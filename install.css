@@ -33,6 +33,14 @@ h1 {
 	font-size : 10pt;
 }
 
+.row1 {
+	background: #e7e7e7;
+}
+
+.row2 {
+	background: #eee;
+}
+
 a:link, a:active, a:visited {
 	color : #333333;
 	text-decoration : none;

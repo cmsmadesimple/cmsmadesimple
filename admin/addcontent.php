@@ -107,7 +107,7 @@ if ($access) {
 			$new_page_id = $dbnew->GenID($config->db_prefix."pages_seq");
 			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
 			$result = $dbnew->Execute($query);
-			if ($result && $result->RowCount() > 0) {
+			if ($result) {
 				if (isset($_POST["additional_editors"])) {
 					foreach ($_POST["additional_editors"] as $addt_user_id) {
 						$new_addt_id = $dbnew->GenID($config->db_prefix."additional_users_seq");

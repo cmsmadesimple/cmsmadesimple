@@ -58,7 +58,7 @@ if ($access) {
 			$query = "UPDATE ".$config->db_prefix."groups SET group_name=".$dbnew->qstr($group).", active=$active, modified_date = now() WHERE group_id = $group_id";
 			$result = $dbnew->Execute($query);
 
-			if ($result && $result->RowCount() > 0) {
+			if ($result) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
 				redirect("listgroups.php");
 				return;

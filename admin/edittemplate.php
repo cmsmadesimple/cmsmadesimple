@@ -69,7 +69,7 @@ if ($access) {
 			$query = "UPDATE ".$config->db_prefix."templates SET template_name = ".$dbnew->qstr($template).", template_content = ".$dbnew->qstr($content).", stylesheet = ".$dbnew->qstr($stylesheet).", active = $active, modified_date = now() WHERE template_id = $template_id";
 			$result = $dbnew->Execute($query);
 
-			if ($result && $result->RowCount() > 0) {
+			if ($result) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
 				redirect("listtemplates.php");
 				return;

@@ -63,7 +63,7 @@ if ($access) {
 
 			$query = "INSERT INTO ".$config->db_prefix."sections (section_id, section_name, item_order, active, create_date, modified_date, parent_id) VALUES ($new_section_id, ".$dbnew->qstr($section).", $order, $active, now(), now(), $parent_id)";
 			$result = $dbnew->Execute($query);
-			if ($result && $result->RowCount() > 0) {
+			if ($result) {
 				$new_section_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_section_id, $section, 'Added Section');
 				redirect("listsections.php");
