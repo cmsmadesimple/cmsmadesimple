@@ -8,6 +8,7 @@ Version 0.5rc1 -- Fri Aug 20 2004
 * Added file manager
 * Added LinkBlog module
 * Added RSS module
+* Added PostgreSQL 7 support
 * Added phpdoc strings to many files and functions
 * Added module and tag self-documentation hooks
 * Added ability for module's adminexecute function to use the wysiwyg

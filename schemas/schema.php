@@ -58,7 +58,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$db->CreateSequence($db_prefix."additional_users_seq", 1);
 
 	echo "[done]</p>";
 
@@ -92,7 +91,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$db->CreateSequence($db_prefix."group_perms_seq", 1);
 
 	echo "[done]</p>";
 
@@ -104,13 +102,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		group_name C(25),
 		active I1,
 		create_date T,
-		modified_date I
+		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-
-	$db->CreateSequence($db_prefix."groups_seq", 1);
 
 	echo "[done]</p>";
 
@@ -144,8 +140,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($db_prefix."module_news_seq");
-
 	echo "[done]</p>";
 
 	echo "<p>Creating pages table...";
@@ -173,8 +167,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."pages", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($db_prefix."pages_seq", 1);
-
 	$sqlarray = $dbdict->CreateIndexSQL("idx_template_id_modified_date", $db_prefix."pages", array("template_id","modified_date"));
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -194,8 +186,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($db_prefix."permissions_seq", 1);
-
 	echo "[done]</p>";
 
 	echo "<p>Creating templates table...";
@@ -213,8 +203,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-
-	$db->CreateSequence($db_prefix."templates_seq", 1);
 
 	echo "[done]</p>";
 
@@ -262,8 +250,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-
-	$db->CreateSequence($db_prefix."users_seq", 1);
 
 	echo "[done]</p>";
 

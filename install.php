@@ -156,6 +156,7 @@ function showPageOne() {
 function showPageTwo() {
 ?>
 <p>Make sure you have created your database and granted full privileges to a user to use that database.</p>
+<p>For MySQL, use the following:</p>
 <p>Log in to mysql from a console and run the following commands:</p>
 <ol>
 <li>create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)</li>
@@ -167,6 +168,15 @@ Please complete the following fields:
 <form action="install.php" method="post" name="page2form" id="page2form">
 
 <table cellpadding="2" border="1" class="regtable">
+<tr class="row2">
+	<td>Database Type:</td>
+	<td>
+		<select name="dbms">
+			<option value="mysql">MySQL</option>
+			<option value="postgres7">PostgreSQL 7</option>
+		</select>
+	</td>
+</tr>
 <tr class="row1">
 <td>Database host address</td>
 <td><input type="text" name="host" value="localhost" length="20" maxlength="50" /></td>
@@ -209,7 +219,8 @@ function showPageThree($sqlloaded = 0) {
 
         global $config, $CMS_SCHEMA_VERSION;
 
-		$db = &ADONewConnection('mysql');
+		$db = &ADONewConnection($_POST['dbms']);
+		$db->debug = true;
 		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
 
 		$db_prefix = $_POST['prefix'];
@@ -224,9 +235,8 @@ function showPageThree($sqlloaded = 0) {
 
 		echo "<p>Importing initial data...";
 
-		$handle = fopen(dirname(__FILE__)."/schemas/mysql.sql", 'r');
+		$handle = fopen(dirname(__FILE__)."/schemas/initial.sql", 'r');
 		if ($handle) {
-			$result = $db->Execute("USE ".$_POST['database'].";");
 			while (!feof($handle)) {
 				set_magic_quotes_runtime(false);
 				$s = fgets($handle, 32768);
@@ -239,9 +249,12 @@ function showPageThree($sqlloaded = 0) {
 				}
 			}
 		}
+
 		fclose($handle);
 
 		echo "[done]</p>";
+
+		include_once(dirname(__FILE__)."/schemas/createseq.php");
 
 		$db->Close();
         echo "<p>Success!</p>";
@@ -274,6 +287,7 @@ function showPageThree($sqlloaded = 0) {
 			<td>
 				<input type="text" name="bbcode" value="false" length="5" maxlength="5">
 				<input type="hidden" name="page" value="4"><input type="hidden" name="host" value="<?=$_POST['host']?>">
+			    <input type="hidden" name="dbms" value="<?=$_POST['dbms']?>">
 			    <input type="hidden" name="database" value="<?=$_POST['database']?>">
 				<input type="hidden" name="port" value="<?=$_POST['port']?>">
 			    <input type="hidden" name="username" value="<?=$_POST['username']?>">
@@ -301,6 +315,7 @@ function showPageFour() {
 
 	$newconfig = cms_config_load();;
 
+	$newconfig['dbms'] = $_POST['dbms'];
 	$newconfig['db_hostname'] = $_POST['host'];
 	$newconfig['db_username'] = $_POST['username'];
 	$newconfig['db_password'] = $_POST['password'];

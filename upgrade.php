@@ -74,7 +74,7 @@ else
 
 	echo "[done]</p>";
 
-	$db = &ADONewConnection('mysql');
+	$db = &ADONewConnection($config["dbms"]);
 	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);

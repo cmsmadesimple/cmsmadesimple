@@ -155,6 +155,21 @@ function cms_mapi_register_install_function($name, $function) {
 }
 
 /**
+ * Registers the module's upgrade function
+ *
+ * The registered should do any necessary upgrade procedures.
+ *
+ * @since 0.5
+ */
+function cms_mapi_register_upgrade_function($name, $function) {
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['upgrade_function'] = $function;
+	}
+}
+
+/**
  * Registers the module's uninstall function
  *
  * The registered function should clean up anything that was setup
