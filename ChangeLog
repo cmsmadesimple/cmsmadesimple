@@ -2,6 +2,8 @@ Version 0.8.2 "Taunoa" -- Subversion
 -----------------
 
 * Added wysiwyg body tag callback for making htmlarea work
+* Added additional color schemes in CSS Management for overriding
+the default theme. (BrumalPat)
 * Fixed htaccess.txt to point to a better url
 * Fixed hiding/showing of Help boxes
 * Fixed link content type so that urls are encoded properly for xhtml
