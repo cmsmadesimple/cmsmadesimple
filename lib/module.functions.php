@@ -258,7 +258,9 @@ class Smarty_ModuleInterface extends Smarty {
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 			#So no one can do anything nasty
-			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			if (!(isset($smarty_obj->configCMS->use_smarty_php_tags) && $smarty_obj->configCMS->use_smarty_php_tags == true)) {
+				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			}
 			
 			#Run the execute_user function and replace {content} with it's output 
 			if (isset($cmsmodules[$smarty_obj->module])) {
