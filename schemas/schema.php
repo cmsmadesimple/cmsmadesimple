@@ -22,6 +22,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."modules");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."permissions");
@@ -110,7 +112,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "<p>Creating modules table...";
 
-	$db = NewDataDictionary($dbnew);
+	$dbdict = NewDataDictionary($db);
 	$flds = "
 		module_name C(255),
 		status C(255),
@@ -118,8 +120,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		active L
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $db->CreateTableSQL($config->db_prefix."modules", $flds, $taboptarray);
-	$db->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."modules", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
 
@@ -176,7 +178,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		itemplate_id I KEY,
+		template_id I KEY,
 		template_name C(25),
 		template_content X,
 		stylesheet X,

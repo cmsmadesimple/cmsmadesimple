@@ -195,41 +195,39 @@ Please complete the following fields:
 function showPageThree($sqlloaded = 0) {
     ## don't load statements if they've already been loaded
     if ($sqlloaded == 0) {
+
         global $config, $CMS_SCHEMA_VERSION;
         $smarty = new Smarty_DB($config);
-		
-        $smarty->assign('tableprefix', $_POST["prefix"]);
-        $smarty->assign('schemaversion', $CMS_SCHEMA_VERSION);
-        $contents = $smarty->fetch('mysql.tpl');
-
-        $statements = preg_split("/\;\r?\n?$/m", $contents);
- 
-        echo "<textarea name=code rows=15 cols=50>$contents</textarea><p>\n";
 
 		$db = &ADONewConnection('mysql');
 		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
 		if (!$result) die("Connection failed");
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
-        foreach ($statements as $s) {
-            $s = str_replace("\n", "", $s);
-            if ($s != "") {
+		$CMS_INSTALL_DROP_TABLES=1;
+		$CMS_INSTALL_CREATE_TABLES=1;
+
+		include_once(dirname(__FILE__)."/schemas/schema.php");
+
+		echo "<p>Inporting initial data...";
+
+		$handle = fopen(dirname(__FILE__)."/schemas/mysql.sql", 'r');
+		while (!feof($handle)) {
+			$s = fgets($handle, 32768);
+			if ($s != "") {
 				$result = $db->Execute($s);
-                if (!$result) {
-                    die('Invalid query: ' . mysql_error());
-                } ## if
-            } ## if
-        } ## foreach
+				if (!$result) {
+					die('Invalid query: ' . mysql_error());
+				} ## if
+			}
+		}
+		fclose($handle);
 
-		#$CMS_INSTALL_DROP_TABLES=1;
-		#$CMS_INSTALL_CREATE_TABLES=1;
-
-		#include_once(dirname(__FILE__)."/schemas/schema.php");
+		echo "[done]</p>";
 
 		$db->Close();
-        echo "Success!<p>";
+        echo "<p>Success!</p>";
 
-        ## foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
     } ## if
 
     $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
