@@ -5,7 +5,7 @@ if (!file_exists($config)) {
     $file = @fopen($config, "w");
     if ($file != 0) {
         $cwd = getcwd();
-        fwrite($file,'$this->root_path = "'.$cwd.'";'."\n");
+        fwrite($file,"<?php\n".'$this->root_path = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
         echo "Cannot create $config, please change permissions to allow this\n";
@@ -79,7 +79,7 @@ function showPageOne() {
 
     ## check file perms
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt', "config.php");
+    $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt');
 
     echo "<table border=0 cellpadding=2 cellspacing=0>\n";
     echo "<tr><td class=\"label\"><b>Test</b></td><td class=\"label\"><b>Result</b></td></tr>\n";
@@ -185,7 +185,7 @@ function showPageThree($sqlloaded = 0) {
         mysql_close($link);
         echo "Success!<p>";
 
-        foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
+        ## foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
     } ## if
 
     $docroot = 'http://'.$_SERVER['SERVER_NAME'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
@@ -222,16 +222,17 @@ function showPageFour() {
     $config = "config.php";
     ## build the content for config file
 
-    $content = '<?php\n\n#Database connection information\n';
-    $content .= '$this->db_hostname = "'.$_POST['host'].'";\n';
-    $content .= '$this->db_username = "'.$_POST['username'].'";\n';
-    $content .= '$this->db_password = "'.$_POST['password'].'";\n';
-    $content .= '$this->db_name = "'.$_POST['database'].'";\n';
-    $content .= '$this->db_prefix = "'.$_POST['prefix'].';\n';
-    $content .= '$this->root_url = '.$_POST['docroot'].';\n';
-    $content .= '$this->root_path = '.$_POST['docpath'].';\n';
-    $content .= '$this->query_var = '.$_POST['querystr'];
-    $content .= '$this->use_bb_code = '.$_POST['bbcode'].';\n';
+    $content = "<?php\n\n#Database connection information'\n";
+    $content .= '$this->db_hostname = "'.$_POST['host'].'";'."\n";
+    $content .= '$this->db_username = "'.$_POST['username'].'";'."\n";
+    $content .= '$this->db_password = "'.$_POST['password'].'";'."\n";
+    $content .= '$this->db_name = "'.$_POST['database'].'";'."\n";
+    $content .= '$this->db_prefix = "'.$_POST['prefix'].'";'."\n";
+    $content .= '$this->root_url = "'.$_POST['docroot'].'";'."\n";
+    $content .= '$this->root_path = "'.$_POST['docpath'].'";'."\n";
+    $content .= '$this->query_var = "'.$_POST['querystr'].'";'."\n";
+    $content .= '$this->use_bb_code = '.$_POST['bbcode'].';'."\n";
+    $content .= "\n?>\n";
 
     if ((file_exists($config) && is_writable($config)) || !file_exists($config)) {
         $file = @fopen($config, "w");
@@ -240,13 +241,14 @@ function showPageFour() {
                 echo "Cannot write to $config\n";
                 exit;
             } ## if
-            fclose($config);
+            fclose($file);
         } ## if
     } else {
         echo "Error: Cannot write to $config.<br>\n";
         exit;
     } ## if
  
+    echo "<h4>Congratulations, you are all setup.<br>Here is your <a href=".$_POST['docroot'].">CMS site</a><br>\n";
 
 } ## showPageFour
 ?>
