@@ -136,7 +136,7 @@ function linkblog_module_help($cms) {
 	<p>allow_search - set allow_search="true" to show a search form - off by default</p>
 	<p>category - set category="NAME" where NAME is a category name.  Only links in that category will be visible.  This includes the links generated to previously posted links.</p>
 	<p>make_rss_button - creates an image link to the rss feed for the linkblog.  The title for the rss feed is set by a config.php option: $config["linkblog_url"]<br />
-The RSS feed title is set with $config["linkblog_rss_title"] in config.php.</p>
+The RSS feed title is set with $config["linkblog_rss_title"] in config.php. The default number of links returned in the RSS feed is 20, however, you can set the limit with $config["linkblog_rss_limit"] in config.php</p>
 	<h3>How do I style the LinkBlog pages?</h3>
 	<p>Here is some sample CSS you can throw in your template to make your results <i>slightly</i> prettier.<br />
 	<pre>

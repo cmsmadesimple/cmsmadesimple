@@ -31,6 +31,17 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
         $allow_search = $params['allow_search'];
     }
 
+    if(isset($params[$id.'limit']))
+    {
+        $limit = $params[$id.'limit'];
+    }
+    else if(isset($params['limit']))
+    {
+        $limit = $params['limit'];
+    } else {
+		$limit = "20";
+	}
+
     if(isset($params[$id.'category']))
     {
         $category = $params[$id.'category'];
@@ -42,6 +53,9 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
 	if ($params[$id.'type'] == "rss") {
 
+		if (isset($cms->config["linkblog_rss_limit"])) {
+			$limit = $cms->config["linkblog_rss_limit"];
+		} ## if 
 		header('Content-type: text/xml');
 		echo "<?xml version='1.0'?>\n";
 		echo "<rss version='2.0'>\n";
@@ -86,55 +100,57 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
     } ## if
 	$query .= " a.status = '1'";
     $query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
+	$query .= " LIMIT $limit";
+
     $dbresult = $db->Execute($query);
 
 	if ($params[$id.'type'] != "rss") {
 		echo "<div class=\"modulelinkblogtitle\">Posted sites</div>";
 		if (isset($params["make_rss_button"])) {
 			echo "<div class=\"modulelinkblogrss\">\n";
-			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>'curr_date', 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
+			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
 			echo "</div>\n";
 		} ## if
 		echo "<div class=\"modulelinkblog\">\n";
 	} ## if
 
     if ($dbresult && $dbresult->RowCount()) {
-        $last_date = "";
+##         $last_date = "";
         while ($row = $dbresult->FetchRow()) {
 
-            if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
-				if ($params[$id.'type'] == "rss") {
-					echo "	<item>\n";
-					echo "		<title>".$row["linkblog_title"]."</title>\n";
-					echo "		<link>";
-					echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
-					echo "</link>\n";
-					## this is just redundant echo "		<description>".$row["linkblog_title"]."</description>\n";
-					## needs to be an email address echo "		<author>".$row["linkblog_author"]."</author>\n";
-					echo "		<pubDate>".date("D, j M Y H:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
-					echo "	</item>\n";
-				} else {
-					echo "<div class=\"modulelinkblogentry\">\n";
-					if ($last_date == "") {
-						echo "<div class=\"modulelinkblogentrydate\">\n";
-						echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
-						echo "</div>\n";
-					}
-					echo "<div class=\"modulelinkblogentrytime\">\n";
-					echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-					echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
+			if ($params[$id.'type'] == "rss") {
+				echo "	<item>\n";
+				echo "		<title>".$row["linkblog_title"]."</title>\n";
+				echo "		<link>";
+				echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+				echo "</link>\n";
+				## this is just redundant echo "		<description>".$row["linkblog_title"]."</description>\n";
+				## needs to be an email address echo "		<author>".$row["linkblog_author"]."</author>\n";
+				echo "		<pubDate>".date("D, j M Y H:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
+				echo "	</item>\n";
+			} else {
+				echo "<div class=\"modulelinkblogentry\">\n";
+				$this_date = substr($row["create_date"],0,10);
+				if ($last_date != $this_date) {
+					echo "<div class=\"modulelinkblogentrydate\">\n";
+## 						echo "last date: ($last_date)<br />\nthis_date: ($this_date)<br />\n";
+					echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 					echo "</div>\n";
+				}
+				echo "<div class=\"modulelinkblogentrytime\">\n";
+				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
+				echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
+				echo "</div>\n";
 
-					echo "<div class=\"modulelinkblogentrycommentlink\">\n";
-					echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
-					echo "\n</div>\n";
-					echo "</div>\n";
-				} ## if
-            } else {
-                break;
-            }
+				echo "<div class=\"modulelinkblogentrycommentlink\">\n";
+				echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
+				echo "\n</div>\n";
+				echo "</div>\n";
+			} ## if
+
             $last_date = substr($row["create_date"],0,10);
-        }
+        } ## while
+
 		if ($params[$id.'type'] == "rss") {
 			echo "	</channel>\n";
 			echo "</rss>\n";
