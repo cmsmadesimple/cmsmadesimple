@@ -436,7 +436,7 @@ function textarea_highlight($use_javasyntax, $text, $name,
 
 /*
  * Checks to see if password protected (frontend)
- * @return int - page number
+ * @return int - page number or -1 if not protected
  */
 function password_protected($page){
 	global $gCms;
@@ -450,14 +450,14 @@ function password_protected($page){
 		if ($row['password_protected'] == 1)
 			return $row['page_id'];
 	}
-	return false;
+	return -1;
 }
 
 /*
  * Displays the login form (frontend)
  */
 function display_login_form(){
-	echo '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
+	return '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
 	'Name: <input type="text" name="login_name"><br>'.
 	'Password: <input type="password" name="login_password"><br>'.
 	'<input type="submit">'.

@@ -514,10 +514,10 @@ else {
 
 </form>
 
-<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?></a></div>
 <div id="helparea" class="expand">
-<?php echo lang('helpaddcontent')?>
 <a name="help">&nbsp;</a>
+<?php echo lang('helpaddcontent')?>
 </div>
 
 
