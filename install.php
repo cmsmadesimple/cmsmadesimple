@@ -172,7 +172,8 @@ Please complete the following fields:
 	<TD>Database Type:</TD>
 	<TD>
 		<SELECT NAME="dbms">
-			<OPTION VALUE="mysql">MySQL</OPTION>
+			<OPTION VALUE="mysql">MySQL (3 and 4.0)</OPTION>
+			<OPTION VALUE="mysqli">MySQL (4.1+)</OPTION>
 			<OPTION VALUE="postgres7">PostgreSQL 7</OPTION>
 		</SELECT>
 	</TD>
@@ -244,7 +245,7 @@ function showPageThree($sqlloaded = 0) {
 					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
 					$result = $db->Execute($s);
 					if (!$result) {
-						die('Invalid query: ' . mysql_error());
+						die('Invalid query');
 					} ## if
 				}
 			}

@@ -1,6 +1,6 @@
 <?php
 /*
- V4.52 10 Aug 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -150,10 +150,12 @@ WHERE relkind = 'r' AND (c.relname='%s' or c.relname = lower('%s'))
 Using a OID as a unique identifier is not generally wise. 
 Unless you are very careful, you might end up with a tuple having 
 a different OID if a database must be reloaded. */
-	function _insertid()
+	function _insertid($table,$column)
 	{
 		if (!is_resource($this->_resultid) || get_resource_type($this->_resultid) !== 'pgsql result') return false;
-	   	return pg_getlastoid($this->_resultid);
+		$oid = pg_getlastoid($this->_resultid);
+		// to really return the id, we need the table and column-name, else we can only return the oid != id
+		return empty($table) || empty($column) ? $oid : $this->GetOne("SELECT $column FROM $table WHERE oid=".(int)$oid);
 	}
 
 // I get this error with PHP before 4.0.6 - jlim
@@ -783,6 +785,7 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 		case ADODB_FETCH_DEFAULT:
 		case ADODB_FETCH_BOTH:$this->fetchMode = PGSQL_BOTH; break;
 		}
+		$this->adodbFetchMode = $mode;
 		$this->ADORecordSet($queryID);
 	}
 	

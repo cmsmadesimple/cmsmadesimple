@@ -5,6 +5,7 @@ Version 0.7 -- Subversion
 * Added new admin style (thijs)
 * Added language as a user perference and also moved it to the login page
 * Added java based syntax highlighting as a user preference
+* Added support for mysql 4.1+ using the mysqli adodb driver
 * Fixed bug with start and end dates when adding new News item (BamaRob)
 * Fixed missing template option for News module (#67)
 
