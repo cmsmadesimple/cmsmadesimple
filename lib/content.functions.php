@@ -305,7 +305,7 @@ class Smarty_CMS extends Smarty {
 				$gCms->variables['page_id'] = $line['content_id'];
 
 				$gCms->variables['page_name'] = $tpl_name;
-				$gCms->variables['position'] = $line['hierarchy'];
+				$gCms->variables['position'] = ContentManager::CreateFriendlyHierarchyPosition($line['hierarchy']);
 
 				$content_date = $db->UnixTimeStamp($line['content_date']);
 				$template_date = $db->UnixTimeStamp($line['template_date']);

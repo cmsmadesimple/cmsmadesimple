@@ -108,6 +108,58 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			# Set depth to be the relative position
 			$depth = $depth - $basedepth;
 
+			# Now try to remove items that shouldn't be shown, based on current location
+			if ($depth > 1) # All root level items should show 
+			{
+				$curpos = $gCms->variables['position'];
+				$curdepth = count(split('\.', $curpos)) - $basedepth;
+				$curparent = substr($gCms->variables['position'], 0, strrpos($gCms->variables['position'], "."));
+				if ($curparent != '')
+				{
+					$curparent = $curparent . ".";
+				}
+
+				$skipme = true;
+
+				# Are we the currently selected page?
+				if ($onecontent->Hierarchy() == $curpos)
+				{
+					$skipme = false;
+				}
+
+				# First, are we a direct decendant of the current position?
+				if (strstr($onecontent->Hierarchy(), $curpos) == $onecontent->Hierarchy() && $curdepth == ($depth - 1))
+				{
+					$skipme = false;
+				}
+
+				# Now for the nasty part...  loop through all parents and show them and direct siblings
+				if ($skipme)
+				{
+					$blah = '';
+					$count = 1;
+					foreach (split('\.', $curpos) as $level)
+					{
+						$blah .= $level . '.';
+						if (strstr($onecontent->Hierarchy(), $blah) == $onecontent->Hierarchy())
+						{
+							if ($depth == ($count + 1))
+							{
+								$skipme = false;
+								continue;
+							}
+						}
+						$count++;
+					}
+				}
+
+				# Ok, so should we skip this thing already?
+				if ($skipme)
+				{
+					continue;
+				}
+			}
+
 			if ($onecontent->Type() == 'sectionheader')
 			{
 				if ($in_hr == 1)

@@ -290,15 +290,7 @@ class ContentBase
 	 */
 	function Hierarchy()
 	{
-		#Change padded numbers back into user-friendly values
-		$tmp = '';
-		$levels = split('\.', $this->mHierarchy);
-		foreach ($levels as $onelevel)
-		{
-			$tmp .= ltrim($onelevel, '0') . '.';
-		}
-		$tmp = rtrim($tmp, '.');
-		return $tmp;
+		return ContentManager::CreateFriendlyHierarchyPosition($this->mHierarchy);
 	}
 
 	/**
@@ -527,7 +519,7 @@ class ContentBase
 
 		if ($loadProperties)
 		{
-			#$this->mProperties = ContentOperations::LoadPropertiesFromData(strtolower($this->mType), $data);
+			#$this->mProperties = ContentManager::LoadPropertiesFromData(strtolower($this->mType), $data);
 			$this->mProperties->Load($this->mId);
 			$this->mPropertiesLoaded = true;
 
@@ -1363,6 +1355,19 @@ class ContentManager
 		}
 
 		return $error;
+	}
+
+	function CreateFriendlyHierarchyPosition($position)
+	{
+		#Change padded numbers back into user-friendly values
+		$tmp = '';
+		$levels = split('\.', $position);
+		foreach ($levels as $onelevel)
+		{
+			$tmp .= ltrim($onelevel, '0') . '.';
+		}
+		$tmp = rtrim($tmp, '.');
+		return $tmp;
 	}
 }
 
