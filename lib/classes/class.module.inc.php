@@ -1320,14 +1320,6 @@ class ModuleOperations
 									}
 								}
 							}
-
-							/*
-							if ($row['active'] == '1')
-							{
-								#Try generating a content class for this module
-								cms_mapi_create_module_content_class($modulename);
-							}
-							*/
 						}
 					}
 				}

@@ -566,6 +566,8 @@ class News extends CMSModule
 					$news_cat = $row["news_cat"];
 					$title = $row["news_title"];
 					$data = $row["news_data"];
+					$start_date = '';
+					$end_date = '';
 					if (isset($row["news_date"]))
 					{
 						$post_date = $row["news_date"];
