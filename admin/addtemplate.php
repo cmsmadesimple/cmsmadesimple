@@ -183,7 +183,7 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></td>
+		<td><?php echo create_textarea(false, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
