@@ -266,9 +266,12 @@ else {
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = '$template_id'";
 		$cssresult = $db->Execute($cssquery);
-		while ($cssline = $cssresult->FetchRow())
+		if ($cssresult && $cssresult->RowCount() > 0)
 		{
-			$data["stylesheet"] .= "\n".$cssline[css_text]."\n";
+			while ($cssline = $cssresult->FetchRow())
+			{
+				$data["stylesheet"] .= "\n".$cssline[css_text]."\n";
+			}
 		}
 
 		$tmpfname = tempnam($config["previews_path"], "cmspreview");

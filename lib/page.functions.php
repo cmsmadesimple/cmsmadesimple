@@ -256,9 +256,12 @@ function get_stylesheet($templateid) {
 		AND		assoc_type	= 'template'
 		AND		assoc_to_id = '$template_id'";
 	$cssresult = $db->Execute($cssquery);
-	while ($cssline = $cssresult->FetchRow())
+	if ($cssresult && $cssresult->RowCount() > 0)
 	{
-		$css .= "\n".$cssline[css_text]."\n";
+		while ($cssline = $cssresult->FetchRow())
+		{
+			$css .= "\n".$cssline[css_text]."\n";
+		}
 	}
 
 	$css = preg_replace("/[\r\n]/", "", $css);
