@@ -14,6 +14,8 @@ Version 0.3 -- Subversion
 * Added option to turn on/off wysiwyg in user preferences
 * Changed database abstraction so that it will be able to use other db
 backends in the future (Fixes #19)
+* Fixed the install script (again) to work on Win32 (Fixes #12)
+* Fixed the css for admin site to be a little more streamlined
 
 Version 0.2.1 -- Tue Jul 13 2004
 -----------------
