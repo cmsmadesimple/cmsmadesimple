@@ -49,7 +49,7 @@ class Smarty_CMS extends Smarty {
 
 		$db = $smarty_obj->configCMS->db;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result) {
@@ -70,8 +70,11 @@ class Smarty_CMS extends Smarty {
 			}
 			$tpl_source = $line[template_content];
 			$content = $line[page_content];
+			$title = $line[page_title];
 			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 			$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
+			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 
 			if ($this->configCMS->use_bb_code == true) {
 				$tpl_source = $this->configCMS->bbcodeparser->qparse($tpl_source);
