@@ -10,7 +10,7 @@ Requirements:
         - tar xvfz cms-VERSION.tar.gz
 OR
     check out the latest version from subversion
-        - svn co http://svn.wishy.org/cms/cms/trunk
+        - svn co http://svn.cmsmadesimple.org/cms/trunk
 
 ----- If your webserver has write access to your new CMS directory you can skip step 2 ------
 2.  create an empty config.php file and make it writable by your webserver's user:
