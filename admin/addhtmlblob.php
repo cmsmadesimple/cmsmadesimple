@@ -41,10 +41,10 @@ $access = check_permission($userid, 'Add Html Blobs');
 
 $htmlarea_flag = false;
 $use_javasyntax = false;
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+if (get_preference($userid, 'use_wysiwyg') == "1") {
 	$htmlarea_flag = true;
     $use_javasyntax = false;
-}else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+}else if (get_preference($userid, 'use_javasyntax') == "1"){
     $use_javasyntax = true;
 }
 

@@ -1,3 +1,9 @@
+Version 0.7.1 -- Subversion
+-----------------
+
+* Fixed email in add/edit user to accept 255 characters (#000003)
+* Fixed htmlblob NOTICE level messages (#000005)
+
 Version 0.7 -- Mon Oct 11 2004
 -----------------
 
