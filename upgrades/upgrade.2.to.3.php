@@ -44,6 +44,23 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Added item_order to existing sections... ";
+
+	$count = 1;
+	$query = "SELECT section_id FROM ".$config->db_prefix."sections ORDER BY section_id";
+	$result = $db->query($query);
+
+	#foreach loop
+	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		$query = "UPDATE ".$config->db_prefix."sections SET item_order = $count WHERE section_id = " . $row["section_id"];
+		$db->query($query);
+		$count++;
+	}
+
+	mysql_free_result($result);
+
+	echo "[done]</p>";
+
 	echo "<p>Updating schema version... ";
 
 	$query = "UPDATE ".$config->db_prefix."version SET version = 3";

@@ -36,35 +36,55 @@ if (isset($_GET["message"])) {
 
 	$db = new DB($config);
 
-        $query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY section_id";
-        $result = $db->query($query);
+	$query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY item_order";
+	$result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	$totalcount = mysql_num_rows($result);
+
+	if ($totalcount > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".GetText::gettext("Section")."</td>\n";
 		echo "<td>".GetText::gettext("Active")."</td>\n";
-		if ($edit)
+		if ($edit) {
 			echo "<td>&nbsp;</td>\n";
+			echo "<td>&nbsp;</td>\n";
+		}
 		if ($remove)
 			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 		
 		$currow = "row1";
 
+		$count = 1;
+
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["section_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
-			if ($edit)
+			if ($edit) {
+				echo "<td>";
+				if ($count > 1 && $totalcount > 1) {
+					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\">".GetText::gettext("Up")."</a> ";
+				}
+				if ($count < $totalcount && $totalcount > 1) {
+					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\">".GetText::gettext("Down")."</a>";
+				}
+				if ($count == 1) {
+					echo "&nbsp;";
+				}
+				echo "</td>\n";
 				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
+			}
 			if ($remove)
 				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
+
+			$count++;
 
 		}
 

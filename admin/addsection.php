@@ -48,7 +48,17 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', $active, now(), now())";
+			$order = 1;
+
+			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."sections";
+			$result = $db->query($query);
+			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+			if (isset($row["item_order"])) {
+				$order = $row["item_order"];	
+			}
+			mysql_free_result($result);
+
+			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
 				$db->close();

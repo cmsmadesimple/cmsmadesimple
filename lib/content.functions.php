@@ -158,7 +158,7 @@ function db_get_menu_items(&$config) {
 
 	$db = new DB($config);
 
-	$query = "SELECT p.*, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 AND p.active = 1 ORDER BY s.section_id, p.item_order, p.menu_text";
+	$query = "SELECT p.*, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 AND p.active = 1 ORDER BY s.item_order, p.item_order, p.menu_text";
 	$result = $db->query($query);
 
 	while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
