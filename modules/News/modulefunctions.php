@@ -25,6 +25,9 @@ function news_module_install($cms) {
 		news_title C(255),
 		news_data X,
 		news_date T,
+		start_time T,
+		end_time T,
+		icon C(255),
 		create_date T,
 		modified_date T
 	";
@@ -218,12 +221,12 @@ function news_module_about() {
 	Change History:
 	</p>
 	<p>
-	1.2 -- Subversion<br />
+	1.2 -- Sep 20, 2004<br />
 	Added makerssbutton and RSS functionality
 	</p>
 	<p>
 	1.1 -- Sep 15, 2004<br/>
-	Added time modification, date format, and icons
+	Added time modification and date format
 	</p>
 	<?php
 }

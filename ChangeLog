@@ -1,4 +1,4 @@
-Version 0.6.2 -- Subversion
+Version 0.6.2 -- Tue Sep 20 2004 
 -----------------
 
 * Added Chinese translations (ray)
@@ -8,6 +8,8 @@ like show just an RSS feed and nothing else.
 * Fixed a bug with html entities not getting converted properly after preview
 or saved. (Fixes #62, #65)
 * Fixed bug with bug with news when it's the content type.
+* Updated the defalt website to be a little more up to date with the current
+feature set
 
 Version 0.6.1 -- Tue Sep 14 2004
 -----------------

@@ -177,6 +177,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		news_title C(255),
 		news_data X,
 		news_date T,
+		start_time T,
+		end_time T,
+		icon C(255),
 		create_date T,
 		modified_date T
 	";
