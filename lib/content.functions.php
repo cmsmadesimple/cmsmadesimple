@@ -421,6 +421,7 @@ function load_plugins(&$smarty)
 
 function html_blob_regex_callback($matches)
 {
+	global $gCms;
 	if (isset($matches[1]))
 	{
 		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($matches[1]);
