@@ -12,12 +12,13 @@ Steps of a (hopefully) successful cms release
 10. Run cleanup script (removes unwanted files)
 11. Tarball up.  Format is cmsmadesimple-0.1.tar.gz.  Always untars into a cmsmadesimple-0.1 directory.
 12. Zip up.  Format is cmsmadesimple-0.1.zip.  Always unzips into a cmsmadesimple directory.
-13. Upload to sourceforge.  Make sure ChangeLog is added.
+13. Copy to downloads dir
 14. Add new version number to mantis
 15. Update topic in irc channel
-16. Update news and downloads page with new version #, links and MD5 sum
-17. Add news item on sourceforge project.  Sometimes these end up on the sf.net front page.  Good place to be.
+16. Update news, downloads and ChangeLog pages with new version #, links and MD5 sum
+17. Make sure external modules (in main source tree) are up to date on site
 18. Add announcement to the forums
-19. Submit to freshmeat
-20. Submit to hotscripts
-21. Await fame and fortune :)
+19. Send announcement to mailing list
+20. Submit to freshmeat
+21. Submit to hotscripts
+22. Await fame and fortune :)

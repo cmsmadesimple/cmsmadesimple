@@ -1,4 +1,4 @@
-Version 0.9 "Marquesas" -- Subversion
+Version 0.9 "Marquesas" -- Tue Feb 22 2005
 -----------------
 
 * Rewrote module API from scratch to make it easier for a module
@@ -13,6 +13,7 @@ much, much easier.
 * Fixed contact form so that it's xhtml compliant (#000096)
 * Fixed RSS feeds to use proper content type
 * Fixed content type loading so it only loads php files
+* Fixed some bugs with handling gifs in ImageManager
 * Modified login procedure for a little more security
 * Modified install procedure to admin username and password
 * Admin dir can now be changed with admin_dir paramater in config.php
