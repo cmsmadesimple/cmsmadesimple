@@ -302,6 +302,7 @@ function showPageFour() {
     $content .= '$this->root_path = "'.addslashes($_POST['docpath']).'";'."\n";
     $content .= '$this->query_var = "'.$_POST['querystr'].'";'."\n";
     $content .= '$this->use_bb_code = '.$_POST['bbcode'].';'."\n";
+	$content .= '$this->use_smarty_php_tags = false;'."\n";
     $content .= "\n?>\n";
 
     if ((file_exists($config) && is_writable($config)) || !file_exists($config)) {
@@ -330,5 +331,6 @@ function showPageFour() {
 </body>
 </html>
 <?php
+
 # vim:ts=4 sw=4 noet
 ?>
