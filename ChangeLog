@@ -6,6 +6,7 @@ Version 0.3.1 -- Subversion
 road in supporting multiple databases.
 * Fixed so that if no default page is set, system grabs first page it can find
 (Fixes #22)
+* Fixed redirection.  Thanks pdj@txnt.com! (Fixes #27)
 
 Version 0.3 -- Wed Jul 21 2004
 -----------------

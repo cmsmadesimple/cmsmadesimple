@@ -30,9 +30,9 @@ function redirect($to)
 	else
 	{
 		//header("HTTP/1.1 301 Moved Permanently");
-		 header("HTTP/1.1 302 Found");
-		// header("HTTP/1.1 303 See Other");
-		// header("Location: $schema://$host$to");
+		//header("HTTP/1.1 302 Found");
+		//header("HTTP/1.1 303 See Other");
+		//header("Location: $schema://$host$to");
 		header("Location: $to");
 		exit();
 	}
