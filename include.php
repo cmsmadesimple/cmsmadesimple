@@ -73,6 +73,13 @@ require_once("lib/misc.functions.php");
 require_once("lib/db.functions.php");
 require_once("lib/page.functions.php");
 require_once("lib/content.functions.php");
+require_once("lib/GetText.php");
+
+#initialiase GetText package
+GetText::init();
+
+#add the translation domain we wrote files for
+GetText::addDomain('cmsmadesimple', 'locale');
 
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
@@ -92,7 +99,6 @@ if(get_magic_quotes_gpc())
 	strip_slashes($_COOKIES);
 	strip_slashes($_SESSIONS);
 }
-
 
 # vim:ts=4 sw=4 noet
 ?>
