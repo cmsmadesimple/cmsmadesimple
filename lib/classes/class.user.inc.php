@@ -328,8 +328,8 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ?, first_name, last_name, email, admin_aceess WHERE user_id = ?";
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->id, $user->firstname, $user->lastname, $user->email, $user->adminaccess));
+		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ?, first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
+		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
 		if ($dbresult !== false)
 		{
 			$result = true;
