@@ -16,8 +16,6 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
 
 check_login($config);
@@ -35,13 +33,14 @@ if (isset($_GET["section_id"])) {
 
 	if ($access) {
 
-		$query = "SELECT section_name, item_order FROM ".$config->db_prefix."sections WHERE section_id = ".$section_id;
+		$query = "SELECT section_name, item_order, parent_id FROM ".$config->db_prefix."sections WHERE section_id = ".$section_id;
 		$result = $dbnew->Execute($query);
 
 		if ($result && $result->RowCount()) {
 			$row = $result->FetchRow();
 			$section_name = $row[section_name];
 			$order = $row[item_order];
+			$parent_id = $row[parent_id];
 		}
 
 		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
@@ -50,13 +49,21 @@ if (isset($_GET["section_id"])) {
 		if (isset($row["count"]) && $row["count"] > 0) {
 			$dodelete = false;
 		}
-
+		
+		# if there are subsection, we cannot delete
+		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."sections WHERE parent_id = $section_id";
+		$result = $dbnew->Execute($query);
+		$row = $result->FetchRow();
+		if (isset($row["count"]) && $row["count"] > 0) {
+			$dodelete = false;
+		}
+		
 		if ($dodelete) {
 			$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";
 			$result = $dbnew->Execute($query);
 
 			#Fix the item_order if necessary
-			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE item_order > $order";
+			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE item_order > $order AND parent_id = $parent_id";
 			$result = $dbnew->Execute($query);
 
 			#This is so pages will not cache the menu changes
@@ -71,7 +78,7 @@ if ($dodelete == true) {
 	redirect("listsections.php");
 }
 else {
-	redirect("listsections.php?message=".$gettext->gettext("Section still being used by content pages.  Please remove those first."));
+	redirect("listsections.php?message=".$gettext->gettext("Section still being used by content pages or subsections.  Please remove those first."));
 }
 
 # vim:ts=4 sw=4 noet

@@ -29,32 +29,59 @@ function smarty_function_bulletmenu($params, &$smarty) {
 	foreach ($sections as $one_section) {
 
 		if ($one_section->active) {
-			if (($one_section->level < $last_level || $one_section->level == 0) && $count > 0) {
-				for ($i=$one_section->level; $i<=$last_level; $i++) {
-					$menu .= "</ul>\n";
-				}
-			}
 
-			if ($one_section->level >= $last_level || $one_section->level == 0) {
-				if ($one_section->level != 0) { $menu .= "<li>"; }
-				$menu .= "<p class=\"sectionname\">".$one_section->section_name."</p>\n";
-				if ($one_section->level != 0) { $menu .= "</li>"; }
-				if ($one_section->level > $last_level || $one_section->level == 0) {$menu .= "<ul>\n"; }
-			}
+							
+			for ($i = 0; $i <= $one_section->level; $i++) { $menu .= "."; }
+			$menu .= "|".$one_section->section_name."\n";
 
 			foreach ($one_section->items as $one_item) {
-				$menu .= "<li><a href=\"".$one_item->url."\">".$one_item->menu_text."</a></li>\n";
+			
+				for ($i = 0; $i <= $one_section->level; $i++) { $menu .= "."; }
+				$menu .= ".|".$one_item->menu_text."|".$one_item->url."\n";
+				
 			}
 		}
+		
 		$count++;
 		$last_level = $one_section->level;
 	}
 
-    for ($i=$one_section->level; $i<=$last_level +1; $i++) {
-       $menu .= "</ul>\n";
-    }
+		
+	$text = '
+	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
+	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-browser_detection.js"></script>
+	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-library.js"></script>
+	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu.js"></script>';
 	
-	return $menu;
+	require_once 'phplayers/lib/PHPLIB.php';
+	require_once 'phplayers/lib/layersmenu-common.inc.php';
+	require_once 'phplayers/lib/layersmenu.inc.php';
+	
+	$mid = new LayersMenu();
+	
+	/* TO USE RELATIVE PATHS: */
+	$mid->setDirroot('./phplayers/');
+	$mid->setLibjsdir('./phplayers/libjs/');
+	$mid->setImgdir('./phplayers/menuimages/');
+	$mid->setImgwww('phplayers/menuimages/');
+	//$mid->setIcondir('./phplayers/menuicons/');
+	//$mid->setIconwww('phplayers/menuicons/');
+	
+	$mid->setTpldir('./phplayers/templates/');
+	$mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
+	$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
+
+	
+	$mid->setMenuStructureString($menu);
+	$mid->setIconsize(16, 16);
+	$mid->parseStructureForMenu('vermenu1');
+	$mid->newVerticalMenu('vermenu1');
+	
+	$text .= $mid->getHeader();
+	$text .= $mid->getMenu('vermenu1');
+	$text .= $mid->getFooter();
+	
+	return $text;
 
 }
 

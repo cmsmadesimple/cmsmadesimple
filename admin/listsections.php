@@ -16,8 +16,6 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$CMS_ADMIN_PAGE=1;
-
 require_once("../include.php");
 
 check_login($config);
@@ -36,67 +34,189 @@ if (isset($_GET["message"])) {
 	$edit = check_permission($config, $userid, 'Modify Section');
 	$remove = check_permission($config, $userid, 'Remove Section');
 
-	$sections = db_get_menu_items($config, "subs");
-	if (count($sections) > 0) {
+	global $sorted_sections;
+	$db = $config->db;
 
+	$query = "SELECT section_id, section_name, active, parent_id, item_order FROM ".$config->db_prefix."sections ORDER BY item_order";
+	$result = $db->Execute($query);
+
+	$totalcount = count($result);
+
+	while($row = $result->FetchRow()) {
+
+		# storing there all sections infos
+		$tabresult[$row["section_id"]] = array(
+			"section_id"	=> $row["section_id"],
+			"section_name"	=> $row["section_name"],
+			"active"		=> $row["active"],
+			"parent_id"		=> $row["parent_id"],
+			"item_order"	=> $row["item_order"]
+			);
+
+		# quick access to name from id
+		$tab_id_to_name[$row["section_id"]]	= $row["section_name"];
+		# quick access to parent from id
+		$tab_id_to_parent[$row["section_id"]]	= $row["parent_id"];
+	}
+	
+	if ($totalcount > 0) {
+	
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Section")."</td>\n";
-		echo "<td width=\"10%\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".$gettext->gettext("Parent")."</td>\n";
+		echo "<td align=\"center\">".$gettext->gettext("Move")."</td>\n";
 		if ($edit) {
-			echo "<td width=\"10%\">&nbsp;</td>\n";
-			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td>&nbsp;</td>\n";
 		}
-		if ($remove)
-			echo "<td width=\"10%\">&nbsp;</td>\n";
 		echo "</tr>\n";
 		
-		$currow = "row1";
-
-		$count = 1;
-
-		foreach ($sections as $one_section) {
-			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$one_section->display_name."</td>\n";
-			echo "<td width=\"10%\">".($one_section->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
-			if ($edit) {
-				echo "<td width=\"10%\">";
-				if ($count > 1 && count($sections) > 1) {
-					echo "<a href=\"movesection.php?direction=up&section_id=".$one_section->section_id."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
-				}
-				if ($count < count($sections) && count($sections) > 1) {
-					echo "<a href=\"movesection.php?direction=down&section_id=".$one_section->section_id."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a> ";
-				}
-				if ($count == 1) {
-					echo "&nbsp;";
-				}
-				echo "</td>\n";
-				echo "<td width=\"10%\"><a href=\"editsection.php?section_id=".$one_section->section_id."&parent_id=".$one_section->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
-			}
-			if ($remove)
-				echo "<td width=\"10%\"><a href=\"deletesection.php?section_id=".$one_section->section_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
-			echo "</tr>\n";
-
-			($currow=="row1"?$currow="row2":$currow="row1");
-
-			$count++;
-
-		}
-
+		$params = array(
+			"tabresult"			=> $tabresult,
+			"tab_id_to_name"	=> $tab_id_to_name,
+			"tab_id_to_parent"	=> $tab_id_to_parent
+			);
+		echo show_section_line($params);
+		
 		echo "</table>\n";
-
 	}
 
 if (check_permission($config, $userid, 'Add Section')) {
 ?>
 
-<div class=button><a href="addsection.php"><?=$gettext->gettext("Add New
-Section")?></div></p>
+<div class=button><a href="addsection.php"><?=$gettext->gettext("Add New Section")?></div></p>
 
 <?php
 }
 
 include_once("footer.php");
+
+
+# needed extra functions
+
+function show_section_line($params) {
+
+    global $gettext;
+
+    $tabresult		= $params["tabresult"];
+    $tab_id_to_name	= $params["tab_id_to_name"];
+    $tab_id_to_parent	= $params["tab_id_to_parent"];
+    # the current parent
+    $parent		= $params["parent"] ? $params["parent"] : 0;
+    # the current sublevel
+    $level		= $params["level"] ? $params["level"] : 0;
+    # the current level text (ie 1, 1.5, 5.3.4, etc)
+    $totlevel		= $params["totlevel"] ? $params["totlevel"] : "";
+    # the current row color
+    $currow		= $params["currow"] ? $params["currow"] : "row1";
+
+    $string = "";
+    
+    $tabchild = array_keys($tab_id_to_parent, $parent);
+
+    if (is_array($tabchild)) {
+
+	foreach ($tabchild as $key => $id) {
+
+	    # we build the new level text : 1.1 => 1.1.1 for example
+	    $totlevelnew = $totlevel.$tabresult[$id]["item_order"].".";
+
+	    if (count($tabchild) > 1) {
+		
+		if ($key == 0 && count($tabchild)) {
+		    
+		    $move = "<a href=\"movesection.php?direction=down&section_id=".$id."&parent_id=".$parent."\">".
+		    "<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
+		    
+		} else if ($key == count($tabchild) - 1) {
+		    
+		    $move = "<a href=\"movesection.php?direction=up&section_id=".$id."&parent_id=".$parent."\">".
+		    "<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+		    
+		} else {
+		    
+		    $move = "<a href=\"movesection.php?direction=down&section_id=".$id."&parent_id=".$parent."\">".
+		    "<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
+		    "<a href=\"movesection.php?direction=up&section_id=".$id."&parent_id=".$parent."\">".
+		    "<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+		    
+		}
+	    }
+
+	    # building params for selectbox
+	    $boxparams = array(
+		"tabresult"		=> $tabresult,
+		"tab_id_to_name"	=> $tab_id_to_name,
+		"tab_id_to_parent"	=> $tab_id_to_parent,
+		"current_id"		=> $id,
+		"current_parent"	=> $parent
+		);
+
+	    $string .= "<tr class=\"$currow\">\n";
+	    
+	    $string .= "<td>".$totlevelnew." ".$tab_id_to_name[$id]."</td>\n";
+	    
+	    $string .= "<td>".($tabresult[$id]["active"] == 1 ? $gettext->gettext("True") : $gettext->gettext("False"))."</td>\n";
+	    
+	    $string .= "<td><select onchange=\"location.href='movesection.php?direction=level&section_id=".$id.
+		"&parent_id_ori=".$tabresult[$id]["parent_id"]."&item_order=".$tabresult[$id]["item_order"].
+		"&parent_id='+this.options[this.selectedIndex].value;\"><option value=\"0\">".$gettext->gettext("None")."</option>".
+		show_section_select($boxparams)."</select></td>";
+	    
+	    $string .= "<td align=\"center\">$move</td>\n";
+	    
+	    $string .= "<td><a href=\"editsection.php?section_id=".$id."&parent_id=".$parent."\">".$gettext->gettext("Edit")."</a></td>\n";
+	    
+	    $string .= "<td><a href=\"deletesection.php?section_id=".$id."\" onclick=\"return confirm('".
+		$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+	    
+	    $string .= "</tr>\n";
+
+	    # updating params for next call
+	    $params["parent"] = $id;
+	    $params["level"] = $level+1;
+	    $params["totlevel"] = $totlevelnew;
+	    $params["currow"] = $currow;
+	    $string .= show_section_line($params);
+	}
+    }
+
+    return $string;
+}
+
+function show_section_select($boxparams) {
+
+    # the current level text (ie 1, 1.5, 5.3.4, etc)
+    $totlevel = $boxparams["totlevel"] ? $boxparams["totlevel"] : "";
+
+    $string = "";
+    
+    # this gives an array containing all childs of current parent section
+    $tabchild = array_keys($boxparams["tab_id_to_parent"], $boxparams["parent"] ? $boxparams["parent"] : 0);
+
+    if (is_array($tabchild)) {
+
+		foreach ($tabchild as $key => $id) {
+			
+			# we build the new level text : 1.1 => 1.1.1 for example
+			$totlevelnew = $totlevel.$boxparams["tabresult"][$id]["item_order"].".";
+
+			# because a section can not have has parent one of its own subsection
+			if ($id != $boxparams["current_id"]) {
+
+			# preparing params for next call
+			$boxparams["parent"] = $id;
+			$boxparams["totlevel"] = $totlevelnew;
+			
+			$string .= "<option value=\"$id\"".($id == $boxparams["current_parent"] ? " selected" : "").">".
+				$totlevelnew." ".$boxparams["tab_id_to_name"][$id]."</option>";
+			$string .= show_section_select($boxparams);
+			}
+		}
+    }
+    return $string;
+}
 
 # vim:ts=4 sw=4 noet
 ?>
