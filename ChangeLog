@@ -1,10 +1,13 @@
 Version 0.4.1 -- Subversion
 -----------------
 
+* Added template copying functionality (Refs #39)
+* Added checks to make sure Template titles can't be reused
 * Fixed redirection bugs in the news module
 * Fixed a bug in adding a group
 * Fixed a bug where mysql imports would not work because of spaces at the
 end of lines (Knaldgas)
+* Removed the section permissions in new installs (Fixes #41)
 
 Version 0.4 -- Tue Aug 10 2004
 -----------------

@@ -90,7 +90,7 @@ if ($moduleaction == "edit") {
 		$validinfo = false;
 	}
 	if ($validinfo) {
-		$query = "UPDATE ".cms_db_prefix()."module_news SET news_title = ".$db->qstr($title).", news_data = ".$db->qstr($title).", modified_date = ".$db->DBTimeStamp(time())." WHERE news_id = $newsid";
+		$query = "UPDATE ".cms_db_prefix()."module_news SET news_title = ".$db->qstr($title).", news_data = ".$db->qstr($data).", modified_date = ".$db->DBTimeStamp(time())." WHERE news_id = $newsid";
 		$dbresult = $db->Execute($query);
 		cms_mapi_audit($cms, $newsid, "News", "Edited News Item");
 		redirect("moduleinterface.php?module=News");
