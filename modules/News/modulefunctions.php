@@ -197,8 +197,8 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 			}
 			else
 			{
-				echo "<div class=\"cms-module-news\">";
-				echo "<div class=\"cms-module-news-header\">";
+				echo "<span class=\"cms-module-news\">";
+				echo "<span class=\"cms-module-news-header\">";
 				if (!(isset($params['swaptitledate']) && 
 						($params['swaptitledate'] == 'true' || 
 						 $params['swaptitledate'] == '1')))
@@ -225,7 +225,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				{
 					echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
 				}
-				echo "</div>";
+				echo "</span>";
 				if( isset( $params["summary"] ) )
 				{
 					echo "<span class=\"cms-news-content\">".news_strip_to_length($row["news_data"],$params["length"],false)."</span>";
@@ -243,7 +243,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				{
 					echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
 				}
-				echo "</div>";
+				echo "</span>";
 			}
 		}
 
