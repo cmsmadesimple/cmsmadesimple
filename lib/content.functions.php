@@ -93,18 +93,14 @@ class Smarty_CMS extends Smarty {
 			#This way the id is right, even if an alias is given
 			$gCms->variables['page'] = $line['page_id'];
 
-			# we replace this we the new css stuff ;)
-			if (0) {
-				if (isset($line[stylesheet]))
-				{
-					$stylesheet .= "<style type=\"text/css\">\n";
-					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-					$stylesheet .= "</style>\n";
-				}
+			if (isset($line[stylesheet]))
+			{
+				$stylesheet .= "<style type=\"text/css\">\n";
+				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
+				$stylesheet .= "</style>\n";
 			}
 
 			# the new css stuff
-			$stylesheet = "";
 			$tempstylesheet = "";
 
 			$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc

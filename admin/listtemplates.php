@@ -63,7 +63,8 @@ if (isset($_GET["message"])) {
 		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
-		echo "<td width=\"16\">&nbsp;</td>\n";
+		if ($config["advanced_user"])
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($add)
 			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
@@ -86,7 +87,9 @@ if (isset($_GET["message"])) {
 				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
 
 			# view css association
-			echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
+			if ($config["advanced_user"]) {
+				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
+			}
 
 			# add new template
 			if ($add)

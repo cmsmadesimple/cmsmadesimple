@@ -97,52 +97,6 @@ clear_dir_5("cache");
 
 echo "[done]</p>";
 
-echo "<p>Updating templates sytem... ";
-
-# we now gonna move the template's css as independent css
-$query = "SELECT * FROM ".cms_db_prefix()."templates";
-$result = $db->Execute($query);
-if ($result)
-{
-	while ($row = $result->FetchRow())
-	{
-		$tid	= $row["template_id"];
-		$ttext	= $row["stylesheet"];
-		$tname	= $row["template_name"]."-CSS";
-
-		# we create the css
-		$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
-		$cssquery = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($tname).", ".$db->qstr($ttext).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-		$cssresult = $db->Execute($cssquery);
-		if (FALSE == $cssresult)
-		{
-			echo "<p>Error inserting new CSS</p>";
-		}
-
-		# we create the association
-		$cssassocquery = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)
-			VALUES ('$tid','$new_css_id','template',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-		$cssassocresult = $db->Execute($cssassocquery);
-		if (FALSE == $cssassocresult)
-		{
-			echo "<p>Error inserting new CSS association</p>";
-		}
-	}
-
-	# we nom update templates modified date
-	$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time());
-	$tplresult = $db->Execute($tplquery);
-	if (FALSE == $tplresult)
-	{
-		echo "<p>Error updating templates</p>";
-	}
-}
-else
-{
-	echo "<p>Error getting templates</p>";
-}
-echo "[done]</p>";
-
 #echo "<p>Deleting stylesheet column... ";
 #$dbdict = NewDataDictionary($db);
 #$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."templates", "stylesheet");
