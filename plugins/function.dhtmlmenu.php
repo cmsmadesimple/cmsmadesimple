@@ -18,7 +18,7 @@
 
 function smarty_cms_function_dhtmlmenu($params, &$smarty)
 {
-	return "DTHMLMenu is deprecated.  Replace it with the PHPLayers module ({cms_module module='phplayers'}).";
+	return "The dhtmlmenu plugin is deprecated.  Replace it with the PHPLayers module ({cms_module module='phplayers'}).";
 }
 
 function smarty_cms_help_function_dhtmlmenu()
