@@ -314,7 +314,7 @@ class Page {
 		
 } ## class
 
-function db_get_menu_items($style) {
+function db_get_menu_items($params = array()) {
 
 	global $sorted_content;
 
@@ -325,37 +325,36 @@ function db_get_menu_items($style) {
 	$sorted_content = array();
 	$content_array = array();
 	
-	if ($style == "content_hierarchy") {
+	$query = "select p.*, u.username, t.template_name from ".cms_db_prefix()."pages p LEFT OUTER JOIN ".cms_db_prefix()."users u on u.user_id=p.owner LEFT OUTER JOIN ".cms_db_prefix()."templates t on t.template_id=p.template_id order by p.parent_id, p.item_order";
+	$result = $db->Execute($query);
 
-		$query = "select p.page_id, p.page_alias, p.page_title, p.page_url, p.page_type, p.menu_text, p.item_order, p.active, p.default_page, p.parent_id, u.username, t.template_name from ".cms_db_prefix()."pages p LEFT OUTER JOIN ".cms_db_prefix()."users u on u.user_id=p.owner LEFT OUTER JOIN ".cms_db_prefix()."templates t on t.template_id=p.template_id order by p.parent_id, p.item_order";
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0) {
-			$content_array = array();
-			while ($line = $result->FetchRow()) {
-				$current_content = new Page;
-				$current_content->page_id = $line["page_id"];
-				$current_content->page_title = $line["page_title"];
-				$current_content->page_alias = $line["page_alias"];
-				$current_content->page_url = $line["page_url"];
-				$current_content->menu_text = $line["menu_text"];
-				$current_content->page_type = $line["page_type"];
-				$current_content->item_order = $line["item_order"];
-				$current_content->active = $line["active"];
-				$current_content->default_page = $line["default_page"];
-				$current_content->username = $line["username"];
-				$current_content->template_name = $line["template_name"];
-				$current_content->parent_id = $line["parent_id"];
-				if (isset($line["url"])) {
-					$current_content->url = $line["url"];
+	if ($result && $result->RowCount() > 0) {
+		$content_array = array();
+		while ($line = $result->FetchRow()) {
+			$current_content = new Page;
+			$current_content->page_id		= $line["page_id"];
+			$current_content->page_title	= $line["page_title"];
+			$current_content->page_alias	= $line["page_alias"];
+			$current_content->page_url		= $line["page_url"];
+			$current_content->menu_text		= $line["menu_text"];
+			$current_content->page_type		= $line["page_type"];
+			$current_content->item_order	= $line["item_order"];
+			$current_content->active		= $line["active"];
+			$current_content->show_in_menu	= $line["show_in_menu"];
+			$current_content->default_page	= $line["default_page"];
+			$current_content->username		= $line["username"];
+			$current_content->template_name = $line["template_name"];
+			$current_content->parent_id		= $line["parent_id"];
+			if (isset($line["url"])) {
+				$current_content->url = $line["url"];
+			}
+			
+			# Fix URL where appropriate
+			if ($current_content->page_type != "link") {
+				if (isset($current_content->page_alias) && $current_content->page_alias != "")
+				{
+					$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
 				}
-				
-				# Fix URL where appropriate
-				if ($current_content->page_type != "link") {
-					if (isset($current_content->page_alias) && $current_content->page_alias != "")
-					{
-						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
-					}
 					else
 					{
 						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;
@@ -373,22 +372,33 @@ function db_get_menu_items($style) {
 				$content_array[$line["page_id"]] = $current_content;
 				$parents[$line["page_id"]] = $line["parent_id"];
 			} ## while
-			
-			construct_tree_from_list($content_array, $parents);
+		
+			construct_tree_from_list($content_array, $parents, $params);
 		
 			# to change : this should be a parameter of the function
 			$start_element = 0;
 
-			$new_array = array();
-			$first_level_childs = array_keys($parents,$start_element);
-			foreach($first_level_childs as $element) array_push($new_array, $content_array[$element]);
+			$new_array			= array();
+
+			$show				= isset($params[show])				? $params[show]				: "all" ;
+			$start_element		= isset($params[start_element])		? $params[start_element]	: 0 ;
+			$number_of_levels	= isset($params[number_of_levels])	? $params[number_of_levels]		: 10 ;
+
+			$first_level_childs	= array_keys($parents,$start_element);
+
+			foreach($first_level_childs as $element)
+			{
+				if (($show == "all") or ($show == "menu" && $content_array[$element]->active && $content_array[$element]->show_in_menu && $number_of_levels > 0))
+				{
+					array_push($new_array, $content_array[$element]);
+				}
+			}
 			
 			flatten_tree_to_list($new_array, &$sorted_content);
 
 		} ## if
 
 		return $sorted_content;
-	} ## if
 
 } ## function
 
@@ -406,23 +416,27 @@ function db_get_menu_items($style) {
  *
  * @param array		content_array		this is the array you want to construct the tree from.
  * @param array		parents				this is the array containing the associations : $parents[identifier] = parent_identifier of element
- * @param int		start_element		the element to start the tree from (used to create only subtrees)
- * @param int		number_of_levels	the number of levels of the tree (ie number of recursion), default is 10
- * @param int		hierarchy_level		the current level of recursion
- * @param string	total_hierarchy		a string of the form 1.2.3 indicating the path from the root to the current element
+ * @param array		params				this is the array containing all the parameters
  *
  * @since 0.5
  */
-function construct_tree_from_list(&$content_array, &$parents, $start_element = 0, $number_of_levels = 10, $hierarchy_level = 0, $total_hierarchy = "") {
+function construct_tree_from_list(&$content_array, &$parents, $params) {
 
-	if ($number_of_levels >= 0)
+	# we get all the parameters and define default options
+	$start_element		= isset($params[start_element])		? $params[start_element]		: 0 ;
+	$number_of_levels	= isset($params[number_of_levels])	? $params[number_of_levels]		: 10 ;
+	$hierarchy_level	= isset($params[hierarchy_level])	? $params[hierarchy_level]		: 0 ;
+	$total_hierarchy	= isset($params[total_hierarchy])	? $params[total_hierarchy]		: "" ;
+	$show				= isset($params[show])				? $params[show]					: "all" ;
+
+	if ($number_of_levels > 0)
 	{
 		# the current element
 		$current = &$content_array[$start_element];
 
 		# this array contains the child of our current element
-		$childs = array_keys($parents, $start_element);
-		$num_of_childs = count($childs);
+		$childs			= array_keys($parents, $start_element);
+		$num_of_childs	= count($childs);
 
 		if ($num_of_childs > 0)
 		{
@@ -431,15 +445,26 @@ function construct_tree_from_list(&$content_array, &$parents, $start_element = 0
 
 			foreach($childs as $key)
 			{
-				$newchild = &$content_array[$key];
-				$newchild->num_same_level = $num_of_childs;
-				$newchild->level = $hierarchy_level + 1;
-				$newchild->hier = $total_hierarchy."$count.";
-				
-				array_push($current->childs,$newchild);
-				construct_tree_from_list($content_array, $parents, $key, $number_of_levels - 1, $hierarchy_level + 1, $newchild->hier);
+				$newchild					= &$content_array[$key];
+				$newchild->num_same_level	= $num_of_childs;
+				$newchild->level			= $hierarchy_level + 1;
+				$newchild->hier				= $total_hierarchy."$count.";
 
-				$count++;
+				if (($show == "menu" && $newchild->active && $newchild->show_in_menu) or ($show == "all")) {
+				
+					array_push($current->childs,$newchild);
+					
+					$newparams = array(
+						"start_element"		=>	$key,
+						"number_of_levels"	=>	$number_of_levels - 1,
+						"hierarchy_level"	=>	$hierarchy_level + 1,
+						"total_hierarchy"	=>	$newchild->hier,
+						"show"				=>	$show
+					);
+					construct_tree_from_list($content_array, $parents, $newparams);
+
+					$count++;
+				}
 			} #foreach
 		} #if numchilds
 	} # if number_of_levels

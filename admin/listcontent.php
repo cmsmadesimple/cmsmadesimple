@@ -46,7 +46,7 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-	$content_array = db_get_menu_items("content_hierarchy");
+	$content_array = db_get_menu_items();
 	if (count($content_array)) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";

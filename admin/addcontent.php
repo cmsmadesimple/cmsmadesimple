@@ -152,7 +152,7 @@ if ($access) {
 	}
 
 	$content_array = array();
-	$content_array = db_get_menu_items("content_hierarchy");
+	$content_array = db_get_menu_items();
 	$dropdown = "<select name=\"parent_id\">";
 	$dropdown .="<option value=\"0\"";
 	if ($parent_id == "0") {

@@ -18,42 +18,73 @@
 
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
-	$menu = "";
-	$levelstop = $params["levelstop"] ? $params["levelstop"] : 2 ;
-	$showadmin = $params["showadmin"] ? $params["showadmin"] : "true";
+	# getting menu parameters
+	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
 	
+	# getting content hierarchy parameters
+	$newparams = array();
+	foreach($params as $key => $val) $newparams[$key] = $val;
+	$newparams["show"] = "menu";
 
-	$content = db_get_menu_items("content_hierarchy");
+	# getting content
+	$content = db_get_menu_items($newparams);
 
+	# defining variables
+	$menu = "";
 	$last_level = 0;
 
 	foreach ($content as $one) {
 
-		if ($one->active && $one->level <= $levelstop) {
-
-			if ($one->level < $last_level) {
-				for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
-			}
-			if ($one->level > $last_level) {
-				for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
-			}
-			if ($one->page_type == "separator") {
-				$menu .= "<hr class=\"separator\"/>";
-			} else {
-				$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
-			}
-			$last_level = $one->level;
+		if ($one->level < $last_level) {
+			for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
 		}
+		if ($one->level > $last_level) {
+			for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
+		}
+		if ($one->page_type == "separator") {
+			$menu .= "<hr class=\"separator\"/>";
+		} else {
+			$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
+		}
+		$last_level = $one->level;
 	}
 
 	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
 
-	if ($showadmin == "true") {
-		$menu .= "<br/>\n"."<ul><li><a href='admin'>Admin</a></li></ul>\n";
+	if ($showadmin == 1) {
+		$menu .= "<ul><li><a href='admin'>Admin</a></li></ul>\n";
 	}
 
 	return $menu;
 
+}
+
+function smarty_cms_help_function_bulletmenu() {
+	?>
+	<h3>What does this do?</h3>
+	<p>Prints a bullet menu.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{bulletmenu}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
+		<li><em>(optional)</em> <tt>start_element</tt> - a page ID. This parameter sets the root of the menu.</li>
+		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
+	</ul>
+	</p>
+
+	<?
+}
+
+function smarty_cms_about_function_bulletmenu() {
+	?>
+	<p>Author: Julien Lancien&lt;calexico@ifrance.com&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+	<?
 }
 
 # vim:ts=4 sw=4 noet

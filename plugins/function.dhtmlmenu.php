@@ -18,27 +18,31 @@
 
 function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
-	$showadmin = $params["showadmin"] ? $params["showadmin"] : "true";
+	# getting menu parameters
+	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
+	
+	# getting content hierarchy parameters
+	$newparams = array();
+	foreach($params as $key => $val) $newparams[$key] = $val;
+	$newparams["show"] = "menu";
+
+	# getting content
+	$content = db_get_menu_items($newparams);
 
 	$menu = "";
 
-	$content = db_get_menu_items("content_hierarchy");
-
 	foreach ($content as $one) {
 
-		if ($one->active) {
+		for ($i = 1; $i <= $one->level; $i++) { $menu .= "."; }
 
-			for ($i = 1; $i <= $one->level; $i++) { $menu .= "."; }
-
-			if ($one->page_type == "separator") {
-				$menu .= "|---\n";
-			} else {
-				$menu .= "|".$one->menu_text."|".$one->url."\n";
-			}
+		if ($one->page_type == "separator") {
+			$menu .= "|---\n";
+		} else {
+			$menu .= "|".$one->menu_text."|".$one->url."\n";
 		}
 	}
 
-	if ($showadmin == "true") {
+	if ($showadmin == 1) {
 		$menu .= ".|---\n";
 		$menu .= ".|Admin|admin\n";
 	}
@@ -79,6 +83,33 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 	
 	return $text;
 
+}
+
+function smarty_cms_help_function_dhtmlmenu() {
+	?>
+	<h3>What does this do?</h3>
+	<p>Prints a dhtml vertical menu.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{dhtmlmenu}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
+		<li><em>(optional)</em> <tt>start_element</tt> - a page ID. This parameter sets the root of the menu.</li>
+		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
+	</ul>
+	</p>
+	<?
+}
+
+function smarty_cms_about_function_dhtmlmenu() {
+	?>
+	<p>Author: Julien Lancien&lt;calexico@ifrance.com&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+	<?
 }
 
 # vim:ts=4 sw=4 noet
