@@ -173,6 +173,12 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 			echo "<?xml version='1.0'?>\n";
 			echo "<rss version='2.0'>\n";
 			echo "   <channel>\n";
+			echo "  <title>".$cms->config["news_rss_title"]."</title>\n";
+			echo "  <link>";
+			echo cms_htmlentities($cms->config["news_url"], ENT_NOQUOTES, get_encoding($encoding));
+			echo "</link>\n";
+			echo "  <description>Current linkblog entries</description>\n";
+
 		}
 
 		while( ($row = $dbresult->FetchRow()) )
@@ -210,7 +216,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				{
 					echo "            <description>".news_strip_to_length($row["news_data"],0)."</description>\n";
 				} 
-				echo "            <pubDate>".gmdate('D d M, Y H:i:s', $db->UnixTimeStamp($row["news_date"]))." GMT</pubDate>\n";
+				echo "            <pubDate>".gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row["news_date"]))."</pubDate>\n";
 				echo "        </item>\n";
 			}
 			else
