@@ -71,7 +71,7 @@ if ($access) {
 			foreach($gCms->modules as $key=>$value)
 			{
 				if (isset($gCms->modules[$key]['addhtmlblob_pre_function']) &&
-					$gCms->modules[$key]['Installed] == true &&
+					$gCms->modules[$key]['Installed'] == true &&
 					$gCms->modules[$key]['Active'] == true)
 				{
 					call_user_func_array($gCms->modules[$key]['addhtmlblob_pre_function'], array(&$gCms, &$blobobj));
@@ -93,7 +93,7 @@ if ($access) {
 				foreach($gCms->modules as $key=>$value)
 				{
 					if (isset($gCms->modules[$key]['addhtmlblob_post_function']) &&
-						$gCms->modules[$key]['Installed] == true &&
+						$gCms->modules[$key]['Installed'] == true &&
 						$gCms->modules[$key]['Active'] == true)
 					{
 						call_user_func_array($gCms->modules[$key]['addhtmlblob_post_function'], array(&$gCms, &$blobobj));
