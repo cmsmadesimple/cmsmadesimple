@@ -1,9 +1,10 @@
 Version 0.4.1 -- Subversion
 -----------------
 
-* Fixed 2 redirection bugs in the news module
+* Fixed redirection bugs in the news module
 * Fixed a bug in adding a group
-
+* Fixed a bug where mysql imports would not work because of spaces at the
+end of lines (Knaldgas)
 
 Version 0.4 -- Tue Aug 10 2004
 -----------------
