@@ -212,6 +212,24 @@ class TemplateOperations
 		return $result;
 	}
 
+	function TouchAllTemplates()
+	{
+		$result = false;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ?";
+		$dbresult = $db->Execute($query,array($db->DBTimeStamp(time())));
+
+		if ($dbresult !== false)
+		{
+			$result = true;
+		}
+
+		return $result;
+	}
+
 	function CheckExistingTemplateName($name)
 	{
 		$result = false;

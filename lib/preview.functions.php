@@ -75,6 +75,8 @@ class Smarty_Preview extends Smarty {
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 		$tpl_source = ereg_replace("\{content\}", $data["content"], $tpl_source);
 		$tpl_source = ereg_replace("\{title\}", $data["title"], $tpl_source);
+		#Do html_blobs
+		$tpl_source = preg_replace_callback("|\{html_blob name=\"(.*?)\"\}|", "html_blob_regex_callback", $tpl_source);
 
 		return true;
 	}

@@ -477,11 +477,27 @@ class Smarty_ModuleInterface extends Smarty {
 		while (($file = $ls->read()) != "") {
 			if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
 				if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
-					#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
 					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
-					#echo $filename . "<br />";
-					require_once $filename;
-					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
+					if (strpos($filename, 'function') !== false)
+					{
+						require_once $filename;
+						$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
+					}
+					else if (strpos($filename, 'compiler') !== false)
+					{
+						require_once $filename;
+						$this->register_compiler_function($matches[2], "smarty_cms_compiler_" . $matches[2], $this->cache_plugins);
+					}
+					else if (strpos($filename, 'prefilter') !== false)
+					{
+						require_once $filename;
+						$this->register_prefilter($matches[2], "smarty_cms_prefilter_" . $matches[2]);
+					}
+					else if (strpos($filename, 'modifier') !== false)
+					{
+						require_once $filename;
+						$this->register_modifier($matches[2], "smarty_cms_modifier_" . $matches[2]);
+					}
 				}
 			}
 		}

@@ -20,6 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.htmlblob.inc.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -97,6 +98,7 @@ if ($access)
 					}
 				}
 				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
+				TemplateOperations::TouchAllTemplates(); #So pages recompile
 				redirect("listhtmlblobs.php");
 				return;
 			}

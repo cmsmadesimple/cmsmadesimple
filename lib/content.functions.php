@@ -22,6 +22,7 @@
  * @package CMS
  */
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
+require_once(dirname(dirname(__FILE__)) . "/lib/classes/class.htmlblob.inc.php");
 $sorted_sections = array();
 $sorted_content = array();
 
@@ -35,6 +36,7 @@ $sorted_content = array();
  */
 class Smarty_CMS extends Smarty {
 
+	
 	function Smarty_CMS(&$config)
 	{
 		$this->Smarty();
@@ -145,6 +147,8 @@ class Smarty_CMS extends Smarty {
 				$header_script = $line['page_header'];
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+
+
 				if (isset($head_tags) && $head_tags != "")
 				{
 					$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
@@ -160,6 +164,9 @@ class Smarty_CMS extends Smarty {
 				{
 					#If it's regular content, do this...
 					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
+
+					#Do html_blobs
+					$tpl_source = preg_replace_callback("|\{html_blob name=\"(.*?)\"\}|", "html_blob_regex_callback", $tpl_source);
 					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
 					{
 						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
@@ -294,12 +301,31 @@ function load_plugins(&$smarty)
 	while (($file = $ls->read()) != "") {
 		if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
 			if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
-				#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
 				$filename = $smarty->_get_plugin_filepath($matches[1], $matches[2]);
-				#echo $filename . "<br />";
-				include_once $filename;
-				$smarty->register_function($matches[2], "smarty_cms_function_" . $matches[2], $smarty->cache_plugins);
-				array_push($plugins, $matches[2]);
+				if (strpos($filename, 'function') !== false)
+				{
+					require_once $filename;
+					$smarty->register_function($matches[2], "smarty_cms_function_" . $matches[2], $smarty->cache_plugins);
+					array_push($plugins, $matches[2]);
+				}
+				else if (strpos($filename, 'compiler') !== false)
+				{
+					require_once $filename;
+					$smarty->register_compiler_function($matches[2], "smarty_cms_compiler_" . $matches[2], $smarty->cache_plugins);
+					array_push($plugins, $matches[2]);
+				}
+				else if (strpos($filename, 'prefilter') !== false)
+				{
+					require_once $filename;
+					$smarty->register_prefilter($matches[2], "smarty_cms_prefilter_" . $matches[2]);
+					array_push($plugins, $matches[2]);
+				}
+				else if (strpos($filename, 'modifier') !== false)
+				{
+					require_once $filename;
+					$smarty->register_modifier($matches[2], "smarty_cms_modifier_" . $matches[2]);
+					array_push($plugins, $matches[2]);
+				}
 			}
 		}
 	}
@@ -678,6 +704,26 @@ function set_all_pages_hierarchy_position()
 		{
 			set_page_hierarchy_position($row['page_id']);
 		}
+	}
+}
+
+function html_blob_regex_callback($matches)
+{
+	if (isset($matches[1]))
+	{
+		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($matches[1]);
+		if ($oneblob)
+		{
+			return $oneblob->content;
+		}
+		else
+		{
+			return "<!-- Html blob '" . $matches[1] . "' does not exist  -->";
+		}
+	}
+	else
+	{
+		return "<!-- Html blob has no name parameter -->";
 	}
 }
 

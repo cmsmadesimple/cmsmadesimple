@@ -20,6 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.htmlblob.inc.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -46,6 +47,7 @@ if (isset($_GET["htmlblob_id"]))
 		if ($result == true)
 		{
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
+			TemplateOperations::TouchAllTemplates(); #So pages recompile
 		}
 	}
 }
