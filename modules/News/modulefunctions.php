@@ -44,6 +44,15 @@ function news_module_install($cms) {
 
 function news_module_upgrade($cms, $oldversion, $newversion)
 {
+	$current_version = $oldversion;
+	if ($current_version == "1.0")
+	{
+		$db = $cms->db;
+		$dict = NewDataDictionary($db);
+		$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "start_time T, end_time T, icon C(255)");
+		$dict->ExecuteSQLArray($sqlarray);
+		$current_version = "1.1";
+	}
 }
 
 function news_module_uninstall($cms) {
@@ -58,17 +67,23 @@ function news_module_uninstall($cms) {
 	cms_mapi_remove_permission($cms, 'Modify News');
 }
 
-function news_module_execute($cms, $id, $params) {
+function news_module_execute($cms, $id, $params)
+{
 	//This is the entryway into the module.  All requests from CMS will come through here.
 	$db = $cms->db;
-	$query = "SELECT news_id, news_title, news_data, news_date FROM ".cms_db_prefix()."module_news ORDER BY news_date desc";
-	if (isset($params["number"])) {
+	$query = "SELECT news_id, news_title, news_data, news_date FROM ".cms_db_prefix()."module_news WHERE (".$db->IfNull('start_time',"''")." = '' AND ".$db->IfNull('end_time',"''")." = '') OR (start_time < ".$db->DBTimeStamp(time())." AND end_time > ".$db->DBTimeStamp(time()).") ORDER BY news_date desc";
+	if (isset($params["number"]))
+	{
 		$dbresult = $db->SelectLimit($query, $params["number"]);
-	} else {
+	}
+	else
+	{
 		$dbresult = $db->Execute($query);
 	}
-	if ($dbresult && $dbresult->RowCount()) {
-		while ($row = $dbresult->FetchRow()) {
+	if ($dbresult && $dbresult->RowCount())
+	{
+		while ($row = $dbresult->FetchRow())
+		{
 			echo "<div class=\"cms-module-news\">";
 			echo "<span class=\"cms-news-date\">".date("F j, Y, g:i a", $db->UnixTimeStamp($row['news_date']))."</span><br />";
 			echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
