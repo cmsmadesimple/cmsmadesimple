@@ -252,7 +252,7 @@ switch( $moduleaction )
         if ($start_date != "")
         {
           $query .= ", start_time = ?";
-          array_push($params, $db->DBTimeStamp($start_date));
+          array_push($params, rtrim(ltrim($db->DBTimeStamp($start_date), "'"), "'"));
         }
         else
         {
@@ -262,7 +262,7 @@ switch( $moduleaction )
         if ($end_date != "")
         {
           $query .= ", end_time = ?";
-          array_push($params, $db->DBTimeStamp($end_date));
+          array_push($params, rtrim(ltrim($db->DBTimeStamp($end_date), "'"), "'"));
         }
         else
         {
@@ -272,7 +272,7 @@ switch( $moduleaction )
         if ($post_date != "")
         {
           $query .= ", news_date = ?";
-          array_push($params, $db->DBTimeStamp($post_date));
+          array_push($params, rtrim(ltrim($db->DBTimeStamp($post_date), "'"), "'"));
         }
         $query .= " WHERE news_id = ?";
         array_push($params, $newsid);
