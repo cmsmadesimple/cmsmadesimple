@@ -2,7 +2,9 @@ Version 0.7.3 -- Subversion
 -----------------
 
 * Added Italian translation (emaunelez)
+* Added more callback functions to module API
 * Fixed bug with relative paths in dhtmlmenu
+* Fixed changing ownership of html blobs
 * Reenabled Image Manager
 * Removed Allow Admin Access from add/edit user
 * Updated adodb to 4.54

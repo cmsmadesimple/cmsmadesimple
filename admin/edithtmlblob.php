@@ -203,7 +203,7 @@ else
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="edithtmlblob" value="true"><input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>"><input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>">
 		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<?php if ($adminaccess) { ?>
+		<?php if (!$adminaccess) { ?>
 			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>">
 		<?php } ?>
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
