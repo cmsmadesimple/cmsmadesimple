@@ -72,7 +72,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 	$query .= " a.status = '1'";
     $query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
     $dbresult = $db->Execute($query);
-    echo "<p class=\"smalltitle\">Posted sites</p>\n";
+    echo "<p class=\"modulelinkblogtitle\">Posted sites</p>\n";
     echo "<div class=\"modulelinkblog\">\n";
 
     if ($dbresult && $dbresult->RowCount()) {
@@ -82,10 +82,12 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
             #echo "last_date: ($last_date) create_date: ".$row["create_date"].")<br/>";
             if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
                 echo "<div class=\"modulelinkblogentry\">\n";
-                echo "<div class=\"modulelinkblogentryheader\">\n";
                 if ($last_date == "") {
+					echo "<div class=\"modulelinkblogentrydate\">\n";
                     echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+					echo "</div>\n";
                 }
+				echo "<div class==\"modulelinkblogentrytime\">\n";
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
                 echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
                 echo "</div>\n";
@@ -273,7 +275,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         $db = $cms->db;
         $query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type, create_date from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params[$id."linkblog_id"];
         $dbresult = $db->Execute($query);
-        echo "<p class=\"smalltitle\">Posted site - ";
+        echo "<p class=\"modulelinkblogtitle\">Posted site - ";
         echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
         echo "</p>\n";
         echo "<div class=\"modulelinkblog\">\n";
@@ -282,8 +284,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
             while ($row = $dbresult->FetchRow()) {
 
                 echo "<div class=\"modulelinkblogentry\">\n";
-                ## echo "<div class=\"modulelinkblogentryheader\">\nPosted at ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentryheader\">\nPosted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
+                echo "<div class=\"modulelinkblogtime\">\nPosted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
                 echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
                 echo "</div>\n";
 
@@ -360,10 +361,12 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 			while ($row = $dbresult->FetchRow()) {
 
 				echo "<div class=\"modulelinkblogentry\">\n";
-				echo "<div class=\"modulelinkblogentryheader\">\n";
 				if ($last_date == "") {
+					echo "<div class=\"modulelinkblogentrydate\">\n";
 					echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+					echo "</div>\n";
 				}
+				echo "<div class=\"modulelinkblogentrytime\">\n";
 				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
 				echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
