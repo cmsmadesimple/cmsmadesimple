@@ -35,25 +35,28 @@ if (!isset($charsetsent))
 <SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="helparea.js"></SCRIPT>
 
 <SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
-  //@param form - current form
-  //@param names - string containing a list of the names used for the textarea
-  //               each name should be seperated with a comma
-  function textarea_submit(form, names){
-    var name = names.split(",");
-    var appletName = document.getElementsByName("CMSSyntaxHighlight");
-    
-    for (var i=0; i < name.length; i++){
-        try{
-			if(appletName[i].getText()){
-				form.elements[name[i].toString()].value = appletName[i].getText();
+	//@param form - current form
+	//@param names - string containing a list of the names used for the textarea
+	//               each name should be seperated with a comma
+	function textarea_submit(form, names){
+		var name = names.split(",");
+		var appletName = document.getElementsByName("CMSSyntaxHighlight");
+		//fixes form not submitting because applet is hidden
+		if (eval(document.getElementById('advanced'))) {expandcontent('advanced');}
+
+		for (var i=0; i < name.length; i++){
+			try{
+				if(appletName[i].getText()){
+					form.elements[name[i].toString()].value = appletName[i].getText();
+				}
+			}catch(error){
+				alert("There was an error with the syntax highlighting textarea.");
 				return;
 			}
-        }catch(error){
-            alert("There was an error with the syntax highlighting textarea.");
-            return;
-        }
-    }
-  }
+		}
+
+		if (eval(document.getElementById('advanced'))) {expandcontent('advanced');}
+	}
 </SCRIPT>
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<SCRIPT TYPE="text/javascript">

@@ -401,7 +401,7 @@ function & strip_slashes(&$str) {
 function textarea_highlight($use_javasyntax, $text, $name,
     $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding=''){
             
-    if ($use_javasyntax && 1 == 0){ //Yes, this is obviously a bad hack :)
+    if ($use_javasyntax){
         $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
         $text = ereg_replace("\r", "<CMSNewLine>", $text);
         $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));

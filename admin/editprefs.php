@@ -36,8 +36,8 @@ $error = "";
 
 $use_wysiwyg = "1";
 if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
-//$use_javasyntax = "1";
-//if (isset($_POST["use_javasyntax"]))$use_javasyntax = $_POST["use_javasyntax"];
+$use_javasyntax = "1";
+if (isset($_POST["use_javasyntax"]))$use_javasyntax = $_POST["use_javasyntax"];
 
 $userid = get_userid();
 
@@ -48,15 +48,15 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
-	//set_preference($userid, 'use_javasyntax', $use_javasyntax);
+	set_preference($userid, 'use_javasyntax', $use_javasyntax);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
 } else if (!isset($_POST["edituserprefs"])) {
 	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
-	//$use_javasyntax = get_preference($userid, 'use_javasyntax');
-    //if($use_javasyntax == null)$use_javasyntax = false;
+	$use_javasyntax = get_preference($userid, 'use_javasyntax');
+    if($use_javasyntax == null)$use_javasyntax = false;
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
 }
@@ -74,11 +74,11 @@ if ($error != "") {
 
 <h3><?php echo lang("userprefs")?></h3>
 
-<!--<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
-</applet>-->
+<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
+</applet>
 
 <?php 
-/*
+
 echo '<script language="JavaScript" type="text/javascript">'.
     'function syntaxSupport(){ '.
         'try{'.
@@ -89,7 +89,7 @@ echo '<script language="JavaScript" type="text/javascript">'.
         '}'.
     '}'.
 '</script>';
-*/
+
 ?>
 
 <table border="0" align="center">
@@ -105,7 +105,6 @@ echo '<script language="JavaScript" type="text/javascript">'.
 			</select>
 		</td>
 	</tr>
-	<!--
 	<tr>
 		<td><?php echo lang("usejavasyntax")?>:</td>
 		<td>
@@ -115,7 +114,6 @@ echo '<script language="JavaScript" type="text/javascript">'.
 			</select>
 		</td>
 	</tr>
-	-->
 	<TR>
 		<TD><?php echo lang('language')?>:</TD>
 		<TD>
