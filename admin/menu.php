@@ -6,17 +6,82 @@
 
 <div>
 
+<?php
+
+$userid = get_userid();
+
+?>
+
 <a href="listcontent.php"><?php echo lang('contentmanagement')?></a>
+
+<?php
+
+if (check_permission($userid, 'Add Template') || check_permission($userid, 'Remove Template') || check_permission($userid, 'Modify Template'))
+{
+
+?>
 <a href="listtemplates.php"><?php echo lang('templatemanagement')?></a>
-<?php if (get_site_preference('useadvancedcss') == "1") { ?>
+<?php
+
+}
+
+if (get_site_preference('useadvancedcss') == "1")
+{
+	if (check_permission($userid, 'Add CSS') || check_permission($userid, 'Remove CSS') || check_permission($userid, 'Modify CSS'))
+	{
+
+?>
 <a href="listcss.php"><?php echo lang('cssmanagement')?></a>
-<?php } ?>
+<?php
+
+	}
+}
+
+if (check_permission($userid, 'Add HTML Blobs') || check_permission($userid, 'Remove HTML Blobs') || check_permission($userid, 'Modify HTML Blobs'))
+{
+
+?>
 <a href="listhtmlblobs.php"><?php echo lang('blobmanagement')?></a>
+<?php
+
+}
+
+?>
 <a href="listusers.php"><?php echo lang('usermanagement')?></a>
+<?php
+
+if (check_permission($userid, 'Add Group') || check_permission($userid, 'Remove Group') || check_permission($userid, 'Modify Group') || check_permission($userid, 'Modify Group Assignments') || check_permission($userid, 'Modify Permissions'))
+{
+
+?>
 <a href="listgroups.php"><?php echo lang('groupmanagement')?></a>
+<?php
+
+}
+
+if (check_permission($userid, 'Modify Files'))
+{
+
+?>
 <a href="files.php"><?php echo lang('filemanagement')?></a>
+<?php
+
+}
+
+?>
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
+<?php
+
+if (check_permission($userid, 'Modify Site Preferences'))
+{
+
+?>
 <a href="siteprefs.php"><?php echo lang('siteprefs')?></a>
+<?php
+
+}
+
+?>
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="<?php
 

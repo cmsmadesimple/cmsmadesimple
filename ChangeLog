@@ -5,6 +5,7 @@ Version 0.8 "Tahiti" -- Subversion
 * Added FCKeditor capability via module
 * Added TinyMCE capability via module (included)
 * Admin and default website are totally xhtml 1.0 transitional compliant
+* Admin menu now only shows items that the user could have access to
 * Cleaned up root directory by moving things to modules and the lib
 directory
 * Moved HTMLArea to a module.

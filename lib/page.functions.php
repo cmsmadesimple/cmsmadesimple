@@ -103,6 +103,32 @@ function generate_user_object($userid)
 }
 
 /**
+ * Loads all permissions for a particular user into a global variable so we don't hit the db for every one.
+ *
+ * @since 0.8
+ */
+function load_all_permissions($userid)
+{
+	global $gCms;
+	$db = &$gCms->db;
+	$variables = &$gCms->variables;
+
+	$perms = array();
+
+	$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ?";
+	$result = $db->Execute($query, array($userid));
+
+	if ($result && $result->RowCount() > 0)
+	{
+		while ($row = $result->FetchRow())
+		{
+			array_push($perms, $row['permission_name']);
+		}
+	}
+	$variables['userperms'] = $perms;
+}
+
+/**
  * Checks to see that the given userid has access to
  * the given permission.
  *
@@ -114,14 +140,18 @@ function check_permission($userid, $permname)
 	$check = false;
 
 	global $gCms;
-	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = ".$db->qstr($permname);
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0)
+	if (!isset($gCms->variables['userperms']))
 	{
-		$check = true;
+		load_all_permissions($userid);
+	}
+
+	if (isset($gCms->variables['userperms']))
+	{
+		if (in_array($permname, $gCms->variables['userperms']))
+		{
+			$check = true;
+		}
 	}
 
 	return $check;
