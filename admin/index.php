@@ -27,6 +27,10 @@ check_login($gCms->config);
 include_once("header.php");
 
 //Shouldn't something go here?
+if (file_exists(dirname(dirname(__FILE__)) . '/install'))
+{
+	echo '<p><em><strong>Warning:</strong></em> install directory still exists.  Please remove it completely.</p>';
+}
 
 include_once("footer.php");
 

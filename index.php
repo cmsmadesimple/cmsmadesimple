@@ -38,24 +38,18 @@ else if (file_exists(dirname(__FILE__)."/tmp/cache/SITEDOWN"))
 	exit;
 }
 
-/*
-if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
-    @unlink("install/install.php");
-} ## if
-
-if (file_exists("config.php") && file_exists("install/install.php")) {
-    echo "You cannot start CMS until you remove the install.php<br>\n";
-    if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
-        echo "Looks like you tried to have CMS delete the install file but that was not sucessful.  You will have to remove it manually before you can continue<br>\n";
-        exit;
-    } ## if
-    echo "Click <a href=\"index.php?deleteinstall=true\">here</a> to have CMS try to delete it for you.  If successful you will see the CMS main page<br>\n";
-    exit;
-} ## if
-*/
+if (!is_writable(dirname(__FILE__).'/tmp/templates_c') || !is_writable(dirname(__FILE__).'/tmp/cache'))
+{
+	echo '<html><title>Error</title></head><body>';
+	echo '<p>The following directories must be writable by the web server:<br />';
+	echo 'tmp/cache<br />';
+	echo 'tmp/templates_c<br /></p>';
+	echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivilent for your platform before continuing.</p>';
+	echo '</body></html>';
+	exit;
+}
 
 require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
-
 
 $smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
