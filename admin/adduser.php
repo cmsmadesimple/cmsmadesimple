@@ -37,7 +37,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 
 $use_wysiwyg = "";
-if (isset($_POST["use_wysiwyg"]))$use_wysiwyg = $_POST["use_wysiwyg"];
+#if (isset($_POST["use_wysiwyg"]))$use_wysiwyg = $_POST["use_wysiwyg"];
 
 if (isset($_POST["cancel"])) {
 	redirect("listusers.php");
