@@ -393,7 +393,7 @@ class Smarty_ModuleInterface extends Smarty {
 		$db = $gCms->db;
 		$cmsmodules = $gCms->modules;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, t.template_id, t.stylesheet, t.template_content FROM ".$cms_db_prefix()."pages p INNER JOIN ".$cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_id = '$tpl_name'";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_id = '$tpl_name'";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
