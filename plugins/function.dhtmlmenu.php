@@ -16,137 +16,28 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_dhtmlmenu($params, &$smarty) {
-
-	global $db;
-
-	# getting menu parameters
-	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
-	$horizontal = isset($params["horizontal"]) ? $params["horizontal"] : 0 ;
-	
-	# getting content hierarchy parameters
-	$newparams = array();
-	foreach($params as $key => $val) $newparams[$key] = $val;
-	$newparams["show"] = "menu";
-
-	if (isset($newparams["start_element"]))
-	{
-		$tmp	= $newparams["start_element"];
-		$tmptab	= explode(".",$tmp);
-		$parent	= 0;
-
-		foreach($tmptab as $key)
-		{
-			if ("" != $key)
-			{
-				$query	= "SELECT page_id FROM ".cms_db_prefix()."pages WHERE item_order = '$key' AND parent_id = '$parent'";
-				$result = $db->Execute($query);
-				if ($result && $result->RowCount() > 0)
-				{
-					$line	= $result->FetchRow();
-					$parent	= $line["page_id"];
-				}
-			}
-		}
-		$newparams["start_element"] = $parent;
-	}
-
-	# getting content
-	$content = db_get_menu_items($newparams);
-
-	$menu = "";
-
-	foreach ($content as $one) {
-
-		for ($i = 1; $i <= $one->level; $i++) { $menu .= "."; }
-
-		if ($one->page_type == "separator") {
-			$menu .= "|---\n";
-		} else if ($one->page_type == "sectionheader") {
-			$menu .= "|".$one->menu_text."\n";
-		} else {
-			$menu .= "|".$one->menu_text."|".$one->url."\n";
-		}
-	}
-
-	if ($showadmin == 1) {
-		$menu .= ".|---\n";
-		$menu .= ".|Admin|admin/\n";
-	}
-
-	$text = '
-	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-browser_detection.js"></script>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-library.js"></script>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu.js"></script>';
-	
-	require_once dirname(dirname(__FILE__)).'/phplayers/lib/PHPLIB.php';
-	require_once dirname(dirname(__FILE__)).'/phplayers/lib/layersmenu-common.inc.php';
-	require_once dirname(dirname(__FILE__)).'/phplayers/lib/layersmenu.inc.php';
-	
-	$mid = new LayersMenu();
-	
-	/* TO USE RELATIVE PATHS: */
-	$mid->setDirroot('./phplayers/');
-	$mid->setLibjsdir('./phplayers/libjs/');
-	$mid->setImgdir('./phplayers/menuimages/');
-	$mid->setImgwww('phplayers/menuimages/');
-	//$mid->setIcondir('./phplayers/menuicons/');
-	//$mid->setIconwww('phplayers/menuicons/');
-	
-	$mid->setTpldir('./phplayers/templates/');
-	if ($horizontal == 1) {
-	  $mid->setHorizontalMenuTpl('layersmenu-horizontal_menu.ihtml');
-	}
-	else {
-	  $mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
-	}
-	$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
-
-	
-	$mid->setMenuStructureString($menu);
-	$mid->setIconsize(16, 16);
-	$mid->parseStructureForMenu('menu1');
-	if ($horizontal == 1) {
-	  $mid->newHorizontalMenu('menu1');
-	}
-	else {
-	  $mid->newVerticalMenu('menu1');
-	}
-	
-	$text .= $mid->getHeader();
-	$text .= $mid->getMenu('menu1');
-	$text .= $mid->getFooter();
-	
-	return $text;
-
+function smarty_cms_function_dhtmlmenu($params, &$smarty)
+{
+	return "DTHMLMenu is deprecated.  Replace it with the PHPLayers module ({cms_module module='phplayers'}).";
 }
 
-function smarty_cms_help_function_dhtmlmenu() {
+function smarty_cms_help_function_dhtmlmenu()
+{
 	?>
 	<h3>What does this do?</h3>
-	<p>Prints a dhtml vertical menu.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{dhtmlmenu}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>
-	<ul>
-		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
-		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
-		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
-		<li><em>(optional)</em> <tt>horizontal</tt> - 1/0, whether you want to have a horizontal menu instead of vertical.</li>
-	</ul>
-	</p>
+	<p>Nothing.  It is now deprecated.  Use the PHPLayers module for similar functionality.</p>
 	<?php
 }
 
-function smarty_cms_about_function_dhtmlmenu() {
+function smarty_cms_about_function_dhtmlmenu()
+{
 	?>
 	<p>Author: Julien Lancien&lt;calexico@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Deprecated in favor of the PHPLayers module.<br />
+	1.0 - Initial Version<br />
 	</p>
 	<?php
 }
