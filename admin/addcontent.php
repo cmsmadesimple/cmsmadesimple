@@ -406,6 +406,7 @@ else {
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
+<div id="advanced" class="expand">&nbsp;</div>
 </div>
 
 
@@ -457,6 +458,7 @@ else {
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
+<div id="advanced" class="expand">&nbsp;</div>
 </div>
 <?php }elseif ($content_type == "sectionheader") { ?>
 <h3><?php echo lang('addlink')?></h3>
@@ -492,6 +494,7 @@ else {
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
+<div id="advanced" class="expand">&nbsp;</div>
 </div>
 <?php } ?>
 

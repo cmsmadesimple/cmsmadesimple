@@ -42,7 +42,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
         try{
             form.elements[name[i].toString()].value = appletName[i].getText();
         }catch(error){
-            alert("There was an error with Syntax Highlighting");
+            alert("There was an error with the syntax highlighting textarea.");
             return;
         }
     }

@@ -5,7 +5,7 @@
 ***********************************************/
 
 var enablepersist="on" //Enable saving state of content structure using session cookies? (on/off)
-var collapseprevious="yes" //Collapse previously open content when opening present? (yes/no)
+var collapseprevious="no" //Collapse previously open content when opening present? (yes/no)
 
 if (document.getElementById){
 document.write('<style type="text/css">')
