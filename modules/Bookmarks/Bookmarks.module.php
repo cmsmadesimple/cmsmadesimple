@@ -60,7 +60,7 @@ class Bookmarks extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.3.1';
+		return '1.3.1+';
 	}
 
 	function GetDescription($lang = 'en_US')
@@ -192,6 +192,8 @@ EOT;
 					<dd>Fix all default options so that the documented default is used. This is most obvious
 					for the display code so that if type is not set, we correctly assume "text" rather than 
 					"rss" now!. Also, fixed the API calls so that About works.</dd>
+				<dt>Version: 1.3.1+</dt>
+					<dd>Minor tidy up and bug fixing.</dd>
 			</dl>
 EOT;
 	}
@@ -444,7 +446,7 @@ EOT;
 			
 		$db = $this->cms->db; /* @var $db ADOConnection */
 		$categories = $this->GetCategories();
-		$bookmark_id = empty($parameters['bookmark_id']) ? -1 : $parameters['bookmark_id'];
+		$bookmark_id = get_parameter_value($parameters, 'bookmark_id', -1);
 		$bookmark = $this->GetBookmark($bookmark_id, 1);
 
 		$button_text = 'Add';
@@ -502,7 +504,7 @@ EOT;
 		
 	    echo <<<EOT
 			</td>
-	    <tr>
+	    </tr>
 	    <tr>
 	        <td align="right">Summary:</td>
 	        <td colspan=3>
@@ -522,7 +524,7 @@ EOT;
 		$count = 0;
 		for($i = 0; $i < $num_cats; $i++,$count ++)
 		{
-			if($count >= $rows_per_col)
+			if($count >= $rows_per_col && $rows_per_col != 0)
 			{
 				$count = 0;
 				echo "</td><td valign='top' style='padding-left: 40px;' >\n";
