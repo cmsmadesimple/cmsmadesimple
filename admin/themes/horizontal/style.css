@@ -1,12 +1,7 @@
-BODY {
-	PADDING: 0px;
-	BACKGROUND: #FFFFFF;
-	MARGIN: 0px;
-	WIDTH: 100%;
-	COLOR: #7197C7;
-	FONT-FAMILY: verdana, helvetica, arial, sans-serif;
-	HEIGHT: 100%;
-	FONT-SIZE: 70%;
+body {
+	width: 98%;
+	margin: auto;
+	font-size: 80%;
 }
 /*
 #header {

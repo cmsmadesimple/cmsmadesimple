@@ -111,7 +111,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('language')?>:</td>
 		<td>
-			<select class="smallselect" name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
+			<select name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
 			<option value=""><?php echo lang('nodefault') ?></option>
 			<?php
 				asort($nls["language"]);
