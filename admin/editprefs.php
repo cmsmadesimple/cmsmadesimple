@@ -57,7 +57,7 @@ if ($error != "") {
 <table border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("Use WYSIWYG Editor for Content?")?>:</td>
+		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content?")?>:</td>
 		<td>
 			<select name="use_wysiwyg">
 				<option value="1" <?= ($use_wysiwyg=="1"?"selected":"") ?>>True</option>
