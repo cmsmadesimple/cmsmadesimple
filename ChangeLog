@@ -9,6 +9,7 @@ htmlentities. (#000002, #000006)
 * Added check to lang/addline.sh to make sure line doesn't already
 exist (#000017)
 * Added German translation (Piratos)
+* Added new div and swaptitledate parameter to News module
 * Fixed email in add/edit user to accept 255 characters (#000003)
 * Fixed htmlblob NOTICE level messages (#000005)
 * Fixed delete confirmation text in file management (#000012)
