@@ -675,6 +675,7 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 			$plan = 'P'.md5($sql);
 				
 			$execp = '';
+
 			foreach($inputarr as $v) {
 				if ($execp) $execp .= ',';
 				if (is_string($v)) {
@@ -683,9 +684,16 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 					$execp .= $v;
 				}
 			}
-			
+
 			if ($execp) $exsql = "EXECUTE $plan ($execp)";
 			else $exsql = "EXECUTE $plan";
+			
+			global $gCms;
+			global $sql_queries;
+			if ($gCms->config["debug"] == true)
+			{
+				$sql_queries .= "<p>$exsql</p>\n";
+			}
 			
 			$rez = @pg_exec($this->_connectionID,$exsql);
 			if (!$rez) {
@@ -711,14 +719,32 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 				}
 				$s = "PREPARE $plan ($params) AS ".substr($sql,0,strlen($sql)-2);		
 				//adodb_pr($s);
+				global $gCms;
+				global $sql_queries;
+				if ($gCms->config["debug"] == true)
+				{
+					$sql_queries .= "<p>$s</p>\n";
+				}
 				pg_exec($this->_connectionID,$s);
 				echo $this->ErrorMsg();
 			}
 			
+			global $gCms;
+			global $sql_queries;
+			if ($gCms->config["debug"] == true)
+			{
+				$sql_queries .= "<p>$exsql</p>\n";
+			}
 			$rez = pg_exec($this->_connectionID,$exsql);
 		} else {
 			$this->_errorMsg = false;
 			//adodb_backtrace();
+			global $gCms;
+			global $sql_queries;
+			if ($gCms->config["debug"] == true)
+			{
+				$sql_queries .= "<p>$sql</p>\n";
+			}
 			$rez = pg_exec($this->_connectionID,$sql);
 		}
 		// check if no data returned, then no need to create real recordset

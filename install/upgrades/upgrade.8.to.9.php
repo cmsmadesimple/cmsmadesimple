@@ -144,17 +144,17 @@ if ($result && $result->RowCount() > 0)
 	$result = $db->Execute($query);
 }
 
-echo "[done]</p>";
+echo '[done]</p>';
 
 @ob_flush();
 
-echo "<p>Updating hierarchy positions...";
+echo '<p>Updating hierarchy positions...';
 
 @ContentManager::SetAllHierarchyPositions();
 
-echo "[done]</p>";
+echo '[done]</p>';
 
-echo "<p>Changing dhtmlmenu to phplayers module on templates...";
+echo '<p>Changing dhtmlmenu to phplayers module on templates...';
 
 $alltemplates = @TemplateOperations::LoadTemplates();
 foreach ($alltemplates as $onetemplate)
@@ -164,27 +164,27 @@ foreach ($alltemplates as $onetemplate)
 	$onetemplate->Save();
 }
 
-echo "[done]</p>";
+echo '[done]</p>';
 
-echo "<p>\"Installing\" phplayers module (if necessary)... ";
+echo '<p>"Installing" phplayers module (if necessary)... ';
 
 $query = "SELECT * from ".cms_db_prefix()."modules WHERE module_name = 'PHPLayers'";
 $result = $db->Execute($query);
 
 if ($result && $result->RowCount() < 1)
 {
-	$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, status, version, active) VALUES ('PHPLayers', Installed', '1.0', 1);
+	$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, status, version, active) VALUES ('PHPLayers', 'Installed', '1.0', 1)";
 	$result = $db->Execute($query);
 }
 
-echo "[done]</p>";
+echo '[done]</p>';
 
-echo "<p>Updating schema version... ";
+echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 9";
 $db->Execute($query);
 
-echo "[done]</p>";
+echo '[done]</p>';
 
 # vim:ts=4 sw=4 noet
 ?>
