@@ -42,4 +42,11 @@ $nls['encoding']['nl_NL'] = "ISO-8859-1";
 $nls['file']['nl_NL'] = array();
 array_push($nls['file']['nl_NL'], dirname(__FILE__)."/nl_NL/admin.inc.php");
 
+#Language setting for HTML area
+# Only change this when translations exist in HTMLarea and plugin dirs
+# (please send language files to HTMLarea development)
+$nls['htmlarea']['nl_NL'] = "nl";
+
+
+
 ?>

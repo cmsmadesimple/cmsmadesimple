@@ -1,12 +1,12 @@
-<div id="navcontainer">
+<DIV ID="navcontainer">
 
-<div id="welcome"><?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
-<br>
-<br>
+<DIV ID="welcome"><?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
+<BR>
+<BR>
 
-<form action="index.php" method="post" name="cms_admin_lang_form">
-<span class="smallselect"><?php echo lang('language')?> : </span>
-<select class="smallselect" name="change_cms_lang" onchange="cms_admin_lang_form.submit()" style="vertical-align: middle;">
+<FORM ACTION="index.php" METHOD="post" NAME="cms_admin_lang_form">
+<SPAN CLASS="smallselect"><?php echo lang('language')?> : </SPAN>
+<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="cms_admin_lang_form.submit()" STYLE="vertical-align: middle;">
 <?php
 	asort($nls["language"]);
 	foreach ($nls["language"] as $key=>$val) {
@@ -28,23 +28,23 @@
 		echo "</option>\n";
 	}
 ?>
-</select>
-</form>
-</div>
+</SELECT>
+</FORM>
+</DIV>
 
-<a href="listcontent.php"><?php echo lang('contentmanagement')?></a>
-<a href="listtemplates.php"><?php echo lang('templatemanagement')?></a>
+<A HREF="listcontent.php"><?php echo lang('contentmanagement')?></A>
+<A HREF="listtemplates.php"><?php echo lang('templatemanagement')?></A>
 <?php if (get_site_preference('useadvancedcss') == "1") { ?>
-<a href="listcss.php"><?php echo lang('cssmanagement')?></a>
+<A HREF="listcss.php"><?php echo lang('cssmanagement')?></A>
 <?php } ?>
 <!--<a href="tools.php"><?php echo lang('tools')?></a>-->
-<a href="listusers.php"><?php echo lang('usermanagement')?></a>
-<a href="listgroups.php"><?php echo lang('groupmanagement')?></a>
-<a href="files.php"><?php echo lang('filemanagement')?></a>
-<a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
-<a href="siteprefs.php"><?php echo lang('siteprefs')?></a>
-<a href="adminlog.php"><?php echo lang('adminlog')?></a>
-<a href="<?php
+<A HREF="listusers.php"><?php echo lang('usermanagement')?></A>
+<A HREF="listgroups.php"><?php echo lang('groupmanagement')?></A>
+<A HREF="files.php"><?php echo lang('filemanagement')?></A>
+<A HREF="plugins.php"><?php echo lang('pluginmanagement')?></A>
+<A HREF="siteprefs.php"><?php echo lang('siteprefs')?></A>
+<A HREF="adminlog.php"><?php echo lang('adminlog')?></A>
+<A HREF="<?php
 
 if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == true)
 {
@@ -72,9 +72,9 @@ else
 	echo "../index.php";
 }
 
-?>" target="_blank"><?php echo lang('showsite')?></a>
-<a href="editprefs.php"><?php echo lang('userprefs')?></a>
-<a href="logout.php"><?php echo lang('logout')?></a>
+?>" TARGET="_blank"><?php echo lang('showsite')?></A>
+<A HREF="editprefs.php"><?php echo lang('userprefs')?></A>
+<A HREF="logout.php"><?php echo lang('logout')?></A>
 
 <?php
 
@@ -98,5 +98,5 @@ else
 	}
 
 ?>
-<br>
-</div> 
+<BR>
+</DIV> 

@@ -40,7 +40,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	#$line = $result->FetchRow();
 
 	#if ($username != "" && $password != "" && isset($line["user_id"])) {
-	if ($oneuser)
+	if ($username != "" && $password != "" && $oneuser)
 	{
 		generate_user_object($oneuser->id);
 		setcookie("cms_admin_user_id", $oneuser->id);
@@ -57,17 +57,17 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
-<head>
+<HEAD>
 
-<title></title>
+<TITLE></TITLE>
 
-<link rel="stylesheet" type="text/css" href="style.css" >
+<LINK REL="stylesheet" TYPE="text/css" HREF="style.css" >
 
-</head>
+</HEAD>
 
-<body>
+<BODY>
 
-<div class="login">
+<DIV CLASS="login">
 
 <?php
 
@@ -77,34 +77,37 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 ?>
 
-<form method="post" action="login.php" id="login" name="login">
-<img src="../images/cms/cmslogo.png" border="0" alt="CMS Made Simple" align="right" >
-<table border="0" id="table">
-	<tr>
-		<td align="right"><?php echo lang('username')?>:</td>
-		<td><input type="text" id="username" name="username" value="<?php echo (isset($_POST["username"])?$_POST["username"]:"")?>" size="15"></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo lang('password')?>:</td>
-		<td><input type="password" id="password" name="password" size="15" ></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
-	</tr>
-</table>
-</form>
+<FORM METHOD="post" ACTION="login.php" ID="login" NAME="login" >
+<IMG SRC="../images/cms/cmsloginbanner.png" ALT="CMS Made Simple" WIDTH="411" HEIGHT="114" BORDER="0" ALIGN="right" >
+<DIV ID=ctr ALIGN=center>
+<IMG SRC="../images/cms/login.png" ALT="CMS Made Simple" WIDTH="64" HEIGHT="64" BORDER="0"  ID="loginbox">
+</DIV>
+<TABLE BORDER="0" ID="logintable" ALIGN="center">
+	<TR>
+		<TD ALIGN="right"><?php echo lang('username')?>:</TD>
+		<TD><INPUT TYPE="text" ID="userdata" NAME="username" VALUE="<?php echo (isset($_POST["username"])?$_POST["username"]:"")?>" SIZE="15"></TD>
+	</TR>
+	<TR>
+		<TD ALIGN="right"><?php echo lang('password')?>:</TD>
+		<TD><INPUT TYPE="password" ID="userdata" NAME="password" SIZE="15" ></TD>
+	</TR>
+	<TR>
+		<TD>&nbsp;</TD>
+		<TD><INPUT TYPE="submit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
+	</TR>
+</TABLE>
+</FORM>
 
-</div>
 
-<script language="javascript">
+
+<SCRIPT LANGUAGE="javascript">
 <!--
 	document.login.username.focus();
 //-->
-</script>
+</SCRIPT>
 
-</body>
-</html>
+</BODY>
+</HTML>
 <?php
 # vim:ts=4 sw=4 noet
 ?>

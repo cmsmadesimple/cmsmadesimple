@@ -198,4 +198,8 @@ $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
+// Translations added after 6.1
+$lang['admin']['directoryunder'] = 'directory under current level';
+$lang['admin']['directoryabove'] = 'directory above current level';
+
 ?>

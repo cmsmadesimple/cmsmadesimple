@@ -30,7 +30,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3><?php echo lang('currenttemplates')?></h3>
+<H3><?php echo lang('currenttemplates')?></H3>
 <?php
 
 	$userid	= get_userid();
@@ -75,12 +75,15 @@ if (isset($_GET["message"])) {
 		echo "</tr>\n";
 
 		$currow = "row1";
+		// construct true/false button images
+		$image_true ="<img src=\"../images/cms/true.png\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
+		$image_false ="<img src=\"../images/cms/false.png\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
 
 		foreach ($templatelist as $onetemplate)
 		{
 			echo "<tr class=\"$currow\">\n";
 			echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
-			echo "<td align=\"center\">".($onetemplate->active == 1?lang('true'):lang('false'))."</td>\n";
+			echo "<td align=\"center\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 			# set template to all content
 			if ($all)
@@ -93,15 +96,15 @@ if (isset($_GET["message"])) {
 
 			# add new template
 			if ($add)
-				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/copy.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\"></a></td>\n";
 
 			# edit template
 			if ($edit)
-				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/edit.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
 
 			# remove template
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -115,13 +118,13 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class="button"><a href="addtemplate.php"><?php echo lang('addtemplate')?></a></div><br>
+<DIV CLASS="button"><A HREF="addtemplate.php"><?php echo lang('addtemplate')?></A></DIV><BR>
 
-<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
-<div id="helparea" class="expand">
+<DIV CLASS="collapseTitle"><A HREF="#help" onClick="expandcontent('helparea')" STYLE="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</A></DIV>
+<DIV ID="helparea" CLASS="expand">
 <?php echo lang('helplisttemplate')?>
-<a name="help">&nbsp;</a>
-</div>
+<A NAME="help">&nbsp;</A>
+</DIV>
 
 <?php
 }

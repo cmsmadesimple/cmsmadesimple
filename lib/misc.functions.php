@@ -82,5 +82,52 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 	}
 }
 
+
+/**
+ * Simple template parser
+ *
+ * @since 0.6.1
+ */
+
+	function parse_template ($template, $tpl_array, $warn=0)
+	{
+		while ( list ($key,$val) = each ($tpl_array) )
+		{
+			if (!(empty($key)))
+			{
+				if(gettype($val) != "string")
+				{
+					settype($val,"string");
+				}
+				$template = eregi_replace("\{$key\}","$val","$template");
+			}
+		}
+
+		if(!$warn)
+		{
+			// Silently remove anything not already found
+
+			$template = ereg_replace("{([A-Z0-9_]+)}","",$template);
+		}
+		else
+		{
+			// Warn about unresolved template variables
+			if (ereg("({[A-Z0-9_]+})",$template))
+			{
+				$unknown = split("\n",$template);
+				while (list ($Element,$Line) = each($unknown) )
+				{
+					$UnkVar = $Line;
+					if(!(empty($UnkVar)))
+					{
+						$this->show_unknowns($UnkVar);
+					}
+				}
+			}
+		}
+		return $template;
+
+	}	// end parse_template();
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -35,7 +35,7 @@ $lang['admin']['copytemplate'] = 'kopieer sjabloon';
 $lang['admin']['create'] = 'Maak';
 $lang['admin']['createnewfolder'] = 'Maak nieuwe folder';
 $lang['admin']['cssalreadyused'] = 'Stylesheet naam is al in gebruik';
-$lang['admin']['cssmanagement'] = 'Stylesheet management';
+$lang['admin']['cssmanagement'] = 'Stylesheet beheer';
 $lang['admin']['currentassociations'] = 'Huidige koppelingen';
 $lang['admin']['currentcss'] = 'Huidige stylesheet';
 $lang['admin']['currentdirectory'] = 'Huidige directory';
@@ -100,8 +100,8 @@ $lang['admin']['filecreatedirnoslash'] = 'Directory cannot contain \'/\' or \'\\
 $lang['admin']['filemanagement'] = 'Bestandsbeheer';
 $lang['admin']['filename'] = 'Bestandsnaam';
 $lang['admin']['filenotuploaded'] = 'Bestand kan niet geimporteerd worden. Bekijk of dit een permissie probleem is.';
-$lang['admin']['filesize'] = 'Bestand grootte';
-$lang['admin']['groupmanagement'] = 'groepsbeheer';
+$lang['admin']['filesize'] = 'Grootte';
+$lang['admin']['groupmanagement'] = 'Groepsbeheer';
 $lang['admin']['headtags'] = 'Paginakop labels';
 $lang['admin']['help'] = 'Uitleg';
 $lang['admin']['helpaddcontent'] = '<p>This page allows you to create new content. Select a content type and fill in the required fields and you have your new content setup. If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.</p><p>You can set your preferences for a WYSIWYG editor by editing your user in the gebruiker Management link. By setting this to false, you can create complex content, or simply cut and paste in existing content from another site.</p>';
@@ -187,8 +187,12 @@ $lang['admin']['usernameincorrect'] = 'Gebruikersnaam of wachtwoord incorrect';
 $lang['admin']['userprefs'] = 'Gebruikers instellingen';
 $lang['admin']['usersassignedtogroup'] = 'Gebruikers toegewezen aan groep %s';
 $lang['admin']['usertagexists'] = 'Een label met deze naam bestaat al. Gebruik aub een andere naam.'; 
-$lang['admin']['usewysiwyg'] = 'Bebruik WYSIWYG editor';
+$lang['admin']['usewysiwyg'] = 'Gebruik WYSIWYG editor';
 $lang['admin']['version'] = 'Versie';
 $lang['admin']['view'] = 'Bekijk';
 $lang['admin']['welcomemsg'] = 'Welkom %s';
+// Translations added after 6.1
+$lang['admin']['directoryunder'] = 'Onderliggende directory';
+$lang['admin']['directoryabove'] = 'bovenliggende directory';
+
 ?>

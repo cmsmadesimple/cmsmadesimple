@@ -46,15 +46,10 @@ a:hover    { color: #700000;
              text-decoration: none;
              font-size: 10pt;
              font-family: Tahoma }
-
-
-
-
 .good     { color: #0033FF;
              font-weight: bold }
 .bad      { color: #CC3300;
              font-weight: bold }
-
 div.heading {
     background-color: #64879d; 
     color: #EDF2F5;

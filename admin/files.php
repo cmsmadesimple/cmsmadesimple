@@ -43,6 +43,9 @@ function deldir($dir)
 	return $success;  
 } 
 
+
+// in filetypes.inc.php filetypes are defined 
+require_once("../filemanager/filetypes.inc.php");
 require_once("../include.php");
 
 check_login();
@@ -77,7 +80,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		}
 		else
 		{
-			audit($userid, $username, -1, $_FILES['uploadfile']['name'], 'Uploaded File');
+			audit(-1, $_FILES['uploadfile']['name'], 'Uploaded File');
 		}
 	}
 	else
@@ -111,7 +114,7 @@ if (isset($_POST['newdirsubmit']))
 		else
 		{
 			mkdir($dir."/".$_POST['newdir']);
-			audit($userid, $username, -1, $_POST['newdir'], 'Created Directory');
+			audit(-1, $_POST['newdir'], 'Created Directory');
 		}
 	}
 	else
@@ -132,7 +135,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			}
 			else
 			{
-				audit($userid, $username, -1, $reldir . "/" . $_GET['file'], 'Deleted File');
+				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted File');
 			}
 		}
 		else
@@ -157,7 +160,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 			}
 			else
 			{
-				audit($userid, $username, -1, $reldir . "/" . $_GET['file'], 'Deleted Directory');
+				audit(-1, $reldir . "/" . $_GET['file'], 'Deleted Directory');
 			}
 		}
 		else
@@ -202,7 +205,7 @@ if ($reldir != "")
 		$newdir = "?reldir=".$newdir;
 	}
 	$dirtext .= "<tr class=\"$row\">";
-	$dirtext .= "<td width=\"30\">[dir]</td>";
+	$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td width=\"10%\">&nbsp;</td>";
 	$dirtext .= "<td width=\"18\">&nbsp;</td>";
@@ -224,10 +227,12 @@ foreach ($dirs as $file)
 	{
 		if (is_dir("$dir/$file"))
 		{
-			$dirtext .= "<tr class=\"$row\">"; $dirtext .= "<td width=\"30\">[dir]</td>";
+
+			$dirtext .= "<tr class=\"$row\">"; 
+			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -249,11 +254,30 @@ foreach ($files as $file)
 	{
 		if (is_file("$dir/$file"))
 		{
+			
+			$extension = strtolower(substr(strrchr($file, "."), 1));
+	        if (!$filetype[$extension]['img']) {$extension = "unknown";}
+			// set template vars						
+			$template_vars['file']  			= $file;
+			$template_vars['dir_file']				= $reldir."/".$file;
+			$template_vars['url_dir_file']				= $url.$reldir."/".$file;
+
+			// parse little template
+			$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
+	//		$file_links = $filetype[$extension]['link']['view'];
+			$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\">";
+
 			$filetext .= "<tr class=\"$row\">";
-			$filetext .= "<td width=\"30\">[file]</td>";
-			$filetext .= '<td><a href="'.$url.$reldir."/".$file.'" target="_blank">'.$file.'</a></td>';
-			$filetext .= "<td width=\"10%\" align=\"right\">".number_format(filesize("$dir/$file"))." Bytes</td>";
-			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+			$filetext .= "<td width=\"30\">{$image_icon}</td>";
+			$filetext .= '<td><a href="'.$file_links.'" target="_blank">'.$file.'</a></td>';
+			$filesize =  filesize("$dir/$file");
+			if ($filesize >(1024*1024)) {$sizestr = number_format($filesize/(1024*1024))." MB";} else {
+				if ($filesize >(1024))  {$sizestr = number_format($filesize/1024)." KB";} else {
+					$sizestr = number_format($filesize)." B";
+				}
+			}
+			$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
+			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$filetext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -271,25 +295,23 @@ echo "</table>";
 if ($access)
 {
 ?>
-<form enctype="multipart/form-data" action="files.php" method="post">
-	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>">
-	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
-		<tr>
-			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
-			<td style="padding-top: 10px;"><input name="uploadfile" type="file">
-			<input type="submit" value="<?php echo lang('send')?>"></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo lang('createnewfolder')?>:</td>
-			<td><input type="text" name="newdir"><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>"></td>
-		</tr>
-	</table>
-	<input type="hidden" name="reldir" value="<?php echo $reldir?>">
-</form>
+<FORM enctype="multipart/form-data" action="files.php" method="post">
+	<INPUT type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>">
+	<TABLE border="0" cellpadding="0" cellspacing="0" summary="" class="box">
+		<TR>
+			<TD align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</TD>
+			<TD style="padding-top: 10px;"><INPUT name="uploadfile" type="file">
+			<INPUT type="submit" value="<?php echo lang('send')?>"></TD>
+		</TR>
+		<TR>
+			<TD align="right"><?php echo lang('createnewfolder')?>:</TD>
+			<TD><INPUT type="text" name="newdir"><INPUT type="submit" name="newdirsubmit" value="<?php echo lang('create')?>"></TD>
+		</TR>
+	</TABLE>
+	<INPUT type="hidden" name="reldir" value="<?php echo $reldir?>">
+</FORM>
 <?php
 }
-
-
 
 include_once("footer.php");
 

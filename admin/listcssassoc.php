@@ -142,7 +142,7 @@ if ("" != $error)
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".('delete')."\" title=\"".('delete')."\"></a></td>\n";
+				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".('delete')."\" title=\"".('delete')."\"></a></td>\n";
 			}
 			else
 			{

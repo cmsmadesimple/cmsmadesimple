@@ -1,36 +1,44 @@
+/**
+* Office 2003 Skin
+*/
 .htmlarea { background: #fff; }
 
 .htmlarea .toolbar {
   cursor: default;
-  background: ButtonFace;
+  background-image:url(t.gif);
   padding: 1px 1px 2px 1px;
   border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  border-color: #FFFFFF #79A4CC #79A4CC #FFFFFF;
 }
 .htmlarea .toolbar table { font-family: tahoma,verdana,sans-serif; font-size: 11px; }
 .htmlarea .toolbar img { border: none; }
 .htmlarea .toolbar .label { padding: 0px 3px; }
 
-.htmlarea .toolbar .button {
-  background: ButtonFace;
+.htmlarea .toolbar .HAbutton {
   color: ButtonText;
-  border: 1px solid ButtonFace;
-  padding: 1px;
+  border: 0;
+  padding: 2px;
+  
   margin: 0px;
   width: 18px;
   height: 18px;
 }
 .htmlarea .toolbar .buttonHover {
+  padding: 1px;
   border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  border-color: #316AC5;
+  background-color : #FFE1AC;
 }
 .htmlarea .toolbar .buttonActive, .htmlarea .toolbar .buttonPressed {
+  padding: 1px;
   padding: 2px 0px 0px 2px;
   border: 1px solid;
-  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+  border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
 }
 .htmlarea .toolbar .buttonPressed {
-  background: ButtonHighlight;
+  border-color: #316AC5;
+  background-color : #FFBE6D;
+
 }
 .htmlarea .toolbar .indicator {
   padding: 0px 3px;
@@ -38,7 +46,7 @@
   width: 20px;
   text-align: center;
   cursor: default;
-  border: 1px solid ButtonShadow;
+  border: 1px solid #79A4CC;
 }
 
 .htmlarea .toolbar .buttonDisabled img {
@@ -49,8 +57,8 @@
 .htmlarea .toolbar .separator {
   position: relative;
   margin: 3px;
-  border-left: 1px solid ButtonShadow;
-  border-right: 1px solid ButtonHighlight;
+  border-left: 1px solid #79A4CC;
+  border-right: 1px solid #FFFFFF;
   width: 0px;
   height: 16px;
   padding: 0px;
@@ -66,9 +74,9 @@
 
 .htmlarea .statusBar {
   border: 1px solid;
-  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+  border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
   padding: 2px 4px;
-  background-color: ButtonFace;
+  background-color: #D5E2EF;
   color: ButtonText;
   font: 11px Tahoma,Verdana,sans-serif;
 }
@@ -80,10 +88,16 @@
 
 .htmlarea .statusBar .statusBarTree a:visited { color: #00f; }
 .htmlarea .statusBar .statusBarTree a:hover {
+/*
   background-color: Highlight;
   color: HighlightText;
   padding: 1px 4px;
   border: 1px solid HighlightText;
+*/
+  border-color: #316AC5;
+  background-color : #FFE1AC;
+  padding: 1px 4px;
+  border: 1px solid #316AC5;
 }
 
 
@@ -91,7 +105,7 @@
 
 .dialog {
   color: ButtonText;
-  background: ButtonFace;
+  background: #D5E2EF;
 }
 
 .dialog .content { padding: 2px; }
@@ -112,7 +126,7 @@
   cursor: default;
 }
 
-.dialog .title .button {
+.dialog .title .HAbutton {
   float: right;
   border: 1px solid #66a;
   padding: 0px 1px 0px 2px;
@@ -132,7 +146,7 @@
   padding: 1px;
   cursor: default;
   border: 1px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  border-color: #FFFFFF #79A4CC #79A4CC #FFFFFF;
 }
 
 .dialog .buttonColor-hilite {
@@ -143,7 +157,7 @@
   height: 0.6em;
   border: 1px solid;
   padding: 0px 1em;
-  border-color: ButtonShadow ButtonHighlight ButtonHighlight ButtonShadow;
+  border-color: #79A4CC #FFFFFF #FFFFFF #79A4CC;
 }
 
 .dialog .buttonColor .nocolor { padding: 0px; }
@@ -158,7 +172,7 @@
 
 .popupdiv {
   border: 2px solid;
-  border-color: ButtonHighlight ButtonShadow ButtonShadow ButtonHighlight;
+  border-color: #FFFFFF #79A4CC #79A4CC #FFFFFF;
 }
 
 .popupwin {
