@@ -296,42 +296,12 @@ class Page {
 	var $level;
 	var $hier;
 	var $num_same_level;
-
-	function get_child_content($parent_content, $all_content, $level, $hier) {
-		global $sorted_content;
-		reset($all_content);
-		$count = 0;
-		foreach ($all_content as $one) {
-			if ($one->parent_id == $parent_content->page_id) {
-				$count++;
-				$prefix = "";
-				for ($i=0; $i<=$level; $i++) {
-					$prefix .= " -- ";
-				}
-				$one->hier = $hier.".".$count;
-				$one->display_name = $prefix.$one->page_title;
-				$one->level = $parent_content->level + 1;
-				array_push($sorted_content, $one);
-				$one->get_child_content($one, $all_content, $level +1, $one->hier);
-			} ## if
-		} ## foreach
-	} ## function
-
-	function get_num_same_level() {
-		global $gCms;
-		$db = $gCms->db;
-		$config = $gCms->config;
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE parent_id = ".$this->parent_id;
-		$result = $db->Execute($query);
-		$line = $result->FetchRow();
-		return $line["count"];
-	}
+	var $childs;
 		
 } ## class
 
 function db_get_menu_items($style) {
 
-	global $sorted_sections;
 	global $sorted_content;
 
 	global $gCms;
@@ -367,7 +337,7 @@ function db_get_menu_items($style) {
 				}
 				$current_content->hier = "1";
 				$current_content->level = "1";
-				$current_content->num_same_level = $current_content->get_num_same_level();
+				
 				# Fix URL where appropriate
 				if ($current_content->page_type != "link") {
 					if (isset($current_content->page_alias) && $current_content->page_alias != "")
@@ -386,32 +356,100 @@ function db_get_menu_items($style) {
 				if ($current_content->page_type == "separator") {
 					$current_content->page_title = "--------";
 				}
-				array_push($content_array, $current_content);
-			} ## while
 
-			reset($content_array);
-			$hier_level = 0;
-			foreach ($content_array as $one_content) {
-				if ($one_content->parent_id == 0) {
-					$hier_level++;
-					$one_content->hier = $hier_level;
-					array_push($sorted_content, $one_content);
-					$one_content->get_child_content($one_content, $content_array, 1, $hier_level);
-				} ## if
-			} ## foreach
+				# Now that all treatment have been done to $current_content, we push it in the array
+				$content_array[$line["page_id"]] = $current_content;
+				$parents[$line["page_id"]] = $line["parent_id"];
+			} ## while
+			
+			construct_tree_from_list($content_array, $parents);
+		
+			# to change : this should be a parameter of the function
+			$start_element = 0;
+
+			$new_array = array();
+			$first_level_childs = array_keys($parents,$start_element);
+			foreach($first_level_childs as $element) array_push($new_array, $content_array[$element]);
+			
+			flatten_tree_to_list($new_array, &$sorted_content);
+
 		} ## if
 
 		return $sorted_content;
 	} ## if
 
-
-	$sections = array();
-	if (isset($current_section)) {
-		array_push($sections, $current_section);
-	}
-	return $sections;
-			
 } ## function
+
+/**
+ * Construct a tree array from a flat array. Returns nothing.
+ *
+ * This function will take an array of elements, an array of equivalence between elements
+ * and parents. It then constructs an array which contains :
+ * - element1
+ * - element1->child = array contening the childs of element1
+ * - etc...
+ *
+ * It is recursive in the sense it recalls itself.
+ * It does not matter what kind of elements it is.
+ *
+ * @param array		content_array		this is the array you want to construct the tree from.
+ * @param array		parents				this is the array containing the associations : $parents[identifier] = parent_identifier of element
+ * @param int		start_element		the element to start the tree from (used to create only subtrees)
+ * @param int		number_of_levels	the number of levels of the tree (ie number of recursion), default is 10
+ * @param int		hierarchy_level		the current level of recursion
+ * @param string	total_hierarchy		a string of the form 1.2.3 indicating the path from the root to the current element
+ *
+ * @since 0.5
+ */
+function construct_tree_from_list($content_array, $parents, $start_element = 0, $number_of_levels = 10, $hierarchy_level = 0, $total_hierarchy = "") {
+
+	if ($number_of_levels >= 0)
+	{
+		# the current element
+		$current = $content_array[$start_element];
+
+		# this array contains the child of our current element
+		$childs = array_keys($parents, $start_element);
+		$num_of_childs = count($childs);
+
+		if ($num_of_childs > 0)
+		{
+			$current->childs = array();
+			$count = 1;
+
+			foreach($childs as $key)
+			{
+				$newchild = $content_array[$key];
+				$newchild->num_same_level = $num_of_childs;
+				$newchild->level = $hierarchy_level + 1;
+				$newchild->hier = $total_hierarchy."$count.";
+				
+				array_push($current->childs,$newchild);
+				construct_tree_from_list($content_array, $parents, $key, $number_of_levels - 1, $hierarchy_level + 1, $newchild->hier);
+
+				$count++;
+			} #foreach
+		} #if numchilds
+	} # if number_of_levels
+} # function
+
+
+/**
+ * Constructs a flat array from a tree array. Returns nothing
+ *
+ * @since 0.5
+ */
+function flatten_tree_to_list($content_array, &$flatarray) {
+
+	if (is_array($content_array) && count($content_array) > 0)
+	{
+		foreach($content_array as $element)
+		{
+			array_push($flatarray, $element);
+			flatten_tree_to_list($element->childs, &$flatarray);
+		}
+	}
+}
 
 /**
  * Returns a list of all currently registered content types
