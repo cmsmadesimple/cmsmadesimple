@@ -43,7 +43,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	if ($username != "" && $password != "" && $oneuser && isset($_POST["loginsubmit"]))
 	{
 		generate_user_object($oneuser->id);
-		setcookie("cms_admin_user_id", $oneuser->id);
 		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');
 		if ($default_cms_lang != '')
 		{

@@ -11,6 +11,7 @@ much, much easier.
 * Fixed bug with css table not having sequence setup correctly (#000093)
 * Fixed bugs with auto alias of pages
 * Fixed contact form so that it's xhtml compliant (#000096)
+* Fixed RSS feeds to use proper content type
 * Admin dir can now be changed with admin_dir paramater in config.php
 * Updated Smarty to 2.6.7 (Jope)
 

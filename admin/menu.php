@@ -1,16 +1,16 @@
 <div id="navcontainer">
 
-<div id="welcome">
-<?php if (isset($_SESSION['cms_admin_username'])) echo lang('welcomemsg', array($_SESSION['cms_admin_username']))?>
-</div>
-
-<div>
-
 <?php
 
 $userid = get_userid();
 
 ?>
+
+<div id="welcome">
+<?php if (isset($_SESSION['cms_admin_username'])) echo lang('welcomemsg', array($_SESSION['cms_admin_username']))?>
+</div>
+
+<div>
 
 <a href="listcontent.php"><?php echo lang('contentmanagement')?></a>
 

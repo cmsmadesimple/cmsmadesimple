@@ -22,10 +22,11 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-audit(-1, "", 'User Logout');
+audit(-1, '', 'User Logout');
 
-unset($_SESSION["cms_admin_user_id"]);
-setcookie("cms_admin_user_id", "", time() - 3600);
+unset($_SESSION['cms_admin_user_id']);
+setcookie('cms_admin_user_id', '', time() - 3600);
+setcookie('cms_passhash', '', time() - 3600);
 
 #Perform the logout_post callback
 foreach($gCms->modules as $key=>$value)

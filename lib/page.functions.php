@@ -32,23 +32,26 @@ require_once(dirname(__FILE__)."/classes/class.user.inc.php");
  *
  * @since 0.1
  */
-function check_login() {
-
-	#For testing xhtml compliance
-	#generate_user_object(1);
-	#return;
-
+function check_login()
+{
 	global $gCms;
 	$config = $gCms->config;
 
-	if (!isset($_COOKIE["cms_admin_user_id"]))
+	if (!isset($_SESSION["cms_admin_user_id"]))
 	{
-		$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-		redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-	}
-	else if (!isset($_SESSION["cms_admin_user_id"]))
-	{
-		if (!generate_user_object($_COOKIE["cms_admin_user_id"]))
+		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
+		{
+			if (check_passhash(isset($_COOKIE["cms_admin_user_id"]), isset($_COOKIE["cms_passhash"])))
+			{
+				generate_user_object($_COOKIE["cms_admin_user_id"]);
+			}
+			else
+			{
+				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+				redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+			}
+		}
+		else
 		{
 			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
@@ -62,9 +65,16 @@ function check_login() {
  * @returns If they're logged in, the user id.  If not logged in, false.
  * @since 0.1
  */
-function get_userid() {
-	if (isset($_COOKIE["cms_admin_user_id"])) {
-		return $_COOKIE["cms_admin_user_id"];
+function get_userid($check = true)
+{
+	if ($check)
+	{
+		check_login(); //It'll redirect out to login if it fails
+	}
+
+	if (isset($_SESSION["cms_admin_user_id"]))
+	{
+		return $_SESSION["cms_admin_user_id"];
 	}
 	else
 	{
@@ -72,16 +82,7 @@ function get_userid() {
 	}
 }
 
-/**
- * Regenerates the user session information from a userid.  This is basically used
- * so that if the session expires, but the cookie still remains (site is left along
- * for 20+ minutes with no interaction), the user won't have to relogin to regenerate
- * the details.
- *
- * @returns mixed If successful, true.  If it fails, false.
- * @since 0.5
- */
-function generate_user_object($userid)
+function check_passhash($userid, $checksum)
 {
 	$check = false;
 
@@ -90,18 +91,36 @@ function generate_user_object($userid)
 
 	$oneuser = UserOperations::LoadUserByID($userid);
 
-	if ($oneuser)
+	if ($oneuser && $checksum == md5(md5($oneuser->password)))
 	{
-		#$row = $result->FetchRow();
-
-		$_SESSION["cms_admin_user_id"] = $userid;
-		$_SESSION["cms_admin_username"] = $oneuser->username;
-		//$_SESSION["cms_passhash"] = $row["password"]; //So we have something to check
-
 		$check = true;
 	}
 
 	return $check;
+}
+
+/**
+ * Regenerates the user session information from a userid.  This is basically used
+ * so that if the session expires, but the cookie still remains (site is left along
+ * for 20+ minutes with no interaction), the user won't have to relogin to regenerate
+ * the details.
+ *
+ * @since 0.5
+ */
+function generate_user_object($userid)
+{
+	global $gCms;
+	$db = $gCms->db;
+
+	$oneuser = UserOperations::LoadUserByID($userid);
+
+	if ($oneuser)
+	{
+		$_SESSION['cms_admin_user_id'] = $userid;
+		$_SESSION['cms_admin_username'] = $oneuser->username;
+		setcookie('cms_admin_user_id', $oneuser->id);
+		setcookie('cms_passhash', md5(md5($oneuser->password)));
+	}
 }
 
 /**
@@ -221,12 +240,12 @@ function audit($itemid, $itemname, $action)
 	$userid = 0;
 	$username = '';
 
-	if ($_SESSION["cms_admin_user_id"])
+	if (isset($_SESSION["cms_admin_user_id"]))
 	{
 		$userid = $_SESSION["cms_admin_user_id"];
 	}
 
-	if ($_SESSION["cms_admin_username"])
+	if (isset($_SESSION["cms_admin_username"]))
 	{
 		$username = $_SESSION["cms_admin_username"];
 	}
