@@ -208,5 +208,5 @@ $lang['admin']['errorinsertingtemplate'] = 'Erreur lors de la création du templa
 $lang['admin']['currentcss'] = 'CSS courante';
 $lang['admin']['imagemanager'] = 'Gestionnaire d\'images';
 $lang['admin']['filemanager'] = 'Gestionnaire de fichiers';
-$lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
+$lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
 ?>
