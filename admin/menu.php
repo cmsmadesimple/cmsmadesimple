@@ -13,8 +13,11 @@ echo $gettext->gettext('Welcome ${name}');
 $gettext->reset();
 ?>
 
+<br/>
+<br/>
+
 <form action="index.php" method="post" name="cms_admin_lang_form">
-<span class="smallselect"><?=$gettext->gettext("Language")?></span>
+<span class="smallselect"><?=$gettext->gettext("Language")?> : </span>
 <select class="smallselect" name="change_cms_lang" onchange="cms_admin_lang_form.submit()" style="vertical-align: middle;">
 <? 
 	foreach ($nls["language"] as $key=>$val) {

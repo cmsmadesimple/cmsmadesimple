@@ -67,6 +67,8 @@ if ($page == "") {
 	$page = db_get_default_page();
 }
 
+echo $page;
+
 ($smarty->is_cached('db:'.$page)?$cached="":$cached="not ");
 
 #$old_error_handler = set_error_handler("ErrorHandler404");

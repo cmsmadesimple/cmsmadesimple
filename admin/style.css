@@ -36,8 +36,8 @@ table.admintable td {padding: 4px;}
 .row2 {background: #FFF; }
 
 /* buttons */
-.button a, .button a:link, .button a:active, .button a:visited {text-align: left; background-color: #BFDAEF; color: #265980; padding: .2em; border: 1px solid #64879d;}
-.button a:hover {text-align: center; background: #64879d; color: #FFF; padding: .2em; border: 1px solid #64879d;}
+.button a, .button a:link, .button a:active, .button a:visited {text-align: left; background-color: #BFDAEF; color: #265980; padding: .4em; border: 1px solid #64879d;}
+.button a:hover {text-align: center; background: #64879d; color: #FFF; padding: .4em; border: 1px solid #64879d;}
 .smallselect {font-size: .85em;}
 
 textarea{width: 100%;}
