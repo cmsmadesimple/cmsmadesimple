@@ -94,7 +94,6 @@ if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
 }
 
 if ($access) {
-	$db = new DB($config);
 
 	if ($submit) {
 
@@ -120,31 +119,29 @@ if ($access) {
 		if ($validinfo) {
 			if ($orig_section_id != $section_id) {
 				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
-				$result = $db->query($query);
-				$row = $db->getresulthash($result);
+				$result = $dbnew->Execute($query);
+				$row = $result->FetchRow();
 				if (isset($row["item_order"])) {
 					$order = $row["item_order"];	
 				}
-				$db->freeresult($result);
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".$db->escapestring($title)."', page_url='".$db->escapestring($url)."', page_content='".$db->escapestring($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".$db->escapestring($menutext)."', active=$active, modified_date = now(), item_order=$order, page_type = '".$db->escapestring($content_type)."' WHERE page_id = $page_id";
-			$result = $db->query($query);
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type)." WHERE page_id = $page_id";
+			$result = $dbnew->Execute($query);
 
-			if ($db->rowsaffected()) {
+			if ($result) {
 				if ($adminaccess) {
 					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
-					$db->query($query);
+					$dbnew->Execute($query);
 					if (isset($_POST["additional_editors"])) {
 						foreach ($_POST["additional_editors"] as $addt_user_id) {
 							$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$page_id.")";
-							$db->query($query);
+							$dbnew->Execute($query);
 						}
 					}
 				}
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-				$db->query($query);
-				$db->close();
+				$dbnew->Execute($query);
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
@@ -157,11 +154,10 @@ if ($access) {
 	}
 	else if ($page_id != -1 && !$preview && !$content_change) {
 
-
 		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		
-		$row = $db->getresulthash($result);
+		$row = $result->FetchRow();
 
 		$title = $row["page_title"];
 		$url = $row["page_url"];
@@ -176,16 +172,14 @@ if ($access) {
 		$order = $row["item_order"];
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
-
-		$db->freeresult($result);
 	}
 
 	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
 	$dropdown = "<select name=\"section_id\">";
 
-	while($row = $db->getresulthash($result)) {
+	while($row = $result->FetchRow()) {
 		$dropdown .= "<option value=\"".$row["section_id"]."\"";
 		if ($row["section_id"] == $section_id) {
 			$dropdown .= "selected";
@@ -195,14 +189,12 @@ if ($access) {
 
 	$dropdown .= "</select>";
 
-	$db->freeresult($result);
-
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
 	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
-	while($row = $db->getresulthash($result)) {
+	while($row = $result->FetchRow()) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
 		if ($row["template_id"] == $template_id) {
 			$dropdown2 .= "selected";
@@ -212,27 +204,20 @@ if ($access) {
 
 	$dropdown2 .= "</select>";
 
-	$db->freeresult($result);
-
     $addt_users = "";
 
     $query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
-    $result = $db->query($query);
+    $result = $dbnew->Execute($query);
 
-    while($row = $db->getresulthash($result)) {
+    while($row = $result->FetchRow()) {
         $addt_users .= "<option value=\"".$row["user_id"]."\"";
 		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
-		$newresult = $db->query($query);
-		if ($db->rowcount($newresult) > 0) {
+		$newresult = $db->Execute($query);
+		if ($newresult) {
 			$addt_users .= " selected=\"true\"";
 		}
-		$db->freeresult($newresult);
 		$addt_users .= ">".$row["username"]."</option>";
     }
-
-    $db->freeresult($result);
-
-	$db->close();
 
 	$ctdropdown = "<select name=\"content_type\" onchange=\"document.editform.content_change.value=1;document.editform.submit()\">";
 	foreach (get_page_types($config) as $key=>$value) {
@@ -260,10 +245,9 @@ else {
 		$data["content"] = $content;
 		$data["template_id"] = $template_id;
 
-		$db = new DB($config);
 		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
 		$result = $db->query($query);
-		if ($db->rowcount($result) > 0) {
+		if ($result) {
 			$row = $db->getresulthash($result);
 			$data["stylesheet"] = $row["stylesheet"];
 			$data["template"] = $row["template_content"];
@@ -271,8 +255,6 @@ else {
 			$data["stylesheet"] = "";
 			$data["template"] = "{content}";
 		}
-		$db->freeresult($result);
-		$db->close();
 
 		$tmpfname = tempnam($config->root_path . "/smarty/cms/cache/", "cmspreview");
 		$handle = fopen($tmpfname, "w");

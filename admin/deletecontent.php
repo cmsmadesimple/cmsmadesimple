@@ -28,15 +28,14 @@ if (isset($_GET["page_id"])) {
 	$access = check_permission($config, $userid, 'Remove Content');
 
 	if ($access)  {
-		$db = new DB($config);
 
 		$order = 1;
 		$section_id = 1;
 		$title = "";
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT page_title, item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
-		$result = $db->query($query);
-		$row = $db->getresulthash($result);
+		$result = $dbnew->Execute($query);
+		$row = $result->FetchRow();
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
@@ -46,20 +45,18 @@ if (isset($_GET["page_id"])) {
 		if (isset($row["page_title"])) {
 			$title = $row["page_title"];	
 		}
-		$db->freeresult($result);
 		#Remove the page
 		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		$query = "DELETE FROM ".$config->db_prefix."additional_users where page_id = $page_id";
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		#Fix the item_order if necessary
 		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE section_id = $section_id AND item_order > $order";
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		#This is so pages will not cache the menu changes
 		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-		$db->query($query);
+		$dbnew->Execute($query);
 		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
-		$db->close();
 	}
 }
 
