@@ -395,6 +395,7 @@ function & strip_slashes(&$str) {
  * the syntax highlighting instead of php's highlight_string()
  */
 function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlight"){
+	/*
 	ini_set("highlight.bg","#FFFFFF"); 
 	ini_set("highlight.comment", "#FF8000"); 
 	ini_set("highlight.default", "#0000BB");
@@ -414,6 +415,8 @@ function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlig
 	echo 'document.write(\'<div id="syntax_highlight" style="border: 1px solid #A5ACB2; overflow: auto;" contenteditable="true" contentEditable="true" onSelect="saveCaret(this)" onClick="syntax_highlight_remove(\\\'onClick\\\', this, \\\''.$textarea_name.'\\\')" onKeyDown="syntax_highlight_remove(\\\'onKeyDown\\\', this, \\\''.$textarea_name.'\\\')" class="'.$class_name.'">'.$text_highlight.'</div>\');';
 	echo '</script>';
 	echo '<textarea name="'.$textarea_name.'" id="plain" rows="24" cols="80" style="border: 1px solid #A5ACB2" class="'.$class_name.'">'.$content.'</textarea>';
+	*/
+	echo '<textarea name="'.$textarea_name.'" rows="24" cols="80">'.$content.'</textarea>';
 }
 
 # vim:ts=4 sw=4 noet
