@@ -25,7 +25,8 @@ audit(-1, "", 'User Logout');
 unset($_SESSION["cms_admin_user_id"]);
 setcookie("cms_admin_user_id", "", time() - 3600);
 
-redirect("index.php");
+echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
+#redirect("index.php");
 
 # vim:ts=4 sw=4 noet
 ?>

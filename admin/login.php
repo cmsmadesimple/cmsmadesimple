@@ -45,7 +45,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		generate_user_object($oneuser->id);
 		setcookie("cms_admin_user_id", $oneuser->id);
 		audit(-1, '', 'User Login');
-		redirect("index.php");
+		echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in, one moment please...</body></html>');
+		return;
+		#redirect("index.php");
 	}
 	else {
 		$error .= "<p>".lang('usernameincorrect')."</p>";

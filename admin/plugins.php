@@ -38,8 +38,10 @@ $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 
-if ($access) {
-	if ($action == "install") {
+if ($access)
+{
+	if ($action == "install")
+	{
 		#run install on it (if there is one)
 		if (isset($gCms->modules[$module]['install_function'])) {
 			call_user_func_array($gCms->modules[$module]['install_function'], array($gCms));
@@ -56,11 +58,16 @@ if ($access) {
 		if (isset($gCms->modules[$module]['upgrade_function'])) {
 			call_user_func_array($gCms->modules[$module]['upgrade_function'], array($gCms, $_GET['oldversion'], $_GET['newversion']));
 		}
+		$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+		$db->Execute($query,array($_GET['newversion'],$module));
+		redirect("plugins.php");
 	}
 
-	if ($action == "uninstall") {
+	if ($action == "uninstall")
+	{
 		#run uninstall on it (if there is one)
-		if (isset($gCms->modules[$module]['uninstall_function'])) {
+		if (isset($gCms->modules[$module]['uninstall_function']))
+		{
 			call_user_func_array($gCms->modules[$module]['uninstall_function'], array($gCms));
 		}
 
@@ -208,8 +215,8 @@ else
 
 		$curclass = "row1";
 
-		foreach($gCms->modules as $key=>$value) {
-
+		foreach($gCms->modules as $key=>$value)
+		{
 			echo "<tr class=\"$curclass\">\n";
 			echo "<td>$key</td>\n";
 			if (!isset($dbm[$key])) #Not installed, lets put up the install button
@@ -274,8 +281,8 @@ else
 
 		$curclass = "row1";
 
-		foreach($gCms->cmsplugins as $oneplugin) {
-
+		foreach($gCms->cmsplugins as $oneplugin)
+		{
 			echo "<tr class=\"$curclass\">\n";
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{

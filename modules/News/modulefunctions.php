@@ -142,10 +142,13 @@ function news_module_help($cms)
 function news_module_about() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
-	Change History:<br/>
-	None
+	Change History:
+	</p>
+	<p>
+	1.1 -- Subversion<br/>
+	Added time modification, date format, and icons
 	</p>
 	<?php
 }
