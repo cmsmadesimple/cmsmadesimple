@@ -4,6 +4,7 @@ Version 0.9.1 "Mohotani" -- Subversion
 * Added collapse option to bulletmenu, for cases where section header
 is used as parents for other content
 * Added apply button to edit css
+* Changed new default install schema (BrumalPat)
 * Changed breadcrumbs plugin to use menu text instead of title
 * Fixed bug with call to post render hook
 * Fixed nasty bug where content would have properties deleted if set

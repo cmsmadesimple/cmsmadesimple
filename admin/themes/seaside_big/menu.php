@@ -30,16 +30,13 @@ if (check_permission($userid, 'Add Template') || check_permission($userid, 'Remo
 
 }
 
-if (get_site_preference('useadvancedcss') == "1")
+if (check_permission($userid, 'Add CSS') || check_permission($userid, 'Remove CSS') || check_permission($userid, 'Modify CSS'))
 {
-	if (check_permission($userid, 'Add CSS') || check_permission($userid, 'Remove CSS') || check_permission($userid, 'Modify CSS'))
-	{
 
 ?>
 <a href="listcss.php"><?php echo lang('cssmanagement')?></a>
 <?php
 
-	}
 }
 
 ?>
