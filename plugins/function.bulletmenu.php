@@ -33,6 +33,9 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$count = 0;
 	$in_hr = 0;
 
+	# array to hold hierarchy postitions of disabled pages
+	$disabled = array();
+
 	if (count($allcontent))
 	{
 		$basedepth = 0;
@@ -71,12 +74,39 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 				}
 			}
 
-			$depth = $depth - $basedepth;
-
+			# Check for inactive items or items set not to show in the menu
 			if (!$onecontent->Active() || !$onecontent->ShowInMenu())
 			{
+				# Stuff the hierarchy position into that array, so we can test for
+				# children that shouldn't be showing.  Put the dot on the end
+				# since it will only affect children anyway...  saves from a
+				# .1 matching .11
+				array_push($disabled, $onecontent->Hierarchy() . ".");
 				continue;
 			}
+
+			$disableme = false;
+
+			# Loop through disabled array to see if this is a child that
+			# shouldn't be showing -- we check this by seeing if the current
+			# hierarhcy postition starts with one of the disabled positions
+			foreach ($disabled as $onepos)
+			{
+				# Why php doesn't have a starts_with function is beyond me...
+				if (strstr($onecontent->Hierarchy(), $onepos) == $onecontent->Hierarchy())
+				{
+					$disableme = true;
+					continue; # Break from THIS foreach
+				}
+			}
+
+			if ($disableme)
+			{
+				continue; # Break from main foreach
+			}
+
+			# Set depth to be the relative position
+			$depth = $depth - $basedepth;
 
 			if ($onecontent->Type() == 'sectionheader')
 			{
