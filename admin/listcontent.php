@@ -83,7 +83,14 @@ if (isset($_GET["message"])) {
 //			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";
 			echo "<td align=\"center\">".$one->username."</td>\n";
 			echo "<td align=\"center\">".($one->active == 1?lang('true'):lang('false'))."</td>\n";
+			if ($one->page_type == "content")
+			{
 			echo "<td align=\"center\">".($one->default_page == 1?lang('true'):"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".lang('false')."</a>")."</td>\n";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
+			}
 
 			if ($modifyall)
 			{
