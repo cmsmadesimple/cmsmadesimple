@@ -921,7 +921,7 @@ class CMSModule extends ModuleOperations
 	 * ------------------------------------------------------------------
 	 */
 	
-	function GetMoudleInstance($module)
+	function GetModuleInstance($module)
 	{
 		global $gCms;
 
