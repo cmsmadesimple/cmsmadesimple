@@ -109,7 +109,7 @@ class PHPLayers extends CMSModule
 			#Reset the base depth if necessary...
 			if (isset($params['start_element']))
 			{
-				$basedepth = count(split('\.', $params['start_element']));
+				$basedepth = count(split('\.', (string)$params['start_element']));
 			}
 
 			foreach ($allcontent as $onecontent)
@@ -121,7 +121,7 @@ class PHPLayers extends CMSModule
 				#If hierarchy starts with the start_element (if it's set), then continue on
 				if (isset($params['start_element']))
 				{
-					if ((strpos($onecontent->Hierarchy(), $params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), $params['start_element']) != 0))
+					if ((strpos($onecontent->Hierarchy(), (string)$params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), (string)$params['start_element']) != 0))
 					{
 						continue;
 					}
@@ -136,7 +136,7 @@ class PHPLayers extends CMSModule
 					#Is start_element set?  If so, reset the base_level to it's level
 					if (isset($params['start_element']))
 					{
-						$base_level = count(split('\.', $params['start_element']));
+						$base_level = count(split('\.', (string)$params['start_element']));
 					}
 
 					#If this element's level is more than base_level + number_of_levels, then scratch it

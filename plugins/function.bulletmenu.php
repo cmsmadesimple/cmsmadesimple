@@ -40,7 +40,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		#Reset the base depth if necessary...
 		if (isset($params['start_element']))
 		{
-			$basedepth = count(split('\.', $params['start_element'])) - 1;
+			$basedepth = count(split('\.', (string)$params['start_element'])) - 1;
 		}
 
 		foreach ($allcontent as $onecontent)
@@ -52,7 +52,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			#If hierarchy starts with the start_element (if it's set), then continue on
 			if (isset($params['start_element']))
 			{
-				if ((strpos($onecontent->Hierarchy(), $params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), $params['start_element']) != 0))
+				if ((strpos($onecontent->Hierarchy(), (string)$params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), (string)$params['start_element']) != 0))
 				{
 					continue;
 				}
