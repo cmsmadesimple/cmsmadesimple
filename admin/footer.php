@@ -23,7 +23,7 @@ if ($config["debug"] == true)
 <?php
 
 #Pull the stuff out of the buffer...
-$htmlresult = '<!-- Start of buffered output -->' . @ob_get_contents() . '<!-- End of buffered output -->';
+$htmlresult = @ob_get_contents();
 @ob_end_clean();
 
 #Do any header replacements (this is for WYSIWYG stuff)
@@ -41,14 +41,14 @@ if (isset($wysiwyg) && $wysiwyg != '')
 		if (isset($gCms->modules[$wysiwyg]['wysiwyg_header_function']))
 		{
 			@ob_start();
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array($gCms));
+			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array(&$gCms));
 			$footertext .= @ob_get_contents();
 			@ob_end_clean();
 		}
 		if (isset($gCms->modules[$wysiwyg]['wysiwyg_form_function']))
 		{
 			@ob_start();
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_function'], array($gCms));
+			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_function'], array(&$gCms));
 			$formtext .= @ob_get_contents();
 			@ob_end_clean();
 		}

@@ -492,7 +492,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 			{
 				$result = '';
 				ob_start();
-				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array($gCms, $name, '80', '15', $encoding, $text, $stylesheet));
+				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array(&$gCms, $name, '80', '15', $encoding, $text, $stylesheet));
 				$result = ob_get_contents();
 				ob_end_clean();	
 			}

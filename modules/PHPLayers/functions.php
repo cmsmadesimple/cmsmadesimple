@@ -20,8 +20,7 @@
 
 function phplayers_prerender_function(&$cms, &$content)
 {
-	global $gCms;
-	$config = $gCms->config;
+	$config = $cms->config;
 
 	$text = '
 	<link rel="stylesheet" href="'.$config['root_url'].'/modules/PHPLayers/phplayers/layersmenu-cms.css" type="text/css"></link>
@@ -32,7 +31,7 @@ function phplayers_prerender_function(&$cms, &$content)
 	$content = ereg_replace("<\/head>", $text."</head>", $content);
 }
 
-function phplayers_module_execute($cms, $id, $params)
+function phplayers_module_execute(&$cms, $id, $params)
 {
 	$allcontent = ContentManager::GetAllContent();
 
@@ -154,7 +153,7 @@ function phplayers_module_execute($cms, $id, $params)
 
 }
 
-function phplayers_module_help($cms)
+function phplayers_module_help(&$cms)
 {
 	?>
 	<h3>What does this do?</h3>
@@ -173,7 +172,7 @@ function phplayers_module_help($cms)
 	<?php
 }
 
-function phplayers_module_about($cms)
+function phplayers_module_about(&$cms)
 {
 	?>
 	<p>Author: Julien Lancien&lt;calexico@cmsmadesimple.org&gt;</p>
