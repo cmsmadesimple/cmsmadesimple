@@ -15,25 +15,35 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Add Group');
 
-if (isset($_POST["addgroup"])) {
+if ($access) {
+	$db = new DB($config);
 
-	$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($group)."', $active, now(), now())";
-	$result = $db->query($query);
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listgroups.php");
-		return;
+	if (isset($_POST["addgroup"])) {
+
+		$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($group)."', $active, now(), now())";
+		$result = $db->query($query);
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listgroups.php");
+			return;
+		}
+		else {
+			echo "Error inserting group";
+		}
 	}
-	else {
-		echo "Error inserting group";
-	}
+
+	$db->close();
 }
 
-$db->close();
-
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access to Add Groups</h3>";
+}
+else {
 
 ?>
 
@@ -65,5 +75,6 @@ include_once("header.php");
 </form>
 
 <?php
+}
 include_once("footer.php");
 ?>

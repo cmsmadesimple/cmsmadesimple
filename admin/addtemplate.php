@@ -18,25 +18,35 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Add Template');
 
-if (isset($_POST["addtemplate"])) {
+if ($access) {
+	$db = new DB($config);
 
-	$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', '".mysql_escape_string($content)."', $active, now(), now());";
-	$result = $db->query($query);
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listtemplates.php");
-		return;
+	if (isset($_POST["addtemplate"])) {
+
+		$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', '".mysql_escape_string($content)."', $active, now(), now());";
+		$result = $db->query($query);
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listtemplates.php");
+			return;
+		}
+		else {
+			echo "Error inserting template";
+		}
 	}
-	else {
-		echo "Error inserting template";
-	}
+
+	$db->close();
 }
 
-$db->close();
-
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access to Add Templates</h3>";
+}
+else {
 
 ?>
 
@@ -73,6 +83,7 @@ include_once("header.php");
 
 <?php
 
+}
 include_once("footer.php");
 
 ?>

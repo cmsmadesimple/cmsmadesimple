@@ -8,12 +8,16 @@ $group_id = -1;
 if (isset($_GET["group_id"])) {
 
 	$group_id = $_GET["group_id"];
+	$userid = get_userid();
+	$access = check_permission($config, $userid, 'Remove Group');
 
-	$db = new DB($config);
+	if ($access) {
+		$db = new DB($config);
 
-	$query = "DELETE FROM ".$config->db_prefix."groups where group_id = $group_id";
-	$result = $db->query($query);
-	$db->close();
+		$query = "DELETE FROM ".$config->db_prefix."groups where group_id = $group_id";
+		$result = $db->query($query);
+		$db->close();
+	}
 }
 
 redirect("listgroups.php");

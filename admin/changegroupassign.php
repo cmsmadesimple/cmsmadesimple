@@ -13,27 +13,38 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify Group Assignments');
 
-if (isset($_POST["changeassign"])) {
+if ($access) {
 
-	$query = "DELETE FROM ".$config->db_prefix."user_groups WHERE group_id = " . $group_id;
-	$result = $db->query($query);
+	$db = new DB($config);
 
-	foreach ($_POST as $key=>$value) {
-		if (strpos($key,"user-") == 0) {
-			$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".mysql_real_escape_string($group_id).", ".mysql_real_escape_string(substr($key,5)).", now(), now())";
-			$result = $db->query($query);
+	if (isset($_POST["changeassign"])) {
+
+		$query = "DELETE FROM ".$config->db_prefix."user_groups WHERE group_id = " . $group_id;
+		$result = $db->query($query);
+
+		foreach ($_POST as $key=>$value) {
+			if (strpos($key,"user-") == 0) {
+				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".mysql_real_escape_string($group_id).", ".mysql_real_escape_string(substr($key,5)).", now(), now())";
+				$result = $db->query($query);
+			}
 		}
+
+		$db->close();
+		redirect("listgroups.php");
+		return;
+
 	}
-
-	$db->close();
-	redirect("listgroups.php");
-	return;
-
 }
 
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access to Modify Group Assignments</h3>";
+}
+else {
 
 ?>
 <h3>Users assigned to group: Name</h3>
@@ -89,6 +100,8 @@ include_once("header.php");
 </form>
 
 <?php
+
+}
 
 include_once("footer.php");
 

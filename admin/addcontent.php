@@ -33,61 +33,71 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Add Content');
 
-if (isset($_POST["addcontent"])) {
+if ($access) {
+	$db = new DB($config);
 
-	$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
+	if (isset($_POST["addcontent"])) {
+
+		$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
+		$result = $db->query($query);
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listcontent.php");
+			return;
+		}
+		else {
+			echo "Error inserting page";
+		}
+		mysql_free_result($result);
+	}
+
+	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
 	$result = $db->query($query);
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listcontent.php");
-		return;
+
+	$dropdown = "<select name=\"section_id\">";
+
+	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+
+		$dropdown .= "<option value=\"".$row["section_id"]."\"";
+		if ($row["section_id"] == $section_id) {
+			$dropdown .= "selected";
+		}
+		$dropdown .= ">".$row["section_name"]."</option>";
+
 	}
-	else {
-		echo "Error inserting page";
-	}
+
+	$dropdown .= "</select>";
+
 	mysql_free_result($result);
-}
 
-$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
-$result = $db->query($query);
+	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
+	$result = $db->query($query);
 
-$dropdown = "<select name=\"section_id\">";
+	$dropdown2 = "<select name=\"template_id\">";
 
-while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-
-        $dropdown .= "<option value=\"".$row["section_id"]."\"";
-        if ($row["section_id"] == $section_id) {
-		$dropdown .= "selected";
+	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
+		if ($row["template_id"] == $template_id) {
+			$dropdown2 .= "selected";
+		}
+		$dropdown2 .= ">".$row["template_name"]."</option>";
 	}
-        $dropdown .= ">".$row["section_name"]."</option>";
 
+	$dropdown2 .= "</select>";
+
+	mysql_free_result($result);
+	$db->close($link);
 }
-
-$dropdown .= "</select>";
-
-mysql_free_result($result);
-
-$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
-$result = $db->query($query);
-
-$dropdown2 = "<select name=\"template_id\">";
-
-while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-        $dropdown2 .= "<option value=\"".$row["template_id"]."\"";
-        if ($row["template_id"] == $template_id) {
-                $dropdown2 .= "selected";
-        }
-        $dropdown2 .= ">".$row["template_name"]."</option>";
-}
-
-$dropdown2 .= "</select>";
-
-mysql_free_result($result);
-$db->close($link);
 
 include_once("header.php");
+
+if (!$access) {
+	echo "<h3>No Access to Add Content</h3>\n";
+}
+else {
 
 ?>
 
@@ -143,5 +153,6 @@ include_once("header.php");
 </form>
 
 <?php
+}
 include_once("footer.php");
 ?>
