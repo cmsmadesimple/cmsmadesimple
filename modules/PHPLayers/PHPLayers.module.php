@@ -98,7 +98,7 @@ class PHPLayers extends CMSModule
 		if ($name == 'default')
 		{
 			$basedepth = 1;
-			$allcontent = ContentManager::GetAllContent(false);
+			$allcontent = ContentManager::GetAllContent();
 
 			# getting menu parameters
 			$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 1 ;
