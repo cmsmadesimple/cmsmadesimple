@@ -388,36 +388,33 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 		}
 	}
 
-	// is $default_value a number?
-	$is_number = false;
-	if(is_numeric($default_value))
-	{
-		$is_number = true;
-	}
-
 	// set our return value to the default initially and overwrite with $value if we like it.
 	$return_value = $default_value;
-	if(is_array($value))
+
+	if(isset($value))
 	{
-		// $value is an array - validate each element.
-		$return_value = array();
-		foreach($value as $element)
+		if(is_array($value))
 		{
-			$return_value[] = get_value_with_default($element, $default_value);
-		}
-	}
-	else
-	{
-		if($is_number)
-		{
-			if(is_numeric($value))
+			// $value is an array - validate each element.
+			$return_value = array();
+			foreach($value as $element)
 			{
-				$return_value = $value;
+				$return_value[] = get_value_with_default($element, $default_value);
 			}
 		}
 		else
 		{
-			$return_value = trim($value);
+			if(is_numeric($default_value))
+			{
+				if(is_numeric($value))
+				{
+					$return_value = $value;
+				}
+			}
+			else
+			{
+				$return_value = trim($value);
+			}
 		}
 	}
 	
@@ -430,49 +427,83 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 }
 
 /**
- * Retrieve the $value from the $params array checking for
- * $params[$value] and $params[$id.$value]. Returns $default
- * if $value is not in $params array. This is a helper function
- * for modules using the execute, executeuser and executeadmin
- * callback functions. Note: This function will also trim() string 
- * values.
+ * Retrieve the $value from the $parameters array checking for
+ * $parameters[$value] and $params[$id.$value]. Returns $default
+ * if $value is not in $params array. 
+ * Note: This function will also trim() string values.
  *
- * @param string $id
+ * @param array $parameters
  * @param string $value
- * @param array $params
- * @param mixed $default
+ * @param mixed $default_value
+ * @param string $session_key
  * @return mixed
  */
-function get_param_value($id, $value, $params, $default = '')
+function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
 {
-	$return_value = $default;
-	
-	if(is_bool($default))
+	if($session_key != '')
 	{
-		// want a boolean return_value
-		if(isset($params[$id.$value]))
+		if(isset($_SESSION['parameter_values'][$session_key]))
 		{
-			$return_value = (boolean)$params[$id.$value];
-		}
-		else if(isset($params[$value]))
-		{
-			$return_value = (boolean)$params[$value];
+			$default_value = $_SESSION['parameter_values'][$session_key];
 		}
 	}
-	else
-	{
-		if(isset($params[$id.$value]))
-		{
-			$return_value = $params[$id.$value];
-		}
-		else if(isset($params[$value]))
-		{
-			$return_value = $params[$value];
-		}
 
-		if(is_string($return_value))
-			$return_value = trim($return_value);
-	}	
+	// set our return value to the default initially and overwrite with $value if we like it.
+	$return_value = $default_value;
+	if(isset($parameters[$value]))
+	{
+		if(is_bool($default))
+		{
+			// want a boolean return_value
+			if(isset($parameters[$value]))
+			{
+				$return_value = (boolean)$parameters[$value];
+			}
+		}
+		else
+		{
+			// is $default_value a number?
+			$is_number = false;
+			if(is_numeric($default_value))
+			{
+				$is_number = true;
+			}
+		
+			if(is_array($parameters[$value]))
+			{
+				// $parameters[$value] is an array - validate each element.
+				$return_value = array();
+				foreach($parameters[$value] as $element)
+				{
+					$return_value[] = get_value_with_default($element, $default_value);
+				}
+			}
+			else
+			{
+				if(is_numeric($default_value))
+				{
+					// default value is a number, we only like $parameters[$value] if it's a number too.
+					if(is_numeric($parameters[$value]))
+					{
+						$return_value = $parameters[$value];
+					}
+				}
+				elseif(is_string($default_value))
+				{
+					$return_value = trim($parameters[$value]);
+				}
+				else
+				{
+					$return_value = $parameters[$value];
+				}
+			}
+		}
+	}
+
+	if($session_key != '')
+	{
+		$_SESSION['parameter_values'][$session_key] = $return_value;
+	}
 	
 	return $return_value;
 }
