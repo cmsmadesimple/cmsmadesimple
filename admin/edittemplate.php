@@ -46,6 +46,9 @@ if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
+$apply = false;
+if (isset($_POST["apply"])) $apply = true;
+
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
@@ -122,8 +125,11 @@ if ($access)
 						call_user_func_array($gCms->modules[$key]['edittemplate_post_function'], array($gCms, $onetemplate));
 					}
 				}
-				audit($template_id, $onetemplate->name, 'Edited Template');
-				redirect("listtemplates.php");
+				if (!$apply)
+				{
+					audit($template_id, $onetemplate->name, 'Edited Template');
+					redirect("listtemplates.php");
+				}
 			}
 			else
 			{
@@ -227,6 +233,7 @@ else
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="template_id" value="<?php echo $template_id?>"><input type="hidden" name="edittemplate" value="true"><input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
