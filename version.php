@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 $CMS_VERSION = "0.7.1-svn";
-$CMS_SCHEMA_VERSION = "7";
+$CMS_SCHEMA_VERSION = "8";
 
 # vim:ts=4 sw=4 noet
 ?>
