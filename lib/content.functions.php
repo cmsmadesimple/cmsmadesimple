@@ -46,25 +46,23 @@ class Smarty_CMS extends Smarty {
 		$this->plugins_dir = $config["root_path"].'/plugins/';
 
 		$this->compile_check = true;
+		$this->caching = true;
+		$this->assign('app_name','CMS');
+		$this->debugging = false;
+		$this->force_compile = true;
+		$this->cache_plugins = false;
+
 		if ($config["debug"] == true)
 		{
 			$this->caching = false;
-		}
-		else
-		{
-			$this->caching = true;
-		}
-		$this->assign('app_name','CMS');
-		$this->debugging = false;
-		if ($config["debug"] == true)
-		{
 			$this->force_compile = true;
 		}
-		else
+
+		if (get_site_preference('enablesitedownmessage') == "1")
 		{
-			$this->force_compile = false;
+			$this->caching = false;
+			$this->force_compile = true;
 		}
-		$this->cache_plugins = false;
 
 		load_plugins($this);
 
@@ -83,86 +81,94 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount())
+		$query = "";
+		if (get_site_preference('enablesitedownmessage') == "1")
 		{
-			$line = $result->FetchRow();
+			$tpl_source = get_site_preference('sitedownmessage');
+			return true;
+		}
+		else {
+			$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			$result = $db->Execute($query);
 
-			#This way the id is right, even if an alias is given
-			$gCms->variables['page'] = $line['page_id'];
-
-			if (isset($line[stylesheet]))
+			if ($result && $result->RowCount())
 			{
-				$stylesheet .= "<style type=\"text/css\">\n";
-				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-				$stylesheet .= "</style>\n";
-			}
+				$line = $result->FetchRow();
 
-			# the new css stuff
-			$tempstylesheet = "";
+				#This way the id is right, even if an alias is given
+				$gCms->variables['page'] = $line['page_id'];
 
-			$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-				WHERE	css_id		= assoc_css_id
-				AND		assoc_type	= 'template'
-				AND		assoc_to_id = '".$line[template_id]."'";
-			$cssresult = $db->Execute($cssquery);
-
-			$stylesheet .= "<style type=\"text/css\">\n";
-			while ($cssline = $cssresult->FetchRow())
-			{
-				$tempstylesheet .= "\n".$cssline[css_text]."\n";
-			}
-			$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
-			$stylesheet .= "</style>\n";
-			
-			$tpl_source = $line['template_content'];
-			$content = $line['page_content'];
-			$title = $line['page_title'];
-			$head_tags = $line['head_tags'];
-			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
-			if (isset($head_tags) && $head_tags != "")
-			{
-				$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
-			}
-
-			#So no one can do anything nasty
-			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-			{
-				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-			}
-			
-			if ($line["page_type"] == "content")
-			{
-				#If it's regular content, do this...
-				$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
-				if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
+				if (isset($line[stylesheet]))
 				{
-					$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
+					$stylesheet .= "<style type=\"text/css\">\n";
+					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
+					$stylesheet .= "</style>\n";
 				}
+
+				# the new css stuff
+				$tempstylesheet = "";
+
+				$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+					WHERE	css_id		= assoc_css_id
+					AND		assoc_type	= 'template'
+					AND		assoc_to_id = '".$line[template_id]."'";
+				$cssresult = $db->Execute($cssquery);
+
+				$stylesheet .= "<style type=\"text/css\">\n";
+				while ($cssline = $cssresult->FetchRow())
+				{
+					$tempstylesheet .= "\n".$cssline[css_text]."\n";
+				}
+				$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
+				$stylesheet .= "</style>\n";
+				
+				$tpl_source = $line['template_content'];
+				$content = $line['page_content'];
+				$title = $line['page_title'];
+				$head_tags = $line['head_tags'];
+				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+				if (isset($head_tags) && $head_tags != "")
+				{
+					$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
+				}
+
+				#So no one can do anything nasty
+				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+				{
+					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				}
+				
+				if ($line["page_type"] == "content")
+				{
+					#If it's regular content, do this...
+					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
+					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
+					{
+						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
+					}
+				}
+				else
+				{
+					#If it's a module, do this instead...
+					if (isset($cmsmodules[$line["page_type"]]['plugin_module'])
+						&& $cmsmodules[$line["page_type"]]['Installed'] == true
+						&& $cmsmodules[$line["page_type"]]['Active'] == true)
+					{
+						@ob_start();
+						call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
+						$modoutput = @ob_get_contents();
+						@ob_end_clean();
+						$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+					}
+				}
+
+				return true;
 			}
 			else
 			{
-				#If it's a module, do this instead...
-				if (isset($cmsmodules[$line["page_type"]]['plugin_module'])
-					&& $cmsmodules[$line["page_type"]]['Installed'] == true
-					&& $cmsmodules[$line["page_type"]]['Active'] == true)
-				{
-					@ob_start();
-					call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
-					$modoutput = @ob_get_contents();
-					@ob_end_clean();
-					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
-				}
+				return false;
 			}
-
-			return true;
-		}
-		else
-		{
-			return false;
 		}
 	}
 
@@ -173,38 +179,46 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount()) {
-			$line = $result->FetchRow();
-
-			#This way the id is right, even if an alias is given
-			$gCms->variables['page'] = $line['page_id'];
-
-			$page_date = $db->UnixTimeStamp($line["page_date"]);
-			$template_date = $db->UnixTimeStamp($line["template_date"]);
-
-			$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
-
-			#We only want to cache "static" content
-			if ($line["page_type"] == "content") {
-
-				$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
-				return true;
-
-			} else {
-
-				$tpl_timestamp = time();
-				return true;
-
-			}
-		}
-		else {
-
-			$smarty_obj->assign('modified_date',time());
+		if (get_site_preference('enablesitedownmessage') == "1")
+		{
 			$tpl_timestamp = time();
-			return false;
+			return true;
+		}
+		else
+		{
+			$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			$result = $db->Execute($query);
+
+			if ($result && $result->RowCount()) {
+				$line = $result->FetchRow();
+
+				#This way the id is right, even if an alias is given
+				$gCms->variables['page'] = $line['page_id'];
+
+				$page_date = $db->UnixTimeStamp($line["page_date"]);
+				$template_date = $db->UnixTimeStamp($line["template_date"]);
+
+				$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
+
+				#We only want to cache "static" content
+				if ($line["page_type"] == "content") {
+
+					$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
+					return true;
+
+				} else {
+
+					$tpl_timestamp = time();
+					return true;
+
+				}
+			}
+			else {
+
+				$smarty_obj->assign('modified_date',time());
+				$tpl_timestamp = time();
+				return false;
+			}
 		}
 	}
 

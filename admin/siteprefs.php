@@ -61,7 +61,6 @@ if (isset($_POST["editsiteprefs"])) {
 	set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 	set_site_preference('useadvancedcss', $useadvancedcss);
 	audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited Site Preferences');
-	redirect("index.php");
 } else if (!isset($_POST["submit"])) {
 	$enablecustom404 = get_site_preference('enablecustom404');
 	$custom404 = get_site_preference('custom404');
