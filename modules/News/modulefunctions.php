@@ -152,7 +152,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 		if ($type == "rss")
 		{
 			header('Content-type: text/xml');
-			echo "<xml version='1.0'>\n";
+			echo "<?xml version='1.0'?>\n";
 			echo "<rss version='2.0'>\n";
 			echo "   <channel>\n";
 		}
