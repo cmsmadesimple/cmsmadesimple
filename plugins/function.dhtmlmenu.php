@@ -22,6 +22,7 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
 	# getting menu parameters
 	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
+	$horizontal = isset($params["horizontal"]) ? $params["horizontal"] : 0 ;
 	
 	# getting content hierarchy parameters
 	$newparams = array();
@@ -94,17 +95,27 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 	//$mid->setIconwww('phplayers/menuicons/');
 	
 	$mid->setTpldir('./phplayers/templates/');
-	$mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
+	if ($horizontal == 1) {
+	  $mid->setHorizontalMenuTpl('layersmenu-horizontal_menu.ihtml');
+	}
+	else {
+	  $mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
+	}
 	$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
 
 	
 	$mid->setMenuStructureString($menu);
 	$mid->setIconsize(16, 16);
-	$mid->parseStructureForMenu('vermenu1');
-	$mid->newVerticalMenu('vermenu1');
+	$mid->parseStructureForMenu('menu1');
+	if ($horizontal == 1) {
+	  $mid->newHorizontalMenu('menu1');
+	}
+	else {
+	  $mid->newVerticalMenu('menu1');
+	}
 	
 	$text .= $mid->getHeader();
-	$text .= $mid->getMenu('vermenu1');
+	$text .= $mid->getMenu('menu1');
 	$text .= $mid->getFooter();
 	
 	return $text;
@@ -123,6 +134,7 @@ function smarty_cms_help_function_dhtmlmenu() {
 		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
+		<li><em>(optional)</em> <tt>horizontal</tt> - 1/0, whether you want to have a horizontal menu instead of vertical.</li>
 	</ul>
 	</p>
 	<?php
