@@ -82,11 +82,11 @@ if ($_POST["username"] && $_POST["password"]) {
 <table border=0 id="table">
 	<tr>
 		<td align="right">Username:</td>
-		<td><input type="text" id="username" name="username" value="<?echo $_POST["username"]?>" /></td>
+		<td><input type="text" id="username" name="username" value="<?echo $_POST["username"]?>" size="15"/></td>
 	</tr>
 	<tr>
 		<td align="right">Password:</td>
-		<td><input type="password" id="password" name="password" /></td>
+		<td><input type="password" id="password" name="password" size="15" /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
