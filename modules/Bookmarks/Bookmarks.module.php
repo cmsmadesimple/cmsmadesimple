@@ -250,7 +250,7 @@ EOT;
 
 	function InstallPostMessage()
 	{
-		return 'Make sure to set the "Modify News" permission on users who will be administering News items.';
+		return 'Make sure to set the "Modify Bookmarks" permission on users who will be administering bookmarks.';
 	}
 
 	function Upgrade($oldversion, $newversion)
