@@ -4,6 +4,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$db->DropSequence($config->db_prefix."additional_users_seq");
 	$db->DropSequence($config->db_prefix."group_perms_seq");
+	$db->DropSequence($config->db_prefix."groups_seq");
 	$db->DropSequence($config->db_prefix."pages_seq");
 	$db->DropSequence($config->db_prefix."permissions_seq");
 	$db->DropSequence($config->db_prefix."templates_seq");
