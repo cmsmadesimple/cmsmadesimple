@@ -58,7 +58,13 @@ class Smarty_CMS extends Smarty {
 			#$smarty_obj->assign('stylesheet',$line[stylesheet]);
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
-				$stylesheet = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
+				$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
+				$stylesheet = "<link rel='stylesheet' href='".$csslink."'>\n";
+				$stylesheet .= "<style type=\"text/css\">\n";
+				$stylesheet .= "<!--\n";
+				$stylesheet .= "	@import url(".$csslink.");\n";
+				$stylesheet .= "-->\n";
+				$stylesheet .= "</style>\n";
 			}
 			$tpl_source = $line[template_content];
 			$content = $line[page_content];
