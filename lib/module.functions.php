@@ -910,7 +910,7 @@ function cms_mapi_check_for_module($name)
 
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$module]))
+	if (isset($cmsmodules[$name]))
 	{
 		$result = true;
 	}
