@@ -1,14 +1,19 @@
-Version 0.4 -- Subversion
+Version 0.4 -- Tue Aug 10 2004
 -----------------
 
 * Added module API
 * Added news module
+* Added comments module
 * Added copyright notice to bottom on all generated pages in a comment
 * Added dhtml menu plugin using phplayers
+* Added hierarchical content
 * Fixed modified_date plugin
+* Fixed several bugs with permissions
 * Removed sections.  Instead we have content be children of other content
 * Rewrote plugin loading so that plugins do not cache, even thought static
 content does
+* Rewrote install script to be more cross-database (even though other db
+systems are not supported yet)
 * Switched WYSIWYGs from tinymce to htmlarea
 
 Version 0.3.2 -- Thu Jul 29 2004

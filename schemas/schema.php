@@ -5,6 +5,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
+	$db->DropSequence($db_prefix."module_news_seq");
 	$db->DropSequence($db_prefix."pages_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
@@ -24,6 +25,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_news");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -123,6 +126,25 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating module_news table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		news_id I KEY,
+		news_title C(255),
+		news_data X,
+		news_date T,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_news", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->CreateSequence(cms_db_prefix()."module_news_seq");
 
 	echo "[done]</p>";
 

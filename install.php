@@ -113,11 +113,11 @@ function showPageOne() {
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
-    echo "<tr class=\"$currow\"><td>Checking for PHP version 4.0+</td><td>";
+    echo "<tr class=\"row1\"><td>Checking for PHP version 4.0+</td><td>";
 	echo (@phpversion() >= "4"?"Success!":"Failure!");
 	echo "</td></tr>\n";
 
-    echo "<tr class=\"$currow\"><td>Checking for PHP mysql support</td><td>";
+    echo "<tr class=\"row2\"><td>Checking for PHP mysql support</td><td>";
 	echo (function_exists('mysql_connect')?"Success!":"Failure!");
 	echo "</td></tr>\n";
 
