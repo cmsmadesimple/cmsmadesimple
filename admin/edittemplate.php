@@ -214,28 +214,28 @@ else
 
 <h3><?php echo lang('edittemplate')?></h3>
 
-<div class="adminform">
+<div class="AdminForm">
 
 <table width="100%" border="0">
 
 	<tr>
-		<td width="100">*<?php echo lang('name')?>:</td>
+		<th width="100">*<?php echo lang('name')?>:</th>
 		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>" /><input type="hidden" name="orig_template" value="<?php echo $orig_template?>" /></td>
 	</tr>
 	<tr>
-		<td>*<?php echo lang('content'); ?>:</td>
+		<th>*<?php echo lang('content'); ?>:</th>
 		<td><?php echo create_textarea(false, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></td>
 	</tr>
 	<tr>
-		<td><?php echo lang('stylesheet')?>:</td>
+		<th><?php echo lang('stylesheet')?>:</th>
 		<td><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'syntaxHighlight', 'stylesheet', $encoding)?></td>
 	</tr>
 	<tr>
-		<td><?php echo lang('active')?>:</td>
+		<th><?php echo lang('active')?>:</th>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /></td>
 	</tr>
 	<tr>
-		<td><?php echo lang('encoding')?>:</td>
+		<th><?php echo lang('encoding')?>:</th>
 		<td><?php echo create_encoding_dropdown('encoding', $encoding) ?></td>
 	</tr>
 	<tr>

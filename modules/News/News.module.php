@@ -175,7 +175,7 @@ class News extends CMSModule
 		$db = $this->cms->db;
 		?>
 
-		<div class="adminform">
+		<div class="AdminForm">
 		 
 		<?php echo $this->CreateFormStart($id, $moduleaction)?>
 
@@ -188,7 +188,7 @@ class News extends CMSModule
 				  {
 			  ?>
 			  <tr>
-				<td width="100">Category:</td>
+				<th width="100">Category:</th>
 				<td>
 				<select name="<?php echo $id?>selcat" size="4">
 				<?php
@@ -214,27 +214,27 @@ class News extends CMSModule
 				  }
 				?>
 		  <tr>
-			 <td>New Category:</td>
+			 <th>New Category:</th>
 			 <td><?php echo $this->CreateInputText($id, 'addcat', '', '40', '255')?></td>
 		  </tr>
 		  <tr>
-			<td width="60">Title:</td>
+			<th width="60">Title:</th>
 			<td><?php echo $this->CreateInputText($id, 'newstitle', $title, '25', '255', 'class="standard"')?></td>
 		  </tr>
 		  <tr>
-			<td>Content:</td>
+			<th>Content:</th>
 			<td><?php echo $this->CreateTextArea(true, $id, $data, 'newscontent', 'syntaxHighlight', 'newscontent')?></td>
 		  </tr>
 		  <tr>
-			<td>Post Date:</td>
+			<th>Post Date:</th>
 			<td><?php echo $this->CreateInputText($id, 'post_date', $post_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
-			<td>Start Date:</td>
+			<th>Start Date:</th>
 			<td><?php echo $this->CreateInputText($id, 'start_date', $start_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
-			<td>Expiry:</td>
+			<th>Expiry:</th>
 			<td>
 			<?php
 				$addttext = '';
@@ -252,11 +252,11 @@ class News extends CMSModule
 			</td>
 		  </tr>
 		  <tr>
-			<td>End Date:</td>
+			<th>End Date:</th>
 			<td><?php echo $this->CreateInputText($id, 'end_date', $end_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
-			<td>&nbsp;</td>
+			<th>&nbsp;</th>
 			<td><em>Note:</em> Dates must be in a 'yyyy-mm-dd hh:mm:ss' format.</td>
 		  </tr>
 		  <tr>
@@ -555,18 +555,21 @@ class News extends CMSModule
 				$dbresult = $db->Execute($query);
 				if ($dbresult && $dbresult->RowCount())
 				{
-					echo "<table cellspacing=\"0\" class=\"admintable\">\n";
-					echo "<tr>\n";
+					echo '<table cellspacing="0" class="AdminTable">';
+					echo '<thead>';
+					echo '<tr>';
 					echo "<td colspan=\"6\"><div align=\"right\" class=\"clearbox\">".$this->CreatePagination($id, 'defaultadmin', $returnid, $current_page, $dbresult->RowCount(), $rowsperpage)."</td>";
 					echo "</tr>\n";
 					echo "<tr>\n";
-					echo "<td width=\"2%\">&nbsp;</td>\n";
-					echo "<td width=\"50%\">Title</td>\n";
-					echo "<td width=\"10%\">Category</td>\n";
-					echo "<td width=\"20%\">Posting Date</td>\n";
-					echo "<td width=\"8%\">&nbsp;</td>\n";
-					echo "<td width=\"10%\">&nbsp;</td>\n";
+					echo "<th width=\"2%\">&nbsp;</th>\n";
+					echo "<th width=\"50%\">Title</th>\n";
+					echo "<th width=\"10%\">Category</th>\n";
+					echo "<th width=\"20%\">Posting Date</th>\n";
+					echo "<th width=\"8%\">&nbsp;</th>\n";
+					echo "<th width=\"10%\">&nbsp;</th>\n";
 					echo "</tr>\n";
+					echo "</thead>\n";
+					echo "<tbody>\n";
 					$rowclass="row1";
 					$r=0;
 
@@ -591,6 +594,7 @@ class News extends CMSModule
 						echo "</tr>\n";
 						($rowclass=="row1"?$rowclass="row2":$rowclass="row1");
 					}
+					echo "</tbody>\n";
 					echo "</table>\n";
 				}
 				else

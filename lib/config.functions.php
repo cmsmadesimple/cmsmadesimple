@@ -99,6 +99,8 @@ function cms_config_load($loadLocal = true)
 
 	$config["admin_dir"] = "admin";
 
+	$config["persistent_db_conn"] = true;
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())

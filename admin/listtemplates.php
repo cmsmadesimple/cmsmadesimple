@@ -136,12 +136,6 @@ if ($add) {
 
 <div class="button"><a href="addtemplate.php"><?php echo lang('addtemplate')?></a></div><br />
 
-<div class="collapseTitle"><a href="#help" onclick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
-<div id="helparea" class="expand">
-<?php echo lang('helplisttemplate')?>
-<a name="help">&nbsp;</a>
-</div>
-
 <?php
 }
 

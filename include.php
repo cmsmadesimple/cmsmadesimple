@@ -95,7 +95,14 @@ function count_sql_execs($db, $sql, $inputarray)
 
 if (!isset($DONT_LOAD_DB)) {
 	$db = &ADONewConnection($config['dbms']);
-	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
+	{
+		$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+	}
+	else
+	{
+		$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+	}
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
 	$db->fnExecute = 'count_sql_execs';

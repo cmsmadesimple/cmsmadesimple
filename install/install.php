@@ -468,6 +468,7 @@ function showPageFive() {
 	$newconfig["default_encoding"] = "";
 	$newconfig["disable_htmlarea_translation"] = false;
 	$newconfig["admin_dir"] = "admin";
+	$newconfig["persistent_db_conn"] = true;
 
     $configfile = dirname(dirname(__FILE__))."/config.php";
     ## build the content for config file
