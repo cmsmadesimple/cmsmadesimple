@@ -110,6 +110,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
     if (isset($params[$id."action"])) {
         $action = $params[$id."action"];
     }
+
     $author = "";
     if (isset($params[$id."author"])) {
         $author = $params[$id."author"];
@@ -174,12 +175,11 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
             $db = $cms->db;
             $new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
             $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".$db->qstr($url).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).", '1')";
-            echo "query: $query<br/>\n";
             $dbresult = $db->Execute($query);
             cms_mapi_redirect_user_by_pageid($return_id);
             return;
         } else {
-            echo $errormsg;
+            echo "Error: $errormsg<br />\n";
         }
         break;
 
