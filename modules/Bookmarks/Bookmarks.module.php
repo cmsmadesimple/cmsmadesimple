@@ -628,8 +628,6 @@ EOT;
 	    $db = $this->cms->db; /* @var $db ADOConnection */
 	    $db->debug = true; /* @var $rs ADORecordset */
 
-	    //debug_display($parameters);
-
 		$ids = $parameters['category_ids'];
 		$names = $parameters['category_names'];
 		$orders = $parameters['category_orders'];
@@ -673,10 +671,8 @@ EOT;
 			}
 		}		
 		
-		//debug_display($id,'$id');
 		$url = $this->CreateLink($id, 'admin_manage_categories', $returnid, $contents='', $params=array('result'=>'1'), '', true);
 		$url = str_replace('&amp;', '&', $url);
-		//debug_display($url);
 		redirect($url);
 	}
 	
@@ -1046,7 +1042,7 @@ EOT;
 	
 			$sql .= "ORDER BY $bookmarks_table_name.bookmark_modified_date DESC";
 		}
-	debug_display($sql, '$sql');
+
 		if($number)
 		{
 			$dbresult = $db->SelectLimit($sql,$number); /* @var $dbresult ADORecordSet */
@@ -1138,8 +1134,6 @@ EOT;
 				}
 				else
 				{
-debug_display($current_category_name,'$current_category_name');	
-debug_display($category_name,'$category_name');	
 					$bookmark_summary = empty($parameters["summaries"]) ? '' : "<div class='cms-module-bookmarks-summary'>" . $row['bookmark_summary'] . "</div>";
 	
 					if($current_category_name != $category_name)
