@@ -91,6 +91,7 @@ if (isset($_POST["serialized_content"]))
 		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
 		$tmpobj->mCachable = $contentobj->mCachable;
 		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
+		$tmpobj->mLastModifiedBy = $contentobj->mLastModifiedBy;
 		$contentobj = $tmpobj;
 	}
 }
@@ -100,6 +101,7 @@ else
 	$contentobj->mOwner = $userid;
 	$contentobj->mActive = True;
 	$contentobj->mShowInMenu = True;
+	$contentobj->mLastModifiedBy = $userid;
 }
 
 if ($access)

@@ -142,6 +142,11 @@ class ContentBase
 	var $mMarkup;
 
 	/**
+	 * Last user to modify this content
+	 */
+	var $mLastModifiedBy;
+
+	/**
 	 * Creation date
 	 * Date
 	 */
@@ -186,6 +191,7 @@ class ContentBase
 		$this->mTemplateId		= -1 ;
 		$this->mItemOrder		= -1 ;
 		$this->mOldItemOrder	= -1 ;
+		$this->mLastModifiedBy	= -1 ;
 		$this->mHierarchy		= "" ;
 		$this->mActive			= false ;
 		$this->mDefaultContent	= false ;
@@ -320,6 +326,11 @@ class ContentBase
 	{
 		return $this->mMarkup;
 	}
+
+	function LastModifiedBy()
+	{
+		return $this->mLastModifiedBy;
+	}
 	
 	function SetAlias($alias)
 	{
@@ -424,6 +435,7 @@ class ContentBase
 				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
 				$this->mCachable		= ($row["cachable"] == 1?true:false);
+				$this->mLastModifiedBy	= $row["last_modified_by"];
 				$this->mCreationDate	= $row["create_date"];
 				$this->mModifiedDate	= $row["modified_date"];
 
@@ -508,6 +520,7 @@ class ContentBase
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
 		$this->mCachable		= ($data["cachable"] == 1?true:false);
+		$this->mLastModifiedBy	= $data["last_modified_by"];
 		$this->mCreationDate	= $data["create_date"];
 		$this->mModifiedDate	= $data["modified_date"];
 
@@ -595,7 +608,7 @@ class ContentBase
 			}
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ?, markup = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
@@ -612,6 +625,7 @@ class ContentBase
 			$db->DBTimeStamp(time()),
 			$this->mItemOrder,
 			$this->mMarkup,
+			$this->mLastModifiedBy,
 			$this->mId
 			));
 
@@ -698,7 +712,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -716,6 +730,7 @@ class ContentBase
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
 			$this->mMarkup,
+			$this->mLastModifiedBy,
 			$db->DBTimeStamp(time()),
 			$db->DBTimeStamp(time())
 			));

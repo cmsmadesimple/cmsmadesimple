@@ -24,6 +24,13 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
+echo "<p>Setting a last_modified_by to something...";
+
+$oneuserid = $db->GetOne("SELECT user_id FROM ".cms_db_prefix()."users");
+$db->Execute("UPDATE ".cms_db_prefix()."content SET last_modified_by = ".$oneuserid);
+
+echo "[done]</p>";
+
 echo "<p>Adding fields to template table...";
 
 $dbdict = NewDataDictionary($db);

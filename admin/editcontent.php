@@ -94,6 +94,7 @@ if (isset($_POST["serialized_content"]))
 		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
 		$tmpobj->mCachable = $contentobj->mCachable;
 		$tmpobj->mHierarchy = $contentobj->mHierarchy;
+		$tmpobj->mLastModifiedBy = $contentobj->mLastModifiedBy;
 		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
 		$contentobj = $tmpobj;
 	}
@@ -147,6 +148,7 @@ if ($access)
 	{
 		$contentobj = ContentManager::LoadContentFromId($content_id);
 		$content_type = $contentobj->Type();
+		$contentobj->mLastModifiedBy = $userid;
 	}
 	else
 	{
@@ -161,6 +163,8 @@ if ($access)
 		{
 			$contentobj->mOwner = $_POST["ownerid"];
 		}
+
+		$contentobj->mLastModifiedBy = $userid;
 
 		#Fill Additional Editors (kind of kludgy)
 		if (isset($_POST["additional_editors"]))
