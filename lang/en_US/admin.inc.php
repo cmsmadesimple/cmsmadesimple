@@ -22,6 +22,7 @@ $lang['admin']['assignments'] = 'Assignments';
 $lang['admin']['associationexists'] = 'This association already exists';
 $lang['admin']['backtoplugins'] = 'Back to Plugins List';
 $lang['admin']['cancel'] = 'Cancel';
+$lang['admin']['clearadminlog'] = 'Clear Admin Log';
 $lang['admin']['code'] = 'Code';
 $lang['admin']['confirmdeletedir'] = 'Are you sure you want to delete this dir and all of its contents?';
 $lang['admin']['content'] = 'Content';
@@ -185,5 +186,4 @@ $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
-$lang['admin']['clearadminlog'] = 'Clear Admin Log';
 ?>

@@ -22,6 +22,7 @@ $lang['admin']['assignments'] = 'jaot';
 $lang['admin']['associationexists'] = 'Tämä liitos on jo käytössä';
 $lang['admin']['backtoplugins'] = 'Takaisin liitännäisten listaan';
 $lang['admin']['cancel'] = 'Peruutus'; 
+$lang['admin']['clearadminlog'] = 'Clear Admin Log'; //needs translation
 $lang['admin']['code'] = 'Koodi'; 
 $lang['admin']['confirmdeletedir'] = 'Oletko varma että haluat poistaa tämän hakemiston ja kaiken sen sisällön ?';
 $lang['admin']['content'] = 'Sisältö'; 
@@ -185,5 +186,4 @@ $lang['admin']['usewysiwyg'] = 'Käytä WYSIWYG editoria sisällön muokkaamiseen';
 $lang['admin']['version'] = 'Versio'; 
 $lang['admin']['view'] = 'Katso'; 
 $lang['admin']['welcomemsg'] = 'Tervetuloa %s'; 
-$lang['admin']['clearadminlog'] = 'Clear Admin Log'; //needs translation
 ?>
