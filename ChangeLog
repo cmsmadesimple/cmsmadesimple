@@ -1,3 +1,11 @@
+Version 0.7 -- Subversion
+-----------------
+
+* Added horizontal option to dhtmlmenu (leen)
+* Added new admin style (thijs)
+* Added language as a user perference and also moved it to the login page
+* Added java based syntax highlighting as a user preference
+
 Version 0.6.3 -- Wed Sep 22 2004 
 -----------------
 
