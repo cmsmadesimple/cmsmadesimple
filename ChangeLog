@@ -2,6 +2,7 @@ Version 0.7 -- Subversion
 -----------------
 
 * Added HTML blobs for easy administration of small chunks of html (#3)
+* Added Image Manager to the files section for advanced image handling functions
 * Added horizontal option to dhtmlmenu (leen)
 * Added new admin style
 * Added language as a user perference and also moved it to the login page
