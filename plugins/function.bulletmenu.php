@@ -40,7 +40,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 				for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
 			}
 			if ($one->page_type == "separator") {
-				$menu .= "<hr/>";
+				$menu .= "<hr class=\"separator\"/>";
 			} else {
 				$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
 			}
