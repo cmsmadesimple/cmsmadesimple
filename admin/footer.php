@@ -4,6 +4,7 @@ echo '</div> <!-- end MainContent -->';
 
 ?>
 <script type="text/javascript" src="<?php echo $config['root_url']?>/lib/dynamic_tabs/tabs.js"></script>
+</div>
 <?php
 
 include_once('topmenu.php');
@@ -18,6 +19,7 @@ else
 {
 	# Show some default stuff
 	?>
+
 <div id="Footer">
 <a href="http://www.cmsmadesimple.org">CMS Made Simple</a> is Free Software released under the GNU/GPL License
 </div>

@@ -3,7 +3,7 @@
 //CHANGED
 Header ("Content-type: text/css");
 require_once("../include.php");
-$theme=get_preference($userid,"admintheme");
+$theme=get_preference(get_userid(),"admintheme");
 if (file_exists(dirname(__FILE__)."/themes/$theme/tab.css")) {
 	readfile(dirname(__FILE__)."/themes/$theme/tab.css");
 } else {
