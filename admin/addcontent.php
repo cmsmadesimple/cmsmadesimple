@@ -405,7 +405,7 @@ else {
 
 
 
-<?php }elseif ($content_type == "link") { ?>
+<?php } elseif ($content_type == "link" || $content_type == 'News') { ?>
 <h3><?php echo lang('addlink')?></h3>
 <div class="adminformSmall">
 <input type="hidden" name="template_id" value="1">
@@ -421,10 +421,12 @@ else {
 		<td>*<?php echo lang('menutext')?>:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>" class="standard"></td>
 	</tr>
+	<?php if ($content_type == 'link') { ?>
 	<tr>
 		<td>*<?php echo lang('url')?>:</td>
 		<td><input type="text" name="url" maxlength="65" value="<?php echo $url?>" class="standard"></td>
 	</tr>
+	<?php } ?>
 	<tr>
 		<td><?php echo lang('parent')?>:</td>
 		<td><?php echo $dropdown?></td>
