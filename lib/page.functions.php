@@ -486,11 +486,10 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
  * if($use_javasyntax){echo 'onSubmit="textarea_submit(
  * this, \'custom404,sitedown\');"';}
  */
-function textarea_highlight($use_javasyntax, $text, $name,
-    $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding=''){
-            
-    if ($use_javasyntax
-	)
+function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding='')
+{
+    if ($use_javasyntax)
+	{
         $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
         $text = ereg_replace("\r", "<CMSNewLine>", $text);
         $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
