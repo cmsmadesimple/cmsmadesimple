@@ -186,7 +186,7 @@ Please complete the following fields:
 </tr>
 <tr class="row1">
 <td>Create Tables (Warning: Deletes existing data)</td>
-<td><input type="checkbox" name="createtables" checked/></td>
+<td><input type="checkbox" name="createtables" checked="true" /></td>
 </tr>
 </table>
 <p align="center" class="continue"><a onclick="document.page2form.submit()">Continue</a></p>
