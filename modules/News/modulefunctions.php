@@ -99,17 +99,17 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 	{
 		$query =  "SELECT news_id, news_title, news_data, news_date FROM ";
 		$query .= cms_db_prefix()."module_news WHERE news_cat = \"";
-		$query .= $params["category"]."\" AND ((".$db->IfNull('start_time',"''");
-		$query .= " = '' AND ".$db->IfNull('end_time',"''");
-		$query .= " = '') OR (start_time < ".$db->DBTimeStamp(time());
+		$query .= $params["category"]."\" AND ((".$db->IfNull('start_time',"'1/1/1900'");
+		$query .= " = '1/1/1900' AND ".$db->IfNull('end_time',"'1/1/1900'");
+		$query .= " = '1/1/1900') OR (start_time < ".$db->DBTimeStamp(time());
 		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
 	}
 	else 
 	{
 		$query =  "SELECT news_id, news_cat, news_title, news_data, news_date ";
 		$query .= "FROM ".cms_db_prefix()."module_news WHERE ";
-		$query .= "((".$db->IfNull('start_time',"''")." = '' AND ".$db->ifNull('end_time',"''");
-		$query .= " = '') OR (start_time < ".$db->DBTimeStamp(time());
+		$query .= "((".$db->IfNull('start_time',"'1/1/1900'")." = '1/1/1900' AND ".$db->ifNull('end_time',"'1/1/1900'");
+		$query .= " = '1/1/1900') OR (start_time < ".$db->DBTimeStamp(time());
 		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
 	}
 	
@@ -164,7 +164,14 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				echo "        <item>\n";
 				if( !isset( $params["category"] ) )
 				{
-					echo "            <title>".$row["news_cat"].": ".$row["news_title"]."</title>\n";
+					if (isset($params["showcategorywithtitle"]) && ($params["showcategorywithtitle"] == "true" || $params["showcategorywithtitle"] == "1"))
+					{
+						echo "            <title>".$row["news_cat"].": ".$row["news_title"]."</title>\n";
+					}
+					else
+					{
+						echo "            <title>".$row["news_title"]."</title>\n";
+					}
 				}
 				else
 				{
