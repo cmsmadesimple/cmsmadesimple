@@ -66,7 +66,7 @@ function comments_module_execute($cms, $id, $params) {
 		echo " - No comments posted - ";
 	}
 	echo "</div>";
-	echo cms_mapi_create_user_link("Comments", $id, $cms->page, array('action'=>'addcomment'), "Add a comment");
+	echo cms_mapi_create_user_link("Comments", $id, $cms->variables['page'], array('action'=>'addcomment'), "Add a comment");
 }
 
 function comments_module_executeuser($cms, $id, $return_id, $params) {

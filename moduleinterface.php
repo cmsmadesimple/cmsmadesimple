@@ -30,7 +30,7 @@ require_once("include.php");
 
 $smarty = new Smarty_ModuleInterface($config);
 
-$modulecmsobj->page = $_GET["return_id"].$_POST["return_id"];
+$gCms->variables['page'] = $_GET["return_id"].$_POST["return_id"];
 $smarty->page = $_GET["return_id"].$_POST["return_id"];
 $smarty->module = $_GET["module"].$_POST["module"];
 $smarty->id = $_GET["id"].$_POST["id"];
@@ -38,9 +38,9 @@ $smarty->id = $_GET["id"].$_POST["id"];
 $params = array_merge($_GET, $_POST);
 $smarty->params = $params;
 
-$old_error_handler = set_error_handler("ErrorHandler404");
-$html = $smarty->fetch('module:'.$modulecmsobj->page) . "\n";
-set_error_handler($old_error_handler);
+#$old_error_handler = set_error_handler("ErrorHandler404");
+$html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
+#set_error_handler($old_error_handler);
 
 echo $html;
 
