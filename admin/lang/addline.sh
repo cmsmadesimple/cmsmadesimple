@@ -10,9 +10,9 @@ if [ $# -ne 2 ] ; then
 fi
 
 #First check en_US to make sure it doesn't exist
-grep "lang['admin']['$1']" en_US/admin.inc.php > /dev/null
+grep "lang\['admin'\]\['$1'\]" en_US/admin.inc.php > /dev/null
 if [ $? -eq 0 ] ; then
-	echo "lang['admin']['$1'] alrady exists"
+	echo "lang['admin']['$1'] already exists"
 	exit 1
 fi
 
