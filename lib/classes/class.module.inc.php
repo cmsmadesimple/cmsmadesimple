@@ -96,7 +96,7 @@ class CMSModule extends ModuleOperations
 	/**
 	 * Returns the name of the author
 	 */
-	function GetAuthorName()
+	function GetAuthor()
 	{
 		return '';
 	}
