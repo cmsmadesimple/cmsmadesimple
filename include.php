@@ -18,7 +18,7 @@
 
 if (preg_match("/Win32/i", $_SERVER['SERVER_SOFTWARE'])) {
 	$sep = ";";
-	ini_set('include_path', ini_get('include_path').$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATOR."go-pear-bundle".DIRECTORY_SEPARATOR.$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATORY);
+	ini_set('include_path', ini_get('include_path').$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATOR."go-pear-bundle".DIRECTORY_SEPARATOR.$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATOR);
 } else {
 	$sep = ":";
 }

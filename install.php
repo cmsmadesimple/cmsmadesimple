@@ -282,7 +282,8 @@ function showPageFour() {
         exit;
     } ## if
  
-    echo "<h4>Congratulations, you are all setup.</h4><h4>Here is your <a href=".$_POST['docroot'].">CMS site</a></h4>\n";
+	$link = str_replace(" ", "%20", $_POST['docroot']);
+    echo "<h4>Congratulations, you are all setup.</h4><h4>Here is your <a href=\"".$link."\">CMS site</a></h4>\n";
 
 } ## showPageFour
 ?>
