@@ -37,7 +37,7 @@ class LinkBlog extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.6';
+		return '1.7';
 	}
 
 	function Install()
@@ -130,6 +130,10 @@ class LinkBlog extends CMSModule
 				$dict->ExecuteSQLArray($sqlarray);
 				$update = "UPDATE ".cms_db_prefix()."module_linkblog SET linkblog_hits=0";
 				$db->Execute($update);
+			case "1.6":
+				$dict = NewDataDictionary($db);
+				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog", "linkblog_content X");
+				$dict->ExecuteSQLArray($sqlarray);
 		} ## switch
 	} ## Upgrade
 
@@ -466,7 +470,7 @@ class LinkBlog extends CMSModule
 			} ## if
 		} ## if
 
-		$query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total, a.linkblog_credit";
+		$query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total, a.linkblog_credit, a.linkblog_content";
 		$query .= ", c.linkblog_type as category";
 		$query .= " FROM";
 		$query .= " ".cms_db_prefix()."module_linkblog_types c,";
@@ -501,10 +505,11 @@ class LinkBlog extends CMSModule
 					echo "  <item>\n";
 					echo "          <title>".$row["linkblog_title"]."</title>\n";
 					echo "          <link>";
-					echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+					echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'), "", true);
+					#echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
 					echo "</link>\n";
-## this is just redundant echo "                <description>".$row["linkblog_title"]."</description>\n";
-## needs to be an email address echo "          <author>".$row["linkblog_author"]."</author>\n";
+					echo "<description>".cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding))."</description>\n";
+					## needs to be an email address echo "          <author>".$row["linkblog_author"]."</author>\n";
 					echo "          <pubDate>".date("D, j M Y H:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
 
 					echo "  </item>\n";
@@ -528,6 +533,11 @@ class LinkBlog extends CMSModule
 					echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "Link", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'));
 					echo ")\n";
 					echo " ".$row["linkblog_title"]."\n";
+					echo "</div>\n";
+
+					echo "<div class=\"modulelinkblogcontent\">\n";
+					#echo cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding));
+					echo $row["linkblog_content"];
 					echo "</div>\n";
 
 					echo "<div class=\"modulelinkbloglinks\">\n";
@@ -600,48 +610,56 @@ class LinkBlog extends CMSModule
 			unset($_SESSION["linkblog_author"]);
 		}
 
-		if (isset($params["author"])) {
-			$author = $params["author"];
-		} else {
+		if ($params["author"] == "") {
 			$validinfo = false;
 			$errormsg .= "Enter an author<br />";
+		} else {
+			$author = $params["author"];
 		}	
 		if ($author == "") {
 			$author = $_SESSION["linkblog_author"];
 		}
 
-		if (!isset($params["title"])) {
+		if ($params["title"] == "") {
 			$validinfo = false;
 			$errormsg .= "Enter a title so people know what you are talking about.<br />";
 		}
 
-		if (!isset($params["type"])) {
+		if ($params["type"] == "") {
 			$validinfo = false;
 			$errormsg .= "Enter a type<br />";
 		}
 
-		if (!isset($params["url"])) {
+		if ($params["url"] == "") {
 			$validinfo = false;
 			$errormsg .= "Enter a link, where are we supposed to go?<br />";
 		}
 
-		$credit = "";
-		if (isset($params["credit"])) {
+		if ($params["credit"] == "") {
+			$credit = "";
+		} else {
 			$credit = $params["credit"];
+		}
+		
+		if ($params["content"] == "") {
+			$content = "";
+		} else {
+			$content = $params["content"];
 		}
 
 		if ($validinfo) {
 			$db = $this->cms->db;
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit, linkblog_hits) VALUES ($new_id, ".$db->qstr($params["author"]).", ".$db->qstr($params["title"]).",".$params["type"].",".htmlentities($db->qstr($params["url"])).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '2', ".htmlentities($db->qstr($credit)).", 1)";
+			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit, linkblog_hits, linkblog_content)";
+			$query .=" VALUES ($new_id, ".$db->qstr($params["author"]).", ".$db->qstr($params["title"]).",".$params["type"].",".htmlentities($db->qstr($params["url"])).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '2', ".htmlentities($db->qstr($credit)).", 1, ".$db->qstr($content).")";
 			$dbresult = $db->Execute($query);
 
 			if ($this->GetPreference("email_notify", "0") == "1") {
 				$subject = 'New Linkblog submission';
 				$body = "A new link for your linkblog has been submitted.\n\n";
-				$body .= "Title: {".$db->qstr($title)."}\n";
-				$body .= "Url: {".htmlentities($db->qstr($url))."}\n";
-				$body .= "Author: {".$db->qstr($author)."}\n";
+				$body .= "Title: {".$db->qstr($params["title"])."}\n";
+				$body .= "Url: {".htmlentities($db->qstr($params["url"]))."}\n";
+				$body .= "Author: {".$db->qstr($params["author"])."}\n";
 
 				$headers = "From: \"CMS Linkblog Module\" <".$this->GetPreference("email_from", "").">\r\n"
 					."Return-Path: \"CMS Linkblog Module\" <".$this->GetPreference("email_from", "").">\r\n"
@@ -653,6 +671,7 @@ class LinkBlog extends CMSModule
 			return;
 		} else {
 			echo "Error: $errormsg<br />\n";
+			$this->create_add_new_link_form($id, $params, $return_id);
 			return;
 		} ## if
 
@@ -687,15 +706,19 @@ class LinkBlog extends CMSModule
 			<table>
 			<tr>
 			<td>* Your name:</td>
-			<td><?php echo $this->CreateInputText($id, "author", $author, '20', '50'); ?></td>
+			<td><?php echo $this->CreateInputText($id, "author", $params["author"], '20', '50'); ?></td>
 			</tr>
 			<tr>
 			<td>* Title:</td>
-			<td><?php echo $this->CreateInputText($id, "title", $title, '50', '250'); ?></td>
+			<td><?php echo $this->CreateInputText($id, "title", $params["title"], '50', '250'); ?></td>
 			</tr>
 			<tr>
 			<td>* URL:</td>
-			<td><?php echo $this->CreateInputText($id, "url", $url, '50', '250'); ?></td>
+			<td><?php echo $this->CreateInputText($id, "url", $params["url"], '50', '250'); ?></td>
+			</tr>
+			<tr>
+			<td>Content:</td>
+			<td><?php echo $this->CreateTextarea(true, $id, $params["content"], 'content', 'syntaxHighlight', 'content'); ?></td>
 			</tr>
 			<tr>
 			<td>* Category:</td>
@@ -703,7 +726,7 @@ class LinkBlog extends CMSModule
 			</tr>
 			<tr>
 			<td>Source credit:</td>
-			<td><?php echo $this->CreateInputText($id, "credit", $credit, '50', '250'); ?></td>
+			<td><?php echo $this->CreateInputText($id, "credit", $params["credit"], '50', '250'); ?></td>
 			</tr>
 			<tr>
 			<td></td>
@@ -1120,5 +1143,26 @@ class LinkBlog extends CMSModule
 	} ## linkblog_module_get_categories
 
 
+	function code2utf($num) 
+	{	
+		if ($num < 128) {
+			return chr($num);
+		}
+		if ($num < 2048) {
+			return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
+		}
+		if ($num < 65536) {
+			return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+		}
+		if ($num < 2097152) {
+			return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
+		}
+		return '';
+	} ## code2utf
+
+	function encode($str)
+	{
+		return preg_replace('/&#(\\d+);/e', 'code2utf($1)', utf8_encode($str));
+	}
 
 } ## class
