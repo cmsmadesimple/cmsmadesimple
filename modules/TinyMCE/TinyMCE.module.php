@@ -34,7 +34,7 @@ class TinyMCE extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.1';
+		return '1.2';
 	}
 	
 	function IsWYSIWYG() {
@@ -222,6 +222,10 @@ class TinyMCE extends CMSModule
 		<p>Version: 1.1</p>
 		<p>Converted for use with new CMS Module architecture.</p>
 		<p>Upgraded TinyMCE to version 1.42.</p>
+		</li>
+		<li>
+		<p>Version: 1.2</p>
+		<p>Fixed bug with paths being created wrong on image insert.</p>
 		</li>
 		</ul>
 		<?php

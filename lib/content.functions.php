@@ -101,7 +101,7 @@ class Smarty_CMS extends Smarty {
 
 			#If the content object is false, then let's see if we should grab a template for a custom 404 error
 			#If not, then let's see if there is a template for this content
-			if ($contentobj === FALSE)
+			if ($contentobj === FALSE || $contentobj->Active() === FALSE)
 			{
 				if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
 				{

@@ -5,7 +5,9 @@ Version 0.10 "Antigua" -- Subversion
 * Added multiple content blocks
 * Added recursive html blobs
 * Submitting site prefernces redircts to an empty page now
+* Fixed bug with image path generation in TinyMCE
 * Fixed bug with text parameter in print plugin
+* Fixed bug with inactive pages still being accessible by page id
 * Updated ADODB to 4.61
 
 Version 0.9.2 "Hatutu" -- Fri Feb 25 2005
