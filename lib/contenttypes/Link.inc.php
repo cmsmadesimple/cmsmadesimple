@@ -20,6 +20,11 @@
 
 class link extends ContentBase
 {
+    function FriendlyName()
+	{
+		return 'Link';
+	}
+
 	function SetProperties()
 	{
 		$this->mProperties->Add('string', 'url');

@@ -59,7 +59,7 @@ else
 {
 	if (isset($existingtypes) && count($existingtypes) > 0)
 	{
-		$content_type = $existingtypes[0];
+		$content_type = 'content';
 	}
 	else
 	{
@@ -163,14 +163,14 @@ else
 {
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
-foreach ($existingtypes as $onetype)
+foreach ($existingtypes as $onetype=>$name)
 {
 	$typesdropdown .= "<option value=\"$onetype\"";
 	if ($onetype == $content_type)
 	{
 		$typesdropdown .= " selected ";
 	}
-	$typesdropdown .= ">".ucfirst($onetype)."</option>";
+	$typesdropdown .= ">".($name)."</option>";
 }
 $typesdropdown .= "</select>";
 

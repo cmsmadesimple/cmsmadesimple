@@ -111,6 +111,28 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * ------------------------------------------------------------------
+	 * Content Type Related Functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	/**
+	 * Does this module support a custom content type?
+	 */
+	function HasContentType()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * Return an instance of the new content type
+	 */
+	function GetContentTypeInstance()
+	{
+		return FALSE;
+	}
+
+	/**
+	 * ------------------------------------------------------------------
 	 * Installation Related Functions
 	 * ------------------------------------------------------------------
 	 */
@@ -820,7 +842,7 @@ class CMSModule extends ModuleOperations
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 */
-	function CreateLink($id, $action, $returnid, $contents, $params, $warn_message='')
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='')
 	{
 		$text = '<a href="moduleinterface.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
 		foreach ($params as $key=>$value)
@@ -1230,6 +1252,10 @@ class ModuleOperations
 
 		return $params;
 	}
+}
+
+class CMSModuleContentType extends ContentBase
+{
 }
 
 # vim:ts=4 sw=4 noet

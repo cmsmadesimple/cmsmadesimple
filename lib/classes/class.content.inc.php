@@ -224,6 +224,14 @@ class ContentBase
 	}
 
 	/**
+	 * Returns a friendly name for this content type
+	 */
+	function FriendlyName()
+	{
+		return '';
+	}
+
+	/**
 	 * Returns the Name
 	 */
 	function Name()
@@ -1053,7 +1061,7 @@ class ContentManager
 			$row = $dbresult->FetchRow();
 
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], @ContentManager::ListContentTypes()))
+			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
 				$contentobj = new $classtype; 
@@ -1102,7 +1110,7 @@ class ContentManager
 			$row = $dbresult->FetchRow();
 
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], @ContentManager::ListContentTypes()))
+			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
 				$contentobj = new $classtype;
@@ -1174,9 +1182,14 @@ class ContentManager
 
 		foreach (get_declared_classes() as $oneclass)
 		{
-			if (strtolower(get_parent_class($oneclass)) == 'contentbase')
+			if (strtolower(get_parent_class($oneclass)) == 'contentbase' || strtolower(get_parent_class($oneclass)) == 'cmsmodulecontenttype')
 			{
-				array_push($result, strtolower($oneclass));
+				if (strtolower($oneclass) != 'cmsmodulecontenttype')
+				{
+					#array_push($result, strtolower($oneclass));
+					$tmpobj = new $oneclass;
+					$result[$oneclass] = $tmpobj->FriendlyName();
+				}
 			}
 		}
 
@@ -1256,7 +1269,7 @@ class ContentManager
 			while ($row = $dbresult->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], ContentManager::ListContentTypes()))
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 				{
 					$contentobj = new $row['type'];
 					$contentobj->LoadFromData($row, true);

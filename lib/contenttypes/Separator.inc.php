@@ -20,6 +20,11 @@
 
 class separator extends ContentBase
 {
+    function FriendlyName()
+	{
+		return 'Separator';
+	}
+
 	function SetProperties()
 	{
 		#Turn off caching

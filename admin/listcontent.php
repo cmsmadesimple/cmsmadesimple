@@ -182,7 +182,7 @@ if (isset($_GET["message"])) {
 					echo "<td>&nbsp;</td>\n";
 				}
 
-				echo "<td align=\"center\">".$one->Type()."</td>\n";
+				echo "<td align=\"center\">".$one->FriendlyName()."</td>\n";
 
 				if ($one->Owner() > -1)
 				{

@@ -20,6 +20,11 @@
 
 class content extends ContentBase
 {
+	function FriendlyName()
+	{
+		return 'Content';
+	}
+
 	function SetProperties()
 	{
 		$this->mProperties->Add("string", "content_en"); //For later language support

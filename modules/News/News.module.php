@@ -321,6 +321,7 @@ class News extends CMSModule
 
 					}
 
+
 					while (($row = $dbresult->FetchRow()))
 					{
 						if ($type == "rss")
@@ -919,6 +920,210 @@ class News extends CMSModule
         </li>
 		</ul>
 		<?php
+	}
+}
+
+class NewsModule extends CMSModuleContentType
+{
+	function SetProperties()
+	{
+		$this->mProperties->Add('string', 'number', '');
+		$this->mProperties->Add('string', 'dateformat', 'F j, Y, g:i a');
+		$this->mProperties->Add('bool', 'swaptitledate', 1);
+		$this->mProperties->Add('string', 'category');
+		$this->mProperties->Add('string', 'summary');
+		$this->mProperties->Add('int', 'length', 80);
+		$this->mProperties->Add('bool', 'showcategorywithtitle', 1);
+		$this->mProperties->Add('string', 'moretext', 'more...');
+		$this->mProperties->Add('bool', 'sortasc', 0);
+
+		#Turn on preview
+		$this->mPreview = true;
+
+		#Turn off caching
+		$this->mCachable = false;
+	}
+
+	function Edit()
+	{
+		global $gCms;
+		$config = $gCms->config;
+
+		$text = '';
+
+		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'"></td></tr>';
+		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'"></td></tr>';
+		if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+		{
+			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'"></td></tr>';
+		}
+		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId).'</td></tr>';
+		$text .= '<tr><td>Number to Display (none show all):</td><td><input type="text" name="number" value="'.$this->GetPropertyValue('number').'" /></td></tr>';
+		$text .= '<tr><td>Date Format:</td><td><input type="text" name="dateformat" value="'.$this->GetPropertyValue('dateformat').'" /></td></tr>';
+		$text .= '<tr><td>Swap Date and Title:</td><td><input type="checkbox" name="swaptitledate" '.($this->GetPropertyValue('swaptitledate')?' checked="true"':'').' /></td></tr>';
+		$text .= '<tr><td>Category:</td><td><input type="text" name="category" value="'.$this->GetPropertyValue('category').'" /></td></tr>';
+		$text .= '<tr><td>Summary:</td><td><input type="text" name="summary" value="'.$this->GetPropertyValue('summary').'" /></td></tr>';
+		$text .= '<tr><td>Summary Length:</td><td><input type="text" name="length" value="'.$this->GetPropertyValue('length').'" /></td></tr>';
+		$text .= '<tr><td>Show Category:</td><td><input type="checkbox" name="showcategorywithtitle" '.($this->GetPropertyValue('showcategorywithtitle')?' checked="true"':'').' /></td></tr>';
+		$text .= '<tr><td>More Text:</td><td><input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" /></td></tr>';
+		$text .= '<tr><td>Sort Ascending:</td><td><input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
+		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'></td></tr>';
+		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="true"':'').'></td></tr>';
+		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
+
+		return $text;
+	}
+
+	function FillParams(&$params)
+	{
+		global $gCms;
+		$config = $gCms->config;
+
+		if (isset($params))
+		{
+			$parameters = array('number', 'category', 'summary', 'length', 'moretext', 'dateformat');
+			foreach ($parameters as $oneparam)
+			{
+				if (isset($params[$oneparam]))
+				{
+					$this->mProperties->SetValue($oneparam, $params[$oneparam]);
+				}
+			}
+			if (isset($params['swaptitledate']))
+			{
+				$this->mProperties->SetValue('swaptitledate', 1);
+			}
+			else
+			{
+				$this->mProperties->SetValue('swaptitledate', 0);
+			}
+			if (isset($params['showcategorywithtitle']))
+			{
+				$this->mProperties->SetValue('showcategorywithtitle', 1);
+			}
+			else
+			{
+				$this->mProperties->SetValue('showcategorywithtitle', 0);
+			}
+			if (isset($params['sortasc']))
+			{
+				$this->mProperties->SetValue('sortasc', 1);
+			}
+			else
+			{
+				$this->mProperties->SetValue('sortasc', 0);
+			}
+			if (isset($params['title']))
+			{
+				$this->mName = $params['title'];
+			}
+			if (isset($params['menutext']))
+			{
+				$this->mMenuText = $params['menutext'];
+			}
+			if (isset($params['template_id']))
+			{
+				$this->mTemplateId = $params['template_id'];
+			}
+			if (isset($params['alias']))
+			{
+				$this->SetAlias($params['alias']);
+			}
+			else
+			{
+				$this->SetAlias('');
+			}
+			if (isset($params['parent_id']))
+			{
+				if ($this->mParentId != $params['parent_id'])
+				{
+					$this->mHierarchy = '';
+					$this->mItemOrder = -1;
+				}
+				$this->mParentId = $params['parent_id'];
+			}
+			if (isset($params['active']))
+			{
+				$this->mActive = true;
+			}
+			else
+			{
+				$this->mActive = false;
+			}
+			if (isset($params['showinmenu']))
+			{
+				$this->mShowInMenu = true;
+			}
+			else
+			{
+				$this->mShowInMenu = false;
+			}
+		}
+	}
+
+	function Show()
+	{
+		global $gCms;
+
+		$params = array();
+
+		if (strlen($params['number']) > 0)
+		{
+			$params['number'] = $this->mProperties->GetValue('number');
+		}
+
+		if (strlen($params['category']) > 0)
+		{
+			$params['category'] = $this->mProperties->GetValue('category');
+		}
+
+		if (strlen($params['summary']) > 0)
+		{
+			$params['summary'] = $this->mProperties->GetValue('summary');
+		}
+
+		if (strlen($params['length']) > 0)
+		{
+			$params['length'] = $this->mProperties->GetValue('length');
+		}
+
+		$params['moretext'] = $this->mProperties->GetValue('moretext');
+		$params['showcategorywithtitle'] = $this->mProperties->GetValue('showcategorywithtitle');
+		$params['swaptitledate'] = $this->mProperties->GetValue('swaptitledate');
+		$params['sortasc'] = $this->mProperties->GetValue('sortasc');
+
+		$newnews = new News();
+
+		//Buffer all this crap spit out by the News module and return it
+		@ob_start();
+		$newnews->DoAction('default', 'newsmodule', $params);
+		$text .= @ob_get_contents();
+		@ob_end_clean();
+		return $text;
+	}
+
+	function GetURL()
+	{
+		global $gCms;
+		$config = $gCms->config;
+
+		$url = "";
+
+		if ($config["assume_mod_rewrite"])
+		{
+			$url = $config["root_url"]."/".$this->mId.".shtml";
+		}
+		else 
+		{
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+		}
+
+		return $url;
+	}
+
+    function FriendlyName()
+	{
+		return 'News';
 	}
 }
 

@@ -20,6 +20,11 @@
 
 class sectionheader extends ContentBase
 {
+    function FriendlyName()
+	{
+		return 'Section Header';
+	}
+
 	function SetProperties()
 	{
 		#Turn off caching

@@ -107,12 +107,12 @@ require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
 require_once(dirname(__FILE__)."/lib/sequence.functions.php");
+require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.sequence.inc.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
 #Load content types
-require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 $dir = dirname(__FILE__)."/lib/contenttypes";
 $ls = dir($dir);
 while (($file = $ls->read()) != "")
