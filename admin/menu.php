@@ -118,7 +118,7 @@ else
 		if (isset($cmsmodules[$key]['object']) 
 			&& $cmsmodules[$key]['installed'] == true
 			&& $cmsmodules[$key]['active'] == true
-			&& $cmsmodules[$key]['object']->HasAdmin())
+			&& $cmsmodules[$key]['object']->HasAdmin()
 		)
 		{
 			$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
