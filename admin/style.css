@@ -329,7 +329,7 @@ TABLE.admintable TD {
 	BACKGROUND-COLOR: #EA8618;
 }
 .smallselect {
-	FONT-SIZE: 70%;
+	FONT-SIZE: 80%;
 }
 FORM .button {
 	FONT-WEIGHT: normal;
@@ -382,10 +382,10 @@ FORM {
 	MARGIN: 0px
 }
 FORM INPUT {
-	FONT-SIZE: 80%;
+	FONT-SIZE: 85%;
 }
 SELECT {
-	FONT-SIZE: 80%;
+	FONT-SIZE: 85%;
 }
 FORM .standard {
 	WIDTH: 150px;
