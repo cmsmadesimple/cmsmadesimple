@@ -1,5 +1,6 @@
 <?php
 
+
 @ob_start();
 
 // Date in the past
@@ -30,8 +31,8 @@ if (!isset($charsetsent))
 
 <title><?php echo lang('adminsystemtitle')?></title>
 
-<link rel="stylesheet" type="text/css" href="style.css" />
-<link rel="stylesheet" type="text/css" href="tab.css" />
+<link rel="stylesheet" type="text/css" href="style.php" />
+<link rel="stylesheet" type="text/css" href="tab.php" />
 
 <script type="text/javascript" src="helparea.js"></script>
 
@@ -41,13 +42,15 @@ if (!isset($charsetsent))
 
 <body##BODYSUBMITSTUFFGOESHERE##>
 
-<div id="header" class="header">
-<img src="../images/cms/cmsadminbanner.gif" border="0" id="logo" alt="CMS Made Simple" />
-</div>
-<div id="sloganWrapper"><div id="slogan"><?php echo lang('slogan'); ?></div></div>
-
-<?php
-include_once("menu.php");
+<?
+//CHANGED
+require_once("../include.php");
+$theme=get_preference(get_userid(),"admintheme");
+if (file_exists(dirname(__FILE__)."/themes/$theme/header.php")) {
+	include(dirname(__FILE__)."/themes/$theme/header.php");
+} else {
+	include(dirname(__FILE__)."/themes/default/header.php");
+}
+//STOP
 ?>
-
-<div class="content">
+<?

@@ -85,6 +85,7 @@ echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=1?"1":"1off").".gif\
 echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=2?"2":"2off").".gif\" ALT=\"Step 2\"></td>";
 echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=3?"3":"3off").".gif\" ALT=\"Step 3\"></td>";
 echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=4?"4":"4off").".gif\" ALT=\"Step 4\"></td>";
+echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=5?"5":"5off").".gif\" ALT=\"Step 5\"></td>";
 echo "</tr></table>\n";
 echo "<p><hr width=80%></p>\n";
 
@@ -100,6 +101,9 @@ switch ($currentpage) {
         break;
     case 4:
         showPageFour();
+        break;
+    case 5:
+        showPageFive();
         break;
     default:
         echo "You were supposed to turn <a href=install.php>right</a> at Alberquerque.<p>\n";
@@ -177,8 +181,85 @@ function showPageOne() {
 
 } ## showPageOne
 
-function showPageTwo() {
+function showPageTwo($errorMessage='',$username='',$email='')
+{
+
+	if ($errorMessage != '')
+	{
+		echo "<p class=\"error\">$errorMessage</p>";
+	}
+	?>
+
+<h3>Admin Account Information</h3>
+
+<p>
+Select the username, password and email address for your admin account.  Please make sure you record this password somewhere, as
+there will be no other way to login to your CMS Made Simple admin system without it.
+</p>
+
+<form action="install.php" method="post" name="page2form" id="page2form">
+
+<table cellpadding="2" border="1" class="regtable">
+
+	<tr class="row1">
+		<td>Username</td>
+		<td><input type="text" name="adminusername" value="<?php echo $username?>" length="20" maxlength="50" /></td>
+	</tr>
+
+	<tr class="row2">
+		<td>Email Address</td>
+		<td><input type="text" name="adminemail" value="<?php echo $email?>" length="20" maxlength="50" /></td>
+	</tr>
+
+	<tr class="row1">
+		<td>Password</td>
+		<td><input type="password" name="adminpassword" value="" length="20" maxlength="50" /></td>
+	</tr>
+
+	<tr class="row2">
+		<td>Password Again</td>
+		<td><input type="password" name="adminpasswordagain" value="" length="20" maxlength="50" /></td>
+	</tr>
+
+</table>
+
+<p align="center" class="continue"><input type="hidden" name="page" value="3" /><a onclick="document.page2form.submit()" href="#">Continue</a></p>
+
+</form>
+
+	<?php
+
+} ## showPageTwo()
+
+function showPageThree()
+{
+
+# Do check that username and password are filled out.
+# Skip back to showPageTwo() if necessary
+# Put given variables into hidden fields so they can up UPDATEd later on in step 4 (post schema install)
+	if ($_POST['adminusername'] == '')
+	{
+		showPageTwo('Username not given!', '', $_POST['adminemail']);
+		return;
+	}
+	else if ($_POST['adminpassword'] == '' || $_POST['adminpasswordagain'] == '')
+	{
+		showPageTwo('Both password fields not given!', $_POST['adminusername'], $_POST['adminemail']);
+		return;
+	}
+	else if ($_POST['adminpassword'] != $_POST['adminpasswordagain'])
+	{
+		showPageTwo('Password fields do not match!', $_POST['adminusername'], $_POST['adminemail']);
+		return;
+	}
+	$adminusername = $_POST['adminusername'];
+	$adminemail = $_POST['adminemail'];
+	$adminpassword = md5($_POST['adminpassword']);
+
 ?>
+
+<h3>Database Information</h3>
+
 <P>Make sure you have created your database and granted full privileges to a user to use that database.</P>
 <P>For MySQL, use the following:</P>
 <P>Log in to mysql from a console and run the following commands:</P>
@@ -189,7 +270,7 @@ function showPageTwo() {
 <P />
 
 Please complete the following fields:
-<FORM ACTION="install.php" METHOD="post" NAME="page2form" ID="page2form">
+<FORM ACTION="install.php" METHOD="post" NAME="page3form" ID="page3form">
 
 <TABLE CELLPADDING="2" BORDER="1" CLASS="regtable">
 <TR CLASS="row2">
@@ -224,21 +305,26 @@ Please complete the following fields:
 </TR>
 <TR CLASS="row2">
 <TD>Table prefix</TD>
-<TD><INPUT TYPE="text" NAME="prefix" VALUE="cms_" LENGTH="20" MAXLENGTH="50" /><INPUT TYPE="hidden" NAME="page" VALUE="3" /></TD>
+<TD><INPUT TYPE="text" NAME="prefix" VALUE="cms_" LENGTH="20" MAXLENGTH="50" />
+<INPUT TYPE="hidden" NAME="page" VALUE="4" />
+<input type="hidden" name="adminusername" value="<?php echo $adminusername ?>" />
+<input type="hidden" name="adminemail" value="<?php echo $adminemail ?>" />
+<input type="hidden" name="adminpassword" value="<?php echo $adminpassword ?>" />
+</TD>
 </TR>
 <TR CLASS="row1">
 <TD>Create Tables (Warning: Deletes existing data)</TD>
 <TD><INPUT TYPE="checkbox" NAME="createtables" CHECKED="true" /></TD>
 </TR>
 </TABLE>
-<P ALIGN="center" CLASS="continue"><A onClick="document.page2form.submit()" href="#">Continue</A></P>
+<P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()" href="#">Continue</A></P>
 <!--<p><input type="submit" value="Continue" /></p>-->
 </FORM>
 <?php
 
-} ## showPageTwo
+} ## showPageThree
 
-function showPageThree($sqlloaded = 0) {
+function showPageFour($sqlloaded = 0) {
     ## don't load statements if they've already been loaded
     if ($sqlloaded == 0 && isset($_POST["createtables"])) {
 
@@ -279,6 +365,13 @@ function showPageThree($sqlloaded = 0) {
 
 		echo "[done]</p>";
 
+		echo "<p>Setting admin account information...";
+
+		$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
+		$db->Execute($sql, array($_POST['adminusername'], $_POST['adminpassword'], $_POST['adminemail']));
+
+		echo "[done]</p>";
+
 		include_once(dirname(__FILE__)."/schemas/createseq.php");
 
 		$db->Close();
@@ -307,7 +400,7 @@ function showPageThree($sqlloaded = 0) {
 			<TD>Query string (leave this alone unless you have trouble, then edit config.php by hand)</TD>
 			<TD>
 				<INPUT TYPE="text" NAME="querystr" VALUE="page" LENGTH="20" MAXLENGTH="20">
-				<INPUT TYPE="hidden" NAME="page" VALUE="4"><INPUT TYPE="hidden" NAME="host" VALUE="<?php echo $_POST['host']?>">
+				<INPUT TYPE="hidden" NAME="page" VALUE="5"><INPUT TYPE="hidden" NAME="host" VALUE="<?php echo $_POST['host']?>">
 			    <INPUT TYPE="hidden" NAME="dbms" VALUE="<?php echo $_POST['dbms']?>">
 			    <INPUT TYPE="hidden" NAME="database" VALUE="<?php echo $_POST['database']?>">
 				<INPUT TYPE="hidden" NAME="port" VALUE="<?php echo $_POST['port']?>">
@@ -331,14 +424,14 @@ function showPageThree($sqlloaded = 0) {
 
 	<?php
     
-} ## showPageThree
+} ## showPageFour
 
-function showPageFour() {
+function showPageFive() {
 
 	/*
     if ($_POST['bbcode'] != 'false' and $_POST['bbcode'] != 'true') {
         echo "<p>BB Code needs to be either 'true' or 'false'</p>\n";
-        showPageThree(1);
+        showPageFour(1);
         exit;
     } ## if
 	*/

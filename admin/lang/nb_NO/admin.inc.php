@@ -228,4 +228,5 @@ $lang['admin']['author'] = 'Forfatter';
 $lang['admin']['changehistory'] = 'Endringslogg';
 $lang['admin']['moduleinstallmessage'] = 'Installasjonsmelding for %s Modul';
 $lang['admin']['moduleuninstallmessage'] = 'Avinstallasjonsmelding for %s Modul';
+$lang['admin']['admintheme'] = 'Administration Theme'; //needs translation
 ?>

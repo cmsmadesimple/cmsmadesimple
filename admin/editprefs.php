@@ -30,6 +30,11 @@ if ($default_cms_lang != $old_default_cms_lang && $default_cms_lang != "")
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
 
+// ADDED
+$admintheme = "default";
+if (isset($_POST["admintheme"])) $admintheme = $_POST["admintheme"];
+// STOP
+
 require_once("../include.php");
 
 check_login();
@@ -49,6 +54,9 @@ if (isset($_POST["cancel"])) {
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
+	//ADDED
+	set_preference($userid, 'admintheme', $admintheme);
+	//STOP
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
@@ -56,6 +64,9 @@ if (isset($_POST["submit_form"])) {
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
+	//ADDED
+	$admintheme = get_preference($userid, 'admintheme');
+	//STOP
 }
 
 include_once("header.php");
@@ -120,6 +131,28 @@ if ($error != "") {
 			</select>
 		</td>
 	</tr>
+	<?//ADDED?>
+	<?
+	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+	?>
+	<tr>	  
+		<td><?php echo lang('admintheme') ?></td>
+		<td>
+			<select name="admintheme">
+			<?
+		  while (($file = readdir($dir)) !== false) {
+		  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
+		  		?>
+		  		<option value="<?=$file?>"<?php echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"")?>><?=$file?></option>				  
+				  <?
+		  	}
+		  }
+				?>				
+			</select>
+		</td>
+	</tr>
+	<?}?>
+	<?//STOP?>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>" />
 		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />

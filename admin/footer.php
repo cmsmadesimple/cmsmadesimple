@@ -1,12 +1,16 @@
 
-</div>
-
-<div id="footer" class="footer">
-
-</div>
-
-<div id="footer1"></div>
-<div id="footer2"><a href="http://www.cmsmadesimple.org">CMS made simple</a> is Free Software released under the GNU/GPL License</div>
+<?
+//CHANGED
+require_once("../include.php");
+$theme=get_preference(get_userid(),"admintheme");
+//echo "theme:$theme";
+if (file_exists(dirname(__FILE__)."/themes/$theme/footer.php")) {
+	include(dirname(__FILE__)."/themes/$theme/footer.php");
+} else {
+	include(dirname(__FILE__)."/themes/default/footer.php");
+}
+//STOP
+?>
 
 <?php
 if ($config["debug"] == true)
@@ -23,7 +27,6 @@ if ($config["debug"] == true)
 ?>
 </body>
 </html>
-
 <?php
 
 #Pull the stuff out of the buffer...

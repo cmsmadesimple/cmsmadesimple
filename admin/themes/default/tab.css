@@ -5,7 +5,6 @@ div.tabArea {
 }
 
 a.tab {
-
 	text-decoration: none;
 	background-color: #F0F0EB;
 	padding: 2px 1em;
@@ -45,5 +44,4 @@ div.tabPane {
   background-color: #FCFCFE;
   border: 1px solid #919B9C;
   padding: 1em;
-
- }
+}

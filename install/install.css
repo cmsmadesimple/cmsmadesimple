@@ -60,7 +60,9 @@ h3 {
 }
 
 .error {
-	text-color: red;
+	color: red;
+	font-weight: bold;
+	text-align: center;
 }
 
 .tbhead {

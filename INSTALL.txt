@@ -23,26 +23,22 @@ OR
             grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';
             quit
 
-4.  Optionally install the BB Code Parser.  There is a flag in config.php where you can turn this feature on/off.  The install.php file will set this for you.
-        - pear install HTML_BBCodeParser
-
-5.  Fix the permissions on the cache and template compilation directories so the web server has access to them.
+4.  Fix the permissions on the cache and template compilation directories so the web server has access to them.
         - chmod 777 tmp/templates_c
 	- chmod 777 tmp/cache
 	- chmod 777 uploads
 	- chmod 777 uploads/images
 
-6.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
+5.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
 
-7.  After install, for security sake, you should set your config.php back to a read-only state.
+6.  After install, for security sake, you should set your config.php back to a read-only state.
         - chmod 444 config.php
 
 Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
-Admin login: admin/admin
 
 Optional: 
 
-8.  Some setup parameters are set to a default value and are not editable through the webinterface.
+7.  Some setup parameters are set to a default value and are not editable through the webinterface.
     Although CMS works out-of-the-box, you might still want to edit these parameters
     	
    	- open config.php with you favorite editor (this file has been created by the installer)

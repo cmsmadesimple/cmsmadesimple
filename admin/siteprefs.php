@@ -48,6 +48,12 @@ if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST[
 $useadvancedcss = "1";
 if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
+// ADDED
+$logintheme = "default";
+if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
+// STOP
+
+
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
 
@@ -77,6 +83,9 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('sitedownmessage', $sitedownmessage);
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		set_site_preference('useadvancedcss', $useadvancedcss);
+		//ADDED
+		set_site_preference('logintheme', $logintheme);
+		//STOP
 		audit(-1, '', 'Edited Site Preferences');
 	}
 	else
@@ -91,6 +100,10 @@ else if (isset($_POST["editsiteprefs"]))
 	$sitedownmessage = get_site_preference('sitedownmessage');
 	$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	$useadvancedcss = get_site_preference('useadvancedcss');
+	//ADDED
+	$logintheme = get_site_preference('logintheme', 'default');
+	//STOP
+
 }
 
 $templates = array();
@@ -187,6 +200,30 @@ if ($message != "") {
 			</select>
 		</td>
 	</tr>
+  <?//ADDED?>
+  <?
+	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+	?>
+	<tr>	  
+		<td><?php echo lang('admintheme') ?></td>
+		<td>
+			<select name="logintheme">
+			<?
+		  while (($file = readdir($dir)) !== false) {
+		  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
+		  		?>
+		  		<option value="<?=$file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?=$file?></option>				  
+				  <?
+		  	}
+		  }
+				?>				
+			</select>
+		</td>
+	</tr>
+	<?}?>
+	<?//STOP?>
+	
+	
 	<?php if ($access) { ?>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="editsiteprefs" value="true" />

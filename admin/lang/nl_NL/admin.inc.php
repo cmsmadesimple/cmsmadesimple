@@ -229,4 +229,5 @@ $lang['admin']['author'] = 'Author'; //needs translation
 $lang['admin']['changehistory'] = 'Change History'; //needs translation
 $lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module'; //needs translation
 $lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module'; //needs translation
+$lang['admin']['admintheme'] = 'Administration Theme'; //needs translation
 ?>

@@ -386,7 +386,7 @@ function get_preference($userid, $prefname)
 		}
 	}
 
-	return $userprefs[$prefname];
+	return (isset($userprefs[$prefname])?$userprefs[$prefname]:'');
 }
 
 /**

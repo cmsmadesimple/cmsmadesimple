@@ -183,7 +183,7 @@ class News extends CMSModule
 		  </tr>
 		  <tr>
 			<td>Content:</td>
-			<td><?php echo $this->CreateTextarea(true, $id, $data, 'newscontent', 'syntaxHighlight', 'newscontent')?></td>
+			<td><?php echo $this->CreateTextArea(true, $id, $data, 'newscontent', 'syntaxHighlight', 'newscontent')?></td>
 		  </tr>
 		  <tr>
 			<td>Post Date:</td>

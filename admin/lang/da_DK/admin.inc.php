@@ -228,4 +228,5 @@ $lang['admin']['author'] = 'Lavet af'; //needs translation
 $lang['admin']['changehistory'] = 'Change History'; //needs translation
 $lang['admin']['moduleinstallmessage'] = 'Installations-besked for %s modulet'; //needs translation
 $lang['admin']['moduleuninstallmessage'] = 'Afinstallations-besked for %s modulet'; //needs translation
+$lang['admin']['admintheme'] = 'Administration Theme'; //needs translation
 ?>

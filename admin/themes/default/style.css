@@ -185,7 +185,7 @@ html>body #navcontainer A {
 #header {
 	PADDING-RIGHT: 0px;
 	PADDING-LEFT: 0px;
-	BACKGROUND: #EA9129 url(../images/cms/cmsadminbanner_r.gif);
+	BACKGROUND: #EA9129 url(themes/default/cmsadminbanner_r.gif);
 	PADDING-BOTTOM: 0px;
 	COLOR: #265980;
 	PADDING-TOP: 0px;
@@ -214,7 +214,7 @@ html>body #navcontainer A {
 	padding: 0px;
 	clear: left;
 	background-color: #EA9129;
-	background-image: url(../images/cms/cmsadminfooter.gif);
+	background-image: url(themes/default/cmsadminfooter.gif);
 }
 #footer2 {
 	position: relative;
