@@ -204,7 +204,7 @@ if ("" != $error)
 
 <input type="hidden" name="id" value="<?=$id?>"/>
 <input type="hidden" name="type" value="<?=$type?>"/>
-<input type="submit" value="<?=$gettext->gettext("Add CSS")?>"/>
+<input type="submit" value="<?=$gettext->gettext("Add CSS")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 </form>
 
 <?

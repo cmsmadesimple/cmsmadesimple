@@ -89,7 +89,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" /></td>
+		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 </form>

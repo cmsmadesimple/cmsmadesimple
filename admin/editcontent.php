@@ -455,9 +455,9 @@ else {
 <input type="hidden" name="page_id" value="<?=$page_id?>" />
 <input type="hidden" name="editcontent" value="true" />
 <input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
-<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 
 <?php }elseif ($content_type == "separator") { ?>
 <h3><?=$gettext->gettext("Edit Separator")?></h3>
@@ -492,8 +492,8 @@ else {
 			<input type="hidden" name="page_id" value="<?=$page_id?>" />
 			<input type="hidden" name="editcontent" value="true" />
 			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 </div>
@@ -545,8 +545,8 @@ else {
 			<input type="hidden" name="page_id" value="<?=$page_id?>" />
 			<input type="hidden" name="editcontent" value="true" />
 			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-		<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+		<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 </div>

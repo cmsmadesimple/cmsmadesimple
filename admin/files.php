@@ -276,7 +276,8 @@ if ($access)
 	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
 		<tr>
 			<td align="right" style="padding-top: 10px;">Upload&nbsp;file:</td>
-			<td style="padding-top: 10px;"><input name="uploadfile" type="file" /><input type="submit" value="Send" /></td>
+			<td style="padding-top: 10px;"><input name="uploadfile" type="file" />
+			<input type="submit" value="Send" /></td>
 		</tr>
 		<tr>
 			<td align="right">Create&nbsp;New&nbsp;Folder:</td>

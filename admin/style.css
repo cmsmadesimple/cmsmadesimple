@@ -40,7 +40,10 @@ table.admintable td {padding: 4px;}
 .button a, .button a:link, .button a:active, .button a:visited {text-align: left; background-color: #BFDAEF; color: #265980; padding: .4em; border: 1px solid #64879d;}
 .button a:hover {text-align: center; background: #64879d; color: #FFF; padding: .4em; border: 1px solid #64879d;}
 .smallselect {font-size: .85em;}
+form .button{text-align: center; background-color: #BFDAEF; color: #265980; padding: .2em .1em .2em .1em; border: 1px solid #64879d;}
+form .buttonHover{text-align: center; background-color: #64879d; color: #fff; padding: .2em .1em .2em .1em; border: 1px solid #64879d; cursor:hand; cursor: pointer;}
 
+/* forms */
 textarea{width: 99%;}
 form {margin: 0 0 0 0;}
 form input, select {margin-top: 2px; margin-bottom: 2px;}
@@ -48,6 +51,7 @@ form .standard {width: 150px;}
 table#padform input,table#padform select{margin-top: 5px; margin-right: 20px; margin-bottom: auto; margin-left: auto;}
 div.adminform {padding:10px; background-color: #E8E8E8; color: #000; border: 1px solid #AAA; width: 90%; margin-bottom: 10px;}
 div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 325px; margin-bottom: 10px;}
+
 .error { color: #F00; }
 table.box {border: 1px solid #AAA; background-color: #E8E8E8;}
 table.box td {padding: 0 10px 10px 10px;}
@@ -56,4 +60,3 @@ table.box td {padding: 0 10px 10px 10px;}
 .moduleabout p {margin: 5px 0 10px 0; padding: 0;}
 #helparea {border: 1px solid #8C8A8C; background-color: #BFDAEF; padding: 10px;}
 #helparea p {margin: 0; border: 0; padding: 0;}
-

@@ -110,7 +110,9 @@ else {
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="copytemplate" value="true" />
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>

@@ -359,9 +359,9 @@ else {
 <input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" />
 <input type="hidden" name="content_change" value="0" />
 <input type="hidden" name="addcontent" value="true" />
-<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
-<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 </div>
 
 <?php }elseif ($content_type == "separator") { ?>
@@ -393,8 +393,8 @@ else {
 		<td>
 			<input type="hidden" name="content_change" value="0" />
 			<input type="hidden" name="addcontent" value="true" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 </div>
@@ -442,8 +442,8 @@ else {
 		<td>
 			<input type="hidden" name="content_change" value="0" />
 			<input type="hidden" name="addcontent" value="true" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 </div>
