@@ -529,16 +529,15 @@ class LinkBlog extends CMSModule
 
 				## I cannot get both rendered HTML to show up in the rss feed as well as no dumb \' apostrophes
 				$content = preg_replace("/\\\'/", "'", $row["linkblog_content"]);
-				$rss_content_clean = preg_replace("/\\\'/", "'", $content);
+				$rss_content = cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding));
+				$rss_content_clean = preg_replace("/\\\'/", "'", $rss_content);
 				$title = preg_replace("/\\\'/", "'", $row["linkblog_title"]);
 				if ($params['type'] == "rss") {
 					echo "  <item>\n";
 					echo "          <title>".$title."</title>\n";
 					echo "          <link>";
 					echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'), "", true);
-					#echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
 					echo "</link>\n";
-					#echo "<description>".cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding))."</description>\n";
 					echo "<description>$rss_content_clean</description>\n";
 					## needs to be an email address echo "          <author>".$row["linkblog_author"]."</author>\n";
 					echo "          <pubDate>".date("D, j M Y H:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
@@ -559,7 +558,6 @@ class LinkBlog extends CMSModule
 
 					echo "<div class=\"modulelinkblogentrybody\">\n";
 					echo $this->CreateLink($id, 'viewoldlinks', $this->cms->variables['page'], "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />", array('category'=>$row["category"]));
-##" (<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
 					echo "(";
 					echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "Link", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'));
 					echo ")\n";
@@ -567,7 +565,6 @@ class LinkBlog extends CMSModule
 					echo "</div>\n";
 
 					echo "<div class=\"modulelinkblogcontent\">\n";
-					#echo cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding));
 					echo $content;
 					echo "</div>\n";
 
@@ -578,8 +575,15 @@ class LinkBlog extends CMSModule
 					echo $this->CreateLink($id, 'view_comments', $this->cms->variables['page'], 'Permalink', array('linkblog_id'=>$row["linkblog_id"]));
 					echo " | \n";
 					if (isset($row["linkblog_credit"]) && $row["linkblog_credit"] != "") {
-						echo "Source credit: <a href=\"".$row["linkblog_credit"]."\">".$row["linkblog_credit"]."</a>\n";
-						echo " | \n";
+						if (substr($row["linkblog_credit"], 0, 1) == "'") {
+							$credit = substr($row["linkblog_credit"], 1, strlen($row["linkblog_credit"])-2);
+						} else {
+							$credit = $row["linkblog_credit"];
+						}
+						if (strlen($credit)>2) {
+							echo "Source credit: <a href=\"".$credit."\">".$credit."</a>\n";
+							echo " | \n";
+						}
 					} ## if
 					echo "\n</div>\n";
 					echo "</div>\n";
@@ -626,7 +630,6 @@ class LinkBlog extends CMSModule
 		}
 		echo "</div>\n";
 		echo "<div class=\"modulelinkbloglink\">\n";
-#echo $this->CreateLink($id, 'create_add_link_form', $return_id, 'Add a Link', array());
 		echo $this->CreateLink($id, 'create_add_link_form', $this->cms->variables['page'], 'Add a Link', array());
 		echo "</div>\n";
 	} ## showlinks
@@ -683,15 +686,16 @@ class LinkBlog extends CMSModule
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
 			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit, linkblog_hits, linkblog_content)";
 			$query .=" VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-			$myparams = array($new_id, $params["author"], $params["title"], $params["type"], $db->qstr($params["url"]), $db->DBTimeStamp(time()), $db->DBTimeStamp(time()), '2', $db->qstr($credit), 1, $content);
+			$myparams = array($new_id, $params["author"], $params["title"], $params["type"], $params["url"], $db->DBTimeStamp(time()), $db->DBTimeStamp(time()), '2', $credit, 1, $content);
 			$dbresult = $db->Execute($query, $myparams);
 
 			if ($this->GetPreference("email_notify", "0") == "1") {
 				$subject = 'New Linkblog submission';
 				$body = "A new link for your linkblog has been submitted.\n\n";
-				$body .= "Title: {".$db->qstr($params["title"])."}\n";
-				$body .= "Url: {".htmlentities($db->qstr($params["url"]))."}\n";
-				$body .= "Author: {".$db->qstr($params["author"])."}\n";
+				$body .= "Title: {".$params["title"]."}\n";
+				$body .= "Url: {".$params["url"]."}\n";
+				$body .= "Author: {".$params["author"]."}\n";
+				$body .= "Description:\n".$content."\n";
 
 				$headers = "From: \"CMS Linkblog Module\" <".$this->GetPreference("email_from", "").">\r\n"
 					."Return-Path: \"CMS Linkblog Module\" <".$this->GetPreference("email_from", "").">\r\n"
@@ -779,7 +783,7 @@ class LinkBlog extends CMSModule
 	function view_linkblog_id($id, $params, $return_id)
 	{
 		$db = $this->cms->db;
-		$query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type as type_id, create_date, status, linkblog_credit from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params["linkblog_id"];
+		$query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type as type_id, create_date, status, linkblog_credit, linkblog_content from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params["linkblog_id"];
 		$dbresult = $db->Execute($query);
 		echo "<p class=\"modulelinkblogtitle\">Posted site - ";
 		echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
@@ -794,6 +798,7 @@ class LinkBlog extends CMSModule
 					echo "</div>\n";
 					return;
 				} ## if
+				$content = preg_replace("/\\\'/", "'", $row["linkblog_content"]);
 				echo "<div class=\"modulelinkblogentrydate\">\n";
 				echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 				echo "</div>\n";
@@ -805,6 +810,10 @@ class LinkBlog extends CMSModule
 				echo "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />";
 				echo " (<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
 				echo " ".$row["linkblog_title"]."\n";
+				echo "</div>\n";
+
+				echo "<div class=\"modulelinkblogcontent\">\n";
+				echo $content;
 				echo "</div>\n";
 
 				echo "<div class=\"modulelinkbloglinks\">\n";
@@ -834,7 +843,7 @@ class LinkBlog extends CMSModule
 
 		if ($validinfo) {
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_comment_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date) VALUES ($new_id,".$params["linkblog_id"].",".$db->qstr($params["author"]).",".$params["comment"].", now())";
+			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date) VALUES ($new_id,".$params["linkblog_id"].",".$params["author"].",".$params["comment"].", now())";
 			$dbresult = $db->Execute($query);
 		} else {
 			echo $errormsg;
