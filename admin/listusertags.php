@@ -91,14 +91,17 @@ else if ($action == "showpluginabout")
 
 ?>
 
-	<h3><?php echo lang('tags')?></h3>
+	<h3><?php echo lang('userdefinedtags')?></h3>
 
-	<table cellspacing="0" class="admintable">
+	<table cellspacing="0" class="AdminTable" style="width:400px;">
+		<thead>
 		<tr>
-			<td><?php echo lang('name')?></td>
-			<td width="16">&nbsp;</td>
-			<td width="16">&nbsp;</td>
+			<th><?php echo lang('name')?></th>
+			<th width="16">&nbsp;</th>
+			<th width="16">&nbsp;</th>
 		</tr>
+		</thead>
+		<tbody>
 
 <?php
 
@@ -109,7 +112,7 @@ else if ($action == "showpluginabout")
 			echo "<tr class=\"$curclass\">\n";
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td>$oneplugin (".lang('user').")</td>\n";
+				echo "<td>$oneplugin</td>\n";
 			}
 
 			if (array_key_exists($oneplugin, $gCms->userplugins))
@@ -128,7 +131,7 @@ else if ($action == "showpluginabout")
 		}
 
 	?>
-
+	</tbody>
 </table>
 
 <div class="button"><a href="adduserplugin.php"><?php echo lang('addusertag')?></a></div>

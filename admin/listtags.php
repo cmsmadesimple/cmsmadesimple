@@ -93,12 +93,15 @@ else if ($action == "showpluginabout")
 
 	<h3><?php echo lang('tags')?></h3>
 
-	<table cellspacing="0" class="admintable">
+	<table cellspacing="0" class="AdminTable">
+		<thead>
 		<tr>
-			<td><?php echo lang('name')?></td>
-			<td width="8%"><?php echo lang('help')?></td>
-			<td width="8%"><?php echo lang('about')?></td>
+			<th><?php echo lang('name')?></th>
+			<th width="8%"><?php echo lang('help')?></th>
+			<th width="8%"><?php echo lang('about')?></th>
 		</tr>
+		</thead>
+		<tbody>
 
 <?php
 
@@ -137,6 +140,7 @@ else if ($action == "showpluginabout")
 
 	?>
 
+	</tbody>
 </table>
 
 	<?php

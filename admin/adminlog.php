@@ -54,14 +54,17 @@ if ($result && $result->RowCount() > 0) {
 
 <h3><?php echo lang('adminlog')?></h3>
 <?php echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>"; ?>
-<table cellspacing="0" class="admintable" style="margin-bottom: 0px;">
-       <tr>
-               <td><?php echo lang('user')?></td>
-               <td><?php echo lang('itemid')?></td>
-               <td><?php echo lang('itemname')?></td>
-               <td><?php echo lang('action')?></td>
-               <td><?php echo lang('date')?></td>
-       </tr>
+<table cellspacing="0" class="AdminTable" style="margin-bottom: 0px;">
+	<thead>
+		<tr>
+			<th><?php echo lang('user')?></th>
+			<th><?php echo lang('itemid')?></th>
+			<th><?php echo lang('itemname')?></th>
+			<th><?php echo lang('action')?></th>
+			<th><?php echo lang('date')?></th>
+		</tr>
+	</thead>
+	<tbody>
 
 <?php
 
@@ -81,6 +84,7 @@ if ($result && $result->RowCount() > 0) {
 
        }
 ?>
+	</tbody>
 </table>
 <?php
 echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
