@@ -20,7 +20,7 @@ include_once("../../../../../config.php");
        PHP must be able to create files in this directory.
 	   Able to create directories is nice, but not necessary.
 */
-$IMConfig['base_dir'] = $config["uploads_path"].'/images';
+$IMConfig['base_dir'] = $config["image_uploads_path"];
 
 /*
  The URL to the above path, the web browser needs to be able to see it.
@@ -30,7 +30,7 @@ $IMConfig['base_dir'] = $config["uploads_path"].'/images';
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-$IMConfig['base_url'] = $config["uploads_url"].'/images/';
+$IMConfig['base_url'] = $config["image_uploads_url"]; 
 
 /*
   Possible values: true, false
