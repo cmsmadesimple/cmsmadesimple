@@ -70,6 +70,21 @@ $db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remov
 $db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_text = 'Modify Permissions for Groups' where permission_name='Modify Permissions'");
 echo "[done]</p>";
 
+echo "<p>Adding admin_bookmarks table...";
+
+$dbdict = NewDataDictionary($db);
+$flds = "
+	bookmark_id I KEY,
+	user_id I,
+	title C(255),
+	url C(255)
+";
+$taboptarray = array('mysql' => 'TYPE=MyISAM');
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."admin_bookmarks", $flds, $taboptarray);
+$dbdict->ExecuteSQLArray($sqlarray);
+
+$db->CreateSequence(cms_db_prefix()."admin_bookmarks_seq");
+
 
 echo '<p>Updating schema version... ';
 
