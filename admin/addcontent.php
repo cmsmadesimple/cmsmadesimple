@@ -186,7 +186,9 @@ if ($access) {
 
 }
 
-$tinymce_flag = "true";
+if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
+	$tinymce_flag = "true";
+}
 include_once("header.php");
 
 if (!$access) {
