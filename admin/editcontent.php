@@ -443,7 +443,9 @@ else {
 						<?php echo lang('contenttype')?>:<?php echo $ctdropdown?>
 						<?php echo lang('title')?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?php echo $title?>">
 						<span style="white-space: nowrap"><?php echo lang('menutext')?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>"></span>
-						<span style="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?php echo $alias?>"></span>
+						<?php if ($config["auto_alias_content"] != true) { ?>
+							<span style="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?php echo $alias?>"></span>
+						<?php } ?>
 						<span style="white-space: nowrap"><?php echo lang('template')?>:&nbsp;<?php echo $dropdown2?></span>
 					</td>
 				</tr>
