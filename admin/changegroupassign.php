@@ -72,12 +72,15 @@ if (!$access) {
 }
 else {
 
+	$gettext->setVar('group_name', $group_name);
+
 ?>
-<h3>Users assigned to group: <?=$group_name?></h3>
 
 <form method="post" action="changegroupassign.php">
 
 <div class="adminform">
+
+<h3><?=$gettext->gettext('Users assigned to group: ${group_name}')?></h3>
 
 <?php
 

@@ -8,8 +8,8 @@
 
 body {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	margin: 00px;
-	padding: 0px;
+	margin: 0;
+	padding: 0;
 	background: #fff;
 	color: #64879d;
 	font-size : 12px;
@@ -25,14 +25,22 @@ a:hover {
 	color: red;
 	text-decoration: none;
 }
+
 	
-h1, h2, h3, h4, h5, p {
+h1, h2, h4, h5, p {
 	font-size: 12px;
 	font-weight: bold;
 	color: #000;
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	padding-left: 185px;
 }			       	       
+
+h3 {
+	font-size: 16px;
+	font-weight: bold;
+	color: #000;
+	padding-left: 190px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
 /* start navigation style */
 
 div.nav {
@@ -42,7 +50,7 @@ div.nav {
 	float: left;
 	width: 175px;
 	background: #F6F6F6;
-	padding: 0px;
+	padding: 0;
 /*	margin: 1em;  */
 	margin-right: 0px;
 /*	border: 1px solid #64879d; */
@@ -69,8 +77,10 @@ div.nav a {
 	margin: 0;
 	width: auto;
 	padding: 0.3em; 
-/*	border-top: 1px solid #64879d; */
+	border-top: 1px solid #f6f6f6;
+	border-bottom: 1px solid #f6f6f6;
 	color: #265980;
+	
 	text-decoration: none;
 }
 
@@ -79,7 +89,6 @@ div.nav a:hover {
 	border-top: 1px solid #8C8A8C;
 	border-bottom: 1px solid #8C8A8C;
 	color: #265980;
-	font-weight: bold;
 }
 
 div.nav form {
@@ -192,31 +201,32 @@ table.admintable td {
 
 /* start form style */
 
-div.adminform {
+div.adminform
+{
 	background: #e8e8e8; /* EDF2F5 */
 	color: #265980;
-/*	border: 1px solid #64879d; */
+	border: 1px solid #8C8A8C; 
+	/*
 	border-bottom: 1px solid #8C8A8C;
 	border-right: 1px solid #8C8A8C;
 	border-left: 1px solid #8C8A8C;
+	*/
 	padding: 8px;
-/*	margin-top: 10px; */
+	margin-top: 10px; 
 	margin-right: 10px;
-	/*margin-left: 180px;*/
+	margin-left: 0;
 	position: absolute;
 	left: 185px;
+}
+
+div.adminform h3
+{
+	padding-left: 10px;
 }
 
 /* end form style */
 
 .error { 
-		color: #F00;
-		padding-left: 185px;
-}
-
-h8 {
- 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 10px;
-	font-weight: normal;
-	
+	color: #F00;
+	padding-left: 200px;
 }

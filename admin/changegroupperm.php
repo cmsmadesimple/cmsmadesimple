@@ -76,11 +76,12 @@ else {
 	$gettext->setVar('group_name', $group_name);
 
 ?>
-<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 
 <form method="post" action="changegroupperm.php">
 
 <div class="adminform">
+
+<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 
 <?php
 

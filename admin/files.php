@@ -40,11 +40,11 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
 #Did we upload a file?
-if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile']['name']))
+if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile']['name']) && $_FILES['uploadfile']['name'] != "")
 {
 	if ($access)
 	{
-		if (move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
+		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
 			$errors .= "<li>".$gettext->gettext("File could not be uploaded.  Permissions problem?")."</li>";
 		}
@@ -105,6 +105,23 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
+else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
+{
+	if ($access)
+	{
+		if (is_dir($dir . "/" . $_GET['file']))
+		{
+			if (!(@rmdir($dir . "/" . $_GET['file'])))
+			{
+				$errors .= "<li>".$gettext->gettext("Could not delete directory.  Directory not empty?  Permissions problem?")."</li>";
+			}
+		}
+		else
+		{
+			$errors .= "<li>".$gettext->gettext("No real directory given")."</li>";
+		}
+	}
+}
 
 include_once("header.php");
 
@@ -122,7 +139,7 @@ if ($errors != "")
 
 echo '<table cellspacing="0" class="admintable">';
 
-echo "<tr><td>&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td>".$gettext->gettext("File Size")."</td><td>&nbsp;</td></tr>";
+echo "<tr><td width=\"30\">&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td width=\"10%\">".$gettext->gettext("File Size")."</td><td width=\"18\">&nbsp;</td></tr>";
 
 if ($reldir != "")
 {
@@ -161,7 +178,7 @@ foreach ($dirs as $file)
 			$dirtext .= "<tr class=\"$row\">"; $dirtext .= "<td width=\"30\">[dir]</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\">&nbsp;</td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete this directory?")."');\"><img src=\"../images/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -195,6 +212,11 @@ foreach ($files as $file)
 }
 echo $filetext;
 
+if ($filetext == "" && $dirtext == "")
+{
+	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">No Files</td></tr>";
+}
+
 echo "</table>";
 
 if ($access)
@@ -202,6 +224,7 @@ if ($access)
 ?>
 
 <form enctype="multipart/form-data" action="files.php" method="post">
+	<input type="hidden" name="MAX_FILE_SIZE" value="<?=$config["max_upload_size"]?>" />
 	<table>
 		<tr>
 			<td align="right">Upload file here:</td>
@@ -212,7 +235,6 @@ if ($access)
 			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="Create" /></td>
 		</tr>
 	</table>
-	<input type="hidden" name="MAX_FILE_SIZE" value="500000" />
 	<input type="hidden" name="reldir" value="<?=$reldir?>" />
 </form>
 

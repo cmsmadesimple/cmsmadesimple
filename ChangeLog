@@ -1,3 +1,12 @@
+Version 0.4.2 -- Subversion
+-----------------
+
+* Added page aliases
+* Added htaccess file to make pretty page aliases
+* Added new admin stylesheet (Bewbs)
+* Added new admin icons (Graeme)
+* Added file manager
+
 Version 0.4.1 -- Fri Aug 13 2004
 -----------------
 
