@@ -28,7 +28,7 @@
 #Dutch (Netherlands)
 
 #Native language name
-$nls['language']['nl_NL'] = 'Nederlander';
+$nls['language']['nl_NL'] = 'Nederlands';
 $nls['englishlang']['nl_NL'] = 'Dutch';
 
 #Possible aliases for language
