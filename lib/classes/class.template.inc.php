@@ -272,7 +272,7 @@ class TemplateOperations
 		return $result;
 	}
 	
-	function TemplateDropdown($id = 'template_id', $selected_id = -1, $othertext = '')
+	function TemplateDropdown($id = 'template_id', $selected_id = -1, $othertext = '', $show_hidden = false)
 	{
 		$result = "";
 
@@ -289,12 +289,15 @@ class TemplateOperations
 			$result .= '<option value="">Select Template</option>';
 			foreach ($alltemplates as $onetemplate)
 			{
-				$result .= '<option value="'.$onetemplate->id.'"';
-				if ($onetemplate->id == $selected_id)
+				if ($onetemplate->active == true || $show_hidden == true)
 				{
-				    $result .= ' selected="selected"';
+					$result .= '<option value="'.$onetemplate->id.'"';
+					if ($onetemplate->id == $selected_id)
+					{
+						$result .= ' selected="selected"';
+					}
+					$result .= '>'.$onetemplate->name.'</option>';
 				}
-				$result .= '>'.$onetemplate->name.'</option>';
 			}
 			$result .= '</select>';
 		}
