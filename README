@@ -8,3 +8,5 @@ For information on upgrading your installion from a previous version, see UPGRAD
 CMS uses the smarty template engine in various places.  Their license and various documentation files are located in the smarty subdirectory of this distribution.
 
 CMS uses GetText.php for internationalization.  GetText.php is released under the LGPL and is located here: http://phptal.sourceforge.net/bagpack/GetText/index.html
+
+CMS uses TinyMCE as it's content WYSIWYG.  TinyMCE is released under the LGPL and is located at: http://tinymce.moxiecode.com/
