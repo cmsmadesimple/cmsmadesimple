@@ -81,7 +81,7 @@ if ($access) {
 			$result = $db->Execute($query);
 
 			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
+				audit(get_userid(), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $template_id, $template, 'Edited Template');
 				redirect("listtemplates.php");
 				return;
 			}
