@@ -150,6 +150,37 @@ if (isset($error) && $error !== FALSE)
 	}
 	echo '</ul>';
 }
+
+if ($preview)
+{
+	$data["content_id"] = $contentobj->Id();
+	$data["title"] = $contentobj->Name();
+	$data["content"] = $contentobj->Show();
+	$data["template_id"] = $contentobj->TemplateId();
+	$data["hierarchy"] = $contentobj->Hierarchy();
+	
+	$templateobj = TemplateOperations::LoadTemplateById($contentobj->TemplateId());
+	$data['template'] = $templateobj->content;
+
+	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
+	$data['encoding'] = $stylesheetobj['encoding'];
+	$data['stylesheet'] = $stylesheetobj['stylesheet'];
+
+	$tmpfname = tempnam($config["previews_path"], "cmspreview");
+	$handle = fopen($tmpfname, "w");
+	fwrite($handle, serialize($data));
+	fclose($handle);
+
+?>
+<h3><?php echo lang('preview')?></h3>
+
+<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
+
+</iframe>
+<?php
+
+}
+
 ?>
 
 <form method="post" action="editcontent.php" name="editform" id="editform">
@@ -174,7 +205,7 @@ if (isset($error) && $error !== FALSE)
 </table>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <?php } ?>
 <input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">

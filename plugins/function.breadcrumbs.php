@@ -21,55 +21,61 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	global $gCms; 
 	
 	$thispage = $gCms->variables['page'];
+	$trail = "";
 
 	#Make an array for all pages
 	$allcontent = array();
 
 	#Load current content
 	$onecontent = ContentManager::LoadContentFromId($thispage);
-	array_push($allcontent, $onecontent);
-
-	#Grab all parents and put them into the array as well
-	while ($onecontent->ParentId() > 0) 
+	if ($onecontent !== FALSE)
 	{
-		$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId());
 		array_push($allcontent, $onecontent);
-	}
 
-	$trail = "";
-
-	#Pull them one by one in reverse order to construct a breadcrumb list
-	while ($onecontent = array_pop($allcontent))
-	{
-		if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator')
+		#Grab all parents and put them into the array as well
+		while ($onecontent->ParentId() > 0) 
 		{
-			if ($onecontent->Type() == 'sectionheader')
+			$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId());
+			array_push($allcontent, $onecontent);
+		}
+
+		#Pull them one by one in reverse order to construct a breadcrumb list
+		while ($onecontent = array_pop($allcontent))
+		{
+			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator')
 			{
-				if (getURL($thispage)!="")
+				if ($onecontent->Type() == 'sectionheader')
 				{
-					$trail .= $onecontent->MenuText()." &gt;&gt;\n";
+					if (getURL($thispage)!="")
+					{
+						$trail .= $onecontent->MenuText()." &gt;&gt;\n";
+					}
+					else
+					{
+						$trail .= $onecontent->MenuText()." &gt;&gt; \n";
+					}
 				}
 				else
 				{
-					$trail .= $onecontent->MenuText()." &gt;&gt; \n";
+					if (getURL($thispage)!="")
+					{
+						$trail .= "<a href=\"".$onecontent->getURL()."\">".$onecontent->Name()."</a> &gt;&gt;\n";
+					}
+					else
+					{
+						$trail .= $onecontent->Name()." &gt;&gt; \n";
+					}
 				}
 			}
 			else
 			{
-				if (getURL($thispage)!="")
-				{
-					$trail .= "<a href=\"".$onecontent->getURL()."\">".$onecontent->Name()."</a> &gt;&gt;\n";
-				}
-				else
-				{
-					$trail .= $onecontent->Name()." &gt;&gt; \n";
-				}
+				$trail .= "<strong>".$onecontent->Name()."</strong>\n";
 			}
 		}
-		else
-		{
-			$trail .= "<strong>".$onecontent->Name()."</strong>\n";
-		}
+	}
+	else
+	{
+		$trail = "No pages";
 	}
 
 	return $trail;

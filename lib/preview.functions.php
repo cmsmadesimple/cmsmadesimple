@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
+require_once dirname(__FILE__).'/smarty/Smarty.class.php';
 
 class Smarty_Preview extends Smarty {
 
@@ -27,10 +27,10 @@ class Smarty_Preview extends Smarty {
 		global $gCms;
 		$this->configCMS = &$gCms->config;
 
-		$this->template_dir = $config["root_path"].'/lib/smarty/cms/templates/';
-		$this->compile_dir = $config["root_path"].'/lib/smarty/cms/templates_c/';
-		$this->config_dir = $config["root_path"].'/lib/smarty/cms/configs/';
-		$this->cache_dir = $config["root_path"].'/lib/smarty/cms/cache/';
+		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		$this->compile_dir = $config["root_path"].'/tmp/templates_c/';
+		$this->config_dir = $config["root_path"].'/tmp/configs/';
+		$this->cache_dir = $config["root_path"].'/tmp/cache/';
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/');
 
 		$this->compile_check = true;
@@ -58,11 +58,20 @@ class Smarty_Preview extends Smarty {
 		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);
 		unlink($fname);
+
 		$tpl_source = $data["template"];
-		#header("Content-Language: " . $current_language);
+
+		$gCms->variables['page'] = $data['content_id'];
+		$gCms->variables['page_id'] = $data['content_id'];
+		$gCms->variables['content_id'] = $data['content_id'];
+		$gCms->variables['page_name'] = $data['title'];
+		$gCms->variables['position'] = $data['hierarchy'];
+
 		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
+
 		$stylesheet = "";
-		if (isset($data["stylesheet"])) {
+		if (isset($data["stylesheet"]))
+		{
 			#$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$data["template_id"];
 			#$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
 			$stylesheet .= "<style type=\"text/css\">\n";
@@ -72,9 +81,11 @@ class Smarty_Preview extends Smarty {
 			#$stylesheet .= "-->\n";
 			$stylesheet .= "</style>\n";
 		}
+
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 		$tpl_source = ereg_replace("\{content\}", $data["content"], $tpl_source);
 		$tpl_source = ereg_replace("\{title\}", $data["title"], $tpl_source);
+
 		#Do html_blobs
 		$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 

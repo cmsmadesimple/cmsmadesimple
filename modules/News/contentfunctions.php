@@ -27,6 +27,9 @@ function news_module_content_set_properties(&$module)
 	$module->mProperties->Add('bool', 'showcategorywithtitle', 1);
 	$module->mProperties->Add('string', 'moretext', 'more...');
 	$module->mProperties->Add('bool', 'sortasc', 0);
+
+	#Turn on preview
+	$module->mPreview = true;
 }
 
 function news_module_content_edit(&$module)
