@@ -247,7 +247,7 @@ function showPageThree($sqlloaded = 0) {
 	?>
 
     <p>Now let's continue to setup your configuration file, we already have most of the stuff we need.</p>
-    <p>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>
+    <p>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Continue.</p>
     <form action="install.php" method="post" name="page3form" id="page3form">
 	<table cellpadding="2" border="1" class="regtable">
 		<tr class="row1">
