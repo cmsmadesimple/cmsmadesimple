@@ -5,6 +5,13 @@
 
 </div>
 
+<?
+if ($config["debug"] == true)
+{
+	echo $sql_queries;
+}
+?>
+
 </body>
 
 </html>
