@@ -394,24 +394,22 @@ else if ($action == 'missingdeps')
             {
                 $brokendeps = 0;
 
-                if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-                {
-                    #Now check to see if we can satisfy any deps
-                    foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-                    {
-                    	if (isset($gCms->modules[$onedepkey]) && 
-                    		$gCms->modules[$onedepkey]['installed'] == true &&
-                    		$gCms->modules[$onedepkey]['active'] == true &&
-                    		version_compare($modinstance->GetVersion(), $onedepvalue) > -1)
-                    	{
-                    		$brokendeps++;
-                    	}
-						elseif (!isset($gCms->modules[$onedepkey]))
+				$dependencies = $modinstance->GetDependencies();
+
+				if (count($dependencies) > 0) #Check for any deps
+				{
+					#Now check to see if we can satisfy any deps
+					foreach ($dependencies as $onedepkey=>$onedepvalue)
+					{
+						if (!isset($gCms->modules[$onedepkey]) ||
+							$gCms->modules[$onedepkey]['installed'] != true ||
+							$gCms->modules[$onedepkey]['active'] != true ||
+							version_compare($gCms->modules[$onedepkey]['object']->GetVersion(), $onedepvalue) < 0)
 						{
-                    		$brokendeps++;
+							$brokendeps++;
 						}
-                    }
-                }
+					}
+				}
 
                 echo "<td>".$modinstance->GetVersion()."</td>";
 				echo "<td>".lang('notinstalled')."</td>";
