@@ -316,7 +316,6 @@ if ($access) {
 
 $templatepostback = "";
 if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
-	echo "content_type: ".$content_type;
 	$htmlarea_flag = true;
 	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
 }
