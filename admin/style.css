@@ -29,11 +29,17 @@ h1, h2, h3, h4, h5, p {
 }			       	       
 
 #header	{
-	background: #EDF2F5 url(../cmslogo.png) no-repeat left;
+	background: #EDF2F5;
 	color: #64879d;
 	padding: 8px;
-	border: 2px solid #64879d;
+	border-bottom: 2px solid #64879d;
 	height: 116px;
+}
+
+#logo {
+	position: absolute;
+	right: 10px;
+	top: 10px;
 }
 
 #footer	{
@@ -47,13 +53,22 @@ h1, h2, h3, h4, h5, p {
 #login	{
 	background: #EDF2F5;
 	color: #64879d;
-	width: 250px;
+	width: 320px;
+	height: 120px;
 	padding: 10px;
 	border: 2px solid #64879d;
 	margin-top: 10px;
-	position: relative;
-	position-left: 50%;
-	position- right: 50%;
+	position: absolute;
+	left: 100px;
+	top: 50px;
+}
+
+#table {
+	margin-top: 20px;
+}
+
+#loginlogo {
+	float: right;
 }
 
 #nav	{
@@ -78,6 +93,11 @@ h1, h2, h3, h4, h5, p {
 	padding: 0px;
 }
 
+#nav .title {
+	padding: 4px;
+	text-align: center;
+}
+
 #nav li a {
 	display: block;
 	background: #EDF2F5;
@@ -86,7 +106,6 @@ h1, h2, h3, h4, h5, p {
 	border-bottom: 1px solid #64879d;
 	margin: 0px;
 	padding: 4px;
-	width: 100%;
 }
 
 #nav a:link, #nav a:active, #nav a:visited {

@@ -12,7 +12,7 @@
 
 <body>
 
-<img src="../cmslogo.png" border="0" class="logo" alt="CMS Made Simple"/>
+<img src="../cmslogo.png" border="0" id="logo" alt="CMS Made Simple"/>
 <div id="header" class="header">
 
 </div>
