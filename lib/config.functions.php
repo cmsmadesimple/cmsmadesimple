@@ -101,6 +101,8 @@ function cms_config_load($loadLocal = true)
 
 	$config["persistent_db_conn"] = true;
 
+	$config["default_upload_permission"] = '664';
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())

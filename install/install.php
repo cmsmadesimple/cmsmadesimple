@@ -469,6 +469,7 @@ function showPageFive() {
 	$newconfig["disable_htmlarea_translation"] = false;
 	$newconfig["admin_dir"] = "admin";
 	$newconfig["persistent_db_conn"] = true;
+	$newconfig["default_upload_permission"] = '664';
 
     $configfile = dirname(dirname(__FILE__))."/config.php";
     ## build the content for config file

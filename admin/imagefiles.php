@@ -88,6 +88,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		}
 		else
 		{
+			chmod($dir."/".$_FILES['uploadfile']['name'], octdec('0'.$config['default_upload_permission']));
 			audit(-1, $_FILES['uploadfile']['name'], 'Uploaded File');
 		}
 	}
