@@ -31,7 +31,7 @@ $reldir = "";
 if (isset($_POST['reldir'])) $reldir = $_POST['reldir'];
 else if (isset($_GET['reldir'])) $reldir = $_GET['reldir'];
 
-if (strpos($reldir, '..') === false)
+if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 {
 	$dir .= $reldir;
 }
@@ -66,7 +66,14 @@ if (isset($_POST['newdirsubmit']))
 			#Make sure no one tries to .. their way out of our little chroot
 			if (strpos($_POST['newdir'], '..') === false)
 			{
-				mkdir($dir . "/" . $_POST['newdir']);
+				if (strpos($_POST['newdir'], '/') === false && strpos($_POST['newdir'], '\\') === false)
+				{
+					mkdir($dir . "/" . $_POST['newdir']);
+				}
+				else
+				{
+					$errors .= "<li>".$gettext->gettext("Directory name cannot contain '/' or '\\'")."</li>";
+				}
 			}
 			else
 			{

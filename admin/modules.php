@@ -41,6 +41,7 @@ if ($access) {
 		#now insert a record
 		$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($gCms->modules[$module]['Version']).",'Installed',1)";
 		$db->Execute($query);
+		redirect("modules.php");
 	}
 
 	if ($action == "uninstall") {
@@ -52,16 +53,19 @@ if ($access) {
 		#now delete the record
 		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
+		redirect("modules.php");
 	}
 
 	if ($action == "settrue") {
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = 1 WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
+		redirect("modules.php");
 	}
 
 	if ($action == "setfalse") {
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = 0 WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
+		redirect("modules.php");
 	}
 }
 include_once("header.php");

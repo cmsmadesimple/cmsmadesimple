@@ -82,14 +82,19 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_id, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
-		if ($result && $result->RowCount()) {
+		if ($result && $result->RowCount())
+		{
 			$line = $result->FetchRow();
 
+			#This way the id is right, even if an alias is given
+			$gCms->variables['page'] = $line['page_id'];
+
 			$stylesheet = "";
-			if (isset($line[stylesheet])) {
+			if (isset($line[stylesheet]))
+			{
 				$stylesheet .= "<style type=\"text/css\">\n";
 				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
 				$stylesheet .= "</style>\n";
@@ -101,19 +106,27 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 			#So no one can do anything nasty
-			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
+			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+			{
 				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 			}
 			
-			if ($line["page_type"] == "content") {
+			if ($line["page_type"] == "content")
+			{
 				#If it's regular content, do this...
 				$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
-				if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser)) {
+				if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
+				{
 					$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
 				}
-			} else {
+			}
+			else
+			{
 				#If it's a module, do this instead...
-				if (isset($cmsmodules[$line["page_type"]])) {
+				if (isset($cmsmodules[$line["page_type"]]['plugin_module'])
+					&& $cmsmodules[$line["page_type"]]['Installed'] == true
+					&& $cmsmodules[$line["page_type"]]['Active'] == true)
+				{
 					@ob_start();
 					call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
 					$modoutput = @ob_get_contents();
@@ -124,7 +137,8 @@ class Smarty_CMS extends Smarty {
 
 			return true;
 		}
-		else {
+		else
+		{
 			return false;
 		}
 	}
@@ -136,11 +150,14 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+		$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
 			$line = $result->FetchRow();
+
+			#This way the id is right, even if an alias is given
+			$gCms->variables['page'] = $line['page_id'];
 
 			$page_date = $db->UnixTimeStamp($line["page_date"]);
 			$template_date = $db->UnixTimeStamp($line["template_date"]);

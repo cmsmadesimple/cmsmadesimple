@@ -30,10 +30,10 @@ require_once("include.php");
 
 $smarty = new Smarty_ModuleInterface($config);
 
-$gCms->variables['page'] = $_GET["return_id"].$_POST["return_id"];
-$smarty->page = $_GET["return_id"].$_POST["return_id"];
-$smarty->module = $_GET["module"].$_POST["module"];
-$smarty->id = $_GET["id"].$_POST["id"];
+$gCms->variables['page'] = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");
+$smarty->page = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");
+$smarty->module = (isset($_GET["module"])?$_GET["module"]:"").(isset($_POST["module"])?$_POST["module"]:"");
+$smarty->id = (isset($_GET["id"])?$_GET["id"]:"").(isset($_POST["id"])?$_POST["id"]:"");
 
 $params = array_merge($_GET, $_POST);
 $smarty->params = $params;

@@ -7,17 +7,40 @@
  */
 
 /**
- * Function to load all modules
+ * Function to load all modules.
+ *
+ * This function loads all modules and then figures out which modules are installed
+ * and active.
  *
  * @since 0.4
  */
 function load_modules() {
+	global $gCms;
+	$db = $gCms->db;
+	$cmsmodules = &$gCms->modules;
+
 	$dir = dirname(dirname(__FILE__))."/modules";
 	$ls = dir($dir);
 	while (($file = $ls->read()) != "") {
 		if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
 			if (is_file("$dir/$file/cmsmodule.php")) {
 				include_once("$dir/$file/cmsmodule.php");
+			}
+		}
+	}
+
+	#Figger out what modules are active and/or installed
+	$query = "SELECT * FROM ".cms_db_prefix()."modules";
+	$result = $db->Execute($query);
+	while ($row = $result->FetchRow())
+	{
+		if (isset($row['module_name']))
+		{
+			$modulename = $row['module_name'];
+			if (isset($modulename) && isset($cmsmodules[$modulename]))
+			{
+				$cmsmodules[$modulename]['Installed'] = true;
+				$cmsmodules[$modulename]['Active'] = $row['active'];
 			}
 		}
 	}
@@ -36,6 +59,8 @@ function cms_mapi_register_module($name, $author, $version) {
 		$cmsmodules[$name] = array();
 		$cmsmodules[$name]['Author'] = $author;
 		$cmsmodules[$name]['Version'] = $version;
+		$cmsmodules[$name]['Installed'] = false; 
+		$cmsmodules[$name]['Active'] = false; 
 	}
 }
 
@@ -417,7 +442,11 @@ class Smarty_ModuleInterface extends Smarty {
 			}
 			
 			#Run the execute_user function and replace {content} with it's output 
-			if (isset($cmsmodules[$smarty_obj->module])) {
+			if (isset($cmsmodules[$smarty_obj->module])
+				&& isset($cmsmodules[$smarty_obj->module]['execute_user_function'])
+				&& $cmsmodules[$smarty_obj->module]['Installed'] == true
+				&& $cmsmodules[$smarty_obj->module]['Active'] == true)
+			{
 				@ob_start();
 				call_user_func_array($cmsmodules[$smarty_obj->module]['execute_user_function'], array($gCms,$smarty_obj->id,$tpl_name,$smarty_obj->params));
 				$modoutput = @ob_get_contents();

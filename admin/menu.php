@@ -51,30 +51,22 @@ $gettext->reset();
 <?
 
 	$cmsmodules = $gCms->modules;
-	$installedmodules = array();
 
-	$query = "SELECT * FROM ".cms_db_prefix()."modules";
-	$result = $db->Execute($query);
+	$displaymodules = "";
 
-	if ($result && $result->RowCount() > 0) {
-
-		$displaymodules = "";
-
-		while ($row = $result->FetchRow()) {
-			$installedmodules[$row['module_name']] = 1;
+	foreach ($cmsmodules as $key=>$value) {
+		if (isset($cmsmodules[$key]['execute_admin_function']) 
+			&& $cmsmodules[$key]['Installed'] == true
+			&& $cmsmodules[$key]['Active'] == true
+		)
+		{
+			$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
 		}
+	}
 
-		foreach ($cmsmodules as $key=>$value) {
-			if (isset($cmsmodules[$key]['execute_admin_function']) && isset($installedmodules[$key])) {
-				$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
-			}
-		}
-
-		if ($displaymodules != "") {
-			echo "<h4>".$gettext->gettext("Modules")."</h4>";
-			echo $displaymodules;
-		}
-
+	if ($displaymodules != "") {
+		echo "<h4>".$gettext->gettext("Modules")."</h4>";
+		echo $displaymodules;
 	}
 
 ?>

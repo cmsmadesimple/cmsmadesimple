@@ -53,7 +53,7 @@ function comments_module_uninstall($cms) {
 function comments_module_execute($cms, $id, $params) {
 	//This is the entryway into the module.  All requests from CMS will come through here.
 	$db = $cms->db;
-	$query = "SELECT comment_id, comment_author, comment_data, comment_date FROM ".cms_db_prefix()."module_comments WHERE page_id = ".$cms->page." ORDER BY comment_date desc";
+	$query = "SELECT comment_id, comment_author, comment_data, comment_date FROM ".cms_db_prefix()."module_comments WHERE page_id = ".$cms->variables['page']." ORDER BY comment_date desc";
 	$dbresult = $db->Execute($query);
 	echo "<div class=\"modulecomments\">Page Comments";
 	if ($dbresult && $dbresult->RowCount()) {

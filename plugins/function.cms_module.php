@@ -32,7 +32,10 @@ function smarty_cms_function_cms_module($params, &$smarty) {
 	if (isset($modulename)) {
 
 		if (isset($cmsmodules[$modulename])) {
-			if (isset($cmsmodules[$modulename]['plugin_module'])) {
+			if (isset($cmsmodules[$modulename]['plugin_module'])
+				&& $cmsmodules[$modulename]['Installed'] == true
+				&& $cmsmodules[$modulename]['Active'] == true)
+			{
 				@ob_start();
 				#$obj = $cmsmodules[$params['module']]['Instance'];
 				#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
