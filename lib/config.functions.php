@@ -133,15 +133,15 @@ function cms_config_save($config)
 			{
 				if (is_string($value))
 				{
-					fwrite($handle, "\$config[\"$key\"] = \"$value\";\n");
+					fwrite($handle, "\$config['$key'] = '$value';\n");
 				}
 				else if (is_bool($value))
 				{
-					fwrite($handle, "\$config[\"$key\"] = ".($value?"true":"false").";\n");
+					fwrite($handle, "\$config['$key'] = ".($value?"true":"false").";\n");
 				}
 				else
 				{
-					fwrite($handle, "\$config[\"$key\"] = ".strval($value).";\n");
+					fwrite($handle, "\$config['$key'] = ".strval($value).";\n");
 				}
 			}
 			fwrite($handle, "\n?>");
