@@ -501,7 +501,7 @@ else {
 
 
 
-<?php }elseif ($content_type == "link") { ?>
+<?php }elseif ($content_type == "link" || $content_type == 'news') { ?>
 <h3><?php echo lang('editlink')?></h3>
 <div class="adminformSmall">
 <input type="hidden" name="template_id" value="1">

@@ -1,6 +1,7 @@
 Version 0.6.2 -- Subversion
 -----------------
 
+* Added Chinese translations (ray)
 * Added dateformat parameter to News
 * Added showtemplate parameter to moduleinterface.php, so you can do things
 like show just an RSS feed and nothing else.
