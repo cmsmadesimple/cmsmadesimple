@@ -30,6 +30,10 @@
  */
 function check_login() {
 
+	#For testing xhtml compliance
+	#generate_user_object(1);
+	#return;
+
 	global $gCms;
 	$config = $gCms->config;
 

@@ -219,16 +219,16 @@ else
 				echo "<td>".$gCms->modules[$key]['Version']."</td>";
 				echo "<td>".$gettext->gettext("Not Installed")."</td>";
 				echo "<td>&nbsp;</td>";
-				echo "<td><a href=\"plugins.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".$gettext->gettext("Install")."</a></td>";
 			} else { #Must be installed
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".$dbm[$key]['Status']."</td>";
-				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='plugins.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
-				echo "<td><a href=\"plugins.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
+				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
+				echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
 			}
 			if (isset($gCms->modules[$key]['help_function']))
 			{
-				echo "<td><a href=\"plugins.php?action=showmodulehelp&module=".$key."\">".$gettext->gettext("Help")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showmodulehelp&amp;module=".$key."\">".$gettext->gettext("Help")."</a></td>";
 			}
 			else
 			{
@@ -236,7 +236,7 @@ else
 			}
 			if (isset($gCms->modules[$key]['about_function']))
 			{
-				echo "<td><a href=\"plugins.php?action=showmoduleabout&module=".$key."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showmoduleabout&amp;module=".$key."\">".$gettext->gettext("About")."</a></td>";
 			}
 			else
 			{
@@ -271,7 +271,7 @@ else
 			echo "<td>$oneplugin</td>\n";
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"plugins.php?action=showpluginhelp&plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
 			}
 			else
 			{
@@ -279,7 +279,7 @@ else
 			}
 			if (function_exists('smarty_cms_about_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"plugins.php?action=showpluginabout&plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginabout&amp;plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
 			}
 			else
 			{
@@ -303,7 +303,6 @@ else
 
 }
 
-echo "</div>";
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
