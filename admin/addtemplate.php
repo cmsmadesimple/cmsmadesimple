@@ -61,10 +61,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+			$new_template_id = $dbnew->GenID($config->db_prefix."templates_seq");
 			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES (".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
 			$result = $dbnew->Execute($query);
 			if ($result) {
-				$new_template_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;

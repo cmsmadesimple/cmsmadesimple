@@ -46,10 +46,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES (".$dbnew->qstr($group).", $active, now(), now())";
+			$new_group_id = $dbnew->GenID($config->db_prefix."groups_seq");
+			$query = "INSERT INTO ".$config->db_prefix."groups (group_id, group_name, active, create_date, modified_date) VALUES ($new_group_id, ".$dbnew->qstr($group).", $active, now(), now())";
 			$result = $dbnew->Execute($query);
 			if ($result) {
-				$new_group_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
 				redirect("listgroups.php");
 				return;
