@@ -1,0 +1,297 @@
+/**
+ * HTML Tags
+ */
+body {
+	font-family: verdana, arial, helvetica, sans-serif;
+	font-size: 12px;
+	margin: 0;
+	padding: 0;
+    background: #F1F2EC url('themes/bluewater/lukewarmsea.jpg') repeat-x;
+}
+
+a {color: #1C639B;}
+a:link {color: #1C639B;}
+a:visited  {color: #1C639B;}
+a:active  {color: #83D5D1;}
+
+iframe {
+	width: 100%;
+}
+
+
+/**
+ * Generic content tags
+ */
+#MainContent {
+	padding-top: 30px;
+	margin-left: 15px;
+	margin-bottom: 30px;
+}
+
+
+.login {
+    width: 450px;
+    left: 30%;
+    position: relative;
+}
+
+/**
+ * Top Menu
+ */
+#TopMenu {
+	width: 99%;
+	background-color: #1C639B;
+	position: absolute;
+	top: 0;
+	left: 0;
+	padding: 5px;
+}
+
+html>body #TopMenu {
+    top: 0px;
+	position: fixed;
+    }
+
+
+#TopMenu a {
+	padding-left: 5px;
+	padding-right: 5px;
+	color: white;
+}
+
+#TopMenu a:hover {
+	padding-left: 5px;
+	padding-right: 5px;
+	color: #83D5D1;
+	}
+
+#TopMenuSelected {
+	background-color: #23A9C4;
+	padding: 5px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+
+/**
+ * Main (and sub) Menu
+ */
+.MainMenu {
+	width: 500px;
+}
+
+.MainMenuItem {
+	padding: 5px;
+	margin: 10px;
+	border: solid 1px #666;
+	background-color: #ebebeb;
+}
+
+.MainMenuItem a {
+	font-size: 16px;
+}
+
+.MainMenuItem .description {
+	font-size: 12px;
+	display: block;
+}
+
+.MainMenuItem .description a {
+	font-size: 12px;
+}
+
+
+#AdminHeader {
+    background: #F1F2EC url('themes/bluewater/logo2.gif') no-repeat;
+    height: 62px;
+    width: 170px;
+    right: 20px;
+    bottom: 30px;
+    position: absolute;
+}
+
+html>body #AdminHeader {
+    right: 0px;
+    bottom: 20px;
+    position: fixed;
+}
+
+/**
+ * Footer
+ */
+#Footer {
+	margin-top: 10px;
+	margin-bottom: 0px;
+	padding: 5px;
+	font-size: 10px;
+	background-color: #d0d0e7;
+	text-align: center;
+    bottom: 0px;
+	width: 100%;
+	heigth: 15px;
+	overflow: auto;
+	position: absolute;
+}
+
+html>body #Footer {
+    bottom: 0px;
+	position: fixed;
+    }
+
+#DebugFooter {
+	margin-top: 10px;
+	font-size: 8px;
+	padding: 5px;
+	background-color: #e7e7e7;
+}
+
+/**
+ * Tables
+ */
+.AdminTable {
+	border: 1px solid #666;
+	margin-bottom: 15px;
+}
+
+.AdminTable th {
+	background-color: #3DC2D5;
+}
+
+.AdminTable thead tr {
+	background-color: #3DC2D5;
+}
+
+.AdminTable tr.row1 {
+	background-color: #ffffff;
+}
+
+.AdminTable tr.row2 {
+	background-color: #e0e0e0;
+}
+
+
+.AdminTable td,
+.AdminTable th {
+	padding: 2px; 
+}
+
+.AdminForm,
+.AdminForm input,
+.AdminForm select {
+	font-size: 100%;
+}
+
+.AdminForm tbody th {
+	text-align: right;
+	padding-right: 5px;
+	font-weight: normal;
+	background: transparent;
+}
+
+/**
+ * Callout boxes
+ */
+.DashboardCallout {
+	width: 150px;
+	float: right;
+	font-size: 10px;
+	padding-top: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 10px;
+	background-color: #d0d0e7;
+	clear: right;
+}
+
+.DashboardCalloutTitle {
+	font-weight: bold;
+	text-align: center;
+	margin-top: 2px;
+}
+
+
+
+.AdminForm	th, .AdminForm td
+{
+	padding: 2px;
+}
+
+
+/**
+ * For tab list
+ */
+.tab-content {
+	border: 1px solid #666;
+	clear: both;
+	background: white; /*#FFF3B3;*/
+	padding: 5px;
+    margin-top: 0px;
+    width: 95%;
+}
+
+
+#tab-header {
+	position: relative;
+	width: 100%;
+	height: 3em;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+#tab-header ul#tab-list {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	bottom: -1px;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+}
+
+#tab-header ul#tab-list li  {
+	display: inline;
+	list-style: none;
+	margin: 0;
+}
+
+#tab-header ul#tab-list a,#tab-header ul#tab-list span,#tab-header ul#tab-list a.tab-active {
+	width: 8em;
+	display: block;
+	float: left;
+	padding: 4px 0;
+	margin: 1px 2px 0 0;
+	text-align: center;
+	font-family: tahoma, verdana, sans-serif;
+	font-size: 85%;
+	text-decoration: none;
+	color: #333;
+}
+
+#tab-header ul#tab-list span,#tab-header ul#tab-list a.tab-active,#tab-header ul#tab-list a.tab-active:hover {
+	border: 1px solid #666;
+	border-bottom: none;
+	background: #D4DED6;
+	padding-bottom: 6px;
+	margin-top: 0;
+}
+
+/* a link in a background tab */
+#tab-header ul#tab-list a {
+	/*background: #FFFAE1;*/
+	background: #bbb;
+	border: 1px solid #666;
+	border-bottom: none;
+}
+
+/* hover on a background tab */
+#tab-header ul#tab-list a:hover {
+	border-color: #666;
+	background: #D4DEEE;
+	/*padding-bottom: 4px;*/
+}
+
+.tab  /* the heading that became the li */
+{
+	display: none;
+}
+
+.tab-content {background: #D4DED6; }
