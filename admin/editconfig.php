@@ -39,7 +39,7 @@ require_once("header.php");
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Edit Configuration")?></h3>
+<h3><?=lang('editconfiguration')?></h3>
 
 <table border="0">
 

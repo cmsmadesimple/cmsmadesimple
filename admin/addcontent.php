@@ -96,31 +96,31 @@ if ($access) {
 		$validinfo = true;
 		if ($title == "" && $content_type != "separator") {
 			$validinfo = false;
-			$error .= "<li>".$gettext->gettext("No title given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
 		}
 		if ($url == "" && $content_type == "link") {
 			$validinfo = false;
-			$error .= "<li>".$gettext->gettext("No url given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
 		}
 		if ($content_type == "content" && $content == "") {
 			$validinfo = false;
-			$error .= "<li>".$gettext->gettext("No content entered!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 		}
 		if ($menutext == "" && $content_type != "separator") {
 			$validinfo = false;
-			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('menutext')))."</li>";
 		}
 		if ($alias != "")
 		{
 			if (preg_match('/^\d+$/', $alias))
 			{
 				$validinfo = false;
-				$error .= "<li>".$gettext->gettext("Alias cannot be an integer!")."</li>";
+				$error .= "<li>".lang('aliasnotaninteger')."</li>";
 			}
 			else if (!preg_match('/^[\d\w\-]+$/', $alias))
 			{
 				$validinfo = false;
-				$error .= "<li>".$gettext->gettext("Alias must be all letters and numbers!")."</li>";
+				$error .= "<li>".lang('aliasmustbelettersandnumbers')."</li>";
 			}
 			else
 			{
@@ -129,7 +129,7 @@ if ($access) {
 				if ($result && $result->RowCount() > 0)
 				{
 					$validinfo = false;
-					$error .= "<li>".$gettext->gettext("Alias has already been used on another page!")."</li>";
+					$error .= "<li>".lang('aliasalreadyused')."</li>";
 				}
 			}
 		}
@@ -158,7 +158,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error inserting page")."</li>";
+				$error .= "<li>".lang('errorinsertingpage')."</li>";
 			}
 		}
 	}
@@ -239,7 +239,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	echo "<h3>".$gettext->gettext("No Access to Add Content")."</h3>\n";
+	echo "<h3>".lang('noaccessto',array(lang('addcontent')))."</h3>\n";
 }
 else {
 
@@ -284,9 +284,9 @@ else {
 		fclose($handle);
 
 ?>
-<h3><?=$gettext->gettext("Preview")?></h3>
+<h3><?php echo lang('preview')?></h3>
 
-<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
+<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
 
 </iframe>
 <?php
@@ -298,7 +298,7 @@ else {
 <form method="post" action="addcontent.php" name="addform" id="addform">
 
 <?php if ($content_type == "content") { ?>
-<h3><?=$gettext->gettext("Add Content")?></h3>
+<h3><?php echo lang('addcontent')?></h3>
 <div class="adminform">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
 	<tr>
@@ -306,53 +306,53 @@ else {
 			<table cellpadding="0" cellspacing="0" summary="" style="margin-top: 0; border: solid 1px #8C8A8C; padding: 5px 5px 10px 5px;" id="padform">
 				<tr valign="top">
 					<td valign="top">
-						<?=$gettext->gettext("Content Type")?>:<?=$ctdropdown?>
-						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>">
-						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>"></span>
-						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>"></span>
-						<span style="white-space: nowrap"><?=$gettext->gettext("Template")?>:&nbsp;<?=$dropdown2?></span>
+						<?php echo lang('contenttype')?>:<?php echo $ctdropdown?>
+						<?php echo lang('title')?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?php echo $title?>">
+						<span style="white-space: nowrap"><?php echo lang('menutext')?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>"></span>
+						<span style="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?php echo $alias?>"></span>
+						<span style="white-space: nowrap"><?php echo lang('template')?>:&nbsp;<?php echo $dropdown2?></span>
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-top: 10px;"><strong><?=$gettext->gettext("Content") ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?php echo $content?></textarea></td>
 	</tr>
 </table>
 
-<div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></div>
+<div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?php echo lang('advanced') ?></a></div>
 <div id="advanced" class="expand">
 	<a name="advanced">&nbsp;</a>
-	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?></div>
-	<textarea rows="4" cols="80" name="head_tags"><?=$head_tags ?></textarea>
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?></div>
+	<textarea rows="4" cols="80" name="head_tags"><?php echo $head_tags ?></textarea>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">
 		<tr valign="top">
 			<td valign="top" style="padding-right: 10px;">
-				<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Status") ?></div>
+				<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('status') ?></div>
 				<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
 					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
 						<tr valign="top">
-							<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
+							<td valign="top"><?php echo lang('showinmenu')?>:</td>
+							<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
 						</tr>
 						<tr valign="top" style="padding-top: 5px;">
-							<td valign="top"><?=$gettext->gettext("Active")?>:</td>
-							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>> </td>
+							<td valign="top"><?php echo lang('active')?>:</td>
+							<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>> </td>
 						</tr>
 						<tr>
-							<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
+							<td colspan="2"><?php echo lang('parent')?>:&nbsp;<?php echo $dropdown?></td>
 						</tr>
 					</table>
 				</div>
 			</td>
 			<?php //if ($adminaccess) { ?>
 			<td valign="top">
-					<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Permission") ?></div>
+					<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('permission') ?></div>
 					<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
-					<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
-					<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple size="3"><?php echo $addt_users ?></select></div>
+					<!--<?php echo lang('owner')?>:&nbsp;<?php echo $owners?><br>-->
+					<div style="text-align: center;"><?php echo lang('additionaleditors')?>:<br><select name="additional_editors[]" multiple size="3"><?php echo $addt_users ?></select></div>
 					</div>
 			</td>
 			<?php // } ?>
@@ -360,45 +360,45 @@ else {
 	</table>
 </div>
 <br>
-<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>">
+<input type="hidden" name="orig_section_id" value="<?php echo $orig_section_id?>">
 <input type="hidden" name="content_change" value="0">
 <input type="hidden" name="addcontent" value="true">
-<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 </div>
 
 <?php }elseif ($content_type == "separator") { ?>
-<h3><?=$gettext->gettext("Add Separator")?></h3>
+<h3><?php echo lang('addseparator')?></h3>
 <div class="adminformSmall">
 <input type="hidden" name="template_id" value="1">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
 	<tr>
-		<td><?=$gettext->gettext("Content Type")?>:</td>
-		<td><?=$ctdropdown?></td>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
 	<tr>
-		<td><?=$gettext->gettext("Parent")?>:</td>
-		<td><?=$dropdown?></td>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Additional Editors")?>:</td>
-		<td><select name="additional_editors[]" multiple size="5"><?=$addt_users?></select></td>
+		<td><?php echo lang('additionaleditors')?>:</td>
+		<td><select name="additional_editors[]" multiple size="5"><?php echo $addt_users?></select></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
 			<input type="hidden" name="content_change" value="0">
 			<input type="hidden" name="addcontent" value="true">
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>
@@ -406,48 +406,48 @@ else {
 
 
 <?php }elseif ($content_type == "link") { ?>
-<h3><?=$gettext->gettext("Add Link")?></h3>
+<h3><?php echo lang('addlink')?></h3>
 <div class="adminformSmall">
 <input type="hidden" name="template_id" value="1">
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
 	<tr>
-		<td><?=$gettext->gettext("Content Type")?>:</td>
-		<td><?=$ctdropdown?></td>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
 	<tr>
-		<td>*<?=$gettext->gettext("Title")?>:</td>
-		<td><input type="text" name="title" maxlength="80" value="<?=$title?>" class="standard"></td>
+		<td>*<?php echo lang('title')?>:</td>
+		<td><input type="text" name="title" maxlength="80" value="<?php echo $title?>" class="standard"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
-		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" class="standard"></td>
+		<td>*<?php echo lang('menutext')?>:</td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>" class="standard"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("URL")?>:</td>
-		<td><input type="text" name="url" maxlength="65" value="<?=$url?>" class="standard"></td>
+		<td>*<?php echo lang('url')?>:</td>
+		<td><input type="text" name="url" maxlength="65" value="<?php echo $url?>" class="standard"></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Parent")?>:</td>
-		<td><?=$dropdown?></td>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Additional Editors")?>:</td>
-		<td><select name="additional_editors[]" multiple size="5"><?=$addt_users?></select></td>
+		<td><?php echo lang('additionaleditors')?>:</td>
+		<td><select name="additional_editors[]" multiple size="5"><?php echo $addt_users?></select></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
 			<input type="hidden" name="content_change" value="0">
 			<input type="hidden" name="addcontent" value="true">
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>
@@ -455,10 +455,10 @@ else {
 
 </form>
 
-<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</a></div>
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
 <div id="helparea" class="expand">
-<p><?php echo $gettext->gettext("This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.") ?></p>
-<p><?php echo $gettext->gettext("You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>") ?>
+<p><?php echo lang("This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.") ?></p>
+<p><?php echo lang("You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>") ?>
 <a name="help">&nbsp;</a>
 </div>
 

@@ -64,7 +64,7 @@ function smarty_cms_help_function_adsense() {
 		<li>ad_channel - channels are an advanced feature of adsense.  Put it here if you use it.</li>
 	</ul>
 	</p>
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_adsense() {
@@ -75,7 +75,7 @@ function smarty_cms_about_function_adsense() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 ?>

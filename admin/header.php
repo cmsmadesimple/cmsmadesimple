@@ -15,23 +15,27 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 // HTTP/1.0
 header("Pragma: no-cache");
 
+// Language shizzle
+header("Content-Encoding: " . get_encoding());
+header("Content-Language: " . $current_language);
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
 <html>
 <head>
 
-<title><?=$gettext->gettext("CMS Admin System")?></title>
+<title><?php echo lang('adminsystemtitle')?></title>
 
 <link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" language="javascript" src="helparea.js"></script>
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<script type="text/javascript">
-		_editor_url = "<?=$config["root_url"]?>/htmlarea/";
+		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		_editor_lang = "en";
 	</script>
 
-	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
+	<script type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></script>
 	<script type="text/javascript" defer>
 		var editor = null;
 		function initHtmlArea() {
@@ -42,11 +46,11 @@ header("Pragma: no-cache");
 <?php } else if (isset($htmlarea_flag)) { ?>
 
 	<script type="text/javascript">
-		_editor_url = "<?=$config["root_url"]?>/htmlarea/";
+		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		_editor_lang = "en";
 	</script>
 
-	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
+	<script type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></script>
 
 	<script type="text/javascript">
 
@@ -59,7 +63,7 @@ header("Pragma: no-cache");
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
-			editor.config.pageStyle = '<?=str_replace("'", "\\'", get_stylesheet($template_id))?>';
+			editor.config.pageStyle = '<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}
 	</script>

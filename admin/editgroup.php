@@ -51,7 +51,7 @@ if ($access) {
 		$validinfo = true;
 		if ($group == "") {
 			$validinfo = false;
-			$error .= "<li>".$gettext->gettext("No group name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 		}
 
 		if ($validinfo) {
@@ -64,7 +64,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error updating group")."</li>";
+				$error .= "<li>".lang('errorupdatinggroup')."</li>";
 			}
 		}
 
@@ -84,7 +84,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access to Edit Groups")."</h3>";
+	print "<h3>".lang('noaccessto',array(lang('editgroup')))."</h3>";
 }
 else {
 	if ($error != "") {
@@ -96,22 +96,22 @@ else {
 
 <div class="adminformSmall">
 
-<h3><?=$gettext->gettext("Edit Group")?></h3>
+<h3><?php echo lang('editgroup')?></h3>
 
 <table border="0" align="center">
 
 	<tr>
-		<td align="right"><?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="group" maxlength="25" value="<?=$group?>"></td>
+		<td align="right"><?php echo lang('name')?>:</td>
+		<td><input type="text" name="group" maxlength="25" value="<?php echo $group?>"></td>
 	</tr>
 	<tr>
-		<td align="right"><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td align="right"><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?=$group_id?>"><input type="hidden" name="editgroup" value="true">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?php echo $group_id?>"><input type="hidden" name="editgroup" value="true">
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

@@ -60,19 +60,19 @@ if ($access) {
 
 		$validinfo = true;
 		if ($template == "") {
-			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 		} else if ($template != $orig_template) {
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 
 			if ($result && $result->RowCount() > 0) {
-				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
+				$error .= "<li>".lang('errortemplateinuse')."</li>";
 				$validinfo = false;
 			}
 		}
 		if ($content == "") {
-			$error .= "<li>".$gettext->gettext("No template content given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
@@ -86,7 +86,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error updating template!")."</li>";
+				$error .= "<li>".lang('errorupdatingtemplate')."</li>";
 			}
 		}
 
@@ -110,7 +110,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access To Edit Templates")."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('edittemplate')))."</h3>";
 }
 else {
 
@@ -146,9 +146,9 @@ else {
 		fclose($handle);
 
 ?>
-<h3><?=$gettext->gettext("Preview")?></h3>
+<h3><?php echo lang('preview')?></h3>
 
-<iframe name="previewframe" width="100%" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(basename($tmpfname))?>">
+<iframe name="previewframe" width="100%" height="400" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>">
 
 </iframe>
 <?php
@@ -161,31 +161,31 @@ else {
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Edit Template")?></h3>
+<h3><?php echo lang('edittemplate')?></h3>
 
 <table width="100%" border="0">
 
 	<tr>
-		<td width="100">*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?=$template?>"><input type="hidden" name="orig_template" value="<?=$orig_template?>"></td>
+		<td width="100">*<?php echo lang('name')?>:</td>
+		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"><input type="hidden" name="orig_template" value="<?php echo $orig_template?>"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
+		<td>*<?php echo lang('content')?>:</td>
+		<td><textarea name="content" cols="90" rows="18"><?php echo htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Stylesheet")?>:</td>
-		<td><textarea name="stylesheet" cols="90" rows="18"><?=htmlentities($stylesheet)?></textarea></td>
+		<td><?php echo lang('stylesheet')?>:</td>
+		<td><textarea name="stylesheet" cols="90" rows="18"><?php echo htmlentities($stylesheet)?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="template_id" value="<?=$template_id?>"><input type="hidden" name="edittemplate" value="true"><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td><input type="hidden" name="template_id" value="<?php echo $template_id?>"><input type="hidden" name="edittemplate" value="true"><input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

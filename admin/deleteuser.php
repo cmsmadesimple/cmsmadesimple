@@ -63,7 +63,7 @@ if ($dodelete == true) {
 	redirect("listusers.php");
 }
 else {
-	redirect("listusers.php?message=".$gettext->gettext("User still owns content pages.  Please change ownership to another user before deleting."));
+	redirect("listusers.php?message=".lang('erroruserinuse'));
 }
 
 # vim:ts=4 sw=4 noet

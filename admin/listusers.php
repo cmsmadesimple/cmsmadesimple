@@ -29,7 +29,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3><?=$gettext->gettext("Current Users")?></h3>
+<h3><?php echo lang('currentusers')?></h3>
 <?php
 
 	$userid = get_userid();
@@ -43,8 +43,8 @@ if (isset($_GET["message"])) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".$gettext->gettext("Username")."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".lang('username')."</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
 		echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
 			echo "<td width=\"16\">&nbsp;</td>\n";
@@ -56,13 +56,13 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".$row["username"]."</a></td>\n";
-			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?lang('true'):lang('false'))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
-				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
 			else
 				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -76,7 +76,7 @@ if (isset($_GET["message"])) {
 if (check_permission($userid, 'Add User')) {
 ?>
 
-<div class=button><a href="adduser.php"><?=$gettext->gettext("Add New User")?></a></div><br>
+<div class=button><a href="adduser.php"><?php echo lang('adduser')?></a></div><br>
 
 <?php
 }

@@ -62,7 +62,7 @@ function smarty_cms_help_function_cms_module() {
 		<li>module - Name of the module to insert.  This is not case sensitive.</li>
 	</ul>
 	</p>
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_cms_module() {
@@ -73,7 +73,7 @@ function smarty_cms_about_function_cms_module() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 

@@ -33,13 +33,13 @@ if ($_POST['action'] == "do_restore") {
     return;
 }
 
-echo "<p>".$gettext->gettext("Click the Backup button to proceed with the database backup.")."</p>\n";
+echo "<p>".lang("Click the Backup button to proceed with the database backup.")."</p>\n";
 echo "<form method=\"POST\" action=\"".basename(__FILE__)."\">";
 echo "<input type=hidden name=action value=\"do_backup\">\n";
 echo "<input type=submit value=\"Backup\">\n";
 echo "</form>\n";
 
-echo "<p>".$gettext->gettext("Enter your backup sql filename and click Restore to wipe out your database and rebuild it.  Use with caution.")."</p>\n";
+echo "<p>".lang("Enter your backup sql filename and click Restore to wipe out your database and rebuild it.  Use with caution.")."</p>\n";
 echo "<form method=\"POST\" action=\"".basename(__FILE__)."\">\n";
 echo "<input type=hidden name=action value=\"do_restore\">\n";
 echo "<p><input type=text length=50 maxlength=250 name=filename>\n";
@@ -48,12 +48,11 @@ echo "</form>\n";
 
 function do_adodb_backup() {
 
-    global $gettext;
     global $gCms;
     $db = $gCms->db;
     $config = $gCms->config;
 
-    echo "<p>".$gettext->gettext("Working....")."<br>\n";
+    echo "<p>".lang("Working....")."<br>\n";
 
     ## open file for backup
     $date = date("mdy-Hi");
@@ -115,12 +114,11 @@ function do_adodb_backup() {
 
     #function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
     audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $backup_file, 'Database backup');
-    echo $gettext->gettext("Backup complete.  Wrriten to file:")." ".$backup_file."</p>\n";
+    echo lang("Backup complete.  Wrriten to file:")." ".$backup_file."</p>\n";
 }
 
 function do_adodb_restore() {
 
-    global $gettext;
     global $gCms;
     $db = $gCms->db;
     $config = $gCms->config;
@@ -131,6 +129,6 @@ function do_adodb_restore() {
         $db->Execute($line);
     }
     audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $_POST["filename"], 'Database restore');
-    echo $gettext->gettext("Restore complete: ").$_POST["filename"]."</p>\n";
+    echo lang("Restore complete: ").$_POST["filename"]."</p>\n";
 }
 ?>

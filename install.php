@@ -272,11 +272,11 @@ function showPageThree($sqlloaded = 0) {
 	<table cellpadding="2" border="1" class="regtable">
 		<tr class="row1">
 			<td>CMS Document root (as seen from the webserver)</td>
-			<td><input type="text" name="docroot" value="<?=$docroot?>" length="50" maxlength="100"></td>
+			<td><input type="text" name="docroot" value="<?php echo $docroot?>" length="50" maxlength="100"></td>
 		</tr>
 		<tr class="row2">
 			<td>Path to the Document root</td>
-			<td><input type="text" name="docpath" value="<?=$docpath?>" length="50" maxlength="100"></td>
+			<td><input type="text" name="docpath" value="<?php echo $docpath?>" length="50" maxlength="100"></td>
 		</tr>
 		<tr class="row1">
 			<td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td>
@@ -286,13 +286,13 @@ function showPageThree($sqlloaded = 0) {
 			<td>Use BBCode (must have this installed, see <a href="INSTALL" target="_new">INSTALL</a></td>
 			<td>
 				<input type="text" name="bbcode" value="false" length="5" maxlength="5">
-				<input type="hidden" name="page" value="4"><input type="hidden" name="host" value="<?=$_POST['host']?>">
-			    <input type="hidden" name="dbms" value="<?=$_POST['dbms']?>">
-			    <input type="hidden" name="database" value="<?=$_POST['database']?>">
-				<input type="hidden" name="port" value="<?=$_POST['port']?>">
-			    <input type="hidden" name="username" value="<?=$_POST['username']?>">
-				<input type="hidden" name="password" value="<?=$_POST['password']?>">
-			    <input type="hidden" name="prefix" value="<?=$_POST['prefix']?>">
+				<input type="hidden" name="page" value="4"><input type="hidden" name="host" value="<?php echo $_POST['host']?>">
+			    <input type="hidden" name="dbms" value="<?php echo $_POST['dbms']?>">
+			    <input type="hidden" name="database" value="<?php echo $_POST['database']?>">
+				<input type="hidden" name="port" value="<?php echo $_POST['port']?>">
+			    <input type="hidden" name="username" value="<?php echo $_POST['username']?>">
+				<input type="hidden" name="password" value="<?php echo $_POST['password']?>">
+			    <input type="hidden" name="prefix" value="<?php echo $_POST['prefix']?>">
 			</td>
 		</tr>
     </table>

@@ -86,7 +86,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 			else
 			{
 				$dodelete = false;
-				$error = $gettext->gettext("Error getting the template name");
+				$error = lang('errorgettingtemplatename');
 			}
 		}
 
@@ -113,20 +113,20 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 			else
 			{
 				$dodelete = false;
-				$error = $gettext->gettext("Error deleting CSS association!");
+				$error = lang('errordeletingassociation');
 			}
 		}
 	} # end of if access
 	else
 	{
 		$dodelete = false;
-		$error = $gettext->gettext("You do not have the right to remove CSS association");
+		$error = lang('noaccessto', array(lang('removecssassocation')));
 	}
 } # end of if params
 else
 {
 	$dodelete = false;
-	$error = $gettext->gettext("Some parameters were missing or invalid!");
+	$error = lang('missingparams');
 }
 
 #******************************************************************************

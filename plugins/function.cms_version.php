@@ -29,7 +29,7 @@ function smarty_cms_help_function_cms_version() {
 	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code>
 	<h3>What parameters does it take?</h3>
 	<p>It takes no parameters.</p>
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_cms_version() {
@@ -40,7 +40,7 @@ function smarty_cms_about_function_cms_version() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 ?>

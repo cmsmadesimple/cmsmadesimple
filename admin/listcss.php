@@ -46,7 +46,7 @@ if (isset($_GET["message"]))
 
 ?>
 
-<h3><?=$gettext->gettext("Current CSS")?></h3>
+<h3><?php echo lang('currentcss')?></h3>
 
 <?php
 
@@ -68,7 +68,7 @@ if (isset($_GET["message"]))
 		# displaying the table header
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".$gettext->gettext("Title")."</td>\n";
+		echo "<td>".lang('title')."</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
@@ -85,7 +85,7 @@ if (isset($_GET["message"]))
 			# if user has right to edit
 			if ($modify)
 			{
-				echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Edit")."\"></a></td>\n";
+				echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
 			}
 			else
 			{
@@ -95,7 +95,7 @@ if (isset($_GET["message"]))
 			# if user has right to delete
 			if ($delcss)
 			{
-				echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+				echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
 			}
 			else
 			{
@@ -113,7 +113,7 @@ if (isset($_GET["message"]))
 	} # end if result
 	else
 	{
-		echo "<p>".$gettext->gettext("No CSS")."</p>";
+		echo "<p>".lang('nocss')."</p>";
 	}
 
 	# if user can add css
@@ -121,7 +121,7 @@ if (isset($_GET["message"]))
 	{
 ?>
 
-<div class="button"><a href="addcss.php"><?=$gettext->gettext("Add New CSS")?></a></div>
+<div class="button"><a href="addcss.php"><?php echo lang('addcss')?></a></div>
 
 <?php
 	} # end if add css

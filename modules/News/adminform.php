@@ -107,27 +107,27 @@ if ($error != "") {
 
 <div class="adminform">
 
-<?=cms_mapi_create_admin_form_start("News", $id)?>
+<?php echo cms_mapi_create_admin_form_start("News", $id)?>
 
 <table width="100%" border="0">
 	<tr>
 		<td width="60">Title:</td>
-		<td><input name="<?=$id?>newstitle" maxlength="255" value="<?=$title?>" class="standard"/></td>
+		<td><input name="<?php echo $id?>newstitle" maxlength="255" value="<?php echo $title?>" class="standard"/></td>
 	</tr>
 	<tr>
 		<td>Content:</td>
-		<td><textarea id="<?=$id?>newscontent" name="<?=$id?>newscontent" cols="80" rows="12"><?=$data?></textarea></td>
+		<td><textarea id="<?php echo $id?>newscontent" name="<?php echo $id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=$hiddenfields?>&nbsp;</td>
+		<td><?php echo $hiddenfields?>&nbsp;</td>
 		<td>
-			<input type="submit" name="<?=$id?>submit" value="Submit" />
-			<input type="submit" name="<?=$id?>cancelsubmit" value="Cancel" />
+			<input type="submit" name="<?php echo $id?>submit" value="Submit" />
+			<input type="submit" name="<?php echo $id?>cancelsubmit" value="Cancel" />
 		</td>
 	</tr>
 </table>
 
-<?=cms_mapi_create_admin_form_end()?>
+<?php echo cms_mapi_create_admin_form_end()?>
 
 </div>
 

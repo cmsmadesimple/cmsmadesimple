@@ -51,9 +51,9 @@ if ($result && $result->RowCount() > 0) {
        if ($numofpages > 1) {
                if($page != 1){
                                $pageprev = $page-1;
-                               $page_string .= "<a href=\"adminlog.php?page=$pageprev\">Previous</a>&nbsp;";
+                               $page_string .= "<a href=\"adminlog.php?page=$pageprev\">".lang('previous')."</a>&nbsp;";
                }else{
-                               $page_string .= "Previous ";
+                               $page_string .= lang('previous')." ";
                }
 
                for($i = 1; $i <= $numofpages; $i++){
@@ -74,23 +74,23 @@ if ($result && $result->RowCount() > 0) {
 
                if(($totalrows - ($limit * $page)) > 0){
                                $pagenext = $page+1;
-                               $page_string .= "<a href=\"adminlog.php?page=$pagenext\">Next</a>";
+                               $page_string .= "<a href=\"adminlog.php?page=$pagenext\">".lang('next')."</a>";
                }else{
-                               $page_string .= "Next";
+                               $page_string .= lang('next')." ";
                }
        }
 
 ?>
 
-<h3><?=$gettext->gettext("Admin Log")?></h3>
+<h3><?php echo lang('adminlog')?></h3>
 <?php echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>"; ?>
 <table cellspacing="0" class="admintable" style="margin-bottom: 0px;">
        <tr>
-               <td><?=$gettext->gettext("User")?></td>
-               <td><?=$gettext->gettext("Item ID")?></td>
-               <td><?=$gettext->gettext("Item Name")?></td>
-               <td><?=$gettext->gettext("Action")?></td>
-               <td><?=$gettext->gettext("Date")?></td>
+               <td><?php echo lang('user')?></td>
+               <td><?php echo lang('itemid')?></td>
+               <td><?php echo lang('itemname')?></td>
+               <td><?php echo lang('action')?></td>
+               <td><?php echo lang('date')?></td>
        </tr>
 
 <?php
@@ -116,7 +116,7 @@ if ($result && $result->RowCount() > 0) {
 echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
 
        if ($access) {
-               echo "<div class=\"button\"><a href=\"adminlog.php?clear=true\">Clear Admin Log</a></div>";
+               echo "<div class=\"button\"><a href=\"adminlog.php?clear=true\">".lang('clearadminlog')."</a></div>";
        }
        echo "<br>";
 }

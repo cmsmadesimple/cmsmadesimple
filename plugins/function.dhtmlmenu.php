@@ -98,7 +98,7 @@ function smarty_cms_help_function_dhtmlmenu() {
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>
 	</p>
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_dhtmlmenu() {
@@ -109,7 +109,7 @@ function smarty_cms_about_function_dhtmlmenu() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 # vim:ts=4 sw=4 noet

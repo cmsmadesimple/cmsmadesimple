@@ -29,7 +29,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3><?=$gettext->gettext("Current Templates")?></h3>
+<h3><?php echo lang('currenttemplates')?></h3>
 <?php
 
 	$userid		= get_userid();
@@ -59,8 +59,8 @@ if (isset($_GET["message"])) {
 
 		echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
 		echo "<tr>\n";
-		echo "<td>".$gettext->gettext("Template")."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".lang('template')."</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
 		if ($config["advanced_user"])
@@ -80,28 +80,28 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">".$row["template_name"]."</a></td>\n";
-			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?lang('true'):lang('false'))."</td>\n";
 
 			# set template to all content
 			if ($all)
-				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$row["template_id"]."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 			# view css association
 			if ($config["advanced_user"]) {
-				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang("CSS")."\" title=\"".lang("CSS")."\"></a></td>\n";
 			}
 
 			# add new template
 			if ($add)
-				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Copy")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\"></a></td>\n";
 
 			# edit template
 			if ($edit)
-				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
 
 			# remove template
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -115,15 +115,15 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class="button"><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div><br>
+<div class="button"><a href="addtemplate.php"><?php echo lang('addtemplate')?></a></div><br>
 
-<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</a></div>
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
 <div id="helparea" class="expand">
 <?php
-echo "<p>".$gettext->gettext("This page allows you to edit, delete, and create templates.")."</p>";
-echo "<p>".$gettext->gettext("To create a new template, click on the <u>Add New Template</u> button.")."<br>";
-echo $gettext->gettext("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br>";
-echo $gettext->gettext("If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.")."</p>";
+echo "<p>".lang("This page allows you to edit, delete, and create templates.")."</p>";
+echo "<p>".lang("To create a new template, click on the <u>Add New Template</u> button.")."<br>";
+echo lang("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br>";
+echo lang("If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.")."</p>";
 ?>
 <a name="help">&nbsp;</a>
 </div>

@@ -214,31 +214,31 @@ function linkblog_module_executeuser($cms, $id, $return_id, $params) {
 		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
 
 		?>
-		<p class="smalltitle">Add Link - <? echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog"); ?></p>
+		<p class="smalltitle">Add Link - <?php echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog"); ?></p>
 
 		<table>
 			<tr>
 				<td>Your name:</td>
-				<td><input type="text" name="<?=$id?>author" value="<?=$author?>" size=20 maxlength=50 /></td>
+				<td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
 			</tr>
 			<tr>
 				<td>Title:</td>
-				<td><input type="text" name="<?=$id?>title" value="<?=$title?>" size=100 maxlength=250/></td>
+				<td><input type="text" name="<?php echo $id?>title" value="<?php echo $title?>" size=100 maxlength=250/></td>
 			</tr>
 			<tr>
 				<td>URL:</td>
-				<td><input type="text" name="<?=$id?>url" value="<?=$url?>" size=100 maxlength=250 /></td>
+				<td><input type="text" name="<?php echo $id?>url" value="<?php echo $url?>" size=100 maxlength=250 /></td>
 			</tr>
 			<tr>
 				<td>Type:</td>
-				<td><?=$types?></td>
+				<td><?php echo $types?></td>
 			</tr>
 			<tr>
-				<td>&nbsp;<input type="hidden" name="<?=$id?>action" value="linkadd" /></td>
-				<td><input type="submit" name="<?=$id?>submitlink" value="Submit" /><input type="submit" name="<?=$id?>cancellink" value="Cancel" /></td>
+				<td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="linkadd" /></td>
+				<td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
 			</tr>
 		</table>
-		<?
+		<?php
 
 		echo cms_mapi_create_user_form_end();
 	}
@@ -308,19 +308,19 @@ function linkblog_module_executeuser($cms, $id, $return_id, $params) {
 		<table>
 			<tr>
 				<td>Your name:</td>
-				<td><input type="text" name="<?=$id?>author" value="<?=$author?>" size=20 maxlength=50 /></td>
+				<td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
 			</tr>
 			<tr>
 				<td>Comment:</td>
-				<td><input type="text" name="<?=$id?>comment" value="" size=100 maxlength=250/></td>
+				<td><input type="text" name="<?php echo $id?>comment" value="" size=100 maxlength=250/></td>
 			</tr>
 			<tr>
-				<td>&nbsp;<input type="hidden" name="<?=$id?>action" value="postcomment" />
-				<input type="hidden" name="<?=$id?>linkblog_id" value="<?=$params[$id."linkblog_id"]?>" /></td>
-				<td><input type="submit" name="<?=$id?>submitlink" value="Submit" /><input type="submit" name="<?=$id?>cancellink" value="Cancel" /></td>
+				<td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="postcomment" />
+				<input type="hidden" name="<?php echo $id?>linkblog_id" value="<?php echo $params[$id."linkblog_id"]?>" /></td>
+				<td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
 			</tr>
 		</table>
-		<?
+		<?php
 
 		echo cms_mapi_create_user_form_end();
 	}
@@ -377,7 +377,7 @@ div.modulelinkblogentrycommentlink {
 	<h3>How can I help?</h3>
 	<p>Well, first of all, thanks for asking ;).<br />
 	There is the need for an admin piece to manage the differnt types of links within LinkBlog.  Right now the types have to be manually updated in the database, which, as we all know, is not cool.</p>
-	<?
+	<?php
 
 }
 
@@ -389,7 +389,7 @@ function linkblog_module_about() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 

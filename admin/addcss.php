@@ -88,7 +88,7 @@ if ($access)
 		# if no CSS name was given
 		if ("" == $css_name)
 		{
-			$error .= "<li>".$gettext->gettext("No CSS name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 			
 		}
@@ -100,7 +100,7 @@ if ($access)
 
 			if ($result && $result->RowCount() > 0)
 			{
-				$error .= "<li>".$gettext->gettext("CSS name already in use!")."</li>";
+				$error .= "<li>".lang('cssalreadyused')."</li>";
 				$validinfo = false;
 			}
 		}
@@ -108,7 +108,7 @@ if ($access)
 		# now checking the content of the CSS
 		if ("" == $css_text)
 		{
-			$error .= "<li>".$gettext->gettext("No CSS content entered!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
@@ -138,7 +138,7 @@ if ($access)
 			}
 			else
 			{
-				$error .= "<li>".$gettext->gettext("Error inserting CSS")."</li>";
+				$error .= "<li>".lang('errorinsertingcss')."</li>";
 			}
 		}
 	}
@@ -151,7 +151,7 @@ include_once("header.php");
 #******************************************************************************
 if (!$access)
 {
-	print "<h3>".$gettext->gettext("No Access to Add CSS")."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('addcss')))."</h3>";
 }
 #******************************************************************************
 # the user has access, we display the form
@@ -174,24 +174,24 @@ else
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Add CSS")?></h3>
+<h3><?php echo lang('addcss')?></h3>
 
 <table border="0">
 
 	<tr>
-		<td><?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="css_name" maxlength="25" value="<?=$css_name?>"/></td>
+		<td><?php echo lang('name')?>:</td>
+		<td><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>"></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="css_text" cols="90" rows="18"><?=$css_text?></textarea></td>
+		<td><?php echo lang('content')?>:</td>
+		<td><textarea name="css_text" cols="90" rows="18"><?php echo $css_text?></textarea></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
 			<input type="hidden" name="addcss" value="true">
-			<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		</td>
 	</tr>
 

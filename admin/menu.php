@@ -1,25 +1,13 @@
 <div id="navcontainer">
 
-<div id="welcome"><?php
-if (isset($_SESSION["cms_admin_username"]))
-{
-	$gettext->setVar("name", $_SESSION["cms_admin_username"]);
-}
-else
-{
-	$gettext->setVar("name", "");
-}
-echo $gettext->gettext('Welcome ${name}');
-$gettext->reset();
-?>
-
-<br/>
-<br/>
+<div id="welcome"><?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
+<br>
+<br>
 
 <form action="index.php" method="post" name="cms_admin_lang_form">
-<span class="smallselect"><?=$gettext->gettext("Language")?> : </span>
+<span class="smallselect"><?php echo lang('language')?> : </span>
 <select class="smallselect" name="change_cms_lang" onchange="cms_admin_lang_form.submit()" style="vertical-align: middle;">
-<? 
+<?php
 	foreach ($nls["language"] as $key=>$val) {
 		echo "<option value=\"$key\"";
 		if (isset($_POST["change_cms_lang"])) {
@@ -38,22 +26,22 @@ $gettext->reset();
 </form>
 </div>
 
-<a href="listcontent.php"><?=$gettext->gettext("Content Management")?></a>
-<a href="listtemplates.php"><?=$gettext->gettext("Template Management")?></a>
-<? if ($config["advanced_user"]) { ?>
-<a href="listcss.php"><?=$gettext->gettext("CSS Management")?></a>
-<? } ?>
-<!--<a href="tools.php"><?=$gettext->gettext("Tools")?></a>-->
-<a href="listusers.php"><?=$gettext->gettext("User Management")?></a>
-<a href="listgroups.php"><?=$gettext->gettext("Group Management")?></a>
-<a href="files.php"><?=$gettext->gettext("File Management")?></a>
-<a href="plugins.php"><?=$gettext->gettext("Plugin Management")?></a>
-<!--<a href="editprefs.php"><?=$gettext->gettext("User Preferences")?></a>-->
-<a href="adminlog.php"><?=$gettext->gettext("Admin Log")?></a>
-<a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
-<a href="logout.php"><?=$gettext->gettext("Logout")?></a>
+<a href="listcontent.php"><?php echo lang('contentmanagement')?></a>
+<a href="listtemplates.php"><?php echo lang('templatemanagement')?></a>
+<?php if ($config["advanced_user"]) { ?>
+<a href="listcss.php"><?php echo lang('cssmanagement')?></a>
+<?php } ?>
+<!--<a href="tools.php"><?php echo lang('tools')?></a>-->
+<a href="listusers.php"><?php echo lang('usermanagement')?></a>
+<a href="listgroups.php"><?php echo lang('groupmanagement')?></a>
+<a href="files.php"><?php echo lang('filemanagement')?></a>
+<a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
+<!--<a href="editprefs.php"><?php echo lang('userprefs')?></a>-->
+<a href="adminlog.php"><?php echo lang('adminlog')?></a>
+<a href="../index.php" target="_new"><?php echo lang('showsite')?></a>
+<a href="logout.php"><?php echo lang('logout')?></a>
 
-<?
+<?php
 
 	$cmsmodules = $gCms->modules;
 
@@ -70,7 +58,7 @@ $gettext->reset();
 	}
 
 	if ($displaymodules != "") {
-		echo "<div class=\"menutitle\">".$gettext->gettext("Modules")."</div>";
+		echo "<div class=\"menutitle\">".lang('modules')."</div>";
 		echo $displaymodules;
 	}
 

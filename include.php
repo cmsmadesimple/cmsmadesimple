@@ -95,6 +95,7 @@ require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
+require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
 if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
@@ -123,50 +124,33 @@ $gCms->cmsplugins = array();
 #Load all installed module code
 load_modules();
 
+#Nice decent default
+$current_language = "en_US";
+
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE)) {
 
-	#Setup gettext
-	require_once(dirname(__FILE__)."/lib/GetText.php");
-	if (function_exists('gettext')) {
-		$gettext = new GetText_NativeSupport();
-	} else {
-		$gettext = new GetText_PHPSupport();
-	}
-	$gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
-
-	#Setup defaults
-	$nls['language']['en_US'] = "English";
-	$nls['alias']['en_CA'] = "en_US";
-	$nls['alias']['en_GB'] = "en_US";
-
 	#Read in all current languages...
-	$dir = dirname(__FILE__)."/locale";
+	$dir = dirname(__FILE__)."/lang";
 	$ls = dir($dir);
 	while (($file = $ls->read()) != "") {
-		if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-			if (is_file("$dir/$file/nls.php")) {
-				include("$dir/$file/nls.php");
-			}
+		if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
+			include("$dir/$file");
 		}
 	}
+
 	#Check to see if there is already a language in use...
-	if (isset($_POST["change_cms_lang"])) {
-		$err = $gettext->setLanguage($_POST["change_cms_lang"]);
-		if (PEAR::isError($err))
-		{
-			echo $err->toString(), "\n";
-		}
+	if (isset($_POST["change_cms_lang"]))
+	{
+		$current_language = $_POST["change_cms_lang"];
 		setcookie("cms_language", $_POST["change_cms_lang"]);
 	}
-	else if (isset($_COOKIE["cms_language"])) {
-		$err = $gettext->setLanguage($_COOKIE["cms_language"]);
-		if (PEAR::isError($err))
-		{
-			echo $err->toString(), "\n";
-		}
-	} else {
-
+	else if (isset($_COOKIE["cms_language"]))
+	{
+		$current_language = $_COOKIE["cms_language"];
+	}
+	else
+	{
 		#No, take a stab at figuring out the default language...
 		#Figure out default language and set it if it exists
 		if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
@@ -177,11 +161,7 @@ if (isset($CMS_ADMIN_PAGE)) {
 			foreach ($langs as $onelang) {
 				#Check to see if lang exists...
 				if (isset($nls['language'][$onelang])) {
-					$err = $gettext->setLanguage($onelang);
-					if (PEAR::isError($err))
-					{
-						echo $err->toString(), "\n";
-					}
+					$current_language = $onelang;
 					setcookie("cms_language", $onelang);
 					break;
 				}
@@ -189,16 +169,20 @@ if (isset($CMS_ADMIN_PAGE)) {
 				if (isset($nls['alias'][$onelang])) {
 					$alias = $nls['alias'][$onelang];
 					if (isset($nls['language'][$alias])) {
-						$err = $gettext->setLanguage($alias);
-						if (PEAR::isError($err))
-						{
-							echo $err->toString(), "\n";
-						}
+						$current_language = $alias;
 						setcookie("cms_language", $alias);
 						break;
 					}
 				}
 			}
+		}
+	}
+	#Ok, we have a language to load, let's load it already...
+	if (isset($nls['file'][$current_language]))
+	{
+		foreach ($nls['file'][$current_language] as $onefile)
+		{
+			include($onefile);
 		}
 	}
 }

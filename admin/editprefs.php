@@ -55,23 +55,23 @@ if ($error != "") {
 
 <div class="adminformSmall">
 
-<h3><?=$gettext->gettext("Edit User Preferences")?></h3>
+<h3><?php echo lang("Edit User Preferences")?></h3>
 
 <table border="0" align="center">
 
 	<tr>
-		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content?")?>:</td>
+		<td><?php echo lang("Use WYSIWYG Editor for Content?")?>:</td>
 		<td>
 			<select name="use_wysiwyg">
-				<option value="1" <?= ($use_wysiwyg=="1"?"selected":"") ?>>True</option>
-				<option value="0" <?= ($use_wysiwyg=="0"?"selected":"") ?>>False</option>
+				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>>True</option>
+				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>>False</option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true">
-		<input type="submit" name="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<input type="submit" name="submit" value="<?php echo lang("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

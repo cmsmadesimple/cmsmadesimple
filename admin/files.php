@@ -73,7 +73,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	{
 		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
-			$errors .= "<li>".$gettext->gettext("File could not be uploaded.  Permissions problem?")."</li>";
+			$errors .= "<li>".lang("File could not be uploaded.  Permissions problem?")."</li>";
 		}
 		else
 		{
@@ -82,7 +82,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	}
 	else
 	{
-		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
 
@@ -94,19 +94,19 @@ if (isset($_POST['newdirsubmit']))
 		#Make sure it isn't an empty dir name
 		if ($_POST['newdir'] == "")
 		{
-			$errors .= "<li>".$gettext->gettext("Cannot create a directory with no name.")."</li>";
+			$errors .= "<li>".lang("Cannot create a directory with no name.")."</li>";
 		}
 		else if (ereg('\.\.',$_POST['newdir']))
 		{
-			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '..'")."</li>";
+			$errors .= "<li>".lang("Directory name cannot contain '..'")."</li>";
 		}
 		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
-			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '/' or '\'")."</li>";
+			$errors .= "<li>".lang("Directory name cannot contain '/' or '\'")."</li>";
 		}
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
-			$errors .= "<li>".$gettext->gettext("This directory already exists.")."</li>";
+			$errors .= "<li>".lang("This directory already exists.")."</li>";
 		}
 		else
 		{
@@ -116,7 +116,7 @@ if (isset($_POST['newdirsubmit']))
 	}
 	else
 	{
-		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
 
@@ -128,7 +128,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		{
 			if (!(unlink($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".$gettext->gettext("Could not delete file.  Permissions problem?")."</li>";
+				$errors .= "<li>".lang("Could not delete file.  Permissions problem?")."</li>";
 			}
 			else
 			{
@@ -137,12 +137,12 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		}
 		else
 		{
-			$errors .= "<li>".$gettext->gettext("No real file given")."</li>";
+			$errors .= "<li>".lang("No real file given")."</li>";
 		}
 	}
 	else
 	{
-		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
 else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
@@ -153,7 +153,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		{
 			if (!(deldir($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".$gettext->gettext("Could not delete directory.  Permissions problem?")."</li>";
+				$errors .= "<li>".lang("Could not delete directory.  Permissions problem?")."</li>";
 			}
 			else
 			{
@@ -162,12 +162,12 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		}
 		else
 		{
-			$errors .= "<li>".$gettext->gettext("No real directory given")."</li>";
+			$errors .= "<li>".lang("No real directory given")."</li>";
 		}
 	}
 	else
 	{
-		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
 
@@ -178,7 +178,7 @@ $row = "row1";
 $dirtext = "";
 $filetext = "";
 
-echo "<h3>".$gettext->gettext("File Management")."</h3>";
+echo "<h3>".lang('filemanagement')."</h3>";
 
 
 if ($errors != "")
@@ -186,9 +186,9 @@ if ($errors != "")
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
-echo "<h4>".$gettext->gettext("Current Directory").": ".($reldir==""?"/":$reldir)."</h4>";
+echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4><p>";
 echo '<table cellspacing="0" class="admintable">';
-echo "<tr><td width=\"30\">&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td width=\"10%\">".$gettext->gettext("File Size")."</td><td width=\"18\">&nbsp;</td></tr>";
+echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
 
 if ($reldir != "")
 {
@@ -227,7 +227,7 @@ foreach ($dirs as $file)
 			$dirtext .= "<tr class=\"$row\">"; $dirtext .= "<td width=\"30\">[dir]</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete this directory and all of it\'s contents?")."');\"><img src=\"../images/cms/delete.gif\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\"></a></td>";
+			$dirtext .= "<ld width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -253,7 +253,7 @@ foreach ($files as $file)
 			$filetext .= "<td width=\"30\">[file]</td>";
 			$filetext .= '<td><a href="'.$url.$reldir."/".$file.'" target="_blank">'.$file.'</a></td>';
 			$filetext .= "<td width=\"10%\" align=\"right\">".number_format(filesize("$dir/$file"))." Bytes</td>";
-			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete this file?")."');\"><img src=\"../images/cms/delete.gif\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\"></a></td>";
+			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$filetext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -263,7 +263,7 @@ echo $filetext;
 
 if ($filetext == "" && $dirtext == "")
 {
-	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">".$gettext->gettext("No Files")."</td></tr>";
+	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">".lang('nofiles')."</td></tr>";
 }
 
 echo "</table>";
@@ -272,21 +272,21 @@ if ($access)
 {
 ?>
 <form enctype="multipart/form-data" action="files.php" method="post">
-	<input type="hidden" name="MAX_FILE_SIZE" value="<?=$config["max_upload_size"]?>">
+	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>">
 	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
 		<tr>
-			<td align="right" style="padding-top: 10px;">Upload&nbsp;file:</td>
+			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
 			<td style="padding-top: 10px;"><input name="uploadfile" type="file">
-			<input type="submit" value="Send"></td>
+			<input type="submit" value="<?php echo lang('send')?>"></td>
 		</tr>
 		<tr>
-			<td align="right">Create&nbsp;New&nbsp;Folder:</td>
-			<td><input type="text" name="newdir"><input type="submit" name="newdirsubmit" value="Create"></td>
+			<td align="right"><?php echo lang('createnewfolder')?>:</td>
+			<td><input type="text" name="newdir"><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>"></td>
 		</tr>
 	</table>
-	<input type="hidden" name="reldir" value="<?=$reldir?>">
+	<input type="hidden" name="reldir" value="<?php echo $reldir?>">
 </form>
-<?
+<?php
 }
 
 

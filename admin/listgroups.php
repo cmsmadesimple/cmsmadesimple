@@ -25,7 +25,7 @@ check_login();
 include_once("header.php");
 
 ?>
-<h3><?=$gettext->gettext("Current Groups")?></h3>
+<h3><?php echo lang('currentgroups')?></h3>
 <?php
 
 	$userid = get_userid();
@@ -41,8 +41,8 @@ include_once("header.php");
 
 		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
 		echo "<tr>\n";
-		echo "<td>".$gettext->gettext("Group Name")."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".lang('name')."</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
 		if ($perm)
 			echo "<td width=\"7%\" align=\"center\">&nbsp;</td>\n";
 		if ($assign)
@@ -59,15 +59,15 @@ include_once("header.php");
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$row["group_name"]."</a></td>\n";
-			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?lang('true'):lang('false'))."</td>\n";
 			if ($perm)
-				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".lang('permissions')."</a></td>\n";
 			if ($assign)
-				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".lang('assignments')."</a></td>\n";
 			if ($edit)
-				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow == "row1"?$currow="row2":$currow="row1");
@@ -80,7 +80,7 @@ include_once("header.php");
 if (check_permission($userid, 'Add Group')) {
 ?>
 
-<div class=button><a href="addgroup.php"><?=$gettext->gettext("Add New Group")?></a></div><br>
+<div class=button><a href="addgroup.php"><?php echo lang('addgroup')?></a></div><br>
 
 <?php
 }

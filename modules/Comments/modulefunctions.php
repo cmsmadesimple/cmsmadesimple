@@ -131,18 +131,18 @@ function comments_module_executeuser($cms, $id, $return_id, $params) {
 	<table>
 		<tr>
 			<td>Your name:</td>
-			<td><input type="text" name="<?=$id?>author" value="<?=$author?>" /></td>
+			<td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" /></td>
 		</tr>
 		<tr>
 			<td>Comment:</td>
-			<td><textarea rows="6" cols="40" name="<?=$id?>content"><?=$content?></textarea></td>
+			<td><textarea rows="6" cols="40" name="<?php echo $id?>content"><?php echo $content?></textarea></td>
 		</tr>
 		<tr>
-			<td>&nbsp;<input type="hidden" name="<?=$id?>action" value="contadd" /></td>
-			<td><input type="submit" name="<?=$id?>submitcomment" value="Submit" /><input type="submit" name="<?=$id?>cancelcomment" value="Cancel" /></td>
+			<td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="contadd" /></td>
+			<td><input type="submit" name="<?php echo $id?>submitcomment" value="Submit" /><input type="submit" name="<?php echo $id?>cancelcomment" value="Cancel" /></td>
 		</tr>
 	</table>
-	<?
+	<?php
 
 	echo cms_mapi_create_user_form_end();
 
@@ -160,7 +160,7 @@ function comments_module_help($cms)
 	<h3>What parameters are there?</h3>
 	<p>There are none.</p>
 
-	<?
+	<?php
 
 }
 
@@ -172,7 +172,7 @@ function comments_module_about() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 # vim:ts=4 sw=4 noet

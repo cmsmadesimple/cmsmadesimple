@@ -36,7 +36,7 @@ function smarty_cms_help_function_current_date() {
 		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
 	</ul>
 	</p>
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_current_date() {
@@ -47,6 +47,6 @@ function smarty_cms_about_function_current_date() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 ?>

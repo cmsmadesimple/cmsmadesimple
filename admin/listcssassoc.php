@@ -57,10 +57,10 @@ $csslist = array();
 
 # getting variables
 if (isset($_GET["type"])) $type	= $_GET["type"] ;
-else $error = $gettext->gettext("Type is not valid!");
+else $error = lang('typenotvalid');
 
 if (isset($_GET["id"]))	$id	= $_GET["id"] ;
-else $error = $gettext->gettext("ID is not valid!");
+else $error = lang('idnotvalid');
 
 # if type is template, we get the name
 if ("template" == $type) 
@@ -76,7 +76,7 @@ if ("template" == $type)
 	}
 	else
 	{
-		$error = $gettext->gettext("Error getting template name!");
+		$error = lang('errorretrievingtemplate');
 	}
 }
 
@@ -97,7 +97,7 @@ if ("" != $error)
 #******************************************************************************
 ?>
 
-<h3><?=$gettext->gettext("Current CSS associations")?> - <?=$type?> : <?=$name?></h3>
+<h3><?php echo lang('currentassociations')?> - <?php echo $type?> : <?php echo $name?></h3>
 
 <?php
 
@@ -120,7 +120,7 @@ if ("" != $error)
 		# table header
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".$gettext->gettext("Title")."</td>\n";
+		echo "<td>".lang('title')."</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 
@@ -140,7 +140,7 @@ if ("" != $error)
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".('delete')."\" title=\"".('delete')."\"></a></td>\n";
 			}
 			else
 			{
@@ -202,9 +202,9 @@ if ("" != $error)
 
 ?>
 
-<input type="hidden" name="id" value="<?=$id?>"/>
-<input type="hidden" name="type" value="<?=$type?>"/>
-<input type="submit" value="<?=$gettext->gettext("Add CSS")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="hidden" name="id" value="<?php echo $id?>">
+<input type="hidden" name="type" value="<?php echo $type?>">
+<input type="submit" value="<?php echo lang('addcss')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 </form>
 
 <?
@@ -212,7 +212,7 @@ if ("" != $error)
 	} # end of if has right to add
 	else
 	{
-		echo $gettext->gettext("You do not have the right to add CSS association!");
+		echo lang('noaccessto', array(lang('addcssassocation')));
 	}
 
 include_once("footer.php");

@@ -68,6 +68,11 @@ class CmsObject {
 	 */
 	var $bbcodeparser;
 
+	/**
+	 * Translator object - for i18n support
+	 */
+	var $trans;
+
 }
 
 # vim:ts=4 sw=4 noet

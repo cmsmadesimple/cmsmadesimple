@@ -3,6 +3,8 @@ Version 0.6 -- Subversion
 
 * Added User Defined Tags (user defined php code editable in the admin)
 * Changed layout of add and edit content pages to make for less scrolling
+* Removed gettext and instead are using a homegrown system with less weird
+dependencies and is easier to create new translations
 
 Version 0.5.1 -- Wed Aug 25 2004
 -----------------

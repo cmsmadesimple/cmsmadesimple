@@ -73,7 +73,7 @@ function smarty_cms_help_function_bulletmenu() {
 	</ul>
 	</p>
 
-	<?
+	<?php
 }
 
 function smarty_cms_about_function_bulletmenu() {
@@ -84,7 +84,7 @@ function smarty_cms_about_function_bulletmenu() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 # vim:ts=4 sw=4 noet

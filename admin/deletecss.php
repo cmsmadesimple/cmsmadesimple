@@ -75,7 +75,7 @@ if (isset($_GET["css_id"]))
 		else
 		{
 			$dodelete = false;
-			$error = $gettext->gettext("Error getting the CSS name");
+			$error = lang('errorgettingcssname');
 		}
 
 		# we test on dodelete only to avoid too many queries
@@ -88,7 +88,7 @@ if (isset($_GET["css_id"]))
 			if ($result && $result->RowCount())
 			{
 				$dodelete = false;
-				$error =  $gettext->gettext("This CSS is still used by templates or pages. Please remove those association first!");
+				$error =  lang('errorcssinuse');
 			}
 		}
 
@@ -105,7 +105,7 @@ if (isset($_GET["css_id"]))
 			else
 			{
 				$dodelete = false;
-				$error = $gettext->gettext("Error deleting CSS!");
+				$error = lang('errordeletingcss');
 			}
 		} # end of deletion
 	} # end of if access
@@ -114,14 +114,14 @@ if (isset($_GET["css_id"]))
 	else
 	{
 		$dodelete = false;
-		$error = $gettext->gettext("You do not have the right to delete CSS");
+		$error = lang('noaccessto',array(lang('deletecss')));
 	}
 } # end of isset params
 
 else
 {
 	$dodelete = false;
-	$error = $gettext->gettext("The CSS ID is not valid!");
+	$error = lang('idnotvalid');
 }
 
 #******************************************************************************

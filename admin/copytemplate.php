@@ -45,13 +45,13 @@ if ($access) {
 
 		$validinfo = true;
 		if ($template == "") {
-			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven',array(lang('name')))."</li>";
 			$validinfo = false;
 		} else {
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 			if ($result && $result->RowCount() > 0) {
-				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
+				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
 			}
 		}
@@ -77,7 +77,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error copying template!")."</li>";
+				$error .= "<li>".lang('errorcopyingtemplate')."</li>";
 			}
 		}
 
@@ -87,7 +87,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access To Copy Templates")."</h3>";
+	print "<h3>".lang('noaccessto',array(lang('copytemplate')))."</h3>";
 }
 else {
 
@@ -101,18 +101,18 @@ else {
 
 <div class="adminformSmall">
 
-<h3><?=$gettext->gettext("Copy Template")?></h3>
+<h3><?php echo lang('copytemplate')?></h3>
 
 <table border="0">
 
 	<tr>
-		<td><?=$gettext->gettext("New Template Name")?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?=$template?>"></td>
+		<td><?php echo lang('newtemplatename')?>:</td>
+		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?=$template_id?>"><input type="hidden" name="copytemplate" value="true">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?php echo $template_id?>"><input type="hidden" name="copytemplate" value="true">
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

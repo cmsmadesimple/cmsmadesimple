@@ -86,15 +86,13 @@ if ($action == "showmoduleabout")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		$gettext->setVar("module", $module);
-		echo "<h2>".$gettext->gettext('About the ${module} module')."</h2>";
-		$gettext->reset();
+		echo "<h2>".lang('moduleabout', array($module))."</h2>";
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
+		<p><input type="submit" value="<?php echo lang('backtoplugins')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
-		<?
+		<?php
 		echo "</div>";
 	}
 }
@@ -106,15 +104,13 @@ else if ($action == "showmodulehelp")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		$gettext->setVar("module", $module);
-		echo "<h2>".$gettext->gettext('Help for ${module} module')."</h2>";
-		$gettext->reset();
+		echo "<h2>".lang('modulehelp', array($module))."</h2>";
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
+		<p><input type="submit" value="<?php echo lang('backtoplugins')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
-		<?
+		<?php
 		echo "</div>";
 	}
 }
@@ -127,22 +123,20 @@ else if ($action == "showpluginhelp")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		$gettext->setVar("plugin", $plugin);
-		echo "<h2>".$gettext->gettext('Help for ${plugin} tag')."</h2>";
-		$gettext->reset();
+		echo "<h2>".lang('pluginhelp', array($plugin))."</h2>";
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
+		<p><input type="submit" value="<?php echo lang('backtoplugins')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
-		<?
+		<?php
 		echo "</div>";
 	}
 	else
 	{
 		?>
 		<p>No help text available for this plugin.</p>
-		<?
+		<?php
 	}
 }
 else if ($action == "showpluginabout")
@@ -154,29 +148,27 @@ else if ($action == "showpluginabout")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		$gettext->setVar("plugin", $plugin);
-		echo "<h2>".$gettext->gettext('About the ${plugin} tag')."</h2>";
-		$gettext->reset();
+		echo "<h2>".lang('pluginabout', array($plugin))."</h2>";
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
+		<p><input type="submit" value="<?php echo lang('backtoplugins')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
-		<?
+		<?php
 		echo "</div>";
 	}
 	else
 	{
 		?>
 		<p>No about text available for this tag.</p>
-		<?
+		<?php
 	}
 }
 else
 {
 
 	if ($action != "" && !$access) {
-		echo "<p class=\"error\">".$gettext->gettext("You need the 'Modify Modules' permission to perform that function.")."</p>";
+		echo "<p class=\"error\">".lang("You need the 'Modify Modules' permission to perform that function.")."</p>";
 	}
 
 	if (count($gCms->modules) > 0) {
@@ -192,20 +184,20 @@ else
 ?>
 
 
-	<h3><?=$gettext->gettext("Modules")?></h3>
+	<h3><?php echo lang('modules')?></h3>
 
 	<table cellspacing="0" class="admintable">
 		<tr>
-			<td><?=$gettext->gettext("Module Name")?></td>
-			<td width="10%"><?=$gettext->gettext("Version")?></td>
-			<td width="10%"><?=$gettext->gettext("Status")?></td>
-			<td width="10%"><?=$gettext->gettext("Active")?></td>
-			<td width="10%"><?=$gettext->gettext("Action")?></td>
-			<td width="10%"><?=$gettext->gettext("Help")?></td>
-			<td width="10%"><?=$gettext->gettext("About")?></td>
+			<td><?php echo lang('name')?></td>
+			<td width="10%"><?php echo lang('version')?></td>
+			<td width="10%"><?php echo lang('status')?></td>
+			<td width="10%"><?php echo lang('active')?></td>
+			<td width="10%"><?php echo lang('action')?></td>
+			<td width="10%"><?php echo lang('help')?></td>
+			<td width="10%"><?php echo lang('about')?></td>
 		</tr>
 
-<?
+<?php
 
 		$curclass = "row1";
 
@@ -215,18 +207,18 @@ else
 			echo "<td>$key</td>\n";
 			if (!isset($dbm[$key])) { #Not installed, lets put up the install button
 				echo "<td>".$gCms->modules[$key]['Version']."</td>";
-				echo "<td>".$gettext->gettext("Not Installed")."</td>";
+				echo "<td>".lang('notinstalled')."</td>";
 				echo "<td>&nbsp;</td>";
-				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".$gettext->gettext("Install")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
 			} else { #Must be installed
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".$dbm[$key]['Status']."</td>";
-				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
-				echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
+				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".lang('true')."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".lang('false')."</a>")."</td>";
+				echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
 			}
 			if (isset($gCms->modules[$key]['help_function']))
 			{
-				echo "<td><a href=\"plugins.php?action=showmodulehelp&amp;module=".$key."\">".$gettext->gettext("Help")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a></td>";
 			}
 			else
 			{
@@ -234,7 +226,7 @@ else
 			}
 			if (isset($gCms->modules[$key]['about_function']))
 			{
-				echo "<td><a href=\"plugins.php?action=showmoduleabout&amp;module=".$key."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a></td>";
 			}
 			else
 			{
@@ -250,18 +242,18 @@ else
 
 </table>
 
-	<h3><?=$gettext->gettext("Tags")?></h3>
+	<h3><?php echo lang('tags')?></h3>
 
 	<table cellspacing="0" class="admintable">
 		<tr>
-			<td><?=$gettext->gettext("Tag Name")?></td>
+			<td><?php echo lang('name')?></td>
 			<td width="16">&nbsp;</td>
 			<td width="16">&nbsp;</td>
-			<td width="8%"><?=$gettext->gettext("Help")?></td>
-			<td width="8%"><?=$gettext->gettext("About")?></td>
+			<td width="8%"><?php echo lang('help')?></td>
+			<td width="8%"><?php echo lang('about')?></td>
 		</tr>
 
-<?
+<?php
 
 		$curclass = "row1";
 
@@ -270,7 +262,7 @@ else
 			echo "<tr class=\"$curclass\">\n";
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td>$oneplugin (".$gettext->gettext('User').")</td>\n";
+				echo "<td>$oneplugin (".lang('user').")</td>\n";
 			}
 			else
 			{
@@ -278,7 +270,7 @@ else
 			}
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".gettext("Edit")."\" alt=\"".gettext("Edit")."\"></a></td>\n";
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".lang('edit')."\" alt=\"".lang('edit')."\"></a></td>\n";
 			}
 			else
 			{
@@ -286,7 +278,7 @@ else
 			}
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\" title=\"".gettext("Delete")."\"></a></td>\n";
+				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
 			}
 			else
 			{
@@ -294,7 +286,7 @@ else
 			}
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"plugins.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
 			}
 			else
 			{
@@ -302,7 +294,7 @@ else
 			}
 			if (function_exists('smarty_cms_about_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"plugins.php?action=showpluginabout&amp;plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginabout&amp;plugin=".$oneplugin."\">".lang('about')."</a></td>";
 			}
 			else
 			{
@@ -318,9 +310,9 @@ else
 
 </table>
 
-<div class="button"><a href="adduserplugin.php"><?=$gettext->gettext("Add User Defined Tag")?></a></div>
+<div class="button"><a href="adduserplugin.php"><?php echo lang('addusertag')?></a></div>
 
-	<?
+	<?php
 
 	}
 

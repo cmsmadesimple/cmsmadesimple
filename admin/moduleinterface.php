@@ -41,9 +41,9 @@ if (count($gCms->modules) > 0) {
 
 ?>
 
-	<h3><?=$module?> Interface</h3>
+	<h3><? echo lang('moduleinterface', array($module))?></h3>
 
-<?
+<?php
 
 	if (isset($gCms->modules[$module])) {
 		@ob_start();

@@ -16,26 +16,47 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-#NLS (National Language System) array.
+/**
+ * Translation functions/classes
+ *
+ * @package CMS
+ */
 
-#The basic idea and values was taken from then Horde Framework (http://horde.org)
-#The original filename was horde/config/nls.php.
-#The modifications to fit it for Gallery were made by Jens Tkotz
-#(http://gallery.meanalto.com) 
+function lang($name, $params = array(), $realm='admin')
+{
+	global $lang;
 
-#Ideas from Gallery's implementation made to CMS by Ted Kulp
+	if (isset($lang[$realm][$name]))
+	{
+		if (isset($params))
+		{
+			return vsprintf($lang[$realm][$name], $params);
+		}
+		else
+		{
+			return $lang[$realm][$name];
+		}
+	}
+	else
+	{
+		return "--Add Me - $name --";
+	}
+}
 
-#Native language name
-$nls['language']['fr_FR'] = 'Fran&#231;ais';
+function get_encoding()
+{
+	global $nls;
+	global $current_language;
 
-#Possible aliases for language
-$nls['alias']['fr'] = 'fr_FR';
-$nls['alias']['french'] = 'fr_FR' ;
-$nls['alias']['fra'] = 'fr_FR' ;
-$nls['alias']['fr_BE'] = 'fr_FR' ;
-$nls['alias']['fr_CA'] = 'fr_FR' ;
-$nls['alias']['fr_LU'] = 'fr_FR' ;
-$nls['alias']['fr_CH'] = 'fr_FR' ;
-$nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
+	if (isset($nls['encoding'][$current_language]))
+	{
+		return $nls['encoding'][$current_language];
+	}
+	else
+	{
+		return "UTF-8"; //can't hurt
+	}
+}
 
+# vim:ts=4 sw=4 noet
 ?>

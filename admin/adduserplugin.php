@@ -43,17 +43,17 @@ if ($access) {
 
 		$validinfo = true;
 		if ($plugin_name == "") {
-			$error .= "<li>".$gettext->gettext("No plugin name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven',array(lang('name')))."</li>";
 			$validinfo = false;
 		}
 		if ($code == "") {
-			$error .= "<li>".$gettext->gettext("No code entered!")."</li>";
+			$error .= "<li>".lang('nofieldgiven',array(lang('code')))."</li>";
 			$validinfo = false;
 		}
 		srand();
 		if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
 		{
-			$error .= "<li>".$gettext->gettext("Invalid code entered!  Remember, this is the inside of a function.")."</li>";
+			$error .= "<li>".lang('invalidcode')."</li>";
 			$validinfo = false;
 		}
 
@@ -67,7 +67,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error inserting user tag!")."</li>";
+				$error .= "<li>".lang('errorinsertingtag')."</li>";
 			}
 		}
 	}
@@ -76,7 +76,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access to Add Plugin")."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('addusertag')))."</h3>";
 }
 else {
 	if ($error != "") {
@@ -88,22 +88,22 @@ else {
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Add Tag")?></h3>
+<h3><?php echo lang('addusertag')?></h3>
 
 <table width="100%" border="0">
 	<tr>
-		<td width="60">*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" class="standard"/></td>
+		<td width="60">*<?php echo lang('name')?>:</td>
+		<td><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" class="standard"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Code")?></td>
-		<td><textarea name="code" cols="50" rows="10"><?=$code?></textarea></td>
+		<td>*<?php echo lang('code')?></td>
+		<td><textarea name="code" cols="50" rows="10"><?php echo $code?></textarea></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="addplugin" value="true">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 

@@ -69,22 +69,18 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access to Modify Group Permissions")."</h3>";
+	print "<h3>".lang('noaccessto',array(lang('modifygrouppermissions')))."</h3>";
 }
 else {
 
-	$gettext->setVar('group_name', $group_name);
-
 ?>
-<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
+<h3><?php echo lang('permissionsforgroup',array($group_name))?></h3>
 
 <form method="post" action="changegroupperm.php">
 
 <div class="adminformSmall">
 
 <?php
-
-	$gettext->reset();
 
 	$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
 	$result = $db->Execute($query);
@@ -125,9 +121,9 @@ else {
 
 ?>
 
-<tr><td><br><input type="hidden" name="group_id" value="<?=$group_id?>">
-<input type="submit" name="changeperm" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></tr>
+<tr><td><br><input type="hidden" name="group_id" value="<?php echo $group_id?>">
+<input type="submit" name="changeperm" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></tr>
 </table>
 
 </div>

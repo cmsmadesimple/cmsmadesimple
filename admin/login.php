@@ -44,7 +44,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		return;
 	}
 	else {
-		$error .= "<p>".$gettext->gettext("Username or Password incorrect!")."</p>";
+		$error .= "<p>".lang('usernameincorrect')."</p>";
 	}
 
 }
@@ -75,16 +75,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 <img src="../images/cms/cmslogo.png" border="0" alt="CMS Made Simple" align="right" >
 <table border="0" id="table">
 	<tr>
-		<td align="right"><?=$gettext->gettext("Username")?>:</td>
+		<td align="right"><?=lang('username')?>:</td>
 		<td><input type="text" id="username" name="username" value="<?=(isset($_POST["username"])?$_POST["username"]:"")?>" size="15"></td>
 	</tr>
 	<tr>
-		<td align="right"><?=$gettext->gettext("Password")?>:</td>
+		<td align="right"><?=lang('password')?>:</td>
 		<td><input type="password" id="password" name="password" size="15" ></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" ></td>
+		<td><input type="submit" value="<?=lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </form>

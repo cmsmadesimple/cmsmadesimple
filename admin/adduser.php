@@ -49,17 +49,17 @@ if (isset($_POST["adduser"])) {
 
 	if ($user == "") {
 		$validinfo = false;
-		$error .= "<li>".$gettext->gettext("No username given!")."</li>";
+		$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
 	}
 
 	if ($password == "") {
 		$validinfo = false;
-		$error .= "<li>".$gettext->gettext("No password given!")."</li>";
+		$error .= "<li>".lang('nofieldgiven', array(lang('password')))."</li>";
 	}
 	else if ($password != $passwordagain) {
 		#We don't want to see this if no password was given
 		$validinfo = false;
-		$error .= "<li>".$gettext->gettext("Passwords do not match!")."</li>";
+		$error .= "<li>".lang('nopasswordmatch')."</li>";
 	}
 
 	if ($validinfo) {
@@ -73,7 +73,7 @@ if (isset($_POST["adduser"])) {
 			return;
 		}
 		else {
-			$error .= "<li>".$gettext->gettext("Error inserting user!")."</li>";
+			$error .= "<li>".lang('errorinsertinguser')."</li>";
 		}
 	}
 }
@@ -90,40 +90,40 @@ if ($error != "") {
 
 <div class="adminformSmall">
 
-<h3><?=$gettext->gettext("Add User")?></h3>
+<h3><?php echo lang('adduser')?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="user" maxlength="255" value="<?=$user?>" class="standard"/></td>
+		<td>*<?php echo lang('name')?>:</td>
+		<td><input type="text" name="user" maxlength="255" value="<?php echo $user?>" class="standard"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Password")?>:</td>
+		<td>*<?php echo lang('password')?>:</td>
 		<td><input type="password" name="password" maxlength="255" value="" class="standard"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Password (again)")?>:</td>
+		<td>*<?php echo lang('passwordagain')?>:</td>
 		<td><input type="password" name="passwordagain" maxlength="255" value="" class="standard"></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content")?>:</td>
+		<td><?php echo lang('usewysiwyg')?>:</td>
 		<td>
 			<select name="use_wysiwyg">
-				<option value="1" <?= ($use_wysiwyg=="1"?"selected":"") ?>>True</option>
-				<option value="0" <?= ($use_wysiwyg=="0"?"selected":"") ?>>False</option>
+				<option value="1" <?php echo (isset($use_wysiwyg) && $use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
+				<option value="0" <?php echo (isset($use_wysiwyg) && $use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="adduser" value="true">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

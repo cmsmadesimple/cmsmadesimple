@@ -76,7 +76,7 @@ function rss_module_help($cms)
 	</ul>
 	</p>
 
-	<?
+	<?php
 
 }
 
@@ -88,7 +88,7 @@ function rss_module_about() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 # vim:ts=4 sw=4 noet

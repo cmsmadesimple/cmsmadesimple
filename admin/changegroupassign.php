@@ -68,14 +68,12 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access to Modify Group Assignments")."</h3>";
+	print "<h3>".lang('noaccessto',array(lang('modifygroupassignments')))."</h3>";
 }
 else {
 
-	$gettext->setVar('group_name', $group_name);
-
 ?>
-<h3><?=$gettext->gettext('Users assigned to group: ${group_name}')?></h3>
+<h3><?php echo lang('usersassignedtogroup',array($group_name))?></h3>
 
 <form method="post" action="changegroupassign.php">
 
@@ -121,9 +119,9 @@ else {
 
 ?>
 
-<tr><td><br><input type="hidden" name="group_id" value="<?=$group_id?>">
-<input type="submit" name="changeassign" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td></tr>
+<tr><td><br><input type="hidden" name="group_id" value="<?php echo $group_id?>">
+<input type="submit" name="changeassign" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td></tr>
 </table>
 </div>
 

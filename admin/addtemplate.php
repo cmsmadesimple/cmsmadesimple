@@ -54,19 +54,19 @@ if ($access) {
 		$validinfo = true;
 
 		if ($template == "") {
-			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
+			$error .= "<li>".lang("nofieldgiven",array(lang('name')))."</li>";
 			$validinfo = false;
 		} else {
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 
 			if ($result && $result->RowCount() > 0) {
-				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
+				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
 			}
 		}
 		if ($content == "") {
-			$error .= "<li>".$gettext->gettext("No template content entered!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
@@ -80,7 +80,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error inserting template")."$query</li>";
+				$error .= "<li>".lang('errorinsertingtemplate')."$query</li>";
 			}
 		}
 	}
@@ -89,7 +89,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".$gettext->gettext("No Access to Add Templates")."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('addtemplate')))."</h3>";
 }
 else {
 
@@ -111,9 +111,9 @@ else {
 		fclose($handle);
 
 ?>
-<h3><?=$gettext->gettext("Preview")?></h3>
+<h3><?php echo lang('preview')?></h3>
 
-<iframe name="previewframe" width="100%" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(basename($tmpfname))?>">
+<iframe name="previewframe" width="100%" height="400" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>">
 
 </iframe>
 <?php
@@ -126,32 +126,32 @@ else {
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Add Template")?></h3>
+<h3><?php echo lang('addtemplate')?></h3>
 
 <table width="100%" border="0">
 
 	<tr>
-		<td width="100">*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?=$template?>"></td>
+		<td width="100">*<?php echo lang('name')?>:</td>
+		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="content" cols="90" rows="18" style="width: 100%;"><?=$content?></textarea></td>
+		<td>*<?php echo lang('content')?>:</td>
+		<td><textarea name="content" cols="90" rows="18" style="width: 100%;"><?php echo $content?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Stylesheet")?>:</td>
-		<td><textarea name="stylesheet" cols="90" rows="18" style="width: 100%;"><?=$stylesheet?></textarea></td>
+		<td><?php echo lang('stylesheet')?>:</td>
+		<td><textarea name="stylesheet" cols="90" rows="18" style="width: 100%;"><?php echo $stylesheet?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="addtemplate" value="true">
-		<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>
@@ -160,11 +160,11 @@ else {
 
 </form>
 
-<h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
+<h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</h4>
 <div id="helparea" class="expand">
 <?php
-echo "<p>".$gettext->gettext("A template is what controls the look and feel of your site's content.")."</p>";
-echo "<p>".$gettext->gettext("Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.")."</p>";
+echo "<p>".lang("A template is what controls the look and feel of your site's content.")."</p>";
+echo "<p>".lang("Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.")."</p>";
 ?>
 </div>
 <?php

@@ -90,7 +90,7 @@ if ($access)
 		# check if the name is valid
 		if ("" == $css_name)
 		{
-			$error .= "<li>".$gettext->gettext("No CSS name given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 		}
 
@@ -102,7 +102,7 @@ if ($access)
 
 			if ($result && $result->RowCount() > 0)
 			{
-				$error .= "<li>".$gettext->gettext("CSS name already in use!")."</li>";
+				$error .= "<li>".lang('cssalreadyused')."</li>";
 				$validinfo = false;
 			}
 		}
@@ -110,7 +110,7 @@ if ($access)
 		# then check if css has content
 		if ("" == $css_text)
 		{
-			$error .= "<li>".$gettext->gettext("No CSS content given!")."</li>";
+			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
@@ -143,7 +143,7 @@ if ($access)
 
 						if (FALSE == $result)
 						{
-							$error .= "<li>".$gettext->gettext("Error updating template!")."</li>";
+							$error .= "<li>".lang('errorupdatingtemplate')."</li>";
 						}
 					}
 				}
@@ -153,7 +153,7 @@ if ($access)
 			}
 			else
 			{
-				$error .= "<li>".$gettext->gettext("Error updating CSS!")."</li>";
+				$error .= "<li>".lang('errorupdatingcss')."</li>";
 			}
 		} # end of updating
 	} # end of the user has submitted
@@ -167,7 +167,7 @@ if ($access)
 		$result = $db->Execute($query);
 
 		# we put the content in vars
-		if ($result)
+		if ($result && $result->RowCount() > 0)
 		{
 			$row = $result->FetchRow();
 			$css_name		= $row["css_name"];
@@ -176,7 +176,7 @@ if ($access)
 		}
 		else
 		{
-			$error .= "<li>".$gettext->gettext("Error getting CSS!")."</li>";
+			$error .= "<li>".lang('errorretrievingcss')."</li>";
 		}
 	} # end of getting css
 } # end of has access
@@ -186,7 +186,7 @@ include_once("header.php");
 # if the user has no acess, we display an error
 if (!$access)
 {
-	print "<h3>".$gettext->gettext("No Access To Edit CSS")."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('editcss')))."</h3>";
 }
 
 # else, we can display the form
@@ -203,28 +203,28 @@ else
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Edit CSS")?></h3>
+<h3><?php echo lang('editcss')?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("CSS Name")?>:</td>
+		<td>*<?php echo lang('name')?>:</td>
 		<td>
-			<input type="text" name="css_name" maxlength="25" value="<?=$css_name?>">
-			<input type="hidden" name="orig_css_name" value="<?=$orig_css_name?>">
+			<input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>">
+			<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>">
 		</td>
 	</tr>
 	<tr>
-		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="css_text" cols="90" rows="18"><?=htmlentities($css_text)?></textarea></td>
+		<td>*<?php echo lang('content')?>:</td>
+		<td><textarea name="css_text" cols="90" rows="18"><?php echo htmlentities($css_text)?></textarea></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="css_id" value="<?=$css_id?>">
+			<input type="hidden" name="css_id" value="<?php echo $css_id?>">
 			<input type="hidden" name="editcss" value="true">
-			<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		</td>
 	</tr>
 

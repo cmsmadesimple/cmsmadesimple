@@ -131,7 +131,7 @@ function news_module_help($cms)
 	</ul>
 	</p>
 
-	<?
+	<?php
 
 }
 
@@ -143,7 +143,7 @@ function news_module_about() {
 	Change History:<br/>
 	None
 	</p>
-	<?
+	<?php
 }
 
 # vim:ts=4 sw=4 noet

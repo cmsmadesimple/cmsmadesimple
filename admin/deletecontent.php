@@ -39,7 +39,7 @@ if (isset($_GET["page_id"])) {
         $result = $db->Execute($query);
         $row = $result->FetchRow();
         if (isset($row["default_page"]) && $row["default_page"] == 1) {
-			redirect("listcontent.php?message=".$gettext->gettext("Cannot delete default page.  Please set another page as default first."));
+			redirect("listcontent.php?message=".lang('errordefaultpage'));
 			exit;
         }
 
@@ -81,7 +81,7 @@ if (isset($_GET["page_id"])) {
 if ($dodelete) {
 	redirect("listcontent.php");
 } else {
-	redirect("listcontent.php?message=".$gettext->gettext("Content still have child contents. Please remove those first."));
+	redirect("listcontent.php?message=".lang('errrochildcontent'));
 }
 
 # vim:ts=4 sw=4 noet

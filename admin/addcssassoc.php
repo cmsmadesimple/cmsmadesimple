@@ -88,7 +88,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 		if ($result && $result->RowCount() > 0)
 		{
-			$error = $gettext->gettext("This CSS association already exists");
+			$error = lang('associationexists');
 			$doadd = false;
 		}
 
@@ -106,7 +106,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			else
 			{
 				$doadd = false;
-				$error = $gettext->gettext("The template is not valid !");
+				$error = lang('invalidtemplate');
 			}
 		}
 
@@ -131,7 +131,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			else
 			{
 				$doadd = false;
-				$error = $gettext->gettext("Error creating CSS association!");
+				$error = lang('errorcreatingassocation');
 			}
 		} # enf od adding query to db
 	} # end of "if has access"
@@ -140,13 +140,13 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 	else
 	{
 		$doadd = false;
-		$error = $gettext->gettext("You do not have the right to create CSS associations");
+		$error = lang('noaccessto', array(lang('addcss')));
 	}
 } # end if vars are set
 else
 {
 	$doadd = false;
-	$error = $gettext->gettext("Some informations where missing!");
+	$error = lang('informationmissing');
 }
 
 #******************************************************************************
@@ -154,11 +154,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("listcssassoc.php?id=$id&type=$type");
+	redirect("listcssassoc.php?id=$id&amp;type=$type");
 }
 else
 {
-	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
+	redirect("listcssassoc.php?id=$id&amp;type=$type&amp;message=$error");
 }
 
 # vim:ts=4 sw=4 noet

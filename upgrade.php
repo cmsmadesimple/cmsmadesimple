@@ -59,7 +59,7 @@ if (!is_writable(dirname(__FILE__)."/config.php"))
 		<input type="submit" name="submitbutton" value="Try Again" />
 	</form>
 	</p>
-	<?
+	<?php
 }
 else
 {
@@ -123,6 +123,6 @@ else
 
 </body>
 </html>
-<?
+<?php
 # vim:ts=4 sw=4 noet
 ?>
