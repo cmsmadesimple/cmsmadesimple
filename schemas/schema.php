@@ -208,6 +208,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		news_id I KEY,
 		news_title C(255),
+		news_cat C(255),
 		news_data X,
 		news_date T,
 		start_time T,

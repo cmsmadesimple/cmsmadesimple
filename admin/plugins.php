@@ -340,6 +340,8 @@ else
 
 <DIV CLASS="button"><A HREF="adduserplugin.php"><?php echo lang('addusertag')?></A></DIV>
 
+<BR />
+
 	<?php
 
 	}
