@@ -122,15 +122,16 @@ class News extends CMSModule
 			case "1.2":
 			case "1.3":
 			case "1.4":
+			case "1.5":
 				$db = $this->cms->db;
 				$dict = NewDataDictionary($db);
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "news_cat C(255)");
 				$dict->ExecuteSQLArray($sqlarray);
-				$current_version = "1.5";
-			case "1.5":
+				$current_version = "1.6";
+			case "1.6":
 				# Setup display template
 				$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
-				$current_version = "1.6";
+				$current_version = "1.7";
 		}
 	}
 
