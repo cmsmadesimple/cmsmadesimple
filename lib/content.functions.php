@@ -397,12 +397,19 @@ function db_get_menu_items($params = array()) {
 			$current_content->username		= $line["username"];
 			$current_content->template_name = $line["template_name"];
 			$current_content->parent_id		= $line["parent_id"];
-			if (isset($line["url"])) {
+			if (isset($line["url"]))
+			{
 				$current_content->url = $line["url"];
 			}
 			
 			# Fix URL where appropriate
-			if ($current_content->page_type != "link") {
+			if ($current_content->page_type == "sectionheader")
+			{
+				$current_content->page_title = $current_content->menu_text;
+				$current_content->url = "";
+			}
+			else if ($current_content->page_type != "link")
+			{
 				if (isset($current_content->page_alias) && $current_content->page_alias != "")
 				{
 					if ($config["assume_mod_rewrite"])
@@ -571,6 +578,7 @@ function get_page_types() {
 	$result['content'] = 'Content';
 	$result['link'] = 'Link';
 	$result['separator'] = 'Separator';
+	$result['sectionheader'] = 'Section Header';
 
 	$installedmodules = array();
 

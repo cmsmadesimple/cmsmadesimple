@@ -94,7 +94,7 @@ if ($access) {
 	if ($submit) {
 
 		$validinfo = true;
-		if ($title == "" && $content_type != "separator") {
+		if ($title == "" && $content_type != "separator" && $content_type != "sectionheader") {
 			$validinfo = false;
 			$error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
 		}
@@ -432,6 +432,41 @@ else {
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>
 		<td><select name="additional_editors[]" multiple size="5"><?php echo $addt_users?></select></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+	</tr>
+</table>
+</div>
+<?php }elseif ($content_type == "sectionheader") { ?>
+<h3><?php echo lang('addlink')?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
+	</tr>
+	<tr>
+		<td>*<?php echo lang('menutext')?>:</td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('showinmenu')?>:</td>

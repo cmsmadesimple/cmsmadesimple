@@ -56,21 +56,45 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	# defining variables
 	$menu = "";
 	$last_level = 0;
+	$count = 0;
+	$in_hr = 0;
 
 	foreach ($content as $one) {
 
-		if ($one->level < $last_level) {
-			for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
+		if ($one->page_type == "sectionheader")
+		{
+			if ($in_hr == 1)
+			{
+				$menu .= "</ul>\n";
+				$in_hr = 0;
+			}
+			$menu .= "<div class=\"sectionheader\">".$one->menu_text."</div>\n";
+			if ($count > 0 && $in_hr == 0)
+			{
+				$menu .= "<ul>\n";
+				$in_hr = 1;
+			}
 		}
-		if ($one->level > $last_level) {
-			for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
+		else
+		{
+			if ($one->level < $last_level) {
+				for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
+			}
+			if ($one->level > $last_level) {
+				for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
+			}
+			if ($one->page_type == "separator")
+			{
+				$menu .= "<hr class=\"separator\"/>\n";
+			}
+			else
+			{
+				$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
+			}
+			$in_hr = 1;
+			$last_level = $one->level;
 		}
-		if ($one->page_type == "separator") {
-			$menu .= "<hr class=\"separator\"/>";
-		} else {
-			$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
-		}
-		$last_level = $one->level;
+		$count++;
 	}
 
 	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
