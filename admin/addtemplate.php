@@ -49,6 +49,9 @@ if (isset($_POST["cancel"]))
 $userid = get_userid();
 $access = check_permission($userid, 'Add Template');
 
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+
 if ($access)
 {
 	if (isset($_POST["addtemplate"]) && !$preview)
@@ -136,10 +139,9 @@ else
 <?php
 
 	}
-
 ?>
 
-<form method="post" action="addtemplate.php">
+<form method="post" action="addtemplate.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
 
 <div class="adminform">
 
@@ -153,11 +155,11 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><textarea name="content" cols="90" rows="18" style="width: 100%;"><?php echo htmlentities($content)?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $content, "content"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><textarea name="stylesheet" cols="90" rows="18" style="width: 100%;"><?php echo $stylesheet?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet") ?></textarea></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>

@@ -229,7 +229,10 @@ if ($access) {
 	if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
 		$htmlarea_flag = true;
 		$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
-	}
+        $use_javasyntax = false;
+    }else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+        $use_javasyntax = true;
+    }
 
     $content_array = array();
     $content_array = db_get_menu_items();
@@ -383,7 +386,7 @@ else {
 
 ?>
 
-<form method="post" action="editcontent.php" name="editform" id="editform">
+<form method="post" action="editcontent.php" name="editform" id="editform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
 
 <?php if ($content_type == "content") { ?>
 <h3><?php echo lang('editcontent')?></h3>
@@ -405,7 +408,9 @@ else {
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" cols="80" rows="24"><?php echo htmlentities($content)?></textarea></td>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br>
+        <?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?>
+        </td>
 	</tr>
 </table>
 
@@ -413,7 +418,7 @@ else {
 <div id="advanced" class="expand">
 	<a id="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?>
-		<textarea rows="4" name="head_tags"><?php echo htmlentities($head_tags) ?></textarea>
+		<?php echo textarea_highlight($use_javasyntax, $head_tags, "head_tags"); ?></textarea>
 	</div>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">

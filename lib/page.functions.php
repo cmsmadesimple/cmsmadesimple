@@ -391,33 +391,34 @@ function & strip_slashes(&$str) {
 
 /*
  * creates a textarea that does syntax highlighting on the source code.
- * This function could be made better if javascript was used to create
- * the syntax highlighting instead of php's highlight_string()
+ * The following also needs to be added to the <form> tag for submit to work.
+ * onSubmit="document.getElementById('content').value =
+ * document.getElementById('syntaxHighlight').getText();"
  */
-function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlight"){
-	/*
-	ini_set("highlight.bg","#FFFFFF"); 
-	ini_set("highlight.comment", "#FF8000"); 
-	ini_set("highlight.default", "#0000BB");
-	ini_set("highlight.html", "#000000");
-	ini_set("highlight.keyword", "#007700");
-	ini_set("highlight.string", "#DD0000");
-
-	$text_highlight = highlight_string("<?$content?>", true);
-	$text_highlight = str_replace("&lt;?", "", $text_highlight);
-	$text_highlight = str_replace("?&gt;","", $text_highlight);
-	$text_highlight = str_replace('\'', '\\\'', $text_highlight);
-	$text_highlight = ereg_replace("\r", '', $text_highlight);
-	$text_highlight = ereg_replace("\n", '', $text_highlight);
-	$content = ereg_replace("\r", ' ', $content);
-
-	echo '<script type="text/javascript" language="Javascript1.2">';
-	echo 'document.write(\'<div id="syntax_highlight" style="border: 1px solid #A5ACB2; overflow: auto;" contenteditable="true" contentEditable="true" onSelect="saveCaret(this)" onClick="syntax_highlight_remove(\\\'onClick\\\', this, \\\''.$textarea_name.'\\\')" onKeyDown="syntax_highlight_remove(\\\'onKeyDown\\\', this, \\\''.$textarea_name.'\\\')" class="'.$class_name.'">'.$text_highlight.'</div>\');';
-	echo '</script>';
-	echo '<textarea name="'.$textarea_name.'" id="plain" rows="24" cols="80" style="border: 1px solid #A5ACB2" class="'.$class_name.'">'.$content.'</textarea>';
-	*/
-	echo '<textarea name="'.$textarea_name.'" rows="24" cols="80">'.htmlentities($content).'</textarea>';
+function textarea_highlight($use_javasyntax, $text, $name,
+    $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id=""){
+            
+    if ($use_javasyntax){
+        $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
+        $text = ereg_replace("\r", "<CMSNewLine>", $text);
+        $text = htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
+                
+        // possible values for syntaxType are: Java, C/C++, LaTeX, SQL, 
+        // Java Properties, HTML (Simple), HTML (Complex)
+        
+        $output = '<applet name="CMSSyntaxHighlight"
+            code="org.CMSMadeSimple.Syntax/Editor.class" 
+            archive="SyntaxHighlight.jar" width="100%">
+                <param name="content" value="'.$text.'">
+                <param name="syntaxType" value="'.$syntax_type.'">
+            </applet>
+            <input type="hidden" name="'.$name.'" value="">';
+    }else{
+        $output = '<textarea name="'.$name.'" cols="80" rows="24" 
+            class="'.$class_name.'" id="'.$id.'">'.htmlentities($text).'</textarea>';
+    }
+    
+    return $output;
 }
-
 # vim:ts=4 sw=4 noet
 ?>

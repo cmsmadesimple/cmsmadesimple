@@ -55,6 +55,9 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Template');
 
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+
 if ($access)
 {
 	if (isset($_POST["edittemplate"]) && !$preview)
@@ -164,7 +167,7 @@ else
 	}
 ?>
 
-<form method="post" action="edittemplate.php" onSubmit="document.getElementById('content').value=document.getElementById('syntaxHighlight').getText();">
+<form method="post" action="edittemplate.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
 
 <div class="adminform">
 
@@ -177,30 +180,16 @@ else
 		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"><input type="hidden" name="orig_template" value="<?php echo $orig_template?>"></td>
 	</tr>
 	<tr>
-		<td>*<?php echo lang('content')?>:</td>
-		<td>
-            <!--if selected in user config...else textarea-->
-            <?php
-            $hcontent = ereg_replace("\r\n", "<CMSNewLine>", $content);
-            $hcontent = ereg_replace("\r", "<CMSNewLine>", $hcontent);
-            $hcontent = htmlentities(ereg_replace("\n", "<CMSNewLine>", $hcontent));
-            ?>
-            <applet id="syntaxHighlight" code="org.CMSMadeSimple.Syntax/Editor.class" archive="SyntaxHighlight.jar" width="100%">
-                <param name="content" value="<?php echo $hcontent; ?>">
-                <param name="syntaxType" value="HTML (Complex)">
-                <!-- possible values for syntaxType are: Java, C/C++, LaTeX, SQL, 
-                Java Properties, HTML (Simple), HTML (Complex) -->
-            </applet>
-            <input type="hidden" id="content" name="content" value="">
-       </td>
+		<td>*<?php echo lang('content'); ?>:</td>
+		<td><?php echo textarea_highlight($use_javasyntax, $content, "content"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><?php textarea_highlight($stylesheet, 'stylesheet', 'syntaxHighlight'); ?></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet") ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"") ?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

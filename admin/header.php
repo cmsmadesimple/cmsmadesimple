@@ -30,61 +30,24 @@ header("Content-Type: text/html; charset=" . get_encoding());
 <LINK rel="stylesheet" type="text/css" href="style.css">
 <SCRIPT type="text/javascript" language="javascript" src="helparea.js"></SCRIPT>
 
-<!--
-<script type="text/javascript" language="Javascript">
-	function silent_error(){
-		return true;
-	}
-	//turn off all javascript errors
-	//window.onerror=silent_error;
-
-	function saveCaret(elem){
-		if (document.selection.createRange){
-			elem.caretPos = document.selection.createRange();
-		}
-	}
-
-	function getCaretPos(elem)
-	{
-		if (elem.caretPos){
-			var bookmark = "~";
-			var orig = elem.value;
-			var caretPos = elem.caretPos;
-			caretPos.text = bookmark;
-			var i = elem.innerText.search( bookmark );
-			elem.value = orig;
-			return i;
-		}
-	}
-
-	function syntax_highlight_remove(called_by, element, plainName){
-		var syntax_highlight = element;
-		var plain;
-
-		for (var j=0; j < document.forms.length; j++) {
-			if (document.forms[j].elements[plainName]) {
-				plain = document.forms[j].elements[plainName];
-			}
-		}
-
-		if (called_by == 'onClick' && !(plain.createTextRange)) {
-			syntax_highlight.style.display='none'; 
-			plain.style.display='block';
-		}else if(called_by == 'onKeyDown' && plain.createTextRange){
-			saveCaret(syntax_highlight);
-			syntax_highlight.style.display='none'; 
-			plain.style.display='block';
-			plain.focus();
-			var pos = getCaretPos(syntax_highlight);
-			var r = plain.createTextRange();
-			r.moveStart('character', pos) ;
-			r.collapse();
-			r.select();
-		}
-	}
-
+<script language="JavaScript" type="text/javascript">
+  //@param form - current form
+  //@param names - string containing a list of the names used for the textarea
+  //               each name should be seperated with a comma
+  function textarea_submit(form, names){
+    var name = names.split(",");
+    var appletName = document.getElementsByName("CMSSyntaxHighlight");
+    
+    for (var i=0; i < name.length; i++){
+        try{
+            form.elements[name[i].toString()].value = appletName[i].getText();
+        }catch(error){
+            alert("error");
+            return;
+        }
+    }
+  }
 </script>
--->
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<SCRIPT type="text/javascript">

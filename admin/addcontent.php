@@ -87,6 +87,9 @@ $templatepostback = "";
 if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
 	$htmlarea_flag = true;
 	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
+    $use_javasyntax = false;
+}else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+    $use_javasyntax = true;
 }
 
 if ($access) {
@@ -284,221 +287,220 @@ else {
 		fclose($handle);
 
 ?>
-<H3><?php echo lang('preview')?></H3>
+<h3><?php echo lang('preview')?></h3>
 
-<IFRAME NAME="previewframe" WIDTH="90%" HEIGHT="400" FRAMEBORDER="0" SRC="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" STYLE="margin: 10px; border: 1px solid #8C8A8C;">
+<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
 
-</IFRAME>
+</iframe>
 <?php
 
 	}
 
 ?>
 
-<FORM METHOD="post" ACTION="addcontent.php" NAME="addform" ID="addform">
+<form method="post" action="addcontent.php" name="addform" id="addform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
 
 <?php if ($content_type == "content") { ?>
-<H3><?php echo lang('addcontent')?></H3>
-<DIV CLASS="adminform">
-<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
-	<TR>
-		<TD>
-			<TABLE CELLPADDING="0" CELLSPACING="0" SUMMARY="" STYLE="margin-top: 0; border: solid 1px #8C8A8C; padding: 5px 5px 10px 5px;" ID="padform">
-				<TR VALIGN="top">
-					<TD VALIGN="top">
+<h3><?php echo lang('addcontent')?></h3>
+<div class="adminform">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td>
+			<table cellpadding="0" cellspacing="0" summary="" style="margin-top: 0; border: solid 1px #8C8A8C; padding: 5px 5px 10px 5px;" id="padform">
+				<tr valign="top">
+					<td valign="top">
 						<?php echo lang('contenttype')?>:<?php echo $ctdropdown?>
-						<?php echo lang('title')?>:&nbsp;<INPUT TYPE="text" NAME="title" MAXLENGTH="80" VALUE="<?php echo $title?>">
-						<SPAN STYLE="white-space: nowrap"><?php echo lang('menutext')?>:&nbsp;<INPUT TYPE="text" NAME="menutext" MAXLENGTH="25" VALUE="<?php echo $menutext?>"></SPAN>
-						<SPAN STYLE="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<INPUT TYPE="text" NAME="alias" MAXLENGTH="65" VALUE="<?php echo $alias?>"></SPAN>
-						<SPAN STYLE="white-space: nowrap"><?php echo lang('template')?>:&nbsp;<?php echo $dropdown2?></SPAN>
+						<?php echo lang('title')?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?php echo $title?>">
+						<span style="white-space: nowrap"><?php echo lang('menutext')?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>"></span>
+						<span style="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?php echo $alias?>"></span>
+						<span style="white-space: nowrap"><?php echo lang('template')?>:&nbsp;<?php echo $dropdown2?></span>
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
-	<TR>
-		<TD STYLE="padding-top: 10px;"><STRONG><?php echo lang('content') ?></STRONG><BR><TEXTAREA ID="content" NAME="content" STYLE="width:100%" COLS="80" ROWS="24"><?php echo htmlentities($content)?></TEXTAREA></TD>
-	</TR>
+	<tr>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br>
+        <?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
+	</tr>
 </table>
 
+<div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?php echo lang('advanced') ?></a></div>
+<div id="advanced" class="expand">
+	<a name="advanced">&nbsp;</a>
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?></div>
+	<?php echo textarea_highlight($use_javasyntax, $head_tags, "head_tags"); ?>
 
-<DIV CLASS="collapseTitle"><A HREF="#advanced" onClick="expandcontent('advanced')" STYLE="cursor:hand; cursor:pointer"><?php echo lang('advanced') ?></A></DIV>
-<DIV ID="advanced" CLASS="expand">
-	<A NAME="advanced">&nbsp;</A>
-	<DIV STYLE="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?></DIV>
-	<TEXTAREA ROWS="4" COLS="80" NAME="head_tags"><?php echo htmlentities($head_tags) ?></TEXTAREA>
-
-
-	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
-		<TR VALIGN="top">
-			<TD VALIGN="top" STYLE="padding-right: 10px;">
-				<DIV STYLE="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('status') ?></DIV>
-				<DIV STYLE="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-					<TABLE WIDTH="100%" BORDER="0"CELLPADDING="0" CELLSPACING="0" SUMMARY="" STYLE=" vertical-align: middle;">
-						<TR VALIGN="top">
-							<TD VALIGN="top"><?php echo lang('showinmenu')?>:</TD>
-							<TD><INPUT TYPE="checkbox" NAME="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></TD>
-						</TR>
-						<TR VALIGN="top" STYLE="padding-top: 5px;">
-							<TD VALIGN="top"><?php echo lang('active')?>:</TD>
-							<TD><INPUT TYPE="checkbox" NAME="active" <?php echo ($active == 1?"checked":"")?>> </TD>
-						</TR>
-						<TR>
-							<TD COLSPAN="2"><?php echo lang('parent')?>:&nbsp;<?php echo $dropdown?></TD>
-						</TR>
-					</TABLE>
-				</DIV>
-			</TD>
+	<table border="0" cellpadding="0" cellspacing="0" summary="">
+		<tr valign="top">
+			<td valign="top" style="padding-right: 10px;">
+				<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('status') ?></div>
+				<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
+						<tr valign="top">
+							<td valign="top"><?php echo lang('showinmenu')?>:</td>
+							<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
+						</tr>
+						<tr valign="top" style="padding-top: 5px;">
+							<td valign="top"><?php echo lang('active')?>:</td>
+							<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>> </td>
+						</tr>
+						<tr>
+							<td colspan="2"><?php echo lang('parent')?>:&nbsp;<?php echo $dropdown?></td>
+						</tr>
+					</table>
+				</div>
+			</td>
 			<?php //if ($adminaccess) { ?>
-			<TD VALIGN="top">
-					<DIV STYLE="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('permission') ?></DIV>
-					<DIV STYLE="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
+			<td valign="top">
+					<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('permission') ?></div>
+					<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
 					<!--<?php echo lang('owner')?>:&nbsp;<?php echo $owners?><br>-->
-					<DIV STYLE="text-align: center;"><?php echo lang('additionaleditors')?>:<BR><SELECT NAME="additional_editors[]" MULTIPLE SIZE="3"><?php echo $addt_users ?></SELECT></DIV>
-					</DIV>
-			</TD>
+					<div style="text-align: center;"><?php echo lang('additionaleditors')?>:<br><select name="additional_editors[]" multiple size="3"><?php echo $addt_users ?></select></div>
+					</div>
+			</td>
 			<?php // } ?>
-		</TR>
-	</TABLE>
-</DIV>
-<BR>
-<INPUT TYPE="hidden" NAME="orig_section_id" VALUE="<?php echo $orig_section_id?>">
-<INPUT TYPE="hidden" NAME="content_change" VALUE="0">
-<INPUT TYPE="hidden" NAME="addcontent" VALUE="true">
-<INPUT TYPE="submit" NAME="preview" VALUE="<?php echo lang('preview')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-<INPUT TYPE="submit" NAME="submitbutton" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-<INPUT TYPE="submit" NAME="cancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-</DIV>
+		</tr>
+	</table>
+</div>
+<br>
+<input type="hidden" name="orig_section_id" value="<?php echo $orig_section_id?>">
+<input type="hidden" name="content_change" value="0">
+<input type="hidden" name="addcontent" value="true">
+<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+</div>
 
 <?php }elseif ($content_type == "separator") { ?>
-<H3><?php echo lang('addseparator')?></H3>
-<DIV CLASS="adminformSmall">
-<INPUT TYPE="hidden" NAME="template_id" VALUE="1">
-<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
-	<TR>
-		<TD><?php echo lang('contenttype')?>:</TD>
-		<TD><?php echo $ctdropdown?></TD>
-	<TR>
-		<TD><?php echo lang('parent')?>:</TD>
-		<TD><?php echo $dropdown?></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('additionaleditors')?>:</TD>
-		<TD><SELECT NAME="additional_editors[]" MULTIPLE SIZE="5"><?php echo $addt_users?></SELECT></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('showinmenu')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('active')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="active" <?php echo ($active == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD>&nbsp;</TD>
-		<TD>
-			<INPUT TYPE="hidden" NAME="content_change" VALUE="0">
-			<INPUT TYPE="hidden" NAME="addcontent" VALUE="true">
-			<INPUT TYPE="submit" NAME="submitbutton" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-			<INPUT TYPE="submit" NAME="cancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
-	</TR>
-</TABLE>
-</DIV>
+<h3><?php echo lang('addseparator')?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
+	<tr>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('additionaleditors')?>:</td>
+		<td><select name="additional_editors[]" multiple size="5"><?php echo $addt_users?></select></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+	</tr>
+</table>
+</div>
 
 
 
 <?php } elseif ($content_type == "link" || $content_type == 'News') { ?>
-<H3><?php echo lang('addlink')?></H3>
-<DIV CLASS="adminformSmall">
-<INPUT TYPE="hidden" NAME="template_id" VALUE="1">
-<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
-	<TR>
-		<TD><?php echo lang('contenttype')?>:</TD>
-		<TD><?php echo $ctdropdown?></TD>
-	<TR>
-		<TD>*<?php echo lang('title')?>:</TD>
-		<TD><INPUT TYPE="text" NAME="title" MAXLENGTH="80" VALUE="<?php echo $title?>" CLASS="standard"></TD>
-	</TR>
-	<TR>
-		<TD>*<?php echo lang('menutext')?>:</TD>
-		<TD><INPUT TYPE="text" NAME="menutext" MAXLENGTH="25" VALUE="<?php echo $menutext?>" CLASS="standard"></TD>
-	</TR>
+<h3><?php echo lang('addlink')?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
+	<tr>
+		<td>*<?php echo lang('title')?>:</td>
+		<td><input type="text" name="title" maxlength="80" value="<?php echo $title?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td>*<?php echo lang('menutext')?>:</td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>" class="standard"></td>
+	</tr>
 	<?php if ($content_type == 'link') { ?>
-	<TR>
-		<TD>*<?php echo lang('url')?>:</TD>
-		<TD><INPUT TYPE="text" NAME="url" MAXLENGTH="65" VALUE="<?php echo $url?>" CLASS="standard"></TD>
-	</TR>
+	<tr>
+		<td>*<?php echo lang('url')?>:</td>
+		<td><input type="text" name="url" maxlength="65" value="<?php echo $url?>" class="standard"></td>
+	</tr>
 	<?php } ?>
-	<TR>
-		<TD><?php echo lang('parent')?>:</TD>
-		<TD><?php echo $dropdown?></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('additionaleditors')?>:</TD>
-		<TD><SELECT NAME="additional_editors[]" MULTIPLE SIZE="5"><?php echo $addt_users?></SELECT></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('showinmenu')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('active')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="active" <?php echo ($active == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD>&nbsp;</TD>
-		<TD>
-			<INPUT TYPE="hidden" NAME="content_change" VALUE="0">
-			<INPUT TYPE="hidden" NAME="addcontent" VALUE="true">
-			<INPUT TYPE="submit" NAME="submitbutton" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-			<INPUT TYPE="submit" NAME="cancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
-	</TR>
-</TABLE>
-</DIV>
+	<tr>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('additionaleditors')?>:</td>
+		<td><select name="additional_editors[]" multiple size="5"><?php echo $addt_users?></select></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+	</tr>
+</table>
+</div>
 <?php }elseif ($content_type == "sectionheader") { ?>
-<H3><?php echo lang('addlink')?></H3>
-<DIV CLASS="adminformSmall">
-<INPUT TYPE="hidden" NAME="template_id" VALUE="1">
-<TABLE WIDTH="100%" BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="">
-	<TR>
-		<TD><?php echo lang('contenttype')?>:</TD>
-		<TD><?php echo $ctdropdown?></TD>
-	</TR>
-	<TR>
-		<TD>*<?php echo lang('menutext')?>:</TD>
-		<TD><INPUT TYPE="text" NAME="menutext" MAXLENGTH="25" VALUE="<?php echo $menutext?>" CLASS="standard"></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('parent')?>:</TD>
-		<TD><?php echo $dropdown?></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('showinmenu')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD><?php echo lang('active')?>:</TD>
-		<TD><INPUT TYPE="checkbox" NAME="active" <?php echo ($active == 1?"checked":"")?>></TD>
-	</TR>
-	<TR>
-		<TD>&nbsp;</TD>
-		<TD>
-			<INPUT TYPE="hidden" NAME="content_change" VALUE="0">
-			<INPUT TYPE="hidden" NAME="addcontent" VALUE="true">
-			<INPUT TYPE="submit" NAME="submitbutton" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-			<INPUT TYPE="submit" NAME="cancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
-	</TR>
-</TABLE>
-</DIV>
+<h3><?php echo lang('addlink')?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td><?php echo lang('contenttype')?>:</td>
+		<td><?php echo $ctdropdown?></td>
+	</tr>
+	<tr>
+		<td>*<?php echo lang('menutext')?>:</td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('parent')?>:</td>
+		<td><?php echo $dropdown?></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('showinmenu')?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?php echo ($showinmenu == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('active')?>:</td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+	</tr>
+</table>
+</div>
 <?php } ?>
 
-</FORM>
+</form>
 
-<DIV CLASS="collapseTitle"><A HREF="#help" onClick="expandcontent('helparea')" STYLE="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</A></DIV>
-<DIV ID="helparea" CLASS="expand">
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
+<div id="helparea" class="expand">
 <?php echo lang('helpaddcontent')?>
-<A NAME="help">&nbsp;</A>
-</DIV>
+<a name="help">&nbsp;</a>
+</div>
 
 
 <?php
