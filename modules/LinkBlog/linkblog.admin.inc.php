@@ -1,6 +1,6 @@
 <?php
-#Bookmarks. A plugin for CMS - CMS Made Simple
-#Copyright (c) 2004 by Rob Allen <rob@akrabat.com>
+#Linkblog. A module for CMS - CMS Made Simple
+#Copyright (c) 2004 by Greg Froese <heavy_g@users.sf.net>
 #
 #CMS- CMS Made Simple is Copyright (c) Ted Kulp (wishy@users.sf.net)
 #

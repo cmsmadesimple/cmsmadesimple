@@ -1,5 +1,7 @@
 <?php
-#CMS - CMS Made Simple
+#Linkblog - a module for CMS - CMS Made Simple
+#Copyright (c) 2004 by Greg Froese <heavy_g@users.sf.net>
+#
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
