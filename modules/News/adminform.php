@@ -109,14 +109,14 @@ if ($error != "") {
 
 <?=cms_mapi_create_admin_form_start("News", $id)?>
 
-<table>
+<table width="100%" border="0">
 	<tr>
-		<td>Title:</td>
-		<td><input name="<?=$id?>newstitle" maxlength="255" value="<?=$title?>" /></td>
+		<td width="60">Title:</td>
+		<td><input name="<?=$id?>newstitle" maxlength="255" value="<?=$title?>" class="standard"/></td>
 	</tr>
 	<tr>
 		<td>Content:</td>
-		<td><textarea id="<?=$id?>newscontent" name="<?=$id?>newscontent" cols="70" rows="12"><?=$data?></textarea></td>
+		<td><textarea id="<?=$id?>newscontent" name="<?=$id?>newscontent" rows="12"><?=$data?></textarea></td>
 	</tr>
 	<tr>
 		<td><?=$hiddenfields?>&nbsp;</td>

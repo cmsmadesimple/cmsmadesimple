@@ -317,49 +317,52 @@ else {
 	</tr>
 </table>
 
-<h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
+<div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></div>
 <div id="advanced" class="expand">
+	<a id="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?></div>
 	<textarea rows="4" name="head_tags"><?=$head_tags ?></textarea>
 
-			<table border="0" cellpadding="0" cellspacing="0" summary="">
-				<tr valign="top">
-					<td valign="top" style="padding-right: 10px;">
-						<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Status") ?></div>
-						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
-								<tr valign="top">
-									<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-									<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
-								</tr>
-								<tr valign="top" style="padding-top: 5px;">
-									<td valign="top"><?=$gettext->gettext("Active")?>:</td>
-									<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
-								</tr>
-									<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
-								</tr>
-							</table>
-						</div>
-					</td>
-					<?php //if ($adminaccess) { ?>
-					<td valign="top">
-								<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Permission") ?></div>
-								<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
-							<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
-							<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
-							</div>
-					</td>
-					<?php // } ?>
-				</tr>
-			</table>
-		</div>
-			<br>
-			<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" />
-			<input type="hidden" name="content_change" value="0" />
-			<input type="hidden" name="addcontent" value="true" />
-			<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
+	<table border="0" cellpadding="0" cellspacing="0" summary="">
+		<tr valign="top">
+			<td valign="top" style="padding-right: 10px;">
+				<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Status") ?></div>
+				<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
+						<tr valign="top">
+							<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
+							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+						</tr>
+						<tr valign="top" style="padding-top: 5px;">
+							<td valign="top"><?=$gettext->gettext("Active")?>:</td>
+							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
+						</tr>
+						<tr>
+							<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<?php //if ($adminaccess) { ?>
+			<td valign="top">
+					<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Permission") ?></div>
+					<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
+					<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
+					<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
+					</div>
+			</td>
+			<?php // } ?>
+		</tr>
+	</table>
+</div>
+<br>
+<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" />
+<input type="hidden" name="content_change" value="0" />
+<input type="hidden" name="addcontent" value="true" />
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
+</div>
 
 <?php }elseif ($content_type == "separator") { ?>
 <h3><?=$gettext->gettext("Add Separator")?></h3>
@@ -448,11 +451,13 @@ else {
 
 </form>
 
-<h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</a></div>
 <div id="helparea" class="expand">
 <p><?php echo $gettext->gettext("This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.") ?></p>
 <p><?php echo $gettext->gettext("You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>") ?>
+<a name="help">&nbsp;</a>
 </div>
+
 
 <?php
 

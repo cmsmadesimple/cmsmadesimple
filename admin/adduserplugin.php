@@ -88,13 +88,12 @@ else {
 
 <div class="adminform">
 
-<h3><?=$gettext->gettext("Add Plugin")?></h3>
+<h3><?=$gettext->gettext("Add Tag")?></h3>
 
-<table border="0">
-
+<table width="100%" border="0">
 	<tr>
-		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" /></td>
+		<td width="60">*<?=$gettext->gettext("Name")?>:</td>
+		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" class="standard"/></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Code")?></td>
@@ -104,7 +103,6 @@ else {
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="addplugin" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
-
 </table>
 
 </div>

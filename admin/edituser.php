@@ -45,6 +45,10 @@ else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User') || ($userid == $user_id);
 
+if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
+else{$use_wysiwyg = get_preference($userid, 'use_wysiwyg');}
+
+
 if ($access) {
 
 	if (isset($_POST["cancel"])) {
@@ -67,6 +71,9 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+			set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User');
+
 			$query = "UPDATE ".cms_db_prefix()."users SET username=".$db->qstr($user).", ";
 			if ($password != "") {
 				$query .= "password='".md5($password)."', ";
@@ -139,8 +146,16 @@ else {
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="user_id" value="<?=$user_id?>" /><input type="hidden" name="edituser" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
+		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content")?>:</td>
+		<td>
+			<select name="use_wysiwyg">
+				<option value="1" <?= ($use_wysiwyg=="1"?"selected":"") ?>>True</option>
+				<option value="0" <?= ($use_wysiwyg=="0"?"selected":"") ?>>False</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?=$user_id?>" /><input type="hidden" name="edituser" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

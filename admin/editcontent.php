@@ -409,8 +409,9 @@ else {
 	</tr>
 </table>
 
-<h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
+<div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></div>
 <div id="advanced" class="expand">
+	<a id="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?>
 		<textarea rows="4" name="head_tags"><?=$head_tags ?></textarea>
 	</div>
@@ -554,13 +555,15 @@ else {
 </div>
 </form>
 
-<h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
+<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</a></div>
 <div id="helparea" class="expand">
 <?php
 	echo "<p>".$gettext->gettext("This page allows you to change the actual content of your page, the parent of this piece of content used for generating the menu. You can also change the text that actually appears in the menu, the title of the page, change the owner, and assign additional editors to the selected piece of content.")."</p>";
 	echo "<p>".$gettext->gettext("If you choose to use the page alias, the links created by the automated menu will be more readable using the page alias as the argument rather than the internally defined page id number.")."</p>";
 ?>
+<a name="help">&nbsp;</a>
 </div>
+
 <?php
 
 }

@@ -103,11 +103,11 @@ else {
 
 <h3><?=$gettext->gettext("Edit Plugin")?></h3>
 
-<table border="0">
+<table width="100%" border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" /></td>
+		<td width="60">*<?=$gettext->gettext("Name")?>:</td>
+		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Code")?></td>

@@ -5,9 +5,10 @@ a:link, a:active, a:visited {color: #64879D; text-decoration : none;}
 a:hover {color: red; text-decoration: none;}
 
 /* titles */
-h1, h2, h3, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; text-align: left;}
+h1, h2, h3, h4, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; text-align: left;}
 h4{font-size: 1em; font-weight: bold; color: #64879D; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; margin-top: 20px;}
 .menutitle {padding: 6px; text-align: left; font-size: .9em; font-weight: bold; width: 155px; background-color: #fff; border-bottom: 1px solid #8C8A8C;}
+.collapseTitle{font-size: 1em; font-weight: bold; color: #64879D; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; margin-top: 20px;}
 
 /* menu */
 #navcontainer {position: absolute; margin: 0 10px 10px 10px; float: left; left: 0; width: 155px; font-size: .80em;}
@@ -40,7 +41,7 @@ table.admintable td {padding: 4px;}
 .button a:hover {text-align: center; background: #64879d; color: #FFF; padding: .4em; border: 1px solid #64879d;}
 .smallselect {font-size: .85em;}
 
-textarea{width: 100%;}
+textarea{width: 99%;}
 form {margin: 0 0 0 0;}
 form input, select {margin-top: 2px; margin-bottom: 2px;}
 form .standard {width: 150px;}
@@ -55,3 +56,4 @@ table.box td {padding: 0 10px 10px 10px;}
 .moduleabout p {margin: 5px 0 10px 0; padding: 0;}
 #helparea {border: 1px solid #8C8A8C; background-color: #BFDAEF; padding: 10px;}
 #helparea p {margin: 0; border: 0; padding: 0;}
+
