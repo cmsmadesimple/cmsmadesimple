@@ -46,7 +46,7 @@ class content extends ContentBase
 			{
 				if (isset($params[$oneparam]))
 				{
-					$this->mProperties->SetValue($oneparam, $params[$oneparam]);
+					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
 			}
 			if (isset($params['title']))
@@ -107,7 +107,7 @@ class content extends ContentBase
 
 	function Show()
 	{
-		return $this->mProperties->GetValue('content_en');
+		return $this->GetPropertyValue('content_en');
 	}
 
 	function Edit($adding = false)
@@ -142,8 +142,8 @@ class content extends ContentBase
 		}
 //		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
 		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>';
-		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->mProperties->GetValue('content_en'), 'content_en', 'syntaxHighlight', 'content_en', '', $stylesheet).'</td></tr>'."\n";
-		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->mProperties->GetValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
+		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', 'syntaxHighlight', 'content_en', '', $stylesheet).'</td></tr>'."\n";
+		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('cachable').':</td><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';

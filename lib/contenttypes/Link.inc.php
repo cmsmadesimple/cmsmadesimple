@@ -42,7 +42,7 @@ class link extends ContentBase
 			{
 				if (isset($params[$oneparam]))
 				{
-					$this->mProperties->SetValue($oneparam, $params[$oneparam]);
+					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
 			}
 			if (isset($params['title']))
@@ -120,7 +120,7 @@ class link extends ContentBase
 
 		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';
 		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
-		$text .= '<tr><td>'.lang('url').':</td><td><input type="text" name="url" value="'.$this->mProperties->GetValue('url').'" /></td></tr>';
+		$text .= '<tr><td>'.lang('url').':</td><td><input type="text" name="url" value="'.$this->GetPropertyValue('url').'" /></td></tr>';
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
@@ -130,7 +130,7 @@ class link extends ContentBase
 
 	function GetURL()
 	{
-		return htmlentities($this->mProperties->GetValue('url'));
+		return htmlentities($this->GetPropertyValue('url'));
 	}
 }
 

@@ -25,7 +25,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	# getting menu parameters
 	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 0 ;
 
-	$allcontent = ContentManager::GetAllContent();
+	$allcontent = ContentManager::GetAllContent(false);
 
 	# defining variables
 	$menu = "";

@@ -987,32 +987,32 @@ class NewsModule extends CMSModuleContentType
 			{
 				if (isset($params[$oneparam]))
 				{
-					$this->mProperties->SetValue($oneparam, $params[$oneparam]);
+					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
 			}
 			if (isset($params['swaptitledate']))
 			{
-				$this->mProperties->SetValue('swaptitledate', 1);
+				$this->SetPropertyValue('swaptitledate', 1);
 			}
 			else
 			{
-				$this->mProperties->SetValue('swaptitledate', 0);
+				$this->SetPropertyValue('swaptitledate', 0);
 			}
 			if (isset($params['showcategorywithtitle']))
 			{
-				$this->mProperties->SetValue('showcategorywithtitle', 1);
+				$this->SetPropertyValue('showcategorywithtitle', 1);
 			}
 			else
 			{
-				$this->mProperties->SetValue('showcategorywithtitle', 0);
+				$this->SetPropertyValue('showcategorywithtitle', 0);
 			}
 			if (isset($params['sortasc']) && $params['sortasc'] == 1)
 			{
-				$this->mProperties->SetValue('sortasc', 1);
+				$this->SetPropertyValue('sortasc', 1);
 			}
 			else
 			{
-				$this->mProperties->SetValue('sortasc', 0);
+				$this->SetPropertyValue('sortasc', 0);
 			}
 			if (isset($params['title']))
 			{
@@ -1070,28 +1070,28 @@ class NewsModule extends CMSModuleContentType
 
 		if (strlen($params['number']) > 0)
 		{
-			$params['number'] = $this->mProperties->GetValue('number');
+			$params['number'] = $this->GetPropertyValue('number');
 		}
 
 		if (strlen($params['category']) > 0)
 		{
-			$params['category'] = $this->mProperties->GetValue('category');
+			$params['category'] = $this->GetPropertyValue('category');
 		}
 
 		if (strlen($params['summary']) > 0)
 		{
-			$params['summary'] = $this->mProperties->GetValue('summary');
+			$params['summary'] = $this->GetPropertyValue('summary');
 		}
 
 		if (strlen($params['length']) > 0)
 		{
-			$params['length'] = $this->mProperties->GetValue('length');
+			$params['length'] = $this->GetPropertyValue('length');
 		}
 
-		$params['moretext'] = $this->mProperties->GetValue('moretext');
-		$params['showcategorywithtitle'] = $this->mProperties->GetValue('showcategorywithtitle');
-		$params['swaptitledate'] = $this->mProperties->GetValue('swaptitledate');
-		$params['sortasc'] = $this->mProperties->GetValue('sortasc');
+		$params['moretext'] = $this->GetPropertyValue('moretext');
+		$params['showcategorywithtitle'] = $this->GetPropertyValue('showcategorywithtitle');
+		$params['swaptitledate'] = $this->GetPropertyValue('swaptitledate');
+		$params['sortasc'] = $this->GetPropertyValue('sortasc');
 
 		$newnews = new News();
 

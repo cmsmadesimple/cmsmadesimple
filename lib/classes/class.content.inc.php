@@ -172,6 +172,7 @@ class ContentBase
 	{
 		$this->SetInitialValues();
 		$this->SetProperties();
+		$this->mPropertiesLoaded = false;
 	}
 
 	/**
@@ -361,16 +362,31 @@ class ContentBase
 	 */
 	function Properties()
 	{
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
 		return $this->mProperties;
 	}
 
 	function GetPropertyValue($name)
 	{
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
 		return $this->mProperties->GetValue($name);
 	}
 
 	function SetPropertyValue($name, $value)
 	{
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
 		$this->mProperties->SetValue($name, $value);
 	}
 
@@ -439,6 +455,7 @@ class ContentBase
 			if ($result && $loadProperties)
 			{
 				$this->mProperties->Load($this->mId);
+				$this->mPropertiesLoaded = true;
 
 				if (NULL == $this->mProperties)
 				{
@@ -512,6 +529,7 @@ class ContentBase
 		{
 			#$this->mProperties = ContentOperations::LoadPropertiesFromData(strtolower($this->mType), $data);
 			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
 
 			if (NULL == $this->mProperties)
 			{
