@@ -56,16 +56,10 @@ class Smarty_CMS extends Smarty {
 			$line = $result->FetchRow();
 
 			$smarty_obj->assign('modified_date',$line[modified_date]);
-			#$smarty_obj->assign('stylesheet',$line[stylesheet]);
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
-				#$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
-				#$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
 				$stylesheet .= "<style type=\"text/css\">\n";
-				#$stylesheet .= "<!--\n";
-				#$stylesheet .= "	@import \"".$csslink."\";\n";
 				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-				#$stylesheet .= "-->\n";
 				$stylesheet .= "</style>\n";
 			}
 			$tpl_source = $line[template_content];
@@ -74,6 +68,7 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 			$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+			#So no one can do anything nasty
 			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 
 			if ($this->configCMS->use_bb_code == true) {
@@ -135,6 +130,17 @@ function db_get_default_page (&$config) {
 	if ($dbresult) {
 		$line = $dbresult->FetchRow();
 		$result = $line["page_url"];
+	}
+
+	#We have no default.  Just get something!!!
+	if ($result == "") {
+		$query = "SELECT page_url FROM ".$config->db_prefix."pages";
+		$dbresult = $db->SelectLimit($query, 1);
+
+		if ($dbresult) {
+			$line = $dbresult->FetchRow();
+			$result = $line["page_url"];
+		}
 	}
 
 	return $result;
