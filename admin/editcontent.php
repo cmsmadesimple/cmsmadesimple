@@ -51,6 +51,9 @@ else if (isset($_GET["page_id"])) $page_id = $_GET["page_id"];
 $section_id = -1;
 if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
 
+$orig_section_id = -1;
+if (isset($_POST["orig_section_id"])) $orig_section_id = $_POST["orig_section_id"];
+
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
@@ -94,6 +97,15 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+			if ($orig_section_id != $section_id) {
+				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
+				$result = $db->query($query);
+				$row = mysql_fetch_array($result, MYSQL_ASSOC);
+				if (isset($row["item_order"])) {
+					$order = $row["item_order"];	
+				}
+				mysql_free_result($result);
+			}
 			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now(), item_order=$order WHERE page_id = $page_id";
 			$result = $db->query($query);
 
@@ -132,6 +144,7 @@ if ($access) {
 		$url = $row["page_url"];
 		$content = $row["page_content"];
 		$section_id = $row["section_id"];
+		$orig_section_id = $row["section_id"];
 		$template_id = $row["template_id"];
 		$active = $row["active"];
 		$order = $row["item_order"];
@@ -264,7 +277,7 @@ else {
 	</tr>
 	<tr>
 		<td><?=GetText::gettext("Section")?>:</td>
-		<td><?=$dropdown?></td>
+		<td><?=$dropdown?><input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" /></td>
 	</tr>
 	<tr>
 		<td><?=GetText::gettext("Template")?>:</td>
