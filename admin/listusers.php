@@ -37,17 +37,14 @@ include_once("header.php");
 
 	if (mysql_num_rows($result) > 0) {
 
-		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
-		echo "<thead class=\"tbhead\">\n";
+		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<th>".GetText::gettext("Username")."</th>\n";
-		echo "<th>".GetText::gettext("Active")."</th>\n";
-		echo "<th>&nbsp;</th>\n";
+		echo "<td>".GetText::gettext("Username")."</td>\n";
+		echo "<td>".GetText::gettext("Active")."</td>\n";
+		echo "<td>&nbsp;</td>\n";
 		if ($remove)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
-		echo "</thead>\n";
-		echo "<tbody>\n";
 
 		$currow = "row1";
 
@@ -68,7 +65,6 @@ include_once("header.php");
 
 		}
 
-		echo "</tbody>\n";
 		echo "</table>\n";
 
 	}
@@ -79,7 +75,7 @@ include_once("header.php");
 if (check_permission($config, $userid, 'Add User')) {
 ?>
 
-<p><a href="adduser.php"><?=GetText::gettext("Add New User")?></a></p>
+<div class=button><a href="adduser.php"><?=GetText::gettext("Add New User")?></div></p>
 
 <?php
 }

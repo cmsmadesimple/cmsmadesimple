@@ -41,18 +41,15 @@ if (isset($_GET["message"])) {
 
 	if (mysql_num_rows($result) > 0) {
 
-		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
-		echo "<thead class=\"tbhead\">\n";
+		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<th>".GetText::gettext("Template")."</th>\n";
-		echo "<th>".GetText::gettext("Active")."</th>\n";
+		echo "<td>".GetText::gettext("Template")."</td>\n";
+		echo "<td>".GetText::gettext("Active")."</td>\n";
 		if ($edit)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		if ($remove)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
-		echo "</thead>\n";
-		echo "<tbody>\n";
 
 		$currow = "row1";
 
@@ -71,7 +68,6 @@ if (isset($_GET["message"])) {
 
 		}
 
-		echo "</tbody>\n";
 		echo "</table>\n";
 
 	}
@@ -82,7 +78,8 @@ if (isset($_GET["message"])) {
 if (check_permission($config, $userid, 'Add Template')) {
 ?>
 
-<p><a href="addtemplate.php"><?=GetText::gettext("Add New Template")?></a></p>
+<div class=button><a href="addtemplate.php"><?=GetText::gettext("Add New
+Template")?></div></p>
 
 <?php
 }

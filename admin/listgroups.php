@@ -39,22 +39,19 @@ include_once("header.php");
 
 	if (mysql_num_rows($result) > 0) {
 
-		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
-		echo "<thead class=\"tbhead\">\n";
+		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<th>".GetText::gettext("Group Name")."</th>\n";
-		echo "<th>".GetText::gettext("Active")."</th>\n";
+		echo "<td>".GetText::gettext("Group Name")."</td>\n";
+		echo "<td>".GetText::gettext("Active")."</td>\n";
 		if ($perm)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		if ($assign)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		if ($edit)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		if ($remove)
-			echo "<th>&nbsp;</th>\n";
+			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
-		echo "</thead>\n";
-		echo "<tbody>\n";
 
 		$currow = "row1";
 
@@ -76,7 +73,6 @@ include_once("header.php");
 			($currow == "row1"?$currow="row2":$currow="row1");
 		}
 
-		echo "</tbody>\n";
 		echo "</table>\n";
 
 	}
@@ -87,7 +83,7 @@ include_once("header.php");
 if (check_permission($config, $userid, 'Add Group')) {
 ?>
 
-<p><a href="addgroup.php"><?=GetText::gettext("Add New Group")?></a></p>
+<div class=button><a href="addgroup.php"><?=GetText::gettext("Add New Group")?></div></p>
 
 <?php
 }

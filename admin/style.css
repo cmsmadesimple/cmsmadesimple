@@ -1,32 +1,75 @@
-/* Stylesheet by Christian Page for CMS: CMS Made Simple, June 2004
+/* Stylesheet by Christian Page for CMS: CMS Made Simple, June, July 2004
 	this is freesoftware as defined by the GPL version 2 or later
-	christian@localdesert.com
-	www.localdesert.com/christian
+	christian at localdesert.com
+	http://www.localdesert.com/christian
 */
 
-body{
-	font-family : Arial, sans-serif ;
+body {
+	font-family : Arial, Helvetica;
 	margin: 0px;
 	padding: 0px;
 	background: #fff;
-	color: #000000;
+	color: #64879d;
 	font-size : 10pt;
 }
 
 a:link, a:active, a:visited {
-	color : #333333;
+	color : #64879d;
 	text-decoration : none;
 }
 
 a:hover {
-	color: #000;
-	text-decoration : underline;
+	color: red;
+	text-decoration: none;
 }
 
 h1, h2, h3, h4, h5, p {
-	font-size : 10pt;
-	text-decoration : none;
+	font-size: 12pt;
+	font-weight: bold;
+	color: #64879d;
 }			       	       
+
+/* start navigation style */
+
+div.nav {
+	float: left;
+	width: 150px;
+	background: #EDF2F5;
+	padding: 0px;
+	margin: 1em;
+	margin-right: 20px;
+	border: 1px solid #64879d;
+}
+
+div.nav h4 {
+	margin: 0;
+	background: #EDF2F5;
+	color: #67AACB;
+	font-size : 10pt;
+	font-weight: bold;
+	padding: 0;
+	margin: 1em;
+	text-align: center;
+}
+
+div.nav a {
+	display: block;
+	margin: 0;
+	width: auto;
+	padding: 0.3em;
+	border-top: 1px solid #64879d;
+	color: #67AACB;
+	text-decoration: none;
+}
+
+div.nav a:hover {
+	background: #67AACB;
+	color: #fff;
+}
+
+/* end navigation style */
+
+/* start content style */
 
 #header	{
 	background: #EDF2F5;
@@ -63,72 +106,74 @@ h1, h2, h3, h4, h5, p {
 	top: 50px;
 }
 
-#table {
-	margin-top: 20px;
-}
+#table { margin-top: 20px; }
 
-#loginlogo {
-	float: right;
-}
+#loginlogo { float: right; }
 
-#nav	{
-	border: 1px solid #64879d;
-	width: 150;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	margin-left: 10px;
-	float: left;
-}
-
-#nav ul {
-	list-style: none;
-	padding: 0px;
-	margin: 0;
-}
-
-#nav li.sub {
-	color: #64879d;
-	background: #EDF2F5;
-	font-weight: bold;
-	padding: 0px;
-}
-
-#nav .title {
-	padding: 4px;
-	text-align: center;
-}
-
-#nav li a {
-	display: block;
-	background: #EDF2F5;
+div.content {
 	color: #000;
-	border-top: 1px solid #64879d;
-	border-bottom: 1px solid #64879d;
-	margin: 0px;
-	padding: 4px;
+/*	margin-left: 200px; &*/
+
 }
 
-#nav a:link, #nav a:active, #nav a:visited {
-	font-family: Arial, sans-serif;
-	font-weight: bold;
-	color: #64879d;
-	font-size: 10px;
-}
+/* end content style */
 
-#nav li.item a:hover, ul.sub li.item a:hover  {
-	display: block;
-	color: #ffffff;
+/* start table style */
+
+table.admintable {
 	background: #67AACB;
-	border-top: 1px solid #64879d;
-	border-bottom: 1px solid #64879d;
-	text-decoration: none;
+	color: #EDF2F5;
+	border: 1px solid #67AACB;
+	font-weight: bold;
+	text-align: left;
+	border-collapse: collapse;
+	border-spacing: 0px;
+	margin-bottom: 15px;
+	width: 76%;
 }
 
-.content {
-	color: #000;
-	margin-left: 200px;
+table.admintable td {
+	padding: 4px;
 }
 
-.error {
-	color: #F00;
+.row1, .row2 {
+	color: #64879d;
+	border: #64879d;
+	font-weight: normal;
 }
+
+.row1 {	background: #EDF2F5; }
+.row2 {	background: #dbe6ec; }
+
+.button a, .button a:link, .button a:active, .button a:visited {
+	background: #EDF2F5;
+	color: #64879d;
+	padding: 4px;
+	border: 1px solid #64879d;
+}
+
+.button a:hover {
+	background: #dbe6ec;
+	color: #64879d;
+	padding: 4px;
+	border: 1px solid #64879d;
+}
+
+/* end table style */
+
+/* start form style */
+
+div.adminform {
+	background: #EDF2F5;
+	color: #64879d;
+	border: 1px solid #64879d;
+	padding: 8px;
+	margin-top: 10px;
+	margin-right: 10px;
+	margin-left: 180px;
+	
+}
+
+/* end form style */
+
+.error { color: #F00; }
