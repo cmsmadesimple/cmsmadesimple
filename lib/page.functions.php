@@ -492,5 +492,50 @@ function check_access($page_id){
 	}
 	return false;
 }
+
+/**
+ * Creates a string containing links to all the pages. 
+ * @param page - the current page to display
+ * @param totalrows - the amount of items being listed
+ * @param limit - the amount of items to list per page
+ * @return a string containing links to all the pages (ex. next 1,2 prev)
+ */
+ function pagination($page, $totalrows, $limit){
+	
+	$page_string = "";
+	$from = ($page * $limit) - $limit;
+	$numofpages = $totalrows / $limit;
+	if ($numofpages > 1) {
+		if($page != 1){
+			$pageprev = $page-1;
+			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pageprev\">".lang('previous')."</a>&nbsp;";
+		}else{
+			$page_string .= lang('previous')." ";
+		}
+		for($i = 1; $i <= $numofpages; $i++){
+			if($i == $page){
+				$page_string .= $i."&nbsp;";
+			}else{
+				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
+			}
+		}
+
+		if(($totalrows % $limit) != 0){
+			if($i == $page){
+				$page_string .= $i."&nbsp;";
+			}else{
+				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
+			}
+		}
+
+		if(($totalrows - ($limit * $page)) > 0){
+			$pagenext = $page+1;
+			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pagenext\">".lang('next')."</a>";
+		}else{
+			$page_string .= lang('next')." ";
+		}
+	}
+	return $page_string;
+ }
 # vim:ts=4 sw=4 noet
 ?>

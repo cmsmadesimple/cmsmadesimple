@@ -46,38 +46,7 @@ $query = "SELECT * from ".cms_db_prefix()."adminlog ORDER BY timestamp DESC limi
 $result = $db->Execute($query);
 
 if ($result && $result->RowCount() > 0) {
-
-	$numofpages = $totalrows / $limit;
-	if ($numofpages > 1) {
-		if($page != 1){
-			$pageprev = $page-1;
-			$page_string .= "<a href=\"adminlog.php?page=$pageprev\">".lang('previous')."</a>&nbsp;";
-		}else{
-			$page_string .= lang('previous')." ";
-		}
-		for($i = 1; $i <= $numofpages; $i++){
-			if($i == $page){
-				$page_string .= $i."&nbsp;";
-			}else{
-				$page_string .= "<a href=\"adminlog.php?page=$i\">$i</a>&nbsp;";
-			}
-		}
-
-		if(($totalrows % $limit) != 0){
-			if($i == $page){
-				$page_string .= $i."&nbsp;";
-			}else{
-				$page_string .= "<a href=\"adminlog.php?page=$i\">$i</a>&nbsp;";
-			}
-		}
-
-		if(($totalrows - ($limit * $page)) > 0){
-			$pagenext = $page+1;
-			$page_string .= "<a href=\"adminlog.php?page=$pagenext\">".lang('next')."</a>";
-		}else{
-			$page_string .= lang('next')." ";
-		}
-	}
+	$page_string = pagination($page, $totalrows, $limit)
 
 ?>
 

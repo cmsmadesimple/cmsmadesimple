@@ -48,45 +48,11 @@ if (isset($_GET["message"])) {
 
 	$content_array = db_get_menu_items();
 	
-	//pagination
+
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
-	$limit = 20;
-	$page_string = "";
-	$totalrows = count($content_array);
-	$from = ($page * $limit) - $limit;
-	$numofpages = $totalrows / $limit;
-	if ($numofpages > 1) {
-		if($page != 1){
-			$pageprev = $page-1;
-			$page_string .= "<a href=\"listcontent.php?page=$pageprev\">".lang('previous')."</a>&nbsp;";
-		}else{
-			$page_string .= lang('previous')." ";
-		}
-		for($i = 1; $i <= $numofpages; $i++){
-			if($i == $page){
-				$page_string .= $i."&nbsp;";
-			}else{
-				$page_string .= "<a href=\"listcontent.php?page=$i\">$i</a>&nbsp;";
-			}
-		}
-
-		if(($totalrows % $limit) != 0){
-			if($i == $page){
-				$page_string .= $i."&nbsp;";
-			}else{
-				$page_string .= "<a href=\"listcontent.php?page=$i\">$i</a>&nbsp;";
-			}
-		}
-
-		if(($totalrows - ($limit * $page)) > 0){
-			$pagenext = $page+1;
-			$page_string .= "<a href=\"listcontent.php?page=$pagenext\">".lang('next')."</a>";
-		}else{
-			$page_string .= lang('next')." ";
-		}
-	}
-	echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
+	$limit = 2;
+	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($content_array), $limit)."</div>";
 
 	
 	if (count($content_array)) {
@@ -121,7 +87,7 @@ if (isset($_GET["message"])) {
 
 		$counter = 0;
 		foreach ($content_array as $one) {
-			if ($counter < $limit+$from && $counter >= $from) {
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td>".$one->hier."</td>\n";
 				echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".$one->page_title."</a></td>\n";
