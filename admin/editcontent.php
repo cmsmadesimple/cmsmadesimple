@@ -138,7 +138,7 @@ if ($access) {
 				$validinfo = false;
 				$error .= "<li>".lang('aliasnotaninteger')."</li>";
 			}
-			else if (!preg_match('/^[^\W\-]+$/', $alias))
+			else if (!preg_match('/^[\-\_\w]+$/', $alias))
 			{
 				$validinfo = false;
 				$error .= "<li>".lang('aliasmustbelettersandnumbers')."</li>";

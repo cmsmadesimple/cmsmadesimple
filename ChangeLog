@@ -6,6 +6,7 @@ Version 0.7.3 -- Subversion
 * Added config.php option to disable sending translations to htmlarea 
 (#000049)
 * Added active/inactive toggle in Content Management (Xorn725)
+* Fixed bug with handling of aliases in add/editcontent
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
 * Fixed displaying html_blobs in modules with executeuser
