@@ -1403,7 +1403,7 @@ class ContentManager
 		return $result;
 	}
 	
-	function CheckAliasError($alias)
+	function CheckAliasError($alias, $content_id = -1)
 	{
 		global $gCms;
 		$db = &$gCms->db;
@@ -1420,8 +1420,14 @@ class ContentManager
 		}
 		else
 		{
+			$params = array($alias);
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-			$dbresult = $db->Execute($query, array($alias));
+			if ($content_id > -1)
+			{
+				$query = " AND content_id != ?";
+				array_push($params, $content_id);
+			}
+			$dbresult = $db->Execute($query, $params);
 	
 			if ($dbresult && $dbresult->RowCount() > 0)
 			{

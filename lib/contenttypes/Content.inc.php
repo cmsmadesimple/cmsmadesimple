@@ -232,7 +232,7 @@ class content extends ContentBase
 		
 		if ($this->mAlias != $this->mOldAlias)
 		{
-			$error = @ContentManager::CheckAliasError($this->mAlias);
+			$error = @ContentManager::CheckAliasError($this->mAlias, $this->mId);
 			if ($error !== FALSE)
 			{
 				array_push($errors, $error);

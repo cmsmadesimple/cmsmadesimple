@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='usersgroups';
-$CMS_ADMIN_TITLE='modifygrouppermissions';
+$CMS_ADMIN_TITLE='grouppermissions';
 
 require_once("../include.php");
 
