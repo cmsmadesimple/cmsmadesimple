@@ -14,47 +14,56 @@ $section_id = -1;
 if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
 else if (isset($_GET["section_id"])) $section_id = $_GET["section_id"];
 
-$db = new DB($config);
-
 if (isset($_POST["cancel"])) {
 	redirect("listsections.php");
 	return;
 }
 
-if (isset($_POST["editsection"])) {
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify Section');
 
-	$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
-	$result = $db->query($query);
+if ($access) {
+	$db = new DB($config);
 
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listsections.php");
-		return;
+	if (isset($_POST["editsection"])) {
+
+		$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
+		$result = $db->query($query);
+
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listsections.php");
+			return;
+		}
+		else {
+			echo "Error updating section";
+			echo "<pre>query: $query</pre>";
+		}
+
 	}
-	else {
-		echo "Error updating section";
-		echo "<pre>query: $query</pre>";
+	else if ($section_id != -1) {
+
+		$query = "SELECT * from ".$config->db_prefix."sections WHERE section_id = " . $section_id;
+		$result = $db->query($query);
+		
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+
+		$section = $row["section_name"];
+		$active = $row["active"];
+
+		mysql_free_result($result);
+
 	}
 
+	$db->close();
 }
-else if ($section_id != -1) {
-
-	$query = "SELECT * from ".$config->db_prefix."sections WHERE section_id = " . $section_id;
-	$result = $db->query($query);
-	
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-
-	$section = $row["section_name"];
-	$active = $row["active"];
-
-	mysql_free_result($result);
-
-}
-
-$db->close();
 
 include_once("header.php");
 
+if (!$access) {
+	print "<h3>No Access to Edit Sections</h3>";
+}
+else {
 ?>
 
 <form method="post" action="editsection.php">
@@ -85,6 +94,7 @@ include_once("header.php");
 </form>
 
 <?php
+}
 
 include_once("footer.php");
 

@@ -22,52 +22,62 @@ $user_id = -1;
 if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify User');
 
-if (isset($_POST["cancel"])) {
-	redirect("listusers.php");
-	return;
-}
+if ($access) {
+	$db = new DB($config);
 
-if (isset($_POST["edituser"])) {
-	if ($password == $passwordagain) {
-		$query = "UPDATE ".$config->db_prefix."users SET username='".mysql_real_escape_string($user)."', ";
-		if ($password != "") {
-			$query .= "password='".mysql_real_escape_string($password)."', ";
-		}
-		$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
-		$result = $db->query($query);
+	if (isset($_POST["cancel"])) {
+		redirect("listusers.php");
+		return;
+	}
 
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listusers.php");
-			return;
+	if (isset($_POST["edituser"])) {
+		if ($password == $passwordagain) {
+			$query = "UPDATE ".$config->db_prefix."users SET username='".mysql_real_escape_string($user)."', ";
+			if ($password != "") {
+				$query .= "password='".mysql_real_escape_string($password)."', ";
+			}
+			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
+			$result = $db->query($query);
+
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listusers.php");
+				return;
+			}
+			else {
+				echo "Error updating user";
+			}
 		}
 		else {
-			echo "Error updating user";
+			echo "Passwords do not match";
 		}
 	}
-	else {
-		echo "Passwords do not match";
+	else if ($user_id != -1) {
+
+		$query = "SELECT * from ".$config->db_prefix."users WHERE user_id = " . $user_id;
+		$result = $db->query($query);
+		
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+
+		$user = $row["username"];
+		$active = $row["active"];
+
+		mysql_free_result($result);
+
 	}
+
+	$db->close();
 }
-else if ($user_id != -1) {
-
-	$query = "SELECT * from ".$config->db_prefix."users WHERE user_id = " . $user_id;
-	$result = $db->query($query);
-	
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-
-	$user = $row["username"];
-	$active = $row["active"];
-
-	mysql_free_result($result);
-
-}
-
-$db->close();
 
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access to Edit Users</h3>";
+}
+else {
 
 ?>
 
@@ -107,6 +117,8 @@ include_once("header.php");
 </form>
 
 <?php
+
+}
 
 include_once("footer.php");
 

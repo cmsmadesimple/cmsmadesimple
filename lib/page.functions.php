@@ -30,12 +30,17 @@ function check_permission(&$config, $userid, $permname) {
 	return $check;
 }
 
-function check_ownership(&$config, $userid, $pagename) {
+function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 	$check = false;
 
 	$db = new DB($config);
 
-	$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_url = '".$pagename."'";
+	$query = "";
+	if ($pageid == "") {
+		$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_url = '".$pagename."'";
+	} else {
+		$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
+	}
 	$result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
