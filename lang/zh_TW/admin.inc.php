@@ -212,4 +212,7 @@ $lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
 $lang['admin']['encoding'] = 'Encoding'; //needs translation
 $lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
 $lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>'; //needs translation
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

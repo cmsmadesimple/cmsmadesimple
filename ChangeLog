@@ -8,6 +8,7 @@ Version 0.7.3 -- Subversion
 * Added active/inactive toggle in Content Management (Xorn725)
 * Added categories and other fixes to the News module (calguy1000)
 * Added breadcrumbs and sitemap plugins (Manarth)
+* Added clear cache button to site preferences (#000055)
 * Fixed syntax highlighting not submitting data of second textarea.
 * Fixed HTMLArea to display properly with all languages, even if some
 still default to en_US

@@ -212,4 +212,7 @@ $lang['admin']['currentcss'] = 'Aktuelles CSS';
 $lang['admin']['encoding'] = 'Kodierung'; //needs translation
 $lang['admin']['nosyntax'] = 'Ihr Browser unterst&#252;tzt keine Syntax - Hervorhebung.'; //needs translation
 $lang['admin']['slogan'] = 'So <span style="color: #FE0404">einfach</span>,als wenn man in den  <span style="color: #FE0404">Ferien</span> w&#228;re.'; //needs translation
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

@@ -212,4 +212,7 @@ $lang['admin']['imagemanager'] = 'Billedhåndtering';
 $lang['admin']['encoding'] = 'Encoding';
 $lang['admin']['nosyntax'] = 'Din browser understøtter ikke Java'; //needs translation
 $lang['admin']['slogan'] = ''; //needs translation
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

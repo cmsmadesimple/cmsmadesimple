@@ -212,4 +212,7 @@ $lang['admin']['currentcss'] = 'Souèasný CSS';
 $lang['admin']['encoding'] = 'Kódování'; //needs translation
 $lang['admin']['nosyntax'] = 'Zvýrazòování syntaxe není ve Va¹em prohlí¾eèi podporováno.'; //needs translation
 $lang['admin']['slogan'] = 'Tak <span style="color: #FE0404">jednoduché</span>, jako u¾ívat si <span style="color: #FE0404">prázdnin</span>'; //needs translation
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

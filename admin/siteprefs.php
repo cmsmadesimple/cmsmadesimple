@@ -23,6 +23,7 @@ require_once("../include.php");
 check_login();
 
 $error = "";
+$message = "";
 
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
@@ -48,7 +49,6 @@ if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
 
-
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
 
@@ -57,7 +57,15 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-if (isset($_POST["editsiteprefs"])) {
+if (isset($_POST['clearcache']))
+{
+	$smarty = new Smarty_CMS($config);
+	$smarty->clear_all_cache();
+	$smarty->clear_compiled_tpl();
+	$message .= lang('cachecleared');
+}
+else if (isset($_POST["editsiteprefs"]))
+{
 	if ($access)
 	{
 		set_site_preference('enablecustom404', $enablecustom404);
@@ -102,10 +110,12 @@ include_once("header.php");
 if ($error != "") {
 	echo "<ul class=\"error\">".$error."</ul>";
 }
-
+if ($message != "") {
+	echo "<h3>$message</h3>";
+}
 ?>
 
-<form method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedownmessage\');"';} ?>>
+<form name="siteprefform" id="siteprefform" method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedownmessage\');"';} ?>>
 
 <div class="adminform">
 
@@ -113,7 +123,11 @@ if ($error != "") {
 
 <table width="100%" cellpadding="4" cellspacing="0" border="0">
 	<tr>
-		<td width="230">Enable Custom 404 Message</td>
+		<td width="230"><?php echo lang('clearcache') ?></td>
+		<td><input type="submit" name="clearcache" value="<?php echo lang('clear') ?>" onclick="document.siteprefform.submit()" /></td>
+	</tr>
+	<tr>
+		<td>Enable Custom 404 Message</td>
 		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked"?>></td>
 	</tr>
 	<tr>

@@ -212,4 +212,7 @@ $lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
 $lang['admin']['encoding'] = 'Encodage';
 $lang['admin']['nosyntax'] = 'Désolé, la coloration syntaxique n\'est pas supporté par votre navigateur.';
 $lang['admin']['slogan'] = 'Si <span style="color: #FE0404">simple</span>, que cela ressemble à partir en <span style="color: #FE0404">vacances</span>'; 
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

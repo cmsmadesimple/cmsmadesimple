@@ -210,6 +210,9 @@ $lang['admin']['edithtmlblob'] = 'Edit Html Blob';
 $lang['admin']['filemanager'] = 'Filemanager';
 $lang['admin']['imagemanager'] = 'Imagemanager';
 $lang['admin']['encoding'] = 'Encoding';
-$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
-$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>'; //needs translation
+$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.';
+$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>';
+$lang['admin']['clearcache'] = 'Clear Cache';
+$lang['admin']['clear'] = 'Clear';
+$lang['admin']['cachecleared'] = 'Cache Cleared';
 ?>

@@ -212,4 +212,7 @@ $lang['admin']['imagemanager'] = 'Gestore Immagini';
 $lang['admin']['encoding'] = 'Codifica';
 $lang['admin']['nosyntax'] = 'Spiacente, evidenziazione sintassi non supportata dal tuo browser.'; //needs translation
 $lang['admin']['slogan'] = 'Così <span style="color: #FE0404">semplice</span>, sembra di stare in <span style="color: #FE0404">vacanza</span>'; //needs translation
+$lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
+$lang['admin']['clear'] = 'Clear'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
 ?>

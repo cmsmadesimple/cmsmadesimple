@@ -11,7 +11,7 @@ fi
 
 #First check en_US to make sure it doesn't exist
 grep "lang['admin']['$1']" en_US/admin.inc.php > /dev/null
-if [ $? -ne 0 ] ; then
+if [ $? -eq 0 ] ; then
 	echo "lang['admin']['$1'] alrady exists"
 	exit 1
 fi
