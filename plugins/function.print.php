@@ -24,7 +24,7 @@ function smarty_cms_function_print($params, &$smarty)
 
 	if (!empty($params['text']))
 	{
-		$domain = $params['text'];
+		$text = $params['text'];
 	}
 
 	//will this work if using htaccess? (Yes! -Wishy)
