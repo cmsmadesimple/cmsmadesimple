@@ -66,7 +66,7 @@ function display_file($filename) {
 	global $excludefilters;
 		
 	foreach ($excludefilters as $currentfilter) {
-		if (fnmatch($currentfilter, $filename)) {
+		if (ereg($currentfilter, $filename)) {
 			$do_display = false;
 			break(1);
 		}
