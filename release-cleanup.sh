@@ -13,6 +13,7 @@ rm -fr images/*.svg
 rm -fr smarty/cms/cache/*
 rm -fr smarty/cms/templates_c/*
 find -depth -type d -name .svn -exec rm -fr {} \;
+find . -type d -exec chmod 775 {} \;
 rm -fr release-cleanup.sh
 
 echo ------------------------------------
