@@ -158,12 +158,12 @@ function showPageThree($sqlloaded = 0) {
     if ($sqlloaded == 0) {
         global $config, $CMS_SCHEMA_VERSION;
         $smarty = new Smarty_DB($config);
-        $smarty->assign('tableprefix', 'cms_');
+        $smarty->assign('tableprefix', $_POST["prefix"]);
         $smarty->assign('schemaversion', $CMS_SCHEMA_VERSION);
         $contents = $smarty->fetch('mysql.tpl');
 
-        $statements = split(";", $contents);
-     
+        $statements = preg_split("/\;\r?\n?$/m", $contents);
+ 
         echo "<textarea name=code rows=15 cols=80>$contents</textarea><p>\n";
         $link = @mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
         if (!$link) {
@@ -188,7 +188,7 @@ function showPageThree($sqlloaded = 0) {
         ## foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
     } ## if
 
-    $docroot = 'http://'.$_SERVER['SERVER_NAME'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
+    $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
     $docpath = substr($_SERVER['SCRIPT_FILENAME'],0,strlen($_SERVER['SCRIPT_FILENAME'])-12);
     echo "<p>\n";
 
