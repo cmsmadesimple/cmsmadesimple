@@ -809,7 +809,7 @@ class Smarty_ModuleInterface extends Smarty {
 		$this->compile_dir = $config["root_path"].'/smarty/cms/templates_c/';
 		$this->config_dir = $config["root_path"].'/smarty/cms/configs/';
 		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
-		$this->plugins_dir = $config["root_path"].'/plugins/';
+		$this->plugins_dir = array($config["root_path"].'/smarty/plugins/',$config["root_path"].'/plugins/');
 
 		$this->compile_check = true;
 		$this->caching = false;
