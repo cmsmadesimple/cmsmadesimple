@@ -31,10 +31,12 @@ include_once("header.php");
 
 <div class="MainMenu">
 
+<?php if ($sitePrefPerms) { ?>
 <div class="MainMenuItem">
 <a href="siteprefs.php">Site Preferences</a>
 <span class="description">This is where you set various site-wide preferences.</span>
 </div>
+<?php } ?>
 
 <div class="MainMenuItem">
 <a href="adminlog.php">Admin Log</a>

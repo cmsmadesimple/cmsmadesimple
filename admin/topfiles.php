@@ -31,10 +31,12 @@ include_once("header.php");
 
 <div class="MainMenu">
 
+<?php if ($filePerms) { ?>
 <div class="MainMenuItem">
 <a href="files.php">File Manager</a>
 <span class="description">Upload files and such.</span>
 </div>
+<?php } ?>
 
 <div class="MainMenuItem">
 <a href="imagefiles.php">Image Manager</a>

@@ -31,25 +31,33 @@ include_once("header.php");
 
 <div class="MainMenu">
 
+<?php if ($userPerms) { ?>
 <div class="MainMenuItem">
 <a href="listusers.php">Users</a>
 <span class="description">This is where you manage users.</span>
 </div>
+<?php } ?>
 
+<?php if ($groupPerms) { ?>
 <div class="MainMenuItem">
 <a href="listgroups.php">Groups</a>
 <span class="description">This is where you manage groups.</span>
 </div>
+<?php } ?>
 
+<?php if ($groupMemberPerms) { ?>
 <div class="MainMenuItem">
 <a href="changegroupassign.php">Group Assignments</a>
 <span class="description">Assign users to groups.</span>
 </div>
+<?php } ?>
 
+<?php if ($groupPermPerms) { ?>
 <div class="MainMenuItem">
 <a href="changegroupperm.php">Group Permissions</a>
 <span class="description">Permissions for a group.</span>
 </div>
+<?php } ?>
 
 <div class="MainMenuItem">
 <a href="index.php">Main Menu</a>

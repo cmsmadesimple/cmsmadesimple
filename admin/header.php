@@ -23,6 +23,26 @@ if (!isset($charsetsent))
 	header("Content-Type: text/html; charset=" . get_encoding());
 }
 
+$userid = get_userid();
+# find aggregate permissions
+$pagePerms = check_permission($userid, 'Modify Any Content') | check_permission($userid, 'Add Content') |
+          check_permission($userid, 'Remove Content');
+$htmlPerms = check_permission($userid, 'Add Html Blobs') | check_permission($userid, 'Modify Html Blobs') |
+	      check_permission($userid, 'Delete Html Blobs');
+$templatePerms = check_permission($userid, 'Add Template') | check_permission($userid, 'Modify Template') |
+          check_permission($userid, 'Remove Template');
+$cssPerms = check_permission($userid, 'Add CSS') | check_permission($userid, 'Modify CSS') |
+          check_permission($userid, 'Remove CSS');
+$filePerms = check_permission($userid, 'Modify Files');
+$userPerms = check_permission($userid, 'Add User') | check_permission($userid, 'Modify User') |
+          check_permission($userid, 'Remove User');
+$groupPerms = check_permission($userid, 'Add Group') | check_permission($userid, 'Modify Group') |
+          check_permission($userid, 'Remove Group');
+$groupPermPerms = check_permission($userid, 'Modify Permissions');
+$groupMemberPerms =  check_permission($userid, 'Modify Group Assignments');
+$sitePrefPerms = check_permission($userid, 'Modify Site Preferences');
+$codeBlockPerms = check_permission($userid, 'Modify Code Blocks');
+$modulePerms = check_permission($userid, 'Modify Modules');
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>

@@ -31,15 +31,19 @@ include_once("header.php");
 
 <div class="MainMenu">
 
+<?php if ($templatePerms) { ?>
 <div class="MainMenuItem">
 <a href="listtemplates.php">Templates</a>
 <span class="description">This is where we add and edit templates.  Templates define the look and feel of your site.</span>
 </div>
+<?php } ?>
 
+<?php if ($cssPerms) { ?>
 <div class="MainMenuItem">
 <a href="listcss.php">Stylesheets</a>
 <span class="description">CSS Management is an advanced way to handle stylesheets separately from templates.</span>
 </div>
+<?php } ?>
 
 <div class="MainMenuItem">
 <a href="index.php">Back</a>

@@ -31,20 +31,24 @@ include_once("header.php");
 
 <div class="MainMenu">
 
+<?php if ($modulePerms) { ?>
 <div class="MainMenuItem">
 <a href="listmodules.php">Modules</a>
 <span class="description">Modules majorly extend CMS Made Simple to provide all kinds of functionality.</span>
 </div>
+<?php } ?>
 
 <div class="MainMenuItem">
 <a href="listtags.php">Tags</a>
 <span class="description">Tags are little bits of functionality that can be added to your content and/or templates.</span>
 </div>
 
+<?php if ($codeBlockPerms) { ?>
 <div class="MainMenuItem">
 <a href="listusertags.php">User Defined Tags</a>
 <span class="description">Tags that you can create and modify yourself to perform specific tasks, right from your browser.</span>
 </div>
+<?php } ?>
 
 <?php
 	# Is there any modules with an admin interface?
