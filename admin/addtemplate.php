@@ -94,6 +94,7 @@ if ($access)
 			$newtemplate->stylesheet = $stylesheet;
 			$newtemplate->encoding = $encoding;
 			$newtemplate->active = $active;
+			$newtemplate->default = 0;
 
 			#Perform the addtemplate_pre callback
 			foreach($gCms->modules as $key=>$value)
