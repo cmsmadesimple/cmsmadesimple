@@ -186,6 +186,7 @@ $lang['admin']['username'] = 'Tunnus';
 $lang['admin']['usernameincorrect'] = 'Tunnus tai salasana eivät täsmää';
 $lang['admin']['userprefs'] = 'Käyttäjän asetukset';
 $lang['admin']['usersassignedtogroup'] = 'Käyttäjät jotka kuuluvat ryhmään %s';
+$lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.'; //needs translation
 $lang['admin']['usewysiwyg'] = 'Käytä WYSIWYG editoria sisällön muokkaamiseen';
 $lang['admin']['version'] = 'Versio'; 
 $lang['admin']['view'] = 'Katso'; 

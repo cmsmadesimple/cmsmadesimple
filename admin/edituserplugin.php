@@ -42,6 +42,9 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
+$smarty = new Smarty_CMS($gCms->config);
+load_plugins($smarty);
+
 if ($access) {
 	if (isset($_POST["editplugin"])) {
 
@@ -50,6 +53,15 @@ if ($access) {
 			$error .= "<li>".lang('nofieldgiven', array(lang('editusertag')))."</li>";
 			$validinfo = false;
 		}
+		else
+		{
+			if (in_array($plugin_name, $gCms->cmsplugins))
+			{
+				$error .= "<li>".lang('usertagexists')."</li>";
+				$validinfo = false;
+			}
+		}
+
 		if ($code == "") {
 			$error .= "<li>".lang('nofieldgiven', array(lang('code')))."</li>";
 			$validinfo = false;

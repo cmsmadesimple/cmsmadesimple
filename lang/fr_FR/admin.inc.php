@@ -186,6 +186,7 @@ $lang['admin']['username'] = 'Nom d\'utilisateur';
 $lang['admin']['usernameincorrect'] = 'Nom d\'utilisateur ou mot de passe incorrect';
 $lang['admin']['userprefs'] = 'Préférences';
 $lang['admin']['usersassignedtogroup'] = 'Utilisateur membre du groupe %s';
+$lang['admin']['usertagexists'] = 'Un Tag existe déjà avec le même nom, veuillez en choisir un autre.';
 $lang['admin']['usewysiwyg'] = 'Utiliser l\'éditeur visuel (WYSIWYG) pour l\'édition';
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'Voir';
