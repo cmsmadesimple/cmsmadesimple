@@ -1,0 +1,49 @@
+div.tabArea {
+  position: relative;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+a.tab {
+
+	text-decoration: none;
+	background-color: #F0F0EB;
+	padding: 2px 1em;
+	position: relative;
+	top: -2px;
+	z-index: 100;
+	margin: 0px;
+	border: 0px;
+	height: 25px;
+	width: 100px;
+	clear: both;
+	float: none;
+}
+
+a.tab, a.tab:visited {
+  color: #808080;
+}
+
+a.tab:hover {
+	background-color: #d0d0d0;
+	color: #606060;
+}
+
+a.tab.activeTab, a.tab.activeTab:hover, a.tab.activeTab:visited {
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 0px;
+  border-left-width: 1px;
+  border: solid #919B9C;
+  z-index: 102;
+  top: -1px;
+  background-color: #FCFCFE;
+  color: #000000;
+}
+
+div.tabPane {
+  background-color: #FCFCFE;
+  border: 1px solid #919B9C;
+  padding: 1em;
+
+ }

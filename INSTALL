@@ -30,6 +30,7 @@ OR
         - chmod 777 smarty/cms/templates_c
 	- chmod 777 smarty/cms/cache
 	- chmod 777 uploads
+	- chmod 777 uploads/images
 
 6.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
 
