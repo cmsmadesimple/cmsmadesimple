@@ -5,6 +5,8 @@ Version 0.7.2 -- Subversion
 * Added ability to invert the foreground/background color of htmlarea (#0000031)
 * Added search and replace to htmlarea
 * Added ability to clean pastes from Microsoft Word in htmlarea
+* Added pagination to majority of CMSMadeSimple
+* Added google search plugin
 * Changed en_US to UTF-8
 * Changed with of add and edit html blob pages
 * Fixed login to redirect back to originally requested link
