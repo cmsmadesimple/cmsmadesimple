@@ -123,7 +123,7 @@ class Smarty_CMS extends Smarty {
 			#If this fails, then it basically is a standard 404 error or a custom with no template
 			if (!($contentobj === FALSE && $templateobj === FALSE))
 			{
-				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
+				$stylesheet = '';
 
 				#Perform the content stylesheet callback
 				foreach($gCms->modules as $key=>$value)
@@ -135,6 +135,8 @@ class Smarty_CMS extends Smarty {
 						call_user_func_array($gCms->modules[$key]['content_stylesheet_function'], array(&$gCms, &$stylesheet));
 					}
 				}
+
+				$stylesheet .= '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />'; 
 
 				#Time to fill our template content
 				#If it's in print mode, then just create a simple stupid template

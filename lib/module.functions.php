@@ -970,30 +970,30 @@ function cms_mapi_check_for_module($name)
 	return $result;
 }
 
-function cms_mapi_register_intramodule_function($module, $name, $function_pointer)
+function cms_mapi_register_intermodule_function($module, $name, $function_pointer)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 	if (isset($cmsmodules[$module]))
 	{
-		$cmsmodules[$module]['intramodule_function'][$name] = $function_pointer;
+		$cmsmodules[$module]['intermodule_function'][$name] = $function_pointer;
 	}
 }
 
-function cms_mapi_call_intramodule_function($module, $name, $array)
+function cms_mapi_call_intermodule_function($module, $name, $array)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 	if (isset($cmsmodules[$module]) && $cmsmodules[$module]['Installed'] == true && $cmsmodules[$module]['Active'] == true)
 	{
-		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
+		if (isset($cmsmodules[$module]['intermodule_function'][$name]))
 		{
-			call_user_func_array($cmsmodules[$module]['intramodule_function'][$name], array($array));
+			call_user_func_array($cmsmodules[$module]['intermodule_function'][$name], array($array));
 		}
 	}
 }
 
-function cms_mapi_check_intramodule_function_exists($module, $name)
+function cms_mapi_check_intermodule_function_exists($module, $name)
 {
 	$result = false;
 
@@ -1001,7 +1001,7 @@ function cms_mapi_check_intramodule_function_exists($module, $name)
 	$cmsmodules = &$gCms->modules;
 	if (isset($cmsmodules[$module]) && $cmsmodules[$module]['Installed'] == true && $cmsmodules[$module]['Active'] == true)
 	{
-		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
+		if (isset($cmsmodules[$module]['intermodule_function'][$name]))
 		{
 			$result = true;
 		}
