@@ -927,7 +927,7 @@ function cms_mapi_register_intramodule_function($module, $name, $function_pointe
 	}
 }
 
-function cms_mapit_call_intramodule_function($module, $name, $array)
+function cms_mapi_call_intramodule_function($module, $name, $array)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
@@ -940,7 +940,7 @@ function cms_mapit_call_intramodule_function($module, $name, $array)
 	}
 }
 
-function cms_mapit_call_intramodule_function_exists($module, $name)
+function cms_mapi_call_intramodule_function_exists($module, $name)
 {
 	$result = false;
 
