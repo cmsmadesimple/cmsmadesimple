@@ -255,7 +255,7 @@ else
 	</tr>
 	<?php
 		#Run edit method in our contentobj
-		echo $contentobj->Edit();
+		echo $contentobj->Edit(false);
 	if ($adminaccess)
 	{
 	?>

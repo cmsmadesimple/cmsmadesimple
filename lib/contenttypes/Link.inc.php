@@ -114,7 +114,7 @@ class link extends ContentBase
 	{
 	}
 
-	function Edit()
+	function Edit($adding = false)
 	{
 		$text = "";
 

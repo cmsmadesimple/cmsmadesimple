@@ -110,7 +110,7 @@ class content extends ContentBase
 		return $this->mProperties->GetValue('content_en');
 	}
 
-	function Edit()
+	function Edit($adding = false)
 	{
 		global $gCms;
 		$config = $gCms->config;
@@ -123,7 +123,8 @@ class content extends ContentBase
 
 		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';
 		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
-		if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+		#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+		if (!($config['auto_alias_content'] == true && $adding))
 		{
 			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
 		}

@@ -235,7 +235,7 @@ else if ($preview)
 		<td><?php echo $typesdropdown ?></td>
 	</tr>
 	<?php
-		echo $contentobj->Edit();
+		echo $contentobj->Edit(true);
 	?>
 	<tr>
 		<td>Additional Editors:</td>

@@ -341,7 +341,8 @@ class ContentBase
 		if ($gCms->config['auto_alias_content'] && $alias == '')
 		{
 			$alias = trim($this->mMenuText);
-			$alias = preg_replace("/\W+/", "-", $alias);
+			$alias = preg_replace("/[_-\W]+/", "_", $alias);
+			$alias = trim($alias, '_');
 		}
 
 		$this->mAlias = $alias;
@@ -837,7 +838,7 @@ class ContentBase
 	/**
 	 * Show the Edit interface
 	 */
-	function Edit()
+	function Edit($adding = false)
 	{
 		# :TODO:
 		return "<tr><td>Edit Not Defined</td></tr>";
@@ -846,7 +847,7 @@ class ContentBase
 	/**
 	 * Show the Advanced Edit interface
 	 */
-	function AdvancedEdit()
+	function AdvancedEdit($adding = false)
 	{
 		# :TODO:
 		return "<tr><td>Advanced Edit Not Defined</td></tr>";
