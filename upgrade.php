@@ -74,6 +74,28 @@ else
 
 	echo "[done]</p>";
 
+	echo "<p>Clearning cache dirs...";
+
+	//Clear cache dirs
+	$cpath = dirname(__FILE__)."/smarty/cms/cache/";
+	$handle=opendir($cpath);
+	while ($cfile = readdir($handle)) {
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
+			#echo ($cpath.$cfile);
+			unlink($cpath.$cfile);
+		}
+	}
+	$cpath = dirname(__FILE__)."/smarty/cms/templates_c/";
+	$handle=opendir($cpath);
+	while ($cfile = readdir($handle)) {
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
+			#echo ($cpath.$cfile);
+			unlink($cpath.$cfile);
+		}
+	}
+
+	echo "[done]</p>";
+
 	$db = &ADONewConnection($config["dbms"]);
 	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
@@ -101,6 +123,7 @@ else
 			echo "<p>You should also check that all of your modules are up to date, by going to the Plugins page and looking for any listed as 'Needs Upgrade'.</p>";
 			echo "<p>The CMS database is up to date using schema version ".$current_version.".  Please remove this file when possible.  Click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
 		}
+
 	}
 	else
 	{
@@ -144,6 +167,7 @@ else
 
 		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 		echo "<p>CMS is up to date.  Please click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
+
 	}
 
 }
