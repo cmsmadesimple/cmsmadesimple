@@ -65,10 +65,10 @@ function news_module_execute($cms, $id, $params) {
 	}
 	if ($dbresult && $dbresult->RowCount()) {
 		while ($row = $dbresult->FetchRow()) {
-			echo "<div class=\"module_news\">";
-			echo date("F j, Y, g:i a", $db->UnixTimeStamp($row['news_date']))."<br />";
-			echo $row["news_title"]."<br />";
-			echo $row["news_data"];
+			echo "<div class=\"cms-module-news\">";
+			echo "<span class=\"cms-news-date\">".date("F j, Y, g:i a", $db->UnixTimeStamp($row['news_date']))."</span><br />";
+			echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
+			echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
 			echo "</div>";
 		}
 	}

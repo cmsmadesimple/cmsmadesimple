@@ -219,6 +219,7 @@ function showPageThree($sqlloaded = 0) {
 
 		$handle = fopen(dirname(__FILE__)."/schemas/mysql.sql", 'r');
 		while (!feof($handle)) {
+			set_magic_quotes_runtime(false);
 			$result = $db->Execute("USE ".$_POST['database'].";");
 			$s = fgets($handle, 32768);
 			if ($s != "") {
