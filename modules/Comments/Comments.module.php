@@ -76,11 +76,6 @@ class Comments extends CMSModule
 		$db->CreateSequence(cms_db_prefix()."module_comments_seq");
 	}
 
-	function InstallPostMessage()
-	{
-		return "this is a test";
-	}
-
 	function Uninstall()
 	{
 		$db = $this->cms->db;
@@ -89,11 +84,6 @@ class Comments extends CMSModule
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->DropSequence(cms_db_prefix()."module_comments_seq");
-	}
-
-	function UninstallPostMessage()
-	{
-		return "this is a test";
 	}
 
 	function GetChangeLog()
@@ -114,7 +104,7 @@ class Comments extends CMSModule
 		return true;
 	}
 
-	function DoAction($name, $id, $params, $returnid='')
+	function DoAction($name, $id, $params, $return_id='')
 	{
 		$db = $this->cms->db;
 		switch ($name)
@@ -133,7 +123,7 @@ class Comments extends CMSModule
 					$dateformat = $params['dateformat'];
 				}
 				
-				echo $this->CreateLink($id, 'addcomment', $this->cms->variables['page'], 'Add a comment', $params);
+				echo $this->CreateLink($id, 'addcomment', $return_id, 'Add a comment', $params);
 
 				if ($dbresult && $dbresult->RowCount())
 				{
@@ -154,7 +144,7 @@ class Comments extends CMSModule
 			case 'addcomment':
 				if (isset($params['cancelcomment']))
 				{
-					$this->RedirectContent($returnid);
+					$this->RedirectContent($return_id);
 				}
 
 				$errormsg = "";
@@ -190,9 +180,9 @@ class Comments extends CMSModule
 					{
 						$db = $this->cms->db;
 						$new_id = $db->GenID(cms_db_prefix()."module_comments_seq");
-						$query = "INSERT INTO ".cms_db_prefix()."module_comments (comment_id, page_id, comment_author, comment_data, comment_date, create_date) VALUES ($new_id, $returnid, ".$db->qstr($author).", ".$db->qstr($content).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+						$query = "INSERT INTO ".cms_db_prefix()."module_comments (comment_id, page_id, comment_author, comment_data, comment_date, create_date) VALUES ($new_id, $return_id, ".$db->qstr($author).", ".$db->qstr($content).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
 						$dbresult = $db->Execute($query);
-						$this->RedirectContent($returnid);
+						$this->RedirectContent($return_id);
 						return;
 					}
 				}
@@ -202,7 +192,7 @@ class Comments extends CMSModule
 					echo "<p>Error:</p><ul>".$errormsg."</ul>";
 				}
 
-				echo $this->CreateFormStart($id, 'addcomment', $returnid);
+				echo $this->CreateFormStart($id, 'addcomment', $return_id);
 
 				?>
 				<h3>Add Comment</h3>

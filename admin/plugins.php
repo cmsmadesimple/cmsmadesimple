@@ -387,7 +387,7 @@ else if ($action == 'missingdeps')
 			echo "<td>$key</td>\n";
             if (!isset($dbm[$key])) #Not installed, lets put up the install button
             {
-                $brokendeps;
+                $brokendeps = 0;
 
                 if (count($modinstance->GetDependencies()) > 0) #Check for any deps
                 {

@@ -1494,7 +1494,13 @@ class Smarty_ModuleInterface extends Smarty {
 		$query = "SELECT t.template_id, t.stylesheet, t.template_content, p.hierarchy, p.content_id FROM ".cms_db_prefix()."content p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.content_id = ?";
 		$result = $db->Execute($query, array($tpl_name));
 
-		if ($result && $result->RowCount()) {
+		if ($result && $result->RowCount())
+		{
+			$gCms->variables['content_id'] = $tpl_name;
+			$gCms->variables['page'] = $tpl_name;
+			$gCms->variables['page_id'] = $tpl_name;
+
+			$gCms->variables['page_name'] = $tpl_name;
 
 			if ($smarty_obj->showtemplate == true)
 			{
@@ -1527,11 +1533,6 @@ class Smarty_ModuleInterface extends Smarty {
 
 				$template_id = $line['template_id'];
 
-				$gCms->variables['content_id'] = $line['content_id'];
-				$gCms->variables['page'] = $line['content_id'];
-				$gCms->variables['page_id'] = $line['content_id'];
-
-				$gCms->variables['page_name'] = $tpl_name;
 				$gCms->variables['position'] = $line['hierarchy'];
 
 				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
@@ -1560,7 +1561,7 @@ class Smarty_ModuleInterface extends Smarty {
 						$params[$key] = $value;
 					}
 				}
-				echo $gCms->modules[$smarty_obj->module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $gCms->variables['page']);
+				echo $gCms->modules[$smarty_obj->module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $tpl_name);
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				if ($smarty_obj->showtemplate == true)
