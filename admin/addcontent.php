@@ -221,49 +221,68 @@ else if ($preview)
 
 }
 
+$tabs = array();
+if (isset($contentobj))
+{
+	$tabs = $contentobj->GetTabDefinitions();
+}
+
+
 ?>
 
 <form method="post" action="addcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 
 <h3><?php echo lang('addcontent')?></h3>
 
-<div class="adminform">
+<div class="AdminForm">
+
+<?php
+
+if (count($tabs) > 0)
+{
+	echo '<div class="tabsystem">';
+	echo '<div class="tabpage tdefault">';
+	echo '<h2>'.$tabs[0].'</h2>';
+}
+
+?>
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tbody>
 	<tr>
-		<td><?php echo lang('contenttype') ?>:</td>
+		<th><?php echo lang('contenttype') ?>:</th>
 		<td><?php echo $typesdropdown ?></td>
 	</tr>
 	<?php
 		echo $contentobj->Edit(true);
 	?>
-	<tr>
-		<td>Additional Editors:</td>
-		<td>
-			<select name="additional_editors[]" multiple="multiple" size="5">
-				<?php
-				$allusers = UserOperations::LoadUsers();
-				$addteditors = $contentobj->GetAdditionalEditors();
-				foreach ($allusers as $oneuser)
-				{
-					if ($oneuser->id != $userid)
-					{
-						echo '<option value="'.$oneuser->id.'"';
-						if (in_array($oneuser->id, $addteditors))
-						{
-							echo ' selected="selected"';
-						}
-						echo '>'.$oneuser->username.'</option>';
-					}
-				}
-				?>
-			</select>
-		</td>
-	</tr>
+	</tbody>
 </table>
 
+</div> <!-- end tabpage -->
+
+<?php
+
+if (count($tabs) > 1)
+{
+	# Show additional tabs now
+	for ($i = 1; $i < count($tabs); $i++)
+	{
+		echo '<div class="tabpage">';
+		echo '<h2>'.$tabs[$i].'</h2>';
+		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary=""><tbody>';
+		echo $contentobj->Edit(true, $i);
+		echo '</tbody></table>';
+		echo '</div> <!-- end tabpage -->';
+	}
+}
+
+?>
+
+</div> <!-- end tabsystem -->
+
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+	<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <?php } ?>
 <input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">

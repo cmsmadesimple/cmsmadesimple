@@ -240,6 +240,12 @@ else
 
 }
 
+$tabs = array();
+if (isset($contentobj))
+{
+	$tabs = $contentobj->GetTabDefinitions();
+}
+
 ?>
 
 <form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
@@ -248,48 +254,58 @@ else
 
 <div class="AdminForm">
 
+
+<?php
+
+if (count($tabs) > 0)
+{
+	echo '<div class="tabsystem">';
+	echo '<div class="tabpage tdefault">';
+	echo '<h2>'.$tabs[0].'</h2>';
+}
+
+?>
+
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
 	<tbody>
 	<tr>
-		<td><?php echo lang('contenttype') ?>:</td>
+		<th><?php echo lang('contenttype') ?>:</th>
 		<td><?php echo $typesdropdown ?></td>
 	</tr>
 	<?php
 		#Run edit method in our contentobj
-		echo $contentobj->Edit(false);
-	if ($adminaccess)
-	{
+		echo $contentobj->Edit(false, 0, $adminaccess);
 	?>
-	<tr>
-		<td>Owner:</td>
-		<td><?php echo UserOperations::GenerateDropdown($contentobj->Owner());?></td>
-	</tr>
-	<tr>
-		<td>Additional Editors:</td>
-		<td>
-			<select name="additional_editors[]" multiple="multiple" size="5">
-				<?php
-				$allusers = UserOperations::LoadUsers();
-				$addteditors = $contentobj->GetAdditionalEditors();
-				foreach ($allusers as $oneuser)
-				{
-					if ($oneuser->id != $contentobj->Owner())
-					{
-						echo '<option value="'.$oneuser->id.'"';
-						if (in_array($oneuser->id, $addteditors))
-						{
-							echo ' selected="selected"';
-						}
-						echo '>'.$oneuser->username.'</option>';
-					}
-				}
-				?>
-			</select>
-		</td>
-	</tr>
 	</tbody>
-	<?php } ?>
 </table>
+
+</div> <!-- end tabpage -->
+
+<?php
+
+if (count($tabs) > 1)
+{
+	# Show additional tabs now
+	for ($i = 1; $i < count($tabs); $i++)
+	{
+		echo '<div class="tabpage">';
+		echo '<h2>'.$tabs[$i].'</h2>';
+		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary=""><tbody>';
+		echo $contentobj->Edit(false, $i, $adminaccess);
+		echo '</tbody></table>';
+		echo '</div> <!-- end tabpage -->';
+	}
+}
+
+if (count($tabs) > 0)
+{
+	echo '</div> <!-- end tabsystem -->';
+}
+
+?>
+
+
+<br style="clear: both;" />
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
 <input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />

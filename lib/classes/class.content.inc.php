@@ -859,9 +859,17 @@ class ContentBase
 	}
 
 	/**
+	 * Returns a list of tab names that should be used when adding or editing this type of content
+	 */
+	function GetTabDefinitions()
+	{
+		return array();
+	}
+
+	/**
 	 * Show the Edit interface
 	 */
-	function Edit($adding = false)
+	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
 		# :TODO:
 		return "<tr><td>Edit Not Defined</td></tr>";
@@ -932,6 +940,33 @@ class ContentBase
 	function SetAdditionalEditors($editorarray)
 	{
 		$this->mAdditionalEditors = $editorarray;
+	}
+
+	function ShowAdditionalEditors()
+	{
+		$text = '';
+
+		$text .= '<tr><th>Additional Editors:</th>';
+		$text .= '<td><select name="additional_editors[]" multiple="multiple" size="5">';
+
+		$allusers = UserOperations::LoadUsers();
+		$addteditors = $this->GetAdditionalEditors();
+		foreach ($allusers as $oneuser)
+		{
+			if ($oneuser->id != $this->Owner())
+			{
+				echo '<option value="'.$oneuser->id.'"';
+				if (in_array($oneuser->id, $addteditors))
+				{
+					echo ' selected="selected"';
+				}
+				echo '>'.$oneuser->username.'</option>';
+			}
+		}
+
+		$text .= '</select></td></tr>';
+
+		return $text;
 	}
 }
 

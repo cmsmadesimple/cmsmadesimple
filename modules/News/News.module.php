@@ -386,7 +386,7 @@ class News extends CMSModule
 							}
 							else
 							{
-								echo $prestring.$row["news_title"].$poststring;
+								echo $prestring.cms_htmlentities($row["news_title"]).$poststring;
 							}
 							if (isset($params['swaptitledate']) && 
 									($params['swaptitledate'] == 'true' || 

@@ -3,6 +3,7 @@ Version 0.9.3 "" -- Subversion
 
 * Added dropdown of encodings to add/edit template pages
 * Submitting site prefernces redircts to an empty page now
+* Fixed bug with text parameter in print plugin
 
 Version 0.9.2 "Hatutu" -- Fri Feb 25 2005
 -----------------

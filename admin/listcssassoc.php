@@ -122,11 +122,14 @@ if ("" != $error)
 	if ($result)
 	{
 		# table header
-		echo '<table cellspacing="0" class="admintable">'."\n";
+		echo '<table cellspacing="0" class="AdminTable" style="width: 400px;">'."\n";
+		echo '<thead>';
 		echo "<tr>\n";
 		echo "<td>".lang('title')."</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		# this var is used to show each line with different color
 		$currow = "row1";
@@ -157,6 +160,7 @@ if ("" != $error)
 
 		} ## foreach
 
+		echo '</tbody>';
 		echo "</table>\n";
 
 	} # end of if result

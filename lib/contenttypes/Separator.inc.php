@@ -68,13 +68,23 @@ class separator extends ContentBase
 	{
 	}
 
-	function Edit($adding = false)
+	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
 		$text = "";
 
-		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
+		$text .= '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
+		$text .= '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
+		$text .= '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
+
+		if (!$adding && $showadmin)
+		{
+			$text .= '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>';
+		}
+
+		if ($adding || $showadmin)
+		{
+			$text .= $this->ShowAdditionalEditors();
+		}
 
 		return $text;
 	}

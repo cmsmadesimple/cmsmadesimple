@@ -33,7 +33,8 @@ if (!isset($charsetsent))
 <link rel="stylesheet" type="text/css" href="style.php" />
 <link rel="stylesheet" type="text/css" href="tab.php" />
 
-<script type="text/javascript" src="../lib/helparea.js"></script>
+<script type="text/javascript" src="listener.js"></script>
+<script type="text/javascript" src="tabs.js"></script>
 
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 

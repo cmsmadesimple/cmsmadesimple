@@ -42,6 +42,12 @@ class content extends ContentBase
 		$this->mPreview = true;
 	}
 
+	function GetTabDefinitions()
+	{
+		return array('Basic', 'Advanced');
+		#return array();
+	}
+
 	function FillParams($params)
 	{
 		global $gCms;
@@ -128,7 +134,7 @@ class content extends ContentBase
 		return $this->GetPropertyValue('content_en');
 	}
 
-	function Edit($adding = false)
+	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
 		global $gCms;
 		$config = $gCms->config;
@@ -139,42 +145,59 @@ class content extends ContentBase
 			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 		}
 
-		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';
-		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
-		#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
-		if (!($config['auto_alias_content'] == true && $adding))
+		if ($tab == 0)
 		{
-			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
-		}
-		$additionalcall = '';
-		foreach($gCms->modules as $key=>$value)
-		{
-			if (get_preference(get_userid(), 'wysiwyg')!="" && 
-				$gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true &&
-				$gCms->modules[$key]['object']->IsWYSIWYG() &&
-				$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
+			$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';
+			$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
+			#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+			if (!($config['auto_alias_content'] == true && $adding))
 			{
-				$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+				$text .= '<tr><th>'.lang('pagealias').':</th><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
+			}
+			$additionalcall = '';
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (get_preference(get_userid(), 'wysiwyg')!="" && 
+					$gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true &&
+					$gCms->modules[$key]['object']->IsWYSIWYG() &&
+					$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
+				{
+					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+				}
+			}
+	//		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
+			$text .= '<tr><th>'.lang('template').':</th><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n";
+			$text .= '<tr><th>'.lang('content').':</th><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11').'</td></tr>'."\n";
+			
+			// add additional content blocks if required
+			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+			{
+				$text .= '<tr><th>'.ucwords($blockName).':</th><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n";
 			}
 		}
-//		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
-		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n";
-		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet).'</td></tr>'."\n";
-		
-		// add additional content blocks if required
-		$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
-		foreach($this->additionalContentBlocks as $blockName => $blockNameId)
-		{
-			$text .= '<tr><td>'.ucwords($blockName).':</td><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n";
-		}
 
-		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n";
-		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><td>'.lang('cachable').':</td><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
+		if ($tab == 1)
+		{
+			$text .= '<tr><th>'.lang('headtags').':</th><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n";
+			$text .= '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
+			$text .= '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
+			$text .= '<tr><th>'.lang('cachable').':</th><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';
+			$text .= '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
+
+			if (!$adding && $showadmin)
+			{
+				$text .= '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>';
+			}
+
+			if ($adding || $showadmin)
+			{
+				$text .= $this->ShowAdditionalEditors();
+			}
+		}
 		return $text;
+
 	}
 
 	function ValidateData()
