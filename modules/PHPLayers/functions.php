@@ -143,7 +143,7 @@ function phplayers_module_help($cms)
 	<h3>What does this do?</h3>
 	<p>Prints a dhtml vertical menu.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{dhtmlmenu}</code></p>
+	<p>Just insert the module into your template/page like: <code>{cms_module module='phplayers'}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p>
 	<ul>
