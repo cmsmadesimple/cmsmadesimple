@@ -53,7 +53,7 @@ class Smarty_Preview extends Smarty {
 		global $gCms;
 		$config = $gCms->config;
 
-		$fname = $config["previews_path"] . "/cmspreview" . $tpl_name;
+		$fname = $config["previews_path"] . "/" . $tpl_name;
 		$handle = fopen($fname, "r");
 		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);

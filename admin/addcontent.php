@@ -273,8 +273,8 @@ else {
 				$data["stylesheet"] .= "\n".$cssline[css_text]."\n";
 			}
 		}
-
-		$tmpfname = tempnam($config["previews_path"], "cmspreview");
+		
+		$tmpfname = tempnam($config["previews_path"], "");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
