@@ -1,14 +1,12 @@
 <?php
 
-function check_login() {
-
+function check_login(&$config) {
 	if (!isset($_SESSION["user_id"])) {
-		redirect("/admin/login.php");
+		redirect($config->root_url."/admin/login.php");
 	}
-
 }
 
-function check_admin() {
+function check_admin(&$config) {
 
 }
 

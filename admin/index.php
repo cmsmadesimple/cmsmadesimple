@@ -2,7 +2,7 @@
 
 require_once("../config.php");
 
-check_login();
+check_login($config);
 
 ?>
 
