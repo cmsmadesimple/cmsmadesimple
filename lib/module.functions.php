@@ -505,7 +505,7 @@ function cms_mapi_register_edithtmlblob_post_function($name, $function)
  *
  * @since 0.7.3
  */
-function cms_mapi_register_adduser_pre_function($name, $function)
+function cms_mapi_register_addtemplate_pre_function($name, $function)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
@@ -521,7 +521,7 @@ function cms_mapi_register_adduser_pre_function($name, $function)
  *
  * @since 0.7.3
  */
-function cms_mapi_register_adduser_post_function($name, $function)
+function cms_mapi_register_addtemplate_post_function($name, $function)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
