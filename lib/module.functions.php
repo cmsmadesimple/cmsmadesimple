@@ -727,9 +727,9 @@ function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message=
  *
  * @since 0.4
  */
-function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post") {
+function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post", $form_extra="") {
 
-	return "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
+	return "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"" .$form_extra." ><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
 
 
 }
