@@ -16,13 +16,26 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_print($params, &$smarty) {
-	$text = 'Print This Page';
-	if (!empty($params['text']))
-		$domain = $params['text'];
+function smarty_cms_function_print($params, &$smarty)
+{
+	global $gCms;
 
-	//will this work if using htaccess?
-	echo '<a href="index.php?print='.$_GET['page'].'">'.$text.'</a>';
+	$text = 'Print This Page';
+
+	if (!empty($params['text']))
+	{
+		$domain = $params['text'];
+	}
+
+	//will this work if using htaccess? (Yes! -Wishy)
+	if (isset($params["showbutton"]))
+	{
+		echo '<a href="index.php?page='.$gCms->variables['page_name'].'&amp;print=true"><img border="0" src="images/cms/printbutton.png" alt='.$text.'/></a>';
+	}
+	else
+	{
+		echo '<a href="index.php?page='.$gCms->variables['page_name'].'&amp;print=true">'.$text.'</a>';
+	}
 }
 
 function smarty_cms_help_function_print() {
@@ -31,6 +44,10 @@ function smarty_cms_help_function_print() {
 	<p>Creates a link to only the content of the page.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
+        </ul>
 	<?php
 }
 

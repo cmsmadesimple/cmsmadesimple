@@ -35,7 +35,6 @@ $sorted_content = array();
  * @since 0.1
  */
 class Smarty_CMS extends Smarty {
-
 	
 	function Smarty_CMS(&$config)
 	{
@@ -47,8 +46,8 @@ class Smarty_CMS extends Smarty {
 		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
 		$this->plugins_dir = $config["root_path"].'/plugins/';
 
-		$this->compile_check = true;
 		$this->caching = true;
+		$this->compile_check = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
 		$this->force_compile = false;
@@ -72,11 +71,14 @@ class Smarty_CMS extends Smarty {
 						       "db_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+		$this->register_resource("print", array(&$this, "db_get_template",
+						       "db_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
 	}
 
 	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-
 		global $gCms;
 
 		$cmsmodules = $gCms->modules;
@@ -87,7 +89,9 @@ class Smarty_CMS extends Smarty {
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
 			return true;
-		} else {
+		}
+		else
+		{
 			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
 			{ 
 				$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
@@ -115,6 +119,7 @@ class Smarty_CMS extends Smarty {
 
 				#This way the id is right, even if an alias is given
 				$gCms->variables['page'] = $line['page_id'];
+				$gCms->variables['page_name'] = $tpl_name;
 
 				if (isset($line['stylesheet']))
 				{
@@ -141,13 +146,16 @@ class Smarty_CMS extends Smarty {
 				$stylesheet .= "</style>\n";
 				
 				$tpl_source = $line['template_content'];
+				if (isset($_GET["print"])) #Instead, we'll just make a simple template to use
+				{
+					$tpl_source = '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head>{stylesheet}{literal}<style type=\"text/css\" media=\"print\">#back{display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image; none;"><form action="index.php?page='.$gCms->variables['page_name'].'" method="post"><input type="submit" value="Go Back"></form>{content}</body></html>';
+				}
 				$content = $line['page_content'];
 				$title = $line['page_title'];
 				$head_tags = $line['head_tags'];
 				$header_script = $line['page_header'];
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
-
 
 				if (isset($head_tags) && $head_tags != "")
 				{
@@ -195,7 +203,6 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = $header_script.$tpl_source;
 					}
 				}
-
 				return true;
 			}
 			else
@@ -215,7 +222,6 @@ class Smarty_CMS extends Smarty {
 
 	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-
 		global $gCms;
 		$db = $gCms->db;
 		$config = $gCms->config;
@@ -237,34 +243,35 @@ class Smarty_CMS extends Smarty {
 			}
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount()) {
+			if ($result && $result->RowCount())
+			{
 				$line = $result->FetchRow();
 
 				#This way the id is right, even if an alias is given
 				$gCms->variables['page'] = $line['page_id'];
+				$gCms->variables['page_name'] = $tpl_name;
 				$gCms->variables['position'] = $line['hierarchy_position'];
 
 				$page_date = $db->UnixTimeStamp($line["page_date"]);
 				$template_date = $db->UnixTimeStamp($line["template_date"]);
 
-
 				$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
 
 				#We only want to cache "static" content
-				if ($line["page_type"] == "content") {
-
+				if ($line["page_type"] == "content")
+				{
 					header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 					$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
 					return true;
-
-				} else {
-
+				}
+				else
+				{
 					$tpl_timestamp = time();
 					return true;
-
 				}
 			}
-			else {
+			else
+			{
 				$smarty_obj->assign('modified_date',time());
 				$tpl_timestamp = time();
 				return true;
