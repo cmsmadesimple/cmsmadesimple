@@ -9,7 +9,7 @@ var collapseprevious="yes" //Collapse previously open content when opening prese
 
 if (document.getElementById){
 document.write('<style type="text/css">')
-document.write('.helparea{display:none;}')
+document.write('.expand{display:none;}')
 document.write('</style>')
 }
 
@@ -84,7 +84,7 @@ document.cookie=window.location.pathname+"="+selectedItem
 }
 
 function do_onload(){
-getElementbyClass("helparea")
+getElementbyClass("expand")
 if (enablepersist=="on" && typeof ccollect!="undefined")
 revivecontent()
 }

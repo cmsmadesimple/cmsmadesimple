@@ -389,8 +389,13 @@ else {
 	<tr>
 		<td style="padding-top: 10px;"><strong><?=$gettext->gettext("Content") ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
 	</tr>
-	<tr>
-		<td>
+</table>
+
+<h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
+<div id="advanced" class="expand">
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Head Tags</div>
+	<textarea rows="4"></textarea>
+
 			<table border="0" cellpadding="0" cellspacing="0" summary="">
 				<tr valign="top">
 					<td valign="top" style="padding-right: 10px;">
@@ -537,7 +542,7 @@ else {
 </form>
 
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
-<div id="helparea" class="helparea">
+<div id="helparea" class="expand">
 <?php
 	echo "<p>".$gettext->gettext("This page allows you to change the actual content of your page, the parent of this piece of content used for generating the menu. You can also change the text that actually appears in the menu, the title of the page, change the owner, and assign additional editors to the selected piece of content.")."</p>";
 	echo "<p>".$gettext->gettext("If you choose to use the page alias, the links created by the automated menu will be more readable using the page alias as the argument rather than the internally defined page id number.")."</p>";

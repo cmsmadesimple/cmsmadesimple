@@ -298,17 +298,22 @@ else {
 	<tr>
 		<td style="padding-top: 10px;"><strong><?=$gettext->gettext("Content") ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
 	</tr>
-	<tr>
-		<td>
+</table>
+
+<h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
+<div id="advanced" class="expand">
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Head Tags</div>
+	<textarea rows="4"></textarea>
+
 			<table border="0" cellpadding="0" cellspacing="0" summary="">
 				<tr valign="top">
 					<td valign="top" style="padding-right: 10px;">
 						<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Status</div>
-						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 5px 5px 3px 5px;">
-							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="">
+						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
 								<tr valign="top">
 									<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-									<td width="45%"><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+									<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
 								</tr>
 								<tr valign="top" style="padding-top: 5px;">
 									<td valign="top"><?=$gettext->gettext("Active")?>:</td>
@@ -330,21 +335,14 @@ else {
 					<?php // } ?>
 				</tr>
 			</table>
-		</td>
-	</tr>
-	<tr>
-		<td><br>
+		</div>
+			<br>
 			<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" />
 			<input type="hidden" name="content_change" value="0" />
 			<input type="hidden" name="addcontent" value="true" />
 			<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
 			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
 			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
-		</td>
-	</tr>
-</table>
-</div>
-
 
 <?php }elseif ($content_type == "separator") { ?>
 <h3><?=$gettext->gettext("Add Separator")?></h3>
@@ -434,7 +432,7 @@ else {
 </form>
 
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
-<div id="helparea" class="helparea">
+<div id="helparea" class="expand">
 <p><?php echo $gettext->gettext("This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.") ?></p>
 <p><?php echo $gettext->gettext("You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>") ?>
 </div>
