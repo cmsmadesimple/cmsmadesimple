@@ -213,8 +213,8 @@ if ($result && $result->RowCount() > 0)
 {
 	while ($row = $result->FetchRow())
 	{
-		$query2 = "UPDATE ".cms_db_prefix()."additional_users SET content_id = ? WHERE additional_user_id = ?";
-		$db->Execute($query, array($idmap[$row['page_id']], $row['additional_user_id']));
+		$query2 = "UPDATE ".cms_db_prefix()."additional_users SET content_id = ? WHERE additional_users_id = ?";
+		$db->Execute($query2, array($idmap[$row['page_id']], $row['additional_users_id']));
 	}
 }
 
