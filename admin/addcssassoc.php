@@ -76,7 +76,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 	# we then check permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Add Stylesheets association');
+	$access = check_permission($userid, 'Add Stylesheet Assoc');
 
 #******************************************************************************
 # the user has permissions, and vars are set, we can go on
@@ -121,7 +121,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 			if ($result)
 			{
-				audit($id, (isset($name)?$name:""), 'Added CSS association');
+				audit($id, (isset($name)?$name:""), 'Added Stylesheet Association');
 
 				if ("template" == $type)
 				{
