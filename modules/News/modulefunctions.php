@@ -198,7 +198,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 					$prestring .= "<a name=\"".$row["news_id"]."\">";
 					$poststring = "</a>".$poststring;
 				}
-				if( !isset( $params["category"] ) )
+				if (isset($params["showcategorywithtitle"]) && ($params["showcategorywithtitle"] == "true" || $params["showcategorywithtitle"] == "1"))
 				{
 					echo $prestring.$row["news_cat"].": ".$row["news_title"].$poststring;
 				}
@@ -428,6 +428,7 @@ function news_module_help($cms)
 		<li><em>(optional)</em> category="category" - Only display items for that category.  leaving empty, will show all categories</li>
 		<li><em>(optional)</em> summary="page" - Activate summary mode, links are placed in the title of each summary article, and the page is trimmed to "length" characters</li>
 		<li><em>(optional)</em> length="80" - Used in summary mode (see above) this trims the length of each article to the specified number of characters after stripping all html tags.</li>
+		<li><em>(optional)</em> showcategorywithtitle="true" - Display the title with the category in front of it (Category: Title).  Leave false for old style behavior.</li>
 		</ul>
 		</p>
 	<?php
