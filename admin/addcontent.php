@@ -241,9 +241,9 @@ if (isset($contentobj))
 
 if (count($tabs) > 0)
 {
-	echo '<div class="tabsystem">';
-	echo '<div class="tabpage tdefault">';
-	echo '<h2>'.$tabs[0].'</h2>';
+	echo '<div id="tab-container">';
+	echo '<div class="tab-content">';
+	echo '<h2 class="tab">'.$tabs[0].'</h2>';
 }
 
 ?>
@@ -260,7 +260,7 @@ if (count($tabs) > 0)
 	</tbody>
 </table>
 
-</div> <!-- end tabpage -->
+</div> <!-- end tab-content -->
 
 <?php
 
@@ -269,18 +269,18 @@ if (count($tabs) > 1)
 	# Show additional tabs now
 	for ($i = 1; $i < count($tabs); $i++)
 	{
-		echo '<div class="tabpage">';
-		echo '<h2>'.$tabs[$i].'</h2>';
+		echo '<div class="tab-content">';
+		echo '<h2 class="tab">'.$tabs[$i].'</h2>';
 		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary=""><tbody>';
 		echo $contentobj->Edit(true, $i);
 		echo '</tbody></table>';
-		echo '</div> <!-- end tabpage -->';
+		echo '</div> <!-- end tab-content -->';
 	}
 }
 
 if (count($tabs) > 0)
 {
-	echo '</div> <!-- end tabsystem -->';
+	echo '</div> <!-- end tab-container -->';
 }
 
 ?>

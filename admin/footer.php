@@ -2,6 +2,10 @@
 
 echo '</div> <!-- end MainContent -->';
 
+?>
+<script type="text/javascript" src="<?php echo $config['root_url']?>/lib/dynamic_tabs/tabs.js"></script>
+<?php
+
 include_once('topmenu.php');
 
 require_once("../include.php");
