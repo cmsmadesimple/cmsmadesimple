@@ -85,16 +85,23 @@ if (isset($_GET["message"])) {
 			echo "<td align=\"center\">".($one->active == 1?lang('true'):lang('false'))."</td>\n";
 			echo "<td align=\"center\">".($one->default_page == 1?lang('true'):"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".lang('false')."</a>")."</td>\n";
 
-			if ($modifyall) {
+			if ($modifyall)
+			{
 				echo "<td align=\"center\">";
-				if ($one->num_same_level > 1) {
-					if ($one->item_order == 1 && $one->num_same_level) {
+				if ($one->num_same_level > 1)
+				{
+					if ($one->item_order == 1 && $one->num_same_level)
+					{
 						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
 							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\"></a>";
-					} else if ($one->item_order == $one->num_same_level) {
+					}
+					else if ($one->item_order == $one->num_same_level)
+					{
 						echo "<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
 							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".lang('up')."\" title=\"".lang('up')."\" border=\"0\"></a>";
-					} else {
+					}
+					else
+					{
 						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
 							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\"></a>&nbsp;".
 							"<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
@@ -103,11 +110,16 @@ if (isset($_GET["message"])) {
 				}
 				echo "</td>\n";
 			}
-			if ($config["query_var"] == ""){
+			if ($config["query_var"] == "")
+			{
 				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
-			}else if (isset($one->page_alias) && $one->page_alias != "") {
-				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/".$one->page_alias.".html\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
-			}else{
+			}
+			else if (isset($one->page_alias) && $one->page_alias != "")
+			{
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?page_id=".$one->page_alias."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
+			}
+			else
+			{
 				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?page_id=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
 			}
 			echo "<td align=\"center\"><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
