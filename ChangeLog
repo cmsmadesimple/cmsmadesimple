@@ -1,9 +1,11 @@
-Version 0.5.1 -- Subversion
+Version 0.5.1 -- Wed Aug 25 2004
 -----------------
 
 * Added assume_mod_rewrite to config if using the .htaccess and mod_rewrite
 functionality
 * Added automatic aliases option
+* Added character map to the WYSIWYG
+* Added collapsable help blurbs to some admin pages
 * Fixed upgrade path from 0.1 through to 0.5.1
 * Fixed up the admin stylesheet so it's more cross-browser friendly
 * Fixed a bug with PATH_INFO
