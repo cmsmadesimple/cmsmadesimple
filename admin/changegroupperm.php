@@ -50,7 +50,7 @@ if ($access) {
 		$result = $dbnew->Execute($query);
 
 		foreach ($_POST as $key=>$value) {
-			if (strpos($key,"perm-") == 0) {
+			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false) {
 				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_id, permission_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
 				$dbnew->Execute($query);
 			}
