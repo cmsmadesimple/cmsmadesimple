@@ -71,8 +71,8 @@ if (get_site_preference('enablecustom404') != "1")
 {
 	$old_error_handler = set_error_handler("ErrorHandler404");
 }
-$html = $smarty->fetch('db:'.$page) . "\n";
 ($smarty->is_cached('db:'.$page)?$cached="":$cached="not ");
+$html = $smarty->fetch('db:'.$page) . "\n";
 if (get_site_preference('enablecustom404') != "1")
 {
 	set_error_handler($old_error_handler);
