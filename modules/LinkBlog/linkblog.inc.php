@@ -65,7 +65,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
     $curr_date = date("Y-m-d");
     $old_date = "";
     if (isset($params[$id."old_date"])) {
-		if ($old_date == "curr_date") {
+		if ($params[$id."old_date"] == "curr_date") {
 			$old_date = $curr_date;
 		} else {
 			$old_date = $params[$id."old_date"];
