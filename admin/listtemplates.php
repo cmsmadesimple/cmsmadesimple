@@ -32,11 +32,12 @@ if (isset($_GET["message"])) {
 <h3><?=$gettext->gettext("Current Templates")?></h3>
 <?php
 
-	$userid = get_userid();
-	$add = check_permission($userid, 'Add Template');
-	$edit = check_permission($userid, 'Modify Template');
-	$all = check_permission($userid, 'Modify Any Content');
-	$remove = check_permission($userid, 'Remove Template');
+	$userid		= get_userid();
+	$css		= check_permission($userid, 'Edit CSS associations');
+	$add		= check_permission($userid, 'Add Template');
+	$edit		= check_permission($userid, 'Modify Template');
+	$all		= check_permission($userid, 'Modify Any Content');
+	$remove		= check_permission($userid, 'Remove Template');
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {
@@ -63,6 +64,8 @@ if (isset($_GET["message"])) {
 		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
+		if ($css)
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($add)
 			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
@@ -81,6 +84,8 @@ if (isset($_GET["message"])) {
 			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($all)
 				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
+			if ($css)
+				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
 			if ($add)
 				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Copy")."\"></a></td>\n";
 			if ($edit)

@@ -91,7 +91,7 @@ else
 
 	if (!isset($_GET["doupgrade"]))
 	{
-		if ($current_version < $CMS_SCHEMA_VERSION)
+		if ($current_version <= $CMS_SCHEMA_VERSION)
 		{
 			echo "<p>CMS is in need of an upgrade.<p>You are now running schema version ".$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.".</p>Please click <a href=\"upgrade.php?doupgrade=true\">here</a> to complete it.</p>";
 		}
@@ -103,7 +103,7 @@ else
 	}
 	else
 	{
-		while ($current_version < $CMS_SCHEMA_VERSION)
+		while ($current_version <= $CMS_SCHEMA_VERSION)
 		{
 			$filename = "upgrades/upgrade.".$current_version.".to.".($current_version+1).".php";
 			include($filename);
