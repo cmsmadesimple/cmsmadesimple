@@ -17,3 +17,5 @@ OR
 
 6.  After the upgrade is complete, for security sake, you should set your config.php back to a read-only state.
         - chmod 444 config.php
+
+7.  Check your Plugin Management page to make sure there are no modules that need an upgrade.  If they do, please click the Upgrade link next to each of them.

@@ -34,11 +34,13 @@ OR
 6.  After install, for security sake, you should set your config.php back to a read-only state.
         - chmod 444 config.php
 
+7.  To reach the admin of your site, point your browser to: http://yoursiteurl/admin/
+
 Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
 
 Optional: 
 
-7.  Some setup parameters are set to a default value and are not editable through the webinterface.
+8.  Some setup parameters are set to a default value and are not editable through the webinterface.
     Although CMS works out-of-the-box, you might still want to edit these parameters
     	
    	- open config.php with you favorite editor (this file has been created by the installer)
