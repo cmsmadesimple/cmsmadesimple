@@ -103,7 +103,7 @@ foreach($gCms->modules as $key=>$value)
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true)
 	{
-		$gCms->modules[$key]['object']->ContentPostRender($oneuser);
+		$gCms->modules[$key]['object']->ContentPostRender($html);
 	}
 }
 
