@@ -11,6 +11,9 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
+	$edit = check_permission($config, $userid, 'Modify Template');
+	$remove = check_permission($config, $userid, 'Remove Template');
+
 	$db = new DB($config);
 
         $query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
@@ -22,8 +25,10 @@ include_once("header.php");
 		echo "<tr>\n";
 		echo "<th>Template</th>\n";
 		echo "<th>Active</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
+		if ($edit)
+			echo "<th>&nbsp;</th>\n";
+		if ($remove)
+			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -31,8 +36,10 @@ include_once("header.php");
 			echo "<tr>\n";
 			echo "<td>".$row["template_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
-			echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">Edit</a></td>\n";
-			echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+			if ($edit)
+				echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">Edit</a></td>\n";
+			if ($remove)
+				echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
 		}

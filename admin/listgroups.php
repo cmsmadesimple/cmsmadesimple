@@ -11,6 +11,11 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
+	$perm = check_permission($config, $userid, 'Modify Permissions');
+	$assign = check_permission($config, $userid, 'Modify Group Assignments');
+	$edit = check_permission($config, $userid, 'Modify Group');
+	$remove = check_permission($config, $userid, 'Remove Group');
+
 	$db = new DB($config);
 
         $query = "SELECT group_id, group_name, active FROM ".$config->db_prefix."groups ORDER BY group_id";
@@ -22,10 +27,14 @@ include_once("header.php");
 		echo "<tr>\n";
 		echo "<th>Group Name</th>\n";
 		echo "<th>Active</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
+		if ($perm)
+			echo "<th>&nbsp;</th>\n";
+		if ($assign)
+			echo "<th>&nbsp;</th>\n";
+		if ($edit)
+			echo "<th>&nbsp;</th>\n";
+		if ($remove)
+			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -33,10 +42,14 @@ include_once("header.php");
 			echo "<tr>\n";
 			echo "<td>".$row["group_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
-			echo "<td><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">Permissions</a></td>\n";
-			echo "<td><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">Assignments</a></td>\n";
-			echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">Edit</a></td>\n";
-			echo "<td><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+			if ($perm)
+				echo "<td><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">Permissions</a></td>\n";
+			if ($assign)
+				echo "<td><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">Assignments</a></td>\n";
+			if ($edit)
+				echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">Edit</a></td>\n";
+			if ($remove)
+				echo "<td><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
 		}

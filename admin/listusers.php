@@ -11,6 +11,9 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
+	$edit = check_permission($config, $userid, 'Modify User');
+	$remove = check_permission($config, $userid, 'Remove User');
+
 	$db = new DB($config);
 
         $query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
@@ -22,8 +25,10 @@ include_once("header.php");
 		echo "<tr>\n";
 		echo "<th>Username</th>\n";
 		echo "<th>Active</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
+		if ($edit)
+			echo "<th>&nbsp;</th>\n";
+		if ($remove)
+			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -31,8 +36,10 @@ include_once("header.php");
 			echo "<tr>\n";
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
-			echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">Edit</a></td>\n";
-			echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+			if ($edit)
+				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">Edit</a></td>\n";
+			if ($remove)
+				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
 		}
