@@ -71,7 +71,7 @@ class Smarty_CMS extends Smarty {
 			#So no one can do anything nasty
 			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 
-			if ($this->configCMS->use_bb_code == true) {
+			if ($this->configCMS->use_bb_code == true && isset($this->configCMS->bbcodeparser)) {
 				$tpl_source = $this->configCMS->bbcodeparser->qparse($tpl_source);
 			}
 
