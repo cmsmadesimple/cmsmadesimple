@@ -16,8 +16,14 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-ini_set('include_path', ini_get('include_path').":".getcwd().":".getcwd()."/smarty/");
-ini_set('include_path', ini_get('include_path').":".getcwd()."/../:".getcwd()."/../smarty/");
+if (preg_match("/Win32/i", $_SERVER['SERVER_SOFTWARE'])) {
+	$sep = ";";
+} else {
+	$sep = ":";
+}
+
+ini_set('include_path', ini_get('include_path').$sep.getcwd().$sep.getcwd().DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
+ini_set('include_path', ini_get('include_path').$sep.getcwd().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$sep.getcwd().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
 
 session_name("CMSSESSID");
 if(!session_id()) {
@@ -65,8 +71,9 @@ include_once("config.php");
 require_once("version.php");
 
 $config = new CMSConfig();
-define('SMARTY_DIR', $config->root_path.'/smarty/');
-ini_set('include_path', ini_get('include_path').":".$config->root_path.":".$config->root_path."/smarty/");
+define('SMARTY_DIR', $config->root_path.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
+
+ini_set('include_path', ini_get('include_path').$sep.$config->root_path.$sep.$config->root_path.DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
 echo ini_get('include_dir');
 
 require_once("lib/misc.functions.php");
