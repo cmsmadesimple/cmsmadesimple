@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $section= "";
 if (isset($_POST["section"])) $section = $_POST["section"];
 

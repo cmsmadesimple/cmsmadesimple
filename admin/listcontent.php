@@ -2,6 +2,8 @@
 
 require("../include.php");
 
+check_login($config);
+
 ?>
 <h3>Current Pages</h3>
 <?php

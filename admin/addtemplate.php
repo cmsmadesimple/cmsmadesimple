@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $template = "";
 if (isset($_POST["template"])) $template = $_POST["template"];
 

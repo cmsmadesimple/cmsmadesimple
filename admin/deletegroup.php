@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $group_id = -1;
 if (isset($_GET["group_id"])) {
 

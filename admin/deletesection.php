@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $section_id = -1;
 if (isset($_GET["section_id"])) {
 

@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 ?>
 <h3>Current Groups</h3>
 <?php

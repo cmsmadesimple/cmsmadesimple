@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $group_id="";
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];

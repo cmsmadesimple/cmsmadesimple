@@ -43,7 +43,7 @@ if ($_POST["username"] && $_POST["password"]) {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" /></td>
+		<td><input type="submit" value="Submit" /></td>
 	</tr>
 </table>
 

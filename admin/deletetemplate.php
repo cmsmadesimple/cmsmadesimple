@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $template_id = -1;
 if (isset($_GET["template_id"])) {
 

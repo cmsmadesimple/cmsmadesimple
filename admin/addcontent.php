@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 

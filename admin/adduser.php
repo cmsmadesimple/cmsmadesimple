@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+check_login($config);
+
 $user= "";
 if (isset($_POST["user"])) $user = $_POST["user"];
 
