@@ -93,15 +93,15 @@ if ($error != "") {
 
 	<tr>
 		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="user" maxlength="255" value="<?=$user?>" /></td>
+		<td><input type="text" name="user" maxlength="255" value="<?=$user?>" style="width: 200px;"/></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Password")?>:</td>
-		<td><input type="password" name="password" maxlength="255" value="" /></td>
+		<td><input type="password" name="password" maxlength="255" value="" style="width: 200px;" /></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Password (again)")?>:</td>
-		<td><input type="password" name="passwordagain" maxlength="255" value="" /></td>
+		<td><input type="password" name="passwordagain" maxlength="255" value="" style="width: 200px;" /></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>

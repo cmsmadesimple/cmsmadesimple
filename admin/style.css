@@ -1,53 +1,57 @@
 body {font-family: verdana, helvetica, arial, sans-serif; font-size: 100%; margin: 0 0 0 0; padding: 0 0 0 0;  height: 100%; width: 100%; background: #fff; color: #64879d;}
+
+/* links */
 a:link, a:active, a:visited {color: #64879D; text-decoration : none;}
-a:hover {color: red; font-weight: 300;}
-h1, h2, h3, h4, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; font-weight: bold; text-align: left;}
+a:hover {color: red; text-decoration: none;}
+
+/* titles */
+h1, h2, h3, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; text-align: left;}
 h4{font-size: 1em; font-weight: bold; color: #64879D; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; margin-top: 20px;}
-/* start navigation style */
-#navcontainer {position: absolute; float: left; left: 0; width: 150px; font-size: .80em; background: #F6F6F6; border-bottom: 1px solid #AAA; border-right: 1px solid #AAA;}
-#navcontainer h5 { margin: 0; background: #F6F6F6; color: #000; font-size : 12px; padding: 0; margin: 0.3em; text-align: left;}
-#navcontainer ul {display: block; margin: 0; width: auto; padding: 0.3em; border-top: 1px solid #f6f6f6; border-bottom: 1px solid #f6f6f6; color: #265980; text-decoration: none;}
-#navcontainer a { display: block; margin: 0 0 1px 0; width: auto; padding: 0.3em; border-top: 1px solid #f6f6f6; border-bottom: 1px solid #f6f6f6; color: #265980; text-decoration: none;}
-#navcontainer a:hover { background: #FFF; border-top: 1px solid #8C8A8C; border-bottom: 1px solid #8C8A8C; color: #265980; }
-#navcontainer form { text-align: center; margin-left: auto; margin-right: auto; padding-bottom: 2px; margin-bottom: 4px; }
-#welcome {padding: 6px; font-weight: bold; font-size: .9em; text-align: center; border: 1px solid #6F8341; width: 150px; background-color: #DDEBC5}
-.menubox {padding: 6px; text-align: center; border-left: 1px solid #6F8341; border-right: 1px solid #6F8341; border-bottom: 1px solid #6F8341; width: 150px;}
-.menutitle {padding: 6px; text-align: left; font-size: .9em; font-weight: bold; border-bottom: 1px solid #6F8341; width: 150px; background-color: #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;}
-/* end navigation style */
-/* start content style */
+.menutitle {padding: 6px; text-align: left; font-size: .9em; font-weight: bold; width: 155px; background-color: #fff; border-bottom: 1px solid #8C8A8C;}
+
+/* menu */
+#navcontainer {position: absolute; margin: 0 10px 10px 10px; float: left; left: 0; width: 155px; font-size: .80em;}
+#navcontainer a {display: block; padding: 6px; width: 155px; background-color: #BFDAEF; border-bottom: 1px solid #8C8A8C; border-left: 1px solid #8C8A8C; border-right: 1px solid #8C8A8C; color: #265980; text-decoration: none;}
+#navcontainer a:hover {background-color: #64879d; color: #fff;}
+#welcome {margin-top: 10px; padding: 6px; font-weight: bold; font-size: .9em; text-align: center; border: 1px solid #8C8A8C; width: 155px; background-color: #BFDAEF}
+.menubox {padding: 6px; text-align: center; border-left: 1px solid #6F8341; border-right: 1px solid #8C8A8C; border-bottom: 1px solid #8C8A8C; width: 150px;}
+
+/* header */
+#logo {position: absolute; left: 10px; top: 10px;}
+#login {background: #EDF2F5; color: #64879d; width: 320px; height: 120px; padding: 10px; border: 2px solid #64879d; margin-top: 10px; position: absolute; left: 100px; top: 50px;}
+#topHeader {background-color: black; width: 600px;}
+#bottomHeader {background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
 #header	{ background: #BFDAEF; color: #265980; padding: 8px; border-bottom: 1px solid #8C8A8C; height: 100px;}
-#logo { position: absolute; left: 10px; top: 10px;}
-#login { background: #EDF2F5; color: #64879d; width: 320px; height: 120px; padding: 10px; border: 2px solid #64879d; margin-top: 10px; position: absolute; left: 100px; top: 50px;}
 #loginlogo { float: right; }
-#topHeader { background-color: black; width: 600px;}
-#bottomHeader { background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
-#table { margin-top: 20px; }
-#helparea {border: 1px solid #8C8A8C; background-color: #BFDAEF; padding: 10px;}
+
+/* boxes */
+#table {margin-top: 20px;}
 div {border: none;}
-div.content {color: #000; height: 100%; margin: 0px 10px 0px 180px; padding-top: 10px; font-size: .8em;}
-/* end content style */
-/* start table style */
+div.content {color: #000; height: 100%; margin: 0px 10px 0px 185px; padding-top: 10px; font-size: .8em;}
 table.admintable {background: #8ABEE5; color: #fff; border: 1px solid #8C8A8C; font-weight: bold; text-align: left; border-collapse: collapse; border-spacing: 0px; margin-bottom: 15px; width: 100%;}
-table.admintable a:hover {text-decoration: none;}
+table.admintable a:hover {text-decoration: underline overline;}
 table.admintable td {padding: 4px;}
 .row1, .row2 {color: #265980; border: #8C8A8C; font-weight: normal;}
 .row1 {background: #F6F6F6 }
 .row2 {background: #FFF; }
-.button a, .button a:link, .button a:active, .button a:visited {text-align: left; background: #F6F6F6; color: #265980; padding: 5px; border: 1px solid #64879d;}
-.button a:hover {text-align: center; background: #64879d; color: #FFF; padding: 5px; border: 1px solid #64879d;}
+
+/* buttons */
+.button a, .button a:link, .button a:active, .button a:visited {text-align: left; background-color: #BFDAEF; color: #265980; padding: .2em; border: 1px solid #64879d;}
+.button a:hover {text-align: center; background: #64879d; color: #FFF; padding: .2em; border: 1px solid #64879d;}
 .smallselect {font-size: .85em;}
-/* end table style */
+
 textarea{width: 100%;}
-/* start form style */
 form {margin: 0 0 0 0;}
 form input, select {margin-top: 2px; margin-bottom: 2px;}
 form .standard {width: 150px;}
 table#padform input,table#padform select{margin-top: 5px; margin-right: 20px; margin-bottom: auto; margin-left: auto;}
-div.adminform {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 90%; margin-bottom: 10px;}
-div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 400px; margin-bottom: 10px;}
-div.adminformnobkg {padding:0; border: 0px solid #6F8341; width: 90%; margin-bottom: 10px;}
-/* end form style */
+div.adminform {padding:10px; background-color: #E8E8E8; color: #000; border: 1px solid #AAA; width: 90%; margin-bottom: 10px;}
+div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 325px; margin-bottom: 10px;}
 .error { color: #F00; }
-table.box {border: 1px solid #6F8341; background-color: #DDEBC5;}
+table.box {border: 1px solid #AAA; background-color: #E8E8E8;}
 table.box td {padding: 0 10px 10px 10px;}
-
+.clearbox {width: 100%;}
+.moduleabout h3 {font-size: .9em; margin: 0; padding: 0;}
+.moduleabout p {margin: 5px 0 10px 0; padding: 0;}
+#helparea {border: 1px solid #8C8A8C; background-color: #BFDAEF; padding: 10px;}
+#helparea p {margin: 0; border: 0; padding: 0;}

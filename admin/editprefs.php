@@ -57,7 +57,7 @@ if ($error != "") {
 
 <h3><?=$gettext->gettext("Edit User Preferences")?></h3>
 
-<table border="0">
+<table border="0" align="center">
 
 	<tr>
 		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content?")?>:</td>
@@ -69,8 +69,7 @@ if ($error != "") {
 		</td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="edituserprefs" value="true" /><input type="submit" name="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
+		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true" /><input type="submit" name="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

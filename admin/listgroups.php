@@ -25,7 +25,6 @@ check_login();
 include_once("header.php");
 
 ?>
-<div class="adminformnobkg">
 <h3><?=$gettext->gettext("Current Groups")?></h3>
 <?php
 
@@ -40,18 +39,18 @@ include_once("header.php");
 
 	if ($result && $result->RowCount() > 0) {
 
-		echo '<table cellspacing="0" class="admintable">'."\n";
+		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Group Name")."</td>\n";
-		echo "<td width=\"10%\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
 		if ($perm)
-			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td width=\"7%\" align=\"center\">&nbsp;</td>\n";
 		if ($assign)
-			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td width=\"7%\" align=\"center\">&nbsp;</td>\n";
 		if ($edit)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		echo "</tr>\n";
 
 		$currow = "row1";
@@ -60,15 +59,15 @@ include_once("header.php");
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["group_name"]."</td>\n";
-			echo "<td width=\"10%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($perm)
-				echo "<td width=\"10%\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";
 			if ($assign)
-				echo "<td width=\"10%\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
 			if ($edit)
-				echo "<td width=\"18\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/cms/edit.png\" alt=\"".$gettext->gettext("Edit")."\" title=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
 			if ($remove)
-				echo "<td width=\"18\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow == "row1"?$currow="row2":$currow="row1");
@@ -86,7 +85,6 @@ if (check_permission($userid, 'Add Group')) {
 <?php
 }
 
-echo '</div>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -78,8 +78,6 @@ if ($access) {
 
 include_once("header.php");
 
-echo '<div class="adminformnobkg">';
-
 if ($action == "showmoduleabout")
 {
 	if (isset($gCms->modules[$module]['about_function'])) {

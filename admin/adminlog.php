@@ -82,7 +82,6 @@ if ($result && $result->RowCount() > 0) {
 
 ?>
 
-<div class="adminformnobkg">
 <h3><?=$gettext->gettext("Admin Log")?></h3>
 <?php echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>"; ?>
 <table cellspacing="0" class="admintable" style="margin-bottom: 0px;">
@@ -115,13 +114,14 @@ if ($result && $result->RowCount() > 0) {
 </table>
 <?php
 echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
-echo "</div>";
 
        if ($access) {
                echo "<div class=\"button\"><a href=\"adminlog.php?clear=true\">Clear Admin Log</a></div>";
        }
        echo "<br>";
 }
+
+
 
 include_once("footer.php");
 

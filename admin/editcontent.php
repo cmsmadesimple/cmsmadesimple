@@ -227,8 +227,16 @@ if ($access) {
 	}
 
     $content_array = array();
-    $content_array = db_get_menu_items();
-    $dropdown = "<select name=\"parent_id\">";
+    $content_array = db_get_menu_items("content_hierarchy");
+		foreach ($content_array as $one ) {
+			if (strlen($one->page_title) > 20) {
+				$ddsize = "style=\"width: 250px;\"";
+				break;
+			}else{
+				$ddsize = "class=\"standard\"";
+			}
+		}
+    $dropdown = "<select name=\"parent_id\" $ddsize>";
     $dropdown .="<option value=\"0\"";
     if ($parent_id == "0") {
         $dropdown .= " selected";
@@ -300,7 +308,7 @@ if ($access) {
 		$addt_users .= ">".$row["username"]."</option>";
     }
 
-	$ctdropdown = "<select name=\"content_type\" onchange=\"document.editform.content_change.value=1;document.editform.submit()\">";
+	$ctdropdown = "<select name=\"content_type\" onchange=\"document.editform.content_change.value=1;document.editform.submit()\" class=\"standard\">";
 	foreach (get_page_types() as $key=>$value) {
 		$ctdropdown .= "<option value=\"$key\"";
 		if ($key == $content_type) {
@@ -346,7 +354,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
+<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
 
 </iframe>
 <?php
@@ -357,68 +365,95 @@ else {
 
 <form method="post" action="editcontent.php" name="editform" id="editform">
 
-<div class="adminform">
-
+<?php if ($content_type == "content") { ?>
 <h3><?=$gettext->gettext("Edit Content")?></h3>
+<div class="adminform">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td>
+			<table cellpadding="0" cellspacing="0" summary="" style="margin-top: 0; border: solid 1px #8C8A8C; padding: 5px 5px 10px 5px;" id="padform">
+				<tr valign="top">
+					<td valign="top">
+						<?=$gettext->gettext("Content Type")?>:<?=$ctdropdown?>
+						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>" />
+						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></span>
+						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>" /></span>
+						<span style="white-space: nowrap"><?=$gettext->gettext("Template")?>:&nbsp;<?=$dropdown2?></span>
+					</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td style="padding-top: 10px;"><strong><?=$gettext->gettext("Content") ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
+	</tr>
+	<tr>
+		<td>
+			<table border="0" cellpadding="0" cellspacing="0" summary="">
+				<tr valign="top">
+					<td valign="top" style="padding-right: 10px;">
+						<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Status</div>
+						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
+								<tr valign="top">
+									<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
+									<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+								</tr>
+								<tr valign="top" style="padding-top: 5px;">
+									<td valign="top"><?=$gettext->gettext("Active")?>:</td>
+									<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
+								</tr>
+									<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
+								</tr>
+							</table>
+						</div>
+					</td>
+					<?php //if ($adminaccess) { ?>
+					<td valign="top">
+							<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Permission</div>
+							<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+							<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
+							<div style="text-align: center; padding-top: 5px;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
+							</div>
+					</td>
+					<?php// } ?>
+				</tr>
+			</table>
+		</td>
+	</tr>
+	<tr>
+		<td><br>
+			<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
+			<input type="hidden" name="content_change" value="0" />
+			<input type="hidden" name="order" value="<?=$order?>" />
+			<input type="hidden" name="page_id" value="<?=$page_id?>" />
+			<input type="hidden" name="editcontent" value="true" />
+			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
+			<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
+		</td>
+	</tr>
+</table>
+</div>
 
-<table border="0">
 
+<?php }elseif ($content_type == "separator") { ?>
+<h3><?=$gettext->gettext("Edit Separator")?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
 	<tr>
 		<td><?=$gettext->gettext("Content Type")?>:</td>
-		<td><?=$ctdropdown?><input type="hidden" name="orig_content_type" value="<?=$orig_content_type?>" /></td>
-	</tr>
-<?php if ($content_type != "separator") { ?>
-	<tr>
-		<td>*<?=$gettext->gettext("Title")?>:</td>
-		<td><input type="text" name="title" maxlength="255" value="<?=$title?>" /></td>
-	</tr>
-<?php } ?>
-<?php if ($content_type == "link") { ?>
-	<tr>
-		<td>*<?=$gettext->gettext("URL")?>:</td>
-		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
-	</tr>
-<?php } ?>
-<?php if ($content_type == "content") { ?>
-	<?php if ($config["auto_alias_content"] == false) { ?>
-	<tr>
-		<td><?=$gettext->gettext("Page Alias")?>:</td>
-		<td><input type="text" name="alias" maxlength="255" value="<?=$alias?>" /></td>
-	</tr>
-	<?php } ?>
-	<tr>
-		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea id="content" name="content" cols="90" rows="24"><?=htmlentities($content)?></textarea></td>
-	</tr>
-<?php } ?>
+		<td><?=$ctdropdown?></td>
 	<tr>
 		<td><?=$gettext->gettext("Parent")?>:</td>
-		<td><?=$dropdown?><input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" /></td>
+		<td><?=$dropdown?></td>
 	</tr>
-<?php if ($content_type != "link" && $content_type != "separator") { ?>
 	<tr>
-		<td><?=$gettext->gettext("Template")?>:</td>
-		<td><?=$dropdown2?></td>
-	</tr>
-<?php } else { ?>
-	<input type="hidden" name="template_id" value="0">
-<?php } ?>
-<?php if ($adminaccess) { ?>
-	<tr>
-		<td><?=$gettext->gettext("Owner")?>:</td>
-		<td><?=$owners?></td>
-	</tr>
-    <tr> 
 		<td><?=$gettext->gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
-<?php } ?>
-<?php if ($content_type != "separator") { ?>
-	<tr>
-		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
-		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
-	</tr>
-<?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
 		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
@@ -429,20 +464,76 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="content_change" value="0" />
+		<td>
+<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
+			<input type="hidden" name="content_change" value="0" />
+			<input type="hidden" name="order" value="<?=$order?>" />
+			<input type="hidden" name="page_id" value="<?=$page_id?>" />
+			<input type="hidden" name="editcontent" value="true" />
+			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+	</tr>
+</table>
+</div>
+
+
+
+<?php }elseif ($content_type == "link") { ?>
+<h3><?=$gettext->gettext("Edit Link")?></h3>
+<div class="adminformSmall">
+<input type="hidden" name="template_id" value="1">
+<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tr>
+		<td><?=$gettext->gettext("Content Type")?>:</td>
+		<td><?=$ctdropdown?></td>
+	<tr>
+		<td>*<?=$gettext->gettext("Title")?>:</td>
+		<td><input type="text" name="title" maxlength="80" value="<?=$title?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td>*<?=$gettext->gettext("URL")?>:</td>
+		<td><input type="text" name="url" maxlength="65" value="<?=$url?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?=$gettext->gettext("Parent")?>:</td>
+		<td><?=$dropdown?></td>
+	</tr>
+	<tr>
+		<td><?=$gettext->gettext("Additional Editors")?>:</td>
+		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
+	</tr>
+	<tr>
+		<td><?=$gettext->gettext("Show in Menu")?>:</td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+	</tr>
+	<tr>
+		<td><?=$gettext->gettext("Active")?>:</td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
+			<input type="hidden" name="content_change" value="0" />
 		    <input type="hidden" name="order" value="<?=$order?>" />
 			<input type="hidden" name="page_id" value="<?=$page_id?>" />
 			<input type="hidden" name="editcontent" value="true" />
 			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-
-<?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+		<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
 	</tr>
-
 </table>
-
 </div>
 
+<?php } ?>
+</div>
 </form>
+
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
 <div id="helparea" class="helparea">
 <?php
@@ -451,6 +542,7 @@ else {
 ?>
 </div>
 <?php
+
 }
 
 include_once("footer.php");

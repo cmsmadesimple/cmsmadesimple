@@ -34,7 +34,6 @@ header("Pragma: no-cache");
 	</script>
 
 	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
-
 	<script type="text/javascript" defer="1">
 		var editor = null;
 		function initHtmlArea() {
@@ -65,14 +64,14 @@ header("Pragma: no-cache");
 			editor.config.pageStyle = '<?=str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}
-
 	</script>
-
+<?php }
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content" || get_preference($userid, 'use_wysiwyg') == "1" && $_GET['module'] == "News" && $action != "showmodulehelp"){
+	$load = "onload=\"initHtmlArea();\""; ?>
 <?php } ?>
 
 </head>
-
-<body <?php if (isset($htmlarea_flag)) { ?>onload="initHtmlArea();"<?php } ?>>
+<body <?php echo $load; ?>>
 
 <div id="header" class="header">
 <img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>

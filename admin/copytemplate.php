@@ -99,19 +99,18 @@ else {
 
 <form method="post" action="copytemplate.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext("Copy Template")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("New Template Name")?>:</td>
+		<td><?=$gettext->gettext("New Template Name")?>:</td>
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
 	</tr>
 	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

@@ -29,7 +29,6 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<div class="adminformnobkg">
 <h3><?=$gettext->gettext("Current Templates")?></h3>
 <?php
 
@@ -58,18 +57,19 @@ if (isset($_GET["message"])) {
 
 	if ($result) {
 
-		echo '<table cellspacing="0" class="admintable">'."\n";
+		echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Template")."</td>\n";
-		echo "<td>".$gettext->gettext("Active")."</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
 		if ($add)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($all)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
+
 		echo "</tr>\n";
 
 		$currow = "row1";
@@ -78,15 +78,15 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
-			echo "<td width=\"6%\" align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($all)
-				echo "<td width=\"12%\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
 			if ($add)
-				echo "<td width=\"18\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.png\" alt=\"".$gettext->gettext("Copy")."\" title=\"".$gettext->gettext("Copy")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Copy")."\"></a></td>\n";
 			if ($edit)
-				echo "<td width=\"18\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/edit.png\" alt=\"".$gettext->gettext("Edit")."\" title=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
 			if ($remove)
-				echo "<td width=\"18\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -100,7 +100,8 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div>
+<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div></p>
+
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
 <div id="helparea" class="helparea">
 <?php
@@ -109,11 +110,10 @@ echo "<p>".$gettext->gettext("To create a new template, click on the <u>Add New 
 echo $gettext->gettext("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br />";
 echo $gettext->gettext("If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.")."</p>";
 ?>
-</div></div>
+</div>
 <?php
 }
 
-echo '</div>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -134,7 +134,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
+<iframe name="previewframe" width="100%" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
 </iframe>
 <?php
@@ -149,10 +149,10 @@ else {
 
 <h3><?=$gettext->gettext("Edit Template")?></h3>
 
-<table border="0">
+<table width="100%" border="0">
 
 	<tr>
-		<td>*<?=$gettext->gettext("Template Name")?>:</td>
+		<td width="100">*<?=$gettext->gettext("Name")?>:</td>
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /><input type="hidden" name="orig_template" value="<?=$orig_template?>" /></td>
 	</tr>
 	<tr>

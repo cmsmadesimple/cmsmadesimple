@@ -76,12 +76,11 @@ else {
 	$gettext->setVar('group_name', $group_name);
 
 ?>
+<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 
 <form method="post" action="changegroupperm.php">
 
 <div class="adminformSmall">
-
-<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 
 <?php
 
@@ -113,19 +112,21 @@ else {
 		}
 
 	}
-
+	
+	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
 	foreach ($perms as $key => $value) {
 
-		echo "<p>";
+		echo "<tr><td>";
 		echo "<input type=\"checkbox\"";
 		echo ($value == true?" checked":"");
-		echo " name=\"perm-".$ids[$key]."\" value=\"1\">$key</p>\n";
+		echo " name=\"perm-".$ids[$key]."\" value=\"1\">$key</td></tr>\n";
 
 	}
 
 ?>
 
-<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></p>
+<tr><td><br><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></tr></tr>
+</table>
 
 </div>
 

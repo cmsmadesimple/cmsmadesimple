@@ -83,6 +83,7 @@ if ($access) {
 				$error .= "<li>".$gettext->gettext("Error updating user")."</li>";
 			}
 		}
+
 	}
 	else if ($user_id != -1) {
 
@@ -112,7 +113,7 @@ else {
 
 <form method="post" action="edituser.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext("Edit User")?></h3>
 
@@ -120,15 +121,18 @@ else {
 
 	<tr>
 		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" /></td>
+		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" class="standard" /></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Password<br />(leave blank to keep current password)")?>:</td>
-		<td><input type="password" name="password" maxlength="25" value="" /></td>
+		<td><?=$gettext->gettext("Password")?></td>
+		<td ><input type="password" name="password" maxlength="25" value="" class="standard" /></td>
 	</tr>
 	<tr>
-		<td><?=$gettext->gettext("Password (again)")?>:</td>
-		<td><input type="password" name="passwordagain" maxlength="25" value="" /></td>
+		<td><?=$gettext->gettext("Repeat Password")?>:</td>
+		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></td>
+	</tr>
+	<tr>
+		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>

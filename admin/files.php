@@ -178,7 +178,6 @@ $row = "row1";
 $dirtext = "";
 $filetext = "";
 
-echo '<div class="adminformnobkg">';
 echo "<h3>".$gettext->gettext("File Management")."</h3>";
 
 
@@ -272,23 +271,20 @@ echo "</table>";
 if ($access)
 {
 ?>
-
-
 <form enctype="multipart/form-data" action="files.php" method="post">
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?=$config["max_upload_size"]?>" />
-	<table>
+	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
 		<tr>
-			<td align="right"><?=$gettext->gettext("Upload file here")?>:</td>
-			<td><input name="uploadfile" type="file" /><input type="submit" value="<?=$gettext->gettext("Send")?>" /></td>
+			<td align="right" style="padding-top: 10px;">Upload&nbsp;file:</td>
+			<td style="padding-top: 10px;"><input name="uploadfile" type="file" /><input type="submit" value="Send" /></td>
 		</tr>
 		<tr>
-			<td align="right"><?=$gettext->gettext("Create new dir")?>:</td>
-			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?=$gettext->gettext("Create")?>" /></td>
+			<td align="right">Create&nbsp;New&nbsp;Folder:</td>
+			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="Create" /></td>
 		</tr>
 	</table>
 	<input type="hidden" name="reldir" value="<?=$reldir?>" />
 </form>
-
 <?
 }
 

@@ -29,7 +29,6 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<div class="adminformnobkg">
 <h3><?=$gettext->gettext("Current Users")?></h3>
 <?php
 
@@ -45,10 +44,10 @@ if (isset($_GET["message"])) {
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Username")."</td>\n";
-		echo "<td>".$gettext->gettext("Active")."</td>\n";
-		echo "<td>&nbsp;</td>\n";
+		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"16\">&nbsp;</td>\n";
 		echo "</tr>\n";
 
 		$currow = "row1";
@@ -57,13 +56,13 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
-			echo "<td width=\"10%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
-				echo "<td width=\"18\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.png\" alt=\"".$gettext->gettext("Edit")."\" title=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
 			else
-				echo "<td width=\"18\">&nbsp;</td>\n";
+				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td width=\"18\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -82,7 +81,6 @@ if (check_permission($userid, 'Add User')) {
 <?php
 }
 
-echo "</div>";
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

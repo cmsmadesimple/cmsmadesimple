@@ -29,7 +29,6 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<div class="adminformnobkg">
 <h3><?=$gettext->gettext("Current Pages")?></h3>
 <?php
 
@@ -53,18 +52,19 @@ if (isset($_GET["message"])) {
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>&nbsp;</td>";
-		echo "<td>".$gettext->gettext("Title")."</td>\n";
-		echo "<td>".$gettext->gettext("Type")."</td>\n";
-		echo "<td>".$gettext->gettext("Owner")."</td>\n";
+		echo "<td width=\"25%\">".$gettext->gettext("Title")."</td>\n";
 		echo "<td>".$gettext->gettext("Template")."</td>\n";
-		echo "<td>".$gettext->gettext("Active")."</td>\n";
-		echo "<td>".$gettext->gettext("Default")."</td>\n";
+		echo "<td align=\"center\">".$gettext->gettext("Type")."</td>\n";
+//		echo "<td align=\"center\">".$gettext->gettext("URL")."</td>\n";
+		echo "<td align=\"center\">".$gettext->gettext("Owner")."</td>\n";
+		echo "<td align=\"center\">".$gettext->gettext("Active")."</td>\n";
+		echo "<td align=\"center\">".$gettext->gettext("Default")."</td>\n";
 		if ($modifyall) {
 			echo "<td align=\"center\">".$gettext->gettext("Move")."</td>\n";
 		}
-		echo "<td>&nbsp;</td>\n";
-		echo "<td>&nbsp;</td>\n";
-		echo "<td>&nbsp;</td>\n";
+		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
+		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
+		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
 		echo "</tr>\n";
 
 		$count = 1;
@@ -78,36 +78,40 @@ if (isset($_GET["message"])) {
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one->hier."</td>\n";
 			echo "<td>".$one->page_title."</td>\n";
-			echo "<td>".$types[$one->page_type]."</td>\n";
-			echo "<td>".$one->username."</td>\n";
 			echo "<td>".$one->template_name."</td>\n";
-			echo "<td>".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
-			echo "<td>".($one->default_page == 1?"True":"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
+			echo "<td align=\"center\">".$types[$one->page_type]."</td>\n";
+//			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";
+			echo "<td align=\"center\">".$one->username."</td>\n";
+			echo "<td align=\"center\">".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td align=\"center\">".($one->default_page == 1?"True":"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
 
 			if ($modifyall) {
 				echo "<td align=\"center\">";
 				if ($one->num_same_level > 1) {
 					if ($one->item_order == 1 && $one->num_same_level) {
-						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\"  title=\"".$gettext->gettext("Down")."\"border=\"0\" /></a>";
+						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
+							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
 					} else if ($one->item_order == $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" title=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
 					} else {
 						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" title=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
+							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
 							"<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" title=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
 					}
 				}
 				echo "</td>\n";
 			}
-			if ($config["query_var"] == "")
-				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.png\" alt=\"".$gettext->gettext("View")."\" title=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
-			else
-				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.png\" alt=\"".$gettext->gettext("View")."\" title=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
-			echo "<td width=\"18\"><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\"><img src=\"../images/cms/edit.png\" alt=\"".$gettext->gettext("Edit")."\" title=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
-			echo "<td width=\"18\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
+			if ($config["query_var"] == ""){
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("View")."\"></a></td>\n";
+			}else if (isset($one->page_alias) && $one->page_alias != "") {
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/".$one->page_alias.".html\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("View")."\"></a></td>\n";
+			}else{
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?page_id=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("View")."\"></a></td>\n";
+			}
+			echo "<td align=\"center\"><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Edit")."\"></a></td>\n";
+			echo "<td align=\"center\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
 			echo "</tr>\n";
 
 			$count++;
@@ -136,7 +140,6 @@ Content")?></a></div>
 <?php
 	}
 
-echo ("</div>");
 
 include_once("footer.php");
 
