@@ -186,13 +186,6 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
 				}
 
-				#So no one can do anything nasty, take out the php smarty tags.  Use a user
-				#defined plugin instead.
-				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-				{
-					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-				}
-
 				#Check to see if Show() actually gave us something
 				if ($content != '')
 				{
@@ -230,6 +223,13 @@ class Smarty_CMS extends Smarty {
 					{
 						$tpl_source = $header_script.$tpl_source;
 					}
+				}
+
+				#So no one can do anything nasty, take out the php smarty tags.  Use a user
+				#defined plugin instead.
+				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+				{
+					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
 				#Perform the content prerender callback
