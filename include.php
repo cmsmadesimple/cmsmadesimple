@@ -97,23 +97,31 @@ if(get_magic_quotes_gpc())
 	strip_slashes($_SESSIONS);
 }
 
-#Check to see if there is already a language in use...
-if (isset($_COOKIE["cms_language"])) {
-	$gettext->setLanguage($_COOKIE["cms_language"]);
-} else {
-	#No, take a stab at figuring out the default language...
+$nls['language']['en_US'] = "English";
+$nls['alias']['en_CA'] = "en_US";
+$nls['alias']['en_GB'] = "en_US";
 
-	#First read in all current languages...
-	$dir = dirname(__FILE__)."/locale";
-	$ls = dir($dir);
-	while (($file = $ls->read()) != "") {
-		if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-			if (is_file("$dir/$file/nls.php")) {
-				include("$dir/$file/nls.php");
-			}
+#Read in all current languages...
+$dir = dirname(__FILE__)."/locale";
+$ls = dir($dir);
+while (($file = $ls->read()) != "") {
+	if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
+		if (is_file("$dir/$file/nls.php")) {
+			include("$dir/$file/nls.php");
 		}
 	}
+}
 
+#Check to see if there is already a language in use...
+if (isset($_POST["change_cms_lang"])) {
+	$gettext->setLanguage($_POST["change_cms_lang"]);
+	setcookie("cms_language", $_POST["change_cms_lang"]);
+}
+else if (isset($_COOKIE["cms_language"])) {
+	$gettext->setLanguage($_COOKIE["cms_language"]);
+} else {
+
+	#No, take a stab at figuring out the default language...
 	#Figure out default language and set it if it exists
 	if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
 		$svrstring = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
@@ -124,7 +132,7 @@ if (isset($_COOKIE["cms_language"])) {
 			#Check to see if lang exists...
 			if (isset($nls['language'][$onelang])) {
 				$gettext->setLanguage($onelang);
-				#setcookie("cms_language", $onelang);
+				setcookie("cms_language", $onelang);
 				break;
 			}
 			#Check to see if alias exists...
@@ -132,7 +140,7 @@ if (isset($_COOKIE["cms_language"])) {
 				$alias = $nls['alias'][$onelang];
 				if (isset($nls['language'][$alias])) {
 					$gettext->setLanguage($alias);
-					#setcookie("cms_language", $alias);
+					setcookie("cms_language", $alias);
 					break;
 				}
 			}

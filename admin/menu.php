@@ -17,4 +17,26 @@ $gettext->reset();
 <a href="tools.php"><?=$gettext->gettext("Tools")?></a>
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <a href="logout.php"><?=$gettext->gettext("Logout")?></a>
+<p align="center">Language<br />
+<form action="index.php" method="post" name="cms_admin_lang_form">
+<select name="change_cms_lang" onchange="cms_admin_lang_form.submit()">
+<?
+	foreach ($nls["language"] as $key=>$val) {
+		echo "<option value=\"$key\"";
+		if (isset($_POST["change_cms_lang"])) {
+			if ($_POST["change_cms_lang"] == $key) {
+				echo " selected";
+			}
+		} else if (isset($_COOKIE["cms_language"])) {
+			if ($_COOKIE["cms_language"] == $key) {
+				echo " selected";
+			}
+		}
+		echo ">$val</option>\n";
+	}
+?>
+</select>
+</form>
+</p>
+
 </div> 
