@@ -188,15 +188,9 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				}
 				$prestring = "<span class=\"cms-news-title\">";
 				$poststring = "</span><br />";
-				if( isset( $params["summary"] ) )
+				if( !isset( $params["no_anchors"] ) )
 				{
-					$prestring .= "<a href=\"/index.php?page=".$params["summary"]."#".$row["news_id"]."\">";
-					$poststring = "</a>".$poststring;
-				}
-				else if( !isset( $params["no_anchors"] ) )
-				{
-					$prestring .= "<a name=\"".$row["news_id"]."\">";
-					$poststring = "</a>".$poststring;
+					$prestring .= "<a name=\"".$row["news_id"]."\"></a>";
 				}
 				if (isset($params["showcategorywithtitle"]) && ($params["showcategorywithtitle"] == "true" || $params["showcategorywithtitle"] == "1"))
 				{
@@ -216,6 +210,15 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				if( isset( $params["summary"] ) )
 				{
 					echo "<span class=\"cms-news-content\">".strip_to_length($row["news_data"],$params["length"])."</span>";
+					if (strlen($row["news_data"]) >$params["length"])
+					{
+						$moretext = "more...";
+						if (isset($params['moretext']))
+						{
+							$moretext = $params['moretext'];
+						}
+						echo "<br><a href=\"index.php?page=".$params["summary"]."#".$row["news_id"]."\">$moretext</a>";
+					}
 				}
 				else
 				{
@@ -439,6 +442,7 @@ function news_module_help($cms)
 		<li><em>(optional)</em> summary="page" - Activate summary mode, links are placed in the title of each summary article, and the page is trimmed to "length" characters</li>
 		<li><em>(optional)</em> length="80" - Used in summary mode (see above) this trims the length of each article to the specified number of characters after stripping all html tags.</li>
 		<li><em>(optional)</em> showcategorywithtitle="true" - Display the title with the category in front of it (Category: Title).  Leave false for old style behavior.</li>
+		<li><em>(optional)</em> moretext="more..." - Text to display at the end of a news item if it goes over the summary length.  Defaults to "more...".</li>
 		</ul>
 		</p>
 	<?php
