@@ -387,6 +387,10 @@ FORM INPUT {
 SELECT {
 	FONT-SIZE: 85%;
 }
+CODE,
+PRE {
+	FONT-SIZE: 1.08em;
+}
 FORM .standard {
 	WIDTH: 150px;
 }
