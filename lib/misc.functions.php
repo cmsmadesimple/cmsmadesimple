@@ -452,7 +452,7 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 	$return_value = $default_value;
 	if(isset($parameters[$value]))
 	{
-		if(is_bool($default))
+		if(is_bool($default_value))
 		{
 			// want a boolean return_value
 			if(isset($parameters[$value]))
