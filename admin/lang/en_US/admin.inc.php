@@ -216,4 +216,6 @@ $lang['admin']['clearcache'] = 'Clear Cache';
 $lang['admin']['clear'] = 'Clear';
 $lang['admin']['cachecleared'] = 'Cache Cleared';
 $lang['admin']['apply'] = 'Apply'; //needs translation
+$lang['admin']['none'] = 'None'; //needs translation
+$lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use'; //needs translation
 ?>
