@@ -209,7 +209,7 @@ if (isset($_GET["message"])) {
   				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
   				}
   
-  				if ($one->Type() == "content")
+				if ($one->IsDefaultPossible() == TRUE)
   				{
   					echo "<td align=\"center\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
   				}

@@ -977,6 +977,11 @@ class ContentBase
 
 		return $text;
 	}
+
+	function IsDefaultPossible()
+	{
+		return FALSE;
+	}
 }
 
 /**

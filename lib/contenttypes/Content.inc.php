@@ -134,6 +134,11 @@ class content extends ContentBase
 		return $this->GetPropertyValue('content_en');
 	}
 
+	function IsDefaultPossible()
+	{
+		return TRUE;
+	}
+
 	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
 		global $gCms;
