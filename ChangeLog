@@ -9,6 +9,8 @@ Version 0.7.3 -- Subversion
 * Added categories and other fixes to the News module (calguy1000)
 * Disabled syntax highlighting applet as it's been causing random
 issues (speedfly)
+* Fixed HTMLArea to display properly with all languages, even if some
+still default to en_US
 * Fixed bug with handling of aliases in add/editcontent
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
