@@ -150,7 +150,7 @@ function linkblog_module_manage_categories($cms, $module_id) {
         if ($categories[$i]["linkblog_type"] != "") {
             echo "<tr><td>".cms_mapi_create_admin_link('LinkBlog', $module_id, array('action'=>'edit_category', 'category_id'=>$categories[$i]['linkblog_type_id'], 'category_name'=>$categories[$i]['linkblog_type']), $categories[$i]['linkblog_type']) . "</td>\n";
             echo "<td>".$categories[$i]['linkblog_type_id']."</td>\n";
-            echo "<td>type".$categories[$i]['linkblog_type_id'].".png</td></tr>\n";
+            echo "<td>type".$categories[$i]['linkblog_type_id'].".gif</td></tr>\n";
         } ## if
     } ## for
     echo "</table>\n";
