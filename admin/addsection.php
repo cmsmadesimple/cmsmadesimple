@@ -56,10 +56,10 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 
-			$new_section_id = $dbnew->GenID($config->db_prefix."sections_seq");
 			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES (".$dbnew->qstr($section).", $order, $active, now(), now())";
 			$result = $dbnew->Execute($query);
 			if ($result) {
+				$new_section_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_section_id, $section, 'Added Section');
 				redirect("listsections.php");
 				return;
