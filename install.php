@@ -305,12 +305,8 @@ function showPageThree($sqlloaded = 0) {
 		</TR>
 		<TR CLASS="row1">
 			<TD>Query string (leave this alone unless you have trouble, then edit config.php by hand)</TD>
-			<TD><INPUT TYPE="text" NAME="querystr" VALUE="page" LENGTH="20" MAXLENGTH="20"></TD>
-		</TR>
-		<TR CLASS="row2">
-			<TD>Use BBCode (must have this installed, see <A HREF="INSTALL" TARGET="_new">INSTALL</A></TD>
 			<TD>
-				<INPUT TYPE="text" NAME="bbcode" VALUE="false" LENGTH="5" MAXLENGTH="5">
+				<INPUT TYPE="text" NAME="querystr" VALUE="page" LENGTH="20" MAXLENGTH="20">
 				<INPUT TYPE="hidden" NAME="page" VALUE="4"><INPUT TYPE="hidden" NAME="host" VALUE="<?php echo $_POST['host']?>">
 			    <INPUT TYPE="hidden" NAME="dbms" VALUE="<?php echo $_POST['dbms']?>">
 			    <INPUT TYPE="hidden" NAME="database" VALUE="<?php echo $_POST['database']?>">
@@ -318,8 +314,17 @@ function showPageThree($sqlloaded = 0) {
 			    <INPUT TYPE="hidden" NAME="username" VALUE="<?php echo $_POST['username']?>">
 				<INPUT TYPE="hidden" NAME="password" VALUE="<?php echo $_POST['password']?>">
 			    <INPUT TYPE="hidden" NAME="prefix" VALUE="<?php echo $_POST['prefix']?>">
+				<INPUT TYPE="hidden" NAME="bbcode" VALUE="false" LENGTH="5" MAXLENGTH="5">
 			</TD>
 		</TR>
+		<!--
+		<TR CLASS="row2">
+			<TD>Use BBCode (must have this installed, see <A HREF="INSTALL" TARGET="_new">INSTALL</A></TD>
+			<TD>
+				<INPUT TYPE="text" NAME="bbcode" VALUE="false" LENGTH="5" MAXLENGTH="5">
+			</TD>
+		</TR>
+		-->
     </TABLE>
     <P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()">Continue</A></P>
 	</FORM>
@@ -330,11 +335,13 @@ function showPageThree($sqlloaded = 0) {
 
 function showPageFour() {
 
+	/*
     if ($_POST['bbcode'] != 'false' and $_POST['bbcode'] != 'true') {
         echo "<p>BB Code needs to be either 'true' or 'false'</p>\n";
         showPageThree(1);
         exit;
     } ## if
+	*/
 
 	require_once("lib/config.functions.php");
 
@@ -349,7 +356,7 @@ function showPageFour() {
 	$newconfig['root_url'] = $_POST['docroot'];
 	$newconfig['root_path'] = addslashes($_POST['docpath']);
 	$newconfig['query_var'] = $_POST['querystr'];
-	$newconfig['use_bb_code'] = ($_POST['bbcode'] == "true"?true:false);
+	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
 	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
