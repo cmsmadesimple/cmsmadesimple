@@ -88,7 +88,6 @@ function comments_module_execute($cms, $id, $params) {
 			echo "</div>\n";
 			echo "<div class=\"modulecommentsentrybody\">".$row["comment_data"]."</div>\n";
 			echo "</div>\n";
-			echo "</div>\n";
 		}
 	}
 }
