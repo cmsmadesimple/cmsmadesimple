@@ -174,7 +174,7 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
 					#Do html_blobs
-					$tpl_source = preg_replace_callback("|\{html_blob name=\"(.*?)\"\}|", "html_blob_regex_callback", $tpl_source);
+					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
 					{
 						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
