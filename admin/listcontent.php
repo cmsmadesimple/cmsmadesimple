@@ -74,9 +74,9 @@ include_once("header.php");
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
 			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\" onclick=\"return confirm('Are you sure you want to set site\'s default page?');\">False</a>")."</td>\n";
 			if ($config->query_var == "")
-				echo "<td><a href=\"".$doc_root."/index.php/".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php/".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
 			else
-				echo "<td><a href=\"".$doc_root."/?".$config->query_var."=".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
 			echo "<td><a href=\"editcontent.php?page_id=".$row["page_id"]."\">Edit</a></td>\n";
 			echo "<td><a href=\"deletecontent.php?page_id=".$row["page_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
