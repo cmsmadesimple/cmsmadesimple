@@ -253,6 +253,8 @@ function init() {\
 		if (document.forms[0].align.options[i].value == "{$align}")\
 			document.forms[0].align.options.selectedIndex = i;\
 	}\
+\
+	window.focus();\
 }\
 \
 function cancelAction() {\
@@ -344,6 +346,8 @@ function init() {\
 		document.forms[0].cols.disabled = true;\
 		document.forms[0].rows.disabled = true;\
 	}\
+\
+	window.focus();\
 }\
 \
 function cancelAction() {\
@@ -367,7 +371,7 @@ function cancelAction() {\
 </tr><tr><td>{$lang_insert_table_align}:</td> \
 <td><select name="align"> \
 <option value="">{$lang_insert_table_align_default}</option> \
-<option value="middle">{$lang_insert_table_align_middle}</option> \
+<option value="center">{$lang_insert_table_align_middle}</option> \
 <option value="left">{$lang_insert_table_align_left}</option> \
 <option value="right">{$lang_insert_table_align_right}</option> \
 </select></td> \
@@ -553,15 +557,16 @@ function TinyMCE_advanced_openHTMLSourceEditor() {
 				window.close();\
 			}\
 		}\
+		window.focus();\
 		</script></head>\
 		<body>\
 		<div class="title">{$lang_theme_code_title}</div><br>\
-		<textarea id="htmlSource" name="htmlSource" cols="60" rows="15" style="width: 320px">' + tinyMCE.getContent() + '</textarea><br>\
+		<textarea id="htmlSource" name="htmlSource" cols="60" rows="15" style="width: ' + tinyMCE.getParam("theme_advanced_source_editor_area_width", 320) + 'px; height: ' + tinyMCE.getParam("theme_advanced_source_editor_area_height", 190) + 'px">' + tinyMCE.getContent() + '</textarea><br>\
 		<input type="button" name="Button" value="{$lang_theme_code_save}" onclick="saveContent();">\
 		</body></html>';
 
-	template['width'] = 340;
-	template['height'] = 270;
+	template['width'] = tinyMCE.getParam("theme_advanced_source_editor_width", 340);
+	template['height'] = tinyMCE.getParam("theme_advanced_source_editor_height", 270);
 
 	tinyMCE.openWindow(template);
 }

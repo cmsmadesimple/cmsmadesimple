@@ -1,3 +1,13 @@
+Version 1.22 (2004-07-19)
+	Fixed bug #989846, Image resize bug.
+	Changed so that style attribute values get converted to lowercase in MSIE.
+	Changed so the alignment called "middle" is "center" in table properties.
+	Fixed so visual aids work correctly after using the source editor.
+	Fixed some issues with anchor links.
+	Fixed so that javascript: links can be used.
+	Added width/height options for the advanced source editor.
+	Fixed bug issue with URL:s containing quotes or single quotes.
+	Fixed so that document_base_url can point to another domain.
 Version 1.21 (2004-07-12)
 	Added new "theme_plugins" option, check the manuals for details.
 	Added new "execCommand" plugin extention possibility.

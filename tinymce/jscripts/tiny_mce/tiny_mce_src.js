@@ -1,7 +1,7 @@
 /**
  * $RCSfile: tiny_mce_src.js,v $
- * $Revision: 1.66 $
- * $Date: 2004/07/12 17:03:16 $
+ * $Revision: 1.74 $
+ * $Date: 2004/07/19 09:48:33 $
  *
  * @author Moxiecode
  * @copyright Copyright © 2004, Moxiecode Systems AB, All rights reserved.
@@ -406,7 +406,7 @@ function TinyMCE_setupContent(editor_id) {
 }
 
 function TinyMCE_handleEvent(e) {
-	//window.status = e.type + " " + e.target.nodeName;
+	//window.status = e.type + " " + e.target.nodeName + " " + (e.relatedTarget ? e.relatedTarget.nodeName : "");
 
 	switch (e.type) {
 		case "keypress":
@@ -654,7 +654,7 @@ function TinyMCE_cleanupNode(config, node) {
 				var attribValue = attribForceValue ? attribForceValue : node.getAttribute(attribName);
 				// * * Handle URL convertor callback
 				if (urlConvertorCallbackStr && attribValue && attribValue != "" && (attribName == "src" || attribName == "href" || attribName == "mceOverSrc"))
-					attribValue = eval(urlConvertorCallbackStr + "('" + attribValue + "', node, onSave);");
+					attribValue = eval(urlConvertorCallbackStr + "(attribValue, node, onSave);");
 
 				// * * Special MSIE stuff
 				if (isMSIE && !attribForceValue) {
@@ -664,7 +664,7 @@ function TinyMCE_cleanupNode(config, node) {
 						break;
 
 						case "style":
-							attribValue = node.style.cssText;
+							attribValue = node.style.cssText.toLowerCase();
 						break;
 
 						case "colspan":
@@ -932,7 +932,7 @@ function TinyMCE_insertLink(href, target) {
 
 		var linkElement = doc.createElement("a");
 
-		href = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + href + "', linkElement);");
+		href = eval(tinyMCE.settings['urlconvertor_callback'] + "(href, linkElement);");
 		linkElement.setAttribute('href', href);
 		linkElement.setAttribute('target', target);
 		linkElement.appendChild(this.selectedElement.cloneNode(true));
@@ -949,7 +949,7 @@ function TinyMCE_insertLink(href, target) {
 		var elementArray = this.getElementsByAttributeValue(this.selectedInstance.contentDocument.body, "a", "href", "#mce_temp_url#");
 
 		for (var i=0; i<elementArray.length; i++) {
-			href = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + href + "', elementArray[i]);");
+			href = eval(tinyMCE.settings['urlconvertor_callback'] + "(href, elementArray[i]);");
 			elementArray[i].setAttribute('href', href);
 			elementArray[i].setAttribute('target', target);
 		}
@@ -958,7 +958,7 @@ function TinyMCE_insertLink(href, target) {
 	}
 
 	if (this.linkElement) {
-		href = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + href + "', this.linkElement);");
+		href = eval(tinyMCE.settings['urlconvertor_callback'] + "(href, this.linkElement);");
 		this.linkElement.setAttribute('href', href);
 		this.linkElement.setAttribute('target', target);
 	}
@@ -983,7 +983,7 @@ function TinyMCE_insertImage(src, alt, border, hspace, vspace, width, height, al
 	}
 
 	if (this.imgElement) {
-		src = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + src + "', tinyMCE.imgElement);");
+		src = eval(tinyMCE.settings['urlconvertor_callback'] + "(src, tinyMCE.imgElement);");
 
 		tinyMCE.setAttrib(this.imgElement, 'src', src, true);
 		tinyMCE.setAttrib(this.imgElement, 'alt', alt, true);
@@ -994,6 +994,13 @@ function TinyMCE_insertImage(src, alt, border, hspace, vspace, width, height, al
 		tinyMCE.setAttrib(this.imgElement, 'width', width);
 		tinyMCE.setAttrib(this.imgElement, 'height', height);
 		tinyMCE.setAttrib(this.imgElement, 'border', border);
+
+		// Fix for bug #989846 - Image resize bug
+		if (width != "")
+			this.imgElement.style.pixelWidth = width;
+
+		if (height != "")
+			this.imgElement.style.pixelHeight = height;
 	}
 }
 
@@ -1043,8 +1050,8 @@ function TinyMCE_getParentElement(node, names) {
 function TinyMCE_convertURL(url, node, on_save) {
 	var fileProto = (document.location.protocol == "file:");
 
-	// Mailto link (Pass through)
-	if (url.indexOf('mailto:') != -1)
+	// Mailto link or anchor (Pass through)
+	if (url.indexOf('mailto:') != -1 || url.indexOf('javascript:') != -1 || url.replace(' ','').charAt(0) == "#")
 		return url;
 
 	// Fix relative/Mozilla
@@ -1066,8 +1073,10 @@ function TinyMCE_convertURL(url, node, on_save) {
 			urlParts = tinyMCE.parseURL(url);
 		}
 
+		var tmpUrlParts = tinyMCE.parseURL(tinyMCE.settings['document_base_url']);
+
 		// Link is within this site
-		if (urlParts['host'] == document.location.hostname && (!urlParts['port'] || urlParts['port'] == document.location.port))
+		if (urlParts['host'] == tmpUrlParts['host'] && (!urlParts['port'] || urlParts['port'] == tmpUrlParts['port']))
 			return tinyMCE.convertAbsoluteURLToRelativeURL(tinyMCE.settings['document_base_url'], url);
 	}
 
@@ -1240,6 +1249,8 @@ function TinyMCE_setContent(html_content) {
 
 		if (!tinyMCE.isMSIE)
 			this.selectedInstance.contentWindow.document.body.innerHTML = tinyMCE.cleanupHTML(tinyMCE.settings, this.selectedInstance.contentWindow.document.body);
+
+		tinyMCE.handleVisualAid(this.selectedInstance.contentWindow.document.body, true);
 	}
 }
 
@@ -1437,7 +1448,7 @@ function TinyMCEControl_execCommand(command, user_interface, value) {
 			if (tinyMCE.linkElement) {
 				href= tinyMCE.linkElement.getAttribute('href') ? tinyMCE.linkElement.getAttribute('href') : "";
 				target = tinyMCE.linkElement.getAttribute('target') ? tinyMCE.linkElement.getAttribute('target') : "";
-				href = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + href + "', tinyMCE.linkElement, true);");
+				href = eval(tinyMCE.settings['urlconvertor_callback'] + "(href, tinyMCE.linkElement, true);");
 			}
 
 			if (this.settings['insertlink_callback']) {
@@ -1464,7 +1475,7 @@ function TinyMCEControl_execCommand(command, user_interface, value) {
 				width = tinyMCE.imgElement.getAttribute('width') ? tinyMCE.imgElement.getAttribute('width') : "";
 				height = tinyMCE.imgElement.getAttribute('height') ? tinyMCE.imgElement.getAttribute('height') : "";
 				align = tinyMCE.imgElement.getAttribute('align') ? tinyMCE.imgElement.getAttribute('align') : "";
-				src = eval(tinyMCE.settings['urlconvertor_callback'] + "('" + src + "', tinyMCE.imgElement, true);");
+				src = eval(tinyMCE.settings['urlconvertor_callback'] + "(src, tinyMCE.imgElement, true);");
 			}
 
 			if (this.settings['insertimage_callback']) {
