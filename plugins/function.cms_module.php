@@ -24,13 +24,17 @@ function smarty_cms_function_cms_module($params, &$smarty) {
 	if (isset($params['module'])) {
 
 		if (isset($cmsmodules[$params['module']])) {
-			@ob_start();
-			#$obj = $cmsmodules[$params['module']]['Instance'];
-			#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
-			call_user_func_array(&$cmsmodules[$params['module']]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
-			$modoutput = @ob_get_contents();
-			@ob_end_clean();
-			echo $modoutput;
+			if (isset($cmsmodules[$params['module']]['plugin_module'])) {
+				@ob_start();
+				#$obj = $cmsmodules[$params['module']]['Instance'];
+				#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
+				call_user_func_array(&$cmsmodules[$params['module']]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
+				$modoutput = @ob_get_contents();
+				@ob_end_clean();
+				echo $modoutput;
+			} else {
+				echo "<!-- Not a plugin module -->\n";
+			}
 		}
 
 	}

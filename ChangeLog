@@ -3,9 +3,10 @@ Version 0.4 -- Subversion
 
 * Added module API
 * Added news module
-* Added subsections
 * Added copyright notice to bottom on all generated pages in a comment
+* Added dhtml menu plugin using phplayers
 * Fixed modified_date plugin
+* Removed sections.  Instead we have content be children of other content
 * Rewrote plugin loading so that plugins do not cache, even thought static
 content does
 * Switched WYSIWYGs from tinymce to htmlarea

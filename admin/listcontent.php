@@ -92,15 +92,15 @@ if (isset($_GET["message"])) {
 		$currow = "row1";
 
 ## 		while($row = $result->FetchRow()) 
-		foreach ($content_array as $one) {
+		$types = get_page_types($config);
 
-			$types = get_page_types($config);
+		foreach ($content_array as $one) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one->hier."</td>\n";
 			echo "<td>".$one->page_title."</td>\n";
 			echo "<td>".$types[$one->page_type]."</td>\n";
-			echo "<td>".$one->page_url."</td>\n";
+			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";
 			echo "<td>".$one->username."</td>\n";
 			echo "<td>".$one->template_name."</td>\n";
 			echo "<td>".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
@@ -111,7 +111,7 @@ if (isset($_GET["message"])) {
 				if ($one->num_same_level > 1) {
 					if ($one->item_order == 1 && $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
 					} else if ($one->item_order == $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
 							"<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";

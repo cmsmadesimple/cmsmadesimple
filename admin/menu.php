@@ -42,7 +42,9 @@ $gettext->reset();
 <?
 
 	foreach ($cmsmodules as $key=>$value) {
-		echo "<a href=\"moduleinterface.php?module=$key\">$key Module</a>";
+		if (isset($cmsmodules[$key]['execute_admin_function'])) {
+			echo "<a href=\"moduleinterface.php?module=$key\">$key</a>";
+		}
 	}
 
 ?>

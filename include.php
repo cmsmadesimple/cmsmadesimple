@@ -82,15 +82,6 @@ require_once(dirname(__FILE__)."/lib/module.functions.php");
 
 define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
 
-#Setup gettext
-require_once(dirname(__FILE__)."/lib/GetText.php");
-if (function_exists('gettext')) {
-	$gettext = new GetText_NativeSupport();
-} else {
-	$gettext = new GetText_PHPSupport();
-}
-$gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
-
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
@@ -100,29 +91,14 @@ if(get_magic_quotes_gpc())
 	strip_slashes($_SESSIONS);
 }
 
-#Setup defaults
-$nls['language']['en_US'] = "English";
-$nls['alias']['en_CA'] = "en_US";
-$nls['alias']['en_GB'] = "en_US";
-
-#Read in all current languages...
-$dir = dirname(__FILE__)."/locale";
-$ls = dir($dir);
-while (($file = $ls->read()) != "") {
-	if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-		if (is_file("$dir/$file/nls.php")) {
-			include("$dir/$file/nls.php");
-		}
-	}
-}
-
 #Setup the object sent to modules
+$modulecmsobj->pluginnum = 1;
 $modulecmsobj->page = $page;
 $modulecmsobj->db = &$dbnew;
 $modulecmsobj->config = &$config;
 
 #Setup hash for storing all modules
-$cmsmodules;
+$cmsmodules = array();
 
 #Load all installed module code
 load_modules();
@@ -137,6 +113,31 @@ load_modules();
 
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE)) {
+
+	#Setup gettext
+	require_once(dirname(__FILE__)."/lib/GetText.php");
+	if (function_exists('gettext')) {
+		$gettext = new GetText_NativeSupport();
+	} else {
+		$gettext = new GetText_PHPSupport();
+	}
+	$gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
+
+	#Setup defaults
+	$nls['language']['en_US'] = "English";
+	$nls['alias']['en_CA'] = "en_US";
+	$nls['alias']['en_GB'] = "en_US";
+
+	#Read in all current languages...
+	$dir = dirname(__FILE__)."/locale";
+	$ls = dir($dir);
+	while (($file = $ls->read()) != "") {
+		if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
+			if (is_file("$dir/$file/nls.php")) {
+				include("$dir/$file/nls.php");
+			}
+		}
+	}
 	#Check to see if there is already a language in use...
 	if (isset($_POST["change_cms_lang"])) {
 		$err = $gettext->setLanguage($_POST["change_cms_lang"]);
