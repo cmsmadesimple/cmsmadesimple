@@ -5,11 +5,12 @@ Version 0.7.3 -- Subversion
 * Added more callback functions to module API
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
+* Fixed displaying html_blobs in modules with executeuser
 * Reenabled Image Manager
 * Removed Allow Admin Access from add/edit user
 * Updated adodb to 4.54
 
-Version 0.7.2 -- Wed Nov 10 2004
+Vrersion 0.7.2 -- Wed Nov 10 2004
 -----------------
 
 * Added missing edit links to titles in CSS and News admin (#000035)
