@@ -18,7 +18,6 @@ upgrade_create_sequence_table($dbnew, $config->db_prefix."group_perms", "group_p
 upgrade_create_sequence_table($dbnew, $config->db_prefix."groups", "group_group_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."pages", "page_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."permissions", "permission_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."sections", "section_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."templates", "template_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."users", "user_id");
 
@@ -39,7 +38,29 @@ $db->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
-#permission_id | permission_name          | permission_text              | create_date         | modified_date 
+echo "<p>Adding parent_id to pages table...";
+
+$db = NewDataDictionary($dbnew);
+$sqlarray = $db->AddColumnSQL($config->db_prefix."pages", "parent_id I NOTNULL DEFAULT 0");
+$db->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
+echo "<p>Removing section_id from pages table...";
+
+$db = NewDataDictionary($dbnew);
+$sqlarray = $db->DropColumnSQL($config->db_prefix."pages", "section_id");
+$db->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
+echo "<p>Removing sections table...";
+
+$db = NewDataDictionary($dbnew);
+$sqlarray = $db->DropTableSQL($config->db_prefix."sections");
+$db->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
 
 echo "<p>Adding module admin permission... ";
 
