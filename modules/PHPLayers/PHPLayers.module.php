@@ -102,7 +102,7 @@ class PHPLayers extends CMSModule
 			$allcontent = ContentManager::GetAllContent();
 
 			# getting menu parameters
-			$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 1 ;
+			$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 			$horizontal = isset($params['horizontal']) ? $params['horizontal'] : 0 ;
 
 			$menu = '';
