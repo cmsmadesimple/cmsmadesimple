@@ -212,6 +212,8 @@ function load_plugins(&$smarty)
 {
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
+	$userplugins = &$gCms->userplugins;
+	$db = &$gCms->db;
 
 	$dir = dirname(dirname(__FILE__))."/plugins";
 	$ls = dir($dir);
@@ -224,6 +226,26 @@ function load_plugins(&$smarty)
 				include_once $filename;
 				$smarty->register_function($matches[2], "smarty_cms_function_" . $matches[2], $smarty->cache_plugins);
 				array_push($plugins, $matches[2]);
+			}
+		}
+	}
+
+	$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
+	$result = $db->Execute($query);
+	if ($result && $result->RowCount() > 0)
+	{
+		while ($row = $result->FetchRow())
+		{
+			if (!in_array($row['userplugin_name'], $plugins))
+			{
+				array_push($plugins, $row['userplugin_name']);
+				$userplugins[$row['userplugin_name']] = $row['userplugin_id'];
+				$functionname = "cms_tmp_".$row['userplugin_name']."_userplugin_function";
+				//Only register valid code
+				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$row['code'].'}') === FALSE))
+				{
+					$smarty->register_function($row['userplugin_name'], $functionname, $smarty->cache_plugins);
+				}
 			}
 		}
 	}

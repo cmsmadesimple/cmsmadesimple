@@ -58,6 +58,12 @@ class CmsObject {
 	var $cmsplugins;
 
 	/**
+	 * User Plugins object - holds list and function pointers of all registered user plugins
+	 */
+	
+	var $userplugins;
+
+	/**
 	 * BBCode object - for use in bbcode parsing
 	 */
 	var $bbcodeparser;

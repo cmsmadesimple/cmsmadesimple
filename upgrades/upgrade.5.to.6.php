@@ -1,19 +1,20 @@
 <?php
 
-echo "<p>Creating codeblocks table...";
+echo "<p>Creating userplugins table...";
 
 $dbdict = NewDataDictionary($db);
 $flds = "
-	codeblock_id I,
-	codeblock_name C(255),
-	codeblock_data X,
-	active I1
+	userplugin_id I,
+	userplugin_name C(255),
+	code X,
+	create_date T,
+	modified_date T
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."codeblocks", $flds, $taboptarray);
+$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."userplugins", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
 
-$db->CreateSequence($config["db_prefix"]."codeblocks_seq");
+$db->CreateSequence($config["db_prefix"]."userplugins_seq");
 
 echo "[done]</p>";
 

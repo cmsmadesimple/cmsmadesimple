@@ -266,7 +266,14 @@ else
 		foreach($gCms->cmsplugins as $oneplugin) {
 
 			echo "<tr class=\"$curclass\">\n";
-			echo "<td>$oneplugin</td>\n";
+			if (array_key_exists($oneplugin, $gCms->userplugins))
+			{
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
+			}
+			else
+			{
+				echo "<td>$oneplugin</td>\n";
+			}
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
 			{
 				echo "<td><a href=\"plugins.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
@@ -292,6 +299,8 @@ else
 	?>
 
 </table>
+
+<div class="button"><a href="adduserplugin.php"><?=$gettext->gettext("Add New Plugin")?></a></div>
 
 </div>
 

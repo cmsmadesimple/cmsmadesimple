@@ -117,6 +117,7 @@ if (isset($page)) {
 
 #Setup hash for storing all modules
 $gCms->cmsmodules = array();
+$gCms->userplugins = array();
 $gCms->cmsplugins = array();
 
 #Load all installed module code
