@@ -56,8 +56,8 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		?>
 		<table>
 			<tr>
-				<td><input name="<?php echo $id?>search_text" type=text value="" /></td>
-				<td><input name="<?php echo $id?>submit_search" type=submit value=Search /><input type=hidden name="<?php echo $id?>action" value="search_url" /></td>
+				<td><input name="<?php echo $id?>search_text" type="text" value="" /></td>
+				<td><input name="<?php echo $id?>submit_search" type="submit" value="Search" /><input type="hidden" name="<?php echo $id?>action" value="search_url" /></td>
 			</tr>
 		</table>
 		<?php
