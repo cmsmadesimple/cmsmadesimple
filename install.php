@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 $config = "config.php";
-if (!file_exists($config) || filesize($config) == 0) {
+if (!file_exists($config)) {
     $file = @fopen($config, "w");
     if ($file != 0) {
 		#Follow fix suggested by sig in the forums
@@ -30,6 +30,19 @@ if (!file_exists($config) || filesize($config) == 0) {
         exit;
     } ## if
 } ## if
+else if (filesize($config) == 0) {
+    $file = @fopen($config, "w");
+    if ($file != 0) {
+		#Follow fix suggested by sig in the forums
+        #$cwd = getcwd();
+		$cwd = str_replace("\\","/",dirname(__FILE__));
+        fwrite($file,"<?php\n".'$this->root_path = "'.$cwd.'";'."\n?>\n");
+        fclose($file);
+    } else {
+        echo "Cannot modify $config, please change permissions to allow this\n";
+        exit;
+    } ## if
+}
 
 $pages = 4;
 if (isset($_POST["page"])) {
@@ -108,7 +121,7 @@ function showPageOne() {
     ## check file perms
 	$continueon = true;
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array('smarty/cms/cache', 'smarty/cms/templates_c', 'uploads');
+    $files = array('smarty/cms/cache', 'smarty/cms/templates_c', 'uploads', 'config.php');
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
