@@ -20,7 +20,9 @@ $config = "config.php";
 if (!file_exists($config) || filesize($config) == 0) {
     $file = @fopen($config, "w");
     if ($file != 0) {
-        $cwd = getcwd();
+		#Follow fix suggested by sig in the forums
+        #$cwd = getcwd();
+		$cwd = str_replace("\\","/",dirname(__FILE__));
         fwrite($file,"<?php\n".'$this->root_path = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
