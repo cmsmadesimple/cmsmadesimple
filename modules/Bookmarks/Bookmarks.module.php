@@ -37,6 +37,16 @@ class Bookmarks extends CMSModule
 	{
 		return 'Bookmarks';
 	}
+	
+	function GetAuthor()
+	{
+		return 'Rob Allen';
+	}
+	
+	function GetAuthorEmail()
+	{
+		return 'rob@akrabat.com';
+	}
 
 	function IsPluginModule()
 	{
@@ -50,7 +60,7 @@ class Bookmarks extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.3';
+		return '1.3.1';
 	}
 
 	function GetDescription($lang = 'en_US')
@@ -178,18 +188,12 @@ EOT;
 					<dd>Update to 0.8.</dd>
 				<dt>Version: 1.3</dt>
 					<dd>Update to 0.9.</dd>
+				<dt>Version: 1.3.1</dt>
+					<dd>Fix all default options so that the documented default is used. This is most obvious
+					for the display code so that if type is not set, we correctly assume "text" rather than 
+					"rss" now!. Also, fixed the API calls so that About works.</dd>
 			</dl>
 EOT;
-	}
-
-	function GetAuthorName()
-	{
-		return '';
-	}
-
-	function GetAuthorEmail()
-	{
-		return '';
 	}
 
 	function Install()
@@ -684,12 +688,12 @@ EOT;
 	
 		/* @var $rs ADORecordset */
 		$user_id = $this->cms->variables['user_id'];
-		$categories = get_value_with_default(@$parameters['bookmark_categories']);
-		$bookmark_id = get_value_with_default(@$parameters['bookmark_id'], -1);
-		$bookmark_title = $db->quote(get_value_with_default(@$parameters['bookmark_title']), get_magic_quotes_runtime());
-		$bookmark_url = $db->quote(get_value_with_default(@$parameters['bookmark_url']), get_magic_quotes_runtime());
-		$bookmark_summary = $db->quote(get_value_with_default(@$parameters['bookmark_summary']), get_magic_quotes_runtime());
-		$bookmark_approved = get_value_with_default(@$parameters['bookmark_approved'], 0);
+		$categories = get_parameter_value($parameters, 'bookmark_categories');
+		$bookmark_id = get_parameter_value($parameters, 'bookmark_id', -1);
+		$bookmark_title = $db->quote(get_parameter_value($parameters, 'bookmark_title'), get_magic_quotes_runtime());
+		$bookmark_url = $db->quote(get_parameter_value($parameters, 'bookmark_url'), get_magic_quotes_runtime());
+		$bookmark_summary = $db->quote(get_parameter_value($parameters, 'bookmark_summary'), get_magic_quotes_runtime());
+		$bookmark_approved = get_parameter_value($parameters, 'bookmark_approved', 0);
 	
 		if($bookmark_id > -1)
 		{
@@ -758,7 +762,7 @@ EOT;
 		$bookmarks_table_name = $this->bookmarks_table_name;
 		$bookmarks_to_categories_table_name = $this->bookmarks_to_categories_table_name;
 	
-		$bookmark_id = get_value_with_default(@$parameters['bookmark_id'], -1);
+		$bookmark_id = get_parameter_value($parameters, 'bookmark_id', -1);
 	
 		// delete current bookmarks_to_categories records for this bookmark
 		$sql = "DELETE FROM $bookmarks_to_categories_table_name WHERE bookmark_id = $bookmark_id";
@@ -771,8 +775,8 @@ EOT;
 	
 	function AdminDisplayManageBookmarks($id, $parameters, $returnid)
 	{
-		$keyword = get_value_with_default(@$parameters['keyword'], '', 'Bookmarks-keyword');
-		$not_approved_only = get_value_with_default(@$parameters['not_approved_only'], 0, 'Bookmarks-not_approved_only');
+		$keyword = get_parameter_value($parameters, 'keyword', '', 'Bookmarks-keyword');
+		$not_approved_only = get_parameter_value($parameters, 'not_approved_only', 0, 'Bookmarks-not_approved_only');
 	
 		echo "<p>", $this->CreateFormStart($id, 'defaultadmin', $returnid, $method='get', $enctype='');
 		echo <<<EOT
@@ -827,7 +831,7 @@ EOT;
 						OR ". $this->bookmarks_table_name . ".bookmark_url LIKE '%$keyword%'
 						OR ". $this->bookmarks_table_name . ".bookmark_summary LIKE '%$keyword%' ";
 		}
-		$order_by = get_value_with_default(@$parameters['order_by'], '');
+		$order_by = get_parameter_value($parameters, 'order_by', '');
 		if(!empty($order_by))
 		{
 			$sql .= "ORDER BY ". $this->bookmarks_table_name . ".modified_date";
@@ -842,7 +846,7 @@ EOT;
 	
 		if ($rs && $rs->RowCount() > 0)
 		{
-			$number_of_columns = get_value_with_default(@$parameters['columns'], 2);
+			$number_of_columns = get_parameter_value($parameters, 'columns', 2);
 	
 			$num_rows = $rs->RecordCount();
 			$rows_per_column = intval($num_rows / $number_of_columns) + 0; /* 10 is a fudge factor to make it look better! */
@@ -942,17 +946,17 @@ EOT;
 			return;
 		}
 	
-		$type = get_value_with_default(@$parameters['type'], 'text');
-		$display_unapproved = get_value_with_default(@$parameters['display_unapproved'], false);
-		$show_category_with_title = get_value_with_default(@$parameters['show_category_with_title'], '');
-		$category = get_value_with_default(@$parameters['category'], '');
-		$number = get_value_with_default(@$parameters['number'], '');
-		$order_by_date = get_value_with_default(@$parameters['order_by_date'], false);
+		$type = get_parameter_value($parameters, 'type', 'text');
+		$display_unapproved = get_parameter_value($parameters, display_unapproved, false);
+		$show_category_with_title = get_parameter_value($parameters, 'show_category_with_title', '');
+		$category = get_parameter_value($parameters, 'category', '');
+		$number = get_parameter_value($parameters, 'number', '');
+		$order_by_date = get_parameter_value($parameters, 'order_by_date', false);
 		if($order_by_date)
 		{
 			$show_category_with_title = false;
 		}
-	
+			
 		$categories_table_name = $this->categories_table_name;
 		$bookmarks_to_categories_table_name = $this->bookmarks_to_categories_table_name;
 		$bookmarks_table_name = $this->bookmarks_table_name;
@@ -1042,7 +1046,7 @@ EOT;
 	
 			$sql .= "ORDER BY $bookmarks_table_name.bookmark_modified_date DESC";
 		}
-	
+	debug_display($sql, '$sql');
 		if($number)
 		{
 			$dbresult = $db->SelectLimit($sql,$number); /* @var $dbresult ADORecordSet */
@@ -1087,7 +1091,7 @@ EOT;
 			}
 			else
 			{
-				$number_of_columns = get_value_with_default(@$parameters['columns'], 3);
+				$number_of_columns = get_parameter_value($parameters, 'columns', 3);
 	
 				$num_rows = $dbresult->RecordCount();
 				$rows_per_column = intval($num_rows / $number_of_columns) + 10; /* 10 is a fudge factor to make it look better! */
@@ -1134,6 +1138,8 @@ EOT;
 				}
 				else
 				{
+debug_display($current_category_name,'$current_category_name');	
+debug_display($category_name,'$category_name');	
 					$bookmark_summary = empty($parameters["summaries"]) ? '' : "<div class='cms-module-bookmarks-summary'>" . $row['bookmark_summary'] . "</div>";
 	
 					if($current_category_name != $category_name)
@@ -1201,9 +1207,9 @@ EOT;
 		$categories = $this->GetCategories();
 		$bookmark = $this->GetBookmark(-1);
 	
-		$include_back_button = get_value_with_default(@$parameters['include_back_button'], false);
-		$email_to = get_value_with_default(@$parameters['email_to'], 0);
-		$email_from = get_value_with_default(@$parameters['email_from'], 0);
+		$include_back_button = get_parameter_value($parameters, 'include_back_button', false);
+		$email_to = get_parameter_value($parameters, 'email_to', 0);
+		$email_from = get_parameter_value($parameters, 'email_from', 0);
 	
 		$button_text = 'Add';
 		if($bookmark_id > 0)
@@ -1311,7 +1317,7 @@ EOT;
 	{
 		$parameters['bookmark_approved']=0;
 		$this->AdminUpdateBookmarks($id, $parameters, $returnid);
-		$email_to = get_value_with_default(@$parameters['email_to'], 0);
+		$email_to = get_parameter_value($parameters, 'email_to', 0);
 		if($email_to > 0)
 		{
 			// get email address to send email to:
@@ -1325,7 +1331,7 @@ EOT;
 			if($email_to != '')
 			{
 				// get from email address.
-				$email_from = get_value_with_default(@$parameters['email_from'], 0);
+				$email_from = get_parameter_value($parameters, 'email_from', 0);
 				if($email_from <= 0)
 				{
 					// none set - pick up first email we can find.
