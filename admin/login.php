@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
 
@@ -31,17 +32,20 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
-	$query = "SELECT * FROM ".cms_db_prefix()."users WHERE username = ".$db->qstr($username)." and password = ".$db->qstr(md5($password)) . " and active = 1";
-	$result = $db->Execute($query);
+	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
 
-	$line = $result->FetchRow();
+	#$query = "SELECT * FROM ".cms_db_prefix()."users WHERE username = ".$db->qstr($username)." and password = ".$db->qstr(md5($password)) . " and active = 1";
+	#$result = $db->Execute($query);
 
-	if ($username != "" && $password != "" && isset($line["user_id"])) {
-		setcookie("cms_admin_user_id", $line["user_id"]);
-		generate_user_object($line["user_id"]);
-		audit($line["user_id"], $line["username"], -1, "", 'User Login');
+	#$line = $result->FetchRow();
+
+	#if ($username != "" && $password != "" && isset($line["user_id"])) {
+	if ($oneuser)
+	{
+		generate_user_object($oneuser->id);
+		setcookie("cms_admin_user_id", $oneuser->id);
+		audit(-1, '', 'User Login');
 		redirect("index.php");
-		return;
 	}
 	else {
 		$error .= "<p>".lang('usernameincorrect')."</p>";

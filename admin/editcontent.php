@@ -188,7 +188,7 @@ if ($access) {
 						}
 					}
 				}
-				audit((isset($_SESSION["cms_admin_user_id"])?$_SESSION["cms_admin_user_id"]:""), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $page_id, $title, 'Edited Content');
+				audit($page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
 			}

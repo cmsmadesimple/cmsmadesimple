@@ -91,7 +91,7 @@ if ($access) {
 			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ".$userplugin_id;
 			$result = $db->Execute($query);
 			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $userplugin_id, $plugin_name, 'Edited User Defined Tag');
+				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
 				redirect("plugins.php");
 				return;
 			}

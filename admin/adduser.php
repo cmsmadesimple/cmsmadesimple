@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.user.inc.php");
 
 check_login();
 
@@ -27,17 +28,26 @@ $error = "";
 $user= "";
 if (isset($_POST["user"])) $user = $_POST["user"];
 
+$firstname = "";
+if (isset($_POST["firstname"])) $firstname = $_POST["firstname"];
+
+$lastname = "";
+if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
+
 $password= "";
 if (isset($_POST["password"])) $password = $_POST["password"];
 
 $passwordagain= "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
+$email = "";
+if (isset($_POST["email"])) $email = $_POST["email"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 
-$use_wysiwyg = "";
-#if (isset($_POST["use_wysiwyg"]))$use_wysiwyg = $_POST["use_wysiwyg"];
+$adminaccess = 0;
+if (isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 1;
 
 if (isset($_POST["cancel"])) {
 	redirect("listusers.php");
@@ -64,14 +74,23 @@ if (isset($_POST["adduser"])) {
 	}
 
 	if ($validinfo) {
-		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-		$result = $db->Execute($query);
+		
+		#$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
+		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+		#$result = $db->Execute($query);
+
+		$newuser = new User();
+		$newuser->username = $user;
+		$newuser->SetPassword($password);
+		$newuser->active = $active;
+		$newuser->firstname = $firstname;
+		$newuser->lastname = $lastname;
+		$newuser->email = $email;
+		$result = $newuser->save();
+
 		if ($result) {
-			#set_preference($new_user_id, 'use_wysiwyg', $use_wysiwyg);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
+			audit($newuser->id, $newuser->username, 'Added User');
 			redirect("listusers.php");
-			return;
 		}
 		else {
 			$error .= "<li>".lang('errorinsertinguser')."</li>";
@@ -108,20 +127,25 @@ if ($error != "") {
 		<td><input type="password" name="passwordagain" maxlength="255" value="" class="standard"></td>
 	</tr>
 	<tr>
+		<td><?php echo lang('firstname')?>:</td>
+		<td><input type="text" name="firstname" maxlength="50" value="" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('lastname')?>:</td>
+		<td><input type="text" name="lastname" maxlength="50" value="" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('email')?>:</td>
+		<td><input type="text" name="email" maxlength="50" value="" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('adminaccess')?>:</td>
+		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
+	</tr>
+	<tr>
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
-	<!--
-	<tr>
-		<td><?php echo lang('usewysiwyg')?>:</td>
-		<td>
-			<select name="use_wysiwyg">
-				<option value="1" <?php echo (isset($use_wysiwyg) && $use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
-				<option value="0" <?php echo (isset($use_wysiwyg) && $use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
-			</select>
-		</td>
-	</tr>
-	-->
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="adduser" value="true">

@@ -119,7 +119,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 			if ($result)
 			{
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, (isset($name)?$name:""), 'Added CSS association');
+				audit($id, (isset($name)?$name:""), 'Added CSS association');
 
 				if ("template" == $type)
 				{

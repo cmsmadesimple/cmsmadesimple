@@ -34,27 +34,17 @@ if (isset($_GET["user_id"])) {
 
 	if ($access) {
 
-		$query = "SELECT username FROM ".cms_db_prefix()."users WHERE user_id = ".$user_id;
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount()) {
-			$row = $result->FetchRow();
-			$user_name = $row['username'];
-		}
-
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE owner = $user_id";
-		$result = $db->Execute($query);
-		$row = $result->FetchRow();
-		if (isset($row["count"]) && $row["count"] > 0) {
+		$oneuser = UserOperations::LoadUserByID($user_id);
+		$user_name = $oneuser->username;
+		$ownercount = UserOperations::CountPageOwnershipByID($user_id);
+		if ($ownercount > 0)
+		{
 			$dodelete = false;
 		}
 
 		if ($dodelete) {
-			$query = "DELETE FROM ".cms_db_prefix()."additional_users where user_id = $user_id";
-			$result = $db->Execute($query);
-			$query = "DELETE FROM ".cms_db_prefix()."users where user_id = $user_id";
-			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user_name, 'Deleted User');
+			$oneuser->Delete();
+			audit($user_id, $user_name, 'Deleted User');
 		}
 	}
 }

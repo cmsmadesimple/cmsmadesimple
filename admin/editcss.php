@@ -124,7 +124,7 @@ if ($access)
 
 			if ($result)
 			{
-				audit(get_userid(), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $css_id, $css_name, 'Edited CSS');
+				audit($css_id, $css_name, 'Edited CSS');
 
 				# we now have to check which templates are associated with this CSS and update their modified date.
 				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc

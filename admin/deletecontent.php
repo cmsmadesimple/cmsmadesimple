@@ -74,7 +74,7 @@ if (isset($_GET["page_id"])) {
 			#Fix the item_order if necessary
 			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
 			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
+			audit($page_id, $title, 'Deleted Content');
 		}
 	}
 }

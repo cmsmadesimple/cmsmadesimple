@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.user.inc.php");
 
 check_login();
 
@@ -34,6 +35,18 @@ if (isset($_POST["password"])) $password = $_POST["password"];
 
 $passwordagain = "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
+
+$firstname = "";
+if (isset($_POST["firstname"])) $firstname = $_POST["firstname"];
+
+$lastname = "";
+if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
+
+$email = "";
+if (isset($_POST["email"])) $email = $_POST["email"];
+
+$adminaccess = 0;
+if (isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 1;
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
@@ -72,19 +85,27 @@ if ($access) {
 
 		if ($validinfo) {
 			#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User');
+			#audit(-1, '', 'Edited User');
 
-			$query = "UPDATE ".cms_db_prefix()."users SET username=".$db->qstr($user).", ";
-			if ($password != "") {
-				$query .= "password='".md5($password)."', ";
+			$result = false;
+			$thisuser = UserOperations::LoadUserByID($user_id);
+			if ($thisuser)
+			{
+				$thisuser->username = $user;
+				$thisuser->firstname = $firstname;
+				$thisuser->lastname = $lastname;
+				$thisuser->email = $email;
+				$thisuser->adminaccess = $adminaccess;
+				$thisuser->active = $active;
+				if ($password != "") {
+					$thisuser->SetPassword($password);
+				}
+				$result = $thisuser->save();
 			}
-			$query .= "active=$active, modified_date = ".$db->DBTimeStamp(time())." WHERE user_id = $user_id";
-			$result = $db->Execute($query);
 
 			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
+				audit($user_id, $thisuser->username, 'Edited User');
 				redirect("listusers.php");
-				return;
 			}
 			else {
 				$error .= "<li>".lang('errorupdatinguser')."</li>";
@@ -94,14 +115,13 @@ if ($access) {
 	}
 	else if ($user_id != -1) {
 
-		$query = "SELECT * from ".cms_db_prefix()."users WHERE user_id = " . $user_id;
-		$result = $db->Execute($query);
-		
-		$row = $result->FetchRow();
-
-		$user = $row["username"];
-		$active = $row["active"];
-
+		$thisuser = UserOperations::LoadUserByID($user_id);
+		$user = $thisuser->username;
+		$firstname = $thisuser->firstname;
+		$lastname = $thisuser->lastname;
+		$email = $thisuser->email;
+		$adminaccess = $thisuser->adminaccess;
+		$active = $thisuser->active;
 	}
 }
 
@@ -140,6 +160,22 @@ else {
 	</tr>
 	<tr>
 		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
+	</tr>
+	<tr>
+		<td><?php echo lang('firstname')?>:</td>
+		<td><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('lastname')?>:</td>
+		<td><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('email')?>:</td>
+		<td><input type="text" name="email" maxlength="25" value="<?php echo $email?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('adminaccess')?>:</td>
+		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>

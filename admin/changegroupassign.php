@@ -58,7 +58,7 @@ if ($access) {
 			}
 		}
 
-		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Assignments');
+		audit($group_id, $group_name, 'Changed Group Assignments');
 		redirect("listgroups.php");
 		return;
 

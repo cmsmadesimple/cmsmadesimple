@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -54,72 +55,79 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Template');
 
-if ($access) {
-
-	if (isset($_POST["edittemplate"]) && !$preview) {
-
+if ($access)
+{
+	if (isset($_POST["edittemplate"]) && !$preview)
+	{
 		$validinfo = true;
-		if ($template == "") {
+		if ($template == "")
+		{
 			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
-		} else if ($template != $orig_template) {
+		}
+		else if ($template != $orig_template)
+		{
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0) {
+			if ($result && $result->RowCount() > 0)
+			{
 				$error .= "<li>".lang('errortemplateinuse')."</li>";
 				$validinfo = false;
 			}
 		}
-		if ($content == "") {
+		if ($content == "")
+		{
 			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
-			$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ".$db->qstr($template).", template_content = ".$db->qstr($content).", stylesheet = ".$db->qstr($stylesheet).", active = $active, modified_date = ".$db->DBTimeStamp(time())." WHERE template_id = $template_id";
-			$result = $db->Execute($query);
+		if ($validinfo)
+		{
+			$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+			$onetemplate->name = $template;
+			$onetemplate->content = $content;
+			$onetemplate->stylesheet = $stylesheet;
+			$onetemplate->active = $active;
+			$result = $onetemplate->save();
 
-			if ($result) {
-				audit(get_userid(), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $template_id, $template, 'Edited Template');
+			if ($result)
+			{
+				audit($template_id, $onetemplate->name, 'Edited Template');
 				redirect("listtemplates.php");
-				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorupdatingtemplate')."</li>";
 			}
 		}
-
 	}
-	else if ($template_id != -1 && !$preview) {
-
-		$query = "SELECT * from ".cms_db_prefix()."templates WHERE template_id = " . $template_id;
-		$result = $db->Execute($query);
-		
-		$row = $result->FetchRow();
-
-		$template = $row["template_name"];
-		$orig_template = $row["template_name"];
-		$content = $row["template_content"];
-		$stylesheet = $row["stylesheet"];
-		$active = $row["active"];
-
+	else if ($template_id != -1 && !$preview)
+	{
+		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+		$template = $onetemplate->name;
+		$orig_template = $onetemplate->name;
+		$content = $onetemplate->content;
+		$stylesheet = $onetemplate->stylesheet;
+		$active = $onetemplate->active;
 	}
 }
 
 include_once("header.php");
 
-if (!$access) {
+if (!$access)
+{
 	print "<h3>".lang('noaccessto', array(lang('edittemplate')))."</h3>";
 }
-else {
-
-	if ($error != "") {
+else
+{
+	if ($error != "")
+	{
 		echo "<ul class=\"error\">".$error."</ul>";
 	}
 
-	if ($preview) {
-
+	if ($preview)
+	{
 		$data["title"] = "TITLE HERE";
 		$data["content"] = "Test Content";
 		#$data["template_id"] = $template_id;

@@ -17,10 +17,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /**
- * Global functions/classes
+ * Global class for easy access to all important variables.
  *
  * @package CMS
  */
+
 /**
  * Simple global object to hold references to other objects
  *

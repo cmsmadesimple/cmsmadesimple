@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -55,11 +56,14 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".cms_db_prefix()."groups SET group_name=".$db->qstr($group).", active=$active, modified_date = ".$db->DBTimeStamp(time())." WHERE group_id = $group_id";
-			$result = $db->Execute($query);
+			$groupobj = new Group();
+			$groupobj->id = $group_id;
+			$groupobj->name = $group;
+			$groupobj->active = $active;
+			$result = $groupobj->save();
 
 			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
+				audit($groupobj->id, $groupobj->name, 'Edited Group');
 				redirect("listgroups.php");
 				return;
 			}

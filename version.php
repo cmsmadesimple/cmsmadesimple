@@ -16,8 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$CMS_VERSION = "0.6";
-$CMS_SCHEMA_VERSION = "6";
+$CMS_VERSION = "0.7-svn";
+$CMS_SCHEMA_VERSION = "7";
 
 # vim:ts=4 sw=4 noet
 ?>

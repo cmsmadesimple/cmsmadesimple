@@ -100,7 +100,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 			if ($result)
 			{
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, (isset($name)?$name:""), 'Deleted CSS association');
+				audit($id, (isset($name)?$name:""), 'Deleted CSS association');
 
 				# now updating template
 				if ("template" == $type)

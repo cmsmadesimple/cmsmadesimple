@@ -130,7 +130,7 @@ if ($access)
 			if ($result)
 			{
 				# it's ok, we record the operation in the admin log
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_css_id, $css_name, 'Added CSS');
+				audit($new_css_id, $css_name, 'Added CSS');
 
 				# and goes back to the css list
 				redirect("listcss.php");

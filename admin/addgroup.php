@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -48,11 +49,13 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES ($new_group_id, ".$db->qstr($group).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query);
+			$groupobj = new Group();
+			$groupobj->name = $group;
+			$groupobj->active = $active;
+			$result = $groupobj->save();
+
 			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
+				audit($groupobj->id, $groupobj->name, 'Added Group');
 				redirect("listgroups.php");
 				return;
 			}

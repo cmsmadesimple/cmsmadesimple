@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+require_once(dirname(__FILE__)."/classes/class.user.inc.php");
+
 /**
  * Page related functions.  Generally these are functions not necessarily
  * related to content, but more to the underlying mechanisms of the system.
@@ -53,11 +55,16 @@ function check_login() {
 /**
  * Gets the userid of the currently logged in user.
  *
+ * @returns If they're logged in, the user id.  If not logged in, false.
  * @since 0.1
  */
 function get_userid() {
 	if (isset($_COOKIE["cms_admin_user_id"])) {
 		return $_COOKIE["cms_admin_user_id"];
+	}
+	else
+	{
+		return false;
 	}
 }
 
@@ -67,6 +74,7 @@ function get_userid() {
  * for 20+ minutes with no interaction), the user won't have to relogin to regenerate
  * the details.
  *
+ * @returns mixed If successful, true.  If it fails, false.
  * @since 0.5
  */
 function generate_user_object($userid)
@@ -76,15 +84,14 @@ function generate_user_object($userid)
 	global $gCms;
 	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."users WHERE user_id = ".$userid;
-	$result = $db->Execute($query);
+	$oneuser = UserOperations::LoadUserByID($userid);
 
-	if ($result && $result->RowCount() > 0)
+	if ($oneuser)
 	{
-		$row = $result->FetchRow();
+		#$row = $result->FetchRow();
 
 		$_SESSION["cms_admin_user_id"] = $userid;
-		$_SESSION["cms_admin_username"] = $row["username"];
+		$_SESSION["cms_admin_username"] = $oneuser->username;
 		//$_SESSION["cms_passhash"] = $row["password"]; //So we have something to check
 
 		$check = true;
@@ -97,6 +104,7 @@ function generate_user_object($userid)
  * Checks to see that the given userid has access to
  * the given permission.
  *
+ * @returns mixed If they have perimission, true.  If they do not, false.
  * @since 0.1
  */
 function check_permission($userid, $permname) {
@@ -119,6 +127,7 @@ function check_permission($userid, $permname) {
 /**
  * Checks that the given userid is the owner of the given pageid.
  *
+ * @returns mixed If they have ownership, true.  If they do not, false.
  * @since 0.1
  */
 function check_ownership($userid, $pagename, $pageid = "") {
@@ -143,6 +152,7 @@ function check_ownership($userid, $pagename, $pageid = "") {
  * pageid.  This would mean that they were set as additional
  * authors/editors by the owner.
  *
+ * @returns mixed If they have authorship, true.  If they do not, false.
  * @since 0.2
  */
 function check_authorship($userid, $pageid) {
@@ -167,16 +177,30 @@ function check_authorship($userid, $pageid) {
  *
  * @since 0.3
  */
-function audit($userid, $username, $itemid, $itemname, $action) {
+function audit($itemid, $itemname, $action) {
 
 	global $gCms;
 	$db = $gCms->db;
 
+	$userid = 0;
+	$username = '';
+
+	if ($_SESSION["cms_admin_user_id"])
+	{
+		$userid = $_SESSION["cms_admin_user_id"];
+	}
+
+	if ($_SESSION["cms_admin_username"])
+	{
+		$username = $_SESSION["cms_admin_username"];
+	}
+
 	if (!isset($userid) || $userid == "") {
 		$userid = 0;
 	}
-	$query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, ".$db->qstr($username).", $itemid, ".$db->qstr($itemname).", ".$db->qstr($action).")";
-	$db->Execute($query);
+
+	$query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (?,?,?,?,?,?)";
+	$db->Execute($query,array(time(),$userid,$username,$itemid,$itemname,$action));
 }
 
 /**

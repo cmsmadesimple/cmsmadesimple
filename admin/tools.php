@@ -113,7 +113,7 @@ function do_adodb_backup() {
     fclose($file);
 
     #function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
-    audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $backup_file, 'Database backup');
+    audit(-1, $backup_file, 'Database backup');
     echo lang("Backup complete.  Wrriten to file:")." ".$backup_file."</p>\n";
 }
 
@@ -128,7 +128,7 @@ function do_adodb_restore() {
     foreach ($lines as $line) {
         $db->Execute($line);
     }
-    audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $_POST["filename"], 'Database restore');
+    audit(-1, $_POST["filename"], 'Database restore');
     echo lang("Restore complete: ").$_POST["filename"]."</p>\n";
 }
 ?>

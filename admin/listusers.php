@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.user.inc.php");
 
 check_login();
 
@@ -39,8 +40,11 @@ if (isset($_GET["message"])) {
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	$userlist = UserOperations::LoadUsers();
 
+	#if ($result && $result->RowCount() > 0) {
+	if ($userlist && count($userlist) > 0)
+	{
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".lang('username')."</td>\n";
@@ -52,17 +56,18 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 
-		while($row = $result->FetchRow()) {
-
+		#while($row = $result->FetchRow()) {
+		foreach ($userlist as $oneuser)
+		{
 			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".$row["username"]."</a></td>\n";
-			echo "<td align=\"center\">".($row["active"] == 1?lang('true'):lang('false'))."</td>\n";
-			if ($edit || $userid == $row["user_id"])
-				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
+			echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+			echo "<td align=\"center\">".($oneuser->active == 1?lang('true'):lang('false'))."</td>\n";
+			if ($edit || $userid == $oneuser->id)
+				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$oneuser->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
 			else
 				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");

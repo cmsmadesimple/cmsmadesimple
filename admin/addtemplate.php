@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -37,9 +38,10 @@ $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
 $active = 1;
-if (isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
+if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listtemplates.php");
 	return;
 }
@@ -47,39 +49,52 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Template');
 
-if ($access) {
-
-	if (isset($_POST["addtemplate"]) && !$preview) {
-
+if ($access)
+{
+	if (isset($_POST["addtemplate"]) && !$preview)
+	{
 		$validinfo = true;
 
-		if ($template == "") {
+		if ($template == "")
+		{
 			$error .= "<li>".lang("nofieldgiven",array(lang('name')))."</li>";
 			$validinfo = false;
-		} else {
+		}
+		else
+		{
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0) {
+			if ($result && $result->RowCount() > 0)
+			{
 				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
 			}
 		}
-		if ($content == "") {
+
+		if ($content == "")
+		{
 			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
-			$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$db->qstr($template).", ".$db->qstr($content).", ".$db->qstr($stylesheet).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query);
-			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
+		if ($validinfo)
+		{
+			$newtemplate = new Template();
+			$newtemplate->name = $template;
+			$newtemplate->content = $content;
+			$newtemplate->stylesheet = $stylesheet;
+			$newtemplate->active = $active;
+			$result = $newtemplate->save();
+
+			if ($result)
+			{
+				audit($newtemplate->id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorinsertingtemplate')."$query</li>";
 			}
 		}
@@ -88,17 +103,19 @@ if ($access) {
 
 include_once("header.php");
 
-if (!$access) {
+if (!$access)
+{
 	print "<h3>".lang('noaccessto', array(lang('addtemplate')))."</h3>";
 }
-else {
-
-	if ($error != "") {
+else
+{
+	if ($error != "")
+	{
 		echo "<ul class=\"error\">".$error."</ul>";
 	}
 
-	if ($preview) {
-
+	if ($preview)
+	{
 		$data["title"] = "TITLE HERE";
 		$data["content"] = "Test Content";
 		#$data["template_id"] = $template_id;

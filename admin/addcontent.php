@@ -153,7 +153,7 @@ if ($access) {
 						$db->Execute($query);
 					}
 				}
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_page_id, $title, 'Added Content');
+				audit($new_page_id, $title, 'Added Content');
 				redirect("listcontent.php");
 				return;
 			}

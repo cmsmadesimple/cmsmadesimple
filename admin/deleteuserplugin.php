@@ -42,7 +42,7 @@ if (isset($_GET["userplugin_id"])) {
 
 		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = $userplugin_id";
 		$result = $db->Execute($query);
-		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
+		audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
 	}
 }
 

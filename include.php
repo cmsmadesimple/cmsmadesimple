@@ -33,7 +33,7 @@ if(!session_id()) {
 }
 
 #Make a new CMS object
-require_once(dirname(__FILE__)."/lib/global.functions.php");
+require_once(dirname(__FILE__)."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
 
 #Load the config file (or defaults if it doesn't exist)
@@ -87,6 +87,10 @@ if (!isset($DONT_LOAD_DB)) {
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
 	$db->fnExecute = 'count_sql_execs';
+	if ($gCms->config['debug'] == true)
+	{
+		$db->debug = true;
+	}
 	$gCms->db = &$db;
 }
 

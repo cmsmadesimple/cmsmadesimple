@@ -100,7 +100,7 @@ if (isset($_GET["css_id"]))
 
 			if ($result)
 			{
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $css_id, $css_name, 'Deleted CSS');
+				audit($css_id, $css_name, 'Deleted CSS');
 			}
 			else
 			{

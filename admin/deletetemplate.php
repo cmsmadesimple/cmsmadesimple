@@ -19,47 +19,45 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
 $dodelete = true;
 $template_id = -1;
-if (isset($_GET["template_id"])) {
-
+if (isset($_GET["template_id"]))
+{
 	$template_id = $_GET["template_id"];
 	$template_name = "";
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Template');
 
-	if ($access) {
+	if ($access)
+	{
+		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
 
-		$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount()) {
-			$row = $result->FetchRow();
-			$template_name = $row['template_name'];
-		}
-
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE template_id = $template_id";
-		$result = $db->Execute($query);
-		$row = $result->FetchRow();
-		if (isset($row["count"]) && $row["count"] > 0) {
+		if (TemplateOperations::CountPagesUsingTemplateByID($template_id) > 0)
+		{
 			$dodelete = false;
 		}
 
-		if ($dodelete) {
-			$query = "DELETE FROM ".cms_db_prefix()."templates where template_id = $template_id";
-			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template_name, 'Deleted Template');
+		if ($dodelete)
+		{
+			$result = TemplateOperations::DeleteTemplateByID($template_id);
+			if ($result)
+			{
+				audit($template_id, $onetemplate->name, 'Deleted Template');
+			}
 		}
 	}
 }
 
-if ($dodelete) {
+if ($dodelete)
+{
 	redirect("listtemplates.php");
 }
-else {
+else
+{
 	redirect("listtemplates.php?message=".lang('errortemplateisuse'));
 }
 

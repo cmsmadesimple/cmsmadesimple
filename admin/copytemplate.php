@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -31,7 +32,8 @@ $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listtemplates.php");
 	return;
 }
@@ -39,44 +41,40 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Template');
 
-if ($access) {
-
-	if (isset($_POST["copytemplate"])) {
-
+if ($access)
+{
+	if (isset($_POST["copytemplate"]))
+	{
 		$validinfo = true;
-		if ($template == "") {
+		if ($template == "")
+		{
 			$error .= "<li>".lang('nofieldgiven',array(lang('name')))."</li>";
 			$validinfo = false;
-		} else {
-			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
-			$result = $db->Execute($query);
-			if ($result && $result->RowCount() > 0) {
+		}
+		else
+		{
+			if (TemplateOperations::CheckExistingTemplateName($template))
+			{
 				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
 			}
 		}
 
-		if ($validinfo) {
+		if ($validinfo)
+		{
+			$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+			$onetemplate->id = -1; //Reset id so it will insert a new record
+			$onetemplate->name = $template; //Change name
+			$result = $onetemplate->save();
 
-			$query = "SELECT * from ".cms_db_prefix()."templates WHERE template_id = " . $template_id;
-			$result = $db->Execute($query);
-			
-			$row = $result->FetchRow();
-
-			$content = $row["template_content"];
-			$stylesheet = $row["stylesheet"];
-			$active = $row["active"];
-
-			$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$db->qstr($template).", ".$db->qstr($content).", ".$db->qstr($stylesheet).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-			$result = $db->Execute($query);
-
-			if ($result) {
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Copied Template');
+			if ($result)
+			{
+				audit($new_template_id, $template, 'Copied Template');
 				redirect("listtemplates.php");
 				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorcopyingtemplate')."</li>";
 			}
 		}
@@ -86,12 +84,14 @@ if ($access) {
 
 include_once("header.php");
 
-if (!$access) {
+if (!$access)
+{
 	print "<h3>".lang('noaccessto',array(lang('copytemplate')))."</h3>";
 }
-else {
-
-	if ($error != "") {
+else
+{
+	if ($error != "")
+	{
 		echo "<ul class=\"error\">".$error."</ul>";
 	}
 

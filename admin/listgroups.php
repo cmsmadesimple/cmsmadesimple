@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -34,10 +35,12 @@ include_once("header.php");
 	$edit = check_permission($userid, 'Modify Group');
 	$remove = check_permission($userid, 'Remove Group');
 
-	$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
-	$result = $db->Execute($query);
+	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
+	#$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	$grouplist = GroupOperations::LoadGroups();
+
+	if (count($grouplist) > 0) {
 
 		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
 		echo "<tr>\n";
@@ -55,19 +58,20 @@ include_once("header.php");
 
 		$currow = "row1";
 
-		while ($row = $result->FetchRow()) {
-
+		#while ($row = $result->FetchRow()) {
+		foreach ($grouplist as $onegroup)
+		{
 			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$row["group_name"]."</a></td>\n";
-			echo "<td align=\"center\">".($row["active"] == 1?lang('true'):lang('false'))."</td>\n";
+			echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+			echo "<td align=\"center\">".($onegroup->active == 1?lang('true'):lang('false'))."</td>\n";
 			if ($perm)
-				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".lang('permissions')."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".lang('permissions')."</a></td>\n";
 			if ($assign)
-				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".lang('assignments')."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".lang('assignments')."</a></td>\n";
 			if ($edit)
-				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow == "row1"?$currow="row2":$currow="row1");

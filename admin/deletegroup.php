@@ -19,30 +19,34 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
 $group_id = -1;
-if (isset($_GET["group_id"])) {
-
+if (isset($_GET["group_id"]))
+{
 	$group_id = $_GET["group_id"];
 	$group_name = "";
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Group');
 
-	if ($access) {
+	if ($access)
+	{
+		$result = false;
 
-		$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
-		$result = $db->Execute($query);
+		$groupobj = GroupOperations::LoadGroupByID($group_id);
+		$group_name = $groupobj->name;
 
-		if ($result && $result->RowCount()) {
-			$row = $result->FetchRow();
-			$group_name = $row['group_name'];
+		if ($groupobj)
+		{
+			$result = $groupobj->Delete();
 		}
 
-		$query = "DELETE FROM ".cms_db_prefix()."groups where group_id = $group_id";
-		$result = $db->Execute($query);
-		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Deleted Group');
+		if ($result == true)
+		{
+			audit($group_id, $group_name, 'Deleted Group');
+		}
 	}
 }
 
