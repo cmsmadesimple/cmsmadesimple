@@ -18,9 +18,19 @@
 
 $CMS_ADMIN_PAGE=1;
 
+$default_cms_lang = "";
+if (isset($_POST["default_cms_lang"])) $default_cms_lang = $_POST["default_cms_lang"];
+$old_default_cms_lang = "";
+if (isset($_POST["old_default_cms_lang"])) $old_default_cms_lang = $_POST["old_default_cms_lang"];
+
+if ($default_cms_lang != $old_default_cms_lang && $default_cms_lang != "")
+{
+	$_POST['change_cms_lang'] = $default_cms_lang;
+}
+
 require_once("../include.php");
 
-#check_login();
+check_login();
 
 $error = "";
 
@@ -36,15 +46,18 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-if (isset($_POST["edituserprefs"])) {
+if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
 	set_preference($userid, 'use_javasyntax', $use_javasyntax);
+	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
-} else if (!isset($_POST["submit_form"])) {
+} else if (!isset($_POST["edituserprefs"])) {
 	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
 	$use_javasyntax = get_preference($userid, 'use_javasyntax');
+	$default_cms_lang = get_preference($userid, 'default_cms_language');
+	$old_default_cms_lang = $default_cms_language;
 }
 
 include_once("header.php");
@@ -54,9 +67,7 @@ if ($error != "") {
 }
 
 ?>
-
 <form name="prefsform" method="post" action="editprefs.php">
-
 
 <div class="adminformSmall">
 
@@ -85,19 +96,14 @@ if ($error != "") {
 	<TR>
 		<TD><?php echo lang('language')?>:</TD>
 		<TD>
-			<SELECT CLASS="smallselect" NAME="change_cms_lang" onChange="document.prefsform.submit();" STYLE="vertical-align: middle;">
+			<SELECT CLASS="smallselect" NAME="default_cms_lang" onChange="document.prefsform.submit();" STYLE="vertical-align: middle;">
+			<option value="">No Default Selected</option>
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {
 					echo "<option value=\"$key\"";
-					if (isset($_POST["change_cms_lang"])) {
-						if ($_POST["change_cms_lang"] == $key) {
-							echo " selected";
-						}
-					} else if (isset($_COOKIE["cms_language"])) {
-						if ($_COOKIE["cms_language"] == $key) {
-							echo " selected";
-						}
+					if ($default_cms_lang == $key) {
+						echo " selected";
 					}
 					echo ">$val";
 					if (isset($nls["englishlang"][$key]))
@@ -111,7 +117,7 @@ if ($error != "") {
 		</TD>
 	</TR>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true">
+		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true"><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_cms_default_lang ?>">
 		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>

@@ -18,15 +18,10 @@
 
 $CMS_ADMIN_PAGE=1;
 
-if (isset($_POST["change_cms_lang"]))
-{
-}
-
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
-
 
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
@@ -38,10 +33,15 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
 
-	if ($username != "" && $password != "" && $oneuser)
+	if ($username != "" && $password != "" && $oneuser && isset($_POST["loginsubmit"]))
 	{
 		generate_user_object($oneuser->id);
 		setcookie("cms_admin_user_id", $oneuser->id);
+		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');
+		if ($default_cms_lang != '')
+		{
+			setcookie('cms_language', $default_cms_lang);
+		}
 		audit(-1, '', 'User Login');
 		echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in, one moment please...</body></html>');
 		return;
@@ -92,7 +92,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
 	</TR>
 	<TR>
 		<TD ALIGN="right"><?php echo lang('password')?>:</TD>
-		<TD><INPUT TYPE="password" ID="userdata" NAME="password" SIZE="15" ></TD>
+		<TD><INPUT TYPE="password" ID="userdata" NAME="password" VALUE="<?php echo (isset($_POST["password"])?$_POST["password"]:"")?>" SIZE="15" ></TD>
 	</TR>
 	<TR>
 		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
