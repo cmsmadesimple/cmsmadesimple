@@ -88,7 +88,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
 <?php
 
 	if ($error != "") {
-		echo "<div class=\"loginerror\">".$error."</div>";
+		echo "<div class=\"formError\">".$error."</div>";
 	}
 
 ?>
