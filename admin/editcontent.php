@@ -91,7 +91,7 @@ if (isset($_POST["serialized_content"]))
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
-$access = check_permission($userid, 'Edit Content') || check_ownership($userid, $content_id);;
+$access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Content');
 $adminaccess = $access;
 if (!$access)
 {
@@ -105,6 +105,11 @@ if ($access)
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
+
+		if (isset($_POST["ownerid"]))
+		{
+			$contentobj->mOwner = $_POST["ownerid"];
+		}
 
 		#Fill Additional Editors (kind of kludgy)
 		$addtarray = array();
@@ -138,6 +143,11 @@ if ($access)
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
+
+		if (isset($_POST["ownerid"]))
+		{
+			$contentobj->mOwner = $_POST["ownerid"];
+		}
 
 		#Fill Additional Editors (kind of kludgy)
 		$addtarray = array();
@@ -231,6 +241,10 @@ else
 		echo $contentobj->Edit();
 	?>
 	<tr>
+		<td>Owner:</td>
+		<td><?php echo UserOperations::GenerateDropdown($contentobj->Owner());?></td>
+	</tr>
+	<tr>
 		<td>Additional Editors:</td>
 		<td>
 			<select name="additional_editors[]" multiple="multiple" size="5">
@@ -239,7 +253,7 @@ else
 				$addteditors = $contentobj->GetAdditionalEditors();
 				foreach ($allusers as $oneuser)
 				{
-					if ($oneuser->id != $userid)
+					if ($oneuser->id != $contentobj->Owner())
 					{
 						echo '<option value="'.$oneuser->id.'"';
 						if (in_array($oneuser->id, $addteditors))

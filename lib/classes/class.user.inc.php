@@ -398,6 +398,30 @@ class UserOperations
 
 		return $result;
 	}
+
+	function GenerateDropdown($currentuserid = '')
+	{
+		$result = '';
+
+		$allusers = @UserOperations::LoadUsers();
+
+		if (count($allusers) > 0)
+		{
+			$result .= '<select name="ownerid">';
+			foreach ($allusers as $oneuser)
+			{
+				$result .= '<option value="'.$oneuser->id.'"';
+				if ($oneuser->id == $currentuserid)
+				{
+					$result .= ' selected="selected"';
+				}
+				$result .= '>'.$oneuser->username.'</option>';
+			}
+			$result .= '</select>';
+		}
+
+		return $result;
+	}
 }
 
 # vim:ts=4 sw=4 noet
