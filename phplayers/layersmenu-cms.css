@@ -1,3 +1,37 @@
+.horbar {
+	color: black;
+	background-color: #FFFFE4;
+	/*border: 2px outset #cecac1;*/
+}
+.horbaritem {
+	float: left;
+	white-space: nowrap;
+	font-family: verdana, geneva, arial, helvetica, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+}
+.horbaritem a {
+	display: block;
+	text-decoration: none;
+}
+.horbaritem a:link {
+	color: 000000;
+	text-decoration: none;
+}
+.horbaritem a:visited {
+	color: 000000;
+	text-decoration: none;
+}
+.horbaritem a:hover {
+	color: #ffffff;
+	background-color: 0000004b6983;
+	text-decoration: none;
+}
+.horbaritem a:active {
+	color: #ff0000;
+	text-decoration: none;
+}
+
 .verbar	{
 	color: black;
 	background-color: #EDF2F5;
