@@ -342,5 +342,56 @@ function linkblog_module_executeuser($cms, $id, $return_id, $params) {
 
 }
 
+function linkblog_module_help($cms) {
+	?>
+	<h3>What does this do?</h3>
+	<p>LinkBlog is a module which allows users to post links and comments about the links to a page within your site.  It can be inserted into a template or content page as a module, however, it makes more sense as a content page because it does produce a complete page.</p>
+	<h3>Anything else I should know?</h3>
+	<p>You should know that if you uninstall this module it will delete all your links and comments.  If you do not wish to use it for a temporary time period, just deactivate it.</p>
+	<h3>How do I use it?</h3>
+	<p>As this is just a plugin module, it's inserted into your page or template by using the cms_module plugin.  Example syntax would be: <br /><code>{cms_module module="LinkBlog"}</code></p>
+	<h3>What parameters are there?</h3>
+	<p>So far there are no parameters available, but there will need to be paging added for when the number of links or comments becomes too large for one page.</p>
+	<h3>How do I style the LinkBlog pages?</h3>
+	<p>Here is some sample CSS you can throw in your template to make your results <i>slightly</i> prettier.<br />
+	<pre>
+.modulelinkblog a:hover { color: #000000;
+                          text-decoration: none;
+                          background-color: #FFFFFF;
+}
+div.modulelinkblog {
+    background-color: #EDF2F5;
+    color: #000000;
+    text-align: left;
+    font-size: 12px;
+}
+
+div.modulelinkblogentryheader {
+    font-weight: bold;
+    padding: 5px;
+}
+
+div.modulelinkblogentrybody {
+    padding-left: 15px;
+}
+
+div.modulelinkbloglink {
+    padding: 5px;
+}
+
+div.modulelinkblogcomment {
+    padding-left: 35px;
+    padding-bottom: 10px;
+}
+
+div.modulelinkblogentrycommentlink {
+    padding-left: 35px;
+}
+
+	</pre></p>
+	<?
+
+}
+
 # vim:ts=4 sw=4 noet
 ?>
