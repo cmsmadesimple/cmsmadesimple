@@ -61,6 +61,7 @@ function comments_module_execute($cms, $id, $params) {
 			echo "<div class=\"modulecommentsentry\">";
 			echo "<div class=\"modulecommentsentryheader\">Posted at ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['comment_date']))." by ".$row['comment_author']."</div>";
 			echo "<div class=\"modulecommentsentrybody\">".$row["comment_data"]."</div>";
+			echo "</div>";
 		}
 	} else {
 		echo " - No comments posted - ";
