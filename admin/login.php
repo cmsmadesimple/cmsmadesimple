@@ -43,7 +43,7 @@ if ($_POST["username"] && $_POST["password"]) {
 		return;
 	}
 	else {
-		$error .= "<p>".GetText::gettext("Username or Password incorrect!")."</p>";
+		$error .= "<p>".$gettext->gettext("Username or Password incorrect!")."</p>";
 	}
 
 	$db->freeresult($result);
@@ -82,16 +82,16 @@ if ($_POST["username"] && $_POST["password"]) {
 
 <table border=0 id="table">
 	<tr>
-		<td align="right"><?=GetText::gettext("Username")?>:</td>
+		<td align="right"><?=$gettext->gettext("Username")?>:</td>
 		<td><input type="text" id="username" name="username" value="<?echo $_POST["username"]?>" size="15"/></td>
 	</tr>
 	<tr>
-		<td align="right"><?=GetText::gettext("Password")?>:</td>
+		<td align="right"><?=$gettext->gettext("Password")?>:</td>
 		<td><input type="password" id="password" name="password" size="15" /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?=GetText::gettext("Submit")?>" /></td>
+		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" /></td>
 	</tr>
 </table>
 </form>

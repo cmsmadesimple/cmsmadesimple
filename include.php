@@ -75,10 +75,19 @@ require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/GetText.php");
 
 #initialiase GetText package
-GetText::init();
+#GetText::init();
 
 #add the translation domain we wrote files for
-GetText::addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
+#GetText::addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
+
+#$gettextobj = new GetText();
+if (function_exists('gettext')) {
+	$gettext = new GetText_NativeSupport();
+} else {
+	$gettext = new GetText_PHPSupport();
+}
+#$gettextobj->init();
+$gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
 
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
