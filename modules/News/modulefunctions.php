@@ -102,7 +102,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 		$query .= $params["category"]."\" AND ((".$db->IfNull('start_time',"''");
 		$query .= " = '' AND ".$db->IfNull('end_time',"''");
 		$query .= " = '') OR (start_time < ".$db->DBTimeStamp(time());
-		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ORDER BY news_date desc";
+		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
 	}
 	else 
 	{
@@ -110,7 +110,16 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 		$query .= "FROM ".cms_db_prefix()."module_news WHERE ";
 		$query .= "((".$db->IfNull('start_time',"''")." = '' AND ".$db->ifNull('end_time',"''");
 		$query .= " = '') OR (start_time < ".$db->DBTimeStamp(time());
-		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ORDER BY news_date desc";
+		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
+	}
+	
+	if (isset($params["sortasc"]))
+	{
+		$query .= "ORDER BY news_date asc";
+	}
+	else
+	{
+		$query .= "ORDER BY news_date desc";
 	}
 
 	if( isset( $params["number"]))
@@ -446,6 +455,7 @@ function news_module_help($cms)
 		<li><em>(optional)</em> length="80" - Used in summary mode (see above) this trims the length of each article to the specified number of characters after stripping all html tags.</li>
 		<li><em>(optional)</em> showcategorywithtitle="true" - Display the title with the category in front of it (Category: Title).  Leave false for old style behavior.</li>
 		<li><em>(optional)</em> moretext="more..." - Text to display at the end of a news item if it goes over the summary length.  Defaults to "more...".</li>
+		<li><em>(optional)</em> sortasc="true" - Sort news items in ascending date order rather than descending.</li>
 		</ul>
 		</p>
 	<?php

@@ -26,6 +26,7 @@ function news_module_content_set_properties(&$module)
 	$module->mProperties->Add('int', 'length', 80);
 	$module->mProperties->Add('bool', 'showcategorywithtitle', true);
 	$module->mProperties->Add('string', 'moretext', 'more...');
+	$module->mProperties->Add('bool', 'sortasc', false);
 }
 
 function news_module_content_edit(&$module)
@@ -44,6 +45,7 @@ function news_module_content_edit(&$module)
 	$text .= '<tr><td>Summary Length:</td><td><input type="text" name="length" value="'.$module->GetPropertyValue('length').'" /></td></tr>';
 	$text .= '<tr><td>Show Category:</td><td><input type="checkbox" name="showcategorywithtitle" '.($module->GetPropertyValue('showcategorywithtitle')?' checked=true':'').' /></td></tr>';
 	$text .= '<tr><td>More Text:</td><td><input type="text" name="moretext" value="'.$module->GetPropertyValue('moretext').'" /></td></tr>';
+	$text .= '<tr><td>Sort Ascending:</td><td><input type="checkbox" name="sortasc" '.($module->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
 	$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($module->mActive?' checked="true"':'').'></td></tr>';
 	$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($module->mShowInMenu?' checked="true"':'').'></td></tr>';
 	$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($module->mId, $module->mParentId).'</td></tr>';
@@ -78,6 +80,14 @@ function news_module_content_fill_params(&$module, &$params)
 		else
 		{
 			$module->mProperties->SetValue('showcategorywithtitle', false);
+		}
+		if (isset($params['sortasc']))
+		{
+			$module->mProperties->SetValue('sortasc', true);
+		}
+		else
+		{
+			$module->mProperties->SetValue('sortasc', false);
 		}
 		if (isset($params['title']))
 		{
