@@ -988,7 +988,7 @@ function cms_mapi_call_intermodule_function($module, $name, $array)
 	{
 		if (isset($cmsmodules[$module]['intermodule_function'][$name]))
 		{
-			call_user_func_array($cmsmodules[$module]['intermodule_function'][$name], array($array));
+			return call_user_func_array($cmsmodules[$module]['intermodule_function'][$name], array($array));
 		}
 	}
 }
