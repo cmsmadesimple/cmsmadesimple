@@ -53,6 +53,11 @@ class CmsObject {
 	var $cmsmodules;
 
 	/**
+	 * Plugins object - holds list of all registered plugins 
+	 */
+	var $cmsplugins;
+
+	/**
 	 * BBCode object - for use in bbcode parsing
 	 */
 	var $bbcodeparser;

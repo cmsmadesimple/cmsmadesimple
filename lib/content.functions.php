@@ -52,20 +52,7 @@ class Smarty_CMS extends Smarty {
 		$this->force_compile = false;
 		$this->cache_plugins = false;
 
-		#Load all CMS plugins as non-cacheable
-		$dir = dirname(dirname(__FILE__))."/plugins";
-		$ls = dir($dir);
-		while (($file = $ls->read()) != "") {
-			if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-				if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
-					#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
-					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
-					#echo $filename . "<br />";
-					include_once $filename;
-					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
-				}
-			}
-		}
+		load_plugins(&$this);
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -195,6 +182,33 @@ class Smarty_CMS extends Smarty {
 	{
 		// not used for templates
 	}
+}
+
+/**
+ * Loads all plugins into the system
+ *
+ * @since 0.5
+ */
+function load_plugins($smarty)
+{
+	global $gCms;
+	$plugins = &$gCms->cmsplugins;
+
+	$dir = dirname(dirname(__FILE__))."/plugins";
+	$ls = dir($dir);
+	while (($file = $ls->read()) != "") {
+		if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
+			if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
+				#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
+				$filename = $smarty->_get_plugin_filepath($matches[1], $matches[2]);
+				#echo $filename . "<br />";
+				include_once $filename;
+				$smarty->register_function($matches[2], "smarty_cms_function_" . $matches[2], $smarty->cache_plugins);
+				array_push($plugins, $matches[2]);
+			}
+		}
+	}
+	sort($plugins);
 }
 
 /**

@@ -48,4 +48,10 @@ function smarty_cms_function_adsense($params, &$smarty) {
 	return $result;
 }
 
-?> 
+function smarty_cms_help_function_adsense() {
+	?>
+	<h3>Testing...</h3>
+	<?
+}
+
+?>

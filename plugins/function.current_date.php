@@ -25,4 +25,4 @@ function smarty_cms_function_current_date($params, &$smarty) {
 	return strftime($format,time());
 }
 
-?> 
+?>

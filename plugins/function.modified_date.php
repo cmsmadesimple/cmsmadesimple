@@ -28,4 +28,4 @@ function smarty_cms_function_modified_date($params, &$smarty) {
 		return "";
 }
 
-?> 
+?>

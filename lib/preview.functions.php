@@ -40,20 +40,7 @@ class Smarty_Preview extends Smarty {
 		$this->force_compile = true;
 		$this->cache_plugins = false;
 
-		#Load all CMS plugins as non-cacheable
-		$dir = dirname(dirname(__FILE__))."/plugins";
-		$ls = dir($dir);
-		while (($file = $ls->read()) != "") {
-			if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-				if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
-					#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
-					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
-					#echo $filename . "<br />";
-					require_once $filename;
-					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
-				}
-			}
-		}
+		load_plugins(&$this);
 
 		$this->register_resource("preview", array(&$this, "preview_get_template",
 						       "preview_get_timestamp",

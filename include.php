@@ -96,7 +96,8 @@ if (isset($page)) {
 }
 
 #Setup hash for storing all modules
-$gCms->modules = array();
+$gCms->cmsmodules = array();
+$gCms->cmsplugins = array();
 
 #Load all installed module code
 load_modules();

@@ -44,7 +44,7 @@ $gettext->reset();
 <a href="listgroups.php"><?=$gettext->gettext("Group Management")?></a>
 <a href="listusers.php"><?=$gettext->gettext("User Management")?></a>
 <a href="files.php"><?=$gettext->gettext("File Management")?></a>
-<!--<a href="editprefs.php"><?=$gettext->gettext("User Preferences")?></a>-->
+<a href="plugins.php"><?=$gettext->gettext("Plugin List")?></a>
 <a href="adminlog.php"><?=$gettext->gettext("Admin Log")?></a>
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <!--<a href="logout.php"><?=$gettext->gettext("Logout")?></a>--><br />
