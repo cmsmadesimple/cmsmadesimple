@@ -168,8 +168,7 @@ div.modulelinkblogentrycommentlink {
 
 	</pre></p>
 	<h3>How can I help?</h3>
-	<p>Well, first of all, thanks for asking ;).<br />
-	There is the need for an admin piece to manage the differnt types of links within LinkBlog.  Right now the types have to be manually updated in the database, which, as we all know, is not cool.</p>
+	<p>Come into #cms on irc.freenode.net and find out the latest and offer your services.</p>
 	<?php
 
 }

@@ -4,7 +4,6 @@
 function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
 
-	## echo "return_id: ($return_id)<br />\n";
     $allow_search = '';
     if(isset($params[$id.'allow_search']))
     {
@@ -34,10 +33,11 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
     $db = $cms->db;
     $curr_date = date("Y-m-d");
-    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type, a.create_date, count(b.linkblog_id) as total FROM ".cms_db_prefix()."module_linkblog a LEFT OUTER JOIN ".cms_db_prefix()."module_linkblog_comments b ON a.linkblog_id=b.linkblog_id";
+    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type, a.create_date, count(b.linkblog_id) as total FROM ".cms_db_prefix()."module_linkblog a LEFT OUTER JOIN ".cms_db_prefix()."module_linkblog_comments b ON a.linkblog_id=b.linkblog_id WHERE";
     if ($old_date != "") {
-        $query .= " WHERE a.create_date like '$old_date%'";
-    }
+        $query .= " a.create_date like '$old_date%' and ";
+    } ## if
+	$query .= " a.status = '1'";
     $query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
     $dbresult = $db->Execute($query);
     echo "<p class=\"smalltitle\">Posted sites</p>\n";
@@ -76,12 +76,12 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
             $last_date = "";
             echo "<p>Recent links:</p><ul>\n";
             echo "<li>";
-            echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date), "Today");
+            echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date, 'allow_search'=>'true'), "Today");
             echo "</li>\n";
             while ($row = $dbresult->FetchRow()) {
                 if ($last_date != substr($row["create_date"],0,10) && substr($row["create_date"],0,10) != $curr_date) {
                     echo "<li>";
-                    echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>substr($row["create_date"],0,10)), substr($row["create_date"],0,10));
+                    echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>substr($row["create_date"],0,10), 'allow_search'=>'true'), substr($row["create_date"],0,10));
                     echo "</li>\n";
                 }
                 $last_date = substr($row["create_date"],0,10);
@@ -134,9 +134,9 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         $comment = $params[$id."comment"];
     }
 
-    if ($action == "viewoldlinks") {
-        linkblog_module_showLinks($cms, $id, $params, $return_id);
-    }
+##     if ($action == "viewoldlinks") {
+##         linkblog_module_showLinks($cms, $id, $params, $return_id);
+##     }
 
     switch ($action) {
     ## run this when a new link is submitted
@@ -173,7 +173,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         if ($validinfo) {
             $db = $cms->db;
             $new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".$db->qstr($url).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".$db->qstr($url).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).", '1')";
             echo "query: $query<br/>\n";
             $dbresult = $db->Execute($query);
             cms_mapi_redirect_user_by_pageid($return_id);
@@ -319,8 +319,9 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 		echo "<div class=\"modulelinkblog\">\n";
         $db = $cms->db;
 		$query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type, a.create_date, count(b.linkblog_id) as total FROM ".cms_db_prefix()."module_linkblog a LEFT OUTER JOIN ".cms_db_prefix()."module_linkblog_comments b ON a.linkblog_id=b.linkblog_id";
-		$query .= " WHERE a.linkblog_url like '%".$params[$id."search_text"]."%'";
-		$query .= " OR a.linkblog_title like '%".$params[$id."search_text"]."%'";
+		$query .= " WHERE (a.linkblog_url like '%".$params[$id."search_text"]."%'";
+		$query .= " OR a.linkblog_title like '%".$params[$id."search_text"]."%')";
+		$query .= " AND a.status = '1'";
 		$query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
         $dbresult = $db->Execute($query);
 		if ($dbresult && $dbresult->RowCount()) {
@@ -343,8 +344,13 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 		}
 		break;
 
+	case "viewoldlinks":
+		linkblog_module_showLinks($cms, $id, $params, $return_id);
+		break;
+
 	default:
-		echo "No appropriate action found<br />\n";
+		echo "No appropriate action found ($action)<br />\n";
     } //switch
 }
+
 # vim:ts=4 sw=4 noet
