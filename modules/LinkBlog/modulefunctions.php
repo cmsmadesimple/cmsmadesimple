@@ -32,7 +32,8 @@ function linkblog_module_install($cms) {
 		linkblog_author C(255),
 		linkblog_type I,
 		create_date T,
-		modified_date T
+		modified_date T,
+		status C(10)
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_linkblog", $flds, $taboptarray);
