@@ -31,7 +31,7 @@
 #This is the default language
 
 #Native language name
-$nls['language']['it_IT'] = 'Italia';
+$nls['language']['it_IT'] = 'Italiano';
 $nls['englishlang']['it_IT'] = 'Italian';
 
 #Possible aliases for language
@@ -40,9 +40,10 @@ $nls['alias']['italiano'] = 'it_IT' ;
 $nls['alias']['ita'] = 'it_IT' ;
 $nls['alias']['italian'] = 'it_IT' ;
 $nls['alias']['it_IT.ISO8859-1'] = 'it_IT' ;
+$nls['alias']['it_IT.ISO8859-15'] = 'it_IT' ;
 
 #Encoding of the language
-$nls['encoding']['it_IT'] = "UTF-8";
+$nls['encoding']['it_IT'] = "ISO8859-15";
 
 #Location of the file(s)
 $nls['file']['it_IT'] = array();
