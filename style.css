@@ -1,0 +1,52 @@
+body { color: #000000;
+       background-color: #aaaaaa;
+       font-size: 10pt;
+       font-family: Tahoma }
+
+td.nav     { color: #000000;
+             background-color: #e9e9e9;
+             font-size: 10pt;
+             text-align: center;
+             font-family: Tahoma }
+td.header  { color: #000000;
+             font-size: 10pt;
+             font-family: Tahoma }
+td.label   { color: #000000;
+             background-color: #ccccff;
+             font-size: 10pt;
+             font-family: Tahoma }
+td.body    { color: #000000;
+             background-color: #ffffff;
+             font-size: 10pt;
+             font-family: Tahoma }
+td.bodyalt { color: #000000;
+             background-color: #e9e9e9;
+             font-size: 10pt;
+             font-family: Tahoma }
+td.footer  { color: #000000;
+             font-size: 10pt;
+             font-family: Tahoma }
+
+a:link     { color: #002060;
+             text-decoration: none;
+             font-size: 10pt;
+             font-family: Tahoma }
+a:visited  { color: #333333;
+             text-decoration: none;
+             font-size: 10pt;
+             font-family: Tahoma }
+a:active   { color: #606060;
+             text-decoration: none;
+             font-size: 10pt;
+             font-family: Tahoma }
+a:hover    { color: #700000;
+             text-decoration: none;
+             font-size: 10pt;
+             font-family: Tahoma }
+
+
+.good     { color: #0033FF;
+             font-weight: bold }
+.bad      { color: #CC3300;
+             font-weight: bold }
+
