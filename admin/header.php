@@ -119,11 +119,30 @@ if (isset($CMS_ADMIN_SUBTITLE))
 
 # add to recent pages, delete old
 require_once("../lib/classes/class.recentpage.inc.php");
+$recent = RecentPageOperations::LoadRecentPages($userid);
 
-$rp = new RecentPage();
-$rp->setValues($pagetitle, $_SERVER['REQUEST_URI'], $userid);
-$rp->Save();
-$rp->PurgeOldPages($userid,5);
+if (! isset($CMS_EXCLUDE_FROM_RECENT))
+{
+    $addToRecent = true;
+    foreach ($recent as $thisPage)
+        {
+        if ($thisPage->url == $_SERVER['REQUEST_URI'])
+            {
+            $addToRecent = false;
+            }
+        }
+    if ($addToRecent)
+        {
+        $rp = new RecentPage();
+        $rp->setValues($pagetitle, $_SERVER['REQUEST_URI'], $userid);
+        $rp->Save();
+        $recent = array_reverse($recent);
+        array_push($recent, $rp);
+        array_shift($recent);
+        $recent = array_reverse($recent);
+        $rp->PurgeOldPages($userid,5);
+        }
+}
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
@@ -187,7 +206,6 @@ function toggleBookmarkState()
 
 <p class="DashboardCalloutTitle">Recent Pages</p>
 <?php
-$recent = RecentPageOperations::LoadRecentPages($userid);
 	echo "<ul>";
 	if (count($recent) > 0)
 		{

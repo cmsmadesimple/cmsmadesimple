@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='usersgroups';
 $CMS_ADMIN_TITLE='usersgroups';
+$CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 

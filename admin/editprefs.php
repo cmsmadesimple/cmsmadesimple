@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='preferences';
 $CMS_ADMIN_TITLE='userprefs';
+$CMS_EXCLUDE_FROM_RECENT=1;
 
 $default_cms_lang = "";
 if (isset($_POST["default_cms_lang"])) $default_cms_lang = $_POST["default_cms_lang"];
