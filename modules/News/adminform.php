@@ -71,6 +71,7 @@ switch( $moduleaction )
  
   case "add":
     {
+      $newsid = (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
       $hiddenfields .= "<input type=\"hidden\" name=\"".$id."action\" value=\"completeadd\" /><input type=\"hidden\" name=\"".$id."news_id\" value=\"".$newsid."\" />";
       $post_date = rtrim(ltrim($db->DBTimeStamp(time()), "'"), "'");
     }
