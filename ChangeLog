@@ -1,4 +1,4 @@
-Version 0.5 -- Subversion
+Version 0.5rc1 -- Fri Aug 20 2004
 -----------------
 
 * Added page aliases
@@ -6,14 +6,21 @@ Version 0.5 -- Subversion
 * Added new admin stylesheet (Bewbs)
 * Added new admin icons (Graeme)
 * Added file manager
+* Added LinkBlog module
+* Added RSS module
 * Added phpdoc strings to many files and functions
+* Added module and tag self-documentation hooks
 * Added ability for module's adminexecute function to use the wysiwyg
+* Changed modules page to be called plugins.  Added tags to same page.
 * Changed config file to a new format.  Upgrade script will take care
 up upgrading it automatically.
 * Changed inner workings so that code is easier to 
 understand.  We now pass one global object around and put important 
 variables and objects inside it.  Makes the code very consistent.
+* Changed inner working of the content hierarchy to allow for more
+custom menus.
 * Fixed modules to respect the installed and active flags
+* Lots of little bug fixes and changes
 * Removed lots of NOTICE level errors
 
 Version 0.4.1 -- Fri Aug 13 2004
