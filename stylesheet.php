@@ -21,7 +21,8 @@ require_once(dirname(__FILE__)."/include.php");
 $templateid = "";
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 
-header("Content-Type: text/css");
+header("Content-Language: " . $current_language);
+header("Content-Type: text/css; charset=" . get_encoding());
 
 echo get_stylesheet($templateid);
 

@@ -341,6 +341,7 @@ function showPageFour() {
 	$newconfig["use_Indite"] = false;
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
 	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
+	$newconfig["default_encoding"] = "";
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file

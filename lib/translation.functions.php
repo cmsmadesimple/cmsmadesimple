@@ -47,8 +47,13 @@ function get_encoding()
 {
 	global $nls;
 	global $current_language;
+	global $config;
 
-	if (isset($nls['encoding'][$current_language]))
+	if (isset($config['default_encoding']) && isset($config['default_encoding']) != "")
+	{
+		return $config['default_encoding'];
+	}
+	else if (isset($nls['encoding'][$current_language]))
 	{
 		return $nls['encoding'][$current_language];
 	}

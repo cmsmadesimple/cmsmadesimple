@@ -79,6 +79,10 @@ if (get_site_preference('enablecustom404') == "0")
 }
 
 echo $html;
+
+header("Content-Language: " . $current_language);
+header("Content-Type: text/html; charset=" . get_encoding());
+
 @ob_flush();
 
 $endtime = microtime();

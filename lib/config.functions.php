@@ -91,6 +91,8 @@ function cms_config_load($loadLocal = true)
 	$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
 	$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
 
+	$config["default_encoding"] = "";
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())

@@ -421,7 +421,7 @@ function textarea_highlight($use_javasyntax, $text, $name,
        
     }else{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
-            class="'.$class_name.'" id="'.$id.'">'.htmlentities($text).'</textarea>';
+            class="'.$class_name.'" id="'.$id.'">'.htmlentities($text,ENT_NOQUOTES,get_encoding()).'</textarea>';
     }
     
     return $output;
