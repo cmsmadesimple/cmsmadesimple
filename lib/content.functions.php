@@ -203,7 +203,7 @@ class Smarty_CMS extends Smarty {
  *
  * @since 0.5
  */
-function & load_plugins(&$smarty)
+function load_plugins(&$smarty)
 {
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
@@ -353,11 +353,25 @@ function db_get_menu_items($params = array()) {
 			if ($current_content->page_type != "link") {
 				if (isset($current_content->page_alias) && $current_content->page_alias != "")
 				{
-					$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
+					if ($config["assume_mod_rewrite"])
+					{
+						$current_content->url = $config["root_url"]."/".$current_content->page_alias.".shtml";
+					}
+					else
+					{
+						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
+					}
 				}
 					else
 					{
-						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;
+						if ($config["assume_mod_rewrite"])
+						{
+							$current_content->url = $config["root_url"]."/".$current_content->page_id.".shtml";
+						}
+						else
+						{
+							$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;
+						}
 					}
 					$current_content->page_url = "";	
 				} else {
