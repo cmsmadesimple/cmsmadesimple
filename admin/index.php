@@ -54,27 +54,52 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <div class="MainMenuItem">
 <a href="topcontent.php">Content</a>
-<span class="description">This is where we add and edit content. Subitems: <a href="listcontent.php">content</a>, <a href="listhtmlblobs.php">html blobs</a></span>
+<span class="description">This is where we add and edit content. Subitems: <a href="listcontent.php">content</a>, <a href="listhtmlblobs.php">html blobs</a>.</span>
 </div>
 
 <div class="MainMenuItem">
 <a href="topfiles.php">Files</a>
-<span class="description">This is where we add and remove files. Subitems: <a href="files.php">file manager</a>, <a href="imagefiles.php">image manager</a></span>
+<span class="description">This is where we add and remove files. Subitems: <a href="files.php">file manager</a>, <a href="imagefiles.php">image manager</a>.</span>
 </div>
 
 <div class="MainMenuItem">
 <a href="toplayout.php">Layout</a>
-<span class="description">Site layout options. Subitems: <a href="listtemplates.php">templates</a>, <a href="listhtmlblobs.php">html blobs</a></span>
+<span class="description">Site layout options. Subitems: <a href="listtemplates.php">templates</a>, <a href="listhtmlblobs.php">html blobs</a>.</span>
 </div>
 
 <div class="MainMenuItem">
 <a href="topusers.php">Users/Groups</a>
-<span class="description">User and Group related items. Subitems: <a href="listusers.php">users</a>, <a href="listgroups.php">groups</a>, <a href="#">permissions</a></span>
+<span class="description">User and Group related items. Subitems: <a href="listusers.php">users</a>, <a href="listgroups.php">groups</a>, <a href="#">permissions</a>.</span>
 </div>
 
 <div class="MainMenuItem">
 <a href="topextensions.php">Extensions</a>
-<span class="description">Modules, tags and other assorted fun. Subitems: <a href="listmodules.php">modules</a>, <a href="listtags.php">tags</a>, <a href="listusertags.php">user defined tags</a></span>
+<span class="description">Modules, tags and other assorted fun. Subitems: <a href="listmodules.php">modules</a>, <a href="listtags.php">tags</a>, <a href="listusertags.php">user defined tags</a>.
+<?php
+	# Is there any modules with an admin interface?
+	$cmsmodules = $gCms->modules;
+
+	$displaymodules = "";
+
+	foreach ($cmsmodules as $key=>$value)
+	{
+		if (isset($cmsmodules[$key]['object']) 
+			&& $cmsmodules[$key]['installed'] == true
+			&& $cmsmodules[$key]['active'] == true
+			&& $cmsmodules[$key]['object']->HasAdmin()
+		)
+		{
+			$displaymodules .= '<a href="moduleinterface.php?module='.$key.'">'.strtolower($key).'</a>, ';
+		}
+	}
+
+	if ($displaymodules != '')
+	{
+		$displaymodules = substr($displaymodules, 0, strlen($displaymodules) - 2);
+		echo ' Modules: ' . $displaymodules;
+	}
+?>
+</span>
 </div>
 
 <div class="MainMenuItem">

@@ -46,6 +46,31 @@ include_once("header.php");
 <span class="description">Tags that you can create and modify yourself to perform specific tasks, right from your browser.</span>
 </div>
 
+<?php
+	# Is there any modules with an admin interface?
+	$cmsmodules = $gCms->modules;
+
+	$displaymodules = "";
+
+	foreach ($cmsmodules as $key=>$value)
+	{
+		if (isset($cmsmodules[$key]['object']) 
+			&& $cmsmodules[$key]['installed'] == true
+			&& $cmsmodules[$key]['active'] == true
+			&& $cmsmodules[$key]['object']->HasAdmin()
+		)
+		{
+			echo '<div class="MainMenuItem">';
+			echo '<a href="moduleinterface.php?module='.$key.'">'.$key.'</a>';
+			if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
+			{
+				echo '<span class="description">'.$cmsmodules[$key]['object']->GetAdminDescription().'</span>';
+			}
+			echo '</div>';
+		}
+	}
+?>
+
 <div class="MainMenuItem">
 <a href="index.php">Main Menu</a>
 </div>

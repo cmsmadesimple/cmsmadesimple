@@ -85,6 +85,18 @@ class CMSModule extends ModuleOperations
 		return '';
 	}
 
+
+	/**
+	 * Returns a description of what the admin link does.
+	 *
+	 * @param string Optional language that the admin is using.  If that language
+	 * is not defined, use en_US.
+	 */
+	function GetAdminDescription($lang = 'en_US')
+	{
+		return '';
+	}
+
 	/**
 	 * Returns the changelog for the module
 	 */

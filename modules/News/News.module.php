@@ -40,6 +40,11 @@ class News extends CMSModule
 		return '1.6';
 	}
 
+	function GetAdminDescription()
+	{
+		return 'Add, edit and remove News entries';
+	}
+
 	function Install()
 	{
 		$db = $this->cms->db;
