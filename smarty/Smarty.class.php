@@ -27,10 +27,10 @@
  * @author Monte Ohrt <monte@ispi.net>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.3
+ * @version 2.6.5-dev
  */
 
-/* $Id: Smarty.class.php,v 1.490 2004/06/08 10:48:50 messju Exp $ */
+/* $Id: Smarty.class.php,v 1.498 2004/09/10 19:15:01 messju Exp $ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -231,7 +231,8 @@ class Smarty
                                                                'true','false'),
                                     'INCLUDE_ANY'     => false,
                                     'PHP_TAGS'        => false,
-                                    'MODIFIER_FUNCS'  => array('count')
+                                    'MODIFIER_FUNCS'  => array('count'),
+                                    'ALLOW_CONSTANTS'  => false
                                    );
 
     /**
@@ -263,7 +264,7 @@ class Smarty
      *
      * @var string
      */
-    var $request_vars_order    = "EGPCS";
+    var $request_vars_order    = 'EGPCS';
 
     /**
      * Indicates wether $HTTP_*_VARS[] (request_use_auto_globals=false)
@@ -459,7 +460,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.3';
+    var $_version              = '2.6.5-dev';
 
     /**
      * current template inclusion depth
@@ -1196,12 +1197,12 @@ class Smarty
                             && !$this->_cache_serials
                             && $_gmt_mtime == $_last_modified_date) {
                             if (php_sapi_name()=='cgi')
-                                header("Status: 304 Not Modified");
+                                header('Status: 304 Not Modified');
                             else
-                                header("HTTP/1.1 304 Not Modified");
+                                header('HTTP/1.1 304 Not Modified');
 
                         } else {
-                            header("Last-Modified: ".$_gmt_mtime);
+                            header('Last-Modified: '.$_gmt_mtime);
                             echo $_smarty_results;
                         }
                     } else {
@@ -1220,7 +1221,7 @@ class Smarty
             } else {
                 $this->_cache_info['template'][$resource_name] = true;
                 if ($this->cache_modified_check && $display) {
-                    header("Last-Modified: ".gmdate('D, d M Y H:i:s', time()).' GMT');
+                    header('Last-Modified: '.gmdate('D, d M Y H:i:s', time()).' GMT');
                 }
             }
         }
@@ -1408,7 +1409,6 @@ class Smarty
         }
 
         $_source_content = $_params['source_content'];
-        $_resource_timestamp = $_params['resource_timestamp'];
         $_cache_include    = substr($compile_path, 0, -4).'.inc';
 
         if ($this->_compile_source($resource_name, $_source_content, $_compiled_content, $_cache_include)) {
@@ -1418,7 +1418,7 @@ class Smarty
                 smarty_core_write_compiled_include(array_merge($this->_cache_include_info, array('compiled_content'=>$_compiled_content)),  $this);
             }
 
-            $_params = array('compile_path'=>$compile_path, 'compiled_content' => $_compiled_content, 'resource_timestamp' => $_resource_timestamp);
+            $_params = array('compile_path'=>$compile_path, 'compiled_content' => $_compiled_content);
             require_once(SMARTY_DIR . 'core' . DIRECTORY_SEPARATOR . 'core.write_compiled_resource.php');
             smarty_core_write_compiled_resource($_params, $this);
 
@@ -1624,7 +1624,7 @@ class Smarty
         }
 
         if ($params['resource_type'] == 'file') {
-            if (!preg_match("/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/", $params['resource_name'])) {
+            if (!preg_match('/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/', $params['resource_name'])) {
                 // relative pathname to $params['resource_base_path']
                 // use the first directory where the file is found
                 foreach ((array)$params['resource_base_path'] as $_curr_path) {
@@ -1727,16 +1727,7 @@ class Smarty
     function _get_auto_filename($auto_base, $auto_source = null, $auto_id = null)
     {
         $_compile_dir_sep =  $this->use_sub_dirs ? DIRECTORY_SEPARATOR : '^';
-
-        if(@is_dir($auto_base)) {
-            $_return = $auto_base . DIRECTORY_SEPARATOR;
-        } else {
-            // auto_base not found, try include_path
-            $_params = array('file_path' => $auto_base);
-            require_once(SMARTY_DIR . 'core' . DIRECTORY_SEPARATOR . 'core.get_include_path.php');
-            smarty_core_get_include_path($_params, $this);
-            $_return = isset($_params['new_file_path']) ? $_params['new_file_path'] . DIRECTORY_SEPARATOR : null;
-        }
+        $_return = $auto_base . DIRECTORY_SEPARATOR;
 
         if(isset($auto_id)) {
             // make auto_id safe for directory names
@@ -1748,7 +1739,7 @@ class Smarty
         if(isset($auto_source)) {
             // make source name safe for filename
             $_filename = urlencode(basename($auto_source));
-            $_crc32 = sprintf("%08X", crc32($auto_source));
+            $_crc32 = sprintf('%08X', crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
             $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .

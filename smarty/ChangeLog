@@ -1,3 +1,331 @@
+2004-09-11  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/function.debug.php:
+      removed notice from {debug}
+      thanks to Peter Billen for pointing this one out!
+
+2004-09-11  Monte Ohrt  <monte@ispi.net>
+
+    * libs/Smarty_Compiler.class.php:
+      fix more object calling syntax issues
+
+2004-09-10  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      added $smarty->security_settings['ALLOW_CONSTANTS']
+      including test-cases for them
+
+2004-09-09  Monte Ohrt  <monte@ispi.net>
+
+    * libs/Smarty_Compiler.class.php:
+      break down regex to digestable chunks, fix multiple param problem with
+      method calls,
+      add object method testing to unit_test cases
+
+    * libs/Smarty_Compiler.class.php:
+      update code comment with more examples
+
+    * libs/Smarty_Compiler.class.php:
+      allow objects in arbitrary param positions
+
+    * libs/Smarty_Compiler.class.php:
+      fix object parameter regex, allow one level of object indirection
+
+    * libs/Smarty_Compiler.class.php:
+      fix compile problem with numeric constants and math operator matching
+
+2004-09-07  Monte Ohrt  <monte@ispi.net>
+
+    * libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      update files to 2.6.5-dev
+
+    * (Smarty_2_6_4)
+      NEWS:
+      update NEWS file with 2.6.4 header
+
+2004-08-31  Monte Ohrt  <monte@ispi.net>
+
+    * libs/Smarty_Compiler.class.php:
+      fix preg_quote
+
+    * libs/Smarty_Compiler.class.php:
+      fix math in object params, clean up some regex on the way, change
+      preg_ delimiters to ~ to avoid character clashes with ! and %
+
+2004-08-30  Monte Ohrt  <monte@ispi.net>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      add $smarty.ldelim and $smarty.rdelim to smarty special var
+
+2004-08-29  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/core/core.write_file.php:
+      tempnam() seems to be borken on many installation.
+      
+      now we try tempnam first and if that fails we generate our own
+      temp-filename with uniqid()
+
+2004-08-23  Monte Ohrt  <monte@ispi.net>
+
+    * libs/plugins/modifier.capitalize.php:
+      dont use constant, use static var instead
+
+    * libs/plugins/modifier.capitalize.php:
+      implement optional param to capitalize for digit behavior
+
+    * libs/plugins/modifier.capitalize.php:
+      another commit to capitalize, taking special chars into account
+
+2004-08-23  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/Smarty_Compiler.class.php:
+      cleaned up attribute-handling in Smarty_Compiler::_compile_foreach_start()
+
+2004-08-23  Monte Ohrt  <monte@ispi.net>
+
+    * NEWS
+      libs/plugins/function.html_select_date.php
+      libs/plugins/modifier.capitalize.php:
+      fix capitalize modifier to not rely on buggy ucwords() func
+
+2004-08-20  Monte Ohrt  <monte@ispi.net>
+
+    * libs/plugins/function.html_select_date.php:
+      update version
+
+    * NEWS
+      libs/plugins/function.html_select_date.php:
+      make time param work with negative timestamps, force year range to include
+      given date unless explicitly set
+
+2004-08-19  Monte Ohrt  <monte@ispi.net>
+
+    * NEWS
+      libs/plugins/function.fetch.php:
+      fix bug with fetch, passing user/pass in url did not work
+
+2004-08-13  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/Smarty_Compiler.class.php:
+      fixed handling of {foreachelse} and {sectionelse} that got borked with
+      the latest commit (v 1.330)
+
+2004-08-12  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      fixed occasional wrong error messages on mismatched tags when
+      {else}, {elseif}, {foreachelse} or {sectionelse} is involved
+      
+      thanks to Ooypunk for pointing me on this
+
+2004-08-12  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/.cvsignore
+      docs/Makefile.in
+      docs/configure.in:
+      enable russian PDF builds
+
+2004-07-30  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/configure.in:
+      typo
+
+    * docs/Makefile.in
+      docs/README
+      docs/configure.in:
+      add make test_xml
+      this is usefull to detect XML problems
+
+2004-07-29  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/configure.in:
+      avoid warnings in head
+
+    * docs/.cvsignore
+      docs/Makefile.in
+      docs/README
+      docs/configure.in:
+      build pdf files
+      just type make pdf
+
+2004-07-27  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      fixed handling of methods arguments.
+      
+      thanks to Manfred Wischin for finding this one and providing the
+      conceptual fix.
+
+2004-07-23  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/function.html_checkboxes.php
+      libs/plugins/function.html_radios.php:
+      there was little flaw in smarty_function_html_radios() and
+      smarty_function_html_checkboxes():
+      
+      the newly introduced assign-attribute was still added to the
+      tag-output as an extra-attribute.
+      
+      fixed.
+
+    * NEWS
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php
+      libs/core/core.load_plugins.php
+      libs/core/core.load_resource_plugin.php
+      libs/plugins/function.html_checkboxes.php
+      libs/plugins/function.html_image.php
+      libs/plugins/function.html_options.php
+      libs/plugins/function.html_radios.php
+      libs/plugins/function.html_select_date.php
+      libs/plugins/function.html_select_time.php
+      libs/plugins/modifier.date_format.php:
+      backed out renaming of _get_plugin_filepath() to get_plugin_filepath()
+      
+      we'll stick to _get_plugin_filepath() and look for a more viable
+      solution to be exposed to plugin-writers.
+
+2004-07-20  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/Smarty_Compiler.class.php
+      libs/core/core.is_trusted.php
+      libs/plugins/compiler.assign.php:
+      Some fixes on PhpDocumentor comments. Thanks go to Ruben Vermeersch.
+
+2004-07-16  andreas halter  <phpcvs@andreashalter.ch>
+
+    * docs/de/bookinfo.xml
+      docs/de/getting-started.xml
+      docs/de/language-defs.ent
+      docs/de/language-snippets.ent
+      docs/de/preface.xml:
+      - updated for 2.6.3
+      - updates for new build system
+      - added missing files
+      - corrections from users
+      - revcheck comments for all files
+      - big up to didou and nuno, brilliant work
+      - make test: ok
+      - make: ok
+
+2004-07-16  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/de/getting-started.xml:
+      fix the revision tracking tag
+      the revision number might not be right. just check it, please
+
+2004-07-16  andreas halter  <phpcvs@andreashalter.ch>
+
+    * docs/de/getting-started.xml:
+      - updated version (incl revcheck comment) for revcheck testing
+
+2004-07-14  Monte Ohrt  <monte@ispi.net>
+
+    * libs/Smarty.class.php:
+      replace " with ' where literal strings are quoted (ever so slight speedup)
+
+2004-07-12  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/modifier.date_format.php:
+      changed call from $smarty->_get_plugin_filepath() to
+      $smarty->get_plugin_filepath()
+
+    * libs/plugins/function.html_checkboxes.php
+      libs/plugins/function.html_image.php
+      libs/plugins/function.html_options.php
+      libs/plugins/function.html_radios.php
+      libs/plugins/function.html_select_date.php
+      libs/plugins/function.html_select_time.php:
+      renamed calls to $smarty->_get_plugin_filepath() to
+      $smarty->get_plugin_filepath()
+
+    * NEWS
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php
+      libs/core/core.load_plugins.php
+      libs/core/core.load_resource_plugin.php:
+      renamed Smarty::_get_plugin_filepath() to Smarty::get_plugin_filepath()
+
+    * NEWS
+      libs/Smarty.class.php
+      libs/core/core.write_compiled_include.php
+      libs/core/core.write_compiled_resource.php
+      libs/core/core.write_file.php:
+      removed touch() call. changing the timestamp of the compiled-template
+      to the source template's may be irritating for certain
+      source-code-caches. now a newly compiled template gets the current
+      time as timestamp.
+
+2004-07-02  gerald croes  <gerald@phpside.org>
+
+    * docs/fr/getting-started.xml
+      docs/fr/preface.xml:
+      Fixed missing tags to be able to make doc again
+
+    * docs/fr/preface.xml:
+      added the "is a good thing [TM]" as in en docs
+
+    * docs/fr/getting-started.xml:
+      added ctags, updated screen => programm listing.
+      added the technical note founded on the en doc
+
+2004-07-02  Monte Ohrt  <monte@ispi.net>
+
+    * NEWS
+      libs/plugins/function.html_checkboxes.php
+      libs/plugins/function.html_radios.php
+      libs/plugins/function.mailto.php:
+      add assign attribute to html_checkboxes and html_radios
+
+2004-07-01  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty.class.php:
+      removed use of get_include_filepath() inside
+      get_auto_filename(). thanks go to c960657
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      enhanced error-reporting for {foreach}
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      fixed handling of digits inside tagnames. this problem slipped into
+      the regexps by adding support for numeric contants next to string
+      constants as variables.
+
+2004-06-27  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      fixed escaping of backslashes in Smarty_Compiler::_quote_replace()
+
+2004-06-23  Monte Ohrt  <monte@ispi.net>
+
+    * libs/plugins/modifier.date_format.php:
+      display date_format %e, %T and %D as expected for windows
+
+2004-06-17  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      changed version-number to 2.6.4-dev
+
+2004-06-16  Monte Ohrt  <monte@ispi.net>
+
+    * (Smarty_2_6_3)
+      NEWS:
+      update NEWS file with version number
+
 2004-06-09  Monte Ohrt  <monte@ispi.net>
 
     * NEWS
@@ -2521,7 +2849,7 @@
 
     * libs/Smarty.class.php
       libs/Smarty_Compiler.class.php:
-      added CVS $Id: ChangeLog,v 1.301 2004/06/10 00:32:47 changelog Exp $
+      added CVS $Id: ChangeLog,v 1.327 2004/09/12 00:33:39 changelog Exp $
 
 2003-03-31  Messju Mohr  <messju@lammfellpuschen.de>
 

@@ -8,6 +8,7 @@ Version 0.6.1 -- Subversion
 * Fixed a bug with view page in listcontent (Fixes #61)
 * Fixed so only content pages can be set as default (Fixes #59)
 * Started moving code to an easy object oriented design
+* Updated smarty to 2.6.5
 
 Version 0.6 -- Wed Sep 01 2004
 -----------------
