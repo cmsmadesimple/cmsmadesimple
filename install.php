@@ -297,9 +297,26 @@ function showPageFour() {
         exit;
     } ## if
 
-    $config = "config.php";
+	require_once("lib/config.functions.php");
+
+	$newconfig = array();
+
+	$newconfig['db_hostname'] = $_POST['host'];
+	$newconfig['db_username'] = $_POST['username'];
+	$newconfig['db_password'] = $_POST['password'];
+	$newconfig['db_name'] = $_POST['database'];
+	$newconfig['db_prefix'] = $_POST['prefix'];
+	$newconfig['root_url'] = $_POST['docroot'];
+	$newconfig['root_path'] = addslashes($_POST['docpath']);
+	$newconfig['query_var'] = $_POST['querystr'];
+	$newconfig['use_bb_code'] = $_POST['bbcode'];
+	$newconfig['use_smarty_php_tags'] = false;
+	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
+
+    $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file
 
+	/*
     $content = "<?php\n\n#Database connection information'\n";
 	$content .= '$this->dbms = "mysql";'."\n";
     $content .= '$this->db_hostname = "'.$_POST['host'].'";'."\n";
@@ -314,16 +331,10 @@ function showPageFour() {
 	$content .= '$this->use_smarty_php_tags = false;'."\n";
 	$content .= '$this->previews_path = $this->root_path . "/smarty/cms/cache";'."\n";
     $content .= "\n?>\n";
+	*/
 
-    if ((file_exists($config) && is_writable($config)) || !file_exists($config)) {
-        $file = @fopen($config, "w");
-        if ($file != 0) {
-            if (fwrite($file,$content) === FALSE) {
-                echo "Cannot write to $config\n";
-                exit;
-            } ## if
-            fclose($file);
-        } ## if
+    if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
+		cms_config_save($newconfig);
     } else {
         echo "Error: Cannot write to $config.<br />\n";
         exit;
