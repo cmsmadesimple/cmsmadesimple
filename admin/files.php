@@ -100,7 +100,7 @@ if (isset($_POST['newdirsubmit']))
 		{
 			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '..'")."</li>";
 		}
-		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') === true)
+		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
 			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '/' or '\'")."</li>";
 		}
@@ -181,15 +181,14 @@ $filetext = "";
 echo '<div class="adminformnobkg">';
 echo "<h3>".$gettext->gettext("File Management")."</h3>";
 
-echo "<h4>".$gettext->gettext("Current Directory").": ".($reldir==""?"/":$reldir)."</h4>"; 
 
 if ($errors != "")
 {
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
+echo "<h4>".$gettext->gettext("Current Directory").": ".($reldir==""?"/":$reldir)."</h4>";
 echo '<table cellspacing="0" class="admintable">';
-
 echo "<tr><td width=\"30\">&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td width=\"10%\">".$gettext->gettext("File Size")."</td><td width=\"18\">&nbsp;</td></tr>";
 
 if ($reldir != "")
