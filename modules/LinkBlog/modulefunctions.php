@@ -389,6 +389,10 @@ div.modulelinkblogentrycommentlink {
 }
 
 	</pre></p>
+	<h3>How can I help?</h3>
+	<p>Well, first of all, thanks for asking ;).<br />
+	This module still needs a way to manage an ever growing list of links with pagination or some sort of max results per page solution.  Maybe just breaking it down by day is enough for most people.  It's not hard to do, the time just hasn't been there.<br />
+	There is also the need for an admin piece to manage the differnt types of links within LinkBlog.  Right now the types have to be manually updated in the database, which, as we all know, is not cool.</p>
 	<?
 
 }
