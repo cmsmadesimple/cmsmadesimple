@@ -14,7 +14,7 @@
 
 InsertFile.I18N = {
 	"InsertFileTooltip"				: "Insert link to file"
-};
+}
 /*
 
 

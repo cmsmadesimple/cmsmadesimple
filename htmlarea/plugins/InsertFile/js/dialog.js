@@ -19,14 +19,14 @@ function Dialog(url, action, init) {
 		init = window;	// pass this window object by default
 	}
 	Dialog._geckoOpenModal(url, action, init);
-};
+}
 
 Dialog._parentEvent = function(ev) {
 	setTimeout( function() { if (Dialog._modal && !Dialog._modal.closed) { Dialog._modal.focus() } }, 50);
 	if (Dialog._modal && !Dialog._modal.closed) {
 		Dialog._stopEvent(ev);
 	}
-};
+}
 
 
 // should be a function, the return handler of the currently opened dialog.
@@ -54,13 +54,13 @@ Dialog._geckoOpenModal = function(url, action, init) {
 		Dialog._addEvent(w, "click", Dialog._parentEvent);
 		Dialog._addEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._addEvent(w, "focus", Dialog._parentEvent);
-	};
+	}
 	// release the captured events
 	function relwin(w) {
 		Dialog._removeEvent(w, "click", Dialog._parentEvent);
 		Dialog._removeEvent(w, "mousedown", Dialog._parentEvent);
 		Dialog._removeEvent(w, "focus", Dialog._parentEvent);
-	};
+	}
 	capwin(window);
 	// capture other frames
 	for (var i = 0; i < window.frames.length; capwin(window.frames[i++]));
@@ -73,8 +73,8 @@ Dialog._geckoOpenModal = function(url, action, init) {
 		// capture other frames
 		for (var i = 0; i < window.frames.length; relwin(window.frames[i++]));
 		Dialog._modal = null;
-	};
-};
+	}
+}
 
 
 // event handling
@@ -85,7 +85,7 @@ Dialog._addEvent = function(el, evname, func) {
 	} else {
 		el.addEventListener(evname, func, true);
 	}
-};
+}
 
 
 Dialog._removeEvent = function(el, evname, func) {
@@ -94,7 +94,7 @@ Dialog._removeEvent = function(el, evname, func) {
 	} else {
 		el.removeEventListener(evname, func, true);
 	}
-};
+}
 
 
 Dialog._stopEvent = function(ev) {
@@ -105,7 +105,7 @@ Dialog._stopEvent = function(ev) {
 		ev.preventDefault();
 		ev.stopPropagation();
 	}
-};
+}
 
 Dialog.agt = navigator.userAgent.toLowerCase();
 Dialog.is_ie	   = ((Dialog.agt.indexOf("msie") != -1) && (Dialog.agt.indexOf("opera") == -1));

@@ -78,7 +78,7 @@ if (!isset($charsetsent))
 	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
 	<SCRIPT TYPE="text/javascript">
 
-		HTMLArea.loadPlugin("ImageManager");
+		//HTMLArea.loadPlugin("ImageManager");
 		HTMLArea.loadPlugin("InsertFile");
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
@@ -90,7 +90,7 @@ if (!isset($charsetsent))
 		var editor = null;
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
-			editor.registerPlugin(ImageManager);
+			//editor.registerPlugin(ImageManager);
 			<?php 
 				// Ugly Hack alert! making setting session var to send language setting to insertFile
 				$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];

@@ -60,14 +60,14 @@ function SortableTable(oTable, oSortTypes) {
 	var oThis = this;
 	this._headerOnclick = function (e) {
 		oThis.headerOnclick(e);
-	};
+	}
 
 
 	// only IE needs this
 	var win = this.document.defaultView || this.document.parentWindow;
 	this._onunload = function () {
 		oThis.destroy();
-	};
+	}
 	if (win && typeof win.attachEvent != "undefined") {
 		win.attachEvent("onunload", this._onunload);
 	}
@@ -81,7 +81,7 @@ SortableTable.msie = /msie/i.test(navigator.userAgent);
 // an orphaned element. MSIE is not
 SortableTable.removeBeforeSort = SortableTable.gecko;
 
-SortableTable.prototype.onsort = function () {};
+SortableTable.prototype.onsort = function () {}
 
 // adds arrow containers and events
 // also binds sort type to the header cells so that reordering columns does
@@ -104,7 +104,7 @@ SortableTable.prototype.initHeader = function (oSortTypes) {
 			c.attachEvent("onclick", this._headerOnclick);
 	}
 	this.updateHeaderArrows();
-};
+}
 
 // remove arrows and events
 SortableTable.prototype.uninitHeader = function () {
@@ -119,7 +119,7 @@ SortableTable.prototype.uninitHeader = function () {
 		else if (typeof c.detachEvent != "undefined")
 			c.detachEvent("onclick", this._headerOnclick);
 	}
-};
+}
 
 SortableTable.prototype.updateHeaderArrows = function () {
 	var cells = this.tHead.rows[0].cells;
@@ -132,7 +132,7 @@ SortableTable.prototype.updateHeaderArrows = function () {
 		else
 			img.className = "sort-arrow";
 	}
-};
+}
 
 SortableTable.prototype.headerOnclick = function (e) {
 	// find TD element
@@ -141,7 +141,7 @@ SortableTable.prototype.headerOnclick = function (e) {
 		el = el.parentNode;
 
 	this.sort(SortableTable.msie ? SortableTable.getCellIndex(el) : el.cellIndex);
-};
+}
 
 // IE returns wrong cellIndex when columns are hidden
 SortableTable.getCellIndex = function (oTd) {
@@ -151,7 +151,7 @@ SortableTable.getCellIndex = function (oTd) {
 	for (i = 0; cells[i] != oTd && i < l; i++)
 		;
 	return i;
-};
+}
 
 SortableTable.prototype.getSortType = function (nColumn) {
 	var cell = this.tHead.rows[0].cells[nColumn];
@@ -159,7 +159,7 @@ SortableTable.prototype.getSortType = function (nColumn) {
 	if (val != "")
 		return val;
 	return "String";
-};
+}
 
 // only nColumn is required
 // if bDescending is left out the old value is taken into account
@@ -217,15 +217,15 @@ SortableTable.prototype.sort = function (nColumn, bDescending, sSortType) {
 
 	if (typeof this.onsort == "function")
 		this.onsort();
-};
+}
 
 SortableTable.prototype.asyncSort = function (nColumn, bDescending, sSortType) {
 	var oThis = this;
 	this._asyncsort = function () {
 		oThis.sort(nColumn, bDescending, sSortType);
-	};
+	}
 	window.setTimeout(this._asyncsort, 1);
-};
+}
 
 SortableTable.prototype.getCache = function (sType, nColumn) {
 	var rows = this.tBody.rows;
@@ -237,10 +237,10 @@ SortableTable.prototype.getCache = function (sType, nColumn) {
 		a[i] = {
 			value:		this.getRowValue(r, sType, nColumn),
 			element:	r
-		};
-	};
+		}
+	}
 	return a;
-};
+}
 
 SortableTable.prototype.destroyCache = function (oArray) {
 	var l = oArray.length;
@@ -259,7 +259,7 @@ SortableTable.prototype.getRowValue = function (oRow, sType, nColumn) {
 	else
 		s = SortableTable.getInnerText(c);
 	return this.getValueFromString(s, sType);
-};
+}
 
 SortableTable.getInnerText = function (oNode) {
 	var s = "";
@@ -293,7 +293,7 @@ SortableTable.prototype.getValueFromString = function (sText, sType) {
 			return d.valueOf();
 	}
 	return sText;
-};
+}
 
 SortableTable.prototype.getSortFunction = function (sType, nColumn) {
 	return function compare(n1, n2) {
@@ -302,8 +302,8 @@ SortableTable.prototype.getSortFunction = function (sType, nColumn) {
 		if (n2.value < n1.value)
 			return 1;
 		return 0;
-	};
-};
+	}
+}
 
 SortableTable.prototype.destroy = function () {
 	this.uninitHeader();
@@ -320,4 +320,4 @@ SortableTable.prototype.destroy = function () {
 	this.sortTypes = null;
 	this._asyncsort = null;
 	this.onsort = null;
-};
+}

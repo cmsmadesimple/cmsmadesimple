@@ -59,20 +59,20 @@ SelectableTableRows.prototype.isItem = function (node) {
 	return node != null && node.tagName == "TR" &&
 		node.parentNode.tagName == "TBODY" &&
 		node.parentNode.parentNode == this._htmlElement;
-};
+}
 
 /* Indexable Collection Interface */
 
 SelectableTableRows.prototype.getItems = function () {
 	return this._htmlElement.rows;
-};
+}
 
 SelectableTableRows.prototype.getItemIndex = function (el) {
 	return el.rowIndex;
-};
+}
 
 SelectableTableRows.prototype.getItem = function (i) {
 	return this._htmlElement.rows[i];
-};
+}
 
 /* End Indexable Collection Interface */

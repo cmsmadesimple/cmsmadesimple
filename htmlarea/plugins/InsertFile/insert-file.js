@@ -40,7 +40,7 @@ function InsertFile(editor) {
             toolbar[1].splice(0, 0, "separator");
 	    toolbar[1].splice(0, 0, "insertfile");
         }
-};
+}
 
 InsertFile._pluginInfo = {
 	name          : "InsertFile",
@@ -51,7 +51,7 @@ InsertFile._pluginInfo = {
 	sponsor       : "",
 	sponsor_url   : "",
 	license       : "htmlArea"
-};
+}
 
 InsertFile.prototype.buttonPress = function(editor) {
 	var sel = editor._getSelection();
@@ -74,7 +74,7 @@ InsertFile.prototype.buttonPress = function(editor) {
 		f_horiz  : image.hspace,
 		f_width  : image.width,
 		f_height  : image.height
-	};
+	}
 */
 	var manager = _editor_url + 'plugins/InsertFile/insert_file.php';
 

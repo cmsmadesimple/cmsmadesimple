@@ -79,7 +79,7 @@ require('config.php');
 			__dlg_init();
 			window.resizeTo(750, 470);
    			resize_iframe;
-		};
+		}
 
 		function onOK() {
 			var myPath = fileManager.document.getElementById('form2').elements["path"].value;
@@ -119,7 +119,7 @@ require('config.php');
 		  	}
 			__dlg_close(param);
 			return false;
-		};
+		}
 
 		function onCancel() {
 		  if (preview_window) {
@@ -127,7 +127,7 @@ require('config.php');
 		  }
 		  __dlg_close(null);
 		  return false;
-		};
+		}
 		
 		function changeDir(selection) {
 			changeLoadingStatus('load');

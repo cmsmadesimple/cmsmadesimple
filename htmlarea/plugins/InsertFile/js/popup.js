@@ -15,14 +15,14 @@
 // by each window's script. Added translation for a few other HTML elements.
 
 function getAbsolutePos(el) {
-	var r = { x: el.offsetLeft, y: el.offsetTop };
+	var r = { x: el.offsetLeft, y: el.offsetTop }
 	if (el.offsetParent) {
 		var tmp = getAbsolutePos(el.offsetParent);
 		r.x += tmp.x;
 		r.y += tmp.y;
 	}
 	return r;
-};
+}
 
 function comboSelectValue(c, val) {
 	var ops = c.getElementsByTagName("option");
@@ -31,12 +31,12 @@ function comboSelectValue(c, val) {
 		op.selected = (op.value == val);
 	}
 	c.value = val;
-};
+}
 
 function __dlg_onclose() {
 	if(opener.Dialog._return)
 		opener.Dialog._return(null);
-};
+}
 
 function __dlg_init(bottom) {
 	var body = document.body;
@@ -80,7 +80,7 @@ function __dlg_init(bottom) {
 		window.moveTo(x, y);
 	}
 	document.body.onkeypress = __dlg_close_on_esc;
-};
+}
 
 function __dlg_translate(i18n) {
 	var types = ["span", "option", "td", "button", "div", "label", "a","img", "legend"];
@@ -105,13 +105,13 @@ function __dlg_translate(i18n) {
 	var txt = i18n[document.title];
 	if (txt)
 		document.title = txt;
-};
+}
 
 // closes the dialog and passes the return info upper.
 function __dlg_close(val) {
 	opener.Dialog._return(val);
 	window.close();
-};
+}
 
 function __dlg_close_on_esc(ev) {
 	ev || (ev = window.event);
@@ -120,4 +120,4 @@ function __dlg_close_on_esc(ev) {
 		return false;
 	}
 	return true;
-};
+}

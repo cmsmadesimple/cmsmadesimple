@@ -21,9 +21,9 @@
  */
 function ImageManager(editor)
 {
-	var tt = ImageManager.I18N;	
+	var tt = ImageManager.I18N;
 
-};
+}
 
 ImageManager._pluginInfo = {
 	name          : "ImageManager",
@@ -31,7 +31,7 @@ ImageManager._pluginInfo = {
 	developer     : "Xiang Wei Zhuo",
 	developer_url : "http://www.zhuo.org/htmlarea/",
 	license       : "htmlArea"
-};
+}
 
 
 // Over ride the _insertImage function in htmlarea.js.
@@ -54,7 +54,7 @@ HTMLArea.prototype._insertImage = function(image) {
 		f_horiz  : image.hspace,
 		f_width  : image.width,
 		f_height  : image.height
-	};
+	}
 
 	var manager = _editor_url + 'plugins/ImageManager/manager.php';
 
@@ -95,6 +95,6 @@ HTMLArea.prototype._insertImage = function(image) {
 		
 		
 	}, outparam);
-};
+}
 
 

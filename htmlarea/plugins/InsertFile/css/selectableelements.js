@@ -59,7 +59,7 @@ function SelectableElements(oElement, bMultiple) {
 	this._onclick = function (e) {
 		if (e == null) e = oElement.ownerDocument.parentWindow.event;
 		oThis.click(e);
-	};
+	}
 
 	if (oElement.addEventListener)
 		oElement.addEventListener("click", this._onclick, false);
@@ -106,7 +106,7 @@ SelectableElements.prototype.setItemSelected = function (oEl, bSelected) {
 		}
 		this.fireChange();
 	}
-};
+}
 
 // This method updates the UI of the item
 SelectableElements.prototype.setItemSelectedUi = function (oEl, bSelected) {
@@ -116,11 +116,11 @@ SelectableElements.prototype.setItemSelectedUi = function (oEl, bSelected) {
 		removeClassName(oEl, "selected");
 
 	oEl._selected = bSelected;
-};
+}
 
 SelectableElements.prototype.getItemSelected = function (oEl) {
 	return Boolean(oEl._selected);
-};
+}
 
 SelectableElements.prototype.fireChange = function () {
 	if (!this._fireChange)
@@ -129,7 +129,7 @@ SelectableElements.prototype.fireChange = function () {
 		this.onchange = new Function(this.onchange);
 	if (typeof this.onchange == "function")
 		this.onchange();
-};
+}
 
 
 SelectableElements.prototype.click = function (e) {
@@ -236,7 +236,7 @@ SelectableElements.prototype.click = function (e) {
 	this._fireChange = oldFireChange;
 	if (changed && this._fireChange)
 		this.fireChange();
-};
+}
 
 SelectableElements.prototype.getSelectedItems = function () {
 	//clone
@@ -246,11 +246,11 @@ SelectableElements.prototype.getSelectedItems = function () {
 	for (var i = 0; i < l; i++)
 		tmp[i] = items[i];
 	return tmp;
-};
+}
 
 SelectableElements.prototype.isItem = function (node) {
 	return node != null && node.nodeType == 1 && node.parentNode == this._htmlElement;
-};
+}
 
 SelectableElements.prototype.destroy = function () {
 	if (this._htmlElement.removeEventListener)
@@ -261,7 +261,7 @@ SelectableElements.prototype.destroy = function () {
 	this._htmlElement = null;
 	this._onclick = null;
 	this._selectedItems = null;
-};
+}
 
 /* Traversable Collection Interface */
 
@@ -270,14 +270,14 @@ SelectableElements.prototype.getNext = function (el) {
 	if (n == null || this.isItem(n))
 		return n;
 	return this.getNext(n);
-};
+}
 
 SelectableElements.prototype.getPrevious = function (el) {
 	var p = el.previousSibling;
 	if (p == null || this.isItem(p))
 		return p;
 	return this.getPrevious(p);
-};
+}
 
 SelectableElements.prototype.isBefore = function (n1, n2) {
 	var next = this.getNext(n1);
@@ -287,7 +287,7 @@ SelectableElements.prototype.isBefore = function (n1, n2) {
 		next = this.getNext(next);
 	}
 	return false;
-};
+}
 
 /* End Traversable Collection Interface */
 
@@ -303,7 +303,7 @@ SelectableElements.prototype.getItems = function () {
 			tmp[j++] = cs[i]
 	}
 	return tmp;
-};
+}
 
 SelectableElements.prototype.getItem = function (nIndex) {
 	var j = 0;
@@ -317,7 +317,7 @@ SelectableElements.prototype.getItem = function (nIndex) {
 		}
 	}
 	return null;
-};
+}
 
 SelectableElements.prototype.getSelectedIndexes = function () {
 	var items = this.getSelectedItems();
@@ -326,7 +326,7 @@ SelectableElements.prototype.getSelectedIndexes = function () {
 	for (var i = 0; i < l; i++)
 		tmp[i] = this.getItemIndex(items[i]);
 	return tmp;
-};
+}
 
 
 SelectableElements.prototype.getItemIndex = function (el) {
@@ -340,7 +340,7 @@ SelectableElements.prototype.getItemIndex = function (el) {
 			j++;
 	}
 	return -1;
-};
+}
 
 /* End Indexable Collection Interface */
 
