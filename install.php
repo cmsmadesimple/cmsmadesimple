@@ -2,8 +2,6 @@
 
 require_once("include.php");
 
-$smarty = new Smarty_CMS($config);
-$smarty->configCMS = &$config;
 ?>
 
 <html>
@@ -102,6 +100,9 @@ Log in to mysql from a console and run the following commands:<br>
 - grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';<p>
 
 <?php
+    global $config;
+    $smarty = new Smarty_CMS($config);
+    $smarty->Smarty_CMS = &$config;
     $smarty->assign('tableprefix', 'cms_');
     $contents = $smarty->fetch('mysql.tpl');
 
