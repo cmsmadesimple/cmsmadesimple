@@ -54,8 +54,8 @@ class Smarty_CMS extends Smarty {
 
 		if ($config["debug"] == true)
 		{
-			#$this->caching = false;
-			#$this->force_compile = true;
+			$this->caching = false;
+			$this->force_compile = true;
 		}
 
 		if (get_site_preference('enablesitedownmessage') == "1")

@@ -52,7 +52,7 @@ function rss_module_execute($cms, $id, $params)
 		foreach ($items as $item ) {
 			$title = $item[title];
 			$url   = $item[link];
-			echo "<a href=\"$url\">$title</a><br />\n";
+			echo "<div class=\"modulerssentry\"><a href=\"$url\">$title</a><br /></div>\n";
 		}
 	}
 }
@@ -67,12 +67,12 @@ function rss_module_help($cms)
 	<h3>Anything else I should know?</h3>
 	<p>The RSS module will cache feeds so that they are not downloaded and parsed on every refresh.  Instead, it pulls the feed down every so many page refreshes and stores the data locally so it's easily accessible.  When the local data becomes stale, it will pull fresh data.  You should notice no performance hit by using it in a template.</p>
 	<h3>How do I use it?</h3>
-	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="rss" url="http://download.freshmeat.net/backend/fm-releases.rdf" numbertofetch="5"}</code></p>
+	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="rss" url="http://download.freshmeat.net/backend/fm-releases.rdf" numbertoshow="5"}</code></p>
 	<h3>What parameters are there?</h3>
 	<p>
 	<ul>
 		<li>url="http://feed_url" - RSS feed URL</li>
-		<li><em>(optional)</em>numbertofetch="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em>numbertoshow="5" - Maximum number of items to display -- leaving empty will show all items</li>
 	</ul>
 	</p>
 
