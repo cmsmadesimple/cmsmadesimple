@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -61,7 +63,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
 
 $showinmenu = 1;
-if (!isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $active = 0;
+if (!isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $showinmenu = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listcontent.php");
