@@ -389,6 +389,7 @@ else {
 	<tr>
 		<td><?php echo lang('contenttype')?>:</td>
 		<td><?php echo $ctdropdown?></td>
+	</tr>
 	<tr>
 		<td><?php echo lang('parent')?>:</td>
 		<td><?php echo $dropdown?></td>
