@@ -925,7 +925,7 @@ class ContentProperties
 
 	function Add($type, $name, $defaultvalue='')
 	{
-		if (!isset($this->mPropertyValues[$name]))
+		if (!array_key_exists($name, $this->mPropertyValues))
 		{
 			$this->mPropertyTypes[$name] = $type;
 			$this->mPropertyValues[$name] = $defaultvalue;
@@ -936,7 +936,7 @@ class ContentProperties
 	{
 		if (count($this->mPropertyValues) > 0)
 		{
-			if (isset($this->mPropertyValues[$name]))
+			if (array_key_exists($name, $this->mPropertyValues))
 			{
 				return $this->mPropertyValues[$name];
 			}
@@ -947,7 +947,7 @@ class ContentProperties
 	{
 		if (count($this->mPropertyValues) > 0)
 		{
-			if (isset($this->mPropertyValues[$name]))
+			if (array_key_exists($name, $this->mPropertyValues))
 			{
 				$this->mPropertyValues[$name] = $value;
 			}

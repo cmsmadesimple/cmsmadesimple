@@ -1,7 +1,7 @@
 <div id="navcontainer">
 
 <div id="welcome">
-<?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
+<?php if (isset($_SESSION['cms_admin_username'])) echo lang('welcomemsg', array($_SESSION['cms_admin_username']))?>
 </div>
 
 <div>

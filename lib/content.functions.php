@@ -187,7 +187,7 @@ class Smarty_CMS extends Smarty {
 					}
 				}
 
-				$head_tags = $contentobj->mProperties->GetValue('head_tags');
+				$head_tags = $contentobj->mProperties->GetValue('headtags');
 				$header_script = $contentobj->mProperties->GetValue('page_header');
 
 				#Replace stylesheet and title tags
