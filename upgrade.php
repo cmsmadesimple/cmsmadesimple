@@ -41,11 +41,14 @@ require_once(dirname(__FILE__)."/include.php");
 
 <div class="main">
 
-<p>In order to upgrade properly, upgrade needs to have write access to your config.php file.  This is so any extra settings that have been introduced in this version can be set to their defaults.</p>
+<?php
 
-<p>Please review this file,  modify any new settings as necessary and then reset it's permissions back to a locked state when the upgrade is complete.</p>
+if (!isset($_GET["doupgrade"])) {
+	echo "<h4>Welcome to the CMS Upgrade System!</h4>";
 
-<?
+	echo "<p>In order to upgrade properly, upgrade needs to have write access to your config.php file.  This is so any extra settings that have been introduced in this version can be set to their defaults.</p>";
+}
+
 if (!is_writable(dirname(__FILE__)."/config.php"))
 {
 	?>
@@ -60,12 +63,16 @@ if (!is_writable(dirname(__FILE__)."/config.php"))
 }
 else
 {
+	echo "<p>Upgrading config.php...";
+
 	if (cms_config_check_old_config())
 	{
 		cms_config_upgrade();
 	}
 	$config = cms_config_load(true);
 	cms_config_save($config);
+
+	echo "[done]</p>";
 
 	$db = &ADONewConnection('mysql');
 	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
@@ -90,18 +97,19 @@ else
 		}
 		else
 		{
+			echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 			echo "<p>The CMS database is up to date using schema version ".$current_version.".  Please remove this file when possible.  Click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
 		}
 	}
 	else
 	{
-
 		while ($current_version < $CMS_SCHEMA_VERSION)
 		{
 			$filename = "upgrades/upgrade.".$current_version.".to.".($current_version+1).".php";
 			include($filename);
 			$current_version++;
 		}
+		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 		echo "<p>CMS is up to date.  Please click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
 	}
 

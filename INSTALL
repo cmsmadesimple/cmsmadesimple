@@ -15,7 +15,7 @@ OR
 ----- If your webserver has write access to your new CMS directory you can skip step 2 ------
 2.  create an empty config.php file and make it writable by your webserver's user:
         - touch config.php
-        - chmod 777 config.php 
+        - chmod 666 config.php 
 
 3.  Create the cms database and grant a user rights to use it:
         - login to mysql: mysql -u root -p
@@ -32,6 +32,9 @@ OR
 	- chmod 777 uploads
 
 6.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
+
+7.  After install, for security sake, you should set your config.php back to a read-only state.
+        - chmod 644 config.php
 
 Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
 Admin login: admin/admin

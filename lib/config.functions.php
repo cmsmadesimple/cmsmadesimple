@@ -76,7 +76,7 @@ function cms_config_load($loadLocal = true)
 
 	if ($loadLocal == true)
 	{
-		if (file_exists(dirname(dirname(__FILE__))."/config.php"))
+		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())
 		{
 			include(dirname(dirname(__FILE__))."/config.php");
 		}

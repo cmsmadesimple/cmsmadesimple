@@ -299,7 +299,7 @@ function showPageFour() {
 
 	require_once("lib/config.functions.php");
 
-	$newconfig = array();
+	$newconfig = cms_config_load();;
 
 	$newconfig['db_hostname'] = $_POST['host'];
 	$newconfig['db_username'] = $_POST['username'];
@@ -312,6 +312,9 @@ function showPageFour() {
 	$newconfig['use_bb_code'] = ($_POST['bbcode'] == "true"?true:false);
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
+	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
+	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";
+	$newconfig["max_upload_size"] = 1000000;
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file

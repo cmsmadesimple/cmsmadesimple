@@ -12,4 +12,10 @@ OR
 4.  If upgrading from a version pervious to 0.5, make the uploads dir writable by the web server user.
         - chmod 777 uploads
 
-5.  Point your browser to the upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.
+5.  Upgrade needs write access to your config.php file.  This is only until the upgrade is complete.
+	- chmod 666 config.php
+
+6.  Point your browser to the upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.
+
+7.  After the upgrade is complete, for security sake, you should set your config.php back to a read-only state.
+        - chmod 644 config.php

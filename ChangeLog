@@ -8,6 +8,8 @@ Version 0.5 -- Subversion
 * Added file manager
 * Added phpdoc strings to many files and functions
 * Added ability for module's adminexecute function to use the wysiwyg
+* Changed config file to a new format.  Upgrade script will take care
+up upgrading it automatically.
 * Changed inner workings so that code is easier to 
 understand.  We now pass one global object around and put important 
 variables and objects inside it.  Makes the code very consistent.

@@ -93,8 +93,8 @@ div.nav a:hover {
 
 div.nav form {
 	text-align: center;
-	left-margin: auto;
-	right-margin: auto;
+	margin-left: auto;
+	margin-right: auto;
 	padding-bottom: 2px;
 	margin-bottom: 4px;
 }
@@ -163,14 +163,14 @@ div.content {
 
 .moduleabout h3 {
 	font-size: 16px;
-	font-color: #333;
+	color: #333;
 	border-bottom: 1px solid #000;
 	padding-left: 0;
 }
 
 .moduleabout h4 {
 	font-size: 14px;
-	font-color: #333;
+	color: #333;
 	padding-left: 0;
 }
 
