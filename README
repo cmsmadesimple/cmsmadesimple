@@ -16,10 +16,6 @@ CMS uses the smarty template engine in various places.  Their license and
 various documentation files are located in the smarty subdirectory of this 
 distribution.  Their website is located at: http://smarty.php.net
 
-CMS uses GetText.php for internationalization.  GetText.php is released 
-under the LGPL and is located here: 
-http://phptal.sourceforge.net/bagpack/GetText/index.html
-
 CMS uses HTMLArea 3.0 as it's content WYSIWYG.  HTMLArea is released under 
 the htmlArea license (based on the BSD license) and is located at: 
 http://www.interactivetools.com/products/htmlarea/

@@ -11,6 +11,7 @@ Version 0.7 -- Subversion
 * Added cancel link to login page that redirects back to site (#6)
 * Added auto_upgrade functionality to modules (#4)
 * Added more intelligent handling of file types to file management
+* Added ability to override the default encoding of the whole site, admin included (#15)
 * Fixed News module so that post date shows on newly created items (#5)
 * Fixed bug with start and end dates when adding new News item (BamaRob)
 * Fixed missing template option for News module (trac #67)
