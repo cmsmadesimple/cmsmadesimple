@@ -51,6 +51,13 @@ if ($access) {
 		redirect("plugins.php");
 	}
 
+	if ($action == 'upgrade')
+	{
+		if (isset($gCms->modules[$module]['upgrade_function'])) {
+			call_user_func_array($gCms->modules[$module]['upgrade_function'], array($gCms, $_GET['oldversion'], $_GET['newversion']));
+		}
+	}
+
 	if ($action == "uninstall") {
 		#run uninstall on it (if there is one)
 		if (isset($gCms->modules[$module]['uninstall_function'])) {
@@ -205,12 +212,22 @@ else
 
 			echo "<tr class=\"$curclass\">\n";
 			echo "<td>$key</td>\n";
-			if (!isset($dbm[$key])) { #Not installed, lets put up the install button
+			if (!isset($dbm[$key])) #Not installed, lets put up the install button
+			{
 				echo "<td>".$gCms->modules[$key]['Version']."</td>";
 				echo "<td>".lang('notinstalled')."</td>";
 				echo "<td>&nbsp;</td>";
 				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
-			} else { #Must be installed
+			}
+			else if (version_compare($gCms->modules[$key]['Version'], $dbm[$key]['Version']) == 1 && isset($gCms->modules[$key]['upgrade_function'])) #Check for an upgrade
+			{
+				echo "<td>".$gCms->modules[$key]['Version']."</td>";
+				echo "<td>".lang('needupgrade')."</td>";
+				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".lang('true')."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".lang('false')."</a>")."</td>";
+				echo "<td><a href=\"plugins.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$gCms->modules[$key]['Version']."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a></td>";
+			}
+			else #Must be installed
+			{
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".$dbm[$key]['Status']."</td>";
 				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".lang('true')."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".lang('false')."</a>")."</td>";

@@ -45,8 +45,8 @@ if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
 $email = "";
 if (isset($_POST["email"])) $email = $_POST["email"];
 
-$adminaccess = 0;
-if (isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 1;
+$adminaccess = 1;
+if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;

@@ -42,6 +42,10 @@ function news_module_install($cms) {
 	$result = $db->Execute($query);
 }
 
+function news_module_upgrade($cms, $oldversion, $newversion)
+{
+}
+
 function news_module_uninstall($cms) {
 	//This function should uninstall database tables and generally cleanup.
 	$db = $cms->db;

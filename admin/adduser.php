@@ -46,8 +46,8 @@ if (isset($_POST["email"])) $email = $_POST["email"];
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 
-$adminaccess = 0;
-if (isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 1;
+$adminaccess = 1;
+if (!isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listusers.php");
