@@ -1035,11 +1035,23 @@ function cms_mapi_create_module_content_class($key)
 		}
 		if (isset($allmodules[$key]['content_module_show']))
 		{
-			$classtext .= 'function Show() { return ' . $allmodules[$key]['content_module_show'] . '($this); } ';
+			#This does some tricks to make sure that all output is captured
+			$classtext .= 'function Show() {';
+			$classtext .= '@ob_start();';
+			$classtext .= $allmodules[$key]['content_module_show'] . '($this);';
+			$classtext .= '$result = @ob_get_clean();';
+			$classtext .= 'return $result;';
+			$classtext .= '}';
 		}
 		if (isset($allmodules[$key]['content_module_edit']))
 		{
-			$classtext .= 'function Edit() { return ' . $allmodules[$key]['content_module_edit'] . '($this); } ';
+			#Same here...
+			$classtext .= 'function Edit() {';
+			$classtext .= '@ob_start();';
+			$classtext .= $allmodules[$key]['content_module_edit'] . '($this);';
+			$classtext .= '$result = @ob_get_clean();';
+			$classtext .= 'return $result;';
+			$classtext .= '}';
 		}
 		if (isset($allmodules[$key]['content_module_get_url']))
 		{

@@ -135,7 +135,8 @@ function news_module_content_fill_params(&$module, &$params)
 
 function news_module_content_show(&$module)
 {
-	return "Hi!  I'm News content";
+	global $gCms;
+	return news_module_execute($gCms, '1', array());
 }
 
 function news_module_content_get_url(&$module)
