@@ -309,7 +309,7 @@ function showPageFour() {
 	$newconfig['root_url'] = $_POST['docroot'];
 	$newconfig['root_path'] = addslashes($_POST['docpath']);
 	$newconfig['query_var'] = $_POST['querystr'];
-	$newconfig['use_bb_code'] = $_POST['bbcode'];
+	$newconfig['use_bb_code'] = ($_POST['bbcode'] == "true"?true:false);
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
 
