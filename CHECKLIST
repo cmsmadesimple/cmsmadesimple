@@ -1,6 +1,6 @@
 Steps of a (hopefully) successful cms release
 
-1. Update ChangeLog, AUTHORS, README, INSTALL
+1. Update ChangeLog (including DATE!!!), AUTHORS, README, INSTALL
 2. Make sure GPL header is on all relevant files
 3. Make sure COPYING is included
 4. (optional) Make sure smarty is up to date
