@@ -818,6 +818,10 @@ function cms_mapi_register_content_postrender_function($name, $function)
 	}
 }
 
+/**********************************************************
+*WYSIWYG Callbacks
+**********************************************************/
+
 /**
  * Enables the WYSIWYG for this module on all textareas
  *
@@ -876,6 +880,62 @@ function cms_mapi_register_wysiwyg_page_textbox_function($name, $function)
 	{
 		$cmsmodules[$name]['wysiwyg_textbox_function'] = $function;
 	}
+}
+
+/**********************************************************
+*Intra-Module Callbacks
+**********************************************************/
+
+function cms_mapi_check_for_module($name)
+{
+	$result = false;
+
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$module]))
+	{
+		$result = true;
+	}
+	return $result;
+}
+
+function cms_mapi_register_intramodule_function($module, $name, $function_pointer)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$module]))
+	{
+		$cmsmodules[$module]['intramodule_function'][$name] = $function_pointer;
+	}
+}
+
+function cms_mapit_call_intramodule_function($module, $name, $array)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$module]))
+	{
+		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
+		{
+			call_user_func_array($cmsmodules[$module]['intramodule_function'][$name], array($array));
+		}
+	}
+}
+
+function cms_mapit_call_intramodule_function_exists($module, $name)
+{
+	$result = false;
+
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$module]))
+	{
+		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
+		{
+			$result = true;
+		}
+	}
+	return $result;
 }
 
 /**

@@ -18,11 +18,14 @@
 
 function phplayers_prerender_function(&$cms, &$content)
 {
+	global $gCms;
+	$config = $gCms->config;
+
 	$text = '
-	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
+	<link rel="stylesheet" href="'.$config['root_url'].'/modules/PHPLayers/phplayers/layersmenu-cms.css" type="text/css"></link>
+	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
+	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
+	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
 
 	$content = ereg_replace("<\/head>", $text."</head>", $content);
 }
@@ -99,12 +102,8 @@ function phplayers_module_execute($cms, $id, $params)
 		$menu .= ".|Admin|admin/\n";
 	}
 
-	#TODO: Needs to go into head somehow (with prerender hook?)
-	$text = '
-	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
-	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
+	global $gCms;
+	$config = $gCms->config;
 
 	$text = '';
 	
@@ -115,18 +114,19 @@ function phplayers_module_execute($cms, $id, $params)
 	$mid = new LayersMenu();
 	
 	/* TO USE RELATIVE PATHS: */
-	$mid->setDirroot('./phplayers/');
-	$mid->setLibjsdir('./phplayers/libjs/');
-	$mid->setImgdir('./phplayers/menuimages/');
-	$mid->setImgwww('./phplayers/menuimages/');
-	//$mid->setIcondir('./phplayers/menuicons/');
-	//$mid->setIconwww('./phplayers/menuicons/');
-	
-	$mid->setTpldir('./phplayers/templates/');
-	if ($horizontal == 1) {
+	$mid->setDirroot(dirname(__FILE__).'/phplayers/');
+	$mid->setLibjsdir(dirname(__FILE__).'/phplayers/libjs/');
+	$mid->setImgdir(dirname(__FILE__).'/phplayers/menuimages/');
+	$mid->setImgwww($config['root_url'].'/modules/PHPLayers/phplayers/menuimages/');
+	//$mid->setIcondir(dirname(__FILE__).'/phplayers/menuicons/');
+	//$mid->setIconwww($config['root_url'].'/modules/PHPLayers/phplayers/menuicons/'); 
+	$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
+	if ($horizontal == 1)
+	{
 	  $mid->setHorizontalMenuTpl('layersmenu-horizontal_menu.ihtml');
 	}
-	else {
+	else
+	{
 	  $mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
 	}
 	$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
@@ -135,10 +135,12 @@ function phplayers_module_execute($cms, $id, $params)
 	$mid->setMenuStructureString($menu);
 	$mid->setIconsize(16, 16);
 	$mid->parseStructureForMenu('menu1');
-	if ($horizontal == 1) {
+	if ($horizontal == 1)
+	{
 	  $mid->newHorizontalMenu('menu1');
 	}
-	else {
+	else
+	{
 	  $mid->newVerticalMenu('menu1');
 	}
 	
