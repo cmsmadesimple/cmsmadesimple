@@ -331,7 +331,7 @@ function get_stylesheet($templateid) {
 	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
 		WHERE	css_id		= assoc_css_id
 		AND		assoc_type	= 'template'
-		AND		assoc_to_id = '$template_id'";
+		AND		assoc_to_id = '$templateid'";
 	$cssresult = $db->Execute($cssquery);
 	if ($cssresult && $cssresult->RowCount() > 0)
 	{
