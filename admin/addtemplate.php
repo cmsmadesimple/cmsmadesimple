@@ -10,6 +10,9 @@ if (isset($_POST["template"])) $template = $_POST["template"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$stylesheet = "";
+if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
+
 $active = 1;
 if (isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
 
@@ -26,7 +29,7 @@ if ($access) {
 
 	if (isset($_POST["addtemplate"])) {
 
-		$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', '".mysql_escape_string($content)."', $active, now(), now());";
+		$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".mysql_escape_string($template)."', '".mysql_escape_string($content)."', '".mysql_escape_string($stylesheet)."', $active, now(), now());";
 		$result = $db->query($query);
 		if (mysql_affected_rows() > -1) {
 			$db->close();
@@ -65,6 +68,10 @@ else {
 	<tr>
 		<td>Content:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
+	</tr>
+	<tr>
+		<td>Stylesheet:</td>
+		<td><textarea name="stylesheet" cols="90" rows="18"><?=$stylesheet?></textarea></td>
 	</tr>
 	<tr>
 		<td>Active:</td>
