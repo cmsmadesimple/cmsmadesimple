@@ -86,6 +86,9 @@ if (isset($_POST["preview"])) $preview = true;
 $content_change = false;
 if (isset($_POST["content_change"]) && $_POST["content_change"] == 1) $content_change = true;
 
+$password_protect = false;
+if (isset($_POST['password_protect']))$password_protect = $_POST['password_protect'];
+
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
@@ -173,7 +176,7 @@ if ($access) {
 				}
 
 			}
-			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags)." WHERE page_id = $page_id";
+			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags).", password_protected=".$password_protect." WHERE page_id = $page_id";
 			$result1 = $db->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
@@ -191,7 +194,16 @@ if ($access) {
 					if (isset($_POST["additional_editors"])) {
 						foreach ($_POST["additional_editors"] as $addt_user_id) {
 							$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-							$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$page_id.")";
+							$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, page_id) VALUES (".$new_addt_id.", ".$addt_user_id.", ".$page_id.")";
+							$db->Execute($query);
+						}
+					}
+					$query = "DELETE FROM ".cms_db_prefix()."frontend_users WHERE page_id = $page_id";
+					$db->Execute($query);
+					if(isset($_POST['frontend_access'])){
+						foreach($_POST["frontend_access"] as $frontend_user_id){
+							$new_user_id = $db->GenID(cms_db_prefix()."frontend_users_seq");
+							$query = "INSERT INTO ".cms_db_prefix()."frontend_users (frontend_users_id, user_id, page_id) VALUES (".$new_user_id.", ".$frontend_user_id.", ".$page_id.")";
 							$db->Execute($query);
 						}
 					}
@@ -232,6 +244,7 @@ if ($access) {
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
 		$orig_item_order = $row["item_order"];
+		$password_protect = $row['password_protected'];
 
 		//Get encoding of template
 		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
@@ -454,7 +467,7 @@ else {
 					</table>
 				</div>
 			</td>
-			<td valign="top">
+			<td valign="top" style="padding-right: 10px;">
 					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?php echo lang('permission')?></div>
 					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
 					<?php if ($adminaccess) { ?>
@@ -462,6 +475,11 @@ else {
 					<?php } ?>
 					<div style="text-align: center; padding-top: 5px;"><?php echo lang('additionaleditors')?>:<br><select name="additional_editors[]" multiple="true" size="3"><?php echo $addt_users?></select></div>
 					</div>
+			</td>
+			<td valign="top">
+					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;">Password Protect</div>
+					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+					<div style="text-align: center; padding-top: 5px;">Password Protect:<input type="checkbox" name="password_protect" value="1" <?php echo ($password_protect == 1?"checked":"") ?>><br><select name="frontend_access[]" multiple="true" size="3"><?php echo $addt_users ?></select></div></div>
 			</td>
 		</tr>
 	</table>

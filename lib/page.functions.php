@@ -394,7 +394,7 @@ function & strip_slashes(&$str) {
  * creates a textarea that does syntax highlighting on the source code.
  * The following also needs to be added to the <form> tag for submit to work.
  * if($use_javasyntax){echo 'onSubmit="textarea_submit(
- *      this, \'custom404,sitedown\');"';}
+ * this, \'custom404,sitedown\');"';}
  */
 function textarea_highlight($use_javasyntax, $text, $name,
     $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding=''){
@@ -426,6 +426,66 @@ function textarea_highlight($use_javasyntax, $text, $name,
     }
     
     return $output;
+}
+
+
+/*
+ * Checks to see if password protected (frontend)
+ * @return int - page number
+ */
+function password_protected($page){
+	global $gCms;
+	$db = $gCms->db;
+
+	$query = "SELECT password_protected,page_id FROM ".cms_db_prefix()."pages WHERE page_id = ".$page." OR page_alias = ".$page;
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() > 0){
+		$row = $result->FetchRow();
+		if ($row['password_protected'] == 1)
+			return $row['page_id'];
+	}
+	return false;
+}
+
+/*
+ * Displays the login form (frontend)
+ */
+function display_login_form(){
+	echo '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
+	'Name: <input type="text" name="login_name"><br>'.
+	'Password: <input type="password" name="login_password"><br>'.
+	'<input type="submit">'.
+	'</form>';
+}
+
+/*
+ * check if the person has access to this file (frontend)
+ */
+function check_access($page_id){
+	global $gCms;
+	$db = $gCms->db;
+	
+	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password'])) {
+		return true;
+	}
+
+	if (isset($_POST['login_password']) && isset($_POST['login_name'])){
+		$login_password = trim($_POST['login_password']);
+		$login_name = trim($_POST['login_name']);
+		$query = 'SELECT user_id FROM '.cms_db_prefix().'frontend_users WHERE page_id = '.$page_id;
+		$result = $db->Execute($query);
+		if ($result && $result->RowCount() > 0){
+			$query = 'SELECT user_id from '.cms_db_prefix().'users WHERE `username`=\''.$login_name.'\' AND `password`=\''.md5($login_password).'\'';
+			$result = $db->Execute($query);
+			if ($result && $result->RowCount() > 0) {
+				$_SESSION['login_name'] = $login_name;
+				$_SESSION['login_password'] = $login_password;
+				return true;
+			}
+		}
+	}
+	return false;
 }
 # vim:ts=4 sw=4 noet
 ?>
