@@ -86,7 +86,14 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = get_site_preference('sitedownmessage');
 			return true;
 		} else {
-			$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
+			{ 
+				$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			} 
+			else 
+			{ 
+				$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1"; 
+			} 
 			$result = $db->Execute($query);
 
 			if (!$result || !$result->RowCount() < 1)
@@ -209,7 +216,14 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
+			{ 
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+			}
+			else
+			{
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
+			}
 			$result = $db->Execute($query);
 
 			if ($result && $result->RowCount()) {
