@@ -55,11 +55,13 @@ header("Pragma: no-cache");
 
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
+		HTMLArea.loadPlugin("CharacterMap");
 		var editor = null;
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
+			editor.registerPlugin(CharacterMap);
 			editor.config.pageStyle = '<?=str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}

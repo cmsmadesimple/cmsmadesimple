@@ -81,7 +81,7 @@ include_once("header.php");
 if (check_permission($userid, 'Add Group')) {
 ?>
 
-<div class=button><a href="addgroup.php"><?=$gettext->gettext("Add New Group")?></div></p>
+<div class=button><a href="addgroup.php"><?=$gettext->gettext("Add New Group")?></a></div></p>
 
 <?php
 }
