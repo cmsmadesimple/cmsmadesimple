@@ -245,6 +245,30 @@ function nl2pnbr( $text )
 	return $text;
 }
 
+function debug_bt() 
+{ 
+    $bt=debug_backtrace(); 
+    $file = $bt[0]['file']; 
+    $line = $bt[0]['line']; 
+ 
+    echo "\n\n<p><b>Backtrace in $file on line $line</b></p>\n"; 
+ 
+    $bt = array_reverse($bt); 
+    echo "<pre><dl>\n"; 
+    foreach($bt as $trace) 
+    { 
+        $file = $trace['file']; 
+        $line = $trace['line']; 
+        $function = $trace['function']; 
+        $args = implode(',', $trace['args']); 
+        echo "
+        <dt><b>$function</b>($args) </dt> 
+        <dd>$file on line $line</dd> 
+		";
+	} 
+    echo "</dl></pre>\n"; 
+}
+
 /**
 * Debug function to display $var nicely in html.
 * 

@@ -34,6 +34,8 @@ if(!@session_id()) {
 	@session_start();
 }
 
+require_once(dirname(__FILE__)."/lib/misc.functions.php");
+
 #Make a new CMS object
 require_once(dirname(__FILE__)."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
@@ -102,7 +104,6 @@ if (!isset($DONT_LOAD_DB)) {
 }
 
 require_once(dirname(__FILE__)."/lib/db.functions.php");
-require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");

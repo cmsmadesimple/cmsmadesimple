@@ -164,7 +164,10 @@ class TinyMCE extends CMSModule
 				relative_urls : "false",
 				plugin_insertdate_dateFormat : "%Y-%m-%d",
 				plugin_insertdate_timeFormat : "%H:%M:%S",
-				valid_elements : "*[*]"
+				valid_elements : "*[*]",
+				extended_valid_elements : "*[*]",
+				auto_reset_designmode : "true",
+				trim_span_elements : "false"
 			});
 		</script>
 	
