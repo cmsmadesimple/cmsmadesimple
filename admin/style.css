@@ -99,15 +99,16 @@ H4 {
 	PADDING-TOP: 4px;
 	PADDING-BOTTOM: 4px;
 	PADDING-LEFT: 4px;
-	WIDTH: 100%;
+	WIDTH: 149px;
 	BORDER-LEFT: #8c8a8c 1px solid;
 	BORDER-RIGHT: #8c8a8c 1px solid;
 	BORDER-BOTTOM: #8c8a8c 1px solid;
 }
+/*
 html>body #navcontainer A {
-	/* Warning: Hack for Stupid IE 6.x */
 	WIDTH: 149px;
 }
+*/
 #navcontainer A:hover {
 	COLOR: #fff;
 	BACKGROUND-COLOR: #64879d;
@@ -382,10 +383,16 @@ FORM {
 	MARGIN: 0px
 }
 FORM INPUT {
-	FONT-SIZE: 85%;
+	FONT-SIZE: 1.2em;
 }
 SELECT {
-	FONT-SIZE: 85%;
+	FONT-SIZE: 1.2em;
+}
+html>body FORM INPUT {
+	FONT-SIZE: 1em;
+}
+html>body SELECT {
+	FONT-SIZE: 1em;
 }
 CODE,
 PRE {
@@ -427,8 +434,8 @@ DIV.adminformSmall {
 	BORDER-BOTTOM: #aaa 1px solid;
 	BACKGROUND-COLOR: #F5F3F3;
 }
-DIV.adminform TD,
-DIV.adminformSmall TD {
+html>body DIV.adminform TD,
+html>body DIV.adminformSmall TD {
 	COLOR: black;
 	FONT-SIZE: 70%;
 }
