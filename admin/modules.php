@@ -28,39 +28,47 @@ if (isset($_GET["module"])) $module = $_GET["module"];
 $action = "";
 if (isset($_GET["action"])) $action = $_GET["action"];
 
-if ($action == "install") {
-	#run install on it (if there is one)
-	if (isset($cmsmodules[$module]['install_function'])) {
-		call_user_func_array(&$cmsmodules[$module]['install_function'], array($modulecmsobj));
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify Modules');
+
+if ($access) {
+	if ($action == "install") {
+		#run install on it (if there is one)
+		if (isset($cmsmodules[$module]['install_function'])) {
+			call_user_func_array(&$cmsmodules[$module]['install_function'], array($modulecmsobj));
+		}
+
+		#now insert a record
+		$query = "INSERT INTO ".$config->db_prefix."modules (module_name, version, status, active) VALUES (".$dbnew->qstr($module).",".$dbnew->qstr($cmsmodules[$module]['Version']).",'Installed',1)";
+		$dbnew->Execute($query);
 	}
 
-	#now insert a record
-	$query = "INSERT INTO ".$config->db_prefix."modules (module_name, version, status, active) VALUES (".$dbnew->qstr($module).",".$dbnew->qstr($cmsmodules[$module]['Version']).",'Installed',1)";
-	$dbnew->Execute($query);
-}
+	if ($action == "uninstall") {
+		#run uninstall on it (if there is one)
+		if (isset($cmsmodules[$module]['uninstall_function'])) {
+			call_user_func_array(&$cmsmodules[$module]['uninstall_function'], array($modulecmsobj));
+		}
 
-if ($action == "uninstall") {
-	#run uninstall on it (if there is one)
-	if (isset($cmsmodules[$module]['uninstall_function'])) {
-		call_user_func_array(&$cmsmodules[$module]['uninstall_function'], array($modulecmsobj));
+		#now delete the record
+		$query = "DELETE FROM ".$config->db_prefix."modules WHERE module_name = ".$dbnew->qstr($module);
+		$dbnew->Execute($query);
 	}
 
-	#now delete the record
-	$query = "DELETE FROM ".$config->db_prefix."modules WHERE module_name = ".$dbnew->qstr($module);
-	$dbnew->Execute($query);
-}
+	if ($action == "settrue") {
+		$query = "UPDATE ".$config->db_prefix."modules SET active = 1 WHERE module_name = ".$dbnew->qstr($module);
+		$dbnew->Execute($query);
+	}
 
-if ($action == "settrue") {
-	$query = "UPDATE ".$config->db_prefix."modules SET active = 1 WHERE module_name = ".$dbnew->qstr($module);
-	$dbnew->Execute($query);
+	if ($action == "setfalse") {
+		$query = "UPDATE ".$config->db_prefix."modules SET active = 0 WHERE module_name = ".$dbnew->qstr($module);
+		$dbnew->Execute($query);
+	}
 }
-
-if ($action == "setfalse") {
-	$query = "UPDATE ".$config->db_prefix."modules SET active = 0 WHERE module_name = ".$dbnew->qstr($module);
-	$dbnew->Execute($query);
-}
-
 include_once("header.php");
+
+if ($action != "" && !$access) {
+	echo "<p class=\"error\">You need the 'Modify Modules' permission to perform that function.</p>";
+}
 
 if (count($cmsmodules) > 0) {
 
