@@ -349,8 +349,6 @@ function db_get_menu_items($style) {
 				if (isset($line["url"])) {
 					$current_content->url = $line["url"];
 				}
-				$current_content->hier = "1";
-				$current_content->level = "1";
 				
 				# Fix URL where appropriate
 				if ($current_content->page_type != "link") {
@@ -433,7 +431,7 @@ function construct_tree_from_list(&$content_array, &$parents, $start_element = 0
 
 			foreach($childs as $key)
 			{
-				$newchild = $content_array[$key];
+				$newchild = &$content_array[$key];
 				$newchild->num_same_level = $num_of_childs;
 				$newchild->level = $hierarchy_level + 1;
 				$newchild->hier = $total_hierarchy."$count.";
