@@ -2,6 +2,8 @@
 
 require_once("../include.php");
 
+$error = "";
+
 $dropdown = "";
 
 $section = "";
@@ -27,17 +29,26 @@ if ($access) {
 
 	if (isset($_POST["editsection"])) {
 
-		$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
-		$result = $db->query($query);
+		$validinfo = true;
 
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listsections.php");
-			return;
+		if ($section == "") {
+			$validinfo = false;
+			$error .= "<p>No Section name given!</p>";
 		}
-		else {
-			echo "Error updating section";
-			echo "<pre>query: $query</pre>";
+
+		if ($validinfo) {
+
+			$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
+			$result = $db->query($query);
+
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listsections.php");
+				return;
+			}
+			else {
+				$error .= "<p>Error updating section</p>";
+			}
 		}
 
 	}
@@ -64,6 +75,10 @@ if (!$access) {
 	print "<h3>No Access to Edit Sections</h3>";
 }
 else {
+
+	if ($error != "") {
+		echo $error;
+	}
 ?>
 
 <form method="post" action="editsection.php">

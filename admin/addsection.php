@@ -4,6 +4,8 @@ require_once("../include.php");
 
 check_login($config);
 
+$error="";
+
 $section= "";
 if (isset($_POST["section"])) $section = $_POST["section"];
 
@@ -23,15 +25,23 @@ if ($access) {
 
 	if (isset($_POST["addsection"])) {
 
-		$query = "INSERT INTO ".$config->db_prefix."sections (section_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($section)."', $active, now(), now())";
-		$result = $db->query($query);
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listsections.php");
-			return;
+		$validinfo = true;
+		if ($section == "") {
+			$validinfo = false;
+			$error .= "<p>No Section title given!</p>";
 		}
-		else {
-			echo "Error inserting section";
+
+		if ($validinfo) {
+			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($section)."', $active, now(), now())";
+			$result = $db->query($query);
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listsections.php");
+				return;
+			}
+			else {
+				$error .= "Error inserting section";
+			}
 		}
 	}
 
@@ -45,6 +55,10 @@ if (!$access) {
 }
 else {
 
+	if ($error != "") {
+		echo $error;
+	}
+
 ?>
 
 <form method="post" action="addsection.php">
@@ -56,7 +70,7 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Name:</td>
+		<td>*Name:</td>
 		<td><input type="text" name="section" maxlength="255" value="<?=$section?>" /></td>
 	</tr>
 	<tr>
