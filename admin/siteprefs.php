@@ -99,10 +99,9 @@ if ($error != "") {
 
 <h3><?php echo lang("siteprefs")?></h3>
 
-<table border="0" align="center">
-
+<table width="100%" cellpadding="4" cellspacing="0" border="0">
 	<tr>
-		<td>Enable Custom 404 Message</td>
+		<td width="230">Enable Custom 404 Message</td>
 		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked"?>></td>
 	</tr>
 	<tr>
@@ -163,7 +162,6 @@ if ($error != "") {
 		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
-
 </table>
 
 </div>

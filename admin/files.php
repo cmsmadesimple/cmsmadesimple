@@ -186,7 +186,7 @@ if ($errors != "")
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
-echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4><p>";
+echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
 echo '<table cellspacing="0" class="admintable">';
 echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
 
@@ -227,7 +227,7 @@ foreach ($dirs as $file)
 			$dirtext .= "<tr class=\"$row\">"; $dirtext .= "<td width=\"30\">[dir]</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<ld width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -253,7 +253,7 @@ foreach ($files as $file)
 			$filetext .= "<td width=\"30\">[file]</td>";
 			$filetext .= '<td><a href="'.$url.$reldir."/".$file.'" target="_blank">'.$file.'</a></td>';
 			$filetext .= "<td width=\"10%\" align=\"right\">".number_format(filesize("$dir/$file"))." Bytes</td>";
-			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$filetext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
