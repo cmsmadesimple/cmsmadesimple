@@ -1,9 +1,9 @@
-DROP TABLE sections;
-DROP TABLE templates;
-DROP TABLE pages;
-DROP TABLE groups;
-DROP TABLE user_groups;
-DROP TABLE users;
+DROP TABLE IF EXISTS sections;
+DROP TABLE IF EXISTS templates;
+DROP TABLE IF EXISTS pages;
+DROP TABLE IF EXISTS groups;
+DROP TABLE IF EXISTS user_groups;
+DROP TABLE IF EXISTS users;
 
 CREATE TABLE templates (
 	template_id int PRIMARY KEY AUTO_INCREMENT,
@@ -68,8 +68,8 @@ INSERT INTO templates(template_name, template_content, active, create_date)
 INSERT INTO sections(section_name, active, create_date)
 	VALUES ('About', 1, now());
 
-INSERT INTO pages (page_url, page_title, page_content, menu_text, show_in_menu, owner, active, section_id, template_id, create_date)
-	VALUES ('/', 'Home Page', 'Testing content', 'Home Page', 1, 1, 1, 1, 1, now());
+INSERT INTO pages (page_url, page_title, page_content, menu_text, show_in_menu, owner, active, section_id, template_id, default_page, create_date)
+	VALUES ('/', 'Home Page', 'Testing content', 'Home Page', 1, 1, 1, 1, 1, 1, now());
 
 INSERT INTO groups (group_name, create_date)
 	VALUES ('Admin', now());

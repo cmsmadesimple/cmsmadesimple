@@ -1,0 +1,33 @@
+Reqs:
+    PHP 4+
+    MySQL
+    Apache webserver (or another php enabled webserver)
+    BBCodeParser (optional)
+
+
+1.  Untar the source package to document root dir or your webserver
+        - cd DOCUMENT_ROOT
+        - tar xvfz cms-VERSION.tar.gz
+OR
+    check out the latest version from subversion
+        - svn co http://svn.wishy.org/cms/cms/trunk
+
+2.  Copy config.php.sample to config.php and modify the settings in config.php.
+
+3.  Create the cms database and grant a user rights to use it:
+        - login to mysql: mysql -u root -p
+            create database cms;
+            grant all privileges on cms.* to cms@localhost identified by 'cms';
+            quit
+
+4.  Create the tables in the database:
+        - msyql -u root -p cms < mysql.sql
+
+5.  Optionally install the BB Code Parser.  There is a flag in config.php where you can turn this feature on/off:
+        - pear install HTML_BBCodeParser
+
+6.  Run autogen.sh to fix up permissions on the cache dir
+
+
+Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
+Admin login: admin/admin
