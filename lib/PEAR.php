@@ -21,6 +21,8 @@
 // $Id: PEAR.php,v 1.50.2.10 2003/10/20 15:51:43 cox Exp $
 //
 
+if (!class_exists("PEAR")) {
+
 define('PEAR_ERROR_RETURN',     1);
 define('PEAR_ERROR_PRINT',      2);
 define('PEAR_ERROR_TRIGGER',    4);
@@ -961,6 +963,8 @@ class PEAR_Error
 }
 
 register_shutdown_function("_PEAR_call_destructors");
+
+}
 
 /*
  * Local Variables:

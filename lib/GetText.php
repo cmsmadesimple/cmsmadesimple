@@ -20,9 +20,7 @@
 //  Authors: Laurent Bedubourg <laurent.bedubourg@free.fr>
 //  
 
-if (!class_exists("PEAR")) {
-    require_once dirname(__FILE__)."/PEAR.php";
-}
+require_once "PEAR.php";
 
 define('GETTEXT_NATIVE', 1);
 define('GETTEXT_PHP', 2);
