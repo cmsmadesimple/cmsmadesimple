@@ -30,6 +30,8 @@ if (isset($_GET["user_id"])) {
 	if ($access) {
 		$db = new DB($config);
 
+		$query = "DELETE FROM ".$config->db_prefix."additional_users where user_id = $user_id";
+		$result = $db->query($query);
 		$query = "DELETE FROM ".$config->db_prefix."users where user_id = $user_id";
 		$result = $db->query($query);
 		$db->close();

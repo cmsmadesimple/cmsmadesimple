@@ -60,6 +60,10 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($config, $userid, 'Modify Any Content') || check_ownership($config, $userid, "", $page_id);
+$adminaccess = $access;
+if (!$access) {
+	$access = check_authorship($config, $userid, $page_id);
+}
 
 if ($access) {
 	$db = new DB($config);
@@ -90,6 +94,14 @@ if ($access) {
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {
+				if ($adminaccess) {
+					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
+					$db->query($query);
+					foreach ($_POST["additional_editors"] as $addt_user_id) {
+						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$page_id.")";
+						$db->query($query);
+					}
+				}
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
@@ -104,7 +116,6 @@ if ($access) {
 
 	}
 	else if ($page_id != -1) {
-
 
 		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
 		$result = $db->query($query);
@@ -122,7 +133,6 @@ if ($access) {
 		$menutext = $row["menu_text"];
 
 		mysql_free_result($result);
-
 	}
 
 	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
@@ -158,6 +168,25 @@ if ($access) {
 	$dropdown2 .= "</select>";
 
 	mysql_free_result($result);
+
+    $addt_users = "";
+
+    $query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
+    $result = $db->query($query);
+
+    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+        $addt_users .= "<option value=\"".$row["user_id"]."\"";
+		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
+		$newresult = $db->query($query);
+		if (mysql_num_rows($newresult) > 0) {
+			$addt_users .= " selected=\"true\"";
+		}
+		mysql_free_result($newresult);
+		$addt_users .= ">".$row["username"]."</option>";
+    }
+
+    mysql_free_result($result);
+
 	$db->close();
 }
 
@@ -200,6 +229,12 @@ else {
 		<td>Template:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
+<?php if ($adminaccess) { ?>
+    <tr> 
+		<td>Additional Editors:</td>
+		<td><select name="additional_editors[]" multiple="true"><?=$addt_users?></select></td>
+	</tr>
+<?php } ?>
 	<tr>
 		<td>*Menu Text:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>

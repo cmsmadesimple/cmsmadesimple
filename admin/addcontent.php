@@ -89,6 +89,11 @@ if ($access) {
 			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
+				$new_page_id = mysql_insert_id();
+				foreach ($_POST["additional_editors"] as $addt_user_id) {
+					$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
+					$db->query($query);
+				}
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
@@ -135,6 +140,16 @@ if ($access) {
 	}
 
 	$dropdown2 .= "</select>";
+	mysql_free_result($result);
+
+	$addt_users = "";
+
+	$query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
+	$result = $db->query($query);
+
+	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+	}
 
 	mysql_free_result($result);
 	$db->close($link);
@@ -182,12 +197,16 @@ else {
 		<td><?=$dropdown2?></td>
 	</tr>
 	<tr>
-		<td>Show in Menu:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td>Additional Editors:</td>
+		<td><select name="additional_editors[]" multiple="true"><?=$addt_users?></select></td>
 	</tr>
 	<tr>
 		<td>*Menu Text:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
+	</tr>
+	<tr>
+		<td>Show in Menu:</td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>Active:</td>

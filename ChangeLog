@@ -1,3 +1,20 @@
+Version 0.2 -- Subversion
+
+* Added content reordering
+* Added ability to let additional users modify content on a particular page
+* Added note to show if a template or section is still being used before it is
+deleted
+* Added a cms_version plugin
+* Added an upgrade.php
+* Added a title to the admin pages
+* Added an UPGRADE document
+* Fixed a bug in show in menu in both admin and bulletmenu
+* Fixed up install.php to fit the look of the admin seciton
+* Fixed the footer plugin to not have multiple divs
+* Fixed the wording of INSTALL to match the text in install.php
+* Upgraded schema to version 2
+* Removed some code from install.php that was breaking on non-posix systems
+
 Version 0.1 -- Thu Jul 01 2004
 -----------------
 

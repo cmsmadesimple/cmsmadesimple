@@ -63,7 +63,26 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 		$check = true;
 	}
 
+	mysql_free_result($result);
 	$db->close();
+
+	return $check;
+}
+
+function check_authorship(&$config, $userid, $pageid) {
+	$check = false;
+
+	$db = new DB($config);
+
+	$query = "SELECT * FROM ".$config->db_prefix."additional_users WHERE page_id = $pageid AND user_id = $userid";
+	$result = $db->query($query);
+	if (mysql_num_rows($result) > 0) {
+		$check = true;
+	}
+
+	mysql_free_result($result);
+	$db->close();
+
 	return $check;
 }
 

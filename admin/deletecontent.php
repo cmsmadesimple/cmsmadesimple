@@ -46,6 +46,8 @@ if (isset($_GET["page_id"])) {
 		#Remove the page
 		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
 		$result = $db->query($query);
+		$query = "DELETE FROM ".$config->db_prefix."additional_users where page_id = $page_id";
+		$result = $db->query($query);
 		#Fix the item_order if necessary
 		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE section_id = $section_id AND item_order > $order";
 		$result = $db->query($query);
