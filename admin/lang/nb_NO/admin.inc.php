@@ -221,4 +221,7 @@ $lang['admin']['wysiwygtouse'] = 'Velg hvilken WYSIWYG tekstbehandler som skal a
 $lang['admin']['cachable'] = 'Kan caches'; 
 $lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
 $lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
+$lang['admin']['minimumversion'] = 'Minimum Version'; //needs translation
+$lang['admin']['depsformodule'] = 'Dependencies for %s Module'; //needs translation
+$lang['admin']['installed'] = 'Installed'; //needs translation
 ?>

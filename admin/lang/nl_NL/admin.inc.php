@@ -222,4 +222,7 @@ $lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use'; //needs translation
 $lang['admin']['cachable'] = 'Cachable'; //needs translation
 $lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
 $lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
+$lang['admin']['minimumversion'] = 'Minimum Version'; //needs translation
+$lang['admin']['depsformodule'] = 'Dependencies for %s Module'; //needs translation
+$lang['admin']['installed'] = 'Installed'; //needs translation
 ?>

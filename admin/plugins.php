@@ -195,6 +195,48 @@ else if ($action == "showpluginabout")
 		<?php
 	}
 }
+else if ($action == 'missingdeps')
+{
+	if (isset($gCms->modules[$module]['dependency']))
+	{
+		echo "<div class=\"moduleabout\">";
+		echo '<h2>'.lang('depsformodule', array($module)).'</h2>';
+		echo '<table cellspacing="0" class="admintable">';
+		echo '<tr><td>'.lang('name').'</td><td>'.lang('minimumversion').'</td><td>'.lang('installed').'</td></tr>';
+
+		$curclass = 'row1';
+		foreach ($gCms->modules[$module]['dependency'] as $key=>$value)
+		{
+			echo '<tr class="'.$curclass.'"><td>'.$key.'</td><td>'.$value.'</td><td>';
+
+			$havedep = false;
+
+			#Now check to see if we can satisfy any deps
+			foreach ($gCms->modules[$module]['dependency'] as $onedepkey=>$onedepvalue)
+			{
+				if (isset($gCms->modules[$onedepkey]) && 
+					$gCms->modules[$onedepkey]['Installed'] == true &&
+					$gCms->modules[$onedepkey]['Active'] == true &&
+					version_compare($gCms->modules[$onedepkey]['Version'], $onedepvalue) > -1)
+				{
+					$havedep = true;
+				}
+			}
+
+			echo lang(($havedep?'true':'false'));
+			echo '</td></tr>';
+			($curclass=="row1"?$curclass="row2":$curclass="row1");
+		}
+
+		echo '</table>';
+
+		?>
+		<FORM ACTION="plugins.php" METHOD="get">
+		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
+		</FORM>
+		<?php
+	}
+}
 else
 {
 
@@ -278,18 +320,17 @@ else
                 }
 
                 echo "<td>".$gCms->modules[$key]['Version']."</td>";
+				echo "<td>".lang('notinstalled')."</td>";
 
                 if ($havedep)
                 {
-					echo "<td>".lang('notinstalled')."</td>";
                 	echo "<td>&nbsp;</td>";
                     echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
                 }
                 else
                 {
-                	echo '<td>'.lang('missingdependency').'</td>';
                 	echo "<td>&nbsp;</td>";
-                	echo "<td>&nbsp;</td>";
+                	echo '<td><a href="plugins.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a></td>';
                 }
             }
 			else if (version_compare($gCms->modules[$key]['Version'], $dbm[$key]['Version']) == 1) #Check for an upgrade
