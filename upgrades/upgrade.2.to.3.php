@@ -74,6 +74,13 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Updating sections table schema...";
+
+	$query = "ALTER table ".$config->db_prefix."sections ADD parent_id int(11) NOT NULL DEFAULT 0";
+	$db->query($query);
+
+	echo "[done]</p>";
+
 	echo "<p>Updating user table schema...";
 
 	$query = "ALTER table ".$config->db_prefix."users CHANGE password password varchar(40)";
