@@ -81,12 +81,17 @@ include_once("header.php");
 		echo "<tbody>\n";
 
 		$count = 1;
+		$oldsectionid = -1;
 
 		$currow = "row1";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 			$totalcount = $section_count[$row[section_id]];
+			if ($oldsectionid != $row["section_id"]) {
+				$count = 1;
+				$oldsectionid = $row["section_id"];
+			}
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["page_title"]."</td>\n";
