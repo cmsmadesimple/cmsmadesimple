@@ -219,9 +219,9 @@ $lang['admin']['apply'] = 'Appliquer';
 $lang['admin']['none'] = 'Aucun';
 $lang['admin']['wysiwygtouse'] = 'Sélection du WYSIWYG à utiliser';
 $lang['admin']['cachable'] = 'Cachable'; 
-$lang['admin']['hasdependents'] = 'A des modules dependants';
-$lang['admin']['missingdependency'] = 'Dependance manquante';
-$lang['admin']['minimumversion'] = 'Version minimale';
-$lang['admin']['depsformodule'] = 'Dependances pour module %s ';
-$lang['admin']['installed'] = 'Installe'; 
+$lang['admin']['hasdependents'] = 'A des modules dépendants';
+$lang['admin']['missingdependency'] = 'Dépendance manquante';
+$lang['admin']['minimumversion'] = 'Version minimalé';
+$lang['admin']['depsformodule'] = 'Dépendances pour module %s ';
+$lang['admin']['installed'] = 'Installé'; 
 ?>
