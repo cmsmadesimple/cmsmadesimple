@@ -80,13 +80,6 @@ if (!isset($charsetsent))
 	<SCRIPT TYPE="text/javascript">
 
 		HTMLArea.loadPlugin("ImageManager");
-
-		<?php 
-		// making setting session var to send language setting to insertFile
-		$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];		
-		 ?>
-		
-		HTMLArea.loadPlugin("InsertFile");
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
@@ -97,7 +90,6 @@ if (!isset($charsetsent))
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(ImageManager);
-			editor.registerPlugin(InsertFile);			
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
