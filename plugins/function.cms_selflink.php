@@ -22,29 +22,55 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	$db = $gCms->db;
 	$config = $gCms->config;
 
-	if (isset($params['page']))
-	{
+	if (isset($params['page'])) {
+		$page = $params['page'];
+
+		# check if the page exists in the db
+		$query	= "SELECT page_id, page_alias FROM ".cms_db_prefix()."pages WHERE page_type='CONTENT' AND (page_id='$page' OR page_alias='$page')";
+		$result = $db->Execute($query);
+		if ($result && $result->RowCount() > 0) {
+			$line	= $result->FetchRow();
+			$pageid = $line["page_id"];
+			$alias = $line["page_alias"];
+		}
+	}
+	
+	if (isset($alias) && $alias != "") {
+		if ($config["assume_mod_rewrite"]) 
+			$url = $config["root_url"]."/".$alias.".shtml";
+		else 
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
+	} else if (isset ($pageid)) {
+		if ($config["assume_mod_rewrite"])
+			$url = $config["root_url"]."/".$pageid.".shtml";
+		else 
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+	} else {
+		$url="";
+	}
+
+
+	if ($url != "") {
 		$result = "";
-		$result .= '<a href="'.$config['root_url'].'/index.php?'.$config['query_var'].'='.$params['page'].'"';
-		if (isset($params['target']))
-		{
+		$result .= '<a href="'.$url.'"';
+
+		if (isset($params['target'])) {
 			$result .= ' target="'.$params['target'].'"';
 		}
 		$result .= '>';
-		if (isset($params['text']))
-		{
+		
+		if (isset($params['text']))	{
 			$result .= $params['text'];
-		}
-		else
-		{
+		} else {
 			$result .= $params['page'];
 		}
+
 		$result .= '</a>';
 	}
-	else
-	{
-		$result .= "<!-- Not a valid cms_selflink -->";
+	else {
+		$result .= "<!-- Not a valid cms_selflink -->".$params['text'];
 	}
+	
 	return $result;
 }
 
