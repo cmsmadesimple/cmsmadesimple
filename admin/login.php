@@ -22,17 +22,21 @@ require_once("../include.php");
 
 $error = "";
 
-if ($_POST["username"] && $_POST["password"]) {
 
-	$username = $_POST["username"];
-	$password = $_POST["password"];
+if (isset($_POST["username"]) && isset($_POST["password"])) {
 
-	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = ".$dbnew->qstr($username)." and password = ".$dbnew->qstr(md5($password));
+	$username = "";
+	if (isset($_POST["username"])) $username = $_POST["username"];
+
+	$password = "";
+	if (isset($_POST["password"])) $password = $_POST["password"];
+
+	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = ".$dbnew->qstr($username)." and password = ".$dbnew->qstr(md5($password)) . " and active = 1";
 	$result = $dbnew->Execute($query);
 
 	$line = $result->FetchRow();
 
-	if (isset($line["user_id"])) {
+	if ($username != "" && $password != "" && isset($line["user_id"])) {
 		setcookie("cms_admin_user_id", $line["user_id"]);
 		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
 		$_SESSION["cms_admin_username"] = $line["username"];	
