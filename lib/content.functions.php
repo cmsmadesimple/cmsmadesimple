@@ -285,48 +285,50 @@ function db_get_menu_items(&$config, $style) {
 		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u on u.user_id=p.owner LEFT OUTER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
 		$result = $db->Execute($query);
 
-		$content_array = array();
-		while ($line = $result->FetchRow()) {
-			$current_content = new Page;
-			$current_content->page_id = $line["page_id"];
-			$current_content->page_title = $line["page_title"];
-			$current_content->page_url = $line["page_url"];
-			$current_content->menu_text = $line["menu_text"];
-			$current_content->page_type = $line["page_type"];
-			$current_content->item_order = $line["item_order"];
-			$current_content->active = $line["active"];
-			$current_content->default_page = $line["default_page"];
-			$current_content->username = $line["username"];
-			$current_content->template_name = $line["template_name"];
-			$current_content->parent_id = $line["parent_id"];
-			$current_content->url = $line["url"];
-			$current_content->hier = "1";
-			$current_content->level = "1";
-			$current_content->num_same_level = $current_content->get_num_same_level($config);
-			# Fix URL where appropriate
-			if ($current_content->page_type != "link") {
-				$current_content->url = $config->root_url."/index.php?".$config->query_var."=".$current_content->page_id;	
-				$current_content->page_url = "";	
-			} else {
-				$current_content->url = $current_content->page_url;
-			}
-			# Special display for separator
-			if ($current_content->page_type == "separator") {
-				$current_content->page_title = "--------";
-			}
-			array_push($content_array, $current_content);
-		} ## while
+		if ($result) {
+			$content_array = array();
+			while ($line = $result->FetchRow()) {
+				$current_content = new Page;
+				$current_content->page_id = $line["page_id"];
+				$current_content->page_title = $line["page_title"];
+				$current_content->page_url = $line["page_url"];
+				$current_content->menu_text = $line["menu_text"];
+				$current_content->page_type = $line["page_type"];
+				$current_content->item_order = $line["item_order"];
+				$current_content->active = $line["active"];
+				$current_content->default_page = $line["default_page"];
+				$current_content->username = $line["username"];
+				$current_content->template_name = $line["template_name"];
+				$current_content->parent_id = $line["parent_id"];
+				$current_content->url = $line["url"];
+				$current_content->hier = "1";
+				$current_content->level = "1";
+				$current_content->num_same_level = $current_content->get_num_same_level($config);
+				# Fix URL where appropriate
+				if ($current_content->page_type != "link") {
+					$current_content->url = $config->root_url."/index.php?".$config->query_var."=".$current_content->page_id;	
+					$current_content->page_url = "";	
+				} else {
+					$current_content->url = $current_content->page_url;
+				}
+				# Special display for separator
+				if ($current_content->page_type == "separator") {
+					$current_content->page_title = "--------";
+				}
+				array_push($content_array, $current_content);
+			} ## while
 
-		reset($content_array);
-		$hier_level = 0;
-		foreach ($content_array as $one_content) {
-			if ($one_content->parent_id == 0) {
-				$hier_level++;
-				$one_content->hier = $hier_level;
-				array_push($sorted_content, $one_content);
-				$one_content->get_child_content($one_content, $content_array, 1, $hier_level);
-			} ## if
-		} ## foreach
+			reset($content_array);
+			$hier_level = 0;
+			foreach ($content_array as $one_content) {
+				if ($one_content->parent_id == 0) {
+					$hier_level++;
+					$one_content->hier = $hier_level;
+					array_push($sorted_content, $one_content);
+					$one_content->get_child_content($one_content, $content_array, 1, $hier_level);
+				} ## if
+			} ## foreach
+		} ## if
 
 		return $sorted_content;
 	} ## if
