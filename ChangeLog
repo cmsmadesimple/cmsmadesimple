@@ -5,6 +5,11 @@ Version 0.8.2 "Taunoa" -- Subversion
 * Fixed htaccess.txt to point to a better url
 * Fixed hiding/showing of Help boxes
 * Fixed link content type so that urls are encoded properly for xhtml
+* Fixed handling of attached CSS to WYSIWYGs
+* Fixed stylesheet hook to actually send CSS
+* Fixed phplayers menu to put CSS in with template CSS so it's easily
+cascaded
+* Lots of other WYSIWYG related bugfixes
 
 Version 0.8.1 "Papeete" -- Sat Jan 01 2005 
 -----------------

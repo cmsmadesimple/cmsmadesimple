@@ -23,12 +23,20 @@ function phplayers_prerender_function(&$cms, &$content)
 	$config = $cms->config;
 
 	$text = '
-	<link rel="stylesheet" href="'.$config['root_url'].'/modules/PHPLayers/phplayers/layersmenu-cms.css" type="text/css"></link>
 	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
 	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
 	<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
 
 	$content = ereg_replace("<\/head>", $text."</head>", $content);
+}
+
+function phplayers_stylesheet_function(&$cms, &$stylesheet)
+{
+	$config = $cms->config;
+	@ob_start();
+	@readfile(dirname(__FILE__).'/phplayers/layersmenu-cms.css');
+	$stylesheet = @ob_get_contents() . $stylesheet;
+	@ob_end_clean();
 }
 
 function phplayers_module_execute(&$cms, $id, $params)

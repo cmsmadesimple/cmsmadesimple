@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.8.2-svn";
+$CMS_VERSION = "0.8.2rc1";
 $CMS_VERSION_NAME = "Taunoa";
 $CMS_SCHEMA_VERSION = "9";
 

@@ -33,6 +33,7 @@ cms_mapi_register_plugin_module($module_name);
 //Register callback functions
 cms_mapi_register_execute_function($module_name, 'phplayers_module_execute');
 cms_mapi_register_content_prerender_function($module_name, 'phplayers_prerender_function');
+cms_mapi_register_content_stylesheet_function($module_name, 'phplayers_stylesheet_function');
 
 //Register help callback functions
 cms_mapi_register_help_function($module_name, 'phplayers_module_help');

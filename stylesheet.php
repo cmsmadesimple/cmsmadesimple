@@ -27,10 +27,21 @@ if (isset($_GET["stripbackground"])) $stripbackground = true;
 
 $result = get_stylesheet($templateid);
 
+$css = $result['stylesheet']; 
+
+#Perform the content stylesheet callback
+foreach($gCms->modules as $key=>$value)
+{
+	if (isset($gCms->modules[$key]['content_stylesheet_function']) &&
+		$gCms->modules[$key]['Installed'] == true &&
+		$gCms->modules[$key]['Active'] == true)
+	{
+		call_user_func_array($gCms->modules[$key]['content_stylesheet_function'], array(&$gCms, &$css));
+	}
+}
+
 #header("Content-Language: " . $current_language);
 header("Content-Type: text/css; charset=" . $result['encoding']);
-
-$css = $result['stylesheet']; 
 
 if ($stripbackground)
 {

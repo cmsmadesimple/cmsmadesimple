@@ -90,13 +90,25 @@ class Smarty_Preview extends Smarty {
 
 		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
 
-		$stylesheet = "";
+		$stylesheet = '';
+
 		if (isset($data["stylesheet"]))
 		{
-			$stylesheet .= "<style type=\"text/css\">\n";
-			$stylesheet .= "{literal}".$data["stylesheet"]."{/literal}";
-			$stylesheet .= "</style>\n";
+			$stylesheet .= $data["stylesheet"];
 		}
+		
+		#Perform the content stylesheet callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['content_stylesheet_function']) &&
+				$gCms->modules[$key]['Installed'] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
+				call_user_func_array($gCms->modules[$key]['content_stylesheet_function'], array(&$gCms, &$stylesheet));
+			}
+		}
+
+		$stylesheet = "<style type=\"text/css\">{literal}\n".$stylesheet."{/literal}</style>\n";
 
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 
