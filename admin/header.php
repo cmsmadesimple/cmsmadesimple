@@ -80,11 +80,12 @@ if (!isset($charsetsent))
 	<SCRIPT TYPE="text/javascript">
 
 		HTMLArea.loadPlugin("ImageManager");
+		HTMLArea.loadPlugin("InsertFile");
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
 		HTMLArea.loadPlugin("FindReplace");
-		HTMLArea.loadPlugin("invertBackground");
+		HTMLArea.loadPlugin("InvertBackground");
 <?php if ($config["use_Indite"] == true)	{ ?>	
 		HTMLArea.loadPlugin("Indite");
 <?php } ?>	
@@ -92,11 +93,16 @@ if (!isset($charsetsent))
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(ImageManager);
+			<?php 
+				// Ugly Hack alert! making setting session var to send language setting to insertFile
+				$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];		
+		 	?>			
+			editor.registerPlugin(InsertFile);
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
 			editor.registerPlugin(FindReplace);
-			editor.registerPlugin(invertBackground);
+			editor.registerPlugin(InvertBackground);
 <?php if ($config["use_Indite"] == true)	{ ?>	
 			editor.registerPlugin(Indite);
 <?php } 
@@ -138,7 +144,7 @@ $userid = get_userid();
 <DIV ID="header" CLASS="header">
 <IMG SRC="../images/cms/cmsadminbanner.gif" BORDER="0" ID="logo" ALT="CMS Made Simple">
 </DIV>
-<div id="sloganWrapper"><div id="slogan"><?php echo lang('slogan'); ?></div></div>
+<DIV ID="sloganWrapper"><DIV ID="slogan"><?php echo lang('slogan'); ?></DIV></DIV>
 
 <?php
 include_once("menu.php");

@@ -1,6 +1,6 @@
-ï»¿// I18N constants
+// I18N constants
 
-// LANG: "en", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "cz", ENCODING: UTF-8 | ISO-8859-2
 // Author: Xiang Wei Zhuo, http://www.zhuo.org
 
 // FOR TRANSLATORS:
@@ -13,8 +13,8 @@
 //       that states what encoding is necessary.)
 
 ImageManager.I18N = {
-	"Image Manager"									: "Image Manager",
-	"Crop"											: "Crop"
+	"Image Manager"									: "Správce obrázkù",
+	"Crop"											: "Vyprázdnit"
 };
 /*
 

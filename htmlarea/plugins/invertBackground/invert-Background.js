@@ -1,14 +1,14 @@
 
-function invertBackground(editor) {
+function InvertBackground(editor) {
 	this.editor = editor;
 	var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
 
 	cfg.registerButton({
-		id       : "invertBackground",
-		tooltip  : "Invert Background/Foreground",
-		image    : editor.imgURL("invertBackground.gif", "invertBackground"),
+		id       : "invertbackground",
+		tooltip  : i18n["InvertBackgroundTooltip"],
+		image    : editor.imgURL("invertbackground.gif", "InvertBackground"),
 		textMode : false,
 		action   : function(editor) {self.buttonPress(editor);}
 	})
@@ -27,15 +27,15 @@ function invertBackground(editor) {
 
 	//inserts new icon
 	if (found)
-		a.splice(j, 0, "invertBackground");
+		a.splice(j, 0, "invertbackground");
 	else{
 		toolbar[1].splice(0, 0, "separator");
-		toolbar[1].splice(0, 0, "invertBackground");
+		toolbar[1].splice(0, 0, "invertbackground");
 	}
 };
 
-invertBackground._pluginInfo = {
-	name          : "invertBackground",
+InvertBackground._pluginInfo = {
+	name          : "InvertBackground",
 	version       : "1.0",
 	developer     : "Brett Batie",
 	developer_url : "http://www.provisiontech.net/",
@@ -45,7 +45,7 @@ invertBackground._pluginInfo = {
 	license       : "Free"
 };
 
-invertBackground.prototype.buttonPress = function(editor) {
+InvertBackground.prototype.buttonPress = function(editor) {
 	//invert background color
 	if ((editor._doc.body.style.background).indexOf("black") < 0){
 		editor._doc.body.style.background = 'black';
