@@ -86,7 +86,7 @@ function comments_module_execute($cms, $id, $params) {
 			echo " - ";
 			echo "<span class=\"modulecommentsentryauthor\">".$row['comment_author']."</span>\n";
 			echo "</div>\n";
-			echo "<div class=\"modulecommentsentrybody\">".$row["comment_data"]."</div>\n";
+			echo "<div class=\"modulecommentsentrybody\">".nl2pnbr($row["comment_data"])."</div>\n";
 			echo "</div>\n";
 		}
 	}
@@ -193,9 +193,14 @@ function comments_module_help($cms)
 function comments_module_about() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.2</p>
 	<p>
 	Change History:<br/>
+	</p>
+	<p>
+	1.2 -- Oct 13, 2004<br />
+	Added newline parsing (kickthedonkey)
+	Removed a rogue div (kickthedonkey)
 	</p>
 	<p>
 	1.1 -- Sep 28, 2004<br />

@@ -23,7 +23,7 @@ $module_name = "Comments";
 require_once(dirname(__FILE__)."/modulefunctions.php");
 
 //Register Module
-cms_mapi_register_module($module_name, "Ted Kulp <tedkulp@users.sf.net>", "1.1");
+cms_mapi_register_module($module_name, "Ted Kulp <tedkulp@users.sf.net>", "1.2");
 
 //Register module to work as a plugin (cms_module)
 cms_mapi_register_plugin_module($module_name);

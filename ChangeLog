@@ -1,8 +1,10 @@
 Version 0.7.1 -- Subversion
 -----------------
 
+* Added newline parsing to the comments module (#000011)
 * Fixed email in add/edit user to accept 255 characters (#000003)
 * Fixed htmlblob NOTICE level messages (#000005)
+* Removed a rogue div from the Comments module (#000010)
 
 Version 0.7 -- Mon Oct 11 2004
 -----------------

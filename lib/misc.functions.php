@@ -132,7 +132,7 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 {
 	$result = "";
-	$result = htmlentities($string, $param, $charset);
+	#$result = htmlentities($string, $param, $charset);
 	$result = my_htmlentities($string);
 	return $result;
 }
@@ -184,6 +184,25 @@ function my_htmlentities($val)
 	// $val = preg_replace( "/\(?!&#|?#)/", "\", $val );
 
 	return $val;
+}
+
+
+//Taken from http://www.webmasterworld.com/forum88/164.htm
+function nl2pnbr( $text )
+{
+	// Use \n for newline on all systems
+	$text = preg_replace("/(\r\n|\n|\r)/", "\n", $text);
+
+	// Only allow two newlines in a row.
+	$text = preg_replace("/\n\n+/", "\n\n", $text);
+
+	// Put <p>..</p> around paragraphs
+	$text = preg_replace('/\n?(.+?)(\n\n|\z)/s', "<p>$1</p>", $text);
+
+	// Convert newlines not preceded by </p> to a <br /> tag
+	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
+
+	return $text;
 }
 
 # vim:ts=4 sw=4 noet
