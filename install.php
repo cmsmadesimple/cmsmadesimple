@@ -205,6 +205,9 @@ function showPageThree($sqlloaded = 0) {
 
 		$db = &ADONewConnection('mysql');
 		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
+
+		$db_prefix = $_POST['prefix'];
+
 		if (!$result) die("Connection failed");
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
@@ -219,6 +222,7 @@ function showPageThree($sqlloaded = 0) {
 		while (!feof($handle)) {
 			$s = fgets($handle, 32768);
 			if ($s != "") {
+				$s = str_replace("{DB_PREFIX}", $db_prefix, $s);
 				$result = $db->Execute($s);
 				if (!$result) {
 					die('Invalid query: ' . mysql_error());

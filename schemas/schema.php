@@ -2,42 +2,42 @@
 
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
-	$db->DropSequence($config->db_prefix."additional_users_seq");
-	$db->DropSequence($config->db_prefix."group_perms_seq");
-	$db->DropSequence($config->db_prefix."groups_seq");
-	$db->DropSequence($config->db_prefix."pages_seq");
-	$db->DropSequence($config->db_prefix."permissions_seq");
-	$db->DropSequence($config->db_prefix."templates_seq");
-	$db->DropSequence($config->db_prefix."users_seq");
+	$db->DropSequence($db_prefix."additional_users_seq");
+	$db->DropSequence($db_prefix."group_perms_seq");
+	$db->DropSequence($db_prefix."groups_seq");
+	$db->DropSequence($db_prefix."pages_seq");
+	$db->DropSequence($db_prefix."permissions_seq");
+	$db->DropSequence($db_prefix."templates_seq");
+	$db->DropSequence($db_prefix."users_seq");
 
 	$dbdict = NewDataDictionary($db);
 
 	$sqlarray = $dbdict->DropIndexSQL("idx_template_id_modified_date");
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."additional_users");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_users");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."adminlog");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."group_perms");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."group_perms");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."groups");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."modules");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."pages");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."permissions");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."templates");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."user_groups");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."userprefs");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."userprefs");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."users");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."users");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($config->db_prefix."version");
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."version");
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 }
@@ -53,9 +53,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		page_id I
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."additional_users", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$db->CreateSequence($config->db_prefix."additional_users_seq", 1);
+	$db->CreateSequence($db_prefix."additional_users_seq", 1);
 
 	echo "[done]</p>";
 
@@ -71,7 +71,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		action C(255)
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."adminlog", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -87,9 +87,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."group_perms", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$db->CreateSequence($config->db_prefix."group_perms_seq", 1);
+	$db->CreateSequence($db_prefix."group_perms_seq", 1);
 
 	echo "[done]</p>";
 
@@ -104,10 +104,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date I
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."groups", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config->db_prefix."groups_seq", 1);
+	$db->CreateSequence($db_prefix."groups_seq", 1);
 
 	echo "[done]</p>";
 
@@ -121,7 +121,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		active L
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."modules", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -147,12 +147,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."pages", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."pages", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config->db_prefix."pages_seq", 1);
+	$db->CreateSequence($db_prefix."pages_seq", 1);
 
-	$sqlarray = $dbdict->CreateIndexSQL("idx_template_id_modified_date", $config->db_prefix."pages", array("template_id","modified_date"));
+	$sqlarray = $dbdict->CreateIndexSQL("idx_template_id_modified_date", $db_prefix."pages", array("template_id","modified_date"));
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -168,10 +168,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."permissions", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config->db_prefix."permissions_seq", 1);
+	$db->CreateSequence($db_prefix."permissions_seq", 1);
 
 	echo "[done]</p>";
 
@@ -188,10 +188,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."templates", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config->db_prefix."templates_seq", 1);
+	$db->CreateSequence($db_prefix."templates_seq", 1);
 
 	echo "[done]</p>";
 
@@ -205,7 +205,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."user_groups", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -220,7 +220,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		type C(25)
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."userprefs", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -237,10 +237,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."users", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config->db_prefix."users_seq", 1);
+	$db->CreateSequence($db_prefix."users_seq", 1);
 
 	echo "[done]</p>";
 
@@ -251,7 +251,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		version I
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."version", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
