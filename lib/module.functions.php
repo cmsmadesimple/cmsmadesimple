@@ -58,7 +58,7 @@ function load_modules() {
  *
  * @since 0.4
  */
-function cms_mapi_register_module($name, $author, $version) {
+function cms_mapi_register_module($name, $author, $version, $minimum_version='') {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 	if (!isset($cmsmodules[$name])) {
