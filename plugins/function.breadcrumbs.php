@@ -59,17 +59,17 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 				{
 					if (getURL($thispage)!="")
 					{
-						$trail .= "<a href=\"".$onecontent->getURL()."\">".$onecontent->Name()."</a> &gt;&gt;\n";
+						$trail .= "<a href=\"".$onecontent->getURL()."\">".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</a> &gt;&gt;\n";
 					}
 					else
 					{
-						$trail .= $onecontent->Name()." &gt;&gt; \n";
+						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())." &gt;&gt; \n";
 					}
 				}
 			}
 			else
 			{
-				$trail .= "<strong>".$onecontent->Name()."</strong>\n";
+				$trail .= "<strong>".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</strong>\n";
 			}
 		}
 	}
