@@ -7,7 +7,9 @@ road in supporting multiple databases.
 * Added template name to content list page.  (Fixes #28)
 * Fixed so that if no default page is set, system grabs first page it can find
 (Fixes #22)
-* Fixed redirection.  Thanks pdj@txnt.com! (Fixes #27)
+* Fixed redirection. (pdj@txnt.com) (Fixes #27)
+* Fixed nasty bug with changeperm and changeassign. (fcardone@wp.pl) (Fixes
+#29, #30)
 
 Version 0.3 -- Wed Jul 21 2004
 -----------------
