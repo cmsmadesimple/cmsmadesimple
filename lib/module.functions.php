@@ -910,7 +910,7 @@ function cms_mapi_check_for_module($name)
 
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$name]))
+	if (isset($cmsmodules[$module]) && $cmsmodules[$module]['Installed'] == true && $cmsmodules[$module]['Active'] == true)
 	{
 		$result = true;
 	}
@@ -931,7 +931,7 @@ function cms_mapi_call_intramodule_function($module, $name, $array)
 {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$module]))
+	if (isset($cmsmodules[$module]) && $cmsmodules[$module]['Installed'] == true && $cmsmodules[$module]['Active'] == true)
 	{
 		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
 		{
@@ -946,7 +946,7 @@ function cms_mapi_call_intramodule_function_exists($module, $name)
 
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$module]))
+	if (isset($cmsmodules[$module]) && $cmsmodules[$module]['Installed'] == true && $cmsmodules[$module]['Active'] == true)
 	{
 		if (isset($cmsmodules[$module]['intramodule_function'][$name]))
 		{
