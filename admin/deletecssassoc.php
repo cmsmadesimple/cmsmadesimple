@@ -62,7 +62,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 	# we check the permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Stylesheets association');
+	$access = check_permission($userid, 'Remove Stylesheet Assoc');
 
 #******************************************************************************
 # the user has the right to delete association, we can go on
@@ -102,7 +102,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 			if ($result)
 			{
-				audit($id, (isset($name)?$name:""), 'Deleted CSS association');
+				audit($id, (isset($name)?$name:""), 'Deleted Stylesheet Association');
 
 				# now updating template
 				if ("template" == $type)

@@ -68,14 +68,14 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 </div>
 <?php } ?>
 
-<?php  if ( $templatePerms || $cssPerms) { ?>
+<?php  if ( $templatePerms || $cssPerms || $cssAssocPerms) { ?>
 <div class="MainMenuItem">
 <a href="toplayout.php">Layout</a>
 <span class="description">Site layout options. Subitems: 
 <?php if ($templatePerms)
 	{ ?>
     <a href="listtemplates.php">templates</a><?php if ($cssPerms) { ?>, <?php }
-    } if ($cssPerms)
+    } if ($cssPerms || $cssAssocPerms)
     { ?><a href="listcss.php">stylesheets</a><?php } ?>.</span>
 </div>
 <?php } ?>

@@ -113,8 +113,8 @@ if ("" != $error)
 	$userid = get_userid();
 
 	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
-	$delasso = check_permission($userid, 'Remove Stylesheets association');
-	$addasso = check_permission($userid, 'Add Stylesheets association');
+	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
+	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
 	$query = "SELECT assoc_to_id, template_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."templates
 		WHERE assoc_type='$type' AND assoc_css_id = '$id' AND assoc_to_id = template_id";

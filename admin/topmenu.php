@@ -27,7 +27,7 @@
 <?php if ($filePerms)
    { ?><a href="topfiles.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==3)?' id="TopMenuSelected"':'') ?>>Files</a><?php
    }
-if ($templatePerms || $cssPerms)
+if ($templatePerms || $cssPerms || $cssAssocPerms)
    { ?><a href="toplayout.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==4)?' id="TopMenuSelected"':'') ?>>Layout</a><?php
    }
 if ($userPerms || $groupPerms || $groupPermPerms || $groupMemberPerms)

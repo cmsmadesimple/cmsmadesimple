@@ -33,6 +33,9 @@ $templatePerms = check_permission($userid, 'Add Templates') | check_permission($
           check_permission($userid, 'Remove Templates');
 $cssPerms = check_permission($userid, 'Add Stylesheets') | check_permission($userid, 'Modify Stylesheets') |
           check_permission($userid, 'Remove Stylesheets');
+$cssAssocPerms = check_permission($userid, 'Add Stylesheet Assoc') |
+        check_permission($userid, 'Modify Stylesheet Assoc') |
+          check_permission($userid, 'Remove Stylesheet Assoc');
 $filePerms = check_permission($userid, 'Modify Files');
 $userPerms = check_permission($userid, 'Add Users') | check_permission($userid, 'Modify Users') |
           check_permission($userid, 'Remove Users');

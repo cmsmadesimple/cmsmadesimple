@@ -38,7 +38,7 @@ include_once("header.php");
 </div>
 <?php } ?>
 
-<?php if ($cssPerms) { ?>
+<?php if ($cssPerms || $cssAssocPerms) { ?>
 <div class="MainMenuItem">
 <a href="listcss.php">Stylesheets</a>
 <span class="description">CSS Management is an advanced way to handle stylesheets separately from templates.</span>
