@@ -125,33 +125,16 @@ class Smarty_CMS extends Smarty {
 			{
 				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
 
-				/*
-				if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
+				#Perform the content stylesheet callback
+				foreach($gCms->modules as $key=>$value)
 				{
-					$stylesheet .= "<style type=\"text/css\">\n";
-					$stylesheet .= "{literal}".$templateobj->stylesheet."{/literal}";
-					$stylesheet .= "</style>\n";
-				}
-
-				#Handle "advanced" CSS Management
-				$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-					WHERE	css_id		= assoc_css_id
-					AND		assoc_type	= 'template'
-					AND		assoc_to_id = '".$contentobj->TemplateId()."'";
-				$cssresult = $db->Execute($cssquery);
-
-				if ($cssresult && $cssresult->RowCount() > 0)
-				{
-					$tempstylesheet = "";
-					$stylesheet .= "<style type=\"text/css\">\n";
-					while ($cssline = $cssresult->FetchRow())
+					if (isset($gCms->modules[$key]['content_stylesheet_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
 					{
-						$tempstylesheet .= "\n".$cssline['css_text']."\n";
+						call_user_func_array($gCms->modules[$key]['content_stylesheet_function'], array(&$gCms, &$stylesheet));
 					}
-					$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
-					$stylesheet .= "</style>\n";
 				}
-				*/
 
 				#Time to fill our template content
 				#If it's in print mode, then just create a simple stupid template
@@ -164,9 +147,32 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = $templateobj->content;
 				}
 
+				#Perform the content template callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_template_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_template_function'], array(&$gCms, &$tpl_source));
+					}
+				}
+
 				#Fill some variables with various information
 				$content = $contentobj->Show();
 				$title = $contentobj->Name();
+
+				#Perform the content title callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_title_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_title_function'], array(&$gCms, &$title));
+					}
+				}
+
 				$head_tags = $contentobj->mProperties->GetValue('head_tags');
 				$header_script = $contentobj->mProperties->GetValue('page_header');
 
@@ -244,6 +250,7 @@ class Smarty_CMS extends Smarty {
 				if (get_site_preference('enablecustom404') == "1")
 				{
 					$tpl_source = get_site_preference('custom404');
+
 					#Perform the content prerender callback
 					foreach($gCms->modules as $key=>$value)
 					{
@@ -746,7 +753,20 @@ function html_blob_regex_callback($matches)
 		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($matches[1]);
 		if ($oneblob)
 		{
-			return $oneblob->content;
+			$text = $oneblob->content;
+
+			#Perform the content htmlblob callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['content_htmlblob_function']) &&
+					$gCms->modules[$key]['Installed'] == true &&
+					$gCms->modules[$key]['Active'] == true)
+				{
+					call_user_func_array($gCms->modules[$key]['content_htmlblob_function'], array(&$gCms, &$text));
+				}
+			}
+
+			return $text;
 		}
 		else
 		{

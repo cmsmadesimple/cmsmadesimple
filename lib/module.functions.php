@@ -702,6 +702,10 @@ function cms_mapi_register_content_module_get_url_function($name, $function)
 	}
 }
 
+/**********************************************************
+*Content Callbacks
+**********************************************************/
+
 /**
  * Registers a function to be called with content before it is sent to
  * smarty for processing.  These changes will possibly cache.
@@ -717,6 +721,82 @@ function cms_mapi_register_content_prerender_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['content_prerender_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called with the template before it is
+ * has any tags replaced.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of the template as parameters to the
+ * function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_template_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_template_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called with the stylesheet text before it
+ * is merged into the template.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of the stylesheet as parameters to the
+ * function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_stylesheet_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_stylesheet_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called with the title text before it
+ * is merged into the template.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of the title as parameters to the
+ * function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_title_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_title_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called with the htmlblob text before it
+ * is merged into the template.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of the htmlblob as parameters to the
+ * function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_htmlblob_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_htmlblob_function'] = $function;
 	}
 }
 
