@@ -22,16 +22,17 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	$db = $gCms->db;
 	$config = $gCms->config;
 
-	if (isset($params['page'])) {
+	if (isset($params['page']))
+	{
 		$page = $params['page'];
 
 		# check if the page exists in the db
-		$query	= "SELECT page_id, page_alias FROM ".cms_db_prefix()."pages WHERE page_type='CONTENT' AND (page_id='$page' OR page_alias='$page')";
-		$result = $db->Execute($query);
-		if ($result && $result->RowCount() > 0) {
-			$line	= $result->FetchRow();
-			$pageid = $line["page_id"];
-			$alias = $line["page_alias"];
+		$content = ContentManager::LoadContentFromAlias($page);
+		if ($content !== FALSE)
+		{
+			$pageid = $content->Id();
+			$alias = $content->Alias();
+			$url = $content->GetUrl();
 		}
 	}
 	
@@ -95,10 +96,11 @@ function smarty_cms_help_function_cms_selflink() {
 function smarty_cms_about_function_cms_selflink() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Changed to new content system<br />
+	1.0 - Initial release
 	</p>
 	<?php
 }

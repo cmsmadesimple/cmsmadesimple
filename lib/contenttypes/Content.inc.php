@@ -181,11 +181,25 @@ class content extends ContentBase
 
 		if ($config["assume_mod_rewrite"])
 		{
-			$url = $config["root_url"]."/".$this->mId.".shtml";
+			if ($this->mAlias != '')
+			{
+				$url = $config["root_url"]."/".$this->mAlias.".shtml";
+			}
+			else
+			{
+				$url = $config["root_url"]."/".$this->mId.".shtml";
+			}
 		}
 		else
 		{
-			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+			if ($this->mAlias != '')
+			{
+				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mAlias;
+			}
+			else
+			{
+				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+			}
 		}
 
 		return $url;
