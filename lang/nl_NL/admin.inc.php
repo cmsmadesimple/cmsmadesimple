@@ -211,4 +211,6 @@ $lang['admin']['addhtmlblob'] = 'Nieuw Html Blok';
 $lang['admin']['edithtmlblob'] = 'Edit Html Blok'; 
 $lang['admin']['encoding'] = 'Encoding'; //needs translation
 $lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
+$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>';
+
 ?>

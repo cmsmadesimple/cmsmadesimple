@@ -134,6 +134,7 @@ $userid = get_userid();
 <DIV ID="header" CLASS="header">
 <IMG SRC="../images/cms/cmsadminbanner.gif" BORDER="0" ID="logo" ALT="CMS Made Simple">
 </DIV>
+<div id="sloganWrapper"><div id="slogan"><?php echo lang('slogan'); ?></div></div>
 
 <?php
 include_once("menu.php");

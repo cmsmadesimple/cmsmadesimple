@@ -118,6 +118,12 @@ H4 {
 #header {
 	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: #EA9129 url(../images/cms/cmsadminbanner_r.gif); PADDING-BOTTOM: 0px; COLOR: #265980; PADDING-TOP: 0px; BORDER-BOTTOM: #8c8a8c 0px solid; HEIGHT: 117px
 }
+#sloganWrapper {
+  position: absolute; left: 0; top: 93px; width: 100%; text-align: center;
+}
+#slogan{
+  padding-left: 220px; font-size: 18px; font-family: Georgia, serif; color: #495249; font-weight: bold;
+}
 #footer1 {
 	position: relative;
 	COLOR: #265980;

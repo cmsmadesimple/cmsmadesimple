@@ -211,4 +211,5 @@ $lang['admin']['filemanager'] = 'Správce souborù';
 $lang['admin']['currentcss'] = 'Souèasný CSS';
 $lang['admin']['encoding'] = 'Kódování'; //needs translation
 $lang['admin']['nosyntax'] = 'Promiòte, ale zvýrazòování syntaxe není ve Va¹em prohlí¾eèi podporováno.'; //needs translation
+$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>'; //needs translation
 ?>

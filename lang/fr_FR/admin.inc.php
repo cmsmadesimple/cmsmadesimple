@@ -211,4 +211,5 @@ $lang['admin']['filemanager'] = 'Gestionnaire de fichiers';
 $lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
 $lang['admin']['encoding'] = 'Encodage';
 $lang['admin']['nosyntax'] = 'Désolé, la coloration syntaxique n\'est pas supporté par votre navigateur.';
+$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>'; 
 ?>
