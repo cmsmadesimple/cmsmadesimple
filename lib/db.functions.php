@@ -16,6 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
+#$dsn = rawurlencode("mysql://".$config->db_username.":".$config->db_password."@".$config->db_hostname."/".$config->db_name."?persist");
+
 class DB {
 
 	function DB($config) {
@@ -29,6 +32,9 @@ class DB {
 			$this->pass = $config->db_password;
 			$this->link = mysql_connect($this->host, $this->user, $this->pass);
 			mysql_select_db($this->db, $this->link);
+
+
+			
 		#}
 	}
 	

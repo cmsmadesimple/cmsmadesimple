@@ -62,31 +62,30 @@ include_once(dirname(__FILE__)."/config.php");
 require_once(dirname(__FILE__)."/version.php");
 
 $config = new CMSConfig();
-#define('SMARTY_DIR', $config->root_path.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
-define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
 
-#ini_set('include_path', ini_get('include_path'). DIRECTORY_SEPARATOR .$config->root_path. DIRECTORY_SEPARATOR .$config->root_path.DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
-#echo ini_get('include_dir');
+#Setup db connection
+include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
-require_once(dirname(__FILE__)."/lib/misc.functions.php");
+$dbnew = &ADONewConnection('mysql');
+$dbnew->PConnect($config->db_hostname,$config->db_username,$config->db_password,$config->db_name);
+if (!$dbnew) die("Connection failed");
+$dbnew->SetFetchMode(ADODB_FETCH_ASSOC);
+$config->db = &$dbnew;
+
 require_once(dirname(__FILE__)."/lib/db.functions.php");
+require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
+
+define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
+
+#Setup gettext
 require_once(dirname(__FILE__)."/lib/GetText.php");
-
-#initialiase GetText package
-#GetText::init();
-
-#add the translation domain we wrote files for
-#GetText::addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
-
-#$gettextobj = new GetText();
 if (function_exists('gettext')) {
 	$gettext = new GetText_NativeSupport();
 } else {
 	$gettext = new GetText_PHPSupport();
 }
-#$gettextobj->init();
 $gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
 
 #Check for HTML_BBCodeParser

@@ -1,3 +1,9 @@
+Version 0.3.1 -- Subversion 
+-----------------
+
+* Using adodb for database connectivity.  Will be a good thing for down the
+road in supporting multiple databases.
+
 Version 0.3 -- Wed Jul 21 2004
 -----------------
 

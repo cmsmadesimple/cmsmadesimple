@@ -29,28 +29,26 @@ function get_userid() {
 }
 
 function check_permission(&$config, $userid, $permname) {
+
 	$check = false;
 
-	$db = new DB($config);
+	$db = $config->db;
 
 	$query = "SELECT * FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = '".$permname."'";
-	$result = $db->query($query);
+	$result = $db->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 		$check = true;
 	}
-
-	$db->freeresult($result);
-	$db->close();
-
 
 	return $check;
 }
 
 function check_ownership(&$config, $userid, $pagename, $pageid = "") {
+
 	$check = false;
 
-	$db = new DB($config);
+	$db = $config->db;
 
 	$query = "";
 	if ($pageid == "") {
@@ -58,61 +56,51 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 	} else {
 		$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
 	}
-	$result = $db->query($query);
+	$result = $db->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 		$check = true;
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 	return $check;
 }
 
 function check_authorship(&$config, $userid, $pageid) {
+
 	$check = false;
 
-	$db = new DB($config);
+	$db = $config->db;
 
 	$query = "SELECT * FROM ".$config->db_prefix."additional_users WHERE page_id = $pageid AND user_id = $userid";
-	$result = $db->query($query);
-	if ($db->_rowcount($result) > 0) {
+	$result = $db->Execute($query);
+	if ($$result) {
 		$check = true;
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 	return $check;
 }
 
 function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
 
-	$db = new DB($config);
+	$db = $config->db;
 
-	$query = "INSERT INTO ".$config->db_prefix."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, '".$db->escapestring($username)."', $itemid, '".$db->escapestring($itemname)."', '".$db->escapestring($action)."')";
-	$db->query($query);
-
-	$db->close();
-
+	$query = "INSERT INTO ".$config->db_prefix."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, ".$db->qstr($username).", $itemid, ".$db->qstr($itemname).", ".$db->qstr($action).")";
+	$db->Execute($query);
 }
 
 function get_preference(&$config, $userid, $prefname) {
 
 	$value = "";
 
-	$db = new DB($config);
-	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
+	$db = $config->db;
+
+	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->query($query);
 	
-	if ($db->rowcount($result) > 0) {
-		$row = $db->getresulthash($result);
+	if ($result) {
+		$row = $result->FetchRow();
 		$value = $row["value"];
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 	return $value;
 }
@@ -121,42 +109,37 @@ function set_preference(&$config, $userid, $prefname, $value) {
 
 	$doinsert = true;
 
-	$db = new DB($config);
-	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
-	$result = $db->query($query);
+	$db = $config->db;
 
-	if ($db->rowcount($result) > 0) {
+	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+	$result = $db->Execute($query);
+
+	if ($result) {
 		$doinsert = false;
 	}
 
-	$db->freeresult($result);
-
 	if ($doinsert) {
-		$query = "INSERT INTO ".$config->db_prefix."userprefs (user_id, preference, value) VALUES ($userid, '".$db->escapestring($prefname)."', '".$db->escapestring($value)."')";
-		$db->query($query);
+		$query = "INSERT INTO ".$config->db_prefix."userprefs (user_id, preference, value) VALUES ($userid, ".$db->qstr($prefname).", ".$db->qstr($value).")";
+		$db->Execute($query);
 	} else {
-		$query = "UPDATE ".$config->db_prefix."userprefs SET value = '".$db->escapestring($value)."' WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
-		$db->query($query);
+		$query = "UPDATE ".$config->db_prefix."userprefs SET value = ".$db->qstr($value)." WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+		$db->Execute($query);
 	}
-
-	$db->close();
 }
 
 function get_stylesheet(&$config, $templateid) {
 
 	$css = "";
 
-	$db = new DB($config);
-	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
-	$result = $db->query($query);
+	$db = $config->db;
 
-	if ($db->rowcount($result) > 0) {
-		$line = $db->getresulthash($result);
+	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
+	$result = $db->Execute($query);
+
+	if ($result) {
+		$line = $result->FetchRow();
 		$css = $line[stylesheet];
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 	return $css;
 }

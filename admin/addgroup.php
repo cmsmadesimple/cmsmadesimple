@@ -39,8 +39,6 @@ $access = check_permission($config, $userid, 'Add Group');
 if ($access) {
 	if (isset($_POST["addgroup"])) {
 
-		$db = new DB($config);
-
 		$validinfo = true;
 		if ($group == "") {
 			$error .= "<li>".$gettext->gettext("No group name given!")."</li>";
@@ -48,11 +46,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".$db->escapestring($group)."', $active, now(), now())";
-			$result = $db->query($query);
-			if ($db->rowsaffected()) {
-				$new_group_id = $db->insertid();
-				$db->close();
+			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES (".$dbnew->qstr($group).", $active, now(), now())";
+			$result = $dbnew->Execute($query);
+			if ($result) {
+				$new_group_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
 				redirect("listgroups.php");
 				return;
@@ -61,8 +58,6 @@ if ($access) {
 				$error .= "<li>".$gettext->gettext("Error inserting group!")."</li>";
 			}
 		}
-
-		$db->close();
 	}
 }
 
