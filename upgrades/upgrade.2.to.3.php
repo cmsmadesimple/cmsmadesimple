@@ -46,7 +46,7 @@ mysql_free_result($result);
 
 	echo "<p>Updating content types...";
 
-	$query = "UPDATE ".$config->db_prefix."pages SET page_type = 'ccntent'";
+	$query = "UPDATE ".$config->db_prefix."pages SET page_type = 'content'";
 	$db->query($query);
 
 	echo "[done]</p>";
