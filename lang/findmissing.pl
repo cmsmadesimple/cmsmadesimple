@@ -5,9 +5,15 @@
 open FILE,"< en_US/admin.inc.php";
 while (<FILE>)
 {
-	if ($_ =~ m/(.*?) = (.*)/)
+	if ($_ =~ m/(.+?) = (.*)/)
 	{
-		$original{$1} = $2;
+		$keyname = $1;
+		$value = $2;
+		if ($value =~ m/(.*?)\ \/\/needs translation/)
+		{
+			$value = $1;
+		}
+		$original{$keyname} = $value;
 	}
 }
 close(FILE);
@@ -30,9 +36,15 @@ foreach $curlang(@langs)
 	open FILE,"< ".$curlang."/admin.inc.php";
 	while (<FILE>)
 	{
-		if ($_ =~ m/(.*?) = (.*)/)
+		if ($_ =~ m/(.+?) = (.+)/)
 		{
-			$current{$1} = $2;
+			$keyname = $1;
+			$value = $2;
+			#if ($value =~ m/(.*?)\ \/\/needs translation/)
+			#{
+			#	$value = $1;
+			#}
+			$current{$keyname} = $value;
 		}
 	}
 	close(FILE);
@@ -51,9 +63,17 @@ foreach $curlang(@langs)
 	if (scalar(@missing) > 0)
 	{
 		print scalar(@missing) . " keys missing in: " . $curlang . "\n";
+		open FILE,"> ".$curlang."/admin.inc.php";
+		print FILE "<?php\n";
+		foreach $existingkey(keys %current)
+		{
+			print FILE $existingkey . " = " . $current{$existingkey} . "\n";
+		}
 		foreach $missingkey(@missing)
 		{
-			print $missingkey . "\n";
+			print FILE $missingkey . " = " . $original{$missingkey} . " //needs translation\n";
 		}
+		print FILE "?>\n";
+		close(FILE);
 	}
 }
