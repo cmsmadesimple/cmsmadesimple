@@ -40,6 +40,8 @@ if (isset($_POST["cancel"]))
 $userid = get_userid();
 $access = check_permission($userid, "Modify Permissions");
 
+$message = '';
+
 if ($access)
 {
 	if ($group_id != '' && $group_id != '-1')
@@ -69,6 +71,7 @@ if ($access)
 			}
 
 			audit($group_id, $group_name, "Changed Group Permissions");
+			$message = lang('permissionschanged');
 			#redirect("listgroups.php");
 			#return;
 
@@ -83,12 +86,18 @@ if (!$access) {
 }
 else {
 
+if ($message != '')
+{
+	echo '<p class="Message">'.$message.'</p>';
+	$message = '';
+}
+
 ?>
 <h3><?php echo lang('grouppermissions')?></h3>
 
 <p><a href="topusers.php"><?php echo lang('back')?></a></p>
 
-<div class="adminformSmall">
+<div class="AdminForm">
 
 <?php
 
@@ -140,13 +149,13 @@ else {
 			}
 		}
 		
-		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
+		echo '<table border="0" cellpadding="0" cellspacing="0">';
 		foreach ($perms as $key => $value)
 		{
-			echo "<tr><td>";
-			echo "<input type=\"checkbox\"";
-			echo ($value == true?" checked=\"checked\"":"");
-			echo " name=\"perm-".$ids[$key]."\" value=\"1\" />$perm_text[$key]</td></tr>\n";
+			echo '<tr>';
+			echo '<th>'.$perm_text[$key].':</th>';
+			echo '<td><input type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>';
+			echo '</tr>';
 		}
 
 ?>
