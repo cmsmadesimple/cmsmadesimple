@@ -193,10 +193,14 @@ class Smarty_CMS extends Smarty {
 					#If it's regular content, do this...
 					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
+					// now do prerender
+					$tpl_source = $contentobj->ContentPreRender($tpl_source);
+
 					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
 					{
 						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
 					}
+					
 				}
 				else
 				{

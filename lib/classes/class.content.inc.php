@@ -849,6 +849,14 @@ class ContentBase
 		# :TODO:
 		return "<tr><td>Show Not Defined</td></tr>";
 	}
+	
+	/**
+	* allow the content module to handle custom tags. Typically used for parameters in {content} tags
+	*/
+	function ContentPreRender($tpl_source)
+	{
+		return $tpl_source;
+	}
 
 	/**
 	 * Show the Edit interface

@@ -20,6 +20,14 @@
 
 class content extends ContentBase
 {
+	var $additionalContentBlocks;
+	
+	function content()
+	{
+		$this->ContentBase();
+		$this->additionalContentBlocks = array();
+	}
+	
 	function FriendlyName()
 	{
 		return 'Content';
@@ -42,6 +50,20 @@ class content extends ContentBase
 		if (isset($params))
 		{
 			$parameters = array('content_en', 'headtags');
+
+			//pick up the template id before we do parameters
+			if (isset($params['template_id']))
+			{
+				$this->mTemplateId = $params['template_id'];
+			}
+
+			// add additional content blocks
+			$this->GetAdditionalContentBlocks();
+			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+			{
+				$parameters[] = $blockNameId;
+			}
+			
 			foreach ($parameters as $oneparam)
 			{
 				if (isset($params[$oneparam]))
@@ -56,10 +78,6 @@ class content extends ContentBase
 			if (isset($params['menutext']))
 			{
 				$this->mMenuText = $params['menutext'];
-			}
-			if (isset($params['template_id']))
-			{
-				$this->mTemplateId = $params['template_id'];
 			}
 			if (isset($params['alias']))
 			{
@@ -141,9 +159,17 @@ class content extends ContentBase
 			}
 		}
 //		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
-		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>';
-		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', 'syntaxHighlight', 'content_en', '', $stylesheet).'</td></tr>'."\n";
-		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
+		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n";
+		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet).'</td></tr>'."\n";
+		
+		// add additional content blocks if required
+		$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+		foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+		{
+			$text .= '<tr><td>'.ucwords($blockName).':</td><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n";
+		}
+
+		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('cachable').':</td><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';
@@ -221,6 +247,70 @@ class content extends ContentBase
 		}
 
 		return $url;
+	}
+	
+	function GetAdditionalContentBlocks()
+	{
+		$result = false;
+		$this->additionalContentBlocks = array();
+		$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+		if($template !== false)
+		{
+			$content = $template->content;
+			
+			$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
+			$matches = array();
+			$result = preg_match_all($pattern, $content, $matches);
+			if($result)
+			{
+				if(count($matches[1]) > 0)
+				{
+					$additionalContentBlocks = $matches[1];
+					
+					// add the ContentProperties
+					foreach($additionalContentBlocks as $blockName)
+					{
+						$blockNameId = str_replace(' ', '_', $blockName);
+						$this->additionalContentBlocks[$blockName] = $blockNameId;
+						
+						if(!array_key_exists($blockName, $this->mProperties->mPropertyTypes))
+						{
+							$this->mProperties->Add("string", $blockNameId);
+						}
+					}
+					
+					// force a load 
+					$this->mProperties->Load($this->mId);
+
+					$result = true;
+				}
+			}
+		}
+		return $result;
+	}
+	
+	function ContentPreRender($tpl_source)
+	{
+		// check for additional content blocks
+		$this->GetAdditionalContentBlocks();
+
+		// find the {content block='XXX'} and store into an array
+		$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
+		$matches = array();
+		$result = preg_match_all($pattern, $tpl_source, $matches);
+		if($result)
+		{
+			$count = count($matches);
+			// iterate over each additional content block and replace with the text from the property
+			for($i = 0; $i < $count; $i++)
+			{
+				$pattern = $matches[0][$i];
+				$blockNameId = $this->additionalContentBlocks[$matches[1][$i]];
+				$replace = $this->GetPropertyValue($blockNameId);
+				$tpl_source = str_replace('{' . $pattern . '}', $replace, $tpl_source);
+			}
+		}		
+		return $tpl_source;
 	}
 }
 
