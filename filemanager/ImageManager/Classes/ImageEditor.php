@@ -354,7 +354,7 @@ class ImageEditor
 		$prefix = $tmp.$this->_uid;
 		$len = strlen($prefix);
 
-		while (false !== ($entry = $d->read())) 
+		while (false != ($entry = $d->read())) 
 		{
 			//echo $entry."<br>";
 			if(is_file($path.$entry) && $this->manager->isTmpFile($entry))

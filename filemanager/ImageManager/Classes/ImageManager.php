@@ -141,15 +141,19 @@ class ImageManager
 		if($this->isValidBase() == false)
 			return array($files,$dirs);
 
+
 		$path = Files::fixPath($path);
 		$base = Files::fixPath($this->getBaseDir());
 		$fullpath = Files::makePath($base,$path);
+
 
 
 		$d = @dir($fullpath);
 		
 		while (false !== ($entry = $d->read())) 
 		{
+
+			
 			//not a dot file or directory
 			if(substr($entry,0,1) != '.')
 			{
@@ -178,6 +182,20 @@ class ImageManager
 			}
 		}
 		$d->close();
+
+			//Add a back directory
+			
+			$backpath = $path.'/..';
+			$backpath = realpath($backpath);
+			$realpath = realpath($path);
+			if($path != '/') {
+					$relative = Files::fixPath($backpath);
+					$full = Files::fixPath($backpath);
+					$count = $this->countFiles($full);
+					$entry = '..';
+					$dirs[$relative] = array('fullpath'=>$full,'entry'=>$entry,'count'=>$count);			  
+			}
+
 		ksort($dirs);
 		ksort($files);
 		

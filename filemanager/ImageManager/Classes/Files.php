@@ -121,7 +121,7 @@ class Files
 		if($recursive) 
 		{
 			$d = dir($folder);
-			while (false !== ($entry = $d->read())) 
+			while (false != ($entry = $d->read())) 
 			{
 				if ($entry != '.' && $entry != '..')
 				{

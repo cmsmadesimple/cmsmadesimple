@@ -95,8 +95,11 @@ function drawDirs($list, &$manager)
 		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
 		</td></tr><tr>
 		<td class="edit">
+			<?php if ($dir['entry']!='..') { ?>
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+			<?php }; ?>
 			<?php echo $dir['entry']; ?>
+		
 		</td>
 		</tr></table></td>
 	  <?php 
