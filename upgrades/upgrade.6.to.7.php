@@ -7,6 +7,13 @@ $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."pages", "page_header X");
 
 echo "[done]</p>";
 
+echo "<p>Adding fields to templates table...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."templates", "encoding C(25)");
+
+echo "[done]</p>";
+
 echo "<p>Adding fields to users table...";
 
 $dbdict = NewDataDictionary($db);

@@ -294,6 +294,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		template_name C(25),
 		template_content X,
 		stylesheet X,
+		encoding C(25),
 		active I1,
 		create_date T,
 		modified_date T
