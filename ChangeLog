@@ -7,6 +7,7 @@ Version 0.3 -- Subversion
 * Added password hashing for insecure hosts.  (Fixes #11)
 * Added content types to content creation and editing (Fixes #5)
 * Added the link content type
+* Added proper 404 error for pages that are not found or active (Fixes #18)
 * Changed database abstraction so that it will be able to use other db
 backends in the future (Fixes #19)
 
