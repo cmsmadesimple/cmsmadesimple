@@ -45,6 +45,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	{
 		$result .= "<!-- Not a valid cms_selflink -->";
 	}
+	return $result;
 }
 
 function smarty_cms_help_function_cms_selflink() {
