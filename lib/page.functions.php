@@ -362,7 +362,7 @@ function get_stylesheet($templateid) {
 	{
 		while ($cssline = $cssresult->FetchRow())
 		{
-			$css .= "\n".$cssline['css_text']."\n";
+			$css .= "\n".$cssline[css_text]."\n";
 		}
 	}
 
@@ -422,7 +422,11 @@ function textarea_highlight($use_javasyntax, $text, $name,
        
     }else{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
-            class="'.$class_name.'" id="'.$id.'">'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+            class="'.$class_name.'"';
+	if ($id<>""){
+	$output.='" id="'.$id.'"';
+	};
+	$output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
     }
     
     return $output;

@@ -60,6 +60,7 @@ function HTMLArea(textarea, config) {
 	for (var i = 1; i < scripts.length; ++i) {
 		var script = document.createElement("script");
 		script.src = scripts[i];
+		script.type="text/javascript";
 		head.appendChild(script);
 	}
 })();
@@ -372,6 +373,10 @@ HTMLArea.prototype._createToolbar = function () {
 		table.appendChild(tb_body);
 		tb_row = document.createElement("tr");
 		tb_body.appendChild(tb_row);
+		var tb_cell = document.createElement("td");
+		tb_row.appendChild(tb_cell);
+			
+			
 	}; // END of function: newLine
 	// init first line
 	newLine();
@@ -517,6 +522,7 @@ HTMLArea.prototype._createToolbar = function () {
 				cmd	: btn[3], // the command ID
 				state	: setButtonStatus, // for changing state
 				context : btn[4] || null // enabled in a certain context?
+				
 			};
 			tb_objects[txt] = obj;
 			// handlers to emulate nice flat toolbar buttons
@@ -552,7 +558,11 @@ HTMLArea.prototype._createToolbar = function () {
 			img.src = btn[1];
 			img.style.width = "18px";
 			img.style.height = "18px";
+			img.alt="";
+			
 			el.appendChild(img);
+			
+			
 		} else if (!el) {
 			el = createSelect(txt);
 		}
@@ -560,6 +570,8 @@ HTMLArea.prototype._createToolbar = function () {
 			var tb_cell = document.createElement("td");
 			tb_row.appendChild(tb_cell);
 			tb_cell.appendChild(el);
+			
+			
 		} else {
 			alert("FIXME: Unknown toolbar item: " + txt);
 		}
@@ -741,9 +753,10 @@ HTMLArea.prototype.generate = function () {
 			html += "<head>\n";
 			if (editor.config.baseURL)
 				html += '<base href="' + editor.config.baseURL + '" />';
-			html += "<style>" + editor.config.pageStyle + "</style>\n";
+			html += "<style> html,body { border: 0px; } " +
+				editor.config.pageStyle + "</style>\n";
 			html += "</head>\n";
-			html += "<body style=\"border: 0px; background: white; background-image: none; color: black;\">\n";
+			html += "<body>\n";
 			html += editor._textArea.value;
 			html += "</body>\n";
 			html += "</html>";
@@ -2172,3 +2185,4 @@ HTMLArea.getElementById = function(tag, id) {
 // c-basic-offset:8 //
 // indent-tabs-mode:t //
 // End: //
+

@@ -355,7 +355,7 @@ if ($access) {
 		$query = "SELECT * from ".cms_db_prefix()."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
 		$newresult = $db->Execute($query);
 		if ($newresult && $newresult->RowCount() > 0) {
-			$addt_users .= " selected=\"true\"";
+			$addt_users .= " selected=\"selected\"";
 		}
 		$addt_users .= ">".$row["username"]."</option>";
     }
@@ -364,7 +364,7 @@ if ($access) {
 	foreach (get_page_types() as $key=>$value) {
 		$ctdropdown .= "<option value=\"$key\"";
 		if ($key == $content_type) {
-			$ctdropdown .= " selected=\"true\"";
+			$ctdropdown .= " selected=\"selected\"";
 		}
 		$ctdropdown .= ">".$value."</option>";
 	}
@@ -459,7 +459,7 @@ else {
 
 <div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?php echo lang('advanced') ?></a></div>
 <div id="advanced" class="expand">
-	<a id="advanced">&nbsp;</a>
+	<a id="advanced1">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?>
 		<?php echo textarea_highlight($use_javasyntax, $head_tags, "head_tags"); ?></textarea>
 	</div>
@@ -490,7 +490,15 @@ else {
 					<?php if ($adminaccess) { ?>
 							<?php echo lang('owner')?>:&nbsp;<?php echo $owners?>
 					<?php } ?>
-					<div style="text-align: center; padding-top: 5px;"><?php echo lang('additionaleditors')?>:<br><select name="additional_editors[]" multiple="true" size="3"><?php echo $addt_users?></select></div>
+					<?php
+					if ($addt_users<>""){
+					echo '<div style="text-align: center; padding-top: 5px;">';
+					 echo lang('additionaleditors');
+					 echo'<br><select name="additional_editors[]" multiple="multiple" size="3">';
+					 echo $addt_users;
+					 echo '</select></div>';
+					}
+					?>
 					</div>
 			</td>
 			<td valign="top">
@@ -500,7 +508,7 @@ else {
 			</td>
 		</tr>
 	</table>
-    <div id="advanced" class="expand">&nbsp;</div>
+    <div id="advanced2" class="expand">&nbsp;</div>
 </div>
 
 <br>

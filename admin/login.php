@@ -97,7 +97,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
 	</TR>
 	<TR>
 		<TD ALIGN="right"><?php echo lang('password')?>:</TD>
-		<TD><INPUT TYPE="password" ID="userdata" NAME="password" VALUE="<?php echo (isset($_POST["password"])?$_POST["password"]:"")?>" SIZE="15" ></TD>
+		<TD><INPUT TYPE="password" ID="userdata_p" NAME="password" VALUE="<?php echo (isset($_POST["password"])?$_POST["password"]:"")?>" SIZE="15" ></TD>
 	</TR>
 	<TR>
 		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
@@ -141,12 +141,12 @@ header("Content-Type: text/html; charset=" . get_encoding());
 </TABLE>
 </FORM>
 
-<SCRIPT LANGUAGE="javascript">
+<script type="text/javascript">
 <!--
 	document.login.username.focus();
 //-->
-</SCRIPT>
-
+</script>
+</div>
 </BODY>
 </HTML>
 <?php

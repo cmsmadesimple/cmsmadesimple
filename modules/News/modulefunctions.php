@@ -79,7 +79,8 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 {
 	if (isset($params["makerssbutton"]))
 	{
-		$params = array_merge($params, array("showtemplate"=>"false","type"=>"rss"));
+	
+		$params = array_merge($params, array("showtemplate"=>"false","type"=>"rss",));
 		echo cms_mapi_create_user_link('News', $id, $return_id, $params, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />");
 		return;
 	}
@@ -134,7 +135,7 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 			}
 			else
 			{
-				echo "<div class=\"cms-module-news\">";
+				echo "<object><div class=\"cms-module-news\">";
 				echo "<div class=\"cms-module-news-header\">";
 				if (isset($params['swaptitledate']) && ($params['swaptitledate'] == 'true' || $params['swaptitledate'] == '1'))
 				{
@@ -148,7 +149,7 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 				}
 				echo "</div>";
 				echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
-				echo "</div>";
+				echo "</div></object>";
 			}
 		}
 
@@ -186,7 +187,7 @@ function news_module_executeadmin($cms,$id) {
 			$rowclass="row1";
 			while ($row = $dbresult->FetchRow()) {
 				echo "<tr class=\"$rowclass\">\n";
-				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"edit","news_id"=>$row["news_id"]),$row['news_title'])."</td>\n";
+				echo "<td>".$row["news_title"]."</td>\n";
 				echo "<td>".$row["news_date"]."</td>\n";
 				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"edit","news_id"=>$row["news_id"]),"Edit")."</td>\n";
 				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"delete","news_id"=>$row["news_id"]),"Delete", "Are you sure you want to delete?")."</td>\n";
