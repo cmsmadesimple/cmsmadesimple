@@ -1014,6 +1014,26 @@ function cms_mapi_remove_permission($cms, $permission_name) {
 }
 
 /**
+ * Returns a module preference if it exists.
+ *
+ * @since 0.8
+ */
+function cms_mapi_get_preference($module, $preference_name)
+{
+	return get_site_preference($module . "_mapi_pref_" . $preference_name);
+}
+
+/**
+ * Sets a module preference.
+ *
+ * @since 0.8
+ */
+function cms_mapi_set_preference($module, $preference_name, $value)
+{
+	return set_site_preference($module . "_mapi_pref_" . $preference_name, $value);
+}
+
+/**
  * Put an event into the audit (admin) log.  This should be
  * done on most admin events for consistency.
  *
