@@ -66,11 +66,13 @@ $config = new CMSConfig();
 #Setup db connection
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
-$dbnew = &ADONewConnection('mysql');
-$dbnew->PConnect($config->db_hostname,$config->db_username,$config->db_password,$config->db_name);
-if (!$dbnew) die("Connection failed");
-$dbnew->SetFetchMode(ADODB_FETCH_ASSOC);
-$config->db = &$dbnew;
+if (!$DONT_LOAD_DB) {
+	$dbnew = &ADONewConnection('mysql');
+	$dbnew->PConnect($config->db_hostname,$config->db_username,$config->db_password,$config->db_name);
+	if (!$dbnew) die("Connection failed");
+	$dbnew->SetFetchMode(ADODB_FETCH_ASSOC);
+	$config->db = &$dbnew;
+}
 
 require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/misc.functions.php");

@@ -40,6 +40,7 @@ if ($_POST["page"]) {
     $currentpage = 1;
 } ## if
 
+$DONT_LOAD_DB = true;
 if ($currentpage > 1) { require_once("include.php"); }
 
 ?>
