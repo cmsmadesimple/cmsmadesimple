@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class Link extends ContentBase
+class link extends ContentBase
 {
 	function SetProperties()
 	{
@@ -94,7 +94,7 @@ class Link extends ContentBase
 			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
 			$result = false;
 		}
-	
+
 		if ($this->GetPropertyValue('url') == '')
 		{
 			array_push($errors, lang('nofieldgiven',array(lang('url'))));

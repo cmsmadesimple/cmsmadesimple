@@ -17,7 +17,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-class Content extends ContentBase
+class content extends ContentBase
 {
 	function SetProperties()
 	{
@@ -59,7 +59,11 @@ class Content extends ContentBase
 			}
 			if (isset($params['alias']))
 			{
-				$this->mAlias = $params['alias'];
+				$this->SetAlias($params['alias']);
+			}
+			else
+			{
+				$this->SetAlias('');
 			}
 			if (isset($params['parent_id']))
 			{
@@ -94,12 +98,6 @@ class Content extends ContentBase
 			{
 				$this->mCachable = false;
 			}
-		} 
-		if ($config["auto_alias_content"] && $this->mAlias == "")
-		{
-			$this->mAlias = $this->mMenuText;
-			$this->mAlias = trim($this->mAlias);
-			$this->mAlias = preg_replace("/\W+/", "-", $this->mAlias);
 		}
 	}
 
@@ -146,13 +144,20 @@ class Content extends ContentBase
 			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
 			$result = false;
 		}
+		
+		$error = @ContentManager::CheckAliasError($this->mAlias);
+		if ($error !== FALSE)
+		{
+			array_push($errors, $error);
+			$result = false;
+		}
 
 		if ($this->mTemplateId == '-1')
 		{
 			array_push($errors, lang('nofieldgiven',array(lang('template'))));
 			$result = false;
 		}
-		
+
 		if ($this->GetPropertyValue('content_en') == '')
 		{
 			array_push($errors, lang('nofieldgiven',array(lang('content'))));
@@ -171,7 +176,7 @@ class Content extends ContentBase
 		{
 			$url = $config["root_url"]."/".$this->mId.".shtml";
 		}
-		else 
+		else
 		{
 			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
 		}

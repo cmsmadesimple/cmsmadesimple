@@ -309,6 +309,19 @@ class ContentBase
 	{
 		return $this->mCachable;
 	}
+	
+	function SetAlias($alias)
+	{
+		global $gCms;
+
+		if ($gCms->config['auto_alias_content'] && $alias == '')
+		{
+			$alias = trim($this->mMenuText);
+			$alias = preg_replace("/\W+/", "-", $alias);
+		}
+
+		$this->mAlias = $alias;
+	}
 
 	/**
 	 * Returns the menu text for this content
@@ -353,7 +366,7 @@ class ContentBase
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
-		
+
 		$result = false;
 
 		if (-1 < $id)
@@ -443,7 +456,7 @@ class ContentBase
 	function LoadFromData($data, $loadProperties = false)
 	{
 		global $config, $debug_errors;
-		
+
 		$result = true;
 
 		$this->mId				= $data["content_id"];
@@ -451,7 +464,7 @@ class ContentBase
 		$this->mAlias			= $data["content_alias"];
 		$this->mType			= strtolower($data["type"]);
 		$this->mOwner			= $data["owner_id"];
-		#$this->mProperties		= new ContentProperties(); 
+		#$this->mProperties		= new ContentProperties();
 		$this->mParentId		= $data["parent_id"];
 		$this->mOldParentId		= $data["parent_id"];
 		$this->mTemplateId		= $data["template_id"];
@@ -521,7 +534,7 @@ class ContentBase
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
-		
+
 		$result = false;
 
 		#Figure out the item_order (if necessary)
@@ -609,7 +622,7 @@ class ContentBase
 			}
 		}
 	}
-	
+
 	/**
 	 * Insert the content in the db
 	 */
@@ -620,7 +633,7 @@ class ContentBase
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
-		
+
 		$result = false;
 
 		#Figure out the item_order
@@ -675,7 +688,7 @@ class ContentBase
 				$debug_errors .= "<p>Error inserting content</p>\n";
 			}
 		}
-		
+
 		if (NULL != $this->mProperties)
 		{
 			# :TODO: There might be some error checking there
@@ -723,7 +736,7 @@ class ContentBase
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
-		
+
 		$result = false;
 
 		if (-1 > $this->mId)
@@ -825,7 +838,7 @@ class ContentBase
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
-		
+
 		$result = false;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ".$this->mId;
@@ -845,7 +858,7 @@ class ContentBase
 		{
 			global $gCms;
 			$db = &$gCms->db;
-			
+
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ".$this->mId;
@@ -886,8 +899,8 @@ class ContentProperties
 	 */
 	function SetInitialValues()
 	{
-		$this->mPropertyTypes = array(); 
-		$this->mPropertyValues = array(); 
+		$this->mPropertyTypes = array();
+		$this->mPropertyValues = array();
 	}
 
 	function Add($type, $name, $defaultvalue='')
@@ -1265,6 +1278,35 @@ class ContentManager
 		}
 
 		return $result;
+	}
+	
+	function CheckAliasError($alias)
+	{
+		global $gCms;
+		$db = &$gCms->db;
+
+		$error = FALSE;
+
+		if (preg_match('/^\d+$/', $alias))
+		{
+			$error = lang('aliasnotaninteger');
+		}
+		else if (!preg_match('/^[\-\_\w]+$/', $alias))
+		{
+			$error = lang('aliasmustbelettersandnumbers');
+		}
+		else
+		{
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			$dbresult = $db->Execute($query, array($alias));
+	
+			if ($dbresult && $dbresult->RowCount() > 0)
+			{
+				$error = lang('aliasalreadyused');
+			}
+		}
+
+		return $error;
 	}
 }
 

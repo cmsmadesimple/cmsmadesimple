@@ -118,7 +118,11 @@ function news_module_content_fill_params(&$module, &$params)
 		}
 		if (isset($params['alias']))
 		{
-			$module->mAlias = $params['alias'];
+			$module->SetAlias($params['alias']);
+		}
+		else
+		{
+			$module->SetAlias('');
 		}
 		if (isset($params['parent_id']))
 		{
@@ -144,12 +148,6 @@ function news_module_content_fill_params(&$module, &$params)
 		else
 		{
 			$module->mShowInMenu = false;
-		}
-		if ($config["auto_alias_content"] && $module->mAlias == "")
-		{
-			$module->mAlias = $module->mMenuText;
-			$module->mAlias = trim($module->mAlias);
-			$module->mAlias = preg_replace("/\W+/", "-", $module->mAlias);
 		}
 	}
 }
