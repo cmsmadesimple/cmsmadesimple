@@ -153,9 +153,9 @@ function comments_module_help($cms)
 	?>
 
 	<h3>What does this do?</h3>
-	<p>The comments module is a plugin module.  It's used to add comments to individual pages which can be read by users who visit the page later.  The practical reason for this module is for documentation pages, so that users can add additional comments and information to the page.</p>
+	<p>The comments module is a tag module.  It's used to add comments to individual pages which can be read by users who visit the page later.  The practical reason for this module is for documentation pages, so that users can add additional comments and information to the page.</p>
 	<h3>How do I use it?</h3>
-	<p>Comments is just a plugin module.  It's inserted into your page or template by using the cms_module plugin.  Example syntax would be: <code>{cms_module module="comments"}</code></p>
+	<p>Comments is just a tag module.  It's inserted into your page or template by using the cms_module tag.  Example syntax would be: <code>{cms_module module="comments"}</code></p>
 	<h3>What parameters are there?</h3>
 	<p>There are none.</p>
 

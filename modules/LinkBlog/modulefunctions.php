@@ -334,7 +334,7 @@ function linkblog_module_help($cms) {
 	<h3>Anything else I should know?</h3>
 	<p>You should know that if you uninstall this module it will delete all your links and comments.  If you do not wish to use it for a temporary time period, just deactivate it.</p>
 	<h3>How do I use it?</h3>
-	<p>As this is just a plugin module, it's inserted into your page or template by using the cms_module plugin.  Example syntax would be: <br /><code>{cms_module module="LinkBlog"}</code></p>
+	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="LinkBlog"}</code></p>
 	<h3>What parameters are there?</h3>
 	<p>So far there are no parameters available, but there will need to be paging added for when the number of links or comments becomes too large for one page.</p>
 	<h3>How do I style the LinkBlog pages?</h3>

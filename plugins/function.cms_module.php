@@ -44,7 +44,7 @@ function smarty_cms_function_cms_module($params, &$smarty) {
 				@ob_end_clean();
 				echo $modoutput;
 			} else {
-				echo "<!-- Not a plugin module -->\n";
+				echo "<!-- Not a tag module -->\n";
 			}
 		}
 	}

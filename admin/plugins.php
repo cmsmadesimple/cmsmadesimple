@@ -48,7 +48,7 @@ if ($access) {
 		#now insert a record
 		$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($gCms->modules[$module]['Version']).",'Installed',1)";
 		$db->Execute($query);
-		redirect("modules.php");
+		redirect("plugins.php");
 	}
 
 	if ($action == "uninstall") {
@@ -60,19 +60,19 @@ if ($access) {
 		#now delete the record
 		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
-		redirect("modules.php");
+		redirect("plugins.php");
 	}
 
 	if ($action == "settrue") {
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = 1 WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
-		redirect("modules.php");
+		redirect("plugins.php");
 	}
 
 	if ($action == "setfalse") {
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = 0 WHERE module_name = ".$db->qstr($module);
 		$db->Execute($query);
-		redirect("modules.php");
+		redirect("plugins.php");
 	}
 }
 
@@ -89,7 +89,7 @@ if ($action == "showmoduleabout")
 		echo "<h2>About the $module module</h2>";
 		echo $content;
 		?>
-		<form action="modules.php" method="get">
+		<form action="plugins.php" method="get">
 		<p><input type="submit" value="Back to Module List" /></p>
 		</form>
 		<?
@@ -106,11 +106,11 @@ else if ($action == "showpluginhelp")
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
 		$gettext->setVar("plugin", $plugin);
-		echo "<h2>".$gettext->gettext('Help for ${plugin} plugin')."</h2>";
+		echo "<h2>".$gettext->gettext('Help for ${plugin} tag')."</h2>";
 		$gettext->reset();
 		echo $content;
 		?>
-		<form action="modules.php" method="get">
+		<form action="plugins.php" method="get">
 		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
 		</form>
 		<?
@@ -133,11 +133,11 @@ else if ($action == "showpluginabout")
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
 		$gettext->setVar("plugin", $plugin);
-		echo "<h2>".$gettext->gettext('About the ${plugin} plugin')."</h2>";
+		echo "<h2>".$gettext->gettext('About the ${plugin} tag')."</h2>";
 		$gettext->reset();
 		echo $content;
 		?>
-		<form action="modules.php" method="get">
+		<form action="plugins.php" method="get">
 		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
 		</form>
 		<?
@@ -146,7 +146,7 @@ else if ($action == "showpluginabout")
 	else
 	{
 		?>
-		<p>No about text available for this plugin.</p>
+		<p>No about text available for this tag.</p>
 		<?
 	}
 }
@@ -194,16 +194,16 @@ else
 				echo "<td>&nbsp</td>";
 				echo "<td>".$gettext->gettext("Not Installed")."</td>";
 				echo "<td>&nbsp;</td>";
-				echo "<td><a href=\"modules.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
 			} else { #Must be installed
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".$dbm[$key]['Status']."</td>";
-				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='modules.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
-				echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
+				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='plugins.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
+				echo "<td><a href=\"plugins.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
 			}
 			if (isset($gCms->modules[$key]['help_function']))
 			{
-				echo "<td><a href=\"modules.php?action=showmoduleabout&module=".$key."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showmoduleabout&module=".$key."\">".$gettext->gettext("About")."</a></td>";
 			}
 			else
 			{
@@ -238,7 +238,7 @@ else
 			echo "<td>$oneplugin</td>\n";
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"modules.php?action=showpluginhelp&plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginhelp&plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
 			}
 			else
 			{
@@ -246,7 +246,7 @@ else
 			}
 			if (function_exists('smarty_cms_about_function_'.$oneplugin))
 			{
-				echo "<td><a href=\"modules.php?action=showpluginabout&plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
+				echo "<td><a href=\"plugins.php?action=showpluginabout&plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
 			}
 			else
 			{
