@@ -59,11 +59,6 @@ class RSS extends CMSModule
 		return 'wishy@cmsmadesimple.org';
 	}
 
-	function GetDependencies()
-	{
-		return array('PHPLayers'=>'1.1');
-	}
-
 	function GetChangeLog()
 	{
 		return "

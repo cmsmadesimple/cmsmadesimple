@@ -83,11 +83,16 @@ if (isset($_POST["serialized_content"]))
 		$tmpobj->mName = $contentobj->mName;
 		$tmpobj->mMenuText = $contentobj->mMenuText;
 		$tmpobj->mTemplateId = $contentobj->mTemplateId;
+		$tmpobj->mParentId = $contentobj->mParentId;
+		$tmpobj->mOldParentId = $contentobj->mOldParentId;
 		$tmpobj->mAlias = $contentobj->mAlias;
 		$tmpobj->mOwner = $contentobj->mOwner;
 		$tmpobj->mActive = $contentobj->mActive;
+		$tmpobj->mItemOrder = $contentobj->mItemOrder;
+		$tmpobj->mOldItemOrder = $contentobj->mOldItemOrder;
 		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
 		$tmpobj->mCachable = $contentobj->mCachable;
+		$tmpobj->mHierarchy = $contentobj->mHierarchy;
 		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
 		$contentobj = $tmpobj;
 	}
