@@ -12,6 +12,7 @@ much, much easier.
 * Fixed bugs with auto alias of pages
 * Fixed contact form so that it's xhtml compliant (#000096)
 * Fixed RSS feeds to use proper content type
+* Fixed content type loading so it only loads php files
 * Modified login procedure for a little more security
 * Modified install procedure to admin username and password
 * Admin dir can now be changed with admin_dir paramater in config.php
