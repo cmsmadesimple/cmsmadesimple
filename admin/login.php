@@ -43,7 +43,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			setcookie('cms_language', $default_cms_lang);
 		}
 		audit(-1, '', 'User Login');
-		echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in, one moment please...</body></html>');
+		echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
 		return;
 		#redirect("index.php");
 	}

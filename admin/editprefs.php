@@ -114,7 +114,7 @@ if ($error != "") {
 		<TD><?php echo lang('language')?>:</TD>
 		<TD>
 			<SELECT CLASS="smallselect" NAME="default_cms_lang" onChange="document.prefsform.submit();" STYLE="vertical-align: middle;">
-			<option value="">No Default Selected</option>
+			<option value=""><?php echo lang('nodefault') ?></option>
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {

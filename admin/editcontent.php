@@ -443,15 +443,15 @@ else {
 					</table>
 				</div>
 			</td>
-			<?php //if ($adminaccess) { ?>
 			<td valign="top">
 					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?php echo lang('permission')?></div>
 					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-					<!--<?php echo lang('owner')?>:&nbsp;<?php echo $owners?><br>-->
+					<?php if ($adminaccess) { ?>
+							<?php echo lang('owner')?>:&nbsp;<?php echo $owners?>
+					<?php } ?>
 					<div style="text-align: center; padding-top: 5px;"><?php echo lang('additionaleditors')?>:<br><select name="additional_editors[]" multiple="true" size="3"><?php echo $addt_users?></select></div>
 					</div>
 			</td>
-			<?php // } ?>
 		</tr>
 	</table>
     <div id="advanced" class="expand">&nbsp;</div>

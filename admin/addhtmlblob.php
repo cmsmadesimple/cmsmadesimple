@@ -1,0 +1,130 @@
+<?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+
+$CMS_ADMIN_PAGE=1;
+
+require_once("../include.php");
+require_once("../lib/classes/class.htmlblob.inc.php");
+
+check_login();
+
+$error = "";
+
+$htmlblob = "";
+if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
+
+$content = "";
+if (isset($_POST['content'])) $content = $_POST['content'];
+
+if (isset($_POST["cancel"])) {
+	redirect("listhtmlblobs.php");
+	return;
+}
+
+$userid = get_userid();
+$access = check_permission($userid, 'Add Html Blobs');
+
+$htmlarea_flag = false;
+$use_javasyntax = false;
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	$htmlarea_flag = true;
+    $use_javasyntax = false;
+}else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+    $use_javasyntax = true;
+}
+
+if ($access) {
+	if (isset($_POST["addhtmlblob"])) {
+
+		$validinfo = true;
+		if ($htmlblob == "")
+		{
+			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
+			$validinfo = false;
+		}
+		else if (HtmlBlobOperations::CheckExistingHtmlBlobName($htmlblob))
+		{
+			$error .= "<li>".lang('blobexists')."</li>";
+			$validinfo = false;
+		}
+
+		if ($validinfo) {
+			$blobobj = new HtmlBlob();
+			$blobobj->name = $htmlblob;
+			$blobobj->content = $content;
+			$blobobj->owner = $userid;
+			$result = $blobobj->save();
+
+			if ($result) {
+				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
+				redirect("listhtmlblobs.php");
+				return;
+			}
+			else {
+				$error .= "<li>".lang('errorinsertingblob')."</li>";
+			}
+		}
+	}
+}
+
+include_once("header.php");
+
+if (!$access) {
+	print "<h3>".lang('noaccessto', array(lang('addblob')))."</h3>";
+}
+else {
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
+?>
+
+<form method="post" action="addhtmlblob.php">
+
+<div class="adminformSmall">
+
+<h3><?php echo lang('addblob')?></h3>
+
+<table border="0">
+
+	<tr>
+		<td>*<?php echo lang('name')?>:</td>
+		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard"></td>
+	</tr>
+	<tr>
+		<td>*<?php echo lang('content')?>:</td>
+		<td><?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content") ?></td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td><input type="hidden" name="addhtmlblob" value="true">
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+	</tr>
+
+</table>
+
+</div>
+
+</form>
+
+<?php
+}
+include_once("footer.php");
+
+# vim:ts=4 sw=4 noet
+?>

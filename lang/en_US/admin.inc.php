@@ -201,4 +201,7 @@ $lang['admin']['welcomemsg'] = 'Welcome %s';
 $lang['admin']['directoryunder'] = 'directory under current level';
 $lang['admin']['directoryabove'] = 'directory above current level';
 $lang['admin']['usejavasyntax'] = 'Use syntax highlighting in text boxes (requires java)'; //needs translation
+$lang['admin']['nodefault'] = 'No Default Selected'; //needs translation
+$lang['admin']['blobexists'] = 'Html Blob name already exists'; //needs translation
+$lang['admin']['errorinsertingblob'] = 'There was an error inserting the Html Blob'; //needs translation
 ?>

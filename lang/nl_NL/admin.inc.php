@@ -201,4 +201,7 @@ $lang['admin']['firstname'] = 'First Name'; //needs translation
 $lang['admin']['upgrade'] = 'Upgrade'; //needs translation
 $lang['admin']['email'] = 'Email Address'; //needs translation
 $lang['admin']['needupgrade'] = 'Needs Upgrade'; //needs translation
+$lang['admin']['nodefault'] = 'No Default Selected'; //needs translation
+$lang['admin']['blobexists'] = 'Html Blob name already exists'; //needs translation
+$lang['admin']['errorinsertingblob'] = 'There was an error inserting the Html Blob'; //needs translation
 ?>

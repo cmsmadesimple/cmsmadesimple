@@ -201,4 +201,7 @@ $lang['admin']['errorinsertingtemplate'] = 'Virhe mallipohjaa lisättäessä';
 $lang['admin']['currentcss'] = 'Viimeisin tyylitiedosto'; 
 $lang['admin']['directoryabove'] = 'directory above current level'; //needs translation
 $lang['admin']['directoryunder'] = 'directory under current level'; //needs translation
+$lang['admin']['nodefault'] = 'No Default Selected'; //needs translation
+$lang['admin']['blobexists'] = 'Html Blob name already exists'; //needs translation
+$lang['admin']['errorinsertingblob'] = 'There was an error inserting the Html Blob'; //needs translation
 ?>
