@@ -1,6 +1,6 @@
 <?php
 
-include_once("include.php");
+include_once(dirname(__FILE__)."/include.php");
 
 function execute_dump($result) {
 	global $dbnew;

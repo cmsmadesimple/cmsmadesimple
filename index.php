@@ -44,7 +44,7 @@ if (file_exists("config.php") && file_exists("install.php")) {
     exit;
 } ## if
 
-require_once("include.php"); #Makes gCms object
+require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
 
 $smarty = new Smarty_CMS($config);
 

@@ -26,7 +26,7 @@ $starttime = microtime();
 
 @ob_start();
 
-require_once("include.php");
+require_once(dirname(__FILE__)."/include.php");
 
 $smarty = new Smarty_ModuleInterface($config);
 

@@ -30,17 +30,20 @@ function load_modules() {
 	}
 
 	#Figger out what modules are active and/or installed
-	$query = "SELECT * FROM ".cms_db_prefix()."modules";
-	$result = $db->Execute($query);
-	while ($row = $result->FetchRow())
+	if (isset($db))
 	{
-		if (isset($row['module_name']))
+		$query = "SELECT * FROM ".cms_db_prefix()."modules";
+		$result = $db->Execute($query);
+		while ($row = $result->FetchRow())
 		{
-			$modulename = $row['module_name'];
-			if (isset($modulename) && isset($cmsmodules[$modulename]))
+			if (isset($row['module_name']))
 			{
-				$cmsmodules[$modulename]['Installed'] = true;
-				$cmsmodules[$modulename]['Active'] = $row['active'];
+				$modulename = $row['module_name'];
+				if (isset($modulename) && isset($cmsmodules[$modulename]))
+				{
+					$cmsmodules[$modulename]['Installed'] = true;
+					$cmsmodules[$modulename]['Active'] = $row['active'];
+				}
 			}
 		}
 	}

@@ -41,9 +41,9 @@ require_once(dirname(__FILE__)."/version.php");
 require_once(dirname(__FILE__)."/lib/config.functions.php");
 
 #make a local reference
-if (cms_config_check_old_config()) {
-	cms_config_upgrade();
-}
+#if (cms_config_check_old_config()) {
+#	cms_config_upgrade();
+#}
 $config = cms_config_load(true);
 
 #attach to global object

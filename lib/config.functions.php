@@ -78,7 +78,7 @@ function cms_config_load($loadLocal = true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php"))
 		{
-			include_once(dirname(dirname(__FILE__))."/config.php");
+			include(dirname(dirname(__FILE__))."/config.php");
 		}
 	}
 
@@ -108,15 +108,15 @@ function cms_config_save($config)
 			{
 				if (is_string($value))
 				{
-					fwrite($handle, "$key = \"$value\";\n");
+					fwrite($handle, "\$config[\"$key\"] = \"$value\";\n");
 				}
 				else if (is_bool($value))
 				{
-					fwrite($handle, "$key = ".($value?"true":"false").";\n");
+					fwrite($handle, "\$config[\"$key\"] = ".($value?"true":"false").";\n");
 				}
 				else
 				{
-					fwrite($handle, "$key = ".strval($value).";\n");
+					fwrite($handle, "\$config[\"$key\"] = ".strval($value).";\n");
 				}
 			}
 			fwrite($handle, "\n?>");
