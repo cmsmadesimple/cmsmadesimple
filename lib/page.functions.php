@@ -530,7 +530,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 	$userid = get_userid();
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 
-	if ($enablewysiwyg)
+	if ($enablewysiwyg == true)
 	{
 		foreach($gCms->modules as $key=>$value)
 		{
