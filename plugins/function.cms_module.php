@@ -45,7 +45,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					@ob_start();
 					#call_user_func_array($cmsmodules[$modulename]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
 					$id = ++$gCms->variables["modulenum"];
-					$params = array_splice($params, @ModuleOperations::GetModuleParameters($id));
+					$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
 					$result = $cmsmodules[$modulename]['object']->DoAction('default', $id, $params, $gCms->variables['page']);
 					if ($result !== FALSE)
 					{
