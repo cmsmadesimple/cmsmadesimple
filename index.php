@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-if (!file_exists("config.php")) {
+if (!file_exists("config.php") || filesize("config.php") == 0) {
     require_once("lib/misc.functions.php");
     redirect("install.php");
     exit;

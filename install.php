@@ -17,7 +17,7 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 $config = "config.php";
-if (!file_exists($config)) {
+if (!file_exists($config) || filesize($config) == 0) {
     $file = @fopen($config, "w");
     if ($file != 0) {
         $cwd = getcwd();
