@@ -1,4 +1,4 @@
-Version 0.2.1 -- Subversion
+Version 0.2.1 -- Tue Jul 13 2004
 -----------------
 
 * Added GetText.php to work with systems even without gettext support in php
