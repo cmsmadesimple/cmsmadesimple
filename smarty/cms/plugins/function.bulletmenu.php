@@ -10,7 +10,7 @@ function smarty_function_bulletmenu($params, &$smarty) {
 
 	$db = new DB($smarty->configCMS);
 
-        $query = "SELECT p.*, s.section_name FROM pages p INNER JOIN sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 ORDER BY s.section_id, p.menu_text";
+        $query = "SELECT p.*, s.section_name FROM ".$smarty->configCMS->db_prefix."pages p INNER JOIN ".$smarty->configCMS->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 ORDER BY s.section_id, p.menu_text";
         $result = $db->query($query);
 
         while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
