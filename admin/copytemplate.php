@@ -71,6 +71,25 @@ if ($access)
 
 			if ($result)
 			{
+				//Copy attached CSS templates as well...
+				$db = &$gCms->db;
+
+				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = '$template_id' AND assoc_css_id = css_id";
+				debug_buffer($query);
+				$result2 = $db->Execute($query);
+				debug_buffer($result2);
+
+				# if any css was found.
+				if ($result2)
+				{
+					while ($row = $result2->FetchRow())
+					{
+						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."','".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+						debug_buffer($query);
+						$db->Execute($query);
+					}
+				}
+
 				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
 				redirect("listtemplates.php");
 				return;
@@ -112,9 +131,9 @@ else
 		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?php echo $template_id?>"><input type="hidden" name="copytemplate" value="true">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>
