@@ -42,4 +42,14 @@ function smarty_cms_help_function_modified_date() {
         <?
 }
 
+function smarty_cms_about_function_modified_date() {
+	?>
+	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+	<?
+}
 ?>

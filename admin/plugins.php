@@ -32,7 +32,7 @@ $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 
-if ($action == "showabout")
+if ($action == "showhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))
 	{
@@ -41,14 +41,49 @@ if ($action == "showabout")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		echo "<h2>About the $plugin plugin</h2>";
+		$gettext->setVar("plugin", $plugin);
+		echo "<h2>".$gettext->gettext('Help for ${plugin} plugin')."</h2>";
+		$gettext->reset();
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="Back to Plugin List" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
 		</form>
 		<?
 		echo "</div>";
+	}
+	else
+	{
+		?>
+		<p>No help text available for this plugin.</p>
+		<?
+	}
+}
+else if ($action == "showabout")
+{
+	if (function_exists('smarty_cms_about_function_'.$plugin))
+	{
+		@ob_start();
+		call_user_func_array('smarty_cms_about_function_'.$plugin, array());
+		$content = @ob_get_contents();
+		@ob_end_clean();
+		echo "<div class=\"moduleabout\">";
+		$gettext->setVar("plugin", $plugin);
+		echo "<h2>".$gettext->gettext('About the ${plugin} plugin')."</h2>";
+		$gettext->reset();
+		echo $content;
+		?>
+		<form action="plugins.php" method="get">
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
+		</form>
+		<?
+		echo "</div>";
+	}
+	else
+	{
+		?>
+		<p>No about text available for this plugin.</p>
+		<?
 	}
 }
 else
@@ -61,7 +96,8 @@ else
 	<table cellspacing="0" class="admintable">
 		<tr>
 			<td><?=$gettext->gettext("Module Name")?></td>
-			<td width="10%"><?=$gettext->gettext("About")?></td>
+			<td width="8%"><?=$gettext->gettext("Help")?></td>
+			<td width="8%"><?=$gettext->gettext("About")?></td>
 		</tr>
 
 <?
@@ -73,6 +109,14 @@ else
 			echo "<tr class=\"$curclass\">\n";
 			echo "<td>$oneplugin</td>\n";
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
+			{
+				echo "<td><a href=\"plugins.php?action=showhelp&plugin=".$oneplugin."\">".$gettext->gettext("Help")."</a></td>";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
+			}
+			if (function_exists('smarty_cms_about_function_'.$oneplugin))
 			{
 				echo "<td><a href=\"plugins.php?action=showabout&plugin=".$oneplugin."\">".$gettext->gettext("About")."</a></td>";
 			}

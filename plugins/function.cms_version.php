@@ -21,4 +21,15 @@ function smarty_cms_function_cms_version() {
     echo $CMS_VERSION;
 } ## smarty_function_cms_version
 
+function smarty_cms_about_function_cms_version() {
+	?>
+	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+	<?
+}
+
 ?>

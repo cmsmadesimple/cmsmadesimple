@@ -168,6 +168,12 @@ div.content {
 	padding-left: 0;
 }
 
+.moduleabout h4 {
+	font-size: 14px;
+	font-color: #333;
+	padding-left: 0;
+}
+
 /* end content style */
 
 /* start table style */
