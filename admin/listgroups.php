@@ -37,7 +37,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	$perm = check_permission($userid, 'Modify Permissions');
-	$assign = check_permission($userid, 'Modify Groups Assignments');
+	$assign = check_permission($userid, 'Modify Group Assignments');
 	$edit = check_permission($userid, 'Modify Groups');
 	$remove = check_permission($userid, 'Remove Groups');
 
