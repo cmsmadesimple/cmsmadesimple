@@ -27,11 +27,11 @@
  * @author http://www.edoceo.com/
  * @since 0.1
  */
-function redirect($to)
+function redirect($to, $noappend=false)
 {
 	$schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
 	$host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
-	if (ini_get("session.use_trans_sid") != "0")
+	if (ini_get("session.use_trans_sid") != "0" && $noappend == false)
 	{
 		$to = $to."?".session_name()."=".session_id();
 	}

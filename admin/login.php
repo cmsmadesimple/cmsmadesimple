@@ -25,7 +25,7 @@ $error = "";
 
 if (isset($_POST["logincancel"]))
 {
-	redirect($config["root_url"].'/index.php');
+	redirect($config["root_url"].'/index.php', true);
 }
 
 if (isset($_POST["username"]) && isset($_POST["password"])) {
