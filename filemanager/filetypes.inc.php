@@ -25,53 +25,53 @@
 	    'html'  =>Array(
 		    "img"=>"fhtml","desc"=>"Web page",
 			"link"=>Array(
-				"view"=>"{url_dir_file}",
-				"edit"=>"../filehandlers/htmledit?file={file}"				
+				"view"=>'{url_dir_file}',
+				"edit"=>'../filehandlers/htmledit?file={file}'				
 			),
 			"alias"=>Array("htm","shtm","shtml","hta","xhtml")			
 		), 
 	    "unknown"  =>Array("img"=>"ffile","desc"=>"Unknown file format",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			)
 		), 
 	    "zip"  =>Array("img"=>"fzip","desc"=>"Zip archive",
 			"link"=>Array(
-				"view"=>"/{file}"
+				"view"=>'/{file}'
 			),
 			"alias"=>Array("tar","gz","rar","arc")	
 		), 
 	    "tar.gz"  =>Array("img"=>"fzip","desc"=>"Zipped tar archive",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			)
 		), 
 	    "exe"  =>Array("img"=>"fexe","desc"=>"Executable",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			),
 			"alias"=>Array("com","pif","so","dll")	
 		), 
 	    "doc"  =>Array("img"=>"fdoc","desc"=>"Document",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			),
 			"alias"=>Array("rtf","dot")	
 		),
 		"txt"  =>Array("img"=>"ftxt","desc"=>"Text document",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			)
 		),
 		"jpg"  =>Array("img"=>"fpaint","desc"=>"Image file",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			),
 			"alias"=>Array("gif","png","jpeg")	
 		),		 
 	    "psd"  =>Array("img"=>"fpsd","desc"=>"Photoshop",
 			"link"=>Array(
-				"view"=>"{url_dir_file}"
+				"view"=>'{url_dir_file}'
 			),
 			"alias"=>Array("pdd")	
 		)
