@@ -4,6 +4,7 @@ require_once("../include.php");
 
 check_login($config);
 
+include_once("header.php");
 ?>
 
 <h3>Admin Page</h3>
@@ -16,3 +17,7 @@ check_login($config);
 <li><a href="listgroups.php">Group Management</a></li>
 <li><a href="logout.php">Logout</a></li>
 </ul>
+
+<?php
+include_once("footer.php");
+?>

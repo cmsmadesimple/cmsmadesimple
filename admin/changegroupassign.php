@@ -33,6 +33,8 @@ if (isset($_POST["changeassign"])) {
 
 }
 
+include_once("header.php");
+
 ?>
 <h3>Users assigned to group: Name</h3>
 
@@ -85,3 +87,9 @@ if (isset($_POST["changeassign"])) {
 <p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeassign" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></p>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>

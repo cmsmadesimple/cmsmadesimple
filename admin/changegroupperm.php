@@ -33,6 +33,8 @@ if (isset($_POST["changeperm"])) {
 
 }
 
+include_once("header.php");
+
 ?>
 <h3>Permissions for group: Name</h3>
 
@@ -86,3 +88,9 @@ if (isset($_POST["changeperm"])) {
 <p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></p>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>

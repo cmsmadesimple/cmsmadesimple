@@ -33,6 +33,8 @@ if (isset($_POST["addsection"])) {
 
 $db->close();
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="addsection.php">
@@ -61,3 +63,9 @@ $db->close();
 </div>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>

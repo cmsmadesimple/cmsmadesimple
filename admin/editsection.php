@@ -53,6 +53,8 @@ else if ($section_id != -1) {
 
 $db->close();
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="editsection.php">
@@ -81,3 +83,9 @@ $db->close();
 </div>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>

@@ -27,6 +27,8 @@ if ($_POST["username"] && $_POST["password"]) {
 
 }
 
+include_once("header.php");
+
 ?>
 <form method="post" action="login.php" id="login">
 
@@ -50,3 +52,7 @@ if ($_POST["username"] && $_POST["password"]) {
 </div>
 
 </form>
+
+<?php
+include_once("footer.php");
+?>

@@ -57,6 +57,8 @@ else if ($template_id != -1) {
 
 $db->close($link);
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="edittemplate.php">
@@ -89,3 +91,9 @@ $db->close($link);
 </div>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>

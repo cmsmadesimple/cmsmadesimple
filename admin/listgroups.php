@@ -4,6 +4,8 @@ require_once("../include.php");
 
 check_login($config);
 
+include_once("header.php");
+
 ?>
 <h3>Current Groups</h3>
 <?php
@@ -49,3 +51,9 @@ check_login($config);
 
 <p><a href="addgroup.php">Add New Group</a></p>
 <p><a href="index.php">Admin Menu</a></p>
+
+<?php
+
+include_once("footer.php");
+
+?>

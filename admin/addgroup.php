@@ -33,6 +33,8 @@ if (isset($_POST["addgroup"])) {
 
 $db->close();
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="addgroup.php">
@@ -61,3 +63,7 @@ $db->close();
 </div>
 
 </form>
+
+<?php
+include_once("footer.php");
+?>

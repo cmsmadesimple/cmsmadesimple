@@ -4,6 +4,8 @@ require("../include.php");
 
 check_login($config);
 
+include_once("header.php");
+
 ?>
 <h3>Current Pages</h3>
 <?php
@@ -65,3 +67,9 @@ check_login($config);
 
 <p><a href="addcontent.php">Add New Content</a></p>
 <p><a href="index.php">Admin Menu</a></p>
+
+<?php
+
+include_once("footer.php");
+
+?>

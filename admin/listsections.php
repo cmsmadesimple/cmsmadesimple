@@ -4,6 +4,8 @@ require_once("../include.php");
 
 check_login($config);
 
+include_once("header.php");
+
 ?>
 <h3>Current Sections</h3>
 <?php
@@ -46,3 +48,9 @@ check_login($config);
 
 <p><a href="addsection.php">Add New Section</a></p>
 <p><a href="index.php">Admin Menu</a></p>
+
+<?php
+
+include_once("footer.php");
+
+?>

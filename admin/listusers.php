@@ -4,6 +4,8 @@ require_once("../include.php");
 
 check_login($config);
 
+include_once("header.php");
+
 ?>
 <h3>Current Users</h3>
 <?php
@@ -45,3 +47,9 @@ check_login($config);
 
 <p><a href="adduser.php">Add New User</a></p>
 <p><a href="index.php">Admin Menu</a></p>
+
+<?php
+
+include_once("footer.php");
+
+?>

@@ -87,6 +87,8 @@ $dropdown2 .= "</select>";
 mysql_free_result($result);
 $db->close($link);
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="addcontent.php">
@@ -139,3 +141,7 @@ $db->close($link);
 </div>
 
 </form>
+
+<?php
+include_once("footer.php");
+?>

@@ -36,6 +36,8 @@ if (isset($_POST["addtemplate"])) {
 
 $db->close();
 
+include_once("header.php");
+
 ?>
 
 <form method="post" action="addtemplate.php">
@@ -68,3 +70,9 @@ $db->close();
 </div>
 
 </form>
+
+<?php
+
+include_once("footer.php");
+
+?>
