@@ -42,8 +42,13 @@ include_once("header.php");
 </div>
 
 <div class="MainMenuItem">
-<a href="#">Permissions</a>
-<span class="description">Permissions to do stuff.</span>
+<a href="#">Group Assignments</a>
+<span class="description">Assign users to groups.</span>
+</div>
+
+<div class="MainMenuItem">
+<a href="changegroupperm.php">Group Permissions</a>
+<span class="description">Permissions for a group.</span>
 </div>
 
 <div class="MainMenuItem">

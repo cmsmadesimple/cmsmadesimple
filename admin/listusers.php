@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=5;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
@@ -33,6 +34,9 @@ if (isset($_GET["message"])) {
 
 ?>
 <h3><?php echo lang('currentusers')?></h3>
+
+<p><a href="topusers.php"><?php echo lang('back')?></a></p>
+
 <?php
 
 	$userid = get_userid();

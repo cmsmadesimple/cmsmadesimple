@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=5;
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
@@ -29,6 +30,9 @@ include_once("header.php");
 
 ?>
 <h3><?php echo lang('currentgroups')?></h3>
+
+<p><a href="topusers.php"><?php echo lang('back')?></a></p>
+
 <?php
 
 	$userid = get_userid();
@@ -57,10 +61,10 @@ include_once("header.php");
 		echo "<tr>\n";
 		echo "<th width=\"60%\">".lang('name')."</th>\n";
 		echo "<th align=\"center\">".lang('active')."</th>\n";
-		if ($perm)
-			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
-		if ($assign)
-			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
+		#if ($perm)
+		#	echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
+		#if ($assign)
+		#	echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
 		if ($edit)
 			echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($remove)
@@ -84,10 +88,10 @@ include_once("header.php");
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td align=\"center\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
-				if ($perm)
-					echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_premissions."</a></td>\n";
-				if ($assign)
-					echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+				#if ($perm)
+				#	echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_premissions."</a></td>\n";
+				#if ($assign)
+				#	echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
 				if ($edit)
 					echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" /></a></td>\n";
 				if ($remove)

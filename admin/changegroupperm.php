@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=5;
 
 require_once("../include.php");
 
@@ -32,7 +33,7 @@ $group_name = "";
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listgroups.php");
+	redirect("topusers.php");
 	return;
 }
 
@@ -41,34 +42,37 @@ $access = check_permission($userid, "Modify Permissions");
 
 if ($access)
 {
-	$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0)
+	if ($group_id != '' && $group_id != '-1')
 	{
-		$row = $result->FetchRow();
-		$group_name = $row['group_name'];
-	}
-
-	if (isset($_POST["changeperm"]))
-	{
-		$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = " . $group_id;
+		$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
 		$result = $db->Execute($query);
 
-		foreach ($_POST as $key=>$value)
+		if ($result && $result->RowCount() > 0)
 		{
-			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false)
-			{
-				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-				$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
-				$db->Execute($query);
-			}
+			$row = $result->FetchRow();
+			$group_name = $row['group_name'];
 		}
 
-		audit($group_id, $group_name, "Changed Group Permissions");
-		redirect("listgroups.php");
-		return;
+		if (isset($_POST["changeperm"]))
+		{
+			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = " . $group_id;
+			$result = $db->Execute($query);
 
+			foreach ($_POST as $key=>$value)
+			{
+				if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false)
+				{
+					$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+					$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+					$db->Execute($query);
+				}
+			}
+
+			audit($group_id, $group_name, "Changed Group Permissions");
+			#redirect("listgroups.php");
+			#return;
+
+		}
 	}
 }
 
@@ -80,49 +84,70 @@ if (!$access) {
 else {
 
 ?>
-<h3><?php echo lang('permissionsforgroup',array($group_name))?></h3>
+<h3><?php echo lang('grouppermissions')?></h3>
 
-<form method="post" action="changegroupperm.php">
+<p><a href="topusers.php"><?php echo lang('back')?></a></p>
 
 <div class="adminformSmall">
 
 <?php
 
-	$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0)
+	$groups = GroupOperations::LoadGroups();
+	if (count($groups) > 0)
 	{
-		while($row = $result->FetchRow())
+		echo '<form method="post" action="changegroupperm.php">';
+		echo 'Group Name: <select name="group_id">';
+		echo '<option value="-1">Select a Group</option>';
+		foreach ($groups as $onegroup)
 		{
-            $perms[$row['permission_name']] = false;
-			$perm_text[$row['permission_name']] = $row['permission_text'];
-			$ids[$row['permission_name']] = $row['permission_id'];
+			echo '<option value="'.$onegroup->id.'"';
+			if ($onegroup->id == $group_id)
+			{
+				echo ' selected="selected"';
+			}
+			echo '>'.$onegroup->name.'</option>';
+		}
+		echo '</select> <input type="submit" value="'.lang('submit').'" /></form>';
+		echo '<form method="post" action="changegroupperm.php">';
+	}
+
+	if ($group_id != '' && $group_id != '-1')
+	{
+		$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
+		$result = $db->Execute($query);
+
+		if ($result && $result->RowCount() > 0)
+		{
+			while($row = $result->FetchRow())
+			{
+				$perms[$row['permission_name']] = false;
+				$perm_text[$row['permission_name']] = $row['permission_text'];
+				$ids[$row['permission_name']] = $row['permission_id'];
+			}
+
 		}
 
-	}
+		$query = "SELECT p.permission_name FROM ".cms_db_prefix()."group_perms g INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
 
-	$query = "SELECT p.permission_name FROM ".cms_db_prefix()."group_perms g INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
+		$result = $db->Execute($query);
 
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0)
-	{
-		while($row = $result->FetchRow())
+		if ($result && $result->RowCount() > 0)
 		{
-			$tmp = $row['permission_name'];
-			$perms[$tmp] = true;
+			while($row = $result->FetchRow())
+			{
+				$tmp = $row['permission_name'];
+				$perms[$tmp] = true;
+			}
 		}
-	}
-	
-	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
-	foreach ($perms as $key => $value)
-	{
-		echo "<tr><td>";
-		echo "<input type=\"checkbox\"";
-		echo ($value == true?" checked=\"checked\"":"");
-		echo " name=\"perm-".$ids[$key]."\" value=\"1\" />$perm_text[$key]</td></tr>\n";
-	}
+		
+		echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
+		foreach ($perms as $key => $value)
+		{
+			echo "<tr><td>";
+			echo "<input type=\"checkbox\"";
+			echo ($value == true?" checked=\"checked\"":"");
+			echo " name=\"perm-".$ids[$key]."\" value=\"1\" />$perm_text[$key]</td></tr>\n";
+		}
 
 ?>
 
@@ -131,9 +156,13 @@ else {
 <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
 </table>
 
-</div>
+<?php
+	}
+?>
 
 </form>
+
+</div>
 
 <?php
 
