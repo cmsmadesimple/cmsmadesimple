@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=8;
+$CMS_TOP_MENU='admin';
+$CMS_ADMIN_TITLE='admin';
 
 require_once("../include.php");
 
@@ -33,20 +34,35 @@ include_once("header.php");
 
 <?php if ($sitePrefPerms) { ?>
 <div class="MainMenuItem">
-<a href="siteprefs.php">Site Preferences</a>
-<span class="description">This is where you set various site-wide preferences.</span>
+<a href="siteprefs.php"><?php echo lang('preferences') ?></a>
+<span class="description"><?php echo lang('preferencesdescription') ?></span>
 </div>
 <?php } ?>
 
 <div class="MainMenuItem">
-<a href="adminlog.php">Admin Log</a>
-<span class="description">Shows a log of who did what in the admin.</span>
+<a href="adminlog.php"><?php echo lang('adminlog') ?></a>
+<span class="description"><?php echo lang('adminlogdescription') ?></span>
 </div>
 
 <div class="MainMenuItem">
-<a href="index.php">Main Menu</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
+<?php
+if (isset($sectionCount['admin']) && $sectionCount['admin'] > 0)
+    {
+    foreach($modulesBySection['admin'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
+?>
 </div> <!-- end MainMenu -->
 
 <?php

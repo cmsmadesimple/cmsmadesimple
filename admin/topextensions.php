@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=6;
+$CMS_TOP_MENU='extensions';
+$CMS_ADMIN_TITLE='extensions';
 
 require_once("../include.php");
 
@@ -33,50 +34,39 @@ include_once("header.php");
 
 <?php if ($modulePerms) { ?>
 <div class="MainMenuItem">
-<a href="listmodules.php">Modules</a>
-<span class="description">Modules majorly extend CMS Made Simple to provide all kinds of functionality.</span>
+<a href="listmodules.php"><?php echo lang('modules') ?></a>
+<span class="description"><?php echo lang('moduledescription') ?></span>
 </div>
 <?php } ?>
 
 <div class="MainMenuItem">
-<a href="listtags.php">Tags</a>
-<span class="description">Tags are little bits of functionality that can be added to your content and/or templates.</span>
+<a href="listtags.php"><?php echo lang('tags') ?></a>
+<span class="description"><?php echo lang('tagdescription') ?></span>
 </div>
 
 <?php if ($codeBlockPerms) { ?>
 <div class="MainMenuItem">
-<a href="listusertags.php">User Defined Tags</a>
-<span class="description">Tags that you can create and modify yourself to perform specific tasks, right from your browser.</span>
+<a href="listusertags.php"><?php echo lang('usertags') ?></a>
+<span class="description"><?php echo lang('usertagdescription') ?></span>
 </div>
-<?php } ?>
+<?php }
 
-<?php
-	# Is there any modules with an admin interface?
-	$cmsmodules = $gCms->modules;
-
-	$displaymodules = "";
-
-	foreach ($cmsmodules as $key=>$value)
-	{
-		if (isset($cmsmodules[$key]['object']) 
-			&& $cmsmodules[$key]['installed'] == true
-			&& $cmsmodules[$key]['active'] == true
-			&& $cmsmodules[$key]['object']->HasAdmin()
-		)
-		{
-			echo '<div class="MainMenuItem">';
-			echo '<a href="moduleinterface.php?module='.$key.'">'.$key.'</a>';
-			if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
-			{
-				echo '<span class="description">'.$cmsmodules[$key]['object']->GetAdminDescription().'</span>';
-			}
-			echo '</div>';
-		}
-	}
+if (isset($sectionCount['extensions']) && $sectionCount['extensions'] > 0)
+    {
+    foreach($modulesBySection['extensions'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
 ?>
-
 <div class="MainMenuItem">
-<a href="index.php">Main Menu</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->

@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='usersgroups';
+$CMS_ADMIN_TITLE='edituser';
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
@@ -57,6 +59,12 @@ $user_id = -1;
 if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
+$thisuser = UserOperations::LoadUserByID($user_id);
+if (strlen($thisuser->username) > 0)
+    {
+    $CMS_ADMIN_SUBTITLE = $thisuser->username;
+    }
+
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Users') || ($userid == $user_id);
 
@@ -90,7 +98,6 @@ if ($access) {
 			#audit(-1, '', 'Edited User');
 
 			$result = false;
-			$thisuser = UserOperations::LoadUserByID($user_id);
 			if ($thisuser)
 			{
 				$thisuser->username = $user;
@@ -141,8 +148,6 @@ if ($access) {
 
 	}
 	else if ($user_id != -1) {
-
-		$thisuser = UserOperations::LoadUserByID($user_id);
 		$user = $thisuser->username;
 		$firstname = $thisuser->firstname;
 		$lastname = $thisuser->lastname;

@@ -19,7 +19,8 @@
 #$Id: index.php 1307 2005-02-16 03:23:04Z wishy $
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=3;
+$CMS_TOP_MENU='files';
+$CMS_ADMIN_TITLE='files';
 
 require_once("../include.php");
 
@@ -33,18 +34,34 @@ include_once("header.php");
 
 <?php if ($filePerms) { ?>
 <div class="MainMenuItem">
-<a href="files.php">File Manager</a>
-<span class="description">Upload files and such.</span>
+<a href="files.php"><?php echo lang('filemanager') ?></a>
+<span class="description"><?php echo lang('filemanagerdescription') ?></span>
 </div>
 <?php } ?>
 
 <div class="MainMenuItem">
-<a href="imagefiles.php">Image Manager</a>
-<span class="description">Upload/edit and remove images.</span>
+<a href="imagefiles.php"><?php echo lang('imagemanager') ?></a>
+<span class="description"><?php echo lang('imagemanagerdescription') ?></span>
 </div>
 
+<?php
+if (isset($sectionCount['files']) && $sectionCount['files'] > 0)
+    {
+    foreach($modulesBySection['files'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
+?>
+
 <div class="MainMenuItem">
-<a href="index.php">Main Menu</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->

@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=5;
+$CMS_TOP_MENU='usersgroups';
+$CMS_ADMIN_TITLE='currentgroups';
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");

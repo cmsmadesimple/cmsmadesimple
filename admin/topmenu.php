@@ -21,23 +21,29 @@
 
 <div id="TopMenu">
 
-<a href="index.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==1)?' id="TopMenuSelected"':'') ?>>Main</a>
-<a href="topcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==2)?' id="TopMenuSelected"':'') ?>>Content</a>
-<a href="listcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==9)?' id="TopMenuSelected"':'') ?>>Pages</a>
-<?php if ($filePerms)
-   { ?><a href="topfiles.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==3)?' id="TopMenuSelected"':'') ?>>Files</a><?php
+<a href="index.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='main')?' id="TopMenuSelected"':'') ?>><?php echo lang('main')?></a>
+<?php if ($contentPerms)
+    { ?><a href="topcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='content')?' id="TopMenuSelected"':'') ?>><?php echo lang('content')?></a>
+        <a href="listcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='pages')?' id="TopMenuSelected"':'') ?>><?php echo lang('pages')?></a><?php
    }
-if ($templatePerms || $cssPerms || $cssAssocPerms)
-   { ?><a href="toplayout.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==4)?' id="TopMenuSelected"':'') ?>>Layout</a><?php
+if ($filePerms)
+   { ?><a href="topfiles.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='files')?' id="TopMenuSelected"':'') ?>><?php echo lang('files')?></a><?php
    }
-if ($userPerms || $groupPerms || $groupPermPerms || $groupMemberPerms)
-   { ?><a href="topusers.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==5)?' id="TopMenuSelected"':'') ?>>Users/Groups</a><?php
+if ($layoutPerms)
+   { ?><a href="toplayout.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='layout')?' id="TopMenuSelected"':'') ?>><?php echo lang('layout')?></a><?php
+   }
+if ($usersGroupsPerms)
+   { ?><a href="topusers.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='usersgroups')?' id="TopMenuSelected"':'') ?>><?php echo lang('usersgroups')?></a><?php
+   }
+if ($extensionsPerms)
+   { ?><a href="topextensions.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='extensions')?' id="TopMenuSelected"':'') ?>><?php echo lang('extensions')?></a><?php
    } ?>
-<a href="topextensions.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==6)?' id="TopMenuSelected"':'') ?>>Extensions</a>
-<a href="editprefs.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==7)?' id="TopMenuSelected"':'') ?>>Preferences</a>
-<a href="topadmin.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==8)?' id="TopMenuSelected"':'') ?>>Site Admin</a>
-<a href="../index.php">View Site</a>
-<a href="logout.php">Logout</a>
-<a href="makebookmark.php">[+]</a>
+<a href="editprefs.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='preferences')?' id="TopMenuSelected"':'') ?>><?php echo lang('preferences')?></a>
+<?php if ($adminPerms)
+    { ?><a href="topadmin.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='admin')?' id="TopMenuSelected"':'') ?>><?php echo lang('admin')?></a><?php
+    } ?>
+<a href="../index.php"><?php echo lang('viewsite')?></a>
+<a href="logout.php"><?php echo lang('logout')?></a>
+<a href="makebookmark.php?title=<?php echo urlencode($pagetitle) ?>">[+]</a>
 
 </div> <!-- end TopMenu -->

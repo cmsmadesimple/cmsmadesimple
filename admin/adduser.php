@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='usersgroups';
+$CMS_ADMIN_TITLE='adduser';
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");

@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=9;
+$CMS_TOP_MENU='pages';
+$CMS_ADMIN_TITLE='currentpages';
 
 require_once("../include.php");
 

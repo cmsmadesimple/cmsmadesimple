@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=6;
+$CMS_TOP_MENU='extensions';
+$CMS_ADMIN_TITLE='usertags';
 
 require_once("../include.php");
 

@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='extensions';
+$CMS_ADMIN_TITLE='editusertag';
 
 require_once("../include.php");
 
@@ -120,7 +122,10 @@ if ($access) {
 		$code = $row['code'];
 	}
 }
-
+if (strlen($plugin_name)>0)
+    {
+    $CMS_ADMIN_SUBTITLE = $plugin_name;
+    }
 include_once("header.php");
 
 if (!$access) {

@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='content';
+$CMS_ADMIN_TITLE='htmlblobs';
 
 require_once("../include.php");
 require_once("../lib/classes/class.htmlblob.inc.php");
@@ -32,7 +34,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3>HTML Blobs</h3>
+<h3><?php echo lang('htmlblobs')?></h3>
 
 <p><a href="topcontent.php"><?php echo lang('back')?></a></p>
 

@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=9;
+$CMS_TOP_MENU='pages';
+$CMS_ADMIN_TITLE='addcontent';
 
 require_once("../include.php");
 require_once("header.php");

@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=9;
+$CMS_TOP_MENU='pages';
+$CMS_ADMIN_TITLE='editpage';
 
 require_once("../include.php");
 
@@ -28,7 +29,6 @@ if (isset($_POST["cancel"]))
 	redirect("listcontent.php");
 }
 
-include_once("header.php");
 
 check_login();
 
@@ -178,6 +178,13 @@ if ($access)
 		}
 	}
 }
+
+if (strlen($contentobj->mName)> 0)
+    {
+    $CMS_ADMIN_SUBTITLE = $contentobj->mName;
+    }
+include_once("header.php");
+
 
 if (!$access)
 {

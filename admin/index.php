@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=1;
+$CMS_TOP_MENU='main';
+$CMS_ADMIN_TITLE='adminhome';
 
 require_once("../include.php");
 
@@ -34,18 +35,18 @@ include_once("header.php");
 
 if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 {
-	echo '<p><em><strong>Warning:</strong></em> install directory still exists.  Please remove it completely.</p>';
+	echo '<p>'.lang('installdirwarning').'</p>';
 }
 
 ?>
 
 </div> <!-- end DashboardCallout -->
 
-<!-- 
+<!--
 
 <div class="DashboardCallout">
 
-<p class="DashboardCalloutTitle">News Items</p>
+<p class="DashboardCalloutTitle"><?php echo lang('newsitems') ?></p>
 
 </div> --> <!-- end DashboardCallout -->
 
@@ -53,96 +54,90 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <?php if ($pagePerms || $htmlPerms) { ?>
 <div class="MainMenuItem">
-<a href="topcontent.php">Content</a>
-<span class="description">This is where we add and edit content. Subitems:
-<?php if ($pagePerms) { ?><a href="listcontent.php">pages</a><?php if ($htmlPerms)
+<a href="topcontent.php"><?php echo lang('content') ?></a>
+<span class="description"><?php echo lang('contentdescription')." ".lang('subitems') ?>:
+<?php if ($pagePerms) { ?><a href="listcontent.php"><?php echo lang('pages') ?></a><?php if ($htmlPerms)
 	      { ?>, <?php }
-} if ($htmlPerms) { ?><a href="listhtmlblobs.php">html blobs</a><?php } ?>.</span>
+} if ($htmlPerms) { ?><a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a><?php } ?>.</span>
 </div>
 <?php } ?>
 
 <?php if ($filePerms) { ?>
 <div class="MainMenuItem">
-<a href="topfiles.php">Files</a>
-<span class="description">This is where we add and remove files. Subitems: <a href="files.php">file manager</a>, <a href="imagefiles.php">image manager</a>.</span>
+<a href="topfiles.php"><?php echo lang('files') ?></a>
+<span class="description"><?php echo lang('filemanagerdescription')." ".lang('subitems')
+    ?>: <a href="files.php"><?php echo lang('filemanager') ?></a>, <a href="imagefiles.php"><?php echo lang('imagemanager') ?></a>.</span>
 </div>
 <?php } ?>
 
 <?php  if ( $templatePerms || $cssPerms || $cssAssocPerms) { ?>
 <div class="MainMenuItem">
-<a href="toplayout.php">Layout</a>
-<span class="description">Site layout options. Subitems: 
+<a href="toplayout.php"><?php echo lang('layout') ?></a>
+<span class="description"><?php echo lang('layoutdescription')." ".lang('subitems') ?>:
 <?php if ($templatePerms)
 	{ ?>
-    <a href="listtemplates.php">templates</a><?php if ($cssPerms) { ?>, <?php }
+    <a href="listtemplates.php"><?php echo lang('templates') ?></a><?php if ($cssPerms) { ?>, <?php }
     } if ($cssPerms || $cssAssocPerms)
-    { ?><a href="listcss.php">stylesheets</a><?php } ?>.</span>
+    { ?><a href="listcss.php"><?php echo lang('stylesheets') ?></a><?php } ?>.</span>
 </div>
 <?php } ?>
 
 <?php if ($groupPerms || $userPerms || $groupMemberPerms || $groupPermPerms) { ?>
 <div class="MainMenuItem">
-<a href="topusers.php">Users/Groups</a>
-<span class="description">User and Group related items. Subitems:
-<?php if ($userPerms) { ?><a href="listusers.php">users</a><?php if
+<a href="topusers.php"><?php echo lang('usersgroups') ?></a>
+<span class="description"><?php echo lang('usersgroupsdescription')." ".lang('subitems') ?>:
+<?php if ($userPerms) { ?><a href="listusers.php"><?php echo lang('users') ?></a><?php if
 ($groupPerms || $groupMemberPerms || $groupPermPerms) {?>, <? }
-} if ($groupPerms) { ?><a href="listgroups.php">groups</a><?php if
+} if ($groupPerms) { ?><a href="listgroups.php"><?php echo lang('groups') ?></a><?php if
 ($groupPermPerms || $groupMemberPerms) { ?>, <?php }
-} if ($groupPermPerms) { ?><a href="changegroupperm.php">group permissions</a><?php if
+} if ($groupPermPerms) { ?><a href="changegroupperm.php"><?php echo lang('grouppermissions') ?></a><?php if
 ($groupMemberPerms) {?>,  <?php }
-} if ($groupMemberPerms) { ?><a href="changegroupassign.php">group assignments</a><?php } ?>.</span>
+} if ($groupMemberPerms) { ?><a href="changegroupassign.php"><?php echo lang('groupassignments') ?></a><?php } ?>.</span>
 </div>
 <?php } ?>
 
 <div class="MainMenuItem">
-<a href="topextensions.php">Extensions</a>
-<span class="description">Modules, tags and other assorted fun. Subitems:
-<?php if ($modulePerms) {?><a href="listmodules.php">modules</a>, <?php } ?><a href="listtags.php">tags</a><?php
-if ($codeBlockPerms) {?>, <a href="listusertags.php">user defined tags</a><?php } ?>.
+<a href="topextensions.php"><?php echo lang('extensions') ?></a>
+<span class="description"><?php echo lang('extensionsdescription')." ".lang('subitems') ?>:
+<?php if ($modulePerms) {?><a href="listmodules.php"><?php echo lang('modules') ?></a>, <?php }
+?><a href="listtags.php"><?php echo lang('tags') ?></a><?php
+if ($codeBlockPerms) {?>, <a href="listusertags.php"><?php echo lang('usertags') ?></a><?php } ?>.
 <?php
-	# Is there any modules with an admin interface?
-	$cmsmodules = $gCms->modules;
-
-	$displaymodules = "";
-
-	foreach ($cmsmodules as $key=>$value)
-	{
-		if (isset($cmsmodules[$key]['object']) 
-			&& $cmsmodules[$key]['installed'] == true
-			&& $cmsmodules[$key]['active'] == true
-			&& $cmsmodules[$key]['object']->HasAdmin()
-		)
-		{
-			$displaymodules .= '<a href="moduleinterface.php?module='.$key.'">'.strtolower($key).'</a>, ';
-		}
-	}
-
+	# Any modules with an admin interface?
+	$displaymodules = '';
+    foreach($modulesBySection as $thisSectionModules)
+        {
+        foreach ($thisSectionModules as $sectionModule)
+            {
+            $displaymodules .= " <a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>,";
+            }
+        }
 	if ($displaymodules != '')
 	{
 		$displaymodules = substr($displaymodules, 0, strlen($displaymodules) - 2);
-		echo ' Modules: ' . $displaymodules;
+		echo ' '.lang('modules').':' . rtrim($displaymodules,",");
 	}
 ?>
 </span>
 </div>
 
 <div class="MainMenuItem">
-<a href="editprefs.php">Preferences</a>
-<span class="description">This is where you will find user preferences.</span>
+<a href="editprefs.php"><?php echo lang('preferences') ?></a>
+<span class="description"><?php echo lang('preferencedescription') ?></span>
 </div>
  
 <div class="MainMenuItem">
-<a href="topadmin.php">Site Admin</a>
-<span class="description">Site Administration functions. Subitems: <?php if ($sitePrefPerms) {
-?><a href="siteprefs.php">site preferences</a>, <?php } ?><a href="adminlog.php">admin log</a></span>
+<a href="topadmin.php"><?php echo lang('admin') ?></a>
+<span class="description"><?php echo lang('admindescription')." ".lang('subitems') ?>: <?php if ($sitePrefPerms) {
+?><a href="siteprefs.php"><?php echo lang('sitepreferences') ?></a>, <?php } ?><a href="adminlog.php"><?php echo lang('adminlog') ?></a></span>
 </div>
 
 <div class="MainMenuItem">
-<a href="../index.php">View Site</a>
+<a href="../index.php"><?php echo lang('viewsite') ?></a>
 </div>
 
 <div class="MainMenuItem">
-<a href="logout.php">Logout</a>
+<a href="logout.php"><?php echo lang('logout') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->

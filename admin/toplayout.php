@@ -19,7 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=4;
+$CMS_TOP_MENU='layout';
+$CMS_ADMIN_TITLE='layout';
 
 require_once("../include.php");
 
@@ -33,20 +34,35 @@ include_once("header.php");
 
 <?php if ($templatePerms) { ?>
 <div class="MainMenuItem">
-<a href="listtemplates.php">Templates</a>
-<span class="description">This is where we add and edit templates.  Templates define the look and feel of your site.</span>
+<a href="listtemplates.php"><?php echo lang('templates') ?></a>
+<span class="description"><?php echo lang('templatesdescription') ?></span>
 </div>
 <?php } ?>
 
 <?php if ($cssPerms || $cssAssocPerms) { ?>
 <div class="MainMenuItem">
-<a href="listcss.php">Stylesheets</a>
-<span class="description">CSS Management is an advanced way to handle stylesheets separately from templates.</span>
+<a href="listcss.php"><?php echo lang('stylesheets') ?></a>
+<span class="description"><?php echo lang('stylesheetsdescription') ?></span>
 </div>
-<?php } ?>
+<?php } 
+
+if (isset($sectionCount['layout']) && $sectionCount['layout'] > 0)
+    {
+    foreach($modulesBySection['layout'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
+?>
 
 <div class="MainMenuItem">
-<a href="index.php">Back</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->

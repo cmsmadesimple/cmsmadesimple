@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='admin';
+$CMS_ADMIN_TITLE='editconfiguration';
 
 require_once("../include.php");
 

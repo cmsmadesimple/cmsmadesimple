@@ -19,7 +19,8 @@
 #$Id: index.php 1307 2005-02-16 03:23:04Z wishy $
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=2;
+$CMS_TOP_MENU='content';
+$CMS_ADMIN_TITLE='content';
 
 require_once("../include.php");
 
@@ -32,19 +33,33 @@ include_once("header.php");
 <div class="MainMenu">
 
 <div class="MainMenuItem">
-<a href="listcontent.php">Pages</a>
-<span class="description">This is where we add and edit pages and other content.</span>
+<a href="listcontent.php"><?php echo lang('pages') ?></a>
+<span class="description"><?php echo lang('pagesdescription') ?></span>
 </div>
 
 <?php if ($htmlPerms) { ?>
 <div class="MainMenuItem">
-<a href="listhtmlblobs.php">HTML Blobs</a>
-<span class="description">HTML Blobs are chunks of content you can place in your pages.</span>
+<a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a>
+<span class="description"><?php echo lang('htmlblobdescription') ?></span>
 </div>
-<?php } ?>
+<?php }
+if (isset($sectionCount['content']) && $sectionCount['content'] > 0)
+    {
+    foreach($modulesBySection['content'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
+?>
 
 <div class="MainMenuItem">
-<a href="index.php">Main Menu</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->

@@ -35,6 +35,8 @@
 
  
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='layout';
+$CMS_ADMIN_TITLE='addstylesheet';
 
 require_once("../include.php");
 

@@ -34,6 +34,8 @@
 
 
 $CMS_ADMIN_PAGE=1;
+$CMS_ADMIN_TITLE='editcss';
+$CMS_TOP_MENU='layout';
 
 require_once("../include.php");
 
@@ -186,6 +188,10 @@ if ($access)
 	} # end of getting css
 } # end of has access
 
+if (strlen($css_name) > 0)
+    {
+    $CMS_ADMIN_SUBTITLE = $css_name;
+    }
 include_once("header.php");
 
 # if the user has no acess, we display an error

@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='files';
+$CMS_ADMIN_TITLE='imagemanagement';
 
 // in filetypes.inc.php filetypes are defined 
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");

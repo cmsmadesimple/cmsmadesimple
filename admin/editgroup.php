@@ -19,6 +19,8 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU='usersgroups';
+$CMS_ADMIN_TITLE='editgroup';
 
 require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
@@ -110,7 +112,10 @@ if ($access) {
 		$active = $row["active"];
 	}
 }
-
+if (strlen($group) > 0)
+    {
+    $CMS_ADMIN_SUBTITLE = $group;
+    }
 include_once("header.php");
 
 if (!$access) {

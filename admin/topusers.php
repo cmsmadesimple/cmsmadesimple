@@ -19,7 +19,8 @@
 #$Id: index.php 1307 2005-02-16 03:23:04Z wishy $
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU=5;
+$CMS_TOP_MENU='usersgroups';
+$CMS_ADMIN_TITLE='usersgroups';
 
 require_once("../include.php");
 
@@ -33,34 +34,48 @@ include_once("header.php");
 
 <?php if ($userPerms) { ?>
 <div class="MainMenuItem">
-<a href="listusers.php">Users</a>
-<span class="description">This is where you manage users.</span>
+<a href="listusers.php"><?php echo lang('users') ?></a>
+<span class="description"><?php echo lang('usersdescription') ?></span>
 </div>
 <?php } ?>
 
 <?php if ($groupPerms) { ?>
 <div class="MainMenuItem">
-<a href="listgroups.php">Groups</a>
-<span class="description">This is where you manage groups.</span>
+<a href="listgroups.php"><?php echo lang('groups') ?></a>
+<span class="description"><?php echo lang('groupsdescription') ?></span>
 </div>
 <?php } ?>
 
 <?php if ($groupMemberPerms) { ?>
 <div class="MainMenuItem">
-<a href="changegroupassign.php">Group Assignments</a>
-<span class="description">Assign users to groups.</span>
+<a href="changegroupassign.php"><?php echo lang('groupassignments') ?></a>
+<span class="description"><?php echo lang('groupassignmentdescription') ?></span>
 </div>
 <?php } ?>
 
 <?php if ($groupPermPerms) { ?>
 <div class="MainMenuItem">
-<a href="changegroupperm.php">Group Permissions</a>
-<span class="description">Permissions for a group.</span>
+<a href="changegroupperm.php"><?php echo lang('groupperms') ?></a>
+<span class="description"><?php echo lang('grouppermsdescription') ?></span>
 </div>
-<?php } ?>
+<?php } 
 
+if (isset($sectionCount['usersgroups']) && $sectionCount['usersgroups'] > 0)
+    {
+    foreach($modulesBySection['usersgroups'] as $sectionModule)
+        {
+        echo "<div class=\"MainMenuItem\">\n";
+        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
+        if ($sectionModule['description'] != '')
+            {
+            echo '<span class="description">'.$sectionModule['description'].'</span>';
+            }
+        echo "</div>\n";
+        }
+    }
+?>
 <div class="MainMenuItem">
-<a href="index.php">Main Menu</a>
+<a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>
 
 </div> <!-- end MainMenu -->
