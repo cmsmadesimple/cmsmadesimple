@@ -298,6 +298,22 @@ function debug_display($var, $title="", $echo_to_screen = true)
 }
 
 /**
+ * Display $var nicely only if $config["debug"] is set
+ *
+ * @param mixed $var
+ * @param string $title
+ */
+function debug_output($var, $title="")
+{
+	
+	global $gCms;
+	if($gCms->config["debug"] == true)
+	{
+		debug_display($var, $title, true);
+	}
+
+}
+/**
 * Retrieve value from $_REQUEST. Returns $default_value if
 *		value is not in $_REQUEST or is not the same basic type as
 *		$default_value.
