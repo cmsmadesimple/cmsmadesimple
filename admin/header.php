@@ -46,6 +46,7 @@ if (!isset($charsetsent))
         try{
 			if(appletName[i].getText()){
 				form.elements[name[i].toString()].value = appletName[i].getText();
+				return;
 			}
         }catch(error){
             alert("There was an error with the syntax highlighting textarea.");
