@@ -170,7 +170,7 @@ function drawErrorBase(&$manager)
 			}
 		}		
 <?php } ?>
-	}	
+	};	
 
 	function editImage(image) 
 	{
@@ -184,7 +184,7 @@ function drawErrorBase(&$manager)
 				return true;
 			}
 		}, null);		
-	}
+	};
 
 /*]]>*/
 </script>

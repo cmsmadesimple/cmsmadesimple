@@ -501,11 +501,11 @@ else {
 					?>
 					</div>
 			</td>
-			<td valign="top">
+			<!--<td valign="top">
 					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;">Password Protect</div>
 					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-					<!--<div style="text-align: center; padding-top: 5px;">Password Protect:<input type="checkbox" name="password_protect" value="1" <?php echo ($password_protect == 1?"checked":"") ?>><br><select name="frontend_access[]" multiple="true" size="3"><?php echo $addt_users ?></select></div>--></div>
-			</td>
+					<div style="text-align: center; padding-top: 5px;">Password Protect:<input type="checkbox" name="password_protect" value="1" <?php echo ($password_protect == 1?"checked":"") ?>><br><select name="frontend_access[]" multiple="true" size="3"><?php echo $addt_users ?></select></div></div>
+			</td>-->
 		</tr>
 	</table>
     <div id="advanced2" class="expand">&nbsp;</div>

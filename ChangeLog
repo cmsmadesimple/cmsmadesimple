@@ -7,6 +7,9 @@ Version 0.7.2 -- Subversion
 * Added ability to clean pastes from Microsoft Word in htmlarea
 * Added pagination to majority of CMSMadeSimple
 * Added google search plugin
+* Added google pagerank plugin
+* Added Expand/Collapse plugin
+* Added print page plugin
 * Changed en_US to UTF-8
 * Changed with of add and edit html blob pages
 * Changed all template lists to be ordered by template name (#000038)
