@@ -905,6 +905,7 @@ class CMSModule extends ModuleOperations
 	 * @param string The text that will have to be clicked to follow the link
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
+	 * @param boolean A flag to determine if only the href section should be returned
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false)
 	{
@@ -940,6 +941,45 @@ class CMSModule extends ModuleOperations
 		return $text;
 	}
 
+	/**
+	 * Returns the xhtml equivalent of an href link for Content links.  This is basically a nice little wrapper
+	 * to make sure that we go back to where we want to and that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The id to return to when the module is finished it's task
+	 * @param string The text that will have to be clicked to follow the link
+	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param boolean A flag to determine if only the href section should be returned
+	 */
+	function CreateContentLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+	{
+		$text = '';		
+		$content = ContentManager::LoadContentFromId($returnid);
+		if (isset($content))
+		{
+			if ($content->GetUrl() != '')
+			{
+				if (!$onlyhref)
+				{
+					$text .= '<a href="';
+				}
+				$text .= $content->GetUrl();
+				foreach ($params as $key=>$value)
+				{
+					$text .= '&amp;'.$id.$key.'='.$value;
+				}		
+				if (!$onlyhref)
+				{
+					$text .= "\"";
+					$text .= '>'.$contents.'</a>';
+				}
+			}
+		}
+		
+		return $text;
+	}
+	
+	
 	/**
 	 * Redirects the user to another action of the module. 
 	 *
