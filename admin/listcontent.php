@@ -305,7 +305,7 @@ if (isset($_GET["message"])) {
 			}
 			$counter++;
 		} ## foreach
-		echo '<tbody>';
+		echo '</tbody>';
 		echo "</table>\n";
 
 	}
