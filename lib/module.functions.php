@@ -834,6 +834,51 @@ function cms_mapi_enable_wysiwyg($name)
 }
 
 /**
+ * Registers this module as a WYSIWYG module
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_module($name)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_module'] = true;
+	}
+}
+
+/**
+ * Registers this module's WYSIWYG header function
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_page_header_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_header_function'] = $function;
+	}
+}
+
+/**
+ * Registers this module's WYSIWYG textbox function
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_page_textbox_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_textbox_function'] = $function;
+	}
+}
+
+/**
  * Create's a new permission for use by the module.
  *
  * @since 0.4

@@ -428,6 +428,45 @@ function & strip_slashes(&$str) {
 	return $str;
 }
 
+function create_textarea($text, $name, $classname, $id='', $encoding='')
+{
+	global $gCms;
+	$result = '';
+
+	$userid = get_userid();
+	$wysiwyg = get_preference($userid, 'wysiwyg');
+
+	if (isset($wysiwyg) && $wysiwyg != '')
+	{
+		if (isset($gCms->modules[$wysiwyg]) &&
+			$gCms->modules[$wysiwyg]['Installed'] == true &&
+			$gCms->modules[$wysiwyg]['Active'] == true &&
+			isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
+		{
+			if (isset($gCms->modules[$wysiwyg]['wysiwyg_textbox_function']))
+			{
+				$result = '';
+				ob_start();
+				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array($gCms, $name, '80', '15', $encoding, $text));
+				$result = ob_get_contents();
+				ob_clean();	
+			}
+		}
+	}
+
+	if ($result == '')
+	{
+		$result = '<textarea name="'.$name.'" cols="80" rows="12" class="'.$class_name.'"';
+		if ($id <> '')
+		{
+			$result .= ' id="'.$id.'"';
+		}
+		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+	}
+
+	return $result;
+}
+
 /*
  * creates a textarea that does syntax highlighting on the source code.
  * The following also needs to be added to the <form> tag for submit to work.

@@ -125,9 +125,12 @@ if ($result && $result->RowCount() > 0) {
 	$addt_users = "<option>&nbsp;</option>";
 }
 
-if (!$access) {
+if (!$access)
+{
 	print "<h3>".lang('noaccessto', array(lang('addhtmlblob')))."</h3>";
-} else {
+}
+else
+{
 	if ($error != "")
 		echo "<ul class=\"error\">".$error."</ul>";
 ?>
@@ -146,7 +149,7 @@ if (!$access) {
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
+		<td><?php echo create_textarea($content, 'content', 'syntaxHighlight', 'content');?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>

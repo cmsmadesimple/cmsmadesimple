@@ -120,7 +120,7 @@ if (isset($_GET["message"])) {
 		echo "<td width=\"25%\">".lang('title')."</td>\n";
 		echo "<td align=\"center\">".lang('template')."</td>\n";
 		echo "<td align=\"center\">".lang('type')."</td>\n";
-//		echo "<td align=\"center\">".lang('URL')."</td>\n";
+		// echo "<td align=\"center\">".lang('URL')."</td>\n";
 		echo "<td align=\"center\">".lang('owner')."</td>\n";
 		echo "<td align=\"center\">".lang('active')."</td>\n";
 		echo "<td align=\"center\">".lang('default')."</td>\n";

@@ -328,8 +328,7 @@ if ( $error != "" )
   </tr>
   <tr>
     <td>Content:</td>
-    <td><textarea id="<?php echo $id?>newscontent" name="<?php echo
-$id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
+    <td><?php echo create_textarea($data, $id.'newscontent', 'syntaxHighlight', $id.'newscontent')?></td>
   </tr>
   <?php //if ($moduleaction == "edit" || $moduleaction == "completeedit") { ?>
   <tr>

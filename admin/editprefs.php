@@ -34,10 +34,8 @@ check_login();
 
 $error = "";
 
-$use_wysiwyg = "1";
-if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
-$use_javasyntax = "1";
-if (isset($_POST["use_javasyntax"]))$use_javasyntax = $_POST["use_javasyntax"];
+$wysiwyg = '';
+if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
 
 $userid = get_userid();
 
@@ -47,16 +45,13 @@ if (isset($_POST["cancel"])) {
 }
 
 if (isset($_POST["submit_form"])) {
-	set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
-	set_preference($userid, 'use_javasyntax', $use_javasyntax);
+	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
 } else if (!isset($_POST["edituserprefs"])) {
-	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
-	$use_javasyntax = get_preference($userid, 'use_javasyntax');
-    if($use_javasyntax == null)$use_javasyntax = false;
+	$wysiwyg = get_preference($userid, 'wysiwyg');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
 }
@@ -74,43 +69,29 @@ if ($error != "") {
 
 <h3><?php echo lang("userprefs")?></h3>
 
-<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
-</applet>
-
-<?php 
-
-echo '<script language="JavaScript" type="text/javascript">'.
-    'function syntaxSupport(){ '.
-        'try{'.
-            'document.hiddenApplet.myMethod();'.
-        '}catch(err){'.
-            'alert(\''.lang('nosyntax').'\');'.
-            'document.prefsform.use_javasyntax.selectedIndex = 0;'.
-        '}'.
-    '}'.
-'</script>';
-
-?>
-
 <table border="0" align="center">
 
 	<tr>
-		<td><?php echo lang("usewysiwyg")?>:</td>
+		<td><?php echo lang('wysiwygtouse')?>:</td>
 		<td>
-        
-        
-			<select name="use_wysiwyg">
-				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected=\"selected\"":"") ?>><?php echo lang('false')?></option>
-				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected=\"selected\"":"") ?>><?php echo lang('true')?></option>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<td><?php echo lang("usejavasyntax")?>:</td>
-		<td>
-			<select name="use_javasyntax"  onchange="syntaxSupport()">
-				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected=\"selected\"":"") ?>><?php echo lang('false')?></option>
-				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected=\"selected\"":"") ?>><?php echo lang('true')?></option>
+			<select name="wysiwyg">
+				<option value=""><?php echo lang('none')?></option>
+				<?php
+					foreach($gCms->modules as $key=>$value)
+					{
+						if ($gCms->modules[$key]['Installed'] == true &&
+							$gCms->modules[$key]['Active'] == true &&
+							isset($gCms->modules[$key]['wysiwyg_module']))
+						{
+							echo '<option value="'.$key.'"';
+							if ($wysiwyg == $key)
+							{
+								echo ' selected="selected"';
+							}
+							echo '>'.$key.'</option>';
+						}
+					}
+				?>
 			</select>
 		</td>
 	</tr>

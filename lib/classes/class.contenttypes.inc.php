@@ -109,8 +109,8 @@ class Content extends ContentBase
 		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
 		$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
 		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId).'</td></tr>';
-		$text .= '<tr><td>'.lang('content').':</td><td>'.textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $this->mProperties->GetValue('content_en'), "content_en", "syntaxHighlight", "HTML (Complex)", "content_en") . '</td></tr>';
-		$text .= '<tr><td>'.lang('headtags').':</td><td>'.textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $this->mProperties->GetValue('headtags'), "headtags").'</td></tr>';
+		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea($this->mProperties->GetValue('content_en'), 'content', 'syntaxHighlight', 'content').'</td></tr>'."\n";
+		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea($this->mProperties->GetValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
