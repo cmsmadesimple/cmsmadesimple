@@ -72,8 +72,8 @@ $userid = get_userid();
 $access = check_permission($userid, 'Add Content');
 
 $templatepostback = "";
-if (get_preference($userid, 'use_wysiwyg') == "1") {
-	$htmlarea_flag = "true";
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	$htmlarea_flag = true;
 	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
 }
 

@@ -113,5 +113,27 @@ function news_module_executeadmin($cms,$id) {
 	}
 }
 
+function news_module_help($cms)
+{
+	//Text to show for the help box...
+	?>
+
+	<h3>What does this do?</h3>
+	<p>News is a module for displaying News events on your page, similar to a blog style.  When the module is installed, a News admin page is added to the left menu that will show a list of news items for the site.  The user must belong to a group with the 'Modify News' permission in order to add, edit or delete News entries.  While still being very basic, this module is perfect for adding some quick news items to your site.</p>
+	<h3>How do I use it?</h3>
+	<p>News works in two ways.</p>
+	<p>The perferred way is to use it in conjunction with the cms_module tag.  This will insert the module into your template or page anywhere you wish and display the number of news items.  The code would look something like: <code>{cms_module module="news" number="5"}</code></p>
+	<p>The other way is to use it as a content module.  Basically, when you add or edit a page, you can set the content type of that page to News.  This basically means that there will be one whole page on your site dedicated to showing all news postings.  This is great for a "News Archive".</p>
+	<h3>What parameters are there?</h3>
+	<p>
+	<ul>
+		<li><em>(optional)</em>number="5" - Maximum number of items to display -- leaving empty will show all items</li>
+	</ul>
+	</p>
+
+	<?
+
+}
+
 # vim:ts=4 sw=4 noet
 ?>

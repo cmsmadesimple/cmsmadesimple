@@ -94,8 +94,8 @@ if (!$access) {
 	$access = check_authorship($userid, $page_id);
 }
 
-if (get_preference($userid, 'use_wysiwyg') == "1") {
-	$htmlarea_flag = "true";
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	$htmlarea_flag = true;
 	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
 }
 

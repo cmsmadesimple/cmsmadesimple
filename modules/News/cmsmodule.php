@@ -37,6 +37,9 @@ cms_mapi_register_uninstall_function($module_name, 'news_module_uninstall');
 cms_mapi_register_execute_function($module_name, 'news_module_execute');
 cms_mapi_register_executeadmin_function($module_name, 'news_module_executeadmin');
 
+//Register help function
+cms_mapi_register_help_function($module_name, 'news_module_help');
+
 //Enable the wysiwyg for editing
 cms_mapi_enable_wysiwyg($module_name);
 

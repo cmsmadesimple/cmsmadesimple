@@ -5,5 +5,5 @@ php_flag register_globals Off
 # and Allow on
 RewriteEngine On
 
-#Rewrites page as index.php?page
+#Rewrites page.shtml as index.php?page
 RewriteRule ^(.+)\.shtml$ index.php?$1

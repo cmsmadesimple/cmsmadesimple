@@ -380,9 +380,9 @@ function db_get_menu_items($params = array()) {
 
 			$new_array			= array();
 
-			$show				= isset($params[show])				? $params[show]				: "all" ;
-			$start_element		= isset($params[start_element])		? $params[start_element]	: 0 ;
-			$number_of_levels	= isset($params[number_of_levels])	? $params[number_of_levels]		: 10 ;
+			$show				= isset($params['show'])				? $params['show']				: "all" ;
+			$start_element		= isset($params['start_element'])		? $params['start_element']		: 0 ;
+			$number_of_levels	= isset($params['number_of_levels'])	? $params['number_of_levels']	: 10 ;
 
 			$first_level_childs	= array_keys($parents,$start_element);
 
@@ -423,11 +423,11 @@ function db_get_menu_items($params = array()) {
 function construct_tree_from_list(&$content_array, &$parents, $params) {
 
 	# we get all the parameters and define default options
-	$start_element		= isset($params[start_element])		? $params[start_element]		: 0 ;
-	$number_of_levels	= isset($params[number_of_levels])	? $params[number_of_levels]		: 10 ;
-	$hierarchy_level	= isset($params[hierarchy_level])	? $params[hierarchy_level]		: 0 ;
-	$total_hierarchy	= isset($params[total_hierarchy])	? $params[total_hierarchy]		: "" ;
-	$show				= isset($params[show])				? $params[show]					: "all" ;
+	$start_element		= isset($params['start_element'])		? $params['start_element']		: 0 ;
+	$number_of_levels	= isset($params['number_of_levels'])	? $params['number_of_levels']		: 10 ;
+	$hierarchy_level	= isset($params['hierarchy_level'])	? $params['hierarchy_level']		: 0 ;
+	$total_hierarchy	= isset($params['total_hierarchy'])	? $params['total_hierarchy']		: "" ;
+	$show				= isset($params['show'])				? $params['show']					: "all" ;
 
 	if ($number_of_levels > 0)
 	{
