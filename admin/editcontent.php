@@ -224,12 +224,8 @@ else
 		<td><?php echo $typesdropdown ?></td>
 	</tr>
 	<?php
-		#Make sure the edit method exists in our contentobj
-		#If so, run it
-		if (in_array('edit', get_class_methods($contentobj)))
-		{
-			echo $contentobj->Edit();
-		}
+		#Run edit method in our contentobj
+		echo $contentobj->Edit();
 	?>
 	<tr>
 		<td>Additional Editors:</td>

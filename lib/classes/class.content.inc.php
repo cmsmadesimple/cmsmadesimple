@@ -1021,7 +1021,8 @@ class ContentManager
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($row['type'], @ContentManager::ListContentTypes()))
 			{
-				$contentobj = new $row['type'];
+				$classtype = strtolower($row['type']);
+				$contentobj = new $classtype; 
 				$contentobj->LoadFromData($row,true);
 				return $contentobj;
 			}
@@ -1138,9 +1139,9 @@ class ContentManager
 
 		foreach (get_declared_classes() as $oneclass)
 		{
-			if (get_parent_class($oneclass) == 'contentbase')
+			if (strtolower(get_parent_class($oneclass)) == 'contentbase')
 			{
-				array_push($result, $oneclass);
+				array_push($result, strtolower($oneclass));
 			}
 		}
 
