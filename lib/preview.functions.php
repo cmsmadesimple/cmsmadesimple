@@ -55,7 +55,15 @@ class Smarty_Preview extends Smarty {
 		global $gCms;
 		$config = $gCms->config;
 
-		$fname = $config["previews_path"] . "/" . $tpl_name;
+		$fname = '';
+		if (is_writable($config["previews_path"]))
+		{
+			$fname = $config["previews_path"] . "/" . $tpl_name;
+		}
+		else
+		{
+			$fname = dirname(dirname(__FILE__)) . "/tmp/cache/" . $tpl_name;
+		}
 		$handle = fopen($fname, "r");
 		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);

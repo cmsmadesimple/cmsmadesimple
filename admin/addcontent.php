@@ -198,7 +198,15 @@ else if ($preview)
 	$data['encoding'] = $stylesheetobj['encoding'];
 	$data['stylesheet'] = $stylesheetobj['stylesheet'];
 
-	$tmpfname = tempnam($config["previews_path"], "cmspreview");
+	$tmpfname = '';
+	if (is_writable($config["previews_path"]))
+	{
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
+	}
+	else
+	{
+		$tmpfname = tempnam(dirname(dirname(__FILE__)) . '/tmp/cache', "cmspreview");
+	}
 	$handle = fopen($tmpfname, "w");
 	fwrite($handle, serialize($data));
 	fclose($handle);
