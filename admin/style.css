@@ -388,6 +388,12 @@ FORM INPUT {
 SELECT {
 	FONT-SIZE: 1.2em;
 }
+FORM INPUT {
+	FONT-SIZE: .9em;
+}
+SELECT {
+	FONT-SIZE: .9em;
+}
 html>body FORM INPUT {
 	FONT-SIZE: 1em;
 }
