@@ -37,7 +37,7 @@ class LinkBlog extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.7';
+		return '1.8';
 	}
 
 	function Install()
@@ -98,7 +98,7 @@ class LinkBlog extends CMSModule
 			comment_id I KEY,
 				   linkblog_id I,
 				   author C(255),
-				   comment C(255),
+				   big_comment X,
 				   create_date T
 					   ";
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_linkblog_comments", $flds, $taboptarray);
@@ -137,6 +137,12 @@ class LinkBlog extends CMSModule
 				$dict = NewDataDictionary($db);
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog", "linkblog_content X");
 				$dict->ExecuteSQLArray($sqlarray);
+			case "1.7":
+				$dict = NewDataDictionary($db);
+				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog_comments", "big_comment X");
+				$dict->ExecuteSQLArray($sqlarray);
+				$update = "UPDATE ".cms_db_prefix()."module_linkblog_comments SET big_comment=comment";
+				$db->Execute($update);
 		} ## switch
 	} ## Upgrade
 
@@ -371,6 +377,21 @@ class LinkBlog extends CMSModule
 			<p>Author: Greg Froese &lt;heavy_g@users.sf.net&gt;<br />
 			Please send all bug requests through <a href="http://bugs.cmsmadesimple.org">here</a></p>
 			<b>Change History:</b><br/>
+			<p>Version 1.8</p>
+			<ul>
+			<li>Changed comment field to a longtext to allow a much larger comment</li>
+			<li>Removed cancel button from comment form</li>
+			<li>Added a field that retrieves an image to the local server so you aren't stealing other sites' bandwidth</li>
+			</ul>
+			<p>Version 1.7</p>
+			<ul>
+			<li>Added a content area to allow commenting on the post by the author</li>
+			</ul>
+			<p>Version 1.6</p>
+			<ul>
+			<li>Made code conform to new module API</li>
+			<li>Separated the display of RSS image, search form, etc from the actual content of linkblog</li>
+			</ul>
 			<p>Version: 1.5</p>
 			<p>Version 1.4 - 2005.01.03</p>
 			<ul>
@@ -688,6 +709,16 @@ class LinkBlog extends CMSModule
 		} else {
 			$content = $params["content"];
 		}
+		
+		if ($params["image1"] != "") {
+			$file = $this->cached_fopen_url($params["image1"], "r");
+			if ($file) {
+				echo "file is true ($file)<br />\n";
+				$content .= "<br /><img src=\"".$this->GetPreference("web_path", "")."/".basename($file)."\" alt=\"\" /><br />";
+			} else {
+				echo "file is false ($file)<br />\n";
+			}
+		}
 
 		if ($validinfo) {
 			$db = $this->cms->db;
@@ -771,6 +802,10 @@ class LinkBlog extends CMSModule
 			<tr>
 			<td>Source credit:</td>
 			<td><?php echo $this->CreateInputText($id, "credit", $params["credit"], '50', '250'); ?></td>
+			</tr>
+			<tr>
+			<td>Embed an image from the web in content area:</td>
+			<td><?php echo $this->CreateInputText($id, "image1", $params["image1"], '50', '250'); ?></td>
 			</tr>
 			<tr>
 			<td></td>
@@ -857,7 +892,7 @@ class LinkBlog extends CMSModule
 
 		if ($validinfo) {
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_comment_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date)";
+			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, big_comment, create_date)";
 			$query .= " VALUES (?,?,?,?,now())";
 			$myparams = array($new_id, $params["linkblog_id"], $params["author"], $params["comment"]);
 			$dbresult = $db->Execute($query, $myparams);
@@ -865,14 +900,14 @@ class LinkBlog extends CMSModule
 			echo $errormsg;
 		}
 
-		$query = "SELECT author, comment, create_date FROM ".cms_db_prefix()."module_linkblog_comments WHERE linkblog_id=".$params["linkblog_id"]." ORDER BY create_date desc";
+		$query = "SELECT author, big_comment, create_date FROM ".cms_db_prefix()."module_linkblog_comments WHERE linkblog_id=".$params["linkblog_id"]." ORDER BY create_date desc";
 		$dbresult = $db->Execute($query);
 		echo "<p class=\"smalltitle\">Comments</p>\n";
 		echo "<div class=\"modulelinkblog\">\n";
 		if ($dbresult && $dbresult->RowCount()) {
 			while ($row = $dbresult->FetchRow()) {
 				echo "<div class=\"modulelinkblogauthor\">".$row["author"]." - ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['create_date']))."</div>\n";
-				echo "<div class=\"modulelinkblogcomment\">".$row["comment"]."</div>\n";
+				echo "<div class=\"modulelinkblogcomment\">".$row["big_comment"]."</div>\n";
 			}
 		}
 		echo "</div>\n";
@@ -889,13 +924,12 @@ class LinkBlog extends CMSModule
 			</tr>
 			<tr>
 			<td>Comment:</td>
-			<td><?php echo $this->CreateInputText($id, "comment", "", '100', '250'); ?></td>
+			<td><?php echo $this->CreateTextarea(true, $id, '', 'comment', 'syntaxHighlight', 'comment'); ?></td>
 			</tr>
 			<tr>
 			<td><?php echo $this->CreateInputHidden($id, 'linkblog_id', $params["linkblog_id"]);?></td>
 			<td>
 			<?php echo $this->CreateInputSubmit($id, 'submit', 'Submit') ?>
-			<?php echo $this->CreateInputSubmit($id, 'cancelsubmit', 'Cancel') ?>
 			</td>
 			</tr>
 			</table>
@@ -1183,6 +1217,14 @@ class LinkBlog extends CMSModule
 			<td><input type="checkbox" value="1" name="<?php echo $id;?>ping" <?php if ($this->GetPreference("ping", "0") == "1") {echo "CHECKED";}?></td>
 			</tr>
 			<tr>
+			<td>Local file system path for retrieved/uploaded images:</td>
+			<td><?php echo $this->CreateInputText($id, "file_path", $this->GetPreference("file_path", ""), '30', '80');?></td>
+			</tr>
+			<tr>
+			<td>Local web path for retrieved/uploaded images:</td>
+			<td><?php echo $this->CreateInputText($id, "web_path", $this->GetPreference("web_path", ""), '30', '80');?></td>
+			</tr>
+			<tr>
 			<td></td>
 			<td><?php echo $this->CreateInputSubmit($id, 'submit', 'Save Changes');?></td>
 			</tr>
@@ -1202,6 +1244,8 @@ class LinkBlog extends CMSModule
 		if (isset($params["rss_title"])) { $rss_title = $params["rss_title"]; } else { $rss_title = ""; }
 		if (isset($params["rss_limit"])) { $rss_limit = $params["rss_limit"]; } else { $rss_limit = ""; }
 		if (isset($params["ping"])) { $ping = "1"; } else { $ping = "0"; }
+		if (isset($params["web_path"])) { $web_path = $params["web_path"]; } else { $web_path = ""; }
+		if (isset($params["file_path"])) { $file_path = $params["file_path"]; } else { $file_path = ""; }
 
 		$this->SetPreference("email_notify", $email_notify);
 		$this->SetPreference("email_to", $email_to);
@@ -1210,6 +1254,8 @@ class LinkBlog extends CMSModule
 		$this->SetPreference("rss_title", $rss_title);
 		$this->SetPreference("rss_limit", $rss_limit);
 		$this->SetPreference("ping", $ping);
+		$this->SetPreference("web_path", $web_path);
+		$this->SetPreference("file_path", $file_path);
 
 	} ## linkblog_module_set_preferences
 
@@ -1229,27 +1275,74 @@ class LinkBlog extends CMSModule
 		return $result;
 	} ## linkblog_module_get_categories
 
-
-	function code2utf($num) 
-	{	
-		if ($num < 128) {
-			return chr($num);
-		}
-		if ($num < 2048) {
-			return chr(($num >> 6) + 192) . chr(($num & 63) + 128);
-		}
-		if ($num < 65536) {
-			return chr(($num >> 12) + 224) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
-		}
-		if ($num < 2097152) {
-			return chr(($num >> 18) + 240) . chr((($num >> 12) & 63) + 128) . chr((($num >> 6) & 63) + 128) . chr(($num & 63) + 128);
-		}
-		return '';
-	} ## code2utf
-
-	function encode($str)
+	function cached_fopen_url($url, $file_mode, $timeout_seconds = 90, $fsocket_timeout = 10)
 	{
-		return preg_replace('/&#(\\d+);/e', 'code2utf($1)', utf8_encode($str));
-	}
+
+		$cache_path = $this->GetPreference("file_path", "");
+		$debug = false;
+
+		clearstatcache();
+		$cache_filename=$cache_path . "/" . urlencode(basename($url)); # .".cached";
+
+		if ($debug) {
+			echo "url: $url<br />";
+			print "local_cache creation_time =" .
+				@filemtime($cache_filename) .
+				" actual time = " . time() .
+				" timeout = " .
+				timeout_seconds ."<p>";
+		}
+
+		if ( ( @file_exists($cache_filename ) and ( ( @filemtime($cache_filename) + $timeout_seconds) > ( time() ) ) ) ) {
+			// ok, file is already cached and young enouth
+			if ($debug) { print "using cached file ($cache_filename) <p>";}
+		} else {
+
+			if ($debug) { print "cacheing file ($url) to local ($cache_filename)<p>";}
+
+			$urlParts = parse_url($url);
+			$host = $urlParts['host'];
+			$port = (isset($urlParts['port'])) ? $urlParts['port'] : 80;
+
+			if( !$fp = @fsockopen( $host, $port, $errno, $errstr, $fsocket_timeout )) {
+				// Server not responding
+
+			} else {
+
+				if( !fputs( $fp, "GET $url HTTP/1.0\r\nHost:$host\r\n\r\n" )) {
+					die( "unable to send get request" );
+				}
+
+				$data = null;
+				stream_set_timeout($fp, $fsocket_timeout);   
+				$status = socket_get_status($fp);
+				while( !feof($fp) && !$status['timed_out'])         
+				{
+					$data .= fgets ($fp,8192);
+					$status = socket_get_status($fp);
+				}
+				fclose ($fp);
+
+				// strip headers
+				$sData = split("\r\n\r\n", $data, 2);
+				$data = $sData[1];
+
+				// save to cache file
+				$f2 = fopen($cache_filename,"w+");
+				fwrite($f2,$data);
+				fclose($f2);
+			}
+		}
+
+		// ok, point to (fresh) cached file
+		if ( @file_exists($cache_filename )) {
+			## $handle = fopen($cache_filename, $file_mode);
+			## return $handle;
+			return $cache_filename;
+		}
+
+		return false;
+	} 
+
 
 } ## class
