@@ -21,6 +21,8 @@ require_once("include.php");
 $templateid = "";
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 
+header("Content-Type: text/css");
+
 echo get_stylesheet($config, $templateid);
 
 # vim:ts=4 sw=4 noet
