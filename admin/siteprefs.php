@@ -59,9 +59,9 @@ if (isset($_POST["editsiteprefs"])) {
 		set_site_preference('enablecustom404', $enablecustom404);
 		set_site_preference('custom404', $custom404);
 		set_site_preference('custom404template', $custom404template);
-		#set_site_preference('enablesitedownmessage', $enablesitedownmessage);
+		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
-		set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
+		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		set_site_preference('useadvancedcss', $useadvancedcss);
 		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited Site Preferences');
 	}

@@ -69,7 +69,7 @@ $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, site
 $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('custom404').", ".$db->qstr('<p>Page could not be found.</p>').")");
 $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('custom404template').", ".$db->qstr('-1').")");
 $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('enablesitedownmessage').", ".$db->qstr('0').")");
-$db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('sitedownmessage').", ".$db->qstr('<p>Page could not be found.</p>').")");
+$db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('sitedownmessage').", ".$db->qstr('<p>Site is currently down for maintenance.</p>').")");
 $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('sitedownmessagetemplate').", ".$db->qstr('-1').")");
 $db->Execute("INSERT INTO ".$config["db_prefix"]."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr('useadvancedcss').", ".$db->qstr('1').")");
 
