@@ -1,6 +1,9 @@
 Version 0.6.2 -- Subversion
 -----------------
 
+* Added dateformat parameter to News
+* Added showtemplate parameter to moduleinterface.php, so you can do things
+like show just an RSS feed and nothing else.
 * Fixed a bug with html entities not getting converted properly after preview
 or saved. (Fixes #62, #65)
 

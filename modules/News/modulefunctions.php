@@ -69,6 +69,18 @@ function news_module_uninstall($cms) {
 
 function news_module_execute($cms, $id, $params)
 {
+	news_module_executeuser($cms, $id, $cms->variables['page'], $params);
+}
+
+function news_module_executeuser($cms, $id, $return_id, $params)
+{
+	if (isset($params["makerssbutton"]))
+	{
+		$params = array_merge($params, array("showtemplate"=>"false","type"=>"rss"));
+		echo cms_mapi_create_user_link('News', $id, $return_id, $params, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" />");
+		return;
+	}
+
 	//This is the entryway into the module.  All requests from CMS will come through here.
 	$db = $cms->db;
 	$query = "SELECT news_id, news_title, news_data, news_date FROM ".cms_db_prefix()."module_news WHERE (".$db->IfNull('start_time',"''")." = '' AND ".$db->IfNull('end_time',"''")." = '') OR (start_time < ".$db->DBTimeStamp(time())." AND end_time > ".$db->DBTimeStamp(time()).") ORDER BY news_date desc";
@@ -80,15 +92,57 @@ function news_module_execute($cms, $id, $params)
 	{
 		$dbresult = $db->Execute($query);
 	}
-	if ($dbresult && $dbresult->RowCount())
+
+	$dateformat = "F j, Y, g:i a";
+	if (isset($params["dateformat"]))
 	{
+		$dateformat = $params["dateformat"];
+	}
+
+	$type = "text";
+	if (isset($params[$id."type"]))
+	{
+		$type = $params[$id."type"];
+	}
+	else if (isset($params["type"]))
+	{
+		$type = $params["type"];
+	}
+
+	if ($dbresult && $dbresult->RowCount() > 0)
+	{
+		if ($type == "rss")
+		{
+			header('Content-type: text/xml');
+			echo "<?xml version='1.0'?>\n";
+			echo "<rss version='2.0'>\n";
+			echo "   <channel>\n";
+		}
+
 		while ($row = $dbresult->FetchRow())
 		{
-			echo "<div class=\"cms-module-news\">";
-			echo "<span class=\"cms-news-date\">".date("F j, Y, g:i a", $db->UnixTimeStamp($row['news_date']))."</span><br />";
-			echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
-			echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
-			echo "</div>";
+			if ($type == "rss")
+			{
+				echo "        <item>\n";
+				echo "            <title>".$row["news_title"]."</title>\n";
+				echo "            <description>".$row["news_data"]."</description>\n";
+				echo "            <pubDate>".gmdate('D d M, Y H:i:s', $db->UnixTimeStamp($row["news_date"]))." GMT</pubDate>\n";
+				echo "        </item>\n";
+			}
+			else
+			{
+				echo "<div class=\"cms-module-news\">";
+				echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
+				echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
+				echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
+				echo "</div>";
+			}
+		}
+
+		if ($type == "rss")
+		{
+			echo "   </channel>\n";
+			echo "</rss>";
 		}
 	}
 }

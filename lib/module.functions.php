@@ -500,41 +500,45 @@ class Smarty_ModuleInterface extends Smarty {
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
-			$line = $result->FetchRow();
 
-			$stylesheet = "";
-			if (isset($line[stylesheet])) {
-				$stylesheet .= "<style type=\"text/css\">\n";
-				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-				$stylesheet .= "</style>\n";
-			}
-
-			# the new css stuff
-			$tempstylesheet = "";
-
-			$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-				WHERE	css_id		= assoc_css_id
-				AND		assoc_type	= 'template'
-				AND		assoc_to_id = '".$line[template_id]."'";
-			$cssresult = $db->Execute($cssquery);
-
-			$stylesheet .= "<style type=\"text/css\">\n";
-			while ($cssline = $cssresult->FetchRow())
+			if ($smarty_obj->showtemplate == true)
 			{
-				$tempstylesheet .= "\n".$cssline[css_text]."\n";
-			}
-			$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
-			$stylesheet .= "</style>\n";
+				$line = $result->FetchRow();
 
-			$tpl_source = $line[template_content];
-			$content = $line[page_content];
-			$title = $line[page_title];
-			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+				$stylesheet = "";
+				if (isset($line[stylesheet])) {
+					$stylesheet .= "<style type=\"text/css\">\n";
+					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
+					$stylesheet .= "</style>\n";
+				}
 
-			#So no one can do anything nasty
-			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
-				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				# the new css stuff
+				$tempstylesheet = "";
+
+				$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+					WHERE	css_id		= assoc_css_id
+					AND		assoc_type	= 'template'
+					AND		assoc_to_id = '".$line[template_id]."'";
+				$cssresult = $db->Execute($cssquery);
+
+				$stylesheet .= "<style type=\"text/css\">\n";
+				while ($cssline = $cssresult->FetchRow())
+				{
+					$tempstylesheet .= "\n".$cssline[css_text]."\n";
+				}
+				$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
+				$stylesheet .= "</style>\n";
+
+				$tpl_source = $line[template_content];
+				$content = $line[page_content];
+				$title = $line[page_title];
+				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+
+				#So no one can do anything nasty
+				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
+					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				}
 			}
 			
 			#Run the execute_user function and replace {content} with it's output 
@@ -547,7 +551,14 @@ class Smarty_ModuleInterface extends Smarty {
 				call_user_func_array($cmsmodules[$smarty_obj->module]['execute_user_function'], array($gCms,$smarty_obj->id,$tpl_name,$smarty_obj->params));
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
-				$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+				if ($smarty_obj->showtemplate == true)
+				{
+					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+				}
+				else
+				{
+					$tpl_source = $modoutput;
+				}
 			}
 			return true;
 		}

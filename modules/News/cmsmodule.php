@@ -36,6 +36,7 @@ cms_mapi_register_install_function($module_name, 'news_module_install');
 cms_mapi_register_upgrade_function($module_name, 'news_module_upgrade');
 cms_mapi_register_uninstall_function($module_name, 'news_module_uninstall');
 cms_mapi_register_execute_function($module_name, 'news_module_execute');
+cms_mapi_register_executeuser_function($module_name, 'news_module_executeuser');
 cms_mapi_register_executeadmin_function($module_name, 'news_module_executeadmin');
 
 //Register help function
