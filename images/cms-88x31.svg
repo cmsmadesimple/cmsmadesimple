@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="88pt"
+   height="31pt"
+   sodipodi:docbase="/home/mudfly/development/cms/images"
+   sodipodi:docname="cms-88x31.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient829">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.74901962;"
+         offset="0.0000000"
+         id="stop830" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.10000000;"
+         offset="1.0000000"
+         id="stop831" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient829"
+       id="linearGradient832"
+       x1="0.95940959"
+       y1="1.13043475"
+       x2="0.11439114"
+       y2="-0.11956522" />
+    <radialGradient
+       xlink:href="#linearGradient829"
+       id="radialGradient615"
+       cx="0.53505534"
+       cy="0.54347825"
+       r="1.37410319"
+       fx="0.53505534"
+       fy="0.54347825" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.70710678"
+     inkscape:cx="36.2500121"
+     inkscape:cy="16.9999968"
+     inkscape:window-width="939"
+     inkscape:window-height="683"
+     inkscape:window-x="345"
+     inkscape:window-y="553"
+     borderlayer="top" />
+  <rect
+     style="font-size:12;fill:#516870;fill-rule:evenodd;stroke-width:7.5;"
+     id="rect866"
+     width="110.05389453"
+     height="38.67508316"
+     ry="2.33780622"
+     x="-0.00981305"
+     y="0.07693080"
+     rx="2.11505933" />
+  <rect
+     style="font-size:12;fill:url(#radialGradient615);fill-rule:evenodd;stroke-width:7.5;"
+     id="rect827"
+     width="107.411339"
+     height="36.4117928"
+     ry="1.75132477"
+     x="1.37552381"
+     y="1.28961372"
+     rx="1.46123946" />
+  <rect
+     style="font-size:12;fill:#788a90;fill-rule:evenodd;stroke:#2f5562;stroke-width:0.717959;"
+     id="rect826"
+     width="22.99549347"
+     height="21.11649895"
+     ry="1.27091718"
+     x="82.17340790"
+     y="3.91218257"
+     rx="1.23022777" />
+  <rect
+     style="font-size:12;fill:#64add1;fill-rule:evenodd;stroke:#3b6871;stroke-width:0.717959;"
+     id="rect825"
+     width="23.99663579"
+     height="22.03583908"
+     ry="1.32624829"
+     x="71.51997226"
+     y="8.38859558"
+     rx="1.28378730" />
+  <rect
+     style="font-size:12;fill:#c5dee3;fill-rule:evenodd;stroke:#39708b;stroke-width:0.717959;"
+     id="rect828"
+     width="19.97473648"
+     height="18.34257317"
+     ry="1.10396576"
+     x="82.68573510"
+     y="16.76797485"
+     rx="1.06862135" />
+  <text
+     xml:space="preserve"
+     style="fill:#24414a;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:0.188051;stroke-linejoin:miter;stroke-linecap:butt;stroke-dasharray:none;"
+     x="1.77917852"
+     y="12.0985508"
+     id="text592"
+     transform="scale(1.660600,1.662963)"><tspan
+       id="tspan593"
+       style="fill:#24414a;fill-opacity:1;stroke:none;stroke-opacity:1;stroke-width:0.188051;stroke-dasharray:none;">CMS</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:#24414a;fill-opacity:1;stroke:none;font-family:helvetica;font-style:normal;font-weight:normal;font-size:12px;stroke-opacity:1;stroke-width:0.233445;stroke-linejoin:miter;stroke-linecap:butt;stroke-dasharray:none;"
+     x="2.22635235"
+     y="25.2023958"
+     id="text595"
+     transform="scale(1.288280,1.390978)"><tspan
+       id="tspan596"
+       style="fill:#24414a;fill-opacity:1;stroke:none;stroke-opacity:1;stroke-width:0.233445;stroke-dasharray:none;">Made Simple</tspan></text>
+</svg>
