@@ -79,7 +79,8 @@ require_once("lib/GetText.php");
 GetText::init();
 
 #add the translation domain we wrote files for
-GetText::addDomain('cmsmadesimple', 'locale');
+#GetText::addDomain('cmsmadesimple','/var/cms/locale');
+GetText::addDomain('cmsmadesimple');
 
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
