@@ -1369,7 +1369,7 @@ class ModuleOperations
 
 		foreach ($_REQUEST as $key=>$value)
 		{
-			if (strpos($key, $id) !== FALSE && strpos($key, $id) == 0)
+			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
 			{
 				$key = str_replace($id, '', $key);
 				$params[$key] = $value;
