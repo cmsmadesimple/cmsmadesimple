@@ -80,6 +80,9 @@ else {
 <h3><?=GetText::gettext('Permissions for group: ${group_name}')?></h3>
 
 <form method="post" action="changegroupperm.php">
+
+<div class="adminform">
+
 <?php
 
 	GetText::reset();
@@ -129,6 +132,8 @@ else {
 ?>
 
 <p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></p>
+
+</div>
 
 </form>
 
