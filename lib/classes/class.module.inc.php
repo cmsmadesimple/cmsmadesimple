@@ -190,6 +190,17 @@ class CMSModule extends ModuleOperations
 	{
 		return FALSE;
 	}
+
+	/**
+	 * Returns whether or not modules should be autoupgraded while upgrading
+	 * CMS versions.  Generally only useful for modules included with the CMS
+	 * base install, but there could be a situation down the road where we have
+	 * different distributions with different modules included in them.
+	 */
+	function AllowAutoUpgrade()
+	{
+		return FALSE;
+	}
  
  	/**
 	 * Returns a list of dependencies and minimum versions that this module

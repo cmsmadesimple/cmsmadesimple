@@ -28,7 +28,7 @@ function module_autoupgrade()
 
 	foreach ($gCms->modules as $modulename=>$value)
 	{
-		if (isset($gCms->modules[$modulename]['auto_upgrade_function']))
+		if ($gCms->modules[$modulename]['object']->AllowAutoUpgrade())
 		{
 			//Check to see what version we currently have in the database (if it's installed)
 			$module_version = false;
@@ -40,14 +40,14 @@ function module_autoupgrade()
 			}
 
 			//Check to see what version we have in the file system
-			$file_version = $gCms->modules[$modulename]['Version'];
+			$file_version = $gCms->modules[$modulename]['object']->GetVersion();
 
 			if ($module_version)
 			{
 				if (version_compare($file_version, $module_version) == 1)
 				{
 					echo "<p>Upgrading $modulename module...";
-					call_user_func_array($gCms->modules[$modulename]['auto_upgrade_function'], array($gCms, $module_version, $file_version));
+					$gCms->modules[$modulename]['object']->Upgrade($module_version, $file_version);
 					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
 					$result = $db->Execute($query, array($file_version, $modulename));
 					echo "[Done]</p>";
