@@ -125,7 +125,7 @@ class link extends ContentBase
 
 	function GetURL()
 	{
-		return $this->mProperties->GetValue('url');
+		return htmlentities($this->mProperties->GetValue('url'));
 	}
 }
 
