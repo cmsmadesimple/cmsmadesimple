@@ -51,6 +51,9 @@ class LinkBlog extends CMSModule
 				    linkblog_title C(255),
 				    linkblog_url C(255),
 				    linkblog_author C(255),
+				    linkblog_credit C(255),
+				    linkblog_content X,
+				    linkblog_hits I,
 				    linkblog_type I,
 				    create_date T,
 				    modified_date T,
@@ -102,7 +105,7 @@ class LinkBlog extends CMSModule
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix()."module_linkblog_comment_seq");
-		cms_mapi_create_permission( $cms, 'Modify Linkblog', 'Modify Linkblog');
+		$this->CreatePermission('Modify Linkblog', 'Modify Linkblog');
 
 	}
 
@@ -112,7 +115,7 @@ class LinkBlog extends CMSModule
 		switch ($oldversion) {
 			case "1.0":
 				case "1.1":
-				cms_mapi_create_permission( $cms, 'Modify Linkblog', 'Modify Linkblog');
+				$this->CreatePermission('Modify Linkblog', 'Modify Linkblog');
 			case "1.2":
 				$dict = NewDataDictionary($db);
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog", "status C(10)");
@@ -963,7 +966,7 @@ class LinkBlog extends CMSModule
 
 	function admin_menu($id, $params)
 	{
-		$access = cms_mapi_check_permission($cms, "Modify Linkblog");
+		$access = $this->CheckPermission("Modify Linkblog");
 		if (!$access) {
 		echo "<p class=\"error\">You need the 'Modify Linkblog' permission to perform that function.</p>";
 		return;
