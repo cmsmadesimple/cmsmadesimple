@@ -1,5 +1,11 @@
-Version 0.4 -- Subversion 
+Version 0.3.2 -- Subversion 
 -----------------
+
+* Added version check to install.php
+* Added check to make sure bbcode exists before using it
+* Fixed link to cmsmadesimple in footer
+* Fixed bug in displaying 404 pages
+* Fixed a nasty bug where link pages would file to show in the content list
 
 Version 0.3.1 -- Tue Jul 27 2004
 -----------------

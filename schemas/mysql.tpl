@@ -55,7 +55,7 @@ INSERT INTO {$tableprefix}group_perms (group_perm_id, group_id, permission_id, c
 INSERT INTO {$tableprefix}group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (17,1,17,now(),now());
 
 CREATE TABLE {$tableprefix}groups (
-  group_id int(11) NOT NULL,
+  group_id int(11) NOT NULL auto_increment,
   group_name varchar(25) default NULL,
   active tinyint(1) default NULL,
   create_date datetime default NULL,

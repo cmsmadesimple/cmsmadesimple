@@ -14,7 +14,7 @@ $gettext->reset();
 <a href="listgroups.php"><?=$gettext->gettext("Group Management")?></a>
 <a href="adminlog.php"><?=$gettext->gettext("Admin Log")?></a>
 <a href="editprefs.php"><?=$gettext->gettext("User Preferences")?></a>
-<a href="tools.php"><?=$gettext->gettext("Tools")?></a>
+<!--<a href="tools.php"><?=$gettext->gettext("Tools")?></a>-->
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <a href="logout.php"><?=$gettext->gettext("Logout")?></a>
 <p><form action="index.php" method="post" name="cms_admin_lang_form">
