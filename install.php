@@ -173,7 +173,7 @@ Please complete the following fields:
 <td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /><input type="hidden" name="page" value="3" /></td>
 </tr>
 </table>
-<p class="continue" align="center"><a href="#" onclick="document.page2form.submit()">Continue</a></p>
+<p class="continue" align="center"><a href="install.php?page=3" onclick="document.page2form.submit()">Continue</a></p>
 </form>
 <?php
 
