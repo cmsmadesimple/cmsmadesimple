@@ -141,7 +141,7 @@ function check_ownership($userid, $contentid = "")
 	$db = $gCms->db;
 
 	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE owner_id = ? AND content_id = ?";
-	$result = $db->Execute($query, array($userid, $pageid));
+	$result = $db->Execute($query, array($userid, $contentid));
 
 	if ($result && $result->RowCount() > 0) {
 		$check = true;

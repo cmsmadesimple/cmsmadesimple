@@ -89,7 +89,6 @@ if (isset($_POST["serialized_content"]))
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
 $access = check_permission($userid, 'Edit Content') || check_ownership($userid, $content_id);;
-$access = true; #TODO: Remove Me!!!
 $adminaccess = $access;
 if (!$access)
 {
@@ -103,6 +102,18 @@ if ($access)
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
+
+		#Fill Additional Editors (kind of kludgy)
+		$addtarray = array();
+		if (isset($_POST["additional_editors"]))
+		{
+			foreach ($_POST["additional_editors"] as $addt_user_id)
+			{
+				array_push($addtarray, $addt_user_id);
+			}
+		}
+		$contentobj->SetAdditionalEditors($addtarray);
+
 		if ($error === FALSE)
 		{
 			$contentobj->Save();
@@ -124,6 +135,17 @@ if ($access)
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
+
+		#Fill Additional Editors (kind of kludgy)
+		$addtarray = array();
+		if (isset($_POST["additional_editors"]))
+		{
+			foreach ($_POST["additional_editors"] as $addt_user_id)
+			{
+				array_push($addtarray, $addt_user_id);
+			}
+		}
+		$contentobj->SetAdditionalEditors($addtarray);
 	}
 }
 
@@ -209,6 +231,29 @@ else
 			echo $contentobj->Edit();
 		}
 	?>
+	<tr>
+		<td>Additional Editors:</td>
+		<td>
+			<select name="additional_editors[]" multiple="multiple" size="5">
+				<?php
+				$allusers = UserOperations::LoadUsers();
+				$addteditors = $contentobj->GetAdditionalEditors();
+				foreach ($allusers as $oneuser)
+				{
+					if ($oneuser->id != $userid)
+					{
+						echo '<option value="'.$oneuser->id.'"';
+						if (in_array($oneuser->id, $addteditors))
+						{
+							echo ' selected="selected"';
+						}
+						echo '>'.$oneuser->username.'</option>';
+					}
+				}
+				?>
+			</select>
+		</td>
+	</tr>
 </table>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>

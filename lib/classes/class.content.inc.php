@@ -150,6 +150,8 @@ class ContentBase
 	 */
 	var $mModifiedDate;
 
+	var $mAdditionalEditors;
+
 	/************************************************************************/
 	/* Constructor related													*/
 	/************************************************************************/
@@ -580,6 +582,19 @@ class ContentBase
 			$this->mOldItemOrder = $this->mItemOrder;
 		}
 
+		if (isset($this->mAdditionalEditors))
+		{
+			$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ".$this->Id();
+			$db->Execute($query);
+
+			foreach ($this->mAdditionalEditors as $oneeditor)
+			{
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+			}
+		}
+
 		if (NULL != $this->mProperties)
 		{
 			# :TODO: There might be some error checking there
@@ -672,6 +687,15 @@ class ContentBase
 			{
 				# :TODO: Translate the error message
 				$debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
+			}
+		}
+		if (isset($this->mAdditionalEditors))
+		{
+			foreach ($this->mAdditionalEditors as $oneeditor)
+			{
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
 			}
 		}
 	}
@@ -813,6 +837,35 @@ class ContentBase
 		}
 
 		return $result;
+	}
+
+	function GetAdditionalEditors()
+	{
+		var_dump($this->mAdditionalEditors);
+		if (!isset($this->mAdditionalEditors))
+		{
+			global $gCms;
+			$db = &$gCms->db;
+			
+			$this->mAdditionalEditors = array();
+
+			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ".$this->mId;
+			$dbresult = $db->Execute($query);
+
+			if ($dbresult && $dbresult->RowCount() > 0)
+			{
+				while ($row = $dbresult->FetchRow())
+				{
+					array_push($this->mAdditionalEditors, $row['user_id']);
+				}
+			}
+		}
+		return $this->mAdditionalEditors;
+	}
+
+	function SetAdditionalEditors($editorarray)
+	{
+		$this->mAdditionalEditors = $editorarray;
 	}
 }
 

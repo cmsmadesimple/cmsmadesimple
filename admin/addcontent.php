@@ -99,6 +99,19 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
+		$contentobj->mOwnerId = $userid;
+
+		#Fill Additional Editors (kind of kludgy)
+		$addtarray = array();
+		if (isset($_POST["additional_editors"]))
+		{
+			foreach ($_POST["additional_editors"] as $addt_user_id)
+			{
+				array_push($addtarray, $addt_user_id);
+			}
+		}
+		$contentobj->SetAdditionalEditors($addtarray);
+
 		$error = $contentobj->ValidateData();
 		if ($error === FALSE)
 		{
@@ -115,6 +128,15 @@ if ($access)
 	{
 		$contentobj->FillParams($_POST);
 		$error = $contentobj->ValidateData();
+		$addtarray = array();
+		if (isset($_POST["additional_editors"]))
+		{
+			foreach ($_POST["additional_editors"] as $addt_user_id)
+			{
+				array_push($addtarray, $addt_user_id);
+			}
+		}
+		$contentobj->SetAdditionalEditors($addtarray);
 	}
 }
 
@@ -199,6 +221,29 @@ else if ($preview)
 			echo $contentobj->Edit();
 		}
 	?>
+	<tr>
+		<td>Additional Editors:</td>
+		<td>
+			<select name="additional_editors[]" multiple="multiple" size="5">
+				<?php
+				$allusers = UserOperations::LoadUsers();
+				$addteditors = $contentobj->GetAdditionalEditors();
+				foreach ($allusers as $oneuser)
+				{
+					if ($oneuser->id != $userid)
+					{
+						echo '<option value="'.$oneuser->id.'"';
+						if (in_array($oneuser->id, $addteditors))
+						{
+							echo ' selected="selected"';
+						}
+						echo '>'.$oneuser->username.'</option>';
+					}
+				}
+				?>
+			</select>
+		</td>
+	</tr>
 </table>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
