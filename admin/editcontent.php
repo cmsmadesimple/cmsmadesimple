@@ -25,12 +25,22 @@ $error = "";
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
-$url = "";
-#if (isset($_POST["url"])) $url = $_POST["url"];
-if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
-
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
+
+$content_type = "content";
+if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
+
+$orig_content_type = "content";
+if (isset($_POST["orig_content_type"])) $orig_content_type = $_POST["orig_content_type"];
+
+$url = "";
+if ($content_type == "content") {
+	if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
+}
+else {
+	if (isset($_POST["url"])) $url = $_POST["url"];
+}
 
 $menutext = "";
 if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
@@ -57,6 +67,12 @@ if (isset($_POST["orig_section_id"])) $orig_section_id = $_POST["orig_section_id
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
+$content_change = false;
+if (isset($_POST["content_change"]) && $_POST["content_change"] == 1) $content_change = true;
+
+$submit = false;
+if (isset($_POST["submitbutton"])) $submit = true;
+
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 
@@ -75,7 +91,7 @@ if (!$access) {
 if ($access) {
 	$db = new DB($config);
 
-	if (isset($_POST["editcontent"]) && !$preview) {
+	if ($submit) {
 
 		$validinfo = true;
 
@@ -87,7 +103,7 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".GetText::gettext("No url given!")."</li>";
 		}
-		if ($content == "") {
+		if ($content_type == "content" && $content == "") {
 			$validinfo = false;
 			$error .= "<li>".GetText::gettext("No content entered!")."</li>";
 		}
@@ -106,7 +122,7 @@ if ($access) {
 				}
 				mysql_free_result($result);
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now(), item_order=$order WHERE page_id = $page_id";
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now(), item_order=$order, page_type = '".mysql_escape_string($content_type)."' WHERE page_id = $page_id";
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {
@@ -133,7 +149,7 @@ if ($access) {
 		}
 
 	}
-	else if ($page_id != -1 && !$preview) {
+	else if ($page_id != -1 && !$preview && !$content_change) {
 
 		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
 		$result = $db->query($query);
@@ -141,6 +157,9 @@ if ($access) {
 		$row = mysql_fetch_array($result, MYSQL_ASSOC);
 
 		$title = $row["page_title"];
+		$url = $row["page_url"];
+		$content_type = $row["page_type"];
+		$orig_content_type = $row["page_type"];
 		$url = $row["page_url"];
 		$content = $row["page_content"];
 		$section_id = $row["section_id"];
@@ -207,6 +226,16 @@ if ($access) {
     mysql_free_result($result);
 
 	$db->close();
+
+	$ctdropdown = "<select name=\"content_type\" onchange=\"document.editform.content_change.value=1;document.editform.submit()\">";
+	foreach (get_page_types($config) as $key=>$value) {
+		$ctdropdown .= "<option value=\"$key\"";
+		if ($key == $content_type) {
+			$ctdropdown .= " selected=\"true\"";
+		}
+		$ctdropdown .= ">".$value."</option>";
+	}
+	$ctdropdown .= "</select>";
 }
 
 include_once("header.php");
@@ -255,7 +284,7 @@ else {
 
 ?>
 
-<form method="post" action="editcontent.php">
+<form method="post" action="editcontent.php" name="editform" id="editform">
 
 <div class="adminform">
 
@@ -264,6 +293,10 @@ else {
 <table border="0">
 
 	<tr>
+		<td><?=GetText::gettext("Content Type")?>:</td>
+		<td><?=$ctdropdown?><input type="hidden" name="orig_content_type" value="<?=$orig_content_type?>" /></td>
+	</tr>
+	<tr>
 		<td>*<?=GetText::gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="255" value="<?=$title?>" /></td>
 	</tr>
@@ -271,18 +304,22 @@ else {
 		<td>*<?=GetText::gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
+<?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=GetText::gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
+<?php } ?>
 	<tr>
 		<td><?=GetText::gettext("Section")?>:</td>
 		<td><?=$dropdown?><input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" /></td>
 	</tr>
+<?php if ($content_type == "content") { ?>
 	<tr>
 		<td><?=GetText::gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
+<?php } ?>
 <?php if ($adminaccess) { ?>
     <tr> 
 		<td><?=GetText::gettext("Additional Editors")?>:</td>
@@ -303,7 +340,7 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
+		<td><input type="hidden" name="content_change" value="0" /><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

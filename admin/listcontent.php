@@ -64,6 +64,7 @@ include_once("header.php");
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".GetText::gettext("Title")."</td>\n";
+		echo "<td>".GetText::gettext("Type")."</td>\n";
 		echo "<td>".GetText::gettext("URL")."</td>\n";
 		echo "<td>".GetText::gettext("Owner")."</td>\n";
 		echo "<td>".GetText::gettext("Section")."</td>\n";
@@ -90,8 +91,11 @@ include_once("header.php");
 				$oldsectionid = $row["section_id"];
 			}
 
+			$types = get_page_types($config);
+
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["page_title"]."</td>\n";
+			echo "<td>".$types[$row["page_type"]]."</td>\n";
 			echo "<td>".$row["page_url"]."</td>\n";
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".$row["section_name"]."</td>\n";

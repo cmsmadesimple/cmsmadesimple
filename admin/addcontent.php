@@ -25,12 +25,19 @@ $error = "";
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
-$url = "";
-#if (isset($_POST["url"])) $url = $_POST["url"];
-if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
-
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
+
+$content_type = "content";
+if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
+
+$url = "";
+if ($content_type == "content") {
+	if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
+}
+else {
+	if (isset($_POST["url"])) $url = $_POST["url"];
+}
 
 $section_id = -1;
 if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
@@ -43,6 +50,12 @@ if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
 
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
+
+$submit = false;
+if (isset($_POST["submitbutton"])) $submit = true;
+
+$content_change = false;
+if (isset($_POST["content_change"]) && $_POST["content_change"] == 1) $content_change = true;
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
@@ -61,7 +74,7 @@ $access = check_permission($config, $userid, 'Add Content');
 if ($access) {
 	$db = new DB($config);
 
-	if (isset($_POST["addcontent"]) && !$preview) {
+	if ($submit) {
 
 		$validinfo = true;
 		if ($title == "") {
@@ -72,7 +85,7 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".GetText::gettext("No url given!")."</li>";
 		}
-		if ($content == "") {
+		if ($content_type == "content" && $content == "") {
 			$validinfo = false;
 			$error .= "<li>".GetText::gettext("No content entered!")."</li>";
 		}
@@ -90,7 +103,7 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 			mysql_free_result($result);
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, $userid, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."','".mysql_escape_string($content_type)."', $section_id, $template_id, $userid, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
 				$new_page_id = mysql_insert_id();
@@ -159,6 +172,17 @@ if ($access) {
 
 	mysql_free_result($result);
 	$db->close();
+
+	$ctdropdown = "<select name=\"content_type\" onchange=\"document.addform.content_change.value=1;document.addform.submit()\">";
+	foreach (get_page_types($config) as $key=>$value) {
+		$ctdropdown .= "<option value=\"$key\"";
+		if ($key == $content_type) {
+			$ctdropdown .= " selected=\"true\"";
+		}
+		$ctdropdown .= ">".$value."</option>";
+	}
+	$ctdropdown .= "</select>";
+
 }
 
 include_once("header.php");
@@ -209,7 +233,7 @@ else {
 
 ?>
 
-<form method="post" action="addcontent.php">
+<form method="post" action="addcontent.php" name="addform" id="addform">
 
 <div class="adminform">
 
@@ -218,6 +242,10 @@ else {
 <table border="0">
 
 	<tr>
+		<td><?=GetText::gettext("Content Type")?>:</td>
+		<td><?=$ctdropdown?></td>
+	</tr>
+	<tr>
 		<td>*<?=GetText::gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="25" value="<?=$title?>" /></td>
 	</tr>
@@ -225,18 +253,22 @@ else {
 		<td>*<?=GetText::gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
+<?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=GetText::gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
 	</tr>
+<?php } ?>
 	<tr>
 		<td><?=GetText::gettext("Section")?>:</td>
 		<td><?=$dropdown?></td>
 	</tr>
+<?php if ($content_type == "content") { ?>
 	<tr>
 		<td><?=GetText::gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
+<?php } ?>
 	<tr>
 		<td><?=GetText::gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
@@ -255,7 +287,7 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addcontent" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" name="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
+		<td><input type="hidden" name="content_change" value="0" /><input type="hidden" name="addcontent" value="true" /><?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
 	</tr>
 
 </table>
