@@ -46,10 +46,11 @@ class Smarty_Preview extends Smarty {
 
 	function preview_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		$handle = fopen($tpl_name, "r");
-		$data = unserialize(fread($handle, filesize($tpl_name)));
+		$fname = $smarty_obj->configCMS->root_path . "/smarty/cms/cache/cmspreview" . $tpl_name;
+		$handle = fopen($fname, "r");
+		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);
-		unlink($tpl_name);
+		unlink($fname);
 		$tpl_source = $data["template"];
 		$stylesheet = "";
 		if (isset($data["stylesheet"])) {

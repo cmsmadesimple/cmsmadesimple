@@ -225,7 +225,7 @@ else {
 		mysql_free_result($result);
 		$db->close();
 
-		$tmpfname = tempnam('/tmp', "cmspreview");
+		$tmpfname = tempnam($config->root_path . "/smarty/cms/cache/", "cmspreview");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
@@ -233,7 +233,7 @@ else {
 ?>
 <h3><?=GetText::gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode($tmpfname)?>">
+<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
 </iframe>
 <?php
