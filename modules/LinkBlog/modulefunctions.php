@@ -105,7 +105,8 @@ function linkblog_module_execute($cms, $id, $params) {
 	//This is the entryway into the module.  All requests from CMS will come through here.
 	//Default to showing the current days links, if no links from the current day, show the last day with links.
 
-	linkblog_module_showLinks($cms, $id, $params);
+	$return_id = $cms->variables['page'];
+	linkblog_module_showLinks($cms, $id, $params, $return_id);
 	return;
 }
 
@@ -116,218 +117,7 @@ function linkblog_module_executeuser($cms, $id, $return_id, $params) {
 		return;
 	}
 
-	$errormsg = "";
-
-	$action = "";
-	if (isset($params[$id."action"])) {
-		$action = $params[$id."action"];
-	}
-	$author = "";
-	if (isset($params[$id."author"])) {
-		$author = $params[$id."author"];
-	}
-	$title = "";
-	if (isset($params[$id."title"])) {
-		$title = $params[$id."title"];
-	}
-
-	$type = "";
-	if (isset($params[$id."type"])) {
-		$type = $params[$id."type"];
-	}
-
-	$url = "";
-	if (isset($params[$id."url"])) {
-		$url = $params[$id."url"];
-	}
-
-	$comment = "";
-	if (isset($params[$id."comment"])) {
-		$comment = $params[$id."comment"];
-	}
-
-	if ($action == "viewoldlinks") {
-		linkblog_module_showLinks($cms, $id, $params);
-	}
-
-	
-	## run this when a new link is submitted
-	if ($action == "linkadd") {
-		echo "here we are<br/>\n";
-
-		$validinfo = true;
-
-		if ($author == "") {
-			$validinfo = false;
-			$errormsg .= "<li>Enter an author</li>";
-		}
-	
-		if ($title == "") {
-			$validinfo = false;
-			$errormsg .= "<li>Enter a title so people know what you are talking about.</li>";
-		}
-
-		if ($type == "") {
-			$validinfo = false;
-			$errormsg .= "<li>Enter a type</li>";
-		}
-
-		if ($url == "") {
-			$validinfo = false;
-			$errormsg .= "<li>Enter a link, where are we supposed to go?</li>";
-		}
-		
-		if ($validinfo) {
-			echo "validinfo: true<br/>\n";
-		} else {
-			echo "validinfo: false<br/>\n";
-		}
-
-		if ($validinfo) {
-			$db = $cms->db;
-			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".$db->qstr($url).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-			echo "query: $query<br/>\n";
-			$dbresult = $db->Execute($query);
-			cms_mapi_redirect_user_by_pageid($return_id);
-			return;
-		} else {
-			echo $errormsg;
-		}
-	}
-
-	## Display this when the Add Link link is clicked
-	if ($action == "addlink") {
-
-		if (strlen($errormsg) > 0) {
-			echo "<p>Error:</p><ul>".$errormsg."</ul>";
-		}
-		
-		$types = "<select name=\"".$id."type\">\n";
-		$db = $cms->db;
-		$query = "SELECT linkblog_type_id, linkblog_type from ".cms_db_prefix()."module_linkblog_types ORDER BY linkblog_type";
-		$dbresult = $db->Execute($query);
-		if ($dbresult && $dbresult->RowCount()) {
-			while ($row = $dbresult->FetchRow()) {
-				$types .= "<option value=\"".$row['linkblog_type_id']."\">".$row['linkblog_type']."</option>\n";
-			}
-		}
-		$types .= "</select>\n";
-
-		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
-
-		?>
-		<p class="smalltitle">Add Link - <?php echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog"); ?></p>
-
-		<table>
-			<tr>
-				<td>Your name:</td>
-				<td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
-			</tr>
-			<tr>
-				<td>Title:</td>
-				<td><input type="text" name="<?php echo $id?>title" value="<?php echo $title?>" size=100 maxlength=250/></td>
-			</tr>
-			<tr>
-				<td>URL:</td>
-				<td><input type="text" name="<?php echo $id?>url" value="<?php echo $url?>" size=100 maxlength=250 /></td>
-			</tr>
-			<tr>
-				<td>Type:</td>
-				<td><?php echo $types?></td>
-			</tr>
-			<tr>
-				<td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="linkadd" /></td>
-				<td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
-			</tr>
-		</table>
-		<?php
-
-		echo cms_mapi_create_user_form_end();
-	}
-
-	## this displays any existing comments for the chosen link and also displays a form to submit a comment
-	if ($action == "viewcomments" || $action == "postcomment") {
-
-		$db = $cms->db;
-		$query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type, create_date from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params[$id."linkblog_id"];
-		$dbresult = $db->Execute($query);
-		echo "<p class=\"smalltitle\">Posted site - ";
-		echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
-		echo "</p>\n";
-		echo "<div class=\"modulelinkblog\">\n";
-
-		if ($dbresult && $dbresult->RowCount()) {
-			while ($row = $dbresult->FetchRow()) {
-				
-				echo "<div class=\"modulelinkblogentry\">\n";
-				## echo "<div class=\"modulelinkblogentryheader\">\nPosted at ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-				echo "<div class=\"modulelinkblogentryheader\">\nPosted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-				echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=modules/LinkBlog/images/type".$row["linkblog_type"].".png border=\"0\"> ".$row["linkblog_title"]."</a>\n";
-				echo "</div>\n";
-
-				echo "</div>\n";
-			}
-		}
-		echo "</div>\n";
-
-		if ($action == "postcomment") {
-
-			$validinfo = true;
-			$errormsg = "<ul>\n";
-
-			if ($comment == "") {
-				$validinfo = false;
-				$errormsg .= "<li>You must be saying something to post a comment</li>\n";
-			}
-
-			$errormsg .= "</ul>\n";
-
-			if ($validinfo) {
-				$new_id = $db->GenID(cms_db_prefix()."module_linkblog_comment_seq");
-				$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date) VALUES ($new_id,".$params[$id."linkblog_id"].",".$db->qstr($params[$id."author"]).",".$db->qstr($params[$id."comment"]).", now())";
-				$dbresult = $db->Execute($query);
-			} else {
-				echo $errormsg;
-			}
-		}
-
-		$query = "SELECT author, comment, create_date FROM ".cms_db_prefix()."module_linkblog_comments WHERE linkblog_id=".$params[$id."linkblog_id"]." ORDER BY create_date desc";
-		$dbresult = $db->Execute($query);
-		echo "<p class=\"smalltitle\">Comments</p>\n";
-		echo "<div class=\"modulelinkblog\">\n";
-		if ($dbresult && $dbresult->RowCount()) {
-			while ($row = $dbresult->FetchRow()) {
-				echo "<div class=\"modulelinkblogauthor\">".$row["author"]." - ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['create_date']))."</div>\n";
-				echo "<div class=\"modulelinkblogcomment\">".$row["comment"]."</div>\n";
-			}
-		}
-		echo "</div>\n";
-
-		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
-		?>
-		<h3>Add a comment</h3>
-
-		<table>
-			<tr>
-				<td>Your name:</td>
-				<td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
-			</tr>
-			<tr>
-				<td>Comment:</td>
-				<td><input type="text" name="<?php echo $id?>comment" value="" size=100 maxlength=250/></td>
-			</tr>
-			<tr>
-				<td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="postcomment" />
-				<input type="hidden" name="<?php echo $id?>linkblog_id" value="<?php echo $params[$id."linkblog_id"]?>" /></td>
-				<td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
-			</tr>
-		</table>
-		<?php
-
-		echo cms_mapi_create_user_form_end();
-	}
-
+	linkblog_module_user_action($cms, $id, $return_id, $params);
 }
 
 function linkblog_module_help($cms) {
@@ -337,9 +127,9 @@ function linkblog_module_help($cms) {
 	<h3>Anything else I should know?</h3>
 	<p>You should know that if you uninstall this module it will delete all your links and comments.  If you do not wish to use it for a temporary time period, just deactivate it.</p>
 	<h3>How do I use it?</h3>
-	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="LinkBlog"}</code></p>
+	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="LinkBlog" allow_search="true"}</code></p>
 	<h3>What parameters are there?</h3>
-	<p>So far there are no parameters available, but there will need to be paging added for when the number of links or comments becomes too large for one page.</p>
+	<p>allow_search - set allow_search="true" to show a search form - off by default</p>
 	<h3>How do I style the LinkBlog pages?</h3>
 	<p>Here is some sample CSS you can throw in your template to make your results <i>slightly</i> prettier.<br />
 	<pre>

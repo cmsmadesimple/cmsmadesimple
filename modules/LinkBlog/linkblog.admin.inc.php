@@ -21,10 +21,17 @@
 function linkblog_module_about() {
     ?>
     <p>Author: Greg Froese &lt;heavy_g@users.sf.net&gt;</p>
-    <p>Version: 1.0</p>
+    <p>Version: 1.1</p>
     <p>
-    Change History:<br/>
-    None
+    <b>Change History:</b><br/>
+    Version 1.1 - 2004.12.01
+    <ul>
+        <li>Added search functionality</li>
+    </ul>
+    Version 1.0
+    <ul>
+        <li>Initial release</li>
+    </ul>
     </p>
     <?php
 }
