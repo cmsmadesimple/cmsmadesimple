@@ -339,6 +339,8 @@ function showPageFour() {
 	$newconfig["image_manipulation_prog"] = "GD";
 	$newconfig["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 	$newconfig["use_Indite"] = true;
+	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
+	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file
