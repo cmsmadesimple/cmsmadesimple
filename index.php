@@ -25,11 +25,16 @@ $starttime = microtime();
 
 @ob_start();
 
-if (!file_exists("config.php") || filesize("config.php") == 0) {
+if (!file_exists("config.php") || filesize("config.php") == 0)
+{
     require_once("lib/misc.functions.php");
     redirect("install/install.php");
-    exit;
-} ## if
+}
+else if (file_exists(dirname(__FILE__)."/tmp/cache/SITEDOWN"))
+{
+	echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
+	exit;
+}
 
 /*
 if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
@@ -48,6 +53,7 @@ if (file_exists("config.php") && file_exists("install/install.php")) {
 */
 
 require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
+
 
 $smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
