@@ -23,7 +23,7 @@ $module_name = "News";
 require_once(dirname(__FILE__)."/modulefunctions.php");
 
 //Register Module
-cms_mapi_register_module($module_name, "Ted Kulp <tedkulp@users.sf.net>", "1.4");
+cms_mapi_register_module($module_name, "Robert Campbell <rob@techcom.dyndns.org", "1.5");
 
 //Register module to work as a content type
 cms_mapi_register_content_module($module_name);
