@@ -9,7 +9,7 @@
 <?php if (get_site_preference('useadvancedcss') == "1") { ?>
 <A HREF="listcss.php"><?php echo lang('cssmanagement')?></A>
 <?php } ?>
-<A HREF="listhtmlblobs.php">HTML Blob Management</A>
+<A HREF="listhtmlblobs.php"><?php echo lang('blobmanagement')?></A>
 <!--<a href="tools.php"><?php echo lang('tools')?></a>-->
 <A HREF="listusers.php"><?php echo lang('usermanagement')?></A>
 <A HREF="listgroups.php"><?php echo lang('groupmanagement')?></A>

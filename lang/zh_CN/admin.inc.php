@@ -208,4 +208,5 @@ $lang['admin']['errorinsertingtemplate'] = '插入模板错误';
 $lang['admin']['currentcss'] = '当前CSS';
 $lang['admin']['imagemanager'] = 'Imagemanager'; //needs translation
 $lang['admin']['filemanager'] = 'Filemanager'; //needs translation
+$lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
 ?>

@@ -208,4 +208,5 @@ $lang['admin']['errorinsertingtemplate'] = 'Virhe mallipohjaa lisättäessä';
 $lang['admin']['currentcss'] = 'Viimeisin tyylitiedosto'; 
 $lang['admin']['imagemanager'] = 'Imagemanager'; //needs translation
 $lang['admin']['filemanager'] = 'Filemanager'; //needs translation
+$lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
 ?>

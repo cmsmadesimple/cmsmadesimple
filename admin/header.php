@@ -75,7 +75,6 @@ header("Content-Type: text/html; charset=" . get_encoding());
 	<SCRIPT TYPE="text/javascript">
 
 		HTMLArea.loadPlugin("ImageManager");
-		HTMLArea.loadPlugin("LinkManager");
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
@@ -86,7 +85,6 @@ header("Content-Type: text/html; charset=" . get_encoding());
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(ImageManager);
-			editor.registerPlugin(LinkManager);
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);

@@ -208,4 +208,5 @@ $lang['admin']['errorinsertingtemplate'] = '´¡¤J¼ÒªO¿ù»~';
 $lang['admin']['currentcss'] = '·í«eCSS';
 $lang['admin']['imagemanager'] = 'Imagemanager'; //needs translation
 $lang['admin']['filemanager'] = 'Filemanager'; //needs translation
+$lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
 ?>

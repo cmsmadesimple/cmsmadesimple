@@ -338,7 +338,7 @@ function showPageFour() {
 	$newconfig["auto_alias_content"] = true;
 	$newconfig["image_manipulation_prog"] = "GD";
 	$newconfig["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
-	$newconfig["use_Indite"] = true;
+	$newconfig["use_Indite"] = false;
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
 	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
 
