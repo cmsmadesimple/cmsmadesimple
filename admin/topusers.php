@@ -42,7 +42,7 @@ include_once("header.php");
 </div>
 
 <div class="MainMenuItem">
-<a href="#">Group Assignments</a>
+<a href="changegroupassign.php">Group Assignments</a>
 <span class="description">Assign users to groups.</span>
 </div>
 

@@ -31,39 +31,44 @@ else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 $group_name="";
 
 if (isset($_POST["cancel"])) {
-	redirect("listgroups.php");
+	redirect("topusers.php");
 	return;
 }
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Group Assignments');
 
-if ($access) {
+$message = '';
 
-	$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0) {
-		$row = $result->FetchRow();
-		$group_name = $row['group_name'];
-	}
-
-	if (isset($_POST["changeassign"])) {
-
-		$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = " . $group_id;
+if ($access)
+{
+	if ($group_id != '' && $group_id != '-1')
+	{
+		$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
 		$result = $db->Execute($query);
 
-		foreach ($_POST as $key=>$value) {
-			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false) {
-				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
-				$result = $db->Execute($query);
-			}
+		if ($result && $result->RowCount() > 0) {
+			$row = $result->FetchRow();
+			$group_name = $row['group_name'];
 		}
 
-		audit($group_id, $group_name, 'Changed Group Assignments');
-		redirect("listgroups.php");
-		return;
+		if (isset($_POST["changeassign"])) {
 
+			$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = " . $group_id;
+			$result = $db->Execute($query);
+
+			foreach ($_POST as $key=>$value) {
+				if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false) {
+					$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+					$result = $db->Execute($query);
+				}
+			}
+
+			audit($group_id, $group_name, 'Changed Group Assignments');
+			$message = lang('assignmentschanged');
+			#redirect("listgroups.php");
+			#return;
+		}
 	}
 }
 
@@ -77,14 +82,33 @@ else {
 ?>
 <h3><?php echo lang('usersassignedtogroup',array($group_name))?></h3>
 
-<form method="post" action="changegroupassign.php">
+<p><a href="topusers.php"><?php echo lang('back')?></a></p>
 
-<div class="adminformSmall">
-
-
+<div class="AdminForm">
 
 <?php
 
+	$groups = GroupOperations::LoadGroups();
+	if (count($groups) > 0)
+	{
+		echo '<form method="post" action="changegroupassign.php">';
+		echo 'Group Name: <select name="group_id">';
+		echo '<option value="-1">Select a Group</option>';
+		foreach ($groups as $onegroup)
+		{
+			echo '<option value="'.$onegroup->id.'"';
+			if ($onegroup->id == $group_id)
+			{
+				echo ' selected="selected"';
+			}
+			echo '>'.$onegroup->name.'</option>';
+		}
+		echo '</select> <input type="submit" value="'.lang('submit').'" /></form>';
+		echo '<form method="post" action="changegroupassign.php">';
+	}
+
+	if ($group_id != '' && $group_id != '-1')
+	{
 	$query = "SELECT * FROM ".cms_db_prefix()."users ORDER BY username";
 	$result = $db->Execute($query);
 
@@ -110,13 +134,13 @@ else {
 		}
 
 	}
-	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
-	foreach ($users as $key => $value) {
-
-		echo "<tr><td>";
-		echo "<input type=\"checkbox\"";
-		echo ($value == true?" checked=\"checked\"":"");
-		echo " name=\"user-".$ids[$key]."\" value=\"1\" />$key</td></tr>\n";
+	echo '<table border="0" cellpadding="0" cellspacing="0">';
+	foreach ($users as $key => $value)
+	{
+		echo '<tr>';
+		echo '<th>'.$key.':</th>';
+		echo '<td><input type="checkbox" name="user-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>';
+		echo '</tr>';
 	}
 
 ?>
@@ -125,9 +149,14 @@ else {
 <input type="submit" name="changeassign" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
 </table>
-</div>
+
+<?php
+	}
+?>
 
 </form>
+
+</div>
 
 <?php
 
