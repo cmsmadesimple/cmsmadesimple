@@ -793,7 +793,7 @@ class LinkBlog extends CMSModule
 			</tr>
 			<tr>
 			<td>Content:</td>
-			<td><?php echo $this->CreateTextarea(true, $id, $params["content"], 'content', 'syntaxHighlight', 'content'); ?></td>
+			<td><?php echo $this->CreateTextarea(false, $id, $params["content"], 'content', '', 'content'); ?></td>
 			</tr>
 			<tr>
 			<td>* Category:</td>
@@ -913,6 +913,9 @@ class LinkBlog extends CMSModule
 		echo "</div>\n";
 
 		echo $this->CreateFormStart($id, "post_comment", $this->cms->variables["page"]);
+		/*
+
+		*/
 		?>
 			<h3>Add a comment</h3>
 
@@ -924,7 +927,7 @@ class LinkBlog extends CMSModule
 			</tr>
 			<tr>
 			<td>Comment:</td>
-			<td><?php echo $this->CreateTextarea(true, $id, '', 'comment', 'syntaxHighlight', 'comment'); ?></td>
+			<td><?php echo $this->CreateTextarea(false, $id, '', 'comment', 'syntaxHighlight', 'comment'); ?></td>
 			</tr>
 			<tr>
 			<td><?php echo $this->CreateInputHidden($id, 'linkblog_id', $params["linkblog_id"]);?></td>

@@ -527,11 +527,11 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 	global $gCms;
 	$result = '';
 
-	$userid = get_userid();
-	$wysiwyg = get_preference($userid, 'wysiwyg');
-
 	if ($enablewysiwyg == true)
 	{
+		$userid = get_userid();
+		$wysiwyg = get_preference($userid, 'wysiwyg');
+		
 		foreach($gCms->modules as $key=>$value)
 		{
 			if (get_preference(get_userid(), 'wysiwyg')!="" &&
