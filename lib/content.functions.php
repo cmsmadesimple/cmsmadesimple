@@ -93,13 +93,34 @@ class Smarty_CMS extends Smarty {
 			#This way the id is right, even if an alias is given
 			$gCms->variables['page'] = $line['page_id'];
 
-			$stylesheet = "";
-			if (isset($line[stylesheet]))
-			{
-				$stylesheet .= "<style type=\"text/css\">\n";
-				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-				$stylesheet .= "</style>\n";
+			# we replace this we the new css stuff ;)
+			if (0) {
+				if (isset($line[stylesheet]))
+				{
+					$stylesheet .= "<style type=\"text/css\">\n";
+					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
+					$stylesheet .= "</style>\n";
+				}
 			}
+
+			# the new css stuff
+			$stylesheet = "";
+			$tempstylesheet = "";
+
+			$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+				WHERE	css_id		= assoc_css_id
+				AND		assoc_type	= 'template'
+				AND		assoc_to_id = '".$line[template_id]."'";
+			$cssresult = $db->Execute($cssquery);
+
+			$stylesheet .= "<style type=\"text/css\">\n";
+			while ($cssline = $cssresult->FetchRow())
+			{
+				$tempstylesheet .= "\n".$cssline[css_text]."\n";
+			}
+			$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
+			$stylesheet .= "</style>\n";
+			
 			$tpl_source = $line['template_content'];
 			$content = $line['page_content'];
 			$title = $line['page_title'];

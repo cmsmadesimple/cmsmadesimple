@@ -152,7 +152,9 @@ if ("" != $error)
 			("row1" == $currow) ? $currow="row2" : $currow="row1";
 
 		} ## foreach
+
 		echo "</table>\n";
+
 	} # end of if result
 	
 
@@ -174,7 +176,14 @@ if ("" != $error)
 		$dropdown = "";
 
 		# we generate the dropdown
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
+		if ("" == $notinto)
+		{
+			$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id ORDER BY css_name";
+		}
+		else
+		{
+			$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
+		}
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount() > 0)
@@ -201,6 +210,10 @@ if ("" != $error)
 <?
 		} # end of showing form
 	} # end of if has right to add
+	else
+	{
+		echo $gettext->gettext("You do not have the right to add CSS association!");
+	}
 
 include_once("footer.php");
 
