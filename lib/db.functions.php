@@ -16,30 +16,6 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
-
-class Smarty_DB extends Smarty {
-
-        function Smarty_DB(&$config)
-        {
-                $this->Smarty();
-
-                $this->configCMS = $config;
-
-                $this->template_dir = $config->root_path.'/schemas/';
-                $this->compile_dir = $config->root_path.'/smarty/cms/templates_c/';
-                $this->config_dir = $config->root_path.'/smarty/cms/configs/';
-                $this->cache_dir = $config->root_path.'/smarty/cms/cache/';
-                $this->plugins_dir = $config->root_path.'/plugins/';
-
-                $this->compile_check = true;
-                $this->caching = false;
-                $this->assign('app_name','CMS');
-                $this->debugging = false;
-                $this->force_compile = true;
-	}
-}
-
 function cms_db_prefix() {
 	global $config;
 	return $config->db_prefix;

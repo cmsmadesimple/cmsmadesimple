@@ -201,7 +201,6 @@ function showPageThree($sqlloaded = 0) {
     if ($sqlloaded == 0 && isset($_POST["createtables"])) {
 
         global $config, $CMS_SCHEMA_VERSION;
-        $smarty = new Smarty_DB($config);
 
 		$db = &ADONewConnection('mysql');
 		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
