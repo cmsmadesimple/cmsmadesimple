@@ -175,11 +175,16 @@ function db_get_menu_items(&$config) {
 
 		$menu_item = new MenuItem;
 		$menu_item->name = $line["menu_text"];
-		if (isset($config->query_var) && $config->query_var != "") {
-			$menu_item->url = $config->root_url."/index.php?".$config->query_var."=".$line["page_url"];
+		if ($line['page_type'] == "content") {
+			if (isset($config->query_var) && $config->query_var != "") {
+				$menu_item->url = $config->root_url."/index.php?".$config->query_var."=".$line["page_url"];
+			}
+			else {
+				$menu_item->url = $config->root_url."/index.php/".$line["page_url"];
+			}
 		}
-		else {
-			$menu_item->url = $config->root_url."/index.php/".$line["page_url"];
+		else if ($line['page_type'] == "link") {
+			$menu_item->url = $line["page_url"];
 		}
 		array_push($current_section->items, $menu_item);
 	}
@@ -192,6 +197,15 @@ function db_get_menu_items(&$config) {
 	$db->close();
 
 	return $sections;
+}
+
+function get_page_types(&$config) {
+
+	$result['content'] = 'Content';
+	$result['link'] = 'Link';
+
+	return $result;
+
 }
 
 # vim:ts=4 sw=4 noet

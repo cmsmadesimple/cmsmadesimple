@@ -44,6 +44,13 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Updating content types...";
+
+	$query = "UPDATE ".$config->db_prefix."pages SET page_type = 'ccntent'";
+	$db->query($query);
+
+	echo "[done]</p>";
+
 	echo "<p>Added item_order to existing sections... ";
 
 	$count = 1;

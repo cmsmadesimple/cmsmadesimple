@@ -5,6 +5,8 @@ Version 0.3 -- Subversion
 * Added section reordering (Fixes #4)
 * Added index to tables to make querying faster on the frontend (Fixes #1)
 * Added password hashing for insecure hosts.  (Fixes #11)
+* Added content types to content creation and editing (Fixes #5)
+* Added the link content type
 
 Version 0.2.1 -- Tue Jul 13 2004
 -----------------
