@@ -71,6 +71,11 @@ if ($access) {
 			$result = $blobobj->save();
 
 			if ($result) {
+				if (isset($_POST["additional_editors"])) {
+					foreach ($_POST["additional_editors"] as $addt_user_id) {
+						$blobobj->AddAuthor($addt_user_id);
+					}
+				}
 				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
 				redirect("listhtmlblobs.php");
 				return;
@@ -83,6 +88,19 @@ if ($access) {
 }
 
 include_once("header.php");
+
+$addt_users = "";
+
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid;
+$result = $db->Execute($query);
+
+if ($result && $result->RowCount() > 0) {
+	while($row = $result->FetchRow()) {
+		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+	}
+}else{
+	$addt_users = "<option>&nbsp;</option>";
+}
 
 if (!$access) {
 	print "<h3>".lang('noaccessto', array(lang('addblob')))."</h3>";
@@ -110,10 +128,16 @@ else {
 		<td><?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content") ?></td>
 	</tr>
 	<tr>
+		<td><?php echo lang('additionaleditors')?>:</td>
+		<td><select name="additional_editors[]" multiple size="3"><?php echo $addt_users?></select></td>
+	</tr>
+	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addhtmlblob" value="true">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td>
+			<input type="hidden" name="addhtmlblob" value="true">
+			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		</td>
 	</tr>
 
 </table>

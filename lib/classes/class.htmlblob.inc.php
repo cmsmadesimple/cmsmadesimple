@@ -73,6 +73,56 @@ class HtmlBlob
 
 		return $result;
 	}
+
+	function IsOwner($user_id)
+	{
+		$result = false;
+
+		if ($this->id > -1)
+		{
+			$result = HtmlBlobOperations::CheckOwnership($this->id, $user_id);
+		}
+
+		return $result;
+	}
+
+	function IsAuthor($user_id)
+	{
+		$result = false;
+
+		if ($this->id > -1)
+		{
+			$result = HtmlBlobOperations::CheckAuthorship($this->id, $user_id);
+		}
+
+		return $result;
+	}
+
+	function ClearAuthors()
+	{
+		$result = false;
+
+		if ($this->id > -1)
+		{
+			HtmlBlobOperations::ClearAdditionalEditors($this->id);
+			$result = true;
+		}
+
+		return $result;
+	}
+
+	function AddAuthor($user_id)
+	{
+		$result = false;
+
+		if ($this->id > -1)
+		{
+			HtmlBlobOperations::InsertAdditionalEditors($this->id, $user_id);
+			$result = true;
+		}
+
+		return $result;
+	}
 }
 
 class HtmlBlobOperations
@@ -224,6 +274,66 @@ class HtmlBlobOperations
 		}
 
 		return $result;
+	}
+
+	function CheckOwnership($id, $user_id)
+	{
+		$result = false;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ? AND owner = ?";
+		$dbresult = $db->Execute($query, array($id, $user_id));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			$result = true;
+		}
+
+		return $result;
+	}
+
+	function CheckAuthorship($id, $user_id)
+	{
+		$result = CheckOwnership($id, $user_id); //Owners are authors
+
+		if (!$result) //Might as well only check if necessary
+		{
+			global $gCms;
+			$db = &$gCms->db;
+
+			$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND owner = ?";
+
+			$dbresult = $db->Execute($query, array($id, $user_id));
+
+			if ($dbresult && $dbresult->RowCount() > 0)
+			{
+				$result = true;
+			}
+		}
+
+		return $result;
+	}
+
+	function ClearAdditionalEditors($id)
+	{
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "DELETE FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ?";
+
+		$dbresult = $db->Execute($query, array($id));
+	}
+
+	function InsertAdditionalEditors($id, $user_id)
+	{
+		global $gCms;
+		$db = &$gCms->db;
+
+		$new_id = $db->GenID(cms_db_prefix()."additional_htmlblob_users_seq");
+		$query = "INSERT INTO ".cms_db_prefix()."additional_htmlblob_users (additional_htmlblob_users_id, htmlblob_id, user_id) VALUES (?,?,?)";
+		$dbresult = $db->Execute($query, array($new_id,$id,$user_id));
 	}
 }
 

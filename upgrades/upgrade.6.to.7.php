@@ -45,7 +45,7 @@ $flds = "
 	modified_date T
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."htmlblobs", $flds, $taboptarray);
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."htmlblobs", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence($config["db_prefix"]."htmlblobs_seq");
@@ -61,7 +61,7 @@ $flds = "
 	htmlblob_id I
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."additional_htmlblob_users", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
