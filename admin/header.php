@@ -4,7 +4,7 @@
 
 <head>
 
-<title></title>
+<title>CMS Admin System</title>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
 
