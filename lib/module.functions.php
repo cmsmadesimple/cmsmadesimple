@@ -818,6 +818,25 @@ function cms_mapi_register_content_title_function($name, $function)
 }
 
 /**
+ * Registers a function to be called with the content data before it
+ * is merged into the template.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of the title as parameters to the
+ * function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_data_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_data_function'] = $function;
+	}
+}
+
+/**
  * Registers a function to be called with the htmlblob text before it
  * is merged into the template.  These changes will possibly cache.
  *

@@ -89,7 +89,21 @@ class Smarty_Preview extends Smarty {
 		}
 
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-		$tpl_source = ereg_replace("\{content\}", $data["content"], $tpl_source);
+
+		$content = $data["content"];
+
+		#Perform the content data callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['content_data_function']) &&
+				$gCms->modules[$key]['Installed'] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
+				call_user_func_array($gCms->modules[$key]['content_data_function'], array(&$gCms, &$content));
+			}
+		}
+
+		$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
 		$title = $data['title'];
 

@@ -136,7 +136,7 @@ class Smarty_CMS extends Smarty {
 					}
 				}
 
-				$stylesheet .= '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />'; 
+				$stylesheet .='<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />'; 
 
 				#Time to fill our template content
 				#If it's in print mode, then just create a simple stupid template
@@ -162,6 +162,18 @@ class Smarty_CMS extends Smarty {
 
 				#Fill some variables with various information
 				$content = $contentobj->Show();
+
+				#Perform the content data callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_data_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_data_function'], array(&$gCms, &$content));
+					}
+				}
+
 				$title = $contentobj->Name();
 
 				#Perform the content title callback
