@@ -508,6 +508,24 @@ class Smarty_ModuleInterface extends Smarty {
 				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
 				$stylesheet .= "</style>\n";
 			}
+
+			# the new css stuff
+			$tempstylesheet = "";
+
+			$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+				WHERE	css_id		= assoc_css_id
+				AND		assoc_type	= 'template'
+				AND		assoc_to_id = '".$line[template_id]."'";
+			$cssresult = $db->Execute($cssquery);
+
+			$stylesheet .= "<style type=\"text/css\">\n";
+			while ($cssline = $cssresult->FetchRow())
+			{
+				$tempstylesheet .= "\n".$cssline[css_text]."\n";
+			}
+			$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
+			$stylesheet .= "</style>\n";
+
 			$tpl_source = $line[template_content];
 			$content = $line[page_content];
 			$title = $line[page_title];

@@ -248,8 +248,20 @@ function get_stylesheet($templateid) {
 	if ($result && $result->RowCount() > 0) {
 		$line = $result->FetchRow();
 		$css = $line['stylesheet'];
-		$css = preg_replace("/[\r\n]/", "", $css);
 	}
+
+	# add linked CSS if any
+	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+		WHERE	css_id		= assoc_css_id
+		AND		assoc_type	= 'template'
+		AND		assoc_to_id = '$template_id'";
+	$cssresult = $db->Execute($cssquery);
+	while ($cssline = $cssresult->FetchRow())
+	{
+		$css .= "\n".$cssline[css_text]."\n";
+	}
+
+	$css = preg_replace("/[\r\n]/", "", $css);
 
 	return $css;
 }
