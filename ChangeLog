@@ -19,6 +19,8 @@ still default to en_US
 * Fixed error message with Deleting templates (Part of #000047)
 * Fixed check_ownership and check_authorship to be more consistant 
 (Xorn725)
+* Fixed htmlarea so that it doesn't convert double quotes in &quot; and
+mess up smarty tags
 * Reenabled Image Manager
 * Removed Allow Admin Access from add/edit user
 * Updated adodb to 4.54
