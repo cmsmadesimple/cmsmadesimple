@@ -28,7 +28,7 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty) {
 	}
 
 	if ($firstExpandCollapse) {
-		echo '<SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="admin/helparea.js"></SCRIPT>';
+		echo '<SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="lib/helparea.js"></SCRIPT>';
 		$firstExpandCollapse = false;
 	}
 
