@@ -300,6 +300,8 @@ function set_site_preference($prefname, $value)
 	global $gCms;
 	$db = $gCms->db;
 
+	$siteprefs = &$gCms->siteprefs;
+
 	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
@@ -318,6 +320,7 @@ function set_site_preference($prefname, $value)
 		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
 		$db->Execute($query);
 	}
+	$siteprefs[$prefname] = $value;
 }
 
 /**
