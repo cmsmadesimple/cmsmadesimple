@@ -886,6 +886,41 @@ function cms_mapi_register_wysiwyg_page_header_function($name, $function)
 }
 
 /**
+ * Registers a function that will product output destined for that
+ * pages <form> tag.  Useful for javascript needed to be done on submit
+ * and such.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_page_form_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_form_function'] = $function;
+	}
+}
+
+/**
+ * This is a function that would be called before a form is submitted.  Generally, a dropdown
+ * box or something similar that would force a submit of the form via javascript should put this
+ * in their onchange line as well so that the WYSIWYG can do any cleanups before the actual form
+ * submission takes place.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_page_form_submit_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_form_submit_function'] = $function;
+	}
+}
+
+/**
  * Registers this module's WYSIWYG textbox function
  *
  * @since 0.8
@@ -1018,9 +1053,9 @@ function cms_mapi_remove_permission($cms, $permission_name) {
  *
  * @since 0.8
  */
-function cms_mapi_get_preference($module, $preference_name)
+function cms_mapi_get_preference($module, $preference_name, $defaultvalue='')
 {
-	return get_site_preference($module . "_mapi_pref_" . $preference_name);
+	return get_site_preference($module . "_mapi_pref_" . $preference_name, $defaultvalue);
 }
 
 /**
@@ -1215,7 +1250,8 @@ function cms_mapi_create_module_content_class($key)
 			$classtext .= 'function Show() {';
 			$classtext .= '@ob_start();';
 			$classtext .= 'echo ' . $allmodules[$key]['content_module_show'] . '($this);';
-			$classtext .= '$result = @ob_get_clean();';
+			$classtext .= '$result = @ob_get_contents();';
+			$classtext .= '@ob_end_clean();';
 			$classtext .= 'return $result;';
 			$classtext .= '}';
 		}
@@ -1225,7 +1261,8 @@ function cms_mapi_create_module_content_class($key)
 			$classtext .= 'function Edit() {';
 			$classtext .= '@ob_start();';
 			$classtext .= 'echo ' . $allmodules[$key]['content_module_edit'] . '($this);';
-			$classtext .= '$result = @ob_get_clean();';
+			$classtext .= '$result = @ob_get_contents();';
+			$classtext .= '@ob_end_clean();';
 			$classtext .= 'return $result;';
 			$classtext .= '}';
 		}

@@ -271,9 +271,9 @@ function load_site_preferences()
  *
  * @since 0.6
  */
-function get_site_preference($prefname) {
+function get_site_preference($prefname, $defaultvalue = '') {
 
-	$value = "";
+	$value = $defaultvalue;
 
 	global $gCms;
 	$siteprefs = $gCms->siteprefs;
@@ -471,7 +471,7 @@ function & strip_slashes(&$str)
 	return $str;
 }
 
-function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $encoding='')
+function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $encoding='', $stylesheet='')
 {
 	global $gCms;
 	$result = '';
@@ -490,9 +490,9 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 			{
 				$result = '';
 				ob_start();
-				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array($gCms, $name, '80', '15', $encoding, $text));
+				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array($gCms, $name, '80', '15', $encoding, $text, $stylesheet));
 				$result = ob_get_contents();
-				ob_clean();	
+				ob_end_clean();	
 			}
 		}
 	}
@@ -696,5 +696,32 @@ function getURL($page)
 	return $url;
 
  }
+ 
+function wysiwyg_form_submit()
+{
+	global $gCms;
+
+	$result = '';
+
+	$userid = get_userid();
+	$wysiwyg = get_preference($userid, 'wysiwyg');
+	
+	if (isset($wysiwyg) && $wysiwyg != '')
+	{
+		if (isset($gCms->modules[$wysiwyg]) && $gCms->modules[$wysiwyg]['Installed'] == true &&
+			$gCms->modules[$wysiwyg]['Active'] == true && isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
+		{
+			if (isset($gCms->modules[$wysiwyg]['wysiwyg_form_submit_function']))
+			{
+				@ob_start();
+				call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_submit_function'], array($gCms));
+				$result = @ob_get_contents();
+				@ob_end_clean();
+			}
+		}
+	}
+	
+	return $result;
+}
 # vim:ts=4 sw=4 noet
 ?>

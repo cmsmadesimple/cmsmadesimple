@@ -25,6 +25,8 @@ if (isset($_POST["cancel"]))
 	redirect("listcontent.php");
 }
 
+include_once("header.php");
+
 check_login();
 
 $error = FALSE;
@@ -142,7 +144,10 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		$error = $contentobj->ValidateData();
+		if (!$preview)
+		{
+			$error = $contentobj->ValidateData();
+		}
 
 		if (isset($_POST["ownerid"]))
 		{
@@ -162,8 +167,6 @@ if ($access)
 	}
 }
 
-include_once("header.php");
-
 if (!$access)
 {
 	print "<h3>".lang('noaccessto', array(lang('editpage')))."</h3>";
@@ -171,7 +174,7 @@ if (!$access)
 else
 {
 	#Get a list of content_types and build the dropdown to select one
-	$typesdropdown = '<select name="content_type" onchange="document.editform.submit()" class="standard">';
+	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
 	foreach ($existingtypes as $onetype)
 	{
 		$typesdropdown .= "<option value=\"$onetype\"";
@@ -192,8 +195,7 @@ else
 		}
 		echo '</ul>';
 	}
-
-	if ($preview)
+	else if ($preview)
 	{
 		$data["content_id"] = $contentobj->Id();
 		$data["title"] = $contentobj->Name();
@@ -225,7 +227,7 @@ else
 
 ?>
 
-<form method="post" action="editcontent.php" name="editform" id="editform">
+<form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 
 <h3><?php echo lang('editcontent')?></h3>
 

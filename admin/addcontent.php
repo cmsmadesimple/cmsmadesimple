@@ -19,11 +19,11 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("header.php");
 
 if (isset($_POST["cancel"]))
 {
 	redirect("listcontent.php");
-	return;
 }
 
 check_login();
@@ -127,10 +127,13 @@ if ($access)
 			}
 		}
 	}
-	else if ($preview)
+	else #Either we're a preview or a template postback
 	{
 		$contentobj->FillParams($_POST);
-		$error = $contentobj->ValidateData();
+		if ($preview) #If preview, check for errors...
+		{
+			$error = $contentobj->ValidateData();
+		}
 		$addtarray = array();
 		if (isset($_POST["additional_editors"]))
 		{
@@ -143,8 +146,6 @@ if ($access)
 	}
 }
 
-include_once("header.php");
-
 if (!$access)
 {
 	echo "<h3>".lang('noaccessto',array(lang('addcontent')))."</h3>\n";
@@ -152,7 +153,7 @@ if (!$access)
 else
 {
 #Get a list of content_types and build the dropdown to select one
-$typesdropdown = '<select name="content_type" onchange="document.addform.submit()" class="standard">';
+$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
 foreach ($existingtypes as $onetype)
 {
 	$typesdropdown .= "<option value=\"$onetype\"";
@@ -205,7 +206,7 @@ else if ($preview)
 
 ?>
 
-<form method="post" action="addcontent.php" name="addform" id="addform">
+<form method="post" action="addcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 
 <h3><?php echo lang('addcontent')?></h3>
 

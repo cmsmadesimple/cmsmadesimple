@@ -258,7 +258,7 @@ class TemplateOperations
 		return $result;
 	}
 	
-	function TemplateDropdown($id = 'template_id', $selected_id = -1)
+	function TemplateDropdown($id = 'template_id', $selected_id = -1, $othertext = '')
 	{
 		$result = "";
 
@@ -266,7 +266,12 @@ class TemplateOperations
 		
 		if (count($alltemplates) > 0)
 		{
-			$result .= '<select name="'.$id.'">';
+			$result .= '<select name="'.$id.'"';
+			if ($othertext != '')
+			{
+				$result .= ' ' . $othertext;
+			}
+			$result .= '>';
 			$result .= '<option value="">Select Template</option>';
 			foreach ($alltemplates as $onetemplate)
 			{

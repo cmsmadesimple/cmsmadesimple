@@ -37,7 +37,7 @@ if (get_site_preference('useadvancedcss') == "1")
 	}
 }
 
-if (check_permission($userid, 'Add HTML Blobs') || check_permission($userid, 'Remove HTML Blobs') || check_permission($userid, 'Modify HTML Blobs'))
+if (check_permission($userid, 'Add Html Blobs') || check_permission($userid, 'Remove Html Blobs') || check_permission($userid, 'Modify Html Blobs'))
 {
 
 ?>

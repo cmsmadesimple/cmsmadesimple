@@ -149,7 +149,7 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo create_textarea($content, 'content', 'syntaxHighlight', 'content');?></td>
+		<td><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content');?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>

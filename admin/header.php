@@ -33,27 +33,7 @@ if (!isset($charsetsent))
 <link rel="stylesheet" type="text/css" href="style.css" />
 <link rel="stylesheet" type="text/css" href="tab.css" />
 
-<?php
-
-$userid = get_userid();
-$wysiwyg = get_preference($userid, 'wysiwyg');
-
-if (isset($wysiwyg) && $wysiwyg != '')
-{
-	if (isset($gCms->modules[$wysiwyg]) &&
-		$gCms->modules[$wysiwyg]['Installed'] == true &&
-		$gCms->modules[$wysiwyg]['Active'] == true &&
-		isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
-	{
-		global $gCms;
-		if (isset($gCms->modules[$wysiwyg]['wysiwyg_header_function']))
-		{
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array($gCms));
-		}
-	}
-}
-
-?>
+<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 
 </head>
 
