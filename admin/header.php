@@ -156,16 +156,21 @@ function toggleBookmarkState()
 <p class="DashboardCalloutTitle"><?php echo lang('bookmarks') ?></p>
 <?php 
 	$marks = BookmarkOperations::LoadBookmarks($userid);
+	echo "<ul>";
 	if (count($marks) > 0)
 		{
-		echo "<ul>";
 		foreach($marks as $mark)
 			{
 			echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
 			}
 		echo "<li><a href=\"listbookmarks.php\">".lang('managebookmarks')."</a></li>\n";
-		echo "</ul>\n";
 		}
+	else
+		{
+		echo "<li><a href=\"makebookmark.php?title=". urlencode($pagetitle). "\">".lang('addbookmark')."</a></li>\n";
+		}
+	echo "</ul>\n";
+
 ?>
 </div>
 
