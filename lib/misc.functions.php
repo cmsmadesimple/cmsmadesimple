@@ -165,6 +165,18 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 	return $result;
 }
 
+/**
+ * Enter description here...
+ *
+ * @param unknown $val
+ * @param integer $quote_style
+ * @return unknown
+ * 
+ * $quote_style may be one of:
+ *     ENT_COMPAT   : Will convert double-quotes and leave single-quotes alone. 
+ *     ENT_QUOTES   : Will convert both double and single quotes. 
+ *     ENT_NOQUOTES : Will leave both double and single quotes unconverted. 
+ */
 function my_htmlentities($val)
 {
 	if ($val == "")
@@ -182,7 +194,9 @@ function my_htmlentities($val)
 	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val ); 
 	$val = str_replace( ">"            , "&gt;"          , $val ); 
 	$val = str_replace( "<"            , "&lt;"          , $val ); 
-	$val = str_replace( "\""           , "&quot;"        , $val ); 
+	
+	
+	//$val = str_replace( "\""           , "&quot;"        , $val ); 
 
 	// Uncomment it if you need to convert literal newlines 
 	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
@@ -229,6 +243,190 @@ function nl2pnbr( $text )
 	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
 
 	return $text;
+}
+
+/**
+* Debug function to display $var nicely in html.
+* 
+* @param mixed $var
+* @param string $title (optional)
+* @param boolean $echo_to_screen (optional)
+* @return string
+*/
+function debug_display($var, $title="", $echo_to_screen = true)
+{
+	$titleText = "Debug: ";
+	if($title)
+	{
+		$titleText = "Debug display of '$title':";
+	}
+
+	ob_start();
+	echo "<p><b>$titleText</b><pre>\n";
+	if(is_array($var))
+	{
+		echo "Number of elements: " . count($var) . "\n";
+		print_r($var);
+	}
+	elseif(is_object($var))
+	{
+		print_r($var);
+	}
+	elseif(is_string($var))
+	{
+		print_r(htmlentities(str_replace("\t", '  ', $var)));
+	}
+	elseif(is_bool($var))
+	{
+		echo $var === true ? 'true' : 'false';
+	}
+	else
+	{
+		print_r($var);
+	}
+
+	echo "</pre></p>\n";
+	$output = ob_get_contents();
+	ob_end_clean();
+
+	if($echo_to_screen)
+	{
+		echo $output;
+	}
+
+	return $output;
+}
+
+/**
+* Retrieve value from $_REQUEST. Returns $default_value if
+*		value is not in $_REQUEST or is not the same basic type as
+*		$default_value.
+*		If $session_key is set, then will return session value in preference
+*		to $default_value if $_REQUEST[$value] is not set.
+* 
+* @param string $value
+* @param mixed $default_value (optional)
+* @param string $session_key (optional)
+* @return mixed
+*/
+function get_request_value($value, $default_value = '', $session_key = '')
+{
+	if($session_key != '')
+	{
+		if(isset($_SESSION['request_values'][$session_key][$value]))
+		{
+			$default_value = $_SESSION['request_values'][$session_key][$value];
+		}
+	}
+	if(isset($_REQUEST[$value]))
+	{
+		$result = getValueWithDefault($_REQUEST[$value], $default_value);
+	}
+	else
+	{
+		$result = $default_value;
+	}
+
+	if($session_key != '')
+	{
+		$_SESSION['request_values'][$session_key][$value] = $result;
+	}
+
+	return $result;
+}
+
+/**
+* Return $value if it's set and same basic type as $default_value,
+*			otherwise return $default_value. Note. Also will trim($value)
+*			if $value is not numeric.
+* 
+* @param string $value
+* @param mixed $default_value
+* @return mixed
+*/
+function get_value_with_default($value, $default_value = '')
+{
+	// is $default_value a number?
+	$is_number = false;
+	if(is_numeric($default_value))
+	{
+		$is_number = true;
+	}
+
+	// set our return value to the default initially and overwrite with $value if we like it.
+	$return_value = $default_value;
+	if(is_array($value))
+	{
+		// $value is an array - validate each element.
+		$return_value = array();
+		foreach($value as $element)
+		{
+			$return_value[] = getValueWithDefault($element, $default_value);
+		}
+	}
+	else
+	{
+		if($is_number)
+		{
+			if(is_numeric($value))
+			{
+				$return_value = $value;
+			}
+		}
+		else
+		{
+			$return_value = trim($value);
+		}
+	}
+	return $return_value;
+}
+
+/**
+ * Retrieve the $value from the $params array checking for
+ * $params[$value] and $params[$id.$value]. Returns $default
+ * if $value is not in $params array. This is a helper function
+ * for modules using the execute, executeuser and executeadmin
+ * callback functions. Note: This function will also trim() string 
+ * values.
+ *
+ * @param string $id
+ * @param string $value
+ * @param array $params
+ * @param mixed $default
+ * @return mixed
+ */
+function get_param_value($id, $value, $params, $default = '')
+{
+	$return_value = $default;
+	
+	if(is_bool($default))
+	{
+		// want a boolean return_value
+		if(isset($params[$id.$value]))
+		{
+			$return_value = settype($params[$id.$value], 'boolean');
+		}
+		else if(isset($params[$value]))
+		{
+			$return_value = settype($params["display_approved"], 'boolean');
+		}
+	}
+	else
+	{
+		if(isset($params[$id.$value]))
+		{
+			$return_value = $params[$id.$value];
+		}
+		else if(isset($params[$value]))
+		{
+			$return_value = $params[$value];
+		}
+
+		if(is_string($return_value))
+			$return_value = trim($return_value);
+	}	
+	
+	return $return_value;
 }
 
 # vim:ts=4 sw=4 noet
