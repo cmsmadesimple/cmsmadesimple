@@ -89,6 +89,7 @@ else {
 
 	if ($preview) {
 
+		$data["title"] = "TITLE HERE";
 		$data["content"] = "Test Content";
 		#$data["template_id"] = $template_id;
 		$data["stylesheet"] = $stylesheet;

@@ -65,6 +65,7 @@ class Smarty_Preview extends Smarty {
 		}
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 		$tpl_source = ereg_replace("\{content\}", $data["content"], $tpl_source);
+		$tpl_source = ereg_replace("\{title\}", $data["title"], $tpl_source);
 
 		return true;
 	}

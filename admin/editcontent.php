@@ -242,6 +242,7 @@ else {
 
 	if ($preview) {
 
+		$data["title"] = $title;
 		$data["content"] = $content;
 		$data["template_id"] = $template_id;
 
