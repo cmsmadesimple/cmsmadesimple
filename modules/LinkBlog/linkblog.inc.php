@@ -89,7 +89,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
                 }
 				echo "<div class=\"modulelinkblogentrytime\">\n";
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
+                echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
                 echo "</div>\n";
 
                 echo "<div class=\"modulelinkblogentrycommentlink\">\n";
@@ -285,7 +285,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 
                 echo "<div class=\"modulelinkblogentry\">\n";
                 echo "<div class=\"modulelinkblogtime\">\nPosted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
+                echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
                 echo "</div>\n";
 
                 echo "</div>\n";
