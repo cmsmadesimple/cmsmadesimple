@@ -18,6 +18,12 @@
 #
 #$Id$
 
+/**
+ * Generic template class. This can be used for any template or template related function.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class Template
 {
 	var $id;
@@ -81,6 +87,12 @@ class Template
 	}
 }
 
+/**
+ * Class for doing template related functions.  Many of the Template object functions are just wrappers around these.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class TemplateOperations
 {
 	function LoadTemplates()

@@ -21,12 +21,6 @@
 
 /**
  * This file respect the PHP Coding Standards : http://alltasks.net/code/php_coding_standard.html
- *
- * @author		calexico@cmsmadesimple.org
- * @revision	0.1
- * @created		28/09/2004
- * @modified	09/10/2004
- *
  */
 
 /**
@@ -36,7 +30,7 @@
  * we load them only when required. However, each function which makes use
  * of extra properties should first test if the properties object exist.
  *
- * @since		svn
+ * @since		0.8
  * @package		CMS
  */
 class ContentBase
@@ -392,7 +386,7 @@ class ContentBase
 	 * @param $id				the ID of the element
 	 * @param $loadProperties	whether to load or not the properties
 	 *
-	 * @returns					If it fails, the object comes back to initial values and returns FALSE
+	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
 	 *							If everything goes well, it returns TRUE
 	 */
 	function LoadFromId($id, $loadProperties = false)
@@ -486,7 +480,7 @@ class ContentBase
 	 * There is no check on the data provided, because this is the job of
 	 * ValidateData
 	 *
-	 * @returns					If it fails, the object comes back to initial values and returns FALSE
+	 * @returns	bool			If it fails, the object comes back to initial values and returns FALSE
 	 *							If everything goes well, it returns TRUE
 	 */
 	function LoadFromData($data, $loadProperties = false)
@@ -970,6 +964,13 @@ class ContentBase
 	}
 }
 
+/**
+ * Class to represent content properties.  These are pretty much
+ * separate beings that get used by a content object instance.
+ *
+ * @since		0.8
+ * @package		CMS
+ */
 class ContentProperties
 {
 	var $mPropertyTypes;
@@ -1103,6 +1104,12 @@ class ContentProperties
 	}
 }
 
+/**
+ * Class for static methods related to content
+ *
+ * @since		0.8
+ * @package		CMS
+ */
 class ContentManager
 {
 	/**

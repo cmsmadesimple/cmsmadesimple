@@ -18,6 +18,12 @@
 #
 #$Id$
 
+/**
+ * Generic group class. This can be used for any logged in group or group related function.
+ *
+ * @since		0.9
+ * @package		CMS
+ */
 class Group
 {
 	var $id;
@@ -75,6 +81,12 @@ class Group
 	}
 }
 
+/**
+ * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class GroupOperations
 {
 	function LoadGroups()

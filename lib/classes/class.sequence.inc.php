@@ -1,5 +1,24 @@
 <?php
-/*
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id: class.template.inc.php 1090 2004-12-28 18:12:54Z wishy $
+
+/**
  * sequence - a helper class for module developers
  *
  * a sequence is a sequence of pages (most likely forms but not necessarily) which have to be viewed in sequence
@@ -9,12 +28,14 @@
  * the sequence static is in the session
  * if a form does not receive a seqstep variable the sequence dies and the user is taken to the panic page
  * in debug mode such errors are displayed for sanity checking
- *
- *
  */
-#
-#$Id: class.template.inc.php 1090 2004-12-28 18:12:54Z wishy $
 
+/**
+ * Generic sequence class. This can be used for any sequence or sequence related function.
+ *
+ * @since		0.9
+ * @package		CMS
+ */
 class Sequence
 {
 	var $id;
@@ -78,6 +99,12 @@ class Sequence
 	}
 }
 
+/**
+ * Class for doing sequence related functions.  Many of the Sequence object functions are just wrappers around these.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class SequenceOperations
 {
 	function LoadSequences()

@@ -18,6 +18,12 @@
 #
 #$Id$
 
+/**
+ * Generic html blob class. This can be used for any logged in blob or blob related function.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class HtmlBlob
 {
 	var $id;
@@ -127,6 +133,12 @@ class HtmlBlob
 	}
 }
 
+/**
+ * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
+ *
+ * @since		0.6
+ * @package		CMS
+ */
 class HtmlBlobOperations
 {
 	function LoadHtmlBlobs()
