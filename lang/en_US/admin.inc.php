@@ -200,5 +200,5 @@ $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
 $lang['admin']['directoryunder'] = 'directory under current level';
 $lang['admin']['directoryabove'] = 'directory above current level';
-$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting for content'; //needs translation
+$lang['admin']['usejavasyntax'] = 'Use syntax highlighting in text boxes (requires java)'; //needs translation
 ?>
