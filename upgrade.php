@@ -51,15 +51,16 @@ $result = $db->query($query);
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 	$current_version = $row["version"];
 }
+
 mysql_free_result($result);
 
 if (!isset($_GET["doupgrade"])) {
 
 	if ($current_version < $CMS_SCHEMA_VERSION) {
-		echo "<p>CMS is in need of an upgrade.  Please click <a href=\"upgrade.php?doupgrade=true\">here</a> to complete it.</p>";
+		echo "<p>CMS is in need of an upgrade.<p>You are now running schema version ".$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.".</p>Please click <a href=\"upgrade.php?doupgrade=true\">here</a> to complete it.</p>";
 	}
 	else {
-		echo "<p>The CMS database is up to date.  Please remove this file when possible.  Click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
+		echo "<p>The CMS database is up to date using schema version ".$current_version.".  Please remove this file when possible.  Click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
 	}
 
 }
