@@ -83,7 +83,7 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+		$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount())
@@ -100,11 +100,16 @@ class Smarty_CMS extends Smarty {
 				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
 				$stylesheet .= "</style>\n";
 			}
-			$tpl_source = $line[template_content];
-			$content = $line[page_content];
-			$title = $line[page_title];
+			$tpl_source = $line['template_content'];
+			$content = $line['page_content'];
+			$title = $line['page_title'];
+			$head_tags = $line['head_tags'];
 			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+			if (isset($head_tags) && $head_tags != "")
+			{
+				$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
+			}
 
 			#So no one can do anything nasty
 			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
