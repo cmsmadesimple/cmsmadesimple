@@ -363,6 +363,24 @@ function set_site_preference($prefname, $value)
 	$siteprefs[$prefname] = $value;
 }
 
+function load_all_preferences($userid)
+{
+	global $gCms;
+	$db = &$gCms->db;
+	$variables = &$gCms->userprefs;
+
+	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
+	$result = $db->Execute($query, array($userid));
+
+	if ($result && $result->RowCount() > 0)
+	{
+		while ($row = $result->FetchRow())
+		{
+			$variables[$row['preference']] = $row['value'];
+		}
+	}
+}
+
 /**
  * Gets the given preference for the given userid.
  *
@@ -374,23 +392,22 @@ function get_preference($userid, $prefname)
 	$db = $gCms->db;
 	$userprefs = &$gCms->userprefs;
 
-	if (!isset($userprefs[$prefname]))
+	$result = '';
+
+	if (!isset($gCms->userprefs))
 	{
-		$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
-		$result = $db->query($query);
-		
-		if ($result && $result->RowCount() > 0) {
-			$row = $result->FetchRow();
-			$value = $row["value"];
-			$userprefs[$prefname] = $value;
-		}
-		else
+		load_all_preferences($userid);
+	}
+
+	if (isset($gCms->userprefs))
+	{
+		if (isset($userprefs[$prefname]))
 		{
-			$userprefs[$prefname] = '';
+			$result = $userprefs[$prefname];
 		}
 	}
 
-	return (isset($userprefs[$prefname])?$userprefs[$prefname]:'');
+	return $result;
 }
 
 /**

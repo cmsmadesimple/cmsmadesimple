@@ -59,8 +59,9 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'admintheme', $admintheme);
 	//STOP
 	audit(-1, '', 'Edited User Preferences');
-	redirect("index.php");
-	return;
+	$error = lang('prefsupdated');
+	#redirect("index.php");
+	#return;
 } else if (!isset($_POST["edituserprefs"])) {
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
@@ -73,7 +74,7 @@ if (isset($_POST["submit_form"])) {
 include_once("header.php");
 
 if ($error != "") {
-	echo "<ul class=\"error\">".$error."</ul>";
+	echo '<p class="Error">'.$error.'</p>';
 }
 
 ?>

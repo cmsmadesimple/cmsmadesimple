@@ -46,6 +46,9 @@ iframe {
 	padding-right: 5px;
 }
 
+.Error {
+	color: red;
+}
 
 /**
  * Main (and sub) Menu
