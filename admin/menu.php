@@ -28,7 +28,7 @@
 
 <a href="listcontent.php"><?php echo lang('contentmanagement')?></a>
 <a href="listtemplates.php"><?php echo lang('templatemanagement')?></a>
-<?php if ($config["advanced_user"]) { ?>
+<?php if (get_site_preference('useadvancedcss') == "1") { ?>
 <a href="listcss.php"><?php echo lang('cssmanagement')?></a>
 <?php } ?>
 <!--<a href="tools.php"><?php echo lang('tools')?></a>-->

@@ -87,7 +87,7 @@ if (isset($_GET["message"])) {
 				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$row["template_id"]."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 			# view css association
-			if ($config["advanced_user"]) {
+			if (get_site_preference('useadvancedcss') == "1") {
 				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang("CSS")."\" title=\"".lang("CSS")."\"></a></td>\n";
 			}
 

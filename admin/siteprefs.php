@@ -154,8 +154,8 @@ if ($error != "") {
 		<td><?php echo lang('useadvancedcss')?></td>
 		<td>
 			<select name="useadvancedcss">
-				<option value="1"><?php echo lang('true')?></option>
-				<option value="0"><?php echo lang('false')?></option>
+				<option value="1"<?php echo ($useadvancedcss=="1"?" selected":"")?>><?php echo lang('true')?></option>
+				<option value="0"<?php echo ($useadvancedcss=="0"?" selected":"")?>><?php echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
