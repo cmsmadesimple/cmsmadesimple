@@ -69,9 +69,9 @@ function linkblog_module_executeadmin($cms, $module_id) {
     } ## if
 
     ## create mini menu
-    echo cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'add_category_form'), "Add Category");
-    echo " | " . cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'manage_categories'), "Manage Categories");
-    echo " | " . cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'manage_links'), "Manage Links");
+    echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'add_category_form'), "Add Category");
+    echo " | " . cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'manage_categories'), "Manage Categories");
+    echo " | " . cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'manage_links'), "Manage Links");
 
 ##     echo "action: ($action)\n";
     switch ($action) {
@@ -110,11 +110,11 @@ function linkblog_module_add_category_form($cms, $module_id) {
 
 ##     echo "<table cellspacing=5 border=0>\n";
     echo "<h4 class=admintitle>Add Category</h4>\n";
-    echo cms_mapi_create_user_form_start("LinkBlog", $module_id, $cms->variables["page"]);
+    echo cms_mapi_create_admin_form_start("LinkBlog", $module_id);
     echo "Cagegory name: <input name=".$module_id."category_name length=25 maxlength=100 />\n";
     echo "<input type=hidden name=".$module_id."action value=add_category_to_db />\n";
     echo "<input type=submit value=\"Add Category\" />\n";
-    echo cms_mapi_create_user_form_end();
+    echo cms_mapi_create_admin_form_end();
 
 } ## linkblog_module_add_category
 
@@ -141,11 +141,11 @@ function linkblog_module_manage_categories($cms, $module_id) {
     
     $records = count($categories);
 
-    for ($i = 0; $i <= $records; $i++) {
+    for ($i = 0; $i < $records; $i++) {
         if ($categories[$i]["linkblog_type"] != "") {
-            echo "<tr><td>".cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'edit_category', 'category_id'=>$categories[$i]["linkblog_type_id"], 'category_name'=>$categories[$i]["linkblog_type"]), $categories[$i][linkblog_type]) . "</td>\n";
-            echo "<td>".$categories[$i]["linkblog_type_id"]."</td>\n";
-            echo "<td>type".$categories[$i]["linkblog_type_id"].".png</td></tr>\n";
+            echo "<tr><td>".cms_mapi_create_admin_link('LinkBlog', $module_id, array('action'=>'edit_category', 'category_id'=>$categories[$i]['linkblog_type_id'], 'category_name'=>$categories[$i]['linkblog_type']), $categories[$i]['linkblog_type']) . "</td>\n";
+            echo "<td>".$categories[$i]['linkblog_type_id']."</td>\n";
+            echo "<td>type".$categories[$i]['linkblog_type_id'].".png</td></tr>\n";
         } ## if
     } ## for
     echo "</table>\n";
@@ -165,13 +165,13 @@ function linkblog_module_edit_category($cms, $module_id) {
     } ## if
 
     echo "<p>\n";
-    echo cms_mapi_create_user_form_start("LinkBlog", $module_id, $cms->variables["page"]);
+    echo cms_mapi_create_admin_form_start("LinkBlog", $module_id);
     echo "Category name: $category_name<br />\n";
     echo "<input name=".$module_id."category_name type=text length=20 maxlength=40 value=\"$category_name\" />\n";
     echo "<input name=".$module_id."action type=hidden value=update_category />\n";
     echo "<input name=".$module_id."category_id type=hidden value=$category_id />\n";
     echo "<input type=submit value=Update />\n";
-    echo cms_mapi_create_user_form_end();
+    echo cms_mapi_create_admin_form_end();
     echo "</p>\n";
 } ## linkblog_module_edit_category
 
@@ -190,7 +190,7 @@ function linkblog_module_update_category($cms, $module_id) {
 
 function linkblog_module_manage_links($cms, $module_id) {
 
-    $keywords = $_POST[$module_id."keywords"];
+    $keywords = '';
     if (isset($_POST[$module_id."keywords"])) {
         $keywords = $_POST[$module_id."keywords"];
     } elseif (isset($_GET[$module_id."keywords"])) {
@@ -199,11 +199,11 @@ function linkblog_module_manage_links($cms, $module_id) {
 
     echo "<h4 class=admintitle>Manage Links</h4><br />\n";
     echo "Note: Only the 20 most recent links are shown. Use the search box to find others<br />\n";
-    echo cms_mapi_create_user_form_start("LinkBlog", $module_id, $cms->variables["page"]);
+    echo cms_mapi_create_admin_form_start("LinkBlog", $module_id);
     echo "<input type=text name=".$module_id."keywords length=25 maxlength=50 value=\"$keywords\" />\n";
     echo "<input type=hidden name=".$module_id."action value=manage_links />\n";
     echo "<input type=submit value=\"Search\" />\n"; 
-    echo cms_mapi_create_user_form_end();
+    echo cms_mapi_create_admin_form_end();
 
     echo "<table class=admintable cellspacing=5 border=0>\n";
     echo "<tr><th>Name</th><th>Category</th><th>Author</th><th>Post Date</th><th>Status</th></tr>\n";

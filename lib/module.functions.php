@@ -1439,7 +1439,7 @@ class Smarty_ModuleInterface extends Smarty {
 		$db = $gCms->db;
 		$cmsmodules = $gCms->modules;
 
-		$query = "SELECT t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_id = ?";
+		$query = "SELECT t.template_id, t.stylesheet, t.template_content, p.hierarchy, p.content_id FROM ".cms_db_prefix()."content p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.content_id = ?";
 		$result = $db->Execute($query, array($tpl_name));
 
 		if ($result && $result->RowCount()) {
@@ -1449,9 +1449,16 @@ class Smarty_ModuleInterface extends Smarty {
 				$line = $result->FetchRow();
 
 				$tpl_source = $line['template_content'];
-				$content = $line['page_content'];
-				$title = $line['page_title'];
+				#$content = $line['page_content'];
+				$title = $line['title'];
 				$template_id = $line['template_id'];
+
+				$gCms->variables['content_id'] = $line['content_id'];
+				$gCms->variables['page'] = $line['content_id'];
+				$gCms->variables['page_id'] = $line['content_id'];
+
+				$gCms->variables['page_name'] = $tpl_name;
+				$gCms->variables['position'] = $line['hierarchy'];
 
 				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
 
