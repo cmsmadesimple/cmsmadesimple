@@ -4,6 +4,8 @@ echo ------------------------------------
 echo Running Cleanup Script
 echo ------------------------------------
 
+sh autogen.sh
+
 rm -fr CHECKLIST
 rm -fr config.php
 rm -fr autogen.sh
