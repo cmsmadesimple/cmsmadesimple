@@ -218,16 +218,18 @@ function showPageThree($sqlloaded = 0) {
 		echo "<p>Importing initial data...";
 
 		$handle = fopen(dirname(__FILE__)."/schemas/mysql.sql", 'r');
-		while (!feof($handle)) {
-			set_magic_quotes_runtime(false);
+		if ($handle) {
 			$result = $db->Execute("USE ".$_POST['database'].";");
-			$s = fgets($handle, 32768);
-			if ($s != "") {
-				$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
-				$result = $db->Execute($s);
-				if (!$result) {
-					die('Invalid query: ' . mysql_error());
-				} ## if
+			while (!feof($handle)) {
+				set_magic_quotes_runtime(false);
+				$s = fgets($handle, 32768);
+				if ($s != "") {
+					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
+					$result = $db->Execute($s);
+					if (!$result) {
+						die('Invalid query: ' . mysql_error());
+					} ## if
+				}
 			}
 		}
 		fclose($handle);
