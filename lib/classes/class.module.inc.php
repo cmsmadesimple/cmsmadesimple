@@ -1355,6 +1355,10 @@ class ModuleOperations
 		return $cmsmodules;
 	}
 
+	/**
+	 * Returns all parameters sent that are destined for the module with
+	 * the given $id
+	 */
 	function GetModuleParameters($id)
 	{
 		$params = array();

@@ -585,7 +585,7 @@ class News extends CMSModule
 
 			case "add":
 				$post_date = rtrim(ltrim($db->DBTimeStamp(time()), "'"), "'");
-				$this->AdminForm($id, 'completeedit', '', '', '', $post_date);
+				$this->AdminForm($id, 'completeadd', '', '', '', $post_date);
 				break;
 
 			case "delete":

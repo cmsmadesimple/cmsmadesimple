@@ -51,15 +51,7 @@ if (count($gCms->modules) > 0)
 	{
 		@ob_start();
 		$id = 'm1_';
-		$params = array();
-		foreach ($_REQUEST as $key=>$value)
-		{
-			if (strpos($key, $id) !== FALSE && strpos($key, $id) == 0)
-			{
-				$key = str_replace($id, '', $key);
-				$params[$key] = $value;
-			}
-		}
+		$params = @ModuleOperations::GetModuleParameters($id);
 		echo $gCms->modules[$module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'defaultadmin'), $id, $params);
 		$content = @ob_get_contents();
 		@ob_end_clean();
