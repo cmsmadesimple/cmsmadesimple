@@ -119,6 +119,17 @@ div.nav form {
 	height: 100px;
 }
 
+div.helparea {
+    position: absolute;
+    background: #BFDAEF;
+    color: #265980;
+    left: 450px;
+    top: 10px;
+    height: 95px;
+    border: 1px solid #8C8A8C;
+    padding: 2px;
+}
+
 #logo {
 	position: absolute;
 	left: 10px;

@@ -100,8 +100,15 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></div></p>
-
+<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div></div>
+<div class="helparea">
+<?php
+echo "<p>".$gettext->gettext("This page allows you to edit, delete, and create templates.")."</p>";
+echo "<p>".$gettext->gettext("To create a new template, click on the ")."<u>".$gettext->gettext("Add New Template")."</u>".$gettext->gettext(" button.")."<br />";
+echo $gettext->gettext("If you wish to set all content pages to use the same template, click on the ")."<u>".$gettext->gettext("Set All Content")."</u>".$gettext->gettext(" link.")."<br />";
+echo $gettext->gettext("If you wish to duplicate a template, click on the ")."<u>".$gettext->gettext("Copy")."</u>".$gettext->gettext(" icon and you will be prompted to name the new duplicate template.")."</p>";
+?>
+</div>
 <?php
 }
 

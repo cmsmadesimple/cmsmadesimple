@@ -128,6 +128,11 @@ if (isset($_GET["message"])) {
 <div class="button"><a href="addcontent.php"><?=$gettext->gettext("Add New
 Content")?></a></div></div>
 
+<div class="helparea">
+<p>This is the main content page used as the starting point for editing of all content.<br/>
+This page allows you to reorder your content hierarchy for use with the automated menuing system, as well as deleting, editing, and creating new content pieces.</p>
+<p>To make a page the default page (shown when no page parameter is passed) click on the <u>False</u> link in the <i>Default</i> column.</p>
+</div>
 <?php
 	}
 

@@ -443,7 +443,12 @@ else {
 </div>
 
 </form>
-
+<div class="helparea">
+<?php
+	echo "<p>".$gettext->gettext("This page allows you to change the actual content of your page, the parent of this piece of content used for generating the menu. You can also change the text that actually appears in the menu, the title of the page, change the owner, and assign additional editors to the selected piece of content.")."</p>";
+	echo "<p>".$gettext->gettext("If you choose to use the page alias, the links created by the automated menu will be more readable using the page alias as the argument rather than the internally defined page id number.")."</p>";
+?>
+</div>
 <?php
 }
 
