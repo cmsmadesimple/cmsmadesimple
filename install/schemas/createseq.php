@@ -78,6 +78,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$db->CreateSequence($db_prefix."templates_seq", $max+1);
 
 	echo "[done]</p>";
+	
+	echo "<p>Creating sequence table sequence...";
+
+	$max = $db->GetOne("SELECT max(sequence_id) from ".$db_prefix."sequence");
+	$db->CreateSequence($db_prefix."sequence_seq", $max+1);
+
+	echo "[done]</p>";
 
 	echo "<p>Creating users table sequence...";
 

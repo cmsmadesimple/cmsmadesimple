@@ -480,22 +480,21 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 
 	$userid = get_userid();
 	$wysiwyg = get_preference($userid, 'wysiwyg');
-
-	if (isset($wysiwyg) && $wysiwyg != '' && $enablewysiwyg)
+	
+	foreach($gCms->modules as $key=>$value)
 	{
-		if (isset($gCms->modules[$wysiwyg]) &&
-			$gCms->modules[$wysiwyg]['Installed'] == true &&
-			$gCms->modules[$wysiwyg]['Active'] == true &&
-			isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
+		if (get_preference(get_userid(), 'wysiwyg')!="" &&
+			$gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true &&
+			$gCms->modules[$key]['object']->IsWYSIWYG() &&
+			$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg') &&
+			$enablewysiwyg)
 		{
-			if (isset($gCms->modules[$wysiwyg]['wysiwyg_textbox_function']))
-			{
-				$result = '';
-				ob_start();
-				echo call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_textbox_function'], array(&$gCms, $name, '80', '15', $encoding, $text, $stylesheet));
-				$result = ob_get_contents();
-				ob_end_clean();	
-			}
+			$result = '';
+			ob_start();
+			echo $gCms->modules[$key]['object']->WYSIWYGTextarea($name,'80','15',$encoding,$text,$stylesheet);
+			$result = ob_get_contents();
+			ob_end_clean();
 		}
 	}
 

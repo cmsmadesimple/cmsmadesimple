@@ -103,6 +103,7 @@ if (get_site_preference('enablecustom404') == "0")
 #}
 
 #Perform the content postrender callback
+/*
 foreach($gCms->modules as $key=>$value)
 {
 	if (isset($gCms->modules[$key]['content_postrender_function']) &&
@@ -112,6 +113,7 @@ foreach($gCms->modules as $key=>$value)
 		call_user_func_array($gCms->modules[$key]['content_postrender_function'], array(&$gCms, &$html));
 	}
 }
+*/
 
 echo $html;
 

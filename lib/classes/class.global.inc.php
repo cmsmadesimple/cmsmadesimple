@@ -90,6 +90,7 @@ class CmsObject {
 	 */
 	function CmsObject()
 	{
+		$this->modules = array();
 		$this->errors = array();
 	}
 }

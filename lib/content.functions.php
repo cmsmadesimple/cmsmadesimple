@@ -142,6 +142,7 @@ class Smarty_CMS extends Smarty {
 				}
 
 				#Perform the content template callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if (isset($gCms->modules[$key]['content_template_function']) &&
@@ -151,11 +152,13 @@ class Smarty_CMS extends Smarty {
 						call_user_func_array($gCms->modules[$key]['content_template_function'], array(&$gCms, &$tpl_source));
 					}
 				}
+				*/
 
 				#Fill some variables with various information
 				$content = $contentobj->Show();
 
 				#Perform the content data callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if (isset($gCms->modules[$key]['content_data_function']) &&
@@ -165,10 +168,12 @@ class Smarty_CMS extends Smarty {
 						call_user_func_array($gCms->modules[$key]['content_data_function'], array(&$gCms, &$content));
 					}
 				}
+				*/
 
 				$title = $contentobj->Name();
 
 				#Perform the content title callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if (isset($gCms->modules[$key]['content_title_function']) &&
@@ -178,6 +183,7 @@ class Smarty_CMS extends Smarty {
 						call_user_func_array($gCms->modules[$key]['content_title_function'], array(&$gCms, &$title));
 					}
 				}
+				*/
 
 				$head_tags = $contentobj->mProperties->GetValue('headtags');
 				$header_script = $contentobj->mProperties->GetValue('page_header');
@@ -242,13 +248,9 @@ class Smarty_CMS extends Smarty {
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
 				{
-					if (isset($gCms->modules[$key]['content_prerender_function']) &&
-						$gCms->modules[$key]['Installed'] == true &&
-						$gCms->modules[$key]['Active'] == true)
-					{
-						call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
-					}
+					$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
 				}
+
 				return true;
 			}
 			else
@@ -260,12 +262,7 @@ class Smarty_CMS extends Smarty {
 					#Perform the content prerender callback
 					foreach($gCms->modules as $key=>$value)
 					{
-						if (isset($gCms->modules[$key]['content_prerender_function']) &&
-							$gCms->modules[$key]['Installed'] == true &&
-							$gCms->modules[$key]['Active'] == true)
-						{
-							call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
-						}
+						$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
 					}
 					return true;	
 				}

@@ -33,10 +33,10 @@ require_once(dirname(__FILE__)."/include.php");
 $smarty = new Smarty_ModuleInterface($config);
 $gCms->smarty = &$smarty;
 
-$gCms->variables['page'] = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");
-$smarty->page = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");
-$smarty->module = (isset($_GET["module"])?$_GET["module"]:"").(isset($_POST["module"])?$_POST["module"]:"");
-$smarty->id = (isset($_GET["id"])?$_GET["id"]:"").(isset($_POST["id"])?$_POST["id"]:"");
+$smarty->id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+$gCms->variables['page'] = (isset($_REQUEST[$smarty->id.'returnid'])?$_REQUEST[$smarty->id.'returnid']:"");
+$smarty->page = (isset($_REQUEST[$smarty->id.'returnid'])?$_REQUEST[$smarty->id.'returnid']:'');
+$smarty->module = (isset($_REQUEST['module'])?$_REQUEST['module']:'');
 
 $showtemplate = true;
 if (isset($_POST["showtemplate"]) && $_POST["showtemplate"] == "false") $showtemplate = false;
@@ -49,7 +49,7 @@ $smarty->showtemplate = $showtemplate;
 $params = array_merge($_GET, $_POST);
 $smarty->params = $params;
 
-$old_error_handler = set_error_handler("ErrorHandler404");
+#$old_error_handler = set_error_handler("ErrorHandler404");
 $html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
 
 #Perform the content postrender callback
@@ -63,7 +63,7 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
-set_error_handler($old_error_handler);
+#set_error_handler($old_error_handler);
 
 echo $html;
 
@@ -80,7 +80,7 @@ if ($config["debug"] == true)
 	echo $sql_queries;
 }
 
-header("Content-Language: " . $current_language);
+#header("Content-Language: " . $current_language);
 header("Content-Type: text/html; charset=" . get_encoding());
 @ob_flush();
 

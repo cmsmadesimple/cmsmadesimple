@@ -1,3 +1,11 @@
+Version 0.9 "Marquesas" -- Subversion
+-----------------
+
+* Rewrote module API from scratch to make it easier for a module
+dev to write modules.  Not only is it now object oriented, it is
+also better organized and navigations related functions are
+much, much easier.
+
 Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
 -----------------
 

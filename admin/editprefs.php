@@ -81,9 +81,9 @@ if ($error != "") {
 				<?php
 					foreach($gCms->modules as $key=>$value)
 					{
-						if ($gCms->modules[$key]['Installed'] == true &&
-							$gCms->modules[$key]['Active'] == true &&
-							isset($gCms->modules[$key]['wysiwyg_module']))
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true &&
+							$gCms->modules[$key]['object']->IsWYSIWYG())
 						{
 							echo '<option value="'.$key.'"';
 							if ($wysiwyg == $key)

@@ -302,10 +302,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 				$headers = "From: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
 				."Return-Path: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
 				."X-Mailer: PHP/" . phpversion();
-				$recipients = split(" ", cms_mapi_get_preference("LinkBlog", "email_to"));
-				foreach ($recipients as $r) {
-					$result = @mail(cms_mapi_get_preference("LinkBlog", "email_to"), $subject, $body, $headers);
-				} ## foreach
+				$result = @mail(cms_mapi_get_preference("LinkBlog", "email_to"), $subject, $body, $headers);
 			} ## if
 
             cms_mapi_redirect_user_by_pageid($return_id);

@@ -1548,13 +1548,21 @@ class Smarty_ModuleInterface extends Smarty {
 			}
 			
 			#Run the execute_user function and replace {content} with it's output 
-			if (isset($cmsmodules[$smarty_obj->module])
-				&& isset($cmsmodules[$smarty_obj->module]['execute_user_function'])
-				&& $cmsmodules[$smarty_obj->module]['Installed'] == true
-				&& $cmsmodules[$smarty_obj->module]['Active'] == true)
+			if (isset($gCms->modules[$smarty_obj->module]))
 			{
 				@ob_start();
-				call_user_func_array($cmsmodules[$smarty_obj->module]['execute_user_function'], array($gCms,$smarty_obj->id,$tpl_name,$smarty_obj->params));
+				#call_user_func_array($gCms->modules[$smarty_obj->module]['execute_admin_function'], array($gCms,"module_".$module."_"));
+				$id = $smarty_obj->id;
+				$params = array();
+				foreach ($_REQUEST as $key=>$value)
+				{
+					if (strpos($key, $id) !== FALSE && strpos($key, $id) == 0)
+					{
+						$key = str_replace($id, '', $key);
+						$params[$key] = $value;
+					}
+				}
+				echo $gCms->modules[$smarty_obj->module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $gCms->variables['page']);
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				if ($smarty_obj->showtemplate == true)
@@ -1584,13 +1592,9 @@ class Smarty_ModuleInterface extends Smarty {
 			#Perform the content prerender callback
 			foreach($gCms->modules as $key=>$value)
 			{
-				if (isset($gCms->modules[$key]['content_prerender_function']) &&
-					$gCms->modules[$key]['Installed'] == true &&
-					$gCms->modules[$key]['Active'] == true)
-				{
-					call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
-				}
+				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
 			}
+			
 
 			return true;
 		}

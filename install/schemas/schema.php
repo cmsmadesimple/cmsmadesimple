@@ -11,6 +11,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."module_news_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
+	$db->DropSequence($db_prefix."sequence_seq");
 	$db->DropSequence($db_prefix."users_seq");
 	$db->DropSequence($db_prefix."userplugins_seq");
 
@@ -44,6 +45,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."siteprefs");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."sequence");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -417,6 +420,24 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+	
+	echo "<p>Creating sequence table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		sequence_id I KEY,
+		sequence_name C(25),
+		sequence_actions X,
+		sequence_panic X,
+		active I1,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";

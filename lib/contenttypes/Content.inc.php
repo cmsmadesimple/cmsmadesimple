@@ -109,7 +109,6 @@ class content extends ContentBase
 	{
 		global $gCms;
 		$config = $gCms->config;
-
 		$text = "";
 		$stylesheet = '';
 		if ($this->TemplateId() > 0)
@@ -123,7 +122,20 @@ class content extends ContentBase
 		{
 			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
 		}
-		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.wysiwyg_form_submit().'document.contentform.submit()"').'</td></tr>';
+		$additionalcall = '';
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (get_preference(get_userid(), 'wysiwyg')!="" && 
+				$gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true &&
+				$gCms->modules[$key]['object']->IsWYSIWYG() &&
+				$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
+			{
+				$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+			}
+		}
+//		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
+		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>';
 		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->mProperties->GetValue('content_en'), 'content_en', 'syntaxHighlight', 'content_en', '', $stylesheet).'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(false, $this->mProperties->GetValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';

@@ -198,7 +198,7 @@ Please complete the following fields:
 		<SELECT NAME="dbms">
 			<OPTION VALUE="mysql">MySQL (3 and 4.0)</OPTION>
 			<OPTION VALUE="mysqli">MySQL (4.1+)</OPTION>
-			<OPTION VALUE="postgres7">PostgreSQL 7</OPTION>
+			<OPTION VALUE="postgres7">PostgreSQL 7/8</OPTION>
 		</SELECT>
 	</TD>
 </TR>

@@ -113,13 +113,17 @@ else
 
 	$displaymodules = "";
 
-	foreach ($cmsmodules as $key=>$value) {
-		if (isset($cmsmodules[$key]['execute_admin_function']) 
-			&& $cmsmodules[$key]['Installed'] == true
-			&& $cmsmodules[$key]['Active'] == true
+	foreach ($cmsmodules as $key=>$value)
+	{
+		if (isset($cmsmodules[$key]['object']) 
+			&& $cmsmodules[$key]['installed'] == true
+			&& $cmsmodules[$key]['active'] == true
 		)
 		{
-			$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
+			if ($cmsmodules[$key]['object']->HasAdmin())
+			{
+				$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
+			}
 		}
 	}
 

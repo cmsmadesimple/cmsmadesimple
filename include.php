@@ -106,6 +106,9 @@ require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
+require_once(dirname(__FILE__)."/lib/sequence.functions.php");
+require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
+require_once(dirname(__FILE__)."/lib/classes/class.sequence.inc.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
 #Load content types
@@ -154,7 +157,14 @@ $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
 #Load all installed module code
-load_modules();
+if (isset($LOAD_ALL_MODULES))
+{
+	ModuleOperations::LoadModules(true);
+}
+else
+{
+	ModuleOperations::LoadModules(false);
+}
 
 #Load all site preferences
 load_site_preferences();

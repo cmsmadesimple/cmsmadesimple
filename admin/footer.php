@@ -38,32 +38,27 @@ $bodytext = '';
 $userid = get_userid();
 $wysiwyg = get_preference($userid, 'wysiwyg');
 
-if (isset($wysiwyg) && $wysiwyg != '')
+foreach($gCms->modules as $key=>$value)
 {
-	if (isset($gCms->modules[$wysiwyg]) && $gCms->modules[$wysiwyg]['Installed'] == true &&
-		$gCms->modules[$wysiwyg]['Active'] == true && isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true &&
+		$gCms->modules[$key]['object']->IsWYSIWYG())
 	{
-		if (isset($gCms->modules[$wysiwyg]['wysiwyg_body_function']))
-		{
-			@ob_start();
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_body_function'], array(&$gCms));
-			$bodytext .= @ob_get_contents();
-			@ob_end_clean();
-		}
-		if (isset($gCms->modules[$wysiwyg]['wysiwyg_header_function']))
-		{
-			@ob_start();
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array(&$gCms));
-			$footertext .= @ob_get_contents();
-			@ob_end_clean();
-		}
-		if (isset($gCms->modules[$wysiwyg]['wysiwyg_form_function']))
-		{
-			@ob_start();
-			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_function'], array(&$gCms));
-			$formtext .= @ob_get_contents();
-			@ob_end_clean();
-		}
+		@ob_start();
+		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_body_function'], array(&$gCms));
+		$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
+		$bodytext .= @ob_get_contents();
+		@ob_end_clean();
+		@ob_start();
+		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array(&$gCms));
+		$gCms->modules[$key]['object']->WYSIWYGGenerateHeader();
+		$footertext .= @ob_get_contents();
+		@ob_end_clean();
+		@ob_start();
+		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_function'], array(&$gCms));
+		$gCms->modules[$key]['object']->WYSIWYGPageForm();
+		$formtext .= @ob_get_contents();
+		@ob_end_clean();
 	}
 }
 

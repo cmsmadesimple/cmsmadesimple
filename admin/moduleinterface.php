@@ -25,10 +25,9 @@ require_once("../include.php");
 check_login($config);
 
 $module = "";
-if (isset($_GET["module"])) $module = $_GET["module"];
-else if (isset($_POST["module"])) $module = $_POST["module"];
+if (isset($_REQUEST["module"])) $module = $_REQUEST["module"];
 
-if (isset($gCms->modules[$module]) && isset($gCms->modules[$module]['enable_wysiwyg']) && $gCms->modules[$module]['enable_wysiwyg'] == true)
+if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
 	$userid = get_userid();
 	if (get_preference($userid, 'use_wysiwyg') == "1") {
@@ -39,7 +38,8 @@ if (isset($gCms->modules[$module]) && isset($gCms->modules[$module]['enable_wysi
 
 include_once("header.php");
 
-if (count($gCms->modules) > 0) {
+if (count($gCms->modules) > 0)
+{
 
 ?>
 
@@ -47,18 +47,32 @@ if (count($gCms->modules) > 0) {
 
 <?php
 
-	if (isset($gCms->modules[$module])) {
+	if (isset($gCms->modules[$module]))
+	{
 		@ob_start();
-		call_user_func_array($gCms->modules[$module]['execute_admin_function'], array($gCms,"module_".$module."_"));
+		#call_user_func_array($gCms->modules[$module]['execute_admin_function'], array($gCms,"module_".$module."_"));
+		$id = 'm1_';
+		$params = array();
+		foreach ($_REQUEST as $key=>$value)
+		{
+			if (strpos($key, $id) !== FALSE && strpos($key, $id) == 0)
+			{
+				$key = str_replace($id, '', $key);
+				$params[$key] = $value;
+			}
+		}
+		echo $gCms->modules[$module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'defaultadmin'), $id, $params);
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;
-	} else {
+	}
+	else
+	{
 		redirect("index.php");
 	}
-
 }
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

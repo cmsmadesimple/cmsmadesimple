@@ -16,35 +16,45 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_module($params, &$smarty) {
-
+function smarty_cms_function_cms_module($params, &$smarty)
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 
-	$modulename = $params['module'];
+	if (isset($cmsmodules))
+	{
+		$modulename = $params['module'];
 
-	foreach ($cmsmodules as $key=>$value) {
-		if (strtolower($modulename) == strtolower($key)) {
-			$modulename = $key;
-		}
-	}
-
-	if (isset($modulename)) {
-
-		if (isset($cmsmodules[$modulename])) {
-			if (isset($cmsmodules[$modulename]['plugin_module'])
-				&& $cmsmodules[$modulename]['Installed'] == true
-				&& $cmsmodules[$modulename]['Active'] == true)
+		foreach ($cmsmodules as $key=>$value)
+		{
+			if (strtolower($modulename) == strtolower($key))
 			{
-				@ob_start();
-				#$obj = $cmsmodules[$params['module']]['Instance'];
-				#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
-				call_user_func_array($cmsmodules[$modulename]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
-				$modoutput = @ob_get_contents();
-				@ob_end_clean();
-				return $modoutput;
-			} else {
-				return "<!-- Not a tag module -->\n";
+				$modulename = $key;
+			}
+		}
+
+		if (isset($modulename))
+		{
+			if (isset($cmsmodules[$modulename]))
+			{
+				if (isset($cmsmodules[$modulename]['object'])
+					&& $cmsmodules[$modulename]['installed'] == true
+					&& $cmsmodules[$modulename]['active'] == true
+					&& $cmsmodules[$modulename]['object']->IsPluginModule())
+				{
+					@ob_start();
+					#call_user_func_array($cmsmodules[$modulename]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
+					$result = $cmsmodules[$modulename]['object']->DoAction('default', ++$gCms->variables["modulenum"], $params);
+					if ($result !== FALSE)
+					{
+						echo $result;
+					}
+					$modoutput = @ob_get_contents();
+					@ob_end_clean();
+					return $modoutput;
+				} else {
+					return "<!-- Not a tag module -->\n";
+				}
 			}
 		}
 	}
