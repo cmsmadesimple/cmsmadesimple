@@ -1,3 +1,8 @@
+Version 0.7.2 -- Subversion
+-----------------
+
+* Fixed stupid encoding issue with cms_htmlentities
+
 Version 0.7.1 -- Wed Oct 26 2004
 -----------------
 

@@ -143,45 +143,43 @@ function my_htmlentities($val)
 	{
 		return "";
 	}
+	$val = str_replace( "&#032;", " ", $val ); 
 
-	$val = str_replace( " ", " ", $val );
+	//Remove sneaky spaces 
+	// $val = str_replace( chr(0xCA), "", $val );   
 
-	//Remove sneaky spaces
-	// $val = str_replace( chr(0xCA), "", $val );
+	$val = str_replace( "&"            , "&amp;"         , $val ); 
+	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val ); 
+	$val = str_replace( "-->"          , "--&#62;"       , $val ); 
+	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val ); 
+	$val = str_replace( ">"            , "&gt;"          , $val ); 
+	$val = str_replace( "<"            , "&lt;"          , $val ); 
+	$val = str_replace( "\""           , "&quot;"        , $val ); 
 
-	$val = str_replace( "&" , "&" , $val );
-	$val = str_replace( "<!--" , "<!--" , $val );
-	$val = str_replace( "-->" , "-->" , $val );
-	$val = preg_replace( "/<script/i" , "<script" , $val );
-	$val = str_replace( ">" , "&gt;" , $val );
-	$val = str_replace( "<" , "&lt;" , $val );
-	$val = str_replace( "\"" , "&quot;" , $val );
+	// Uncomment it if you need to convert literal newlines 
+	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
 
-	// Uncomment it if you need to convert literal newlines
-	//$val = preg_replace( "/\n/" , "
-//" , $val );
+	$val = preg_replace( "/\\$/"      , "&#036;"        , $val ); 
 
-	$val = preg_replace( "/\\$/" , "$" , $val );
+	// Uncomment it if you need to remove literal carriage returns 
+	//$val = preg_replace( "/\r/"        , ""              , $val ); 
 
-	// Uncomment it if you need to remove literal carriage returns
-	//$val = preg_replace( "/\r/" , "" , $val );
+	$val = str_replace( "!"            , "&#33;"         , $val ); 
+	$val = str_replace( "'"            , "&#39;"         , $val ); 
+	 
+	// Uncomment if you need to convert unicode chars 
+	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val ); 
 
-	$val = str_replace( "!" , "!" , $val );
-	$val = str_replace( "'" , "'" , $val );
+	// Strip slashes if not already done so. 
 
-	// Uncomment if you need to convert unicode chars
-	$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val );
+	//if ( get_magic_quotes_gpc() ) 
+	//{ 
+	//	$val = stripslashes($val); 
+	//} 
 
-	// Strip slashes if not already done so.
-	//if ( get_magic_quotes_gpc() )
-	//{
-	//	$val = stripslashes($val);
-	//}
+	// Swop user inputted backslashes 
 
-	// Swop user inputted backslashes (this caused an error so
-	// I commented it)
-
-	// $val = preg_replace( "/\(?!&#|?#)/", "\", $val );
+	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
 
 	return $val;
 }

@@ -42,7 +42,7 @@ $nls['alias']['en_GB'] = 'en_US' ;
 $nls['alias']['en_US.ISO8859-1'] = 'en_US' ;
 
 #Encoding of the language
-$nls['encoding']['en_US'] = "ISO-8859-1";
+$nls['encoding']['en_US'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['en_US'] = array();
