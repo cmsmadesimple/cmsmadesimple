@@ -68,6 +68,13 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Reseting cache update time...";
+
+	$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+	$db->query($query);
+
+	echo "[done]</p>";
+
 	echo "<p>Updating schema version... ";
 
 	$query = "UPDATE ".$config->db_prefix."version SET version = 3";
