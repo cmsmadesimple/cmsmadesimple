@@ -1,0 +1,17 @@
+Steps of a (hopefully) successful cms release
+
+1. Update ChangeLog, AUTHORS, README, INSTALL
+2. Make sure GPL header is on all relevant files
+3. Make sure COPYING is included
+4. (optional) Make sure smarty is up to date
+5. Update version.php with new version number
+6. Commit
+7. Make tag (e.g. tags/version-0.1)
+8. Checkout tag in new directory
+9. Run cleanup script (removes unwanted files)
+10. Tarball up.  Format is cmsmadesimple-0.1.tar.gz.  Always untars into a cmsmadesimple-0.1 directory.
+11. Upload to sourceforge.  Make sure ChangeLog is added.
+12. Add news item on sourceforge project.  Sometimes these end up on the sf.net front page.  Good place to be.
+13. Update website.  This isn't completely fleshed out yet.  This will involve news and junk.
+14. Submit to freshmeat
+15. Await fame and fortune :)
