@@ -185,6 +185,7 @@ if ($access) {
 
 }
 
+$tinymce_flag = "true";
 include_once("header.php");
 
 if (!$access) {

@@ -238,6 +238,7 @@ if ($access) {
 	$ctdropdown .= "</select>";
 }
 
+$tinymce_flag = "true";
 include_once("header.php");
 
 if (!$access) {

@@ -8,6 +8,27 @@
 
 <link rel="stylesheet" type="text/css" href="style.css" />
 
+<?php 
+
+if (isset($tinymce_flag)) { ?>
+
+<!-- tinyMCE -->
+ <script language="javascript" type="text/javascript" src="../tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+ <script language="javascript" type="text/javascript">
+  	tinyMCE.init({
+  		theme : "advanced",
+  		mode : "textareas",
+  		content_css : "../style.css",
+  		debug : false
+	});
+ </script>
+ <!-- /tinyMCE -->
+ 
+ <?php } ?>
+ 
+
+
+</head>
 </head>
 
 <body>
