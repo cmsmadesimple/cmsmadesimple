@@ -550,6 +550,11 @@ class ContentBase
 	# :TODO: This function should return something
 	function Save()
 	{
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
 		if (-1 < $this->mId)
 		{
 			$this->Update();

@@ -71,8 +71,7 @@ if (isset($_GET["message"])) {
     if (isset($_GET["setactive"])) 
 	{
       	// to activate a page, you must be admin, owner, or additional author
-		#$permission = ($modifyall || check_ownership($userid,$_GET["setactive"]) || check_authorship($userid,$_GET["setactive"]));
-		$permission = true;
+		$permission = ($modifyall || check_ownership($userid,$_GET["setactive"]) || check_authorship($userid,$_GET["setactive"]));
       	if($permission) 
 		{
 			foreach ($content_array as $key=>$value_copy)
@@ -92,8 +91,7 @@ if (isset($_GET["message"])) {
     if (isset($_GET["setinactive"])) 
 	{
       	// to deactivate a page, you must be admin, owner, or additional author
-      	#$permission = ($modifyall || check_ownership($userid,$_GET["setinactive"]) || check_authorship($userid,$_GET["setinactive"]));
-		$permission = true;
+      	$permission = ($modifyall || check_ownership($userid,$_GET["setinactive"]) || check_authorship($userid,$_GET["setinactive"]));
       	if($permission) 
 		{
 			foreach ($content_array as $key=>$value_copy)
