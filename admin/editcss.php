@@ -125,6 +125,29 @@ if ($access)
 			if ($result)
 			{
 				audit(get_userid(), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $css_id, $css_name, 'Edited CSS');
+
+				# we now have to check which templates are associated with this CSS and update their modified date.
+				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc
+					WHERE	assoc_type		= 'template'
+					AND		assoc_css_id	= '$css_id'";
+				$cssresult = $db->Execute($cssquery);
+
+				if ($cssresult)
+				{
+					# now updating templates
+					while ($line = $cssresult->FetchRow())
+					{
+						$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+							WHERE template_id = '".$line["assoc_to_id"]."'";
+						$result = $db->Execute($query);
+
+						if (FALSE == $result)
+						{
+							$error .= "<li>".$gettext->gettext("Error updating template!")."</li>";
+						}
+					}
+				}
+					
 				redirect("listcss.php");
 				return;
 			}

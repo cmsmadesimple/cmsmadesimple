@@ -101,6 +101,14 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 			if ($result)
 			{
 				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Deleted CSS association');
+
+				# now updating template
+				if ("template" == $type)
+				{
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+						WHERE template_id = '$id'";
+					$tplresult = $db->Execute($tplquery);
+				}
 			}
 			else
 			{
