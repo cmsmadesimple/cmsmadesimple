@@ -83,10 +83,11 @@ if (isset($_POST["adduser"])) {
 		$newuser->username = $user;
 		$newuser->SetPassword($password);
 		$newuser->active = $active;
-		#$newuser->firstname = $firstname;
-		#$newuser->lastname = $lastname;
-		#$newuser->email = $email;
-		#$newuser->adminaccess = $adminaccess;
+		$newuser->firstname = $firstname;
+		$newuser->lastname = $lastname;
+		$newuser->email = $email;
+		$newuser->adminaccess = $adminaccess;
+		$newuser->SetPassword($password);
 		$result = $newuser->save();
 
 		if ($result) {
