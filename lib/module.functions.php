@@ -941,6 +941,21 @@ function cms_mapi_register_wysiwyg_page_header_function($name, $function)
 }
 
 /**
+ * Registers this module's WYSIWYG body function
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_wysiwyg_page_body_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['wysiwyg_body_function'] = $function;
+	}
+}
+
+/**
  * Registers a function that will product output destined for that
  * pages <form> tag.  Useful for javascript needed to be done on submit
  * and such.

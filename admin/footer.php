@@ -29,6 +29,7 @@ $htmlresult = @ob_get_contents();
 #Do any header replacements (this is for WYSIWYG stuff)
 $footertext = '';
 $formtext = '';
+$bodytext = '';
 
 $userid = get_userid();
 $wysiwyg = get_preference($userid, 'wysiwyg');
@@ -38,6 +39,13 @@ if (isset($wysiwyg) && $wysiwyg != '')
 	if (isset($gCms->modules[$wysiwyg]) && $gCms->modules[$wysiwyg]['Installed'] == true &&
 		$gCms->modules[$wysiwyg]['Active'] == true && isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
 	{
+		if (isset($gCms->modules[$wysiwyg]['wysiwyg_body_function']))
+		{
+			@ob_start();
+			call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_body_function'], array(&$gCms));
+			$bodytext .= @ob_get_contents();
+			@ob_end_clean();
+		}
 		if (isset($gCms->modules[$wysiwyg]['wysiwyg_header_function']))
 		{
 			@ob_start();
@@ -57,6 +65,7 @@ if (isset($wysiwyg) && $wysiwyg != '')
 
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', $formtext, $htmlresult);
+$htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
 echo $htmlresult;
 

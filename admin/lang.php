@@ -79,6 +79,10 @@ if (isset($CMS_ADMIN_PAGE)) {
 			include($onefile);
 		}
 	}
+
+	global $gCms;
+	$gCms->nls = $nls;
+	$gCms->current_language = $current_language;
 }
 
 # vim:ts=4 sw=4 noet

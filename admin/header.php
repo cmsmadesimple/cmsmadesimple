@@ -37,7 +37,7 @@ if (!isset($charsetsent))
 
 </head>
 
-<body>
+<body##BODYSUBMITSTUFFGOESHERE##>
 
 <div id="header" class="header">
 <img src="../images/cms/cmsadminbanner.gif" border="0" id="logo" alt="CMS Made Simple" />
