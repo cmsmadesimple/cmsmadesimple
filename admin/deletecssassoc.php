@@ -120,7 +120,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 	else
 	{
 		$dodelete = false;
-		$error = lang('noaccessto', array(lang('removecssassocation')));
+		$error = lang('noaccessto', array(lang('removecssassociation')));
 	}
 } # end of if params
 else

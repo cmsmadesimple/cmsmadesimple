@@ -131,7 +131,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			else
 			{
 				$doadd = false;
-				$error = lang('errorcreatingassocation');
+				$error = lang('errorcreatingassociation');
 			}
 		} # enf od adding query to db
 	} # end of "if has access"

@@ -214,7 +214,7 @@ if ("" != $error)
 	} # end of if has right to add
 	else
 	{
-		echo lang('noaccessto', array(lang('addcssassocation')));
+		echo lang('noaccessto', array(lang('addcssassociation')));
 	}
 
 include_once("footer.php");
