@@ -214,7 +214,6 @@ function showPageThree($sqlloaded = 0) {
         foreach ($statements as $s) {
             $s = str_replace("\n", "", $s);
             if ($s != "") {
-                $result = mysql_unbuffered_query($s, $link);
 				$result = $db->Execute($s);
                 if (!$result) {
                     die('Invalid query: ' . mysql_error());

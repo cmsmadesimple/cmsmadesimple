@@ -146,14 +146,14 @@ if ($access) {
 					if (isset($_POST["additional_editors"])) {
 						foreach ($_POST["additional_editors"] as $addt_user_id) {
 							$new_addt_id = $dbnew->GenID($config->db_prefix."additional_users_seq");
-							$query = "INSERT INTO ".$config->db_prefix."additional_users (additional_user_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$new_page_id.")";
+							$query = "INSERT INTO ".$config->db_prefix."additional_users (additional_users_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$page_id.")";
 							$dbnew->Execute($query);
 						}
 					}
 				}
-				#This is so pages will not cache the menu changes
-				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-				$dbnew->Execute($query);
+				#This is so pages will not cache the menu changes (menu isn't cached anymore)
+				#$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+				#$dbnew->Execute($query);
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
@@ -257,7 +257,7 @@ if ($access) {
         $addt_users .= "<option value=\"".$row["user_id"]."\"";
 		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
 		$newresult = $dbnew->Execute($query);
-		if ($newresult) {
+		if ($newresult && $newresult->RowCount() > 0) {
 			$addt_users .= " selected=\"true\"";
 		}
 		$addt_users .= ">".$row["username"]."</option>";

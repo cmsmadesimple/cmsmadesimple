@@ -108,6 +108,21 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Creating modules table...";
+
+	$db = NewDataDictionary($dbnew);
+	$flds = "
+		module_name C(255),
+		status C(255),
+		version C(255),
+		active L
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $db->CreateTableSQL($config->db_prefix."modules", $flds, $taboptarray);
+	$db->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating pages table...";
 
 	$dbdict = NewDataDictionary($db);

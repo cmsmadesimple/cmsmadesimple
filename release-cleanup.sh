@@ -14,6 +14,7 @@ rm -fr config.php
 rm -fr autogen.sh
 rm -fr mpd.sql
 rm -fr mysql.sql
+rm -fr generatedump.php
 rm -fr images/*.svg
 rm -fr smarty/cms/cache/*
 rm -fr smarty/cms/templates_c/*

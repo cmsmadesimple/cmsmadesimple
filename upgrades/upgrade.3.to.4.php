@@ -16,7 +16,7 @@ function upgrade_create_sequence_table($db, $tablename, $idcol) {
 
 upgrade_create_sequence_table($dbnew, $config->db_prefix."additional_users", "additional_users_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."group_perms", "group_perm_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."groups", "group_group_id");
+upgrade_create_sequence_table($dbnew, $config->db_prefix."groups", "group_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."pages", "page_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."permissions", "permission_id");
 upgrade_create_sequence_table($dbnew, $config->db_prefix."templates", "template_id");
