@@ -21,12 +21,12 @@
  * @link http://smarty.php.net/
  * @author Monte Ohrt <monte@ispi.net>
  * @author Andrei Zmievski <andrei@php.net>
- * @version 2.6.2
+ * @version 2.6.3
  * @copyright 2001-2004 ispi of Lincoln, Inc.
  * @package Smarty
  */
 
-/* $Id: Smarty_Compiler.class.php,v 1.314 2004/02/17 15:52:02 mohrt Exp $ */
+/* $Id: Smarty_Compiler.class.php,v 1.321 2004/05/21 14:11:41 messju Exp $ */
 
 /**
  * Template compiling class
@@ -97,6 +97,12 @@ class Smarty_Compiler extends Smarty {
         // [$bar]
         $this->_var_bracket_regexp = '\[\$?[\w\.]+\]';
 
+        // matches numerical constants
+        // 30
+        // -12
+        // 13.22
+        $this->_num_const_regexp = '\-?\d+(?:\.\d+)?';
+
         // matches $ vars (not objects):
         // $foo
         // $foo.bar
@@ -107,9 +113,8 @@ class Smarty_Compiler extends Smarty {
         // $foo[5].bar[$foobar][4]
         $this->_dvar_math_regexp = '[\+\-\*\/\%]';
         $this->_dvar_math_var_regexp = '[\$\w\.\+\-\*\/\%\d\>\[\]]';
-        $this->_dvar_num_var_regexp = '\-?\d+(?:\.\d+)?' . $this->_dvar_math_var_regexp;
         $this->_dvar_guts_regexp = '\w+(?:' . $this->_var_bracket_regexp
-                . ')*(?:\.\$?\w+(?:' . $this->_var_bracket_regexp . ')*)*(?:' . $this->_dvar_math_regexp . '(?:\-?\d+(?:\.\d+)?|' . $this->_dvar_math_var_regexp . ')*)?';
+                . ')*(?:\.\$?\w+(?:' . $this->_var_bracket_regexp . ')*)*(?:' . $this->_dvar_math_regexp . '(?:' . $this->_num_const_regexp . '|' . $this->_dvar_math_var_regexp . ')*)?';
         $this->_dvar_regexp = '\$' . $this->_dvar_guts_regexp;
 
         // matches config vars:
@@ -132,7 +137,7 @@ class Smarty_Compiler extends Smarty {
         // #foo#
         // "text"
         // "text"
-        $this->_var_regexp = '(?:' . $this->_avar_regexp . '|' . $this->_qstr_regexp . ')';
+        $this->_var_regexp = '(?:' . $this->_avar_regexp . '|' . $this->_num_const_regexp . '|' . $this->_qstr_regexp . ')';
 
         // matches valid object call (no objects allowed in parameters):
         // $foo->bar
@@ -436,7 +441,7 @@ class Smarty_Compiler extends Smarty {
             case 'else':
                 list($_open_tag) = end($this->_tag_stack);
                 if ($_open_tag != 'if' && $_open_tag != 'elseif')
-                    $this->_syntax_error('unxepected {else}', E_USER_ERROR, __FILE__, __LINE__);
+                    $this->_syntax_error('unexpected {else}', E_USER_ERROR, __FILE__, __LINE__);
                 else
                     $this->_push_tag('else');
                 return '<?php else: ?>';
@@ -444,7 +449,7 @@ class Smarty_Compiler extends Smarty {
             case 'elseif':
                 list($_open_tag) = end($this->_tag_stack);
                 if ($_open_tag != 'if' && $_open_tag != 'elseif')
-                    $this->_syntax_error('unxepected {elseif}', E_USER_ERROR, __FILE__, __LINE__);
+                    $this->_syntax_error('unexpected {elseif}', E_USER_ERROR, __FILE__, __LINE__);
                 if ($_open_tag == 'if')
                     $this->_push_tag('elseif');
                 return $this->_compile_if_tag($tag_args, true);
@@ -1017,7 +1022,7 @@ class Smarty_Compiler extends Smarty {
             $this->_syntax_error("missing section name", E_USER_ERROR, __FILE__, __LINE__);
         }
 
-        $output .= "if (isset(\$this->_sections[$section_name])) unset(\$this->_sections[$section_name]);\n";
+        $output .= "unset(\$this->_sections[$section_name]);\n";
         $section_props = "\$this->_sections[$section_name]";
 
         foreach ($attrs as $attr_name => $attr_value) {
@@ -1590,6 +1595,14 @@ class Smarty_Compiler extends Smarty {
                 }
                 return $return;
             }
+        elseif(preg_match('!^' . $this->_num_const_regexp . '(?:' . $this->_mod_regexp . '*)$!', $val)) {
+                // numerical constant
+                preg_match('!^(' . $this->_num_const_regexp . ')('. $this->_mod_regexp . '*)$!', $val, $match);
+                if($match[2] != '') {
+                    $this->_parse_modifiers($match[1], $match[2]);
+                    return $match[1];
+                }
+            }
         elseif(preg_match('!^' . $this->_si_qstr_regexp . '(?:' . $this->_mod_regexp . '*)$!', $val)) {
                 // single quoted text
                 preg_match('!^(' . $this->_si_qstr_regexp . ')('. $this->_mod_regexp . '*)$!', $val, $match);
@@ -1690,7 +1703,7 @@ class Smarty_Compiler extends Smarty {
             }
             if($_has_math) {
                 if(!empty($_complete_var) || is_numeric($_complete_var))
-                    $_output .= $this->_parse_var($_complete_var, true);
+                    $_output .= $this->_parse_var($_complete_var);
 
                 // get the modifiers working (only the last var from math + modifier is left)
                 $var_expr = $_complete_var;

@@ -27,10 +27,10 @@
  * @author Monte Ohrt <monte@ispi.net>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.2
+ * @version 2.6.3
  */
 
-/* $Id: Smarty.class.php,v 1.477 2004/02/17 15:52:02 mohrt Exp $ */
+/* $Id: Smarty.class.php,v 1.490 2004/06/08 10:48:50 messju Exp $ */
 
 /**
  * DIR_SEP isn't used anymore, but third party apps might
@@ -231,8 +231,7 @@ class Smarty
                                                                'true','false'),
                                     'INCLUDE_ANY'     => false,
                                     'PHP_TAGS'        => false,
-                                    'MODIFIER_FUNCS'  => array('count'),
-                                    'ALLOW_CONSTANTS' => false
+                                    'MODIFIER_FUNCS'  => array('count')
                                    );
 
     /**
@@ -400,13 +399,6 @@ class Smarty
  * @access private
  */
     /**
-     * error messages. true/false
-     *
-     * @var boolean
-     */
-    var $_error_msg            = false;
-
-    /**
      * where assigned template vars are kept
      *
      * @var array
@@ -467,7 +459,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.2';
+    var $_version              = '2.6.3';
 
     /**
      * current template inclusion depth
@@ -944,10 +936,10 @@ class Smarty
         if (!isset($compile_id))
             $compile_id = $this->compile_id;
 
-    if (!isset($tpl_file))
-        $compile_id = null;
+        if (!isset($tpl_file))
+            $compile_id = null;
 
-    $_auto_id = $this->_get_auto_id($cache_id, $compile_id);
+        $_auto_id = $this->_get_auto_id($cache_id, $compile_id);
 
         if (!empty($this->cache_handler_func)) {
             return call_user_func_array($this->cache_handler_func,
@@ -972,18 +964,7 @@ class Smarty
      */
     function clear_all_cache($exp_time = null)
     {
-        if (!empty($this->cache_handler_func)) {
-            $dummy = null;
-            call_user_func_array($this->cache_handler_func,
-                           array('clear', &$this, &$dummy, null, null, null, $exp_time));
-        } else {
-            $_params = array('auto_base' => $this->cache_dir,
-                            'auto_source' => null,
-                            'auto_id' => null,
-                            'exp_time' => $exp_time);
-            require_once(SMARTY_DIR . 'core' . DIRECTORY_SEPARATOR . 'core.rm_auto.php');
-            return smarty_core_rm_auto($_params, $this);
-        }
+        return $this->clear_cache(null, null, null, $exp_time);
     }
 
 
@@ -1443,7 +1424,6 @@ class Smarty
 
             return true;
         } else {
-            $this->trigger_error($smarty_compiler->_error_msg);
             return false;
         }
 
@@ -1483,6 +1463,7 @@ class Smarty
         $smarty_compiler->secure_dir        = $this->secure_dir;
         $smarty_compiler->security_settings = $this->security_settings;
         $smarty_compiler->trusted_dir       = $this->trusted_dir;
+        $smarty_compiler->use_sub_dirs      = $this->use_sub_dirs;
         $smarty_compiler->_reg_objects      = &$this->_reg_objects;
         $smarty_compiler->_plugins          = &$this->_plugins;
         $smarty_compiler->_tpl_vars         = &$this->_tpl_vars;
@@ -1546,6 +1527,8 @@ class Smarty
         $_params = array('resource_name' => $params['resource_name']) ;
         if (isset($params['resource_base_path']))
             $_params['resource_base_path'] = $params['resource_base_path'];
+        else
+            $_params['resource_base_path'] = $this->template_dir;
 
         if ($this->_parse_resource_name($_params)) {
             $_resource_type = $_params['resource_type'];
@@ -1644,13 +1627,7 @@ class Smarty
             if (!preg_match("/^([\/\\\\]|[a-zA-Z]:[\/\\\\])/", $params['resource_name'])) {
                 // relative pathname to $params['resource_base_path']
                 // use the first directory where the file is found
-                if (isset($params['resource_base_path'])) {
-                    $_resource_base_path = (array)$params['resource_base_path'];
-                } else {
-                    $_resource_base_path = (array)$this->template_dir;
-                    $_resource_base_path[] = '.';
-                }
-                foreach ($_resource_base_path as $_curr_path) {
+                foreach ((array)$params['resource_base_path'] as $_curr_path) {
                     $_fullpath = $_curr_path . DIRECTORY_SEPARATOR . $params['resource_name'];
                     if (file_exists($_fullpath) && is_file($_fullpath)) {
                         $params['resource_name'] = $_fullpath;
@@ -1665,6 +1642,9 @@ class Smarty
                     }
                 }
                 return false;
+            } else {
+                /* absolute path */
+                return file_exists($params['resource_name']);
             }
         } elseif (empty($this->_plugins['resource'][$params['resource_type']])) {
             $_params = array('type' => $params['resource_type']);
@@ -1723,39 +1703,15 @@ class Smarty
      * @param integer $lines
      * @return string
      */
-    function _read_file($filename, $start=null, $lines=null)
+    function _read_file($filename)
     {
-        if (!($fd = @fopen($filename, 'r'))) {
+        if ( file_exists($filename) && ($fd = @fopen($filename, 'rb')) ) {
+            $contents = ($size = filesize($filename)) ? fread($fd, $size) : '';
+            fclose($fd);
+            return $contents;
+        } else {
             return false;
         }
-        flock($fd, LOCK_SH);
-        if ($start == null && $lines == null) {
-            // read the entire file
-            $contents = fread($fd, filesize($filename));
-        } else {
-            if ( $start > 1 ) {
-                // skip the first lines before $start
-                for ($loop=1; $loop < $start; $loop++) {
-                    fgets($fd, 65536);
-                }
-            }
-            if ( $lines == null ) {
-                // read the rest of the file
-                while (!feof($fd)) {
-                    $contents .= fgets($fd, 65536);
-                }
-            } else {
-                // read up to $lines lines
-                for ($loop=0; $loop < $lines; $loop++) {
-                    $contents .= fgets($fd, 65536);
-                    if (feof($fd)) {
-                        break;
-                    }
-                }
-            }
-        }
-        fclose($fd);
-        return $contents;
     }
 
     /**
@@ -1792,11 +1748,12 @@ class Smarty
         if(isset($auto_source)) {
             // make source name safe for filename
             $_filename = urlencode(basename($auto_source));
-            $_crc32 = crc32($auto_source) . $_compile_dir_sep;
+            $_crc32 = sprintf("%08X", crc32($auto_source));
             // prepend %% to avoid name conflicts with
             // with $params['auto_id'] names
-            $_crc32 = '%%' . substr($_crc32,0,3) . $_compile_dir_sep . '%%' . $_crc32;
-            $_return .= $_crc32 . $_filename;
+            $_crc32 = substr($_crc32, 0, 2) . $_compile_dir_sep .
+                      substr($_crc32, 0, 3) . $_compile_dir_sep . $_crc32;
+            $_return .= '%%' . $_crc32 . '%%' . $_filename;
         }
 
         return $_return;
