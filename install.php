@@ -1,6 +1,28 @@
 <?php
 
-require_once("include.php");
+$config = "config.php";
+if (!file_exists($config)) {
+    $file = @fopen($config, "w");
+    if ($file != 0) {
+        $cwd = getcwd();
+        fwrite($file,'$this->root_path = "'.$cwd.'";'."\n");
+        fclose($file);
+    } else {
+        echo "Cannot create $config, please change permissions to allow this\n";
+        exit;
+    } ## if
+} ## if
+
+$pages = 4;
+if ($_GET["page"]) {
+    $currentpage = $_GET["page"];
+} elseif ($_POST["page"]) {
+    $currentpage = $_POST["page"];
+} else {  
+    $currentpage = 1;
+} ## if
+
+if ($currentpage > 1) { require_once("include.php"); }
 
 ?>
 
@@ -19,14 +41,6 @@ require_once("include.php");
 
 <?php
 
-$pages = 4;
-if ($_GET["page"]) {
-    $currentpage = $_GET["page"];
-} elseif ($_POST["page"]) {
-    $currentpage = $_POST["page"];
-} else {  
-    $currentpage = 1;
-}
 
 echo "<h3>Thanks for installing CMS: CMS Made Simple.<br>\n";
 echo "We're on page $currentpage of $pages of the install process.  Please follow below.</h3><p><hr width=80%>\n";
@@ -65,7 +79,7 @@ function showPageOne() {
 
     ## check file perms
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt');
+    $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt', "config.php");
 
     echo "<table border=0 cellpadding=2 cellspacing=0>\n";
     echo "<tr><td class=\"label\"><b>Test</b></td><td class=\"label\"><b>Result</b></td></tr>\n";
@@ -99,16 +113,142 @@ Log in to mysql from a console and run the following commands:<br>
 - create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)<br>
 - grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';<p>
 
-<?php
-    global $config;
-    $smarty = new Smarty_CMS($config);
-    $smarty->Smarty_CMS = &$config;
-    $smarty->assign('tableprefix', 'cms_');
-    $contents = $smarty->fetch('mysql.tpl');
+Please complete the following fields:
+<form action=install.php method=post>
 
-    echo "contents: ($contents)<p>\n";
+<table cellpadding=2 border=1>
+<tr>
+<td class="body">Database host address</td>
+<td class="body"><input type=text name=host value="localhost" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="body">Database host port</td>
+<td class="body"><input type=text name=port value="3306" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="body">Database name</td>
+<td class="body"><input type=text name=database value="cms" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="bodyalt">Username</td>
+<td class="bodyalt"><input type=text name=username value="cms_user" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="body">Password</td>
+<td class="body"><input type=password name=password value="cms_pass" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="bodyalt">Table prefix</td>
+<td class="bodyalt"><input type=text name=prefix value="cms_" length=20 maxlength=50></td>
+</tr>
+<tr>
+<td class="body"><input type=hidden name=page value=3></td>
+<td class="body"><input type=submit value="Continue"> <input type=reset></td>
+</tr>
+
+</table>
+
+</form>
+<?php
 
 } ## showPageTwo
+
+function showPageThree($sqlloaded = 0) {
+    ## don't load statements if they've already been loaded
+    if ($sqlloaded == 0) {
+        global $config;
+        $smarty = new Smarty_CMS($config);
+        $smarty->Smarty_CMS = &$config;
+        $smarty->assign('tableprefix', 'cms_');
+        $contents = $smarty->fetch('mysql.tpl');
+
+        $statements = split(";", $contents);
+     
+        echo "<textarea name=code rows=15 cols=80>$contents</textarea><p>\n";
+        $link = @mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
+        if (!$link) {
+           die('Could not connect: ' . mysql_error());
+        } ## if
+        mysql_select_db($_POST['database']);
+
+
+        foreach ($statements as $s) {
+            $s = str_replace("\n", "", $s);
+            if ($s != "") {
+                $result = mysql_unbuffered_query($s, $link);
+                if (!$result) {
+                    die('Invalid query: ' . mysql_error());
+                } ## if
+            } ## if
+        } ## foreach
+
+        mysql_close($link);
+        echo "Success!<p>";
+
+        foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
+    } ## if
+
+    $docroot = 'http://'.$_SERVER['SERVER_NAME'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
+    $docpath = substr($_SERVER['SCRIPT_FILENAME'],0,strlen($_SERVER['SCRIPT_FILENAME'])-12);
+    echo "<p>\n";
+
+    echo "Now let's continue to setup your configuration file, we already have most of the stuff we need.<br>\n";
+    echo "Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.<p>\n";
+    echo "<form action=install.php method=post>\n";
+    echo "<table border=0 cellpadding=2>\n";
+    echo "<tr><td class=\"body\">CMS Document root (as seen from the webserver)</td><td class=\"body\"><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr><td class=\"bodyalt\">Path to the Document root</td><td class=\"bodyalt\"><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr><td class=\"body\">Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td class=\"body\"><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
+    echo "<tr><td class=\"bodyalt\">Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td class=\"bodyalt\"><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
+
+    echo '<tr><td class="body"><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
+    echo '<input type=hidden name=database value="'.$_POST['database'].'"><input type=hidden name=port value="'.$_POST['port'].'">';
+    echo '<input type=hidden name=username value="'.$_POST['username'].'"><input type=hidden name=password value="'.$_POST['password'].'">';
+    echo '<input type=hidden name=prefix value="'.$_POST['prefix'].'">';
+    echo "</td><td class=\"body\"><input type=submit value=\"Write config\"> <input type=reset></td></tr>\n";
+    echo "</table></form>\n";
+
+    
+} ## showPageThree
+
+function showPageFour() {
+
+    if ($_POST['bbcode'] != 'false' and $_POST['bbcode'] != 'true') {
+        echo "<p>BB Code needs to be either 'true' or 'false'</p>\n";
+        showPageThree(1);
+        exit;
+    } ## if
+
+    $config = "config.php";
+    ## build the content for config file
+
+    $content = '<?php\n\n#Database connection information\n';
+    $content .= '$this->db_hostname = "'.$_POST['host'].'";\n';
+    $content .= '$this->db_username = "'.$_POST['username'].'";\n';
+    $content .= '$this->db_password = "'.$_POST['password'].'";\n';
+    $content .= '$this->db_name = "'.$_POST['database'].'";\n';
+    $content .= '$this->db_prefix = "'.$_POST['prefix'].';\n';
+    $content .= '$this->root_url = '.$_POST['docroot'].';\n';
+    $content .= '$this->root_path = '.$_POST['docpath'].';\n';
+    $content .= '$this->query_var = '.$_POST['querystr'];
+    $content .= '$this->use_bb_code = '.$_POST['bbcode'].';\n';
+
+    if ((file_exists($config) && is_writable($config)) || !file_exists($config)) {
+        $file = @fopen($config, "w");
+        if ($file != 0) {
+            if (fwrite($file,$content) === FALSE) {
+                echo "Cannot write to $config\n";
+                exit;
+            } ## if
+            fclose($config);
+        } ## if
+    } else {
+        echo "Error: Cannot write to $config.<br>\n";
+        exit;
+    } ## if
+ 
+
+} ## showPageFour
 ?>
 
 
