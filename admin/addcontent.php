@@ -225,7 +225,7 @@ if ($access) {
 
 	$addt_users = "";
 
-	$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid;
+	$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid . " ORDER BY username;
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {

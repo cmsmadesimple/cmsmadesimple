@@ -122,7 +122,7 @@ include_once("header.php");
 
 $owners = "<select name=\"owner_id\">";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users";
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
 $result = $db->Execute($query);
 
 while($row = $result->FetchRow())
@@ -139,7 +139,7 @@ $owners .= "</select>";
 
 $addt_users = "";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid;
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid . " ORDER BY username";
 $result = $db->Execute($query);
 
 while($row = $result->FetchRow())

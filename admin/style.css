@@ -288,7 +288,7 @@ TABLE.box TD {
 	BORDER-TOP-WIDTH: 0px; PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BORDER-LEFT-WIDTH: 0px; BORDER-BOTTOM-WIDTH: 0px; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px; BORDER-RIGHT-WIDTH: 0px
 }
 
-#userdata		{cursor: text;font-family:Arial,Helvetica,sans-serif;text-align:left;font-size:9pt;color:#000000;border-width:1pt;background-color:#ffffff;border-color:#CCCCCC;border-style:solid;}
+#userdata,#userdata_p		{cursor: text;font-family:Arial,Helvetica,sans-serif;text-align:left;font-size:9pt;color:#000000;border-width:1pt;background-color:#ffffff;border-color:#CCCCCC;border-style:solid;}
 
 .syntaxHighlight{width: 99%; height: 200px; background-color: white;}
 .imagefilesFrame { width: 600px; height: 250px; margin: 0px; border: 0px; padding-right: 0px; background-color: White; }
