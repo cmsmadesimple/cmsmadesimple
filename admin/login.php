@@ -111,10 +111,12 @@ header("Content-Type: text/html; charset=" . get_encoding());
 						if ($_POST["change_cms_lang"] == $key) {
 							echo " selected";
 						}
-					} else if (isset($_COOKIE["cms_language"])) {
+					}else if(isset($_COOKIE["cms_language"])) {
 						if ($_COOKIE["cms_language"] == $key) {
 							echo " selected";
 						}
+					}else if($key == 'en_US'){//no language is set defaults to english.
+						echo ' selected';
 					}
 					echo ">$val";
 					/*
