@@ -76,10 +76,16 @@ function news_module_execute($cms, $id, $params) {
 
 function news_module_executeadmin($cms,$id) {
 
-	if ((isset($_POST[$id."action"]) || isset($_GET[$id."action"])) && cms_mapi_check_permission($cms, "Modify News")) {
+	$access = cms_mapi_check_permission($cms, "Modify News");
+
+	if ((isset($_POST[$id."action"]) || isset($_GET[$id."action"])) && $access) {
 		$moduleaction = $_POST[$id."action"] . $_GET[$id."action"];
 		include_once(dirname(__FILE__)."/adminform.php");
 	} else {
+
+		if ((isset($_POST[$id."action"]) || isset($_GET[$id."action"])) && !$access) {
+			echo "<p class=\"error\">You need the 'Modify News' permission to perform that function.</p>";
+		}
 		$db = $cms->db;
 		$query = "SELECT news_id, news_title, news_data, news_date FROM ".cms_db_prefix()."module_news ORDER BY news_date desc";
 		$dbresult = $db->Execute($query);

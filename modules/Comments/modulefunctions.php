@@ -35,7 +35,7 @@ function comments_module_install($cms) {
 
 	$db->CreateSequence(cms_db_prefix()."module_comments_seq");
 
-	cms_mapi_create_permission($cms, 'Comments Admin', 'Comments Admin');
+	#cms_mapi_create_permission($cms, 'Comments Admin', 'Comments Admin');
 }
 
 function comments_module_uninstall($cms) {
@@ -47,7 +47,7 @@ function comments_module_uninstall($cms) {
 
 	$db->DropSequence(cms_db_prefix()."module_comments_seq");
 
-	cms_mapi_remove_permission($cms, 'Comments Admin');
+	#cms_mapi_remove_permission($cms, 'Comments Admin');
 }
 
 function comments_module_execute($cms, $id, $params) {
