@@ -1,0 +1,24 @@
+These set of scripts belong to each other:
+
+  svn-propset
+  svn-propset-file
+  find-mime
+
+svn-propset is the primary script. It sets predefined svn properties
+on predefined file types. See 'svn-propset --help' for more info.
+
+Typical usage:
+
+  * On the first run : svn-propset --force
+
+    All defined properties for all defined files are set.
+
+  * on later runs    : svn-propset
+
+    A specific property for a file will only be set if that property
+    for that file is not present.
+
+I M P O R T A N T :
+===================
+After setting of the properties, the changes will *automatically* be committed,
+*unless* the -n or the --no-commit option is passed.
