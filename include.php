@@ -134,9 +134,11 @@ if(get_magic_quotes_gpc())
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
-if (!$_SERVER['REQUEST_URI'])
+if (!isset($_SERVER['REQUEST_URI']))
 {
-	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'];
+	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
+	if(isset($_SERVER['QUERY_STRING']))
+		$_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
 }
 
 #Setup the object sent to modules
