@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
@@ -29,13 +29,13 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
-	$perm = check_permission($config, $userid, 'Modify Permissions');
-	$assign = check_permission($config, $userid, 'Modify Group Assignments');
-	$edit = check_permission($config, $userid, 'Modify Group');
-	$remove = check_permission($config, $userid, 'Remove Group');
+	$perm = check_permission($userid, 'Modify Permissions');
+	$assign = check_permission($userid, 'Modify Group Assignments');
+	$edit = check_permission($userid, 'Modify Group');
+	$remove = check_permission($userid, 'Remove Group');
 
-	$query = "SELECT group_id, group_name, active FROM ".$config->db_prefix."groups ORDER BY group_id";
-	$result = &$dbnew->Execute($query);
+	$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 
@@ -77,7 +77,7 @@ include_once("header.php");
 
 	}
 
-if (check_permission($config, $userid, 'Add Group')) {
+if (check_permission($userid, 'Add Group')) {
 ?>
 
 <div class=button><a href="addgroup.php"><?=$gettext->gettext("Add New Group")?></div></p>

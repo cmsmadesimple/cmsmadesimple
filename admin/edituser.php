@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -43,7 +43,7 @@ if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify User') || ($userid == $user_id);
+$access = check_permission($userid, 'Modify User') || ($userid == $user_id);
 
 if ($access) {
 
@@ -67,15 +67,15 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."users SET username=".$dbnew->qstr($user).", ";
+			$query = "UPDATE ".cms_db_prefix()."users SET username=".$db->qstr($user).", ";
 			if ($password != "") {
 				$query .= "password='".md5($password)."', ";
 			}
-			$query .= "active=$active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE user_id = $user_id";
-			$result = $dbnew->Execute($query);
+			$query .= "active=$active, modified_date = ".$db->DBTimeStamp(time())." WHERE user_id = $user_id";
+			$result = $db->Execute($query);
 
 			if ($result) {
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
 				redirect("listusers.php");
 				return;
 			}
@@ -86,8 +86,8 @@ if ($access) {
 	}
 	else if ($user_id != -1) {
 
-		$query = "SELECT * from ".$config->db_prefix."users WHERE user_id = " . $user_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."users WHERE user_id = " . $user_id;
+		$result = $db->Execute($query);
 		
 		$row = $result->FetchRow();
 

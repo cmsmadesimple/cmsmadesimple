@@ -18,8 +18,8 @@
 
 function smarty_cms_function_cms_module($params, &$smarty) {
 
-	global $cmsmodules;
-	global $modulecmsobj;
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
 
 	$modulename = $params['module'];
 
@@ -36,7 +36,7 @@ function smarty_cms_function_cms_module($params, &$smarty) {
 				@ob_start();
 				#$obj = $cmsmodules[$params['module']]['Instance'];
 				#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
-				call_user_func_array($cmsmodules[$modulename]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
+				call_user_func_array($cmsmodules[$modulename]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				echo $modoutput;

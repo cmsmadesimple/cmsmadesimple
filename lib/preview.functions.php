@@ -24,13 +24,14 @@ class Smarty_Preview extends Smarty {
 	{
 		$this->Smarty();
 
-		$this->configCMS = &$config;
+		global $gCms;
+		$this->configCMS = &$gCms->config;
 
-		$this->template_dir = $config->root_path.'/smarty/cms/templates/';
-		$this->compile_dir = $config->root_path.'/smarty/cms/templates_c/';
-		$this->config_dir = $config->root_path.'/smarty/cms/configs/';
-		$this->cache_dir = $config->root_path.'/smarty/cms/cache/';
-		$this->plugins_dir = $config->root_path.'/plugins/';
+		$this->template_dir = $config["root_path"].'/smarty/cms/templates/';
+		$this->compile_dir = $config["root_path"].'/smarty/cms/templates_c/';
+		$this->config_dir = $config["root_path"].'/smarty/cms/configs/';
+		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
+		$this->plugins_dir = $config["root_path"].'/plugins/';
 
 		$this->compile_check = true;
 		$this->caching = false;
@@ -62,7 +63,10 @@ class Smarty_Preview extends Smarty {
 
 	function preview_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		$fname = $smarty_obj->configCMS->previews_path . "/cmspreview" . $tpl_name;
+		global $gCms;
+		$config = $gCms->config;
+
+		$fname = $config["previews_path"] . "/cmspreview" . $tpl_name;
 		$handle = fopen($fname, "r");
 		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);

@@ -16,15 +16,13 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require_once("config.php");
-
 function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
 	$showadmin = $params["showadmin"] ? $params["showadmin"] : "true";
 
 	$menu = "";
 
-	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
+	$content = db_get_menu_items("content_hierarchy");
 
 	foreach ($content as $one) {
 

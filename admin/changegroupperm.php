@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $group_id="";
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
@@ -34,32 +34,32 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, $gettext->gettext("Modify Permissions"));
+$access = check_permission($userid, $gettext->gettext("Modify Permissions"));
 
 if ($access) {
 
-	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
-	$result = $dbnew->Execute($query);
+	$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 		$row = $result->FetchRow();
-		$group_name = $row[group_name];
+		$group_name = $row['group_name'];
 	}
 
 	if (isset($_POST["changeperm"])) {
 
-		$query = "DELETE FROM ".$config->db_prefix."group_perms WHERE group_id = " . $group_id;
-		$result = $dbnew->Execute($query);
+		$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = " . $group_id;
+		$result = $db->Execute($query);
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false) {
-				$new_id = $dbnew->GenID($config->db_prefix."group_perms_seq");
-				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
-				$dbnew->Execute($query);
+				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+				$db->Execute($query);
 			}
 		}
 
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, $gettext->gettext("Changed Group Permissions"));
+		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, $gettext->gettext("Changed Group Permissions"));
 		redirect("listgroups.php");
 		return;
 
@@ -86,28 +86,28 @@ else {
 
 	$gettext->reset();
 
-	$query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 
 		while($row = $result->FetchRow()) {
 
-			$perms[$row[permission_name]] = false;
-			$ids[$row[permission_name]] = $row[permission_id];
+			$perms[$row['permission_name']] = false;
+			$ids[$row['permission_name']] = $row['permission_id'];
 		}
 
 	}
 
-	$query = "SELECT p.permission_name FROM ".$config->db_prefix."group_perms g INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
+	$query = "SELECT p.permission_name FROM ".cms_db_prefix()."group_perms g INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
 
-	$result = $dbnew->Execute($query);
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 
 		while($row = $result->FetchRow()) {
 
-			$tmp = $row[permission_name];
+			$tmp = $row['permission_name'];
 			$perms[$tmp] = true;
 		}
 

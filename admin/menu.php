@@ -39,15 +39,15 @@ $gettext->reset();
 <a href="modules.php"><?=$gettext->gettext("Module Management")?></a>
 <a href="adminlog.php"><?=$gettext->gettext("Admin Log")?></a>
 <a href="editprefs.php"><?=$gettext->gettext("User Preferences")?></a>
+<a href="editconfig.php"><?=$gettext->gettext("Edit Configuration")?></a>
 <!--<a href="tools.php"><?=$gettext->gettext("Tools")?></a>-->
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <a href="logout.php"><?=$gettext->gettext("Logout")?></a>
 <?
-
 	$installedmodules = array();
 
-	$query = "SELECT * FROM ".$config->db_prefix."modules";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT * FROM ".cms_db_prefix()."modules";
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 
@@ -57,8 +57,8 @@ $gettext->reset();
 			$installedmodules[$row['module_name']] = 1;
 		}
 
-		foreach ($cmsmodules as $key=>$value) {
-			if (isset($cmsmodules[$key]['execute_admin_function']) && isset($installedmodules[$key])) {
+		foreach ($gCms->modules as $key=>$value) {
+			if (isset($gCms->modules[$key]['execute_admin_function']) && isset($installedmodules[$key])) {
 				$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
 			}
 		}

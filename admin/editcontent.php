@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -85,13 +85,13 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Any Content') || check_ownership($config, $userid, "", $page_id);
+$access = check_permission($userid, 'Modify Any Content') || check_ownership($userid, "", $page_id);
 $adminaccess = $access;
 if (!$access) {
-	$access = check_authorship($config, $userid, $page_id);
+	$access = check_authorship($userid, $page_id);
 }
 
-if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
+if (get_preference($userid, 'use_wysiwyg') == "1") {
 	$htmlarea_flag = "true";
 	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
 }
@@ -121,8 +121,8 @@ if ($access) {
 
 		if ($validinfo) {
 			if ($orig_parent_id != $parent_id) {
-				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE parent_id = $parent_id";
-				$result = $dbnew->Execute($query);
+				$query = "SELECT max(item_order) + 1 AS item_order FROM ".cms_db_prefix()."pages WHERE parent_id = $parent_id";
+				$result = $db->Execute($query);
 				$row = $result->FetchRow();
 				if (isset($row["item_order"])) {
 					$order = $row["item_order"];	
@@ -130,15 +130,13 @@ if ($access) {
 					$order = 1;
 				}
 
-## 				$query = "UPDATE ".$config->db_prefix."pages set item_order=item_order-1 where parent_id=$orig_parent_id and item_order>$orig_item_order";
-## 				$result = $dbnew->Execute($query);
 			}
-			$query1 = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = ".$dbnew->DBTimeStamp(time()).", item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
-			$result1 = $dbnew->Execute($query1);
+			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
+			$result1 = $db->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
-				$query2 = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = " . $orig_parent_id . " AND item_order > " . $item_order;
-				$result2 = $dbnew->Execute($query2);
+				$query2 = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE parent_id = " . $orig_parent_id . " AND item_order > " . $item_order;
+				$result2 = $db->Execute($query2);
 				if (!$result2) {
 					$result1 = null;
 				}
@@ -146,17 +144,17 @@ if ($access) {
 
 			if ($result1) {
 				if ($adminaccess) {
-					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
-					$dbnew->Execute($query);
+					$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE page_id = $page_id";
+					$db->Execute($query);
 					if (isset($_POST["additional_editors"])) {
 						foreach ($_POST["additional_editors"] as $addt_user_id) {
-							$new_addt_id = $dbnew->GenID($config->db_prefix."additional_users_seq");
-							$query = "INSERT INTO ".$config->db_prefix."additional_users (additional_users_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$page_id.")";
-							$dbnew->Execute($query);
+							$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+							$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$page_id.")";
+							$db->Execute($query);
 						}
 					}
 				}
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
 			}
@@ -168,8 +166,8 @@ if ($access) {
 	}
 	else if ($page_id != -1 && !$preview && !$content_change) {
 
-		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."pages WHERE page_id = " . $page_id;
+		$result = $db->Execute($query);
 		
 		$row = $result->FetchRow();
 
@@ -192,7 +190,7 @@ if ($access) {
 	}
 
     $content_array = array();
-    $content_array = db_get_menu_items($config, "content_hierarchy");
+    $content_array = db_get_menu_items("content_hierarchy");
     $dropdown = "<select name=\"parent_id\">";
     $dropdown .="<option value=\"0\"";
     if ($parent_id == "0") {
@@ -220,8 +218,8 @@ if ($access) {
 
     $dropdown .= "</select>";
 
-	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT template_id, template_name FROM ".cms_db_prefix()."templates ORDER BY template_id";
+	$result = $db->Execute($query);
 
 	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
@@ -237,8 +235,8 @@ if ($access) {
 
 	$owners = "<select name=\"owner_id\">";
 
-    $query = "SELECT user_id, username FROM ".$config->db_prefix."users";
-    $result = $dbnew->Execute($query);
+    $query = "SELECT user_id, username FROM ".cms_db_prefix()."users";
+    $result = $db->Execute($query);
 
     while($row = $result->FetchRow()) {
         $owners .= "<option value=\"".$row["user_id"]."\"";
@@ -252,13 +250,13 @@ if ($access) {
 
     $addt_users = "";
 
-    $query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
-    $result = $dbnew->Execute($query);
+    $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid;
+    $result = $db->Execute($query);
 
     while($row = $result->FetchRow()) {
         $addt_users .= "<option value=\"".$row["user_id"]."\"";
-		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
-		$newresult = $dbnew->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
+		$newresult = $db->Execute($query);
 		if ($newresult && $newresult->RowCount() > 0) {
 			$addt_users .= " selected=\"true\"";
 		}
@@ -266,7 +264,7 @@ if ($access) {
     }
 
 	$ctdropdown = "<select name=\"content_type\" onchange=\"document.editform.content_change.value=1;document.editform.submit()\">";
-	foreach (get_page_types($config) as $key=>$value) {
+	foreach (get_page_types() as $key=>$value) {
 		$ctdropdown .= "<option value=\"$key\"";
 		if ($key == $content_type) {
 			$ctdropdown .= " selected=\"true\"";
@@ -292,8 +290,8 @@ else {
 		$data["content"] = $content;
 		$data["template_id"] = $template_id;
 
-		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT template_content, stylesheet FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
+		$result = $db->Execute($query);
 		if ($result && $result->RowCount() > 0) {
 			$row = $result->FetchRow();
 			$data["stylesheet"] = $row["stylesheet"];
@@ -303,7 +301,7 @@ else {
 			$data["template"] = "{content}";
 		}
 
-		$tmpfname = tempnam($config->previews_path, "cmspreview");
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
@@ -311,7 +309,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
+<iframe name="previewframe" width="600" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
 </iframe>
 <?php

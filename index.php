@@ -16,31 +16,14 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * Entry point for all non-admin pages
+ *
+ * @package CMS
+ */
 $starttime = microtime();
 
 @ob_start();
-
-function microtime_diff($a, $b) {
-	list($a_dec, $a_sec) = explode(" ", $a);
-	list($b_dec, $b_sec) = explode(" ", $b);
-	return $b_sec - $a_sec + $b_dec - $a_dec;
-}
-
-function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
-{
-	if ($errno == E_USER_WARNING) {
-		@ob_end_clean();
-		header("HTTP/1.0 404 Not Found");
-		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
-<html><head>
-<title>404 Not Found</title>
-</head><body>
-<h1>Not Found</h1>
-<p>The requested URL was not found on this server.</p>
-</body></html>';
-		exit();
-	}
-}
 
 if (!file_exists("config.php") || filesize("config.php") == 0) {
     require_once("lib/misc.functions.php");
@@ -61,15 +44,15 @@ if (file_exists("config.php") && file_exists("install.php")) {
     exit;
 } ## if
 
-require_once("include.php");
+require_once("include.php"); #Makes gCms object
 
 $smarty = new Smarty_CMS($config);
 
 $page = "";
 
-if (isset($config->query_var) && $config->query_var != "") {
-	if (isset($_GET[$config->query_var])) {
-		$page = $_GET[$config->query_var];
+if (isset($config["query_var"]) && $config["query_var"] != "") {
+	if (isset($_GET[$config["query_var"]])) {
+		$page = $_GET[$config["query_var"]];
 	}
 }
 else {
@@ -79,10 +62,10 @@ else {
 }
 
 if ($page == "") {
-	$page = db_get_default_page($config);
+	$page = db_get_default_page();
 }
 
-$modulecmsobj->page = $page;
+$gCms->variables["page"] = $page;
 
 ($smarty->is_cached('db:'.$page)?$cached="":$cached="not ");
 

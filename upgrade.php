@@ -44,8 +44,8 @@ require_once("include.php");
 
 $current_version = 1;
 
-$query = "SELECT version from ".$config->db_prefix."version";
-$result = $dbnew->Execute($query);
+$query = "SELECT version from ".cms_db_prefix()."version";
+$result = $db->Execute($query);
 while($row = $result->FetchRow()) {
 	$current_version = $row["version"];
 }

@@ -16,25 +16,53 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function check_login(&$config) {
+/**
+ * Page related functions.  Generally these are functions not necessarily
+ * related to content, but more to the underlying mechanisms of the system.
+ *
+ * @package CMS
+ */
+/**
+ * Checks to see if the user is logged in.   If not, redirects the browser
+ * to the admin login.
+ *
+ * @since 0.1
+ */
+function check_login() {
+
+	global $gCms;
+	$config = $gCms->config;
+
 	if (!isset($_COOKIE["cms_admin_user_id"])) {
-		redirect($config->root_url."/admin/login.php");
+		redirect($config["root_url"]."/admin/login.php");
 	}
 }
 
+/**
+ * Gets the userid of the currently logged in user.
+ *
+ * @since 0.1
+ */
 function get_userid() {
 	if (isset($_COOKIE["cms_admin_user_id"])) {
 		return $_COOKIE["cms_admin_user_id"];
 	}
 }
 
-function check_permission(&$config, $userid, $permname) {
+/**
+ * Checks to see that the given userid has access to
+ * the given permission.
+ *
+ * @since 0.1
+ */
+function check_permission($userid, $permname) {
 
 	$check = false;
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = ".$db->qstr($permname);
+	$query = "SELECT * FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = ".$db->qstr($permname);
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
@@ -44,13 +72,19 @@ function check_permission(&$config, $userid, $permname) {
 	return $check;
 }
 
-function check_ownership(&$config, $userid, $pagename, $pageid = "") {
+/**
+ * Checks that the given userid is the owner of the given pageid.
+ *
+ * @since 0.1
+ */
+function check_ownership($userid, $pagename, $pageid = "") {
 
 	$check = false;
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
+	$query = "SELECT * FROM ".cms_db_prefix()."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
@@ -60,13 +94,21 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 	return $check;
 }
 
-function check_authorship(&$config, $userid, $pageid) {
+/**
+ * Checks that the given userid has access to modify the given
+ * pageid.  This would mean that they were set as additional
+ * authors/editors by the owner.
+ *
+ * @since 0.2
+ */
+function check_authorship($userid, $pageid) {
 
 	$check = false;
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".$config->db_prefix."additional_users WHERE page_id = $pageid AND user_id = $userid";
+	$query = "SELECT * FROM ".cms_db_prefix()."additional_users WHERE page_id = $pageid AND user_id = $userid";
 	$result = $db->Execute($query);
 	if ($result && $result->RowCount() > 0) {
 		$check = true;
@@ -75,24 +117,37 @@ function check_authorship(&$config, $userid, $pageid) {
 	return $check;
 }
 
-function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
+/**
+ * Put an event into the audit (admin) log.  This should be
+ * done on most admin events for consistency.
+ *
+ * @since 0.3
+ */
+function audit($userid, $username, $itemid, $itemname, $action) {
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
 	if (!isset($userid) || $userid == "") {
 		$userid = 0;
 	}
-	$query = "INSERT INTO ".$config->db_prefix."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, ".$db->qstr($username).", $itemid, ".$db->qstr($itemname).", ".$db->qstr($action).")";
+	$query = "INSERT INTO ".cms_db_prefix()."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, ".$db->qstr($username).", $itemid, ".$db->qstr($itemname).", ".$db->qstr($action).")";
 	$db->Execute($query);
 }
 
-function get_preference(&$config, $userid, $prefname) {
+/**
+ * Gets the given preference for the given userid.
+ *
+ * @since 0.3
+ */
+function get_preference($userid, $prefname) {
 
 	$value = "";
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->query($query);
 	
 	if ($result && $result->RowCount() > 0) {
@@ -103,13 +158,19 @@ function get_preference(&$config, $userid, $prefname) {
 	return $value;
 }
 
-function set_preference(&$config, $userid, $prefname, $value) {
+/**
+ * Sets the given perference for the given userid with the given value.
+ *
+ * @since 0.3
+ */
+function set_preference($userid, $prefname, $value) {
 
 	$doinsert = true;
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
@@ -117,21 +178,27 @@ function set_preference(&$config, $userid, $prefname, $value) {
 	}
 
 	if ($doinsert) {
-		$query = "INSERT INTO ".$config->db_prefix."userprefs (user_id, preference, value) VALUES ($userid, ".$db->qstr($prefname).", ".$db->qstr($value).")";
+		$query = "INSERT INTO ".cms_db_prefix()."userprefs (user_id, preference, value) VALUES ($userid, ".$db->qstr($prefname).", ".$db->qstr($value).")";
 		$db->Execute($query);
 	} else {
-		$query = "UPDATE ".$config->db_prefix."userprefs SET value = ".$db->qstr($value)." WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+		$query = "UPDATE ".cms_db_prefix()."userprefs SET value = ".$db->qstr($value)." WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 		$db->Execute($query);
 	}
 }
 
-function get_stylesheet(&$config, $templateid) {
+/**
+ * Returns the stylesheet for the given templateid.
+ *
+ * @since 0.1
+ */
+function get_stylesheet($templateid) {
 
 	$css = "";
 
-	$db = $config->db;
+	global $gCms;
+	$db = $gCms->db;
 
-	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
+	$query = "SELECT stylesheet FROM ".cms_db_prefix()."templates WHERE template_id = ".$templateid;
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
@@ -143,6 +210,11 @@ function get_stylesheet(&$config, $templateid) {
 	return $css;
 }
 
+/**
+ * Strips slashes from an array of values.
+ *
+ * @since 0.1
+ */
 function & strip_slashes(&$str) {
 
 	if(is_array($str)) {

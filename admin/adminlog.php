@@ -20,14 +20,14 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
 $userid = get_userid();
 
-$query = "SELECT * from ".$config->db_prefix."adminlog ORDER BY timestamp DESC limit 30";
-$result = $dbnew->Execute($query);
+$query = "SELECT * from ".cms_db_prefix()."adminlog ORDER BY timestamp DESC limit 30";
+$result = $db->Execute($query);
 
 if ($result && $result->RowCount() > 0) {
 

@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -45,7 +45,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Add Template');
+$access = check_permission($userid, 'Add Template');
 
 if ($access) {
 
@@ -57,8 +57,8 @@ if ($access) {
 			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
 			$validinfo = false;
 		} else {
-			$query = "SELECT template_id from ".$config->db_prefix."templates WHERE template_name = " . $dbnew->qstr($template);
-			$result = $dbnew->Execute($query);
+			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
+			$result = $db->Execute($query);
 
 			if ($result && $result->RowCount() > 0) {
 				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
@@ -71,11 +71,11 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$new_template_id = $dbnew->GenID($config->db_prefix."templates_seq");
-			$query = "INSERT INTO ".$config->db_prefix."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
-			$result = $dbnew->Execute($query);
+			$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
+			$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$db->qstr($template).", ".$db->qstr($content).", ".$db->qstr($stylesheet).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query);
 			if ($result) {
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;
 			}
@@ -105,7 +105,7 @@ else {
 		$data["stylesheet"] = $stylesheet;
 		$data["template"] = $content;
 
-		$tmpfname = tempnam($config->previews_path, "cmspreview");
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
@@ -113,7 +113,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
+<iframe name="previewframe" width="600" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
 </iframe>
 <?php

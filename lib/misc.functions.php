@@ -16,24 +16,68 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-// redirect ***************************************************************
-// Purpose: Redirects to relative URL on the current site
-// Author: http://www.edoceo.com/
+/**
+ * Misc functions
+ *
+ * @package CMS
+ */
+/**
+ * Redirects to relative URL on the current site
+ *
+ * @author http://www.edoceo.com/
+ * @since 0.1
+ */
 function redirect($to)
 {
 	$schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
 	$host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
-	if (ini_get("session.use_trans_sid") != "0") {
+	if (ini_get("session.use_trans_sid") != "0")
+	{
 		$to = $to."?".session_name()."=".session_id();
 	}
-	if (headers_sent()) return false;
+	if (headers_sent())
+	{
+		return false;
+	}
 	else
 	{
-		//header("HTTP/1.1 301 Moved Permanently");
-		//header("HTTP/1.1 302 Found");
-		//header("HTTP/1.1 303 See Other");
-		//header("Location: $schema://$host$to");
 		header("Location: $to");
+		exit();
+	}
+}
+
+/**
+ * Shows the difference in seconds between two microtime() values
+ *
+ * @since 0.3
+ */
+function microtime_diff($a, $b) {
+	list($a_dec, $a_sec) = explode(" ", $a);
+	list($b_dec, $b_sec) = explode(" ", $b);
+	return $b_sec - $a_sec + $b_dec - $a_dec;
+}
+
+/**
+ * Shows a very close approximation of an Apache generated 404 error.
+ *
+ * Shows a very close approximation of an Apache generated 404 error.
+ * It also sends the actual header along as well, so that generic
+ * browser error pages (like what IE does) will be displayed.
+ *
+ * @since 0.3
+ */
+function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
+{
+	if ($errno == E_USER_WARNING) {
+		@ob_end_clean();
+		header("HTTP/1.0 404 Not Found");
+		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+</body></html>';
 		exit();
 	}
 }

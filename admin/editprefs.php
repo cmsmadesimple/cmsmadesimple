@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -35,12 +35,12 @@ if (isset($_POST["cancel"])) {
 }
 
 if (isset($_POST["edituserprefs"])) {
-	set_preference($config, $userid, 'use_wysiwyg', $use_wysiwyg);
-	audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User Preferences');
+	set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+	audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
 } else if (!isset($_POST["submit"])) {
-	$use_wysiwyg = get_preference($config, $userid, 'use_wysiwyg');
+	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
 }
 
 include_once("header.php");

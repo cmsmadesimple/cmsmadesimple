@@ -31,8 +31,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
-	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = ".$dbnew->qstr($username)." and password = ".$dbnew->qstr(md5($password)) . " and active = 1";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT * FROM ".cms_db_prefix()."users WHERE username = ".$db->qstr($username)." and password = ".$db->qstr(md5($password)) . " and active = 1";
+	$result = $db->Execute($query);
 
 	$line = $result->FetchRow();
 
@@ -82,7 +82,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 <table border=0 id="table">
 	<tr>
 		<td align="right"><?=$gettext->gettext("Username")?>:</td>
-		<td><input type="text" id="username" name="username" value="<?echo $_POST["username"]?>" size="15"/></td>
+		<td><input type="text" id="username" name="username" value="<?=(isset($_POST["username"])?$_POST["username"]:"")?>" size="15"/></td>
 	</tr>
 	<tr>
 		<td align="right"><?=$gettext->gettext("Password")?>:</td>

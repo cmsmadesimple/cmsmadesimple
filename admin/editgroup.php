@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -42,7 +42,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Group');
+$access = check_permission($userid, 'Modify Group');
 
 if ($access) {
 
@@ -55,11 +55,11 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."groups SET group_name=".$dbnew->qstr($group).", active=$active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE group_id = $group_id";
-			$result = $dbnew->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."groups SET group_name=".$db->qstr($group).", active=$active, modified_date = ".$db->DBTimeStamp(time())." WHERE group_id = $group_id";
+			$result = $db->Execute($query);
 
 			if ($result) {
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
 				redirect("listgroups.php");
 				return;
 			}
@@ -71,8 +71,8 @@ if ($access) {
 	}
 	else if ($group_id != -1) {
 
-		$query = "SELECT * from ".$config->db_prefix."groups WHERE group_id = " . $group_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."groups WHERE group_id = " . $group_id;
+		$result = $db->Execute($query);
 		
 		$row = $result->FetchRow();
 

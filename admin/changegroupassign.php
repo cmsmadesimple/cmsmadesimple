@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $group_id="";
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
@@ -34,31 +34,31 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Group Assignments');
+$access = check_permission($userid, 'Modify Group Assignments');
 
 if ($access) {
 
-	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
-	$result = $dbnew->Execute($query);
+	$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 		$row = $result->FetchRow();
-		$group_name = $row[group_name];
+		$group_name = $row['group_name'];
 	}
 
 	if (isset($_POST["changeassign"])) {
 
-		$query = "DELETE FROM ".$config->db_prefix."user_groups WHERE group_id = " . $group_id;
-		$result = $dbnew->Execute($query);
+		$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = " . $group_id;
+		$result = $db->Execute($query);
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false) {
-				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
-				$result = $dbnew->Execute($query);
+				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+				$result = $db->Execute($query);
 			}
 		}
 
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Assignments');
+		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Assignments');
 		redirect("listgroups.php");
 		return;
 
@@ -81,28 +81,28 @@ else {
 
 <?php
 
-	$query = "SELECT * FROM ".$config->db_prefix."users ORDER BY username";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT * FROM ".cms_db_prefix()."users ORDER BY username";
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount()) {
 
 		while($row = $result->FetchRow()) {
 
-			$users[$row[username]] = false;
-			$ids[$row[username]] = $row[user_id];
+			$users[$row['username']] = false;
+			$ids[$row['username']] = $row['user_id'];
 		}
 
 	}
 
-	$query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
-	$result = $dbnew->Execute($query);
+	$query = "SELECT u.user_id, u.username FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount()) {
 
 		while($row = $result->FetchRow()) {
 
-			$users[$row[username]] = true; 
-			$ids[$row[username]] = $row[user_id];
+			$users[$row['username']] = true; 
+			$ids[$row['username']] = $row['user_id'];
 		}
 
 	}

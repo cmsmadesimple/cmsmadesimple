@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
@@ -33,18 +33,18 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid = get_userid();
-	$add = check_permission($config, $userid, 'Add Template');
-	$edit = check_permission($config, $userid, 'Modify Template');
-	$all = check_permission($config, $userid, 'Modify Any Content');
-	$remove = check_permission($config, $userid, 'Remove Template');
+	$add = check_permission($userid, 'Add Template');
+	$edit = check_permission($userid, 'Modify Template');
+	$all = check_permission($userid, 'Modify Any Content');
+	$remove = check_permission($userid, 'Remove Template');
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {
-			$query = "UPDATE ".$config->db_prefix."pages SET template_id = ".$_GET["template_id"];
-			$result = $dbnew->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."pages SET template_id = ".$_GET["template_id"];
+			$result = $db->Execute($query);
 			if ($result) {
-				$query = "UPDATE ".$config->db_prefix."pages SET modified_date = ".$dbnew->DBTimeStamp(time());
-				$dbnew->Execute($query);
+				$query = "UPDATE ".cms_db_prefix()."pages SET modified_date = ".$db->DBTimeStamp(time());
+				$db->Execute($query);
 				echo "<p>All Pages Modified!</p>";
 			} else {
 				echo "<p class=\"error\">Error updating pages</p>";
@@ -52,8 +52,8 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-	$query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT template_id, template_name, active FROM ".cms_db_prefix()."templates ORDER BY template_id";
+	$result = $db->Execute($query);
 
 	if ($result) {
 
@@ -99,8 +99,7 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New
-Template")?></div></p>
+<div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></div></p>
 
 <?php
 }

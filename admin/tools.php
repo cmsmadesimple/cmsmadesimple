@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
@@ -49,15 +49,15 @@ echo "</form>\n";
 function do_adodb_backup() {
 
     global $gettext;
-    global $dbnew;
-    global $db;
-    global $config;
+    global $gCms;
+    $db = $gCms->db;
+    $config = $gCms->config;
 
     echo "<p>".$gettext->gettext("Working....")."<br />\n";
 
     ## open file for backup
     $date = date("mdy-Hi");
-    $backup_file = $config->root_path."/backup.$date.sql";
+    $backup_file = $config["root_path"]."/backup.$date.sql";
     $file = @fopen($backup_file, "w");
     if ($file != 0) {
     } else {
@@ -66,7 +66,7 @@ function do_adodb_backup() {
     } ## if
 
     ## get an array of all the tables
-    foreach ($dbnew->MetaTables('TABLES') as $table) {
+    foreach ($db->MetaTables('TABLES') as $table) {
 
         ## drop the table if it exists
         fwrite($file, "DROP TABLE IF EXISTS $table;\n");
@@ -74,7 +74,7 @@ function do_adodb_backup() {
         ## build a list of each column in $table
         $field_list = "";
         $create_syntax = "CREATE TABLE $table (";
-        foreach ($dbnew->MetaColumns($table) as $column) {  ## name, type, max_length
+        foreach ($db->MetaColumns($table) as $column) {  ## name, type, max_length
             $field_list .= $column->name.", ";
             $create_syntax .= $column->name . " " . $column->type;
             if ($column->max_length <> -1) {
@@ -93,14 +93,14 @@ function do_adodb_backup() {
 
         ## get all the data from the table
         $query = "select $field_list from $table";
-        $result = &$dbnew->Execute($query);
+        $result = &$db->Execute($query);
     
         if ($result && $result->RowCount() > 0) {
             while ($row2 = $result->FetchRow()) {
 
                 $data_line = "";
                 foreach ($row2 as $data) {
-                    $data_line .= $dbnew->qstr($data).",";
+                    $data_line .= $db->qstr($data).",";
                 } ## foreach
 
                 $data_line = substr($data_line,0,strlen($data_line) -1);
@@ -114,23 +114,23 @@ function do_adodb_backup() {
     fclose($file);
 
     #function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
-    audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $backup_file, 'Database backup');
+    audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $backup_file, 'Database backup');
     echo $gettext->gettext("Backup complete.  Wrriten to file:")." ".$backup_file."</p>\n";
 }
 
 function do_adodb_restore() {
 
     global $gettext;
-    global $dbnew;
-    global $db;
-    global $config;
+    global $gCms;
+    $db = $gCms->db;
+    $config = $gCms->config;
 
     $lines = explode("\n", file_get_contents($_POST["filename"]));
 
     foreach ($lines as $line) {
-        $dbnew->Execute($line);
+        $db->Execute($line);
     }
-    audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $_POST["filename"], 'Database restore');
+    audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, $_POST["filename"], 'Database restore');
     echo $gettext->gettext("Restore complete: ").$_POST["filename"]."</p>\n";
 }
 ?>

@@ -52,7 +52,6 @@ if ($moduleaction == "edit") {
 
 } else if ($moduleaction == "completeadd") {
 
-	echo "completeadd";
 	$hiddenfields .= '<input type="hidden" name="'.$id.'action" value="completeadd" />';
 	$validinfo = true;
 
@@ -76,7 +75,7 @@ if ($moduleaction == "edit") {
 
 } else if ($moduleaction == "completeedit") {
 
-	$newsid = $_GET[$id."news_id"].$_POST[$id."news_id"];
+	$newsid = (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
 	$hiddenfields .= "<input type=\"hidden\" name=\"".$id."action\" value=\"completeedit\" /><input type=\"hidden\" name=\"".$id."news_id\" value=\"".$newsid."\" />";
 
 	$validinfo = true;

@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -61,11 +61,11 @@ if (isset($_POST["adduser"])) {
 	}
 
 	if ($validinfo) {
-		$new_user_id = $dbnew->GenID($config->db_prefix."users_seq");
-		$query = "INSERT INTO ".$config->db_prefix."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
-		$result = $dbnew->Execute($query);
+		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
+		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+		$result = $db->Execute($query);
 		if ($result) {
-			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
+			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
 			redirect("listusers.php");
 			return;
 		}

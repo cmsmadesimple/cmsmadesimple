@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -36,7 +36,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Add Group');
+$access = check_permission($userid, 'Add Group');
 
 if ($access) {
 	if (isset($_POST["addgroup"])) {
@@ -48,11 +48,11 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$new_group_id = $dbnew->GenID($config->db_prefix."groups_seq");
-			$query = "INSERT INTO ".$config->db_prefix."groups (group_id, group_name, active, create_date, modified_date) VALUES ($new_group_id, ".$dbnew->qstr($group).", $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
-			$result = $dbnew->Execute($query);
+			$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
+			$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES ($new_group_id, ".$db->qstr($group).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query);
 			if ($result) {
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
 				redirect("listgroups.php");
 				return;
 			}

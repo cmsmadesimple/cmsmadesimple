@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $page_id = -1;
 if (isset($_GET["page_id"])) {
@@ -29,39 +29,39 @@ if (isset($_GET["page_id"])) {
 	$parent_id = $_GET["parent_id"];
 	$direction = $_GET["direction"];
 	$userid = get_userid();
-	$access = check_permission($config, $userid, 'Modify Any Content');
+	$access = check_permission($userid, 'Modify Any Content');
 
 	if ($access)  {
 
 		$order = 1;
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
-		$result = $dbnew->Execute($query);
+		$query = "SELECT item_order FROM ".cms_db_prefix()."pages WHERE page_id = $page_id";
+		$result = $db->Execute($query);
 		$row = $result->FetchRow();
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
 
 		if ($direction == "down") {
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
+			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
 				" AND parent_id = $parent_id";
 			#echo $query;
-			$dbnew->Execute($query);
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id .
+			$db->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id .
 				" AND parent_id = $parent_id";
 			#echo $query;
-			$dbnew->Execute($query);
+			$db->Execute($query);
 		}
 		else if ($direction == "up") {
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
+			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
 				" AND parent_id = $parent_id";
 			#echo $query;
-			$dbnew->Execute($query);
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id .
+			$db->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id .
 				" AND parent_id = $parent_id";
 			#echo $query;
-			$dbnew->Execute($query);
+			$db->Execute($query);
 		}
 	}
 }

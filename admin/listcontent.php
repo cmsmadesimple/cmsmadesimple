@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
@@ -34,37 +34,19 @@ if (isset($_GET["message"])) {
 
 	$userid = get_userid();
 
-	$modifyall = check_permission($config, $userid, 'Modify Any Content');
+	$modifyall = check_permission($userid, 'Modify Any Content');
 
 	if ($modifyall) {
 		if (isset($_GET["makedefault"])) {
-			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 0";
-			$result = $dbnew->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."pages SET default_page = 0";
+			$result = $db->Execute($query);
 
-			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
-			$result = $dbnew->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
+			$result = $db->Execute($query);
 		}
 	}
 
-## 	$section_count;
-## 	$query = "SELECT count(*) AS count, section_id FROM ".$config->db_prefix."pages GROUP BY section_id";
-## 	$result = $dbnew->Execute($query);
-## 	while($row = $result->FetchRow()) {
-## 		$section_count[$row[section_id]] = $row[count];
-## 	}
-## 
-## 	$query = "";
-## 	if ($modifyall == true) {
-## 		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id ORDER BY section_id, item_order";
-## 	} else {
-## 		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."additional_users cau ON cau.page_id = p.page_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id WHERE owner = ".$userid." OR cau.user_id = ".$userid." ORDER BY section_id, item_order";
-## 	}
-## 
-## 	$result = $dbnew->Execute($query);
-## 
-## 	if ($result && $result->RowCount() > 0) {
-
-	$content_array = db_get_menu_items($config, "content_hierarchy");
+	$content_array = db_get_menu_items("content_hierarchy");
 	if (count($content_array)) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
@@ -74,7 +56,6 @@ if (isset($_GET["message"])) {
 		echo "<td>".$gettext->gettext("Type")."</td>\n";
 		echo "<td>".$gettext->gettext("URL")."</td>\n";
 		echo "<td>".$gettext->gettext("Owner")."</td>\n";
-## 		echo "<td>".$gettext->gettext("Section")."</td>\n";
 		echo "<td>".$gettext->gettext("Template")."</td>\n";
 		echo "<td>".$gettext->gettext("Active")."</td>\n";
 		echo "<td>".$gettext->gettext("Default")."</td>\n";
@@ -87,12 +68,10 @@ if (isset($_GET["message"])) {
 		echo "</tr>\n";
 
 		$count = 1;
-## 		$oldsectionid = -1;
 
 		$currow = "row1";
 
-## 		while($row = $result->FetchRow()) 
-		$types = get_page_types($config);
+		$types = get_page_types();
 
 		foreach ($content_array as $one) {
 
@@ -124,15 +103,13 @@ if (isset($_GET["message"])) {
 				}
 				echo "</td>\n";
 			}
-			if ($config->query_var == "")
-				echo "<td><a href=\"".$config->root_url."/index.php/".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+			if ($config["query_var"] == "")
+				echo "<td><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			else
-				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+				echo "<td><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
 			echo "<td><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
-
-# 			echo "</tr>\n";
 
 			$count++;
 
@@ -146,7 +123,7 @@ if (isset($_GET["message"])) {
 		echo "<p>".$gettext->gettext("No pages")."</p>";
 	}
 
-	if (check_permission($config, $userid, 'Add Content')) {
+	if (check_permission($userid, 'Add Content')) {
 ?>
 
 <div class="button"><a href="addcontent.php"><?=$gettext->gettext("Add New

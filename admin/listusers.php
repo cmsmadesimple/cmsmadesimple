@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 include_once("header.php");
 
@@ -33,11 +33,11 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid = get_userid();
-	$edit = check_permission($config, $userid, 'Modify User');
-	$remove = check_permission($config, $userid, 'Remove User');
+	$edit = check_permission($userid, 'Modify User');
+	$remove = check_permission($userid, 'Remove User');
 
-	$query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
-	$result = $dbnew->Execute($query);
+	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 
@@ -73,7 +73,7 @@ if (isset($_GET["message"])) {
 
 	}
 
-if (check_permission($config, $userid, 'Add User')) {
+if (check_permission($userid, 'Add User')) {
 ?>
 
 <div class=button><a href="adduser.php"><?=$gettext->gettext("Add New User")?></div></p>

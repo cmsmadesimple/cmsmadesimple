@@ -16,70 +16,48 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * This file is included in every page.  It does all seutp functions including
+ * importing additional functions/classes, setting up sessions and nls, and
+ * construction of various important variables like $gCms.
+ *
+ * @package CMS
+ */
+#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
 set_magic_quotes_runtime(false);
 
+#Setup session with different id and start it
 session_name("CMSSESSID");
 if(!session_id()) {
 	session_start();
 }
 
-class CMSConfig {
+#Make a new CMS object
+require_once(dirname(__FILE__)."/lib/global.functions.php");
+$gCms = new CmsObject();
 
-	function CMSConfig() {
-
-#Database connection information
-$this->db_hostname = "localhost";
-$this->db_username = "cms";
-$this->db_password = "cms";
-$this->db_name = "cms";
-
-#If app needs to coexist with other tables in the same db,
-#put a prefix here.  e.g. "cms_"
-$this->db_prefix = "";
-
-#Document root as seen from the webserver.  No slash at the end
-#e.g. http://blah.com
-$this->root_url = "http://www.something.com";
-
-#Path to document root
-#e.g. /var/www/localhost
-$this->root_path = dirname(__FILE__);
-
-#For using a particular querystring variable.  Turning off
-#produces variables like: http://cms.wishy.org/index.php/somecontent
-#where as setting to page would make:
-#http://cms.wishy.org/?page=somecontent
-$this->query_var = "";
-
-#Install BBCodeParser from the PEAR library
-#and then set this to true for BBCode usage in content
-#and tables.
-$this->use_bb_code = false;
-
-#Allow smarty {php} tags?  These could be dangerous.
-$this->use_smarty_php_tags = false;
-
-#Where do previews get saved?
-$this->previews_path = $this->root_path . "/smarty/cms/cache";
-
-include_once(dirname(__FILE__)."/config.php");
-
-	}
-}
-
+#Load the config file (or defaults if it doesn't exist)
 require_once(dirname(__FILE__)."/version.php");
+require_once(dirname(__FILE__)."/lib/config.functions.php");
 
-$config = new CMSConfig();
+#make a local reference
+if (cms_config_check_old_config()) {
+	cms_config_upgrade();
+}
+$config = cms_config_load(true);
+
+#attach to global object
+$gCms->config = &$config;
 
 #Setup db connection
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
 if (!isset($DONT_LOAD_DB)) {
-	$dbnew = &ADONewConnection('mysql');
-	$dbnew->PConnect($config->db_hostname,$config->db_username,$config->db_password,$config->db_name);
-	if (!$dbnew) die("Connection failed");
-	$dbnew->SetFetchMode(ADODB_FETCH_ASSOC);
-	$config->db = &$dbnew;
+	$db = &ADONewConnection('mysql');
+	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+	if (!$db) die("Connection failed");
+	$db->SetFetchMode(ADODB_FETCH_ASSOC);
+	$gCms->db = &$db;
 }
 
 require_once(dirname(__FILE__)."/lib/db.functions.php");
@@ -102,26 +80,16 @@ if(get_magic_quotes_gpc())
 }
 
 #Setup the object sent to modules
-$modulecmsobj->pluginnum = 1;
+$gCms->variables["pluginnum"] = 1;
 if (isset($page)) {
-	$modulecmsobj->page = $page;
+	$gCms->variables["page"] = $page;
 }
-$modulecmsobj->db = &$dbnew;
-$modulecmsobj->config = &$config;
 
 #Setup hash for storing all modules
-$cmsmodules = array();
+$gCms->modules = array();
 
 #Load all installed module code
 load_modules();
-
-#Debug
-#foreach ($cmsmodules as $key=>$val) {
-#	echo "$key - $val<br />";
-#	foreach ($val as $key2=>$val2) {
-#		echo "$key2 - $val2<br />";
-#	}
-#}
 
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE)) {
@@ -204,11 +172,10 @@ if (isset($CMS_ADMIN_PAGE)) {
 }
 
 #Check for HTML_BBCodeParser
-if ($config->use_bb_code == true) {
+if ($config["use_bb_code"] == true) {
 	if (include_once(dirname(__FILE__)."/lib/PEAR.php")) {
 		if (include_once("HTML/BBCodeParser.php")) {
-			$parser = new HTML_BBCodeParser();
-			$config->bbcodeparser = new HTML_BBCodeParser();
+			$gCms->bbcodeparser = new HTML_BBCodeParser();
 		}
 	}
 }

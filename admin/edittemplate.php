@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $error = "";
 
@@ -52,7 +52,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Template');
+$access = check_permission($userid, 'Modify Template');
 
 if ($access) {
 
@@ -63,8 +63,8 @@ if ($access) {
 			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
 			$validinfo = false;
 		} else if ($template != $orig_template) {
-			$query = "SELECT template_id from ".$config->db_prefix."templates WHERE template_name = " . $dbnew->qstr($template);
-			$result = $dbnew->Execute($query);
+			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
+			$result = $db->Execute($query);
 
 			if ($result && $result->RowCount() > 0) {
 				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
@@ -77,11 +77,11 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."templates SET template_name = ".$dbnew->qstr($template).", template_content = ".$dbnew->qstr($content).", stylesheet = ".$dbnew->qstr($stylesheet).", active = $active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE template_id = $template_id";
-			$result = $dbnew->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ".$db->qstr($template).", template_content = ".$db->qstr($content).", stylesheet = ".$db->qstr($stylesheet).", active = $active, modified_date = ".$db->DBTimeStamp(time())." WHERE template_id = $template_id";
+			$result = $db->Execute($query);
 
 			if ($result) {
-				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
 				redirect("listtemplates.php");
 				return;
 			}
@@ -93,8 +93,8 @@ if ($access) {
 	}
 	else if ($template_id != -1 && !$preview) {
 
-		$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."templates WHERE template_id = " . $template_id;
+		$result = $db->Execute($query);
 		
 		$row = $result->FetchRow();
 
@@ -126,7 +126,7 @@ else {
 		$data["stylesheet"] = $stylesheet;
 		$data["template"] = $content;
 
-		$tmpfname = tempnam($config->previews_path, "cmspreview");
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
@@ -134,7 +134,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
+<iframe name="previewframe" width="600" height="400" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
 </iframe>
 <?php

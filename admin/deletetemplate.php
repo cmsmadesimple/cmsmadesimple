@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login($config);
+check_login();
 
 $dodelete = true;
 $template_id = -1;
@@ -29,29 +29,29 @@ if (isset($_GET["template_id"])) {
 	$template_id = $_GET["template_id"];
 	$template_name = "";
 	$userid = get_userid();
-	$access = check_permission($config, $userid, 'Remove Template');
+	$access = check_permission($userid, 'Remove Template');
 
 	if ($access) {
 
-		$query = "SELECT template_name FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
-		$result = $dbnew->Execute($query);
+		$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
+		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
 			$row = $result->FetchRow();
-			$template_name = $row[template_name];
+			$template_name = $row['template_name'];
 		}
 
-		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE template_id = $template_id";
-		$result = $dbnew->Execute($query);
+		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE template_id = $template_id";
+		$result = $db->Execute($query);
 		$row = $result->FetchRow();
 		if (isset($row["count"]) && $row["count"] > 0) {
 			$dodelete = false;
 		}
 
 		if ($dodelete) {
-			$query = "DELETE FROM ".$config->db_prefix."templates where template_id = $template_id";
-			$result = $dbnew->Execute($query);
-			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template_name, 'Deleted Template');
+			$query = "DELETE FROM ".cms_db_prefix()."templates where template_id = $template_id";
+			$result = $db->Execute($query);
+			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template_name, 'Deleted Template');
 		}
 	}
 }

@@ -28,7 +28,7 @@ else if (isset($_POST["module"])) $module = $_POST["module"];
 
 include_once("header.php");
 
-if (count($cmsmodules) > 0) {
+if (count($gCms->modules) > 0) {
 
 ?>
 
@@ -36,11 +36,11 @@ if (count($cmsmodules) > 0) {
 
 <?
 
-	if (isset($cmsmodules[$module])) {
+	if (isset($gCms->modules[$module])) {
 		@ob_start();
 		#$obj = $cmsmodules[$module]['Instance'];
 		#$obj->executeadmin($modulecmsobj,"module_".$module."_");
-		call_user_func_array($cmsmodules[$module]['execute_admin_function'], array($modulecmsobj,"module_".$module."_"));
+		call_user_func_array($gCms->modules[$module]['execute_admin_function'], array($gCms,"module_".$module."_"));
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;

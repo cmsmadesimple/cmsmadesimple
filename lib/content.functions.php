@@ -16,23 +16,34 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * Handles content related functions
+ *
+ * @package CMS
+ */
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 $sorted_sections = array();
 $sorted_content = array();
 
+/**
+ * Extends the Smarty class for content.
+ *
+ * Extends the Smarty class for checking timestamps and rendering
+ * content to the browser.
+ *
+ * @since 0.1
+ */
 class Smarty_CMS extends Smarty {
 
 	function Smarty_CMS(&$config)
 	{
 		$this->Smarty();
 
-		$this->configCMS = &$config;
-
-		$this->template_dir = $config->root_path.'/smarty/cms/templates/';
-		$this->compile_dir = $config->root_path.'/smarty/cms/templates_c/';
-		$this->config_dir = $config->root_path.'/smarty/cms/configs/';
-		$this->cache_dir = $config->root_path.'/smarty/cms/cache/';
-		$this->plugins_dir = $config->root_path.'/plugins/';
+		$this->template_dir = $config["root_path"].'/smarty/cms/templates/';
+		$this->compile_dir = $config["root_path"].'/smarty/cms/templates_c/';
+		$this->config_dir = $config["root_path"].'/smarty/cms/configs/';
+		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
+		$this->plugins_dir = $config["root_path"].'/plugins/';
 
 		$this->compile_check = true;
 		$this->caching = true;
@@ -50,7 +61,7 @@ class Smarty_CMS extends Smarty {
 					#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
 					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
 					#echo $filename . "<br />";
-					require_once $filename;
+					include_once $filename;
 					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
 				}
 			}
@@ -65,12 +76,13 @@ class Smarty_CMS extends Smarty {
 	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 
-		global $cmsmodules;
-		global $modulecmsobj;
+		global $gCms;
 
-		$db = $smarty_obj->configCMS->db;
+		$cmsmodules = $gCms->modules;
+		$db = $gCms->db;
+		$config = $gCms->config;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
@@ -89,21 +101,21 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 			#So no one can do anything nasty
-			if (!(isset($smarty_obj->configCMS->use_smarty_php_tags) && $smarty_obj->configCMS->use_smarty_php_tags == true)) {
+			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
 				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 			}
 			
 			if ($line["page_type"] == "content") {
 				#If it's regular content, do this...
 				$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
-				if ($this->configCMS->use_bb_code == true && isset($this->configCMS->bbcodeparser)) {
-					$tpl_source = $this->configCMS->bbcodeparser->qparse($tpl_source);
+				if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser)) {
+					$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
 				}
 			} else {
 				#If it's a module, do this instead...
 				if (isset($cmsmodules[$line["page_type"]])) {
 					@ob_start();
-					call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
+					call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
 					$modoutput = @ob_get_contents();
 					@ob_end_clean();
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
@@ -120,9 +132,11 @@ class Smarty_CMS extends Smarty {
 	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 
-		$db = $smarty_obj->configCMS->db;
+		global $gCms;
+		$db = $gCms->db;
+		$config = $gCms->config;
 
-		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
+		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
@@ -166,13 +180,21 @@ class Smarty_CMS extends Smarty {
 	}
 }
 
-function db_get_default_page (&$config) {
+/**
+ * Returns the id of the current selected default page
+ *
+ * @since 0.1
+ */
+function db_get_default_page () {
 
-	$db = $config->db;
+	global $gCms;
+	
+	$db = $gCms->db;
+	$config = $gCms->config;
 
 	$result = "";
 
-	$query = "SELECT page_id FROM ".$config->db_prefix."pages WHERE default_page = 1";
+	$query = "SELECT page_id FROM ".cms_db_prefix()."pages WHERE default_page = 1";
 	$dbresult = $db->Execute($query);
 
 	if ($dbresult) {
@@ -182,7 +204,7 @@ function db_get_default_page (&$config) {
 
 	#We have no default.  Just get something!!!
 	if ($result == "") {
-		$query = "SELECT page_id FROM ".$config->db_prefix."pages";
+		$query = "SELECT page_id FROM ".cms_db_prefix()."pages";
 		$dbresult = $db->SelectLimit($query, 1);
 
 		if ($dbresult) {
@@ -263,9 +285,11 @@ class Page {
 		} ## foreach
 	} ## function
 
-	function get_num_same_level(&$config) {
-		$db = $config->db;
-		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE parent_id = ".$this->parent_id;
+	function get_num_same_level() {
+		global $gCms;
+		$db = $gCms->db;
+		$config = $gCms->config;
+		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE parent_id = ".$this->parent_id;
 		$result = $db->Execute($query);
 		$line = $result->FetchRow();
 		return $line["count"];
@@ -273,18 +297,21 @@ class Page {
 		
 } ## class
 
-function db_get_menu_items(&$config, $style) {
+function db_get_menu_items($style) {
 
 	global $sorted_sections;
 	global $sorted_content;
-	$db = $config->db;
+
+	global $gCms;
+	$db = $gCms->db;
+	$config = $gCms->config;
 
 	$sorted_content = array();
 	$content_array = array();
 	
 	if ($style == "content_hierarchy") {
 
-		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u on u.user_id=p.owner LEFT OUTER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
+		$query = "select p.page_id, p.page_title, p.page_url, p.page_type, p.menu_text, p.item_order, p.active, p.default_page, p.parent_id, u.username, t.template_name from ".cms_db_prefix()."pages p LEFT OUTER JOIN ".cms_db_prefix()."users u on u.user_id=p.owner LEFT OUTER JOIN ".cms_db_prefix()."templates t on t.template_id=p.template_id order by p.parent_id, p.item_order";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount() > 0) {
@@ -307,10 +334,10 @@ function db_get_menu_items(&$config, $style) {
 				}
 				$current_content->hier = "1";
 				$current_content->level = "1";
-				$current_content->num_same_level = $current_content->get_num_same_level($config);
+				$current_content->num_same_level = $current_content->get_num_same_level();
 				# Fix URL where appropriate
 				if ($current_content->page_type != "link") {
-					$current_content->url = $config->root_url."/index.php?".$config->query_var."=".$current_content->page_id;	
+					$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;	
 					$current_content->page_url = "";	
 				} else {
 					$current_content->url = $current_content->page_url;
@@ -338,6 +365,7 @@ function db_get_menu_items(&$config, $style) {
 	} ## if
 
 
+	$sections = array();
 	if (isset($current_section)) {
 		array_push($sections, $current_section);
 	}
@@ -345,10 +373,18 @@ function db_get_menu_items(&$config, $style) {
 			
 } ## function
 
-function get_page_types(&$config) {
+/**
+ * Returns a list of all currently registered content types
+ *
+ * @since 0.3
+ */
+function get_page_types() {
 
-	global $cmsmodules;
-	global $dbnew;
+	global $gCms;
+
+	$db = $gCms->db;
+	$modules = $gCms->modules;
+	$config = $gCms->config;
 
 	$result['content'] = 'Content';
 	$result['link'] = 'Link';
@@ -356,8 +392,8 @@ function get_page_types(&$config) {
 
 	$installedmodules = array();
 
-	$query = "SELECT * FROM ".$config->db_prefix."modules";
-	$dbresult = $dbnew->Execute($query);
+	$query = "SELECT * FROM ".cms_db_prefix()."modules";
+	$dbresult = $db->Execute($query);
 
 	if ($dbresult && $dbresult->RowCount() > 0) {
 
@@ -365,8 +401,8 @@ function get_page_types(&$config) {
 			$installedmodules[$row['module_name']] = 1;
 		}
 
-		foreach ($cmsmodules as $key=>$value) {
-			if (isset($cmsmodules[$key]['content_module']) && isset($installedmodules[$key])) {
+		foreach ($modules as $key=>$value) {
+			if (isset($modules[$key]['content_module']) && isset($installedmodules[$key])) {
 				$result[$key] = $key;
 			}
 		}
