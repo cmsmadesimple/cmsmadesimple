@@ -120,9 +120,13 @@ if (isset($page)) {
 $gCms->cmsmodules = array();
 $gCms->userplugins = array();
 $gCms->cmsplugins = array();
+$gCms->siteprefs = array();
 
 #Load all installed module code
 load_modules();
+
+#Load all site preferences
+load_site_preferences();
 
 #Nice decent default
 $current_language = "en_US";

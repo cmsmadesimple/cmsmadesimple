@@ -180,6 +180,32 @@ function audit($userid, $username, $itemid, $itemname, $action) {
 }
 
 /**
+ * Loads a cache of site preferences so we only have to do it once.
+ *
+ * @since 0.6
+ */
+function load_site_preferences()
+{
+	$value = "";
+
+	global $gCms;
+	$db = $gCms->db;
+	$siteprefs = &$gCms->siteprefs;
+
+	$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
+	$result = $db->query($query);
+	
+	if ($result && $result->RowCount() > 0) {
+		while ($row = $result->FetchRow())
+		{
+			$siteprefs[$row['sitepref_name']] = $row['sitepref_value'];
+		}
+	}
+
+	return $value;
+}
+
+/**
  * Gets the given site prefernce
  *
  * @since 0.6
@@ -189,14 +215,11 @@ function get_site_preference($prefname) {
 	$value = "";
 
 	global $gCms;
-	$db = $gCms->db;
+	$siteprefs = $gCms->siteprefs;
 
-	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
-	$result = $db->query($query);
-	
-	if ($result && $result->RowCount() > 0) {
-		$row = $result->FetchRow();
-		$value = $row['sitepref_value'];
+	if (isset($siteprefs[$prefname]))
+	{
+		$value = $siteprefs[$prefname];
 	}
 
 	return $value;

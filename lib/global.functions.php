@@ -60,7 +60,6 @@ class CmsObject {
 	/**
 	 * User Plugins object - holds list and function pointers of all registered user plugins
 	 */
-	
 	var $userplugins;
 
 	/**
@@ -69,10 +68,9 @@ class CmsObject {
 	var $bbcodeparser;
 
 	/**
-	 * Translator object - for i18n support
+	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 */
-	var $trans;
-
+	var $siteprefs;
 }
 
 # vim:ts=4 sw=4 noet
