@@ -33,6 +33,7 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid = get_userid();
+	$add = check_permission($config, $userid, 'Add Template');
 	$edit = check_permission($config, $userid, 'Modify Template');
 	$remove = check_permission($config, $userid, 'Remove Template');
 
@@ -57,11 +58,13 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td width=\"8%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit)
-				echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+				echo "<td width=\"8%\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+			if ($add)
+				echo "<td width=\"8%\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\">".$gettext->gettext("Copy")."</a></td>\n";
 			if ($remove)
-				echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"8%\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -72,7 +75,7 @@ if (isset($_GET["message"])) {
 
 	}
 
-if (check_permission($config, $userid, 'Add Template')) {
+if ($add) {
 ?>
 
 <div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New
