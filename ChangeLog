@@ -1,18 +1,19 @@
-Version 0.7 -- Subversion
+Version 0.7 -- Mon Oct 11 2004
 -----------------
 
-* Added HTML blobs for easy administration of small chunks of html (#3)
+* Added HTML blobs for easy administration of small chunks of html (Genie #3)
 * Added Image Manager to the files section for advanced image handling functions
 * Added horizontal option to dhtmlmenu (leen)
 * Added new admin style
+* Added new install and upgrade look
 * Added language as a user perference and also moved it to the login page
 * Added java based syntax highlighting as a user preference
 * Added support for mysql 4.1+ using the mysqli adodb driver
-* Added cancel link to login page that redirects back to site (#6)
-* Added auto_upgrade functionality to modules (#4)
+* Added cancel link to login page that redirects back to site (Genie #6)
+* Added auto_upgrade functionality to modules (Genie #4)
 * Added more intelligent handling of file types to file management
-* Added ability to override the default encoding of the whole site, admin included (#15)
-* Fixed News module so that post date shows on newly created items (#5)
+* Added ability to override the default encoding of the whole site, admin included (Genie #15)
+* Fixed News module so that post date shows on newly created items (Genie #5)
 * Fixed bug with start and end dates when adding new News item (BamaRob)
 * Fixed missing template option for News module (trac #67)
 * Updated adodb to 4.53
