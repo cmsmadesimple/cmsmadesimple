@@ -64,8 +64,6 @@ if ($result && $result->RowCount() > 0)
 	while ($row = $result->FetchRow())
 	{
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
-		$this->mId = $newid;
-
 		$idmap[$row['page_id']] = $newid;
 
 		$contentquery = "INSERT INTO ".cms_db_prefix()."content (content_id, content_name, type, owner_id, parent_id, item_order, create_date, modified_date, active, default_content, template_id, content_alias, menu_text, show_in_menu) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
