@@ -18,6 +18,31 @@
 
 $CMS_ADMIN_PAGE=1;
 
+function deldir($dir)
+{
+	$handle = opendir($dir);
+	while (false!==($FolderOrFile = readdir($handle)))
+	{
+		if($FolderOrFile != "." && $FolderOrFile != "..") 
+		{  
+			if(is_dir("$dir/$FolderOrFile")) 
+			{
+				deldir("$dir/$FolderOrFile");
+			}  // recursive
+			else
+			{
+				unlink("$dir/$FolderOrFile");
+			}
+		}  
+	}
+	closedir($handle);
+	if(rmdir($dir))
+	{
+		$success = true;
+	}
+	return $success;  
+} 
+
 require_once("../include.php");
 
 check_login();
@@ -61,28 +86,25 @@ if (isset($_POST['newdirsubmit']))
 	if ($access)
 	{
 		#Make sure it isn't an empty dir name
-		if ($_POST['newdir'] != "")
+		if ($_POST['newdir'] == "")
 		{
-			#Make sure no one tries to .. their way out of our little chroot
-			if (strpos($_POST['newdir'], '..') === false)
-			{
-				if (strpos($_POST['newdir'], '/') === false && strpos($_POST['newdir'], '\\') === false)
-				{
-					mkdir($dir . "/" . $_POST['newdir']);
-				}
-				else
-				{
-					$errors .= "<li>".$gettext->gettext("Directory name cannot contain '/' or '\\'")."</li>";
-				}
-			}
-			else
-			{
-				$errors .= "<li>".$gettext->gettext("Directory name cannot contain '..'")."</li>";
-			}
+			$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+		}
+		else if (ereg('\.\.',$_POST['newdir']))
+		{
+			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '..'")."</li>";
+		}
+		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') === true)
+		{
+			$errors .= "<li>".$gettext->gettext("Directory name cannot contain '/' or '\'")."</li>";
+		}
+		else if (file_exists($dir."/".$_POST['newdir']))
+		{
+			$errors .= "<li>".$gettext->gettext("This folder already exists.")."</li>";
 		}
 		else
 		{
-			$errors .= "<li>".$gettext->gettext("No directory name given")."</li>";
+			mkdir($dir."/".$_POST['newdir']);
 		}
 	}
 	else
@@ -118,9 +140,9 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 	{
 		if (is_dir($dir . "/" . $_GET['file']))
 		{
-			if (!(@rmdir($dir . "/" . $_GET['file'])))
+			if (!(deldir($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".$gettext->gettext("Could not delete directory.  Directory not empty?  Permissions problem?")."</li>";
+				$errors .= "<li>".$gettext->gettext("Could not delete directory.  Permissions problem?")."</li>";
 			}
 		}
 		else
@@ -185,7 +207,7 @@ foreach ($dirs as $file)
 			$dirtext .= "<tr class=\"$row\">"; $dirtext .= "<td width=\"30\">[dir]</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete this directory?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete this directory and all of it\'s contents?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" title=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
