@@ -66,7 +66,9 @@ if (isset($_SESSION["cms_admin_username"]))
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
 $sql_execs = 0;
+
 $sql_queries = "";
+
 function count_sql_execs($db, $sql, $inputarray)
 {
 	global $gCms;
@@ -89,7 +91,7 @@ if (!isset($DONT_LOAD_DB)) {
 	$db->fnExecute = 'count_sql_execs';
 	if ($gCms->config['debug'] == true)
 	{
-		$db->debug = true;
+		#$db->debug = true;
 	}
 	$gCms->db = &$db;
 }

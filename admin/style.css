@@ -139,6 +139,16 @@ H4 {
 	FONT-SIZE: 0.6em;
 	text-align: center;	
 }
+#debugfooter {
+	position: relative;
+	COLOR: #666666;
+	BORDER-BOTTOM: #8c8a8c 0px solid;
+	HEIGHT: 10px;
+	padding: 0px;
+	clear: left;
+	background-color: #ffffff;
+	FONT-SIZE: 0.6em;
+}
 #table {
 	MARGIN-TOP: 20px
 }
