@@ -59,6 +59,9 @@ $this->use_bb_code = false;
 #Allow smarty {php} tags?  These could be dangerous.
 $this->use_smarty_php_tags = false;
 
+#Where do previews get saved?
+$this->previews_path = $this->root_path . "/smarty/cms/cache";
+
 include_once(dirname(__FILE__)."/config.php");
 
 	}

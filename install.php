@@ -303,6 +303,7 @@ function showPageFour() {
     $content .= '$this->query_var = "'.$_POST['querystr'].'";'."\n";
     $content .= '$this->use_bb_code = '.$_POST['bbcode'].';'."\n";
 	$content .= '$this->use_smarty_php_tags = false;'."\n";
+	$content .= '$this->previews_path = $this->root_path . \"/smarty/cms/cache\";'."\n";
     $content .= "\n?>\n";
 
     if ((file_exists($config) && is_writable($config)) || !file_exists($config)) {

@@ -62,7 +62,7 @@ class Smarty_Preview extends Smarty {
 
 	function preview_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		$fname = $smarty_obj->configCMS->root_path . "/smarty/cms/cache/cmspreview" . $tpl_name;
+		$fname = $smarty_obj->configCMS->previews_path . "/cmspreview" . $tpl_name;
 		$handle = fopen($fname, "r");
 		$data = unserialize(fread($handle, filesize($fname)));
 		fclose($handle);

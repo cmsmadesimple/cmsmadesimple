@@ -126,7 +126,7 @@ else {
 		$data["stylesheet"] = $stylesheet;
 		$data["template"] = $content;
 
-		$tmpfname = tempnam($config->root_path . "/smarty/cms/cache/", "cmspreview");
+		$tmpfname = tempnam($config->previews_path, "cmspreview");
 		$handle = fopen($tmpfname, "w");
 		fwrite($handle, serialize($data));
 		fclose($handle);
