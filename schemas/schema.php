@@ -99,10 +99,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config["db_prefix"]."css_seq");
+	$db->CreateSequence($db_prefix."css_seq");
 
 	echo "[done]</p>";
 
@@ -117,7 +117,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css_assoc", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -243,7 +243,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."siteprefs", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -324,10 +324,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."userplugins", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config["db_prefix"]."userplugins_seq");
+	$db->CreateSequence($db_prefix."userplugins_seq");
 
 	echo "[done]</p>";
 
