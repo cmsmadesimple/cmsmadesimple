@@ -179,6 +179,26 @@ if ($result && $result->RowCount() < 1)
 
 echo '[done]</p>';
 
+echo '<p>Updating additional_users to new content ids...';
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."additional_users", "content_id I");
+$dbdict->ExecuteSQLArray($sqlarray);
+
+$query = "SELECT * from ".cms_db_prefix()."additional_users";
+$result = $db->Execute($query);
+
+if ($result && $result->RowCount() > 0)
+{
+	while ($row = $result->FetchRow())
+	{
+		$query2 = "UPDATE ".cms_db_prefix()."additional_users SET content_id = ? WHERE additional_user_id = ?";
+		$db->Execute($query, array($idmap[$row['page_id']], $row['additional_user_id']));
+	}
+}
+
+echo '[done]</p>';
+
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 9";

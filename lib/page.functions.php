@@ -109,8 +109,8 @@ function generate_user_object($userid)
  * @returns mixed If they have perimission, true.  If they do not, false.
  * @since 0.1
  */
-function check_permission($userid, $permname) {
-
+function check_permission($userid, $permname)
+{
 	$check = false;
 
 	global $gCms;
@@ -119,7 +119,8 @@ function check_permission($userid, $permname) {
 	$query = "SELECT * FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = ".$db->qstr($permname);
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	if ($result && $result->RowCount() > 0)
+	{
 		$check = true;
 	}
 
@@ -127,20 +128,20 @@ function check_permission($userid, $permname) {
 }
 
 /**
- * Checks that the given userid is the owner of the given pageid.
+ * Checks that the given userid is the owner of the given contentid.
  *
  * @returns mixed If they have ownership, true.  If they do not, false.
  * @since 0.1
  */
-function check_ownership($userid, $pageid = "") {
-
+function check_ownership($userid, $contentid = "")
+{
 	$check = false;
 
 	global $gCms;
 	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
-	$result = $db->Execute($query);
+	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE owner_id = ? AND content_id = ?";
+	$result = $db->Execute($query, array($userid, $pageid));
 
 	if ($result && $result->RowCount() > 0) {
 		$check = true;
@@ -157,16 +158,17 @@ function check_ownership($userid, $pageid = "") {
  * @returns mixed If they have authorship, true.  If they do not, false.
  * @since 0.2
  */
-function check_authorship($userid, $pageid = "") {
-
+function check_authorship($userid, $contentid = "")
+{
 	$check = false;
 
 	global $gCms;
 	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."additional_users WHERE page_id = $pageid AND user_id = $userid";
-	$result = $db->Execute($query);
-	if ($result && $result->RowCount() > 0) {
+	$query = "SELECT * FROM ".cms_db_prefix()."additional_users WHERE content_id = ? AND user_id = ?";
+	$result = $db->Execute($query, array($contentid, $userid));
+	if ($result && $result->RowCount() > 0)
+	{
 		$check = true;
 	}
 
@@ -179,8 +181,8 @@ function check_authorship($userid, $pageid = "") {
  *
  * @since 0.3
  */
-function audit($itemid, $itemname, $action) {
-
+function audit($itemid, $itemname, $action)
+{
 	global $gCms;
 	$db = $gCms->db;
 
@@ -259,8 +261,8 @@ function get_site_preference($prefname) {
  *
  * @since 0.6
  */
-function set_site_preference($prefname, $value) {
-
+function set_site_preference($prefname, $value)
+{
 	$doinsert = true;
 
 	global $gCms;
@@ -269,14 +271,18 @@ function set_site_preference($prefname, $value) {
 	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	if ($result && $result->RowCount() > 0)
+	{
 		$doinsert = false;
 	}
 
-	if ($doinsert) {
+	if ($doinsert)
+	{
 		$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
 		$db->Execute($query);
-	} else {
+	}
+	else
+	{
 		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
 		$db->Execute($query);
 	}
@@ -287,8 +293,8 @@ function set_site_preference($prefname, $value) {
  *
  * @since 0.3
  */
-function get_preference($userid, $prefname) {
-
+function get_preference($userid, $prefname)
+{
 	$value = "";
 
 	global $gCms;
@@ -310,8 +316,8 @@ function get_preference($userid, $prefname) {
  *
  * @since 0.3
  */
-function set_preference($userid, $prefname, $value) {
-
+function set_preference($userid, $prefname, $value)
+{
 	$doinsert = true;
 
 	global $gCms;
@@ -320,14 +326,18 @@ function set_preference($userid, $prefname, $value) {
 	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	if ($result && $result->RowCount() > 0)
+	{
 		$doinsert = false;
 	}
 
-	if ($doinsert) {
+	if ($doinsert)
+	{
 		$query = "INSERT INTO ".cms_db_prefix()."userprefs (user_id, preference, value) VALUES ($userid, ".$db->qstr($prefname).", ".$db->qstr($value).")";
 		$db->Execute($query);
-	} else {
+	}
+	else
+	{
 		$query = "UPDATE ".cms_db_prefix()."userprefs SET value = ".$db->qstr($value)." WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 		$db->Execute($query);
 	}
@@ -338,8 +348,8 @@ function set_preference($userid, $prefname, $value) {
  *
  * @since 0.1
  */
-function get_stylesheet($template_id) {
-
+function get_stylesheet($template_id)
+{
 	$result = array();
 	$css = "";
 
@@ -414,14 +424,17 @@ function get_stylesheet($template_id) {
  *
  * @since 0.1
  */
-function & strip_slashes(&$str) {
-
-	if(is_array($str)) {
-		while(list($key, $val) = each($str)) {
+function & strip_slashes(&$str)
+{
+	if(is_array($str))
+	{
+		while(list($key, $val) = each($str))
+		{
 			$str[$key] = strip_slashes($val);
 		}
 	}
-	else {
+	else
+	{
 		$str = stripslashes($str);
 	}
 
@@ -476,7 +489,8 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 function textarea_highlight($use_javasyntax, $text, $name,
     $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding=''){
             
-    if ($use_javasyntax){
+    if ($use_javasyntax
+	)
         $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
         $text = ereg_replace("\r", "<CMSNewLine>", $text);
         $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
@@ -497,7 +511,9 @@ function textarea_highlight($use_javasyntax, $text, $name,
             </applet>
             <input type="hidden" name="'.$name.'" value="">';
        
-    }else{
+    }
+	else
+	{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
             class="'.$class_name.'"';
         if ($id<>"")
@@ -508,30 +524,11 @@ function textarea_highlight($use_javasyntax, $text, $name,
     return $output;
 }
 
-
-/*
- * Checks to see if password protected (frontend)
- * @return int - page number or -1 if not protected
- */
-function password_protected($page){
-	global $gCms;
-	$db = $gCms->db;
-
-	$query = "SELECT password_protected,page_id FROM ".cms_db_prefix()."pages WHERE page_id = ".$page." OR page_alias = ".$page;
-	$result = $db->Execute($query);
-
-	if ($result && $result->RowCount() > 0){
-		$row = $result->FetchRow();
-		if ($row['password_protected'] == 1)
-			return $row['page_id'];
-	}
-	return -1;
-}
-
 /*
  * Displays the login form (frontend)
  */
-function display_login_form(){
+function display_login_form()
+{
 	return '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
 	'Name: <input type="text" name="login_name"><br>'.
 	'Password: <input type="password" name="login_password"><br>'.
@@ -542,23 +539,28 @@ function display_login_form(){
 /*
  * check if the person has access to this file (frontend)
  */
-function check_access($page_id){
+function check_access($page_id)
+{
 	global $gCms;
 	$db = $gCms->db;
 	
-	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password'])) {
+	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password']))
+	{
 		return true;
 	}
 
-	if (isset($_POST['login_password']) && isset($_POST['login_name'])){
+	if (isset($_POST['login_password']) && isset($_POST['login_name']))
+	{
 		$login_password = trim($_POST['login_password']);
 		$login_name = trim($_POST['login_name']);
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'frontend_users WHERE page_id = '.$page_id;
 		$result = $db->Execute($query);
-		if ($result && $result->RowCount() > 0){
+		if ($result && $result->RowCount() > 0)
+		{
 			$query = 'SELECT user_id from '.cms_db_prefix().'users WHERE `username`=\''.$login_name.'\' AND `password`=\''.md5($login_password).'\'';
 			$result = $db->Execute($query);
-			if ($result && $result->RowCount() > 0) {
+			if ($result && $result->RowCount() > 0)
+			{
 				$_SESSION['login_name'] = $login_name;
 				$_SESSION['login_password'] = $login_password;
 				return true;
@@ -575,38 +577,53 @@ function check_access($page_id){
  * @param limit - the amount of items to list per page
  * @return a string containing links to all the pages (ex. next 1,2 prev)
  */
- function pagination($page, $totalrows, $limit){
-	
+ function pagination($page, $totalrows, $limit)
+ {
 	$page_string = "";
 	$from = ($page * $limit) - $limit;
 	$numofpages = $totalrows / $limit;
-	if ($numofpages > 1) {
-		if($page != 1){
+	if ($numofpages > 1)
+	{
+		if($page != 1)
+		{
 			$pageprev = $page-1;
 			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pageprev\">".lang('previous')."</a>&nbsp;";
-		}else{
+		}
+		else
+		{
 			$page_string .= lang('previous')." ";
 		}
-		for($i = 1; $i <= $numofpages; $i++){
-			if($i == $page){
+		for($i = 1; $i <= $numofpages; $i++)
+		{
+			if($i == $page)
+			{
 				$page_string .= $i."&nbsp;";
-			}else{
+			}
+			else
+			{
 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
 			}
 		}
 
-		if(($totalrows % $limit) != 0){
-			if($i == $page){
+		if(($totalrows % $limit) != 0)
+		{
+			if($i == $page)
+			{
 				$page_string .= $i."&nbsp;";
-			}else{
+			}
+			else
+			{
 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
 			}
 		}
 
-		if(($totalrows - ($limit * $page)) > 0){
+		if(($totalrows - ($limit * $page)) > 0)
+		{
 			$pagenext = $page+1;
 			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pagenext\">".lang('next')."</a>";
-		}else{
+		}
+		else
+		{
 			$page_string .= lang('next')." ";
 		}
 	}
@@ -619,21 +636,28 @@ function check_access($page_id){
  * Returns the page's URL as a string.
  * If the page cannot have a valid URL (e.g. content_type='seperator'), it returns an empty string.
  */
-function getURL($page) {
+function getURL($page)
+{
 	global $config;
 	$url = "";
 
 	# Fix URL where appropriate
-	if ($page->page_type == "link")	{
+	if ($page->page_type == "link")
+	{
 		$url = $page->page_url;
-	} elseif ($page->page_type != "sectionheader") {
-		if (isset($page->page_alias) && $page->page_alias != "") {
+	}
+	elseif ($page->page_type != "sectionheader")
+	{
+		if (isset($page->page_alias) && $page->page_alias != "")
+		{
 			if ($config["assume_mod_rewrite"]) 
 				$url = $config["root_url"]."/".$page->page_alias.".shtml";
 			else 
 				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$page->page_alias;
 			
-		} else {
+		}
+		else
+		{
 			if ($config["assume_mod_rewrite"])
 				$url = $config["root_url"]."/".$page->page_id.".shtml";
 			else 
