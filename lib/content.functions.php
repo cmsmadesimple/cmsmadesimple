@@ -46,10 +46,24 @@ class Smarty_CMS extends Smarty {
 		$this->plugins_dir = $config["root_path"].'/plugins/';
 
 		$this->compile_check = true;
-		$this->caching = true;
+		if ($config["debug"] == true)
+		{
+			$this->caching = false;
+		}
+		else
+		{
+			$this->caching = true;
+		}
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
-		$this->force_compile = false;
+		if ($config["debug"] == true)
+		{
+			$this->force_compile = true;
+		}
+		else
+		{
+			$this->force_compile = false;
+		}
 		$this->cache_plugins = false;
 
 		load_plugins(&$this);

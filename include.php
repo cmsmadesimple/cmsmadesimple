@@ -62,11 +62,28 @@ if (isset($_SESSION["cms_admin_username"]))
 #Setup db connection
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
+$sql_execs = 0;
+$sql_queries = "";
+function count_sql_execs($db, $sql, $inputarray)
+{
+	global $gCms;
+	global $sql_execs;
+	global $sql_queries;
+	if (!is_array($inputarray)) $sql_execs++;
+	else if (is_array(reset($inputarray))) $sql_execs += sizeof($inputarray);
+	else $sql_execs++;
+	if ($gCms->config["debug"] == true)
+	{
+		$sql_queries .= "<p>$sql</p>\n";
+	}
+}
+
 if (!isset($DONT_LOAD_DB)) {
 	$db = &ADONewConnection('mysql');
 	$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
+	$db->fnExecute = 'count_sql_execs';
 	$gCms->db = &$db;
 }
 

@@ -74,6 +74,9 @@ function cms_config_load($loadLocal = true)
 	#Maxium upload size (in bytes)?
 	$config["max_upload_size"] = 1000000;
 
+	#CMS Debug Mode?
+	$config["debug"] = false;
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())
