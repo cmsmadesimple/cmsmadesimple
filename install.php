@@ -56,7 +56,7 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <div class="headerish">
 
-<p>Install System</p>
+<h1>Install System</h1>
 
 </div>
 
@@ -127,7 +127,7 @@ function showPageOne() {
     echo "</table>\n";
   
     echo "<p>If all your tests show successful then it is time to setup your database.<br />\n";
-    echo "<a href=\"install.php?page=2\">Continue</a></p>\n";
+    echo "<div class=\"continue\"><a href=\"install.php?page=2\">Continue</a></div></p>\n";
 
 } ## showPageOne
 
@@ -231,7 +231,7 @@ function showPageThree($sqlloaded = 0) {
     echo '<input type=hidden name=prefix value="'.$_POST['prefix'].'">';
     echo "</td><td><input type=submit value=\"Write config\" /></td></tr>\n";
     echo "</table></form>\n";
-
+    echo "<div class=\"continue\"><a href=\"install.php?page=4\">Continue</a></div></p>\n";
     
 } ## showPageThree
 
