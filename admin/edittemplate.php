@@ -162,10 +162,9 @@ else
 <?php
 
 	}
-
 ?>
 
-<form method="post" action="edittemplate.php">
+<form method="post" action="edittemplate.php" onSubmit="document.getElementById('content').value=document.getElementById('syntaxHighlight').getText();">
 
 <div class="adminform">
 
@@ -179,7 +178,21 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php textarea_highlight($content, 'content', 'syntaxHighlight'); ?></td>
+		<td>
+            <!--if selected in user config...else textarea-->
+            <?php
+            $hcontent = ereg_replace("\r\n", "<CMSNewLine>", $content);
+            $hcontent = ereg_replace("\r", "<CMSNewLine>", $hcontent);
+            $hcontent = htmlentities(ereg_replace("\n", "<CMSNewLine>", $hcontent));
+            ?>
+            <applet id="syntaxHighlight" code="org.CMSMadeSimple.Syntax/Editor.class" archive="SyntaxHighlight.jar" width="100%">
+                <param name="content" value="<?php echo $hcontent; ?>">
+                <param name="syntaxType" value="HTML (Complex)">
+                <!-- possible values for syntaxType are: Java, C/C++, LaTeX, SQL, 
+                Java Properties, HTML (Simple), HTML (Complex) -->
+            </applet>
+            <input type="hidden" id="content" name="content" value="">
+       </td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
