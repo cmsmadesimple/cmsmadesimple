@@ -50,6 +50,12 @@ if ($access) {
 			$error .= "<li>".$gettext->gettext("No code entered!")."</li>";
 			$validinfo = false;
 		}
+		srand();
+		if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+		{
+			$error .= "<li>".$gettext->gettext("Invalid code entered!  Remember, this is the inside of a function.")."</li>";
+			$validinfo = false;
+		}
 
 		if ($validinfo) {
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
