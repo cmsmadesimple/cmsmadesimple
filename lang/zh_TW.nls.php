@@ -39,7 +39,7 @@ $nls['alias']['chinese'] = 'zh_TW' ;
 $nls['alias']['zh_TW.Big5'] = 'zh_TW' ;
 
 #Encoding of the language
-$nls['encoding']['zh_TW'] = "UTF-8";
+$nls['encoding']['zh_TW'] = "Big5";
 
 #Location of the file(s)
 $nls['file']['zh_TW'] = array();
