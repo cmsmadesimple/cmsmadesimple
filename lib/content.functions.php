@@ -457,48 +457,24 @@ function db_get_menu_items($params = array()) {
 			}
 			
 			# Fix URL where appropriate
-			if ($current_content->page_type == "sectionheader")
-			{
+			if ($current_content->page_type == "sectionheader") {
 				$current_content->page_title = $current_content->menu_text;
 				$current_content->url = "";
+			} else if ($current_content->page_type != "link") {
+				$current_content->page_url = "";	
+				$current_content->url = getURL($current_content);
+			} else {
+				$current_content->url = $current_content->page_url;
 			}
-			else if ($current_content->page_type != "link")
-			{
-				if (isset($current_content->page_alias) && $current_content->page_alias != "")
-				{
-					if ($config["assume_mod_rewrite"])
-					{
-						$current_content->url = $config["root_url"]."/".$current_content->page_alias.".shtml";
-					}
-					else
-					{
-						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
-					}
-				}
-					else
-					{
-						if ($config["assume_mod_rewrite"])
-						{
-							$current_content->url = $config["root_url"]."/".$current_content->page_id.".shtml";
-						}
-						else
-						{
-							$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;
-						}
-					}
-					$current_content->page_url = "";	
-				} else {
-					$current_content->url = $current_content->page_url;
-				}
-				# Special display for separator
-				if ($current_content->page_type == "separator") {
-					$current_content->page_title = "--------";
-				}
+			# Special display for separator
+			if ($current_content->page_type == "separator") {
+				$current_content->page_title = "--------";
+			}
 
-				# Now that all treatment have been done to $current_content, we push it in the array
-				$content_array[$line["page_id"]] = $current_content;
-				$parents[$line["page_id"]] = $line["parent_id"];
-			} ## while
+			# Now that all treatment have been done to $current_content, we push it in the array
+			$content_array[$line["page_id"]] = $current_content;
+			$parents[$line["page_id"]] = $line["parent_id"];
+		} ## while
 		
 			construct_tree_from_list($content_array, $parents, $params);
 		
