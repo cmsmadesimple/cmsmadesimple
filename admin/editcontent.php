@@ -151,7 +151,7 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		if (!$preview)
+		if ($preview)
 		{
 			$error = $contentobj->ValidateData();
 		}
@@ -303,9 +303,6 @@ if (count($tabs) > 0)
 }
 
 ?>
-
-
-<br style="clear: both;" />
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
 <input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />

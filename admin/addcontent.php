@@ -277,9 +277,12 @@ if (count($tabs) > 1)
 	}
 }
 
-?>
+if (count($tabs) > 0)
+{
+	echo '</div> <!-- end tabsystem -->';
+}
 
-</div> <!-- end tabsystem -->
+?>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
 	<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">

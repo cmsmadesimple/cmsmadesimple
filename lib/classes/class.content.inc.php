@@ -955,12 +955,12 @@ class ContentBase
 		{
 			if ($oneuser->id != $this->Owner())
 			{
-				echo '<option value="'.$oneuser->id.'"';
+				$text .= '<option value="'.$oneuser->id.'"';
 				if (in_array($oneuser->id, $addteditors))
 				{
-					echo ' selected="selected"';
+					$text .= ' selected="selected"';
 				}
-				echo '>'.$oneuser->username.'</option>';
+				$text .= '>'.$oneuser->username.'</option>';
 			}
 		}
 
