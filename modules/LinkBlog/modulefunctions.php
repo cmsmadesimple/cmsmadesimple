@@ -430,7 +430,9 @@ function showLinks($cms, $id, $params) {
                 echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewcomments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
                 echo "\n</div>\n";
                 echo "</div>\n";
-            }
+            } else {
+				break;
+			}
             $last_date = substr($row["create_date"],0,10);
         }
 
