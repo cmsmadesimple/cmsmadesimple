@@ -214,7 +214,7 @@ else
 			echo "<tr class=\"$curclass\">\n";
 			echo "<td>$key</td>\n";
 			if (!isset($dbm[$key])) { #Not installed, lets put up the install button
-				echo "<td>&nbsp</td>";
+				echo "<td>".$gCms->modules[$key]['Version']."</td>";
 				echo "<td>".$gettext->gettext("Not Installed")."</td>";
 				echo "<td>&nbsp;</td>";
 				echo "<td><a href=\"plugins.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
