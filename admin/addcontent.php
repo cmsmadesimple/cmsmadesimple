@@ -88,9 +88,11 @@ $templatepostback = "";
 if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
 	$htmlarea_flag = true;
 	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
-    $use_javasyntax = false;
-}else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
-    $use_javasyntax = true;
+}
+
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+	$use_javasyntax = true;
 }
 
 if ($access) {
@@ -263,7 +265,6 @@ else {
 		$data["title"] = $title;
 		$data["content"] = $content;
 		$data["template_id"] = $template_id;
-		$data["encoding"] = $encoding;
 
 		$query = "SELECT template_content, stylesheet FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
 		$result = $db->Execute($query);

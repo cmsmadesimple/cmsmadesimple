@@ -210,4 +210,5 @@ $lang['admin']['imagemanager'] = 'Gestionnaire d\'images';
 $lang['admin']['filemanager'] = 'Gestionnaire de fichiers';
 $lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
 $lang['admin']['encoding'] = 'Encoding'; //needs translation
+$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
 ?>

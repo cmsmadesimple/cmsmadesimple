@@ -93,7 +93,10 @@ if (!isset($charsetsent))
 			editor.registerPlugin(CharacterMap);
 <?php if ($config["use_Indite"] == true)	{ ?>	
 			editor.registerPlugin(Indite);
-<?php } ?>	
+<?php } 
+			$template_id = -1;
+			if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
+?>	
 			editor.config.pageStyle = editor.config.pageStyle+'<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}

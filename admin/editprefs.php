@@ -77,16 +77,18 @@ if ($error != "") {
 <applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
 </applet>
 
-<script language="JavaScript" type="text/javascript">
-    function syntaxSupport(){
-        try{
-            document.hiddenApplet.myMethod();
-        }catch(err){
-            alert("Sorry, syntax highighting is not supported in your browser.");
-            document.prefsform.use_javasyntax.selectedIndex = 1; 
-        }
-    }
-</script>
+<?php 
+echo '<script language="JavaScript" type="text/javascript">'.
+    'function syntaxSupport(){ '.
+        'try{'.
+            'document.hiddenApplet.myMethod();'.
+        '}catch(err){'.
+            'alert(\''.lang('nosyntax').'\');'.
+            'document.prefsform.use_javasyntax.selectedIndex = 0;'.
+        '}'.
+    '}'.
+'</script>';
+?>
 
 <table border="0" align="center">
 

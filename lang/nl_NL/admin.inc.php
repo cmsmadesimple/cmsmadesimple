@@ -210,4 +210,5 @@ $lang['admin']['imagemanager'] = 'Afbeeldingen';
 $lang['admin']['addhtmlblob'] = 'Nieuw Html Blok'; 
 $lang['admin']['edithtmlblob'] = 'Edit Html Blok'; 
 $lang['admin']['encoding'] = 'Encoding'; //needs translation
+$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
 ?>

@@ -200,7 +200,7 @@ $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
 $lang['admin']['directoryunder'] = 'directory under current level';
 $lang['admin']['directoryabove'] = 'directory above current level';
-$lang['admin']['usejavasyntax'] = 'Use syntax highlighting in text boxes (requires java)';
+$lang['admin']['usejavasyntax'] = 'Use syntax highlighting in text boxes (<a href="http://java.com/">requires java</a>)';
 $lang['admin']['nodefault'] = 'No Default Selected';
 $lang['admin']['blobexists'] = 'Html Blob name already exists';
 $lang['admin']['blobmanagement'] = 'HTML Blob Management';
@@ -210,4 +210,5 @@ $lang['admin']['edithtmlblob'] = 'Edit Html Blob';
 $lang['admin']['filemanager'] = 'Filemanager';
 $lang['admin']['imagemanager'] = 'Imagemanager';
 $lang['admin']['encoding'] = 'Encoding';
+$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
 ?>
