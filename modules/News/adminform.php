@@ -3,6 +3,7 @@
 $error = "";
 $hiddenfields = "";
 $db = $cms->db;
+$config = $cms->config;
 
 //$news_cat = "";
 $news_cat = "";
@@ -30,7 +31,7 @@ $end_date = "";
 if (isset($_POST[$id."end_date"])) $end_date = $_POST[$id."end_date"];
  
 if (isset($_POST[$id."cancelsubmit"])) {
-        redirect("moduleinterface.php?module=News");
+        redirect($config["root_url"]."/admin/moduleinterface.php?module=News");
         return;
 }
 //$hiddenfields .= "<input type=\"hidden\" name=\"".$id."news_cat\" value=\"$newscat\" />";
@@ -81,7 +82,7 @@ switch( $moduleaction )
     {
       $query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = ?";        $dbresult = $db->Execute($query, array((isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"")));
       cms_mapi_audit($cms, (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:""), "News", "Deleted News Item");
-       redirect("moduleinterface.php?module=News");
+       redirect($config["root_url"]."/admin/moduleinterface.php?module=News");
      } 
      break;
 
@@ -166,8 +167,8 @@ switch( $moduleaction )
         }
         $query = $querystart . $queryend . ")";
         $dbresult = $db->Execute($query, $params);
-        //cms_mapi_audit($cms, $new_id, "News", "Added News Item");
-        //redirect("moduleinterface.php?module=News");
+        cms_mapi_audit($cms, $new_id, "News", "Added News Item");
+        redirect($config["root_url"]."/admin/moduleinterface.php?module=News");
         return;
       }
     }
@@ -261,7 +262,7 @@ switch( $moduleaction )
         $dbresult = $db->Execute($query, $params);
         
         cms_mapi_audit($cms, $newsid, "News", "Edited News Item");
-        redirect("moduleinterface.php?module=News");
+        redirect($config["root_url"]."/admin/moduleinterface.php?module=News");
 	return;
       }
     }
