@@ -24,17 +24,29 @@ $user_id = -1;
 if (isset($_GET["user_id"])) {
 
 	$user_id = $_GET["user_id"];
+	$user_name = "";
 	$userid = get_userid();
 	$access = check_permission($config, $userid, 'Remove User');
 
 	if ($access) {
 		$db = new DB($config);
 
+		$query = "SELECT username FROM ".$config->db_prefix."users WHERE user_id = ".$user_id;
+		$result = $db->query($query);
+
+		if ($db->rowcount($result) > 0) {
+			$row = $db->getresulthash($result);
+			$user_name = $row[username];
+		}
+
+		$db->freeresult($result);
+
 		$query = "DELETE FROM ".$config->db_prefix."additional_users where user_id = $user_id";
 		$result = $db->query($query);
 		$query = "DELETE FROM ".$config->db_prefix."users where user_id = $user_id";
 		$result = $db->query($query);
 		$db->close();
+		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user_name, 'Deleted User');
 	}
 }
 

@@ -38,6 +38,7 @@ if ($_POST["username"] && $_POST["password"]) {
 		$_SESSION["cms_admin_username"] = $line["username"];	
 		$db->freeresult($result);
 		$db->close($link);
+		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, "", 'User Login');
 		redirect("index.php");
 		return;
 	}

@@ -140,6 +140,7 @@ if ($access) {
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
 			}
@@ -150,6 +151,7 @@ if ($access) {
 
 	}
 	else if ($page_id != -1 && !$preview && !$content_change) {
+
 
 		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
 		$result = $db->query($query);

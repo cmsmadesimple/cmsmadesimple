@@ -38,6 +38,16 @@ if ($access) {
 
 	$db = new DB($config);
 
+	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
+	$result = $db->query($query);
+
+	if ($db->rowcount($result) > 0) {
+		$row = $db->getresulthash($result);
+		$group_name = $row[group_name];
+	}
+
+	$db->freeresult($result);
+
 	if (isset($_POST["changeperm"])) {
 
 		$query = "DELETE FROM ".$config->db_prefix."group_perms WHERE group_id = " . $group_id;
@@ -51,20 +61,11 @@ if ($access) {
 		}
 
 		$db->close();
+		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Permissions');
 		redirect("listgroups.php");
 		return;
 
 	}
-
-	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
-	$result = $db->query($query);
-
-	if ($db->rowcount($result) > 0) {
-		$row = $db->getresulthash($result);
-		$group_name = $row[group_name];
-	}
-
-	$db->freeresult($result);
 }
 
 include_once("header.php");

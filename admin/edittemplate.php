@@ -71,6 +71,7 @@ if ($access) {
 
 			if ($db->rowsaffected()) {
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
 				redirect("listtemplates.php");
 				return;
 			}

@@ -51,7 +51,9 @@ if ($access) {
 			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".$db->escapestring($group)."', $active, now(), now())";
 			$result = $db->query($query);
 			if ($db->rowsaffected()) {
+				$new_group_id = $db->insertid();
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
 				redirect("listgroups.php");
 				return;
 			}

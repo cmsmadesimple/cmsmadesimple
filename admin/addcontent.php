@@ -117,6 +117,7 @@ if ($access) {
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_page_id, $title, 'Added Content');
 				redirect("listcontent.php");
 				return;
 			}

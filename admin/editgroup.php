@@ -60,6 +60,7 @@ if ($access) {
 
 			if ($db->rowsaffected()) {
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
 				redirect("listgroups.php");
 				return;
 			}

@@ -26,11 +26,22 @@ $section_id = -1;
 if (isset($_GET["section_id"])) {
 
 	$section_id = $_GET["section_id"];
+	$seciton_name = "";
 	$userid = get_userid();
 	$access = check_permission($config, $userid, 'Remove Section');
 
 	if ($access) {
 		$db = new DB($config);
+
+		$query = "SELECT section_name FROM ".$config->db_prefix."sections WHERE section_id = ".$section_id;
+		$result = $db->query($query);
+
+		if ($db->rowcount($result) > 0) {
+			$row = $db->getresulthash($result);
+			$section_name = $row[section_name];
+		}
+
+		$db->freeresult($result);
 
 		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
 		$result = $db->query($query);
@@ -46,6 +57,7 @@ if (isset($_GET["section_id"])) {
 			#This is so pages will not cache the menu changes
 			$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 			$db->query($query);
+			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $section_id, $section_name, 'Deleted Section');
 		}
 		$db->close();
 	}

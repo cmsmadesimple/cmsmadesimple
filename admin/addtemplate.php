@@ -65,7 +65,9 @@ if ($access) {
 			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".$db->escapestring($template)."', '".$db->escapestring($content)."', '".$db->escapestring($stylesheet)."', $active, now(), now());";
 			$result = $db->query($query);
 			if ($db->rowsaffected()) {
+				$new_template_id = $db->insertid();
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;
 			}

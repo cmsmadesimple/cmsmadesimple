@@ -61,7 +61,9 @@ if ($access) {
 			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES ('".$db->escapestring($section)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if ($db->rowsaffected()) {
+				$new_section_id = $db->insertid();
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_section_id, $section, 'Added Section');
 				redirect("listsections.php");
 				return;
 			}

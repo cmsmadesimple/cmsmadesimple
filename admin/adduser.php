@@ -64,7 +64,9 @@ if (isset($_POST["adduser"])) {
 		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES ('".$db->escapestring($user)."', '".md5($password)."', $active, now(), now())";
 		$result = $db->query($query);
 		if ($db->rowsaffected()) {
+			$new_user_id = $db->insertid();
 			$db->close();
+			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
 			redirect("listusers.php");
 			return;
 		}

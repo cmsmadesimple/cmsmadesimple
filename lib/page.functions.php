@@ -87,6 +87,17 @@ function check_authorship(&$config, $userid, $pageid) {
 	return $check;
 }
 
+function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
+
+	$db = new DB($config);
+
+	$query = "INSERT INTO ".$config->db_prefix."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, '".$db->escapestring($username)."', $itemid, '".$db->escapestring($itemname)."', '".$db->escapestring($action)."')";
+	$db->query($query);
+
+	$db->close();
+
+}
+
 function get_stylesheet(&$config, $templateid) {
 
 	$css = "";

@@ -62,6 +62,7 @@ if ($access) {
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $section_id, $section, 'Edited Section');
 				redirect("listsections.php");
 				return;
 			}

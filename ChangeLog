@@ -8,6 +8,7 @@ Version 0.3 -- Subversion
 * Added content types to content creation and editing (Fixes #5)
 * Added the link content type
 * Added proper 404 error for pages that are not found or active (Fixes #18)
+* Added admin logging and a simple report (Fixes #21)
 * Changed database abstraction so that it will be able to use other db
 backends in the future (Fixes #19)
 

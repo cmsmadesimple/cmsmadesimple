@@ -32,8 +32,9 @@ if (isset($_GET["page_id"])) {
 
 		$order = 1;
 		$section_id = 1;
+		$title = "";
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+		$query = "SELECT page_title, item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $db->query($query);
 		$row = $db->getresulthash($result);
 		if (isset($row["item_order"])) {
@@ -41,6 +42,9 @@ if (isset($_GET["page_id"])) {
 		}
 		if (isset($row["section_id"])) {
 			$section_id = $row["section_id"];	
+		}
+		if (isset($row["page_title"])) {
+			$title = $row["page_title"];	
 		}
 		$db->freeresult($result);
 		#Remove the page
@@ -54,6 +58,7 @@ if (isset($_GET["page_id"])) {
 		#This is so pages will not cache the menu changes
 		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 		$db->query($query);
+		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
 		$db->close();
 	}
 }

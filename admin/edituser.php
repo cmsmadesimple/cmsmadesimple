@@ -76,6 +76,7 @@ if ($access) {
 
 			if ($db->rowsaffected()) {
 				$db->close();
+				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
 				redirect("listusers.php");
 				return;
 			}

@@ -30,6 +30,21 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Creating adminlog table...";
+
+	$query  = "CREATE TABLE ".$config->db_prefix."adminlog (";
+	$query .= "  timestamp int(11),";
+	$query .= "  user_id int(11),";
+	$query .= "  username varchar(25),";
+	$query .= "  item_id int(11),";
+	$query .= "  item_name varchar(50),";
+	$query .= "  action varchar(255)";
+	$query .= ") TYPE=MyISAM";
+
+	$db->query($query);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating indexes...";
 
 	$query = "CREATE INDEX idx_template_id_modified_date ON ".$config->db_prefix."pages (template_id, modified_date)";
