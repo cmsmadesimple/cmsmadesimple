@@ -38,6 +38,15 @@ function comments_module_install($cms) {
 	#cms_mapi_create_permission($cms, 'Comments Admin', 'Comments Admin');
 }
 
+function comments_module_upgrade($cms, $oldversion, $newversion)
+{
+	$current_version = $oldversion;
+	if ($current_version == "1.0")
+	{
+		$current_version = "1.1";
+	}
+}
+
 function comments_module_uninstall($cms) {
 	//This function should uninstall database tables and generally cleanup.
 	$db = $cms->db;
@@ -54,20 +63,35 @@ function comments_module_execute($cms, $id, $params) {
 	//This is the entryway into the module.  All requests from CMS will come through here.
 	$db = $cms->db;
 	$query = "SELECT comment_id, comment_author, comment_data, comment_date FROM ".cms_db_prefix()."module_comments WHERE page_id = ".$cms->variables['page']." ORDER BY comment_date desc";
-	$dbresult = $db->Execute($query);
-	echo "<div class=\"modulecomments\">Page Comments";
-	if ($dbresult && $dbresult->RowCount()) {
-		while ($row = $dbresult->FetchRow()) {
-			echo "<div class=\"modulecommentsentry\">";
-			echo "<div class=\"modulecommentsentryheader\">Posted at ".date("F j, Y, g:i a", $db->UnixTimeStamp($row['comment_date']))." by ".$row['comment_author']."</div>";
-			echo "<div class=\"modulecommentsentrybody\">".$row["comment_data"]."</div>";
-			echo "</div>";
-		}
-	} else {
-		echo " - No comments posted - ";
+	if (isset($params["number"]))
+	{
+		$dbresult = $db->SelectLimit($query, $params["number"]);
 	}
-	echo "</div>";
+	$dbresult = $db->Execute($query);
+
+	$dateformat = "F j, Y, g:i a";
+	if (isset($params["dateformat"]))
+	{
+		$dateformat = $params["dateformat"];
+	}
+	
 	echo cms_mapi_create_user_link("Comments", $id, $cms->variables['page'], array('action'=>'addcomment'), "Add a comment");
+
+	if ($dbresult && $dbresult->RowCount()) {
+
+		echo "\n<div class=\"modulecomments\">\n";
+
+		while ($row = $dbresult->FetchRow()) {
+			echo "<div class=\"modulecommentsentry\">\n";
+			echo "<span class=\"modulecommentsentrydate\">".date($dateformat, $db->UnixTimeStamp($row['comment_date']))."</span>";
+			echo " - ";
+			echo "<span class=\"modulecommentsentryauthor\">".$row['comment_author']."</span><br/>\n";
+			echo "<span class=\"modulecommentsentrybody\">".$row["comment_data"]."</span>\n";
+			echo "</div>\n";
+		}
+
+		echo "</div>\n";
+	}
 }
 
 function comments_module_executeuser($cms, $id, $return_id, $params) {
@@ -158,7 +182,11 @@ function comments_module_help($cms)
 	<h3>How do I use it?</h3>
 	<p>Comments is just a tag module.  It's inserted into your page or template by using the cms_module tag.  Example syntax would be: <code>{cms_module module="comments"}</code></p>
 	<h3>What parameters are there?</h3>
-	<p>There are none.</p>
+	<p>
+	<ul>
+		<li><em>(optional)</em> number="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+	</ul>
 
 	<?php
 
@@ -170,7 +198,10 @@ function comments_module_about() {
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>
-	None
+	</p>
+	<p>
+	1.1 -- Sep 28, 2004<br />
+	Added <em>number</em> and <em>dateformat</em> options, plus little cosmetic changes.
 	</p>
 	<?php
 }

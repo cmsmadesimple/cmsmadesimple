@@ -203,9 +203,9 @@ function news_module_help($cms)
 	<h3>What parameters are there?</h3>
 	<p>
 	<ul>
-		<li><em>(optional)</em>number="5" - Maximum number of items to display -- leaving empty will show all items</li>
-		<li><em>(optional)</em>dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
-		<li><em>(optional)</em>makerssbutton="true" - Make a button to link to an RSS feed of the News items</li>
+		<li><em>(optional)</em> number="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+		<li><em>(optional)</em> makerssbutton="true" - Make a button to link to an RSS feed of the News items</li>
 	</ul>
 	</p>
 
