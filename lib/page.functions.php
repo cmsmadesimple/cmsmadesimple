@@ -407,7 +407,7 @@ function textarea_highlight($use_javasyntax, $text, $name,
         // Java Properties, HTML (Simple), HTML (Complex)
         
         $output = '<applet name="CMSSyntaxHighlight"
-            code="org.CMSMadeSimple.Syntax/Editor.class" 
+            code="org.CMSMadeSimple.Syntax.Editor.class" 
             archive="SyntaxHighlight.jar" width="100%">
                 <param name="content" value="'.$text.'">
                 <param name="syntaxType" value="'.$syntax_type.'">
