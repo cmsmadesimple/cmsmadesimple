@@ -25,6 +25,10 @@ function linkblog_module_about() {
     <p>Version: 1.3</p>
     <p>
     <b>Change History:</b><br/>
+    Version 1.4 - 2005.01.03
+    <ul>
+        <li>Added an rss feed</li>
+    </ul>
     Version 1.3 - 2004.12.20
     <ul>
         <li>Added admin functions for managing categories and links</li>
@@ -270,6 +274,7 @@ function linkblog_module_upgrade($cms, $oldversion, $newversion)
             $dict->ExecuteSQLArray($sqlarray);
             $update = "UPDATE ".cms_db_prefix()."module_linkblog SET status='1'";
             $db->Execute($update);
+        case "1.3":
     } ## switch
 
 } ## linkblog_module_upgrade

@@ -135,6 +135,7 @@ function linkblog_module_help($cms) {
 	<h3>What parameters are there?</h3>
 	<p>allow_search - set allow_search="true" to show a search form - off by default</p>
 	<p>category - set category="NAME" where NAME is a category name.  Only links in that category will be visible.  This includes the links generated to previously posted links.</p>
+	<p>make_rss_button - creates an image link to the rss feed for the linkblog.  The title for the rss feed is set by a config.php option: $config["linkblog_url"]</p>
 	<h3>How do I style the LinkBlog pages?</h3>
 	<p>Here is some sample CSS you can throw in your template to make your results <i>slightly</i> prettier.<br />
 	<pre>

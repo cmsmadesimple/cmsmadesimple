@@ -40,7 +40,16 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
         $category = $params['category'];
     }
 
-	if ($allow_search != '') {
+	if ($params[$id.'type'] == "rss") {
+
+		header('Content-type: text/xml');
+		echo "<?xml version='1.0'?>\n";
+		echo "<rss version='2.0'>\n";
+		echo "	<channel>\n";
+		echo "	<title>Linkblog RSS Feed</title>\n";
+		echo "	<link>".$cms->config["linkblog_url"]."</link>\n";
+		echo "	<description>Current linkblog entries</description>\n";
+	} else if ($allow_search != '') {
 		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
 		?>
 		<table>
@@ -72,8 +81,15 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 	$query .= " a.status = '1'";
     $query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
     $dbresult = $db->Execute($query);
-    echo "<div class=\"modulelinkblogtitle\">Posted sites</div>\n";
-    echo "<div class=\"modulelinkblog\">\n";
+
+	if ($params[$id.'type'] != "rss") {
+		echo "<div class=\"modulelinkblogtitle\">Posted sites";
+		if (isset($params["make_rss_button"])) {
+			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date, 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
+		} ## if
+		echo "</div>\n";
+		echo "<div class=\"modulelinkblog\">\n";
+	} ## if
 
     if ($dbresult && $dbresult->RowCount()) {
         $last_date = "";
@@ -81,26 +97,41 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
             #echo "last_date: ($last_date) create_date: ".$row["create_date"].")<br/>";
             if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
-                echo "<div class=\"modulelinkblogentry\">\n";
-                if ($last_date == "") {
-					echo "<div class=\"modulelinkblogentrydate\">\n";
-                    echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+				if ($params[$id.'type'] == "rss") {
+					echo "	<item>\n";
+					echo "		<title>".$row["linkblog_title"]."</title>\n";
+					echo "		<link>".$row["linkblog_url"]."</link>\n";
+					## this is just redundant echo "		<description>".$row["linkblog_title"]."</description>\n";
+					## needs to be an email address echo "		<author>".$row["linkblog_author"]."</author>\n";
+					echo "		<pubDate>".date("D, j M Y h:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
+					echo "	</item>\n";
+				} else {
+					echo "<div class=\"modulelinkblogentry\">\n";
+					if ($last_date == "") {
+						echo "<div class=\"modulelinkblogentrydate\">\n";
+						echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+						echo "</div>\n";
+					}
+					echo "<div class=\"modulelinkblogentrytime\">\n";
+					echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
+					echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
 					echo "</div>\n";
-                }
-				echo "<div class=\"modulelinkblogentrytime\">\n";
-                echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
-                echo "</div>\n";
 
-                echo "<div class=\"modulelinkblogentrycommentlink\">\n";
-                echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
-                echo "\n</div>\n";
-                echo "</div>\n";
+					echo "<div class=\"modulelinkblogentrycommentlink\">\n";
+					echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
+					echo "\n</div>\n";
+					echo "</div>\n";
+				} ## if
             } else {
                 break;
             }
             $last_date = substr($row["create_date"],0,10);
         }
+		if ($params[$id.'type'] == "rss") {
+			echo "	</channel>\n";
+			echo "</rss>\n";
+			return;
+		} ## if
 
         // show a list of the last 5 days with links
         $query = "SELECT create_date from ".cms_db_prefix()."module_linkblog GROUP BY DATE_FORMAT(create_date, '%d %m %Y') ORDER BY create_date DESC LIMIT 5";
@@ -168,10 +199,6 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
     if (isset($params[$id."comment"])) {
         $comment = $params[$id."comment"];
     }
-
-##     if ($action == "viewoldlinks") {
-##         linkblog_module_showLinks($cms, $id, $params, $return_id);
-##     }
 
     switch ($action) {
     ## run this when a new link is submitted
@@ -388,6 +415,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 		echo "No appropriate action found ($action)<br />\n";
     } //switch
 }
+
 
 # vim:ts=4 sw=4 noet
 ?>
