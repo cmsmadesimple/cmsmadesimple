@@ -1,6 +1,6 @@
 <?php
 /*
-V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.54 5 Nov 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -179,7 +179,6 @@ class ADODB_mysqli extends ADOConnection {
 	
 	function _insertid()
 	{
-//	  $this->_connectionID = $this->mysqli_resolve_link($this->_connectionID);
 	  $result = @mysqli_insert_id($this->_connectionID);
 	  if ($result == -1){
 	      if ($this->debug) ADOConnection::outp("mysqli_insert_id() failed : "  . $this->ErrorMsg());
@@ -190,7 +189,6 @@ class ADODB_mysqli extends ADOConnection {
 	// Only works for INSERT, UPDATE and DELETE query's
 	function _affectedrows()
 	{
-	//  $this->_connectionID = $this->mysqli_resolve_link($this->_connectionID);
 	  $result =  @mysqli_affected_rows($this->_connectionID);
 	  if ($result == -1) {
 	      if ($this->debug) ADOConnection::outp("mysqli_affected_rows() failed : "  . $this->ErrorMsg());
@@ -238,62 +236,62 @@ class ADODB_mysqli extends ADOConnection {
 	}
 	
   	function &MetaDatabases()
-	  {
-	    $query = "SHOW DATABASES";
-	    $ret =& $this->Execute($query);
+	{
+		$query = "SHOW DATABASES";
+		$ret =& $this->Execute($query);
 		return $ret;
-	  }
+	}
 
 	  
 	function &MetaIndexes ($table, $primary = FALSE)
 	{
-	        // save old fetch mode
-	        global $ADODB_FETCH_MODE;
-	        
-	        $save = $ADODB_FETCH_MODE;
-	        $ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-	        if ($this->fetchMode !== FALSE) {
-	               $savem = $this->SetFetchMode(FALSE);
-	        }
-	        
-	        // get index details
-	        $rs = $this->Execute(sprintf('SHOW INDEXES FROM %s',$table));
-	        
-	        // restore fetchmode
-	        if (isset($savem)) {
-	                $this->SetFetchMode($savem);
-	        }
-	        $ADODB_FETCH_MODE = $save;
-	        
-	        if (!is_object($rs)) {
-	                return FALSE;
-	        }
-	        
-	        $indexes = array ();
-	        
-	        // parse index data into array
-	        while ($row = $rs->FetchRow()) {
-	                if ($primary == FALSE AND $row[2] == 'PRIMARY') {
-	                        continue;
-	                }
-	                
-	                if (!isset($indexes[$row[2]])) {
-	                        $indexes[$row[2]] = array(
-	                                'unique' => ($row[1] == 0),
-	                                'columns' => array()
-	                        );
-	                }
-	                
-	                $indexes[$row[2]]['columns'][$row[3] - 1] = $row[4];
-	        }
-	        
-	        // sort columns by order in the index
-	        foreach ( array_keys ($indexes) as $index )
-	        {
-	                ksort ($indexes[$index]['columns']);
-	        }
-	        
-	        return $indexes;
+		// save old fetch mode
+		global $ADODB_FETCH_MODE;
+		
+		$save = $ADODB_FETCH_MODE;
+		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
+		if ($this->fetchMode !== FALSE) {
+		       $savem = $this->SetFetchMode(FALSE);
+		}
+		
+		// get index details
+		$rs = $this->Execute(sprintf('SHOW INDEXES FROM %s',$table));
+		
+		// restore fetchmode
+		if (isset($savem)) {
+		        $this->SetFetchMode($savem);
+		}
+		$ADODB_FETCH_MODE = $save;
+		
+		if (!is_object($rs)) {
+		        return FALSE;
+		}
+		
+		$indexes = array ();
+		
+		// parse index data into array
+		while ($row = $rs->FetchRow()) {
+		        if ($primary == FALSE AND $row[2] == 'PRIMARY') {
+		                continue;
+		        }
+		        
+		        if (!isset($indexes[$row[2]])) {
+		                $indexes[$row[2]] = array(
+		                        'unique' => ($row[1] == 0),
+		                        'columns' => array()
+		                );
+		        }
+		        
+		        $indexes[$row[2]]['columns'][$row[3] - 1] = $row[4];
+		}
+		
+		// sort columns by order in the index
+		foreach ( array_keys ($indexes) as $index )
+		{
+		        ksort ($indexes[$index]['columns']);
+		}
+		
+		return $indexes;
 	}
 
 	

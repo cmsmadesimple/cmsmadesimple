@@ -7,7 +7,7 @@ global $ADODB_INCLUDED_LIB;
 $ADODB_INCLUDED_LIB = 1;
 
 /* 
- @version V4.53 14 Sept 2004 (c) 2000-2004 John Lim (jlim\@natsoft.com.my). All rights reserved.
+ @version V4.54 5 Nov 2004 (c) 2000-2004 John Lim (jlim\@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -22,6 +22,7 @@ $ADODB_INCLUDED_LIB = 1;
 function _array_change_key_case($an_array)
 {
 	if (is_array($an_array)) {
+		$new_array = array();
 		foreach($an_array as $key=>$value)
 			$new_array[strtoupper($key)] = $value;
 
@@ -114,12 +115,12 @@ function _adodb_getmenu(&$zthis, $name,$defstr='',$blank1stItem=true,$multiple=f
 
 	if ($multiple or is_array($defstr)) {
 		if ($size==0) $size=5;
-		$attr = " multiple size=$size";
+		$attr = ' multiple size="'.$size.'"';
 		if (!strpos($name,'[]')) $name .= '[]';
-	} else if ($size) $attr = " size=$size";
+	} else if ($size) $attr = ' size="'.$size.'"';
 	else $attr ='';
-
-	$s = "<select name=\"$name\"$attr $selectAttr>";
+	
+	$s = '<select name="'.$name.'"'.$attr.' '.$selectAttr.'>';
 	if ($blank1stItem) 
 		if (is_string($blank1stItem))  {
 			$barr = explode(':',$blank1stItem);

@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.54 5 Nov 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -22,13 +22,14 @@ if (!defined('ADODB_DIR')) die();
 
 function Lens_ParseTest()
 {
-$str = "`zcol ACOL` NUMBER(32,2) DEFAULT 'The \"cow\" (and Jim''s dog) jumps over the moon' PRIMARY, INTI INT AUTO DEFAULT 0";
+$str = "`zcol ACOL` NUMBER(32,2) DEFAULT 'The \"cow\" (and Jim''s dog) jumps over the moon' PRIMARY, INTI INT AUTO DEFAULT 0, zcol2\"afs ds";
 print "<p>$str</p>";
 $a= Lens_ParseArgs($str);
 print "<pre>";
 print_r($a);
 print "</pre>";
 }
+
 
 if (!function_exists('ctype_alnum')) {
 	function ctype_alnum($text) {
@@ -153,6 +154,7 @@ function Lens_ParseArgs($args,$endstmtchar=',',$tokenchars='_.-')
 		}
 		$pos += 1;
 	}
+	if ($intoken) $tokens[$stmtno][] = implode('',$tokarr);
 	
 	return $tokens;
 }

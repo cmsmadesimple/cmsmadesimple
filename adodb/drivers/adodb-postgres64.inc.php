@@ -1,6 +1,6 @@
 <?php
 /*
- V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V4.54 5 Nov 2004  (c) 2000-2004 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -128,12 +128,12 @@ WHERE relkind = 'r' AND (c.relname='%s' or c.relname = lower('%s'))
 		$this->version = $arr;
 		return $arr;
 	}
-/*
+
 	function IfNull( $field, $ifNull ) 
 	{
-		return " NULLIF($field, $ifNull) "; // if PGSQL
+		return " coalesce($field, $ifNull) "; 
 	}
-*/
+
 	// get the last id - never tested
 	function pg_insert_id($tablename,$fieldname)
 	{
@@ -200,12 +200,26 @@ a different OID if a database must be reloaded. */
 	}
 	
 	function &MetaTables($ttype=false,$showSchema=false,$mask=false) 
-	{	
+	{
+		$info = $this->ServerInfo();
+		if ($info['version'] >= 7.3) {
+	    	$this->metaTablesSQL = "select tablename,'T' from pg_tables where tablename not like 'pg\_%'
+			  and schemaname  not in ( 'pg_catalog','information_schema')
+	union 
+        select viewname,'V' from pg_views where viewname not like 'pg\_%'  and schemaname  not in ( 'pg_catalog','information_schema') ";
+		}
 		if ($mask) {
 			$save = $this->metaTablesSQL;
 			$mask = $this->qstr(strtolower($mask));
-			$this->metaTablesSQL = "
-select tablename,'T' from pg_tables where tablename like $mask union 
+			if ($info['version']>=7.3)
+				$this->metaTablesSQL = "
+select tablename,'T' from pg_tables where tablename like $mask and schemaname not in ( 'pg_catalog','information_schema')  
+ union 
+select viewname,'V' from pg_views where viewname like $mask and schemaname  not in ( 'pg_catalog','information_schema')  ";
+			else
+				$this->metaTablesSQL = "
+select tablename,'T' from pg_tables where tablename like $mask 
+ union 
 select viewname,'V' from pg_views where viewname like $mask";
 		}
 		$ret =& ADOConnection::MetaTables($ttype,$showSchema);
@@ -333,6 +347,15 @@ select viewname,'V' from pg_views where viewname like $mask";
 		return $rez; 
 	} 
 	
+	/*
+		Hueristic - not guaranteed to work.
+	*/
+	function GuessOID($oid)
+	{
+		if (strlen($oid)>16) return false;
+		return is_numeric($oid);
+	}
+	
 	/* 
 	* If an OID is detected, then we use pg_lo_* to open the oid file and read the
 	* real blob from the db using the oid supplied as a parameter. If you are storing
@@ -341,20 +364,24 @@ select viewname,'V' from pg_views where viewname like $mask";
 	* contributed by Mattia Rossi mattia@technologist.com
 	*
 	* see http://www.postgresql.org/idocs/index.php?largeobjects.html
+	*
+	* Since adodb 4.54, this returns the blob, instead of sending it to stdout. Also
+	* added maxsize parameter, which defaults to $db->maxblobsize if not defined.
 	*/ 
-	function BlobDecode( $blob) 
-	{ 
-		if (strlen($blob) > 24) return $blob;
+	function BlobDecode($blob,$maxsize=false,$hastrans=true) 
+	{
+		if (!$this->GuessOID($blob)) return $blob;
 		
-		@pg_exec($this->_connectionID,"begin"); 
+		if ($hastrans) @pg_exec($this->_connectionID,"begin"); 
 		$fd = @pg_lo_open($this->_connectionID,$blob,"r");
 		if ($fd === false) {
-			@pg_exec($this->_connectionID,"commit");
+			if ($hastrans) @pg_exec($this->_connectionID,"commit");
 			return $blob;
 		}
-		$realblob = @pg_loreadall($fd); 
+		if (!$maxsize) $maxsize = $this->maxblobsize;
+		$realblob = @pg_loread($fd,$maxsize); 
 		@pg_loclose($fd); 
-		@pg_exec($this->_connectionID,"commit"); 
+		if ($hastrans) @pg_exec($this->_connectionID,"commit"); 
 		return $realblob;
 	} 
 	
@@ -410,8 +437,10 @@ select viewname,'V' from pg_views where viewname like $mask";
 		if (isset($savem)) $this->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
 		
-		if ($rs === false) return false;
-		
+		if ($rs === false) {
+			$false = false;
+			return $false;
+		}
 		if (!empty($this->metaKeySQL)) {
 			// If we want the primary keys, we have to issue a separate query
 			// Of course, a modified version of the metaColumnsSQL query using a 
@@ -464,7 +493,10 @@ select viewname,'V' from pg_views where viewname like $mask";
 			$fld->max_length = $rs->fields[2];
 			if ($fld->max_length <= 0) $fld->max_length = $rs->fields[3]-4;
 			if ($fld->max_length <= 0) $fld->max_length = -1;
-			
+			if ($fld->type == 'numeric') {
+				$fld->scale = $fld->max_length & 0xFFFF;
+				$fld->max_length >>= 16;
+			}
 			// dannym
 			// 5 hasdefault; 6 num-of-column
 			$fld->has_default = ($rs->fields[5] == 't');
@@ -538,7 +570,8 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
                 $ADODB_FETCH_MODE = $save;
 
                 if (!is_object($rs)) {
-                	return FALSE;
+                	$false = false;
+					return $false;
                 }
 				
                 $col_names = $this->MetaColumnNames($table,true);

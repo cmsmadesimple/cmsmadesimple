@@ -14,7 +14,7 @@
 /**
 	\mainpage 	
 	
-	 @version V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim\@natsoft.com.my). All rights reserved.
+	 @version V4.54 5 Nov 2004  (c) 2000-2004 John Lim (jlim#natsoft.com.my). All rights reserved.
 
 	Released under both BSD license and Lesser GPL library license. You can choose which license
 	you prefer.
@@ -172,7 +172,7 @@
 		/**
 		 * ADODB version as a string.
 		 */
-		$ADODB_vers = 'V4.53 14 Sept 2004  (c) 2000-2004 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
+		$ADODB_vers = 'V4.54 5 Nov 2004  (c) 2000-2004 John Lim (jlim#natsoft.com.my). All rights reserved. Released BSD & LGPL.';
 	
 		/**
 		 * Determines whether recordset->RecordCount() is used. 
@@ -240,7 +240,7 @@
 	var $user = ''; 			/// The username which is used to connect to the database server. 
 	var $password = ''; 		/// Password for the username. For security, we no longer store it.
 	var $debug = false; 		/// if set to true will output sql statements
-	var $maxblobsize = 256000; 	/// maximum size of blobs or large text fields -- some databases die otherwise like foxpro
+	var $maxblobsize = 262144; 	/// maximum size of blobs or large text fields (262144 = 256K)-- some db's die otherwise like foxpro
 	var $concat_operator = '+'; /// default concat operator -- change to || for Oracle/Interbase	
 	var $substr = 'substr';		/// substring operator
 	var $length = 'length';		/// string length operator
@@ -252,7 +252,7 @@
 	var $false = '0'; 			/// string that represents FALSE for a database
 	var $replaceQuote = "\\'"; 	/// string to use to replace quotes
 	var $nameQuote = '"';		/// string to use to quote identifiers and names
-	var $charSet=false; 		/// character set to use - only for interbase
+	var $charSet=false; 		/// character set to use - only for interbase, postgres and oci8
 	var $metaDatabasesSQL = '';
 	var $metaTablesSQL = '';
 	var $uniqueOrderBy = false; /// All order by columns have to be unique
@@ -800,7 +800,7 @@
 					$sql = ''; $i = 0;
 					foreach($arr as $v) {
 						$sql .= $sqlarr[$i];
-						// from Ron Baldwin <ron.baldwin@sourceprose.com>
+						// from Ron Baldwin <ron.baldwin#sourceprose.com>
 						// Only quote string types	
 						if (gettype($v) == 'string')
 							$sql .= $this->qstr($v);
@@ -858,8 +858,8 @@
 			if ($fn) {
 				$fn($this->databaseType,'EXECUTE',$this->ErrorNo(),$this->ErrorMsg(),$sql,$inputarr,$this);
 			} 
-				
-			return false;
+			$false = false;
+			return $false;
 		} 
 		
 		if ($this->_queryID === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
@@ -948,7 +948,7 @@
 
 
 	/**
-	 * Portable Insert ID. Pablo Roca <pabloroca@mvps.org>
+	 * Portable Insert ID. Pablo Roca <pabloroca#mvps.org>
 	 *
 	 * @return  the last inserted ID. All databases support this. But aware possible
 	 * problems in multiuser environments. Heavy test this before deploying.
@@ -1155,8 +1155,10 @@
 	*/
 	function &_rs2rs(&$rs,$nrows=-1,$offset=-1,$close=true)
 	{
-		if (! $rs) return false;
-		
+		if (! $rs) {
+			$false = false;
+			return $false;
+		}
 		$dbtype = $rs->databaseType;
 		if (!$dbtype) {
 			$rs = &$rs;  // required to prevent crashing in 4.2.1, but does not happen in 4.3.1 -- why ?
@@ -1199,8 +1201,10 @@
 	function &GetAssoc($sql, $inputarr=false,$force_array = false, $first2cols = false)
 	{
 		$rs =& $this->Execute($sql, $inputarr);
-		if (!$rs) return false;
-		
+		if (!$rs) {
+			$false = false;
+			return $false;
+		}
 		$arr =& $rs->GetAssoc($force_array,$first2cols);
 		return $arr;
 	}
@@ -1212,8 +1216,10 @@
 			$force_array = $inputarr;
 		}
 		$rs =& $this->CacheExecute($secs2cache, $sql, $inputarr);
-		if (!$rs) return false;
-		
+		if (!$rs) {
+			$false = false;
+			return $false;
+		}
 		$arr =& $rs->GetAssoc($force_array,$first2cols);
 		return $arr;
 	}
@@ -1325,7 +1331,10 @@
 		$ADODB_COUNTRECS = $savec;
 		if (!$rs) 
 			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
-			else return false;
+			else {
+				$false = false;
+				return $false;
+			}
 		$arr =& $rs->GetArray();
 		$rs->Close();
 		return $arr;
@@ -1347,8 +1356,10 @@
 		
 		if (!$rs) 
 			if (defined('ADODB_PEAR')) return ADODB_PEAR_Error();
-			else return false;
-		
+			else {
+				$false = false;
+				return $false;
+			}
 		$arr =& $rs->GetArray();
 		$rs->Close();
 		return $arr;
@@ -1378,7 +1389,8 @@
 			return $arr;
 		}
 		
-		return false;
+		$false = false;
+		return $false;
 	}
 	
 	function &CacheGetRow($secs2cache,$sql=false,$inputarr=false)
@@ -1390,7 +1402,8 @@
 			$rs->Close();
 			return $arr;
 		}
-		return false;
+		$false = false;
+		return $false;
 	}
 	
 	/**
@@ -1865,8 +1878,11 @@
 	{
 	global $ADODB_FETCH_MODE;
 	
-		if ($mask) return false;
 		
+		$false = false;
+		if ($mask) {
+			return $false;
+		}
 		if ($this->metaTablesSQL) {
 			// complicated state saving by the need for backward compat
 			$save = $ADODB_FETCH_MODE; 
@@ -1878,7 +1894,7 @@
 			if (isset($savem)) $this->SetFetchMode($savem);
 			$ADODB_FETCH_MODE = $save; 
 			
-			if ($rs === false) return false;
+			if ($rs === false) return $false;
 			$arr =& $rs->GetArray();
 			$arr2 = array();
 			
@@ -1899,7 +1915,7 @@
 			$rs->Close();
 			return $arr2;
 		}
-		return false;
+		return $false;
 	}
 	
 	
@@ -1925,6 +1941,8 @@
 	{
 	global $ADODB_FETCH_MODE;
 		
+		$false = false;
+		
 		if (!empty($this->metaColumnsSQL)) {
 		
 			$schema = false;
@@ -1936,7 +1954,7 @@
 			$rs = $this->Execute(sprintf($this->metaColumnsSQL,($upper)?strtoupper($table):$table));
 			if (isset($savem)) $this->SetFetchMode($savem);
 			$ADODB_FETCH_MODE = $save;
-			if ($rs === false) return false;
+			if ($rs === false || $rs->EOF) return $false;
 
 			$retarr = array();
 			while (!$rs->EOF) { //print_r($rs->fields);
@@ -1957,7 +1975,7 @@
 			$rs->Close();
 			return $retarr;	
 		}
-		return false;
+		return $false;
 	}
 	
     /**
@@ -1969,7 +1987,8 @@
       */
      function &MetaIndexes($table, $primary = false, $owner = false)
      {
-             return FALSE;
+	 		$false = false;
+            return false;
      }
 
 	/**
@@ -1981,8 +2000,10 @@
 	function &MetaColumnNames($table, $numIndexes=false) 
 	{
 		$objarr =& $this->MetaColumns($table);
-		if (!is_array($objarr)) return false;
-		
+		if (!is_array($objarr)) {
+			$false = false;
+			return $false;
+		}
 		$arr = array();
 		if ($numIndexes) {
 			$i = 0;
@@ -2062,6 +2083,7 @@
 	function UnixDate($v)
 	{
 		if (is_object($v)) {
+		// odbtp support
 		//( [year] => 2004 [month] => 9 [day] => 4 [hour] => 12 [minute] => 44 [second] => 8 [fraction] => 0 )
 			return adodb_mktime($v->hour,$v->minute,$v->second,$v->month,$v->day, $v->year);
 		}
@@ -2085,6 +2107,7 @@
 	function UnixTimeStamp($v)
 	{
 		if (is_object($v)) {
+		// odbtp support
 		//( [year] => 2004 [month] => 9 [day] => 4 [hour] => 12 [minute] => 44 [second] => 8 [fraction] => 0 )
 			return adodb_mktime($v->hour,$v->minute,$v->second,$v->month,$v->day, $v->year);
 		}
@@ -2528,7 +2551,8 @@
 	
 		$cols = $this->_numOfFields;
 		if ($cols < 2) {
-			return false;
+			$false = false;
+			return $false;
 		}
 		$numIndex = isset($this->fields[0]);
 		$results = array();
@@ -2691,7 +2715,10 @@
 	*/
 	function &FetchRow()
 	{
-		if ($this->EOF) return false;
+		if ($this->EOF) {
+			$false = false;
+			return $false;
+		}
 		$arr = $this->fields;
 		$this->_currentRow++;
 		if (!$this->_fetch()) $this->EOF = true;
@@ -3352,7 +3379,8 @@
 		/* Use associative array to get fields array */
 		function Fields($colname)
 		{
-			if ($this->fetchMode & ADODB_FETCH_ASSOC) {
+			$mode = isset($this->adodbFetchMode) ? $this->adodbFetchMode : $this->fetchMode;
+			if ($mode & ADODB_FETCH_ASSOC) {
 				if (!isset($this->fields[$colname])) $colname = strtolower($colname);
 				return $this->fields[$colname];
 			}
@@ -3495,7 +3523,7 @@
 		
 		if (!defined('ADODB_ASSOC_CASE')) define('ADODB_ASSOC_CASE',2);
 		$errorfn = (defined('ADODB_ERROR_HANDLER')) ? ADODB_ERROR_HANDLER : false;
-		
+		$false = false;
 		if (strpos($db,'://')) {
 			$origdsn = $db;
 			$dsna = @parse_url($db);
@@ -3503,11 +3531,11 @@
 				// special handling of oracle, which might not have host
 				$db = str_replace('@/','@adodb-fakehost/',$db);
 				$dsna = parse_url($db);
-				if (!$dsna) return false;
+				if (!$dsna) return $false;
 				$dsna['host'] = '';
 			}
 			$db = @$dsna['scheme'];
-			if (!$db) return false;
+			if (!$db) return $false;
 			$dsna['host'] = isset($dsna['host']) ? rawurldecode($dsna['host']) : '';
 			$dsna['user'] = isset($dsna['user']) ? rawurldecode($dsna['user']) : '';
 			$dsna['pass'] = isset($dsna['pass']) ? rawurldecode($dsna['pass']) : '';
@@ -3552,13 +3580,13 @@
 				} else
 					 ADOConnection::outp( "<p>ADONewConnection: Unable to load database driver '$db'</p>",false);
 					
-				return false;
+				return $false;
 			}
 			
 			$cls = 'ADODB_'.$db;
 			if (!class_exists($cls)) {
 				adodb_backtrace();
-				return false;
+				return $false;
 			}
 			
 			$obj =& new $cls();
@@ -3595,7 +3623,7 @@
 				else
 					$ok = $obj->PConnect($dsna['host'], $dsna['user'], $dsna['pass'], $dsna['path']);
 					
-				if (!$ok) return false;
+				if (!$ok) return $false;
 			}
 		}
 		return $obj;
@@ -3629,12 +3657,13 @@
 	
 	function &NewPerfMonitor(&$conn)
 	{
+		$false = false;
 		$drivername = _adodb_getdriver($conn->dataProvider,$conn->databaseType,true);
-		if (!$drivername || $drivername == 'generic') return false;
+		if (!$drivername || $drivername == 'generic') return $false;
 		include_once(ADODB_DIR.'/adodb-perf.inc.php');
 		@include_once(ADODB_DIR."/perf/perf-$drivername.inc.php");
 		$class = "Perf_$drivername";
-		if (!class_exists($class)) return false;
+		if (!class_exists($class)) return $false;
 		$perf =& new $class($conn);
 		
 		return $perf;
@@ -3642,6 +3671,7 @@
 	
 	function &NewDataDictionary(&$conn,$drivername=false)
 	{
+		$false = false;
 		if (!$drivername) $drivername = _adodb_getdriver($conn->dataProvider,$conn->databaseType);
 
 		include_once(ADODB_DIR.'/adodb-lib.inc.php');
@@ -3650,7 +3680,7 @@
 
 		if (!file_exists($path)) {
 			ADOConnection::outp("Database driver '$path' not available");
-			return false;
+			return $false;
 		}
 		include_once($path);
 		$class = "ADODB2_$drivername";
