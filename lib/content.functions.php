@@ -401,12 +401,12 @@ function db_get_menu_items($style) {
  *
  * @since 0.5
  */
-function construct_tree_from_list($content_array, $parents, $start_element = 0, $number_of_levels = 10, $hierarchy_level = 0, $total_hierarchy = "") {
+function construct_tree_from_list(&$content_array, &$parents, $start_element = 0, $number_of_levels = 10, $hierarchy_level = 0, $total_hierarchy = "") {
 
 	if ($number_of_levels >= 0)
 	{
 		# the current element
-		$current = $content_array[$start_element];
+		$current = &$content_array[$start_element];
 
 		# this array contains the child of our current element
 		$childs = array_keys($parents, $start_element);
