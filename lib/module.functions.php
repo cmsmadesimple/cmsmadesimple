@@ -940,7 +940,7 @@ function cms_mapi_call_intramodule_function($module, $name, $array)
 	}
 }
 
-function cms_mapi_call_intramodule_function_exists($module, $name)
+function cms_mapi_check_intramodule_function_exists($module, $name)
 {
 	$result = false;
 
