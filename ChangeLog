@@ -11,6 +11,7 @@ exist (#000017)
 * Added German translation (Piratos)
 * Added Czech translation (peca)
 * Added new div and swaptitledate parameter to News module
+* Fixed bug when not saving all fields when adding a user
 * Fixed html blobs so that they can  handle smarty functions inside of them.
 * Fixed email in add/edit user to accept 255 characters (#000003)
 * Fixed htmlblob NOTICE level messages (#000005)
