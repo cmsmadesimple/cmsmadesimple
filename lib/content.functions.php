@@ -1,6 +1,6 @@
 <?php
 
-require('Smarty.class.php');
+require_once('Smarty.class.php');
 
 class Smarty_CMS extends Smarty {
 
@@ -8,7 +8,7 @@ class Smarty_CMS extends Smarty {
 	{
 		$this->Smarty();
 
-		$this->configCMS = $config;
+		$this->configCMS = &$config;
 
 		$this->template_dir = $config->root_path.'/smarty/cms/templates/';
 		$this->compile_dir = $config->root_path.'/smarty/cms/templates_c/';

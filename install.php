@@ -156,10 +156,10 @@ Please complete the following fields:
 function showPageThree($sqlloaded = 0) {
     ## don't load statements if they've already been loaded
     if ($sqlloaded == 0) {
-        global $config;
-        $smarty = new Smarty_CMS($config);
-        $smarty->Smarty_CMS = &$config;
+        global $config, $CMS_SCHEMA_VERSION;
+        $smarty = new Smarty_DB($config);
         $smarty->assign('tableprefix', 'cms_');
+        $smarty->assign('schemaversion', $CMS_SCHEMA_VERSION);
         $contents = $smarty->fetch('mysql.tpl');
 
         $statements = split(";", $contents);

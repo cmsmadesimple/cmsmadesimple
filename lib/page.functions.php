@@ -14,7 +14,7 @@ function check_permission(&$config, $userid, $permname) {
 
 	$db = new DB($config);
 
-	$query = "SELECT * FROM user_groups ug INNER JOIN group_perms gp ON gp.group_id = ug.group_id INNER JOIN permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = '".$permname."'";
+	$query = "SELECT * FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = '".$permname."'";
 	$result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {

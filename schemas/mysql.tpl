@@ -6,6 +6,11 @@ DROP TABLE IF EXISTS {$tableprefix}user_groups;
 DROP TABLE IF EXISTS {$tableprefix}users;
 DROP TABLE IF EXISTS {$tableprefix}permissions;
 DROP TABLE IF EXISTS {$tableprefix}group_perms;
+DROP TABLE IF EXISTS {$tableprefix}version;
+
+CREATE TABLE {$tableprefix}version (
+	version int
+);
 
 CREATE TABLE {$tableprefix}permissions (
 	permission_id int PRIMARY KEY AUTO_INCREMENT,
@@ -80,6 +85,8 @@ CREATE TABLE {$tableprefix}users (
 	modified_date datetime
 );
 
+INSERT INTO {$tableprefix}version VALUES ({$schemaversion});
+
 INSERT INTO {$tableprefix}templates(template_name, template_content, active, create_date, modified_date)
 	VALUES('Default', '{literal}<p>Header</p> {bulletmenu} {$content}<p>Footer</p>{/literal}', 1, now(), now());
 
@@ -113,4 +120,3 @@ INSERT INTO {$tableprefix}group_perms VALUES (4,1,4,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (5,1,5,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (6,1,6,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (7,1,7,now(),now());
-

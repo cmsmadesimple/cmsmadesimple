@@ -22,4 +22,28 @@ class DB {
 
 }
 
+require_once('Smarty.class.php');
+
+class Smarty_DB extends Smarty {
+
+        function Smarty_DB(&$config)
+        {
+                $this->Smarty();
+
+                $this->configCMS = $config;
+
+                $this->template_dir = $config->root_path.'/schemas/';
+                $this->compile_dir = $config->root_path.'/smarty/cms/templates_c/';
+                $this->config_dir = $config->root_path.'/smarty/cms/configs/';
+                $this->cache_dir = $config->root_path.'/smarty/cms/cache/';
+                $this->plugins_dir = $config->root_path.'/smarty/cms/plugins/';
+
+                $this->compile_check = true;
+                $this->caching = false;
+                $this->assign('app_name','CMS');
+                $this->debugging = false;
+                $this->force_compile = true;
+	}
+}
+
 ?>

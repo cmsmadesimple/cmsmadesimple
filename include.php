@@ -1,5 +1,7 @@
 <?php
 
+require_once("version.php");
+
 class CMSConfig {
 
 	function CMSConfig() {
