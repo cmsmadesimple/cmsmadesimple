@@ -71,7 +71,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Modify Group Assignments")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Modify Group Assignments")."</h3>";
 }
 else {
 
@@ -127,7 +127,7 @@ else {
 
 ?>
 
-<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeassign" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></p>
+<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeassign" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></p>
 
 </div>
 

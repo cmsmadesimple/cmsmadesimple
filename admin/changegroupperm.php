@@ -71,14 +71,14 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Modify Group Permissions")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Modify Group Permissions")."</h3>";
 }
 else {
 
-	GetText::setVar('group_name', $group_name);
+	$gettext->setVar('group_name', $group_name);
 
 ?>
-<h3><?=GetText::gettext('Permissions for group: ${group_name}')?></h3>
+<h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 
 <form method="post" action="changegroupperm.php">
 
@@ -86,7 +86,7 @@ else {
 
 <?php
 
-	GetText::reset();
+	$gettext->reset();
 
 	$query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
 	$result = $db->query($query);
@@ -132,7 +132,7 @@ else {
 
 ?>
 
-<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></p>
+<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></p>
 
 </div>
 

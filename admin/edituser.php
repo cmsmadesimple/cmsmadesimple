@@ -58,12 +58,12 @@ if ($access) {
 
 		if ($user == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No username given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No username given!")."</li>";
 		}
 
 		if ($password != $passwordagain) {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("Passwords do not match")."</li>";
+			$error .= "<li>".$gettext->gettext("Passwords do not match")."</li>";
 		}
 
 		if ($validinfo) {
@@ -81,7 +81,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".GetText::gettext("Error updating user")."</li>";
+				$error .= "<li>".$gettext->gettext("Error updating user")."</li>";
 			}
 		}
 	}
@@ -105,7 +105,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Edit Users")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Edit Users")."</h3>";
 }
 else {
 
@@ -119,29 +119,29 @@ else {
 
 <div class="adminform">
 
-<h3><?=GetText::gettext("Edit User")?></h3>
+<h3><?=$gettext->gettext("Edit User")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=GetText::gettext("Name")?>:</td>
+		<td>*<?=$gettext->gettext("Name")?>:</td>
 		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Password<br />(leave blank to keep current password)")?>:</td>
+		<td><?=$gettext->gettext("Password<br />(leave blank to keep current password)")?>:</td>
 		<td><input type="password" name="password" maxlength="25" value="" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Password (again)")?>:</td>
+		<td><?=$gettext->gettext("Password (again)")?>:</td>
 		<td><input type="password" name="passwordagain" maxlength="25" value="" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Active")?>:</td>
+		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="user_id" value="<?=$user_id?>" /><input type="hidden" name="edituser" value="true" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
+		<td><input type="hidden" name="user_id" value="<?=$user_id?>" /><input type="hidden" name="edituser" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

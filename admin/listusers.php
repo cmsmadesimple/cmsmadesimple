@@ -23,7 +23,7 @@ check_login($config);
 include_once("header.php");
 
 ?>
-<h3><?=GetText::gettext("Current Users")?></h3>
+<h3><?=$gettext->gettext("Current Users")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -39,8 +39,8 @@ include_once("header.php");
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".GetText::gettext("Username")."</td>\n";
-		echo "<td>".GetText::gettext("Active")."</td>\n";
+		echo "<td>".$gettext->gettext("Username")."</td>\n";
+		echo "<td>".$gettext->gettext("Active")."</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		if ($remove)
 			echo "<td>&nbsp;</td>\n";
@@ -52,13 +52,13 @@ include_once("header.php");
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
-			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
+			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
-				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
+				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
 			else
 				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
+				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -75,7 +75,7 @@ include_once("header.php");
 if (check_permission($config, $userid, 'Add User')) {
 ?>
 
-<div class=button><a href="adduser.php"><?=GetText::gettext("Add New User")?></div></p>
+<div class=button><a href="adduser.php"><?=$gettext->gettext("Add New User")?></div></p>
 
 <?php
 }

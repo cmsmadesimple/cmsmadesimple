@@ -4,7 +4,7 @@
 
 <head>
 
-<title><?=GetText::gettext("CMS Admin System")?></title>
+<title><?=$gettext->gettext("CMS Admin System")?></title>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
 

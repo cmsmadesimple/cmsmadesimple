@@ -27,7 +27,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3><?=GetText::gettext("Current Sections")?></h3>
+<h3><?=$gettext->gettext("Current Sections")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -45,8 +45,8 @@ if (isset($_GET["message"])) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".GetText::gettext("Section")."</td>\n";
-		echo "<td>".GetText::gettext("Active")."</td>\n";
+		echo "<td>".$gettext->gettext("Section")."</td>\n";
+		echo "<td>".$gettext->gettext("Active")."</td>\n";
 		if ($edit) {
 			echo "<td>&nbsp;</td>\n";
 			echo "<td>&nbsp;</td>\n";
@@ -63,23 +63,23 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["section_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
+			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit) {
 				echo "<td>";
 				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".GetText::gettext("Up")."\" border=\"0\" /></a> ";
+					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
 				}
 				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".GetText::gettext("Down")."\" border=\"0\" /></a> ";
+					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a> ";
 				}
 				if ($count == 1) {
 					echo "&nbsp;";
 				}
 				echo "</td>\n";
-				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
+				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
 			}
 			if ($remove)
-				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
+				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -98,7 +98,7 @@ if (isset($_GET["message"])) {
 if (check_permission($config, $userid, 'Add Section')) {
 ?>
 
-<div class=button><a href="addsection.php"><?=GetText::gettext("Add New
+<div class=button><a href="addsection.php"><?=$gettext->gettext("Add New
 Section")?></div></p>
 
 <?php

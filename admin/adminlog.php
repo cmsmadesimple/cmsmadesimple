@@ -33,15 +33,15 @@ if ($db->rowcount($result) > 0) {
 
 ?>
 
-<h3><?=GetText::gettext("Admin Log")?></h3>
+<h3><?=$gettext->gettext("Admin Log")?></h3>
 
 <table cellspacing="0" class="admintable">
 	<tr>
-		<td><?=GetText::gettext("User")?></td>
-		<td><?=GetText::gettext("Item ID")?></td>
-		<td><?=GetText::gettext("Item Name")?></td>
-		<td><?=GetText::gettext("Action")?></td>
-		<td><?=GetText::gettext("Date")?></td>
+		<td><?=$gettext->gettext("User")?></td>
+		<td><?=$gettext->gettext("Item ID")?></td>
+		<td><?=$gettext->gettext("Item Name")?></td>
+		<td><?=$gettext->gettext("Action")?></td>
+		<td><?=$gettext->gettext("Date")?></td>
 	</tr>
 
 <?php

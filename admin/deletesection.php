@@ -74,7 +74,7 @@ if ($dodelete == true) {
 	redirect("listsections.php");
 }
 else {
-	redirect("listsections.php?message=".GetText::gettext("Section still being used by content pages.  Please remove those first."));
+	redirect("listsections.php?message=".$gettext->gettext("Section still being used by content pages.  Please remove those first."));
 }
 
 # vim:ts=4 sw=4 noet

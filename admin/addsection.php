@@ -44,7 +44,7 @@ if ($access) {
 		$validinfo = true;
 		if ($section == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No Section title given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No Section title given!")."</li>";
 		}
 
 		if ($validinfo) {
@@ -68,7 +68,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".GetText::gettext("Error inserting section")."</li>";
+				$error .= "<li>".$gettext->gettext("Error inserting section")."</li>";
 			}
 		}
 	}
@@ -79,7 +79,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Add Sections")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Add Sections")."</h3>";
 }
 else {
 
@@ -93,21 +93,21 @@ else {
 
 <div class="adminform">
 
-<h3><?=GetText::gettext("Add Section")?></h3>
+<h3><?=$gettext->gettext("Add Section")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=GetText::gettext("Name")?>:</td>
+		<td>*<?=$gettext->gettext("Name")?>:</td>
 		<td><input type="text" name="section" maxlength="255" value="<?=$section?>" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Active")?>:</td>
+		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addsection" value="true" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
+		<td><input type="hidden" name="addsection" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

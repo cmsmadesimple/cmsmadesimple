@@ -97,19 +97,19 @@ if ($access) {
 
 		if ($title == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No title given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No title given!")."</li>";
 		}
 		if ($url == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No url given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No url given!")."</li>";
 		}
 		if ($content_type == "content" && $content == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No content entered!")."</li>";
+			$error .= "<li>".$gettext->gettext("No content entered!")."</li>";
 		}
 		if ($menutext == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No menu text given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
 		}
 
 		if ($validinfo) {
@@ -145,7 +145,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".GetText::gettext("Error updating content!")."</li>";
+				$error .= "<li>".$gettext->gettext("Error updating content!")."</li>";
 			}
 		}
 
@@ -244,7 +244,7 @@ $tinymce_flag = "true";
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Edit this Page")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Edit this Page")."</h3>";
 }
 else {
 	if ($error != "") {
@@ -276,7 +276,7 @@ else {
 		fclose($handle);
 
 ?>
-<h3><?=GetText::gettext("Preview")?></h3>
+<h3><?=$gettext->gettext("Preview")?></h3>
 
 <iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
@@ -291,59 +291,59 @@ else {
 
 <div class="adminform">
 
-<h3><?=GetText::gettext("Edit Content")?></h3>
+<h3><?=$gettext->gettext("Edit Content")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td><?=GetText::gettext("Content Type")?>:</td>
+		<td><?=$gettext->gettext("Content Type")?>:</td>
 		<td><?=$ctdropdown?><input type="hidden" name="orig_content_type" value="<?=$orig_content_type?>" /></td>
 	</tr>
 	<tr>
-		<td>*<?=GetText::gettext("Title")?>:</td>
+		<td>*<?=$gettext->gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="255" value="<?=$title?>" /></td>
 	</tr>
 	<tr>
-		<td>*<?=GetText::gettext("URL")?>:</td>
+		<td>*<?=$gettext->gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
 <?php if ($content_type == "content") { ?>
 	<tr>
-		<td>*<?=GetText::gettext("Content")?>:</td>
+		<td>*<?=$gettext->gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
 <?php } ?>
 	<tr>
-		<td><?=GetText::gettext("Section")?>:</td>
+		<td><?=$gettext->gettext("Section")?>:</td>
 		<td><?=$dropdown?><input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" /></td>
 	</tr>
 <?php if ($content_type == "content") { ?>
 	<tr>
-		<td><?=GetText::gettext("Template")?>:</td>
+		<td><?=$gettext->gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
 <?php } ?>
 <?php if ($adminaccess) { ?>
     <tr> 
-		<td><?=GetText::gettext("Additional Editors")?>:</td>
+		<td><?=$gettext->gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
 <?php } ?>
 	<tr>
-		<td>*<?=GetText::gettext("Menu Text")?>:</td>
+		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Show in Menu")?>:</td>
+		<td><?=$gettext->gettext("Show in Menu")?>:</td>
 		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Active")?>:</td>
+		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="content_change" value="0" /><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
+		<td><input type="hidden" name="content_change" value="0" /><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

@@ -49,7 +49,7 @@ if ($access) {
 
 		if ($section == "") {
 			$validinfo = false;
-			$error .= "<li>".GetText::gettext("No Section name given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No Section name given!")."</li>";
 		}
 
 		if ($validinfo) {
@@ -67,7 +67,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".GetText::gettext("Error updating section")."</li>";
+				$error .= "<li>".$gettext->gettext("Error updating section")."</li>";
 			}
 		}
 
@@ -92,7 +92,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access to Edit Sections")."</h3>";
+	print "<h3>".$gettext->gettext("No Access to Edit Sections")."</h3>";
 }
 else {
 
@@ -105,21 +105,21 @@ else {
 
 <div class="adminform">
 
-<h3><?=GetText::gettext("Edit Content")?></h3>
+<h3><?=$gettext->gettext("Edit Content")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=GetText::gettext("Name")?>:</td>
+		<td>*<?=$gettext->gettext("Name")?>:</td>
 		<td><input type="text" name="section" maxlength="25" value="<?=$section?>" /></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Active")?>:</td>
+		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="section_id" value="<?=$section_id?>" /><input type="hidden" name="editsection" value="true" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
+		<td><input type="hidden" name="section_id" value="<?=$section_id?>" /><input type="hidden" name="editsection" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

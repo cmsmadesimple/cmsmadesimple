@@ -57,11 +57,11 @@ if ($access) {
 
 		$validinfo = true;
 		if ($template == "") {
-			$error .= "<li>".GetText::gettext("No template name given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
 			$validinfo = false;
 		}
 		if ($content == "") {
-			$error .= "<li>".GetText::gettext("No template content given!")."</li>";
+			$error .= "<li>".$gettext->gettext("No template content given!")."</li>";
 			$validinfo = false;
 		}
 
@@ -76,7 +76,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".GetText::gettext("Error updating template!")."</li>";
+				$error .= "<li>".$gettext->gettext("Error updating template!")."</li>";
 			}
 		}
 
@@ -104,7 +104,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".GetText::gettext("No Access To Edit Templates")."</h3>";
+	print "<h3>".$gettext->gettext("No Access To Edit Templates")."</h3>";
 }
 else {
 
@@ -125,7 +125,7 @@ else {
 		fclose($handle);
 
 ?>
-<h3><?=GetText::gettext("Preview")?></h3>
+<h3><?=$gettext->gettext("Preview")?></h3>
 
 <iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>">
 
@@ -140,29 +140,29 @@ else {
 
 <div class="adminform">
 
-<h3><?=GetText::gettext("Edit Template")?></h3>
+<h3><?=$gettext->gettext("Edit Template")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*<?=GetText::gettext("Template Name")?>:</td>
+		<td>*<?=$gettext->gettext("Template Name")?>:</td>
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
 	</tr>
 	<tr>
-		<td>*<?=GetText::gettext("Content")?>:</td>
+		<td>*<?=$gettext->gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Stylesheet")?>:</td>
+		<td><?=$gettext->gettext("Stylesheet")?>:</td>
 		<td><textarea name="stylesheet" cols="90" rows="18"><?=htmlentities($stylesheet)?></textarea></td>
 	</tr>
 	<tr>
-		<td><?=GetText::gettext("Active")?>:</td>
+		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="edittemplate" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
+		<td><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="edittemplate" value="true" /><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

@@ -23,7 +23,7 @@ check_login($config);
 include_once("header.php");
 
 ?>
-<h3><?=GetText::gettext("Current Pages")?></h3>
+<h3><?=$gettext->gettext("Current Pages")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -63,16 +63,16 @@ include_once("header.php");
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td>".GetText::gettext("Title")."</td>\n";
-		echo "<td>".GetText::gettext("Type")."</td>\n";
-		echo "<td>".GetText::gettext("URL")."</td>\n";
-		echo "<td>".GetText::gettext("Owner")."</td>\n";
-		echo "<td>".GetText::gettext("Section")."</td>\n";
+		echo "<td>".$gettext->gettext("Title")."</td>\n";
+		echo "<td>".$gettext->gettext("Type")."</td>\n";
+		echo "<td>".$gettext->gettext("URL")."</td>\n";
+		echo "<td>".$gettext->gettext("Owner")."</td>\n";
+		echo "<td>".$gettext->gettext("Section")."</td>\n";
 		if ($modifyall) {
-			echo "<td align=\"center\">".GetText::gettext("Move")."</td>\n";
+			echo "<td align=\"center\">".$gettext->gettext("Move")."</td>\n";
 		}
-		echo "<td>".GetText::gettext("Active")."</td>\n";
-		echo "<td>".GetText::gettext("Default")."</td>\n";
+		echo "<td>".$gettext->gettext("Active")."</td>\n";
+		echo "<td>".$gettext->gettext("Default")."</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "<td>&nbsp;</td>\n";
 		echo "<td>&nbsp;</td>\n";
@@ -102,24 +102,24 @@ include_once("header.php");
 			if ($modifyall) {
 				echo "<td align=\"center\">";
 				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=up&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".GetText::gettext("Up")."\" border=\"0\" /></a> ";
+					echo "<a href=\"movecontent.php?direction=up&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
 				}
 				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=down&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".GetText::gettext("Down")."\" border=\"0\" /></a>";
+					echo "<a href=\"movecontent.php?direction=down&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
 				}
 				if ($totalcount == 1 && $count == 1) {
 					echo "&nbsp;";
 				}
 				echo "</td>\n";
 			}
-			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
-			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
+			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
 			if ($config->query_var == "")
-				echo "<td><a href=\"".$config->root_url."/index.php/".$row["page_url"]."\" target=\"_blank\">".GetText::gettext("View")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php/".$row["page_url"]."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			else
-				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$row["page_url"]."\" target=\"_blank\">".GetText::gettext("View")."</a></td>\n";
-			echo "<td><a href=\"editcontent.php?page_id=".$row["page_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
-			echo "<td><a href=\"deletecontent.php?page_id=".$row["page_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$row["page_url"]."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+			echo "<td><a href=\"editcontent.php?page_id=".$row["page_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+			echo "<td><a href=\"deletecontent.php?page_id=".$row["page_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			$count++;
@@ -131,7 +131,7 @@ include_once("header.php");
 		echo "</table>\n";
 
 	} else {
-		echo "<p>".GetText::gettext("No pages")."</p>";
+		echo "<p>".$gettext->gettext("No pages")."</p>";
 	}
 
 	$db->freeresult($result);
@@ -140,7 +140,7 @@ include_once("header.php");
 	if (check_permission($config, $userid, 'Add Content')) {
 ?>
 
-<div class="button"><a href="addcontent.php"><?=GetText::gettext("Add New
+<div class="button"><a href="addcontent.php"><?=$gettext->gettext("Add New
 Content")?></a></div>
 
 <?php
