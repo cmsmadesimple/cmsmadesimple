@@ -16,39 +16,40 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
+#$Id: index.php 1307 2005-02-16 03:23:04Z wishy $
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=3;
 
 require_once("../include.php");
 
 check_login();
 
-$userplugin_id = -1;
-if (isset($_GET["userplugin_id"])) {
+include_once("header.php");
 
-	$userplugin_id = $_GET["userplugin_id"];
-	$userplugin_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Modify Code Blocks');
+?>
 
-	if ($access) {
+<div class="MainMenu">
 
-		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ".$userplugin_id;
-		$result = $db->Execute($query);
+<div class="MainMenuItem">
+<a href="files.php">File Manager</a>
+<span class="description">Upload files and such.</span>
+</div>
 
-		if ($result && $result->RowCount()) {
-			$row = $result->FetchRow();
-			$userplugin_name = $row['userplugin_name'];
-		}
+<div class="MainMenuItem">
+<a href="imagefiles.php">Image Manager</a>
+<span class="description">Upload/edit and remove images.</span>
+</div>
 
-		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = $userplugin_id";
-		$result = $db->Execute($query);
-		audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
-	}
-}
+<div class="MainMenuItem">
+<a href="index.php">Main Menu</a>
+</div>
 
-redirect("listusertags.php");
+</div> <!-- end MainMenu -->
+
+<?php
+
+include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>

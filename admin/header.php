@@ -1,6 +1,5 @@
 <?php
 
-
 @ob_start();
 
 // Date in the past
@@ -42,15 +41,12 @@ if (!isset($charsetsent))
 
 <body##BODYSUBMITSTUFFGOESHERE##>
 
-<?
-//CHANGED
-require_once("../include.php");
-$theme=get_preference(get_userid(),"admintheme");
-if (file_exists(dirname(__FILE__)."/themes/$theme/header.php")) {
-	include(dirname(__FILE__)."/themes/$theme/header.php");
-} else {
-	include(dirname(__FILE__)."/themes/default/header.php");
-}
-//STOP
-?>
-<?
+<?php include_once('topmenu.php') ?>
+
+<div id="MainContent">
+
+<div class="DashboardCallout">
+
+<p class="DashboardCalloutTitle">Bookmarks</p>
+
+</div> <!-- end DashboardCallout -->

@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=2;
 
 require_once("../include.php");
 
@@ -117,24 +118,26 @@ if (isset($_GET["message"])) {
 	
 	if (count($content_array))
 	{
-		echo '<table cellspacing="0" class="admintable">'."\n";
+		echo '<table cellspacing="0" class="AdminTable">'."\n";
+		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>&nbsp;</td>";
-		echo "<td width=\"25%\">".lang('title')."</td>\n";
-		echo "<td align=\"center\">".lang('template')."</td>\n";
-		echo "<td align=\"center\">".lang('type')."</td>\n";
-		// echo "<td align=\"center\">".lang('URL')."</td>\n";
-		echo "<td align=\"center\">".lang('owner')."</td>\n";
-		echo "<td align=\"center\">".lang('active')."</td>\n";
-		echo "<td align=\"center\">".lang('default')."</td>\n";
+		echo "<th>&nbsp;</th>";
+		echo "<th width=\"25%\">".lang('title')."</th>\n";
+		echo "<th>".lang('template')."</th>\n";
+		echo "<th>".lang('type')."</th>\n";
+		echo "<th>".lang('owner')."</th>\n";
+		echo "<th>".lang('active')."</th>\n";
+		echo "<th>".lang('default')."</th>\n";
 		if ($modifyall)
 		{
-			echo "<td align=\"center\">".lang('move')."</td>\n";
+			echo "<th align=\"center\">".lang('move')."</th>\n";
 		}
-		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
-		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
-		echo "<td align=\"center\" width=\"16\">&nbsp;</td>\n";
+		echo "<th width=\"16\">&nbsp;</th>\n";
+		echo "<th width=\"16\">&nbsp;</th>\n";
+		echo "<th width=\"16\">&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		$count = 1;
 
@@ -294,6 +297,7 @@ if (isset($_GET["message"])) {
 			}
 			$counter++;
 		} ## foreach
+		echo '<tbody>';
 		echo "</table>\n";
 
 	}
@@ -307,12 +311,6 @@ if (isset($_GET["message"])) {
 ?>
 
 <div class="button"><a href="addcontent.php"><?php echo lang("addcontent")?></a></div>
-
-<div class="collapseTitle"><a href="#help" onclick="expandcontent('helparea')"><?php echo lang('help')?>?</a></div>
-<div id="helparea" class="expand">
-<?php echo lang('helplistcontent')?>
-<a name="help">&nbsp;</a>
-</div>
 
 <?php
 	}

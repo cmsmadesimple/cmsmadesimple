@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=4;
 
 require_once("../include.php");
 require_once("../lib/classes/class.template.inc.php");
@@ -67,22 +68,25 @@ if (isset($_GET["message"])) {
 
 	if ($templatelist && count($templatelist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
+		echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">"."\n";
+		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>".lang('template')."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
+		echo "<th width=\"50%\">".lang('template')."</th>\n";
+		echo "<th>".lang('active')."</th>\n";
 		if ($edit)
-			echo "<td>&nbsp;</td>\n";
+			echo "<th>&nbsp;</th>\n";
 		if (get_site_preference('useadvancedcss') == "1")
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($add)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($all)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 
 		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		$currow = "row1";
 		// construct true/false button images
@@ -122,6 +126,7 @@ if (isset($_GET["message"])) {
 			$counter++;
 		}
 
+		echo '</tbody>';
 		echo "</table>\n";
 
 	}

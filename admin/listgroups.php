@@ -52,19 +52,22 @@ include_once("header.php");
 
 	if (count($grouplist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
+		echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">\n";
+		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>".lang('name')."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
+		echo "<th width=\"60%\">".lang('name')."</th>\n";
+		echo "<th align=\"center\">".lang('active')."</th>\n";
 		if ($perm)
-			echo "<td width=\"7%\" align=\"center\">&nbsp;</td>\n";
+			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
 		if ($assign)
-			echo "<td width=\"7%\" align=\"center\">&nbsp;</td>\n";
+			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
 		if ($edit)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		$currow = "row1";
 
@@ -96,6 +99,7 @@ include_once("header.php");
 			$counter++;
 		}
 
+		echo '</tbody>';
 		echo "</table>\n";
 
 	}

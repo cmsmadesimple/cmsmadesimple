@@ -1,29 +1,36 @@
-
-<?
-//CHANGED
-require_once("../include.php");
-$theme=get_preference(get_userid(),"admintheme");
-//echo "theme:$theme";
-if (file_exists(dirname(__FILE__)."/themes/$theme/footer.php")) {
-	include(dirname(__FILE__)."/themes/$theme/footer.php");
-} else {
-	include(dirname(__FILE__)."/themes/default/footer.php");
-}
-//STOP
-?>
-
 <?php
+
+echo '</div> <!-- end MainContent -->';
+
+
+require_once("../include.php");
+$theme=get_preference(get_userid(), 'admintheme', 'default');
+if (file_exists(dirname(__FILE__).'/themes/$theme/footer.php'))
+{
+	include(dirname(__FILE__).'/themes/$theme/footer.php');
+}
+else
+{
+	# Show some default stuff
+	?>
+<div id="Footer">
+<a href="http://www.cmsmadesimple.org">CMS Made Simple</a> is Free Software released under the GNU/GPL License
+</div>
+	<?php
+}
+
 if ($config["debug"] == true)
 {
-	echo '<div id="debugfooter">';
+	echo '<div id="DebugFooter">';
 	global $sql_queries;
 	echo "<div>".$sql_queries."</div>\n";
 	foreach ($gCms->errors as $error)
 	{
 		echo $error;
 	}
-	echo '</div>';
+	echo '</div> <!-- end DebugFooter -->';
 }
+
 ?>
 </body>
 </html>

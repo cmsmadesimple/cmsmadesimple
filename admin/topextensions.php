@@ -19,36 +19,42 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=6;
 
 require_once("../include.php");
 
 check_login();
 
-$userplugin_id = -1;
-if (isset($_GET["userplugin_id"])) {
+include_once("header.php");
 
-	$userplugin_id = $_GET["userplugin_id"];
-	$userplugin_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Modify Code Blocks');
+?>
 
-	if ($access) {
+<div class="MainMenu">
 
-		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ".$userplugin_id;
-		$result = $db->Execute($query);
+<div class="MainMenuItem">
+<a href="listmodules.php">Modules</a>
+<span class="description">Modules majorly extend CMS Made Simple to provide all kinds of functionality.</span>
+</div>
 
-		if ($result && $result->RowCount()) {
-			$row = $result->FetchRow();
-			$userplugin_name = $row['userplugin_name'];
-		}
+<div class="MainMenuItem">
+<a href="listtags.php">Tags</a>
+<span class="description">Tags are little bits of functionality that can be added to your content and/or templates.</span>
+</div>
 
-		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = $userplugin_id";
-		$result = $db->Execute($query);
-		audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
-	}
-}
+<div class="MainMenuItem">
+<a href="listusertags.php">User Defined Tags</a>
+<span class="description">Tags that you can create and modify yourself to perform specific tasks, right from your browser.</span>
+</div>
 
-redirect("listusertags.php");
+<div class="MainMenuItem">
+<a href="index.php">Main Menu</a>
+</div>
+
+</div> <!-- end MainMenu -->
+
+<?php
+
+include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
 ?>

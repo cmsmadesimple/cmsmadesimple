@@ -72,8 +72,6 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 	$dir .= $reldir;
 }
 
-
-
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
@@ -216,12 +214,7 @@ include_once("header.php");
 /*]]>*/
 </script>
 
-<?php echo "<h3>".lang('filemanagement')."</h3>"; ?>
-<div class="ttabArea">
-<a href="files.php" class="tab"><?php echo lang('filemanager')?></a> 
-<a href="#" class="tab activeTab"><?php echo lang('imagemanager')?></a> 
-</div>
-<div class="tabPane">
+<?php echo "<h3>".lang('imagemanagement')."</h3>"; ?>
 
 <?php
 
@@ -267,7 +260,7 @@ if ($access)
 	</table>
 	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
 </form>
-</div>
+
 <?php
 }
 

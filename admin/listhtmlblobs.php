@@ -44,12 +44,15 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($htmlbloblist), $limit)."</div>";
 
-	echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
+	echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">"."\n";
+	echo '<thead>';
 	echo "<tr>\n";
-	echo "<td>".lang('name')."</td>\n";
-	echo "<td>&nbsp;</td>\n";
-	echo "<td width=\"16\">&nbsp;</td>\n";
+	echo "<th>".lang('name')."</th>\n";
+	echo "<th>&nbsp;</th>\n";
+	echo "<th width=\"16\">&nbsp;</th>\n";
 	echo "</tr>\n";
+	echo '</thead>';
+	echo '<tbody>';
 
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
 
@@ -73,6 +76,7 @@ if (isset($_GET["message"])) {
 		}
 	}
 
+	echo '</tbody>';
 	echo "</table>\n";
 
 #if ($add) {

@@ -246,9 +246,10 @@ else
 
 <h3><?php echo lang('editcontent')?></h3>
 
-<div class="adminform">
+<div class="AdminForm">
 
 <table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
+	<tbody>
 	<tr>
 		<td><?php echo lang('contenttype') ?>:</td>
 		<td><?php echo $typesdropdown ?></td>
@@ -286,6 +287,7 @@ else
 			</select>
 		</td>
 	</tr>
+	</tbody>
 	<?php } ?>
 </table>
 

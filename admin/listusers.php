@@ -53,14 +53,17 @@ if (isset($_GET["message"])) {
 	}
 
 	if ($userlist && count($userlist) > 0){
-		echo '<table cellspacing="0" class="admintable">'."\n";
+		echo '<table cellspacing="0" class="AdminTable" style="width: 500px;">'."\n";
+		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>".lang('username')."</td>\n";
-		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
-		echo "<td width=\"16\">&nbsp;</td>\n";
+		echo "<th width=\"70%\">".lang('username')."</th>\n";
+		echo "<th align=\"center\">".lang('active')."</th>\n";
+		echo "<th width=\"16\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+			echo "<th width=\"16\">&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		$currow = "row1";
 		// construct true/false button images
@@ -86,6 +89,7 @@ if (isset($_GET["message"])) {
 			$counter++;
 		}
 
+		echo '</tbody>';
 		echo "</table>\n";
 
 	}

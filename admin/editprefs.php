@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=7;
 
 $default_cms_lang = "";
 if (isset($_POST["default_cms_lang"])) $default_cms_lang = $_POST["default_cms_lang"];

@@ -191,21 +191,18 @@ $dirtext = "";
 $filetext = "";
 
 echo "<h3>".lang('filemanagement')."</h3>";
-?>
-<div class="ttabArea">
-<a href="#" class="tab activeTab"><?php echo lang('filemanager')?></a> 
-<a href="imagefiles.php" class="tab"><?php echo lang('imagemanager')?></a> 
-</div>
-<div class="tabPane">
-<?php
+
 if ($errors != "")
 {
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
 echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
-echo '<table cellspacing="0" class="admintable">';
+echo '<table cellspacing="0" class="AdminTable">';
+echo '<thead>';
 echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
+echo '</thead>';
+echo '<tbody>';
 
 if ($reldir != "")
 {
@@ -290,7 +287,7 @@ foreach ($files as $file)
 					}
 				}
 				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
+				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
 				$filetext .= "</tr>";
 				($row=="row1"?$row="row2":$row="row1");
 			}
@@ -304,11 +301,14 @@ if ($filetext == "" && $dirtext == "")
 	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">".lang('nofiles')."</td></tr>";
 }
 
+echo '</tbody>';
 echo "</table>";
 
 if ($access)
 {
+
 ?>
+
 <form enctype="multipart/form-data" action="files.php" method="post">
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
 	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
@@ -324,7 +324,7 @@ if ($access)
 	</table>
 	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
 </form>
-</div>
+
 <?php
 }
 

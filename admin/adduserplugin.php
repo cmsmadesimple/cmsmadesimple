@@ -33,7 +33,7 @@ $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
 if (isset($_POST["cancel"])) {
-	redirect("plugins.php");
+	redirect("listusertags.php");
 	return;
 }
 
@@ -93,7 +93,7 @@ if ($access) {
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
-				redirect("plugins.php");
+				redirect("listusertags.php");
 				return;
 			}
 			else {
