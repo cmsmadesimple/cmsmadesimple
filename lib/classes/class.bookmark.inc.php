@@ -62,7 +62,7 @@ class Bookmark
 		$this->bookmark_id = -1;
 		$this->title = '';
 		$this->url = '';
-		$tihs->user_id = -1;
+		$this->user_id = -1;
 	}
 
 
@@ -204,7 +204,6 @@ class BookmarkOperations
 
 		global $gCms;
 		$db = &$gCms->db;
-		$db->debug=true;
 
 		$new_bookmark_id = $db->GenID(cms_db_prefix()."admin_bookmarks_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."admin_bookmarks (bookmark_id, user_id, url, title) VALUES (?,?,?,?)";
