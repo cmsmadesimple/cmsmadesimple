@@ -20,7 +20,7 @@ require_once("config.php");
 
 function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
-	$showadmin = $params["showadmin"] ? $params["showadmin"] : true;
+	$showadmin = $params["showadmin"] ? $params["showadmin"] : "true";
 
 	$menu = "";
 
@@ -40,7 +40,7 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 		}
 	}
 
-	if ($showadmin) {
+	if ($showadmin == "true") {
 		$menu .= ".|---\n";
 		$menu .= ".|Admin|admin\n";
 	}
