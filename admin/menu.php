@@ -72,7 +72,7 @@ else
 	echo "../index.php";
 }
 
-?>" target="_new"><?php echo lang('showsite')?></a>
+?>" target="_blank"><?php echo lang('showsite')?></a>
 <a href="editprefs.php"><?php echo lang('userprefs')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
 
