@@ -15,22 +15,22 @@ $this->db_prefix = "";
 
 #Document root as seen from the webserver.  No slash at the end
 #e.g. http://blah.com
-$this->root_url = "http://cms.wishy.org";
+$this->root_url = "http://www.something.com";
 
 #Path to document root
 #e.g. /var/www/localhost
-$this->root_path = "/var/cms";
+$this->root_path = "/var/www/localhost/htdocs";
 
 #For using a particular querystring variable.  Turning off
 #produces variables like: http://cms.wishy.org/index.php/somecontent
 #where as setting to page would make:
 #http://cms.wishy.org/?page=somecontent
-$this->query_var = "page";
+$this->query_var = "";
 
 #Install BBCodeParser from the PEAR library
 #and then set this to true for BBCode usage in content
 #and tables.
-$this->use_bb_code = true;
+$this->use_bb_code = false;
 
 include_once("config.php");
 
