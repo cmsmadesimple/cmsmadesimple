@@ -8,10 +8,12 @@ deleted
 * Added an upgrade.php
 * Added a title to the admin pages
 * Added an UPGRADE document
+* Fixed a security hole where incactive pages can still be called by URL
 * Fixed a bug in show in menu in both admin and bulletmenu
 * Fixed up install.php to fit the look of the admin seciton
 * Fixed the footer plugin to not have multiple divs
 * Fixed the wording of INSTALL to match the text in install.php
+* Fixed it so users can change their own password
 * Upgraded schema to version 2
 * Removed some code from install.php that was breaking on non-posix systems
 

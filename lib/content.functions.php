@@ -48,7 +48,7 @@ class Smarty_CMS extends Smarty {
 	{
 		$db = new DB($this->configCMS);
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name'";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->query($query);
 
 		if (mysql_num_rows($result) > 0) {
@@ -88,7 +88,7 @@ class Smarty_CMS extends Smarty {
         {
                 $db = new DB($this->configCMS);
 
-                $query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name'";
+                $query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
                 $result = $db->query($query);
 
                 if (mysql_num_rows($result) > 0) {
