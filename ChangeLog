@@ -1,9 +1,11 @@
 Version 0.4.1 -- Subversion
 -----------------
 
-* Added template copying functionality (Refs #39)
+* Added template copying functionality (Fixes #39)
 * Added checks to make sure Template titles can't be reused
 * Added function to set template to every page (Fixes #42)
+* Added config flag for turning on smarty's {php} tags (Fixes #47)
+* Added config flag for setting preview tmp file location (Fixes #36)
 * Fixed redirection bugs in the news module
 * Fixed a bug in adding a group
 * Fixed a bug where mysql imports would not work because of spaces at the

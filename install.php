@@ -215,7 +215,7 @@ function showPageThree($sqlloaded = 0) {
 
 		include_once(dirname(__FILE__)."/schemas/schema.php");
 
-		echo "<p>Inporting initial data...";
+		echo "<p>Importing initial data...";
 
 		$handle = fopen(dirname(__FILE__)."/schemas/mysql.sql", 'r');
 		while (!feof($handle)) {
