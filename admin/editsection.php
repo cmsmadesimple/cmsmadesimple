@@ -23,7 +23,7 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST["editsection"])) {
 
-	$query = "UPDATE sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
+	$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_real_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
 	$result = $db->query($query);
 
 	if (mysql_affected_rows() > -1) {
@@ -39,7 +39,7 @@ if (isset($_POST["editsection"])) {
 }
 else if ($section_id != -1) {
 
-	$query = "SELECT * from sections WHERE section_id = " . $section_id;
+	$query = "SELECT * from ".$config->db_prefix."sections WHERE section_id = " . $section_id;
 	$result = $db->query($query);
 	
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);

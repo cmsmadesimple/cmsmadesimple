@@ -17,7 +17,7 @@ $db = new DB($config);
 
 if (isset($_POST["addsection"])) {
 
-	$query = "INSERT INTO sections (section_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($section)."', $active, now(), now())";
+	$query = "INSERT INTO ".$config->db_prefix."sections (section_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($section)."', $active, now(), now())";
 	$result = $db->query($query);
 	if (mysql_affected_rows() > -1) {
 		$db->close();

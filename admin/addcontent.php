@@ -35,7 +35,7 @@ $db = new DB($config);
 
 if (isset($_POST["addcontent"])) {
 
-	$query = "INSERT INTO pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
+	$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
 	$result = $db->query($query);
 	if (mysql_affected_rows() > -1) {
 		$db->close();
@@ -48,7 +48,7 @@ if (isset($_POST["addcontent"])) {
 	mysql_free_result($result);
 }
 
-$query = "SELECT section_id, section_name FROM sections ORDER BY section_id";
+$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
 $result = $db->query($query);
 
 $dropdown = "<select name=\"section_id\">";
@@ -67,7 +67,7 @@ $dropdown .= "</select>";
 
 mysql_free_result($result);
 
-$query = "SELECT template_id, template_name FROM templates ORDER BY template_id";
+$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 $result = $db->query($query);
 
 $dropdown2 = "<select name=\"template_id\">";

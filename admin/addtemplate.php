@@ -20,7 +20,7 @@ $db = new DB($config);
 
 if (isset($_POST["addtemplate"])) {
 
-	$query = "INSERT INTO templates (template_name, template_content, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', '".mysql_escape_string($content)."', $active, now(), now());";
+	$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', '".mysql_escape_string($content)."', $active, now(), now());";
 	$result = $db->query($query);
 	if (mysql_affected_rows() > -1) {
 		$db->close();

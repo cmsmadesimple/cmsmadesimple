@@ -24,7 +24,7 @@ $db = new DB($config);
 
 if (isset($_POST["edittemplate"])) {
 
-	$query = "UPDATE templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', active = $active, modified_date = now() WHERE template_id = $template_id";
+	$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', active = $active, modified_date = now() WHERE template_id = $template_id";
 	$result = $db->query($query);
 
 	if (mysql_affected_rows() > -1) {
@@ -40,7 +40,7 @@ if (isset($_POST["edittemplate"])) {
 }
 else if ($template_id != -1) {
 
-	$query = "SELECT * from templates WHERE template_id = " . $template_id;
+	$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
 	$result = $db->query($query);
 	
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);

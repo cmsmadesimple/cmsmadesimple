@@ -9,7 +9,7 @@ require_once("../config.php");
 
 	$db = new DB($config);
 
-        $query = "SELECT section_id, section_name, active FROM sections ORDER BY section_id";
+        $query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY section_id";
         $result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {

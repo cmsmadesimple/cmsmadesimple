@@ -39,7 +39,7 @@ $db = new DB($config);
 
 if (isset($_POST["editcontent"])) {
 
-	$query = "UPDATE pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now() WHERE page_id = $page_id";
+	$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now() WHERE page_id = $page_id";
 	$result = $db->query($query);
 
 	if (mysql_affected_rows() > -1) {
@@ -57,7 +57,7 @@ if (isset($_POST["editcontent"])) {
 else if ($page_id != -1) {
 
 
-	$query = "SELECT * from pages WHERE page_id = " . $page_id;
+	$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
 	$result = $db->query($query);
 	
 	$row = mysql_fetch_array($result, MYSQL_ASSOC);
@@ -75,7 +75,7 @@ else if ($page_id != -1) {
 
 }
 
-$query = "SELECT section_id, section_name FROM sections ORDER BY section_id";
+$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
 $result = $db->query($query);
 
 $dropdown = "<select name=\"section_id\">";
@@ -92,7 +92,7 @@ $dropdown .= "</select>";
 
 mysql_free_result($result);
 
-$query = "SELECT template_id, template_name FROM templates ORDER BY template_id";
+$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 $result = $db->query($query);
 
 $dropdown2 = "<select name=\"template_id\">";

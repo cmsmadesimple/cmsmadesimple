@@ -7,7 +7,7 @@
 <?php
 	$db = new DB($config);
 
-        $query = "SELECT p.*, u.username, s.section_name FROM pages p INNER JOIN users u ON u.user_id = p.owner INNER JOIN sections s ON s.section_id = p.section_id ORDER BY page_id";
+        $query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id ORDER BY page_id";
         $result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {

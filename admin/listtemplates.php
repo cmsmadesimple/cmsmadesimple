@@ -8,7 +8,7 @@ require_once("../config.php");
 
 	$db = new DB($config);
 
-        $query = "SELECT template_id, template_name, active FROM templates ORDER BY template_id";
+        $query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
         $result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
@@ -27,7 +27,7 @@ require_once("../config.php");
 			echo "<td>".$row["template_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
 			echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">Edit</a></td>\n";
-			echo "<td><a href=\"deletetemplate.php?section_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+			echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
 		}

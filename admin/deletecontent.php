@@ -9,7 +9,7 @@ if (isset($_GET["page_id"])) {
 
 	$db = new DB($config);
 
-	$query = "DELETE FROM pages where page_id = $page_id";
+	$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
 	$result = $db->query($query);
 	$db->close();
 }

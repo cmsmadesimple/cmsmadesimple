@@ -9,7 +9,7 @@ if ($_POST["username"] && $_POST["password"]) {
 
 	$db = new DB($config);
 
-	$query = "SELECT * FROM users WHERE username = '".mysql_escape_string($username)."' and password = '".mysql_escape_string($password)."'";
+	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = '".mysql_escape_string($username)."' and password = '".mysql_escape_string($password)."'";
 	$result = $db->query($query);
 
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
