@@ -107,32 +107,31 @@ function showPageOne() {
     ## echo "Userid ($userid) is named $username is running this script<p>\n";
 
     ## check file perms
+	$continueon = true;
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt');
+    $files = array('smarty/cms/cache', 'smarty/cms/templates_c', 'uploads');
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
     echo "<tr class=\"row1\"><td>Checking for PHP version 4.0+</td><td>";
 	echo (@phpversion() >= "4"?"Success!":"Failure!");
+	(@phpversion() >= "4"?null:$continueon=false);
 	echo "</td></tr>\n";
 
-    echo "<tr class=\"row2\"><td>Checking for PHP mysql support</td><td>";
-	echo (function_exists('mysql_connect')?"Success!":"Failure!");
-	echo "</td></tr>\n";
-
-	$currow = "row1";
+	$currow = "row2";
 
     foreach ($files as $f) {
         #echo "<tr><td>\n";
         ## check if we can write to the this file
-        echo "<tr class=\"$currow\"><td>Opening for write ($f)</td><td>";
-        $file = @fopen ($f, "w");
-        if($file != 0) {
-            fclose($file); 
-			@unlink($f);
+        echo "<tr class=\"$currow\"><td>Checking write permission on $f</td><td>";
+		if (is_writable($f))
+		{
             echo "Success!";
-        } else {
+        }
+		else
+		{
+			$continueon=false;
             echo "Failure!";
         } ## if 
         echo "</td></tr>\n";
@@ -141,8 +140,16 @@ function showPageOne() {
 
     echo "</tbody></table>\n";
   
-    echo "<p>If all your tests show successful then it is time to setup your database.</p>\n";
-    echo "<p class=\"continue\" align=\"center\"><a href=\"install.php?page=2\">Continue</a></p>\n";
+  	if ($continueon)
+	{
+		echo "<p>All of your tests show successful.  It is time to setup your database.</p>\n";
+		echo "<p class=\"continue\" align=\"center\"><a href=\"install.php?page=2\">Continue</a></p>\n";
+	}
+	else
+	{
+		echo "<p>One or more tests have failed.  Please correct the problem and click the button below to recheck.</p>\n";
+		echo "<p class=\"continue\" align=\"center\"><a href=\"install.php\">Try Again</a></p>\n";
+	}
 
 } ## showPageOne
 

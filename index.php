@@ -58,7 +58,7 @@ else if (isset($_SERVER["PATH_INFO"]))
 {
 	$page = $_SERVER["PATH_INFO"];
 }
-else if (isset($_SERVER["QUERY_STRING"]))
+else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false)
 {
 	$page = $_SERVER["QUERY_STRING"];
 }
