@@ -216,11 +216,14 @@ if (isset($_GET["message"])) {
 					#Figure out some variables real quick
 					$depth = count(split('\.', $one->Hierarchy()));
 
-					$item_order = substr($one->Hierarchy(), strrpos($one->Hierarchy(), '.') + 1);
+					$item_order = substr($one->Hierarchy(), strrpos($one->Hierarchy(), '.'));
 					if ($item_order == '')
 					{
 						$item_order = $one->Hierarchy();
 					}
+
+					#Remove any rogue dots
+					$item_order = trim($item_order, ".");
 
 					$num_same_level = 0;
 
@@ -250,6 +253,7 @@ if (isset($_GET["message"])) {
 					echo "<td align=\"center\">";
 					if ($num_same_level > 1)
 					{
+						#echo "item_order: " . $item_order . " num_same_level:" . $num_same_level . "<br />";
 						if ($item_order == 1 && $num_same_level)
 						{
 							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
