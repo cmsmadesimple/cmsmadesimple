@@ -22,6 +22,10 @@ check_login($config);
 
 include_once("header.php");
 
+if (isset($_GET["message"])) {
+    echo "<p class=\"error\">".$_GET["message"]."</p>";
+}
+
 ?>
 <h3><?=$gettext->gettext("Current Pages")?></h3>
 <?php

@@ -32,6 +32,15 @@ if (isset($_GET["page_id"])) {
 		$order = 1;
 		$section_id = 1;
 		$title = "";
+
+        $query = "SELECT default_page FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+        $result = $dbnew->Execute($query);
+        $row = $result->FetchRow();
+        if (isset($row["default_page"]) && $row["default_page"] == 1) {
+			redirect("listcontent.php?message=".$gettext->gettext("Cannot delete default page.  Please set another page as default first."));
+			exit;
+        }
+
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT page_title, item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $dbnew->Execute($query);
