@@ -34,17 +34,13 @@ if (isset($_GET["page_id"])) {
 	if ($access)  {
 
 		$order = 1;
-		$section_id = 1;
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+		$query = "SELECT item_order FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $dbnew->Execute($query);
 		$row = $result->FetchRow();
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
-		}
-		if (isset($row["section_id"])) {
-			$section_id = $row["section_id"];
 		}
 
 		if ($direction == "down") {
