@@ -189,9 +189,9 @@ include_once("header.php");
 
 
 
-	<script type="text/javascript" src="../filemanager/ImageManager/assets/dialog.js"></script>
-	<script type="text/javascript" src="../filemanager/ImageManager/IMEStandalone.js"></script>
-<?php echo "	<script type=\"text/javascript\" src=\"../filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
+	<script type="text/javascript" src="../lib/filemanager/ImageManager/assets/dialog.js"></script>
+	<script type="text/javascript" src="../lib/filemanager/ImageManager/IMEStandalone.js"></script>
+<?php echo "	<script type=\"text/javascript\" src=\"../lib/filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
 	<script type="text/javascript">
     //<![CDATA[
 
