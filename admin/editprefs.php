@@ -26,6 +26,8 @@ $error = "";
 
 $use_wysiwyg = "1";
 if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
+$use_javasyntax = "1";
+if (isset($_POST["use_javasyntax"])) $use_javasyntax = $_POST["use_javasyntax"];
 
 $userid = get_userid();
 
@@ -36,11 +38,13 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST["edituserprefs"])) {
 	set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+	set_preference($userid, 'use_javasyntax', $use_javasyntax);
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
 } else if (!isset($_POST["submit"])) {
 	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
+	$use_javasyntax = get_preference($userid, 'use_javasyntax');
 }
 
 include_once("header.php");
@@ -65,6 +69,15 @@ if ($error != "") {
 			<select name="use_wysiwyg">
 				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo lang("usejavasyntax")?>:</td>
+		<td>
+			<select name="use_wysiwyg">
+				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
+				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected":"") ?>><?php echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
