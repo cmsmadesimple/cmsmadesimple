@@ -29,6 +29,9 @@
  */
 function redirect($to, $noappend=false)
 {
+	global $gCms;
+	$config = $gCms->config;
+
 	$schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
 	$host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
 	if (ini_get("session.use_trans_sid") != "0" && $noappend == false)
@@ -41,8 +44,22 @@ function redirect($to, $noappend=false)
 	}
 	else
 	{
-		header("Location: $to");
-		exit();
+		if (isset($config) and $config['debug'] == true)
+		{
+			echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+			echo "<a href=\"".$to."\">".$to."</a><br />";
+			global $sql_queries;
+			if (isset($sql_queries))
+			{
+				echo $sql_queries;
+			}
+			exit();
+		}
+		else
+		{
+			header("Location: $to");
+			exit();
+		}
 	}
 }
 
