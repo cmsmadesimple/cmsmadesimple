@@ -16,60 +16,59 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_breadcrumbs($params, &$smarty) {
-
-	global $db;
+function smarty_cms_function_breadcrumbs($params, &$smarty)
+{
 	global $gCms; 
 	
 	$thispage = $gCms->variables['page'];
 
-	# track - identify all ancestors of current page
-	$parent = $thispage;
-	$breadcrumbs = array();
-	
-	# gather data
-	while ($parent != 0) {
-		$query	= "SELECT * FROM ".cms_db_prefix()."pages WHERE page_id = '$parent'";
-		$result = $db->Execute($query);
-		if ($result && $result->RowCount() > 0) {
-			$line	= $result->FetchRow();
-			$parent	= $line["parent_id"];
+	#Make an array for all pages
+	$allcontent = array();
 
-			$current_content = new Page;
-			$current_content->page_id		= $line["page_id"];
-			$current_content->page_title	= $line["page_title"];
-			$current_content->page_alias	= $line["page_alias"];
-			$current_content->page_url		= $line["page_url"];
-			$current_content->menu_text		= $line["menu_text"];
-			$current_content->page_type		= $line["page_type"];
-			$current_content->item_order	= $line["item_order"];
-			$current_content->active		= $line["active"];
-			$current_content->show_in_menu	= $line["show_in_menu"];
-			$current_content->default_page	= $line["default_page"];
-			$current_content->username		= $line["username"];
-			$current_content->template_name = $line["template_name"];
-			$current_content->parent_id		= $line["parent_id"];
-			if (isset($line["url"])) $current_content->url = $line["url"];
-			array_push($breadcrumbs, $current_content);
-		}
+	#Load current content
+	$onecontent = ContentManager::LoadContentFromId($thispage);
+	array_push($allcontent, $onecontent);
+
+	#Grab all parents and put them into the array as well
+	while ($onecontent->ParentId() > 0) 
+	{
+		$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId());
+		array_push($allcontent, $onecontent);
 	}
 
 	$trail = "";
-	# process $breadcrumbs
-	while ($a = array_pop($breadcrumbs)) {
-		if ($a->page_id != $thispage && $a->page_type != 'seperator') {
-			if ($a->page_type == 'sectionheader')
+
+	#Pull them one by one in reverse order to construct a breadcrumb list
+	while ($onecontent = array_pop($allcontent))
+	{
+		if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator')
+		{
+			if ($onecontent->Type() == 'sectionheader')
 			{
-				if (getURL($thispage)!="") $trail .= $a->menu_text." &gt;&gt;\n";
-				else $trail .= $a->menu_text." &gt;&gt; \n";
+				if (getURL($thispage)!="")
+				{
+					$trail .= $onecontent->MenuText()." &gt;&gt;\n";
+				}
+				else
+				{
+					$trail .= $onecontent->MenuText()." &gt;&gt; \n";
+				}
 			}
 			else
 			{
-				if (getURL($thispage)!="") $trail .= "<a href=\"".getURL($a)."\">".$a->page_title."</a> &gt;&gt;\n";
-				else $trail .= $a->page_title." &gt;&gt; \n";
+				if (getURL($thispage)!="")
+				{
+					$trail .= "<a href=\"".$onecontent->getURL()."\">".$onecontent->Name()."</a> &gt;&gt;\n";
+				}
+				else
+				{
+					$trail .= $onecontent->Name()." &gt;&gt; \n";
+				}
 			}
-		} else {
-			$trail .= "<strong>".$a->page_title."</strong>\n";
+		}
+		else
+		{
+			$trail .= "<strong>".$onecontent->Name()."</strong>\n";
 		}
 	}
 
@@ -95,10 +94,10 @@ function smarty_cms_help_function_breadcrumbs() {
 function smarty_cms_about_function_breadcrumbs() {
 	?>
 	<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Modified to use new content rewrite (wishy)<br />
 	</p>
 	<?php
 }
