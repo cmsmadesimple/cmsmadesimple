@@ -201,24 +201,23 @@ function showPageThree($sqlloaded = 0) {
  
         echo "<textarea name=code rows=15 cols=50>$contents</textarea><p>\n";
 
-        $link = mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
-        if (!$link) {
-           echo 'Could not connect: ' . mysql_error();
-        } ## if
-
-        mysql_select_db($_POST['database']);
+		$db = &ADONewConnection('mysql');
+		$db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
+		if (!$db) die("Connection failed");
+		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
         foreach ($statements as $s) {
             $s = str_replace("\n", "", $s);
             if ($s != "") {
-                $result = mysql_unbuffered_query($s, $link);
+                #$result = mysql_unbuffered_query($s, $link);
+				$result = $db->Execute($s);
                 if (!$result) {
                     die('Invalid query: ' . mysql_error());
                 } ## if
             } ## if
         } ## foreach
 
-        mysql_close($link);
+		$db->Close();
         echo "Success!<p>";
 
         ## foreach ($_SERVER as $key => $value) { echo "$key: $value<br>\n"; }
