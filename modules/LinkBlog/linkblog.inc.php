@@ -354,3 +354,4 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 }
 
 # vim:ts=4 sw=4 noet
+?>
