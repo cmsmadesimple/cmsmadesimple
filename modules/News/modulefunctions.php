@@ -128,8 +128,8 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 			if ($type == "rss")
 			{
 				echo "        <item>\n";
-				echo "            <title>".$row["news_title"]."</title>\n";
-				echo "            <description>".$row["news_data"]."</description>\n";
+				echo "            <title>".strip_tags($row["news_title"])."</title>\n";
+				echo "            <description>".strip_tags($row["news_data"])."</description>\n";
 				echo "            <pubDate>".gmdate('D d M, Y H:i:s', $db->UnixTimeStamp($row["news_date"]))." GMT</pubDate>\n";
 				echo "        </item>\n";
 			}

@@ -23,6 +23,9 @@ require_once("../include.php");
 check_login($gCms->config);
 
 include_once("header.php");
+
+//Shouldn't something go here?
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
