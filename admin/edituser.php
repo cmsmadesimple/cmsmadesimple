@@ -1,8 +1,26 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require_once("../include.php");
 
 check_login($config);
+
+$error = "";
 
 $dropdown = "";
 
@@ -26,15 +44,29 @@ $userid = get_userid();
 $access = check_permission($config, $userid, 'Modify User');
 
 if ($access) {
-	$db = new DB($config);
 
 	if (isset($_POST["cancel"])) {
 		redirect("listusers.php");
 		return;
 	}
 
+	$db = new DB($config);
+
 	if (isset($_POST["edituser"])) {
-		if ($password == $passwordagain) {
+	
+		$validinfo = true;
+
+		if ($user == "") {
+			$validinfo = false;
+			$error .= "<li>No username given!</li>";
+		}
+
+		if ($password != $passwordagain) {
+			$validinfo = false;
+			$error .= "<li>Passwords do not match</li>";
+		}
+
+		if ($validinfo) {
 			$query = "UPDATE ".$config->db_prefix."users SET username='".mysql_real_escape_string($user)."', ";
 			if ($password != "") {
 				$query .= "password='".mysql_real_escape_string($password)."', ";
@@ -48,11 +80,8 @@ if ($access) {
 				return;
 			}
 			else {
-				echo "Error updating user";
+				$error .= "<li>Error updating user</li>";
 			}
-		}
-		else {
-			echo "Passwords do not match";
 		}
 	}
 	else if ($user_id != -1) {
@@ -79,6 +108,10 @@ if (!$access) {
 }
 else {
 
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
+
 ?>
 
 <form method="post" action="edituser.php">
@@ -90,11 +123,11 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Name:</td>
+		<td>*Name:</td>
 		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" /></td>
 	</tr>
 	<tr>
-		<td>Password:</td>
+		<td>Password<br />(leave blank to keep current password):</td>
 		<td><input type="password" name="password" maxlength="25" value="" /></td>
 	</tr>
 	<tr>
@@ -122,4 +155,5 @@ else {
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

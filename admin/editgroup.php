@@ -1,8 +1,26 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require_once("../include.php");
 
 check_login($config);
+
+$error = "";
 
 $dropdown = "";
 
@@ -30,17 +48,24 @@ if ($access) {
 
 	if (isset($_POST["editgroup"])) {
 
-		$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_real_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
-		$result = $db->query($query);
-
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listgroups.php");
-			return;
+		$validinfo = true;
+		if ($group == "") {
+			$validinfo = false;
+			$error .= "<li>No group name given!</li>";
 		}
-		else {
-			echo "Error updating group";
-			echo "<pre>query: $query</pre>";
+
+		if ($validinfo) {
+			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_real_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
+			$result = $db->query($query);
+
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listgroups.php");
+				return;
+			}
+			else {
+				$error .= "<li>Error updating group</li>";
+			}
 		}
 
 	}
@@ -68,7 +93,9 @@ if (!$access) {
 	print "<h3>No Access to Edit Groups</h3>";
 }
 else {
-
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
 ?>
 
 <form method="post" action="editgroup.php">
@@ -103,4 +130,5 @@ else {
 }
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

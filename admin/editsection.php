@@ -1,4 +1,20 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require_once("../include.php");
 
@@ -33,7 +49,7 @@ if ($access) {
 
 		if ($section == "") {
 			$validinfo = false;
-			$error .= "<p>No Section name given!</p>";
+			$error .= "<li>No Section name given!</li>";
 		}
 
 		if ($validinfo) {
@@ -47,7 +63,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<p>Error updating section</p>";
+				$error .= "<li>Error updating section</li>";
 			}
 		}
 
@@ -77,7 +93,7 @@ if (!$access) {
 else {
 
 	if ($error != "") {
-		echo $error;
+		echo "<ul class=\"error\">".$error."</ul>";
 	}
 ?>
 
@@ -90,7 +106,7 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Name:</td>
+		<td>*Name:</td>
 		<td><input type="text" name="section" maxlength="25" value="<?=$section?>" /></td>
 	</tr>
 	<tr>

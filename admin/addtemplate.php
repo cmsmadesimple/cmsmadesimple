@@ -1,8 +1,26 @@
 <?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 require_once("../include.php");
 
 check_login($config);
+
+$error = "";
 
 $template = "";
 if (isset($_POST["template"])) $template = $_POST["template"];
@@ -29,15 +47,28 @@ if ($access) {
 
 	if (isset($_POST["addtemplate"])) {
 
-		$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".mysql_escape_string($template)."', '".mysql_escape_string($content)."', '".mysql_escape_string($stylesheet)."', $active, now(), now());";
-		$result = $db->query($query);
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listtemplates.php");
-			return;
+		$validinfo = true;
+
+		if ($template == "") {
+			$error .= "<li>No template name given!</li>";
+			$validinfo = false;
 		}
-		else {
-			echo "Error inserting template";
+		if ($content == "") {
+			$error .= "<li>No template content entered!</li>";
+			$validinfo = false;
+		}
+
+		if ($validinfo) {
+			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".mysql_escape_string($template)."', '".mysql_escape_string($content)."', '".mysql_escape_string($stylesheet)."', $active, now(), now());";
+			$result = $db->query($query);
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listtemplates.php");
+				return;
+			}
+			else {
+				$error .= "<li>Error inserting template</li>";
+			}
 		}
 	}
 
@@ -50,6 +81,10 @@ if (!$access) {
 	print "<h3>No Access to Add Templates</h3>";
 }
 else {
+
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
 
 ?>
 
