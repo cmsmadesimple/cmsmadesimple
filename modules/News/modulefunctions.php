@@ -321,7 +321,12 @@ function news_module_executeadmin($cms,$id)
 		echo "<TABLE><TR>";
 		echo "<TD><H5>Filter:</H5></TD>";
 		echo "<TD><SELECT NAME=\"".$id."news_cat\">";
-		echo "<OPTION SELECTED>All</OPTION>";
+		echo "<OPTION";
+		if ($newscat == "All")
+		{
+			echo " SELECTED";
+		}
+		echo ">All</OPTION>";
 		while ($row = $dbresult->FetchRow())
 		{
 			$x = $row["news_cat"];
@@ -329,7 +334,12 @@ function news_module_executeadmin($cms,$id)
 			{
 				$x = "**Empty**";
 			}
-			echo "<OPTION>".$x."</OPTION>";
+			echo "<OPTION";
+			if ($newscat == $x)
+			{
+				echo " SELECTED";
+			}
+			echo ">".$x."</OPTION>";
 		}
 		echo "</SELECT></TD>";
 		echo "<TD><INPUT TYPE=\"SUBMIT\" NAME=\"".$id."filter\" VALUE=\"Select\" /></TD>";
@@ -347,13 +357,13 @@ function news_module_executeadmin($cms,$id)
 		}
 		else if( $newscat == "**Empty**" )
 		{
-			echo "<H4>**Empty** Entries</H4>";
+			echo "<H4>**Empty** Entries:</H4><BR>";
 			$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 				.cms_db_prefix()."module_news ORDER BY news_date desc";
 		}
 		else 
 		{
-			echo "<H4>$newscat Entries</H4>";
+			echo "<H4>$newscat Entries:</H4><BR>";
 			$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 				.cms_db_prefix()."module_news WHERE news_cat = \""
 				.$newscat."\" ORDER BY news_date desc";
