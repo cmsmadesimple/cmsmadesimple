@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.8.1-svn";
+$CMS_VERSION = "0.8.1";
 $CMS_VERSION_NAME = "Papeete";
 $CMS_SCHEMA_VERSION = "9";
 
