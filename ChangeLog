@@ -1,9 +1,13 @@
 Version 0.7.1 -- Subversion
 -----------------
 
+* Added check for session functions to install script (#000004)
 * Added newline parsing to the comments module (#000011)
+* Added encoding override on templates.  Fixed bugs with htmlentities. (#000002, #000006)
+* Added missing CSS to the horizontal menu (#000008)
 * Fixed email in add/edit user to accept 255 characters (#000003)
 * Fixed htmlblob NOTICE level messages (#000005)
+* Fixed delete confirmation text in file management (#000012)
 * Removed a rogue div from the Comments module (#000010)
 
 Version 0.7 -- Mon Oct 11 2004
