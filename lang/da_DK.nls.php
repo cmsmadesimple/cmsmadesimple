@@ -3,6 +3,7 @@
 #DK Danish
 #Translated by: Simon Justesen
 $nls['language']['da_DK'] = 'Dansk';
+$nls['englishlang']['da_DK'] = 'Danish';
 
 #Possible aliases for language
 $nls['alias']['dk'] = 'da_DK';
