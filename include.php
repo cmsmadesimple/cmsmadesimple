@@ -113,6 +113,9 @@ require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.sequence.inc.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
+#Load all site preferences
+load_site_preferences();
+
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
 $ls = dir($dir);
@@ -170,9 +173,6 @@ else
 {
 	ModuleOperations::LoadModules(false);
 }
-
-#Load all site preferences
-load_site_preferences();
 
 if (isset($CMS_ADMIN_PAGE)) {
 	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");

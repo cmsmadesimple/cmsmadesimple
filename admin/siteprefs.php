@@ -45,8 +45,8 @@ if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage
 $sitedownmessagetemplate = "-1";
 if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
 
-$useadvancedcss = "1";
-if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
+#$useadvancedcss = "1";
+#if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
 // ADDED
 $logintheme = "default";
@@ -82,10 +82,8 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
-		set_site_preference('useadvancedcss', $useadvancedcss);
-		//ADDED
+		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
-		//STOP
 		audit(-1, '', 'Edited Site Preferences');
 	}
 	else
@@ -99,7 +97,7 @@ else if (isset($_POST["editsiteprefs"]))
 	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
 	$sitedownmessage = get_site_preference('sitedownmessage');
 	$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
-	$useadvancedcss = get_site_preference('useadvancedcss');
+	#$useadvancedcss = get_site_preference('useadvancedcss');
 	//ADDED
 	$logintheme = get_site_preference('logintheme', 'default');
 	//STOP
@@ -191,16 +189,17 @@ if ($message != "") {
 			-->
 		</td>
 	</tr>
+	<!--
 	<tr>
-		<td><?php echo lang('useadvancedcss')?></td>
+		<td><?php #echo lang('useadvancedcss')?></td>
 		<td>
 			<select name="useadvancedcss">
-				<option value="1"<?php echo ($useadvancedcss=="1"?" selected=\"selected\"":"")?>><?php echo lang('true')?></option>
-				<option value="0"<?php echo ($useadvancedcss=="0"?" selected=\"selected\"":"")?>><?php echo lang('false')?></option>
+				<option value="1"<?php #echo ($useadvancedcss=="1"?" selected=\"selected\"":"")?>><?php #echo lang('true')?></option>
+				<option value="0"<?php #echo ($useadvancedcss=="0"?" selected=\"selected\"":"")?>><?php #echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
-  <?//ADDED?>
+	-->
   <?
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
@@ -221,7 +220,6 @@ if ($message != "") {
 		</td>
 	</tr>
 	<?}?>
-	<?//STOP?>
 	
 	
 	<?php if ($access) { ?>

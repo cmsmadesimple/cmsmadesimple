@@ -150,8 +150,11 @@ if ($access)
 					}
 				}
 					
-				redirect("listcss.php");
-				return;
+				if (!isset($_POST["apply"]))
+				{
+					redirect("listcss.php");
+					return;
+				}
 			}
 			else
 			{
@@ -226,6 +229,7 @@ else
 			<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
 			<input type="hidden" name="editcss" value="true" />
 			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		</td>
 	</tr>
