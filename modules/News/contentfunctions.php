@@ -18,15 +18,15 @@
 
 function news_module_content_set_properties(&$module)
 {
-	$module->mProperties->Add('int', 'number', 5);
+	$module->mProperties->Add('string', 'number', '');
 	$module->mProperties->Add('string', 'dateformat', 'F j, Y, g:i a');
-	$module->mProperties->Add('bool', 'swaptitledate', true);
+	$module->mProperties->Add('bool', 'swaptitledate', 1);
 	$module->mProperties->Add('string', 'category');
 	$module->mProperties->Add('string', 'summary');
 	$module->mProperties->Add('int', 'length', 80);
-	$module->mProperties->Add('bool', 'showcategorywithtitle', true);
+	$module->mProperties->Add('bool', 'showcategorywithtitle', 1);
 	$module->mProperties->Add('string', 'moretext', 'more...');
-	$module->mProperties->Add('bool', 'sortasc', false);
+	$module->mProperties->Add('bool', 'sortasc', 0);
 }
 
 function news_module_content_edit(&$module)
@@ -43,7 +43,7 @@ function news_module_content_edit(&$module)
 	$text .= '<tr><td>Category:</td><td><input type="text" name="category" value="'.$module->GetPropertyValue('category').'" /></td></tr>';
 	$text .= '<tr><td>Summary:</td><td><input type="text" name="summary" value="'.$module->GetPropertyValue('summary').'" /></td></tr>';
 	$text .= '<tr><td>Summary Length:</td><td><input type="text" name="length" value="'.$module->GetPropertyValue('length').'" /></td></tr>';
-	$text .= '<tr><td>Show Category:</td><td><input type="checkbox" name="showcategorywithtitle" '.($module->GetPropertyValue('showcategorywithtitle')?' checked=true':'').' /></td></tr>';
+	$text .= '<tr><td>Show Category:</td><td><input type="checkbox" name="showcategorywithtitle" '.($module->GetPropertyValue('showcategorywithtitle')?' checked="true"':'').' /></td></tr>';
 	$text .= '<tr><td>More Text:</td><td><input type="text" name="moretext" value="'.$module->GetPropertyValue('moretext').'" /></td></tr>';
 	$text .= '<tr><td>Sort Ascending:</td><td><input type="checkbox" name="sortasc" '.($module->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
 	$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($module->mActive?' checked="true"':'').'></td></tr>';
@@ -57,7 +57,7 @@ function news_module_content_fill_params(&$module, &$params)
 {
 	if (isset($params))
 	{
-		$parameters = array('number', 'category', 'summary', 'length', 'moretext');
+		$parameters = array('number', 'category', 'summary', 'length', 'moretext', 'dateformat');
 		foreach ($parameters as $oneparam)
 		{
 			if (isset($params[$oneparam]))
@@ -67,27 +67,27 @@ function news_module_content_fill_params(&$module, &$params)
 		}
 		if (isset($params['swaptitledate']))
 		{
-			$module->mProperties->SetValue('swaptitledate', true);
+			$module->mProperties->SetValue('swaptitledate', 1);
 		}
 		else
 		{
-			$module->mProperties->SetValue('swaptitledate', false);
+			$module->mProperties->SetValue('swaptitledate', 0);
 		}
 		if (isset($params['showcategorywithtitle']))
 		{
-			$module->mProperties->SetValue('showcategorywithtitle', true);
+			$module->mProperties->SetValue('showcategorywithtitle', 1);
 		}
 		else
 		{
-			$module->mProperties->SetValue('showcategorywithtitle', false);
+			$module->mProperties->SetValue('showcategorywithtitle', 0);
 		}
 		if (isset($params['sortasc']))
 		{
-			$module->mProperties->SetValue('sortasc', true);
+			$module->mProperties->SetValue('sortasc', 1);
 		}
 		else
 		{
-			$module->mProperties->SetValue('sortasc', false);
+			$module->mProperties->SetValue('sortasc', 0);
 		}
 		if (isset($params['title']))
 		{
@@ -136,7 +136,31 @@ function news_module_content_fill_params(&$module, &$params)
 function news_module_content_show(&$module)
 {
 	global $gCms;
-	return news_module_execute($gCms, '1', array());
+
+	$params = array();
+
+	if (strlen($params['number']) > 0)
+	{
+		$params['number'] = $module->mProperties->GetValue('number');
+	}
+	if (strlen($params['category']) > 0)
+	{
+		$params['category'] = $module->mProperties->GetValue('category');
+	}
+	if (strlen($params['summary']) > 0)
+	{
+		$params['summary'] = $module->mProperties->GetValue('summary');
+	}
+	if (strlen($params['length']) > 0)
+	{
+		$params['length'] = $module->mProperties->GetValue('length');
+	}
+	$params['moretext'] = $module->mProperties->GetValue('moretext');
+	$params['showcategorywithtitle'] = $module->mProperties->GetValue('showcategorywithtitle');
+	$params['swaptitledate'] = $module->mProperties->GetValue('swaptitledate');
+	$params['sortasc'] = $module->mProperties->GetValue('sortasc');
+
+	return news_module_execute($gCms, '1', $params);
 }
 
 function news_module_content_get_url(&$module)

@@ -1038,7 +1038,7 @@ function cms_mapi_create_module_content_class($key)
 			#This does some tricks to make sure that all output is captured
 			$classtext .= 'function Show() {';
 			$classtext .= '@ob_start();';
-			$classtext .= $allmodules[$key]['content_module_show'] . '($this);';
+			$classtext .= 'echo ' . $allmodules[$key]['content_module_show'] . '($this);';
 			$classtext .= '$result = @ob_get_clean();';
 			$classtext .= 'return $result;';
 			$classtext .= '}';
@@ -1048,7 +1048,7 @@ function cms_mapi_create_module_content_class($key)
 			#Same here...
 			$classtext .= 'function Edit() {';
 			$classtext .= '@ob_start();';
-			$classtext .= $allmodules[$key]['content_module_edit'] . '($this);';
+			$classtext .= 'echo ' . $allmodules[$key]['content_module_edit'] . '($this);';
 			$classtext .= '$result = @ob_get_clean();';
 			$classtext .= 'return $result;';
 			$classtext .= '}';
