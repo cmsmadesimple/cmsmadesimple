@@ -4,13 +4,14 @@ Version 0.7.2 -- Subversion
 * Added missing edit links to titles in CSS and News admin (#000035)
 * Added ability to invert the foreground/background color of htmlarea (#0000031)
 * Added search and replace to htmlarea
+* Added ability to clean pastes from Microsoft Word in htmlarea
 * Changed en_US to UTF-8
 * Changed with of add and edit html blob pages
+* Fixed login to redirect back to originally requested link
 * Fixed stupid encoding issue with cms_htmlentities
 * Fixed htmlarea not loading due to a notice level error (#0000034)
 * Fixed a few problems with htmlarea's fullscreen not working in Internet Explorer
-* Added search and replace to htmlarea
-* Added ability to clean pastes from Microsoft Word in htmlarea
+* Updated Smarty to 2.6.6
 
 Version 0.7.1 -- Wed Oct 26 2004
 -----------------
