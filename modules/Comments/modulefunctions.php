@@ -79,18 +79,17 @@ function comments_module_execute($cms, $id, $params) {
 
 	if ($dbresult && $dbresult->RowCount()) {
 
-		echo "\n<div class=\"modulecomments\">\n";
-
 		while ($row = $dbresult->FetchRow()) {
 			echo "<div class=\"modulecommentsentry\">\n";
+			echo "<div class=\"modulecommentsentryheader\">\n";
 			echo "<span class=\"modulecommentsentrydate\">".date($dateformat, $db->UnixTimeStamp($row['comment_date']))."</span>";
 			echo " - ";
-			echo "<span class=\"modulecommentsentryauthor\">".$row['comment_author']."</span><br/>\n";
-			echo "<span class=\"modulecommentsentrybody\">".$row["comment_data"]."</span>\n";
+			echo "<span class=\"modulecommentsentryauthor\">".$row['comment_author']."</span>\n";
+			echo "</div>\n";
+			echo "<div class=\"modulecommentsentrybody\">".$row["comment_data"]."</div>\n";
+			echo "</div>\n";
 			echo "</div>\n";
 		}
-
-		echo "</div>\n";
 	}
 }
 

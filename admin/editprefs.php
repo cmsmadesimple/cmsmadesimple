@@ -58,7 +58,7 @@ if (isset($_POST["submit_form"])) {
 	$use_javasyntax = get_preference($userid, 'use_javasyntax');
     if($use_javasyntax == null)$use_javasyntax = false;
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
-	$old_default_cms_lang = $default_cms_language;
+	$old_default_cms_lang = $default_cms_lang;
 }
 
 include_once("header.php");

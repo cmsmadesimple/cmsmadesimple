@@ -26,7 +26,7 @@
 		    "img"=>"fhtml","desc"=>"Web page",
 			"link"=>Array(
 				"view"=>"{url_dir_file}",
-				"edit"=>"../filehandlers/htmledit?file={$file}"				
+				"edit"=>"../filehandlers/htmledit?file={file}"				
 			),
 			"alias"=>Array("htm","shtm","shtml","hta","xhtml")			
 		), 
