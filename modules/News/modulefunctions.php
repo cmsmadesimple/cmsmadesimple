@@ -80,7 +80,7 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 	if (isset($params["makerssbutton"]))
 	{
 		$params = array_merge($params, array("showtemplate"=>"false","type"=>"rss"));
-		echo cms_mapi_create_user_link('News', $id, $return_id, $params, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" />");
+		echo cms_mapi_create_user_link('News', $id, $return_id, $params, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />");
 		return;
 	}
 

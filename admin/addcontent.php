@@ -433,6 +433,12 @@ else {
 		<td><input type="text" name="url" maxlength="65" value="<?php echo $url?>" class="standard"></td>
 	</tr>
 	<?php } ?>
+	<?php if ($content_type == 'News') { ?>
+	<tr>
+		<td><?php echo lang('template')?>:</td>
+		<td><?php echo $dropdown2?></td>
+	</tr>
+	<?php } ?>
 	<tr>
 		<td><?php echo lang('parent')?>:</td>
 		<td><?php echo $dropdown?></td>
