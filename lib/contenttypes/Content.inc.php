@@ -114,7 +114,7 @@ class content extends ContentBase
 		$stylesheet = '';
 		if ($this->TemplateId() > 0)
 		{
-			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId() . '&amp;stripbackground=true';
+			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 		}
 
 		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';

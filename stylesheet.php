@@ -34,7 +34,8 @@ $css = $result['stylesheet'];
 
 if ($stripbackground)
 {
-	$css = preg_replace('/(\w*?background.*?\:).*?(;)/', '', $css);
+	#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
+	$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
 }
 
 echo $css;
