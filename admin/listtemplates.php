@@ -79,7 +79,7 @@ if (isset($_GET["message"])) {
 		while($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$row["template_name"]."</td>\n";
+			echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">".$row["template_name"]."</a></td>\n";
 			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 
 			# set template to all content

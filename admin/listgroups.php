@@ -58,7 +58,7 @@ include_once("header.php");
 		while ($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$row["group_name"]."</td>\n";
+			echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$row["group_name"]."</a></td>\n";
 			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($perm)
 				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";

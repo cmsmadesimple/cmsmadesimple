@@ -77,7 +77,7 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one->hier."</td>\n";
-			echo "<td>".$one->page_title."</td>\n";
+			echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".$one->page_title."</a></td>\n";
 			echo "<td>".$one->template_name."</td>\n";
 			echo "<td align=\"center\">".$types[$one->page_type]."</td>\n";
 //			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";

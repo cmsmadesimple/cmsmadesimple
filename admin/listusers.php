@@ -55,7 +55,7 @@ if (isset($_GET["message"])) {
 		while($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$row["username"]."</td>\n";
+			echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".$row["username"]."</a></td>\n";
 			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
 				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
