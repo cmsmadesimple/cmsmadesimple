@@ -687,14 +687,14 @@ class News extends CMSModule
 					{
 						$querystart .= ", end_time";
 						$queryend .= ",?";
-						array_push($params, $db->DBTimeStamp($end_date));
+						array_push($params, rtrim(ltrim($db->DBTimeStamp($end_date), "'"), "'")); 
 					}
 					else if( $expiry != "" && $expiry != "Never" )
 					{
 						$querystart .= ", end_time";
 						$queryend .= ",?";
 						$time = strtotime("+".$expiry);
-						array_push($params, $db->DBTimeStamp($time));
+						array_push($params, rtrim(ltrim($db->DBTimeStamp($time), "'"), "'")); 
 						if( $start_date == "" ) 
 						{
 							$start_date = $db->DBTimeStamp(time());
@@ -704,7 +704,7 @@ class News extends CMSModule
 					{
 						$querystart .= ", start_time";
 						$queryend .= ",?";
-						array_push($params, $db->DBTimeStamp($start_date));
+						array_push($params, rtrim(ltrim($db->DBTimeStamp($start_date), "'"), "'")); 
 					}
 					$query = $querystart . $queryend . ")";
 					$dbresult = $db->Execute($query, $params);
