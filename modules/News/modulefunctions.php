@@ -216,9 +216,13 @@ function news_module_help($cms)
 function news_module_about() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.2</p>
+	<p>Version: 1.3</p>
 	<p>
 	Change History:
+	</p>
+	<p>
+	1.3 -- Oct 03, 2004<br />
+	Post date it now editable on the Add News form
 	</p>
 	<p>
 	1.2 -- Sep 20, 2004<br />

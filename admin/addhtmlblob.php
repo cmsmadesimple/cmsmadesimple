@@ -103,7 +103,7 @@ if ($result && $result->RowCount() > 0) {
 }
 
 if (!$access) {
-	print "<h3>".lang('noaccessto', array(lang('addblob')))."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('addhtmlblob')))."</h3>";
 }
 else {
 	if ($error != "") {
@@ -115,7 +115,7 @@ else {
 
 <div class="adminformSmall">
 
-<h3><?php echo lang('addblob')?></h3>
+<h3><?php echo lang('addhtmlblob')?></h3>
 
 <table border="0">
 

@@ -206,4 +206,6 @@ $lang['admin']['blobexists'] = 'Html Blok naam bestaat al';
 $lang['admin']['errorinsertingblob'] = 'Er was een error bij het invoegen van het Html Blok'; 
 $lang['admin']['filemanager'] = 'Bestanden';
 $lang['admin']['imagemanager'] = 'Afbeeldingen';
+$lang['admin']['addhtmlblob'] = 'Add Html Blob'; //needs translation
+$lang['admin']['edithtmlblob'] = 'Edit Html Blob'; //needs translation
 ?>

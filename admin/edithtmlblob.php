@@ -154,7 +154,7 @@ while($row = $result->FetchRow())
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('editblob')))."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('edithtmlblob')))."</h3>";
 }
 else
 {
@@ -168,7 +168,7 @@ else
 
 <div class="adminformSmall">
 
-<h3><?php echo lang('editblob')?></h3>
+<h3><?php echo lang('edithtmlblob')?></h3>
 
 <table border="0">
 
