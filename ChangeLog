@@ -1,3 +1,10 @@
+Version 0.4.1 -- Subversion
+-----------------
+
+* Fixed 2 redirection bugs in the news module
+* Fixed a bug in adding a group
+
+
 Version 0.4 -- Tue Aug 10 2004
 -----------------
 
