@@ -3,6 +3,7 @@ Version 0.9.1 "Mohotani" -- Subversion
 
 * Added collapse option to bulletmenu, for cases where section header
 is used as parents for other content
+* Added apply button to edit css
 * Changed breadcrumbs plugin to use menu text instead of title
 * Fixed bug with call to post render hook
 * Fixed nasty bug where content would have properties deleted if set
@@ -12,6 +13,7 @@ inactive
 * Fixed automated module upgrades by making AllowAutoUpgrade() function
 return TRUE by defualt instead of FALSE (which is correct)
 * Removed a rogue debug message
+* Removed the advanced css option.  It's on all the time now.
 * Updated some text in INSTALL and UPGRADE docs
 
 Version 0.9 "Marquesas" -- Tue Feb 22 2005
