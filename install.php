@@ -203,8 +203,8 @@ function showPageThree($sqlloaded = 0) {
         echo "<textarea name=code rows=15 cols=50>$contents</textarea><p>\n";
 
 		$db = &ADONewConnection('mysql');
-		$db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
-		if (!$db) die("Connection failed");
+		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
+		if (!$result) die("Connection failed");
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
         foreach ($statements as $s) {
@@ -259,6 +259,7 @@ function showPageFour() {
     ## build the content for config file
 
     $content = "<?php\n\n#Database connection information'\n";
+	$content .= '$this->dbms = "mysql";'."\n";
     $content .= '$this->db_hostname = "'.$_POST['host'].'";'."\n";
     $content .= '$this->db_username = "'.$_POST['username'].'";'."\n";
     $content .= '$this->db_password = "'.$_POST['password'].'";'."\n";
