@@ -64,6 +64,7 @@ function cms_mapi_register_module($name, $author, $version) {
 		$cmsmodules[$name]['Version'] = $version;
 		$cmsmodules[$name]['Installed'] = false; 
 		$cmsmodules[$name]['Active'] = false; 
+		$cmsmodules[$name]['enable_wysiwyg'] = false;
 	}
 }
 
@@ -196,6 +197,16 @@ function cms_mapi_unregister_module($name) {
 	}
 }
 
+function cms_mapi_enable_wysiwyg($name)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['enable_wysiwyg'] = true;
+	}
+}
+
 /**
  * Create's a new permission for use by the module.
  *
@@ -314,7 +325,7 @@ function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message=
  */
 function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post") {
 
-	return "<form method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
+	return "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
 
 
 }
@@ -340,7 +351,7 @@ function cms_mapi_create_user_form_end() {
  */
 function cms_mapi_create_admin_form_start($module, $id, $method="post") {
 
-	return "<form method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
+	return "<form name=\"".$id."moduleform\" method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
 
 
 }

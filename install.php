@@ -55,7 +55,7 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <div class="body">
 
-<img src="images/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
+<img src="images/cms/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
 
 <div class="headerish">
 

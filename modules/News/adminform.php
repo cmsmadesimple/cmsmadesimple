@@ -116,7 +116,7 @@ if ($error != "") {
 	</tr>
 	<tr>
 		<td>Content:</td>
-		<td><textarea name="<?=$id?>newscontent" cols="45" rows="8"><?=$data?></textarea></td>
+		<td><textarea id="<?=$id?>newscontent" name="<?=$id?>newscontent" cols="70" rows="12"><?=$data?></textarea></td>
 	</tr>
 	<tr>
 		<td><?=$hiddenfields?>&nbsp;</td>

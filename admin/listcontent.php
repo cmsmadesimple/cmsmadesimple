@@ -90,25 +90,25 @@ if (isset($_GET["message"])) {
 				if ($one->num_same_level > 1) {
 					if ($one->item_order == 1 && $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
 					} else if ($one->item_order == $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
 					} else {
 						echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
+							"<img src=\"../images/cms/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
 							"<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
 					}
 				}
 				echo "</td>\n";
 			}
 			if ($config["query_var"] == "")
-				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
 			else
-				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\"><img src=\"../images/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
-			echo "<td width=\"18\"><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\"><img src=\"../images/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
-			echo "<td width=\"18\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
+				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
+			echo "<td width=\"18\"><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\"><img src=\"../images/cms/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
+			echo "<td width=\"18\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
 			echo "</tr>\n";
 
 			$count++;

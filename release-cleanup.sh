@@ -15,7 +15,7 @@ rm -fr autogen.sh
 rm -fr mpd.sql
 rm -fr mysql.sql
 rm -fr generatedump.php
-rm -fr images/*.svg
+rm -fr images/cms/*.svg
 rm -fr smarty/cms/cache/*
 rm -fr smarty/cms/templates_c/*
 find -depth -type f -name *.po -exec rm -fr {} \;

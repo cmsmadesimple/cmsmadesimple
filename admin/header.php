@@ -26,14 +26,29 @@ header("Pragma: no-cache");
 
 <link rel="stylesheet" type="text/css" href="style.css" />
 
-<?php if (isset($htmlarea_flag)) { ?>
-
+<?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<script type="text/javascript">
-		_editor_url = "<?=$config->root_url?>/htmlarea/";
+		_editor_url = "<?=$config["root_url"]?>/htmlarea/";
 		_editor_lang = "en";
 	</script>
 
-	<script type="text/javascript" src="<?=$config->root_url?>/htmlarea/htmlarea.js"></script>
+	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
+
+	<script type="text/javascript" defer="1">
+		var editor = null;
+		function initHtmlArea() {
+			HTMLArea.replaceAll();
+		}
+	</script>
+
+<?php } else if (isset($htmlarea_flag)) { ?>
+
+	<script type="text/javascript">
+		_editor_url = "<?=$config["root_url"]?>/htmlarea/";
+		_editor_lang = "en";
+	</script>
+
+	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
 
 	<script type="text/javascript">
 
@@ -56,7 +71,7 @@ header("Pragma: no-cache");
 
 <body <?php if (isset($htmlarea_flag)) { ?>onload="initHtmlArea();"<?php } ?>>
 
-<img src="../images/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
+<img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
 <div id="header" class="header">
 
 </div>

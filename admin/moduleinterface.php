@@ -26,6 +26,15 @@ $module = "";
 if (isset($_GET["module"])) $module = $_GET["module"];
 else if (isset($_POST["module"])) $module = $_POST["module"];
 
+if (isset($gCms->modules[$module]) && isset($gCms->modules[$module]['enable_wysiwyg']) && $gCms->modules[$module]['enable_wysiwyg'] == true)
+{
+	$userid = get_userid();
+	if (get_preference($userid, 'use_wysiwyg') == "1") {
+		$htmlarea_flag = "true";
+		$htmlarea_replaceall = true;
+	}
+}
+
 include_once("header.php");
 
 if (count($gCms->modules) > 0) {
@@ -38,8 +47,6 @@ if (count($gCms->modules) > 0) {
 
 	if (isset($gCms->modules[$module])) {
 		@ob_start();
-		#$obj = $cmsmodules[$module]['Instance'];
-		#$obj->executeadmin($modulecmsobj,"module_".$module."_");
 		call_user_func_array($gCms->modules[$module]['execute_admin_function'], array($gCms,"module_".$module."_"));
 		$content = @ob_get_contents();
 		@ob_end_clean();
