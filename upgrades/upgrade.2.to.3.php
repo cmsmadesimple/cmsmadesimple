@@ -26,7 +26,14 @@ mysql_free_result($result);
 	$query .= "  PRIMARY KEY (plugin_id)";
 	$query .= ") TYPE=MyISAM";
 
-	$result = $db->query($query);
+	$db->query($query);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating indexes...";
+
+	$query = "CREATE INDEX idx_template_id_modified_date ON cms_pages (template_id, modified_date)";
+	$db->query($query);
 
 	echo "[done]</p>";
 
