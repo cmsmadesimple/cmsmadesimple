@@ -76,7 +76,7 @@ if (isset($_GET["message"])) {
 if (check_permission($userid, 'Add User')) {
 ?>
 
-<div class=button><a href="adduser.php"><?=$gettext->gettext("Add New User")?></a></div></p>
+<div class=button><a href="adduser.php"><?=$gettext->gettext("Add New User")?></a></div><br>
 
 <?php
 }

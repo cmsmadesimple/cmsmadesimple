@@ -337,9 +337,9 @@ function cms_mapi_audit($cms, $itemid, $itemname, $action) {
  * @since 0.4
  */
 function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn_message="") {
-	$val = "<a href=\"moduleinterface.php?module=$module&return_id=$page_id&id=$id";
+	$val = "<a href=\"moduleinterface.php?module=$module&amp;return_id=$page_id&amp;id=$id";
 	foreach ($params as $key=>$value) {
-		$val .= "&$id$key=$value";
+		$val .= "&amp;$id$key=$value";
 	}
 	$val .= "\"";
 	if ($warn_message !== "") {
@@ -358,7 +358,7 @@ function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message=
 
 	$val = "<a href=\"moduleinterface.php?module=$module";
 	foreach ($params as $key=>$value) {
-		$val .= "&$id$key=$value";
+		$val .= "&amp;$id$key=$value";
 	}
 	$val .= "\"";
 	if ($warn_message !== "") {

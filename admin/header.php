@@ -16,15 +16,13 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 ?>
-<!DOCTYPE html PUBLIC "-//W4C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
+<html>
 <head>
 
 <title><?=$gettext->gettext("CMS Admin System")?></title>
 
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" language="javascript" src="helparea.js"></script>
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
@@ -34,7 +32,7 @@ header("Pragma: no-cache");
 	</script>
 
 	<script type="text/javascript" src="<?=$config["root_url"]?>/htmlarea/htmlarea.js"></script>
-	<script type="text/javascript" defer="1">
+	<script type="text/javascript" defer>
 		var editor = null;
 		function initHtmlArea() {
 			HTMLArea.replaceAll();
@@ -75,7 +73,7 @@ if (get_preference($userid, 'use_wysiwyg') == "1" && isset($htmlarea_flag)){
 <body <?php echo (isset($load)?$load:""); ?>>
 
 <div id="header" class="header">
-<img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
+<img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple">
 </div>
 
 <?php

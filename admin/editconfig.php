@@ -56,29 +56,29 @@ require_once("header.php");
 	</tr>
 	<tr>
 		<td>Hostname:</td>
-		<td><input type="text" name="db_hostname" value="<?=$config["db_hostname"]?>" /></td>
+		<td><input type="text" name="db_hostname" value="<?=$config["db_hostname"]?>"></td>
 	</tr>
 	<!--
 	<tr>
 		<td>Port:</td>
-		<td><input type="text" name="db_port" value="<?=$config["db_hostname"]?>" /></td>
+		<td><input type="text" name="db_port" value="<?=$config["db_hostname"]?>"></td>
 	</tr>
 	-->
 	<tr>
 		<td>Username:</td>
-		<td><input type="text" name="db_username" value="<?=$config["db_username"]?>" /></td>
+		<td><input type="text" name="db_username" value="<?=$config["db_username"]?>"></td>
 	</tr>
 	<tr>
 		<td>Password:</td>
-		<td><input type="text" name="db_password" value="<?=$config["db_password"]?>" /></td>
+		<td><input type="text" name="db_password" value="<?=$config["db_password"]?>"></td>
 	</tr>
 	<tr>
 		<td>Database:</td>
-		<td><input type="text" name="db_database" value="<?=$config["db_name"]?>" /></td>
+		<td><input type="text" name="db_database" value="<?=$config["db_name"]?>"></td>
 	</tr>
 	<tr>
 		<td>Database Prefix:</td>
-		<td><input type="text" name="db_prefix" value="<?=$config["db_prefix"]?>" /></td>
+		<td><input type="text" name="db_prefix" value="<?=$config["db_prefix"]?>"></td>
 	</tr>
 	<tr>
 		<td colspan="2">&nbsp;</td>

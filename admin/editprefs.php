@@ -69,9 +69,9 @@ if ($error != "") {
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true" />
-		<input type="submit" name="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true">
+		<input type="submit" name="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

@@ -132,7 +132,7 @@ else {
 
 	<tr>
 		<td width="100">*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
+		<td><input type="text" name="template" maxlength="25" value="<?=$template?>"></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
@@ -144,14 +144,14 @@ else {
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addtemplate" value="true" />
-		<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td><input type="hidden" name="addtemplate" value="true">
+		<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

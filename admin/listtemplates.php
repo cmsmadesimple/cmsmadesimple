@@ -84,7 +84,7 @@ if (isset($_GET["message"])) {
 
 			# set template to all content
 			if ($all)
-				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
+				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
 
 			# view css association
 			if ($config["advanced_user"]) {
@@ -115,14 +115,14 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 
-<div class="button"><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div></p>
+<div class="button"><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div><br>
 
 <div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</a></div>
 <div id="helparea" class="expand">
 <?php
 echo "<p>".$gettext->gettext("This page allows you to edit, delete, and create templates.")."</p>";
-echo "<p>".$gettext->gettext("To create a new template, click on the <u>Add New Template</u> button.")."<br />";
-echo $gettext->gettext("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br />";
+echo "<p>".$gettext->gettext("To create a new template, click on the <u>Add New Template</u> button.")."<br>";
+echo $gettext->gettext("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br>";
 echo $gettext->gettext("If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.")."</p>";
 ?>
 <a name="help">&nbsp;</a>

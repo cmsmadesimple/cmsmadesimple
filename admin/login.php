@@ -50,15 +50,12 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 }
 
 ?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
-
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
 <head>
 
 <title></title>
 
-<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="style.css" >
 
 </head>
 
@@ -75,21 +72,19 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 ?>
 
 <form method="post" action="login.php" id="login" name="login">
-
-<img src="../images/cms/cmslogo.png" border="0" id="loginlogo" alt="CMS Made Simple"/>
-
-<table border=0 id="table">
+<img src="../images/cms/cmslogo.png" border="0" alt="CMS Made Simple" align="right" >
+<table border="0" id="table">
 	<tr>
 		<td align="right"><?=$gettext->gettext("Username")?>:</td>
-		<td><input type="text" id="username" name="username" value="<?=(isset($_POST["username"])?$_POST["username"]:"")?>" size="15"/></td>
+		<td><input type="text" id="username" name="username" value="<?=(isset($_POST["username"])?$_POST["username"]:"")?>" size="15"></td>
 	</tr>
 	<tr>
 		<td align="right"><?=$gettext->gettext("Password")?>:</td>
-		<td><input type="password" id="password" name="password" size="15" /></td>
+		<td><input type="password" id="password" name="password" size="15" ></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td><input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" ></td>
 	</tr>
 </table>
 </form>

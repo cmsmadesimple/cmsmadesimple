@@ -90,15 +90,15 @@ if (isset($_GET["message"])) {
 				if ($one->num_same_level > 1) {
 					if ($one->item_order == 1 && $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\"></a>";
 					} else if ($one->item_order == $one->num_same_level) {
 						echo "<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\"></a>";
 					} else {
 						echo "<a href=\"movecontent.php?direction=down&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
+							"<img src=\"../images/cms/arrow-d.gif\" alt=\"".$gettext->gettext("Down")."\" border=\"0\"></a>&nbsp;".
 							"<a href=\"movecontent.php?direction=up&amp;page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\">".
-							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+							"<img src=\"../images/cms/arrow-u.gif\" alt=\"".$gettext->gettext("Up")."\" border=\"0\"></a>";
 					}
 				}
 				echo "</td>\n";

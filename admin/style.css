@@ -23,7 +23,6 @@ h4{font-size: 1em; font-weight: bold; color: #64879D; border-bottom: 0; padding-
 #topHeader {background-color: black; width: 600px;}
 #bottomHeader {background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
 #header	{ background: #BFDAEF; color: #265980; padding: 8px; border-bottom: 1px solid #8C8A8C; height: 100px;}
-#loginlogo { float: right; }
 
 /* boxes */
 #table {margin-top: 20px;}

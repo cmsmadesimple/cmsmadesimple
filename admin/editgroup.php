@@ -102,16 +102,16 @@ else {
 
 	<tr>
 		<td align="right"><?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="group" maxlength="25" value="<?=$group?>" /></td>
+		<td><input type="text" name="group" maxlength="25" value="<?=$group?>"></td>
 	</tr>
 	<tr>
 		<td align="right"><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="hidden" name="editgroup" value="true" />
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?=$group_id?>"><input type="hidden" name="editgroup" value="true">
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

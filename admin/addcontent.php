@@ -215,15 +215,19 @@ if ($access) {
 	$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid;
 	$result = $db->Execute($query);
 
-	while($row = $result->FetchRow()) {
-		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+	if ($result && $result->RowCount() > 0) {
+		while($row = $result->FetchRow()) {
+			$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+		}
+	}else{
+		$addt_users = "<option>&nbsp;</option>";
 	}
 
 	$ctdropdown = "<select name=\"content_type\" onchange=\"document.addform.content_change.value=1;document.addform.submit()\" class=\"standard\">";
 	foreach (get_page_types() as $key=>$value) {
 		$ctdropdown .= "<option value=\"$key\"";
 		if ($key == $content_type) {
-			$ctdropdown .= " selected=\"true\"";
+			$ctdropdown .= " selected ";
 		}
 		$ctdropdown .= ">".$value."</option>";
 	}
@@ -303,9 +307,9 @@ else {
 				<tr valign="top">
 					<td valign="top">
 						<?=$gettext->gettext("Content Type")?>:<?=$ctdropdown?>
-						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>" />
-						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></span>
-						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>" /></span>
+						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>">
+						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>"></span>
+						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>"></span>
 						<span style="white-space: nowrap"><?=$gettext->gettext("Template")?>:&nbsp;<?=$dropdown2?></span>
 					</td>
 				</tr>
@@ -319,9 +323,9 @@ else {
 
 <div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></div>
 <div id="advanced" class="expand">
-	<a id="advanced">&nbsp;</a>
+	<a name="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?></div>
-	<textarea rows="4" name="head_tags"><?=$head_tags ?></textarea>
+	<textarea rows="4" cols="80" name="head_tags"><?=$head_tags ?></textarea>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">
 		<tr valign="top">
@@ -331,11 +335,11 @@ else {
 					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
 						<tr valign="top">
 							<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 						</tr>
 						<tr valign="top" style="padding-top: 5px;">
 							<td valign="top"><?=$gettext->gettext("Active")?>:</td>
-							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
+							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>> </td>
 						</tr>
 						<tr>
 							<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
@@ -348,7 +352,7 @@ else {
 					<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Permission") ?></div>
 					<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
 					<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
-					<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
+					<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple size="3"><?php echo $addt_users ?></select></div>
 					</div>
 			</td>
 			<?php // } ?>
@@ -356,12 +360,12 @@ else {
 	</table>
 </div>
 <br>
-<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" />
-<input type="hidden" name="content_change" value="0" />
-<input type="hidden" name="addcontent" value="true" />
-<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>">
+<input type="hidden" name="content_change" value="0">
+<input type="hidden" name="addcontent" value="true">
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 </div>
 
 <?php }elseif ($content_type == "separator") { ?>
@@ -378,23 +382,23 @@ else {
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Additional Editors")?>:</td>
-		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
+		<td><select name="additional_editors[]" multiple size="5"><?=$addt_users?></select></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="content_change" value="0" />
-			<input type="hidden" name="addcontent" value="true" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>
@@ -415,7 +419,7 @@ else {
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
-		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" class="standard"/></td>
+		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("URL")?>:</td>
@@ -427,23 +431,23 @@ else {
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Additional Editors")?>:</td>
-		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
+		<td><select name="additional_editors[]" multiple size="5"><?=$addt_users?></select></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="content_change" value="0" />
-			<input type="hidden" name="addcontent" value="true" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="addcontent" value="true">
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>

@@ -107,7 +107,7 @@ else {
 
 	<tr>
 		<td width="60">*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" class="standard" /></td>
+		<td><input type="text" name="plugin_name" maxlength="255" value="<?=$plugin_name?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Code")?></td>
@@ -115,9 +115,9 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="userplugin_id" value="<?=$userplugin_id?>" /><input type="hidden" name="editplugin" value="true" />
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td><input type="hidden" name="userplugin_id" value="<?=$userplugin_id?>"><input type="hidden" name="editplugin" value="true">
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

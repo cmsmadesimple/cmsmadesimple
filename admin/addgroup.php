@@ -76,7 +76,7 @@ else {
 
 <form method="post" action="addgroup.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext("Add Group")?></h3>
 
@@ -84,17 +84,17 @@ else {
 
 	<tr>
 		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="group" maxlength="255" value="<?=$group?>" /></td>
+		<td><input type="text" name="group" maxlength="255" value="<?=$group?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addgroup" value="true" />
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td><input type="hidden" name="addgroup" value="true">
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

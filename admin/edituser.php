@@ -128,22 +128,22 @@ else {
 
 	<tr>
 		<td>*<?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" class="standard" /></td>
+		<td><input type="text" name="user" maxlength="25" value="<?=$user?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Password")?></td>
-		<td ><input type="password" name="password" maxlength="25" value="" class="standard" /></td>
+		<td ><input type="password" name="password" maxlength="25" value="" class="standard"></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Repeat Password")?>:</td>
-		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></td>
+		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard"></td>
 	</tr>
 	<tr>
 		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Use WYSIWYG Editor for Content")?>:</td>
@@ -155,9 +155,9 @@ else {
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?=$user_id?>" /><input type="hidden" name="edituser" value="true" />
-		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?=$user_id?>"><input type="hidden" name="edituser" value="true">
+		<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
 </table>

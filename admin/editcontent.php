@@ -395,9 +395,9 @@ else {
 				<tr valign="top">
 					<td valign="top">
 						<?=$gettext->gettext("Content Type")?>:<?=$ctdropdown?>
-						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>" />
-						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></span>
-						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>" /></span>
+						<?=$gettext->gettext("Title")?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?=$title?>">
+						<span style="white-space: nowrap"><?=$gettext->gettext("Menu Text")?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?=$menutext?>"></span>
+						<span style="white-space: nowrap"><?=$gettext->gettext("Page Alias")?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?=$alias?>"></span>
 						<span style="white-space: nowrap"><?=$gettext->gettext("Template")?>:&nbsp;<?=$dropdown2?></span>
 					</td>
 				</tr>
@@ -424,11 +424,11 @@ else {
 					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
 						<tr valign="top">
 							<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 						</tr>
 						<tr valign="top" style="padding-top: 5px;">
 							<td valign="top"><?=$gettext->gettext("Active")?>:</td>
-							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
+							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>> </td>
 						</tr>
 							<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
 						</tr>
@@ -448,16 +448,16 @@ else {
 	</table>
 </div>
 
-<br />
-<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
-<input type="hidden" name="content_change" value="0" />
-<input type="hidden" name="order" value="<?=$order?>" />
-<input type="hidden" name="page_id" value="<?=$page_id?>" />
-<input type="hidden" name="editcontent" value="true" />
-<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<br>
+<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>">
+<input type="hidden" name="content_change" value="0">
+<input type="hidden" name="order" value="<?=$order?>">
+<input type="hidden" name="page_id" value="<?=$page_id?>">
+<input type="hidden" name="editcontent" value="true">
+<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>">
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 
 <?php }elseif ($content_type == "separator") { ?>
 <h3><?=$gettext->gettext("Edit Separator")?></h3>
@@ -477,23 +477,23 @@ else {
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
-			<input type="hidden" name="content_change" value="0" />
-			<input type="hidden" name="order" value="<?=$order?>" />
-			<input type="hidden" name="page_id" value="<?=$page_id?>" />
-			<input type="hidden" name="editcontent" value="true" />
-			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>">
+			<input type="hidden" name="content_change" value="0">
+			<input type="hidden" name="order" value="<?=$order?>">
+			<input type="hidden" name="page_id" value="<?=$page_id?>">
+			<input type="hidden" name="editcontent" value="true">
+			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>">
+			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>
@@ -530,23 +530,23 @@ else {
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
-		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
-		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?>></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
-			<input type="hidden" name="content_change" value="0" />
-		    <input type="hidden" name="order" value="<?=$order?>" />
-			<input type="hidden" name="page_id" value="<?=$page_id?>" />
-			<input type="hidden" name="editcontent" value="true" />
-			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-		<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
+			<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>">
+			<input type="hidden" name="content_change" value="0">
+		    <input type="hidden" name="order" value="<?=$order?>">
+			<input type="hidden" name="page_id" value="<?=$page_id?>">
+			<input type="hidden" name="editcontent" value="true">
+			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>">
+		<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 </table>
 </div>

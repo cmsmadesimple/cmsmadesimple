@@ -92,7 +92,7 @@ if ($action == "showmoduleabout")
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
 		<?
 		echo "</div>";
@@ -112,7 +112,7 @@ else if ($action == "showmodulehelp")
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
 		<?
 		echo "</div>";
@@ -133,7 +133,7 @@ else if ($action == "showpluginhelp")
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
 		<?
 		echo "</div>";
@@ -160,7 +160,7 @@ else if ($action == "showpluginabout")
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></p>
 		</form>
 		<?
 		echo "</div>";
@@ -319,8 +319,6 @@ else
 </table>
 
 <div class="button"><a href="adduserplugin.php"><?=$gettext->gettext("Add User Defined Tag")?></a></div>
-
-</div>
 
 	<?
 

@@ -210,8 +210,8 @@ else
 	<tr>
 		<td>*<?=$gettext->gettext("CSS Name")?>:</td>
 		<td>
-			<input type="text" name="css_name" maxlength="25" value="<?=$css_name?>" />
-			<input type="hidden" name="orig_css_name" value="<?=$orig_css_name?>" />
+			<input type="text" name="css_name" maxlength="25" value="<?=$css_name?>">
+			<input type="hidden" name="orig_css_name" value="<?=$orig_css_name?>">
 		</td>
 	</tr>
 	<tr>
@@ -221,10 +221,10 @@ else
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="css_id" value="<?=$css_id?>" />
-			<input type="hidden" name="editcss" value="true" />
-			<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="hidden" name="css_id" value="<?=$css_id?>">
+			<input type="hidden" name="editcss" value="true">
+			<input type="submit" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		</td>
 	</tr>
 

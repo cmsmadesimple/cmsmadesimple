@@ -75,5 +75,5 @@ $gettext->reset();
 	}
 
 ?>
-<br />
+<br>
 </div> 

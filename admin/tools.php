@@ -53,7 +53,7 @@ function do_adodb_backup() {
     $db = $gCms->db;
     $config = $gCms->config;
 
-    echo "<p>".$gettext->gettext("Working....")."<br />\n";
+    echo "<p>".$gettext->gettext("Working....")."<br>\n";
 
     ## open file for backup
     $date = date("mdy-Hi");
@@ -105,7 +105,7 @@ function do_adodb_backup() {
 
                 $data_line = substr($data_line,0,strlen($data_line) -1);
                 $insert_line = "INSERT INTO $table ($field_list) values ($data_line);\n";
-##                 echo $insert_line."<br />";
+##                 echo $insert_line."<br>";
                 fwrite($file, $insert_line);
             } ## while
         } ## if

@@ -121,9 +121,9 @@ else {
 
 ?>
 
-<tr><td><br><input type="hidden" name="group_id" value="<?=$group_id?>" />
-<input type="submit" name="changeassign" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
+<tr><td><br><input type="hidden" name="group_id" value="<?=$group_id?>">
+<input type="submit" name="changeassign" value="<?=$gettext->gettext("Submit")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td></tr>
 </table>
 </div>
 
