@@ -13,5 +13,6 @@ check_login($config);
 <li><a href="listsections.php">Section Management</a></li>
 <li><a href="listtemplates.php">Template Management</a></li>
 <li><a href="listusers.php">User Management</a></li>
+<!--<li><a href="listgroups.php">Group Management</a></li>-->
 <li><a href="logout.php">Logout</a></li>
 </ul>

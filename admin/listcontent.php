@@ -7,6 +7,14 @@ require("../include.php");
 <?php
 	$db = new DB($config);
 
+	if (isset($_GET["makedefault"])) {
+		$query = "UPDATE pages SET default_page = 0";
+		$result = $db->query($query);
+
+		$query = "UPDATE pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
+		$result = $db->query($query);
+	}
+
         $query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id ORDER BY page_id";
         $result = $db->query($query);
 
@@ -19,6 +27,7 @@ require("../include.php");
 		echo "<th>Owner</th>\n";
 		echo "<th>Section</th>\n";
 		echo "<th>Active</th>\n";
+		echo "<th>Default</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		echo "<th>&nbsp;</th>\n";
@@ -32,6 +41,7 @@ require("../include.php");
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".$row["section_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
+			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\">False</a>")."</td>\n";
 			echo "<td><a href=\"".$doc_root."/index.php".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
 			echo "<td><a href=\"editcontent.php?page_id=".$row["page_id"]."\">Edit</a></td>\n";
 			echo "<td><a href=\"deletecontent.php?page_id=".$row["page_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
