@@ -16,6 +16,18 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * This page is in charge of listing all CSS, and giving acces to editing and
+ * deleting.
+ *
+ * There is no particular argument.
+ *
+ * @since	0.6
+ * @author	calexico
+ */
+
+
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
@@ -24,14 +36,24 @@ check_login();
 
 include_once("header.php");
 
-if (isset($_GET["message"])) {
+#******************************************************************************
+# first : displaying error message, if any.
+#******************************************************************************
+if (isset($_GET["message"]))
+{
     echo "<p class=\"error\">".$_GET["message"]."</p>";
 }
 
 ?>
+
 <h3><?=$gettext->gettext("Current CSS")?></h3>
+
 <?php
 
+#******************************************************************************
+# first getting all permission : we only display elements the user has access
+# too
+#******************************************************************************
 	$userid = get_userid();
 
 	$modify = check_permission($userid, 'Modify CSS');
@@ -41,8 +63,9 @@ if (isset($_GET["message"])) {
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
 
-	if ($result) {
-
+	if ($result)
+	{
+		# displaying the table header
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Title")."</td>\n";
@@ -50,52 +73,58 @@ if (isset($_GET["message"])) {
 		echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 
-		$count = 1;
-
+		# this var is used to show each line with different color
 		$currow = "row1";
 
-		while ($one = $result->FetchRow()) {
-
+		# we now show each line
+		while ($one = $result->FetchRow())
+		{
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one["css_name"]."</td>\n";
 
-			# edit
-			if ($modify) {
+			# if user has right to edit
+			if ($modify)
+			{
 				echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Edit")."\"></a></td>\n";
 			}
-			else {
+			else
+			{
 				echo "<td>&nbsp;</td>";
 			}
 
-			# delete
-			if ($delcss) {
+			# if user has right to delete
+			if ($delcss)
+			{
 				echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
 			}
-			else {
+			else
+			{
 				echo "<td>&nbsp;</td>";
 			}
 
 			echo "</tr>\n";
 
-			$count++;
-
-			($currow == "row1"?$currow="row2":$currow="row1");
+			("row1" == $currow) ? $currow="row2" : $currow="row1";
 
 		} ## foreach
 
 		echo "</table>\n";
 
-	} else {
+	} # end if result
+	else
+	{
 		echo "<p>".$gettext->gettext("No CSS")."</p>";
 	}
 
-	if ($addcss) {
+	# if user can add css
+	if ($addcss)
+	{
 ?>
 
 <div class="button"><a href="addcss.php"><?=$gettext->gettext("Add New CSS")?></a></div>
 
 <?php
-	}
+	} # end if add css
 
 
 include_once("footer.php");

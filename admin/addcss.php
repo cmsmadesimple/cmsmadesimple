@@ -16,61 +16,128 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * This page is responsible for showing the interface to add a new CSS. There is
+ * a form that returns back to this page. The content of the form is then
+ * checked to verify that all parameters are valid.
+ *
+ * - If all parameter are valid, the result is stored in the DB
+ * - If one or more parameters are not valid, the form is redisplayed. An error
+ *   message indictaes to the user what went wrong.
+ *
+ * There is no GET parameters.
+ *
+ * @since	0.6
+ * @author  calexico
+ */
+
+ 
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
 check_login();
 
+#******************************************************************************
+# global variables definitions
+#******************************************************************************
+
+# this variable is used to store an eventual error message.
 $error = "";
 
+#******************************************************************************
+# we get the content of the form if there are not empty.
+#******************************************************************************
+
+# first ; the content of the css
 $css_text = "";
 if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
 
+# then its name
 $css_name = "";
 if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
 
-if (isset($_POST["cancel"])) {
+#******************************************************************************
+# if the form was cancelled, we get back to the CSS list
+#******************************************************************************
+if (isset($_POST["cancel"]))
+{
 	redirect("listcss.php");
 	return;
 }
 
+#******************************************************************************
+# we now check that user has access to add CSS
+#******************************************************************************
 $userid = get_userid();
 $access = check_permission($userid, 'Add CSS');
 
-if ($access) {
+if ($access)
+{
 
-	if (isset($_POST["addcss"])) {
+#******************************************************************************
+# if the var "addcss" is set, this means that the form has been submitted.
+# we check if params are valid
+#******************************************************************************
+	if (isset($_POST["addcss"]))
+	{
 
+		# used to check if we will save the form or not
 		$validinfo = true;
 
-		if ($css_name == "") {
+		# if no CSS name was given
+		if ("" == $css_name)
+		{
 			$error .= "<li>".$gettext->gettext("No CSS name given!")."</li>";
 			$validinfo = false;
-		} else {
+			
+		}
+		# the CSS has a name, we check if it already exists or not
+		else 
+		{
 			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . $db->qstr($css_name);
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0) {
+			if ($result && $result->RowCount() > 0)
+			{
 				$error .= "<li>".$gettext->gettext("CSS name already in use!")."</li>";
 				$validinfo = false;
 			}
 		}
-		if ($css_text == "") {
+
+		# now checking the content of the CSS
+		if ("" == $css_text)
+		{
 			$error .= "<li>".$gettext->gettext("No CSS content entered!")."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
+#******************************************************************************
+# everythings seems to be ok, we can try to save the form
+#******************************************************************************
+		if ($validinfo)
+		{
+			# this is used to get a unique ID for the CSS
 			$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
+
+			# we then generate the request
 			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($css_name).", ".$db->qstr($css_text).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+
+			# and execute it
 			$result = $db->Execute($query);
-			if ($result) {
+
+			# we now have to check that everything went well
+			if ($result)
+			{
+				# it's ok, we record the operation in the admin log
 				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_css_id, $css_name, 'Added CSS');
+
+				# and goes back to the css list
 				redirect("listcss.php");
 				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".$gettext->gettext("Error inserting CSS")."</li>";
 			}
 		}
@@ -79,14 +146,28 @@ if ($access) {
 
 include_once("header.php");
 
-if (!$access) {
+#******************************************************************************
+# the user does not have access : error message 
+#******************************************************************************
+if (!$access)
+{
 	print "<h3>".$gettext->gettext("No Access to Add CSS")."</h3>";
 }
-else {
+#******************************************************************************
+# the user has access, we display the form
+#******************************************************************************
+else
+{
 
-	if ($error != "") {
+	# the user has correct rights, we display error message if any
+	if ("" != $error)
+	{
 		echo "<ul class=\"error\">".$error."</ul>";
 	}
+
+#******************************************************************************
+# we now display the content of the form, in HTML
+#******************************************************************************
 ?>
 
 <form method="post" action="addcss.php">
@@ -99,7 +180,7 @@ else {
 
 	<tr>
 		<td><?=$gettext->gettext("Name")?>:</td>
-		<td><input type="text" name="css_name" maxlength="25" value="<?=$css_name?>" /></td>
+		<td><input type="text" name="css_name" maxlength="25" value="<?=$css_name?>"/></td>
 	</tr>
 	<tr>
 		<td><?=$gettext->gettext("Content")?>:</td>
@@ -107,7 +188,11 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addcss" value="true" /><input type="submit" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" /></td>
+		<td>
+			<input type="hidden" name="addcss" value="true" />
+			<input type="submit" value="<?=$gettext->gettext("Submit")?>" />
+			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>" />
+		</td>
 	</tr>
 
 </table>
@@ -118,7 +203,7 @@ else {
 
 <?php
 
-}
+} # end of displaying the form
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

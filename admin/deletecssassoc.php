@@ -16,67 +16,120 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * This page is used to delete CSS association. It doesn't show any HTML and only does
+ * treatments.
+ * For more explanations about CSS associations, please the the header of
+ * addcssassoc.php.
+ *
+ * Variable are passed by GET. Needed vars are :
+ * - $css_id	: the id of the CSS link
+ * - $id		: the id of the element the CSS is linked to
+ * - $type		: the type of the element the CSS is linked to
+ *				  (only template for the moment)
+ *
+ * @since	0.6
+ * @author	calexico
+ */
+
+
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
 check_login();
 
+#******************************************************************************
+# global vars definition
+#******************************************************************************
+
+# this var is used to check if we'll delete or not
+# it is set to false when an error is encountered
 $dodelete = true;
 
-if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"])) {
+#******************************************************************************
+# start of the treatment
+#******************************************************************************
+if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
+{
 
+	# we get the parameters
 	$css_id = $_GET["css_id"];
 	$id = $_GET["id"];
 	$type = $_GET["type"];
 
+	# we check the permissions
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove CSS association');
 
-	if ($access) {
+#******************************************************************************
+# the user has the right to delete association, we can go on
+#******************************************************************************
+	if ($access)
+	{
 
-		if ($type == 'template') {
+#******************************************************************************
+# we first have to get the name of the element the CSS is linked to
+# this is for logging of actions
+#******************************************************************************
+		if ($type == 'template')
+		{
 			# first we get the name of the template for logging
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
 			$result = $db->Execute($query);
-			if ($result && $result->RowCount()) {
+
+			if ($result && $result->RowCount())
+			{
 				$line = $result->FetchRow();
 				$name = $line['template_name'];
 			}
-			else {
+			else
+			{
 				$dodelete = false;
 				$error = $gettext->gettext("Error getting the template name");
 			}
 		}
 
-		if ($dodelete) {
+#******************************************************************************
+# everythings look ok, we can delete
+#******************************************************************************
+		if ($dodelete)
+		{
 			$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = '$css_id' AND assoc_type = '$type' AND assoc_to_id = '$id'";
 			$result = $db->Execute($query);
 
-			if ($result) {
+			if ($result)
+			{
 				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Deleted CSS association');
 			}
-			else {
+			else
+			{
 				$dodelete = false;
 				$error = $gettext->gettext("Error deleting CSS association!");
 			}
 		}
-	}
-	else {
+	} # end of if access
+	else
+	{
 		$dodelete = false;
 		$error = $gettext->gettext("You do not have the right to remove CSS association");
 	}
-
-}
-else {
+} # end of if params
+else
+{
 	$dodelete = false;
 	$error = $gettext->gettext("Some parameters were missing or invalid!");
 }
 
-if ($dodelete) {
+#******************************************************************************
+# end of treatment, redirecting
+#******************************************************************************
+if ($dodelete)
+{
 	redirect("listcssassoc.php?id=$id&type=$type");
 }
-else {
+else
+{
 	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 

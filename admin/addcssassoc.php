@@ -16,78 +16,141 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * The goal of this page is to create a CSS association. So firts, what is a css
+ * association, and how it works.
+ *
+ * The idea came that CSS should be broken in small pieces, easily maintanable,
+ * instead of one big CSS. So, the user created several little CSS pieces :
+ * - css_menu
+ * - css_header
+ * - css_footer
+ * - css_whatever
+ *
+ * There is a table (css_assoc) on the DB with the following fields :
+ * - assoc_to_id	: the id of the element we associate the CSS with
+ *					  it can be a template id, a page id, a what you want id
+ * - assoc_css_id	: the id of the CSS we link
+ * - assoc_type		: what do we link the CSS to ? for the moment, only template
+ * - create_date	: the create date of this association
+ * - modified_date	: the modified date of this association (which is not used
+ *					  at the moment.
+ *
+ * This page takes arguments as GET variables. 3 arguments are necessary :
+ * - $id		: refers to "assoc_to_id", the id of the element
+ * - $css_id	: the id of the CSS we link, refers to "assoc_css_id"
+ * - $type		: the type of element $id refers to (only template for the
+ *				  moment)
+ *
+ * @since	0.6
+ * @author	calexico
+ */
+
+	
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
 check_login();
 
+#******************************************************************************
+# global variables definition
+#******************************************************************************
+
+# variable to check if we'll make the association or not
+# will be set to false if an error is encountered
 $doadd = true;
 
-if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"])) {
+#******************************************************************************
+# start of the treatment
+#******************************************************************************
+if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
+{
 
+	# we get the arguments as local vars (easier)
 	$css_id = $_POST["css_id"];
 	$id		= $_POST["id"];
 	$type	= $_POST["type"];
 
+	# we then check permissions
 	$userid = get_userid();
 	$access = check_permission($userid, 'Add CSS association');
 
-	if ($access) {
+#******************************************************************************
+# the user has permissions, and vars are set, we can go on
+#******************************************************************************
+	if ($access)
+	{
 
 		# first check if this association already exists
 		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = '$id' AND assoc_type = '$type' AND assoc_css_id = '$css_id'";
 		$result = $db->Execute($query);
 
-		if ($result && $result->RowCount() > 0) {
+		if ($result && $result->RowCount() > 0)
+		{
 			$error = $gettext->gettext("This CSS association already exists");
 			$doadd = false;
 		}
 
 		# we get the name of the element (for logging)
-		if ($type == "template" && $doadd) {
+		if ("template" == $type && $doadd)
+		{
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
 			$result = $db->Execute($query);
 			
-			if ($result && $result->RowCount() > 0) {
+			if ($result && $result->RowCount() > 0)
+			{
 				$line = $result->FetchRow();
 				$name = $line["template_name"];
 			}
-			else {
+			else
+			{
 				$doadd = false;
 				$error = $gettext->gettext("The template is not valid !");
 			}
 		}
 
 		# everything is ok, we can insert the element.
-		if ($doadd) {
+		if ($doadd)
+		{
 			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)
 				VALUES ('$id','$css_id','$type',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query);
 
-			if ($result) {
+			if ($result)
+			{
 				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Added CSS association');
 			}
-			else {
+			else
+			{
 				$doadd = false;
 				$error = $gettext->gettext("Error creating CSS association!");
 			}
-		}
-	}
-	else {
+		} # enf od adding query to db
+	} # end of "if has access"
+	
+	# user does not have the right to create association
+	else
+	{
 		$doadd = false;
 		$error = $gettext->gettext("You do not have the right to create CSS associations");
 	}
-}
-else {
+} # end if vars are set
+else
+{
 	$doadd = false;
 	$error = $gettext->gettext("Some informations where missing!");
 }
 
-if ($doadd) {
+#******************************************************************************
+# end of treatment, we redirect
+#******************************************************************************
+if ($doadd)
+{
 	redirect("listcssassoc.php?id=$id&type=$type");
 }
-else {
+else
+{
 	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 
