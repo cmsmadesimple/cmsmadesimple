@@ -114,11 +114,19 @@ while (($file = $ls->read()) != "") {
 
 #Check to see if there is already a language in use...
 if (isset($_POST["change_cms_lang"])) {
-	$gettext->setLanguage($_POST["change_cms_lang"]);
+	$err = $gettext->setLanguage($_POST["change_cms_lang"]);
+	if (PEAR::isError($err))
+	{
+		echo $err->toString(), "\n";
+	}
 	setcookie("cms_language", $_POST["change_cms_lang"]);
 }
 else if (isset($_COOKIE["cms_language"])) {
-	$gettext->setLanguage($_COOKIE["cms_language"]);
+	$err = $gettext->setLanguage($_COOKIE["cms_language"]);
+	if (PEAR::isError($err))
+	{
+		echo $err->toString(), "\n";
+	}
 } else {
 
 	#No, take a stab at figuring out the default language...
@@ -131,7 +139,11 @@ else if (isset($_COOKIE["cms_language"])) {
 		foreach ($langs as $onelang) {
 			#Check to see if lang exists...
 			if (isset($nls['language'][$onelang])) {
-				$gettext->setLanguage($onelang);
+				$err = $gettext->setLanguage($onelang);
+				if (PEAR::isError($err))
+				{
+					echo $err->toString(), "\n";
+				}
 				setcookie("cms_language", $onelang);
 				break;
 			}
@@ -139,7 +151,11 @@ else if (isset($_COOKIE["cms_language"])) {
 			if (isset($nls['alias'][$onelang])) {
 				$alias = $nls['alias'][$onelang];
 				if (isset($nls['language'][$alias])) {
-					$gettext->setLanguage($alias);
+					$err = $gettext->setLanguage($alias);
+					if (PEAR::isError($err))
+					{
+						echo $err->toString(), "\n";
+					}
 					setcookie("cms_language", $alias);
 					break;
 				}
