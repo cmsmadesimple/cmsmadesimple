@@ -6,6 +6,8 @@ Version 0.3.1 -- Subversion
 * Added adodb for database connectivity.  Will be a good thing for down the
 road in supporting multiple databases
 * Added template name to content list page  (Fixes #28)
+* Added check to make sure users don't still own pages before the user is
+deleted
 * Fixed so that if no default page is set, system grabs first page it can find
 (Fixes #22)
 * Fixed redirection. (pdj@txnt.com) (Fixes #27)

@@ -20,6 +20,12 @@ $starttime = microtime();
 
 @ob_start();
 
+function microtime_diff($a, $b) {
+	list($a_dec, $a_sec) = explode(" ", $a);
+	list($b_dec, $b_sec) = explode(" ", $b);
+	return $b_sec - $a_sec + $b_dec - $a_dec;
+}
+
 function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 {
 	if ($errno == E_USER_WARNING) {
@@ -86,7 +92,7 @@ echo $html;
 
 $endtime = microtime();
 
-echo "<!-- Generated in ".($endtime-$starttime)." seconds by CMS Made Simple -->\n";
+echo "<!-- Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple -->\n";
 
 # vim:ts=4 sw=4 noet
 ?>

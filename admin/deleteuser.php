@@ -20,6 +20,8 @@ require_once("../include.php");
 
 check_login($config);
 
+$dodelete = true;
+
 $user_id = -1;
 if (isset($_GET["user_id"])) {
 
@@ -38,15 +40,29 @@ if (isset($_GET["user_id"])) {
 			$user_name = $row[username];
 		}
 
-		$query = "DELETE FROM ".$config->db_prefix."additional_users where user_id = $user_id";
+		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE owner = $user_id";
 		$result = $dbnew->Execute($query);
-		$query = "DELETE FROM ".$config->db_prefix."users where user_id = $user_id";
-		$result = $dbnew->Execute($query);
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user_name, 'Deleted User');
+		$row = $result->FetchRow();
+		if (isset($row["count"]) && $row["count"] > 0) {
+			$dodelete = false;
+		}
+
+		if ($dodelete) {
+			$query = "DELETE FROM ".$config->db_prefix."additional_users where user_id = $user_id";
+			$result = $dbnew->Execute($query);
+			$query = "DELETE FROM ".$config->db_prefix."users where user_id = $user_id";
+			$result = $dbnew->Execute($query);
+			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user_name, 'Deleted User');
+		}
 	}
 }
 
-redirect("listusers.php");
+if ($dodelete == true) {
+	redirect("listusers.php");
+}
+else {
+	redirect("listusers.php?message=".$gettext->gettext("User still owns content pages.  Please change ownership to another user before deleting."));
+}
 
 # vim:ts=4 sw=4 noet
 ?>
