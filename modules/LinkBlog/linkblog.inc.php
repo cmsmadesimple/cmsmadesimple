@@ -53,16 +53,15 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
 	if ($params[$id.'type'] == "rss") {
 
-		if (isset($cms->config["linkblog_rss_limit"])) {
-			$limit = $cms->config["linkblog_rss_limit"];
-		} ## if 
+		$limit = cms_mapi_get_preference("LinkBlog", "rss_limit");
+		if (!isset($limit)) { $limit = 10; } ## if 
 		header('Content-type: text/xml');
 		echo "<?xml version='1.0'?>\n";
 		echo "<rss version='2.0'>\n";
 		echo "	<channel>\n";
-		echo "	<title>".$cms->config["linkblog_rss_title"]."</title>\n";
+		echo "	<title>".cms_mapi_get_preference("LinkBlog", "rss_title")."</title>\n";
 		echo "	<link>";
-		echo cms_htmlentities($cms->config["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+		echo cms_htmlentities(cms_mapi_get_preference("LinkBlog", "linkblog_url"), ENT_NOQUOTES, get_encoding($encoding));
 		echo "</link>\n";
 		echo "	<description>Current linkblog entries</description>\n";
 	} else if ($allow_search != '') {
@@ -225,7 +224,11 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
     $author = "";
     if (isset($params[$id."author"])) {
         $author = $params[$id."author"];
+	} 
+	if ($author == "") {
+		$author = $_SESSION["linkblog_author"];
     }
+
     $title = "";
     if (isset($params[$id."title"])) {
         $title = $params[$id."title"];
@@ -257,6 +260,12 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 
         $validinfo = true;
 
+		if (isset($params[$id."rememberme"])) {
+			$_SESSION["linkblog_author"] = $author;
+		} else {
+			unset($_SESSION["linkblog_author"]);
+		}
+
         if ($author == "") {
             $validinfo = false;
             $errormsg .= "Enter an author<br />";
@@ -280,8 +289,22 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         if ($validinfo) {
             $db = $cms->db;
             $new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".htmlentities($db->qstr($url)).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '1', ".htmlentities($db->qstr($credit)).")";
+            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".htmlentities($db->qstr($url)).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '2', ".htmlentities($db->qstr($credit)).")";
             $dbresult = $db->Execute($query);
+
+			if (cms_mapi_get_preference("LinkBlog", "email_notify") == "1") {
+				$subject = 'New Linkblog submission';
+				$body = "A new link for your linkblog has been submitted.\n\n";
+				$body .= "Title: {".$db->qstr($title)."}\n";
+				$body .= "Url: {".htmlentities($db->qstr($url))."}\n";
+				$body .= "Author: {".$db->qstr($author)."}\n";
+
+				$headers = "From: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
+				."Return-Path: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
+				."X-Mailer: PHP/" . phpversion();
+				$result = @mail(cms_mapi_get_preference("LinkBlog", "email_to"), $subject, $body, $headers);
+			} ## if
+
             cms_mapi_redirect_user_by_pageid($return_id);
             return;
         } ## if
@@ -330,6 +353,10 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 				<td>Source credit:</td>
 				<td><input type="text" name="<?php echo $id?>credit" value="<?php echo $credit?>" size="100" maxlength="250" /></td>
 			</tr>
+			<tr>
+				<td></td>
+				<td><input type="checkbox" name="<?php echo $id?>rememberme" <?php if(isset($_SESSION["linkblog_author"])) { echo "CHECKED"; }?> /> Remember me</td>
+			</tr>
             <tr>
                 <td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="add_new_link" /></td>
                 <td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
@@ -358,8 +385,12 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 
 				if ($row["status"] == "0") {
 					echo "This link is no longer available<br />\n";
+					echo "</div>\n";
 					return;
 				} ## if
+				echo "<div class=\"modulelinkblogentrydate\">\n";
+				echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+				echo "</div>\n";
                 echo "<div class=\"modulelinkblogentrytime\">\n";
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n";
                 echo "</div>\n";
@@ -379,6 +410,10 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
                     echo " | \n";
                 } ## if
             } ## while
+		} else {
+			echo "There is no link available for id: ".$params[$id."linkblog_id"];
+			echo "</div>\n";
+			return;
         } ## if
 
         echo "</div>\n";

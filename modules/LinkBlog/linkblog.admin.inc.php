@@ -77,6 +77,7 @@ function linkblog_module_executeadmin($cms, $module_id) {
     echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'add_category_form'), "Add Category");
     echo " | " . cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'manage_categories'), "Manage Categories");
     echo " | " . cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'manage_links'), "Manage Links");
+    echo " | " . cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'preferences'), "Preferences");
 
 ##     echo "action: ($action)\n";
     switch ($action) {
@@ -103,9 +104,16 @@ function linkblog_module_executeadmin($cms, $module_id) {
             linkblog_module_manage_links($cms, $module_id);
             break;
         case "activate":
+        case "approve": ## can use the same logic here as all we're doing is setting status=1
             linkblog_module_activate_link($cms, $module_id);
             linkblog_module_manage_links($cms, $module_id);
             break;
+        case "preferences":
+            linkblog_module_view_preferences($cms, $module_id);
+            break;
+        case "set_preferences":
+            linkblog_module_set_preferences($cms, $module_id);
+            linkblog_module_view_preferences($cms, $module_id);
         default:
             break;
     } ## switch
@@ -231,9 +239,14 @@ function linkblog_module_manage_links($cms, $module_id) {
                 echo "<td>";
                 echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'deactivate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Active"); 
                 echo "</td>\n";
-            } else {
+            } elseif ($row["status"] == "0") {
                 echo "<td>";
                 echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'activate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Inactive"); 
+                echo "</td>\n";
+            } ## if
+            if ($row["status"] == "2") {
+                echo "<td>";
+                echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'approve', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Approve"); 
                 echo "</td>\n";
             } ## if
             echo "</tr>\n";
@@ -250,7 +263,7 @@ function linkblog_module_activate_link($cms, $module_id) {
     $update = "UPDATE ".cms_db_prefix()."module_linkblog SET status='1' WHERE linkblog_id=$linkblog_id";
     $db->Execute($update);
 
-} ## linkblog_module_deactivate_link
+} ## linkblog_module_activate_link
 
 function linkblog_module_deactivate_link($cms, $module_id) {
 
@@ -260,6 +273,61 @@ function linkblog_module_deactivate_link($cms, $module_id) {
     $db->Execute($update);
 
 } ## linkblog_module_deactivate_link
+
+function linkblog_module_view_preferences($cms, $module_id) {
+
+    echo "<br />\n";
+    echo cms_mapi_create_admin_form_start("LinkBlog",$module_id);
+    ?>
+    <table>
+        <tr>
+            <td>Send email notification:</td><td><input type="checkbox" value="1" name="<?php echo $module_id."email_notify"; ?>" <?php if (cms_mapi_get_preference("LinkBlog","email_notify") == "1") { echo "CHECKED"; }?>/></td>
+        </tr>
+        <tr>
+            <td>Send email to:</td><td> <input type="text" size="30" maxlength="80" name="<?php echo $module_id."email_to"; ?>" value="<?php echo cms_mapi_get_preference("LinkBlog","email_to");?>"/></td>
+        </tr>
+        <tr>
+            <td>Send email from:</td><td> <input type="text" size="30" maxlength="80" name="<?php echo $module_id."email_from"; ?>" value="<?php echo cms_mapi_get_preference("LinkBlog","email_from");?>"/></td>
+        </tr>
+        <tr>
+            <td>Linkblog URL:</td><td><input type="text" size="30" maxlength="80" name="<?php echo $module_id."linkblog_url"; ?>" value="<?php echo cms_mapi_get_preference("LinkBlog","linkblog_url");?>"/></td>
+        </tr>
+        <tr>
+            <td>Linkblog RSS Title:</td><td><input type="text" size="30" maxlength="80" name="<?php echo $module_id."rss_title"; ?>" value="<?php echo cms_mapi_get_preference("LinkBlog","rss_title");?>"/></td>
+        </tr>
+        <tr>
+            <td>Linkblog RSS limit:</td><td> <input type="text" size="30" maxlength="80" name="<?php echo $module_id."rss_limit"; ?>" value="<?php echo cms_mapi_get_preference("LinkBlog","rss_limit");?>"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="submit" value="Save Changes" /> <input type="reset" /><input type="hidden" name="<?php echo $module_id."action"; ?>" value="set_preferences" /></td>
+        </tr>
+    </table>
+    <?php
+
+    echo cms_mapi_create_admin_form_end();
+} ## linkblog_module_view_preferences
+
+function linkblog_module_set_preferences($cms, $module_id) {
+
+    ## retrieve any posted settings
+##     echo "email_nofity: (".$_POST[$module_id."email_notify"].") email_from: (".$_POST[$module_id."email_from"].")<br />\n";
+    $email_notify = (isset($_REQUEST[$module_id.'email_notify'])?"1":"0");
+    if (isset($_REQUEST[$module_id."email_to"])) { $email_to = $_REQUEST[$module_id."email_to"]; } else { $email_to = ""; }
+    if (isset($_REQUEST[$module_id."email_from"])) { $email_from = $_REQUEST[$module_id."email_from"]; } else { $email_from = ""; }
+    if (isset($_REQUEST[$module_id."linkblog_url"])) { $linkblog_url = $_REQUEST[$module_id."linkblog_url"]; } else { $linkblog_url = ""; }
+    if (isset($_REQUEST[$module_id."rss_title"])) { $rss_title = $_REQUEST[$module_id."rss_title"]; } else { $rss_title = ""; }
+    if (isset($_REQUEST[$module_id."rss_limit"])) { $rss_limit = $_REQUEST[$module_id."rss_limit"]; } else { $rss_limit = ""; }
+##     echo "<br />email_notify: ($email_notify)<br />email_from: ($email_from)<br />\n";
+##     echo "<br />[".$_REQUEST[$module_id."email_notify"]."]<br />\n";
+
+    cms_mapi_set_preference("LinkBlog", "email_notify", $email_notify);
+    cms_mapi_set_preference("LinkBlog", "email_to", $email_to);
+    cms_mapi_set_preference("LinkBlog", "email_from", $email_from);
+    cms_mapi_set_preference("LinkBlog", "linkblog_url", $linkblog_url);
+    cms_mapi_set_preference("LinkBlog", "rss_title", $rss_title);
+    cms_mapi_set_preference("LinkBlog", "rss_limit", $rss_limit);
+} ## linkblog_module_set_preferences
 
 function linkblog_module_upgrade($cms, $oldversion, $newversion)
 {
