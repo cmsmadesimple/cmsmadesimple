@@ -95,6 +95,10 @@ class Template_PHPLIB
      */
     function Template_PHPLIB($root = ".", $unknowns = "remove", $fallback="")
     {
+        if ($root == ".")
+        {
+            $root = dirname(__FILE__);
+        }
         $this->setRoot($root);
         $this->setUnknowns($unknowns);
         if (is_array($fallback)) $this->file_fallbacks = $fallback;
