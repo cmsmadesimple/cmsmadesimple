@@ -48,6 +48,8 @@ class Smarty_ModuleInterface extends Smarty {
 		$this->force_compile = true;
 		$this->cache_plugins = false;
 
+		load_plugins($this);
+
 		#Load all CMS plugins as non-cacheable
 		$dir = dirname(dirname(__FILE__))."/plugins";
 		$ls = dir($dir);
