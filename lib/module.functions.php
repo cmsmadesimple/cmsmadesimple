@@ -164,11 +164,15 @@ function cms_mapi_register_install_function($name, $function) {
  *
  * @since 0.5
  */
-function cms_mapi_register_upgrade_function($name, $function) {
+function cms_mapi_register_upgrade_function($name, $function, $autoupgrade = false) {
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 	if (isset($cmsmodules[$name])) {
 		$cmsmodules[$name]['upgrade_function'] = $function;
+		if ($autoupgrade == true)
+		{
+			$cmsmodules[$name]['auto_upgrade_function'] = $function;
+		}
 	}
 }
 

@@ -55,7 +55,7 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <DIV CLASS="body">
 
-<IMG SRC="images/cms/cmsbanner.png" WIDTH="400" HEIGHT="96" ALT="CMS Banner Logo" />
+<IMG SRC="images/cms/cmsbanner.gif" WIDTH="400" HEIGHT="96" ALT="CMS Banner Logo" />
 
 <DIV CLASS="headerish">
 

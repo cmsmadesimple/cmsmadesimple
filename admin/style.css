@@ -116,7 +116,7 @@ H4 {
 	MARGIN-BOTTOM: 20px; WIDTH: 600px; BACKGROUND-COLOR: #6f8341; TEXT-ALIGN: center
 }
 #header {
-	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: #EA9129 url(../images/cms/cmsadminbanner_r.png); PADDING-BOTTOM: 0px; COLOR: #265980; PADDING-TOP: 0px; BORDER-BOTTOM: #8c8a8c 0px solid; HEIGHT: 117px
+	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; BACKGROUND: #EA9129 url(../images/cms/cmsadminbanner_r.gif); PADDING-BOTTOM: 0px; COLOR: #265980; PADDING-TOP: 0px; BORDER-BOTTOM: #8c8a8c 0px solid; HEIGHT: 117px
 }
 #footer1 {
 	position: relative;
@@ -126,7 +126,7 @@ H4 {
 	padding: 0px;
 	clear: left;
 	background-color: #EA9129;
-	background-image: url(../images/cms/cmsadminfooter.png);
+	background-image: url(../images/cms/cmsadminfooter.gif);
 }
 #footer2 {
 	position: relative;

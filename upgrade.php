@@ -31,7 +31,7 @@ require_once(dirname(__FILE__)."/include.php");
 
 <div class="body">
 
-<img src="images/cms/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
+<img src="images/cms/cmsbanner.gif" width="400" height="96" alt="CMS Banner Logo" />
 
 <div class="headerish">
 

@@ -142,6 +142,7 @@ class Smarty_CMS extends Smarty {
 				$content = $line['page_content'];
 				$title = $line['page_title'];
 				$head_tags = $line['head_tags'];
+				$header_script = $line['page_header'];
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 				if (isset($head_tags) && $head_tags != "")
@@ -182,8 +183,11 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
 						$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
 					}
+					if ($header_script && $header_script != '')
+					{
+						$tpl_source = $header_script.$tpl_source;
+					}
 				}
-
 
 				return true;
 			}

@@ -118,7 +118,7 @@ $userid = get_userid();
 <BODY onLoad="page_load()">
 
 <DIV ID="header" CLASS="header">
-<IMG SRC="../images/cms/cmsadminbanner.png" BORDER="0" ID="logo" ALT="CMS Made Simple">
+<IMG SRC="../images/cms/cmsadminbanner.gif" BORDER="0" ID="logo" ALT="CMS Made Simple">
 </DIV>
 
 <?php

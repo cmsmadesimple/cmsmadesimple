@@ -129,6 +129,32 @@ class HtmlBlobOperations
 		return $result;
 	}
 
+	function LoadHtmlBlobByName($name)
+	{
+		$result = false;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
+		$dbresult = $db->Execute($query, array($name));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				$oneblob = new HtmlBlob();
+				$oneblob->id = $row['htmlblob_id'];
+				$oneblob->name = $row['htmlblob_name'];
+				$oneblob->content = $row['html'];
+				$oneblob->owner = $row['owner'];
+				$result = $oneblob;
+			}
+		}
+
+		return $result;
+	}
+
 	function InsertHtmlBlob($htmlblob)
 	{
 		$result = -1; 

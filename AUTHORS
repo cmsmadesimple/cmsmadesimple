@@ -1,6 +1,6 @@
 Developers Past and Present
---------------------------
-- Ted Kulp <tedkulp@users.sf.net>
+---------------------------
+- Ted Kulp <wishy@cmsmadesimple.org>
 - Greg Froese <heavy_g@users.sf.net>
 - Christian Page <christian@localdesert.com>
 - Darren Landrum <consul@studioconsul.net>
@@ -14,3 +14,7 @@ Chinese (Simplified and Traditional): ray
 Dutch: Thijs Elenbaas <thijs@contemplated.net>
 French: Hervé Commowick <daycom@daycom.net>
 Finnish: jani <jani@mikkonen.org>
+
+Contributors
+------------
+leen: Horizontal menu patch and svn cleanup scripts

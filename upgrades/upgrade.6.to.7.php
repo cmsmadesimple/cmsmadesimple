@@ -1,5 +1,12 @@
 <?php
 
+echo "<p>Adding fields to pages table...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."pages", "page_header X");
+
+echo "[done]</p>";
+
 echo "<p>Adding fields to users table...";
 
 $dbdict = NewDataDictionary($db);

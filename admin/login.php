@@ -86,9 +86,9 @@ header("Content-Type: text/html; charset=" . get_encoding());
 ?>
 
 <FORM METHOD="post" ACTION="login.php" ID="login" NAME="login" >
-<IMG SRC="../images/cms/cmsloginbanner.png" ALT="CMS Made Simple" WIDTH="411" HEIGHT="114" BORDER="0" ALIGN="right" >
+<IMG SRC="../images/cms/cmsloginbanner.gif" ALT="CMS Made Simple" WIDTH="411" HEIGHT="114" BORDER="0" ALIGN="right" >
 <DIV ID=ctr ALIGN=center>
-<IMG SRC="../images/cms/login.png" ALT="CMS Made Simple" WIDTH="64" HEIGHT="64" BORDER="0"  ID="loginbox">
+<IMG SRC="../images/cms/login.gif" ALT="CMS Made Simple" WIDTH="64" HEIGHT="64" BORDER="0"  ID="loginbox">
 </DIV>
 <TABLE BORDER="0" ID="logintable" ALIGN="center">
 	<TR>

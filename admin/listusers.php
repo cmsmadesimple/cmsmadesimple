@@ -56,8 +56,8 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.png\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
-		$image_false ="<img src=\"../images/cms/false.png\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
+		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
+		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
 
 		#while($row = $result->FetchRow()) {
 		foreach ($userlist as $oneuser)
@@ -66,11 +66,11 @@ if (isset($_GET["message"])) {
 			echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
 			echo "<td align=\"center\">".($oneuser->active == 1?$image_true:$image_false)."</td>\n";
 			if ($edit || $userid == $oneuser->id)
-				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$oneuser->id."\"><img src=\"../images/cms/edit.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$oneuser->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
 			else
 				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
