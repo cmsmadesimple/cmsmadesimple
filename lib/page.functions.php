@@ -398,6 +398,7 @@ function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlig
 	$text_highlight = highlight_string("<?$content?>", true);
 	$text_highlight = str_replace("&lt;?", "", $text_highlight);
 	$text_highlight = str_replace("?&gt;","", $text_highlight);
+	$text_highlight = str_replace('\'', '\\\'', $text_highlight);
 	$text_highlight = ereg_replace("\r", '', $text_highlight);
 	$text_highlight = ereg_replace("\n", '', $text_highlight);
 	$content = ereg_replace("\r", ' ', $content);
