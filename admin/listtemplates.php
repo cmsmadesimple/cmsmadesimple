@@ -56,6 +56,24 @@ if (isset($_GET["message"])) {
 		}
 	}
 
+	if (isset($_GET['setdefault']))
+	{
+		$templatelist = TemplateOperations::LoadTemplates();
+		foreach ($templatelist as $onetemplate)
+		{
+			if ($onetemplate->id == $_GET['setdefault'])
+			{
+				$onetemplate->default = 1;
+				$onetemplate->Save();
+			}
+			else
+			{
+				$onetemplate->default = 0;
+				$onetemplate->Save();
+			}
+		}
+	}
+
 	if (isset($_GET['setactive']) || isset($_GET['setinactive']))
 	{
 		$theid = '';
@@ -99,6 +117,7 @@ if (isset($_GET["message"])) {
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th width=\"50%\">".lang('template')."</th>\n";
+		echo "<th>".lang('default')."</th>\n";
 		echo "<th>".lang('active')."</th>\n";
 		if ($edit)
 			echo "<th>&nbsp;</th>\n";
@@ -123,10 +142,13 @@ if (isset($_GET["message"])) {
 			// construct true/false button images
 			$image_true ="<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\"><img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" /></a>";
 			$image_false ="<a href=\"listtemplates.php?setactive=".$onetemplate->id."\"><img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" /></a>";
+			$default_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
+			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\"><img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" /></a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
+				echo "<td align=\"center\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
 				echo "<td align=\"center\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 				# set template to all content
