@@ -21,7 +21,7 @@ h1, h2, h3, h4, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; font-w
 #topHeader { background-color: black; width: 600px;}
 #bottomHeader { background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
 #table { margin-top: 20px; }
-#helparea { background-color: #BFDAEF; border: 1px solid #8C8A8C; padding: 2px; margin-top: 20px; margin-bottom: 20px;}
+#helparea { background-color: #BFDAEF; border: 1px solid #8C8A8C; padding: 10px; margin: 20px;}
 div {border: none;}
 div.content {color: #000; height: 100%; margin: 0px 10px 0px 180px; padding-top: 10px; font-size: .8em;}
 /* end content style */
@@ -42,8 +42,8 @@ form {margin: 0 0 0 0;}
 form input, select {margin-top: 2px; margin-bottom: 2px;}
 form .standard {width: 150px;}
 table#padform input,table#padform select{margin-top: 5px; margin-right: 20px; margin-bottom: auto; margin-left: auto;}
-div.adminform {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: auto; margin-bottom: 10px;}
-div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 325px; margin-bottom: 10px;}
+div.adminform {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 90%; margin-bottom: 10px;}
+div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 400px; margin-bottom: 10px;}
 div.adminformnobkg {padding:0; border: 0px solid #6F8341; width: 90%; margin-bottom: 10px;}
 /* end form style */
 .error { color: #F00; }

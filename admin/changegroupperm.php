@@ -79,7 +79,7 @@ else {
 
 <form method="post" action="changegroupperm.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext('Permissions for group: ${group_name}')?></h3>
 

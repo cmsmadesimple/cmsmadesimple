@@ -78,7 +78,7 @@ else {
 
 <form method="post" action="changegroupassign.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext('Users assigned to group: ${group_name}')?></h3>
 

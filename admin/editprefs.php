@@ -53,7 +53,7 @@ if ($error != "") {
 
 <form method="post" action="editprefs.php">
 
-<div class="adminform">
+<div class="adminformSmall">
 
 <h3><?=$gettext->gettext("Edit User Preferences")?></h3>
 
