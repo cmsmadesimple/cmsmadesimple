@@ -387,7 +387,7 @@ else if ($action == 'missingdeps')
 			echo "<td>$key</td>\n";
             if (!isset($dbm[$key])) #Not installed, lets put up the install button
             {
-                $havedep = false;
+                $brokendeps;
 
                 if (count($modinstance->GetDependencies()) > 0) #Check for any deps
                 {
@@ -399,27 +399,23 @@ else if ($action == 'missingdeps')
                     		$gCms->modules[$onedepkey]['active'] == true &&
                     		version_compare($modinstance->GetVersion(), $onedepvalue) > -1)
                     	{
-                    		$havedep = true;
+                    		$brokendeps++;
                     	}
                     }
-                }
-                else
-                {
-                    $havedep = true;
                 }
 
                 echo "<td>".$modinstance->GetVersion()."</td>";
 				echo "<td>".lang('notinstalled')."</td>";
 
-                if ($havedep)
+                if ($brokendeps > 0)
                 {
                 	echo "<td>&nbsp;</td>";
-                    echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
+                	echo '<td><a href="plugins.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a></td>';
                 }
                 else
                 {
                 	echo "<td>&nbsp;</td>";
-                	echo '<td><a href="plugins.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a></td>';
+                    echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
                 }
             }
 			else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
@@ -433,14 +429,15 @@ else if ($action == 'missingdeps')
 			{
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".lang('installed')."</td>";
-				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 				#Can't be removed if it has a dependency...
 				if (!$modinstance->CheckForDependents())
 				{
+					echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
 				}
 				else
 				{
+					echo "<td>".($dbm[$key]['Active']==="1"?$image_true:"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td>".lang('hasdependents')."</td>";
 				}
 			}
