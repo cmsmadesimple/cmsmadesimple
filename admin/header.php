@@ -51,15 +51,13 @@ $modulePerms = check_permission($userid, 'Modify Modules');
 <title><?php echo lang('adminsystemtitle')?></title>
 
 <link rel="stylesheet" type="text/css" href="style.php" />
-<link rel="stylesheet" type="text/css" href="tab.php" />
-
 
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 
 </head>
 
 <body##BODYSUBMITSTUFFGOESHERE##>
-
+<div id="AdminHeader"></div>
 
 <div id="MainContent">
 
