@@ -137,7 +137,7 @@ if ($error != "") {
 	</tr>
 	<tr>
 		<td><?php echo lang('email')?>:</td>
-		<td><input type="text" name="email" maxlength="50" value="" class="standard"></td>
+		<td><input type="text" name="email" maxlength="255" value="" class="standard"></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('adminaccess')?>:</td>

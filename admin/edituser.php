@@ -171,7 +171,7 @@ else {
 	</tr>
 	<tr>
 		<td><?php echo lang('email')?>:</td>
-		<td><input type="text" name="email" maxlength="25" value="<?php echo $email?>" class="standard"></td>
+		<td><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('adminaccess')?>:</td>
