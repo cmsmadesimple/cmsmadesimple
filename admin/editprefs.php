@@ -96,8 +96,8 @@ if ($error != "") {
         
         
 			<select name="use_wysiwyg">
-				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
+				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 			</select>
 		</td>
 	</tr>
@@ -105,8 +105,8 @@ if ($error != "") {
 		<td><?php echo lang("usejavasyntax")?>:</td>
 		<td>
 			<select name="use_javasyntax"  onChange="syntaxSupport()">
-				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected":"") ?>><?php echo lang('false')?></option>
+				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 			</select>
 		</td>
 	</tr>
