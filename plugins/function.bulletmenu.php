@@ -100,7 +100,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
 
 	if ($showadmin == 1) {
-		$menu .= "<ul><li><a href='admin'>Admin</a></li></ul>\n";
+		$menu .= "<ul><li><a href='admin/'>Admin</a></li></ul>\n";
 	}
 
 	return $menu;

@@ -71,7 +71,7 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
 	if ($showadmin == 1) {
 		$menu .= ".|---\n";
-		$menu .= ".|Admin|admin\n";
+		$menu .= ".|Admin|admin/\n";
 	}
 
 	$text = '
