@@ -58,19 +58,19 @@ if ($currentpage > 1) { require_once(dirname(dirname(__FILE__))."/include.php");
 
 ?>
 
-<HTML>
-<HEAD>
-        <TITLE>CMS Made Simple Install</TITLE>
-        <LINK REL="stylesheet" TYPE="text/css" HREF="install.css" />
-</HEAD>
+<html>
+<head>
+        <title>CMS Made Simple Install</title>
+        <link rel="stylesheet" type="text/css" href="install.css" />
+</head>
 
-<BODY>
+<body>
 
-<DIV CLASS="body">
+<div class="body">
 
-<IMG SRC="../images/cms/cmsbanner.gif" WIDTH="449" HEIGHT="114" ALT="CMS Banner Logo" />
+<img src="../images/cms/cmsbanner.gif" width="449" height="114" alt="CMS Banner Logo" />
 
-<DIV CLASS="headerish">
+<div class="headerish">
 
 <H1>Install System</H1>
 
@@ -81,13 +81,13 @@ if ($currentpage > 1) { require_once(dirname(dirname(__FILE__))."/include.php");
 
 echo "<h3>Thanks for installing CMS: CMS Made Simple.</h3>\n";
 echo "<table class=\"countdown\" cellspacing=\"2\" cellpadding=\"2\"><tr>";
-echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=1?"1":"1off").".gif\" ALT=\"Step 1\"></td>";
-echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=2?"2":"2off").".gif\" ALT=\"Step 2\"></td>";
-echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=3?"3":"3off").".gif\" ALT=\"Step 3\"></td>";
-echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=4?"4":"4off").".gif\" ALT=\"Step 4\"></td>";
-echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=5?"5":"5off").".gif\" ALT=\"Step 5\"></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage>=1?"1":"1off").".gif\" alt=\"Step 1\"></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage>=2?"2":"2off").".gif\" alt=\"Step 2\"></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage>=3?"3":"3off").".gif\" alt=\"Step 3\"></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage>=4?"4":"4off").".gif\" alt=\"Step 4\"></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage>=5?"5":"5off").".gif\" alt=\"Step 5\"></td>";
 echo "</tr></table>\n";
-echo "<p><hr width=80%></p>\n";
+echo "<p><hr width=\"80%\"></p>\n";
 
 switch ($currentpage) {
     case 1:
@@ -106,7 +106,7 @@ switch ($currentpage) {
         showPageFive();
         break;
     default:
-        echo "You were supposed to turn <a href=install.php>right</a> at Alberquerque.<p>\n";
+        echo "You were supposed to turn <a href=\"install.php\">right</a> at Alberquerque.<p>\n";
         break;
 } ## switch
 
@@ -167,17 +167,20 @@ function showPageOne() {
     } ## foreach
 
     echo "</tbody></table>\n";
+
+	echo '<form method="post" action="install.php">';
   
   	if ($continueon)
 	{
 		echo "<p>All of your tests show successful.  It is time to setup your database.</p>\n";
-		echo "<p class=\"continue\" align=\"center\"><a href=\"install.php?page=2\">Continue</a></p>\n";
+		echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input type="submit" value="Continue" /></p>';
 	}
 	else
 	{
 		echo "<p>One or more tests have failed.  Please correct the problem and click the button below to recheck.</p>\n";
-		echo "<p class=\"continue\" align=\"center\"><a href=\"install.php\">Try Again</a></p>\n";
+		echo '<p class="continue" align="center"><input type="Submit" value="Try Again" /></p>';
 	}
+	echo '</form>';
 
 } ## showPageOne
 
@@ -223,7 +226,7 @@ there will be no other way to login to your CMS Made Simple admin system without
 
 </table>
 
-<p align="center" class="continue"><input type="hidden" name="page" value="3" /><a onclick="document.page2form.submit()" href="#">Continue</a></p>
+<p align="center" class="continue"><input type="hidden" name="page" value="3" /><input type="submit" value="Continue" /><!--<a onclick="document.page2form.submit()" href="#">Continue</a>--></p>
 
 </form>
 
@@ -317,7 +320,7 @@ Please complete the following fields:
 <TD><INPUT TYPE="checkbox" NAME="createtables" CHECKED="true" /></TD>
 </TR>
 </TABLE>
-<P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()" href="#">Continue</A></P>
+<P ALIGN="center" CLASS="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input type="submit" value="Continue" /></P>
 <!--<p><input type="submit" value="Continue" /></p>-->
 </FORM>
 <?php
@@ -419,7 +422,7 @@ function showPageFour($sqlloaded = 0) {
 		</TR>
 		-->
     </TABLE>
-    <P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()" href="#">Continue</A></P>
+    <P ALIGN="center" CLASS="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input type="submit" value="Continue" /></P>
 	</FORM>
 
 	<?php
@@ -512,11 +515,11 @@ function showPageFive() {
 } ## showPageFour
 ?>
 
-</DIV>
-</DIV>
+</div>
+</div>
 
-</BODY>
-</HTML>
+</body>
+</html>
 <?php
 
 # vim:ts=4 sw=4 noet
