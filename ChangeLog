@@ -6,6 +6,7 @@ Version 0.3.2 -- Subversion
 * Fixed link to cmsmadesimple in footer
 * Fixed bug in displaying 404 pages
 * Fixed a nasty bug where link pages would file to show in the content list
+* Fixed addcontent so it sets showinmenu correctly
 
 Version 0.3.1 -- Tue Jul 27 2004
 -----------------

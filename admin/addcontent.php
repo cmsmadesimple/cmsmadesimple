@@ -61,7 +61,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
 
 $showinmenu = 1;
-if (!isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $active = 0;
+if (!isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $showinmenu = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listcontent.php");
