@@ -45,7 +45,7 @@ if ($moduleaction == "edit") {
 
 } else if ($moduleaction == "delete") {
 
-	$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = " . (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
+	$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = " . $db->qstr((isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:""));
 	$dbresult = $db->Execute($query);
 	cms_mapi_audit($cms, (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:""), "News", "Deleted News Item");
 	redirect("moduleinterface.php?module=News");
