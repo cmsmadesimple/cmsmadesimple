@@ -544,7 +544,7 @@ class Smarty_ModuleInterface extends Smarty {
 				$stylesheet .= "<style type=\"text/css\">\n";
 				while ($cssline = $cssresult->FetchRow())
 				{
-					$tempstylesheet .= "\n".$cssline[css_text]."\n";
+					$tempstylesheet .= "\n".$cssline['css_text']."\n";
 				}
 				$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
 				$stylesheet .= "</style>\n";

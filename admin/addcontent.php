@@ -287,7 +287,7 @@ else {
 		{
 			while ($cssline = $cssresult->FetchRow())
 			{
-				$data["stylesheet"] .= "\n".$cssline[css_text]."\n";
+				$data["stylesheet"] .= "\n".$cssline['css_text']."\n";
 			}
 		}
 		

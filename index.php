@@ -78,13 +78,13 @@ if (get_site_preference('enablecustom404') == "0"){
 	set_error_handler($old_error_handler);
 }
 
-//$protected_page = password_protected($page);
-//if($protected_page != false){
-//	if (!check_access($protected_page))
-//		display_login_form();
-//	else
-//		echo $html;
-//}else
+$protected_page = password_protected($page);
+if($protected_page != false){
+	if (!check_access($protected_page))
+		display_login_form();
+	else
+		echo $html;
+}else
 	echo $html;
 
 #header("Content-Language: " . $current_language);

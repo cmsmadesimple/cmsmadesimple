@@ -103,7 +103,7 @@ if (!isset($charsetsent))
 			$template_id = -1;
 			if (isset($_POST["template_id"])) 
 				$template_id = $_POST["template_id"];
-			else{
+			else if (isset($_GET['page_id'])){
 				$query = "SELECT template_id FROM ".cms_db_prefix()."pages WHERE ".$_GET['page_id']." = page_id";
 				$template_id = $db->GetOne($query);
 			}
