@@ -1,7 +1,7 @@
 Version 0.8 "Tahiti" -- Subversion
 -----------------
 
-* Added Norwegian translation (Patricia)
+* Added Norwegian translation (Roger 'Stigma' Knutsen)
 * Added FCKeditor capability via module
 * Added TinyMCE capability via module (included)
 * Admin and default website are totally xhtml 1.0 transitional compliant

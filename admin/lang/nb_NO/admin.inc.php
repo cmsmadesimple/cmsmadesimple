@@ -219,9 +219,9 @@ $lang['admin']['apply'] = 'Bruk';
 $lang['admin']['none'] = 'Ingen';
 $lang['admin']['wysiwygtouse'] = 'Velg hvilken WYSIWYG tekstbehandler som skal anvendes';
 $lang['admin']['cachable'] = 'Kan caches'; 
-$lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
-$lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
-$lang['admin']['minimumversion'] = 'Minimum Version'; //needs translation
-$lang['admin']['depsformodule'] = 'Dependencies for %s Module'; //needs translation
-$lang['admin']['installed'] = 'Installed'; //needs translation
+$lang['admin']['hasdependents'] = 'Har bindinger(avhengiheter)';
+$lang['admin']['missingdependency'] = 'Mangler binding';
+$lang['admin']['minimumversion'] = 'Minimum versjon';
+$lang['admin']['depsformodule'] = 'Bindinger for %s Modul';
+$lang['admin']['installed'] = 'Installert'; 
 ?>
