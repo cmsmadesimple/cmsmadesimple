@@ -81,6 +81,15 @@ else if ($moduleaction == "delete")
 		$error .= "<li>No content given</li>";
 		$validinfo = false;
 	}
+	if ($post_date === "") {
+		$error .= "<li>No post date given</li>";
+		$validinfo = false;
+	}
+	else if ($db->DBTimeStamp($post_date) === FALSE)
+	{
+		$error .= "<li>Post date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+		$validinfo = false;
+	}
 	if ($start_date !== "" && $end_date === "")
 	{
 		$error .= "<li>Entering a start date requires an end date also.</li>";
@@ -109,7 +118,7 @@ else if ($moduleaction == "delete")
 		$new_id = $db->GenID(cms_db_prefix()."module_news_seq");
 		$querystart = "INSERT INTO ".cms_db_prefix()."module_news (news_id, news_title, news_data, news_date, create_date";
 		$queryend = ") VALUES (?,?,?,?,?";
-		$params = array($new_id, $title, $data, $db->DBTimeStamp(time()), $db->DBTimeStamp(time()));
+		$params = array($new_id, $title, $data, $post_date, $db->DBTimeStamp(time()));
 		if ($start_date != "")
 		{
 			$querystart .= ", start_time";
@@ -141,6 +150,15 @@ else if ($moduleaction == "completeedit")
 	}
 	if ($data === "") {
 		$error .= "<li>No content given</li>";
+		$validinfo = false;
+	}
+	if ($post_date === "") {
+		$error .= "<li>No post date given</li>";
+		$validinfo = false;
+	}
+	else if ($db->DBTimeStamp($post_date) === FALSE)
+	{
+		$error .= "<li>Post date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
 		$validinfo = false;
 	}
 	if ($start_date !== "" && $end_date === "")
@@ -205,6 +223,7 @@ else if ($moduleaction == "completeedit")
 	}
 } else {
 	$hiddenfields .= '<input type="hidden" name="'.$id.'action" value="completeadd" />';
+	$post_date = rtrim(ltrim($db->DBTimeStamp(time()), "'"), "'");
 }
 
 if ($error != "") {
@@ -226,12 +245,12 @@ if ($error != "") {
 		<td>Content:</td>
 		<td><textarea id="<?php echo $id?>newscontent" name="<?php echo $id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
 	</tr>
-	<?php if ($moduleaction == "edit" || $moduleaction == "completeedit") { ?>
+	<?php //if ($moduleaction == "edit" || $moduleaction == "completeedit") { ?>
 	<tr>
 		<td>Post Date:</td>
 		<td><input type="text"  name="<?php echo $id?>post_date" maxlength="20" length="12" value="<?php echo $post_date?>" /></td>
 	</tr>
-	<?php } ?>
+	<?php //} ?>
 	<tr>
 		<td>Start Date:</td>
 		<td><input type="text"  name="<?php echo $id?>start_date" maxlength="20" length="12" value="<?php echo $start_date?>" /></td>
