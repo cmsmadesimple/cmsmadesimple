@@ -30,9 +30,23 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Creating htmlblobs table sequence...";
+
+	$max = $db->GetOne("SELECT max(htmlblob_id) from ".$db_prefix."htmlblobs");
+	$db->CreateSequence($db_prefix."htmlblobs_seq", $max+1);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating additional_htmlblob_users table sequence...";
+
+	$max = $db->GetOne("SELECT max(additional_htmlblob_users_id) from ".$db_prefix."additional_htmlblob_users");
+	$db->CreateSequence($db_prefix."additional_htmlblobs_users_seq", $max+1);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating module_news table sequence...";
 
-	$max = $db->GetOne("SELECT max(module_news_id) from ".$db_prefix."module_news");
+	$max = $db->GetOne("SELECT max(news_id) from ".$db_prefix."module_news");
 	$db->CreateSequence($db_prefix."module_news_seq", $max+1);
 
 	echo "[done]</p>";
