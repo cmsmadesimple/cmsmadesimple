@@ -231,7 +231,7 @@ Please complete the following fields:
 <TD><INPUT TYPE="checkbox" NAME="createtables" CHECKED="true" /></TD>
 </TR>
 </TABLE>
-<P ALIGN="center" CLASS="continue"><A onClick="document.page2form.submit()">Continue</A></P>
+<P ALIGN="center" CLASS="continue"><A onClick="document.page2form.submit()" href="#">Continue</A></P>
 <!--<p><input type="submit" value="Continue" /></p>-->
 </FORM>
 <?php
@@ -326,7 +326,7 @@ function showPageThree($sqlloaded = 0) {
 		</TR>
 		-->
     </TABLE>
-    <P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()">Continue</A></P>
+    <P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()" href="#">Continue</A></P>
 	</FORM>
 
 	<?php
