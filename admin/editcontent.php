@@ -136,10 +136,15 @@ if ($access) {
 			$query1 = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
 			$result1 = $dbnew->Execute($query1);
 
-			$query2 = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = " . $orig_parent_id . " AND item_order > " . $item_order;
-			$result2 = $dbnew->Execute($query2);
+			if ($orig_parent_id != $parent_id) {
+				$query2 = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = " . $orig_parent_id . " AND item_order > " . $item_order;
+				$result2 = $dbnew->Execute($query2);
+				if (!$result2) {
+					$result1 = null;
+				}
+			}
 
-			if ($result1 && $result2) {
+			if ($result1) {
 				if ($adminaccess) {
 					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
 					$dbnew->Execute($query);

@@ -344,17 +344,29 @@ function db_get_menu_items(&$config, $style) {
 function get_page_types(&$config) {
 
 	global $cmsmodules;
+	global $dbnew;
 
 	$result['content'] = 'Content';
 	$result['link'] = 'Link';
 	$result['separator'] = 'Separator';
 
-	if (isset($cmsmodules)) {
+	$installedmodules = array();
+
+	$query = "SELECT * FROM ".$config->db_prefix."modules";
+	$dbresult = $dbnew->Execute($query);
+
+	if ($dbresult && $dbresult->RowCount() > 0) {
+
+		while ($row = $dbresult->FetchRow()) {
+			$installedmodules[$row['module_name']] = 1;
+		}
+
 		foreach ($cmsmodules as $key=>$value) {
-			if (isset($value['content_module'])) {
+			if (isset($cmsmodules[$key]['content_module']) && isset($installedmodules[$key])) {
 				$result[$key] = $key;
 			}
 		}
+
 	}
 
 	return $result;
