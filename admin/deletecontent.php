@@ -21,3 +21,6 @@ if (isset($_GET["page_id"])) {
 }
 
 redirect("listcontent.php");
+
+# vim:ts=4 sw=4 noet
+?>

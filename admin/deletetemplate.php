@@ -37,3 +37,6 @@ if (isset($_GET["template_id"])) {
 }
 
 redirect("listtemplates.php");
+
+# vim:ts=4 sw=4 noet
+?>

@@ -19,4 +19,5 @@
 $CMS_VERSION = "0.1";
 $CMS_SCHEMA_VERSION = "1";
 
+# vim:ts=4 sw=4 noet
 ?>

@@ -87,4 +87,5 @@ if (check_permission($config, $userid, 'Add Group')) {
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

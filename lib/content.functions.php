@@ -129,4 +129,5 @@ function db_get_default_page (&$config) {
 	return $result;
 }
 
+# vim:ts=4 sw=4 noet
 ?>

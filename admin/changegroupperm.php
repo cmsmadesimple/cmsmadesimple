@@ -134,4 +134,5 @@ else {
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

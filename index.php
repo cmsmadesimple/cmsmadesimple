@@ -58,4 +58,5 @@ if ($page == "") {
 
 echo $smarty->fetch('db:'.$page);
 
+# vim:ts=4 sw=4 noet
 ?>

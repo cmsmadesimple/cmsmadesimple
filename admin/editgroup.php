@@ -107,7 +107,7 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Name:</td>
+		<td>*Name:</td>
 		<td><input type="text" name="group" maxlength="25" value="<?=$group?>" /></td>
 	</tr>
 	<tr>

@@ -22,4 +22,5 @@ unset($_SESSION["user_id"]);
 
 redirect("index.php");
 
+# vim:ts=4 sw=4 noet
 ?>

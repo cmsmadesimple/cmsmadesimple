@@ -37,3 +37,6 @@ if (isset($_GET["user_id"])) {
 }
 
 redirect("listusers.php");
+
+# vim:ts=4 sw=4 noet
+?>

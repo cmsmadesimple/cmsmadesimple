@@ -20,6 +20,8 @@ require_once("../include.php");
 
 check_login($config);
 
+$error = "";
+
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
@@ -61,19 +63,38 @@ if ($access) {
 
 	if (isset($_POST["editcontent"])) {
 
-		$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now() WHERE page_id = $page_id";
-		$result = $db->query($query);
+		$validinfo = true;
 
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listcontent.php");
-			return;
+		if ($title == "") {
+			$validinfo = false;
+			$error .= "<li>No title given!</li>";
 		}
-		else {
-			echo "Error updating content";
-			echo "<pre>query: $query</pre>";
+		if ($url == "") {
+			$validinfo = false;
+			$error .= "<li>No url given!</li>";
 		}
-		mysql_free_result($result);
+		if ($content == "") {
+			$validinfo = false;
+			$error .= "<li>No content entered!</li>";
+		}
+		if ($menutext == "") {
+			$validinfo = false;
+			$error .= "<li>No menu text given!</li>";
+		}
+
+		if ($validinfo) {
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now() WHERE page_id = $page_id";
+			$result = $db->query($query);
+
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listcontent.php");
+				return;
+			}
+			else {
+				$error .= "<li>Error updating content</li>";
+			}
+		}
 
 	}
 	else if ($page_id != -1) {
@@ -139,7 +160,9 @@ if (!$access) {
 	print "<h3>No Access to Edit this Page</h3>";
 }
 else {
-
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
 ?>
 
 <form method="post" action="editcontent.php">
@@ -151,15 +174,15 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Title:</td>
+		<td>*Title:</td>
 		<td><input type="text" name="title" maxlength="255" value="<?=$title?>" /></td>
 	</tr>
 	<tr>
-		<td>URL:</td>
+		<td>*URL:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
 	<tr>
-		<td>Content:</td>
+		<td>*Content:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
 	</tr>
 	<tr>
@@ -171,7 +194,7 @@ else {
 		<td><?=$dropdown2?></td>
 	</tr>
 	<tr>
-		<td>Menu Text:</td>
+		<td>*Menu Text:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
 	<tr>
@@ -198,4 +221,5 @@ else {
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

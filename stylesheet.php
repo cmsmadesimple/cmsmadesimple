@@ -23,4 +23,5 @@ if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 
 echo get_stylesheet($config, $templateid);
 
+# vim:ts=4 sw=4 noet
 ?>

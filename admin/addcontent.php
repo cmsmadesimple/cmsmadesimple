@@ -20,6 +20,8 @@ require_once("../include.php");
 
 check_login($config);
 
+$error = "";
+
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
@@ -57,17 +59,36 @@ if ($access) {
 
 	if (isset($_POST["addcontent"])) {
 
-		$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
-		$result = $db->query($query);
-		if (mysql_affected_rows() > -1) {
-			$db->close();
-			redirect("listcontent.php");
-			return;
+		$validinfo = true;
+		if ($title == "") {
+			$validinfo = false;
+			$error .= "<li>No title given!</li>";
 		}
-		else {
-			echo "Error inserting page";
+		if ($url == "") {
+			$validinfo = false;
+			$error .= "<li>No url given!</li>";
 		}
-		mysql_free_result($result);
+		if ($content == "") {
+			$validinfo = false;
+			$error .= "<li>No content entered!</li>";
+		}
+		if ($menutext == "") {
+			$validinfo = false;
+			$error .= "<li>No menu text given!</li>";
+		}
+
+		if ($validinfo) {
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($title)."','".mysql_real_escape_string($url)."','".mysql_real_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_real_escape_string($menutext)."', $active, now(), now())";
+			$result = $db->query($query);
+			if (mysql_affected_rows() > -1) {
+				$db->close();
+				redirect("listcontent.php");
+				return;
+			}
+			else {
+				$error .= "<li>Error inserting page</li>";
+			}
+		}
 	}
 
 	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
@@ -115,6 +136,10 @@ if (!$access) {
 }
 else {
 
+	if ($error != "") {
+		echo "<ul class=\"error\">".$error."</ul>";
+	}
+
 ?>
 
 <form method="post" action="addcontent.php">
@@ -126,15 +151,15 @@ else {
 <table border="0">
 
 	<tr>
-		<td>Title:</td>
+		<td>*Title:</td>
 		<td><input type="text" name="title" maxlength="25" value="<?=$title?>" /></td>
 	</tr>
 	<tr>
-		<td>URL:</td>
+		<td>*URL:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
 	<tr>
-		<td>Content:</td>
+		<td>*Content:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
 	</tr>
 	<tr>
@@ -150,7 +175,7 @@ else {
 		<td><input type="checkbox" name="active" <?=($showinmenu == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
-		<td>Menu Text:</td>
+		<td>*Menu Text:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
 	<tr>
@@ -169,6 +194,10 @@ else {
 </form>
 
 <?php
+
 }
+
 include_once("footer.php");
+
+# vim:ts=4 sw=4 noet
 ?>

@@ -88,3 +88,6 @@ if ($_POST["username"] && $_POST["password"]) {
 
 </body>
 </html>
+<?php
+# vim:ts=4 sw=4 noet
+?>

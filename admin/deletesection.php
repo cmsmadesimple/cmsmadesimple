@@ -37,3 +37,6 @@ if (isset($_GET["section_id"])) {
 }
 
 redirect("listsections.php");
+
+# vim:ts=4 sw=4 noet
+?>

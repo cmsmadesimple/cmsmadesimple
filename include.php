@@ -86,4 +86,5 @@ if(get_magic_quotes_gpc())
 
 session_start();
 
+# vim:ts=4 sw=4 noet
 ?>
