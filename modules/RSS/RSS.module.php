@@ -78,7 +78,7 @@ class RSS extends CMSModule
 		{
 			$config = $this->cms->config;
 
-			define('MAGPIE_CACHE_DIR', $config["root_path"].'/smarty/cms/cache');
+			define('MAGPIE_CACHE_DIR', $config["root_path"].'/tmp/cache');
 
 			require_once dirname(__FILE__).('/rss_fetch.inc');
 
