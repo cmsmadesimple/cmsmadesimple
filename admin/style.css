@@ -259,6 +259,24 @@ div.adminform h3
 	padding-left: 10px;
 }
 
+div.adminformnobkg
+{
+	color: #265980;
+	border: 0; 
+	padding: 0;
+	margin-top: 15px;
+	margin-right: 20px;
+	margin-left: 0;
+	position: absolute;
+	left: 185px;
+}
+
+div.adminformnobkg h3
+{
+	font-size: 16px;
+	padding-left: 10px;
+}
+
 /* end form style */
 
 .error { 

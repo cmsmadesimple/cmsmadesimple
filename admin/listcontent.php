@@ -30,6 +30,7 @@ if (isset($_GET["message"])) {
 
 ?>
 <h3><?=$gettext->gettext("Current Pages")?></h3>
+<div class="adminformnobkg">
 <?php
 
 	$userid = get_userid();
@@ -125,7 +126,7 @@ if (isset($_GET["message"])) {
 ?>
 
 <div class="button"><a href="addcontent.php"><?=$gettext->gettext("Add New
-Content")?></a></div>
+Content")?></a></div></div>
 
 <?php
 	}

@@ -30,6 +30,7 @@ if (isset($_GET["message"])) {
 
 ?>
 <h3><?=$gettext->gettext("Current Templates")?></h3>
+<div class="adminformnobkg">
 <?php
 
 	$userid = get_userid();
@@ -104,6 +105,7 @@ if ($add) {
 <?php
 }
 
+echo '</div>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

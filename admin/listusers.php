@@ -30,6 +30,7 @@ if (isset($_GET["message"])) {
 
 ?>
 <h3><?=$gettext->gettext("Current Users")?></h3>
+<div class="adminformnobkg">
 <?php
 
 	$userid = get_userid();
@@ -81,6 +82,7 @@ if (check_permission($userid, 'Add User')) {
 <?php
 }
 
+echo "</div>";
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

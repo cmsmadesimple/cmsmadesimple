@@ -26,6 +26,7 @@ include_once("header.php");
 
 ?>
 <h3><?=$gettext->gettext("Current Groups")?></h3>
+<div class="adminformnobkg">
 <?php
 
 	$userid = get_userid();
@@ -85,6 +86,7 @@ if (check_permission($userid, 'Add Group')) {
 <?php
 }
 
+echo '</div>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -78,6 +78,8 @@ if ($access) {
 
 include_once("header.php");
 
+echo '<div class="adminformnobkg">';
+
 if ($action == "showmoduleabout")
 {
 	if (isset($gCms->modules[$module]['about_function'])) {
@@ -301,6 +303,7 @@ else
 
 }
 
+echo "</div>";
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

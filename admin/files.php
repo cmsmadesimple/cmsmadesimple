@@ -187,6 +187,7 @@ if ($errors != "")
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
+echo '<div class="adminformnobkg">';
 echo '<table cellspacing="0" class="admintable">';
 
 echo "<tr><td width=\"30\">&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td width=\"10%\">".$gettext->gettext("File Size")."</td><td width=\"18\">&nbsp;</td></tr>";
@@ -269,7 +270,6 @@ if ($filetext == "" && $dirtext == "")
 
 echo "</table>";
 
-
 if ($access)
 {
 ?>
@@ -292,6 +292,8 @@ if ($access)
 
 <?
 }
+
+echo "</div>";
 
 include_once("footer.php");
 
