@@ -163,7 +163,7 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
-		$dbresult = $db->Execute($query, array($id));
+		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
 		{
@@ -319,13 +319,13 @@ class TemplateOperations
 				$result .= ' ' . $othertext;
 			}
 			$result .= '>';
-			$result .= '<option value="">Select Template</option>';
+			#$result .= '<option value="">Select Template</option>';
 			foreach ($alltemplates as $onetemplate)
 			{
 				if ($onetemplate->active == true || $show_hidden == true)
 				{
 					$result .= '<option value="'.$onetemplate->id.'"';
-					if ($onetemplate->id == $selected_id)
+					if ($onetemplate->id == $selected_id || ($selected_id == -1 && $onetemplate->default == true))
 					{
 						$result .= ' selected="selected"';
 					}

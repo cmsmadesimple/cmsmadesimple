@@ -144,6 +144,15 @@ class content extends ContentBase
 		{
 			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
 		}
+		else
+		{
+			$defaulttemplate = TemplateOperations::LoadDefaultTemplate();
+			if (isset($defaulttemplate))
+			{
+				$this->mTemplateId = $defaulttemplate->id;
+				$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+			}
+		}
 
 		if ($tab == 0)
 		{
