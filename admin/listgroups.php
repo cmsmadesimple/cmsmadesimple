@@ -19,6 +19,8 @@ require_once("../include.php");
 		echo "<th>Active</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		echo "<th>&nbsp;</th>\n";
+		echo "<th>&nbsp;</th>\n";
+		echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
@@ -26,6 +28,8 @@ require_once("../include.php");
 			echo "<tr>\n";
 			echo "<td>".$row["group_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
+			echo "<td><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">Permissions</a></td>\n";
+			echo "<td><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">Assignments</a></td>\n";
 			echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">Edit</a></td>\n";
 			echo "<td><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";

@@ -2,7 +2,8 @@
 
 class CMSConfig {
 
-function CMSConfig() {
+	function CMSConfig() {
+
 #Database connection information
 $this->db_hostname = "localhost";
 $this->db_username = "cms";
@@ -34,7 +35,7 @@ $this->use_bb_code = false;
 
 include_once("config.php");
 
-}
+	}
 }
 
 $config = new CMSConfig();
