@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.9.1";
-$CMS_VERSION_NAME = "Mohotani";
+$CMS_VERSION = "0.9.2";
+$CMS_VERSION_NAME = "Hatutu";
 $CMS_SCHEMA_VERSION = "9";
 
 # vim:ts=4 sw=4 noet

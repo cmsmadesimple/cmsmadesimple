@@ -98,10 +98,7 @@ else if (isset($_POST["editsiteprefs"]))
 	$sitedownmessage = get_site_preference('sitedownmessage');
 	$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_site_preference('useadvancedcss');
-	//ADDED
 	$logintheme = get_site_preference('logintheme', 'default');
-	//STOP
-
 }
 
 $templates = array();

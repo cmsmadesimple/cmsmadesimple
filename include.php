@@ -115,8 +115,6 @@ require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
-#Load all site preferences
-load_site_preferences();
 
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
@@ -165,6 +163,9 @@ $gCms->cmsmodules = array();
 $gCms->userplugins = array();
 $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
+
+#Load all site preferences
+load_site_preferences();
 
 #Load all installed module code
 if (isset($LOAD_ALL_MODULES))
