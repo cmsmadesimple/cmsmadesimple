@@ -59,6 +59,8 @@ class Smarty_Preview extends Smarty {
 		fclose($handle);
 		unlink($fname);
 		$tpl_source = $data["template"];
+		#header("Content-Language: " . $current_language);
+		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
 		$stylesheet = "";
 		if (isset($data["stylesheet"])) {
 			#$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$data["template_id"];

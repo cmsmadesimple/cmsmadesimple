@@ -343,12 +343,13 @@ function get_stylesheet($templateid) {
 	global $gCms;
 	$db = $gCms->db;
 
-	$query = "SELECT stylesheet FROM ".cms_db_prefix()."templates WHERE template_id = ".$templateid;
+	$query = "SELECT stylesheet, encoding FROM ".cms_db_prefix()."templates WHERE template_id = ".$templateid;
 	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0) {
 		$line = $result->FetchRow();
 		$css = $line['stylesheet'];
+		header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 	}
 
 	# add linked CSS if any

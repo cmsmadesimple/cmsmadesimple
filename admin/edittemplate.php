@@ -37,6 +37,9 @@ if (isset($_POST["content"])) $content = $_POST["content"];
 $stylesheet = "";
 if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 
+$encoding = "";
+if (isset($_POST["encoding"])) $encoding = $_POST["encoding"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
@@ -91,6 +94,7 @@ if ($access)
 			$onetemplate->name = $template;
 			$onetemplate->content = $content;
 			$onetemplate->stylesheet = $stylesheet;
+			$onetemplate->encoding = $encoding;
 			$onetemplate->active = $active;
 			$result = $onetemplate->save();
 
@@ -112,6 +116,7 @@ if ($access)
 		$orig_template = $onetemplate->name;
 		$content = $onetemplate->content;
 		$stylesheet = $onetemplate->stylesheet;
+		$encoding = $onetemplate->encoding;
 		$active = $onetemplate->active;
 	}
 }
@@ -135,6 +140,7 @@ else
 		$data["content"] = "Test Content";
 		#$data["template_id"] = $template_id;
 		$data["stylesheet"] = $stylesheet;
+		$data["encoding"] = $encoding;
 		$data["template"] = $content;
 
 		# add linked CSS if any
@@ -190,6 +196,10 @@ else
 	<tr>
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"") ?>></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('encoding')?>:</td>
+		<td><input type="text" name="encoding" maxlength="25" value="<?php echo $encoding?>"></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

@@ -34,6 +34,9 @@ if (isset($_POST["content"])) $content = $_POST["content"];
 $stylesheet = "";
 if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 
+$encoding = "";
+if (isset($_POST["encoding"])) $encoding = $_POST["encoding"];
+
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
@@ -87,6 +90,7 @@ if ($access)
 			$newtemplate->name = $template;
 			$newtemplate->content = $content;
 			$newtemplate->stylesheet = $stylesheet;
+			$newtemplate->encoding = $encoding;
 			$newtemplate->active = $active;
 			$result = $newtemplate->save();
 
@@ -160,6 +164,10 @@ else
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
 		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet", "syntaxHighlight", "Java Properties") ?></textarea></td>
+	</tr>
+	<tr>
+		<td><?php echo lang('encoding')?>:</td>
+		<td><input type="text" name="encoding" maxlength="25" value="<?php echo $encoding?>"></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>

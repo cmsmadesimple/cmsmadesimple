@@ -22,6 +22,7 @@ class Template
 	var $name;
 	var $content;
 	var $stylesheet;
+	var $encoding;
 	var $active;
 
 	function Template()
@@ -35,6 +36,7 @@ class Template
 		$this->name = '';
 		$this->content = '';
 		$this->stylesheet = '';
+		$this->encoding = '';
 		$this->active = false;
 	}
 
@@ -86,7 +88,7 @@ class TemplateOperations
 
 		$result = array();
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, active FROM ".cms_db_prefix()."templates ORDER BY template_id";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active FROM ".cms_db_prefix()."templates ORDER BY template_id";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -98,6 +100,7 @@ class TemplateOperations
 				$onetemplate->name = $row['template_name'];
 				$onetemplate->active = $row['active'];
 				$onetemplate->content = $row['template_content'];
+				$onetemplate->encoding = $row['encoding'];
 				$onetemplate->stylesheet = $row['stylesheet'];
 				array_push($result, $onetemplate);
 			}
@@ -113,7 +116,7 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, active FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -125,6 +128,7 @@ class TemplateOperations
 				$onetemplate->name = $row['template_name'];
 				$onetemplate->content = $row['template_content'];
 				$onetemplate->stylesheet = $row['stylesheet'];
+				$onetemplate->encoding = $row['encoding'];
 				$onetemplate->active = $row['active'];
 				$result = $onetemplate;
 			}
@@ -141,8 +145,8 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES (?,?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, create_date, modified_date) VALUES (?,?,?,?,?,?,?)";
+		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->encoding, $template->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		if ($dbresult !== false)
 		{
 			$result = $new_template_id;
@@ -158,8 +162,8 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, active = ?, modified_date = ? WHERE template_id = ?";
-		$dbresult = $db->Execute($query,array($template->name,$template->content,$template->stylesheet,$template->active,$db->DBTimeStamp(time()),$template->id));
+		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, encoding = ?, active = ?, modified_date = ? WHERE template_id = ?";
+		$dbresult = $db->Execute($query,array($template->name,$template->content,$template->stylesheet,$template->encoding,$template->active,$db->DBTimeStamp(time()),$template->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

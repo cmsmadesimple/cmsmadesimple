@@ -222,11 +222,11 @@ class Smarty_CMS extends Smarty {
 		{
 			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
 			{ 
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position, t.encoding FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 			}
 			else
 			{
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position, t.encoding FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
 			}
 			$result = $db->Execute($query);
 
@@ -240,11 +240,13 @@ class Smarty_CMS extends Smarty {
 				$page_date = $db->UnixTimeStamp($line["page_date"]);
 				$template_date = $db->UnixTimeStamp($line["template_date"]);
 
+
 				$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
 
 				#We only want to cache "static" content
 				if ($line["page_type"] == "content") {
 
+					header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 					$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
 					return true;
 
