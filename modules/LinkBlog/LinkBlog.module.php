@@ -633,7 +633,7 @@ class LinkBlog extends CMSModule
 		if ($validinfo) {
 			$db = $this->cms->db;
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit) VALUES ($new_id, ".$db->qstr($params["author"]).", ".$db->qstr($params["title"]).",".$params["type"].",".htmlentities($db->qstr($params["url"])).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '2', ".htmlentities($db->qstr($credit)).")";
+			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit, linkblog_hits) VALUES ($new_id, ".$db->qstr($params["author"]).", ".$db->qstr($params["title"]).",".$params["type"].",".htmlentities($db->qstr($params["url"])).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '2', ".htmlentities($db->qstr($credit)).", 1)";
 			$dbresult = $db->Execute($query);
 
 			if ($this->GetPreference("email_notify", "0") == "1") {
@@ -682,7 +682,7 @@ class LinkBlog extends CMSModule
 		echo $this->CreateFormStart($id, "add_new_link", $this->cms->variables["page"]);
 
 		?>
-			<p class="smalltitle">Add Link - <?php echo $this->CreateLink($id, 'default', $this->cms->variables['page'], "FIXME: Back to LinkBlog", array()); ?></p>
+			<p class="smalltitle">Add Link - <?php echo $this->CreateLink($id, 'default', $this->cms->variables['page'], "Back to LinkBlog", array()); ?></p>
 
 			<table>
 			<tr>
