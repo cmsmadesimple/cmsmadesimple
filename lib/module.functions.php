@@ -1023,7 +1023,7 @@ function cms_mapi_create_module_content_class($key)
 	{
 		$classtext = '';
 
-		$classtext .= 'class ' . $key . 'Module extends ContentBase { ';
+		$classtext .= 'class ' . $key . ' extends ContentBase { ';
 
 		if (isset($allmodules[$key]['content_module_set_properties']))
 		{

@@ -16,6 +16,9 @@ function news_module_content_edit(&$module)
 {
 	$text = '';
 
+	$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'"></td></tr>';
+	$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'"></td></tr>';
+	$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'"></td></tr>';
 	$text .= '<tr><td>Number to Display (none show all):</td><td><input type="text" name="numbertodisplay" value="'.$module->GetPropertyValue('number').'" /></td></tr>';
 	$text .= '<tr><td>Date Format:</td><td><input type="text" name="dateformat" value="'.$module->GetPropertyValue('dateformat').'" /></td></tr>';
 	$text .= '<tr><td>Swap Date and Title:</td><td><input type="checkbox" name="swapdatetitle" '.($module->GetPropertyValue('swaptitledate')?' checked="true"':'').' /></td></tr>';
