@@ -1,7 +1,5 @@
 <?php
 
-#echo "config.php";
-
 class CMSConfig {
 
 function CMSConfig() {
@@ -34,12 +32,10 @@ $this->query_var = "page";
 #and tables.
 $this->use_bb_code = true;
 
-}
-}
+include_once("config.php");
 
-###################################
-### Don't touch anything below! ###
-###################################
+}
+}
 
 $config = new CMSConfig();
 define('SMARTY_DIR', $config->root_path.'/smarty/');

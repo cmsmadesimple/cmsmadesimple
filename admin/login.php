@@ -1,6 +1,6 @@
 <?
 
-require_once("../config.php");
+require_once("../include.php");
 
 if ($_POST["username"] && $_POST["password"]) {
 

@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $section_id = -1;
 if (isset($_GET["section_id"])) {

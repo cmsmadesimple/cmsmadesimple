@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $section= "";
 if (isset($_POST["section"])) $section = $_POST["section"];

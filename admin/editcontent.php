@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];

@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $template = "";
 if (isset($_POST["template"])) $template = $_POST["template"];

@@ -1,6 +1,6 @@
 <?php
 
-	require("../config.php");
+require("../include.php");
 
 ?>
 <h3>Current Pages</h3>

@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $template_id = -1;
 if (isset($_GET["template_id"])) {

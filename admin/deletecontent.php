@@ -1,6 +1,6 @@
 <?php
 
-require_once("../config.php");
+require_once("../include.php");
 
 $page_id = -1;
 if (isset($_GET["page_id"])) {

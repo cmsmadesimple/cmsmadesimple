@@ -1,6 +1,6 @@
 <?php
 
-require_once("config.php");
+require_once("include.php");
 
 $smarty = new Smarty_CMS($config);
 $smarty->configCMS = &$config;
