@@ -52,7 +52,7 @@ class Smarty_CMS extends Smarty {
 		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
-		if ($result) {
+		if ($result && $result->RowCount()) {
 			$line = $result->FetchRow();
 
 			$smarty_obj->assign('modified_date',$line[modified_date]);
@@ -78,7 +78,6 @@ class Smarty_CMS extends Smarty {
 			return true;
 		}
 		else {
-
 			return false;
 		}
 	}
@@ -91,7 +90,7 @@ class Smarty_CMS extends Smarty {
 		$query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
-		if ($result) {
+		if ($result && $result->RowCount()) {
 			$line = $result->FetchRow();
 
 			$tpl_timestamp = $line["create_date"];
