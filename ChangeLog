@@ -1,4 +1,4 @@
-Version 0.3 -- Subversion
+Version 0.3 -- Wed Jul 21 2004
 -----------------
 
 * Added PEAR.php to the lib directory for hosts that may not have it (Fixes #13)
