@@ -201,6 +201,7 @@ function news_module_help($cms)
 	<p>
 	<ul>
 		<li><em>(optional)</em>number="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em>makerssbutton="true" - Make a button to link to an RSS feed of the News items</li>
 	</ul>
 	</p>
 
