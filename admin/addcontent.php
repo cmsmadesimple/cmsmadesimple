@@ -263,6 +263,7 @@ else {
 		$data["title"] = $title;
 		$data["content"] = $content;
 		$data["template_id"] = $template_id;
+		$data["encoding"] = $encoding;
 
 		$query = "SELECT template_content, stylesheet FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
 		$result = $db->Execute($query);

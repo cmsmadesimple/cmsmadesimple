@@ -128,6 +128,7 @@ else
 		#$data["template_id"] = $template_id;
 		$data["stylesheet"] = $stylesheet;
 		$data["template"] = $content;
+		$data["encoding"] = $encoding;
 
 		$tmpfname = tempnam($config["previews_path"], "cmspreview");
 		$handle = fopen($tmpfname, "w");
