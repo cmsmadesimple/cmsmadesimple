@@ -24,7 +24,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	# getting menu parameters
 	$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
-	$collapse = isset($params['collapse']) ? $params['collapse'] : 1 ;
+	$collapse = isset($params['collapse']) ? $params['collapse'] : 0 ;
 
 	$allcontent = ContentManager::GetAllContent(false);
 
@@ -251,7 +251,7 @@ function smarty_cms_help_function_bulletmenu() {
 	<p>
 	<ul>
 		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
-		<li><em>(optional)</em> <tt>collapse</tt> - 1/0, whether you want to collapse sub items that shouldn't be shown.  Defaults to 1.</li>
+		<li><em>(optional)</em> <tt>collapse</tt> - 1/0, whether you want to collapse sub items that shouldn't be shown.  Defaults to 0.</li>
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>

@@ -1,7 +1,10 @@
-Version 0.9.1 "Mohotani" -- Tue Feb 22 2005
+Version 0.9.1 "Mohotani" -- Subversion
 -----------------
 
+* Added collapse option to bulletmenu, for cases where section header
+is used as parents for other content
 * Fixed bug with call to post render hook
+* Removed a rogue debug message
 
 Version 0.9 "Marquesas" -- Tue Feb 22 2005
 -----------------
