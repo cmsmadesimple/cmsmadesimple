@@ -37,7 +37,7 @@ function check_permission(&$config, $userid, $permname) {
 	$query = "SELECT * FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = '".$permname."'";
 	$result = $db->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$check = true;
 	}
 
@@ -53,7 +53,7 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 	$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
 	$result = $db->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$check = true;
 	}
 
@@ -68,7 +68,7 @@ function check_authorship(&$config, $userid, $pageid) {
 
 	$query = "SELECT * FROM ".$config->db_prefix."additional_users WHERE page_id = $pageid AND user_id = $userid";
 	$result = $db->Execute($query);
-	if ($$result) {
+	if ($result && $result->RowCount() > 0) {
 		$check = true;
 	}
 
@@ -92,7 +92,7 @@ function get_preference(&$config, $userid, $prefname) {
 	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->query($query);
 	
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$row = $result->FetchRow();
 		$value = $row["value"];
 	}
@@ -109,7 +109,7 @@ function set_preference(&$config, $userid, $prefname, $value) {
 	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$doinsert = false;
 	}
 
@@ -131,7 +131,7 @@ function get_stylesheet(&$config, $templateid) {
 	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
 	$result = $db->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$line = $result->FetchRow();
 		$css = $line[stylesheet];
 		$css = preg_replace("/[\r\n]/", "", $css);

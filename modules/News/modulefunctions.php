@@ -76,7 +76,7 @@ function news_module_execute($cms, $id, $params) {
 
 function news_module_executeadmin($cms,$id) {
 
-	if (isset($_POST[$id."action"]) || isset($_GET[$id."action"])) {
+	if ((isset($_POST[$id."action"]) || isset($_GET[$id."action"])) && cms_mapi_check_permission($cms, "Modify News")) {
 		$moduleaction = $_POST[$id."action"] . $_GET[$id."action"];
 		include_once(dirname(__FILE__)."/adminform.php");
 	} else {

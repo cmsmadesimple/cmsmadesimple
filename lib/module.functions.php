@@ -87,6 +87,12 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 	$db->Execute($query);
 }
 
+function cms_mapi_check_permission($cms, $permission_name) {
+
+	$userid = get_userid();
+	return check_permission($cms->config, $userid, $permission_name);
+}
+
 function cms_mapi_remove_permission($cms, $permission_name) {
 
 	$db = $cms->db;
