@@ -22,6 +22,7 @@ is actually used on.
 the title
 * Changed upgrade script so that it always clears the cache directories even
 if there is no schema change.
+* Fixed custom 404 error template usage
 * Fixed add and edit content pages so that the alias field is more intelligent
 when auto_alias_content is on (#000043)
 * Fixed login to redirect back to originally requested link

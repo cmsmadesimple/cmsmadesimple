@@ -102,7 +102,7 @@ class Smarty_CMS extends Smarty {
 			} 
 			$result = $db->Execute($query);
 
-			if (!$result || !$result->RowCount() < 1)
+			if (!$result || $result->RowCount() < 1)
 			{
 				if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
 				{
