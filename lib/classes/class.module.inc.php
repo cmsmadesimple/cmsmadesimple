@@ -1170,10 +1170,11 @@ class CMSModule extends ModuleOperations
 
 		if ($result && $result->RowCount() > 0)
 		{
-			return $result['content'];
+			$row = $result->FetchRow();
+			return $row['content'];
 		}
 
-		return "";
+		return '';
 	}
 
 	function SetTemplate($tpl_name, $content)
@@ -1213,6 +1214,31 @@ class CMSModule extends ModuleOperations
 	{
 		$smarty = &$this->smarty;
 		return $smarty->fetch('template:'.$tpl_name);
+	}
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Tab Functions
+	 * ------------------------------------------------------------------
+	 */
+	function StartTabSet()
+	{
+		return '<div id="tab-container">';
+	}
+
+	function EndTabSet()
+	{
+		return '</div> <!-- tab-container -->';
+	}
+
+	function StartTab($name = '')
+	{
+		return '<div class="tab-content"><h3 class="tab">'.$name.'</h3>';
+	}
+
+	function EndTab()
+	{
+		return '</div> <!-- tab-content -->';
 	}
 
 	/**

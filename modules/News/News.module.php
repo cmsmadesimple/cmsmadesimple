@@ -484,6 +484,9 @@ class News extends CMSModule
 					return;
 				}
 
+				echo $this->StartTabSet();
+				echo $this->StartTab('News Items');
+
 				$query = "SELECT news_cat FROM "
 					.cms_db_prefix()."module_news GROUP BY news_cat";
 				$dbresult = $db->Execute($query);
@@ -602,11 +605,33 @@ class News extends CMSModule
 				{
 					echo "<p><b>No</b> news items found for category: ".$newscat."</p>";
 				}
+
+				echo $this->EndTab();
+
+				echo $this->StartTab('Template');
+				
+				echo $this->CreateFormStart($id, 'updatetemplate');
+
+				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayhtml'), 'templatecontent', '').'</p>';
+
+				echo $this->CreateInputSubmit($id, 'submitbutton', 'Submit');
+
+				echo $this->CreateFormEnd();
+
+				echo $this->EndTab();
+
+				echo $this->EndTabSet();
+
 				break;
 
 			case "Add":
 			case "Select":
 				echo "<p>Error!</p>"; 
+				break;
+
+			case "updatetemplate":
+				$this->SetTemplate('displayhtml', $params['templatecontent']);
+				$this->Redirect($id, 'defaultadmin');
 				break;
 
 			case "edit":
