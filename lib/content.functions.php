@@ -39,7 +39,7 @@ class Smarty_CMS extends Smarty {
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
 		$this->force_compile = false;
-		$this->cache_plugins = true;
+		$this->cache_plugins = false;
 
 		#Load all CMS plugins as non-cacheable
 		$dir = dirname(dirname(__FILE__))."/plugins";
@@ -282,7 +282,7 @@ function db_get_menu_items(&$config, $style) {
 	
 	if ($style == "content_hierarchy") {
 
-		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u on u.user_id=p.owner INNER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
+		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u on u.user_id=p.owner LEFT OUTER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
 		$result = $db->Execute($query);
 
 		$content_array = array();
@@ -349,7 +349,9 @@ function get_page_types(&$config) {
 
 	if (isset($cmsmodules)) {
 		foreach ($cmsmodules as $key=>$value) {
-			$result[$key] = $key;
+			if (isset($value['content_module'])) {
+				$result[$key] = $key;
+			}
 		}
 	}
 
