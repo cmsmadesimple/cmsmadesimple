@@ -215,3 +215,4 @@ $lang['admin']['slogan'] = 'Si <span style="color: #FE0404">simple</span>, que c
 $lang['admin']['clearcache'] = 'Effacer le Cache';
 $lang['admin']['clear'] = 'Effacer';
 $lang['admin']['cachecleared'] = 'Cache Effacé';
+?>
