@@ -192,13 +192,16 @@ function load_site_preferences()
 	$db = $gCms->db;
 	$siteprefs = &$gCms->siteprefs;
 
-	$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-	$result = $db->query($query);
-	
-	if ($result && $result->RowCount() > 0) {
-		while ($row = $result->FetchRow())
-		{
-			$siteprefs[$row['sitepref_name']] = $row['sitepref_value'];
+	if ($db)
+	{
+		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
+		$result = $db->Execute($query);
+		
+		if ($result && $result->RowCount() > 0) {
+			while ($row = $result->FetchRow())
+			{
+				$siteprefs[$row['sitepref_name']] = $row['sitepref_value'];
+			}
 		}
 	}
 
