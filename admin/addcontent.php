@@ -331,8 +331,7 @@ else {
 	</tr>
 	<tr>
 		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br>
-        <?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content"); ?></td>
-	</tr>
+        <?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>	</tr>
 </table>
 
 <div class="collapseTitle"><a href="#advanced" onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?php echo lang('advanced') ?></a></div>
