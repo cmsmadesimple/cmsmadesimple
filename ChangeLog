@@ -1,6 +1,8 @@
 Version 0.7.2 -- Subversion
 -----------------
 
+* Added missing edit links to titles in CSS and News admin (#000035)
+* Changed en_US to UTF-8
 * Fixed stupid encoding issue with cms_htmlentities
 
 Version 0.7.1 -- Wed Oct 26 2004

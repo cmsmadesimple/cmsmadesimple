@@ -186,7 +186,7 @@ function news_module_executeadmin($cms,$id) {
 			$rowclass="row1";
 			while ($row = $dbresult->FetchRow()) {
 				echo "<tr class=\"$rowclass\">\n";
-				echo "<td>".$row["news_title"]."</td>\n";
+				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"edit","news_id"=>$row["news_id"]),$row['news_title'])."</td>\n";
 				echo "<td>".$row["news_date"]."</td>\n";
 				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"edit","news_id"=>$row["news_id"]),"Edit")."</td>\n";
 				echo "<td>".cms_mapi_create_admin_link("News",$id,array("action"=>"delete","news_id"=>$row["news_id"]),"Delete", "Are you sure you want to delete?")."</td>\n";

@@ -80,7 +80,7 @@ if (isset($_GET["message"]))
 		while ($one = $result->FetchRow())
 		{
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$one["css_name"]."</td>\n";
+			echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
 
 			# if user has right to edit
 			if ($modify)
