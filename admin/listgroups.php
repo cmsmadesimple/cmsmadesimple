@@ -43,7 +43,10 @@ include_once("header.php");
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
 	$limit = 20;
-	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($grouplist), $limit)."</div>";
+	if (count($grouplist) > $limit)
+	{
+		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($grouplist), $limit)."</div>";
+	}
 
 	if (count($grouplist) > 0) {
 
