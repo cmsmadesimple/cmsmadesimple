@@ -65,11 +65,11 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	?>
 
 	<form action="<?php $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] ?>" method="post" name="contactForm"<?php echo ($style)?' style="font-weight: bold;"':''; ?>>
-	Your Name:<input type="text" name="name" value="<?php echo $name; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>>
-	Your Email Address:<input type="text" name="email" value="<?php echo $email; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>>
-	Subject:<input type="text" name="subject" value="<?php echo $subject; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>>
-	Message:<TEXTAREA NAME="message" COLS="40" ROWS="10"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>><?php echo $message; ?></textarea>
-	<input type="submit" value="Submit"><input type="reset" value="Clear">
+	Your Name:<input type="text" name="name" value="<?php echo $name; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Your Email Address:<input type="text" name="email" value="<?php echo $email; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Subject:<input type="text" name="subject" value="<?php echo $subject; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Message:<textarea name="message" cols="40" rows="10"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>><?php echo $message; ?></textarea>
+	<input type="submit" value="Submit" /><input type="reset" value="Clear" />
 	</form>
 
 <?php
