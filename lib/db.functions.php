@@ -38,7 +38,7 @@ class DB {
 
 }
 
-require_once('Smarty.class.php');
+require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 
 class Smarty_DB extends Smarty {
 

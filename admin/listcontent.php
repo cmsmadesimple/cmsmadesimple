@@ -68,7 +68,7 @@ include_once("header.php");
 		echo "<td>".GetText::gettext("Owner")."</td>\n";
 		echo "<td>".GetText::gettext("Section")."</td>\n";
 		if ($modifyall) {
-			echo "<td>".GetText::gettext("Move")."</td>\n";
+			echo "<td align=\"center\">".GetText::gettext("Move")."</td>\n";
 		}
 		echo "<td>".GetText::gettext("Active")."</td>\n";
 		echo "<td>".GetText::gettext("Default")."</td>\n";
@@ -96,12 +96,12 @@ include_once("header.php");
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".$row["section_name"]."</td>\n";
 			if ($modifyall) {
-				echo "<td>";
+				echo "<td align=\"center\">";
 				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=up&page_id=".$row["page_id"]."\">".GetText::gettext("Up")."</a> ";
+					echo "<a href=\"movecontent.php?direction=up&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".GetText::gettext("Up")."\" border=\"0\" /></a> ";
 				}
 				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=down&page_id=".$row["page_id"]."\">".GetText::gettext("Down")."</a>";
+					echo "<a href=\"movecontent.php?direction=down&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".GetText::gettext("Down")."\" border=\"0\" /></a>";
 				}
 				if ($totalcount == 1 && $count == 1) {
 					echo "&nbsp;";

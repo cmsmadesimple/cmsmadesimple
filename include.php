@@ -16,16 +16,6 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-if (preg_match("/Win32/i", $_SERVER['SERVER_SOFTWARE'])) {
-	$sep = ";";
-	ini_set('include_path', ini_get('include_path').$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATOR."go-pear-bundle".DIRECTORY_SEPARATOR.$sep."c:".DIRECTORY_SEPARATOR."php".DIRECTORY_SEPARATOR."pear".DIRECTORY_SEPARATOR);
-} else {
-	$sep = ":";
-}
-
-ini_set('include_path', ini_get('include_path').$sep.getcwd().$sep.getcwd().DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
-ini_set('include_path', ini_get('include_path').$sep.getcwd().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR.$sep.getcwd().DIRECTORY_SEPARATOR."..".DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
-
 session_name("CMSSESSID");
 if(!session_id()) {
 	session_start();
@@ -51,7 +41,7 @@ $this->root_url = "http://www.something.com";
 
 #Path to document root
 #e.g. /var/www/localhost
-$this->root_path = "/var/www/localhost/htdocs";
+$this->root_path = dirname(__FILE__);
 
 #For using a particular querystring variable.  Turning off
 #produces variables like: http://cms.wishy.org/index.php/somecontent
@@ -64,35 +54,36 @@ $this->query_var = "";
 #and tables.
 $this->use_bb_code = false;
 
-include_once("config.php");
+include_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."config.php");
 
 	}
 }
 
-require_once("version.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."version.php");
 
 $config = new CMSConfig();
-define('SMARTY_DIR', $config->root_path.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
+#define('SMARTY_DIR', $config->root_path.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
+define('SMARTY_DIR', dirname(__FILE__). DIRECTORY_SEPARATOR .'smarty'. DIRECTORY_SEPARATOR );
 
-ini_set('include_path', ini_get('include_path').$sep.$config->root_path.$sep.$config->root_path.DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
-echo ini_get('include_dir');
+#ini_set('include_path', ini_get('include_path'). DIRECTORY_SEPARATOR .$config->root_path. DIRECTORY_SEPARATOR .$config->root_path.DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
+#echo ini_get('include_dir');
 
-require_once("lib/misc.functions.php");
-require_once("lib/db.functions.php");
-require_once("lib/page.functions.php");
-require_once("lib/content.functions.php");
-require_once("lib/GetText.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."misc.functions.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."db.functions.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."page.functions.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."content.functions.php");
+require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."GetText.php");
 
 #initialiase GetText package
 GetText::init();
 
 #add the translation domain we wrote files for
-GetText::addDomain('cmsmadesimple', $config->root_path . "/locale");
+GetText::addDomain('cmsmadesimple', dirname(__FILE__). DIRECTORY_SEPARATOR ."locale");
 
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
-	if (include_once("PEAR.php")) {
-		if (include_once("HTML/BBCodeParser.php")) {
+	if (include_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."PEAR.php")) {
+		if (include_once("HTML". DIRECTORY_SEPARATOR ."BBCodeParser.php")) {
 			$parser = new HTML_BBCodeParser();
 			$config->bbcodeparser = new HTML_BBCodeParser();
 		}
