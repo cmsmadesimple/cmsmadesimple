@@ -263,7 +263,7 @@ class Smarty_ModuleInterface extends Smarty {
 			#Run the execute_user function and replace {content} with it's output 
 			if (isset($cmsmodules[$smarty_obj->module])) {
 				@ob_start();
-				call_user_func_array(&$cmsmodules[$smarty_obj->module]['execute_user_function'], array($modulecmsobj,$smarty_obj->id,$tpl_name,$smarty_obj->params));
+				call_user_func_array(array(&$cmsmodules[$smarty_obj->module]['execute_user_function']), array($modulecmsobj,$smarty_obj->id,$tpl_name,$smarty_obj->params));
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);

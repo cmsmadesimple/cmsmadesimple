@@ -47,7 +47,7 @@ if (!file_exists("config.php") || filesize("config.php") == 0) {
     redirect("install.php");
     exit;
 } ## if
-if ($_GET["deleteinstall"] == "true") {
+if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
     @unlink("install.php");
 } ## if
 

@@ -68,7 +68,7 @@ $config = new CMSConfig();
 #Setup db connection
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
 
-if (!$DONT_LOAD_DB) {
+if (!isset($DONT_LOAD_DB)) {
 	$dbnew = &ADONewConnection('mysql');
 	$dbnew->PConnect($config->db_hostname,$config->db_username,$config->db_password,$config->db_name);
 	if (!$dbnew) die("Connection failed");
@@ -82,7 +82,9 @@ require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
 
-define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
+if (!defined('SMARTY_DIR')) {
+	define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
+}
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
@@ -95,7 +97,9 @@ if(get_magic_quotes_gpc())
 
 #Setup the object sent to modules
 $modulecmsobj->pluginnum = 1;
-$modulecmsobj->page = $page;
+if (isset($page)) {
+	$modulecmsobj->page = $page;
+}
 $modulecmsobj->db = &$dbnew;
 $modulecmsobj->config = &$config;
 
