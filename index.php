@@ -16,6 +16,24 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+@ob_start();
+
+function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
+{
+	if ($errno == E_USER_WARNING) {
+		@ob_end_clean();
+		header("HTTP/1.0 404 Not Found");
+		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
+<html><head>
+<title>404 Not Found</title>
+</head><body>
+<h1>Not Found</h1>
+<p>The requested URL was not found on this server.</p>
+</body></html>';
+		exit();
+	}
+}
+
 if (!file_exists("config.php") || filesize("config.php") == 0) {
     require_once("lib/misc.functions.php");
     redirect("install.php");
@@ -34,6 +52,7 @@ if (file_exists("config.php") && file_exists("install.php")) {
     echo "Click <a href=\"index.php?deleteinstall=true\">here</a> to have CMS try to delete it for you.  If successful you will see the CMS main page<br>\n";
     exit;
 } ## if
+
 
 require_once("include.php");
 
@@ -55,6 +74,9 @@ else {
 if ($page == "") {
 	$page = db_get_default_page($config);
 }
+
+error_reporting(0);
+$old_error_handler = set_error_handler("ErrorHandler404");
 
 echo $smarty->fetch('db:'.$page);
 

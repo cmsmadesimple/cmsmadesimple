@@ -81,45 +81,49 @@ class Smarty_CMS extends Smarty {
 			return true;
 		}
 		else {
+
 			mysql_free_result($result);
 			$db->close();
 			return false;
 		}
-        }
+	}
 
-        function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-        {
-                $db = new DB($this->configCMS);
+	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		$db = new DB($this->configCMS);
 
-                $query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
-                $result = $db->query($query);
+		$query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
+		$result = $db->query($query);
 
-                if (mysql_num_rows($result) > 0) {
-                        $line = mysql_fetch_array($result, MYSQL_ASSOC);
+		if (mysql_num_rows($result) > 0) {
+			$line = mysql_fetch_array($result, MYSQL_ASSOC);
 
-                        $tpl_timestamp = $line["create_date"];
+			$tpl_timestamp = $line["create_date"];
 
 			mysql_free_result($result);
-                        $db->close();
-                        return true;
-                }
-                else {
+			$db->close();
+			return true;
+		}
+		else {
+
+			$tpl_timestamp = time();
+
 			mysql_free_result($result);
-                        $db->close();
-                        return false;
-                }
-        }
+			$db->close();
+			return false;
+		}
+	}
 
-        function db_get_secure($tpl_name, &$smarty_obj)
-        {
-            // assume all templates are secure
-            return true;
-        }
+	function db_get_secure($tpl_name, &$smarty_obj)
+	{
+		// assume all templates are secure
+		return true;
+	}
 
-        function db_get_trusted($tpl_name, &$smarty_obj)
-        {
-            // not used for templates
-        }
+	function db_get_trusted($tpl_name, &$smarty_obj)
+	{
+		// not used for templates
+	}
 }
 
 function db_get_default_page (&$config) {
