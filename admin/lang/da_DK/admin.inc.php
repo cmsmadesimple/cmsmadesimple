@@ -214,7 +214,7 @@ $lang['admin']['nosyntax'] = 'Din browser understøtter ikke Java'; //needs trans
 $lang['admin']['slogan'] = ''; //needs translation
 $lang['admin']['clearcache'] = 'Nulstil Cache'; //needs translation
 $lang['admin']['clear'] = 'Nulstil'; //needs translation
-$lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
+$lang['admin']['cachecleared'] = 'Cache nulstillet'; //needs translation
 $lang['admin']['apply'] = 'Apply'; //needs translation
 $lang['admin']['none'] = 'Ingen'; //needs translation
 $lang['admin']['wysiwygtouse'] = 'Vælg hvilket WYSIWYG-system der skal bruges'; //needs translation
@@ -226,6 +226,6 @@ $lang['admin']['depsformodule'] = 'Dependencies for %s Module'; //needs translat
 $lang['admin']['installed'] = 'Installeret'; //needs translation
 $lang['admin']['author'] = 'Lavet af'; //needs translation
 $lang['admin']['changehistory'] = 'Change History'; //needs translation
-$lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module'; //needs translation
-$lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module'; //needs translation
+$lang['admin']['moduleinstallmessage'] = 'Installations-besked for %s modulet'; //needs translation
+$lang['admin']['moduleuninstallmessage'] = 'Afinstallations-besked for %s modulet'; //needs translation
 ?>
