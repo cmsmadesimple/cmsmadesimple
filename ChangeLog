@@ -1,14 +1,14 @@
-Version 0.6 -- Subversion
+Version 0.6 -- Wed Sep 01 2004
 -----------------
 
-* Added user defined 404 messages
-* Added site down message
-* Added site preferences box
+* Added User Defined Tags (user defined php code editable in the admin)
 * Added advanced CSS management for doing CSS in chunks instead of entirely
 in the template
-* Added User Defined Tags (user defined php code editable in the admin)
-* Added head tags field for putting text into the <head> tag
 * Added Finnish translation
+* Added user defined 404 messages
+* Added site down message
+* Added site preferences page
+* Added head tags field for putting text into the <head> tag
 * Changed layout of add and edit content pages to make for less scrolling
 * More changes to the admin site look
 * Removed gettext and instead are using a homegrown system with less weird

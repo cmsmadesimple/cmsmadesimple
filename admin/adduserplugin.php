@@ -50,11 +50,25 @@ if ($access) {
 			$error .= "<li>".lang('nofieldgiven',array(lang('code')))."</li>";
 			$validinfo = false;
 		}
-		srand();
-		if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+		else if (strrpos($code, '{') !== FALSE)
 		{
-			$error .= "<li>".lang('invalidcode')."</li>";
-			$validinfo = false;
+			$lastopenbrace = strrpos($code, '{');
+			$lastclosebrace = strrpos($code, '}');
+			if ($lastopenbrace > $lastclosebrace)
+			{
+				$error .= "<li>".lang('invalidcode')."</li>";
+				$validinfo = false;
+			}
+		}
+		
+		if ($validinfo)
+		{
+			srand();
+			if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+			{
+				$error .= "<li>".lang('invalidcode')."</li>";
+				$validinfo = false;
+			}
 		}
 
 		if ($validinfo) {
