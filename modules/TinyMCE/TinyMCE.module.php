@@ -161,7 +161,7 @@ class TinyMCE extends CMSModule
 				theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom",
 				theme_advanced_buttons3_add : "tablecontrols,emotions,iespell,flash,advhr,ibrowser",
 				document_base_url : "<?php echo $gCms->config['root_url']?>/",
-				relative_urls : "false",
+				relative_urls : "true",
 				plugin_insertdate_dateFormat : "%Y-%m-%d",
 				plugin_insertdate_timeFormat : "%H:%M:%S",
 				valid_elements : "*[*]",
