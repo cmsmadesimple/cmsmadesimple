@@ -22,6 +22,7 @@ custom menus.
 * Fixed modules to respect the installed and active flags
 * Lots of little bug fixes and changes
 * Removed lots of NOTICE level errors
+* Updated adodb to 4.5.2
 
 Version 0.4.1 -- Fri Aug 13 2004
 -----------------
