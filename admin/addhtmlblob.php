@@ -40,7 +40,6 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Html Blobs');
 
-$htmlarea_flag = false;
 $use_javasyntax = false;
 if (get_preference($userid, 'use_wysiwyg') == "1") {
 	$htmlarea_flag = true;
