@@ -11,6 +11,7 @@ Version 0.7.2 -- Subversion
 * Fixed stupid encoding issue with cms_htmlentities
 * Fixed htmlarea not loading due to a notice level error (#0000034)
 * Fixed a few problems with htmlarea's fullscreen not working in Internet Explorer
+* Fixed htmlblob to fill the width of the screen (#0000037)
 * Updated Smarty to 2.6.6
 
 Version 0.7.1 -- Wed Oct 26 2004

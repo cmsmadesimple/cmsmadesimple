@@ -114,15 +114,15 @@ if (!$access) {
 
 <h3><?php echo lang('addhtmlblob')?></h3>
 
-<table border="0">
+<table border="0" width="100%">
 
 	<tr>
-		<td>*<?php echo lang('name')?>:</td>
+		<td width="150">*<?php echo lang('name')?>:</td>
 		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard"></td>
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content") ?></td>
+		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>
