@@ -1,7 +1,7 @@
 ﻿// I18N constants
 
 // LANG: "en", ENCODING: UTF-8 | ISO-8859-1
-// Author: Xiang Wei Zhuo, http://www.zhuo.org
+// Author: Thijs Elenbaas, thijs@contemplated.net
 
 // FOR TRANSLATORS:
 //
@@ -13,8 +13,30 @@
 //       that states what encoding is necessary.)
 
 ImageManager.I18N = {
-	"Image Manager"									: "Image Manager",
-	"Crop"											: "Snijdt bij"
+	"Image Manager"		: "Afbeeldingbeheer",	
+	"Insert Image"		: "Voeg afbeelding in",
+	"Crop"			: "Snijd bij",
+	"scale"			: "Schaal",
+	"Image File"		: "Afbeelding",
+	"Directory"		: "Folder",
+	"Width"			: "Breedte",
+	"Height"		: "Hoogte",
+	"V Space"		: "V ruimte",
+	"H Space"		: "H ruimte",
+	"Refresh"		: "Ververs",
+	"OK"			: "OK",
+	"Border"		: "Rand",
+	"Alt"			: "Alternatief",
+	"Align"			: "Uitlijnen",
+	"Constrain Proportions"	: "Behoud verhoudingen",
+	"Cancel"		: "Annuleren",
+	"Edit"			: "Bewerk",
+	"Thrash"		: "Verwijder",
+	"Resize"		: "Herschaal",
+	"Rotate"		: "Roteer",
+	"Measure"		: "Meet op",
+	"Marker"		: "Markeer",
+	"Save"			: "Opslaan"
 };
 /*
 

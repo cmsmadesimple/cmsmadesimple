@@ -11,6 +11,7 @@
 CharacterMap.I18N = {
 		"Cancel"                                            : "Annuleren",
 		"Insert/Modify Link"                                : "Hyperlink invoegen/aanpassen",
+		"CharacterMapTooltip"								: "Speciale karakters",
 		"New window (_blank)"                               : "Nieuw venster (_blank)",
 		"None (use implicit)"                               : "Geen",
 		"OK"                                                : "OK",

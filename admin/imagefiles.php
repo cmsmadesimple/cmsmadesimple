@@ -180,15 +180,18 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 include_once("header.php");
 ?>
 
+
+
 	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/assets/dialog.js"></SCRIPT>
 	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/IMEStandalone.js"></SCRIPT>
-	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/lang/en.js"></SCRIPT>
+<?php echo "	<SCRIPT TYPE=\"text/javascript\" SRC=\"../filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></SCRIPT>\n" ?>
 	<SCRIPT TYPE="text/javascript">
     //<![CDATA[
 
 		//Create a new Imanager Manager, needs the directory where the manager is
 		//and which language translation to use.
-		var manager = new ImageManager('/cms/filemanager/ImageManager','en');
+
+		var manager = new ImageManager('../filemanager/ImageManager','en');
 			
 		//alert('crop '+ I18N["Crop"] );	
 		var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";

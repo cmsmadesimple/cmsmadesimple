@@ -13,9 +13,30 @@
 //       that states what encoding is necessary.)
 
 ImageManager.I18N = {
-	"Image Manager"		: "Afbeeldingbeheer",
+	"Image Manager"		: "Afbeeldingbeheer",	
+	"Insert Image"		: "Voeg afbeelding in",
 	"Crop"			: "Snijd bij",
-	"scale"		: "Schaal"
+	"scale"			: "Schaal",
+	"Image File"		: "Afbeelding",
+	"Directory"		: "Folder",
+	"Width"			: "Breedte",
+	"Height"		: "Hoogte",
+	"V Space"		: "V ruimte",
+	"H Space"		: "H ruimte",
+	"Refresh"		: "Ververs",
+	"OK"			: "OK",
+	"Border"		: "Rand",
+	"Alt"			: "Alternatief",
+	"Align"			: "Uitlijnen",
+	"Constrain Proportions"	: "Behoud verhoudingen",
+	"Cancel"		: "Annuleren",
+	"Edit"			: "Bewerk",
+	"Thrash"		: "Verwijder",
+	"Resize"		: "Herschaal",
+	"Rotate"		: "Roteer",
+	"Measure"		: "Meet op",
+	"Marker"		: "Markeer",
+	"Save"			: "Opslaan"
 };
 /*
 
