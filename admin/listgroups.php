@@ -10,6 +10,7 @@ include_once("header.php");
 <h3>Current Groups</h3>
 <?php
 
+	$userid = get_userid();
 	$db = new DB($config);
 
         $query = "SELECT group_id, group_name, active FROM ".$config->db_prefix."groups ORDER BY group_id";
@@ -47,11 +48,13 @@ include_once("header.php");
         mysql_free_result($result);
 	$db->close();
 
+if (check_permission($config, $userid, 'Add Group')) {
 ?>
 
 <p><a href="addgroup.php">Add New Group</a></p>
 
 <?php
+}
 
 include_once("footer.php");
 

@@ -1,6 +1,6 @@
 <div id="nav">
  <ul>
-  <li class="sub"><div class="title">Admin Page</div></li>
+  <li class="sub"><div class="title">Welcome <?=$_SESSION["username"]?></div></li>
   <li>
    <ul class"sub">
     <li class="item"><a href="listcontent.php">Content Management</a></li>

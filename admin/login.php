@@ -16,7 +16,11 @@ if ($_POST["username"] && $_POST["password"]) {
 
 	if (isset($line["user_id"])) {
 		$_SESSION["user_id"] = $line["user_id"];	
+		$_SESSION["username"] = $line["username"];	
+		mysql_free_result($result);
+		$db->close($link);
 		redirect("index.php");
+		return;
 	}
 	else {
 		echo "<p>Username or Password incorrect!</p>";

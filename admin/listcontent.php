@@ -76,11 +76,13 @@ include_once("header.php");
         mysql_free_result($result);
 	$db->close();
 
+if (check_permission($config, $userid, 'Add Content')) {
 ?>
 
 <p><a href="addcontent.php">Add New Content</a></p>
 
 <?php
+}
 
 include_once("footer.php");
 

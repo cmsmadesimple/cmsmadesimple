@@ -10,6 +10,7 @@ include_once("header.php");
 <h3>Current Users</h3>
 <?php
 
+	$userid = get_userid();
 	$db = new DB($config);
 
         $query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
@@ -43,11 +44,13 @@ include_once("header.php");
         mysql_free_result($result);
 	$db->close();
 
+if (check_permission($config, $userid, 'Add User')) {
 ?>
 
 <p><a href="adduser.php">Add New User</a></p>
 
 <?php
+}
 
 include_once("footer.php");
 

@@ -10,6 +10,7 @@ include_once("header.php");
 <h3>Current Sections</h3>
 <?php
 
+	$userid = get_userid();
 
 	$db = new DB($config);
 
@@ -44,11 +45,13 @@ include_once("header.php");
         mysql_free_result($result);
         $db->query($link);
 
+if (check_permission($config, $userid, 'Add Section')) {
 ?>
 
 <p><a href="addsection.php">Add New Section</a></p>
 
 <?php
+}
 
 include_once("footer.php");
 
