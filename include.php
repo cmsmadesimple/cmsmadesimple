@@ -54,36 +54,36 @@ $this->query_var = "";
 #and tables.
 $this->use_bb_code = false;
 
-include_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."config.php");
+include_once(dirname(__FILE__)."/config.php");
 
 	}
 }
 
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."version.php");
+require_once(dirname(__FILE__)."/version.php");
 
 $config = new CMSConfig();
 #define('SMARTY_DIR', $config->root_path.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
-define('SMARTY_DIR', dirname(__FILE__). DIRECTORY_SEPARATOR .'smarty'. DIRECTORY_SEPARATOR );
+define('SMARTY_DIR', dirname(__FILE__).'/smarty/');
 
 #ini_set('include_path', ini_get('include_path'). DIRECTORY_SEPARATOR .$config->root_path. DIRECTORY_SEPARATOR .$config->root_path.DIRECTORY_SEPARATOR."smarty".DIRECTORY_SEPARATOR);
 #echo ini_get('include_dir');
 
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."misc.functions.php");
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."db.functions.php");
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."page.functions.php");
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."content.functions.php");
-require_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."GetText.php");
+require_once(dirname(__FILE__)."/lib/misc.functions.php");
+require_once(dirname(__FILE__)."/lib/db.functions.php");
+require_once(dirname(__FILE__)."/lib/page.functions.php");
+require_once(dirname(__FILE__)."/lib/content.functions.php");
+require_once(dirname(__FILE__)."/lib/GetText.php");
 
 #initialiase GetText package
 GetText::init();
 
 #add the translation domain we wrote files for
-GetText::addDomain('cmsmadesimple', dirname(__FILE__). DIRECTORY_SEPARATOR ."locale");
+GetText::addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
 
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
-	if (include_once(dirname(__FILE__). DIRECTORY_SEPARATOR ."lib". DIRECTORY_SEPARATOR ."PEAR.php")) {
-		if (include_once("HTML". DIRECTORY_SEPARATOR ."BBCodeParser.php")) {
+	if (include_once(dirname(__FILE__)."/lib/PEAR.php")) {
+		if (include_once("HTML/BBCodeParser.php")) {
 			$parser = new HTML_BBCodeParser();
 			$config->bbcodeparser = new HTML_BBCodeParser();
 		}
