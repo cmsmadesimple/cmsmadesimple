@@ -1,4 +1,4 @@
-Version 0.8.2 "Taunoa" -- Subversion 
+Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
 -----------------
 
 * Added wysiwyg body tag callback for making htmlarea work
@@ -19,6 +19,7 @@ group
 root of the content hierarchy
 * Fixed additional editors not always being saved properly (#000086)
 * Lots of other WYSIWYG related bugfixes
+* Removed the html blob check in the menu for now
 
 Version 0.8.1 "Papeete" -- Sat Jan 01 2005 
 -----------------

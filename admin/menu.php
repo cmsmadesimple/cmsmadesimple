@@ -37,16 +37,8 @@ if (get_site_preference('useadvancedcss') == "1")
 	}
 }
 
-if (check_permission($userid, 'Add Html Blobs') || check_permission($userid, 'Remove Html Blobs') || check_permission($userid, 'Modify Html Blobs'))
-{
-
 ?>
 <a href="listhtmlblobs.php"><?php echo lang('blobmanagement')?></a>
-<?php
-
-}
-
-?>
 <a href="listusers.php"><?php echo lang('usermanagement')?></a>
 <?php
 
