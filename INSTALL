@@ -20,7 +20,7 @@ OR
 3.  Create the cms database and grant a user rights to use it:
         - login to mysql: mysql -u root -p
             create database cms;
-            grant all privileges on cms.* to cms@localhost identified by 'cms';
+            grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';
             quit
 
 4.  Optionally install the BB Code Parser.  There is a flag in config.php where you can turn this feature on/off.  The install.php file will set this for you.
