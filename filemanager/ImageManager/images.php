@@ -47,19 +47,18 @@ $list = $manager->getFiles($relative);
 /**
  * Draw the files in an table.
  */
-function drawFiles($list, &$manager)
+function drawFiles($list, &$manager, $i)
 {
 	global $relative;
 	$image_per_line = 5;
-	$i = 0;
-	echo "<table width=\"560\" cellpadding=\"0\" cellspacing=\"0\">";
+
 	foreach($list as $entry => $file) 
 	{ 
 		$i++;
 		if ($i==1) { echo "<tr>";}
 		?> 
 		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="javascript:;" onclick="selectImage('<?php echo $file['relative'];?>', '<?php echo $entry; ?>', <?php echo $file['image'][0];?>, <?php echo $file['image'][1]; ?>);"title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
+		<a href="<?php echo "{$manager->config['base_url']}{$file['relative']}";?>" TARGET="_blank" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
 		</td></tr><tr><td class="edit">
 			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
 		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
@@ -70,8 +69,8 @@ function drawFiles($list, &$manager)
 			$i=0;
 		}
 	}//foreach
-	echo "</table>";
 
+    return ($i);
 
 }//function drawFiles
 
@@ -79,13 +78,11 @@ function drawFiles($list, &$manager)
 /**
  * Draw the directory.
  */
-function drawDirs($list, &$manager) 
+function drawDirs($list, &$manager, $i) 
 {
 	global $relative;
 
 	$image_per_line = 5;
-	$i = 0;
-	echo "<table width=\"560\" cellpadding=\"0\" cellspacing=\"0\">";
 	foreach($list as $path => $dir) 
 	{ 
 		$i++;
@@ -108,7 +105,29 @@ function drawDirs($list, &$manager)
 			$i=0;
 		}
 	} //foreach
+    return ($i);
 }//function drawDirs
+
+function addEmpties($list, &$manager, $j) 
+{
+	global $relative;
+
+	$image_per_line = 5;
+	
+	if ($j != 0) {
+		for ($i=$j; $i <= $image_per_line; $i++) {		 
+		?>
+			<td></td>
+		<?php 
+			if ($i==$image_per_line) { 			
+				echo "</tr>";
+				$i=0;
+				break;
+		        }
+		} //for
+       }
+}//function addEmpties
+
 
 
 /**
@@ -230,11 +249,14 @@ function drawErrorBase(&$manager)
 
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
 
-<table>
-	<tr>
-	<?php drawDirs($list[0], $manager); ?>
-	<?php drawFiles($list[1], $manager); ?>
-	</tr>
+<table width="560" cellpadding="0" cellspacing="0">
+	<?php 
+		$i = 0;
+		$i = drawDirs($list[0], $manager,$i); 
+		$i = drawFiles($list[1], $manager,$i); 
+		addEmpties($list[1], $manager,$i); 
+	?>
+
 </table>
 <?php } else { drawNoResults(); } ?>
 </body>
