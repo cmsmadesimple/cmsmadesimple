@@ -23,6 +23,11 @@ require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
 
+if (isset($_POST["logincancel"]))
+{
+	redirect($config["root_url"].'/index.php');
+}
+
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	$username = "";
@@ -126,7 +131,10 @@ header("Content-Type: text/html; charset=" . get_encoding());
 	</TR>
 	<TR>
 		<TD>&nbsp;</TD>
-		<TD><INPUT TYPE="submit" NAME="loginsubmit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
+		<TD>
+			<INPUT TYPE="submit" NAME="loginsubmit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">&nbsp;
+			<INPUT TYPE="submit" NAME="logincancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
+		</TD>
 	</TR>
 </TABLE>
 </FORM>

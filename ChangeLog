@@ -6,6 +6,7 @@ Version 0.7 -- Subversion
 * Added language as a user perference and also moved it to the login page
 * Added java based syntax highlighting as a user preference
 * Added support for mysql 4.1+ using the mysqli adodb driver
+* Added cancel link to login page that redirects back to site (#6)
 * Fixed News module so that post date shows on newly created items (#5)
 * Fixed bug with start and end dates when adding new News item (BamaRob)
 * Fixed missing template option for News module (trac #67)
