@@ -132,6 +132,7 @@ if(get_magic_quotes_gpc())
 {
 	strip_slashes($_GET);
 	strip_slashes($_POST);
+	strip_slashes($_REQUEST);
 	strip_slashes($_COOKIE);
 	strip_slashes($_SESSIONS);
 }
