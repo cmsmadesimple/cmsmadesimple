@@ -303,6 +303,118 @@ function cms_mapi_register_adduser_post_function($name, $function)
 }
 
 /**
+ * Registers a function to be called after a successful user edit.
+ * Passes $gCms and a user object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edituser_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edituser_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful group addition.
+ * Passes $gCms and a group object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_addgroup_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addgroup_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful group edit.
+ * Passes $gCms and a group object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_editgroup_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['editgroup_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful htmlblob addition.
+ * Passes $gCms and a htmlblob object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_addhtmlblob_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addhtmlblob_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful htmlblob edit.
+ * Passes $gCms and a htmlblob object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edithtmlblob_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edithtmlblob_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful template addition.
+ * Passes $gCms and a template object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_adduser_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addtemplate_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful template edit.
+ * Passes $gCms and a template object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edittemplate_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edittemplate_post_function'] = $function;
+	}
+}
+
+/**
  * Enables the WYSIWYG for this module on all textareas
  *
  * @since 0.5
@@ -627,6 +739,8 @@ class Smarty_ModuleInterface extends Smarty {
 				if ($smarty_obj->showtemplate == true)
 				{
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+					#Do html_blobs
+					$tpl_source = preg_replace_callback("|\{html_blob name=\"(.*?)\"\}|", "html_blob_regex_callback", $tpl_source);
 				}
 				else
 				{
