@@ -1175,7 +1175,9 @@ class ContentManager
 	}
 
 	/**
-	 * Returns a list of valid content types (classes that extend ContentBase)
+	 * Returns a hash of valid content types (classes that extend ContentBase)
+	 * The key is the name of the class that would be saved into the dabase.  The
+	 * value would be the text returned by the type's FriendlyName() method.
 	 */
 	function ListContentTypes()
 	{
