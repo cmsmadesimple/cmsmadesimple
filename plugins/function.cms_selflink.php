@@ -24,25 +24,26 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 	if (isset($params['page']))
 	{
-		echo '<a href="'.$config['root_url'].'/index.php?'.$config['query_var'].'='.$params['page'].'"';
+		$result = "";
+		$result .= '<a href="'.$config['root_url'].'/index.php?'.$config['query_var'].'='.$params['page'].'"';
 		if (isset($params['target']))
 		{
-			echo ' target="'.$params['target'].'"';
+			$result .= ' target="'.$params['target'].'"';
 		}
-		echo '>';
+		$result .= '>';
 		if (isset($params['text']))
 		{
-			echo $params['text'];
+			$result .= $params['text'];
 		}
 		else
 		{
-			echo $params['page'];
+			$result .= $params['page'];
 		}
-		echo '</a>';
+		$result .= '</a>';
 	}
 	else
 	{
-		echo "<!-- Not a valid cms_selflink -->";
+		$result .= "<!-- Not a valid cms_selflink -->";
 	}
 }
 

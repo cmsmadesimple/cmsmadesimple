@@ -24,7 +24,7 @@ function smarty_cms_function_search($params, &$smarty) {
 	if (!empty($params['buttonText'])) 
 		$buttonText = $params['buttonText'];
 
-	echo '<form method="get" action="http://www.google.com/search">
+	return '<form method="get" action="http://www.google.com/search">
 	<input type="hidden" name="ie" value="utf-8">
 	<input type="hidden" name="oe" value="utf-8">
 	<input type="hidden" name="sitesearch" value="'.$domain.'">

@@ -18,7 +18,7 @@
 
 function smarty_cms_function_cms_version() {
     global $CMS_VERSION;
-    echo $CMS_VERSION;
+    return $CMS_VERSION;
 } ## smarty_function_cms_version
 
 function smarty_cms_help_function_cms_version() {

@@ -107,7 +107,7 @@ function smarty_cms_function_googlepr($params, &$smarty) {
 		return substr($pr_str,strrpos($pr_str, ":")+1); 
 	} 
 
-	echo getPR($domain);
+	return getPR($domain);
 }
 
 function smarty_cms_help_function_googlepr() {
