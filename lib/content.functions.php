@@ -266,34 +266,6 @@ function db_get_default_page () {
 	return $result;
 }
 
-class Section {
-	var $section_id;
-	var $section_name;
-	var $display_name;
-	var $parent_id;
-	var $items;
-	var $level;
-
-	function get_child_sections($section_id, $sections, $level) {
-
-		global $sorted_sections;
-		reset($sections);
-		$child_sections = array();
-		foreach ($sections as $one) {
-			if ($section_id == $one->parent_id) {
-				$prefix = "";
-				for ($i=0; $i<=$level; $i++) { $prefix .= " -- "; }
-
-				$one->display_name = $prefix.$one->section_name;
-				$one->level = $level;
-				array_push($sorted_sections, $one);
-				$children = $one->get_child_sections($one->section_id, $sections, $level +1);
-			} ## if
-		} ## foreach
-
-	} ## function
-} ## class
-
 class MenuItem {
 	var $name;
 	var $url;
