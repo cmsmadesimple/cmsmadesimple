@@ -396,6 +396,17 @@ function cms_mapi_redirect_user_by_pageid($page_id) {
 
 }
 
+/**
+ * Used to create a link back to a content page from an executeuser function
+ *
+ * @since 0.5
+ */
+function cms_mapi_create_content_link_by_page_id($page_id, $link_text) {
+	global $gCms;
+	$config = &$gCms->config;
+	return "<a href=\"".$config["root_url"]."/index.php?page=$page_id\">$link_text</a>\n";
+}
+
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 
 class Smarty_ModuleInterface extends Smarty {
