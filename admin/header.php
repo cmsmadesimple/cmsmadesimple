@@ -97,7 +97,13 @@ if (!isset($charsetsent))
 			editor.registerPlugin(Indite);
 <?php } 
 			$template_id = -1;
-			if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
+			if (isset($_POST["template_id"])) 
+				$template_id = $_POST["template_id"];
+			else{
+				$query = "SELECT template_id FROM ".cms_db_prefix()."pages WHERE ".$_GET['page_id']." = page_id";
+				$template_id = $db->GetOne($query);
+			}
+
 ?>	
 			editor.config.pageStyle = editor.config.pageStyle+'<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
@@ -125,7 +131,6 @@ $userid = get_userid();
 
 </HEAD>
 <BODY onLoad="page_load()">
-
 <DIV ID="header" CLASS="header">
 <IMG SRC="../images/cms/cmsadminbanner.gif" BORDER="0" ID="logo" ALT="CMS Made Simple">
 </DIV>
