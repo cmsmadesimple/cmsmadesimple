@@ -72,7 +72,6 @@ if (!$dbnew) die("Connection failed");
 $dbnew->SetFetchMode(ADODB_FETCH_ASSOC);
 $config->db = &$dbnew;
 
-require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
