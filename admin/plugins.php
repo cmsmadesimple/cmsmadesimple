@@ -197,13 +197,13 @@ else if ($action == "showpluginabout")
 }
 else if ($action == 'missingdeps')
 {
+	echo "<div class=\"moduleabout\">";
+	echo '<h2>'.lang('depsformodule', array($module)).'</h2>';
+	echo '<table cellspacing="0" class="admintable">';
+	echo '<tr><td>'.lang('name').'</td><td>'.lang('minimumversion').'</td><td>'.lang('installed').'</td></tr>';
+
 	if (isset($gCms->modules[$module]['dependency']))
 	{
-		echo "<div class=\"moduleabout\">";
-		echo '<h2>'.lang('depsformodule', array($module)).'</h2>';
-		echo '<table cellspacing="0" class="admintable">';
-		echo '<tr><td>'.lang('name').'</td><td>'.lang('minimumversion').'</td><td>'.lang('installed').'</td></tr>';
-
 		$curclass = 'row1';
 		foreach ($gCms->modules[$module]['dependency'] as $key=>$value)
 		{
@@ -227,15 +227,15 @@ else if ($action == 'missingdeps')
 			echo '</td></tr>';
 			($curclass=="row1"?$curclass="row2":$curclass="row1");
 		}
-
-		echo '</table>';
-
-		?>
-		<FORM ACTION="plugins.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
 	}
+
+	echo '</table>';
+
+	?>
+	<FORM ACTION="plugins.php" METHOD="get">
+	<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
+	</FORM>
+	<?php
 }
 else
 {
