@@ -34,15 +34,18 @@ function load_modules() {
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."modules";
 		$result = $db->Execute($query);
-		while ($row = $result->FetchRow())
+		if ($result)
 		{
-			if (isset($row['module_name']))
+			while ($row = $result->FetchRow())
 			{
-				$modulename = $row['module_name'];
-				if (isset($modulename) && isset($cmsmodules[$modulename]))
+				if (isset($row['module_name']))
 				{
-					$cmsmodules[$modulename]['Installed'] = true;
-					$cmsmodules[$modulename]['Active'] = $row['active'];
+					$modulename = $row['module_name'];
+					if (isset($modulename) && isset($cmsmodules[$modulename]))
+					{
+						$cmsmodules[$modulename]['Installed'] = true;
+						$cmsmodules[$modulename]['Active'] = $row['active'];
+					}
 				}
 			}
 		}

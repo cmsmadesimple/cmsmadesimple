@@ -14,19 +14,19 @@ function upgrade_create_sequence_table($db, $tablename, $idcol) {
 
 }
 
-upgrade_create_sequence_table($dbnew, $config->db_prefix."additional_users", "additional_users_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."group_perms", "group_perm_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."groups", "group_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."pages", "page_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."permissions", "permission_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."templates", "template_id");
-upgrade_create_sequence_table($dbnew, $config->db_prefix."users", "user_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."additional_users", "additional_users_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."group_perms", "group_perm_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."groups", "group_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."pages", "page_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."permissions", "permission_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."templates", "template_id");
+upgrade_create_sequence_table($db, $config["db_prefix"]."users", "user_id");
 
 echo "[done]</p>";
 
 echo "<p>Creating modules table...";
 
-$db = NewDataDictionary($dbnew);
+$dbdict = NewDataDictionary($db);
 $flds = "
 	module_name C(255),
 	status C(255),
@@ -34,40 +34,40 @@ $flds = "
 	active L
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $db->CreateTableSQL($config->db_prefix."modules", $flds, $taboptarray);
-$db->ExecuteSQLArray($sqlarray);
+$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."modules", $flds, $taboptarray);
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
 echo "<p>Adding parent_id to pages table...";
 
-$db = NewDataDictionary($dbnew);
-$sqlarray = $db->AddColumnSQL($config->db_prefix."pages", "parent_id I NOTNULL DEFAULT 0");
-$db->ExecuteSQLArray($sqlarray);
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AddColumnSQL($config["db_prefix"]."pages", "parent_id I NOTNULL DEFAULT 0");
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
 echo "<p>Removing section_id from pages table...";
 
-$db = NewDataDictionary($dbnew);
-$sqlarray = $db->DropColumnSQL($config->db_prefix."pages", "section_id");
-$db->ExecuteSQLArray($sqlarray);
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->DropColumnSQL($config["db_prefix"]."pages", "section_id");
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
 echo "<p>Removing sections table...";
 
-$db = NewDataDictionary($dbnew);
-$sqlarray = $db->DropTableSQL($config->db_prefix."sections");
-$db->ExecuteSQLArray($sqlarray);
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->DropTableSQL($config["db_prefix"]."sections");
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
 echo "<p>Adding module admin permission... ";
 
-$new_id = $dbnew->GenID($config->db_prefix."permissions_seq");
-$query = "INSERT INTO ".$config->db_prefix."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id,'Modify Modules','Modify Modules',".$dbnew->DBTimeStamp(time()).",".$dbnew->DBTimeStamp(time()).")";
-$dbnew->Execute($query);
+$new_id = $db->GenID($config["db_prefix"]."permissions_seq");
+$query = "INSERT INTO ".$config["db_prefix"]."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id,'Modify Modules','Modify Modules',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+$db->Execute($query);
 
 echo "[done]</p>";
 
@@ -93,8 +93,8 @@ echo "[done]</p>";
 
 echo "<p>Updating schema version... ";
 
-$query = "UPDATE ".$config->db_prefix."version SET version = 4";
-$dbnew->Execute($query);
+$query = "UPDATE ".$config["db_prefix"]."version SET version = 4";
+$db->Execute($query);
 
 echo "[done]</p>";
 
