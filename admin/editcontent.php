@@ -101,7 +101,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Any Content') || check_ownership($userid, "", $page_id);
+$access = check_permission($userid, 'Modify Any Content') || check_ownership($userid, $page_id);
 $adminaccess = $access;
 if (!$access) {
 	$access = check_authorship($userid, $page_id);

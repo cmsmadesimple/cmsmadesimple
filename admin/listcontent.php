@@ -40,11 +40,32 @@ if (isset($_GET["message"])) {
 		if (isset($_GET["makedefault"])) {
 			$query = "UPDATE ".cms_db_prefix()."pages SET default_page = 0";
 			$result = $db->Execute($query);
-
 			$query = "UPDATE ".cms_db_prefix()."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
 			$result = $db->Execute($query);
 		}
 	}
+    // check if we're activating a page
+    if (isset($_GET["setactive"])) 
+	{
+      	// to activate a page, you must be admin, owner, or additional author
+      	$permission = ($modifyall || check_ownership($userid,$_GET["setactive"]) || check_authorship($userid,$_GET["setactive"]));
+      	if($permission) 
+		{
+			$query = "UPDATE ".cms_db_prefix(). "pages SET active = 1 where page_id = ".$_GET["setactive"];
+			$result = $db->Execute($query);
+    	}
+    }
+    // perhaps we're deactivating a page instead?
+    if (isset($_GET["setinactive"])) 
+	{
+      	// to deactivate a page, you must be admin, owner, or additional author
+      	$permission = ($modifyall || check_ownership($userid,$_GET["setinactive"]) || check_authorship($userid,$_GET["setinactive"]));
+      	if($permission) 
+		{
+			$query = "UPDATE ".cms_db_prefix(). "pages SET active = 0 where page_id = ".$_GET["setinactive"];
+			$result = $db->Execute($query);
+	    }
+    }
 
 	$content_array = db_get_menu_items();
 	
@@ -95,11 +116,19 @@ if (isset($_GET["message"])) {
 				echo "<td align=\"center\">".$types[$one->page_type]."</td>\n";
 	//			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";
 				echo "<td align=\"center\">".$one->username."</td>\n";
-				echo "<td align=\"center\">".($one->active == 1?$image_true:$image_false)."</td>\n";
-	//			echo "<td align=\"center\">".($one->active == 1?lang('true'):lang('false'))."</td>\n";
+// 
+				if($one->active) 
+				{
+				  	echo "<td align=\"center\"><a href=\"listcontent.php?setinactive=".$one->page_id."\">".$image_true."</a></td>\n";
+				}
+				else 
+				{
+				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->page_id."\">".$image_false."</a></td>\n";
+				}
+ 
 				if ($one->page_type == "content")
 				{
-				echo "<td align=\"center\">".($one->default_page == 1?$image_true:"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+				  	echo "<td align=\"center\">".($one->default_page == 1?$image_true:"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
 				}
 				else
 				{

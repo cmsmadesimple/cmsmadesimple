@@ -132,7 +132,7 @@ function check_permission($userid, $permname) {
  * @returns mixed If they have ownership, true.  If they do not, false.
  * @since 0.1
  */
-function check_ownership($userid, $pagename, $pageid = "") {
+function check_ownership($userid, $pageid = "") {
 
 	$check = false;
 
@@ -157,7 +157,7 @@ function check_ownership($userid, $pagename, $pageid = "") {
  * @returns mixed If they have authorship, true.  If they do not, false.
  * @since 0.2
  */
-function check_authorship($userid, $pageid) {
+function check_authorship($userid, $pageid = "") {
 
 	$check = false;
 
