@@ -282,7 +282,7 @@ else {
 ?>
 <h3><?=$gettext->gettext("Preview")?></h3>
 
-<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
+<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?=$config["root_url"]?>/preview.php?tmpfile=<?=urlencode(str_replace("cmspreview","",basename($tmpfname)))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
 
 </iframe>
 <?php
