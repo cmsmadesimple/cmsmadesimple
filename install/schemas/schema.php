@@ -3,11 +3,12 @@
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$db->DropSequence($db_prefix."additional_users_seq");
+	$db->DropSequence($db_prefix."content_seq");
+	$db->DropSequence($db_prefix."content_prop_seq");
 	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
 	$db->DropSequence($db_prefix."module_news_seq");
-	$db->DropSequence($db_prefix."pages_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
 	$db->DropSequence($db_prefix."users_seq");
@@ -22,6 +23,10 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."content_props");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."css_assoc");
@@ -33,8 +38,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_news");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -63,7 +66,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		additional_users_id I KEY,
 		user_id I,
-		page_id I
+		page_id I,
+		content_id I
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
@@ -84,6 +88,55 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating content table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		content_id I,
+		content_name C(255),
+		type C(25),
+		owner_id I,
+		parent_id I,
+		template_id I,
+		item_order I,
+		hierarchy C(255),
+		default_content I1,
+		menu_text C(255),
+		content_alias C(255),
+		show_in_menu I1,
+		markup C(25),
+		active I1,
+		cachable I1,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating content_props table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		content_prop_id I,
+		content_id I,
+		type C(25),
+		prop_name C(255),
+		param1 C(255),
+		param2 C(255),
+		param3 C(255),
+		content X,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -202,6 +255,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo '<p>Creating module_deps table...';
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		parent_module C(25),
+		child_module C(25),
+		minimum_version C(25),
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo '[done]</p>';
+
 	echo "<p>Creating module_news table...";
 
 	$dbdict = NewDataDictionary($db);
@@ -219,39 +288,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news", $flds, $taboptarray);
-	$dbdict->ExecuteSQLArray($sqlarray);
-
-	echo "[done]</p>";
-
-	echo "<p>Creating pages table...";
-
-	$dbdict = NewDataDictionary($db);
-	$flds = "
-		page_id I KEY,
-		page_title C(255),
-		page_url C(255),
-		page_alias C(255),
-		page_content X,
-		menu_text C(25),
-		default_page I1,
-		show_in_menu I1,
-		page_type C(25),
-		owner I,
-		item_order I,
-		active I1,
-		parent_id I,
-		template_id I,
-		head_tags X,
-		page_header X,
-		hierarchy_position C(255),
-		create_date T,
-		modified_date T
-	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."pages", $flds, $taboptarray);
-	$dbdict->ExecuteSQLArray($sqlarray);
-
-	$sqlarray = $dbdict->CreateIndexSQL("idx_template_id_modified_date", $db_prefix."pages", array("template_id","modified_date"));
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";

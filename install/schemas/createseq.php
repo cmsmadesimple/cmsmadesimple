@@ -9,6 +9,20 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Creating content table sequence...";
+
+	$max = $db->GetOne("SELECT max(content_id) from ".$db_prefix."content");
+	$db->CreateSequence($db_prefix."content_seq", $max+1);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating content_props table sequence...";
+
+	$max = $db->GetOne("SELECT max(content_prop_id) from ".$db_prefix."content_props");
+	$db->CreateSequence($db_prefix."content_props_seq", $max+1);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating group_perms table sequence...";
 
 	$max = $db->GetOne("SELECT max(css_id) from ".$db_prefix."css");
@@ -48,13 +62,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$max = $db->GetOne("SELECT max(news_id) from ".$db_prefix."module_news");
 	$db->CreateSequence($db_prefix."module_news_seq", $max+1);
-
-	echo "[done]</p>";
-
-	echo "<p>Creating pages table sequence...";
-
-	$max = $db->GetOne("SELECT max(page_id) from ".$db_prefix."pages");
-	$db->CreateSequence($db_prefix."pages_seq", $max+1);
 
 	echo "[done]</p>";
 

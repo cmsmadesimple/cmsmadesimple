@@ -152,7 +152,7 @@ echo '[done]</p>';
 
 @ob_flush();
 
-echo '<p>Adding module_deps...';
+echo '<p>Adding module_deps table...';
 
 $dbdict = NewDataDictionary($db);
 $flds = "
