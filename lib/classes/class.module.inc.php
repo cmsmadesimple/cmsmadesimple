@@ -88,7 +88,6 @@ class CMSModule extends ModuleOperations
 		return '';
 	}
 
-
 	/**
 	 * Returns a description of what the admin link does.
 	 *
@@ -289,6 +288,30 @@ class CMSModule extends ModuleOperations
 	{
 		return false;
 	}
+
+	/**
+	 * Returns which admin section this module belongs to.
+	 * this is used to place the module in the appropriate admin navigation
+	 * section. Valid options are currently:
+	 *
+	 * content, layout, files, usersgroups, extensions, preferences, admin
+     *
+	 */
+	function GetAdminSection()
+	{
+		return 'extensions';
+	}
+
+    /**
+     * Returns true or false, depending on whether the user has the
+     * right permissions to see the module in their Admin menus.
+     *
+     * Defaults to true.
+     */
+    function VisibleToAdminUser()
+    {
+    	return true;
+    }
 
 	/**
 	 * Returns true if the module should be treated as a content module.

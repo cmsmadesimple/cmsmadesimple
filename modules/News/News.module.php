@@ -45,6 +45,16 @@ class News extends CMSModule
 		return 'Add, edit and remove News entries';
 	}
 
+	function GetAdminSection()
+	{
+		return 'content';
+	}
+
+    function VisibleToAdminUser()
+    {
+        return $this->CheckPermission('Modify News');
+    }
+
 	/**
 	 * This function is not in the API!!!
 	 */
