@@ -119,7 +119,10 @@ while (($file = $ls->read()) != "")
 {
 	if (!is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
 	{
-		include_once("$dir/$file");
+		if (substr($file,strlen($file)-4,4) == ".php")
+		{
+			include_once("$dir/$file");
+		}
 	}
 }
 
