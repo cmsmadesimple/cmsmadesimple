@@ -12,7 +12,7 @@
       head.appendChild(base);
     </script>
 
-    <script type="text/javascript" src="../htmlarea.js"></script>
+    <script type="text/javascript" src="../htmlarea/htmlarea.js"></script>
 
     <script type="text/javascript">
 	// load HTMLArea scripts that are present in the opener frame
@@ -34,11 +34,13 @@ var editor	   = null;	// to be initialized later [ function init() ]
 
 function _CloseOnEsc(ev) {
 	ev || (ev = window.event);
-	if (ev.keyCode == 27) {
-		// update_parent();
-		window.close();
-		return;
-	}
+	try{
+		if (ev.keyCode == 27) {
+			// update_parent();
+			window.close();
+			return;
+		}
+	}catch(error){}
 }
 
 /* ---------------------------------------------------------------------- *\
