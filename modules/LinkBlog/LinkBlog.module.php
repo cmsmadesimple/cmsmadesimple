@@ -565,9 +565,11 @@ class LinkBlog extends CMSModule
 					echo " ".$title."\n";
 					echo "</div>\n";
 
-					echo "<div class=\"modulelinkblogcontent\">\n";
-					echo $content;
-					echo "</div>\n";
+					if ($content) {
+						echo "<div class=\"modulelinkblogcontent\">\n";
+						echo $content;
+						echo "</div>\n";
+					}
 
 					echo "<div class=\"modulelinkbloglinks\">\n";
 					echo " | \n";
@@ -817,9 +819,11 @@ class LinkBlog extends CMSModule
 				echo ") ".$title."\n";
 				echo "</div>\n";
 
-				echo "<div class=\"modulelinkblogcontent\">\n";
-				echo $content;
-				echo "</div>\n";
+				if ($content) {
+					echo "<div class=\"modulelinkblogcontent\">\n";
+					echo $content;
+					echo "</div>\n";
+				}
 
 				echo "<div class=\"modulelinkbloglinks\">\n";
 				echo " | \n";
@@ -933,9 +937,11 @@ class LinkBlog extends CMSModule
 				echo ") ".$title."\n";
 				echo "</div>\n";
 
-				echo "<div class=\"modulelinkblogcontent\">\n";
-				echo $content;
-				echo "</div>\n";
+				if ($content) {
+					echo "<div class=\"modulelinkblogcontent\">\n";
+					echo $content;
+					echo "</div>\n";
+				}
 
 				echo "<div class=\"modulelinkbloglinks\">\n";
 				echo " | \n";
