@@ -23,6 +23,8 @@ require_once("../filemanager/filetypes.inc.php");
 require_once("../lib/file.functions.php");
 require_once("../include.php");
 
+$action_done='';
+
 
 function deldir($dir)
 {
@@ -59,6 +61,8 @@ $dir = $config["image_uploads_path"];
 $url = $config["image_uploads_url"];
 
 $reldir = "";
+
+if (!isset($IMConfig['thumbnail_dir'])) $IMConfig['thumbnail_dir'] = '';
 if (isset($_POST['reldir'])) $reldir = $_POST['reldir'];
 else if (isset($_GET['reldir'])) $reldir = $_GET['reldir'];
 
@@ -66,6 +70,8 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 {
 	$dir .= $reldir;
 }
+
+
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
@@ -193,7 +199,6 @@ include_once("header.php");
 
 		var manager = new ImageManager('../filemanager/ImageManager','en');
 			
-		//alert('crop '+ I18N["Crop"] );	
 		var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 		var base_url = "<?php echo $url; ?>";	
 		//Image Manager wrapper. Simply calls the ImageManager
@@ -233,11 +238,11 @@ if ($errors != "")
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
-echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
+//echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
 //echo '<table cellspacing="0" class="admintable">';
 //echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
 ?>
-<IFRAME SRC="../filemanager/ImageManager/images.php" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
+<IFRAME SRC="../filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
 
 <?php
 
@@ -246,7 +251,7 @@ if ($access)
 ?>
 
 
-<FORM ENCTYPE="multipart/form-data" ACTION="imagefiles.php" METHOD="post">
+<FORM ENCTYPE="multipart/form-data" ACTION="imagefiles.php" METHOD="post" NAME="uploader">
 	<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $config["max_upload_size"]?>">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="" CLASS="box">
 		<TR>

@@ -41,14 +41,14 @@ function get_file_extention($filename) {
 	//extention type if nothing is found:
 	$found_ext = "unknown";
 	// See if extention is listed
-	if ($filetype[$extension]['img']) {
+	if (isset($filetype[$extension]['img']) && $filetype[$extension]['img']) {
 	    // Yes, listed!
 		$found_ext = $extension;
 	} else {
 	 	// apparently not, so let's browse the aliasses
 		foreach ($filetype  as $current_ext=>$current_type) {	  
-		   if ($current_type[alias]) {
-			   foreach ($current_type[alias] as $current_alias) {
+		   if (isset($current_type['alias']) && $current_type['alias']) {
+			   foreach ($current_type['alias'] as $current_alias) {
 				   if ($extension == $current_alias) { 
 						$found_ext = $current_ext;
 						break(2);

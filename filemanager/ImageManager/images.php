@@ -26,6 +26,7 @@ if($manager->deleteDirs() || $manager->processNewDir())
 //check for any sub-directory request
 //check that the requested sub-directory exists
 //and valid
+
 if(isset($_REQUEST['dir']))
 {
 	$path = rawurldecode($_REQUEST['dir']);
@@ -164,6 +165,7 @@ function drawErrorBase(&$manager)
 	{
 		hideMessage();
 		var topDoc = window.top.document;
+		window.parent.document.uploader.reldir.value = "<?php echo $relative; ?>";
 
 <?php 
 	//we need to refesh the drop directory list
@@ -213,12 +215,18 @@ function drawErrorBase(&$manager)
 /*]]>*/
 </script>
 <script type="text/javascript" src="assets/images.js"></script>
+<script language="javascript">
+</script>
 
 </head>
 
 <body>
+
+
 <?php if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
+
 	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
+
 <table>
 	<tr>
 	<?php drawDirs($list[0], $manager); ?>
