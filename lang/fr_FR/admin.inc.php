@@ -40,6 +40,10 @@ $lang['admin']['currentgroups'] = 'Groupes courants';
 $lang['admin']['currentpages'] = 'Pages courantes';
 $lang['admin']['currenttemplates'] = 'Templates courants';
 $lang['admin']['currentusers'] = 'Utilisateurs courants';
+$lang['admin']['custom404'] = 'Custom 404 Error Message'; //needs translation
+$lang['admin']['database'] = 'Database'; //needs translation
+$lang['admin']['databaseprefix'] = 'Database Prefix'; //needs translation
+$lang['admin']['databasetype'] = 'Database Type'; //needs translation
 $lang['admin']['date'] = 'Date';
 $lang['admin']['default'] = 'Defaut';
 $lang['admin']['delete'] = 'Supprimer';
@@ -48,6 +52,7 @@ $lang['admin']['deletecss'] = 'Supprimer la CSS';
 $lang['admin']['directoryexists'] = 'Ce répertoire existe déjà.';
 $lang['admin']['down'] = 'Bas';
 $lang['admin']['edit'] = 'Editer';
+$lang['admin']['editconfiguration'] = 'Edit Configuration'; //needs translation
 $lang['admin']['editcontent'] = 'Editer le contenu';
 $lang['admin']['editgroup'] = 'Editer le groupe';
 $lang['admin']['editlink'] = 'Editer le lien';
@@ -94,18 +99,12 @@ $lang['admin']['filesize'] = 'Taille';
 $lang['admin']['groupmanagement'] = 'Gestion des groupes';
 $lang['admin']['headtags'] = 'Head Tags';
 $lang['admin']['help'] = 'Aide';
-$lang['admin']['helpaddcontent'] = '<p>Cette page vous permet de créer de nouveaux contenus. Sélectionnez un type de contenu et remplissez les champs requis : vôtre nouveau contenu est créé. Si vous choisissez de le faire apparaitre dans le menu, et que vous utilisez l\'un des menus automatiques {dhtmlmenu} ou {bulletmenu}, alors le nouveau contenu apparaitra tout seul dans le menu..</p>
-<p>Vous pouvez choisir d\'utilisez l\'éditeur visuel (WYSIWYG) and éditant votre utilisateur dans la section "Gestion des utilisateurs". En choisissant de ne pas utiliser le mode WYSIWYG, vous pouvez créer des contenus complexes, ou simplement copier-coller un contenu provenant d\'un autre site.</p>';
-$lang['admin']['helpaddtemplate'] = '<p>Un template est ce qui contrôle l\'aspect de votre site.</p>
-<p>Créer la maquette ou "layout" ici et ajoutez également votre CSS dans la zone "Feuille de style" pour contrôler l\aspect de vos divers éléments.</p>';
-$lang['admin']['helpeditcontent'] = '<p>Cette page vous permet de modifier le contenu de votre page, son "parent" (utilisé pour la génération automatique du menu). Vous pouvez aussi changer le texte qui apparait effectivement dans le menu, le titre de la page, son propriétaire, ou assigner des éditeurs additionnels.</p>
-<p>Si vous décidez d\'utiliser l\'alias de page, les liens créés automatiquement par le menu seront plus compréhensibles que ceux utilisant l\'ID (identifiant interne) de la page.</p>';
-$lang['admin']['helplistcontent'] = '<p>Cette page est le point de départ pour pouvoir éditer tous vos contenus.<br>Cette page vous permet de réordonner vos éléments ainsi que de modifier leur hiérarchie pour l\'utilisation avec le menu automatique. Vous pouvez aussi supprimer, éditer et créer de nouveaux contenus.</p>
-<p>Pour choisir une page par défaut (la page affichée quand aucun paramètre n\'est passé), clickez sur le lien <u>Faux</u> dans la colonne <i>Défaut</i>.</p>';
-$lang['admin']['helplisttemplate'] = '<p>Cette section vous permet d\'éditer, supprimer et créer des templates.</p>
-<p>Pour créer un nouveau template, clickez sur le bouton <u>Ajouter un nouveau template</u>.</p>
-<p>Si vous désirez que toutes vos pages utilisent le même template, clickez sur le lien <u>Choisir pour tous les contenus</u>.</p>
-<p>Si vous désirez copier un template, clicker sur l\'icone <u>Copier</u> et l\'on vous demandera un nom pour la nouvelle copie.</p>';
+$lang['admin']['helpaddcontent'] = '<p>Cette page vous permet de créer de nouveaux contenus. Sélectionnez un type de contenu et remplissez les champs requis : vôtre nouveau contenu est créé. Si vous choisissez de le faire apparaitre dans le menu, et que vous utilisez l\'un des menus automatiques {dhtmlmenu} ou {bulletmenu}, alors le nouveau contenu apparaitra tout seul dans le menu..</p><p>Vous pouvez choisir d\'utilisez l\'éditeur visuel (WYSIWYG) and éditant votre utilisateur dans la section "Gestion des utilisateurs". En choisissant de ne pas utiliser le mode WYSIWYG, vous pouvez créer des contenus complexes, ou simplement copier-coller un contenu provenant d\'un autre site.</p>';
+$lang['admin']['helpaddtemplate'] = '<p>Un template est ce qui contrôle l\'aspect de votre site.</p><p>Créer la maquette ou "layout" ici et ajoutez également votre CSS dans la zone "Feuille de style" pour contrôler l\aspect de vos divers éléments.</p>';
+$lang['admin']['helpeditcontent'] = '<p>Cette page vous permet de modifier le contenu de votre page, son "parent" (utilisé pour la génération automatique du menu). Vous pouvez aussi changer le texte qui apparait effectivement dans le menu, le titre de la page, son propriétaire, ou assigner des éditeurs additionnels.</p><p>Si vous décidez d\'utiliser l\'alias de page, les liens créés automatiquement par le menu seront plus compréhensibles que ceux utilisant l\'ID (identifiant interne) de la page.</p>';
+$lang['admin']['helplistcontent'] = '<p>Cette page est le point de départ pour pouvoir éditer tous vos contenus.<br>Cette page vous permet de réordonner vos éléments ainsi que de modifier leur hiérarchie pour l\'utilisation avec le menu automatique. Vous pouvez aussi supprimer, éditer et créer de nouveaux contenus.</p><p>Pour choisir une page par défaut (la page affichée quand aucun paramètre n\'est passé), clickez sur le lien <u>Faux</u> dans la colonne <i>Défaut</i>.</p>';
+$lang['admin']['helplisttemplate'] = '<p>Cette section vous permet d\'éditer, supprimer et créer des templates.</p><p>Pour créer un nouveau template, clickez sur le bouton <u>Ajouter un nouveau template</u>.</p><p>Si vous désirez que toutes vos pages utilisent le même template, clickez sur le lien <u>Choisir pour tous les contenus</u>.</p><p>Si vous désirez copier un template, clicker sur l\'icone <u>Copier</u> et l\'on vous demandera un nom pour la nouvelle copie.</p>';
+$lang['admin']['hostname'] = 'Hostname'; //needs translation
 $lang['admin']['idnotvalid'] = 'L\'ID donné n\'est pas valide.';
 $lang['admin']['informationmissing'] = 'Certaines informations sont manquantes.';
 $lang['admin']['install'] = 'Installer';
@@ -150,11 +149,14 @@ $lang['admin']['pluginmanagement'] = 'Gestion des plugins';
 $lang['admin']['preview'] = 'Aperçu';
 $lang['admin']['previous'] = 'Précédent';
 $lang['admin']['removecssassocation'] = 'Supprimer l\'association';
+$lang['admin']['saveconfig'] = 'Save Config'; //needs translation
 $lang['admin']['send'] = 'Envoyer';
 $lang['admin']['setallcontent'] = 'Choisir pour tous les contenus';
 $lang['admin']['setallcontentconfirm'] = 'Etes vous sur que toutes les pages doivent utiliser ce template ?';
 $lang['admin']['showinmenu'] = 'Afficher dans le menu';
 $lang['admin']['showsite'] = 'Afficher le site';
+$lang['admin']['sitedownmessage'] = 'Site Down Message'; //needs translation
+$lang['admin']['siteprefs'] = 'Site Preferences'; //needs translation
 $lang['admin']['status'] = 'Status';
 $lang['admin']['stylesheet'] = 'Feuille de style';
 $lang['admin']['submit'] = 'envoyer';
@@ -172,6 +174,7 @@ $lang['admin']['uninstallconfirm'] = 'Etes vous sûr de vouloir désinstaller ?';
 $lang['admin']['up'] = 'Haut';
 $lang['admin']['uploadfile'] = 'Télécharger le fichier';
 $lang['admin']['url'] = 'URL';
+$lang['admin']['useadvancedcss'] = 'Use Advanced CSS Management'; //needs translation
 $lang['admin']['user'] = 'Utilisateur';
 $lang['admin']['usermanagement'] = 'Gestion des utilisateurs';
 $lang['admin']['username'] = 'Nom d\'utilisateur';
@@ -182,15 +185,4 @@ $lang['admin']['usewysiwyg'] = 'Utiliser l\'éditeur visuel (WYSIWYG) pour l\'édi
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'Voir';
 $lang['admin']['welcomemsg'] = 'Bienvenue %s';
-$lang['admin']['editconfiguration'] = 'Edit Configuration'; //needs translation
-$lang['admin']['database'] = 'Database'; //needs translation
-$lang['admin']['databaseprefix'] = 'Database Prefix'; //needs translation
-$lang['admin']['saveconfig'] = 'Save Config'; //needs translation
-$lang['admin']['databasetype'] = 'Database Type'; //needs translation
-$lang['admin']['hostname'] = 'Hostname'; //needs translation
-$lang['admin']['saveconfig'] = 'Save Config'; //needs translation
-$lang['admin']['custom404'] = 'Custom 404 Error Message'; //needs translation
-$lang['admin']['siteprefs'] = 'Site Preferences'; //needs translation
-$lang['admin']['sitedownmessage'] = 'Site Down Message'; //needs translation
-$lang['admin']['useadvancedcss'] = 'Use Advanced CSS Management'; //needs translation
 ?>
