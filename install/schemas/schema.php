@@ -158,8 +158,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($db_prefix."css_seq");
-
 	echo "[done]</p>";
 
 	echo "<p>Creating css_assoc table...";
@@ -224,8 +222,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
-
-	$db->CreateSequence($db_prefix."htmlblobs_seq");
 
 	echo "[done]</p>";
 
