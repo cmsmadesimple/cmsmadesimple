@@ -45,9 +45,30 @@ if (isset($_GET["template_id"]))
 
 		if ($dodelete)
 		{
+			#Perform the deletetemplate_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->DeleteTemplatePre($onetemplate);
+				}
+			}
+
 			$result = TemplateOperations::DeleteTemplateByID($template_id);
+
 			if ($result)
 			{
+				#Perform the deletetemplate_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->DeleteTemplatePost($onetemplate);
+					}
+				}
+
 				audit($template_id, $onetemplate->name, 'Deleted Template');
 			}
 		}

@@ -40,9 +40,29 @@ if (isset($_GET["group_id"]))
 		$groupobj = GroupOperations::LoadGroupByID($group_id);
 		$group_name = $groupobj->name;
 
+		#Perform the deletegroup_pre callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->DeleteGroupPre($groupobj);
+			}
+		}
+
 		if ($groupobj)
 		{
 			$result = $groupobj->Delete();
+		}
+
+		#Perform the deletegroup_post callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->DeleteGroupPost($groupobj);
+			}
 		}
 
 		if ($result == true)

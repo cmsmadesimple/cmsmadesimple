@@ -27,34 +27,59 @@ check_login();
 $dodelete = true;
 
 $user_id = -1;
-if (isset($_GET["user_id"])) {
-
+if (isset($_GET["user_id"]))
+{
 	$user_id = $_GET["user_id"];
 	$user_name = "";
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove User');
 
-	if ($access) {
-
+	if ($access)
+	{
 		$oneuser = UserOperations::LoadUserByID($user_id);
 		$user_name = $oneuser->username;
 		$ownercount = UserOperations::CountPageOwnershipByID($user_id);
+
 		if ($ownercount > 0)
 		{
 			$dodelete = false;
 		}
 
-		if ($dodelete) {
+		if ($dodelete)
+		{
+			#Perform the deleteuser_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->DeleteUserPre($oneuser);
+				}
+			}
+
 			$oneuser->Delete();
+
+			#Perform the deleteuser_post callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->DeleteUserPost($oneuser);
+				}
+			}
+
 			audit($user_id, $user_name, 'Deleted User');
 		}
 	}
 }
 
-if ($dodelete == true) {
+if ($dodelete == true)
+{
 	redirect("listusers.php");
 }
-else {
+else
+{
 	redirect("listusers.php?message=".lang('erroruserinuse'));
 }
 
