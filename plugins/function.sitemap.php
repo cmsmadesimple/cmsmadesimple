@@ -88,27 +88,33 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 		}
 		else
 		{
-			if ($depth < $last_level)
-			{
-				for ($i = $depth; $i < $last_level; $i++) $menu .= "</ul>\n";
+			if ($depth < $last_level) {
+				for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
+				if ($depth > 0)
+				{
+					$menu .= "</li>\n";
+				}
 			}
 			if ($depth > $last_level)
 			{
-				for ($i = $depth; $i > $last_level; $i--) $menu .= "<ul>\n";
+				for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
+			}
+			if ($depth == $last_level) {
+				$menu .= "</li>\n";
 			}
 			$menu .= "<li><h2><a href=\"".$onecontent->GetURL()."\">".$onecontent->MenuText();
 			if ($onecontent->Name() != '')
 			{
 				$menu .= ' - ' . $onecontent->Name();
 			}
-			$menu .= "</a></h2></li>\n";
+			$menu .= "</a></h2>";
 			$in_hr = 1;
 			$last_level = $depth;
 		}
 		$count++;
 	}
 
-	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
+	for ($i = 0; $i < $last_level; $i++) $menu .= "</li></ul>";
 
 	return $menu;
 

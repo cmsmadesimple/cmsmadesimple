@@ -18,6 +18,7 @@
 
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
+	global $gCms;
 	global $db;
 
 	# getting menu parameters
@@ -87,18 +88,30 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		else
 		{
 			if ($depth < $last_level) {
-				for ($i = $depth; $i < $last_level; $i++) $menu .= "</ul>\n";
+				for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
+				if ($depth > 0)
+				{
+					$menu .= "</li>\n";
+				}
 			}
 			if ($depth > $last_level) {
-				for ($i = $depth; $i > $last_level; $i--) $menu .= "<ul>\n";
+				for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
+			}
+			if ($depth == $last_level) {
+				$menu .= "</li>\n";
 			}
 			if ($onecontent->Type() == 'separator')
 			{
-				$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/></li>\n";
+				$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/>";
 			}
 			else
 			{
-				$menu .= "<li><a href=\"".$onecontent->GetURL()."\">".$onecontent->MenuText()."</a></li>\n";
+				$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
+				if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
+				{
+					$menu .= " class=\"currentpage\"";
+				}
+				$menu .= ">".$onecontent->MenuText()."</a>";
 			}
 			$in_hr = 1;
 			$last_level = $depth;
@@ -106,7 +119,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		$count++;
 	}
 
-	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
+	for ($i = 0; $i < $last_level; $i++) $menu .= "</li></ul>";
 
 	if ($showadmin == 1)
 	{
