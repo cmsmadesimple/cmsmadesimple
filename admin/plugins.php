@@ -401,6 +401,10 @@ else if ($action == 'missingdeps')
                     	{
                     		$brokendeps++;
                     	}
+						elseif (!isset($gCms->modules[$onedepkey]))
+						{
+                    		$brokendeps++;
+						}
                     }
                 }
 
