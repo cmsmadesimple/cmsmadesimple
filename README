@@ -2,3 +2,5 @@ CMS Made Simple
 http://cmsmadesimple.sf.net
 
 For information on installation, see INSTALL.
+
+CMS uses the smarty template engine in various places.  Their license and various documentation files are located in the smarty subdirectory of this distribution.
