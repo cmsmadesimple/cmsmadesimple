@@ -15,7 +15,7 @@ OR
 ----- If your webserver has write access to your new CMS directory you can skip step 2 ------
 2.  create an empty config.php file and make it writable by your webserver's user:
         - touch config.php
-        - chmod 666 config.php 
+        - chmod 777 config.php 
 
 3.  Create the cms database and grant a user rights to use it:
         - login to mysql: mysql -u root -p
@@ -27,9 +27,9 @@ OR
         - pear install HTML_BBCodeParser
 
 5.  Fix the permissions on the cache and template compilation directories so the web server has access to them.
-        - chmod 666 smarty/cms/templates_c
-	- chmod 666 smarty/cms/cache
-	- chmod 666 uploads
+        - chmod 777 smarty/cms/templates_c
+	- chmod 777 smarty/cms/cache
+	- chmod 777 uploads
 
 6.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
 

@@ -10,6 +10,6 @@ OR
 3.  Remove the install.php file.  This is only needed for fresh installs and will cause a warning message to anyone entering the site
 
 4.  If upgrading from a version pervious to 0.5, make the uploads dir writable by the web server user.
-        - chmod 666 uploads
+        - chmod 777 uploads
 
 5.  Point your browser to the upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.
