@@ -401,7 +401,7 @@ else {
 		<td><?=$dropdown2?></td>
 	</tr>
 <?php } else { ?>
-	<input type="hidden" name="template_id" value="1">
+	<input type="hidden" name="template_id" value="0">
 <?php } ?>
 <?php if ($adminaccess) { ?>
 	<tr>

@@ -178,9 +178,9 @@ $row = "row1";
 $dirtext = "";
 $filetext = "";
 
-echo "<h3>File Management</h3>";
+echo "<h3>".$gettext->gettext("File Management")."</h3>";
 
-echo "<h4>Current Directory: ".($reldir==""?"/":$reldir)."</h4>"; 
+echo "<h4>".$gettext->gettext("Current Directory").": ".($reldir==""?"/":$reldir)."</h4>"; 
 
 if ($errors != "")
 {
@@ -265,7 +265,7 @@ echo $filetext;
 
 if ($filetext == "" && $dirtext == "")
 {
-	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">No Files</td></tr>";
+	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">".$gettext->gettext("No Files")."</td></tr>";
 }
 
 echo "</table>";
@@ -279,12 +279,12 @@ if ($access)
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?=$config["max_upload_size"]?>" />
 	<table>
 		<tr>
-			<td align="right">Upload file here:</td>
-			<td><input name="uploadfile" type="file" /><input type="submit" value="Send" /></td>
+			<td align="right"><?=$gettext->gettext("Upload file here")?>:</td>
+			<td><input name="uploadfile" type="file" /><input type="submit" value="<?=$gettext->gettext("Send")?>" /></td>
 		</tr>
 		<tr>
-			<td align="right">Create new dir:</td>
-			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="Create" /></td>
+			<td align="right"><?=$gettext->gettext("Create new dir")?>:</td>
+			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?=$gettext->gettext("Create")?>" /></td>
 		</tr>
 	</table>
 	<input type="hidden" name="reldir" value="<?=$reldir?>" />
