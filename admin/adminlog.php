@@ -52,7 +52,7 @@ if ($db->rowcount($result) > 0) {
 
 		echo "<tr class=\"$currow\">\n";
 		echo "<td>".$row["username"]."</td>\n";
-		echo "<td>".$row["item_id"]."</td>\n";
+		echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
 		echo "<td>".$row["item_name"]."</td>\n";
 		echo "<td>".$row["action"]."</td>\n";
 		echo "<td>".date("D M j G:i:s T Y", $row["timestamp"])."</td>\n";

@@ -34,6 +34,7 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST["edituserprefs"])) {
 	set_preference($config, $userid, 'use_wysiwyg', $use_wysiwyg);
+	audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
 } else if (!isset($_POST["submit"])) {
