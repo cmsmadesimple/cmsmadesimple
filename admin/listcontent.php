@@ -56,7 +56,7 @@ include_once("header.php");
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".$row["section_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
-			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\">False</a>")."</td>\n";
+			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\" onclick=\"return confirm('Are you sure you want to set site\'s default page?');\">False</a>")."</td>\n";
 			if ($config->query_var == "")
 				echo "<td><a href=\"".$doc_root."/index.php/".$row["page_url"]."\" target=\"_blank\">View</a></td>\n";
 			else
