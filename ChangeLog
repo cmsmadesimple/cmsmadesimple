@@ -4,8 +4,12 @@ Version 0.9.1 "Mohotani" -- Subversion
 * Added collapse option to bulletmenu, for cases where section header
 is used as parents for other content
 * Added apply button to edit css
+* Added LoadUsersByGroup() function (sjg)
+* Added user and group classes to be loaded by default in include.php
 * Changed new default install schema (BrumalPat)
 * Changed breadcrumbs plugin to use menu text instead of title
+* Fixed CreateTextInput and CreateTextHidden to change " to &quot; in 
+value
 * Fixed bug with call to post render hook
 * Fixed nasty bug where content would have properties deleted if set
 inactive
@@ -13,6 +17,7 @@ inactive
 * Fixed permission check for setting active flag on content
 * Fixed automated module upgrades by making AllowAutoUpgrade() function
 return TRUE by defualt instead of FALSE (which is correct)
+* Fixed ibrowser in ImageManager to handle subdirectories properly (sjg)
 * Removed a rogue debug message
 * Removed the advanced css option.  It's on all the time now.
 * Updated some text in INSTALL and UPGRADE docs

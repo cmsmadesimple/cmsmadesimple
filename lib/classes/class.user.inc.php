@@ -200,6 +200,42 @@ class UserOperations
 		return $result;
 	}
 
+
+	/**
+	 * Gets a list of all users in a given group
+	 *
+	 * @param mixed $groupid Group for the loaded users
+	 * @returns array An array of User objects
+	 */
+	function LoadUsersInGroup($groupid)
+	{
+		global $gCms;
+		$db = &$gCms->db;
+		$result = array();
+
+		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
+		$dbresult = $db->Execute($query, array($groupid));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				$oneuser = new User();
+				$oneuser->id = $row['user_id'];
+				$oneuser->username = $row['username'];
+				$oneuser->firstname = $row['first_name'];
+				$oneuser->lastname = $row['last_name'];
+				$oneuser->email = $row['email'];
+				$oneuser->password = $row['password'];
+				$oneuser->active = $row['active'];
+				$oneuser->adminaccess = $row['admin_access'];
+				array_push($result, $oneuser);
+			}
+		}
+
+		return $result;
+	}
+
 	/**
 	 * Loads a user by username.
 	 *

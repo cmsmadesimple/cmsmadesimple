@@ -752,6 +752,7 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 	{
+		$value = str_replace('"', '&quot;', $value);
 		$text = '<input type="text" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 		if ($addttext != '')
 		{
@@ -772,6 +773,7 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateInputHidden($id, $name, $value='', $addttext='')
 	{
+		$value = str_replace('"', '&quot;', $value);
 		$text = '<input type="hidden" name="'.$id.$name.'" value="'.$value.'"';
 		if ($addttext != '')
 		{
