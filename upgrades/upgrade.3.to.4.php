@@ -73,7 +73,7 @@ echo "[done]</p>";
 
 echo "<p>Clearing cache and template directories... ";
 
-function clear_dir($dir){
+function clear_dir_3($dir){
 
 	$path = dirname(dirname(__FILE__))."/smarty/cms/".$dir."/";
 
@@ -86,8 +86,8 @@ function clear_dir($dir){
 	}
 }
 
-clear_dir("templates_c");
-clear_dir("cache");
+clear_dir_3("templates_c");
+clear_dir_3("cache");
 
 echo "[done]</p>";
 
