@@ -789,9 +789,13 @@ class CMSModule extends ModuleOperations
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputCheckbox($id, $name, $value='', $addttext='')
+	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
 	{
 		$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
+		if ($selectedvalue == $value)
+		{
+			$text .= ' ' . 'checked="checked"';
+		}
 		if ($addttext != '')
 		{
 			$text .= ' '.$addttext;
