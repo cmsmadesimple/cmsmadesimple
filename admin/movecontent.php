@@ -47,18 +47,18 @@ if (isset($_GET["page_id"])) {
 		mysql_free_result($result);
 
 		if ($direction == "down") {
-			$query = "UPDATE cms_pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);
 			#echo $query;
 			$db->query($query);
-			$query = "UPDATE cms_pages SET item_order = item_order + 1 WHERE page_id = " . $page_id;
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id;
 			#echo $query;
 			$db->query($query);
 		}
 		else if ($direction == "up") {
-			$query = "UPDATE cms_pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1);
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1);
 			#echo $query;
 			$db->query($query);
-			$query = "UPDATE cms_pages SET item_order = item_order - 1 WHERE page_id = " . $page_id;
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id;
 			#echo $query;
 			$db->query($query);
 		}
