@@ -20,45 +20,23 @@ require_once("config.php");
 
 function smarty_function_bulletmenu($params, &$smarty) {
 
-        $menu = "";
-        $current_section = "";
-        $firsttime = 1;
+	$menu = "";
 
-	$db = new DB($smarty->configCMS);
+	$sections = db_get_menu_items($smarty->configCMS);
 
-        $query = "SELECT p.*, s.section_name FROM ".$smarty->configCMS->db_prefix."pages p INNER JOIN ".$smarty->configCMS->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 AND p.active = 1 ORDER BY s.section_id, p.item_order, p.menu_text";
-        $result = $db->query($query);
+	foreach ($sections as $onesection) {
 
-        while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
-
-                if ($line["section_name"] != $current_section) {
-
-                        if ($firsttime == 0) {
-                                $menu .= "</ul>";
-                        }
-
-                        $menu .= "<p class=\"sectionname\">".$line["section_name"]."</p>";
-                        $menu .= "<ul>";
-                        $current_section = $line["section_name"];
-
-                        $firsttime = 0;
-
-                }
-
-		if (isset($smarty->configCMS->query_var) && $smarty->configCMS->query_var != "") {
-			$menu .= "<li><a href=\"".$smarty->configCMS->root_url."/?".$smarty->configCMS->query_var."=".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
+		$menu .= "<p class=\"sectionname\">".$onesection->name."</p>";
+		$menu .= "<ul>";
+		foreach ($onesection->items as $oneitem) {
+			$menu .= "<li><a href=\"".$oneitem->url."\">".$oneitem->name."</a></li>";
 		}
-		else {
-			$menu .= "<li><a href=\"".$smarty->configCMS->root_url."/index.php".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
-		}
-        }
-        $menu .= "</ul>";
+		$menu .= "</ul>";
+	}
 
-        mysql_free_result($result);
-        $db->close();
-
-        return $menu;
+	return $menu;
 
 }
 
+# vim:ts=4 sw=4 noet
 ?>

@@ -36,7 +36,7 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
-		$this->force_compile = false;
+		$this->force_compile = true;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -133,6 +133,59 @@ function db_get_default_page (&$config) {
 	$db->close();
 
 	return $result;
+}
+
+class Section {
+	var $section_name;
+	var $items;
+}
+
+class MenuItem {
+	var $name;
+	var $url;
+}
+
+function db_get_menu_items(&$config) {
+
+	$sections = array();
+	$current_section;
+
+	$db = new DB($config);
+
+	$query = "SELECT p.*, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 AND p.active = 1 ORDER BY s.section_id, p.item_order, p.menu_text";
+	$result = $db->query($query);
+
+	while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+
+		if (!isset($current_section) || $line["section_name"] != $current_section->name) {
+
+			if (isset($current_section)) {
+				array_push($sections, $current_section);
+			}
+			$current_section = new Section;
+			$current_section->name = $line["section_name"];
+			$current_section->items = array();
+		}
+
+		$menu_item = new MenuItem;
+		$menu_item->name = $line["menu_text"];
+		if (isset($config->query_var) && $config->query_var != "") {
+			$menu_item->url = $smarty->configCMS->root_url."/?".$smarty->configCMS->query_var."=".$line["page_url"];
+		}
+		else {
+			$menu_item->url = $smarty->configCMS->root_url."/index.php/".$line["page_url"];
+		}
+		array_push($current_section->items, $menu_item);
+	}
+
+	if (isset($current_section)) {
+		array_push($sections, $current_section);
+	}
+	
+	mysql_free_result($result);
+	$db->close();
+
+	return $sections;
 }
 
 # vim:ts=4 sw=4 noet
