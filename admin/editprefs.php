@@ -55,7 +55,8 @@ if ($error != "") {
 
 ?>
 
-<FORM METHOD="post" ACTION="editprefs.php" NAME="prefsform">
+<form name="prefsform" method="post" action="editprefs.php">
+
 
 <div class="adminformSmall">
 
@@ -84,7 +85,7 @@ if ($error != "") {
 	<TR>
 		<TD><?php echo lang('language')?>:</TD>
 		<TD>
-			<SELECT CLASS="smallselect" NAME="change_cms_lang" onChange="document.forms['prefsform'].Submit();" STYLE="vertical-align: middle;">
+			<SELECT CLASS="smallselect" NAME="change_cms_lang" onChange="document.prefsform.submit();" STYLE="vertical-align: middle;">
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {
