@@ -393,57 +393,52 @@ else {
 
 <h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
 <div id="advanced" class="expand">
-	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Head Tags</div>
-	<textarea rows="4"></textarea>
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?>
+		<textarea rows="4"></textarea>
+	</div>
 
-			<table border="0" cellpadding="0" cellspacing="0" summary="">
-				<tr valign="top">
-					<td valign="top" style="padding-right: 10px;">
-						<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?=$gettext->gettext("Status")?></div>
-						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
-								<tr valign="top">
-									<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
-									<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
-								</tr>
-								<tr valign="top" style="padding-top: 5px;">
-									<td valign="top"><?=$gettext->gettext("Active")?>:</td>
-									<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
-								</tr>
-									<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
-								</tr>
-							</table>
-						</div>
-					</td>
-					<?php //if ($adminaccess) { ?>
-					<td valign="top">
-							<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?=$gettext->gettext("Permission")?></div>
-							<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-							<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
-							<div style="text-align: center; padding-top: 5px;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
-							</div>
-					</td>
-					<?php // } ?>
-				</tr>
-			</table>
-		</td>
-	</tr>
-	<tr>
-		<td><br>
-			<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
-			<input type="hidden" name="content_change" value="0" />
-			<input type="hidden" name="order" value="<?=$order?>" />
-			<input type="hidden" name="page_id" value="<?=$page_id?>" />
-			<input type="hidden" name="editcontent" value="true" />
-			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
-			<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
-			<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
-			<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
-		</td>
-	</tr>
-</table>
+	<table border="0" cellpadding="0" cellspacing="0" summary="">
+		<tr valign="top">
+			<td valign="top" style="padding-right: 10px;">
+				<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?=$gettext->gettext("Status")?></div>
+				<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+					<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
+						<tr valign="top">
+							<td valign="top"><?=$gettext->gettext("Show in Menu")?>:</td>
+							<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
+						</tr>
+						<tr valign="top" style="padding-top: 5px;">
+							<td valign="top"><?=$gettext->gettext("Active")?>:</td>
+							<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /> </td>
+						</tr>
+							<td colspan="2"><?=$gettext->gettext("Parent")?>:&nbsp;<?=$dropdown?></td>
+						</tr>
+					</table>
+				</div>
+			</td>
+			<?php //if ($adminaccess) { ?>
+			<td valign="top">
+					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;"><?=$gettext->gettext("Permission")?></div>
+					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+					<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
+					<div style="text-align: center; padding-top: 5px;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
+					</div>
+			</td>
+			<?php // } ?>
+		</tr>
+	</table>
 </div>
 
+<br />
+<input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" />
+<input type="hidden" name="content_change" value="0" />
+<input type="hidden" name="order" value="<?=$order?>" />
+<input type="hidden" name="page_id" value="<?=$page_id?>" />
+<input type="hidden" name="editcontent" value="true" />
+<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
+<input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" />
+<input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" />
+<input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>">
 
 <?php }elseif ($content_type == "separator") { ?>
 <h3><?=$gettext->gettext("Edit Separator")?></h3>

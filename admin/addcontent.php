@@ -302,13 +302,13 @@ else {
 
 <h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
 <div id="advanced" class="expand">
-	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Head Tags</div>
+	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?></div>
 	<textarea rows="4"></textarea>
 
 			<table border="0" cellpadding="0" cellspacing="0" summary="">
 				<tr valign="top">
 					<td valign="top" style="padding-right: 10px;">
-						<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Status</div>
+						<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Status") ?></div>
 						<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
 							<table width="100%" border="0"cellpadding="0" cellspacing="0" summary="" style=" vertical-align: middle;">
 								<tr valign="top">
@@ -326,8 +326,8 @@ else {
 					</td>
 					<?php //if ($adminaccess) { ?>
 					<td valign="top">
-							<div style="line-height: .8em; padding-top: 1em; font-weight: bold;">Permission</div>
-							<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
+								<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Permission") ?></div>
+								<div style="border: solid 1px #6F8341; height: 8em; padding: 7px 5px 5px 5px;">
 							<!--<?=$gettext->gettext("Owner")?>:&nbsp;<?=$owners?><br>-->
 							<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
 							</div>
