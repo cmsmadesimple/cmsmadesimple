@@ -45,25 +45,25 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 ?>
 
-<html>
-<head>
-        <title>CMS Made Simple Install</title>
-        <link rel="stylesheet" type="text/css" href="install.css" />
-</head>
+<HTML>
+<HEAD>
+        <TITLE>CMS Made Simple Install</TITLE>
+        <LINK REL="stylesheet" TYPE="text/css" HREF="install.css" />
+</HEAD>
 
-<body>
+<BODY>
 
-<div class="body">
+<DIV CLASS="body">
 
-<img src="images/cms/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
+<IMG SRC="images/cms/cmsbanner.png" WIDTH="400" HEIGHT="96" ALT="CMS Banner Logo" />
 
-<div class="headerish">
+<DIV CLASS="headerish">
 
-<h1>Install System</h1>
+<H1>Install System</H1>
 
-</div>
+</DIV>
 
-<div class="main">
+<DIV CLASS="main">
 
 <?php
 
@@ -155,60 +155,60 @@ function showPageOne() {
 
 function showPageTwo() {
 ?>
-<p>Make sure you have created your database and granted full privileges to a user to use that database.</p>
-<p>For MySQL, use the following:</p>
-<p>Log in to mysql from a console and run the following commands:</p>
-<ol>
-<li>create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)</li>
-<li>grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';</li>
-</ol>
-<p />
+<P>Make sure you have created your database and granted full privileges to a user to use that database.</P>
+<P>For MySQL, use the following:</P>
+<P>Log in to mysql from a console and run the following commands:</P>
+<OL>
+<LI>create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)</LI>
+<LI>grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';</LI>
+</OL>
+<P />
 
 Please complete the following fields:
-<form action="install.php" method="post" name="page2form" id="page2form">
+<FORM ACTION="install.php" METHOD="post" NAME="page2form" ID="page2form">
 
-<table cellpadding="2" border="1" class="regtable">
-<tr class="row2">
-	<td>Database Type:</td>
-	<td>
-		<select name="dbms">
-			<option value="mysql">MySQL</option>
-			<option value="postgres7">PostgreSQL 7</option>
-		</select>
-	</td>
-</tr>
-<tr class="row1">
-<td>Database host address</td>
-<td><input type="text" name="host" value="localhost" length="20" maxlength="50" /></td>
-</tr>
-<tr class="row2">
-<td>Database host port</td>
-<td><input type="text" name="port" value="3306" length="20" maxlength="50" /></td>
-</tr>
-<tr class="row1">
-<td>Database name</td>
-<td><input type="text" name="database" value="cms" length="20" maxlength="50" /></td>
-</tr>
-<tr class="row2">
-<td>Username</td>
-<td><input type="text" name="username" value="cms_user" length="20" maxlength="50" /></td>
-</tr>
-<tr class="row1">
-<td>Password</td>
-<td><input type="password" name="password" value="cms_pass" length="20" maxlength="50" /></td>
-</tr>
-<tr class="row2">
-<td>Table prefix</td>
-<td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /><input type="hidden" name="page" value="3" /></td>
-</tr>
-<tr class="row1">
-<td>Create Tables (Warning: Deletes existing data)</td>
-<td><input type="checkbox" name="createtables" checked="true" /></td>
-</tr>
-</table>
-<p align="center" class="continue"><a onclick="document.page2form.submit()">Continue</a></p>
+<TABLE CELLPADDING="2" BORDER="1" CLASS="regtable">
+<TR CLASS="row2">
+	<TD>Database Type:</TD>
+	<TD>
+		<SELECT NAME="dbms">
+			<OPTION VALUE="mysql">MySQL</OPTION>
+			<OPTION VALUE="postgres7">PostgreSQL 7</OPTION>
+		</SELECT>
+	</TD>
+</TR>
+<TR CLASS="row1">
+<TD>Database host address</TD>
+<TD><INPUT TYPE="text" NAME="host" VALUE="localhost" LENGTH="20" MAXLENGTH="50" /></TD>
+</TR>
+<TR CLASS="row2">
+<TD>Database host port</TD>
+<TD><INPUT TYPE="text" NAME="port" VALUE="3306" LENGTH="20" MAXLENGTH="50" /></TD>
+</TR>
+<TR CLASS="row1">
+<TD>Database name</TD>
+<TD><INPUT TYPE="text" NAME="database" VALUE="cms" LENGTH="20" MAXLENGTH="50" /></TD>
+</TR>
+<TR CLASS="row2">
+<TD>Username</TD>
+<TD><INPUT TYPE="text" NAME="username" VALUE="cms_user" LENGTH="20" MAXLENGTH="50" /></TD>
+</TR>
+<TR CLASS="row1">
+<TD>Password</TD>
+<TD><INPUT TYPE="password" NAME="password" VALUE="cms_pass" LENGTH="20" MAXLENGTH="50" /></TD>
+</TR>
+<TR CLASS="row2">
+<TD>Table prefix</TD>
+<TD><INPUT TYPE="text" NAME="prefix" VALUE="cms_" LENGTH="20" MAXLENGTH="50" /><INPUT TYPE="hidden" NAME="page" VALUE="3" /></TD>
+</TR>
+<TR CLASS="row1">
+<TD>Create Tables (Warning: Deletes existing data)</TD>
+<TD><INPUT TYPE="checkbox" NAME="createtables" CHECKED="true" /></TD>
+</TR>
+</TABLE>
+<P ALIGN="center" CLASS="continue"><A onClick="document.page2form.submit()">Continue</A></P>
 <!--<p><input type="submit" value="Continue" /></p>-->
-</form>
+</FORM>
 <?php
 
 } ## showPageTwo
@@ -266,38 +266,38 @@ function showPageThree($sqlloaded = 0) {
 
 	?>
 
-    <p>Now let's continue to setup your configuration file, we already have most of the stuff we need.</p>
-    <p>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Continue.</p>
-    <form action="install.php" method="post" name="page3form" id="page3form">
-	<table cellpadding="2" border="1" class="regtable">
-		<tr class="row1">
-			<td>CMS Document root (as seen from the webserver)</td>
-			<td><input type="text" name="docroot" value="<?php echo $docroot?>" length="50" maxlength="100"></td>
-		</tr>
-		<tr class="row2">
-			<td>Path to the Document root</td>
-			<td><input type="text" name="docpath" value="<?php echo $docpath?>" length="50" maxlength="100"></td>
-		</tr>
-		<tr class="row1">
-			<td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td>
-			<td><input type="text" name="querystr" value="page" length="20" maxlength="20"></td>
-		</tr>
-		<tr class="row2">
-			<td>Use BBCode (must have this installed, see <a href="INSTALL" target="_new">INSTALL</a></td>
-			<td>
-				<input type="text" name="bbcode" value="false" length="5" maxlength="5">
-				<input type="hidden" name="page" value="4"><input type="hidden" name="host" value="<?php echo $_POST['host']?>">
-			    <input type="hidden" name="dbms" value="<?php echo $_POST['dbms']?>">
-			    <input type="hidden" name="database" value="<?php echo $_POST['database']?>">
-				<input type="hidden" name="port" value="<?php echo $_POST['port']?>">
-			    <input type="hidden" name="username" value="<?php echo $_POST['username']?>">
-				<input type="hidden" name="password" value="<?php echo $_POST['password']?>">
-			    <input type="hidden" name="prefix" value="<?php echo $_POST['prefix']?>">
-			</td>
-		</tr>
-    </table>
-    <p align="center" class="continue"><a onclick="document.page3form.submit()">Continue</a></p>
-	</form>
+    <P>Now let's continue to setup your configuration file, we already have most of the stuff we need.</P>
+    <P>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Continue.</P>
+    <FORM ACTION="install.php" METHOD="post" NAME="page3form" ID="page3form">
+	<TABLE CELLPADDING="2" BORDER="1" CLASS="regtable">
+		<TR CLASS="row1">
+			<TD>CMS Document root (as seen from the webserver)</TD>
+			<TD><INPUT TYPE="text" NAME="docroot" VALUE="<?php echo $docroot?>" LENGTH="50" MAXLENGTH="100"></TD>
+		</TR>
+		<TR CLASS="row2">
+			<TD>Path to the Document root</TD>
+			<TD><INPUT TYPE="text" NAME="docpath" VALUE="<?php echo $docpath?>" LENGTH="50" MAXLENGTH="100"></TD>
+		</TR>
+		<TR CLASS="row1">
+			<TD>Query string (leave this alone unless you have trouble, then edit config.php by hand)</TD>
+			<TD><INPUT TYPE="text" NAME="querystr" VALUE="page" LENGTH="20" MAXLENGTH="20"></TD>
+		</TR>
+		<TR CLASS="row2">
+			<TD>Use BBCode (must have this installed, see <A HREF="INSTALL" TARGET="_new">INSTALL</A></TD>
+			<TD>
+				<INPUT TYPE="text" NAME="bbcode" VALUE="false" LENGTH="5" MAXLENGTH="5">
+				<INPUT TYPE="hidden" NAME="page" VALUE="4"><INPUT TYPE="hidden" NAME="host" VALUE="<?php echo $_POST['host']?>">
+			    <INPUT TYPE="hidden" NAME="dbms" VALUE="<?php echo $_POST['dbms']?>">
+			    <INPUT TYPE="hidden" NAME="database" VALUE="<?php echo $_POST['database']?>">
+				<INPUT TYPE="hidden" NAME="port" VALUE="<?php echo $_POST['port']?>">
+			    <INPUT TYPE="hidden" NAME="username" VALUE="<?php echo $_POST['username']?>">
+				<INPUT TYPE="hidden" NAME="password" VALUE="<?php echo $_POST['password']?>">
+			    <INPUT TYPE="hidden" NAME="prefix" VALUE="<?php echo $_POST['prefix']?>">
+			</TD>
+		</TR>
+    </TABLE>
+    <P ALIGN="center" CLASS="continue"><A onClick="document.page3form.submit()">Continue</A></P>
+	</FORM>
 
 	<?php
     
@@ -333,6 +333,9 @@ function showPageFour() {
 	$newconfig["debug"] = false;
 	$newconfig["assume_mod_rewrite"] = false;
 	$newconfig["auto_alias_content"] = true;
+	$newconfig["image_manipulation_prog"] = "GD";
+	$newconfig["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
+	$newconfig["use_Indite"] = true;
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file
@@ -357,21 +360,21 @@ function showPageFour() {
     if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
 		cms_config_save($newconfig);
     } else {
-        echo "Error: Cannot write to $config.<br />\n";
+        echo "Error: Cannot write to $config.<BR />\n";
         exit;
     } ## if
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
-    echo "<h4>Congratulations, you are all setup.</h4><h4>Here is your <a href=\"".$link."\">CMS site</a></h4>\n";
+    echo "<H4>Congratulations, you are all setup.</H4><H4>Here is your <A HREF=\"".$link."\">CMS site</A></H4>\n";
 
 } ## showPageFour
 ?>
 
-</div>
-</div>
+</DIV>
+</DIV>
 
-</body>
-</html>
+</BODY>
+</HTML>
 <?php
 
 # vim:ts=4 sw=4 noet

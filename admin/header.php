@@ -27,10 +27,10 @@ header("Content-Type: text/html; charset=" . get_encoding());
 
 <TITLE><?php echo lang('adminsystemtitle')?></TITLE>
 
-<LINK rel="stylesheet" type="text/css" href="style.css">
-<SCRIPT type="text/javascript" language="javascript" src="helparea.js"></SCRIPT>
+<LINK REL="stylesheet" TYPE="text/css" HREF="style.css">
+<SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="helparea.js"></SCRIPT>
 
-<script language="JavaScript" type="text/javascript">
+<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
   //@param form - current form
   //@param names - string containing a list of the names used for the textarea
   //               each name should be seperated with a comma
@@ -47,16 +47,16 @@ header("Content-Type: text/html; charset=" . get_encoding());
         }
     }
   }
-</script>
+</SCRIPT>
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
-	<SCRIPT type="text/javascript">
+	<SCRIPT TYPE="text/javascript">
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		<?php echo "_editor_lang = \"".$nls['htmlarea'][$current_language]."\";"  ?>
 	</SCRIPT>
 
-	<SCRIPT type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
-	<SCRIPT type="text/javascript" defer>
+	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript" DEFER>
 		var editor = null;
 		function initHtmlArea() {
 			HTMLArea.replaceAll();
@@ -65,27 +65,32 @@ header("Content-Type: text/html; charset=" . get_encoding());
 
 <?php } else if (isset($htmlarea_flag)) { ?>
 
-	<SCRIPT type="text/javascript">
+	<SCRIPT TYPE="text/javascript">
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		<?php echo "_editor_lang = \"{$nls['htmlarea'][$current_language]}\";"  ?>
 	</SCRIPT>
 
-	<SCRIPT type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript">
 
-	<SCRIPT type="text/javascript">
-
+		HTMLArea.loadPlugin("ImageManager");
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
+<?php if ($config["use_Indite"] == true)	{ ?>	
 		HTMLArea.loadPlugin("Indite");
+<?php } ?>	
 		var editor = null;
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
+			editor.registerPlugin(ImageManager);
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
+<?php if ($config["use_Indite"] == true)	{ ?>	
 			editor.registerPlugin(Indite);
-			editor.config.pageStyle = '<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
+<?php } ?>	
+			editor.config.pageStyle = editor.config.pageStyle+'<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}
 	</SCRIPT>
@@ -93,7 +98,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
 $userid = get_userid();
 ?>
 
-<SCRIPT type="text/javascript" language="Javascript">;
+<SCRIPT TYPE="text/javascript" LANGUAGE="Javascript">;
 	function page_load(){
 		<?php if (get_preference($userid, 'use_wysiwyg') == "1" && isset($htmlarea_flag)){ ?>
 			initHtmlArea();
@@ -112,12 +117,12 @@ $userid = get_userid();
 </HEAD>
 <BODY onLoad="page_load()">
 
-<DIV id="header" class="header">
-<IMG src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple">
+<DIV ID="header" CLASS="header">
+<IMG SRC="../images/cms/cmsadminbanner.png" BORDER="0" ID="logo" ALT="CMS Made Simple">
 </DIV>
 
 <?php
 include_once("menu.php");
 ?>
 
-<DIV class="content">
+<DIV CLASS="content">

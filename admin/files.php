@@ -18,6 +18,12 @@
 
 $CMS_ADMIN_PAGE=1;
 
+// in filetypes.inc.php filetypes are defined 
+require_once("../filemanager/filetypes.inc.php");
+require_once("../lib/file.functions.php");
+require_once("../include.php");
+
+
 function deldir($dir)
 {
 	$handle = opendir($dir);
@@ -44,9 +50,6 @@ function deldir($dir)
 } 
 
 
-// in filetypes.inc.php filetypes are defined 
-require_once("../filemanager/filetypes.inc.php");
-require_once("../include.php");
 
 check_login();
 
@@ -250,36 +253,36 @@ while (($file = $ls->read()) != "")
 sort($files);
 foreach ($files as $file)
 {
-	if (strpos($file, ".") === false || strpos($file, ".") != 0)
-	{
-		if (is_file("$dir/$file"))
+	if (display_file($file)==true){
+		if (strpos($file, ".") === false || strpos($file, ".") != 0)
 		{
-			
-			$extension = strtolower(substr(strrchr($file, "."), 1));
-	        if (!$filetype[$extension]['img']) {$extension = "unknown";}
-			// set template vars						
-			$template_vars['file']  			= $file;
-			$template_vars['dir_file']				= $reldir."/".$file;
-			$template_vars['url_dir_file']				= $url.$reldir."/".$file;
-
-			// parse little template
-			$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
-	//		$file_links = $filetype[$extension]['link']['view'];
-			$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\">";
-
-			$filetext .= "<tr class=\"$row\">";
-			$filetext .= "<td width=\"30\">{$image_icon}</td>";
-			$filetext .= '<td><a href="'.$file_links.'" target="_blank">'.$file.'</a></td>';
-			$filesize =  filesize("$dir/$file");
-			if ($filesize >(1024*1024)) {$sizestr = number_format($filesize/(1024*1024))." MB";} else {
-				if ($filesize >(1024))  {$sizestr = number_format($filesize/1024)." KB";} else {
-					$sizestr = number_format($filesize)." B";
+			if (is_file("$dir/$file"))
+			{
+				$extension = get_file_extention($file);
+				// set template vars						
+				$template_vars['file']  			= $file;
+				$template_vars['dir_file']				= $reldir."/".$file;
+				$template_vars['url_dir_file']				= $url.$reldir."/".$file;
+	
+				// parse little template
+				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
+		//		$file_links = $filetype[$extension]['link']['view'];
+				$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\">";
+	
+				$filetext .= "<tr class=\"$row\">";
+				$filetext .= "<td width=\"30\">{$image_icon}</td>";
+				$filetext .= '<td><a href="'.$file_links.'" target="_blank">'.$file.'</a></td>';
+				$filesize =  filesize("$dir/$file");
+				if ($filesize >(1024*1024)) {$sizestr = number_format($filesize/(1024*1024))." MB";} else {
+					if ($filesize >(1024))  {$sizestr = number_format($filesize/1024)." KB";} else {
+						$sizestr = number_format($filesize)." B";
+					}
 				}
+				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
+				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+				$filetext .= "</tr>";
+				($row=="row1"?$row="row2":$row="row1");
 			}
-			$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-			$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.png\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
-			$filetext .= "</tr>";
-			($row=="row1"?$row="row2":$row="row1");
 		}
 	}
 }
@@ -295,20 +298,20 @@ echo "</table>";
 if ($access)
 {
 ?>
-<FORM enctype="multipart/form-data" action="files.php" method="post">
-	<INPUT type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>">
-	<TABLE border="0" cellpadding="0" cellspacing="0" summary="" class="box">
+<FORM ENCTYPE="multipart/form-data" ACTION="files.php" METHOD="post">
+	<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $config["max_upload_size"]?>">
+	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="" CLASS="box">
 		<TR>
-			<TD align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</TD>
-			<TD style="padding-top: 10px;"><INPUT name="uploadfile" type="file">
-			<INPUT type="submit" value="<?php echo lang('send')?>"></TD>
+			<TD ALIGN="right" STYLE="padding-top: 10px;"><?php echo lang('uploadfile')?>:</TD>
+			<TD STYLE="padding-top: 10px;"><INPUT NAME="uploadfile" TYPE="file">
+			<INPUT TYPE="submit" VALUE="<?php echo lang('send')?>"></TD>
 		</TR>
 		<TR>
-			<TD align="right"><?php echo lang('createnewfolder')?>:</TD>
-			<TD><INPUT type="text" name="newdir"><INPUT type="submit" name="newdirsubmit" value="<?php echo lang('create')?>"></TD>
+			<TD ALIGN="right"><?php echo lang('createnewfolder')?>:</TD>
+			<TD><INPUT TYPE="text" NAME="newdir"><INPUT TYPE="submit" NAME="newdirsubmit" VALUE="<?php echo lang('create')?>"></TD>
 		</TR>
 	</TABLE>
-	<INPUT type="hidden" name="reldir" value="<?php echo $reldir?>">
+	<INPUT TYPE="hidden" NAME="reldir" VALUE="<?php echo $reldir?>">
 </FORM>
 <?php
 }

@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * On the fly Thumbnail generation.
  * Creates thumbnails given by thumbs.php?img=/relative/path/to/image.jpg

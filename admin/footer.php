@@ -12,7 +12,7 @@ if ($config["debug"] == true)
 }
 ?>
 <DIV ID=footer1></DIV>
-<DIV ID=footer2 ><A HREF="http://www.cmsmadesimple.com">CMS made simple</A> is Free Software released under the GNU/GPL License</DIV>
+<DIV ID=footer2 ><A HREF="http://www.cmsmadesimple.org">CMS made simple</A> is Free Software released under the GNU/GPL License</DIV>
 </BODY>
 
 </HTML>

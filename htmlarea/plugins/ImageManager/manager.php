@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * The main GUI for the ImageManager.
  * @author $Author: Wei Zhuo $
@@ -29,8 +29,8 @@
 	if(window.opener)
 		I18N = window.opener.ImageManager.I18N;
 
-	var thumbdir = "<? echo $IMConfig['thumbnail_dir']; ?>";
-	var base_url = "<? echo $manager->getBaseURL(); ?>";
+	var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
+	var base_url = "<?php echo $manager->getBaseURL(); ?>";
 /*]]>*/
 </script>
 <script type="text/javascript" src="assets/manager.js"></script>
@@ -43,14 +43,14 @@
 	<label for="dirPath">Directory</label>
 	<select name="dir" class="dirWidth" id="dirPath" onchange="updateDir(this)">
 	<option value="/">/</option>
-<? foreach($dirs as $relative=>$fullpath) { ?>
-		<option value="<? echo rawurlencode($relative); ?>"><? echo $relative; ?></option>
-<? } ?>
+<?php foreach($dirs as $relative=>$fullpath) { ?>
+		<option value="<?php echo rawurlencode($relative); ?>"><?php echo $relative; ?></option>
+<?php } ?>
 	</select>
 	<a href="#" onclick="javascript: goUpDir();" title="Directory Up"><img src="img/btnFolderUp.gif" height="15" width="15" alt="Directory Up" /></a>
-<? if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
+<?php if($IMConfig['safe_mode'] == false && $IMConfig['allow_new_dir']) { ?>
 	<a href="#" onclick="newFolder();" title="New Folder"><img src="img/btnFolderNew.gif" height="15" width="15" alt="New Folder" /></a>
-<? } ?>
+<?php } ?>
 	<div id="messages" style="display: none;"><span id="message"></span><img SRC="img/dots.gif" width="22" height="12" alt="..." /></div>
 	<iframe src="images.php" name="imgManager" id="imgManager" class="imageFrame" scrolling="auto" title="Image Selection" frameborder="0"></iframe>
 </div>
@@ -77,7 +77,7 @@
 			<td><input type="text" id="f_horiz" class="smallWidth" value="" /></td>
 		</tr>
 		<tr>
-<? if($IMConfig['allow_upload'] == true) { ?>
+<?php if($IMConfig['allow_upload'] == true) { ?>
 			<td align="right"><label for="upload">Upload</label></td>
 			<td>
 				<table cellpadding="0" cellspacing="0" border="0">
@@ -87,9 +87,9 @@
                   </tr>
                 </table>
 			</td>
-<? } else { ?>
+<?php } else { ?>
 			<td colspan="2"></td>
-<? } ?>
+<?php } ?>
 			<td align="right"><label for="f_align">Align</label></td>
 			<td colspan="2">
 				<select size="1" id="f_align"  title="Positioning of this image">

@@ -1,10 +1,15 @@
-<?
+<?php
 /**
  * Image Manager configuration file.
  * @author $Author: Wei Zhuo $
  * @version $Id: config.inc.php 27 2004-04-01 08:31:57Z Wei Zhuo $
  * @package ImageManager
+ *
+ * Updated by Thijs (thijs@contemplated) to work with CMS made easy
+ * File basicly functions as a stub to facilitate future upgrading
  */
+
+include_once("../../../config.php");
 
 
 /* 
@@ -15,7 +20,7 @@
        PHP must be able to create files in this directory.
 	   Able to create directories is nice, but not necessary.
 */
-$IMConfig['base_dir'] = 'c:/www/assets/';
+$IMConfig['base_dir'] = $config["uploads_path"].'/images';
 
 /*
  The URL to the above path, the web browser needs to be able to see it.
@@ -25,7 +30,7 @@ $IMConfig['base_dir'] = 'c:/www/assets/';
  for this directory (i.e. disable PHP, Perl, CGI). We only want to store assets
  in this directory and its subdirectories.
 */
-$IMConfig['base_url'] = 'http://127.0.0.1/assets/';
+$IMConfig['base_url'] = $config["uploads_url"].'/images/';
 
 /*
   Possible values: true, false
@@ -46,7 +51,7 @@ $IMConfig['safe_mode'] = false;
  If you have safe mode ON, or don't have the binaries to other packages, 
  your choice is 'GD' only. Other packages require Safe Mode to be off.
 */
-define('IMAGE_CLASS', 'IM');
+define('IMAGE_CLASS', $config["image_manipulation_prog"]);
 
 
 /*
@@ -55,7 +60,7 @@ define('IMAGE_CLASS', 'IM');
  your server and PHP must be able to execute them (i.e. safe mode is OFF).
  GD does not require the following definition.
 */
-define('IMAGE_TRANSFORM_LIB_PATH', 'C:/"Program Files"/ImageMagick-5.5.7-Q16/');
+define('IMAGE_TRANSFORM_LIB_PATH', $config["image_transform_lib_path"]);
 
 
 /* ==============  OPTIONAL SETTINGS ============== */
@@ -66,7 +71,7 @@ define('IMAGE_TRANSFORM_LIB_PATH', 'C:/"Program Files"/ImageMagick-5.5.7-Q16/');
   thumbnails files will be named as "prefix_imagefile.ext", that is,
   prefix + orginal filename.
 */
-$IMConfig['thumbnail_prefix'] = '.';
+$IMConfig['thumbnail_prefix'] = 'thumb_';
 
 /*
   Thumbnail can also be stored in a directory, this directory
@@ -75,8 +80,10 @@ $IMConfig['thumbnail_prefix'] = '.';
 
   If you do not want to store thumbnails in a directory, set this
   to false or empty string '';
+  
+  NOTE this is relative to the $IMConfig['base_dir']!
 */
-$IMConfig['thumbnail_dir'] = '.thumbs';
+$IMConfig['thumbnail_dir'] = '';
 
 /*
   Possible values: true, false
@@ -128,5 +135,5 @@ $IMConfig['thumbnail_height'] = 96;
 /*
   Image Editor temporary filename prefix.
 */
-$IMConfig['tmp_prefix'] = '.editor_';
+$IMConfig['tmp_prefix'] = 'editor_';
 ?>

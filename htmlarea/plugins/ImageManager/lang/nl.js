@@ -14,7 +14,8 @@
 
 ImageManager.I18N = {
 	"Image Manager"		: "Afbeeldingbeheer",
-	"Crop"			: "Snijd bij"
+	"Crop"			: "Snijd bij",
+	"scale"		: "Schaal"
 };
 /*
 

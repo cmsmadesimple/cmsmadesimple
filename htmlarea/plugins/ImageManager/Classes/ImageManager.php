@@ -1,4 +1,4 @@
-<?
+<?php
 /**
  * ImageManager, list images, directories, and thumbnails.
  * @author $Author: Wei Zhuo $
