@@ -48,7 +48,7 @@ if ($access)
 		}
 
 		#now insert a record
-		$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($gCms->modules[$module]['Version']).",'Installed',1)";
+		$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($gCms->modules[$module]['Version']).",'installed',1)";
 		$db->Execute($query);
 		
 		#and insert any dependancies
@@ -346,7 +346,7 @@ else
 				$hasdeps = cms_mapi_check_for_dependents($key);
 				
 				echo "<td>".$dbm[$key]['Version']."</td>";
-				echo "<td>".$dbm[$key]['Status']."</td>";
+				echo "<td>".lang('installed')."</td>";
 				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 				if (!$hasdeps)
 				{
