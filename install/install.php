@@ -267,7 +267,6 @@ function showPageThree($sqlloaded = 0) {
 				$s = fgets($handle, 32768);
 				if ($s != "") {
 					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
-					echo $s;
 					$result = $db->Execute($s);
 					if (!$result) {
 						die('Invalid query');
