@@ -27,14 +27,28 @@ if ($_POST["username"] && $_POST["password"]) {
 
 }
 
-include_once("header.php");
-
 ?>
-<form method="post" action="login.php" id="login">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+
+<head>
+
+<title></title>
+
+<link rel="stylesheet" type="text/css" href="style.css" />
+
+</head>
+
+<body>
 
 <div class="login">
 
-<table border=0>
+<form method="post" action="login.php" id="login">
+
+<img src="../cmslogo.png" border="0" class="loginlogo" alt="CMS Made Simple"/>
+
+<table border=0 id="table">
 	<tr>
 		<td align="right">Username:</td>
 		<td><input type="text" id="username" name="username" value="<?echo $_POST["username"]?>" /></td>
@@ -48,11 +62,9 @@ include_once("header.php");
 		<td><input type="submit" value="Submit" /></td>
 	</tr>
 </table>
+</form>
 
 </div>
 
-</form>
-
-<?php
-include_once("footer.php");
-?>
+</body>
+</html>
