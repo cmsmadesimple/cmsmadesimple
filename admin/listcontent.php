@@ -51,10 +51,9 @@ if (isset($_GET["message"])) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
-		echo "<td></td>";
+		echo "<td>&nbsp;</td>";
 		echo "<td>".$gettext->gettext("Title")."</td>\n";
 		echo "<td>".$gettext->gettext("Type")."</td>\n";
-		echo "<td>".$gettext->gettext("URL")."</td>\n";
 		echo "<td>".$gettext->gettext("Owner")."</td>\n";
 		echo "<td>".$gettext->gettext("Template")."</td>\n";
 		echo "<td>".$gettext->gettext("Active")."</td>\n";
@@ -79,7 +78,6 @@ if (isset($_GET["message"])) {
 			echo "<td>".$one->hier."</td>\n";
 			echo "<td>".$one->page_title."</td>\n";
 			echo "<td>".$types[$one->page_type]."</td>\n";
-			echo "<td>".($types[$one->page_type]=="Link"?$one->page_url:"&nbsp;")."</td>\n";
 			echo "<td>".$one->username."</td>\n";
 			echo "<td>".$one->template_name."</td>\n";
 			echo "<td>".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";

@@ -39,12 +39,11 @@ $gettext->reset();
 <h4>Content</h4>
 <a href="listcontent.php"><?=$gettext->gettext("Content Management")?></a>
 <a href="listtemplates.php"><?=$gettext->gettext("Template Management")?></a>
-<a href="modules.php"><?=$gettext->gettext("Module Management")?></a>
 <!--<a href="tools.php"><?=$gettext->gettext("Tools")?></a>-->
 <a href="listgroups.php"><?=$gettext->gettext("Group Management")?></a>
 <a href="listusers.php"><?=$gettext->gettext("User Management")?></a>
 <a href="files.php"><?=$gettext->gettext("File Management")?></a>
-<a href="plugins.php"><?=$gettext->gettext("Plugin List")?></a>
+<a href="plugins.php"><?=$gettext->gettext("Plugin Management")?></a>
 <a href="adminlog.php"><?=$gettext->gettext("Admin Log")?></a>
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <!--<a href="logout.php"><?=$gettext->gettext("Logout")?></a>--><br />
