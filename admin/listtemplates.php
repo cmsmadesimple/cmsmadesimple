@@ -42,6 +42,7 @@ if (isset($_GET["message"])) {
 	if (mysql_num_rows($result) > 0) {
 
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
+		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
 		echo "<th>Template</th>\n";
 		echo "<th>Active</th>\n";
@@ -50,10 +51,14 @@ if (isset($_GET["message"])) {
 		if ($remove)
 			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo "</thead>\n";
+		echo "<tbody>\n";
+
+		$currow = "row1";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
-			echo "<tr>\n";
+			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
 			if ($edit)
@@ -62,13 +67,16 @@ if (isset($_GET["message"])) {
 				echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
+			($currow=="row1"?$currow="row2":$currow="row1");
+
 		}
 
+		echo "</tbody>\n";
 		echo "</table>\n";
 
 	}
 
-        mysql_free_result($result);
+	mysql_free_result($result);
 	$db->close();
 
 if (check_permission($config, $userid, 'Add Template')) {

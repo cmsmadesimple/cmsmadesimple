@@ -40,6 +40,7 @@ include_once("header.php");
 	if (mysql_num_rows($result) > 0) {
 
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
+		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
 		echo "<th>Group Name</th>\n";
 		echo "<th>Active</th>\n";
@@ -52,10 +53,14 @@ include_once("header.php");
 		if ($remove)
 			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo "</thead>\n";
+		echo "<tbody>\n";
+
+		$currow = "row1";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
-			echo "<tr>\n";
+			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["group_name"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
 			if ($perm)
@@ -68,8 +73,10 @@ include_once("header.php");
 				echo "<td><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";
 
+			($currow == "row1"?$currow="row2":$currow="row1");
 		}
 
+		echo "</tbody>\n";
 		echo "</table>\n";
 
 	}

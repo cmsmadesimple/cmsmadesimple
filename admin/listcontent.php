@@ -61,6 +61,7 @@ include_once("header.php");
 	if (mysql_num_rows($result) > 0) {
 
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
+		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
 		echo "<th>Title</th>\n";
 		echo "<th>URL</th>\n";
@@ -75,14 +76,18 @@ include_once("header.php");
 		echo "<th>&nbsp;</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
+		echo "</thead>\n";
+		echo "<tbody>\n";
 
 		$count = 1;
+
+		$currow = "row1";
 
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 			$totalcount = $section_count[$row[section_id]];
 
-			echo "<tr>\n";
+			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["page_title"]."</td>\n";
 			echo "<td>".$row["page_url"]."</td>\n";
 			echo "<td>".$row["username"]."</td>\n";
@@ -112,8 +117,11 @@ include_once("header.php");
 
 			$count++;
 
+			($currow == "row1"?$currow="row2":$currow="row1");
+
 		}
 
+		echo "</tbody>\n";
 		echo "</table>\n";
 
 	} else {
