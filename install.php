@@ -136,10 +136,13 @@ function showPageOne() {
 
 function showPageTwo() {
 ?>
-Make sure you have created your database and granted full privileges to a user to use that database.<br>
-Log in to mysql from a console and run the following commands:<br>
-- create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)<br>
-- grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';<p>
+<p>Make sure you have created your database and granted full privileges to a user to use that database.</p>
+<p>Log in to mysql from a console and run the following commands:</p>
+<ol>
+<li>create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)</li>
+<li>grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';</li>
+</ol>
+<p />
 
 Please complete the following fields:
 <form action="install.php" method="post" name="page2form" id="page2form">
