@@ -12,6 +12,7 @@ much, much easier.
 * Fixed bugs with auto alias of pages
 * Fixed contact form so that it's xhtml compliant (#000096)
 * Admin dir can now be changed with admin_dir paramater in config.php
+* Updated Smarty to 2.6.7 (Jope)
 
 Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
 -----------------

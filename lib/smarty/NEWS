@@ -1,10 +1,35 @@
+Version 2.6.7 (Feb 3, 2005)
+---------------------------
+
+  - fix handling of hashed opening php-tags inside strip-blocks (messju)
+  - removed border tag from html_image function (monte)
+  - change escape:url use rawurlencode() instead of urlencode() (messju)
+  - make $smarty.const.FOO compile to "FOO", and not to "constant('foo')".
+    this is less code and a little faster execution. note that undefined
+    constants are now displayed as the constant's name. (messju)
+  - make block functions and registered objects' block methods use a
+    local variable for block_content instead of a property of $smarty (messju)
+  - fix escaping in the generated code that calls smarty_core_load_plugins
+    (jes5199, messju)
+  - fix invalid HTML issue with popup (Stefanos Harhalakis,
+    Monte)
+  - fixed {popup} to properly handle inarray and function parameters and added
+    support for mouseoff and followmouse options (boots)
+
+Version 2.6.6 (Oct 13, 2004)
+----------------------------
+
+  - fixed nocache-handling with nested includes (Lars Jankowfsky, messju)
+  - moved /libs/core to /libs/internals (boots)
+  - fixed more parsing problems (messju)
+
 Version 2.6.5 (Sept 13, 2004)
 -----------------------------
 
   - fixed some parsing problems with object calls introduced
     in 2.6.4 (Monte)
   - add $smarty->security_settings['ALLOW_CONSTANTS']. note: this
-    defaults to false which means you have to allow them explicitely
+    defaults to false which means you have to allow them explicitly
     in your secured templates from now on! (messju)
 
 Version 2.6.4 (Sept 7, 2004)
