@@ -37,12 +37,7 @@ $orig_content_type = "content";
 if (isset($_POST["orig_content_type"])) $orig_content_type = $_POST["orig_content_type"];
 
 $url = "";
-if ($content_type == "content") {
-	if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
-}
-else {
-	if (isset($_POST["url"])) $url = $_POST["url"];
-}
+if (isset($_POST["url"])) $url = $_POST["url"];
 
 $menutext = "";
 if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
@@ -107,11 +102,11 @@ if ($access) {
 
 		$validinfo = true;
 
-		if ($title == "") {
+		if ($title == "" && $content_type != "separator") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No title given!")."</li>";
 		}
-		if ($url == "") {
+		if ($url == "" && $content_type == "link") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No url given!")."</li>";
 		}
@@ -119,7 +114,7 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No content entered!")."</li>";
 		}
-		if ($menutext == "") {
+		if ($menutext == "" && $content_type != "separator") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
 		}
@@ -131,15 +126,20 @@ if ($access) {
 				$row = $result->FetchRow();
 				if (isset($row["item_order"])) {
 					$order = $row["item_order"];	
+				} else {
+					$order = 1;
 				}
 
 ## 				$query = "UPDATE ".$config->db_prefix."pages set item_order=item_order-1 where parent_id=$orig_parent_id and item_order>$orig_item_order";
 ## 				$result = $dbnew->Execute($query);
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
-			$result = $dbnew->Execute($query);
+			$query1 = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
+			$result1 = $dbnew->Execute($query1);
 
-			if ($result) {
+			$query2 = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = " . $orig_parent_id . " AND item_order > " . $item_order;
+			$result2 = $dbnew->Execute($query2);
+
+			if ($result1 && $result2) {
 				if ($adminaccess) {
 					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
 					$dbnew->Execute($query);
@@ -198,13 +198,21 @@ if ($access) {
     }
     $dropdown .= ">None</option>";
 
+	$showparent = true;
     foreach ($content_array as $one) {
-		if ($one->page_id != $page_id) {
+		if ($one->page_id == $page_id) {
+			$showparent = false;
+			$rememberlevel = $one->level;
+		}
+		if ($showparent == false && $one->level == $rememberlevel && $one->page_id != $page_id) {
+			$showparent = true;
+		}
+		if ($showparent && $one->page_type != "separator") {
 			$dropdown .= "<option value=\"".$one->page_id."\"";
 			if ($one->page_id == $parent_id) {
 				$dropdown .= "selected";
 			}
-			$dropdown .= ">".$one->hier." ".$one->page_title."</option>";
+			$dropdown .= ">".$one->hier." - ".$one->page_title."</option>";
 		} ## if
     }
 
@@ -322,14 +330,18 @@ else {
 		<td><?=$gettext->gettext("Content Type")?>:</td>
 		<td><?=$ctdropdown?><input type="hidden" name="orig_content_type" value="<?=$orig_content_type?>" /></td>
 	</tr>
+<?php if ($content_type != "separator") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="255" value="<?=$title?>" /></td>
 	</tr>
+<?php } ?>
+<?php if ($content_type == "link") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
+<?php } ?>
 <?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
@@ -340,11 +352,13 @@ else {
 		<td><?=$gettext->gettext("Parent")?>:</td>
 		<td><?=$dropdown?><input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" /></td>
 	</tr>
-<?php if ($content_type != "link") { ?>
+<?php if ($content_type != "link" && $content_type != "separator") { ?>
 	<tr>
 		<td><?=$gettext->gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
+<?php } else { ?>
+	<input type="hidden" name="template_id" value="1">
 <?php } ?>
 <?php if ($adminaccess) { ?>
 	<tr>
@@ -356,10 +370,12 @@ else {
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
 <?php } ?>
+<?php if ($content_type != "separator") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
+<?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
 		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>

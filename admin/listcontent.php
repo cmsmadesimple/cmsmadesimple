@@ -69,6 +69,7 @@ if (isset($_GET["message"])) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
+		echo "<td></td>";
 		echo "<td>".$gettext->gettext("Title")."</td>\n";
 		echo "<td>".$gettext->gettext("Type")."</td>\n";
 		echo "<td>".$gettext->gettext("URL")."</td>\n";
@@ -96,30 +97,37 @@ if (isset($_GET["message"])) {
 			$types = get_page_types($config);
 
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$one->hier." ".$one->page_title."</td>\n";
+			echo "<td>".$one->hier."</td>\n";
+			echo "<td>".$one->page_title."</td>\n";
 			echo "<td>".$types[$one->page_type]."</td>\n";
 			echo "<td>".$one->page_url."</td>\n";
 			echo "<td>".$one->username."</td>\n";
 			echo "<td>".$one->template_name."</td>\n";
 			echo "<td>".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			echo "<td>".($one->default_page == 1?"True":"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
+
 			if ($modifyall) {
 				echo "<td align=\"center\">";
-				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
-				}
-				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
-				}
-				if ($totalcount == 1 && $count == 1) {
-					echo "&nbsp;";
+				if ($one->num_same_level > 1) {
+					if ($one->item_order == 1 && $one->num_same_level) {
+						echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
+							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+					} else if ($one->item_order == $one->num_same_level) {
+						echo "<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
+							"<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+					} else {
+						echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
+							"<img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>&nbsp;".
+							"<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".
+							"<img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a>";
+					}
 				}
 				echo "</td>\n";
 			}
 			if ($config->query_var == "")
-				echo "<td><a href=\"".$config->root_url."/index.php/".$one->page_url."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php/".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			else
-				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$one->page_url."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
 			echo "<td><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";

@@ -50,12 +50,7 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 
 	$db = $config->db;
 
-	$query = "";
-	if ($pageid == "") {
-		$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_url = '".$pagename."'";
-	} else {
-		$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
-	}
+	$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_id = ".$pageid;
 	$result = $db->Execute($query);
 
 	if ($result) {

@@ -21,58 +21,34 @@ require_once("config.php");
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	$menu = "";
+	$level_stop = $params["levelstop"] ? $params["levelstop"] : 2 ;
 
 	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
 
-	$count=0;
-	$last_level = -1;
+	$last_level = 0;
+
 	foreach ($content as $one) {
 
-		if ($one->active) {
+		if ($one->active && $one->level <= $level_stop) {
 
-			for ($i = 1; $i <= $one->level; $i++) { $menu .= "."; }
-			$menu .= "|".$one->menu_text."|".$one->page_url."\n";
+			if ($one->level < $last_level) {
+				for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
+			}
+			if ($one->level > $last_level) {
+				for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
+			}
+			if ($one->page_type == "separator") {
+				$menu .= "<hr/>";
+			} else {
+				$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
+			}
+			$last_level = $one->level;
 		}
-		
-		$count++;
-		$last_level = $one_section->level;
 	}
 
-	$text = '
-	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-browser_detection.js"></script>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-library.js"></script>
-	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu.js"></script>';
-	
-	require_once 'phplayers/lib/PHPLIB.php';
-	require_once 'phplayers/lib/layersmenu-common.inc.php';
-	require_once 'phplayers/lib/layersmenu.inc.php';
-	
-	$mid = new LayersMenu();
-	
-	/* TO USE RELATIVE PATHS: */
-	$mid->setDirroot('./phplayers/');
-	$mid->setLibjsdir('./phplayers/libjs/');
-	$mid->setImgdir('./phplayers/menuimages/');
-	$mid->setImgwww('phplayers/menuimages/');
-	//$mid->setIcondir('./phplayers/menuicons/');
-	//$mid->setIconwww('phplayers/menuicons/');
-	
-	$mid->setTpldir('./phplayers/templates/');
-	$mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
-	$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
+	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
 
-	
-	$mid->setMenuStructureString($menu);
-	$mid->setIconsize(16, 16);
-	$mid->parseStructureForMenu('vermenu1');
-	$mid->newVerticalMenu('vermenu1');
-	
-	$text .= $mid->getHeader();
-	$text .= $mid->getMenu('vermenu1');
-	$text .= $mid->getFooter();
-	
-	return $text;
+	return $menu;
 
 }
 

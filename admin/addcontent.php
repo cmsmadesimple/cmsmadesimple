@@ -34,12 +34,7 @@ $content_type = "content";
 if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
 
 $url = "";
-if ($content_type == "content") {
-	if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
-}
-else {
-	if (isset($_POST["url"])) $url = $_POST["url"];
-}
+if (isset($_POST["url"])) $url = $_POST["url"];
 
 $parent_id = -1;
 if (isset($_POST["parent_id"])) $parent_id = $_POST["parent_id"];
@@ -84,11 +79,11 @@ if ($access) {
 	if ($submit) {
 
 		$validinfo = true;
-		if ($title == "") {
+		if ($title == "" && $content_type != "separator") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No title given!")."</li>";
 		}
-		if ($url == "") {
+		if ($url == "" && $content_type == "link") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No url given!")."</li>";
 		}
@@ -96,7 +91,7 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No content entered!")."</li>";
 		}
-		if ($menutext == "") {
+		if ($menutext == "" && $content_type != "separator") {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
 		}
@@ -147,7 +142,7 @@ if ($access) {
 		if ($one->page_id == $parent_id) {
 			$dropdown .= "selected";
 		}
-		$dropdown .= ">".$one->hier." ".$one->page_title."</option>";
+		$dropdown .= ">".$one->hier." - ".$one->page_title."</option>";
 
 	}
 
@@ -249,14 +244,18 @@ else {
 		<td><?=$gettext->gettext("Content Type")?>:</td>
 		<td><?=$ctdropdown?></td>
 	</tr>
+<?php if ($content_type != "separator") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="25" value="<?=$title?>" /></td>
 	</tr>
+<?php } ?>
+<?php if ($content_type == "link") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
+<?php } ?>
 <?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
@@ -267,20 +266,24 @@ else {
 		<td><?=$gettext->gettext("Parent")?>:</td>
 		<td><?=$dropdown?></td>
 	</tr>
-<?php if ($content_type != "link") { ?>
+<?php if ($content_type != "link" && $content_type != "separator") { ?>
 	<tr>
 		<td><?=$gettext->gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
+<?php } else { ?>
+	<input type="hidden" name="template_id" value="1">
 <?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
+<?php if ($content_type != "separator") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Menu Text")?>:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
+<?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Show in Menu")?>:</td>
 		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>

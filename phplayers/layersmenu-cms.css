@@ -23,6 +23,16 @@
 	white-space: nowrap;
 }
 
+.separator	{
+	background-color: #ff0000;
+    border-top: 1px solid #9e9a91;
+    border-bottom: 1px solid #ffffff;
+    margin: 2px 1px 2px 1px;    /* top right bottom left */
+    height: 0;
+    font-size: 1px;
+    line-height: 0
+}
+
 .item a	{
 	position: relative;
 	display: block;
@@ -55,3 +65,4 @@
 	top: 5px;
 	right: 7px;
 }
+

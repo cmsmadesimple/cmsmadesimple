@@ -43,35 +43,49 @@ if (isset($_GET["page_id"])) {
 			exit;
         }
 
-		#Grab necessary info for fixing the item_order
-		$query = "SELECT page_title, item_order, parent_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+		# if there are subsection, we cannot delete
+		$dodelete = true;
+		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE parent_id = $page_id";
 		$result = $dbnew->Execute($query);
 		$row = $result->FetchRow();
-		if (isset($row["item_order"])) {
-			$order = $row["item_order"];	
+		if (isset($row["count"]) && $row["count"] > 0) {
+			$dodelete = false;
 		}
-		if (isset($row["parent_id"])) {
-			$parent_id = $row["parent_id"];	
+		
+		if ($dodelete) {
+			#Grab necessary info for fixing the item_order
+			$query = "SELECT page_title, item_order, parent_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+			$result = $dbnew->Execute($query);
+			$row = $result->FetchRow();
+			if (isset($row["item_order"])) {
+				$order = $row["item_order"];	
+			}
+			if (isset($row["parent_id"])) {
+				$parent_id = $row["parent_id"];	
+			}
+			if (isset($row["page_title"])) {
+				$title = $row["page_title"];	
+			}
+			#Remove the page
+			$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
+			$result = $dbnew->Execute($query);
+			$query = "DELETE FROM ".$config->db_prefix."additional_users where page_id = $page_id";
+			$result = $dbnew->Execute($query);
+			#Fix the item_order if necessary
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
+			$result = $dbnew->Execute($query);
+			#This is so pages will not cache the menu changes
+			$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+			$dbnew->Execute($query);
+			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
 		}
-		if (isset($row["page_title"])) {
-			$title = $row["page_title"];	
-		}
-		#Remove the page
-		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
-		$result = $dbnew->Execute($query);
-		$query = "DELETE FROM ".$config->db_prefix."additional_users where page_id = $page_id";
-		$result = $dbnew->Execute($query);
-		#Fix the item_order if necessary
-		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
-		$result = $dbnew->Execute($query);
-		#This is so pages will not cache the menu changes
-		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-		$dbnew->Execute($query);
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
 	}
 }
-
-redirect("listcontent.php");
+if ($dodelete) {
+	redirect("listcontent.php");
+} else {
+	redirect("listcontent.php?message=".$gettext->gettext("Content still have child contents. Please remove those first."));
+}
 
 # vim:ts=4 sw=4 noet
 ?>

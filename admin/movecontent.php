@@ -26,6 +26,7 @@ $page_id = -1;
 if (isset($_GET["page_id"])) {
 
 	$page_id = $_GET["page_id"];
+	$parent_id = $_GET["parent_id"];
 	$direction = $_GET["direction"];
 	$userid = get_userid();
 	$access = check_permission($config, $userid, 'Modify Any Content');
@@ -47,18 +48,22 @@ if (isset($_GET["page_id"])) {
 		}
 
 		if ($direction == "down") {
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
+				" AND parent_id = $parent_id";
 			#echo $query;
 			$dbnew->Execute($query);
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id;
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id .
+				" AND parent_id = $parent_id";
 			#echo $query;
 			$dbnew->Execute($query);
 		}
 		else if ($direction == "up") {
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1);
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
+				" AND parent_id = $parent_id";
 			#echo $query;
 			$dbnew->Execute($query);
-			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id;
+			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id .
+				" AND parent_id = $parent_id";
 			#echo $query;
 			$dbnew->Execute($query);
 		}
