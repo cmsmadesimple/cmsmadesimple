@@ -66,7 +66,7 @@ $contentobj = "";
 if (isset($_POST["serialized_content"]))
 {
 	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
-	if (get_class($contentobj) != $content_type)
+	if (strtolower(get_class($contentobj)) != $content_type)
 	{
 		#Fill up the existing object with values in form
 		#Create new object
@@ -74,7 +74,8 @@ if (isset($_POST["serialized_content"]))
 		#Put new object on top of old on
 
 		$contentobj->FillParams($_POST);
-		$tmpobj = new $content_type;
+		$newcontenttype = strtolower($content_type);
+		$tmpobj = new $newcontenttype;
 		$tmpobj->mName = $contentobj->mName;
 		$tmpobj->mMenuText = $contentobj->mMenuText;
 		$tmpobj->mTemplateId = $contentobj->mTemplateId;
@@ -82,6 +83,8 @@ if (isset($_POST["serialized_content"]))
 		$tmpobj->mOwner = $contentobj->mOwner;
 		$tmpobj->mActive = $contentobj->mActive;
 		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
+		$tmpobj->mCachable = $contentobj->mCachable;
+		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
 		$contentobj = $tmpobj;
 	}
 }

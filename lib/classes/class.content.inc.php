@@ -173,7 +173,7 @@ class ContentBase
 		$this->mId				= -1 ;
 		$this->mName			= "" ;
 		$this->mAlias			= "" ;
-		$this->mType			= get_class($this) ;
+		$this->mType			= strtolower(get_class($this)) ;
 		$this->mOwner			= -1 ;
 		$this->mProperties		= new ContentProperties();
 		$this->mParentId		= -1 ;
@@ -233,7 +233,7 @@ class ContentBase
 	 */
 	function Type()
 	{
-		return $this->mType;
+		return strtolower($this->mType);
 	}
 
 	/**
@@ -368,7 +368,7 @@ class ContentBase
 				$this->mId				= $row["content_id"];
 				$this->mName			= $row["content_name"];
 				$this->mAlias			= $row["content_alias"];
-				$this->mType			= $row["type"];
+				$this->mType			= strtolower($row["type"]);
 				$this->mOwner			= $row["owner_id"];
 				#$this->mProperties		= new ContentProperties();
 				$this->mParentId		= $row["parent_id"];
@@ -449,7 +449,7 @@ class ContentBase
 		$this->mId				= $data["content_id"];
 		$this->mName			= $data["content_name"];
 		$this->mAlias			= $data["content_alias"];
-		$this->mType			= $data["type"];
+		$this->mType			= strtolower($data["type"]);
 		$this->mOwner			= $data["owner_id"];
 		#$this->mProperties		= new ContentProperties(); 
 		$this->mParentId		= $data["parent_id"];
@@ -468,7 +468,7 @@ class ContentBase
 
 		if ($loadProperties)
 		{
-			#$this->mProperties = ContentOperations::LoadPropertiesFromData($this->mType, $data);
+			#$this->mProperties = ContentOperations::LoadPropertiesFromData(strtolower($this->mType), $data);
 			$this->mProperties->Load($this->mId);
 
 			if (NULL == $this->mProperties)
@@ -549,7 +549,7 @@ class ContentBase
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
-			$this->mType,
+			strtolower($this->mType),
 			$this->mTemplateId,
 			$this->mParentId,
 			($this->mActive==true?1:0),
@@ -652,7 +652,7 @@ class ContentBase
 			$newid,
 			$this->mName,
 			$this->mAlias,
-			$this->mType,
+			strtolower($this->mType),
 			$this->mOwner,
 			$this->mParentId,
 			$this->mTemplateId,
@@ -841,7 +841,6 @@ class ContentBase
 
 	function GetAdditionalEditors()
 	{
-		var_dump($this->mAdditionalEditors);
 		if (!isset($this->mAdditionalEditors))
 		{
 			global $gCms;
@@ -1070,7 +1069,8 @@ class ContentManager
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($row['type'], @ContentManager::ListContentTypes()))
 			{
-				$contentobj = new $row['type'];
+				$classtype = strtolower($row['type']);
+				$contentobj = $classtype;
 				$contentobj->LoadFromData($row,true);
 				return $contentobj;
 			}
