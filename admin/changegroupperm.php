@@ -34,7 +34,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, $gettext->gettext("Modify Permissions"));
+$access = check_permission($userid, "Modify Permissions");
 
 if ($access) {
 
