@@ -29,7 +29,7 @@ $action = "";
 if (isset($_GET["action"])) $action = $_GET["action"];
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Modules');
+$access = check_permission($config, $userid, $gettext->gettext("Modify Modules"));
 
 if ($access) {
 	if ($action == "install") {
@@ -67,7 +67,7 @@ if ($access) {
 include_once("header.php");
 
 if ($action != "" && !$access) {
-	echo "<p class=\"error\">You need the 'Modify Modules' permission to perform that function.</p>";
+	echo $gettext->gettext("<p class=\"error\">You need the 'Modify Modules' permission to perform that function.</p>");
 }
 
 if (count($cmsmodules) > 0) {
@@ -105,14 +105,14 @@ if (count($cmsmodules) > 0) {
 		echo "<td>$key</td>\n";
 		if (!isset($dbm[$key])) { #Not installed, lets put up the install button
 			echo "<td>&nbsp</td>";
-			echo "<td>Not Installed</td>";
+			echo "<td>".$gettext->gettext("Not Installed")."</td>";
 			echo "<td>&nbsp;</td>";
-			echo "<td><a href=\"modules.php?action=install&module=".$key."\">Install</a></td>";
+			echo "<td><a href=\"modules.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
 		} else { #Must be installed
 			echo "<td>".$dbm[$key]['Version']."</td>";
 			echo "<td>".$dbm[$key]['Status']."</td>";
-			echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>True</a>":"<a href='modules.php?action=settrue&module=".$key."'>False</a>")."</td>";
-			echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">Uninstall</a></td>";
+			echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='modules.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
+			echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
 		}
 	
 		echo "</tr>\n";

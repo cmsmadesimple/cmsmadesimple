@@ -5,8 +5,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: CMS Made Simple\n"
-"Report-Msgid-Bugs-To: cms@wishy.org\n"
-"POT-Creation-Date: 2004-07-24 22:02+0200\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2004-08-09 23:34+0200\n"
 "PO-Revision-Date: 2004-07-24 22:02+0200\n"
 "Last-Translator: Julien Lancien <calexico@ifrance.com>\n"
 "Language-Team: CMS Made Simple <cms@wishy.org>\n"
@@ -14,411 +14,446 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: ../admin/addcontent.php:87 ../admin/editcontent.php:104
+#: ../admin/addcontent.php:87 ../admin/editcontent.php:110
 msgid "No title given!"
-msgstr "Aucun titre entré !"
+msgstr "Aucun titre entr&eacute; !"
 
-#: ../admin/addcontent.php:91 ../admin/editcontent.php:108
+#: ../admin/addcontent.php:91 ../admin/editcontent.php:114
 msgid "No url given!"
-msgstr "Aucun nom pour le lien entré !"
+msgstr "Aucun nom pour le lien entr&eacute; !"
 
-#: ../admin/addcontent.php:95 ../admin/editcontent.php:112
+#: ../admin/addcontent.php:95 ../admin/editcontent.php:118
 msgid "No content entered!"
-msgstr "Aucune donnée entrée !"
+msgstr "Aucune donn&eacute;e entr&eacute;e !"
 
-#: ../admin/addcontent.php:99 ../admin/editcontent.php:116
+#: ../admin/addcontent.php:99 ../admin/editcontent.php:122
 msgid "No menu text given!"
-msgstr "Aucun texte entré pour le menu !"
+msgstr "Aucun texte entr&eacute; pour le menu !"
 
-#: ../admin/addcontent.php:128
+#: ../admin/addcontent.php:129
 msgid "Error inserting page"
-msgstr "Erreur lors de la création de la page"
+msgstr "Erreur lors de la cr&eacute;ation de la page"
 
-#: ../admin/addcontent.php:192
+#: ../admin/addcontent.php:196
 msgid "No Access to Add Content"
-msgstr "Vous ne possédez pas les droits suffisants pour ajouter du contenu"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour ajouter du contenu"
 
-#: ../admin/addcontent.php:223 ../admin/addcontent.php:288
-#: ../admin/addtemplate.php:105 ../admin/addtemplate.php:142
-#: ../admin/editcontent.php:266 ../admin/editcontent.php:333
-#: ../admin/edittemplate.php:121 ../admin/edittemplate.php:158
+#: ../admin/addcontent.php:227 ../admin/addcontent.php:300
+#: ../admin/addtemplate.php:107 ../admin/addtemplate.php:144
+#: ../admin/editcontent.php:313 ../admin/editcontent.php:398
+#: ../admin/edittemplate.php:123 ../admin/edittemplate.php:160
 msgid "Preview"
-msgstr "Aperçu"
+msgstr "Aper&ccedil;u"
 
-#: ../admin/addcontent.php:238
+#: ../admin/addcontent.php:242
 msgid "Add Content"
 msgstr "Ajouter du contenu"
 
-#: ../admin/addcontent.php:243 ../admin/editcontent.php:286
+#: ../admin/addcontent.php:247 ../admin/editcontent.php:333
 msgid "Content Type"
 msgstr "Type de contenu"
 
-#: ../admin/addcontent.php:247 ../admin/editcontent.php:290
-#: ../admin/listcontent.php:67
+#: ../admin/addcontent.php:252 ../admin/editcontent.php:338
+#: ../admin/listcontent.php:73
 msgid "Title"
 msgstr "Titre"
 
-#: ../admin/addcontent.php:251 ../admin/editcontent.php:294
-#: ../admin/listcontent.php:69
+#: ../admin/addcontent.php:258 ../admin/editcontent.php:344
+#: ../admin/listcontent.php:75
 msgid "URL"
 msgstr "Lien (URL)"
 
-#: ../admin/addcontent.php:256 ../admin/addtemplate.php:129
-#: ../admin/editcontent.php:299 ../admin/edittemplate.php:145
+#: ../admin/addcontent.php:264 ../admin/addtemplate.php:131
+#: ../admin/editcontent.php:350 ../admin/edittemplate.php:147
 msgid "Content"
 msgstr "Contenu"
 
-#: ../admin/addcontent.php:261 ../admin/editcontent.php:304
-#: ../admin/listcontent.php:71 ../admin/listsections.php:46
-msgid "Section"
-msgstr "Section"
+#: ../admin/addcontent.php:269 ../admin/editcontent.php:355
+#: ../admin/listsections.php:70
+msgid "Parent"
+msgstr "Parent"
 
-#: ../admin/addcontent.php:266 ../admin/editcontent.php:309
-#: ../admin/listcontent.php:72 ../admin/listtemplates.php:44
+#: ../admin/addcontent.php:274 ../admin/editcontent.php:360
+#: ../admin/listcontent.php:78 ../admin/listtemplates.php:46
 msgid "Template"
 msgstr "Template"
 
-#: ../admin/addcontent.php:271 ../admin/editcontent.php:315
+#: ../admin/addcontent.php:281 ../admin/editcontent.php:372
 msgid "Additional Editors"
-msgstr "Autres éditeurs"
+msgstr "Autres &eacute;diteurs"
 
-#: ../admin/addcontent.php:275 ../admin/editcontent.php:320
+#: ../admin/addcontent.php:286 ../admin/editcontent.php:378
 msgid "Menu Text"
 msgstr "Texte du menu"
 
-#: ../admin/addcontent.php:279 ../admin/editcontent.php:324
+#: ../admin/addcontent.php:291 ../admin/editcontent.php:383
 msgid "Show in Menu"
 msgstr "Afficher dans le menu"
 
-#: ../admin/addcontent.php:283 ../admin/addgroup.php:88
-#: ../admin/addsection.php:100 ../admin/addtemplate.php:137
-#: ../admin/adduser.php:105 ../admin/editcontent.php:328
-#: ../admin/editgroup.php:106 ../admin/editsection.php:111
-#: ../admin/edittemplate.php:153 ../admin/edituser.php:132
-#: ../admin/listcontent.php:73 ../admin/listgroups.php:43
-#: ../admin/listsections.php:47 ../admin/listtemplates.php:45
-#: ../admin/listusers.php:41
+#: ../admin/addcontent.php:295 ../admin/addgroup.php:90
+#: ../admin/addsection.php:105 ../admin/addtemplate.php:139
+#: ../admin/adduser.php:107 ../admin/editcontent.php:387
+#: ../admin/editgroup.php:108 ../admin/editsection.php:132
+#: ../admin/edittemplate.php:155 ../admin/edituser.php:134
+#: ../admin/listcontent.php:79 ../admin/listgroups.php:45
+#: ../admin/listsections.php:69 ../admin/listtemplates.php:47
+#: ../admin/listusers.php:47
 msgid "Active"
 msgstr "Actif"
 
-#: ../admin/addcontent.php:288 ../admin/addgroup.php:93
-#: ../admin/addsection.php:105 ../admin/addtemplate.php:142
-#: ../admin/adduser.php:110 ../admin/changegroupassign.php:118
-#: ../admin/changegroupperm.php:124 ../admin/editcontent.php:333
-#: ../admin/editgroup.php:111 ../admin/editprefs.php:71
-#: ../admin/editsection.php:116 ../admin/edittemplate.php:158
-#: ../admin/edituser.php:137 ../admin/login.php:87
+#: ../admin/addcontent.php:300 ../admin/addgroup.php:95
+#: ../admin/addsection.php:126 ../admin/addtemplate.php:144
+#: ../admin/adduser.php:112 ../admin/changegroupassign.php:120
+#: ../admin/changegroupperm.php:127 ../admin/editcontent.php:398
+#: ../admin/editgroup.php:113 ../admin/editprefs.php:73
+#: ../admin/editsection.php:162 ../admin/edittemplate.php:160
+#: ../admin/edituser.php:139 ../admin/login.php:89
 msgid "Submit"
 msgstr "Envoyer"
 
-#: ../admin/addcontent.php:288 ../admin/addgroup.php:93
-#: ../admin/addsection.php:105 ../admin/addtemplate.php:142
-#: ../admin/adduser.php:110 ../admin/changegroupassign.php:118
-#: ../admin/changegroupperm.php:124 ../admin/editcontent.php:333
-#: ../admin/editgroup.php:111 ../admin/editprefs.php:71
-#: ../admin/editsection.php:116 ../admin/edittemplate.php:158
-#: ../admin/edituser.php:137
+#: ../admin/addcontent.php:300 ../admin/addgroup.php:95
+#: ../admin/addsection.php:126 ../admin/addtemplate.php:144
+#: ../admin/adduser.php:112 ../admin/changegroupassign.php:120
+#: ../admin/changegroupperm.php:127 ../admin/editcontent.php:398
+#: ../admin/editgroup.php:113 ../admin/editprefs.php:73
+#: ../admin/editsection.php:162 ../admin/edittemplate.php:160
+#: ../admin/edituser.php:139
 msgid "Cancel"
 msgstr "Annuler"
 
-#: ../admin/addgroup.php:44 ../admin/editgroup.php:52
+#: ../admin/addgroup.php:46 ../admin/editgroup.php:54
 msgid "No group name given!"
-msgstr "Aucun nom de groupe entré !"
+msgstr "Aucun nom de groupe entr&eacute; !"
 
-#: ../admin/addgroup.php:58
+#: ../admin/addgroup.php:60
 msgid "Error inserting group!"
-msgstr "Erreur lors de la création du groupe !"
+msgstr "Erreur lors de la cr&eacute;ation du groupe !"
 
-#: ../admin/addgroup.php:67
+#: ../admin/addgroup.php:69
 msgid "No Access to Add Groups"
-msgstr "Vous ne possédez pas les droits suffisants pour ajouter un groupe"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour ajouter un groupe"
 
-#: ../admin/addgroup.php:79
+#: ../admin/addgroup.php:81
 msgid "Add Group"
 msgstr "Ajouter un groupe"
 
-#: ../admin/addgroup.php:84 ../admin/addsection.php:96
-#: ../admin/addtemplate.php:125 ../admin/adduser.php:93
-#: ../admin/editgroup.php:102 ../admin/editsection.php:107
-#: ../admin/edituser.php:120
+#: ../admin/addgroup.php:86 ../admin/addsection.php:101
+#: ../admin/addtemplate.php:127 ../admin/adduser.php:95
+#: ../admin/editgroup.php:104 ../admin/editsection.php:128
+#: ../admin/edituser.php:122
 msgid "Name"
 msgstr "Nom"
 
-#: ../admin/addsection.php:46
+#: ../admin/addsection.php:51
 msgid "No Section title given!"
-msgstr "Aucun titre entré pour la section !"
+msgstr "Aucun titre entr&eacute; pour la section !"
 
-#: ../admin/addsection.php:68
+#: ../admin/addsection.php:73
 msgid "Error inserting section"
-msgstr "Erreur lors de la création de la section"
+msgstr "Erreur lors de la cr&eacute;ation de la section"
 
-#: ../admin/addsection.php:77
+#: ../admin/addsection.php:82
 msgid "No Access to Add Sections"
-msgstr "Vous ne possédez pas les droits suffisants pour ajouter une section"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour ajouter une section"
 
-#: ../admin/addsection.php:91
+#: ../admin/addsection.php:96
 msgid "Add Section"
 msgstr "Ajouter une section"
 
-#: ../admin/addtemplate.php:55 ../admin/edittemplate.php:58
-msgid "No template name given!"
-msgstr "Aucun nom entré pour le template !"
+#: ../admin/addsection.php:109 ../admin/editsection.php:136
+#, fuzzy
+msgid "Parent section"
+msgstr "Section parente"
 
-#: ../admin/addtemplate.php:59
+#: ../admin/addtemplate.php:57 ../admin/edittemplate.php:60
+msgid "No template name given!"
+msgstr "Aucun nom entr&eacute; pour le template !"
+
+#: ../admin/addtemplate.php:61
 msgid "No template content entered!"
 msgstr "Le template est vide !"
 
-#: ../admin/addtemplate.php:73
+#: ../admin/addtemplate.php:75
 msgid "Error inserting template"
-msgstr "Ereur lors de la création du template"
+msgstr "Ereur lors de la cr&eacute;ation du template"
 
-#: ../admin/addtemplate.php:82
+#: ../admin/addtemplate.php:84
 msgid "No Access to Add Templates"
-msgstr "Vous ne possédez pas les droits suffisants pour Ajouter un template"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Ajouter un template"
 
-#: ../admin/addtemplate.php:120
+#: ../admin/addtemplate.php:122
 msgid "Add Template"
 msgstr "Ajouter un template"
 
-#: ../admin/addtemplate.php:133 ../admin/edittemplate.php:149
+#: ../admin/addtemplate.php:135 ../admin/edittemplate.php:151
 msgid "Stylesheet"
 msgstr "Feuille de style"
 
-#: ../admin/adduser.php:48 ../admin/edituser.php:59
+#: ../admin/adduser.php:50 ../admin/edituser.php:61
 msgid "No username given!"
-msgstr "Aucun nom d'utilisateur entré !"
+msgstr "Aucun nom d'utilisateur entr&eacute; !"
 
-#: ../admin/adduser.php:53
+#: ../admin/adduser.php:55
 msgid "No password given!"
-msgstr "Aucun mot de passe entré !"
+msgstr "Aucun mot de passe entr&eacute; !"
 
-#: ../admin/adduser.php:58
+#: ../admin/adduser.php:60
 msgid "Passwords do not match!"
 msgstr "Les mots de passe ne correspondent pas !"
 
-#: ../admin/adduser.php:71
+#: ../admin/adduser.php:73
 msgid "Error inserting user!"
-msgstr "Erreur lors de la création de l'utilisateur !"
+msgstr "Erreur lors de la cr&eacute;ation de l'utilisateur !"
 
-#: ../admin/adduser.php:88
+#: ../admin/adduser.php:90
 msgid "Add User"
 msgstr "Ajouter un utilisateur"
 
-#: ../admin/adduser.php:97 ../admin/login.php:82
+#: ../admin/adduser.php:99 ../admin/login.php:84
 msgid "Password"
 msgstr "Mot de passe"
 
-#: ../admin/adduser.php:101 ../admin/edituser.php:128
+#: ../admin/adduser.php:103 ../admin/edituser.php:130
 msgid "Password (again)"
 msgstr "Mot de passe (encore)"
 
-#: ../admin/adminlog.php:34 ../admin/menu.php:15
+#: ../admin/adminlog.php:36 ../admin/menu.php:36
 msgid "Admin Log"
-msgstr "Entrée Administrateur"
+msgstr "Journaux"
 
-#: ../admin/adminlog.php:38
+#: ../admin/adminlog.php:40
 msgid "User"
 msgstr "Utilisateur"
 
-#: ../admin/adminlog.php:39
-msgid "Item ID"
-msgstr "Identité de l'élément"
-
-#: ../admin/adminlog.php:40
-msgid "Item Name"
-msgstr "Nom de l'élément"
-
 #: ../admin/adminlog.php:41
+msgid "Item ID"
+msgstr "Identit&eacute; de l'&eacute;l&eacute;ment"
+
+#: ../admin/adminlog.php:42
+msgid "Item Name"
+msgstr "Nom de l'&eacute;l&eacute;ment"
+
+#: ../admin/adminlog.php:43
 msgid "Action"
 msgstr "Action"
 
-#: ../admin/adminlog.php:42
+#: ../admin/adminlog.php:44
 msgid "Date"
 msgstr "Date"
 
-#: ../admin/changegroupassign.php:69
+#: ../admin/changegroupassign.php:71
 msgid "No Access to Modify Group Assignments"
-msgstr "Vous ne possédez pas les droits suffisants pour modifier les assignations de groupe"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour modifier les memebres"
 
-#: ../admin/changegroupperm.php:69
+#: ../admin/changegroupperm.php:37
+#, fuzzy
+msgid "Modify Permissions"
+msgstr "Permissions"
+
+#: ../admin/changegroupperm.php:62
+#, fuzzy
+msgid "Changed Group Permissions"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour modifier les permissions des groupes"
+
+#: ../admin/changegroupperm.php:72
 msgid "No Access to Modify Group Permissions"
-msgstr "Vous ne possédez pas les droits suffisants pour modifier les permissions des groupes"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour modifier les permissions des groupes"
 
-#: ../admin/changegroupperm.php:76
+#: ../admin/changegroupperm.php:79
 msgid "Permissions for group: ${group_name}"
 msgstr "Permissions pour le groupe: ${group_name}"
 
-#: ../admin/deletecontent.php:40
+#: ../admin/deletecontent.php:42
 msgid "Cannot delete default page.  Please set another page as default first."
-msgstr "Vous ne pouvez pas supprimer la page par défaut. Veuillez d'abord choisir une autre page comme page par défaut."
+msgstr "Vous ne pouvez pas supprimer la page par d&eacute;faut. Veuillez d'abord choisir une autre page comme page par d&eacute;faut."
 
-#: ../admin/deletesection.php:72
-msgid "Section still being used by content pages.  Please remove those first."
-msgstr "Cette section est encore utilisée par des pages. Veuillez les supprimer d'abord."
+#: ../admin/deletecontent.php:87
+#, fuzzy
+msgid "Content still have child contents. Please remove those first."
+msgstr "Cette page est encore utilis&eacute;e par d'autres pages. Veuillez les supprimer d'abord."
 
-#: ../admin/deletetemplate.php:61
+#: ../admin/deletesection.php:83
+#, fuzzy
+msgid ""
+"Section still being used by content pages or subsections.  Please remove "
+"those first."
+msgstr ""
+"Cette section est encore utilis&eacute;e par des pages ou des sous-sections. "
+"Veuillez les supprimer d'abord."
+
+#: ../admin/deletetemplate.php:63
 msgid "Template still being used by content pages.  Please remove those first."
-msgstr "Ce template est encore utilisé par des pages. Veuillez les supprimer d'abord."
+msgstr "Ce template est encore utilis&eacute; par des pages. Veuillez les supprimer d'abord."
 
-#: ../admin/editcontent.php:150
+#: ../admin/deleteuser.php:66
+msgid ""
+"User still owns content pages.  Please change ownership to another user "
+"before deleting."
+msgstr ""
+"Cet utilisateur poss&egrave;de encore des pages. Veuillez changer "
+"l'appartenance de ces pages avant de le supprimer."
+
+#: ../admin/editcontent.php:165
 msgid "Error updating content!"
-msgstr "Erreur lors de la mise à jour du contenu !"
+msgstr "Erreur lors de la mise &agrave; jour du contenu !"
 
-#: ../admin/editcontent.php:236
+#: ../admin/editcontent.php:283
 msgid "No Access to Edit this Page"
-msgstr "Vous ne possédez pas les droits suffisants pour Editer cette page"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer cette page"
 
-#: ../admin/editcontent.php:281 ../admin/editsection.php:102
+#: ../admin/editcontent.php:328 ../admin/editsection.php:123
 msgid "Edit Content"
 msgstr "Editer le contenu"
 
-#: ../admin/editgroup.php:65
+#: ../admin/editcontent.php:368 ../admin/listcontent.php:76
+msgid "Owner"
+msgstr "Propri&eacute;taire"
+
+#: ../admin/editgroup.php:67
 msgid "Error updating group"
-msgstr "Erreur lors de la mise à jour du groupe"
+msgstr "Erreur lors de la mise &agrave; jour du groupe"
 
-#: ../admin/editgroup.php:85
+#: ../admin/editgroup.php:87
 msgid "No Access to Edit Groups"
-msgstr "Vous ne possédez pas les droits suffisants pour Editer un groupe"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer un groupe"
 
-#: ../admin/editgroup.php:97
+#: ../admin/editgroup.php:99
 msgid "Edit Group"
 msgstr "Editer le groupe"
 
-#: ../admin/editprefs.php:56
+#: ../admin/editprefs.php:58
 msgid "Edit User Preferences"
-msgstr "Modifier les préférences"
+msgstr "Modifier les pr&eacute;f&eacute;rences"
 
-#: ../admin/editprefs.php:61
+#: ../admin/editprefs.php:63
 msgid "Use WYSIWYG Editor for Content?"
-msgstr "Utilisez le mode visuel (WYSIWYG) lors de l'édition ?"
+msgstr "Utilisez le mode visuel (WYSIWYG) lors de l'&eacute;dition ?"
 
-#: ../admin/editsection.php:51
+#: ../admin/editsection.php:58
 msgid "No Section name given!"
-msgstr "Aucun nom de section entré !"
-
-#: ../admin/editsection.php:68
-msgid "Error updating section"
-msgstr "Erreur lors de la mise à jour de la section"
+msgstr "Aucun nom de section entr&eacute; !"
 
 #: ../admin/editsection.php:89
-msgid "No Access to Edit Sections"
-msgstr "Vous ne possédez pas les droits suffisants pour Editer des sections"
+msgid "Error updating section"
+msgstr "Erreur lors de la mise &agrave; jour de la section"
 
-#: ../admin/edittemplate.php:62
+#: ../admin/editsection.php:110
+msgid "No Access to Edit Sections"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer des sections"
+
+#: ../admin/edittemplate.php:64
 msgid "No template content given!"
 msgstr "Le template est vide !"
 
-#: ../admin/edittemplate.php:76
+#: ../admin/edittemplate.php:78
 msgid "Error updating template!"
-msgstr "Erreur lors de la mise à jour du template"
+msgstr "Erreur lors de la mise &agrave; jour du template"
 
-#: ../admin/edittemplate.php:99
+#: ../admin/edittemplate.php:101
 msgid "No Access To Edit Templates"
-msgstr "Vous ne possédez pas les droits suffisants pour Editer des templates"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer des templates"
 
-#: ../admin/edittemplate.php:136
+#: ../admin/edittemplate.php:138
 msgid "Edit Template"
 msgstr "Editer le template"
 
-#: ../admin/edittemplate.php:141
+#: ../admin/edittemplate.php:143
 msgid "Template Name"
 msgstr "Nom du template"
 
-#: ../admin/edituser.php:64
+#: ../admin/edituser.php:66
 msgid "Passwords do not match"
 msgstr "Les mots de passe ne correspondent pas"
 
-#: ../admin/edituser.php:81
+#: ../admin/edituser.php:83
 msgid "Error updating user"
-msgstr "Erreur lors de la mise à jour de l'utilisateur"
+msgstr "Erreur lors de la mise &agrave; jour de l'utilisateur"
 
-#: ../admin/edituser.php:101
+#: ../admin/edituser.php:103
 msgid "No Access to Edit Users"
-msgstr "Vous ne possédez pas les droits suffisants pour Editer les utilisateurs"
+msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer les utilisateurs"
 
-#: ../admin/edituser.php:115
+#: ../admin/edituser.php:117
 msgid "Edit User"
 msgstr "Modifier l'utilisateur"
 
-#: ../admin/edituser.php:124
+#: ../admin/edituser.php:126
 msgid "Password<br />(leave blank to keep current password)"
 msgstr "Mot de passe<br />(laisser vide pour conserver le mot de passe actuel)"
 
-#: ../admin/header.php:7
+#: ../admin/header.php:25
 msgid "CMS Admin System"
 msgstr "CMS Panneau d'administration"
 
-#: ../admin/listcontent.php:30
+#: ../admin/listcontent.php:32
 msgid "Current Pages"
 msgstr "Pages courantes"
 
-#: ../admin/listcontent.php:68
+#: ../admin/listcontent.php:74
 msgid "Type"
 msgstr "Type"
 
-#: ../admin/listcontent.php:70
-msgid "Owner"
-msgstr "Propriétaire"
-
-#: ../admin/listcontent.php:74
+#: ../admin/listcontent.php:80
 msgid "Default"
-msgstr "Défaut"
+msgstr "D&eacute;faut"
 
-#: ../admin/listcontent.php:76
+#: ../admin/listcontent.php:82 ../admin/listsections.php:71
 msgid "Move"
-msgstr "Déplacer"
+msgstr "D&eacute;placer"
 
-#: ../admin/listcontent.php:105 ../admin/listgroups.php:60
-#: ../admin/listsections.php:64 ../admin/listtemplates.php:58
-#: ../admin/listusers.php:53
+#: ../admin/listcontent.php:106 ../admin/listgroups.php:62
+#: ../admin/listsections.php:162 ../admin/listtemplates.php:60
+#: ../admin/listusers.php:59 ../admin/modules.php:114
 msgid "True"
 msgstr "Vrai"
 
-#: ../admin/listcontent.php:105 ../admin/listgroups.php:60
-#: ../admin/listsections.php:64 ../admin/listtemplates.php:58
-#: ../admin/listusers.php:53
+#: ../admin/listcontent.php:106 ../admin/listgroups.php:62
+#: ../admin/listsections.php:162 ../admin/listtemplates.php:60
+#: ../admin/listusers.php:59 ../admin/modules.php:114
 msgid "False"
 msgstr "Faux"
 
-#: ../admin/listcontent.php:106
+#: ../admin/listcontent.php:107
 msgid "Are you sure you want to set site\\'s default page?"
-msgstr "Etes vous sûr de vouloir l'utiliser comme page par défaut pour le site ?"
+msgstr "Etes vous s&ucirc;r de vouloir l'utiliser comme page par d&eacute;faut pour le site ?"
 
-#: ../admin/listcontent.php:110 ../admin/listsections.php:68
-msgid "Up"
-msgstr "Haut"
-
-#: ../admin/listcontent.php:113 ../admin/listsections.php:71
+#: ../admin/listcontent.php:114 ../admin/listcontent.php:120
+#: ../admin/listsections.php:132 ../admin/listsections.php:142
 msgid "Down"
 msgstr "Bas"
 
-#: ../admin/listcontent.php:121 ../admin/listcontent.php:123
+#: ../admin/listcontent.php:117 ../admin/listcontent.php:122
+#: ../admin/listsections.php:137 ../admin/listsections.php:144
+msgid "Up"
+msgstr "Haut"
+
+#: ../admin/listcontent.php:128 ../admin/listcontent.php:130
 msgid "View"
 msgstr "Visualiser"
 
-#: ../admin/listcontent.php:124 ../admin/listgroups.php:66
-#: ../admin/listsections.php:77 ../admin/listtemplates.php:60
-#: ../admin/listusers.php:55
+#: ../admin/listcontent.php:131 ../admin/listgroups.php:68
+#: ../admin/listsections.php:171 ../admin/listtemplates.php:62
+#: ../admin/listusers.php:61
 msgid "Edit"
 msgstr "Editer"
 
-#: ../admin/listcontent.php:125 ../admin/listgroups.php:68
-#: ../admin/listsections.php:80 ../admin/listtemplates.php:62
-#: ../admin/listusers.php:59
+#: ../admin/listcontent.php:132 ../admin/listgroups.php:70
+#: ../admin/listsections.php:174 ../admin/listtemplates.php:64
+#: ../admin/listusers.php:65
 msgid "Are you sure you want to delete?"
-msgstr "Etes vous sûr de vouloir supprimer ?"
+msgstr "Etes vous s&ucirc;r de vouloir supprimer ?"
 
-#: ../admin/listcontent.php:125 ../admin/listgroups.php:68
-#: ../admin/listsections.php:80 ../admin/listtemplates.php:62
-#: ../admin/listusers.php:59
+#: ../admin/listcontent.php:132 ../admin/listgroups.php:70
+#: ../admin/listsections.php:174 ../admin/listtemplates.php:64
+#: ../admin/listusers.php:65
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../admin/listcontent.php:137
+#: ../admin/listcontent.php:146
 msgid "No pages"
 msgstr "Aucune page"
 
-#: ../admin/listcontent.php:143
+#: ../admin/listcontent.php:152
 msgid ""
 "Add New\n"
 "Content"
@@ -426,43 +461,48 @@ msgstr ""
 "Ajouter\n"
 "nouveau contenu"
 
-#: ../admin/listgroups.php:26
+#: ../admin/listgroups.php:28
 msgid "Current Groups"
 msgstr "Groupes actuels"
 
-#: ../admin/listgroups.php:42
+#: ../admin/listgroups.php:44
 msgid "Group Name"
 msgstr "Nom du groupe"
 
-#: ../admin/listgroups.php:62
+#: ../admin/listgroups.php:64
 msgid "Permissions"
 msgstr "Permissions"
 
-#: ../admin/listgroups.php:64
+#: ../admin/listgroups.php:66
 msgid "Assignments"
-msgstr "Assignations"
+msgstr "Membres"
 
-#: ../admin/listgroups.php:81
+#: ../admin/listgroups.php:83
 msgid "Add New Group"
 msgstr "Ajouter un groupe"
 
-#: ../admin/listsections.php:30
+#: ../admin/listsections.php:32
 msgid "Current Sections"
 msgstr "Sections actuelles"
 
-#: ../admin/listsections.php:96
-msgid ""
-"Add New\n"
-"Section"
-msgstr ""
-"Ajouter une\n"
-"nouvelle section"
+#: ../admin/listsections.php:68
+msgid "Section"
+msgstr "Section"
 
-#: ../admin/listtemplates.php:30
+#: ../admin/listsections.php:90
+#, fuzzy
+msgid "Add New Section"
+msgstr "Ajouter une nouvelle section"
+
+#: ../admin/listsections.php:166
+msgid "None"
+msgstr "Aucun"
+
+#: ../admin/listtemplates.php:32
 msgid "Current Templates"
 msgstr "Templates actuels"
 
-#: ../admin/listtemplates.php:76
+#: ../admin/listtemplates.php:78
 msgid ""
 "Add New\n"
 "Template"
@@ -470,19 +510,19 @@ msgstr ""
 "Ajouter un\n"
 "nouveau template"
 
-#: ../admin/listusers.php:26
+#: ../admin/listusers.php:32
 msgid "Current Users"
 msgstr "Utilisateurs actuels"
 
-#: ../admin/listusers.php:40 ../admin/login.php:78
+#: ../admin/listusers.php:46 ../admin/login.php:80
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: ../admin/listusers.php:73
+#: ../admin/listusers.php:79
 msgid "Add New User"
 msgstr "Ajouter un utilisateur"
 
-#: ../admin/login.php:42
+#: ../admin/login.php:44
 msgid "Username or Password incorrect!"
 msgstr "Nom d'utilisateur ou mot de passe incorrect"
 
@@ -490,62 +530,96 @@ msgstr "Nom d'utilisateur ou mot de passe incorrect"
 msgid "Welcome ${name}"
 msgstr "Bienvenue ${name}"
 
-#: ../admin/menu.php:10
+#: ../admin/menu.php:31
 msgid "Content Management"
-msgstr "Gestion de contenu"
+msgstr "Gestion du contenu"
 
-#: ../admin/menu.php:11
-msgid "Section Management"
-msgstr "Gestion des sections"
-
-#: ../admin/menu.php:12
+#: ../admin/menu.php:32
 msgid "Template Management"
 msgstr "Gestion des templates"
 
-#: ../admin/menu.php:13
+#: ../admin/menu.php:33
 msgid "User Management"
-msgstr "Gestion utilisateurs"
+msgstr "Gestion des utilisateurs"
 
-#: ../admin/menu.php:14
+#: ../admin/menu.php:34
 msgid "Group Management"
-msgstr "Gestion groupes"
+msgstr "Gestion des groupes"
 
-#: ../admin/menu.php:16
+#: ../admin/menu.php:35
+#, fuzzy
+msgid "Module Management"
+msgstr "Gestion des modules"
+
+#: ../admin/menu.php:37
 msgid "User Preferences"
-msgstr "Préférences"
+msgstr "Pr&eacute;f&eacute;rences"
 
-#: ../admin/menu.php:17
+#: ../admin/menu.php:38
 msgid "Tools"
 msgstr "Outils"
 
-#: ../admin/menu.php:18
+#: ../admin/menu.php:39
 msgid "Show Site"
 msgstr "Voir le site"
 
-#: ../admin/menu.php:19
+#: ../admin/menu.php:40
 msgid "Logout"
-msgstr "Déconnexion"
+msgstr "D&eacute;connexion"
 
-#: ../admin/tools.php:34
+#: ../admin/modules.php:32
+msgid "Modify Modules"
+msgstr "Modifier le module"
+
+#: ../admin/modules.php:70
+msgid ""
+"<p class=\"error\">You need the 'Modify Modules' permission to perform that "
+"function.</p>"
+msgstr "<p class=\"error\">Vous avez besoin du droit 'Modify Modules' pour effectuer cette action.</p>"
+
+#: ../admin/modules.php:108
+msgid "Not Installed"
+msgstr "Pas install&eacute;"
+
+#: ../admin/modules.php:110
+msgid "Install"
+msgstr "Installer"
+
+#: ../admin/modules.php:115
+#, fuzzy
+msgid "Are you sure you want to uninstall this module?"
+msgstr "Etes vous s&ucirc;r de vouloir d&eacute;sinstaller ce module ?"
+
+#: ../admin/modules.php:115
+msgid "Uninstall"
+msgstr "D&eacute;sinstaller"
+
+#: ../admin/tools.php:36
 msgid "Click the Backup button to proceed with the database backup."
-msgstr "Clickez sur le bouton Backup pour lancer la sauvegarde de la base de données"
+msgstr ""
+"Clickez sur le bouton Backup pour lancer la sauvegarde de la base de "
+"donn&eacute;es"
 
-#: ../admin/tools.php:40
+#: ../admin/tools.php:42
 msgid ""
 "Enter your backup sql filename and click Restore to wipe out your database "
 "and rebuild it.  Use with caution."
 msgstr ""
-"Entrer le nom du fichier sql de backup et clickez sur Restaurer pour vider la base de données "
-" et charger les nouvelles données. A utiliser avec précaution."
+"Entrer le nom du fichier sql de backup et clickez sur Restaurer pour vider "
+"la base de donn&eacute;es  et charger les nouvelles donn&eacute;es. A "
+"utiliser avec pr&eacute;caution."
 
-#: ../admin/tools.php:54
+#: ../admin/tools.php:56
 msgid "Working...."
 msgstr "En cours..."
 
-#: ../admin/tools.php:116
+#: ../admin/tools.php:118
 msgid "Backup complete.  Wrriten to file:"
-msgstr "Sauvegarde terminée. Sauvegardé dans le fichier :"
+msgstr "Sauvegarde termin&eacute;e. Sauvegard&eacute; dans le fichier :"
 
-#: ../admin/tools.php:132
+#: ../admin/tools.php:134
 msgid "Restore complete: "
-msgstr "Restauration complète : "
+msgstr "Restauration compl&egrave;te : "
+
+#~ msgid "Section Management"
+#~ msgstr "Gestion des sections"

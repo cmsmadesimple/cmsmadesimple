@@ -34,7 +34,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify Permissions');
+$access = check_permission($config, $userid, $gettext->gettext("Modify Permissions"));
 
 if ($access) {
 
@@ -59,7 +59,7 @@ if ($access) {
 			}
 		}
 
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Permissions');
+		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, $gettext->gettext("Changed Group Permissions"));
 		redirect("listgroups.php");
 		return;
 
