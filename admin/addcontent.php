@@ -31,16 +31,17 @@ if (isset($_POST["title"])) $title = $_POST["title"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$menutext = "";
+if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
+
 $alias = "";
-if ($config["auto_alias_content"])
+if (isset($_POST["alias"])) $alias = $_POST["alias"];
+
+if ($config["auto_alias_content"] && $alias == "")
 {
-	$alias = $title;
-	$alias=trim($alias);
+	$alias = $menutext;
+	$alias = trim($alias);
 	$alias = preg_replace("/\W+/", "-", $alias);
-}
-else
-{
-	if (isset($_POST["alias"])) $alias = $_POST["alias"];
 }
 
 $content_type = "content";
@@ -57,9 +58,6 @@ if (isset($_POST["parent_id"])) $parent_id = $_POST["parent_id"];
 
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
-
-$menutext = "";
-if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
 
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
@@ -322,7 +320,7 @@ else {
 						<?php echo lang('contenttype')?>:<?php echo $ctdropdown?>
 						<?php echo lang('title')?>:&nbsp;<input type="text" name="title" maxlength="80" value="<?php echo $title?>">
 						<span style="white-space: nowrap"><?php echo lang('menutext')?>:&nbsp;<input type="text" name="menutext" maxlength="25" value="<?php echo $menutext?>"></span>
-						<?php if ($config["auto_alias_content"] != true) { ?>
+						<?php if ($config["auto_alias_content"] == false || ($alias != "")) { ?>
 							<span style="white-space: nowrap"><?php echo lang('pagealias')?>:&nbsp;<input type="text" name="alias" maxlength="65" value="<?php echo $alias?>"></span>
 						<?php } ?>
 						<span style="white-space: nowrap"><?php echo lang('template')?>:&nbsp;<?php echo $dropdown2?></span>
