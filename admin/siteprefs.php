@@ -129,7 +129,7 @@ if ($message != "") {
 
 <form name="siteprefform" id="siteprefform" method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedownmessage\');"';} ?>>
 
-<div class="adminform">
+<div class="AdminForm">
 
 <h3><?php echo lang("siteprefs")?></h3>
 
