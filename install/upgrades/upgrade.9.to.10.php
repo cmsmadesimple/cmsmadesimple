@@ -32,6 +32,14 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
+echo "<p>Setting a default template...";
+
+$onetemplateid = $db->GetOne("SELECT template_id FROM ".cms_db_prefix()."templates");
+$db->Execute("UPDATE ".cms_db_prefix()."templates SET default_template = 0");
+$db->Execute("UPDATE ".cms_db_prefix()."templates SET default_template = 1 WHERE template_id = ".$onetemplateid);
+
+echo "[done]</p>";
+
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 10";
