@@ -56,8 +56,8 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		?>
 		<table>
 			<tr>
-				<td><input name="<?php echo $id?>search_text" type=text value=""></td>
-				<td><input name="<?php echo $id?>submit_search" type=submit value=Search><input type=hidden name="<?php echo $id?>action" value="search_url"></td>
+				<td><input name="<?php echo $id?>search_text" type=text value="" /></td>
+				<td><input name="<?php echo $id?>submit_search" type=submit value=Search /><input type=hidden name="<?php echo $id?>action" value="search_url" /></td>
 			</tr>
 		</table>
 		<?php
@@ -89,11 +89,12 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
     $dbresult = $db->Execute($query);
 
 	if ($params[$id.'type'] != "rss") {
-		echo "<div class=\"modulelinkblogtitle\">Posted sites";
+		echo "<div class=\"modulelinkblogtitle\">Posted sites</div>";
 		if (isset($params["make_rss_button"])) {
+			echo "<div class=\"modulelinkblogrss\">\n";
 			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>'curr_date', 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
+			echo "</div>\n";
 		} ## if
-		echo "</div>\n";
 		echo "<div class=\"modulelinkblog\">\n";
 	} ## if
 
@@ -248,7 +249,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         if ($validinfo) {
             $db = $cms->db;
             $new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".$db->qstr($url).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '1')";
+            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".htmlentities($db->qstr($url)).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '1')";
             $dbresult = $db->Execute($query);
             cms_mapi_redirect_user_by_pageid($return_id);
             return;
