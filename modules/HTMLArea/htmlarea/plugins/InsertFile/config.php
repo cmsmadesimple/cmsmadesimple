@@ -58,7 +58,7 @@ $MY_URL_TO_OPEN_FILE 	= $config["uploads_url"];
         You should always include server side executable file types in MY_DENY_EXTENSIONS !!!
 */
 
-$MY_ALLOW_EXTENSIONS	= array('html', 'doc', 'xls', 'txt', 'gif', 'jpeg', 'jpg', 'png', 'pdf', 'mp3', 'ogg');
+$MY_ALLOW_EXTENSIONS	= array('html', 'doc', 'xls', 'txt', 'gif', 'jpeg', 'jpg', 'png', 'pdf', 'mp3', 'ogg', 'htm');
 $MY_DENY_EXTENSIONS		= array('php', 'php3', 'php4', 'phtml', 'shtml', 'cgi', 'pl');
 
 /*
@@ -66,7 +66,7 @@ $MY_DENY_EXTENSIONS		= array('php', 'php3', 'php4', 'phtml', 'shtml', 'cgi', 'pl
  This array specifies which files are listed in dialog. Setting to null causes that all files are listed.
  NOTE: File extensions arrays are case insensitive.
 */
-$MY_LIST_EXTENSIONS		= array('html', 'doc', 'xls', 'txt', 'gif', 'jpeg', 'jpg', 'png', 'pdf', 'mp3', 'ogg');
+$MY_LIST_EXTENSIONS		= array('html', 'doc', 'xls', 'txt', 'gif', 'jpeg', 'jpg', 'png', 'pdf', 'mp3', 'ogg', 'htm');
 
 /*
  MY_ALLOW_CREATE
