@@ -855,9 +855,10 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false)
 	{
+		$text = '';
 		if (!$onlyhref)
 		{
-			$text = '<a href="';
+			$text .= '<a href="';
 		}
 		$text .= $this->cms->config['root_url'];
 		if (!($returnid != '' && $returnid > -1))
