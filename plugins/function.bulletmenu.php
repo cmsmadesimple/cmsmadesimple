@@ -59,7 +59,32 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			{
 				if ((strpos($onecontent->Hierarchy(), (string)$params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), (string)$params['start_element']) != 0))
 				{
-					continue;
+					if (isset($params['show_root_siblings']) && $params['show_root_siblings'] == '1')
+					{
+						# Find direct parent of current item
+						$curparent = substr($onecontent->Hierarchy(), 0, strrpos($onecontent->Hierarchy(), "."));
+						if ($curparent != '')
+						{
+							$curparent = $curparent . ".";
+						}
+
+						# Find direct parent of start_element
+						$otherparent = substr((string)$params['start_element'], 0, strpos((string)$params['start_element'], "."));
+						if ($otherparent != '')
+						{
+							$otherparent = $otherparent . ".";
+						}
+
+						# Make sure the parents match
+						if ($curparent != $otherparent)
+						{
+							continue;
+						}
+					}
+					else
+					{
+						continue;
+					}
 				}
 			}
 
@@ -252,7 +277,8 @@ function smarty_cms_help_function_bulletmenu() {
 	<ul>
 		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
 		<li><em>(optional)</em> <tt>collapse</tt> - 1/0, whether you want to collapse sub items that shouldn't be shown.  Defaults to 0.</li>
-		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
+		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root node of the menu and only shows it and it's children.</li>
+		<li><em>(optional)</em> <tt>show_root_siblings</tt> - 1/0, if start_element (above) is given, then show direct siblings of the give start_element as well.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>
 	</p>
