@@ -134,6 +134,7 @@ function linkblog_module_help($cms) {
 	<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module="LinkBlog" allow_search="true"}</code></p>
 	<h3>What parameters are there?</h3>
 	<p>allow_search - set allow_search="true" to show a search form - off by default</p>
+	<p>category - set category="NAME" where NAME is a category name.  Only links in that category will be visible.  This includes the links generated to previously posted links.</p>
 	<h3>How do I style the LinkBlog pages?</h3>
 	<p>Here is some sample CSS you can throw in your template to make your results <i>slightly</i> prettier.<br />
 	<pre>

@@ -30,6 +30,16 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
     {
         $allow_search = $params['allow_search'];
     }
+
+    if(isset($params[$id.'category']))
+    {
+        $category = $params[$id.'category'];
+    }
+    else if(isset($params['category']))
+    {
+        $category = $params['category'];
+    }
+
 	if ($allow_search != '') {
 		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
 		?>
@@ -50,7 +60,12 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 
     $db = $cms->db;
     $curr_date = date("Y-m-d");
-    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type, a.create_date, count(b.linkblog_id) as total FROM ".cms_db_prefix()."module_linkblog a LEFT OUTER JOIN ".cms_db_prefix()."module_linkblog_comments b ON a.linkblog_id=b.linkblog_id WHERE";
+    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total";
+	if ($category != "") { $query .= ", c.linkblog_type"; }
+	$query .= " FROM";
+	if ($category != "") { $query .= " ".cms_db_prefix()."module_linkblog_types c,"; }
+	$query .= " ".cms_db_prefix()."module_linkblog a LEFT OUTER JOIN ".cms_db_prefix()."module_linkblog_comments b ON a.linkblog_id=b.linkblog_id WHERE";
+	if ($category != "") { $query .= " a.linkblog_type=c.linkblog_type_id and c.linkblog_type like \"%$category%\" and"; }
     if ($old_date != "") {
         $query .= " a.create_date like '$old_date%' and ";
     } ## if
@@ -72,7 +87,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
                     echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
                 }
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
+                echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
                 echo "</div>\n";
 
                 echo "<div class=\"modulelinkblogentrycommentlink\">\n";
@@ -93,12 +108,12 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
             $last_date = "";
             echo "<p>Recent links:</p><ul>\n";
             echo "<li>";
-            echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date, 'allow_search'=>'true'), "Today");
+			echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date, 'allow_search'=>'true', 'category'=>$category), "Today");
             echo "</li>\n";
             while ($row = $dbresult->FetchRow()) {
                 if ($last_date != substr($row["create_date"],0,10) && substr($row["create_date"],0,10) != $curr_date) {
                     echo "<li>";
-                    echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>substr($row["create_date"],0,10), 'allow_search'=>'true'), substr($row["create_date"],0,10));
+                    echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>substr($row["create_date"],0,10), 'allow_search'=>'true', 'category'=>$category), substr($row["create_date"],0,10));
                     echo "</li>\n";
                 }
                 $last_date = substr($row["create_date"],0,10);

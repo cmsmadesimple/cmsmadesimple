@@ -30,6 +30,7 @@ function linkblog_module_about() {
         <li>Added admin functions for managing categories and links</li>
         <li>Added a status code to each link to allow the administrator to hide selected links</li>
         <li>Version 1.2 got lost on the way to 1.3</li>
+        <li>Added ability to filter links by category</li>
         <li>Added the To Do section below</li>
     </ul>
     Version 1.1 - 2004.12.01
