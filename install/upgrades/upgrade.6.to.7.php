@@ -22,7 +22,7 @@ $dbdict = NewDataDictionary($db);
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."pages", "hierarchy_position C(255)");
 $dbdict->ExecuteSQLArray($sqlarray);
 
-set_all_pages_hierarchy_position();
+#set_all_pages_hierarchy_position();
 
 echo "[done]</p>";
 
