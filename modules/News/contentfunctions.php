@@ -37,11 +37,17 @@ function news_module_content_set_properties(&$module)
 
 function news_module_content_edit(&$module)
 {
+	global $gCms;
+	$config = $gCms->config;
+
 	$text = '';
 
 	$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$module->mName.'"></td></tr>';
 	$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$module->mMenuText.'"></td></tr>';
-	$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$module->mAlias.'"></td></tr>';
+	if (!($config['auto_alias_content'] == true && $module->mAlias == ''))
+	{
+		$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$module->mAlias.'"></td></tr>';
+	}
 	$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $module->mTemplateId).'</td></tr>';
 	$text .= '<tr><td>Number to Display (none show all):</td><td><input type="text" name="number" value="'.$module->GetPropertyValue('number').'" /></td></tr>';
 	$text .= '<tr><td>Date Format:</td><td><input type="text" name="dateformat" value="'.$module->GetPropertyValue('dateformat').'" /></td></tr>';
@@ -61,6 +67,9 @@ function news_module_content_edit(&$module)
 
 function news_module_content_fill_params(&$module, &$params)
 {
+	global $gCms;
+	$config = $gCms->config;
+
 	if (isset($params))
 	{
 		$parameters = array('number', 'category', 'summary', 'length', 'moretext', 'dateformat');
@@ -135,6 +144,12 @@ function news_module_content_fill_params(&$module, &$params)
 		else
 		{
 			$module->mShowInMenu = false;
+		}
+		if ($config["auto_alias_content"] && $module->mAlias == "")
+		{
+			$module->mAlias = $module->mMenuText;
+			$module->mAlias = trim($module->mAlias);
+			$module->mAlias = preg_replace("/\W+/", "-", $module->mAlias);
 		}
 	}
 }

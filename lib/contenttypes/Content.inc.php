@@ -30,6 +30,9 @@ class Content extends ContentBase
 
 	function FillParams($params)
 	{
+		global $gCms;
+		$config = $gCms->config;
+
 		if (isset($params))
 		{
 			$parameters = array('content_en', 'headtags');
@@ -91,6 +94,12 @@ class Content extends ContentBase
 			{
 				$this->mCachable = false;
 			}
+		} 
+		if ($config["auto_alias_content"] && $this->mAlias == "")
+		{
+			$this->mAlias = $this->mMenuText;
+			$this->mAlias = trim($this->mAlias);
+			$this->mAlias = preg_replace("/\W+/", "-", $this->mAlias);
 		}
 	}
 
@@ -101,11 +110,17 @@ class Content extends ContentBase
 
 	function Edit()
 	{
+		global $gCms;
+		$config = $gCms->config;
+
 		$text = "";
 
 		$text .= '<tr><td>'.lang('title').':</td><td><input type="text" name="title" value="'.$this->mName.'" /></td></tr>';
 		$text .= '<tr><td>'.lang('menutext').':</td><td><input type="text" name="menutext" value="'.$this->mMenuText.'" /></td></tr>';
-		$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
+		if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+		{
+			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
+		}
 		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId).'</td></tr>';
 		$text .= '<tr><td>'.lang('content').':</td><td>'.create_textarea(true, $this->mProperties->GetValue('content_en'), 'content_en', 'syntaxHighlight', 'content_en').'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(true, $this->mProperties->GetValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
