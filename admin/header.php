@@ -25,6 +25,7 @@ header("Pragma: no-cache");
 <title><?=$gettext->gettext("CMS Admin System")?></title>
 
 <link rel="stylesheet" type="text/css" href="style.css" />
+<script type="text/javascript" language="javascript" src="helparea.js"></script>
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<script type="text/javascript">

@@ -158,6 +158,7 @@ else {
 </form>
 
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
+<div id="helparea" class="helparea">
 <?php
 echo "<p>".$gettext->gettext("A template is what controls the look and feel of your site's content.")."</p>";
 echo "<p>".$gettext->gettext("Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.")."</p>";

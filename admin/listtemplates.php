@@ -102,6 +102,7 @@ if ($add) {
 
 <div class=button><a href="addtemplate.php"><?=$gettext->gettext("Add New Template")?></a></div>
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Help") ?>?</h4>
+<div id="helparea" class="helparea">
 <?php
 echo "<p>".$gettext->gettext("This page allows you to edit, delete, and create templates.")."</p>";
 echo "<p>".$gettext->gettext("To create a new template, click on the <u>Add New Template</u> button.")."<br />";
