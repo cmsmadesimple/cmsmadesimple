@@ -102,17 +102,18 @@ if (!isset($charsetsent))
 			editor.registerPlugin(CharacterMap);
 			editor.registerPlugin(FindReplace);
 			editor.registerPlugin(InvertBackground);
-			<?php if ($config["use_Indite"] == true)
-				editor.registerPlugin(Indite);
-			$template_id = -1;
-			if (isset($_POST["template_id"])) 
-				$template_id = $_POST["template_id"];
-			else if (isset($_GET['page_id'])){
-				$query = "SELECT template_id FROM ".cms_db_prefix()."pages WHERE ".$_GET['page_id']." = page_id";
-				$template_id = $db->GetOne($query);
-			}
 
-?>	
+			<?php if ($config["use_Indite"] == true)
+				echo "editor.registerPlugin(Indite);";
+				$template_id = -1;
+				if (isset($_POST["template_id"])) 
+					$template_id = $_POST["template_id"];
+				else if (isset($_GET['page_id'])){
+					$query = "SELECT template_id FROM ".cms_db_prefix()."pages WHERE ".$_GET['page_id']." = page_id";
+					$template_id = $db->GetOne($query);
+				}
+			?>	
+
 			editor.config.pageStyle = editor.config.pageStyle+'<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}
