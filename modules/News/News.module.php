@@ -96,7 +96,7 @@ class News extends CMSModule
 
 	function Uninstall()
 	{
-		$db = $this->gCms->db;
+		$db = $this->cms->db;
 		$dict = NewDataDictionary( $db );
 		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news" );
 		$dict->ExecuteSQLArray($sqlarray);
@@ -248,7 +248,7 @@ class News extends CMSModule
 			case "default":
 				if (isset($params["makerssbutton"]))
 				{
-					$params = array_merge($params, array("showtemplate"=>"false","type"=>"rss"));
+					$params = array_merge(array("showtemplate"=>"false","type"=>"rss"));
 					echo $this->CreateLink($id, 'default', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
 					return;
 				}
@@ -351,11 +351,11 @@ class News extends CMSModule
 							}
 							if (isset($params["summary"]))
 							{
-								echo "            <description>".news_strip_to_length($row["news_data"],$params["length"])."</description>\n";
+								echo "            <description>".$this->StripToLength($row["news_data"],$params["length"])."</description>\n";
 							}
 							else
 							{
-								echo "            <description>".news_strip_to_length($row["news_data"],0)."</description>\n";
+								echo "            <description>".$this->StripToLength($row["news_data"],0)."</description>\n";
 							} 
 							echo "            <pubDate>".gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row["news_date"]))."</pubDate>\n";
 							echo "        </item>\n";
@@ -393,7 +393,7 @@ class News extends CMSModule
 							echo "</span>";
 							if (isset($params["summary"]))
 							{
-								echo "<span class=\"cms-news-content\">".news_strip_to_length($row["news_data"],$params["length"],false)."</span>";
+								echo "<span class=\"cms-news-content\">".$this->StripToLength($row["news_data"],$params["length"],false)."</span>";
 								if (strlen($row["news_data"]) > $params["length"])
 								{
 									$moretext = "more...";
