@@ -38,7 +38,7 @@ if (isset($_GET["message"])) {
 
 	$modifyall = check_permission($userid, 'Modify Any Content');
 
-	$content_array = ContentManager::GetAllContent();
+	$content_array = ContentManager::GetAllContent(false);
 
 	if ($modifyall)
 	{
