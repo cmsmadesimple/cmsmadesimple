@@ -25,6 +25,7 @@ if (isset($tinymce_flag)) { ?>
 		theme_advanced_source_editor_height : "480",
 		theme_advanced_source_editor_area_width : "600",
 		theme_advanced_source_editor_area_height : "380",		
+		theme_advanced_buttons2: "bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,image,cleanup,code",
   		debug : false
 	});
  </script>
