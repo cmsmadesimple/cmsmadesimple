@@ -147,6 +147,27 @@ div.content {
 	color: #000;
 }
 
+.moduleabout {
+	margin-right: 150px;
+	margin-left: 200px;
+}
+
+.moduleabout p {
+	font-style: normal;
+	color: #666;
+}
+
+.moduleabout h2 {
+	font-size: 20px;
+}
+
+.moduleabout h3 {
+	font-size: 16px;
+	font-color: #333;
+	border-bottom: 1px solid #000;
+	padding-left: 0;
+}
+
 /* end content style */
 
 /* start table style */

@@ -68,25 +68,46 @@ if ($access) {
 		redirect("modules.php");
 	}
 }
+
 include_once("header.php");
 
-if ($action != "" && !$access) {
-	echo "<p class=\"error\">".$gettext->gettext("You need the 'Modify Modules' permission to perform that function.")."</p>";
-}
-
-if (count($gCms->modules) > 0) {
-
-	$query = "SELECT * from ".cms_db_prefix()."modules";
-	$result = $db->Execute($query);
-	while ($row = $result->FetchRow()) {
-		$dbm[$row['module_name']]['Status'] = $row['status'];
-		$dbm[$row['module_name']]['Version'] = $row['version'];
-		$dbm[$row['module_name']]['Active'] = $row['active'];
+if ($action == "showabout")
+{
+	if (isset($gCms->modules[$module]['help_function'])) {
+		@ob_start();
+		call_user_func_array($gCms->modules[$module]['help_function'], array($gCms));
+		$content = @ob_get_contents();
+		@ob_end_clean();
+		echo "<div class=\"moduleabout\">";
+		echo "<h2>About the $module module</h2>";
+		echo $content;
+		?>
+		<form action="modules.php" method="get">
+		<p><input type="submit" value="Back to Module List" /></p>
+		</form>
+		<?
+		echo "</div>";
 	}
+}
+else
+{
+
+	if ($action != "" && !$access) {
+		echo "<p class=\"error\">".$gettext->gettext("You need the 'Modify Modules' permission to perform that function.")."</p>";
+	}
+
+	if (count($gCms->modules) > 0) {
+
+		$query = "SELECT * from ".cms_db_prefix()."modules";
+		$result = $db->Execute($query);
+		while ($row = $result->FetchRow()) {
+			$dbm[$row['module_name']]['Status'] = $row['status'];
+			$dbm[$row['module_name']]['Version'] = $row['version'];
+			$dbm[$row['module_name']]['Active'] = $row['active'];
+		}
 
 ?>
 
-	<div class="content">
 
 	<h3><?=$gettext->gettext("Module Admin")?></h3>
 
@@ -97,40 +118,51 @@ if (count($gCms->modules) > 0) {
 			<td width="10%"><?=$gettext->gettext("Status")?></td>
 			<td width="10%"><?=$gettext->gettext("Active")?></td>
 			<td width="10%"><?=$gettext->gettext("Action")?></td>
+			<td width="10%"><?=$gettext->gettext("About")?></td>
 		</tr>
 
 <?
 
-	$curclass = "row1";
+		$curclass = "row1";
 
-	foreach($gCms->modules as $key=>$value) {
+		foreach($gCms->modules as $key=>$value) {
 
-		echo "<tr class=\"$curclass\">\n";
-		echo "<td>$key</td>\n";
-		if (!isset($dbm[$key])) { #Not installed, lets put up the install button
-			echo "<td>&nbsp</td>";
-			echo "<td>".$gettext->gettext("Not Installed")."</td>";
-			echo "<td>&nbsp;</td>";
-			echo "<td><a href=\"modules.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
-		} else { #Must be installed
-			echo "<td>".$dbm[$key]['Version']."</td>";
-			echo "<td>".$dbm[$key]['Status']."</td>";
-			echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='modules.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
-			echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
+			echo "<tr class=\"$curclass\">\n";
+			echo "<td>$key</td>\n";
+			if (!isset($dbm[$key])) { #Not installed, lets put up the install button
+				echo "<td>&nbsp</td>";
+				echo "<td>".$gettext->gettext("Not Installed")."</td>";
+				echo "<td>&nbsp;</td>";
+				echo "<td><a href=\"modules.php?action=install&module=".$key."\">".$gettext->gettext("Install")."</a></td>";
+			} else { #Must be installed
+				echo "<td>".$dbm[$key]['Version']."</td>";
+				echo "<td>".$dbm[$key]['Status']."</td>";
+				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>".$gettext->gettext("True")."</a>":"<a href='modules.php?action=settrue&module=".$key."'>".$gettext->gettext("False")."</a>")."</td>";
+				echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
+			}
+			if (isset($gCms->modules[$key]['help_function']))
+			{
+				echo "<td><a href=\"modules.php?action=showabout&module=".$key."\">".$gettext->gettext("About")."</a></td>";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
+			}
+		
+			echo "</tr>\n";
+
+			($curclass=="row1"?$curclass="row2":$curclass="row1");
 		}
-	
-		echo "</tr>\n";
 
-		($curclass=="row1"?$curclass="row2":$curclass="row1");
+	?>
+
+</table>
+
+</div>
+
+	<?
+
 	}
-
-?>
-
-	</table>
-
-	</div>
-
-<?
 
 }
 

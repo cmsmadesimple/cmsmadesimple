@@ -33,5 +33,8 @@ cms_mapi_register_install_function($module_name, 'rss_module_install');
 cms_mapi_register_uninstall_function($module_name, 'rss_module_uninstall');
 cms_mapi_register_execute_function($module_name, 'rss_module_execute');
 
+//Register callback help function
+cms_mapi_register_help_function($module_name, 'rss_module_help');
+
 # vim:ts=4 sw=4 noet
 ?>

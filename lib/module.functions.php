@@ -104,6 +104,23 @@ function cms_mapi_register_plugin_module($name) {
 }
 
 /**
+ * Registers the module's help function
+ *
+ * This function should echo out help html.  It should show
+ * basics of what the module if for and how to use it.  This
+ * will be displayed on the module list in the admin.
+ *
+ * @since 0.5
+ */
+function cms_mapi_register_help_function($name, $function) {
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['help_function'] = $function;
+	}
+}
+
+/**
  * Registers the module's install function
  *
  * The registered function should setup any necessary tables,
