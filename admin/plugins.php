@@ -255,6 +255,8 @@ else
 	<table cellspacing="0" class="admintable">
 		<tr>
 			<td><?=$gettext->gettext("Tag Name")?></td>
+			<td width="16">&nbsp;</td>
+			<td width="16">&nbsp;</td>
 			<td width="8%"><?=$gettext->gettext("Help")?></td>
 			<td width="8%"><?=$gettext->gettext("About")?></td>
 		</tr>
@@ -268,11 +270,27 @@ else
 			echo "<tr class=\"$curclass\">\n";
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
+				echo "<td>$oneplugin (".$gettext->gettext('User').")</td>\n";
 			}
 			else
 			{
 				echo "<td>$oneplugin</td>\n";
+			}
+			if (array_key_exists($oneplugin, $gCms->userplugins))
+			{
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".gettext("Edit")."\" alt=\"".gettext("Edit")."\"></a></td>\n";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
+			}
+			if (array_key_exists($oneplugin, $gCms->userplugins))
+			{
+				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\" title=\"".gettext("Delete")."\"></a></td>\n";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
 			}
 			if (function_exists('smarty_cms_help_function_'.$oneplugin))
 			{
