@@ -176,10 +176,6 @@ class Smarty_CMS extends Smarty {
 				$head_tags = $contentobj->mProperties->GetValue('headtags');
 				$header_script = $contentobj->mProperties->GetValue('page_header');
 
-				#Replace stylesheet and title tags
-				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
-
 				#Pop the head tags in if they exist
 				if (isset($head_tags) && $head_tags != "")
 				{
@@ -204,24 +200,8 @@ class Smarty_CMS extends Smarty {
 				}
 				else
 				{
-					#If it's a module, do this instead...
-					/*
-					if (isset($cmsmodules[$line["page_type"]]['plugin_module'])
-						&& $cmsmodules[$line["page_type"]]['Installed'] == true
-						&& $cmsmodules[$line["page_type"]]['Active'] == true)
-					{
-						@ob_start();
-						call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($gCms,"cmsmodule_".++$gCms->variables["modulenum"]."_",$params));
-						$modoutput = @ob_get_contents();
-						@ob_end_clean();
-						$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
-					}
-					else //Prolly a 404 message
-					{
-					*/
-						$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
-						$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
-					//}
+					$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
+					$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
 
 					if ($header_script && $header_script != '')
 					{
@@ -238,6 +218,10 @@ class Smarty_CMS extends Smarty {
 
 				#Do html_blobs
 				$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
+
+				#Replace stylesheet and title tags
+				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)

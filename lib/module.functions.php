@@ -106,10 +106,16 @@ class Smarty_ModuleInterface extends Smarty {
 
 			$line = $result->FetchRow();
 
+			#Set the title
+			$title = $line['title'];
+
+			#Setup the stylesheet inclusion
+			$template_id = $line['template_id'];
+			$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
+
 			if ($smarty_obj->showtemplate == true)
 			{
 				$tpl_source = $line['template_content'];
-
 
 				#Perform the content template callback
 				foreach($gCms->modules as $key=>$value)
@@ -122,7 +128,6 @@ class Smarty_ModuleInterface extends Smarty {
 				}
 
 				#$content = $line['page_content'];
-				$title = $line['title'];
 
 				#Perform the content title callback
 				foreach($gCms->modules as $key=>$value)
@@ -134,11 +139,8 @@ class Smarty_ModuleInterface extends Smarty {
 					}
 				}
 
-				$template_id = $line['template_id'];
 
 				$gCms->variables['position'] = $line['hierarchy'];
-
-				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
 
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
@@ -172,6 +174,10 @@ class Smarty_ModuleInterface extends Smarty {
 					}
 
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+
+					#In case any lingering tags are coming in from the content
+					$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+					$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 				}
 				else
 				{
