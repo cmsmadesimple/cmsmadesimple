@@ -83,6 +83,9 @@ if ($access)
 					</FORM>
 					<?php
 					echo "</div>";
+					include_once("footer.php");
+					exit;
+					
 				}
 
 			}
@@ -152,6 +155,8 @@ if ($access)
 					</FORM>
 					<?php
 					echo "</div>";
+					include_once("footer.php");
+					exit;
 				}
 			}
 			else
