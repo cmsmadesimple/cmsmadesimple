@@ -55,6 +55,7 @@ CREATE TABLE {$tableprefix}pages (
 	menu_text varchar(25),
 	default_page bool,
 	show_in_menu bool,
+	page_type varchar(25),
 	owner int,
 	item_order int,
 	active bool,
