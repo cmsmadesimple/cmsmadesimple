@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.9";
+$CMS_VERSION = "0.9.1-svn";
 $CMS_VERSION_NAME = "Marquesas";
 $CMS_SCHEMA_VERSION = "9";
 

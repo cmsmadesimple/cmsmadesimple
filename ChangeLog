@@ -1,3 +1,8 @@
+Version 0.9.1 "Mohotani" -- Tue Feb 22 2005
+-----------------
+
+* Fixed bug with call to post render hook
+
 Version 0.9 "Marquesas" -- Tue Feb 22 2005
 -----------------
 
