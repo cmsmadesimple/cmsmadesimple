@@ -71,9 +71,8 @@ header("Pragma: no-cache");
 
 <body <?php if (isset($htmlarea_flag)) { ?>onload="initHtmlArea();"<?php } ?>>
 
-<img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
 <div id="header" class="header">
-
+<img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
 </div>
 
 <?php

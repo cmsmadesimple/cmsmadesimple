@@ -1,301 +1,51 @@
-/* Stylesheet by Christian Page for CMS: CMS Made Simple, June, July 2004
-	this is freesoftware as defined by the GPL version 2 or later
-	christian at localdesert.com
-	http://www.localdesert.com/christian
-	modified on August 16, 2004 by Shawn Pata
-	http://www.bewbs.com/V2
-*/
-
-body {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	margin: 0;
-	padding: 0;
-	background: #fff;
-	color: #64879d;
-	font-size : 12px;
-}
-
-a:link, a:active, a:visited {
-	color : #64879d;
-	text-decoration : none;
-}
-
-a:hover {
-	font-weight: 300;
-	color: red;
-	text-decoration: none;
-}
-
-	
-h1, h2, h5, p {
-	font-size: 12px;
-	font-weight: bold;
-	color: #000;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-}			       	       
-
-h3 {
-	font-size: 16px;
-	font-weight: bold;
-	color: #000;
-	padding-left: 190px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-}
-
-h4 {
-	font-size: 12px;
-	font-weight: bold;
-	color: #000;
-	padding-left: 190px;
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-}
+body{font-family: verdana, helvetica, arial, sans-serif; font-size: 100%; margin: 0 0 0 0; padding: 0 0 0 0;  height: 100%; width: 100%; background: #fff; color: #6F8341;}
+a:link, a:active, a:visited {color: #6F8341; text-decoration : none;}
+a:hover {color: #6F8341; text-decoration: none;}
+h1, h2, h3, h4, h5{font-size: 1.25em; font-weight: bold; color: #6F8341; font-weight: bold; text-align: left;}
 /* start navigation style */
-
-div.nav {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 12px;
-	vertical-align: top;
-	float: left;
-	width: 175px;
-	background: #F6F6F6;
-	padding: 0;
-/*	margin: 1em;  */
-	margin-right: 0px;
-/*	border: 1px solid #64879d; */
-	border-bottom: 1px solid #8C8A8C;
-/*	border-top: 0px solid #000; */
-/*	border-left: 1px solid #8C8A8C; */
-	border-right: 1px solid #8C8A8C;
-}
-
-div.nav h5 {
-	font-family: Verdana, Arial, Helvetica, sans-serif;
-	margin: 0;
-	background: #F6F6F6;
-	color: #000;
-	font-size : 12px;
-/*	font-weight: bold; */
-	padding: 0;
-	margin: 0.3em; 
-	text-align: left;
-}
-
-div.nav a {
-	display: block;
-	margin: 0;
-	width: auto;
-	padding: 0.3em; 
-	border-top: 1px solid #f6f6f6;
-	border-bottom: 1px solid #f6f6f6;
-	color: #265980;
-	
-	text-decoration: none;
-}
-
-div.nav a:hover {
-	background: #FFF;
-	border-top: 1px solid #8C8A8C;
-	border-bottom: 1px solid #8C8A8C;
-	color: #265980;
-}
-
-div.nav form {
-	text-align: center;
-	margin-left: auto;
-	margin-right: auto;
-	padding-bottom: 2px;
-	margin-bottom: 4px;
-}
-
+#navcontainer {position: absolute; float: left; left: 0; width: 150px; font-size: .80em;}
+#navcontainer ul{margin: 10px; padding: 0; list-style-type: none; background-color: #DDEBC5;}
+#navcontainer a{display: block; padding: 6px; width: 150px; background-color: #DDEBC5; border-bottom: 1px solid #6F8341; border-left: 1px solid #6F8341; border-right: 1px solid #6F8341;}
+#navcontainer a:link, #navlist a:visited{color: #6F8341; text-decoration: none; }
+#navcontainer a:hover{background-color: #6F8341; color: #fff; }
+#welcome {padding: 6px; font-weight: bold; font-size: .9em; text-align: center; border: 1px solid #6F8341; width: 150px; background-color: #DDEBC5}
+.menubox{padding: 6px; text-align: center; border-left: 1px solid #6F8341; border-right: 1px solid #6F8341; border-bottom: 1px solid #6F8341; width: 150px;}
+.menutitle{padding: 6px; text-align: left; font-size: .9em; font-weight: bold; border-bottom: 1px solid #6F8341; width: 150px; background-color: #fff; border-left: 1px solid #fff; border-right: 1px solid #fff;}
 /* end navigation style */
-
 /* start content style */
-
-#header	{
-	background: #BFDAEF;
-	color: #265980;
-	padding: 8px;
-	border-bottom: 1px solid #8C8A8C;
-	height: 100px;
-}
-
-.helparea {
-    background: #BFDAEF;
-    color: #265980;
-    width: auto;
-    margin: 30px;
-    border: 1px solid #8C8A8C;
-    padding: 3px;
-}
-
-#logo {
-	position: absolute;
-	left: 10px;
-	top: 10px;
-}
-
-/*#footer	{
-	background: #BFDAEF;
-	color: #265980;
-	padding: 8px;
-	border: 1px solid #8C8A8C;
-	vertical-align: bottom;
-} */
-			
-#login	{
-	background: #EDF2F5;
-	color: #64879d;
-	width: 320px;
-	height: 120px;
-	padding: 10px;
-	border: 2px solid #64879d;
-	margin-top: 10px;
-	position: absolute;
-	left: 100px;
-	top: 50px;
-}
-
+/*#header{background: #EDF2F5; color: #64879d; padding: 8px; border-bottom: 2px solid #64879d; height: 100px;}*/
+#logo {position: absolute; left: 10px; top: 10px;}
+#login{background: #DDEBC5; color: #6F8341; padding-bottom: 20px; border: 2px solid #6F8341; position: absolute; left: 100px; top: 50px;}
+#topHeader{background-color: black; width: 600px;}
+#bottomHeader{background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
 #table { margin-top: 20px; }
-
-#loginlogo { float: right; }
-
-div.content {
-	height: 100%;
-	color: #000;
-}
-
-.moduleabout {
-	margin-right: 150px;
-	margin-left: 200px;
-}
-
-.moduleabout p {
-	font-style: normal;
-	color: #666;
-}
-
-.moduleabout h2 {
-	font-size: 20px;
-}
-
-.moduleabout h3 {
-	font-size: 16px;
-	color: #333;
-	border-bottom: 1px solid #000;
-	padding-left: 0;
-}
-
-.moduleabout h4 {
-	font-size: 14px;
-	color: #333;
-	padding-left: 0;
-}
-
+div{border: none;}
+div.content {color: #000; height: 100%; margin: 0px 10px 0px 180px; padding-top: 10px; font-size: .8em;}
 /* end content style */
-
 /* start table style */
+table.admintable {background: #6F8341; color: #fff; border: 1px solid #6F8341; font-weight: bold; text-align: left; border-collapse: collapse; border-spacing: 0px; margin-bottom: 15px; width: 75%;}
+table.admintable a:hover{color: #6F8341; text-decoration: underline overline;}
+table.admintable td {padding: 4px;}
 
-table.admintable {
-	background: #8ABEE5;
-	color: #FFF;
-	border: 1px solid #8C8A8C;
-	font-weight: bold;
-	text-align: left;
-	border-collapse: collapse;
-	border-spacing: 0px;
-	margin-bottom: 15px;
-	width: 75%;
-	margin-left: 10px;
-}
-
-table.admintable td {
-	padding: 4px;
-}
-
-.row1, .row2 {
-	color: #265980;
-	border: #8C8A8C;
-	font-weight: normal;
-}
-
-.row1 {	background: #F6F6F6 }
-.row2 {	background: #FFF; }
-
-.button a, .button a:link, .button a:active, .button a:visited {
-	background: #F6F6F6;
-	color: #265980;
-	padding: 4px;
-	border: 1px solid #8C8A8C;
-	margin-left: 20px;
-}
-
-.button a:hover {
-	background: #FFF;
-	color: #64879d;
-	padding: 4px;
-	border: 1px solid #64879d;
-	font-weight: normal;
-}
-
-.smallselect {
-	font-size: 12px;
-}
-
+.row1, .row2 {color: #6F8341; border: #6F8341; font-weight: normal;}
+.row1 {background: #FFF }
+.row2 {background: #DDEBC5; }
+.button a, .button a:link, .button a:active, .button a:visited {text-align: left; background: #DDEBC5; color: #6F8341; padding: .2em; border: 1px solid #6F8341;}
+.button a:hover {text-align: center; background: #6F8341; color: #FFF; padding: .2em; border: 1px solid #6F8341;}
+.smallselect {font-size: .85em;}
 /* end table style */
-
+textarea{width: 100%;}
 /* start form style */
-
-div.adminform
-{
-	background: #e8e8e8; /* EDF2F5 */
-	color: #265980;
-	border: 1px solid #8C8A8C; 
-	/*
-	border-bottom: 1px solid #8C8A8C;
-	border-right: 1px solid #8C8A8C;
-	border-left: 1px solid #8C8A8C;
-	*/
-	padding: 8px;
-	margin-top: 10px; 
-	margin-right: 10px;
-	margin-left: 10px;
-	position: absolute;
-	/*left: 10px;*/
-}
-
-div.adminform h3
-{
-	padding-left: 10px;
-}
-
-div.adminformnobkg
-{
-	color: #265980;
-	border: 0; 
-	padding: 0;
-	margin-top: 10px;
-	margin-right: 20px;
-	margin-left: 0;
-	position: absolute;
-	left: 185px;
-	width: auto;
-}
-
-div.adminformnobkg h3
-{
-	font-size: 16px;
-	padding-left: 10px;
-}
-
-div.adminformnobkg h4
-{
-	font-size: 12px;
-	padding-left: 10px;
-}
-
+form{margin: 0 0 0 0;}
+form input, select{margin-top: 2px; margin-bottom: 2px;}
+form .standard{width: 150px;}
+table#padform input,table#padform select{margin-top: 5px; margin-right: 20px; margin-bottom: auto; margin-left: auto;}
+div.adminform {padding:10px; background-color: #DDEBC5; color: #6F8341; border: 1px solid #6F8341; width: 90%; margin-bottom: 10px;}
+div.adminformSmall{padding:10px; background-color: #DDEBC5; color: #6F8341; border: 1px solid #6F8341; width: 325px; margin-bottom: 10px;}
+div.adminformnobkg {padding:0; color: #6F8341; border: 0px solid #6F8341; width: 90%; margin-bottom: 10px;}
 /* end form style */
-
-.error { 
-	color: #F00;
-	padding-left: 200px;
-}
+.error { color: #F00; }
+table.box{border: 1px solid #6F8341; background-color: #DDEBC5;}
+table.box td{padding: 0 10px 10px 10px;}
+div.nav { font-size: 12px; vertical-align: top; float: left; width: 175px; background: #F6F6F6; padding: 0; margin-right: 0px; border-bottom: 1px solid #8C8A8C; border-right: 1px solid #8C8A8C;}
+#header	{ background: #BFDAEF; color: #265980; padding: 8px; border-bottom: 1px solid #8C8A8C; height: 100px;}
