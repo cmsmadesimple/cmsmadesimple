@@ -7,9 +7,9 @@ function InvertBackground(editor) {
 	var i18n = InvertBackground.I18N;
 
 	cfg.registerButton({
-		id       : "invertbackground",
+		id       : "InvertBackground",
 		tooltip  : i18n["InvertBackgroundTooltip"],
-		image    : editor.imgURL("invertbackground.gif", "InvertBackground"),
+		image    : editor.imgURL("invertBackground.gif", "InvertBackground"),
 		textMode : false,
 		action   : function(editor) {self.buttonPress(editor);}
 	})
@@ -28,10 +28,10 @@ function InvertBackground(editor) {
 
 	//inserts new icon
 	if (found)
-		a.splice(j, 0, "invertbackground");
+		a.splice(j, 0, "InvertBackground");
 	else{
 		toolbar[1].splice(0, 0, "separator");
-		toolbar[1].splice(0, 0, "invertbackground");
+		toolbar[1].splice(0, 0, "InvertBackground");
 	}
 };
 
