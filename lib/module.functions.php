@@ -1076,9 +1076,15 @@ function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message=
  *
  * @since 0.4
  */
-function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post", $form_extra="")
+function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post", $form_extra="", $enctype='')
 {
-	return "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"" .$form_extra." ><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
+	$text = "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"" .$form_extra;
+	if ($enctype != '')
+	{
+		$text .= ' enctype="'.$enctype.'"';
+	}
+	$text .= "><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
+	return $text;
 }
 
 /**
@@ -1099,9 +1105,15 @@ function cms_mapi_create_user_form_end()
  *
  * @since 0.4
  */
-function cms_mapi_create_admin_form_start($module, $id, $method="post")
+function cms_mapi_create_admin_form_start($module, $id, $method="post", $enctype='')
 {
-	return "<form name=\"".$id."moduleform\" method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
+	$text = "<form name=\"".$id."moduleform\" method=\"$method\" action=\"moduleinterface.php\"";
+	if ($enctype != '')
+	{
+		$text .= ' enctype="'.$enctype.'"';
+	}
+	$text .= "><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
+	return $text;
 }
 
 /**
