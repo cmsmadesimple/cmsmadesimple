@@ -358,7 +358,7 @@ function showPageFour() {
 	$newconfig['query_var'] = $_POST['querystr'];
 	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
-	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
+	$newconfig['previews_path'] = $newconfig['root_path'] . "/tmp/cache";
 	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
 	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";	
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";

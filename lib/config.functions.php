@@ -64,7 +64,7 @@ function cms_config_load($loadLocal = true)
 	$config["use_smarty_php_tags"] = false;
 
 	#Where do previews get saved?
-	$config["previews_path"] = $config["root_path"] . "/smarty/cms/cache";
+	$config["previews_path"] = $config["root_path"] . "/tmp/cache";
 
 	#Where are uploaded files put?
 	$config["uploads_path"] = $config["root_path"] . "/uploads";

@@ -24,11 +24,27 @@ $gCms->smarty = &$smarty;
 
 $page = "";
 
-if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "") {
+if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+{
 	$page = $_GET["tmpfile"];
+
 	#header("Content-Language: " . $current_language);
 	#header("Content-Type: text/html; charset=" . get_encoding());
-	echo $smarty->fetch('preview:'.$page);
+
+	$html = $smarty->fetch('preview:'.$page);
+
+	#Perform the content postrender callback
+	foreach($gCms->modules as $key=>$value)
+	{
+		if (isset($gCms->modules[$key]['content_postrender_function']) &&
+			$gCms->modules[$key]['Installed'] == true &&
+			$gCms->modules[$key]['Active'] == true)
+		{
+			call_user_func_array($gCms->modules[$key]['content_postrender_function'], array(&$gCms, &$html));
+		}
+	}
+
+	echo $html;
 }
 
 # vim:ts=4 sw=4 noet

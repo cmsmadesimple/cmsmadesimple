@@ -105,7 +105,7 @@ if (get_site_preference('enablecustom404') == "0")
 #	$html = display_login_form();
 #}
 
-#Perform the content prerender callback
+#Perform the content postrender callback
 foreach($gCms->modules as $key=>$value)
 {
 	if (isset($gCms->modules[$key]['content_postrender_function']) &&

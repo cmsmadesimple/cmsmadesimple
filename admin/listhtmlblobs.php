@@ -42,14 +42,14 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($htmlbloblist), $limit)."</div>";
 
-	if ($htmlbloblist && count($htmlbloblist) > 0) {
+	echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
+	echo "<tr>\n";
+	echo "<td>".lang('name')."</td>\n";
+	echo "<td>&nbsp;</td>\n";
+	echo "<td width=\"16\">&nbsp;</td>\n";
+	echo "</tr>\n";
 
-		echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
-		echo "<tr>\n";
-		echo "<td>".lang('name')."</td>\n";
-		echo "<td>&nbsp;</td>\n";
-		echo "<td width=\"16\">&nbsp;</td>\n";
-		echo "</tr>\n";
+	if ($htmlbloblist && count($htmlbloblist) > 0) {
 
 		$currow = "row1";
 		// construct true/false button images
@@ -69,10 +69,9 @@ if (isset($_GET["message"])) {
 			}
 			$counter++;
 		}
-
-		echo "</table>\n";
-
 	}
+
+	echo "</table>\n";
 
 #if ($add) {
 ?>

@@ -61,6 +61,17 @@ class Smarty_Preview extends Smarty {
 
 		$tpl_source = $data["template"];
 
+		#Perform the content template callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['content_template_function']) &&
+				$gCms->modules[$key]['Installed'] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
+				call_user_func_array($gCms->modules[$key]['content_template_function'], array(&$gCms, &$tpl_source));
+			}
+		}
+
 		$gCms->variables['page'] = $data['content_id'];
 		$gCms->variables['page_id'] = $data['content_id'];
 		$gCms->variables['content_id'] = $data['content_id'];
@@ -72,22 +83,42 @@ class Smarty_Preview extends Smarty {
 		$stylesheet = "";
 		if (isset($data["stylesheet"]))
 		{
-			#$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$data["template_id"];
-			#$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
 			$stylesheet .= "<style type=\"text/css\">\n";
-			#$stylesheet .= "<!--\n";
-			#$stylesheet .= "	@import \"".$csslink."\";\n";
 			$stylesheet .= "{literal}".$data["stylesheet"]."{/literal}";
-			#$stylesheet .= "-->\n";
 			$stylesheet .= "</style>\n";
 		}
 
 		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 		$tpl_source = ereg_replace("\{content\}", $data["content"], $tpl_source);
-		$tpl_source = ereg_replace("\{title\}", $data["title"], $tpl_source);
+
+		$title = $data['title'];
+
+		#Perform the content title callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['content_title_function']) &&
+				$gCms->modules[$key]['Installed'] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
+				call_user_func_array($gCms->modules[$key]['content_title_function'], array(&$gCms, &$title));
+			}
+		}
+
+		$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 		#Do html_blobs
 		$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
+
+		#Perform the content prerender callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['content_prerender_function']) &&
+				$gCms->modules[$key]['Installed'] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
+				call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
+			}
+		}
 
 		return true;
 	}
