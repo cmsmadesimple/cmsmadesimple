@@ -108,12 +108,14 @@ function showPageOne() {
     $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt');
 
     echo "<table class=\"regtable\" border=\"1\">\n";
-    echo "<tr><th>Test</th><th>Result</th></tr>\n";
+    echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
+
+	$currow = "row1";
 
     foreach ($files as $f) {
         #echo "<tr><td>\n";
         ## check if we can write to the this file
-        echo "<tr><td>Opening for write ($f)</td><td>";
+        echo "<tr class=\"$currow\"><td>Opening for write ($f)</td><td>";
         $file = @fopen ($f, "w");
         if($file != 0) {
             echo "Success!";
@@ -122,12 +124,13 @@ function showPageOne() {
             echo "Failure!";
         } ## if 
         echo "</td></tr>\n";
+		($currow=="row1"?$currow="row2":$currow="row1");
     } ## foreach
 
-    echo "</table>\n";
+    echo "</tbody></table>\n";
   
-    echo "<p>If all your tests show successful then it is time to setup your database.<br />\n";
-    echo "<div class=\"continue\"><a href=\"install.php?page=2\">Continue</a></div></p>\n";
+    echo "<p>If all your tests show successful then it is time to setup your database.</p>\n";
+    echo "<p class=\"continue\" align=\"center\"><a href=\"install.php?page=2\">Continue</a></p>\n";
 
 } ## showPageOne
 
@@ -139,40 +142,35 @@ Log in to mysql from a console and run the following commands:<br>
 - grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';<p>
 
 Please complete the following fields:
-<form action="install.php" method="post">
+<form action="install.php" method="post" name="page2form" id="page2form">
 
 <table cellpadding="2" border="1" class="regtable">
-<tr>
+<tr class="row1">
 <td>Database host address</td>
 <td><input type="text" name="host" value="localhost" length="20" maxlength="50" /></td>
 </tr>
-<tr>
+<tr class="row2">
 <td>Database host port</td>
 <td><input type="text" name="port" value="3306" length="20" maxlength="50" /></td>
 </tr>
-<tr>
+<tr class="row1">
 <td>Database name</td>
 <td><input type="text" name="database" value="cms" length="20" maxlength="50" /></td>
 </tr>
-<tr>
+<tr class="row2">
 <td>Username</td>
 <td><input type="text" name="username" value="cms_user" length="20" maxlength="50" /></td>
 </tr>
-<tr>
+<tr class="row1">
 <td>Password</td>
 <td><input type="password" name="password" value="cms_pass" length="20" maxlength="50" /></td>
 </tr>
-<tr>
+<tr class="row2">
 <td>Table prefix</td>
-<td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /></td>
+<td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /><input type="hidden" name="page" value="3" /></td>
 </tr>
-<tr>
-<td><input type="hidden" name="page" value="3" />&nbsp;</td>
-<td><input type="submit" value="Continue" /></td>
-</tr>
-
 </table>
-
+<p class="continue" align="center"><a href="#" onclick="document.page2form.submit()">Continue</a></p>
 </form>
 <?php
 
@@ -218,20 +216,21 @@ function showPageThree($sqlloaded = 0) {
 
     echo "<p>Now let's continue to setup your configuration file, we already have most of the stuff we need.<br />\n";
     echo "Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>\n";
-    echo "<form action=install.php method=post>\n";
+    echo "<form action=install.php method=post name=\"page3form\" id=\"page3form\">\n";
 	echo "<table cellpadding=\"2\" border=\"1\" class=\"regtable\">\n";
-    echo "<tr><td>CMS Document root (as seen from the webserver)</td><td><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
-    echo "<tr><td>Path to the Document root</td><td><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
-    echo "<tr><td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
-    echo "<tr><td>Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
+    echo "<tr class=\"row1\"><td>CMS Document root (as seen from the webserver)</td><td><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr class=\"row2\"><td>Path to the Document root</td><td><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr class=\"row1\"><td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
+    echo "<tr class=\"row2\"><td>Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
 
-    echo '<tr><td><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
+    echo '<tr class=\"row1\"><td><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
     echo '<input type=hidden name=database value="'.$_POST['database'].'"><input type=hidden name=port value="'.$_POST['port'].'">';
     echo '<input type=hidden name=username value="'.$_POST['username'].'"><input type=hidden name=password value="'.$_POST['password'].'">';
     echo '<input type=hidden name=prefix value="'.$_POST['prefix'].'">';
-    echo "</td><td><input type=submit value=\"Write config\" /></td></tr>\n";
-    echo "</table></form>\n";
-    echo "<div class=\"continue\"><a href=\"install.php?page=4\">Continue</a></div></p>\n";
+    echo "</td><td>&nbsp;</td></tr>\n";
+    echo "</table>";
+    echo "<p align=\"center\" class=\"continue\"><a href=\"#\" onclick=\"document.page3form.submit()\">Continue</a></p>\n";
+	echo "</form>\n";
     
 } ## showPageThree
 
@@ -268,11 +267,11 @@ function showPageFour() {
             fclose($file);
         } ## if
     } else {
-        echo "Error: Cannot write to $config.<br>\n";
+        echo "Error: Cannot write to $config.<br />\n";
         exit;
     } ## if
  
-    echo "<h4>Congratulations, you are all setup.<br>Here is your <a href=".$_POST['docroot'].">CMS site</a><br>\n";
+    echo "<h4>Congratulations, you are all setup.</h4><h4>Here is your <a href=".$_POST['docroot'].">CMS site</a></h4>\n";
 
 } ## showPageFour
 ?>
