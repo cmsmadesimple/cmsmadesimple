@@ -34,5 +34,8 @@ cms_mapi_register_uninstall_function($module_name, 'comments_module_uninstall');
 cms_mapi_register_execute_function($module_name, 'comments_module_execute');
 cms_mapi_register_executeuser_function($module_name, 'comments_module_executeuser');
 
+//Register help callback functions
+cms_mapi_register_help_function($module_name, 'comments_module_help');
+
 # vim:ts=4 sw=4 noet
 ?>

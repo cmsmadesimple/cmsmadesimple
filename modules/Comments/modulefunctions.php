@@ -103,10 +103,10 @@ function comments_module_executeuser($cms, $id, $return_id, $params) {
 		if ($content == "") {
 			$validinfo = false;
 			$errormsg .= "<li>Enter a comment...  isn't that the point?</li>";
-		} else if (strlen($content) < 32) {
-			$validinfo = false;
-			$errormsg .= "<li>Please, no test comments.  It's works.</li>";
-		}
+		}# else if (strlen($content) < 32) {
+		#	$validinfo = false;
+		#	$errormsg .= "<li>Please, no test comments.  It's works.</li>";
+		#}
 
 		if ($validinfo) {
 			$db = $cms->db;
@@ -153,18 +153,11 @@ function comments_module_help($cms)
 	?>
 
 	<h3>What does this do?</h3>
-	<p>RSS is a module for displaying news feeds from other sites in your site.  It can be inserted into a template or content page as a plugin and will display the title and url of each item from the feed given.</p>
-	<h3>Anything else I should know?</h3>
-	<p>The RSS module will cache feeds so that they are not downloaded and parsed on every refresh.  Instead, it will be pulls the feed down every so many page refreshes and stores the data locally so it's easily accessible.  When the local data becomes stale, it will pull fresh data.  You should notice no performance hit by using it in a template.</p>
+	<p>The comments module is a plugin module.  It's used to add comments to individual pages which can be read by users who visit the page later.  The practical reason for this module is for documentation pages, so that users can add additional comments and information to the page.</p>
 	<h3>How do I use it?</h3>
-	<p>As this is just a plugin module, it's inserted into your page or template by using the cms_module plugin.  Example syntax would be: <br /><code>{cms_module module="rss" url="http://download.freshmeat.net/backend/fm-releases.rdf" numbertofetch="5"}</code></p>
+	<p>Comments is just a plugin module.  It's inserted into your page or template by using the cms_module plugin.  Example syntax would be: <code>{cms_module module="comments"}</code></p>
 	<h3>What parameters are there?</h3>
-	<p>
-	<ul>
-		<li>url="http://feed_url" - RSS feed URL</li>
-		<li><em>(optional)</em>numbertofetch="5" - Maximum number of items to display -- leaving empty will show all items</li>
-	</ul>
-	</p>
+	<p>There are none.</p>
 
 	<?
 
