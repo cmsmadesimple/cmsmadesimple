@@ -169,7 +169,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($config["db_prefix"]."htmlblobs_seq");
+	$db->CreateSequence($db_prefix."htmlblobs_seq");
 
 	echo "[done]</p>";
 
