@@ -441,6 +441,8 @@ Class Image_Transform
     {
         switch($this->type){
             case 'gif':
+	    	return 'gif';
+		break;
             case 'png':
                 return 'png';
                 break;
