@@ -8,6 +8,8 @@ Version 0.2.1 -- Subversion
 * Changed content url entries to automatically be lowercase with no odd chars
 * Changed admin login page so username field gets focus on load
 * Changed install.php so that it removes the test files created on page 1
+* Fixed editing content so that changing sections does not mess up ordering
+* Fixed the install script so that it works correctly on Win32 platforms
 * Moved stylesheets to display inline instead of from separate script
 * Moved menu generation code out of the bulletmenu plugin
 
