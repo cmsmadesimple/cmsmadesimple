@@ -47,7 +47,7 @@ $gettext->reset();
 
 	if ($result && $result->RowCount() > 0) {
 
-		echo "<h4>Modules</h4>";
+		$displaymodules = "";
 
 		while ($row = $result->FetchRow()) {
 			$installedmodules[$row['module_name']] = 1;
@@ -55,8 +55,13 @@ $gettext->reset();
 
 		foreach ($cmsmodules as $key=>$value) {
 			if (isset($cmsmodules[$key]['execute_admin_function']) && isset($installedmodules[$key])) {
-				echo "<a href=\"moduleinterface.php?module=$key\">$key</a>";
+				$displaymodules .= "<a href=\"moduleinterface.php?module=$key\">$key</a>";
 			}
+		}
+
+		if ($displaymodules != "") {
+			echo "<h4>Modules</h4>";
+			echo $displaymodules;
 		}
 
 	}
