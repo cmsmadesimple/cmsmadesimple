@@ -209,6 +209,6 @@ $lang['admin']['currentcss'] = 'CSS courante';
 $lang['admin']['imagemanager'] = 'Gestionnaire d\'images';
 $lang['admin']['filemanager'] = 'Gestionnaire de fichiers';
 $lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
-$lang['admin']['encoding'] = 'Encoding'; //needs translation
-$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
+$lang['admin']['encoding'] = 'Encodage';
+$lang['admin']['nosyntax'] = 'Désolé, la coloration syntaxique n\'est pas supporté par votre navigateur.';
 ?>
