@@ -378,8 +378,16 @@ function get_request_value($value, $default_value = '', $session_key = '')
 * @param mixed $default_value
 * @return mixed
 */
-function get_value_with_default($value, $default_value = '')
+function get_value_with_default($value, $default_value = '', $session_key = '')
 {
+	if($session_key != '')
+	{
+		if(isset($_SESSION['default_values'][$session_key][$value]))
+		{
+			$default_value = $_SESSION['default_values'][$session_key][$value];
+		}
+	}
+
 	// is $default_value a number?
 	$is_number = false;
 	if(is_numeric($default_value))
@@ -412,6 +420,12 @@ function get_value_with_default($value, $default_value = '')
 			$return_value = trim($value);
 		}
 	}
+	
+	if($session_key != '')
+	{
+		$_SESSION['default_values'][$session_key][$value] = $return_value;
+	}
+	
 	return $return_value;
 }
 
