@@ -38,6 +38,11 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
+$use_javasyntax = false;
+//FIXME: change below to true after bugs are worked out...and see if there
+//       is syntax highlighting that will work for this textarea
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = false;
+
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
@@ -109,7 +114,7 @@ else {
 	}
 ?>
 
-<form method="post" action="adduserplugin.php">
+<form method="post" action="adduserplugin.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'code\');"';} ?>>
 
 <div class="adminform">
 
@@ -122,7 +127,7 @@ else {
 	</tr>
 	<tr>
 		<td>*<?php echo lang('code')?></td>
-		<td><textarea name="code" cols="50" rows="10"><?php echo $code?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $code, "code", "syntaxHighlight", "Java Properties") ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

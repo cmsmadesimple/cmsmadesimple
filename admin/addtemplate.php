@@ -159,7 +159,7 @@ else
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet") ?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet", "syntaxHighlight", "Java Properties") ?></textarea></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>

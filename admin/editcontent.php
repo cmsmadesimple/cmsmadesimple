@@ -386,7 +386,7 @@ else {
 
 ?>
 
-<form method="post" action="editcontent.php" name="editform" id="editform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
+<form method="post" action="editcontent.php" name="editform" id="editform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,head_tags\');"';} ?>>
 
 <?php if ($content_type == "content") { ?>
 <h3><?php echo lang('editcontent')?></h3>

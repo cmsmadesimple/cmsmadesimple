@@ -298,7 +298,7 @@ else {
 
 ?>
 
-<form method="post" action="addcontent.php" name="addform" id="addform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
+<form method="post" action="addcontent.php" name="addform" id="addform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,head_tags\');"';} ?>>
 
 <?php if ($content_type == "content") { ?>
 <h3><?php echo lang('addcontent')?></h3>
