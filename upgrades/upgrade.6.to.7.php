@@ -4,6 +4,7 @@ echo "<p>Adding fields to pages table...";
 
 $dbdict = NewDataDictionary($db);
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."pages", "page_header X");
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
@@ -11,6 +12,7 @@ echo "<p>Adding fields to templates table...";
 
 $dbdict = NewDataDictionary($db);
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."templates", "encoding C(25)");
+$dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
