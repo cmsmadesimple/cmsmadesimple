@@ -48,14 +48,49 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			setcookie('cms_language', $default_cms_lang);
 		}
 		audit(-1, '', 'User Login');
+
+		#Perform the login_post callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['login_post_function'])) {
+				call_user_func_array($gCms->modules[$key]['login_post_function'], array($gCms, $oneuser));
+			}
+		}
+
 		if (isset($_SESSION["redirect_url"]))
 		{
-			echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url='.$_SESSION["redirect_url"].'"></head><body>Logging in and redirecting to <a href="'.$_SESSION["redirect_url"].'">'.$_SESSION["redirect_url"].'</a>, one moment please...</body></html>');
+			if (isset($gCms->config) and $gCms->config['debug'] == true)
+			{
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+				echo "<a href=\"".$_SESSION["redirect_url"]."\">".$_SESSION["redirect_url"]."</a><br />";
+				global $sql_queries;
+				if (isset($sql_queries))
+				{
+					echo $sql_queries;
+				}
+			}
+			else
+			{
+				echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url='.$_SESSION["redirect_url"].'"></head><body>Logging in and redirecting to <a href="'.$_SESSION["redirect_url"].'">'.$_SESSION["redirect_url"].'</a>, one moment please...</body></html>');
+			}
 			unset($_SESSION["redirect_url"]);
 		}
 		else
 		{
-			echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
+			if (isset($config) and $config['debug'] == true)
+			{
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+				echo "<a href=\"index.php\">index.php</a><br />";
+				global $sql_queries;
+				if (isset($sql_queries))
+				{
+					echo $sql_queries;
+				}
+			}
+			else
+			{
+				echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
+			}
 		}
 		return;
 		#redirect("index.php");
@@ -158,5 +193,13 @@ header("Content-Type: text/html; charset=" . get_encoding());
 </BODY>
 </HTML>
 <?php
+	if (isset($gCms->config) and $gCms->config['debug'] == true)
+	{
+		global $sql_queries;
+		if (isset($sql_queries))
+		{
+			echo $sql_queries;
+		}
+	}
 # vim:ts=4 sw=4 noet
 ?>

@@ -25,6 +25,14 @@ audit(-1, "", 'User Logout');
 unset($_SESSION["cms_admin_user_id"]);
 setcookie("cms_admin_user_id", "", time() - 3600);
 
+#Perform the logout_post callback
+foreach($gCms->modules as $key=>$value)
+{
+	if (isset($gCms->modules[$key]['logout_post_function'])) {
+		call_user_func_array($gCms->modules[$key]['logout_post_function'], array($gCms, $oneuser));
+	}
+}
+
 echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
 #redirect("index.php");
 

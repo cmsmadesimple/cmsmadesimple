@@ -254,6 +254,59 @@ function cms_mapi_unregister_module($name) {
 	}
 }
 
+/**
+ * Registers a function to be called after a successful login.
+ * Passes $gCms and a user object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_login_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['login_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful logout.
+ * Passes $gCms to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_logout_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['logout_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called after a successful user addition.
+ * Passes $gCms and a user object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_adduser_post_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['adduser_post_function'] = $function;
+	}
+}
+
+/**
+ * Enables the WYSIWYG for this module on all textareas
+ *
+ * @since 0.5
+ */
 function cms_mapi_enable_wysiwyg($name)
 {
 	global $gCms;
