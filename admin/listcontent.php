@@ -46,23 +46,26 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-	$section_count;
-	$query = "SELECT count(*) AS count, section_id FROM ".$config->db_prefix."pages GROUP BY section_id";
-	$result = $dbnew->Execute($query);
-	while($row = $result->FetchRow()) {
-		$section_count[$row[section_id]] = $row[count];
-	}
+## 	$section_count;
+## 	$query = "SELECT count(*) AS count, section_id FROM ".$config->db_prefix."pages GROUP BY section_id";
+## 	$result = $dbnew->Execute($query);
+## 	while($row = $result->FetchRow()) {
+## 		$section_count[$row[section_id]] = $row[count];
+## 	}
+## 
+## 	$query = "";
+## 	if ($modifyall == true) {
+## 		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id ORDER BY section_id, item_order";
+## 	} else {
+## 		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."additional_users cau ON cau.page_id = p.page_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id WHERE owner = ".$userid." OR cau.user_id = ".$userid." ORDER BY section_id, item_order";
+## 	}
+## 
+## 	$result = $dbnew->Execute($query);
+## 
+## 	if ($result) {
 
-	$query = "";
-	if ($modifyall == true) {
-		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id ORDER BY section_id, item_order";
-	} else {
-		$query = "SELECT p.*, u.username, s.section_name, t.template_name FROM ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."additional_users cau ON cau.page_id = p.page_id LEFT OUTER JOIN ".$config->db_prefix."templates t ON t.template_id = p.template_id WHERE owner = ".$userid." OR cau.user_id = ".$userid." ORDER BY section_id, item_order";
-	}
-
-	$result = $dbnew->Execute($query);
-
-	if ($result) {
+	$content_array = db_get_menu_items($config, "content_hierarchy");
+	if (count($content_array)) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -70,7 +73,7 @@ if (isset($_GET["message"])) {
 		echo "<td>".$gettext->gettext("Type")."</td>\n";
 		echo "<td>".$gettext->gettext("URL")."</td>\n";
 		echo "<td>".$gettext->gettext("Owner")."</td>\n";
-		echo "<td>".$gettext->gettext("Section")."</td>\n";
+## 		echo "<td>".$gettext->gettext("Section")."</td>\n";
 		echo "<td>".$gettext->gettext("Template")."</td>\n";
 		echo "<td>".$gettext->gettext("Active")."</td>\n";
 		echo "<td>".$gettext->gettext("Default")."</td>\n";
@@ -83,36 +86,30 @@ if (isset($_GET["message"])) {
 		echo "</tr>\n";
 
 		$count = 1;
-		$oldsectionid = -1;
+## 		$oldsectionid = -1;
 
 		$currow = "row1";
 
-		while($row = $result->FetchRow()) {
-
-			$totalcount = $section_count[$row[section_id]];
-			if ($oldsectionid != $row["section_id"]) {
-				$count = 1;
-				$oldsectionid = $row["section_id"];
-			}
+## 		while($row = $result->FetchRow()) 
+		foreach ($content_array as $one) {
 
 			$types = get_page_types($config);
 
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$row["page_title"]."</td>\n";
-			echo "<td>".$types[$row["page_type"]]."</td>\n";
-			echo "<td>".$row["page_url"]."</td>\n";
-			echo "<td>".$row["username"]."</td>\n";
-			echo "<td>".$row["section_name"]."</td>\n";
-			echo "<td>".$row["template_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
-			echo "<td>".($row["default_page"] == 1?"True":"<a href=\"listcontent.php?makedefault=".$row["page_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
+			echo "<td>".$one->hier." ".$one->page_title."</td>\n";
+			echo "<td>".$types[$one->page_type]."</td>\n";
+			echo "<td>".$one->page_url."</td>\n";
+			echo "<td>".$one->username."</td>\n";
+			echo "<td>".$one->template_name."</td>\n";
+			echo "<td>".($one->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td>".($one->default_page == 1?"True":"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to set site\'s default page?")."');\">False</a>")."</td>\n";
 			if ($modifyall) {
 				echo "<td align=\"center\">";
 				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=up&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
+					echo "<a href=\"movecontent.php?direction=up&page_id=".$one->page_id."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
 				}
 				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movecontent.php?direction=down&page_id=".$row["page_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
+					echo "<a href=\"movecontent.php?direction=down&page_id=".$one->page_id."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a>";
 				}
 				if ($totalcount == 1 && $count == 1) {
 					echo "&nbsp;";
@@ -120,18 +117,20 @@ if (isset($_GET["message"])) {
 				echo "</td>\n";
 			}
 			if ($config->query_var == "")
-				echo "<td><a href=\"".$config->root_url."/index.php/".$row["page_url"]."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php/".$one->page_url."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
 			else
-				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$row["page_url"]."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
-			echo "<td><a href=\"editcontent.php?page_id=".$row["page_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
-			echo "<td><a href=\"deletecontent.php?page_id=".$row["page_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td><a href=\"".$config->root_url."/index.php?".$config->query_var."=".$one->page_url."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+			echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
+			echo "<td><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
+
+# 			echo "</tr>\n";
 
 			$count++;
 
 			($currow == "row1"?$currow="row2":$currow="row1");
 
-		}
+		} ## foreach
 
 		echo "</table>\n";
 
@@ -147,6 +146,7 @@ Content")?></a></div>
 
 <?php
 	}
+
 
 include_once("footer.php");
 

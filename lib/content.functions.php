@@ -18,6 +18,7 @@
 
 require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
 $sorted_sections = array();
+$sorted_content = array();
 
 class Smarty_CMS extends Smarty {
 
@@ -224,25 +225,49 @@ class MenuItem {
 }
 
 class Page {
-	var $title;
-	var $url;
+	var $page_title;
+	var $display_title;
+	var $page_url;
 	var $menu_text;
 	var $show_in_menu;
 	var $page_type;
 	var $item_order;
 	var $active;
 	var $section_id;
-}
+	var $parent_id;
+	var $level;
+	var $hier;
+
+	function get_child_content($parent_content, $all_content, $level, $hier) {
+		global $sorted_content;
+		reset($all_content);
+		$count = 0;
+		foreach ($all_content as $one) {
+			if ($one->parent_id == $parent_content->page_id) {
+				$count++;
+				$prefix = "";
+				for ($i=0; $i<=$level; $i++) {
+					$prefix .= " -- ";
+				}
+				$one->hier = $hier.".".$count;
+				$one->display_name = $prefix.$one->page_title;
+				$one->level = $parent_content->level + 1;
+				array_push($sorted_content, $one);
+				$one->get_child_content($one, $all_content, $level +1, $one->hier);
+			} ## if
+		} ## foreach
+	} ## function
+} ## class
 
 function db_get_menu_items(&$config, $style) {
 
 	global $sorted_sections;
+	global $sorted_content;
 	$db = $config->db;
 
 	$sections = array();
 	$current_section;
 
-## 	echo "style: ($style)";
 	if ($style === "subs") { ## shows all sections and subsections, no pages
 		$query = "SELECT p.menu_text, p.page_title, p.page_url, s.section_name, s.parent_id, s.section_id, s.active FROM ".$config->db_prefix."sections s LEFT OUTER JOIN ".$config->db_prefix."pages p ON s.section_id=p.section_id order by s.parent_id, s.item_order";
 		$result = $db->Execute($query);
@@ -334,7 +359,45 @@ function db_get_menu_items(&$config, $style) {
 
 		} ## while
 
+	} elseif ($style == "content_hierarchy") {
+
+		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u on u.user_id=p.owner INNER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
+		$result = $db->Execute($query);
+
+		$content_array = array();
+		while ($line = $result->FetchRow()) {
+			$current_content = new Page;
+			$current_content->page_id = $line["page_id"];
+			$current_content->page_title = $line["page_title"];
+			$current_content->page_url = $line["page_url"];
+			$current_content->menu_text = $line["menu_text"];
+			$current_content->page_type = $line["page_type"];
+			$current_content->item_order = $line["item_order"];
+			$current_content->active = $line["active"];
+			$current_content->default_page = $line["default_page"];
+			$current_content->username = $line["username"];
+			$current_content->template_name = $line["template_name"];
+			$current_content->parent_id = $line["parent_id"];
+			$current_content->url = $line["url"];
+			$current_content->hier = "1";
+			$current_content->level = "1";
+			array_push($content_array, $current_content);
+		} ## while
+
+		reset($content_array);
+		$hier_level = 0;
+		foreach ($content_array as $one_content) {
+			if ($one_content->parent_id == 0) {
+				$hier_level++;
+				$one_content->hier = $hier_level;
+				array_push($sorted_content, $one_content);
+				$one_content->get_child_content($one_content, $content_array, 1, $hier_level);
+			} ## if
+		} ## foreach
+
+		return $sorted_content;
 	} ## if
+
 
 	if (isset($current_section)) {
 		array_push($sections, $current_section);

@@ -32,7 +32,7 @@ if (isset($_GET["page_id"])) {
 	if ($access)  {
 
 		$order = 1;
-		$section_id = 1;
+		$parent_id = 1;
 		$title = "";
 
         $query = "SELECT default_page FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
@@ -44,14 +44,14 @@ if (isset($_GET["page_id"])) {
         }
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT page_title, item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
+		$query = "SELECT page_title, item_order, parent_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $dbnew->Execute($query);
 		$row = $result->FetchRow();
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
-		if (isset($row["section_id"])) {
-			$section_id = $row["section_id"];	
+		if (isset($row["parent_id"])) {
+			$parent_id = $row["parent_id"];	
 		}
 		if (isset($row["page_title"])) {
 			$title = $row["page_title"];	
@@ -62,7 +62,7 @@ if (isset($_GET["page_id"])) {
 		$query = "DELETE FROM ".$config->db_prefix."additional_users where page_id = $page_id";
 		$result = $dbnew->Execute($query);
 		#Fix the item_order if necessary
-		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE section_id = $section_id AND item_order > $order";
+		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
 		$result = $dbnew->Execute($query);
 		#This is so pages will not cache the menu changes
 		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";

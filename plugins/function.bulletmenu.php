@@ -22,31 +22,22 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	$menu = "";
 
-	$sections = db_get_menu_items($smarty->configCMS, "subs");
+	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
 
 	$count=0;
 	$last_level = -1;
-	foreach ($sections as $one_section) {
+	foreach ($content as $one) {
 
-		if ($one_section->active) {
+		if ($one->active) {
 
-							
-			for ($i = 0; $i <= $one_section->level; $i++) { $menu .= "."; }
-			$menu .= "|".$one_section->section_name."\n";
-
-			foreach ($one_section->items as $one_item) {
-			
-				for ($i = 0; $i <= $one_section->level; $i++) { $menu .= "."; }
-				$menu .= ".|".$one_item->menu_text."|".$one_item->url."\n";
-				
-			}
+			for ($i = 1; $i <= $one->level; $i++) { $menu .= "."; }
+			$menu .= "|".$one->menu_text."|".$one->page_url."\n";
 		}
 		
 		$count++;
 		$last_level = $one_section->level;
 	}
 
-		
 	$text = '
 	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
 	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-browser_detection.js"></script>

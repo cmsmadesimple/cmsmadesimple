@@ -60,14 +60,14 @@ $page_id = -1;
 if (isset($_POST["page_id"])) $page_id = $_POST["page_id"];
 else if (isset($_GET["page_id"])) $page_id = $_GET["page_id"];
 
-$section_id = -1;
-if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
+$parent_id = -1;
+if (isset($_POST["parent_id"])) $parent_id = $_POST["parent_id"];
 
 $owner_id = -1;
 if (isset($_POST["owner_id"])) $owner_id = $_POST["owner_id"];
 
-$orig_section_id = -1;
-if (isset($_POST["orig_section_id"])) $orig_section_id = $_POST["orig_section_id"];
+$orig_parent_id = -1;
+if (isset($_POST["orig_parent_id"])) $orig_parent_id = $_POST["orig_parent_id"];
 
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
@@ -80,6 +80,9 @@ if (isset($_POST["submitbutton"])) $submit = true;
 
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
+
+$orig_item_order = -1;
+if (isset($_POST["orig_item_order"])) $item_order = $_POST["orig_item_order"];
 
 if (isset($_POST["cancel"])) {
 	redirect("listcontent.php");
@@ -122,15 +125,18 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			if ($orig_section_id != $section_id) {
-				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
+			if ($orig_parent_id != $parent_id) {
+				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE parent_id = $parent_id";
 				$result = $dbnew->Execute($query);
 				$row = $result->FetchRow();
 				if (isset($row["item_order"])) {
 					$order = $row["item_order"];	
 				}
+
+## 				$query = "UPDATE ".$config->db_prefix."pages set item_order=item_order-1 where parent_id=$orig_parent_id and item_order>$orig_item_order";
+## 				$result = $dbnew->Execute($query);
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {
@@ -165,6 +171,7 @@ if ($access) {
 		
 		$row = $result->FetchRow();
 
+		$page_id = $row["page_id"];
 		$title = $row["page_title"];
 		$url = $row["page_url"];
 		$content_type = $row["page_type"];
@@ -172,29 +179,36 @@ if ($access) {
 		$url = $row["page_url"];
 		$content = $row["page_content"];
 		$owner_id = $row["owner"];
-		$section_id = $row["section_id"];
-		$orig_section_id = $row["section_id"];
+		$parent_id = $row["parent_id"];
+		$orig_parent_id = $row["parent_id"];
 		$template_id = $row["template_id"];
 		$active = $row["active"];
 		$order = $row["item_order"];
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
+		$orig_item_order = $row["item_order"];
 	}
 
-	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
-	$result = $dbnew->Execute($query);
+    $content_array = array();
+    $content_array = db_get_menu_items($config, "content_hierarchy");
+    $dropdown = "<select name=\"parent_id\">";
+    $dropdown .="<option value=\"0\"";
+    if ($parent_id == "0") {
+        $dropdown .= " selected";
+    }
+    $dropdown .= ">None</option>";
 
-	$dropdown = "<select name=\"section_id\">";
+    foreach ($content_array as $one) {
+		if ($one->page_id != $page_id) {
+			$dropdown .= "<option value=\"".$one->page_id."\"";
+			if ($one->page_id == $parent_id) {
+				$dropdown .= "selected";
+			}
+			$dropdown .= ">".$one->hier." ".$one->page_title."</option>";
+		} ## if
+    }
 
-	while($row = $result->FetchRow()) {
-		$dropdown .= "<option value=\"".$row["section_id"]."\"";
-		if ($row["section_id"] == $section_id) {
-			$dropdown .= "selected";
-		}
-		$dropdown .= ">".$row["section_name"]."</option>";
-	}
-
-	$dropdown .= "</select>";
+    $dropdown .= "</select>";
 
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $dbnew->Execute($query);
@@ -323,8 +337,8 @@ else {
 	</tr>
 <?php } ?>
 	<tr>
-		<td><?=$gettext->gettext("Section")?>:</td>
-		<td><?=$dropdown?><input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" /></td>
+		<td><?=$gettext->gettext("Parent")?>:</td>
+		<td><?=$dropdown?><input type="hidden" name="orig_parent_id" value="<?=$orig_parent_id?>" /></td>
 	</tr>
 <?php if ($content_type != "link") { ?>
 	<tr>
@@ -356,7 +370,13 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="content_change" value="0" /><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
+		<td><input type="hidden" name="content_change" value="0" />
+		    <input type="hidden" name="order" value="<?=$order?>" />
+			<input type="hidden" name="page_id" value="<?=$page_id?>" />
+			<input type="hidden" name="editcontent" value="true" />
+			<input type="hidden" name="orig_item_order" value="<?=$orig_item_order?>" />
+
+<?php if ($content_type == "content") { ?><input type="submit" name="preview" value="<?=$gettext->gettext("Preview")?>" /><?php } ?><input type="submit" name="submitbutton" value="<?=$gettext->gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=$gettext->gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

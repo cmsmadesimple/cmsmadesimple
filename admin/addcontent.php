@@ -41,8 +41,8 @@ else {
 	if (isset($_POST["url"])) $url = $_POST["url"];
 }
 
-$section_id = -1;
-if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
+$parent_id = -1;
+if (isset($_POST["parent_id"])) $parent_id = $_POST["parent_id"];
 
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
@@ -103,14 +103,14 @@ if ($access) {
 
 		if ($validinfo) {
 			$order = 1;
-			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
+			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."pages WHERE parent_id = $parent_id";
 			$result = $dbnew->Execute($query);
 			$row = $result->FetchRow();
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
 			$new_page_id = $dbnew->GenID($config->db_prefix."pages_seq");
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $section_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
 			$result = $dbnew->Execute($query);
 			if ($result) {
 				if (isset($_POST["additional_editors"])) {
@@ -133,18 +133,21 @@ if ($access) {
 		}
 	}
 
-	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
-	$result = $dbnew->Execute($query);
+	$content_array = array();
+	$content_array = db_get_menu_items($config, "content_hierarchy");
+	$dropdown = "<select name=\"parent_id\">";
+	$dropdown .="<option value=\"0\"";
+	if ($parent_id == "0") {
+		$dropdown .= " selected";
+	}
+	$dropdown .= ">None</option>";
 
-	$dropdown = "<select name=\"section_id\">";
-
-	while($row = $result->FetchRow()) {
-
-		$dropdown .= "<option value=\"".$row["section_id"]."\"";
-		if ($row["section_id"] == $section_id) {
+	foreach ($content_array as $one) {
+		$dropdown .= "<option value=\"".$one->page_id."\"";
+		if ($one->page_id == $parent_id) {
 			$dropdown .= "selected";
 		}
-		$dropdown .= ">".$row["section_name"]."</option>";
+		$dropdown .= ">".$one->hier." ".$one->page_title."</option>";
 
 	}
 
@@ -261,7 +264,7 @@ else {
 	</tr>
 <?php } ?>
 	<tr>
-		<td><?=$gettext->gettext("Section")?>:</td>
+		<td><?=$gettext->gettext("Parent")?>:</td>
 		<td><?=$dropdown?></td>
 	</tr>
 <?php if ($content_type != "link") { ?>

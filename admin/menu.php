@@ -29,7 +29,6 @@ $gettext->reset();
 </form>
 
 <a href="listcontent.php"><?=$gettext->gettext("Content Management")?></a>
-<a href="listsections.php"><?=$gettext->gettext("Section Management")?></a>
 <a href="listtemplates.php"><?=$gettext->gettext("Template Management")?></a>
 <a href="listusers.php"><?=$gettext->gettext("User Management")?></a>
 <a href="listgroups.php"><?=$gettext->gettext("Group Management")?></a>
