@@ -1205,6 +1205,12 @@ class NewsModule extends CMSModuleContentType
 	{
 		return 'News';
 	}
+
+	function IsDefaultPossible()
+	{
+		return TRUE;
+	}
+
 }
 
 # vim:ts=4 sw=4 noet
