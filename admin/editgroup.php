@@ -68,11 +68,10 @@ if ($access) {
 			#Perform the editgroup_pre callback
 			foreach($gCms->modules as $key=>$value)
 			{
-				if (isset($gCms->modules[$key]['editgroup_pre_function']) &&
-					$gCms->modules[$key]['Installed'] == true &&
-					$gCms->modules[$key]['Active'] == true)
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
 				{
-					call_user_func_array($gCms->modules[$key]['editgroup_pre_function'], array(&$gCms, &$groupobj));
+					$gCms->modules[$key]['object']->EditGroupPre($groupobj);
 				}
 			}
 
@@ -83,11 +82,10 @@ if ($access) {
 				#Perform the editgroup_post callback
 				foreach($gCms->modules as $key=>$value)
 				{
-					if (isset($gCms->modules[$key]['editgroup_post_function']) &&
-						$gCms->modules[$key]['Installed'] == true &&
-						$gCms->modules[$key]['Active'] == true)
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
 					{
-						call_user_func_array($gCms->modules[$key]['editgroup_post_function'], array(&$gCms, &$groupobj));
+						$gCms->modules[$key]['object']->EditGroupPost($groupobj);
 					}
 				}
 

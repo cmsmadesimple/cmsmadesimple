@@ -62,11 +62,10 @@ if ($access)
 			#Perform the addgroup_pre callback
 			foreach($gCms->modules as $key=>$value)
 			{
-				if (isset($gCms->modules[$key]['addgroup_pre_function']) &&
-					$gCms->modules[$key]['Installed'] == true &&
-					$gCms->modules[$key]['Active'] == true)
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
 				{
-					call_user_func_array($gCms->modules[$key]['addgroup_pre_function'], array(&$gCms, &$groupobj));
+					$gCms->modules[$key]['object']->AddGroupPre($groupobj);
 				}
 			}
 
@@ -77,11 +76,10 @@ if ($access)
 				#Perform the addgroup_post callback
 				foreach($gCms->modules as $key=>$value)
 				{
-					if (isset($gCms->modules[$key]['addgroup_post_function']) &&
-						$gCms->modules[$key]['Installed'] == true &&
-						$gCms->modules[$key]['Active'] == true)
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
 					{
-						call_user_func_array($gCms->modules[$key]['addgroup_post_function'], array(&$gCms, &$groupobj));
+						$gCms->modules[$key]['object']->AddGroupPost($groupobj);
 					}
 				}
 				audit($groupobj->id, $groupobj->name, 'Added Group');

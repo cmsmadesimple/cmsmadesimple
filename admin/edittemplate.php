@@ -105,11 +105,10 @@ if ($access)
 			#Perform the edittemplate_pre callback
 			foreach($gCms->modules as $key=>$value)
 			{
-				if (isset($gCms->modules[$key]['edittemplate_pre_function']) &&
-					$gCms->modules[$key]['Installed'] == true &&
-					$gCms->modules[$key]['Active'] == true)
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
 				{
-					call_user_func_array($gCms->modules[$key]['edittemplate_pre_function'], array(&$gCms, &$onetemplate));
+					$gCms->modules[$key]['object']->EditTemplatePre($onetemplate);
 				}
 			}
 
@@ -120,13 +119,13 @@ if ($access)
 				#Perform the edittemplate_post callback
 				foreach($gCms->modules as $key=>$value)
 				{
-					if (isset($gCms->modules[$key]['edittemplate_post_function']) &&
-						$gCms->modules[$key]['Installed'] == true &&
-						$gCms->modules[$key]['Active'] == true)
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
 					{
-						call_user_func_array($gCms->modules[$key]['edittemplate_post_function'], array($gCms, $onetemplate));
+						$gCms->modules[$key]['object']->EditTemplatePost($onetemplate);
 					}
 				}
+
 				if (!$apply)
 				{
 					audit($template_id, $onetemplate->name, 'Edited Template');

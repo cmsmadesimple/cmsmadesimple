@@ -709,13 +709,14 @@ function wysiwyg_form_submit()
 	
 	if (isset($wysiwyg) && $wysiwyg != '')
 	{
-		if (isset($gCms->modules[$wysiwyg]) && $gCms->modules[$wysiwyg]['Installed'] == true &&
-			$gCms->modules[$wysiwyg]['Active'] == true && isset($gCms->modules[$wysiwyg]['wysiwyg_module']))
+		#Perform the content title callback
+		foreach($gCms->modules as $key=>$value)
 		{
-			if (isset($gCms->modules[$wysiwyg]['wysiwyg_form_submit_function']))
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
 			{
 				@ob_start();
-				call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_submit_function'], array($gCms));
+				$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				$result = @ob_get_contents();
 				@ob_end_clean();
 			}

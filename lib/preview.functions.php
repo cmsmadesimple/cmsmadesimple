@@ -74,11 +74,10 @@ class Smarty_Preview extends Smarty {
 		#Perform the content template callback
 		foreach($gCms->modules as $key=>$value)
 		{
-			if (isset($gCms->modules[$key]['content_template_function']) &&
-				$gCms->modules[$key]['Installed'] == true &&
-				$gCms->modules[$key]['Active'] == true)
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
 			{
-				call_user_func_array($gCms->modules[$key]['content_template_function'], array(&$gCms, &$tpl_source));
+				$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
 			}
 		}
 
@@ -112,11 +111,10 @@ class Smarty_Preview extends Smarty {
 		#Perform the content data callback
 		foreach($gCms->modules as $key=>$value)
 		{
-			if (isset($gCms->modules[$key]['content_data_function']) &&
-				$gCms->modules[$key]['Installed'] == true &&
-				$gCms->modules[$key]['Active'] == true)
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
 			{
-				call_user_func_array($gCms->modules[$key]['content_data_function'], array(&$gCms, &$content));
+				$gCms->modules[$key]['object']->ContentData($content);
 			}
 		}
 
@@ -127,11 +125,10 @@ class Smarty_Preview extends Smarty {
 		#Perform the content title callback
 		foreach($gCms->modules as $key=>$value)
 		{
-			if (isset($gCms->modules[$key]['content_title_function']) &&
-				$gCms->modules[$key]['Installed'] == true &&
-				$gCms->modules[$key]['Active'] == true)
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
 			{
-				call_user_func_array($gCms->modules[$key]['content_title_function'], array(&$gCms, &$title));
+				$gCms->modules[$key]['object']->ContentTitle($title);
 			}
 		}
 
@@ -143,7 +140,11 @@ class Smarty_Preview extends Smarty {
 		#Perform the content prerender callback
 		foreach($gCms->modules as $key=>$value)
 		{
-			$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+			}
 		}
 
 		return true;

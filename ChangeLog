@@ -7,6 +7,7 @@ also better organized and navigations related functions are
 much, much easier.
 * Stylesheet URL is now absolute based on root_url in config.php
 * Fixed bug with content type changes breaking hierarchy (#000090)
+* Fixed bug with start_element in bulletmenu and phplayers
 
 Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
 -----------------

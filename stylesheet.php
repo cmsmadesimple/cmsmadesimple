@@ -32,15 +32,16 @@ $css = $result['stylesheet'];
 #Perform the content stylesheet callback
 foreach($gCms->modules as $key=>$value)
 {
-	/*
-	if (isset($gCms->modules[$key]['content_stylesheet_function']) &&
-		$gCms->modules[$key]['Installed'] == true &&
-		$gCms->modules[$key]['Active'] == true)
+	#Perform the content postrender callback
+	foreach($gCms->modules as $key=>$value)
 	{
-		call_user_func_array($gCms->modules[$key]['content_stylesheet_function'], array(&$gCms, &$css));
+		if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+		{
+			$gCms->modules[$key]['object']->ContentStylesheet($css);
+		}
 	}
-	*/
-	$gCms->modules[$key]['object']->ContentStylesheet($css);
+
 }
 
 #header("Content-Language: " . $current_language);

@@ -55,11 +55,10 @@ $html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
 #Perform the content postrender callback
 foreach($gCms->modules as $key=>$value)
 {
-	if (isset($gCms->modules[$key]['content_postrender_function']) &&
-		$gCms->modules[$key]['Installed'] == true &&
-		$gCms->modules[$key]['Active'] == true)
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true)
 	{
-		call_user_func_array($gCms->modules[$key]['content_postrender_function'], array(&$gCms, &$html));
+		$gCms->modules[$key]['object']->ContentPostRender($html);
 	}
 }
 

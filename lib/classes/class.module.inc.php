@@ -245,11 +245,9 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
-	 * Called after a successful logout.  It sends the user object.
-	 *
-	 * @param User The user that just logged in
+	 * Called after a successful logout.
 	 */
-	function LogoutPost(&$user)
+	function LogoutPost()
 	{
 	}
 

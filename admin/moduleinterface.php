@@ -50,7 +50,6 @@ if (count($gCms->modules) > 0)
 	if (isset($gCms->modules[$module]))
 	{
 		@ob_start();
-		#call_user_func_array($gCms->modules[$module]['execute_admin_function'], array($gCms,"module_".$module."_"));
 		$id = 'm1_';
 		$params = array();
 		foreach ($_REQUEST as $key=>$value)

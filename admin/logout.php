@@ -30,11 +30,10 @@ setcookie("cms_admin_user_id", "", time() - 3600);
 #Perform the logout_post callback
 foreach($gCms->modules as $key=>$value)
 {
-	if (isset($gCms->modules[$key]['logout_post_function']) &&
-		$gCms->modules[$key]['Installed'] == true &&
-		$gCms->modules[$key]['Active'] == true)
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true)
 	{
-		call_user_func_array($gCms->modules[$key]['logout_post_function'], array(&$gCms));
+		$gCms->modules[$key]['object']->LogoutPost();
 	}
 }
 

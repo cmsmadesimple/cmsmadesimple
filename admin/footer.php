@@ -45,17 +45,16 @@ foreach($gCms->modules as $key=>$value)
 		$gCms->modules[$key]['object']->IsWYSIWYG())
 	{
 		@ob_start();
-		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_body_function'], array(&$gCms));
 		$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
 		$bodytext .= @ob_get_contents();
 		@ob_end_clean();
+
 		@ob_start();
-		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_header_function'], array(&$gCms));
 		$gCms->modules[$key]['object']->WYSIWYGGenerateHeader();
 		$footertext .= @ob_get_contents();
 		@ob_end_clean();
+
 		@ob_start();
-		#call_user_func_array($gCms->modules[$wysiwyg]['wysiwyg_form_function'], array(&$gCms));
 		$gCms->modules[$key]['object']->WYSIWYGPageForm();
 		$formtext .= @ob_get_contents();
 		@ob_end_clean();
