@@ -85,6 +85,23 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence(cms_db_prefix()."admin_bookmarks_seq");
 
+echo "<p>Adding admin_recent_pages table...";
+
+$dbdict = NewDataDictionary($db);
+$flds = "
+	id I KEY,
+	user_id I,
+	title C(255),
+	url C(255),
+    access_time T
+";
+$taboptarray = array('mysql' => 'TYPE=MyISAM');
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."admin_recent_pages", $flds, $taboptarray);
+$dbdict->ExecuteSQLArray($sqlarray);
+
+$db->CreateSequence(cms_db_prefix()."admin_recent_pages_seq");
+
+
 echo '[done]</p>';
 
 echo "<p>Adding Primary Keys...";

@@ -116,6 +116,15 @@ if (isset($CMS_ADMIN_SUBTITLE))
     {
     $pagetitle .= " : ".$CMS_ADMIN_SUBTITLE;
     }
+
+# add to recent pages, delete old
+require_once("../lib/classes/class.recentpage.inc.php");
+
+$rp = new RecentPage();
+$rp->setValues($pagetitle, 'url', $userid);
+$rp->Save();
+$rp->PurgeOldPages($userid,5);
+
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
@@ -154,7 +163,7 @@ function toggleBookmarkState()
 <div id="BookmarkCallout">
 
 <p class="DashboardCalloutTitle"><?php echo lang('bookmarks') ?></p>
-<?php 
+<?php
 	$marks = BookmarkOperations::LoadBookmarks($userid);
 	echo "<ul>";
 	if (count($marks) > 0)
@@ -174,9 +183,19 @@ function toggleBookmarkState()
 ?>
 </div>
 
-<!--
 <div class="DashboardCallout">
 
 <p class="DashboardCalloutTitle">Recent Pages</p>
-
-</div> --> <!-- end DashboardCallout -->
+<?php
+$recent = RecentPageOperations::LoadRecentPages($userid);
+	echo "<ul>";
+	if (count($recent) > 0)
+		{
+		foreach($recent as $pg)
+			{
+			echo "<li><a href=\"". $pg->url."\">".$pg->title."</a></li>\n";
+			}
+		}
+	echo "</ul>\n";
+?>
+</div><!-- end DashboardCallout -->
