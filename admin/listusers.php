@@ -46,7 +46,6 @@ include_once("header.php");
 ?>
 
 <p><a href="adduser.php">Add New User</a></p>
-<p><a href="index.php">Admin Menu</a></p>
 
 <?php
 

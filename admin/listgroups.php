@@ -50,7 +50,6 @@ include_once("header.php");
 ?>
 
 <p><a href="addgroup.php">Add New Group</a></p>
-<p><a href="index.php">Admin Menu</a></p>
 
 <?php
 

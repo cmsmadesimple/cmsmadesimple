@@ -105,13 +105,19 @@ INSERT INTO {$tableprefix}user_groups (group_id, user_id, create_date, modified_
 INSERT INTO {$tableprefix}users (user_id, username, password, active, create_date, modified_date)
 	VALUES (1, 'admin', 'admin', 1, now(), now());
 
-INSERT INTO {$tableprefix}permissions VALUES (1,'Add User','Add User',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (1,'Add Content','Add New Content',now(),now());
 INSERT INTO {$tableprefix}permissions VALUES (2,'Add Group','Add Group',now(),now());
-INSERT INTO {$tableprefix}permissions VALUES (3,'Modify Permissions','Modify Permissions for Group',now(),now());
-INSERT INTO {$tableprefix}permissions VALUES (4,'Modify User','Modify User',now(),now());
-INSERT INTO {$tableprefix}permissions VALUES (5,'Modify Group','Modify Group',now(),now());
-INSERT INTO {$tableprefix}permissions VALUES (6,'Remove User','Remove User',now(),now());
-INSERT INTO {$tableprefix}permissions VALUES (7,'Remove Group','Remove Group',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (3,'Add Template','Add Template',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (4,'Add User','Add User',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (5,'Modify Any Content','Modify Any Content',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (6,'Modify Group','Modify Group',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (7,'Modify Permissions','Modify Permissions for Group',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (8,'Modify Template','Modify Template',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (9,'Modify User','Modify User',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (10,'Remove Content','Remove Content',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (11,'Remove Group','Remove Group',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (12,'Remove Template','Remove Template',now(),now());
+INSERT INTO {$tableprefix}permissions VALUES (13,'Remove User','Remove User',now(),now());
 
 INSERT INTO {$tableprefix}group_perms VALUES (1,1,1,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (2,1,2,now(),now());
@@ -120,3 +126,9 @@ INSERT INTO {$tableprefix}group_perms VALUES (4,1,4,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (5,1,5,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (6,1,6,now(),now());
 INSERT INTO {$tableprefix}group_perms VALUES (7,1,7,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (8,1,8,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (9,1,9,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (10,1,10,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (11,1,11,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (12,1,12,now(),now());
+INSERT INTO {$tableprefix}group_perms VALUES (13,1,13,now(),now());

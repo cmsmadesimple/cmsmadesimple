@@ -9,17 +9,28 @@ include_once("header.php");
 ?>
 <h3>Current Pages</h3>
 <?php
+	$userid = get_userid();
+
+	$modifyall = check_permission($config, $userid, 'Modify Any Content');
+
 	$db = new DB($config);
 
-	if (isset($_GET["makedefault"])) {
-		$query = "UPDATE ".$config->db_prefix."pages SET default_page = 0";
-		$result = $db->query($query);
+	if ($modifyall) {
+		if (isset($_GET["makedefault"])) {
+			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 0";
+			$result = $db->query($query);
 
-		$query = "UPDATE ".$config->db_prefix."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
-		$result = $db->query($query);
+			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
+			$result = $db->query($query);
+		}
 	}
 
-        $query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id ORDER BY page_id";
+	$query = "";
+	if ($modifyall == true) {
+		$query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id ORDER BY page_id";
+	} else {
+		$query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id WHERE owner = ".$userid." ORDER BY page_id";
+	}
         $result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
@@ -58,6 +69,8 @@ include_once("header.php");
 
 		echo "</table>\n";
 
+	} else {
+		echo "<p>No pages</p>";
 	}
 
         mysql_free_result($result);
@@ -66,7 +79,6 @@ include_once("header.php");
 ?>
 
 <p><a href="addcontent.php">Add New Content</a></p>
-<p><a href="index.php">Admin Menu</a></p>
 
 <?php
 

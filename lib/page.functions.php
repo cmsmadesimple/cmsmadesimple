@@ -6,7 +6,10 @@ function check_login(&$config) {
 	}
 }
 
-function check_admin(&$config) {
+function get_userid() {
+	if (isset($_SESSION["user_id"])) {
+		return $_SESSION["user_id"];
+	}
 }
 
 function check_permission(&$config, $userid, $permname) {
@@ -23,6 +26,23 @@ function check_permission(&$config, $userid, $permname) {
 
 	$db->close();
 
+
+	return $check;
+}
+
+function check_ownership(&$config, $userid, $pagename) {
+	$check = false;
+
+	$db = new DB($config);
+
+	$query = "SELECT * FROM ".$config->db_prefix."pages WHERE owner = ".$userid." AND page_url = '".$pagename."'";
+	$result = $db->query($query);
+
+	if (mysql_num_rows($result) > 0) {
+		$check = true;
+	}
+
+	$db->close();
 	return $check;
 }
 
