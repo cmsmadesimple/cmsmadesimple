@@ -137,6 +137,11 @@ class ContentBase
 	 * Is this page the default?
 	 */
 	var $mDefaultContent;
+	
+	/**
+	 * What type of markup is ths?  HTML is the default
+	 */
+	var $mMarkup;
 
 	/**
 	 * Creation date
@@ -190,6 +195,7 @@ class ContentBase
 		$this->mCreationDate	= "" ;
 		$this->mModifiedDate	= "" ;
 		$this->mPreview         = false ;
+		$this->mMarkup			= 'html' ;
 	}
 
 	/**
@@ -310,6 +316,11 @@ class ContentBase
 		return $this->mCachable;
 	}
 	
+	function Markup()
+	{
+		return $this->mMarkup;
+	}
+	
 	function SetAlias($alias)
 	{
 		global $gCms;
@@ -391,6 +402,7 @@ class ContentBase
 				$this->mOldItemOrder	= $row["item_order"];
 				$this->mHierarchy		= $row["hierarchy"];
 				$this->mMenuText		= $row['menu_text'];
+				$this->mMarkup			= $row['markup'];
 				$this->mActive			= ($row["active"] == 1?true:false);
 				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
@@ -472,6 +484,7 @@ class ContentBase
 		$this->mOldItemOrder	= $data["item_order"];
 		$this->mHierarchy		= $data["hierarchy"];
 		$this->mMenuText		= $data['menu_text'];
+		$this->mMarkuop			= $data['markup'];
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
@@ -557,7 +570,7 @@ class ContentBase
 			}
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ?, markup = ? WHERE content_id = ?";
 
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
@@ -573,6 +586,7 @@ class ContentBase
 			$this->mAlias,
 			$db->DBTimeStamp(time()),
 			$this->mItemOrder,
+			$this->mMarkup,
 			$this->mId
 			));
 
@@ -659,7 +673,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -676,6 +690,7 @@ class ContentBase
 			($this->mShowInMenu==true?1:0),
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
+			$this->mMarkup,
 			$db->DBTimeStamp(time()),
 			$db->DBTimeStamp(time())
 			));
