@@ -302,7 +302,10 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 				$headers = "From: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
 				."Return-Path: \"CMS Linkblog Module\" <".cms_mapi_get_preference("LinkBlog", "email_from").">\r\n"
 				."X-Mailer: PHP/" . phpversion();
-				$result = @mail(cms_mapi_get_preference("LinkBlog", "email_to"), $subject, $body, $headers);
+				$recipients = split(" ", cms_mapi_get_preference("LinkBlog", "email_to"));
+				foreach ($recipients as $r) {
+					$result = @mail(cms_mapi_get_preference("LinkBlog", "email_to"), $subject, $body, $headers);
+				} ## foreach
 			} ## if
 
             cms_mapi_redirect_user_by_pageid($return_id);
@@ -359,7 +362,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 			</tr>
             <tr>
                 <td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="add_new_link" /></td>
-                <td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
+                <td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /> * Note: Links are subject to moderation prior to showing up on the main page.</td>
             </tr>
         </table>
         <?php
