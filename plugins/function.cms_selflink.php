@@ -24,7 +24,12 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 	if (isset($params['page']))
 	{
-		echo '<a href="'.$config['root_url'].'/index.php?'.$config['query_var'].'='.$params['page'].'">';
+		echo '<a href="'.$config['root_url'].'/index.php?'.$config['query_var'].'='.$params['page'].'"';
+		if (isset($params['target']))
+		{
+			echo ' target="'.$params['target'].'"';
+		}
+		echo '>';
 		if (isset($params['text']))
 		{
 			echo $params['text'];
@@ -52,6 +57,7 @@ function smarty_cms_help_function_cms_selflink() {
 	<ul>
 		<li><tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the page variable is used instead.</li>
+		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
 	</ul>
 	</p>
 
