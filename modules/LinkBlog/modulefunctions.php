@@ -407,7 +407,7 @@ function showLinks($cms, $id, $params) {
             if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
                 echo "<div class=\"modulelinkblogentry\">\n";
                 echo "<div class=\"modulelinkblogentryheader\">\n";
-				if ($late_date == "") {
+				if ($last_date == "") {
 					echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 				}
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
@@ -428,7 +428,10 @@ function showLinks($cms, $id, $params) {
 
         if ($dbresult && $dbresult->RowCount()) {
             $last_date = "";
-            echo "<p>Last 5 days with links:</p><ul>\n";
+            echo "<p>Recent links:</p><ul>\n";
+			echo "<li>";
+			echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date), "Today");
+			echo "</li>\n";
             while ($row = $dbresult->FetchRow()) {
                 if ($last_date != substr($row["create_date"],0,10) && substr($row["create_date"],0,10) != $curr_date) {
                     echo "<li>";
