@@ -103,8 +103,17 @@ require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
+#Load content types
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.contenttypes.inc.php");
+$dir = dirname(__FILE__)."/lib/contenttypes";
+$ls = dir($dir);
+while (($file = $ls->read()) != "")
+{
+	if (!is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+	{
+		include_once("$dir/$file");
+	}
+}
 
 if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');

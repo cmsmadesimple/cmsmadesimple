@@ -183,11 +183,11 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $content, "content", 'syntaxHighlight', 'HTML (Complex)', '', $encoding); ?></td>
+		<td><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet", "syntaxHighlight", "Java Properties", '', $encoding) ?></td>
+		<td><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'syntaxHighlight', 'stylesheet', $encoding)?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('encoding')?>:</td>

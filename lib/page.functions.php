@@ -428,7 +428,7 @@ function & strip_slashes(&$str) {
 	return $str;
 }
 
-function create_textarea($text, $name, $classname, $id='', $encoding='')
+function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $encoding='')
 {
 	global $gCms;
 	$result = '';
@@ -436,7 +436,7 @@ function create_textarea($text, $name, $classname, $id='', $encoding='')
 	$userid = get_userid();
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 
-	if (isset($wysiwyg) && $wysiwyg != '')
+	if (isset($wysiwyg) && $wysiwyg != '' && $enablewysiwyg)
 	{
 		if (isset($gCms->modules[$wysiwyg]) &&
 			$gCms->modules[$wysiwyg]['Installed'] == true &&
