@@ -1266,7 +1266,7 @@ class ModuleOperations
 		#Load them if loadall is false
 		if (isset($db))
 		{
-			$query = "SELECT * FROM ".cms_db_prefix()."modules";
+			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
 			$result = $db->Execute($query);
 			if ($result)
 			{
@@ -1341,6 +1341,8 @@ class ModuleOperations
 				array_push($result, strtolower($oneclass));
 			}
 		}
+
+		sort($result);
 
 		return $result;
 	}

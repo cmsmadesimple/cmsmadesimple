@@ -152,8 +152,8 @@ class TinyMCE extends CMSModule
 				}
 				?>
 				theme : "advanced",
-				theme_advanced_toolbar_location: "top",
-				verify_html: "false",
+				theme_advanced_toolbar_location : "top",
+				verify_html : "false",
 				plugins : "table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,ibrowser",
 				theme_advanced_buttons1_add : "fontselect,fontsizeselect,forecolor",
 				theme_advanced_buttons2_add_before: "cut,copy,paste,separator",
