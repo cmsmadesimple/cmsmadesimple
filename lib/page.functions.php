@@ -456,7 +456,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 
 	if ($result == '')
 	{
-		$result = '<textarea name="'.$name.'" cols="80" rows="12" class="'.$class_name.'"';
+		$result = '<textarea name="'.$name.'" cols="80" rows="12" class="'.$classname.'"';
 		if ($id <> '')
 		{
 			$result .= ' id="'.$id.'"';
