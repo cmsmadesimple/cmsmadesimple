@@ -61,6 +61,8 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
 		if ($one->page_type == "separator") {
 			$menu .= "|---\n";
+		} else if ($one->page_type == "sectionheader") {
+			$menu .= "|".$one->menu_text."\n";
 		} else {
 			$menu .= "|".$one->menu_text."|".$one->url."\n";
 		}
