@@ -1035,7 +1035,7 @@ class CMSModule extends ModuleOperations
 			$gCms->modules[$module]['installed'] == true &&
 			$gCms->modules[$module]['active'] == true)
 		{
-			return $gCms->modules[$module]['object'];
+			return &$gCms->modules[$module]['object'];
 		}
 
 		return FALSE;
