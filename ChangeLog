@@ -2,7 +2,7 @@ Version 0.6.2 -- Subversion
 -----------------
 
 * Fixed a bug with html entities not getting converted properly after preview
-or saved. (Fixes #65)
+or saved. (Fixes #62, #65)
 
 Version 0.6.1 -- Tue Sep 14 2004
 -----------------
