@@ -135,8 +135,18 @@ function news_module_executeuser($cms, $id, $return_id, $params)
 			else
 			{
 				echo "<div class=\"cms-module-news\">";
-				echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
-				echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
+				echo "<div class=\"cms-module-news-header\">";
+				if (isset($params['swaptitledate']) && ($params['swaptitledate'] == 'true' || $params['swaptitledate'] == '1'))
+				{
+					echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
+					echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
+				}
+				else
+				{
+					echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
+					echo "<span class=\"cms-news-title\">".$row["news_title"]."</span><br />";
+				}
+				echo "</div>";
 				echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
 				echo "</div>";
 			}
@@ -206,6 +216,7 @@ function news_module_help($cms)
 		<li><em>(optional)</em> number="5" - Maximum number of items to display -- leaving empty will show all items</li>
 		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
 		<li><em>(optional)</em> makerssbutton="true" - Make a button to link to an RSS feed of the News items</li>
+		<li><em>(optional)</em> swaptitledate="true" - Switch the order of the date and title</li>
 	</ul>
 	</p>
 
@@ -216,10 +227,14 @@ function news_module_help($cms)
 function news_module_about() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.3</p>
+	<p>Version: 1.4</p>
 	<p>
 	Change History:
 	</p>
+	<p>
+	1.4 -- Oct 18, 2004<br />
+	Added swaptitledate parameter<br />
+	Added cms-module-news-header div
 	<p>
 	1.3 -- Oct 03, 2004<br />
 	Post date it now editable on the Add News form
