@@ -50,6 +50,7 @@ if ($access) {
 	if (isset($_POST["editcss"])) {
 
 		$validinfo = true;
+
 		if ($css_name == "") {
 			$error .= "<li>".$gettext->gettext("No CSS name given!")."</li>";
 			$validinfo = false;
@@ -86,12 +87,16 @@ if ($access) {
 
 		$query = "SELECT * from ".cms_db_prefix()."css WHERE css_id = " . $css_id;
 		$result = $db->Execute($query);
-		
-		$row = $result->FetchRow();
 
-		$css_name = $row["css_name"];
-		$orig_css_name = $row["css_name"];
-		$css_text = $row["css_text"];
+		if ($result) {
+			$row = $result->FetchRow();
+			$css_name		= $row["css_name"];
+			$orig_css_name	= $row["css_name"];
+			$css_text		= $row["css_text"];
+		}
+		else {
+			$error .= "<li>".$gettext->gettext("Error getting CSS!")."</li>";
+		}
 
 	}
 }
@@ -102,7 +107,6 @@ if (!$access) {
 	print "<h3>".$gettext->gettext("No Access To Edit CSS")."</h3>";
 }
 else {
-
 	if ($error != "") {
 		echo "<ul class=\"error\">".$error."</ul>";
 	}

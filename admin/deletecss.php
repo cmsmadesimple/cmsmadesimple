@@ -23,50 +23,69 @@ require_once("../include.php");
 check_login();
 
 $dodelete = true;
-$css_id = -1;
+
 if (isset($_GET["css_id"])) {
 
-	$css_id = $_GET["css_id"];
-	$css_name = "";
-	$userid = get_userid();
-	$access = check_permission($userid, 'Remove CSS');
+	$css_id		= $_GET["css_id"];
+	$css_name	= "";
+
+	$userid		= get_userid();
+	$access		= check_permission($userid, 'Remove CSS');
 
 	if ($access) {
 
-		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ".$css_id;
+		# first we get the name of the css for logging
+		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = '$css_id'";
 		$result = $db->Execute($query);
-
 		if ($result && $result->RowCount()) {
 			$row = $result->FetchRow();
 			$css_name = $row['css_name'];
 		}
-
-		/*
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."css WHERE css_id = $css_id";
-		$result = $db->Execute($query);
-		$row = $result->FetchRow();
-		if (isset($row["count"]) && $row["count"] > 0) {
+		else {
 			$dodelete = false;
+			$error = $gettext->gettext("Error getting the CSS name");
 		}
-		*/
 
 		if ($dodelete) {
-			$query = "DELETE FROM ".cms_db_prefix()."css where css_id = $css_id";
+
+			# then we check if this CSS has associations
+			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = '$css_id'";
 			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $css_id, $css_name, 'Deleted CSS');
+			if ($result && $result->RowCount()) {
+				$dodelete = false;
+				$error =  $gettext->gettext("This CSS is still used by templates or pages. Please remove those association first!");
+			}
+		}
+
+		# everything should be ok
+		if ($dodelete) {
+			$query = "DELETE FROM ".cms_db_prefix()."css where css_id = '$css_id'";
+			$result = $db->Execute($query);
+
+			if ($result) {
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $css_id, $css_name, 'Deleted CSS');
+			}
+			else {
+				$dodelete = false;
+				$error = $gettext->gettext("Error deleting CSS!");
+			}
 		}
 	}
 	else {
-		redirect("listcss.php?message=".$gettext->gettext("You do not have the right to delete CSS"));
+		$dodelete = false;
+		$error = $gettext->gettext("You do not have the right to delete CSS");
 	}
-
+}
+else {
+	$dodelete = false;
+	$error = $gettext->gettext("The CSS ID is not valid!");
 }
 
 if ($dodelete) {
 	redirect("listcss.php");
 }
 else {
-	redirect("listcss.php?message=".$gettext->gettext("CSS still being used by content pages or templates.  Please remove those associations first."));
+	redirect("listcss.php?message=$error");
 }
 
 # vim:ts=4 sw=4 noet

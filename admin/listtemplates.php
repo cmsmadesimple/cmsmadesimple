@@ -33,7 +33,6 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid		= get_userid();
-	$css		= check_permission($userid, 'Edit CSS associations');
 	$add		= check_permission($userid, 'Add Template');
 	$edit		= check_permission($userid, 'Modify Template');
 	$all		= check_permission($userid, 'Modify Any Content');
@@ -64,8 +63,7 @@ if (isset($_GET["message"])) {
 		echo "<td width=\"7%\" align=\"center\">".$gettext->gettext("Active")."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
-		if ($css)
-			echo "<td width=\"16\">&nbsp;</td>\n";
+		echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($add)
 			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($remove)
@@ -82,14 +80,23 @@ if (isset($_GET["message"])) {
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
 			echo "<td align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+
+			# set template to all content
 			if ($all)
 				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
-			if ($css)
-				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
+
+			# view css association
+			echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$row["template_id"]."\"><img src=\"../images/cms/css.png\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("CSS")."\"></a></td>\n";
+
+			# add new template
 			if ($add)
 				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Copy")."\"></a></td>\n";
+
+			# edit template
 			if ($edit)
 				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Edit")."\"></a></td>\n";
+
+			# remove template
 			if ($remove)
 				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".$gettext->gettext("Delete")."\"></a></td>\n";
 			echo "</tr>\n";

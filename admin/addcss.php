@@ -63,7 +63,7 @@ if ($access) {
 
 		if ($validinfo) {
 			$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ($new_css_id, ".$db->qstr($css_name).", ".$db->qstr($css_text).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($css_name).", ".$db->qstr($css_text).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_css_id, $css_name, 'Added CSS');
@@ -71,7 +71,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error inserting CSS")."$query</li>";
+				$error .= "<li>".$gettext->gettext("Error inserting CSS")."</li>";
 			}
 		}
 	}

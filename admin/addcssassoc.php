@@ -23,39 +23,72 @@ require_once("../include.php");
 check_login();
 
 $doadd = true;
-$css_id = -1;
+
 if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"])) {
 
 	$css_id = $_POST["css_id"];
-	$id = $_POST["id"];
-	$type = $_POST["type"];
+	$id		= $_POST["id"];
+	$type	= $_POST["type"];
 
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove CSS');
+	$access = check_permission($userid, 'Add CSS association');
 
 	if ($access) {
 
+		# first check if this association already exists
 		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = '$id' AND assoc_type = '$type' AND assoc_css_id = '$css_id'";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount() > 0) {
+			$error = $gettext->gettext("This CSS association already exists");
 			$doadd = false;
 		}
 
-		if ($doadd) {
-			$query = "INSERT INTO ".cms_db_prefix()."css_assoc  (`assoc_to_id`,`assoc_css_id`,`assoc_type`,`create_date`,`modified_date`)
-				VALUES ('$id','$css_id','$type',now(),now())";
+		# we get the name of the element (for logging)
+		if ($type == "template" && $doadd) {
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
 			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $css_id, 'Added CSS associations');
+			
+			if ($result && $result->RowCount() > 0) {
+				$line = $result->FetchRow();
+				$name = $line["template_name"];
+			}
+			else {
+				$doadd = false;
+				$error = $gettext->gettext("The template is not valid !");
+			}
+		}
+
+		# everything is ok, we can insert the element.
+		if ($doadd) {
+			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)
+				VALUES ('$id','$css_id','$type',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$result = $db->Execute($query);
+
+			if ($result) {
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Added CSS association');
+			}
+			else {
+				$doadd = false;
+				$error = $gettext->gettext("Error creating CSS association!");
+			}
 		}
 	}
+	else {
+		$doadd = false;
+		$error = $gettext->gettext("You do not have the right to create CSS associations");
+	}
+}
+else {
+	$doadd = false;
+	$error = $gettext->gettext("Some informations where missing!");
 }
 
 if ($doadd) {
 	redirect("listcssassoc.php?id=$id&type=$type");
 }
 else {
-	redirect("listcssassoc.php?id=$id&type=$type&error");
+	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

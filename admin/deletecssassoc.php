@@ -31,26 +31,53 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"])) {
 	$type = $_GET["type"];
 
 	$userid = get_userid();
-	$access = check_permission($userid, 'Edit CSS associations');
+	$access = check_permission($userid, 'Remove CSS association');
 
 	if ($access) {
+
+		if ($type == 'template') {
+			# first we get the name of the template for logging
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
+			$result = $db->Execute($query);
+			if ($result && $result->RowCount()) {
+				$line = $result->FetchRow();
+				$name = $line['template_name'];
+			}
+			else {
+				$dodelete = false;
+				$error = $gettext->gettext("Error getting the template name");
+			}
+		}
 
 		if ($dodelete) {
 			$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = '$css_id' AND assoc_type = '$type' AND assoc_to_id = '$id'";
 			$result = $db->Execute($query);
-			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $css_id, $id, 'Deleted CSS association');
+
+			if ($result) {
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Deleted CSS association');
+			}
+			else {
+				$dodelete = false;
+				$error = $gettext->gettext("Error deleting CSS association!");
+			}
 		}
 	}
 	else {
-		redirect("listcssassoc.php?id=$id&type=$type&css_id=$css_id&message=".$gettext->gettext("You do not have the right to delete CSS association"));
+		$dodelete = false;
+		$error = $gettext->gettext("You do not have the right to remove CSS association");
 	}
 
+}
+else {
+	$dodelete = false;
+	$error = $gettext->gettext("Some parameters were missing or invalid!");
 }
 
 if ($dodelete) {
 	redirect("listcssassoc.php?id=$id&type=$type");
 }
 else {
+	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

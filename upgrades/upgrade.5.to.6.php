@@ -56,7 +56,9 @@ echo "<p>Creating modify CSS permission...";
 cms_mapi_create_permission($gCms, 'Modify CSS', 'Modify CSS');
 cms_mapi_create_permission($gCms, 'Add CSS', 'Add CSS');
 cms_mapi_create_permission($gCms, 'Remove CSS', 'Remove CSS');
-cms_mapi_create_permission($gCms, 'Edit CSS associations', 'Edit CSS associations');
+cms_mapi_create_permission($gCms, 'Add CSS association', 'Add CSS association');
+cms_mapi_create_permission($gCms, 'Edit CSS association', 'Edit CSS association');
+cms_mapi_create_permission($gCms, 'Remove CSS association', 'Remove CSS association');
 
 echo "[done]</p>";
 

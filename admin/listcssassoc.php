@@ -24,26 +24,38 @@ check_login();
 
 include_once("header.php");
 
-if (isset($_GET["message"])) {
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
-}
+$error = "";
+
+# this one is used later to store all the css found, because they won't appear in the dropdown
+$csslist = array();
 
 # getting variables
-$type	= isset($_GET["type"])	? $_GET["type"]	: "template" ;
-$id		= isset($_GET["id"])	? $_GET["id"]	: 1 ;
-$name	= "";
+if (isset($_GET["type"])) $type	= $_GET["type"] ;
+else $error = $gettext->gettext("Type is not valid!");
 
+if (isset($_GET["id"]))	$id	= $_GET["id"] ;
+else $error = $gettext->gettext("ID is not valid!");
+
+# if type is template, we get the name
 if ($type == "template") {
 
 	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = $id";
 	$result = $db->Execute($query);
 
 	if ($result) {
-
 		$line = $result->FetchRow();
 		$name = $line["template_name"];
-
 	}
+	else {
+		$error = $gettext->gettext("Error getting template name!");
+	}
+}
+
+if (isset($_GET["message"])) {
+    echo "<p class=\"error\">".$_GET["message"]."</p>";
+}
+if ($error != "") {
+    echo "<p class=\"error\">$error</p>";
 }
 
 ?>
@@ -52,7 +64,9 @@ if ($type == "template") {
 
 	$userid = get_userid();
 
-	$modifyall = check_permission($userid, 'Edit CSS associations');
+	$modify  = check_permission($userid, 'Edit CSS association');
+	$delasso = check_permission($userid, 'Remove CSS association');
+	$addasso = check_permission($userid, 'Add CSS association');
 
 	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css
 		WHERE assoc_type='$type' AND assoc_to_id = '$id' AND assoc_css_id = css_id";
@@ -67,14 +81,23 @@ if ($type == "template") {
 	if ($result) {
 
 		$count = 1;
-
 		$currow = "row1";
 
 		while ($one = $result->FetchRow()) {
 
+			array_push($csslist,$one["assoc_css_id"]);
+		 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one["css_name"]."</td>\n";
-			echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+
+			# delete
+			if ($delasso) {
+				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+			}
+			else {
+				echo "<td>&nbsp;</td>";
+			}
+
 			echo "</tr>\n";
 
 			$count++;
@@ -86,19 +109,26 @@ if ($type == "template") {
 
 	echo "</table>\n";
 
-	if (check_permission($userid, 'Edit CSS associations')) {
+	if ($addasso) {
+
+		$notinto = "";
+
+		foreach($csslist as $key) {
+			$notinto .= "$key,";
+		}
+		$notinto = substr($notinto, 0, strlen($notinto) - 1);
 
 		$dropdown = "";
 
 		# we generate the dropdown
-		$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
 		$result = $db->Execute($query);
 
-		if ($result) {
+		if ($result && $result->RowCount() > 0) {
 
 			$form = "<form action=\"addcssassoc.php\" method=\"post\">";
 			
-			$dropdown = "<select name=\"css_id\">\n";
+			$dropdown = "<select name=\"css_id\" style=\"width: 250px;\">\n";
 			while ($line = $result->FetchRow())
 				$dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
 			$dropdown .= "</select>";
@@ -114,7 +144,6 @@ if ($type == "template") {
 <?
 		}
 	}
-
 
 include_once("footer.php");
 

@@ -34,7 +34,9 @@ if (isset($_GET["message"])) {
 
 	$userid = get_userid();
 
-	$modifyall = check_permission($userid, 'Modify Any CSS');
+	$modify = check_permission($userid, 'Modify CSS');
+	$addcss = check_permission($userid, 'Add CSS');
+	$delcss = check_permission($userid, 'Remove CSS');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
@@ -57,8 +59,22 @@ if (isset($_GET["message"])) {
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$one["css_name"]."</td>\n";
 
-			echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Edit")."\"></a></td>\n";
-			echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+			# edit
+			if ($modify) {
+				echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Edit")."\"></a></td>\n";
+			}
+			else {
+				echo "<td>&nbsp;</td>";
+			}
+
+			# delete
+			if ($delcss) {
+				echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".gettext("Delete")."\"></a></td>\n";
+			}
+			else {
+				echo "<td>&nbsp;</td>";
+			}
+
 			echo "</tr>\n";
 
 			$count++;
@@ -73,7 +89,7 @@ if (isset($_GET["message"])) {
 		echo "<p>".$gettext->gettext("No CSS")."</p>";
 	}
 
-	if (check_permission($userid, 'Add CSS')) {
+	if ($addcss) {
 ?>
 
 <div class="button"><a href="addcss.php"><?=$gettext->gettext("Add New CSS")?></a></div>
