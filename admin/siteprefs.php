@@ -86,7 +86,7 @@ if (isset($_POST["editsiteprefs"])) {
 $templates = array();
 $templates['-1'] = 'None';
 
-$query = "SELECT * FROM ".cms_db_prefix()."templates";
+$query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
 $result = $db->Execute($query);
 
 if ($result && $result->RowCount() > 0)

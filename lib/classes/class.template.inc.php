@@ -88,7 +88,7 @@ class TemplateOperations
 
 		$result = array();
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active FROM ".cms_db_prefix()."templates ORDER BY template_id";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active FROM ".cms_db_prefix()."templates ORDER BY template_name";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)

@@ -311,7 +311,7 @@ if ($access) {
 
     $dropdown .= "</select>";
 
-	$query = "SELECT template_id, template_name FROM ".cms_db_prefix()."templates ORDER BY template_id";
+	$query = "SELECT template_id, template_name FROM ".cms_db_prefix()."templates ORDER BY template_name";
 	$result = $db->Execute($query);
 
 	$dropdown2 = "<select name=\"template_id\"$templatepostback>";

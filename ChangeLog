@@ -9,6 +9,7 @@ Version 0.7.2 -- Subversion
 * Added google search plugin
 * Changed en_US to UTF-8
 * Changed with of add and edit html blob pages
+* Changed all template lists to be ordered by template name (#000038)
 * Fixed login to redirect back to originally requested link
 * Fixed stupid encoding issue with cms_htmlentities
 * Fixed htmlarea not loading due to a notice level error (#0000034)
