@@ -89,7 +89,9 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
 			#So no one can do anything nasty
-			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			if (!(isset($smarty_obj->configCMS->use_smarty_php_tags) && $smarty_obj->configCMS->use_smarty_php_tags == true)) {
+				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			}
 			
 			if ($line["page_type"] == "content") {
 				#If it's regular content, do this...

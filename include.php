@@ -56,6 +56,9 @@ $this->query_var = "";
 #and tables.
 $this->use_bb_code = false;
 
+#Allow smarty {php} tags?  These could be dangerous.
+$this->use_smarty_php_tags = false;
+
 include_once(dirname(__FILE__)."/config.php");
 
 	}
