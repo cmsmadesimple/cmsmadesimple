@@ -23,7 +23,7 @@ check_login($config);
 include_once("header.php");
 
 ?>
-<h3>Current Users</h3>
+<h3><?=GetText::gettext("Current Users")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -40,8 +40,8 @@ include_once("header.php");
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
 		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
-		echo "<th>Username</th>\n";
-		echo "<th>Active</th>\n";
+		echo "<th>".GetText::gettext("Username")."</th>\n";
+		echo "<th>".GetText::gettext("Active")."</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		if ($remove)
 			echo "<th>&nbsp;</th>\n";
@@ -55,13 +55,13 @@ include_once("header.php");
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
-			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
+			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
-				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">Edit</a></td>\n";
+				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
 			else
 				echo "<td>&nbsp;</td>\n";
 			if ($remove)
-				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -73,13 +73,13 @@ include_once("header.php");
 
 	}
 
-        mysql_free_result($result);
+	mysql_free_result($result);
 	$db->close();
 
 if (check_permission($config, $userid, 'Add User')) {
 ?>
 
-<p><a href="adduser.php">Add New User</a></p>
+<p><a href="adduser.php"><?=GetText::gettext("Add New User")?></a></p>
 
 <?php
 }

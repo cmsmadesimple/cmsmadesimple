@@ -30,10 +30,10 @@ if (!file_exists($config) || filesize($config) == 0) {
 } ## if
 
 $pages = 4;
-if ($_GET["page"]) {
-    $currentpage = $_GET["page"];
-} elseif ($_POST["page"]) {
+if ($_POST["page"]) {
     $currentpage = $_POST["page"];
+} elseif ($_GET["page"]) {
+    $currentpage = $_GET["page"];
 } else {  
     $currentpage = 1;
 } ## if
@@ -127,6 +127,11 @@ function showPageOne() {
 		($currow=="row1"?$currow="row2":$currow="row1");
     } ## foreach
 
+
+    echo "<tr class=\"$currow\"><td>Checking for PHP mysql support</td><td>";
+	echo (function_exists('mysql_connect')?"Success!":"Failure!");
+	echo "</td></tr>\n";
+
     echo "</tbody></table>\n";
   
     echo "<p>If all your tests show successful then it is time to setup your database.</p>\n";
@@ -173,7 +178,8 @@ Please complete the following fields:
 <td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /><input type="hidden" name="page" value="3" /></td>
 </tr>
 </table>
-<p class="continue" align="center"><a href="#" onclick="document.page2form.submit()">Continue</a></p>
+<p align="center" class="continue"><a onclick="document.page2form.submit()">Continue</a></p>
+<!--<p><input type="submit" value="Continue" /></p>-->
 </form>
 <?php
 
@@ -191,13 +197,13 @@ function showPageThree($sqlloaded = 0) {
         $statements = preg_split("/\;\r?\n?$/m", $contents);
  
         echo "<textarea name=code rows=15 cols=50>$contents</textarea><p>\n";
-        $link = @mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
+
+        $link = mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
         if (!$link) {
-           die('Could not connect: ' . mysql_error());
+           echo 'Could not connect: ' . mysql_error();
         } ## if
 
         mysql_select_db($_POST['database']);
-
 
         foreach ($statements as $s) {
             $s = str_replace("\n", "", $s);
@@ -220,20 +226,20 @@ function showPageThree($sqlloaded = 0) {
 
     echo "<p>Now let's continue to setup your configuration file, we already have most of the stuff we need.</p>\n";
     echo "<p>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>\n";
-    echo "<form action=install.php method=post name=\"page3form\" id=\"page3form\">\n";
+    echo "<form action=\"install.php\" method=\"post\" name=\"page3form\" id=\"page3form\">\n";
 	echo "<table cellpadding=\"2\" border=\"1\" class=\"regtable\">\n";
     echo "<tr class=\"row1\"><td>CMS Document root (as seen from the webserver)</td><td><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
     echo "<tr class=\"row2\"><td>Path to the Document root</td><td><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
     echo "<tr class=\"row1\"><td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
     echo "<tr class=\"row2\"><td>Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
 
-    echo '<tr class=\"row1\"><td><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
+    echo '<tr class=\"row1\"><td><input type="hidden" name="page" value="4"><input type=hidden name=host value="'.$_POST['host'].'">';
     echo '<input type=hidden name=database value="'.$_POST['database'].'"><input type=hidden name=port value="'.$_POST['port'].'">';
     echo '<input type=hidden name=username value="'.$_POST['username'].'"><input type=hidden name=password value="'.$_POST['password'].'">';
     echo '<input type=hidden name=prefix value="'.$_POST['prefix'].'">';
-    echo "</td><td>&nbsp;</td></tr>\n";
+    echo "</td><td><!--<input type=\"submit\" value=\"Continue\" />-->&nbsp;</td></tr>\n";
     echo "</table>";
-    echo "<p align=\"center\" class=\"continue\"><a href=\"#\" onclick=\"document.page3form.submit()\">Continue</a></p>\n";
+    echo "<p align=\"center\" class=\"continue\"><a onclick=\"document.page3form.submit()\">Continue</a></p>\n";
 	echo "</form>\n";
     
 } ## showPageThree

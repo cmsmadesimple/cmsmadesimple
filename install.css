@@ -81,7 +81,10 @@ a:hover {
 	background: #aaa;
 }
 
-.continue a:link, a:active, a:visited {
+.continue a,
+.continue a:link,
+.continue a:active,
+.continue a:visited {
 	background: #fff;
 	color: #000;
 	padding: 4px;

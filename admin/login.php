@@ -42,7 +42,7 @@ if ($_POST["username"] && $_POST["password"]) {
 		return;
 	}
 	else {
-		$error .= "<p>Username or Password incorrect!</p>";
+		$error .= "<p>".GetText::gettext("Username or Password incorrect!")."</p>";
 	}
 
 	mysql_free_result($result);

@@ -1,19 +1,21 @@
 <?php
 
-$doupgrade = false;
+//$doupgrade = false;
 
 $db = new DB($config);
 
+/*
 $query = "SELECT version from ".$config->db_prefix."version";
 $result = $db->query($query);
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-	if ($row["version"] == 1) {
+	if ($row["version"] == $current_version) {
 		$doupgrade = true;
 	}
 }
 mysql_free_result($result);
 
 if ($doupgrade) {
+*/
 
 	echo "<p>Added item_order to existing items... ";
 
@@ -57,7 +59,7 @@ if ($doupgrade) {
 	$db->query($query);
 
 	echo "[done]</p>";
-}
+//}
 
 $db->close();
 

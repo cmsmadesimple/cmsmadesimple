@@ -34,6 +34,9 @@ if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
+$preview = false;
+if (isset($_POST["preview"])) $preview = true;
+
 $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
@@ -50,15 +53,15 @@ if ($access) {
 
 	$db = new DB($config);
 
-	if (isset($_POST["edittemplate"])) {
+	if (isset($_POST["edittemplate"]) && !$preview) {
 
 		$validinfo = true;
 		if ($template == "") {
-			$error .= "<li>No template name given!</li>";
+			$error .= "<li>".GetText::gettext("No template name given!")."</li>";
 			$validinfo = false;
 		}
 		if ($content == "") {
-			$error .= "<li>No template content given!</li>";
+			$error .= "<li>".GetText::gettext("No template content given!")."</li>";
 			$validinfo = false;
 		}
 
@@ -72,12 +75,12 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>Error updating template!</li>";
+				$error .= "<li>".GetText::gettext("Error updating template!")."</li>";
 			}
 		}
 
 	}
-	else if ($template_id != -1) {
+	else if ($template_id != -1 && !$preview) {
 
 		$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
 		$result = $db->query($query);
@@ -100,12 +103,34 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>No Access To Edit Templates</h3>";
+	print "<h3>".GetText::gettext("No Access To Edit Templates")."</h3>";
 }
 else {
 
 	if ($error != "") {
 		echo "<ul class=\"error\">".$error."</ul>";
+	}
+
+	if ($preview) {
+
+		$data["content"] = "Test Content";
+		#$data["template_id"] = $template_id;
+		$data["stylesheet"] = $stylesheet;
+		$data["template"] = $content;
+
+		$tmpfname = tempnam('/tmp', "cmspreview");
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, serialize($data));
+		fclose($handle);
+
+?>
+<h3><?=GetText::gettext("Preview")?></h3>
+
+<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode($tmpfname)?>">
+
+</iframe>
+<?php
+
 	}
 
 ?>
@@ -114,29 +139,29 @@ else {
 
 <div class="adminform">
 
-<h3>Edit Template</h3>
+<h3><?=GetText::gettext("Edit Template")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*Template Name:</td>
+		<td>*<?=GetText::gettext("Template Name")?>:</td>
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
 	</tr>
 	<tr>
-		<td>*Content:</td>
+		<td>*<?=GetText::gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
-		<td>Stylesheet:</td>
+		<td><?=GetText::gettext("Stylesheet")?>:</td>
 		<td><textarea name="stylesheet" cols="90" rows="18"><?=htmlentities($stylesheet)?></textarea></td>
 	</tr>
 	<tr>
-		<td>Active:</td>
+		<td><?=GetText::gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="edittemplate" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel"></td>
+		<td><input type="hidden" name="template_id" value="<?=$template_id?>" /><input type="hidden" name="edittemplate" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

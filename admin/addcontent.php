@@ -26,7 +26,8 @@ $title = "";
 if (isset($_POST["title"])) $title = $_POST["title"];
 
 $url = "";
-if (isset($_POST["url"])) $url = $_POST["url"];
+#if (isset($_POST["url"])) $url = $_POST["url"];
+if (isset($_POST["url"])) $url = strtolower(preg_replace("/[^A-Za-z0-9.]/","",$_POST["url"]));
 
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
@@ -39,6 +40,9 @@ if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 
 $menutext = "";
 if (isset($_POST["menutext"])) $menutext = $_POST["menutext"];
+
+$preview = false;
+if (isset($_POST["preview"])) $preview = true;
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
@@ -57,24 +61,24 @@ $access = check_permission($config, $userid, 'Add Content');
 if ($access) {
 	$db = new DB($config);
 
-	if (isset($_POST["addcontent"])) {
+	if (isset($_POST["addcontent"]) && !$preview) {
 
 		$validinfo = true;
 		if ($title == "") {
 			$validinfo = false;
-			$error .= "<li>No title given!</li>";
+			$error .= "<li>".GetText::gettext("No title given!")."</li>";
 		}
 		if ($url == "") {
 			$validinfo = false;
-			$error .= "<li>No url given!</li>";
+			$error .= "<li>".GetText::gettext("No url given!")."</li>";
 		}
 		if ($content == "") {
 			$validinfo = false;
-			$error .= "<li>No content entered!</li>";
+			$error .= "<li>".GetText::gettext("No content entered!")."</li>";
 		}
 		if ($menutext == "") {
 			$validinfo = false;
-			$error .= "<li>No menu text given!</li>";
+			$error .= "<li>".GetText::gettext("No menu text given!")."</li>";
 		}
 
 		if ($validinfo) {
@@ -104,7 +108,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>Error inserting page</li>";
+				$error .= "<li>".GetText::gettext("Error inserting page")."</li>";
 			}
 		}
 	}
@@ -154,18 +158,53 @@ if ($access) {
 	}
 
 	mysql_free_result($result);
-	$db->close($link);
+	$db->close();
 }
 
 include_once("header.php");
 
 if (!$access) {
-	echo "<h3>No Access to Add Content</h3>\n";
+	echo "<h3>".GetText::gettext("No Access to Add Content")."</h3>\n";
 }
 else {
 
 	if ($error != "") {
 		echo "<ul class=\"error\">".$error."</ul>";
+	}
+
+	if ($preview) {
+
+		$data["content"] = $content;
+		$data["template_id"] = $template_id;
+
+		$db = new DB($config);
+		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
+		#echo $query;
+		$result = $db->query($query);
+		if (mysql_num_rows($result) > 0) {
+			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+			$data["stylesheet"] = $row["stylesheet"];
+			$data["template"] = $row["template_content"];
+		} else {
+			$data["stylesheet"] = "";
+			$data["template"] = "{content}";
+		}
+		mysql_free_result($result);
+		$db->close();
+
+		$tmpfname = tempnam('/tmp', "cmspreview");
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, serialize($data));
+		fclose($handle);
+
+?>
+<h3><?=GetText::gettext("Preview")?></h3>
+
+<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode($tmpfname)?>">
+
+</iframe>
+<?php
+
 	}
 
 ?>
@@ -174,49 +213,49 @@ else {
 
 <div class="adminform">
 
-<h3>Add Content</h3>
+<h3><?=GetText::gettext("Add Content")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*Title:</td>
+		<td>*<?=GetText::gettext("Title")?>:</td>
 		<td><input type="text" name="title" maxlength="25" value="<?=$title?>" /></td>
 	</tr>
 	<tr>
-		<td>*URL:</td>
+		<td>*<?=GetText::gettext("URL")?>:</td>
 		<td><input type="text" name="url" maxlength="255" value="<?=$url?>" /></td>
 	</tr>
 	<tr>
-		<td>*Content:</td>
+		<td>*<?=GetText::gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
 	</tr>
 	<tr>
-		<td>Section:</td>
+		<td><?=GetText::gettext("Section")?>:</td>
 		<td><?=$dropdown?></td>
 	</tr>
 	<tr>
-		<td>Template:</td>
+		<td><?=GetText::gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>
 	</tr>
 	<tr>
-		<td>Additional Editors:</td>
+		<td><?=GetText::gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
 	<tr>
-		<td>*Menu Text:</td>
+		<td>*<?=GetText::gettext("Menu Text")?>:</td>
 		<td><input type="text" name="menutext" maxlength="25" value="<?=$menutext?>" /></td>
 	</tr>
 	<tr>
-		<td>Show in Menu:</td>
+		<td><?=GetText::gettext("Show in Menu")?>:</td>
 		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
-		<td>Active:</td>
+		<td><?=GetText::gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addcontent" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel"></td>
+		<td><input type="hidden" name="addcontent" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" name="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>"></td>
 	</tr>
 
 </table>

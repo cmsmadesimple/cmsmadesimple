@@ -47,17 +47,17 @@ if (isset($_POST["adduser"])) {
 
 	if ($user == "") {
 		$validinfo = false;
-		$error .= "<li>No username given!</li>";
+		$error .= "<li>".GetText::gettext("No username given!")."</li>";
 	}
 
 	if ($password == "") {
 		$validinfo = false;
-		$error .= "<li>No password given!</li>";
+		$error .= "<li>".GetText::gettext("No password given!")."</li>";
 	}
 	else if ($password != $passwordagain) {
 		#We don't want to see this if no password was given
 		$validinfo = false;
-		$error .= "<li>Passwords do not match</li>";
+		$error .= "<li>".GetText::gettext("Passwords do not match!")."</li>";
 	}
 
 	if ($validinfo) {
@@ -69,7 +69,8 @@ if (isset($_POST["adduser"])) {
 			return;
 		}
 		else {
-			$error .= "<li>Error inserting user</li>";
+			$db->close();
+			$error .= "<li>".GetText::gettext("Error inserting user!")."</li>";
 		}
 	}
 }
@@ -88,29 +89,29 @@ if ($error != "") {
 
 <div class="adminform">
 
-<h3>Add User</h3>
+<h3><?=GetText::gettext("Add User")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*Name:</td>
+		<td>*<?=GetText::gettext("Name")?>:</td>
 		<td><input type="text" name="user" maxlength="255" value="<?=$user?>" /></td>
 	</tr>
 	<tr>
-		<td>*Password:</td>
+		<td>*<?=GetText::gettext("Password")?>:</td>
 		<td><input type="password" name="password" maxlength="255" value="" /></td>
 	</tr>
 	<tr>
-		<td>*Password (again):</td>
+		<td>*<?=GetText::gettext("Password (again)")?>:</td>
 		<td><input type="password" name="passwordagain" maxlength="255" value="" /></td>
 	</tr>
 	<tr>
-		<td>Active:</td>
+		<td><?=GetText::gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="adduser" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></td>
+		<td><input type="hidden" name="adduser" value="true" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

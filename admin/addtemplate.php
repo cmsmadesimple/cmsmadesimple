@@ -31,6 +31,9 @@ if (isset($_POST["content"])) $content = $_POST["content"];
 $stylesheet = "";
 if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 
+$preview = false;
+if (isset($_POST["preview"])) $preview = true;
+
 $active = 1;
 if (isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
 
@@ -45,16 +48,16 @@ $access = check_permission($config, $userid, 'Add Template');
 if ($access) {
 	$db = new DB($config);
 
-	if (isset($_POST["addtemplate"])) {
+	if (isset($_POST["addtemplate"]) && !$preview) {
 
 		$validinfo = true;
 
 		if ($template == "") {
-			$error .= "<li>No template name given!</li>";
+			$error .= "<li>".GetText::gettext("No template name given!")."</li>";
 			$validinfo = false;
 		}
 		if ($content == "") {
-			$error .= "<li>No template content entered!</li>";
+			$error .= "<li>".GetText::gettext("No template content entered!")."</li>";
 			$validinfo = false;
 		}
 
@@ -67,7 +70,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>Error inserting template</li>";
+				$error .= "<li>".GetText::gettext("Error inserting template")."</li>";
 			}
 		}
 	}
@@ -78,12 +81,34 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>No Access to Add Templates</h3>";
+	print "<h3>".GetText::gettext("No Access to Add Templates")."</h3>";
 }
 else {
 
 	if ($error != "") {
 		echo "<ul class=\"error\">".$error."</ul>";
+	}
+
+	if ($preview) {
+
+		$data["content"] = "Test Content";
+		#$data["template_id"] = $template_id;
+		$data["stylesheet"] = $stylesheet;
+		$data["template"] = $content;
+
+		$tmpfname = tempnam('/tmp', "cmspreview");
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, serialize($data));
+		fclose($handle);
+
+?>
+<h3><?=GetText::gettext("Preview")?></h3>
+
+<iframe name="previewframe" width="600" height="400" src="<?=$config->root_url?>/preview.php?tmpfile=<?=urlencode($tmpfname)?>">
+
+</iframe>
+<?php
+
 	}
 
 ?>
@@ -92,29 +117,29 @@ else {
 
 <div class="adminform">
 
-<h3>Add Template</h3>
+<h3><?=GetText::gettext("Add Template")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>Name:</td>
+		<td><?=GetText::gettext("Name")?>:</td>
 		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
 	</tr>
 	<tr>
-		<td>Content:</td>
+		<td><?=GetText::gettext("Content")?>:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
 	</tr>
 	<tr>
-		<td>Stylesheet:</td>
+		<td><?=GetText::gettext("Stylesheet")?>:</td>
 		<td><textarea name="stylesheet" cols="90" rows="18"><?=$stylesheet?></textarea></td>
 	</tr>
 	<tr>
-		<td>Active:</td>
+		<td><?=GetText::gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addtemplate" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></td>
+		<td><input type="hidden" name="addtemplate" value="true" /><input type="submit" name="preview" value="<?=GetText::gettext("Preview")?>" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

@@ -51,7 +51,7 @@ if ($dodelete) {
 	redirect("listtemplates.php");
 }
 else {
-	redirect("listtemplates.php?message=Template still being used by content pages.  Please remove those first.");
+	redirect("listtemplates.php?message=".GetText::gettext("Template still being used by content pages.  Please remove those first."));
 }
 
 # vim:ts=4 sw=4 noet

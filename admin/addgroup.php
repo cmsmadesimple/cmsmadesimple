@@ -43,7 +43,7 @@ if ($access) {
 
 		$validinfo = true;
 		if ($group == "") {
-			$error .= "<li>No group name given!</li>";
+			$error .= "<li>".GetText::gettext("No group name given!")."</li>";
 			$validinfo = false;
 		}
 
@@ -57,7 +57,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>Error inserting group</li>";
+				$error .= "<li>".GetText::gettext("Error inserting group!")."</li>";
 			}
 		}
 
@@ -68,7 +68,7 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>No Access to Add Groups</h3>";
+	print "<h3>".GetText::gettext("No Access to Add Groups")."</h3>";
 }
 else {
 	if ($error != "") {
@@ -80,21 +80,21 @@ else {
 
 <div class="adminform">
 
-<h3>Add Group</h3>
+<h3><?=GetText::gettext("Add Group")?></h3>
 
 <table border="0">
 
 	<tr>
-		<td>*Name:</td>
+		<td>*<?=GetText::gettext("Name")?>:</td>
 		<td><input type="text" name="group" maxlength="255" value="<?=$group?>" /></td>
 	</tr>
 	<tr>
-		<td>Active:</td>
+		<td><?=GetText::gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addgroup" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></td>
+		<td><input type="hidden" name="addgroup" value="true" /><input type="submit" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></td>
 	</tr>
 
 </table>

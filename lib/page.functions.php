@@ -40,6 +40,7 @@ function check_permission(&$config, $userid, $permname) {
 		$check = true;
 	}
 
+	mysql_free_result($result);
 	$db->close();
 
 
@@ -98,6 +99,8 @@ function get_stylesheet(&$config, $templateid) {
 		$line = mysql_fetch_array($result, MYSQL_ASSOC);
 		$css = $line[stylesheet];
 	}
+
+	mysql_free_result($result);
 	$db->close();
 
 	return $css;

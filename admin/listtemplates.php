@@ -27,7 +27,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3>Current Templates</h3>
+<h3><?=GetText::gettext("Current Templates")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -44,8 +44,8 @@ if (isset($_GET["message"])) {
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
 		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
-		echo "<th>Template</th>\n";
-		echo "<th>Active</th>\n";
+		echo "<th>".GetText::gettext("Template")."</th>\n";
+		echo "<th>".GetText::gettext("Active")."</th>\n";
 		if ($edit)
 			echo "<th>&nbsp;</th>\n";
 		if ($remove)
@@ -60,11 +60,11 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
+			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
 			if ($edit)
-				echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">Edit</a></td>\n";
+				echo "<td><a href=\"edittemplate.php?template_id=".$row["template_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
 			if ($remove)
-				echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+				echo "<td><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -82,7 +82,7 @@ if (isset($_GET["message"])) {
 if (check_permission($config, $userid, 'Add Template')) {
 ?>
 
-<p><a href="addtemplate.php">Add New Template</a></p>
+<p><a href="addtemplate.php"><?=GetText::gettext("Add New Template")?></a></p>
 
 <?php
 }

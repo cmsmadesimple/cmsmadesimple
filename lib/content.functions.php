@@ -36,7 +36,7 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
-		$this->force_compile = true;
+		$this->force_compile = false;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -58,11 +58,12 @@ class Smarty_CMS extends Smarty {
 			#$smarty_obj->assign('stylesheet',$line[stylesheet]);
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
-				$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
-				$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
+				#$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
+				#$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
 				$stylesheet .= "<style type=\"text/css\">\n";
 				#$stylesheet .= "<!--\n";
-				$stylesheet .= "	@import \"".$csslink."\";\n";
+				#$stylesheet .= "	@import \"".$csslink."\";\n";
+				$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
 				#$stylesheet .= "-->\n";
 				$stylesheet .= "</style>\n";
 			}
@@ -75,10 +76,12 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = $this->configCMS->bbcodeparser->qparse($tpl_source);
 			}
 
+			mysql_free_result($result);
 			$db->close();
 			return true;
 		}
 		else {
+			mysql_free_result($result);
 			$db->close();
 			return false;
 		}
@@ -96,10 +99,12 @@ class Smarty_CMS extends Smarty {
 
                         $tpl_timestamp = $line["create_date"];
 
+			mysql_free_result($result);
                         $db->close();
                         return true;
                 }
                 else {
+			mysql_free_result($result);
                         $db->close();
                         return false;
                 }
@@ -123,13 +128,14 @@ function db_get_default_page (&$config) {
 	$db = new DB($config);
 
 	$query = "SELECT page_url FROM ".$config->db_prefix."pages WHERE default_page = 1";
-	$result = $db->query($query);
+	$dbresult = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
-		$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	if (mysql_num_rows($dbresult) > 0) {
+		$line = mysql_fetch_array($dbresult, MYSQL_ASSOC);
 		$result = $line["page_url"];
 	}
 
+	mysql_free_result($dbresult);
 	$db->close();
 
 	return $result;
@@ -170,10 +176,10 @@ function db_get_menu_items(&$config) {
 		$menu_item = new MenuItem;
 		$menu_item->name = $line["menu_text"];
 		if (isset($config->query_var) && $config->query_var != "") {
-			$menu_item->url = $smarty->configCMS->root_url."/?".$smarty->configCMS->query_var."=".$line["page_url"];
+			$menu_item->url = $config->root_url."/index.php?".$config->query_var."=".$line["page_url"];
 		}
 		else {
-			$menu_item->url = $smarty->configCMS->root_url."/index.php/".$line["page_url"];
+			$menu_item->url = $config->root_url."/index.php/".$line["page_url"];
 		}
 		array_push($current_section->items, $menu_item);
 	}

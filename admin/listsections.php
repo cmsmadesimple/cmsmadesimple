@@ -27,7 +27,7 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3>Current Sections</h3>
+<h3><?=GetText::gettext("Current Sections")?></h3>
 <?php
 
 	$userid = get_userid();
@@ -44,8 +44,8 @@ if (isset($_GET["message"])) {
 		echo '<table border="1" cellpadding="2" cellspacing="0" class="admintable">'."\n";
 		echo "<thead class=\"tbhead\">\n";
 		echo "<tr>\n";
-		echo "<th>Section</th>\n";
-		echo "<th>Active</th>\n";
+		echo "<th>".GetText::gettext("Section")."</th>\n";
+		echo "<th>".GetText::gettext("Active")."</th>\n";
 		if ($edit)
 			echo "<th>&nbsp;</th>\n";
 		if ($remove)
@@ -60,11 +60,11 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["section_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
+			echo "<td>".($row["active"] == 1?GetText::gettext("True"):GetText::gettext("False"))."</td>\n";
 			if ($edit)
-				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">Edit</a></td>\n";
+				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">".GetText::gettext("Edit")."</a></td>\n";
 			if ($remove)
-				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
+				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('".GetText::gettext("Are you sure you want to delete?")."');\">".GetText::gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
@@ -76,13 +76,13 @@ if (isset($_GET["message"])) {
 
 	}
 
-        mysql_free_result($result);
-        $db->query($link);
+	mysql_free_result($result);
+	$db->query($link);
 
 if (check_permission($config, $userid, 'Add Section')) {
 ?>
 
-<p><a href="addsection.php">Add New Section</a></p>
+<p><a href="addsection.php"><?=GetText::gettext("Add New Section")?></a></p>
 
 <?php
 }

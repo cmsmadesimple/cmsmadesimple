@@ -1,21 +1,21 @@
 <?php
 
-$current_schema_ver = 2;
-$new_schema_ver = 3;
-$doupgrade = false;
+//$doupgrade = false;
 
 $db = new DB($config);
 
+/*
 $query = "SELECT version from ".$config->db_prefix."version";
 $result = $db->query($query);
 while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
-	if ($row["version"] == $current_schema_ver) {
+	if ($row["version"] == $current_version) {
 		$doupgrade = true;
 	}
 }
 mysql_free_result($result);
+*/
 
-if ($doupgrade) {
+//if ($doupgrade) {
 
 	echo "<p>Creating plugins table...";
 
@@ -32,11 +32,11 @@ if ($doupgrade) {
 
 	echo "<p>Updating schema version... ";
 
-	$query = "UPDATE ".$config->db_prefix."version SET version = ".$new_schema_ver;
+	$query = "UPDATE ".$config->db_prefix."version SET version = 3";
 	$db->query($query);
 
 	echo "[done]</p>";
-}
+//}
 
 $db->close();
 

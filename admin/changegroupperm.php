@@ -70,18 +70,22 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>No Access to Modify Group Permissions</h3>";
+	print "<h3>".GetText::gettext("No Access to Modify Group Permissions")."</h3>";
 }
 else {
 
+	GetText::setVar('group_name', $group_name);
+
 ?>
-<h3>Permissions for group: <?=$group_name?></h3>
+<h3><?=GetText::gettext('Permissions for group: ${group_name}')?></h3>
 
 <form method="post" action="changegroupperm.php">
 <?php
 
-        $query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
-        $result = $db->query($query);
+	GetText::reset();
+
+	$query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
+	$result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
 
@@ -93,11 +97,11 @@ else {
 
 	}
 
-        mysql_free_result($result);
+	mysql_free_result($result);
 
 	$query = "SELECT p.permission_name FROM ".$config->db_prefix."group_perms g INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
 
-        $result = $db->query($query);
+	$result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
 
@@ -109,9 +113,9 @@ else {
 
 	}
 
-        mysql_free_result($result);
+	mysql_free_result($result);
 
-        $db->close();
+	$db->close();
 
 	foreach ($perms as $key => $value) {
 
@@ -124,7 +128,7 @@ else {
 
 ?>
 
-<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="Submit" /><input type="submit" name="cancel" value="Cancel" /></p>
+<p><input type="hidden" name="group_id" value="<?=$group_id?>" /><input type="submit" name="changeperm" value="<?=GetText::gettext("Submit")?>" /><input type="submit" name="cancel" value="<?=GetText::gettext("Cancel")?>" /></p>
 
 </form>
 
