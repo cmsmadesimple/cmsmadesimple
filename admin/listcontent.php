@@ -10,10 +10,10 @@ check_login($config);
 	$db = new DB($config);
 
 	if (isset($_GET["makedefault"])) {
-		$query = "UPDATE pages SET default_page = 0";
+		$query = "UPDATE ".$config->db_prefix."pages SET default_page = 0";
 		$result = $db->query($query);
 
-		$query = "UPDATE pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
+		$query = "UPDATE ".$config->db_prefix."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
 		$result = $db->query($query);
 	}
 

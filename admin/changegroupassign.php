@@ -54,7 +54,7 @@ if (isset($_POST["changeassign"])) {
 
         mysql_free_result($result);
 
-        $query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
+        $query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
         $result = $db->query($query);
 
 	if (mysql_num_rows($result) > 0) {
