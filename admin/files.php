@@ -24,6 +24,7 @@ require_once("../lib/file.functions.php");
 require_once("../include.php");
 
 
+
 function deldir($dir)
 {
 	$handle = opendir($dir);
@@ -62,10 +63,21 @@ $reldir = "";
 if (isset($_POST['reldir'])) $reldir = $_POST['reldir'];
 else if (isset($_GET['reldir'])) $reldir = $_GET['reldir'];
 
+# Check for path errors. It's a bit of a hack.
+$reldir = urldecode($reldir);
+$reldir = str_replace("..", "", $reldir);
+$reldir = str_replace("\\", "/", $reldir);
+$reldir = str_replace("//", "/", $reldir);
+$reldir = ereg_replace("/^", "", $reldir);
+
 if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 {
 	$dir .= $reldir;
 }
+
+ 
+
+
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
@@ -203,8 +215,8 @@ echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"1
 
 if ($reldir != "")
 {
-	$newdir = dirname($reldir.'/'.$file);
-	if ($newdir == "/")
+	$newdir = urlencode(dirname($reldir.'/'.$file));
+	if ($newdir == "/" || $newdir == '\\')
 	{
 		$newdir = "";
 	}
@@ -235,10 +247,10 @@ foreach ($dirs as $file)
 	{
 		if (is_dir("$dir/$file"))
 		{
-
+			$tmp=urlencode($reldir."/".$file);
 			$dirtext .= "<tr class=\"$row\">"; 
 			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
-			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
+			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
 			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
 			$dirtext .= "</tr>";
