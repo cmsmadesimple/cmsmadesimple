@@ -41,8 +41,7 @@ include_once("header.php");
 		echo "<tr>\n";
 		echo "<th>Username</th>\n";
 		echo "<th>Active</th>\n";
-		if ($edit)
-			echo "<th>&nbsp;</th>\n";
+		echo "<th>&nbsp;</th>\n";
 		if ($remove)
 			echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
@@ -52,8 +51,10 @@ include_once("header.php");
 			echo "<tr>\n";
 			echo "<td>".$row["username"]."</td>\n";
 			echo "<td>".($row["active"] == 1?"True":"False")."</td>\n";
-			if ($edit)
+			if ($edit || $userid == $row["user_id"])
 				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">Edit</a></td>\n";
+			else
+				echo "<td>&nbsp;</td>\n";
 			if ($remove)
 				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('Are you sure you want to delete?');\">Delete</a></td>\n";
 			echo "</tr>\n";

@@ -41,7 +41,7 @@ if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify User');
+$access = check_permission($config, $userid, 'Modify User') || ($userid == $user_id);
 
 if ($access) {
 

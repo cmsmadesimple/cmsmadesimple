@@ -200,7 +200,7 @@ else {
 	</tr>
 	<tr>
 		<td>Additional Editors:</td>
-		<td><select name="additional_editors[]" multiple="true"><?=$addt_users?></select></td>
+		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>
 	</tr>
 	<tr>
 		<td>*Menu Text:</td>
