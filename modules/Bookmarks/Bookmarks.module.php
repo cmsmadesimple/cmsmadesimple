@@ -60,7 +60,7 @@ class Bookmarks extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.3.1+';
+		return '1.3.2';
 	}
 
 	function GetDescription($lang = 'en_US')
@@ -538,9 +538,9 @@ EOT;
 				$cat_name = $category['category_name'];
 				$checked = '';
 				if(in_array($cat_id, $bookmark['categories']))
-				$checked = 'checked';
+					$checked = $cat_id;
 				echo "<div>";
-				echo $this->CreateInputCheckbox($id, 'bookmark_categories[]', $cat_id, $cat_id);
+				echo $this->CreateInputCheckbox($id, 'bookmark_categories[]', $cat_id, $checked);
 				echo $cat_name; 
 				echo "</div>\n";
 			}
@@ -793,7 +793,8 @@ EOT;
 EOT;
 		echo $this->CreateInputRadioGroup($id, 'not_approved_only', array('Any'=>0,'Not Approved Only'=>1), $not_approved_only);	    		
 	    echo <<<EOT
-	    		</td>
+	    	</td>
+	    </tr>
 	    <tr>
 	    	<td style='padding-right: 5px;'></td>
 	    	<td><input type="submit" value="Go"></td>
