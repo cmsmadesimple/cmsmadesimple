@@ -20,7 +20,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login();
+#check_login();
 
 $error = "";
 
@@ -55,7 +55,7 @@ if ($error != "") {
 
 ?>
 
-<FORM method="post" action="editprefs.php" name="prefsform">
+<FORM METHOD="post" ACTION="editprefs.php" NAME="prefsform">
 
 <div class="adminformSmall">
 
@@ -82,9 +82,9 @@ if ($error != "") {
 		</td>
 	</tr>
 	<TR>
-		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
+		<TD><?php echo lang('language')?>:</TD>
 		<TD>
-			<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="document.prefsform.submit()" STYLE="vertical-align: middle;">
+			<SELECT CLASS="smallselect" NAME="change_cms_lang" onChange="document.forms['prefsform'].Submit();" STYLE="vertical-align: middle;">
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {

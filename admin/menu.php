@@ -1,37 +1,7 @@
 <DIV ID="navcontainer">
 
-<DIV ID="welcome"><?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
-<BR>
-<BR>
-
-<!--
-<FORM ACTION="index.php" METHOD="post" NAME="cms_admin_lang_form">
-<SPAN CLASS="smallselect"><?php echo lang('language')?> : </SPAN>
-<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="cms_admin_lang_form.submit()" STYLE="vertical-align: middle;">
-<?php
-	asort($nls["language"]);
-	foreach ($nls["language"] as $key=>$val) {
-		echo "<option value=\"$key\"";
-		if (isset($_POST["change_cms_lang"])) {
-			if ($_POST["change_cms_lang"] == $key) {
-				echo " selected";
-			}
-		} else if (isset($_COOKIE["cms_language"])) {
-			if ($_COOKIE["cms_language"] == $key) {
-				echo " selected";
-			}
-		}
-		echo ">$val";
-		if (isset($nls["englishlang"][$key]))
-		{
-			echo " (".$nls["englishlang"][$key].")";
-		}
-		echo "</option>\n";
-	}
-?>
-</SELECT>
-</FORM>
--->
+<DIV ID="welcome">
+<?php echo lang('welcomemsg', array($_SESSION["cms_admin_username"]))?>
 </DIV>
 
 <A HREF="listcontent.php"><?php echo lang('contentmanagement')?></A>
