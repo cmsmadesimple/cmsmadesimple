@@ -57,12 +57,12 @@ class TinyMCE extends CMSModule
 			if (isset($_REQUEST[$id.'striptags']))
 			{
 				$striptags = $_REQUEST[$id.'striptags'];
-				$this->SetPreference('TinyMCE', 'striptags', $striptags);
+				$this->SetPreference('striptags', $striptags);
 			}
 		}
 		else
 		{
-			$striptags = $this->GetPreference('TinyMCE', 'striptags', 'false');
+			$striptags = $this->GetPreference('striptags', 'false');
 		}
 
 		?>
@@ -76,7 +76,7 @@ class TinyMCE extends CMSModule
 				<td>Strip background tags from CSS:</td>
 				<td>
 					<?php $values = array();
-					$values = array('true'=>'True', 'false'=>'False');
+					$values = array('true'=>'true', 'false'=>'false');
 					echo $this->CreateInputDropdown($id, 'striptags', $values, -1, $striptags, '');
 					?></td>
 			</tr>
@@ -141,7 +141,7 @@ class TinyMCE extends CMSModule
 				{
 					$css = $gCms->variables['tinymce_stylesheet'];
 	
-					$striptags = $this->GetPreference('TinyMCE', 'striptags', 'false');
+					$striptags = $this->GetPreference('striptags', 'false');
 	
 					if ($striptags == 'true')
 					{
