@@ -27,6 +27,9 @@ $error = "";
 $template = "";
 if (isset($_POST["template"])) $template = $_POST["template"];
 
+$orig_template = "";
+if (isset($_POST["orig_template"])) $orig_template = $_POST["orig_template"];
+
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
@@ -59,6 +62,14 @@ if ($access) {
 		if ($template == "") {
 			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
 			$validinfo = false;
+		} else if ($template != $orig_template) {
+			$query = "SELECT template_id from ".$config->db_prefix."templates WHERE template_name = " . $dbnew->qstr($template);
+			$result = $dbnew->Execute($query);
+
+			if ($result && $result->RowCount() > 0) {
+				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
+				$validinfo = false;
+			}
 		}
 		if ($content == "") {
 			$error .= "<li>".$gettext->gettext("No template content given!")."</li>";
@@ -88,6 +99,7 @@ if ($access) {
 		$row = $result->FetchRow();
 
 		$template = $row["template_name"];
+		$orig_template = $row["template_name"];
 		$content = $row["template_content"];
 		$stylesheet = $row["stylesheet"];
 		$active = $row["active"];
@@ -141,7 +153,7 @@ else {
 
 	<tr>
 		<td>*<?=$gettext->gettext("Template Name")?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /></td>
+		<td><input type="text" name="template" maxlength="25" value="<?=$template?>" /><input type="hidden" name="orig_template" value="<?=$orig_template?>" /></td>
 	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>

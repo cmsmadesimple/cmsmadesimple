@@ -47,13 +47,13 @@ if ($access) {
 		if ($template == "") {
 			$error .= "<li>".$gettext->gettext("No template name given!")."</li>";
 			$validinfo = false;
-		}
-
-		$query = "SELECT template_id from ".$config->db_prefix."templates WHERE template_name = " . $dbnew->qstr($template);
-		$result = $dbnew->Execute($query);
-		if ($result && $result->RowCount() > 0) {
-			$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
-			$validinfo = false;
+		} else {
+			$query = "SELECT template_id from ".$config->db_prefix."templates WHERE template_name = " . $dbnew->qstr($template);
+			$result = $dbnew->Execute($query);
+			if ($result && $result->RowCount() > 0) {
+				$error .= "<li>".$gettext->gettext("Template name already in use!")."</li>";
+				$validinfo = false;
+			}
 		}
 
 		if ($validinfo) {
