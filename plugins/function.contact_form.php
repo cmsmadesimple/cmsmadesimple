@@ -37,7 +37,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	if (!empty($_POST['message'])) $message = trim($_POST['message']);
 	
 	if($_SERVER['REQUEST_METHOD']=='POST'){
-		$extra = "From: \"$name\"$email\r\nReply-To: $email\r\n";
+		$extra = "From: $name <$email>\r\nReply-To: $email\r\n";
 		echo '<div class="contactMessage"';
 		echo ($style)?' style="font-weight: bold; color: red;"':'';
 		echo '>';
