@@ -80,17 +80,39 @@ include_once("header.php");
 
 if ($action == "showmoduleabout")
 {
+	if (isset($gCms->modules[$module]['about_function'])) {
+		@ob_start();
+		call_user_func_array($gCms->modules[$module]['about_function'], array($gCms));
+		$content = @ob_get_contents();
+		@ob_end_clean();
+		echo "<div class=\"moduleabout\">";
+		$gettext->setVar("module", $module);
+		echo "<h2>".$gettext->gettext('About the ${module} module')."</h2>";
+		$gettext->reset();
+		echo $content;
+		?>
+		<form action="plugins.php" method="get">
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
+		</form>
+		<?
+		echo "</div>";
+	}
+}
+else if ($action == "showmodulehelp")
+{
 	if (isset($gCms->modules[$module]['help_function'])) {
 		@ob_start();
 		call_user_func_array($gCms->modules[$module]['help_function'], array($gCms));
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo "<div class=\"moduleabout\">";
-		echo "<h2>About the $module module</h2>";
+		$gettext->setVar("module", $module);
+		echo "<h2>".$gettext->gettext('Help for ${module} module')."</h2>";
+		$gettext->reset();
 		echo $content;
 		?>
 		<form action="plugins.php" method="get">
-		<p><input type="submit" value="Back to Module List" /></p>
+		<p><input type="submit" value="<?=$gettext->gettext("Back to Plugin List")?>" /></p>
 		</form>
 		<?
 		echo "</div>";
@@ -179,6 +201,7 @@ else
 			<td width="10%"><?=$gettext->gettext("Status")?></td>
 			<td width="10%"><?=$gettext->gettext("Active")?></td>
 			<td width="10%"><?=$gettext->gettext("Action")?></td>
+			<td width="10%"><?=$gettext->gettext("Help")?></td>
 			<td width="10%"><?=$gettext->gettext("About")?></td>
 		</tr>
 
@@ -202,6 +225,14 @@ else
 				echo "<td><a href=\"plugins.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">".$gettext->gettext("Uninstall")."</a></td>";
 			}
 			if (isset($gCms->modules[$key]['help_function']))
+			{
+				echo "<td><a href=\"plugins.php?action=showmodulehelp&module=".$key."\">".$gettext->gettext("Help")."</a></td>";
+			}
+			else
+			{
+				echo "<td>&nbsp;</td>";
+			}
+			if (isset($gCms->modules[$key]['about_function']))
 			{
 				echo "<td><a href=\"plugins.php?action=showmoduleabout&module=".$key."\">".$gettext->gettext("About")."</a></td>";
 			}

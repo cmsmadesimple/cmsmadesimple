@@ -121,6 +121,24 @@ function cms_mapi_register_help_function($name, $function) {
 }
 
 /**
+ * Registers the module's about function
+ *
+ * This function should echo out about html.  It should at least
+ * show the version number, the author, and if possible, a change
+ * history.  Any other credits or necessary license messages would
+ * go here as well.
+ *
+ * @since 0.5
+ */
+function cms_mapi_register_about_function($name, $function) {
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['about_function'] = $function;
+	}
+}
+
+/**
  * Registers the module's install function
  *
  * The registered function should setup any necessary tables,
