@@ -1,5 +1,7 @@
 #!/bin/sh
 
+# Shell script to sort all entries so they're easier to read
+
 for file in `find . -name "admin.inc.php"`
 do
 	echo $file " "

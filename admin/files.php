@@ -73,7 +73,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	{
 		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
-			$errors .= "<li>".lang("File could not be uploaded.  Permissions problem?")."</li>";
+			$errors .= "<li>".lang('filenotuploaded')."</li>";
 		}
 		else
 		{
@@ -82,7 +82,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 	}
 	else
 	{
-		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
 	}
 }
 
@@ -94,19 +94,19 @@ if (isset($_POST['newdirsubmit']))
 		#Make sure it isn't an empty dir name
 		if ($_POST['newdir'] == "")
 		{
-			$errors .= "<li>".lang("Cannot create a directory with no name.")."</li>";
+			$errors .= "<li>".lang('filecreatedirnoname')."</li>";
 		}
 		else if (ereg('\.\.',$_POST['newdir']))
 		{
-			$errors .= "<li>".lang("Directory name cannot contain '..'")."</li>";
+			$errors .= "<li>".lang('filecreatedirnodoubledot')."</li>";
 		}
 		else if (ereg('/', $_POST['newdir']) || strpos($_POST['newdir'], '\\') !== false)
 		{
-			$errors .= "<li>".lang("Directory name cannot contain '/' or '\'")."</li>";
+			$errors .= "<li>".lang('filecreatedirnoslash')."</li>";
 		}
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
-			$errors .= "<li>".lang("This directory already exists.")."</li>";
+			$errors .= "<li>".lang('directoryexists')."</li>";
 		}
 		else
 		{
@@ -116,7 +116,7 @@ if (isset($_POST['newdirsubmit']))
 	}
 	else
 	{
-		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
 	}
 }
 
@@ -128,7 +128,7 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		{
 			if (!(unlink($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang("Could not delete file.  Permissions problem?")."</li>";
+				$errors .= "<li>".lang('errordeletingfile')."</li>";
 			}
 			else
 			{
@@ -137,12 +137,12 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 		}
 		else
 		{
-			$errors .= "<li>".lang("No real file given")."</li>";
+			$errors .= "<li>".lang('norealfile')."</li>";
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
 	}
 }
 else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
@@ -153,7 +153,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		{
 			if (!(deldir($dir . "/" . $_GET['file'])))
 			{
-				$errors .= "<li>".lang("Could not delete directory.  Permissions problem?")."</li>";
+				$errors .= "<li>".lang('errordeletingdirectory')."</li>";
 			}
 			else
 			{
@@ -162,12 +162,12 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 		}
 		else
 		{
-			$errors .= "<li>".lang("No real directory given")."</li>";
+			$errors .= "<li>".lang('norealdirectory')."</li>";
 		}
 	}
 	else
 	{
-		$errors .= "<li>".lang("You need the 'Modify Files' permission to perform that function.")."</li>";
+		$errors .= "<li>".lang('needpermissionto', array('Modify Files'))."</li>";
 	}
 }
 

@@ -168,7 +168,7 @@ else
 {
 
 	if ($action != "" && !$access) {
-		echo "<p class=\"error\">".lang("You need the 'Modify Modules' permission to perform that function.")."</p>";
+		echo "<p class=\"error\">".lang('needpermissionto', array('Modify Modules'))."</p>";
 	}
 
 	if (count($gCms->modules) > 0) {

@@ -162,10 +162,7 @@ else {
 
 <h4 onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</h4>
 <div id="helparea" class="expand">
-<?php
-echo "<p>".lang("A template is what controls the look and feel of your site's content.")."</p>";
-echo "<p>".lang("Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.")."</p>";
-?>
+<?php echo lang("helpaddtemplate")?>
 </div>
 <?php
 

@@ -133,8 +133,7 @@ if (isset($_GET["message"])) {
 
 <div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')"><?php echo lang('help')?>?</a></div>
 <div id="helparea" class="expand">
-<p><?php echo lang("This is the main content page used as the starting point for editing of all content.<br>This page allows you to reorder your content hierarchy for use with the automated menuing system, as well as deleting, editing, and creating new content pieces.")?></p>
-<p><?php echo lang("To make a page the default page (shown when no page parameter is passed) click on the <u>False</u> link in the <i>Default</i> column.")?></p>
+<?php echo lang('helplistcontent')?>
 <a name="help">&nbsp;</a>
 </div>
 <?php

@@ -119,12 +119,7 @@ if ($add) {
 
 <div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
 <div id="helparea" class="expand">
-<?php
-echo "<p>".lang("This page allows you to edit, delete, and create templates.")."</p>";
-echo "<p>".lang("To create a new template, click on the <u>Add New Template</u> button.")."<br>";
-echo lang("If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.")."<br>";
-echo lang("If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.")."</p>";
-?>
+<?php echo lang('helplisttemplate')?>
 <a name="help">&nbsp;</a>
 </div>
 
