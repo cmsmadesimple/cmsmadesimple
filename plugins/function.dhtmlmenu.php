@@ -18,6 +18,8 @@
 
 function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
+	global $db;
+
 	# getting menu parameters
 	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
 	
@@ -25,6 +27,28 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 	$newparams = array();
 	foreach($params as $key => $val) $newparams[$key] = $val;
 	$newparams["show"] = "menu";
+
+	if (isset($newparams["start_element"]))
+	{
+		$tmp	= $newparams["start_element"];
+		$tmptab	= explode(".",$tmp);
+		$parent	= 0;
+
+		foreach($tmptab as $key)
+		{
+			if ("" != $key)
+			{
+				$query	= "SELECT page_id FROM ".cms_db_prefix()."pages WHERE item_order = '$key' AND parent_id = '$parent'";
+				$result = $db->Execute($query);
+				if ($result && $result->RowCount() > 0)
+				{
+					$line	= $result->FetchRow();
+					$parent	= $line["page_id"];
+				}
+			}
+		}
+		$newparams["start_element"] = $parent;
+	}
 
 	# getting content
 	$content = db_get_menu_items($newparams);
