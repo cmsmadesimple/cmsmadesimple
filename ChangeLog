@@ -1,7 +1,7 @@
 Version 0.7.3 -- Subversion
 -----------------
 
-* Added Italian translation (emaunelez)
+* Added Italian translation (emanuelez)
 * Added more callback functions to module API
 * Added config.php option to disable sending translations to htmlarea
 (#000049)
