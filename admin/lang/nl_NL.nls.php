@@ -34,7 +34,7 @@ $nls['englishlang']['nl_NL'] = 'Dutch';
 #Possible aliases for language
 $nls['alias']['nl'] = 'nl_NL';
 $nls['alias']['dutch'] = 'nl_NL';
-$nls['alias']['nl_US.ISO8859-1'] = 'nl_NL' ;
+$nls['alias']['nl_NL.ISO8859-1'] = 'nl_NL' ;
 
 #Encoding of the language
 $nls['encoding']['nl_NL'] = "ISO-8859-1";
