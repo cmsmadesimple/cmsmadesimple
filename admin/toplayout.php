@@ -37,8 +37,8 @@ include_once("header.php");
 </div>
 
 <div class="MainMenuItem">
-<a href="listcss.php">HTML Blobs</a>
-<span class="description">CSS Management is an advanced way to handle CSS separately from templates.  Read here for more info.</span>
+<a href="listcss.php">Stylesheets</a>
+<span class="description">CSS Management is an advanced way to handle stylesheets separately from templates.</span>
 </div>
 
 <div class="MainMenuItem">

@@ -48,7 +48,9 @@ if (isset($_GET["message"]))
 
 ?>
 
-<h3><?php echo lang('currentcss')?></h3>
+<h3><?php echo lang('liststylesheets')?></h3>
+
+<p><a href="toplayout.php"><?php echo lang('back')?></a></p>
 
 <?php
 
@@ -82,6 +84,7 @@ if (isset($_GET["message"]))
 		echo "<th>".lang('title')."</th>\n";
 		echo "<th>&nbsp;</th>\n";
 		echo "<th>&nbsp;</th>\n";
+		echo "<th>&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -95,11 +98,12 @@ if (isset($_GET["message"]))
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\"><img src=\"../images/cms/css.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('attachtotemplate')."\" /></a></td>\n";
 
 				# if user has right to edit
 				if ($modify)
 				{
-					echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
+					echo "<td width=\"18\"><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
 				}
 				else
 				{
@@ -137,7 +141,7 @@ if (isset($_GET["message"]))
 	{
 ?>
 
-<div class="button"><a href="addcss.php"><?php echo lang('addcss')?></a></div>
+<div class="button"><a href="addcss.php"><?php echo lang('addstylesheet')?></a></div>
 
 <?php
 	} # end if add css

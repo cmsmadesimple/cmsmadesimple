@@ -208,7 +208,7 @@ else
 
 <div class="adminform">
 
-<h3><?php echo lang('editcss')?></h3>
+<h3><?php echo lang('editstylesheet')?></h3>
 
 <table width="100%" border="0">
 

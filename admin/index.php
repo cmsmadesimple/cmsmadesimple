@@ -64,7 +64,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <div class="MainMenuItem">
 <a href="toplayout.php">Layout</a>
-<span class="description">Site layout options. Subitems: <a href="listtemplates.php">templates</a>, <a href="listhtmlblobs.php">html blobs</a>.</span>
+<span class="description">Site layout options. Subitems: <a href="listtemplates.php">templates</a>, <a href="listcss.php">stylesheets</a>.</span>
 </div>
 
 <div class="MainMenuItem">

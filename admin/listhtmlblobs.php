@@ -33,6 +33,9 @@ if (isset($_GET["message"])) {
 
 ?>
 <h3>HTML Blobs</h3>
+
+<p><a href="topcontent.php"><?php echo lang('back')?></a></p>
+
 <?php
 
 	$userid	= get_userid();

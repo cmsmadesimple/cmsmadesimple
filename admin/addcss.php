@@ -153,7 +153,7 @@ include_once("header.php");
 #******************************************************************************
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('addcss')))."</h3>";
+	print "<h3>".lang('noaccessto', array(lang('addstylesheet')))."</h3>";
 }
 #******************************************************************************
 # the user has access, we display the form
@@ -176,7 +176,7 @@ else
 
 <div class="adminform">
 
-<h3><?php echo lang('addcss')?></h3>
+<h3><?php echo lang('addstylesheet')?></h3>
 
 <table width="100%" border="0">
 
