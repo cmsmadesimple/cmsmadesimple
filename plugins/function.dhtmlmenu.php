@@ -20,6 +20,8 @@ require_once("config.php");
 
 function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 
+	$showadmin = $params["showadmin"] ? $params["showadmin"] : true;
+
 	$menu = "";
 
 	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
@@ -36,6 +38,11 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 				$menu .= "|".$one->menu_text."|".$one->url."\n";
 			}
 		}
+	}
+
+	if ($showadmin) {
+		$menu .= ".|---\n";
+		$menu .= ".|Admin|admin\n";
 	}
 
 	$text = '

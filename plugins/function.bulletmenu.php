@@ -21,7 +21,9 @@ require_once("config.php");
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	$menu = "";
-	$level_stop = $params["levelstop"] ? $params["levelstop"] : 2 ;
+	$levelstop = $params["levelstop"] ? $params["levelstop"] : 2 ;
+	$showadmin = $params["showadmin"] ? $params["showadmin"] : true;
+	
 
 	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
 
@@ -29,7 +31,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	foreach ($content as $one) {
 
-		if ($one->active && $one->level <= $level_stop) {
+		if ($one->active && $one->level <= $levelstop) {
 
 			if ($one->level < $last_level) {
 				for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
@@ -47,6 +49,10 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	}
 
 	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
+
+	if ($showadmin) {
+		$menu .= "<br/>\n"."<ul><li><a href='admin'>Admin</a></li></ul>\n";
+	}
 
 	return $menu;
 
