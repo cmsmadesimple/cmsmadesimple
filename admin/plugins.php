@@ -313,7 +313,7 @@ else
 				}
 				else
 				{
-					echo "<td>".lang('hasdependency')."</td>";
+					echo "<td>".lang('hasdependents')."</td>";
 				}
 			}
 			if (isset($gCms->modules[$key]['help_function']))
