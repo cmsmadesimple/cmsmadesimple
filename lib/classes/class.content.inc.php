@@ -118,6 +118,8 @@ class ContentBase
 	 */
 	var $mAlias;
 
+	var $mOldAlias;
+
 	/**
 	 * Cachable?
 	 */
@@ -178,6 +180,7 @@ class ContentBase
 		$this->mId				= -1 ;
 		$this->mName			= "" ;
 		$this->mAlias			= "" ;
+		$this->mOldAlias		= "" ;
 		$this->mType			= strtolower(get_class($this)) ;
 		$this->mOwner			= -1 ;
 		$this->mProperties		= new ContentProperties();
@@ -392,6 +395,7 @@ class ContentBase
 				$this->mId				= $row["content_id"];
 				$this->mName			= $row["content_name"];
 				$this->mAlias			= $row["content_alias"];
+				$this->mOldAlias		= $row["content_alias"];
 				$this->mType			= strtolower($row["type"]);
 				$this->mOwner			= $row["owner_id"];
 				#$this->mProperties		= new ContentProperties();
@@ -474,6 +478,7 @@ class ContentBase
 		$this->mId				= $data["content_id"];
 		$this->mName			= $data["content_name"];
 		$this->mAlias			= $data["content_alias"];
+		$this->mOldAlias		= $data["content_alias"];
 		$this->mType			= strtolower($data["type"]);
 		$this->mOwner			= $data["owner_id"];
 		#$this->mProperties		= new ContentProperties();

@@ -145,11 +145,14 @@ class content extends ContentBase
 			$result = false;
 		}
 		
-		$error = @ContentManager::CheckAliasError($this->mAlias);
-		if ($error !== FALSE)
+		if ($this->mAlias != $this->mOldAlias)
 		{
-			array_push($errors, $error);
-			$result = false;
+			$error = @ContentManager::CheckAliasError($this->mAlias);
+			if ($error !== FALSE)
+			{
+				array_push($errors, $error);
+				$result = false;
+			}
 		}
 
 		if ($this->mTemplateId == '-1')
