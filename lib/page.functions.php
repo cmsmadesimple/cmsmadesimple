@@ -411,8 +411,12 @@ function textarea_highlight($use_javasyntax, $text, $name,
             archive="SyntaxHighlight.jar" width="100%">
                 <param name="content" value="'.$text.'">
                 <param name="syntaxType" value="'.$syntax_type.'">
+                Sorry, the syntax highlighted textarea will not work with your
+                browser. Please use a different browser or turn off syntax 
+                highlighting under user preferences.
             </applet>
             <input type="hidden" name="'.$name.'" value="">';
+       
     }else{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
             class="'.$class_name.'" id="'.$id.'">'.htmlentities($text).'</textarea>';

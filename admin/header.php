@@ -16,7 +16,7 @@ header("Cache-Control: post-check=0, pre-check=0", false);
 header("Pragma: no-cache");
 
 // Language shizzle
-header("Content-Encoding: " . get_encoding());
+//header("Content-Encoding: " . get_encoding());
 header("Content-Language: " . $current_language);
 header("Content-Type: text/html; charset=" . get_encoding());
 

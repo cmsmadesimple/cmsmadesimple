@@ -54,7 +54,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 }
 
 // Language shizzle
-header("Content-Encoding: " . get_encoding());
+//header("Content-Encoding: " . get_encoding());
 header("Content-Language: " . $current_language);
 header("Content-Type: text/html; charset=" . get_encoding());
 

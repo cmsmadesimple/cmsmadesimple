@@ -37,7 +37,7 @@ $error = "";
 $use_wysiwyg = "1";
 if (isset($_POST["use_wysiwyg"])) $use_wysiwyg = $_POST["use_wysiwyg"];
 $use_javasyntax = "1";
-if (isset($_POST["use_javasyntax"])) $use_javasyntax = $_POST["use_javasyntax"];
+if (isset($_POST["use_javasyntax"]))$use_javasyntax = $_POST["use_javasyntax"];
 
 $userid = get_userid();
 
@@ -56,6 +56,7 @@ if (isset($_POST["submit_form"])) {
 } else if (!isset($_POST["edituserprefs"])) {
 	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
 	$use_javasyntax = get_preference($userid, 'use_javasyntax');
+    if($use_javasyntax == null)$use_javasyntax = false;
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_language;
 }
@@ -73,11 +74,27 @@ if ($error != "") {
 
 <h3><?php echo lang("userprefs")?></h3>
 
+<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
+</applet>
+
+<script language="JavaScript" type="text/javascript">
+    function syntaxSupport(){
+        try{
+            document.hiddenApplet.myMethod();
+        }catch(err){
+            alert("Sorry, syntax highighting is not supported in your browser.");
+            document.prefsform.use_javasyntax.selectedIndex = 1; 
+        }
+    }
+</script>
+
 <table border="0" align="center">
 
 	<tr>
 		<td><?php echo lang("usewysiwyg")?>:</td>
 		<td>
+        
+        
 			<select name="use_wysiwyg">
 				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
@@ -87,7 +104,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang("usejavasyntax")?>:</td>
 		<td>
-			<select name="use_javasyntax">
+			<select name="use_javasyntax"  onChange="syntaxSupport()">
 				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected":"") ?>><?php echo lang('false')?></option>
 			</select>
