@@ -1947,7 +1947,7 @@ HTMLArea.htmlEncode = function(str) {
 	str = str.replace(/&/ig, "&amp;");
 	str = str.replace(/</ig, "&lt;");
 	str = str.replace(/>/ig, "&gt;");
-	str = str.replace(/\x22/ig, "&quot;");
+	//str = str.replace(/\x22/ig, "&quot;");
 	// \x22 means '"' -- we use hex reprezentation so that we don't disturb
 	// JS compressors (well, at least mine fails.. ;)
 	return str;

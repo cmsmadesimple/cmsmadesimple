@@ -21,14 +21,22 @@ function smarty_cms_function_cms_module($params, &$smarty) {
 	global $cmsmodules;
 	global $modulecmsobj;
 
-	if (isset($params['module'])) {
+	$modulename = $params['module'];
 
-		if (isset($cmsmodules[$params['module']])) {
-			if (isset($cmsmodules[$params['module']]['plugin_module'])) {
+	foreach ($cmsmodules as $key=>$value) {
+		if (strtolower($modulename) == strtolower($key)) {
+			$modulename = $key;
+		}
+	}
+
+	if (isset($modulename)) {
+
+		if (isset($cmsmodules[$modulename])) {
+			if (isset($cmsmodules[$modulename]['plugin_module'])) {
 				@ob_start();
 				#$obj = $cmsmodules[$params['module']]['Instance'];
 				#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
-				call_user_func_array(&$cmsmodules[$params['module']]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
+				call_user_func_array(&$cmsmodules[$modulename]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				echo $modoutput;
