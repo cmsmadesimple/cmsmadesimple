@@ -63,6 +63,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
+			$new_template_id = $dbnew->GenID($config->db_prefix."templates_seq");
 			$query = "INSERT INTO ".$config->db_prefix."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
 			$result = $dbnew->Execute($query);
 			if ($result && $result->RowCount() > 0) {
@@ -72,7 +73,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".$gettext->gettext("Error inserting template")."</li>";
+				$error .= "<li>".$gettext->gettext("Error inserting template")."$query</li>";
 			}
 		}
 	}
