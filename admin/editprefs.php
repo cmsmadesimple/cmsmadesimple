@@ -81,14 +81,14 @@ if ($error != "") {
 ?>
 <form name="prefsform" method="post" action="editprefs.php">
 
-<div class="adminformSmall">
+<div class="AdminForm">
 
 <h3><?php echo lang("userprefs")?></h3>
 
-<table border="0" align="center">
+<table border="0">
 
 	<tr>
-		<td><?php echo lang('wysiwygtouse')?>:</td>
+		<th><?php echo lang('wysiwygtouse')?>:</th>
 		<td>
 			<select name="wysiwyg">
 				<option value=""><?php echo lang('none')?></option>
@@ -112,7 +112,7 @@ if ($error != "") {
 		</td>
 	</tr>
 	<tr>
-		<td><?php echo lang('language')?>:</td>
+		<th><?php echo lang('language')?>:</th>
 		<td>
 			<select name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
 			<option value=""><?php echo lang('nodefault') ?></option>
@@ -139,7 +139,7 @@ if ($error != "") {
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
 	<tr>	  
-		<td><?php echo lang('admintheme') ?></td>
+		<th><?php echo lang('admintheme') ?></th>
 		<td>
 			<select name="admintheme">
 			<?
@@ -157,7 +157,8 @@ if ($error != "") {
 	<?}?>
 	<?//STOP?>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>" />
+		<td>&nbsp;</td>
+		<td><input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>" />
 		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>

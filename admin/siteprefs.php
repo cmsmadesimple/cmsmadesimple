@@ -137,15 +137,15 @@ if ($message != "") {
 
 <table width="100%" cellpadding="4" cellspacing="0" border="0">
 	<tr>
-		<td width="230"><?php echo lang('clearcache') ?></td>
+		<th><?php echo lang('clearcache') ?>:</th>
 		<td><input type="submit" name="clearcache" value="<?php echo lang('clear') ?>" onclick="document.siteprefform.submit()" /></td>
 	</tr>
 	<tr>
-		<td>Enable Custom 404 Message</td>
+		<th><?php echo lang('enablecustom404') ?>:</th>
 		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></td>
 	</tr>
 	<tr>
-		<td><?php echo lang('custom404')?>:</td>
+		<th><?php echo lang('custom404')?>:</th>
 		<td>
 			<?php echo textarea_highlight($use_javasyntax, $custom404, 'custom404'); ?><br />
 			<?php echo lang('template')?>:
@@ -165,11 +165,11 @@ if ($message != "") {
 		</td>
 	</tr>
 	<tr>
-		<td>Enable Site Down Message</td>
+		<th><?php echo lang('enablesitedown')?>:</th>
 		<td><input type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked=\"checked\""?> /></td>
 	</tr>
 	<tr>
-		<td><?php echo lang('sitedownmessage')?>:</td>
+		<th><?php echo lang('sitedownmessage')?>:</th>
 		<td>
 			<?php echo textarea_highlight($use_javasyntax, $sitedownmessage,'sitedownmessage'); ?>
 			<!--<br>
@@ -192,7 +192,7 @@ if ($message != "") {
 	</tr>
 	<!--
 	<tr>
-		<td><?php #echo lang('useadvancedcss')?></td>
+		<th><?php #echo lang('useadvancedcss')?>:</th>
 		<td>
 			<select name="useadvancedcss">
 				<option value="1"<?php #echo ($useadvancedcss=="1"?" selected=\"selected\"":"")?>><?php #echo lang('true')?></option>
@@ -205,7 +205,7 @@ if ($message != "") {
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
 	<tr>	  
-		<td><?php echo lang('admintheme') ?></td>
+		<th><?php echo lang('admintheme') ?>:</th>
 		<td>
 			<select name="logintheme">
 			<?
@@ -225,7 +225,8 @@ if ($message != "") {
 	
 	<?php if ($access) { ?>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="editsiteprefs" value="true" />
+		<td>&nbsp;</td>
+		<td><input type="hidden" name="editsiteprefs" value="true" />
 		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>

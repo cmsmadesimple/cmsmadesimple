@@ -290,4 +290,6 @@ $lang['admin']['usersgroupsdescription'] = 'User and Group related items.'; //ne
 $lang['admin']['layoutdescription'] = 'Site layout options.'; //needs translation
 $lang['admin']['admindescription'] = 'Site Administration functions.'; //needs translation
 $lang['admin']['contentdescription'] = 'This is where we add and edit content.'; //needs translation
+$lang['admin']['enablecustom404'] = 'Enable Custom 404 Message'; //needs translation
+$lang['admin']['enablesitedown'] = 'Enable Site Down Message'; //needs translation
 ?>
