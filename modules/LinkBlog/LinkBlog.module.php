@@ -319,6 +319,13 @@ class LinkBlog extends CMSModule
 				$this->linkblog_module_view_preferences($id, $params);
 				break;
 			}
+			
+			case "admin_decode_urls":
+			{
+				$this->admin_menu($id, $params);
+				$this->admin_decode_urls($id, $params, $return_id);
+				break;
+			}
 				
 		} ## switch
 
@@ -395,6 +402,21 @@ class LinkBlog extends CMSModule
 
 	}
 
+	function admin_decode_urls($id, $params, $return_id)
+	{
+		$db = $this->cms->db;
+		$select = "SELECT linkblog_url FROM ".cms_db_prefix()."module_linkblog where linkblog_url like \"%amp%\" ";
+		$dbresult = $db->Execute($select);
+
+		if ($dbresult && $dbresult->RowCount()) {
+			while ($row = $dbresult->FetchRow()) {
+				$url = html_entity_decode($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+				$update = "UPDATE ".cms_db_prefix()."module_linkblog SET linkblog_url='".$url."'";
+				echo "(".$row["linkblog_url"].") (".$url.")";
+			} ## while
+		} ## if
+	} ## admin_decode_urls
+
 	function redirect_url($id, $params, $return_id)
 	{
 		$db = $this->cms->db;
@@ -405,7 +427,11 @@ class LinkBlog extends CMSModule
 
 		if ($dbresult && $dbresult->RowCount()) {
 			while ($row = $dbresult->FetchRow()) {
-				$url = html_entity_decode($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+				if (substr($row["linkblog_url"],0,1) == "'") {
+					$url = substr($row["linkblog_url"], 1, strlen($row["linkblog_url"])-2);
+				} else {
+					$url = $row["linkblog_url"];
+				}
 			}
 		}
 		redirect($url);
@@ -657,7 +683,7 @@ class LinkBlog extends CMSModule
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
 			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit, linkblog_hits, linkblog_content)";
 			$query .=" VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-			$myparams = array($new_id, $params["author"], $params["title"], $params["type"], htmlentities($db->qstr($params["url"])), $db->DBTimeStamp(time()), $db->DBTimeStamp(time()), '2', htmlentities($db->qstr($credit)), 1, $content);
+			$myparams = array($new_id, $params["author"], $params["title"], $params["type"], $db->qstr($params["url"]), $db->DBTimeStamp(time()), $db->DBTimeStamp(time()), '2', $db->qstr($credit), 1, $content);
 			$dbresult = $db->Execute($query, $myparams);
 
 			if ($this->GetPreference("email_notify", "0") == "1") {
@@ -905,6 +931,7 @@ class LinkBlog extends CMSModule
 		echo " | " . $this->CreateLink($id, 'admin_manage_categories', $this->cms->variables['page'], 'Manage Categories', array());
 		echo " | " . $this->CreateLink($id, 'admin_manage_links', $this->cms->variables['page'], 'Manage Links', array());
 		echo " | " . $this->CreateLink($id, 'admin_preferences', $this->cms->variables['page'], 'Preferences', array());
+		#echo " | " . $this->CreateLink($id, 'admin_decode_urls', $this->cms->variables['page'], 'Decode URLs', array());
 
 	} ## admin_menu
 
