@@ -164,6 +164,16 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 	{
 		$type = $params["type"];
 	}
+	
+	$rsstitle = "CMS Made Simple News Feed";
+	if (isset($params[$id."rsstitle"]))
+	{
+		$rsstitle = $params[$id."rsstitle"];
+	}
+	else if (isset($params["rsstitle"]))
+	{
+		$rsstitle = $params["rsstitle"];
+	}
 
 	if ($dbresult && $dbresult->RowCount() > 0)
 	{
@@ -173,9 +183,9 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 			echo "<?xml version='1.0'?>\n";
 			echo "<rss version='2.0'>\n";
 			echo "   <channel>\n";
-			echo "  <title>".$cms->config["news_rss_title"]."</title>\n";
+			echo "  <title>".$rsstitle."</title>\n";
 			echo "  <link>";
-			echo cms_htmlentities($cms->config["news_url"], ENT_NOQUOTES, get_encoding($encoding));
+			echo cms_htmlentities($cms->config["root_url"], ENT_NOQUOTES, get_encoding($encoding));
 			echo "</link>\n";
 			echo "  <description>Current linkblog entries</description>\n";
 
@@ -456,10 +466,8 @@ function news_module_help($cms)
 		<ul>
 		<li><em>(optional)</em> number="5" - Maximum number of items to display =- leaving empty will show all items</li>
 		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's date function.  See <a href="http://php.net/date" target="_blank">here</a> for a parameter list and information.</li>
-		<li><em>(optional)</em> makerssbutton="true" - Make a button to
-		link to an RSS feed of the News items. Two values in config.php are required for this to work.<br />
-		<code>$config["news_url]</code><br />
-		<code>$config["news_rss_title"]</code></li>
+		<li><em>(optional)</em> makerssbutton="true" - Make a button to link to an RSS feed of the News items.<br />
+		<li><em>(optional)</em> rsstitle="CMS Made Simple News Feed" - Title to use for RSS feeds.<br />
 		<li><em>(optional)</em> swaptitledate="true" - Switch the order
 		of the date and title</li>
 		<li><em>(optional)</em> category="category" - Only display items for that category.  leaving empty, will show all categories</li>
