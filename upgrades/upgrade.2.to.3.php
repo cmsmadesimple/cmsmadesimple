@@ -45,6 +45,28 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Creating userprefs table...";
+
+	$query  = "CREATE TABLE ".$config->db_prefix."userprefs (";
+	$query .= "  user_id int(11),";
+	$query .= "  preference varchar(50),";
+	$query .= "  value varchar(255),";
+	$query .= "  type varchar(25)";
+	$query .= ") TYPE=MyISAM";
+
+	$db->query($query);
+
+	$query = "SELECT user_id FROM ".$config->db_prefix."users";
+	$result = $db->query($query);
+	while ($row = $db->getresulthash($result)) {
+		#$query = "UPDATE ".$config->db_prefix."users SET password = '".md5($row["password"])."' where user_id = " . $row["user_id"];
+		$query = "INSERT INTO ".$config->db_prefix."userprefs (user_id, preference, value) VALUES (".$row["user_id"].", 'use_wysiwyg', '1')";
+		$db->query($query);
+	}
+	$db->freeresult($result);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating indexes...";
 
 	$query = "CREATE INDEX idx_template_id_modified_date ON ".$config->db_prefix."pages (template_id, modified_date)";

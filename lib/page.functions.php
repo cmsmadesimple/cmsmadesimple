@@ -98,6 +98,50 @@ function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
 
 }
 
+function get_preference(&$config, $userid, $prefname) {
+
+	$value = "";
+
+	$db = new DB($config);
+	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
+	$result = $db->query($query);
+	
+	if ($db->rowcount($result) > 0) {
+		$row = $db->getresulthash($result);
+		$value = $row["value"];
+	}
+
+	$db->freeresult($result);
+	$db->close();
+
+	return $value;
+}
+
+function set_preference(&$config, $userid, $prefname, $value) {
+
+	$doinsert = true;
+
+	$db = new DB($config);
+	$query = "SELECT value from ".$config->db_prefix."userprefs WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
+	$result = $db->query($query);
+
+	if ($db->rowcount($result) > 0) {
+		$doinsert = false;
+	}
+
+	$db->freeresult($result);
+
+	if ($doinsert) {
+		$query = "INSERT INTO ".$config->db_prefix."userprefs (user_id, preference, value) VALUES ($userid, '".$db->escapestring($prefname)."', '".$db->escapestring($value)."')";
+		$db->query($query);
+	} else {
+		$query = "UPDATE ".$config->db_prefix."userprefs SET value = '".$db->escapestring($value)."' WHERE user_id = $userid AND preference = '".$db->escapestring($prefname)."'";
+		$db->query($query);
+	}
+
+	$db->close();
+}
+
 function get_stylesheet(&$config, $templateid) {
 
 	$css = "";

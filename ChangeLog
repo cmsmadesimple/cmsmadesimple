@@ -9,6 +9,9 @@ Version 0.3 -- Subversion
 * Added the link content type
 * Added proper 404 error for pages that are not found or active (Fixes #18)
 * Added admin logging and a simple report (Fixes #21)
+* Added TinyMCE WYSIWYG editor for content (Fixes #10)
+* Added user preferences page
+* Added option to turn on/off wysiwyg in user preferences
 * Changed database abstraction so that it will be able to use other db
 backends in the future (Fixes #19)
 
