@@ -370,6 +370,8 @@ class Smarty_CMS extends Smarty {
  */
 function load_plugins(&$smarty)
 {
+	debug_buffer("load plugins...");
+
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
 	$userplugins = &$gCms->userplugins;

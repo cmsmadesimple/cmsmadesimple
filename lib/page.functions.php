@@ -477,7 +477,7 @@ function get_stylesheet($template_id)
 	}
 
 	#If it's valid after loading, then start the process...
-	if ($templateobj !== FALSE)
+	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
 	{
 		#Grab the encoding
 		if ($templateobj->encoding !== FALSE && $templateobj->encoding != '')

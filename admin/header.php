@@ -63,14 +63,16 @@ $modulePerms = check_permission($userid, 'Modify Modules');
 
 <div id="MainContent">
 
+<!--
 <div class="DashboardCallout">
 
 <p class="DashboardCalloutTitle">Bookmarks</p>
 
-</div> <!-- end DashboardCallout -->
+</div> --><!-- end DashboardCallout -->
 
+<!--
 <div class="DashboardCallout">
 
 <p class="DashboardCalloutTitle">Recent Pages</p>
 
-</div> <!-- end DashboardCallout -->
+</div> --> <!-- end DashboardCallout -->
