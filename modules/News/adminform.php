@@ -5,7 +5,6 @@ $hiddenfields = "";
 $db = $cms->db;
 $config = $cms->config;
 
-//$news_cat = "";
 $news_cat = "";
 if( isset($_POST[$id."news_cat"])) $news_cat = $_POST[$id."news_cat"];
 if( strlen($news_cat) == 0 ) {

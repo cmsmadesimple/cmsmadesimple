@@ -70,7 +70,7 @@ function news_module_execute( $cms, $id, $params )
 }
 
 
-function strip_to_length( $str, $len, $tags=true )
+function news_strip_to_length( $str, $len, $tags=true )
 {
 	if ($tags == true)
 	{
@@ -186,11 +186,11 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				}
 				if( isset( $params["summary"] ) )
 				{
-					echo "            <description>".strip_to_length($row["news_data"],$params["length"])."</description>\n";
+					echo "            <description>".news_strip_to_length($row["news_data"],$params["length"])."</description>\n";
 				}
 				else
 				{
-					echo "            <description>".strip_to_length($row["news_data"],0)."</description>\n";
+					echo "            <description>".news_strip_to_length($row["news_data"],0)."</description>\n";
 				} 
 				echo "            <pubDate>".gmdate('D d M, Y H:i:s', $db->UnixTimeStamp($row["news_date"]))." GMT</pubDate>\n";
 				echo "        </item>\n";
@@ -228,7 +228,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				echo "</div>";
 				if( isset( $params["summary"] ) )
 				{
-					echo "<span class=\"cms-news-content\">".strip_to_length($row["news_data"],$params["length"],false)."</span>";
+					echo "<span class=\"cms-news-content\">".news_strip_to_length($row["news_data"],$params["length"],false)."</span>";
 					if (strlen($row["news_data"]) >$params["length"])
 					{
 						$moretext = "more...";
@@ -256,26 +256,32 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 }
 
 
-function get_var( $var )
+function news_get_var( $var )
 {
 	if( isset( $_POST[$var] ) )
 	{
 		return $_POST[$var];
 	}
-	if( isset( $HTTP_GET_VARS[$var] ) )
+	if( isset( $_GET[$var] ) )
 	{
-		return $HTTP_GET_VARS[$var];
+		return $_GET[$var];
 	}
 	return;
 }
 
 function news_module_executeadmin($cms,$id)
 {
+    $rowsperpage=20;
 	$access = cms_mapi_check_permission($cms, "Modify News");
-	$newscat = get_var( $id."news_cat" );
+	$newscat = news_get_var( $id."news_cat" );
+    $current_page = news_get_var( $id."page" );
+    if( !isset( $current_page ) )
+    {
+      $current_page = 1;
+    }
 	if( !isset( $newscat ) || (strlen($newscat) == 0) )
 	{
-		$newscat = get_var( $id."add_news_cat" );
+		$newscat = news_get_var( $id."add_news_cat" );
 	}
 	$moduleaction = (isset($_POST[$id."action"])?$_POST[$id."action"]:"") . 
 		(isset($_GET[$id."action"])?$_GET[$id."action"]:"");
@@ -293,46 +299,6 @@ function news_module_executeadmin($cms,$id)
 	}
 	else
 	{
-#    if( !isset( $newscat ) || strlen( $newscat ) == 0 ) 
-#    {
-#      $query = "SELECT news_cat FROM "
-#           .cms_db_prefix()."module_news GROUP BY news_cat";
-#      $dbresult = $db->Execute($query);
-#
-#      if ($dbresult && $dbresult->RowCount())
-#      {
-#        echo cms_mapi_create_admin_form_start("News", $id);
-#        echo "<TABLE><TR ALIGN=\"BOTTOM\"><TD ALIGN=\"CENTER\">";
-#        echo "<H3>Select Category:</H3>";
-#        echo "<SELECT NAME=\"".$id."news_cat\" SIZE=\"4\">";
-#        while ($row = $dbresult->FetchRow())
-#        {
-#          $x = $row["news_cat"];
-#          if( strlen($x) == 0 )
-#          {
-#            $x = "**Empty**";
-#          }
-# 
-#          echo "<OPTION>".$x."</OPTION>";
-#        } 
-#        echo "</SELECT></TD>";
-#        echo "<TD><INPUT TYPE=\"SUBMIT\" NAME=\"".$id."maction\" VALUE=\"Select\" /></TD>";
-#        echo "</TR></TD>";
-#        echo cms_mapi_create_admin_form_end();
-#      }
-#
-#      echo cms_mapi_create_admin_form_start("News", $id);
-#      echo "<TABLE>";
-#      echo "<TR VALIGN=\"BOTTOM\"><TD>";
-#      echo "<H3>New Category:</H3>";
-#      echo "<INPUT TYPE=\"TEXT\" NAME=\"".$id."add_news_cat\" SIZE=\"40\" MAXLENGTH=\"255\">";
-#      echo "</TD>";
-#      echo "<TD><INPUT TYPE=\"SUBMIT\" NAME=\"".$id."maction\" VALUE=\"Add\" /></TD>";
-#      echo "</TR></TABLE>";
-#      echo "".cms_mapi_create_admin_form_end();
-#    }
-#    else 
-#    {
 
 	$query = "SELECT news_cat FROM "
 		.cms_db_prefix()."module_news GROUP BY news_cat";
@@ -369,6 +335,12 @@ function news_module_executeadmin($cms,$id)
 		echo cms_mapi_create_admin_form_end();
 	}
 
+    echo cms_mapi_create_admin_form_start("News", $id);
+    echo "<input type=\"hidden\" name=\"".$id."news_cat\" value=\"$newscat\" />";
+    echo "<input type=\"hidden\" name=\"".$id."action\" value=\"add\" />";
+    echo "<input type=\"submit\" name=\"submit\" value=\"Add News Item\" />";
+    echo cms_mapi_create_admin_form_end();
+
 	if( isset($newscat) && strlen($newscat) ) 
 	{
 		if( $newscat == "All" )
@@ -400,8 +372,12 @@ function news_module_executeadmin($cms,$id)
 
 	$dbresult = $db->Execute($query);
 	if ($dbresult && $dbresult->RowCount())
-	{ 
-		echo "<table cellspacing=\"0\" class=\"admintable\">\n";                        echo "<tr>\n";
+	{
+		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
+        echo "<tr>\n";
+        echo "<td colspan=\"6\"><div align=\"right\" class=\"clearbox\">".cms_mapi_admin_pagination("News",$id,$current_page,$dbresult->RowCount(),$rowsperpage)."</td>";
+        echo "</tr>\n";
+        echo "<tr>\n";
 		echo "<td width=\"2%\">&nbsp;</td>\n";
 		echo "<td width=\"50%\">Title</td>\n";
 		echo "<td width=\"10%\">Category</td>\n";
@@ -410,11 +386,21 @@ function news_module_executeadmin($cms,$id)
 		echo "<td width=\"10%\">&nbsp;</td>\n";
 		echo "</tr>\n";
 		$rowclass="row1";
-		$r=1;
+		$r=0;
+
+	    $startn = ($current_page - 1) * $rowsperpage;
+        $endn   = ($current_page * $rowsperpage) - 1;
 		while ($row = $dbresult->FetchRow()) 
 		{
+            if( $r < $startn || $r > $endn )
+            {
+               $r++;
+               continue;
+            } 
+            $r++;
+
 			echo "<tr class=\"$rowclass\">\n";
-			echo "<td align=\"right\">".$r."</td>\n"; $r++;
+			echo "<td align=\"right\">".$r."</td>\n";
 			echo "<td>".$row["news_title"]."</td>\n";
 			echo "<td>".$row["news_cat"]."</td>\n";
 			echo "<td>".$row["news_date"]."</td>\n";
@@ -429,12 +415,6 @@ function news_module_executeadmin($cms,$id)
 	{
 		echo "<p><b>No</b> news items found for category: ".$newscat."</p>";
 	}
-	echo cms_mapi_create_admin_form_start("News", $id);
-	echo "<input type=\"hidden\" name=\"".$id."news_cat\" value=\"$newscat\" />";
-	echo "<input type=\"hidden\" name=\"".$id."action\" value=\"add\" />";
-	echo "<input type=\"submit\" name=\"submit\" value=\"Add News Item\" />"; 
-	echo cms_mapi_create_admin_form_end();
-#    }
 	}
 }
 
@@ -492,6 +472,11 @@ function news_module_about()
 		<li>
 		<p>Version 1.5</p>
 		<p>Merged into the trunk News module</p>
+        </li>
+		<li>
+		<p>Version 1.6</p>
+		<p>Added pagination, and moved the add button to the top (calguy)</p>
+        </li>
 		</ul>
 	<?php
 }

@@ -1205,6 +1205,61 @@ function cms_mapi_create_module_content_class($key)
 	}
 }
 
+/**
+ * Creates a string containing links to all the pages.
+ * @param page - the current page to display
+ * @param totalrows - the amount of items being listed
+ * @param limit - the amount of items to list per page
+ * @return a string containing links to all the pages (ex. next 1,2 prev)
+ */
+function cms_mapi_admin_pagination($module, $id, $page, $totalrows, $limit)
+{
+    $link="<a href=\"moduleinterface.php?module=$module&".$id."page=";
+    $page_string = "";
+    $from = ($page * $limit) - $limit;
+    $numofpages = floor($totalrows / $limit);
+    if( $numofpages * $limit < $totalrows )
+    {
+      $numofpages++;
+    }
+
+    if ($numofpages > 1)
+    {
+        if($page != 1)
+        {
+            $pageprev = $page-1;
+            $page_string .= $link.$pageprev."\">".lang('previous')."</a>&nbsp;";
+        }
+        else
+        {
+            $page_string .= lang('previous')." ";
+        }
+        for($i = 1; $i <= $numofpages; $i++)
+        {
+            if($i == $page)
+            {
+                 $page_string .= $i."&nbsp;";
+            }
+            else
+            {
+                 $page_string .= $link.$i."\">$i</a>&nbsp;";
+            }
+        }
+        if(($totalrows - ($limit * $page)) > 0)
+        {
+            $pagenext = $page+1;
+            $page_string .= $link.$pagenext."\">".lang('next')."</a>";
+        }
+        else
+        {
+            $page_string .= lang('next')." ";
+        }
+    }
+    return $page_string;
+ }
+
+ 
+
 require_once(dirname(dirname(__FILE__)).'/lib/smarty/Smarty.class.php');
 
 class Smarty_ModuleInterface extends Smarty {
