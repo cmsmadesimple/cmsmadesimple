@@ -6,7 +6,6 @@ echo ------------------------------------
 
 rm -fr CHECKLIST
 rm -fr config.php
-rm -fr config.php.sample
 rm -fr autogen.sh
 rm -fr mpd.sql
 rm -fr mysql.sql
