@@ -77,11 +77,11 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
-			echo "<td width=\"6%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
-			if ($add)
-				echo "<td width=\"6%\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\">".$gettext->gettext("Copy")."</a></td>\n";
+			echo "<td width=\"6%\" align=\"center\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($all)
 				echo "<td width=\"12%\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want all content to use this template?")."');\">".$gettext->gettext("Set All Content")."</a></td>\n";
+			if ($add)
+				echo "<td width=\"18\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/copy.png\" alt=\"".$gettext->gettext("Copy")."\" border=\"0\" /></a></td>\n";
 			if ($edit)
 				echo "<td width=\"18\"><a href=\"edittemplate.php?template_id=".$row["template_id"]."\"><img src=\"../images/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
 			if ($remove)

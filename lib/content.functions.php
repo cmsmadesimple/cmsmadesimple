@@ -82,7 +82,7 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
@@ -136,7 +136,7 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_id = '$tpl_name' AND p.active = 1";
+		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
@@ -252,6 +252,7 @@ class MenuItem {
 class Page {
 	var $page_id;
 	var $page_title;
+	var $page_alias;
 	var $display_title;
 	var $page_url;
 	var $menu_text;
@@ -311,7 +312,7 @@ function db_get_menu_items($style) {
 	
 	if ($style == "content_hierarchy") {
 
-		$query = "select p.page_id, p.page_title, p.page_url, p.page_type, p.menu_text, p.item_order, p.active, p.default_page, p.parent_id, u.username, t.template_name from ".cms_db_prefix()."pages p LEFT OUTER JOIN ".cms_db_prefix()."users u on u.user_id=p.owner LEFT OUTER JOIN ".cms_db_prefix()."templates t on t.template_id=p.template_id order by p.parent_id, p.item_order";
+		$query = "select p.page_id, p.page_alias, p.page_title, p.page_url, p.page_type, p.menu_text, p.item_order, p.active, p.default_page, p.parent_id, u.username, t.template_name from ".cms_db_prefix()."pages p LEFT OUTER JOIN ".cms_db_prefix()."users u on u.user_id=p.owner LEFT OUTER JOIN ".cms_db_prefix()."templates t on t.template_id=p.template_id order by p.parent_id, p.item_order";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount() > 0) {
@@ -320,6 +321,7 @@ function db_get_menu_items($style) {
 				$current_content = new Page;
 				$current_content->page_id = $line["page_id"];
 				$current_content->page_title = $line["page_title"];
+				$current_content->page_alias = $line["page_alias"];
 				$current_content->page_url = $line["page_url"];
 				$current_content->menu_text = $line["menu_text"];
 				$current_content->page_type = $line["page_type"];
@@ -337,7 +339,14 @@ function db_get_menu_items($style) {
 				$current_content->num_same_level = $current_content->get_num_same_level();
 				# Fix URL where appropriate
 				if ($current_content->page_type != "link") {
-					$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;	
+					if (isset($current_content->page_alias) && $current_content->page_alias != "")
+					{
+						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_alias;
+					}
+					else
+					{
+						$current_content->url = $config["root_url"]."/index.php?".$config["query_var"]."=".$current_content->page_id;
+					}
 					$current_content->page_url = "";	
 				} else {
 					$current_content->url = $current_content->page_url;

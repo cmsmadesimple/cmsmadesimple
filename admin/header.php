@@ -44,7 +44,7 @@ header("Pragma: no-cache");
 			editor = new HTMLArea("content");
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
-			editor.config.pageStyle = '<?=get_stylesheet($config,$template_id)?>';
+			editor.config.pageStyle = '<?=get_stylesheet($template_id)?>';
 			editor.generate();
 		}
 

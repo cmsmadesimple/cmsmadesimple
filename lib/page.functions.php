@@ -203,7 +203,7 @@ function get_stylesheet($templateid) {
 
 	if ($result && $result->RowCount() > 0) {
 		$line = $result->FetchRow();
-		$css = $line[stylesheet];
+		$css = $line['stylesheet'];
 		$css = preg_replace("/[\r\n]/", "", $css);
 	}
 

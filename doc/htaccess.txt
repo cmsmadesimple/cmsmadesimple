@@ -1,0 +1,9 @@
+php_flag magic_quotes_gpc Off
+php_flag register_globals Off
+
+# Make sure you have Options FollowSymLinks
+# and Allow on
+RewriteEngine On
+
+#Rewrites page as index.php?page
+RewriteRule ^(.+)\.shtml$ index.php?$1

@@ -23,7 +23,7 @@ if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 
 header("Content-Type: text/css");
 
-echo get_stylesheet($config, $templateid);
+echo get_stylesheet($templateid);
 
 # vim:ts=4 sw=4 noet
 ?>

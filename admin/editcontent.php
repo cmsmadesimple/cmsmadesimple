@@ -30,6 +30,9 @@ if (isset($_POST["title"])) $title = $_POST["title"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$alias = "";
+if (isset($_POST["alias"])) $alias = $_POST["alias"];
+
 $content_type = "content";
 if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
 
@@ -118,6 +121,29 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
 		}
+		if ($alias != "")
+		{
+			if (preg_match('/^\d+$/', $alias))
+			{
+				$validinfo = false;
+				$error .= "<li>".$gettext->gettext("Alias cannot be an integer!")."</li>";
+			}
+			else if (!preg_match('/^[\d\w]+$/', $alias))
+			{
+				$validinfo = false;
+				$error .= "<li>".$gettext->gettext("Alias must be all letters and numbers!")."</li>";
+			}
+			else
+			{
+				$query = "SELECT page_id FROM ".cms_db_prefix()."pages WHERE page_id <> $page_id AND page_alias = ".$db->qstr($alias);
+				$result = $db->Execute($query);
+				if ($result && $result->RowCount() > 0)
+				{
+					$validinfo = false;
+					$error .= "<li>".$gettext->gettext("Alias has already been used on another page!")."</li>";
+				}
+			}
+		}
 
 		if ($validinfo) {
 			if ($orig_parent_id != $parent_id) {
@@ -131,7 +157,7 @@ if ($access) {
 				}
 
 			}
-			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
+			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias)." WHERE page_id = $page_id";
 			$result1 = $db->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
@@ -154,7 +180,7 @@ if ($access) {
 						}
 					}
 				}
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
+				audit((isset($_SESSION["cms_admin_user_id"])?$_SESSION["cms_admin_user_id"]:""), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
 			}
@@ -173,6 +199,7 @@ if ($access) {
 
 		$page_id = $row["page_id"];
 		$title = $row["page_title"];
+		$alias = $row["page_alias"];
 		$url = $row["page_url"];
 		$content_type = $row["page_type"];
 		$orig_content_type = $row["page_type"];
@@ -343,6 +370,10 @@ else {
 	</tr>
 <?php } ?>
 <?php if ($content_type == "content") { ?>
+	<tr>
+		<td><?=$gettext->gettext("Page Alias")?>:</td>
+		<td><input type="text" name="alias" maxlength="255" value="<?=$alias?>" /></td>
+	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
 		<td><textarea id="content" name="content" cols="90" rows="24"><?=htmlentities($content)?></textarea></td>

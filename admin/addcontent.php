@@ -30,6 +30,9 @@ if (isset($_POST["title"])) $title = $_POST["title"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$alias = "";
+if (isset($_POST["alias"])) $alias = $_POST["alias"];
+
 $content_type = "content";
 if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
 
@@ -95,6 +98,29 @@ if ($access) {
 			$validinfo = false;
 			$error .= "<li>".$gettext->gettext("No menu text given!")."</li>";
 		}
+		if ($alias != "")
+		{
+			if (preg_match('/^\d+$/', $alias))
+			{
+				$validinfo = false;
+				$error .= "<li>".$gettext->gettext("Alias cannot be an integer!")."</li>";
+			}
+			else if (!preg_match('/^[\d\w]+$/', $alias))
+			{
+				$validinfo = false;
+				$error .= "<li>".$gettext->gettext("Alias must be all letters and numbers!")."</li>";
+			}
+			else
+			{
+				$query = "SELECT page_id FROM ".cms_db_prefix()."pages WHERE page_alias = ".$db->qstr($alias);	
+				$result = $db->Execute($query);
+				if ($result && $result->RowCount() > 0)
+				{
+					$validinfo = false;
+					$error .= "<li>".$gettext->gettext("Alias has already been used on another page!")."</li>";
+				}
+			}
+		}
 
 		if ($validinfo) {
 			$order = 1;
@@ -105,7 +131,7 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 			$new_page_id = $db->GenID(cms_db_prefix()."pages_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$db->qstr($title).",".$db->qstr($url).",".$db->qstr($content).",".$db->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$db->qstr($menutext).", $order, $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, page_alias, create_date, modified_date) VALUES ($new_page_id, ".$db->qstr($title).",".$db->qstr($url).",".$db->qstr($content).",".$db->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$db->qstr($menutext).", $order, $active, ".$db->qstr($alias).",".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query);
 			if ($result) {
 				if (isset($_POST["additional_editors"])) {
@@ -254,6 +280,10 @@ else {
 	</tr>
 <?php } ?>
 <?php if ($content_type == "content") { ?>
+	<tr>
+		<td>*<?=$gettext->gettext("Page Alias")?>:</td>
+		<td><input type="text" name="alias" maxlength="255" value="<?=$alias?>" /></td>
+	</tr>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
 		<td><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>

@@ -50,15 +50,17 @@ $smarty = new Smarty_CMS($config);
 
 $page = "";
 
-if (isset($config["query_var"]) && $config["query_var"] != "") {
-	if (isset($_GET[$config["query_var"]])) {
-		$page = $_GET[$config["query_var"]];
-	}
+if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
+{
+	$page = $_GET[$config["query_var"]];
 }
-else {
-	if (isset($_SERVER["PATH_INFO"])) {
-		$page = $_SERVER["PATH_INFO"];
-	}
+else if (isset($_SERVER["PATH_INFO"]))
+{
+	$page = $_SERVER["PATH_INFO"];
+}
+else if (isset($_SERVER["QUERY_STRING"]))
+{
+	$page = $_SERVER["QUERY_STRING"];
 }
 
 if ($page == "") {
