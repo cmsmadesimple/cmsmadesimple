@@ -121,7 +121,7 @@ if (isset($CMS_ADMIN_SUBTITLE))
 require_once("../lib/classes/class.recentpage.inc.php");
 
 $rp = new RecentPage();
-$rp->setValues($pagetitle, 'url', $userid);
+$rp->setValues($pagetitle, $_SERVER['REQUEST_URI'], $userid);
 $rp->Save();
 $rp->PurgeOldPages($userid,5);
 
