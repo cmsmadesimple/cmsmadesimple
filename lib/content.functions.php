@@ -39,6 +39,7 @@ class Smarty_CMS extends Smarty {
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
 		$this->force_compile = false;
+		$this->cache_plugins = true;
 
 		#Load all CMS plugins as non-cacheable
 		$dir = dirname(dirname(__FILE__))."/plugins";
@@ -50,7 +51,7 @@ class Smarty_CMS extends Smarty {
 					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
 					#echo $filename . "<br />";
 					require_once $filename;
-					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], false);
+					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], $this->cache_plugins);
 				}
 			}
 		}
@@ -381,6 +382,10 @@ function db_get_menu_items(&$config, $style) {
 			$current_content->url = $line["url"];
 			$current_content->hier = "1";
 			$current_content->level = "1";
+			#Fix URL where appropriate
+			if ($current_content->page_type != "link") {
+				$current_content->page_url = $config->root_url."/index.php?".$config->query_var."=".$current_content->page_url;	
+			}
 			array_push($content_array, $current_content);
 		} ## while
 
