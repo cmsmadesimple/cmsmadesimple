@@ -35,6 +35,7 @@ cms_mapi_register_execute_function($module_name, 'rss_module_execute');
 
 //Register callback help function
 cms_mapi_register_help_function($module_name, 'rss_module_help');
+cms_mapi_register_about_function($module_name, 'rss_module_about');
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -164,5 +164,16 @@ function comments_module_help($cms)
 
 }
 
+function comments_module_about() {
+	?>
+	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+	<?
+}
+
 # vim:ts=4 sw=4 noet
 ?>

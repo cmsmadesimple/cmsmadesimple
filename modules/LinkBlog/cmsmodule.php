@@ -34,5 +34,6 @@ cms_mapi_register_uninstall_function($module_name, 'linkblog_module_uninstall');
 cms_mapi_register_execute_function($module_name, 'linkblog_module_execute');
 cms_mapi_register_executeuser_function($module_name, 'linkblog_module_executeuser');
 cms_mapi_register_help_function($module_name, 'linkblog_module_help');
+cms_mapi_register_about_function($module_name, 'linkblog_module_about');
 # vim:ts=4 sw=4 noet
 ?>

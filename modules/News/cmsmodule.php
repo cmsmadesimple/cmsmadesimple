@@ -39,6 +39,7 @@ cms_mapi_register_executeadmin_function($module_name, 'news_module_executeadmin'
 
 //Register help function
 cms_mapi_register_help_function($module_name, 'news_module_help');
+cms_mapi_register_about_function($module_name, 'news_module_about');
 
 //Enable the wysiwyg for editing
 cms_mapi_enable_wysiwyg($module_name);

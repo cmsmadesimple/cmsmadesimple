@@ -36,6 +36,7 @@ cms_mapi_register_executeuser_function($module_name, 'comments_module_executeuse
 
 //Register help callback functions
 cms_mapi_register_help_function($module_name, 'comments_module_help');
+cms_mapi_register_about_function($module_name, 'comments_module_about');
 
 # vim:ts=4 sw=4 noet
 ?>

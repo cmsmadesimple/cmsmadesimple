@@ -2,7 +2,7 @@ Version 0.5rc1 -- Fri Aug 20 2004
 -----------------
 
 * Added page aliases
-* Added htaccess file to make pretty page aliases
+* Added htaccess file to make pretty page aliases 
 * Added new admin stylesheet (Bewbs)
 * Added new admin icons (Graeme)
 * Added file manager
@@ -12,6 +12,7 @@ Version 0.5rc1 -- Fri Aug 20 2004
 * Added phpdoc strings to many files and functions
 * Added module and tag self-documentation hooks
 * Added ability for module's adminexecute function to use the wysiwyg
+* Added more options to dhtmlmenu and bulletmenu
 * Changed modules page to be called plugins.  Added tags to same page.
 * Changed config file to a new format.  Upgrade script will take care
 up upgrading it automatically.
