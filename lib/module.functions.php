@@ -1034,6 +1034,23 @@ function cms_mapi_set_preference($module, $preference_name, $value)
 }
 
 /**
+ * Adds a message to be displayed on next invocation the Plugin Management page.  These
+ * messages are stored in the Session.
+ *
+ * @since 0.8
+ */
+function cms_mapi_add_message($message)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (!isset($_SESSION['modules_messages']))
+	{
+		$_SESSION['modules_messages'] = array();
+	}
+	array_push($_SESSION['modules_messages'], $message); 
+}
+
+/**
  * Put an event into the audit (admin) log.  This should be
  * done on most admin events for consistency.
  *

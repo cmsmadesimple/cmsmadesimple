@@ -200,6 +200,21 @@ else
 
 	<h3><?php echo lang('modules')?></h3>
 
+	<?php
+
+	if (isset($_SESSION['modules_messages']) && count($_SESSION['modules_messages']) > 0)
+	{
+		echo '<ul class="messages">';
+		foreach ($_SESSION['modules_messages'] as $onemessage)
+		{
+			echo "<li>" . $onemessage . "</li>";
+		}
+		echo "</ul>";
+		unset($_SESSION['modules_messages']);
+	}
+
+	?>
+
 	<table cellspacing="0" class="admintable">
 		<tr>
 			<td><?php echo lang('name')?></td>
