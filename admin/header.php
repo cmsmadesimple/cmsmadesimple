@@ -16,3 +16,9 @@
 <div id="header" class="header">
 
 </div>
+
+<?php
+include_once("menu.php");
+?>
+
+<div class="content">
