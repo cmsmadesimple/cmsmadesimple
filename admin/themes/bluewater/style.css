@@ -175,10 +175,9 @@ html>body #Footer {
 	padding: 2px; 
 }
 
-.AdminForm,
-.AdminForm input,
-.AdminForm select {
-	font-size: 100%;
+.AdminForm, .adminformSmall {
+    width: 95%;
+    background: url('themes/bluewater/shadow.png');
 }
 
 .AdminForm tbody th {
