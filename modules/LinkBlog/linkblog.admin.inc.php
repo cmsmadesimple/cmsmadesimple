@@ -224,11 +224,11 @@ function linkblog_module_manage_links($cms, $module_id) {
             echo "<td>".date($row["create_date"], "Y-m-d")."</td>\n";
             if ($row["status"] == "1") {
                 echo "<td>";
-                echo cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'deactivate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Active"); 
+                echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'deactivate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Active"); 
                 echo "</td>\n";
             } else {
                 echo "<td>";
-                echo cms_mapi_create_user_link("LinkBlog", $module_id, $cms->variables["page"], array('action'=>'activate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Inactive"); 
+                echo cms_mapi_create_admin_link("LinkBlog", $module_id, array('action'=>'activate', 'linkblog_id'=>$row["linkblog_id"], 'keywords'=>$keywords), "Inactive"); 
                 echo "</td>\n";
             } ## if
             echo "</tr>\n";

@@ -1468,8 +1468,32 @@ class Smarty_ModuleInterface extends Smarty {
 				$line = $result->FetchRow();
 
 				$tpl_source = $line['template_content'];
+
+				#Perform the content template callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_template_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_template_function'], array(&$gCms, &$tpl_source));
+					}
+				}
+
 				#$content = $line['page_content'];
 				$title = $line['title'];
+
+				#Perform the content title callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_title_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_title_function'], array(&$gCms, &$title));
+					}
+				}
+
 				$template_id = $line['template_id'];
 
 				$gCms->variables['content_id'] = $line['content_id'];
@@ -1502,15 +1526,39 @@ class Smarty_ModuleInterface extends Smarty {
 				@ob_end_clean();
 				if ($smarty_obj->showtemplate == true)
 				{
+					#Perform the content data callback
+					foreach($gCms->modules as $key=>$value)
+					{
+						if (isset($gCms->modules[$key]['content_data_function']) &&
+							$gCms->modules[$key]['Installed'] == true &&
+							$gCms->modules[$key]['Active'] == true)
+						{
+							call_user_func_array($gCms->modules[$key]['content_data_function'], array(&$gCms, &$modoutput));
+						}
+					}
+
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
-					#Do html_blobs
-					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 				}
 				else
 				{
 					$tpl_source = $modoutput;
 				}
 			}
+
+			#Do html_blobs
+			$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
+
+			#Perform the content prerender callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['content_prerender_function']) &&
+					$gCms->modules[$key]['Installed'] == true &&
+					$gCms->modules[$key]['Active'] == true)
+				{
+					call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
+				}
+			}
+
 			return true;
 		}
 		else {

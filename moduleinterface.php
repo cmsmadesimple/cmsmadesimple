@@ -49,6 +49,18 @@ $smarty->params = $params;
 
 $old_error_handler = set_error_handler("ErrorHandler404");
 $html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
+
+#Perform the content postrender callback
+foreach($gCms->modules as $key=>$value)
+{
+	if (isset($gCms->modules[$key]['content_postrender_function']) &&
+		$gCms->modules[$key]['Installed'] == true &&
+		$gCms->modules[$key]['Active'] == true)
+	{
+		call_user_func_array($gCms->modules[$key]['content_postrender_function'], array(&$gCms, &$html));
+	}
+}
+
 set_error_handler($old_error_handler);
 
 echo $html;
