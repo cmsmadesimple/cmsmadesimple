@@ -116,6 +116,12 @@ if(get_magic_quotes_gpc())
 	strip_slashes($_SESSIONS);
 }
 
+#Fix for IIS (and others) to make sure REQUEST_URI is filled in
+if (!$_SERVER['REQUEST_URI'])
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'].'?'.$_SERVER['QUERY_STRING'];
+}
+
 #Setup the object sent to modules
 $gCms->variables["pluginnum"] = 1;
 if (isset($page)) {
