@@ -532,6 +532,7 @@ class LinkBlog extends CMSModule
 				$rss_content = cms_htmlentities($row["linkblog_content"], ENT_NOQUOTES, get_encoding($encoding));
 				$rss_content_clean = preg_replace("/\\\'/", "'", $rss_content);
 				$title = preg_replace("/\\\'/", "'", $row["linkblog_title"]);
+				$title = preg_replace("/\\\"/", '"', $title);
 				if ($params['type'] == "rss") {
 					echo "  <item>\n";
 					echo "          <title>".$title."</title>\n";
@@ -798,7 +799,10 @@ class LinkBlog extends CMSModule
 					echo "</div>\n";
 					return;
 				} ## if
+				$title = preg_replace("/\\\'/", "'", $row["linkblog_title"]);
+				$title = preg_replace("/\\\"/", '"', $title);
 				$content = preg_replace("/\\\'/", "'", $row["linkblog_content"]);
+				$content = preg_replace("/\\\"/", '"', $content);
 				echo "<div class=\"modulelinkblogentrydate\">\n";
 				echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 				echo "</div>\n";
@@ -808,8 +812,9 @@ class LinkBlog extends CMSModule
 
 				echo "<div class=\"modulelinkblogentrybody\">\n";
 				echo "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />";
-				echo " (<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
-				echo " ".$row["linkblog_title"]."\n";
+				echo " (";
+				echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "Link", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'));
+				echo ") ".$title."\n";
 				echo "</div>\n";
 
 				echo "<div class=\"modulelinkblogcontent\">\n";
@@ -843,8 +848,10 @@ class LinkBlog extends CMSModule
 
 		if ($validinfo) {
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_comment_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date) VALUES ($new_id,".$params["linkblog_id"].",".$params["author"].",".$params["comment"].", now())";
-			$dbresult = $db->Execute($query);
+			$query = "INSERT INTO ".cms_db_prefix()."module_linkblog_comments (comment_id, linkblog_id, author, comment, create_date)";
+			$query .= " VALUES (?,?,?,?,now())";
+			$myparams = array($new_id, $params["linkblog_id"], $params["author"], $params["comment"]);
+			$dbresult = $db->Execute($query, $myparams);
 		} else {
 			echo $errormsg;
 		}
@@ -894,7 +901,7 @@ class LinkBlog extends CMSModule
 	function search_url($id, $params, $return_id)
 	{
 		echo "<p class=\"smalltitle\">Search Results for (".$params["search_text"].")";
-		echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
+		echo $this->CreateLink($id, 'default', $this->cms->variables['page'], " - Home", array());
 		echo "</p>\n";
 		echo "<div class=\"modulelinkblog\">\n";
 		$db = $this->cms->db;
@@ -907,21 +914,42 @@ class LinkBlog extends CMSModule
 		if ($dbresult && $dbresult->RowCount()) {
 			while ($row = $dbresult->FetchRow()) {
 
+				$title = preg_replace("/\\\'/", "'", $row["linkblog_title"]);
+				$title = preg_replace("/\\\"/", '"', $title);
+				$content = preg_replace("/\\\'/", "'", $row["linkblog_content"]);
+				$content = preg_replace("/\\\"/", '"', $content);
 				echo "<div class=\"modulelinkblogentry\">\n";
-				if ($last_date == "") {
-					echo "<div class=\"modulelinkblogentrydate\">\n";
-					echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
-					echo "</div>\n";
-				}
+				echo "<div class=\"modulelinkblogentrydate\">\n";
+				echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
+				echo "</div>\n";
 				echo "<div class=\"modulelinkblogentrytime\">\n";
-				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-				echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".gif\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
+				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n";
 				echo "</div>\n";
 
-				echo "<div class=\"modulelinkblogentrycommentlink\">\n";
-				echo $this->CreateLink($id, 'view_comments', $this->cms->variables['page'], 'Comments ('.$row["total"].")", array('linkblog_id'=>$row["linkblog_id"]));
-				echo "\n</div>\n";
+				echo "<div class=\"modulelinkblogentrybody\">\n";
+				echo "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />";
+				echo " (";
+				echo $this->CreateLink($id, 'redirect', $this->cms->variables['page'], "Link", array('linkblog_id'=>$row["linkblog_id"], 'showtemplate'=>'false'));
+				echo ") ".$title."\n";
 				echo "</div>\n";
+
+				echo "<div class=\"modulelinkblogcontent\">\n";
+				echo $content;
+				echo "</div>\n";
+
+				echo "<div class=\"modulelinkbloglinks\">\n";
+				echo " | \n";
+				echo $this->CreateLink($id, 'view_comments', $this->cms->variables['page'], 'Comments ('.$row["total"].")", array('linkblog_id'=>$row["linkblog_id"]));
+				echo " | \n";
+				echo $this->CreateLink($id, 'view_comments', $this->cms->variables['page'], 'Permalink', array('linkblog_id'=>$row["linkblog_id"]));
+				echo " | \n";
+				if (isset($row["linkblog_credit"]) && $row["linkblog_credit"] != "") {
+					echo "Source credit: <a href=\"".$row["linkblog_credit"]."\">".$row["linkblog_credit"]."</a>\n";
+					echo " | \n";
+				} ## if
+				echo "</div>\n";
+				echo "</div>\n";
+
 			} ## while
 		} ## if
 
