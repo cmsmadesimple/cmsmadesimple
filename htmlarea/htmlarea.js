@@ -87,7 +87,7 @@ HTMLArea.Config = function () {
 
 	// the next parameter specifies whether the toolbar should be included
 	// in the size or not.
-	this.sizeIncludesToolbar = true;
+	this.sizeIncludesToolbar = false;
 
 	// if true then HTMLArea will retrieve the full HTML, starting with the
 	// <HTML> tag.
