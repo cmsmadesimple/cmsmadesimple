@@ -532,5 +532,26 @@ function get_parameter_value($parameters, $value, $default_value = '', $session_
 	return $return_value;
 }
 
+function create_encoding_dropdown($name = 'encoding', $selected = '')
+{
+	$result = '';
+
+	$encodings = array(''=>'Default','UTF-8'=>'Unicode','ISO-8859-1'=>'Latin 1/West European','ISO-8859-2'=>'Latin 2/Central European','ISO-8859-3'=>'Latin 3/South European','ISO-8859-4'=>'Latin 4/North European','ISO-8859-5'=>'Cyrilic','ISO-8859-6'=>'Arabic','ISO-8859-7'=>'Greek','ISO-8859-8'=>'Hebrew','ISO-8859-9'=>'Latin 5/Turkish','ISO-8859-11'=>'TIS-620/Thai','ISO-8859-14'=>'Latin 8','ISO-8859-15'=>'Latin 9','Big5'=>'Taiwanese','GB2312'=>'Chinese','EUC-JP'=>'Japanese','EUC-KR'=>'Korean','KOI8-R'=>'Russian','Windows-1250'=>'Central Europe','Windows-1251'=>'Cyrilic','Windows-1252'=>'Latin 1','Windows-1253'=>'Greek','Windows-1254'=>'Turkish','Windows-1255'=>'Hebrew','Windows-1256'=>'Arabic','Windows-1257'=>'Baltic','Windows-1258'=>'Vietnam');
+
+	$result .= '<select name="'.$name.'">';
+	foreach ($encodings as $key=>$value)
+	{
+		$result .= '<option value="'.$key.'"';
+		if ($selected == $key)
+		{
+			$result .= ' selected="selected"';
+		}
+		$result .= '>'.$key.($key!=''?' - ':'').$value.'</option>';
+	}
+	$result .= '</select>';
+
+	return $result;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

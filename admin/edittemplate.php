@@ -236,7 +236,7 @@ else
 	</tr>
 	<tr>
 		<td><?php echo lang('encoding')?>:</td>
-		<td><input type="text" name="encoding" maxlength="25" value="<?php echo $encoding?>" /></td>
+		<td><?php echo create_encoding_dropdown('encoding', $encoding) ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
