@@ -1130,11 +1130,21 @@ class CMSModule extends ModuleOperations
 	/**
 	 * Sets a module preference.
 	 *
-	 * @param string The name of the preference to check
+	 * @param string The name of the preference to set
+	 * @param string The value to set it to
 	 */
 	function SetPreference($preference_name, $value)
 	{
 		return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
+	}
+
+	/**
+	 * Removes a module preference.
+	 * @param string The name of the preference to remove
+	 */
+	function RemovePreference($preference_name)
+	{
+		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
 
 	/**

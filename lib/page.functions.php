@@ -289,6 +289,27 @@ function get_site_preference($prefname, $defaultvalue = '') {
 }
 
 /**
+ * Removes the given site preference
+ *
+ * @param string Preference name to remove
+ */ 
+function remove_site_preference($prefname)
+{
+	global $gCms;
+	$db = $gCms->db;
+
+	$siteprefs = &$gCms->siteprefs;
+
+	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
+	$result = $db->Execute($query, array($prefname));
+
+	if (isset($siteprefs[$prefname]))
+	{
+		unset($siteprefs[$prefname]);
+	}
+}
+
+/**
  * Sets the given site perference with the given value.
  *
  * @since 0.6
