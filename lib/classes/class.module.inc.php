@@ -1213,10 +1213,10 @@ class CMSModule extends ModuleOperations
 	 */
 	function Audit($itemid, $itemname, $action)
 	{
-		$userid = get_userid();
-		$username = $_SESSION["cms_admin_username"];
-		audit($userid, $username, $itemid, $itemname, $action);
-	}
+		#$userid = get_userid();
+		#$username = $_SESSION["cms_admin_username"];
+        audit($itemid,$itemname,$action);
+    }
 
 	/**
 	 * Create's a new permission for use by the module.

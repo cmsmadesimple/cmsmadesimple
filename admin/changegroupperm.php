@@ -30,7 +30,8 @@ else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
 $group_name = "";
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listgroups.php");
 	return;
 }
@@ -38,23 +39,26 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, "Modify Permissions");
 
-if ($access) {
-
+if ($access)
+{
 	$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	if ($result && $result->RowCount() > 0)
+	{
 		$row = $result->FetchRow();
 		$group_name = $row['group_name'];
 	}
 
-	if (isset($_POST["changeperm"])) {
-
+	if (isset($_POST["changeperm"]))
+	{
 		$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = " . $group_id;
 		$result = $db->Execute($query);
 
-		foreach ($_POST as $key=>$value) {
-			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false) {
+		foreach ($_POST as $key=>$value)
+		{
+			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false)
+			{
 				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
 				$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 				$db->Execute($query);
@@ -87,11 +91,12 @@ else {
 	$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
-
-		while($row = $result->FetchRow()) {
-
-			$perms[$row['permission_name']] = false;
+	if ($result && $result->RowCount() > 0)
+	{
+		while($row = $result->FetchRow())
+		{
+            $perms[$row['permission_name']] = false;
+			$perm_text[$row['permission_name']] = $row['permission_text'];
 			$ids[$row['permission_name']] = $row['permission_id'];
 		}
 
@@ -101,24 +106,22 @@ else {
 
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
-
-		while($row = $result->FetchRow()) {
-
+	if ($result && $result->RowCount() > 0)
+	{
+		while($row = $result->FetchRow())
+		{
 			$tmp = $row['permission_name'];
 			$perms[$tmp] = true;
 		}
-
 	}
 	
 	echo "<table border=\"0\" cellpadding=\"0\" cellspacing=\"0\" summary=\"\" align=\"center\">";
-	foreach ($perms as $key => $value) {
-
+	foreach ($perms as $key => $value)
+	{
 		echo "<tr><td>";
 		echo "<input type=\"checkbox\"";
 		echo ($value == true?" checked=\"checked\"":"");
-		echo " name=\"perm-".$ids[$key]."\" value=\"1\" />$key</td></tr>\n";
-
+		echo " name=\"perm-".$ids[$key]."\" value=\"1\" />$perm_text[$key]</td></tr>\n";
 	}
 
 ?>
