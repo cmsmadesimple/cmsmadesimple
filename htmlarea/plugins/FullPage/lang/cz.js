@@ -13,13 +13,13 @@
 //       that states what encoding is necessary.)
 
 FullPage.I18N = {
-	"Alternate style-sheet:":		"Volitelný styl:",
-	"Background color:":			"Barva pozadí:",
+	"Alternate style-sheet:":		"VolitelnÃ½ styl:",
+	"Background color:":			"Barva pozadÃ­:",
 	"Cancel":				"Storno",
 	"DOCTYPE:":				"DOCTYPE:",
 	"Document properties":			"Vlastnosti dokumentu",
 	"Document title:":			"Titulek dokumentu:",
 	"OK":					"OK",
-	"Primary style-sheet:":			"Hlavní styl:",
+	"Primary style-sheet:":			"HlavnÃ­ styl:",
 	"Text color:":				"Barva textu:"
 };

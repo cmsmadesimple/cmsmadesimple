@@ -1,7 +1,7 @@
-// I18N constants
+ï»¿// I18N constants
 
 // LANG: "cz", ENCODING: UTF-8 | ISO-8859-2
-// Author: Jiri Löw, <jirilow@jirilow.com>
+// Author: Jiri LÃ¶w, <jirilow@jirilow.com>
 
 // FOR TRANSLATORS:
 //
@@ -19,45 +19,45 @@ HTMLArea.I18N = {
 	lang: "cz",
 
 	tooltips: {
-		bold:           "Tuènì",
-		italic:         "Kurzíva",
-		underline:      "Podtr¾ení",
-		strikethrough:  "Pøe¹krtnutí",
-		subscript:      "Dolní index",
-		superscript:    "Horní index",
+		bold:           "TuÄnÄ›",
+		italic:         "KurzÃ­va",
+		underline:      "PodtrÅ¾enÃ­",
+		strikethrough:  "PÅ™eÅ¡krtnutÃ­",
+		subscript:      "DolnÃ­ index",
+		superscript:    "HornÃ­ index",
 		justifyleft:    "Zarovnat doleva",
-		justifycenter:  "Na støed",
+		justifycenter:  "Na stÅ™ed",
 		justifyright:   "Zarovnat doprava",
 		justifyfull:    "Zarovnat do stran",
 		orderedlist:    "Seznam",
-		unorderedlist:  "Odrá¾ky",
-		outdent:        "Pøedsadit",
+		unorderedlist:  "OdrÃ¡Å¾ky",
+		outdent:        "PÅ™edsadit",
 		indent:         "Odsadit",
-		forecolor:      "Barva písma",
-		hilitecolor:    "Barva pozadí",
-		horizontalrule: "Vodorovná èára",
-		createlink:     "Vlo¾it odkaz",
-		insertimage:    "Vlo¾it obrázek",
-		inserttable:    "Vlo¾it tabulku",
-		htmlmode:       "Pøepnout HTML",
-		popupeditor:    "Nové okno editoru",
-		about:          "O této aplikaci",
-		showhelp:       "Nápovìda aplikace",
-		textindicator:  "Zvolenı styl",
-		undo:           "Vrátí poslední akci",
-		redo:           "Opakuje poslední akci",
+		forecolor:      "Barva pÃ­sma",
+		hilitecolor:    "Barva pozadÃ­",
+		horizontalrule: "VodorovnÃ¡ ÄÃ¡ra",
+		createlink:     "VloÅ¾it odkaz",
+		insertimage:    "VloÅ¾it obrÃ¡zek",
+		inserttable:    "VloÅ¾it tabulku",
+		htmlmode:       "PÅ™epnout HTML",
+		popupeditor:    "NovÃ© okno editoru",
+		about:          "O tÃ©to aplikaci",
+		showhelp:       "NÃ¡povÄ›da aplikace",
+		textindicator:  "ZvolenÃ½ styl",
+		undo:           "VrÃ¡tÃ­ poslednÃ­ akci",
+		redo:           "Opakuje poslednÃ­ akci",
 		cut:            "Vyjmout",
-		copy:           "Kopírovat",
-		paste:          "Vlo¾it"
+		copy:           "KopÃ­rovat",
+		paste:          "VloÅ¾it"
 	},
 
 	buttons: {
 		"ok":           "OK",
-		"cancel":       "Zru¹it"
+		"cancel":       "ZruÅ¡it"
 	},
 
 	msg: {
 		"Path":         "Cesta",
-		"TEXT_MODE":    "Jste v TEXTOVÉM RE®IMU.  Pou¾ijte tlaèítko [<>] pro pøepnutí do WYSIWIG."
+		"TEXT_MODE":    "Jste v TEXTOVÃ‰M REÅ½IMU.  PouÅ¾ijte tlaÄÃ­tko [<>] pro pÅ™epnutÃ­ do WYSIWIG."
 	}
 };

@@ -27,11 +27,11 @@
 
 #US English
 #Created by: Ted Kulp <tedkulp@users.sf.net>
-#Maintained by: Ted Kulp <tedkulp@users.sf.net>
+#Maintained by: Petr Jelinek <pjelinek@seznam.cz>
 #This is the default language
 
 #Native language name
-$nls['language']['cs_CZ'] = 'Èesky';
+$nls['language']['cs_CZ'] = 'ÄŒesky';
 $nls['englishlang']['cs_CZ'] = 'Czech';
 
 #Possible aliases for language
@@ -43,7 +43,7 @@ $nls['alias']['cs_CZ.WINDOWS-1250'] = 'cs_CZ' ;
 $nls['alias']['cs_CZ.ISO8859-2'] = 'cs_CZ' ;
 
 #Encoding of the language
-$nls['encoding']['cs_CZ'] = "ISO-8859-2";
+$nls['encoding']['cs_CZ'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['cs_CZ'] = array();

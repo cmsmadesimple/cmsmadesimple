@@ -13,8 +13,8 @@
 //       that states what encoding is necessary.)
 
 ImageManager.I18N = {
-	"Image Manager"									: "Spr·vce obr·zk˘",
-	"Crop"											: "Vypr·zdnit"
+	"Image Manager"									: "Spr√°vce obr√°zk≈Ø",
+	"Crop"											: "Vypr√°zdnit"
 };
 /*
 

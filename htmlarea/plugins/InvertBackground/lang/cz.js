@@ -1,6 +1,6 @@
 // I18N constants
 
-// LANG: "cz", ENCODING: UTF-8 | ISO-8859-1
+// LANG: "en", ENCODING: UTF-8 | ISO-8859-1
 // Author: Al Rashid, http://alrashid.klokan.sk
 
 // FOR TRANSLATORS:
@@ -12,9 +12,9 @@
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
 
-InsertFile.I18N = {
-	"InsertFileTooltip"				: "Vložit odkaz do souboru"
-}
+InvertBackground.I18N = {
+	"InvertBackgroundTooltip"				: "Převrátit pozadí/popředí"
+};
 /*
 
 
