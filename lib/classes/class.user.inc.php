@@ -19,7 +19,7 @@
 /**
  * Generic user class.  This can be used for any logged in user or user related function.
  *
- * @since 0.7
+ * @since 0.6.1
  * @package CMS
  */
 class User
@@ -75,7 +75,7 @@ class User
 	/**
 	 * Sets object to some sane initial values
 	 *
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function SetInitialValues()
 	{
@@ -92,7 +92,7 @@ class User
 	/**
 	 * Encrypts and sets password for the User
 	 *
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function SetPassword($password)
 	{
@@ -105,7 +105,7 @@ class User
 	 * in the User object.
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function Save()
 	{
@@ -134,7 +134,7 @@ class User
 	 * all values to their initial values.
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function Delete()
 	{
@@ -157,7 +157,7 @@ class User
  * Class for doing user related functions.  Maybe of the User object functions
  * are just wrappers around these.
  *
- * @since 0.7
+ * @since 0.6.1
  * @package CMS
  */
 class UserOperations
@@ -166,7 +166,7 @@ class UserOperations
 	 * Gets a list of all users
 	 *
 	 * @returns array An array of User objects
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function LoadUsers()
 	{
@@ -175,7 +175,8 @@ class UserOperations
 
 		$result = array();
 
-		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY user_id";
+		#$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY user_id";
+		$query = "SELECT user_id, username, password, active FROM ".cms_db_prefix()."users ORDER BY user_id";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -185,12 +186,12 @@ class UserOperations
 				$oneuser = new User();
 				$oneuser->id = $row['user_id'];
 				$oneuser->username = $row['username'];
-				$oneuser->firstname = $row['first_name'];
-				$oneuser->lastname = $row['last_name'];
-				$oneuser->email = $row['email'];
+				#$oneuser->firstname = $row['first_name'];
+				#$oneuser->lastname = $row['last_name'];
+				#$oneuser->email = $row['email'];
 				$oneuser->password = $row['password'];
 				$oneuser->active = $row['active'];
-				$oneuser->adminaccess = $row['admin_access'];
+				#$oneuser->adminaccess = $row['admin_access'];
 				array_push($result, $oneuser);
 			}
 		}
@@ -207,7 +208,7 @@ class UserOperations
 	 * @param mixed $adminaccessonly Only load the user if they have admin access
 	 *
 	 * @returns mixed If successful, the filled User object.  If it fails, it returns false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
@@ -232,10 +233,10 @@ class UserOperations
 			$query .= " AND active = 1";
 		}
 
-		if ($adminaccessonly == true)
-		{
-			$query .= " AND admin_access = 1";
-		}
+		#if ($adminaccessonly == true)
+		#{
+		#	$query .= " AND admin_access = 1";
+		#}
 
 		$dbresult = $db->Execute($query, $params);
 
@@ -255,7 +256,7 @@ class UserOperations
 	 * @param mixed $id User id to load
 	 *
 	 * @returns mixed If successful, the filled User object.  If it fails, it returns false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function LoadUserByID($id)
 	{
@@ -264,7 +265,8 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
+		#$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
+		$query = "SELECT username, password, active FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -275,10 +277,10 @@ class UserOperations
 				$oneuser->id = $id;
 				$oneuser->username = $row['username'];
 				$oneuser->password = $row['password'];
-				$oneuser->firstname = $row['first_name'];
-				$oneuser->lastname = $row['last_name'];
-				$oneuser->email = $row['email'];
-				$oneuser->adminaccess = $row['admin_access'];
+				#$oneuser->firstname = $row['first_name'];
+				#$oneuser->lastname = $row['last_name'];
+				#$oneuser->email = $row['email'];
+				#$oneuser->adminaccess = $row['admin_access'];
 				$oneuser->active = $row['active'];
 				$result = $oneuser;
 			}
@@ -293,7 +295,7 @@ class UserOperations
 	 * @param mixed $usre User object to save
 	 *
 	 * @returns mixed The new user id.  If it fails, it returns -1.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function InsertUser($user)
 	{
@@ -303,8 +305,10 @@ class UserOperations
 		$db = &$gCms->db;
 
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		#$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES (?,?,?,?,?,?)";
+		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		if ($dbresult !== false)
 		{
 			$result = $new_user_id;
@@ -319,7 +323,7 @@ class UserOperations
 	 * @param mixed $user User object to save
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function UpdateUser($user)
 	{
@@ -328,8 +332,8 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, first_name = ?, last_name = ?, admin_access = ?, email = ?, active = ?, modified_date = ? WHERE user_id = ?";
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->firstname, $user->lastname, $user->adminaccess, $user->email, $user->active, $db->DBTimeStamp(time()), $user->id));
+		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ? WHERE user_id = ?";
+		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->id));
 		if ($dbresult !== false)
 		{
 			$result = true;
@@ -344,7 +348,7 @@ class UserOperations
 	 * @param mixed $id Id of the user to delete
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function DeleteUserByID($id)
 	{
@@ -373,7 +377,7 @@ class UserOperations
 	 * @param mixed $id Id of the user to count
 	 *
 	 * @returns mixed Number of pages they own.  0 if any problems.
-	 * @since 0.7
+	 * @since 0.6.1
 	 */
 	function CountPageOwnershipByID($id)
 	{
