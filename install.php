@@ -87,9 +87,9 @@ function showPageOne() {
     ## as well as the cms root for config.php to be created.
 
     ## find the user running this script
-    $userid = posix_getuid();
-    $userdata = posix_getpwuid($userid);
-    $username = $userdata['name'];
+    #$userid = posix_getuid();
+    #$userdata = posix_getpwuid($userid);
+    #$username = $userdata['name'];
 
     ## echo "Userid ($userid) is named $username is running this script<p>\n";
 
