@@ -631,7 +631,7 @@ function cms_mapi_register_content_module_set_properties_function($name, $functi
 }
 
 /**
- * Registers a function to be called for a content SetProperties($params)
+ * Registers a function to be called for a content FillParams($params)
  * function.
  *
  * Passes the $params array to the function.
@@ -645,6 +645,24 @@ function cms_mapi_register_content_module_fill_params_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['content_module_fill_params'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called for a content ValidateData()
+ * function.
+ *
+ * Passes the $params array to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_validate_data_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_validate_data'] = $function;
 	}
 }
 
@@ -1137,6 +1155,10 @@ function cms_mapi_create_module_content_class($key)
 		if (isset($allmodules[$key]['content_module_fill_params']))
 		{
 			$classtext .= 'function FillParams($params) { ' . $allmodules[$key]['content_module_fill_params'] . '($this, $params); } ';
+		}
+		if (isset($allmodules[$key]['content_module_validate_data']))
+		{
+			$classtext .= 'function ValidateData() { ' . $allmodules[$key]['content_module_validate_data'] . '($this); } ';
 		}
 		if (isset($allmodules[$key]['content_module_show']))
 		{
