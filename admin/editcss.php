@@ -199,7 +199,7 @@ else
 	}
 ?>
 
-<form method="post" action="editcss.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
+<form method="post" action="editcss.php" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
 
 <div class="adminform">
 
@@ -216,7 +216,7 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $css_text, "css_text"); ?></td>
+		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $css_text, "css_text"); ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
