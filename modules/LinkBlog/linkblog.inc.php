@@ -66,6 +66,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		echo "</link>\n";
 		echo "	<description>Current linkblog entries</description>\n";
 	} else if ($allow_search != '') {
+		echo "<div class=\"modulelinkblogsearchform\">\n";
 		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
 		?>
 		<table>
@@ -76,6 +77,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		</table>
 		<?php
 		echo cms_mapi_create_user_form_end();
+		echo "</div>\n";
 	}
 
     $curr_date = date("Y-m-d");
@@ -89,7 +91,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 	} ## if
 
     $db = $cms->db;
-    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total";
+    $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total, a.linkblog_credit";
 	$query .= ", c.linkblog_type as category";
 	$query .= " FROM";
 	$query .= " ".cms_db_prefix()."module_linkblog_types c,";
@@ -136,17 +138,28 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 					echo "<div class=\"modulelinkblogentrydate\">\n";
 					echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 					echo "</div>\n";
-				}
-				echo "<div class=\"modulelinkblogentrytime\">\n";
-				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
-                echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'category'=>$row["category"]), "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />");
-                echo " ".$row["linkblog_title"]."\n";
+				} ## if
 
+				echo "<div class=\"modulelinkblogentrytime\">\n";
+				echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n";
 				echo "</div>\n";
 
-				echo "<div class=\"modulelinkblogentrycommentlink\">\n";
+                echo "<div class=\"modulelinkblogentrybody\">\n";
+                echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'category'=>$row["category"]), "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />");
+				echo " (<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
+                echo " ".$row["linkblog_title"]."\n";
+				echo "</div>\n";
+
+                echo "<div class=\"modulelinkbloglinks\">\n";
+				echo " | \n";
 				echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Comments (".$row["total"].")");
+				echo " | \n";
+				echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Permalink");
+				echo " | \n";
+				if (isset($row["linkblog_credit"]) && $row["linkblog_credit"] != "") {
+					echo "Source credit: <a href=\"".$row["linkblog_credit"]."\">".$row["linkblog_credit"]."</a>\n";
+					echo " | \n";
+				} ## if
 				echo "\n</div>\n";
 				echo "</div>\n";
 			} ## if
@@ -228,6 +241,11 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         $url = $params[$id."url"];
     }
 
+	$credit = "";
+	if (isset($params[$id."credit"])) {
+		$credit = $params[$id."credit"];
+	}
+
     $comment = "";
     if (isset($params[$id."comment"])) {
         $comment = $params[$id."comment"];
@@ -241,41 +259,32 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 
         if ($author == "") {
             $validinfo = false;
-            $errormsg .= "<li>Enter an author</li>";
+            $errormsg .= "Enter an author<br />";
         }
 
         if ($title == "") {
             $validinfo = false;
-            $errormsg .= "<li>Enter a title so people know what you are talking about.</li>";
+            $errormsg .= "Enter a title so people know what you are talking about.<br />";
         }
 
         if ($type == "") {
             $validinfo = false;
-            $errormsg .= "<li>Enter a type</li>";
+            $errormsg .= "Enter a type<br />";
         }
 
         if ($url == "") {
             $validinfo = false;
-            $errormsg .= "<li>Enter a link, where are we supposed to go?</li>";
-        }
-
-        if ($validinfo) {
-            echo "validinfo: true<br/>\n";
-        } else {
-            echo "validinfo: false<br/>\n";
+            $errormsg .= "Enter a link, where are we supposed to go?<br />";
         }
 
         if ($validinfo) {
             $db = $cms->db;
             $new_id = $db->GenID(cms_db_prefix()."module_linkblog_seq");
-            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".htmlentities($db->qstr($url)).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '1')";
+            $query = "INSERT INTO ".cms_db_prefix()."module_linkblog (linkblog_id, linkblog_author, linkblog_title, linkblog_type, linkblog_url, create_date, modified_date, status, linkblog_credit) VALUES ($new_id, ".$db->qstr($author).", ".$db->qstr($title).",".$type.",".htmlentities($db->qstr($url)).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."', '1', ".htmlentities($db->qstr($credit)).")";
             $dbresult = $db->Execute($query);
             cms_mapi_redirect_user_by_pageid($return_id);
             return;
-        } else {
-            echo "Error: $errormsg<br />\n";
-        }
-        break;
+        } ## if
 
     ## Display this when the Add Link link is clicked
     case "create_add_link_form":
@@ -302,21 +311,25 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 
         <table>
             <tr>
-                <td>Your name:</td>
+                <td>* Your name:</td>
                 <td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size="20" maxlength="50" /></td>
             </tr>
             <tr>
-                <td>Title:</td>
+                <td>* Title:</td>
                 <td><input type="text" name="<?php echo $id?>title" value="<?php echo $title?>" size="100" maxlength="250" /></td>
             </tr>
             <tr>
-                <td>URL:</td>
+                <td>* URL:</td>
                 <td><input type="text" name="<?php echo $id?>url" value="<?php echo $url?>" size="100" maxlength="250" /></td>
             </tr>
             <tr>
-                <td>Type:</td>
+                <td>* Category:</td>
                 <td><?php echo $types?></td>
             </tr>
+			<tr>
+				<td>Source credit:</td>
+				<td><input type="text" name="<?php echo $id?>credit" value="<?php echo $credit?>" size="100" maxlength="250" /></td>
+			</tr>
             <tr>
                 <td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="add_new_link" /></td>
                 <td><input type="submit" name="<?php echo $id?>submitlink" value="Submit" /><input type="submit" name="<?php echo $id?>cancellink" value="Cancel" /></td>
@@ -333,7 +346,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
 	case "post_comment":
 
         $db = $cms->db;
-        $query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type, create_date from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params[$id."linkblog_id"];
+        $query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type as type_id, create_date, status, linkblog_credit from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params[$id."linkblog_id"];
         $dbresult = $db->Execute($query);
         echo "<p class=\"modulelinkblogtitle\">Posted site - ";
         echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
@@ -343,14 +356,31 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         if ($dbresult && $dbresult->RowCount()) {
             while ($row = $dbresult->FetchRow()) {
 
-                echo "<div class=\"modulelinkblogentry\">\n";
-                echo "<div class=\"modulelinkblogtime\">\nPosted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
-                echo "<div class=\"modulelinkblogentrybody\">\n(<a href=\"".$row["linkblog_url"]."\">Link</a>) <img src=\"modules/LinkBlog/images/type".$row["linkblog_type"].".gif\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."\n";
+				if ($row["status"] == "0") {
+					echo "This link is no longer available<br />\n";
+					return;
+				} ## if
+                echo "<div class=\"modulelinkblogentrytime\">\n";
+                echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n";
                 echo "</div>\n";
 
+                echo "<div class=\"modulelinkblogentrybody\">\n";
+                echo "<img src=\"modules/LinkBlog/images/type".$row["type_id"].".gif\" border=\"0\" alt=\"\" />";
+                echo " (<a href=\"".$row["linkblog_url"]."\">Link</a>)\n";
+                echo " ".$row["linkblog_title"]."\n";
                 echo "</div>\n";
-            }
-        }
+
+                echo "<div class=\"modulelinkbloglinks\">\n";
+                echo " | \n";
+                echo cms_mapi_create_user_link("LinkBlog", $id, $cms->variables["page"], array('action'=>'view_comments', 'linkblog_id'=>$row["linkblog_id"]), "Permalink");
+				echo " | \n";
+                if (isset($row["linkblog_credit"]) && $row["linkblog_credit"] != "") {
+                    echo "Source credit: <a href=\"".$row["linkblog_credit"]."\">".$row["linkblog_credit"]."</a>\n";
+                    echo " | \n";
+                } ## if
+            } ## while
+        } ## if
+
         echo "</div>\n";
 
         if ($action == "post_comment") {

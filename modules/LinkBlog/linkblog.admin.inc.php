@@ -275,6 +275,11 @@ function linkblog_module_upgrade($cms, $oldversion, $newversion)
             $update = "UPDATE ".cms_db_prefix()."module_linkblog SET status='1'";
             $db->Execute($update);
         case "1.3":
+        case "1.4":
+            $db = $cms->db;
+            $dict = NewDataDictionary($db);
+            $sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog", "linkblog_credit C(255)");
+            $dict->ExecuteSQLArray($sqlarray);
     } ## switch
 
 } ## linkblog_module_upgrade
