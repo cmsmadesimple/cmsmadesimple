@@ -37,11 +37,11 @@ if ($db->rowcount($result) > 0) {
 
 <table cellspacing="0" class="admintable">
 	<tr>
-		<td>User</td>
-		<td>Item ID</td>
-		<td>Item Name</td>
-		<td>Action</td>
-		<td>Date</td>
+		<td><?=GetText::gettext("User")?></td>
+		<td><?=GetText::gettext("Item ID")?></td>
+		<td><?=GetText::gettext("Item Name")?></td>
+		<td><?=GetText::gettext("Action")?></td>
+		<td><?=GetText::gettext("Date")?></td>
 	</tr>
 
 <?php
