@@ -69,7 +69,7 @@ if ($access) {
 		if ($validinfo) {
 			$query = "UPDATE ".$config->db_prefix."users SET username='".mysql_escape_string($user)."', ";
 			if ($password != "") {
-				$query .= "password='".mysql_escape_string($password)."', ";
+				$query .= "password=password('".mysql_escape_string($password)."'), ";
 			}
 			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
 			$result = $db->query($query);

@@ -32,7 +32,14 @@ mysql_free_result($result);
 
 	echo "<p>Creating indexes...";
 
-	$query = "CREATE INDEX idx_template_id_modified_date ON cms_pages (template_id, modified_date)";
+	$query = "CREATE INDEX idx_template_id_modified_date ON ".$config->db_prefix."pages (template_id, modified_date)";
+	$db->query($query);
+
+	echo "[done]</p>";
+
+	echo "<p>Hashing passwords...";
+
+	$query = "UPDATE ".$config->db_prefix."users SET password = password(password)";
 	$db->query($query);
 
 	echo "[done]</p>";
