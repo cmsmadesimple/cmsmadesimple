@@ -315,6 +315,7 @@ function showPageFour() {
 	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
 	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";
 	$newconfig["max_upload_size"] = 1000000;
+	$newconfig["debug"] = false;
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file

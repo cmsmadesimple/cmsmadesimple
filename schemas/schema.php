@@ -155,6 +155,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		page_id I KEY,
 		page_title C(255),
 		page_url C(255),
+		page_alias C(255),
 		page_content X,
 		menu_text C(25),
 		default_page I1,

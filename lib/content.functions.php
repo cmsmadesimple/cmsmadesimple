@@ -83,7 +83,7 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_id, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+		$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount())

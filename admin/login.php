@@ -40,7 +40,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		setcookie("cms_admin_user_id", $line["user_id"]);
 		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
 		$_SESSION["cms_admin_username"] = $line["username"];	
-		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, "", 'User Login');
+		audit($line["user_id"], $line["username"], -1, "", 'User Login');
 		redirect("index.php");
 		return;
 	}
