@@ -81,7 +81,8 @@ function module_autoupgrade()
 
 <?php
 
-if (!is_writable(dirname(__FILE__).'/tmp/templates_c') || !is_writable(dirname(__FILE__).'/tmp/cache'))
+clearstatcache();
+if (!is_writable(dirname(dirname(__FILE__)).'/tmp/templates_c') || !is_writable(dirname(dirname(__FILE__)).'/tmp/cache'))
 {
 	echo '<p>The following directories must be writable by the web server:<br />';
 	echo 'tmp/cache<br />';
