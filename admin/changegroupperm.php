@@ -59,7 +59,7 @@ if ($access) {
 			}
 		}
 
-		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, $gettext->gettext("Changed Group Permissions"));
+		audit((isset($_SESSION["cms_admin_user_id"])?$_SESSION["cms_admin_user_id"]:""), (isset($_SESSION["cms_admin_username"])?$_SESSION["cms_admin_username"]:""), $group_id, $group_name, "Changed Group Permissions");
 		redirect("listgroups.php");
 		return;
 

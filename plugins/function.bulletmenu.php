@@ -25,7 +25,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$showadmin = $params["showadmin"] ? $params["showadmin"] : "true";
 	
 
-	$content = db_get_menu_items($smarty->configCMS, "content_hierarchy");
+	$content = db_get_menu_items("content_hierarchy");
 
 	$last_level = 0;
 

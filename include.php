@@ -46,8 +46,18 @@ require_once(dirname(__FILE__)."/lib/config.functions.php");
 #}
 $config = cms_config_load(true);
 
-#attach to global object
+#Attach to global object
 $gCms->config = &$config;
+
+#Add users if they exist in the session
+if (isset($_SESSION["cms_admin_user_id"]))
+{
+	$gCms->variables["user_id"] = $_SESSION["cms_admin_user_id"];
+}
+if (isset($_SESSION["cms_admin_username"]))
+{
+	$gCms->variables["username"] = $_SESSION["cms_admin_username"];
+}
 
 #Setup db connection
 include_once(dirname(__FILE__)."/adodb/adodb.inc.php");
