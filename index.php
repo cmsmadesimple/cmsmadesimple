@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$starttime = microtime();
+
 @ob_start();
 
 function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
@@ -78,7 +80,13 @@ if ($page == "") {
 error_reporting(0);
 $old_error_handler = set_error_handler("ErrorHandler404");
 
-echo $smarty->fetch('db:'.$page);
+$html = $smarty->fetch('db:'.$page) . "\n";
+echo $html;
+@ob_flush();
+
+$endtime = microtime();
+
+echo "<!-- Generated in ".($endtime-$starttime)." seconds by CMS Made Simple -->\n";
 
 # vim:ts=4 sw=4 noet
 ?>

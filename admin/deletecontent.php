@@ -35,14 +35,14 @@ if (isset($_GET["page_id"])) {
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $db->query($query);
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
 		if (isset($row["section_id"])) {
 			$section_id = $row["section_id"];	
 		}
-		mysql_free_result($result);
+		$db->freeresult($result);
 		#Remove the page
 		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
 		$result = $db->query($query);

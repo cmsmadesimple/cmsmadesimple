@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -19,21 +19,61 @@
 class DB {
 
 	function DB($config) {
-		$this->host = $config->db_hostname;
-		$this->db = $config->db_name;
-		$this->user = $config->db_username;
-		$this->pass = $config->db_password;
-		$this->link = mysql_connect($this->host, $this->user, $this->pass);
-		mysql_select_db($this->db, $this->link);
+		#if ($type == "sqlite") {
+			#$this->db = $config->db_name;
+			#$this->link = sqlite_connect($this->db);
+		#} else {
+			$this->host = $config->db_hostname;
+			$this->db = $config->db_name;
+			$this->user = $config->db_username;
+			$this->pass = $config->db_password;
+			$this->link = mysql_connect($this->host, $this->user, $this->pass);
+			mysql_select_db($this->db, $this->link);
+		#}
 	}
 	
 	function query($query) {
-		$result = mysql_query($query, $this->link);
-		return $result;
+		return mysql_query($query, $this->link);
+		#return sqlite_query($query, $this->link);
+	}
+
+	function rowcount($result) {
+		return mysql_num_rows($result);
+		#return sqlite_num_rows($result);
+	}
+
+	function rowsaffected() {
+		if (mysql_affected_rows($this->link) > 0) {
+			return true;
+		} else {
+			return false;
+		}
+		#sqlite should return TRUE of FALSE for $result, this should be good enough for how we use it
+	}
+
+	function getresulthash($result) {
+		return mysql_fetch_array($result, MYSQL_ASSOC);
+		#sqlite_fetch(array($result, SQLITE_ASSOC);
+	}
+
+	function freeresult($result) {
+		mysql_free_result($result);
+		#no sqlite equiv -- just ignore it
 	}
 
 	function close() {
 		mysql_close($this->link);
+		#sqlite_close($this->link);
+	}
+
+	function escapestring($string) {
+		return mysql_escape_string($string);
+		#sqlite_escape_string($string);
+	}
+
+	function insertid() {
+		return mysql_insert_id($this->link);
+		#sqlite_insert_id($result);
 	}
 
 }

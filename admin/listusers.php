@@ -35,7 +35,7 @@ include_once("header.php");
         $query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
         $result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -48,7 +48,7 @@ include_once("header.php");
 
 		$currow = "row1";
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while($row = $db->getresulthash($result)) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
@@ -69,7 +69,7 @@ include_once("header.php");
 
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 if (check_permission($config, $userid, 'Add User')) {

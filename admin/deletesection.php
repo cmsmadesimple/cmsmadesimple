@@ -34,11 +34,11 @@ if (isset($_GET["section_id"])) {
 
 		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
 		$result = $db->query($query);
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 		if (isset($row["count"]) && $row["count"] > 0) {
 			$dodelete = false;
 		}
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 		if ($dodelete) {
 			$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";

@@ -61,9 +61,9 @@ if (isset($_POST["adduser"])) {
 	}
 
 	if ($validinfo) {
-		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES ('".mysql_escape_string($user)."', password('".mysql_escape_string($password)."'), $active, now(), now())";
+		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES ('".$db->escapestring($user)."', '".md5($password)."', $active, now(), now())";
 		$result = $db->query($query);
-		if (mysql_affected_rows() > -1) {
+		if ($db->rowsaffected()) {
 			$db->close();
 			redirect("listusers.php");
 			return;

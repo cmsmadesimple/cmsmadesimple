@@ -55,10 +55,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
+			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".$db->escapestring($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
 			$result = $db->query($query);
 
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				$db->close();
 				redirect("listgroups.php");
 				return;
@@ -74,12 +74,12 @@ if ($access) {
 		$query = "SELECT * from ".$config->db_prefix."groups WHERE group_id = " . $group_id;
 		$result = $db->query($query);
 		
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 
 		$group = $row["group_name"];
 		$active = $row["active"];
 
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 	}
 

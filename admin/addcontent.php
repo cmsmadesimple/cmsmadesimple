@@ -98,15 +98,15 @@ if ($access) {
 			$order = 1;
 			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
 			$result = $db->query($query);
-			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+			$row = $db->getresulthash($result);
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
-			mysql_free_result($result);
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."','".mysql_escape_string($content_type)."', $section_id, $template_id, $userid, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
+			$db->freeresult($result);
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".$db->escapestring($title)."','".$db->escapestring($url)."','".$db->escapestring($content)."','".$db->escapestring($content_type)."', $section_id, $template_id, $userid, $showinmenu, '".$db->escapestring($menutext)."', $order, $active, now(), now())";
 			$result = $db->query($query);
-			if (mysql_affected_rows() > -1) {
-				$new_page_id = mysql_insert_id();
+			if ($db->rowsaffected($result) == true) {
+				$new_page_id = $db->insertid();
 				if (isset($_POST["additional_editors"])) {
 					foreach ($_POST["additional_editors"] as $addt_user_id) {
 						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
@@ -131,7 +131,7 @@ if ($access) {
 
 	$dropdown = "<select name=\"section_id\">";
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 
 		$dropdown .= "<option value=\"".$row["section_id"]."\"";
 		if ($row["section_id"] == $section_id) {
@@ -143,14 +143,14 @@ if ($access) {
 
 	$dropdown .= "</select>";
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $db->query($query);
 
 	$dropdown2 = "<select name=\"template_id\">";
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
 		if ($row["template_id"] == $template_id) {
 			$dropdown2 .= "selected";
@@ -159,18 +159,18 @@ if ($access) {
 	}
 
 	$dropdown2 .= "</select>";
-	mysql_free_result($result);
+	$db->freeresult($result);
 
 	$addt_users = "";
 
 	$query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
 	$result = $db->query($query);
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	$ctdropdown = "<select name=\"content_type\" onchange=\"document.addform.content_change.value=1;document.addform.submit()\">";
@@ -206,15 +206,15 @@ else {
 		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
 		#echo $query;
 		$result = $db->query($query);
-		if (mysql_num_rows($result) > 0) {
-			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		if ($db->rowcount($result) > 0) {
+			$row = $db->getresulthash($result);
 			$data["stylesheet"] = $row["stylesheet"];
 			$data["template"] = $row["template_content"];
 		} else {
 			$data["stylesheet"] = "";
 			$data["template"] = "{content}";
 		}
-		mysql_free_result($result);
+		$db->freeresult($result);
 		$db->close();
 
 		$tmpfname = tempnam($config->root_path . "/smarty/cms/cache/", "cmspreview");

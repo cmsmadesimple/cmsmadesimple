@@ -62,9 +62,9 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".mysql_escape_string($template)."', '".mysql_escape_string($content)."', '".mysql_escape_string($stylesheet)."', $active, now(), now());";
+			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".$db->escapestring($template)."', '".$db->escapestring($content)."', '".$db->escapestring($stylesheet)."', $active, now(), now());";
 			$result = $db->query($query);
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				$db->close();
 				redirect("listtemplates.php");
 				return;

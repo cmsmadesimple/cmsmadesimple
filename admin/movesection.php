@@ -37,11 +37,11 @@ if (isset($_GET["section_id"])) {
 		$query = "SELECT item_order FROM ".$config->db_prefix."sections WHERE section_id = $section_id";
 		#echo $query . "<br />";
 		$result = $db->query($query);
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 		if ($direction == "down") {
 			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);

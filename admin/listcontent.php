@@ -45,10 +45,10 @@ include_once("header.php");
 	$section_count;
 	$query = "SELECT count(*) AS count, section_id FROM ".$config->db_prefix."pages GROUP BY section_id";
 	$result = $db->query($query);
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$section_count[$row[section_id]] = $row[count];
 	}
-	mysql_free_result($result);
+	$db->freeresult($result);
 
 	$query = "";
 	if ($modifyall == true) {
@@ -59,7 +59,7 @@ include_once("header.php");
 
 	$result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -83,7 +83,7 @@ include_once("header.php");
 
 		$currow = "row1";
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while($row = $db->getresulthash($result)) {
 
 			$totalcount = $section_count[$row[section_id]];
 			if ($oldsectionid != $row["section_id"]) {
@@ -134,7 +134,7 @@ include_once("header.php");
 		echo "<p>".GetText::gettext("No pages")."</p>";
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	if (check_permission($config, $userid, 'Add Content')) {

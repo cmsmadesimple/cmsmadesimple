@@ -66,10 +66,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_escape_string($template)."', template_content = '".mysql_escape_string($content)."', stylesheet = '".mysql_escape_string($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
+			$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".$db->escapestring($template)."', template_content = '".$db->escapestring($content)."', stylesheet = '".$db->escapestring($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
 			$result = $db->query($query);
 
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				$db->close();
 				redirect("listtemplates.php");
 				return;
@@ -85,14 +85,14 @@ if ($access) {
 		$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
 		$result = $db->query($query);
 		
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 
 		$template = $row["template_name"];
 		$content = $row["template_content"];
 		$stylesheet = $row["stylesheet"];
 		$active = $row["active"];
 
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 	}
 

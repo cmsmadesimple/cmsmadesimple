@@ -45,7 +45,7 @@ if ($access) {
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"user-") == 0) {
-				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".mysql_escape_string($group_id).", ".mysql_escape_string(substr($key,5)).", now(), now())";
+				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->escapestring($group_id).", ".$db->escapestring(substr($key,5)).", now(), now())";
 				$result = $db->query($query);
 			}
 		}
@@ -59,11 +59,11 @@ if ($access) {
 	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
         $result = $db->query($query);
 
-        if (mysql_num_rows($result) > 0) {
-                $row = mysql_fetch_array($result, MYSQL_ASSOC);
+        if ($db->rowcount($result) > 0) {
+                $row = $db->getresulthash($result);
                 $group_name = $row[group_name];                                         }
 
-        mysql_free_result($result);
+        $db->freeresult($result);
 }
 
 include_once("header.php");
@@ -85,9 +85,9 @@ else {
         $query = "SELECT * FROM ".$config->db_prefix."users ORDER BY username";
         $result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while($row = $db->getresulthash($result)) {
 
 			$users[$row[username]] = false;
 			$ids[$row[username]] = $row[user_id];
@@ -95,14 +95,14 @@ else {
 
 	}
 
-        mysql_free_result($result);
+        $db->freeresult($result);
 
         $query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
         $result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while($row = $db->getresulthash($result)) {
 
 			$users[$row[username]] = true; 
 			$ids[$row[username]] = $row[user_id];
@@ -110,7 +110,7 @@ else {
 
 	}
 
-        mysql_free_result($result);
+        $db->freeresult($result);
 
         $db->close();
 

@@ -39,7 +39,7 @@ if (isset($_GET["message"])) {
 	$query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY item_order";
 	$result = $db->query($query);
 
-	$totalcount = mysql_num_rows($result);
+	$totalcount = $db->rowcount($result);
 
 	if ($totalcount > 0) {
 
@@ -59,7 +59,7 @@ if (isset($_GET["message"])) {
 
 		$count = 1;
 
-		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+		while($row = $db->getresulthash($result)) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["section_name"]."</td>\n";
@@ -92,7 +92,7 @@ if (isset($_GET["message"])) {
 
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->query($link);
 
 if (check_permission($config, $userid, 'Add Section')) {

@@ -52,15 +52,15 @@ if ($access) {
 
 			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."sections";
 			$result = $db->query($query);
-			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+			$row = $db->getresulthash($result);
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
-			mysql_free_result($result);
+			$db->freeresult($result);
 
-			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($section)."', $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES ('".$db->escapestring($section)."', $order, $active, now(), now())";
 			$result = $db->query($query);
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				$db->close();
 				redirect("listsections.php");
 				return;

@@ -48,11 +48,11 @@ $db = new DB($config);
 
 $query = "SELECT version from ".$config->db_prefix."version";
 $result = $db->query($query);
-while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+while($row = $db->getresulthash($result)) {
 	$current_version = $row["version"];
 }
 
-mysql_free_result($result);
+$db->freeresult($result);
 
 if (!isset($_GET["doupgrade"])) {
 

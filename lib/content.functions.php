@@ -51,8 +51,8 @@ class Smarty_CMS extends Smarty {
 		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->query($query);
 
-		if (mysql_num_rows($result) > 0) {
-			$line = mysql_fetch_array($result, MYSQL_ASSOC);
+		if ($db->rowcount($result) > 0) {
+			$line = $db->getresulthash($result);
 
 			$smarty_obj->assign('modified_date',$line[modified_date]);
 			#$smarty_obj->assign('stylesheet',$line[stylesheet]);
@@ -76,13 +76,13 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = $this->configCMS->bbcodeparser->qparse($tpl_source);
 			}
 
-			mysql_free_result($result);
+			$db->freeresult($result);
 			$db->close();
 			return true;
 		}
 		else {
 
-			mysql_free_result($result);
+			$db->freeresult($result);
 			$db->close();
 			return false;
 		}
@@ -95,12 +95,12 @@ class Smarty_CMS extends Smarty {
 		$query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->query($query);
 
-		if (mysql_num_rows($result) > 0) {
-			$line = mysql_fetch_array($result, MYSQL_ASSOC);
+		if ($db->rowcount($result) > 0) {
+			$line = $db->getresulthash($result);
 
 			$tpl_timestamp = $line["create_date"];
 
-			mysql_free_result($result);
+			$db->freeresult($result);
 			$db->close();
 			return true;
 		}
@@ -108,7 +108,7 @@ class Smarty_CMS extends Smarty {
 
 			$tpl_timestamp = time();
 
-			mysql_free_result($result);
+			$db->freeresult($result);
 			$db->close();
 			return false;
 		}
@@ -134,12 +134,12 @@ function db_get_default_page (&$config) {
 	$query = "SELECT page_url FROM ".$config->db_prefix."pages WHERE default_page = 1";
 	$dbresult = $db->query($query);
 
-	if (mysql_num_rows($dbresult) > 0) {
-		$line = mysql_fetch_array($dbresult, MYSQL_ASSOC);
+	if ($db->rowcount($dbresult) > 0) {
+		$line = $db->getresulthash($dbresult);
 		$result = $line["page_url"];
 	}
 
-	mysql_free_result($dbresult);
+	$db->freeresult($dbresult);
 	$db->close();
 
 	return $result;
@@ -165,7 +165,7 @@ function db_get_menu_items(&$config) {
 	$query = "SELECT p.*, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id WHERE p.show_in_menu = 1 AND p.active = 1 ORDER BY s.item_order, p.item_order, p.menu_text";
 	$result = $db->query($query);
 
-	while ($line = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while ($line = $db->getresulthash($result)) {
 
 		if (!isset($current_section) || $line["section_name"] != $current_section->name) {
 
@@ -197,7 +197,7 @@ function db_get_menu_items(&$config) {
 		array_push($sections, $current_section);
 	}
 	
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	return $sections;

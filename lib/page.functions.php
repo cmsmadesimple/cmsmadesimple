@@ -36,11 +36,11 @@ function check_permission(&$config, $userid, $permname) {
 	$query = "SELECT * FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ".$userid." AND permission_name = '".$permname."'";
 	$result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 		$check = true;
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 
@@ -60,11 +60,11 @@ function check_ownership(&$config, $userid, $pagename, $pageid = "") {
 	}
 	$result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
+	if ($db->rowcount($result) > 0) {
 		$check = true;
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	return $check;
@@ -77,11 +77,11 @@ function check_authorship(&$config, $userid, $pageid) {
 
 	$query = "SELECT * FROM ".$config->db_prefix."additional_users WHERE page_id = $pageid AND user_id = $userid";
 	$result = $db->query($query);
-	if (mysql_num_rows($result) > 0) {
+	if ($db->_rowcount($result) > 0) {
 		$check = true;
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	return $check;
@@ -95,12 +95,12 @@ function get_stylesheet(&$config, $templateid) {
 	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
 	$result = $db->query($query);
 
-	if (mysql_num_rows($result) > 0) {
-		$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	if ($db->rowcount($result) > 0) {
+		$line = $db->getresulthash($result);
 		$css = $line[stylesheet];
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close();
 
 	return $css;

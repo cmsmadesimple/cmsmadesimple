@@ -54,10 +54,10 @@ if ($access) {
 
 		if ($validinfo) {
 
-			$query = "UPDATE ".$config->db_prefix."sections SET section_name='".mysql_escape_string($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
+			$query = "UPDATE ".$config->db_prefix."sections SET section_name='".$db->escapestring($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
 			$result = $db->query($query);
 
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$db->query($query);
@@ -76,12 +76,12 @@ if ($access) {
 		$query = "SELECT * from ".$config->db_prefix."sections WHERE section_id = " . $section_id;
 		$result = $db->query($query);
 		
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 
 		$section = $row["section_name"];
 		$active = $row["active"];
 
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 	}
 

@@ -27,16 +27,16 @@ if ($_POST["username"] && $_POST["password"]) {
 
 	$db = new DB($config);
 
-	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = '".mysql_escape_string($username)."' and password = password('".mysql_escape_string($password)."')";
+	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = '".$db->escapestring($username)."' and password = '".md5($password)."'";
 	$result = $db->query($query);
 
-	$line = mysql_fetch_array($result, MYSQL_ASSOC);
+	$line = $db->getresulthash($result);
 
 	if (isset($line["user_id"])) {
 		setcookie("cms_admin_user_id", $line["user_id"]);
 		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
 		$_SESSION["cms_admin_username"] = $line["username"];	
-		mysql_free_result($result);
+		$db->freeresult($result);
 		$db->close($link);
 		redirect("index.php");
 		return;
@@ -45,7 +45,7 @@ if ($_POST["username"] && $_POST["password"]) {
 		$error .= "<p>".GetText::gettext("Username or Password incorrect!")."</p>";
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 	$db->close($link);
 
 }

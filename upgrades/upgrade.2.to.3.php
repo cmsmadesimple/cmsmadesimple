@@ -37,10 +37,22 @@ mysql_free_result($result);
 
 	echo "[done]</p>";
 
+	echo "<p>Updating user table schema...";
+
+	$query = "ALTER table ".$config->db_prefix."users CHANGE password password varchar(40)";
+	$db->query($query);
+
+	echo "[done]</p>";
+
 	echo "<p>Hashing passwords...";
 
-	$query = "UPDATE ".$config->db_prefix."users SET password = password(password)";
-	$db->query($query);
+	$query = "SELECT user_id, password FROM ".$config->db_prefix."users";
+	$result = $db->query($query);
+	while ($row = $db->getresulthash($result)) {
+		$query = "UPDATE ".$config->db_prefix."users SET password = '".md5($row["password"])."' where user_id = " . $row["user_id"];
+		$db->query($query);
+	}
+	$db->freeresult($result);
 
 	echo "[done]</p>";
 
@@ -58,13 +70,13 @@ mysql_free_result($result);
 	$result = $db->query($query);
 
 	#foreach loop
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$query = "UPDATE ".$config->db_prefix."sections SET item_order = $count WHERE section_id = " . $row["section_id"];
 		$db->query($query);
 		$count++;
 	}
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 
 	echo "[done]</p>";
 

@@ -67,14 +67,14 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."users SET username='".mysql_escape_string($user)."', ";
+			$query = "UPDATE ".$config->db_prefix."users SET username='".$db->escapestring($user)."', ";
 			if ($password != "") {
-				$query .= "password=password('".mysql_escape_string($password)."'), ";
+				$query .= "password='".md5($password)."', ";
 			}
 			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
 			$result = $db->query($query);
 
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				$db->close();
 				redirect("listusers.php");
 				return;
@@ -89,12 +89,12 @@ if ($access) {
 		$query = "SELECT * from ".$config->db_prefix."users WHERE user_id = " . $user_id;
 		$result = $db->query($query);
 		
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 
 		$user = $row["username"];
 		$active = $row["active"];
 
-		mysql_free_result($result);
+		$db->freeresult($result);
 
 	}
 

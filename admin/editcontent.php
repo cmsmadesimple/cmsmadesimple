@@ -116,16 +116,16 @@ if ($access) {
 			if ($orig_section_id != $section_id) {
 				$query = "SELECT max(item_order) + 1 AS item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
 				$result = $db->query($query);
-				$row = mysql_fetch_array($result, MYSQL_ASSOC);
+				$row = $db->getresulthash($result);
 				if (isset($row["item_order"])) {
 					$order = $row["item_order"];	
 				}
-				mysql_free_result($result);
+				$db->freeresult($result);
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now(), item_order=$order, page_type = '".mysql_escape_string($content_type)."' WHERE page_id = $page_id";
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".$db->escapestring($title)."', page_url='".$db->escapestring($url)."', page_content='".$db->escapestring($content)."', section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text='".$db->escapestring($menutext)."', active=$active, modified_date = now(), item_order=$order, page_type = '".$db->escapestring($content_type)."' WHERE page_id = $page_id";
 			$result = $db->query($query);
 
-			if (mysql_affected_rows() > -1) {
+			if ($db->rowsaffected()) {
 				if ($adminaccess) {
 					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
 					$db->query($query);
@@ -154,7 +154,7 @@ if ($access) {
 		$query = "SELECT * from ".$config->db_prefix."pages WHERE page_id = " . $page_id;
 		$result = $db->query($query);
 		
-		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		$row = $db->getresulthash($result);
 
 		$title = $row["page_title"];
 		$url = $row["page_url"];
@@ -170,7 +170,7 @@ if ($access) {
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
 
-		mysql_free_result($result);
+		$db->freeresult($result);
 	}
 
 	$query = "SELECT section_id, section_name FROM ".$config->db_prefix."sections ORDER BY section_id";
@@ -178,7 +178,7 @@ if ($access) {
 
 	$dropdown = "<select name=\"section_id\">";
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$dropdown .= "<option value=\"".$row["section_id"]."\"";
 		if ($row["section_id"] == $section_id) {
 			$dropdown .= "selected";
@@ -188,14 +188,14 @@ if ($access) {
 
 	$dropdown .= "</select>";
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $db->query($query);
 
 	$dropdown2 = "<select name=\"template_id\">";
 
-	while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+	while($row = $db->getresulthash($result)) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
 		if ($row["template_id"] == $template_id) {
 			$dropdown2 .= "selected";
@@ -205,25 +205,25 @@ if ($access) {
 
 	$dropdown2 .= "</select>";
 
-	mysql_free_result($result);
+	$db->freeresult($result);
 
     $addt_users = "";
 
     $query = "SELECT user_id, username FROM ".$config->db_prefix."users WHERE user_id <> " . $userid;
     $result = $db->query($query);
 
-    while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
+    while($row = $db->getresulthash($result)) {
         $addt_users .= "<option value=\"".$row["user_id"]."\"";
 		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
 		$newresult = $db->query($query);
-		if (mysql_num_rows($newresult) > 0) {
+		if ($db->rowcount($newresult) > 0) {
 			$addt_users .= " selected=\"true\"";
 		}
-		mysql_free_result($newresult);
+		$db->freeresult($newresult);
 		$addt_users .= ">".$row["username"]."</option>";
     }
 
-    mysql_free_result($result);
+    $db->freeresult($result);
 
 	$db->close();
 
@@ -257,15 +257,15 @@ else {
 		$db = new DB($config);
 		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
 		$result = $db->query($query);
-		if (mysql_num_rows($result) > 0) {
-			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		if ($db->rowcount($result) > 0) {
+			$row = $db->getresulthash($result);
 			$data["stylesheet"] = $row["stylesheet"];
 			$data["template"] = $row["template_content"];
 		} else {
 			$data["stylesheet"] = "";
 			$data["template"] = "{content}";
 		}
-		mysql_free_result($result);
+		$db->freeresult($result);
 		$db->close();
 
 		$tmpfname = tempnam($config->root_path . "/smarty/cms/cache/", "cmspreview");
