@@ -121,7 +121,7 @@ if ($access)
 #******************************************************************************
 		if ($validinfo)
 		{
-			$query = "UPDATE ".cms_db_prefix()."css SET css_name = ".$db->qstr($css_name).", css_text = ".$db->qstr($css_text).", modified_date = ".$db->DBTimeStamp(time())." WHERE css_id = $css_id";
+			$query = "UPDATE ".cms_db_prefix()."css SET css_name = ".$db->qstr($css_name).", css_text = ".$db->qstr($css_text).", modified_date = '".$db->DBTimeStamp(time())."' WHERE css_id = $css_id";
 			$result = $db->Execute($query);
 
 			if ($result)
@@ -139,7 +139,7 @@ if ($access)
 					# now updating templates
 					while ($line = $cssresult->FetchRow())
 					{
-						$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+						$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."' 
 							WHERE template_id = '".$line["assoc_to_id"]."'";
 						$result = $db->Execute($query);
 

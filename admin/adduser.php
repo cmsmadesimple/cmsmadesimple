@@ -82,7 +82,7 @@ if (isset($_POST["adduser"]))
 	if ($validinfo)
 	{
 		#$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 		#$result = $db->Execute($query);
 
 		$newuser = new User();

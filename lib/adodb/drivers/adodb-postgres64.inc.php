@@ -92,8 +92,8 @@ WHERE relkind = 'r' AND (c.relname='%s' or c.relname = lower('%s'))
 	// below suggested by Freek Dijkstra 
 	var $true = 't';		// string that represents TRUE for a database
 	var $false = 'f';		// string that represents FALSE for a database
-	var $fmtDate = "'Y-m-d'";	// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "'Y-m-d G:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
+	var $fmtDate = "Y-m-d";	// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "Y-m-d G:i:s"; // used by DBTimeStamp as the default timestamp fmt.
 	var $hasMoveFirst = true;
 	var $hasGenID = true;
 	var $_genIDSQL = "SELECT NEXTVAL('%s')";

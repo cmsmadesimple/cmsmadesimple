@@ -136,7 +136,7 @@ function comments_module_executeuser($cms, $id, $return_id, $params) {
 		if ($validinfo) {
 			$db = $cms->db;
 			$new_id = $db->GenID(cms_db_prefix()."module_comments_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."module_comments (comment_id, page_id, comment_author, comment_data, comment_date, create_date) VALUES ($new_id, $return_id, ".$db->qstr($author).", ".$db->qstr($content).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."module_comments (comment_id, page_id, comment_author, comment_data, comment_date, create_date) VALUES ($new_id, $return_id, ".$db->qstr($author).", ".$db->qstr($content).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
 			$dbresult = $db->Execute($query);
 			cms_mapi_redirect_user_by_pageid($return_id);
 			return;

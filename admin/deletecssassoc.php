@@ -107,7 +107,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 				# now updating template
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."'
 						WHERE template_id = '$id'";
 					$tplresult = $db->Execute($tplquery);
 				}

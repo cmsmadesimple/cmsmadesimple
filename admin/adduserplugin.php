@@ -89,7 +89,7 @@ if ($access) {
 
 		if ($validinfo) {
 			$new_usertag_id = $db->GenID(cms_db_prefix()."userplugins_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", ".$db->qstr($code).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."userplugins (userplugin_id, userplugin_name, code, create_date, modified_date) VALUES ($new_usertag_id, ".$db->qstr($plugin_name).", ".$db->qstr($code).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');

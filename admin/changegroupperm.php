@@ -56,7 +56,7 @@ if ($access) {
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false) {
 				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-				$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+				$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 				$db->Execute($query);
 			}
 		}

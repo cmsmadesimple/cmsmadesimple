@@ -123,7 +123,7 @@ if ($access)
 			$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
 
 			# we then generate the request
-			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($css_name).", ".$db->qstr($css_text).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($css_name).", ".$db->qstr($css_text).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 
 			# and execute it
 			$result = $db->Execute($query);

@@ -119,16 +119,16 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 		$query .= cms_db_prefix()."module_news WHERE news_cat = \"";
 		$query .= $params["category"]."\" AND ((".$db->IfNull('start_time',"'1/1/1900'");
 		$query .= " = '1/1/1900' AND ".$db->IfNull('end_time',"'1/1/1900'");
-		$query .= " = '1/1/1900') OR (start_time < ".$db->DBTimeStamp(time());
-		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
+		$query .= " = '1/1/1900') OR (start_time < '".$db->DBTimeStamp(time()) . "'";
+		$query .= " AND end_time > '".$db->DBTimeStamp(time())."')) ";
 	}
 	else 
 	{
 		$query =  "SELECT news_id, news_cat, news_title, news_data, news_date ";
 		$query .= "FROM ".cms_db_prefix()."module_news WHERE ";
 		$query .= "((".$db->IfNull('start_time',"'1/1/1900'")." = '1/1/1900' AND ".$db->ifNull('end_time',"'1/1/1900'");
-		$query .= " = '1/1/1900') OR (start_time < ".$db->DBTimeStamp(time());
-		$query .= " AND end_time > ".$db->DBTimeStamp(time()).")) ";
+		$query .= " = '1/1/1900') OR (start_time < '".$db->DBTimeStamp(time()) . "'";
+		$query .= " AND end_time > '".$db->DBTimeStamp(time())."')) ";
 	}
 	
 	if (isset($params["sortasc"]))

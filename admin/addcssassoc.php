@@ -116,7 +116,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		if ($doadd)
 		{
 			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)
-				VALUES ('$id','$css_id','$type',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+				VALUES ('$id','$css_id','$type','".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
 			$result = $db->Execute($query);
 
 			if ($result)
@@ -125,7 +125,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."' 
 						WHERE template_id = '$id'";
 					$tplresult = $db->Execute($tplquery);
 				}
