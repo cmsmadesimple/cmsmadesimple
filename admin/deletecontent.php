@@ -16,6 +16,9 @@ if (isset($_GET["page_id"])) {
 
 		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
 		$result = $db->query($query);
+		#This is so pages will not cache the menu changes
+		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+		$db->query($query);
 		$db->close();
 	}
 }

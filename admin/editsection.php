@@ -58,6 +58,9 @@ if ($access) {
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {
+				#This is so pages will not cache the menu changes
+				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+				$db->query($query);
 				$db->close();
 				redirect("listsections.php");
 				return;

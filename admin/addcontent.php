@@ -81,6 +81,9 @@ if ($access) {
 			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_escape_string($menutext)."', $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
+				#This is so pages will not cache the menu changes
+				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+				$db->query($query);
 				$db->close();
 				redirect("listcontent.php");
 				return;

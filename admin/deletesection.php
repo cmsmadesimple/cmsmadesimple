@@ -32,6 +32,9 @@ if (isset($_GET["section_id"])) {
 
 		$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";
 		$result = $db->query($query);
+		#This is so pages will not cache the menu changes
+		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+		$db->query($query);
 		$db->close();
 	}
 }
