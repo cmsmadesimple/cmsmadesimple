@@ -23,7 +23,7 @@ $CMS_ADMIN_PAGE=1;
 // in filetypes.inc.php filetypes are defined 
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
 require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
-require_once(dirname(dirname(__FILE__))."/include.php");
+require_once("../include.php");
 
 function deldir($dir)
 {
