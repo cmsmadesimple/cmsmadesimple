@@ -46,7 +46,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		echo "<?xml version='1.0'?>\n";
 		echo "<rss version='2.0'>\n";
 		echo "	<channel>\n";
-		echo "	<title>Linkblog RSS Feed</title>\n";
+		echo "	<title>".$cms->config["linkblog_rss_title"]."</title>\n";
 		echo "	<link>".$cms->config["linkblog_url"]."</link>\n";
 		echo "	<description>Current linkblog entries</description>\n";
 	} else if ($allow_search != '') {
