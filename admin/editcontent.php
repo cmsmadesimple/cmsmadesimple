@@ -133,7 +133,7 @@ if ($access) {
 ## 				$query = "UPDATE ".$config->db_prefix."pages set item_order=item_order-1 where parent_id=$orig_parent_id and item_order>$orig_item_order";
 ## 				$result = $dbnew->Execute($query);
 			}
-			$query1 = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
+			$query1 = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = ".$dbnew->DBTimeStamp(time()).", item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
 			$result1 = $dbnew->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
@@ -156,9 +156,6 @@ if ($access) {
 						}
 					}
 				}
-				#This is so pages will not cache the menu changes (menu isn't cached anymore)
-				#$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-				#$dbnew->Execute($query);
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;

@@ -62,7 +62,7 @@ if (isset($_POST["adduser"])) {
 
 	if ($validinfo) {
 		$new_user_id = $dbnew->GenID($config->db_prefix."users_seq");
-		$query = "INSERT INTO ".$config->db_prefix."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, now(), now())";
+		$query = "INSERT INTO ".$config->db_prefix."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
 		$result = $dbnew->Execute($query);
 		if ($result) {
 			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');

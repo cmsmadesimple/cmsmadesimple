@@ -68,7 +68,7 @@ if ($access) {
 			$active = $row["active"];
 
 			$new_template_id = $dbnew->GenID($config->db_prefix."templates_seq");
-			$query = "INSERT INTO ".$config->db_prefix."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
+			$query = "INSERT INTO ".$config->db_prefix."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {

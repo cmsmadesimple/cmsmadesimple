@@ -300,7 +300,9 @@ function db_get_menu_items(&$config, $style) {
 				$current_content->username = $line["username"];
 				$current_content->template_name = $line["template_name"];
 				$current_content->parent_id = $line["parent_id"];
-				$current_content->url = $line["url"];
+				if (isset($line["url"])) {
+					$current_content->url = $line["url"];
+				}
 				$current_content->hier = "1";
 				$current_content->level = "1";
 				$current_content->num_same_level = $current_content->get_num_same_level($config);

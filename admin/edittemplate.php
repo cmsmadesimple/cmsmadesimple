@@ -77,7 +77,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."templates SET template_name = ".$dbnew->qstr($template).", template_content = ".$dbnew->qstr($content).", stylesheet = ".$dbnew->qstr($stylesheet).", active = $active, modified_date = now() WHERE template_id = $template_id";
+			$query = "UPDATE ".$config->db_prefix."templates SET template_name = ".$dbnew->qstr($template).", template_content = ".$dbnew->qstr($content).", stylesheet = ".$dbnew->qstr($stylesheet).", active = $active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE template_id = $template_id";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {

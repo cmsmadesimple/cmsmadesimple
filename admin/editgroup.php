@@ -55,7 +55,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."groups SET group_name=".$dbnew->qstr($group).", active=$active, modified_date = now() WHERE group_id = $group_id";
+			$query = "UPDATE ".$config->db_prefix."groups SET group_name=".$dbnew->qstr($group).", active=$active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE group_id = $group_id";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {

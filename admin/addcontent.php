@@ -105,7 +105,7 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 			$new_page_id = $dbnew->GenID($config->db_prefix."pages_seq");
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
 			$result = $dbnew->Execute($query);
 			if ($result) {
 				if (isset($_POST["additional_editors"])) {
@@ -116,7 +116,7 @@ if ($access) {
 					}
 				}
 				#This is so pages will not cache the menu changes
-				#$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+				#$query = "UPDATE ".$config->db_prefix."templates SET modified_date = ".$dbnew->DBTimeStamp(time());
 				#$dbnew->Execute($query);
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_page_id, $title, 'Added Content');
 				redirect("listcontent.php");

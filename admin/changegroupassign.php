@@ -53,7 +53,7 @@ if ($access) {
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false) {
-				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
+				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", ".$dbnew->DBTimeStamp(time()).", ".$dbnew->DBTimeStamp(time()).")";
 				$result = $dbnew->Execute($query);
 			}
 		}

@@ -74,9 +74,6 @@ if (isset($_GET["page_id"])) {
 			#Fix the item_order if necessary
 			$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
 			$result = $dbnew->Execute($query);
-			#This is so pages will not cache the menu changes
-			#$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-			#$dbnew->Execute($query);
 			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $page_id, $title, 'Deleted Content');
 		}
 	}

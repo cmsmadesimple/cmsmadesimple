@@ -63,10 +63,6 @@ if (isset($_GET["page_id"])) {
 			#echo $query;
 			$dbnew->Execute($query);
 		}
-
-		#This is so pages will not cache the menu changes
-		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-		$dbnew->Execute($query);
 	}
 }
 

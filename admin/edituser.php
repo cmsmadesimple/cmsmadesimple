@@ -71,7 +71,7 @@ if ($access) {
 			if ($password != "") {
 				$query .= "password='".md5($password)."', ";
 			}
-			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
+			$query .= "active=$active, modified_date = ".$dbnew->DBTimeStamp(time())." WHERE user_id = $user_id";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {

@@ -35,12 +35,27 @@ if (isset($_GET["message"])) {
 	$userid = get_userid();
 	$add = check_permission($config, $userid, 'Add Template');
 	$edit = check_permission($config, $userid, 'Modify Template');
+	$all = check_permission($config, $userid, 'Modify Any Content');
 	$remove = check_permission($config, $userid, 'Remove Template');
+
+	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
+		if (isset($_GET["template_id"])) {
+			$query = "UPDATE ".$config->db_prefix."pages SET template_id = ".$_GET["template_id"];
+			$result = $dbnew->Execute($query);
+			if ($result) {
+				$query = "UPDATE ".$config->db_prefix."pages SET modified_date = ".$dbnew->DBTimeStamp(time());
+				$dbnew->Execute($query);
+				echo "<p>All Pages Modified!</p>";
+			} else {
+				echo "<p class=\"error\">Error updating pages</p>";
+			}
+		}
+	}
 
 	$query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $dbnew->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
+	if ($result) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -48,7 +63,11 @@ if (isset($_GET["message"])) {
 		echo "<td>".$gettext->gettext("Active")."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
+		if ($add)
+			echo "<td>&nbsp;</td>\n";
 		if ($remove)
+			echo "<td>&nbsp;</td>\n";
+		if ($all)
 			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 
@@ -65,6 +84,8 @@ if (isset($_GET["message"])) {
 				echo "<td width=\"8%\"><a href=\"copytemplate.php?template_id=".$row["template_id"]."\">".$gettext->gettext("Copy")."</a></td>\n";
 			if ($remove)
 				echo "<td width=\"8%\"><a href=\"deletetemplate.php?template_id=".$row["template_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+			if ($all)
+				echo "<td width=\"15%\"><a href=\"listtemplates.php?action=setallcontent&template_id=".$row["template_id"]."\">".$gettext->gettext("Set All Content")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");
