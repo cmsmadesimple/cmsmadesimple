@@ -31,6 +31,7 @@ function cms_config_load($loadLocal = true)
 	$config = array();
 
 	#Database connection information
+	$config["dbms"] = "mysql";
 	$config["db_hostname"] = "localhost";
 	$config["db_username"] = "cms";
 	$config["db_password"] = "cms";
