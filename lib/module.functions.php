@@ -254,6 +254,10 @@ function cms_mapi_unregister_module($name) {
 	}
 }
 
+/**********************************************************
+*Login/Logout Callbacks
+**********************************************************/
+
 /**
  * Registers a function to be called after a successful login.
  * Passes $gCms and a user object to the function.
@@ -286,6 +290,26 @@ function cms_mapi_register_logout_post_function($name, $function)
 	}
 }
 
+/**********************************************************
+*Add/Edit User Callbacks
+**********************************************************/
+
+/**
+ * Registers a function to be called before a successful user addition.
+ * Passes $gCms and a user object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_adduser_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['adduser_pre_function'] = $function;
+	}
+}
+
 /**
  * Registers a function to be called after a successful user addition.
  * Passes $gCms and a user object to the function.
@@ -303,6 +327,22 @@ function cms_mapi_register_adduser_post_function($name, $function)
 }
 
 /**
+ * Registers a function to be called before a successful user edit.
+ * Passes $gCms and a user object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edituser_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edituser_pre_function'] = $function;
+	}
+}
+
+/**
  * Registers a function to be called after a successful user edit.
  * Passes $gCms and a user object to the function.
  *
@@ -315,6 +355,27 @@ function cms_mapi_register_edituser_post_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['edituser_post_function'] = $function;
+	}
+}
+
+
+/**********************************************************
+*Add/Edit Group Callbacks
+**********************************************************/
+
+/**
+ * Registers a function to be called before a successful group addition.
+ * Passes $gCms and a group object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_addgroup_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addgroup_pre_function'] = $function;
 	}
 }
 
@@ -335,6 +396,22 @@ function cms_mapi_register_addgroup_post_function($name, $function)
 }
 
 /**
+ * Registers a function to be called before a successful group edit.
+ * Passes $gCms and a group object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_editgroup_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['editgroup_pre_function'] = $function;
+	}
+}
+
+/**
  * Registers a function to be called after a successful group edit.
  * Passes $gCms and a group object to the function.
  *
@@ -347,6 +424,26 @@ function cms_mapi_register_editgroup_post_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['editgroup_post_function'] = $function;
+	}
+}
+
+/**********************************************************
+*Add/Edit HTML Blob Callbacks
+**********************************************************/
+
+/**
+ * Registers a function to be called before a successful htmlblob addition.
+ * Passes $gCms and a htmlblob object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_addhtmlblob_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addhtmlblob_pre_function'] = $function;
 	}
 }
 
@@ -367,6 +464,22 @@ function cms_mapi_register_addhtmlblob_post_function($name, $function)
 }
 
 /**
+ * Registers a function to be called before a successful htmlblob edit.
+ * Passes $gCms and a htmlblob object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edithtmlblob_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edithtmlblob_pre_function'] = $function;
+	}
+}
+
+/**
  * Registers a function to be called after a successful htmlblob edit.
  * Passes $gCms and a htmlblob object to the function.
  *
@@ -379,6 +492,26 @@ function cms_mapi_register_edithtmlblob_post_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['edithtmlblob_post_function'] = $function;
+	}
+}
+
+/**********************************************************
+*Add/Edit Template Callbacks
+**********************************************************/
+
+/**
+ * Registers a function to be called before a successful template addition.
+ * Passes $gCms and a template object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_adduser_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['addtemplate_pre_function'] = $function;
 	}
 }
 
@@ -395,6 +528,22 @@ function cms_mapi_register_adduser_post_function($name, $function)
 	if (isset($cmsmodules[$name]))
 	{
 		$cmsmodules[$name]['addtemplate_post_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called before a successful template edit.
+ * Passes $gCms and a template object to the function.
+ *
+ * @since 0.7.3
+ */
+function cms_mapi_register_edittemplate_pre_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['edittemplate_pre_function'] = $function;
 	}
 }
 

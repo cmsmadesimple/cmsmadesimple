@@ -92,6 +92,16 @@ if (isset($_POST["adduser"]))
 		$newuser->email = $email;
 		$newuser->adminaccess = $adminaccess;
 		$newuser->SetPassword($password);
+
+		#Perform the adduser_pre callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if (isset($gCms->modules[$key]['adduser_pre_function']))
+			{
+				call_user_func_array($gCms->modules[$key]['adduser_pre_function'], array($gCms, $newuser));
+			}
+		}
+
 		$result = $newuser->save();
 
 		if ($result)

@@ -87,6 +87,16 @@ if ($access)
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $owner_id;
+
+			#Perform the edithtmlblob_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['edithtmlblob_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['edithtmlblob_pre_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $blobobj->save();
 
 			if ($result)
@@ -105,6 +115,15 @@ if ($access)
 				#So pages recompile
 				$query = "UPDATE ".cms_db_prefix()."pages SET modified_date = ? WHERE page_content like ?";
 				$dbresult = $db->Execute($query,array($db->DBTimeStamp(time()),'%{html_blob name="'.$blobobj->name.'"}%'));
+
+				#Perform the edithtmlblob_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['edithtmlblob_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['edithtmlblob_post_function'], array($gCms, $groupobj));
+					}
+				}
 
 				redirect("listhtmlblobs.php");
 				return;

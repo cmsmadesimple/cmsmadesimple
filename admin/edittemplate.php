@@ -96,10 +96,28 @@ if ($access)
 			$onetemplate->stylesheet = $stylesheet;
 			$onetemplate->encoding = $encoding;
 			$onetemplate->active = $active;
+
+			#Perform the edittemplate_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['edittemplate_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['edittemplate_pre_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $onetemplate->save();
 
 			if ($result)
 			{
+				#Perform the edittemplate_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['edittemplate_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['edittemplate_post_function'], array($gCms, $groupobj));
+					}
+				}
 				audit($template_id, $onetemplate->name, 'Edited Template');
 				redirect("listtemplates.php");
 			}

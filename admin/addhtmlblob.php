@@ -66,6 +66,16 @@ if ($access) {
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
+
+			#Perform the addhtmlblob_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['addhtmlblob_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['addhtmlblob_pre_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $blobobj->save();
 
 			if ($result) {
@@ -76,6 +86,16 @@ if ($access) {
 				}
 				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
 				TemplateOperations::TouchAllTemplates(); #So pages recompile
+
+				#Perform the addhtmlblob_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['addhtmlblob_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['addhtmlblob_post_function'], array($gCms, $groupobj));
+					}
+				}
+
 				redirect("listhtmlblobs.php");
 				return;
 			}

@@ -92,10 +92,29 @@ if ($access)
 			$newtemplate->stylesheet = $stylesheet;
 			$newtemplate->encoding = $encoding;
 			$newtemplate->active = $active;
+
+			#Perform the addtemplate_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['addtemplate_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $newtemplate->save();
 
 			if ($result)
 			{
+				#Perform the addtemplate_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['addtemplate_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array($gCms, $groupobj));
+					}
+				}
+
 				audit($newtemplate->id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;

@@ -91,20 +91,41 @@ if ($access) {
 			$thisuser = UserOperations::LoadUserByID($user_id);
 			if ($thisuser)
 			{
+				#Perform the edituser_pre callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['edituser_pre_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['edituser_pre_function'], array($gCms, $thisuser));
+					}
+				}
+
 				$thisuser->username = $user;
 				$thisuser->firstname = $firstname;
 				$thisuser->lastname = $lastname;
 				$thisuser->email = $email;
 				$thisuser->adminaccess = $adminaccess;
 				$thisuser->active = $active;
-				if ($password != "") {
+				if ($password != "")
+				{
 					$thisuser->SetPassword($password);
 				}
 				$result = $thisuser->save();
 			}
 
-			if ($result) {
+			if ($result)
+			{
 				audit($user_id, $thisuser->username, 'Edited User');
+
+				#Perform the edituser_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['edituser_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['edituser_post_function'], array($gCms, $thisuser));
+					}
+				}
+
 				redirect("listusers.php");
 			}
 			else {

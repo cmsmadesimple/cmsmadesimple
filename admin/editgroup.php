@@ -47,22 +47,44 @@ $access = check_permission($userid, 'Modify Group');
 
 if ($access) {
 
-	if (isset($_POST["editgroup"])) {
-
+	if (isset($_POST["editgroup"]))
+	{
 		$validinfo = true;
-		if ($group == "") {
+		if ($group == "")
+		{
 			$validinfo = false;
 			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 		}
 
-		if ($validinfo) {
+		if ($validinfo)
+		{
 			$groupobj = new Group();
 			$groupobj->id = $group_id;
 			$groupobj->name = $group;
 			$groupobj->active = $active;
+
+			#Perform the editgroup_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['editgroup_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['editgroup_pre_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $groupobj->save();
 
-			if ($result) {
+			if ($result)
+			{
+				#Perform the editgroup_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['editgroup_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['editgroup_post_function'], array($gCms, $groupobj));
+					}
+				}
+
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
 				redirect("listgroups.php");
 				return;

@@ -39,27 +39,51 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Group');
 
-if ($access) {
-	if (isset($_POST["addgroup"])) {
-
+if ($access)
+{
+	if (isset($_POST["addgroup"]))
+	{
 		$validinfo = true;
-		if ($group == "") {
+
+		if ($group == "")
+		{
 			$error .= "<li>".lang('nofieldgiven', array('addgroup'))."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
+		if ($validinfo)
+		{
 			$groupobj = new Group();
 			$groupobj->name = $group;
 			$groupobj->active = $active;
+
+			#Perform the addgroup_pre callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (isset($gCms->modules[$key]['addgroup_pre_function']))
+				{
+					call_user_func_array($gCms->modules[$key]['addgroup_pre_function'], array($gCms, $groupobj));
+				}
+			}
+
 			$result = $groupobj->save();
 
-			if ($result) {
+			if ($result)
+			{
+				#Perform the addgroup_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['addgroup_post_function']))
+					{
+						call_user_func_array($gCms->modules[$key]['addgroup_post_function'], array($gCms, $groupobj));
+					}
+				}
 				audit($groupobj->id, $groupobj->name, 'Added Group');
 				redirect("listgroups.php");
 				return;
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorinsertinggroup')."</li>";
 			}
 		}
@@ -68,11 +92,14 @@ if ($access) {
 
 include_once("header.php");
 
-if (!$access) {
+if (!$access)
+{
 	print "<h3>".lang('noaccessto', array(lang('addgroup')))."</h3>";
 }
-else {
-	if ($error != "") {
+else
+{
+	if ($error != "")
+	{
 		echo "<ul class=\"error\">".$error."</ul>";
 	}
 ?>
