@@ -40,6 +40,11 @@ include_once("header.php");
 
 	$grouplist = GroupOperations::LoadGroups();
 
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
+	$limit = 20;
+	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($grouplist), $limit)."</div>";
+
 	if (count($grouplist) > 0) {
 
 		echo "<table cellspacing=\"0\" class=\"admintable\">\n";
@@ -64,25 +69,26 @@ include_once("header.php");
 		$image_groupassign ="<img src=\"../images/cms/groupassign.gif\" alt=\"".lang('assignments')."\" title=\"".lang('assignments')."\" border=\"0\">";
 		$image_premissions ="<img src=\"../images/cms/permissions.gif\" alt=\"".lang('permissions')."\" title=\"".lang('permissions')."\" border=\"0\">";
 
-		
 
-		#while ($row = $result->FetchRow()) {
-		foreach ($grouplist as $onegroup)
-		{
-			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
-			echo "<td align=\"center\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
-			if ($perm)
-				echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_premissions."</a></td>\n";
-			if ($assign)
-				echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
-			if ($edit)
-				echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
-			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
-			echo "</tr>\n";
+		$counter=0;
+		foreach ($grouplist as $onegroup){
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+				echo "<tr class=\"$currow\">\n";
+				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
+				echo "<td align=\"center\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
+				if ($perm)
+					echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_premissions."</a></td>\n";
+				if ($assign)
+					echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+				if ($edit)
+					echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
+				if ($remove)
+					echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
+				echo "</tr>\n";
 
-			($currow == "row1"?$currow="row2":$currow="row1");
+				($currow == "row1"?$currow="row2":$currow="row1");
+			}
+			$counter++;
 		}
 
 		echo "</table>\n";

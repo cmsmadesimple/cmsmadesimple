@@ -51,7 +51,7 @@ if (isset($_GET["message"])) {
 
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
-	$limit = 2;
+	$limit = 20;
 	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($content_array), $limit)."</div>";
 
 	

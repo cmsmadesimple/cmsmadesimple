@@ -63,6 +63,11 @@ if (isset($_GET["message"]))
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);
 
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
+	$limit = 20;
+	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, $result->RowCount(), $limit)."</div>";
+
 	if ($result)
 	{
 		# displaying the table header
@@ -77,35 +82,37 @@ if (isset($_GET["message"]))
 		$currow = "row1";
 
 		# we now show each line
-		while ($one = $result->FetchRow())
-		{
-			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
+		$counter = 0;
+		while ($one = $result->FetchRow()){
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+				echo "<tr class=\"$currow\">\n";
+				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
 
-			# if user has right to edit
-			if ($modify)
-			{
-				echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
+				# if user has right to edit
+				if ($modify)
+				{
+					echo "<td width=\"18\"><a href=\"editcss.php?css_id=".$one["css_id"]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
+				}
+				else
+				{
+					echo "<td>&nbsp;</td>";
+				}
+
+				# if user has right to delete
+				if ($delcss)
+				{
+					echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
+				}
+				else
+				{
+					echo "<td>&nbsp;</td>";
+				}
+
+				echo "</tr>\n";
+
+				("row1" == $currow) ? $currow="row2" : $currow="row1";
 			}
-			else
-			{
-				echo "<td>&nbsp;</td>";
-			}
-
-			# if user has right to delete
-			if ($delcss)
-			{
-				echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
-			}
-			else
-			{
-				echo "<td>&nbsp;</td>";
-			}
-
-			echo "</tr>\n";
-
-			("row1" == $currow) ? $currow="row2" : $currow="row1";
-
+			$counter++;
 		} ## foreach
 
 		echo "</table>\n";

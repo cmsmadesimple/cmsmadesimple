@@ -37,6 +37,11 @@ if (isset($_GET["message"])) {
 
 	$htmlbloblist = HtmlBlobOperations::LoadHtmlBlobs();
 
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
+	$limit = 20;
+	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($htmlbloblist), $limit)."</div>";
+
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
 
 		echo "<table cellspacing=\"0\" class=\"admintable\">"."\n";
@@ -51,16 +56,18 @@ if (isset($_GET["message"])) {
 		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
 		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
 
-		foreach ($htmlbloblist as $onehtmlblob)
-		{
-			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
-			echo "<td width=\"16\"><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
-			echo "<td width=\"16\"><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
-			echo "</tr>\n";
+		$counter = 0;
+		foreach ($htmlbloblist as $onehtmlblob){
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+				echo "<tr class=\"$currow\">\n";
+				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
+				echo "<td width=\"16\"><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
+				echo "</tr>\n";
 
-			($currow=="row1"?$currow="row2":$currow="row1");
-
+				($currow=="row1"?$currow="row2":$currow="row1");
+			}
+			$counter++;
 		}
 
 		echo "</table>\n";

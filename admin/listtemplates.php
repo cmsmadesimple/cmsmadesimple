@@ -54,6 +54,11 @@ if (isset($_GET["message"])) {
 	}
 
 	$templatelist = TemplateOperations::LoadTemplates();
+	
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
+	$limit = 20;
+	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($templatelist), $limit)."</div>";
 
 	if ($templatelist && count($templatelist) > 0) {
 
@@ -79,36 +84,39 @@ if (isset($_GET["message"])) {
 		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
 		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
 
-		foreach ($templatelist as $onetemplate)
-		{
-			echo "<tr class=\"$currow\">\n";
-			echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
-			echo "<td align=\"center\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
+		$counter=0;
+		foreach ($templatelist as $onetemplate){
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+				echo "<tr class=\"$currow\">\n";
+				echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
+				echo "<td align=\"center\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
-			# set template to all content
-			if ($all)
-				echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
+				# set template to all content
+				if ($all)
+					echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
-			# view css association
-			if (get_site_preference('useadvancedcss') == "1") {
-				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$onetemplate->id."\"><img src=\"../images/cms/css.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang("CSS")."\" title=\"".lang("CSS")."\"></a></td>\n";
+				# view css association
+				if (get_site_preference('useadvancedcss') == "1") {
+					echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&id=".$onetemplate->id."\"><img src=\"../images/cms/css.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang("CSS")."\" title=\"".lang("CSS")."\"></a></td>\n";
+				}
+
+				# add new template
+				if ($add)
+					echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\"></a></td>\n";
+
+				# edit template
+				if ($edit)
+					echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
+
+				# remove template
+				if ($remove)
+					echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
+				echo "</tr>\n";
+
+				($currow=="row1"?$currow="row2":$currow="row1");
+
 			}
-
-			# add new template
-			if ($add)
-				echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\"></a></td>\n";
-
-			# edit template
-			if ($edit)
-				echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
-
-			# remove template
-			if ($remove)
-				echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
-			echo "</tr>\n";
-
-			($currow=="row1"?$currow="row2":$currow="row1");
-
+			$counter++;
 		}
 
 		echo "</table>\n";
