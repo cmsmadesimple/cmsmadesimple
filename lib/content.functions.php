@@ -35,8 +35,8 @@ class Smarty_CMS extends Smarty {
 		$this->compile_check = true;
 		$this->caching = true;
 		$this->assign('app_name','CMS');
-		$this->debugging = true;
-		$this->force_compile = true;
+		#$this->debugging = true;
+		#$this->force_compile = true;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
