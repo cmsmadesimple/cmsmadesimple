@@ -14,6 +14,7 @@ rm -fr images/*.svg
 rm -fr smarty/cms/cache/*
 rm -fr smarty/cms/templates_c/*
 find -depth -type d -name .svn -exec rm -fr {} \;
+rm -fr release-cleanup.sh
 
 echo ------------------------------------
 echo Done!
