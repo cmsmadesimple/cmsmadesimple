@@ -288,7 +288,7 @@ class News extends CMSModule
 			case "default":
 				if (isset($params["makerssbutton"]))
 				{
-					$params = array_merge(array("showtemplate"=>"false","type"=>"rss"));
+					$params = array("showtemplate"=>"false","type"=>"rss");
 					echo $this->CreateLink($id, 'default', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
 					return;
 				}
