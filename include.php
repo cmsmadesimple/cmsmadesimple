@@ -170,7 +170,7 @@ else
 load_site_preferences();
 
 if (isset($CMS_ADMIN_PAGE)) {
-	include_once(dirname(__FILE__)."/admin/lang.php");
+	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
 }
 
 #Check for HTML_BBCodeParser

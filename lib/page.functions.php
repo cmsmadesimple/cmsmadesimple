@@ -44,14 +44,14 @@ function check_login() {
 	if (!isset($_COOKIE["cms_admin_user_id"]))
 	{
 		$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-		redirect($config["root_url"]."/admin/login.php");
+		redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
 	}
 	else if (!isset($_SESSION["cms_admin_user_id"]))
 	{
 		if (!generate_user_object($_COOKIE["cms_admin_user_id"]))
 		{
 			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			redirect($config["root_url"]."/admin/login.php");
+			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
 		}
 	}
 }

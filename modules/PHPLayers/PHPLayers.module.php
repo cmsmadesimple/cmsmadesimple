@@ -95,6 +95,7 @@ class PHPLayers extends CMSModule
 
 	function DoAction($name, $id, $params)
 	{
+		$config = $this->cms->config;
 		if ($name == 'default')
 		{
 			$basedepth = 1;
@@ -172,7 +173,7 @@ class PHPLayers extends CMSModule
 			if ($showadmin == 1)
 			{
 				$menu .= ".|---\n";
-				$menu .= ".|Admin|admin/\n";
+				$menu .= ".|Admin|".$config['admin_dir']."/\n";
 			}
 
 			global $gCms;

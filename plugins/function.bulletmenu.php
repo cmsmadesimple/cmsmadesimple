@@ -20,6 +20,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	global $gCms;
 	global $db;
+	global $config;
 
 	# getting menu parameters
 	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
@@ -145,7 +146,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 		if ($showadmin == 1)
 		{
-			$menu .= "<ul><li><a href='admin/'>Admin</a></li></ul>\n";
+			$menu .= "<ul><li><a href='".$config['admin_dir']."/'>Admin</a></li></ul>\n";
 		}
 		$menu .= "</div>\n";
 	}

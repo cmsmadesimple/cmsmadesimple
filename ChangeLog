@@ -10,6 +10,7 @@ much, much easier.
 * Fixed bug with start_element in bulletmenu and phplayers
 * Fixed bug with css table not having sequence setup correctly (#000093)
 * Fixed contact form so that it's xhtml compliant (#000096)
+* Admin dir can now be changed with admin_dir paramater in config.php
 
 Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
 -----------------
