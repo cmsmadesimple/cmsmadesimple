@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.8rc1";
+$CMS_VERSION = "0.8";
 $CMS_VERSION_NAME = "Tahiti";
 $CMS_SCHEMA_VERSION = "9";
 
