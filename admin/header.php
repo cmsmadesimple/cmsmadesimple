@@ -66,12 +66,13 @@ header("Pragma: no-cache");
 		}
 	</script>
 <?php }
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content" || get_preference($userid, 'use_wysiwyg') == "1" && $_GET['module'] == "News" && $action != "showmodulehelp"){
+$userid = get_userid();
+if (get_preference($userid, 'use_wysiwyg') == "1" && isset($htmlarea_flag)){
 	$load = "onload=\"initHtmlArea();\""; ?>
 <?php } ?>
 
 </head>
-<body <?php echo $load; ?>>
+<body <?php echo (isset($load)?$load:""); ?>>
 
 <div id="header" class="header">
 <img src="../images/cms/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>

@@ -103,11 +103,6 @@ if (!$access) {
 	$access = check_authorship($userid, $page_id);
 }
 
-$templatepostback = "";
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
-	$htmlarea_flag = true;
-	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
-}
 
 if ($access) {
 
@@ -236,7 +231,7 @@ if ($access) {
 				$ddsize = "class=\"standard\"";
 			}
 		}
-    $dropdown = "<select name=\"parent_id\" $ddsize>";
+    $dropdown = "<select name=\"parent_id\" ".(isset($ddsize)?$ddsize:"").">";
     $dropdown .="<option value=\"0\"";
     if ($parent_id == "0") {
         $dropdown .= " selected";
@@ -317,6 +312,13 @@ if ($access) {
 		$ctdropdown .= ">".$value."</option>";
 	}
 	$ctdropdown .= "</select>";
+}
+
+$templatepostback = "";
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	echo "content_type: ".$content_type;
+	$htmlarea_flag = true;
+	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
 }
 
 include_once("header.php");
@@ -416,7 +418,7 @@ else {
 							<div style="text-align: center; padding-top: 5px;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
 							</div>
 					</td>
-					<?php// } ?>
+					<?php // } ?>
 				</tr>
 			</table>
 		</td>

@@ -80,11 +80,6 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Content');
 
-$templatepostback = "";
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
-	$htmlarea_flag = true;
-	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
-}
 
 if ($access) {
 
@@ -170,7 +165,7 @@ if ($access) {
 			$ddsize = "class=\"standard\"";
 		}
 	}
-	$dropdown = "<select name=\"parent_id\" $ddsize>";
+	$dropdown = "<select name=\"parent_id\" ".(isset($ddsize)?$ddsize:"").">";
 	$dropdown .="<option value=\"0\"";
 	if ($parent_id == "0") {
 		$dropdown .= " selected";
@@ -226,6 +221,12 @@ if ($access) {
 	}
 	$ctdropdown .= "</select>";
 
+}
+
+$templatepostback = "";
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	$htmlarea_flag = true;
+	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
 }
 
 include_once("header.php");
@@ -326,7 +327,7 @@ else {
 							<div style="text-align: center;"><?=$gettext->gettext("Additional Editors")?>:<br><select name="additional_editors[]" multiple="true" size="3"><?=$addt_users?></select></div>
 							</div>
 					</td>
-					<?php// } ?>
+					<?php // } ?>
 				</tr>
 			</table>
 		</td>
