@@ -216,8 +216,30 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
-				#Do html_blobs
-				$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
+				#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
+				$safetycount = 0;
+				$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|";
+				while (1 == 1)
+				{
+					$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);
+					if ($result != '' && $result != $tpl_source)
+					{
+						$tpl_source = $result;
+					}
+					else
+					{
+						break;
+					}
+
+					$safetycount++;
+
+					if ($safetycount > 15)
+					{
+						# Remove the last one so it doesn't get sent to smarty
+						$tpl_source = preg_replace($regexstr, '', $tpl_source);
+						break;
+					}
+				}
 
 				#Replace stylesheet and title tags
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);

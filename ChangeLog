@@ -2,6 +2,8 @@ Version 0.10 "Antigua" -- Subversion
 -----------------
 
 * Added dropdown of encodings to add/edit template pages
+* Added multiple content blocks
+* Added recursive html blobs
 * Submitting site prefernces redircts to an empty page now
 * Fixed bug with text parameter in print plugin
 * Updated ADODB to 4.61
