@@ -145,7 +145,7 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, create_date, modified_date) VALUES (?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?)";
 		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->encoding, $template->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		if ($dbresult !== false)
 		{

@@ -69,7 +69,7 @@ if ($access)
 
 			if ($result)
 			{
-				audit($new_template_id, $template, 'Copied Template');
+				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
 				redirect("listtemplates.php");
 				return;
 			}

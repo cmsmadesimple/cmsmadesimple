@@ -176,7 +176,8 @@ if ($access) {
 				}
 
 			}
-			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags).", password_protected=".$password_protect." WHERE page_id = $page_id";
+			#$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags).", password_protected=".$password_protect." WHERE page_id = $page_id";
+			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags)." WHERE page_id = $page_id";
 			$result1 = $db->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
@@ -217,7 +218,6 @@ if ($access) {
 				$error .= "<li>".lang('errorupdatingcontent')."</li>";
 			}
 		}
-
 	}
 	else if ($page_id != -1 && !$preview && !$content_change) {
 
@@ -244,7 +244,7 @@ if ($access) {
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
 		$orig_item_order = $row["item_order"];
-		$password_protect = $row['password_protected'];
+		#$password_protect = $row['password_protected'];
 
 		//Get encoding of template
 		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
@@ -253,43 +253,56 @@ if ($access) {
 	}
 
 	$templatepostback = "";
-	if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content")
+	{
 		$htmlarea_flag = true;
 		$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
         $use_javasyntax = false;
-    }else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content"){
+    }
+	else if (get_preference($userid, 'use_javasyntax') == "1" && $content_type == "content")
+	{
         $use_javasyntax = true;
     }
 
     $content_array = array();
     $content_array = db_get_menu_items();
-		foreach ($content_array as $one ) {
-			if (strlen($one->page_title) > 20) {
-				$ddsize = "style=\"width: 250px;\"";
-				break;
-			}else{
-				$ddsize = "class=\"standard\"";
-			}
+	foreach ($content_array as $one )
+	{
+		if (strlen($one->page_title) > 20)
+		{
+			$ddsize = "style=\"width: 250px;\"";
+			break;
 		}
+		else
+		{
+			$ddsize = "class=\"standard\"";
+		}
+	}
     $dropdown = "<select name=\"parent_id\" ".(isset($ddsize)?$ddsize:"").">";
     $dropdown .="<option value=\"0\"";
-    if ($parent_id == "0") {
+    if ($parent_id == "0")
+	{
         $dropdown .= " selected";
     }
     $dropdown .= ">None</option>";
 
 	$showparent = true;
-    foreach ($content_array as $one) {
-		if ($one->page_id == $page_id) {
+    foreach ($content_array as $one)
+	{
+		if ($one->page_id == $page_id)
+		{
 			$showparent = false;
 			$rememberlevel = $one->level;
 		}
-		if ($showparent == false && $one->level == $rememberlevel && $one->page_id != $page_id) {
+		if ($showparent == false && $one->level == $rememberlevel && $one->page_id != $page_id)
+		{
 			$showparent = true;
 		}
-		if ($showparent && $one->page_type != "separator") {
+		if ($showparent && $one->page_type != "separator")
+		{
 			$dropdown .= "<option value=\"".$one->page_id."\"";
-			if ($one->page_id == $parent_id) {
+			if ($one->page_id == $parent_id)
+			{
 				$dropdown .= "selected";
 			}
 			$dropdown .= ">".$one->hier." - ".$one->page_title."</option>";
@@ -303,9 +316,11 @@ if ($access) {
 
 	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
-	while($row = $result->FetchRow()) {
+	while($row = $result->FetchRow())
+	{
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
-		if ($row["template_id"] == $template_id) {
+		if ($row["template_id"] == $template_id)
+		{
 			$dropdown2 .= "selected";
 		}
 		$dropdown2 .= ">".$row["template_name"]."</option>";
@@ -318,9 +333,11 @@ if ($access) {
     $query = "SELECT user_id, username FROM ".cms_db_prefix()."users";
     $result = $db->Execute($query);
 
-    while($row = $result->FetchRow()) {
+    while($row = $result->FetchRow())
+	{
         $owners .= "<option value=\"".$row["user_id"]."\"";
-		if ($row["user_id"] == $owner_id) {
+		if ($row["user_id"] == $owner_id)
+		{
 			$owners .= " selected";
 		}
 		$owners .= ">".$row["username"]."</option>";
@@ -479,7 +496,7 @@ else {
 			<td valign="top">
 					<div style="line-height: .8em; padding-top: 1em; margin-bottom: 1em; font-weight: bold;">Password Protect</div>
 					<div style="border: solid 1px #8C8A8C; height: 8em; padding: 7px 5px 5px 5px;">
-					<div style="text-align: center; padding-top: 5px;">Password Protect:<input type="checkbox" name="password_protect" value="1" <?php echo ($password_protect == 1?"checked":"") ?>><br><select name="frontend_access[]" multiple="true" size="3"><?php echo $addt_users ?></select></div></div>
+					<!--<div style="text-align: center; padding-top: 5px;">Password Protect:<input type="checkbox" name="password_protect" value="1" <?php echo ($password_protect == 1?"checked":"") ?>><br><select name="frontend_access[]" multiple="true" size="3"><?php echo $addt_users ?></select></div>--></div>
 			</td>
 		</tr>
 	</table>
