@@ -38,7 +38,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($config, $userid, 'Modify User') || check_ownership($config, $userid, "", $page_id);
+$access = check_permission($config, $userid, 'Modify Any Content') || check_ownership($config, $userid, "", $page_id);
 
 if ($access) {
 	$db = new DB($config);
