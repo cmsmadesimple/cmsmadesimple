@@ -11,7 +11,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."module_news_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
-	$db->DropSequence($db_prefix."sequence_seq");
+	#$db->DropSequence($db_prefix."sequence_seq");
 	$db->DropSequence($db_prefix."users_seq");
 	$db->DropSequence($db_prefix."userplugins_seq");
 
@@ -46,8 +46,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."sequence");
-	$dbdict->ExecuteSQLArray($sqlarray);
+	#$sqlarray = $dbdict->DropTableSQL($db_prefix."sequence");
+	#$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."userprefs");
@@ -424,6 +424,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 	
+	/*
 	echo "<p>Creating sequence table...";
 
 	$dbdict = NewDataDictionary($db);
@@ -441,6 +442,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
+	*/
 
 }
 

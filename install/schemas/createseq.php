@@ -23,6 +23,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Creating css table sequence...";
+
+	$max = $db->GetOne("SELECT max(css_id) from ".$db_prefix."css");
+	$db->CreateSequence($db_prefix."css_seq", $max+1);
+
+	echo "[done]</p>";
+
 	echo "<p>Creating group_perms table sequence...";
 
 	$max = $db->GetOne("SELECT max(css_id) from ".$db_prefix."css");
