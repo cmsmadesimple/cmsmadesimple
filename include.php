@@ -87,6 +87,58 @@ if (function_exists('gettext')) {
 }
 $gettext->addDomain('cmsmadesimple', dirname(__FILE__)."/locale");
 
+#Stupid magic quotes...
+if(get_magic_quotes_gpc())
+{
+	strip_slashes($_GET);
+	strip_slashes($_POST);
+	strip_slashes($_COOKIE);
+	strip_slashes($_SESSIONS);
+}
+
+#Check to see if there is already a language in use...
+if (isset($_COOKIE["cms_language"])) {
+	$gettext->setLanguage($_COOKIE["cms_language"]);
+} else {
+	#No, take a stab at figuring out the default language...
+
+	#First read in all current languages...
+	$dir = dirname(__FILE__)."/locale";
+	$ls = dir($dir);
+	while (($file = $ls->read()) != "") {
+		if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
+			if (is_file("$dir/$file/nls.php")) {
+				include("$dir/$file/nls.php");
+			}
+		}
+	}
+
+	#Figure out default language and set it if it exists
+	if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
+		$svrstring = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+		$alllang = substr($svrstring,0,strpos($svrstring, ";"));
+		$langs = explode(",", $alllang);
+
+		foreach ($langs as $onelang) {
+			#Check to see if lang exists...
+			if (isset($nls['language'][$onelang])) {
+				$gettext->setLanguage($onelang);
+				#setcookie("cms_language", $onelang);
+				break;
+			}
+			#Check to see if alias exists...
+			if (isset($nls['alias'][$onelang])) {
+				$alias = $nls['alias'][$onelang];
+				if (isset($nls['language'][$alias])) {
+					$gettext->setLanguage($alias);
+					#setcookie("cms_language", $alias);
+					break;
+				}
+			}
+		}
+	}
+}
+
 #Check for HTML_BBCodeParser
 if ($config->use_bb_code == true) {
 	if (include_once(dirname(__FILE__)."/lib/PEAR.php")) {
@@ -95,15 +147,6 @@ if ($config->use_bb_code == true) {
 			$config->bbcodeparser = new HTML_BBCodeParser();
 		}
 	}
-}
-
-#Stupid magic quotes...
-if(get_magic_quotes_gpc())
-{
-	strip_slashes($_GET);
-	strip_slashes($_POST);
-	strip_slashes($_COOKIES);
-	strip_slashes($_SESSIONS);
 }
 
 # vim:ts=4 sw=4 noet
