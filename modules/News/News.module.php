@@ -37,7 +37,7 @@ class News extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.6';
+		return '1.7';
 	}
 
 	function GetAdminDescription()

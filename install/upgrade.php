@@ -16,9 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$DONT_LOAD_DB=1;
+#$DONT_LOAD_DB=1;
+$LOAD_ALL_MODULES=1;
 require_once(dirname(dirname(__FILE__))."/include.php");
-
 
 //Do module autoupgrades 
 function module_autoupgrade()
@@ -28,7 +28,7 @@ function module_autoupgrade()
 
 	foreach ($gCms->modules as $modulename=>$value)
 	{
-		if ($gCms->modules[$modulename]['object']->AllowAutoUpgrade())
+		if ($gCms->modules[$modulename]['object']->AllowAutoUpgrade() == true)
 		{
 			//Check to see what version we currently have in the database (if it's installed)
 			$module_version = false;
@@ -42,11 +42,11 @@ function module_autoupgrade()
 			//Check to see what version we have in the file system
 			$file_version = $gCms->modules[$modulename]['object']->GetVersion();
 
-			if ($module_version)
+			if ($module_version != false)
 			{
 				if (version_compare($file_version, $module_version) == 1)
 				{
-					echo "<p>Upgrading $modulename module...";
+					echo "<p>Upgrading $modulename module from $module_version to $file_version...";
 					$gCms->modules[$modulename]['object']->Upgrade($module_version, $file_version);
 					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
 					$result = $db->Execute($query, array($file_version, $modulename));
