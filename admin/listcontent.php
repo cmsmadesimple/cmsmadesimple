@@ -68,13 +68,11 @@ if (isset($_GET["message"])) {
     }
 
 	$content_array = db_get_menu_items();
-	
 
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
 	$limit = 20;
 	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($content_array), $limit)."</div>";
-
 	
 	if (count($content_array)) {
 
@@ -126,9 +124,9 @@ if (isset($_GET["message"])) {
 				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->page_id."\">".$image_false."</a></td>\n";
 				}
  
-				if ($one->page_type == "content")
+				if ($one->page_type == "content" && $one->active)
 				{
-				  	echo "<td align=\"center\">".($one->default_page == 1?$image_true:"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+					echo "<td align=\"center\">".($one->default_page == 1?$image_true:"<a href=\"listcontent.php?makedefault=".$one->page_id."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
 				}
 				else
 				{
