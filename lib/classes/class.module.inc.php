@@ -842,9 +842,18 @@ class CMSModule extends ModuleOperations
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='')
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false)
 	{
-		$text = '<a href="moduleinterface.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+		if (!$onlyhref)
+		{
+			$text = '<a href="';
+		}
+		$text .= $this->cms->config['root_url'];
+		if (!($returnid != '' && $returnid > -1))
+		{
+			$text .= '/admin';
+		}
+		$text .= '/moduleinterface.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
 		foreach ($params as $key=>$value)
 		{
 			$text .= '&amp;'.$id.$key.'='.$value;
@@ -854,11 +863,14 @@ class CMSModule extends ModuleOperations
 			$text .= '&amp;'.$id.'returnid='.$returnid;
 		}
 		$text .= "\"";
-		if ($warn_message !== '')
+		if (!$onlyhref)
 		{
-			$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
+			if ($warn_message !== '')
+			{
+				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
+			}
+			$text .= '>'.$contents.'</a>';
 		}
-		$text .= '>'.$contents.'</a>';
 		return $text;
 	}
 
