@@ -53,7 +53,7 @@ function get_encoding($charset='')
 	{
 		return $charset;
 	}
-	else if (isset($config['default_encoding']) && isset($config['default_encoding']) != "")
+	else if (isset($config['default_encoding']) && $config['default_encoding'] != "")
 	{
 		return $config['default_encoding'];
 	}
