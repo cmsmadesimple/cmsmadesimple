@@ -75,7 +75,7 @@ if ($_POST["username"] && $_POST["password"]) {
 
 ?>
 
-<form method="post" action="login.php" id="login">
+<form method="post" action="login.php" id="login" name="login">
 
 <img src="../images/cmslogo.png" border="0" id="loginlogo" alt="CMS Made Simple"/>
 
@@ -97,6 +97,11 @@ if ($_POST["username"] && $_POST["password"]) {
 
 </div>
 
+<script language="javascript">
+<!--
+	document.login.username.focus();
+//-->
+</script>
 
 </body>
 </html>
