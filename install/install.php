@@ -401,6 +401,14 @@ function showPageFour() {
         echo "Error: Cannot write to $config.<BR />\n";
         exit;
     } ## if
+
+	if (file_exists(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+	{
+		if (!unlink(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+		{
+			echo "Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.";
+		}
+	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
     echo "<H4>Congratulations, you are all setup.</H4><H4>Here is your <A HREF=\"".$link."\">CMS site</A></H4>\n";

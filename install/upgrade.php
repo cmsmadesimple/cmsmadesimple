@@ -175,6 +175,14 @@ else
 
 		module_autoupgrade();
 
+		if (file_exists(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+		{
+			if (!unlink(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+			{
+				echo "<p class=\"error\">Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.</p>";
+			}
+		}
+
 		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 		echo "<p>CMS is up to date.  Please click <a href=\"../index.php\">here</a> to go to your CMS site.</p>";
 

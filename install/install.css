@@ -59,6 +59,10 @@ h3 {
 	font-size : 10pt;
 }
 
+.error {
+	text-color: red;
+}
+
 .tbhead {
 BORDER-RIGHT: #8c8a8c 1px solid; BORDER-TOP: #8c8a8c 1px solid; FONT-WEIGHT: bold; BACKGROUND: #EA8618; MARGIN-BOTTOM: 15px; BORDER-LEFT: #8c8a8c 1px solid; WIDTH: 100%; COLOR: #fff; BORDER-BOTTOM: #8c8a8c 1px solid; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; border-spacing: 0px }
 
