@@ -781,6 +781,27 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Returns the xhtml equivalent of a checkbox.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the hidden field 
+	 * @param string The predefined value of the field, if any
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateInputCheckbox($id, $name, $value='', $addttext='')
+	{
+		$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
+		if ($addttext != '')
+		{
+			$text .= ' '.$addttext;
+		}
+		$text .= " />\n";
+		return $text;
+	}
+
+	
+	/**
 	 * Returns the xhtml equivalent of a submit button.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
@@ -834,6 +855,34 @@ class CMSModule extends ModuleOperations
 		}
 		$text .= '</select>'."\n";
 
+		return $text;
+	}
+
+	/**
+	 * Returns the xhtml equivalent of a set of radio buttons.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it is xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the dropdown list
+	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
+	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
+	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='')
+	{
+		$text = '';
+		foreach ($items as $key=>$value)
+		{
+			$text .= '<input type="radio" name="'.$id.$name.'" value="'.$value.'"';
+			if ($selectedvalue == $value)
+			{
+				$text .= ' ' . 'checked="checked"';
+			}
+			$text .= ' />';
+			$text .= $key;
+		}
+		
 		return $text;
 	}
 
