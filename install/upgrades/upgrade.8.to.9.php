@@ -120,6 +120,9 @@ if ($result && $result->RowCount() > 0)
 	}
 
 	#Fix parent ids
+	$query = "UPDATE ".cms_db_prefix()."content SET parent_id = -1 WHERE parent_id = 0";
+	$result = $db->Execute($query);
+
 	$query = "SELECT content_id, parent_id from ".cms_db_prefix()."content";
 	$result = $db->Execute($query);
 
@@ -127,7 +130,7 @@ if ($result && $result->RowCount() > 0)
 	{
 		while ($row = $result->FetchRow())
 		{
-			if (isset($row['parent_id']) && $row['parent_id'] > 0)
+			if (isset($row['parent_id']) && $row['parent_id'] > -1)
 			{
 				$newquery = "UPDATE ".cms_db_prefix()."content SET parent_id = ? WHERE content_id = ?";
 				$db->Execute($newquery, array(
@@ -138,10 +141,10 @@ if ($result && $result->RowCount() > 0)
 		}
 	}
 
-	$query = "UPDATE ".cms_db_prefix()."content SET parent_id = -1 wHERE parent_id IS NULL";
+	$query = "UPDATE ".cms_db_prefix()."content SET parent_id = -1 WHERE parent_id IS NULL";
 	$result = $db->Execute($query);
 
-	$query = "UPDATE ".cms_db_prefix()."content SET content_alias = '' wHERE content_alias IS NULL";
+	$query = "UPDATE ".cms_db_prefix()."content SET content_alias = '' WHERE content_alias IS NULL";
 	$result = $db->Execute($query);
 }
 
