@@ -85,7 +85,7 @@ if (!isset($charsetsent))
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
 		HTMLArea.loadPlugin("FindReplace");
-		HTMLArea.loadPlugin("InvertBackground");
+		//HTMLArea.loadPlugin("InvertBackground");
 		<?php if ($config["use_Indite"] == true) ?>	
 			HTMLArea.loadPlugin("Indite");	
 		var editor = null;
@@ -101,7 +101,7 @@ if (!isset($charsetsent))
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
 			editor.registerPlugin(FindReplace);
-			editor.registerPlugin(InvertBackground);
+			//editor.registerPlugin(InvertBackground);
 
 			<?php if ($config["use_Indite"] == true)
 				echo "editor.registerPlugin(Indite);";
