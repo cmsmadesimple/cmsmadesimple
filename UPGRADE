@@ -18,4 +18,4 @@ OR
 6.  Point your browser to the upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.
 
 7.  After the upgrade is complete, for security sake, you should set your config.php back to a read-only state.
-        - chmod 644 config.php
+        - chmod 444 config.php
