@@ -47,7 +47,9 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		echo "<rss version='2.0'>\n";
 		echo "	<channel>\n";
 		echo "	<title>".$cms->config["linkblog_rss_title"]."</title>\n";
-		echo "	<link>".$cms->config["linkblog_url"]."</link>\n";
+		echo "	<link>";
+		echo cms_htmlentities($cms->config["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+		echo "</link>\n";
 		echo "	<description>Current linkblog entries</description>\n";
 	} else if ($allow_search != '') {
 		echo cms_mapi_create_user_form_start("LinkBlog", $id, $return_id);
@@ -99,12 +101,13 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
         $last_date = "";
         while ($row = $dbresult->FetchRow()) {
 
-            #echo "last_date: ($last_date) create_date: ".$row["create_date"].")<br/>";
             if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
 				if ($params[$id.'type'] == "rss") {
 					echo "	<item>\n";
 					echo "		<title>".$row["linkblog_title"]."</title>\n";
-					echo "		<link>".$row["linkblog_url"]."</link>\n";
+					echo "		<link>";
+					echo cms_htmlentities($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
+					echo "</link>\n";
 					## this is just redundant echo "		<description>".$row["linkblog_title"]."</description>\n";
 					## needs to be an email address echo "		<author>".$row["linkblog_author"]."</author>\n";
 					echo "		<pubDate>".date("D, j M Y h:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
