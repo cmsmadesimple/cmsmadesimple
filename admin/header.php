@@ -30,7 +30,8 @@ header("Content-Type: text/html; charset=" . get_encoding());
 <link rel="stylesheet" type="text/css" href="style.css">
 <script type="text/javascript" language="javascript" src="helparea.js"></script>
 
-<script type="text/javascript" language="Javascript"><!-- 
+<!--
+<script type="text/javascript" language="Javascript">
 	function silent_error(){
 		return true;
 	}
@@ -82,7 +83,8 @@ header("Content-Type: text/html; charset=" . get_encoding());
 		}
 	}
 
-// --></script>
+</script>
+-->
 
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<script type="text/javascript">
