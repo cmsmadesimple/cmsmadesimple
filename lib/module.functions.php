@@ -113,6 +113,8 @@ function cms_mapi_register_plugin_module($name) {
  * basics of what the module if for and how to use it.  This
  * will be displayed on the module list in the admin.
  *
+ * Passes $gCms as a parameter to the function.
+ *
  * @since 0.5
  */
 function cms_mapi_register_help_function($name, $function) {
@@ -147,6 +149,8 @@ function cms_mapi_register_about_function($name, $function) {
  * The registered function should setup any necessary tables,
  * sequences, etc.
  *
+ * Passes $gCms as a parameter.
+ *
  * @since 0.4
  */
 function cms_mapi_register_install_function($name, $function) {
@@ -160,7 +164,9 @@ function cms_mapi_register_install_function($name, $function) {
 /**
  * Registers the module's upgrade function
  *
- * The registered should do any necessary upgrade procedures.
+ * The registered function should do any necessary upgrade procedures.
+ *
+ * Passes $gCms, the old version and the new version as parameters.
  *
  * @since 0.5
  */
@@ -182,6 +188,8 @@ function cms_mapi_register_upgrade_function($name, $function, $autoupgrade = fal
  * The registered function should clean up anything that was setup
  * in the install function.  This includes any tables, sequences, etc.
  *
+ * Passes $gCms as a parameter.
+ *
  * @since 0.4
  */
 function cms_mapi_register_uninstall_function($name, $function) {
@@ -198,6 +206,9 @@ function cms_mapi_register_uninstall_function($name, $function) {
  * The registered function is what is shown if either the
  * it is included as a content module or if has been used as a
  * plugin.
+ *
+ * Passes $gCms, the masking id and the extra passed parameters
+ * to the function.
  *
  * @since 0.4
  */
@@ -216,6 +227,9 @@ function cms_mapi_register_execute_function($name, $function) {
  * needs a page that is not really a content page.  i.e. a full
  * page form for input.
  *
+ * Passes $gCms, the masking id, the calling page id and the extra
+ * passed parameters to the function.
+ *
  * @since 0.4
  */
 function cms_mapi_register_executeuser_function($name, $function) {
@@ -230,6 +244,8 @@ function cms_mapi_register_executeuser_function($name, $function) {
  * Register's the modules' executeadmin function
  *
  * This is the function that is called from the admin section.
+ *
+ * Passes $gCms and the masking id as parameters to the function.
  *
  * @since 0.4
  */
@@ -260,6 +276,7 @@ function cms_mapi_unregister_module($name) {
 
 /**
  * Registers a function to be called after a successful login.
+ *
  * Passes $gCms and a user object to the function.
  *
  * @since 0.7.3
@@ -276,6 +293,7 @@ function cms_mapi_register_login_post_function($name, $function)
 
 /**
  * Registers a function to be called after a successful logout.
+ *
  * Passes $gCms to the function.
  *
  * @since 0.7.3
@@ -296,6 +314,7 @@ function cms_mapi_register_logout_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful user addition.
+ *
  * Passes $gCms and a user object to the function.
  *
  * @since 0.7.3
@@ -312,6 +331,7 @@ function cms_mapi_register_adduser_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful user addition.
+ *
  * Passes $gCms and a user object to the function.
  *
  * @since 0.7.3
@@ -328,6 +348,7 @@ function cms_mapi_register_adduser_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful user edit.
+ *
  * Passes $gCms and a user object to the function.
  *
  * @since 0.7.3
@@ -344,6 +365,7 @@ function cms_mapi_register_edituser_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful user edit.
+ *
  * Passes $gCms and a user object to the function.
  *
  * @since 0.7.3
@@ -358,13 +380,13 @@ function cms_mapi_register_edituser_post_function($name, $function)
 	}
 }
 
-
 /**********************************************************
 *Add/Edit Group Callbacks
 **********************************************************/
 
 /**
  * Registers a function to be called before a successful group addition.
+ *
  * Passes $gCms and a group object to the function.
  *
  * @since 0.7.3
@@ -381,6 +403,7 @@ function cms_mapi_register_addgroup_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful group addition.
+ *
  * Passes $gCms and a group object to the function.
  *
  * @since 0.7.3
@@ -397,6 +420,7 @@ function cms_mapi_register_addgroup_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful group edit.
+ *
  * Passes $gCms and a group object to the function.
  *
  * @since 0.7.3
@@ -413,6 +437,7 @@ function cms_mapi_register_editgroup_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful group edit.
+ *
  * Passes $gCms and a group object to the function.
  *
  * @since 0.7.3
@@ -433,6 +458,7 @@ function cms_mapi_register_editgroup_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful htmlblob addition.
+ *
  * Passes $gCms and a htmlblob object to the function.
  *
  * @since 0.7.3
@@ -449,6 +475,7 @@ function cms_mapi_register_addhtmlblob_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful htmlblob addition.
+ *
  * Passes $gCms and a htmlblob object to the function.
  *
  * @since 0.7.3
@@ -465,6 +492,7 @@ function cms_mapi_register_addhtmlblob_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful htmlblob edit.
+ *
  * Passes $gCms and a htmlblob object to the function.
  *
  * @since 0.7.3
@@ -481,6 +509,7 @@ function cms_mapi_register_edithtmlblob_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful htmlblob edit.
+ *
  * Passes $gCms and a htmlblob object to the function.
  *
  * @since 0.7.3
@@ -501,6 +530,7 @@ function cms_mapi_register_edithtmlblob_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful template addition.
+ *
  * Passes $gCms and a template object to the function.
  *
  * @since 0.7.3
@@ -517,6 +547,7 @@ function cms_mapi_register_addtemplate_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful template addition.
+ *
  * Passes $gCms and a template object to the function.
  *
  * @since 0.7.3
@@ -533,6 +564,7 @@ function cms_mapi_register_addtemplate_post_function($name, $function)
 
 /**
  * Registers a function to be called before a successful template edit.
+ *
  * Passes $gCms and a template object to the function.
  *
  * @since 0.7.3
@@ -549,6 +581,7 @@ function cms_mapi_register_edittemplate_pre_function($name, $function)
 
 /**
  * Registers a function to be called after a successful template edit.
+ *
  * Passes $gCms and a template object to the function.
  *
  * @since 0.7.3

@@ -73,7 +73,12 @@ if (!isset($charsetsent))
 
 	<SCRIPT TYPE="text/javascript">
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
-		<?php echo "_editor_lang = \"{$nls['htmlarea'][$current_language]}\";"  ?>
+		<?php
+			if ($config["disable_htmlarea_translation"] != true)
+			{
+				echo "_editor_lang = \"{$nls['htmlarea'][$current_language]}\";";
+			}
+		?>
 	</SCRIPT>
 
 	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
@@ -86,15 +91,26 @@ if (!isset($charsetsent))
 		HTMLArea.loadPlugin("CharacterMap");
 		HTMLArea.loadPlugin("FindReplace");
 		HTMLArea.loadPlugin("InvertBackground");
-		<?php if ($config["use_Indite"] == true) ?>	
+		<?php if ($config["use_Indite"] == true) { ?>	
 			HTMLArea.loadPlugin("Indite");	
+		<?php } ?>
 		var editor = null;
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(ImageManager);
 			<?php 
 				// Ugly Hack alert! making setting session var to send language setting to insertFile
-				$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];
+				if ($config["disable_htmlarea_translation"] != true)
+				{
+					$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];
+				}
+				else
+				{
+					if (isset($_SESSION['InsertFileLang']))
+					{
+						unset($_SESSION['InsertFileLang']);
+					}
+				}
 		 	?>
 			editor.registerPlugin(InsertFile);
 			editor.registerPlugin(TableOperations);

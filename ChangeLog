@@ -3,6 +3,8 @@ Version 0.7.3 -- Subversion
 
 * Added Italian translation (emaunelez)
 * Added more callback functions to module API
+* Added config.php option to disable sending translations to htmlarea
+(#000049)
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
 * Fixed displaying html_blobs in modules with executeuser
