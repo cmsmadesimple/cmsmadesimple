@@ -141,10 +141,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		modified_date T
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix()."module_news", $flds, $taboptarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence(cms_db_prefix()."module_news_seq");
+	$db->CreateSequence($db_prefix."module_news_seq");
 
 	echo "[done]</p>";
 
