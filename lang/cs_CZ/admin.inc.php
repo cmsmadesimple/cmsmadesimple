@@ -193,11 +193,11 @@ $lang['admin']['newtemplatename'] = 'Nové jméno ¹ablony';
 $lang['admin']['editcontent'] = 'Upravit obsah';
 $lang['admin']['filecreatedirnoname'] = 'Nelze vytvoøit adresáø bez jména.';
 $lang['admin']['adminsystemtitle'] = 'Administrace CMS systému';
-$lang['admin']['nodefault'] = 'Výchozí nevybrán'; //needs translation
+$lang['admin']['nodefault'] = 'Výchozí není vybrán'; //needs translation
 $lang['admin']['confirmdeletedir'] = 'Opravdu chcete smazat tento adresáø a ve¹kerý jeho obsah?';
 $lang['admin']['edithtmlblob'] = 'Upravit html blok'; //needs translation
 $lang['admin']['install'] = 'Instalovat';
-$lang['admin']['norealfile'] = 'Nezadán reální soubor';
+$lang['admin']['norealfile'] = 'Nebyl zadán reálný soubor';
 $lang['admin']['databasetype'] = 'Typ databáze';
 $lang['admin']['useadvancedcss'] = 'Pou¾ít roz¹íøenou správu CSS';
 $lang['admin']['type'] = 'Typ';
@@ -210,6 +210,6 @@ $lang['admin']['errorinsertingtemplate'] = 'Chyba vlo¾ení ¹ablony';
 $lang['admin']['filemanager'] = 'Správce souborù';
 $lang['admin']['currentcss'] = 'Souèasný CSS';
 $lang['admin']['encoding'] = 'Kódování'; //needs translation
-$lang['admin']['nosyntax'] = 'Promiòte, ale zvýrazòování syntaxe není ve Va¹em prohlí¾eèi podporováno.'; //needs translation
+$lang['admin']['nosyntax'] = 'Zvýrazòování syntaxe není ve Va¹em prohlí¾eèi podporováno.'; //needs translation
 $lang['admin']['slogan'] = 'Tak <span style="color: #FE0404">jednoduché</span>, jako u¾ívat si <span style="color: #FE0404">prázdnin</span>'; //needs translation
 ?>
