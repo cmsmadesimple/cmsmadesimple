@@ -438,7 +438,7 @@ function showLinks($cms, $id, $params) {
         }
 
         // show a list of the last 5 days with links
-        $query = "SELECT create_date from ".cms_db_prefix()."module_linkblog ORDER BY create_date DESC LIMIT 5";
+        $query = "SELECT create_date from ".cms_db_prefix()."module_linkblog GROUP BY DATE_FORMAT(create_date, '%d %m %Y') ORDER BY create_date DESC LIMIT 5";
         $dbresult = $db->Execute($query);
 
         if ($dbresult && $dbresult->RowCount()) {
