@@ -175,8 +175,7 @@ class UserOperations
 
 		$result = array();
 
-		#$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY user_id";
-		$query = "SELECT user_id, username, password, active FROM ".cms_db_prefix()."users ORDER BY user_id";
+		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY user_id";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -186,12 +185,12 @@ class UserOperations
 				$oneuser = new User();
 				$oneuser->id = $row['user_id'];
 				$oneuser->username = $row['username'];
-				#$oneuser->firstname = $row['first_name'];
-				#$oneuser->lastname = $row['last_name'];
-				#$oneuser->email = $row['email'];
+				$oneuser->firstname = $row['first_name'];
+				$oneuser->lastname = $row['last_name'];
+				$oneuser->email = $row['email'];
 				$oneuser->password = $row['password'];
 				$oneuser->active = $row['active'];
-				#$oneuser->adminaccess = $row['admin_access'];
+				$oneuser->adminaccess = $row['admin_access'];
 				array_push($result, $oneuser);
 			}
 		}
@@ -233,10 +232,10 @@ class UserOperations
 			$query .= " AND active = 1";
 		}
 
-		#if ($adminaccessonly == true)
-		#{
-		#	$query .= " AND admin_access = 1";
-		#}
+		if ($adminaccessonly == true)
+		{
+			$query .= " AND admin_access = 1";
+		}
 
 		$dbresult = $db->Execute($query, $params);
 
@@ -265,8 +264,7 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		#$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
-		$query = "SELECT username, password, active FROM ".cms_db_prefix()."users WHERE user_id = ?";
+		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -277,10 +275,10 @@ class UserOperations
 				$oneuser->id = $id;
 				$oneuser->username = $row['username'];
 				$oneuser->password = $row['password'];
-				#$oneuser->firstname = $row['first_name'];
-				#$oneuser->lastname = $row['last_name'];
-				#$oneuser->email = $row['email'];
-				#$oneuser->adminaccess = $row['admin_access'];
+				$oneuser->firstname = $row['first_name'];
+				$oneuser->lastname = $row['last_name'];
+				$oneuser->email = $row['email'];
+				$oneuser->adminaccess = $row['admin_access'];
 				$oneuser->active = $row['active'];
 				$result = $oneuser;
 			}
@@ -305,10 +303,8 @@ class UserOperations
 		$db = &$gCms->db;
 
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
-		#$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
-		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES (?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
+		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		if ($dbresult !== false)
 		{
 			$result = $new_user_id;
@@ -332,8 +328,8 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ? WHERE user_id = ?";
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->id));
+		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ?, first_name, last_name, email, admin_aceess WHERE user_id = ?";
+		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->id, $user->firstname, $user->lastname, $user->email, $user->adminaccess));
 		if ($dbresult !== false)
 		{
 			$result = true;

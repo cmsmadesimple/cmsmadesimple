@@ -156,6 +156,7 @@ if ($access) {
 						$db->Execute($query);
 					}
 				}
+				set_all_pages_hierarchy_position();
 				audit($new_page_id, $title, 'Added Content');
 				redirect("listcontent.php");
 				return;

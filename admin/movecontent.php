@@ -63,6 +63,7 @@ if (isset($_GET["page_id"])) {
 			#echo $query;
 			$db->Execute($query);
 		}
+		set_all_pages_hierarchy_position();
 	}
 }
 

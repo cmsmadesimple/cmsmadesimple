@@ -16,6 +16,16 @@ $db->Execute("UPDATE ".cms_db_prefix()."users SET admin_access = 1");
 
 echo "[done]</p>";
 
+echo "<p>Adding hierarchy position to pages table...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."pages", "hierarchy_position C(255)");
+$dbdict->ExecuteSQLArray($sqlarray);
+
+set_all_pages_hierarchy_position();
+
+echo "[done]</p>";
+
 echo "<p>Clearing cache and template directories... ";
 
 function clear_dir_6($dir){

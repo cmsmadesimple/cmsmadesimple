@@ -218,11 +218,11 @@ class Smarty_CMS extends Smarty {
 		{
 			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
 			{ 
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 			}
 			else
 			{
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
+				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
 			}
 			$result = $db->Execute($query);
 
@@ -231,6 +231,7 @@ class Smarty_CMS extends Smarty {
 
 				#This way the id is right, even if an alias is given
 				$gCms->variables['page'] = $line['page_id'];
+				$gCms->variables['position'] = $line['hierarchy_position'];
 
 				$page_date = $db->UnixTimeStamp($line["page_date"]);
 				$template_date = $db->UnixTimeStamp($line["template_date"]);
@@ -615,6 +616,63 @@ function get_page_types() {
 
 	return $result;
 
+}
+
+/**
+ * Updates the page's hierarchy position
+ *
+ * @since 0.7
+ */
+function set_page_hierarchy_position($pageid) {
+
+	global $gCms;
+	$db = $gCms->db;
+
+	$current_hierarchy_position = "";
+	$current_parent_id = $pageid;
+	$count = 0;
+
+	while ($current_parent_id > 0)
+	{
+		$query = "SELECT item_order, parent_id FROM ".cms_db_prefix()."pages WHERE page_id = ?";
+		$dbresult = $db->Execute($query, array($current_parent_id));
+		if ($dbresult && $dbresult->RowCount())
+		{
+			$row = $dbresult->FetchRow();
+			$current_hierarchy_position	= $row['item_order'] . "." . $current_hierarchy_position;
+			$current_parent_id = $row['parent_id'];
+			$count++;
+		}
+		else
+		{
+			$current_parent_id = 0;
+		}
+	}
+
+	if (strlen($current_hierarchy_position) > 0)
+	{
+		$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
+	}
+
+	$query = "UPDATE ".cms_db_prefix()."pages SET hierarchy_position = ? WHERE page_id = ?";
+	$db->Execute($query, array($current_hierarchy_position, $pageid));
+}
+
+function set_all_pages_hierarchy_position()
+{
+	global $gCms;
+	$db = $gCms->db;
+
+	$query = "SELECT page_id FROM ".cms_db_prefix()."pages";
+	$dbresult = $db->Execute($query);
+
+	if ($dbresult && $dbresult->RowCount() > 0)
+	{
+		while ($row = $dbresult->FetchRow())
+		{
+			set_page_hierarchy_position($row['page_id']);
+		}
+	}
 }
 
 # vim:ts=4 sw=4 noet

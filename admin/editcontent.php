@@ -189,6 +189,7 @@ if ($access) {
 						}
 					}
 				}
+				set_all_pages_hierarchy_position();
 				audit($page_id, $title, 'Edited Content');
 				redirect("listcontent.php");
 				return;
