@@ -1,10 +1,10 @@
 Version 0.3 -- Subversion
 -----------------
 
-* Added PEAR.php to the lib directory for hosts that may not it (Fixes #13)
+* Added PEAR.php to the lib directory for hosts that may not have it (Fixes #13)
 * Added section reordering (Fixes #4)
 * Added index to tables to make querying faster on the frontend (Fixes #1)
-* Added password hashing for insecure hosts.  (Fixes #11)
+* Added password hashing for insecure hosts  (Fixes #11)
 * Added content types to content creation and editing (Fixes #5)
 * Added the link content type
 * Added proper 404 error for pages that are not found or active (Fixes #18)
