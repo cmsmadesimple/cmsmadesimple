@@ -18,9 +18,9 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.9.2";
-$CMS_VERSION_NAME = "Hatutu";
-$CMS_SCHEMA_VERSION = "9";
+$CMS_VERSION = "0.10-svn";
+$CMS_VERSION_NAME = "Antigua";
+$CMS_SCHEMA_VERSION = "10";
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -39,6 +39,9 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 		$this->cms = &$gCms;
+
+		$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
+		$this->smarty = &$smarty;
 	}
 
 	/**
@@ -119,6 +122,36 @@ class CMSModule extends ModuleOperations
 	function GetAuthorEmail()
 	{
 		return '';
+	}
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Reference functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	/**
+	 * Returns the cms->config object as a reference
+	 */
+	function & GetConfig()
+	{
+		return $this->cms->config;
+	}
+
+	/**
+	 * Returns the cms->db object as a reference
+	 */
+	function & GetDb()
+	{
+		return $this->cms->db;
+	}
+
+	/**
+	 * Returns the cms->variables as a reference
+	 */
+	function & GetVariables()
+	{
+		return $this->cms->variables;
 	}
 
 	/**
@@ -1072,6 +1105,93 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * ------------------------------------------------------------------
+	 * Template/Smarty Functions
+	 * ------------------------------------------------------------------
+	 */
+
+	function ListTemplates()
+	{
+		global $gCms;
+
+		$db = $gCms->db;
+		$config = $gCms->config;
+
+		$retresult = array();
+
+		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ?";
+		$result = $db->Execute($query, array($this->GetName()));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			array_push($retresult, $result['template_name']);
+		}
+
+		return $retresult;
+	}
+	
+	/**
+	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
+	 * follow any smarty caching rules.
+	 */
+	function GetTemplate($tpl_name)
+	{
+		global $gCms;
+
+		$db = $gCms->db;
+		$config = $gCms->config;
+
+		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			return $result['content'];
+		}
+
+		return "";
+	}
+
+	function SetTemplate($tpl_name, $content)
+	{
+		$db = $this->cms->db;
+
+		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?'; 
+		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+
+		if ($result && $result->RowCount() < 1)
+		{
+			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,?,?)';
+			$db->Execute($query, array($this->GetName(), $tpl_name, $content, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		}
+		else
+		{
+			$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = ? WHERE module_name = ? AND template_name = ?';
+			$db->Execute($query, array($content, $db->DBTimeStamp(time()), $this->GetName(), $tpl_name));
+		}
+	}
+
+	function DeleteTemplate($tpl_name)
+	{
+		$db = $this->cms->db;
+
+		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?"; 
+		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+	}
+
+	function ProcessTemplate($tpl_name)
+	{
+		$smarty = &$this->smarty;
+		return $smarty->fetch($tpl_name);
+	}
+
+	function ProcessTemplateFromDatabase($tpl_name)
+	{
+		$smarty = &$this->smarty;
+		return $smarty->fetch('template:'.$tpl_name);
+	}
+
+	/**
+	 * ------------------------------------------------------------------
 	 * Other Functions
 	 * ------------------------------------------------------------------
 	 */
@@ -1251,7 +1371,7 @@ class CMSModule extends ModuleOperations
  * @since		0.9
  * @package		CMS
  */
-class ModuleOperations
+class ModuleOperations extends Smarty
 {
 	/**
 	 * Loads modules from the filesystem.  If loadall is true, then it will load all
@@ -1428,6 +1548,104 @@ class ModuleOperations
  */
 class CMSModuleContentType extends ContentBase
 {
+}
+
+/**
+ * Extended smarty class for handling database bound .tpl files.
+ *
+ * @since		0.9
+ * @package		CMS
+ */
+class CMSModuleSmarty extends Smarty
+{
+	var $modulename;
+
+	function CMSModuleSmarty(&$config, $modulename)
+	{
+		$this->Smarty();
+
+		$dir = dirname(dirname(dirname(__FILE__)))."/modules";
+
+		$ls = dir($dir);
+		while (($file = $ls->read()) != "")
+		{
+			if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+			{
+				if (strtolower($file) == strtolower($modulename))
+				{
+					$dirname = $dir.'/'.$file.'/templates/';
+					$this->template_dir = $dirname;
+					break;
+				}
+			}
+		}
+
+		#$this->template_dir = $config["root_path"].'/tmp/templates/';
+		$this->compile_dir = $config["root_path"].'/tmp/templates_c/';
+		$this->config_dir = $config["root_path"].'/tmp/configs/';
+		$this->cache_dir = $config["root_path"].'/tmp/cache/';
+
+		$this->caching = false;
+		$this->compile_check = true;
+		$this->debugging = false;
+
+		$this->modulename = $modulename;
+
+		$this->register_resource("template", array(&$this, "db_get_template",
+						       "db_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+	}
+
+	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		global $gCms;
+
+		$db = $gCms->db;
+		$config = $gCms->config;
+
+		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$result = $db->Execute($query, array($this->modulename, $tpl_name));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$line = $result->FetchRow();
+			$tpl_source = $line['content'];
+			return true;
+		}
+
+		return false;
+	}
+
+	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		global $gCms;
+
+		$db = $gCms->db;
+		$config = $gCms->config;
+
+		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$result = $db->Execute($query, array($this->modulename, $tpl_name));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$line = $result->FetchRow();
+			$tpl_timestamp = $db->UnixTimeStamp($line['modified_date']);
+			return true;
+		}
+
+		return false;
+	}
+
+	function db_get_secure($tpl_name, &$smarty_obj)
+	{
+		return true;
+	}
+
+	function db_get_trusted($tpl_name, &$smarty_obj)
+	{
+		//not used for templates
+	}
 }
 
 # vim:ts=4 sw=4 noet
