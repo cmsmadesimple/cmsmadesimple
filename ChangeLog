@@ -1,12 +1,15 @@
 Version 0.7 -- Subversion
 -----------------
 
+* Added HTML blobs for easy administration of small chunks of html (#3)
 * Added horizontal option to dhtmlmenu (leen)
-* Added new admin style (thijs)
+* Added new admin style
 * Added language as a user perference and also moved it to the login page
 * Added java based syntax highlighting as a user preference
 * Added support for mysql 4.1+ using the mysqli adodb driver
 * Added cancel link to login page that redirects back to site (#6)
+* Added auto_upgrade functionality to modules (#4)
+* Added more intelligent handling of file types to file management
 * Fixed News module so that post date shows on newly created items (#5)
 * Fixed bug with start and end dates when adding new News item (BamaRob)
 * Fixed missing template option for News module (trac #67)
