@@ -42,7 +42,7 @@ if (isset($_POST["edituserprefs"])) {
 	audit(-1, '', 'Edited User Preferences');
 	redirect("index.php");
 	return;
-} else if (!isset($_POST["submit"])) {
+} else if (!isset($_POST["submit_form"])) {
 	$use_wysiwyg = get_preference($userid, 'use_wysiwyg');
 	$use_javasyntax = get_preference($userid, 'use_javasyntax');
 }
@@ -111,7 +111,7 @@ if ($error != "") {
 	</TR>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true">
-		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
 
