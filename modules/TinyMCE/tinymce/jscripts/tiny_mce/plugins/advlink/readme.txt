@@ -8,12 +8,12 @@ About:
 Installation instructions:
   * Copy the advlink directory to the plugins directory of TinyMCE (/jscripts/tiny_mce/plugins).
   * Add plugin to TinyMCE plugin option list example: plugins : "advlink".
-  * Add this "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout]" to extended_valid_elements option.
+  * Add this "a[name|href|target|title|onclick]" to extended_valid_elements option.
 
 Initialization example:
   tinyMCE.init({
     theme : "advanced",
     mode : "textareas",
     plugins : "advlink",
-    extended_valid_elements : "img[class|src|border=0|alt|title|hspace|vspace|width|height|align|onmouseover|onmouseout]"
+    extended_valid_elements : "a[name|href|target|title|onclick]"
   });

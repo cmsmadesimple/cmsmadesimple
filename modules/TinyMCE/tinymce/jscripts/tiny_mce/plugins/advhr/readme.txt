@@ -1,4 +1,4 @@
- Advlink plugin for TinyMCE
+ Advhr plugin for TinyMCE
 -----------------------------
 
 About:
@@ -6,8 +6,8 @@ About:
   This one supports noshade, width and size.
 
 Installation instructions:
-  * Copy the advlink directory to the plugins directory of TinyMCE (/jscripts/tiny_mce/plugins).
-  * Add plugin to TinyMCE plugin option list example: plugins : "advlink".
+  * Copy the advhr directory to the plugins directory of TinyMCE (/jscripts/tiny_mce/plugins).
+  * Add plugin to TinyMCE plugin option list example: plugins : "advhr".
   * Add this "hr[class|width|size|noshade]" to extended_valid_elements option.
 
 Initialization example:

@@ -154,11 +154,11 @@ class TinyMCE extends CMSModule
 				theme : "advanced",
 				theme_advanced_toolbar_location: "top",
 				verify_html: "false",
-				plugins : "advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,ibrowser",
+				plugins : "table,advhr,advimage,advlink,emotions,iespell,insertdatetime,preview,zoom,flash,ibrowser",
 				theme_advanced_buttons1_add : "fontselect,fontsizeselect,forecolor",
 				theme_advanced_buttons2_add_before: "cut,copy,paste,separator",
 				theme_advanced_buttons2_add : "separator,insertdate,inserttime,preview,zoom",
-				theme_advanced_buttons3_add : "emotions,iespell,flash,advhr,ibrowser",
+				theme_advanced_buttons3_add : "tablecontrols,emotions,iespell,flash,advhr,ibrowser",
 				document_base_url : "<?php echo $gCms->config['root_url']?>/",
 				relative_urls : "false",
 				plugin_insertdate_dateFormat : "%Y-%m-%d",
@@ -217,6 +217,7 @@ class TinyMCE extends CMSModule
 		<p>Author: Simon Brown &lt;simon@uptoeleven.ws&gt;</p>
 		<p>Version: 1.1</p>
 		<p>Converted for use with new CMS Module architecture.</p>
+		<p>Upgraded TinyMCE to version 1.42.</p>
 		</li>
 		</ul>
 		<?php
