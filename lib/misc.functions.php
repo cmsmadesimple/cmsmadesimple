@@ -320,7 +320,7 @@ function get_request_value($value, $default_value = '', $session_key = '')
 	}
 	if(isset($_REQUEST[$value]))
 	{
-		$result = getValueWithDefault($_REQUEST[$value], $default_value);
+		$result = get_value_with_default($_REQUEST[$value], $default_value);
 	}
 	else
 	{
@@ -361,7 +361,7 @@ function get_value_with_default($value, $default_value = '')
 		$return_value = array();
 		foreach($value as $element)
 		{
-			$return_value[] = getValueWithDefault($element, $default_value);
+			$return_value[] = get_value_with_default($element, $default_value);
 		}
 	}
 	else
