@@ -110,15 +110,15 @@ if ($access)
 		$contentobj->mOwnerId = $userid;
 
 		#Fill Additional Editors (kind of kludgy)
-		$addtarray = array();
 		if (isset($_POST["additional_editors"]))
 		{
+			$addtarray = array();
 			foreach ($_POST["additional_editors"] as $addt_user_id)
 			{
 				array_push($addtarray, $addt_user_id);
 			}
+			$contentobj->SetAdditionalEditors($addtarray);
 		}
-		$contentobj->SetAdditionalEditors($addtarray);
 
 		$error = $contentobj->ValidateData();
 		if ($error === FALSE)
@@ -139,15 +139,15 @@ if ($access)
 		{
 			$error = $contentobj->ValidateData();
 		}
-		$addtarray = array();
 		if (isset($_POST["additional_editors"]))
 		{
+			$addtarray = array();
 			foreach ($_POST["additional_editors"] as $addt_user_id)
 			{
 				array_push($addtarray, $addt_user_id);
 			}
+			$contentobj->SetAdditionalEditors($addtarray);
 		}
-		$contentobj->SetAdditionalEditors($addtarray);
 	}
 	else
 	{

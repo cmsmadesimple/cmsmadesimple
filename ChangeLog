@@ -9,6 +9,9 @@ Version 0.8.2 "Taunoa" -- Subversion
 * Fixed stylesheet hook to actually send CSS
 * Fixed phplayers menu to put CSS in with template CSS so it's easily
 cascaded
+* Fixed initial database so first user created is not in the admin
+group
+* Fixed additional editors not always being saved properly (#000086)
 * Lots of other WYSIWYG related bugfixes
 
 Version 0.8.1 "Papeete" -- Sat Jan 01 2005 
