@@ -115,7 +115,7 @@ else {
 
 <form method="post" action="addhtmlblob.php">
 
-<div class="adminformSmall">
+<div class="adminform">
 
 <h3><?php echo lang('addhtmlblob')?></h3>
 
@@ -127,7 +127,7 @@ else {
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content") ?></td>
+		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content") ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>

@@ -168,7 +168,7 @@ else
 
 <form method="post" action="edithtmlblob.php">
 
-<div class="adminformSmall">
+<div class="adminform">
 
 <h3><?php echo lang('edithtmlblob')?></h3>
 
