@@ -19,6 +19,7 @@
 $DONT_LOAD_DB=1;
 require_once(dirname(dirname(__FILE__))."/include.php");
 
+
 //Do module autoupgrades 
 function module_autoupgrade()
 {
@@ -79,6 +80,17 @@ function module_autoupgrade()
 <div class="main">
 
 <?php
+
+if (!is_writable(dirname(__FILE__).'/tmp/templates_c') || !is_writable(dirname(__FILE__).'/tmp/cache'))
+{
+	echo '<p>The following directories must be writable by the web server:<br />';
+	echo 'tmp/cache<br />';
+	echo 'tmp/templates_c<br /></p>';
+	echo '<p>Please correct by executing:<br /><em>chmod 777 tmp/cache<br />chmod 777 tmp/templates_c</em><br />or the equivilent for your platform before continuing.</p>';
+	echo '</div></div>';
+	echo '</body></html>';
+	exit;
+}
 
 if (!isset($_GET["doupgrade"])) {
 	echo "<h3>Welcome to the CMS Upgrade System!</h3>";
