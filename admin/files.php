@@ -122,7 +122,7 @@ if (isset($_POST['newdirsubmit']))
 		}
 		else
 		{
-			mkdir($dir."/".$_POST['newdir']);
+			mkdir($dir."/".$_POST['newdir'], 0777);
 			audit(-1, $_POST['newdir'], 'Created Directory');
 		}
 	}
