@@ -101,7 +101,7 @@ class Smarty_CMS extends Smarty {
 				#If it's a module, do this instead...
 				if (isset($cmsmodules[$line["page_type"]])) {
 					@ob_start();
-					call_user_func_array(array(&$cmsmodules[$line["page_type"]]['execute_function']), array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
+					call_user_func_array($cmsmodules[$line["page_type"]]['execute_function'], array($modulecmsobj,"cmsmodule_".++$modulecmsobj->modulenum."_",$params));
 					$modoutput = @ob_get_contents();
 					@ob_end_clean();
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);

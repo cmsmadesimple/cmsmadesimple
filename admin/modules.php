@@ -35,7 +35,7 @@ if ($access) {
 	if ($action == "install") {
 		#run install on it (if there is one)
 		if (isset($cmsmodules[$module]['install_function'])) {
-			call_user_func_array(array(&$cmsmodules[$module]['install_function']), array($modulecmsobj));
+			call_user_func_array($cmsmodules[$module]['install_function'], array($modulecmsobj));
 		}
 
 		#now insert a record
@@ -46,7 +46,7 @@ if ($access) {
 	if ($action == "uninstall") {
 		#run uninstall on it (if there is one)
 		if (isset($cmsmodules[$module]['uninstall_function'])) {
-			call_user_func_array(array(&$cmsmodules[$module]['uninstall_function']), array($modulecmsobj));
+			call_user_func_array($cmsmodules[$module]['uninstall_function'], array($modulecmsobj));
 		}
 
 		#now delete the record
