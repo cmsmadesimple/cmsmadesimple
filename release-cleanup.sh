@@ -12,6 +12,7 @@ rm -fr autogen.sh
 rm -fr mpd.sql
 rm -fr mysql.sql
 rm -fr makedoc.sh
+rm -fr cleardb.sh
 rm -fr generatedump.php
 rm -fr images/cms/*.svg
 rm -fr tmp/cache/*
