@@ -512,6 +512,7 @@ function get_stylesheet($template_id)
 	}
 	else
 	{
+		$result['nostylesheet'] = true;
 		$result['encoding'] = get_encoding();
 	}
 

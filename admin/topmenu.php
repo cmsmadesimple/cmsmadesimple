@@ -38,5 +38,6 @@ if ($userPerms || $groupPerms || $groupPermPerms || $groupMemberPerms)
 <a href="topadmin.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==8)?' id="TopMenuSelected"':'') ?>>Site Admin</a>
 <a href="../index.php">View Site</a>
 <a href="logout.php">Logout</a>
+<a href="makebookmark.php">[+]</a>
 
 </div> <!-- end TopMenu -->

@@ -1101,9 +1101,7 @@ class CMSModule extends ModuleOperations
 		{
 			if ($content->GetUrl() != '')
 			{
-				
 				redirect($content->GetUrl());				
-				
 			}
 		}
 	}
