@@ -285,42 +285,46 @@ if ( $error != "" )
  
 <?php echo cms_mapi_create_admin_form_start("News", $id)?>
 <table width="100%" border="0">
-  <tr>
-    <td width="100">Category:</td>
-    <td>
-      <SELECT NAME="<?php echo $id?>selcat" SIZE="4">
         <?php
 	  $query = "SELECT news_cat FROM "
-	     .cms_db_prefix()."module_news GROUP BY news_cat";
+	     .cms_db_prefix()."module_news WHERE news_cat <> '' GROUP BY news_cat";
 	  $dbresult = $cms->db->Execute($query);
-          if( $dbresult && $dbresult->RowCount() )
+          if( $dbresult && $dbresult->RowCount() > 0)
           {
+	  ?>
+	  <tr>
+	    <td width="100">Category:</td>
+	    <td>
+	    <select name="<?php echo $id?>selcat" size="4">
+	    <?php
 	    while( $row = $dbresult->FetchRow() )
             {
 	       if( strlen( $row["news_cat"] ) > 0 ) 
                {
 	         if( $row["news_cat"] == $news_cat )
                  {
-                   echo "<OPTION SELECTED>".$row["news_cat"]."</OPTION>\n";
+                   echo "<option selected=\"selected\">".$row["news_cat"]."</option>\n";
                  }
                  else
                  {
-                   echo "<OPTION>".$row["news_cat"]."</OPTION>\n";
+                   echo "<option>".$row["news_cat"]."</option>\n";
                  }
                }
             }
+	    ?>
+	    </select>
+	    </td>
+	  </tr>
+	  <?php
           }
         ?>
-      </SELECT>
-    </td>
-  </tr>
   <tr>
      <td>New Category:</td>
-     <td><INPUT NAME="<?php echo $id?>addcat" SIZE="40" MAXLENGTH="255">
-  </td>
+     <td><input name="<?php echo $id?>addcat" size="40" maxlength="255" /></td>
+  </tr>
   <tr>
     <td width="60">Title:</td>
-    <td><input name="<?php echo $id?>newstitle" maxlength="255" value="<?php echo $title?>" class="standard"/></td>
+    <td><input name="<?php echo $id?>newstitle" maxlength="255" value="<?php echo $title?>" class="standard" /></td>
   </tr>
   <tr>
     <td>Content:</td>
@@ -330,19 +334,19 @@ $id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
   <?php //if ($moduleaction == "edit" || $moduleaction == "completeedit") { ?>
   <tr>
     <td>Post Date:</td>
-    <td><input type="text"  name="<?php echo $id?>post_date" maxlength="20" length="12" value="<?php echo $post_date?>" /></td>
+    <td><input type="text"  name="<?php echo $id?>post_date" maxlength="20" size="12" value="<?php echo $post_date?>" /></td>
   </tr>
   <?php //} ?>
   <tr>
     <td>Start Date:</td>
-    <td><input type="text"  name="<?php echo $id?>start_date" maxlength="20" length="12" value="<?php echo $start_date?>" /></td>
+    <td><input type="text"  name="<?php echo $id?>start_date" maxlength="20" size="12" value="<?php echo $start_date?>" /></td>
   </tr>
   <tr>
     <td>Expiry:</td>
     <td>
 <?php
    if( $moduleaction == "edit" || $moduleaction == "completeedit" ) {
-      echo "<select name=\"".$id."expiry\" disabled>";
+      echo "<select name=\"".$id."expiry\" disabled=\"disabled\">";
    }
    else {
       echo "<select name=\"".$id."expiry\">";
@@ -353,7 +357,7 @@ $id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
          <option>2 Weeks</option>
          <option>1 Month</option>
          <option>3 Months</option>
-         <option selected>6 Months</option>
+         <option selected="selected">6 Months</option>
          <option>1 Year</option>
          <option>Never</option>
        </select>
@@ -361,7 +365,7 @@ $id?>newscontent" cols="80" rows="12"><?php echo $data?></textarea></td>
   </tr>
   <tr>
     <td>End Date:</td>
-    <td><input type="text"  name="<?php echo $id?>end_date" maxlength="20" length="12" value="<?php echo $end_date?>" /></td>
+    <td><input type="text"  name="<?php echo $id?>end_date" maxlength="20" size="12" value="<?php echo $end_date?>" /></td>
   </tr>
   <tr>
     <td>&nbsp;</td>

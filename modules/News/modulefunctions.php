@@ -236,7 +236,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 						{
 							$moretext = $params['moretext'];
 						}
-						echo "<br><a href=\"index.php?page=".$params["summary"]."#".$row["news_id"]."\">$moretext</a>";
+						echo "<br /><a href=\"index.php?page=".$params["summary"]."#".$row["news_id"]."\">$moretext</a>";
 					}
 				}
 				else
@@ -340,15 +340,15 @@ function news_module_executeadmin($cms,$id)
 	if ($dbresult && $dbresult->RowCount())
 	{
 		echo cms_mapi_create_admin_form_start("News", $id);
-		echo "<TABLE><TR>";
-		echo "<TD><H5>Filter:</H5></TD>";
-		echo "<TD><SELECT NAME=\"".$id."news_cat\">";
-		echo "<OPTION";
+		echo "<table><tr>";
+		echo "<td><h5>Filter:</h5></td>";
+		echo "<td><select name=\"".$id."news_cat\">";
+		echo "<option";
 		if ($newscat == "All")
 		{
-			echo " SELECTED";
+			echo " selected=\"selected\"";
 		}
-		echo ">All</OPTION>";
+		echo ">All</option>";
 		while ($row = $dbresult->FetchRow())
 		{
 			$x = $row["news_cat"];
@@ -356,16 +356,16 @@ function news_module_executeadmin($cms,$id)
 			{
 				$x = "**Empty**";
 			}
-			echo "<OPTION";
+			echo "<option";
 			if ($newscat == $x)
 			{
-				echo " SELECTED";
+				echo " selected=\"selected\"";
 			}
-			echo ">".$x."</OPTION>";
+			echo ">".$x."</option>";
 		}
-		echo "</SELECT></TD>";
-		echo "<TD><INPUT TYPE=\"SUBMIT\" NAME=\"".$id."filter\" VALUE=\"Select\" /></TD>";
-		echo "</TR></TABLE>";
+		echo "</select></td>";
+		echo "<td><input type=\"submit\" name=\"".$id."filter\" value=\"Select\" /></td>";
+		echo "</tr></table>";
 		echo cms_mapi_create_admin_form_end();
 	}
 
@@ -373,19 +373,19 @@ function news_module_executeadmin($cms,$id)
 	{
 		if( $newscat == "All" )
 		{
-			echo "<H4>All Entries:</H4><BR>";
+			echo "<h4>All Entries:</h4><br />";
 			$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 				.cms_db_prefix()."module_news ORDER BY news_date desc";
 		}
 		else if( $newscat == "**Empty**" )
 		{
-			echo "<H4>**Empty** Entries:</H4><BR>";
+			echo "<h4>**Empty** Entries:</h4><br />";
 			$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 				.cms_db_prefix()."module_news ORDER BY news_date desc";
 		}
 		else 
 		{
-			echo "<H4>$newscat Entries:</H4><BR>";
+			echo "<h4>$newscat Entries:</h4><br />";
 			$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 				.cms_db_prefix()."module_news WHERE news_cat = \""
 				.$newscat."\" ORDER BY news_date desc";
@@ -393,7 +393,7 @@ function news_module_executeadmin($cms,$id)
 	}
 	else
 	{
-		echo "<H4>All Entries:</H4><BR>";
+		echo "<h4>All Entries:</h4><br />";
 		$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 			.cms_db_prefix()."module_news ORDER BY news_date desc";
 	}
@@ -430,9 +430,9 @@ function news_module_executeadmin($cms,$id)
 		echo "<p><b>No</b> news items found for category: ".$newscat."</p>";
 	}
 	echo cms_mapi_create_admin_form_start("News", $id);
-	echo "<input type=\"hidden\" name=\"".$id."news_cat\" value=\"$newscat\">";
-	echo "<input type=\"hidden\" name=\"".$id."action\" value=\"add\">";
-	echo "<input type=\"submit\" name=\"submit\" value=\"Add News Item\">"; 
+	echo "<input type=\"hidden\" name=\"".$id."news_cat\" value=\"$newscat\" />";
+	echo "<input type=\"hidden\" name=\"".$id."action\" value=\"add\" />";
+	echo "<input type=\"submit\" name=\"submit\" value=\"Add News Item\" />"; 
 	echo cms_mapi_create_admin_form_end();
 #    }
 	}
