@@ -120,31 +120,31 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 
 }
 
-function smarty_cms_help_function_sitemap() {
+function smarty_cms_help_function_sitemap()
+{
 	?>
 	<h3>What does this do?</h3>
-	<p>Prints a bullet menu.</p>
+	<p>Prints out a sitemap.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{bulletmenu}</code></p>
+	<p>Just insert the tag into your template/page like: <code>{sitemap}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p>
 	<ul>
-		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>
 	</p>
-
 	<?php
 }
 
-function smarty_cms_about_function_sitemap() {
+function smarty_cms_about_function_sitemap()
+{
 	?>
-	<p>Author: Julien Lancien&lt;calexico@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Modified to use new content rewrite (wishy)<br />
 	</p>
 	<?php
 }
