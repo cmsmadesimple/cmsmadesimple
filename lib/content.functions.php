@@ -109,6 +109,7 @@ class Smarty_CMS extends Smarty {
 					$this->caching = false;
 					$this->force_compile = true;
 					$templateobj = TemplateOperations::LoadTemplateById(get_site_preference('custom404template'));
+					$template_id = get_site_preference('custom404template');
 				}
 			}
 			else
@@ -149,32 +150,39 @@ class Smarty_CMS extends Smarty {
 				}
 
 				#Fill some variables with various information
-				$content = $contentobj->Show();
+				$content = '';
+				$head_tags = '';
+				$header_script = '';
 
-				#Perform the content data callback
-				foreach($gCms->modules as $key=>$value)
+				if ($contentobj !== FALSE)
 				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
+					$content = $contentobj->Show();
+
+					#Perform the content data callback
+					foreach($gCms->modules as $key=>$value)
 					{
-						$gCms->modules[$key]['object']->ContentData($content);
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true)
+						{
+							$gCms->modules[$key]['object']->ContentData($content);
+						}
 					}
-				}
 
-				$title = $contentobj->Name();
+					$title = $contentobj->Name();
 
-				#Perform the content title callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
+					#Perform the content title callback
+					foreach($gCms->modules as $key=>$value)
 					{
-						$gCms->modules[$key]['object']->ContentTitle($title);
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true)
+						{
+							$gCms->modules[$key]['object']->ContentTitle($title);
+						}
 					}
-				}
 
-				$head_tags = $contentobj->mProperties->GetValue('headtags');
-				$header_script = $contentobj->mProperties->GetValue('page_header');
+					$head_tags = $contentobj->mProperties->GetValue('headtags');
+					$header_script = $contentobj->mProperties->GetValue('page_header');
+				}
 
 				#Pop the head tags in if they exist
 				if (isset($head_tags) && $head_tags != "")

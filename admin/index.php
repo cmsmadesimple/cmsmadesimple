@@ -21,6 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='main';
 $CMS_ADMIN_TITLE='adminhome';
+$CMS_ADMIN_TITLE='mainmenu';
 
 require_once("../include.php");
 
