@@ -20,6 +20,7 @@ require_once(dirname(__FILE__)."/include.php");
 require_once(dirname(__FILE__)."/lib/preview.functions.php");
 
 $smarty = new Smarty_Preview($config);
+$gCms->smarty = &$smarty;
 
 $page = "";
 

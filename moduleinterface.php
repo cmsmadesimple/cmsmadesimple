@@ -29,6 +29,7 @@ $starttime = microtime();
 require_once(dirname(__FILE__)."/include.php");
 
 $smarty = new Smarty_ModuleInterface($config);
+$gCms->smarty = &$smarty;
 
 $gCms->variables['page'] = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");
 $smarty->page = (isset($_GET["return_id"])?$_GET["return_id"]:"").(isset($_POST["return_id"])?$_POST["return_id"]:"");

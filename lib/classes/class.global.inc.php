@@ -72,6 +72,11 @@ class CmsObject {
 	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 */
 	var $siteprefs;
+
+	/**
+	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
+	 */
+	var $smarty;
 }
 
 # vim:ts=4 sw=4 noet
