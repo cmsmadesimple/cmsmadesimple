@@ -5,6 +5,9 @@ Version 0.4 -- Subversion
 * Added news module
 * Added subsections
 * Added copyright notice to bottom on all generated pages in a comment
+* Fixed modified_date plugin
+* Rewrote plugin loading so that plugins do not cache, even thought static
+content does
 * Switched WYSIWYGs from tinymce to htmlarea
 
 Version 0.3.2 -- Thu Jul 29 2004

@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_cms_module($params, &$smarty) {
+function smarty_cms_function_cms_module($params, &$smarty) {
 
 	global $cmsmodules;
 	global $modulecmsobj;
@@ -27,7 +27,7 @@ function smarty_function_cms_module($params, &$smarty) {
 			@ob_start();
 			#$obj = $cmsmodules[$params['module']]['Instance'];
 			#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
-			call_user_func_array(&$cmsmodules[$module]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
+			call_user_func_array(&$cmsmodules[$params['module']]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
 			$modoutput = @ob_get_contents();
 			@ob_end_clean();
 			echo $modoutput;

@@ -18,7 +18,7 @@
 
 require_once("config.php");
 
-function smarty_function_bulletmenu($params, &$smarty) {
+function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	$menu = "";
 

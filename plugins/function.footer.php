@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_footer() {
+function smarty_cms_function_footer() {
     global $CMS_VERSION;
     echo '<div class="bottom">'."\n";
     echo 'Site powered by <a href="http://cmsmadesimple.org">CMS Made Simple</a> Version: '."$CMS_VERSION<br />\n";

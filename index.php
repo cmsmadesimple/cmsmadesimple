@@ -82,8 +82,8 @@ if ($page == "") {
 	$page = db_get_default_page($config);
 }
 
-error_reporting(0);
-$old_error_handler = set_error_handler("ErrorHandler404");
+#error_reporting(0);
+#$old_error_handler = set_error_handler("ErrorHandler404");
 
 $html = $smarty->fetch('db:'.$page) . "\n";
 echo $html;

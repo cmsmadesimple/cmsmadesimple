@@ -37,7 +37,22 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
-		$this->force_compile = true;
+		$this->force_compile = false;
+
+		#Load all CMS plugins as non-cacheable
+		$dir = dirname(dirname(__FILE__))."/plugins";
+		$ls = dir($dir);
+		while (($file = $ls->read()) != "") {
+			if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
+				if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
+					#$filename = dirname(dirname(__FILE__)) . "/" . $this->_get_plugin_filepath($matches[1], $matches[2]);
+					$filename = $this->_get_plugin_filepath($matches[1], $matches[2]);
+					#echo $filename . "<br />";
+					require_once $filename;
+					$this->register_function($matches[2], "smarty_cms_function_" . $matches[2], false);
+				}
+			}
+		}
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -59,7 +74,6 @@ class Smarty_CMS extends Smarty {
 		if ($result && $result->RowCount()) {
 			$line = $result->FetchRow();
 
-			$smarty_obj->assign('modified_date',$line[modified_date]);
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
 				$stylesheet .= "<style type=\"text/css\">\n";
@@ -85,7 +99,7 @@ class Smarty_CMS extends Smarty {
 				#If it's a module, do this instead...
 				if (isset($cmsmodules[$line["page_type"]])) {
 					@ob_start();
-					call_user_func_array(&$cmsmodules[$module]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
+					call_user_func_array(&$cmsmodules[$line["page_type"]]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
 					$modoutput = @ob_get_contents();
 					@ob_end_clean();
 					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
@@ -104,16 +118,21 @@ class Smarty_CMS extends Smarty {
 
 		$db = $smarty_obj->configCMS->db;
 
-		$query = "SELECT UNIX_TIMESTAMP(IF(t.modified_date>p.modified_date,t.modified_date,p.modified_date)) as create_date, p.page_type FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
+		$query = "SELECT t.modified_date as template_date, p.modified_date as page_date, p.page_type FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON t.template_id = p.template_id WHERE p.page_url = '$tpl_name' AND p.active = 1";
 		$result = $db->Execute($query);
 
 		if ($result && $result->RowCount()) {
 			$line = $result->FetchRow();
 
+			$page_date = $db->UnixTimeStamp($line["page_date"]);
+			$template_date = $db->UnixTimeStamp($line["template_date"]);
+
+			$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
+
 			#We only want to cache "static" content
 			if ($line["page_type"] == "content") {
 
-				$tpl_timestamp = $line["create_date"];
+				$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
 				return true;
 
 			} else {
@@ -125,6 +144,7 @@ class Smarty_CMS extends Smarty {
 		}
 		else {
 
+			$smarty_obj->assign('modified_date',time());
 			$tpl_timestamp = time();
 			return false;
 		}
