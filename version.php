@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.8";
-$CMS_VERSION_NAME = "Tahiti";
+$CMS_VERSION = "0.8.1-svn";
+$CMS_VERSION_NAME = "Papeete";
 $CMS_SCHEMA_VERSION = "9";
 
 # vim:ts=4 sw=4 noet
