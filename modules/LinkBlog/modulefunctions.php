@@ -416,6 +416,7 @@ function showLinks($cms, $id, $params) {
         $last_date = "";
         while ($row = $dbresult->FetchRow()) {
 
+			#echo "last_date: ($last_date) create_date: ".$row["create_date"].")<br/>";
             if ($last_date == substr($row["create_date"],0,10) || $last_date == "") {
                 echo "<div class=\"modulelinkblogentry\">\n";
                 echo "<div class=\"modulelinkblogentryheader\">\n";
