@@ -342,8 +342,8 @@ else {
 </form>
 
 <div id="helparea" class="helparea">
-<p>This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.</p>
-<p>You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>
+<p><?php echo $gettext->gettext("This page allows you to create new content.  Select a content type and fill in the required fields and you have your new content setup.  If you select to show it in the menu, and you are using one of the automated menu tools {dhtmlmenu} or {bulletmenu} then the new content will show up automatically in the menu.") ?></p>
+<p><?php echo $gettext->gettext("You can set your preference for a WYSIWYG editor by clicking on the User Preferences link on the menu.  By setting this to false you can create more complex content, or simply cut and paste in existing content from another site.</p>") ?>
 </div>
 
 <?php
