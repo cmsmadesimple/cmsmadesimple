@@ -58,8 +58,16 @@ function smarty_cms_function_breadcrumbs($params, &$smarty) {
 	# process $breadcrumbs
 	while ($a = array_pop($breadcrumbs)) {
 		if ($a->page_id != $thispage && $a->page_type != 'seperator') {
-			if (getURL($thispage)!="") $trail .= "<a href=\"".getURL($a)."\">".$a->page_title."</a> &gt;&gt;\n";
-			else $trail .= $a->page_title." &gt;&gt; \n";
+			if ($a->page_type == 'sectionheader')
+			{
+				if (getURL($thispage)!="") $trail .= $a->menu_text." &gt;&gt;\n";
+				else $trail .= $a->menu_text." &gt;&gt; \n";
+			}
+			else
+			{
+				if (getURL($thispage)!="") $trail .= "<a href=\"".getURL($a)."\">".$a->page_title."</a> &gt;&gt;\n";
+				else $trail .= $a->page_title." &gt;&gt; \n";
+			}
 		} else {
 			$trail .= "<strong>".$a->page_title."</strong>\n";
 		}
