@@ -120,7 +120,12 @@ if ($access)
 
 include_once("header.php");
 
-
+if (!$access)
+{
+	echo "<h3>".lang('noaccessto',array(lang('addcontent')))."</h3>\n";
+}
+else
+{
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" onchange="document.addform.submit()" class="standard">';
 foreach ($existingtypes as $onetype)
@@ -209,6 +214,8 @@ else if ($preview)
 </form>
 
 <?php
+
+}
 
 include_once("footer.php");
 

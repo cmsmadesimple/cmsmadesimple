@@ -123,61 +123,68 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
+		$error = $contentobj->ValidateData();
 	}
 }
 
 include_once("header.php");
 
-#Get a list of content_types and build the dropdown to select one
-$typesdropdown = '<select name="content_type" onchange="document.editform.submit()" class="standard">';
-foreach ($existingtypes as $onetype)
+if (!$access)
 {
-	$typesdropdown .= "<option value=\"$onetype\"";
-	if ($onetype == $content_type)
-	{
-		$typesdropdown .= " selected ";
-	}
-	$typesdropdown .= ">".ucfirst($onetype)."</option>";
+	print "<h3>".lang('noaccessto', array(lang('editpage')))."</h3>";
 }
-$typesdropdown .= "</select>";
-
-if (isset($error) && $error !== FALSE)
+else
 {
-	echo '<ul>';
-	foreach ($error as $oneerror)
+	#Get a list of content_types and build the dropdown to select one
+	$typesdropdown = '<select name="content_type" onchange="document.editform.submit()" class="standard">';
+	foreach ($existingtypes as $onetype)
 	{
-		echo '<li>'.$oneerror.'</li>';
+		$typesdropdown .= "<option value=\"$onetype\"";
+		if ($onetype == $content_type)
+		{
+			$typesdropdown .= ' selected="selected"';
+		}
+		$typesdropdown .= ">".ucfirst($onetype)."</option>";
 	}
-	echo '</ul>';
-}
+	$typesdropdown .= "</select>";
 
-if ($preview)
-{
-	$data["content_id"] = $contentobj->Id();
-	$data["title"] = $contentobj->Name();
-	$data["content"] = $contentobj->Show();
-	$data["template_id"] = $contentobj->TemplateId();
-	$data["hierarchy"] = $contentobj->Hierarchy();
-	
-	$templateobj = TemplateOperations::LoadTemplateById($contentobj->TemplateId());
-	$data['template'] = $templateobj->content;
+	if (isset($error) && $error !== FALSE)
+	{
+		echo '<ul>';
+		foreach ($error as $oneerror)
+		{
+			echo '<li>'.$oneerror.'</li>';
+		}
+		echo '</ul>';
+	}
 
-	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
-	$data['encoding'] = $stylesheetobj['encoding'];
-	$data['stylesheet'] = $stylesheetobj['stylesheet'];
+	if ($preview)
+	{
+		$data["content_id"] = $contentobj->Id();
+		$data["title"] = $contentobj->Name();
+		$data["content"] = $contentobj->Show();
+		$data["template_id"] = $contentobj->TemplateId();
+		$data["hierarchy"] = $contentobj->Hierarchy();
+		
+		$templateobj = TemplateOperations::LoadTemplateById($contentobj->TemplateId());
+		$data['template'] = $templateobj->content;
 
-	$tmpfname = tempnam($config["previews_path"], "cmspreview");
-	$handle = fopen($tmpfname, "w");
-	fwrite($handle, serialize($data));
-	fclose($handle);
+		$stylesheetobj = get_stylesheet($contentobj->TemplateId());
+		$data['encoding'] = $stylesheetobj['encoding'];
+		$data['stylesheet'] = $stylesheetobj['stylesheet'];
 
-?>
-<h3><?php echo lang('preview')?></h3>
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
+		$handle = fopen($tmpfname, "w");
+		fwrite($handle, serialize($data));
+		fclose($handle);
 
-<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
+	?>
+	<h3><?php echo lang('preview')?></h3>
 
-</iframe>
-<?php
+	<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
+
+	</iframe>
+	<?php
 
 }
 
@@ -205,20 +212,22 @@ if ($preview)
 </table>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 <?php } ?>
-<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 
 </div> <!--end adminform-->
 
-<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>">
-<input type="hidden" name="content_id" value="<?php echo $content_id?>">
+<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" />
+<input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 
 </form>
 
 <?php
+
+}
 
 include_once("footer.php");
 

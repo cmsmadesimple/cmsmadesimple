@@ -1192,7 +1192,7 @@ class ContentManager
 				}
 			}
 
-			$reuslt .= '</select>';
+			$result .= '</select>';
 		}
 
 		return $result;

@@ -273,7 +273,7 @@ class TemplateOperations
 				$result .= '<option value="'.$onetemplate->id.'"';
 				if ($onetemplate->id == $selected_id)
 				{
-				    $result .= ' selected="true"';
+				    $result .= ' selected="selected"';
 				}
 				$result .= '>'.$onetemplate->name.'</option>';
 			}

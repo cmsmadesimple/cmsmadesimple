@@ -24,17 +24,18 @@ if (!isset($charsetsent))
 }
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
-<HTML>
-<HEAD>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
 
-<TITLE><?php echo lang('adminsystemtitle')?></TITLE>
+<title><?php echo lang('adminsystemtitle')?></title>
 
-<LINK REL="stylesheet" TYPE="text/css" HREF="style.css">
-<LINK REL="stylesheet" TYPE="text/css" HREF="tab.css">
-<SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="helparea.js"></SCRIPT>
+<link rel="stylesheet" type="text/css" href="style.css" />
+<link rel="stylesheet" type="text/css" href="tab.css" />
+<script type="text/javascript" language="javascript" src="helparea.js"></script>
 
-<SCRIPT LANGUAGE="JavaScript" TYPE="text/javascript">
+<script language="JavaScript" type="text/javascript">
+	<!--
 	//@param form - current form
 	//@param names - string containing a list of the names used for the textarea
 	//               each name should be seperated with a comma
@@ -57,24 +58,31 @@ if (!isset($charsetsent))
 
 		if (eval(document.getElementById('advanced'))) {expandcontent('advanced');}
 	}
-</SCRIPT>
+	-->
+</script>
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
-	<SCRIPT TYPE="text/javascript">
+	<script type="text/javascript">
+		<!--
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		<?php echo "_editor_lang = \"".$nls['htmlarea'][$current_language]."\";"  ?>
-	</SCRIPT>
+		-->
+	</script>
 
-	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
-	<SCRIPT TYPE="text/javascript" DEFER>
+	<script type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></script>
+	<script type="text/javascript" defer>
+		<!--
+		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		var editor = null;
 		function initHtmlArea() {
 			HTMLArea.replaceAll();
 		}
-	</SCRIPT>
+		-->
+	</script>
 
 <?php } else if (isset($htmlarea_flag)) { ?>
 
-	<SCRIPT TYPE="text/javascript">
+	<script type="text/javascript">
+		<!--
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
 		<?php
 			if ($config["disable_htmlarea_translation"] != true)
@@ -82,10 +90,12 @@ if (!isset($charsetsent))
 				echo "_editor_lang = \"{$nls['htmlarea'][$current_language]}\";";
 			}
 		?>
-	</SCRIPT>
+		-->
+	</script>
 
-	<SCRIPT TYPE="text/javascript" SRC="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></SCRIPT>
-	<SCRIPT TYPE="text/javascript">
+	<script type="text/javascript" src="<?php echo $config["root_url"]?>/htmlarea/htmlarea.js"></script>
+	<script type="text/javascript">
+		<!--
 
 		HTMLArea.loadPlugin("ImageManager");
 		HTMLArea.loadPlugin("InsertFile");
@@ -136,12 +146,14 @@ if (!isset($charsetsent))
 			editor.config.pageStyle = editor.config.pageStyle+'<?php echo str_replace("'", "\\'", get_stylesheet($template_id))?>';
 			editor.generate();
 		}
-	</SCRIPT>
+		-->
+	</script>
 <?php }
 $userid = get_userid();
 ?>
 
-<SCRIPT TYPE="text/javascript" LANGUAGE="Javascript">;
+<script type="text/javascript" language="Javascript">;
+	<!--
 	function page_load(){
 		<?php if (get_preference($userid, 'use_wysiwyg') == "1" && isset($htmlarea_flag)){ ?>
 			initHtmlArea();
@@ -155,17 +167,18 @@ $userid = get_userid();
 			}
 		}
 	}
-</SCRIPT>
+	-->
+</script>
 
-</HEAD>
-<BODY onLoad="page_load()">
-<DIV ID="header" CLASS="header">
-<IMG SRC="../images/cms/cmsadminbanner.gif" BORDER="0" ID="logo" ALT="CMS Made Simple">
-</DIV>
-<DIV ID="sloganWrapper"><DIV ID="slogan"><?php echo lang('slogan'); ?></DIV></DIV>
+</head>
+<body onload="page_load()">
+<div id="header" class="header">
+<img src="../images/cms/cmsadminbanner.gif" border="0" id="logo" alt="CMS Made Simple" />
+</div>
+<div id="sloganWrapper"><div id="slogan"><?php echo lang('slogan'); ?></div></div>
 
 <?php
 include_once("menu.php");
 ?>
 
-<DIV CLASS="content">
+<div class="content">
