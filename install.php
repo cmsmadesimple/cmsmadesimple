@@ -333,6 +333,7 @@ function showPageFour() {
 	$newconfig["debug"] = false;
 	$newconfig["assume_mod_rewrite"] = false;
 	$newconfig["auto_alias_content"] = true;
+	$newconfig["advanced_user"] = false;
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file

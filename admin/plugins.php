@@ -318,7 +318,7 @@ else
 
 </table>
 
-<div class="button"><a href="adduserplugin.php"><?=$gettext->gettext("Add New Plugin")?></a></div>
+<div class="button"><a href="adduserplugin.php"><?=$gettext->gettext("Add User Defined Tag")?></a></div>
 
 </div>
 
