@@ -180,7 +180,7 @@ else
 
 	<tr>
 		<td width="100"><?php echo lang('name')?>:</td>
-		<td><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>"></td>
+		<td><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('content')?>:</td>
@@ -189,9 +189,9 @@ else
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="addcss" value="true">
-			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="hidden" name="addcss" value="true" />
+			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		</td>
 	</tr>
 

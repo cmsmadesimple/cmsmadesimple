@@ -142,7 +142,7 @@ if ("" != $error)
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".('delete')."\" title=\"".('delete')."\"></a></td>\n";
+				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".('delete')."\" title=\"".('delete')."\" /></a></td>\n";
 			}
 			else
 			{
@@ -204,9 +204,9 @@ if ("" != $error)
 
 ?>
 
-<input type="hidden" name="id" value="<?php echo $id?>">
-<input type="hidden" name="type" value="<?php echo $type?>">
-<input type="submit" value="<?php echo lang('addcss')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="hidden" name="id" value="<?php echo $id?>" />
+<input type="hidden" name="type" value="<?php echo $type?>" />
+<input type="submit" value="<?php echo lang('addcss')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 </form>
 
 <?php

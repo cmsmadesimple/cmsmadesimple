@@ -211,7 +211,7 @@ else
 
 	<tr>
 		<td width="100">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"><input type="hidden" name="orig_template" value="<?php echo $orig_template?>"></td>
+		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>" /><input type="hidden" name="orig_template" value="<?php echo $orig_template?>" /></td>
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content'); ?>:</td>
@@ -223,18 +223,18 @@ else
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"") ?>></td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('encoding')?>:</td>
-		<td><input type="text" name="encoding" maxlength="25" value="<?php echo $encoding?>"></td>
+		<td><input type="text" name="encoding" maxlength="25" value="<?php echo $encoding?>" /></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="template_id" value="<?php echo $template_id?>"><input type="hidden" name="edittemplate" value="true"><input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td><input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="edittemplate" value="true" /><input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>
