@@ -50,7 +50,20 @@ function smarty_cms_function_adsense($params, &$smarty) {
 
 function smarty_cms_help_function_adsense() {
 	?>
-	<h3>Testing...</h3>
+	<h3>What does this do?</h3>
+	<p>Google adsense is a popular advertising program for websites.  This plugin will take the basic parameters that would be provided by the adsense program and puts them in a easy to use plugin that makes your templates look much cleaner.  See <a href="http://www.google.com/adsense" target="_blank">here</a> for more details on adsense.</p>
+	<h3>How do I use it?</h3>
+	<p>First, sign up for a google adsense account and get the parameters for your ad.  Then just use the plugin in your page/template like so: <code>{adsense ad_client="pub-random#" ad_width="120" ad_height="600" ad_format="120x600_as"}</code>
+	<h3>What parameters does it take?</h3>
+	<p>All parameters are optional, though skipping one might not necessarily made the ad work right.  Options are:
+	<ul>
+		<li>ad_client - This would be the pub_random# id that would represent your adsense account number</li>
+		<li>ad_width - width of the ad</li>
+		<li>ad_height - height of the ad</li>
+		<li>ad_format - "format" of the ad <em>e.g. 120x600_as</em></li>
+		<li>ad_channel - channels are an advanced feature of adsense.  Put it here if you use it.</li>
+	</ul>
+	</p>
 	<?
 }
 

@@ -28,4 +28,18 @@ function smarty_cms_function_modified_date($params, &$smarty) {
 		return "";
 }
 
+function smarty_cms_help_function_modified_date() {
+        ?>
+        <h3>What does this do?</h3>
+        <p>Prints the date and time the page or it's template was last modified.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+        <h3>How do I use it?</h3>
+        <p>Just insert the plugin into your template/page like: <code>{modified_date format="%A %d-%b-%y %T %Z"}</code></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+        </ul>
+        </p>
+        <?
+}
+
 ?>
