@@ -23,7 +23,7 @@ iframe {
  * Generic content tags
  */
 #MainContent {
-	padding-top: 30px;
+	padding-top: 50px;
 	margin-left: 15px;
 	margin-bottom: 30px;
 }
@@ -43,7 +43,7 @@ iframe {
 	background-color: #1C639B;
 	position: absolute;
 	top: 0;
-	left: 0;
+	left: 60px;
 	padding: 5px;
 }
 
@@ -54,7 +54,7 @@ html>body #TopMenu {
 
 
 #TopMenu a {
-	padding-left: 5px;
+    padding-left: 5px;
 	padding-right: 5px;
 	color: white;
 }
@@ -102,17 +102,18 @@ html>body #TopMenu {
 
 
 #AdminHeader {
-    background: #F1F2EC url('themes/bluewater/logo2.gif') no-repeat;
-    height: 62px;
-    width: 170px;
-    right: 20px;
-    bottom: 30px;
+    background: transparent url('themes/bluewater/logo9.gif') no-repeat;
+    height: 60px;
+    width: 60px;
+    left: 0px;
+    top: 0px;
     position: absolute;
+    z-index: 100;
 }
 
 html>body #AdminHeader {
-    right: 0px;
-    bottom: 20px;
+    left: 0px;
+    top: 0px;
     position: fixed;
 }
 
