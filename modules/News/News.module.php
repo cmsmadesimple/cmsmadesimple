@@ -45,6 +45,34 @@ class News extends CMSModule
 		return 'Add, edit and remove News entries';
 	}
 
+	/**
+	 * This function is not in the API!!!
+	 */
+	function GetDisplayHtmlTemplate()
+	{
+		return '
+<!-- Start News Display Template -->
+{foreach from=$items item=entry}
+<span class="cms-module-news">
+<span class="cms-module-news-header">
+{if !($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
+        <span class="cms-news-date">{$entry->date}</span><br />
+{/if}
+<span class="cms-news-title"><a name="{$entry->id}"></a>{$entry->title}</span><br />
+{if ($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
+        <span class="cms-news-date">{$entry->date}</span><br />
+{/if}
+</span> <!-- end cms_module-news-header -->
+<span class="cms-news-content">{$entry->data}</span>
+{if $entry->moretext != \'\'}
+        <br />
+        <a href="index.php?page="{$params.summary}#{$entry->id}">{$entry->moretext}</a>
+{/if}
+</span> <!-- end cms-module-news -->
+{/foreach}
+<!-- End News Display Template -->';
+	}
+
 	function Install()
 	{
 		$db = $this->cms->db;
@@ -69,6 +97,9 @@ class News extends CMSModule
 
 		$db->CreateSequence(cms_db_prefix()."module_news_seq");
 		$this->CreatePermission('Modify News', 'Modify News');
+
+		# Setup display template
+		$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
 	}
 
 	function InstallPostMessage()
@@ -96,6 +127,10 @@ class News extends CMSModule
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "news_cat C(255)");
 				$dict->ExecuteSQLArray($sqlarray);
 				$current_version = "1.5";
+			case "1.5":
+				# Setup display template
+				$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
+				$current_version = "1.6";
 		}
 	}
 
@@ -297,7 +332,11 @@ class News extends CMSModule
 				$dateformat = "F j, Y, g:i a";
 				if (isset($params["dateformat"]))
 				{
-					$dateformat = $params["dateformat"];
+					$dateformat = $params['dateformat'];
+				}
+				else
+				{
+					$params['dateformat'] = $dateformat;
 				}
 
 				$type = "text";
@@ -325,6 +364,8 @@ class News extends CMSModule
 						echo "</link>\n";
 						echo "  <description>Current News entries</description>\n";
 					}
+
+					$entryarray = array();
 
 					while (($row = $dbresult->FetchRow()))
 					{
@@ -366,53 +407,49 @@ class News extends CMSModule
 						}
 						else
 						{
-							echo "<span class=\"cms-module-news\">";
-							echo "<span class=\"cms-module-news-header\">";
-							if (!(isset($params['swaptitledate']) && 
-									($params['swaptitledate'] == 'true' || 
-									 $params['swaptitledate'] == '1')))
-							{
-								echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
-							}
-							$prestring = "<span class=\"cms-news-title\">";
-							$poststring = "</span><br />";
-							if (!isset($params["no_anchors"]))
-							{
-								$prestring .= "<a name=\"".$row["news_id"]."\"></a>";
-							}
-							if (isset($params["showcategorywithtitle"]) && ($params["showcategorywithtitle"] == "true" || $params["showcategorywithtitle"] == "1"))
-							{
-								echo $prestring.$row["news_cat"].": ".$row["news_title"].$poststring;
-							}
-							else
-							{
-								echo $prestring.cms_htmlentities($row["news_title"]).$poststring;
-							}
-							if (isset($params['swaptitledate']) && 
-									($params['swaptitledate'] == 'true' || 
-									 $params['swaptitledate'] == '1'))
-							{
-								echo "<span class=\"cms-news-date\">".date($dateformat, $db->UnixTimeStamp($row['news_date']))."</span><br />";
-							}
-							echo "</span>";
+							$onerow = new stdClass();
+							$onerow->unixdate = $db->UnixTimeStamp($row['news_date']);
+							$onerow->date = date($dateformat, $db->UnixTimeStamp($row['news_date']));
+							$onerow->id = $row['news_id'];
+
 							if (isset($params["summary"]))
 							{
-								echo "<span class=\"cms-news-content\">".$this->StripToLength($row["news_data"],$params["length"],false)."</span>";
+								$onerow->data = $this->StriptoLength($row['news_data'], $params['length'], false);
 								if (strlen($row["news_data"]) > $params["length"])
 								{
-									$moretext = "more...";
 									if (isset($params['moretext']))
 									{
-										$moretext = $params['moretext'];
+										$onerow->moretext = $params['moretext'];
 									}
-									echo "<br /><a href=\"index.php?page=".$params["summary"]."#".$row["news_id"]."\">$moretext</a>";
+									else
+									{
+										$onerow->moretext = 'more...';
+									}
+								}
+								else
+								{
+									$onerow->moretext = '';
 								}
 							}
 							else
 							{
-								echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
+								$onerow->data = $row['news_data'];
+								$onerow->moretext = '';
 							}
-							echo "</span>";
+
+							if (isset($params["showcategorywithtitle"])
+										&& ($params["showcategorywithtitle"] == "true"
+										|| $params["showcategorywithtitle"] == "1")
+							)
+							{
+								$onerow->title = $row['news_cat'] . ": " . $row['news_title'];
+							}
+							else
+							{
+								$onerow->title = $row['news_title'];
+							}
+
+							array_push($entryarray, $onerow);
 						}
 					}
 
@@ -420,6 +457,12 @@ class News extends CMSModule
 					{
 						echo "   </channel>\n";
 						echo "</rss>";
+					}
+					else
+					{
+						$this->smarty->assign_by_ref('items', $entryarray);
+						$this->smarty->assign_by_ref('params', $params);
+						echo $this->ProcessTemplateFromDatabase('displayhtml');
 					}
 				}
 				break;

@@ -77,7 +77,7 @@ if ($page == "")
 
 if (get_site_preference('enablecustom404') == "0")
 {
-	$old_error_handler = set_error_handler("ErrorHandler404");
+	#$old_error_handler = set_error_handler("ErrorHandler404");
 }
 
 $html = "";
@@ -94,7 +94,7 @@ else
 
 if (get_site_preference('enablecustom404') == "0")
 {
-	set_error_handler($old_error_handler);
+	#set_error_handler($old_error_handler);
 }
 
 #Perform the content postrender callback
