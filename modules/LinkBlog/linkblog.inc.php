@@ -62,13 +62,17 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 		echo cms_mapi_create_user_form_end();
 	}
 
+    $curr_date = date("Y-m-d");
     $old_date = "";
     if (isset($params[$id."old_date"])) {
-        $old_date = $params[$id."old_date"];
-    }
+		if ($old_date == "curr_date") {
+			$old_date = $curr_date;
+		} else {
+			$old_date = $params[$id."old_date"];
+		} ## if
+	} ## if
 
     $db = $cms->db;
-    $curr_date = date("Y-m-d");
     $query = "SELECT a.linkblog_id, a.linkblog_title, a.linkblog_url, a.linkblog_author, a.linkblog_type as type_id, a.create_date, count(b.linkblog_id) as total";
 	if ($category != "") { $query .= ", c.linkblog_type"; }
 	$query .= " FROM";
@@ -85,7 +89,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 	if ($params[$id.'type'] != "rss") {
 		echo "<div class=\"modulelinkblogtitle\">Posted sites";
 		if (isset($params["make_rss_button"])) {
-			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>$curr_date, 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
+			echo " ".cms_mapi_create_user_link('LinkBlog', $id, $cms->variables["page"], array('action'=>'viewoldlinks', 'old_date'=>'curr_date', 'type'=>'rss', 'showtemplate'=>'false'), "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />");
 		} ## if
 		echo "</div>\n";
 		echo "<div class=\"modulelinkblog\">\n";
@@ -154,7 +158,13 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
             echo "</ul>\n";
         }
     } else {
-        echo " - No linkblog posted - ";
+		if ($params[$id.'type'] == "rss") {
+            echo "	</channel>\n";
+            echo "</rss>\n";
+            return;
+		} else {					
+	        echo " - No linkblog posted - ";
+		} ## if
     }
     echo "</div>\n";
     echo "<div class=\"modulelinkbloglink\">\n";
