@@ -235,4 +235,10 @@ $lang['admin']['currentpages'] = 'Current Pages'; //needs translation
 $lang['admin']['editseparator'] = 'Edit Separator'; //needs translation
 $lang['admin']['user'] = 'User'; //needs translation
 $lang['admin']['parent'] = 'Parent'; //needs translation
+$lang['admin']['listsheetstyles'] = 'Stylesheets'; //needs translation
+$lang['admin']['addstylesheet'] = 'Add a Stylesheet'; //needs translation
+$lang['admin']['editstylesheet'] = 'Edit Stylesheet'; //needs translation
+$lang['admin']['addcssassociation'] = 'Add Stylesheet Association'; //needs translation
+$lang['admin']['attachstylesheet'] = 'Attach This Stylesheet'; //needs translation
+$lang['admin']['liststylesheets'] = 'Stylesheets'; //needs translation
 ?>

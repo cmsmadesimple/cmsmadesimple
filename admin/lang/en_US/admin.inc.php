@@ -235,4 +235,10 @@ $lang['admin']['changehistory'] = 'Change History'; //needs translation
 $lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module'; //needs translation
 $lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module'; //needs translation
 $lang['admin']['admintheme'] = 'Administration Theme'; //needs translation
+$lang['admin']['listsheetstyles'] = 'Stylesheets'; //needs translation
+$lang['admin']['addstylesheet'] = 'Add a Stylesheet'; //needs translation
+$lang['admin']['editstylesheet'] = 'Edit Stylesheet'; //needs translation
+$lang['admin']['addcssassociation'] = 'Add Stylesheet Association'; //needs translation
+$lang['admin']['attachstylesheet'] = 'Attach This Stylesheet'; //needs translation
+$lang['admin']['liststylesheets'] = 'Stylesheets'; //needs translation
 ?>
