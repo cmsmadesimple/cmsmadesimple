@@ -15,16 +15,16 @@
 	text-decoration: none;
 }
 .horbaritem a:link {
-	color: 000000;
+	color: #000000;
 	text-decoration: none;
 }
 .horbaritem a:visited {
-	color: 000000;
+	color: #000000;
 	text-decoration: none;
 }
 .horbaritem a:hover {
 	color: #ffffff;
-	background-color: 0000004b6983;
+	background-color: #4b6983;
 	text-decoration: none;
 }
 .horbaritem a:active {
@@ -59,12 +59,12 @@
 
 .separator	{
 	background-color: #ff0000;
-    border-top: 1px solid #9e9a91;
-    border-bottom: 1px solid #ffffff;
-    margin: 2px 1px 2px 1px;    /* top right bottom left */
-    height: 0;
-    font-size: 1px;
-    line-height: 0
+	border-top: 1px solid #9e9a91;
+	border-bottom: 1px solid #ffffff;
+	margin: 2px 1px 2px 1px;    /* top right bottom left */
+	height: 0;
+	font-size: 1px;
+	line-height: 0
 }
 
 .item a	{
