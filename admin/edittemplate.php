@@ -124,11 +124,11 @@ else {
 	</tr>
 	<tr>
 		<td>*Content:</td>
-		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
+		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
 		<td>Stylesheet:</td>
-		<td><textarea name="stylesheet" cols="90" rows="18"><?=$stylesheet?></textarea></td>
+		<td><textarea name="stylesheet" cols="90" rows="18"><?=htmlentities($stylesheet)?></textarea></td>
 	</tr>
 	<tr>
 		<td>Active:</td>

@@ -221,7 +221,7 @@ else {
 	</tr>
 	<tr>
 		<td>*Content:</td>
-		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
+		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
 		<td>Section:</td>
