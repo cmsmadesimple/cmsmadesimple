@@ -823,12 +823,12 @@ class ContentProperties
 		$this->mPropertyValues = array(); 
 	}
 
-	function Add($type, $name)
+	function Add($type, $name, $defaultvalue='')
 	{
 		if (!isset($this->mPropertyValues[$name]))
 		{
 			$this->mPropertyTypes[$name] = $type;
-			$this->mPropertyValues[$name] = "";
+			$this->mPropertyValues[$name] = $defaultvalue;
 		}
 	}
 

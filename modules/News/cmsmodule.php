@@ -28,6 +28,7 @@ cms_mapi_register_module($module_name, "Robert Campbell <rob@techcom.dyndns.org"
 
 //Register module to work as a content type
 cms_mapi_register_content_module($module_name);
+cms_mapi_register_content_module_set_properties_function($module_name, 'news_module_content_set_properties');
 cms_mapi_register_content_module_edit_function($module_name, 'news_module_content_edit');
 
 //Register module to work as a plugin (cms_module)
