@@ -29,8 +29,8 @@ if (isset($_GET["message"])) {
 }
 
 ?>
-<h3><?=$gettext->gettext("Current Users")?></h3>
 <div class="adminformnobkg">
+<h3><?=$gettext->gettext("Current Users")?></h3>
 <?php
 
 	$userid = get_userid();

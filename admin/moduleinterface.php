@@ -41,6 +41,7 @@ if (count($gCms->modules) > 0) {
 
 ?>
 
+	<div class="adminformnobkg">
 	<h3><?=$module?> Interface</h3>
 
 <?
@@ -54,6 +55,8 @@ if (count($gCms->modules) > 0) {
 	} else {
 		redirect("index.php");
 	}
+
+	echo "</div>";
 
 }
 

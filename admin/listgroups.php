@@ -25,8 +25,8 @@ check_login();
 include_once("header.php");
 
 ?>
-<h3><?=$gettext->gettext("Current Groups")?></h3>
 <div class="adminformnobkg">
+<h3><?=$gettext->gettext("Current Groups")?></h3>
 <?php
 
 	$userid = get_userid();

@@ -178,6 +178,7 @@ $row = "row1";
 $dirtext = "";
 $filetext = "";
 
+echo '<div class="adminformnobkg">';
 echo "<h3>".$gettext->gettext("File Management")."</h3>";
 
 echo "<h4>".$gettext->gettext("Current Directory").": ".($reldir==""?"/":$reldir)."</h4>"; 
@@ -187,7 +188,6 @@ if ($errors != "")
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
-echo '<div class="adminformnobkg">';
 echo '<table cellspacing="0" class="admintable">';
 
 echo "<tr><td width=\"30\">&nbsp;</td><td>".$gettext->gettext("Filename")."</td><td width=\"10%\">".$gettext->gettext("File Size")."</td><td width=\"18\">&nbsp;</td></tr>";

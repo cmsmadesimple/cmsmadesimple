@@ -82,8 +82,8 @@ if ($result && $result->RowCount() > 0) {
 
 ?>
 
-<h3><?=$gettext->gettext("Admin Log")?></h3>
 <div class="adminformnobkg">
+<h3><?=$gettext->gettext("Admin Log")?></h3>
 <?php echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>"; ?>
 <table cellspacing="0" class="admintable" style="margin-bottom: 0px;">
        <tr>
