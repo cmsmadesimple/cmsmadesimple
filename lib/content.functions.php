@@ -20,7 +20,7 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = true;
-		#$this->force_compile = true;
+		$this->force_compile = true;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -32,12 +32,13 @@ class Smarty_CMS extends Smarty {
 	{
 		$db = new DB($this->configCMS);
 
-		$query = "SELECT p.page_content, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name'";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name'";
 		$result = $db->query($query);
 
 		if (mysql_num_rows($result) > 0) {
 			$line = mysql_fetch_array($result, MYSQL_ASSOC);
 
+			$smarty_obj->assign('modified_date',$line[modified_date]);
 			$tpl_source = $line[template_content];
 			$content = $line[page_content];
 			$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
