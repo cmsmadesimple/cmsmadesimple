@@ -382,9 +382,9 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 {
 	if($session_key != '')
 	{
-		if(isset($_SESSION['default_values'][$session_key][$value]))
+		if(isset($_SESSION['default_values'][$session_key]))
 		{
-			$default_value = $_SESSION['default_values'][$session_key][$value];
+			$default_value = $_SESSION['default_values'][$session_key];
 		}
 	}
 
@@ -423,7 +423,7 @@ function get_value_with_default($value, $default_value = '', $session_key = '')
 	
 	if($session_key != '')
 	{
-		$_SESSION['default_values'][$session_key][$value] = $return_value;
+		$_SESSION['default_values'][$session_key] = $return_value;
 	}
 	
 	return $return_value;
