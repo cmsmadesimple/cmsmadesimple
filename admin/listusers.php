@@ -40,8 +40,8 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid = get_userid();
-	$edit = check_permission($userid, 'Modify User');
-	$remove = check_permission($userid, 'Remove User');
+	$edit = check_permission($userid, 'Modify Users');
+	$remove = check_permission($userid, 'Remove Users');
 
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
 	$result = $db->Execute($query);
@@ -98,7 +98,7 @@ if (isset($_GET["message"])) {
 
 	}
 
-if (check_permission($userid, 'Add User')) {
+if (check_permission($userid, 'Add Users')) {
 ?>
 
 <div class="button"><a href="adduser.php"><?php echo lang('adduser')?></a></div><br />

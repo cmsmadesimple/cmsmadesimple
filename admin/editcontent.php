@@ -102,7 +102,7 @@ if (isset($_POST["serialized_content"]))
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
-$access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Content');
+$access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page');
 $adminaccess = $access;
 if (!$access)
 {

@@ -32,7 +32,7 @@ if (isset($_GET["user_id"]))
 	$user_id = $_GET["user_id"];
 	$user_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove User');
+	$access = check_permission($userid, 'Remove Users');
 
 	if ($access)
 	{

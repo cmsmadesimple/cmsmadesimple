@@ -41,7 +41,7 @@ if (isset($_POST["cancel"]))
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Template');
+$access = check_permission($userid, 'Modify Templates');
 
 if ($access)
 {

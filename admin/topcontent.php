@@ -31,12 +31,10 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($pagePerms) { ?>
 <div class="MainMenuItem">
 <a href="listcontent.php">Pages</a>
 <span class="description">This is where we add and edit pages and other content.</span>
 </div>
-<?php } ?>
 
 <?php if ($htmlPerms) { ?>
 <div class="MainMenuItem">

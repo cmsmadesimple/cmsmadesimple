@@ -39,7 +39,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Add Group');
+$access = check_permission($userid, 'Add Groups');
 
 if ($access)
 {

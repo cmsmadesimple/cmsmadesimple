@@ -31,7 +31,7 @@ if (isset($_GET["group_id"]))
 	$group_id = $_GET["group_id"];
 	$group_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Group');
+	$access = check_permission($userid, 'Remove Groups');
 
 	if ($access)
 	{

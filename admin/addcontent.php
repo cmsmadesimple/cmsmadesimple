@@ -47,7 +47,7 @@ if (isset($_POST["applybutton"])) $apply = true;
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
-$access = check_permission($userid, 'Add Content');
+$access = check_permission($userid, 'Add Pages');
 
 #Get a list of content types and pick a default if necessary
 $existingtypes = ContentManager::ListContentTypes();

@@ -59,7 +59,7 @@ if (isset($_GET["css_id"]))
 	$css_name	= "";
 
 	$userid		= get_userid();
-	$access		= check_permission($userid, 'Remove CSS');
+	$access		= check_permission($userid, 'Remove Stylesheets');
 
 	# checking of users permissions
 	if ($access)

@@ -25,19 +25,19 @@ if (!isset($charsetsent))
 
 $userid = get_userid();
 # find aggregate permissions
-$pagePerms = check_permission($userid, 'Modify Any Content') | check_permission($userid, 'Add Content') |
-          check_permission($userid, 'Remove Content');
+$pagePerms = check_permission($userid, 'Modify Any Page') | check_permission($userid, 'Add Pages') |
+          check_permission($userid, 'Remove Pages');
 $htmlPerms = check_permission($userid, 'Add Html Blobs') | check_permission($userid, 'Modify Html Blobs') |
 	      check_permission($userid, 'Delete Html Blobs');
-$templatePerms = check_permission($userid, 'Add Template') | check_permission($userid, 'Modify Template') |
-          check_permission($userid, 'Remove Template');
-$cssPerms = check_permission($userid, 'Add CSS') | check_permission($userid, 'Modify CSS') |
-          check_permission($userid, 'Remove CSS');
+$templatePerms = check_permission($userid, 'Add Templates') | check_permission($userid, 'Modify Templates') |
+          check_permission($userid, 'Remove Templates');
+$cssPerms = check_permission($userid, 'Add Stylesheets') | check_permission($userid, 'Modify Stylesheets') |
+          check_permission($userid, 'Remove Stylesheets');
 $filePerms = check_permission($userid, 'Modify Files');
-$userPerms = check_permission($userid, 'Add User') | check_permission($userid, 'Modify User') |
-          check_permission($userid, 'Remove User');
-$groupPerms = check_permission($userid, 'Add Group') | check_permission($userid, 'Modify Group') |
-          check_permission($userid, 'Remove Group');
+$userPerms = check_permission($userid, 'Add Users') | check_permission($userid, 'Modify Users') |
+          check_permission($userid, 'Remove Users');
+$groupPerms = check_permission($userid, 'Add Groups') | check_permission($userid, 'Modify Groups') |
+          check_permission($userid, 'Remove Groups');
 $groupPermPerms = check_permission($userid, 'Modify Permissions');
 $groupMemberPerms =  check_permission($userid, 'Modify Group Assignments');
 $sitePrefPerms = check_permission($userid, 'Modify Site Preferences');

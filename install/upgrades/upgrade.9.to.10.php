@@ -47,6 +47,30 @@ $db->Execute("UPDATE ".cms_db_prefix()."templates SET default_template = 1 WHERE
 
 echo "[done]</p>";
 
+echo "<p>Updating Permissions...";
+
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Stylesheets', permission_text='Add Stylesheets' where permission_name='Add CSS'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Stylesheets', permission_text='Modify Stylesheets' where permission_name='Modify CSS'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Stylesheets', permission_text='Remove Stylesheets' where permission_name='Remove CSS'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Pages', permission_text='Add Pages' where permission_name='Add Content'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Any Page', permission_text='Modify Any Page' where permission_name='Modify Any Content'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Pages', permission_text='Remove Pages' where permission_name='Remove Content'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Groups', permission_text='Add Groups' where permission_name='Add Group'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Groups', permission_text='Modify Groups' where permission_name='Modify Group'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Groups', permission_text='Remove Groups' where permission_name='Remove Group'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Templates', permission_text='Add Templates' where permission_name='Add Template'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Templates', permission_text='Modify Templates' where permission_name='Modify Template'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Templates', permission_text='Remove Templates' where permission_name='Remove Template'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Users', permission_text='Add Users' where permission_name='Add User'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Users', permission_text='Modify Users' where permission_name='Modify User'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Users', permission_text='Remove Users' where permission_name='Remove User'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Add Stylesheet Assoc', permission_text='Add Stylesheet Associations' where permission_name='Add CSS association'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Modify Stylesheet Assoc', permission_text='Modify Stylesheet Associations' where permission_name='Edit CSS association'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_name = 'Remove Stylesheet Assoc', permission_text='Remove Stylesheet Associations' where permission_name='Remove CSS association'");
+$db->Execute("UPDATE ".cms_db_prefix()."permissions SET permission_text = 'Modify Permissions for Groups' where permission_name='Modify Permissions'");
+echo "[done]</p>";
+
+
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 10";

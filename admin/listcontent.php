@@ -40,7 +40,7 @@ if (isset($_GET["message"])) {
 
 	$userid = get_userid();
 
-	$modifyall = check_permission($userid, 'Modify Any Content');
+	$modifyall = check_permission($userid, 'Modify Any Page');
 
 	$content_array = ContentManager::GetAllContent(false);
 
@@ -174,129 +174,133 @@ if (isset($_GET["message"])) {
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit)
 			{
-				echo "<tr class=\"$currow\">\n";
-				echo "<td>".$one->Hierarchy()."</td>\n";
-				echo "<td><a href=\"editcontent.php?content_id=".$one->Id()."\">".$one->Name()."</a></td>\n";
-				if ($templates[$one->TemplateId()]->name)
-				{
-					echo "<td>".$templates[$one->TemplateId()]->name."</td>\n";
+                // check that permissions are good before showing:
+                if ($modifyall || check_ownership($userid,$one->Id()) || check_authorship($userid,$one->Id()))
+                {
+  			    echo "<tr class=\"$currow\">\n";
+  			    echo "<td>".$one->Hierarchy()."</td>\n";
+                echo "<td><a href=\"editcontent.php?content_id=".$one->Id()."\">".$one->Name()."</a></td>\n";
+  				if ($templates[$one->TemplateId()]->name)
+  				{
+  					 echo "<td>".$templates[$one->TemplateId()]->name."</td>\n";
+  				}
+  				else
+  				{
+  					echo "<td>&nbsp;</td>\n";
+  				}
+  
+  				echo "<td align=\"center\">".$one->FriendlyName()."</td>\n";
+  
+  				if ($one->Owner() > -1)
+  				{
+  					echo "<td align=\"center\">".$users[$one->Owner()]->username."</td>\n";
+  				}
+  				else
+  				{
+  					echo "<td>&nbsp;</td>\n";
+  				}
+  
+  				if($one->Active())
+  				{
+  					echo "<td align=\"center\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
+  				}
+  				else 
+  				{
+  				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
+  				}
+  
+  				if ($one->Type() == "content")
+  				{
+  					echo "<td align=\"center\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+  				}
+  				else
+  				{
+  					echo "<td>&nbsp;</td>";
+  				}
+  
+  				if ($modifyall)
+  				{
+  					#Figure out some variables real quick
+  					$depth = count(split('\.', $one->Hierarchy()));
+  
+  					$item_order = substr($one->Hierarchy(), strrpos($one->Hierarchy(), '.'));
+  					if ($item_order == '')
+  					{
+  						$item_order = $one->Hierarchy();
+  					}
+  
+  					#Remove any rogue dots
+  					$item_order = trim($item_order, ".");
+  
+  					$num_same_level = 0;
+  
+  					#TODO: Handle depth correctly yet
+  					foreach ($content_array as $another)
+  					{
+  						#Are they the same level?
+  						if (count(split('\.', $another->Hierarchy())) == $depth)
+  						{
+  							#Make sure it's not top level
+  							if (count(split('\.', $another->Hierarchy())) > 1)
+  							{
+  								#So only pages with the same parents count
+  								if (substr($another->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')) == substr($one->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')))
+  								{
+  									$num_same_level++;
+  								}
+  							}
+  							else
+  							{
+  								#It's top level, just increase the count
+  								$num_same_level++;	
+  							}
+  						}
+  					}
+  					
+  					echo "<td align=\"center\">";
+  					if ($num_same_level > 1)
+  					{
+  						#echo "item_order: " . $item_order . " num_same_level:" . $num_same_level . "<br />";
+  						if ($item_order == 1 && $num_same_level)
+  						{
+  							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
+  								"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\" /></a>";
+  						}
+  						else if ($item_order == $num_same_level)
+  						{
+  							echo "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
+  								"<img src=\"../images/cms/arrow-u.gif\" alt=\"".lang('up')."\" title=\"".lang('up')."\" border=\"0\" /></a>";
+  						}
+  						else
+  						{
+  							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
+  								"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\" /></a>&nbsp;".
+  								"<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
+  								"<img src=\"../images/cms/arrow-u.gif\" alt=\"".lang('up')."\" title=\"".lang('up')."\" border=\"0\" /></a>";
+  						}
+  					}
+  					echo "</td>\n";
+  				}
+  				if ($config["query_var"] == "")
+  				{
+  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
+  				}
+  				else if ($one->Alias() != "")
+  				{
+  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
+  				}
+  				else
+  				{
+  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
+  				}
+  				echo "<td align=\"center\"><a href=\"editcontent.php?content_id=".$one->Id()."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
+  				echo "<td align=\"center\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
+  				echo "</tr>\n";
+  
+  				$count++;
+  
+  				($currow == "row1"?$currow="row2":$currow="row1");
 				}
-				else
-				{
-					echo "<td>&nbsp;</td>\n";
-				}
-
-				echo "<td align=\"center\">".$one->FriendlyName()."</td>\n";
-
-				if ($one->Owner() > -1)
-				{
-					echo "<td align=\"center\">".$users[$one->Owner()]->username."</td>\n";
-				}
-				else
-				{
-					echo "<td>&nbsp;</td>\n";
-				}
-
-				if($one->Active())
-				{
-					echo "<td align=\"center\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
-				}
-				else 
-				{
-				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
-				}
-
-				if ($one->Type() == "content")
-				{
-					echo "<td align=\"center\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
-				}
-				else
-				{
-					echo "<td>&nbsp;</td>";
-				}
-
-				if ($modifyall)
-				{
-					#Figure out some variables real quick
-					$depth = count(split('\.', $one->Hierarchy()));
-
-					$item_order = substr($one->Hierarchy(), strrpos($one->Hierarchy(), '.'));
-					if ($item_order == '')
-					{
-						$item_order = $one->Hierarchy();
-					}
-
-					#Remove any rogue dots
-					$item_order = trim($item_order, ".");
-
-					$num_same_level = 0;
-
-					#TODO: Handle depth correctly yet
-					foreach ($content_array as $another)
-					{
-						#Are they the same level?
-						if (count(split('\.', $another->Hierarchy())) == $depth)
-						{
-							#Make sure it's not top level
-							if (count(split('\.', $another->Hierarchy())) > 1)
-							{
-								#So only pages with the same parents count
-								if (substr($another->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')) == substr($one->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')))
-								{
-									$num_same_level++;
-								}
-							}
-							else
-							{
-								#It's top level, just increase the count
-								$num_same_level++;	
-							}
-						}
-					}
-					
-					echo "<td align=\"center\">";
-					if ($num_same_level > 1)
-					{
-						#echo "item_order: " . $item_order . " num_same_level:" . $num_same_level . "<br />";
-						if ($item_order == 1 && $num_same_level)
-						{
-							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
-								"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\" /></a>";
-						}
-						else if ($item_order == $num_same_level)
-						{
-							echo "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
-								"<img src=\"../images/cms/arrow-u.gif\" alt=\"".lang('up')."\" title=\"".lang('up')."\" border=\"0\" /></a>";
-						}
-						else
-						{
-							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
-								"<img src=\"../images/cms/arrow-d.gif\" alt=\"".lang('down')."\" title=\"".lang('down')."\" border=\"0\" /></a>&nbsp;".
-								"<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">".
-								"<img src=\"../images/cms/arrow-u.gif\" alt=\"".lang('up')."\" title=\"".lang('up')."\" border=\"0\" /></a>";
-						}
-					}
-					echo "</td>\n";
-				}
-				if ($config["query_var"] == "")
-				{
-					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
-				}
-				else if ($one->Alias() != "")
-				{
-					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
-				}
-				else
-				{
-					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\" /></a></td>\n";
-				}
-				echo "<td align=\"center\"><a href=\"editcontent.php?content_id=".$one->Id()."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
-				echo "<td align=\"center\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
-				echo "</tr>\n";
-
-				$count++;
-
-				($currow == "row1"?$currow="row2":$currow="row1");
 			}
 			$counter++;
 		} ## foreach
@@ -309,7 +313,7 @@ if (isset($_GET["message"])) {
 		echo "<p>".lang('noentries')."</p>";
 	}
 
-	if (check_permission($userid, 'Add Content'))
+	if (check_permission($userid, 'Add Pages'))
 	{
 ?>
 

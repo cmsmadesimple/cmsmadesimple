@@ -32,7 +32,7 @@ if (isset($_GET["template_id"]))
 	$template_id = $_GET["template_id"];
 	$template_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Template');
+	$access = check_permission($userid, 'Remove Templates');
 
 	if ($access)
 	{

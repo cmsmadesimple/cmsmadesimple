@@ -58,7 +58,7 @@ if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify User') || ($userid == $user_id);
+$access = check_permission($userid, 'Modify Users') || ($userid == $user_id);
 
 $use_wysiwyg = "";
 #if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}

@@ -62,7 +62,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 
 	# we check the permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove CSS association');
+	$access = check_permission($userid, 'Remove Stylesheets association');
 
 #******************************************************************************
 # the user has the right to delete association, we can go on

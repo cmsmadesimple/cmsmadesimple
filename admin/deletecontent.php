@@ -30,7 +30,7 @@ if (isset($_GET["content_id"])) {
 
 	$content_id = $_GET["content_id"];
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Content');
+	$access = check_permission($userid, 'Remove Pages');
 
 	if ($access)
 	{

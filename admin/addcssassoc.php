@@ -76,7 +76,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 	# we then check permissions
 	$userid = get_userid();
-	$access = check_permission($userid, 'Add CSS association');
+	$access = check_permission($userid, 'Add Stylesheets association');
 
 #******************************************************************************
 # the user has permissions, and vars are set, we can go on

@@ -72,7 +72,7 @@ if (isset($_POST["cancel"]))
 # we now check that user has access to add CSS
 #******************************************************************************
 $userid = get_userid();
-$access = check_permission($userid, 'Add CSS');
+$access = check_permission($userid, 'Add Stylesheets');
 
 if ($access)
 {

@@ -40,10 +40,10 @@ if (isset($_GET["message"])) {
 <?php
 
 	$userid	= get_userid();
-	$add = check_permission($userid, 'Add Template');
-	$edit = check_permission($userid, 'Modify Template');
-	$all = check_permission($userid, 'Modify Any Content');
-	$remove	= check_permission($userid, 'Remove Template');
+	$add = check_permission($userid, 'Add Templates');
+	$edit = check_permission($userid, 'Modify Templates');
+	$all = check_permission($userid, 'Modify Any Page');
+	$remove	= check_permission($userid, 'Remove Templates');
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {

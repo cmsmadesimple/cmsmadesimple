@@ -16,7 +16,7 @@ $userid = get_userid();
 
 <?php
 
-if (check_permission($userid, 'Add Template') || check_permission($userid, 'Remove Template') || check_permission($userid, 'Modify Template'))
+if (check_permission($userid, 'Add Templates') || check_permission($userid, 'Remove Templates') || check_permission($userid, 'Modify Templates'))
 {
 
 ?>
@@ -25,7 +25,7 @@ if (check_permission($userid, 'Add Template') || check_permission($userid, 'Remo
 
 }
 
-if (check_permission($userid, 'Add CSS') || check_permission($userid, 'Remove CSS') || check_permission($userid, 'Modify CSS'))
+if (check_permission($userid, 'Add Stylesheets') || check_permission($userid, 'Remove Stylesheets') || check_permission($userid, 'Modify Stylesheets'))
 {
 
 ?>
@@ -39,7 +39,7 @@ if (check_permission($userid, 'Add CSS') || check_permission($userid, 'Remove CS
 <a href="listusers.php"><?php echo lang('usermanagement')?></a>
 <?php
 
-if (check_permission($userid, 'Add Group') || check_permission($userid, 'Remove Group') || check_permission($userid, 'Modify Group') || check_permission($userid, 'Modify Group Assignments') || check_permission($userid, 'Modify Permissions'))
+if (check_permission($userid, 'Add Groups') || check_permission($userid, 'Remove Groups') || check_permission($userid, 'Modify Groups') || check_permission($userid, 'Modify Groups Assignments') || check_permission($userid, 'Modify Permissions'))
 {
 
 ?>

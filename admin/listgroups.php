@@ -37,9 +37,9 @@ include_once("header.php");
 
 	$userid = get_userid();
 	$perm = check_permission($userid, 'Modify Permissions');
-	$assign = check_permission($userid, 'Modify Group Assignments');
-	$edit = check_permission($userid, 'Modify Group');
-	$remove = check_permission($userid, 'Remove Group');
+	$assign = check_permission($userid, 'Modify Groups Assignments');
+	$edit = check_permission($userid, 'Modify Groups');
+	$remove = check_permission($userid, 'Remove Groups');
 
 	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 	#$result = $db->Execute($query);
@@ -108,7 +108,7 @@ include_once("header.php");
 
 	}
 
-if (check_permission($userid, 'Add Group')) {
+if (check_permission($userid, 'Add Groups')) {
 ?>
 
 <div class="button"><a href="addgroup.php"><?php echo lang('addgroup')?></a></div><br />

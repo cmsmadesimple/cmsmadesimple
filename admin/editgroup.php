@@ -45,7 +45,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Group');
+$access = check_permission($userid, 'Modify Groups');
 
 if ($access) {
 

@@ -79,7 +79,7 @@ if (isset($_POST["cancel"]))
 # first, checking the user's permission
 #******************************************************************************
 $userid = get_userid();
-$access = check_permission($userid, 'Modify CSS');
+$access = check_permission($userid, 'Modify Stylesheets');
 
 if ($access)
 {

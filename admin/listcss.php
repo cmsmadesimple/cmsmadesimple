@@ -60,9 +60,9 @@ if (isset($_GET["message"]))
 #******************************************************************************
 	$userid = get_userid();
 
-	$modify = check_permission($userid, 'Modify CSS');
-	$addcss = check_permission($userid, 'Add CSS');
-	$delcss = check_permission($userid, 'Remove CSS');
+	$modify = check_permission($userid, 'Modify Stylesheets');
+	$addcss = check_permission($userid, 'Add Stylesheets');
+	$delcss = check_permission($userid, 'Remove Stylesheets');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 	$result = $db->Execute($query);

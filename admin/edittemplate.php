@@ -61,7 +61,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Template');
+$access = check_permission($userid, 'Modify Templates');
 
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;

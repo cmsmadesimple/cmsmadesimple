@@ -33,7 +33,7 @@ if (isset($_GET["content_id"])) {
 	$direction = $_GET["direction"];
 	$page = $_GET['page'];
 	$userid = get_userid();
-	$access = check_permission($userid, 'Modify Any Content');
+	$access = check_permission($userid, 'Modify Any Page');
 
 	if ($access)
 	{
