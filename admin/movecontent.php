@@ -24,14 +24,16 @@ $page_id = -1;
 if (isset($_GET["page_id"])) {
 
 	$page_id = $_GET["page_id"];
+	$direction = $_GET["direction"];
 	$userid = get_userid();
-	$access = check_permission($config, $userid, 'Remove Content');
+	$access = check_permission($config, $userid, 'Modify Any Content');
 
 	if ($access)  {
 		$db = new DB($config);
 
 		$order = 1;
 		$section_id = 1;
+
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT item_order, section_id FROM ".$config->db_prefix."pages WHERE page_id = $page_id";
 		$result = $db->query($query);
@@ -40,15 +42,27 @@ if (isset($_GET["page_id"])) {
 			$order = $row["item_order"];	
 		}
 		if (isset($row["section_id"])) {
-			$section_id = $row["section_id"];	
+			$section_id = $row["section_id"];
 		}
 		mysql_free_result($result);
-		#Remove the page
-		$query = "DELETE FROM ".$config->db_prefix."pages where page_id = $page_id";
-		$result = $db->query($query);
-		#Fix the item_order if necessary
-		$query = "UPDATE ".$config->db_prefix."pages SET item_order = item_order - 1 WHERE section_id = $section_id AND item_order > $order";
-		$result = $db->query($query);
+
+		if ($direction == "down") {
+			$query = "UPDATE cms_pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);
+			#echo $query;
+			$db->query($query);
+			$query = "UPDATE cms_pages SET item_order = item_order + 1 WHERE page_id = " . $page_id;
+			#echo $query;
+			$db->query($query);
+		}
+		else if ($direction == "up") {
+			$query = "UPDATE cms_pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1);
+			#echo $query;
+			$db->query($query);
+			$query = "UPDATE cms_pages SET item_order = item_order - 1 WHERE page_id = " . $page_id;
+			#echo $query;
+			$db->query($query);
+		}
+
 		#This is so pages will not cache the menu changes
 		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 		$db->query($query);

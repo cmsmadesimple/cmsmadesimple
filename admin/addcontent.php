@@ -78,7 +78,15 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_escape_string($menutext)."', $active, now(), now())";
+			$order = 1;
+			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
+			$result = $db->query($query);
+			$row = mysql_fetch_array($result, MYSQL_ASSOC);
+			if (isset($row["item_order"])) {
+				$order = $row["item_order"];	
+			}
+			mysql_free_result($result);
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
 				#This is so pages will not cache the menu changes

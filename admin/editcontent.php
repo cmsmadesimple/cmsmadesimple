@@ -40,6 +40,9 @@ if (!isset($_POST["active"]) && isset($_POST["editcontent"])) $active = 0;
 $showinmenu = 1;
 if (!isset($_POST["showinmenu"]) && isset($_POST["showinmenu"])) $showinmenu = 0;
 
+$order = 1;
+if (isset($_POST["order"])) $order = $_POST["order"];
+
 $page_id = -1;
 if (isset($_POST["page_id"])) $page_id = $_POST["page_id"];
 else if (isset($_GET["page_id"])) $page_id = $_GET["page_id"];
@@ -83,7 +86,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now() WHERE page_id = $page_id";
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title='".mysql_escape_string($title)."', page_url='".mysql_escape_string($url)."', page_content='".mysql_escape_string($content)."', section_id=$section_id, template_id=$template_id, owner=1, show_in_menu=$showinmenu, menu_text='".mysql_escape_string($menutext)."', active=$active, modified_date = now(), item_order=$order WHERE page_id = $page_id";
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {
@@ -114,6 +117,7 @@ if ($access) {
 		$section_id = $row["section_id"];
 		$template_id = $row["template_id"];
 		$active = $row["active"];
+		$order = $row["item_order"];
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
 
@@ -210,7 +214,7 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel"></td>
+		<td><input type="hidden" name="order" value="<?=$order?>" /><input type="hidden" name="page_id" value="<?=$page_id?>" /><input type="hidden" name="editcontent" value="true" /><input type="submit" value="Submit" /><input type="submit" name="cancel" value="Cancel"></td>
 	</tr>
 
 </table>
