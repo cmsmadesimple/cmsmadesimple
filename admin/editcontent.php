@@ -239,6 +239,8 @@ else
 	<?php
 		#Run edit method in our contentobj
 		echo $contentobj->Edit();
+	if ($adminaccess)
+	{
 	?>
 	<tr>
 		<td>Owner:</td>
@@ -267,6 +269,7 @@ else
 			</select>
 		</td>
 	</tr>
+	<?php } ?>
 </table>
 
 <?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>

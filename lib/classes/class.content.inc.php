@@ -1070,7 +1070,7 @@ class ContentManager
 			if (in_array($row['type'], @ContentManager::ListContentTypes()))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj = $classtype;
+				$contentobj = new $classtype;
 				$contentobj->LoadFromData($row,true);
 				return $contentobj;
 			}
