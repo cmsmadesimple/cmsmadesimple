@@ -384,6 +384,10 @@ function get_preference($userid, $prefname)
 			$value = $row["value"];
 			$userprefs[$prefname] = $value;
 		}
+		else
+		{
+			$userprefs[$prefname] = '';
+		}
 	}
 
 	return (isset($userprefs[$prefname])?$userprefs[$prefname]:'');
