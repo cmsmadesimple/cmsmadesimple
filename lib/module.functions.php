@@ -82,9 +82,15 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 
 	$db = $cms->db;
 
-	$new_id = $db->GenID($cms->config->db_prefix."permissions_seq");
-	$query = "INSERT INTO ".$cms->config->db_prefix."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-	$db->Execute($query);
+	$query = "SELECT permission_id FROM ".$cms->config->db_prefix."permissions WHERE permission_name =" . $db->qstr($permission_name); 
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() < 1) {
+
+		$new_id = $db->GenID($cms->config->db_prefix."permissions_seq");
+		$query = "INSERT INTO ".$cms->config->db_prefix."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+		$db->Execute($query);
+	}
 }
 
 function cms_mapi_check_permission($cms, $permission_name) {
@@ -97,8 +103,20 @@ function cms_mapi_remove_permission($cms, $permission_name) {
 
 	$db = $cms->db;
 
-	$query = "DELETE FROM ".$cms->config->db_prefix."permissions WHERE permission_name = " . $db->qstr($permission_name);
-	$db->Execute($query);
+	$query = "SELECT permission_id FROM ".$cms->config->db_prefix."permissions WHERE permission_name = " . $db->qstr($permission_name); 
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() > 0) {
+
+		$row = $result->FetchRow();
+		$id = $row["permission_id"];
+
+		$query = "DELETE FROM ".$cms->config->db_prefix."group_perms WHERE permission_id = $id";
+		$db->Execute($query);
+
+		$query = "DELETE FROM ".$cms->config->db_prefix."permissions WHERE permission_id = $id";
+		$db->Execute($query);
+	}
 }
 
 function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn_message="") {
