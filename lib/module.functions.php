@@ -119,6 +119,14 @@ function cms_mapi_remove_permission($cms, $permission_name) {
 	}
 }
 
+function cms_mapi_audit($cms, $itemid, $itemname, $action) {
+
+	$userid = get_userid();
+	$username = $_SESSION["cms_admin_username"];
+	audit($cms->config, $userid, $username, $itemid, $itemname, $action);
+
+}
+
 function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn_message="") {
 	$val = "<a href=\"moduleinterface.php?module=$module&return_id=$page_id&id=$id";
 	foreach ($params as $key=>$value) {

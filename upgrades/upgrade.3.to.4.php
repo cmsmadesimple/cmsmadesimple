@@ -2,6 +2,7 @@
 
 echo "<p>Creating sequences...";
 
+
 function upgrade_create_sequence_table($db, $tablename, $idcol) {
 
 	$num = $db->GetOne("SELECT MAX($idcol) FROM $tablename");
@@ -67,6 +68,26 @@ echo "<p>Adding module admin permission... ";
 $new_id = $dbnew->GenID($config->db_prefix."permissions_seq");
 $query = "INSERT INTO ".$config->db_prefix."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id,'Modify Modules','Modify Modules',".$dbnew->DBTimeStamp(time()).",".$dbnew->DBTimeStamp(time()).")";
 $dbnew->Execute($query);
+
+echo "[done]</p>";
+
+echo "<p>Clearing cache and template directories... ";
+
+function clear_dir($dir){
+
+	$path = dirname(dirname(__FILE__))."/smarty/cms/".$dir."/";
+
+	$handle=opendir($path);
+	while ($file = readdir($handle)) {
+		if ($file != "." && $file != ".." && is_file($path.$file)) {
+			#echo ($path.$file);
+			unlink($path.$file);
+		}
+	}
+}
+
+clear_dir("templates_c");
+clear_dir("cache");
 
 echo "[done]</p>";
 

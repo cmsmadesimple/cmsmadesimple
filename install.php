@@ -197,6 +197,7 @@ function showPageThree($sqlloaded = 0) {
     if ($sqlloaded == 0) {
         global $config, $CMS_SCHEMA_VERSION;
         $smarty = new Smarty_DB($config);
+		
         $smarty->assign('tableprefix', $_POST["prefix"]);
         $smarty->assign('schemaversion', $CMS_SCHEMA_VERSION);
         $contents = $smarty->fetch('mysql.tpl');
@@ -213,13 +214,18 @@ function showPageThree($sqlloaded = 0) {
         foreach ($statements as $s) {
             $s = str_replace("\n", "", $s);
             if ($s != "") {
-                #$result = mysql_unbuffered_query($s, $link);
+                $result = mysql_unbuffered_query($s, $link);
 				$result = $db->Execute($s);
                 if (!$result) {
                     die('Invalid query: ' . mysql_error());
                 } ## if
             } ## if
         } ## foreach
+
+		#$CMS_INSTALL_DROP_TABLES=1;
+		#$CMS_INSTALL_CREATE_TABLES=1;
+
+		#include_once(dirname(__FILE__)."/schemas/schema.php");
 
 		$db->Close();
         echo "Success!<p>";
