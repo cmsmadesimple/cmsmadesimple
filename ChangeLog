@@ -1,4 +1,4 @@
-Version 0.4.2 -- Subversion
+Version 0.5 -- Subversion
 -----------------
 
 * Added page aliases
@@ -6,6 +6,12 @@ Version 0.4.2 -- Subversion
 * Added new admin stylesheet (Bewbs)
 * Added new admin icons (Graeme)
 * Added file manager
+* Added phpdoc strings to many files and functions
+* Changed inner workings so that code is easier to 
+understand.  We now pass one global object around and put important 
+variables and objects inside it.  Makes the code very consistent.
+* Fixed modules to respect the installed and active flags
+* Removed lots of NOTICE level errors
 
 Version 0.4.1 -- Fri Aug 13 2004
 -----------------
