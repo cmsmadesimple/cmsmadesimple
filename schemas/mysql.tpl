@@ -41,6 +41,7 @@ CREATE TABLE {$tableprefix}templates (
 CREATE TABLE {$tableprefix}sections (
 	section_id int PRIMARY KEY AUTO_INCREMENT,
 	section_name varchar(25),
+	order int,
 	active bool,
 	create_date datetime,
 	modified_date datetime
@@ -55,6 +56,7 @@ CREATE TABLE {$tableprefix}pages (
 	default_page bool,
 	show_in_menu bool,
 	owner int,
+	order int,
 	active bool,
 	section_id int,
 	template_id int,
