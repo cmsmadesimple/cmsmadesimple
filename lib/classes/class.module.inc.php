@@ -1077,6 +1077,17 @@ class CMSModule extends ModuleOperations
 	 */
 
 	/**
+	 * Set the content-type header.
+	 *
+	 * @param string Value to set the content-type header too
+	 */
+	function SetContentType($contenttype)
+	{
+		$variables = &$this->cms->variables;
+		$variables['content-type'] = $contenttype;
+	}
+
+	/**
 	 * Put an event into the audit (admin) log.  This should be
 	 * done on most admin events for consistency.
 	 */
