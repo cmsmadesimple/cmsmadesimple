@@ -27,7 +27,7 @@ a:hover {
 }
 
 	
-h1, h2, h4, h5, p {
+h1, h2, h5, p {
 	font-size: 12px;
 	font-weight: bold;
 	color: #000;
@@ -36,6 +36,14 @@ h1, h2, h4, h5, p {
 
 h3 {
 	font-size: 16px;
+	font-weight: bold;
+	color: #000;
+	padding-left: 190px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+h4 {
+	font-size: 12px;
 	font-weight: bold;
 	color: #000;
 	padding-left: 190px;
@@ -60,7 +68,7 @@ div.nav {
 	border-right: 1px solid #8C8A8C;
 }
 
-div.nav h4 {
+div.nav h5 {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
 	margin: 0;
 	background: #F6F6F6;

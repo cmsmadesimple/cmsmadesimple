@@ -64,6 +64,8 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');
 
+$username = $gCms->variables["username"];
+
 #Did we upload a file?
 if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile']['name']) && $_FILES['uploadfile']['name'] != "")
 {
@@ -72,6 +74,10 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
 			$errors .= "<li>".$gettext->gettext("File could not be uploaded.  Permissions problem?")."</li>";
+		}
+		else
+		{
+			audit($userid, $username, -1, $_FILES['uploadfile']['name'], 'Uploaded File');
 		}
 	}
 	else
@@ -88,7 +94,7 @@ if (isset($_POST['newdirsubmit']))
 		#Make sure it isn't an empty dir name
 		if ($_POST['newdir'] == "")
 		{
-			$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
+			$errors .= "<li>".$gettext->gettext("Cannot create a directory with no name.")."</li>";
 		}
 		else if (ereg('\.\.',$_POST['newdir']))
 		{
@@ -100,11 +106,12 @@ if (isset($_POST['newdirsubmit']))
 		}
 		else if (file_exists($dir."/".$_POST['newdir']))
 		{
-			$errors .= "<li>".$gettext->gettext("This folder already exists.")."</li>";
+			$errors .= "<li>".$gettext->gettext("This directory already exists.")."</li>";
 		}
 		else
 		{
 			mkdir($dir."/".$_POST['newdir']);
+			audit($userid, $username, -1, $_POST['newdir'], 'Created Directory');
 		}
 	}
 	else
@@ -122,6 +129,10 @@ if (isset($_GET['action']) && $_GET['action'] == "deletefile")
 			if (!(unlink($dir . "/" . $_GET['file'])))
 			{
 				$errors .= "<li>".$gettext->gettext("Could not delete file.  Permissions problem?")."</li>";
+			}
+			else
+			{
+				audit($userid, $username, -1, $reldir . "/" . $_GET['file'], 'Deleted File');
 			}
 		}
 		else
@@ -144,11 +155,19 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 			{
 				$errors .= "<li>".$gettext->gettext("Could not delete directory.  Permissions problem?")."</li>";
 			}
+			else
+			{
+				audit($userid, $username, -1, $reldir . "/" . $_GET['file'], 'Deleted Directory');
+			}
 		}
 		else
 		{
 			$errors .= "<li>".$gettext->gettext("No real directory given")."</li>";
 		}
+	}
+	else
+	{
+		$errors .= "<li>".$gettext->gettext("You need the 'Modify Files' permission to perform that function.")."</li>";
 	}
 }
 
@@ -160,6 +179,8 @@ $dirtext = "";
 $filetext = "";
 
 echo "<h3>File Management</h3>";
+
+echo "<h4>Current Directory: ".($reldir==""?"/":$reldir)."</h4>"; 
 
 if ($errors != "")
 {
@@ -248,9 +269,11 @@ if ($filetext == "" && $dirtext == "")
 
 echo "</table>";
 
+
 if ($access)
 {
 ?>
+
 
 <form enctype="multipart/form-data" action="files.php" method="post">
 	<input type="hidden" name="MAX_FILE_SIZE" value="<?=$config["max_upload_size"]?>" />

@@ -38,8 +38,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	if ($username != "" && $password != "" && isset($line["user_id"])) {
 		setcookie("cms_admin_user_id", $line["user_id"]);
-		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
-		$_SESSION["cms_admin_username"] = $line["username"];	
+		generate_user_object($line["user_id"]);
 		audit($line["user_id"], $line["username"], -1, "", 'User Login');
 		redirect("index.php");
 		return;

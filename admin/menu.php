@@ -1,5 +1,5 @@
 <div class="nav">
-<h4><?php
+<h5><?php
 if (isset($_SESSION["cms_admin_username"]))
 {
 	$gettext->setVar("name", $_SESSION["cms_admin_username"]);
@@ -10,7 +10,7 @@ else
 }
 echo $gettext->gettext('Welcome ${name}');
 $gettext->reset();
-?></h4>
+?></h5>
 <a href="editprefs.php"><?=$gettext->gettext("User Preferences")?></a>
 <a href="logout.php"><?=$gettext->gettext("Logout")?></a>
 
@@ -36,7 +36,7 @@ $gettext->reset();
 </form>
 <br />
 
-<h4>Content</h4>
+<h5>Content</h5>
 <a href="listcontent.php"><?=$gettext->gettext("Content Management")?></a>
 <a href="listtemplates.php"><?=$gettext->gettext("Template Management")?></a>
 <!--<a href="tools.php"><?=$gettext->gettext("Tools")?></a>-->
@@ -64,7 +64,7 @@ $gettext->reset();
 	}
 
 	if ($displaymodules != "") {
-		echo "<h4>".$gettext->gettext("Modules")."</h4>";
+		echo "<h5>".$gettext->gettext("Modules")."</h5>";
 		echo $displaymodules;
 	}
 

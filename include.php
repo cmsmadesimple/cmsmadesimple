@@ -50,10 +50,13 @@ $config = cms_config_load(true);
 $gCms->config = &$config;
 
 #Add users if they exist in the session
+$gCms->variables["user_id"] = "";
 if (isset($_SESSION["cms_admin_user_id"]))
 {
 	$gCms->variables["user_id"] = $_SESSION["cms_admin_user_id"];
 }
+
+$gCms->variables["username"] = "";
 if (isset($_SESSION["cms_admin_username"]))
 {
 	$gCms->variables["username"] = $_SESSION["cms_admin_username"];
