@@ -26,7 +26,9 @@ OR
 4.  Optionally install the BB Code Parser.  There is a flag in config.php where you can turn this feature on/off.  The install.php file will set this for you.
         - pear install HTML_BBCodeParser
 
-5.  Run autogen.sh to fix up permissions on the cache dir
+5.  Fix the permissions on the cache and template compilation directories so the web server has access to them.
+        - chmod 666 smarty/cms/templates_c
+	- chmod 666 smarty/cms/cache
 
 6.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
 
