@@ -83,9 +83,10 @@ if (isset($_POST["adduser"])) {
 		$newuser->username = $user;
 		$newuser->SetPassword($password);
 		$newuser->active = $active;
-		$newuser->firstname = $firstname;
-		$newuser->lastname = $lastname;
-		$newuser->email = $email;
+		#$newuser->firstname = $firstname;
+		#$newuser->lastname = $lastname;
+		#$newuser->email = $email;
+		#$newuser->adminaccess = $adminaccess;
 		$result = $newuser->save();
 
 		if ($result) {
@@ -126,6 +127,7 @@ if ($error != "") {
 		<td>*<?php echo lang('passwordagain')?>:</td>
 		<td><input type="password" name="passwordagain" maxlength="255" value="" class="standard"></td>
 	</tr>
+	<!--
 	<tr>
 		<td><?php echo lang('firstname')?>:</td>
 		<td><input type="text" name="firstname" maxlength="50" value="" class="standard"></td>
@@ -142,6 +144,7 @@ if ($error != "") {
 		<td><?php echo lang('adminaccess')?>:</td>
 		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
 	</tr>
+	-->
 	<tr>
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>

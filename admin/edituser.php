@@ -92,10 +92,10 @@ if ($access) {
 			if ($thisuser)
 			{
 				$thisuser->username = $user;
-				$thisuser->firstname = $firstname;
-				$thisuser->lastname = $lastname;
-				$thisuser->email = $email;
-				$thisuser->adminaccess = $adminaccess;
+				#$thisuser->firstname = $firstname;
+				#$thisuser->lastname = $lastname;
+				#$thisuser->email = $email;
+				#$thisuser->adminaccess = $adminaccess;
 				$thisuser->active = $active;
 				if ($password != "") {
 					$thisuser->SetPassword($password);
@@ -117,10 +117,10 @@ if ($access) {
 
 		$thisuser = UserOperations::LoadUserByID($user_id);
 		$user = $thisuser->username;
-		$firstname = $thisuser->firstname;
-		$lastname = $thisuser->lastname;
-		$email = $thisuser->email;
-		$adminaccess = $thisuser->adminaccess;
+		#$firstname = $thisuser->firstname;
+		#$lastname = $thisuser->lastname;
+		#$email = $thisuser->email;
+		#$adminaccess = $thisuser->adminaccess;
 		$active = $thisuser->active;
 	}
 }
@@ -161,6 +161,7 @@ else {
 	<tr>
 		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
 	</tr>
+	<!--
 	<tr>
 		<td><?php echo lang('firstname')?>:</td>
 		<td><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard"></td>
@@ -177,6 +178,7 @@ else {
 		<td><?php echo lang('adminaccess')?>:</td>
 		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
 	</tr>
+	-->
 	<tr>
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
