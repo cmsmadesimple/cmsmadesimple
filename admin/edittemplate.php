@@ -22,42 +22,54 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify Template');
 
-if (isset($_POST["edittemplate"])) {
+if ($access) {
 
-	$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', active = $active, modified_date = now() WHERE template_id = $template_id";
-	$result = $db->query($query);
+	$db = new DB($config);
 
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listtemplates.php");
-		return;
+	if (isset($_POST["edittemplate"])) {
+
+		$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', active = $active, modified_date = now() WHERE template_id = $template_id";
+		$result = $db->query($query);
+
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listtemplates.php");
+			return;
+		}
+		else {
+			echo "Error updating template";
+			echo "<pre>query: $query</pre>";
+		}
+
 	}
-	else {
-		echo "Error updating template";
-		echo "<pre>query: $query</pre>";
+	else if ($template_id != -1) {
+
+		$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
+		$result = $db->query($query);
+		
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+
+		$template = $row["template_name"];
+		$content = $row["template_content"];
+		$active = $row["active"];
+
+		mysql_free_result($result);
+
 	}
+
+	$db->close($link);
 
 }
-else if ($template_id != -1) {
-
-	$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
-	$result = $db->query($query);
-	
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-
-	$template = $row["template_name"];
-	$content = $row["template_content"];
-	$active = $row["active"];
-
-	mysql_free_result($result);
-
-}
-
-$db->close($link);
 
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access To Edit Templates</h3>";
+}
+else {
 
 ?>
 
@@ -94,6 +106,7 @@ include_once("header.php");
 
 <?php
 
+}
 include_once("footer.php");
 
 ?>

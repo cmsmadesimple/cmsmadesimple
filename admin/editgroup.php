@@ -16,46 +16,58 @@ $group_id = -1;
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
-$db = new DB($config);
-
 if (isset($_POST["cancel"])) {
 	redirect("listgroups.php");
 	return;
 }
 
-if (isset($_POST["editgroup"])) {
+$userid = get_userid();
+$access = check_permission($config, $userid, 'Modify Group');
 
-	$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_real_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
-	$result = $db->query($query);
+if ($access) {
 
-	if (mysql_affected_rows() > -1) {
-		$db->close();
-		redirect("listgroups.php");
-		return;
+	$db = new DB($config);
+
+	if (isset($_POST["editgroup"])) {
+
+		$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_real_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
+		$result = $db->query($query);
+
+		if (mysql_affected_rows() > -1) {
+			$db->close();
+			redirect("listgroups.php");
+			return;
+		}
+		else {
+			echo "Error updating group";
+			echo "<pre>query: $query</pre>";
+		}
+
 	}
-	else {
-		echo "Error updating group";
-		echo "<pre>query: $query</pre>";
+	else if ($group_id != -1) {
+
+		$query = "SELECT * from ".$config->db_prefix."groups WHERE group_id = " . $group_id;
+		$result = $db->query($query);
+		
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+
+		$group = $row["group_name"];
+		$active = $row["active"];
+
+		mysql_free_result($result);
+
 	}
+
+	$db->close();
 
 }
-else if ($group_id != -1) {
-
-	$query = "SELECT * from ".$config->db_prefix."groups WHERE group_id = " . $group_id;
-	$result = $db->query($query);
-	
-	$row = mysql_fetch_array($result, MYSQL_ASSOC);
-
-	$group = $row["group_name"];
-	$active = $row["active"];
-
-	mysql_free_result($result);
-
-}
-
-$db->close();
 
 include_once("header.php");
+
+if (!$access) {
+	print "<h3>No Access to Edit Groups</h3>";
+}
+else {
 
 ?>
 
@@ -88,6 +100,7 @@ include_once("header.php");
 
 <?php
 
+}
 include_once("footer.php");
 
 ?>
