@@ -27,18 +27,20 @@ if (isset($_GET["section_id"])) {
 
 	$section_id = $_GET["section_id"];
 	$seciton_name = "";
+	$order = 1;
 	$userid = get_userid();
 	$access = check_permission($config, $userid, 'Remove Section');
 
 	if ($access) {
 		$db = new DB($config);
 
-		$query = "SELECT section_name FROM ".$config->db_prefix."sections WHERE section_id = ".$section_id;
+		$query = "SELECT section_name, item_order FROM ".$config->db_prefix."sections WHERE section_id = ".$section_id;
 		$result = $db->query($query);
 
 		if ($db->rowcount($result) > 0) {
 			$row = $db->getresulthash($result);
 			$section_name = $row[section_name];
+			$order = $row[item_order];
 		}
 
 		$db->freeresult($result);
@@ -54,6 +56,11 @@ if (isset($_GET["section_id"])) {
 		if ($dodelete) {
 			$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";
 			$result = $db->query($query);
+
+			#Fix the item_order if necessary
+			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE item_order > $order";
+			$result = $db->query($query);
+
 			#This is so pages will not cache the menu changes
 			$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 			$db->query($query);

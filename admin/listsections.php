@@ -67,10 +67,10 @@ if (isset($_GET["message"])) {
 			if ($edit) {
 				echo "<td>";
 				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\">".GetText::gettext("Up")."</a> ";
+					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".GetText::gettext("Up")."\" border=\"0\" /></a> ";
 				}
 				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\">".GetText::gettext("Down")."</a>";
+					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".GetText::gettext("Down")."\" border=\"0\" /></a> ";
 				}
 				if ($count == 1) {
 					echo "&nbsp;";
