@@ -16,6 +16,17 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+function phplayers_prerender_function(&$cms, &$content)
+{
+	$text = '
+	<link rel="stylesheet" href="phplayers/layersmenu-cms.css" type="text/css"></link>
+	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
+	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
+	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
+
+	$content = ereg_replace("<\/head>", $text."</head>", $content);
+}
+
 function phplayers_module_execute($cms, $id, $params)
 {
 	$allcontent = ContentManager::GetAllContent();
@@ -94,6 +105,8 @@ function phplayers_module_execute($cms, $id, $params)
 	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
 	<script language="JavaScript" type="text/javascript" src="modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
+
+	$text = '';
 	
 	require_once dirname(__FILE__).'/phplayers/lib/PHPLIB.php';
 	require_once dirname(__FILE__).'/phplayers/lib/layersmenu-common.inc.php';

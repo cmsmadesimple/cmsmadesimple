@@ -703,6 +703,42 @@ function cms_mapi_register_content_module_get_url_function($name, $function)
 }
 
 /**
+ * Registers a function to be called with content before it is sent to
+ * smarty for processing.  These changes will possibly cache.
+ *
+ * Passes $cms and a string of content as parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_prerender_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_prerender_function'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called with content after it is sent to
+ * smarty for processing.  Changes will never cache.
+ *
+ * Passes $cms and a string of content as parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_postrender_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_postrender_function'] = $function;
+	}
+}
+
+/**
  * Enables the WYSIWYG for this module on all textareas
  *
  * @since 0.5

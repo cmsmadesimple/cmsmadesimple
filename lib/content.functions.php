@@ -226,6 +226,17 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = $header_script.$tpl_source;
 					}
 				}
+
+				#Perform the content prerender callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['content_prerender_function']) &&
+						$gCms->modules[$key]['Installed'] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
+					}
+				}
 				return true;
 			}
 			else
@@ -233,6 +244,16 @@ class Smarty_CMS extends Smarty {
 				if (get_site_preference('enablecustom404') == "1")
 				{
 					$tpl_source = get_site_preference('custom404');
+					#Perform the content prerender callback
+					foreach($gCms->modules as $key=>$value)
+					{
+						if (isset($gCms->modules[$key]['content_prerender_function']) &&
+							$gCms->modules[$key]['Installed'] == true &&
+							$gCms->modules[$key]['Active'] == true)
+						{
+							call_user_func_array($gCms->modules[$key]['content_prerender_function'], array(&$gCms, &$tpl_source));
+						}
+					}
 					return true;	
 				}
 				else

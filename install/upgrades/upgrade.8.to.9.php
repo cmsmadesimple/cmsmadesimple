@@ -166,6 +166,19 @@ foreach ($alltemplates as $onetemplate)
 
 echo "[done]</p>";
 
+echo "<p>\"Installing\" phplayers module (if necessary)... ";
+
+$query = "SELECT * from ".cms_db_prefix()."modules WHERE module_name = 'PHPLayers'";
+$result = $db->Execute($query);
+
+if ($result && $result->RowCount() < 1)
+{
+	$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, status, version, active) VALUES ('PHPLayers', Installed', '1.0', 1);
+	$result = $db->Execute($query);
+}
+
+echo "[done]</p>";
+
 echo "<p>Updating schema version... ";
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 9";

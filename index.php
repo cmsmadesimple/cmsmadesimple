@@ -74,7 +74,7 @@ if ($page == "")
 
 if (get_site_preference('enablecustom404') == "0")
 {
-	#$old_error_handler = set_error_handler("ErrorHandler404");
+	$old_error_handler = set_error_handler("ErrorHandler404");
 }
 
 $html = "";
@@ -91,13 +91,24 @@ else
 
 if (get_site_preference('enablecustom404') == "0")
 {
-	#set_error_handler($old_error_handler);
+	set_error_handler($old_error_handler);
 }
 
 #if(password_protected($page) != -1 && !check_access(password_protected($page)))
 #{
 #	$html = display_login_form();
 #}
+
+#Perform the content prerender callback
+foreach($gCms->modules as $key=>$value)
+{
+	if (isset($gCms->modules[$key]['content_postrender_function']) &&
+		$gCms->modules[$key]['Installed'] == true &&
+		$gCms->modules[$key]['Active'] == true)
+	{
+		call_user_func_array($gCms->modules[$key]['content_postrender_function'], array(&$gCms, &$html));
+	}
+}
 
 echo $html;
 
