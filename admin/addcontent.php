@@ -331,7 +331,7 @@ else {
 	</tr>
 	<tr>
 		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br>
-        <?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
+        <?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content"); ?></td>
 	</tr>
 </table>
 

@@ -53,13 +53,11 @@ if ($access) {
 	if (isset($_POST["addhtmlblob"])) {
 
 		$validinfo = true;
-		if ($htmlblob == "")
-		{
+		if ($htmlblob == ""){
 			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
 			$validinfo = false;
 		}
-		else if (HtmlBlobOperations::CheckExistingHtmlBlobName($htmlblob))
-		{
+		else if (HtmlBlobOperations::CheckExistingHtmlBlobName($htmlblob)){
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
@@ -106,11 +104,9 @@ if ($result && $result->RowCount() > 0) {
 
 if (!$access) {
 	print "<h3>".lang('noaccessto', array(lang('addhtmlblob')))."</h3>";
-}
-else {
-	if ($error != "") {
+} else {
+	if ($error != "")
 		echo "<ul class=\"error\">".$error."</ul>";
-	}
 ?>
 
 <form method="post" action="addhtmlblob.php" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content\');"';}?>>

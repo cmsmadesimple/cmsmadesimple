@@ -71,7 +71,7 @@ H4 {
 	BORDER-RIGHT: #8c8a8c 1px solid; PADDING-RIGHT: 6px; PADDING-LEFT: 6px; PADDING-BOTTOM: 6px; BORDER-LEFT: #6f8341 1px solid; WIDTH: 150px; PADDING-TOP: 6px; BORDER-BOTTOM: #8c8a8c 1px solid; TEXT-ALIGN: center
 }
 #logo {
-	POSITION: absolute; LEFT: 0x; POSITION: absolute; TOP: 0px
+	POSITION: absolute; LEFT: 0; POSITION: absolute; TOP: 0px
 }
 #login {
 	PADDING-RIGHT: 0px;
@@ -193,7 +193,7 @@ TABLE.admintable TD {
 }
 
 .button A {
-	BORDER-RIGHT: white 4px outset; PADDING-RIGHT: 11px; BORDER-TOP: white 4px outset; DISPLAY: inline-block ; PADDING-LEFT: 10px; FONT-WEIGHT: normal; FONT-SIZE: 0.9em; PADDING-BOTTOM: 2px; MARGIN: 1px; BORDER-LEFT: white 4px outset;  COLOR: #ffffff; PADDING-TOP: 2px; BORDER-BOTTOM: white 4px outset; FONT-FAMILY: Arial; TEXT-DECORATION: none; BACKGROUND-COLOR: #EEA351; TEXT-ALIGN: left;
+	BORDER-RIGHT: white 4px outset; PADDING-RIGHT: 11px; BORDER-TOP: white 4px outset; DISPLAY: inline; PADDING-LEFT: 10px; FONT-WEIGHT: normal; FONT-SIZE: 0.9em; PADDING-BOTTOM: 2px; MARGIN: 1px; BORDER-LEFT: white 4px outset;  COLOR: #ffffff; PADDING-TOP: 2px; BORDER-BOTTOM: white 4px outset; FONT-FAMILY: Arial, sans-serif; TEXT-DECORATION: none; BACKGROUND-COLOR: #EEA351; TEXT-ALIGN: left;
 }
 .button A:hover {
 	BORDER-RIGHT: white 4px inset; BORDER-TOP: white 4px inset; PADDING-LEFT: 11px; BORDER-LEFT: white 4px inset; COLOR: #cccccc; BORDER-BOTTOM: white 4px inset; BACKGROUND-COLOR: #EA8618
@@ -205,7 +205,7 @@ TABLE.admintable TD {
 }
 FORM .button {
 	FONT-WEIGHT: normal; FONT-SIZE: 0.9em; 
-	FONT-FAMILY: Arial;
+	FONT-FAMILY: Arial, sans-serif;
 	BORDER-RIGHT: white 4px outset; 
 	PADDING-RIGHT: 11px; 
 	BORDER-TOP: white 4px outset; 
@@ -220,14 +220,14 @@ FORM .button {
 	MARGIN: 1px; 
 	COLOR: #ffffff; 
 
-	FONT-FAMILY: Arial; 
+	FONT-FAMILY: Arial, sans-serif; 
 	TEXT-DECORATION: none; 
 	BACKGROUND-COLOR: #EEA351; 
 	TEXT-ALIGN: center;
 }
 FORM .buttonHover {
 	FONT-WEIGHT: normal; FONT-SIZE: 0.9em; 
-	FONT-FAMILY: Arial; 
+	FONT-FAMILY: Arial, sans-serif; 
 	MARGIN: 1px; 
 	BORDER-RIGHT: white 4px inset; 
 	PADDING-RIGHT: 10px; 
