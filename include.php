@@ -16,7 +16,13 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-require_once("version.php");
+ini_set('include_path', ini_get('include_path').":".getcwd().":".getcwd()."/smarty/");
+ini_set('include_path', ini_get('include_path').":".getcwd()."/../:".getcwd()."/../smarty/");
+
+session_name("CMSSESSID");
+if(!session_id()) {
+	session_start();
+}
 
 class CMSConfig {
 
@@ -56,6 +62,8 @@ include_once("config.php");
 	}
 }
 
+require_once("version.php");
+
 $config = new CMSConfig();
 define('SMARTY_DIR', $config->root_path.'/smarty/');
 ini_set('include_path', ini_get('include_path').":".$config->root_path.":".$config->root_path."/smarty/");
@@ -82,9 +90,9 @@ if(get_magic_quotes_gpc())
 	strip_slashes($_GET);
 	strip_slashes($_POST);
 	strip_slashes($_COOKIES);
+	strip_slashes($_SESSIONS);
 }
 
-session_start();
 
 # vim:ts=4 sw=4 noet
 ?>

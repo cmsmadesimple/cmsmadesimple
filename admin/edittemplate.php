@@ -63,7 +63,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', stylesheet = '".mysql_real_escape_string($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
+			$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_escape_string($template)."', template_content = '".mysql_escape_string($content)."', stylesheet = '".mysql_escape_string($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {

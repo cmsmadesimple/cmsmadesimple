@@ -49,7 +49,7 @@ if ($access) {
 
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".mysql_real_escape_string($group)."', $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES ('".mysql_escape_string($group)."', $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
 				$db->close();

@@ -18,7 +18,7 @@
 
 require_once("../include.php");
 
-unset($_SESSION["user_id"]);
+unset($_SESSION["cms_admin_user_id"]);
 
 redirect("index.php");
 

@@ -17,14 +17,14 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 function check_login(&$config) {
-	if (!isset($_SESSION["user_id"])) {
+	if (!isset($_SESSION["cms_admin_user_id"])) {
 		redirect($config->root_url."/admin/login.php");
 	}
 }
 
 function get_userid() {
-	if (isset($_SESSION["user_id"])) {
-		return $_SESSION["user_id"];
+	if (isset($_SESSION["cms_admin_user_id"])) {
+		return $_SESSION["cms_admin_user_id"];
 	}
 }
 

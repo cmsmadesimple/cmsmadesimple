@@ -55,7 +55,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_real_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
+			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".mysql_escape_string($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
 			$result = $db->query($query);
 
 			if (mysql_affected_rows() > -1) {

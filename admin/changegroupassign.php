@@ -45,7 +45,7 @@ if ($access) {
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"user-") == 0) {
-				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".mysql_real_escape_string($group_id).", ".mysql_real_escape_string(substr($key,5)).", now(), now())";
+				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".mysql_escape_string($group_id).", ".mysql_escape_string(substr($key,5)).", now(), now())";
 				$result = $db->query($query);
 			}
 		}
