@@ -198,25 +198,25 @@ else
 ?>
 
 
-	<H3><?php echo lang('modules')?></H3>
+	<h3><?php echo lang('modules')?></h3>
 
-	<TABLE CELLSPACING="0" CLASS="admintable">
-		<TR>
-			<TD><?php echo lang('name')?></TD>
-			<TD WIDTH="10%"><?php echo lang('version')?></TD>
-			<TD WIDTH="10%"><?php echo lang('status')?></TD>
-			<TD WIDTH="10%"><?php echo lang('active')?></TD>
-			<TD WIDTH="10%"><?php echo lang('action')?></TD>
-			<TD WIDTH="10%"><?php echo lang('help')?></TD>
-			<TD WIDTH="10%"><?php echo lang('about')?></TD>
-		</TR>
+	<table cellspacing="0" class="admintable">
+		<tr>
+			<td><?php echo lang('name')?></td>
+			<td width="10%"><?php echo lang('version')?></td>
+			<td width="10%"><?php echo lang('status')?></td>
+			<td width="10%"><?php echo lang('active')?></td>
+			<td width="10%"><?php echo lang('action')?></td>
+			<td width="10%"><?php echo lang('help')?></td>
+			<td width="10%"><?php echo lang('about')?></td>
+		</tr>
 
 <?php
 
 		$curclass = "row1";
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
+		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
+		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
 		
 		foreach($gCms->modules as $key=>$value)
 		{
@@ -267,18 +267,18 @@ else
 
 	?>
 
-</TABLE>
+</table>
 
-	<H3><?php echo lang('tags')?></H3>
+	<h3><?php echo lang('tags')?></h3>
 
-	<TABLE CELLSPACING="0" CLASS="admintable">
-		<TR>
-			<TD><?php echo lang('name')?></TD>
-			<TD WIDTH="16">&nbsp;</TD>
-			<TD WIDTH="16">&nbsp;</TD>
-			<TD WIDTH="8%"><?php echo lang('help')?></TD>
-			<TD WIDTH="8%"><?php echo lang('about')?></TD>
-		</TR>
+	<table cellspacing="0" class="admintable">
+		<tr>
+			<td><?php echo lang('name')?></td>
+			<td width="16">&nbsp;</td>
+			<td width="16">&nbsp;</td>
+			<td width="8%"><?php echo lang('help')?></td>
+			<td width="8%"><?php echo lang('about')?></td>
+		</tr>
 
 <?php
 
@@ -297,7 +297,7 @@ else
 			}
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".lang('edit')."\" alt=\"".lang('edit')."\"></a></td>\n";
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".lang('edit')."\" alt=\"".lang('edit')."\" /></a></td>\n";
 			}
 			else
 			{
@@ -305,7 +305,7 @@ else
 			}
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";
+				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
 			}
 			else
 			{
@@ -335,11 +335,11 @@ else
 
 	?>
 
-</TABLE>
+</table>
 
-<DIV CLASS="button"><A HREF="adduserplugin.php"><?php echo lang('addusertag')?></A></DIV>
+<div class="button"><a href="adduserplugin.php"><?php echo lang('addusertag')?></a></div>
 
-<BR />
+<br />
 
 	<?php
 

@@ -26,7 +26,7 @@ check_login();
 include_once("header.php");
 
 ?>
-<H3><?php echo lang('currentgroups')?></H3>
+<h3><?php echo lang('currentgroups')?></h3>
 <?php
 
 	$userid = get_userid();
@@ -64,10 +64,10 @@ include_once("header.php");
 		$currow = "row1";
 
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
-		$image_groupassign ="<img src=\"../images/cms/groupassign.gif\" alt=\"".lang('assignments')."\" title=\"".lang('assignments')."\" border=\"0\">";
-		$image_premissions ="<img src=\"../images/cms/permissions.gif\" alt=\"".lang('permissions')."\" title=\"".lang('permissions')."\" border=\"0\">";
+		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
+		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
+		$image_groupassign ="<img src=\"../images/cms/groupassign.gif\" alt=\"".lang('assignments')."\" title=\"".lang('assignments')."\" border=\"0\" />";
+		$image_premissions ="<img src=\"../images/cms/permissions.gif\" alt=\"".lang('permissions')."\" title=\"".lang('permissions')."\" border=\"0\" />";
 
 
 		$counter=0;
@@ -81,9 +81,9 @@ include_once("header.php");
 				if ($assign)
 					echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
 				if ($edit)
-					echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\"></a></td>\n";
+					echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" /></a></td>\n";
 				if ($remove)
-					echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\"></a></td>\n";
+					echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" /></a></td>\n";
 				echo "</tr>\n";
 
 				($currow == "row1"?$currow="row2":$currow="row1");
@@ -98,7 +98,7 @@ include_once("header.php");
 if (check_permission($userid, 'Add Group')) {
 ?>
 
-<DIV CLASS=button><A HREF="addgroup.php"><?php echo lang('addgroup')?></A></DIV><BR>
+<div class="button"><a href="addgroup.php"><?php echo lang('addgroup')?></a></div><br />
 
 <?php
 }

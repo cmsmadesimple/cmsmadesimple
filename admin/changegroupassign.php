@@ -113,15 +113,15 @@ else {
 
 		echo "<tr><td>";
 		echo "<input type=\"checkbox\"";
-		echo ($value == true?" checked":"");
-		echo " name=\"user-".$ids[$key]."\" value=\"1\">$key</td></tr>\n";
+		echo ($value == true?" checked=\"checked\"":"");
+		echo " name=\"user-".$ids[$key]."\" value=\"1\" />$key</td></tr>\n";
 	}
 
 ?>
 
-<tr><td><br><input type="hidden" name="group_id" value="<?php echo $group_id?>">
-<input type="submit" name="changeassign" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td></tr>
+<tr><td><br /><input type="hidden" name="group_id" value="<?php echo $group_id?>" />
+<input type="submit" name="changeassign" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
 </table>
 </div>
 

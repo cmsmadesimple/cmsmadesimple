@@ -142,7 +142,7 @@ if (!$access) {
 
 	<tr>
 		<td width="150">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard"></td>
+		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
@@ -150,14 +150,14 @@ if (!$access) {
 	</tr>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>
-		<td><select name="additional_editors[]" multiple size="3"><?php echo $addt_users?></select></td>
+		<td><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
 		<td>
-			<input type="hidden" name="addhtmlblob" value="true">
-			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+			<input type="hidden" name="addhtmlblob" value="true" />
+			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		</td>
 	</tr>
 

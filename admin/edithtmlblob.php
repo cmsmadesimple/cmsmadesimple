@@ -160,7 +160,7 @@ while($row = $result->FetchRow())
 	$owners .= "<option value=\"".$row["user_id"]."\"";
 	if ($row["user_id"] == $owner_id)
 	{
-		$owners .= " selected";
+		$owners .= " selected=\"selected\"";
 	}
 	$owners .= ">".$row["username"]."</option>";
 }
@@ -206,7 +206,7 @@ else
 
 	<tr>
 		<td>*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard"></td>
+		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
@@ -218,18 +218,20 @@ else
 		<td><?php echo $owners?></td>
 	</tr>
 	<?php } ?>
+	<?php if ($addt_users != '') { ?>
 	<tr>
 		<td><?php echo lang('additionaleditors')?>:</td>
-		<td><select name="additional_editors[]" multiple size="3"><?php echo $addt_users?></select></td>
+		<td><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></td>
 	</tr>
+	<?php } ?>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="edithtmlblob" value="true"><input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>"><input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+		<td><input type="hidden" name="edithtmlblob" value="true" /><input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>" /><input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 		<?php if (!$adminaccess) { ?>
-			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>">
+			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
 		<?php } ?>
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>

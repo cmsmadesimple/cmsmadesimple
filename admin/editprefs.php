@@ -100,31 +100,31 @@ echo '<script language="JavaScript" type="text/javascript">'.
         
         
 			<select name="use_wysiwyg">
-				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
-				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
+				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected=\"selected\"":"") ?>><?php echo lang('false')?></option>
+				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected=\"selected\"":"") ?>><?php echo lang('true')?></option>
 			</select>
 		</td>
 	</tr>
 	<tr>
 		<td><?php echo lang("usejavasyntax")?>:</td>
 		<td>
-			<select name="use_javasyntax"  onChange="syntaxSupport()">
-				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected":"") ?>><?php echo lang('false')?></option>
-				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
+			<select name="use_javasyntax"  onchange="syntaxSupport()">
+				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected=\"selected\"":"") ?>><?php echo lang('false')?></option>
+				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected=\"selected\"":"") ?>><?php echo lang('true')?></option>
 			</select>
 		</td>
 	</tr>
-	<TR>
-		<TD><?php echo lang('language')?>:</TD>
-		<TD>
-			<SELECT CLASS="smallselect" NAME="default_cms_lang" onChange="document.prefsform.submit();" STYLE="vertical-align: middle;">
+	<tr>
+		<td><?php echo lang('language')?>:</td>
+		<td>
+			<select class="smallselect" name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
 			<option value=""><?php echo lang('nodefault') ?></option>
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {
 					echo "<option value=\"$key\"";
 					if ($default_cms_lang == $key) {
-						echo " selected";
+						echo " selected=\"selected\"";
 					}
 					echo ">$val";
 					if (isset($nls["englishlang"][$key]))
@@ -134,20 +134,20 @@ echo '<script language="JavaScript" type="text/javascript">'.
 					echo "</option>\n";
 				}
 			?>
-			</SELECT>
-		</TD>
-	</TR>
+			</select>
+		</td>
+	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true"><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>">
-		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>" />
+		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>
 
 </div>
 
-</FORM>
+</form>
 
 <?php
 

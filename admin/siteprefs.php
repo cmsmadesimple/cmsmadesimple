@@ -128,12 +128,12 @@ if ($message != "") {
 	</tr>
 	<tr>
 		<td>Enable Custom 404 Message</td>
-		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked"?>></td>
+		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('custom404')?>:</td>
 		<td>
-			<?php echo textarea_highlight($use_javasyntax, $custom404, 'custom404'); ?><br>
+			<?php echo textarea_highlight($use_javasyntax, $custom404, 'custom404'); ?><br />
 			<?php echo lang('template')?>:
 			<select name="custom404template">
 			<?php
@@ -142,7 +142,7 @@ if ($message != "") {
 					echo "<option value=\"".$key."\"";
 					if ($key == $custom404template)
 					{
-						echo " selected";
+						echo " selected=\"selected\"";
 					}
 					echo ">".$value."</option>";
 				}
@@ -152,7 +152,7 @@ if ($message != "") {
 	</tr>
 	<tr>
 		<td>Enable Site Down Message</td>
-		<td><input type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked"?>></td>
+		<td><input type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked=\"checked\""?> /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('sitedownmessage')?>:</td>
@@ -167,7 +167,7 @@ if ($message != "") {
 					echo "<option value=\"".$key."\"";
 					if ($key == $sitedownmessagetemplate)
 					{
-						echo " selected";
+						echo " selected=\"selected\"";
 					}
 					echo ">".$value."</option>";
 				}
@@ -180,16 +180,16 @@ if ($message != "") {
 		<td><?php echo lang('useadvancedcss')?></td>
 		<td>
 			<select name="useadvancedcss">
-				<option value="1"<?php echo ($useadvancedcss=="1"?" selected":"")?>><?php echo lang('true')?></option>
-				<option value="0"<?php echo ($useadvancedcss=="0"?" selected":"")?>><?php echo lang('false')?></option>
+				<option value="1"<?php echo ($useadvancedcss=="1"?" selected=\"selected\"":"")?>><?php echo lang('true')?></option>
+				<option value="0"<?php echo ($useadvancedcss=="0"?" selected=\"selected\"":"")?>><?php echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
 	<?php if ($access) { ?>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="editsiteprefs" value="true">
-		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="editsiteprefs" value="true" />
+		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 	<?php } ?>
 </table>

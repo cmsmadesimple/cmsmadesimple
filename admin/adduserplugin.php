@@ -121,7 +121,7 @@ else {
 <table width="100%" border="0">
 	<tr>
 		<td width="60">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" class="standard"></td>
+		<td><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td>*<?php echo lang('code')?></td>
@@ -129,9 +129,9 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="addplugin" value="true">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td><input type="hidden" name="addplugin" value="true" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 </table>
 

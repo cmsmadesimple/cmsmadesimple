@@ -132,16 +132,16 @@ else {
 
 	<tr>
 		<td align="right"><?php echo lang('name')?>:</td>
-		<td><input type="text" name="group" maxlength="25" value="<?php echo $group?>"></td>
+		<td><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></td>
 	</tr>
 	<tr>
 		<td align="right"><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
 	</tr>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?php echo $group_id?>"><input type="hidden" name="editgroup" value="true">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?php echo $group_id?>" /><input type="hidden" name="editgroup" value="true" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>

@@ -174,40 +174,40 @@ else {
 
 	<tr>
 		<td>*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard"></td>
+		<td><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('password')?></td>
-		<td ><input type="password" name="password" maxlength="25" value="" class="standard"></td>
+		<td ><input type="password" name="password" maxlength="25" value="" class="standard" /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('passwordagain')?>:</td>
-		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard"></td>
+		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></td>
 	</tr>
 	<tr>
 		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
 	</tr>
 	<tr>
 		<td><?php echo lang('firstname')?>:</td>
-		<td><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard"></td>
+		<td><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('lastname')?>:</td>
-		<td><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard"></td>
+		<td><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard" /></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('email')?>:</td>
-		<td><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard"></td>
+		<td><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></td>
 	</tr>
 	<!--
 	<tr>
 		<td><?php echo lang('adminaccess')?>:</td>
-		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
+		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked=\"checked\"":"")?> /></td>
 	</tr>
 	-->
 	<tr>
 		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
+		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
 	</tr>
 	<!--
 	<tr>
@@ -221,9 +221,9 @@ else {
 	</tr>
 	-->
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?php echo $user_id?>"><input type="hidden" name="edituser" value="true">
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
+		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?php echo $user_id?>" /><input type="hidden" name="edituser" value="true" />
+		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
 	</tr>
 
 </table>
