@@ -50,7 +50,7 @@ if ($access) {
 		if ($validinfo) {
 			$query = "INSERT INTO ".$config->db_prefix."groups (group_name, active, create_date, modified_date) VALUES (".$dbnew->qstr($group).", $active, now(), now())";
 			$result = $dbnew->Execute($query);
-			if ($result) {
+			if ($result && $result->RowCount() > 0) {
 				$new_group_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_group_id, $group, 'Added Group');
 				redirect("listgroups.php");

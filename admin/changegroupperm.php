@@ -41,7 +41,7 @@ if ($access) {
 	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$row = $result->FetchRow();
 		$group_name = $row[group_name];
 	}
@@ -89,7 +89,7 @@ else {
 	$query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 
 		while($row = $result->FetchRow()) {
 
@@ -103,7 +103,7 @@ else {
 
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 
 		while($row = $result->FetchRow()) {
 

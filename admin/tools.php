@@ -95,7 +95,7 @@ function do_adodb_backup() {
         $query = "select $field_list from $table";
         $result = &$dbnew->Execute($query);
     
-        if ($result) {
+        if ($result && $result->RowCount() > 0) {
             while ($row2 = $result->FetchRow()) {
 
                 $data_line = "";

@@ -29,7 +29,7 @@ $userid = get_userid();
 $query = "SELECT * from ".$config->db_prefix."adminlog ORDER BY timestamp DESC limit 30";
 $result = $dbnew->Execute($query);
 
-if ($result) {
+if ($result && $result->RowCount() > 0) {
 
 ?>
 

@@ -77,7 +77,7 @@ if ($access) {
 			$query = "UPDATE ".$config->db_prefix."sections SET section_name=".$dbnew->qstr($section).", active=$active, $query_order parent_id=$parent_id, modified_date = now() WHERE section_id = $section_id";
 			$result = $dbnew->Execute($query);
 
-			if ($result) {
+			if ($result && $result->RowCount() > 0) {
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
 				$dbnew->Execute($query);

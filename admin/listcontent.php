@@ -62,7 +62,7 @@ if (isset($_GET["message"])) {
 ## 
 ## 	$result = $dbnew->Execute($query);
 ## 
-## 	if ($result) {
+## 	if ($result && $result->RowCount() > 0) {
 
 	$content_array = db_get_menu_items($config, "content_hierarchy");
 	if (count($content_array)) {

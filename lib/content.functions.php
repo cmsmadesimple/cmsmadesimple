@@ -285,7 +285,7 @@ function db_get_menu_items(&$config, $style) {
 		$query = "select p.*, u.username, t.template_name from ".$config->db_prefix."pages p LEFT OUTER JOIN ".$config->db_prefix."users u on u.user_id=p.owner LEFT OUTER JOIN ".$config->db_prefix."templates t on t.template_id=p.template_id order by parent_id, item_order";
 		$result = $db->Execute($query);
 
-		if ($result) {
+		if ($result && $result->RowCount() > 0) {
 			$content_array = array();
 			while ($line = $result->FetchRow()) {
 				$current_content = new Page;

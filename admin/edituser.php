@@ -74,7 +74,7 @@ if ($access) {
 			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
 			$result = $dbnew->Execute($query);
 
-			if ($result) {
+			if ($result && $result->RowCount() > 0) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
 				redirect("listusers.php");
 				return;

@@ -41,7 +41,7 @@ if ($access) {
 	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 		$row = $result->FetchRow();
 		$group_name = $row[group_name];
 	}
@@ -84,7 +84,7 @@ else {
 	$query = "SELECT * FROM ".$config->db_prefix."users ORDER BY username";
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount()) {
 
 		while($row = $result->FetchRow()) {
 
@@ -97,7 +97,7 @@ else {
 	$query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount()) {
 
 		while($row = $result->FetchRow()) {
 

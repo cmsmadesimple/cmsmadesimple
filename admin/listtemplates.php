@@ -39,7 +39,7 @@ if (isset($_GET["message"])) {
 	$query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";

@@ -39,7 +39,7 @@ if (isset($_GET["message"])) {
 	$query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
 	$result = $dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";

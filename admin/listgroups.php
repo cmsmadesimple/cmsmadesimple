@@ -37,7 +37,7 @@ include_once("header.php");
 	$query = "SELECT group_id, group_name, active FROM ".$config->db_prefix."groups ORDER BY group_id";
 	$result = &$dbnew->Execute($query);
 
-	if ($result) {
+	if ($result && $result->RowCount() > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";

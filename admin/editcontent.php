@@ -292,7 +292,7 @@ else {
 
 		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
 		$result = $dbnew->Execute($query);
-		if ($result) {
+		if ($result && $result->RowCount() > 0) {
 			$row = $result->FetchRow();
 			$data["stylesheet"] = $row["stylesheet"];
 			$data["template"] = $row["template_content"];
