@@ -34,16 +34,11 @@ if (!isset($result['nostylesheet']))
 {
 	foreach($gCms->modules as $key=>$value)
 	{
-		#Perform the content postrender callback
-		foreach($gCms->modules as $key=>$value)
+		if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
 		{
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentStylesheet($css);
-			}
+			$gCms->modules[$key]['object']->ContentStylesheet($css);
 		}
-
 	}
 }
 
