@@ -2,7 +2,11 @@ Version 0.6.1 -- Subversion
 -----------------
 
 * Added section header content type
-* Changed login and logout to work properly in IIS
+* Added cms_selflink plugin
+* Added some functionality to the News module (make sure you upgrade it)
+* Changed login and logout to work properly in IIS (Fixes #60)
+* Fixed a bug with view page in listcontent (Fixes #61)
+* Fixed so only content pages can be set as default (Fixes #59)
 * Started moving code to an easy object oriented design
 
 Version 0.6 -- Wed Sep 01 2004
