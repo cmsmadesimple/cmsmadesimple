@@ -217,8 +217,7 @@ else
 		// construct true/false button images
 		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\">";
 		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\">";
-
-
+		
 		foreach($gCms->modules as $key=>$value)
 		{
 			echo "<tr class=\"$curclass\">\n";
@@ -230,7 +229,7 @@ else
 				echo "<td>&nbsp;</td>";
 				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
 			}
-			else if (version_compare($gCms->modules[$key]['Version'], $dbm[$key]['Version']) == 1 && isset($gCms->modules[$key]['upgrade_function'])) #Check for an upgrade
+			else if (version_compare($gCms->modules[$key]['Version'], $dbm[$key]['Version']) == 1) #Check for an upgrade
 			{
 				echo "<td>".$gCms->modules[$key]['Version']."</td>";
 				echo "<td>".lang('needupgrade')."</td>";
