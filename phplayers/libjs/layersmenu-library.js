@@ -1,4 +1,4 @@
-// PHP Layers Menu 3.2beta (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
+// PHP Layers Menu 3.2.0-rc (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
 
 layerLeft = new Array();
 layerTop = new Array();
@@ -182,7 +182,7 @@ function getWindowWidth()
 {
 	var value = 0;
 	if ((DOM && !IE) || NS4 || Konqueror || Opera) {
-		value = top.innerWidth;
+		value = window.innerWidth;
 //	} else if (NS4) {
 //		value = document.width;
 	} else {	// IE
@@ -193,7 +193,7 @@ function getWindowWidth()
 		}
 	}
 	if (isNaN(value)) {
-		value = top.innerWidth;
+		value = window.innerWidth;
 	}
 	return (value);
 }
@@ -217,7 +217,7 @@ function getWindowHeight()
 {
 	var value = 0;
 	if ((DOM && !IE) || NS4 || Konqueror || Opera) {
-		value = top.innerHeight;
+		value = window.innerHeight;
 	} else {	// IE
 		if (document.documentElement && document.documentElement.clientHeight) {
 			value = document.documentElement.clientHeight;
@@ -226,7 +226,7 @@ function getWindowHeight()
 		}
 	}
 	if (isNaN(value)) {
-		value = top.innerHeight;
+		value = window.innerHeight;
 	}
 	return (value);
 }

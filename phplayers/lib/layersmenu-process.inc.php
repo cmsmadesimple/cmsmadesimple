@@ -1,5 +1,5 @@
 <?php
-// PHP Layers Menu 3.2beta (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
+// PHP Layers Menu 3.2.0-rc (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
 
 /**
 * This file contains the code of the ProcessLayersMenu class.
@@ -11,7 +11,7 @@
 *
 * It provides methods useful to process/convert menus data, e.g. to output a menu structure and a DB SQL dump corresponding to already parsed data and hence also to convert a menu structure file to a DB SQL dump and viceversa
 *
-* @version 3.2beta
+* @version 3.2.0-rc
 * @package PHPLayersMenu
 */
 class ProcessLayersMenu extends LayersMenuCommon
@@ -75,10 +75,16 @@ function getMenuStructure(
 * @access public
 * @param string $menu_name the name of the menu for which a DB SQL dump
 *   has to be returned
+* @param string $db_type the type of DB to dump for;
+*   leave it either empty or not specified if you are using PHP < 5,
+*   as sqlite_escape_string() has been added in PHP 5;
+*   it has to be specified and set to 'sqlite' only if the dump
+*   has to be prepared for SQLite; it is not significant if != 'sqlite'
 * @return string
 */
 function getSQLDump(
-	$menu_name = ''	// non consistent default...
+	$menu_name = '',	// non consistent default...
+	$db_type = ''
 	)
 {
 	$SQLDump = '';
@@ -100,12 +106,28 @@ function getSQLDump(
 			$VALUES .= "'1', ";
 		}
 		$SQLDump .= $this->tableFields['text'] . ', ';
-		$VALUES .= "'" . addslashes($this->tree[$cnt]['text']) . "', ";
+		$foobar = $this->tree[$cnt]['text'];
+		if ($foobar != '') {
+			if ($db_type != 'sqlite') {
+				$foobar = addslashes($foobar);
+			} else {
+				$foobar = sqlite_escape_string($foobar);
+			}
+		}
+		$VALUES .= "'$foobar', ";
 		$SQLDump .= $this->tableFields['href'] . ', ';
 		$VALUES .= "'" . $this->tree[$cnt]['href'] . "', ";
 		if ($this->tableFields['title'] != "''") {
 			$SQLDump .= $this->tableFields['title'] . ', ';
-			$VALUES .= "'" . addslashes($this->tree[$cnt]['title']) . "', ";
+			$foobar = $this->tree[$cnt]['title'];
+			if ($foobar != '') {
+				if ($db_type != 'sqlite') {
+					$foobar = addslashes($foobar);
+				} else {
+					$foobar = sqlite_escape_string($foobar);
+				}
+			}
+			$VALUES .= "'$foobar', ";
 		}
 		if ($this->tableFields['icon'] != "''") {
 			$SQLDump .= $this->tableFields['icon'] . ', ';

@@ -1,4 +1,4 @@
-// PHP Layers Menu 3.2beta (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
+// PHP Layers Menu 3.2.0-rc (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
 
 function scanChildren(element)
 {
@@ -12,10 +12,10 @@ function scanChildren(element)
 			 )
 			)
 			||
-// Konqueror 3.2 needs hiding only for the following two form elements, but, alas,
-// at the time of this writing (Konqueror 3.2.2), hiding of such two form elements
-// on Konqueror 3.2.x does not work, it is affected by the following bug: http://bugs.kde.org/72885
-			( Konqueror32 &&
+// Konqueror 3.2 and 3.3 need hiding only for the following two form elements, but, alas,
+// at the time of this writing (Konqueror 3.2.3 and 3.3.0-rc2), hiding of such two form elements
+// on Konqueror 3.2 and 3.3 does not work, it is affected by the following bug: http://bugs.kde.org/72885
+			( (Konqueror32 || Konqueror33) &&
 			 (  ((foobar.nodeName == 'SELECT' || foobar.nodeName == 'select') && foobar.size > 1)
 			 || foobar.nodeName == 'TEXTAREA' || foobar.nodeName == 'textarea'
 			 )

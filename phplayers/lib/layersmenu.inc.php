@@ -1,5 +1,5 @@
 <?php
-// PHP Layers Menu 3.2beta (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
+// PHP Layers Menu 3.2.0-rc (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
 
 /**
 * This file contains the code of the LayersMenu class.
@@ -11,7 +11,7 @@
 *
 * This class depends on the LayersMenuCommon class and on the PEAR conforming version of the PHPLib Template class, i.e. on HTML_Template_PHPLIB
 *
-* @version 3.2beta
+* @version 3.2.0-rc
 * @package PHPLayersMenu
 */
 class LayersMenu extends LayersMenuCommon

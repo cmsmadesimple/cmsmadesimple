@@ -1,5 +1,5 @@
 <?php
-// PHP Layers Menu 3.2beta (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
+// PHP Layers Menu 3.2.0-rc (C) 2001-2004 Marco Pratesi - http://www.marcopratesi.it/
 
 /**
 * This file contains the code of the LayersMenuCommon class.
@@ -11,7 +11,7 @@
 *
 * You need to include PEAR.php and DB.php if (and only if) you want to use the DB support provided by ths class.
 *
-* @version 3.2beta
+* @version 3.2.0-rc
 * @package PHPLayersMenu
 */
 class LayersMenuCommon
@@ -233,7 +233,7 @@ var $_tmpArray = array();
 function LayersMenuCommon()
 {
 	$this->_packageName = 'PHP Layers Menu';
-	$this->version = '3.2beta';
+	$this->version = '3.2.0-rc';
 	$this->copyright = '(C) 2001-2004';
 	$this->author = 'Marco Pratesi - http://www.marcopratesi.it/';
 
@@ -714,8 +714,10 @@ $time_start = $this->_getmicrotime();
 				AND ' . $this->tableFields_i18n['language'] . ' = ' . "'$language'" . '
 		');
 		while ($dbresult->fetchInto($row, DB_FETCHMODE_ASSOC)) {
-			$this->_tmpArray[$row['id']]['text'] = $row['text'];
-			$this->_tmpArray[$row['id']]['title'] = $row['title'];
+			if (isset($this->_tmpArray[$row['id']])) {
+				$this->_tmpArray[$row['id']]['text'] = $row['text'];
+				$this->_tmpArray[$row['id']]['title'] = $row['title'];
+			}
 		}
 	}
 	unset($dbresult);
