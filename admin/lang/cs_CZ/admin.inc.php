@@ -215,4 +215,5 @@ $lang['admin']['slogan'] = 'Tak <span style="color: #FE0404">jednoduché</span>,
 $lang['admin']['clearcache'] = 'Vymazat cache'; //needs translation
 $lang['admin']['clear'] = 'Čistá'; //needs translation
 $lang['admin']['cachecleared'] = 'Cache vymazána'; //needs translation
+$lang['admin']['apply'] = 'Apply'; //needs translation
 ?>

@@ -117,6 +117,37 @@ class Content extends ContentBase
 		return $text;
 	}
 
+	function ValidateData()
+	{
+		$errors = array();
+
+		if ($this->mName == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('title'))));
+			$result = false;
+		}
+
+		if ($this->mMenuText == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
+			$result = false;
+		}
+
+		if ($this->mTemplateId == '-1')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('template'))));
+			$result = false;
+		}
+		
+		if ($this->GetPropertyValue('content_en') == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('content'))));
+			$result = false;
+		}
+
+		return (count($errors) > 0?$errors:FALSE);
+	}
+
 	function GetURL()
 	{
 		global $config;
@@ -192,6 +223,31 @@ class Link extends ContentBase
 				$this->mShowInMenu = false;
 			}
 		}
+	}
+
+	function ValidateData()
+	{
+		$errors = array();
+
+		if ($this->mName == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('title'))));
+			$result = false;
+		}
+
+		if ($this->mMenuText == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
+			$result = false;
+		}
+	
+		if ($this->GetPropertyValue('url') == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('url'))));
+			$result = false;
+		}
+
+		return (count($errors) > 0?$errors:FALSE);
 	}
 
 	function Show()
@@ -318,6 +374,26 @@ class SectionHeader extends ContentBase
 				$this->mShowInMenu = false;
 			}
 		}
+	}
+
+	function ValidateData()
+	{
+		$result = true;
+		$errors = array();
+
+		if ($this->mName == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('title'))));
+			$result = false;
+		}
+
+		if ($this->mMenuText == '')
+		{
+			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
+			$result = false;
+		}
+
+		return (count($errors) > 0?$errors:FALSE);
 	}
 
 	function Show()

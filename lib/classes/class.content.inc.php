@@ -669,14 +669,11 @@ class ContentBase
 	 * We do not check the Id because there can be no Id (new content)
 	 * That's up to Save to check this.
 	 *
-	 * @returns	TRUE if data is ok, and an array of invalid parameters else
+	 * @returns	FALSE if data is ok, and an array of invalid parameters else
 	 */
 	function ValidateData()
 	{
-		$result = true;
-		$errors = array();
-
-		return ($result) ? $result : $errors;
+		return FALSE;
 	}
 
 	/**

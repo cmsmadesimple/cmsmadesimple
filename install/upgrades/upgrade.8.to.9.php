@@ -130,6 +130,12 @@ if ($result && $result->RowCount() > 0)
 			}
 		}
 	}
+
+	$query = "UPDATE ".cms_db_prefix()."content SET parent_id = -1 wHERE parent_id IS NULL";
+	$result = $db->Execute($query);
+
+	$query = "UPDATE ".cms_db_prefix()."content SET content_alias = '' wHERE content_alias IS NULL";
+	$result = $db->Execute($query);
 }
 
 echo "[done]</p>";

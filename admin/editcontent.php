@@ -27,7 +27,7 @@ if (isset($_POST["cancel"]))
 
 check_login();
 
-$error = "";
+$error = FALSE;
 
 $content_id = "";
 if (isset($_POST["content_id"])) $content_id = $_POST["content_id"];
@@ -38,6 +38,9 @@ if (isset($_POST["previewbutton"])) $preview = true;
 
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
+
+$apply = false;
+if (isset($_POST["applybutton"])) $apply = true;
 
 #Get a list of content types and pick a default if necessary
 $existingtypes = ContentManager::ListContentTypes();
@@ -95,14 +98,21 @@ if (!$access)
 
 if ($access)
 {
-	if ($submit)
+	if ($submit || $apply)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		$contentobj->Save();
-		ContentManager::SetAllHierarchyPositions();
-		audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-		redirect("listcontent.php");
+		$error = $contentobj->ValidateData();
+		if ($error === FALSE)
+		{
+			$contentobj->Save();
+			ContentManager::SetAllHierarchyPositions();
+			if ($submit)
+			{
+				audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
+				redirect("listcontent.php");
+			}
+		}
 	}
 	else if ($content_id != -1 && !$preview && get_class($contentobj) != $content_type)
 	{
@@ -131,6 +141,15 @@ foreach ($existingtypes as $onetype)
 }
 $typesdropdown .= "</select>";
 
+if (isset($error) && $error !== FALSE)
+{
+	echo '<ul>';
+	foreach ($error as $oneerror)
+	{
+		echo '<li>'.$oneerror.'</li>';
+	}
+	echo '</ul>';
+}
 ?>
 
 <form method="post" action="editcontent.php" name="editform" id="editform">
@@ -158,6 +177,7 @@ $typesdropdown .= "</select>";
 <input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <?php } ?>
 <input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
+<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 
 </div> <!--end adminform-->

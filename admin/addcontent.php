@@ -28,10 +28,13 @@ if (isset($_POST["cancel"]))
 
 check_login();
 
-$error = "";
+$error = FALSE;
 
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
+
+$apply = false;
+if (isset($_POST["applybutton"])) $apply = true;
 
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
@@ -89,19 +92,26 @@ else
 
 if ($access)
 {
-	if ($submit)
+	if ($submit || $apply)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		$contentobj->Save();
-		ContentManager::SetAllHierarchyPositions();
-		audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-		redirect("listcontent.php");
-		return;
+		$error = $contentobj->ValidateData();
+		if ($error === FALSE)
+		{
+			$contentobj->Save();
+			ContentManager::SetAllHierarchyPositions();
+			if ($submit)
+			{
+				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
+				redirect("listcontent.php");
+			}
+		}
 	}
 }
 
 include_once("header.php");
+
 
 #Get a list of content_types and build the dropdown to select one
 $typesdropdown = '<select name="content_type" onchange="document.addform.submit()" class="standard">';
@@ -115,6 +125,16 @@ foreach ($existingtypes as $onetype)
 	$typesdropdown .= ">".ucfirst($onetype)."</option>";
 }
 $typesdropdown .= "</select>";
+
+if ($error !== FALSE)
+{
+	echo '<ul>';
+	foreach ($error as $oneerror)
+	{
+		echo '<li>'.$oneerror.'</li>';
+	}
+	echo '</ul>';
+}
 
 ?>
 

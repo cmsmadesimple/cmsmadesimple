@@ -215,4 +215,5 @@ $lang['admin']['slogan'] = 'Così <span style="color: #FE0404">semplice</span>, s
 $lang['admin']['clearcache'] = 'Clear Cache'; //needs translation
 $lang['admin']['clear'] = 'Clear'; //needs translation
 $lang['admin']['cachecleared'] = 'Cache Cleared'; //needs translation
+$lang['admin']['apply'] = 'Apply'; //needs translation
 ?>
