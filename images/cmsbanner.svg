@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.37"
+   width="2862.28pt"
+   height="688.89000pt"
+   sodipodi:docbase="/home/wishy/src/cms"
+   sodipodi:docname="cmsbanner.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient829">
+      <stop
+         style="stop-color:#000;stop-opacity:1;"
+         offset="0"
+         id="stop830" />
+      <stop
+         style="stop-color:#fff;stop-opacity:1;"
+         offset="1"
+         id="stop831" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient829"
+       id="linearGradient832" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.31527551"
+     inkscape:cx="1077.83290"
+     inkscape:cy="313.896948"
+     inkscape:window-width="873"
+     inkscape:window-height="547"
+     inkscape:window-x="9"
+     inkscape:window-y="38" />
+  <rect
+     style="font-size:12;fill:#516870;fill-rule:evenodd;stroke-width:7.5;opacity:0.990000;"
+     id="rect866"
+     width="3578.15234375"
+     height="860.89825439"
+     ry="51.8140869"
+     x="0.18225493"
+     y="8.30051002"
+     rx="51.8140869" />
+  <rect
+     style="font-size:12;fill:#788a90;fill-rule:evenodd;stroke-width:7.5;"
+     id="rect827"
+     width="3552.07177734"
+     height="837.61437988"
+     ry="38.3838577"
+     x="16.02603531"
+     y="19.94253976"
+     rx="38.3838577" />
+  <rect
+     style="font-size:12;fill:#d3edf3;fill-rule:evenodd;stroke:#88baca;stroke-width:16.6959;"
+     id="rect826"
+     width="513.43846533"
+     height="511.44129378"
+     ry="30.7815969"
+     x="310.22134156"
+     y="57.65476642"
+     rx="27.4682609" />
+  <rect
+     style="font-size:12;fill:#67aacb;fill-rule:evenodd;stroke:#c5dee3;stroke-width:16.6959;"
+     id="rect825"
+     width="535.79173604"
+     height="533.70758837"
+     ry="32.1217082"
+     x="72.35372922"
+     y="166.07343275"
+     rx="28.6641273" />
+  <rect
+     style="font-size:12;fill:#88baca;fill-rule:evenodd;stroke:#61a0bf;stroke-width:16.6959;"
+     id="rect828"
+     width="445.99164098"
+     height="444.25683206"
+     ry="26.7380287"
+     x="321.66025316"
+     y="369.02184339"
+     rx="23.8599466" />
+  <text
+     xml:space="preserve"
+     style="font-size:48;fill:#c6e7ef;stroke-width:2.69756;font-family:Courier;font-weight:normal;font-style:normal;text-anchor:start;writing-mode:lr;"
+     x="158.811234"
+     y="61.3434252"
+     id="text838"
+     sodipodi:linespacing="100%"
+     transform="scale(5.831805,5.646922)"><tspan
+       x="158.811234"
+       y="61.3434258"
+       sodipodi:role="line"
+       id="tspan636">CMS Made Simple</tspan></text>
+  <text
+     xml:space="preserve"
+     style="fill:black;fill-opacity:1;stroke:none;font-family:Bitstream Charter;font-style:normal;font-weight:normal;font-size:12;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;text-anchor:start;writing-mode:lr;"
+     x="118.804802"
+     y="68.7865963"
+     id="text619"
+     transform="scale(10.67050,10.81947)"
+     sodipodi:linespacing="100%"><tspan
+       x="118.804802"
+       y="68.7865982"
+       sodipodi:role="line"
+       id="tspan640">Content Management.  Done.</tspan></text>
+</svg>

@@ -33,12 +33,12 @@ h1, h2, h3, h4, h5, p {
 	color: #64879d;
 	padding: 8px;
 	border-bottom: 2px solid #64879d;
-	height: 116px;
+	height: 100px;
 }
 
 #logo {
 	position: absolute;
-	right: 10px;
+	left: 10px;
 	top: 10px;
 }
 

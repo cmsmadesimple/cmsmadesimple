@@ -66,7 +66,7 @@ if ($_POST["username"] && $_POST["password"]) {
 
 <form method="post" action="login.php" id="login">
 
-<img src="../cmslogo.png" border="0" id="loginlogo" alt="CMS Made Simple"/>
+<img src="../images/cmslogo.png" border="0" id="loginlogo" alt="CMS Made Simple"/>
 
 <table border=0 id="table">
 	<tr>
