@@ -224,8 +224,8 @@ $lang['admin']['missingdependency'] = 'Dépendance manquante';
 $lang['admin']['minimumversion'] = 'Version minimale';
 $lang['admin']['depsformodule'] = 'Dépendances pour module %s ';
 $lang['admin']['installed'] = 'Installé'; 
-$lang['admin']['author'] = 'Author'; //needs translation
-$lang['admin']['changehistory'] = 'Change History'; //needs translation
-$lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module'; //needs translation
-$lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module'; //needs translation
+$lang['admin']['author'] = 'Auteur';
+$lang['admin']['changehistory'] = 'Historique des changements';
+$lang['admin']['moduleinstallmessage'] = 'Message d\'installation pour le module %s';
+$lang['admin']['moduleuninstallmessage'] = 'Message de désinstallation pour le module %s';
 ?>
