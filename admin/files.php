@@ -190,11 +190,11 @@ $filetext = "";
 
 echo "<h3>".lang('filemanagement')."</h3>";
 ?>
-<DIV CLASS="ttabArea">
-<A HREF="#" CLASS="tab activeTab"><?php echo lang('filemanager')?></A> 
-<A HREF="imagefiles.php" CLASS="tab"><?php echo lang('imagemanager')?></A> 
-</DIV>
-<DIV CLASS="tabPane">
+<div class="ttabArea">
+<a href="#" class="tab activeTab"><?php echo lang('filemanager')?></a> 
+<a href="imagefiles.php" class="tab"><?php echo lang('imagemanager')?></a> 
+</div>
+<div class="tabPane">
 <?php
 if ($errors != "")
 {
@@ -217,7 +217,7 @@ if ($reldir != "")
 		$newdir = "?reldir=".$newdir;
 	}
 	$dirtext .= "<tr class=\"$row\">";
-	$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
+	$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\" /></td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td width=\"10%\">&nbsp;</td>";
 	$dirtext .= "<td width=\"18\">&nbsp;</td>";
@@ -241,10 +241,10 @@ foreach ($dirs as $file)
 		{
 			$tmp=urlencode($reldir."/".$file);
 			$dirtext .= "<tr class=\"$row\">"; 
-			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
+			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\" /></td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -276,7 +276,7 @@ foreach ($files as $file)
 				// parse little template
 				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
 		//		$file_links = $filetype[$extension]['link']['view'];
-				$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\">";
+				$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
 	
 				$filetext .= "<tr class=\"$row\">";
 				$filetext .= "<td width=\"30\">{$image_icon}</td>";
@@ -288,7 +288,7 @@ foreach ($files as $file)
 					}
 				}
 				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
+				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
 				$filetext .= "</tr>";
 				($row=="row1"?$row="row2":$row="row1");
 			}
@@ -307,22 +307,22 @@ echo "</table>";
 if ($access)
 {
 ?>
-<FORM ENCTYPE="multipart/form-data" ACTION="files.php" METHOD="post">
-	<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $config["max_upload_size"]?>">
-	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="" CLASS="box">
-		<TR>
-			<TD ALIGN="right" STYLE="padding-top: 10px;"><?php echo lang('uploadfile')?>:</TD>
-			<TD STYLE="padding-top: 10px;"><INPUT NAME="uploadfile" TYPE="file">
-			<INPUT TYPE="submit" VALUE="<?php echo lang('send')?>"></TD>
-		</TR>
-		<TR>
-			<TD ALIGN="right"><?php echo lang('createnewfolder')?>:</TD>
-			<TD><INPUT TYPE="text" NAME="newdir"><INPUT TYPE="submit" NAME="newdirsubmit" VALUE="<?php echo lang('create')?>"></TD>
-		</TR>
-	</TABLE>
-	<INPUT TYPE="hidden" NAME="reldir" VALUE="<?php echo $reldir?>">
-</FORM>
-</DIV>
+<form enctype="multipart/form-data" action="files.php" method="post">
+	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
+	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
+		<tr>
+			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
+			<td style="padding-top: 10px;"><input name="uploadfile" type="file" />
+			<input type="submit" value="<?php echo lang('send')?>" /></td>
+		</tr>
+		<tr>
+			<td align="right"><?php echo lang('createnewfolder')?>:</td>
+			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></td>
+		</tr>
+	</table>
+	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+</form>
+</div>
 <?php
 }
 

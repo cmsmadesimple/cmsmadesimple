@@ -187,10 +187,10 @@ include_once("header.php");
 
 
 
-	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/assets/dialog.js"></SCRIPT>
-	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/IMEStandalone.js"></SCRIPT>
-<?php echo "	<SCRIPT TYPE=\"text/javascript\" SRC=\"../filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></SCRIPT>\n" ?>
-	<SCRIPT TYPE="text/javascript">
+	<script type="text/javascript" src="../filemanager/ImageManager/assets/dialog.js"></script>
+	<script type="text/javascript" src="../filemanager/ImageManager/IMEStandalone.js"></script>
+<?php echo "	<script type=\"text/javascript\" src=\"../filemanager/ImageManager/lang/{$nls['htmlarea'][$current_language]}.js\"></script>\n" ?>
+	<script type="text/javascript">
     //<![CDATA[
 
 		//Create a new Imanager Manager, needs the directory where the manager is
@@ -204,22 +204,22 @@ include_once("header.php");
 
 
     //]]>
-    </SCRIPT>
+    </script>
 
-<SCRIPT TYPE="text/javascript">
+<script type="text/javascript">
 /*<![CDATA[*/
 
 
 
 /*]]>*/
-</SCRIPT>
+</script>
 
 <?php echo "<h3>".lang('filemanagement')."</h3>"; ?>
-<DIV CLASS="ttabArea">
-<A HREF="files.php" CLASS="tab"><?php echo lang('filemanager')?></A> 
-<A HREF="#" CLASS="tab activeTab"><?php echo lang('imagemanager')?></A> 
-</DIV>
-<DIV CLASS="tabPane">
+<div class="ttabArea">
+<a href="files.php" class="tab"><?php echo lang('filemanager')?></a> 
+<a href="#" class="tab activeTab"><?php echo lang('imagemanager')?></a> 
+</div>
+<div class="tabPane">
 
 <?php
 
@@ -241,7 +241,7 @@ if ($errors != "")
 //echo '<table cellspacing="0" class="admintable">';
 //echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
 ?>
-<IFRAME SRC="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
+<iframe src="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" name="imgManager" class="imagefilesFrame" title="Image Selection" frameborder="0"></iframe>
 
 <?php
 
@@ -250,22 +250,22 @@ if ($access)
 ?>
 
 
-<FORM ENCTYPE="multipart/form-data" ACTION="imagefiles.php" METHOD="post" NAME="uploader">
-	<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $config["max_upload_size"]?>">
-	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="" CLASS="box">
-		<TR>
-			<TD ALIGN="right" STYLE="padding-top: 10px;"><?php echo lang('uploadfile')?>:</TD>
-			<TD STYLE="padding-top: 10px;"><INPUT NAME="uploadfile" TYPE="file">
-			<INPUT TYPE="submit" VALUE="<?php echo lang('send')?>"></TD>
-		</TR>
-		<TR>
-			<TD ALIGN="right"><?php echo lang('createnewfolder')?>:</TD>
-			<TD><INPUT TYPE="text" NAME="newdir"><INPUT TYPE="submit" NAME="newdirsubmit" VALUE="<?php echo lang('create')?>"></TD>
-		</TR>
-	</TABLE>
-	<INPUT TYPE="hidden" NAME="reldir" VALUE="<?php echo $reldir?>">
-</FORM>
-</DIV>
+<form enctype="multipart/form-data" action="imagefiles.php" method="post" name="uploader">
+	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
+	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
+		<tr>
+			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
+			<td style="padding-top: 10px;"><input name="uploadfile" type="file" />
+			<input type="submit" value="<?php echo lang('send')?>" /></td>
+		</tr>
+		<tr>
+			<td align="right"><?php echo lang('createnewfolder')?>:</td>
+			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></td>
+		</tr>
+	</table>
+	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+</form>
+</div>
 <?php
 }
 

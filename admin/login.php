@@ -110,18 +110,19 @@ header("Content-Language: " . $current_language);
 header("Content-Type: text/html; charset=" . get_encoding());
 
 ?>
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
-<HEAD>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+<head>
 
-<TITLE>CMS Admin Login</TITLE>
+<title>CMS Admin Login</title>
 
-<LINK REL="stylesheet" TYPE="text/css" HREF="style.css" >
+<link rel="stylesheet" type="text/css" href="style.css" />
 
-</HEAD>
+</head>
 
-<BODY>
+<body>
 
-<DIV CLASS="login">
+<div class="login">
 
 <?php
 
@@ -131,38 +132,38 @@ header("Content-Type: text/html; charset=" . get_encoding());
 
 ?>
 
-<FORM METHOD="post" ACTION="login.php" ID="login" NAME="login" >
-<IMG SRC="../images/cms/cmsloginbanner.gif" ALT="CMS Made Simple" WIDTH="411" HEIGHT="114" BORDER="0" ALIGN="right" >
-<DIV ID=ctr ALIGN=center>
-<IMG SRC="../images/cms/login.gif" ALT="CMS Made Simple" WIDTH="64" HEIGHT="64" BORDER="0"  ID="loginbox">
-</DIV>
-<TABLE BORDER="0" ID="logintable" ALIGN="center">
-	<TR>
-		<TD ALIGN="right"><?php echo lang('username')?>:</TD>
-		<TD><INPUT TYPE="text" ID="userdata" NAME="username" VALUE="<?php echo (isset($_POST["username"])?$_POST["username"]:"")?>" SIZE="15"></TD>
-	</TR>
-	<TR>
-		<TD ALIGN="right"><?php echo lang('password')?>:</TD>
-		<TD><INPUT TYPE="password" ID="userdata_p" NAME="password" VALUE="<?php echo (isset($_POST["password"])?$_POST["password"]:"")?>" SIZE="15" ></TD>
-	</TR>
-	<TR>
-		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
-		<TD>
-			<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="document.login.submit()" STYLE="vertical-align: middle;">
+<form method="post" action="login.php" id="login" name="login" >
+<img src="../images/cms/cmsloginbanner.gif" alt="CMS Made Simple" width="411" height="114" border="0" align="right" />
+<div id="ctr" align="center">
+<img src="../images/cms/login.gif" alt="CMS Made Simple" width="64" height="64" border="0" id="loginbox" />
+</div>
+<table border="0" id="logintable" align="center">
+	<tr>
+		<td align="right"><?php echo lang('username')?>:</td>
+		<td><input type="text" id="userdata" name="username" value="<?php echo (isset($_POST["username"])?$_POST["username"]:"")?>" size="15" /></td>
+	</tr>
+	<tr>
+		<td align="right"><?php echo lang('password')?>:</td>
+		<td><input type="password" id="userdata_p" name="password" value="<?php echo (isset($_POST["password"])?$_POST["password"]:"")?>" size="15" /></td>
+	</tr>
+	<tr>
+		<td align="right"><?php echo lang('language')?>:</td>
+		<td>
+			<select class="smallselect"  name="change_cms_lang" onchange="document.login.submit()" style="vertical-align: middle;">
 			<?php
 				asort($nls["language"]);
 				foreach ($nls["language"] as $key=>$val) {
 					echo "<option value=\"$key\"";
 					if (isset($_POST["change_cms_lang"])) {
 						if ($_POST["change_cms_lang"] == $key) {
-							echo " selected";
+							echo " selected=\"selected\"";
 						}
 					}else if(isset($_COOKIE["cms_language"])) {
 						if ($_COOKIE["cms_language"] == $key) {
-							echo " selected";
+							echo " selected=\"selected\"";
 						}
 					}else if($key == 'en_US'){//no language is set defaults to english.
-						echo ' selected';
+						echo ' selected="selected"';
 					}
 					echo ">$val";
 					/*
@@ -174,18 +175,18 @@ header("Content-Type: text/html; charset=" . get_encoding());
 					echo "</option>\n";
 				}
 			?>
-			</SELECT>
-		</TD>
-	</TR>
-	<TR>
-		<TD>&nbsp;</TD>
-		<TD>
-			<INPUT TYPE="submit" NAME="loginsubmit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">&nbsp;
-			<INPUT TYPE="submit" NAME="logincancel" VALUE="<?php echo lang('cancel')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'">
-		</TD>
-	</TR>
-</TABLE>
-</FORM>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>&nbsp;</td>
+		<td>
+			<input type="submit" name="loginsubmit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />&nbsp;
+			<input type="submit" name="logincancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+		</td>
+	</tr>
+</table>
+</form>
 
 <script type="text/javascript">
 <!--
@@ -193,8 +194,8 @@ header("Content-Type: text/html; charset=" . get_encoding());
 //-->
 </script>
 </div>
-</BODY>
-</HTML>
+</body>
+</html>
 <?php
 	if (isset($gCms->config) and $gCms->config['debug'] == true)
 	{
