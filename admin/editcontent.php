@@ -38,7 +38,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["editcontent"])) $active = 0;
 
 $showinmenu = 1;
-if (!isset($_POST["showinmenu"]) && isset($_POST["showinmenu"])) $showinmenu = 0;
+if (!isset($_POST["showinmenu"]) && isset($_POST["editcontent"])) $showinmenu = 0;
 
 $order = 1;
 if (isset($_POST["order"])) $order = $_POST["order"];

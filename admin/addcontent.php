@@ -44,7 +44,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
 
 $showinmenu = 1;
-if (isset($_POST["showinmenu"]) && isset($_POST["showinmenu"])) $active = 0;
+if (isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listcontent.php");
@@ -183,7 +183,7 @@ else {
 	</tr>
 	<tr>
 		<td>Show in Menu:</td>
-		<td><input type="checkbox" name="active" <?=($showinmenu == 1?"checked":"")?> /></td>
+		<td><input type="checkbox" name="showinmenu" <?=($showinmenu == 1?"checked":"")?> /></td>
 	</tr>
 	<tr>
 		<td>*Menu Text:</td>
