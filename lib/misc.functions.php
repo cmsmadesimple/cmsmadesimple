@@ -42,7 +42,17 @@ function redirect($to, $noappend=false)
 	}
 	if (headers_sent())
 	{
-		return false;
+		// use javascript instead
+		echo '<script type="text/javascript">
+			<!--
+				location.replace("'.$url.'");
+			// -->
+			</script>
+			<noscript>
+				<meta http-equiv="Refresh" content="0;URL='.$url.'">
+			</noscript>';
+		exit;
+
 	}
 	else
 	{
