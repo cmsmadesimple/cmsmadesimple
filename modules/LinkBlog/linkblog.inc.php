@@ -226,15 +226,15 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         <table>
             <tr>
                 <td>Your name:</td>
-                <td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
+                <td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size="20" maxlength="50" /></td>
             </tr>
             <tr>
                 <td>Title:</td>
-                <td><input type="text" name="<?php echo $id?>title" value="<?php echo $title?>" size=100 maxlength=250/></td>
+                <td><input type="text" name="<?php echo $id?>title" value="<?php echo $title?>" size="100" maxlength="250" /></td>
             </tr>
             <tr>
                 <td>URL:</td>
-                <td><input type="text" name="<?php echo $id?>url" value="<?php echo $url?>" size=100 maxlength=250 /></td>
+                <td><input type="text" name="<?php echo $id?>url" value="<?php echo $url?>" size="100" maxlength="250" /></td>
             </tr>
             <tr>
                 <td>Type:</td>
@@ -283,7 +283,7 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
             $errormsg = "<ul>\n";
 		}
 
-		$errormsg .= "</ul>\n";
+		if ($errormsg != "") { $errormsg .= "</ul>\n"; }
 
 		if ($validinfo) {
 			$new_id = $db->GenID(cms_db_prefix()."module_linkblog_comment_seq");
@@ -312,11 +312,11 @@ function linkblog_module_user_action($cms, $id, $return_id, $params) {
         <table>
             <tr>
                 <td>Your name:</td>
-                <td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size=20 maxlength=50 /></td>
+                <td><input type="text" name="<?php echo $id?>author" value="<?php echo $author?>" size="20" maxlength="50" /></td>
             </tr>
             <tr>
                 <td>Comment:</td>
-                <td><input type="text" name="<?php echo $id?>comment" value="" size=100 maxlength=250/></td>
+                <td><input type="text" name="<?php echo $id?>comment" value="" size="100" maxlength="250" /></td>
             </tr>
             <tr>
                 <td>&nbsp;<input type="hidden" name="<?php echo $id?>action" value="post_comment" />
