@@ -149,6 +149,22 @@ echo '[done]</p>';
 
 @ob_flush();
 
+echo '<p>Adding module_deps...';
+
+$dbdict = NewDataDictionary($db);
+$flds = "
+	parent_module C(25),
+	child_module C(25),
+	minimum_version C(25),
+	create_date T,
+	modified_date T
+";
+$taboptarray = array('mysql' => 'TYPE=MyISAM');
+$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_deps", $flds, $taboptarray);
+$dbdict->ExecuteSQLArray($sqlarray);
+
+echo '[done]</p>';
+
 echo '<p>Updating hierarchy positions...';
 
 @ContentManager::SetAllHierarchyPositions();

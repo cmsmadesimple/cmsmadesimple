@@ -119,6 +119,24 @@ function cms_mapi_register_plugin_module($name)
 }
 
 /**
+ * Register a module as a dependency.
+ *
+ * This function will register a dependency on another module for this
+ * one.  It checks for existence and proper versions.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_dependency($name, $depname, $minimum_version)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['dependency'][$depname] = $minimum_version;
+	}
+}
+
+/**
  * Registers the module's help function
  *
  * This function should echo out help html.  It should show
@@ -1219,6 +1237,24 @@ function cms_mapi_create_content_link_by_page_id($page_id, $link_text)
 	global $gCms;
 	$config = &$gCms->config;
 	return "<a href=\"".$config["root_url"]."/index.php?page=$page_id\">$link_text</a>\n";
+}
+
+function cms_mapi_check_for_dependents($parent)
+{
+	global $gCms;
+	$db = $gCms->db;
+	
+	$result = false;
+	
+	$query = "SELECT * FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
+	$dbresult = $db->Execute($query, array($parent));
+	
+	if ($dbresult && $dbresult->RowCount() > 0)
+	{
+		$result = true;
+	}
+	
+	return $result;
 }
 
 function cms_mapi_create_module_content_class($key)

@@ -50,6 +50,18 @@ if ($access)
 		#now insert a record
 		$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($gCms->modules[$module]['Version']).",'Installed',1)";
 		$db->Execute($query);
+		
+		#and insert any dependancies
+        if (isset($gCms->modules[$module]['dependency'])) #Check for any deps
+        {
+            #Now check to see if we can satisfy any deps
+            foreach ($gCms->modules[$module]['dependency'] as $onedepkey=>$onedepvalue)
+            {
+				$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
+				$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+            }
+        }
+		
 		redirect("plugins.php");
 	}
 
@@ -72,8 +84,13 @@ if ($access)
 		}
 
 		#now delete the record
-		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ".$db->qstr($module);
-		$db->Execute($query);
+		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+		$db->Execute($query, array($module));
+		
+		#delete any dependencies
+		$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
+		$db->Execute($query, array($module));
+		
 		redirect("plugins.php");
 	}
 
@@ -237,13 +254,44 @@ else
 		{
 			echo "<tr class=\"$curclass\">\n";
 			echo "<td>$key</td>\n";
-			if (!isset($dbm[$key])) #Not installed, lets put up the install button
-			{
-				echo "<td>".$gCms->modules[$key]['Version']."</td>";
-				echo "<td>".lang('notinstalled')."</td>";
-				echo "<td>&nbsp;</td>";
-				echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
-			}
+            if (!isset($dbm[$key])) #Not installed, lets put up the install button
+            {
+                $havedep = false;
+
+                if (isset($gCms->modules[$key]['dependency'])) #Check for any deps
+                {
+                    #Now check to see if we can satisfy any deps
+                    foreach ($gCms->modules[$key]['dependency'] as $onedepkey=>$onedepvalue)
+                    {
+                    	if (isset($gCms->modules[$onedepkey]) && 
+                    		$gCms->modules[$onedepkey]['Installed'] == true &&
+                    		$gCms->modules[$onedepkey]['Active'] == true &&
+                    		version_compare($gCms->modules[$onedepkey]['Version'], $onedepvalue) > -1)
+                    	{
+                    		$havedep = true;
+                    	}
+                    }
+                }
+                else
+                {
+                    $havedep = true;
+                }
+
+                echo "<td>".$gCms->modules[$key]['Version']."</td>";
+
+                if ($havedep)
+                {
+					echo "<td>".lang('notinstalled')."</td>";
+                	echo "<td>&nbsp;</td>";
+                    echo "<td><a href=\"plugins.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
+                }
+                else
+                {
+                	echo '<td>'.lang('missingdependency').'</td>';
+                	echo "<td>&nbsp;</td>";
+                	echo "<td>&nbsp;</td>";
+                }
+            }
 			else if (version_compare($gCms->modules[$key]['Version'], $dbm[$key]['Version']) == 1) #Check for an upgrade
 			{
 				echo "<td>".$dbm[$key]['Version']."</td>";
@@ -253,10 +301,20 @@ else
 			}
 			else #Must be installed
 			{
+				#Can't be removed if it has a dependency...
+				$hasdeps = cms_mapi_check_for_dependents($key);
+				
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".$dbm[$key]['Status']."</td>";
 				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='plugins.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='plugins.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
-				echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
+				if (!$hasdeps)
+				{
+					echo "<td><a href=\"plugins.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
+				}
+				else
+				{
+					echo "<td>".lang('hasdependency')."</td>";
+				}
 			}
 			if (isset($gCms->modules[$key]['help_function']))
 			{
