@@ -28,6 +28,7 @@ CREATE TABLE pages (
 	page_url varchar(255),
 	page_content text,
 	menu_text varchar(25),
+	default_page bool,
 	show_in_menu bool,
 	owner int,
 	active bool,
@@ -40,6 +41,7 @@ CREATE TABLE pages (
 CREATE TABLE groups (
 	group_id int PRIMARY KEY AUTO_INCREMENT,
 	group_name varchar(25),
+	active bool,
 	create_date datetime,
 	modified_date datetime
 );
@@ -55,6 +57,7 @@ CREATE TABLE users (
 	user_id int PRIMARY KEY AUTO_INCREMENT,
 	username varchar(25),
 	password varchar(25),
+	active bool,
 	create_date datetime,
 	modified_date datetime
 );

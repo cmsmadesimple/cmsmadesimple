@@ -23,6 +23,12 @@ $this->root_url = "http://cms.wishy.org";
 #e.g. /var/www/localhost
 $this->root_path = "/var/cms";
 
+#For using a particular querystring variable.  Turning off
+#produces variables like: http://cms.wishy.org/index.php/somecontent
+#where as setting to page would make:
+#http://cms.wishy.org/?page=somecontent
+$this->query_var = "page";
+
 #Install BBCodeParser from the PEAR library
 #and then set this to true for BBCode usage in content
 #and tables.

@@ -20,7 +20,7 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = true;
-		$this->force_compile = true;
+		#$this->force_compile = true;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -88,5 +88,22 @@ class Smarty_CMS extends Smarty {
         }
 }
 
+function db_get_default_page (&$config) {
+
+	$result = "";
+	$db = new DB($config);
+
+	$query = "SELECT page_url FROM pages WHERE default_page = 1";
+	$result = $db->query($query);
+
+	if (mysql_num_rows($result) > 0) {
+		$line = mysql_fetch_array($result, MYSQL_ASSOC);
+		$result = $line["page_url"];
+	}
+
+	$db->close();
+
+	return $result;
+}
 
 ?>
