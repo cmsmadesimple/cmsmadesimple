@@ -215,8 +215,8 @@ $lang['admin']['database'] = 'Database';
 $lang['admin']['errorinsertingtemplate'] = 'Det oppstod en feil ved innleggelse av mal';
 $lang['admin']['filemanager'] = 'Filbehandler';
 $lang['admin']['currentcss'] = 'Gjeldende CSS';
-$lang['admin']['apply'] = 'Apply'; //needs translation
-$lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use'; //needs translation
-$lang['admin']['none'] = 'None'; //needs translation
-$lang['admin']['cachable'] = 'Cachable'; //needs translation
+$lang['admin']['apply'] = 'Bruk';
+$lang['admin']['none'] = 'Ingen';
+$lang['admin']['wysiwygtouse'] = 'Velg hvilken WYSIWYG tekstbehandler som skal anvendes';
+$lang['admin']['cachable'] = 'Kan caches'; 
 ?>

@@ -215,8 +215,8 @@ $lang['admin']['slogan'] = 'Si <span style="color: #FE0404">simple</span>, que c
 $lang['admin']['clearcache'] = 'Effacer le Cache';
 $lang['admin']['clear'] = 'Effacer';
 $lang['admin']['cachecleared'] = 'Cache Effacé';
-$lang['admin']['apply'] = 'Apply'; //needs translation
-$lang['admin']['none'] = 'None'; //needs translation
-$lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use'; //needs translation
-$lang['admin']['cachable'] = 'Cachable'; //needs translation
+$lang['admin']['apply'] = 'Appliquer';
+$lang['admin']['none'] = 'Aucun';
+$lang['admin']['wysiwygtouse'] = 'Sélection du WYSIWYG à utiliser';
+$lang['admin']['cachable'] = 'Cachable'; 
 ?>
