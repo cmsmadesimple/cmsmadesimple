@@ -22,6 +22,7 @@ expanded (#0000016)
 * Removed most references to BBCode without breaking backwards
 compatibility (#000013)
 * Removed a rogue div from the Comments module (#000010)
+* Fixed htmlarea displaying inproper align values (#0000021)
 
 Version 0.7 -- Mon Oct 11 2004
 -----------------
