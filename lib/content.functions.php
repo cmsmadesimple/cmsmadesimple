@@ -205,8 +205,6 @@ class Smarty_CMS extends Smarty {
 				#Check to see if Show() actually gave us something
 				if ($content != '')
 				{
-					#Do html_blobs
-					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 
 					#If it's regular content, do this...
 					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
@@ -247,6 +245,9 @@ class Smarty_CMS extends Smarty {
 				{
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
+
+				#Do html_blobs
+				$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
