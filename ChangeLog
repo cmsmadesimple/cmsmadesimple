@@ -6,6 +6,8 @@ Version 0.7.3 -- Subversion
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
 * Fixed displaying html_blobs in modules with executeuser
+* Fixed HTML bug in print module (#000048)
+* Fixed error message with Deleting templates (Part of #000047)
 * Reenabled Image Manager
 * Removed Allow Admin Access from add/edit user
 * Updated adodb to 4.54

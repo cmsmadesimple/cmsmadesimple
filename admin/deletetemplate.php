@@ -58,7 +58,7 @@ if ($dodelete)
 }
 else
 {
-	redirect("listtemplates.php?message=".lang('errortemplateisuse'));
+	redirect("listtemplates.php?message=".lang('errortemplateinuse'));
 }
 
 # vim:ts=4 sw=4 noet
