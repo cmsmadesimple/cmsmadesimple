@@ -405,7 +405,7 @@ else {
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" cols="80" rows="24"><?php echo $content?></textarea></td>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" cols="80" rows="24"><?php echo htmlentities($content)?></textarea></td>
 	</tr>
 </table>
 
@@ -413,7 +413,7 @@ else {
 <div id="advanced" class="expand">
 	<a id="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?>
-		<textarea rows="4" name="head_tags"><?php echo $head_tags ?></textarea>
+		<textarea rows="4" name="head_tags"><?php echo htmlentities($head_tags) ?></textarea>
 	</div>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">
@@ -429,6 +429,7 @@ else {
 						<tr valign="top" style="padding-top: 5px;">
 							<td valign="top"><?php echo lang('active')?>:</td>
 							<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>> </td>
+						</tr>
 						</tr>
 							<td colspan="2"><?php echo lang('parent')?>:&nbsp;<?php echo $dropdown?></td>
 						</tr>

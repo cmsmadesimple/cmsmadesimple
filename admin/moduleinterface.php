@@ -41,7 +41,7 @@ if (count($gCms->modules) > 0) {
 
 ?>
 
-	<h3><? echo lang('moduleinterface', array($module))?></h3>
+	<h3><?php echo lang('moduleinterface', array($module))?></h3>
 
 <?php
 

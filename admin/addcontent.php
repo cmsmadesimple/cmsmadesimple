@@ -317,7 +317,7 @@ else {
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?php echo $content?></textarea></td>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?php echo htmlentities($content)?></textarea></td>
 	</tr>
 </table>
 
@@ -325,7 +325,7 @@ else {
 <div id="advanced" class="expand">
 	<a name="advanced">&nbsp;</a>
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?php echo lang('headtags') ?></div>
-	<textarea rows="4" cols="80" name="head_tags"><?php echo $head_tags ?></textarea>
+	<textarea rows="4" cols="80" name="head_tags"><?php echo htmlentities($head_tags) ?></textarea>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">
 		<tr valign="top">

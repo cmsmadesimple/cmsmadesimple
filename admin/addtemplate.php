@@ -153,7 +153,7 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><textarea name="content" cols="90" rows="18" style="width: 100%;"><?php echo $content?></textarea></td>
+		<td><textarea name="content" cols="90" rows="18" style="width: 100%;"><?php echo htmlentities($content)?></textarea></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>

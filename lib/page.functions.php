@@ -416,7 +416,7 @@ function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlig
 	echo '</script>';
 	echo '<textarea name="'.$textarea_name.'" id="plain" rows="24" cols="80" style="border: 1px solid #A5ACB2" class="'.$class_name.'">'.$content.'</textarea>';
 	*/
-	echo '<textarea name="'.$textarea_name.'" rows="24" cols="80">'.$content.'</textarea>';
+	echo '<textarea name="'.$textarea_name.'" rows="24" cols="80">'.htmlentities($content).'</textarea>';
 }
 
 # vim:ts=4 sw=4 noet
