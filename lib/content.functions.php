@@ -193,9 +193,8 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
-				#Check to see if it's a content type...  this should really be part of content
-				#manager, but we're talking baby steps here
-				if ($contentobj->Type() == 'content')
+				#Check to see if Show() actually gave us something
+				if ($content != '')
 				{
 					#Do html_blobs
 					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
@@ -321,7 +320,6 @@ class Smarty_CMS extends Smarty {
 				else
 				{
 					$tpl_timestamp = time();
-					echo "2";
 					return true;
 				}
 			}
@@ -329,7 +327,6 @@ class Smarty_CMS extends Smarty {
 			{
 				$smarty_obj->assign('modified_date',time());
 				$tpl_timestamp = time();
-				echo "3";
 				return true;
 			}
 		}

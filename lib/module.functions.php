@@ -1031,7 +1031,7 @@ function cms_mapi_create_module_content_class($key)
 		}
 		if (isset($allmodules[$key]['content_module_fill_params']))
 		{
-			$classtext .= 'function FillParams() { ' . $allmodules[$key]['content_module_fill_params'] . '($this, $params); } ';
+			$classtext .= 'function FillParams($params) { ' . $allmodules[$key]['content_module_fill_params'] . '($this, $params); } ';
 		}
 		if (isset($allmodules[$key]['content_module_show']))
 		{
