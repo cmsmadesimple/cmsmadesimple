@@ -32,15 +32,21 @@ class Smarty_CMS extends Smarty {
 	{
 		$db = new DB($this->configCMS);
 
-		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name'";
+		$query = "SELECT UNIX_TIMESTAMP(p.modified_date) as modified_date, p.page_content, t.template_id, t.stylesheet, t.template_content FROM ".$this->configCMS->db_prefix."pages p INNER JOIN ".$this->configCMS->db_prefix."templates t ON p.template_id = t.template_id WHERE p.page_url = '$tpl_name'";
 		$result = $db->query($query);
 
 		if (mysql_num_rows($result) > 0) {
 			$line = mysql_fetch_array($result, MYSQL_ASSOC);
 
 			$smarty_obj->assign('modified_date',$line[modified_date]);
+			#$smarty_obj->assign('stylesheet',$line[stylesheet]);
+			$stylesheet = "";
+			if (isset($line[stylesheet])) {
+				$stylesheet = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
+			}
 			$tpl_source = $line[template_content];
 			$content = $line[page_content];
+			$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 			$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
 			if ($this->configCMS->use_bb_code == true) {

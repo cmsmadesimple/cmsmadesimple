@@ -32,6 +32,7 @@ CREATE TABLE {$tableprefix}templates (
 	template_id int PRIMARY KEY AUTO_INCREMENT,
 	template_name varchar(25),
 	template_content text,
+	stylesheet text,
 	active bool,
 	create_date datetime,
 	modified_date datetime
@@ -87,8 +88,8 @@ CREATE TABLE {$tableprefix}users (
 
 INSERT INTO {$tableprefix}version VALUES ({$schemaversion});
 
-INSERT INTO {$tableprefix}templates(template_name, template_content, active, create_date, modified_date)
-	VALUES('Default', '{literal}<p>Header</p> {bulletmenu} {$content}<p>Footer</p>{/literal}', 1, now(), now());
+INSERT INTO {$tableprefix}templates(template_name, template_content, stylesheet, active, create_date, modified_date)
+	VALUES('Default', '{literal}<p>Header</p> {bulletmenu} {$content}<p>Footer</p>{/literal}', '', 1, now(), now());
 
 INSERT INTO {$tableprefix}sections(section_name, active, create_date, modified_date)
 	VALUES ('About', 1, now(), now());

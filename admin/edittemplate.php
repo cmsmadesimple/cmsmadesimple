@@ -10,6 +10,9 @@ if (isset($_POST["template"])) $template = $_POST["template"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$stylesheet = "";
+if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
@@ -31,7 +34,7 @@ if ($access) {
 
 	if (isset($_POST["edittemplate"])) {
 
-		$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', active = $active, modified_date = now() WHERE template_id = $template_id";
+		$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".mysql_real_escape_string($template)."', template_content = '".mysql_real_escape_string($content)."', stylesheet = '".mysql_real_escape_string($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
 		$result = $db->query($query);
 
 		if (mysql_affected_rows() > -1) {
@@ -54,6 +57,7 @@ if ($access) {
 
 		$template = $row["template_name"];
 		$content = $row["template_content"];
+		$stylesheet = $row["stylesheet"];
 		$active = $row["active"];
 
 		mysql_free_result($result);
@@ -88,6 +92,10 @@ else {
 	<tr>
 		<td>Content:</td>
 		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
+	</tr>
+	<tr>
+		<td>Stylesheet:</td>
+		<td><textarea name="stylesheet" cols="90" rows="18"><?=$stylesheet?></textarea></td>
 	</tr>
 	<tr>
 		<td>Active:</td>

@@ -46,6 +46,23 @@ function check_ownership(&$config, $userid, $pagename) {
 	return $check;
 }
 
+function get_stylesheet(&$config, $templateid) {
+
+	$css = "";
+
+	$db = new DB($config);
+	$query = "SELECT stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$templateid;
+	$result = $db->query($query);
+
+	if (mysql_num_rows($result) > 0) {
+		$line = mysql_fetch_array($result, MYSQL_ASSOC);
+		$css = $line[stylesheet];
+	}
+	$db->close();
+
+	return $css;
+}
+
 function & strip_slashes(&$str) {
 
 	if(is_array($str)) {
