@@ -3,6 +3,7 @@ Version 0.3 -- Subversion
 
 * Added GetText.php to work with systems even without gettext support in php
 * Added gettext functionality to all admin pages
+* Added a new index to make page lookups (hopefully) faster
 * Added some missing mysql_free_result functions
 * Added preview functionality for adding and editing content and templates
 * Changed content url entries to automatically be lowercase with no odd chars
