@@ -806,6 +806,29 @@ class CMSModule extends ModuleOperations
 		$text .= " />\n";
 		return $text;
 	}
+	
+	/**
+	 * Returns the xhtml equivalent of an input password-box.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	{
+		$value = str_replace('"', '&quot;', $value);
+		$text = '<input type="password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+		if ($addttext != '')
+		{
+			$text .= ' ' . $addttext;
+		}
+		$text .= " />\n";
+		return $text;
+	}
 
 	/**
 	 * Returns the xhtml equivalent of a hidden field.  This is basically a nice little wrapper
@@ -1078,7 +1101,9 @@ class CMSModule extends ModuleOperations
 		{
 			if ($content->GetUrl() != '')
 			{
-				redirect($content->GetUrl());
+				
+				redirect($content->GetUrl());				
+				
 			}
 		}
 	}
