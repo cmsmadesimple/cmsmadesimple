@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: CMS Made Simple\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2004-08-22 19:12+0200\n"
+"POT-Creation-Date: 2004-08-23 23:54+0200\n"
 "PO-Revision-Date: 2004-07-24 22:02+0200\n"
 "Last-Translator: Julien Lancien <calexico@ifrance.com>\n"
 "Language-Team: CMS Made Simple <cms@wishy.org>\n"
@@ -36,7 +36,8 @@ msgstr "L'alias ne peut pas &ecirc;tre un nombre!"
 
 #: ../admin/addcontent.php:111 ../admin/editcontent.php:134
 msgid "Alias must be all letters and numbers!"
-msgstr "L'alias ne doit &ecirc;tre constitu&eacute; que de lettres et de chiffres!"
+msgstr ""
+"L'alias ne doit &ecirc;tre constitu&eacute; que de lettres et de chiffres!"
 
 #: ../admin/addcontent.php:120 ../admin/editcontent.php:143
 msgid "Alias has already been used on another page!"
@@ -48,7 +49,8 @@ msgstr "Erreur lors de la cr&eacute;ation de la page"
 
 #: ../admin/addcontent.php:216
 msgid "No Access to Add Content"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour ajouter du contenu"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour ajouter du contenu"
 
 #: ../admin/addcontent.php:247 ../admin/addcontent.php:324
 #: ../admin/addtemplate.php:114 ../admin/addtemplate.php:151
@@ -120,7 +122,7 @@ msgstr "Actif"
 #: ../admin/copytemplate.php:114 ../admin/editcontent.php:426
 #: ../admin/editgroup.php:113 ../admin/editprefs.php:73
 #: ../admin/edittemplate.php:172 ../admin/edituser.php:139
-#: ../admin/login.php:93
+#: ../admin/login.php:92
 msgid "Submit"
 msgstr "Envoyer"
 
@@ -143,7 +145,8 @@ msgstr "Erreur lors de la cr&eacute;ation du groupe !"
 
 #: ../admin/addgroup.php:69
 msgid "No Access to Add Groups"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour ajouter un groupe"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour ajouter un groupe"
 
 #: ../admin/addgroup.php:81
 msgid "Add Group"
@@ -175,7 +178,8 @@ msgstr "Ereur lors de la cr&eacute;ation du template"
 
 #: ../admin/addtemplate.php:92
 msgid "No Access to Add Templates"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Ajouter un template"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour Ajouter un template"
 
 #: ../admin/addtemplate.php:129
 msgid "Add Template"
@@ -205,7 +209,7 @@ msgstr "Erreur lors de la cr&eacute;ation de l'utilisateur !"
 msgid "Add User"
 msgstr "Ajouter un utilisateur"
 
-#: ../admin/adduser.php:99 ../admin/login.php:88
+#: ../admin/adduser.php:99 ../admin/login.php:87
 msgid "Password"
 msgstr "Mot de passe"
 
@@ -239,21 +243,19 @@ msgstr "Date"
 
 #: ../admin/changegroupassign.php:71
 msgid "No Access to Modify Group Assignments"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour modifier les membres"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour modifier les membres"
 
 #: ../admin/changegroupassign.php:83
 #, fuzzy
 msgid "Users assigned to group: ${group_name}"
 msgstr "Membres du groupe: ${group_name}"
 
-#: ../admin/changegroupperm.php:37
-#, fuzzy
-msgid "Modify Permissions"
-msgstr "Modifier les Permissions"
-
 #: ../admin/changegroupperm.php:72
 msgid "No Access to Modify Group Permissions"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour modifier les permissions des groupes"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour modifier les "
+"permissions des groupes"
 
 #: ../admin/changegroupperm.php:84
 msgid "Permissions for group: ${group_name}"
@@ -267,7 +269,8 @@ msgstr "Erreur lors de la copie du template"
 #: ../admin/copytemplate.php:90
 #, fuzzy
 msgid "No Access To Copy Templates"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Copier des templates"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour Copier des templates"
 
 #: ../admin/copytemplate.php:104
 #, fuzzy
@@ -317,7 +320,8 @@ msgstr "Erreur lors de la mise &agrave; jour du contenu !"
 
 #: ../admin/editcontent.php:307
 msgid "No Access to Edit this Page"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer cette page"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour Editer cette page"
 
 #: ../admin/editcontent.php:352
 msgid "Edit Content"
@@ -333,7 +337,8 @@ msgstr "Erreur lors de la mise &agrave; jour du groupe"
 
 #: ../admin/editgroup.php:87
 msgid "No Access to Edit Groups"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer un groupe"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour Editer un groupe"
 
 #: ../admin/editgroup.php:99
 msgid "Edit Group"
@@ -357,7 +362,8 @@ msgstr "Erreur lors de la mise &agrave; jour du template"
 
 #: ../admin/edittemplate.php:113
 msgid "No Access To Edit Templates"
-msgstr "Vous ne poss&eacute;dez pas les droits suffisants pour Editer des templates"
+msgstr ""
+"Vous ne poss&eacute;dez pas les droits suffisants pour Editer des templates"
 
 #: ../admin/edittemplate.php:150
 msgid "Edit Template"
@@ -389,69 +395,81 @@ msgstr "Modifier l'utilisateur"
 msgid "Password<br />(leave blank to keep current password)"
 msgstr "Mot de passe<br />(laisser vide pour conserver le mot de passe actuel)"
 
-#: ../admin/files.php:49
+#: ../admin/files.php:76
 msgid "File could not be uploaded.  Permissions problem?"
-msgstr "Le fichier n'a pas pu &ecirc;tre upload&eacute;. Peut &ecirc;tre un probl&egrave;me de permissions?"
+msgstr ""
+"Le fichier n'a pas pu &ecirc;tre upload&eacute;. Peut &ecirc;tre un "
+"probl&egrave;me de permissions?"
 
-#: ../admin/files.php:54 ../admin/files.php:90 ../admin/files.php:112
+#: ../admin/files.php:85 ../admin/files.php:119 ../admin/files.php:145
+#: ../admin/files.php:170
 #, fuzzy
 msgid "You need the 'Modify Files' permission to perform that function."
 msgstr ""
-"Vous avez besoin du droit 'Modifier les fichiers' pour effectuer "
-"cette action."
+"Vous avez besoin du droit 'Modifier les fichiers' pour effectuer cette "
+"action."
 
-#: ../admin/files.php:75
-msgid "Directory name cannot contain '/' or '\\'"
-msgstr "Le nom du r&eacute;pertoire ne peut pas contenir '/' ou '\\'"
+#: ../admin/files.php:97
+msgid "Cannot create a directory with no name."
+msgstr "Vous ne pouvez pas cr&eacute;er de r&eacute;pertoire sans nom"
 
-#: ../admin/files.php:80
+#: ../admin/files.php:101
 msgid "Directory name cannot contain '..'"
 msgstr "Le nom du r&eacute;pertoire ne peut pas contenir '..'"
 
-#: ../admin/files.php:85
-#, fuzzy
-msgid "No directory name given"
-msgstr "Aucun nom de r&eacute;pertoire entr&eacute; !"
+#: ../admin/files.php:105
+msgid "Directory name cannot contain '/' or '\\'"
+msgstr "Le nom du r&eacute;pertoire ne peut pas contenir '/' ou '\\'"
 
-#: ../admin/files.php:102
+#: ../admin/files.php:109
+msgid "This directory already exists."
+msgstr "Ce r&eacute;pertoire existe d&eacute;j&agrave;"
+
+#: ../admin/files.php:131
 msgid "Could not delete file.  Permissions problem?"
-msgstr "Le fichier n'a pas pu &ecirc;tre supprim&eacute;. Peut &ecirctre un probl&egrave;me de permissions?"
+msgstr ""
+"Le fichier n'a pas pu &ecirc;tre supprim&eacute;. Peut &ecirctre un "
+"probl&egrave;me de permissions?"
 
-#: ../admin/files.php:107
+#: ../admin/files.php:140
 #, fuzzy
 msgid "No real file given"
 msgstr "Aucun nom de fichier valide entr&eacute; !"
 
-#: ../admin/files.php:123
-msgid "Could not delete directory.  Directory not empty?  Permissions problem?"
-msgstr "Le r&eacute;pertoire n'a pas pu &ecirc;tre supprim&eacute;. Verifiez si le r&eacute;pertoire est vide ou si il n'y a pas un probl&egrave;me de permissions."
+#: ../admin/files.php:156
+#, fuzzy
+msgid "Could not delete directory.  Permissions problem?"
+msgstr ""
+"Le fichier n'a pas pu &ecirc;tre supprim&eacute;. Peut &ecirctre un "
+"probl&egrave;me de permissions?"
 
-#: ../admin/files.php:128
+#: ../admin/files.php:165
 #, fuzzy
 msgid "No real directory given"
 msgstr "Aucun r&eacute;pertoire valide entr&acute; !"
 
-#: ../admin/files.php:149
+#: ../admin/files.php:192
 #, fuzzy
 msgid "Filename"
 msgstr "Nom du fichier"
 
-#: ../admin/files.php:149
+#: ../admin/files.php:192
 msgid "File Size"
 msgstr "Taille du fichier"
 
-#: ../admin/files.php:188
+#: ../admin/files.php:231
 #, fuzzy
-msgid "Are you sure you want to delete this directory?"
+msgid ""
+"Are you sure you want to delete this directory and all of it\\'s contents?"
 msgstr "Etes vous s&ucirc;r de vouloir supprimer ce r&eacute;pertoire?"
 
-#: ../admin/files.php:188 ../admin/files.php:214 ../admin/listcontent.php:109
+#: ../admin/files.php:231 ../admin/files.php:257 ../admin/listcontent.php:109
 #: ../admin/listgroups.php:70 ../admin/listtemplates.php:88
 #: ../admin/listusers.php:65
 msgid "Delete"
 msgstr "Supprimer"
 
-#: ../admin/files.php:214
+#: ../admin/files.php:257
 #, fuzzy
 msgid "Are you sure you want to delete this file?"
 msgstr "Etes vous s&ucirc;r de vouloir supprimer ce fichier ?"
@@ -555,7 +573,8 @@ msgstr "Templates actuels"
 #: ../admin/listtemplates.php:82
 #, fuzzy
 msgid "Are you sure you want all content to use this template?"
-msgstr "Etes vous s&ucirc;r de vouloir utiliser ce template pour toutes les pages ?"
+msgstr ""
+"Etes vous s&ucirc;r de vouloir utiliser ce template pour toutes les pages ?"
 
 #: ../admin/listtemplates.php:82
 #, fuzzy
@@ -577,7 +596,7 @@ msgstr ""
 msgid "Current Users"
 msgstr "Utilisateurs actuels"
 
-#: ../admin/listusers.php:46 ../admin/login.php:84
+#: ../admin/listusers.php:46 ../admin/login.php:83
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
@@ -585,7 +604,7 @@ msgstr "Nom d'utilisateur"
 msgid "Add New User"
 msgstr "Ajouter un utilisateur"
 
-#: ../admin/login.php:48
+#: ../admin/login.php:47
 msgid "Username or Password incorrect!"
 msgstr "Nom d'utilisateur ou mot de passe incorrect"
 
@@ -644,10 +663,6 @@ msgstr "Voir le site"
 msgid "Modules"
 msgstr "Modules"
 
-#: ../admin/plugins.php:35
-msgid "Modify Modules"
-msgstr "Modifier le module"
-
 #: ../admin/plugins.php:90
 msgid "About the ${module} module"
 msgstr "A propos du module ${module}"
@@ -673,8 +688,7 @@ msgstr "A propos du plugin ${plugin}"
 #, fuzzy
 msgid "You need the 'Modify Modules' permission to perform that function."
 msgstr ""
-"Vous avez besoin du droit 'Modify Modules' pour effectuer "
-"cette action."
+"Vous avez besoin du droit 'Modify Modules' pour effectuer cette action."
 
 #: ../admin/plugins.php:199
 #, fuzzy
@@ -752,6 +766,24 @@ msgstr "Sauvegarde termin&eacute;e. Sauvegard&eacute; dans le fichier :"
 #: ../admin/tools.php:134
 msgid "Restore complete: "
 msgstr "Restauration compl&egrave;te : "
+
+#, fuzzy
+#~ msgid "Modify Permissions"
+#~ msgstr "Modifier les Permissions"
+
+#, fuzzy
+#~ msgid "No directory name given"
+#~ msgstr "Aucun nom de r&eacute;pertoire entr&eacute; !"
+
+#~ msgid ""
+#~ "Could not delete directory.  Directory not empty?  Permissions problem?"
+#~ msgstr ""
+#~ "Le r&eacute;pertoire n'a pas pu &ecirc;tre supprim&eacute;. Verifiez si "
+#~ "le r&eacute;pertoire est vide ou si il n'y a pas un probl&egrave;me de "
+#~ "permissions."
+
+#~ msgid "Modify Modules"
+#~ msgstr "Modifier le module"
 
 #~ msgid "No Section title given!"
 #~ msgstr "Aucun titre entr&eacute; pour la section !"

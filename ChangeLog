@@ -3,6 +3,9 @@ Version 0.5.1 -- Subversion
 
 * Fixed upgrade path from 0.2 through to 0.5
 * Fixed a bug with PATH_INFO
+* Fixed a bug with Call-time pass-by-reference Warning
+* Re-added phplayers-menu.css : users should however move its content to their
+template.
 
 Version 0.5 -- Sun Aug 22 2004
 -----------------
