@@ -61,6 +61,9 @@ else if (isset($_GET["page_id"])) $page_id = $_GET["page_id"];
 $section_id = -1;
 if (isset($_POST["section_id"])) $section_id = $_POST["section_id"];
 
+$owner_id = -1;
+if (isset($_POST["owner_id"])) $owner_id = $_POST["owner_id"];
+
 $orig_section_id = -1;
 if (isset($_POST["orig_section_id"])) $orig_section_id = $_POST["orig_section_id"];
 
@@ -125,7 +128,7 @@ if ($access) {
 					$order = $row["item_order"];	
 				}
 			}
-			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type)." WHERE page_id = $page_id";
+			$query = "UPDATE ".$config->db_prefix."pages SET page_title=".$dbnew->qstr($title).", page_url=".$dbnew->qstr($url).", page_content=".$dbnew->qstr($content).", section_id=$section_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$dbnew->qstr($menutext).", active=$active, modified_date = now(), item_order=$order, page_type = ".$dbnew->qstr($content_type).", owner=$owner_id WHERE page_id = $page_id";
 			$result = $dbnew->Execute($query);
 
 			if ($result) {
@@ -165,6 +168,7 @@ if ($access) {
 		$orig_content_type = $row["page_type"];
 		$url = $row["page_url"];
 		$content = $row["page_content"];
+		$owner_id = $row["owner"];
 		$section_id = $row["section_id"];
 		$orig_section_id = $row["section_id"];
 		$template_id = $row["template_id"];
@@ -203,6 +207,21 @@ if ($access) {
 	}
 
 	$dropdown2 .= "</select>";
+
+	$owners = "<select name=\"owner_id\">";
+
+    $query = "SELECT user_id, username FROM ".$config->db_prefix."users";
+    $result = $dbnew->Execute($query);
+
+    while($row = $result->FetchRow()) {
+        $owners .= "<option value=\"".$row["user_id"]."\"";
+		if ($row["user_id"] == $owner_id) {
+			$owners .= " selected";
+		}
+		$owners .= ">".$row["username"]."</option>";
+	}
+
+	$owners .= "</select>";
 
     $addt_users = "";
 
@@ -311,6 +330,10 @@ else {
 	</tr>
 <?php } ?>
 <?php if ($adminaccess) { ?>
+	<tr>
+		<td><?=$gettext->gettext("Owner")?>:</td>
+		<td><?=$owners?></td>
+	</tr>
     <tr> 
 		<td><?=$gettext->gettext("Additional Editors")?>:</td>
 		<td><select name="additional_editors[]" multiple="true" size="5"><?=$addt_users?></select></td>

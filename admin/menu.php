@@ -17,8 +17,8 @@ $gettext->reset();
 <a href="tools.php"><?=$gettext->gettext("Tools")?></a>
 <a href="../index.php" target="_new"><?=$gettext->gettext("Show Site")?></a>
 <a href="logout.php"><?=$gettext->gettext("Logout")?></a>
-<p align="center">Language<br />
-<form action="index.php" method="post" name="cms_admin_lang_form">
+<p><form action="index.php" method="post" name="cms_admin_lang_form">
+Language<br />
 <select name="change_cms_lang" onchange="cms_admin_lang_form.submit()">
 <?
 	foreach ($nls["language"] as $key=>$val) {

@@ -67,6 +67,12 @@ div.nav a:hover {
 	color: #fff;
 }
 
+div.nav form {
+	text-align: center;
+	left-margin: auto;
+	right-margin: auto;
+}
+
 /* end navigation style */
 
 /* start content style */

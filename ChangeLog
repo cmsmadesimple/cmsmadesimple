@@ -1,14 +1,15 @@
 Version 0.3.1 -- Subversion 
 -----------------
 
+* Added ownership change to editcontent
 * Added {title} tag (Fixes #23)
 * Added adodb for database connectivity.  Will be a good thing for down the
-road in supporting multiple databases.
-* Added template name to content list page.  (Fixes #28)
+road in supporting multiple databases
+* Added template name to content list page  (Fixes #28)
 * Fixed so that if no default page is set, system grabs first page it can find
 (Fixes #22)
 * Fixed redirection. (pdj@txnt.com) (Fixes #27)
-* Fixed nasty bug with changeperm and changeassign. (fcardone@wp.pl) (Fixes
+* Fixed nasty bug with changeperm and changeassign (fcardone@wp.pl) (Fixes
 #29, #30)
 
 Version 0.3 -- Wed Jul 21 2004
