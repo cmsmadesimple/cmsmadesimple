@@ -3,6 +3,7 @@ Version 0.8.2 "Taunoa" -- Subversion
 
 * Added wysiwyg body tag callback for making htmlarea work
 * Fixed htaccess.txt to point to a better url
+* Fixed hiding/showing of Help boxes
 
 Version 0.8.1 "Papeete" -- Sat Jan 01 2005 
 -----------------

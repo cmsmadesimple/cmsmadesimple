@@ -203,7 +203,7 @@ else
 ?>
 <h3><?php echo lang('preview')?></h3>
 
-<iframe name="previewframe" width="100%" height="400" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>">
+<iframe name="previewframe" width="90%" height="400" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
 
 </iframe>
 <?php
@@ -213,9 +213,9 @@ else
 
 <form method="post" action="edittemplate.php">
 
-<div class="adminform">
-
 <h3><?php echo lang('edittemplate')?></h3>
+
+<div class="adminform">
 
 <table width="100%" border="0">
 

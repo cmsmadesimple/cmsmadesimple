@@ -313,6 +313,24 @@ function debug_output($var, $title="")
 	}
 
 }
+
+/**
+ * Display $var nicely to the $gCms->errors array if $config['debug'] is set
+ *
+ * @param mixed $var
+ * @param string $title
+ */
+function debug_buffer($var, $title="")
+{
+	global $gCms;
+	$errors = &$gCms->errors;
+
+	if($gCms->config["debug"] == true)
+	{
+		array_push($errors, debug_display($var, $title, false));
+	}
+}
+
 /**
 * Retrieve value from $_REQUEST. Returns $default_value if
 *		value is not in $_REQUEST or is not the same basic type as

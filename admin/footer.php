@@ -14,6 +14,10 @@ if ($config["debug"] == true)
 	echo '<div id="debugfooter">';
 	global $sql_queries;
 	echo "<div>".$sql_queries."</div>\n";
+	foreach ($gCms->errors as $error)
+	{
+		echo $error;
+	}
 	echo '</div>';
 }
 ?>

@@ -131,6 +131,10 @@ if (get_site_preference('enablesitedownmessage') == "1")
 if ($config["debug"] == true)
 {
 	echo $sql_queries;
+	foreach ($gCms->errors as $error)
+	{
+		echo $error;
+	}
 }
 
 # vim:ts=4 sw=4 noet
