@@ -39,3 +39,30 @@ OR
 
 Admin features including user management, template management, section management, and of course content management can all be accessed at your CMSROOT/admin.
 Admin login: admin/admin
+
+Optional: 
+
+8.  Some setup parameters are set to a default value and are not editable through the webinterface.
+    Although CMS works out-of-the-box, you might still want to edit these parameters
+    	
+   	- open config.php with you favorite editor (this file has been created by the installer)
+
+    Some of the parameters you can find here are:
+		    
+	The image manipulation library used by the Image manager, either 'GD' or 'NetPBM' or 'IM' for ImageMagick. 
+        - $config["image_manipulation_prog"] = "GD";        
+        If the library is NetPBM or IM, you need to specify where the binary for the selected library are.
+        -  $config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
+	The location (filepath and URL) to which files are uploaded using the filemanager
+	- $config["uploads_path"] = "/site/web/cms/uploads";
+	- $config["uploads_url"] = "http://www.cmsmadesimple.org/cms/uploads";
+	The location (filepath and URL) to which files are uploaded using the imagemanager. This can be the same path as the image manager URL
+	- $config["image_uploads_path"] = "/site/web/cms/uploads/images";
+	- $config["image_uploads_url"] = "http://www.cmsmadesimple.org/cms/uploads/images";
+    	CMS features a realtime HTML validation plugin for the WYSIWYG editor, which will insure valid HTML content
+        This is turned off by default, since it will also disable the use of tables and markup tags.
+        - $config["use_Indite"] = false;
+
+
+
+

@@ -55,7 +55,7 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <DIV CLASS="body">
 
-<IMG SRC="images/cms/cmsbanner.gif" WIDTH="400" HEIGHT="96" ALT="CMS Banner Logo" />
+<IMG SRC="images/cms/cmsbanner.gif" WIDTH="449" HEIGHT="114" ALT="CMS Banner Logo" />
 
 <DIV CLASS="headerish">
 
@@ -64,15 +64,14 @@ if ($currentpage > 1) { require_once("include.php"); }
 </DIV>
 
 <DIV CLASS="main">
-
 <?php
 
 echo "<h3>Thanks for installing CMS: CMS Made Simple.</h3>\n";
 echo "<table class=\"countdown\" cellspacing=\"2\" cellpadding=\"2\"><tr>";
-echo "<td class=\"".($currentpage>=1?"complete":"todo")."\">1</td>";
-echo "<td class=\"".($currentpage>=2?"complete":"todo")."\">2</td>";
-echo "<td class=\"".($currentpage>=3?"complete":"todo")."\">3</td>";
-echo "<td class=\"".($currentpage>=4?"complete":"todo")."\">4</td>";
+echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=1?"1":"1off").".gif\" ALT=\"Step 1\"></td>";
+echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=2?"2":"2off").".gif\" ALT=\"Step 2\"></td>";
+echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=3?"3":"3off").".gif\" ALT=\"Step 3\"></td>";
+echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=4?"4":"4off").".gif\" ALT=\"Step 4\"></td>";
 echo "</tr></table>\n";
 echo "<p><hr width=80%></p>\n";
 

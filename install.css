@@ -3,9 +3,25 @@ body {
 	margin: 0px;
 	padding: 0px;
 	background: #fff;
-	color: #64879d;
+	color: #00FF33;
 	font-size : 10pt;
 }
+
+.body img {
+	display: block;
+	margin: 0px;
+	padding: 0px;
+}
+
+.body {
+	BACKGROUND: #FFFDFA;
+	COLOR: #64879d;
+	padding: 0px;
+	border: 1px solid #CCCCCC;
+	margin-top: 10px;
+	width: 450px;
+}
+
 
 p {
 	font-family : Verdana, serif ;	
@@ -15,8 +31,15 @@ p {
 
 h1 {
 	font-family : Verdana, serif ;	
-	color: #64879d;
+	COLOR: #DB3801;
 	font-size : 13pt;
+	font-weight: bold;
+}
+
+h3 {
+	font-family : Verdana, serif ;	
+	COLOR: #333333;
+	font-size : 12pt;
 	font-weight: bold;
 }
 
@@ -32,6 +55,10 @@ h1 {
 	color: #000000;
 	font-size : 10pt;
 }
+
+.tbhead {
+BORDER-RIGHT: #8c8a8c 1px solid; BORDER-TOP: #8c8a8c 1px solid; FONT-WEIGHT: bold; BACKGROUND: #EA8618; MARGIN-BOTTOM: 15px; BORDER-LEFT: #8c8a8c 1px solid; WIDTH: 100%; COLOR: #fff; BORDER-BOTTOM: #8c8a8c 1px solid; BORDER-COLLAPSE: collapse; TEXT-ALIGN: left; border-spacing: 0px }
+
 
 .row1 {
 	background: #e7e7e7;
@@ -51,29 +78,19 @@ a:hover {
 	text-decoration : none;
 }
 
-.body {
-	background: #EDF2F5;
-	color: #64879d;
-	padding: 10px;
-	border: 2px solid #64879d;
-	margin-top: 10px;
-	width: 450px;
-	margin-left: auto;
-	margin-right: auto;
+.main {
+	padding-right:10;
+	padding-left:10;
 }
 
-.body img {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-}
+
 
 .headerish {
 	font-family: Verdana, serif;
 	font-size: 12px;
 	text-align: center;
 	font-size: 16px;
-	color: #000;
+	color: #000;	
 }
 
 .countdown td {
@@ -82,7 +99,7 @@ a:hover {
 	background: #fff;
 	color: #000000;
 	font-size : 12pt;
-	border: 1px #000 solid;
+	border: 0px;
 }
 
 .countdown .todo {
@@ -93,15 +110,8 @@ a:hover {
 .continue a:link,
 .continue a:active,
 .continue a:visited {
-	background: #fff;
-	color: #000;
-	padding: 4px;
-	border: 1px #000 solid;
+	BORDER-RIGHT: white 4px outset; PADDING-RIGHT: 11px; BORDER-TOP: white 4px outset; DISPLAY: inline-block ; PADDING-LEFT: 10px; FONT-WEIGHT: normal; FONT-SIZE: 0.9em; PADDING-BOTTOM: 2px; MARGIN: 1px; BORDER-LEFT: white 4px outset;  COLOR: #ffffff; PADDING-TOP: 2px; BORDER-BOTTOM: white 4px outset; FONT-FAMILY: Arial; TEXT-DECORATION: none; BACKGROUND-COLOR: #EEA351; TEXT-ALIGN: left;
 }
-
-.continue a:hover {
-	background: #aaa;
-	color: #000;
-	padding: 4px;
-	border: 1px #000 solid;
+.continue A:hover {
+	BORDER-RIGHT: white 4px inset; BORDER-TOP: white 4px inset; PADDING-LEFT: 11px; BORDER-LEFT: white 4px inset; COLOR: #cccccc; BORDER-BOTTOM: white 4px inset; BACKGROUND-COLOR: #EA8618
 }
