@@ -263,7 +263,7 @@ function showPageFour() {
     $content .= '$this->db_name = "'.$_POST['database'].'";'."\n";
     $content .= '$this->db_prefix = "'.$_POST['prefix'].'";'."\n";
     $content .= '$this->root_url = "'.$_POST['docroot'].'";'."\n";
-    $content .= '$this->root_path = "'.$_POST['docpath'].'";'."\n";
+    $content .= '$this->root_path = "'.addslashes($_POST['docpath']).'";'."\n";
     $content .= '$this->query_var = "'.$_POST['querystr'].'";'."\n";
     $content .= '$this->use_bb_code = '.$_POST['bbcode'].';'."\n";
     $content .= "\n?>\n";
