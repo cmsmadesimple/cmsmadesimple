@@ -35,8 +35,8 @@ class Smarty_CMS extends Smarty {
 		$this->compile_check = true;
 		$this->caching = true;
 		$this->assign('app_name','CMS');
-		#$this->debugging = true;
-		#$this->force_compile = true;
+		$this->debugging = false;
+		$this->force_compile = true;
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -59,7 +59,7 @@ class Smarty_CMS extends Smarty {
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
 				$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
-				$stylesheet = "<link rel='stylesheet' href='".$csslink."'>\n";
+				$stylesheet = "<link rel=\"stylesheet\" href=\"".$csslink."\" />\n";
 				$stylesheet .= "<style type=\"text/css\">\n";
 				$stylesheet .= "<!--\n";
 				$stylesheet .= "	@import url(".$csslink.");\n";
