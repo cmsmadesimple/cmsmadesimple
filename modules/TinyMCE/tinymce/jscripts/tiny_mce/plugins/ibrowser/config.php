@@ -1,4 +1,4 @@
-<?php 
+<?php
 // ================================================
 // tinymce PHP WYSIWYG editor control
 // ================================================
@@ -43,6 +43,31 @@ $tinyMCE_imglibs = array(
     'text'    => 'Uploaded Images',
   ),
 );
-// file to include in img_library.php (useful for setting $tinyMCE_imglibs dynamically
-// $tinyMCE_imglib_include = '';
+
+$arr = array();
+getDirList($config['image_uploads_path'], $arr);
+foreach($arr as $t)
+    {
+    $tName = substr($t,strlen($config['image_uploads_path'])+1);
+    array_push($tinyMCE_imglibs, array('value'=>$tName.'/', 'text'=>$tName));
+    }
+
+//Recursively build a list of directories in a directory, return 'em as an array
+function getDirList($dirName, &$dirList)
+    {
+    $d = opendir($dirName);
+    while($thisFile = readdir($d))
+        {
+        if ($thisFile[0] != ".")
+            {
+            if (is_dir($dirName."/".$thisFile))
+                {
+                array_push($dirList, $dirName."/".$thisFile);
+                getDirList($dirName."/".$thisFile, $dirList);
+                }
+            }
+        }
+    closedir($d);
+    }
+
 ?>
