@@ -27,6 +27,7 @@
 
 #Native language name
 $nls['language']['fr_FR'] = 'Fran&#231;ais';
+$nls['englishlang']['fr_FR'] = 'French';
 
 #Possible aliases for language
 $nls['alias']['fr'] = 'fr_FR';

@@ -31,6 +31,7 @@
 
 #Native language name
 $nls['language']['fi_FI'] = 'Suomi';
+$nls['englishlang']['fi_FI'] = 'Finnish';
 
 #Possible aliases for language
 $nls['alias']['fi'] = 'fi_FI';

@@ -8,6 +8,7 @@
 <span class="smallselect"><?php echo lang('language')?> : </span>
 <select class="smallselect" name="change_cms_lang" onchange="cms_admin_lang_form.submit()" style="vertical-align: middle;">
 <?php
+	asort($nls["language"]);
 	foreach ($nls["language"] as $key=>$val) {
 		echo "<option value=\"$key\"";
 		if (isset($_POST["change_cms_lang"])) {
@@ -19,7 +20,12 @@
 				echo " selected";
 			}
 		}
-		echo ">$val</option>\n";
+		echo ">$val";
+		if (isset($nls["englishlang"][$key]))
+		{
+			echo " (".$nls["englishlang"][$key].")";
+		}
+		echo "</option>\n";
 	}
 ?>
 </select>

@@ -49,7 +49,7 @@ class Smarty_CMS extends Smarty {
 		$this->caching = true;
 		$this->assign('app_name','CMS');
 		$this->debugging = false;
-		$this->force_compile = true;
+		$this->force_compile = false;
 		$this->cache_plugins = false;
 
 		if ($config["debug"] == true)
@@ -217,7 +217,7 @@ class Smarty_CMS extends Smarty {
 
 				$smarty_obj->assign('modified_date',time());
 				$tpl_timestamp = time();
-				return false;
+				return true;
 			}
 		}
 	}
