@@ -19,6 +19,7 @@
 require_once("../include.php");
 
 unset($_SESSION["cms_admin_user_id"]);
+setcookie("cms_admin_user_id", "", time() - 3600);
 
 redirect("index.php");
 

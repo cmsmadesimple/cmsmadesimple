@@ -31,6 +31,7 @@ if ($_POST["username"] && $_POST["password"]) {
 	$line = mysql_fetch_array($result, MYSQL_ASSOC);
 
 	if (isset($line["user_id"])) {
+		setcookie("cms_admin_user_id", $line["user_id"]);
 		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
 		$_SESSION["cms_admin_username"] = $line["username"];	
 		mysql_free_result($result);
