@@ -110,7 +110,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 					echo "</link>\n";
 					## this is just redundant echo "		<description>".$row["linkblog_title"]."</description>\n";
 					## needs to be an email address echo "		<author>".$row["linkblog_author"]."</author>\n";
-					echo "		<pubDate>".date("D, j M Y h:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
+					echo "		<pubDate>".date("D, j M Y H:i:s T", $db->UnixTimeStamp($row['create_date']))."</pubDate>\n";
 					echo "	</item>\n";
 				} else {
 					echo "<div class=\"modulelinkblogentry\">\n";
