@@ -40,7 +40,7 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 
 if (count($gCms->modules) > 0)
     {
-    $CMS_TOP_MENU=$gCms->modules[$module]->GetAdminSection();
+    $CMS_TOP_MENU=$gCms->modules[$module]['object']->GetAdminSection();
     }
 
 include_once("header.php");
