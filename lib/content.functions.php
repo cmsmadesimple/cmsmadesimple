@@ -66,7 +66,7 @@ class Smarty_CMS extends Smarty {
 		}
 		$this->cache_plugins = false;
 
-		load_plugins(&$this);
+		load_plugins($this);
 
 		$this->register_resource("db", array(&$this, "db_get_template",
 						       "db_get_timestamp",
@@ -394,7 +394,7 @@ function db_get_menu_items($params = array()) {
 				}
 			}
 			
-			flatten_tree_to_list($new_array, &$sorted_content);
+			flatten_tree_to_list($new_array, $sorted_content);
 
 		} ## if
 
@@ -483,7 +483,7 @@ function flatten_tree_to_list($content_array, &$flatarray) {
 		foreach($content_array as $element)
 		{
 			array_push($flatarray, $element);
-			flatten_tree_to_list($element->childs, &$flatarray);
+			flatten_tree_to_list($element->childs, $flatarray);
 		}
 	}
 }
