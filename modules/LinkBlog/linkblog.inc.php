@@ -72,7 +72,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
 	$query .= " a.status = '1'";
     $query .= " GROUP BY a.linkblog_id ORDER BY create_date DESC";
     $dbresult = $db->Execute($query);
-    echo "<p class=\"modulelinkblogtitle\">Posted sites</p>\n";
+    echo "<div class=\"modulelinkblogtitle\">Posted sites</div>\n";
     echo "<div class=\"modulelinkblog\">\n";
 
     if ($dbresult && $dbresult->RowCount()) {
@@ -87,7 +87,7 @@ function linkblog_module_showLinks($cms, $id, $params, $return_id) {
                     echo date("F j, Y", $db->UnixTimeStamp($row['create_date']))."<br />\n";
 					echo "</div>\n";
                 }
-				echo "<div class==\"modulelinkblogentrytime\">\n";
+				echo "<div class=\"modulelinkblogentrytime\">\n";
                 echo "Posted at ".date("g:i a", $db->UnixTimeStamp($row['create_date']))." by ".$row['linkblog_author']."\n</div>\n";
                 echo "<div class=\"modulelinkblogentrybody\">\n<a href=\"".$row["linkblog_url"]."\"><img src=\"modules/LinkBlog/images/type".$row["type_id"].".png\" border=\"0\" alt=\"\" /> ".$row["linkblog_title"]."</a>\n";
                 echo "</div>\n";
