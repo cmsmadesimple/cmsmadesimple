@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['CSS'] = 'CSS'; //needs translation
 $lang['admin']['about'] = 'Tietoja'; 
 $lang['admin']['action'] = 'Toiminto'; 
 $lang['admin']['active'] = 'aktiivinen'; 
@@ -35,6 +36,7 @@ $lang['admin']['createnewfolder'] = 'Luo uusi hakemisto';
 $lang['admin']['cssalreadyused'] = 'Tyylitiedoston nimi on jo käytössä'; 
 $lang['admin']['cssmanagement'] = 'Tyylitiedosto hallinta'; 
 $lang['admin']['currentassocations'] = 'Nykyiset tyylitiedosto liitokset';
+$lang['admin']['currentassociations'] = 'Current Associations'; //needs translation
 $lang['admin']['currentcss'] = 'Viimeisin tyylitiedosto'; 
 $lang['admin']['currentdirectory'] = 'Viimeisin hakemisto';
 $lang['admin']['currentgroups'] = 'Viimeisimmät ryhmät ';
@@ -55,6 +57,7 @@ $lang['admin']['down'] = 'Alas';
 $lang['admin']['edit'] = 'Muokkaa';
 $lang['admin']['editconfiguration'] = 'Muokkaa asetuksia';
 $lang['admin']['editcontent'] = 'Muokkaa sisältöä';
+$lang['admin']['editcss'] = 'Edit CSS'; //needs translation
 $lang['admin']['editgroup'] = 'Muokkaa ryhmää'; 
 $lang['admin']['editlink'] = 'Muokkaa linkkiä';
 $lang['admin']['editpage'] = 'Muokkaa sivua';

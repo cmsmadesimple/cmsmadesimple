@@ -63,7 +63,7 @@ if (isset($_GET["message"])) {
 		echo "<td width=\"7%\" align=\"center\">".lang('active')."</td>\n";
 		if ($edit)
 			echo "<td>&nbsp;</td>\n";
-		if ($config["advanced_user"])
+		if (get_site_preference('useadvancedcss') == "1")
 			echo "<td width=\"16\">&nbsp;</td>\n";
 		if ($add)
 			echo "<td width=\"16\">&nbsp;</td>\n";

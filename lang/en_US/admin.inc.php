@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['CSS'] = 'CSS'; //needs translation
 $lang['admin']['about'] = 'About';
 $lang['admin']['action'] = 'Action';
 $lang['admin']['active'] = 'Active';
@@ -35,6 +36,7 @@ $lang['admin']['createnewfolder'] = 'Create New Folder';
 $lang['admin']['cssalreadyused'] = 'CSS name already in use';
 $lang['admin']['cssmanagement'] = 'CSS Management';
 $lang['admin']['currentassocations'] = 'Current CSS Assocations';
+$lang['admin']['currentassociations'] = 'Current Associations'; //needs translation
 $lang['admin']['currentcss'] = 'Current CSS';
 $lang['admin']['currentdirectory'] = 'Current Directory';
 $lang['admin']['currentgroups'] = 'Current Groups';
@@ -55,6 +57,7 @@ $lang['admin']['down'] = 'Down';
 $lang['admin']['edit'] = 'Edit';
 $lang['admin']['editconfiguration'] = 'Edit Configuration';
 $lang['admin']['editcontent'] = 'Edit Content';
+$lang['admin']['editcss'] = 'Edit CSS'; //needs translation
 $lang['admin']['editgroup'] = 'Edit Group';
 $lang['admin']['editlink'] = 'Edit Link';
 $lang['admin']['editpage'] = 'Edit Page';

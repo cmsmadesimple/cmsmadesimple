@@ -164,7 +164,7 @@ if ($access) {
 	}
 
 	$content_array = array();
-	$content_array = db_get_menu_items("content_hierarchy");
+	$content_array = db_get_menu_items();
 	foreach ($content_array as $one ) {
 		if (strlen($one->page_title) > 20) {
 			$ddsize = "style=\"width: 250px;\"";

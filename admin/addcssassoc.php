@@ -119,7 +119,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 			if ($result)
 			{
-				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, $name, 'Added CSS association');
+				audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $id, (isset($name)?$name:""), 'Added CSS association');
 
 				if ("template" == $type)
 				{
@@ -154,11 +154,11 @@ else
 #******************************************************************************
 if ($doadd)
 {
-	redirect("listcssassoc.php?id=$id&amp;type=$type");
+	redirect("listcssassoc.php?id=$id&type=$type");
 }
 else
 {
-	redirect("listcssassoc.php?id=$id&amp;type=$type&amp;message=$error");
+	redirect("listcssassoc.php?id=$id&type=$type&message=$error");
 }
 
 # vim:ts=4 sw=4 noet

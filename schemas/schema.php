@@ -3,6 +3,7 @@
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$db->DropSequence($db_prefix."additional_users_seq");
+	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
 	$db->DropSequence($db_prefix."module_news_seq");
@@ -10,6 +11,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
 	$db->DropSequence($db_prefix."users_seq");
+	$db->DropSequence($db_prefix."userplugins_seq");
 
 	$dbdict = NewDataDictionary($db);
 
@@ -19,6 +21,10 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_users");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."css_assoc");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."group_perms");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -32,6 +38,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."siteprefs");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."user_groups");
@@ -39,6 +47,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."userprefs");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."users");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."userplugins");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."version");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -74,6 +84,40 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating css table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		css_id I,
+		css_name C(255),
+		css_text X,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->CreateSequence($config["db_prefix"]."css_seq");
+
+	echo "[done]</p>";
+
+	echo "<p>Creating css_assoc table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		assoc_to_id I,
+		assoc_css_id I,
+		assoc_type C(80),
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -160,6 +204,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		active I1,
 		parent_id I,
 		template_id I,
+		head_tags X,
 		create_date T,
 		modified_date T
 	";
@@ -184,6 +229,21 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating siteprefs table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		sitepref_name C(255),
+		sitepref_value text,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."siteprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
@@ -250,6 +310,24 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating userplugins table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		userplugin_id I,
+		userplugin_name C(255),
+		code X,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."userplugins", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->CreateSequence($config["db_prefix"]."userplugins_seq");
 
 	echo "[done]</p>";
 

@@ -51,6 +51,8 @@ $error = "";
 # this one is used later to store all the css found, because they won't appear in the dropdown
 $csslist = array();
 
+$type = "";
+
 #******************************************************************************
 # we now get the parameters
 #******************************************************************************
@@ -63,7 +65,7 @@ if (isset($_GET["id"]))	$id	= $_GET["id"] ;
 else $error = lang('idnotvalid');
 
 # if type is template, we get the name
-if ("template" == $type) 
+if (isset($type) && "template" == $type) 
 {
 
 	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = $id";
@@ -97,7 +99,7 @@ if ("" != $error)
 #******************************************************************************
 ?>
 
-<h3><?php echo lang('currentassociations')?> - <?php echo $type?> : <?php echo $name?></h3>
+<h3><?php echo lang('currentassociations')?> - <?php echo $type?> : <?php echo (isset($name)?$name:"")?></h3>
 
 <?php
 
@@ -207,7 +209,7 @@ if ("" != $error)
 <input type="submit" value="<?php echo lang('addcss')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 </form>
 
-<?
+<?php
 		} # end of showing form
 	} # end of if has right to add
 	else

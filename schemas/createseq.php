@@ -11,6 +11,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "<p>Creating group_perms table sequence...";
 
+	$max = $db->GetOne("SELECT max(css_id) from ".$db_prefix."css");
+	$db->CreateSequence($db_prefix."css_seq", $max+1);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating group_perms table sequence...";
+
 	$max = $db->GetOne("SELECT max(group_perm_id) from ".$db_prefix."group_perms");
 	$db->CreateSequence($db_prefix."group_perms_seq", $max+1);
 
@@ -55,6 +62,13 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$max = $db->GetOne("SELECT max(user_id) from ".$db_prefix."users");
 	$db->CreateSequence($db_prefix."users_seq", $max+1);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating users table sequence...";
+
+	$max = $db->GetOne("SELECT max(userplugin_id) from ".$db_prefix."userplugins");
+	$db->CreateSequence($db_prefix."userplugins_seq", $max+1);
 
 	echo "[done]</p>";
 }
