@@ -47,7 +47,7 @@ if (isset($_POST["changeassign"])) {
 		while($row = mysql_fetch_array($result, MYSQL_ASSOC)) {
 
 			$users[$row[username]] = false;
-			#$ids[$row[permission_name]] = $row[permission_id];
+			$ids[$row[username]] = $row[user_id];
 		}
 
 	}
