@@ -97,6 +97,7 @@ class PHPLayers extends CMSModule
 	{
 		if ($name == 'default')
 		{
+			$basedepth = 1;
 			$allcontent = ContentManager::GetAllContent();
 
 			# getting menu parameters
@@ -104,6 +105,12 @@ class PHPLayers extends CMSModule
 			$horizontal = isset($params['horizontal']) ? $params['horizontal'] : 0 ;
 
 			$menu = '';
+
+			#Reset the base depth if necessary...
+			if (isset($params['start_element']))
+			{
+				$basedepth = count(split('\.', $params['start_element']));
+			}
 
 			foreach ($allcontent as $onecontent)
 			{
@@ -114,7 +121,7 @@ class PHPLayers extends CMSModule
 				#If hierarchy starts with the start_element (if it's set), then continue on
 				if (isset($params['start_element']))
 				{
-					if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
+					if ((strpos($onecontent->Hierarchy(), $params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), $params['start_element']) != 0))
 					{
 						continue;
 					}
@@ -144,7 +151,7 @@ class PHPLayers extends CMSModule
 					continue;
 				}
 
-				for ($i = 1; $i <= $depth; $i++) { $menu .= "."; }
+				for ($i = $basedepth; $i <= $depth; $i++) { $menu .= "."; }
 
 				if ($onecontent->Type() == 'sectionheader')
 				{
@@ -158,6 +165,7 @@ class PHPLayers extends CMSModule
 				{
 					$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."\n";
 				}
+
 				$count++;
 			}
 

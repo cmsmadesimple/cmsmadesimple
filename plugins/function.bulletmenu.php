@@ -34,7 +34,14 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	if (count($allcontent))
 	{
+		$basedepth = 0;
 		$menu .= "<div class=\"bulletmenu\">\n";
+
+		#Reset the base depth if necessary...
+		if (isset($params['start_element']))
+		{
+			$basedepth = count(split('\.', $params['start_element'])) - 1;
+		}
 
 		foreach ($allcontent as $onecontent)
 		{
@@ -45,7 +52,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			#If hierarchy starts with the start_element (if it's set), then continue on
 			if (isset($params['start_element']))
 			{
-				if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
+				if ((strpos($onecontent->Hierarchy(), $params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), $params['start_element']) != 0))
 				{
 					continue;
 				}
@@ -55,20 +62,15 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			if (isset($params['number_of_levels']))
 			{
 				$number_of_levels = $params['number_of_levels'] - 1;
-				$base_level = 1;
-				
-				#Is start_element set?  If so, reset the base_level to it's level
-				if (isset($params['start_element']))
-				{
-					$base_level = count(split('\.', $params['start_element']));
-				}
 
 				#If this element's level is more than base_level + number_of_levels, then scratch it
-				if ($base_level + $number_of_levels < $depth)
+				if ($basedepth + $number_of_levels < $depth)
 				{
 					continue;
 				}
 			}
+
+			$depth = $depth - $basedepth;
 
 			if (!$onecontent->Active() || !$onecontent->ShowInMenu())
 			{
@@ -82,7 +84,9 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 					$menu .= "</ul>\n";
 					$in_hr = 0;
 				}
+
 				$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
+
 				if ($count > 0 && $in_hr == 0)
 				{
 					$menu .= "<ul>\n";
@@ -91,19 +95,32 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			}
 			else
 			{
-				if ($depth < $last_level) {
-					for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
+				if ($depth < $last_level)
+				{
+					for ($i = $depth; $i < $last_level; $i++)
+					{
+						$menu .= "\n</li>\n</ul>\n";
+					}
+
 					if ($depth > 0)
 					{
 						$menu .= "</li>\n";
 					}
 				}
-				if ($depth > $last_level) {
-					for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
+
+				if ($depth > $last_level)
+				{
+					for ($i = $depth; $i > $last_level; $i--)
+					{
+						$menu .= "\n<ul>\n";
+					}
 				}
-				if ($depth == $last_level) {
+
+				if ($depth == $last_level)
+				{
 					$menu .= "</li>\n";
 				}
+
 				if ($onecontent->Type() == 'separator')
 				{
 					$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/>";
@@ -117,6 +134,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 					}
 					$menu .= ">".$onecontent->MenuText()."</a>";
 				}
+
 				$in_hr = 1;
 				$last_level = $depth;
 			}
