@@ -209,7 +209,7 @@ $lang['admin']['database'] = 'Datenbank';
 $lang['admin']['errorinsertingtemplate'] = 'Fehler beim einf&#252;gen des Templates';
 $lang['admin']['filemanager'] = 'Dateimanager';
 $lang['admin']['currentcss'] = 'Aktuelles CSS';
-$lang['admin']['encoding'] = 'Encoding'; //needs translation
-$lang['admin']['nosyntax'] = 'Sorry, syntax highlighting is not supported in your browser.'; //needs translation
-$lang['admin']['slogan'] = 'So <span style="color: #FE0404">simple</span>, it feels like taking a <span style="color: #FE0404">holiday</span>'; //needs translation
+$lang['admin']['encoding'] = 'Kodierung'; //needs translation
+$lang['admin']['nosyntax'] = 'Ihr Browser unterst&#252;tzt keine Syntax - Hervorhebung.'; //needs translation
+$lang['admin']['slogan'] = 'So <span style="color: #FE0404">einfach</span>,als wenn man in den  <span style="color: #FE0404">Ferien</span> w&#228;re.'; //needs translation
 ?>
