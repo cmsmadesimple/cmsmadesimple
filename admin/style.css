@@ -71,6 +71,8 @@ div.nav form {
 	text-align: center;
 	left-margin: auto;
 	right-margin: auto;
+	padding-bottom: 2px;
+	margin-bottom: 4px;
 }
 
 /* end navigation style */
@@ -117,8 +119,8 @@ div.nav form {
 #loginlogo { float: right; }
 
 div.content {
+	height: 100%;
 	color: #000;
-/*	margin-left: 200px; &*/
 
 }
 
@@ -165,6 +167,10 @@ table.admintable td {
 	border: 1px solid #64879d;
 }
 
+.smallselect {
+	font-size: 70%;
+}
+
 /* end table style */
 
 /* start form style */
@@ -176,8 +182,9 @@ div.adminform {
 	padding: 8px;
 	margin-top: 10px;
 	margin-right: 10px;
-	margin-left: 180px;
-	
+	/*margin-left: 180px;*/
+	position: absolute;
+	left: 200px;
 }
 
 /* end form style */

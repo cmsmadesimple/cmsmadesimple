@@ -22,18 +22,38 @@ function smarty_function_bulletmenu($params, &$smarty) {
 
 	$menu = "";
 
-	$sections = db_get_menu_items($smarty->configCMS);
+	$sections = db_get_menu_items($smarty->configCMS, "subs");
 
-	foreach ($sections as $onesection) {
+	$count=0;
+	$last_level = -1;
+	foreach ($sections as $one_section) {
 
-		$menu .= "<p class=\"sectionname\">".$onesection->name."</p>";
-		$menu .= "<ul>";
-		foreach ($onesection->items as $oneitem) {
-			$menu .= "<li><a href=\"".$oneitem->url."\">".$oneitem->name."</a></li>";
+		if ($one_section->active) {
+			if (($one_section->level < $last_level || $one_section->level == 0) && $count > 0) {
+				for ($i=$one_section->level; $i<=$last_level; $i++) {
+					$menu .= "</ul>\n";
+				}
+			}
+
+			if ($one_section->level >= $last_level || $one_section->level == 0) {
+				if ($one_section->level != 0) { $menu .= "<li>"; }
+				$menu .= "<p class=\"sectionname\">".$one_section->section_name."</p>\n";
+				if ($one_section->level != 0) { $menu .= "</li>"; }
+				if ($one_section->level > $last_level || $one_section->level == 0) {$menu .= "<ul>\n"; }
+			}
+
+			foreach ($one_section->items as $one_item) {
+				$menu .= "<li><a href=\"".$one_item->url."\">".$one_item->menu_text."</a></li>\n";
+			}
 		}
-		$menu .= "</ul>";
+		$count++;
+		$last_level = $one_section->level;
 	}
 
+    for ($i=$one_section->level; $i<=$last_level +1; $i++) {
+       $menu .= "</ul>\n";
+    }
+	
 	return $menu;
 
 }

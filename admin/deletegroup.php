@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -33,7 +35,7 @@ if (isset($_GET["group_id"])) {
 		$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
 		$result = $dbnew->Execute($query);
 
-		if ($result) {
+		if ($result && $result->RowCount()) {
 			$row = $result->FetchRow();
 			$group_name = $row[group_name];
 		}

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -40,15 +42,15 @@ include_once("header.php");
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Group Name")."</td>\n";
-		echo "<td>".$gettext->gettext("Active")."</td>\n";
+		echo "<td width=\"10%\">".$gettext->gettext("Active")."</td>\n";
 		if ($perm)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		if ($assign)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		if ($edit)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		if ($remove)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		echo "</tr>\n";
 
 		$currow = "row1";
@@ -57,15 +59,15 @@ include_once("header.php");
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["group_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td width=\"10%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($perm)
-				echo "<td><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"changegroupperm.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Permissions")."</a></td>\n";
 			if ($assign)
-				echo "<td><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
 			if ($edit)
-				echo "<td><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
 			if ($remove)
-				echo "<td><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow == "row1"?$currow="row2":$currow="row1");

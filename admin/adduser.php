@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -59,7 +61,7 @@ if (isset($_POST["adduser"])) {
 	}
 
 	if ($validinfo) {
-		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES (".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, now(), now())";
+		$query = "INSERT INTO ".$config->db_prefix."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, now(), now())";
 		$result = $dbnew->Execute($query);
 		if ($result) {
 			$new_user_id = $dbnew->Insert_ID();

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -61,7 +63,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES (".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
+			$query = "INSERT INTO ".$config->db_prefix."templates (template_id, template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ($new_template_id, ".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
 			$result = $dbnew->Execute($query);
 			if ($result) {
 				$new_template_id = $dbnew->Insert_ID();

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -34,50 +36,45 @@ if (isset($_GET["message"])) {
 	$edit = check_permission($config, $userid, 'Modify Section');
 	$remove = check_permission($config, $userid, 'Remove Section');
 
-	$query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY item_order";
-	$result = $dbnew->Execute($query);
-
-	$totalcount = $result->RowCount($result);
-
-	if ($totalcount > 0) {
+	$sections = db_get_menu_items($config, "subs");
+	if (count($sections) > 0) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
 		echo "<td>".$gettext->gettext("Section")."</td>\n";
-		echo "<td>".$gettext->gettext("Active")."</td>\n";
+		echo "<td width=\"10%\">".$gettext->gettext("Active")."</td>\n";
 		if ($edit) {
-			echo "<td>&nbsp;</td>\n";
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		}
 		if ($remove)
-			echo "<td>&nbsp;</td>\n";
+			echo "<td width=\"10%\">&nbsp;</td>\n";
 		echo "</tr>\n";
 		
 		$currow = "row1";
 
 		$count = 1;
 
-		while($row = $result->FetchRow()) {
-
+		foreach ($sections as $one_section) {
 			echo "<tr class=\"$currow\">\n";
-			echo "<td>".$row["section_name"]."</td>\n";
-			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td>".$one_section->display_name."</td>\n";
+			echo "<td width=\"10%\">".($one_section->active == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit) {
-				echo "<td>";
-				if ($count > 1 && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=up&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
+				echo "<td width=\"10%\">";
+				if ($count > 1 && count($sections) > 1) {
+					echo "<a href=\"movesection.php?direction=up&section_id=".$one_section->section_id."\"><img src=\"../images/arrow-u.png\" alt=\"".$gettext->gettext("Up")."\" border=\"0\" /></a> ";
 				}
-				if ($count < $totalcount && $totalcount > 1) {
-					echo "<a href=\"movesection.php?direction=down&section_id=".$row["section_id"]."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a> ";
+				if ($count < count($sections) && count($sections) > 1) {
+					echo "<a href=\"movesection.php?direction=down&section_id=".$one_section->section_id."\"><img src=\"../images/arrow-d.png\" alt=\"".$gettext->gettext("Down")."\" border=\"0\" /></a> ";
 				}
 				if ($count == 1) {
 					echo "&nbsp;";
 				}
 				echo "</td>\n";
-				echo "<td><a href=\"editsection.php?section_id=".$row["section_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"editsection.php?section_id=".$one_section->section_id."&parent_id=".$one_section->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
 			}
 			if ($remove)
-				echo "<td><a href=\"deletesection.php?section_id=".$row["section_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"10%\"><a href=\"deletesection.php?section_id=".$one_section->section_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");

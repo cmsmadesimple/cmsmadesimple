@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -51,7 +53,8 @@ if ($access) {
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false) {
-				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_id, permission_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
+				$new_id = $dbnew->GenID($config->db_prefix."group_perms_seq");
+				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
 				$dbnew->Execute($query);
 			}
 		}

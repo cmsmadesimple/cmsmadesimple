@@ -26,35 +26,35 @@ header("Pragma: no-cache");
 
 <link rel="stylesheet" type="text/css" href="style.css" />
 
-<?php 
+<?php if (isset($htmlarea_flag)) { ?>
 
-if (isset($tinymce_flag)) { ?>
+	<script type="text/javascript">
+		_editor_url = "<?=$config->root_url?>/htmlarea/";
+		_editor_lang = "en";
+	</script>
 
-<!-- tinyMCE -->
- <script language="javascript" type="text/javascript" src="../tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
- <script language="javascript" type="text/javascript">
-  	tinyMCE.init({
-  		theme : "advanced",
-  		mode : "textareas",
-  		content_css : "../stylesheet.php?templateid=<?=$template_id?>",
-		theme_advanced_source_editor_width : "640",
-		theme_advanced_source_editor_height : "480",
-		theme_advanced_source_editor_area_width : "600",
-		theme_advanced_source_editor_area_height : "380",		
-		theme_advanced_buttons2: "bullist,numlist,separator,outdent,indent,separator,undo,redo,separator,link,unlink,image,cleanup,code",
-  		debug : false
-	});
- </script>
- <!-- /tinyMCE -->
- 
- <?php } ?>
- 
+	<script type="text/javascript" src="<?=$config->root_url?>/htmlarea/htmlarea.js"></script>
 
+	<script type="text/javascript">
+
+		HTMLArea.loadPlugin("TableOperations");
+		HTMLArea.loadPlugin("ContextMenu");
+		var editor = null;
+		function initHtmlArea() {
+			editor = new HTMLArea("content");
+			editor.registerPlugin(TableOperations);
+			editor.registerPlugin(ContextMenu);
+			editor.config.pageStyle = '<?=get_stylesheet($config,$template_id)?>';
+			editor.generate();
+		}
+
+	</script>
+
+<?php } ?>
 
 </head>
-</head>
 
-<body>
+<body <?php if (isset($htmlarea_flag)) { ?>onload="initHtmlArea();"<?php } ?>>
 
 <img src="../images/cmsadminbanner.png" border="0" id="logo" alt="CMS Made Simple"/>
 <div id="header" class="header">

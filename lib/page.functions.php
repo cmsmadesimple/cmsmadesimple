@@ -139,6 +139,7 @@ function get_stylesheet(&$config, $templateid) {
 	if ($result) {
 		$line = $result->FetchRow();
 		$css = $line[stylesheet];
+		$css = preg_replace("/[\r\n]/", "", $css);
 	}
 
 	return $css;

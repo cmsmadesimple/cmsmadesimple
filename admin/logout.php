@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, "", 'User Logout');

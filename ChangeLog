@@ -1,3 +1,12 @@
+Version 0.4 -- Subversion
+-----------------
+
+* Added module API
+* Added news module
+* Added subsections
+* Added copyright notice to bottom on all generated pages in a comment
+* Switched WYSIWYGs from tinymce to htmlarea
+
 Version 0.3.2 -- Thu Jul 29 2004
 -----------------
 

@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -73,8 +75,8 @@ $access = check_permission($config, $userid, 'Add Content');
 
 $templatepostback = "";
 if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
-	$tinymce_flag = "true";
-	$templatepostback = " onchange=\"tinyMCE.triggerSave();document.addform.submit()\"";
+	$htmlarea_flag = "true";
+	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
 }
 
 if ($access) {
@@ -107,13 +109,14 @@ if ($access) {
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES (".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $section_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_id, page_title, page_url, page_content, page_type, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ($new_page_id, ".$dbnew->qstr($title).",".$dbnew->qstr($url).",".$dbnew->qstr($content).",".$dbnew->qstr($content_type).", $section_id, $template_id, $userid, $showinmenu, ".$dbnew->qstr($menutext).", $order, $active, now(), now())";
 			$result = $dbnew->Execute($query);
 			if ($result) {
 				$new_page_id = $dbnew->Insert_ID();
 				if (isset($_POST["additional_editors"])) {
 					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
+						$new_addt_id = $dbnew->GenID($config->db_prefix."additional_users_seq");
+						$query = "INSERT INTO ".$config->db_prefix."additional_users (additional_user_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$new_page_id.")";
 						$dbnew->Execute($query);
 					}
 				}
@@ -254,14 +257,14 @@ else {
 <?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="content" cols="90" rows="18"><?=$content?></textarea></td>
+		<td><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
 	</tr>
 <?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Section")?>:</td>
 		<td><?=$dropdown?></td>
 	</tr>
-<?php if ($content_type == "content") { ?>
+<?php if ($content_type != "link") { ?>
 	<tr>
 		<td><?=$gettext->gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>

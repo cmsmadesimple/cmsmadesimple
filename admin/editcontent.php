@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -92,8 +94,8 @@ if (!$access) {
 }
 
 if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
-	$tinymce_flag = "true";
-	$templatepostback = " onchange=\"document.editform.content_change.value=1;tinyMCE.triggerSave();document.editform.submit()\"";
+	$htmlarea_flag = "true";
+	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
 }
 
 if ($access) {
@@ -137,7 +139,8 @@ if ($access) {
 					$dbnew->Execute($query);
 					if (isset($_POST["additional_editors"])) {
 						foreach ($_POST["additional_editors"] as $addt_user_id) {
-							$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$page_id.")";
+							$new_addt_id = $dbnew->GenID($config->db_prefix."additional_users_seq");
+							$query = "INSERT INTO ".$config->db_prefix."additional_users (additional_user_id, user_id, page_id) VALUES ($new_addt_id, ".$addt_user_id.", ".$new_page_id.")";
 							$dbnew->Execute($query);
 						}
 					}
@@ -316,14 +319,14 @@ else {
 <?php if ($content_type == "content") { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
-		<td><textarea name="content" cols="90" rows="18"><?=htmlentities($content)?></textarea></td>
+		<td><textarea id="content" name="content" cols="90" rows="24"><?=htmlentities($content)?></textarea></td>
 	</tr>
 <?php } ?>
 	<tr>
 		<td><?=$gettext->gettext("Section")?>:</td>
 		<td><?=$dropdown?><input type="hidden" name="orig_section_id" value="<?=$orig_section_id?>" /></td>
 	</tr>
-<?php if ($content_type == "content") { ?>
+<?php if ($content_type != "link") { ?>
 	<tr>
 		<td><?=$gettext->gettext("Template")?>:</td>
 		<td><?=$dropdown2?></td>

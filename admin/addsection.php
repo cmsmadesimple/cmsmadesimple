@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$CMS_ADMIN_PAGE=1;
+
 require_once("../include.php");
 
 check_login($config);
@@ -27,6 +29,9 @@ if (isset($_POST["section"])) $section = $_POST["section"];
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
+
+$parent_id = 0;
+if (isset($_POST["addsection"])) $parent_id = $_POST["parent_id"];
 
 if (isset($_POST["cancel"])) {
 	redirect("listsections.php");
@@ -49,14 +54,14 @@ if ($access) {
 		if ($validinfo) {
 			$order = 1;
 
-			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."sections";
+			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."sections WHERE parent_id=$parent_id";
 			$result = $dbnew->Execute($query);
 			$row = $result->FetchRow();
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
 
-			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES (".$dbnew->qstr($section).", $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."sections (section_id, section_name, item_order, active, create_date, modified_date, parent_id) VALUES ($new_section_id, ".$dbnew->qstr($section).", $order, $active, now(), now(), $parent_id)";
 			$result = $dbnew->Execute($query);
 			if ($result) {
 				$new_section_id = $dbnew->Insert_ID();
@@ -99,6 +104,22 @@ else {
 	<tr>
 		<td><?=$gettext->gettext("Active")?>:</td>
 		<td><input type="checkbox" name="active" <?=($active == 1?"checked":"")?> /></td>
+	</tr>
+	<tr>
+		<td><?=$gettext->gettext("Parent section")?>:</td>
+		<td>
+		<select name="parent_id" size="1">
+			<option selected value="0">[None]</option>
+<?php
+	$sections = db_get_menu_items($config,"subs");
+  	foreach ($sections as $onesection) {
+		echo "<p>".var_dump($onesection)."</p>\n";
+		echo "<option value=\"".$onesection->section_id."\">".$onesection->display_name."</option>\n";
+    }
+
+?>
+		</select>
+		</td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
