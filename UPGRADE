@@ -1,0 +1,12 @@
+1.  Untar the source package to document root dir or your webserver
+        - cd DOCUMENT_ROOT
+        - tar xvfz cms-VERSION.tar.gz
+OR
+    check out the latest version from subversion
+        - svn co http://svn.wishy.org/cms/cms/trunk
+
+2.  Copy all of the files over top of your existing installation
+
+3.  Remove the install.php file.  This is only needed for fresh installs and will cause a warning message to anyone entering the site
+
+4.  Point your browser to the upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.

@@ -8,6 +8,7 @@
     <li class="item"><a href="listtemplates.php">Template Management</a></li>
     <li class="item"><a href="listusers.php">User Management</a></li>
     <li class="item"><a href="listgroups.php">Group Management</a></li>
+    <li class="item"><a href="../index.php" target="_new">Show Site</a></li>
     <li class="item"><a href="logout.php">Logout</a></li>
    </ul>
  </li>
