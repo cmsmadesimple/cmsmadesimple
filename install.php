@@ -331,6 +331,8 @@ function showPageFour() {
 	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";
 	$newconfig["max_upload_size"] = 1000000;
 	$newconfig["debug"] = false;
+	$newconfig["assume_mod_rewrite"] = false;
+	$newconfig["auto_alias_content"] = true;
 
     $configfile = dirname(__FILE__)."/config.php";
     ## build the content for config file
