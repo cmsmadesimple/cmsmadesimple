@@ -132,24 +132,15 @@ if (isset($sectionCount['usersgroups']) && $sectionCount['usersgroups'] > 0)
 <span class="description"><?php echo lang('extensionsdescription')." ".lang('subitems') ?>:
 <?php if ($modulePerms) {?><a href="listmodules.php"><?php echo lang('modules') ?></a>, <?php }
 ?><a href="listtags.php"><?php echo lang('tags') ?></a><?php
-if ($codeBlockPerms) {?>, <a href="listusertags.php"><?php echo lang('usertags') ?></a><?php } ?>.
-<?php
-	# Any modules with an admin interface?
-	$displaymodules = '';
-    foreach($modulesBySection as $thisSectionModules)
+if ($codeBlockPerms) {?>, <a href="listusertags.php"><?php echo lang('usertags') ?></a><?php }
+if (isset($sectionCount['extensions']) && $sectionCount['extensions'] > 0)
+    {
+    foreach($modulesBySection['extensions'] as $sectionModule)
         {
-        foreach ($thisSectionModules as $sectionModule)
-            {
-            $displaymodules .= " <a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>,";
-            }
+        echo ", <a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>";
         }
-	if ($displaymodules != '')
-	{
-		$displaymodules = substr($displaymodules, 0, strlen($displaymodules) - 2);
-		echo ' '.lang('modules').':' . rtrim($displaymodules,",");
-	}
-?>
-</span>
+    }
+?>.</span>
 </div>
 
 <div class="MainMenuItem">
