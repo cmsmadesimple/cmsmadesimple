@@ -187,7 +187,7 @@ function showPageThree($sqlloaded = 0) {
 
         $statements = preg_split("/\;\r?\n?$/m", $contents);
  
-        echo "<textarea name=code rows=15 cols=60>$contents</textarea><p>\n";
+        echo "<textarea name=code rows=15 cols=50>$contents</textarea><p>\n";
         $link = @mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
         if (!$link) {
            die('Could not connect: ' . mysql_error());
@@ -214,8 +214,8 @@ function showPageThree($sqlloaded = 0) {
     $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
     $docpath = substr($_SERVER['SCRIPT_FILENAME'],0,strlen($_SERVER['SCRIPT_FILENAME'])-12);
 
-    echo "<p>Now let's continue to setup your configuration file, we already have most of the stuff we need.<br />\n";
-    echo "Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>\n";
+    echo "<p>Now let's continue to setup your configuration file, we already have most of the stuff we need.</p>\n";
+    echo "<p>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>\n";
     echo "<form action=install.php method=post name=\"page3form\" id=\"page3form\">\n";
 	echo "<table cellpadding=\"2\" border=\"1\" class=\"regtable\">\n";
     echo "<tr class=\"row1\"><td>CMS Document root (as seen from the webserver)</td><td><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
