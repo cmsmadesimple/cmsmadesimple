@@ -80,6 +80,11 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Content');
 
+$templatepostback = "";
+if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+	$htmlarea_flag = true;
+	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
+}
 
 if ($access) {
 
@@ -223,11 +228,6 @@ if ($access) {
 
 }
 
-$templatepostback = "";
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
-	$htmlarea_flag = true;
-	$templatepostback = " onchange=\"document.addform.content.value=editor.getHTML();document.addform.submit()\"";
-}
 
 include_once("header.php");
 

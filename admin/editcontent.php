@@ -221,6 +221,12 @@ if ($access) {
 		$orig_item_order = $row["item_order"];
 	}
 
+	$templatepostback = "";
+	if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
+		$htmlarea_flag = true;
+		$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
+	}
+
     $content_array = array();
     $content_array = db_get_menu_items("content_hierarchy");
 		foreach ($content_array as $one ) {
@@ -314,11 +320,6 @@ if ($access) {
 	$ctdropdown .= "</select>";
 }
 
-$templatepostback = "";
-if (get_preference($userid, 'use_wysiwyg') == "1" && $content_type == "content") {
-	$htmlarea_flag = true;
-	$templatepostback = " onchange=\"document.editform.content_change.value=1;document.editform.content.value=editor.getHTML();document.editform.submit()\"";
-}
 
 include_once("header.php");
 
