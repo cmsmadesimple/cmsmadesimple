@@ -18,6 +18,7 @@ header("Pragma: no-cache");
 // Language shizzle
 header("Content-Encoding: " . get_encoding());
 header("Content-Language: " . $current_language);
+header("Content-Type: text/html; charset=" . get_encoding());
 
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">

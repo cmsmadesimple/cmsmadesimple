@@ -36,9 +36,10 @@
 <a href="listgroups.php"><?php echo lang('groupmanagement')?></a>
 <a href="files.php"><?php echo lang('filemanagement')?></a>
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
-<!--<a href="editprefs.php"><?php echo lang('userprefs')?></a>-->
+<a href="siteprefs.php"><?php echo lang('siteprefs')?></a>
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
 <a href="../index.php" target="_new"><?php echo lang('showsite')?></a>
+<a href="editprefs.php"><?php echo lang('userprefs')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
 
 <?php

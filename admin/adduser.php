@@ -36,6 +36,7 @@ if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 
+$use_wysiwyg = "";
 if (isset($_POST["use_wysiwyg"]))$use_wysiwyg = $_POST["use_wysiwyg"];
 
 if (isset($_POST["cancel"])) {
@@ -67,7 +68,7 @@ if (isset($_POST["adduser"])) {
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 		$result = $db->Execute($query);
 		if ($result) {
-			set_preference($new_user_id, 'use_wysiwyg', $use_wysiwyg);
+			#set_preference($new_user_id, 'use_wysiwyg', $use_wysiwyg);
 			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
 			redirect("listusers.php");
 			return;
@@ -110,6 +111,7 @@ if ($error != "") {
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
+	<!--
 	<tr>
 		<td><?php echo lang('usewysiwyg')?>:</td>
 		<td>
@@ -119,6 +121,7 @@ if ($error != "") {
 			</select>
 		</td>
 	</tr>
+	-->
 	<tr>
 		<td>&nbsp;</td>
 		<td><input type="hidden" name="adduser" value="true">

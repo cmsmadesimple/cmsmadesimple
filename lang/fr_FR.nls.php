@@ -39,7 +39,7 @@ $nls['alias']['fr_CH'] = 'fr_FR' ;
 $nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
 
 #Encoding of the language
-$nls['encoding']['fr_FR'] = "UTF-8";
+$nls['encoding']['fr_FR'] = "ISO-8859-1";
 
 #Location of the file(s)
 $nls['file']['fr_FR'] = array();

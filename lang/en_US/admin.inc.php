@@ -175,4 +175,15 @@ $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
+$lang['admin']['editconfiguration'] = 'Edit Configuration'; //needs translation
+$lang['admin']['database'] = 'Database'; //needs translation
+$lang['admin']['databaseprefix'] = 'Database Prefix'; //needs translation
+$lang['admin']['saveconfig'] = 'Save Config'; //needs translation
+$lang['admin']['databasetype'] = 'Database Type'; //needs translation
+$lang['admin']['hostname'] = 'Hostname'; //needs translation
+$lang['admin']['saveconfig'] = 'Save Config'; //needs translation
+$lang['admin']['custom404'] = 'Custom 404 Error Message'; //needs translation
+$lang['admin']['siteprefs'] = 'Site Preferences'; //needs translation
+$lang['admin']['sitedownmessage'] = 'Site Down Message'; //needs translation
+$lang['admin']['useadvancedcss'] = 'Use Advanced CSS Management'; //needs translation
 ?>

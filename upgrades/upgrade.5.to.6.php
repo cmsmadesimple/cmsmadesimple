@@ -52,6 +52,27 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
+echo "<p>Creating siteprefs table...";
+
+$dbdict = NewDataDictionary($db);
+$flds = "
+	sitepref_name C(255),
+	sitepref_value text,
+	create_date T,
+	modified_date T
+";
+$taboptarray = array('mysql' => 'TYPE=MyISAM');
+$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."siteprefs", $flds, $taboptarray);
+$dbdict->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
+echo "<p>Creating modify CSS permission...";
+
+cms_mapi_create_permission($gCms, 'Modify Site Preferences', 'Modify Site Preferences');
+
+echo "[done]</p>";
+
 echo "<p>Creating modify CSS permission...";
 
 cms_mapi_create_permission($gCms, 'Modify CSS', 'Modify CSS');
@@ -74,6 +95,12 @@ echo "[done]</p>";
 echo "<p>Creating modify code blocks permission...";
 
 cms_mapi_create_permission($gCms, 'Modify Code Blocks', 'Modify Code Blocks');
+
+echo "[done]</p>";
+
+echo "<p>Creating clear admin log permission...";
+
+cms_mapi_create_permission($gCms, 'Clear Admin Log', 'Clear Admin Log');
 
 echo "[done]</p>";
 

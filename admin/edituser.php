@@ -45,8 +45,9 @@ else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User') || ($userid == $user_id);
 
+$use_wysiwyg = ""
 if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
-else{$use_wysiwyg = get_preference($userid, 'use_wysiwyg');}
+#else{$use_wysiwyg = get_preference($userid, 'use_wysiwyg');}
 
 
 if ($access) {
@@ -71,7 +72,7 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+			#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
 			audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited User');
 
 			$query = "UPDATE ".cms_db_prefix()."users SET username=".$db->qstr($user).", ";
@@ -145,6 +146,7 @@ else {
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>
 	</tr>
+	<!--
 	<tr>
 		<td><?php echo lang('usewysiwyg')?>:</td>
 		<td>
@@ -154,6 +156,7 @@ else {
 			</select>
 		</td>
 	</tr>
+	-->
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?php echo $user_id?>"><input type="hidden" name="edituser" value="true">
 		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">

@@ -180,6 +180,57 @@ function audit($userid, $username, $itemid, $itemname, $action) {
 }
 
 /**
+ * Gets the given site prefernce
+ *
+ * @since 0.6
+ */
+function get_site_preference($prefname) {
+
+	$value = "";
+
+	global $gCms;
+	$db = $gCms->db;
+
+	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
+	$result = $db->query($query);
+	
+	if ($result && $result->RowCount() > 0) {
+		$row = $result->FetchRow();
+		$value = $row['sitepref_value'];
+	}
+
+	return $value;
+}
+
+/**
+ * Sets the given site perference with the given value.
+ *
+ * @since 0.6
+ */
+function set_site_preference($prefname, $value) {
+
+	$doinsert = true;
+
+	global $gCms;
+	$db = $gCms->db;
+
+	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() > 0) {
+		$doinsert = false;
+	}
+
+	if ($doinsert) {
+		$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
+		$db->Execute($query);
+	} else {
+		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
+		$db->Execute($query);
+	}
+}
+
+/**
  * Gets the given preference for the given userid.
  *
  * @since 0.3
