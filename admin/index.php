@@ -69,7 +69,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <div class="MainMenuItem">
 <a href="topusers.php">Users/Groups</a>
-<span class="description">User and Group related items. Subitems: <a href="listusers.php">users</a>, <a href="listgroups.php">groups</a>, <a href="#">permissions</a>.</span>
+<span class="description">User and Group related items. Subitems: <a href="listusers.php">users</a>, <a href="listgroups.php">groups</a>, <a href="changegroupperm.php">group permissions</a>,  <a href="changegroupassign.php">group assignments</a>.</span>
 </div>
 
 <div class="MainMenuItem">
