@@ -32,9 +32,9 @@ if (!file_exists($config) || filesize($config) == 0) {
 } ## if
 
 $pages = 4;
-if ($_POST["page"]) {
+if (isset($_POST["page"])) {
     $currentpage = $_POST["page"];
-} elseif ($_GET["page"]) {
+} elseif (isset($_GET["page"])) {
     $currentpage = $_GET["page"];
 } else {  
     $currentpage = 1;

@@ -53,7 +53,7 @@ if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
 
 if (file_exists("config.php") && file_exists("install.php")) {
     echo "You cannot start CMS until you remove the install.php<br>\n";
-    if ($_GET["deleteinstall"] == "true") {
+    if (isset($_GET["deleteinstall"]) && $_GET["deleteinstall"] == "true") {
         echo "Looks like you tried to have CMS delete the install file but that was not sucessful.  You will have to remove it manually before you can continue<br>\n";
         exit;
     } ## if
