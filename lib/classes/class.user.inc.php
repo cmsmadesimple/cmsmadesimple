@@ -304,7 +304,8 @@ class UserOperations
 
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		#$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $db->DBTimeStamp(time()), $db->DBTimeStamp(time()))); //Force admin access on
 		if ($dbresult !== false)
 		{
 			$result = $new_user_id;
@@ -329,7 +330,8 @@ class UserOperations
 		$db = &$gCms->db;
 
 		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ?, first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
+		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
+		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->firstname, $user->lastname, $user->email, 1, $user->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

@@ -80,9 +80,9 @@ function smarty_cms_function_dhtmlmenu($params, &$smarty) {
 	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu-library.js"></script>
 	<script language="JavaScript" type="text/javascript" src="phplayers/libjs/layersmenu.js"></script>';
 	
-	require_once 'phplayers/lib/PHPLIB.php';
-	require_once 'phplayers/lib/layersmenu-common.inc.php';
-	require_once 'phplayers/lib/layersmenu.inc.php';
+	require_once dirname(dirname(__FILE__)).'/phplayers/lib/PHPLIB.php';
+	require_once dirname(dirname(__FILE__)).'/phplayers/lib/layersmenu-common.inc.php';
+	require_once dirname(dirname(__FILE__)).'/phplayers/lib/layersmenu.inc.php';
 	
 	$mid = new LayersMenu();
 	

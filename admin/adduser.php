@@ -140,10 +140,12 @@ if ($error != "") {
 		<td><?php echo lang('email')?>:</td>
 		<td><input type="text" name="email" maxlength="255" value="" class="standard"></td>
 	</tr>
+	<!--
 	<tr>
 		<td><?php echo lang('adminaccess')?>:</td>
 		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked":"")?>></td>
 	</tr>
+	-->
 	<tr>
 		<td><?php echo lang('active')?>:</td>
 		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked":"")?>></td>

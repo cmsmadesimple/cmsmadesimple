@@ -1,7 +1,10 @@
-Version 0.8 -- Subversion
+Version 0.7.3 -- Subversion
 -----------------
 
 * Added Italian translation (emaunelez)
+* Fixed bug with relative paths in dhtmlmenu
+* Reenabled Image Manager
+* Removed Allow Admin Access from add/edit user
 * Updated adodb to 4.54
 
 Version 0.7.2 -- Wed Nov 10 2004
