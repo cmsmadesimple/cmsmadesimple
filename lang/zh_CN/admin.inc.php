@@ -209,4 +209,5 @@ $lang['admin']['currentcss'] = 'µ±Ç°CSS';
 $lang['admin']['imagemanager'] = 'Imagemanager'; //needs translation
 $lang['admin']['filemanager'] = 'Filemanager'; //needs translation
 $lang['admin']['blobmanagement'] = 'HTML Blob Management'; //needs translation
+$lang['admin']['encoding'] = 'Encoding'; //needs translation
 ?>

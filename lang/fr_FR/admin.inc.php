@@ -209,4 +209,5 @@ $lang['admin']['currentcss'] = 'CSS courante';
 $lang['admin']['imagemanager'] = 'Gestionnaire d\'images';
 $lang['admin']['filemanager'] = 'Gestionnaire de fichiers';
 $lang['admin']['blobmanagement'] = 'Gestionnaire de Blob HTML';
+$lang['admin']['encoding'] = 'Encoding'; //needs translation
 ?>

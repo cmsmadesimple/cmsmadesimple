@@ -209,4 +209,5 @@ $lang['admin']['filemanager'] = 'Bestanden';
 $lang['admin']['imagemanager'] = 'Afbeeldingen';
 $lang['admin']['addhtmlblob'] = 'Nieuw Html Blok'; 
 $lang['admin']['edithtmlblob'] = 'Edit Html Blok'; 
+$lang['admin']['encoding'] = 'Encoding'; //needs translation
 ?>
