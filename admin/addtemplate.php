@@ -159,11 +159,11 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $content, "content"); ?></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $content, "content", 'syntaxHighlight', 'HTML (Complex)', '', $encoding); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet", "syntaxHighlight", "Java Properties") ?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $stylesheet, "stylesheet", "syntaxHighlight", "Java Properties", '', $encoding) ?></textarea></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('encoding')?>:</td>

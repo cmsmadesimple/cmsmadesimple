@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -89,7 +90,13 @@ $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
 
 $template_id = -1;
-if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
+if (isset($_POST["template_id"]))
+{
+	$template_id = $_POST["template_id"];
+	$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+	header("Content-Type: text/html; charset=" . (isset($onetemplate->encoding)?$onetemplate->encoding:get_encoding()));
+	$charsetsent = true;
+}
 
 $orig_item_order = -1;
 if (isset($_POST["orig_item_order"])) $item_order = $_POST["orig_item_order"];
@@ -225,6 +232,11 @@ if ($access) {
 		$showinmenu = $row["show_in_menu"];
 		$menutext = $row["menu_text"];
 		$orig_item_order = $row["item_order"];
+
+		//Get encoding of template
+		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+		header("Content-Type: text/html; charset=" . (isset($onetemplate->encoding)?$onetemplate->encoding:get_encoding()));
+		$charsetsent = true;
 	}
 
 	$templatepostback = "";
@@ -328,7 +340,6 @@ if ($access) {
 	}
 	$ctdropdown .= "</select>";
 }
-
 
 include_once("header.php");
 

@@ -19,6 +19,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -196,20 +197,26 @@ if ($access) {
 
 	$dropdown .= "</select>";
 
-	$query = "SELECT template_id, template_name FROM ".cms_db_prefix()."templates ORDER BY template_id";
+	$query = "SELECT template_id, template_name, encoding FROM ".cms_db_prefix()."templates ORDER BY template_id";
 	$result = $db->Execute($query);
 
 	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
+	$count = 0;
 	while($row = $result->FetchRow()) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
-		if ($row["template_id"] == $template_id) {
+		if ($row["template_id"] == $template_id || $count == 0 && $template_id == -1) {
 			$dropdown2 .= "selected";
+			//Get encoding of template
+			$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+			header("Content-Type: text/html; charset=" . (isset($row['encoding'])?$row['encoding']:get_encoding()));
+			$charsetsent = true;
 		}
 		if ($template_id == -1) {
 			$template_id = $row["template_id"];
 		}
 		$dropdown2 .= ">".$row["template_name"]."</option>";
+		$count++;
 	}
 
 	$dropdown2 .= "</select>";
@@ -299,7 +306,7 @@ else {
 
 ?>
 
-<form method="post" action="addcontent.php" name="addform" id="addform" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,head_tags\');"';} ?>>
+<form method="post" action="addcontent.php" name="addform" id="addform" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,head_tags\');"';} ?>>
 
 <?php if ($content_type == "content") { ?>
 <h3><?php echo lang('addcontent')?></h3>
@@ -322,7 +329,7 @@ else {
 	</tr>
 	<tr>
 		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br>
-        <?php echo textarea_highlight($use_javasyntax, $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
+        <?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $content, "content", "syntaxHighlight", "HTML (Complex)", "content"); ?></td>
 	</tr>
 </table>
 

@@ -129,5 +129,62 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 
 	}	// end parse_template();
 
+function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
+{
+	$result = "";
+	$result = htmlentities($string, $param, $charset);
+	$result = my_htmlentities($string);
+	return $result;
+}
+
+function my_htmlentities($val)
+{
+	if ($val == "")
+	{
+		return "";
+	}
+
+	$val = str_replace( " ", " ", $val );
+
+	//Remove sneaky spaces
+	// $val = str_replace( chr(0xCA), "", $val );
+
+	$val = str_replace( "&" , "&" , $val );
+	$val = str_replace( "<!--" , "<!--" , $val );
+	$val = str_replace( "-->" , "-->" , $val );
+	$val = preg_replace( "/<script/i" , "<script" , $val );
+	$val = str_replace( ">" , "&gt;" , $val );
+	$val = str_replace( "<" , "&lt;" , $val );
+	$val = str_replace( "\"" , "&quot;" , $val );
+
+	// Uncomment it if you need to convert literal newlines
+	//$val = preg_replace( "/\n/" , "
+//" , $val );
+
+	$val = preg_replace( "/\\$/" , "$" , $val );
+
+	// Uncomment it if you need to remove literal carriage returns
+	//$val = preg_replace( "/\r/" , "" , $val );
+
+	$val = str_replace( "!" , "!" , $val );
+	$val = str_replace( "'" , "'" , $val );
+
+	// Uncomment if you need to convert unicode chars
+	$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val );
+
+	// Strip slashes if not already done so.
+	//if ( get_magic_quotes_gpc() )
+	//{
+	//	$val = stripslashes($val);
+	//}
+
+	// Swop user inputted backslashes (this caused an error so
+	// I commented it)
+
+	// $val = preg_replace( "/\(?!&#|?#)/", "\", $val );
+
+	return $val;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -397,12 +397,12 @@ function & strip_slashes(&$str) {
  *      this, \'custom404,sitedown\');"';}
  */
 function textarea_highlight($use_javasyntax, $text, $name,
-    $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id=""){
+    $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding=''){
             
     if ($use_javasyntax){
         $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
         $text = ereg_replace("\r", "<CMSNewLine>", $text);
-        $text = htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
+        $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
                 
         // possible values for syntaxType are: Java, C/C++, LaTeX, SQL, 
         // Java Properties, HTML (Simple), HTML (Complex)
@@ -422,7 +422,7 @@ function textarea_highlight($use_javasyntax, $text, $name,
        
     }else{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
-            class="'.$class_name.'" id="'.$id.'">'.@htmlentities($text,ENT_NOQUOTES,get_encoding()).'</textarea>';
+            class="'.$class_name.'" id="'.$id.'">'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
     }
     
     return $output;
