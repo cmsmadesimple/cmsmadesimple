@@ -220,7 +220,7 @@ function showPageThree($sqlloaded = 0) {
         global $config, $CMS_SCHEMA_VERSION;
 
 		$db = &ADONewConnection($_POST['dbms']);
-		$db->debug = true;
+		#$db->debug = true;
 		$result = $db->Connect($_POST['host'].":".$_POST['port'],$_POST['username'],$_POST['password'],$_POST['database']);
 
 		$db_prefix = $_POST['prefix'];

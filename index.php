@@ -69,9 +69,9 @@ if ($page == "") {
 
 ($smarty->is_cached('db:'.$page)?$cached="":$cached="not ");
 
-$old_error_handler = set_error_handler("ErrorHandler404");
+#$old_error_handler = set_error_handler("ErrorHandler404");
 $html = $smarty->fetch('db:'.$page) . "\n";
-set_error_handler($old_error_handler);
+#set_error_handler($old_error_handler);
 
 echo $html;
 @ob_flush();

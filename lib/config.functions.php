@@ -78,6 +78,12 @@ function cms_config_load($loadLocal = true)
 	#CMS Debug Mode?
 	$config["debug"] = false;
 
+	#Show mod_rewrite URLs in the menu?
+	$config["assume_mod_rewrite"] = false;
+
+	#Automatically assign alias based on page title?
+	$config["auto_alias_content"] = true;
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())
