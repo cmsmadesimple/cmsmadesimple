@@ -923,9 +923,10 @@ class CMSModule extends ModuleOperations
 		{
 			$text .= '&amp;'.$id.'returnid='.$returnid;
 		}
-		$text .= "\"";
+		
 		if (!$onlyhref)
 		{
+			$text .= "\"";
 			if ($warn_message !== '')
 			{
 				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
