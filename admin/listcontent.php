@@ -104,11 +104,11 @@ if (isset($_GET["message"])) {
 				echo "</td>\n";
 			}
 			if ($config["query_var"] == "")
-				echo "<td><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php/".$one->page_id."\" target=\"_blank\"><img src=\"../images/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
 			else
-				echo "<td><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\">".$gettext->gettext("View")."</a></td>\n";
-			echo "<td><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\">".$gettext->gettext("Edit")."</a></td>\n";
-			echo "<td><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"".$config["root_url"]."/index.php?".$config["query_var"]."=".$one->page_id."\" target=\"_blank\"><img src=\"../images/view.png\" alt=\"".$gettext->gettext("View")."\" border=\"0\" /></a></td>\n";
+			echo "<td width=\"18\"><a href=\"editcontent.php?page_id=".$one->page_id."&parent_id=".$one->parent_id."\"><img src=\"../images/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
+			echo "<td width=\"18\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
 			echo "</tr>\n";
 
 			$count++;

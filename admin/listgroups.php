@@ -48,9 +48,9 @@ include_once("header.php");
 		if ($assign)
 			echo "<td width=\"10%\">&nbsp;</td>\n";
 		if ($edit)
-			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td>&nbsp;</td>\n";
 		if ($remove)
-			echo "<td width=\"10%\">&nbsp;</td>\n";
+			echo "<td>&nbsp;</td>\n";
 		echo "</tr>\n";
 
 		$currow = "row1";
@@ -65,9 +65,9 @@ include_once("header.php");
 			if ($assign)
 				echo "<td width=\"10%\"><a href=\"changegroupassign.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Assignments")."</a></td>\n";
 			if ($edit)
-				echo "<td width=\"10%\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"editgroup.php?group_id=".$row["group_id"]."\"><img src=\"../images/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
 			if ($remove)
-				echo "<td width=\"10%\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"deletegroup.php?group_id=".$row["group_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
 			echo "</tr>\n";
 
 			($currow == "row1"?$currow="row2":$currow="row1");

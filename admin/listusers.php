@@ -56,13 +56,13 @@ if (isset($_GET["message"])) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
-			echo "<td>".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
+			echo "<td width=\"10%\">".($row["active"] == 1?$gettext->gettext("True"):$gettext->gettext("False"))."</td>\n";
 			if ($edit || $userid == $row["user_id"])
-				echo "<td><a href=\"edituser.php?user_id=".$row["user_id"]."\">".$gettext->gettext("Edit")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"edituser.php?user_id=".$row["user_id"]."\"><img src=\"../images/edit.png\" alt=\"".$gettext->gettext("Edit")."\" border=\"0\" /></a></td>\n";
 			else
-				echo "<td>&nbsp;</td>\n";
+				echo "<td width=\"18\">&nbsp;</td>\n";
 			if ($remove)
-				echo "<td><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\">".$gettext->gettext("Delete")."</a></td>\n";
+				echo "<td width=\"18\"><a href=\"deleteuser.php?user_id=".$row["user_id"]."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to delete?")."');\"><img src=\"../images/delete.png\" alt=\"".$gettext->gettext("Delete")."\" border=\"0\" /></a></td>\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");

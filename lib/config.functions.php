@@ -68,6 +68,12 @@ function cms_config_load($loadLocal = true)
 	#Where are uploaded files put?
 	$config["uploads_path"] = $config["root_path"] . "/uploads";
 
+	#Where is the url to this directory?
+	$config["uploads_url"] = $config["root_url"] . "/uploads";
+
+	#Maxium upload size (in bytes)?
+	$config["max_upload_size"] = 1000000;
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php"))
@@ -97,6 +103,7 @@ function cms_config_save($config)
 		$handle = fopen($newfilename, "w");
 		if ($handle)
 		{
+			fwrite($handle, "<?php\n\n");
 			foreach ($config as $key=>$value)
 			{
 				if (is_string($value))
@@ -112,6 +119,7 @@ function cms_config_save($config)
 					fwrite($handle, "$key = ".strval($value).";\n");
 				}
 			}
+			fwrite($handle, "\n?>");
 			fclose($handle);
 		}
 	}
@@ -144,7 +152,11 @@ function cms_config_upgrade()
 				foreach ($oldconfiglines as $oneline)
 				{
 					$newline = trim(preg_replace('/\$this-\>(\S+)/', '$config["$1"]', $oneline));
-					fwrite($handle, $newline."\n");
+					if ($newline != "?>")
+					{
+						$newline .= "\n";
+					}
+					fwrite($handle, $newline);
 				}
 				fclose($handle);
 			}

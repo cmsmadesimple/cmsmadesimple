@@ -67,7 +67,7 @@ if ($access) {
 include_once("header.php");
 
 if ($action != "" && !$access) {
-	echo $gettext->gettext("<p class=\"error\">You need the 'Modify Modules' permission to perform that function.</p>");
+	echo "<p class=\"error\">".$gettext->gettext("You need the 'Modify Modules' permission to perform that function.")."</p>";
 }
 
 if (count($gCms->modules) > 0) {
@@ -132,4 +132,5 @@ if (count($gCms->modules) > 0) {
 
 include_once("footer.php");
 
+# vim:ts=4 sw=4 noet
 ?>

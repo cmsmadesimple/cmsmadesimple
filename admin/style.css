@@ -2,15 +2,17 @@
 	this is freesoftware as defined by the GPL version 2 or later
 	christian at localdesert.com
 	http://www.localdesert.com/christian
+	modified on August 16, 2004 by Shawn Pata
+	http://www.bewbs.com/V2
 */
 
 body {
-	font-family : Arial, Helvetica;
-	margin: 0px;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	margin: 00px;
 	padding: 0px;
 	background: #fff;
 	color: #64879d;
-	font-size : 10pt;
+	font-size : 12px;
 }
 
 a:link, a:active, a:visited {
@@ -19,52 +21,65 @@ a:link, a:active, a:visited {
 }
 
 a:hover {
+	font-weight: 300;
 	color: red;
 	text-decoration: none;
 }
-
+	
 h1, h2, h3, h4, h5, p {
-	font-size: 12pt;
+	font-size: 12px;
 	font-weight: bold;
-	color: #64879d;
+	color: #000;
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	padding-left: 185px;
 }			       	       
-
 /* start navigation style */
 
 div.nav {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 12px;
+	vertical-align: top;
 	float: left;
-	width: 150px;
-	background: #EDF2F5;
+	width: 175px;
+	background: #F6F6F6;
 	padding: 0px;
-	margin: 1em;
-	margin-right: 20px;
-	border: 1px solid #64879d;
+/*	margin: 1em;  */
+	margin-right: 0px;
+/*	border: 1px solid #64879d; */
+	border-bottom: 1px solid #8C8A8C;
+/*	border-top: 0px solid #000; */
+/*	border-left: 1px solid #8C8A8C; */
+	border-right: 1px solid #8C8A8C;
 }
 
 div.nav h4 {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
 	margin: 0;
-	background: #EDF2F5;
-	color: #67AACB;
-	font-size : 10pt;
-	font-weight: bold;
+	background: #F6F6F6;
+	color: #000;
+	font-size : 12px;
+/*	font-weight: bold; */
 	padding: 0;
-	margin: 1em;
-	text-align: center;
+	margin: 0.3em; 
+	text-align: left;
 }
 
 div.nav a {
 	display: block;
 	margin: 0;
 	width: auto;
-	padding: 0.3em;
-	border-top: 1px solid #64879d;
-	color: #67AACB;
+	padding: 0.3em; 
+/*	border-top: 1px solid #64879d; */
+	color: #265980;
 	text-decoration: none;
 }
 
 div.nav a:hover {
-	background: #67AACB;
-	color: #fff;
+	background: #FFF;
+	border-top: 1px solid #8C8A8C;
+	border-bottom: 1px solid #8C8A8C;
+	color: #265980;
+	font-weight: bold;
 }
 
 div.nav form {
@@ -80,10 +95,10 @@ div.nav form {
 /* start content style */
 
 #header	{
-	background: #EDF2F5;
-	color: #64879d;
+	background: #BFDAEF;
+	color: #265980;
 	padding: 8px;
-	border-bottom: 2px solid #64879d;
+	border-bottom: 1px solid #8C8A8C;
 	height: 100px;
 }
 
@@ -93,13 +108,13 @@ div.nav form {
 	top: 10px;
 }
 
-#footer	{
-/*	background: #EDF2F5;
-	color: #64879d;
+/*#footer	{
+	background: #BFDAEF;
+	color: #265980;
 	padding: 8px;
-	border: 2px solid #64879d;
-*/
-}
+	border: 1px solid #8C8A8C;
+	vertical-align: bottom;
+} */
 			
 #login	{
 	background: #EDF2F5;
@@ -121,7 +136,6 @@ div.nav form {
 div.content {
 	height: 100%;
 	color: #000;
-
 }
 
 /* end content style */
@@ -129,15 +143,16 @@ div.content {
 /* start table style */
 
 table.admintable {
-	background: #67AACB;
-	color: #EDF2F5;
-	border: 1px solid #67AACB;
+	background: #8ABEE5;
+	color: #FFF;
+	border: 1px solid #8C8A8C;
 	font-weight: bold;
 	text-align: left;
 	border-collapse: collapse;
 	border-spacing: 0px;
 	margin-bottom: 15px;
-	width: 76%;
+	width: 75%;
+	margin-left: 10px;
 }
 
 table.admintable td {
@@ -145,30 +160,32 @@ table.admintable td {
 }
 
 .row1, .row2 {
-	color: #64879d;
-	border: #64879d;
+	color: #265980;
+	border: #8C8A8C;
 	font-weight: normal;
 }
 
-.row1 {	background: #EDF2F5; }
-.row2 {	background: #dbe6ec; }
+.row1 {	background: #F6F6F6 }
+.row2 {	background: #FFF; }
 
 .button a, .button a:link, .button a:active, .button a:visited {
-	background: #EDF2F5;
-	color: #64879d;
+	background: #F6F6F6;
+	color: #265980;
 	padding: 4px;
-	border: 1px solid #64879d;
+	border: 1px solid #8C8A8C;
+	margin-left: 20px;
 }
 
 .button a:hover {
-	background: #dbe6ec;
+	background: #FFF;
 	color: #64879d;
 	padding: 4px;
 	border: 1px solid #64879d;
+	font-weight: normal;
 }
 
 .smallselect {
-	font-size: 70%;
+	font-size: 12px;
 }
 
 /* end table style */
@@ -176,17 +193,30 @@ table.admintable td {
 /* start form style */
 
 div.adminform {
-	background: #EDF2F5;
-	color: #64879d;
-	border: 1px solid #64879d;
+	background: #e8e8e8; /* EDF2F5 */
+	color: #265980;
+/*	border: 1px solid #64879d; */
+	border-bottom: 1px solid #8C8A8C;
+	border-right: 1px solid #8C8A8C;
+	border-left: 1px solid #8C8A8C;
 	padding: 8px;
-	margin-top: 10px;
+/*	margin-top: 10px; */
 	margin-right: 10px;
 	/*margin-left: 180px;*/
 	position: absolute;
-	left: 200px;
+	left: 185px;
 }
 
 /* end form style */
 
-.error { color: #F00; }
+.error { 
+		color: #F00;
+		padding-left: 185px;
+}
+
+h8 {
+ 	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 10px;
+	font-weight: normal;
+	
+}
