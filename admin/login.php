@@ -18,6 +18,8 @@
 
 require_once("../include.php");
 
+$error = "";
+
 if ($_POST["username"] && $_POST["password"]) {
 
 	$username = $_POST["username"];
@@ -40,7 +42,7 @@ if ($_POST["username"] && $_POST["password"]) {
 		return;
 	}
 	else {
-		echo "<p>Username or Password incorrect!</p>";
+		$error .= "<p>Username or Password incorrect!</p>";
 	}
 
 	mysql_free_result($result);
@@ -64,6 +66,14 @@ if ($_POST["username"] && $_POST["password"]) {
 <body>
 
 <div class="login">
+
+<?
+
+	if ($error != "") {
+		echo "<div class=\"loginerror\">".$error."</div>";
+	}
+
+?>
 
 <form method="post" action="login.php" id="login">
 
