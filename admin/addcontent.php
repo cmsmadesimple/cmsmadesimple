@@ -71,6 +71,12 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($config, $userid, 'Add Content');
 
+$templatepostback = "";
+if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
+	$tinymce_flag = "true";
+	$templatepostback = " onchange=\"tinyMCE.triggerSave();document.addform.submit()\"";
+}
+
 if ($access) {
 	$db = new DB($config);
 
@@ -149,12 +155,15 @@ if ($access) {
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $db->query($query);
 
-	$dropdown2 = "<select name=\"template_id\">";
+	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
 	while($row = $db->getresulthash($result)) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
 		if ($row["template_id"] == $template_id) {
 			$dropdown2 .= "selected";
+		}
+		if ($template_id == -1) {
+			$template_id = $row["template_id"];
 		}
 		$dropdown2 .= ">".$row["template_name"]."</option>";
 	}
@@ -186,9 +195,6 @@ if ($access) {
 
 }
 
-if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
-	$tinymce_flag = "true";
-}
 include_once("header.php");
 
 if (!$access) {

@@ -18,9 +18,7 @@ if (isset($tinymce_flag)) { ?>
   	tinyMCE.init({
   		theme : "advanced",
   		mode : "textareas",
-  		content_css : "../style.css",
-		editor_css : "../style.css",
-		popups_css : "../style.css",
+  		content_css : "../stylesheet.php?templateid=<?=$template_id?>",
 		theme_advanced_source_editor_width : "640",
 		theme_advanced_source_editor_height : "480",
 		theme_advanced_source_editor_area_width : "600",

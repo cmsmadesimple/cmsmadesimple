@@ -88,6 +88,11 @@ if (!$access) {
 	$access = check_authorship($config, $userid, $page_id);
 }
 
+if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
+	$tinymce_flag = "true";
+	$templatepostback = " onchange=\"document.editform.content_change.value=1;tinyMCE.triggerSave();document.editform.submit()\"";
+}
+
 if ($access) {
 	$db = new DB($config);
 
@@ -195,7 +200,7 @@ if ($access) {
 	$query = "SELECT template_id, template_name FROM ".$config->db_prefix."templates ORDER BY template_id";
 	$result = $db->query($query);
 
-	$dropdown2 = "<select name=\"template_id\">";
+	$dropdown2 = "<select name=\"template_id\"$templatepostback>";
 
 	while($row = $db->getresulthash($result)) {
 		$dropdown2 .= "<option value=\"".$row["template_id"]."\"";
@@ -240,9 +245,6 @@ if ($access) {
 	$ctdropdown .= "</select>";
 }
 
-if (get_preference($config, $userid, 'use_wysiwyg') == "1") {
-	$tinymce_flag = "true";
-}
 include_once("header.php");
 
 if (!$access) {
