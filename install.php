@@ -119,7 +119,7 @@ function showPageOne() {
         $file = @fopen ($f, "w");
         if($file != 0) {
             fclose($file); 
-			unlink($file);
+			@unlink($f);
             echo "Success!";
         } else {
             echo "Failure!";
