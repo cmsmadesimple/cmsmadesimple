@@ -81,15 +81,24 @@ class Smarty_CMS extends Smarty {
 		$db = $gCms->db;
 		$config = $gCms->config;
 
-		$query = "";
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
 			return true;
-		}
-		else {
+		} else {
 			$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$db->qstr($tpl_name)." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
 			$result = $db->Execute($query);
+
+			if (!$result || !$result->RowCount())
+			{
+				if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
+				{
+					$this->caching = false;
+					$this->force_compile = true;
+					$query = "SELECT t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."templates t WHERE t.template_id = ".get_site_preference('custom404template');
+					$result = $db->Execute($query);
+				}
+			}
 
 			if ($result && $result->RowCount())
 			{
@@ -98,7 +107,7 @@ class Smarty_CMS extends Smarty {
 				#This way the id is right, even if an alias is given
 				$gCms->variables['page'] = $line['page_id'];
 
-				if (isset($line[stylesheet]))
+				if (isset($line['stylesheet']))
 				{
 					$stylesheet .= "<style type=\"text/css\">\n";
 					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
@@ -161,13 +170,27 @@ class Smarty_CMS extends Smarty {
 						@ob_end_clean();
 						$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
 					}
+					else //Prolly a 404 message
+					{
+						$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
+						$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
+					}
 				}
+
 
 				return true;
 			}
 			else
 			{
-				return false;
+				if (get_site_preference('enablecustom404') == "1")
+				{
+					$tpl_source = get_site_preference('custom404');
+					return true;	
+				}
+				else
+				{
+					return false;
+				}
 			}
 		}
 	}
@@ -214,7 +237,6 @@ class Smarty_CMS extends Smarty {
 				}
 			}
 			else {
-
 				$smarty_obj->assign('modified_date',time());
 				$tpl_timestamp = time();
 				return true;

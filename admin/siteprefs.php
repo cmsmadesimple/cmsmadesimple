@@ -46,6 +46,7 @@ $useadvancedcss = "1";
 if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
 $userid = get_userid();
+$access = check_permission($userid, 'Modify Site Preferences');
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php");
@@ -53,14 +54,21 @@ if (isset($_POST["cancel"])) {
 }
 
 if (isset($_POST["editsiteprefs"])) {
-	set_site_preference('enablecustom404', $enablecustom404);
-	set_site_preference('custom404', $custom404);
-	set_site_preference('custom404template', $custom404template);
-	set_site_preference('enablesitedownmessage', $enablesitedownmessage);
-	set_site_preference('sitedownmessage', $sitedownmessage);
-	set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
-	set_site_preference('useadvancedcss', $useadvancedcss);
-	audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited Site Preferences');
+	if ($access)
+	{
+		set_site_preference('enablecustom404', $enablecustom404);
+		set_site_preference('custom404', $custom404);
+		set_site_preference('custom404template', $custom404template);
+		#set_site_preference('enablesitedownmessage', $enablesitedownmessage);
+		set_site_preference('sitedownmessage', $sitedownmessage);
+		set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
+		set_site_preference('useadvancedcss', $useadvancedcss);
+		audit($_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, '', 'Edited Site Preferences');
+	}
+	else
+	{
+		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+	}
 } else if (!isset($_POST["submit"])) {
 	$enablecustom404 = get_site_preference('enablecustom404');
 	$custom404 = get_site_preference('custom404');
@@ -131,7 +139,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('sitedownmessage')?>:</td>
 		<td>
-			<textarea name="sitedownmessage" cols="80" rows="8"><?php echo $sitedownmessage?></textarea><br>
+			<textarea name="sitedownmessage" cols="80" rows="8"><?php echo $sitedownmessage?></textarea><!--<br>
 			<?php echo lang('template')?>:
 			<select name="sitedownmessagetemplate">
 			<?php
@@ -145,7 +153,7 @@ if ($error != "") {
 					echo ">".$value."</option>";
 				}
 			?>
-			</select>
+			</select>-->
 		</td>
 	</tr>
 	<tr>
@@ -157,11 +165,13 @@ if ($error != "") {
 			</select>
 		</td>
 	</tr>
+	<?php if ($access) { ?>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="editsiteprefs" value="true">
 		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>
+	<?php } ?>
 </table>
 
 </div>
