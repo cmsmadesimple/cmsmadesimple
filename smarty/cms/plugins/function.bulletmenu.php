@@ -30,10 +30,10 @@ function smarty_function_bulletmenu($params, &$smarty) {
                 }
 
 		if (isset($smarty->configCMS->query_var) && $smarty->configCMS->query_var != "") {
-			$menu .= "<li><a href=\"".$doc_root."/?".$smarty->configCMS->query_var."=".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
+			$menu .= "<li><a href=\"".$smarty->configCMS->root_url."/?".$smarty->configCMS->query_var."=".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
 		}
 		else {
-			$menu .= "<li><a href=\"".$doc_root."/index.php".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
+			$menu .= "<li><a href=\"".$smarty->configCMS->root_url."/index.php".$line["page_url"]."\">".$line["menu_text"]."</a></li>";
 		}
         }
         $menu .= "</ul>";
