@@ -10,6 +10,7 @@ Version 0.7.2 -- Subversion
 * Fixed htmlarea not loading due to a notice level error (#0000034)
 * Fixed a few problems with htmlarea's fullscreen not working in Internet Explorer
 * Added search and replace to htmlarea
+* Added ability to clean pastes from Microsoft Word in htmlarea
 
 Version 0.7.1 -- Wed Oct 26 2004
 -----------------

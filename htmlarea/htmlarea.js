@@ -97,7 +97,7 @@ HTMLArea.Config = function () {
 	this.pageStyle = "";
 
 	// set to true if you want Word code to be cleaned upon Paste
-	this.killWordOnPaste = false;
+	this.killWordOnPaste = true;
 
 	// BaseURL included in the iframe document
 	this.baseURL = document.baseURI || document.URL;
