@@ -214,7 +214,7 @@ if ("" != $error)
 
 <input type="hidden" name="id" value="<?php echo $id?>" />
 <input type="hidden" name="type" value="<?php echo $type?>" />
-<input type="submit" value="<?php echo lang('attachstylesheet')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" value="<?php echo lang('attachtemplate')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 </form>
 
 <?php

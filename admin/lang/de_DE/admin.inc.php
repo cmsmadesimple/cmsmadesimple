@@ -241,4 +241,5 @@ $lang['admin']['editstylesheet'] = 'Edit Stylesheet'; //needs translation
 $lang['admin']['addcssassociation'] = 'Add Stylesheet Association'; //needs translation
 $lang['admin']['attachstylesheet'] = 'Attach This Stylesheet'; //needs translation
 $lang['admin']['liststylesheets'] = 'Stylesheets'; //needs translation
+$lang['admin']['attachtemplate'] = 'Attach to this Template'; //needs translation
 ?>
