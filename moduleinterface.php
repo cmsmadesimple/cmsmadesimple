@@ -80,7 +80,7 @@ if ($config["debug"] == true)
 }
 
 #header("Content-Language: " . $current_language);
-header("Content-Type: text/html; charset=" . get_encoding());
+#header("Content-Type: text/html; charset=" . get_encoding());
 @ob_flush();
 
 # vim:ts=4 sw=4 noet

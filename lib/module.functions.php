@@ -1491,7 +1491,7 @@ class Smarty_ModuleInterface extends Smarty {
 		$db = $gCms->db;
 		$cmsmodules = $gCms->modules;
 
-		$query = "SELECT t.template_id, t.stylesheet, t.template_content, p.hierarchy, p.content_id FROM ".cms_db_prefix()."content p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.content_id = ?";
+		$query = "SELECT t.template_id, t.stylesheet, t.template_content, p.hierarchy, p.content_id, t.encoding FROM ".cms_db_prefix()."content p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.content_id = ?";
 		$result = $db->Execute($query, array($tpl_name));
 
 		if ($result && $result->RowCount())
@@ -1502,11 +1502,12 @@ class Smarty_ModuleInterface extends Smarty {
 
 			$gCms->variables['page_name'] = $tpl_name;
 
+			$line = $result->FetchRow();
+
 			if ($smarty_obj->showtemplate == true)
 			{
-				$line = $result->FetchRow();
-
 				$tpl_source = $line['template_content'];
+
 
 				#Perform the content template callback
 				foreach($gCms->modules as $key=>$value)
@@ -1589,6 +1590,7 @@ class Smarty_ModuleInterface extends Smarty {
 				}
 			}
 			
+			header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 
 			return true;
 		}

@@ -315,7 +315,7 @@ class Smarty_CMS extends Smarty {
 				#We only want to cache "static" content
 				if ($line['type'] == 'content')
 				{
-					header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+					header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 					if ($line['cachable'] == 1)
 					{
 						$tpl_timestamp = ($content_date<$template_date?$template_date:$content_date);

@@ -97,6 +97,7 @@ class CmsObject {
 	{
 		$this->modules = array();
 		$this->errors = array();
+		$this->variables['content-type'] = 'text/html';
 	}
 }
 

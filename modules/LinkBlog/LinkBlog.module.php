@@ -465,7 +465,9 @@ class LinkBlog extends CMSModule
 
 			$limit = $this->GetPreference("rss_limit", "10");
 			if (!isset($limit)) { $limit = 10; } ## if
-				header('Content-type: text/xml');
+			#header('Content-type: text/xml');
+			$variables = &$this->cms->variables;
+			$variables['content-type'] = 'text/xml';
 			echo "<?xml version='1.0'?>\n";
 			echo "<rss version='2.0'>\n";
 			echo "  <channel>\n";
