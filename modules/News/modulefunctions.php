@@ -70,11 +70,14 @@ function news_module_execute( $cms, $id, $params )
 }
 
 
-function strip_to_length( $str, $len )
+function strip_to_length( $str, $len, $tags=true )
 {
-	while( $str != strip_tags( $str ) )
+	if ($tags == true)
 	{
-		$str = strip_tags($str);
+		while( $str != strip_tags( $str ) )
+		{
+			$str = strip_tags($str);
+		}
 	}
 
 	if( $len > 0 && $len < strlen($str) ) $str=substr($str,0,$len)."...";
@@ -209,7 +212,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				echo "</div>";
 				if( isset( $params["summary"] ) )
 				{
-					echo "<span class=\"cms-news-content\">".strip_to_length($row["news_data"],$params["length"])."</span>";
+					echo "<span class=\"cms-news-content\">".strip_to_length($row["news_data"],$params["length"],false)."</span>";
 					if (strlen($row["news_data"]) >$params["length"])
 					{
 						$moretext = "more...";
