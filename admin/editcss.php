@@ -205,10 +205,10 @@ else
 
 <h3><?php echo lang('editcss')?></h3>
 
-<table border="0">
+<table width="100%" border="0">
 
 	<tr>
-		<td>*<?php echo lang('name')?>:</td>
+		<td width="100">*<?php echo lang('name')?>:</td>
 		<td>
 			<input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>">
 			<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>">
@@ -216,7 +216,7 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><textarea name="css_text" cols="90" rows="18"><?php echo htmlentities($css_text)?></textarea></td>
+		<td><?php textarea_highlight($css_text, 'css_text', 'syntaxHighlight'); ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

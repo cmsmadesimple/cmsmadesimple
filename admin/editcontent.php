@@ -405,7 +405,7 @@ else {
 		</td>
 	</tr>
 	<tr>
-		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?php echo $content?></textarea></td>
+		<td style="padding-top: 10px;"><strong><?php echo lang('content') ?></strong><br><textarea id="content" name="content" cols="80" rows="24"><?php echo $content?></textarea></td>
 	</tr>
 </table>
 

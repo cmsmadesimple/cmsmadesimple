@@ -389,5 +389,24 @@ function & strip_slashes(&$str) {
 	return $str;
 }
 
+/*
+ * creates a textarea that does syntax highlighting on the source code.
+ * This function could be made better if javascript was used to create
+ * the syntax highlighting instead of php's highlight_string()
+ */
+function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlight"){
+	$text_highlight = highlight_string("<?$content?>", true);
+	$text_highlight = str_replace("&lt;?", "", $text_highlight);
+	$text_highlight = str_replace("?&gt;","", $text_highlight);
+	$text_highlight = ereg_replace("\r", '', $text_highlight);
+	$text_highlight = ereg_replace("\n", '', $text_highlight);
+	$content = ereg_replace("\r", ' ', $content);
+
+	echo '<script type="text/javascript" language="Javascript1.2">';
+	echo 'document.write(\'<div id="syntax_highlight" style="border: 1px solid #A5ACB2; overflow: auto;" contenteditable="true" contentEditable="true" onSelect="saveCaret(this)" onClick="syntax_highlight_remove(\\\'onClick\\\', this, \\\''.$textarea_name.'\\\')" onKeyDown="syntax_highlight_remove(\\\'onKeyDown\\\', this, \\\''.$textarea_name.'\\\')" class="'.$class_name.'">'.$text_highlight.'</div>\');';
+	echo '</script>';
+	echo '<textarea name="'.$textarea_name.'" id="plain" rows="24" cols="80" style="border: 1px solid #A5ACB2" class="'.$class_name.'">'.$content.'</textarea>';
+}
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -115,7 +115,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('custom404')?>:</td>
 		<td>
-			<textarea name="custom404" cols="80" rows="8"><?php echo $custom404?></textarea><br>
+			<?php textarea_highlight($custom404, 'custom404', 'syntaxHighlight'); ?><br>
 			<?php echo lang('template')?>:
 			<select name="custom404template">
 			<?php
@@ -139,7 +139,8 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('sitedownmessage')?>:</td>
 		<td>
-			<textarea name="sitedownmessage" cols="80" rows="8"><?php echo $sitedownmessage?></textarea><!--<br>
+			<?php textarea_highlight($sitedownmessage, 'sitedownmessage', 'syntaxHighlight'); ?>
+			<!--<br>
 			<?php echo lang('template')?>:
 			<select name="sitedownmessagetemplate">
 			<?php

@@ -176,10 +176,10 @@ else
 
 <h3><?php echo lang('addcss')?></h3>
 
-<table border="0">
+<table width="100%" border="0">
 
 	<tr>
-		<td><?php echo lang('name')?>:</td>
+		<td width="100"><?php echo lang('name')?>:</td>
 		<td><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>"></td>
 	</tr>
 	<tr>

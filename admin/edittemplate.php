@@ -179,11 +179,11 @@ else
 	</tr>
 	<tr>
 		<td>*<?php echo lang('content')?>:</td>
-		<td><textarea name="content" cols="90" rows="18"><?php echo htmlentities($content)?></textarea></td>
+		<td><?php textarea_highlight($content, 'content', 'syntaxHighlight'); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('stylesheet')?>:</td>
-		<td><textarea name="stylesheet" cols="90" rows="18"><?php echo htmlentities($stylesheet)?></textarea></td>
+		<td><?php textarea_highlight($stylesheet, 'stylesheet', 'syntaxHighlight'); ?></td>
 	</tr>
 	<tr>
 		<td><?php echo lang('active')?>:</td>

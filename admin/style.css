@@ -50,6 +50,10 @@ form .standard {width: 150px;}
 table#padform input,table#padform select{margin-top: 5px; margin-right: 20px; margin-bottom: auto; margin-left: auto;}
 div.adminform {padding:10px; background-color: #E8E8E8; color: #000; border: 1px solid #AAA; width: 90%; margin-bottom: 10px;}
 div.adminformSmall {padding:10px; background-color: #E8E8E8; border: 1px solid #AAA; width: 325px; margin-bottom: 10px;}
+.syntaxHighlight{width: 100%; height: 200px; background-color: white; font-size: 10pt; -moz-user-modify: read-write;
+	-moz-user-input: enabled;
+	-moz-user-select: normal;
+}
 
 .error { color: #F00; }
 table.box {border: 1px solid #AAA; background-color: #E8E8E8;}
