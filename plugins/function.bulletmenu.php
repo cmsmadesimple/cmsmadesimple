@@ -23,7 +23,8 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	global $config;
 
 	# getting menu parameters
-	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 0 ;
+	$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
+	$collapse = isset($params['collapse']) ? $params['collapse'] : 1 ;
 
 	$allcontent = ContentManager::GetAllContent(false);
 
@@ -109,54 +110,57 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			$depth = $depth - $basedepth;
 
 			# Now try to remove items that shouldn't be shown, based on current location
-			if ($depth > 1) # All root level items should show 
+			if ($collapse == 1)
 			{
-				$curpos = $gCms->variables['position'];
-				$curdepth = count(split('\.', $curpos)) - $basedepth;
-				$curparent = substr($gCms->variables['position'], 0, strrpos($gCms->variables['position'], "."));
-				if ($curparent != '')
+				if ($depth > 1) # All root level items should show 
 				{
-					$curparent = $curparent . ".";
-				}
-
-				$skipme = true;
-
-				# Are we the currently selected page?
-				if ($onecontent->Hierarchy() == $curpos)
-				{
-					$skipme = false;
-				}
-
-				# First, are we a direct decendant of the current position?
-				if (strstr($onecontent->Hierarchy(), $curpos) == $onecontent->Hierarchy() && $curdepth == ($depth - 1))
-				{
-					$skipme = false;
-				}
-
-				# Now for the nasty part...  loop through all parents and show them and direct siblings
-				if ($skipme)
-				{
-					$blah = '';
-					$count = 1;
-					foreach (split('\.', $curpos) as $level)
+					$curpos = $gCms->variables['position'];
+					$curdepth = count(split('\.', $curpos)) - $basedepth;
+					$curparent = substr($gCms->variables['position'], 0, strrpos($gCms->variables['position'], "."));
+					if ($curparent != '')
 					{
-						$blah .= $level . '.';
-						if (strstr($onecontent->Hierarchy(), $blah) == $onecontent->Hierarchy())
-						{
-							if ($depth == ($count + 1))
-							{
-								$skipme = false;
-								continue;
-							}
-						}
-						$count++;
+						$curparent = $curparent . ".";
 					}
-				}
 
-				# Ok, so should we skip this thing already?
-				if ($skipme)
-				{
-					continue;
+					$skipme = true;
+
+					# Are we the currently selected page?
+					if ($onecontent->Hierarchy() == $curpos)
+					{
+						$skipme = false;
+					}
+
+					# First, are we a direct decendant of the current position?
+					if (strstr($onecontent->Hierarchy(), $curpos) == $onecontent->Hierarchy() && $curdepth == ($depth - 1))
+					{
+						$skipme = false;
+					}
+
+					# Now for the nasty part...  loop through all parents and show them and direct siblings
+					if ($skipme)
+					{
+						$blah = '';
+						$count = 1;
+						foreach (split('\.', $curpos) as $level)
+						{
+							$blah .= $level . '.';
+							if (strstr($onecontent->Hierarchy(), $blah) == $onecontent->Hierarchy())
+							{
+								if ($depth == ($count + 1))
+								{
+									$skipme = false;
+									continue;
+								}
+							}
+							$count++;
+						}
+					}
+
+					# Ok, so should we skip this thing already?
+					if ($skipme)
+					{
+						continue;
+					}
 				}
 			}
 
@@ -247,6 +251,7 @@ function smarty_cms_help_function_bulletmenu() {
 	<p>
 	<ul>
 		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
+		<li><em>(optional)</em> <tt>collapse</tt> - 1/0, whether you want to collapse sub items that shouldn't be shown.  Defaults to 1.</li>
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>
