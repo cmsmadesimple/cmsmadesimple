@@ -1002,7 +1002,7 @@ class CMSModule extends ModuleOperations
 		$text .= $this->cms->config['root_url'];
 		if (!($returnid != '' && $returnid > -1))
 		{
-			$text .= '/admin';
+			$text .= '/'.$this->cms->config['admin_dir'];
 		}
 		$text .= '/moduleinterface.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
 		foreach ($params as $key=>$value)
