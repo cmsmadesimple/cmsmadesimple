@@ -119,7 +119,7 @@ if (isset($_GET["message"])) {
 // 
 				if($one->active) 
 				{
-				  	echo "<td align=\"center\"><a href=\"listcontent.php?setinactive=".$one->page_id."\">".$image_true."</a></td>\n";
+					echo "<td align=\"center\">".($one->default_page == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->page_id."\">".$image_true."</a>")."</td>\n";
 				}
 				else 
 				{
