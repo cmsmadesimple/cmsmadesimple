@@ -32,6 +32,7 @@ compatibility (#000013)
 * Fixed htmlarea displaying inproper align values (#0000021)
 * Fixed css not properly displaying in htmlarea until post (#0000031)
 * Fixed default language on login page to default to english. (#0000032)
+* Fixed htmlarea not loading due to a notice level error (#0000034)
 * Changed the header slogan to be text instead of an image (#0000015)
 
 Version 0.7 -- Mon Oct 11 2004

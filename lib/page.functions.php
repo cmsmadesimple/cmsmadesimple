@@ -362,7 +362,7 @@ function get_stylesheet($templateid) {
 	{
 		while ($cssline = $cssresult->FetchRow())
 		{
-			$css .= "\n".$cssline[css_text]."\n";
+			$css .= "\n".$cssline['css_text']."\n";
 		}
 	}
 
