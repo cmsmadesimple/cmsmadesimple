@@ -166,15 +166,8 @@ iframe {
  * For tab list
  */
 .tabsystem {
+	margin: 0px;
 	border: none;
-	scrollbar-3dlight-color: #666;
-	scrollbar-arrow-color: #eee;
-	scrollbar-base-color: #ffffff;
-	scrollbar-darkshadow-color: #ffffff;
-	scrollbar-face-color: #eeeeee;
-	scrollbar-highlight-color: #eeeeee;
-	scrollbar-shadow-color: #666;
-	margin-right: 10px;
 }
 
 .tabsystem .tabcontainer ul, li {
@@ -185,13 +178,14 @@ iframe {
 	border: none;
 }
 
+
 .tabsystem .firstHeading {
 	display: block;
 	text-align: right;
 	border: 1px #bbb dotted;
 	border-width: 0px 0px 1px 0px;
 	padding-bottom: .5em;
-	margin-bottom: 1em;
+	margin-bottom: 1em;	
 }
 
 .tabsystem .tabcontainer {
@@ -206,12 +200,16 @@ iframe {
 .tabsystem .tabpage {
 	background: #fff;
 	padding: 2em 2em;
-	font: 14px Verdana;
 	color: black;
-	border: 1px solid rgb( 145, 155, 156 );
-	clear: both;
+	border: 1px solid black; /*rgb( 145, 155, 156 );*/
+	clear: both; 
+	margin-right: 10px;
 }
 
+
+
+/* display of the tabs */
+/* .tab = normal tab */
 .tabsystem .tabcontainer .tab {
 	position: relative;
 	top: 0;
@@ -231,6 +229,7 @@ iframe {
 	height: 18px;
 }
 
+/* .tab-hover = normal tab when being hovered over */
 .tabsystem .tabcontainer .tab-hover {
 	margin: 1px 1px 1px 0px;
 	width: 70px;
@@ -238,8 +237,12 @@ iframe {
 	border-top: 1px solid black;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
+	
+	background-color: #d0d0e7;
+
 }
 
+/* .tab-active = the currently active tab */
 .tabsystem .tabcontainer .tab-active{
 	position: relative;
 	top: 1px;
@@ -259,4 +262,13 @@ iframe {
 	border-top: 1px solid black;
 	border-left: 1px solid black;
 	border-right: 1px solid black;
+	
+	font-weight: bold;
+	background-color: #d0d0e7;
+}
+
+
+.AdminForm	th, .AdminForm td
+{
+	padding: 2px;
 }
