@@ -19,6 +19,43 @@
 $DONT_LOAD_DB=1;
 require_once(dirname(__FILE__)."/include.php");
 
+//Do module autoupgrades 
+function module_autoupgrade()
+{
+	global $gCms;
+	$db = $gCms->db;
+
+	foreach ($gCms->modules as $modulename=>$value)
+	{
+		if (isset($gCms->modules[$modulename]['auto_upgrade_function']))
+		{
+			//Check to see what version we currently have in the database (if it's installed)
+			$module_version = false;
+
+			$query = "SELECT version from ".cms_db_prefix()."modules WHERE module_name = ?";
+			$result = $db->Execute($query, array($modulename));
+			while ($row = $result->FetchRow()) {
+				$module_version = $row['version'];
+			}
+
+			//Check to see what version we have in the file system
+			$file_version = $gCms->modules[$modulename]['Version'];
+
+			if ($module_version)
+			{
+				if (version_compare($file_version, $module_version) == 1)
+				{
+					echo "<p>Upgrading $modulename module...";
+					call_user_func_array($gCms->modules[$modulename]['auto_upgrade_function'], array($gCms, $module_version, $file_version));
+					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+					$result = $db->Execute($query, array($file_version, $modulename));
+					echo "[Done]</p>";
+				}
+			}
+		}
+	}
+}
+
 ?>
 
 <html>
@@ -119,6 +156,8 @@ else
 		}
 		else
 		{
+			module_autoupgrade();
+
 			echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 			echo "<p>You should also check that all of your modules are up to date, by going to the Plugins page and looking for any listed as 'Needs Upgrade'.</p>";
 			echo "<p>The CMS database is up to date using schema version ".$current_version.".  Please remove this file when possible.  Click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
@@ -134,36 +173,7 @@ else
 			$current_version++;
 		}
 
-		//Do module autoupgrades 
-		foreach ($gCms->modules as $modulename=>$value)
-		{
-			if (isset($gCms->modules[$modulename]['auto_upgrade_function']))
-			{
-				//Check to see what version we currently have in the database (if it's installed)
-				$module_version = false;
-
-				$query = "SELECT version from ".cms_db_prefix()."modules WHERE module_name = ?";
-				$result = $db->Execute($query, array($modulename));
-				while ($row = $result->FetchRow()) {
-					$module_version = $row['version'];
-				}
-
-				//Check to see what version we have in the file system
-				$file_version = $gCms->modules[$modulename]['Version'];
-
-				if ($module_version)
-				{
-					if (version_compare($file_version, $module_version) == 1)
-					{
-						echo "<p>Upgrading $modulename module...";
-						call_user_func_array($gCms->modules[$modulename]['auto_upgrade_function'], array($gCms, $module_version, $file_version));
-						$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-						$result = $db->Execute($query, array($file_version, $modulename));
-						echo "[Done]</p>";
-					}
-				}
-			}
-		}
+		module_autoupgrade();
 
 		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 		echo "<p>CMS is up to date.  Please click <a href=\"index.php\">here</a> to go to your CMS site.</p>";
