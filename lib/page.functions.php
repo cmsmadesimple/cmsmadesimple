@@ -392,8 +392,8 @@ function & strip_slashes(&$str) {
 /*
  * creates a textarea that does syntax highlighting on the source code.
  * The following also needs to be added to the <form> tag for submit to work.
- * onSubmit="document.getElementById('content').value =
- * document.getElementById('syntaxHighlight').getText();"
+ * if($use_javasyntax){echo 'onSubmit="textarea_submit(
+ *      this, \'custom404,sitedown\');"';}
  */
 function textarea_highlight($use_javasyntax, $text, $name,
     $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id=""){

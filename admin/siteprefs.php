@@ -105,7 +105,7 @@ if ($error != "") {
 
 ?>
 
-<form method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedown\');"';} ?>>
+<form method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedownmessage\');"';} ?>>
 
 <div class="adminform">
 
