@@ -2,6 +2,7 @@
 
 echo '</div> <!-- end MainContent -->';
 
+include_once('topmenu.php');
 
 require_once("../include.php");
 $theme=get_preference(get_userid(), 'admintheme', 'default');

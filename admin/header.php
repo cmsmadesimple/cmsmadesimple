@@ -42,12 +42,17 @@ if (!isset($charsetsent))
 
 <body##BODYSUBMITSTUFFGOESHERE##>
 
-<?php include_once('topmenu.php') ?>
 
 <div id="MainContent">
 
 <div class="DashboardCallout">
 
 <p class="DashboardCalloutTitle">Bookmarks</p>
+
+</div> <!-- end DashboardCallout -->
+
+<div class="DashboardCallout">
+
+<p class="DashboardCalloutTitle">Recent Pages</p>
 
 </div> <!-- end DashboardCallout -->
