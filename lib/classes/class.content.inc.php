@@ -1049,7 +1049,7 @@ class ContentManager
 	/**
 	 * Determine proper type of object, load it and return it
 	 */
-	function LoadContentFromId($id)
+	function LoadContentFromId($id,$loadprops=true)
 	{
 		global $gCms;
 		$db = &$gCms->db;
@@ -1065,7 +1065,7 @@ class ContentManager
 			{
 				$classtype = strtolower($row['type']);
 				$contentobj = new $classtype; 
-				$contentobj->LoadFromData($row,true);
+				$contentobj->LoadFromData($row,$loadprops);
 				return $contentobj;
 			}
 			else
@@ -1254,7 +1254,7 @@ class ContentManager
 		}
 	}
 
-	function GetAllContent()
+	function GetAllContent($loadprops=true)
 	{
 		global $gCms;
 		$db = $gCms->db;
@@ -1272,7 +1272,7 @@ class ContentManager
 				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 				{
 					$contentobj = new $row['type'];
-					$contentobj->LoadFromData($row, true);
+					$contentobj->LoadFromData($row, $loadprops);
 					array_push($result, $contentobj);
 				}
 			}
@@ -1285,7 +1285,7 @@ class ContentManager
 	{
 		$result = '';
 
-		$allcontent = ContentManager::GetAllContent();
+		$allcontent = ContentManager::GetAllContent(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{

@@ -76,6 +76,11 @@ class CmsObject {
 	var $siteprefs;
 
 	/**
+	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
+	 */
+	var $userprefs;
+
+	/**
 	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
 	 */
 	var $smarty;

@@ -27,7 +27,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	$allcontent = array();
 
 	#Load current content
-	$onecontent = ContentManager::LoadContentFromId($thispage);
+	$onecontent = ContentManager::LoadContentFromId($thispage, false);
 	if ($onecontent !== FALSE)
 	{
 		array_push($allcontent, $onecontent);
@@ -35,7 +35,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 		#Grab all parents and put them into the array as well
 		while ($onecontent->ParentId() > 0) 
 		{
-			$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId());
+			$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId(), false);
 			array_push($allcontent, $onecontent);
 		}
 

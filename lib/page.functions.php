@@ -330,20 +330,23 @@ function set_site_preference($prefname, $value)
  */
 function get_preference($userid, $prefname)
 {
-	$value = "";
-
 	global $gCms;
 	$db = $gCms->db;
+	$userprefs = &$gCms->userprefs;
 
-	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
-	$result = $db->query($query);
-	
-	if ($result && $result->RowCount() > 0) {
-		$row = $result->FetchRow();
-		$value = $row["value"];
+	if (!isset($userprefs[$prefname]))
+	{
+		$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
+		$result = $db->query($query);
+		
+		if ($result && $result->RowCount() > 0) {
+			$row = $result->FetchRow();
+			$value = $row["value"];
+			$userprefs[$prefname] = $value;
+		}
 	}
 
-	return $value;
+	return $userprefs[$prefname];
 }
 
 /**
@@ -357,6 +360,9 @@ function set_preference($userid, $prefname, $value)
 
 	global $gCms;
 	$db = $gCms->db;
+
+	$userprefs = &$gCms->userprefs;
+	$userprefs[$prefname] = $value;
 
 	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
