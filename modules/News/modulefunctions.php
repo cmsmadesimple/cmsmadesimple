@@ -434,7 +434,6 @@ function news_module_executeadmin($cms,$id)
 function news_module_help($cms)
 {
 	?>
-
 		<h3>What does this do?</h3>
 		<p>News is a module for displaying news events on your page, similar to a blog style, except with more features!.  When the module is installed, a News admin page is added to the bottom menu that will allow you to select or add a news category.  Once a news category is created or selected, a list of news items for that category will be displayed.  From here, you can add, edit or delete news items for that category.</p>
 		<h3>Security</h3>
@@ -445,7 +444,7 @@ function news_module_help($cms)
 		<p>
 		<ul>
 		<li><em>(optional)</em> number="5" - Maximum number of items to display =- leaving empty will show all items</li>
-		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's date function.  See <a href="http://php.net/date" target="_blank">here</a> for a parameter list and information.</li>
 		<li><em>(optional)</em> makerssbutton="true" - Make a button to
 		link to an RSS feed of the News items</li>
 		<li><em>(optional)</em> swaptitledate="true" - Switch the order
