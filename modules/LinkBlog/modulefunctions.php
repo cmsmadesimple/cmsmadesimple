@@ -80,6 +80,7 @@ function linkblog_module_install($cms) {
 	$dict->ExecuteSQLArray($sqlarray);
 	
 	$db->CreateSequence(cms_db_prefix()."module_linkblog_comment_seq");
+	cms_mapi_create_permission( $cms, 'Modify Linkblog', 'Modify Linkblog');
 }
 
 function linkblog_module_uninstall($cms) {
