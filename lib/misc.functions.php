@@ -452,11 +452,11 @@ function get_param_value($id, $value, $params, $default = '')
 		// want a boolean return_value
 		if(isset($params[$id.$value]))
 		{
-			$return_value = settype($params[$id.$value], 'boolean');
+			$return_value = (boolean)$params[$id.$value];
 		}
 		else if(isset($params[$value]))
 		{
-			$return_value = settype($params["display_approved"], 'boolean');
+			$return_value = (boolean)$params[$value];
 		}
 	}
 	else
