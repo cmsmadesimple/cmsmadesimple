@@ -27,7 +27,7 @@ echo "[done]</p>";
 echo "<p>Adding fields to template table...";
 
 $dbdict = NewDataDictionary($db);
-$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."content", "default_template I1");
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."templates", "default_template I1");
 $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";

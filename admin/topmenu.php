@@ -23,7 +23,7 @@
 
 <a href="index.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==1)?' id="TopMenuSelected"':'') ?>>Main</a>
 <a href="topcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==2)?' id="TopMenuSelected"':'') ?>>Content</a>
-<a href="listcontent.php">Pages</a>
+<a href="listcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==9)?' id="TopMenuSelected"':'') ?>>Pages</a>
 <a href="topfiles.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==3)?' id="TopMenuSelected"':'') ?>>Files</a>
 <a href="toplayout.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==4)?' id="TopMenuSelected"':'') ?>>Layout</a>
 <a href="topusers.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU==5)?' id="TopMenuSelected"':'') ?>>Users/Groups</a>

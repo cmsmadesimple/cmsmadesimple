@@ -56,6 +56,33 @@ if (isset($_GET["message"])) {
 		}
 	}
 
+	if (isset($_GET['setactive']) || isset($_GET['setinactive']))
+	{
+		$theid = '';
+		if (isset($_GET['setactive']))
+		{
+			$theid = $_GET['setactive'];
+		}
+		if (isset($_GET['setinactive']))
+		{
+			$theid = $_GET['setinactive'];
+		}
+		$thetemplate = TemplateOperations::LoadTemplateByID($theid);
+		if (isset($thetemplate))
+		{
+			if (isset($_GET['setactive']))
+			{
+				$thetemplate->active = 1;
+				$thetemplate->Save();
+			}
+			if (isset($_GET['setinactive']))
+			{
+				$thetemplate->active = 0;
+				$thetemplate->Save();
+			}
+		}
+	}
+
 	$templatelist = TemplateOperations::LoadTemplates();
 	
 	$page = 1;
@@ -89,12 +116,14 @@ if (isset($_GET["message"])) {
 		echo '<tbody>';
 
 		$currow = "row1";
-		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
-
 		$counter=0;
-		foreach ($templatelist as $onetemplate){
+
+		foreach ($templatelist as $onetemplate)
+		{
+			// construct true/false button images
+			$image_true ="<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\"><img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" /></a>";
+			$image_false ="<a href=\"listtemplates.php?setactive=".$onetemplate->id."\"><img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" /></a>";
+
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";

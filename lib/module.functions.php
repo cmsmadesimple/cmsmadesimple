@@ -109,6 +109,16 @@ class Smarty_ModuleInterface extends Smarty {
 			#Set the title
 			$title = $line['title'];
 
+			#Perform the content title callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentTitle($title);
+				}
+			}
+
 			#Setup the stylesheet inclusion
 			$template_id = $line['template_id'];
 			$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
@@ -128,17 +138,6 @@ class Smarty_ModuleInterface extends Smarty {
 				}
 
 				#$content = $line['page_content'];
-
-				#Perform the content title callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentTitle($title);
-					}
-				}
-
 
 				$gCms->variables['position'] = $line['hierarchy'];
 

@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_TOP_MENU=9;
 
 require_once("../include.php");
 
