@@ -1,4 +1,4 @@
-Reqs:
+Requirements:
     PHP 4+
     MySQL
     Apache webserver (or another php enabled webserver)
