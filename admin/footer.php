@@ -7,16 +7,14 @@
 
 <DIV ID="footer1"></DIV>
 <DIV ID="footer2"><A HREF="http://www.cmsmadesimple.org">CMS made simple</A> is Free Software released under the GNU/GPL License</DIV>
-</BODY>
 
-<div ID="debugfooter">
 <?php
-if ($config["debug"] == true)
-{
+if ($config["debug"] == true){
+	echo '<div ID="debugfooter">';
 	global $sql_queries;
 	echo "<div>".$sql_queries."</div>\n";
+	echo '</div>';
 }
 ?>
-</div>
-
+</BODY>
 </HTML>

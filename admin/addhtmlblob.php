@@ -113,7 +113,7 @@ else {
 	}
 ?>
 
-<form method="post" action="addhtmlblob.php">
+<form method="post" action="addhtmlblob.php" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content\');"';}?>>
 
 <div class="adminform">
 

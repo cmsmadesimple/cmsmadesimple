@@ -423,10 +423,9 @@ function textarea_highlight($use_javasyntax, $text, $name,
     }else{
         $output = '<textarea name="'.$name.'" cols="80" rows="24" 
             class="'.$class_name.'"';
-	if ($id<>""){
-	$output.='" id="'.$id.'"';
-	};
-	$output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+        if ($id<>"")
+            $output.=' id="'.$id.'"';
+        $output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
     }
     
     return $output;

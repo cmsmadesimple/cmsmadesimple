@@ -54,7 +54,6 @@ if (!isset($charsetsent))
     }
   }
 </SCRIPT>
-
 <?php if (isset($htmlarea_flag) && isset($htmlarea_replaceall)) {?>
 	<SCRIPT TYPE="text/javascript">
 		_editor_url = "<?php echo $config["root_url"]?>/htmlarea/";
@@ -86,26 +85,24 @@ if (!isset($charsetsent))
 		HTMLArea.loadPlugin("CharacterMap");
 		HTMLArea.loadPlugin("FindReplace");
 		HTMLArea.loadPlugin("InvertBackground");
-<?php if ($config["use_Indite"] == true)	{ ?>	
-		HTMLArea.loadPlugin("Indite");
-<?php } ?>	
+		<?php if ($config["use_Indite"] == true) ?>	
+			HTMLArea.loadPlugin("Indite");	
 		var editor = null;
 		function initHtmlArea() {
 			editor = new HTMLArea("content");
 			editor.registerPlugin(ImageManager);
 			<?php 
 				// Ugly Hack alert! making setting session var to send language setting to insertFile
-				$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];		
-		 	?>			
+				$_SESSION['InsertFileLang'] = $nls['htmlarea'][$current_language];
+		 	?>
 			editor.registerPlugin(InsertFile);
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
 			editor.registerPlugin(FindReplace);
 			editor.registerPlugin(InvertBackground);
-<?php if ($config["use_Indite"] == true)	{ ?>	
-			editor.registerPlugin(Indite);
-<?php } 
+			<?php if ($config["use_Indite"] == true)
+				editor.registerPlugin(Indite);
 			$template_id = -1;
 			if (isset($_POST["template_id"])) 
 				$template_id = $_POST["template_id"];

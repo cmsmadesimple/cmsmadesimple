@@ -4,6 +4,7 @@ function InvertBackground(editor) {
 	var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
+	var i18n = InsertFile.I18N;
 
 	cfg.registerButton({
 		id       : "invertbackground",
