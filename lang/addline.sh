@@ -9,6 +9,13 @@ if [ $# -ne 2 ] ; then
 	exit 1
 fi
 
+#First check en_US to make sure it doesn't exist
+grep "lang['admin']['$1']" en_US/admin.inc.php > /dev/null
+if [ $? -ne 0 ] ; then
+	echo "lang['admin']['$1'] alrady exists"
+	exit 1
+fi
+
 for file in `find . -name "admin.inc.php"`
 do
 	echo $file " "
