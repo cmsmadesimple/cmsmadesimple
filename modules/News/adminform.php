@@ -70,7 +70,7 @@ if ($moduleaction == "edit") {
 		$query = "INSERT INTO ".cms_db_prefix()."module_news (news_id, news_title, news_data, news_date, create_date) VALUES ($new_id, ".$db->qstr($title).", ".$db->qstr($data).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 		$dbresult = $db->Execute($query);
 		cms_mapi_audit($cms, $new_id, "News", "Added News Item");
-		redirect("moduleinterface?module=News");
+		redirect("moduleinterface.php?module=News");
 		return;
 	}
 
@@ -93,7 +93,7 @@ if ($moduleaction == "edit") {
 		$query = "UPDATE ".cms_db_prefix()."module_news SET news_title = ".$db->qstr($title).", news_data = ".$db->qstr($title).", modified_date = ".$db->DBTimeStamp(time())." WHERE news_id = $newsid";
 		$dbresult = $db->Execute($query);
 		cms_mapi_audit($cms, $newsid, "News", "Edited News Item");
-		redirect("moduleinterface?module=News");
+		redirect("moduleinterface.php?module=News");
 		return;
 	}
 } else {

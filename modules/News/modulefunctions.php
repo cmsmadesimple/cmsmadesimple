@@ -108,8 +108,8 @@ function news_module_executeadmin($cms,$id) {
 				($rowclass=="row1"?$rowclass="row2":$rowclass="row1");
 			}
 			echo "</table>\n";
-			echo "<div class=\"button\">".cms_mapi_create_admin_link("News",$id,array("action"=>"add"),"Add News Item")."</div>";
 		}
+		echo "<div class=\"button\">".cms_mapi_create_admin_link("News",$id,array("action"=>"add"),"Add News Item")."</div>";
 	}
 }
 
