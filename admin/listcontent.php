@@ -123,11 +123,11 @@ if (isset($_GET["message"])) {
 			}
 			else if (isset($one->page_alias) && $one->page_alias != "")
 			{
-				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?page_id=".$one->page_alias."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->page_alias."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
 			}
 			else
 			{
-				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?page_id=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
+				echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->page_id."\" target=\"_blank\"><img src=\"../images/cms/view.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('view')."\" title=\"".lang('view')."\"></a></td>\n";
 			}
 			echo "<td align=\"center\"><a href=\"editcontent.php?page_id=".$one->page_id."&amp;parent_id=".$one->parent_id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\"></a></td>\n";
 			echo "<td align=\"center\"><a href=\"deletecontent.php?page_id=".$one->page_id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\"></a></td>\n";

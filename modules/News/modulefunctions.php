@@ -201,6 +201,7 @@ function news_module_help($cms)
 	<p>
 	<ul>
 		<li><em>(optional)</em>number="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em>dateformat - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
 		<li><em>(optional)</em>makerssbutton="true" - Make a button to link to an RSS feed of the News items</li>
 	</ul>
 	</p>
@@ -212,12 +213,16 @@ function news_module_help($cms)
 function news_module_about() {
 	?>
 	<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.1</p>
+	<p>Version: 1.2</p>
 	<p>
 	Change History:
 	</p>
 	<p>
-	1.1 -- Subversion<br/>
+	1.2 -- Subversion<br />
+	Added makerssbutton and RSS functionality
+	</p>
+	<p>
+	1.1 -- Sep 15, 2004<br/>
 	Added time modification, date format, and icons
 	</p>
 	<?php
