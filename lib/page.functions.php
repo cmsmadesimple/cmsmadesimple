@@ -395,6 +395,13 @@ function & strip_slashes(&$str) {
  * the syntax highlighting instead of php's highlight_string()
  */
 function textarea_highlight($content, $textarea_name, $class_name="syntaxHighlight"){
+	ini_set("highlight.bg","#FFFFFF"); 
+	ini_set("highlight.comment", "#FF8000"); 
+	ini_set("highlight.default", "#0000BB");
+	ini_set("highlight.html", "#000000");
+	ini_set("highlight.keyword", "#007700");
+	ini_set("highlight.string", "#DD0000");
+
 	$text_highlight = highlight_string("<?$content?>", true);
 	$text_highlight = str_replace("&lt;?", "", $text_highlight);
 	$text_highlight = str_replace("?&gt;","", $text_highlight);
