@@ -1,7 +1,8 @@
 body {font-family: verdana, helvetica, arial, sans-serif; font-size: 100%; margin: 0 0 0 0; padding: 0 0 0 0;  height: 100%; width: 100%; background: #fff; color: #64879d;}
 a:link, a:active, a:visited {color: #64879D; text-decoration : none;}
 a:hover {color: red; font-weight: 300;}
-h1, h2, h3, h4, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; font-weight: bold; text-align: left;}
+h1, h2, h3, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; font-weight: bold; text-align: left;}
+h4{font-size: 1em; font-weight: bold; color: #64879D; border-bottom: 0; padding-bottom: 0; margin-bottom: 0; margin-top: 20px;}
 /* start navigation style */
 #navcontainer {position: absolute; float: left; left: 0; width: 150px; font-size: .80em; background: #F6F6F6; border-bottom: 1px solid #AAA; border-right: 1px solid #AAA;}
 #navcontainer h5 { margin: 0; background: #F6F6F6; color: #000; font-size : 12px; padding: 0; margin: 0.3em; text-align: left;}
@@ -21,7 +22,7 @@ h1, h2, h3, h4, h5 {font-size: 1.25em; font-weight: bold; color: #64879D; font-w
 #topHeader { background-color: black; width: 600px;}
 #bottomHeader { background-color: #6F8341; margin-bottom: 20px; width: 600px; text-align: center;}
 #table { margin-top: 20px; }
-#helparea { background-color: #BFDAEF; border: 1px solid #8C8A8C; padding: 10px; margin: 20px;}
+#helparea {border: 1px solid #8C8A8C; background-color: #BFDAEF; padding: 10px;}
 div {border: none;}
 div.content {color: #000; height: 100%; margin: 0px 10px 0px 180px; padding-top: 10px; font-size: .8em;}
 /* end content style */
@@ -49,4 +50,3 @@ div.adminformnobkg {padding:0; border: 0px solid #6F8341; width: 90%; margin-bot
 .error { color: #F00; }
 table.box {border: 1px solid #6F8341; background-color: #DDEBC5;}
 table.box td {padding: 0 10px 10px 10px;}
-
