@@ -30,6 +30,9 @@ check_login();
 
 $error = FALSE;
 
+$firsttime = "1"; #Flag to make sure we're not trying to fill params on the first display
+if (isset($_POST["firsttime"])) $firsttime = $_POST["firsttime"];
+
 $preview = false;
 if (isset($_POST["previewbutton"])) $preview = true;
 
@@ -92,8 +95,8 @@ else
 {
 	$contentobj = new $content_type;
 	$contentobj->mOwner = $userid;
-	$contentobj->mActive = true;
-	$contentobj->mShowInMenu = true;
+	$contentobj->mActive = True;
+	$contentobj->mShowInMenu = True;
 }
 
 if ($access)
@@ -127,7 +130,7 @@ if ($access)
 			}
 		}
 	}
-	else #Either we're a preview or a template postback
+	else if ($firsttime == "0") #Either we're a preview or a template postback
 	{
 		$contentobj->FillParams($_POST);
 		if ($preview) #If preview, check for errors...
@@ -143,6 +146,10 @@ if ($access)
 			}
 		}
 		$contentobj->SetAdditionalEditors($addtarray);
+	}
+	else
+	{
+		$firsttime = "0";
 	}
 }
 
@@ -253,7 +260,8 @@ else if ($preview)
 
 </div> <!--end adminform-->
 
-<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>">
+<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" />
+<input type="hidden" name="firsttime" value="<?php echo $firsttime ?>" />
 
 </form>
 

@@ -155,7 +155,7 @@ class content extends ContentBase
 			}
 		}
 
-		if ($this->mTemplateId == '-1')
+		if ($this->mTemplateId == '')
 		{
 			array_push($errors, lang('nofieldgiven',array(lang('template'))));
 			$result = false;
