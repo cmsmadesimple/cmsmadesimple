@@ -29,7 +29,7 @@ setcookie("cms_admin_user_id", "", time() - 3600);
 foreach($gCms->modules as $key=>$value)
 {
 	if (isset($gCms->modules[$key]['logout_post_function'])) {
-		call_user_func_array($gCms->modules[$key]['logout_post_function'], array($gCms, $oneuser));
+		call_user_func_array($gCms->modules[$key]['logout_post_function'], array(&$gCms));
 	}
 }
 

@@ -72,7 +72,7 @@ if ($access) {
 			{
 				if (isset($gCms->modules[$key]['addhtmlblob_pre_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['addhtmlblob_pre_function'], array($gCms, $groupobj));
+					call_user_func_array($gCms->modules[$key]['addhtmlblob_pre_function'], array(&$gCms, &$blobobj));
 				}
 			}
 
@@ -92,7 +92,7 @@ if ($access) {
 				{
 					if (isset($gCms->modules[$key]['addhtmlblob_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['addhtmlblob_post_function'], array($gCms, $groupobj));
+						call_user_func_array($gCms->modules[$key]['addhtmlblob_post_function'], array(&$gCms, &$blobobj));
 					}
 				}
 

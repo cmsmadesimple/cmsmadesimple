@@ -98,7 +98,7 @@ if (isset($_POST["adduser"]))
 		{
 			if (isset($gCms->modules[$key]['adduser_pre_function']))
 			{
-				call_user_func_array($gCms->modules[$key]['adduser_pre_function'], array($gCms, $newuser));
+				call_user_func_array($gCms->modules[$key]['adduser_pre_function'], array(&$gCms, &$newuser));
 			}
 		}
 
@@ -111,7 +111,7 @@ if (isset($_POST["adduser"]))
 			{
 				if (isset($gCms->modules[$key]['adduser_post_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['adduser_post_function'], array($gCms, $newuser));
+					call_user_func_array($gCms->modules[$key]['adduser_post_function'], array(&$gCms, &$newuser));
 				}
 			}
 

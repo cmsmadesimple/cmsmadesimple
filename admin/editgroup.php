@@ -68,7 +68,7 @@ if ($access) {
 			{
 				if (isset($gCms->modules[$key]['editgroup_pre_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['editgroup_pre_function'], array($gCms, $groupobj));
+					call_user_func_array($gCms->modules[$key]['editgroup_pre_function'], array(&$gCms, &$groupobj));
 				}
 			}
 
@@ -81,7 +81,7 @@ if ($access) {
 				{
 					if (isset($gCms->modules[$key]['editgroup_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['editgroup_post_function'], array($gCms, $groupobj));
+						call_user_func_array($gCms->modules[$key]['editgroup_post_function'], array(&$gCms, &$groupobj));
 					}
 				}
 

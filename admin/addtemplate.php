@@ -98,7 +98,7 @@ if ($access)
 			{
 				if (isset($gCms->modules[$key]['addtemplate_pre_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array($gCms, $groupobj));
+					call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array(&$gCms, &$newtemplate));
 				}
 			}
 
@@ -111,7 +111,7 @@ if ($access)
 				{
 					if (isset($gCms->modules[$key]['addtemplate_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array($gCms, $groupobj));
+						call_user_func_array($gCms->modules[$key]['addtemplate_post_function'], array(&$gCms, &$newtemplate));
 					}
 				}
 

@@ -102,7 +102,7 @@ if ($access)
 			{
 				if (isset($gCms->modules[$key]['edittemplate_pre_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['edittemplate_pre_function'], array($gCms, $groupobj));
+					call_user_func_array($gCms->modules[$key]['edittemplate_pre_function'], array(&$gCms, &$onetemplate));
 				}
 			}
 
@@ -115,7 +115,7 @@ if ($access)
 				{
 					if (isset($gCms->modules[$key]['edittemplate_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['edittemplate_post_function'], array($gCms, $groupobj));
+						call_user_func_array($gCms->modules[$key]['edittemplate_post_function'], array($gCms, $onetemplate));
 					}
 				}
 				audit($template_id, $onetemplate->name, 'Edited Template');

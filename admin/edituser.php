@@ -96,7 +96,7 @@ if ($access) {
 				{
 					if (isset($gCms->modules[$key]['edituser_pre_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['edituser_pre_function'], array($gCms, $thisuser));
+						call_user_func_array($gCms->modules[$key]['edituser_pre_function'], array(&$gCms, &$thisuser));
 					}
 				}
 
@@ -122,7 +122,7 @@ if ($access) {
 				{
 					if (isset($gCms->modules[$key]['edituser_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['edituser_post_function'], array($gCms, $thisuser));
+						call_user_func_array($gCms->modules[$key]['edituser_post_function'], array(&$gCms, &$thisuser));
 					}
 				}
 

@@ -62,7 +62,7 @@ if ($access)
 			{
 				if (isset($gCms->modules[$key]['addgroup_pre_function']))
 				{
-					call_user_func_array($gCms->modules[$key]['addgroup_pre_function'], array($gCms, $groupobj));
+					call_user_func_array($gCms->modules[$key]['addgroup_pre_function'], array(&$gCms, &$groupobj));
 				}
 			}
 
@@ -75,7 +75,7 @@ if ($access)
 				{
 					if (isset($gCms->modules[$key]['addgroup_post_function']))
 					{
-						call_user_func_array($gCms->modules[$key]['addgroup_post_function'], array($gCms, $groupobj));
+						call_user_func_array($gCms->modules[$key]['addgroup_post_function'], array(&$gCms, &$groupobj));
 					}
 				}
 				audit($groupobj->id, $groupobj->name, 'Added Group');
