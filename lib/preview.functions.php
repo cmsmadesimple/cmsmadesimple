@@ -40,7 +40,7 @@ class Smarty_Preview extends Smarty {
 		$this->force_compile = true;
 		$this->cache_plugins = false;
 
-		load_plugins(&$this);
+		load_plugins($this);
 
 		$this->register_resource("preview", array(&$this, "preview_get_template",
 						       "preview_get_timestamp",

@@ -203,7 +203,7 @@ class Smarty_CMS extends Smarty {
  *
  * @since 0.5
  */
-function load_plugins($smarty)
+function & load_plugins(&$smarty)
 {
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
