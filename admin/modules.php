@@ -84,15 +84,15 @@ if (count($cmsmodules) > 0) {
 
 	<div class="content">
 
-	<h3>Module Admin</h3>
+	<h3><?=$gettext->gettext("Module Admin")?></h3>
 
 	<table cellspacing="0" class="admintable">
 		<tr>
-			<td>Module Name</td>
-			<td width="10%">Version</td>
-			<td width="10%">Status</td>
-			<td width="10%">Active</td>
-			<td width="10%">Action</td>
+			<td><?=$gettext->gettext("Module Name")?></td>
+			<td width="10%"><?=$gettext->gettext("Version")?></td>
+			<td width="10%"><?=$gettext->gettext("Status")?></td>
+			<td width="10%"><?=$gettext->gettext("Active")?></td>
+			<td width="10%"><?=$gettext->gettext("Action")?></td>
 		</tr>
 
 <?

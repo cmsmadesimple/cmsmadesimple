@@ -1,14 +1,18 @@
 <div class="nav">
 <h4><?php
   
-$gettext->setVar("name", $_SESSION["cms_admin_username"]);
+if (isset($_SESSION["cms_admin_username"])) {
+	$gettext->setVar("name", $_SESSION["cms_admin_username"]);
+} else {
+	$gettext->setVar("name", "");
+}
 echo $gettext->gettext('Welcome ${name}');
 $gettext->reset();
   
 ?></h4>
 
 <form action="index.php" method="post" name="cms_admin_lang_form">
-<span class="smallselect">Language</span><br />
+<span class="smallselect"><?=$gettext->gettext("Language")?></span><br />
 <select class="smallselect" name="change_cms_lang" onchange="cms_admin_lang_form.submit()">
 <?
 	foreach ($nls["language"] as $key=>$val) {
@@ -60,7 +64,7 @@ $gettext->reset();
 		}
 
 		if ($displaymodules != "") {
-			echo "<h4>Modules</h4>";
+			echo "<h4>".$gettext->gettext("Modules")."</h4>";
 			echo $displaymodules;
 		}
 

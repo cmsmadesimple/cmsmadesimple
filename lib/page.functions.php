@@ -79,6 +79,9 @@ function audit(&$config, $userid, $username, $itemid, $itemname, $action) {
 
 	$db = $config->db;
 
+	if (!isset($userid) || $userid == "") {
+		$userid = 0;
+	}
 	$query = "INSERT INTO ".$config->db_prefix."adminlog (timestamp, user_id, username, item_id, item_name, action) VALUES (".time().", $userid, ".$db->qstr($username).", $itemid, ".$db->qstr($itemname).", ".$db->qstr($action).")";
 	$db->Execute($query);
 }

@@ -33,7 +33,7 @@ if (isset($_POST[$id."cancelsubmit"])) {
 
 if ($moduleaction == "edit") {
 
-	$newsid = $_GET[$id."news_id"].$_POST[$id."news_id"];
+	$newsid = (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
 	$hiddenfields .= "<input type=\"hidden\" name=\"".$id."action\" value=\"completeedit\" /><input type=\"hidden\" name=\"".$id."news_id\" value=\"".$newsid."\" />";
 	$query = "SELECT * FROM ".cms_db_prefix()."module_news WHERE news_id = $newsid";
 	$dbresult = $db->Execute($query);
@@ -45,9 +45,9 @@ if ($moduleaction == "edit") {
 
 } else if ($moduleaction == "delete") {
 
-	$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = " . $_GET[$id."news_id"].$_POST[$id."news_id"];
+	$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = " . (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
 	$dbresult = $db->Execute($query);
-	cms_mapi_audit($cms, $_GET[$id."news_id"].$_POST[$id."news_id"], "News", "Deleted News Item");
+	cms_mapi_audit($cms, (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:""), "News", "Deleted News Item");
 	redirect("moduleinterface.php?module=News");
 
 } else if ($moduleaction == "completeadd") {
