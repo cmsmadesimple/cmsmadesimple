@@ -31,7 +31,16 @@ $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
 $alias = "";
-if (isset($_POST["alias"])) $alias = $_POST["alias"];
+if ($config["auto_alias_content"])
+{
+	$alias = $title;
+	$alias=trim($alias);
+	$alias = preg_replace("/\W+/", "-", $alias);
+}
+else
+{
+	if (isset($_POST["alias"])) $alias = $_POST["alias"];
+}
 
 $content_type = "content";
 if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
@@ -105,7 +114,7 @@ if ($access) {
 				$validinfo = false;
 				$error .= "<li>".$gettext->gettext("Alias cannot be an integer!")."</li>";
 			}
-			else if (!preg_match('/^[\d\w]+$/', $alias))
+			else if (!preg_match('/^[\d\w\-]+$/', $alias))
 			{
 				$validinfo = false;
 				$error .= "<li>".$gettext->gettext("Alias must be all letters and numbers!")."</li>";
@@ -280,10 +289,12 @@ else {
 	</tr>
 <?php } ?>
 <?php if ($content_type == "content") { ?>
+	<?php if ($config["auto_alias_content"] == false) { ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Page Alias")?>:</td>
 		<td><input type="text" name="alias" maxlength="255" value="<?=$alias?>" /></td>
 	</tr>
+	<?php } ?>
 	<tr>
 		<td>*<?=$gettext->gettext("Content")?>:</td>
 		<td><textarea id="content" name="content" style="width:100%" cols="80" rows="24"><?=$content?></textarea></td>
