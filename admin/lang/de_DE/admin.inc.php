@@ -219,4 +219,6 @@ $lang['admin']['apply'] = 'Apply'; //needs translation
 $lang['admin']['none'] = 'None'; //needs translation
 $lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use'; //needs translation
 $lang['admin']['cachable'] = 'Cachable'; //needs translation
+$lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
+$lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
 ?>

@@ -219,4 +219,6 @@ $lang['admin']['apply'] = 'Bruk';
 $lang['admin']['none'] = 'Ingen';
 $lang['admin']['wysiwygtouse'] = 'Velg hvilken WYSIWYG tekstbehandler som skal anvendes';
 $lang['admin']['cachable'] = 'Kan caches'; 
+$lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
+$lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
 ?>

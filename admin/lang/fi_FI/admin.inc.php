@@ -219,4 +219,6 @@ $lang['admin']['apply'] = 'Ota Käyttöön';
 $lang['admin']['none'] = 'Ei mitään'; 
 $lang['admin']['wysiwygtouse'] = 'Valitse WYSIWYG käyttöön';
 $lang['admin']['cachable'] = 'Cachable'; //needs translation
+$lang['admin']['hasdependents'] = 'Has Dependents'; //needs translation
+$lang['admin']['missingdependency'] = 'Missing Dependency'; //needs translation
 ?>
