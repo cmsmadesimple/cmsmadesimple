@@ -45,6 +45,9 @@ else
 $content_type = "content";
 if (isset($_POST["content_type"])) $content_type = $_POST["content_type"];
 
+$head_tags = "";
+if (isset($_POST["head_tags"])) $head_tags = $_POST["head_tags"];
+
 $url = "";
 if (isset($_POST["url"])) $url = $_POST["url"];
 
@@ -140,7 +143,7 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 			$new_page_id = $db->GenID(cms_db_prefix()."pages_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, page_alias, create_date, modified_date) VALUES ($new_page_id, ".$db->qstr($title).",".$db->qstr($url).",".$db->qstr($content).",".$db->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$db->qstr($menutext).", $order, $active, ".$db->qstr($alias).",".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
+			$query = "INSERT INTO ".cms_db_prefix()."pages (page_id, page_title, page_url, page_content, page_type, parent_id, template_id, owner, show_in_menu, menu_text, item_order, active, page_alias, create_date, modified_date, head_tags) VALUES ($new_page_id, ".$db->qstr($title).",".$db->qstr($url).",".$db->qstr($content).",".$db->qstr($content_type).", $parent_id, $template_id, $userid, $showinmenu, ".$db->qstr($menutext).", $order, $active, ".$db->qstr($alias).",".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).", ".$db->qstr($head_tags).")";
 			$result = $db->Execute($query);
 			if ($result) {
 				if (isset($_POST["additional_editors"])) {
@@ -303,7 +306,7 @@ else {
 <h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
 <div id="advanced" class="expand">
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?></div>
-	<textarea rows="4"></textarea>
+	<textarea rows="4" name="head_tags"><?=$head_tags ?></textarea>
 
 			<table border="0" cellpadding="0" cellspacing="0" summary="">
 				<tr valign="top">

@@ -30,6 +30,9 @@ if (isset($_POST["title"])) $title = $_POST["title"];
 $content = "";
 if (isset($_POST["content"])) $content = $_POST["content"];
 
+$head_tags = "";
+if (isset($_POST["head_tags"])) $head_tags = $_POST["head_tags"];
+
 $alias = "";
 if ($config["auto_alias_content"])
 {
@@ -162,7 +165,7 @@ if ($access) {
 				}
 
 			}
-			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias)." WHERE page_id = $page_id";
+			$query1 = "UPDATE ".cms_db_prefix()."pages SET page_title=".$db->qstr($title).", page_url=".$db->qstr($url).", page_content=".$db->qstr($content).", parent_id=$parent_id, template_id=$template_id, show_in_menu=$showinmenu, menu_text=".$db->qstr($menutext).", active=$active, modified_date = ".$db->DBTimeStamp(time()).", item_order=$order, page_type = ".$db->qstr($content_type).", owner=$owner_id, page_alias=".$db->qstr($alias).", head_tags=".$db->qstr($head_tags)." WHERE page_id = $page_id";
 			$result1 = $db->Execute($query1);
 
 			if ($orig_parent_id != $parent_id) {
@@ -207,6 +210,7 @@ if ($access) {
 		$alias = $row["page_alias"];
 		$url = $row["page_url"];
 		$content_type = $row["page_type"];
+		$head_tags = $row["head_tags"];
 		$orig_content_type = $row["page_type"];
 		$url = $row["page_url"];
 		$content = $row["page_content"];
@@ -394,7 +398,7 @@ else {
 <h4 onClick="expandcontent('advanced')" style="cursor:hand; cursor:pointer"><?=$gettext->gettext("Advanced") ?></a></h4>
 <div id="advanced" class="expand">
 	<div style="line-height: .8em; padding-top: 1em; font-weight: bold;"><?=$gettext->gettext("Head Tags") ?>
-		<textarea rows="4"></textarea>
+		<textarea rows="4" name="head_tags"><?=$head_tags ?></textarea>
 	</div>
 
 	<table border="0" cellpadding="0" cellspacing="0" summary="">
