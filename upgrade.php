@@ -31,11 +31,11 @@ require_once(dirname(__FILE__)."/include.php");
 
 <div class="body">
 
-<img src="images/cms/cmsbanner.gif" width="400" height="96" alt="CMS Banner Logo" />
+<img src="images/cms/cmsbanner.gif" width="449" height="114" alt="CMS Banner Logo" />
 
 <div class="headerish">
 
-<p>Upgrade System</p>
+<h1>Upgrade System</h1>
 
 </div>
 
@@ -44,7 +44,7 @@ require_once(dirname(__FILE__)."/include.php");
 <?php
 
 if (!isset($_GET["doupgrade"])) {
-	echo "<h4>Welcome to the CMS Upgrade System!</h4>";
+	echo "<h3>Welcome to the CMS Upgrade System!</h3>";
 
 	echo "<p>In order to upgrade properly, upgrade needs to have write access to your config.php file.  This is so any extra settings that have been introduced in this version can be set to their defaults.</p>";
 }

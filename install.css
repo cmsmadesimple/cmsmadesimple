@@ -20,6 +20,8 @@ body {
 	border: 1px solid #CCCCCC;
 	margin-top: 10px;
 	width: 450px;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 
@@ -41,6 +43,7 @@ h3 {
 	COLOR: #333333;
 	font-size : 12pt;
 	font-weight: bold;
+	text-align: center;
 }
 
 .regtable {
@@ -83,7 +86,10 @@ a:hover {
 	padding-left:10;
 }
 
-
+.main table {
+	margin-left: auto;
+	margin-right: auto;
+}
 
 .headerish {
 	font-family: Verdana, serif;
