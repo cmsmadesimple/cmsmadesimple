@@ -22,6 +22,9 @@ class Link extends ContentBase
 	function SetProperties()
 	{
 		$this->mProperties->Add('string', 'url');
+
+		#Turn off caching
+		$this->mCachable = false;
 	}
 
 	function FillParams($params)

@@ -32,98 +32,104 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$count = 0;
 	$in_hr = 0;
 
-	foreach ($allcontent as $onecontent)
+	if (count($allcontent))
 	{
-		#Handy little trick to figure out how deep in the tree we are
-		#Remember, content comes to use in order of how it should be displayed in the tree already
-		$depth = count(split('\.', $onecontent->Hierarchy()));
+		$menu .= "<div class=\"bulletmenu\">\n";
 
-		#If hierarchy starts with the start_element (if it's set), then continue on
-		if (isset($params['start_element']))
+		foreach ($allcontent as $onecontent)
 		{
-			if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
-			{
-				continue;
-			}
-		}
+			#Handy little trick to figure out how deep in the tree we are
+			#Remember, content comes to use in order of how it should be displayed in the tree already
+			$depth = count(split('\.', $onecontent->Hierarchy()));
 
-		#Now check to make sure we're not too many levels deep if number_of_levels is set
-		if (isset($params['number_of_levels']))
-		{
-			$number_of_levels = $params['number_of_levels'] - 1;
-			$base_level = 1;
-			
-			#Is start_element set?  If so, reset the base_level to it's level
+			#If hierarchy starts with the start_element (if it's set), then continue on
 			if (isset($params['start_element']))
 			{
-				$base_level = count(split('\.', $params['start_element']));
+				if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
+				{
+					continue;
+				}
 			}
 
-			#If this element's level is more than base_level + number_of_levels, then scratch it
-			if ($base_level + $number_of_levels < $depth)
+			#Now check to make sure we're not too many levels deep if number_of_levels is set
+			if (isset($params['number_of_levels']))
+			{
+				$number_of_levels = $params['number_of_levels'] - 1;
+				$base_level = 1;
+				
+				#Is start_element set?  If so, reset the base_level to it's level
+				if (isset($params['start_element']))
+				{
+					$base_level = count(split('\.', $params['start_element']));
+				}
+
+				#If this element's level is more than base_level + number_of_levels, then scratch it
+				if ($base_level + $number_of_levels < $depth)
+				{
+					continue;
+				}
+			}
+
+			if (!$onecontent->Active() || !$onecontent->ShowInMenu())
 			{
 				continue;
 			}
-		}
 
-		if (!$onecontent->Active() || !$onecontent->ShowInMenu())
-		{
-			continue;
-		}
-
-		if ($onecontent->Type() == 'sectionheader')
-		{
-			if ($in_hr == 1)
+			if ($onecontent->Type() == 'sectionheader')
 			{
-				$menu .= "</ul>\n";
-				$in_hr = 0;
-			}
-			$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
-			if ($count > 0 && $in_hr == 0)
-			{
-				$menu .= "<ul>\n";
-				$in_hr = 1;
-			}
-		}
-		else
-		{
-			if ($depth < $last_level) {
-				for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
-				if ($depth > 0)
+				if ($in_hr == 1)
 				{
-					$menu .= "</li>\n";
+					$menu .= "</ul>\n";
+					$in_hr = 0;
 				}
-			}
-			if ($depth > $last_level) {
-				for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
-			}
-			if ($depth == $last_level) {
-				$menu .= "</li>\n";
-			}
-			if ($onecontent->Type() == 'separator')
-			{
-				$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/>";
+				$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
+				if ($count > 0 && $in_hr == 0)
+				{
+					$menu .= "<ul>\n";
+					$in_hr = 1;
+				}
 			}
 			else
 			{
-				$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
-				if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
-				{
-					$menu .= " class=\"currentpage\"";
+				if ($depth < $last_level) {
+					for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
+					if ($depth > 0)
+					{
+						$menu .= "</li>\n";
+					}
 				}
-				$menu .= ">".$onecontent->MenuText()."</a>";
+				if ($depth > $last_level) {
+					for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
+				}
+				if ($depth == $last_level) {
+					$menu .= "</li>\n";
+				}
+				if ($onecontent->Type() == 'separator')
+				{
+					$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/>";
+				}
+				else
+				{
+					$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
+					if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
+					{
+						$menu .= " class=\"currentpage\"";
+					}
+					$menu .= ">".$onecontent->MenuText()."</a>";
+				}
+				$in_hr = 1;
+				$last_level = $depth;
 			}
-			$in_hr = 1;
-			$last_level = $depth;
+			$count++;
 		}
-		$count++;
-	}
 
-	for ($i = 0; $i < $last_level; $i++) $menu .= "</li></ul>";
+		for ($i = 0; $i < $last_level; $i++) $menu .= "</li></ul>";
 
-	if ($showadmin == 1)
-	{
-		$menu .= "<ul><li><a href='admin/'>Admin</a></li></ul>\n";
+		if ($showadmin == 1)
+		{
+			$menu .= "<ul><li><a href='admin/'>Admin</a></li></ul>\n";
+		}
+		$menu .= "</div>\n";
 	}
 
 	return $menu;

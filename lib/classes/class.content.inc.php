@@ -119,6 +119,11 @@ class ContentBase
 	var $mAlias;
 
 	/**
+	 * Cachable?
+	 */
+	var $mCachable;
+
+	/**
 	 * Does this content have a preview function?
 	 */
 	var $mPreview;
@@ -178,6 +183,7 @@ class ContentBase
 		$this->mActive			= false ;
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
+		$this->mCachable		= true;
 		$this->mMenuText		= "" ;
 		$this->mCreationDate	= "" ;
 		$this->mModifiedDate	= "" ;
@@ -297,6 +303,11 @@ class ContentBase
 		return $this->mDefaultContent;
 	}
 
+	function Cachable()
+	{
+		return $this->mCachable;
+	}
+
 	/**
 	 * Returns the menu text for this content
 	 */
@@ -368,6 +379,7 @@ class ContentBase
 				$this->mActive			= ($row["active"] == 1?true:false);
 				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
+				$this->mCachable		= ($row["cachable"] == 1?true:false);
 				$this->mCreationDate	= $row["create_date"];
 				$this->mModifiedDate	= $row["modified_date"];
 
@@ -448,6 +460,7 @@ class ContentBase
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
+		$this->mCachable		= ($data["cachable"] == 1?true:false);
 		$this->mCreationDate	= $data["create_date"];
 		$this->mModifiedDate	= $data["modified_date"];
 
@@ -529,7 +542,7 @@ class ContentBase
 			}
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ? WHERE content_id = ?";
 
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
@@ -540,6 +553,7 @@ class ContentBase
 			($this->mActive==true?1:0),
 			($this->mDefaultContent==true?1:0),
 			($this->mShowInMenu==true?1:0),
+			($this->mCachable==true?1:0),
 			$this->mMenuText,
 			$this->mAlias,
 			$db->DBTimeStamp(time()),
@@ -617,7 +631,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, menu_text, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -632,6 +646,7 @@ class ContentBase
 			($this->mActive==true?1:0),
 			($this->mDefaultContent==true?1:0),
 			($this->mShowInMenu==true?1:0),
+			($this->mCachable==true?1:0),
 			$this->mMenuText,
 			$db->DBTimeStamp(time()),
 			$db->DBTimeStamp(time())

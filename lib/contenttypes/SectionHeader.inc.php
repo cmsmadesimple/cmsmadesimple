@@ -21,6 +21,8 @@ class SectionHeader extends ContentBase
 {
 	function SetProperties()
 	{
+		#Turn off caching
+		$this->mCachable = false;
 	}
 
 	function FillParams($params)

@@ -83,6 +83,14 @@ class Content extends ContentBase
 			{
 				$this->mShowInMenu = false;
 			}
+			if (isset($params['cachable']))
+			{
+				$this->mCachable = true;
+			}
+			else
+			{
+				$this->mCachable = false;
+			}
 		}
 	}
 
@@ -103,6 +111,7 @@ class Content extends ContentBase
 		$text .= '<tr><td>'.lang('headtags').':</td><td>'.create_textarea(true, $this->mProperties->GetValue('headtags'), 'headtags', 'syntaxHighlight', 'headtags').'</td></tr>'."\n";
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
+		$text .= '<tr><td>'.lang('cachable').':</td><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
 		return $text;
 	}

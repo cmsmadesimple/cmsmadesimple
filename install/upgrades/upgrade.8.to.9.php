@@ -17,6 +17,7 @@ $flds = "
 	content_alias C(255),
 	show_in_menu I1,
 	active I1,
+	cachable I1,
 	create_date T,
 	modified_date T
 ";

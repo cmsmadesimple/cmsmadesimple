@@ -285,11 +285,11 @@ class Smarty_CMS extends Smarty {
 		{
 			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
 			{ 
-				$query = "SELECT c.content_id, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE (c.content_id = ".$tpl_name." OR c.content_alias=".$db->qstr($tpl_name).") AND c.active = 1";
+				$query = "SELECT c.content_id, c.cachable, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE (c.content_id = ".$tpl_name." OR c.content_alias=".$db->qstr($tpl_name).") AND c.active = 1";
 			}
 			else
 			{
-				$query = "SELECT c.content_id, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE c.content_alias=".$db->qstr($tpl_name)." AND c.active = 1";
+				$query = "SELECT c.content_id, c.cachable, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE c.content_alias=".$db->qstr($tpl_name)." AND c.active = 1";
 			}
 			$result = $db->Execute($query);
 
@@ -314,7 +314,14 @@ class Smarty_CMS extends Smarty {
 				if ($line['type'] == 'content')
 				{
 					header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
-					$tpl_timestamp = ($content_date<$template_date?$template_date:$content_date);
+					if ($line['cachable'] == 1)
+					{
+						$tpl_timestamp = ($content_date<$template_date?$template_date:$content_date);
+					}
+					else
+					{
+						$tpl_timestamp = time();
+					}
 					return true;
 				}
 				else

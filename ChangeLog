@@ -1,8 +1,16 @@
 Version 0.8 "Tahiti" -- Subversion
 -----------------
 
-* Rewrote all content handling from scratch for better expandibility
+* Added Norwegian translation (Patricia)
+* Added FCKeditor capability via module
+* Added TinyMCE capability via module (included)
 * Admin and default website are totally xhtml 1.0 transitional compliant
+* Cleaned up root directory by moving things to modules and the lib
+directory
+* Moved HTMLArea to a module.
+* Moved dhtmlmenu plugin to PHPLayers module in order to fix xhtml issues
+* Rewrote all content handling from scratch for better expandibility
+* Updated Traditional Chinese translation (gobido)
 
 Version 0.7.3 -- Tue Nov 23 2004
 -----------------

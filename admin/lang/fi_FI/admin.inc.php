@@ -218,4 +218,5 @@ $lang['admin']['cachecleared'] = 'Välimuisti tyhjennetty';
 $lang['admin']['apply'] = 'Ota Käyttöön'; 
 $lang['admin']['none'] = 'Ei mitään'; 
 $lang['admin']['wysiwygtouse'] = 'Valitse WYSIWYG käyttöön';
+$lang['admin']['cachable'] = 'Cachable'; //needs translation
 ?>

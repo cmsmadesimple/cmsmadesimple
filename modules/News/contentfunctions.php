@@ -30,6 +30,9 @@ function news_module_content_set_properties(&$module)
 
 	#Turn on preview
 	$module->mPreview = true;
+
+	#Turn off caching
+	$module->mCachable = false;
 }
 
 function news_module_content_edit(&$module)
