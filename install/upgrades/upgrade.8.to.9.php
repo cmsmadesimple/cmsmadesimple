@@ -97,8 +97,9 @@ if ($result && $result->RowCount() > 0)
 					$oldcontent = $row['page_content'];
 					
 					#Fix for dhtmlmenu
-
 					$oldcontent = str_replace('{dhtmlmenu', "{cms_module module='phplayers'", $oldcontent);
+
+					$newcontent->mCachable = true;
 
 					$newcontent->SetPropertyValue('content_en', $oldcontent);
 					$newcontent->SetPropertyValue('head_tags', $row['head_tags']);
