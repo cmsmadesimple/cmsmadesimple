@@ -1005,7 +1005,7 @@ class NewsModule extends CMSModuleContentType
 			{
 				$this->mProperties->SetValue('showcategorywithtitle', 0);
 			}
-			if (isset($params['sortasc']))
+			if (isset($params['sortasc']) && $params['sortasc'] == 1)
 			{
 				$this->mProperties->SetValue('sortasc', 1);
 			}
