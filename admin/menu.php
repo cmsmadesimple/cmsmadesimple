@@ -1,4 +1,4 @@
-<div class="nav">
+<div id="navcontainer">
 <h5><?php
 if (isset($_SESSION["cms_admin_username"]))
 {

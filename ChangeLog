@@ -5,6 +5,7 @@ Version 0.5.1 -- Subversion
 functionality
 * Added automatic aliases option
 * Fixed upgrade path from 0.1 through to 0.5
+* Fixed up the admin stylesheet so it's more cross-browser friendly
 * Fixed a bug with PATH_INFO
 * Fixed a bug with Call-time pass-by-reference Warning
 * Re-added phplayers-menu.css : users should however move its content to their
