@@ -274,7 +274,7 @@ TABLE.box TD {
 	PADDING-RIGHT: 10px; PADDING-LEFT: 10px; PADDING-BOTTOM: 10px; PADDING-TOP: 0px
 }
 .clearbox {
-	WIDTH: 100%
+	WIDTH: 100%; padding-top: 0px;
 }
 .moduleabout H3 {
 	PADDING-RIGHT: 0px; PADDING-LEFT: 0px; FONT-SIZE: 0.9em; PADDING-BOTTOM: 0px; MARGIN: 0px; PADDING-TOP: 0px
