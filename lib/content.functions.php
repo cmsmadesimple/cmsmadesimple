@@ -59,11 +59,11 @@ class Smarty_CMS extends Smarty {
 			$stylesheet = "";
 			if (isset($line[stylesheet])) {
 				$csslink = $this->configCMS->root_url."/stylesheet.php?templateid=".$line[template_id];
-				$stylesheet = "<link rel=\"stylesheet\" href=\"".$csslink."\" />\n";
+				$stylesheet .= "<link rel=\"stylesheet\" href=\"".$csslink."\" type=\"text/css\" />\n";
 				$stylesheet .= "<style type=\"text/css\">\n";
-				$stylesheet .= "<!--\n";
-				$stylesheet .= "	@import url(".$csslink.");\n";
-				$stylesheet .= "-->\n";
+				#$stylesheet .= "<!--\n";
+				$stylesheet .= "	@import \"".$csslink."\";\n";
+				#$stylesheet .= "-->\n";
 				$stylesheet .= "</style>\n";
 			}
 			$tpl_source = $line[template_content];
