@@ -98,7 +98,14 @@ if ($access)
 					}
 				}
 				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
-				TemplateOperations::TouchAllTemplates(); #So pages recompile
+
+				#So pages recompile
+				TemplateOperations::TouchAllTemplates($blobobj->name);
+
+				#So pages recompile
+				$query = "UPDATE ".cms_db_prefix()."pages SET modified_date = ? WHERE page_content like ?";
+				$dbresult = $db->Execute($query,array($db->DBTimeStamp(time()),'%{html_blob name="'.$blobobj->name.'"}%'));
+
 				redirect("listhtmlblobs.php");
 				return;
 			}

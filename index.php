@@ -89,31 +89,41 @@ if (isset($_GET['print'])){
 
 $page = "";
 
-if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]])){
+if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
+{
 	$page = $_GET[$config["query_var"]];
-}else if (isset($_SERVER["PATH_INFO"]) && (isset($_SERVER["SCRIPT_URL"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"]))){
-	$page = $_SERVER["PATH_INFO"];
-}else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false){
+}
+#else if (isset($_SERVER["PATH_INFO"]) && (isset($_SERVER["SCRIPT_URL"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"])))
+#{
+#	$page = $_SERVER["PATH_INFO"];
+#}
+else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false)
+{
 	$page = $_SERVER["QUERY_STRING"];
 }
 
-if ($page == "") {
+if ($page == "")
+{
 	$page = db_get_default_page();
 }
 
-if (get_site_preference('enablecustom404') == "0"){
+if (get_site_preference('enablecustom404') == "0")
+{
 	$old_error_handler = set_error_handler("ErrorHandler404");
 }
 
 ($smarty->is_cached('db:'.$page)?$cached="":$cached="not ");
 $html = $smarty->fetch('db:'.$page) . "\n";
 
-if (get_site_preference('enablecustom404') == "0"){
+if (get_site_preference('enablecustom404') == "0")
+{
 	set_error_handler($old_error_handler);
 }
 
 if(password_protected($page) != -1 && !check_access(password_protected($page)))
+{
 	$html = display_login_form();
+}
 
 echo $html;
 

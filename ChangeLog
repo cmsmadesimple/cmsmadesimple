@@ -13,6 +13,8 @@ Version 0.7.2 -- Subversion
 * Changed en_US to UTF-8
 * Changed with of add and edit html blob pages
 * Changed all template lists to be ordered by template name (#000038)
+* Changed edit html blob so that is only modifies the timestamps of pages it
+is actually used on.
 * Changed all user lists to be ordered by username (#000039)
 * Fixed login to redirect back to originally requested link
 * Fixed stupid encoding issue with cms_htmlentities
