@@ -185,4 +185,5 @@ $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'View';
 $lang['admin']['welcomemsg'] = 'Welcome %s';
+$lang['admin']['clearadminlog'] = 'Clear Admin Log';
 ?>

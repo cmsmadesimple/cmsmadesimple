@@ -185,4 +185,5 @@ $lang['admin']['usewysiwyg'] = 'Käytä WYSIWYG editoria sisällön muokkaamiseen';
 $lang['admin']['version'] = 'Versio'; 
 $lang['admin']['view'] = 'Katso'; 
 $lang['admin']['welcomemsg'] = 'Tervetuloa %s'; 
+$lang['admin']['clearadminlog'] = 'Clear Admin Log'; //needs translation
 ?>

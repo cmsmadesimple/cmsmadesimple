@@ -116,7 +116,7 @@ if ($result && $result->RowCount() > 0) {
 echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
 
        if ($access) {
-               echo "<div class=\"button\"><a href=\"adminlog.php?clear=true\">".lang('clearadminlog')."</a></div>";
+               echo "<br><div class=\"button\"><a href=\"adminlog.php?clear=true\">".lang('clearadminlog')."</a></div>";
        }
        echo "<br>";
 }
