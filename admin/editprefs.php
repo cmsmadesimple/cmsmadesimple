@@ -74,8 +74,8 @@ if ($error != "") {
 
 <h3><?php echo lang("userprefs")?></h3>
 
-<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
-</applet>
+<!--<applet code="org.CMSMadeSimple.Syntax.Hidden.class" archive="SyntaxHighlight.jar" name="hiddenApplet" width="0" height="0" style="width: 0; height: 0;">
+</applet>-->
 
 <?php 
 /*

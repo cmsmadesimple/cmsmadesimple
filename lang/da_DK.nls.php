@@ -24,5 +24,5 @@ array_push($nls['file']['da_DK'], dirname(__FILE__)."/da_DK/admin.inc.php");
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['en_US'] = "en";
+$nls['htmlarea']['da_DK'] = "da";
 ?>

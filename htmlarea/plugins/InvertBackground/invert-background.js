@@ -4,11 +4,10 @@ function InvertBackground(editor) {
 	var cfg = editor.config;
 	var toolbar = cfg.toolbar;
 	var self = this;
-	var i18n = InvertBackground.I18N;
 
 	cfg.registerButton({
 		id       : "InvertBackground",
-		tooltip  : i18n["InvertBackgroundTooltip"],
+		tooltip  : "InvertBackgroundTooltip",
 		image    : editor.imgURL("invertBackground.gif", "InvertBackground"),
 		textMode : false,
 		action   : function(editor) {self.buttonPress(editor);}

@@ -45,4 +45,5 @@ $nls['encoding']['zh_CN'] = "GB2312";
 $nls['file']['zh_CN'] = array();
 array_push($nls['file']['zh_CN'], dirname(__FILE__)."/zh_CN/admin.inc.php");
 
+$nls['htmlarea']['zh_CN'] = "en";
 ?>

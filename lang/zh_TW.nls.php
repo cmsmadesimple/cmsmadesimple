@@ -45,4 +45,5 @@ $nls['encoding']['zh_TW'] = "Big5";
 $nls['file']['zh_TW'] = array();
 array_push($nls['file']['zh_TW'], dirname(__FILE__)."/zh_TW/admin.inc.php");
 
+$nls['htmlarea']['zh_TW'] = "en";
 ?>

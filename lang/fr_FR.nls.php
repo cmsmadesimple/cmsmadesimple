@@ -47,6 +47,6 @@ $nls['file']['fr_FR'] = array();
 array_push($nls['file']['fr_FR'], dirname(__FILE__)."/fr_FR/admin.inc.php");
 
 #Language setting for HTML area
-$nls['htmlarea']['fr_FR'] = "en";
+$nls['htmlarea']['fr_FR'] = "fr";
 
 ?>
