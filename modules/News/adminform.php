@@ -93,12 +93,12 @@ else if ($moduleaction == "delete")
 	}
 	if ($start_date !== "" && $end_date !== "" && $validinfo)
 	{
-		if ($db->DBTimeStamp($start_date))
+		if ($db->DBTimeStamp($start_date) === FALSE)
 		{
 			$error .= "<li>Start date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
 			$validinfo = false;
 		}
-		if ($db->DBTimeStamp($end_date))
+		if ($db->DBTimeStamp($end_date) === FALSE)
 		{
 			$error .= "<li>End date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
 			$validinfo = false;
