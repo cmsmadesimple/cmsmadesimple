@@ -138,7 +138,7 @@ echo '<script language="JavaScript" type="text/javascript">'.
 		</TD>
 	</TR>
 	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true"><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_cms_default_lang ?>">
+		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true"><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>">
 		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>

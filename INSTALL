@@ -27,8 +27,8 @@ OR
         - pear install HTML_BBCodeParser
 
 5.  Fix the permissions on the cache and template compilation directories so the web server has access to them.
-        - chmod 777 smarty/cms/templates_c
-	- chmod 777 smarty/cms/cache
+        - chmod 777 tmp/templates_c
+	- chmod 777 tmp/cache
 	- chmod 777 uploads
 	- chmod 777 uploads/images
 

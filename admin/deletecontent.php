@@ -22,67 +22,42 @@ require_once("../include.php");
 
 check_login();
 
-$page_id = -1;
-if (isset($_GET["page_id"])) {
+$content_id = -1;
+if (isset($_GET["content_id"])) {
 
-	$page_id = $_GET["page_id"];
+	$content_id = $_GET["content_id"];
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Content');
 
-	if ($access)  {
+	if ($access)
+	{
+		$contentobj = ContentManager::LoadContentFromId($content_id);
 
-		$order = 1;
-		$parent_id = 1;
-		$title = "";
-
-        $query = "SELECT default_page FROM ".cms_db_prefix()."pages WHERE page_id = $page_id";
-        $result = $db->Execute($query);
-        $row = $result->FetchRow();
-        if (isset($row["default_page"]) && $row["default_page"] == 1) {
-			redirect("listcontent.php?message=".lang('errordefaultpage'));
-			exit;
-        }
-
-		# if there are subsection, we cannot delete
-		$dodelete = true;
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE parent_id = $page_id";
-		$result = $db->Execute($query);
-		$row = $result->FetchRow();
-		if (isset($row["count"]) && $row["count"] > 0) {
-			$dodelete = false;
-		}
-		
-		if ($dodelete) {
-			#Grab necessary info for fixing the item_order
-			$query = "SELECT page_title, item_order, parent_id FROM ".cms_db_prefix()."pages WHERE page_id = $page_id";
-			$result = $db->Execute($query);
-			$row = $result->FetchRow();
-			if (isset($row["item_order"])) {
-				$order = $row["item_order"];	
+		if ($contentobj)
+		{
+			$title = $contentobj->Name();
+	
+			#Check for children
+			if ($contentobj->HasChildren())
+			{
+				redirect("listcontent.php?message=".lang('errorchildcontent'));
 			}
-			if (isset($row["parent_id"])) {
-				$parent_id = $row["parent_id"];	
+	
+			#Check for default
+			if ($contentobj->DefaultContent())
+			{
+				redirect("listcontent.php?message=".lang('errordefaultpage'));
 			}
-			if (isset($row["page_title"])) {
-				$title = $row["page_title"];	
-			}
-			#Remove the page
-			$query = "DELETE FROM ".cms_db_prefix()."pages where page_id = $page_id";
-			$result = $db->Execute($query);
-			$query = "DELETE FROM ".cms_db_prefix()."additional_users where page_id = $page_id";
-			$result = $db->Execute($query);
-			#Fix the item_order if necessary
-			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE parent_id = $parent_id AND item_order > $order";
-			$result = $db->Execute($query);
-			audit($page_id, $title, 'Deleted Content');
+			
+			$title = $contentobj->Name();
+			$contentobj->Delete();
+			ContentManager::SetAllHierarchyPositions();
+			audit($content_id, $title, 'Deleted Content');
 		}
 	}
 }
-if ($dodelete) {
-	redirect("listcontent.php");
-} else {
-	redirect("listcontent.php?message=".lang('errrochildcontent'));
-}
+
+redirect("listcontent.php");
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -54,7 +54,7 @@ if (isset($_POST["page"])) {
 } ## if
 
 $DONT_LOAD_DB = true;
-if ($currentpage > 1) { require_once("include.php"); }
+if ($currentpage > 1) { require_once(dirname(dirname(__FILE__))."/include.php"); }
 
 ?>
 
@@ -68,7 +68,7 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <DIV CLASS="body">
 
-<IMG SRC="images/cms/cmsbanner.gif" WIDTH="449" HEIGHT="114" ALT="CMS Banner Logo" />
+<IMG SRC="../images/cms/cmsbanner.gif" WIDTH="449" HEIGHT="114" ALT="CMS Banner Logo" />
 
 <DIV CLASS="headerish">
 
@@ -81,10 +81,10 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 echo "<h3>Thanks for installing CMS: CMS Made Simple.</h3>\n";
 echo "<table class=\"countdown\" cellspacing=\"2\" cellpadding=\"2\"><tr>";
-echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=1?"1":"1off").".gif\" ALT=\"Step 1\"></td>";
-echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=2?"2":"2off").".gif\" ALT=\"Step 2\"></td>";
-echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=3?"3":"3off").".gif\" ALT=\"Step 3\"></td>";
-echo "<td><IMG SRC=\"images/cms/install/".($currentpage>=4?"4":"4off").".gif\" ALT=\"Step 4\"></td>";
+echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=1?"1":"1off").".gif\" ALT=\"Step 1\"></td>";
+echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=2?"2":"2off").".gif\" ALT=\"Step 2\"></td>";
+echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=3?"3":"3off").".gif\" ALT=\"Step 3\"></td>";
+echo "<td><IMG SRC=\"../images/cms/install/".($currentpage>=4?"4":"4off").".gif\" ALT=\"Step 4\"></td>";
 echo "</tr></table>\n";
 echo "<p><hr width=80%></p>\n";
 
@@ -121,7 +121,7 @@ function showPageOne() {
     ## check file perms
 	$continueon = true;
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array('smarty/cms/cache', 'smarty/cms/templates_c', 'uploads', 'config.php');
+    $files = array(dirname(dirname(__FILE__)).'/tmp/cache', dirname(dirname(__FILE__)).'/tmp/templates_c', dirname(dirname(__FILE__)).'/uploads', dirname(dirname(__FILE__)).'/config.php');
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
@@ -286,8 +286,8 @@ function showPageThree($sqlloaded = 0) {
 
     } ## if
 
-    $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
-    $docpath = substr($_SERVER['SCRIPT_FILENAME'],0,strlen($_SERVER['SCRIPT_FILENAME'])-12);
+    $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-20);
+    $docpath = dirname(dirname(__FILE__)); 
 
 	?>
 
@@ -343,7 +343,7 @@ function showPageFour() {
     } ## if
 	*/
 
-	require_once("lib/config.functions.php");
+	require_once(dirname(dirname(__FILE__))."/lib/config.functions.php");
 
 	$newconfig = cms_config_load();;
 
@@ -375,7 +375,7 @@ function showPageFour() {
 	$newconfig["default_encoding"] = "";
 	$newconfig["disable_htmlarea_translation"] = false;
 
-    $configfile = dirname(__FILE__)."/config.php";
+    $configfile = dirname(dirname(__FILE__))."/config.php";
     ## build the content for config file
 
 	/*

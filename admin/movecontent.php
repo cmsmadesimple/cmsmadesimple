@@ -23,48 +23,52 @@ require_once("../include.php");
 check_login();
 
 $page_id = -1;
-if (isset($_GET["page_id"])) {
+$page = 1;
+if (isset($_GET["content_id"])) {
 
-	$page_id = $_GET["page_id"];
+	$content_id = $_GET["content_id"];
 	$parent_id = $_GET["parent_id"];
 	$direction = $_GET["direction"];
 	$page = $_GET['page'];
 	$userid = get_userid();
 	$access = check_permission($userid, 'Modify Any Content');
 
-	if ($access)  {
-
+	if ($access)
+	{
 		$order = 1;
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".cms_db_prefix()."pages WHERE page_id = $page_id";
+		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = $content_id";
 		$result = $db->Execute($query);
 		$row = $result->FetchRow();
-		if (isset($row["item_order"])) {
+		if (isset($row["item_order"]))
+		{
 			$order = $row["item_order"];	
 		}
 
-		if ($direction == "down") {
-			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
+		if ($direction == "down")
+		{
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
 				" AND parent_id = $parent_id";
 			#echo $query;
 			$db->Execute($query);
-			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order + 1 WHERE page_id = " . $page_id .
-				" AND parent_id = $parent_id";
-			#echo $query;
-			$db->Execute($query);
-		}
-		else if ($direction == "up") {
-			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
-				" AND parent_id = $parent_id";
-			#echo $query;
-			$db->Execute($query);
-			$query = "UPDATE ".cms_db_prefix()."pages SET item_order = item_order - 1 WHERE page_id = " . $page_id .
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order + 1 WHERE content_id = " . $content_id .
 				" AND parent_id = $parent_id";
 			#echo $query;
 			$db->Execute($query);
 		}
-		set_all_pages_hierarchy_position();
+		else if ($direction == "up")
+		{
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
+				" AND parent_id = $parent_id";
+			#echo $query;
+			$db->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE content_id = " . $content_id .
+				" AND parent_id = $parent_id";
+			#echo $query;
+			$db->Execute($query);
+		}
+		ContentManager::SetAllHierarchyPositions();
 	}
 }
 

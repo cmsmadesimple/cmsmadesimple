@@ -21,10 +21,12 @@ require_once(dirname(__FILE__)."/include.php");
 $templateid = "";
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 
-#header("Content-Language: " . $current_language);
-#header("Content-Type: text/css; charset=" . get_encoding());
+$result = get_stylesheet($templateid);
 
-echo get_stylesheet($templateid);
+#header("Content-Language: " . $current_language);
+header("Content-Type: text/css; charset=" . $result['encoding']);
+
+echo $result['stylesheet'];
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -22,36 +22,8 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	# getting menu parameters
 	$showadmin = isset($params["showadmin"]) ? $params["showadmin"] : 1 ;
-	
-	# getting content hierarchy parameters
-	$newparams = array();
-	foreach($params as $key => $val) $newparams[$key] = $val;
-	$newparams["show"] = "menu";
 
-	if (isset($newparams["start_element"]))
-	{
-		$tmp	= $newparams["start_element"];
-		$tmptab	= explode(".",$tmp);
-		$parent	= 0;
-
-		foreach($tmptab as $key)
-		{
-			if ("" != $key)
-			{
-				$query	= "SELECT page_id FROM ".cms_db_prefix()."pages WHERE item_order = '$key' AND parent_id = '$parent'";
-				$result = $db->Execute($query);
-				if ($result && $result->RowCount() > 0)
-				{
-					$line	= $result->FetchRow();
-					$parent	= $line["page_id"];
-				}
-			}
-		}
-		$newparams["start_element"] = $parent;
-	}
-	
-	# getting content
-	$content = db_get_menu_items($newparams);
+	$allcontent = ContentManager::GetAllContent();
 
 	# defining variables
 	$menu = "";
@@ -59,16 +31,53 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$count = 0;
 	$in_hr = 0;
 
-	foreach ($content as $one) {
+	foreach ($allcontent as $onecontent)
+	{
+		#Handy little trick to figure out how deep in the tree we are
+		#Remember, content comes to use in order of how it should be displayed in the tree already
+		$depth = count(split('\.', $onecontent->Hierarchy()));
 
-		if ($one->page_type == "sectionheader")
+		#If hierarchy starts with the start_element (if it's set), then continue on
+		if (isset($params['start_element']))
+		{
+			if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
+			{
+				continue;
+			}
+		}
+
+		#Now check to make sure we're not too many levels deep if number_of_levels is set
+		if (isset($params['number_of_levels']))
+		{
+			$number_of_levels = $params['number_of_levels'] - 1;
+			$base_level = 1;
+			
+			#Is start_element set?  If so, reset the base_level to it's level
+			if (isset($params['start_element']))
+			{
+				$base_level = count(split('\.', $params['start_element']));
+			}
+
+			#If this element's level is more than base_level + number_of_levels, then scratch it
+			if ($base_level + $number_of_levels < $depth)
+			{
+				continue;
+			}
+		}
+
+		if (!$onecontent->Active() || !$onecontent->ShowInMenu())
+		{
+			continue;
+		}
+
+		if ($onecontent->Type() == 'sectionheader')
 		{
 			if ($in_hr == 1)
 			{
 				$menu .= "</ul>\n";
 				$in_hr = 0;
 			}
-			$menu .= "<div class=\"sectionheader\">".$one->menu_text."</div>\n";
+			$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
 			if ($count > 0 && $in_hr == 0)
 			{
 				$menu .= "<ul>\n";
@@ -77,29 +86,30 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		}
 		else
 		{
-			if ($one->level < $last_level) {
-				for ($i = $one->level; $i < $last_level; $i++)	$menu .= "</ul>\n";
+			if ($depth < $last_level) {
+				for ($i = $depth; $i < $last_level; $i++) $menu .= "</ul>\n";
 			}
-			if ($one->level > $last_level) {
-				for ($i = $one->level; $i > $last_level; $i--) $menu .= "<ul>\n";
+			if ($depth > $last_level) {
+				for ($i = $depth; $i > $last_level; $i--) $menu .= "<ul>\n";
 			}
-			if ($one->page_type == "separator")
+			if ($onecontent->Type() == 'separator')
 			{
-				$menu .= "<hr class=\"separator\"/>\n";
+				$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\"/></li>\n";
 			}
 			else
 			{
-				$menu .= "<li><a href=\"".$one->url."\">".$one->menu_text."</a></li>\n";
+				$menu .= "<li><a href=\"".$onecontent->GetURL()."\">".$onecontent->MenuText()."</a></li>\n";
 			}
 			$in_hr = 1;
-			$last_level = $one->level;
+			$last_level = $depth;
 		}
 		$count++;
 	}
 
 	for ($i = 0; $i < $last_level; $i++) $menu .= "</ul>";
 
-	if ($showadmin == 1) {
+	if ($showadmin == 1)
+	{
 		$menu .= "<ul><li><a href='admin/'>Admin</a></li></ul>\n";
 	}
 

@@ -21,8 +21,9 @@
  *
  * @package CMS
  */
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
-require_once(dirname(dirname(__FILE__)) . "/lib/classes/class.htmlblob.inc.php");
+require_once(dirname(__FILE__) . '/smarty/Smarty.class.php');
+require_once(dirname(__FILE__) . '/classes/class.htmlblob.inc.php');
+require_once(dirname(__FILE__) . '/classes/class.template.inc.php');
 $sorted_sections = array();
 $sorted_content = array();
 
@@ -40,10 +41,10 @@ class Smarty_CMS extends Smarty {
 	{
 		$this->Smarty();
 
-		$this->template_dir = $config["root_path"].'/smarty/cms/templates/';
-		$this->compile_dir = $config["root_path"].'/smarty/cms/templates_c/';
-		$this->config_dir = $config["root_path"].'/smarty/cms/configs/';
-		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
+		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		$this->compile_dir = $config["root_path"].'/tmp/templates_c/';
+		$this->config_dir = $config["root_path"].'/tmp/configs/';
+		$this->cache_dir = $config["root_path"].'/tmp/cache/';
 		$this->plugins_dir = array($config["root_path"].'/smarty/plugins/',$config["root_path"].'/plugins/');
 
 		$this->caching = true;
@@ -92,89 +93,110 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
-			{ 
-				$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
-			} 
-			else 
-			{ 
-				$query = "SELECT p.page_id, p.page_content, p.page_title, p.page_type, p.head_tags, t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON p.template_id = t.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1"; 
-			} 
-			$result = $db->Execute($query);
+			#Find valid content by id or alias
+			$contentobj = ContentManager::LoadContentFromAlias($tpl_name, true);
+			$templateobj = FALSE;
 
-			if (!$result || $result->RowCount() < 1)
+			#If the content object is false, then let's see if we should grab a template for a custom 404 error
+			#If not, then let's see if there is a template for this content
+			if ($contentobj === FALSE)
 			{
 				if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
 				{
+					#We don't cache error pages
 					$this->caching = false;
 					$this->force_compile = true;
-					$query = "SELECT t.template_id, t.stylesheet, t.template_content FROM ".cms_db_prefix()."templates t WHERE t.template_id = ".get_site_preference('custom404template');
-					$result = $db->Execute($query);
+					$templateobj = TemplateOperations::LoadTemplateById(get_site_preference('custom404template'));
+				}
+			}
+			else
+			{
+				#Grab template id and make sure it's actually "somewhat" valid
+				$template_id = $contentobj->TemplateId();
+				if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
+				{
+					#Ok, it's valid, let's load the bugger
+					$templateobj = TemplateOperations::LoadTemplateById($template_id);
 				}
 			}
 
-			if ($result && $result->RowCount() > 0)
+			#If this fails, then it basically is a standard 404 error or a custom with no template
+			if (!($contentobj === FALSE && $templateobj === FALSE))
 			{
-				$line = $result->FetchRow();
+				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
 
-				#This way the id is right, even if an alias is given
-				$gCms->variables['page'] = $line['page_id'];
-				$gCms->variables['page_name'] = $tpl_name;
-
-				if (isset($line['stylesheet']))
+				/*
+				if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
 				{
 					$stylesheet .= "<style type=\"text/css\">\n";
-					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
+					$stylesheet .= "{literal}".$templateobj->stylesheet."{/literal}";
 					$stylesheet .= "</style>\n";
 				}
 
-				# the new css stuff
-				$tempstylesheet = "";
-
+				#Handle "advanced" CSS Management
 				$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
 					WHERE	css_id		= assoc_css_id
 					AND		assoc_type	= 'template'
-					AND		assoc_to_id = '".$line[template_id]."'";
+					AND		assoc_to_id = '".$contentobj->TemplateId()."'";
 				$cssresult = $db->Execute($cssquery);
 
-				$stylesheet .= "<style type=\"text/css\">\n";
-				while ($cssline = $cssresult->FetchRow())
+				if ($cssresult && $cssresult->RowCount() > 0)
 				{
-					$tempstylesheet .= "\n".$cssline['css_text']."\n";
+					$tempstylesheet = "";
+					$stylesheet .= "<style type=\"text/css\">\n";
+					while ($cssline = $cssresult->FetchRow())
+					{
+						$tempstylesheet .= "\n".$cssline['css_text']."\n";
+					}
+					$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
+					$stylesheet .= "</style>\n";
 				}
-				$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
-				$stylesheet .= "</style>\n";
-				
-				$tpl_source = $line['template_content'];
-				if (isset($_GET["print"])) #Instead, we'll just make a simple template to use
+				*/
+
+				#Time to fill our template content
+				#If it's in print mode, then just create a simple stupid template
+				if (isset($_GET["print"]))
 				{
-					$tpl_source = '<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0 Transitional//EN\"><html><head>{stylesheet}{literal}<style type=\"text/css\" media=\"print\">#back{display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image; none;"><form action="index.php?page='.$gCms->variables['page_name'].'" method="post"><input type="submit" value="Go Back"></form>{content}</body></html>';
+					$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}</body></html>';
 				}
-				$content = $line['page_content'];
-				$title = $line['page_title'];
-				$head_tags = $line['head_tags'];
-				$header_script = $line['page_header'];
+				else
+				{
+					$tpl_source = $templateobj->content;
+				}
+
+				#Fill some variables with various information
+				$content = $contentobj->Show();
+				$title = $contentobj->Name();
+				$head_tags = $contentobj->mProperties->GetValue('head_tags');
+				$header_script = $contentobj->mProperties->GetValue('page_header');
+
+				#Replace stylesheet and title tags
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 
+				#Pop the head tags in if they exist
 				if (isset($head_tags) && $head_tags != "")
 				{
 					$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
 				}
 
-				#So no one can do anything nasty
+				#So no one can do anything nasty, take out the php smarty tags.  Use a user
+				#defined plugin instead.
 				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 				{
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
-				
-				if ($line["page_type"] == "content")
+
+				#Check to see if it's a content type...  this should really be part of content
+				#manager, but we're talking baby steps here
+				if ($contentobj->Type() == 'content')
 				{
+					#Do html_blobs
+					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
+
 					#If it's regular content, do this...
 					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
-					#Do html_blobs
-					$tpl_source = preg_replace_callback("|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|", "html_blob_regex_callback", $tpl_source);
 					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
 					{
 						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
@@ -198,6 +220,7 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
 						$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
 					}
+
 					if ($header_script && $header_script != '')
 					{
 						$tpl_source = $header_script.$tpl_source;
@@ -235,38 +258,42 @@ class Smarty_CMS extends Smarty {
 		{
 			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
 			{ 
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position, t.encoding FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE (p.page_id = ".$tpl_name." OR p.page_alias=".$db->qstr($tpl_name).") AND p.active = 1";
+				$query = "SELECT c.content_id, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE (c.content_id = ".$tpl_name." OR c.content_alias=".$db->qstr($tpl_name).") AND c.active = 1";
 			}
 			else
 			{
-				$query = "SELECT p.page_id, t.modified_date as template_date, p.modified_date as page_date, p.page_type, p.hierarchy_position, t.encoding FROM ".cms_db_prefix()."pages p INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = p.template_id WHERE p.page_alias=".$db->qstr($tpl_name)." AND p.active = 1";
+				$query = "SELECT c.content_id, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE c.content_alias=".$db->qstr($tpl_name)." AND c.active = 1";
 			}
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount())
+			if ($result && $result->RowCount() > 0)
 			{
 				$line = $result->FetchRow();
 
 				#This way the id is right, even if an alias is given
-				$gCms->variables['page'] = $line['page_id'];
+				$gCms->variables['content_id'] = $line['content_id'];
+				$gCms->variables['page'] = $line['content_id'];
+				$gCms->variables['page_id'] = $line['content_id'];
+
 				$gCms->variables['page_name'] = $tpl_name;
-				$gCms->variables['position'] = $line['hierarchy_position'];
+				$gCms->variables['position'] = $line['hierarchy'];
 
-				$page_date = $db->UnixTimeStamp($line["page_date"]);
-				$template_date = $db->UnixTimeStamp($line["template_date"]);
+				$content_date = $db->UnixTimeStamp($line['content_date']);
+				$template_date = $db->UnixTimeStamp($line['template_date']);
 
-				$smarty_obj->assign('modified_date',($page_date<$template_date?$template_date:$page_date));
+				$smarty_obj->assign('modified_date',($content_date<$template_date?$template_date:$content_date));
 
 				#We only want to cache "static" content
-				if ($line["page_type"] == "content")
+				if ($line['type'] == 'content')
 				{
 					header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
-					$tpl_timestamp = ($page_date<$template_date?$template_date:$page_date);
+					$tpl_timestamp = ($content_date<$template_date?$template_date:$content_date);
 					return true;
 				}
 				else
 				{
 					$tpl_timestamp = time();
+					echo "2";
 					return true;
 				}
 			}
@@ -274,6 +301,7 @@ class Smarty_CMS extends Smarty {
 			{
 				$smarty_obj->assign('modified_date',time());
 				$tpl_timestamp = time();
+				echo "3";
 				return true;
 			}
 		}

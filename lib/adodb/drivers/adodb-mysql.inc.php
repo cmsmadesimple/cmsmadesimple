@@ -456,10 +456,13 @@ class ADODB_mysql extends ADOConnection {
 	// returns queryID or false
 	function _query($sql,$inputarr)
 	{
-	//global $ADODB_COUNTRECS;
-		//if($ADODB_COUNTRECS) 
+		global $gCms;
+		global $sql_queries;
+		if ($gCms->config["debug"] == true)
+		{
+			$sql_queries .= "<p>$sql</p>\n";
+		}
 		return mysql_query($sql,$this->_connectionID);
-		//else return @mysql_unbuffered_query($sql,$this->_connectionID); // requires PHP >= 4.0.6
 	}
 
 	/*	Returns: the last error message from previous database operation	*/	

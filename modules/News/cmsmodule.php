@@ -21,12 +21,14 @@ $module_name = "News";
 
 //Load functions
 require_once(dirname(__FILE__)."/modulefunctions.php");
+require_once(dirname(__FILE__)."/contentfunctions.php");
 
 //Register Module
 cms_mapi_register_module($module_name, "Robert Campbell <rob@techcom.dyndns.org", "1.5");
 
 //Register module to work as a content type
 cms_mapi_register_content_module($module_name);
+cms_mapi_register_content_module_edit_function($module_name, 'news_module_content_edit');
 
 //Register module to work as a plugin (cms_module)
 cms_mapi_register_plugin_module($module_name);

@@ -257,6 +257,31 @@ class TemplateOperations
 
 		return $result;
 	}
+	
+	function TemplateDropdown($id = 'template_id', $selected_id = -1)
+	{
+		$result = "";
+
+		$alltemplates = TemplateOperations::LoadTemplates();
+		
+		if (count($alltemplates) > 0)
+		{
+			$result .= '<select name="'.$id.'">';
+			$result .= '<option value="">Select Template</option>';
+			foreach ($alltemplates as $onetemplate)
+			{
+				$result .= '<option value="'.$onetemplate->id.'"';
+				if ($onetemplate->id == $selected_id)
+				{
+				    $result .= ' selected="true"';
+				}
+				$result .= '>'.$onetemplate->name.'</option>';
+			}
+			$result .= '</select>';
+		}
+		
+		return $result;
+	}
 }
 
 # vim:ts=4 sw=4 noet

@@ -334,43 +334,79 @@ function set_preference($userid, $prefname, $value) {
 }
 
 /**
- * Returns the stylesheet for the given templateid.
+ * Returns the stylesheet for the given templateid.  Returns a hash with encoding and stylesheet entries.
  *
  * @since 0.1
  */
-function get_stylesheet($templateid) {
+function get_stylesheet($template_id) {
 
+	$result = array();
 	$css = "";
 
 	global $gCms;
 	$db = $gCms->db;
 
-	$query = "SELECT stylesheet, encoding FROM ".cms_db_prefix()."templates WHERE template_id = ".$templateid;
-	$result = $db->Execute($query);
+	#$query = "SELECT stylesheet, encoding FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
+	#$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0) {
-		$line = $result->FetchRow();
-		$css = $line['stylesheet'];
-		header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+	#if ($result && $result->RowCount() > 0) {
+	#	$line = $result->FetchRow();
+	#	$css = $line['stylesheet'];
+	#	header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+	#}
+
+	$templateobj = FALSE;
+
+	#Grab template id and make sure it's actually "somewhat" valid
+	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
+	{
+		#Ok, it's valid, let's load the bugger
+		$templateobj = TemplateOperations::LoadTemplateById($template_id);
 	}
 
-	# add linked CSS if any
-	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-		WHERE	css_id		= assoc_css_id
-		AND		assoc_type	= 'template'
-		AND		assoc_to_id = '$templateid'";
-	$cssresult = $db->Execute($cssquery);
-	if ($cssresult && $cssresult->RowCount() > 0)
+	#If it's valid after loading, then start the process...
+	if ($templateobj !== FALSE)
 	{
-		while ($cssline = $cssresult->FetchRow())
+		#Grab the encoding
+		if ($templateobj->encoding !== FALSE && $templateobj->encoding != '')
 		{
-			$css .= "\n".$cssline['css_text']."\n";
+			$result['encoding'] = $templateobj->encoding;
+		}
+		else
+		{
+			$result['encoding'] = get_encoding();
+		}
+
+		#Load in the "standard" template CSS
+		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
+		{
+			$css .= $templateobj->stylesheet;
+		}
+
+		#Handle "advanced" CSS Management
+		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+			WHERE	css_id		= assoc_css_id
+			AND		assoc_type	= 'template'
+			AND		assoc_to_id = '".$template_id."'";
+		$cssresult = $db->Execute($cssquery);
+
+		if ($cssresult && $cssresult->RowCount() > 0)
+		{
+			while ($cssline = $cssresult->FetchRow())
+			{
+				$css .= "\n".$cssline['css_text']."\n";
+			}
 		}
 	}
+	else
+	{
+		$result['encoding'] = get_encoding();
+	}
 
-	$css = preg_replace("/[\r\n]/", "", $css);
+	#$css = preg_replace("/[\r\n]/", "", $css); //hack for tinymce
+	$result['stylesheet'] = $css;
 
-	return $css;
+	return $result;
 }
 
 /**

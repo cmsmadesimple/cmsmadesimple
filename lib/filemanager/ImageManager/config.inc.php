@@ -9,7 +9,7 @@
  * File basicly functions as a stub to facilitate future upgrading
  */
 
-include_once("../../config.php");
+include_once("../../../config.php");
 
 
 /* 

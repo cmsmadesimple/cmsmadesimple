@@ -19,12 +19,11 @@
 $CMS_ADMIN_PAGE=1;
 
 // in filetypes.inc.php filetypes are defined 
-require_once("../filemanager/filetypes.inc.php");
-require_once("../lib/file.functions.php");
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
+require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
+require_once(dirname(dirname(__FILE__))."/include.php");
 
 $action_done='';
-
 
 function deldir($dir)
 {
@@ -197,7 +196,7 @@ include_once("header.php");
 		//Create a new Imanager Manager, needs the directory where the manager is
 		//and which language translation to use.
 
-		var manager = new ImageManager('../filemanager/ImageManager','en');
+		var manager = new ImageManager('../lib/filemanager/ImageManager','en');
 			
 		var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
 		var base_url = "<?php echo $url; ?>";	
@@ -242,7 +241,7 @@ if ($errors != "")
 //echo '<table cellspacing="0" class="admintable">';
 //echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
 ?>
-<IFRAME SRC="../filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
+<IFRAME SRC="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
 
 <?php
 

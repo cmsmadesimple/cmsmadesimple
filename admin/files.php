@@ -19,11 +19,9 @@
 $CMS_ADMIN_PAGE=1;
 
 // in filetypes.inc.php filetypes are defined 
-require_once("../filemanager/filetypes.inc.php");
-require_once("../lib/file.functions.php");
-require_once("../include.php");
-
-
+require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
+require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
+require_once(dirname(dirname(__FILE__))."/include.php");
 
 function deldir($dir)
 {
@@ -50,8 +48,6 @@ function deldir($dir)
 	return $success;  
 } 
 
-
-
 check_login();
 
 $errors = "";
@@ -74,10 +70,6 @@ if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 {
 	$dir .= $reldir;
 }
-
- 
-
-
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Files');

@@ -45,6 +45,11 @@ function load_modules() {
 					{
 						$cmsmodules[$modulename]['Installed'] = true;
 						$cmsmodules[$modulename]['Active'] = $row['active'];
+						if ($row['active'] == '1')
+						{
+							#Try generating a content class for this module
+							cms_mapi_create_module_content_class($modulename);
+						}
 					}
 				}
 			}
@@ -58,10 +63,12 @@ function load_modules() {
  *
  * @since 0.4
  */
-function cms_mapi_register_module($name, $author, $version, $minimum_version='') {
+function cms_mapi_register_module($name, $author, $version, $minimum_version='')
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (!isset($cmsmodules[$name])) {
+	if (!isset($cmsmodules[$name]))
+	{
 		$cmsmodules[$name] = array();
 		$cmsmodules[$name]['Author'] = $author;
 		$cmsmodules[$name]['Version'] = $version;
@@ -81,11 +88,14 @@ function cms_mapi_register_module($name, $author, $version, $minimum_version='')
  *
  * @since 0.4
  */
-function cms_mapi_register_content_module($name) {
+function cms_mapi_register_content_module($name)
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$name])) {
+	if (isset($cmsmodules[$name]))
+	{
 		$cmsmodules[$name]['content_module'] = true;
+		$cmsmodules[$name]['content_module_created'] = false;
 	}
 }
 
@@ -98,10 +108,12 @@ function cms_mapi_register_content_module($name) {
  *
  * @since 0.4
  */
-function cms_mapi_register_plugin_module($name) {
+function cms_mapi_register_plugin_module($name)
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$name])) {
+	if (isset($cmsmodules[$name]))
+	{
 		$cmsmodules[$name]['plugin_module'] = true;
 	}
 }
@@ -117,10 +129,12 @@ function cms_mapi_register_plugin_module($name) {
  *
  * @since 0.5
  */
-function cms_mapi_register_help_function($name, $function) {
+function cms_mapi_register_help_function($name, $function)
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$name])) {
+	if (isset($cmsmodules[$name]))
+	{
 		$cmsmodules[$name]['help_function'] = $function;
 	}
 }
@@ -135,10 +149,12 @@ function cms_mapi_register_help_function($name, $function) {
  *
  * @since 0.5
  */
-function cms_mapi_register_about_function($name, $function) {
+function cms_mapi_register_about_function($name, $function)
+{
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
-	if (isset($cmsmodules[$name])) {
+	if (isset($cmsmodules[$name]))
+	{
 		$cmsmodules[$name]['about_function'] = $function;
 	}
 }
@@ -597,6 +613,96 @@ function cms_mapi_register_edittemplate_post_function($name, $function)
 }
 
 /**
+ * Registers a function to be called for a content SetProperties()
+ * function.
+ *
+ * Passes no parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_set_properties_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_set_properties'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called for a content SetProperties($params)
+ * function.
+ *
+ * Passes the $params array to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_fill_params_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_fill_params'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called for a content Show()
+ * function.
+ *
+ * Passes no parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_show_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_show'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called for a content Edit()
+ * function.
+ *
+ * Passes no parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_edit_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_edit'] = $function;
+	}
+}
+
+/**
+ * Registers a function to be called for a content GetURL()
+ * function.
+ *
+ * Passes no parameters to the function.
+ *
+ * @since 0.8
+ */
+function cms_mapi_register_content_module_get_url_function($name, $function)
+{
+	global $gCms;
+	$cmsmodules = &$gCms->modules;
+	if (isset($cmsmodules[$name]))
+	{
+		$cmsmodules[$name]['content_module_get_url'] = $function;
+	}
+}
+
+/**
  * Enables the WYSIWYG for this module on all textareas
  *
  * @since 0.5
@@ -674,12 +780,11 @@ function cms_mapi_remove_permission($cms, $permission_name) {
  *
  * @since 0.4
  */
-function cms_mapi_audit($cms, $itemid, $itemname, $action) {
-
+function cms_mapi_audit($cms, $itemid, $itemname, $action)
+{
 	$userid = get_userid();
 	$username = $_SESSION["cms_admin_username"];
 	audit($userid, $username, $itemid, $itemname, $action);
-
 }
 
 /**
@@ -687,13 +792,16 @@ function cms_mapi_audit($cms, $itemid, $itemname, $action) {
  *
  * @since 0.4
  */
-function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn_message="") {
+function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn_message="")
+{
 	$val = "<a href=\"moduleinterface.php?module=$module&amp;return_id=$page_id&amp;id=$id";
-	foreach ($params as $key=>$value) {
+	foreach ($params as $key=>$value)
+	{
 		$val .= "&amp;$id$key=$value";
 	}
 	$val .= "\"";
-	if ($warn_message !== "") {
+	if ($warn_message !== "")
+	{
 		$val .= " onclick=\"return confirm('$warn_message');\"";
 	}
 	$val .= ">$text</a>";
@@ -705,14 +813,16 @@ function cms_mapi_create_user_link($module, $id, $page_id, $params, $text, $warn
  *
  * @since 0.4
  */
-function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message="") {
-
+function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message="")
+{
 	$val = "<a href=\"moduleinterface.php?module=$module";
-	foreach ($params as $key=>$value) {
+	foreach ($params as $key=>$value)
+	{
 		$val .= "&amp;$id$key=$value";
 	}
 	$val .= "\"";
-	if ($warn_message !== "") {
+	if ($warn_message !== "")
+	{
 		$val .= " onclick=\"return confirm('$warn_message');\"";
 	}
 	$val .= ">$text</a>";
@@ -727,11 +837,9 @@ function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message=
  *
  * @since 0.4
  */
-function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post", $form_extra="") {
-
+function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post", $form_extra="")
+{
 	return "<form name=\"".$id."_moduleform\" method=\"$method\" action=\"moduleinterface.php\"" .$form_extra." ><input type=\"hidden\" name=\"module\" value=\"$module\" /><input type=\"hidden\" name=\"return_id\" value=\"$return_id\" /><input type=\"hidden\" name=\"id\" value=\"$id\" />\n";
-
-
 }
 
 /**
@@ -740,10 +848,9 @@ function cms_mapi_create_user_form_start($module, $id, $return_id, $method="post
  *
  * @since 0.4
  */
-function cms_mapi_create_user_form_end() {
-
+function cms_mapi_create_user_form_end()
+{
 	return "</form>\n";
-
 }
 
 /**
@@ -753,11 +860,9 @@ function cms_mapi_create_user_form_end() {
  *
  * @since 0.4
  */
-function cms_mapi_create_admin_form_start($module, $id, $method="post") {
-
+function cms_mapi_create_admin_form_start($module, $id, $method="post")
+{
 	return "<form name=\"".$id."moduleform\" method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
-
-
 }
 
 /**
@@ -766,10 +871,9 @@ function cms_mapi_create_admin_form_start($module, $id, $method="post") {
  *
  * @since 0.4
  */
-function cms_mapi_create_admin_form_end() {
-
+function cms_mapi_create_admin_form_end()
+{
 	return "</form>\n";
-
 }
 
 /**
@@ -777,10 +881,9 @@ function cms_mapi_create_admin_form_end() {
  *
  * @since 0.4
  */
-function cms_mapi_redirect_user_by_pageid($page_id) {
-
+function cms_mapi_redirect_user_by_pageid($page_id)
+{
 	redirect("index.php?page=$page_id");
-
 }
 
 /**
@@ -788,13 +891,54 @@ function cms_mapi_redirect_user_by_pageid($page_id) {
  *
  * @since 0.5
  */
-function cms_mapi_create_content_link_by_page_id($page_id, $link_text) {
+function cms_mapi_create_content_link_by_page_id($page_id, $link_text)
+{
 	global $gCms;
 	$config = &$gCms->config;
 	return "<a href=\"".$config["root_url"]."/index.php?page=$page_id\">$link_text</a>\n";
 }
 
-require_once(dirname(dirname(__FILE__)).'/smarty/Smarty.class.php');
+function cms_mapi_create_module_content_class($key)
+{
+	global $gCms;
+	$allmodules = $gCms->modules;
+
+	if (isset($allmodules[$key]['content_module_created']) && $allmodules[$key]['content_module_created'] == FALSE)
+	{
+		$classtext = '';
+
+		$classtext .= 'class ' . $key . 'Module extends ContentBase { ';
+
+		if (isset($allmodules[$key]['content_module_set_properties']))
+		{
+			$classtext .= 'function SetProperties() { ' . $allmodules[$key]['content_module_set_properties'] . '($this); } ';
+		}
+		if (isset($allmodules[$key]['content_module_fill_params']))
+		{
+			$classtext .= 'function FillParams() { ' . $allmodules[$key]['content_module_fill_params'] . '($this, $params); } ';
+		}
+		if (isset($allmodules[$key]['content_module_show']))
+		{
+			$classtext .= 'function Show() { return ' . $allmodules[$key]['content_module_show'] . '($this); } ';
+		}
+		if (isset($allmodules[$key]['content_module_edit']))
+		{
+			$classtext .= 'function Edit() { return ' . $allmodules[$key]['content_module_edit'] . '($this); } ';
+		}
+		if (isset($allmodules[$key]['content_module_get_url']))
+		{
+			$classtext .= 'function GetURL() { return ' . $allmodules[$key]['content_module_get_url'] . '($this); } ';
+		}
+
+		$classtext .= '}';
+
+		eval($classtext);
+
+		$allmodules[$key]['content_module_created'] = true;
+	}
+}
+
+require_once(dirname(dirname(__FILE__)).'/lib/smarty/Smarty.class.php');
 
 class Smarty_ModuleInterface extends Smarty {
 
@@ -805,10 +949,10 @@ class Smarty_ModuleInterface extends Smarty {
 		global $gCms;
 		$config = &$gCms->config;
 
-		$this->template_dir = $config["root_path"].'/smarty/cms/templates/';
-		$this->compile_dir = $config["root_path"].'/smarty/cms/templates_c/';
-		$this->config_dir = $config["root_path"].'/smarty/cms/configs/';
-		$this->cache_dir = $config["root_path"].'/smarty/cms/cache/';
+		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		$this->compile_dir = $config["root_path"].'/tmp/templates_c/';
+		$this->config_dir = $config["root_path"].'/tmp/configs/';
+		$this->cache_dir = $config["root_path"].'/tmp/cache/';
 		$this->plugins_dir = array($config["root_path"].'/smarty/plugins/',$config["root_path"].'/plugins/');
 
 		$this->compile_check = true;
@@ -872,33 +1016,13 @@ class Smarty_ModuleInterface extends Smarty {
 			{
 				$line = $result->FetchRow();
 
-				$stylesheet = "";
-				if (isset($line[stylesheet])) {
-					$stylesheet .= "<style type=\"text/css\">\n";
-					$stylesheet .= "{literal}".$line["stylesheet"]."{/literal}";
-					$stylesheet .= "</style>\n";
-				}
+				$tpl_source = $line['template_content'];
+				$content = $line['page_content'];
+				$title = $line['page_title'];
+				$template_id = $line['template_id'];
 
-				# the new css stuff
-				$tempstylesheet = "";
+				$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
 
-				$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-					WHERE	css_id		= assoc_css_id
-					AND		assoc_type	= 'template'
-					AND		assoc_to_id = '".$line[template_id]."'";
-				$cssresult = $db->Execute($cssquery);
-
-				$stylesheet .= "<style type=\"text/css\">\n";
-				while ($cssline = $cssresult->FetchRow())
-				{
-					$tempstylesheet .= "\n".$cssline['css_text']."\n";
-				}
-				$stylesheet .= "{literal}".$tempstylesheet."{/literal}";
-				$stylesheet .= "</style>\n";
-
-				$tpl_source = $line[template_content];
-				$content = $line[page_content];
-				$title = $line[page_title];
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 

@@ -99,7 +99,6 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 	}
 }
 
-
 /**
  * Simple template parser
  *
