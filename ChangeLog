@@ -7,6 +7,8 @@ is used as parents for other content
 * Fixed nasty bug where content would have properties deleted if set
 inactive
 * Fixed permission check for setting active flag on content
+* Fixed automated module upgrades by making AllowAutoUpgrade() function
+return TRUE by defualt instead of FALSE (which is correct)
 * Removed a rogue debug message
 * Updated some text in INSTALL and UPGRADE docs
 
