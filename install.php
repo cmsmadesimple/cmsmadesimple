@@ -118,8 +118,9 @@ function showPageOne() {
         echo "<tr class=\"$currow\"><td>Opening for write ($f)</td><td>";
         $file = @fopen ($f, "w");
         if($file != 0) {
-            echo "Success!";
             fclose($file); 
+			unlink($file);
+            echo "Success!";
         } else {
             echo "Failure!";
         } ## if 
