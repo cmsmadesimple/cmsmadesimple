@@ -24,7 +24,7 @@
 <a href="index.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='main')?' id="TopMenuSelected"':'') ?>><?php echo lang('main')?></a>
 <a href="topcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='content')?' id="TopMenuSelected"':'') ?>><?php echo lang('content')?></a>
 <a href="listcontent.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='pages')?' id="TopMenuSelected"':'') ?>><?php echo lang('pages')?></a>
-if ($filePerms)
+<?php if ($filePerms)
    { ?><a href="topfiles.php"<?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='files')?' id="TopMenuSelected"':'') ?>><?php echo lang('files')?></a><?php
    }
 if ($layoutPerms)

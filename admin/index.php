@@ -52,15 +52,13 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <div class="MainMenu">
 
-<?php if ($pagePerms || $htmlPerms) { ?>
 <div class="MainMenuItem">
 <a href="topcontent.php"><?php echo lang('content') ?></a>
 <span class="description"><?php echo lang('contentdescription')." ".lang('subitems') ?>:
-<?php if ($pagePerms) { ?><a href="listcontent.php"><?php echo lang('pages') ?></a><?php if ($htmlPerms)
+<a href="listcontent.php"><?php echo lang('pages') ?></a><?php if ($htmlPerms)
 	      { ?>, <?php }
-} if ($htmlPerms) { ?><a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a><?php } ?>.</span>
+if ($htmlPerms) { ?><a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a><?php } ?>.</span>
 </div>
-<?php } ?>
 
 <?php if ($filePerms) { ?>
 <div class="MainMenuItem">
