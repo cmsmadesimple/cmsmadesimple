@@ -8,6 +8,8 @@ $group_id="";
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
+$group_name="";
+
 if (isset($_POST["cancel"])) {
 	redirect("listgroups.php");
 	return;
@@ -37,6 +39,15 @@ if ($access) {
 		return;
 
 	}
+
+	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
+        $result = $db->query($query);
+
+        if (mysql_num_rows($result) > 0) {
+                $row = mysql_fetch_array($result, MYSQL_ASSOC);
+                $group_name = $row[group_name];                                         }
+
+        mysql_free_result($result);
 }
 
 include_once("header.php");
@@ -47,7 +58,7 @@ if (!$access) {
 else {
 
 ?>
-<h3>Users assigned to group: Name</h3>
+<h3>Users assigned to group: <?=$group_name?></h3>
 
 <form method="post" action="changegroupassign.php">
 <?php
