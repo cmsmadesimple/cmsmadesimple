@@ -890,9 +890,23 @@ class CMSModule extends ModuleOperations
 		return $text;
 	}
 
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname, $htmlid='', $encoding='', $stylesheet='')
+	/**
+	 * Returns the xhtml equivalent of a textarea.  Also takes WYSIWYG preference into consideration if it's called from the admin side.
+	 *
+	 * @param bool Should we try to create a WYSIWYG for this textarea?
+	 * @param string The id given to the module on execution
+	 * @param string The text to display in the textarea's content
+	 * @param string The html name of the textarea
+	 * @param string The CSS class to associate this textarea to
+	 * @param string The html id to give to this textarea
+	 * @param string The encoding to use for the content
+	 * @param string The text of the stylesheet associated to this content.  Only used for certain WYSIWYGs
+	 * @param string The number of characters wide (columns) the resulting textarea should be
+	 * @param string The number of characters high (rows) the resulting textarea should be
+	 */
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname, $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15')
 	{
-		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet);
+		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols);
 	}
 
 	/**

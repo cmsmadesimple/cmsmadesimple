@@ -522,7 +522,7 @@ function & strip_slashes(&$str)
 	return $str;
 }
 
-function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $encoding='', $stylesheet='')
+function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15')
 {
 	global $gCms;
 	$result = '';
@@ -542,7 +542,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 			{
 				$result = '';
 				ob_start();
-				echo $gCms->modules[$key]['object']->WYSIWYGTextarea($name,'80','15',$encoding,$text,$stylesheet);
+				echo $gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
 				$result = ob_get_contents();
 				ob_end_clean();
 			}
@@ -551,8 +551,12 @@ function create_textarea($enablewysiwyg, $text, $name, $classname, $id='', $enco
 
 	if ($result == '')
 	{
-		$result = '<textarea name="'.$name.'" cols="80" rows="12" class="'.$classname.'"';
-		if ($id <> '')
+		$result = '<textarea name="'.$name.'" cols="'.$width.'" rows="'.$height.'"';
+		if ($classname != '')
+		{
+			$result .= ' class="'.$classname.'"';
+		}
+		if ($id != '')
 		{
 			$result .= ' id="'.$id.'"';
 		}
