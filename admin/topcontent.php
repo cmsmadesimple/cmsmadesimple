@@ -32,8 +32,8 @@ include_once("header.php");
 <div class="MainMenu">
 
 <div class="MainMenuItem">
-<a href="listcontent.php">Content</a>
-<span class="description">This is where we add and edit content.</span>
+<a href="listcontent.php">Pages</a>
+<span class="description">This is where we add and edit pages.</span>
 </div>
 
 <div class="MainMenuItem">

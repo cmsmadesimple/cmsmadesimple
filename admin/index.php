@@ -54,7 +54,7 @@ if (file_exists(dirname(dirname(__FILE__)) . '/install'))
 
 <div class="MainMenuItem">
 <a href="topcontent.php">Content</a>
-<span class="description">This is where we add and edit content. Subitems: <a href="listcontent.php">content</a>, <a href="listhtmlblobs.php">html blobs</a>.</span>
+<span class="description">This is where we add and edit content. Subitems: <a href="listcontent.php">pages</a>, <a href="listhtmlblobs.php">html blobs</a>.</span>
 </div>
 
 <div class="MainMenuItem">
