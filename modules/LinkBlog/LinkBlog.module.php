@@ -1116,9 +1116,14 @@ class LinkBlog extends CMSModule
 		$db->Execute($update);
 		
 		if ($this->GetPreference("ping", "0") == "1") {
+			$url = $this->GetPreference("linkblog_url", "");
 			require_once dirname(dirname(dirname(__FILE__))).'/lib/xmlrpc.functions.php';
-			if (XMLRPC_request('rpc.pingomatic.com', '/RPC2', 'weblogUpdates.ping', array($params["linkblog_title"], $this->GetPreference("linkblog_url", "")))) {}
-			if (XMLRPC_request('rpc.weblogs.com', '/RPC2', 'weblogUpdates.ping', array($params["linkblog_title"], $this->GetPreference("linkblog_url", "")))) {}
+			if (XMLRPC_request('rpc.pingomatic.com', '/RPC2', 'weblogUpdates.ping', array($params["linkblog_title"], $url))) {
+				echo "<h4 class=\"good\">Success pinging pingomatic.com</h4>\n";
+			} else {
+				echo "<h4 class=\"bad\">Failed pinging pingomatic.com</h4>\n";
+			}
+			#if (XMLRPC_request('rpc.weblogs.com', '/RPC2', 'weblogUpdates.ping', array($params["linkblog_title"], $this->GetPreference("linkblog_url", "")))) {}
 		} ## if
 
 	} ## linkblog_module_activate_link
@@ -1163,8 +1168,9 @@ class LinkBlog extends CMSModule
 			<td><?php echo $this->CreateInputText($id, "rss_limit", $this->GetPreference("rss_limit", ""), '30', '80');?></td>
 			</tr>
 			<tr>
-			<td>Ping pingomatic.com and weblogs.com for each approved link:</td>
+			<td>Ping pingomatic.com for each approved link:</td>
 			<td><input type="checkbox" value="1" name="<?php echo $id;?>ping" <?php if ($this->GetPreference("ping", "0") == "1") {echo "CHECKED";}?></td>
+			</tr>
 			<tr>
 			<td></td>
 			<td><?php echo $this->CreateInputSubmit($id, 'submit', 'Save Changes');?></td>
