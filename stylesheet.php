@@ -21,14 +21,23 @@
 require_once(dirname(__FILE__)."/include.php");
 
 $templateid = "";
+$stripbackground = false;
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
+if (isset($_GET["stripbackground"])) $stripbackground = true;
 
 $result = get_stylesheet($templateid);
 
 #header("Content-Language: " . $current_language);
 header("Content-Type: text/css; charset=" . $result['encoding']);
 
-echo $result['stylesheet'];
+$css = $result['stylesheet']; 
+
+if ($stripbackground)
+{
+	$css = preg_replace('/(\w*?background.*?\:).*?(;)/', '', $css);
+}
+
+echo $css;
 
 # vim:ts=4 sw=4 noet
 ?>
