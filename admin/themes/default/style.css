@@ -146,6 +146,30 @@ iframe {
 	margin-top: 2px;
 }
 
+#BookmarkCallout {
+	width: 150px;
+	font-size: .9em;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 10px;
+	background-color: #a7e0a7;
+	visibility: hidden;
+	position: absolute;
+	right: 0px;
+	top: 50px;
+}
+
+#BookmarkCallout ul {
+	margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+#BookmarkCallout li {
+	margin: 0;
+	padding: 5px;
+	list-style: none;
+}
 
 /**
  * Footer

@@ -42,6 +42,6 @@ if ($extensionsPerms)
     } ?>
 <a href="../index.php"><?php echo lang('viewsite')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
-<a href="makebookmark.php?title=<?php echo urlencode($pagetitle) ?>">[+]</a>
+<a href="makebookmark.php?title=<?php echo urlencode($pagetitle) ?>" onMouseOver="javascript:toggleBookmarkState()" <?php echo ((isset($CMS_TOP_MENU) && $CMS_TOP_MENU=='bookmarks')?' id="TopMenuSelected"':'') ?>>[+]</a>
 
 </div> <!-- end TopMenu -->

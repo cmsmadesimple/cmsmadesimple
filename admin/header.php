@@ -128,7 +128,21 @@ if (isset($CMS_ADMIN_SUBTITLE))
 <link rel="stylesheet" type="text/css" href="style.php?ie=1" />
 <![endif]-->
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-
+<script type="text/javascript">
+var state=false;
+function toggleBookmarkState()
+	{
+	state = !state;
+	if (state)
+		{
+		document.getElementById("BookmarkCallout").style.visibility = 'visible';
+		}
+	else
+		{
+		document.getElementById("BookmarkCallout").style.visibility = 'hidden';
+		}
+	}
+</script>
 </head>
 
 <body##BODYSUBMITSTUFFGOESHERE##>
@@ -137,12 +151,23 @@ if (isset($CMS_ADMIN_SUBTITLE))
 
 <div id="MainContent">
 
-<!--
-<div class="DashboardCallout">
+<div id="BookmarkCallout">
 
-<p class="DashboardCalloutTitle">Bookmarks</p>
-
-</div> --><!-- end DashboardCallout -->
+<p class="DashboardCalloutTitle"><?php echo lang('bookmarks') ?></p>
+<?php 
+	$marks = BookmarkOperations::LoadBookmarks($userid);
+	if (count($marks) > 0)
+		{
+		echo "<ul>";
+		foreach($marks as $mark)
+			{
+			echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+			}
+		echo "<li><a href=\"listbookmarks.php\">".lang('managebookmarks')."</a></li>\n";
+		echo "</ul>\n";
+		}
+?>
+</div>
 
 <!--
 <div class="DashboardCallout">

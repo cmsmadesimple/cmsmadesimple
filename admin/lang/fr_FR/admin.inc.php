@@ -292,4 +292,8 @@ $lang['admin']['admindescription'] = 'Site Administration functions.'; //needs t
 $lang['admin']['contentdescription'] = 'This is where we add and edit content.'; //needs translation
 $lang['admin']['enablecustom404'] = 'Enable Custom 404 Message'; //needs translation
 $lang['admin']['enablesitedown'] = 'Enable Site Down Message'; //needs translation
+$lang['admin']['bookmarks'] = 'Bookmarks'; //needs translation
+$lang['admin']['managebookmarks'] = 'Manage Bookmarks'; //needs translation
+$lang['admin']['editbookmark'] = 'Edit Bookmark'; //needs translation
+$lang['admin']['addbookmark'] = 'Add Bookmark'; //needs translation
 ?>

@@ -20,7 +20,28 @@
 
 require_once('../include.php');
 
+include_once("header.php");
+
+check_login();
 $link = $_SERVER['HTTP_REFERER'];
-redirect($link);
+
+$newmark = new Bookmark();
+$newmark->user_id = get_userid();
+$newmark->url = $link;
+$newmark->title = $_GET['title'];
+
+$result = $newmark->save();
+
+if ($result)
+	{
+	header('HTTP_REFERER: /admin/index.php');
+	redirect($link);
+	}
+else
+	{
+	include_once("header.php");
+    debug_display($newmark);
+	echo "<h3>". lang('erroraddingbookmark') . "</h3>";
+	}
 
 ?>

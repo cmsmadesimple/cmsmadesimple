@@ -209,7 +209,19 @@ html>body #Footer {
 	margin-top: 2px;
 }
 
-
+#BookmarkCallout {
+	width: 150px;
+	font-size: 10px;
+	padding-top: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 10px;
+	background-color: #d0d0e7;
+	visibility: hidden;
+	position: absolute;
+	right: 0px;
+	top: 14px;
+}
 
 .AdminForm	th, .AdminForm td
 {
