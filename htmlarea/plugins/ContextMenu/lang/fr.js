@@ -11,6 +11,8 @@
 //   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
+// to be translated: row 45, 46, 70, 71
+
 
 ContextMenu.I18N = {
 	// Items that appear in menu.  Please note that an underscore (_)
@@ -40,6 +42,8 @@ ContextMenu.I18N = {
 	"Make link"                                             : "Convertir en lien...",
 	"Remove the"                                            : "Supprimer",
 	"Element"                                               : "Élément...",
+	"Insert paragraph before"                               : "Insert paragraph before",
+	"Insert paragraph after"                                : "Insert paragraph after",	
 
 	// Other labels (tooltips and alert/confirm box messages)
 
@@ -62,5 +66,7 @@ ContextMenu.I18N = {
 	"Insert a new column before the current one"            : "Insérer une nouvelle rangée avant celle-ci",
 	"Insert a new column after the current one"             : "Insérer une nouvelle colonne après celle-ci",
 	"Delete the current column"                             : "Supprimer cette colonne",
-	"Create a link"                                         : "Créer un lien"
+	"Create a link"                                         : "Créer un lien",
+	"Insert a paragraph before the current node"            : "Insert a paragraph before the current node",
+	"Insert a paragraph after the current node"             : "Insert a paragraph after the current node"
 };

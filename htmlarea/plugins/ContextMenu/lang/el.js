@@ -2,6 +2,8 @@
 
 // LANG: "el", ENCODING: UTF-8 | ISO-8859-7
 // Author: Dimitris Glezos, dimitris@glezos.com
+// to be translated: row 36, 37, 61, 62
+
 
 ContextMenu.I18N = {
 	// Items that appear in menu.  Please note that an underscore (_)
@@ -31,7 +33,8 @@ ContextMenu.I18N = {
 	"Make link"                                             : "Δημιουργία συνδέσμου...",
 	"Remove the"                                            : "Αφαίρεση",
 	"Element"                                               : "στοιχείου...",
-
+	"Insert paragraph before"                               : "Insert paragraph before",
+	"Insert paragraph after"                                : "Insert paragraph after",
 	// Other labels (tooltips and alert/confirm box messages)
 
 	"Please confirm that you want to remove this element:"  : "Είστε βέβαιος πως θέλετε να αφαιρέσετε το στοιχείο ",
@@ -53,5 +56,7 @@ ContextMenu.I18N = {
 	"Insert a new column before the current one"            : "Εισαγωγή νέας στήλης πριν την επιλεγμένη",
 	"Insert a new column after the current one"             : "Εισαγωγή νέας στήλης μετά την επιλεγμένη",
 	"Delete the current column"                             : "Διαγραφή επιλεγμένης στήλης",
-	"Create a link"                                         : "Δημιουργία συνδέσμου"
+	"Create a link"                                         : "Δημιουργία συνδέσμου",
+	"Insert a paragraph before the current node"            : "Insert a paragraph before the current node",
+	"Insert a paragraph after the current node"             : "Insert a paragraph after the current node"	
 };

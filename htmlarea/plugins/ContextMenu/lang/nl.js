@@ -32,7 +32,7 @@ ContextMenu.I18N = {
 	"Table Properties"                                      : "_Tabeleigenschappen...",
 	"Insert Column Before"                                  : "Kolom invoegen voor",
 	"Insert Column After"                                   : "Kolom invoegen na",
-	"Delete Column"                                         : "Kolom verwijderen",
+    "Delete Column"                                         : "Kolom verwijderen",
 	"Justify Left"                                          : "Links uitlijnen",
 	"Justify Center"                                        : "Centreren",
 	"Justify Right"                                         : "Rechts uitlijnen",
@@ -40,6 +40,8 @@ ContextMenu.I18N = {
 	"Make link"                                             : "Maak hyperlin_k...",
 	"Remove the"                                            : "Verwijder het",
 	"Element"                                               : "element...",
+	"Insert paragraph before"                               : "Paragraaf invoegen voor",
+	"Insert paragraph after"                                : "Paragraaf invoegen na",
 
 	// Other labels (tooltips and alert/confirm box messages)
 
@@ -62,5 +64,8 @@ ContextMenu.I18N = {
 	"Insert a new column before the current one"            : "Voeg een nieuwe kolom in voor de huidige",
 	"Insert a new column after the current one"             : "Voeg een nieuwe kolom in na de huidige",
 	"Delete the current column"                             : "Verwijder de huidige kolom",
-	"Create a link"                                         : "Maak een hyperlink"
+	"Create a link"                                         : "Maak een hyperlink",
+	"Insert a paragraph before the current node"            : "Voeg een nieuwe paragraaf in voor de huidige",
+	"Insert a paragraph after the current node"             : "Voeg een nieuwe paragraaf in achter de huidige"
+
 };

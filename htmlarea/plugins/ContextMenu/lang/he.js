@@ -11,6 +11,7 @@
 //   2. PLEASE TRY TO USE UTF-8 FOR ENCODING;
 //      (if this is not possible, please include a comment
 //       that states what encoding is necessary.)
+// to be translated: row 44, 45, 69,70
 
 ContextMenu.I18N = {
 	// Items that appear in menu.  Please note that an underscore (_)
@@ -40,6 +41,8 @@ ContextMenu.I18N = {
 	"Make link"                                             : "צור קי_שור...",
 	"Remove the"                                            : "הסר את אלמנט ה-",
 	"Element"                                               : "...",
+	"Insert paragraph before"                               : "Insert paragraph before",
+	"Insert paragraph after"                                : "Insert paragraph after",	
 
 	// Other labels (tooltips and alert/confirm box messages)
 
@@ -62,5 +65,7 @@ ContextMenu.I18N = {
 	"Insert a new column before the current one"            : "הוספת טור חדש לפני הנוכחי",
 	"Insert a new column after the current one"             : "הוספת טור חדש אחרי הנוכחי",
 	"Delete the current column"                             : "מחיקת את הטור הנוכחי",
-	"Create a link"                                         : "יצירת קישור"
+	"Create a link"                                         : "יצירת קישור",
+	"Insert a paragraph before the current node"            : "Insert a paragraph before the current node",
+	"Insert a paragraph after the current node"             : "Insert a paragraph after the current node"	
 };

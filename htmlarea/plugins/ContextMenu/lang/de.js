@@ -3,7 +3,7 @@
 // LANG: "de", ENCODING: UTF-8 | ISO-8859-1
 
 // translated: <]{MJ}[>  i@student.ethz.ch
-
+// to be translated: row 36, 37, 61, 62
 
 ContextMenu.I18N = {
 	// Items that appear in menu.  Please note that an underscore (_)
@@ -33,7 +33,9 @@ ContextMenu.I18N = {
 	"Make link"                                             : "Lin_k erstellen...",
 	"Remove the"                                            : "",
 	"Element"                                               : "Element entfernen...",
-
+	"Insert paragraph before"                               : "Insert paragraph before",
+	"Insert paragraph after"                                : "Insert paragraph after",
+	
 	// Other labels (tooltips and alert/confirm box messages)
 
 	"Please confirm that you want to remove this element:"  : "Wollen sie dieses Element wirklich entfernen ?",
@@ -55,5 +57,7 @@ ContextMenu.I18N = {
 	"Insert a new column before the current one"            : "Spalte einfügen vor der aktuellen Position",
 	"Insert a new column after the current one"             : "Spalte einfügen nach der aktuellen Position",
 	"Delete the current column"                             : "Spalte löschen",
-	"Create a link"                                         : "Link erstellen"
+	"Create a link"                                         : "Link erstellen",
+	"Insert a paragraph before the current node"            : "Insert a paragraph before the current node",
+	"Insert a paragraph after the current node"             : "Insert a paragraph after the current node"
 };
