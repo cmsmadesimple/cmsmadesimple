@@ -54,7 +54,7 @@ if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$co
 {
 	$page = $_GET[$config["query_var"]];
 }
-else if (isset($_SERVER["PATH_INFO"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"]))
+else if (isset($_SERVER["PATH_INFO"]) && (isset($_SERVER["SCRIPT_URL"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"])))
 {
 	$page = $_SERVER["PATH_INFO"];
 }
