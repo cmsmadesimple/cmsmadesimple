@@ -210,6 +210,7 @@ FORM .button {
 	PADDING-RIGHT: 11px; 
 	BORDER-TOP: white 4px outset; 
 	PADDING-TOP: 2px; 
+	PADDING-BOTTOM: 2px; 
 
 	PADDING-LEFT: 10px; 
 	BORDER-LEFT: white 4px outset;  
@@ -227,16 +228,26 @@ FORM .button {
 }
 FORM .buttonHover {
 	FONT-WEIGHT: normal; FONT-SIZE: 0.9em; 
-	FONT-FAMILY: Arial, sans-serif; 
-	MARGIN: 1px; 
+	FONT-FAMILY: Arial, sans-serif;
 	BORDER-RIGHT: white 4px inset; 
-	PADDING-RIGHT: 10px; 
-	PADDING-LEFT: 11px; 
-	BORDER-LEFT: white 4px inset; 
-
+	PADDING-RIGHT: 11px; 
 	BORDER-TOP: white 4px inset; 
-	COLOR: #cccccc; 
-	BORDER-BOTTOM: white 4px inset; BACKGROUND-COLOR: #EA8618
+	PADDING-TOP: 2px; 
+	PADDING-BOTTOM: 2px; 
+
+	PADDING-LEFT: 10px; 
+	BORDER-LEFT: white 4px inset;  
+
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 0.9em; 
+
+	MARGIN: 1px; 
+	COLOR: #ffffff; 
+
+	FONT-FAMILY: Arial, sans-serif; 
+	TEXT-DECORATION: none; 
+	BACKGROUND-COLOR: #EEA351; 
+	TEXT-ALIGN: center;
 }
 TEXTAREA {
 	WIDTH: 99%
