@@ -83,6 +83,8 @@ if (!isset($charsetsent))
 		HTMLArea.loadPlugin("TableOperations");
 		HTMLArea.loadPlugin("ContextMenu");
 		HTMLArea.loadPlugin("CharacterMap");
+		HTMLArea.loadPlugin("FindReplace");
+		HTMLArea.loadPlugin("invertBackground");
 <?php if ($config["use_Indite"] == true)	{ ?>	
 		HTMLArea.loadPlugin("Indite");
 <?php } ?>	
@@ -93,6 +95,8 @@ if (!isset($charsetsent))
 			editor.registerPlugin(TableOperations);
 			editor.registerPlugin(ContextMenu);
 			editor.registerPlugin(CharacterMap);
+			editor.registerPlugin(FindReplace);
+			editor.registerPlugin(invertBackground);
 <?php if ($config["use_Indite"] == true)	{ ?>	
 			editor.registerPlugin(Indite);
 <?php } 

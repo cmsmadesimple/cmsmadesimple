@@ -741,10 +741,9 @@ HTMLArea.prototype.generate = function () {
 			html += "<head>\n";
 			if (editor.config.baseURL)
 				html += '<base href="' + editor.config.baseURL + '" />';
-			html += "<style> html,body { border: 0px; } " +
-				editor.config.pageStyle + "</style>\n";
+			html += "<style>" + editor.config.pageStyle + "</style>\n";
 			html += "</head>\n";
-			html += "<body>\n";
+			html += "<body style=\"border: 0px; background: white; background-image: none; color: black;\">\n";
 			html += editor._textArea.value;
 			html += "</body>\n";
 			html += "</html>";
