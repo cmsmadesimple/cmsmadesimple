@@ -1,6 +1,8 @@
-Version 0.7 -- Subversion
+Version 0.6.1 -- Subversion
 -----------------
 
+* Added section header content type
+* Changed login and logout to work properly in IIS
 * Started moving code to an easy object oriented design
 
 Version 0.6 -- Wed Sep 01 2004
