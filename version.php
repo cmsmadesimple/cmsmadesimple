@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "0.9.1";
-$CMS_VERSION_NAME = "Marquesas";
+$CMS_VERSION_NAME = "Mohotani";
 $CMS_SCHEMA_VERSION = "9";
 
 # vim:ts=4 sw=4 noet
