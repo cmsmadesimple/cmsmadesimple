@@ -99,7 +99,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		content_id I,
+		content_id I KEY,
 		content_name C(255),
 		type C(25),
 		owner_id I,
@@ -148,7 +148,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		css_id I,
+		css_id I KEY,
 		css_name C(255),
 		css_text X,
 		create_date T,
@@ -212,7 +212,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		htmlblob_id I,
+		htmlblob_id I KEY,
 		htmlblob_name C(255),
 		html X,
 		owner I,
@@ -396,7 +396,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		userplugin_id I,
+		userplugin_id I KEY,
 		userplugin_name C(255),
 		code X,
 		create_date T,

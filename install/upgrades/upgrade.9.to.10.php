@@ -5,7 +5,7 @@ echo "<p>Adding module_templates table...";
 $dbdict = NewDataDictionary($db);
 $flds = "
 	module_name C(255),
-	template_name C(255),
+	template_name C(200),
 	content X,
 	create_date T,
 	modified_date T
@@ -85,6 +85,25 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence(cms_db_prefix()."admin_bookmarks_seq");
 
+echo '[done]</p>';
+
+echo "<p>Adding Primary Keys...";
+
+$db->Execute("ALTER TABLE cms_content ADD PRIMARY KEY (content_id)";
+$db->Execute("ALTER TABLE cms_htmlblobs ADD PRIMARY KEY (htmlblob_id)";
+$db->Execute("ALTER TABLE cms_css ADD PRIMARY KEY (css_id)";
+$db->Execute("ALTER TABLE cms_userplugins ADD PRIMARY KEY (userplugin_id)";
+
+echo '[done]</p>';
+
+echo "<p>Adding Indexes...";
+
+$db->Execute("ALTER TABLE cms_content_props ADD INDEX (content_id)";
+$db->Execute("ALTER TABLE cms_content ADD INDEX (content_alias, active)";
+$db->Execute("ALTER TABLE cms_content ADD INDEX (content_alias)";
+$db->Execute("ALTER TABLE cms_module_templates ADD INDEX (module_name, template_name)";
+
+echo '[done]</p>';
 
 echo '<p>Updating schema version... ';
 
