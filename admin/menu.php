@@ -44,7 +44,35 @@
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
 <a href="siteprefs.php"><?php echo lang('siteprefs')?></a>
 <a href="adminlog.php"><?php echo lang('adminlog')?></a>
-<a href="../index.php" target="_new"><?php echo lang('showsite')?></a>
+<a href="<?php
+
+if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == true)
+{
+	$query = "SELECT page_alias, page_id FROM " . cms_db_prefix() . "pages WHERE default_page = '1'";
+	$result = $db->query($query);
+	if ($result && $result->RowCount() > 0)
+	{
+		$row = $result->FetchRow();
+		if ($row['page_alias'] != '')
+		{
+			echo "../" . $row['page_alias'] . ".shtml";
+		}
+		else
+		{
+			echo "../" . $row['page_id'] . ".shtml";
+		}
+	}
+	else
+	{
+		echo "../index.php";
+	}
+}
+else
+{
+	echo "../index.php";
+}
+
+?>" target="_new"><?php echo lang('showsite')?></a>
 <a href="editprefs.php"><?php echo lang('userprefs')?></a>
 <a href="logout.php"><?php echo lang('logout')?></a>
 
