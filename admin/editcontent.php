@@ -97,9 +97,11 @@ if ($access) {
 				if ($adminaccess) {
 					$query = "DELETE FROM ".$config->db_prefix."additional_users WHERE page_id = $page_id";
 					$db->query($query);
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$page_id.")";
-						$db->query($query);
+					if (isset($_POST["additional_editors"])) {
+						foreach ($_POST["additional_editors"] as $addt_user_id) {
+							$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$page_id.")";
+							$db->query($query);
+						}
 					}
 				}
 				#This is so pages will not cache the menu changes

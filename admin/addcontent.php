@@ -44,7 +44,7 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addcontent"])) $active = 0;
 
 $showinmenu = 1;
-if (isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $active = 0;
+if (!isset($_POST["showinmenu"]) && isset($_POST["addcontent"])) $active = 0;
 
 if (isset($_POST["cancel"])) {
 	redirect("listcontent.php");
@@ -86,13 +86,15 @@ if ($access) {
 				$order = $row["item_order"];	
 			}
 			mysql_free_result($result);
-			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, 1, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
+			$query = "INSERT INTO ".$config->db_prefix."pages (page_title, page_url, page_content, section_id, template_id, owner, show_in_menu, menu_text, item_order, active, create_date, modified_date) VALUES ('".mysql_escape_string($title)."','".mysql_escape_string($url)."','".mysql_escape_string($content)."', $section_id, $template_id, $userid, $showinmenu, '".mysql_escape_string($menutext)."', $order, $active, now(), now())";
 			$result = $db->query($query);
 			if (mysql_affected_rows() > -1) {
 				$new_page_id = mysql_insert_id();
-				foreach ($_POST["additional_editors"] as $addt_user_id) {
-					$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
-					$db->query($query);
+				if (isset($_POST["additional_editors"])) {
+					foreach ($_POST["additional_editors"] as $addt_user_id) {
+						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
+						$db->query($query);
+					}
 				}
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
