@@ -55,8 +55,8 @@ check_login();
 
 $errors = "";
 
-$dir = $config["uploads_path"];
-$url = $config["uploads_url"];
+$dir = $config["image_uploads_path"];
+$url = $config["image_uploads_url"];
 
 $reldir = "";
 if (isset($_POST['reldir'])) $reldir = $_POST['reldir'];
@@ -178,132 +178,72 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 }
 
 include_once("header.php");
+?>
+
+	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/assets/dialog.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/IMEStandalone.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript" SRC="../filemanager/ImageManager/lang/en.js"></SCRIPT>
+	<SCRIPT TYPE="text/javascript">
+    //<![CDATA[
+
+		//Create a new Imanager Manager, needs the directory where the manager is
+		//and which language translation to use.
+		var manager = new ImageManager('/cms/filemanager/ImageManager','en');
+			
+		//alert('crop '+ I18N["Crop"] );	
+		var thumbdir = "<?php echo $IMConfig['thumbnail_dir']; ?>";
+		var base_url = "<?php echo $url; ?>";	
+		//Image Manager wrapper. Simply calls the ImageManager
+
+
+    //]]>
+    </SCRIPT>
+
+<SCRIPT TYPE="text/javascript">
+/*<![CDATA[*/
+
+
+
+/*]]>*/
+</SCRIPT>
+
+<?php echo "<h3>".lang('filemanagement')."</h3>"; ?>
+<DIV CLASS="ttabArea">
+<A HREF="files.php" CLASS="tab"><?php echo lang('filemanager')?></A> 
+<A HREF="#" CLASS="tab activeTab"><?php echo lang('imagemanager')?></A> 
+</DIV>
+<DIV CLASS="tabPane">
+
+<?php
+
 
 $row = "row1";
 
 $dirtext = "";
 $filetext = "";
 
-echo "<h3>".lang('filemanagement')."</h3>";
-?>
-<DIV CLASS="ttabArea">
-<A HREF="#" CLASS="tab activeTab"><?php echo lang('filemanager')?></A> 
-<A HREF="imagefiles.php" CLASS="tab"><?php echo lang('imagemanager')?></A> 
-</DIV>
-<DIV CLASS="tabPane">
-<?php
+
+
+
 if ($errors != "")
 {
 	echo "<ul class=\"error\">$errors</ul>\n";
 }
 
 echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
-echo '<table cellspacing="0" class="admintable">';
-echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
+//echo '<table cellspacing="0" class="admintable">';
+//echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
+?>
+<IFRAME SRC="../filemanager/ImageManager/images.php" NAME="imgManager" CLASS="imagefilesFrame" TITLE="Image Selection" FRAMEBORDER="0"></IFRAME>
 
-if ($reldir != "")
-{
-	$newdir = dirname($reldir.'/'.$file);
-	if ($newdir == "/")
-	{
-		$newdir = "";
-	}
-	else
-	{
-		$newdir = "?reldir=".$newdir;
-	}
-	$dirtext .= "<tr class=\"$row\">";
-	$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
-	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
-	$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-	$dirtext .= "<td width=\"18\">&nbsp;</td>";
-	$dirtext .= "</tr>";
-	$row = "row2";
-}
-
-#First do dirs
-$ls = dir($dir);
-$dirs = array();
-while (($file = $ls->read()) != "")
-{
-	array_push($dirs, $file);
-}
-sort($dirs);
-foreach ($dirs as $file)
-{
-	if (strpos($file, ".") === false || strpos($file, ".") != 0)
-	{
-		if (is_dir("$dir/$file"))
-		{
-
-			$dirtext .= "<tr class=\"$row\">"; 
-			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\"></td>";
-			$dirtext .= '<td><a href="files.php?reldir='.$reldir."/".$file.'">'.$file.'</a></td>';
-			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
-			$dirtext .= "</tr>";
-			($row=="row1"?$row="row2":$row="row1");
-		}
-	}
-}
-echo $dirtext;
-
-#Now do files
-$ls = dir($dir);
-$files = array();
-while (($file = $ls->read()) != "")
-{
-	array_push($files, $file);
-}
-sort($files);
-foreach ($files as $file)
-{
-	if (display_file($file)==true){
-		if (strpos($file, ".") === false || strpos($file, ".") != 0)
-		{
-			if (is_file("$dir/$file"))
-			{
-				$extension = get_file_extention($file);
-				// set template vars						
-				$template_vars['file']  			= $file;
-				$template_vars['dir_file']				= $reldir."/".$file;
-				$template_vars['url_dir_file']				= $url.$reldir."/".$file;
-	
-				// parse little template
-				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
-		//		$file_links = $filetype[$extension]['link']['view'];
-				$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\">";
-	
-				$filetext .= "<tr class=\"$row\">";
-				$filetext .= "<td width=\"30\">{$image_icon}</td>";
-				$filetext .= '<td><a href="'.$file_links.'" target="_blank">'.$file.'</a></td>';
-				$filesize =  filesize("$dir/$file");
-				if ($filesize >(1024*1024)) {$sizestr = number_format($filesize/(1024*1024))." MB";} else {
-					if ($filesize >(1024))  {$sizestr = number_format($filesize/1024)." KB";} else {
-						$sizestr = number_format($filesize)." B";
-					}
-				}
-				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&reldir=".$reldir."&file=".$file."\" onclick=\"return confirm('".lang('confirmdelete')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\"></a></td>";
-				$filetext .= "</tr>";
-				($row=="row1"?$row="row2":$row="row1");
-			}
-		}
-	}
-}
-echo $filetext;
-
-if ($filetext == "" && $dirtext == "")
-{
-	echo "<tr class=\"row1\"><td colspan=\"4\" align=\"center\">".lang('nofiles')."</td></tr>";
-}
-
-echo "</table>";
+<?php
 
 if ($access)
 {
 ?>
-<FORM ENCTYPE="multipart/form-data" ACTION="files.php" METHOD="post">
+
+
+<FORM ENCTYPE="multipart/form-data" ACTION="imagefiles.php" METHOD="post">
 	<INPUT TYPE="hidden" NAME="MAX_FILE_SIZE" VALUE="<?php echo $config["max_upload_size"]?>">
 	<TABLE BORDER="0" CELLPADDING="0" CELLSPACING="0" SUMMARY="" CLASS="box">
 		<TR>

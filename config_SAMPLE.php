@@ -18,9 +18,8 @@ $config["max_upload_size"] = 1000000;
 $config["debug"] = false;
 $config["assume_mod_rewrite"] = false;
 $config["auto_alias_content"] = true;
-
-// Extra config settings
-
+$config["image_uploads_path"] = "/site/web/cms/uploads/images";
+$config["image_uploads_url"] = "http://www.cmsmadesimple.org/cms/uploads/images";
 $config["image_manipulation_prog"] = "GD";
 $config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 $config["use_Indite"] = true;

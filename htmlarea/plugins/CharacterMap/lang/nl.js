@@ -9,8 +9,16 @@
 // This notice MUST stay intact for use (see license.txt).
 
 CharacterMap.I18N = {
-	"CharacterMapTooltip"       : "Voeg speciaal teken in",
-	"Insert special character"  : "Voeg speciaal teken in",
-	"HTML value:"               : "HTML waarde:",
-	"Cancel"                    : "Annuleren"
+		"Cancel"                                            : "Annuleren",
+		"Insert/Modify Link"                                : "Hyperlink invoegen/aanpassen",
+		"New window (_blank)"                               : "Nieuw venster (_blank)",
+		"None (use implicit)"                               : "Geen",
+		"OK"                                                : "OK",
+		"Other"                                             : "Ander",
+		"Same frame (_self)"                                : "Zelfde frame (_self)",
+		"Target:"                                           : "Doel:",
+		"Title (tooltip):"                                  : "Titel (tooltip):",
+		"Top frame (_top)"                                  : "Bovenste frame (_top)",
+		"URL:"                                              : "URL:",
+		"You must enter the URL where this link points to"  : "Geef de URL in waar de link naar verwijst"
 };

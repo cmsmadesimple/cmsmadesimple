@@ -329,7 +329,9 @@ function showPageFour() {
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = $newconfig['root_path'] . "/smarty/cms/cache";
 	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
-	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";
+	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";	
+	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
+	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
 	$newconfig["max_upload_size"] = 1000000;
 	$newconfig["debug"] = false;
 	$newconfig["assume_mod_rewrite"] = false;

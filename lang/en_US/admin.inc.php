@@ -204,4 +204,6 @@ $lang['admin']['usejavasyntax'] = 'Use syntax highlighting in text boxes (requir
 $lang['admin']['nodefault'] = 'No Default Selected'; //needs translation
 $lang['admin']['blobexists'] = 'Html Blob name already exists'; //needs translation
 $lang['admin']['errorinsertingblob'] = 'There was an error inserting the Html Blob'; //needs translation
+$lang['admin']['filemanager'] = 'Filemanager';
+$lang['admin']['imagemanager'] = 'Imagemanager';
 ?>
