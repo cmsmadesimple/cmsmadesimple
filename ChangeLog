@@ -7,6 +7,8 @@ Version 0.7.3 -- Subversion
 (#000049)
 * Added active/inactive toggle in Content Management (Xorn725)
 * Added categories and other fixes to the News module (calguy1000)
+* Disabled syntax highlighting applet as it's been causing random
+issues (speedfly)
 * Fixed bug with handling of aliases in add/editcontent
 * Fixed bug with relative paths in dhtmlmenu
 * Fixed changing ownership of html blobs
