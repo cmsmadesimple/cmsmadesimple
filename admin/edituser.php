@@ -91,15 +91,6 @@ if ($access) {
 			$thisuser = UserOperations::LoadUserByID($user_id);
 			if ($thisuser)
 			{
-				#Perform the edituser_pre callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if (isset($gCms->modules[$key]['edituser_pre_function']))
-					{
-						call_user_func_array($gCms->modules[$key]['edituser_pre_function'], array(&$gCms, &$thisuser));
-					}
-				}
-
 				$thisuser->username = $user;
 				$thisuser->firstname = $firstname;
 				$thisuser->lastname = $lastname;
@@ -110,6 +101,18 @@ if ($access) {
 				{
 					$thisuser->SetPassword($password);
 				}
+				
+				#Perform the edituser_pre callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if (isset($gCms->modules[$key]['edituser_pre_function']) &&
+						$gCms->modules[$key]['Installed] == true &&
+						$gCms->modules[$key]['Active'] == true)
+					{
+						call_user_func_array($gCms->modules[$key]['edituser_pre_function'], array(&$gCms, &$thisuser));
+					}
+				}
+
 				$result = $thisuser->save();
 			}
 
@@ -120,7 +123,9 @@ if ($access) {
 				#Perform the edituser_post callback
 				foreach($gCms->modules as $key=>$value)
 				{
-					if (isset($gCms->modules[$key]['edituser_post_function']))
+					if (isset($gCms->modules[$key]['edituser_post_function']) &&
+						$gCms->modules[$key]['Installed] == true &&
+						$gCms->modules[$key]['Active'] == true)
 					{
 						call_user_func_array($gCms->modules[$key]['edituser_post_function'], array(&$gCms, &$thisuser));
 					}

@@ -52,7 +52,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		#Perform the login_post callback
 		foreach($gCms->modules as $key=>$value)
 		{
-			if (isset($gCms->modules[$key]['login_post_function'])) {
+			if (isset($gCms->modules[$key]['login_post_function']) &&
+				$gCms->modules[$key]['Installed] == true &&
+				$gCms->modules[$key]['Active'] == true)
+			{
 				call_user_func_array($gCms->modules[$key]['login_post_function'], array(&$gCms, &$oneuser));
 			}
 		}
