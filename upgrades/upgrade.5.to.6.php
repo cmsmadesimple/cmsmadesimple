@@ -10,7 +10,7 @@ $flds = "
 	active I1
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($config->db_prefix."codeblocks", $flds, $taboptarray);
+$sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."codeblocks", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence($config->db_prefix."codeblocks_seq");
