@@ -30,7 +30,7 @@ function smarty_cms_function_print($params, &$smarty)
 	//will this work if using htaccess? (Yes! -Wishy)
 	if (isset($params["showbutton"]))
 	{
-		echo '<a href="index.php?page='.$gCms->variables['page_name'].'&amp;print=true"><img border="0" src="images/cms/printbutton.png" alt='.$text.'/></a>';
+		echo '<a href="index.php?page='.$gCms->variables['page_name'].'&amp;print=true"><img border="0" src="images/cms/printbutton.gif" alt='.$text.'/></a>';
 	}
 	else
 	{
