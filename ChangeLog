@@ -11,6 +11,7 @@ Version 0.8.2 "Taunoa" -- Subversion
 cascaded
 * Fixed initial database so first user created is not in the admin
 group
+* Fixed ereg_replace functions in file management (ntro)
 * Fixed bug with uploading images in TinyMCE (#000087)
 * Fixed bug with ordering if there are more than 10 pages in the 
 root of the content hierarchy

@@ -127,7 +127,7 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 				{
 					settype($val,"string");
 				}
-				$template = eregi_replace("\{$key\}","$val","$template");
+				$template = eregi_replace('\{' . $key . '\}',$val,$template);
 			}
 		}
 
@@ -135,12 +135,12 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 		{
 			// Silently remove anything not already found
 
-			$template = ereg_replace("{([A-Z0-9_]+)}","",$template);
+			$template = ereg_replace('\{[A-Z0-9_]+\}', "", $template);
 		}
 		else
 		{
 			// Warn about unresolved template variables
-			if (ereg("({[A-Z0-9_]+})",$template))
+			if (ereg('\{[A-Z0-9_]+\}',$template))
 			{
 				$unknown = split("\n",$template);
 				while (list ($Element,$Line) = each($unknown) )
