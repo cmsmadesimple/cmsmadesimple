@@ -20,6 +20,7 @@ require_once("../include.php");
 
 check_login($config);
 
+$dodelete = true;
 $template_id = -1;
 if (isset($_GET["template_id"])) {
 
@@ -30,13 +31,28 @@ if (isset($_GET["template_id"])) {
 	if ($access) {
 		$db = new DB($config);
 
-		$query = "DELETE FROM ".$config->db_prefix."templates where template_id = $template_id";
+		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE template_id = $template_id";
 		$result = $db->query($query);
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		if (isset($row["count"]) && $row["count"] > 0) {
+			$dodelete = false;
+		}
+		mysql_free_result($result);
+
+		if ($dodelete) {
+			$query = "DELETE FROM ".$config->db_prefix."templates where template_id = $template_id";
+			$result = $db->query($query);
+		}
 		$db->close();
 	}
 }
 
-redirect("listtemplates.php");
+if ($dodelete) {
+	redirect("listtemplates.php");
+}
+else {
+	redirect("listtemplates.php?message=Template still being used by content pages.  Please remove those first.");
+}
 
 # vim:ts=4 sw=4 noet
 ?>

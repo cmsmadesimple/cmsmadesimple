@@ -20,6 +20,8 @@ require_once("../include.php");
 
 check_login($config);
 
+$dodelete = true;
+
 $section_id = -1;
 if (isset($_GET["section_id"])) {
 
@@ -30,16 +32,31 @@ if (isset($_GET["section_id"])) {
 	if ($access) {
 		$db = new DB($config);
 
-		$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";
+		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE section_id = $section_id";
 		$result = $db->query($query);
-		#This is so pages will not cache the menu changes
-		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-		$db->query($query);
+		$row = mysql_fetch_array($result, MYSQL_ASSOC);
+		if (isset($row["count"]) && $row["count"] > 0) {
+			$dodelete = false;
+		}
+		mysql_free_result($result);
+
+		if ($dodelete) {
+			$query = "DELETE FROM ".$config->db_prefix."sections where section_id = $section_id";
+			$result = $db->query($query);
+			#This is so pages will not cache the menu changes
+			$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
+			$db->query($query);
+		}
 		$db->close();
 	}
 }
 
-redirect("listsections.php");
+if ($dodelete == true) {
+	redirect("listsections.php");
+}
+else {
+	redirect("listsections.php?message=Section still being used by content pages.  Please remove those first.");
+}
 
 # vim:ts=4 sw=4 noet
 ?>
