@@ -50,10 +50,7 @@ $access = check_permission($userid, 'Modify Site Preferences');
 
 
 $use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1")
-{
-	$use_javasyntax = true;
-}
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php");
@@ -108,7 +105,7 @@ if ($error != "") {
 
 ?>
 
-<form method="post" action="siteprefs.php">
+<form method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedown\');"';} ?>>
 
 <div class="adminform">
 
@@ -122,7 +119,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('custom404')?>:</td>
 		<td>
-			<?php echo textarea_highlight($use_javasyntax, 'custom404', 'syntaxHighlight'); ?><br>
+			<?php echo textarea_highlight($use_javasyntax, $custom404, 'custom404'); ?><br>
 			<?php echo lang('template')?>:
 			<select name="custom404template">
 			<?php
@@ -146,7 +143,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('sitedownmessage')?>:</td>
 		<td>
-			<?php echo textarea_highlight($use_javasyntax, 'sitedownmessage', 'syntaxHighlight'); ?>
+			<?php echo textarea_highlight($use_javasyntax, $sitedownmessage,'sitedownmessage'); ?>
 			<!--<br>
 			<?php echo lang('template')?>:
 			<select name="sitedownmessagetemplate">

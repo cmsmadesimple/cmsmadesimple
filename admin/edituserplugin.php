@@ -45,6 +45,9 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
@@ -127,7 +130,7 @@ else {
 	}
 ?>
 
-<form method="post" action="edituserplugin.php">
+<form method="post" action="edituserplugin.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'code\');"';} ?>>
 
 <div class="adminform">
 
@@ -141,7 +144,7 @@ else {
 	</tr>
 	<tr>
 		<td>*<?php echo lang('code')?></td>
-		<td><textarea name="code" cols="50" rows="10"><?php echo $code?></textarea></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $code, "code", "syntaxHighlight", "Java") ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>

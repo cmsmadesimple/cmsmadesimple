@@ -39,9 +39,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
 $use_javasyntax = false;
-//FIXME: change below to true after bugs are worked out...and see if there
-//       is syntax highlighting that will work for this textarea
-if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
 
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
@@ -127,7 +125,7 @@ else {
 	</tr>
 	<tr>
 		<td>*<?php echo lang('code')?></td>
-		<td><?php echo textarea_highlight($use_javasyntax, $code, "code", "syntaxHighlight", "Java Properties") ?></td>
+		<td><?php echo textarea_highlight($use_javasyntax, $code, "code", "syntaxHighlight", "Java") ?></td>
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
