@@ -25,8 +25,9 @@ function smarty_function_cms_module($params, &$smarty) {
 
 		if (isset($cmsmodules[$params['module']])) {
 			@ob_start();
-			$obj = $cmsmodules[$params['module']]['Instance'];
-			$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
+			#$obj = $cmsmodules[$params['module']]['Instance'];
+			#$obj->execute($modulecmsobj,"randstringgoeshere_",$params);
+			call_user_func_array(&$cmsmodules[$module]['execute_function'], array($modulecmsobj,"randstringgoeshere_",$params));
 			$modoutput = @ob_get_contents();
 			@ob_end_clean();
 			echo $modoutput;

@@ -1,31 +1,5 @@
 <?php
 
-class cmsmodule {
-
-	function install() {
-		//This function should install the database functions and do other basic init stuff for first time use.
-	}
-
-	function uninstall() {
-		//This function should uninstall database tables and generally cleanup.
-	}
-
-	function execute($cms, $id) {
-		//This is the entryway into the module.  All requests from CMS will come through here.
-		die("cmsmodule::execute() not implemented!");
-	}
-
-	function executeadmin($cms,$id) {
-		//This is the entryway for the admin section of the module.  It's optional.
-	}
-
-	function upgrade($cms, $oldversion, $newversion) {
-		//This function will be run for upgrading
-	}
-
-
-}
-
 function load_modules() {
 	global $cmsmodules;
 	$dir = dirname(dirname(__FILE__))."/modules";
@@ -39,7 +13,49 @@ function load_modules() {
 	}
 }
 
-function create_permission($cms, $permission_name, $permission_text) {
+function cms_mapi_register_module($name) {
+	global $cmsmodules;
+	if (!isset($cmsmodules[$name])) {
+		$cmsmodules[$name] = array();
+	}
+}
+
+function cms_mapi_register_install_function($name, $function) {
+	global $cmsmodules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['install_function'] = $function;
+	}
+}
+
+function cms_mapi_register_uninstall_function($name, $function) {
+	global $cmsmodules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['uninstall_function'] = $function;
+	}
+}
+
+function cms_mapi_register_execute_function($name, $function) {
+	global $cmsmodules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['execute_function'] = $function;
+	}
+}
+
+function cms_mapi_register_executeadmin_function($name, $function) {
+	global $cmsmodules;
+	if (isset($cmsmodules[$name])) {
+		$cmsmodules[$name]['execute_admin_function'] = $function;
+	}
+}
+
+function cms_mapi_unregister_module($name) {
+	global $cmsmodules;
+	if (isset($cmsmodules[$name])) {
+		unset($cmsmodules[$name]);
+	}
+}
+
+function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 
 	$db = $cms->db;
 
@@ -48,7 +64,7 @@ function create_permission($cms, $permission_name, $permission_text) {
 	$db->Execute($query);
 }
 
-function remove_permission($cms, $permission_name) {
+function cms_mapi_remove_permission($cms, $permission_name) {
 
 	$db = $cms->db;
 
@@ -56,7 +72,7 @@ function remove_permission($cms, $permission_name) {
 	$db->Execute($query);
 }
 
-function create_module_admin_link($module, $id, $params, $text, $warn_message="") {
+function cms_mapi_create_admin_link($module, $id, $params, $text, $warn_message="") {
 
 	$val = "<a href=\"moduleinterface.php?module=$module";
 	foreach ($params as $key=>$value) {
@@ -71,14 +87,14 @@ function create_module_admin_link($module, $id, $params, $text, $warn_message=""
 
 }
 
-function create_module_admin_start_form($module, $id, $method="post") {
+function cms_mapi_create_admin_form_start($module, $id, $method="post") {
 
 	return "<form method=\"$method\" action=\"moduleinterface.php\"><input type=\"hidden\" name=\"module\" value=\"$module\" />\n";
 
 
 }
 
-function create_module_admin_end_form() {
+function cms_mapi_create_admin_form_end() {
 
 	return "</form>\n";
 

@@ -29,11 +29,10 @@ $action = "";
 if (isset($_GET["action"])) $action = $_GET["action"];
 
 if ($action == "install") {
-	#grab said object
-	$moduleobj = $cmsmodules[$module]['Instance'];
-
-	#run install on it
-	$moduleobj->install($modulecmsobj);
+	#run install on it (if there is one)
+	if (isset($cmsmodules[$module]['install_function'])) {
+		call_user_func_array(&$cmsmodules[$module]['install_function'], array($modulecmsobj));
+	}
 
 	#now insert a record
 	$query = "INSERT INTO ".$config->db_prefix."modules (module_name, version, status, active) VALUES (".$dbnew->qstr($module).",".$dbnew->qstr($cmsmodules[$module]['Version']).",'Installed',1)";
@@ -41,11 +40,10 @@ if ($action == "install") {
 }
 
 if ($action == "uninstall") {
-	#grab said object
-	$moduleobj = $cmsmodules[$module]['Instance'];
-
-	#run install on it
-	$moduleobj->uninstall($modulecmsobj);
+	#run uninstall on it (if there is one)
+	if (isset($cmsmodules[$module]['uninstall_function'])) {
+		call_user_func_array(&$cmsmodules[$module]['uninstall_function'], array($modulecmsobj));
+	}
 
 	#now delete the record
 	$query = "DELETE FROM ".$config->db_prefix."modules WHERE module_name = ".$dbnew->qstr($module);

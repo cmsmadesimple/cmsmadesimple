@@ -40,5 +40,10 @@ class Smarty_DB extends Smarty {
 	}
 }
 
+function cms_db_prefix() {
+	global $config;
+	return $config->db_prefix;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

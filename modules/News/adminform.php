@@ -35,7 +35,7 @@ if ($moduleaction == "edit") {
 
 	$newsid = $_GET[$id."news_id"].$_POST[$id."news_id"];
 	$hiddenfields .= "<input type=\"hidden\" name=\"".$id."action\" value=\"completeedit\" /><input type=\"hidden\" name=\"".$id."news_id\" value=\"".$newsid."\" />";
-	$query = "SELECT * FROM ".$cms->config->db_prefix."module_news WHERE news_id = $newsid";
+	$query = "SELECT * FROM ".cms_db_prefix()."module_news WHERE news_id = $newsid";
 	$dbresult = $db->Execute($query);
 	if ($dbresult && $dbresult->RowCount() > 0) {
 		$row = $dbresult->FetchRow();
@@ -45,7 +45,7 @@ if ($moduleaction == "edit") {
 
 } else if ($moduleaction == "delete") {
 
-	$query = "DELETE FROM ".$cms->config->db_prefix."module_news WHERE news_id = " . $_GET[$id."news_id"].$_POST[$id."news_id"];
+	$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = " . $_GET[$id."news_id"].$_POST[$id."news_id"];
 	$dbresult = $db->Execute($query);
 	redirect("moduleinterface.php?module=News");
 
@@ -65,9 +65,8 @@ if ($moduleaction == "edit") {
 	}
 
 	if ($validinfo) {
-		$db = $cms->db;
-		$new_id = $db->GenID($cms->config->db_prefix."module_news_seq");
-		$query = "INSERT INTO ".$cms->config->db_prefix."module_news (news_id, news_title, news_data, news_date, create_date) VALUES ($new_id, ".$db->qstr($title).", ".$db->qstr($data).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
+		$new_id = $db->GenID(cms_db_prefix()."module_news_seq");
+		$query = "INSERT INTO ".cms_db_prefix()."module_news (news_id, news_title, news_data, news_date, create_date) VALUES ($new_id, ".$db->qstr($title).", ".$db->qstr($data).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 		$dbresult = $db->Execute($query);
 		redirect("moduleinterface?module=News");
 		return;
@@ -89,8 +88,7 @@ if ($moduleaction == "edit") {
 		$validinfo = false;
 	}
 	if ($validinfo) {
-		$db = $cms->db;
-		$query = "UPDATE ".$cms->config->db_prefix."module_news SET news_title = ".$db->qstr($title).", news_data = ".$db->qstr($title).", modified_date = ".$db->DBTimeStamp(time())." WHERE news_id = $newsid";
+		$query = "UPDATE ".cms_db_prefix()."module_news SET news_title = ".$db->qstr($title).", news_data = ".$db->qstr($title).", modified_date = ".$db->DBTimeStamp(time())." WHERE news_id = $newsid";
 		$dbresult = $db->Execute($query);
 		redirect("moduleinterface?module=News");
 		return;
@@ -107,7 +105,7 @@ if ($error != "") {
 
 <div class="adminform">
 
-<?=create_module_admin_start_form("News", $id)?>
+<?=cms_mapi_create_admin_form_start("News", $id)?>
 
 <table>
 	<tr>
@@ -127,7 +125,7 @@ if ($error != "") {
 	</tr>
 </table>
 
-<?=create_module_admin_end_form()?>
+<?=cms_mapi_create_admin_form_end()?>
 
 </div>
 
