@@ -55,7 +55,7 @@ if ($error != "") {
 
 ?>
 
-<form method="post" action="editprefs.php">
+<FORM method="post" action="editprefs.php" name="prefsform">
 
 <div class="adminformSmall">
 
@@ -75,12 +75,40 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang("usejavasyntax")?>:</td>
 		<td>
-			<select name="use_wysiwyg">
+			<select name="use_javasyntax">
 				<option value="1" <?php echo  ($use_javasyntax=="1"?"selected":"") ?>><?php echo lang('true')?></option>
 				<option value="0" <?php echo  ($use_javasyntax=="0"?"selected":"") ?>><?php echo lang('false')?></option>
 			</select>
 		</td>
 	</tr>
+	<TR>
+		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
+		<TD>
+			<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="document.prefsform.submit()" STYLE="vertical-align: middle;">
+			<?php
+				asort($nls["language"]);
+				foreach ($nls["language"] as $key=>$val) {
+					echo "<option value=\"$key\"";
+					if (isset($_POST["change_cms_lang"])) {
+						if ($_POST["change_cms_lang"] == $key) {
+							echo " selected";
+						}
+					} else if (isset($_COOKIE["cms_language"])) {
+						if ($_COOKIE["cms_language"] == $key) {
+							echo " selected";
+						}
+					}
+					echo ">$val";
+					if (isset($nls["englishlang"][$key]))
+					{
+						echo " (".$nls["englishlang"][$key].")";
+					}
+					echo "</option>\n";
+				}
+			?>
+			</SELECT>
+		</TD>
+	</TR>
 	<tr>
 		<td colspan="2" align="center"><input type="hidden" name="edituserprefs" value="true">
 		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
@@ -91,7 +119,7 @@ if ($error != "") {
 
 </div>
 
-</form>
+</FORM>
 
 <?php
 

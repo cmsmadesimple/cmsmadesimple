@@ -4,6 +4,7 @@
 <BR>
 <BR>
 
+<!--
 <FORM ACTION="index.php" METHOD="post" NAME="cms_admin_lang_form">
 <SPAN CLASS="smallselect"><?php echo lang('language')?> : </SPAN>
 <SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="cms_admin_lang_form.submit()" STYLE="vertical-align: middle;">
@@ -30,6 +31,7 @@
 ?>
 </SELECT>
 </FORM>
+-->
 </DIV>
 
 <A HREF="listcontent.php"><?php echo lang('contentmanagement')?></A>

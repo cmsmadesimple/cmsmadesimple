@@ -198,4 +198,5 @@ $lang['admin']['usewysiwyg'] = 'Utiliser l\'éditeur visuel (WYSIWYG) pour l\'édi
 $lang['admin']['version'] = 'Version';
 $lang['admin']['view'] = 'Voir';
 $lang['admin']['welcomemsg'] = 'Bienvenue %s';
+$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting content'; //needs translation
 ?>

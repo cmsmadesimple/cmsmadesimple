@@ -106,6 +106,7 @@ if (!$access) {
 	$access = check_authorship($userid, $page_id);
 }
 
+$use_javasyntax = false;
 
 if ($access) {
 

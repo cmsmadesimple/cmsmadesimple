@@ -198,4 +198,5 @@ $lang['admin']['usewysiwyg'] = 'Käytä WYSIWYG editoria sisällön muokkaamiseen';
 $lang['admin']['version'] = 'Versio'; 
 $lang['admin']['view'] = 'Katso'; 
 $lang['admin']['welcomemsg'] = 'Tervetuloa %s'; 
+$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting content'; //needs translation
 ?>

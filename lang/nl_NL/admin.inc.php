@@ -191,8 +191,7 @@ $lang['admin']['usewysiwyg'] = 'Gebruik WYSIWYG editor';
 $lang['admin']['version'] = 'Versie';
 $lang['admin']['view'] = 'Bekijk';
 $lang['admin']['welcomemsg'] = 'Welkom %s';
-// Translations added after 6.1
 $lang['admin']['directoryunder'] = 'Onderliggende directory';
 $lang['admin']['directoryabove'] = 'bovenliggende directory';
-
+$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting content'; //needs translation
 ?>

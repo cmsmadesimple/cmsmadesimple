@@ -18,6 +18,10 @@
 
 $CMS_ADMIN_PAGE=1;
 
+if (isset($_POST["change_cms_lang"]))
+{
+}
+
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 
@@ -34,12 +38,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
 
-	#$query = "SELECT * FROM ".cms_db_prefix()."users WHERE username = ".$db->qstr($username)." and password = ".$db->qstr(md5($password)) . " and active = 1";
-	#$result = $db->Execute($query);
-
-	#$line = $result->FetchRow();
-
-	#if ($username != "" && $password != "" && isset($line["user_id"])) {
 	if ($username != "" && $password != "" && $oneuser)
 	{
 		generate_user_object($oneuser->id);
@@ -49,17 +47,22 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		return;
 		#redirect("index.php");
 	}
-	else {
+	else if (isset($_POST["loginsubmit"])) { //No error if changing languages
 		$error .= "<p>".lang('usernameincorrect')."</p>";
 	}
 
 }
 
+// Language shizzle
+header("Content-Encoding: " . get_encoding());
+header("Content-Language: " . $current_language);
+header("Content-Type: text/html; charset=" . get_encoding());
+
 ?>
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html40/loose.dtd">
 <HEAD>
 
-<TITLE></TITLE>
+<TITLE>CMS Admin Login</TITLE>
 
 <LINK REL="stylesheet" TYPE="text/css" HREF="style.css" >
 
@@ -92,13 +95,41 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		<TD><INPUT TYPE="password" ID="userdata" NAME="password" SIZE="15" ></TD>
 	</TR>
 	<TR>
+		<TD ALIGN="right"><?php echo lang('language')?>:</TD>
+		<TD>
+			<SELECT CLASS="smallselect"  NAME="change_cms_lang" onChange="document.login.submit()" STYLE="vertical-align: middle;">
+			<?php
+				asort($nls["language"]);
+				foreach ($nls["language"] as $key=>$val) {
+					echo "<option value=\"$key\"";
+					if (isset($_POST["change_cms_lang"])) {
+						if ($_POST["change_cms_lang"] == $key) {
+							echo " selected";
+						}
+					} else if (isset($_COOKIE["cms_language"])) {
+						if ($_COOKIE["cms_language"] == $key) {
+							echo " selected";
+						}
+					}
+					echo ">$val";
+					/*
+					if (isset($nls["englishlang"][$key]))
+					{
+						echo " (".$nls["englishlang"][$key].")";
+					}
+					*/
+					echo "</option>\n";
+				}
+			?>
+			</SELECT>
+		</TD>
+	</TR>
+	<TR>
 		<TD>&nbsp;</TD>
-		<TD><INPUT TYPE="submit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
+		<TD><INPUT TYPE="submit" NAME="loginsubmit" VALUE="<?php echo lang('submit')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></TD>
 	</TR>
 </TABLE>
 </FORM>
-
-
 
 <SCRIPT LANGUAGE="javascript">
 <!--

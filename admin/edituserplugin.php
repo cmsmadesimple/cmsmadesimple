@@ -31,6 +31,9 @@ else if (isset($_GET["userplugin_id"])) $userplugin_id = $_GET["userplugin_id"];
 $plugin_name= "";
 if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
 
+$orig_plugin_name = "";
+if (isset($_POST["origpluginname"])) $orig_plugin_name = $_POST["origpluginname"];
+
 $code= "";
 if (isset($_POST["code"])) $code = $_POST["code"];
 
@@ -55,7 +58,7 @@ if ($access) {
 		}
 		else
 		{
-			if (in_array($plugin_name, $gCms->cmsplugins))
+			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
 			{
 				$error .= "<li>".lang('usertagexists')."</li>";
 				$validinfo = false;
@@ -108,6 +111,7 @@ if ($access) {
 		$row = $result->FetchRow();
 
 		$plugin_name = $row["userplugin_name"];
+		$orig_plugin_name = $plugin_name;
 		$code = $row['code'];
 	}
 }
@@ -141,7 +145,7 @@ else {
 	</tr>
 	<tr>
 		<td>&nbsp;</td>
-		<td><input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>"><input type="hidden" name="editplugin" value="true">
+		<td><input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>"><input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>"><input type="hidden" name="editplugin" value="true">
 		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
 		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'"></td>
 	</tr>

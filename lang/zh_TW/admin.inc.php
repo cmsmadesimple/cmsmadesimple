@@ -191,4 +191,5 @@ $lang['admin']['usewysiwyg'] = '?內容使用WYSIWYG編輯器';
 $lang['admin']['version'] = '版本';
 $lang['admin']['view'] = '瀏覽';
 $lang['admin']['welcomemsg'] = '歡迎%s';
+$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting content'; //needs translation
 ?>

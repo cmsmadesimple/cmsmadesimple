@@ -191,4 +191,5 @@ $lang['admin']['usewysiwyg'] = 'ÎªÄÚÈÝÊ¹ÓÃWYSIWYG±à¼­Æ÷';
 $lang['admin']['version'] = '°æ±¾';
 $lang['admin']['view'] = 'ä¯ÀÀ';
 $lang['admin']['welcomemsg'] = '»¶Ó­%s';
+$lang['admin']['usejavasyntax'] = 'Use java syntax highlighting content'; //needs translation
 ?>

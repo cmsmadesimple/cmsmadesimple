@@ -48,6 +48,13 @@ if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
 
+
+$use_javasyntax = false;
+if (get_preference($userid, 'use_javasyntax') == "1")
+{
+	$use_javasyntax = true;
+}
+
 if (isset($_POST["cancel"])) {
 	redirect("index.php");
 	return;
@@ -115,7 +122,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('custom404')?>:</td>
 		<td>
-			<?php textarea_highlight($custom404, 'custom404', 'syntaxHighlight'); ?><br>
+			<?php echo textarea_highlight($use_javasyntax, 'custom404', 'syntaxHighlight'); ?><br>
 			<?php echo lang('template')?>:
 			<select name="custom404template">
 			<?php
@@ -139,7 +146,7 @@ if ($error != "") {
 	<tr>
 		<td><?php echo lang('sitedownmessage')?>:</td>
 		<td>
-			<?php textarea_highlight($sitedownmessage, 'sitedownmessage', 'syntaxHighlight'); ?>
+			<?php echo textarea_highlight($use_javasyntax, 'sitedownmessage', 'syntaxHighlight'); ?>
 			<!--<br>
 			<?php echo lang('template')?>:
 			<select name="sitedownmessagetemplate">
@@ -154,7 +161,8 @@ if ($error != "") {
 					echo ">".$value."</option>";
 				}
 			?>
-			</select>-->
+			</select>
+			-->
 		</td>
 	</tr>
 	<tr>

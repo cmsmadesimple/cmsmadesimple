@@ -330,8 +330,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->CreateSequence($db_prefix."userplugins_seq");
-
 	echo "[done]</p>";
 
 	echo "<p>Creating version table...";
