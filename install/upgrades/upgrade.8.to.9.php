@@ -93,7 +93,13 @@ if ($result && $result->RowCount() > 0)
 				$newcontent = @ContentManager::LoadContentFromId($newid);
 				if ($newcontent !== FALSE)
 				{
-					$newcontent->SetPropertyValue('content_en', $row['page_content']);
+					$oldcontent = $row['page_content'];
+					
+					#Fix for dhtmlmenu
+
+					$oldcontent = str_replace('{dhtmlmenu', "{cms_module module='phplayers'", $oldcontent);
+
+					$newcontent->SetPropertyValue('content_en', $oldcontent);
 					$newcontent->SetPropertyValue('head_tags', $row['head_tags']);
 					$newcontent->Save();
 				}
@@ -145,6 +151,18 @@ echo "[done]</p>";
 echo "<p>Updating hierarchy positions...";
 
 @ContentManager::SetAllHierarchyPositions();
+
+echo "[done]</p>";
+
+echo "<p>Changing dhtmlmenu to phplayers module on templates...";
+
+$alltemplates = @TemplateOperations::LoadTemplates();
+foreach ($alltemplates as $onetemplate)
+{
+	#Fix for dhtmlmenu
+	$onetemplate->content = str_replace('{dhtmlmenu', "{cms_module module='phplayers'", $onetemplate->content); 
+	$onetemplate->Save();
+}
 
 echo "[done]</p>";
 
