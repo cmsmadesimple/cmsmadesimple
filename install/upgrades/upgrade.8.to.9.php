@@ -127,7 +127,7 @@ if ($result && $result->RowCount() > 0)
 	{
 		while ($row = $result->FetchRow())
 		{
-			if (isset($row['parent_id']) && $row['parent_id'] > -1)
+			if (isset($row['parent_id']) && $row['parent_id'] > 0)
 			{
 				$newquery = "UPDATE ".cms_db_prefix()."content SET parent_id = ? WHERE content_id = ?";
 				$db->Execute($newquery, array(
