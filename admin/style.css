@@ -446,7 +446,7 @@ html>body DIV.adminformSmall TD {
 	FONT-SIZE: 70%;
 }
 html>body DIV.adminform TD,
-DIV.adminformSmall TD {
+html>body DIV.adminformSmall TD {
 	COLOR: black;
 	FONT-SIZE: 100%;
 }
