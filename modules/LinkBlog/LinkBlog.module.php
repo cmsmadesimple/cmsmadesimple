@@ -128,6 +128,8 @@ class LinkBlog extends CMSModule
 				$dict = NewDataDictionary($db);
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_linkblog", "linkblog_hits I");
 				$dict->ExecuteSQLArray($sqlarray);
+				$update = "UPDATE ".cms_db_prefix()."module_linkblog SET linkblog_hits=0";
+				$db->Execute($update);
 		} ## switch
 	} ## Upgrade
 
@@ -161,8 +163,38 @@ class LinkBlog extends CMSModule
 		switch($action) {
 			case "default":
 			{
+				$break = false;
+				if ($params["allow_search"]) {
+					echo "<div class=\"modulelinkblogsearchform\">\n";
+					echo $this->CreateFormStart($id, "search_url", $this->cms->variables["page"]);
+				?>
+					<table>
+					<tr>
+					<td><?php echo $this->CreateInputText($id, "search_text", "", '20', '50'); ?></td>
+					<td><?php echo $this->CreateInputSubmit($id, 'submit', 'Submit') ?></td>
+					</tr>
+					</table>
+					<?php
+					echo $this->CreateFormEnd();
+					echo "</div>\n";
+					$break = true;
+				} ## if
+				if ($params["view_popular"]) {
+					echo "<div class=\"modulelinkblogpopular\">";
+					echo $this->CreateLink($id, "viewoldlinks", $this->cms->variables["page"], "View popular", array('sort_order'=>'popular'));
+					echo "</div>\n";
+					$break = true;
+				}
+				if (isset($params["make_rss_button"])) {
+					echo "<div class=\"modulelinkblogrss\">\n";
+					echo $this->CreateLink($id, 'viewoldlinks', $this->cms->variables['page'], "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />", array('type'=>'rss', 'showtemplate'=>'false'));
+					echo "</div>\n";
+					$break = true;
+				} ## if
+ ## if
+
+				if ($break) { break; }
 				$this->linkblog_module_showLinks($id, $params, $return_id);
-				return;
 				break;
 			}
 
@@ -175,7 +207,6 @@ class LinkBlog extends CMSModule
 			case "viewoldlinks":
 			{
 				$this->linkblog_module_showLinks($id, $params, $return_id);
-				return;
 				break;
 			}
 
@@ -300,6 +331,26 @@ class LinkBlog extends CMSModule
 		return 'greg.froese@gmail.com';
 	}
 
+	function GetHelp()
+	{
+		return "
+		<h3>What does this do?</h3>
+		<p>LinkBlog is a module which allows users to post links and comments about the links to a page within your site.  It can be inserted into a template or content page as a module, however, it makes more sense as a content page because it does produce a complete page.</p>
+		<h3>Anything else I should know?</h3>
+		<p>You should know that if you uninstall this module it will delete all your links and comments.  If you do not wish to use it for a temporary time period, just deactivate it.</p>
+		<h3>How do I use it?</h3>
+		<p>As this is just a tag module, it's inserted into your page or template by using the cms_module tag.  Example syntax would be: <br /><code>{cms_module module=\"LinkBlog\" allow_search=\"true\"}</code></p>
+		<h3>What parameters are there?</h3>
+		<p>category - set category=\"NAME\" where NAME is a category name.  Only links in that category will be visible.  This includes the links generated to previously posted links.</p>
+		<i>If any of the following options are set, only the chosen option will appear, the default linkblog page will not.  For example: you would have to use a second <code>{cms_module module=\"LinkBlog\"}</code> line to show both the search form and the default page.</i>
+		<p>allow_search - set allow_search=\"true\" to show a search form - off by default</p>
+		<p>make_rss_button - creates an image link to the rss feed for the linkblog.<br />
+		The RSS feed title, linkblog URL, and number of links returned in the rss feed are all set in the linkblog admin preferences.<br />
+		Email notification preferences are also set in the linkblog admin preferences.</p>
+		<p>view_popular - shows the top 20 most clicked on links (view_popluar=\"true\")</p>
+		";
+	}
+	
 	function GetChangeLog()
 	{
 		?>
@@ -350,7 +401,7 @@ class LinkBlog extends CMSModule
 
 		if ($dbresult && $dbresult->RowCount()) {
 			while ($row = $dbresult->FetchRow()) {
-				$url = $row["linkblog_url"];
+				$url = html_entity_decode($row["linkblog_url"], ENT_NOQUOTES, get_encoding($encoding));
 			}
 		}
 		redirect($url);
@@ -405,7 +456,6 @@ class LinkBlog extends CMSModule
 			echo "</div>\n";
 		}
 
-		echo $this->CreateLink($id, "viewoldlinks", $this->cms->variables["page"], "View popular", array('sort_order'=>'popular'));
 		$curr_date = date("Y-m-d");
 		$old_date = "";
 		if (isset($params["old_date"])) {
@@ -438,13 +488,8 @@ class LinkBlog extends CMSModule
 
 		$dbresult = $db->Execute($query);
 
-		if ($params[$id.'type'] != "rss") {
+		if ($params['type'] != "rss") {
 			echo "<div class=\"modulelinkblogtitle\">Posted sites</div>";
-			if (isset($params["make_rss_button"])) {
-				echo "<div class=\"modulelinkblogrss\">\n";
-				echo $this->CreateLink($id, 'viewoldlinks', $this->cms->variables['page'], "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Linkblog Feed\" />", array('type'=>'rss', 'showtemplate'=>'false'));
-				echo "</div>\n";
-			} ## if
 			echo "<div class=\"modulelinkblog\">\n";
 		} ## if
 
@@ -452,7 +497,7 @@ class LinkBlog extends CMSModule
 ##         $last_date = "";
 			while ($row = $dbresult->FetchRow()) {
 
-				if ($params[$id.'type'] == "rss") {
+				if ($params['type'] == "rss") {
 					echo "  <item>\n";
 					echo "          <title>".$row["linkblog_title"]."</title>\n";
 					echo "          <link>";
@@ -499,13 +544,13 @@ class LinkBlog extends CMSModule
 					echo "</div>\n";
 				} ## if
 
-						$last_date = substr($row["create_date"],0,10);
-					} ## while
+					$last_date = substr($row["create_date"],0,10);
+			} ## while
 
-					if ($params[$id.'type'] == "rss") {
-					echo "  </channel>\n";
-					echo "</rss>\n";
-					return;
+					if ($params['type'] == "rss") {
+						echo "  </channel>\n";
+						echo "</rss>\n";
+						return;
 					} ## if
 
 					// show a list of the last 5 days with links
