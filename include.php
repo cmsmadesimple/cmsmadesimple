@@ -27,9 +27,9 @@
 set_magic_quotes_runtime(false);
 
 #Setup session with different id and start it
-session_name("CMSSESSID");
-if(!session_id()) {
-	session_start();
+@session_name("CMSSESSID");
+if(!@session_id()) {
+	@session_start();
 }
 
 #Make a new CMS object

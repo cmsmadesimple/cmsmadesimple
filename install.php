@@ -126,12 +126,24 @@ function showPageOne() {
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
-    echo "<tr class=\"row1\"><td>Checking for PHP version 4.0+</td><td>";
-	echo (@phpversion() >= "4"?"Success!":"Failure!");
-	(@phpversion() >= "4"?null:$continueon=false);
+    echo "<tr class=\"row1\"><td>Checking for PHP version 4.1+</td><td>";
+	echo (@version_compare(phpversion(),"4.1.0") > -1?"Success!":"Failure!");
+	(@version_compare(phpversion(),"4.1.0") > -1?null:$continueon=false);
 	echo "</td></tr>\n";
 
-	$currow = "row2";
+	echo "<tr class=\"row2\"><td>Checking for Session Functions</td><td>";
+	if (function_exists("session_start"))
+	{
+		echo "Success!";
+	}
+	else
+	{
+		echo "Failed!";
+		$continueon = false;
+	}
+	echo "</td></tr>\n";
+
+	$currow = "row1";
 
     foreach ($files as $f) {
         #echo "<tr><td>\n";
