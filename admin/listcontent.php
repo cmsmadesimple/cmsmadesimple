@@ -30,25 +30,22 @@ include_once("header.php");
 
 	$modifyall = check_permission($config, $userid, 'Modify Any Content');
 
-	$db = new DB($config);
-
 	if ($modifyall) {
 		if (isset($_GET["makedefault"])) {
 			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 0";
-			$result = $db->query($query);
+			$result = $dbnew->Execute($query);
 
 			$query = "UPDATE ".$config->db_prefix."pages SET default_page = 1 WHERE page_id = ".$_GET["makedefault"];
-			$result = $db->query($query);
+			$result = $dbnew->Execute($query);
 		}
 	}
 
 	$section_count;
 	$query = "SELECT count(*) AS count, section_id FROM ".$config->db_prefix."pages GROUP BY section_id";
-	$result = $db->query($query);
-	while($row = $db->getresulthash($result)) {
+	$result = $dbnew->Execute($query);
+	while($row = $result->FetchRow()) {
 		$section_count[$row[section_id]] = $row[count];
 	}
-	$db->freeresult($result);
 
 	$query = "";
 	if ($modifyall == true) {
@@ -57,9 +54,9 @@ include_once("header.php");
 		$query = "SELECT p.*, u.username, s.section_name FROM ".$config->db_prefix."pages p INNER JOIN ".$config->db_prefix."users u ON u.user_id = p.owner INNER JOIN ".$config->db_prefix."sections s ON s.section_id = p.section_id LEFT OUTER JOIN ".$config->db_prefix."additional_users cau ON cau.page_id = p.page_id WHERE owner = ".$userid." OR cau.user_id = ".$userid." ORDER BY section_id, item_order";
 	}
 
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -83,7 +80,7 @@ include_once("header.php");
 
 		$currow = "row1";
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			$totalcount = $section_count[$row[section_id]];
 			if ($oldsectionid != $row["section_id"]) {
@@ -133,9 +130,6 @@ include_once("header.php");
 	} else {
 		echo "<p>".$gettext->gettext("No pages")."</p>";
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 	if (check_permission($config, $userid, 'Add Content')) {
 ?>

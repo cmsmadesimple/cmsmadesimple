@@ -212,7 +212,7 @@ if ($access) {
     while($row = $result->FetchRow()) {
         $addt_users .= "<option value=\"".$row["user_id"]."\"";
 		$query = "SELECT * from ".$config->db_prefix."additional_users WHERE user_id = ".$row["user_id"]." AND page_id = $page_id";
-		$newresult = $db->Execute($query);
+		$newresult = $dbnew->Execute($query);
 		if ($newresult) {
 			$addt_users .= " selected=\"true\"";
 		}
@@ -246,9 +246,9 @@ else {
 		$data["template_id"] = $template_id;
 
 		$query = "SELECT template_content, stylesheet FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		if ($result) {
-			$row = $db->getresulthash($result);
+			$row = $result->FetchRow();
 			$data["stylesheet"] = $row["stylesheet"];
 			$data["template"] = $row["template_content"];
 		} else {

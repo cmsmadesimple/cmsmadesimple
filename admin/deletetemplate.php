@@ -30,32 +30,27 @@ if (isset($_GET["template_id"])) {
 	$access = check_permission($config, $userid, 'Remove Template');
 
 	if ($access) {
-		$db = new DB($config);
 
 		$query = "SELECT template_name FROM ".$config->db_prefix."templates WHERE template_id = ".$template_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 
-		if ($db->rowcount($result) > 0) {
-			$row = $db->getresulthash($result);
+		if ($result) {
+			$row = $result->FetchRow();
 			$template_name = $row[template_name];
 		}
 
-		$db->freeresult($result);
-
 		$query = "SELECT count(*) AS count FROM ".$config->db_prefix."pages WHERE template_id = $template_id";
-		$result = $db->query($query);
-		$row = $db->getresulthash($result);
+		$result = $dbnew->Execute($query);
+		$row = $result->FetchRow();
 		if (isset($row["count"]) && $row["count"] > 0) {
 			$dodelete = false;
 		}
-		$db->freeresult($result);
 
 		if ($dodelete) {
 			$query = "DELETE FROM ".$config->db_prefix."templates where template_id = $template_id";
-			$result = $db->query($query);
+			$result = $dbnew->Execute($query);
 			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template_name, 'Deleted Template');
 		}
-		$db->close();
 	}
 }
 

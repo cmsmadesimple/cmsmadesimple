@@ -25,19 +25,15 @@ if ($_POST["username"] && $_POST["password"]) {
 	$username = $_POST["username"];
 	$password = $_POST["password"];
 
-	$db = new DB($config);
+	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = ".$dbnew->qstr($username)." and password = ".$dbnew->qstr(md5($password));
+	$result = $dbnew->Execute($query);
 
-	$query = "SELECT * FROM ".$config->db_prefix."users WHERE username = '".$db->escapestring($username)."' and password = '".md5($password)."'";
-	$result = $db->query($query);
-
-	$line = $db->getresulthash($result);
+	$line = $result->FetchRow();
 
 	if (isset($line["user_id"])) {
 		setcookie("cms_admin_user_id", $line["user_id"]);
 		$_SESSION["cms_admin_user_id"] = $line["user_id"];	
 		$_SESSION["cms_admin_username"] = $line["username"];	
-		$db->freeresult($result);
-		$db->close($link);
 		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], -1, "", 'User Login');
 		redirect("index.php");
 		return;
@@ -45,9 +41,6 @@ if ($_POST["username"] && $_POST["password"]) {
 	else {
 		$error .= "<p>".$gettext->gettext("Username or Password incorrect!")."</p>";
 	}
-
-	$db->freeresult($result);
-	$db->close($link);
 
 }
 

@@ -41,7 +41,6 @@ $userid = get_userid();
 $access = check_permission($config, $userid, 'Modify Section');
 
 if ($access) {
-	$db = new DB($config);
 
 	if (isset($_POST["editsection"])) {
 
@@ -54,14 +53,13 @@ if ($access) {
 
 		if ($validinfo) {
 
-			$query = "UPDATE ".$config->db_prefix."sections SET section_name='".$db->escapestring($section)."', active=$active, modified_date = now() WHERE section_id = $section_id";
-			$result = $db->query($query);
+			$query = "UPDATE ".$config->db_prefix."sections SET section_name=".$dbnew->qstr($section).", active=$active, modified_date = now() WHERE section_id = $section_id";
+			$result = $dbnew->Execute($query);
 
-			if ($db->rowsaffected()) {
+			if ($result) {
 				#This is so pages will not cache the menu changes
 				$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-				$db->query($query);
-				$db->close();
+				$dbnew->Execute($query);
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $section_id, $section, 'Edited Section');
 				redirect("listsections.php");
 				return;
@@ -75,18 +73,14 @@ if ($access) {
 	else if ($section_id != -1) {
 
 		$query = "SELECT * from ".$config->db_prefix."sections WHERE section_id = " . $section_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		
-		$row = $db->getresulthash($result);
+		$row = $result->FetchRow();
 
 		$section = $row["section_name"];
 		$active = $row["active"];
 
-		$db->freeresult($result);
-
 	}
-
-	$db->close();
 }
 
 include_once("header.php");

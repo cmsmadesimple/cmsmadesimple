@@ -37,7 +37,6 @@ $userid = get_userid();
 $access = check_permission($config, $userid, 'Add Section');
 
 if ($access) {
-	$db = new DB($config);
 
 	if (isset($_POST["addsection"])) {
 
@@ -51,18 +50,16 @@ if ($access) {
 			$order = 1;
 
 			$query = "SELECT max(item_order) + 1 as item_order FROM ".$config->db_prefix."sections";
-			$result = $db->query($query);
-			$row = $db->getresulthash($result);
+			$result = $dbnew->Execute($query);
+			$row = $result->FetchRow();
 			if (isset($row["item_order"])) {
 				$order = $row["item_order"];	
 			}
-			$db->freeresult($result);
 
-			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES ('".$db->escapestring($section)."', $order, $active, now(), now())";
-			$result = $db->query($query);
-			if ($db->rowsaffected()) {
-				$new_section_id = $db->insertid();
-				$db->close();
+			$query = "INSERT INTO ".$config->db_prefix."sections (section_name, item_order, active, create_date, modified_date) VALUES (".$dbnew->qstr($section).", $order, $active, now(), now())";
+			$result = $dbnew->Execute($query);
+			if ($result) {
+				$new_section_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_section_id, $section, 'Added Section');
 				redirect("listsections.php");
 				return;
@@ -72,8 +69,6 @@ if ($access) {
 			}
 		}
 	}
-
-	$db->close();
 }
 
 include_once("header.php");

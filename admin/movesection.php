@@ -30,40 +30,35 @@ if (isset($_GET["section_id"])) {
 
 	if ($access)  {
 
-		$db = new DB($config);
-
 		$order = 1;
 		#Grab necessary info for fixing the item_order
 		$query = "SELECT item_order FROM ".$config->db_prefix."sections WHERE section_id = $section_id";
 		#echo $query . "<br />";
-		$result = $db->query($query);
-		$row = $db->getresulthash($result);
+		$result = $dbnew->Execute($query);
+		$row = $result->FetchRow();
 		if (isset($row["item_order"])) {
 			$order = $row["item_order"];	
 		}
-		$db->freeresult($result);
-
 		if ($direction == "down") {
 			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE item_order = " . ($order + 1);
 			#echo $query . "<br />";
-			$db->query($query);
+			$dbnew->Execute($query);
 			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order + 1 WHERE section_id = " . $section_id;
 			#echo $query . "<br />";
-			$db->query($query);
+			$dbnew->Execute($query);
 		}
 		else if ($direction == "up") {
 			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order + 1 WHERE item_order = " . ($order - 1);
 			#echo $query . "<br />";
-			$db->query($query);
+			$dbnew->Execute($query);
 			$query = "UPDATE ".$config->db_prefix."sections SET item_order = item_order - 1 WHERE section_id = " . $section_id;
 			#echo $query . "<br />";
-			$db->query($query);
+			$dbnew->Execute($query);
 		}
 
 		#This is so pages will not cache the menu changes
 		$query = "UPDATE ".$config->db_prefix."templates SET modified_date = now()";
-		$db->query($query);
-		$db->close();
+		$dbnew->Execute($query);
 	}
 }
 

@@ -50,8 +50,6 @@ if ($access) {
 		return;
 	}
 
-	$db = new DB($config);
-
 	if (isset($_POST["edituser"])) {
 	
 		$validinfo = true;
@@ -67,15 +65,14 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."users SET username='".$db->escapestring($user)."', ";
+			$query = "UPDATE ".$config->db_prefix."users SET username=".$dbnew->qstr($user).", ";
 			if ($password != "") {
 				$query .= "password='".md5($password)."', ";
 			}
 			$query .= "active=$active, modified_date = now() WHERE user_id = $user_id";
-			$result = $db->query($query);
+			$result = $dbnew->Execute($query);
 
-			if ($db->rowsaffected()) {
-				$db->close();
+			if ($result) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user, 'Edited User');
 				redirect("listusers.php");
 				return;
@@ -88,18 +85,14 @@ if ($access) {
 	else if ($user_id != -1) {
 
 		$query = "SELECT * from ".$config->db_prefix."users WHERE user_id = " . $user_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		
-		$row = $db->getresulthash($result);
+		$row = $result->FetchRow();
 
 		$user = $row["username"];
 		$active = $row["active"];
 
-		$db->freeresult($result);
-
 	}
-
-	$db->close();
 }
 
 include_once("header.php");

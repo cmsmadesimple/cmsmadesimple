@@ -114,7 +114,7 @@ if ($access) {
 				if (isset($_POST["additional_editors"])) {
 					foreach ($_POST["additional_editors"] as $addt_user_id) {
 						$query = "INSERT INTO ".$config->db_prefix."additional_users (user_id, page_id) VALUES (".$addt_user_id.", ".$new_page_id.")";
-						$db->Execute($query);
+						$dbnew->Execute($query);
 					}
 				}
 				#This is so pages will not cache the menu changes

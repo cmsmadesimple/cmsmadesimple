@@ -34,12 +34,10 @@ if (isset($_GET["message"])) {
 	$edit = check_permission($config, $userid, 'Modify Section');
 	$remove = check_permission($config, $userid, 'Remove Section');
 
-	$db = new DB($config);
-
 	$query = "SELECT section_id, section_name, active FROM ".$config->db_prefix."sections ORDER BY item_order";
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	$totalcount = $db->rowcount($result);
+	$totalcount = $result->RowCount($result);
 
 	if ($totalcount > 0) {
 
@@ -59,7 +57,7 @@ if (isset($_GET["message"])) {
 
 		$count = 1;
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["section_name"]."</td>\n";
@@ -91,9 +89,6 @@ if (isset($_GET["message"])) {
 		echo "</table>\n";
 
 	}
-
-	$db->freeresult($result);
-	$db->query($link);
 
 if (check_permission($config, $userid, 'Add Section')) {
 ?>

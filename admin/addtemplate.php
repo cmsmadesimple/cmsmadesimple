@@ -46,7 +46,6 @@ $userid = get_userid();
 $access = check_permission($config, $userid, 'Add Template');
 
 if ($access) {
-	$db = new DB($config);
 
 	if (isset($_POST["addtemplate"]) && !$preview) {
 
@@ -62,11 +61,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES ('".$db->escapestring($template)."', '".$db->escapestring($content)."', '".$db->escapestring($stylesheet)."', $active, now(), now());";
-			$result = $db->query($query);
-			if ($db->rowsaffected()) {
-				$new_template_id = $db->insertid();
-				$db->close();
+			$query = "INSERT INTO ".$config->db_prefix."templates (template_name, template_content, stylesheet, active, create_date, modified_date) VALUES (".$dbnew->qstr($template).", ".$dbnew->qstr($content).", ".$dbnew->qstr($stylesheet).", $active, now(), now());";
+			$result = $dbnew->Execute($query);
+			if ($result) {
+				$new_template_id = $dbnew->Insert_ID();
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_template_id, $template, 'Added Template');
 				redirect("listtemplates.php");
 				return;
@@ -76,8 +74,6 @@ if ($access) {
 			}
 		}
 	}
-
-	$db->close();
 }
 
 include_once("header.php");

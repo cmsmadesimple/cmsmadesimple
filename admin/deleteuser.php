@@ -29,23 +29,19 @@ if (isset($_GET["user_id"])) {
 	$access = check_permission($config, $userid, 'Remove User');
 
 	if ($access) {
-		$db = new DB($config);
 
 		$query = "SELECT username FROM ".$config->db_prefix."users WHERE user_id = ".$user_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 
-		if ($db->rowcount($result) > 0) {
-			$row = $db->getresulthash($result);
+		if ($result) {
+			$row = $result->FetchRow();
 			$user_name = $row[username];
 		}
 
-		$db->freeresult($result);
-
 		$query = "DELETE FROM ".$config->db_prefix."additional_users where user_id = $user_id";
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		$query = "DELETE FROM ".$config->db_prefix."users where user_id = $user_id";
-		$result = $db->query($query);
-		$db->close();
+		$result = $dbnew->Execute($query);
 		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $user_id, $user_name, 'Deleted User');
 	}
 }

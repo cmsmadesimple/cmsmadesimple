@@ -34,12 +34,10 @@ if (isset($_GET["message"])) {
 	$edit = check_permission($config, $userid, 'Modify Template');
 	$remove = check_permission($config, $userid, 'Remove Template');
 
-	$db = new DB($config);
+	$query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
+	$result = $dbnew->Execute($query);
 
-        $query = "SELECT template_id, template_name, active FROM ".$config->db_prefix."templates ORDER BY template_id";
-        $result = $db->query($query);
-
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -53,7 +51,7 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["template_name"]."</td>\n";
@@ -71,9 +69,6 @@ if (isset($_GET["message"])) {
 		echo "</table>\n";
 
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 if (check_permission($config, $userid, 'Add Template')) {
 ?>

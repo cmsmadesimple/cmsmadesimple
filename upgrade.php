@@ -44,15 +44,11 @@ require_once("include.php");
 
 $current_version = 1;
 
-$db = new DB($config);
-
 $query = "SELECT version from ".$config->db_prefix."version";
-$result = $db->query($query);
-while($row = $db->getresulthash($result)) {
+$result = $dbnew->Execute($query);
+while($row = $result->FetchRow()) {
 	$current_version = $row["version"];
 }
-
-$db->freeresult($result);
 
 if (!isset($_GET["doupgrade"])) {
 

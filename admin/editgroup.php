@@ -44,8 +44,6 @@ $access = check_permission($config, $userid, 'Modify Group');
 
 if ($access) {
 
-	$db = new DB($config);
-
 	if (isset($_POST["editgroup"])) {
 
 		$validinfo = true;
@@ -55,11 +53,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."groups SET group_name='".$db->escapestring($group)."', active=$active, modified_date = now() WHERE group_id = $group_id";
-			$result = $db->query($query);
+			$query = "UPDATE ".$config->db_prefix."groups SET group_name=".$dbnew->qstr($group).", active=$active, modified_date = now() WHERE group_id = $group_id";
+			$result = $dbnew->Execute($query);
 
-			if ($db->rowsaffected()) {
-				$db->close();
+			if ($result) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group, 'Edited Group');
 				redirect("listgroups.php");
 				return;
@@ -73,19 +70,13 @@ if ($access) {
 	else if ($group_id != -1) {
 
 		$query = "SELECT * from ".$config->db_prefix."groups WHERE group_id = " . $group_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		
-		$row = $db->getresulthash($result);
+		$row = $result->FetchRow();
 
 		$group = $row["group_name"];
 		$active = $row["active"];
-
-		$db->freeresult($result);
-
 	}
-
-	$db->close();
-
 }
 
 include_once("header.php");

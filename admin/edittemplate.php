@@ -51,8 +51,6 @@ $access = check_permission($config, $userid, 'Modify Template');
 
 if ($access) {
 
-	$db = new DB($config);
-
 	if (isset($_POST["edittemplate"]) && !$preview) {
 
 		$validinfo = true;
@@ -66,11 +64,10 @@ if ($access) {
 		}
 
 		if ($validinfo) {
-			$query = "UPDATE ".$config->db_prefix."templates SET template_name = '".$db->escapestring($template)."', template_content = '".$db->escapestring($content)."', stylesheet = '".$db->escapestring($stylesheet)."', active = $active, modified_date = now() WHERE template_id = $template_id";
-			$result = $db->query($query);
+			$query = "UPDATE ".$config->db_prefix."templates SET template_name = ".$dbnew->qstr($template).", template_content = ".$dbnew->qstr($content).", stylesheet = ".$dbnew->qstr($stylesheet).", active = $active, modified_date = now() WHERE template_id = $template_id";
+			$result = $dbnew->Execute($query);
 
-			if ($db->rowsaffected()) {
-				$db->close();
+			if ($result) {
 				audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $template_id, $template, 'Edited Template');
 				redirect("listtemplates.php");
 				return;
@@ -84,21 +81,16 @@ if ($access) {
 	else if ($template_id != -1 && !$preview) {
 
 		$query = "SELECT * from ".$config->db_prefix."templates WHERE template_id = " . $template_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 		
-		$row = $db->getresulthash($result);
+		$row = $result->FetchRow();
 
 		$template = $row["template_name"];
 		$content = $row["template_content"];
 		$stylesheet = $row["stylesheet"];
 		$active = $row["active"];
 
-		$db->freeresult($result);
-
 	}
-
-	$db->close($link);
-
 }
 
 include_once("header.php");

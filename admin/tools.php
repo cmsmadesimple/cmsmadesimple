@@ -53,9 +53,6 @@ function do_adodb_backup() {
 
     echo "<p>".$gettext->gettext("Working....")."<br />\n";
 
-    ## open database connection
-    $db = new DB($config);
-
     ## open file for backup
     $date = date("mdy-Hi");
     $backup_file = $config->root_path."/backup.$date.sql";
@@ -101,7 +98,7 @@ function do_adodb_backup() {
 
                 $data_line = "";
                 foreach ($row2 as $data) {
-                    $data_line .= "'".$db->escapestring($data)."',";
+                    $data_line .= $dbnew->qstr($data).",";
                 } ## foreach
 
                 $data_line = substr($data_line,0,strlen($data_line) -1);

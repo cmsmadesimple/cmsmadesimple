@@ -30,12 +30,10 @@ include_once("header.php");
 	$edit = check_permission($config, $userid, 'Modify User');
 	$remove = check_permission($config, $userid, 'Remove User');
 
-	$db = new DB($config);
+	$query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
+	$result = $dbnew->Execute($query);
 
-        $query = "SELECT user_id, username, active FROM ".$config->db_prefix."users ORDER BY user_id";
-        $result = $db->query($query);
-
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
 		echo '<table cellspacing="0" class="admintable">'."\n";
 		echo "<tr>\n";
@@ -48,7 +46,7 @@ include_once("header.php");
 
 		$currow = "row1";
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			echo "<tr class=\"$currow\">\n";
 			echo "<td>".$row["username"]."</td>\n";
@@ -68,9 +66,6 @@ include_once("header.php");
 		echo "</table>\n";
 
 	}
-
-	$db->freeresult($result);
-	$db->close();
 
 if (check_permission($config, $userid, 'Add User')) {
 ?>

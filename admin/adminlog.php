@@ -24,12 +24,10 @@ include_once("header.php");
 
 $userid = get_userid();
 
-$db = new DB($config);
-
 $query = "SELECT * from ".$config->db_prefix."adminlog ORDER BY timestamp DESC limit 30";
-$result = $db->query($query);
+$result = $dbnew->Execute($query);
 
-if ($db->rowcount($result) > 0) {
+if ($result) {
 
 ?>
 
@@ -48,7 +46,7 @@ if ($db->rowcount($result) > 0) {
 
 	$currow = "row1";
 
-	while ($row = $db->getresulthash($result)) {
+	while ($row = $result->FetchRow()) {
 
 		echo "<tr class=\"$currow\">\n";
 		echo "<td>".$row["username"]."</td>\n";
@@ -68,9 +66,6 @@ if ($db->rowcount($result) > 0) {
 </table>
 
 <?php
-
-$db->freeresult($result);
-$db->close();
 
 include_once("footer.php");
 

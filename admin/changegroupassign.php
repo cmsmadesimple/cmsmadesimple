@@ -36,31 +36,26 @@ $access = check_permission($config, $userid, 'Modify Group Assignments');
 
 if ($access) {
 
-	$db = new DB($config);
-
 	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
-		$row = $db->getresulthash($result);
+	if ($result) {
+		$row = $result->FetchRow();
 		$group_name = $row[group_name];
 	}
-
-	$db->freeresult($result);
 
 	if (isset($_POST["changeassign"])) {
 
 		$query = "DELETE FROM ".$config->db_prefix."user_groups WHERE group_id = " . $group_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"user-") == 0) {
-				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->escapestring($group_id).", ".$db->escapestring(substr($key,5)).", now(), now())";
-				$result = $db->query($query);
+				$query = "INSERT INTO ".$config->db_prefix."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
+				$result = $dbnew->Execute($query);
 			}
 		}
 
-		$db->close();
 		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Assignments');
 		redirect("listgroups.php");
 		return;
@@ -84,12 +79,12 @@ else {
 
 <?php
 
-        $query = "SELECT * FROM ".$config->db_prefix."users ORDER BY username";
-        $result = $db->query($query);
+	$query = "SELECT * FROM ".$config->db_prefix."users ORDER BY username";
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			$users[$row[username]] = false;
 			$ids[$row[username]] = $row[user_id];
@@ -97,14 +92,12 @@ else {
 
 	}
 
-        $db->freeresult($result);
+	$query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
+	$result = $dbnew->Execute($query);
 
-        $query = "SELECT u.user_id, u.username FROM ".$config->db_prefix."user_groups ug INNER JOIN ".$config->db_prefix."users u ON u.user_id = ug.user_id WHERE group_id = " . $group_id;
-        $result = $db->query($query);
+	if ($result) {
 
-	if ($db->rowcount($result) > 0) {
-
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			$users[$row[username]] = true; 
 			$ids[$row[username]] = $row[user_id];
@@ -112,17 +105,12 @@ else {
 
 	}
 
-        $db->freeresult($result);
-
-        $db->close();
-
 	foreach ($users as $key => $value) {
 
 		echo "<p>";
 		echo "<input type=\"checkbox\"";
 		echo ($value == true?" checked":"");
 		echo " name=\"user-".$ids[$key]."\" value=\"1\">$key</p>\n";
-
 	}
 
 ?>

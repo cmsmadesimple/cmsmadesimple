@@ -36,31 +36,26 @@ $access = check_permission($config, $userid, 'Modify Permissions');
 
 if ($access) {
 
-	$db = new DB($config);
-
 	$query = "SELECT group_name FROM ".$config->db_prefix."groups WHERE group_id = ".$group_id;
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
-		$row = $db->getresulthash($result);
+	if ($result) {
+		$row = $result->FetchRow();
 		$group_name = $row[group_name];
 	}
-
-	$db->freeresult($result);
 
 	if (isset($_POST["changeperm"])) {
 
 		$query = "DELETE FROM ".$config->db_prefix."group_perms WHERE group_id = " . $group_id;
-		$result = $db->query($query);
+		$result = $dbnew->Execute($query);
 
 		foreach ($_POST as $key=>$value) {
 			if (strpos($key,"perm-") == 0) {
-				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_id, permission_id, create_date, modified_date) VALUES (".$db->escapestring($group_id).", ".$db->escapestring(substr($key,5)).", now(), now())";
-				$result = $db->query($query);
+				$query = "INSERT INTO ".$config->db_prefix."group_perms (group_id, permission_id, create_date, modified_date) VALUES (".$dbnew->qstr($group_id).", ".$dbnew->qstr(substr($key,5)).", now(), now())";
+				$dbnew->Execute($query);
 			}
 		}
 
-		$db->close();
 		audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $group_id, $group_name, 'Changed Group Permissions');
 		redirect("listgroups.php");
 		return;
@@ -89,11 +84,11 @@ else {
 	$gettext->reset();
 
 	$query = "SELECT permission_id, permission_name, permission_text FROM ".$config->db_prefix."permissions ORDER BY permission_name";
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			$perms[$row[permission_name]] = false;
 			$ids[$row[permission_name]] = $row[permission_id];
@@ -101,25 +96,19 @@ else {
 
 	}
 
-	$db->freeresult($result);
-
 	$query = "SELECT p.permission_name FROM ".$config->db_prefix."group_perms g INNER JOIN ".$config->db_prefix."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
 
-	$result = $db->query($query);
+	$result = $dbnew->Execute($query);
 
-	if ($db->rowcount($result) > 0) {
+	if ($result) {
 
-		while($row = $db->getresulthash($result)) {
+		while($row = $result->FetchRow()) {
 
 			$tmp = $row[permission_name];
 			$perms[$tmp] = true;
 		}
 
 	}
-
-	$db->freeresult($result);
-
-	$db->close();
 
 	foreach ($perms as $key => $value) {
 

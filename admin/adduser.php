@@ -39,8 +39,6 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-$db = new DB($config);
-
 if (isset($_POST["adduser"])) {
 
 	$validinfo = true;
@@ -61,23 +59,19 @@ if (isset($_POST["adduser"])) {
 	}
 
 	if ($validinfo) {
-		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES ('".$db->escapestring($user)."', '".md5($password)."', $active, now(), now())";
-		$result = $db->query($query);
-		if ($db->rowsaffected()) {
-			$new_user_id = $db->insertid();
-			$db->close();
+		$query = "INSERT INTO ".$config->db_prefix."users (username, password, active, create_date, modified_date) VALUES (".$dbnew->qstr($user).", ".$dbnew->qstr(md5($password)).", $active, now(), now())";
+		$result = $dbnew->Execute($query);
+		if ($result) {
+			$new_user_id = $dbnew->Insert_ID();
 			audit($config, $_SESSION["cms_admin_user_id"], $_SESSION["cms_admin_username"], $new_user_id, $user, 'Added User');
 			redirect("listusers.php");
 			return;
 		}
 		else {
-			$db->close();
 			$error .= "<li>".$gettext->gettext("Error inserting user!")."</li>";
 		}
 	}
 }
-
-$db->close();
 
 include_once("header.php");
 
