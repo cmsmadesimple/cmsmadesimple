@@ -197,7 +197,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 			}
 			else
 			{
-				echo "<object><div class=\"cms-module-news\">";
+				echo "<div class=\"cms-module-news\">";
 				echo "<div class=\"cms-module-news-header\">";
 				if (!(isset($params['swaptitledate']) && 
 						($params['swaptitledate'] == 'true' || 
@@ -243,7 +243,7 @@ function news_module_executeuser( $cms, $id, $return_id, $params )
 				{
 					echo "<span class=\"cms-news-content\">".$row["news_data"]."</span>";
 				}
-				echo "</div></object>";
+				echo "</div>";
 			}
 		}
 
