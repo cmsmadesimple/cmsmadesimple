@@ -228,9 +228,9 @@ class GetText_NativeSupport
      */
     function setLanguage($langCode)
     {
-        putenv("LANG=$langCode");
-        putenv("LC_ALL=$langCode");
-        putenv("LANGUAGE=$langCode");
+        @putenv("LANG=$langCode");
+        @putenv("LC_ALL=$langCode");
+        @putenv("LANGUAGE=$langCode");
         $set = setlocale(LC_ALL, "$langCode");
         if ($set === false) {
             $str = sprintf('Language code "%s" not supported by your system',

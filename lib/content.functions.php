@@ -466,7 +466,8 @@ function construct_tree_from_list(&$content_array, &$parents, $params) {
 
 				if (($show == "menu" && $newchild->active && $newchild->show_in_menu) or ($show == "all")) {
 				
-					array_push($current->childs,$newchild);
+					$current->childs[$count - 1] = &$newchild;
+					# array_push($current->childs, &$newchild);
 					
 					$newparams = array(
 						"start_element"		=>	$key,
