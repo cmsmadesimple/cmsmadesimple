@@ -104,7 +104,7 @@ if (count($cmsmodules) > 0) {
 			echo "<td>".$dbm[$key]['Version']."</td>";
 			echo "<td>".$dbm[$key]['Status']."</td>";
 			echo "<td>".($dbm[$key]['Active']==="1"?"<a href='modules.php?action=setfalse&module=".$key."'>True</a>":"<a href='modules.php?action=settrue&module=".$key."'>False</a>")."</td>";
-			echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\">Uninstall</a></td>";
+			echo "<td><a href=\"modules.php?action=uninstall&module=".$key."\" onclick=\"return confirm('".$gettext->gettext("Are you sure you want to uninstall this module?")."');\">Uninstall</a></td>";
 		}
 	
 		echo "</tr>\n";
