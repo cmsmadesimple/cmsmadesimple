@@ -41,14 +41,14 @@ if (isset($_GET["message"])) {
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {
-			$query = "UPDATE ".cms_db_prefix()."pages SET template_id = ".$_GET["template_id"];
+			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ".$_GET["template_id"];
 			$result = $db->Execute($query);
 			if ($result) {
-				$query = "UPDATE ".cms_db_prefix()."pages SET modified_date = ".$db->DBTimeStamp(time());
+				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
-				echo "<p>All Pages Modified!</p>";
+				echo '<p>All Pages Modified!</p>';
 			} else {
-				echo "<p class=\"error\">Error updating pages</p>";
+				echo '<p class="error">Error updating pages</p>';
 			}
 		}
 	}
