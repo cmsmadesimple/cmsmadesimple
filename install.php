@@ -44,22 +44,34 @@ if ($currentpage > 1) { require_once("include.php"); }
 
 <html>
 <head>
-    <title>Install for CMS: CMS Made Simple</title>
-    <meta http-equiv="content-type" content="text/html; charset=ISO-8859-1">
-    <link rel='stylesheet' href='style.css'>
-    <style type="text/css">
-    <!--
-        @import url(style.css);
-    -->
-    </style>
+        <title>CMS Made Simple Install</title>
+        <link rel="stylesheet" type="text/css" href="install.css" />
 </head>
+
 <body>
+
+<div class="body">
+
+<img src="images/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
+
+<div class="headerish">
+
+<p>Install System</p>
+
+</div>
+
+<div class="main">
 
 <?php
 
-
-echo "<h3>Thanks for installing CMS: CMS Made Simple.<br>\n";
-echo "We're on page $currentpage of $pages of the install process.  Please follow below.</h3><p><hr width=80%>\n";
+echo "<h3>Thanks for installing CMS: CMS Made Simple.</h3>\n";
+echo "<table class=\"countdown\" cellspacing=\"2\" cellpadding=\"2\"><tr>";
+echo "<td class=\"".($currentpage>=1?"complete":"todo")."\">1</td>";
+echo "<td class=\"".($currentpage>=2?"complete":"todo")."\">2</td>";
+echo "<td class=\"".($currentpage>=3?"complete":"todo")."\">3</td>";
+echo "<td class=\"".($currentpage>=4?"complete":"todo")."\">4</td>";
+echo "</tr></table>\n";
+echo "<p><hr width=80%></p>\n";
 
 switch ($currentpage) {
     case 1:
@@ -79,8 +91,6 @@ switch ($currentpage) {
         break;
 } ## switch
 
-return;
-
 function showPageOne() {
     ## test file permissions
     ## apache (or other webserver) user needs to have write access to the cache and template_c dirs
@@ -97,28 +107,27 @@ function showPageOne() {
     echo "<h3>Checking file permissions:</h3>\n";
     $files = array('smarty/cms/cache/install.test.txt', 'smarty/cms/templates_c/install.test.txt');
 
-    echo "<table border=0 cellpadding=2 cellspacing=0>\n";
-    echo "<tr><td class=\"label\"><b>Test</b></td><td class=\"label\"><b>Result</b></td></tr>\n";
+    echo "<table class=\"regtable\" border=\"1\">\n";
+    echo "<tr><th>Test</th><th>Result</th></tr>\n";
 
     foreach ($files as $f) {
-        if ($class == "body") {$class = "bodyalt";} else {$class = "body";}
-        echo "<tr><td>\n";
+        #echo "<tr><td>\n";
         ## check if we can write to the this file
-        echo "<tr><td class=\"$class\">Opening for write ($f)</td><td class=\"$class\">";
+        echo "<tr><td>Opening for write ($f)</td><td>";
         $file = @fopen ($f, "w");
         if($file != 0) {
-            echo "<p class=\"success\">Success!</p>\n";
+            echo "Success!";
             fclose($file); 
         } else {
-            echo "<p class=\"failure\">Failure!</p>\n";
+            echo "Failure!";
         } ## if 
-        echo "</td></tr>";
+        echo "</td></tr>\n";
     } ## foreach
 
-    echo "</table><p>\n";
+    echo "</table>\n";
   
-    echo "If all your tests show successful then it is time to setup your database.<br>\n";
-    echo "<a href=\"install.php?page=2\">Continue</a>\n";
+    echo "<p>If all your tests show successful then it is time to setup your database.<br />\n";
+    echo "<a href=\"install.php?page=2\">Continue</a></p>\n";
 
 } ## showPageOne
 
@@ -130,36 +139,36 @@ Log in to mysql from a console and run the following commands:<br>
 - grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';<p>
 
 Please complete the following fields:
-<form action=install.php method=post>
+<form action="install.php" method="post">
 
-<table cellpadding=2 border=1>
+<table cellpadding="2" border="1" class="regtable">
 <tr>
-<td class="body">Database host address</td>
-<td class="body"><input type=text name=host value="localhost" length=20 maxlength=50></td>
+<td>Database host address</td>
+<td><input type="text" name="host" value="localhost" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="body">Database host port</td>
-<td class="body"><input type=text name=port value="3306" length=20 maxlength=50></td>
+<td>Database host port</td>
+<td><input type="text" name="port" value="3306" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="body">Database name</td>
-<td class="body"><input type=text name=database value="cms" length=20 maxlength=50></td>
+<td>Database name</td>
+<td><input type="text" name="database" value="cms" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="bodyalt">Username</td>
-<td class="bodyalt"><input type=text name=username value="cms_user" length=20 maxlength=50></td>
+<td>Username</td>
+<td><input type="text" name="username" value="cms_user" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="body">Password</td>
-<td class="body"><input type=password name=password value="cms_pass" length=20 maxlength=50></td>
+<td>Password</td>
+<td><input type="password" name="password" value="cms_pass" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="bodyalt">Table prefix</td>
-<td class="bodyalt"><input type=text name=prefix value="cms_" length=20 maxlength=50></td>
+<td>Table prefix</td>
+<td><input type="text" name="prefix" value="cms_" length="20" maxlength="50" /></td>
 </tr>
 <tr>
-<td class="body"><input type=hidden name=page value=3></td>
-<td class="body"><input type=submit value="Continue"> <input type=reset></td>
+<td><input type="hidden" name="page" value="3" />&nbsp;</td>
+<td><input type="submit" value="Continue" /></td>
 </tr>
 
 </table>
@@ -180,7 +189,7 @@ function showPageThree($sqlloaded = 0) {
 
         $statements = preg_split("/\;\r?\n?$/m", $contents);
  
-        echo "<textarea name=code rows=15 cols=80>$contents</textarea><p>\n";
+        echo "<textarea name=code rows=15 cols=60>$contents</textarea><p>\n";
         $link = @mysql_connect($_POST['host'].":".$_POST['port'], $_POST['username'], $_POST['password']);
         if (!$link) {
            die('Could not connect: ' . mysql_error());
@@ -206,22 +215,21 @@ function showPageThree($sqlloaded = 0) {
 
     $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-12);
     $docpath = substr($_SERVER['SCRIPT_FILENAME'],0,strlen($_SERVER['SCRIPT_FILENAME'])-12);
-    echo "<p>\n";
 
-    echo "Now let's continue to setup your configuration file, we already have most of the stuff we need.<br>\n";
-    echo "Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.<p>\n";
+    echo "<p>Now let's continue to setup your configuration file, we already have most of the stuff we need.<br />\n";
+    echo "Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Write Config.</p>\n";
     echo "<form action=install.php method=post>\n";
-    echo "<table border=0 cellpadding=2>\n";
-    echo "<tr><td class=\"body\">CMS Document root (as seen from the webserver)</td><td class=\"body\"><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
-    echo "<tr><td class=\"bodyalt\">Path to the Document root</td><td class=\"bodyalt\"><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
-    echo "<tr><td class=\"body\">Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td class=\"body\"><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
-    echo "<tr><td class=\"bodyalt\">Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td class=\"bodyalt\"><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
+	echo "<table cellpadding=\"2\" border=\"1\" class=\"regtable\">\n";
+    echo "<tr><td>CMS Document root (as seen from the webserver)</td><td><input type=text name=docroot value=\"$docroot\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr><td>Path to the Document root</td><td><input type=text name=docpath value=\"$docpath\" length=50 maxlength=100></td></tr>\n";
+    echo "<tr><td>Query string (leave this alone unless you have trouble, then edit config.php by hand)</td><td><input type=text name=querystr value=\"page\" length=20 maxlength=20></td></tr>\n";
+    echo "<tr><td>Use BBCode (must have this installed, see <a href=INSTALL target=_new>INSTALL</a></td><td><input type=text name=bbcode value=\"false\" length=5 maxlength=5></td></tr>\n";
 
-    echo '<tr><td class="body"><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
+    echo '<tr><td><input type=hidden name=page value=4><input type=hidden name=host value="'.$_POST['host'].'">';
     echo '<input type=hidden name=database value="'.$_POST['database'].'"><input type=hidden name=port value="'.$_POST['port'].'">';
     echo '<input type=hidden name=username value="'.$_POST['username'].'"><input type=hidden name=password value="'.$_POST['password'].'">';
     echo '<input type=hidden name=prefix value="'.$_POST['prefix'].'">';
-    echo "</td><td class=\"body\"><input type=submit value=\"Write config\"> <input type=reset></td></tr>\n";
+    echo "</td><td><input type=submit value=\"Write config\" /></td></tr>\n";
     echo "</table></form>\n";
 
     
@@ -269,13 +277,9 @@ function showPageFour() {
 } ## showPageFour
 ?>
 
+</div>
+</div>
 
-<!--
-## 1. Check perms - Smarty needs the cache and template_c dirs to be writable by the web server user and I guess config.php also...
-## 2. Install the schema (or update)
-## 3. Setup default admin account - already done in step 2
-## 4. Write settings out to config.php
--->
 </body>
 </html>
 <?php

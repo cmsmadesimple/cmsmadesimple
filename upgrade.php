@@ -18,6 +18,30 @@
 
 require_once("include.php");
 
+?>
+
+<html>
+<head>
+	<title>CMS Made Simple Upgrade</title>
+	<link rel="stylesheet" type="text/css" href="install.css" />
+</head>
+
+<body>
+
+<div class="body">
+
+<img src="images/cmsbanner.png" width="400" height="96" alt="CMS Banner Logo" />
+
+<div class="headerish">
+
+<p>Upgrade System</p>
+
+</div>
+
+<div class="main">
+
+<?
+
 $current_version = 1;
 
 $db = new DB($config);
@@ -50,3 +74,10 @@ else {
 
 # vim:ts=4 sw=4 noet
 ?>
+
+</div>
+
+</div>
+
+</body>
+</html>
