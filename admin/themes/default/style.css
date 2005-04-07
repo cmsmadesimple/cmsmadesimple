@@ -146,6 +146,28 @@ iframe {
 	margin-top: 2px;
 }
 
+#RecentPageCallout {
+	width: 150px;
+	font-size: 10px;
+	padding-top: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	margin: 10px;
+	background-color: #d0d0e7;
+	position: absolute;
+	right:0;
+	top: 14px;
+}
+
+#RecentPageCallout ul {
+    padding: 2px;
+}
+
+#RecentPageCallout li {
+    list-style: decimal inside;
+}
+
+
 #BookmarkCallout {
 	width: 150px;
 	font-size: .9em;

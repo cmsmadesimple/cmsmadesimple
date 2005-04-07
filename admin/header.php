@@ -158,16 +158,20 @@ if (! isset($CMS_EXCLUDE_FROM_RECENT))
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <script type="text/javascript">
 var state=false;
+var recentTop=0;
 function toggleBookmarkState()
 	{
 	state = !state;
+
 	if (state)
 		{
 		document.getElementById("BookmarkCallout").style.visibility = 'visible';
+        document.getElementById("RecentPageCallout").style.visibility = 'hidden';
 		}
 	else
 		{
 		document.getElementById("BookmarkCallout").style.visibility = 'hidden';
+		document.getElementById("RecentPageCallout").style.visibility = 'visible';
 		}
 	}
 </script>
@@ -202,7 +206,7 @@ function toggleBookmarkState()
 ?>
 </div>
 
-<div class="DashboardCallout">
+<div id="RecentPageCallout">
 
 <p class="DashboardCalloutTitle">Recent Pages</p>
 <?php
