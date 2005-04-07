@@ -24,6 +24,14 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
+echo "<p>Removing field from content_props table...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."content_props", "content_prop_id");
+$dbdict->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
 echo "<p>Setting a last_modified_by to something...";
 
 $oneuserid = $db->GetOne("SELECT user_id FROM ".cms_db_prefix()."users");

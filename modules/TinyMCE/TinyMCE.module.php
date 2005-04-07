@@ -73,16 +73,16 @@ class TinyMCE extends CMSModule
 		
 		<table border="0">
 			<tr>
-				<td>Strip background tags from CSS:</td>
+				<td><?php echo $this->Lang('stripbackgroundtags');?>:</td>
 				<td>
 					<?php $values = array();
-					$values = array('true'=>'true', 'false'=>'false');
+					$values = array($this->Lang('true')=>'true', $this->Lang('false')=>'false');
 					echo $this->CreateInputDropdown($id, 'striptags', $values, -1, $striptags, '');
 					?></td>
 			</tr>
 			<tr>
 				<td>&nbsp;</td>
-				<td><?php echo $this->CreateInputSubmit($id, 'submit', 'Submit') ?></td>
+				<td><?php echo $this->CreateInputSubmit($id, 'submit', $this->Lang('submit')) ?></td>
 			</tr>
 		</table>
 

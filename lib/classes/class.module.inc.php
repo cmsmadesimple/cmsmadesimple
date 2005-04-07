@@ -34,11 +34,15 @@ class CMSModule extends ModuleOperations
 	 * ------------------------------------------------------------------
 	 */
 	var $cms;
+	var $curlang;
+	var $langhash;
 
 	function CMSModule()
 	{
 		global $gCms;
 		$this->cms = &$gCms;
+		$this->curlang = '';
+		$this->langhash = array();
 
 		$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
 		$this->smarty = &$smarty;
@@ -1147,6 +1151,46 @@ class CMSModule extends ModuleOperations
 		}
 
 		return FALSE;
+	}
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Language Functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	function Lang($name, $params=array())
+	{
+		global $gCms;
+		$ourlang = $gCms->current_language;
+
+		#Load the language if it's not loaded
+		if (count(array_keys($this->langhash)) == 0)
+		{
+			$dir = $gCms->config['root_path'];
+			#debug_buffer("Loading: $dir/modules/".$this->GetName()."/lang/$ourlang.php");
+			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
+			{
+				include_once("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
+				$this->langhash = &$lang;
+			}
+		}
+
+		if (isset($this->langhash[$name]))
+		{
+			if (isset($params))
+			{
+				return vsprintf($this->langhash[$name], $params);
+			}
+			else
+			{
+				return $this->langhash[$name];
+			}
+		}
+		else
+		{
+			return "--Add Me - $name--";
+		}
 	}
 
 	/**

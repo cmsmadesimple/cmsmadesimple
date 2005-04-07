@@ -128,9 +128,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict = NewDataDictionary($db);
 	$flds = "
 		content_prop_id I,
-		content_id I,
+		content_id I KEY,
 		type C(25),
-		prop_name C(255),
+		prop_name C(255) KEY,
 		param1 C(255),
 		param2 C(255),
 		param3 C(255),
