@@ -1159,6 +1159,23 @@ class CMSModule extends ModuleOperations
 	 * ------------------------------------------------------------------
 	 */
 	
+	/**
+	 * Sets the default language (usually en_US) for the module.  There
+	 * should be at least a language file for this language if the Lang()
+	 * function is used at all.
+	 */
+	function DefaultLanguage()
+	{
+		return 'en_US';
+	}
+	
+	/**
+	 * Returns the corresponding translated string for the id given.
+	 *
+	 * @param string Id of the string to lookup and return
+	 * @param array Corresponding params for string that require replacement.
+	 *        These params use the vsprintf command and it's style of replacement.
+	 */
 	function Lang($name, $params=array())
 	{
 		global $gCms;
@@ -1168,11 +1185,20 @@ class CMSModule extends ModuleOperations
 		if (count(array_keys($this->langhash)) == 0)
 		{
 			$dir = $gCms->config['root_path'];
-			#debug_buffer("Loading: $dir/modules/".$this->GetName()."/lang/$ourlang.php");
 			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
 			{
 				include_once("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				$this->langhash = &$lang;
+			}
+			else if (is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
+			{
+				include_once("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+				$this->langhash = &$lang;
+			}
+			else
+			{
+				# Sucks to be here...  Don't use Lang unless there are language files...
+				# Get ready for a lot of Add Me's
 			}
 		}
 
@@ -1189,7 +1215,7 @@ class CMSModule extends ModuleOperations
 		}
 		else
 		{
-			return "--Add Me - $name--";
+			return "--Add Me - module:".$this->GetName()." string:$name--";
 		}
 	}
 
