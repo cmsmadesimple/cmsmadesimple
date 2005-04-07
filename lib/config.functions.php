@@ -102,6 +102,8 @@ function cms_config_load($loadLocal = true)
 	$config["persistent_db_conn"] = true;
 
 	$config["default_upload_permission"] = '664';
+	
+	$config["page_extension"] = ".shtml";
 
 	if ($loadLocal == true)
 	{

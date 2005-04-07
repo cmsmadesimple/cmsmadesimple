@@ -473,6 +473,7 @@ function showPageFive() {
 	$newconfig["admin_dir"] = "admin";
 	$newconfig["persistent_db_conn"] = true;
 	$newconfig["default_upload_permission"] = '664';
+    $newconfig["page_extension"] = ".shtml";
 
     $configfile = dirname(dirname(__FILE__))."/config.php";
     ## build the content for config file

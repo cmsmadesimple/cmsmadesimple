@@ -1201,7 +1201,7 @@ class NewsModule extends CMSModuleContentType
 
 		if ($config["assume_mod_rewrite"])
 		{
-			$url = $config["root_url"]."/".$this->mId.".shtml";
+			$url = $config["root_url"]."/".$this->mId.$config["page_extension"];
 		}
 		else 
 		{

@@ -83,11 +83,11 @@ if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == tru
 		$row = $result->FetchRow();
 		if ($row['page_alias'] != '')
 		{
-			echo "../" . $row['page_alias'] . ".shtml";
+			echo "../" . $row['page_alias'] . $config["page_extension"];
 		}
 		else
 		{
-			echo "../" . $row['page_id'] . ".shtml";
+			echo "../" . $row['page_id'] . $config["page_extension"];
 		}
 	}
 	else

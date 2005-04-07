@@ -264,11 +264,11 @@ class content extends ContentBase
 		{
 			if ($this->mAlias != '')
 			{
-				$url = $config["root_url"]."/".$this->mAlias.".shtml";
+				$url = $config["root_url"]."/".$this->mAlias.$config["page_extension"];
 			}
 			else
 			{
-				$url = $config["root_url"]."/".$this->mId.".shtml";
+				$url = $config["root_url"]."/".$this->mId.$config["page_extension"];
 			}
 		}
 		else
