@@ -191,12 +191,7 @@ class TinyMCE extends CMSModule
 
 	function GetHelp($lang='en_US')
 	{
-		return "
-		<h3>What does this do?</h3>
-    <p>Enables TinyMCE to be used as a WYSIWYG.</p>
-    <h3>How do I use it?</h3>
-    <p>Install it, then go to User Preferences and Set TinyMCE  to be your wysiwyg of choice.</p>
-		";
+		return $this->Lang('help');
 	}
 
 	function GetAuthor()
