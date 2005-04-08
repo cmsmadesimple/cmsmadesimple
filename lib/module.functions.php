@@ -159,7 +159,7 @@ class Smarty_ModuleInterface extends Smarty {
 				#call_user_func_array($gCms->modules[$smarty_obj->module]['execute_admin_function'], array($gCms,"module_".$module."_"));
 				$id = $smarty_obj->id;
 				$params = @ModuleOperations::GetModuleParameters($id);
-				echo $gCms->modules[$smarty_obj->module]['object']->DoAction((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $tpl_name);
+				echo $gCms->modules[$smarty_obj->module]['object']->DoActionBase((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $tpl_name);
 				$modoutput = @ob_get_contents();
 				@ob_end_clean();
 				if ($smarty_obj->showtemplate == true)

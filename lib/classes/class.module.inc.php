@@ -773,6 +773,15 @@ class CMSModule extends ModuleOperations
 		return '';
 	}
 
+	function DoActionBase($name, $id, $parameters, $returnid='')
+	{
+		if (isset($parameters['lang']))
+		{
+			$this->curlang = $parameters['lang'];
+		}
+		return $this->DoAction($name, $id, $parameters, $returnid);
+	}
+
 	/**
 	 * Returns the start of a module form
 	 *
@@ -1179,7 +1188,11 @@ class CMSModule extends ModuleOperations
 	function Lang($name, $params=array())
 	{
 		global $gCms;
-		$ourlang = $gCms->current_language;
+		if ($this->curlang == '')
+		{
+			$this->curlang = $gCms->current_language;
+		}
+		$ourlang = $this->curlang;
 
 		#Load the language if it's not loaded
 		if (count(array_keys($this->langhash)) == 0)

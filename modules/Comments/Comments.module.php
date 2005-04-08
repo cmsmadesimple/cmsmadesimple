@@ -123,7 +123,7 @@ class Comments extends CMSModule
 					$dateformat = $params['dateformat'];
 				}
 				
-				echo $this->CreateLink($id, 'addcomment', $return_id, 'Add a comment', $params);
+				echo $this->CreateLink($id, 'addcomment', $return_id, $this->Lang('addacomment'), $params);
 
 				if ($dbresult && $dbresult->RowCount())
 				{
@@ -167,13 +167,13 @@ class Comments extends CMSModule
 					if ($author == "")
 					{
 						$validinfo = false;
-						$errormsg .= "<li>Enter an author</li>";
+						$errormsg .= "<li>".$this->Lang('errorenterauthor')."</li>";
 					}
 				
 					if ($content == "")
 					{
 						$validinfo = false;
-						$errormsg .= "<li>Enter a comment...  isn't that the point?</li>";
+						$errormsg .= "<li>".$this->Lang('errorentercomment')."</li>";
 					}
 
 					if ($validinfo)
@@ -189,7 +189,7 @@ class Comments extends CMSModule
 
 				if (strlen($errormsg) > 0)
 				{
-					echo "<p>Error:</p><ul>".$errormsg."</ul>";
+					echo "<p>".$this->Lang('error').":</p><ul>".$errormsg."</ul>";
 				}
 
 				echo $this->CreateFormStart($id, 'addcomment', $return_id);
@@ -199,18 +199,18 @@ class Comments extends CMSModule
 
 				<table>
 					<tr>
-						<td>Your name:</td>
+						<td><?php echo $this->Lang('yourname')?>:</td>
 						<td><?php echo $this->CreateInputText($id, 'author', $author)?></td>
 					</tr>
 					<tr>
-						<td>Comment:</td>
+						<td><?php echo $this->Lang('comment')?>:</td>
 						<td><?php echo $this->CreateTextArea(false, $id, $content, 'content', $id)?></td>
 					</tr>
 					<tr>
 						<td>&nbsp;</td>
 						<td>
-							<?php echo $this->CreateInputSubmit($id, 'submitcomment', 'Submit') ?>
-							<?php echo $this->CreateInputSubmit($id, 'cancelcomment', 'Cancel') ?>
+							<?php echo $this->CreateInputSubmit($id, 'submitcomment', $this->Lang('submit')) ?>
+							<?php echo $this->CreateInputSubmit($id, 'cancelcomment', $this->Lang('cancel')) ?>
 						</td>
 					</tr>
 				</table>
