@@ -83,6 +83,27 @@ class News extends CMSModule
 <!-- End News Display Template -->';
 	}
 
+	function GetDisplayRSSTemplate()
+	{
+		return '
+<?xml version='1.0'?>
+<rss version='2.0'>
+	<channel>
+		<title>CMS Made Simple News Feed</title>
+		<link>{$root_url}</link>
+		<description>Current News entries</description>
+{foreach from=$items item=entry}
+		<item>
+			<title>{$entry->title}</title>
+			<pubdate>{$entry->gmdate}</pubdate>
+			<description>{$entry->data}</description>
+		</item>
+{/foreach}
+	</channel>
+</rss>
+		';
+	}
+
 	function Install()
 	{
 		$db = $this->cms->db;
@@ -110,6 +131,9 @@ class News extends CMSModule
 
 		# Setup display template
 		$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
+
+		# Setup RSS template
+		$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
 	}
 
 	function InstallPostMessage()
@@ -141,6 +165,7 @@ class News extends CMSModule
 			case "1.6":
 				# Setup display template
 				$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
+				$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
 				$current_version = "1.7";
 		}
 	}
@@ -362,6 +387,7 @@ class News extends CMSModule
 
 				if ($dbresult && $dbresult->RowCount() > 0)
 				{
+					/*
 					if ($type == "rss")
 					{
 						$variables = &$this->cms->variables;
@@ -375,12 +401,16 @@ class News extends CMSModule
 						echo "</link>\n";
 						echo "  <description>Current News entries</description>\n";
 					}
+					*/
 
 					$entryarray = array();
 
+					global $gCms;
+					$this->smarty->assign_by_ref('root_url', $gCms->config['root_url']);
+
 					while (($row = $dbresult->FetchRow()))
 					{
-						if ($type == "rss")
+						if ($type == "blahrss")
 						{
 							echo "        <item>\n";
 							if( !isset( $params["category"] ) )
@@ -421,12 +451,13 @@ class News extends CMSModule
 							$onerow = new stdClass();
 							$onerow->unixdate = $db->UnixTimeStamp($row['news_date']);
 							$onerow->date = date($dateformat, $db->UnixTimeStamp($row['news_date']));
+							$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
 							$onerow->id = $row['news_id'];
 
-							if (isset($params["summary"]))
+							if (isset($params['summary']))
 							{
 								$onerow->data = $this->StriptoLength($row['news_data'], $params['length'], false);
-								if (strlen($row["news_data"]) > $params["length"])
+								if (strlen($row['news_data']) > $params['length'])
 								{
 									if (isset($params['moretext']))
 									{
@@ -464,18 +495,19 @@ class News extends CMSModule
 						}
 					}
 
-					if ($type == "rss")
+					$this->smarty->assign_by_ref('items', $entryarray);
+					$this->smarty->assign_by_ref('params', $params);
+
+					if ($type == 'rss')
 					{
-						echo "   </channel>\n";
-						echo "</rss>";
+						echo $this->ProcessTemplateFromDatabase('displayrss');
 					}
 					else
 					{
-						$this->smarty->assign_by_ref('items', $entryarray);
-						$this->smarty->assign_by_ref('params', $params);
 						echo $this->ProcessTemplateFromDatabase('displayhtml');
 					}
 				}
+
 				break;
 
 			case "defaultadmin":
@@ -630,6 +662,18 @@ class News extends CMSModule
 
 				echo $this->EndTab();
 
+				echo $this->StartTab('RSS Template');
+				
+				echo $this->CreateFormStart($id, 'updatersstemplate');
+
+				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayrss'), 'rsstemplatecontent', '').'</p>';
+
+				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', 'Submit');
+
+				echo $this->CreateFormEnd();
+
+				echo $this->EndTab();
+
 				echo $this->EndTabSet();
 
 				break;
@@ -641,6 +685,11 @@ class News extends CMSModule
 
 			case "updatetemplate":
 				$this->SetTemplate('displayhtml', $params['templatecontent']);
+				$this->Redirect($id, 'defaultadmin');
+				break;
+
+			case "updatersstemplate":
+				$this->SetTemplate('displayrss', $params['rsstemplatecontent']);
 				$this->Redirect($id, 'defaultadmin');
 				break;
 
