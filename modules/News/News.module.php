@@ -86,8 +86,8 @@ class News extends CMSModule
 	function GetDisplayRSSTemplate()
 	{
 		return '
-<?xml version='1.0'?>
-<rss version='2.0'>
+<?xml version=\'1.0\'?>
+<rss version=\'2.0\'>
 	<channel>
 		<title>CMS Made Simple News Feed</title>
 		<link>{$root_url}</link>
