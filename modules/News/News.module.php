@@ -42,7 +42,7 @@ class News extends CMSModule
 
 	function GetAdminDescription()
 	{
-		return 'Add, edit and remove News entries';
+		return $this->Lang('description');
 	}
 
 	function GetAdminSection()
@@ -138,7 +138,7 @@ class News extends CMSModule
 
 	function InstallPostMessage()
 	{
-		return 'Make sure to set the "Modify News" permission on users who will be administering News items.';
+		return lang('postinstall');
 	}
 
 	function Upgrade($oldversion, $newversion)
@@ -250,27 +250,27 @@ class News extends CMSModule
 				  }
 				?>
 		  <tr>
-			 <th>New Category:</th>
+			 <th><?php echo $this->Lang('newcategory')?>:</th>
 			 <td><?php echo $this->CreateInputText($id, 'addcat', '', '40', '255')?></td>
 		  </tr>
 		  <tr>
-			<th width="60">Title:</th>
+			<th width="60"><?php echo $this->Lang('title')?>:</th>
 			<td><?php echo $this->CreateInputText($id, 'newstitle', $title, '25', '255', 'class="standard"')?></td>
 		  </tr>
 		  <tr>
-			<th>Content:</th>
+			<th><?php echo $this->Lang('content')?>:</th>
 			<td><?php echo $this->CreateTextArea(true, $id, $data, 'newscontent', 'syntaxHighlight', 'newscontent')?></td>
 		  </tr>
 		  <tr>
-			<th>Post Date:</th>
+			<th><?php echo $this->Lang('postdate')?>:</th>
 			<td><?php echo $this->CreateInputText($id, 'post_date', $post_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
-			<th>Start Date:</th>
+			<th><?php echo $this->Lang('startdate')?>:</th>
 			<td><?php echo $this->CreateInputText($id, 'start_date', $start_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
-			<th>Expiry:</th>
+			<th><?php echo $this->Lang('expiry')?>:</th>
 			<td>
 			<?php
 				$addttext = '';
@@ -288,12 +288,12 @@ class News extends CMSModule
 			</td>
 		  </tr>
 		  <tr>
-			<th>End Date:</th>
+			<th><?php echo $this->Lang('enddate')?>:</th>
 			<td><?php echo $this->CreateInputText($id, 'end_date', $end_date, '12', '20')?></td>
 		  </tr>
 		  <tr>
 			<th>&nbsp;</th>
-			<td><em>Note:</em> Dates must be in a 'yyyy-mm-dd hh:mm:ss' format.</td>
+			<td><?php echo $this->Lang('note')?></td>
 		  </tr>
 		  <tr>
 			<td><?php
@@ -304,8 +304,8 @@ class News extends CMSModule
 				?>
 			</td>
 			<td>
-			  <?php echo $this->CreateInputSubmit($id, 'submit', 'Submit') ?>
-			  <?php echo $this->CreateInputSubmit($id, 'cancelsubmit', 'Cancel') ?>
+			  <?php echo $this->CreateInputSubmit($id, 'submit', $this->Lang('submit')) ?>
+			  <?php echo $this->CreateInputSubmit($id, 'cancelsubmit', $this->Lang('cancel')) ?>
 			</td>
 		  </tr>
 		</table>
@@ -467,7 +467,7 @@ class News extends CMSModule
 
 				if (!$access)
 				{
-					echo "<p class=\"error\">You need the 'Modify News' permission to perform that function.</p>";
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
 					return;
 				}
 
@@ -481,7 +481,7 @@ class News extends CMSModule
 				{
 					echo $this->CreateFormStart($id, 'defaultadmin');
 					echo "<table><tr>";
-					echo "<td><h5>Filter:</h5></td>";
+					echo '<td><h5>'.$this->Lang('filter').':</h5></td>';
 					echo '<td><select name="'.$id.'news_cat">';
 					echo '<option';
 					if ($newscat == "All")
@@ -511,14 +511,14 @@ class News extends CMSModule
 
 				echo $this->CreateFormStart($id, 'add');
 				echo $this->CreateInputHidden($id, 'news_cat', $newscat);
-				echo $this->CreateInputSubmit($id, 'submit', 'Add News Item');
+				echo $this->CreateInputSubmit($id, 'submit', $this->Lang('addnewsitem'));
 				echo $this->CreateFormEnd();
 
 				if( isset($newscat) && strlen($newscat) ) 
 				{
 					if( $newscat == "All" )
 					{
-						echo "<h4>All Entries:</h4><br />";
+						echo '<h4>'.$this->Lang('allentries').':</h4><br />';
 						$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 							.cms_db_prefix()."module_news ORDER BY news_date desc";
 					}
@@ -530,7 +530,7 @@ class News extends CMSModule
 					}
 					else 
 					{
-						echo "<h4>$newscat Entries:</h4><br />";
+						echo '<h4>'.$this->Lang('entries', array($newscat)).':</h4><br />';
 						$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 							.cms_db_prefix()."module_news WHERE news_cat = \""
 							.$newscat."\" ORDER BY news_date desc";
@@ -538,7 +538,7 @@ class News extends CMSModule
 				}
 				else
 				{
-					echo "<h4>All Entries:</h4><br />";
+					echo '<h4>'.$this->Lang('allentries').':</h4><br />';
 					$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
 						.cms_db_prefix()."module_news ORDER BY news_date desc";
 				}
@@ -553,9 +553,9 @@ class News extends CMSModule
 					echo "</tr>\n";
 					echo "<tr>\n";
 					echo "<th width=\"2%\">&nbsp;</th>\n";
-					echo "<th width=\"50%\">Title</th>\n";
-					echo "<th width=\"10%\">Category</th>\n";
-					echo "<th width=\"20%\">Posting Date</th>\n";
+					echo "<th width=\"50%\">".$this->Lang('title')."</th>\n";
+					echo "<th width=\"10%\">".$this->Lang('category')."</th>\n";
+					echo "<th width=\"20%\">".$this->Lang('postdate')."</th>\n";
 					echo "<th width=\"8%\">&nbsp;</th>\n";
 					echo "<th width=\"10%\">&nbsp;</th>\n";
 					echo "</tr>\n";
@@ -590,30 +590,30 @@ class News extends CMSModule
 				}
 				else
 				{
-					echo "<p><b>No</b> news items found for category: ".$newscat."</p>";
+					echo '<p>'.$this->Lang('noitemsfound', array($newscat)).'</p>';
 				}
 
 				echo $this->EndTab();
 
-				echo $this->StartTab('Template');
+				echo $this->StartTab($this->lang('displaytemplate'));
 				
 				echo $this->CreateFormStart($id, 'updatetemplate');
 
 				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayhtml'), 'templatecontent', '').'</p>';
 
-				echo $this->CreateInputSubmit($id, 'submitbutton', 'Submit');
+				echo $this->CreateInputSubmit($id, 'submitbutton', $this->Lang('submit'));
 
 				echo $this->CreateFormEnd();
 
 				echo $this->EndTab();
 
-				echo $this->StartTab('RSS Template');
+				echo $this->StartTab($this->lang('rsstemplate'));
 				
 				echo $this->CreateFormStart($id, 'updatersstemplate');
 
 				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayrss'), 'rsstemplatecontent', '').'</p>';
 
-				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', 'Submit');
+				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', $this->Lang('submit'));
 
 				echo $this->CreateFormEnd();
 
@@ -705,44 +705,44 @@ class News extends CMSModule
 				$end_date = (isset($params['end_date'])?$params['end_date']:"");
 				$expiry = (isset($params['expiry'])?$params['expiry']:"");
 
-				if ($newscat == "")
+				if ($newscat == '')
 				{
-					$error .= "<li>No Category given</li>";
+					$error .= '<li>'.$this->Lang('nocategorygiven').'</li>';
 					$validinfo = false;
 				}
 
-				if ($title == "")
+				if ($title == '')
 				{
-					$error .= "<li>No title given</li>";
+					$error .= '<li>'.$this->Lang('notitlegiven').'</li>';
 					$validinfo = false;
 				}
 
-				if ($data == "")
+				if ($data == '')
 				{
-					$error .= "<li>No content given</li>";
+					$error .= '<li>'.$this->Lang('nocontentgiven').'</li>';
 					$validinfo = false;
 				}
 
 				if ($post_date == "")
 				{
-					$error .= "<li>No post date given</li>";
+					$error .= '<li>'.$this->Lang('nopostdategiven').'</li>';
 					$validinfo = false;
 				}
 				else if ($db->DBTimeStamp($post_date) === FALSE)
 				{
-					$error .= "<li>Post date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+					$error .= '<li>'.$this->Lang('dateformat', array('postdate')).'</li>';
 					$validinfo = false;
 				}
 
 				if ($start_date !== "" && $end_date === "")
 				{
-					$error .= "<li>Entering a start date requires an end date also.</li>";
+					$error .= '<li>'.$this->Lang('startrequiresend').'</li>';
 					$validinfo = false;
 				}
 
-				if ($end_date !== "" && $start_date === "")
+				if ($end_date !== '' && $start_date === '')
 				{
-					$error .= "<li>Entering an end date requires a start date also.</li>";
+					$error .= '<li>'.$this->Lang('endrequiresstart').'</li>';
 					$validinfo = false;
 				}
 
@@ -750,12 +750,12 @@ class News extends CMSModule
 				{
 					if ($db->DBTimeStamp($start_date) === FALSE)
 					{
-						$error .= "<li>Start date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+						$error .= '<li>'.$this->Lang('dateformat', array('startdate')).'</li>';
 						$validinfo = false;
 					}
 					if ($db->DBTimeStamp($end_date) === FALSE)
 					{
-						$error .= "<li>End date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+						$error .= '<li>'.$this->Lang('dateformat', array('enddate')).'</li>';
 						$validinfo = false;
 					}
 				}
@@ -830,42 +830,42 @@ class News extends CMSModule
 
 				if ($newscat == "")
 				{
-					$error .= "<li>No Category given</li>";
+					$error .= '<li>'.$this->Lang('nocategorygiven').'</li>';
 					$validinfo = false;
 				} 
 
 				if ($title == "") 
 				{
-					$error .= "<li>No title given</li>";
+					$error .= '<li>'.$this->Lang('notitlegiven').'</li>';
 					$validinfo = false;
 				}
 
 				if ($data == "")
 				{ 
-					$error .= "<li>No content given</li>";
+					$error .= '<li>'.$this->Lang('nocontentgiven').'</li>';
 					$validinfo = false;
 				}
 
 				if ($post_date == "")
 				{ 
-					$error .= "<li>No post date given</li>";
+					$error .= '<li>'.$this->Lang('nopostdategiven').'</li>';
 					$validinfo = false;
 				}
 				else if ($db->DBTimeStamp($post_date) === FALSE)
 				{
-					$error .= "<li>Post date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+					$error .= '<li>'.$this->Lang('dateformat', array('postdate')).'</li>';
 					$validinfo = false;
 				}
 
 				if ($start_date !== "" && $end_date === "")
 				{
-					$error .= "<li>Entering a start date requires an end date also.</li>";
+					$error .= '<li>'.$this->Lang('startrequiresend').'</li>';
 					$validinfo = false;
 				}
 
 				if ($end_date !== "" && $start_date === "")
 				{
-					$error .= "<li>Entering an end date requires a start date also.</li>";
+					$error .= '<li>'.$this->Lang('endrequiresstart').'</li>';
 					$validinfo = false;
 				}
 
@@ -873,12 +873,12 @@ class News extends CMSModule
 				{
 					if ($db->DBTimeStamp($start_date) === FALSE)
 					{
-						$error .= "<li>Start date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+						$error .= '<li>'.$this->Lang('dateformat', array('startdate')).'</li>';
 						$validinfo = false;
 					}
 					if ($db->DBTimeStamp($end_date) === FALSE)
 					{
-						$error .= "<li>End date not in a valid yyyy-mm-dd hh:mm:ss format</li>";
+						$error .= '<li>'.$this->Lang('dateformat', array('enddate')).'</li>';
 						$validinfo = false;
 					}
 				}
@@ -934,33 +934,7 @@ class News extends CMSModule
 
 	function GetHelp($lang='en_US')
 	{
-		return "
-		<h3>What does this do?</h3>
-		<p>News is a module for displaying news events on your page, similar to a blog style, except with more features!.  When the module is installed, a News admin page is added to the bottom menu that will allow you to select or add a news category.  Once a news category is created or selected, a list of news items for that category will be displayed.  From here, you can add, edit or delete news items for that category.</p>
-		<h3>Security</h3>
-		<p>The user must belong to a group with the 'Modify News' permission in order to add, edit, or delete News entries.</p>
-		<h3>How do I use it?</h3>
-		<p>The easiest way to use it is in conjunction with the cms_module tag.  This will insert the module into your template or page anywhere you wish, and display news items.  The code would look something like: <code>{cms_module module=\"news\" number=\"5\" category=\"beer\"}</code></p>
-		<h3>What Parameters Exist?</h3>
-		<p>
-		<ul>
-		<li><em>(optional)</em> number=\"5\" - Maximum number of items to display =- leaving empty will show all items</li>
-		<li><em>(optional)</em> dateformat - Date/Time format using parameters from php's date function.  See <a href=\"http://php.net/date\" target=\"_blank\">here</a> for a parameter list and information.</li>
-		<li><em>(optional)</em> makerssbutton=\"true\" - Make a button to
-		link to an RSS feed of the News items. Two values in config.php are required for this to work.<br />
-		<code>\$config[\"news_url\"]</code><br />
-		<code>\$config[\"news_rss_title\"]</code></li>
-		<li><em>(optional)</em> swaptitledate=\"true\" - Switch the order
-		of the date and title</li>
-		<li><em>(optional)</em> category=\"category\" - Only display items for that category.  leaving empty, will show all categories</li>
-		<li><em>(optional)</em> summary=\"page\" - Activate summary mode, links are placed in the title of each summary article, and the page is trimmed to \"length\" characters</li>
-		<li><em>(optional)</em> length=\"80\" - Used in summary mode (see above) this trims the length of each article to the specified number of characters after stripping all html tags.</li>
-		<li><em>(optional)</em> showcategorywithtitle=\"true\" - Display the title with the category in front of it (Category: Title).  Leave false for old style behavior.</li>
-		<li><em>(optional)</em> moretext=\"more...\" - Text to display at the end of a news item if it goes over the summary length.  Defaults to \"more...\".</li>
-		<li><em>(optional)</em> sortasc=\"true\" - Sort news items in ascending date order rather than descending.</li>
-		</ul>
-		</p>
-		";
+		return $this->Lang('help');
 	}
 
 	function GetAuthor()
