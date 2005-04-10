@@ -387,22 +387,6 @@ class News extends CMSModule
 
 				if ($dbresult && $dbresult->RowCount() > 0)
 				{
-					/*
-					if ($type == "rss")
-					{
-						$variables = &$this->cms->variables;
-						$variables['content-type'] = 'text/xml';
-						echo "<?xml version='1.0'?>\n";
-						echo "<rss version='2.0'>\n";
-						echo "   <channel>\n";
-						echo "  <title>".$cms->config["news_rss_title"]."</title>\n";
-						echo "  <link>";
-						echo cms_htmlentities($cms->config["news_url"], ENT_NOQUOTES, get_encoding($encoding));
-						echo "</link>\n";
-						echo "  <description>Current News entries</description>\n";
-					}
-					*/
-
 					$entryarray = array();
 
 					global $gCms;
@@ -410,89 +394,50 @@ class News extends CMSModule
 
 					while (($row = $dbresult->FetchRow()))
 					{
-						if ($type == "blahrss")
+						$onerow = new stdClass();
+						$onerow->unixdate = $db->UnixTimeStamp($row['news_date']);
+						$onerow->date = date($dateformat, $db->UnixTimeStamp($row['news_date']));
+						$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
+						$onerow->id = $row['news_id'];
+
+						if (isset($params['summary']))
 						{
-							echo "        <item>\n";
-							if( !isset( $params["category"] ) )
+							$onerow->data = $this->StriptoLength($row['news_data'], $params['length'], false);
+							if (strlen($row['news_data']) > $params['length'])
 							{
-								if (isset($params["showcategorywithtitle"]) && ($params["showcategorywithtitle"] == "true" || $params["showcategorywithtitle"] == "1"))
+								if (isset($params['moretext']))
 								{
-									echo "            <title>".$row["news_cat"].": ".$row["news_title"]."</title>\n";
+									$onerow->moretext = $params['moretext'];
 								}
 								else
 								{
-									echo "            <title>".$row["news_title"]."</title>\n";
+									$onerow->moretext = 'more...';
 								}
 							}
 							else
 							{
-								if (isset($params["summary"]))
-								{
-									echo "            <title><a name=\"".$config["root_url"]."/index.php?page=".$params["summary"]."#".$row["news_id"]."\">".$row["news_title"]."</a></title>\n";
-								}
-								else 
-								{
-									echo "            <title>".strip_tags($row["news_title"])."</title>\n";
-								}
+								$onerow->moretext = '';
 							}
-							if (isset($params["summary"]))
-							{
-								echo "            <description>".$this->StripToLength($row["news_data"],$params["length"])."</description>\n";
-							}
-							else
-							{
-								echo "            <description>".$this->StripToLength($row["news_data"],0)."</description>\n";
-							} 
-							echo "            <pubDate>".gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row["news_date"]))."</pubDate>\n";
-							echo "        </item>\n";
 						}
 						else
 						{
-							$onerow = new stdClass();
-							$onerow->unixdate = $db->UnixTimeStamp($row['news_date']);
-							$onerow->date = date($dateformat, $db->UnixTimeStamp($row['news_date']));
-							$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
-							$onerow->id = $row['news_id'];
-
-							if (isset($params['summary']))
-							{
-								$onerow->data = $this->StriptoLength($row['news_data'], $params['length'], false);
-								if (strlen($row['news_data']) > $params['length'])
-								{
-									if (isset($params['moretext']))
-									{
-										$onerow->moretext = $params['moretext'];
-									}
-									else
-									{
-										$onerow->moretext = 'more...';
-									}
-								}
-								else
-								{
-									$onerow->moretext = '';
-								}
-							}
-							else
-							{
-								$onerow->data = $row['news_data'];
-								$onerow->moretext = '';
-							}
-
-							if (isset($params["showcategorywithtitle"])
-										&& ($params["showcategorywithtitle"] == "true"
-										|| $params["showcategorywithtitle"] == "1")
-							)
-							{
-								$onerow->title = $row['news_cat'] . ": " . $row['news_title'];
-							}
-							else
-							{
-								$onerow->title = $row['news_title'];
-							}
-
-							array_push($entryarray, $onerow);
+							$onerow->data = $row['news_data'];
+							$onerow->moretext = '';
 						}
+
+						if (isset($params["showcategorywithtitle"])
+									&& ($params["showcategorywithtitle"] == "true"
+									|| $params["showcategorywithtitle"] == "1")
+						)
+						{
+							$onerow->title = $row['news_cat'] . ": " . $row['news_title'];
+						}
+						else
+						{
+							$onerow->title = $row['news_title'];
+						}
+
+						array_push($entryarray, $onerow);
 					}
 
 					$this->smarty->assign_by_ref('items', $entryarray);
