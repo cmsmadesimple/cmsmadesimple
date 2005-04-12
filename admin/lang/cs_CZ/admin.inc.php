@@ -297,4 +297,6 @@ $lang['admin']['managebookmarks'] = 'Spravovat záložky';
 $lang['admin']['editbookmark'] = 'Upravit záložku';
 $lang['admin']['addbookmark'] = 'Vložit záložku';
 $lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
+$lang['admin']['selectgroup'] = 'Select Group'; //needs translation
+$lang['admin']['updateperm'] = 'Update Permissions'; //needs translation
 ?>

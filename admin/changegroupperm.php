@@ -117,7 +117,7 @@ if ($message != '')
 			}
 			echo '>'.$onegroup->name.'</option>';
 		}
-		echo '</select> <input type="submit" value="'.lang('submit').'" /></form>';
+		echo '</select> <input type="submit" value="'.lang('selectgroup').'" /></form>';
 		echo '<form method="post" action="changegroupperm.php">';
 	}
 
@@ -162,7 +162,7 @@ if ($message != '')
 ?>
 
 <tr><td><br /><input type="hidden" name="group_id" value="<?php echo $group_id?>" />
-<input type="submit" name="changeperm" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
+<input type="submit" name="changeperm" value="<?php echo lang('updateperm')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
 </table>
 

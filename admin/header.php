@@ -53,7 +53,7 @@ if (! isset($CMS_EXCLUDE_FROM_RECENT))
 </head>
 
 <body##BODYSUBMITSTUFFGOESHERE##>
-<?php $themeObject->DoTopMenu(); ?>
+<?php $themeObject->DoTopMenu($CMS_TOP_MENU); ?>
 <div id="AdminHeader"></div>
 
 <div id="MainContent">
