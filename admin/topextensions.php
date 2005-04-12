@@ -33,7 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($modulePerms) { ?>
+<?php if ($themeObject->HasPerm('modulePerms')) { ?>
 <div class="MainMenuItem">
 <a href="listmodules.php"><?php echo lang('modules') ?></a>
 <span class="description"><?php echo lang('moduledescription') ?></span>
@@ -45,26 +45,13 @@ include_once("header.php");
 <span class="description"><?php echo lang('tagdescription') ?></span>
 </div>
 
-<?php if ($codeBlockPerms) { ?>
+<?php if ($themeObject->HasPerm('codeBlockPerms')) { ?>
 <div class="MainMenuItem">
 <a href="listusertags.php"><?php echo lang('usertags') ?></a>
 <span class="description"><?php echo lang('usertagdescription') ?></span>
 </div>
 <?php }
-
-if (isset($sectionCount['extensions']) && $sectionCount['extensions'] > 0)
-    {
-    foreach($modulesBySection['extensions'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('extensions');
 ?>
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>

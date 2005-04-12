@@ -38,25 +38,13 @@ include_once("header.php");
 <span class="description"><?php echo lang('pagesdescription') ?></span>
 </div>
 
-<?php if ($htmlPerms) { ?>
+<?php if ($themeObject->HasPerm('htmlPerms')) { ?>
 <div class="MainMenuItem">
 <a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a>
 <span class="description"><?php echo lang('htmlblobdescription') ?></span>
 </div>
 <?php }
-if (isset($sectionCount['content']) && $sectionCount['content'] > 0)
-    {
-    foreach($modulesBySection['content'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('content');
 ?>
 
 <div class="MainMenuItem">

@@ -38,6 +38,11 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 	}
 }
 
+if (isset($gCms->modules[$module]))
+{
+    $CMS_ADMIN_SUBTITLE = $gCms->modules[$module]['object']->GetName();
+}
+
 if (count($gCms->modules) > 0)
     {
     $CMS_TOP_MENU=$gCms->modules[$module]['object']->GetAdminSection();

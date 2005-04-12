@@ -128,17 +128,6 @@ iframe {
 /**
  * Callout boxes
  */
-.DashboardCallout {
-	width: 150px;
-	float: right;
-	font-size: .9em;
-	padding-top: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #a7e0a7;
-	clear: right;
-}
 
 .DashboardCalloutTitle {
 	font-weight: bold;
@@ -146,52 +135,27 @@ iframe {
 	margin-top: 2px;
 }
 
-#RecentPageCallout {
+.rightcol {
 	width: 150px;
 	font-size: 10px;
 	padding-top: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #d0d0e7;
+	padding-left: 0;
+	padding-right: 0;
+	margin: 0px;
+	margin-top: 15px;
 	position: absolute;
-	right:0;
+	right:15px;
 	top: 14px;
 }
 
-#RecentPageCallout ul {
+.rightcol ul {
     padding: 2px;
 }
 
-#RecentPageCallout li {
+.rightcol li {
     list-style: decimal inside;
 }
 
-
-#BookmarkCallout {
-	width: 150px;
-	font-size: .9em;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #a7e0a7;
-	visibility: hidden;
-	position: absolute;
-	right: 0px;
-	top: 50px;
-}
-
-#BookmarkCallout ul {
-	margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-#BookmarkCallout li {
-	margin: 0;
-	padding: 5px;
-	list-style: none;
-}
 
 /**
  * Footer
@@ -286,6 +250,75 @@ iframe {
 	background: #FFF7CD;
 	padding-bottom: 5px;
 }
+
+/* admin tab details. Probably could bear some help from Akra :) */
+#admin-tab-container .tab-content {
+	border: 1px solid #666;
+	clear: both;
+	background: white; /*#FFF3B3;*/
+	padding: 0.5em;
+}
+
+
+#admin-tab-header {
+	position: relative;
+	width: 100%;
+	height: 3em;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+	margin-bottom: 0px;
+	padding-bottom: 0px;
+}
+
+#admin-tab-header ul#admin-tab-list {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	bottom: -1px;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+}
+
+#admin-tab-header ul#admin-tab-list li  {
+	display: inline;
+	list-style: none;
+	margin: 0;
+}
+
+#admin-tab-header ul#admin-tab-list a,#admin-tab-header ul#admin-tab-list span,#admin-tab-header ul#admin-tab-list a.tab-active {
+	width: 8em;
+	display: block;
+	float: left;
+	padding: 4px 0;
+	margin: 1px 2px 0 0;
+	text-align: center;
+	font-family: tahoma, verdana, sans-serif;
+	font-size: 85%;
+	text-decoration: none;
+	color: #333;
+}
+
+#admin-tab-header ul#admin-tab-list span,#admin-tab-header ul#admin-tab-list a.tab-active,#admin-tab-header ul#admin-tab-list a.tab-active:hover {
+	border: 1px solid #666;
+	border-bottom: none;
+	background: white;
+	padding-bottom: 6px;
+	margin-top: 0;
+}
+
+/* a link in a background tab */
+#admin-tab-header ul#admin-tab-list a {
+	background: #FFFAE1;
+	border: 1px solid #AAA;
+	border-bottom: none;
+}
+
+/* hover on a background tab */
+#admin-tab-header ul#admin-tab-list a:hover {
+	margin-top: 0;
+	border-color: #666;
+	background: #FFF7CD;
+	padding-bottom: 5px;
+}
+
 
 .tab  /* the heading that became the li */
 {

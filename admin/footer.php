@@ -1,30 +1,11 @@
 <?php
 
 echo '</div> <!-- end MainContent -->';
-
+$themeObject->OutputFooterJavascript();
+$themeObject->DisplayFooter();
 ?>
-<script type="text/javascript" src="<?php echo $config['root_url']?>/lib/dynamic_tabs/tabs.js"></script>
-</div>
-<?php
 
-include_once('topmenu.php');
-
-require_once("../include.php");
-$theme=get_preference(get_userid(), 'admintheme', 'default');
-if (file_exists(dirname(__FILE__).'/themes/$theme/footer.php'))
-{
-	include(dirname(__FILE__).'/themes/$theme/footer.php');
-}
-else
-{
-	# Show some default stuff
-	?>
-
-<div id="Footer">
-<a href="http://www.cmsmadesimple.org">CMS Made Simple</a> is Free Software released under the GNU/GPL License
-</div>
 	<?php
-}
 
 if ($config["debug"] == true)
 {

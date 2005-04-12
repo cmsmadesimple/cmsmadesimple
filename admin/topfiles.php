@@ -33,7 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($filePerms) { ?>
+<?php if ($themeObject->HasPerm('filePerms')) { ?>
 <div class="MainMenuItem">
 <a href="files.php"><?php echo lang('filemanager') ?></a>
 <span class="description"><?php echo lang('filemanagerdescription') ?></span>
@@ -46,19 +46,7 @@ include_once("header.php");
 </div>
 
 <?php
-if (isset($sectionCount['files']) && $sectionCount['files'] > 0)
-    {
-    foreach($modulesBySection['files'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('files');
 ?>
 
 <div class="MainMenuItem">

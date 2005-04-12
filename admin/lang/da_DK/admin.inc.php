@@ -296,4 +296,5 @@ $lang['admin']['bookmarks'] = 'Bogmærker';
 $lang['admin']['managebookmarks'] = 'Håndtér bogmærker';
 $lang['admin']['editbookmark'] = 'Redigér bogmærke';
 $lang['admin']['addbookmark'] = 'Tilføj bogmærke';
+$lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
 ?>

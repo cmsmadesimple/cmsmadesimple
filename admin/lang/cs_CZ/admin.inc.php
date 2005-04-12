@@ -296,4 +296,5 @@ $lang['admin']['bookmarks'] = 'Záložky';
 $lang['admin']['managebookmarks'] = 'Spravovat záložky';
 $lang['admin']['editbookmark'] = 'Upravit záložku';
 $lang['admin']['addbookmark'] = 'Vložit záložku';
+$lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
 ?>

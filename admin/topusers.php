@@ -33,47 +33,34 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($userPerms) { ?>
+<?php if ($themeObject->HasPerm('userPerms')) { ?>
 <div class="MainMenuItem">
 <a href="listusers.php"><?php echo lang('users') ?></a>
 <span class="description"><?php echo lang('usersdescription') ?></span>
 </div>
 <?php } ?>
 
-<?php if ($groupPerms) { ?>
+<?php if ($themeObject->HasPerm('groupPerms')) { ?>
 <div class="MainMenuItem">
 <a href="listgroups.php"><?php echo lang('groups') ?></a>
 <span class="description"><?php echo lang('groupsdescription') ?></span>
 </div>
 <?php } ?>
 
-<?php if ($groupMemberPerms) { ?>
+<?php if ($themeObject->HasPerm('groupMemberPerms')) { ?>
 <div class="MainMenuItem">
 <a href="changegroupassign.php"><?php echo lang('groupassignments') ?></a>
 <span class="description"><?php echo lang('groupassignmentdescription') ?></span>
 </div>
 <?php } ?>
 
-<?php if ($groupPermPerms) { ?>
+<?php if ($themeObject->HasPerm('groupPermPerms')) { ?>
 <div class="MainMenuItem">
 <a href="changegroupperm.php"><?php echo lang('groupperms') ?></a>
 <span class="description"><?php echo lang('grouppermsdescription') ?></span>
 </div>
 <?php } 
-
-if (isset($sectionCount['usersgroups']) && $sectionCount['usersgroups'] > 0)
-    {
-    foreach($modulesBySection['usersgroups'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('usersgroups');
 ?>
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>

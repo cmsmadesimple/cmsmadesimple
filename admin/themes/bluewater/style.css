@@ -53,6 +53,21 @@ iframe {
 	padding: 5px;
 }
 
+#TopMenu ul {
+    padding: 0px;
+    margin: 0px;
+    float: left;
+    display:block;
+}
+
+#TopMenu ul li {
+    list-style:none;
+    float: left;
+    display:block;
+    padding: 0px;
+    margin: 0px;
+}
+
 html>body #TopMenu {
     top: 0px;
 	position: fixed;
@@ -197,36 +212,25 @@ html>body #Footer {
 /**
  * Callout boxes
  */
-.DashboardCallout {
-	width: 150px;
-	float: right;
-	font-size: 10px;
-	padding-top: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #d0d0e7;
-	clear: right;
-}
 
-#RecentPageCallout {
+.rightcol {
 	width: 150px;
 	font-size: 10px;
 	padding-top: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #d0d0e7;
+	padding-left: 0;
+	padding-right: 0;
+	margin: 0px;
+	margin-top: 15px;
 	position: absolute;
-	right:0;
+	right:15px;
 	top: 14px;
 }
 
-#RecentPageCallout ul {
+.rightcol ul {
     padding: 2px;
 }
 
-#RecentPageCallout li {
+.rightcol li {
     list-style: decimal inside;
 }
 
@@ -234,20 +238,6 @@ html>body #Footer {
 	font-weight: bold;
 	text-align: center;
 	margin-top: 2px;
-}
-
-#BookmarkCallout {
-	width: 150px;
-	font-size: 10px;
-	padding-top: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	margin: 10px;
-	background-color: #B5B5DF;
-	visibility: hidden;
-	position: absolute;
-	right: 0px;
-	top: 14px;
 }
 
 .AdminForm	th, .AdminForm td
@@ -327,6 +317,67 @@ html>body #Footer {
 	background: #D4DEEE;
 	/*padding-bottom: 4px;*/
 }
+
+/* admin tab details. Probably could bear some help from Akra :) */
+#admin-tab-container .tab-content {
+	border: 1px solid #666;
+	clear: both;
+	background: white; /*#FFF3B3;*/
+	padding: 5px;
+    margin-top: 19px;
+    width: 100%;
+}
+
+
+#admin-tab-header ul#admin-tab-list {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	top: -1px;
+	width: 45em; /* a width is required for Opera, older Mozilla browsers, and Konqueror browsers */
+}
+
+#admin-tab-header ul#admin-tab-list li  {
+	display: inline;
+	list-style: none;
+	margin: 0;
+}
+
+#admin-tab-header ul#admin-tab-list a,#admin-tab-header ul#admin-tab-list span,#admin-tab-header ul#admin-tab-list a.tab-active {
+	width: 8em;
+	display: block;
+	float: left;
+	padding: 4px 0;
+	margin: 1px 2px 0 0;
+	text-align: center;
+	font-family: tahoma, verdana, sans-serif;
+	font-size: 85%;
+	text-decoration: none;
+	color: black;
+}
+
+#admin-tab-header ul#admin-tab-list span,#admin-tab-header ul#admin-tab-list a.tab-active,#admin-tab-header ul#admin-tab-list a.tab-active:hover {
+	border: 1px solid #666;
+	border-bottom: none;
+	background: white;
+	padding-bottom: 6px;
+	margin-top: 0;
+}
+
+/* a link in a background tab */
+#admin-tab-header ul#admin-tab-list a {
+	background: #e0e0e0;
+	border: 1px solid #666;
+	border-bottom: none;
+}
+
+/* hover on a background tab */
+#admin-tab-header ul#admin-tab-list a:hover {
+	border-color: #666;
+	background: white;
+}
+
+
 
 .tab  /* the heading that became the li */
 {

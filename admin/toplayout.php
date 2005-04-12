@@ -33,33 +33,20 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($templatePerms) { ?>
+<?php if ($themeObject->HasPerm('templatePerms')) { ?>
 <div class="MainMenuItem">
 <a href="listtemplates.php"><?php echo lang('templates') ?></a>
 <span class="description"><?php echo lang('templatesdescription') ?></span>
 </div>
 <?php } ?>
 
-<?php if ($cssPerms || $cssAssocPerms) { ?>
+<?php if ($themeObject->HasPerm('cssPerms') || $themeObject->HasPerm('cssAssocPerms')) { ?>
 <div class="MainMenuItem">
 <a href="listcss.php"><?php echo lang('stylesheets') ?></a>
 <span class="description"><?php echo lang('stylesheetsdescription') ?></span>
 </div>
 <?php } 
-
-if (isset($sectionCount['layout']) && $sectionCount['layout'] > 0)
-    {
-    foreach($modulesBySection['layout'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('layout');
 ?>
 
 <div class="MainMenuItem">

@@ -296,4 +296,5 @@ $lang['admin']['bookmarks'] = 'Bookmarks'; //needs translation
 $lang['admin']['managebookmarks'] = 'Manage Bookmarks'; //needs translation
 $lang['admin']['editbookmark'] = 'Edit Bookmark'; //needs translation
 $lang['admin']['addbookmark'] = 'Add Bookmark'; //needs translation
+$lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
 ?>

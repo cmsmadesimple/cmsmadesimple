@@ -33,7 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($sitePrefPerms) { ?>
+<?php if ($themeObject->HasPerm('sitePrefPerms')) { ?>
 <div class="MainMenuItem">
 <a href="siteprefs.php"><?php echo lang('preferences') ?></a>
 <span class="description"><?php echo lang('preferencesdescription') ?></span>
@@ -50,19 +50,7 @@ include_once("header.php");
 </div>
 
 <?php
-if (isset($sectionCount['admin']) && $sectionCount['admin'] > 0)
-    {
-    foreach($modulesBySection['admin'] as $sectionModule)
-        {
-        echo "<div class=\"MainMenuItem\">\n";
-        echo "<a href=\"moduleinterface.php?module=".$sectionModule['key']."\">".$sectionModule['key']."</a>\n";
-        if ($sectionModule['description'] != '')
-            {
-            echo '<span class="description">'.$sectionModule['description'].'</span>';
-            }
-        echo "</div>\n";
-        }
-    }
+$themeObject->DisplaySectionModules('admin');
 ?>
 </div> <!-- end MainMenu -->
 

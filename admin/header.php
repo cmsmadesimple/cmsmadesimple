@@ -2,222 +2,64 @@
 
 @ob_start();
 
-// Date in the past
-header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+include_once("../lib/classes/class.admintheme.inc.php");
 
-// always modified
-header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");
- 
-// HTTP/1.1
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Cache-Control: post-check=0, pre-check=0", false);
-
-// HTTP/1.0
-header("Pragma: no-cache");
-
-// Language shizzle
-//header("Content-Encoding: " . get_encoding());
-//header("Content-Language: " . $current_language);
-if (!isset($charsetsent))
-{
-	header("Content-Type: text/html; charset=" . get_encoding());
-}
-
+$themeName=get_preference(get_userid(), 'admintheme', 'default');
+$themeObjectName = $themeName."Theme";
 $userid = get_userid();
 
-# Are there any modules with an admin interface?
-$cmsmodules = $gCms->modules;
+if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
+{
+	include(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php");
+    $themeObject = new $themeObjectName($gCms, $userid);
+}
+else
+{
+    $themeObject = new AdminTheme($gCms, $userid);
+}
 
-$modulesBySection = array();
-$sectionCount = array();
-foreach ($cmsmodules as $key=>$value)
-	{
-	if (isset($cmsmodules[$key]['object'])
-			&& $cmsmodules[$key]['installed'] == true
-			&& $cmsmodules[$key]['active'] == true
-			&& $cmsmodules[$key]['object']->HasAdmin()
-			&& $cmsmodules[$key]['object']->VisibleToAdminUser()
-		)
-		{
-            $section = $cmsmodules[$key]['object']->GetAdminSection();
-			if (! isset($sectionCount[$section]))
-			     {
-			     $sectionCount[$section] = 0;
-			     }
-			$modulesBySection[$section][$sectionCount[$section]]['key'] = $key;
-			if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
-			{
-				$modulesBySection[$section][$sectionCount[$section]]['description'] =
-                    $cmsmodules[$key]['object']->GetAdminDescription();
-			}
-			else
-			{
-                $modulesBySection[$section][$sectionCount[$section]]['description'] = "";
-			}
-			$sectionCount[$section]++;
-		}
-	}
-
-# find aggregate permissions
-# content:
-$pagePerms = check_permission($userid, 'Modify Any Page') | check_permission($userid, 'Add Pages') |
-          check_permission($userid, 'Remove Pages');
-$htmlPerms = check_permission($userid, 'Add Html Blobs') | check_permission($userid, 'Modify Html Blobs') |
-	      check_permission($userid, 'Delete Html Blobs');
-$contentPerms = $pagePerms | $htmlPerms | (isset($sectionCount['content']) && $sectionCount['content'] > 0);
-
-#layout
-$templatePerms = check_permission($userid, 'Add Templates') | check_permission($userid, 'Modify Templates') |
-          check_permission($userid, 'Remove Templates');
-$cssPerms = check_permission($userid, 'Add Stylesheets') | check_permission($userid, 'Modify Stylesheets') |
-          check_permission($userid, 'Remove Stylesheets');
-$cssAssocPerms = check_permission($userid, 'Add Stylesheet Assoc') |
-        check_permission($userid, 'Modify Stylesheet Assoc') |
-          check_permission($userid, 'Remove Stylesheet Assoc');
-$layoutPerms = $templatePerms | $cssPerms | $cssAssocPerms |
-    (isset($sectionCount['layout']) && $sectionCount['layout'] > 0);
-
-# file / image
-$filePerms = check_permission($userid, 'Modify Files') |
-    (isset($sectionCount['files']) && $sectionCount['files'] > 0);
-    
-# user/group
-$userPerms = check_permission($userid, 'Add Users') | check_permission($userid, 'Modify Users') |
-          check_permission($userid, 'Remove Users');
-$groupPerms = check_permission($userid, 'Add Groups') | check_permission($userid, 'Modify Groups') |
-          check_permission($userid, 'Remove Groups');
-$groupPermPerms = check_permission($userid, 'Modify Permissions');
-$groupMemberPerms =  check_permission($userid, 'Modify Group Assignments');
-$usersGroupsPerms = $userPerms | $groupPerms | $groupPermPerms | $groupMemberPerms |
-            (isset($sectionCount['usersgroups']) && $sectionCount['usersgroups'] > 0);
-
-# admin
-$sitePrefPerms = check_permission($userid, 'Modify Site Preferences') |
-    (isset($sectionCount['preferences']) && $sectionCount['preferences'] > 0);
-$adminPerms = $sitePrefPerms | (isset($sectionCount['admin']) && $sectionCount['admin'] > 0);
-
-
-# extensions
-$codeBlockPerms = check_permission($userid, 'Modify Code Blocks');
-$modulePerms = check_permission($userid, 'Modify Modules');
-$extensionsPerms = $codeBlockPerms | $modulePerms |
-    (isset($sectionCount['extensions']) && $sectionCount['extensions'] > 0);
-
+$themeObject->SendHeaders(isset($charsetsent), get_encoding());
 
 if (isset($CMS_ADMIN_TITLE))
     {
-    $pagetitle = lang($CMS_ADMIN_TITLE);
+    $themeObject->title = lang($CMS_ADMIN_TITLE);
     }
 else
     {
-    $pagetitle = lang('adminsystemtitle');
+    $themeObject->title = lang('adminsystemtitle');
     }
 if (isset($CMS_ADMIN_SUBTITLE))
     {
-    $pagetitle .= " : ".$CMS_ADMIN_SUBTITLE;
+    $themeObject->title .= " : ".$CMS_ADMIN_SUBTITLE;
     }
-
-# add to recent pages, delete old
-require_once("../lib/classes/class.recentpage.inc.php");
-$recent = RecentPageOperations::LoadRecentPages($userid);
 
 if (! isset($CMS_EXCLUDE_FROM_RECENT))
 {
-    $addToRecent = true;
-    foreach ($recent as $thisPage)
-        {
-        if ($thisPage->url == $_SERVER['REQUEST_URI'])
-            {
-            $addToRecent = false;
-            }
-        }
-    if ($addToRecent)
-        {
-        $rp = new RecentPage();
-        $rp->setValues($pagetitle, $_SERVER['REQUEST_URI'], $userid);
-        $rp->Save();
-        $recent = array_reverse($recent);
-        array_push($recent, $rp);
-        array_shift($recent);
-        $recent = array_reverse($recent);
-        $rp->PurgeOldPages($userid,5);
-        }
+    $themeObject->AddAsRecentPage();
 }
+
 
 ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html>
 <head>
-
-<title><?php echo $pagetitle ?></title>
-
+<title><?php echo $themeObject->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="style.php?ie=1" />
 <![endif]-->
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-<script type="text/javascript">
-var state=false;
-var recentTop=0;
-function toggleBookmarkState()
-	{
-	state = !state;
-
-	if (state)
-		{
-		document.getElementById("BookmarkCallout").style.visibility = 'visible';
-        document.getElementById("RecentPageCallout").style.visibility = 'hidden';
-		}
-	else
-		{
-		document.getElementById("BookmarkCallout").style.visibility = 'hidden';
-		document.getElementById("RecentPageCallout").style.visibility = 'visible';
-		}
-	}
-</script>
+<?php $themeObject->OutputHeaderJavascript(); ?>
 </head>
 
 <body##BODYSUBMITSTUFFGOESHERE##>
+<?php $themeObject->DoTopMenu(); ?>
 <div id="AdminHeader"></div>
-<div id="AllAdmin">
 
 <div id="MainContent">
-
-<div id="BookmarkCallout">
-
-<p class="DashboardCalloutTitle"><?php echo lang('bookmarks') ?></p>
 <?php
-	$marks = BookmarkOperations::LoadBookmarks($userid);
-	echo "<ul>";
-	if (count($marks) > 0)
-		{
-		foreach($marks as $mark)
-			{
-			echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-			}
-		echo "<li><a href=\"listbookmarks.php\">".lang('managebookmarks')."</a></li>\n";
-		}
-	else
-		{
-		echo "<li><a href=\"makebookmark.php?title=". urlencode($pagetitle). "\">".lang('addbookmark')."</a></li>\n";
-		}
-	echo "</ul>\n";
-
+$themeObject->StartRighthandColumn();
+$themeObject->DoRecentPages();
+$themeObject->DoBookmarks();
+$themeObject->EndRighthandColumn();
 ?>
-</div>
-
-<div id="RecentPageCallout">
-
-<p class="DashboardCalloutTitle">Recent Pages</p>
-<?php
-	echo "<ul>";
-	if (count($recent) > 0)
-		{
-		foreach($recent as $pg)
-			{
-			echo "<li><a href=\"". $pg->url."\">".$pg->title."</a></li>\n";
-			}
-		}
-	echo "</ul>\n";
-?>
-</div><!-- end DashboardCallout -->
