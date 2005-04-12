@@ -93,6 +93,8 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence(cms_db_prefix()."admin_bookmarks_seq");
 
+echo '[done]</p>';
+
 echo "<p>Adding admin_recent_pages table...";
 
 $dbdict = NewDataDictionary($db);
@@ -109,27 +111,26 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 $db->CreateSequence(cms_db_prefix()."admin_recent_pages_seq");
 
-
 echo '[done]</p>';
 
 echo "<p>Adding Primary Keys...";
 
-$db->Execute("ALTER TABLE cms_content ADD PRIMARY KEY (content_id, prop_name)");
-$db->Execute("ALTER TABLE cms_htmlblobs ADD PRIMARY KEY (htmlblob_id)");
-$db->Execute("ALTER TABLE cms_css ADD PRIMARY KEY (css_id)");
-$db->Execute("ALTER TABLE cms_userplugins ADD PRIMARY KEY (userplugin_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content ADD PRIMARY KEY (content_id, prop_name)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."htmlblobs ADD PRIMARY KEY (htmlblob_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."css ADD PRIMARY KEY (css_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."userplugins ADD PRIMARY KEY (userplugin_id)");
 
 echo '[done]</p>';
 
 echo "<p>Adding Indexes...";
 
-$db->Execute("ALTER TABLE cms_content_props ADD INDEX (content_id, prop_name)");
-$db->Execute("ALTER TABLE cms_content ADD INDEX (content_alias, active)");
-$db->Execute("ALTER TABLE cms_content ADD INDEX (content_alias)");
-$db->Execute("ALTER TABLE cms_module_templates ADD INDEX (module_name, template_name)");
-$db->Execute("ALTER TABLE cms_group_perms ADD INDEX (group_id, permission_id)");
-$db->Execute("ALTER TABLE cms_admin_bookmarks ADD INDEX (user_id)");
-$db->Execute("ALTER TABLE cms_userprefs ADD INDEX (user_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content_props ADD INDEX (content_id, prop_name)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content ADD INDEX (content_alias, active)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content ADD INDEX (content_alias)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."module_templates ADD INDEX (module_name, template_name)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."group_perms ADD INDEX (group_id, permission_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."admin_bookmarks ADD INDEX (user_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."userprefs ADD INDEX (user_id)");
 
 echo '[done]</p>';
 

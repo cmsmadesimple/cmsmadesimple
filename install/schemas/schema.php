@@ -78,6 +78,23 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Adding admin_bookmarks table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		bookmark_id I KEY,
+		user_id I,
+		title C(255),
+		url C(255)
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."admin_bookmarks ADD INDEX (user_id)");
+
+	echo '[done]</p>';
+
 	echo "<p>Creating adminlog table...";
 
 	$dbdict = NewDataDictionary($db);
@@ -94,6 +111,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
+
+	echo "<p>Adding admin_recent_pages table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		id I KEY,
+		user_id I,
+		title C(255),
+		url C(255),
+		access_time T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	echo '[done]</p>';
 
 	echo "<p>Creating content table...";
 
@@ -114,6 +147,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		markup C(25),
 		active I1,
 		cachable I1,
+		last_modified_by I,
 		create_date T,
 		modified_date T
 	";
@@ -121,13 +155,15 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
+	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias, active)");
+	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias)");
+
 	echo "[done]</p>";
 
 	echo "<p>Creating content_props table...";
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		content_prop_id I,
 		content_id I KEY,
 		type C(25),
 		prop_name C(255) KEY,
@@ -141,6 +177,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id, prop_name)");
 
 	echo "[done]</p>";
 
@@ -189,6 +227,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."group_perms ADD INDEX (group_id, permission_id)");
 
 	echo "[done]</p>";
 
@@ -291,6 +331,24 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Adding module_templates table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = "
+		module_name C(255),
+		template_name C(200),
+		content X,
+		create_date T,
+		modified_date T
+	";
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."module_templates ADD INDEX (module_name, template_name)");
+
+	echo "[done]</p>";
+
 	echo "<p>Creating permissions table...";
 
 	$dbdict = NewDataDictionary($db);
@@ -332,6 +390,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		stylesheet X,
 		encoding C(25),
 		active I1,
+		default_template I1,
 		create_date T,
 		modified_date T
 	";
@@ -368,6 +427,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."userprefs ADD INDEX (user_id)");
 
 	echo "[done]</p>";
 
@@ -439,6 +500,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 	*/
+
 
 }
 

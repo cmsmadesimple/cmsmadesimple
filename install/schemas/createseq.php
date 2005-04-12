@@ -9,6 +9,20 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
+	echo "<p>Creating admin_bookmarks table sequence...";
+
+	$max = $db->GetOne("SELECT max(bookmark_id) from ".$db_prefix."admin_bookmarks");
+	$db->CreateSequence($db_prefix."admin_bookmarks_seq", $max+1);
+
+	echo "[done]</p>";
+
+	echo "<p>Creating admin_recent_pages table sequence...";
+
+	$max = $db->GetOne("SELECT max(id) from ".$db_prefix."admin_recent_pages");
+	$db->CreateSequence(cms_db_prefix()."admin_recent_pages_seq");
+
+	echo "[done]</p>";
+
 	echo "<p>Creating content table sequence...";
 
 	$max = $db->GetOne("SELECT max(content_id) from ".$db_prefix."content");
