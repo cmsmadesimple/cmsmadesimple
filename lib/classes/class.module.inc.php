@@ -790,9 +790,15 @@ class CMSModule extends ModuleOperations
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string Method to use for the form tag.  Defaults to 'post'
 	 * @param string Optional enctype to use, Good for situations where files are being uploaded
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='')
+	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false)
 	{
+		$goto = 'moduleinterface.php';
+		if ($inline && $returnid != '')
+		{
+			$goto = 'index.php';
+		}
 		$text = '<form name="'.$id.'moduleform" method="'.$method.'" action="moduleinterface.php"';
 		if ($enctype != '')
 		{
@@ -806,6 +812,10 @@ class CMSModule extends ModuleOperations
 		if ($returnid != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
+			if ($inline)
+			{
+				$text .= '<input type="hidden" name="'.$this->cms->config['query_var'].'" value="'.$returnid.'" />';
+			}
 		}
 		$text .= "\n";
 		return $text;
@@ -1027,10 +1037,16 @@ class CMSModule extends ModuleOperations
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 * @param boolean A flag to determine if only the href section should be returned
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false)
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false)
 	{
 		$text = '';
+		$goto = 'moduleinterface.php';
+		if ($inline && $returnid != '')
+		{
+			$goto = 'index.php';
+		}
 		if (!$onlyhref)
 		{
 			$text .= '<a href="';
@@ -1040,7 +1056,9 @@ class CMSModule extends ModuleOperations
 		{
 			$text .= '/'.$this->cms->config['admin_dir'];
 		}
-		$text .= '/moduleinterface.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+
+		$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+
 		foreach ($params as $key=>$value)
 		{
 			$text .= '&amp;'.$id.$key.'='.$value;
@@ -1048,6 +1066,10 @@ class CMSModule extends ModuleOperations
 		if ($returnid != '')
 		{
 			$text .= '&amp;'.$id.'returnid='.$returnid;
+			if ($inline)
+			{
+				$text .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+			}
 		}
 		
 		if (!$onlyhref)

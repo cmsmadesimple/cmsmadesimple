@@ -437,7 +437,7 @@ class UserOperations
 		return $result;
 	}
 
-	function GenerateDropdown($currentuserid = '')
+	function GenerateDropdown($currentuserid='', $name='ownerid')
 	{
 		$result = '';
 
@@ -445,7 +445,7 @@ class UserOperations
 
 		if (count($allusers) > 0)
 		{
-			$result .= '<select name="ownerid">';
+			$result .= '<select name="'.$name.'">';
 			foreach ($allusers as $oneuser)
 			{
 				$result .= '<option value="'.$oneuser->id.'"';

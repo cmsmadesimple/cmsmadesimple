@@ -20,6 +20,44 @@ iframe {
 	margin-bottom: 30px;
 }
 
+/**
+ * Login Page
+ */
+#login {
+	padding-right: 0px;
+	margin-top: 0px;
+	padding-left: 0px;
+	background: #FFFDFA;
+	padding-bottom: 0px;
+	width: 411px;
+	color: #64879d;
+	padding-top: 0px;
+	position: absolute;
+	top: 20%;
+	height: 270px;
+	left: 20%;
+	border: 1px solid #CCCCCC;
+}
+#logintable {
+	position: absolute;
+	top: 120px;
+	height: 130px;
+	margin-right: 6px;
+	margin-left: 6px;
+	margin-bottom: 6px;
+	margin-top: 6px;
+	width: 300px;
+	right: 2px;
+	left: 100px;
+	border: 1px #CCCCCC solid;
+	background-color: #FFF7F0;
+	color: #333333;
+}
+#loginbox {
+	position: absolute;
+	top: 150px;
+	left: 30px;
+}
 
 /**
  * Top Menu
