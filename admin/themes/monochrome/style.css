@@ -282,7 +282,7 @@ html>body #Footer {
     list-style: decimal inside;
 }
 
-
+.clearbox {text-align:left;}
 
 /**
  * For tab list
