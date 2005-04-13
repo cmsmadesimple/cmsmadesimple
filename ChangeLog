@@ -4,6 +4,13 @@ Version 0.10 "Antigua" -- Subversion
 * Added dropdown of encodings to add/edit template pages
 * Added multiple content blocks
 * Added recursive html blobs
+* Added ability for modules to use templates, either file based
+or db based through a few API calls
+* Added support for module translations
+* Added indexes to increase performance
+* Added bookmarks and recent pages to the admin
+* Added javascript tabs to content editing
+* Changed admin interface and themes
 * Changed installer to use regular Submit buttons...  now works in
 Konqueror
 * Fixed bug with image path generation in TinyMCE
@@ -11,6 +18,7 @@ Konqueror
 * Fixed bug with inactive pages still being accessible by page id
 * Submitting site prefernces redircts to an empty page now
 * Updated ADODB to 4.61
+* Updated Smarty to 2.6.9 (Jope)
 
 Version 0.9.2 "Hatutu" -- Fri Feb 25 2005
 -----------------

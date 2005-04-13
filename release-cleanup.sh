@@ -15,8 +15,8 @@ rm -fr makedoc.sh
 rm -fr cleardb.sh
 rm -fr generatedump.php
 rm -fr images/cms/*.svg
-rm -fr tmp/cache/*
-rm -fr tmp/templates_c/*
+#rm -fr tmp/cache/*
+#rm -fr tmp/templates_c/*
 rm -fr admin/lang/*.sh
 find -depth -type d -name .svn -exec rm -fr {} \;
 find . -type d -exec chmod 775 {} \;

@@ -1,3 +1,137 @@
+2005-03-30  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/function.math.php:
+      re-enabled hex-constant. i hope in a sane way this time.
+
+2005-03-30  Monte Ohrt  <monte@ohrt.com>
+
+    * libs/plugins/function.math.php:
+      fix function testing logic
+
+    * libs/Smarty_Compiler.class.php:
+      disable variable func calls completely
+
+    * libs/Smarty_Compiler.class.php:
+      disallow variable func calls when security is enabled
+
+2005-03-22  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      bumped version-number to 2.6.9-dev
+      added headline of 2.6.6 release to NEWS file
+
+2005-03-21  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * (Smarty_2_6_8)
+      NEWS:
+      maybe even better this way. thanks monte :)
+
+    * NEWS:
+      little more clear news-entry
+
+2005-03-21  Monte Ohrt  <monte@ohrt.com>
+
+    * NEWS:
+      update NEWS with e-modifier removal
+
+    * (Smarty_2_6_8)
+      libs/plugins/modifier.regex_replace.php:
+      remove e-modifier
+
+2005-03-19  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      objects don't get casted to arrays anymore in {foreach}
+
+2005-02-26  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty.class.php:
+      add "null" as a valid token for {if} when security is enabled
+
+2005-02-25  Monte Ohrt  <monte@ohrt.com>
+
+    * NEWS
+      libs/plugins/function.mailto.php:
+      add javascript_charcode option to mailto
+
+2005-02-24  Monte Ohrt  <monte@ohrt.com>
+
+    * NEWS:
+      update NEWS file
+
+    * QUICK_START
+      libs/plugins/function.html_radios.php:
+      add label ids to html_radios
+
+2005-02-10  Monte Ohrt  <monte@ohrt.com>
+
+    * QUICK_START:
+      update with directory structure
+
+2005-02-10  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/Makefile.in:
+      fix chm generation
+
+2005-02-10  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/Smarty_Compiler.class.php:
+      fixed too agressive {strip} around delimiters inside strip-blocks
+
+2005-02-10  Monte Ohrt  <monte@ohrt.com>
+
+    * QUICK_START:
+      fix a couple errors
+
+2005-02-10  Nuno Lopes  <nunoplopes@sapo.pt>
+
+    * docs/Makefile.in
+      docs/README:
+      commiting the new tools to make the CHM manual.
+
+2005-02-09  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * NEWS
+      libs/Smarty_Compiler.class.php:
+      fixed handling of strip-tags with non-default delimiters
+
+2005-02-04  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * libs/plugins/function.html_radios.php:
+      fixed syntax error. shame on me.
+
+2005-02-03  Monte Ohrt  <monte@ohrt.com>
+
+    * QUICK_START:
+      fix example
+
+    * QUICK_START:
+      initial commit
+
+    * RELEASE_NOTES
+      libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      update version numbers in cvs
+
+    * (Smarty_2_6_7)
+      NEWS
+      libs/Config_File.class.php
+      libs/Smarty.class.php
+      libs/Smarty_Compiler.class.php:
+      commit version numbers for new release
+
+2005-02-03  Messju Mohr  <messju@lammfellpuschen.de>
+
+    * (Smarty_2_6_7)
+      libs/plugins/function.html_image.php:
+      fixed comment (thanks to CirTap)
+
 2005-02-01  Monte Ohrt  <monte@ohrt.com>
 
     * libs/plugins/function.html_image.php:
@@ -3179,7 +3313,7 @@
 
     * libs/Smarty.class.php
       libs/Smarty_Compiler.class.php:
-      added CVS $Id: ChangeLog,v 1.361 2005/02/02 01:33:34 changelog Exp $
+      added CVS $Id: ChangeLog,v 1.372 2005/03/31 01:32:22 changelog Exp $
 
 2003-03-31  Messju Mohr  <messju@lammfellpuschen.de>
 

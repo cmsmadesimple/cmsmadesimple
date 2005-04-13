@@ -21,12 +21,12 @@
  * @link http://smarty.php.net/
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
- * @version 2.6.7
+ * @version 2.6.9
  * @copyright 2001-2005 New Digital Group, Inc.
  * @package Smarty
  */
 
-/* $Id: Smarty_Compiler.class.php,v 1.360 2005/02/03 14:41:33 mohrt Exp $ */
+/* $Id: Smarty_Compiler.class.php,v 1.367 2005/03/30 16:48:41 mohrt Exp $ */
 
 /**
  * Template compiling class
@@ -325,14 +325,18 @@ class Smarty_Compiler extends Smarty {
             if ($compiled_tags[$i] == '{strip}') {
                 $compiled_tags[$i] = '';
                 $strip = true;
+                /* remove leading whitespaces */
+                $text_blocks[$i + 1] = ltrim($text_blocks[$i + 1]);
             }
             if ($strip) {
                 /* strip all $text_blocks before the next '/strip' */
                 for ($j = $i + 1; $j < $for_max; $j++) {
                     /* remove leading and trailing whitespaces of each line */
-                    $text_blocks[$j] = preg_replace('!\s+$|^\s+!m', '', $text_blocks[$j]);
-                    /* remove carriage return and newline between each line */
-                    $text_blocks[$j] = preg_replace('![\r\n]+!m', '', $text_blocks[$j]);                
+                    $text_blocks[$j] = preg_replace('![\t ]*[\r\n]+[\t ]*!', '', $text_blocks[$j]);
+                    if ($compiled_tags[$j] == '{/strip}') {                       
+                        /* remove trailing whitespaces from the last text_block */
+                        $text_blocks[$j] = rtrim($text_blocks[$j]);
+                    }
                     $text_blocks[$j] = "<?php echo '" . strtr($text_blocks[$j], array("'"=>"\'", "\\"=>"\\\\")) . "'; ?>";
                     if ($compiled_tags[$j] == '{/strip}') {
                         $compiled_tags[$j] = "\n"; /* slurped by php, but necessary
@@ -529,13 +533,13 @@ class Smarty_Compiler extends Smarty {
                     $this->_pop_tag('strip');
                     if (--$this->_strip_depth==0) { /* outermost closing {/strip} */
                         $this->_additional_newline = "\n";
-                        return $this->left_delimiter.$tag_command.$this->right_delimiter;
+                        return '{' . $tag_command . '}';
                     }
                 } else {
                     $this->_push_tag('strip');
                     if ($this->_strip_depth++==0) { /* outermost opening {strip} */
                         $this->_additional_newline = "";
-                        return $this->left_delimiter.$tag_command.$this->right_delimiter;
+                        return '{' . $tag_command . '}';
                     }
                 }
                 return '';
@@ -1172,14 +1176,15 @@ class Smarty_Compiler extends Smarty {
         }
 
         $output = '<?php ';
+        $output .= "\$_from = $from; if (!is_array(\$_from) && !is_object(\$_from)) { settype(\$_from, 'array'); }";
         if (isset($name)) {
             $foreach_props = "\$this->_foreach[$name]";
-            $output .= "{$foreach_props} = array('total' => count(\$_from = (array)$from), 'iteration' => 0);\n";
+            $output .= "{$foreach_props} = array('total' => count(\$_from), 'iteration' => 0);\n";
             $output .= "if ({$foreach_props}['total'] > 0):\n";
             $output .= "    foreach (\$_from as $key_part\$this->_tpl_vars['$item']):\n";
             $output .= "        {$foreach_props}['iteration']++;\n";
         } else {
-            $output .= "if (count(\$_from = (array)$from)):\n";
+            $output .= "if (count(\$_from)):\n";
             $output .= "    foreach (\$_from as $key_part\$this->_tpl_vars['$item']):\n";
         }
         $output .= '?>';
@@ -1367,6 +1372,9 @@ class Smarty_Compiler extends Smarty {
                                !in_array($token, $this->security_settings['IF_FUNCS'])) {
                                 $this->_syntax_error("(secure mode) '$token' not allowed in if statement", E_USER_ERROR, __FILE__, __LINE__);
                             }
+                    } elseif(preg_match('~^' . $this->_var_regexp . '$~', $token) && isset($tokens[$i+1]) && $tokens[$i+1] == '(') {
+                        // variable function call
+                        $this->_syntax_error("variable function call '$token' not allowed in if statement", E_USER_ERROR, __FILE__, __LINE__);                      
                     } elseif(preg_match('~^' . $this->_obj_call_regexp . '|' . $this->_var_regexp . '(?:' . $this->_mod_regexp . '*)$~', $token)) {
                         // object or variable
                         $token = $this->_parse_var_props($token);
