@@ -1276,7 +1276,7 @@ class ContentManager
 				{
 					#array_push($result, strtolower($oneclass));
 					$tmpobj = new $oneclass;
-					$result[$oneclass] = $tmpobj->FriendlyName();
+					$result[strtolower($oneclass)] = $tmpobj->FriendlyName();
 				}
 			}
 		}
