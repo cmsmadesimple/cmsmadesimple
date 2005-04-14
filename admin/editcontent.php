@@ -47,6 +47,11 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
+if ($preview || $apply)
+    {
+    	$CMS_EXCLUDE_FROM_RECENT=1;
+    }
+
 #Get a list of content types and pick a default if necessary
 $existingtypes = ContentManager::ListContentTypes();
 $content_type = "";

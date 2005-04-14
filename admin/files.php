@@ -70,6 +70,11 @@ $reldir = str_replace("\\", "/", $reldir);
 $reldir = str_replace("//", "/", $reldir);
 $reldir = ereg_replace("/^", "", $reldir);
 
+if ($reldir != "")
+    {
+    $CMS_ADMIN_SUBTITLE = $reldir;
+    }
+
 if (strpos($reldir, '..') === false && strpos($reldir, '\\') === false)
 {
 	$dir .= $reldir;
