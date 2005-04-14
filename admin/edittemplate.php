@@ -62,6 +62,11 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
+if ($preview || $apply)
+    {
+    	$CMS_EXCLUDE_FROM_RECENT=1;
+    }
+
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 

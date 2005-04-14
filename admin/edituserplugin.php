@@ -58,6 +58,7 @@ load_plugins($smarty);
 if ($access) {
 	if (isset($_POST["editplugin"])) {
 
+        $CMS_EXCLUDE_FROM_RECENT = 1;
 		$validinfo = true;
 		if ($plugin_name == "") {
 			$error .= "<li>".lang('nofieldgiven', array(lang('editusertag')))."</li>";
