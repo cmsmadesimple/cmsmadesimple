@@ -2,7 +2,7 @@
  * HTML Tags
  */
 body {
-	font-family: helvetica, impact, sans-serif;
+	font-family: helvetica, arial, sans-serif;
 	font-size: .9em;
 	margin: 0;
 }
@@ -173,8 +173,8 @@ iframe {
 }
 
 .rightcol {
-	width: 150px;
-	font-size: 10px;
+	width: 200px;
+	font-size: 12px;
 	padding-top: 0;
 	padding-left: 0;
 	padding-right: 0;
