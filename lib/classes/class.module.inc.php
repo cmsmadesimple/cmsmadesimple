@@ -19,6 +19,182 @@
 #$Id$
 
 /**
+ * "Static" module functions for internal use and module development.  CMSModule
+ * extends this so that it has internal access to the functions.
+ *
+ * @since		0.9
+ * @package		CMS
+ */
+class ModuleOperations extends Smarty
+{
+	/**
+	 * Loads modules from the filesystem.  If loadall is true, then it will load all
+	 * modules whether they're installed, or active.  If it is false, then it will
+	 * only load modules which are installed and active.
+	 */
+	function LoadModules($loadall = false)
+	{
+		global $gCms;
+		$db = $gCms->db;
+		$cmsmodules = &$gCms->modules;
+
+		$dir = dirname(dirname(dirname(__FILE__)))."/modules";
+
+		if ($loadall == true)
+		{
+			$ls = dir($dir);
+			while (($file = $ls->read()) != "")
+			{
+				if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+				{
+					if (is_file("$dir/$file/$file.module.php"))
+					{
+						include_once("$dir/$file/$file.module.php");
+					}
+					else
+					{
+						unset($cmsmodules[$file]);
+					}
+				}
+			}
+			//Find modules and instantiate them
+			$allmodules = @ModuleOperations::FindModules();
+			foreach ($allmodules as $onemodule)
+			{
+				if (class_exists($onemodule))
+				{
+					$newmodule = new $onemodule;
+					$name = $newmodule->GetName();
+					$cmsmodules[$name]['object'] = $newmodule;
+					$cmsmodules[$name]['installed'] = false;
+					$cmsmodules[$name]['active'] = false;
+				}
+				else
+				{
+					unset($cmsmodules[$name]);
+				}
+			}
+		}
+
+		#Figger out what modules are active and/or installed
+		#Load them if loadall is false
+		if (isset($db))
+		{
+			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
+			$result = $db->Execute($query);
+			if ($result)
+			{
+				while ($row = $result->FetchRow())
+				{
+					if (isset($row['module_name']))
+					{
+						$modulename = $row['module_name'];
+						if (isset($modulename))
+						{
+							if ($loadall == true)
+							{
+								if (isset($cmsmodules[$modulename]))
+								{
+									$cmsmodules[$modulename]['installed'] = true;
+									$cmsmodules[$modulename]['active'] = ($row['active']=='1'?true:false);
+								}
+							}
+							else
+							{
+								if ($row['active'] == '1')
+								{
+									if (is_file("$dir/$modulename/$modulename.module.php"))
+									{
+										include_once("$dir/$modulename/$modulename.module.php");
+										if (class_exists($modulename))
+										{
+											$newmodule = new $modulename;
+											$name = $newmodule->GetName();
+
+											#Check to see if version in db matchs file version
+											if ($row['version'] == $newmodule->GetVersion())
+											{
+												$cmsmodules[$name]['object'] = $newmodule;
+												$cmsmodules[$name]['installed'] = true;
+												$cmsmodules[$name]['active'] = ($row['active']=='1'?true:false);
+											}
+											else
+											{
+												unset($cmsmodules[$name]);
+											}
+										}
+										else //No point in doing anything with it
+										{
+											unset($cmsmodules[$name]);
+										}
+									}
+									else
+									{
+										unset($cmsmodules[$modulename]);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Finds all classes extending cmsmodule for loading
+	 */
+	function FindModules()
+	{
+		$result = array();
+
+		foreach (get_declared_classes() as $oneclass)
+		{
+			if (strtolower(get_parent_class($oneclass)) == 'cmsmodule')
+			{
+				array_push($result, strtolower($oneclass));
+			}
+		}
+
+		sort($result);
+
+		return $result;
+	}
+
+	/**
+	 * Returns a hash of all loaded modules.  This will include all
+	 * modules loaded by LoadModules, which could either be all or them,
+	 * or just ones that are active and installed.
+	 */
+	function GetAllModules()
+	{
+		global $gCms;
+		$cmsmodules = &$gCms->modules;
+		return $cmsmodules;
+	}
+
+	/**
+	 * Returns all parameters sent that are destined for the module with
+	 * the given $id
+	 */
+	function GetModuleParameters($id)
+	{
+		$params = array();
+
+		foreach ($_REQUEST as $key=>$value)
+		{
+			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+			{
+				$key = str_replace($id, '', $key);
+				$params[$key] = $value;
+			}
+		}
+
+		return $params;
+	}
+}
+
+/**
  * Base module class.
  *
  * All modules should inherit and extend this class with their functionality.
@@ -1538,182 +1714,6 @@ class CMSModule extends ModuleOperations
 		}
 
 		return $page_string;
-	}
-}
-
-/**
- * "Static" module functions for internal use and module development.  CMSModule
- * extends this so that it has internal access to the functions.
- *
- * @since		0.9
- * @package		CMS
- */
-class ModuleOperations extends Smarty
-{
-	/**
-	 * Loads modules from the filesystem.  If loadall is true, then it will load all
-	 * modules whether they're installed, or active.  If it is false, then it will
-	 * only load modules which are installed and active.
-	 */
-	function LoadModules($loadall = false)
-	{
-		global $gCms;
-		$db = $gCms->db;
-		$cmsmodules = &$gCms->modules;
-
-		$dir = dirname(dirname(dirname(__FILE__)))."/modules";
-
-		if ($loadall == true)
-		{
-			$ls = dir($dir);
-			while (($file = $ls->read()) != "")
-			{
-				if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
-				{
-					if (is_file("$dir/$file/$file.module.php"))
-					{
-						include_once("$dir/$file/$file.module.php");
-					}
-					else
-					{
-						unset($cmsmodules[$file]);
-					}
-				}
-			}
-			//Find modules and instantiate them
-			$allmodules = @ModuleOperations::FindModules();
-			foreach ($allmodules as $onemodule)
-			{
-				if (class_exists($onemodule))
-				{
-					$newmodule = new $onemodule;
-					$name = $newmodule->GetName();
-					$cmsmodules[$name]['object'] = $newmodule;
-					$cmsmodules[$name]['installed'] = false;
-					$cmsmodules[$name]['active'] = false;
-				}
-				else
-				{
-					unset($cmsmodules[$name]);
-				}
-			}
-		}
-
-		#Figger out what modules are active and/or installed
-		#Load them if loadall is false
-		if (isset($db))
-		{
-			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
-			$result = $db->Execute($query);
-			if ($result)
-			{
-				while ($row = $result->FetchRow())
-				{
-					if (isset($row['module_name']))
-					{
-						$modulename = $row['module_name'];
-						if (isset($modulename))
-						{
-							if ($loadall == true)
-							{
-								if (isset($cmsmodules[$modulename]))
-								{
-									$cmsmodules[$modulename]['installed'] = true;
-									$cmsmodules[$modulename]['active'] = ($row['active']=='1'?true:false);
-								}
-							}
-							else
-							{
-								if ($row['active'] == '1')
-								{
-									if (is_file("$dir/$modulename/$modulename.module.php"))
-									{
-										include_once("$dir/$modulename/$modulename.module.php");
-										if (class_exists($modulename))
-										{
-											$newmodule = new $modulename;
-											$name = $newmodule->GetName();
-
-											#Check to see if version in db matchs file version
-											if ($row['version'] == $newmodule->GetVersion())
-											{
-												$cmsmodules[$name]['object'] = $newmodule;
-												$cmsmodules[$name]['installed'] = true;
-												$cmsmodules[$name]['active'] = ($row['active']=='1'?true:false);
-											}
-											else
-											{
-												unset($cmsmodules[$name]);
-											}
-										}
-										else //No point in doing anything with it
-										{
-											unset($cmsmodules[$name]);
-										}
-									}
-									else
-									{
-										unset($cmsmodules[$modulename]);
-									}
-								}
-							}
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * Finds all classes extending cmsmodule for loading
-	 */
-	function FindModules()
-	{
-		$result = array();
-
-		foreach (get_declared_classes() as $oneclass)
-		{
-			if (strtolower(get_parent_class($oneclass)) == 'cmsmodule')
-			{
-				array_push($result, strtolower($oneclass));
-			}
-		}
-
-		sort($result);
-
-		return $result;
-	}
-
-	/**
-	 * Returns a hash of all loaded modules.  This will include all
-	 * modules loaded by LoadModules, which could either be all or them,
-	 * or just ones that are active and installed.
-	 */
-	function GetAllModules()
-	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		return $cmsmodules;
-	}
-
-	/**
-	 * Returns all parameters sent that are destined for the module with
-	 * the given $id
-	 */
-	function GetModuleParameters($id)
-	{
-		$params = array();
-
-		foreach ($_REQUEST as $key=>$value)
-		{
-			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
-			{
-				$key = str_replace($id, '', $key);
-				$params[$key] = $value;
-			}
-		}
-
-		return $params;
 	}
 }
 
