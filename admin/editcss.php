@@ -192,6 +192,11 @@ if (strlen($css_name) > 0)
     {
     $CMS_ADMIN_SUBTITLE = $css_name;
     }
+if (isset($_POST["apply"]))
+    {
+    	$CMS_EXCLUDE_FROM_RECENT=1;
+    }
+
 include_once("header.php");
 
 # if the user has no acess, we display an error
