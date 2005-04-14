@@ -43,7 +43,7 @@ if (isset($gCms->modules[$module]))
     $CMS_ADMIN_SUBTITLE = $gCms->modules[$module]['object']->GetName();
 }
 
-if (count($gCms->modules) > 0)
+if (count($gCms->modules) > 0 && isset($gCms->modules[$module]['object']))
     {
     $CMS_TOP_MENU=$gCms->modules[$module]['object']->GetAdminSection();
     }
