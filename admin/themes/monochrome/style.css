@@ -80,7 +80,7 @@ html>body #TopMenu {
 	color: black;
 	}
 
-#TopMenuSelected {
+#TopMenu .selected {
 	border: solid 2px white;
 	padding: 2px;
 

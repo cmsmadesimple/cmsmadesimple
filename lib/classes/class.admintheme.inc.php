@@ -275,6 +275,26 @@ class AdminTheme
             }
     }
 
+    /**
+     * Menu List Section Modules
+     *
+     * @param section - section to display
+     */
+    function MenuListSectionModules($section)
+    {
+    	$modList = array();
+        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
+            {
+            foreach($this->modulesBySection[$section] as $sectionModule)
+                {
+                $modList[$sectionModule['key']] = "moduleinterface.php?module=".
+                    $sectionModule['key'];
+                }
+            }
+        return $modList;
+    }
+
+
     function LoadRecentPages()
     {
         require_once("../lib/classes/class.recentpage.inc.php");
@@ -418,7 +438,25 @@ class AdminTheme
 
     function OutputHeaderJavascript()
     {
-    }
+?>
+<script type="text/JavaScript">
+<!-- Needed for correct display in IE only -->
+<!--
+	cssHover = function() {
+		var sfEls = document.getElementById("nav").getElementsByTagName("LI");
+		for (var i=0; i<sfEls.length; i++) {
+			sfEls[i].onmouseover=function() {
+				this.className+=" cssHover";
+			}
+			sfEls[i].onmouseout=function() {
+				this.className=this.className.replace(new RegExp(" cssHover\\b"), "");
+			}
+		}
+	}
+	if (window.attachEvent) window.attachEvent("onload", cssHover);
+-->
+</script>
+<?php    }
 
     function OutputFooterJavascript()
     {
@@ -429,75 +467,222 @@ class AdminTheme
     }
 
 
-    function DoTopMenu($cms_top='')
+    function DoTopMenu($cms_top='',$url,$query)
     {
     	$menuItems = array();
+    	if (strpos( $url, '/' ) === false)
+    	   {
+    	   	$script = $url;
+    	   }
+        else
+            {
+            $script = array_pop(explode('/',$url));
+    	    }
+        $count = 0;
+    	$menuItems['main'][$count]['url'] = 'index.php';
+    	$menuItems['main'][$count]['title'] = lang('main');
+    	$menuItems['main'][$count++]['selected'] = ($cms_top=='main');
+
     	$count = 0;
-    	$menuItems[$count]['section'] = 'main';
-    	$menuItems[$count]['url'] = 'index.php';
-    	$menuItems[$count]['title'] = lang('main');
-    	$menuItems[$count++]['selected'] = ($cms_top=='main');
+        $menuItems['content'][$count]['url'] = 'topcontent.php';
+    	$menuItems['content'][$count]['title'] = lang('content');
+    	$menuItems['content'][$count++]['selected'] = ($cms_top=='content');
 
-    	$menuItems[$count]['section'] = 'content';
-    	$menuItems[$count]['url'] = 'topcontent.php';
-    	$menuItems[$count]['title'] = lang('content');
-    	$menuItems[$count++]['selected'] = ($cms_top=='content');
+        $menuItems['content'][$count]['url'] = 'listcontent.php';
+        $menuItems['content'][$count]['title'] = lang('pages');
+        $menuItems['content'][$count++]['selected'] = ($script=='listcontent.php');
 
-        $menuItems[$count]['section'] = 'pages';
-    	$menuItems[$count]['url'] = 'listcontent.php';
-    	$menuItems[$count]['title'] = lang('pages');
-    	$menuItems[$count++]['selected'] = ($cms_top=='pages');
+        if ($this->HasPerm('htmlPerms'))
+            {
+            $menuItems['content'][$count]['url'] = 'listhtmlblobs.php';
+    	    $menuItems['content'][$count]['title'] = lang('htmlblobs');
+    	    $menuItems['content'][$count++]['selected'] = ($script=='listhtmlblobs.php');
+            }
+
+        $tmpArray = $this->MenuListSectionModules('content');
+        foreach ($tmpArray as $thisKey=>$thisVal)
+            {
+            $menuItems['content'][$count]['url'] = $thisVal;
+            $menuItems['content'][$count]['title'] = $thisKey;
+            $menuItems['content'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+            }
+
+        $count = 0;
+        $menuItems['pages'][$count]['url'] = 'listcontent.php';
+    	$menuItems['pages'][$count]['title'] = lang('pages');
+    	$menuItems['pages'][$count++]['selected'] = ($cms_top=='pages');
+
         if ($this->HasPerm('filePerms'))
         {
-    	   $menuItems[$count]['section'] = 'files';
-           $menuItems[$count]['url'] = 'topfiles.php';
-    	   $menuItems[$count]['title'] = lang('files');
-    	   $menuItems[$count++]['selected'] = ($cms_top=='files');
+            $count = 0;
+            $menuItems['files'][$count]['url'] = 'topfiles.php';
+            $menuItems['files'][$count]['title'] = lang('files');
+            $menuItems['files'][$count++]['selected'] = ($cms_top=='files');
+
+            $menuItems['files'][$count]['url'] = 'files.php';
+            $menuItems['files'][$count]['title'] = lang('filemanager');
+            $menuItems['files'][$count++]['selected'] = ($script=='files.php');
+            $menuItems['files'][$count]['url'] = 'imagefiles.php';
+            $menuItems['files'][$count]['title'] = lang('imagemanager');
+            $menuItems['files'][$count++]['selected'] = ($script=='imagefile.php');
+
+            $tmpArray = $this->MenuListSectionModules('files');
+            foreach ($tmpArray as $thisKey=>$thisVal)
+                {
+                $menuItems['files'][$count]['url'] = $thisVal;
+                $menuItems['files'][$count]['title'] = $thisKey;
+                $menuItems['files'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                }
         }
         if ($this->HasPerm('layoutPerms'))
         {
-    	   $menuItems[$count]['section'] = 'layout';
-           $menuItems[$count]['url'] = 'toplayout.php';
-    	   $menuItems[$count]['title'] = lang('layout');
-    	   $menuItems[$count++]['selected'] = ($cms_top=='layout');
+            $count = 0;
+            $menuItems['layout'][$count]['url'] = 'toplayout.php';
+            $menuItems['layout'][$count]['title'] = lang('layout');
+            $menuItems['layout'][$count++]['selected'] = ($cms_top=='layout');
+            if ($this->HasPerm('templatePerms'))
+            {
+                $menuItems['layout'][$count]['url'] = 'listtemplates.php';
+                $menuItems['layout'][$count]['title'] = lang('templates');
+                $menuItems['layout'][$count++]['selected'] = ($script=='listtemplates.php');;
+            }
+            if ($this->HasPerm('cssPerms') || $themeObject->HasPerm('cssAssocPerms'))
+            {
+                $menuItems['layout'][$count]['url'] = 'listcss.php';
+                $menuItems['layout'][$count]['title'] = lang('stylesheets');
+                $menuItems['layout'][$count++]['selected'] = ($script=='listcss.php');;
+            }
+            $tmpArray = $this->MenuListSectionModules('layout');
+            foreach ($tmpArray as $thisKey=>$thisVal)
+                {
+                $menuItems['layout'][$count]['url'] = $thisVal;
+                $menuItems['layout'][$count]['title'] = $thisKey;
+                $menuItems['layout'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                }
         }
         if ($this->HasPerm('usersGroupsPerms'))
         {
-    	   $menuItems[$count]['section'] = 'usersgroups';
-           $menuItems[$count]['url'] = 'topusers.php';
-    	   $menuItems[$count]['title'] = lang('usersgroups');
-    	   $menuItems[$count++]['selected'] = ($cms_top=='usersgroups');
+            $count = 0;
+            $menuItems['usersgroups'][$count]['url'] = 'topusers.php';
+            $menuItems['usersgroups'][$count]['title'] = lang('usersgroups');
+            $menuItems['usersgroups'][$count++]['selected'] = ($cms_top=='usersgroups');
+            if ($this->HasPerm('userPerms'))
+            {
+                $menuItems['usersgroups'][$count]['url'] = 'listusers.php';
+                $menuItems['usersgroups'][$count]['title'] = lang('users');
+                $menuItems['usersgroups'][$count++]['selected'] = ($script=='listusers.php');;
+            }
+            if ($this->HasPerm('groupPerms'))
+            {
+                $menuItems['usersgroups'][$count]['url'] = 'listgroups.php';
+                $menuItems['usersgroups'][$count]['title'] = lang('groups');
+                $menuItems['usersgroups'][$count++]['selected'] = ($script=='listgroups.php');;
+            }
+            if ($this->HasPerm('groupMemberPerms'))
+            {
+                $menuItems['usersgroups'][$count]['url'] = 'changegroupassign.php';
+                $menuItems['usersgroups'][$count]['title'] = lang('groupassignments');
+                $menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupassign.php');;
+            }
+            if ($this->HasPerm('groupPermPerms'))
+            {
+                $menuItems['usersgroups'][$count]['url'] = 'changegroupperm.php';
+                $menuItems['usersgroups'][$count]['title'] = lang('groupperms');
+                $menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupperm.php');;
+            }
+            $tmpArray = $this->MenuListSectionModules('usersgroups');
+            foreach ($tmpArray as $thisKey=>$thisVal)
+                {
+                $menuItems['usersgroups'][$count]['url'] = $thisVal;
+                $menuItems['usersgroups'][$count]['title'] = $thisKey;
+                $menuItems['usersgroups'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                }
+
         }
         if ($this->HasPerm('extensionsPerms'))
         {
-    	   $menuItems[$count]['section'] = 'extensions';
-           $menuItems[$count]['url'] = 'topextensions.php';
-    	   $menuItems[$count]['title'] = lang('extensions');
-    	   $menuItems[$count++]['selected'] = ($cms_top=='extensions');
+            $count = 0;
+            $menuItems['extensions'][$count]['url'] = 'topextensions.php';
+            $menuItems['extensions'][$count]['title'] = lang('extensions');
+            $menuItems['extensions'][$count++]['selected'] = ($cms_top=='extensions');
+            if ($this->HasPerm('modulePerms'))
+            {
+                $menuItems['extensions'][$count]['url'] = 'listmodules.php';
+                $menuItems['extensions'][$count]['title'] = lang('modules');
+                $menuItems['extensions'][$count++]['selected'] = ($script=='listmodules.php');;
+            }
+            $menuItems['extensions'][$count]['url'] = 'listtags.php';
+            $menuItems['extensions'][$count]['title'] = lang('tags');
+            $menuItems['extensions'][$count++]['selected'] = ($script=='listtags.php');
+            if ($this->HasPerm('codeBlockPerms'))
+            {
+                $menuItems['extensions'][$count]['url'] = 'listusertags.php';
+                $menuItems['extensions'][$count]['title'] = lang('usertags');
+                $menuItems['extensions'][$count++]['selected'] = ($script=='listusertags.php');;
+            }
+            $tmpArray = $this->MenuListSectionModules('extensions');
+            foreach ($tmpArray as $thisKey=>$thisVal)
+                {
+                $menuItems['extensions'][$count]['url'] = $thisVal;
+                $menuItems['extensions'][$count]['title'] = $thisKey;
+                $menuItems['extensions'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                }
         }
-    	$menuItems[$count]['section'] = 'preferences';
-        $menuItems[$count]['url'] = 'editprefs.php';
-    	$menuItems[$count]['title'] = lang('preferences');
-    	$menuItems[$count++]['selected'] = ($cms_top=='preferences');
+        $count = 0;
+    	$menuItems['preferences'][$count]['url'] = 'editprefs.php';
+    	$menuItems['preferences'][$count]['title'] = lang('preferences');
+    	$menuItems['preferences'][$count++]['selected'] = ($cms_top=='preferences');
+        $tmpArray = $this->MenuListSectionModules('files');
+        foreach ($tmpArray as $thisKey=>$thisVal)
+            {
+            $menuItems['preferences'][$count]['url'] = $thisVal;
+            $menuItems['preferences'][$count]['title'] = $thisKey;
+            $menuItems['preferences'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+            }
+
+
         if ($this->HasPerm('adminPerms'))
         {
-    	   $menuItems[$count]['section'] = 'admin';
-           $menuItems[$count]['url'] = 'topadmin.php';
-    	   $menuItems[$count]['title'] = lang('admin');
-    	   $menuItems[$count++]['selected'] = ($cms_top=='admin');
+            $count = 0;
+            $menuItems['admin'][$count]['url'] = 'topadmin.php';
+            $menuItems['admin'][$count]['title'] = lang('admin');
+            $menuItems['admin'][$count++]['selected'] = ($cms_top=='admin');
+            if ($this->HasPerm('sitePrefPerms'))
+            {
+                $menuItems['admin'][$count]['url'] = 'siteprefs.php';
+                $menuItems['admin'][$count]['title'] = lang('preferences');
+                $menuItems['admin'][$count++]['selected'] = ($script=='siteprefs.php');;
+            }
+            $menuItems['admin'][$count]['url'] = 'adminlog.php';
+            $menuItems['admin'][$count]['title'] = lang('adminlog');
+            $menuItems['admin'][$count++]['selected'] = ($script=='adminlog.php');;
+            $tmpArray = $this->MenuListSectionModules('admin');
+            foreach ($tmpArray as $thisKey=>$thisVal)
+                {
+                $menuItems['admin'][$count]['url'] = $thisVal;
+                $menuItems['admin'][$count]['title'] = $thisKey;
+                $menuItems['admin'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                }
         }
-    	$menuItems[$count]['section'] = 'viewsite';
-        $menuItems[$count]['url'] = '../index.php';
-    	$menuItems[$count]['title'] = lang('viewsite');
-    	$menuItems[$count++]['selected'] = false;
-    	$menuItems[$count]['section'] = 'logout';
-    	$menuItems[$count]['url'] = 'logout.php';
-    	$menuItems[$count]['title'] = lang('logout');
-    	$menuItems[$count++]['selected'] = false;
-    	$menuItems[$count]['section'] = 'bookmarks';
-    	$menuItems[$count]['url'] = 'makebookmark.php?title='.urlencode($this->title);
-    	$menuItems[$count]['title'] = '[+]';
-    	$menuItems[$count++]['selected'] = ($cms_top=='bookmarks');
+        $count = 0;
+    	$menuItems['viewsite'][$count]['url'] = '../index.php';
+    	$menuItems['viewsite'][$count]['title'] = lang('viewsite');
+    	$menuItems['viewsite'][$count]['selected'] = false;
+
+    	$menuItems['logout'][$count]['url'] = 'logout.php';
+    	$menuItems['logout'][$count]['title'] = lang('logout');
+    	$menuItems['logout'][$count]['selected'] = false;
+
+    	$menuItems['bookmarks'][$count]['url'] = 'makebookmark.php?title='.urlencode($this->title);
+    	$menuItems['bookmarks'][$count]['title'] = '[+]';
+    	$menuItems['bookmarks'][$count++]['selected'] = ($cms_top=='bookmarks');
+        $tmpArray = $this->MenuListSectionModules('bookmarks');
+        foreach ($tmpArray as $thisKey=>$thisVal)
+            {
+            $menuItems['bookmarks'][$count]['url'] = $thisVal;
+            $menuItems['bookmarks'][$count]['title'] = $thisKey;
+            $menuItems['bookmarks'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+            }
         $this->DisplayTopMenu($menuItems);
     }
 
@@ -511,20 +696,40 @@ class AdminTheme
      * to indicate this is the current selection. You can use the "section" to trap for
      * javascript links, etc.
      *
+     * Cruftily written to only support a depth of two levels
+     *
      */
     function DisplayTopMenu($menuItems)
     {
-        echo "<div id=\"TopMenu\">\n";
-        foreach ($menuItems as $menuItem)
+        echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
+        foreach ($menuItems as $key=>$menuItem)
             {
-            echo '<a href="'.$menuItem['url'].'"';
-            if ($menuItem['selected'])
+            $count = count($menuItem);
+            $counter = 1;
+            foreach ($menuItem as $thisItem)
                 {
-                echo ' id="TopMenuSelected"';
+                echo '<li><a href="'.$thisItem['url'].'"';
+                if ($thisItem['selected'])
+                    {
+                    echo ' class="selected"';
+                    }
+                echo ">".$thisItem['title']."</a>";
+                if ($count > 1 && $counter == 1)
+                    {
+                    echo "<ul>\n";
+                    }
+                else if ($count > 1 && $count == $counter)
+                    {
+                    echo "</li></ul>\n";
+                    }
+                else
+                    {
+                    echo "</li>\n";
+                    }
+                $counter++;
                 }
-            echo ">".$menuItem['title']."</a>";
             }
-        echo "</div>\n";
+        echo "</ul></div>\n";
     }
 
     function DisplayFooter()

@@ -7,23 +7,24 @@ class monochromeTheme extends AdminTheme {
 
     function DisplayTopMenu($menuItems)
     {
-        echo "<div id=\"TopMenu\"><ul>\n";
-        foreach ($menuItems as $menuItem)
+        echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
+        foreach ($menuItems as $key=>$menuItem)
             {
-            echo '<li><a href="'.$menuItem['url'].'"';
-            if ($menuItem['selected'])
+            $thisItem = $menuItem[0];
+            echo '<li><a href="'.$thisItem['url'].'"';
+            if ($thisItem['selected'])
                 {
-                echo ' id="TopMenuSelected"';
+                echo ' class="selected"';
                 }
-            if ($menuItem['section']=='bookmarks')
+            if ($key=='bookmarks')
                 {
                 echo ' onMouseOver="Javascript:toggleMarkState()"';
                 }
-            echo ">".$menuItem['title']."</a></li>";
+            echo ">".$thisItem['title']."</a>";
+            echo "</li>\n";
             }
         echo "</ul></div>\n";
     }
-
 
     function DisplayRecentPages()
     {

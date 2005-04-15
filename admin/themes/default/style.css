@@ -3,7 +3,7 @@
  */
 body {
 	font-family: helvetica, arial, sans-serif;
-	font-size: .9em;
+	font-size: 12px;
 	margin: 0;
 }
 
@@ -76,12 +76,20 @@ iframe {
 	padding-right: 5px;
 }
 
-#TopMenuSelected {
-	background-color: #e0e0f7;
-	padding: 5px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
+#nav, #nav ul { list-style: none; padding: 0; margin: 0; }
+#nav ul { border: solid #c6c3bd; border-width: 1px; }
+#nav a { display: block; color: #384654; text-decoration: none; margin-top: 2px; margin-left: 10px; margin-right: 10px; }
+#nav li a { font-size: 14px; padding-bottom: 2px; }
+#nav li ul a { text-align: left; padding-bottom: 0px; }
+#nav a.selected { font-weight: bold; text-decoration: underline; background-color: #fff; }
+#nav li { float: left; padding: 0; }
+#nav li ul { position: absolute; display: none; height: auto; width: 139px; background: #F8F8F8; font-weight: normal; border-width: 1px; margin: 0; }
+#nav li li { width: 140px; }
+#nav li ul ul { margin: -18px 0 0 140px; }
+#nav li:hover ul ul, #nav li:hover ul ul ul, #nav li.cssHover ul ul, #nav li.cssHover ul ul ul { display: none; }
+#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li.cssHover ul, #nav li li.cssHover ul, #nav li li li.cssHover ul { display: block; }
+#nav li:hover, #nav li.cssHover { background: #ABB0B6; }
+
 
 .Error {
 	color: red;
@@ -140,16 +148,6 @@ iframe {
  * Forms
  */
 
-/*
-.AdminForm,
-.AdminForm th,
-.AdminForm td,
-.AdminForm input,
-.AdminForm select {
-	font-size: 80%;
-}
-*/
-
 .AdminForm,
 .AdminForm input,
 .AdminForm select {
@@ -181,8 +179,8 @@ iframe {
 	margin: 0px;
 	margin-top: 15px;
 	position: absolute;
-	right:15px;
-	top: 14px;
+	right: 15px;
+	top: 18px;
 }
 
 .rightcol ul {

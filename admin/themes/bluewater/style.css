@@ -73,8 +73,7 @@ html>body #TopMenu {
 	position: fixed;
     }
 
-
-#TopMenu a {
+/*#TopMenu a {
     padding-left: 5px;
 	padding-right: 5px;
 	color: white;
@@ -92,6 +91,21 @@ html>body #TopMenu {
 	padding-left: 5px;
 	padding-right: 5px;
 }
+*/
+#nav, #nav ul { list-style: none; padding: 0; margin: 0; }
+#nav a { display: block; color: white; text-decoration: none; margin-top: 2px; margin-left: 10px; margin-right: 10px; }
+#nav li a { font-size: 14px; padding-bottom: 2px; }
+#nav li ul a { text-align: left; padding-bottom: 0px; }
+#nav a.selected { background-color: #23A9C4; }
+#nav li { float: left; padding: 0; }
+#nav li ul { position: absolute; display: none; height: auto; width: 139px; background: #1C639B; font-weight: normal; margin: 0; }
+#nav li li { width: 140px; }
+#nav li ul ul { margin: -18px 0 0 140px; }
+#nav li:hover ul ul, #nav li:hover ul ul ul, #nav li.cssHover ul ul, #nav li.cssHover ul ul ul { display: none; }
+#nav li:hover ul, #nav li li:hover ul, #nav li li li:hover ul, #nav li.cssHover ul, #nav li li.cssHover ul, #nav li li li.cssHover ul { display: block; }
+#nav li:hover, #nav li.cssHover { background: #23A9C4; }
+
+
 
 
 /**
@@ -214,7 +228,7 @@ html>body #Footer {
  */
 
 .rightcol {
-	width: 150px;
+	width: 200px;
 	font-size: 10px;
 	padding-top: 0;
 	padding-left: 0;
@@ -223,7 +237,7 @@ html>body #Footer {
 	margin-top: 15px;
 	position: absolute;
 	right:15px;
-	top: 14px;
+	top: 18px;
 }
 
 .rightcol ul {
@@ -351,7 +365,6 @@ html>body #Footer {
 	margin: 1px 2px 0 0;
 	text-align: center;
 	font-family: tahoma, verdana, sans-serif;
-	font-size: 85%;
 	text-decoration: none;
 	color: black;
 }

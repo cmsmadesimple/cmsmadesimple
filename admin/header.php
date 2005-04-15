@@ -53,13 +53,24 @@ if (! isset($CMS_EXCLUDE_FROM_RECENT))
 </head>
 
 <body##BODYSUBMITSTUFFGOESHERE##>
-<?php $themeObject->DoTopMenu($CMS_TOP_MENU); ?>
+<?php $themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']); ?>
 <div id="AdminHeader"></div>
 
 <div id="MainContent">
 <?php
-$themeObject->StartRighthandColumn();
-$themeObject->DoRecentPages();
-$themeObject->DoBookmarks();
-$themeObject->EndRighthandColumn();
+$marks = get_preference($userid, 'bookmarks');
+$recent = get_preference($userid, 'recent');
+if ($marks || $recent)
+    {
+    $themeObject->StartRighthandColumn();
+    if ($recent)
+        {
+        $themeObject->DoRecentPages();
+        }
+    if ($marks)
+        {
+        $themeObject->DoBookmarks();
+        }
+    $themeObject->EndRighthandColumn();
+    }
 ?>

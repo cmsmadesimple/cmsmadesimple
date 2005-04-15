@@ -38,6 +38,12 @@ $admintheme = "default";
 if (isset($_POST["admintheme"])) $admintheme = $_POST["admintheme"];
 // STOP
 
+$bookmarks = 0;
+if (isset($_POST["bookmarks"])) $bookmarks = $_POST["bookmarks"];
+$recent = 0;
+if (isset($_POST["recent"])) $recent = $_POST["recent"];
+
+
 require_once("../include.php");
 
 check_login();
@@ -60,6 +66,8 @@ if (isset($_POST["submit_form"])) {
 	//ADDED
 	set_preference($userid, 'admintheme', $admintheme);
 	//STOP
+	set_preference($userid, 'bookmarks', $bookmarks);
+	set_preference($userid, 'recent', $recent);
 	audit(-1, '', 'Edited User Preferences');
 	$error = lang('prefsupdated');
 	#redirect("index.php");
@@ -71,6 +79,8 @@ if (isset($_POST["submit_form"])) {
 	//ADDED
 	$admintheme = get_preference($userid, 'admintheme');
 	//STOP
+    $bookmarks = get_preference($userid, 'bookmarks');
+    $recent = get_preference($userid, 'recent');
 }
 
 include_once("header.php");
@@ -135,6 +145,14 @@ if ($error != "") {
 			</select>
 		</td>
 	</tr>
+	<tr>
+		<th><?php echo lang('admincallout')?>:</th>
+		<td>
+			<input type="checkbox" name="bookmarks" <?php if ($bookmarks) echo " checked"; ?>><?php echo lang('showbookmarks') ?>
+			<input type="checkbox" name="recent" <?php if ($recent) echo " checked"; ?>><?php echo lang('showrecent') ?>
+		</td>
+	</tr>
+
 	<?//ADDED?>
 	<?
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
