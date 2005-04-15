@@ -73,31 +73,13 @@ html>body #TopMenu {
 	position: fixed;
     }
 
-/*#TopMenu a {
-    padding-left: 5px;
-	padding-right: 5px;
-	color: white;
-}
-
-#TopMenu a:hover {
-	padding-left: 5px;
-	padding-right: 5px;
-	color: #83D5D1;
-	}
-
-#TopMenuSelected {
-	background-color: #23A9C4;
-	padding: 5px;
-	padding-left: 5px;
-	padding-right: 5px;
-}
-*/
 #nav, #nav ul { list-style: none; padding: 0; margin: 0; }
 #nav a { display: block; color: white; text-decoration: none; margin-top: 2px; margin-left: 10px; margin-right: 10px; }
 #nav li a { font-size: 14px; padding-bottom: 2px; }
 #nav li ul a { text-align: left; padding-bottom: 0px; }
 #nav a.selected { background-color: #23A9C4; }
 #nav li { float: left; padding: 0; }
+#nav li.selected { background-color: #23A9C4; }
 #nav li ul { position: absolute; display: none; height: auto; width: 139px; background: #1C639B; font-weight: normal; margin: 0; }
 #nav li li { width: 140px; }
 #nav li ul ul { margin: -18px 0 0 140px; }
