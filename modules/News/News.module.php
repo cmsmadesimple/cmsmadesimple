@@ -68,15 +68,19 @@ class News extends CMSModule
 {if !($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
         <span class="cms-news-date">{$entry->date}</span><br />
 {/if}
-<span class="cms-news-title"><a name="{$entry->id}"></a>{$entry->title}</span><br />
+<span class="cms-news-title">
+{if !($params.no_anchors == \'true\' || $params.no_anchors == \'1\')}
+<a name="{$entry->id}"></a>
+{/if}
+{$entry->title}</span><br />
 {if ($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
         <span class="cms-news-date">{$entry->date}</span><br />
 {/if}
 </span> <!-- end cms_module-news-header -->
 <span class="cms-news-content">{$entry->data}</span>
-{if $entry->moretext != \'\'}
+{if $params.summary != \'\'}
         <br />
-        <a href="index.php?page="{$params.summary}#{$entry->id}">{$entry->moretext}</a>
+        <a href="index.php?{$query_var}={$params.summary}#{$entry->id}">{$entry->moretext}</a>
 {/if}
 </span> <!-- end cms-module-news -->
 {/foreach}
@@ -391,6 +395,7 @@ class News extends CMSModule
 
 					global $gCms;
 					$this->smarty->assign_by_ref('root_url', $gCms->config['root_url']);
+					$this->smarty->assign_by_ref('query_var', $gCms->config['query_var']);
 
 					while (($row = $dbresult->FetchRow()))
 					{
