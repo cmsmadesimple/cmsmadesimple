@@ -299,4 +299,7 @@ $lang['admin']['addbookmark'] = 'Neues Lesezeichen';
 $lang['admin']['recentpages'] = 'Aufgerufene Seiten';
 $lang['admin']['selectgroup'] = 'W&auml;hle Gruppe';
 $lang['admin']['updateperm'] = 'Rechte aktualisieren';
+$lang['admin']['admincallout'] = 'Administration Shortcuts'; //needs translation
+$lang['admin']['showbookmarks'] = 'Show Admin Bookmarks'; //needs translation
+$lang['admin']['showrecent'] = 'Show Recently Used Pages'; //needs translation
 ?>

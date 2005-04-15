@@ -298,4 +298,7 @@ $lang['admin']['addbookmark'] = 'Add Bookmark'; //needs translation
 $lang['admin']['recentpages'] = 'Recent Pages'; //needs translation
 $lang['admin']['selectgroup'] = 'Select Group'; //needs translation
 $lang['admin']['updateperm'] = 'Update Permissions'; //needs translation
+$lang['admin']['admincallout'] = 'Administration Shortcuts'; //needs translation
+$lang['admin']['showbookmarks'] = 'Show Admin Bookmarks'; //needs translation
+$lang['admin']['showrecent'] = 'Show Recently Used Pages'; //needs translation
 ?>
