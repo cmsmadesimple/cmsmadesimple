@@ -148,8 +148,8 @@ if ($error != "") {
 	<tr>
 		<th><?php echo lang('admincallout')?>:</th>
 		<td>
-			<input type="checkbox" name="bookmarks" <?php if ($bookmarks) echo " checked"; ?>><?php echo lang('showbookmarks') ?>
-			<input type="checkbox" name="recent" <?php if ($recent) echo " checked"; ?>><?php echo lang('showrecent') ?>
+			<input type="checkbox" name="bookmarks" <?php if ($bookmarks) echo " checked"; ?> /><?php echo lang('showbookmarks') ?>
+			<input type="checkbox" name="recent" <?php if ($recent) echo " checked"; ?> /><?php echo lang('showrecent') ?>
 		</td>
 	</tr>
 
