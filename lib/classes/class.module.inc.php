@@ -1662,14 +1662,26 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * Creates a string containing links to all the pages.
-
+	 * @param string The id given to the module on execution
+	 * @param string The action that this form should do when the form is submitted
+	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string the current page to display
 	 * @param string the amount of items being listed
 	 * @param string the amount of items to list per page
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit)
+	function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
 	{
-		$link = '<a href="moduleinterface.php?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'page=';
+		$goto = 'moduleinterface.php';
+		if ($inline)
+		{
+			$goto = 'index.php';
+		}
+		$link = '<a href="'.$goto.'?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'page=';
+		if ($inline)
+		{
+			$link .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+		}
 		$page_string = "";
 		$from = ($page * $limit) - $limit;
 		$numofpages = floor($totalrows / $limit);
