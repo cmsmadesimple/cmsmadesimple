@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='pages';
+$CMS_TOP_MENU='content';
 $CMS_ADMIN_TITLE='editpage';
 
 require_once("../include.php");

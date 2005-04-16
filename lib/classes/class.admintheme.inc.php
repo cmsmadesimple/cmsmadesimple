@@ -507,10 +507,10 @@ class AdminTheme
             $menuItems['content'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
             }
 
-        $count = 0;
-        $menuItems['pages'][$count]['url'] = 'listcontent.php';
-    	$menuItems['pages'][$count]['title'] = lang('pages');
-    	$menuItems['pages'][$count++]['selected'] = ($cms_top=='pages');
+        #$count = 0;
+        #$menuItems['pages'][$count]['url'] = 'listcontent.php';
+    	#$menuItems['pages'][$count]['title'] = lang('pages');
+    	#$menuItems['pages'][$count++]['selected'] = ($cms_top=='pages');
 
         if ($this->HasPerm('filePerms'))
         {

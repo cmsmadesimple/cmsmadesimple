@@ -30,6 +30,7 @@ set_magic_quotes_runtime(false);
 
 #Trans SID sucks also...
 @ini_set('url_rewriter.tags', '');
+@ini_set('session.use_trans_sid', false);
 
 #Setup session with different id and start it
 @session_name("CMSSESSID");
