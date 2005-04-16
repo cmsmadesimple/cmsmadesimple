@@ -433,6 +433,7 @@ class News extends CMSModule
 						if (isset($params["showcategorywithtitle"])
 									&& ($params["showcategorywithtitle"] == "true"
 									|| $params["showcategorywithtitle"] == "1")
+									&& $row['news_cat'] != ''
 						)
 						{
 							$onerow->title = $row['news_cat'] . ": " . $row['news_title'];

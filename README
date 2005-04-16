@@ -8,7 +8,9 @@ UPGRADE.txt.
 
 Notes
 ---------------------------------
-
+The version of ADODB used is modified for CMS Made Simple's needs.  Copying
+over it with the latest version will result in some things not working
+correctly and it probably won't even install on all databases.
 
 Credits
 ---------------------------------
