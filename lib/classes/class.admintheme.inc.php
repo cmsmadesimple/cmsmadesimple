@@ -315,6 +315,10 @@ class AdminTheme
                 {
                 $addToRecent = false;
                 }
+            if ($thisPage->title == $this->title)
+                {
+                $addToRecent = false;
+                }
             }
         if (preg_match('/moduleinterface/', $this->url))
         	{
