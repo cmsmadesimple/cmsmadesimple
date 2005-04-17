@@ -316,6 +316,13 @@ class AdminTheme
                 $addToRecent = false;
                 }
             }
+        if (preg_match('/moduleinterface/', $this->url))
+        	{
+        	if (! preg_match('/module=/', $this->url))
+        		{
+        		$addToRecent = false;
+        		}
+			}
         if ($addToRecent)
             {
             $rp = new RecentPage();
