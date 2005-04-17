@@ -21,7 +21,9 @@ class bluewaterTheme extends AdminTheme
                     {
                     echo ' class="selected"';
                     }
-                echo ">".$thisItem['title']."</a>";
+				if ($thisItem['url'] == '../index.php')
+					{					echo ' target="_blank"';
+					}                echo ">".$thisItem['title']."</a>";
                 if ($count > 1 && $counter == 1)
                     {
                     echo "<ul>\n";

@@ -124,7 +124,7 @@ $themeObject->ListSectionModules('admin');
 </div>
 
 <div class="MainMenuItem">
-<a href="../index.php"><?php echo lang('viewsite') ?></a>
+<a href="../index.php" target="_blank"><?php echo lang('viewsite') ?></a>
 </div>
 
 <div class="MainMenuItem">

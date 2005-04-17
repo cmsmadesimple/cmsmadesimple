@@ -12,7 +12,9 @@ class monochromeTheme extends AdminTheme {
             {
             $thisItem = $menuItem[0];
             echo '<li><a href="'.$thisItem['url'].'"';
-            if ($thisItem['selected'])
+			if ($thisItem['url'] == '../index.php')
+				{				echo ' target="_blank"';				}            
+			if ($thisItem['selected'])
                 {
                 echo ' class="selected"';
                 }

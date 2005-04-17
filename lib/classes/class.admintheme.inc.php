@@ -709,7 +709,9 @@ class AdminTheme
             foreach ($menuItem as $thisItem)
                 {
                 echo '<li><a href="'.$thisItem['url'].'"';
-                if ($thisItem['selected'])
+				if ($thisItem['url'] == '../index.php')
+					{					echo ' target="_blank"';
+					}                if ($thisItem['selected'])
                     {
                     echo ' class="selected"';
                     }
