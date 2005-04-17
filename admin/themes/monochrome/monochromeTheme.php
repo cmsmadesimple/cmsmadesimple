@@ -18,7 +18,7 @@ class monochromeTheme extends AdminTheme {
                 {
                 echo ' class="selected"';
                 }
-            if ($key=='bookmarks')
+            if ($key=='bookmarks' && get_preference(get_userid(), 'bookmarks'))
                 {
                 echo ' onMouseOver="Javascript:toggleMarkState()"';
                 }
