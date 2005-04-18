@@ -138,7 +138,7 @@ if ($message != "") {
 <table width="100%" cellpadding="4" cellspacing="0" border="0">
 	<tr>
 		<th><?php echo lang('clearcache') ?>:</th>
-		<td><input type="submit" name="clearcache" value="<?php echo lang('clear') ?>" onclick="document.siteprefform.submit()" /></td>
+		<td><input type="submit" name="clearcache" value="<?php echo lang('clear') ?>" /></td>
 	</tr>
 	<tr>
 		<th><?php echo lang('enablecustom404') ?>:</th>

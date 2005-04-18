@@ -301,4 +301,6 @@ $lang['admin']['updateperm'] = 'Update Permissions'; //needs translation
 $lang['admin']['admincallout'] = 'Administration Shortcuts'; //needs translation
 $lang['admin']['showbookmarks'] = 'Show Admin Bookmarks'; //needs translation
 $lang['admin']['showrecent'] = 'Show Recently Used Pages'; //needs translation
+$lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template'; //needs translation
+$lang['admin']['attachstylesheets'] = 'Attach Stylesheets'; //needs translation
 ?>

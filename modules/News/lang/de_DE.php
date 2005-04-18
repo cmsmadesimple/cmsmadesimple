@@ -12,6 +12,7 @@ $lang['endrequiresstart'] = 'Die Angabe eines Ende Datums erfordert auch die Ang
 $lang['entries'] = '%s Eintr&auml;ge';
 $lang['expiry'] = 'Verfall';
 $lang['filter'] = 'Filter';
+$lang['news'] = 'News';
 $lang['newcategory'] = 'Neue Kategorie';
 $lang['needpermission'] = 'Sie ben&ouml;tigen die \'%s\' Rechte um diese Funktion nutzen zu k&ouml;nnen.';
 $lang['nocategorygiven'] = 'Keine Kategorie vorhanden';

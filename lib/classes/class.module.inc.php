@@ -239,6 +239,15 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Returns a translatable name of the module.  For modulues who's names can
+	 * probably be translated into another language (like News)
+	 */
+	function GetFriendlyName()
+	{
+		return '';
+	}
+
+	/**
 	 * Returns the version of the module
 	 */
 	function GetVersion()

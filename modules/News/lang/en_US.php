@@ -12,6 +12,7 @@ $lang['endrequiresstart'] = 'Entering an end date requires a start date also';
 $lang['entries'] = '%s Entries';
 $lang['expiry'] = 'Expriry';
 $lang['filter'] = 'Filter';
+$lang['news'] = 'News';
 $lang['newcategory'] = 'New Category';
 $lang['needpermission'] = 'You need the \'%s\' permission to perform that function.';
 $lang['nocategorygiven'] = 'No Category Given';

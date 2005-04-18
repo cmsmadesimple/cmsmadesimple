@@ -25,6 +25,11 @@ class News extends CMSModule
 		return 'News';
 	}
 
+	function GetFriendlyName()
+	{
+		return $this->Lang('news');
+	}
+
 	function IsPluginModule()
 	{
 		return true;
