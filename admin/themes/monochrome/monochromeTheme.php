@@ -5,15 +5,22 @@
 
 class monochromeTheme extends AdminTheme {
 
-    function DisplayTopMenu($menuItems)
+    function DisplayTopMenu()
     {
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
-        foreach ($menuItems as $key=>$menuItem)
+        foreach ($this->menuItems as $key=>$menuItem)
             {
             $thisItem = $menuItem[0];
+            if (! get_preference(get_userid(), 'bookmarks') &&
+                    preg_match('/makebookmark\.php/',$thisItem['url']))
+                {
+                continue;
+                }
             echo '<li><a href="'.$thisItem['url'].'"';
 			if ($thisItem['url'] == '../index.php')
-				{				echo ' target="_blank"';				}            
+				{
+				echo ' target="_blank"';
+				}
 			if ($thisItem['selected'])
                 {
                 echo ' class="selected"';

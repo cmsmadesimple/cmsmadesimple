@@ -32,27 +32,7 @@ include_once("header.php");
 ?>
 
 <div class="MainMenu">
-
-<?php if ($themeObject->HasPerm('modulePerms')) { ?>
-<div class="MainMenuItem">
-<a href="listmodules.php"><?php echo lang('modules') ?></a>
-<span class="description"><?php echo lang('moduledescription') ?></span>
-</div>
-<?php } ?>
-
-<div class="MainMenuItem">
-<a href="listtags.php"><?php echo lang('tags') ?></a>
-<span class="description"><?php echo lang('tagdescription') ?></span>
-</div>
-
-<?php if ($themeObject->HasPerm('codeBlockPerms')) { ?>
-<div class="MainMenuItem">
-<a href="listusertags.php"><?php echo lang('usertags') ?></a>
-<span class="description"><?php echo lang('usertagdescription') ?></span>
-</div>
-<?php }
-$themeObject->DisplaySectionModules('extensions');
-?>
+<?php $themeObject->DisplaySectionPages('extensions'); ?>
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>

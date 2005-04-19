@@ -33,21 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($themeObject->HasPerm('templatePerms')) { ?>
-<div class="MainMenuItem">
-<a href="listtemplates.php"><?php echo lang('templates') ?></a>
-<span class="description"><?php echo lang('templatesdescription') ?></span>
-</div>
-<?php } ?>
-
-<?php if ($themeObject->HasPerm('cssPerms') || $themeObject->HasPerm('cssAssocPerms')) { ?>
-<div class="MainMenuItem">
-<a href="listcss.php"><?php echo lang('stylesheets') ?></a>
-<span class="description"><?php echo lang('stylesheetsdescription') ?></span>
-</div>
-<?php } 
-$themeObject->DisplaySectionModules('layout');
-?>
+<?php $themeObject->DisplaySectionPages('layout'); ?>
 
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>

@@ -32,36 +32,7 @@ include_once("header.php");
 ?>
 
 <div class="MainMenu">
-
-<?php if ($themeObject->HasPerm('userPerms')) { ?>
-<div class="MainMenuItem">
-<a href="listusers.php"><?php echo lang('users') ?></a>
-<span class="description"><?php echo lang('usersdescription') ?></span>
-</div>
-<?php } ?>
-
-<?php if ($themeObject->HasPerm('groupPerms')) { ?>
-<div class="MainMenuItem">
-<a href="listgroups.php"><?php echo lang('groups') ?></a>
-<span class="description"><?php echo lang('groupsdescription') ?></span>
-</div>
-<?php } ?>
-
-<?php if ($themeObject->HasPerm('groupMemberPerms')) { ?>
-<div class="MainMenuItem">
-<a href="changegroupassign.php"><?php echo lang('groupassignments') ?></a>
-<span class="description"><?php echo lang('groupassignmentdescription') ?></span>
-</div>
-<?php } ?>
-
-<?php if ($themeObject->HasPerm('groupPermPerms')) { ?>
-<div class="MainMenuItem">
-<a href="changegroupperm.php"><?php echo lang('groupperms') ?></a>
-<span class="description"><?php echo lang('grouppermsdescription') ?></span>
-</div>
-<?php } 
-$themeObject->DisplaySectionModules('usersgroups');
-?>
+<?php $themeObject->DisplaySectionPages('usersgroups'); ?>
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>
 </div>

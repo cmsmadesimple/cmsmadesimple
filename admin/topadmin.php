@@ -33,25 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<?php if ($themeObject->HasPerm('sitePrefPerms')) { ?>
-<div class="MainMenuItem">
-<a href="siteprefs.php"><?php echo lang('preferences') ?></a>
-<span class="description"><?php echo lang('preferencesdescription') ?></span>
-</div>
-<?php } ?>
-
-<div class="MainMenuItem">
-<a href="adminlog.php"><?php echo lang('adminlog') ?></a>
-<span class="description"><?php echo lang('adminlogdescription') ?></span>
-</div>
-
-<div class="MainMenuItem">
-<a href="index.php"><?php echo lang('mainmenu') ?></a>
-</div>
-
-<?php
-$themeObject->DisplaySectionModules('admin');
-?>
+<?php $themeObject->DisplaySectionPages('admin'); ?>
 </div> <!-- end MainMenu -->
 
 <?php

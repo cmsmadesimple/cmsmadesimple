@@ -33,19 +33,7 @@ include_once("header.php");
 
 <div class="MainMenu">
 
-<div class="MainMenuItem">
-<a href="listcontent.php"><?php echo lang('pages') ?></a>
-<span class="description"><?php echo lang('pagesdescription') ?></span>
-</div>
-
-<?php if ($themeObject->HasPerm('htmlPerms')) { ?>
-<div class="MainMenuItem">
-<a href="listhtmlblobs.php"><?php echo lang('htmlblobs') ?></a>
-<span class="description"><?php echo lang('htmlblobdescription') ?></span>
-</div>
-<?php }
-$themeObject->DisplaySectionModules('content');
-?>
+<?php $themeObject->DisplaySectionPages('content') ?>
 
 <div class="MainMenuItem">
 <a href="index.php"><?php echo lang('mainmenu') ?></a>
