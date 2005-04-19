@@ -18,7 +18,9 @@ iframe {
 	padding-top: 30px;
 	margin-left: 15px;
 	margin-bottom: 30px;
+	width: 100%;
 }
+
 
 /**
  * Login Page
@@ -69,6 +71,7 @@ iframe {
 	top: 0;
 	left: 0;
 	padding: 5px;
+	font-size: 11px;
 }
 
 #TopMenu a {
@@ -78,7 +81,7 @@ iframe {
 
 #nav, #nav ul { list-style: none; padding: 0; margin: 0; }
 #nav ul { border: solid #c6c3bd; border-width: 1px; }
-#nav a { display: block; color: #384654; text-decoration: none; margin-top: 2px; margin-left: 10px; margin-right: 10px; }
+#nav a { display: block; color: #384654; text-decoration: none; margin-top: 2px; margin-left: 4px; margin-right: 4px;}
 #nav li a { font-size: 14px; padding-bottom: 2px; }
 #nav li ul a { text-align: left; padding-bottom: 0px; }
 #nav a.selected { font-weight: bold; text-decoration: underline; background-color: #fff; }
@@ -147,12 +150,6 @@ iframe {
 /**
  * Forms
  */
-
-.AdminForm,
-.AdminForm input,
-.AdminForm select {
-	font-size: 80%;
-}
 
 .AdminForm tbody th {
 	text-align: right;

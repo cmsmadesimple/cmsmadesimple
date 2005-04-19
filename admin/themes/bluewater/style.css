@@ -74,7 +74,7 @@ html>body #TopMenu {
     }
 
 #nav, #nav ul { list-style: none; padding: 0; margin: 0; }
-#nav a { display: block; color: white; text-decoration: none; margin-top: 2px; margin-left: 10px; margin-right: 10px; }
+#nav a { display: block; color: white; text-decoration: none; margin-top: 2px; margin-left: 4px; margin-right: 4px;}
 #nav li a { font-size: 14px; padding-bottom: 2px; }
 #nav li ul a { text-align: left; padding-bottom: 0px; }
 #nav a.selected { background-color: #23A9C4; }
