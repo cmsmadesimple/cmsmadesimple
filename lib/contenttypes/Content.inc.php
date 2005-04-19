@@ -161,8 +161,8 @@ class content extends ContentBase
 
 		if ($tab == 0)
 		{
-			$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.htmlentities($this->mName).'" /></td></tr>';
-			$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.htmlentities($this->mMenuText).'" /></td></tr>';
+			$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>';
+			$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>';
 			#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
 			if (!($config['auto_alias_content'] == true && $adding))
 			{

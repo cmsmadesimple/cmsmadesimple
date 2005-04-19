@@ -118,9 +118,9 @@ class link extends ContentBase
 	{
 		$text = "";
 
-		$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.htmlentities($this->mName).'" /></td></tr>';
-		$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.htmlentities($this->mMenuText).'" /></td></tr>';
-		$text .= '<tr><th>'.lang('url').':</th><td><input type="text" name="url" value="'.htmlentities($this->GetPropertyValue('url')).'" /></td></tr>';
+		$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>';
+		$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>';
+		$text .= '<tr><th>'.lang('url').':</th><td><input type="text" name="url" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" /></td></tr>';
 		$text .= '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
 		$text .= '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
@@ -140,7 +140,7 @@ class link extends ContentBase
 
 	function GetURL()
 	{
-		return htmlentities($this->GetPropertyValue('url'));
+		return cms_htmlentities($this->GetPropertyValue('url'));
 	}
 }
 
