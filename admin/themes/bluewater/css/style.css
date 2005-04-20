@@ -29,7 +29,20 @@ iframe {
 	margin-bottom: 30px;
 }
 
-.login {width: 100%}.login #logo {top: 5px;left: 5px;;position: absolute;}.login #logintable {top: 45px;position: absolute;}
+.login {
+width: 100%
+}
+
+.login #logo {
+top: 5px;
+left: 5px;;
+position: absolute;
+}
+
+.login #logintable {
+top: 45px;
+position: absolute;
+}
 
 .clearbox {
     text-align:left;
@@ -132,7 +145,8 @@ html>body #AdminHeader {
 /**
  * Footer
  */
-#Footer {
+
+html>body #Footer {
 	margin-top: 10px;
 	margin-bottom: 0px;
 	padding: 5px;
@@ -143,13 +157,9 @@ html>body #AdminHeader {
 	width: 100%;
 	heigth: 15px;
 	overflow: auto;
-	position: absolute;
-}
-
-html>body #Footer {
-    bottom: 0px;
 	position: fixed;
     }
+
 
 #DebugFooter {
 	margin-top: 10px;
