@@ -29,12 +29,7 @@ iframe {
 	margin-bottom: 30px;
 }
 
-
-.login {
-    width: 450px;
-    left: 30%;
-    position: relative;
-}
+.login {width: 100%}.login #logo {top: 5px;left: 5px;;position: absolute;}.login #logintable {top: 45px;position: absolute;}
 
 .clearbox {
     text-align:left;
