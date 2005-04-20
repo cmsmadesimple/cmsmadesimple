@@ -6,7 +6,7 @@ body {
 	font-size: 12px;
 	margin: 0;
 	padding: 0;
-    background: #F1F2EC url('themes/bluewater/lukewarmsea.jpg') repeat-x;
+    background: #F1F2EC url('themes/bluewater/images/lukewarmsea.jpg') repeat-x;
 }
 
 a {color: #1C639B;}
@@ -119,7 +119,7 @@ html>body #TopMenu {
 
 
 #AdminHeader {
-    background: transparent url('themes/bluewater/logo9.gif') no-repeat;
+    background: transparent url('themes/bluewater/images/logo9.gif') no-repeat;
     height: 60px;
     width: 60px;
     left: 0px;
@@ -195,7 +195,7 @@ html>body #Footer {
 
 .AdminForm, .adminformSmall {
     width: 95%;
-    background: url('themes/bluewater/shadow.png');
+    background: url('themes/bluewater/images/shadow.png');
 }
 
 .AdminForm tbody th {

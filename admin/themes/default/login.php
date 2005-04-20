@@ -21,7 +21,7 @@
 ?>
 
 <form method="post" action="login.php" id="login" name="login" >
-<img src="themes/default/cmsloginbanner.gif" alt="CMS Made Simple" width="411" height="114" border="0" align="right" />
+<img src="themes/default/images/cmsloginbanner.gif" alt="CMS Made Simple" width="411" height="114" border="0" align="right" />
 <div id="ctr" align="center">
 <img src="../images/cms/login.gif" alt="CMS Made Simple" width="64" height="64" border="0" id="loginbox" />
 </div>

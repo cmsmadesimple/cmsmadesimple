@@ -11,14 +11,12 @@ if (isset($_GET['ie']))
     $style.="_ie";
     }
 $style .= ".css";
-//
-if (file_exists(dirname(__FILE__)."/themes/".$theme."/".$style)) {
-	readfile(dirname(__FILE__)."/themes/".$theme."/".$style);
-	//include(dirname(__FILE__)."/themes/".$theme."/style.css");
-} else {
-	readfile(dirname(__FILE__)."/themes/default/".$style);
-	//include(dirname(__FILE__)."/themes/default/style.css");
+if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style))
+	{
+	readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
+	}
+else
+	{
+	readfile(dirname(__FILE__)."/themes/default/css/".$style);
 }
-//STOP
-
 ?>
