@@ -33,15 +33,15 @@ class bluewaterTheme extends AdminTheme
                 echo ">".$thisItem['title']."</a>";
                 if ($count > 1 && $counter == 1)
                     {
-                    echo "<ul>\n";
+                    echo "<ul>";
                     }
                 else if ($count > 1 && $count == $counter)
                     {
-                    echo "</li></ul>\n";
+                    echo "</li></ul>";
                     }
                 else
                     {
-                    echo "</li>\n";
+                    echo "</li>";
                     }
                 $counter++;
                 }

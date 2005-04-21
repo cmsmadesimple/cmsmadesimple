@@ -134,7 +134,8 @@ html>body #AdminHeader {
 /**
  * Footer
  */
-#Footer {
+
+html>body #Footer {
 	margin-top: 10px;
 	margin-bottom: 0px;
 	padding: 5px;
@@ -145,11 +146,6 @@ html>body #AdminHeader {
 	width: 100%;
 	heigth: 15px;
 	overflow: auto;
-	position: absolute;
-}
-
-html>body #Footer {
-    bottom: 0px;
 	position: fixed;
     }
 

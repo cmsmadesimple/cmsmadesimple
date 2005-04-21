@@ -1,20 +1,12 @@
-html {
-   overflow : hidden;
-}
-
-body {
-    height: 100%;
-    width: 100%;
-    overflow: hidden;
-    font-size: 100%;
-}
-
-div#AllAdmin {
-    position: absolute;
-    top: 26px;
-    width: 100%;
-    height: 90%;
-    overflow: auto;
-    overflow-x: hidden;
+#Footer {
+	margin-top: 10px;
+	margin-bottom: 0px;
+	padding: 5px;
+	font-size: 10px;
+	background-color: #d0d0e7;
+	text-align: center;
+    bottom: 0px;
+	width: 100%;
+	heigth: 15px;
 }
 

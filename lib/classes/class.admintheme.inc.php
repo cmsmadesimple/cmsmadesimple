@@ -467,7 +467,7 @@ class AdminTheme
     function OutputHeaderJavascript()
     {
 ?>
-<script type="text/JavaScript">
+<script type="text/javascript">
 <!-- Needed for correct display in IE only -->
 <!--
 	cssHover = function() {
@@ -495,6 +495,11 @@ class AdminTheme
     }
 
 
+    function FixSpaces($str)
+    {
+    	return preg_replace('/\s+/',"&nbsp;",$str);
+    }
+
     /**
      * Populates array containing Navigation Taxonomy
      *
@@ -516,30 +521,30 @@ class AdminTheme
     	    }
         $count = 0;
     	$this->menuItems['main'][$count]['url'] = 'index.php';
-    	$this->menuItems['main'][$count]['title'] = lang('main');
+    	$this->menuItems['main'][$count]['title'] = $this->FixSpaces(lang('main'));
         $this->menuItems['main'][$count]['description'] = '';
     	$this->menuItems['main'][$count++]['selected'] = ($cms_top=='main');
 
     	$count = 0;
         $this->menuItems['content'][$count]['url'] = 'topcontent.php';
-    	$this->menuItems['content'][$count]['title'] = lang('content');
+    	$this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('content'));
     	$this->menuItems['content'][$count]['description'] = lang('contentdescription');
         $this->menuItems['content'][$count++]['selected'] = ($cms_top=='content');
 
         $this->menuItems['content'][$count]['url'] = 'listcontent.php';
-        $this->menuItems['content'][$count]['title'] = lang('pages');
+        $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('pages'));
         $this->menuItems['content'][$count]['description'] = lang('pagesdescription');
         $this->menuItems['content'][$count++]['selected'] = ($script=='listcontent.php');
 
         if ($this->HasPerm('filePerms'))
         {
             $this->menuItems['content'][$count]['url'] = 'files.php';
-            $this->menuItems['content'][$count]['title'] = lang('filemanager');
+            $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('filemanager'));
             $this->menuItems['content'][$count]['description'] = lang('filemanagerdescription');
             $this->menuItems['content'][$count++]['selected'] = ($script=='files.php');
 
             $this->menuItems['content'][$count]['url'] = 'imagefiles.php';
-            $this->menuItems['content'][$count]['title'] = lang('imagemanager');
+            $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('imagemanager'));
             $this->menuItems['content'][$count]['description'] = lang('imagemanagerdescription');
             $this->menuItems['content'][$count++]['selected'] = ($script=='imagefile.php');
         }
@@ -548,7 +553,7 @@ class AdminTheme
         foreach ($tmpArray as $thisKey=>$thisVal)
             {
             $this->menuItems['content'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['content'][$count]['title'] = $thisKey;
+            $this->menuItems['content'][$count]['title'] = $this->FixSpaces($thisKey);
             $this->menuItems['content'][$count]['description'] = $thisVal['description'];
             $this->menuItems['content'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
             }
@@ -557,27 +562,27 @@ class AdminTheme
         {
             $count = 0;
             $this->menuItems['layout'][$count]['url'] = 'toplayout.php';
-            $this->menuItems['layout'][$count]['title'] = lang('layout');
+            $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('layout'));
             $this->menuItems['layout'][$count]['description'] = lang('layoutdescription');
             $this->menuItems['layout'][$count++]['selected'] = ($cms_top=='layout');
             if ($this->HasPerm('templatePerms'))
             {
                 $this->menuItems['layout'][$count]['url'] = 'listtemplates.php';
-                $this->menuItems['layout'][$count]['title'] = lang('templates');
+                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('templates'));
                 $this->menuItems['layout'][$count]['description'] = lang('templatesdescription');
                 $this->menuItems['layout'][$count++]['selected'] = ($script=='listtemplates.php');;
             }
             if ($this->HasPerm('cssPerms') || $themeObject->HasPerm('cssAssocPerms'))
             {
                 $this->menuItems['layout'][$count]['url'] = 'listcss.php';
-                $this->menuItems['layout'][$count]['title'] = lang('stylesheets');
+                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('stylesheets'));
                 $this->menuItems['layout'][$count]['description'] = lang('stylesheetsdescription');
                 $this->menuItems['layout'][$count++]['selected'] = ($script=='listcss.php');;
             }
             if ($this->HasPerm('htmlPerms'))
             {
                 $this->menuItems['layout'][$count]['url'] = 'listhtmlblobs.php';
-                $this->menuItems['layout'][$count]['title'] = lang('htmlblobs');
+                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('htmlblobs'));
                 $this->menuItems['layout'][$count]['description'] = lang('htmlblobdescription');
                 $this->menuItems['layout'][$count++]['selected'] = ($script=='listhtmlblobs.php');
             }
@@ -586,7 +591,7 @@ class AdminTheme
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
                 $this->menuItems['layout'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['layout'][$count]['title'] = $thisKey;
+                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces($thisKey);
                 $this->menuItems['layout'][$count]['description'] = $thisVal['description'];
                 $this->menuItems['layout'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
                 }
@@ -595,34 +600,34 @@ class AdminTheme
         {
             $count = 0;
             $this->menuItems['usersgroups'][$count]['url'] = 'topusers.php';
-            $this->menuItems['usersgroups'][$count]['title'] = lang('usersgroups');
+            $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('usersgroups'));
             $this->menuItems['usersgroups'][$count]['description'] = lang('usersgroupsdescription');
             $this->menuItems['usersgroups'][$count++]['selected'] = ($cms_top=='usersgroups');
             if ($this->HasPerm('userPerms'))
             {
                 $this->menuItems['usersgroups'][$count]['url'] = 'listusers.php';
-                $this->menuItems['usersgroups'][$count]['title'] = lang('users');
+                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('users'));
                 $this->menuItems['usersgroups'][$count]['description'] = lang('usersdescription');
                 $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='listusers.php');;
             }
             if ($this->HasPerm('groupPerms'))
             {
                 $this->menuItems['usersgroups'][$count]['url'] = 'listgroups.php';
-                $this->menuItems['usersgroups'][$count]['title'] = lang('groups');
+                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groups'));
                 $this->menuItems['usersgroups'][$count]['description'] = lang('groupsdescription');
                 $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='listgroups.php');;
             }
             if ($this->HasPerm('groupMemberPerms'))
             {
                 $this->menuItems['usersgroups'][$count]['url'] = 'changegroupassign.php';
-                $this->menuItems['usersgroups'][$count]['title'] = lang('groupassignments');
+                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groupassignments'));
                 $this->menuItems['usersgroups'][$count]['description'] = lang('groupassignmentdescription');
                 $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupassign.php');;
             }
             if ($this->HasPerm('groupPermPerms'))
             {
                 $this->menuItems['usersgroups'][$count]['url'] = 'changegroupperm.php';
-                $this->menuItems['usersgroups'][$count]['title'] = lang('groupperms');
+                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groupperms'));
                 $this->menuItems['usersgroups'][$count]['description'] = lang('grouppermsdescription');
                 $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupperm.php');;
             }
@@ -630,7 +635,7 @@ class AdminTheme
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
                 $this->menuItems['usersgroups'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['usersgroups'][$count]['title'] = $thisKey;
+                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces($thisKey);
                 $this->menuItems['usersgroups'][$count]['description'] = $thisVal['description'];
                 $this->menuItems['usersgroups'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
                 }
@@ -640,24 +645,24 @@ class AdminTheme
         {
             $count = 0;
             $this->menuItems['extensions'][$count]['url'] = 'topextensions.php';
-            $this->menuItems['extensions'][$count]['title'] = lang('extensions');
+            $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('extensions'));
             $this->menuItems['extensions'][$count]['description'] = lang('extensionsdescription');
             $this->menuItems['extensions'][$count++]['selected'] = ($cms_top=='extensions');
             if ($this->HasPerm('modulePerms'))
             {
                 $this->menuItems['extensions'][$count]['url'] = 'listmodules.php';
-                $this->menuItems['extensions'][$count]['title'] = lang('modules');
+                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('modules'));
                 $this->menuItems['extensions'][$count]['description'] = lang('moduledescription');
                 $this->menuItems['extensions'][$count++]['selected'] = ($script=='listmodules.php');;
             }
             $this->menuItems['extensions'][$count]['url'] = 'listtags.php';
-            $this->menuItems['extensions'][$count]['title'] = lang('tags');
+            $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('tags'));
             $this->menuItems['extensions'][$count]['description'] = lang('tagdescription');
             $this->menuItems['extensions'][$count++]['selected'] = ($script=='listtags.php');
             if ($this->HasPerm('codeBlockPerms'))
             {
                 $this->menuItems['extensions'][$count]['url'] = 'listusertags.php';
-                $this->menuItems['extensions'][$count]['title'] = lang('usertags');
+                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('usertags'));
                 $this->menuItems['extensions'][$count]['description'] = lang('usertagdescription');
                 $this->menuItems['extensions'][$count++]['selected'] = ($script=='listusertags.php');;
             }
@@ -665,21 +670,21 @@ class AdminTheme
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
                 $this->menuItems['extensions'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['extensions'][$count]['title'] = $thisKey;
+                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces($thisKey);
                 $this->menuItems['extensions'][$count]['description'] = $thisVal['description'];
                 $this->menuItems['extensions'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
                 }
         }
         $count = 0;
     	$this->menuItems['preferences'][$count]['url'] = 'editprefs.php';
-    	$this->menuItems['preferences'][$count]['title'] = lang('preferences');
+    	$this->menuItems['preferences'][$count]['title'] = $this->FixSpaces(lang('preferences'));
         $this->menuItems['preferences'][$count]['description'] = lang('preferencesdescription');
         $this->menuItems['preferences'][$count++]['selected'] = ($cms_top=='preferences');
         $tmpArray = $this->MenuListSectionModules('files');
         foreach ($tmpArray as $thisKey=>$thisVal)
             {
             $this->menuItems['preferences'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['preferences'][$count]['title'] = $thisKey;
+            $this->menuItems['preferences'][$count]['title'] = $this->FixSpaces($thisKey);
             $this->menuItems['preferences'][$count]['description'] = $thisVal['description'];
             $this->menuItems['preferences'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
             }
@@ -689,37 +694,37 @@ class AdminTheme
         {
             $count = 0;
             $this->menuItems['admin'][$count]['url'] = 'topadmin.php';
-            $this->menuItems['admin'][$count]['title'] = lang('admin');
+            $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('admin'));
             $this->menuItems['admin'][$count]['description'] = lang('admindescription');
             $this->menuItems['admin'][$count++]['selected'] = ($cms_top=='admin');
             if ($this->HasPerm('sitePrefPerms'))
             {
                 $this->menuItems['admin'][$count]['url'] = 'siteprefs.php';
-                $this->menuItems['admin'][$count]['title'] = lang('preferences');
+                $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('preferences'));
                 $this->menuItems['admin'][$count]['description'] = lang('preferencesdescription');
                 $this->menuItems['admin'][$count++]['selected'] = ($script=='siteprefs.php');;
             }
             $this->menuItems['admin'][$count]['url'] = 'adminlog.php';
-            $this->menuItems['admin'][$count]['title'] = lang('adminlog');
+            $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('adminlog'));
             $this->menuItems['admin'][$count]['description'] = lang('adminlogdescription');
             $this->menuItems['admin'][$count++]['selected'] = ($script=='adminlog.php');;
             $tmpArray = $this->MenuListSectionModules('admin');
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
                 $this->menuItems['admin'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['admin'][$count]['title'] = $thisKey;
+                $this->menuItems['admin'][$count]['title'] = $this->FixSpaces($thisKey);
                 $this->menuItems['admin'][$count]['description'] = $thisVal['description'];
                 $this->menuItems['admin'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
                 }
         }
         $count = 0;
     	$this->menuItems['viewsite'][$count]['url'] = '../index.php';
-    	$this->menuItems['viewsite'][$count]['title'] = lang('viewsite');
+    	$this->menuItems['viewsite'][$count]['title'] = $this->FixSpaces(lang('viewsite'));
         $this->menuItems['viewsite'][$count]['description'] = '';
         $this->menuItems['viewsite'][$count]['selected'] = false;
 
     	$this->menuItems['logout'][$count]['url'] = 'logout.php';
-    	$this->menuItems['logout'][$count]['title'] = lang('logout');
+    	$this->menuItems['logout'][$count]['title'] = $this->FixSpaces(lang('logout'));
         $this->menuItems['logout'][$count]['description'] = '';
         $this->menuItems['logout'][$count]['selected'] = false;
 
@@ -731,7 +736,7 @@ class AdminTheme
         foreach ($tmpArray as $thisKey=>$thisVal)
             {
             $this->menuItems['bookmarks'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['bookmarks'][$count]['title'] = $thisKey;
+            $this->menuItems['bookmarks'][$count]['title'] = $this->FixSpaces($thisKey);
             $this->menuItems['bookmarks'][$count]['description'] = $thisVal['description'];
             $this->menuItems['bookmarks'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
             }
@@ -889,15 +894,15 @@ class AdminTheme
                 echo ">".$thisItem['title']."</a>";
                 if ($count > 1 && $counter == 1)
                     {
-                    echo "<ul>\n";
+                    echo "<ul>";
                     }
                 else if ($count > 1 && $count == $counter)
                     {
-                    echo "</li></ul>\n";
+                    echo "</li></ul>";
                     }
                 else
                     {
-                    echo "</li>\n";
+                    echo "</li>";
                     }
                 $counter++;
                 }
