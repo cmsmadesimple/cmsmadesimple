@@ -546,7 +546,7 @@ class AdminTheme
             $this->menuItems['content'][$count]['url'] = 'imagefiles.php';
             $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('imagemanager'));
             $this->menuItems['content'][$count]['description'] = lang('imagemanagerdescription');
-            $this->menuItems['content'][$count++]['selected'] = ($script=='imagefile.php');
+            $this->menuItems['content'][$count++]['selected'] = ($script=='imagefiles.php');
         }
 
         $tmpArray = $this->MenuListSectionModules('content');
