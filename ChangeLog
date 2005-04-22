@@ -17,6 +17,7 @@ Konqueror
 * Fixed bug with text parameter in print plugin
 * Fixed bug with inactive pages still being accessible by page id
 * Fixed encoding problems with editing title and menu text in content
+* Removed the redirect pages while logging in or out
 * Submitting site prefernces redircts to an empty page now
 * Updated ADODB to 4.61
 * Updated Smarty to 2.6.9 (Jope)
