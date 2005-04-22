@@ -388,7 +388,7 @@ function showPageFour($sqlloaded = 0) {
 	?>
 
     <P>Now let's continue to setup your configuration file, we already have most of the stuff we need.</P>
-    <P>Chances are you can leave all these values alone unless you have BBCode installed, so when you are ready, click Continue.</P>
+    <P>Chances are you can leave all these values alone, so when you are ready, click Continue.</P>
     <FORM ACTION="install.php" METHOD="post" NAME="page3form" ID="page3form">
 	<TABLE CELLPADDING="2" BORDER="1" CLASS="regtable">
 		<TR CLASS="row1">

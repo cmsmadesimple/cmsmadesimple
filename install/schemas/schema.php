@@ -2,13 +2,20 @@
 
 if (isset($CMS_INSTALL_DROP_TABLES)) {
 
+	$db->DropSequence($db_prefix."additional_htmlblob_users_seq");
+	$db->DropSequence($db_prefix."additional_users_seq");
+	$db->DropSequence($db_prefix."admin_bookmarks_seq");
+	$db->DropSequence($db_prefix."admin_recent_pages_seq");
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."content_seq");
 	$db->DropSequence($db_prefix."content_prop_seq");
 	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
+	$db->DropSequence($db_prefix."htmlblobs_seq");
+	$db->DropSequence($db_prefix."module_deps_seq");
 	$db->DropSequence($db_prefix."module_news_seq");
+	$db->DropSequence($db_prefix."module_templates_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
 	#$db->DropSequence($db_prefix."sequence_seq");
@@ -22,7 +29,13 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_users");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."additional_htmlblob_users");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."adminlog");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_bookmarks");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."admin_recent_pages");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."content");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -36,9 +49,15 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."groups");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."htmlblobs");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_deps");
+	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_news");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."permissions");
 	$dbdict->ExecuteSQLArray($sqlarray);
