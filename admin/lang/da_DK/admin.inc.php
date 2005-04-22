@@ -235,7 +235,6 @@ $lang['admin']['permissionschanged'] = 'Tilladelser blev opdateret.';
 $lang['admin']['grouppermissions'] = 'Gruppe tilladelser'; 
 $lang['admin']['prefsupdated'] = 'Indstillinger blev opdateret.'; 
 $lang['admin']['userdefinedtags'] = 'Brugerdefinerede Tags';
-$lang['admin']['listsheetstyles'] = 'Stylesheets';
 $lang['admin']['addstylesheet'] = 'Tilføj et Stylesheet';
 $lang['admin']['editstylesheet'] = 'Redigér Stylesheet';
 $lang['admin']['addcssassociation'] = 'Tilføj Stylesheet tilknytning';

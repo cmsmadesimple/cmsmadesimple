@@ -235,7 +235,6 @@ $lang['admin']['permissionschanged'] = 'Permissions have been updated.'; //needs
 $lang['admin']['grouppermissions'] = 'Group Permissions'; //needs translation
 $lang['admin']['prefsupdated'] = 'Preferences have been updated.'; //needs translation
 $lang['admin']['userdefinedtags'] = 'User-defined Tags'; //needs translation
-$lang['admin']['listsheetstyles'] = 'Stylesheets'; //needs translation
 $lang['admin']['addstylesheet'] = 'Add a Stylesheet'; //needs translation
 $lang['admin']['editstylesheet'] = 'Edit Stylesheet'; //needs translation
 $lang['admin']['addcssassociation'] = 'Add Stylesheet Association'; //needs translation

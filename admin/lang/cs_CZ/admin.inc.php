@@ -235,7 +235,6 @@ $lang['admin']['permissionschanged'] = 'Oprávnění byla aktualizována.';
 $lang['admin']['grouppermissions'] = 'Oprávnění skupiny';
 $lang['admin']['prefsupdated'] = 'Předvolby upraveny.';
 $lang['admin']['userdefinedtags'] = 'Uživatelské tagy';
-$lang['admin']['listsheetstyles'] = 'Styly';
 $lang['admin']['addstylesheet'] = 'Vložit styl';
 $lang['admin']['editstylesheet'] = 'Upravit styl';
 $lang['admin']['addcssassociation'] = 'Přidat asociaci stylu';

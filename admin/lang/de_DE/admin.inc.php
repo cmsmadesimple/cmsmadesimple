@@ -235,7 +235,6 @@ $lang['admin']['currentpages'] = 'Aktuelle Seiten';
 $lang['admin']['editseparator'] = 'Separator bearbeiten';
 $lang['admin']['user'] = 'User';
 $lang['admin']['parent'] = 'Eltern';
-$lang['admin']['listsheetstyles'] = 'Stylesheets';
 $lang['admin']['addstylesheet'] = 'Neues Stylesheet';
 $lang['admin']['editstylesheet'] = 'Bearbeite Stylesheet';
 $lang['admin']['addcssassociation'] = 'Neue Stylesheet-Verkn&uuml;pfung';
