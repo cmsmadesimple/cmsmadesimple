@@ -28,14 +28,13 @@
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
 set_magic_quotes_runtime(false);
 
-#Trans SID sucks also...
-@ini_set('url_rewriter.tags', '');
-@ini_set('session.use_trans_sid', false);
-
 #Setup session with different id and start it
 @session_name("CMSSESSID");
 if(!@session_id()) {
 	@session_start();
+	#Trans SID sucks also...
+	@ini_set('url_rewriter.tags', '');
+	@ini_set('session.use_trans_sid', false);
 }
 
 require_once(dirname(__FILE__)."/lib/misc.functions.php");

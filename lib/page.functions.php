@@ -37,6 +37,19 @@ function check_login()
 	global $gCms;
 	$config = $gCms->config;
 
+	//Handle a current login if one is in queue in the SESSION
+	if (isset($_SESSION['login_user_id']))
+	{
+		generate_user_object($_SESSION['login_user_id']);
+		unset($_SESSION['login_user_id']);
+	}
+
+	if (isset($_SESSION['login_cms_language']))
+	{
+		setcookie('cms_language', $_SESSION['login_cms_language']);
+		unset($_SESSION['login_cms_language']);
+	}
+
 	if (!isset($_SESSION["cms_admin_user_id"]))
 	{
 		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))

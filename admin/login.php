@@ -25,6 +25,14 @@ require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
 
+if (isset($_SESSION['logout_user_now']))
+{
+	unset($_SESSION['logout_user_now']);
+	unset($_SESSION['cms_admin_user_id']);
+	setcookie('cms_admin_user_id', '', time() - 3600);
+	setcookie('cms_passhash', '', time() - 3600);
+}
+
 if (isset($_POST["logincancel"]))
 {
 	redirect($config["root_url"].'/index.php', true);
@@ -42,11 +50,13 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	if ($username != "" && $password != "" && $oneuser && isset($_POST["loginsubmit"]))
 	{
-		generate_user_object($oneuser->id);
+		#generate_user_object($oneuser->id);
+		$_SESSION['login_user_id'] = $oneuser->id;
 		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');
 		if ($default_cms_lang != '')
 		{
-			setcookie('cms_language', $default_cms_lang);
+			#setcookie('cms_language', $default_cms_lang);
+			$_SESSION['login_cms_language'] = $default_cms_lang;
 		}
 		audit(-1, '', 'User Login');
 
@@ -74,7 +84,10 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			}
 			else
 			{
-				echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url='.$_SESSION["redirect_url"].'"></head><body>Logging in and redirecting to <a href="'.$_SESSION["redirect_url"].'">'.$_SESSION["redirect_url"].'</a>, one moment please...</body></html>');
+				#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url='.$_SESSION["redirect_url"].'"></head><body>Logging in and redirecting to <a href="'.$_SESSION["redirect_url"].'">'.$_SESSION["redirect_url"].'</a>, one moment please...</body></html>');
+				$tmp = $_SESSION["redirect_url"];
+				unset($_SESSION["redirect_url"]);
+				redirect($tmp);
 			}
 			unset($_SESSION["redirect_url"]);
 		}
@@ -92,7 +105,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			}
 			else
 			{
-				echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
+				#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
+				redirect("index.php");
 			}
 		}
 		return;

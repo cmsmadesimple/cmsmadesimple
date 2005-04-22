@@ -24,9 +24,9 @@ require_once("../include.php");
 
 audit(-1, '', 'User Logout');
 
-unset($_SESSION['cms_admin_user_id']);
-setcookie('cms_admin_user_id', '', time() - 3600);
-setcookie('cms_passhash', '', time() - 3600);
+#unset($_SESSION['cms_admin_user_id']);
+#setcookie('cms_admin_user_id', '', time() - 3600);
+#setcookie('cms_passhash', '', time() - 3600);
 
 #Perform the logout_post callback
 foreach($gCms->modules as $key=>$value)
@@ -38,8 +38,9 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
-echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
-#redirect("index.php");
+#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
+$_SESSION['logout_user_now'] = "1";
+redirect("login.php");
 
 # vim:ts=4 sw=4 noet
 ?>
