@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='files';
+$CMS_TOP_MENU='content';
 $CMS_ADMIN_TITLE='filemanagement';
 
 // in filetypes.inc.php filetypes are defined 
