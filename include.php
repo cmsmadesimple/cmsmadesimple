@@ -59,6 +59,12 @@ $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_pa
 #Attach to global object
 $gCms->config = &$config;
 
+#Set the locale if it's set
+if (isset($config['locale']))
+{
+	@setlocale(LC_ALL, $config['locale']);
+}
+
 #Add users if they exist in the session
 $gCms->variables["user_id"] = "";
 if (isset($_SESSION["cms_admin_user_id"]))

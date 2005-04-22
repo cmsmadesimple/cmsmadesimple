@@ -105,6 +105,8 @@ function cms_config_load($loadLocal = true)
 	
 	$config["page_extension"] = ".shtml";
 
+	$config["locale"] = "en_US";
+
 	if ($loadLocal == true)
 	{
 		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())
