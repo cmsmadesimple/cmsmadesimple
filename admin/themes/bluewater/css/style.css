@@ -126,21 +126,14 @@ html>body #TopMenu {
 }
 
 
-#AdminHeader {
-    background: transparent url('themes/bluewater/images/logo9.gif') no-repeat;
-    height: 60px;
-    width: 60px;
-    left: 0px;
-    top: 0px;
-    position: absolute;
-    z-index: 100;
-}
-
-html>body #AdminHeader {
+.logo {
     left: 0px;
     top: 0px;
     position: fixed;
+    height: 60px;
+    width: 60px;
 }
+
 
 /**
  * Footer

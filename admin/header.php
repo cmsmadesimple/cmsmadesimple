@@ -54,7 +54,6 @@ if (! isset($CMS_EXCLUDE_FROM_RECENT))
 
 <body##BODYSUBMITSTUFFGOESHERE##>
 <?php $themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']); ?>
-<div id="AdminHeader"></div>
 
 <div id="MainContent">
 <?php
@@ -71,6 +70,7 @@ if ($marks || $recent)
         {
         $themeObject->DoBookmarks();
         }
+
     $themeObject->EndRighthandColumn();
     }
 ?>

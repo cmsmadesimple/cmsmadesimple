@@ -44,7 +44,7 @@ h1,h2,h3 {text-align: left;}
 	width: 118px;
 	background-color: #e0e0e0;
 	position: absolute;
-	top: 0px;
+	top: 64px;
 	left: 0px;
 	padding: 5px;
 	padding-top: 65px;
@@ -115,20 +115,17 @@ html>body #TopMenu {
 }
 
 
-#AdminHeader {
-    background: transparent url('themes/monochrome/images/logo9.gif') no-repeat;
-    height: 60px;
-    width: 120px;
-    left: 0px;
-    top: 0px;
-    position: absolute;
-    z-index: 100;
-}
-
-html>body #AdminHeader {
+.logo {
+    color: #e0e0e0;
+	background-color: #e0e0e0;
     left: 0px;
     top: 0px;
     position: fixed;
+	width: 118px;
+    height: 64px;
+    margin: 0px;
+    padding: 4px;
+    z-index: 100;
 }
 
 /**

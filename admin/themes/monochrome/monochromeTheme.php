@@ -7,6 +7,7 @@ class monochromeTheme extends AdminTheme {
 
     function DisplayTopMenu()
     {
+        echo "<div class=\"logo\"><img src=\"themes/monochrome/images/logo9.gif\" /></div>";
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
         foreach ($this->menuItems as $key=>$menuItem)
             {
