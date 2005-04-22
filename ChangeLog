@@ -10,6 +10,7 @@ or db based through a few API calls
 * Added indexes to increase performance
 * Added bookmarks and recent pages to the admin
 * Added javascript tabs to content editing
+* Added global locale option to config.php
 * Changed admin interface and themes
 * Changed installer to use regular Submit buttons...  now works in
 Konqueror
