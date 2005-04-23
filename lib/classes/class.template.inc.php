@@ -244,7 +244,7 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-        $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE template_id = ?";
+        $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
         $dbresult = $db->Execute($query,array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)

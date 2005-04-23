@@ -89,6 +89,8 @@ else if ($action == "showpluginabout")
 		<?php
 	}
 }
+else
+{
 
 ?>
 
@@ -145,6 +147,8 @@ else if ($action == "showpluginabout")
 </table>
 
 	<?php
+
+}
 
 include_once("footer.php");
 

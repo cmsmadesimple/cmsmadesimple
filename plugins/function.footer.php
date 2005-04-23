@@ -26,4 +26,22 @@ function smarty_cms_function_footer() {
     return $result;
 } ## smarty_function_show_footer
 
+function smarty_cms_help_function_footer()
+{
+	?>
+	<h3>What does this do?</h3>
+	<p>Prints out the current version of CMS, and also a link to the bug reporting system.  It's used in the default template and is a nice example of how a plugin works.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{footer}</code></p>
+	<?php
+}
+
+function smarty_cms_about_function_footer()
+{
+	?>
+	<p>Author: Ted Kulp &lt;<a href="mailto:wishy@cmsmadesimple.org">wishy@cmsmadesimple.org</a>&gt;</p>
+	<p>Version: 1.0</p>
+	<?php
+}
+
 ?>

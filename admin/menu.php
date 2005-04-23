@@ -76,18 +76,18 @@ if (check_permission($userid, 'Modify Site Preferences'))
 
 if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == true)
 {
-	$query = "SELECT page_alias, page_id FROM " . cms_db_prefix() . "pages WHERE default_page = '1'";
+	$query = "SELECT content_alias, content_id FROM " . cms_db_prefix() . "content WHERE default_content = '1'";
 	$result = $db->query($query);
 	if ($result && $result->RowCount() > 0)
 	{
 		$row = $result->FetchRow();
-		if ($row['page_alias'] != '')
+		if ($row['content_alias'] != '')
 		{
-			echo "../" . $row['page_alias'] . $config["page_extension"];
+			echo "../" . $row['content_alias'] . $config["page_extension"];
 		}
 		else
 		{
-			echo "../" . $row['page_id'] . $config["page_extension"];
+			echo "../" . $row['content_id'] . $config["page_extension"];
 		}
 	}
 	else

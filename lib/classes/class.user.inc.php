@@ -425,7 +425,7 @@ class UserOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."pages WHERE owner = ?";
+		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
