@@ -943,6 +943,10 @@ class AdminTheme
                 {
                 continue;
                 }
+            if (strpos(strtolower($menuItem[0]['title']),'main') == 0 && strlen($menuItem[0]['title'])==4)
+                {
+                continue;
+                }
             echo "<div class=\"MainMenuItem\">\n";
             echo "<a href=\"".$menuItem[0]['url']."\"";
             if ($menuItem[0]['url'] == '../index.php')
@@ -1117,6 +1121,21 @@ class AdminTheme
         echo "</div>\n";
     }
 
+    /**
+     * DisplayDashboardCallout
+     * Outputs warning if the install directory is still there.
+     *
+     * @param file file or dir to check for
+     */
+    function DisplayDashboardCallout($file)
+    {
+        echo "<div class=\"DashboardCallout\">\n";
+        if (file_exists($file))
+        {
+	       echo '<p>'.lang('installdirwarning').'</p>';
+        }
+        echo "</div> <!-- end DashboardCallout -->\n";
+    }
 
 }
 
