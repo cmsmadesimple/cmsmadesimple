@@ -38,25 +38,13 @@ if (! isset($CMS_EXCLUDE_FROM_RECENT))
     $themeObject->AddAsRecentPage();
 }
 
+$themeObject->DisplayDocType();
+$themeObject->DisplayHTMLStartTag();
+$themeObject->DisplayHTMLHeader();
+$themeObject->DisplayBodyTag();
+$themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
+$themeObject->DisplayMainDiv();
 
-?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html>
-<head>
-<title><?php echo $themeObject->title ?></title>
-<link rel="stylesheet" type="text/css" href="style.php" />
-<!--[if IE]>
-<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
-<![endif]-->
-<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
-<?php $themeObject->OutputHeaderJavascript(); ?>
-</head>
-
-<body##BODYSUBMITSTUFFGOESHERE##>
-<?php $themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']); ?>
-
-<div id="MainContent">
-<?php
 $marks = get_preference($userid, 'bookmarks');
 $recent = get_preference($userid, 'recent');
 if ($marks || $recent)

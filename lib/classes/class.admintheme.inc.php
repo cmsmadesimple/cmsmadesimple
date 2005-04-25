@@ -99,7 +99,7 @@ class AdminTheme
 	}
 
     /**
-     * Send admin page headers.
+     * Send admin page HTTP headers.
      *
      * @param alreadySentCharset boolean have we already sent character encoding?
      * @param encoding string what encoding should we set?
@@ -128,6 +128,13 @@ class AdminTheme
     }
     
 
+    /**
+     * SetModuleAdminInterfaces
+     *
+     * This function sets up data structures to place modules in the proper Admin sections
+     * for display on section pages and menus.
+     *
+     */
     function SetModuleAdminInterfaces()
     {
     	# Are there any modules with an admin interface?
@@ -168,7 +175,16 @@ class AdminTheme
                 }
             }
     }
-    
+
+    /**
+     * SetAggregatePermissions
+     *
+     * This function gathers disparate permissions to come up with the visibility of
+     * various admin sections, e.g., if there is any content-related operation for
+     * which a user has permissions, the aggregate content permission is granted, so
+     * that menu item is visible.
+     *
+     */
     function SetAggregatePermissions()
     {
         # Content Permissions
@@ -232,7 +248,11 @@ class AdminTheme
     }
     
     /**
-     * Check aggregate permission
+     * HasPerm
+     *
+     * Check if the user has one of the aggregate permissions
+     * 
+     * @param permission the permission to check.
      */
     function HasPerm($permission)
     {
@@ -247,7 +267,12 @@ class AdminTheme
     }
     
     /**
-     * Display Section Modules
+     * DisplaySectionModules
+     * This method displays all of the modules that are in the specified section,
+     * surrounded by a "MainMenuItem" div.
+     *
+     * This method is not currently used by the admin framework, and may be removed
+     * if no-one sees a need for it in their Admin themes.
      *
      * @param section - section to display
      */
@@ -270,7 +295,14 @@ class AdminTheme
     }
 
     /**
-     * List Section Modules
+     * ListSectionModules
+     * This method presents a nice, human-readable list of modules that are in the
+     * specified admin section. If you specify that these are the first subitems (of
+     * that section), the list will be prefixed with the language-specific
+     * "Submitems:" tag.
+     *
+     * This method is not currently used by the admin framework, and may be removed
+     * if no-one sees a need for it in their Admin themes.
      *
      * @param section - section to display
      * @param firstSubitem - boolean, is this the first subitem to be displayed in the list?
@@ -292,7 +324,12 @@ class AdminTheme
     }
 
     /**
-     * Menu List Section Modules
+     * MenuListSectionModules
+     * This method reformats module information for display in menus. When passed the
+     * name of the admin section, it returns an array of associations:
+     * array['module-name']['url'] is the link to that module, and
+     * array['module-name']['description'] is the language-specific short description of
+     *   the module.
      *
      * @param section - section to display
      */
@@ -312,12 +349,26 @@ class AdminTheme
     }
 
 
+    /**
+     * LoadRecentPages
+     * This method loads a list of recently-accessed pages from the database.
+     * This list is stored in this object's variable "recent" as an array of
+     * associations. See ../lib/classes/class.recentpage.inc.php for more
+     * information on the array's format.
+     *
+     */
     function LoadRecentPages()
     {
         require_once("../lib/classes/class.recentpage.inc.php");
         $this->recent = RecentPageOperations::LoadRecentPages($this->userid);
     }
 
+    /**
+     * AddAsRecentPage
+     * Adds this page to the list of recently-visited pages. It attempts to
+     * filter out top-level pages, and to avoid adding the same page multiple times.
+     *
+     */
     function AddAsRecentPage()
     {
     	if (count($this->recent) < 1)
@@ -361,7 +412,8 @@ class AdminTheme
     }
 
     /**
-     * Setup method for displaying admin bookmarks
+     * DoBookmarks
+     * Setup method for displaying admin bookmarks.
      */
     function DoBookmarks()
     {
@@ -409,6 +461,7 @@ class AdminTheme
 
 
     /**
+     * StartRighthandColumn
      * Override this for different behavior or special functionality
      * for the righthand column. Usual use would be a div open tag.
      */
@@ -420,6 +473,7 @@ class AdminTheme
     }
 
     /**
+     * EndRighthandColumn
      * Override this for different behavior or special functionality
      * for the righthand column. Usual use would be a div close tag.
      */
@@ -431,7 +485,8 @@ class AdminTheme
 
 
     /**
-     * setup method for displaying recent pages
+     * DoRecentPages
+     * Setup method for displaying recent pages.
      */
     function DoRecentPages()
     {
@@ -464,6 +519,14 @@ class AdminTheme
         echo "</div>\n";
     }
 
+    /**
+     * OutputHeaderJavascript
+     * This method can be used to dump out any javascript you'd like into the
+     * Admin page header. In fact, it can be used to put just about anything into
+     * the page header. It's recommended that you leave or copy the javascript
+     * below into your own method if you override this -- it's used by the dropdown
+     * menu in IE.
+     */
     function OutputHeaderJavascript()
     {
 ?>
@@ -486,6 +549,13 @@ class AdminTheme
 </script>
 <?php    }
 
+    /**
+     * OutputFooterJavascript
+     * This method can be used to dump out any javascript you'd like into the
+     * Admin page footer.
+     * It's recommended that you leave or copy the javascript below into your
+     * own method if you override this -- it's used by bookmarks/recent pages tabs.
+     */
     function OutputFooterJavascript()
     {
         echo "<script type=\"text/javascript\" src=\"";
@@ -494,14 +564,30 @@ class AdminTheme
         echo "<script type=\"text/javascript\">BuildTabs('admin-tab-container','admin-tab-header','admin-tab-list');ActivateTab(0,'admin-tab-container','admin-tab-list');</script>";
     }
 
-
+    /**
+     * FixSpaces
+     * This method converts spaces into a non-breaking space HTML entity.
+     * It's used for making menus that work nicely
+     *
+     * @param str string to have it's spaces converted
+     */
     function FixSpaces($str)
     {
     	return preg_replace('/\s+/',"&nbsp;",$str);
     }
 
     /**
-     * Populates array containing Navigation Taxonomy
+     * PopulateAdminNavigation
+     * This method populates a big array containing the Navigation Taxonomy
+     * for the admin section. This array is then used to create menus and
+     * section main pages. It uses aggregate permissions to hide sections for which
+     * the user doesn't have permissions, and highlights the current section so
+     * menus can show the user where they are.
+     *
+     * @param cms_top a flag which can be set in pages to state which section they
+     * belong to.
+     * @param url the current page URL
+     * @param query the query-string portion of the url
      *
      */
     function PopulateAdminNavigation($cms_top='',$url,$query)
@@ -742,7 +828,16 @@ class AdminTheme
             }
         }
 
-
+    /**
+     * DoTopMenu
+     * Setup function for displaying the top menu.
+     *
+     * @param cms_top a flag which can be set in pages to state which section they
+     * belong to.
+     * @param url the current page URL
+     * @param query the query-string portion of the url
+     *
+     */
     function DoTopMenu($cms_top='',$url,$query)
     {
     	$this->PopulateAdminNavigation($cms_top,$url,$query);
@@ -750,7 +845,12 @@ class AdminTheme
     }
 
     /**
-     * Display Section Pages - shows admin section pages
+     * DisplaySectionPages
+     * Shows admin section pages in the specified section, wrapped in a
+     * MainMenuItem div. This is used in the top-level section pages.
+     *
+     * You can override this if you want to change the
+     * way it is shown.
      *
      * @param section - section to display
      */
@@ -789,7 +889,10 @@ class AdminTheme
     }
 
     /**
-     * List Section Pages
+     * ListSectionPages
+     * This method presents a nice, human-readable list of admin pages and 
+     * modules that are in the specified admin section.
+     *
      *
      * @param section - section to display
      */
@@ -819,7 +922,10 @@ class AdminTheme
 
 
     /**
-     * Display Section Pages - shows all admin section pages
+     * DisplayAllSectionPages
+     *
+     * Shows all admin section pages and modules. This is used to display the
+     * admin "main" page.
      *
      */
     function DisplayAllSectionPages()
@@ -910,6 +1016,10 @@ class AdminTheme
         echo "</ul></div>\n";
     }
 
+    /**
+     * DisplayFooter
+     * Displays an end-of-page footer.
+     */
     function DisplayFooter()
     {
 ?>
@@ -918,7 +1028,65 @@ class AdminTheme
 </div>
 <?php
     }
+    
 
+    /**
+     * DisplayDocType
+     * If you rewrite the admin section to output pure, beautiful, unadulterated XHTML, you can
+     * change the body tag so that it proudly proclaims that there is none of the evil transitional
+     * cruft.
+     */
+    function DisplayDocType()
+    {
+    	echo "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n";
+    }
+
+    /**
+     * DisplayHTMLStartTag
+     * Outputs the html open tag. Override at your own risk :)
+     */
+    function DisplayHTMLStartTag()
+    {
+    	echo "<html>\n";
+    }
+
+    /**
+     * DisplayHTMLHeader
+     * This method outputs the HEAD section of the html page in the admin section.
+     */
+    function DisplayHTMLHeader()
+    {
+?><head>
+<title><?php echo $this->title ?></title>
+<link rel="stylesheet" type="text/css" href="style.php" />
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
+<![endif]-->
+<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
+<?php $this->OutputHeaderJavascript(); ?>
+</head>
+<?php
+    }
+
+    /**
+     * DisplayBodyTag
+     * Outputs the admin page body tag. Leave in the funny text if you want this
+     * to work properly.
+     */
+    function DisplayBodyTag()
+    {
+        echo "<body##BODYSUBMITSTUFFGOESHERE##>\n";
+    }
+    
+    /**
+     * DisplayMainDiv
+     *
+     * Used to output the start of the main div that contains the admin page content
+     */
+    function DisplayMainDiv()
+    {
+    	echo "<div id=\"MainContent\">\n";
+    }
 }
 
 # vim:ts=4 sw=4 noet
