@@ -1,6 +1,5 @@
 <?php
-
-echo '</div> <!-- end MainContent -->';
+$themeObject->DisplayMainDivEnd();
 $themeObject->OutputFooterJavascript();
 $themeObject->DisplayFooter();
 ?>

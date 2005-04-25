@@ -1079,14 +1079,45 @@ class AdminTheme
     }
     
     /**
-     * DisplayMainDiv
+     * DisplayMainDivStart
      *
      * Used to output the start of the main div that contains the admin page content
      */
-    function DisplayMainDiv()
+    function DisplayMainDivStart()
     {
     	echo "<div id=\"MainContent\">\n";
     }
+
+    /**
+     * DisplayMainDivEnd
+     *
+     * Used to output the end of the main div that contains the admin page content
+     */
+    function DisplayMainDivEnd()
+    {
+    	echo "</div><!-- end MainContent -->\n";
+    }
+
+
+    /**
+     * DisplaySectionMenuDivStart
+     * Outputs the open div tag for the main section pages.
+     */
+    function DisplaySectionMenuDivStart()
+    {
+        echo "<div class=\"MainMenu\">\n";
+    }
+
+    /**
+     * DisplaySectionMenuDivEnd
+     * Outputs the close div tag for the main section pages.
+     */
+    function DisplaySectionMenuDivEnd()
+    {
+        echo "</div>\n";
+    }
+
+
 }
 
 # vim:ts=4 sw=4 noet

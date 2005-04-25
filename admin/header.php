@@ -43,7 +43,7 @@ $themeObject->DisplayHTMLStartTag();
 $themeObject->DisplayHTMLHeader();
 $themeObject->DisplayBodyTag();
 $themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
-$themeObject->DisplayMainDiv();
+$themeObject->DisplayMainDivStart();
 
 $marks = get_preference($userid, 'bookmarks');
 $recent = get_preference($userid, 'recent');

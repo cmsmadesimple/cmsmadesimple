@@ -28,19 +28,10 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-
-?>
-
-<div class="MainMenu">
-<?php $themeObject->DisplaySectionPages('extensions'); ?>
-<div class="MainMenuItem">
-<a href="index.php"><?php echo lang('mainmenu') ?></a>
-</div>
-
-</div> <!-- end MainMenu -->
-
-<?php
-
+$themeObject->DisplaySectionMenuDivStart();
+$themeObject->DisplaySectionPages('extensions');
+$themeObject->DisplaySectionMenuDivEnd();
+$themeObject->DisplayFooter();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
