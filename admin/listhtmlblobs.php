@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='content';
+$CMS_TOP_MENU='layout';
 $CMS_ADMIN_TITLE='htmlblobs';
 
 require_once("../include.php");
