@@ -31,7 +31,6 @@ include_once("header.php");
 $themeObject->DisplaySectionMenuDivStart();
 $themeObject->DisplaySectionPages('content');
 $themeObject->DisplaySectionMenuDivEnd();
-$themeObject->DisplayFooter();
 include_once("footer.php");
 # vim:ts=4 sw=4 noet
 ?>

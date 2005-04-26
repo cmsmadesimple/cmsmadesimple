@@ -34,7 +34,6 @@ $themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)).'/install');
 $themeObject->DisplaySectionMenuDivStart();
 $themeObject->DisplayAllSectionPages();
 $themeObject->DisplaySectionMenuDivEnd();
-$themeObject->DisplayFooter();
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
