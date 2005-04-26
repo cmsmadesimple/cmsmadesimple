@@ -15,7 +15,7 @@ a:visited  {color: #1C639B;}
 a:active  {color: #83D5D1;}
 
 iframe {
-	width: 100%;
+    width: 600px;
 	height: 400px;
 }
 
@@ -53,7 +53,6 @@ position: absolute;
  * Top Menu
  */
 #TopMenu {
-	width: 99%;
 	background-color: #1C639B;
 	position: absolute;
 	top: 0;

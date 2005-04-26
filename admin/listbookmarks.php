@@ -61,8 +61,8 @@ include_once("header.php");
 		$currow = "row1";
 
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
+        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
+        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
 
 		$counter=0;
 		foreach ($marklist as $onemark){
@@ -70,8 +70,12 @@ include_once("header.php");
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
-				echo "<td width=\"16\"><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" /></a></td>\n";
-				echo "<td width=\"16\"><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">";
+                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo "</a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo "</a></td>\n";
 				echo "</tr>\n";
 				($currow == "row1"?$currow="row2":$currow="row1");
 			}

@@ -224,7 +224,9 @@ if ($reldir != "")
 		$newdir = "?reldir=".$newdir;
 	}
 	$dirtext .= "<tr class=\"$row\">";
-	$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\" /></td>";
+	$dirtext .= "<td width=\"30\">";
+	$dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
+    $dirtext .= "</td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td width=\"10%\">&nbsp;</td>";
 	$dirtext .= "<td width=\"18\">&nbsp;</td>";
@@ -248,10 +250,14 @@ foreach ($dirs as $file)
 		{
 			$tmp=urlencode($reldir."/".$file);
 			$dirtext .= "<tr class=\"$row\">"; 
-			$dirtext .= "<td width=\"30\"><img src=\"../images/cms/fileicons/folder.png\" alt=\"".lang('directoryabove')."\" title=\"".lang('directoryabove')."\" border=\"0\" /></td>";
+			$dirtext .= "<td width=\"30\">";
+            $dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
+            $dirtext .= "</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
 			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
+			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\">";
+            $dirtext .= $themeObject->DisplayImage('delete.gif', lang('delete'));
+            $dirtext .= "</a></td>";
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -283,7 +289,9 @@ foreach ($files as $file)
 				// parse little template
 				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
 		//		$file_links = $filetype[$extension]['link']['view'];
-				$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
+				
+                $image_icon = $themeObject->DisplayImage("fileicons/".$filetype[$extension]['img'].".png", $filetype[$extension]['desc']);
+                //$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
 	
 				$filetext .= "<tr class=\"$row\">";
 				$filetext .= "<td width=\"30\">{$image_icon}</td>";
@@ -295,7 +303,9 @@ foreach ($files as $file)
 					}
 				}
 				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" border=\"0\" /></a></td>";
+				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                $filetext .= $themeObject->DisplayImage('delete.gif', lang('delete'));
+                $filetext .= "</a></td>";
 				$filetext .= "</tr>";
 				($row=="row1"?$row="row2":$row="row1");
 			}

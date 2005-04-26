@@ -63,16 +63,20 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
+        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
+        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
 
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
-				echo "<td width=\"16\"><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
-				echo "<td width=\"16\"><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
+                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo "</a></td>\n";
+				echo "<td width=\"16\"><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo "</a></td>\n";
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");

@@ -143,10 +143,10 @@ if (isset($_GET["message"])) {
 		foreach ($templatelist as $onetemplate)
 		{
 			// construct true/false button images
-			$image_true ="<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\"><img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" /></a>";
-			$image_false ="<a href=\"listtemplates.php?setactive=".$onetemplate->id."\"><img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" /></a>";
-			$default_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
-			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\"><img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" /></a>";
+            $image_true = "<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('true.gif', lang('true'))."</a>";
+            $image_false = "<a href=\"listtemplates.php?setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('false.gif', lang('false'))."</a>";
+			$default_true =$themeObject->DisplayImage('true.gif', lang('true'));
+			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('false.gif', lang('false'))."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
@@ -159,19 +159,33 @@ if (isset($_GET["message"])) {
 					echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 				# view css association
-				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\"><img src=\"../images/cms/css.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('attachstylesheets')."\" title=\"".lang('attachstylesheets')."\" /></a></td>\n";
+				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
+                echo $themeObject->DisplayImage('css.gif', lang('attachstylesheets'));
+                echo "</a></td>\n";
 
 				# add new template
 				if ($add)
-					echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/copy.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('copy')."\" title=\"".lang('copy')."\" /></a></td>\n";
+				    {
+					echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\">";
+                    echo $themeObject->DisplayImage('copy.gif', lang('copy'));
+                    echo "</a></td>\n";
+                    }
 
 				# edit template
 				if ($edit)
-					echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
+				    {
+					echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
+                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo "</a></td>\n";
+                    }
 
 				# remove template
 				if ($remove)
-					echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
+				    {
+					echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo "</a></td>\n";
+        }
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");

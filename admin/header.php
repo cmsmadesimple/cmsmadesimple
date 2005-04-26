@@ -11,11 +11,11 @@ $userid = get_userid();
 if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
 {
 	include(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php");
-    $themeObject = new $themeObjectName($gCms, $userid);
+    $themeObject = new $themeObjectName($gCms, $userid, $themeName);
 }
 else
 {
-    $themeObject = new AdminTheme($gCms, $userid);
+    $themeObject = new AdminTheme($gCms, $userid, $themeName);
 }
 
 $themeObject->SendHeaders(isset($charsetsent), get_encoding());

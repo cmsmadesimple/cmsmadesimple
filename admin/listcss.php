@@ -100,12 +100,16 @@ if (isset($_GET["message"]))
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\">\n";
 				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
-				echo "<td width=\"18\"><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\"><img src=\"../images/cms/css.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('attachtotemplate')."\" /></a></td>\n";
+				echo "<td width=\"18\"><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
+                echo $themeObject->DisplayImage('css.gif', lang('attachtotemplate'));
+                echo "</a></td>\n";
 
 				# if user has right to edit
 				if ($modify)
 				{
-					echo "<td width=\"18\"><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('edit')."\" title=\"".lang('edit')."\" /></a></td>\n";
+					echo "<td width=\"18\"><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\">";
+                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo "</a></td>\n";
 				}
 				else
 				{
@@ -115,7 +119,9 @@ if (isset($_GET["message"]))
 				# if user has right to delete
 				if ($delcss)
 				{
-					echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
+					echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo "</a></td>\n";
 				}
 				else
 				{

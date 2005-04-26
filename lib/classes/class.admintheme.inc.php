@@ -71,27 +71,38 @@ class AdminTheme
      */
     var $menuItems;
 
+    /**
+     * Admin Section Image cache
+     */
+    var $imageLink;
+
+    /**
+     * Theme Name
+     */
+    var $themeName;
 
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function AdminTheme($cms, $userid)
+	function AdminTheme($cms, $userid, $themeName)
 	{
-		$this->SetInitialValues($cms, $userid);
+		$this->SetInitialValues($cms, $userid, $themeName);
 	}
 
 	/**
 	 * Sets object to some sane initial values
 	 */
-	function SetInitialValues($cms, $userid)
+	function SetInitialValues($cms, $userid, $themeName)
 	{
 		$this->title = '';
 		$this->cms = $cms;
 		$this->url = $_SERVER['REQUEST_URI'];
 		$this->userid = $userid;
+		$this->themeName = $themeName;
 		$this->perms = array();
 		$this->recent = array();
 		$this->menuItems = array();
+        $this->imageLink = array();
 		$this->modulesBySection = array();
 		$this->sectionCount = array();
         $this->SetModuleAdminInterfaces();
@@ -1135,6 +1146,47 @@ class AdminTheme
 	       echo '<p>'.lang('installdirwarning').'</p>';
         }
         echo "</div> <!-- end DashboardCallout -->\n";
+    }
+    
+    /**
+     * DisplayImage will display the themed version of an image (if it exists),
+     * or the version from the default theme otherwise.
+     * @param imageName - name of image
+     * @param alt - alt text
+     * @param width
+     * @param height
+     */
+    function DisplayImage($imageName, $alt='', $width='', $height='')
+    {
+        if (! isset($this->imageLink[$imageName]))
+    	   {
+    	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
+                '/themes/' . $this->themeName . '/images/' . $imageName) . '/'. $imageName))
+    	       {
+                $this->imageLink[$imageName] = 'themes/' .
+                    $this->themeName . '/images/' . $imageName;
+    	       }
+    	   else
+    	       {
+    	       $this->imageLink[$imageName] = 'themes/default/images/' . $imageName;
+    	       }
+    	   }
+
+        $retStr = '<img src="'.$this->imageLink[$imageName].'"';
+        if ($width != '')
+            {
+            $retStr .= ' width="'.$width.'"';
+            }
+        if ($height != '')
+            {
+            $retStr .= ' height="'.$height.'"';
+            }
+        if ($alt != '')
+            {
+            $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
+            }
+        $retStr .= ' border="0" />';
+        return $retStr;
     }
 
 }

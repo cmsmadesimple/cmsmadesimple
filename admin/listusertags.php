@@ -118,12 +118,16 @@ else if ($action == "showpluginabout")
 
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\"><img src=\"../images/cms/edit.gif\" width=\"16\" height=\"16\" border=\"0\" title=\"".lang('edit')."\" alt=\"".lang('edit')."\" /></a></td>\n";
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
+                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo "</a></td>\n";
 			}
 
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\"><img src=\"../images/cms/delete.gif\" width=\"16\" height=\"16\" border=\"0\" alt=\"".lang('delete')."\" title=\"".lang('delete')."\" /></a></td>\n";
+				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo "</a></td>\n";
 			}
 		
 			echo "</tr>\n";

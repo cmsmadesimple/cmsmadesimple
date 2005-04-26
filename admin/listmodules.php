@@ -340,9 +340,9 @@ else if ($action == 'missingdeps')
 
 		$curclass = "row1";
 		// construct true/false button images
-		$image_true ="<img src=\"../images/cms/true.gif\" alt=\"".lang('true')."\" title=\"".lang('true')."\" border=\"0\" />";
-		$image_false ="<img src=\"../images/cms/false.gif\" alt=\"".lang('false')."\" title=\"".lang('false')."\" border=\"0\" />";
-		
+        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
+        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
+
 		foreach($gCms->modules as $key=>$value)
 		{
 			$modinstance = $value['object'];

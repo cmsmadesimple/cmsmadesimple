@@ -35,7 +35,7 @@ $result = $newmark->save();
 
 if ($result)
 	{
-	header('HTTP_REFERER: '.$config['admin_dir'].'/index.php');
+	header('HTTP_REFERER: '.$config['root_url'].'/'.$config['admin_dir'].'/index.php');
 	redirect($link);
 	}
 else
