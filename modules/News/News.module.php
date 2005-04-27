@@ -1180,11 +1180,12 @@ class NewsModule extends CMSModuleContentType
 
 		if ($config["assume_mod_rewrite"])
 		{
-			$url = $config["root_url"]."/".$this->mId.$config["page_extension"];
+			// we could use $this->mId instead of mAlias but i think it's better
+			$url = $config["root_url"]."/".$this->mAlias . $config["page_extension"];
 		}
 		else 
 		{
-			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=". $this->mAlias;
 		}
 
 		return $url;
