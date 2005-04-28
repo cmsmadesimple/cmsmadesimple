@@ -1537,9 +1537,9 @@ class CMSModule extends ModuleOperations
 		return '<div id="tab-container">';
 	}
 
-	function EndTabSet()
+	function EndTabSet($tabindex = 0)
 	{
-		return '</div> <!-- tab-container -->';
+		return '</div> <!-- tab-container -->'."\n".'<script type="text/javascript">BuildTabs(\'tab-container\',\'tab-header\',\'tab-list\');ActivateTab('.$tabindex.',\'tab-container\',\'tab-list\');</script>'."\n";
 	}
 
 	function StartTab($name = '')

@@ -558,7 +558,11 @@ class AdminTheme
 	if (window.attachEvent) window.attachEvent("onload", cssHover);
 -->
 </script>
-<?php    }
+<?php    
+        echo "<script type=\"text/javascript\" src=\"";
+        echo $this->cms->config['root_url'];
+        echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
+	}
 
     /**
      * OutputFooterJavascript
@@ -569,9 +573,6 @@ class AdminTheme
      */
     function OutputFooterJavascript()
     {
-        echo "<script type=\"text/javascript\" src=\"";
-        echo $this->cms->config['root_url'];
-        echo "/lib/dynamic_tabs/tabs.js\"></script>\n";
         echo "<script type=\"text/javascript\">BuildTabs('admin-tab-container','admin-tab-header','admin-tab-list');ActivateTab(0,'admin-tab-container','admin-tab-list');</script>";
     }
 
