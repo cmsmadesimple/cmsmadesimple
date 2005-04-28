@@ -317,6 +317,7 @@ if (count($tabs) > 1)
 if (count($tabs) > 0)
 {
 	echo '</div> <!-- end tabsystem -->';
+	echo '<script type="text/javascript">BuildTabs(\'tab-container\',\'tab-header\',\'tab-list\');ActivateTab(0,\'tab-container\',\'tab-list\');</script>';
 }
 
 ?>
