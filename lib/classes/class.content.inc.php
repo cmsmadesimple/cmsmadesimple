@@ -557,6 +557,17 @@ class ContentBase
 	# :TODO: This function should return something
 	function Save()
 	{
+		global $gCms;
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				@ob_start();
+				$gCms->modules[$key]['object']->ContentEditPre();
+			}
+		}
+
 		if ($this->mPropertiesLoaded == false)
 		{
 			$this->mProperties->Load($this->mId);
@@ -570,6 +581,17 @@ class ContentBase
 		{
 			$this->Insert();
 		}
+		
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				@ob_start();
+				$gCms->modules[$key]['object']->ContentEditPost();
+			}
+		}
+		
 	}
 
 	/**
@@ -789,6 +811,16 @@ class ContentBase
 	# :TODO: This function should return something
 	function Delete()
 	{
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				@ob_start();
+				$gCms->modules[$key]['object']->ContentDeletePre();
+			}
+		}
+		
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
 
@@ -832,6 +864,16 @@ class ContentBase
 					# :TODO: Translate the error message
 					$debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
 				}
+			}
+		}
+		
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				@ob_start();
+				$gCms->modules[$key]['object']->ContentDeletePost();
 			}
 		}
 	}

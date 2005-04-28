@@ -730,6 +730,28 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * ------------------------------------------------------------------
+	 * General Content Related Functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	function ContentEditPre()
+	{
+	}
+	
+	function ContentEditPost()
+	{
+	}
+	
+	function ContentDeletePre()
+	{
+	}
+	
+	function ContentDeletePost()
+	{
+	}
+
+	/**
+	 * ------------------------------------------------------------------
 	 * HTML Blob Related Functions
 	 * ------------------------------------------------------------------
 	 */
