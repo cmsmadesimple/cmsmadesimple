@@ -18,6 +18,8 @@ else
     $themeObject = new AdminTheme($gCms, $userid, $themeName);
 }
 
+$gCms->variables['admintheme']=&$themeObject;
+
 $themeObject->SendHeaders(isset($charsetsent), get_encoding());
 
 if (isset($CMS_ADMIN_TITLE))
