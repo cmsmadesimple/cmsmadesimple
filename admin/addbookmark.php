@@ -46,7 +46,7 @@ if (isset($_POST["addbookmark"]))
 
 	if ($title == "")
 		{
-		$error .= "<li>".lang('nofieldgiven', array('addbookmark'))."</li>";
+		$error .= lang('nofieldgiven', array('addbookmark'));
 		$validinfo = false;
 		}
 
@@ -66,7 +66,7 @@ if (isset($_POST["addbookmark"]))
 			}
 		else
 			{
-			$error .= "<li>".lang('errorinsertingbookmark')."</li>";
+			$error .= lang('errorinsertingbookmark');
 			}
 		}
 	}
@@ -75,38 +75,34 @@ include_once("header.php");
 
 if ($error != "")
 	{
-	echo "<ul class=\"error\">".$error."</ul>";
+		echo '<div class="pagemcontainer"><p class="pagemessage">'.$error.'</p></div>';
 	}
 ?>
 
-<form method="post" action="addbookmark.php">
-
-<div class="adminformSmall">
-
-<h3><?php echo lang('addbookmark')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td>*<?php echo lang('title')?>:</td>
-		<td><input type="text" name="title" maxlength="255" value="<?php echo $title?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('url')?>:</td>
-		<td><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="addbookmark" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<div class="pageoverflow">
+			<p class="pageheader"><?php echo lang("addbookmark"); ?></p>
+			<form method="post" action="addbookmark.php">
+				<div class="pageoverflow">
+					<p class="pagetext"><?php echo lang('title')?>:</p>
+					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+				</div>
+				<div class="pageoverflow">
+					<p class="pagetext"><?php echo lang('url')?>:</p>
+					<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" /></p>
+				</div>
+				<div class="pageoverflow">
+					<p class="pagetext">&nbsp;</p>
+					<p class="pageinput">
+						<input type="hidden" name="addbookmark" value="true" />
+						<input type="submit" value="<?php echo lang('submit')?>" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+					</p>
+				</div>		
+			</form>
+	</div>
 </div>
-
-</form>
+<p class="pageback"><a class="pageback" href="listbookmarks.php">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 include_once("footer.php");

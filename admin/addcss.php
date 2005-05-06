@@ -166,7 +166,7 @@ else
 	# the user has correct rights, we display error message if any
 	if ("" != $error)
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";		
 	}
 
 #******************************************************************************
@@ -174,39 +174,31 @@ else
 #******************************************************************************
 ?>
 
-<form method="post" action="addcss.php">
 
-<div class="adminform">
-
-<h3><?php echo lang('addstylesheet')?></h3>
-
-<table width="100%" border="0">
-
-	<tr>
-		<td width="100"><?php echo lang('name')?>:</td>
-		<td><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('content')?>:</td>
-		<td><textarea name="css_text" cols="90" rows="18"><?php echo $css_text?></textarea></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<input type="hidden" name="addcss" value="true" />
-			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		</td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('addstylesheet')?></p>
+		<form method="post" action="addcss.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('content')?>:</p>
+			<p class="pageinput"><textarea class="pagetextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="addcss" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+		</form>
 </div>
 
-</form>
-
 <?php
-
+echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
 } # end of displaying the form
 include_once("footer.php");
 

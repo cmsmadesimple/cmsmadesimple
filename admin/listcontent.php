@@ -30,14 +30,12 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
 }
 
 ?>
-<h3><?php echo lang('currentpages')?></h3>
-
-<p><a href="topcontent.php"><?php echo lang('back')?></a></p>
-
+<div class="pagecontainer">
+	<div class="pageoverflow">
 <?php
 
 	$userid = get_userid();
@@ -118,28 +116,28 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	if (count($content_array) > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($content_array), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, count($content_array), $limit)."</p>";
 	}
-	
+	echo '<p class="pageheader">'.lang('currentpages').'</p></div>';
 	if (count($content_array))
 	{
-		echo '<table cellspacing="0" class="AdminTable">'."\n";
+		echo '<table cellspacing="0" class="pagetable">'."\n";
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th>&nbsp;</th>";
-		echo "<th width=\"25%\">".lang('title')."</th>\n";
+		echo "<th class=\"pagew25\">".lang('title')."</th>\n";
 		echo "<th>".lang('template')."</th>\n";
 		echo "<th>".lang('type')."</th>\n";
 		echo "<th>".lang('owner')."</th>\n";
-		echo "<th>".lang('active')."</th>\n";
-		echo "<th>".lang('default')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('default')."</th>\n";
 		if ($modifyall)
 		{
-			echo "<th align=\"center\">".lang('move')."</th>\n";
+			echo "<th class=\"pagepos\">".lang('move')."</th>\n";
 		}
-		echo "<th width=\"16\">&nbsp;</th>\n";
-		echo "<th width=\"16\">&nbsp;</th>\n";
-		echo "<th width=\"16\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -179,7 +177,7 @@ if (isset($_GET["message"])) {
                 // check that permissions are good before showing:
                 if ($modifyall || check_ownership($userid,$one->Id()) || check_authorship($userid,$one->Id()))
                 {
-  			    echo "<tr class=\"$currow\">\n";
+  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
   			    echo "<td>".$one->Hierarchy()."</td>\n";
                 echo "<td><a href=\"editcontent.php?content_id=".$one->Id()."\">".$one->Name()."</a></td>\n";
   				if ($templates[$one->TemplateId()]->name)
@@ -191,11 +189,11 @@ if (isset($_GET["message"])) {
   					echo "<td>&nbsp;</td>\n";
   				}
   
-  				echo "<td align=\"center\">".$one->FriendlyName()."</td>\n";
+  				echo "<td>".$one->FriendlyName()."</td>\n";
   
   				if ($one->Owner() > -1)
   				{
-  					echo "<td align=\"center\">".$users[$one->Owner()]->username."</td>\n";
+  					echo "<td>".$users[$one->Owner()]->username."</td>\n";
   				}
   				else
   				{
@@ -204,16 +202,16 @@ if (isset($_GET["message"])) {
   
   				if($one->Active())
   				{
-  					echo "<td align=\"center\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
+  					echo "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
   				}
   				else 
   				{
-  				  	echo "<td align=\"center\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
+  				  	echo "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
   				}
   
 				if ($one->IsDefaultPossible() == TRUE)
   				{
-  					echo "<td align=\"center\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+  					echo "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
   				}
   				else
   				{
@@ -259,7 +257,7 @@ if (isset($_GET["message"])) {
   						}
   					}
   					
-  					echo "<td align=\"center\">";
+  					echo "<td class=\"pagepos\">";
   					if ($num_same_level > 1)
   					{
   						#echo "item_order: " . $item_order . " num_same_level:" . $num_same_level . "<br />";
@@ -288,26 +286,26 @@ if (isset($_GET["message"])) {
   				}
   				if ($config["query_var"] == "")
   				{
-  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" target=\"_blank\">";
+  					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" rel=\"external\">";
   					echo $themeObject->DisplayImage('view.gif', lang('view'));
                     echo "</a></td>\n";
   				}
   				else if ($one->Alias() != "")
   				{
-  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" target=\"_blank\">";
+  					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" rel=\"external\">";
                     echo $themeObject->DisplayImage('view.gif', lang('view'));
                     echo "</a></td>\n";
   				}
   				else
   				{
-  					echo "<td align=\"center\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" target=\"_blank\">";
+  					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" rel=\"external\">";
                     echo $themeObject->DisplayImage('view.gif', lang('view'));
                     echo "</a></td>\n";
   				}
-  				echo "<td align=\"center\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
+  				echo "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
   				echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                 echo "</a></td>\n";
-  				echo "<td align=\"center\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+  				echo "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
   				echo "</tr>\n";
@@ -331,9 +329,16 @@ if (isset($_GET["message"])) {
 	if (check_permission($userid, 'Add Pages'))
 	{
 ?>
-
-<div class="button"><a href="addcontent.php"><?php echo lang("addcontent")?></a></div>
-
+	<div class="pageoptions">
+		<a href="addcontent.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addcontent')).'</a>'; 
+				echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
+			?>
+		</a>
+	</div>
+</div>
+<p class="pageback"><a class="pageback" href="topcontent.php">&#171; <?php echo lang('back')?></a></p>
 <?php
 	}
 

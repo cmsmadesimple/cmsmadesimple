@@ -86,107 +86,98 @@ if (isset($_POST["submit_form"])) {
 include_once("header.php");
 
 if ($error != "") {
-	echo '<p class="Error">'.$error.'</p>';
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$error.'</p></div>';
 }
 
 ?>
-<form name="prefsform" method="post" action="editprefs.php">
 
-<div class="AdminForm">
-
-<h3><?php echo lang("userprefs")?></h3>
-
-<table border="0">
-
-	<tr>
-		<th><?php echo lang('wysiwygtouse')?>:</th>
-		<td>
-			<select name="wysiwyg">
-				<option value=""><?php echo lang('none')?></option>
-				<?php
-					foreach($gCms->modules as $key=>$value)
-					{
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true &&
-							$gCms->modules[$key]['object']->IsWYSIWYG())
+<div class="pagecontainer">
+	<div class="pageoverflow">
+		<p class="pageheader"><?php echo lang("userprefs"); ?></p>
+		<form method="post" action="editprefs.php">
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>
+				<p class="pageinput">
+					<select name="wysiwyg">
+					<option value=""><?php echo lang('none'); ?></option>
+					<?php
+						foreach($gCms->modules as $key=>$value)
 						{
-							echo '<option value="'.$key.'"';
-							if ($wysiwyg == $key)
+							if ($gCms->modules[$key]['installed'] == true &&
+								$gCms->modules[$key]['active'] == true &&
+								$gCms->modules[$key]['object']->IsWYSIWYG())
 							{
-								echo ' selected="selected"';
+								echo '<option value="'.$key.'"';
+								if ($wysiwyg == $key)
+								{
+									echo ' selected="selected"';
+								}
+								echo '>'.$key.'</option>';
 							}
-							echo '>'.$key.'</option>';
 						}
-					}
-				?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th><?php echo lang('language')?>:</th>
-		<td>
-			<select name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
-			<option value=""><?php echo lang('nodefault') ?></option>
-			<?php
-				asort($nls["language"]);
-				foreach ($nls["language"] as $key=>$val) {
-					echo "<option value=\"$key\"";
-					if ($default_cms_lang == $key) {
-						echo " selected=\"selected\"";
-					}
-					echo ">$val";
-					if (isset($nls["englishlang"][$key]))
-					{
-						echo " (".$nls["englishlang"][$key].")";
-					}
-					echo "</option>\n";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th><?php echo lang('admincallout')?>:</th>
-		<td>
-			<input type="checkbox" name="bookmarks" <?php if ($bookmarks) echo " checked"; ?> /><?php echo lang('showbookmarks') ?>
-			<input type="checkbox" name="recent" <?php if ($recent) echo " checked"; ?> /><?php echo lang('showrecent') ?>
-		</td>
-	</tr>
-
-	<?//ADDED?>
-	<?
-	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
-	?>
-	<tr>	  
-		<th><?php echo lang('admintheme') ?></th>
-		<td>
-			<select name="admintheme">
-			<?
-		  while (($file = readdir($dir)) !== false) {
-		  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
-		  		?>
-		  		<option value="<?=$file?>"<?php echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"")?>><?=$file?></option>				  
-				  <?
-		  	}
-		  }
-				?>				
-			</select>
-		</td>
-	</tr>
-	<?}?>
-	<?//STOP?>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang ?>" />
-		<input type="submit" name="submit_form" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
-</div>
-
-</form>
+					?>
+					</select>
+				</p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('language'); ?>:</p>
+				<p class="pageinput">
+					<select name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
+					<option value=""><?php echo lang('nodefault'); ?></option>
+					<?php
+						asort($nls["language"]);
+						foreach ($nls["language"] as $key=>$val) {
+							echo "<option value=\"$key\"";
+							if ($default_cms_lang == $key) {
+								echo " selected=\"selected\"";
+							}
+							echo ">$val";
+							if (isset($nls["englishlang"][$key]))
+							{
+								echo " (".$nls["englishlang"][$key].")";
+							}
+							echo "</option>\n";
+						}
+					?>
+					</select>
+				</p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('admintheme');  ?>:</p>
+				<p class="pageinput">
+					<?php
+						if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+								echo '<select name="admintheme">';
+									while (($file = readdir($dir)) !== false) {
+										if (is_dir("themes/".$file) && ( $file[0] != '.')) {
+											echo '<option value="'.$file.'"';
+											echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
+											echo '>'.$file.'</option>';
+										}
+									}
+								echo '</select>';
+						}
+					?>	
+				</p>					
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>
+				<p class="pageinput">
+					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
+					<input class="pagenb" type="checkbox" name="recent" <?php if ($recent) echo "checked=\"checked\""; ?> /><?php echo lang('showrecent') ?>
+				</p>
+			</div>
+			<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+			</p>
+			</div>			
+		</form>
+	</div>
+</div>	
 
 <?php
 

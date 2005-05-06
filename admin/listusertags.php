@@ -89,60 +89,54 @@ else if ($action == "showpluginabout")
 		<?php
 	}
 }
-
-?>
-
-	<h3><?php echo lang('userdefinedtags')?></h3>
-
-	<table cellspacing="0" class="AdminTable" style="width:400px;">
-		<thead>
-		<tr>
-			<th><?php echo lang('name')?></th>
-			<th width="16">&nbsp;</th>
-			<th width="16">&nbsp;</th>
-		</tr>
-		</thead>
-		<tbody>
-
-<?php
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+	echo '<p class="pageheader">'.lang('userdefinedtags').'</p></div>';
+	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+	echo '<thead>';
+	echo "<tr>\n";
+	echo "<th>".lang('name')."</th>\n";
+	echo "<th class=\"pageicon\">&nbsp;</th>\n";
+	echo "<th class=\"pageicon\">&nbsp;</th>\n";
+	echo "</tr>\n";
+	echo '</thead>';
+	echo '<tbody>';
 
 		$curclass = "row1";
 
 		foreach($gCms->cmsplugins as $oneplugin)
 		{
-			echo "<tr class=\"$curclass\">\n";
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
+				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 				echo "<td>$oneplugin</td>\n";
-			}
-
-			if (array_key_exists($oneplugin, $gCms->userplugins))
-			{
 				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
                 echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                 echo "</a></td>\n";
-			}
-
-			if (array_key_exists($oneplugin, $gCms->userplugins))
-			{
 				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
-			}
-		
-			echo "</tr>\n";
 
-			($curclass=="row1"?$curclass="row2":$curclass="row1");
+				echo "</tr>\n";
+		
+				($curclass=="row1"?$curclass="row2":$curclass="row1");
+			}
 		}
 
 	?>
 	</tbody>
 </table>
-
-<div class="button"><a href="adduserplugin.php"><?php echo lang('addusertag')?></a></div>
-
-	<?php
-
+	<div class="pageoptions">
+		<a href="addbookmark.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addusertag')).'</a>'; 
+				echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
+			?>
+		</a>
+	</div>
+</div>
+<?php
+echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

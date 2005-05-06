@@ -198,17 +198,21 @@ $row = "row1";
 $dirtext = "";
 $filetext = "";
 
-echo "<h3>".lang('filemanagement')."</h3>";
-
 if ($errors != "")
 {
-	echo "<ul class=\"error\">$errors</ul>\n";
+	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
 }
 
-echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
-echo '<table cellspacing="0" class="AdminTable">';
+echo '<div class="pagecontainer">';
+echo '<p class="pageheader">'.lang("filemanagement").'</p>';
+echo '<p class="pagesubtitle">'.lang('currentdirectory').': '.($reldir==""?"/":$reldir)."</p>";
+echo '<table cellspacing="0" class="pagetable">'."\n";
 echo '<thead>';
-echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
+echo "<tr>\n";
+echo '<th class="pagew30">&nbsp;</th>';
+echo '<th>'.lang('filename').'</th>';
+echo '<th class="pagew10">'.lang('filesize').'</th>';
+echo '<th class="pageicon">&nbsp;</th>';
 echo '</thead>';
 echo '<tbody>';
 
@@ -223,13 +227,13 @@ if ($reldir != "")
 	{
 		$newdir = "?reldir=".$newdir;
 	}
-	$dirtext .= "<tr class=\"$row\">";
-	$dirtext .= "<td width=\"30\">";
+	$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
+	$dirtext .= "<td>";
 	$dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
     $dirtext .= "</td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
-	$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-	$dirtext .= "<td width=\"18\">&nbsp;</td>";
+	$dirtext .= "<td>&nbsp;</td>";
+	$dirtext .= "<td>&nbsp;</td>";
 	$dirtext .= "</tr>";
 	$row = "row2";
 }
@@ -249,13 +253,13 @@ foreach ($dirs as $file)
 		if (is_dir("$dir/$file"))
 		{
 			$tmp=urlencode($reldir."/".$file);
-			$dirtext .= "<tr class=\"$row\">"; 
-			$dirtext .= "<td width=\"30\">";
+			$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">"; 
+			$dirtext .= "<td>";
             $dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
             $dirtext .= "</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
-			$dirtext .= "<td width=\"10%\">&nbsp;</td>";
-			$dirtext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\">";
+			$dirtext .= "<td>&nbsp;</td>";
+			$dirtext .= "<td class=\"pagepos\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\">";
             $dirtext .= $themeObject->DisplayImage('delete.gif', lang('delete'));
             $dirtext .= "</a></td>";
 			$dirtext .= "</tr>";
@@ -293,17 +297,17 @@ foreach ($files as $file)
                 $image_icon = $themeObject->DisplayImage("fileicons/".$filetype[$extension]['img'].".png", $filetype[$extension]['desc']);
                 //$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
 	
-				$filetext .= "<tr class=\"$row\">";
-				$filetext .= "<td width=\"30\">{$image_icon}</td>";
-				$filetext .= '<td><a href="'.$file_links.'" target="_blank">'.$file.'</a></td>';
+				$filetext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
+				$filetext .= "<td>{$image_icon}</td>";
+				$filetext .= '<td><a href="'.$file_links.'" rel="external">'.$file.'</a></td>';
 				$filesize =  filesize("$dir/$file");
 				if ($filesize >(1024*1024)) {$sizestr = number_format($filesize/(1024*1024))." MB";} else {
 					if ($filesize >(1024))  {$sizestr = number_format($filesize/1024)." KB";} else {
 						$sizestr = number_format($filesize)." B";
 					}
 				}
-				$filetext .= "<td width=\"10%\" align=\"right\">".$sizestr."</td>";
-				$filetext .= "<td width=\"18\" align=\"center\"><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				$filetext .= "<td>".$sizestr."</td>";
+				$filetext .= "<td><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 $filetext .= $themeObject->DisplayImage('delete.gif', lang('delete'));
                 $filetext .= "</a></td>";
 				$filetext .= "</tr>";
@@ -328,24 +332,25 @@ if ($access)
 ?>
 
 <form enctype="multipart/form-data" action="files.php" method="post">
-	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
-	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
-		<tr>
-			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
-			<td style="padding-top: 10px;"><input name="uploadfile" type="file" />
-			<input type="submit" value="<?php echo lang('send')?>" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo lang('createnewfolder')?>:</td>
-			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></td>
-		</tr>
-	</table>
-	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+	<div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
+		<p class="pageinput">
+			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
+			<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+			<input name="uploadfile" type="file" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('send')?>" />
+		</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('createnewfolder')?>:</p>
+		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
+	</div>
 </form>
+
+</div>
 
 <?php
 }
-
+echo '<p class="pageback"><a class="pageback" href="topcontent.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

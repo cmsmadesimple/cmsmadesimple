@@ -47,21 +47,21 @@ if ($action == "showpluginhelp")
 		call_user_func_array('smarty_cms_help_function_'.$plugin, array());
 		$content = @ob_get_contents();
 		@ob_end_clean();
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('pluginhelp', array($plugin))."</h2>";
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';		
 		echo $content;
-		?>
-		<FORM ACTION="listtags.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
 		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		exit;	
 	}
 	else
 	{
-		?>
-		<P>No help text available for this plugin.</P>
-		<?php
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
+		echo '<P>No help text available for this plugin.</P>';
+		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		exit;	
 	}
 }
 else if ($action == "showpluginabout")
@@ -72,41 +72,38 @@ else if ($action == "showpluginabout")
 		call_user_func_array('smarty_cms_about_function_'.$plugin, array());
 		$content = @ob_get_contents();
 		@ob_end_clean();
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('pluginabout', array($plugin))."</h2>";
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('pluginabout', array($plugin)).'</p>';
 		echo $content;
-		?>
-		<FORM ACTION="listtags.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
 		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		exit;	
 	}
 	else
 	{
-		?>
-		<P>No about text available for this tag.</P>
-		<?php
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';
+		echo '<P>No help text available for this plugin.</P>';
+		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
+		exit;	
 	}
 }
 else
 {
 
-?>
-
-	<h3><?php echo lang('tags')?></h3>
-
-	<table cellspacing="0" class="AdminTable">
-		<thead>
-		<tr>
-			<th><?php echo lang('name')?></th>
-			<th width="8%"><?php echo lang('help')?></th>
-			<th width="8%"><?php echo lang('about')?></th>
-		</tr>
-		</thead>
-		<tbody>
-
-<?php
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+	echo '<p class="pageheader">'.lang('tags').'</p></div>';
+	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+	echo '<thead>';
+	echo "<tr>\n";
+	echo "<th>".lang('name')."</th>\n";
+	echo "<th class=\"pagew10\">".lang('help')."</th>\n";
+	echo "<th class=\"pagew10\">".lang('about')."</th>\n";
+	echo "</tr>\n";
+	echo '</thead>';
+	echo '<tbody>';
 
 		$curclass = "row1";
 
@@ -114,7 +111,7 @@ else
 		{
 			if (!array_key_exists($oneplugin, $gCms->userplugins))
 			{
-				echo "<tr class=\"$curclass\">\n";
+				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 
 				echo "<td>$oneplugin</td>\n";
 
@@ -145,9 +142,10 @@ else
 
 	</tbody>
 </table>
+</div>
 
-	<?php
-
+<?php
+echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
 }
 
 include_once("footer.php");

@@ -30,16 +30,14 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-	echo "<p class=\"error\">".$_GET["message"]."</p>";
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p>';
 }
 
 ?>
-<h3><?php echo lang('htmlblobs')?></h3>
-
-<p><a href="topcontent.php"><?php echo lang('back')?></a></p>
+<div class="pagecontainer">
+	<div class="pageoverflow">
 
 <?php
-
 	$userid	= get_userid();
 
 	$htmlbloblist = HtmlBlobOperations::LoadHtmlBlobs();
@@ -47,14 +45,14 @@ if (isset($_GET["message"])) {
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
 	$limit = 20;
-	echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($htmlbloblist), $limit)."</div>";
-
-	echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">"."\n";
+	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
+	echo '<p class="pageheader">'.lang('htmlblobs').'</p></div>';
+	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	echo '<thead>';
 	echo "<tr>\n";
 	echo "<th>".lang('name')."</th>\n";
-	echo "<th>&nbsp;</th>\n";
-	echo "<th width=\"16\">&nbsp;</th>\n";
+	echo "<th class=\"pageicon\">&nbsp;</th>\n";
+	echo "<th class=\"pageicon\">&nbsp;</th>\n";
 	echo "</tr>\n";
 	echo '</thead>';
 	echo '<tbody>';
@@ -69,12 +67,12 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
-				echo "<td width=\"16\"><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
+				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                 echo "</a></td>\n";
-				echo "<td width=\"16\"><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				echo "<td><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
 				echo "</tr>\n";
@@ -91,7 +89,16 @@ if (isset($_GET["message"])) {
 #if ($add) {
 ?>
 
-<div class="button"><a href="addhtmlblob.php"><?php echo lang('addhtmlblob')?></a></div><br />
+	<div class="pageoptions">
+		<a href="addcontent.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addhtmlblob')).'</a>'; 
+				echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
+			?>
+		</a>
+	</div>
+</div>
+<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
 
 <!--
 <div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>

@@ -217,8 +217,6 @@ include_once("header.php");
 /*]]>*/
 </script>
 
-<?php echo "<h3>".lang('imagemanagement')."</h3>"; ?>
-
 <?php
 
 
@@ -232,14 +230,14 @@ $filetext = "";
 
 if ($errors != "")
 {
-	echo "<ul class=\"error\">$errors</ul>\n";
+	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
 }
 
-//echo "<h4>".lang('currentdirectory').": ".($reldir==""?"/":$reldir)."</h4>";
-//echo '<table cellspacing="0" class="admintable">';
-//echo "<tr><td width=\"30\">&nbsp;</td><td>".lang('filename')."</td><td width=\"10%\">".lang('filesize')."</td><td width=\"18\">&nbsp;</td></tr>";
+echo '<div class="pagecontainer">';
+echo '<p class="pageheader">'.lang("imagemanagement").'</p>';
+
 ?>
-<iframe src="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" name="imgManager" class="imagefilesFrame" title="Image Selection" frameborder="0"></iframe>
+<iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>
 
 <?php
 
@@ -247,22 +245,22 @@ if ($access)
 {
 ?>
 
-
-<form enctype="multipart/form-data" action="imagefiles.php" method="post" name="uploader">
-	<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
-	<table border="0" cellpadding="0" cellspacing="0" summary="" class="box">
-		<tr>
-			<td align="right" style="padding-top: 10px;"><?php echo lang('uploadfile')?>:</td>
-			<td style="padding-top: 10px;"><input name="uploadfile" type="file" />
-			<input type="submit" value="<?php echo lang('send')?>" /></td>
-		</tr>
-		<tr>
-			<td align="right"><?php echo lang('createnewfolder')?>:</td>
-			<td><input type="text" name="newdir" /><input type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></td>
-		</tr>
-	</table>
-	<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+<form enctype="multipart/form-data" action="imagefiles.php" method="post">
+	<div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
+		<p class="pageinput">
+			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
+			<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
+			<input name="uploadfile" type="file" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('send')?>" />
+		</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('createnewfolder')?>:</p>
+		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
+	</div>
 </form>
+
+</div>
 
 <?php
 }

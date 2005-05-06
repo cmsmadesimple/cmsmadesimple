@@ -30,13 +30,13 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-	echo "<p class=\"error\">".$_GET["message"]."</p>";
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
 }
 
 ?>
-<h3><?php echo lang('currenttemplates')?></h3>
 
-<p><a href="toplayout.php"><?php echo lang('back')?></a></p>
+<div class="pagecontainer">
+	<div class="pageoverflow">
 
 <?php
 
@@ -112,26 +112,26 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	if (count($templatelist) > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($templatelist), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, count($templatelist), $limit)."</p>";
 	}
-
+	echo '<p class="pageheader">'.lang('currenttemplates').'</p></div>';
 	if ($templatelist && count($templatelist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">"."\n";
+		echo '<table cellspacing="0" class="pagetable">';
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<th width=\"50%\">".lang('template')."</th>\n";
-		echo "<th>".lang('default')."</th>\n";
-		echo "<th>".lang('active')."</th>\n";
+		echo '<th class="pagew50">'.lang('template').'</th>';
+		echo "<th class=\"pagepos\">".lang('default')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
 		if ($edit)
-			echo "<th>&nbsp;</th>\n";
-		echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pagepos\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($add)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($all)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 
 		echo "</tr>\n";
 		echo '</thead>';
@@ -149,24 +149,24 @@ if (isset($_GET["message"])) {
 			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('false.gif', lang('false'))."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
-				echo "<td align=\"center\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
-				echo "<td align=\"center\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
+				echo "<td class=\"pagepos\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
+				echo "<td class=\"pagepos\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 				# set template to all content
 				if ($all)
-					echo "<td align=\"center\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
+					echo "<td class=\"pagepos\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 				# view css association
-				echo "<td width=\"16\"><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
+				echo "<td><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
                 echo $themeObject->DisplayImage('css.gif', lang('attachstylesheets'));
                 echo "</a></td>\n";
 
 				# add new template
 				if ($add)
 				    {
-					echo "<td width=\"16\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."\">";
+					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."\">";
                     echo $themeObject->DisplayImage('copy.gif', lang('copy'));
                     echo "</a></td>\n";
                     }
@@ -174,7 +174,7 @@ if (isset($_GET["message"])) {
 				# edit template
 				if ($edit)
 				    {
-					echo "<td width=\"16\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
+					echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
                     echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                     echo "</a></td>\n";
                     }
@@ -182,7 +182,7 @@ if (isset($_GET["message"])) {
 				# remove template
 				if ($remove)
 				    {
-					echo "<td width=\"16\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                     echo "</a></td>\n";
         }
@@ -201,8 +201,16 @@ if (isset($_GET["message"])) {
 
 if ($add) {
 ?>
-
-<div class="button"><a href="addtemplate.php"><?php echo lang('addtemplate')?></a></div><br />
+	<div class="pageoptions">
+		<a href="addtemplate.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addtemplate')).'</a>'; 
+				echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
+			?>
+		</a>
+	</div>
+</div>
+<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 }

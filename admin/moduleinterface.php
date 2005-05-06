@@ -53,11 +53,9 @@ include_once("header.php");
 if (count($gCms->modules) > 0)
 {
 
-?>
-
-	<h3><?php echo lang('moduleinterface', array($module))?></h3>
-
-<?php
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+	echo '<p class="pageheader">'.lang('moduleinterface', array($module)).'</p></div>';
 
 	if (isset($gCms->modules[$module]))
 	{
@@ -68,12 +66,15 @@ if (count($gCms->modules) > 0)
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;
+		echo '</div>';
 	}
 	else
 	{
 		redirect("index.php");
 	}
 }
+
+echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

@@ -76,15 +76,11 @@ if ($access)
 					echo $modinstance->InstallPostMessage();
 					$content = @ob_get_contents();
 					@ob_end_clean();
-					echo "<div class=\"moduleabout\">";
-					echo "<h2>".lang('moduleinstallmessage', array($module))."</h2>";
+					echo '<div class="pagecontainer">';
+					echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
 					echo $content;
-					?>
-					<FORM ACTION="listmodules.php" METHOD="get">
-					<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-					</FORM>
-					<?php
 					echo "</div>";
+					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
 					include_once("footer.php");
 					exit;
 					
@@ -148,15 +144,11 @@ if ($access)
 					echo $modinstance->UninstallPostMessage();
 					$content = @ob_get_contents();
 					@ob_end_clean();
-					echo "<div class=\"moduleabout\">";
-					echo "<h2>".lang('moduleuninstallmessage', array($module))."</h2>";
+					echo '<div class="pagecontainer">';
+					echo '<p class="pageheader">'.lang('moduleuninstallmessage', array($module)).'</p>';					
 					echo $content;
-					?>
-					<FORM ACTION="listmodules.php" METHOD="get">
-					<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-					</FORM>
-					<?php
 					echo "</div>";
+					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 					include_once("footer.php");
 					exit;
 				}
@@ -191,8 +183,8 @@ if ($action == "showmoduleabout")
 {
 	if (isset($gCms->modules[$module]['object']))
 	{
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('moduleabout', array($module))."</h2>";
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('moduleabout', array($module)).'</p>';
 		if ($gCms->modules[$module]['object']->GetAuthor() != '')
 		{
 			echo "<br />".lang('author').": " . $gCms->modules[$module]['object']->GetAuthor();
@@ -209,38 +201,31 @@ if ($action == "showmoduleabout")
 			echo "<br />".lang('changehistory').":<br />";
 			echo $gCms->modules[$module]['object']->GetChangeLog() . '<br />';
 		}
-
-		?>
-		<FORM ACTION="listmodules.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
 		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+		exit;
 	}
 }
 else if ($action == "showmodulehelp")
 {
 	if (isset($gCms->modules[$module]['object']))
 	{
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('modulehelp', array($module))."</h2>";
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('modulehelp', array($module)).'</p>';
 		@ob_start();
 		echo $gCms->modules[$module]['object']->GetHelp();
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;
-		?>
-		<FORM ACTION="listmodules.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
 		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+		exit;
 	}
 }
 else if ($action == 'missingdeps')
 {
-	echo "<div class=\"moduleabout\">";
-	echo '<h2>'.lang('depsformodule', array($module)).'</h2>';
+	echo '<div class="pagecontainer">';
+	echo '<p class="pageheader">'.lang('depsformodule', array($module)).'</p>';
 	echo '<table cellspacing="0" class="AdminTable">';
 	echo '<thead>';
 	echo '<tr><th>'.lang('name').'</th><th>'.lang('minimumversion').'</th><th>'.lang('installed').'</th></tr>';
@@ -278,7 +263,7 @@ else if ($action == 'missingdeps')
 
 	echo '</tbody>';
 	echo '</table>';
-
+	echo '</div>';
 	?>
 	<FORM ACTION="listmodules.php" METHOD="get">
 	<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
@@ -304,9 +289,8 @@ else if ($action == 'missingdeps')
 
 			?>
 
-
-	<h3><?php echo lang('modules')?></h3>
-
+	<div class="pagecontainer">
+		<div class="pageoverflow">
 		<?php
 
 		if (isset($_SESSION['modules_messages']) && count($_SESSION['modules_messages']) > 0)
@@ -322,14 +306,15 @@ else if ($action == 'missingdeps')
 
 		?>
 
-	<table cellspacing="0" class="AdminTable" style="width: 600px;">
+	<?php echo '<p class="pageheader">'.lang('modules').'</p></div>'; ?>
+	<table cellspacing="0" class="pagetable">
 		<thead>
 		<tr>
 			<th><?php echo lang('name')?></th>
 			<th><?php echo lang('version')?></th>
 			<th><?php echo lang('status')?></th>
-			<th><?php echo lang('active')?></th>
-			<th width="7%"><?php echo lang('action')?></th>
+			<th class="pagepos"><?php echo lang('active')?></th>
+			<th><?php echo lang('action')?></th>
 			<th><?php echo lang('help')?></th>
 			<th><?php echo lang('about')?></th>
 		</tr>
@@ -347,7 +332,7 @@ else if ($action == 'missingdeps')
 		{
 			$modinstance = $value['object'];
 
-			echo "<tr class=\"$curclass\">\n";
+			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 			echo "<td>$key</td>\n";
             if (!isset($dbm[$key])) #Not installed, lets put up the install button
             {
@@ -398,12 +383,12 @@ else if ($action == 'missingdeps')
 				#Can't be removed if it has a dependency...
 				if (!$modinstance->CheckForDependents())
 				{
-					echo "<td align=\"center\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td><a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
 				}
 				else
 				{
-					echo "<td align=\"center\">".($dbm[$key]['Active']==="1"?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+					echo "<td>".($dbm[$key]['Active']==="1"?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td>".lang('hasdependents')."</td>";
 				}
 			}
@@ -436,6 +421,11 @@ else if ($action == 'missingdeps')
 	}
 
 }
+
+echo '</div>';
+
+echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
+
 
 include_once("footer.php");
 

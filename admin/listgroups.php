@@ -30,9 +30,9 @@ check_login();
 include_once("header.php");
 
 ?>
-<h3><?php echo lang('currentgroups')?></h3>
 
-<p><a href="topusers.php"><?php echo lang('back')?></a></p>
+<div class="pagecontainer">
+	<div class="pageoverflow">
 
 <?php
 
@@ -52,24 +52,24 @@ include_once("header.php");
 	$limit = 20;
 	if (count($grouplist) > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($grouplist), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
 	}
-
+	echo '<p class="pageheader">'.lang('currentgroups').'</p></div>';	
 	if (count($grouplist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<th width=\"60%\">".lang('name')."</th>\n";
-		echo "<th align=\"center\">".lang('active')."</th>\n";
+		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
 		if ($perm)
-			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($assign)
-			echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($edit)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -85,22 +85,22 @@ include_once("header.php");
 		$counter=0;
 		foreach ($grouplist as $onegroup){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
-				echo "<td align=\"center\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
+				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
 				if ($perm)
-					echo "<td align=\"center\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
+					echo "<td class=\"pagepos\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
 				if ($assign)
-					echo "<td align=\"center\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+					echo "<td class=\"pagepos\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
 				if ($edit)
 				    {
-					echo "<td width=\"16\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
+					echo "<td class=\"pageicon\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
                     echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                     echo "</a></td>\n";
                     }
 				if ($remove)
 				    {
-					echo "<td width=\"16\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td class=\"pageicon\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                     echo "</a></td>\n";
                     }
@@ -118,8 +118,17 @@ include_once("header.php");
 
 if (check_permission($userid, 'Add Groups')) {
 ?>
+	<div class="pageoptions">
+		<a href="addgroup.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addgroup')).'</a>'; 
+				echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
+			?>
+		</a>
+	</div>
+</div>
 
-<div class="button"><a href="addgroup.php"><?php echo lang('addgroup')?></a></div><br />
+<p class="pageback"><a class="pageback" href="topusers.php">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 }

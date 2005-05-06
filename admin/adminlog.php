@@ -49,32 +49,31 @@ $from = ($page * $limit) - $limit;
 $query = "SELECT * from ".cms_db_prefix()."adminlog ORDER BY timestamp DESC limit $from, $limit";
 $result = $db->Execute($query);
 
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+
 if ($result && $result->RowCount() > 0) {
-	$page_string = pagination($page, $totalrows, $limit)
+	$page_string = pagination($page, $totalrows, $limit);
+	echo "<p class=\"pageshowrows\">".$page_string."</p>";
+	echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
 
-?>
-
-<h3><?php echo lang('adminlog')?></h3>
-<?php echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>"; ?>
-<table cellspacing="0" class="AdminTable" style="margin-bottom: 0px;">
-	<thead>
-		<tr>
-			<th><?php echo lang('user')?></th>
-			<th><?php echo lang('itemid')?></th>
-			<th><?php echo lang('itemname')?></th>
-			<th><?php echo lang('action')?></th>
-			<th><?php echo lang('date')?></th>
-		</tr>
-	</thead>
-	<tbody>
-
-<?php
+	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+	echo '<thead>';
+	echo "<tr>\n";
+	echo "<th>".lang('user')."</th>\n";
+	echo "<th>".lang('itemid')."</th>\n";
+	echo "<th>".lang('itemname')."</th>\n";
+	echo "<th>".lang('action')."</th>\n";
+	echo "<th>".lang('date')."</th>\n";
+	echo "</tr>\n";
+	echo '</thead>';
+	echo '<tbody>';
 
        $currow = "row1";
 
        while ($row = $result->FetchRow()) {
 
-               echo "<tr class=\"$currow\">\n";
+               echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
                echo "<td>".$row["username"]."</td>\n";
                echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
                echo "<td>".$row["item_name"]."</td>\n";
@@ -85,18 +84,24 @@ if ($result && $result->RowCount() > 0) {
                ($currow == "row1"?$currow="row2":$currow="row1");
 
        }
-?>
-	</tbody>
-</table>
-<?php
-echo "<div align=\"right\" class=\"clearbox\">".$page_string."</div>";
+	   
+	echo '</tbody>';
+	echo '</table>';
 
-       if ($access) {
-               echo "<br><div class=\"button\"><a href=\"adminlog.php?clear=true\">".lang('clearadminlog')."</a></div>";
-       }
-       echo "<br>";
+	}
+	else {
+		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+	}
+
+if ($access) {
+	echo '<div class="pageoptions">';
+	echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
+	echo '</div>';
 }
 
+echo '</div>';
+
+echo '<p class="pageback"><a class="pageback" href="topadmin.php">&#171; '.lang('back').'</a></p>';
 
 
 include_once("footer.php");

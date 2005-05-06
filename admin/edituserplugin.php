@@ -130,45 +130,40 @@ if (strlen($plugin_name)>0)
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".lang('noaccessto', array(lang('editusertag')))."</h3>";
+	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
 }
 else {
 	if ($error != "") {
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";		
 	}
 ?>
 
-<form method="post" action="edituserplugin.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'code\');"';} ?>>
-
-<div class="adminform">
-
-<h3><?php echo lang('editusertag')?></h3>
-
-<table width="100%" border="0">
-
-	<tr>
-		<td width="60">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('code')?></td>
-		<td><?php echo textarea_highlight($use_javasyntax, $code, "code", "syntaxHighlight", "Java") ?></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" /><input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" /><input type="hidden" name="editplugin" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang("editusertag")?></p>
+		<form enctype="multipart/form-data" action="edituserplugin.php" method="post">
+			<div class="pageoverflow">
+				<p class="pagetext">*<?php echo lang('name')?>:</p>
+				<p class="pageinput">
+					<input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" />
+				</p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext">*<?php echo lang('code')?></p>
+				<p class="pageinput"><textarea class="pagetextarea" name="code"></textarea></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext">&nbsp;</p>
+				<p class="pageinput">
+					<input type="hidden" name="addplugin" value="true" />
+					<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+				</p>
+			</div>
+		</form>
 </div>
-
-</form>
-
 <?php
 }
+echo '<p class="pageback"><a class="pageback" href="listusertags.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -29,7 +29,8 @@ check_login();
 include_once("header.php");
 
 ?>
-<h3><?php echo lang('bookmarks')?></h3>
+<div class="pagecontainer">
+	<div class="pageoverflow">
 
 <?php
 
@@ -40,20 +41,22 @@ include_once("header.php");
 	$page = 1;
 	if (isset($_GET['page']))$page = $_GET['page'];
 	$limit = 20;
+	
 	if (count($marklist) > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($marklist), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
 	}
+	echo '<p class="pageheader">'.lang('bookmarks').'</p></div>';
 
 	if (count($marklist) > 0) {
 
-		echo "<table cellspacing=\"0\" class=\"AdminTable\" style=\"width: 500px;\">\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<th width=\"60%\">".lang('name')."</th>\n";
-		echo "<th align=\"center\">".lang('url')."</th>\n";
-		echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
-		echo "<th width=\"7%\" align=\"center\">&nbsp;</th>\n";
+		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('url')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -67,13 +70,13 @@ include_once("header.php");
 		$counter=0;
 		foreach ($marklist as $onemark){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
-				echo "<td width=\"16\"><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">";
+				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">";
                 echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                 echo "</a></td>\n";
-				echo "<td width=\"16\"><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
 				echo "</tr>\n";
@@ -87,8 +90,15 @@ include_once("header.php");
 
 	}
 ?>
-<div class="button"><a href="addbookmark.php"><?php echo lang('addbookmark') ?></a></div><br />
-
+	<div class="pageoptions">
+		<a href="addbookmark.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addbookmark')).'</a>'; 
+				echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
+			?>
+		</a>
+	</div>
+</div>
 <?php
 
 include_once("footer.php");

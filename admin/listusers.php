@@ -30,13 +30,13 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
+    echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"]."</p></div>";
 }
 
 ?>
-<h3><?php echo lang('currentusers')?></h3>
 
-<p><a href="topusers.php"><?php echo lang('back')?></a></p>
+<div class="pagecontainer">
+	<div class="pageoverflow">
 
 <?php
 
@@ -54,18 +54,18 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	if (count($userlist) > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, count($userlist), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
 	}
-
+	echo '<p class="pageheader">'.lang('currentusers').'</p></div>';
 	if ($userlist && count($userlist) > 0){
-		echo '<table cellspacing="0" class="AdminTable" style="width: 500px;">'."\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<th width=\"70%\">".lang('username')."</th>\n";
-		echo "<th align=\"center\">".lang('active')."</th>\n";
-		echo "<th width=\"16\">&nbsp;</th>\n";
+		echo "<th class=\"pagew70\">".lang('username')."</th>\n";
+		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($remove)
-			echo "<th width=\"16\">&nbsp;</th>\n";
+			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -78,12 +78,12 @@ if (isset($_GET["message"])) {
 		$counter=0;
 		foreach ($userlist as $oneuser){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+  			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-				echo "<td align=\"center\">".($oneuser->active == 1?$image_true:$image_false)."</td>\n";
+				echo "<td class=\"pagepos\">".($oneuser->active == 1?$image_true:$image_false)."</td>\n";
 				if ($edit || $userid == $oneuser->id)
 				    {
-					echo "<td width=\"16\"><a href=\"edituser.php?user_id=".$oneuser->id."\">";
+					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
                     echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                     echo "</a></td>\n";
                     }
@@ -93,7 +93,7 @@ if (isset($_GET["message"])) {
 					}
 				if ($remove)
 				    {
-					echo "<td width=\"16\"><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                     echo "</a></td>\n";
 		            }
@@ -111,8 +111,17 @@ if (isset($_GET["message"])) {
 
 if (check_permission($userid, 'Add Users')) {
 ?>
+	<div class="pageoptions">
+		<a href="adduser.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('adduser')).'</a>'; 
+				echo ' <a class="pageoptions" href="adduser.php">'.lang("adduser");
+			?>
+		</a>
+	</div>
+</div>
 
-<div class="button"><a href="adduser.php"><?php echo lang('adduser')?></a></div><br />
+<p class="pageback"><a class="pageback" href="topusers.php">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 }

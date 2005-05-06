@@ -45,15 +45,12 @@ include_once("header.php");
 #******************************************************************************
 if (isset($_GET["message"]))
 {
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
+    echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
 }
 
 ?>
-
-<h3><?php echo lang('liststylesheets')?></h3>
-
-<p><a href="toplayout.php"><?php echo lang('back')?></a></p>
-
+<div class="pagecontainer">
+	<div class="pageoverflow">
 <?php
 
 #******************************************************************************
@@ -74,19 +71,19 @@ if (isset($_GET["message"]))
 	$limit = 20;
 	if ($result->RowCount() > $limit)
 	{
-		echo "<div align=\"right\" class=\"clearbox\">".pagination($page, $result->RowCount(), $limit)."</div>";
+		echo "<p class=\"pageshowrows\">".pagination($page, $result->RowCount(), $limit)."</p>";
 	}
-
+	echo '<p class="pageheader">'.lang('liststylesheets').'</p></div>';
 	if ($result)
 	{
 		# displaying the table header
-		echo '<table cellspacing="0" class="AdminTable" style="width: 500px;">'."\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th>".lang('title')."</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
-		echo "<th>&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -98,16 +95,16 @@ if (isset($_GET["message"]))
 		$counter = 0;
 		while ($one = $result->FetchRow()){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-				echo "<tr class=\"$currow\">\n";
+				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
-				echo "<td width=\"18\"><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
+				echo "<td><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
                 echo $themeObject->DisplayImage('css.gif', lang('attachtotemplate'));
                 echo "</a></td>\n";
 
 				# if user has right to edit
 				if ($modify)
 				{
-					echo "<td width=\"18\"><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\">";
+					echo "<td><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\">";
                     echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                     echo "</a></td>\n";
 				}
@@ -119,7 +116,7 @@ if (isset($_GET["message"]))
 				# if user has right to delete
 				if ($delcss)
 				{
-					echo "<td width=\"18\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                     echo "</a></td>\n";
 				}
@@ -148,8 +145,16 @@ if (isset($_GET["message"]))
 	if ($addcss)
 	{
 ?>
-
-<div class="button"><a href="addcss.php"><?php echo lang('addstylesheet')?></a></div>
+	<div class="pageoptions">
+		<a href="addcontent.php">
+			<?php 
+				echo $themeObject->DisplayImage('newobject.gif', lang('addstylesheet')).'</a>'; 
+				echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
+			?>
+		</a>
+	</div>
+</div>
+<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 	} # end if add css

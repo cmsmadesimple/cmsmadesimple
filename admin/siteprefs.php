@@ -89,7 +89,7 @@ else if (isset($_POST["editsiteprefs"]))
 		audit(-1, '', 'Edited Site Preferences');
 		//redirect("siteprefs.php");
 		//return;
-		$error .= "<li>".lang('prefsupdated').'</li>';
+		$message .= lang('prefsupdated');
 	}
 	else
 	{
@@ -123,59 +123,60 @@ if ($result && $result->RowCount() > 0)
 include_once("header.php");
 
 if ($error != "") {
-	echo "<ul class=\"error\">".$error."</ul>";
+	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
 }
 if ($message != "") {
-	echo "<h3>$message</h3>";
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 ?>
 
-<form name="siteprefform" id="siteprefform" method="post" action="siteprefs.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'custom404,sitedownmessage\');"';} ?>>
-
-<div class="AdminForm">
-
-<h3><?php echo lang("siteprefs")?></h3>
-
-<table width="100%" cellpadding="4" cellspacing="0" border="0">
-	<tr>
-		<th><?php echo lang('clearcache') ?>:</th>
-		<td><input type="submit" name="clearcache" value="<?php echo lang('clear') ?>" /></td>
-	</tr>
-	<tr>
-		<th><?php echo lang('enablecustom404') ?>:</th>
-		<td><input type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></td>
-	</tr>
-	<tr>
-		<th><?php echo lang('custom404')?>:</th>
-		<td>
-			<?php echo textarea_highlight($use_javasyntax, $custom404, 'custom404'); ?><br />
-			<?php echo lang('template')?>:
-			<select name="custom404template">
-			<?php
-				foreach ($templates as $key=>$value)
-				{
-					echo "<option value=\"".$key."\"";
-					if ($key == $custom404template)
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang("siteprefs")?></p>
+	<form id="siteprefform" method="post" action="siteprefs.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>
+			<p class="pageinput">
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="clearcache" value="<?php echo lang('clear') ?>" />
+			</p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('enablecustom404') ?>:</p>
+			<p class="pageinput"><input class="pagenb" type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('custom404')?>:</p>
+			<p class="pageinput"><textarea class="pagetextarea" name="custom404" cols="" rows=""></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('template')?>:</p>
+			<p class="pageinput">
+				<select name="custom404template">
+				<?php
+					foreach ($templates as $key=>$value)
 					{
-						echo " selected=\"selected\"";
+						echo "<option value=\"".$key."\"";
+						if ($key == $custom404template)
+						{
+							echo " selected=\"selected\"";
+						}
+						echo ">".$value."</option>";
 					}
-					echo ">".$value."</option>";
-				}
-			?>
-			</select>
-		</td>
-	</tr>
-	<tr>
-		<th><?php echo lang('enablesitedown')?>:</th>
-		<td><input type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked=\"checked\""?> /></td>
-	</tr>
-	<tr>
-		<th><?php echo lang('sitedownmessage')?>:</th>
-		<td>
-			<?php echo textarea_highlight($use_javasyntax, $sitedownmessage,'sitedownmessage'); ?>
-			<!--<br>
-			<?php echo lang('template')?>:
-			<select name="sitedownmessagetemplate">
+				?>
+				</select>
+			</p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('enablesitedown')?>:</p>
+			<p class="pageinput"><input class="pagenb" type="checkbox" name="enablesitedownmessage" <?php if ($enablesitedownmessage == "1") echo "checked=\"checked\""?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
+			<p class="pageinput"><textarea class="pagetextarea" name="sitedownmessage" cols="" rows=""></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('template')?>:</p>
+			<p class="pageinput">
+			<select>
 			<?php
 				foreach ($templates as $key=>$value)
 				{
@@ -188,58 +189,45 @@ if ($message != "") {
 				}
 			?>
 			</select>
-			-->
-		</td>
-	</tr>
-	<!--
-	<tr>
-		<th><?php #echo lang('useadvancedcss')?>:</th>
-		<td>
-			<select name="useadvancedcss">
-				<option value="1"<?php #echo ($useadvancedcss=="1"?" selected=\"selected\"":"")?>><?php #echo lang('true')?></option>
-				<option value="0"<?php #echo ($useadvancedcss=="0"?" selected=\"selected\"":"")?>><?php #echo lang('false')?></option>
-			</select>
-		</td>
-	</tr>
-	-->
+			</p>
+		</div>
   <?
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
-	<tr>	  
-		<th><?php echo lang('admintheme') ?>:</th>
-		<td>
-			<select name="logintheme">
+	<div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('admintheme') ?>:</p>
+		<p class="pageinput">
+		<select name="logintheme">
 			<?
-		  while (($file = readdir($dir)) !== false) {
-		  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
-		  		?>
+			  while (($file = readdir($dir)) !== false) {
+				  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
+			?>
 		  		<option value="<?=$file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?=$file?></option>				  
-				  <?
-		  	}
-		  }
-				?>				
-			</select>
-		</td>
-	</tr>
+			<?
+					}
+			  }
+			?>		
+		</select>
+		</p>
+	</div>
 	<?}?>
 	
 	
 	<?php if ($access) { ?>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="editsiteprefs" value="true" />
-		<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
+	<div class="pageoverflow">
+		<p class="pagetext">&nbsp;</p>
+		<p class="pageinput">
+			<input type="hidden" name="editsiteprefs" value="true" />
+			<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+		</p>
+	</div>
 	<?php } ?>
-</table>
-
+	</form>
 </div>
 
-</form>
-
 <?php
-
+echo '<p class="pageback"><a class="pageback" href="topadmin.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
