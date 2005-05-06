@@ -87,8 +87,9 @@ else if (isset($_POST["editsiteprefs"]))
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
 		audit(-1, '', 'Edited Site Preferences');
-		redirect("index.php");
-		return;
+		//redirect("siteprefs.php");
+		//return;
+		$error .= "<li>".lang('prefsupdated').'</li>';
 	}
 	else
 	{
