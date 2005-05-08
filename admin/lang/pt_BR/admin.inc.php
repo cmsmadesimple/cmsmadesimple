@@ -283,4 +283,5 @@ $lang['admin']['database'] = 'Banco de Dados';
 $lang['admin']['filemanager'] = 'Gerenciador de Arquivos';
 $lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template'; //needs translation
 $lang['admin']['attachstylesheets'] = 'Attach Stylesheets'; //needs translation
+$lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
 ?>

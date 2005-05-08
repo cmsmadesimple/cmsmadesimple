@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='usersgroups';
-$CMS_ADMIN_TITLE='modifygroupassignments';
 
 require_once("../include.php");
 

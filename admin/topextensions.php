@@ -19,9 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='extensions';
-$CMS_ADMIN_TITLE='extensions';
-$CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 

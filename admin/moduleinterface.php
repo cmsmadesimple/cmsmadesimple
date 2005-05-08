@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_ADMIN_TITLE='module';
-$CMS_TOP_MENU='extensions';
 
 require_once("../include.php");
 
@@ -37,16 +35,6 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 		$htmlarea_replaceall = true;
 	}
 }
-
-if (isset($gCms->modules[$module]))
-{
-    $CMS_ADMIN_SUBTITLE = $gCms->modules[$module]['object']->GetName();
-}
-
-if (count($gCms->modules) > 0 && isset($gCms->modules[$module]['object']))
-    {
-    $CMS_TOP_MENU=$gCms->modules[$module]['object']->GetAdminSection();
-    }
 
 include_once("header.php");
 

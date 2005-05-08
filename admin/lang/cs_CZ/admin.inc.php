@@ -283,4 +283,5 @@ $lang['admin']['showbookmarks'] = 'Ukázat administrační záložky';
 $lang['admin']['showrecent'] = 'Ukázat nejčastěji používané stránky';
 $lang['admin']['attachtotemplate'] = 'Připojit styl k šabloně';
 $lang['admin']['attachstylesheets'] = 'Připojit styl';
+$lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
 ?>

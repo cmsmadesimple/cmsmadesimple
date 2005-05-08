@@ -21,41 +21,25 @@ else
 $gCms->variables['admintheme']=&$themeObject;
 
 $themeObject->SendHeaders(isset($charsetsent), get_encoding());
+$themeObject->PopulateAdminNavigation($_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
 
-if (isset($CMS_ADMIN_TITLE))
-    {
-    $themeObject->title = lang($CMS_ADMIN_TITLE);
-    }
-else
-    {
-    $themeObject->title = lang('adminsystemtitle');
-    }
 if (isset($CMS_ADMIN_SUBTITLE))
     {
     $themeObject->title .= " : ".$CMS_ADMIN_SUBTITLE;
     }
 
-if (! isset($CMS_EXCLUDE_FROM_RECENT))
-{
-    $themeObject->AddAsRecentPage();
-}
-
 $themeObject->DisplayDocType();
 $themeObject->DisplayHTMLStartTag();
 $themeObject->DisplayHTMLHeader();
 $themeObject->DisplayBodyTag();
-$themeObject->DoTopMenu($CMS_TOP_MENU,$_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
+$themeObject->DoTopMenu( $_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
 $themeObject->DisplayMainDivStart();
-
+// we've removed the Recent Pages stuff, but other things could go in this box
+// so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
 $marks = get_preference($userid, 'bookmarks');
-$recent = get_preference($userid, 'recent');
-if ($marks || $recent)
+if ($marks)
     {
     $themeObject->StartRighthandColumn();
-    if ($recent)
-        {
-        $themeObject->DoRecentPages();
-        }
     if ($marks)
         {
         $themeObject->DoBookmarks();

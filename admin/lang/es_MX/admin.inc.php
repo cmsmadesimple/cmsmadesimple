@@ -283,4 +283,5 @@ $lang['admin']['showbookmarks'] = 'Mostrar Marcadores del Admin'; //needs transl
 $lang['admin']['showrecent'] = 'Muestra las Paginas Usadas Recientemente'; //needs translation
 $lang['admin']['attachtotemplate'] = 'Adjunta Hojas de Estilo a una Plantilla'; //needs translation
 $lang['admin']['attachstylesheets'] = 'Adjuntar Hojas de Estilo'; //needs translation
+$lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
 ?>

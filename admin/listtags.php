@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='extensions';
-$CMS_ADMIN_TITLE='tags';
 
 require_once("../include.php");
 

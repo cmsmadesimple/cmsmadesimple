@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='admin';
-$CMS_ADMIN_TITLE='adminlog';
 
 require_once("../include.php");
 

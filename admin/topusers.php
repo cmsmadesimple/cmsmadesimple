@@ -19,9 +19,6 @@
 #$Id: index.php 1307 2005-02-16 03:23:04Z wishy $
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='usersgroups';
-$CMS_ADMIN_TITLE='usersgroups';
-$CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 

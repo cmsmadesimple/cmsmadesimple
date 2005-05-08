@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='bookmarks';
-$CMS_ADMIN_TITLE='bookmarks';
 
 require_once("../include.php");
 

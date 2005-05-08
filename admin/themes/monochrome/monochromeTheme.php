@@ -10,28 +10,33 @@ class monochromeTheme extends AdminTheme {
         echo "<div class=\"logo\"><img src=\"themes/monochrome/images/logo9.gif\" /></div>";
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
         foreach ($this->menuItems as $key=>$menuItem)
-            {
-            $thisItem = $menuItem[0];
-            if (! get_preference(get_userid(), 'bookmarks') &&
-                    preg_match('/makebookmark\.php/',$thisItem['url']))
-                {
-                continue;
-                }
-            echo '<li><a href="'.$thisItem['url'].'"';
-			if ($thisItem['url'] == '../index.php')
-				{
-				echo ' target="_blank"';
-				}
-			if ($thisItem['selected'])
-                {
-                echo ' class="selected"';
-                }
-            if ($key=='bookmarks' && get_preference(get_userid(), 'bookmarks'))
-                {
-                echo ' onMouseOver="Javascript:toggleMarkState()"';
-                }
-            echo ">".$thisItem['title']."</a>";
-            echo "</li>\n";
+        	{
+        	if ($menuItem['parent'] == -1)
+        		{
+				if (! $menuItem['show_in_menu'])
+					{
+					continue;
+					}
+				echo "<li><a href=\"";
+				echo $menuItem['url'];
+				echo "\"";
+				if (array_key_exists('target', $menuItem))
+					{
+					echo " target=" . $menuItem['target'];
+					}
+				if ($menuItem['selected'])
+					{
+					echo " class=\"selected\"";
+					}
+				if ($key=='bookmarks' && get_preference(get_userid(), 'bookmarks'))
+                	{
+                	echo ' onMouseOver="Javascript:toggleMarkState()"';
+                	}
+				
+				echo ">";
+				echo $menuItem['title'];
+				echo "</a>";
+            	}
             }
         echo "</ul></div>\n";
     }

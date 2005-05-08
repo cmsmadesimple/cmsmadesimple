@@ -19,9 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='preferences';
-$CMS_ADMIN_TITLE='userprefs';
-$CMS_EXCLUDE_FROM_RECENT=1;
 
 $default_cms_lang = "";
 if (isset($_POST["default_cms_lang"])) $default_cms_lang = $_POST["default_cms_lang"];
@@ -40,9 +37,6 @@ if (isset($_POST["admintheme"])) $admintheme = $_POST["admintheme"];
 
 $bookmarks = 0;
 if (isset($_POST["bookmarks"])) $bookmarks = $_POST["bookmarks"];
-$recent = 0;
-if (isset($_POST["recent"])) $recent = $_POST["recent"];
-
 
 require_once("../include.php");
 
@@ -67,7 +61,6 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'admintheme', $admintheme);
 	//STOP
 	set_preference($userid, 'bookmarks', $bookmarks);
-	set_preference($userid, 'recent', $recent);
 	audit(-1, '', 'Edited User Preferences');
 	$error = lang('prefsupdated');
 	#redirect("index.php");
@@ -80,7 +73,6 @@ if (isset($_POST["submit_form"])) {
 	$admintheme = get_preference($userid, 'admintheme');
 	//STOP
     $bookmarks = get_preference($userid, 'bookmarks');
-    $recent = get_preference($userid, 'recent');
 }
 
 include_once("header.php");
@@ -164,7 +156,6 @@ if ($error != "") {
 				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>
 				<p class="pageinput">
 					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
-					<input class="pagenb" type="checkbox" name="recent" <?php if ($recent) echo "checked=\"checked\""; ?> /><?php echo lang('showrecent') ?>
 				</p>
 			</div>
 			<div class="pageoverflow">

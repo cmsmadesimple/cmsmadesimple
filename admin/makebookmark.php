@@ -19,7 +19,6 @@
 #$Id$ 
 
 require_once('../include.php');
-$CMS_EXCLUDE_FROM_RECENT=1;
 
 include_once("header.php");
 

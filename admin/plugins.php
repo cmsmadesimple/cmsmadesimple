@@ -20,8 +20,6 @@
 
 $CMS_ADMIN_PAGE=1;
 $LOAD_ALL_MODULES=1;
-$CMS_TOP_MENU='extensions';
-$CMS_ADMIN_TITLE='plugins';
 
 require_once("../include.php");
 

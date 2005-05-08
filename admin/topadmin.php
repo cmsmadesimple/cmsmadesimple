@@ -19,9 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='admin';
-$CMS_ADMIN_TITLE='admin';
-$CMS_EXCLUDE_FROM_RECENT=1;
 
 require_once("../include.php");
 

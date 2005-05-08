@@ -138,6 +138,30 @@ class AdminTheme
         }
     }
     
+    /**
+     * MenuListSectionModules
+     * This method reformats module information for display in menus. When passed the
+     * name of the admin section, it returns an array of associations:
+     * array['module-name']['url'] is the link to that module, and
+     * array['module-name']['description'] is the language-specific short description of
+     *   the module.
+     *
+     * @param section - section to display
+     */
+    function MenuListSectionModules($section)
+    {
+    	$modList = array();
+        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
+            {
+            foreach($this->modulesBySection[$section] as $sectionModule)
+                {
+                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
+                    $sectionModule['key'];
+                $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
+                }
+            }
+        return $modList;
+    }
 
     /**
      * SetModuleAdminInterfaces
@@ -277,88 +301,6 @@ class AdminTheme
     	   }
     }
     
-    /**
-     * DisplaySectionModules
-     * This method displays all of the modules that are in the specified section,
-     * surrounded by a "MainMenuItem" div.
-     *
-     * This method is not currently used by the admin framework, and may be removed
-     * if no-one sees a need for it in their Admin themes.
-     *
-     * @param section - section to display
-     */
-    function DisplaySectionModules($section)
-    {
-        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
-        {
-            foreach($this->modulesBySection[$section] as $sectionModule)
-                {
-                echo "<div class=\"MainMenuItem\">\n";
-                echo "<a href=\"moduleinterface.php?module=";
-                echo $sectionModule['key']."\">".$sectionModule['name']."</a>\n";
-                if ($sectionModule['description'] != '')
-                    {
-                    echo '<span class="description">'.$sectionModule['description'].'</span>';
-                    }
-                echo "</div>\n";
-                }
-        }
-    }
-
-    /**
-     * ListSectionModules
-     * This method presents a nice, human-readable list of modules that are in the
-     * specified admin section. If you specify that these are the first subitems (of
-     * that section), the list will be prefixed with the language-specific
-     * "Submitems:" tag.
-     *
-     * This method is not currently used by the admin framework, and may be removed
-     * if no-one sees a need for it in their Admin themes.
-     *
-     * @param section - section to display
-     * @param firstSubitem - boolean, is this the first subitem to be displayed in the list?
-     */
-    function ListSectionModules($section, $firstSubitem=false)
-    {
-        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
-            {
-            if ($firstSubitem)
-                {
-                echo " ".lang('subitems').": ";
-                }
-            foreach($this->modulesBySection[$section] as $sectionModule)
-                {
-                echo ", <a href=\"moduleinterface.php?module=".$sectionModule['key'];
-                echo "\">".$sectionModule['name']."</a>";
-                }
-            }
-    }
-
-    /**
-     * MenuListSectionModules
-     * This method reformats module information for display in menus. When passed the
-     * name of the admin section, it returns an array of associations:
-     * array['module-name']['url'] is the link to that module, and
-     * array['module-name']['description'] is the language-specific short description of
-     *   the module.
-     *
-     * @param section - section to display
-     */
-    function MenuListSectionModules($section)
-    {
-    	$modList = array();
-        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
-            {
-            foreach($this->modulesBySection[$section] as $sectionModule)
-                {
-                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
-                    $sectionModule['key'];
-                $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
-                }
-            }
-        return $modList;
-    }
-
 
     /**
      * LoadRecentPages
@@ -602,7 +544,7 @@ class AdminTheme
      * @param query the query-string portion of the url
      *
      */
-    function PopulateAdminNavigation($cms_top='',$url,$query)
+    function PopulateAdminNavigation($url,$query)
     {
         if (count($this->menuItems) > 0)
             {
@@ -617,226 +559,233 @@ class AdminTheme
             {
             $script = array_pop(explode('/',$url));
     	    }
-        $count = 0;
-    	$this->menuItems['main'][$count]['url'] = 'index.php';
-    	$this->menuItems['main'][$count]['title'] = $this->FixSpaces(lang('main'));
-        $this->menuItems['main'][$count]['description'] = '';
-    	$this->menuItems['main'][$count++]['selected'] = ($cms_top=='main');
+    	    
+    	$this->menuItems = array(
+    	    // base main menu ---------------------------------------------------------
+            'main'=>array('url'=>'index.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('main')),
+                    'description'=>'','show_in_menu'=>true),
+            // base content menu ---------------------------------------------------------
+            'content'=>array('url'=>'topcontent.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('content')),
+                    'description'=>lang('contentdescription'),'show_in_menu'=>true),
+            'pages'=>array('url'=>'listcontent.php','parent'=>'content',
+                    'title'=>$this->FixSpaces(lang('pages')),
+                    'description'=>lang('pagesdescription'),'show_in_menu'=>true),
+            'addpage'=>array('url'=>'addcontent.php','parent'=>'pages',
+                    'title'=>$this->FixSpaces(lang('addcontent')),
+                    'description'=>lang('addcontent'),'show_in_menu'=>false),
+            'editpage'=>array('url'=>'editcontent.php','parent'=>'pages',
+                    'title'=>$this->FixSpaces(lang('editpage')),
+                    'description'=>lang('editpage'),'show_in_menu'=>false),
+            'files'=>array('url'=>'files.php','parent'=>'content',
+                    'title'=>$this->FixSpaces(lang('filemanager')),
+                    'description'=>lang('filemanagerdescription'),'show_in_menu'=>$this->HasPerm('filePerms')),
+            'images'=>array('url'=>'imagefiles.php','parent'=>'content',
+                    'title'=>$this->FixSpaces(lang('imagemanager')),
+                    'description'=>lang('imagemanagerdescription'),'show_in_menu'=>$this->HasPerm('filePerms')),
+             // base layout menu ---------------------------------------------------------
+            'layout'=>array('url'=>'toplayout.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('layout')),
+                    'description'=>lang('layoutdescription'),'show_in_menu'=>$this->HasPerm('layoutPerms')),
+            'template'=>array('url'=>'listtemplates.php','parent'=>'layout',
+                    'title'=>$this->FixSpaces(lang('templates')),
+                    'description'=>lang('templatesdescription'),'show_in_menu'=>$this->HasPerm('templatePerms')),
+            'addtemplate'=>array('url'=>'addtemplate.php','parent'=>'template',
+                    'title'=>$this->FixSpaces(lang('addtemplate')),
+                    'description'=>lang('addtemplate'),'show_in_menu'=>false),
+            'edittemplate'=>array('url'=>'edittemplate.php','parent'=>'template',
+                    'title'=>$this->FixSpaces(lang('edittemplate')),
+                    'description'=>lang('edittemplate'),'show_in_menu'=>false),
+            'listcssassoc'=>array('url'=>'listcssassoc.php','parent'=>'edittemplate',
+                    'title'=>$this->FixSpaces(lang('currentassociations')),
+                    'description'=>lang('currentassociations'),'show_in_menu'=>false),
+            'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
+                    'title'=>$this->FixSpaces(lang('copytemplate')),
+                    'description'=>lang('copytemplate'),'show_in_menu'=>false),
+            'listcss'=>array('url'=>'listcss.php','parent'=>'layout',
+                    'title'=>$this->FixSpaces(lang('stylesheets')),
+                    'description'=>lang('stylesheetsdescription'),
+                    'show_in_menu'=>($this->HasPerm('cssPerms') || $this->HasPerm('cssAssocPerms'))),
+            'addcss'=>array('url'=>'addcss.php','parent'=>'listcss',
+                    'title'=>$this->FixSpaces(lang('addstylesheet')),
+                    'description'=>lang('addstylesheet'),'show_in_menu'=>false),
+            'editcss'=>array('url'=>'editcss.php','parent'=>'listcss',
+                    'title'=>$this->FixSpaces(lang('editcss')),
+                    'description'=>lang('editcss'),'show_in_menu'=>false),
+            'templatecss'=>array('url'=>'templatecss.php','parent'=>'editcss',
+                    'title'=>$this->FixSpaces(lang('templatecss')),
+                    'description'=>lang('templatecss'),'show_in_menu'=>false),
+            'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'layout',
+                    'title'=>$this->FixSpaces(lang('htmlblobs')),
+                    'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->HasPerm('htmlPerms')),
+            'addblob'=>array('url'=>'addhtmlblobs.php','parent'=>'blobs',
+                    'title'=>$this->FixSpaces(lang('addhtmlblob')),
+                    'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
+            'editblob'=>array('url'=>'edithtmlblobs.php','parent'=>'blobs',
+                    'title'=>$this->FixSpaces(lang('edithtmlblob')),
+                    'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
+             // base user/groups menu ---------------------------------------------------------
+            'usersgroups'=>array('url'=>'topusers.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('usersgroups')),
+                    'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->HasPerm('usersGroupsPerms')),
+            'users'=>array('url'=>'listusers.php','parent'=>'usersgroups',
+                    'title'=>$this->FixSpaces(lang('users')),
+                    'description'=>lang('usersdescription'),'show_in_menu'=>$this->HasPerm('userPerms')),
+            'adduser'=>array('url'=>'adduser.php','parent'=>'users',
+                    'title'=>$this->FixSpaces(lang('adduser')),
+                    'description'=>lang('adduser'),'show_in_menu'=>false),
+            'edituser'=>array('url'=>'edituser.php','parent'=>'users',
+                    'title'=>$this->FixSpaces(lang('edituser')),
+                    'description'=>lang('edituser'),'show_in_menu'=>false),
+            'groups'=>array('url'=>'listgroups.php','parent'=>'usersgroups',
+                    'title'=>$this->FixSpaces(lang('groups')),
+                    'description'=>lang('groupsdescription'),'show_in_menu'=>$this->HasPerm('groupPerms')),
+            'addgroup'=>array('url'=>'addgroup.php','parent'=>'groups',
+                    'title'=>$this->FixSpaces(lang('addgroup')),
+                    'description'=>lang('addgroup'),'show_in_menu'=>false),
+            'editgroup'=>array('url'=>'editgroup.php','parent'=>'groups',
+                    'title'=>$this->FixSpaces(lang('editgroup')),
+                    'description'=>lang('editgroup'),'show_in_menu'=>false),
+            'groupmembers'=>array('url'=>'changegroupassign.php','parent'=>'usersgroups',
+                    'title'=>$this->FixSpaces(lang('groupassignments')),
+                    'description'=>lang('groupassignmentdescription'),'show_in_menu'=>$this->HasPerm('groupMemberPerms')),                    
+            'groupperms'=>array('url'=>'changegroupperm.php','parent'=>'usersgroups',
+                    'title'=>$this->FixSpaces(lang('groupperms')),
+                    'description'=>lang('grouppermsdescription'),'show_in_menu'=>$this->HasPerm('groupPermPerms')),                    
+             // base extensions menu ---------------------------------------------------------
+            'extensions'=>array('url'=>'topextensions.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('extensions')),
+                    'description'=>lang('extensionsdescription'),'show_in_menu'=>$this->HasPerm('extensionsPerms')),
+            'modules'=>array('url'=>'listmodules.php','parent'=>'extensions',
+                    'title'=>$this->FixSpaces(lang('modules')),
+                    'description'=>lang('moduledescription'),'show_in_menu'=>$this->HasPerm('modulePerms')),
+            'tags'=>array('url'=>'listtags.php','parent'=>'extensions',
+                    'title'=>$this->FixSpaces(lang('tags')),
+                    'description'=>lang('tagdescription'),'show_in_menu'=>true),
+            'usertags'=>array('url'=>'listusertags.php','parent'=>'extensions',
+                    'title'=>$this->FixSpaces(lang('usertags')),
+                    'description'=>lang('usertagdescription'),'show_in_menu'=>$this->HasPerm('codeBlockPerms')),
+            'addusertag'=>array('url'=>'adduserplugin.php','parent'=>'usertags',
+                    'title'=>$this->FixSpaces(lang('addusertag')),
+                    'description'=>lang('addusertag'),'show_in_menu'=>false),
+            'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
+                    'title'=>$this->FixSpaces(lang('editusertag')),
+                    'description'=>lang('editusertag'),'show_in_menu'=>false),
+             // base preferences menu ---------------------------------------------------------
+            'preferences'=>array('url'=>'editprefs.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('preferences')),
+                    'description'=>lang('preferencesdescription'),'show_in_menu'=>true),
+             // base admin menu ---------------------------------------------------------
+            'admin'=>array('url'=>'topadmin.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('admin')),
+                    'description'=>lang('admindescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
+            'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('preferences')),
+                    'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
+            'adminlog'=>array('url'=>'adminlog.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('adminlog')),
+                    'description'=>lang('adminlogdescription'),'show_in_menu'=>true),
+             // base view site menu ---------------------------------------------------------
+            'viewsite'=>array('url'=>'../index.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('viewsite')),
+                    'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
+             // base logout menu ---------------------------------------------------------
+             'logout'=>array('url'=>'logout.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('logout')),
+                    'description'=>'','show_in_menu'=>true),
+             // base bookmarks menu ---------------------------------------------------------
+            'bookmarks'=>array('url'=>'makebookmark.php?title='.urlencode($this->title),
+            		'parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('menu_bookmarks')),
+                    'description'=>'','show_in_menu'=> get_preference(get_userid(), 'bookmarks')),
+            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'bookmarks',
+                    'title'=>$this->FixSpaces(lang('addbookmark')),
+                    'description'=>lang('addbookmark'),'show_in_menu'=>false),
+            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'bookmarks',
+                    'title'=>$this->FixSpaces(lang('editbookmark')),
+                    'description'=>lang('editbookmark'),'show_in_menu'=>false)
+    	);
 
-    	$count = 0;
-        $this->menuItems['content'][$count]['url'] = 'topcontent.php';
-    	$this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('content'));
-    	$this->menuItems['content'][$count]['description'] = lang('contentdescription');
-        $this->menuItems['content'][$count++]['selected'] = ($cms_top=='content');
-
-        $this->menuItems['content'][$count]['url'] = 'listcontent.php';
-        $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('pages'));
-        $this->menuItems['content'][$count]['description'] = lang('pagesdescription');
-        $this->menuItems['content'][$count++]['selected'] = ($script=='listcontent.php');
-
-        if ($this->HasPerm('filePerms'))
-        {
-            $this->menuItems['content'][$count]['url'] = 'files.php';
-            $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('filemanager'));
-            $this->menuItems['content'][$count]['description'] = lang('filemanagerdescription');
-            $this->menuItems['content'][$count++]['selected'] = ($script=='files.php');
-
-            $this->menuItems['content'][$count]['url'] = 'imagefiles.php';
-            $this->menuItems['content'][$count]['title'] = $this->FixSpaces(lang('imagemanager'));
-            $this->menuItems['content'][$count]['description'] = lang('imagemanagerdescription');
-            $this->menuItems['content'][$count++]['selected'] = ($script=='imagefiles.php');
-        }
-
-        $tmpArray = $this->MenuListSectionModules('content');
-        foreach ($tmpArray as $thisKey=>$thisVal)
+		// add in all of the modules
+        foreach ($this->menuItems as $sectionKey=>$sectionArray)
             {
-            $this->menuItems['content'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['content'][$count]['title'] = $this->FixSpaces($thisKey);
-            $this->menuItems['content'][$count]['description'] = $thisVal['description'];
-            $this->menuItems['content'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
-            }
-
-        if ($this->HasPerm('layoutPerms'))
-        {
-            $count = 0;
-            $this->menuItems['layout'][$count]['url'] = 'toplayout.php';
-            $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('layout'));
-            $this->menuItems['layout'][$count]['description'] = lang('layoutdescription');
-            $this->menuItems['layout'][$count++]['selected'] = ($cms_top=='layout');
-            if ($this->HasPerm('templatePerms'))
-            {
-                $this->menuItems['layout'][$count]['url'] = 'listtemplates.php';
-                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('templates'));
-                $this->menuItems['layout'][$count]['description'] = lang('templatesdescription');
-                $this->menuItems['layout'][$count++]['selected'] = ($script=='listtemplates.php');;
-            }
-            if ($this->HasPerm('cssPerms') || $themeObject->HasPerm('cssAssocPerms'))
-            {
-                $this->menuItems['layout'][$count]['url'] = 'listcss.php';
-                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('stylesheets'));
-                $this->menuItems['layout'][$count]['description'] = lang('stylesheetsdescription');
-                $this->menuItems['layout'][$count++]['selected'] = ($script=='listcss.php');;
-            }
-            if ($this->HasPerm('htmlPerms'))
-            {
-                $this->menuItems['layout'][$count]['url'] = 'listhtmlblobs.php';
-                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces(lang('htmlblobs'));
-                $this->menuItems['layout'][$count]['description'] = lang('htmlblobdescription');
-                $this->menuItems['layout'][$count++]['selected'] = ($script=='listhtmlblobs.php');
-            }
-
-            $tmpArray = $this->MenuListSectionModules('layout');
+            $tmpArray = $this->MenuListSectionModules($sectionKey);
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
-                $this->menuItems['layout'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['layout'][$count]['title'] = $this->FixSpaces($thisKey);
-                $this->menuItems['layout'][$count]['description'] = $thisVal['description'];
-                $this->menuItems['layout'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+                $thisModuleKey = $thisKey;
+                $counter = 0;
+                // don't clobber existing keys
+                if (array_key_exists($thisModuleKey,$this->menuItems))
+                    {
+                    while (array_key_exists($thisModuleKey,$this->menuItems))
+                        {
+                        $thisModuleKey = $thisKey.$counter;
+                        $counter++;
+                        }
+                    }
+                $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+                    'parent'=>$sectionKey,
+                    'title'=>$this->FixSpaces($thisKey),
+                    'description'=>$thisVal['description'],
+                    'show_in_menu'=>true);
                 }
-        }
-        if ($this->HasPerm('usersGroupsPerms'))
-        {
-            $count = 0;
-            $this->menuItems['usersgroups'][$count]['url'] = 'topusers.php';
-            $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('usersgroups'));
-            $this->menuItems['usersgroups'][$count]['description'] = lang('usersgroupsdescription');
-            $this->menuItems['usersgroups'][$count++]['selected'] = ($cms_top=='usersgroups');
-            if ($this->HasPerm('userPerms'))
-            {
-                $this->menuItems['usersgroups'][$count]['url'] = 'listusers.php';
-                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('users'));
-                $this->menuItems['usersgroups'][$count]['description'] = lang('usersdescription');
-                $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='listusers.php');;
-            }
-            if ($this->HasPerm('groupPerms'))
-            {
-                $this->menuItems['usersgroups'][$count]['url'] = 'listgroups.php';
-                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groups'));
-                $this->menuItems['usersgroups'][$count]['description'] = lang('groupsdescription');
-                $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='listgroups.php');;
-            }
-            if ($this->HasPerm('groupMemberPerms'))
-            {
-                $this->menuItems['usersgroups'][$count]['url'] = 'changegroupassign.php';
-                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groupassignments'));
-                $this->menuItems['usersgroups'][$count]['description'] = lang('groupassignmentdescription');
-                $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupassign.php');;
-            }
-            if ($this->HasPerm('groupPermPerms'))
-            {
-                $this->menuItems['usersgroups'][$count]['url'] = 'changegroupperm.php';
-                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces(lang('groupperms'));
-                $this->menuItems['usersgroups'][$count]['description'] = lang('grouppermsdescription');
-                $this->menuItems['usersgroups'][$count++]['selected'] = ($script=='changegroupperm.php');;
-            }
-            $tmpArray = $this->MenuListSectionModules('usersgroups');
-            foreach ($tmpArray as $thisKey=>$thisVal)
-                {
-                $this->menuItems['usersgroups'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['usersgroups'][$count]['title'] = $this->FixSpaces($thisKey);
-                $this->menuItems['usersgroups'][$count]['description'] = $thisVal['description'];
-                $this->menuItems['usersgroups'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
-                }
-
-        }
-        if ($this->HasPerm('extensionsPerms'))
-        {
-            $count = 0;
-            $this->menuItems['extensions'][$count]['url'] = 'topextensions.php';
-            $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('extensions'));
-            $this->menuItems['extensions'][$count]['description'] = lang('extensionsdescription');
-            $this->menuItems['extensions'][$count++]['selected'] = ($cms_top=='extensions');
-            if ($this->HasPerm('modulePerms'))
-            {
-                $this->menuItems['extensions'][$count]['url'] = 'listmodules.php';
-                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('modules'));
-                $this->menuItems['extensions'][$count]['description'] = lang('moduledescription');
-                $this->menuItems['extensions'][$count++]['selected'] = ($script=='listmodules.php');;
-            }
-            $this->menuItems['extensions'][$count]['url'] = 'listtags.php';
-            $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('tags'));
-            $this->menuItems['extensions'][$count]['description'] = lang('tagdescription');
-            $this->menuItems['extensions'][$count++]['selected'] = ($script=='listtags.php');
-            if ($this->HasPerm('codeBlockPerms'))
-            {
-                $this->menuItems['extensions'][$count]['url'] = 'listusertags.php';
-                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces(lang('usertags'));
-                $this->menuItems['extensions'][$count]['description'] = lang('usertagdescription');
-                $this->menuItems['extensions'][$count++]['selected'] = ($script=='listusertags.php');;
-            }
-            $tmpArray = $this->MenuListSectionModules('extensions');
-            foreach ($tmpArray as $thisKey=>$thisVal)
-                {
-                $this->menuItems['extensions'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['extensions'][$count]['title'] = $this->FixSpaces($thisKey);
-                $this->menuItems['extensions'][$count]['description'] = $thisVal['description'];
-                $this->menuItems['extensions'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
-                }
-        }
-        $count = 0;
-    	$this->menuItems['preferences'][$count]['url'] = 'editprefs.php';
-    	$this->menuItems['preferences'][$count]['title'] = $this->FixSpaces(lang('preferences'));
-        $this->menuItems['preferences'][$count]['description'] = lang('preferencesdescription');
-        $this->menuItems['preferences'][$count++]['selected'] = ($cms_top=='preferences');
-        $tmpArray = $this->MenuListSectionModules('files');
-        foreach ($tmpArray as $thisKey=>$thisVal)
-            {
-            $this->menuItems['preferences'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['preferences'][$count]['title'] = $this->FixSpaces($thisKey);
-            $this->menuItems['preferences'][$count]['description'] = $thisVal['description'];
-            $this->menuItems['preferences'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
             }
 
-
-        if ($this->HasPerm('adminPerms'))
-        {
-            $count = 0;
-            $this->menuItems['admin'][$count]['url'] = 'topadmin.php';
-            $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('admin'));
-            $this->menuItems['admin'][$count]['description'] = lang('admindescription');
-            $this->menuItems['admin'][$count++]['selected'] = ($cms_top=='admin');
-            if ($this->HasPerm('sitePrefPerms'))
+		// resolve the tree to be doubly-linked,
+		// and make sure the selections are selected            
+        foreach ($this->menuItems as $sectionKey=>$sectionArray)
             {
-                $this->menuItems['admin'][$count]['url'] = 'siteprefs.php';
-                $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('preferences'));
-                $this->menuItems['admin'][$count]['description'] = lang('preferencesdescription');
-                $this->menuItems['admin'][$count++]['selected'] = ($script=='siteprefs.php');;
-            }
-            $this->menuItems['admin'][$count]['url'] = 'adminlog.php';
-            $this->menuItems['admin'][$count]['title'] = $this->FixSpaces(lang('adminlog'));
-            $this->menuItems['admin'][$count]['description'] = lang('adminlogdescription');
-            $this->menuItems['admin'][$count++]['selected'] = ($script=='adminlog.php');;
-            $tmpArray = $this->MenuListSectionModules('admin');
-            foreach ($tmpArray as $thisKey=>$thisVal)
-                {
-                $this->menuItems['admin'][$count]['url'] = $thisVal['url'];
-                $this->menuItems['admin'][$count]['title'] = $this->FixSpaces($thisKey);
-                $this->menuItems['admin'][$count]['description'] = $thisVal['description'];
-                $this->menuItems['admin'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
-                }
-        }
-        $count = 0;
-    	$this->menuItems['viewsite'][$count]['url'] = '../index.php';
-    	$this->menuItems['viewsite'][$count]['title'] = $this->FixSpaces(lang('viewsite'));
-        $this->menuItems['viewsite'][$count]['description'] = '';
-        $this->menuItems['viewsite'][$count]['selected'] = false;
-
-    	$this->menuItems['logout'][$count]['url'] = 'logout.php';
-    	$this->menuItems['logout'][$count]['title'] = $this->FixSpaces(lang('logout'));
-        $this->menuItems['logout'][$count]['description'] = '';
-        $this->menuItems['logout'][$count]['selected'] = false;
-
-    	$this->menuItems['bookmarks'][$count]['url'] = 'makebookmark.php?title='.urlencode($this->title);
-    	$this->menuItems['bookmarks'][$count]['title'] = '[+]';
-        $this->menuItems['bookmarks'][$count]['description'] = '';
-    	$this->menuItems['bookmarks'][$count++]['selected'] = ($cms_top=='bookmarks');
-        $tmpArray = $this->MenuListSectionModules('bookmarks');
-        foreach ($tmpArray as $thisKey=>$thisVal)
-            {
-            $this->menuItems['bookmarks'][$count]['url'] = $thisVal['url'];
-            $this->menuItems['bookmarks'][$count]['title'] = $this->FixSpaces($thisKey);
-            $this->menuItems['bookmarks'][$count]['description'] = $thisVal['description'];
-            $this->menuItems['bookmarks'][$count++]['selected'] = (strpos($query,$thisKey) !== false);
+            // link the children to the parents; a little clumsy since we can't
+            // assume php5-style references in a foreach.
+            $this->menuItems[$sectionKey]['children'] = array();
+            foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
+            	{
+            	if ($subsectionArray['parent'] == $sectionKey)
+            		{
+            		array_push($this->menuItems[$sectionKey]['children'], $subsectionKey);
+            		}
+            	}
+            // set selected
+			if ($script == 'moduleinterface.php')
+				{
+				if (strpos($query,$sectionKey) !== false)
+					{
+            		$this->menuItems[$sectionKey]['selected'] = true;
+            		$this->title .= $sectionArray['title'];
+            		if ($sectionArray['parent'] != -1)
+            			{
+            			$parent = $sectionArray['parent'];
+            			while ($parent != -1)
+            				{
+            				$this->menuItems[$parent]['selected'] = true;
+            				$parent = $this->menuItems[$parent]['parent'];
+            				}
+            			}
+					}
+				else
+					{
+					$this->menuItems[$sectionKey]['selected'] = false;
+					}
+				}
+            else if ($sectionArray['url'] == $script)
+            	{
+            	$this->menuItems[$sectionKey]['selected'] = true;
+            	$this->title .= $sectionArray['title'];
+            	if ($sectionArray['parent'] != -1)
+            		{
+            		$parent = $sectionArray['parent'];
+            		while ($parent != -1)
+            			{
+            			$this->menuItems[$parent]['selected'] = true;
+            			$parent = $this->menuItems[$parent]['parent'];
+            			}
+            		}
+            	}
+            else
+            	{
+            	$this->menuItems[$sectionKey]['selected'] = false;
+            	}
             }
         }
 
@@ -844,15 +793,13 @@ class AdminTheme
      * DoTopMenu
      * Setup function for displaying the top menu.
      *
-     * @param cms_top a flag which can be set in pages to state which section they
-     * belong to.
      * @param url the current page URL
      * @param query the query-string portion of the url
      *
      */
-    function DoTopMenu($cms_top='',$url,$query)
+    function DoTopMenu($url,$query)
     {
-    	$this->PopulateAdminNavigation($cms_top,$url,$query);
+    	$this->PopulateAdminNavigation($url,$query);
         $this->DisplayTopMenu();
     }
 
@@ -875,19 +822,22 @@ class AdminTheme
             // Problem: current page selection, url, etc?
             return -1;
             }
-        $count = 0;
-        foreach ($this->menuItems[$section] as $thisItem)
+        foreach ($this->menuItems[$section]['children'] as $thisChild)
             {
-            if ($count++ < 1)
-                {
-                // skip the first item
-                continue;
-                }
+            $thisItem = $this->menuItems[$thisChild];
+            if (! $thisItem['show_in_menu'])
+            	{
+            	continue;
+            	}
             echo "<div class=\"MainMenuItem\">\n";
             echo "<a href=\"".$thisItem['url']."\"";
-			if ($thisItem['url'] == '../index.php')
+			if (array_key_exists('target', $thisItem))
 				{
-				echo ' target="_blank"';
+				echo " target=" . $thisItem['target'];
+				}
+			if ($thisItem['selected'])
+				{
+				echo " class=\"selected\"";
 				}
             echo ">".$thisItem['title']."</a>\n";
             if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
@@ -910,18 +860,18 @@ class AdminTheme
      */
     function ListSectionPages($section)
     {
-        if (isset($this->menuItems[$section]) && count($this->menuItems[$section]) > 1)
+        if (isset($this->menuItems[$section]['children']) && count($this->menuItems[$section]['children']) > 1)
             {
             echo " ".lang('subitems').": ";
             $count = 0;
-            foreach($this->menuItems[$section] as $thisItem)
+            foreach($this->menuItems[$section]['children'] as $thisChild)
                 {
-                if ($count++ < 1)
+                $thisItem = $this->menuItems[$thisChild];
+                if (! $thisItem['show_in_menu'])
                     {
-                    // skip the first item
                     continue;
                     }
-                if ($count > 2)
+                if ($count++ > 0)
                     {
                     echo ", ";
                     }
@@ -951,31 +901,74 @@ class AdminTheme
             }
         foreach ($this->menuItems as $thisSection=>$menuItem)
             {
-            if (preg_match('/makebookmark\.php/',$menuItem[0]['url']))
-                {
-                continue;
-                }
-            if (strpos(strtolower($menuItem[0]['title']),'main') == 0 && strlen($menuItem[0]['title'])==4)
+            if ($menuItem['parent'] != -1)
+            	{
+            	continue;
+            	}
+            if (! $menuItem['show_in_menu'])
                 {
                 continue;
                 }
             echo "<div class=\"MainMenuItem\">\n";
-            echo "<a href=\"".$menuItem[0]['url']."\"";
-            if ($menuItem[0]['url'] == '../index.php')
-                {
-                echo ' target="_blank"';
-                }
-            echo ">".$menuItem[0]['title']."</a>\n";
+            echo "<a href=\"".$menuItem['url']."\"";
+			if (array_key_exists('target', $menuItem))
+				{
+				echo " target=" . $menuItem['target'];
+				}
+			if ($menuItem['selected'])
+				{
+				echo " class=\"selected\"";
+				}
+            echo ">".$menuItem['title']."</a>\n";
             echo "<span class=\"description\">";
-            if (isset($menuItem[0]['description']) && strlen($menuItem[0]['description']) > 0)
+            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
                 {
-                echo $menuItem[0]['description'];
+                echo $menuItem['description'];
                 }
             $this->ListSectionPages($thisSection);
             echo "</span>\n";
             echo "</div>\n";
             }
     }
+
+
+
+	function renderMenuSection($section, $depth, $maxdepth)
+	{
+		if ($maxdepth > 0 && $depth> $maxdepth)
+			{
+			return;
+			}
+		if (! $this->menuItems[$section]['show_in_menu'])
+			{
+			return;
+			}
+		echo "<li><a href=\"";
+		echo $this->menuItems[$section]['url'];
+		echo "\"";
+		if (array_key_exists('target', $this->menuItems[$section]))
+			{
+			echo " target=" . $this->menuItems[$section]['target'];
+			}
+		if ($this->menuItems[$section]['selected'])
+			{
+			echo " class=\"selected\"";
+			}
+		echo ">";
+		echo $this->menuItems[$section]['title'];
+		echo "</a>";
+		if (count($this->menuItems[$section]['children']) > 0)
+			{
+			echo "<ul>";
+			foreach ($this->menuItems[$section]['children'] as $child)
+				{
+				$this->renderMenuSection($child, $depth+1, $maxdepth);
+				}
+			echo "</ul>";
+			}
+		echo "</li>";
+		return;
+	}
 
 
     /**
@@ -994,41 +987,12 @@ class AdminTheme
     {
         echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
         foreach ($this->menuItems as $key=>$menuItem)
-            {
-            $count = count($menuItem);
-            $counter = 1;
-            foreach ($menuItem as $thisItem)
-                {
-                if (! get_preference(get_userid(), 'bookmarks') &&
-                      preg_match('/makebookmark\.php/',$thisItem['url']))
-                    {
-                    continue;
-                    }
-                echo '<li><a href="'.$thisItem['url'].'"';
-				if ($thisItem['url'] == '../index.php')
-					{
-					echo ' target="_blank"';
-					}
-                if ($thisItem['selected'])
-                    {
-                    echo ' class="selected"';
-                    }
-                echo ">".$thisItem['title']."</a>";
-                if ($count > 1 && $counter == 1)
-                    {
-                    echo "<ul>";
-                    }
-                else if ($count > 1 && $count == $counter)
-                    {
-                    echo "</li></ul>";
-                    }
-                else
-                    {
-                    echo "</li>";
-                    }
-                $counter++;
-                }
-            }
+        	{
+        	if ($menuItem['parent'] == -1)
+        		{
+        		$this->renderMenuSection($key, 0, -1);
+        		}
+        	}
         echo "</ul></div>\n";
     }
 

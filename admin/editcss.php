@@ -34,8 +34,6 @@
 
 
 $CMS_ADMIN_PAGE=1;
-$CMS_ADMIN_TITLE='editcss';
-$CMS_TOP_MENU='layout';
 
 require_once("../include.php");
 

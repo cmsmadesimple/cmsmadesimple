@@ -19,8 +19,6 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='layout';
-$CMS_ADMIN_TITLE='addhtmlblob';
 
 require_once("../include.php");
 require_once("../lib/classes/class.htmlblob.inc.php");

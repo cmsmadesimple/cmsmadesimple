@@ -17,53 +17,63 @@
 
 class modernTheme extends AdminTheme
 {
+
+	function renderMenuSection($section, $depth, $maxdepth)
+	{
+		if ($maxdepth > 0 && $depth> $maxdepth)
+			{
+			return;
+			}
+		if (! $this->menuItems[$section]['show_in_menu'])
+			{
+			return;
+			}
+		echo "<li><a href=\"";
+		echo $this->menuItems[$section]['url'];
+		echo "\"";
+		if (array_key_exists('target', $this->menuItems[$section]))
+			{
+			echo ' rel="external"';
+			}
+		if ($this->menuItems[$section]['selected'])
+			{
+			echo ' class="selected"';
+			}
+		echo ">";
+		echo $this->menuItems[$section]['title'];
+		echo "</a>";
+		if (count($this->menuItems[$section]['children']) > 0)
+			{
+			echo "<ul>";
+			foreach ($this->menuItems[$section]['children'] as $child)
+				{
+				$this->renderMenuSection($child, $depth+1, $maxdepth);
+				}
+			echo "</ul>";
+			}
+		echo "</li>";
+		return;
+	}
+
+
     function DisplayTopMenu()
     {
 		echo '<div><p class="logocontainer"><img src="themes/modern/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
 		$breadcrumbs = array();
-        foreach ($this->menuItems as $key=>$menuItem)
-            {
+        foreach ($this->menuItems as $key=>$menuItem) {
             $count = count($menuItem);
             $counter = 1;
-            foreach ($menuItem as $thisItem)
-                {
-				if ($thisItem['selected']) {
-					array_push($breadcrumbs, array($thisItem['title'] => $thisItem['url']));
-				}
-				
-                if (! get_preference(get_userid(), 'bookmarks') &&
-                      preg_match('/makebookmark\.php/',$thisItem['url']))
-                    {
-                    continue;
-                    }
-				if ($counter == 1) {
-					echo "\n\t\t";
-				}
-                echo "<li";
-                if ($thisItem['selected'])
-                    {
-                    echo ' class="selected"';
-                    }
-                echo '><a href="'.$thisItem['url'].'"';
-				if ($thisItem['url'] == '../index.php')
-					{
-					echo ' rel="external"';
-					}
-                echo ">".$thisItem['title']."</a>";
-                if ($count > 1 && $counter == 1)
-                    {
-                    echo "\n\t\t\t<ul>";
-                    }
-                else if ($count > 1 && $count == $counter)
-                    {
-                    echo "</li></ul></li>";
-                    }
-				else { 
-					echo "</li>";
-					}
-                $counter++;
-                }	
+			if ($menuItem['selected']) {
+				array_push($breadcrumbs, array($menuItem['title'] => $menuItem['url']));
+			}
+			if ($counter == 1) {
+				echo "\n\t\t";
+			}
+        	if ($menuItem['parent'] == -1) {
+        		$this->renderMenuSection($key, 0, -1);
+        	}
+            $counter++;
             }
         echo "\n\t</ul>\n";
 		echo "\t<div class=\"clearb\"></div>\n";
@@ -96,10 +106,7 @@ class modernTheme extends AdminTheme
 		echo '<div id="navt_display" class="navt_show" onclick="change(\'navt_display\', \'navt_hide\', \'navt_show\'); change(\'navt_container\', \'invisible\', \'visible\');"></div>'."\n";
 		echo '<div id="navt_container" class="invisible">'."\n";
 		echo '<div id="navt_tabs">'."\n";
-		if (get_preference($userid, 'recent')) {
-			echo '<div id="navt_recent_pages">'.lang('recentpages').'</div>'."\n";
-		}
-		if (get_preference($userid, 'bookmarks')) {
+		if (get_preference($this->userid, 'bookmarks')) {
 				echo '<div id="navt_bookmarks">'.lang('bookmarks').'</div>'."\n";
 		}
 		echo '</div>'."\n";
@@ -108,7 +115,7 @@ class modernTheme extends AdminTheme
 	}
 
 	function DisplayRecentPages()	 {
-		if (get_preference($userid, 'recent')) {	
+		if (get_preference($this->userid, 'recent')) {	
 			echo '<div id="navt_recent_pages_c">'."\n";
 			$counter = 0;
 			foreach($this->recent as $pg) {
@@ -119,7 +126,7 @@ class modernTheme extends AdminTheme
 	}
 
 	function DisplayBookmarks($marks) {
-		if (get_preference($userid, 'bookmarks')) {	
+		if (get_preference($this->userid, 'bookmarks')) {	
 			echo '<div id="navt_bookmarks_c">'."\n";
 			$counter = 0;
 			foreach($marks as $mark) {
@@ -160,23 +167,20 @@ class modernTheme extends AdminTheme
 	
 	function DisplayAllSectionPages()
 	{
-		if (count($this->menuItems) < 1)
-            {
-            // menu should be initialized before this gets called.
-            // TODO: try to do initialization.
-            // Problem: current page selection, url, etc?
-            return -1;
-            }
         foreach ($this->menuItems as $thisSection=>$menuItem)
             {
-            if (preg_match('/makebookmark\.php/',$menuItem[0]['url']))
+            if ($menuItem['parent'] != -1)
+            	{
+            	continue;
+            	}
+            if (! $menuItem['show_in_menu'])
                 {
                 continue;
                 }
-            if (strpos(strtolower($menuItem[0]['title']),'main') == 0 && strlen($menuItem[0]['title'])==4)
-                {
-                continue;
-                }
+            if ($menuItem['url'] == 'index.php')
+            	{
+            	continue;
+            	}
 				
 			$itemicons = array (
 				"topcontent.php" => "topcontent.gif",
@@ -189,16 +193,17 @@ class modernTheme extends AdminTheme
 				"logout.php" => "logout.gif"
 			);		
             echo "<div class=\"itemmenu\">\n";
-			echo '<a href="'.$menuItem[0]['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$menuItem[0]['url']].'" alt="" /></a>';
-            echo "<a class=\"itemlink\" href=\"".$menuItem[0]['url']."\"";
-            if ($menuItem[0]['url'] == '../index.php')
+			echo '<a href="'.$menuItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$menuItem['url']].'" alt="" /></a>';
+            echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
+			if (array_key_exists('target', $menuItem))
+				{
+				echo ' rel="external"';
+				}
+
+            echo ">".$menuItem['title']."</a><br />\n";
+            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
                 {
-                echo ' rel="external"';
-                }
-            echo ">".$menuItem[0]['title']."</a><br />\n";
-            if (isset($menuItem[0]['description']) && strlen($menuItem[0]['description']) > 0)
-                {
-                echo $menuItem[0]['description']."<br />";
+                echo $menuItem['description']."<br />";
                 }
             $this->ListSectionPages($thisSection);
             echo "</div>\n";
@@ -214,14 +219,13 @@ class modernTheme extends AdminTheme
             // Problem: current page selection, url, etc?
             return -1;
             }
-        $count = 0;
-        foreach ($this->menuItems[$section] as $thisItem)
+        foreach ($this->menuItems[$section]['children'] as $thisChild)
             {
-            if ($count++ < 1)
-                {
-                // skip the first item
-                continue;
-                }
+            $thisItem = $this->menuItems[$thisChild];
+            if (! $thisItem['show_in_menu'])
+            	{
+            	continue;
+            	}
 				
 			$itemicons = array (
 				"listcontent.php" => "listcontent.gif",
@@ -244,11 +248,14 @@ class modernTheme extends AdminTheme
 			);
 			
             echo "<div class=\"itemmenu\">\n";
-			echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$thisItem['url']].'" alt="" /></a>';
+            if (array_key_exists($thisItem['url'],$itemicons))
+            	{
+				echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$thisItem['url']].'" alt="" /></a>';
+				}
             echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
-			if ($thisItem['url'] == '../index.php')
+			if (array_key_exists('target', $thisItem))
 				{
-				echo ' target="_blank"';
+				echo ' rel="external"';
 				}
             echo ">".$thisItem['title']."</a><br />\n";
             if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
@@ -261,18 +268,18 @@ class modernTheme extends AdminTheme
 	
    function ListSectionPages($section)
     {
-        if (isset($this->menuItems[$section]) && count($this->menuItems[$section]) > 1)
+        if (isset($this->menuItems[$section]['children']) && count($this->menuItems[$section]['children']) > 1)
             {
             echo " ".lang('subitems').": ";
             $count = 0;
-            foreach($this->menuItems[$section] as $thisItem)
+            foreach($this->menuItems[$section]['children'] as $thisChild)
                 {
-                if ($count++ < 1)
+                $thisItem = $this->menuItems[$thisChild];
+                if (! $thisItem['show_in_menu'])
                     {
-                    // skip the first item
                     continue;
                     }
-                if ($count > 2)
+                if ($count++ > 0)
                     {
                     echo ", ";
                     }
