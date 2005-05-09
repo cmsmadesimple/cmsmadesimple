@@ -860,7 +860,21 @@ class AdminTheme
      */
     function ListSectionPages($section)
     {
-        if (isset($this->menuItems[$section]['children']) && count($this->menuItems[$section]['children']) > 1)
+        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
+            {
+            return;
+            }
+        $displayableChildren=false;
+        foreach($this->menuItems[$section]['children'] as $thisChild)
+            {
+            $thisItem = $this->menuItems[$thisChild];
+            if ($thisItem['show_in_menu'])
+                {
+                $displayableChildren = true;
+                }
+            }
+
+        if ($displayableChildren)
             {
             echo " ".lang('subitems').": ";
             $count = 0;

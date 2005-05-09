@@ -193,7 +193,9 @@ class modernTheme extends AdminTheme
 				"logout.php" => "logout.gif"
 			);		
             echo "<div class=\"itemmenu\">\n";
-			echo '<a href="'.$menuItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$menuItem['url']].'" alt="" /></a>';
+            if (array_key_exists($menuItem['url'],$itemicons)) {
+			     echo '<a href="'.$menuItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$menuItem['url']].'" alt="" /></a>';
+			}
             echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
 			if (array_key_exists('target', $menuItem))
 				{
@@ -268,7 +270,21 @@ class modernTheme extends AdminTheme
 	
    function ListSectionPages($section)
     {
-        if (isset($this->menuItems[$section]['children']) && count($this->menuItems[$section]['children']) > 1)
+        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
+            {
+            return;
+            }
+        $displayableChildren=false;
+        foreach($this->menuItems[$section]['children'] as $thisChild)
+            {
+            $thisItem = $this->menuItems[$thisChild];
+            if ($thisItem['show_in_menu'])
+                {
+                $displayableChildren = true;
+                }
+            }
+
+        if ($displayableChildren)
             {
             echo " ".lang('subitems').": ";
             $count = 0;
@@ -283,7 +299,7 @@ class modernTheme extends AdminTheme
                     {
                     echo ", ";
                     }
-                echo "<a class=\"itemsublink\" href=\"".$thisItem['url'];
+                echo "<a class=\"sublink\" href=\"".$thisItem['url'];
                 echo "\">".$thisItem['title']."</a>";
                 }
             }
