@@ -18,7 +18,6 @@ DIV { text-align: left; }
 TH, TD { text-align: left; }
 	
 /* General class library */
-div.footer { color: #ffffff; padding-top: 5px; text-align: center; }
 .b-white { background-color: #FFFFFF; }
 .clearb { clear: both; }
 .f-blued { color: #384654; }
@@ -30,6 +29,7 @@ div.footer { color: #ffffff; padding-top: 5px; text-align: center; }
 .logotext {	color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
 .mt5 { margin-top: 5px; }
 .ta-c { text-align: center; }
+.pagenb { border: none; }
 
 /* Page Specific Classes */
 /* Login page */
@@ -48,6 +48,10 @@ div.topmenucontainer { background-color: #ececec; border-bottom: 1px solid #C0C0
 div.hstippled { background-color: #FFFFFF; background-image: url(themes/modern/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
 p.breadcrumbs { color: #666666; padding-bottom: 3px; padding-left: 5px; padding-top: 3px; }
 p.logocontainer { padding-bottom: 5px; padding-left: 5px; padding-top: 5px; }
+p.footer { color: #ffffff; padding-top: 5px; text-align: center; }
+
+a.breadcrumbs { color: #666666; }
+a.footer { color: #ffffff; }
 
 /* Main Page - Menu */
 #nav, #nav ul { list-style: none; padding: 0; margin: 0; }
@@ -86,22 +90,27 @@ div.itemmenu { background-color: #ececec; border: solid 1px #666666; color: #384
 img.itemicon { float: left; margin-right: 10px; border: 0px; height: 32px; width: 32px; }
 
 /* Standard pages output */
-div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
 div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
+div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
+div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; }
 div.pageoverflow a { color: #384654; }
 div.pageoverflow img { border: 0px; }
 div.pageoptions { /* not in use now */ }
 
+
 img.pageicon { border: none; }
 a.pageoptions { color: #384654; vertical-align: 3px; }
+a.pageback { color: #384654; }
 
 p.pageback { margin-left: 10px; }
+p.error { color: #384654; }
 p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
 p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
 p.pageinput { float: left; padding-top: 5px; }
 p.pagemessage { color: #384654; }
 p.pageshowrows { float: right; margin-right: 5px; text-align: right; }
+p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
 
 table.pagetable { margin-top: 5px; margin-bottom: 10px; border: 1px solid #c6c3bd; font-size: 1em; width: 100%; }
 table.pagetable th { background: #385C72; color: #ffffff; }
@@ -121,14 +130,9 @@ tr.row2 { background: #ececec; }
 tr.row1hover { background: #dddddd; }
 tr.row2hover { background: #dddddd; }
 
-.pagenb { border: none; }
+iframe.imageframe { border: none; margin-top: 10px; width: 100%; }
 input.standard { }
-div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
-ul.error { margin: 0px; }
-a.pageback { color: #384654; }
-p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
 input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
-iframe.imageframe { border: none; margin-top: 10px; width: 100%; }
-p.error { color: #384654; }
 textarea.pagetextarea { height: 30em; width: 45em; }
+ul.error { margin: 0px; }

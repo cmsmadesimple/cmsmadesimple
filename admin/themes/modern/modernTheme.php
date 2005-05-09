@@ -20,7 +20,7 @@ class modernTheme extends AdminTheme
 
 	function renderMenuSection($section, $depth, $maxdepth)
 	{
-		if ($maxdepth > 0 && $depth> $maxdepth)
+		if ($maxdepth > 0 && $depth > $maxdepth)
 			{
 			return;
 			}
@@ -85,7 +85,7 @@ class modernTheme extends AdminTheme
 				echo " &#187; ";
 			}
 			foreach ($menutext as $key=>$value) {
-				echo '<a class="f-graym" href="'.$value.'">'.$key.'</a>';
+				echo '<a class="breadcrumbs" href="'.$value.'">'.$key.'</a>';
 			}
 			$counter++;
 		}
@@ -94,7 +94,7 @@ class modernTheme extends AdminTheme
     }
 
 	function DisplayFooter() {
-		echo '<div class="footer"><a class="f-white" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</div>';
+		echo '<p class="footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</p>';
 	}
 	
 	function OutputHeaderJavascript() {
@@ -299,7 +299,7 @@ class modernTheme extends AdminTheme
                     {
                     echo ", ";
                     }
-                echo "<a class=\"sublink\" href=\"".$thisItem['url'];
+                echo "<a class=\"itemsublink\" href=\"".$thisItem['url'];
                 echo "\">".$thisItem['title']."</a>";
                 }
             }

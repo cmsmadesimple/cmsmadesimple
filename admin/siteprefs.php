@@ -208,8 +208,8 @@ if ($message != "") {
 		  }
 				?>				
 			</select>
-		</td>
-	</tr>
+		</p>
+	</div>
 	<?php }?>
 	
 	
