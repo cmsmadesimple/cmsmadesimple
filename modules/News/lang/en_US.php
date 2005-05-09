@@ -1,17 +1,25 @@
 <?php
 $lang['allentries'] = 'All Entries';
+$lang['addarticle'] = 'Add Article';
+$lang['addcategory'] = 'Add Category';
 $lang['addnewsitem'] = 'Add News Item';
+$lang['areyousure'] = 'Are you sure you want to delete?';
+$lang['articles'] = 'Articles';
 $lang['cancel'] = 'Cancel';
 $lang['category'] = 'Category';
+$lang['categories'] = 'Categories';
 $lang['content'] = 'Content';
 $lang['dateformat'] = '%s not in a valid yyyy-mm-dd hh:mm:ss format';
+$lang['delete'] = 'Delete';
 $lang['description'] = 'Add, edit and remove News entries';
 $lang['displaytemplate'] = 'Display Template';
+$lang['edit'] = 'Edit';
 $lang['enddate'] = 'End Date';
 $lang['endrequiresstart'] = 'Entering an end date requires a start date also';
 $lang['entries'] = '%s Entries';
 $lang['expiry'] = 'Expriry';
 $lang['filter'] = 'Filter';
+$lang['name'] = 'Name';
 $lang['news'] = 'News';
 $lang['newcategory'] = 'New Category';
 $lang['needpermission'] = 'You need the \'%s\' permission to perform that function.';

@@ -18,6 +18,8 @@
 #
 #$Id$
 
+#xdebug_start_profiling();
+
 /**
  * This file is included in every page.  It does all seutp functions including
  * importing additional functions/classes, setting up sessions and nls, and

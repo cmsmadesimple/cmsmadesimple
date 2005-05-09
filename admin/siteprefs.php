@@ -191,26 +191,26 @@ if ($message != "") {
 			</select>
 			</p>
 		</div>
-  <?
+  <?php
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('admintheme') ?>:</p>
 		<p class="pageinput">
 		<select name="logintheme">
-			<?
+			<?php
 			  while (($file = readdir($dir)) !== false) {
 				  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
 			?>
-		  		<option value="<?=$file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?=$file?></option>				  
-			<?
-					}
-			  }
-			?>		
-		</select>
-		</p>
-	</div>
-	<?}?>
+		  		<option value="<?php echo $file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?php echo $file?></option>				  
+				  <?php
+		  	}
+		  }
+				?>				
+			</select>
+		</td>
+	</tr>
+	<?php }?>
 	
 	
 	<?php if ($access) { ?>

@@ -2,9 +2,6 @@
 $themeObject->DisplayMainDivEnd();
 $themeObject->OutputFooterJavascript();
 $themeObject->DisplayFooter();
-?>
-
-	<?php
 
 if ($config["debug"] == true)
 {
@@ -19,8 +16,10 @@ if ($config["debug"] == true)
 }
 
 ?>
+
 </body>
 </html>
+
 <?php
 
 #Pull the stuff out of the buffer...
@@ -64,4 +63,3 @@ $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlres
 
 echo $htmlresult;
 
-?>

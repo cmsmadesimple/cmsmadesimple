@@ -42,7 +42,7 @@ class News extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.7';
+		return '2.0';
 	}
 
 	function GetAdminDescription()
@@ -55,10 +55,12 @@ class News extends CMSModule
 		return 'content';
 	}
 
+	/*
     function VisibleToAdminUser()
     {
         return $this->CheckPermission('Modify News');
     }
+	*/
 
 	/**
 	 * This function is not in the API!!!
@@ -116,6 +118,7 @@ class News extends CMSModule
 	function Install()
 	{
 		$db = $this->cms->db;
+
 		$dict = NewDataDictionary($db);
 		$flds = "
 			news_id I KEY,
@@ -123,8 +126,10 @@ class News extends CMSModule
 			news_title C(255),
 			news_data X,
 			news_date T,
+			summary X,
 			start_time T,
 			end_time T,
+			status C(25),
 			icon C(255),
 			create_date T,
 			modified_date T
@@ -136,6 +141,35 @@ class News extends CMSModule
 		$dict->ExecuteSQLArray($sqlarray);
 
 		$db->CreateSequence(cms_db_prefix()."module_news_seq");
+
+		$flds = "
+			news_category_id I KEY,
+			news_category_name C(255),
+			parent_id I,
+			hierarchy C(255),
+			long_name X,
+			create_date T,
+			modified_date T
+		";
+
+		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories", 
+				$flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
+
+		$flds = "
+			news_category_id I KEY,
+			news_id I KEY
+		";
+
+		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+		$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
+				$flds, $taboptarray);
+		$dict->ExecuteSQLArray($sqlarray);
+
+		#Set Permission
 		$this->CreatePermission('Modify News', 'Modify News');
 
 		# Setup display template
@@ -176,6 +210,59 @@ class News extends CMSModule
 				$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
 				$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
 				$current_version = "1.7";
+			case '1.7':
+				#Makey new tables....
+
+				$db = $this->cms->db;
+
+				$dict = NewDataDictionary($db);
+				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "status C(25)");
+				$dict->ExecuteSQLArray($sqlarray);
+
+				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "summary X");
+				$dict->ExecuteSQLArray($sqlarray);
+
+				$query = "UPDATE ".cms_db_prefix()."module_news SET summary = ?, status = ?";
+				$db->Execute($query, array('', 'published'));
+
+				$flds = "
+					news_category_id I KEY,
+					news_category_name C(255),
+					parent_id I,
+					hierarchy C(255),
+					long_name X,
+					create_date T,
+					modified_date T
+				";
+				$dict = NewDataDictionary($db);
+
+				$taboptarray = array('mysql' => 'TYPE=MyISAM');
+				$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories", 
+						$flds, $taboptarray);
+				$dict->ExecuteSQLArray($sqlarray);
+
+				$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
+
+				$flds = "
+					news_category_id I KEY,
+					news_id I KEY
+				";
+
+				$taboptarray = array('mysql' => 'TYPE=MyISAM');
+				$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
+						$flds, $taboptarray);
+				$dict->ExecuteSQLArray($sqlarray);
+
+				$query = "SELECT DISTINCT news_cat FROM ".cms_db_prefix()."module_news WHERE news_cat IS NOT NULL";
+				$dbresult = $db->Execute($query);
+				while ($row = $dbresult->FetchRow())
+				{
+					$catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
+					$query = "INSERT INTO ".cms_db_prefix()."module_news_categories (news_category_id, news_category_name, parent_id, hierarchy, long_name, create_date, modified_date) VALUES (?,?,?,?,?,?,?)";
+					$db->Execute($query,array($catid, $row['news_cat'], -1, '', '', $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+				}
+
+				$current_version = "2.0";
 		}
 	}
 
@@ -183,762 +270,668 @@ class News extends CMSModule
 	{
 		$db = $this->cms->db;
 		$dict = NewDataDictionary( $db );
+
 		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news" );
 		$dict->ExecuteSQLArray($sqlarray);
 
+		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_categories" );
+		$dict->ExecuteSQLArray($sqlarray);
+
+		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_article_categories" );
+		$dict->ExecuteSQLArray($sqlarray);
+
 		$db->DropSequence( cms_db_prefix()."module_news_seq" );
+		$db->DropSequence( cms_db_prefix()."module_news_categories_seq" );
+
 		$this->RemovePermission('Modify News');
 	}
 
-	/**
-	 * This is NOT overriding a CMSModule function.  It's just used internallly.
-	 */
-	function StripToLength($str, $len, $tags=true)
-	{
-		if ($tags == true)
+    function UpdateHierarchyPositions()
+    {
+		$db = $this->cms->db;
+
+		$query = "SELECT news_category_id, news_category_name FROM ".cms_db_prefix()."module_news_categories";
+		$dbresult = $db->Execute($query);
+		if ($dbresult && $dbresult->RowCount())
 		{
-			while($str != strip_tags($str))
+			while ($row = $dbresult->FetchRow())
 			{
-				$str = strip_tags($str);
+				$current_hierarchy_position = "";
+				$current_long_name = "";
+				$content_id = $row['news_category_id'];
+				$current_parent_id = $row['news_category_id'];
+				$count = 0;
+
+				while ($current_parent_id > -1)
+				{
+					$query = "SELECT news_category_id, news_category_name, parent_id FROM ".cms_db_prefix()."module_news_categories WHERE news_category_id = ?";
+					$dbresult2 = $db->Execute($query, array($current_parent_id));
+					if ($dbresult2 && $dbresult2->RowCount())
+					{
+						$row = $dbresult2->FetchRow();
+						$current_hierarchy_position = str_pad($row['news_category_id'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
+						$current_long_name = $row['news_category_name'] . ' | ' . $current_long_name;
+						$current_parent_id = $row['parent_id'];
+						$count++;
+					}
+					else
+					{
+						$current_parent_id = 0;
+					}
+				}
+
+				if (strlen($current_hierarchy_position) > 0)
+				{
+					$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
+				}
+
+				if (strlen($current_long_name) > 0)
+				{
+					$current_long_name = substr($current_long_name, 0, strlen($current_long_name) - 3);
+				}
+
+
+				$query = "UPDATE ".cms_db_prefix()."module_news_categories SET hierarchy = ?, long_name = ? WHERE news_category_id = ?";
+				$db->Execute($query, array($current_hierarchy_position, $current_long_name, $content_id));
+			}
+		}
+    }
+
+	function CreateParentDropdown($id, $catid = -1, $selectedvalue = -1)
+	{
+		$db = $this->cms->db;
+
+		$longname = '';
+
+		$items['(None)'] = '-1';
+
+		$query = "SELECT hierarchy, long_name FROM ".cms_db_prefix()."module_news_categories WHERE news_category_id = ?";
+		$dbresult = $db->Execute($query, array($catid));
+		if ($dbresult && $dbresult->RowCount())
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				$longname = $row['hierarchy'] . '%';
 			}
 		}
 
-		if ($len > 0 && $len < strlen($str)) $str=substr($str,0,$len)."...";
-		return $str;
-	}
-
-	/**
-	 * This is NOT overriding a CMSModule function.  It's just used internallly for displaying the form, since it's used in so many places.
-	 */
-	function AdminForm($id, $moduleaction, $error='', $data='', $title='', $post_date='', $start_date='', $end_date='', $news_cat='', $newsid = '', $expiry='6 Months')
-	{
-		if ( $error != "" )
+		$query = "SELECT news_category_id, news_category_name, hierarchy, long_name FROM ".cms_db_prefix()."module_news_categories WHERE hierarchy not like ? ORDER by hierarchy";
+		$dbresult = $db->Execute($query, array($longname));
+		if ($dbresult && $dbresult->RowCount())
 		{
-		  echo "<ul class=\"error\">$error</ul>";
-		} 
+			while ($row = $dbresult->FetchRow())
+			{
+				$items[$row['long_name']] = $row['news_category_id'];
+			}
+		}
 
-		$db = $this->cms->db;
-		?>
-
-		<div class="AdminForm">
-		 
-		<?php echo $this->CreateFormStart($id, $moduleaction)?>
-
-		<table width="100%" border="0">
-				<?php
-			  $query = "SELECT news_cat FROM "
-				 .cms_db_prefix()."module_news WHERE news_cat <> '' GROUP BY news_cat";
-			  $dbresult = $db->Execute($query);
-				  if( $dbresult && $dbresult->RowCount() > 0)
-				  {
-			  ?>
-			  <tr>
-				<th width="100">Category:</th>
-				<td>
-				<select name="<?php echo $id?>selcat" size="4">
-				<?php
-				while( $row = $dbresult->FetchRow() )
-					{
-				   if( strlen( $row["news_cat"] ) > 0 ) 
-					   {
-					 if( $row["news_cat"] == $news_cat )
-						 {
-						   echo "<option selected=\"selected\">".$row["news_cat"]."</option>\n";
-						 }
-						 else
-						 {
-						   echo "<option>".$row["news_cat"]."</option>\n";
-						 }
-					   }
-					}
-				?>
-				</select>
-				</td>
-			  </tr>
-			  <?php
-				  }
-				?>
-		  <tr>
-			 <th><?php echo $this->Lang('newcategory')?>:</th>
-			 <td><?php echo $this->CreateInputText($id, 'addcat', '', '40', '255')?></td>
-		  </tr>
-		  <tr>
-			<th width="60"><?php echo $this->Lang('title')?>:</th>
-			<td><?php echo $this->CreateInputText($id, 'newstitle', $title, '25', '255', 'class="standard"')?></td>
-		  </tr>
-		  <tr>
-			<th><?php echo $this->Lang('content')?>:</th>
-			<td><?php echo $this->CreateTextArea(true, $id, $data, 'newscontent', 'syntaxHighlight', 'newscontent')?></td>
-		  </tr>
-		  <tr>
-			<th><?php echo $this->Lang('postdate')?>:</th>
-			<td><?php echo $this->CreateInputText($id, 'post_date', $post_date, '12', '20')?></td>
-		  </tr>
-		  <tr>
-			<th><?php echo $this->Lang('startdate')?>:</th>
-			<td><?php echo $this->CreateInputText($id, 'start_date', $start_date, '12', '20')?></td>
-		  </tr>
-		  <tr>
-			<th><?php echo $this->Lang('expiry')?>:</th>
-			<td>
-			<?php
-				$addttext = '';
-				$values = array();
-				if( $moduleaction == "edit" || $moduleaction == "completeedit" )
-				{
-					$addttext = 'disabled="disabled"';
-				}
-				else
-				{
-					$values = array('1 Day'=>'1 Day', '1 Week'=>'1 Week', '2 Weeks'=>'2 Weeks', '1 Month'=>'1 Month', '3 Months'=>'3 Months', '6 Months'=>'6 Months', '1 Year'=>'1 Year', 'Never'=>'Never');
-				}
-				echo $this->CreateInputDropdown($id, 'expiry', $values, -1, $expiry, $addttext);
-		?>
-			</td>
-		  </tr>
-		  <tr>
-			<th><?php echo $this->Lang('enddate')?>:</th>
-			<td><?php echo $this->CreateInputText($id, 'end_date', $end_date, '12', '20')?></td>
-		  </tr>
-		  <tr>
-			<th>&nbsp;</th>
-			<td><?php echo $this->Lang('note')?></td>
-		  </tr>
-		  <tr>
-			<td><?php
-					if ($newsid != '')
-					{
-						echo $this->CreateInputHidden($id, 'newsid', $newsid);
-					}
-				?>
-			</td>
-			<td>
-			  <?php echo $this->CreateInputSubmit($id, 'submit', $this->Lang('submit')) ?>
-			  <?php echo $this->CreateInputSubmit($id, 'cancelsubmit', $this->Lang('cancel')) ?>
-			</td>
-		  </tr>
-		</table>
-		 
-		<?php echo $this->CreateFormEnd()?>
-		 
-		</div>
-		<?php
+		return $this->CreateInputDropdown($id, 'parent', $items, -1, $selectedvalue);
 	}
 
 	function DoAction($action, $id, $params, $returnid = -1)
 	{
 		$db = $this->cms->db;
+		debug_buffer($action);
+		debug_buffer($params);
 		switch ($action)
 		{
 			case "default":
-				if (isset($params["makerssbutton"]))
+
+				$entryarray = array();
+
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
+				$dbresult = $db->Execute($query);
+
+				while ($row = $dbresult->FetchRow())
 				{
-					$params = array("showtemplate"=>"false","type"=>"rss");
-					echo $this->CreateLink($id, 'default', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
-					return;
+					$onerow = new stdClass();
+
+					$onerow->id = $row['news_id'];
+					$onerow->title = $row['news_title'];
+					$onerow->content = $row['news_data'];
+					$onerow->summary = $row['summary'];
+					$onerow->postdate = $row['news_date'];
+					$onerow->startdate = $row['start_time'];
+					$onerow->enddate = $row['end_time'];
+
+					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], array('articleid'=>$row['news_id']));
+					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, 'more', array('articleid'=>$row['news_id']));
+
+					array_push($entryarray, $onerow);
 				}
 
-				if (isset($params["category"]))
+				$this->smarty->assign_by_ref('items', $entryarray);
+
+				#Display template
+				echo $this->ProcessTemplate('articlesummary.tpl');
+				break;
+
+			case "detail":
+
+				$query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE news_id = ?';
+				$dbresult = $db->Execute($query, array($params['articleid']));
+
+				while ($row = $dbresult->FetchRow())
 				{
-					$query =  "SELECT news_id, news_title, news_data, news_date FROM ";
-					$query .= cms_db_prefix()."module_news WHERE news_cat = \"";
-					$query .= $params["category"]."\" AND ((".$db->IfNull('start_time',"'1/1/1900'");
-					$query .= " = '1/1/1900' AND ".$db->IfNull('end_time',"'1/1/1900'");
-					$query .= " = '1/1/1900') OR (start_time < '".$db->DBTimeStamp(time()) . "'";
-					$query .= " AND end_time > '".$db->DBTimeStamp(time())."')) ";
-				}
-				else 
-				{
-					$query =  "SELECT news_id, news_cat, news_title, news_data, news_date ";
-					$query .= "FROM ".cms_db_prefix()."module_news WHERE ";
-					$query .= "((".$db->IfNull('start_time',"'1/1/1900'")." = '1/1/1900' AND ".$db->ifNull('end_time',"'1/1/1900'");
-					$query .= " = '1/1/1900') OR (start_time < '".$db->DBTimeStamp(time()) . "'";
-					$query .= " AND end_time > '".$db->DBTimeStamp(time())."')) ";
-				}
-				
-				if (isset($params["sortasc"]))
-				{
-					$query .= "ORDER BY news_date asc";
-				}
-				else
-				{
-					$query .= "ORDER BY news_date desc";
+					$onerow = new stdClass();
+
+					$onerow->id = $row['news_id'];
+					$onerow->title = $row['news_title'];
+					$onerow->content = $row['news_data'];
+					$onerow->summary = $row['summary'];
+					$onerow->postdate = $row['news_date'];
+					$onerow->startdate = $row['start_time'];
+					$onerow->enddate = $row['end_time'];
+
+					$this->smarty->assign_by_ref('entry', $onerow);
 				}
 
-				if(isset($params["number"]))
+				echo $this->ProcessTemplate('articledetail.tpl');
+
+				break;
+
+			case "addcategory":
+
+				if (isset($params['cancel']))
 				{
-					$dbresult = $db->SelectLimit($query, $params["number"]);
-				}
-				else
-				{
-					$dbresult = $db->Execute($query);
+					$this->Redirect($id, 'defaultadmin', $returnid);
 				}
 
-				$dateformat = "F j, Y, g:i a";
-				if (isset($params["dateformat"]))
+				$name = '';
+				if (isset($params['name']))
 				{
-					$dateformat = $params['dateformat'];
-				}
-				else
-				{
-					$params['dateformat'] = $dateformat;
-				}
-
-				$type = "text";
-				if (isset($params['type']))
-				{
-					$type = $params['type'];
-				}
-				else if (isset($params["type"]))
-				{
-					$type = $params["type"];
-				}
-
-				if ($dbresult && $dbresult->RowCount() > 0)
-				{
-					$entryarray = array();
-
-					global $gCms;
-					$this->smarty->assign_by_ref('root_url', $gCms->config['root_url']);
-					$this->smarty->assign_by_ref('query_var', $gCms->config['query_var']);
-
-					while (($row = $dbresult->FetchRow()))
+					$name = $params['name'];
+					if ($name != '')
 					{
-						$onerow = new stdClass();
-						$onerow->unixdate = $db->UnixTimeStamp($row['news_date']);
-						$onerow->date = date($dateformat, $db->UnixTimeStamp($row['news_date']));
-						$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
-						$onerow->id = $row['news_id'];
-
-						if (isset($params['summary']))
-						{
-							$onerow->data = $this->StriptoLength($row['news_data'], $params['length'], false);
-							if (strlen($row['news_data']) > $params['length'])
-							{
-								if (isset($params['moretext']))
-								{
-									$onerow->moretext = $params['moretext'];
-								}
-								else
-								{
-									$onerow->moretext = 'more...';
-								}
-							}
-							else
-							{
-								$onerow->moretext = '';
-							}
-						}
-						else
-						{
-							$onerow->data = $row['news_data'];
-							$onerow->moretext = '';
-						}
-
-						if (isset($params["showcategorywithtitle"])
-									&& ($params["showcategorywithtitle"] == "true"
-									|| $params["showcategorywithtitle"] == "1")
-									&& $row['news_cat'] != ''
-						)
-						{
-							$onerow->title = $row['news_cat'] . ": " . $row['news_title'];
-						}
-						else
-						{
-							$onerow->title = $row['news_title'];
-						}
-
-						array_push($entryarray, $onerow);
-					}
-
-					$this->smarty->assign_by_ref('items', $entryarray);
-					$this->smarty->assign_by_ref('params', $params);
-
-					if ($type == 'rss')
-					{
-						echo $this->ProcessTemplateFromDatabase('displayrss');
+						$catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
+						$query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,?,?)';
+						$db->Execute($query, array($catid, $name, $params['parent'], $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+						$this->UpdateHierarchyPositions();
+						$this->Redirect($id, 'defaultadmin', $returnid);
 					}
 					else
 					{
-						echo $this->ProcessTemplateFromDatabase('displayhtml');
+						//Handle error
 					}
 				}
+
+				#Display template
+				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'addcategory', $returnid));
+				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
+				$this->smarty->assign_by_ref('nametext', $this->Lang('name'));
+				$this->smarty->assign_by_ref('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
+				$this->smarty->assign_by_ref('parentdropdown', $this->CreateParentDropdown($id, -1, -1));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				echo $this->ProcessTemplate('editcategory.tpl');
+
+				break;
+
+			case "editcategory":
+
+				if (isset($params['cancel']))
+				{
+					$this->Redirect($id, 'defaultadmin', $returnid);
+				}
+
+				$catid = '';
+				if (isset($params['catid']))
+				{
+					$catid = $params['catid'];
+				}
+
+				$parentid = '-1';
+				if (isset($params['parent']))
+				{
+					$parentid = $params['parent'];
+				}
+
+				$name = '';
+				if (isset($params['name']))
+				{
+					$name = $params['name'];
+					if ($name != '')
+					{
+						$query = 'UPDATE '.cms_db_prefix().'module_news_categories SET news_category_name = ?, parent_id = ?, modified_date = ? WHERE news_category_id = ?';
+						$db->Execute($query, array($name, $parentid, $db->DBTimeStamp(time()), $catid));
+						$this->UpdateHierarchyPositions();
+						$this->Redirect($id, 'defaultadmin', $returnid);
+					}
+					else
+					{
+						//Handle error
+					}
+				}
+				else
+				{
+					$query = 'SELECT * FROM '.cms_db_prefix().'module_news_categories WHERE news_category_id = ?';
+					$dbresult = $db->Execute($query, array($catid));
+
+					while (($row = $dbresult->FetchRow()))
+					{
+						$name = $row['news_category_name'];
+						$parentid = $row['parent_id'];
+					}
+				}
+
+				#Display template
+				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'editcategory', $returnid));
+				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
+				$this->smarty->assign_by_ref('nametext', $this->Lang('name'));
+				$this->smarty->assign_by_ref('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
+				$this->smarty->assign_by_ref('parentdropdown', $this->CreateParentDropdown($id, $catid, $parentid));
+				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'catid', $catid));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				echo $this->ProcessTemplate('editcategory.tpl');
+
+				break;
+
+			case "deletecategory":
+
+				$catid = '';
+				if (isset($params['catid']))
+				{
+					$catid = $params['catid'];
+				}
+
+				//Reset all categories using this parent to have no parent (-1)
+				$query = 'UPDATE '.cms_db_prefix().'module_news_categories SET parent_id=?, modified_date=? WHERE parent_id=?';
+				$db->Execute($query, array(-1, $db->DBTimeStamp(time()), $catid));
+
+
+				//Now remove the category
+				$query = "DELETE FROM ".cms_db_prefix()."module_news_categories WHERE news_category_id = ?";
+				$db->Execute($query, array($catid));
+
+				//And remove it from any articles
+				$query = "DELETE FROM module_news_article_categories WHERE news_category_id = ?";
+				$db->Execute($query, array($catid));
+
+				$this->UpdateHierarchyPositions();
+				$this->Redirect($id, 'defaultadmin', $returnid);
+
+				break;
+
+			case "addarticle":
+
+				if (isset($params['cancel']))
+				{
+					$this->Redirect($id, 'defaultadmin', $returnid);
+				}
+
+				$content = '';
+				if (isset($params['content']))
+				{
+					$content = $params['content'];
+				}
+
+				$summary = '';
+				if (isset($params['summary']))
+				{
+					$summary = $params['summary'];
+				}
+
+				$status = 'draft';
+				if (isset($params['status']))
+				{
+					$status = $params['status'];
+				}
+
+				$usedcategories = array();
+				if (isset($params['categories']))
+				{
+					$usedcategories = $params['categories'];
+				}
+
+				$postdate = time();
+				if (isset($params['postdate_Month']))
+				{
+					$postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
+				}
+
+				$useexp = 0;
+				if (isset($params['useexp']))
+				{
+					$useexp = 1;
+				}
+
+				$startdate = time();
+				if (isset($params['startdate_Month']))
+				{
+					$startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'], $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
+				}
+				$enddate = strtotime('+6 months', time());
+				if (isset($params['enddate_Month']))
+				{
+					$enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'], $params['enddate_Month'], $params['enddate_Day'], $params['enddate_Year']);
+				}
+
+				$title = '';
+				if (isset($params['title']))
+				{
+					$title = $params['title'];
+					if ($title != '')
+					{
+						$articleid = $db->GenID(cms_db_prefix()."module_news_seq");
+						$query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)';
+						if ($useexp == 1)
+						{
+							$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+						}
+						else
+						{
+							$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+						}
+
+						foreach ($usedcategories as $onecategory)
+						{
+							$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
+							$db->Execute($query, array($onecategory, $articleid));
+						}
+
+						$this->Redirect($id, 'defaultadmin', $returnid);
+					}
+					else
+					{
+						//Handle error
+					}
+				}
+
+				$statusdropdown = array();
+				$statusdropdown['Draft'] = 'draft';
+				$statusdropdown['Published'] = 'published';
+
+				$categorylist = array();
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+				$dbresult = $db->Execute($query);
+
+
+				while ($row = $dbresult->FetchRow())
+				{
+					$categorylist[$row['long_name']] = $row['news_category_id'];
+				}
+
+				#Display template
+				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'addarticle', $returnid));
+				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
+				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
+				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign_by_ref('postdate', $postdate);
+				$this->smarty->assign('postdateprefix', $id.'postdate_');
+				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp));
+				$this->smarty->assign_by_ref('startdate', $startdate);
+				$this->smarty->assign('startdateprefix', $id.'startdate_');
+				$this->smarty->assign_by_ref('enddate', $enddate);
+				$this->smarty->assign('enddateprefix', $id.'enddate_');
+				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
+				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputSelectList($id, 'categories[]', $categorylist, $usedcategories));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				echo $this->ProcessTemplate('editarticle.tpl');
+
+				break;
+
+			case "editarticle":
+
+				if (isset($params['cancel']))
+				{
+					$this->Redirect($id, 'defaultadmin', $returnid);
+				}
+
+				$articleid = '';
+				if (isset($params['articleid']))
+				{
+					$articleid = $params['articleid'];
+				}
+
+				$content = '';
+				if (isset($params['content']))
+				{
+					$content = $params['content'];
+				}
+
+				$summary = '';
+				if (isset($params['summary']))
+				{
+					$summary = $params['summary'];
+				}
+
+				$status = 'draft';
+				if (isset($params['status']))
+				{
+					$status = $params['status'];
+				}
+
+				$usedcategories = array();
+				if (isset($params['categories']))
+				{
+					$usedcategories = $params['categories'];
+				}
+
+				$postdate = time();
+				if (isset($params['postdate_Month']))
+				{
+					$postdate = mktime($params['postdate_Hour'], $params['postdate_Minute'], $params['postdate_Second'], $params['postdate_Month'], $params['postdate_Day'], $params['postdate_Year']);
+				}
+			
+				$useexp = 0;
+				if (isset($params['useexp']))
+				{
+					$useexp = 1;
+				}
+
+				$startdate = time();
+				if (isset($params['startdate_Month']))
+				{
+					$startdate = mktime($params['startdate_Hour'], $params['startdate_Minute'], $params['startdate_Second'], $params['startdate_Month'], $params['startdate_Day'], $params['startdate_Year']);
+				}
+
+				$enddate = strtotime('+6 months', time());
+				if (isset($params['enddate_Month']))
+				{
+					$enddate = mktime($params['enddate_Hour'], $params['enddate_Minute'], $params['enddate_Second'], $params['enddate_Month'], $params['enddate_Day'], $params['enddate_Year']);
+				}
+
+				$title = '';
+				if (isset($params['title']))
+				{
+					$title = $params['title'];
+					if ($title != '')
+					{
+						$query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, start_time=?, end_time=?, modified_date=? WHERE news_id = ?';
+						if ($useexp == 1)
+						{
+							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $articleid));
+						}
+						else
+						{
+							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $articleid));
+						}
+
+						$query = 'DELETE FROM '.cms_db_prefix().'module_news_article_categories WHERE news_id = ?';
+						$db->Execute($query, array($articleid));
+
+						foreach ($usedcategories as $onecategory)
+						{
+							$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
+							$db->Execute($query, array($onecategory, $articleid));
+						}
+
+						$this->Redirect($id, 'defaultadmin', $returnid);
+					}
+					else
+					{
+						//Handle error
+					}
+				}
+				else
+				{
+					$query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE news_id = ?';
+					$dbresult = $db->Execute($query, array($articleid));
+
+					while (($row = $dbresult->FetchRow()))
+					{
+						$title = $row['news_title'];
+						$content = $row['news_data'];
+						$summary = $row['summary'];
+						$status = $row['status'];
+						$postdate = $db->UnixTimeStamp($row['news_date']);
+						if (isset($row['start_time']))
+						{
+							$useexp = 1;
+							$startdate = $db->UnixTimeStamp($row['start_time']);
+							$enddate = $db->UnixTimeStamp($row['end_time']);
+						}
+						else
+						{
+							$useexp = 0;
+						}
+					}
+
+					$query = "SELECT * FROM ".cms_db_prefix()."module_news_article_categories WHERE news_id = ?";
+					$dbresult = $db->Execute($query, array($articleid));
+
+					while ($row = $dbresult->FetchRow())
+					{
+						array_push($usedcategories, $row['news_category_id']);
+					}
+					debug_buffer($usedcategories);
+				}
+
+				$statusdropdown = array();
+				$statusdropdown['Draft'] = 'draft';
+				$statusdropdown['Published'] = 'published';
+
+				$categorylist = array();
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+				$dbresult = $db->Execute($query);
+
+				while ($row = $dbresult->FetchRow())
+				{
+					$categorylist[$row['long_name']] = $row['news_category_id'];
+				}
+
+				#Display template
+				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'editarticle', $returnid));
+				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
+				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
+				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp));
+				$this->smarty->assign_by_ref('postdate', $postdate);
+				$this->smarty->assign('postdateprefix', $id.'postdate_');
+				$this->smarty->assign_by_ref('startdate', $startdate);
+				$this->smarty->assign('startdateprefix', $id.'startdate_');
+				$this->smarty->assign_by_ref('enddate', $enddate);
+				$this->smarty->assign('enddateprefix', $id.'enddate_');
+				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
+				debug_buffer($categorylist);
+				debug_buffer($usedcategories);
+				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputSelectList($id, 'categories[]', $categorylist, $usedcategories));
+				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				echo $this->ProcessTemplate('editarticle.tpl');
+
+				break;
+
+			case "deletearticle":
+
+				$articleid = '';
+				if (isset($params['articleid']))
+				{
+					$articleid = $params['articleid'];
+				}
+
+				//Now remove the article
+				$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
+				$db->Execute($query, array($articleid));
+
+				//And remove it from any categories
+				$query = "DELETE FROM module_news_article_categories WHERE news_id = ?";
+				$db->Execute($query, array($articleid));
+
+				$this->Redirect($id, 'defaultadmin', $returnid);
 
 				break;
 
 			case "defaultadmin":
-				$rowsperpage=20;
-				$access = $this->CheckPermission('Modify News');
-				$newscat = (isset($params['news_cat'])?$params['news_cat']:"");
-				$current_page = (isset($params['page'])?$params['page']:"1");
-				if (!isset($current_page))
-				{
-				  $current_page = 1;
-				}
-
-				if (!$access)
-				{
-					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
-					return;
-				}
 
 				echo $this->StartTabSet();
-				echo $this->StartTab('News Items');
 
-				$query = "SELECT news_cat FROM "
-					.cms_db_prefix()."module_news GROUP BY news_cat";
+				echo $this->StartTab($this->Lang('articles'));
+
+				//Load the current articles
+				$entryarray = array();
+
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
 				$dbresult = $db->Execute($query);
-				if ($dbresult && $dbresult->RowCount())
+
+				while ($row = $dbresult->FetchRow())
 				{
-					echo $this->CreateFormStart($id, 'defaultadmin');
-					echo "<table><tr>";
-					echo '<td><h5>'.$this->Lang('filter').':</h5></td>';
-					echo '<td><select name="'.$id.'news_cat">';
-					echo '<option';
-					if ($newscat == "All")
-					{
-						echo " selected=\"selected\"";
-					}
-					echo ">All</option>";
-					while ($row = $dbresult->FetchRow())
-					{
-						$x = $row["news_cat"];
-						if( strlen($x) == 0 )
-						{
-							$x = "**Empty**";
-						}
-						echo "<option";
-						if ($newscat == $x)
-						{
-							echo " selected=\"selected\"";
-						}
-						echo ">".$x."</option>";
-					}
-					echo "</select></td>";
-					echo "<td>".$this->CreateInputSubmit($id, 'filter', 'Select')."</td>";
-					echo "</tr></table>";
-					echo $this->CreateFormEnd($id);
+					$onerow = new stdClass();
+
+					$onerow->id = $row['news_id'];
+					$onerow->title = $row['news_title'];
+					$onerow->data = $row['news_data'];
+					$onerow->postdate = $row['news_date'];
+					$onerow->startdate = $row['start_time'];
+					$onerow->enddate = $row['end_time'];
+
+					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $this->Lang('edit'), array('articleid'=>$row['news_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $this->Lang('delete'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
+
+					array_push($entryarray, $onerow);
 				}
 
-				echo $this->CreateFormStart($id, 'add');
-				echo $this->CreateInputHidden($id, 'news_cat', $newscat);
-				echo $this->CreateInputSubmit($id, 'submit', $this->Lang('addnewsitem'));
-				echo $this->CreateFormEnd();
+				$this->smarty->assign_by_ref('items', $entryarray);
 
-				if( isset($newscat) && strlen($newscat) ) 
-				{
-					if( $newscat == "All" )
-					{
-						echo '<h4>'.$this->Lang('allentries').':</h4><br />';
-						$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
-							.cms_db_prefix()."module_news ORDER BY news_date desc";
-					}
-					else if( $newscat == "**Empty**" )
-					{
-						echo "<h4>**Empty** Entries:</h4><br />";
-						$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
-							.cms_db_prefix()."module_news ORDER BY news_date desc";
-					}
-					else 
-					{
-						echo '<h4>'.$this->Lang('entries', array($newscat)).':</h4><br />';
-						$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
-							.cms_db_prefix()."module_news WHERE news_cat = \""
-							.$newscat."\" ORDER BY news_date desc";
-					}
-				}
-				else
-				{
-					echo '<h4>'.$this->Lang('allentries').':</h4><br />';
-					$query = "SELECT news_id, news_cat, news_title, news_data, news_date FROM "
-						.cms_db_prefix()."module_news ORDER BY news_date desc";
-				}
+				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle')));
 
-				$dbresult = $db->Execute($query);
-				if ($dbresult && $dbresult->RowCount())
-				{
-					echo '<table cellspacing="0" class="AdminTable">';
-					echo '<thead>';
-					echo '<tr>';
-					echo "<td colspan=\"6\"><div align=\"right\" class=\"clearbox\">".$this->CreatePagination($id, 'defaultadmin', $returnid, $current_page, $dbresult->RowCount(), $rowsperpage)."</td>";
-					echo "</tr>\n";
-					echo "<tr>\n";
-					echo "<th width=\"2%\">&nbsp;</th>\n";
-					echo "<th width=\"50%\">".$this->Lang('title')."</th>\n";
-					echo "<th width=\"10%\">".$this->Lang('category')."</th>\n";
-					echo "<th width=\"20%\">".$this->Lang('postdate')."</th>\n";
-					echo "<th width=\"8%\">&nbsp;</th>\n";
-					echo "<th width=\"10%\">&nbsp;</th>\n";
-					echo "</tr>\n";
-					echo "</thead>\n";
-					echo "<tbody>\n";
-					$rowclass="row1";
-					$r=0;
-
-					$startn = ($current_page - 1) * $rowsperpage;
-					$endn   = ($current_page * $rowsperpage) - 1;
-					while ($row = $dbresult->FetchRow()) 
-					{
-						if( $r < $startn || $r > $endn )
-						{
-						   $r++;
-						   continue;
-						} 
-						$r++;
-
-						echo "<tr class=\"$rowclass\">\n";
-						echo "<td align=\"right\">".$r."</td>\n";
-						echo "<td>".$row["news_title"]."</td>\n";
-						echo "<td>".$row["news_cat"]."</td>\n";
-						echo "<td>".$row["news_date"]."</td>\n";
-						echo "<td>".$this->CreateLink($id, 'News', $returnid, 'Edit', array("action"=>"edit","news_id"=>$row["news_id"],"news_cat"=>$newscat))."</td>\n";
-						echo "<td>".$this->CreateLink($id, 'News', $returnid, 'Delete', array("action"=>"delete","news_id"=>$row["news_id"]), 'Are you sure you want to delete?')."</td>\n";
-						echo "</tr>\n";
-						($rowclass=="row1"?$rowclass="row2":$rowclass="row1");
-					}
-					echo "</tbody>\n";
-					echo "</table>\n";
-				}
-				else
-				{
-					echo '<p>'.$this->Lang('noitemsfound', array($newscat)).'</p>';
-				}
+				#Display template
+				echo $this->ProcessTemplate('articlelist.tpl');
 
 				echo $this->EndTab();
 
-				echo $this->StartTab($this->lang('displaytemplate'));
-				
-				echo $this->CreateFormStart($id, 'updatetemplate');
+				echo $this->StartTab($this->Lang('categories'));
 
-				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayhtml'), 'templatecontent', '').'</p>';
+				#Put together a list of current categories...
+				$entryarray = array();
 
-				echo $this->CreateInputSubmit($id, 'submitbutton', $this->Lang('submit'));
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+				$dbresult = $db->Execute($query);
 
-				echo $this->CreateFormEnd();
+				while ($row = $dbresult->FetchRow())
+				{
+					$onerow = new stdClass();
 
-				echo $this->EndTab();
+					$depth = count(split('\.', $row['hierarchy']));
+					debug_buffer($row['hierarchy']);
 
-				echo $this->StartTab($this->lang('rsstemplate'));
-				
-				echo $this->CreateFormStart($id, 'updatersstemplate');
+					$onerow->id = $row['news_category_id'];
+					$onerow->name = str_repeat('&nbsp;', $depth-1).$row['news_category_name'];
+					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $this->Lang('edit'), array('catid'=>$row['news_category_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $this->Lang('delete'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
 
-				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displayrss'), 'rsstemplatecontent', '').'</p>';
+					array_push($entryarray, $onerow);
+				}
 
-				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', $this->Lang('submit'));
+				$this->smarty->assign_by_ref('items', $entryarray);
 
-				echo $this->CreateFormEnd();
+				#Setup links
+				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory')));
+
+				#Display template
+				echo $this->ProcessTemplate('categorylist.tpl');
 
 				echo $this->EndTab();
 
 				echo $this->EndTabSet();
 
-				break;
-
-			case "Add":
-			case "Select":
-				echo "<p>Error!</p>"; 
-				break;
-
-			case "updatetemplate":
-				$this->SetTemplate('displayhtml', $params['templatecontent']);
-				$this->Redirect($id, 'defaultadmin');
-				break;
-
-			case "updatersstemplate":
-				$this->SetTemplate('displayrss', $params['rsstemplatecontent']);
-				$this->Redirect($id, 'defaultadmin');
-				break;
-
-			case "edit":
-				$newsid = (isset($_GET[$id."news_id"])?$_GET[$id."news_id"]:"").(isset($_POST[$id."news_id"])?$_POST[$id."news_id"]:"");
-				$query = "SELECT * FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
-				$dbresult = $db->Execute($query, array($newsid));
-				if ($dbresult && $dbresult->RowCount() > 0) 
-				{
-					$row = $dbresult->FetchRow();
-					$news_cat = $row["news_cat"];
-					$title = $row["news_title"];
-					$data = $row["news_data"];
-					$start_date = '';
-					$end_date = '';
-					if (isset($row["news_date"]))
-					{
-						$post_date = $row["news_date"];
-					}
-					if (isset($row["start_time"]))
-					{
-						$start_date = $row["start_time"];
-					}
-					if (isset($row["end_time"]))
-					{
-						$end_date = $row["end_time"];
-					}
-					$this->AdminForm($id, 'completeedit', '', $data, $title, $post_date, $start_date, $end_date, $news_cat, $newsid);
-				}
-				break;
-
-			case "add":
-				$post_date = rtrim(ltrim($db->DBTimeStamp(time()), "'"), "'");
-				$this->AdminForm($id, 'completeadd', '', '', '', $post_date);
-				break;
-
-			case "delete":
-				$query = "DELETE FROM ".cms_db_prefix()."module_news WHERE news_id = ?";
-				$dbresult = $db->Execute($query, array($params['news_id']));
-				$this->Audit($params['news_id'], 'News', 'Deleted New Item');
-				$this->Redirect($id, 'defaultadmin', $returnid);
-				break;
-
-			case "completeadd":
-
-				$error = '';
-
-				if (isset($params['cancelsubmit']))
-				{
-					$this->Redirect($id, 'defaultadmin');
-				}
-				$validinfo = true;
-
-				$newsid = (isset($params['newsid'])?$params['newsid']:"");
-				$newscat = (isset($params['newscat'])?$params['newscat']:"");
-				if ($newscat == "")
-				{
-					$newscat = (isset($params['selcat'])?$params['selcat']:"");
-					if ($newscat == "")
-					{
-						$newscat = (isset($params['addcat'])?$params['addcat']:"");
-					}
-				}
-				$title = (isset($params['newstitle'])?$params['newstitle']:"");
-				$data = (isset($params['newscontent'])?$params['newscontent']:"");
-				$post_date = (isset($params['post_date'])?$params['post_date']:"");
-				$start_date = (isset($params['start_date'])?$params['start_date']:"");
-				$end_date = (isset($params['end_date'])?$params['end_date']:"");
-				$expiry = (isset($params['expiry'])?$params['expiry']:"");
-
-				if ($newscat == '')
-				{
-					$error .= '<li>'.$this->Lang('nocategorygiven').'</li>';
-					$validinfo = false;
-				}
-
-				if ($title == '')
-				{
-					$error .= '<li>'.$this->Lang('notitlegiven').'</li>';
-					$validinfo = false;
-				}
-
-				if ($data == '')
-				{
-					$error .= '<li>'.$this->Lang('nocontentgiven').'</li>';
-					$validinfo = false;
-				}
-
-				if ($post_date == "")
-				{
-					$error .= '<li>'.$this->Lang('nopostdategiven').'</li>';
-					$validinfo = false;
-				}
-				else if ($db->DBTimeStamp($post_date) === FALSE)
-				{
-					$error .= '<li>'.$this->Lang('dateformat', array('postdate')).'</li>';
-					$validinfo = false;
-				}
-
-				if ($start_date !== "" && $end_date === "")
-				{
-					$error .= '<li>'.$this->Lang('startrequiresend').'</li>';
-					$validinfo = false;
-				}
-
-				if ($end_date !== '' && $start_date === '')
-				{
-					$error .= '<li>'.$this->Lang('endrequiresstart').'</li>';
-					$validinfo = false;
-				}
-
-				if ($start_date !== "" && $end_date !== "" && $validinfo)
-				{
-					if ($db->DBTimeStamp($start_date) === FALSE)
-					{
-						$error .= '<li>'.$this->Lang('dateformat', array('startdate')).'</li>';
-						$validinfo = false;
-					}
-					if ($db->DBTimeStamp($end_date) === FALSE)
-					{
-						$error .= '<li>'.$this->Lang('dateformat', array('enddate')).'</li>';
-						$validinfo = false;
-					}
-				}
-
-				if ($validinfo)
-				{
-					$new_id = $db->GenID(cms_db_prefix()."module_news_seq");
-					$querystart = "INSERT INTO ".cms_db_prefix()."module_news (news_cat, news_id, news_title, news_data, news_date, create_date";
-					$queryend = ") VALUES (?,?,?,?,?,?";
-					$params = array($newscat, $new_id, $title, $data, $post_date, $db->DBTimeStamp(time()));
-					if (strlen($end_date) > 0)
-					{
-						$querystart .= ", end_time";
-						$queryend .= ",?";
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($end_date), "'"), "'")); 
-					}
-					else if( $expiry != "" && $expiry != "Never" )
-					{
-						$querystart .= ", end_time";
-						$queryend .= ",?";
-						$time = strtotime("+".$expiry);
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($time), "'"), "'")); 
-						if( $start_date == "" ) 
-						{
-							$start_date = $db->DBTimeStamp(time());
-						}
-					}
-					if ($start_date != "")
-					{
-						$querystart .= ", start_time";
-						$queryend .= ",?";
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($start_date), "'"), "'")); 
-					}
-					$query = $querystart . $queryend . ")";
-					$dbresult = $db->Execute($query, $params);
-					$this->Audit($new_id, 'News', 'Added News Item');
-					$this->Redirect($id, 'defaultadmin');
-					return;
-				}
-				else
-				{
-					$this->AdminForm($id, 'completeadd', $error, $data, $title, $post_date, $start_date, $end_date, '', $newsid, $expiry);
-				}
-				break;
-
-			case "completeedit":
-
-				if (isset($params['cancelsubmit']))
-				{
-					$this->Redirect($id, 'defaultadmin');
-				}
-
-				$validinfo = true;
-				$error = '';
-
-				$newsid = (isset($params['newsid'])?$params['newsid']:"");
-				$newscat = (isset($params['newscat'])?$params['newscat']:"");
-				if ($newscat == "")
-				{
-					$newscat = (isset($params['selcat'])?$params['selcat']:"");
-					if ($newscat == "")
-					{
-						$newscat = (isset($params['addcat'])?$params['addcat']:"");
-					}
-				}
-				$title = (isset($params['newstitle'])?$params['newstitle']:"");
-				$data = (isset($params['newscontent'])?$params['newscontent']:"");
-				$post_date = (isset($params['post_date'])?$params['post_date']:"");
-				$start_date = (isset($params['start_date'])?$params['start_date']:"");
-				$end_date = (isset($params['end_date'])?$params['end_date']:"");
-				$expiry = (isset($params['expiry'])?$params['expiry']:"");
-
-				if ($newscat == "")
-				{
-					$error .= '<li>'.$this->Lang('nocategorygiven').'</li>';
-					$validinfo = false;
-				} 
-
-				if ($title == "") 
-				{
-					$error .= '<li>'.$this->Lang('notitlegiven').'</li>';
-					$validinfo = false;
-				}
-
-				if ($data == "")
-				{ 
-					$error .= '<li>'.$this->Lang('nocontentgiven').'</li>';
-					$validinfo = false;
-				}
-
-				if ($post_date == "")
-				{ 
-					$error .= '<li>'.$this->Lang('nopostdategiven').'</li>';
-					$validinfo = false;
-				}
-				else if ($db->DBTimeStamp($post_date) === FALSE)
-				{
-					$error .= '<li>'.$this->Lang('dateformat', array('postdate')).'</li>';
-					$validinfo = false;
-				}
-
-				if ($start_date !== "" && $end_date === "")
-				{
-					$error .= '<li>'.$this->Lang('startrequiresend').'</li>';
-					$validinfo = false;
-				}
-
-				if ($end_date !== "" && $start_date === "")
-				{
-					$error .= '<li>'.$this->Lang('endrequiresstart').'</li>';
-					$validinfo = false;
-				}
-
-				if ($start_date !== "" && $end_date !== "" && $validinfo)
-				{
-					if ($db->DBTimeStamp($start_date) === FALSE)
-					{
-						$error .= '<li>'.$this->Lang('dateformat', array('startdate')).'</li>';
-						$validinfo = false;
-					}
-					if ($db->DBTimeStamp($end_date) === FALSE)
-					{
-						$error .= '<li>'.$this->Lang('dateformat', array('enddate')).'</li>';
-						$validinfo = false;
-					}
-				}
-
-				if ($validinfo)
-				{
-					$query = "UPDATE ".cms_db_prefix()."module_news SET news_cat = ?, news_title = ?, news_data = ?, modified_date = ?";
-					$params = array($newscat, $title, $data, $db->DBTimeStamp(time()));
-
-					if ($start_date != "")
-					{
-						$query .= ", start_time = ?";
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($start_date), "'"), "'"));
-					}
-					else
-					{
-						$query .= ", start_time = ?";
-						array_push($params, NULL);
-					}
-
-					if ($end_date != "")
-					{
-						$query .= ", end_time = ?";
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($end_date), "'"), "'"));
-					}
-					else
-					{
-						$query .= ", end_time = ?";
-						array_push($params, NULL);
-					}
-
-					if ($post_date != "")
-					{
-						$query .= ", news_date = ?";
-						array_push($params, rtrim(ltrim($db->DBTimeStamp($post_date), "'"), "'"));
-					}
-
-					$query .= " WHERE news_id = ?";
-					array_push($params, $newsid);
-					$dbresult = $db->Execute($query, $params);
-
-					$this->Audit($newsid, 'News', 'Edited News Item');
-					$this->Redirect($id, 'defaultadmin');
-					return;
-				}
-				else
-				{
-					$this->AdminForm($id, 'completeedit', $error, $data, $title, $post_date, $start_date, $end_date, $newscat, $newsid, $expiry);
-				}
 				break;
 		}
 	}
@@ -950,12 +943,12 @@ class News extends CMSModule
 
 	function GetAuthor()
 	{
-		return 'Robert Campbell';
+		return 'Ted Kulp';
 	}
 
 	function GetAuthorEmail()
 	{
-		return 'rob@techcom.dyndns.org';
+		return 'wishy@cmsmadesimple.org';
 	}
 
 	function GetChangeLog()

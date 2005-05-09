@@ -1186,6 +1186,32 @@ class CMSModule extends ModuleOperations
 		return $text;
 	}
 
+	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='')
+	{
+		$text = '<select name="'.$id.$name.'"';
+		if ($addttext != '')
+		{
+			$text .= ' ' . $addttext;
+		}
+		$text .= ' multiple="multiple" size="'.$size.'">';
+		$count = 0;
+		foreach ($items as $key=>$value)
+		{
+			$text .= '<option value="'.$value.'"';
+			if (in_array($value, $selecteditems))
+			{
+				$text .= ' ' . 'selected="selected"';
+			}
+			$text .= '>';
+			$text .= $key;
+			$text .= '</option>';
+			$count++;
+		}
+		$text .= '</select>'."\n";
+
+		return $text;
+	}
+
 	/**
 	 * Returns the xhtml equivalent of a set of radio buttons.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
@@ -1228,7 +1254,7 @@ class CMSModule extends ModuleOperations
 	 * @param string The number of characters wide (columns) the resulting textarea should be
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname, $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15')
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15')
 	{
 		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols);
 	}

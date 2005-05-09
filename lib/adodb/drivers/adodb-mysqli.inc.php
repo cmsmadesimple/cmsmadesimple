@@ -524,6 +524,14 @@ class ADODB_mysqli extends ADOConnection {
 			$ret = mysqli_stmt_execute($stmt);
 			return $ret;
 		}
+
+		global $gCms;
+		global $sql_queries;
+		if ($gCms->config["debug"] == true)
+		{
+			$sql_queries .= "<p>$sql</p>\n";
+		}
+
 		if (!$mysql_res =  mysqli_query($this->_connectionID, $sql, ($ADODB_COUNTRECS) ? MYSQLI_STORE_RESULT : MYSQLI_USE_RESULT)) {
 		    if ($this->debug) ADOConnection::outp("Query: " . $sql . " failed. " . $this->ErrorMsg());
 		    return false;
