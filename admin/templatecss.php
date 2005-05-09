@@ -89,11 +89,11 @@ if (isset($type) && "template" == $type)
 #******************************************************************************
 if (isset($_GET["message"]))
 {
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
 }
 if ("" != $error)
 {
-    echo "<p class=\"error\">$error</p>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
 }
 
 #******************************************************************************
@@ -101,9 +101,12 @@ if ("" != $error)
 #******************************************************************************
 ?>
 
-<h3><?php echo lang('currentassociations')?> - <?php echo lang('stylesheet')?> : <?php echo (isset($name)?$name:"")?></h3>
-
-<p><a href="listcss.php"><?php echo lang('back') ?></a></p>
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('currentassociations')?></p>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('stylesheet')?> :</p>
+			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>
+		</div>
 
 <?php
 
@@ -123,12 +126,11 @@ if ("" != $error)
 	# if any css was found.
 	if ($result)
 	{
-		# table header
-		echo '<table cellspacing="0" class="AdminTable" style="width: 400px;">'."\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>".lang('title')."</td>\n";
-		echo "<td>&nbsp;</td>\n";
+		echo "<th>".lang('title')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -143,13 +145,13 @@ if ("" != $error)
 			# we store ids of templates found for them not to appear in the dropdown
 			array_push($csslist,$one["assoc_to_id"]);
 		 
-			echo "<tr class=\"$currow\">\n";
+			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 			echo "<td>".$one["template_name"]."</td>\n";
 
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td width=\"18\"><a href=\"deletetemplateassoc.php?id=$id&template_id=".$one["assoc_to_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				echo "<td><a href=\"deletetemplateassoc.php?id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
 			}
@@ -201,31 +203,31 @@ if ("" != $error)
 		if ($result && $result->RowCount() > 0)
 		{
 
-			$form = "<form action=\"addtemplateassoc.php\" method=\"post\">";
-			
-			$dropdown = "<select name=\"template_id\" style=\"width: 250px;\">\n";
+			echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
+			echo '<p class="pageoptions">';
+			echo "<select name=\"template_id\">\n";
 			while ($line = $result->FetchRow())
 			{
-				$dropdown .= "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
+				echo "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
 			}
-			$dropdown .= "</select>";
-
-			echo $form.$dropdown;
-
+			echo "</select> ";
 ?>
-
-<input type="hidden" name="id" value="<?php echo $id?>" />
-<input type="hidden" name="type" value="<?php echo $type?>" />
-<input type="submit" value="<?php echo lang('attachtemplate')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-</form>
+			<input type="hidden" name="id" value="<?php echo $id?>" />
+			<input type="hidden" name="type" value="<?php echo $type?>" />
+			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
+			</p>
+			</form>
 
 <?php
 		} # end of showing form
 	} # end of if has right to add
 	else
 	{
-		echo lang('noaccessto', array(lang('addcssassociation')));
+		echo '<p class="pageoptions">'.lang('noaccessto', array(lang('addcssassociation'))).'</p>';
 	}
+echo '</div>';
+
+echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

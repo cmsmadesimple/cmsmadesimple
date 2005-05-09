@@ -73,7 +73,7 @@ include_once("header.php");
 
 if ($error != "")
 	{
-		echo '<div class="pagemcontainer"><p class="pagemessage">'.$error.'</p></div>';
+		echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
 	}
 ?>
 

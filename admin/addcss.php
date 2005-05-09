@@ -153,7 +153,7 @@ include_once("header.php");
 #******************************************************************************
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('addstylesheet')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addstylesheet')))."</p></div>";
 }
 #******************************************************************************
 # the user has access, we display the form
@@ -164,7 +164,7 @@ else
 	# the user has correct rights, we display error message if any
 	if ("" != $error)
 	{
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";		
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";		
 	}
 
 #******************************************************************************

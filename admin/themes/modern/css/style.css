@@ -96,7 +96,8 @@ div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10p
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; }
 div.pageoverflow a { color: #384654; }
 div.pageoverflow img { border: 0px; }
-div.pageoptions { /* not in use now */ }
+div.pageoptions { padding-top: 1px; }
+p.pageoptions { padding-top: 1px; }
 
 
 img.pageicon { border: none; }
@@ -104,7 +105,7 @@ a.pageoptions { color: #384654; vertical-align: 3px; }
 a.pageback { color: #384654; }
 
 p.pageback { margin-left: 10px; }
-p.error { color: #384654; }
+p.pageerror { color: #384654; }
 p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
 p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
 p.pageinput { float: left; padding-top: 5px; }
@@ -135,4 +136,4 @@ input.standard { }
 input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
 textarea.pagetextarea { height: 30em; width: 45em; }
-ul.error { margin: 0px; }
+ul.pageerror { margin: 0px; }
