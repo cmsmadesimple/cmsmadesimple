@@ -851,6 +851,27 @@ class AdminTheme
     }
 
     /**
+     * HasDisplayableChildren
+     * This method returns a boolean, based upon whether the section in question
+     * has displayable children.
+     *
+     * @param section - section to test
+     */
+     function HasDisplayableChildren($section)
+     {
+        $displayableChildren=false;
+        foreach($this->menuItems[$section]['children'] as $thisChild)
+            {
+            $thisItem = $this->menuItems[$thisChild];
+            if ($thisItem['show_in_menu'])
+                {
+                $displayableChildren = true;
+                }
+            }
+        return $displayableChildren;
+     }
+
+    /**
      * ListSectionPages
      * This method presents a nice, human-readable list of admin pages and 
      * modules that are in the specified admin section.
@@ -864,17 +885,8 @@ class AdminTheme
             {
             return;
             }
-        $displayableChildren=false;
-        foreach($this->menuItems[$section]['children'] as $thisChild)
-            {
-            $thisItem = $this->menuItems[$thisChild];
-            if ($thisItem['show_in_menu'])
-                {
-                $displayableChildren = true;
-                }
-            }
 
-        if ($displayableChildren)
+        if ($this->HasDisplayableChildren($section))
             {
             echo " ".lang('subitems').": ";
             $count = 0;
@@ -971,7 +983,7 @@ class AdminTheme
 		echo ">";
 		echo $this->menuItems[$section]['title'];
 		echo "</a>";
-		if (count($this->menuItems[$section]['children']) > 0)
+		if ($this->HasDisplayableChildren($section))
 			{
 			echo "<ul>";
 			foreach ($this->menuItems[$section]['children'] as $child)

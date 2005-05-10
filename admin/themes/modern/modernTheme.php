@@ -42,7 +42,7 @@ class modernTheme extends AdminTheme
 		echo ">";
 		echo $this->menuItems[$section]['title'];
 		echo "</a>";
-		if (count($this->menuItems[$section]['children']) > 0)
+		if ($this->HasDisplayableChildren($section))
 			{
 			echo "<ul>";
 			foreach ($this->menuItems[$section]['children'] as $child)
@@ -62,19 +62,14 @@ class modernTheme extends AdminTheme
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
 		$breadcrumbs = array();
         foreach ($this->menuItems as $key=>$menuItem) {
-            $count = count($menuItem);
-            $counter = 1;
 			if ($menuItem['selected']) {
 				array_push($breadcrumbs, array($menuItem['title'] => $menuItem['url']));
 			}
-			if ($counter == 1) {
-				echo "\n\t\t";
-			}
         	if ($menuItem['parent'] == -1) {
+        	    echo "\n\t\t";
         		$this->renderMenuSection($key, 0, -1);
         	}
-            $counter++;
-            }
+        }
         echo "\n\t</ul>\n";
 		echo "\t<div class=\"clearb\"></div>\n";
 		echo "</div>\n";
@@ -274,17 +269,8 @@ class modernTheme extends AdminTheme
             {
             return;
             }
-        $displayableChildren=false;
-        foreach($this->menuItems[$section]['children'] as $thisChild)
-            {
-            $thisItem = $this->menuItems[$thisChild];
-            if ($thisItem['show_in_menu'])
-                {
-                $displayableChildren = true;
-                }
-            }
 
-        if ($displayableChildren)
+        if ($this->HasDisplayableChildren($section))
             {
             echo " ".lang('subitems').": ";
             $count = 0;
