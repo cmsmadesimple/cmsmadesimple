@@ -872,6 +872,26 @@ class AdminTheme
      }
 
     /**
+     * TopParent
+     * This method returns the menu node that is the top-level parent of the node you pass
+     * to it.
+     *
+     * @param section - section (menu tag) to find top-level parent
+     */
+     function TopParent($section)
+     {
+     	$next = $section;
+		$node = $this->menuItems[$next];
+        while ($node['parent'] != -1)
+        	{
+        	$next = $node['parent'];
+        	$node = $this->menuItems[$next];
+        	}
+        return $next;
+     }
+
+
+    /**
      * ListSectionPages
      * This method presents a nice, human-readable list of admin pages and 
      * modules that are in the specified admin section.

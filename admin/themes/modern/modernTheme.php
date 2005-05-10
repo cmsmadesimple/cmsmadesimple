@@ -241,13 +241,44 @@ class modernTheme extends AdminTheme
 				"listusertags.php" => "listusertags.gif",
 				"moduleinterface.php?module=TinyMCE" => "wysiwyg.gif",
 				"siteprefs.php" => "siteprefs.gif",
-				"adminlog.php" => "adminlog.gif"
+				"adminlog.php" => "adminlog.gif",
+				"topcontent.php" => "topcontent.gif",
+				"toplayout.php" => "toplayout.gif",
+				"topusers.php" => "topusers.gif",
+				"topextensions.php" => "topextensions.gif",
+				"editprefs.php" => "editprefs.gif",
+				"topadmin.php" => "topadmin.gif",
+				"../index.php" => "viewsite.gif",
+				"logout.php" => "logout.gif"
 			);
 			
             echo "<div class=\"itemmenu\">\n";
+            
             if (array_key_exists($thisItem['url'],$itemicons))
             	{
-				echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$thisItem['url']].'" alt="" /></a>';
+				echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$thisItem['url']].'" alt="'.$thisItem['title'].'" /></a>';
+				}
+			else if (substr($thisItem['url'],0,19) == 'moduleinterface.php')
+				{
+				if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
+					{
+					$imageSpec = dirname($this->cms->config['root_path'] .
+						'/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
+					if (file_exists($imageSpec))
+						{
+						echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
+							'/modules/' . $tmp[1] . '/images/' .
+							'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
+						}
+					else
+						{
+						$top=$this->menuItems[$this->TopParent($thisChild)];
+						if (array_key_exists($top['url'],$itemicons))
+							{
+							echo '<a href="'.$top['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$top['url']].'" alt="'.$top['title'].'" /></a>';
+							}
+						}
+					}
 				}
             echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
 			if (array_key_exists('target', $thisItem))
