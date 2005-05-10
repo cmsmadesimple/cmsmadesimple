@@ -98,47 +98,42 @@ include_once("header.php");
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('addgroup')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addgroup')))."</p></div>";
 }
 else
 {
 	if ($error != "")
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
 	}
 ?>
 
-<form method="post" action="addgroup.php">
-
-<div class="adminformSmall">
-
-<h3><?php echo lang('addgroup')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td>*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="group" maxlength="255" value="<?php echo $group?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="addgroup" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('addgroup')?></p>
+	<form method="post" action="addgroup.php">
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagenb" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="addgroup" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />			
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
 
 <?php
 }
+echo '<p class="pageback"><a class="pageback" href="listgroups.php">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

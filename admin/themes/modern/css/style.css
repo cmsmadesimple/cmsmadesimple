@@ -18,13 +18,8 @@ DIV { text-align: left; }
 TH, TD { text-align: left; }
 	
 /* General class library */
-.b-white { background-color: #FFFFFF; }
 .clearb { clear: both; }
-.f-blued { color: #384654; }
-.f-grayl { color: #E5E5E5; }
-.f-graym { color: #666666; }
-.f-redl { color: #CE374E; }
-.f-white { color: #FFFFFF; }
+.loginerror { color: #CE374E; }
 .floatl { float: left; }
 .logotext {	color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
 .mt5 { margin-top: 5px; }
@@ -46,9 +41,10 @@ p.lbpass { color: #555555; font-size: 1.2em; margin-top: 10px; }
 /* Main Page */
 div.topmenucontainer { background-color: #ececec; border-bottom: 1px solid #C0C0C0; }
 div.hstippled { background-color: #FFFFFF; background-image: url(themes/modern/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
+div.breadcrumbs { background-color: #ffffff; }
 p.breadcrumbs { color: #666666; padding-bottom: 3px; padding-left: 5px; padding-top: 3px; }
 p.logocontainer { padding-bottom: 5px; padding-left: 5px; padding-top: 5px; }
-p.footer { color: #ffffff; padding-top: 5px; text-align: center; }
+.footer { color: #ffffff; padding-top: 5px; text-align: center; }
 
 a.breadcrumbs { color: #666666; }
 a.footer { color: #ffffff; }
@@ -80,6 +76,9 @@ div.navt_hide {	background-image:url(themes/modern/images/hide_navtools.gif); ba
 .visible { display: block; }
 .invisible { display: none; }
 
+#page_tabs { overflow: hidden; border: 1px solid red; }
+#page_tabs div { background-color: #BDC0C6; color: #384654; cursor: pointer; float: left; padding-left: 8px; padding-right: 8px; text-align: center; }
+
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
 
@@ -110,7 +109,7 @@ p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
 p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
 p.pageinput { float: left; padding-top: 5px; }
 p.pagemessage { color: #384654; }
-p.pageshowrows { float: right; margin-right: 5px; text-align: right; }
+p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: right; }
 p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
 
 table.pagetable { margin-top: 5px; margin-bottom: 10px; border: 1px solid #c6c3bd; font-size: 1em; width: 100%; }
@@ -132,8 +131,10 @@ tr.row1hover { background: #dddddd; }
 tr.row2hover { background: #dddddd; }
 
 iframe.imageframe { border: none; margin-top: 10px; width: 100%; }
+iframe.preview { background-color: #ffffff; border: 1px solid #666666; height: 400px; margin: 10px; width: 100%; }
 input.standard { }
 input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
 textarea.pagetextarea { height: 30em; width: 45em; }
 ul.pageerror { margin: 0px; }
+#content { height: 30em; width: 45em; }

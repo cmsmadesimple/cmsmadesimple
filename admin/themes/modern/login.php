@@ -18,7 +18,7 @@
 					Enter a valid user credential to get access to the administration console. <br /><br />
 					<?php
 						if ($error != "") {
-							echo '<span class="f-redl">'.$error.'</span>';
+							echo '<span class="loginerror">'.$error.'</span>';
 						}
 					?>
 				</p>
@@ -40,7 +40,7 @@
 				</div>
 			</div>
 	</div>
-	<div class="lblayout footer"><a class="f-white" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</div>
+	<div class="lblayout footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</div>
 </div>	
 </body>
 </html>

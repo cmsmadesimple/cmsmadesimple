@@ -73,7 +73,7 @@ class modernTheme extends AdminTheme
         echo "\n\t</ul>\n";
 		echo "\t<div class=\"clearb\"></div>\n";
 		echo "</div>\n";
-		echo '<div class="b-white"><p class="breadcrumbs">';
+		echo '<div class="breadcrumbs"><p class="breadcrumbs">';
 		$counter = 0;
 		while ($menutext = array_shift($breadcrumbs)) {
 			if ($counter > 0) {
@@ -155,7 +155,7 @@ class modernTheme extends AdminTheme
         if (file_exists($file))
         {
 	       echo "<div class=\"DashboardCallout\">\n";
-	       echo '<p>'.lang('installdirwarning').'</p>';
+		   echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('installdirwarning')."</p></div>";
 	       echo "</div> <!-- end DashboardCallout -->\n";
         }
     }
