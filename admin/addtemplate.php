@@ -136,13 +136,13 @@ include_once("header.php");
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('addtemplate')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addtemplate')))."</p></div>";
 }
 else
 {
 	if ($error != "")
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
 	}
 
 	if ($preview)
@@ -168,65 +168,53 @@ else
 		fclose($handle);
 
 ?>
-<h3><?php echo lang('preview')?></h3>
-
-<iframe name="previewframe" width="90%" height="400" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
-
-</iframe>
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('preview')?></p>
+	<iframe class="preview" name="preview" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+</div>
 <?php
 
 	}
 ?>
 
-<form method="post" action="addtemplate.php" <?php if($use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
-
-<h3><?php echo lang('addtemplate')?></h3>
-
-<div class="adminform">
-
-<table width="100%" border="0">
-
-	<tr>
-		<td width="100">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>" /></td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo create_textarea(false, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('stylesheet')?>:</td>
-		<td><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'syntaxHighlight', 'stylesheet', $encoding)?></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('encoding')?>:</td>
-		<td><?php echo create_encoding_dropdown('encoding', $encoding) ?></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="addtemplate" value="true"/>
-		<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('addtemplate')?></p>
+	<form method="post" action="addtemplate.php">
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="template" maxlength="25" value="<?php echo $template?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagetextarea', '', $encoding)?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
+			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagetextarea', '', $encoding)?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('encoding')?>:</p>
+			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="addtemplate" value="true"/>
+				<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
 
-</form>
-
-<h4 onclick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</h4>
-<div id="helparea" class="expand">
-<?php echo lang("helpaddtemplate")?>
-</div>
 <?php
-
 }
+echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

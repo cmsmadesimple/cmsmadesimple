@@ -145,7 +145,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'pageinputwysiwyg');?></p>
+			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content', $encoding)?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>

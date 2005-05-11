@@ -85,27 +85,6 @@ if (isset($type) && "template" == $type)
 }
 
 #******************************************************************************
-# displaying erros if any
-#******************************************************************************
-if (isset($_GET["message"]))
-{
-    echo "<p class=\"error\">".$_GET["message"]."</p>";
-}
-if ("" != $error)
-{
-    echo "<p class=\"error\">$error</p>";
-}
-
-#******************************************************************************
-# now really starting
-#******************************************************************************
-?>
-
-<h3><?php echo lang('currentassociations')?> - <?php echo $type?> : <?php echo (isset($name)?$name:"")?></h3>
-
-<?php
-
-#******************************************************************************
 # first getting all user permissions
 #******************************************************************************
 	$userid = get_userid();
@@ -118,15 +97,45 @@ if ("" != $error)
 		WHERE assoc_type='$type' AND assoc_to_id = '$id' AND assoc_css_id = css_id";
 	$result = $db->Execute($query);
 
+#******************************************************************************
+# displaying erros if any
+#******************************************************************************
+if (isset($_GET["message"]))
+{
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+}
+if ("" != $error)
+{
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
+}
+
+if (!$addasso) {
+		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
+}
+
+#******************************************************************************
+# now really starting
+#******************************************************************************
+else {
+?>
+
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('currentassociations')?></p>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('template')?> :</p>
+			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>
+		</div>
+
+<?php
+
 	# if any css was found.
-	if ($result)
+	if ($result && $result->RowCount() > 0)
 	{
-		# table header
-		echo '<table cellspacing="0" class="AdminTable" style="width: 400px;">'."\n";
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<td>".lang('title')."</td>\n";
-		echo "<td>&nbsp;</td>\n";
+		echo "<th>".lang('title')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -141,13 +150,13 @@ if ("" != $error)
 			# we store ids of css found for them not to appear in the dropdown
 			array_push($csslist,$one["assoc_css_id"]);
 		 
-			echo "<tr class=\"$currow\">\n";
+			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";		 
 			echo "<td>".$one["css_name"]."</td>\n";
 
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td width=\"18\"><a href=\"deletecssassoc.php?id=$id&css_id=".$one["assoc_css_id"]."&type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				echo "<td><a href=\"deletecssassoc.php?id=$id&amp;css_id=".$one["assoc_css_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('delete.gif', lang('delete'));
                 echo "</a></td>\n";
 			}
@@ -167,63 +176,54 @@ if ("" != $error)
 
 	} # end of if result
 	
+	# this var is used to store the css ids that should not appear in the
+	# dropdown
+	$notinto = "";
 
-	# if user has right to create assoc
-	if ($addasso)
+	foreach($csslist as $key)
 	{
+		$notinto .= "$key,";
+	}
+	$notinto = substr($notinto, 0, strlen($notinto) - 1);
 
-		# this var is used to store the css ids that should not appear in the
-		# dropdown
-		$notinto = "";
+	# this var contains the dropdown
+	$dropdown = "";
 
-		foreach($csslist as $key)
+	# we generate the dropdown
+	if ("" == $notinto)
+	{
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id ORDER BY css_name";
+	}
+	else
+	{
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
+	}
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() > 0)
+	{
+		$form = "<form action=\"addcssassoc.php\" method=\"post\">";
+	
+		$dropdown = "<select name=\"css_id\">\n";
+		while ($line = $result->FetchRow())
 		{
-			$notinto .= "$key,";
+			$dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
 		}
-		$notinto = substr($notinto, 0, strlen($notinto) - 1);
+		$dropdown .= "</select>";
 
-		# this var contains the dropdown
-		$dropdown = "";
-
-		# we generate the dropdown
-		if ("" == $notinto)
-		{
-			$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id ORDER BY css_name";
-		}
-		else
-		{
-			$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
-		}
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0)
-		{
-
-			$form = "<form action=\"addcssassoc.php\" method=\"post\">";
-			
-			$dropdown = "<select name=\"css_id\" style=\"width: 250px;\">\n";
-			while ($line = $result->FetchRow())
-			{
-				$dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
-			}
-			$dropdown .= "</select>";
-
-			echo $form.$dropdown;
-
+		echo $form.'<p class="pageoptions">'.$dropdown.' ';
 ?>
-
-<input type="hidden" name="id" value="<?php echo $id?>" />
-<input type="hidden" name="type" value="<?php echo $type?>" />
-<input type="submit" value="<?php echo lang('addcss')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-</form>
+		<input type="hidden" name="id" value="<?php echo $id?>" />
+		<input type="hidden" name="type" value="<?php echo $type?>" />
+		<input type="submit" value="<?php echo lang('addcss')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
+		</p>
+		</form>
+		</div>
 
 <?php
 		} # end of showing form
-	} # end of if has right to add
-	else
-	{
-		echo lang('noaccessto', array(lang('addcssassociation')));
-	}
+}
+echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

@@ -85,6 +85,19 @@ if (isset($type) && "template" == $type)
 }
 
 #******************************************************************************
+# first getting all user permissions
+#******************************************************************************
+	$userid = get_userid();
+
+	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
+	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
+	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
+
+	$query = "SELECT assoc_to_id, template_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."templates
+		WHERE assoc_type='$type' AND assoc_css_id = '$id' AND assoc_to_id = template_id";
+	$result = $db->Execute($query);
+
+#******************************************************************************
 # displaying erros if any
 #******************************************************************************
 if (isset($_GET["message"]))
@@ -95,6 +108,12 @@ if ("" != $error)
 {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
 }
+
+if (!$addasso) {
+		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
+}
+
+else {
 
 #******************************************************************************
 # now really starting
@@ -110,21 +129,8 @@ if ("" != $error)
 
 <?php
 
-#******************************************************************************
-# first getting all user permissions
-#******************************************************************************
-	$userid = get_userid();
-
-	$modify  = check_permission($userid, 'Modify Stylesheet Assoc');
-	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
-	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
-
-	$query = "SELECT assoc_to_id, template_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."templates
-		WHERE assoc_type='$type' AND assoc_css_id = '$id' AND assoc_to_id = template_id";
-	$result = $db->Execute($query);
-
 	# if any css was found.
-	if ($result)
+	if ($result && $result->RowCount() > 0)
 	{
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
@@ -172,60 +178,51 @@ if ("" != $error)
 	} # end of if result
 	
 
-	# if user has right to create assoc
-	if ($addasso)
+	# this var is used to store the css ids that should not appear in the
+	# dropdown
+	$notinto = "";
+
+	foreach($csslist as $key)
+	{
+		$notinto .= "$key,";
+	}
+	$notinto = substr($notinto, 0, strlen($notinto) - 1);
+
+	# this var contains the dropdown
+	$dropdown = "";
+
+	# we generate the dropdown
+	if ("" == $notinto)
+	{
+		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id ORDER BY template_name";
+	}
+	else
+	{
+		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN ($notinto) ORDER BY template_name";
+	}
+	$result = $db->Execute($query);
+
+	if ($result && $result->RowCount() > 0)
 	{
 
-		# this var is used to store the css ids that should not appear in the
-		# dropdown
-		$notinto = "";
-
-		foreach($csslist as $key)
+		echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
+		echo '<p class="pageoptions">';
+		echo "<select name=\"template_id\">\n";
+		while ($line = $result->FetchRow())
 		{
-			$notinto .= "$key,";
+			echo "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
 		}
-		$notinto = substr($notinto, 0, strlen($notinto) - 1);
-
-		# this var contains the dropdown
-		$dropdown = "";
-
-		# we generate the dropdown
-		if ("" == $notinto)
-		{
-			$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id ORDER BY template_name";
-		}
-		else
-		{
-			$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN ($notinto) ORDER BY template_name";
-		}
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0)
-		{
-
-			echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
-			echo '<p class="pageoptions">';
-			echo "<select name=\"template_id\">\n";
-			while ($line = $result->FetchRow())
-			{
-				echo "<option value=\"".$line["template_id"]."\">".$line["template_name"]."</option>\n";
-			}
-			echo "</select> ";
+		echo "</select> ";
 ?>
 			<input type="hidden" name="id" value="<?php echo $id?>" />
 			<input type="hidden" name="type" value="<?php echo $type?>" />
 			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
 			</p>
 			</form>
-
+		</div>
 <?php
-		} # end of showing form
-	} # end of if has right to add
-	else
-	{
-		echo '<p class="pageoptions">'.lang('noaccessto', array(lang('addcssassociation'))).'</p>';
-	}
-echo '</div>';
+	} # end of showing form
+}
 
 echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
 
