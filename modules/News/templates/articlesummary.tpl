@@ -5,10 +5,18 @@
 
 {$entry->titlelink}
 
+<br />{$entry->category}
+
+{if $entry->postdate}
+
+<br />{$entry->postdate|date_format}
+
+{/if}
+
 {if $entry->summary}
 
 <br />{$entry->summary}
-<br />[{$morelink}]
+<br />[{$entry->morelink}]
 
 {else if $enty->content}
 

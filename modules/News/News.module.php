@@ -122,7 +122,7 @@ class News extends CMSModule
 		$dict = NewDataDictionary($db);
 		$flds = "
 			news_id I KEY,
-			news_cat C(255),
+			news_category_id I,
 			news_title C(255),
 			news_data X,
 			news_date T,
@@ -159,6 +159,7 @@ class News extends CMSModule
 
 		$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
 
+		/*
 		$flds = "
 			news_category_id I KEY,
 			news_id I KEY
@@ -168,6 +169,7 @@ class News extends CMSModule
 		$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
 				$flds, $taboptarray);
 		$dict->ExecuteSQLArray($sqlarray);
+		*/
 
 		#Set Permission
 		$this->CreatePermission('Modify News', 'Modify News');
@@ -222,6 +224,9 @@ class News extends CMSModule
 				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "summary X");
 				$dict->ExecuteSQLArray($sqlarray);
 
+				$sqlarray = $dict->AddColumnSQL(cms_db_prefix()."module_news", "news_category_id I");
+				$dict->ExecuteSQLArray($sqlarray);
+
 				$query = "UPDATE ".cms_db_prefix()."module_news SET summary = ?, status = ?";
 				$db->Execute($query, array('', 'published'));
 
@@ -243,6 +248,7 @@ class News extends CMSModule
 
 				$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
 
+				/*
 				$flds = "
 					news_category_id I KEY,
 					news_id I KEY
@@ -252,6 +258,7 @@ class News extends CMSModule
 				$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
 						$flds, $taboptarray);
 				$dict->ExecuteSQLArray($sqlarray);
+				*/
 
 				$query = "SELECT DISTINCT news_cat FROM ".cms_db_prefix()."module_news WHERE news_cat IS NOT NULL";
 				$dbresult = $db->Execute($query);
@@ -277,8 +284,10 @@ class News extends CMSModule
 		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_categories" );
 		$dict->ExecuteSQLArray($sqlarray);
 
+		/*
 		$sqlarray = $dict->DropTableSQL( cms_db_prefix()."module_news_article_categories" );
 		$dict->ExecuteSQLArray($sqlarray);
+		*/
 
 		$db->DropSequence( cms_db_prefix()."module_news_seq" );
 		$db->DropSequence( cms_db_prefix()."module_news_categories_seq" );
@@ -379,7 +388,7 @@ class News extends CMSModule
 
 				$entryarray = array();
 
-				$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
+				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' ORDER by news_date DESC";
 				$dbresult = $db->Execute($query);
 
 				while ($row = $dbresult->FetchRow())
@@ -393,9 +402,13 @@ class News extends CMSModule
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
+					$onerow->category = $row['news_category_name'];
 
 					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], array('articleid'=>$row['news_id']));
-					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, 'more', array('articleid'=>$row['news_id']));
+
+					$moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
+					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, array('articleid'=>$row['news_id']));
+					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
 
 					array_push($entryarray, $onerow);
 				}
@@ -408,7 +421,7 @@ class News extends CMSModule
 
 			case "detail":
 
-				$query = 'SELECT * FROM '.cms_db_prefix().'module_news WHERE news_id = ?';
+				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND news_id = ?";
 				$dbresult = $db->Execute($query, array($params['articleid']));
 
 				while ($row = $dbresult->FetchRow())
@@ -422,11 +435,39 @@ class News extends CMSModule
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
+					$onerow->category = $row['news_category_name'];
+
+					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
 
 					$this->smarty->assign_by_ref('entry', $onerow);
 				}
 
 				echo $this->ProcessTemplate('articledetail.tpl');
+
+				break;
+
+			case "print":
+
+				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND news_id = ?";
+				$dbresult = $db->Execute($query, array($params['articleid']));
+
+				while ($row = $dbresult->FetchRow())
+				{
+					$onerow = new stdClass();
+
+					$onerow->id = $row['news_id'];
+					$onerow->title = $row['news_title'];
+					$onerow->content = $row['news_data'];
+					$onerow->summary = $row['summary'];
+					$onerow->postdate = $row['news_date'];
+					$onerow->startdate = $row['start_time'];
+					$onerow->enddate = $row['end_time'];
+					$onerow->category = $row['news_category_name'];
+
+					$this->smarty->assign_by_ref('entry', $onerow);
+				}
+
+				echo $this->ProcessTemplate('articleprint.tpl');
 
 				break;
 
@@ -578,10 +619,10 @@ class News extends CMSModule
 					$status = $params['status'];
 				}
 
-				$usedcategories = array();
-				if (isset($params['categories']))
+				$usedcategory = '';
+				if (isset($params['category']))
 				{
-					$usedcategories = $params['categories'];
+					$usedcategory = $params['category'];
 				}
 
 				$postdate = time();
@@ -624,11 +665,11 @@ class News extends CMSModule
 							$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 						}
 
-						foreach ($usedcategories as $onecategory)
-						{
+						#foreach ($usedcategories as $onecategory)
+						#{
 							$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
-							$db->Execute($query, array($onecategory, $articleid));
-						}
+							$db->Execute($query, array($usedcategory, $articleid));
+						#}
 
 						$this->Redirect($id, 'defaultadmin', $returnid);
 					}
@@ -645,7 +686,6 @@ class News extends CMSModule
 				$categorylist = array();
 				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
 				$dbresult = $db->Execute($query);
-
 
 				while ($row = $dbresult->FetchRow())
 				{
@@ -667,7 +707,7 @@ class News extends CMSModule
 				$this->smarty->assign_by_ref('enddate', $enddate);
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
 				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
-				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputSelectList($id, 'categories[]', $categorylist, $usedcategories));
+				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
 				echo $this->ProcessTemplate('editarticle.tpl');
@@ -705,10 +745,10 @@ class News extends CMSModule
 					$status = $params['status'];
 				}
 
-				$usedcategories = array();
-				if (isset($params['categories']))
+				$usedcategory = '';
+				if (isset($params['category']))
 				{
-					$usedcategories = $params['categories'];
+					$usedcategory = $params['category'];
 				}
 
 				$postdate = time();
@@ -741,23 +781,14 @@ class News extends CMSModule
 					$title = $params['title'];
 					if ($title != '')
 					{
-						$query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, start_time=?, end_time=?, modified_date=? WHERE news_id = ?';
+						$query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=? WHERE news_id = ?';
 						if ($useexp == 1)
 						{
-							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $articleid));
+							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $articleid));
 						}
 						else
 						{
-							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $articleid));
-						}
-
-						$query = 'DELETE FROM '.cms_db_prefix().'module_news_article_categories WHERE news_id = ?';
-						$db->Execute($query, array($articleid));
-
-						foreach ($usedcategories as $onecategory)
-						{
-							$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
-							$db->Execute($query, array($onecategory, $articleid));
+							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, NULL, NULL, $db->DBTimeStamp(time()), $articleid));
 						}
 
 						$this->Redirect($id, 'defaultadmin', $returnid);
@@ -778,6 +809,7 @@ class News extends CMSModule
 						$content = $row['news_data'];
 						$summary = $row['summary'];
 						$status = $row['status'];
+						$usedcategory = $row['news_category_id'];
 						$postdate = $db->UnixTimeStamp($row['news_date']);
 						if (isset($row['start_time']))
 						{
@@ -790,15 +822,6 @@ class News extends CMSModule
 							$useexp = 0;
 						}
 					}
-
-					$query = "SELECT * FROM ".cms_db_prefix()."module_news_article_categories WHERE news_id = ?";
-					$dbresult = $db->Execute($query, array($articleid));
-
-					while ($row = $dbresult->FetchRow())
-					{
-						array_push($usedcategories, $row['news_category_id']);
-					}
-					debug_buffer($usedcategories);
 				}
 
 				$statusdropdown = array();
@@ -830,8 +853,7 @@ class News extends CMSModule
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
 				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
 				debug_buffer($categorylist);
-				debug_buffer($usedcategories);
-				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputSelectList($id, 'categories[]', $categorylist, $usedcategories));
+				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
 				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));

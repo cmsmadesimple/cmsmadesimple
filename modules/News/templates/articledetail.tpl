@@ -1,15 +1,29 @@
-<h3>{$entry->title}</h3>
+<h3 id="NewsPostDetailTitle">{$entry->title}</h3>
 
-{if $entry->summary}
+<hr id="NewsPostDetailHorizRule">
 
-<p>
-<strong>
-{$entry->summary}
-</strong>
-</p>
+{if $entry->postdate}
+
+<div id="NewsPostDetailDate">
+Posted: {$entry->postdate|date_format}
+</div>
 
 {/if}
 
-<p>
+{if $entry->summary}
+
+<div id="NewsPostDetailSummary">
+<strong>
+{$entry->summary}
+</strong>
+</div>
+
+{/if}
+
+<div id="NewsPostDetailContent">
 {$entry->content}
-</p>
+</div>
+
+<div>
+{$entry->printlink}
+</div>
