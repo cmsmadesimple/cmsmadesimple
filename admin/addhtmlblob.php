@@ -127,51 +127,45 @@ if ($result && $result->RowCount() > 0) {
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('addhtmlblob')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addhtmlblob')))."</p></div>";
 }
 else
 {
-	if ($error != "")
-		echo "<ul class=\"error\">".$error."</ul>";
+	if ($error != "") {
+			echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+	}
 ?>
 
-<form method="post" action="addhtmlblob.php" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content\');"';}?>>
-
-<div class="adminform">
-
-<h3><?php echo lang('addhtmlblob')?></h3>
-
-<table border="0" width="100%">
-
-	<tr>
-		<td width="150">*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content');?></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('additionaleditors')?>:</td>
-		<td><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<input type="hidden" name="addhtmlblob" value="true" />
-			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		</td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('addhtmlblob')?></p>
+	<form method="post" action="addhtmlblob.php">
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'pageinputwysiwyg');?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
+			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="addhtmlblob" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
 
 <?php
 }
+
+echo '<p class="pageback"><a class="pageback" href="listhtmlblobs.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

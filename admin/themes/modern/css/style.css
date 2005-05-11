@@ -89,9 +89,9 @@ div.itemmenu { background-color: #ececec; border: solid 1px #666666; color: #384
 img.itemicon { float: left; margin-right: 10px; border: 0px; height: 32px; width: 32px; }
 
 /* Standard pages output */
-div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
-div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
-div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 70em; }
+div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
+div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
+div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; }
 div.pageoverflow a { color: #384654; }
 div.pageoverflow img { border: 0px; }
@@ -108,6 +108,7 @@ p.pageerror { color: #384654; }
 p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
 p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
 p.pageinput { float: left; padding-top: 5px; }
+p.pageinputwysiwyg { padding-top: 5px; }
 p.pagemessage { color: #384654; }
 p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: right; }
 p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
@@ -135,6 +136,6 @@ iframe.preview { background-color: #ffffff; border: 1px solid #666666; height: 4
 input.standard { }
 input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
-textarea.pagetextarea { height: 30em; width: 45em; }
+textarea.pagetextarea { height: 30em; width: 48em; }
 ul.pageerror { margin: 0px; }
-#content { height: 30em; width: 45em; }
+#pageinputwysiwyg { height: 30em; width: 48em; }

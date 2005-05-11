@@ -120,8 +120,8 @@ class TinyMCE extends CMSModule
 		{
 		?>
 	
-		<script language="javascript" type="text/javascript" src="<?php echo $gCms->config['root_url'] ?>/modules/TinyMCE/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
-		<script language="javascript" type="text/javascript">
+		<script type="text/javascript" src="<?php echo $gCms->config['root_url'] ?>/modules/TinyMCE/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+		<script type="text/javascript">
 			tinyMCE.init({
 				mode : "exact",
 				elements : "<?php

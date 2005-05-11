@@ -557,7 +557,7 @@ function & strip_slashes(&$str)
 	return $str;
 }
 
-function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15')
+function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='', $height='')
 {
 	global $gCms;
 	$result = '';
