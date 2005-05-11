@@ -88,7 +88,7 @@ class User
 		$this->lastname = '';
 		$this->email = '';
 		$this->active = false;
-		$tihs->adminaccess = false;
+		$this->adminaccess = false;
 	}
 
 	/**
