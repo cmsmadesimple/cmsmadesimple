@@ -206,7 +206,7 @@ else {
 	{
 
 		echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
-		echo '<p class="pageoptions">';
+		echo '<div class="pageoverflow"><p class="pageoptions">';
 		echo "<select name=\"template_id\">\n";
 		while ($line = $result->FetchRow())
 		{
@@ -218,6 +218,7 @@ else {
 			<input type="hidden" name="type" value="<?php echo $type?>" />
 			<input type="submit" value="<?php echo lang('attachtemplate')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
 			</p>
+			</div>
 			</form>
 		</div>
 <?php

@@ -211,12 +211,13 @@ else {
 		}
 		$dropdown .= "</select>";
 
-		echo $form.'<p class="pageoptions">'.$dropdown.' ';
+		echo $form.'<div class="pageoverflow"><p class="pageoptions">'.$dropdown.' ';
 ?>
 		<input type="hidden" name="id" value="<?php echo $id?>" />
 		<input type="hidden" name="type" value="<?php echo $type?>" />
 		<input type="submit" value="<?php echo lang('addcss')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover';" onmouseout="this.className='pagebutton';" />
 		</p>
+		</div>
 		</form>
 		</div>
 
