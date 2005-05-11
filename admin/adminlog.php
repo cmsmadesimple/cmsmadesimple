@@ -91,9 +91,13 @@ if ($result && $result->RowCount() > 0) {
 		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
 	}
 
-if ($access) {
+if ($access && $result->RowCount() > 0) {
 	echo '<div class="pageoptions">';
+	echo '<p class="pageoptions">';
+	echo '<a href="addtemplate.php">';
+	echo $themeObject->DisplayImage('delete.gif', lang('delete')).'</a>'; 	
 	echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
+	echo '</p>';
 	echo '</div>';
 }
 

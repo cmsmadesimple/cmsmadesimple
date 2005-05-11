@@ -113,7 +113,7 @@ p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: ri
 p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
 p.pageoptions { padding-top: 5px; }
 
-table.pagetable { margin-top: 5px; margin-bottom: 10px; border: 1px solid #c6c3bd; font-size: 1em; width: 100%; }
+table.pagetable { margin-top: 5px; margin-bottom: 5px; border: 1px solid #c6c3bd; font-size: 1em; width: 100%; }
 table.pagetable th { background: #385C72; color: #ffffff; }
 table.pagetable td { color: #384654; }
 table.pagetable a { color: #384654; }
@@ -138,3 +138,4 @@ input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
 textarea.pagetextarea { height: 30em; width: 48em; }
 ul.pageerror { margin: 0px; }
+input.pagecheckbox { border: none; }

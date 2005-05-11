@@ -198,7 +198,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>

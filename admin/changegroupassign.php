@@ -75,7 +75,7 @@ if ($access)
 include_once("header.php");
 
 if (!$access) {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.lang('noaccessto',array(lang('modifygroupassignments'))).'</p></div>';
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
 }
 else {
 
@@ -92,7 +92,7 @@ else {
 		echo '<div class="pageoverflow">';
 		echo '<p class="pagetext">Group Name:</p>';		
 		echo '<p class="pageinput">';
-		echo '<select name="group_id" onchange="document.getElementById(\'groupname\').submit();">';
+		echo '<select name="group_id">';	
 		echo '<option value="-1">Select a Group</option>';
 		foreach ($groups as $onegroup)
 		{
@@ -103,9 +103,11 @@ else {
 			}
 			echo '>'.$onegroup->name.'</option>';
 		}
-		echo '</select>';
+		echo '</select> <input type="submit" value="'.lang('selectgroup').'" />';
 		echo '</p>';
 		echo '</div>';
+		echo '</form>';
+		echo '<form method="post" action="changegroupassign.php">';
 	}
 
 	if ($group_id != '' && $group_id != '-1')
@@ -135,26 +137,43 @@ else {
 		}
 
 	}
+
+	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+	echo '<thead>';
+	echo "<tr>\n";
+	echo "<th>".lang('assignments')."</th>\n";
+	echo "<th class=\"pagew10\">&nbsp;</th>\n";
+	echo "</tr>\n";
+	echo '</thead>';
+	echo '<tbody>';
+
+	$currow = "row1";
+	
 	foreach ($users as $key => $value)
 	{
-		echo '<div class="pageoverflow">';
-		echo '<p class="pagetext">'.$key.':</p>';
-		echo '<p class="pageinput"><input type="checkbox" name="user-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></p>';
-		echo '</div>';
+		echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		echo '<td>'.$key.'</td>'."\n";
+		echo '<td><input class="pagecheckbox" type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
+		echo "</tr>\n";
+
+		($currow=="row1"?$currow="row2":$currow="row1");	
 	}
-	echo '</form>';
+	echo '</tbody>';
+	echo '</table>';
+
 
 ?>
-</div>
-
+		<div class="pageoptions">
+			<p class="pageoptions">
+				<input type="hidden" name="group_id" value="<?php echo $group_id?>" />
+				<input type="submit" name="changeassign" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 <?php
 	}
-?>
-
-</div>
-
-<?php
-
+	echo '</div>';	
 }
 echo '<p class="pageback"><a class="pageback" href="topusers.php">&#171; '.lang('back').'</a></p>';
 

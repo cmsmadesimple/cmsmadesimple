@@ -81,22 +81,20 @@ if ($access)
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".lang('noaccessto',array(lang('modifygrouppermissions')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
 }
 else {
 
 if ($message != '')
 {
-	echo '<p class="Message">'.$message.'</p>';
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 	$message = '';
 }
 
 ?>
-<h3><?php echo lang('grouppermissions')?></h3>
 
-<p><a href="topusers.php"><?php echo lang('back')?></a></p>
-
-<div class="AdminForm">
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('grouppermissions')?></p>
 
 <?php
 
@@ -104,7 +102,10 @@ if ($message != '')
 	if (count($groups) > 0)
 	{
 		echo '<form method="post" action="changegroupperm.php">';
-		echo 'Group Name: <select name="group_id">';
+		echo '<div class="pageoverflow">';
+		echo '<p class="pagetext">Group Name:</p>';
+		echo '<p class="pageinput">';
+		echo '<select name="group_id">';
 		echo '<option value="-1">Select a Group</option>';
 		foreach ($groups as $onegroup)
 		{
@@ -115,7 +116,10 @@ if ($message != '')
 			}
 			echo '>'.$onegroup->name.'</option>';
 		}
-		echo '</select> <input type="submit" value="'.lang('selectgroup').'" /></form>';
+		echo '</select> <input type="submit" value="'.lang('selectgroup').'" />';
+		echo '</p>';
+		echo '</div>';
+		echo '</form>';
 		echo '<form method="post" action="changegroupperm.php">';
 	}
 
@@ -148,34 +152,45 @@ if ($message != '')
 			}
 		}
 		
-		echo '<table border="0" cellpadding="0" cellspacing="0">';
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo '<thead>';
+		echo "<tr>\n";
+		echo "<th>".lang('type')."</th>\n";
+		echo "<th class=\"pagew10\">&nbsp;</th>\n";
+		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
+		
+		$currow = "row1";
+		
 		foreach ($perms as $key => $value)
 		{
-			echo '<tr>';
-			echo '<th>'.$perm_text[$key].':</th>';
-			echo '<td><input type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>';
-			echo '</tr>';
+			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+			echo '<td>'.$perm_text[$key].':</td>'."\n";
+			echo '<td><input class="pagecheckbox" type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
+			echo "</tr>\n";
+
+			($currow=="row1"?$currow="row2":$currow="row1");
 		}
-
+		echo '</tbody>';
+		echo '</table>';
 ?>
-
-<tr><td><br /><input type="hidden" name="group_id" value="<?php echo $group_id?>" />
-<input type="submit" name="changeperm" value="<?php echo lang('updateperm')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td></tr>
-</table>
+		<div class="pageoptions">
+			<p class="pageoptions">
+				<input type="hidden" name="group_id" value="<?php echo $group_id?>" />
+				<input type="submit" name="changeperm" value="<?php echo lang('updateperm')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 
 <?php
 	}
-?>
-
-</form>
-
-</div>
-
-<?php
-
+	echo '</div>';
 }
 
+
+echo '<p class="pageback"><a class="pageback" href="topusers.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
