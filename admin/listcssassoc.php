@@ -151,7 +151,7 @@ else {
 			array_push($csslist,$one["assoc_css_id"]);
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";		 
-			echo "<td>".$one["css_name"]."</td>\n";
+			echo "<td><a href=\"editcss.php?css_id=".$one["assoc_css_id"]."\">".$one["css_name"]."</a></td>\n";
 
 			# if user has right to delete
 			if ($delasso)
