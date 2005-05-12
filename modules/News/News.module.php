@@ -386,6 +386,14 @@ class News extends CMSModule
 		{
 			case "default":
 
+				if (isset($params["makerssbutton"]))
+				{
+					debug_buffer('Making rss button');
+					$params = array_merge(array("showtemplate"=>"false"));
+					echo $this->CreateLink($id, 'rss', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
+					return;
+				}
+
 				$entryarray = array();
 
 				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' ORDER by news_date DESC";
@@ -468,6 +476,45 @@ class News extends CMSModule
 				}
 
 				echo $this->ProcessTemplate('articleprint.tpl');
+
+				break;
+
+			case "rss":
+
+				$entryarray = array();
+
+				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' ORDER by news_date DESC";
+				$dbresult = $db->Execute($query);
+
+				while ($row = $dbresult->FetchRow())
+				{
+					$onerow = new stdClass();
+
+					$onerow->id = $row['news_id'];
+					$onerow->title = $row['news_title'];
+					$onerow->content = $row['news_data'];
+					$onerow->summary = $row['summary'];
+					$onerow->postdate = $row['news_date'];
+					$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
+					$onerow->startdate = $row['start_time'];
+					$onerow->enddate = $row['end_time'];
+					$onerow->category = $row['news_category_name'];
+
+					array_push($entryarray, $onerow);
+				}
+
+				$this->smarty->assign_by_ref('items', $entryarray);
+
+				global $gCms;
+
+				$this->smarty->assign_by_ref('root_url', $gCms->config['root_url']);
+				$this->smarty->assign_by_ref('query_var', $gCms->config['query_var']);
+
+				#Display template
+				$variables = &$this->cms->variables;
+				$variables['content-type'] = 'application/rss+xml';
+
+				echo $this->ProcessTemplate('rssfeed.tpl');
 
 				break;
 
