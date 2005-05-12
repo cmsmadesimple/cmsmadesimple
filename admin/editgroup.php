@@ -117,45 +117,40 @@ if (strlen($group) > 0)
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".lang('noaccessto',array(lang('editgroup')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('editgroup')))."</p></div>";
 }
 else {
 	if ($error != "") {
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";	
 	}
 ?>
 
-<form method="post" action="editgroup.php">
-
-<div class="adminformSmall">
-
-<h3><?php echo lang('editgroup')?></h3>
-
-<table border="0" align="center">
-
-	<tr>
-		<td align="right"><?php echo lang('name')?>:</td>
-		<td><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></td>
-	</tr>
-	<tr>
-		<td align="right"><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
-	</tr>
-	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="group_id" value="<?php echo $group_id?>" /><input type="hidden" name="editgroup" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('editgroup')?></p>
+	<form method="post" action="editgroup.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="group" maxlength="25" value="<?php echo $group?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="group_id" value="<?php echo $group_id?>" /><input type="hidden" name="editgroup" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
-
 <?php
 
 }
+echo '<p class="pageback"><a class="pageback" href="listgroups.php">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

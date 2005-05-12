@@ -200,7 +200,7 @@ include_once("header.php");
 # if the user has no acess, we display an error
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('editcss')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('editcss')))."</p></div>";
 }
 
 # else, we can display the form
@@ -209,49 +209,42 @@ else
 	# first displaying erros if any
 	if ($error != "")
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
 	}
 ?>
 
-<form method="post" action="editcss.php" <?php if(isset($use_javasyntax) && $use_javasyntax){echo 'onSubmit="textarea_submit(this, \'content,stylesheet\');"';} ?>>
-
-<div class="adminform">
-
-<h3><?php echo lang('editstylesheet')?></h3>
-
-<table width="100%" border="0">
-
-	<tr>
-		<td width="100">*<?php echo lang('name')?>:</td>
-		<td>
-			<input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" />
-			<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>" />
-		</td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo textarea_highlight((isset($use_javasyntax)?$use_javasyntax:false), $css_text, "css_text"); ?></td>
-	</tr>
-	<tr>
-		<td>&nbsp;</td>
-		<td>
-			<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
-			<input type="hidden" name="editcss" value="true" />
-			<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		</td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('editstylesheet')?></p>
+	<form method="post" action="editcss.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput">
+				<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>" />
+				<input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" />				
+			</p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('content')?>:</p>
+			<p class="pageinput"><textarea class="pagetextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
+				<input type="hidden" name="editcss" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
 
 <?php
 
 } # end of displaying form
+
+echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

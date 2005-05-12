@@ -102,7 +102,7 @@ if (isset($_GET["message"]))
 				# if user has right to edit
 				if ($modify)
 				{
-					echo "<td><a href=\"editcss.php?id=".$one["css_id"]."&amp;type=template\">";
+					echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">";
                     echo $themeObject->DisplayImage('edit.gif', lang('edit'));
                     echo "</a></td>\n";
 				}

@@ -371,7 +371,7 @@ else if ($action == 'missingdeps')
 			{
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".lang('needupgrade')."</td>";
-				echo "<td>".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+				echo "<td class=\"pagepos\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 				echo "<td><a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a></td>";
 			}
 			else #Must be installed

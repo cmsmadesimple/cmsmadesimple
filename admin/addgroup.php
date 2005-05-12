@@ -113,7 +113,7 @@ else
 	<form method="post" action="addgroup.php">
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" class="standard" /></p>
+			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>

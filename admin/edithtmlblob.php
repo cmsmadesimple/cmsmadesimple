@@ -189,62 +189,60 @@ while($row = $result->FetchRow())
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto', array(lang('edithtmlblob')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('edithtmlblob')))."</p></div>";
 }
 else
 {
 	if ($error != "")
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
 	}
 ?>
 
-<form method="post" action="edithtmlblob.php">
 
-<div class="adminform">
-
-<h3><?php echo lang('edithtmlblob')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td>*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td>*<?php echo lang('content')?>:</td>
-		<td><?php echo create_textarea(true, $content, 'content', 'syntaxHighlight', 'content');?></td>
-	</tr>
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('edithtmlblob')?></p>
+	<form method="post" action="edithtmlblob.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('content')?>:</p>
+			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'wysiwyg', 'wysiwyg'); ?></p>
+		</div>
 	<?php if ($adminaccess) { ?>
-	<tr>
-		<td><?php echo lang('owner')?>:</td>
-		<td><?php echo $owners?></td>
-	</tr>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('owner')?>:</p>
+			<p class="pageinput"><?php echo $owners?></p>
+		</div>
 	<?php } ?>
 	<?php if ($addt_users != '') { ?>
-	<tr>
-		<td><?php echo lang('additionaleditors')?>:</td>
-		<td><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></td>
-	</tr>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
+			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
+		</div>
 	<?php } ?>
-	<tr>
-		<td>&nbsp;</td>
-		<td><input type="hidden" name="edithtmlblob" value="true" /><input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>" /><input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<?php if (!$adminaccess) { ?>
-			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
-		<?php } ?>
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="edithtmlblob" value="true" />
+				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>" />
+				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<?php if (!$adminaccess) { ?>
+					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
+				<?php } ?>
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
 
 <?php
 }
+echo '<p class="pageback"><a class="pageback" href="listhtmlblobs.php">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

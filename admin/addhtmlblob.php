@@ -145,7 +145,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'foo', 'bar'); ?></p>
+			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'wysiwyg', 'wysiwyg'); ?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
@@ -166,6 +166,7 @@ else
 }
 
 echo '<p class="pageback"><a class="pageback" href="listhtmlblobs.php">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
