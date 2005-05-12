@@ -116,7 +116,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		if ($doadd)
 		{
 			$query = "INSERT INTO ".cms_db_prefix().
-                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)"
+                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)" .
 				" VALUES (?,?,?,?,?)";
 			$result = $db->Execute($query, array($id,$css_id,$type,$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
 
