@@ -15,7 +15,7 @@ if (file_exists(dirname(__FILE__)."/themes/".$theme."/css/".$style))
 	{
 	readfile(dirname(__FILE__)."/themes/".$theme."/css/".$style);
 	}
-else
+else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
 	{
 	readfile(dirname(__FILE__)."/themes/default/css/".$style);
 }
