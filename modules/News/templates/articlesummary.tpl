@@ -18,7 +18,7 @@
 <br />{$entry->summary}
 <br />[{$entry->morelink}]
 
-{else if $enty->content}
+{else if $entry->content}
 
 <br />{$entry->content}
 
