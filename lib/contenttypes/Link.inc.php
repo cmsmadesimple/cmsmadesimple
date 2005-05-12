@@ -127,7 +127,7 @@ class link extends ContentBase
 
 		if (!$adding && $showadmin)
 		{
-			array_push($ret,'<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>';
+			array_push($ret,'<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>');
 		}
 
 		if ($adding || $showadmin)
