@@ -94,8 +94,8 @@ if (isset($type) && "template" == $type)
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
 	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css
-		WHERE assoc_type='$type' AND assoc_to_id = '$id' AND assoc_css_id = css_id";
-	$result = $db->Execute($query);
+		WHERE assoc_type=? AND assoc_to_id = ? AND assoc_css_id = css_id";
+	$result = $db->Execute($query, array($type,$id));
 
 #******************************************************************************
 # displaying erros if any
@@ -196,9 +196,9 @@ else {
 	}
 	else
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN ($notinto) ORDER BY css_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (?) ORDER BY css_name";
 	}
-	$result = $db->Execute($query);
+	$result = $db->Execute($query, array($notinto));
 
 	if ($result && $result->RowCount() > 0)
 	{

@@ -85,8 +85,8 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 	{
 
 		# first check if this association already exists
-		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = '$id' AND assoc_type = '$type' AND assoc_css_id = '$css_id'";
-		$result = $db->Execute($query);
+		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = ? AND assoc_type = ? AND assoc_css_id = ?";
+		$result = $db->Execute($query, array($id, $type, $css_id));
 
 		if ($result && $result->RowCount() > 0)
 		{
@@ -97,8 +97,8 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		# we get the name of the element (for logging)
 		if ("template" == $type && $doadd)
 		{
-			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
-			$result = $db->Execute($query);
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			$result = $db->Execute($query, array($id));
 			
 			if ($result && $result->RowCount() > 0)
 			{
@@ -115,9 +115,10 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
-			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)
-				VALUES ('$id','$css_id','$type','".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
-			$result = $db->Execute($query);
+			$query = "INSERT INTO ".cms_db_prefix().
+                "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)"
+				" VALUES (?,?,?,?,?)";
+			$result = $db->Execute($query, array($id,$css_id,$type,$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
 
 			if ($result)
 			{
@@ -125,9 +126,9 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."' 
-						WHERE template_id = '$id'";
-					$tplresult = $db->Execute($tplquery);
+					$tplquery = "UPDATE ".cms_db_prefix().
+                    "templates SET modified_date = ?  WHERE template_id = ?";
+					$tplresult = $db->Execute($tplquery, array($db->DBTimeStamp(time()), $id));
 				}
 			}
 			else

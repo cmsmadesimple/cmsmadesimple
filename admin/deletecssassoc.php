@@ -77,8 +77,8 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 		if ($type == 'template')
 		{
 			# first we get the name of the template for logging
-			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = '$id'";
-			$result = $db->Execute($query);
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			$result = $db->Execute($query,array($id));
 
 			if ($result && $result->RowCount())
 			{
@@ -97,8 +97,8 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 #******************************************************************************
 		if ($dodelete)
 		{
-			$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = '$css_id' AND assoc_type = '$type' AND assoc_to_id = '$id'";
-			$result = $db->Execute($query);
+			$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ? AND assoc_type = ? AND assoc_to_id = ?";
+			$result = $db->Execute($query, array($css_id,$type, $id));
 
 			if ($result)
 			{
@@ -107,9 +107,8 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 				# now updating template
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."'
-						WHERE template_id = '$id'";
-					$tplresult = $db->Execute($tplquery);
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ? WHERE template_id = ?";
+					$tplresult = $db->Execute($tplquery, array($db->DBTimeStamp(time()),$id));
 				}
 			}
 			else
