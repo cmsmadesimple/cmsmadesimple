@@ -141,20 +141,20 @@ else {
 		<form enctype="multipart/form-data" action="edituserplugin.php" method="post">
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>
-				<p class="pageinput">
-					<input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" />
-				</p>
+				<p class="pageinput"><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput"><textarea class="pagetextarea" name="code"></textarea></p>
+				<p class="pageinput"><?php echo textarea_highlight($use_javasyntax, $code, "code", "pagetextarea", "Java") ?></p>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
-					<input type="hidden" name="addplugin" value="true" />
-					<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
+						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
+						<input type="hidden" name="editplugin" value="true" />
+						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				</p>
 			</div>
 		</form>
