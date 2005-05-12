@@ -40,7 +40,6 @@ if ($result)
 else
 	{
 	include_once("header.php");
-    debug_display($newmark);
 	echo "<h3>". lang('erroraddingbookmark') . "</h3>";
 	}
 
