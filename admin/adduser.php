@@ -138,6 +138,9 @@ if (isset($_POST["adduser"]))
 	}
 }
 
+$userid = get_userid();
+$access = check_permission($userid, 'Add Users');
+
 include_once("header.php");
 
 if ($error != "")
@@ -145,53 +148,57 @@ if ($error != "")
 	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";
 }
 
+if (!$access) {
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('adduser')))."</p></div>";	
+}
+else {
 ?>
 
 <div class="pagecontainer">
-	<div class="pageoverflow">
-		<p class="pageheader"><?php echo lang("adduser"); ?></p>
-		<form method="post" action="adduser.php">		
-			<div class="pageoverflow">
-				<p class="pagetext">*<?php echo lang('name')?>:</p>
-				<p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext">*<?php echo lang('password')?>:</p>
-				<p class="pageinput"><input type="password" name="password" maxlength="255" value="" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
-				<p class="pageinput"><input type="password" name="passwordagain" maxlength="255" value="" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('firstname')?>:</p>
-				<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('lastname')?>:</p>
-				<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('email')?>:</p>
-				<p class="pageinput"><input type="text" name="email" maxlength="255" value="" class="standard" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('active')?>:</p>
-				<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
-					<input type="hidden" name="adduser" value="true" />
-					<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
-					<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" /></td>
-				</p>
-			</div>
-		</form>
-	</div>
-</div>	
+	<p class="pageheader"><?php echo lang("adduser"); ?></p>
+	<form method="post" action="adduser.php">		
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('password')?>:</p>
+			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
+			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('firstname')?>:</p>
+			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('lastname')?>:</p>
+			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('email')?>:</p>
+			<p class="pageinput"><input type="text" name="email" maxlength="255" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="adduser" value="true" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+			</p>
+		</div>
+	</form>
+</div>
 
 <?php
+}
+
 echo '<p class="pageback"><a class="pageback" href="listusers.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");

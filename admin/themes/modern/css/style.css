@@ -111,7 +111,7 @@ p.pageinputwysiwyg { padding-top: 5px; }
 p.pagemessage { color: #384654; }
 p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: right; }
 p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
-p.pageoptions { padding-top: 5px; }
+p.pageoptions { color: #384654; padding-top: 5px; }
 
 table.pagetable { margin-top: 5px; margin-bottom: 5px; border: 1px solid #c6c3bd; font-size: 1em; width: 100%; }
 table.pagetable th { background: #385C72; color: #ffffff; }

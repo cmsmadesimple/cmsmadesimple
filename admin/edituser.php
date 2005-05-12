@@ -158,87 +158,63 @@ if ($access) {
 include_once("header.php");
 
 if (!$access) {
-	print "<h3>".lang('noaccessto', array(lang('edituser')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('edituser')))."</p></div>";	
 }
 else {
 
 	if ($error != "") {
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
 	}
 
 ?>
 
-<form method="post" action="edituser.php">
-
-<div class="adminformSmall">
-
-<h3><?php echo lang('edituser')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td>*<?php echo lang('name')?>:</td>
-		<td><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('password')?></td>
-		<td ><input type="password" name="password" maxlength="25" value="" class="standard" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('passwordagain')?>:</td>
-		<td><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></td>
-	</tr>
-	<tr>
-		<td colspan="2" style="font-size: .83em;">Leave password fields blank to keep current password.</td>
-	</tr>
-	<tr>
-		<td><?php echo lang('firstname')?>:</td>
-		<td><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('lastname')?>:</td>
-		<td><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard" /></td>
-	</tr>
-	<tr>
-		<td><?php echo lang('email')?>:</td>
-		<td><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></td>
-	</tr>
-	<!--
-	<tr>
-		<td><?php echo lang('adminaccess')?>:</td>
-		<td><input type="checkbox" name="adminaccess" <?php echo ($adminaccess == 1?"checked=\"checked\"":"")?> /></td>
-	</tr>
-	-->
-	<tr>
-		<td><?php echo lang('active')?>:</td>
-		<td><input type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></td>
-	</tr>
-	<!--
-	<tr>
-		<td><?php echo lang('usewysiwyg')?>:</td>
-		<td>
-			<select name="use_wysiwyg">
-				<option value="1" <?php echo  ($use_wysiwyg=="1"?"selected":"") ?>><?php echo lang('true')?></option>
-				<option value="0" <?php echo  ($use_wysiwyg=="0"?"selected":"") ?>><?php echo lang('false')?></option>
-			</select>
-		</td>
-	</tr>
-	-->
-	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="user_id" value="<?php echo $user_id?>" /><input type="hidden" name="edituser" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang("edituser"); ?></p>
+	<form method="post" action="edituser.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('password')?>:</p>
+			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('passwordagain')?>:</p>
+			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('firstname')?>:</p>
+			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('lastname')?>:</p>
+			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('email')?>:</p>
+			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
+				<input type="hidden" name="edituser" value="true" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
-
 <?php
 
 }
+
+echo '<p class="pageback"><a class="pageback" href="listusers.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 
