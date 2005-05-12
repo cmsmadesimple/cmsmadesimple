@@ -99,39 +99,34 @@ include_once("header.php");
 
 if ($error != "")
 	{
-	echo "<ul class=\"error\">".$error."</ul>";
+	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
 	}
 ?>
 
-<form method="post" action="editbookmark.php">
-
-<div class="adminformSmall">
-
-<h3><?php echo lang('editbookmark')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td align="left"><?php echo lang('title')?>:</td>
-		<td><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></td>
-	</tr>
-	<tr>
-		<td align="left"><?php echo lang('url')?>:</td>
-		<td><input type="text" name="url" maxlength="255" value="<?php echo $url?>" /></td>
-	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('editbookmark')?></p>
+	<form method="post" action="editbookmark.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('title')?>:</p>
+			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('url')?>:</p>
+			<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>		
+	</form>
 </div>
-
-</form>
-
 <?php
 
+echo '<p class="pageback"><a class="pageback" href="listbookmarks.php">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

@@ -106,7 +106,7 @@ p.pageback { margin-left: 10px; }
 p.pageerror { color: #384654; }
 p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
 p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
-p.pageinput { float: left; padding-top: 5px; }
+p.pageinput { color: #384654; float: left; padding-top: 5px; }
 p.pageinputwysiwyg { padding-top: 5px; }
 p.pagemessage { color: #384654; }
 p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: right; }

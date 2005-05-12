@@ -155,7 +155,7 @@ if ($message != '')
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
-		echo "<th>".lang('type')."</th>\n";
+		echo "<th>".lang('permission')."</th>\n";
 		echo "<th class=\"pagew10\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
@@ -166,7 +166,7 @@ if ($message != '')
 		foreach ($perms as $key => $value)
 		{
 			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo '<td>'.$perm_text[$key].':</td>'."\n";
+			echo '<td>'.$perm_text[$key].'</td>'."\n";
 			echo '<td><input class="pagecheckbox" type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
 			echo "</tr>\n";
 

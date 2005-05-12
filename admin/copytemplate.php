@@ -34,6 +34,8 @@ $template_id = -1;
 if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
+if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
+
 if (isset($_POST["cancel"]))
 {
 	redirect("listtemplates.php");
@@ -108,44 +110,46 @@ include_once("header.php");
 
 if (!$access)
 {
-	print "<h3>".lang('noaccessto',array(lang('copytemplate')))."</h3>";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('copytemplate')))."</p></div>";
 }
 else
 {
 	if ($error != "")
 	{
-		echo "<ul class=\"error\">".$error."</ul>";
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";		
 	}
 
 ?>
 
-<form method="post" action="copytemplate.php">
 
-<div class="adminformSmall">
-
-<h3><?php echo lang('copytemplate')?></h3>
-
-<table border="0">
-
-	<tr>
-		<td><?php echo lang('newtemplatename')?>:</td>
-		<td><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></td>
-	</tr>
-	<tr>
-		<td colspan="2" align="center"><input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" />
-		<input type="submit" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
-		<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" /></td>
-	</tr>
-
-</table>
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('copytemplate')?></p>
+	<form method="post" action="copytemplate.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('template'); ?>:</p>
+			<p class="pageinput"><?php echo $template_name; ?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('newtemplatename'); ?>:</p>
+			<p class="pageinput"><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</p>
+		</div>
+	</form>
 </div>
-
-</form>
 
 <?php
 
 }
+
+echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

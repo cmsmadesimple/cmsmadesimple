@@ -164,7 +164,7 @@ if (isset($_GET["message"])) {
 				# add new template
 				if ($add)
 				    {
-					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."\">";
+					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".$onetemplate->name."\">";
                     echo $themeObject->DisplayImage('copy.gif', lang('copy'));
                     echo "</a></td>\n";
                     }
