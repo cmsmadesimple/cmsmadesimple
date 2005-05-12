@@ -918,6 +918,16 @@ class ContentBase
 	}
 
 	/**
+	 * Show the Alternate Edit interface
+	 */
+	function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+	{
+		# :TODO:
+		return array("<tr><td>Edit Not Defined</td></tr>");
+	}
+
+
+	/**
 	 * Show the Edit interface
 	 */
 	function Edit($adding = false, $tab = 0, $showadmin = false)

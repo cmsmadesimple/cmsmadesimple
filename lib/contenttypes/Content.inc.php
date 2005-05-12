@@ -139,6 +139,77 @@ class content extends ContentBase
 		return TRUE;
 	}
 
+
+    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+		global $gCms;
+		$config = $gCms->config;
+		$ret = array();
+		$stylesheet = '';
+		if ($this->TemplateId() > 0)
+		{
+			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+		}
+		else
+		{
+			$defaulttemplate = TemplateOperations::LoadDefaultTemplate();
+			if (isset($defaulttemplate))
+			{
+				$this->mTemplateId = $defaulttemplate->id;
+				$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
+			}
+		}
+		if ($tab == 0)
+		{
+			array_push($ret, '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>');
+			array_push($ret, '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>');
+			if (!($config['auto_alias_content'] == true && $adding))
+			{
+				array_push($ret, '<tr><th>'.lang('pagealias').':</th><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>');
+			}
+			$additionalcall = '';
+			foreach($gCms->modules as $key=>$value)
+			{
+				if (get_preference(get_userid(), 'wysiwyg')!="" && 
+					$gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true &&
+					$gCms->modules[$key]['object']->IsWYSIWYG() &&
+					$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
+				{
+					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+				}
+			}
+			array_push($ret, '<tr><th>'.lang('template').':</th><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n");
+			array_push($ret, '<tr><th>'.lang('content').':</th><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11').'</td></tr>'."\n");
+			
+			// add additional content blocks if required
+			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
+			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
+			{
+				array_push($ret, '<tr><th>'.ucwords($blockName).':</th><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n");
+			}
+		}
+		if ($tab == 1)
+		{
+			array_push($ret, '<tr><th>'.lang('headtags').':</th><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n");
+			array_push($ret, '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>');
+			array_push($ret, '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>');
+			array_push($ret, '<tr><th>'.lang('cachable').':</th><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>');
+			array_push($ret, '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>');
+
+			if (!$adding && $showadmin)
+			{
+				array_push($ret, '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>');
+			}
+
+			if ($adding || $showadmin)
+			{
+				array_push($ret, $this->ShowAdditionalEditors());
+			}
+		}
+        return $ret;
+    }
+
 	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
 		global $gCms;
