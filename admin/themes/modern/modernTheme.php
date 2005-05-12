@@ -338,8 +338,7 @@ class modernTheme extends AdminTheme
     	       }
     	   }
 
-        $retStr = '<img src="'.$this->imageLink[$imageName].'"';
-		$retStr .= 'class="pageicon"';
+        $retStr = '<img src="'.$this->imageLink[$imageName].'"  class="pageicon"';
         if ($width != '')
             {
             $retStr .= ' width="'.$width.'"';
