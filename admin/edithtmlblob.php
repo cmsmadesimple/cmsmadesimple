@@ -209,7 +209,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'wysiwyg', 'wysiwyg'); ?></p>
+			<p class="pageinputwysiwyg"><?php echo create_textarea(true, $content, 'content', 'wysiwyg', 'content');?></p>
 		</div>
 	<?php if ($adminaccess) { ?>
 		<div class="pageoverflow">
