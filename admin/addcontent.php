@@ -63,7 +63,7 @@ else
 	}
 	else
 	{
-		$error = "<p>No content types loaded!</p>";	
+		$error = "No content types loaded!";
 	}
 }
 
@@ -159,7 +159,7 @@ if ($access)
 
 if (!$access)
 {
-	echo "<h3>".lang('noaccessto',array(lang('addcontent')))."</h3>\n";
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
 }
 else
 {
@@ -178,12 +178,12 @@ $typesdropdown .= "</select>";
 
 if ($error !== FALSE)
 {
-	echo '<ul>';
+	echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">";
 	foreach ($error as $oneerror)
 	{
 		echo '<li>'.$oneerror.'</li>';
 	}
-	echo '</ul>';
+	echo "</ul></div>";
 }
 else if ($preview)
 {
@@ -214,95 +214,101 @@ else if ($preview)
 	fclose($handle);
 
 ?>
-<h3><?php echo lang('preview')?></h3>
 
-<iframe name="previewframe" width="90%" height="400" frameborder="0" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>" style="margin: 10px; border: 1px solid #8C8A8C;">
-
-</iframe>
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('preview')?></p>
+	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+</div>
 <?php
-
 }
 
-$tabs = array();
-if (isset($contentobj))
-{
-	$tabs = $contentobj->GetTabDefinitions();
-}
-
+$contentarray = $contentobj->EditAsArray(true, 0);
+$contentarray2 = $contentobj->EditAsArray(true, 1);
 
 ?>
 
-<form method="post" action="addcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-
-<h3><?php echo lang('addcontent')?></h3>
-
-<div class="AdminForm">
-
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang('addcontent')?></p>
+	<div id="page_tabs">
+		<div id="main">Main</div>
+		<div id="options">Options</div>
+	</div>
+	<div style="clear: both;"></div>
+	<form method="post" action="addcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>			
+	<div id="page_content">
+		<div id="main_c">
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
+				<p class="pageinput"><?php echo $typesdropdown; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[0][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray[0][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[1][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray[1][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[2][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray[2][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[3][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray[3][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[4][0]; ?></p>
+				<p class="pageinputwysiwyg"><?php echo $contentarray[4][1]; ?></p>
+			</div>		
+			<div class="pageoverflow">
+				<p class="pagetext">&nbsp;</p>
+				<p class="pageinput">
+					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
+						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<?php } ?>
+					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+				</p>
+			</div>
+			<div style="clear: both;"></div>
+		</div>
+		<div id="options_c">
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray2[0][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray2[0][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray2[1][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray2[1][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray2[2][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray2[2][1]; ?></p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray2[3][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray2[3][1]; ?></p>
+			</div>		
+			<div class="pageoverflow">
+				<p class="pagetext">&nbsp;</p>
+				<p class="pageinput">
+					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
+						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<?php } ?>
+					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+				</p>
+			</div>
+			<div style="clear: both;"></div>			
+		</div>
+	</div>
+	</form>
+</div>
 <?php
 
-if (count($tabs) > 0)
-{
-	echo '<div id="tab-container">';
-	echo '<div class="tab-content">';
-	echo '<h2 class="tab">'.$tabs[0].'</h2>';
 }
-
-?>
-
-<table width="100%" border="0" cellpadding="0" cellspacing="0" summary="">
-	<tbody>
-	<tr>
-		<th><?php echo lang('contenttype') ?>:</th>
-		<td><?php echo $typesdropdown ?></td>
-	</tr>
-	<?php
-		echo $contentobj->Edit(true);
-	?>
-	</tbody>
-</table>
-
-</div> <!-- end tab-content -->
-
-<?php
-
-if (count($tabs) > 1)
-{
-	# Show additional tabs now
-	for ($i = 1; $i < count($tabs); $i++)
-	{
-		echo '<div class="tab-content">';
-		echo '<h2 class="tab">'.$tabs[$i].'</h2>';
-		echo '<table width="100%" border="0" cellpadding="0" cellspacing="0" summary=""><tbody>';
-		echo $contentobj->Edit(true, $i);
-		echo '</tbody></table>';
-		echo '</div> <!-- end tab-content -->';
-	}
-}
-
-if (count($tabs) > 0)
-{
-	echo '</div> <!-- end tab-container -->';
-	echo '<script type="text/javascript">BuildTabs(\'tab-container\',\'tab-header\',\'tab-list\');ActivateTab(0,\'tab-container\',\'tab-list\');</script>';
-}
-
-?>
-
-<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-	<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<?php } ?>
-<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'">
-
-</div> <!--end adminform-->
-
-<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" />
-<input type="hidden" name="firsttime" value="<?php echo $firsttime ?>" />
-
-</form>
-
-<?php
-
-}
+echo '<p class="pageback"><a class="pageback" href="listcontent.php">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

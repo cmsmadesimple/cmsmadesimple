@@ -180,8 +180,8 @@ class content extends ContentBase
 					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				}
 			}
-			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"')));
-			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11')));
+			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
+			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', '', '', '')));
 			
 			// add additional content blocks if required
 			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
@@ -192,10 +192,10 @@ class content extends ContentBase
 		}
 		if ($tab == 1)
 		{
-			array_push($ret, array(lang('headtags').':',create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5)));
-			array_push($ret, array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
-			array_push($ret, array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
-			array_push($ret, array(lang('cachable').':','<input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('headtags').':',create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', 'pageheadtags', 'headtags', '', '', 80, 5)));
+			array_push($ret, array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
 
 			if (!$adding && $showadmin)
 			{

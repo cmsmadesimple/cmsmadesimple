@@ -76,8 +76,11 @@ div.navt_hide {	background-image:url(themes/modern/images/hide_navtools.gif); ba
 .visible { display: block; }
 .invisible { display: none; }
 
-#page_tabs { overflow: hidden; border: 1px solid red; }
-#page_tabs div { background-color: #BDC0C6; color: #384654; cursor: pointer; float: left; padding-left: 8px; padding-right: 8px; text-align: center; }
+#page_tabs { overflow: hidden; padding-top: 10px; }
+#page_tabs div { background: #9CA2A9; color: #ffffff; cursor: pointer; float: left; font-size: 1.1em; margin-right: 5px; padding-left: 8px; padding-right: 8px; text-align: center; }
+#page_tabs div:hover, #page_tabs div.cssHover { background-color: #7A838B; }
+#page_content { background-color: #dddddd; border: 1px solid #385C72; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; }
+#page_tabs div.active { background: #385C72; }
 
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
@@ -89,9 +92,9 @@ div.itemmenu { background-color: #ececec; border: solid 1px #666666; color: #384
 img.itemicon { float: left; margin-right: 10px; border: 0px; height: 32px; width: 32px; }
 
 /* Standard pages output */
-div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
-div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
-div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 75em; }
+div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
+div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
+div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; }
 div.pageoverflow a { color: #384654; }
 div.pageoverflow img { border: 0px; }
@@ -137,5 +140,6 @@ input.standard { }
 input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
 input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
 textarea.pagetextarea { height: 30em; width: 48em; }
+textarea.pageheadtags { height: 5em; }
 ul.pageerror { margin: 0px; }
 input.pagecheckbox { border: none; }
