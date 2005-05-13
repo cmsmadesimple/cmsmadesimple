@@ -161,11 +161,11 @@ class content extends ContentBase
 		}
 		if ($tab == 0)
 		{
-			array_push($ret, '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>');
-			array_push($ret, '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>');
+			array_push($ret, array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />'));
+			array_push($ret, array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
 			if (!($config['auto_alias_content'] == true && $adding))
 			{
-				array_push($ret, '<tr><th>'.lang('pagealias').':</th><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>');
+				array_push($ret, array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />'));
 			}
 			$additionalcall = '';
 			foreach($gCms->modules as $key=>$value)
@@ -179,27 +179,27 @@ class content extends ContentBase
 					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				}
 			}
-			array_push($ret, '<tr><th>'.lang('template').':</th><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n");
-			array_push($ret, '<tr><th>'.lang('content').':</th><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11').'</td></tr>'."\n");
+			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"')));
+			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11')));
 			
 			// add additional content blocks if required
 			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
 			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 			{
-				array_push($ret, '<tr><th>'.ucwords($blockName).':</th><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n");
+				array_push($ret, array(ucwords($blockName).':',create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10)));
 			}
 		}
 		if ($tab == 1)
 		{
-			array_push($ret, '<tr><th>'.lang('headtags').':</th><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n");
-			array_push($ret, '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>');
-			array_push($ret, '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>');
-			array_push($ret, '<tr><th>'.lang('cachable').':</th><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>');
-			array_push($ret, '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>');
+			array_push($ret, array(lang('headtags').':',create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5)));
+			array_push($ret, array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('cachable').':','<input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
+			array_push($ret, array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
 
 			if (!$adding && $showadmin)
 			{
-				array_push($ret, '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>');
+				array_push($ret, array('Owner:',@UserOperations::GenerateDropdown($this->Owner())));
 			}
 
 			if ($adding || $showadmin)
@@ -210,80 +210,6 @@ class content extends ContentBase
         return $ret;
     }
 
-	function Edit($adding = false, $tab = 0, $showadmin = false)
-	{
-		global $gCms;
-		$config = $gCms->config;
-		$text = "";
-		$stylesheet = '';
-		if ($this->TemplateId() > 0)
-		{
-			$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
-		}
-		else
-		{
-			$defaulttemplate = TemplateOperations::LoadDefaultTemplate();
-			if (isset($defaulttemplate))
-			{
-				$this->mTemplateId = $defaulttemplate->id;
-				$stylesheet = '../stylesheet.php?templateid='.$this->TemplateId();
-			}
-		}
-
-		if ($tab == 0)
-		{
-			$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>';
-			$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>';
-			#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
-			if (!($config['auto_alias_content'] == true && $adding))
-			{
-				$text .= '<tr><th>'.lang('pagealias').':</th><td><input type="text" name="alias" value="'.$this->mAlias.'" /></td></tr>';
-			}
-			$additionalcall = '';
-			foreach($gCms->modules as $key=>$value)
-			{
-				if (get_preference(get_userid(), 'wysiwyg')!="" && 
-					$gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true &&
-					$gCms->modules[$key]['object']->IsWYSIWYG() &&
-					$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
-				{
-					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-				}
-			}
-	//		$text .= '<!-- userid = '.get_userid().' wysiwyg = '.get_preference(get_userid(), 'wysiwyg').' -->';
-			$text .= '<tr><th>'.lang('template').':</th><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="'.$additionalcall.'document.contentform.submit()"').'</td></tr>'."\n";
-			$text .= '<tr><th>'.lang('content').':</th><td>'.create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '80', '11').'</td></tr>'."\n";
-			
-			// add additional content blocks if required
-			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
-			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
-			{
-				$text .= '<tr><th>'.ucwords($blockName).':</th><td>'.create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10).'</td></tr>'."\n";
-			}
-		}
-
-		if ($tab == 1)
-		{
-			$text .= '<tr><th>'.lang('headtags').':</th><td>'.create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', '', 'headtags', '', '', 80, 5).'</td></tr>'."\n";
-			$text .= '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
-			$text .= '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
-			$text .= '<tr><th>'.lang('cachable').':</th><td><input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' /></td></tr>';
-			$text .= '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
-
-			if (!$adding && $showadmin)
-			{
-				$text .= '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>';
-			}
-
-			if ($adding || $showadmin)
-			{
-				$text .= $this->ShowAdditionalEditors();
-			}
-		}
-		return $text;
-
-	}
 
 	function ValidateData()
 	{

@@ -1074,6 +1074,38 @@ class NewsModule extends CMSModuleContentType
 		$this->mCachable = false;
 	}
 
+	function EditAsArray($adding = false)
+	{
+		global $gCms;
+		$config = $gCms->config;
+
+		$ret = array();
+
+		array_push($ret,array(lang('title').':','<input type="text" name="title" value="'.$this->mName.'">'));
+		array_push($ret,array(lang('menutext').':','<input type="text" name="menutext" value="'.$this->mMenuText.'">'));
+		#if (!($config['auto_alias_content'] == true && $this->mAlias == ''))
+		if (!($config['auto_alias_content'] == true && $adding))
+		{
+			array_push($ret,array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'">'));
+		}
+		array_push($ret,array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
+		array_push($ret,array('Number to Display (none show all):','<input type="text" name="number" value="'.$this->GetPropertyValue('number').'" />'));
+		array_push($ret,array('Date Format:','<input type="text" name="dateformat" value="'.$this->GetPropertyValue('dateformat').'" />'));
+		array_push($ret,array('Swap Date and Title:','<input type="checkbox" name="swaptitledate" '.($this->GetPropertyValue('swaptitledate')?' checked="true"':'').' />'));
+		array_push($ret,array('Category:','<input type="text" name="category" value="'.$this->GetPropertyValue('category').'" />'));
+		array_push($ret,array('Summary:','<input type="text" name="summary" value="'.$this->GetPropertyValue('summary').'" />'));
+		array_push($ret,array('Summary Length:','<input type="text" name="length" value="'.$this->GetPropertyValue('length').'" />'));
+		array_push($ret,array('Show Category:','<input type="checkbox" name="showcategorywithtitle" '.($this->GetPropertyValue('showcategorywithtitle')?' checked="true"':'').' />'));
+		array_push($ret,array('More Text:','<input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" />'));
+		array_push($ret,array('Sort Ascending:','<input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' />'));
+		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'>'));
+		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="true"':'').'>'));
+		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
+
+		return $ret;
+	}
+
+
 	function Edit($adding = false)
 	{
 		global $gCms;

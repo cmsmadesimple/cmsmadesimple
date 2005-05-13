@@ -923,7 +923,7 @@ class ContentBase
 	function EditAsArray($adding = false, $tab = 0, $showadmin = false)
 	{
 		# :TODO:
-		return array("<tr><td>Edit Not Defined</td></tr>");
+		return array(array('Error','Edit Not Defined!'));
 	}
 
 
@@ -932,8 +932,15 @@ class ContentBase
 	 */
 	function Edit($adding = false, $tab = 0, $showadmin = false)
 	{
-		# :TODO:
-		return "<tr><td>Edit Not Defined</td></tr>";
+        $text = '';
+        $val = $this->EditAsArray($adding, $tab, $showadmin);
+        foreach ($val as $thisRow)
+            {
+            $text .= '<tr><th>'.$thisRow[0].'</th><td>'.$thisRow[1].'</td></tr>';
+            $text .= "\n";
+            }
+		return $text;
+
 	}
 
 	/**
@@ -1005,10 +1012,10 @@ class ContentBase
 
 	function ShowAdditionalEditors()
 	{
-		$text = '';
+		$ret = array();
 
-		$text .= '<tr><th>Additional Editors:</th>';
-		$text .= '<td><select name="additional_editors[]" multiple="multiple" size="5">';
+		array_push($ret, 'Additional Editors');
+		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		$allusers = UserOperations::LoadUsers();
 		$addteditors = $this->GetAdditionalEditors();
@@ -1025,9 +1032,9 @@ class ContentBase
 			}
 		}
 
-		$text .= '</select></td></tr>';
-
-		return $text;
+		$text .= '</select>';
+        array_push($ret,$text);
+		return $ret;
 	}
 
 	function IsDefaultPossible()

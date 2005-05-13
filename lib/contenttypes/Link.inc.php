@@ -118,16 +118,16 @@ class link extends ContentBase
     {
 		$ret = array();
 
-		array_push($ret,'<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>');
-		array_push($ret,'<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>');
-		array_push($ret,'<tr><th>'.lang('url').':</th><td><input type="text" name="url" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" /></td></tr>');
-		array_push($ret,'<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>');
-		array_push($ret,'<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>');
-		array_push($ret,'<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>');
+		array_push($ret,array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />'));
+		array_push($ret,array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
+		array_push($ret,array(lang('url').':','<input type="text" name="url" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />'));
+		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
+		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
+		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
 
 		if (!$adding && $showadmin)
 		{
-			array_push($ret,'<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>');
+			array_push($ret,array('Owner:',@UserOperations::GenerateDropdown($this->Owner())));
 		}
 
 		if ($adding || $showadmin)
@@ -136,31 +136,6 @@ class link extends ContentBase
 		}
 
 		return $ret;
-	}
-
-
-	function Edit($adding = false, $tab = 0, $showadmin = false)
-	{
-		$text = "";
-
-		$text .= '<tr><th>'.lang('title').':</th><td><input type="text" name="title" value="'.cms_htmlentities($this->mName).'" /></td></tr>';
-		$text .= '<tr><th>'.lang('menutext').':</th><td><input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" /></td></tr>';
-		$text .= '<tr><th>'.lang('url').':</th><td><input type="text" name="url" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" /></td></tr>';
-		$text .= '<tr><th>'.lang('active').':</th><td><input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><th>'.lang('showinmenu').':</th><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' /></td></tr>';
-		$text .= '<tr><th>'.lang('parent').':</th><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
-
-		if (!$adding && $showadmin)
-		{
-			$text .= '<tr><th>Owner:</th><td>'.@UserOperations::GenerateDropdown($this->Owner()).'</td></tr>';
-		}
-
-		if ($adding || $showadmin)
-		{
-			$text .= $this->ShowAdditionalEditors();
-		}
-
-		return $text;
 	}
 
 	function GetURL()
