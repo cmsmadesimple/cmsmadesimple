@@ -36,10 +36,25 @@ class AdminTheme
 	 */
 	var $title;
 
+    /**
+     * Subtitle, for use in breadcrumb trails
+     */
+    var $subtitle;
+
 	/**
 	 * Url
 	 */
 	var $url;
+	
+    /**
+	 * Script
+	 */
+	var $script;
+
+	/**
+	 * Query String, for use in breadcrumb trails
+	 */
+	var $query;
 
     /**
      * Aggregation of modules by section
@@ -95,9 +110,11 @@ class AdminTheme
 	function SetInitialValues($cms, $userid, $themeName)
 	{
 		$this->title = '';
+		$this->subtitle = '';
 		$this->cms = $cms;
-		$this->url = $_SERVER['REQUEST_URI'];
-		$this->userid = $userid;
+		$this->url = $_SERVER['SCRIPT_NAME'];
+		$this->query = $_SERVER['QUERY_STRING'];
+        $this->userid = $userid;
 		$this->themeName = $themeName;
 		$this->perms = array();
 		$this->recent = array();
@@ -107,6 +124,15 @@ class AdminTheme
 		$this->sectionCount = array();
         $this->SetModuleAdminInterfaces();
         $this->SetAggregatePermissions();
+        if (strpos( $this->url, '/' ) === false)
+            {
+            $this->script = $this->url;
+            }
+        else
+            {
+            $this->script = array_pop(explode('/',$this->url));
+    	    }
+
 	}
 
     /**
@@ -523,11 +549,21 @@ class AdminTheme
      * This method converts spaces into a non-breaking space HTML entity.
      * It's used for making menus that work nicely
      *
-     * @param str string to have it's spaces converted
+     * @param str string to have its spaces converted
      */
     function FixSpaces($str)
     {
     	return preg_replace('/\s+/',"&nbsp;",$str);
+    }
+    /**
+     * UnFixSpaces
+     * This method converts non-breaking space HTML entities into char(20)s.
+     *
+     * @param str string to have its spaces converted
+     */
+    function UnFixSpaces($str)
+    {
+    	return preg_replace('/&nbsp;/'," ",$str);
     }
 
     /**
@@ -538,27 +574,17 @@ class AdminTheme
      * the user doesn't have permissions, and highlights the current section so
      * menus can show the user where they are.
      *
-     * @param cms_top a flag which can be set in pages to state which section they
-     * belong to.
-     * @param url the current page URL
-     * @param query the query-string portion of the url
+     * @param subtitle any info to add to the page title
      *
      */
-    function PopulateAdminNavigation($url,$query)
+    function PopulateAdminNavigation($subtitle='')
     {
         if (count($this->menuItems) > 0)
             {
             // we have already created the list
             return;
             }
-    	if (strpos( $url, '/' ) === false)
-    	   {
-    	   	$script = $url;
-    	   }
-        else
-            {
-            $script = array_pop(explode('/',$url));
-    	    }
+        $this->subtitle = $subtitle;
     	    
     	$this->menuItems = array(
     	    // base main menu ---------------------------------------------------------
@@ -695,7 +721,7 @@ class AdminTheme
                     'title'=>$this->FixSpaces(lang('logout')),
                     'description'=>'','show_in_menu'=>true),
              // base bookmarks menu ---------------------------------------------------------
-            'bookmarks'=>array('url'=>'makebookmark.php?title='.urlencode($this->title),
+            'bookmarks'=>array('url'=>'makebookmark.php?title=',
             		'parent'=>-1,
                     'title'=>$this->FixSpaces(lang('menu_bookmarks')),
                     'description'=>'','show_in_menu'=> get_preference(get_userid(), 'bookmarks')),
@@ -747,9 +773,9 @@ class AdminTheme
             		}
             	}
             // set selected
-			if ($script == 'moduleinterface.php')
+			if ($this->script == 'moduleinterface.php')
 				{
-				if (strpos($query,$sectionKey) !== false)
+				if (strpos($this->query,$sectionKey) !== false)
 					{
             		$this->menuItems[$sectionKey]['selected'] = true;
             		$this->title .= $sectionArray['title'];
@@ -768,7 +794,7 @@ class AdminTheme
 					$this->menuItems[$sectionKey]['selected'] = false;
 					}
 				}
-            else if ($sectionArray['url'] == $script)
+            else if ($sectionArray['url'] == $this->script)
             	{
             	$this->menuItems[$sectionKey]['selected'] = true;
             	$this->title .= $sectionArray['title'];
@@ -787,19 +813,22 @@ class AdminTheme
             	$this->menuItems[$sectionKey]['selected'] = false;
             	}
             }
+            // fix subtitle, if any
+            if ($subtitle != '')
+                {
+                $this->title .= ': '.$subtitle;
+                }
+            // fix bookmarks
+            $this->menuItems['bookmarks']['url'] .= urlencode($this->UnFixSpaces($this->title));
         }
 
     /**
      * DoTopMenu
      * Setup function for displaying the top menu.
      *
-     * @param url the current page URL
-     * @param query the query-string portion of the url
-     *
      */
-    function DoTopMenu($url,$query)
+    function DoTopMenu()
     {
-    	$this->PopulateAdminNavigation($url,$query);
         $this->DisplayTopMenu();
     }
 

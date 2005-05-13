@@ -19,20 +19,14 @@ else
 }
 
 $gCms->variables['admintheme']=&$themeObject;
-
 $themeObject->SendHeaders(isset($charsetsent), get_encoding());
-$themeObject->PopulateAdminNavigation($_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
-
-if (isset($CMS_ADMIN_SUBTITLE))
-    {
-    $themeObject->title .= " : ".$CMS_ADMIN_SUBTITLE;
-    }
+$themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
 
 $themeObject->DisplayDocType();
 $themeObject->DisplayHTMLStartTag();
 $themeObject->DisplayHTMLHeader();
 $themeObject->DisplayBodyTag();
-$themeObject->DoTopMenu( $_SERVER['SCRIPT_NAME'],$_SERVER['QUERY_STRING']);
+$themeObject->DoTopMenu();
 $themeObject->DisplayMainDivStart();
 // we've removed the Recent Pages stuff, but other things could go in this box
 // so I'll leave some of the logic there. We can remove it later if it makes sense. SjG

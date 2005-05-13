@@ -75,12 +75,23 @@ class modernTheme extends AdminTheme
 		echo "</div>\n";
 		echo '<div class="breadcrumbs"><p class="breadcrumbs">';
 		$counter = 0;
+		$last = count($breadcrumbs) - 1;
 		while ($menutext = array_shift($breadcrumbs)) {
 			if ($counter > 0) {
 				echo " &#187; ";
 			}
 			foreach ($menutext as $key=>$value) {
-				echo '<a class="breadcrumbs" href="'.$value.'">'.$key.'</a>';
+				echo '<a class="breadcrumbs" href="'.$value;
+                if ($counter == $last && $this->query != '')
+                    {
+                    echo '?'.$this->query;
+                    }
+                echo '">'.$key;
+                if ($counter == $last && $this->subtitle != '')
+                    {
+                    echo ': '.$this->subtitle;
+                    }
+                echo '</a>';
 			}
 			$counter++;
 		}
