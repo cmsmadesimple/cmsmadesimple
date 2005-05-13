@@ -163,6 +163,7 @@ class content extends ContentBase
 		{
 			array_push($ret, array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />'));
 			array_push($ret, array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
+			array_push($ret, array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
 			if (!($config['auto_alias_content'] == true && $adding))
 			{
 				array_push($ret, array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />'));
@@ -195,7 +196,6 @@ class content extends ContentBase
 			array_push($ret, array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('cachable').':','<input type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
-			array_push($ret, array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
 
 			if (!$adding && $showadmin)
 			{
