@@ -153,7 +153,7 @@ else {
 	{
 		echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 		echo '<td>'.$key.'</td>'."\n";
-		echo '<td><input class="pagecheckbox" type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
+		echo '<td><input class="pagecheckbox" type="checkbox" name="user-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
 		echo "</tr>\n";
 
 		($currow=="row1"?$currow="row2":$currow="row1");	
