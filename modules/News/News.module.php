@@ -940,6 +940,8 @@ class News extends CMSModule
 				$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
 				$dbresult = $db->Execute($query);
 
+				$rowclass = 'row1';
+
 				while ($row = $dbresult->FetchRow())
 				{
 					$onerow = new stdClass();
@@ -950,11 +952,14 @@ class News extends CMSModule
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
+					$onerow->rowclass = $rowclass;
 
 					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $this->Lang('edit'), array('articleid'=>$row['news_id']));
 					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $this->Lang('delete'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
 
 					array_push($entryarray, $onerow);
+
+					($currow=="row1"?$currow="row2":$currow="row1");
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);
@@ -974,6 +979,8 @@ class News extends CMSModule
 				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
 				$dbresult = $db->Execute($query);
 
+				$rowclass = 'row1';
+
 				while ($row = $dbresult->FetchRow())
 				{
 					$onerow = new stdClass();
@@ -986,7 +993,11 @@ class News extends CMSModule
 					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $this->Lang('edit'), array('catid'=>$row['news_category_id']));
 					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $this->Lang('delete'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
 
+					$onerow->rowclass = $rowclass;
+
 					array_push($entryarray, $onerow);
+
+					($currow=="row1"?$currow="row2":$currow="row1");
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);

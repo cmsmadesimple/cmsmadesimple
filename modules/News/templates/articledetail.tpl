@@ -2,6 +2,14 @@
 
 <hr id="NewsPostDetailHorizRule">
 
+{if $entry->category}
+
+<div id="NewsPostDetailCategory">
+{$entry->category}
+</div>
+
+{/if}
+
 {if $entry->postdate}
 
 <div id="NewsPostDetailDate">
