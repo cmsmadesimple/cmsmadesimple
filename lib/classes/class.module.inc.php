@@ -1275,6 +1275,7 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='')
 	{
+		debug_buffer($addttext);
 		$text = '';
 		$goto = 'moduleinterface.php';
 		if ($inline && $returnid != '')
@@ -1309,7 +1310,7 @@ class CMSModule extends ModuleOperations
 		if (!$onlyhref)
 		{
 			$text .= "\"";
-			if ($warn_message !== '')
+			if ($warn_message != '')
 			{
 				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
 			}
@@ -1320,6 +1321,8 @@ class CMSModule extends ModuleOperations
 			}
 		
 			$text .= '>'.$contents.'</a>';
+
+			debug_buffer($text);
 		}
 		return $text;
 	}
