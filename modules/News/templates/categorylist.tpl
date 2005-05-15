@@ -1,4 +1,4 @@
-<table cellspacing="0" class="AdminTable">
+<table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
 			<th>Category</th>
@@ -17,4 +17,4 @@
 	</tbody>
 </table>
 
-<p>{$addlink}</p>
+<div class="pageoptions"><p class="pageoptions">{$addlink}</p></div>

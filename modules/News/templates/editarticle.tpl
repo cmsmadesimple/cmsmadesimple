@@ -1,52 +1,42 @@
-<div class="AdminForm">
-
 {$startform}
-
-<table width="100%" border="0">
-
-	<tr>
-		<th>*{$titletext}:</th>
-		<td>{$inputtitle}</td>
-	</tr>
-	<tr>
-		<th>*Category:</th>
-		<td>{$inputcategory}</td>
-	</tr>
-	<tr>
-		<th>Summary:</th>
-		<td>{$inputsummary}</td>
-	</tr>
-	<tr>
-		<th>*Content:</th>
-		<td>{$inputcontent}</td>
-	</tr>
-	<tr>
-		<th>Post Date:</th>
-		<td>{html_select_date prefix=$postdateprefix time=$postdate start_year=2000 end_year=2010} {html_select_time prefix=$postdateprefix time=$postdate}</td>
-	</tr>
-	<tr>
-		<th>*Status:</th>
-		<td>{$status}</td>
-	</tr>
-	<tr>
-		<th>Use Expiration:</th>
-		<td>{$inputexp}</td>
-	</tr>
-	<tr>
-		<th>Start Date:</th>
-		<td>{html_select_date prefix=$startdateprefix time=$startdate start_year=2000 end_year=2010} {html_select_time prefix=$startdateprefix time=$startdate}</td>
-	</tr>
-	<tr>
-		<th>End Date:</th>
-		<td>{html_select_date prefix=$enddateprefix time=$enddate start_year=2000 end_year=2010} {html_select_time prefix=$enddateprefix time=$enddate}</td>
-	</tr>
-	<tr>
-		<td>&nbsp;{$hidden}</td>
-		<td>{$submit}{$cancel}</td>
-	</tr>
-
-</table>
-
+	<div class="pageoverflow">
+		<p class="pagetext">*{$titletext}:</p>
+		<p class="pageinput">{$inputtitle}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">*Category:</p>
+		<p class="pageinput">{$inputcategory}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">Summary:</p>
+		<p class="pageinput">{$inputsummary}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">*Content:</p>
+		<p class="pageinput">{$inputcontent}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">Post Date:</p>
+		<p class="pageinput">{html_select_date prefix=$postdateprefix time=$postdate start_year=2000 end_year=2010} {html_select_time prefix=$postdateprefix time=$postdate}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">*Status:</p>
+		<p class="pageinput">{$status}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">Use Expiration:</p>
+		<p class="pageinput">{$inputexp}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">Start Date:</p>
+		<p class="pageinput">{html_select_date prefix=$startdateprefix time=$startdate start_year=2000 end_year=2010} {html_select_time prefix=$startdateprefix time=$startdate}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">End Date:</p>
+		<p class="pageinput">{html_select_date prefix=$enddateprefix time=$enddate start_year=2000 end_year=2010} {html_select_time prefix=$enddateprefix time=$enddate}</p>
+	</div>
+	<div class="pageoverflow">
+		<p class="pagetext">&nbsp;</p>
+		<p class="pageinput">{$hidden}{$submit}{$cancel}</p>
+	</div>
 {$endform}
-
-</div>

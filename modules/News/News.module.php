@@ -748,7 +748,7 @@ class News extends CMSModule
 				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(false, $id, $summary, 'summary', '', '', '', '', '80', '3'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');
-				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"));
+				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
 				$this->smarty->assign_by_ref('startdate', $startdate);
 				$this->smarty->assign('startdateprefix', $id.'startdate_');
 				$this->smarty->assign_by_ref('enddate', $enddate);
@@ -891,7 +891,7 @@ class News extends CMSModule
 				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
 				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(false, $id, $content, 'content'));
 				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(false, $id, $summary, 'summary', '', '', '', '', '80', '3'));
-				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"));
+				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');
 				$this->smarty->assign_by_ref('startdate', $startdate);
@@ -930,9 +930,19 @@ class News extends CMSModule
 
 			case "defaultadmin":
 
-				echo $this->StartTabSet();
+				#echo $this->StartTabSet();
+				#echo $this->StartTab($this->Lang('articles'));
 
-				echo $this->StartTab($this->Lang('articles'));
+				#The tabs
+				echo '<div id="page_tabs">';
+				echo '<div id="articles">'.$this->Lang('articles').'</div>';
+				echo '<div id="categories">'.$this->Lang('categories').'</div>';				
+				echo '</div>';
+				echo '<div class="clearb"></div>';
+
+				#The content of the tabs
+				echo '<div id="page_content">';
+				echo '<div id="articles_c">';					
 
 				//Load the current articles
 				$entryarray = array();
@@ -969,10 +979,12 @@ class News extends CMSModule
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
 
-				echo $this->EndTab();
+				#echo $this->EndTab();
+				echo '</div>';				
 
-				echo $this->StartTab($this->Lang('categories'));
-
+				#echo $this->StartTab($this->Lang('categories'));
+				echo '<div id ="categories_c">';
+				
 				#Put together a list of current categories...
 				$entryarray = array();
 
@@ -1008,10 +1020,12 @@ class News extends CMSModule
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
 
-				echo $this->EndTab();
+				#echo $this->EndTab();
+				echo '</div>';
 
-				echo $this->EndTabSet();
-
+				#echo $this->EndTabSet();
+				echo '</div>';
+				
 				break;
 		}
 	}
