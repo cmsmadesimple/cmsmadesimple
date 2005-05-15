@@ -4,8 +4,8 @@
 		<tr>
 			<th>Post Title</th>
 			<th>Post Date</th>
-			<th class="pagew10">&nbsp;</th>
-			<th class="pagew10">&nbsp;</th>
+			<th class="pageicon">&nbsp;</th>
+			<th class="pageicon">&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>

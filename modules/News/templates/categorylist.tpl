@@ -3,8 +3,8 @@
 	<thead>
 		<tr>
 			<th>Category</th>
-			<th>Edit</th>
-			<th>Delete</th>
+			<th class="pageicon">&nbsp;</th>
+			<th class="pageicon">&nbsp;</th>
 		</tr>
 	</thead>
 	<tbody>

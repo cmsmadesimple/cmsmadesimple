@@ -976,7 +976,7 @@ class News extends CMSModule
 				$this->smarty->assign_by_ref('items', $entryarray);
 				$this->smarty->assign_by_ref('itemcount', count($entryarray));
 
-				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('newobject.gif', $this->lang('addarticle')), array(), '', false, false, 'class="pageoptions"') . $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('newobject.gif', $this->lang('addarticle')), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
@@ -1019,7 +1019,7 @@ class News extends CMSModule
 
 				#Setup links
 				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
-				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('newfolder.gif', $this->lang('addcategory')), array(), '', false, false, 'class="pageoptions"') . $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('newfolder.gif', $this->lang('addcategory')), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
