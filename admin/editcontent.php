@@ -267,6 +267,7 @@ $contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 	</div>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" /> 	                  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 	<div id="page_content">
 		<div id="main_c">
 			<div class="pageoverflow">
