@@ -10,7 +10,7 @@
 	</thead>
 	<tbody>
 	{foreach from=$items item=entry}
-		<tr>
+		<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
 			<td>{$entry->title}</td>
 			<td>{$entry->postdate}</td>
 			<td>{$entry->editlink}</td>

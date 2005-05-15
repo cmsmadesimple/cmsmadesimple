@@ -79,7 +79,7 @@ div.navt_hide {	background-image:url(themes/modern/images/hide_navtools.gif); ba
 #page_tabs { overflow: hidden; padding-top: 10px; }
 #page_tabs div { background: #9CA2A9; color: #ffffff; cursor: pointer; float: left; font-size: 1.1em; margin-right: 5px; padding-left: 8px; padding-right: 8px; text-align: center; }
 #page_tabs div:hover, #page_tabs div.cssHover { background-color: #7A838B; }
-#page_content { background-color: #dddddd; border: 1px solid #385C72; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; }
+#page_content { background-color: #E1E1E1; border: 1px solid #385C72; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; }
 #page_tabs div.active { background: #385C72; }
 
 /* All pages - Content */
