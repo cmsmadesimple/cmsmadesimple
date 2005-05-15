@@ -1271,8 +1271,9 @@ class CMSModule extends ModuleOperations
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false)
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='')
 	{
 		$text = '';
 		$goto = 'moduleinterface.php';
@@ -1304,7 +1305,7 @@ class CMSModule extends ModuleOperations
 				$text .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 			}
 		}
-		
+
 		if (!$onlyhref)
 		{
 			$text .= "\"";
@@ -1312,6 +1313,12 @@ class CMSModule extends ModuleOperations
 			{
 				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
 			}
+
+			if ($addttext != '')
+			{
+				$text .= ' ' . $addttext;
+			}
+		
 			$text .= '>'.$contents.'</a>';
 		}
 		return $text;
