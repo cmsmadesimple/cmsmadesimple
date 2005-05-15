@@ -1,3 +1,4 @@
+{if $itemcount > 0}
 <table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
@@ -18,6 +19,7 @@
 	{/foreach}
 	</tbody>
 </table>
+{/if}
 
 <div class="pageoptions">
 	<p class="pageoptions">{$addlink}</p>

@@ -930,6 +930,7 @@ class News extends CMSModule
 
 			case "defaultadmin":
 
+				global $gCms;
 				#echo $this->StartTabSet();
 				#echo $this->StartTab($this->Lang('articles'));
 
@@ -964,8 +965,8 @@ class News extends CMSModule
 					$onerow->enddate = $row['end_time'];
 					$onerow->rowclass = $rowclass;
 
-					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $this->Lang('edit'), array('articleid'=>$row['news_id']));
-					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $this->Lang('delete'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
+					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('edit.gif', $this->lang('edit')), array('articleid'=>$row['news_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $gCms->variables['admintheme']->DisplayImage('delete.gif', $this->lang('delete')), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
 
 					array_push($entryarray, $onerow);
 
@@ -973,8 +974,9 @@ class News extends CMSModule
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);
+				$this->smarty->assign_by_ref('itemcount', count($entryarray));
 
-				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('newobject.gif', $this->lang('addarticle')), array(), '', false, false, 'class="pageoptions"') . $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
@@ -1002,8 +1004,8 @@ class News extends CMSModule
 
 					$onerow->id = $row['news_category_id'];
 					$onerow->name = str_repeat('&nbsp;', $depth-1).$row['news_category_name'];
-					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $this->Lang('edit'), array('catid'=>$row['news_category_id']));
-					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $this->Lang('delete'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
+					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('edit.gif', $this->lang('edit')), array('catid'=>$row['news_category_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $gCms->variables['admintheme']->DisplayImage('delete.gif', $this->lang('delete')), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
 
 					$onerow->rowclass = $rowclass;
 
@@ -1013,9 +1015,11 @@ class News extends CMSModule
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);
+				$this->smarty->assign_by_ref('itemcount', count($entryarray));
 
 				#Setup links
 				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('newfolder.gif', $this->lang('addcategory')), array(), '', false, false, 'class="pageoptions"') . $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
