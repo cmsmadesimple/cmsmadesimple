@@ -269,31 +269,23 @@ $contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 	<form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" /> 	                  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 	<div id="page_content">
-		<div id="main_c">
-			<div class="pageoverflow">
+		<div id="main_c">  
+		
+					<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
 				<p class="pageinput"><?php echo $typesdropdown; ?></p>
 			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[0][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray[0][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[1][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray[1][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[2][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray[2][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[3][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray[3][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[4][0]; ?></p>
-				<p class="pageinputwysiwyg"><?php echo $contentarray[4][1]; ?></p>
-			</div>		
+
+		<?php
+		for($i=0;$i<count($contentarray);$i++)
+		{
+		  ?><div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
+			</div>                                            
+		  <?php
+		}
+		?>
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
@@ -307,22 +299,17 @@ $contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 			<div style="clear: both;"></div>
 		</div>
 		<div id="options_c">
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray2[0][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray2[0][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray2[1][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray2[1][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray2[2][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray2[2][1]; ?></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray2[3][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray2[3][1]; ?></p>
-			</div>		
+
+		<?php
+		for($i=0;$i<count($contentarray2);$i++)
+		{
+		  ?><div class="pageoverflow">
+				<p class="pagetext"><?php echo $contentarray2[$i][0]; ?></p>
+				<p class="pageinput"><?php echo $contentarray2[$i][1]; ?></p>
+			</div>                                            
+		  <?php
+		}
+		 ?>
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
