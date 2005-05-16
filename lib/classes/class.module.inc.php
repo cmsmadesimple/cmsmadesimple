@@ -1590,24 +1590,40 @@ class CMSModule extends ModuleOperations
 	 * Tab Functions
 	 * ------------------------------------------------------------------
 	 */
-	function StartTabSet()
+	function StartTabHeaders()
+	{		
+		return '<div id="page_tabs">';
+	}
+	
+	function SetTabHeader($tabid,$title) 
 	{
-		return '<div id="tab-container">';
+	  return '<div id="'.$tabid.'">'.$title.'</div>';
+	}
+	
+	function EndTabHeaders() 
+	{
+		return "</div>";
 	}
 
-	function EndTabSet($tabindex = 0)
+	function StartTabContent() 
 	{
-		return '</div> <!-- tab-container -->'."\n".'<script type="text/javascript">BuildTabs(\'tab-container\',\'tab-header\',\'tab-list\');ActivateTab('.$tabindex.',\'tab-container\',\'tab-list\');</script>'."\n";
+		return '<div class="clearb"></div><div id="page_content">';
 	}
-
-	function StartTab($name = '')
+	
+	function EndTabContent() 
 	{
-		return '<div class="tab-content"><h3 class="tab">'.$name.'</h3>';
+	  return '</div>';	
+	}
+	
+	function StartTab($tabid)
+	{
+		return '<div id ="'.$tabid.'_c">';
+		//return '<div class="tab-content"><h3 class="tab">'.$name.'</h3>';
 	}
 
 	function EndTab()
 	{
-		return '</div> <!-- tab-content -->';
+		return '</div>';
 	}
 
 	/**

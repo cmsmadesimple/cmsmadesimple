@@ -935,15 +935,21 @@ class News extends CMSModule
 				#echo $this->StartTab($this->Lang('articles'));
 
 				#The tabs
-				echo '<div id="page_tabs">';
-				echo '<div id="articles">'.$this->Lang('articles').'</div>';
-				echo '<div id="categories">'.$this->Lang('categories').'</div>';				
-				echo '</div>';
-				echo '<div class="clearb"></div>';
+				//echo '<div id="page_tabs">';
+				echo $this->StartTabHeaders();
+				echo $this->SetTabHeader('articles',$this->Lang('articles'));
+				echo $this->SetTabHeader('categories',$this->Lang('categories'));
+				echo $this->EndTabHeaders();
+				//echo '<div id="articles">'.$this->Lang('articles').'</div>';
+				//echo '<div id="categories">'.$this->Lang('categories').'</div>';				
+				//echo '</div>';
+				//echo '<div class="clearb"></div>';
 
 				#The content of the tabs
-				echo '<div id="page_content">';
-				echo '<div id="articles_c">';					
+				//echo '<div id="page_content">';
+				//echo '<div id="articles_c">';					
+				echo $this->StartTabContent();
+				echo $this->StartTab("articles");
 
 				//Load the current articles
 				$entryarray = array();
@@ -982,10 +988,12 @@ class News extends CMSModule
 				echo $this->ProcessTemplate('articlelist.tpl');
 
 				#echo $this->EndTab();
-				echo '</div>';				
+				//echo '</div>';				
+				echo $this->EndTab();
 
 				#echo $this->StartTab($this->Lang('categories'));
-				echo '<div id ="categories_c">';
+				//echo '<div id ="categories_c">';
+				echo $this->StartTab("categories");
 				
 				#Put together a list of current categories...
 				$entryarray = array();
@@ -1025,10 +1033,12 @@ class News extends CMSModule
 				echo $this->ProcessTemplate('categorylist.tpl');
 
 				#echo $this->EndTab();
-				echo '</div>';
+				//echo '</div>';
+				echo $this->EndTab();
 
 				#echo $this->EndTabSet();
-				echo '</div>';
+				//echo '</div>';
+				echo $this->EndTabContent();
 				
 				break;
 		}
