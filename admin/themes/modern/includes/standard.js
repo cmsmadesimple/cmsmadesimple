@@ -56,7 +56,26 @@ function _add_show_handlers(navbar) {
 	    return true;
 	};
     }
-    tabs[0].onmousedown();
+    var activefound=0;
+    for (var i = 0; i < tabs.length; i += 1) {
+    	if (tabs[i].className=='active') activefound=i;
+    }
+    tabs[activefound].onmousedown();
+}
+
+function activatetab(index) {
+	var el=0;
+	if (document.getElementById('navt_tabs')) {
+		el = document.getElementById('navt_tabs');
+		
+	} else {
+ 	  if (document.getElementById('page_tabs')) {
+		  el = document.getElementById('page_tabs');
+	  }
+	}
+	if (el==0) return;
+	var tabs = navbar.getElementsByTagName('div');
+	tabs[index].onmousedown();
 }
 
 function linksExternal()	{

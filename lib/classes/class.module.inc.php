@@ -1595,9 +1595,11 @@ class CMSModule extends ModuleOperations
 		return '<div id="page_tabs">';
 	}
 	
-	function SetTabHeader($tabid,$title) 
+	function SetTabHeader($tabid,$title,$active=false) 
 	{
-	  return '<div id="'.$tabid.'">'.$title.'</div>';
+		$a="";
+		if ($active) $a=" class='active'";
+	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
 	
 	function EndTabHeaders() 
@@ -1612,13 +1614,12 @@ class CMSModule extends ModuleOperations
 	
 	function EndTabContent() 
 	{
-	  return '</div>';	
+		return '</div>';	
 	}
 	
 	function StartTab($tabid)
 	{
-		return '<div id ="'.$tabid.'_c">';
-		//return '<div class="tab-content"><h3 class="tab">'.$name.'</h3>';
+		return '<div id="'.$tabid.'_c">';		
 	}
 
 	function EndTab()
