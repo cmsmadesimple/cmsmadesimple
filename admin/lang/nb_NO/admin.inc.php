@@ -284,4 +284,8 @@ $lang['admin']['filemanager'] = 'Filbehandler';
 $lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template'; //needs translation
 $lang['admin']['attachstylesheets'] = 'Attach Stylesheets'; //needs translation
 $lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
+$lang['admin']['globalconfig'] = 'Global Configuration'; //needs translation
+$lang['admin']['adminprefs'] = 'Admin Preferences'; //needs translation
+$lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
+$lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration bookmarks.'; //needs translation
 ?>

@@ -284,4 +284,8 @@ $lang['admin']['showrecent'] = 'Vis nyligt besøgte sider';
 $lang['admin']['attachtotemplate'] = 'Tilknyt Stylesheet til Skabelon';
 $lang['admin']['attachstylesheets'] = 'Tilknyt Stylesheet';
 $lang['admin']['menu_bookmarks'] = '[+]';
+$lang['admin']['globalconfig'] = 'Global Configuration'; //needs translation
+$lang['admin']['adminprefs'] = 'Admin Preferences'; //needs translation
+$lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
+$lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration bookmarks.'; //needs translation
 ?>

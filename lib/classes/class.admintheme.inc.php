@@ -396,19 +396,15 @@ class AdminTheme
      */
     function DoBookmarks()
     {
-        $marks = BookmarkOperations::LoadBookmarks($this->userid);
-        if (count($marks) > 0)
-            {
-            $tmpMark = new Bookmark();
-            $tmpMark->title = lang('managebookmarks');
-            $tmpMark->url = 'listbookmarks.php';
-            }
-        else
-            {
-            $tmpMark = new Bookmark();
-            $tmpMark->title = lang('addbookmark');
-            $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
-            }
+        $marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
+        $tmpMark = new Bookmark();
+        $tmpMark->title = lang('addbookmark');
+        $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
+        array_push($marks,$tmpMark);
+        $marks = array_reverse($marks);
+        $tmpMark = new Bookmark();
+        $tmpMark->title = lang('managebookmarks');
+        $tmpMark->url = 'listbookmarks.php';
         array_push($marks,$tmpMark);
         $this->DisplayBookmarks($marks);
     }
@@ -629,17 +625,17 @@ class AdminTheme
             'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
                     'title'=>$this->FixSpaces(lang('copytemplate')),
                     'description'=>lang('copytemplate'),'show_in_menu'=>false),
-            'listcss'=>array('url'=>'listcss.php','parent'=>'layout',
+            'stylesheets'=>array('url'=>'listcss.php','parent'=>'layout',
                     'title'=>$this->FixSpaces(lang('stylesheets')),
                     'description'=>lang('stylesheetsdescription'),
                     'show_in_menu'=>($this->HasPerm('cssPerms') || $this->HasPerm('cssAssocPerms'))),
-            'addcss'=>array('url'=>'addcss.php','parent'=>'listcss',
+            'addcss'=>array('url'=>'addcss.php','parent'=>'stylesheets',
                     'title'=>$this->FixSpaces(lang('addstylesheet')),
                     'description'=>lang('addstylesheet'),'show_in_menu'=>false),
-            'editcss'=>array('url'=>'editcss.php','parent'=>'listcss',
+            'editcss'=>array('url'=>'editcss.php','parent'=>'stylesheets',
                     'title'=>$this->FixSpaces(lang('editcss')),
                     'description'=>lang('editcss'),'show_in_menu'=>false),
-            'templatecss'=>array('url'=>'templatecss.php','parent'=>'template',
+            'templatecss'=>array('url'=>'templatecss.php','parent'=>'stylesheets',
                     'title'=>$this->FixSpaces(lang('templatecss')),
                     'description'=>lang('templatecss'),'show_in_menu'=>false),
             'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'layout',
@@ -698,17 +694,25 @@ class AdminTheme
             'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
                     'title'=>$this->FixSpaces(lang('editusertag')),
                     'description'=>lang('editusertag'),'show_in_menu'=>false),
-             // base preferences menu ---------------------------------------------------------
-            'preferences'=>array('url'=>'editprefs.php','parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('preferences')),
-                    'description'=>lang('preferencesdescription'),'show_in_menu'=>true),
              // base admin menu ---------------------------------------------------------
             'admin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
                     'description'=>lang('admindescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
+            'preferences'=>array('url'=>'editprefs.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('adminprefs')),
+                    'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
             'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'admin',
-                    'title'=>$this->FixSpaces(lang('preferences')),
+                    'title'=>$this->FixSpaces(lang('globalconfig')),
                     'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
+            'managebookmarks'=>array('url'=>'listbookmarks.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('managebookmarks')),
+                    'description'=>lang('managebookmarksdescription'),'show_in_menu'=>true),
+            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('addbookmark')),
+                    'description'=>lang('addbookmark'),'show_in_menu'=>false),
+            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'admin',
+                    'title'=>$this->FixSpaces(lang('editbookmark')),
+                    'description'=>lang('editbookmark'),'show_in_menu'=>false),
             'adminlog'=>array('url'=>'adminlog.php','parent'=>'admin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>true),
@@ -720,17 +724,6 @@ class AdminTheme
              'logout'=>array('url'=>'logout.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('logout')),
                     'description'=>'','show_in_menu'=>true),
-             // base bookmarks menu ---------------------------------------------------------
-            'bookmarks'=>array('url'=>'makebookmark.php?title=',
-            		'parent'=>-1,
-                    'title'=>$this->FixSpaces(lang('menu_bookmarks')),
-                    'description'=>'','show_in_menu'=> get_preference(get_userid(), 'bookmarks')),
-            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'bookmarks',
-                    'title'=>$this->FixSpaces(lang('addbookmark')),
-                    'description'=>lang('addbookmark'),'show_in_menu'=>false),
-            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'bookmarks',
-                    'title'=>$this->FixSpaces(lang('editbookmark')),
-                    'description'=>lang('editbookmark'),'show_in_menu'=>false)
     	);
 
 		// add in all of the modules
@@ -819,7 +812,7 @@ class AdminTheme
                 $this->title .= ': '.$subtitle;
                 }
             // fix bookmarks
-            $this->menuItems['bookmarks']['url'] .= urlencode($this->UnFixSpaces($this->title));
+            // $this->menuItems['bookmarks']['url'] .= urlencode($this->UnFixSpaces($this->title));
         }
 
     /**

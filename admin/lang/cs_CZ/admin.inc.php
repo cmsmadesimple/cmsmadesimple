@@ -284,4 +284,8 @@ $lang['admin']['showrecent'] = 'Ukázat nejčastěji používané stránky';
 $lang['admin']['attachtotemplate'] = 'Připojit styl k šabloně';
 $lang['admin']['attachstylesheets'] = 'Připojit styl';
 $lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
+$lang['admin']['globalconfig'] = 'Global Configuration'; //needs translation
+$lang['admin']['adminprefs'] = 'Admin Preferences'; //needs translation
+$lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
+$lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration bookmarks.'; //needs translation
 ?>
