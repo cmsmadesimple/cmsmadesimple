@@ -369,7 +369,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dict = NewDataDictionary($db);
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_categories", 
+	$sqlarray = $dict->CreateTableSQL($db_prefix."module_news_categories", 
 			$flds, $taboptarray);
 	$dict->ExecuteSQLArray($sqlarray);
 
