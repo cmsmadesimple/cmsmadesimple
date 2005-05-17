@@ -381,8 +381,8 @@ else if ($action == 'missingdeps')
 
 		$curclass = "row1";
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
-        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		foreach($gCms->modules as $key=>$value)
 		{
@@ -500,7 +500,7 @@ else if ($action == 'missingdeps')
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
 				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
 			}
 			else
@@ -510,7 +510,7 @@ else if ($action == 'missingdeps')
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
 				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 			}
 			else

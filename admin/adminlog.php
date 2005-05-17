@@ -95,7 +95,7 @@ if ($access && $result->RowCount() > 0) {
 	echo '<div class="pageoptions">';
 	echo '<p class="pageoptions">';
 	echo '<a href="addtemplate.php">';
-	echo $themeObject->DisplayImage('delete.gif', lang('delete')).'</a>'; 	
+	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>'; 	
 	echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
 	echo '</p>';
 	echo '</div>';

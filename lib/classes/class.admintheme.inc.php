@@ -1232,7 +1232,7 @@ class AdminTheme
             {
             $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
             }
-        $retStr .= ' border="0" />';
+        $retStr .= ' />';
         return $retStr;
     }
 

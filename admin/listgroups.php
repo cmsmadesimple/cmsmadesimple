@@ -75,10 +75,10 @@ include_once("header.php");
 		$currow = "row1";
 
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
-        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
-        $image_groupassign = $themeObject->DisplayImage('groupassign.gif', lang('assignments'));
-        $image_permissions = $themeObject->DisplayImage('permissions.gif', lang('permissions'));
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+        $image_groupassign = $themeObject->DisplayImage('icons/system/groupassign.gif', lang('assignments'),'','','systemicon');
+        $image_permissions = $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','systemicon');
 
 		$counter=0;
 		foreach ($grouplist as $onegroup){
@@ -93,13 +93,13 @@ include_once("header.php");
 				if ($edit)
 				    {
 					echo "<td class=\"pageicon\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
-                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 				if ($remove)
 				    {
 					echo "<td class=\"pageicon\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 				echo "</tr>\n";
@@ -120,7 +120,7 @@ if (check_permission($userid, 'Add Groups')) {
 		<p class="pageoptions">
 			<a href="addgroup.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addgroup')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
 				?>
 			</a>

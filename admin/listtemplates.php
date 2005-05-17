@@ -141,10 +141,10 @@ if (isset($_GET["message"])) {
 		foreach ($templatelist as $onetemplate)
 		{
 			// construct true/false button images
-            $image_true = "<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('true.gif', lang('true'))."</a>";
-            $image_false = "<a href=\"listtemplates.php?setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('false.gif', lang('false'))."</a>";
-			$default_true =$themeObject->DisplayImage('true.gif', lang('true'));
-			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('false.gif', lang('false'))."</a>";
+            $image_true = "<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon')."</a>";
+            $image_false = "<a href=\"listtemplates.php?setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon')."</a>";
+			$default_true =$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon')."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
@@ -158,14 +158,14 @@ if (isset($_GET["message"])) {
 
 				# view css association
 				echo "<td><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
-                echo $themeObject->DisplayImage('css.gif', lang('attachstylesheets'));
+                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets','','','systemicon'));
                 echo "</a></td>\n";
 
 				# add new template
 				if ($add)
 				    {
 					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".$onetemplate->name."\">";
-                    echo $themeObject->DisplayImage('copy.gif', lang('copy'));
+                    echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 
@@ -173,7 +173,7 @@ if (isset($_GET["message"])) {
 				if ($edit)
 				    {
 					echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
-                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 
@@ -181,7 +181,7 @@ if (isset($_GET["message"])) {
 				if ($remove)
 				    {
 					echo "<td><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
         }
 				echo "</tr>\n";
@@ -203,7 +203,7 @@ if ($add) {
 		<p class="pageoptions">
 			<a href="addtemplate.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addtemplate')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
 				?>
 			</a>

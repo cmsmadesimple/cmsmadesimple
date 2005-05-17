@@ -109,10 +109,10 @@ else if ($action == "showpluginabout")
 				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 				echo "<td>$oneplugin</td>\n";
 				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 
 				echo "</tr>\n";
@@ -127,8 +127,8 @@ else if ($action == "showpluginabout")
 	<div class="pageoptions">
 		<p class="pageoptions">
 			<a href="adduserplugin.php">
-				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addusertag')).'</a>'; 
+				<?php
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
 				?>
 			</a>

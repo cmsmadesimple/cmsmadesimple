@@ -144,8 +144,8 @@ if (isset($_GET["message"])) {
 		$currow = "row1";
 		
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
-        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		$counter = 0;
 
@@ -261,21 +261,21 @@ if (isset($_GET["message"])) {
   						if ($item_order == 1 && $num_same_level)
   						{
   							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  							echo $themeObject->DisplayImage('arrow-d.gif', lang('down'));
+  							echo $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
   							echo "</a>";
    						}
   						else if ($item_order == $num_same_level)
   						{
   							echo "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  							echo $themeObject->DisplayImage('arrow-u.gif', lang('up'));
+  							echo $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
   							echo "</a>";
   						}
   						else
   						{
   							echo "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  							echo $themeObject->DisplayImage('arrow-d.gif', lang('down'));
+  							echo $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
   							echo "</a>&nbsp;<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  							echo $themeObject->DisplayImage('arrow-u.gif', lang('up'));
+  							echo $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
   							echo "</a>";
   						}
   					}
@@ -284,26 +284,26 @@ if (isset($_GET["message"])) {
   				if ($config["query_var"] == "")
   				{
   					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" rel=\"external\">";
-  					echo $themeObject->DisplayImage('view.gif', lang('view'));
+  					echo $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
                     echo "</a></td>\n";
   				}
   				else if ($one->Alias() != "")
   				{
   					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" rel=\"external\">";
-                    echo $themeObject->DisplayImage('view.gif', lang('view'));
+                    echo $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
                     echo "</a></td>\n";
   				}
   				else
   				{
   					echo "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" rel=\"external\">";
-                    echo $themeObject->DisplayImage('view.gif', lang('view'));
+                    echo $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
                     echo "</a></td>\n";
   				}
   				echo "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
-  				echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+  				echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
   				echo "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
   				echo "</tr>\n";
   
@@ -330,7 +330,7 @@ if (isset($_GET["message"])) {
 		<p class="pageoptions">
 			<a href="addcontent.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addcontent')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
 				?>
 			</a>

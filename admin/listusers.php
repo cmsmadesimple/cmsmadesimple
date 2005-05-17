@@ -70,8 +70,8 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
-        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		$counter=0;
 		foreach ($userlist as $oneuser){
@@ -82,7 +82,7 @@ if (isset($_GET["message"])) {
 				if ($edit || $userid == $oneuser->id)
 				    {
 					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
-                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 				else
@@ -92,7 +92,7 @@ if (isset($_GET["message"])) {
 				if ($remove)
 				    {
 					echo "<td><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 		            }
         		echo "</tr>\n";
@@ -113,7 +113,7 @@ if (check_permission($userid, 'Add Users')) {
 		<p class="pageoptions">
 			<a href="adduser.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('adduser')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('adduser'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="adduser.php">'.lang("adduser");
 				?>
 			</a>

@@ -96,14 +96,14 @@ if (isset($_GET["message"]))
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
 				echo "<td><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
-                echo $themeObject->DisplayImage('css.gif', lang('attachtotemplate'));
+                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
                 echo "</a></td>\n";
 
 				# if user has right to edit
 				if ($modify)
 				{
 					echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">";
-                    echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
 				}
 				else
@@ -115,7 +115,7 @@ if (isset($_GET["message"]))
 				if ($delcss)
 				{
 					echo "<td><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 				}
 				else
@@ -143,7 +143,7 @@ if (isset($_GET["message"]))
 		<p class="pageoptions">
 			<a href="addcontent.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addstylesheet')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
 				?>
 			</a>

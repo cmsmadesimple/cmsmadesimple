@@ -59,8 +59,8 @@ if (isset($_GET["message"])) {
 
 		$currow = "row1";
 		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('true.gif', lang('true'));
-        $image_false = $themeObject->DisplayImage('false.gif', lang('false'));
+        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
@@ -68,10 +68,10 @@ if (isset($_GET["message"])) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
-                echo $themeObject->DisplayImage('edit.gif', lang('edit'));
+                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "<td><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                echo $themeObject->DisplayImage('delete.gif', lang('delete'));
+                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "</tr>\n";
 
@@ -90,7 +90,7 @@ if (isset($_GET["message"])) {
 		<p class="pageoptions">
 			<a href="addhtmlblob.php">
 				<?php 
-					echo $themeObject->DisplayImage('newobject.gif', lang('addhtmlblob')).'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addhtmlblob'),'','','systemicon').'</a>'; 
 					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
 				?>
 			</a>
