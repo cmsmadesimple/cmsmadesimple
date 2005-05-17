@@ -166,7 +166,7 @@ class modernTheme extends AdminTheme
         if (file_exists($file))
         {
 	       echo "<div class=\"DashboardCallout\">\n";
-		   echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('installdirwarning')."</p></div>";
+		   echo "<div class=\"pageerrorinstalldir\"><p class=\"pageerror\">".lang('installdirwarning')."</p></div>";
 	       echo "</div> <!-- end DashboardCallout -->\n";
         }
     }

@@ -86,25 +86,18 @@ if (isset($_GET["message"])) {
 
 #if ($add) {
 ?>
-
 	<div class="pageoptions">
-		<a href="addcontent.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('addhtmlblob')).'</a>'; 
-				echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="addcontent.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('addhtmlblob')).'</a>'; 
+					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
+				?>
+			</a>
+		</p>		
 	</div>
 </div>
 <p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
-
-<!--
-<div class="collapseTitle"><a href="#help" onClick="expandcontent('helparea')" style="cursor:hand; cursor:pointer"><?php echo lang('help') ?>?</a></div>
-<div id="helparea" class="expand">
-<?php echo lang('helplisttemplate')?>
-<a name="help">&nbsp;</a>
-</div>
--->
 
 <?php
 #}

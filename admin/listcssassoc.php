@@ -219,10 +219,10 @@ else {
 		</p>
 		</div>
 		</form>
-		</div>
 
 <?php
 		} # end of showing form
+	echo '</div>';
 }
 echo '<p class="pageback"><a class="pageback" href="listtemplates.php">&#171; '.lang('back').'</a></p>';
 

@@ -110,12 +110,14 @@ if (isset($_GET["message"])) {
 if (check_permission($userid, 'Add Users')) {
 ?>
 	<div class="pageoptions">
-		<a href="adduser.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('adduser')).'</a>'; 
-				echo ' <a class="pageoptions" href="adduser.php">'.lang("adduser");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="adduser.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('adduser')).'</a>'; 
+					echo ' <a class="pageoptions" href="adduser.php">'.lang("adduser");
+				?>
+			</a>
+		</p>
 	</div>
 </div>
 

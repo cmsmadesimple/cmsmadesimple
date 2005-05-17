@@ -200,12 +200,14 @@ if (isset($_GET["message"])) {
 if ($add) {
 ?>
 	<div class="pageoptions">
-		<a href="addtemplate.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('addtemplate')).'</a>'; 
-				echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="addtemplate.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('addtemplate')).'</a>'; 
+					echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
+				?>
+			</a>
+		</p>		
 	</div>
 </div>
 <p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>

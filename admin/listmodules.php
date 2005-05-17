@@ -415,12 +415,9 @@ else if ($action == 'missingdeps')
 </table>
 
 	<?php
-
+	echo '</div>';
 	}
-
 }
-
-echo '</div>';
 
 echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
 

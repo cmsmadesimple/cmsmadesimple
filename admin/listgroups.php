@@ -117,12 +117,14 @@ include_once("header.php");
 if (check_permission($userid, 'Add Groups')) {
 ?>
 	<div class="pageoptions">
-		<a href="addgroup.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('addgroup')).'</a>'; 
-				echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="addgroup.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('addgroup')).'</a>'; 
+					echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
+				?>
+			</a>
+		</p>
 	</div>
 </div>
 

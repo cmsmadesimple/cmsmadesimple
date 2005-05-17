@@ -94,6 +94,7 @@ img.itemicon { float: left; margin-right: 10px; border: 0px; height: 32px; width
 /* Standard pages output */
 div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
 div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
+div.pageerrorinstalldir { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 50em; }
 div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; }
 div.pageoverflow a { color: #384654; }

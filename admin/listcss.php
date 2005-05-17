@@ -72,7 +72,7 @@ if (isset($_GET["message"]))
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RowCount(), $limit)."</p>";
 	}
 	echo '<p class="pageheader">'.lang('liststylesheets').'</p></div>';
-	if ($result)
+	if ($result && $result->RowCount() > 0)
 	{
 		# displaying the table header
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
@@ -134,22 +134,20 @@ if (isset($_GET["message"]))
 		echo "</table>\n";
 
 	} # end if result
-	else
-	{
-		echo "<p>".lang('nocss')."</p>";
-	}
 
 	# if user can add css
 	if ($addcss)
 	{
 ?>
 	<div class="pageoptions">
-		<a href="addcontent.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('addstylesheet')).'</a>'; 
-				echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="addcontent.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('addstylesheet')).'</a>'; 
+					echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
+				?>
+			</a>
+		</p>
 	</div>
 </div>
 <p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>

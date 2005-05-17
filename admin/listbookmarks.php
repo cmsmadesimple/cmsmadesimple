@@ -89,12 +89,14 @@ include_once("header.php");
 	}
 ?>
 	<div class="pageoptions">
-		<a href="addbookmark.php">
-			<?php 
-				echo $themeObject->DisplayImage('newobject.gif', lang('addbookmark')).'</a>'; 
-				echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
-			?>
-		</a>
+		<p class="pageoptions">
+			<a href="addbookmark.php">
+				<?php 
+					echo $themeObject->DisplayImage('newobject.gif', lang('addbookmark')).'</a>'; 
+					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
+				?>
+			</a>
+		</p>
 	</div>
 </div>
 <?php
