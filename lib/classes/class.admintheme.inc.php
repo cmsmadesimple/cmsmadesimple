@@ -695,25 +695,25 @@ class AdminTheme
                     'title'=>$this->FixSpaces(lang('editusertag')),
                     'description'=>lang('editusertag'),'show_in_menu'=>false),
              // base admin menu ---------------------------------------------------------
-            'admin'=>array('url'=>'topadmin.php','parent'=>-1,
+            'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
                     'description'=>lang('admindescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
-            'preferences'=>array('url'=>'editprefs.php','parent'=>'admin',
+            'preferences'=>array('url'=>'editprefs.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminprefs')),
                     'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
-            'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'admin',
+            'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('globalconfig')),
                     'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
-            'managebookmarks'=>array('url'=>'listbookmarks.php','parent'=>'admin',
+            'managebookmarks'=>array('url'=>'listbookmarks.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('managebookmarks')),
                     'description'=>lang('managebookmarksdescription'),'show_in_menu'=>true),
-            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'admin',
+            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('addbookmark')),
                     'description'=>lang('addbookmark'),'show_in_menu'=>false),
-            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'admin',
+            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('editbookmark')),
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
-            'adminlog'=>array('url'=>'adminlog.php','parent'=>'admin',
+            'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>true),
              // base view site menu ---------------------------------------------------------
@@ -1189,23 +1189,37 @@ class AdminTheme
      * @param width
      * @param height
      */
-    function DisplayImage($imageName, $alt='', $width='', $height='')
+    function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
     {
         if (! isset($this->imageLink[$imageName]))
     	   {
+    	   	if (strpos($imageName,'/') !== false)
+    	   	   {
+    	   	   	$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
+    	   	   	$imageName = substr($imageName,strrpos($imageName,'/')+1);
+    	   	   }
+    	   	else
+    	   	   {
+    	   	   	$imagePath = '';
+    	   	   }
+    	   	
     	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
-                '/themes/' . $this->themeName . '/images/' . $imageName) . '/'. $imageName))
+                '/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
     	       {
                 $this->imageLink[$imageName] = 'themes/' .
-                    $this->themeName . '/images/' . $imageName;
+                    $this->themeName . '/images/' . $imagePath . $imageName;
     	       }
     	   else
     	       {
-    	       $this->imageLink[$imageName] = 'themes/default/images/' . $imageName;
+    	       $this->imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
     	       }
     	   }
 
         $retStr = '<img src="'.$this->imageLink[$imageName].'"';
+        if ($class != '')
+            {
+            $retStr .= ' class="'.$class.'"';
+            }
         if ($width != '')
             {
             $retStr .= ' width="'.$width.'"';
