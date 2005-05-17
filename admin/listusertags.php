@@ -125,7 +125,7 @@ else if ($action == "showpluginabout")
 	</tbody>
 </table>
 	<div class="pageoptions">
-		<a href="addbookmark.php">
+		<a href="adduserplugin.php">
 			<?php 
 				echo $themeObject->DisplayImage('newobject.gif', lang('addusertag')).'</a>'; 
 				echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
