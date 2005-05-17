@@ -184,7 +184,7 @@ $lang['admin']['userdefinedtags'] = 'User-defined Tags';
 $lang['admin']['usermanagement'] = 'User Management';
 $lang['admin']['username'] = 'Username';
 $lang['admin']['usernameincorrect'] = 'Username or password incorrect';
-$lang['admin']['userprefs'] = 'Admin Preferences';
+$lang['admin']['userprefs'] = 'User Preferences';
 $lang['admin']['usersassignedtogroup'] = 'Users Assigned to Group %s';
 $lang['admin']['usertagexists'] = 'A tag with this name already exists. Please choose another.';
 $lang['admin']['usewysiwyg'] = 'Use WYSIWYG editor for content';
@@ -285,7 +285,7 @@ $lang['admin']['attachtotemplate'] = 'Attach Stylesheet to Template'; //needs tr
 $lang['admin']['attachstylesheets'] = 'Attach Stylesheets'; //needs translation
 $lang['admin']['menu_bookmarks'] = '[+]'; //needs translation
 $lang['admin']['globalconfig'] = 'Global Settings'; //needs translation
-$lang['admin']['adminprefs'] = 'Admin Preferences'; //needs translation
+$lang['admin']['adminprefs'] = 'User Preferences'; //needs translation
 $lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
 $lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration bookmarks.'; //needs translation
 ?>

@@ -26,7 +26,7 @@ check_login();
 
 include_once("header.php");
 $themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplaySectionPages('admin');
+$themeObject->DisplaySectionPages('siteadmin');
 $themeObject->DisplaySectionMenuDivEnd();
 include_once("footer.php");
 

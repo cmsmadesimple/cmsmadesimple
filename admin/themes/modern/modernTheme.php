@@ -188,20 +188,16 @@ class modernTheme extends AdminTheme
             	continue;
             	}
 				
-			$itemicons = array (
-				"topcontent.php" => "topcontent.gif",
-				"toplayout.php" => "toplayout.gif",
-				"topusers.php" => "topusers.gif",
-				"topextensions.php" => "topextensions.gif",
-				"editprefs.php" => "editprefs.gif",
-				"topadmin.php" => "topadmin.gif",
-				"../index.php" => "viewsite.gif",
-				"logout.php" => "logout.gif"
-			);		
             echo "<div class=\"itemmenu\">\n";
-            if (array_key_exists($menuItem['url'],$itemicons)) {
-			     echo '<a href="'.$menuItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$menuItem['url']].'" alt="" /></a>';
-			}
+            
+            $iconSpec = $thisSection;
+            if ($menuItem['url'] == '../index.php')
+                {
+                $iconSpec = 'viewsite';
+                }
+		    echo '<a href="'.$menuItem['url'].'">';
+            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
+            echo '</a>';
             echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
 			if (array_key_exists('target', $menuItem))
 				{
@@ -234,63 +230,49 @@ class modernTheme extends AdminTheme
             	{
             	continue;
             	}
-				
-			$itemicons = array (
-				"listcontent.php" => "listcontent.gif",
-				"files.php" => "files.gif",
-				"imagefiles.php" => "imagefiles.gif",
-				"moduleinterface.php?module=News" => "newsmodule.gif",
-				"listtemplates.php" => "listtemplates.gif",
-				"listcss.php" => "listcss.gif",
-				"listhtmlblobs.php" => "listhtmlblobs.gif",
-				"listusers.php" => "listusers.gif",
-				"listgroups.php" => "listgroups.gif",
-				"changegroupassign.php" => "changegroupassign.gif",
-				"changegroupperm.php" => "changegroupperm.gif",
-				"listmodules.php" => "listmodules.gif",
-				"listtags.php" => "listtags.gif",
-				"listusertags.php" => "listusertags.gif",
-				"moduleinterface.php?module=TinyMCE" => "wysiwyg.gif",
-				"siteprefs.php" => "siteprefs.gif",
-				"adminlog.php" => "adminlog.gif",
-				"topcontent.php" => "topcontent.gif",
-				"toplayout.php" => "toplayout.gif",
-				"topusers.php" => "topusers.gif",
-				"topextensions.php" => "topextensions.gif",
-				"editprefs.php" => "editprefs.gif",
-				"topadmin.php" => "topadmin.gif",
-				"../index.php" => "viewsite.gif",
-				"logout.php" => "logout.gif"
-			);
-			
+
             echo "<div class=\"itemmenu\">\n";
-            
-            if (array_key_exists($thisItem['url'],$itemicons))
-            	{
-				echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$thisItem['url']].'" alt="'.$thisItem['title'].'" /></a>';
-				}
-			else if (substr($thisItem['url'],0,19) == 'moduleinterface.php')
+ 
+            $moduleIcon = false;
+            $iconSpec = $thisChild;
+            // handle module icons
+            if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
 				{
-				if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
-					{
-					$imageSpec = dirname($this->cms->config['root_path'] .
-						'/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
-					if (file_exists($imageSpec))
-						{
-						echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
+					if ($tmp[1] == 'News')
+					   {
+					   	$iconSpec = 'newsmodule';
+					   }
+					else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
+					   {
+					   	$iconSpec = 'wysiwyg';
+					   }
+					else
+					   {
+					   $imageSpec = dirname($this->cms->config['root_path'] .
+						  '/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
+					   if (file_exists($imageSpec))
+						  {
+						  echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
 							'/modules/' . $tmp[1] . '/images/' .
 							'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
+						  $moduleIcon = true;
+                            }
+					   else
+						  {
+						  $iconSpec=$this->TopParent($thisChild);
+						  }
 						}
-					else
-						{
-						$top=$this->menuItems[$this->TopParent($thisChild)];
-						if (array_key_exists($top['url'],$itemicons))
-							{
-							echo '<a href="'.$top['url'].'"><img class="itemicon" src="themes/modern/images/icons/topfiles/'.$itemicons[$top['url']].'" alt="'.$top['title'].'" /></a>';
-							}
-						}
-					}
 				}
+            if (! $moduleIcon)
+                {
+                if ($thisItem['url'] == '../index.php')
+                    {
+                    $iconSpec = 'viewsite';
+                    }
+		        echo '<a href="'.$thisItem['url'].'">';
+                echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
+                echo '</a>';
+                }
             echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
 			if (array_key_exists('target', $thisItem))
 				{
@@ -333,39 +315,6 @@ class modernTheme extends AdminTheme
             }
     }
 
-	function DisplayImage($imageName, $alt='', $width='', $height='')
-    {
-        if (! isset($this->imageLink[$imageName]))
-    	   {
-    	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
-                '/themes/' . $this->themeName . '/images/icons/system/' . $imageName) . '/'. $imageName))
-    	       {
-                $this->imageLink[$imageName] = 'themes/' .
-                    $this->themeName . '/images/icons/system/' . $imageName;
-    	       }
-    	   else
-    	       {
-    	       $this->imageLink[$imageName] = 'themes/default/images/' . $imageName;
-    	       }
-    	   }
-
-        $retStr = '<img src="'.$this->imageLink[$imageName].'"  class="pageicon"';
-        if ($width != '')
-            {
-            $retStr .= ' width="'.$width.'"';
-            }
-        if ($height != '')
-            {
-            $retStr .= ' height="'.$height.'"';
-            }
-        if ($alt != '')
-            {
-            $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
-            }
-        $retStr .= '/>';
-        return $retStr;
-    }
-	
 	/* Functions that we want dont want the standard output from */
 	function OutputFooterJavascript() {}	
 }
