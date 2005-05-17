@@ -395,9 +395,35 @@ class News extends CMSModule
 				}
 
 				$entryarray = array();
+				$query = '';
 
-				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' ORDER by news_date DESC";
-				$dbresult = $db->Execute($query);
+				if (isset($params["category"]))
+				{
+					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND mnc.news_category_name like '" . $params['category'] . "%' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
+				}
+				else
+				{
+					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
+				}
+
+				if (isset($params["sortasc"]))
+				{
+					$query .= "ORDER BY news_date asc";
+				}
+				else
+				{
+					$query .= "ORDER BY news_date desc";
+				}
+
+				$dbresult = '';
+				if(isset($params['number']))
+				{
+					$dbresult = $db->SelectLimit($query, $params["number"]);
+				}
+				else
+				{
+					$dbresult = $db->Execute($query);
+				}
 
 				while ($row = $dbresult->FetchRow())
 				{
@@ -484,7 +510,15 @@ class News extends CMSModule
 				$entryarray = array();
 
 				$query = "SELECT mn.*, mnc.news_category_name FROM ".cms_db_prefix()."module_news mn LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' ORDER by news_date DESC";
-				$dbresult = $db->Execute($query);
+				$dbresult = '';
+				if(isset($params['number']))
+				{
+					$dbresult = $db->SelectLimit($query, $params["number"]);
+				}
+				else
+				{
+					$dbresult = $db->Execute($query);
+				}
 
 				while ($row = $dbresult->FetchRow())
 				{

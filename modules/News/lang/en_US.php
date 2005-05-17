@@ -49,15 +49,8 @@ $lang['help'] = <<<EOF
 	<p>
 	<ul>
 	<li><em>(optional)</em> number="5" - Maximum number of items to display =- leaving empty will show all items</li>
-	<li><em>(optional)</em> dateformat - Date/Time format using parameters from php\'s date function.  See <a href="http://php.net/date" target="_blank">here</a> for a parameter list and information.</li>
-	<li><em>(optional)</em> makerssbutton="true" - Make a button to
-	link to an RSS feed of the News items.</li>
-	<li><em>(optional)</em> swaptitledate="true" - Switch the order
-	of the date and title</li>
-	<li><em>(optional)</em> category="category" - Only display items for that category.  leaving empty, will show all categories</li>
-	<li><em>(optional)</em> summary="page" - Activate summary mode, links are placed in the title of each summary article, and the page is trimmed to "length" characters</li>
-	<li><em>(optional)</em> length="80" - Used in summary mode (see above) this trims the length of each article to the specified number of characters after stripping all html tags.</li>
-	<li><em>(optional)</em> showcategorywithtitle="true" - Display the title with the category in front of it (Category: Title).  Leave false for old style behavior.</li>
+	<li><em>(optional)</em> makerssbutton="true" - Make a button to link to an RSS feed of the News items.</li>
+	<li><em>(optional)</em> category="category" - Only display items for that category and it's children.  leaving empty, will show all categories</li>
 	<li><em>(optional)</em> moretext="more..." - Text to display at the end of a news item if it goes over the summary length.  Defaults to "more...".</li>
 	<li><em>(optional)</em> sortasc="true" - Sort news items in ascending date order rather than descending.</li>
 	</ul>
