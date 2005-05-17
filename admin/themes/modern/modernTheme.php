@@ -188,16 +188,19 @@ class modernTheme extends AdminTheme
             	continue;
             	}
 				
-            echo "<div class=\"itemmenu\">\n";
+            echo "<div class=\"itemmenucontainer\">\n";
             
             $iconSpec = $thisSection;
             if ($menuItem['url'] == '../index.php')
                 {
                 $iconSpec = 'viewsite';
                 }
+			echo '<div class="itemicon">';
 		    echo '<a href="'.$menuItem['url'].'">';
             echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
             echo '</a>';
+			echo '</div>';
+			echo '<div class="itemtext">';
             echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
 			if (array_key_exists('target', $menuItem))
 				{
@@ -210,6 +213,7 @@ class modernTheme extends AdminTheme
                 echo $menuItem['description']."<br />";
                 }
             $this->ListSectionPages($thisSection);
+			echo '</div>';
             echo "</div>\n";
             }
     }
@@ -231,8 +235,8 @@ class modernTheme extends AdminTheme
             	continue;
             	}
 
-            echo "<div class=\"itemmenu\">\n";
- 
+            echo "<div class=\"itemmenucontainer\">\n";
+ 			echo '<div class="itemicon">';
             $moduleIcon = false;
             $iconSpec = $thisChild;
             // handle module icons
@@ -273,6 +277,8 @@ class modernTheme extends AdminTheme
                 echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
                 echo '</a>';
                 }
+			echo '</div>';
+			echo '<div class="itemtext">';
             echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
 			if (array_key_exists('target', $thisItem))
 				{
@@ -283,6 +289,7 @@ class modernTheme extends AdminTheme
                 {
                 echo $thisItem['description']."<br />";
                 }
+			echo '</div>';
             echo "</div>\n";
         }
     }

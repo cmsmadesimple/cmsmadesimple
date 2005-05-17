@@ -10,7 +10,7 @@
 </head>
 
 <body>
-<div class="ta-c">
+<div class="lball">
 	<div class="lblayout lbtopmargin"><p><img src="themes/modern/images/logo.gif" alt="" /><span class="logotext">CMS Admin Login</span></p></div>
 	<div class="lblayout lbcontainer">
 			<div class="lbinfo">
@@ -24,7 +24,7 @@
 				</p>
 			</div>
 			<div class="lbfields">
-				<div class="floatl">
+				<div class="lbfieldstext">
 					<p class="lbuser"><?php echo lang('username')?>:</p>
 					<p class="lbpass"><?php echo lang('password')?>:</p>
 				</div>
@@ -32,7 +32,7 @@
 					<form method="post" action="login.php">
 						<p>
 							<input name="username" type="text" size="15" value="<?php echo (isset($_POST['username'])?$_POST['username']:'')?>" /><br />
-							<input class="mt5" name="password" type="password" size="15" value="<?php echo (isset($_POST['password'])?$_POST['password']:'')?>" /><br />
+							<input class="lbpassword" name="password" type="password" size="15" value="<?php echo (isset($_POST['password'])?$_POST['password']:'')?>" /><br />
 							<input class="lbsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
 							<input class="lbsubmit" name="logincancel" type="submit" value="<?php echo lang('cancel')?>" />
 						</p>
