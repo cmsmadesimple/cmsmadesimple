@@ -45,17 +45,17 @@ if (isset($_GET["message"])) {
 	$limit = 20;
 	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
 	echo '<p class="pageheader">'.lang('htmlblobs').'</p></div>';
-	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-	echo '<thead>';
-	echo "<tr>\n";
-	echo "<th>".lang('name')."</th>\n";
-	echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	echo "</tr>\n";
-	echo '</thead>';
-	echo '<tbody>';
 
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo '<thead>';
+		echo "<tr>\n";
+		echo "<th>".lang('name')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
 		$currow = "row1";
 		// construct true/false button images
@@ -79,16 +79,16 @@ if (isset($_GET["message"])) {
 			}
 			$counter++;
 		}
-	}
 
-	echo '</tbody>';
-	echo "</table>\n";
+		echo '</tbody>';
+		echo "</table>\n";
+	}
 
 #if ($add) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addcontent.php">
+			<a href="addhtmlblob.php">
 				<?php 
 					echo $themeObject->DisplayImage('newobject.gif', lang('addhtmlblob')).'</a>'; 
 					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
