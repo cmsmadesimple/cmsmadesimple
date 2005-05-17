@@ -39,10 +39,19 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 		{
 			if (!(strpos($onecontent->Hierarchy(), $params['start_element']) !== FALSE && strpos($onecontent->Hierarchy(), $params['start_element']) == 0))
 			{
-				continue;
+				if(($onecontent->Alias() == $params['start_element']))
+				{
+
+					$params['start_element'] = $onecontent->Hierarchy();
+					$depth = count(split('\.', $onecontent->Hierarchy()));
+					continue;
+				}
+				else
+				{
+					continue;
+				}
 			}
 		}
-
 		#Now check to make sure we're not too many levels deep if number_of_levels is set
 		if (isset($params['number_of_levels']))
 		{
@@ -52,9 +61,8 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 			#Is start_element set?  If so, reset the base_level to it's level
 			if (isset($params['start_element']))
 			{
-				$base_level = count(split('\.', $params['start_element']));
+				$base_level = count(split('\.', $params['start_element'])) + 1;
 			}
-
 			#If this element's level is more than base_level + number_of_levels, then scratch it
 			if ($base_level + $number_of_levels < $depth)
 			{
@@ -103,7 +111,7 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 				$menu .= "</li>\n";
 			}
 			$menu .= "<li><h2><a href=\"".$onecontent->GetURL()."\">".$onecontent->MenuText();
-			if ($onecontent->Name() != '')
+			if ($onecontent->Name() != '' && $onecontent->Name()!=$onecontent->MenuText())
 			{
 				$menu .= ' - ' . $onecontent->Name();
 			}
@@ -130,7 +138,7 @@ function smarty_cms_help_function_sitemap()
 	<h3>What parameters does it take?</h3>
 	<p>
 	<ul>
-		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
+		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu. You can use the page alias instead of hierarchy.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 	</ul>
 	</p>
@@ -141,10 +149,11 @@ function smarty_cms_about_function_sitemap()
 {
 	?>
 	<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-	<p>Version: 1.1</p>
+	<p>Version: 1.2</p>
 	<p>
 	Change History:<br/>
 	1.1 - Modified to use new content rewrite (wishy)<br />
+	1.2 - Modified to support alias insted of hierarchy and minot output improvement (intersol).
 	</p>
 	<?php
 }
