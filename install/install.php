@@ -358,7 +358,7 @@ function showPageFour($sqlloaded = 0) {
 					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
 					$result = $db->Execute($s);
 					if (!$result) {
-						die('Invalid query');
+						die("Invalid query: $s");
 					} ## if
 				}
 			}

@@ -159,18 +159,6 @@ class News extends CMSModule
 
 		$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
 
-		/*
-		$flds = "
-			news_category_id I KEY,
-			news_id I KEY
-		";
-
-		$taboptarray = array('mysql' => 'TYPE=MyISAM');
-		$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
-				$flds, $taboptarray);
-		$dict->ExecuteSQLArray($sqlarray);
-		*/
-
 		#Set Permission
 		$this->CreatePermission('Modify News', 'Modify News');
 
@@ -248,18 +236,6 @@ class News extends CMSModule
 
 				$db->CreateSequence(cms_db_prefix()."module_news_categories_seq");
 
-				/*
-				$flds = "
-					news_category_id I KEY,
-					news_id I KEY
-				";
-
-				$taboptarray = array('mysql' => 'TYPE=MyISAM');
-				$sqlarray = $dict->CreateTableSQL(cms_db_prefix()."module_news_article_categories", 
-						$flds, $taboptarray);
-				$dict->ExecuteSQLArray($sqlarray);
-				*/
-
 				$query = "SELECT DISTINCT news_cat FROM ".cms_db_prefix()."module_news WHERE news_cat IS NOT NULL";
 				$dbresult = $db->Execute($query);
 				while ($row = $dbresult->FetchRow())
@@ -267,6 +243,9 @@ class News extends CMSModule
 					$catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
 					$query = "INSERT INTO ".cms_db_prefix()."module_news_categories (news_category_id, news_category_name, parent_id, hierarchy, long_name, create_date, modified_date) VALUES (?,?,?,?,?,?,?)";
 					$db->Execute($query,array($catid, $row['news_cat'], -1, '', '', $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+
+					$query = "UPDATE ".cms_db_prefix()."module_news SET news_category_id = ? WHERE news_cat = ?";
+					$db->Execute($query, array($catid, $row['news_cat']));
 				}
 
 				$current_version = "2.0";
