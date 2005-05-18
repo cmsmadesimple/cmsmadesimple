@@ -158,7 +158,7 @@ if (isset($_GET["message"])) {
 
 				# view css association
 				echo "<td><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
-                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets','','','systemicon'));
+                echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon');
                 echo "</a></td>\n";
 
 				# add new template
@@ -203,14 +203,14 @@ if ($add) {
 		<p class="pageoptions">
 			<a href="addtemplate.php">
 				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
 				?>
 			</a>
 		</p>		
 	</div>
 </div>
-<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
+<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 }

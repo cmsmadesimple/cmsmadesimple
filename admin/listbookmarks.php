@@ -92,7 +92,7 @@ include_once("header.php");
 		<p class="pageoptions">
 			<a href="addbookmark.php">
 				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addbookmark'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addbookmark.php">'.lang("addbookmark");
 				?>
 			</a>
@@ -100,6 +100,7 @@ include_once("header.php");
 	</div>
 </div>
 <?php
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 

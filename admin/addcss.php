@@ -196,7 +196,7 @@ else
 </div>
 
 <?php
-echo '<p class="pageback"><a class="pageback" href="listcss.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 } # end of displaying the form
 include_once("footer.php");
 

@@ -96,6 +96,11 @@ class AdminTheme
      */
     var $themeName;
 
+    /**
+     * Breadcrumbs Array
+     */
+    var $breadcrumbs;
+
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
@@ -119,6 +124,7 @@ class AdminTheme
 		$this->perms = array();
 		$this->recent = array();
 		$this->menuItems = array();
+		$this->breadcrumbs = array();
         $this->imageLink = array();
 		$this->modulesBySection = array();
 		$this->sectionCount = array();
@@ -811,9 +817,48 @@ class AdminTheme
                 {
                 $this->title .= ': '.$subtitle;
                 }
-            // fix bookmarks
-            // $this->menuItems['bookmarks']['url'] .= urlencode($this->UnFixSpaces($this->title));
+            // generate breadcrumb array
+
+            $count = 0;
+            foreach ($this->menuItems as $key=>$menuItem)
+                {
+			    if ($menuItem['selected'])
+                    {
+				    array_push($this->breadcrumbs, array('title'=>$menuItem['title'], 'url'=>$menuItem['url']));
+			        $count++;
+                    }
+			    }
+		    if ($count > 0)
+                {
+                // and fix up the last breadcrumb...
+                if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
+                    {
+                    $this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
+                    }
+                if ($this->subtitle != '')
+                    {
+                    $this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
+                    }
+                }
         }
+
+    /**
+     *  BackUrl
+     *  "Back" Url - link to the next-to-last item in the breadcrumbs
+     *  for the back button.
+     */
+     function BackUrl()
+     {
+     	$count = count($this->breadcrumbs) - 2;
+     	if ($count > -1)
+     	    {
+     	    return $this->breadcrumbs[$count]['url'];
+     	    }
+        else
+            {
+     	    return '';
+     	    }
+     }
 
     /**
      * DoTopMenu
@@ -1180,7 +1225,7 @@ class AdminTheme
         }
         echo "</div> <!-- end DashboardCallout -->\n";
     }
-    
+
     /**
      * DisplayImage will display the themed version of an image (if it exists),
      * or the version from the default theme otherwise.

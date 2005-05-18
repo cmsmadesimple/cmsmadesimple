@@ -128,7 +128,7 @@ else if ($action == "showpluginabout")
 		<p class="pageoptions">
 			<a href="adduserplugin.php">
 				<?php
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addusertag'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="adduserplugin.php">'.lang("addusertag");
 				?>
 			</a>
@@ -136,7 +136,7 @@ else if ($action == "showpluginabout")
 	</div>
 </div>
 <?php
-echo '<p class="pageback"><a class="pageback" href="topextensions.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

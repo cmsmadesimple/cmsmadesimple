@@ -95,7 +95,7 @@ if ($access && $result->RowCount() > 0) {
 	echo '<div class="pageoptions">';
 	echo '<p class="pageoptions">';
 	echo '<a href="addtemplate.php">';
-	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>'; 	
+	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
 	echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
 	echo '</p>';
 	echo '</div>';
@@ -103,7 +103,7 @@ if ($access && $result->RowCount() > 0) {
 
 echo '</div>';
 
-echo '<p class="pageback"><a class="pageback" href="topadmin.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 
 include_once("footer.php");

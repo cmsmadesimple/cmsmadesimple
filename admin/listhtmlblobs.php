@@ -90,14 +90,14 @@ if (isset($_GET["message"])) {
 		<p class="pageoptions">
 			<a href="addhtmlblob.php">
 				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addhtmlblob'),'','','systemicon').'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addhtmlblob'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addhtmlblob.php">'.lang("addhtmlblob");
 				?>
 			</a>
 		</p>		
 	</div>
 </div>
-<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
+<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 #}

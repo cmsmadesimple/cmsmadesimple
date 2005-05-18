@@ -60,11 +60,12 @@ class modernTheme extends AdminTheme
     {
 		echo '<div><p class="logocontainer"><img src="themes/modern/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
-		$breadcrumbs = array();
+//		$breadcrumbs = array();
         foreach ($this->menuItems as $key=>$menuItem) {
-			if ($menuItem['selected']) {
+/*			if ($menuItem['selected']) {
 				array_push($breadcrumbs, array($menuItem['title'] => $menuItem['url']));
 			}
+*/
         	if ($menuItem['parent'] == -1) {
         	    echo "\n\t\t";
         		$this->renderMenuSection($key, 0, -1);
@@ -75,26 +76,16 @@ class modernTheme extends AdminTheme
 		echo "</div>\n";
 		echo '<div class="breadcrumbs"><p class="breadcrumbs">';
 		$counter = 0;
-		$last = count($breadcrumbs) - 1;
-		while ($menutext = array_shift($breadcrumbs)) {
+		foreach ($this->breadcrumbs as $crumb) {
 			if ($counter > 0) {
 				echo " &#187; ";
 			}
-			foreach ($menutext as $key=>$value) {
-				echo '<a class="breadcrumbs" href="'.$value;
-                if ($counter == $last && $this->query != '')
-                    {
-                    echo '?'.$this->query;
-                    }
-                echo '">'.$key;
-                if ($counter == $last && $this->subtitle != '')
-                    {
-                    echo ': '.$this->subtitle;
-                    }
-                echo '</a>';
-			}
+			echo '<a class="breadcrumbs" href="'.$crumb['url'];
+            echo '">'.$crumb['title'];
+            echo '</a>';
 			$counter++;
 		}
+
 		echo '</p></div>';
 		echo '<div class="hstippled">&nbsp;</div>';
     }

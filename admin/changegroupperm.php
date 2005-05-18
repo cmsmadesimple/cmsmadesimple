@@ -162,7 +162,7 @@ if ($message != '')
 		echo '<tbody>';
 		
 		$currow = "row1";
-		
+
 		foreach ($perms as $key => $value)
 		{
 			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
@@ -190,7 +190,7 @@ if ($message != '')
 }
 
 
-echo '<p class="pageback"><a class="pageback" href="topusers.php">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

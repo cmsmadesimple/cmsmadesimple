@@ -143,14 +143,14 @@ if (isset($_GET["message"]))
 		<p class="pageoptions">
 			<a href="addcontent.php">
 				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>'; 
+					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
 				?>
 			</a>
 		</p>
 	</div>
 </div>
-<p class="pageback"><a class="pageback" href="toplayout.php">&#171; <?php echo lang('back')?></a></p>
+<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php
 	} # end if add css
