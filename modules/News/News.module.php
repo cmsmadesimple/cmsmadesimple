@@ -65,54 +65,79 @@ class News extends CMSModule
 	/**
 	 * This function is not in the API!!!
 	 */
-	function GetDisplayHtmlTemplate()
+	function GetSummaryHtmlTemplate()
 	{
-		return '
-<!-- Start News Display Template -->
+		return '<!-- Start News Display Template -->
 {foreach from=$items item=entry}
-<span class="cms-module-news">
-<span class="cms-module-news-header">
-{if !($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
-        <span class="cms-news-date">{$entry->date}</span><br />
+
+<p>
+
+{$entry->titlelink}
+
+<br />{$entry->category}
+
+{if $entry->postdate}
+
+<br />{$entry->postdate|date_format}
+
 {/if}
-<span class="cms-news-title">
-{if !($params.no_anchors == \'true\' || $params.no_anchors == \'1\')}
-<a name="{$entry->id}"></a>
+
+{if $entry->summary}
+
+<br />{$entry->summary}
+<br />[{$entry->morelink}]
+
+{else if $entry->content}
+
+<br />{$entry->content}
+
 {/if}
-{$entry->title}</span><br />
-{if ($params.swaptitledate == \'true\' || $params.swaptitledate == \'1\')}
-        <span class="cms-news-date">{$entry->date}</span><br />
-{/if}
-</span> <!-- end cms_module-news-header -->
-<span class="cms-news-content">{$entry->data}</span>
-{if $params.summary != \'\'}
-        <br />
-        <a href="index.php?{$query_var}={$params.summary}#{$entry->id}">{$entry->moretext}</a>
-{/if}
-</span> <!-- end cms-module-news -->
+
+</p>
+
 {/foreach}
 <!-- End News Display Template -->';
 	}
 
-	function GetDisplayRSSTemplate()
+	function GetDetailHtmlTemplate()
 	{
-		return '
-<?xml version=\'1.0\'?>
-<rss version=\'2.0\'>
-	<channel>
-		<title>CMS Made Simple News Feed</title>
-		<link>{$root_url}</link>
-		<description>Current News entries</description>
-{foreach from=$items item=entry}
-		<item>
-			<title>{$entry->title}</title>
-			<pubdate>{$entry->gmdate}</pubdate>
-			<description>{$entry->data}</description>
-		</item>
-{/foreach}
-	</channel>
-</rss>
-		';
+		return '<h3 id="NewsPostDetailTitle">{$entry->title}</h3>
+
+<hr id="NewsPostDetailHorizRule">
+
+{if $entry->category}
+
+<div id="NewsPostDetailCategory">
+{$entry->category}
+</div>
+
+{/if}
+
+{if $entry->postdate}
+
+<div id="NewsPostDetailDate">
+Posted: {$entry->postdate|date_format}
+</div>
+
+{/if}
+
+{if $entry->summary}
+
+<div id="NewsPostDetailSummary">
+<strong>
+{$entry->summary}
+</strong>
+</div>
+
+{/if}
+
+<div id="NewsPostDetailContent">
+{$entry->content}
+</div>
+
+<div>
+{$entry->printlink}
+</div>';
 	}
 
 	function Install()
@@ -162,11 +187,11 @@ class News extends CMSModule
 		#Set Permission
 		$this->CreatePermission('Modify News', 'Modify News');
 
-		# Setup display template
-		$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
+		# Setup summary template
+		$this->SetTemplate('displaysummary', $this->GetSummaryHtmlTemplate());
 
-		# Setup RSS template
-		$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
+		# Setup detail template
+		$this->SetTemplate('displaydetail', $this->GetDetailHtmlTemplate());
 	}
 
 	function InstallPostMessage()
@@ -247,6 +272,12 @@ class News extends CMSModule
 					$query = "UPDATE ".cms_db_prefix()."module_news SET news_category_id = ? WHERE news_cat = ?";
 					$db->Execute($query, array($catid, $row['news_cat']));
 				}
+
+				# Setup summary template
+				$this->SetTemplate('displaysummary', $this->GetSummaryHtmlTemplate());
+
+				# Setup detail template
+				$this->SetTemplate('displaydetail', $this->GetDetailHtmlTemplate());
 
 				$current_version = "2.0";
 		}
@@ -429,7 +460,7 @@ class News extends CMSModule
 				$this->smarty->assign_by_ref('items', $entryarray);
 
 				#Display template
-				echo $this->ProcessTemplate('articlesummary.tpl');
+				echo $this->ProcessTemplateFromDatabase('displaysummary');
 				break;
 
 			case "detail":
@@ -455,7 +486,7 @@ class News extends CMSModule
 					$this->smarty->assign_by_ref('entry', $onerow);
 				}
 
-				echo $this->ProcessTemplate('articledetail.tpl');
+				echo $this->ProcessTemplateFromDatabase('displaydetail');
 
 				break;
 
@@ -941,27 +972,37 @@ class News extends CMSModule
 
 				break;
 
+			case "updatesummarytemplate":
+
+				$this->SetTemplate('displaysummary', $params['templatecontent']);
+				$this->Redirect($id, 'defaultadmin');
+
+				break;
+
+			case "updatedetailtemplate":
+
+				$this->SetTemplate('displaydetail', $params['templatecontent2']);
+				$this->Redirect($id, 'defaultadmin');
+
+				break;
+
 			case "defaultadmin":
 
 				global $gCms;
-				#echo $this->StartTabSet();
-				#echo $this->StartTab($this->Lang('articles'));
 
 				#The tabs
-				//echo '<div id="page_tabs">';
 				echo $this->StartTabHeaders();
+
 				echo $this->SetTabHeader('articles',$this->Lang('articles'));
 				echo $this->SetTabHeader('categories',$this->Lang('categories'));
+				echo $this->SetTabHeader('summary_template',$this->lang('summarytemplate'));
+				echo $this->SetTabHeader('detail_template',$this->Lang('detailtemplate'));
+
 				echo $this->EndTabHeaders();
-				//echo '<div id="articles">'.$this->Lang('articles').'</div>';
-				//echo '<div id="categories">'.$this->Lang('categories').'</div>';				
-				//echo '</div>';
-				//echo '<div class="clearb"></div>';
 
 				#The content of the tabs
-				//echo '<div id="page_content">';
-				//echo '<div id="articles_c">';					
 				echo $this->StartTabContent();
+
 				echo $this->StartTab("articles");
 
 				//Load the current articles
@@ -1000,12 +1041,8 @@ class News extends CMSModule
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
 
-				#echo $this->EndTab();
-				//echo '</div>';				
 				echo $this->EndTab();
 
-				#echo $this->StartTab($this->Lang('categories'));
-				//echo '<div id ="categories_c">';
 				echo $this->StartTab("categories");
 				
 				#Put together a list of current categories...
@@ -1045,12 +1082,32 @@ class News extends CMSModule
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
 
-				#echo $this->EndTab();
-				//echo '</div>';
 				echo $this->EndTab();
 
-				#echo $this->EndTabSet();
-				//echo '</div>';
+				echo $this->StartTab($this->lang('summarytemplate'));
+				
+				echo $this->CreateFormStart($id, 'updatesummarytemplate');
+
+				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displaysummary'), 'templatecontent', '').'</p>';
+
+				echo $this->CreateInputSubmit($id, 'submitbutton', $this->Lang('submit'));
+
+				echo $this->CreateFormEnd();
+
+				echo $this->EndTab();
+
+				echo $this->StartTab($this->lang('detailtemplate'));
+				
+				echo $this->CreateFormStart($id, 'updatedetailtemplate');
+
+				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displaydetail'), 'templatecontent2', '').'</p>';
+
+				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', $this->Lang('submit'));
+
+				echo $this->CreateFormEnd();
+
+				echo $this->EndTab();
+
 				echo $this->EndTabContent();
 				
 				break;

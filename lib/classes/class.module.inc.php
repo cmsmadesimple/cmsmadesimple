@@ -1604,7 +1604,7 @@ class CMSModule extends ModuleOperations
 	
 	function EndTabHeaders() 
 	{
-		return "</div>";
+		return "</div><!-- EndTabHeaders -->";
 	}
 
 	function StartTabContent() 
@@ -1614,17 +1614,17 @@ class CMSModule extends ModuleOperations
 	
 	function EndTabContent() 
 	{
-		return '</div>';	
+		return '</div> <!-- EndTabContent -->';
 	}
 	
 	function StartTab($tabid)
 	{
-		return '<div id="'.$tabid.'_c">';		
+		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">';
 	}
 
 	function EndTab()
 	{
-		return '</div>';
+		return '</div> <!-- EndTab -->';
 	}
 
 	/**

@@ -12,6 +12,7 @@ $lang['content'] = 'Content';
 $lang['dateformat'] = '%s not in a valid yyyy-mm-dd hh:mm:ss format';
 $lang['delete'] = 'Delete';
 $lang['description'] = 'Add, edit and remove News entries';
+$lang['detailtemplate'] = 'Detail Template';
 $lang['displaytemplate'] = 'Display Template';
 $lang['edit'] = 'Edit';
 $lang['enddate'] = 'End Date';
@@ -37,6 +38,7 @@ $lang['rsstemplate'] = 'RSS Template';
 $lang['startdate'] = 'Start Date';
 $lang['startrequiresend'] = 'Entering a start date requires an end date also';
 $lang['submit'] = 'Submit';
+$lang['summarytemplate'] = 'Summary Template';
 $lang['title'] = 'Title';
 $lang['help'] = <<<EOF
 	<h3>What does this do?</h3>
