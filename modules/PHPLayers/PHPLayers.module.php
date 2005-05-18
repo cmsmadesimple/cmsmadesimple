@@ -27,7 +27,7 @@ class PHPLayers extends CMSModule
 
 	function GetVersion()
 	{
-		return '1.1';
+		return '1.2';
 	}
 
 	function GetHelp($lang = 'en_US')
@@ -48,6 +48,7 @@ class PHPLayers extends CMSModule
 	function GetChangeLog()
 	{
 		return "
+			1.2: Now supports multiple instances (intersol)<br />
 			1.1: Module API changes<br />
 			1.0: Initial release
 		";
@@ -58,8 +59,20 @@ class PHPLayers extends CMSModule
 		return true;
 	}
 
+	function PHPLayers() // constructor
+	{
+		require_once dirname(__FILE__).'/phplayers/lib/PHPLIB.php';
+		require_once dirname(__FILE__).'/phplayers/lib/layersmenu-common.inc.php';
+		require_once dirname(__FILE__).'/phplayers/lib/layersmenu.inc.php';
+
+		$_SESSION['layersmenuobj'] = new LayersMenu();
+	
+	}
+
 	function ContentPreRender(&$content)
 	{
+		global $gCms;
+
 		$config = $this->cms->config;
 
 		$text = '
@@ -69,8 +82,15 @@ class PHPLayers extends CMSModule
 
 		$content = ereg_replace("<\/head>", $text."</head>", $content);
 	}
+	function ContentPostRender(&$content)
+	{
+		$content = ereg_replace('<body>', '<body>' . $_SESSION['layersmenuobj']->getHeader(), $content);
+		$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
+		$_SESSION['layersmenuobj_next'] = null;
+		$_SESSION['layersmenuobj'] = null;
+	}
 
-	function ContentStylesheet(&$stylesheet)
+		function ContentStylesheet(&$stylesheet)
 	{
 		$config = $this->cms->config;
 		@ob_start();
@@ -90,6 +110,19 @@ class PHPLayers extends CMSModule
 			# getting menu parameters
 			$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 			$horizontal = isset($params['horizontal']) ? $params['horizontal'] : 0 ;
+			
+			if(isset($_SESSION['layersmenuobj_cnt']))
+			{
+				$menuid = "menu" . $_SESSION['layersmenuobj_next'];
+				$_SESSION['layersmenuobj_next'] += 1;
+			}
+			else
+			{
+				$menuid = isset($params['id']) ? $params['id'] : 'menu' ;
+				$_SESSION['layersmenuobj_next'] = 2;
+			}
+
+			#$menuid = "menu1";
 
 			$menu = '';
 
@@ -178,7 +211,15 @@ class PHPLayers extends CMSModule
 				}
 				else
 				{
-					$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."\n";
+					$img = $config['root_url'] . "/images/icons/". $onecontent->mAlias . ".png";
+					if (is_file($config['root_path'] . "/images/icons/". $onecontent->mAlias . ".png"))
+                    	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|" . 
+					$onecontent->mAlias . $img
+					."|". $img ."\n";
+					else
+                    	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|$img|\n";
+
+
 				}
 
 				$count++;
@@ -194,12 +235,7 @@ class PHPLayers extends CMSModule
 			$config = $gCms->config;
 
 			$text = '';
-			
-			require_once dirname(__FILE__).'/phplayers/lib/PHPLIB.php';
-			require_once dirname(__FILE__).'/phplayers/lib/layersmenu-common.inc.php';
-			require_once dirname(__FILE__).'/phplayers/lib/layersmenu.inc.php';
-			
-			$mid = new LayersMenu();
+			$mid = $_SESSION['layersmenuobj'];
 			
 			/* TO USE RELATIVE PATHS: */
 			$mid->setDirroot(dirname(__FILE__).'/phplayers/');
@@ -221,22 +257,20 @@ class PHPLayers extends CMSModule
 
 			
 			$mid->setMenuStructureString($menu);
+
 			$mid->setIconsize(16, 16);
-			$mid->parseStructureForMenu('menu1');
+
+			$mid->parseStructureForMenu($menuid);
 			if ($horizontal == 1)
 			{
-			  $mid->newHorizontalMenu('menu1');
+			  $mid->newHorizontalMenu($menuid);
 			}
 			else
 			{
-			  $mid->newVerticalMenu('menu1');
+			  $mid->newVerticalMenu($menuid);
 			}
-			
-			$text .= $mid->getHeader();
-			$text .= $mid->getMenu('menu1');
-			$text .= $mid->getFooter();
-			
-			return $text;
+
+			return $mid->getMenu($menuid);;
 		}
 
 		//Catch-all
