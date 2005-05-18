@@ -72,8 +72,8 @@ div.itemmenucontainer { background-color: #ececec; border: solid 1px #666666; co
 div.itemoverflow { overflow: hidden; }
 div.itemoverflow img { border: none; }
 img.itemicon { border: 0px; height: 32px; width: 32px; }
-p.itemicon { float: left; }
-p.itemtext { float: left; margin-left: 10px; width: 45em; }
+p.itemicon { float: left; margin-right: 10px; }
+p.itemtext { float: left; width: 44em; }
 
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }

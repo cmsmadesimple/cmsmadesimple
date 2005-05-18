@@ -144,8 +144,8 @@ class modernTheme extends AdminTheme
 	
 		echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
 		echo '<!DOCTYPE html'."\n";
-		echo '	PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"'."\n";
-		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">'."\n";
+		echo '	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
+		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 	}
 
    function DisplayHTMLStartTag() {
@@ -187,9 +187,8 @@ class modernTheme extends AdminTheme
                 {
                 $iconSpec = 'viewsite';
                 }
-			echo '<p class="itemicon">';
 		    echo '<a href="'.$menuItem['url'].'">';
-            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
+            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
             echo '</a>';
 			echo '</p>';
 			echo '<p class="itemtext">';
@@ -268,7 +267,7 @@ class modernTheme extends AdminTheme
                     $iconSpec = 'viewsite';
                     }
 		        echo '<a href="'.$thisItem['url'].'">';
-                echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', '', '', '', 'itemicon');
+                echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
                 echo '</a>';
                 }
 			echo '</p>';
