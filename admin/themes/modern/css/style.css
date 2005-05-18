@@ -68,12 +68,12 @@ div.navt_hide {	background-image:url(themes/modern/images/hide_navtools.gif); ba
 /* top*.php files */
 a.itemlink { color: #384654; font-size: 1.1em; font-weight: bold; }
 a.itemsublink { color: #384654; }
-div.itemmenucontainer { background-color: #ececec; border: solid 1px #666666; color: #384654; margin: 10px; overflow: hidden; padding: 5px; width: 50em;  }
-img.itemicon { border: 0px; height: 32px; width: 32px; }
-img.itemoverflow { overflow: hidden; clear: left; }
+div.itemmenucontainer { background-color: #ececec; border: solid 1px #666666; color: #384654; margin: 10px; padding: 5px; width: 50em;  }
+div.itemoverflow { overflow: hidden; }
 div.itemoverflow img { border: none; }
-div.itemicon { float: left; }
-div.itemtext { float: left; margin-left: 10px; }
+img.itemicon { border: 0px; height: 32px; width: 32px; }
+p.itemicon { float: left; }
+p.itemtext { float: left; margin-left: 10px; width: 45em; }
 
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
