@@ -188,7 +188,7 @@ class modernTheme extends AdminTheme
                 $iconSpec = 'viewsite';
                 }
 		    echo '<a href="'.$menuItem['url'].'">';
-            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
+            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', $iconSpec, '', '', 'itemicon');
             echo '</a>';
 			echo '</p>';
 			echo '<p class="itemtext">';
