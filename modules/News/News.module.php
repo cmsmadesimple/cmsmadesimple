@@ -448,10 +448,18 @@ Posted: {$entry->postdate|date_format}
 					$onerow->enddate = $row['end_time'];
 					$onerow->category = $row['news_category_name'];
 
-					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], array('articleid'=>$row['news_id']));
 
 					$moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
-					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, array('articleid'=>$row['news_id']));
+					$sendtodetail = array('articleid'=>$row['news_id']);
+					if (isset($params['detailtemplate']))
+					{
+						$sendtodetail['detailtemplate'] = $params['detailtemplate'];
+					}
+
+					debug_buffer($sendtodetail);
+
+					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], $sendtodetail);
+					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, $sendtodetail);
 					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
 
 					array_push($entryarray, $onerow);
@@ -460,7 +468,15 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('items', $entryarray);
 
 				#Display template
-				echo $this->ProcessTemplateFromDatabase('displaysummary');
+				if (isset($params['summarytemplate']))
+				{
+					echo $this->ProcessTemplate($params['summarytemplate']);
+				}
+				else
+				{
+					echo $this->ProcessTemplateFromDatabase('displaysummary');
+				}
+
 				break;
 
 			case "detail":
@@ -486,7 +502,15 @@ Posted: {$entry->postdate|date_format}
 					$this->smarty->assign_by_ref('entry', $onerow);
 				}
 
-				echo $this->ProcessTemplateFromDatabase('displaydetail');
+				#Display template
+				if (isset($params['detailtemplate']))
+				{
+					echo $this->ProcessTemplate($params['detailtemplate']);
+				}
+				else
+				{
+					echo $this->ProcessTemplateFromDatabase('displaydetail');
+				}
 
 				break;
 
