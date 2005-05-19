@@ -6,12 +6,12 @@
 <head>
 <title>CMS Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-<link rel="stylesheet" type="text/css" media="screen, projection" href="themes/modern/css/style.css" />
+<link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
 </head>
 
 <body>
 <div class="lball">
-	<div class="lblayout lbtopmargin"><p><img src="themes/modern/images/logo.gif" alt="" /><span class="logotext">CMS Admin Login</span></p></div>
+	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Admin Login</span></p></div>
 	<div class="lblayout lbcontainer">
 			<div class="lbinfo">
 				<p>

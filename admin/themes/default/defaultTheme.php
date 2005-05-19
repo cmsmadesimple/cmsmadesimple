@@ -58,7 +58,7 @@ class defaultTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
-		echo '<div><p class="logocontainer"><img src="themes/modern/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
+		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
 //		$breadcrumbs = array();
         foreach ($this->menuItems as $key=>$menuItem) {
@@ -95,7 +95,7 @@ class defaultTheme extends AdminTheme
 	}
 	
 	function OutputHeaderJavascript() {
-		echo '<script type="text/javascript" src="themes/modern/includes/standard.js"></script>';
+		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>';
 	}
 
 	function StartRighthandColumn() {

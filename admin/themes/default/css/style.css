@@ -47,8 +47,8 @@ li.selected { background: #BDC0C6; }
 
 /* Nav Tools */
 div.navt_menu { position: absolute; right: 0px; }
-div.navt_show { background-image:url(themes/modern/images/show_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
-div.navt_hide {	background-image:url(themes/modern/images/hide_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+div.navt_show { background-image:url(themes/default/images/show_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+div.navt_hide {	background-image:url(themes/default/images/hide_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
 #navt_container { background-color: #BDC0C6; border: 1px solid #c6c3bd; float: left; width: 20em; }
 #navt_tabs div { background-color: #BDC0C6; color: #384654; cursor: pointer; float: left; padding-left: 8px; padding-right: 8px; text-align: center; }
 #navt_tabs div:hover, #navt_tabs div.cssHover { background-color: #ABB0B6; }
@@ -78,7 +78,7 @@ p.itemtext { float: left; width: 44em; }
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
 div.topmenucontainer { background-color: #ececec; border-bottom: 1px solid #C0C0C0; }
-div.hstippled { background-color: #FFFFFF; background-image: url(themes/modern/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
+div.hstippled { background-color: #FFFFFF; background-image: url(themes/default/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
 div.breadcrumbs { background-color: #ffffff; }
 p.breadcrumbs { color: #666666; padding-bottom: 3px; padding-left: 5px; padding-top: 3px; }
 p.logocontainer { padding-bottom: 5px; padding-left: 5px; padding-top: 5px; }
@@ -137,4 +137,4 @@ textarea.pageheadtags { height: 5em; }
 ul.pageerror { margin: 0px; }
 .clearb { clear: both; }
 .loginerror { color: #CE374E; }
-.logotext {	color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
+.logotext { color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
