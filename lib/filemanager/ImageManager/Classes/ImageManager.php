@@ -6,7 +6,7 @@
  * @package ImageManager
  */
 
-require_once('Files.php');
+require_once(dirname(__FILE__).'/Files.php');
 
 /**
  * ImageManager Class.
