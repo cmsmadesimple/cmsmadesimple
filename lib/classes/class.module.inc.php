@@ -1004,9 +1004,11 @@ class CMSModule extends ModuleOperations
 		$goto = 'moduleinterface.php';
 		if ($inline && $returnid != '')
 		{
-			$goto = 'index.php';
+			$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+			$goto .= '&amp;'.$id.'returnid='.$returnid;
+			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
-		$text = '<form name="'.$id.'moduleform" method="'.$method.'" action="moduleinterface.php"';
+		$text = '<form name="'.$id.'moduleform" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 		if ($enctype != '')
 		{
 			$text .= ' enctype="'.$enctype.'"';
