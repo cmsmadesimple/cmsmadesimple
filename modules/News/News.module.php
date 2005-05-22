@@ -222,8 +222,8 @@ Posted: {$entry->postdate|date_format}
 				$current_version = "1.6";
 			case "1.6":
 				# Setup display template
-				$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
-				$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
+				#$this->SetTemplate('displayhtml', $this->GetDisplayHtmlTemplate());
+				#$this->SetTemplate('displayrss', $this->GetDisplayRSSTemplate());
 				$current_version = "1.7";
 			case '1.7':
 				#Makey new tables....
