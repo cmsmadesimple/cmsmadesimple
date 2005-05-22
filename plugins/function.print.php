@@ -30,11 +30,11 @@ function smarty_cms_function_print($params, &$smarty)
 	//will this work if using htaccess? (Yes! -Wishy)
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="/index.php?page='.$gCms->variables['page_name'].'&amp;print=true"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['page_name'].'&amp;print=true"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="/index.php?page='.$gCms->variables['page_name'].'&amp;print=true">'.$text.'</a>';
+		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['page_name'].'&amp;print=true">'.$text.'</a>';
 	}
 }
 
