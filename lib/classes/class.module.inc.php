@@ -1152,6 +1152,26 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Returns the xhtml equivalent of a file upload input.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateFileUploadInput($id, $name, $addttext='')
+	{
+		$text = '<input type="file" name="'.$id.$name.'"';
+		if ($addttext != '')
+		{
+			$text .= ' '.$addttext;
+		}
+		$text .= ' />';
+		return $text . "\n";
+	}
+
+
+	/**
 	 * Returns the xhtml equivalent of a dropdown list.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
