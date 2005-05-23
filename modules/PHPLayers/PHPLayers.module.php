@@ -61,11 +61,14 @@ class PHPLayers extends CMSModule
 
 	function PHPLayers() // constructor
 	{
+		$this->CMSModule();
 		require_once dirname(__FILE__).'/phplayers/lib/PHPLIB.php';
 		require_once dirname(__FILE__).'/phplayers/lib/layersmenu-common.inc.php';
 		require_once dirname(__FILE__).'/phplayers/lib/layersmenu.inc.php';
-
+//		require_once dirname(__FILE__).'/phplayers/lib/phptreemenu.inc.php';
+		require_once dirname(__FILE__).'/phplayers/lib/treemenu.inc.php';
 		$_SESSION['layersmenuobj'] = new LayersMenu();
+		$_SESSION['layersmenutreeobj'] = new TreeMenu();
 	
 	}
 
@@ -75,19 +78,22 @@ class PHPLayers extends CMSModule
 
 		$config = $this->cms->config;
 
-		$text = '
-		<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>
-		<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>
-		<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>';
+		$text = '<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>' . "\n" .
+		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>' . "\n".
+		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layerstreemenu-cookies.js"></script>' . "\n".
+		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>' . "\n";
 
 		$content = ereg_replace("<\/head>", $text."</head>", $content);
 	}
 	function ContentPostRender(&$content)
 	{
+		global $gCms;
+		
 		$content = ereg_replace('<body>', '<body>' . $_SESSION['layersmenuobj']->getHeader(), $content);
 		$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
-		$_SESSION['layersmenuobj_next'] = null;
-		$_SESSION['layersmenuobj'] = null;
+
+//		$_SESSION['layersmenuobj_next'] = null;
+//		$_SESSION['layersmenuobj'] = null;
 	}
 
 		function ContentStylesheet(&$stylesheet)
@@ -101,7 +107,9 @@ class PHPLayers extends CMSModule
 
 	function DoAction($name, $id, $params)
 	{
+		global $gCms;
 		$config = $this->cms->config;
+
 		if ($name == 'default')
 		{
 			$basedepth = 1;
@@ -110,7 +118,12 @@ class PHPLayers extends CMSModule
 			# getting menu parameters
 			$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 			$horizontal = isset($params['horizontal']) ? $params['horizontal'] : 0 ;
-			
+			$tree = isset($params['tree']) ? $params['tree'] : 0;
+
+			# set starting position to current page if relative defined
+			if (isset($params['relative'])) // this is a little hack
+				$params['start_element'] = $gCms->variables['position'];
+
 			if(isset($_SESSION['layersmenuobj_cnt']))
 			{
 				$menuid = "menu" . $_SESSION['layersmenuobj_next'];
@@ -147,6 +160,14 @@ class PHPLayers extends CMSModule
 					{
 						continue;
 					}
+				}
+				
+				# test for skipping parent on relative menu (context sensitive)
+				if (isset($params['relative']) && $params['start_element']==$onecontent->Hierarchy())
+				{
+					$basedepth +=1 ;
+//					$menu .= ".|..|". $onecontent->GetURL() . "|/images/icons/colors.png|\n";
+					continue;
 				}
 
 				#Now check to make sure we're not too many levels deep if number_of_levels is set
@@ -212,16 +233,15 @@ class PHPLayers extends CMSModule
 				else
 				{
 					$img = $config['root_url'] . "/images/icons/". $onecontent->mAlias . ".png";
+
+
 					if (is_file($config['root_path'] . "/images/icons/". $onecontent->mAlias . ".png"))
                     	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|" . 
 					$onecontent->mAlias . $img
 					."|". $img ."\n";
 					else
                     	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|$img|\n";
-
-
 				}
-
 				$count++;
 			}
 
@@ -233,9 +253,22 @@ class PHPLayers extends CMSModule
 
 			global $gCms;
 			$config = $gCms->config;
-
+		 	print "<pre>";
+//		 	print_r ($_SESSION);
+		 	print "</pre>";
+		 	
 			$text = '';
-			$mid = $_SESSION['layersmenuobj'];
+			if($tree ==1)
+			{
+				$mid = $_SESSION['layersmenutreeobj'];
+			}
+			else
+			{
+				$mid = $_SESSION['layersmenuobj'];
+				$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
+				$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
+			}
+
 			
 			/* TO USE RELATIVE PATHS: */
 			$mid->setDirroot(dirname(__FILE__).'/phplayers/');
@@ -244,33 +277,48 @@ class PHPLayers extends CMSModule
 			$mid->setImgwww($config['root_url'].'/modules/PHPLayers/phplayers/menuimages/');
 			//$mid->setIcondir(dirname(__FILE__).'/phplayers/menuicons/');
 			//$mid->setIconwww($config['root_url'].'/modules/PHPLayers/phplayers/menuicons/'); 
-			$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
 			if ($horizontal == 1)
 			{
 			  $mid->setHorizontalMenuTpl('layersmenu-horizontal_menu.ihtml');
+			}
+			elseif ($tree == 1)
+			{
+
 			}
 			else
 			{
 			  $mid->setVerticalMenuTpl('layersmenu-vertical_menu.ihtml');
 			}
-			$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
 
-			
+
+			// if there are no elements to publish return nothing.
+			if($menu == '')
+				return '';
+
 			$mid->setMenuStructureString($menu);
-
 			$mid->setIconsize(16, 16);
-
 			$mid->parseStructureForMenu($menuid);
 			if ($horizontal == 1)
 			{
 			  $mid->newHorizontalMenu($menuid);
+			}
+			elseif($tree ==1)
+			{
+//			  $mid->setSelectedItemByUrl($menuid, basename(__FILE__));
+			  $mid->newTreeMenu($menuid);
 			}
 			else
 			{
 			  $mid->newVerticalMenu($menuid);
 			}
 
-			return $mid->getMenu($menuid);;
+			if($tree==1)
+			{
+				return $mid->getTreeMenu($menuid);
+			} else
+			{
+				return $mid->getMenu($menuid);
+			}
 		}
 
 		//Catch-all

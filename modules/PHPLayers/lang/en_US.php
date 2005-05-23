@@ -11,6 +11,10 @@ $lang['help'] = <<<EOF
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
 		<li><em>(optional)</em> <tt>horizontal</tt> - 1/0, whether you want to have a horizontal menu instead of vertical.</li>
+		<li><em>(optional)</em> <tt>id</tt> - text without spaces or special chars, default: menu1. You must specify it if you want to use more than one menu per page.</li>
+		<li><em>(optional)</em> <tt>relative</tt> - 1/0, if set the menu will generate only the childs of the current page. This is very usefulll if you want to add contect sensitive menus.</li>
+		<li><em>(optional)</em> <tt>tree</tt> - 1/0, this option will generate a tree menu.</li>
+
 	</ul>
 	</p>
 EOF;
