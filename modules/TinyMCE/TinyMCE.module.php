@@ -104,7 +104,8 @@ class TinyMCE extends CMSModule
 			$gCms->variables['tinymce_textareas'] = array();
 		}
 		array_push($gCms->variables['tinymce_textareas'], $name);
-		return '<textarea id="'.$name.'" name="'.$name.'" cols="'.$columns.'" rows="'.($rows+5).'">'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+
+		return '<textarea id="'.$name.'" style="width:100%" name="'.$name.'" cols="'.$columns.'" rows="'.($rows+5).'">'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
 	}
 	
 	function WYSIWYGPageFormSubmit()
