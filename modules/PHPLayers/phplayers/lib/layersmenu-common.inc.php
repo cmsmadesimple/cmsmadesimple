@@ -239,13 +239,15 @@ function LayersMenuCommon()
 
 	$this->prependedUrl = '';
 
-	$this->dirroot = './';
-	$this->libjsdir = './libjs/';
-	$this->imgdir = './menuimages/';
+	$basedir = dirname(dirname(__FILE__));
+
+	$this->dirroot = $basedir . '/';
+	$this->libjsdir = $basedir . '/libjs/';
+	$this->imgdir = $basedir . '/menuimages/';
 	$this->imgwww = 'menuimages/';
-	$this->icondir = './menuicons/';
+	$this->icondir = $basedir . '/menuicons/';
 	$this->iconwww = 'menuicons/';
-	$this->tpldir = './templates/';
+	$this->tpldir = $basedir . '/templates/';
 	$this->menuStructure = '';
 	$this->separator = '|';
 
