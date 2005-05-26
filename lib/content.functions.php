@@ -169,6 +169,7 @@ class Smarty_CMS extends Smarty {
 					}
 
 					$title = $contentobj->Name();
+					$menutext = $contentobj->MenuText();
 
 					#Perform the content title callback
 					foreach($gCms->modules as $key=>$value)
@@ -252,6 +253,7 @@ class Smarty_CMS extends Smarty {
 				#Replace stylesheet and title tags
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+				$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
 
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
