@@ -254,38 +254,72 @@ else
 
 }
 
-$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
-$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
+#$contentarray = $contentobj->EditAsArray(true, 0, $adminaccess);
+#$contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
+
+$tabnames = $contentobj->TabNames();
 
 ?>
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('editcontent')?></p>
+	<?php
+	if (count($tabnames) > 0)
+	{
+	?>
 	<div id="page_tabs">
-		<div id="main">Main</div>
-		<div id="options">Options</div>
+		<?php
+		$count = 0;
+		foreach ($tabnames as $onetab)
+		{
+			?>
+			<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
+			<?php
+			$count++;
+		}
+		?>
 	</div>
+	<?php
+	}
+	?>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" /> 	                  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 	<div id="page_content">
-		<div id="main_c">  
-		
-					<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
-				<p class="pageinput"><?php echo $typesdropdown; ?></p>
-			</div>
-
 		<?php
-		for($i=0;$i<count($contentarray);$i++)
+		$numberoftabs = count($tabnames);
+		$showtabs = 1;
+		if ($numberoftabs == 0)
 		{
-		  ?><div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
-			</div>                                            
-		  <?php
+			$numberoftabs = 1;
+			$showtabs = 0;
 		}
-		?>
+		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
+		{
+			if ($showtabs == 1)
+			{
+				?><div id="editab<?php echo $currenttab ?>_c"><?php
+			}
+			if ($currenttab == 0)
+			{
+				?>
+				<div class="pageoverflow">
+					<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
+					<p class="pageinput"><?php echo $typesdropdown; ?></p>
+				</div>
+				<?php
+			}
+			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
+			for($i=0;$i<count($contentarray);$i++)
+			{
+				?>
+				<div class="pageoverflow">
+					<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
+					<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
+				</div>
+				<?php
+			}
+			?>
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
@@ -298,30 +332,9 @@ $contentarray2 = $contentobj->EditAsArray(true, 1, $adminaccess);
 			</div>
 			<div style="clear: both;"></div>
 		</div>
-		<div id="options_c">
-
 		<?php
-		for($i=0;$i<count($contentarray2);$i++)
-		{
-		  ?><div class="pageoverflow">
-				<p class="pagetext"><?php echo $contentarray2[$i][0]; ?></p>
-				<p class="pageinput"><?php echo $contentarray2[$i][1]; ?></p>
-			</div>                                            
-		  <?php
 		}
-		 ?>
-			<div class="pageoverflow">
-				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
-					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-					<?php } ?>
-					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-				</p>
-			</div>
-			<div style="clear: both;"></div>			
-		</div>
+		?>
 	</div>
 	</form>
 </div>

@@ -139,6 +139,10 @@ class content extends ContentBase
 		return TRUE;
 	}
 
+	function TabNames()
+	{
+		return array(lang('main'), lang('options'));
+	}
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {

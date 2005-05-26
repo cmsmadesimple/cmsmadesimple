@@ -916,6 +916,15 @@ class ContentBase
 	{
 		return array();
 	}
+	
+	/**
+	 * Returns the tab names used in the add and edit content page.  If it's an empty array, then
+	 * the tabs won't show at all.
+	 */
+	function TabNames()
+	{
+		return array();
+	}
 
 	/**
 	 * Show the Alternate Edit interface
