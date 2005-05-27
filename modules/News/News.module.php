@@ -812,8 +812,8 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
 				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
 				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
-				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(false, $id, $content, 'content'));
-				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(false, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');
 				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
@@ -957,8 +957,8 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
 				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
 				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
-				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(false, $id, $content, 'content'));
-				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(false, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
 				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');

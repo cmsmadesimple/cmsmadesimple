@@ -85,6 +85,7 @@ class PHPLayers extends CMSModule
 
 		$content = ereg_replace("<\/head>", $text."</head>", $content);
 	}
+
 	function ContentPostRender(&$content)
 	{
 		global $gCms;
@@ -96,13 +97,16 @@ class PHPLayers extends CMSModule
 //		$_SESSION['layersmenuobj'] = null;
 	}
 
-		function ContentStylesheet(&$stylesheet)
+	function ContentStylesheet(&$stylesheet)
 	{
-		$config = $this->cms->config;
-		@ob_start();
-		@readfile(dirname(__FILE__).'/phplayers/layersmenu-cms.css');
-		$stylesheet = @ob_get_contents() . $stylesheet;
-		@ob_end_clean();
+		if ($this->cms)
+		{
+			$config = $this->cms->config;
+			@ob_start();
+			@readfile(dirname(__FILE__).'/phplayers/layersmenu-cms.css');
+			$stylesheet = @ob_get_contents() . $stylesheet;
+			@ob_end_clean();
+		}
 	}
 
 	function DoAction($name, $id, $params)
