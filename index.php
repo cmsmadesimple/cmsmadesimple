@@ -75,7 +75,7 @@ if ($page == "")
 	$page = ContentManager::GetDefaultContent();
 }
 
-if (get_site_preference('enablecustom404') == "0")
+if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
 {
 	$old_error_handler = set_error_handler("ErrorHandler404");
 }

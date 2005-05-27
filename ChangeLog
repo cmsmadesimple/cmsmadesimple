@@ -22,6 +22,7 @@ Konqueror
 * Submitting site prefernces redircts to an empty page now
 * Updated ADODB to 4.61
 * Updated Smarty to 2.6.9 (Jope)
+* Updated TinyMCE to 1.4.4
 
 Version 0.9.2 "Hatutu" -- Fri Feb 25 2005
 -----------------
