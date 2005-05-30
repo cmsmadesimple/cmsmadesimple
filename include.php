@@ -203,7 +203,8 @@ if (isset($CMS_ADMIN_PAGE)) {
 #Check for HTML_BBCodeParser
 if ($config["use_bb_code"] == true) {
 	#if (include_once(dirname(__FILE__)."/lib/PEAR.php")) {
-		if (include_once("HTML/BBCodeParser.php")) {
+		if (file_exists("HTML/BBCodeParser.php")) {
+			include_once("HTML/BBCodeParser.php");
 			$gCms->bbcodeparser = new HTML_BBCodeParser();
 		}
 	#}
