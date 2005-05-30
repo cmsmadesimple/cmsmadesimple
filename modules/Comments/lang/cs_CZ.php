@@ -8,14 +8,14 @@ $lang['errorentercomment'] = 'Vložit komentář (není to důvod existence toho
 $lang['submit'] = 'Odeslat';
 $lang['yourname'] = 'Vaše jméno';
 $lang['help'] = <<<EOD
-	<h3>Co dělá?</h3>
-	<p>Tento modul slouží ke vkládání komentářů k jednotlivým stránkám, které mohou číst uživatelé, kteří navštíví danou stránku později. Praktický význam má tento modul pro dokumentační stránky, kde mohou uživatelé přispívat poznámkami a dodatečnými informacemi k dané stránce.</p>
+	<h3>Co dělá tento modul?</h3>
+	<p>Tento modul slouží ke vkládání komentářů k jednotlivým stránkám. Praktický význam má tento modul pro dokumentační stránky, kde mohou uživatelé přispívat poznámkami a dodatečnými informacemi.</p>
 	<h3>Jak se používá?</h3>
-	<p>Komenář je jen tag modul. Je vkládán do vaší stránky nebo šablony použitím tagu cms_module.  Příklad syntaxe: <code>{cms_module module="komentare"}</code></p>
+	<p>Komentář je tag modul. Vkládá se do stránky nebo šablony použitím tagu cms_module.  Příklad syntaxe: <code>{cms_module module="comments"}</code></p>
 	<h3>Jaké jsou parametry?</h3>
 	<p>
 	<ul>
-		<li><em>(volitelnýl)</em> number="5" - Maximální počet položek k zobrazení -- ponecháno prázdné zobrazí všechny položky</li>
+		<li><em>(volitelný)</em> number="5" - Maximální počet položek k zobrazení -- ponecháno prázdné zobrazí všechny položky</li>
 		<li><em>(volitelný)</em> dateformat - Formát data/času - využívá parametrů z php funkce strftime.  Viz. <a href="http://php.net/strftime" target="_blank">zde</a> pro seznam parametrů.</li>
 	</ul>
 EOD;
