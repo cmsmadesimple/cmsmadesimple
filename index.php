@@ -97,6 +97,19 @@ if (get_site_preference('enablecustom404') == "0")
 	set_error_handler($old_error_handler);
 }
 
+if (!$cached)
+{
+	#Perform the content postrendernoncached callback
+	foreach($gCms->modules as $key=>$value)
+	{
+		if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+		{
+			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
+		}
+	}
+}
+
 #Perform the content postrender callback
 foreach($gCms->modules as $key=>$value)
 {

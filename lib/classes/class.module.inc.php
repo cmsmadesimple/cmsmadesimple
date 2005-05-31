@@ -882,6 +882,17 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * Called after content is sent to smarty for processing and right before
+	 * display.  Cached content will still not call this function before display.
+     * This only exists because we didn't want to break backwards compatibility.
+	 *
+	 * @param string The postrendered text
+	 */
+	function ContentPostRenderNonCached(&$content)
+	{
+	}
+
+	/**
+	 * Called after content is sent to smarty for processing and right before
 	 * display.  Cached content will still call this function before display.
 	 *
 	 * @param string The postrendered text
