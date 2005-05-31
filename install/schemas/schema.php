@@ -94,7 +94,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		page_id I,
 		content_id I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -109,7 +109,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		title C(255),
 		url C(255)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -128,7 +128,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		item_name C(50),
 		action C(255)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -144,7 +144,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		url C(255),
 		access_time T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -173,7 +173,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -196,7 +196,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -214,7 +214,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -230,7 +230,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -246,7 +246,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -264,7 +264,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -281,7 +281,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -295,7 +295,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		user_id I,
 		htmlblob_id I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -310,7 +310,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		version C(255),
 		active L
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -326,7 +326,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -349,7 +349,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -357,6 +357,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "<p>Creating module_news_categories table...";
 
+	$dbdict = NewDataDictionary($db);
 	$flds = "
 		news_category_id I KEY,
 		news_category_name C(255),
@@ -366,12 +367,10 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$dict = NewDataDictionary($db);
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dict->CreateTableSQL($db_prefix."module_news_categories", 
-			$flds, $taboptarray);
-	$dict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news_categories", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
 
@@ -385,7 +384,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -403,7 +402,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -418,7 +417,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -438,7 +437,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -453,7 +452,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -468,7 +467,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		value C(255),
 		type C(25)
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -491,7 +490,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -507,7 +506,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -519,7 +518,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		version I
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
@@ -538,14 +537,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		create_date T,
 		modified_date T
 	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM CHARSET=utf8');
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo "[done]</p>";
 	*/
-
-
 }
 
 # vim:ts=4 sw=4 noet
