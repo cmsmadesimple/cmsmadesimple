@@ -189,6 +189,7 @@ else if ($preview)
 {
 	$data["content_id"] = $contentobj->Id();
 	$data["title"] = $contentobj->Name();
+	$data["menutext"] = $contentobj->MenuText();
 	$data["content"] = $contentobj->Show();
 	$data["template_id"] = $contentobj->TemplateId();
 	$data["hierarchy"] = $contentobj->Hierarchy();
@@ -276,7 +277,7 @@ $tabnames = $contentobj->TabNames();
 				</div>
 				<?php
 			}
-			$contentarray = $contentobj->EditAsArray(true, $currenttab, $adminaccess);
+			$contentarray = $contentobj->EditAsArray(true, $currenttab, $access);
 			for($i=0;$i<count($contentarray);$i++)
 			{
 				?>
@@ -290,6 +291,7 @@ $tabnames = $contentobj->TabNames();
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
+					<input type="hidden" name="firsttime" value="0" />
 					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
 						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
 					<?php } ?>

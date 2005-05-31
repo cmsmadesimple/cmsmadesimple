@@ -121,6 +121,7 @@ class Smarty_Preview extends Smarty {
 		$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
 
 		$title = $data['title'];
+		$menutext = $data['menutext'];
 
 		#Perform the content title callback
 		foreach($gCms->modules as $key=>$value)
@@ -133,6 +134,7 @@ class Smarty_Preview extends Smarty {
 		}
 
 		$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+		$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
 
 		#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
 		$safetycount = 0;
