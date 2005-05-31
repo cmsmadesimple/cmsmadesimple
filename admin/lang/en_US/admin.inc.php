@@ -288,4 +288,5 @@ $lang['admin']['globalconfig'] = 'Global Settings'; //needs translation
 $lang['admin']['adminprefs'] = 'User Preferences'; //needs translation
 $lang['admin']['adminprefsdescription'] = 'This is where you set your specific preferences for site administration.'; //needs translation
 $lang['admin']['managebookmarksdescription'] = 'This is where you can manage your administration bookmarks.'; //needs translation
+$lang['admin']['options'] = 'Options'; //needs translation
 ?>

@@ -288,4 +288,5 @@ $lang['admin']['globalconfig'] = 'Globalūs Nustatymai'; //needs translation
 $lang['admin']['adminprefs'] = 'Vartotojo Nustatymai'; //needs translation
 $lang['admin']['adminprefsdescription'] = 'Čia Jūs nustatote specifinius nustatymus puslapio administravimui.'; //needs translation
 $lang['admin']['managebookmarksdescription'] = 'Čia jūs galite valdyti adminitratoriaus žymeklius.'; //needs translation
+$lang['admin']['options'] = 'Options'; //needs translation
 ?>

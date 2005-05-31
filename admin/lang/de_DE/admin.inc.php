@@ -288,4 +288,5 @@ $lang['admin']['globalconfig'] = 'Globale Einstellungen';
 $lang['admin']['adminprefs'] = 'User Voreinstellungen';
 $lang['admin']['adminprefsdescription'] = 'Hier k&ouml;nnen Sie spezielle Voreinstellungen f&uuml;r die Webadministration vornehmen.';
 $lang['admin']['managebookmarksdescription'] = 'Hier k&ouml;nnen Sie die Lesezeichen des Admins managen.';
+$lang['admin']['options'] = 'Options'; //needs translation
 ?>
