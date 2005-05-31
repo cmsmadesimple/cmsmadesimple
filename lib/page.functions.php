@@ -442,8 +442,8 @@ function set_preference($userid, $prefname, $value)
 	$userprefs = &$gCms->userprefs;
 	$userprefs[$prefname] = $value;
 
-	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
-	$result = $db->Execute($query);
+	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = ? AND preference = ?";
+	$result = $db->Execute($query, array($userid, $prefname));
 
 	if ($result && $result->RowCount() > 0)
 	{
@@ -452,13 +452,13 @@ function set_preference($userid, $prefname, $value)
 
 	if ($doinsert)
 	{
-		$query = "INSERT INTO ".cms_db_prefix()."userprefs (user_id, preference, value) VALUES ($userid, ".$db->qstr($prefname).", ".$db->qstr($value).")";
-		$db->Execute($query);
+		$query = "INSERT INTO ".cms_db_prefix()."userprefs (user_id, preference, value) VALUES (?,?,?)";
+		$db->Execute($query, array($userid, $prefname, $value));
 	}
 	else
 	{
-		$query = "UPDATE ".cms_db_prefix()."userprefs SET value = ".$db->qstr($value)." WHERE user_id = $userid AND preference = ".$db->qstr($prefname);
-		$db->Execute($query);
+		$query = "UPDATE ".cms_db_prefix()."userprefs SET value = ? WHERE user_id = ? AND preference = ?";
+		$db->Execute($query, array($value, $userid, $prefname));
 	}
 }
 
