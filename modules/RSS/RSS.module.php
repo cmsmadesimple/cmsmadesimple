@@ -70,21 +70,24 @@ class RSS extends CMSModule
 
 			if (isset($params['url']))
 			{
-				$rss = fetch_rss($params['url']);
-				$items = array();
-				if (isset($params['numbertoshow']))
+				$rss = @fetch_rss($params['url']);
+				if ($rss && is_array($rss->items))
 				{
-					$items = array_slice($rss->items, 0, $params['numbertoshow']);
-				}
-				else
-				{
-					$items = $rss->items;
-				}
+					$items = array();
+					if (isset($params['numbertoshow']))
+					{
+						$items = array_slice($rss->items, 0, $params['numbertoshow']);
+					}
+					else
+					{
+						$items = $rss->items;
+					}
 
-				foreach ($items as $item ) {
-					$title = $item[title];
-					$url   = $item[link];
-					echo "<div class=\"modulerssentry\"><a href=\"$url\">$title</a><br /></div>\n";
+					foreach ($items as $item ) {
+						$title = $item[title];
+						$url   = $item[link];
+						echo "<div class=\"modulerssentry\"><a href=\"$url\">$title</a><br /></div>\n";
+					}
 				}
 			}
 		}
