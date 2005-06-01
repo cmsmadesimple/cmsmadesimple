@@ -1108,7 +1108,7 @@ Posted: {$entry->postdate|date_format}
 
 				echo $this->EndTab();
 
-				echo $this->StartTab($this->lang('summarytemplate'));
+				echo $this->StartTab('summary_template');
 				
 				echo $this->CreateFormStart($id, 'updatesummarytemplate');
 
@@ -1120,7 +1120,7 @@ Posted: {$entry->postdate|date_format}
 
 				echo $this->EndTab();
 
-				echo $this->StartTab($this->lang('detailtemplate'));
+				echo $this->StartTab('detail_template');
 				
 				echo $this->CreateFormStart($id, 'updatedetailtemplate');
 
