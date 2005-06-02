@@ -65,7 +65,7 @@ class PHPLayers extends CMSModule
 		require_once dirname(__FILE__).'/phplayers/lib/PHPLIB.php';
 		require_once dirname(__FILE__).'/phplayers/lib/layersmenu-common.inc.php';
 		require_once dirname(__FILE__).'/phplayers/lib/layersmenu.inc.php';
-//		require_once dirname(__FILE__).'/phplayers/lib/phptreemenu.inc.php';
+		//require_once dirname(__FILE__).'/phplayers/lib/phptreemenu.inc.php';
 		require_once dirname(__FILE__).'/phplayers/lib/treemenu.inc.php';
 		$_SESSION['layersmenuobj'] = new LayersMenu();
 		$_SESSION['layersmenutreeobj'] = new TreeMenu();
@@ -259,20 +259,20 @@ class PHPLayers extends CMSModule
 
 			global $gCms;
 			$config = $gCms->config;
-		 	print "<pre>";
-//		 	print_r ($_SESSION);
-		 	print "</pre>";
+		 	//print "<pre>";
+		 	//print_r ($_SESSION);
+		 	//print "</pre>";
 		 	
 			$text = '';
 			if($tree ==1)
 			{
-				$mid = $_SESSION['layersmenutreeobj'];
+				$mid = &$_SESSION['layersmenutreeobj'];
 			}
 			else
 			{
-				$mid = $_SESSION['layersmenuobj'];
-				#$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
-				$mid->setTpldir('templates');
+				$mid = &$_SESSION['layersmenuobj'];
+				$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
+				#$mid->setTpldir('templates');
 				$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
 			}
 			
@@ -308,7 +308,7 @@ class PHPLayers extends CMSModule
 			{
 			  $mid->newHorizontalMenu($menuid);
 			}
-			elseif($tree ==1)
+			elseif($tree == 1)
 			{
 //			  $mid->setSelectedItemByUrl($menuid, basename(__FILE__));
 			  $mid->newTreeMenu($menuid);
@@ -318,10 +318,11 @@ class PHPLayers extends CMSModule
 			  $mid->newVerticalMenu($menuid);
 			}
 
-			if($tree==1)
+			if($tree == 1)
 			{
 				return $mid->getTreeMenu($menuid);
-			} else
+			}
+			else
 			{
 				return $mid->getMenu($menuid);
 			}
