@@ -76,14 +76,16 @@ class PHPLayers extends CMSModule
 	{
 		global $gCms;
 
-		$config = $this->cms->config;
+		if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
+		{
+			$config = $this->cms->config;
+			$text = '<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>' . "\n" .
+			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>' . "\n".
+			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layerstreemenu-cookies.js"></script>' . "\n".
+			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>' . "\n";
 
-		$text = '<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>' . "\n" .
-		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>' . "\n".
-		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layerstreemenu-cookies.js"></script>' . "\n".
-		'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>' . "\n";
-
-		$content = ereg_replace("<\/head>", $text."</head>", $content);
+			$content = ereg_replace("<\/head>", $text."</head>", $content);
+		}
 	}
 
 	function ContentPostRender(&$content)

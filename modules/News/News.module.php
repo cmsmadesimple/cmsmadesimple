@@ -55,6 +55,22 @@ class News extends CMSModule
 		return 'content';
 	}
 
+	function ContentPreRender(&$content)
+	{
+		global $gCms;
+
+		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+		{
+			$config = $this->cms->config;
+
+			$params = array("showtemplate"=>"false");
+			$url = 'http://cms.wishy.org:8080/moduleinterface.php?module=News&amp;id=m2&amp;m2action=rss&amp;m2showtemplate=false&amp;m2returnid='.$gCms->variables['page'];
+
+			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
+			$content = ereg_replace("<\/head>", $text."</head>", $content);
+		}
+	}
+
 	/*
     function VisibleToAdminUser()
     {

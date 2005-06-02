@@ -49,7 +49,7 @@ $smarty->showtemplate = $showtemplate;
 $params = array_merge($_GET, $_POST);
 $smarty->params = $params;
 
-$old_error_handler = set_error_handler("ErrorHandler404");
+#$old_error_handler = set_error_handler("ErrorHandler404");
 $html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
 
 #Perform the content postrender callback
@@ -62,7 +62,7 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
-set_error_handler($old_error_handler);
+#set_error_handler($old_error_handler);
 
 echo $html;
 
