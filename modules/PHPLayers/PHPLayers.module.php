@@ -271,8 +271,8 @@ class PHPLayers extends CMSModule
 			else
 			{
 				$mid = &$_SESSION['layersmenuobj'];
-				$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
-				#$mid->setTpldir('templates');
+				#$mid->setTpldir(dirname(__FILE__).'/phplayers/templates/');
+				$mid->setTpldir('templates');
 				$mid->setSubMenuTpl('layersmenu-sub_menu.ihtml');
 			}
 			
