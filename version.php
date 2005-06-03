@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.10-beta3";
+$CMS_VERSION = "0.10-beta4";
 $CMS_VERSION_NAME = "Antigua";
 $CMS_SCHEMA_VERSION = "10";
 
