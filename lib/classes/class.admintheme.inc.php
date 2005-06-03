@@ -194,6 +194,7 @@ class AdminTheme
                 $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
                     $sectionModule['key'];
                 $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
+                $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
                 }
             }
         return $modList;
@@ -755,7 +756,7 @@ class AdminTheme
                     }
                 $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
                     'parent'=>$sectionKey,
-                    'title'=>$this->FixSpaces($thisKey),
+                    'title'=>$this->FixSpaces($thisVal['name']),
                     'description'=>$thisVal['description'],
                     'show_in_menu'=>true);
                 }
