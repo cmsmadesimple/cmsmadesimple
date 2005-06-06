@@ -415,7 +415,7 @@ Posted: {$entry->postdate|date_format}
 				if (isset($params["makerssbutton"]))
 				{
 					debug_buffer('Making rss button');
-					$params = array_merge(array("showtemplate"=>"false"));
+					$params = array("showtemplate"=>"false");
 					echo $this->CreateLink($id, 'rss', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
 					return;
 				}
