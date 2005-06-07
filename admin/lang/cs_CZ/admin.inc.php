@@ -288,5 +288,5 @@ $lang['admin']['globalconfig'] = 'Globální konfigurace';
 $lang['admin']['adminprefs'] = 'Nastavení administrace';
 $lang['admin']['adminprefsdescription'] = 'Zde jsou specifická nastavení administrace.';
 $lang['admin']['managebookmarksdescription'] = 'Zde můžete spravovat Vaše administrační záložky.';
-$lang['admin']['options'] = 'Options'; //needs translation
+$lang['admin']['options'] = 'Volby';
 ?>
