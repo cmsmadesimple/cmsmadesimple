@@ -71,12 +71,10 @@ class News extends CMSModule
 		}
 	}
 
-	/*
     function VisibleToAdminUser()
     {
         return $this->CheckPermission('Modify News');
     }
-	*/
 
 	/**
 	 * This function is not in the API!!!
@@ -604,6 +602,12 @@ Posted: {$entry->postdate|date_format}
 
 			case "addcategory":
 
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
+
 				if (isset($params['cancel']))
 				{
 					$this->Redirect($id, 'defaultadmin', $returnid);
@@ -640,6 +644,12 @@ Posted: {$entry->postdate|date_format}
 				break;
 
 			case "editcategory":
+
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
 
 				if (isset($params['cancel']))
 				{
@@ -701,6 +711,12 @@ Posted: {$entry->postdate|date_format}
 
 			case "deletecategory":
 
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
+
 				$catid = '';
 				if (isset($params['catid']))
 				{
@@ -726,6 +742,12 @@ Posted: {$entry->postdate|date_format}
 				break;
 
 			case "addarticle":
+
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
 
 				if (isset($params['cancel']))
 				{
@@ -994,6 +1016,12 @@ Posted: {$entry->postdate|date_format}
 
 			case "deletearticle":
 
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
+
 				$articleid = '';
 				if (isset($params['articleid']))
 				{
@@ -1029,6 +1057,12 @@ Posted: {$entry->postdate|date_format}
 			case "defaultadmin":
 
 				global $gCms;
+
+				if (!$this->CheckPermission('Modify News'))
+				{
+					echo '<p class="error">'.$this->Lang('needpermission', array('Modify News')).'</p>';
+					return;
+				}
 
 				#The tabs
 				echo $this->StartTabHeaders();
