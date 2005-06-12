@@ -69,13 +69,10 @@ class PHPLayers extends CMSModule
 		require_once dirname(__FILE__).'/phplayers/lib/treemenu.inc.php';
 		$_SESSION['layersmenuobj'] = new LayersMenu();
 		$_SESSION['layersmenutreeobj'] = new TreeMenu();
-	
 	}
 
 	function ContentPreRender(&$content)
 	{
-		global $gCms;
-
 		if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
 		{
 			$config = $this->cms->config;
@@ -302,7 +299,7 @@ class PHPLayers extends CMSModule
 				return '';
 
 			$mid->setMenuStructureString($menu);
-			$mid->setIconsize(16, 16);
+			//$mid->setIconsize(16, 16);
 			$mid->parseStructureForMenu($menuid);
 			if ($horizontal == 1)
 			{

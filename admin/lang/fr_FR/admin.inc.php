@@ -288,5 +288,5 @@ $lang['admin']['globalconfig'] = 'Configuration globale'; //needs translation
 $lang['admin']['adminprefs'] = 'Préférences de l\'admin'; //needs translation
 $lang['admin']['adminprefsdescription'] = 'Préférences spécifiques pour l\'administration du site. ';
 $lang['admin']['managebookmarksdescription'] = 'Gestion des favoris de l\'administration.';
-$lang['admin']['options'] = 'Options'; //needs translation
+$lang['admin']['options'] = 'Options';
 ?>
