@@ -811,6 +811,8 @@ class ContentBase
 	# :TODO: This function should return something
 	function Delete()
 	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+
 		foreach($gCms->modules as $key=>$value)
 		{
 			if ($gCms->modules[$key]['installed'] == true &&
@@ -821,7 +823,6 @@ class ContentBase
 			}
 		}
 		
-		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->db;
 
 		$result = false;
