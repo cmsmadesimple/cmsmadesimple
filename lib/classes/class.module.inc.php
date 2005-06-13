@@ -1308,16 +1308,21 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='')
 	{
-		debug_buffer($addttext);
 		$text = '';
 		$goto = 'moduleinterface.php';
+		$class = (isset($params['class'])?$params['class']:'');
 		if ($inline && $returnid != '')
 		{
 			$goto = 'index.php';
 		}
 		if (!$onlyhref)
 		{
-			$text .= '<a href="';
+			$text .= '<a';
+			if ($class != '')
+			{
+				$text .= ' class="'.$class.'"';
+			}
+			$text .= ' href="';
 		}
 		$text .= $this->cms->config['root_url'];
 		if (!($returnid != '' && $returnid > -1))
