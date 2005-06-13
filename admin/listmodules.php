@@ -200,8 +200,6 @@ if ($action == "showmoduleabout")
 			echo $gCms->modules[$module]['object']->GetChangeLog() . '<br />';
 		}
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-		exit;
 	}
 }
 else if ($action == "showmodulehelp")
@@ -216,8 +214,6 @@ else if ($action == "showmodulehelp")
 		@ob_end_clean();
 		echo $content;
 		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-		exit;
 	}
 }
 else if ($action == 'missingdeps')

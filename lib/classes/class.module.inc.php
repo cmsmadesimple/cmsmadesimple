@@ -1502,17 +1502,17 @@ class CMSModule extends ModuleOperations
 		$ourlang = $this->curlang;
 
 		#Load the language if it's not loaded
-		if (is_array($this->langhash) && count(array_keys($this->langhash)) == 0)
+		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
 		{
 			$dir = $gCms->config['root_path'];
 			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
 			{
-				include_once("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
+				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
 			else if (is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
 			{
-				include_once("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 				$this->langhash = &$lang;
 			}
 			else
