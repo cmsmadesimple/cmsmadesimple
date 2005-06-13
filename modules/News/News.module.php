@@ -414,7 +414,7 @@ Posted: {$entry->postdate|date_format}
 				{
 					debug_buffer('Making rss button');
 					$params = array("showtemplate"=>"false");
-					echo $this->CreateLink($id, 'rss', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params);
+					echo $this->CreateLink($id, 'rss', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params,'',false,false,'',true);
 					return;
 				}
 
@@ -472,8 +472,8 @@ Posted: {$entry->postdate|date_format}
 
 					debug_buffer($sendtodetail);
 
-					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], $sendtodetail);
-					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, $sendtodetail);
+					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], $sendtodetail,'',false,false,'',true);
+					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, $sendtodetail,'',false,false,'',true);
 					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
 
 					array_push($entryarray, $onerow);

@@ -1306,9 +1306,13 @@ class CMSModule extends ModuleOperations
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='')
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false)
 	{
 		$text = '';
+		if ($targetcontentonly)
+		{
+			$id = 'cntnt01';
+		}
 		$goto = 'moduleinterface.php';
 		$class = (isset($params['class'])?$params['class']:'');
 		if ($inline && $returnid != '')
