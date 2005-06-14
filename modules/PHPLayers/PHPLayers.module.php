@@ -89,8 +89,11 @@ class PHPLayers extends CMSModule
 	{
 		global $gCms;
 		
-		$content = ereg_replace('<body>', '<body>' . $_SESSION['layersmenuobj']->getHeader(), $content);
-		$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
+		if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
+		{
+			$content = ereg_replace('<body>', '<body>' . $_SESSION['layersmenuobj']->getHeader(), $content);
+			$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
+		}
 
 //		$_SESSION['layersmenuobj_next'] = null;
 //		$_SESSION['layersmenuobj'] = null;
