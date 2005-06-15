@@ -60,12 +60,7 @@ class defaultTheme extends AdminTheme
     {
 		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
-//		$breadcrumbs = array();
         foreach ($this->menuItems as $key=>$menuItem) {
-/*			if ($menuItem['selected']) {
-				array_push($breadcrumbs, array($menuItem['title'] => $menuItem['url']));
-			}
-*/
         	if ($menuItem['parent'] == -1) {
         	    echo "\n\t\t";
         		$this->renderMenuSection($key, 0, -1);
@@ -250,7 +245,8 @@ class defaultTheme extends AdminTheme
 					   if (file_exists($imageSpec))
 						  {
 						  echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
-							'/modules/' . $tmp[1] . '/images/' .
+							$this->cms->config['root_url'] .
+                            '/modules/' . $tmp[1] . '/images/' .
 							'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
 						  $moduleIcon = true;
                             }
