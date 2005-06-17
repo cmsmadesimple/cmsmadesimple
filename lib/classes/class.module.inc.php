@@ -1495,7 +1495,7 @@ class CMSModule extends ModuleOperations
 	function Lang($name, $params=array())
 	{
 		global $gCms;
-		if ($this->curlang == '')
+		if ($this->curlang == '' && isset($gCms->current_language))
 		{
 			$this->curlang = $gCms->current_language;
 		}
