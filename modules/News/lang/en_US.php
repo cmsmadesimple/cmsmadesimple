@@ -1,8 +1,9 @@
 <?php
-$lang['allentries'] = 'All Entries';
 $lang['addarticle'] = 'Add Article';
 $lang['addcategory'] = 'Add Category';
 $lang['addnewsitem'] = 'Add News Item';
+$lang['allcategories'] = 'All Categories';
+$lang['allentries'] = 'All Entries';
 $lang['areyousure'] = 'Are you sure you want to delete?';
 $lang['articles'] = 'Articles';
 $lang['cancel'] = 'Cancel';
@@ -35,6 +36,7 @@ $lang['print'] = 'Print';
 $lang['postdate'] = 'Post Date';
 $lang['postinstall'] = 'Make sure to set the "Modify News" permission on users who will be administering News items.';
 $lang['rsstemplate'] = 'RSS Template';
+$lang['selectcategory'] = 'Select Category';
 $lang['startdate'] = 'Start Date';
 $lang['startrequiresend'] = 'Entering a start date requires an end date also';
 $lang['submit'] = 'Submit';

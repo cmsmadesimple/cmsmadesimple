@@ -1079,11 +1079,48 @@ Posted: {$entry->postdate|date_format}
 
 				echo $this->StartTab("articles");
 
+				echo $this->CreateFormStart($id, 'defaultadmin');
+
+				$curcategory = (isset($params['curcategory'])?$params['curcategory']:'');
+				$newcategory = $curcategory;
+				
+				if (isset($params['submitcategory']))
+				{
+					$newcategory = (isset($params['newcategory'])?$params['newcategory']:$newcategory);
+				}
+				
+				$curcategory = $newcategory;
+
+				$categorylist = array();
+				$categorylist[$this->Lang('allcategories')] = '';
+				$query = "SELECT * FROM ".cms_db_prefix()."module_news_categories ORDER BY hierarchy";
+				$dbresult = $db->Execute($query);
+
+				while ($row = $dbresult->FetchRow())
+				{
+					$categorylist[$row['long_name']] = $row['news_category_id'];
+				}
+
+				echo '<br /><p>'.$this->Lang('category').': ' . $this->CreateInputDropdown($id, 'newcategory', $categorylist, -1, $newcategory) . ' ' . $this->CreateInputSubmit($id, 'submitcategory', $this->Lang('selectcategory')) . $this->CreateInputHidden($id, 'curcategory', $curcategory) . '</p>';
+
+				echo $this->CreateFormEnd();
+
 				//Load the current articles
 				$entryarray = array();
 
-				$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
-				$dbresult = $db->Execute($query);
+				$query = '';
+				$dbresult = '';
+
+				if ($curcategory != '')
+				{
+					$query = "SELECT * FROM ".cms_db_prefix()."module_news WHERE news_category_id = ? ORDER by news_date DESC";
+					$dbresult = $db->Execute($query,array($curcategory));
+				}
+				else
+				{
+					$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
+					$dbresult = $db->Execute($query);
+				}
 
 				$rowclass = 'row1';
 

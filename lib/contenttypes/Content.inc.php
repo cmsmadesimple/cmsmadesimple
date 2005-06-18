@@ -338,7 +338,7 @@ class content extends ContentBase
 		$result = preg_match_all($pattern, $tpl_source, $matches);
 		if($result)
 		{
-			$count = count($matches);
+			$count = count($matches[0]);
 			// iterate over each additional content block and replace with the text from the property
 			for($i = 0; $i < $count; $i++)
 			{
