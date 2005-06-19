@@ -89,7 +89,8 @@ class PHPLayers extends CMSModule
 	{
 		global $gCms;
 		
-		if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
+		#Check to see if the module had headers sent in prerender
+		if (strpos($content, 'layersmenu-library.js') !== FALSE) #No point in doing a regex...
 		{
 			$content = ereg_replace('<body>', '<body>' . $_SESSION['layersmenuobj']->getHeader(), $content);
 			$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
