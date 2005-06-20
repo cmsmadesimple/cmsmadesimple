@@ -109,7 +109,8 @@ class Smarty_ModuleInterface extends Smarty {
 			$line = $result->FetchRow();
 
 			#Set the title
-			$title = $line['title'];
+			$title = $line['content_name'];
+			$menu_text = $line['menu_text'];
 
 			#Perform the content title callback
 			foreach($gCms->modules as $key=>$value)
@@ -194,6 +195,7 @@ class Smarty_ModuleInterface extends Smarty {
 					#In case any lingering tags are coming in from the content
 					$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 					$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+					$tpl_source = ereg_replace("\{menu_text\}", $menu_text, $tpl_source);
 				}
 				else
 				{

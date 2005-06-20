@@ -17,25 +17,25 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 function smarty_cms_function_startExpandCollapse($params, &$smarty) {
-	static $firstExpandCollapse = true;//only gets set one time per page
+       static $firstExpandCollapse = true;//only gets set one time per page
 
-	if (!empty($params['id']) && !empty($params['title'])){
-		$id = $params['id'];
-		$title = $params['title'];
-	}else{
-		echo 'Error: The expand/collapse plugin requires that both parameters (id,title) are used.';
-		return;
+       if (!empty($params['id']) && !empty($params['title'])){
+               $id = $params['id'];
+               $title = $params['title'];
+       }else{
+	       echo 'Error: The expand/collapse plugin requires that both parameters (id,title) are used.';
+               return;
+       }
+
+       if ($firstExpandCollapse) {
+		echo '<script type="text/javascript" language="javascript" src="lib/helparea.js"></script>';
+               $firstExpandCollapse = false;
 	}
 
-	if ($firstExpandCollapse) {
-		echo '<SCRIPT TYPE="text/javascript" LANGUAGE="javascript" SRC="lib/helparea.js"></SCRIPT>';
-		$firstExpandCollapse = false;
-	}
+	echo '#'.$id.'<br />
 
-	echo '<a href="#'.$id.'" onClick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br>
-    <div id="'.$id.'" class="expand">
-    <a name="'.$id.'">&nbsp;</a>';
-
+	<div id="'.$id.'" class="expand">
+	<a name="'.$id.'">&nbsp;</a>';
 }
 
 function smarty_cms_help_function_startExpandCollapse() {

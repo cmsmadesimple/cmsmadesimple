@@ -1279,11 +1279,7 @@ class NewsModule extends CMSModuleContentType
 	{
 		$this->mProperties->Add('string', 'number', '');
 		$this->mProperties->Add('string', 'dateformat', 'F j, Y, g:i a');
-		$this->mProperties->Add('bool', 'swaptitledate', 1);
 		$this->mProperties->Add('string', 'category');
-		$this->mProperties->Add('string', 'summary');
-		$this->mProperties->Add('int', 'length', 80);
-		$this->mProperties->Add('bool', 'showcategorywithtitle', 1);
 		$this->mProperties->Add('string', 'moretext', 'more...');
 		$this->mProperties->Add('bool', 'sortasc', 0);
 
@@ -1310,12 +1306,7 @@ class NewsModule extends CMSModuleContentType
 		}
 		array_push($ret,array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
 		array_push($ret,array('Number to Display (none show all):','<input type="text" name="number" value="'.$this->GetPropertyValue('number').'" />'));
-		array_push($ret,array('Date Format:','<input type="text" name="dateformat" value="'.$this->GetPropertyValue('dateformat').'" />'));
-		array_push($ret,array('Swap Date and Title:','<input type="checkbox" name="swaptitledate" '.($this->GetPropertyValue('swaptitledate')?' checked="true"':'').' />'));
 		array_push($ret,array('Category:','<input type="text" name="category" value="'.$this->GetPropertyValue('category').'" />'));
-		array_push($ret,array('Summary:','<input type="text" name="summary" value="'.$this->GetPropertyValue('summary').'" />'));
-		array_push($ret,array('Summary Length:','<input type="text" name="length" value="'.$this->GetPropertyValue('length').'" />'));
-		array_push($ret,array('Show Category:','<input type="checkbox" name="showcategorywithtitle" '.($this->GetPropertyValue('showcategorywithtitle')?' checked="true"':'').' />'));
 		array_push($ret,array('More Text:','<input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" />'));
 		array_push($ret,array('Sort Ascending:','<input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' />'));
 		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'>'));
@@ -1342,12 +1333,7 @@ class NewsModule extends CMSModuleContentType
 		}
 		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId).'</td></tr>';
 		$text .= '<tr><td>Number to Display (none show all):</td><td><input type="text" name="number" value="'.$this->GetPropertyValue('number').'" /></td></tr>';
-		$text .= '<tr><td>Date Format:</td><td><input type="text" name="dateformat" value="'.$this->GetPropertyValue('dateformat').'" /></td></tr>';
-		$text .= '<tr><td>Swap Date and Title:</td><td><input type="checkbox" name="swaptitledate" '.($this->GetPropertyValue('swaptitledate')?' checked="true"':'').' /></td></tr>';
 		$text .= '<tr><td>Category:</td><td><input type="text" name="category" value="'.$this->GetPropertyValue('category').'" /></td></tr>';
-		$text .= '<tr><td>Summary:</td><td><input type="text" name="summary" value="'.$this->GetPropertyValue('summary').'" /></td></tr>';
-		$text .= '<tr><td>Summary Length:</td><td><input type="text" name="length" value="'.$this->GetPropertyValue('length').'" /></td></tr>';
-		$text .= '<tr><td>Show Category:</td><td><input type="checkbox" name="showcategorywithtitle" '.($this->GetPropertyValue('showcategorywithtitle')?' checked="true"':'').' /></td></tr>';
 		$text .= '<tr><td>More Text:</td><td><input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" /></td></tr>';
 		$text .= '<tr><td>Sort Ascending:</td><td><input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'></td></tr>';
@@ -1364,29 +1350,13 @@ class NewsModule extends CMSModuleContentType
 
 		if (isset($params))
 		{
-			$parameters = array('number', 'category', 'summary', 'length', 'moretext', 'dateformat');
+			$parameters = array('number', 'category', 'moretext');
 			foreach ($parameters as $oneparam)
 			{
 				if (isset($params[$oneparam]))
 				{
 					$this->SetPropertyValue($oneparam, $params[$oneparam]);
 				}
-			}
-			if (isset($params['swaptitledate']))
-			{
-				$this->SetPropertyValue('swaptitledate', 1);
-			}
-			else
-			{
-				$this->SetPropertyValue('swaptitledate', 0);
-			}
-			if (isset($params['showcategorywithtitle']))
-			{
-				$this->SetPropertyValue('showcategorywithtitle', 1);
-			}
-			else
-			{
-				$this->SetPropertyValue('showcategorywithtitle', 0);
 			}
 			if (isset($params['sortasc']) && $params['sortasc'] == 1)
 			{
@@ -1460,19 +1430,7 @@ class NewsModule extends CMSModuleContentType
 			$params['category'] = $this->GetPropertyValue('category');
 		}
 
-		if (strlen($params['summary']) > 0)
-		{
-			$params['summary'] = $this->GetPropertyValue('summary');
-		}
-
-		if (strlen($params['length']) > 0)
-		{
-			$params['length'] = $this->GetPropertyValue('length');
-		}
-
 		$params['moretext'] = $this->GetPropertyValue('moretext');
-		$params['showcategorywithtitle'] = $this->GetPropertyValue('showcategorywithtitle');
-		$params['swaptitledate'] = $this->GetPropertyValue('swaptitledate');
 		$params['sortasc'] = $this->GetPropertyValue('sortasc');
 
 		$newnews = new News();
