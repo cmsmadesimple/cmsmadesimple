@@ -807,28 +807,35 @@ Posted: {$entry->postdate|date_format}
 					$title = $params['title'];
 					if ($title != '')
 					{
-						$articleid = $db->GenID(cms_db_prefix()."module_news_seq");
-						$query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)';
-						if ($useexp == 1)
+						if ($content != '')
 						{
-							$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+							$articleid = $db->GenID(cms_db_prefix()."module_news_seq");
+							$query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)';
+							if ($useexp == 1)
+							{
+								$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+							}
+							else
+							{
+								$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+							}
+
+							#foreach ($usedcategories as $onecategory)
+							#{
+								$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
+								$db->Execute($query, array($usedcategory, $articleid));
+							#}
+
+							$this->Redirect($id, 'defaultadmin', $returnid);
 						}
 						else
 						{
-							$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+							echo '<p class="error">'.$this->Lang('nocontentgiven').'</p>';
 						}
-
-						#foreach ($usedcategories as $onecategory)
-						#{
-							$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
-							$db->Execute($query, array($usedcategory, $articleid));
-						#}
-
-						$this->Redirect($id, 'defaultadmin', $returnid);
 					}
 					else
 					{
-						//Handle error
+						echo '<p class="error">'.$this->Lang('notitlegiven').'</p>';
 					}
 				}
 
@@ -934,21 +941,28 @@ Posted: {$entry->postdate|date_format}
 					$title = $params['title'];
 					if ($title != '')
 					{
-						$query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=? WHERE news_id = ?';
-						if ($useexp == 1)
+						if ($content != '')
 						{
-							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $articleid));
+							$query = 'UPDATE '.cms_db_prefix().'module_news SET news_title=?, news_data=?, summary=?, status=?, news_date=?, news_category_id=?, start_time=?, end_time=?, modified_date=? WHERE news_id = ?';
+							if ($useexp == 1)
+							{
+								$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $articleid));
+							}
+							else
+							{
+								$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, NULL, NULL, $db->DBTimeStamp(time()), $articleid));
+							}
+
+							$this->Redirect($id, 'defaultadmin', $returnid);
 						}
 						else
 						{
-							$db->Execute($query, array($title, $content, $summary, $status, $db->DBTimeStamp($postdate), $usedcategory, NULL, NULL, $db->DBTimeStamp(time()), $articleid));
+							echo '<p class="error">'.$this->Lang('nocontentgiven').'</p>';
 						}
-
-						$this->Redirect($id, 'defaultadmin', $returnid);
 					}
 					else
 					{
-						//Handle error
+						echo '<p class="error">'.$this->Lang('notitlegiven').'</p>';
 					}
 				}
 				else
@@ -1305,10 +1319,10 @@ class NewsModule extends CMSModuleContentType
 			array_push($ret,array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'">'));
 		}
 		array_push($ret,array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
-		array_push($ret,array('Number to Display (none show all):','<input type="text" name="number" value="'.$this->GetPropertyValue('number').'" />'));
-		array_push($ret,array('Category:','<input type="text" name="category" value="'.$this->GetPropertyValue('category').'" />'));
-		array_push($ret,array('More Text:','<input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" />'));
-		array_push($ret,array('Sort Ascending:','<input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' />'));
+		array_push($ret,array($this->Lang('numbertodisplay').':','<input type="text" name="number" value="'.$this->GetPropertyValue('number').'" />'));
+		array_push($ret,array($this->Lang('category').':','<input type="text" name="category" value="'.$this->GetPropertyValue('category').'" />'));
+		array_push($ret,array($this->Lang('moretext').':','<input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" />'));
+		array_push($ret,array($this->Lang('sortascending').':','<input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' />'));
 		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'>'));
 		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="true"':'').'>'));
 		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
@@ -1332,10 +1346,10 @@ class NewsModule extends CMSModuleContentType
 			$text .= '<tr><td>'.lang('pagealias').':</td><td><input type="text" name="alias" value="'.$this->mAlias.'"></td></tr>';
 		}
 		$text .= '<tr><td>'.lang('template').':</td><td>'.TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId).'</td></tr>';
-		$text .= '<tr><td>Number to Display (none show all):</td><td><input type="text" name="number" value="'.$this->GetPropertyValue('number').'" /></td></tr>';
-		$text .= '<tr><td>Category:</td><td><input type="text" name="category" value="'.$this->GetPropertyValue('category').'" /></td></tr>';
-		$text .= '<tr><td>More Text:</td><td><input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" /></td></tr>';
-		$text .= '<tr><td>Sort Ascending:</td><td><input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
+		$text .= '<tr><td>'.$this->Lang('numbertodisplay').':</td><td><input type="text" name="number" value="'.$this->GetPropertyValue('number').'" /></td></tr>';
+		$text .= '<tr><td>'.$this->Lang('category').':</td><td><input type="text" name="category" value="'.$this->GetPropertyValue('category').'" /></td></tr>';
+		$text .= '<tr><td>'.$this->Lang('moretext').':</td><td><input type="text" name="moretext" value="'.$this->GetPropertyValue('moretext').'" /></td></tr>';
+		$text .= '<tr><td>'.$this->Lang('sortascending').':</td><td><input type="checkbox" name="sortasc" '.($this->GetPropertyValue('sortasc')?' checked="true"':'').' /></td></tr>';
 		$text .= '<tr><td>'.lang('active').':</td><td><input type="checkbox" name="active"'.($this->mActive?' checked="true"':'').'></td></tr>';
 		$text .= '<tr><td>'.lang('showinmenu').':</td><td><input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="true"':'').'></td></tr>';
 		$text .= '<tr><td>'.lang('parent').':</td><td>'.ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId).'</td></tr>';
@@ -1464,6 +1478,11 @@ class NewsModule extends CMSModuleContentType
 	}
 
     function FriendlyName()
+	{
+		return 'News';
+	}
+
+	function ModuleName()
 	{
 		return 'News';
 	}

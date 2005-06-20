@@ -1863,6 +1863,25 @@ class CMSModule extends ModuleOperations
  */
 class CMSModuleContentType extends ContentBase
 {
+	//What module do I belong to?  (needed for things like Lang to work right)
+	function ModuleName()
+	{
+		return '';
+	}
+
+	function Lang($name, $params=array())
+	{
+		global $gCms;
+		$cmsmodules = &$gCms->modules;
+		if (array_key_exists($this->ModuleName(), $cmsmodules))
+		{
+			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
+		}
+		else
+		{
+			return 'ModuleName() not defined properly';
+		}
+	}
 }
 
 /**
