@@ -214,20 +214,20 @@ echo '<th class="pageicon">&nbsp;</th>';
 echo '</thead>';
 echo '<tbody>';
 
-if ($reldir != "")
+if ($reldir != '')
 {
-	$newdir = urlencode(dirname($reldir.'/'.$file));
+	$newdir = dirname($reldir.'/'.$file);
 	if ($newdir == "/" || $newdir == '\\')
 	{
-		$newdir = "";
+		$newdir = '';
 	}
 	else
 	{
-		$newdir = "?reldir=".$newdir;
+		$newdir = '?reldir='.urlencode($newdir);
 	}
 	$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
 	$dirtext .= "<td>";
-	$dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
+	$dirtext .= $themeObject->DisplayImage('icons/filetypes/folder.gif', lang('directoryabove'));
     $dirtext .= "</td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td>&nbsp;</td>";
@@ -253,7 +253,7 @@ foreach ($dirs as $file)
 			$tmp=urlencode($reldir."/".$file);
 			$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">"; 
 			$dirtext .= "<td>";
-            $dirtext .= $themeObject->DisplayImage('fileicons/folder.png', lang('directoryabove'));
+            $dirtext .= $themeObject->DisplayImage('icons/filetypes/folder.gif', lang('directoryabove'));
             $dirtext .= "</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
 			$dirtext .= "<td>&nbsp;</td>";
@@ -292,8 +292,8 @@ foreach ($files as $file)
 				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
 		//		$file_links = $filetype[$extension]['link']['view'];
 				
-                $image_icon = $themeObject->DisplayImage("fileicons/".$filetype[$extension]['img'].".png", $filetype[$extension]['desc']);
-                //$image_icon = "<img src=\"../images/cms/fileicons/".$filetype[$extension]['img'].".png\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
+                $image_icon = $themeObject->DisplayImage("icons/filetypes/".$filetype[$extension]['img'].".gif", $filetype[$extension]['desc']);
+                //$image_icon = "<img src=\"../images/cms/icons/filetypes/".$filetype[$extension]['img'].".gif\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
 	
 				$filetext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
 				$filetext .= "<td>{$image_icon}</td>";
