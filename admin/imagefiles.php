@@ -243,7 +243,7 @@ if ($access)
 {
 ?>
 
-<form enctype="multipart/form-data" action="imagefiles.php" method="post">
+<form enctype="multipart/form-data" action="imagefiles.php" method="post" name="uploader">
 	<div class="pageoverflow">
 		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
 		<p class="pageinput">
