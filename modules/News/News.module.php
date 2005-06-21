@@ -1083,7 +1083,7 @@ Posted: {$entry->postdate|date_format}
 
 				echo $this->SetTabHeader('articles',$this->Lang('articles'));
 				echo $this->SetTabHeader('categories',$this->Lang('categories'));
-				echo $this->SetTabHeader('summary_template',$this->lang('summarytemplate'));
+				echo $this->SetTabHeader('summary_template',$this->Lang('summarytemplate'));
 				echo $this->SetTabHeader('detail_template',$this->Lang('detailtemplate'));
 
 				echo $this->EndTabHeaders();
@@ -1150,8 +1150,8 @@ Posted: {$entry->postdate|date_format}
 					$onerow->enddate = $row['end_time'];
 					$onerow->rowclass = $rowclass;
 
-					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
-					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
+					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletearticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('articleid'=>$row['news_id']), $this->Lang('areyousure'));
 
 					array_push($entryarray, $onerow);
 
@@ -1161,7 +1161,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('items', $entryarray);
 				$this->smarty->assign_by_ref('itemcount', count($entryarray));
 
-				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
@@ -1187,8 +1187,8 @@ Posted: {$entry->postdate|date_format}
 
 					$onerow->id = $row['news_category_id'];
 					$onerow->name = str_repeat('&nbsp;', $depth-1).$row['news_category_name'];
-					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->lang('edit'),'','','systemicon'), array('catid'=>$row['news_category_id']));
-					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->lang('delete'),'','','systemicon'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
+					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('catid'=>$row['news_category_id']));
+					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
 
 					$onerow->rowclass = $rowclass;
 
@@ -1202,7 +1202,7 @@ Posted: {$entry->postdate|date_format}
 
 				#Setup links
 				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
-				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newfolder.gif', $this->lang('addcategory'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newfolder.gif', $this->Lang('addcategory'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
