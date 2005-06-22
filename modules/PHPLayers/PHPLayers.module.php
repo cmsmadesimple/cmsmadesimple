@@ -239,15 +239,15 @@ class PHPLayers extends CMSModule
 				}
 				else
 				{
-					$img = $config['root_url'] . "/images/icons/". $onecontent->mAlias . ".png";
-
-
 					if (is_file($config['root_path'] . "/images/icons/". $onecontent->mAlias . ".png"))
-                    	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|" . 
-					$onecontent->mAlias . $img
-					."|". $img ."\n";
+					{
+						$img = $config['root_url'] . "/images/icons/". $onecontent->mAlias . ".png";
+                    	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|" .  $onecontent->mAlias . $img ."|". $img ."\n";
+					}
 					else
+					{
                     	$menu .= "|".$onecontent->MenuText()."|".$onecontent->GetURL()."|$img|\n";
+					}
 				}
 				$count++;
 			}
