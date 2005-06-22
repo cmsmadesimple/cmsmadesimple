@@ -7,6 +7,6 @@ $lang['help'] = <<<EOF
 	<h3>Hva gjør denne modulen?</h3>
 	<p>Gjør det mulig å bruke TinyMCE som WYSIWYG tekstbehandler.</p>
 	<h3>Hvordan bruker jeg den?</h3>
-	<p>Installer den, gå deretter til bruker innstillinger, og sett TinyMCE til å være din gjeldende WYSIWYG tekstbehandler.</p>
+	<p>Installer den, gå deretter til System -> Brukervalg og velg HTinyMCE som din WYSIWYG tekstbehandler.</p>
 EOF;
 ?>
