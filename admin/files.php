@@ -211,6 +211,7 @@ echo '<th class="pagew30">&nbsp;</th>';
 echo '<th>'.lang('filename').'</th>';
 echo '<th class="pagew10">'.lang('filesize').'</th>';
 echo '<th class="pageicon">&nbsp;</th>';
+echo '</tr>';
 echo '</thead>';
 echo '<tbody>';
 
