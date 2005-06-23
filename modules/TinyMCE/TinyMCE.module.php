@@ -95,15 +95,16 @@ class TinyMCE extends CMSModule
 	function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='')
 	{
 		global $gCms;
+		$variables = &$gCms->variables;
 		if ($stylesheet != '')
 		{
-			$gCms->variables['tinymce_stylesheet'] = $stylesheet;
+			$variables['tinymce_stylesheet'] = $stylesheet;
 		}
 		if (!array_key_exists('tinymce_textareas', $gCms->variables))
 		{
-			$gCms->variables['tinymce_textareas'] = array();
+			$variables['tinymce_textareas'] = array();
 		}
-		array_push($gCms->variables['tinymce_textareas'], $name);
+		array_push($variables['tinymce_textareas'], $name);
 
 		return '<textarea id="'.$name.'" style="width:100%" name="'.$name.'" cols="'.$columns.'" rows="'.($rows+5).'">'.cms_htmlentities($content,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
 	}
