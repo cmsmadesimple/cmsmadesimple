@@ -288,5 +288,5 @@ $lang['admin']['globalconfig'] = 'Global konfiguration';
 $lang['admin']['adminprefs'] = 'Administrations konfiguration';
 $lang['admin']['adminprefsdescription'] = 'Her kan du indstille dine specifikke indstillinger for administrationen.';
 $lang['admin']['managebookmarksdescription'] = 'Her kan du konfigurere dine bogmærker i administrationen.';
-$lang['admin']['options'] = 'Options'; //needs translation
+$lang['admin']['options'] = 'Indstillinger';
 ?>
