@@ -115,7 +115,6 @@ class TinyMCE extends CMSModule
 	}
 	
 	function WYSIWYGGenerateHeader()
-
 	{
 		global $gCms;
 		if (array_key_exists('tinymce_textareas', $gCms->variables))

@@ -349,10 +349,10 @@ function debug_buffer($var, $title="")
 	global $gCms;
 	$errors = &$gCms->errors;
 
-	if($gCms->config["debug"] == true)
-	{
+	#if($gCms->config["debug"] == true)
+	#{
 		array_push($errors, debug_display($var, $title, false));
-	}
+	#}
 }
 
 /**

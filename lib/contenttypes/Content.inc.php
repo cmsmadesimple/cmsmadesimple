@@ -185,7 +185,7 @@ class content extends ContentBase
 				}
 			}
 			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
-			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', '', '', '')));
+			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet, '', '')));
 			
 			// add additional content blocks if required
 			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.

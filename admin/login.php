@@ -27,6 +27,7 @@ $error = "";
 
 if (isset($_SESSION['logout_user_now']))
 {
+	debug_buffer("Logging out.  Clearning cookies and session variables.");
 	unset($_SESSION['logout_user_now']);
 	unset($_SESSION['cms_admin_user_id']);
 	setcookie('cms_admin_user_id', '', time() - 3600);
@@ -35,6 +36,7 @@ if (isset($_SESSION['logout_user_now']))
 
 if (isset($_POST["logincancel"]))
 {
+	debug_buffer("Login cancelled.  Returning to content.");
 	redirect($config["root_url"].'/index.php', true);
 }
 
@@ -47,9 +49,13 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
 	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
+	
+	debug_buffer("Got user by username");
+	debug_buffer($oneuser);
 
-	if ($username != "" && $password != "" && $oneuser && isset($_POST["loginsubmit"]))
+	if ($username != "" && $password != "" && isset($oneuser) && isset($_POST["loginsubmit"]))
 	{
+		debug_buffer("Starting login procedure.  Setting userid so that other pages will pick it up and set a cookie.");
 		#generate_user_object($oneuser->id);
 		$_SESSION['login_user_id'] = $oneuser->id;
 		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');

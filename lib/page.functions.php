@@ -40,6 +40,7 @@ function check_login()
 	//Handle a current login if one is in queue in the SESSION
 	if (isset($_SESSION['login_user_id']))
 	{
+		debug_buffer("Found login_user_id.  Going to generate the user object.");
 		generate_user_object($_SESSION['login_user_id']);
 		unset($_SESSION['login_user_id']);
 	}
