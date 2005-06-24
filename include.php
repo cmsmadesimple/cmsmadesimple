@@ -36,7 +36,7 @@ if(!@session_id()) {
 	@session_start();
 	#Trans SID sucks also...
 	@ini_set('url_rewriter.tags', '');
-	@ini_set('session.use_trans_sid', false);
+	@ini_set('session.use_trans_sid', 0);
 }
 
 require_once(dirname(__FILE__)."/lib/misc.functions.php");
