@@ -86,7 +86,7 @@ if ($error != "") {
 <div class="pagecontainer">
 	<div class="pageoverflow">
 		<p class="pageheader"><?php echo lang("userprefs"); ?></p>
-		<form method="post" action="editprefs.php">
+		<form method="post" action="editprefs.php" name="prefsform">
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>
 				<p class="pageinput">
