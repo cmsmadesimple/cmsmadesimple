@@ -430,14 +430,23 @@ Posted: {$entry->postdate|date_format}
 					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
 				}
 
-				if (isset($params["sortasc"]))
-				{
-					$query .= "ORDER BY news_date asc";
-				}
-				else
-				{
-					$query .= "ORDER BY news_date desc";
-				}
+				if (isset($params["sortby"])) 
+                { 
+                    $query .= "ORDER BY '" . $params['sortby'] . "' "; 
+                } 
+                else 
+                { 
+                    $query .= "ORDER BY news_date "; 
+                } 
+
+                if (isset($params["sortasc"])) 
+                { 
+                    $query .= "asc"; 
+                } 
+                else 
+                { 
+                    $query .= "desc"; 
+                }
 
 				$dbresult = '';
 				if(isset($params['number']))

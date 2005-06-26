@@ -61,6 +61,7 @@ $lang['help'] = <<<EOF
 	<li><em>(optional)</em> moretext="more..." - Text to display at the end of a news item if it goes over the summary length.  Defaults to "more...".</li>
 	<li><em>(optional}</em> summarytemplate="sometemplate.tpl" - Use a separate template for displaying the article summary.  It have to live in modules/News/templates.
 	<li><em>(optional}</em> detailtemplate="sometemplate.tpl" - Use a separate template for displaying the article detail.  It have to live in modules/News/templates.
+	<li><em>(optional)</em> sortby="news_date" - Field to sort by.  Options are: "news_date", "summary", "news_data", "news_category", "news_title".  Defaults to "news_date".</li>
 	<li><em>(optional)</em> sortasc="true" - Sort news items in ascending date order rather than descending.</li>
 	</ul>
 	</p>
