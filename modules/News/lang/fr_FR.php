@@ -1,8 +1,9 @@
 <?php
-$lang['allentries'] = 'Toutes les entrées';
 $lang['addarticle'] = 'Ajouter un article';
 $lang['addcategory'] = 'Ajouter une catégorie';
-$lang['addnewsitem'] = 'Ajouter une News';
+$lang['addnewsitem'] = 'Ajouter un article';
+$lang['allcategories'] = 'Toutes les catégories';
+$lang['allentries'] = 'Toutes les entrées';
 $lang['areyousure'] = 'Etes-vous sûr de vouloir effacer?';
 $lang['articles'] = 'Articles';
 $lang['cancel'] = 'Annuler';
@@ -11,7 +12,7 @@ $lang['categories'] = 'Catégories';
 $lang['content'] = 'Contenu';
 $lang['dateformat'] = '%s pas dans un format valide yyyy-mm-dd hh:mm:ss';
 $lang['delete'] = 'Effacer';
-$lang['description'] = 'Ajout, édition et effacement des entrées News';
+$lang['description'] = 'Ajout, édition et effacement des articles de News';
 $lang['detailtemplate'] = 'Template de l\'article détaillé';
 $lang['displaytemplate'] = 'Afficher le template';
 $lang['edit'] = 'Editer';
@@ -21,6 +22,7 @@ $lang['entries'] = '%s entrées';
 $lang['expiry'] = 'Expiration';
 $lang['filter'] = 'Filtre';
 $lang['more'] = 'Plus';
+$lang['moretext'] = 'Text pour "plus"';
 $lang['name'] = 'Nom';
 $lang['news'] = 'News';
 $lang['newcategory'] = 'Nouvelle catégorie';
@@ -28,13 +30,16 @@ $lang['needpermission'] = 'Vous devez avoir la permission \'%s\' pour exécuter c
 $lang['nocategorygiven'] = 'Aucune catégorie entrée';
 $lang['nocontentgiven'] = 'Aucun contenu entré';
 $lang['noitemsfound'] = '<strong>Aucun</strong> objet trouvé pour cette catégorie: %s';
-$lang['nopostdategiven'] = 'Il manque la date à laquelle la News sera postée';
+$lang['nopostdategiven'] = 'Il manque la date à laquelle l\'article sera posté';
 $lang['note'] = '<em>Note:</em> Les dates doivent être entrées dans ce format \'yyyy-mm-dd hh:mm:ss\'.';
 $lang['notitlegiven'] = 'Aucun titre entré';
+$lang['numbertodisplay'] = 'Nombre à afficher (vide = toutes les entrées)';
 $lang['print'] = 'Imprimer';
-$lang['postdate'] = 'Date à laquelle la News sera postée';
-$lang['postinstall'] = 'Assurez-vous que vous définissez la permission "Modify News" sur les utilisateurs qui administeront les News.';
+$lang['postdate'] = 'Date à laquelle l\'article sera posté';
+$lang['postinstall'] = 'Assurez-vous que vous définissez la permission "Modify News" sur les utilisateurs qui administeront les articles.';
 $lang['rsstemplate'] = 'RSS Template';
+$lang['selectcategory'] = 'Sélection de catégorie';
+$lang['sortascending'] = 'Tri ascendant';
 $lang['startdate'] = 'Date de début';
 $lang['startrequiresend'] = 'Entrer une date de début nécessite qu\'une date de fin soit également entrée';
 $lang['submit'] = 'Envoyer';
@@ -42,22 +47,24 @@ $lang['summarytemplate'] = 'Template du sommaire de l\'article';
 $lang['title'] = 'Titre';
 $lang['help'] = <<<EOF
 	<h3>Que fait ce module?</h3>
-	<p>News est un module pour afficher des News sur vos pages, de façon similaire à un blog, mais avec plus de fonctions!  Dès que le module est installé, une page d'administration des News est ajoutée à votre menu "contenu" qui vous permettra de sélectionner ou ajouter des catégories de News.  Dès qu'une catégorie de News est sélectionnée ou créée, une liste des News pour cette catégorie est affichée.  Depuis là, vous pouvez ajouter, éditer ou effacer les News dans cette catégorie.</p>
+	<p>News est un module pour afficher des articles de News sur vos pages, de façon similaire à un blog, mais avec plus de fonctions!  Dès que le module est installé, une page d'administration des News est ajoutée à votre menu "Contenu" qui vous permettra de sélectionner ou ajouter des catégories d'articles.  Dès qu'une catégorie d'article est sélectionnée ou créée, une liste des articles pour cette catégorie est affichée.  Depuis là, vous pouvez ajouter, éditer ou effacer les articles dans cette catégorie.</p>
 	<h3>Securité</h3>
-	<p>L'utilisateur doit faire partie d'un groupe avec la permission 'Modify News' pour pouvoir ajouter, éditer ou effacer des News.</p>
+	<p>L'utilisateur doit faire partie d'un groupe avec la permission 'Modify News' pour pouvoir ajouter, éditer ou effacer des articles.</p>
 	<h3>Comment l'utiliser?</h3>
-	<p>La façon la plus facile de l'utiliser est en conjonction avec le tag cms_module.  Cela insérera votre module dans votre template ou votre page page où vous le désirez, et y affichera les News.  Exemple de synthaxe: <code>{cms_module module="news" number="5" category="beer"}</code></p>
+	<p>La façon la plus facile de l'utiliser est en conjonction avec le tag cms_module.  Cela insérera votre module dans votre template ou votre page page où vous le désirez, et y affichera les articles.  Exemple de synthaxe: <code>{cms_module module="news" number="5" category="beer"}</code></p>
 	<h3>Quels sont les paramètres possibles?</h3>
 	<p>
 	<ul>
-	<li><em>(en option)</em> number="5" - Le nombre maximal de News à afficher -- laisser ce paramètre vide affichera toutes les News.</li>
-	<li><em>(en option)</em> makerssbutton="true" - Crée un bouton pour un lien à une entrée RSS feed des News.</li>
-	<li><em>(en option)</em> category="category" - Affiche les News de cette catégorie uniquement -- laisser ce paramètre vide affichera toutes les News.</li>
-	<li><em>(en option)</em> moretext="more..." - Texte à afficher à la fin d'une News qui dépasse la longueur définie du sommaire.  Defaut = "more...".</li>
-	<li><em>(en option}</em> summarytemplate="sometemplate.tpl" - Utilise un template séparé pour l'affichage des sommaires des articles.  Il doit se trouver dans modules/News/templates.
-	<li><em>(en option}</em> detailtemplate="sometemplate.tpl" - Utilise un template séparé pour l'affichage des articles détaillés.  Il doit se trouver dans modules/News/templates.
-	<li><em>(en option)</em> sortasc="true" - Trie les News dans un ordre de date ascendant plutôt que descendant (descendant par défaut).</li>
+	<li><em>(en option)</em> number="5" - Le nombre maximal d'articles à afficher -- laisser ce paramètre vide affichera tous les articles.</li>
+	<li><em>(en option)</em> makerssbutton="true" - Affiche un bouton pour créer un flux RSS des articles.</li>
+	<li><em>(en option)</em> category="category" - Affiche les articles de cette catégorie et ses sous-catégories uniquement -- laisser ce paramètre vide affichera tous les articles.</li>
+	<li><em>(en option)</em> moretext="more..." - Texte à afficher à la fin d'un article qui dépasse la longueur définie du sommaire.  Défaut = "more...".</li>
+	<li><em>(en option}</em> summarytemplate="sometemplate.tpl" - Utilise un template séparé pour l'affichage du sommaire des articles.  Il doit se trouver dans modules/News/templates.
+	<li><em>(en option}</em> detailtemplate="sometemplate.tpl" - Utilise un template séparé pour l'affichage du détail des articles.  Il doit se trouver dans modules/News/templates.
+	<li><em>(optional)</em> sortby="news_date" - Champ sur lequel trier les articles.  Les options sont: "news_date", "summary", "news_data", "news_category", "news_title".  Par défaut: "news_date".</li>
+	<li><em>(en option)</em> sortasc="true" - Trie les articles dans un ordre de date ascendant plutôt que descendant. Par défaut: descendant.</li>
 	</ul>
 	</p>
 EOF;
 ?>
+
