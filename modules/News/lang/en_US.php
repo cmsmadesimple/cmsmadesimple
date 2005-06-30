@@ -43,8 +43,10 @@ $lang['sortascending'] = 'Sort Ascending';
 $lang['startdate'] = 'Start Date';
 $lang['startrequiresend'] = 'Entering a start date requires an end date also';
 $lang['submit'] = 'Submit';
+$lang['summary'] = 'Summary';
 $lang['summarytemplate'] = 'Summary Template';
 $lang['title'] = 'Title';
+$lang['useexpiration'] = 'Use Expiration Date';
 $lang['help'] = <<<EOF
 	<h3>What does this do?</h3>
 	<p>News is a module for displaying news events on your page, similar to a blog style, except with more features!.  When the module is installed, a News admin page is added to administration menu that will allow you to select or add a news category.  Once a news category is created or selected, a list of news items for that category will be displayed.  From here, you can add, edit or delete news items for that category.</p>

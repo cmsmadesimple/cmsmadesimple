@@ -206,11 +206,17 @@ Posted: {$entry->postdate|date_format}
 
 		# Setup detail template
 		$this->SetTemplate('displaydetail', $this->GetDetailHtmlTemplate());
+
+		# Setup General category
+		$catid = $db->GenID(cms_db_prefix()."module_news_categories_seq");
+		$query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,?,?)';
+		$db->Execute($query, array($catid, 'General', -1, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$this->UpdateHierarchyPositions();
 	}
 
 	function InstallPostMessage()
 	{
-		return lang('postinstall');
+		return $this->Lang('postinstall');
 	}
 
 	function Upgrade($oldversion, $newversion)
@@ -877,8 +883,19 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
 				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
 				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+
+				$this->smarty->assign_by_ref('titetext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
+				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
+				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
+				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign_by_ref('statustext', $this->Lang('status'));
+				$this->smarty->assign_by_ref('useexpirationtext', $this->Lang('useexpiration'));
+				$this->smarty->assign_by_ref('startdatetext', $this->Lang('startdate'));
+				$this->smarty->assign_by_ref('enddatetext', $this->Lang('enddate'));
+
 				echo $this->ProcessTemplate('editarticle.tpl');
 
 				break;
@@ -1031,8 +1048,19 @@ Posted: {$entry->postdate|date_format}
 				debug_buffer($categorylist);
 				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
 				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+
+				$this->smarty->assign_by_ref('titetext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
+				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
+				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
+				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign_by_ref('statustext', $this->Lang('status'));
+				$this->smarty->assign_by_ref('useexpirationtext', $this->Lang('useexpiration'));
+				$this->smarty->assign_by_ref('startdatetext', $this->Lang('startdate'));
+				$this->smarty->assign_by_ref('enddatetext', $this->Lang('enddate'));
+
 				echo $this->ProcessTemplate('editarticle.tpl');
 
 				break;
@@ -1172,6 +1200,9 @@ Posted: {$entry->postdate|date_format}
 
 				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 
+				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
+
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
 
@@ -1212,6 +1243,8 @@ Posted: {$entry->postdate|date_format}
 				#Setup links
 				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newfolder.gif', $this->Lang('addcategory'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
+
+				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
 
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');

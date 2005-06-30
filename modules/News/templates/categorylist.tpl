@@ -2,7 +2,7 @@
 <table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
-			<th>Category</th>
+			<th>{$categorytext}</th>
 			<th class="pageicon">&nbsp;</th>
 			<th class="pageicon">&nbsp;</th>
 		</tr>

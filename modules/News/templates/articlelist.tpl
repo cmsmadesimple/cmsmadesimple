@@ -2,8 +2,8 @@
 <table cellspacing="0" class="pagetable">
 	<thead>
 		<tr>
-			<th>Post Title</th>
-			<th>Post Date</th>
+			<th>{$titletext}</th>
+			<th>{$postdatetext}</th>
 			<th class="pageicon">&nbsp;</th>
 			<th class="pageicon">&nbsp;</th>
 		</tr>
