@@ -43,8 +43,10 @@ $lang['sortascending'] = 'Sorter med eldste øverst';
 $lang['startdate'] = 'Start-dato';
 $lang['startrequiresend'] = 'Dersom du har en start-dato for artikkelen så må du også ha en slutt-dato.';
 $lang['submit'] = 'Oppdater';
+$lang['summary'] = 'Sammendrag';
 $lang['summarytemplate'] = 'Sammendragsmal';
 $lang['title'] = 'Tittel';
+$lang['useexpiration'] = 'Bruk utløpsdato';
 $lang['help'] = <<<EOF
 	<h3>Hva gjør denne modulen?</h3>
 	<p>Nyhetsmodulen viser nyheter på din side på en måte som ligner på en blog, men med mer funksjonalitet. Når modulen er installert, så vil en side for å administrere nyhtene vises i administrasjonsgrensesnittet. Her vil du kunne legge til og velge nyhetskategorier. Når en nyhetskategori er laget eller valgt, så vil en liste over artikler i denne kategorien vises. Du kan nå legge til, redigere eller slette artikler fra denne kategorien.</p>
