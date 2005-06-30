@@ -47,7 +47,7 @@ $lang['summarytemplate'] = 'Summary Template';
 $lang['title'] = 'Title';
 $lang['help'] = <<<EOF
 	<h3>What does this do?</h3>
-	<p>News is a module for displaying news events on your page, similar to a blog style, except with more features!.  When the module is installed, a News admin page is added to the bottom menu that will allow you to select or add a news category.  Once a news category is created or selected, a list of news items for that category will be displayed.  From here, you can add, edit or delete news items for that category.</p>
+	<p>News is a module for displaying news events on your page, similar to a blog style, except with more features!.  When the module is installed, a News admin page is added to administration menu that will allow you to select or add a news category.  Once a news category is created or selected, a list of news items for that category will be displayed.  From here, you can add, edit or delete news items for that category.</p>
 	<h3>Security</h3>
 	<p>The user must belong to a group with the 'Modify News' permission in order to add, edit, or delete News entries.</p>
 	<h3>How do I use it?</h3>
