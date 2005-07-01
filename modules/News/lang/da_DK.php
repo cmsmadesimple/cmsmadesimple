@@ -43,8 +43,10 @@ $lang['sortascending'] = 'Sortér stigende';
 $lang['startdate'] = 'Start dato';
 $lang['startrequiresend'] = 'Angivelse af en start dato kræver en slutdato';
 $lang['submit'] = 'Send';
+$lang['summary'] = 'Resumé';
 $lang['summarytemplate'] = 'Resumé skabelon';
 $lang['title'] = 'Titel';
+$lang['useexpiration'] = 'Benyt udløbsdato';
 $lang['help'] = <<<EOF
 	<h3>Hvad gør dette modul?</h3>
 	<p>News er et modul til at vise nyheder på din side, på sammen måde som blogs, men med flere funktioner! Når modulet er installeret er der tilføjet et News admin menupunkt til administrations menuen som giver dig mulighed for at vælge eller tilføje en nyheds kategori. Så snart en kategori er tilføjet eller valgt vises en liste over nyheder for denne katagori. Herfra kan du tilføjet, redigere eller slette nyheder for kategorien.</p>
