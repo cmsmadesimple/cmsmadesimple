@@ -742,7 +742,7 @@ class LinkBlog extends CMSModule
 				$result = @mail($this->GetPreference("email_to", ""), $subject, $body, $headers);
 			} ## if
 
-			cms_mapi_redirect_user_by_pageid($return_id);
+			$this->RedirectContent($return_id);
 			return;
 		} else {
 			echo "Error: $errormsg<br />\n";
@@ -750,7 +750,7 @@ class LinkBlog extends CMSModule
 			return;
 		} ## if
 
-		cms_mapi_redirect_user_by_pageid($return_id);
+		$this->RedirectContent($return_id);
 		return;
 
 	}
@@ -829,7 +829,7 @@ class LinkBlog extends CMSModule
 		$query = "SELECT linkblog_id, linkblog_title, linkblog_url, linkblog_author, linkblog_type as type_id, create_date, status, linkblog_credit, linkblog_content from ".cms_db_prefix()."module_linkblog WHERE linkblog_id=".$params["linkblog_id"];
 		$dbresult = $db->Execute($query);
 		echo "<p class=\"modulelinkblogtitle\">Posted site - ";
-		echo cms_mapi_create_content_link_by_page_id($return_id, "Back to LinkBlog");
+		echo $this->CreateLink($id, $params, $return_id, "Back to LinkBlog");
 		echo "</p>\n";
 		echo "<div class=\"modulelinkblog\">\n";
 
