@@ -1,6 +1,7 @@
 <?php
 #Native language name
 $nls['language']['lt_LT'] = 'Lietuvių';
+$nls['englishlang']['lt_LT'] = 'Lithuanian';
 
 #Possible aliases for language
 $nls['alias']['lt'] = 'lt_LT';

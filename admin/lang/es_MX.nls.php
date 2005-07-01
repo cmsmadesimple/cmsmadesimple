@@ -32,6 +32,7 @@
 
 #Native language name
 $nls['language']['es_MX'] = 'Espa&ntilde;ol';
+$nls['englishlang']['es_MX'] = 'Spanish';
 
 #Possible aliases for language
 $nls['alias']['es'] = 'es_MX';

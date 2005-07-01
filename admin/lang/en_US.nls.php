@@ -31,6 +31,7 @@
 #This is the default language
 
 #Native language name
+#NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
 $nls['language']['en_US'] = 'English';
 
 #Possible aliases for language
