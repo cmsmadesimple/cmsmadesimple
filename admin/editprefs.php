@@ -20,23 +20,22 @@
 
 $CMS_ADMIN_PAGE=1;
 
-$default_cms_lang = "";
-if (isset($_POST["default_cms_lang"])) $default_cms_lang = $_POST["default_cms_lang"];
-$old_default_cms_lang = "";
-if (isset($_POST["old_default_cms_lang"])) $old_default_cms_lang = $_POST["old_default_cms_lang"];
+$default_cms_lang = '';
+if (isset($_POST['default_cms_lang'])) $default_cms_lang = $_POST['default_cms_lang'];
+$old_default_cms_lang = '';
+if (isset($_POST['old_default_cms_lang'])) $old_default_cms_lang = $_POST['old_default_cms_lang'];
 
-if ($default_cms_lang != $old_default_cms_lang && $default_cms_lang != "")
+#if ($default_cms_lang != $old_default_cms_lang && $default_cms_lang != '')
+if ($default_cms_lang != '')
 {
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
 
-// ADDED
-$admintheme = "default";
-if (isset($_POST["admintheme"])) $admintheme = $_POST["admintheme"];
-// STOP
+$admintheme = 'default';
+if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
 
 $bookmarks = 0;
-if (isset($_POST["bookmarks"])) $bookmarks = $_POST["bookmarks"];
+if (isset($_POST['bookmarks'])) $bookmarks = $_POST['bookmarks'];
 
 require_once("../include.php");
 
@@ -57,9 +56,7 @@ if (isset($_POST["cancel"])) {
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
-	//ADDED
 	set_preference($userid, 'admintheme', $admintheme);
-	//STOP
 	set_preference($userid, 'bookmarks', $bookmarks);
 	audit(-1, '', 'Edited User Preferences');
 	$error = lang('prefsupdated');
@@ -69,9 +66,7 @@ if (isset($_POST["submit_form"])) {
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
-	//ADDED
 	$admintheme = get_preference($userid, 'admintheme');
-	//STOP
     $bookmarks = get_preference($userid, 'bookmarks');
 }
 
