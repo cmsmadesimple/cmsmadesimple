@@ -16,7 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_startExpandCollapse($params, &$smarty) {
+function smarty_cms_function_startExpandCollapse($params, &$smarty)
+{
        static $firstExpandCollapse = true;//only gets set one time per page
 
        if (!empty($params['id']) && !empty($params['title'])){
@@ -27,13 +28,12 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty) {
                return;
        }
 
-       if ($firstExpandCollapse) {
+	if ($firstExpandCollapse) {
 		echo '<script type="text/javascript" language="javascript" src="lib/helparea.js"></script>';
-               $firstExpandCollapse = false;
+		$firstExpandCollapse = false;
 	}
 
-	echo '#'.$id.'<br />
-
+	echo '<a href="#'.$id.'" onClick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br>
 	<div id="'.$id.'" class="expand">
 	<a name="'.$id.'">&nbsp;</a>';
 }
