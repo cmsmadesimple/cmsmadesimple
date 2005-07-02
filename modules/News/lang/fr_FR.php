@@ -43,11 +43,13 @@ $lang['sortascending'] = 'Tri ascendant';
 $lang['startdate'] = 'Date de début';
 $lang['startrequiresend'] = 'Entrer une date de début nécessite qu\'une date de fin soit également entrée';
 $lang['submit'] = 'Envoyer';
+$lang['summary'] = 'Sommaire';
 $lang['summarytemplate'] = 'Template du sommaire de l\'article';
 $lang['title'] = 'Titre';
+$lang['useexpiration'] = 'Utiliser la date d\'expiration';
 $lang['help'] = <<<EOF
 	<h3>Que fait ce module?</h3>
-	<p>News est un module pour afficher des articles de News sur vos pages, de façon similaire à un blog, mais avec plus de fonctions!  Dès que le module est installé, une page d'administration des News est ajoutée à votre menu "Contenu" qui vous permettra de sélectionner ou ajouter des catégories d'articles.  Dès qu'une catégorie d'article est sélectionnée ou créée, une liste des articles pour cette catégorie est affichée.  Depuis là, vous pouvez ajouter, éditer ou effacer les articles dans cette catégorie.</p>
+	<p>News est un module pour afficher des articles de News sur vos pages, de façon similaire à un blog, mais avec plus de fonctions!  Dès que le module est installé, une page de gestion des News est ajoutée au menu d'administration qui vous permettra de sélectionner ou ajouter des catégories d'articles.  Dès qu'une catégorie d'article est sélectionnée ou créée, une liste des articles pour cette catégorie est affichée.  Depuis là, vous pouvez ajouter, éditer ou effacer les articles dans cette catégorie.</p>
 	<h3>Securité</h3>
 	<p>L'utilisateur doit faire partie d'un groupe avec la permission 'Modify News' pour pouvoir ajouter, éditer ou effacer des articles.</p>
 	<h3>Comment l'utiliser?</h3>
