@@ -1,12 +1,12 @@
 <?php
-$lang['stripbackgroundtags'] = 'Strip Background Tags From CSS';
-$lang['false'] = 'False';
-$lang['true'] = 'True';
-$lang['submit'] = 'Submit';
+$lang['stripbackgroundtags'] = 'Poista tausta avainsanat CSS\'tä';
+$lang['false'] = 'Ei'; // EDIT? 
+$lang['true'] = 'Kyllä'; // EDIT ?
+$lang['submit'] = 'Lähetä';
 $lang['help'] = <<<EOF
-	<h3>What does this do?</h3>
-	<p>Enables TinyMCE to be used as a WYSIWYG.</p>
-	<h3>How do I use it?</h3>
-	<p>Install it, then go to User Preferences and Set TinyMCE  to be your wysiwyg of choice.</p>
+	<h3>Mitä tämä moduuli tekee?</h3>
+	<p>Mahdollistaa TinyMCE nimisen ohjelman käytön sisällön muokkaamiseen WYSIWYG tilassa.</p>
+	<h3>Kuinka moduulia käytetään?</h3>
+	<p>Asenna moduuli, jonka jälkeen valitse käyttäjän asetuksista että tahdot käyttää TinyMCE ohjelmaa</p>
 EOF;
 ?>
