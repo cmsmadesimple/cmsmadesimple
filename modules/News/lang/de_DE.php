@@ -1,47 +1,60 @@
 <?php
 $lang['allentries'] = 'Alle Eintr&auml;ge';
+$lang['addarticle'] = 'Eintrag anlegen';
+$lang['addcategory'] = 'Kategorie hinzuf&uuml;gen';
 $lang['addnewsitem'] = 'Eintrag hinzuf&uuml;gen';
+$lang['allcategories'] = 'Alle Kategorien';
+$lang['allentries'] = 'Alle Eintr&auml;ge';
+$lang['areyousure'] = 'Wirklich l&ouml;schen?';
+$lang['articles'] = 'Artikel';
 $lang['cancel'] = 'Abbruch';
 $lang['category'] = 'Kategorie';
+$lang['categories'] = 'Kategorien';
 $lang['content'] = 'Inhalt';
 $lang['dateformat'] = '%s ist kein g&uuml;ltiges yyyy-mm-dd hh:mm:ss Format';
-$lang['description'] = 'Hinzuf&uuml;gen, bearbeiten und l&ouml;schen von News Eintr&auml;gen';
+$lang['delete'] = 'L&ouml;schen';
+$lang['description'] = 'News-Eintr&auml;ge hinzuf&uuml;gen, bearbeiten und l&ouml;schen';
+$lang['detailtemplate'] = 'Detail-Template';
 $lang['displaytemplate'] = 'Zeige Template';
-$lang['enddate'] = 'Ende Datum';
-$lang['endrequiresstart'] = 'Die Angabe eines Ende Datums erfordert auch die Angabe eines Start Datums';
+$lang['edit'] = 'Bearbeiten';
+$lang['enddate'] = 'Verfallsdatum';
+$lang['endrequiresstart'] = 'Die Angabe eines Verfallsdatums erfordert auch die Angabe eines Anfangsdatums.';
 $lang['entries'] = '%s Eintr&auml;ge';
-$lang['expiry'] = 'Verfall';
+$lang['expiry'] = 'Verf&auml;llt';
 $lang['filter'] = 'Filter';
+$lang['more'] = 'Mehr';
+$lang['moretext'] = 'Mehr-Text';
+$lang['name'] = 'Name';
 $lang['news'] = 'News';
 $lang['newcategory'] = 'Neue Kategorie';
-$lang['needpermission'] = 'Sie ben&ouml;tigen die \'%s\' Rechte um diese Funktion nutzen zu k&ouml;nnen.';
+$lang['needpermission'] = 'Sie ben&ouml;tigen die Berechtigung \'%s\', um diese Funktion nutzen zu k&ouml;nnen.';
 $lang['nocategorygiven'] = 'Keine Kategorie vorhanden';
 $lang['nocontentgiven'] = 'Kein Inhalt vorhanden';
-$lang['noitemsfound'] = '<strong>Keine</strong> Eintr&auml;ge in dieser Kategorie gefunden: %s';
+$lang['noitemsfound'] = 'Keine Eintr&auml;ge in dieser Kategorie gefunden: %s';
 $lang['nopostdategiven'] = 'Kein Erstellungsdatum vorhanden';
 $lang['note'] = '<em>Hinweis:</em> Datum/Zeit muss ein g&uuml;ltiges \'yyyy-mm-dd hh:mm:ss\' Format sein.';
-$lang['notitlegiven'] = 'No Title Given';
+$lang['notitlegiven'] = 'Kein Titel eingegeben';
+$lang['numbertodisplay'] = 'Anzuzeigende Anzahl (leer lassen, um alle anzuzeigen)';
+$lang['print'] = 'Drucken';
 $lang['postdate'] = 'Erstellt am:';
-$lang['postinstall'] = 'Stellen Sie sicher, dass User, welche News administrieren d?rfen das Recht "Modify News" haben !';
-$lang['rsstemplate'] = 'RSS Template';
-$lang['startdate'] = 'Start Datum';
-$lang['startrequiresend'] = 'Die Eingabe eines Startdatums erfordert auch die Eingabe eines Ablaufdatums';
+$lang['postinstall'] = 'Stellen Sie sicher, dass User, welche News administrieren d&uuml;rfen, die Berechtigung "Modify News" haben !';
+$lang['rsstemplate'] = 'RSS-Template';
+$lang['startdate'] = 'Anfangsdatum';
+$lang['startrequiresend'] = 'Die Eingabe eines Anfangsdatums erfordert auch die Eingabe eines Verfallsdatums.';
 $lang['submit'] = 'Speichern';
 $lang['title'] = 'Titel';
+$lang['submit'] = 'Speichern';
+$lang['summary'] = 'Zusammenfassung';
+$lang['summarytemplate'] = 'Zusammenfassungs-Template';
+$lang['title'] = 'Titel';
+$lang['useexpiration'] = 'Verfallsdatum verwenden';
 $lang['help'] = <<<EOF
 	<h3>Was macht dieses Modul?</h3>
-	<p>Dieses Modul zeigt Ihnen Events in der Seite an, in der das Modul aktiviert ist, &auml;hnlich einem HTML Abschnitt (Blog),<br />aber mit mehr M&ouml;glichkeiten.<br />
-           Ist das Modul installiert, kann es ?ber die News - Administratorseite eingestellt werden.<br />
-           Dort k&ouml;nnen Kategorien selektiert oder neue angelegt werden.<br />
-           Wurde eine Kategorie selektiert oder angelegt wird eine der vorhandenen  Eintr&auml;ge angezeigt.<br />
-           Sie k&ouml;nnen an dieser Stelle Eintr&auml;ge hinzuf&uuml;gen, bearbeiten oder l&ouml;schen und zwar f&uuml;r diese Kategorie.</p>
+	<p>Dieses Modul zeigt Ihnen Nachrichten in der Seite an, in der das Modul aktiviert ist, &auml;hnlich einem HTML Abschnitt (Blog),<br />aber mit mehr M&ouml;glichkeiten.<br /> Ist das Modul installiert, kann es ?ber die News - Administratorseite eingestellt werden.<br /> Dort k&ouml;nnen Kategorien selektiert oder neue angelegt werden.<br /> Wurde eine Kategorie selektiert oder angelegt wird eine der vorhandenen  Eintr&auml;ge angezeigt.<br /> Sie k&ouml;nnen an dieser Stelle Eintr&auml;ge hinzuf&uuml;gen, bearbeiten oder l&ouml;schen und zwar f&uuml;r diese Kategorie.</p>
 	<h3>Sicherheit</h3>
 	<p>Ein User kann das Modul nur administrieren, wenn er einer Gruppe angeh&ouml;rt, die das Recht 'Modify News' besitzt !</p>
 	<h3>Wie wird es eingesetzt ?</h3>
-	<p>Der einfachste Weg ist der Gebrauch in Verbindung mit dem cms_module tag.<br />
-           Damit wird das Modul automatisch in Ihrem Template oder Seite eingef&uuml;gt, wo auch immer Sie es w&uuml;schen.<br />
-           Der Code f&uuml;r den Tag  sieht in etwa so aus:<br /><br />
-           <code>{cms_module module="news" number="5" category="Meine Kategorie"}</code></p>
+	<p>Der einfachste Weg ist der Gebrauch in Verbindung mit dem cms_module tag.<br /> Damit wird das Modul automatisch in Ihrem Template oder Seite eingef&uuml;gt, wo auch immer Sie es w&uuml;schen.<br /> Der Code f&uuml;r den Tag  sieht in etwa so aus:<br /><br /> <code>{cms_module module="news" number="5" category="Meine Kategorie"}</code></p>
 	<h3>Welche Parameter gibt es ?</h3>
 	<p>
 	<ul>
