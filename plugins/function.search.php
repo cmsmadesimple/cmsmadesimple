@@ -25,11 +25,11 @@ function smarty_cms_function_search($params, &$smarty) {
 		$buttonText = $params['buttonText'];
 
 	return '<form method="get" action="http://www.google.com/search">
-	<input type="hidden" name="ie" value="utf-8">
-	<input type="hidden" name="oe" value="utf-8">
-	<input type="hidden" name="sitesearch" value="'.$domain.'">
-	<input type="text" id="textSearch" name="q" maxlength="255" value="">
-	<input type="submit" id="buttonSearch" value="'.$buttonText.'">
+	<input type="hidden" name="ie" value="utf-8" />
+	<input type="hidden" name="oe" value="utf-8" />
+	<input type="hidden" name="sitesearch" value="'.$domain.'" />
+	<input type="text" id="textSearch" name="q" maxlength="255" value="" />
+	<input type="submit" id="buttonSearch" value="'.$buttonText.'" />
 	</form>';
 
 }
