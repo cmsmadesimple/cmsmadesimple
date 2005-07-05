@@ -1,4 +1,4 @@
-Version 0.10 "Antigua" -- Subversion
+Version 0.10 "Antigua" -- Tue Jul 05 2005
 -----------------
 
 * Added dropdown of encodings to add/edit template pages
@@ -22,7 +22,6 @@ Konqueror
 * Fixed bug with inactive pages still being accessible by page id
 * Fixed encoding problems with editing title and menu text in content
 * Removed the redirect pages while logging in or out
-* Submitting site preferences redircts to an empty page now
 * Updated ADODB to 4.61
 * Updated Smarty to 2.6.9 (Jope)
 * Updated TinyMCE to 1.4.4

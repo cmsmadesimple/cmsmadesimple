@@ -43,8 +43,10 @@ $lang['sortascending'] = 'Organizar Ascendientemente';
 $lang['startdate'] = 'Fecha de Inicio';
 $lang['startrequiresend'] = 'Una fecha de inicio requiere una fecha final tambien';
 $lang['submit'] = 'Enviar';
+$lang['summary'] = 'Summary';
 $lang['summarytemplate'] = 'Plantilla de resumen';
 $lang['title'] = 'Titulo';
+$lang['useexpiration'] = 'Use Expiration Date';
 $lang['help'] = <<<EOF
 	<h3>Que hace esto?</h3>
 	<p>El modulo de noticias sirve para mostrar eventos de noticias en tu pagina, similar al estilo blog, excepto que tiene mas opciones! Cuandos e instala el modulo, se agrega una pagina de administracion de noticias al menu de abajo que te permitira seleccionar o agregar una categoria de noticias. Ya que una categoria es ceada o seleccionada, se mostrara una lista de noticias relacionadas con la categoria. Desde aqui, puedes agregar, editar o borrar noticias en la categoria correspondiente.</p>
