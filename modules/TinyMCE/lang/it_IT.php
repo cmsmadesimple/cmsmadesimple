@@ -1,12 +1,12 @@
 <?php
-$lang['stripbackgroundtags'] = 'Strip Background Tags From CSS';
-$lang['false'] = 'False';
-$lang['true'] = 'True';
-$lang['submit'] = 'Submit';
+$lang['stripbackgroundtags'] = 'Togli i tags background da CSS';
+$lang['false'] = 'Falso';
+$lang['true'] = 'Vero';
+$lang['submit'] = 'Inserisci';
 $lang['help'] = <<<EOF
-	<h3>What does this do?</h3>
-	<p>Enables TinyMCE to be used as a WYSIWYG.</p>
-	<h3>How do I use it?</h3>
-	<p>Install it, then go to User Preferences and Set TinyMCE  to be your wysiwyg of choice.</p>
+	<h3>Che cosa fa?</h3>
+	<p>Abilita TinyMCE per essere usato come WYSIWYG.</p>
+	<h3>Come usarlo?</h3>
+	<p>Installalo, poi vai a Preferenze Utente e configura TinyMCE per essere il tuo wysiwyg.</p>
 EOF;
 ?>
