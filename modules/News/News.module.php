@@ -299,6 +299,8 @@ Posted: {$entry->postdate|date_format}
 				# Setup detail template
 				$this->SetTemplate('displaydetail', $this->GetDetailHtmlTemplate());
 
+				$this->UpdateHierarchyPositions();
+
 				$current_version = "2.0";
 		}
 	}
@@ -1056,7 +1058,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
 				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
 				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
-				$this->smarty->assign_by_ref('statustext', $this->Lang('status'));
+				$this->smarty->assign_by_ref('statustext', lang('status'));
 				$this->smarty->assign_by_ref('useexpirationtext', $this->Lang('useexpiration'));
 				$this->smarty->assign_by_ref('startdatetext', $this->Lang('startdate'));
 				$this->smarty->assign_by_ref('enddatetext', $this->Lang('enddate'));
