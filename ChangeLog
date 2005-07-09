@@ -1,3 +1,9 @@
+Version 0.10.1
+-----------------
+
+* Fixed bug with phplayers not displaying correctly if the body tag
+of the template had any attributes
+
 Version 0.10 "Antigua" -- Tue Jul 05 2005
 -----------------
 
