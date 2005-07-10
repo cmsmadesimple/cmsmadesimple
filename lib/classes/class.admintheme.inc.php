@@ -708,7 +708,7 @@ class AdminTheme
              // base admin menu ---------------------------------------------------------
             'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
-                    'description'=>lang('admindescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
+                    'description'=>lang('admindescription'),'show_in_menu'=>true),
             'preferences'=>array('url'=>'editprefs.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminprefs')),
                     'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
@@ -726,7 +726,7 @@ class AdminTheme
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
             'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
-                    'description'=>lang('adminlogdescription'),'show_in_menu'=>true),
+                    'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
              // base view site menu ---------------------------------------------------------
             'viewsite'=>array('url'=>'../index.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('viewsite')),
