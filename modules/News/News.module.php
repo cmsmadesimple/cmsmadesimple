@@ -656,6 +656,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('parentdropdown', $this->CreateParentDropdown($id, -1, -1));
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 
 				break;
@@ -722,6 +723,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'catid', $catid));
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 
 				break;
@@ -827,20 +829,20 @@ Posted: {$entry->postdate|date_format}
 						if ($content != '')
 						{
 							$articleid = $db->GenID(cms_db_prefix()."module_news_seq");
-							$query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)';
+							$query = 'INSERT INTO '.cms_db_prefix().'module_news (news_id, news_category_id, news_title, news_data, summary, status, news_date, start_time, end_time, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?)';
 							if ($useexp == 1)
 							{
-								$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+								$db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), $db->DBTimeStamp($startdate), $db->DBTimeStamp($enddate), $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 							}
 							else
 							{
-								$db->Execute($query, array($articleid, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+								$db->Execute($query, array($articleid, $usedcategory, $title, $content, $summary, $status, $db->DBTimeStamp($postdate), NULL, NULL, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 							}
 
 							#foreach ($usedcategories as $onecategory)
 							#{
-								$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
-								$db->Execute($query, array($usedcategory, $articleid));
+							#	$query = 'INSERT INTO '.cms_db_prefix().'module_news_article_categories (news_category_id, news_id) VALUES (?,?)';
+							#	$db->Execute($query, array($usedcategory, $articleid));
 							#}
 
 							$this->Redirect($id, 'defaultadmin', $returnid);
@@ -888,7 +890,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 
-				$this->smarty->assign_by_ref('titetext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
 				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
 				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
 				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));

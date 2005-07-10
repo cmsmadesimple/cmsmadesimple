@@ -1,6 +1,7 @@
 Version 0.10.1
 -----------------
 
+* Fixed a few bugs with the News module
 * Fixed bug with phplayers not displaying correctly if the body tag
 of the template had any attributes
 

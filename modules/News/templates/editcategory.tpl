@@ -4,7 +4,7 @@
 		<p class="pageinput">{$inputname}</p>
 	</div>
 	<div class="pageoverflow">
-		<p class="pagetext">*Parent:</p>
+		<p class="pagetext">*{$parenttext}:</p>
 		<p class="pageinput">{$parentdropdown}</p>
 	</div>
 	<div class="pageoverflow">
