@@ -1,6 +1,7 @@
 Version 0.10.1
 -----------------
 
+* Fixed a bug where all users can't get to user preferences
 * Fixed a bug where css assocations did not get deleted when a
 template does
 * Fixed a few bugs with the css assocation page
