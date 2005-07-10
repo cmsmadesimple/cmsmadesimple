@@ -226,6 +226,9 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->db;
 
+		$query = "DELETE FROM ".cms_db_prefix()."css_assoc WHERE assoc_type = 'template' AND assoc_to_id = ?";
+		$dbresult = $db->Execute($query,array($id));
+
 		$query = "DELETE FROM ".cms_db_prefix()."templates where template_id = ?";
 		$dbresult = $db->Execute($query,array($id));
 
