@@ -55,6 +55,8 @@ $csslist = array();
 
 $type = "";
 
+$name = '';
+
 #******************************************************************************
 # we now get the parameters
 #******************************************************************************
@@ -70,13 +72,13 @@ else $error = lang('idnotvalid');
 if (isset($type) && "template" == $type) 
 {
 
-	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = $id";
-	$result = $db->Execute($query);
+	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+	$result = $db->Execute($query, array($id));
 
 	if ($result)
 	{
 		$line = $result->FetchRow();
-		$name = $line["template_name"];
+		$name = $line['template_name'];
 	}
 	else
 	{
@@ -93,25 +95,24 @@ if (isset($type) && "template" == $type)
 	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
-	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css
-		WHERE assoc_type=? AND assoc_to_id = ? AND assoc_css_id = css_id";
-	$result = $db->Execute($query, array($type,$id));
+	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ?";
+	$result = $db->Execute($query, array($type, $id));
 
 #******************************************************************************
 # displaying erros if any
 #******************************************************************************
-if (isset($_GET["message"]))
-{
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
-}
-if ("" != $error)
-{
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
-}
+	if (isset($_GET["message"]))
+	{
+		echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+	}
+	if ("" != $error)
+	{
+		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
+	}
 
-if (!$addasso) {
+	if (!$addasso) {
 		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addcssassociation')))."</p></div>";
-}
+	}
 
 #******************************************************************************
 # now really starting
@@ -188,17 +189,20 @@ else {
 
 	# this var contains the dropdown
 	$dropdown = "";
+	$result = '';
 
 	# we generate the dropdown
 	if ("" == $notinto)
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id ORDER BY css_name";
+		$result = $db->Execute($query);
 	}
 	else
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (?) ORDER BY css_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (SELECT assoc_css_id FROM ".cms_db_prefix()."css_assoc WHERE assoc_type = 'template' AND assoc_to_id = ?) ORDER BY css_name";
+		$result = $db->Execute($query, array($id));
 	}
-	$result = $db->Execute($query, array($notinto));
+
 
 	if ($result && $result->RowCount() > 0)
 	{
