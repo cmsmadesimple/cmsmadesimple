@@ -203,7 +203,7 @@ class Smarty_CMS extends Smarty {
 				{
 
 					#If it's regular content, do this...
-					$tpl_source = ereg_replace("\{content\}", $content, $tpl_source);
+					$tpl_source = eregi_replace("\{content\}", $content, $tpl_source);
 
 					// now do prerender
 					$tpl_source = $contentobj->ContentPreRender($tpl_source);
@@ -216,8 +216,8 @@ class Smarty_CMS extends Smarty {
 				}
 				else
 				{
-					$tpl_source = ereg_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
-					$tpl_source = ereg_replace("\{title\}", 'Page Not Found!', $tpl_source);
+					$tpl_source = eregi_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
+					$tpl_source = eregi_replace("\{title\}", 'Page Not Found!', $tpl_source);
 
 					if ($header_script && $header_script != '')
 					{
@@ -234,7 +234,7 @@ class Smarty_CMS extends Smarty {
 
 				#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
 				$safetycount = 0;
-				$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|";
+				$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|i";
 				while (1 == 1)
 				{
 					$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);

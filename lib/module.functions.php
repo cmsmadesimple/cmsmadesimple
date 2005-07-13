@@ -190,7 +190,7 @@ class Smarty_ModuleInterface extends Smarty {
 						}
 					}
 
-					$tpl_source = ereg_replace("\{content\}", $modoutput, $tpl_source);
+					$tpl_source = eregi_replace("\{content\}", $modoutput, $tpl_source);
 
 					#In case any lingering tags are coming in from the content
 					$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
@@ -205,7 +205,7 @@ class Smarty_ModuleInterface extends Smarty {
 
 			#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
 			$safetycount = 0;
-			$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|";
+			$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|i";
 			while (1 == 1)
 			{
 				$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);
