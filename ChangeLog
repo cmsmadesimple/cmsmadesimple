@@ -1,8 +1,10 @@
-Version 0.10.1
+Version 0.10.1 "Willoughby" -- Subversion
 -----------------
 
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
+* Changed logic of included htaccess so that html can be used
+as the default extension for friendly urls
 * Fixed a bug where IIS didn't always report QUERY_STRING, which
 would generate a warning message
 * Fixed a bug where all users can't get to user preferences

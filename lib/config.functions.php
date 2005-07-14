@@ -103,7 +103,7 @@ function cms_config_load($loadLocal = true)
 
 	$config["default_upload_permission"] = '664';
 	
-	$config["page_extension"] = ".shtml";
+	$config["page_extension"] = ".html";
 
 	$config["locale"] = "en_US";
 

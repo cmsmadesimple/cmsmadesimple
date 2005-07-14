@@ -7,4 +7,5 @@ php_flag session.use_trans_sid Off
 RewriteEngine On
 
 #Rewrites page.shtml as index.php?page
-RewriteRule ^(.+)\.shtml$ index.php?page=$1 [QSA]
+RewriteCond %{REQUEST_FILENAME} !-f [NC]
+RewriteRule ^(.+)\.html$ index.php?page=$1 [QSA]
