@@ -1055,7 +1055,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
 				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 
-				$this->smarty->assign_by_ref('titetext', $this->Lang('title'));
+				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
 				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
 				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
 				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
