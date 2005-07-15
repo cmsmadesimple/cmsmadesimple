@@ -83,7 +83,7 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('custom404template', $custom404template);
 		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
-		set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
+		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
 		audit(-1, '', 'Edited Site Preferences');
@@ -101,7 +101,7 @@ else if (isset($_POST["editsiteprefs"]))
 	$custom404template = get_site_preference('custom404template');
 	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
 	$sitedownmessage = get_site_preference('sitedownmessage');
-	$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
+	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_site_preference('useadvancedcss');
 	$logintheme = get_site_preference('logintheme', 'default');
 }
@@ -173,6 +173,7 @@ if ($message != "") {
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
 			<p class="pageinput"><textarea class="pagetextarea" name="sitedownmessage" cols="" rows=""><?php echo $sitedownmessage?></textarea></p>
 		</div>
+		<!--
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?>:</p>
 			<p class="pageinput">
@@ -191,6 +192,7 @@ if ($message != "") {
 			</select>
 			</p>
 		</div>
+		-->
   <?php
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
