@@ -1,6 +1,7 @@
 Version 0.10.1 "Willoughby" -- Subversion
 -----------------
 
+* Added ability to set a media type for a stylesheet
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used
@@ -12,6 +13,7 @@ would generate a warning message
 template does
 * Fixed a few bugs with the css assocation page
 * Fixed a few bugs with the News module
+* Fixed a bug where debug mode would cause a warning error
 * Fixed bug with phplayers not displaying correctly if the body tag
 of the template had any attributes
 * Fixed bug where custom 404 message didn't show existing value

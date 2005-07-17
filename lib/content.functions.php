@@ -126,7 +126,22 @@ class Smarty_CMS extends Smarty {
 			#If this fails, then it basically is a standard 404 error or a custom with no template
 			if (!($contentobj === FALSE && $templateobj === FALSE))
 			{
-				$stylesheet = '<link rel="stylesheet" type="text/css" href="'.$config['root_url'].'/stylesheet.php?templateid='.$template_id.'" />'; 
+				$stylesheet = '';
+
+				foreach (get_stylesheet_media_types($template_id) as $media)
+				{
+					$stylesheet .= '<link rel="stylesheet" type="text/css" ';
+					if ($media != '')
+					{
+						$stylesheet .= 'media="'.$media.'" ';
+					}
+					$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$template_id;
+					if ($media != '')
+					{
+						$stylesheet .= '&amp;mediatype='.urlencode($media);
+					}
+					$stylesheet .= '" />'."\n"; 
+				}
 
 				#Time to fill our template content
 				#If it's in print mode, then just create a simple stupid template

@@ -75,6 +75,7 @@ if ($page == "")
 	$page = ContentManager::GetDefaultContent();
 }
 
+$old_error_handler = '';
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
 {
 	$old_error_handler = set_error_handler("ErrorHandler404");
@@ -92,7 +93,7 @@ else
 	$html = $smarty->fetch('db:'.$page) . "\n";
 }
 
-if (get_site_preference('enablecustom404') == "0")
+if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
 {
 	set_error_handler($old_error_handler);
 }

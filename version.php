@@ -20,7 +20,7 @@
 
 $CMS_VERSION = "0.10.1-svn";
 $CMS_VERSION_NAME = "Willoughby";
-$CMS_SCHEMA_VERSION = "10";
+$CMS_SCHEMA_VERSION = "11";
 
 # vim:ts=4 sw=4 noet
 ?>

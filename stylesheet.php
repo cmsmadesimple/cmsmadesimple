@@ -21,11 +21,13 @@
 require_once(dirname(__FILE__)."/include.php");
 
 $templateid = "";
+$mediatype = '';
 $stripbackground = false;
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
+if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
 if (isset($_GET["stripbackground"])) $stripbackground = true;
 
-$result = get_stylesheet($templateid);
+$result = get_stylesheet($templateid, $mediatype);
 
 $css = $result['stylesheet']; 
 

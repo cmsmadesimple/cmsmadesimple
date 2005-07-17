@@ -59,6 +59,9 @@ if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
 $css_name = "";
 if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
 
+$media_type = '';
+if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
+
 #******************************************************************************
 # if the form was cancelled, we get back to the CSS list
 #******************************************************************************
@@ -123,10 +126,10 @@ if ($access)
 			$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
 
 			# we then generate the request
-			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, create_date, modified_date) VALUES ('$new_css_id', ".$db->qstr($css_name).", ".$db->qstr($css_text).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,?,?)";
 
 			# and execute it
-			$result = $db->Execute($query);
+			$result = $db->Execute($query,array($new_css_id, $css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 
 			# we now have to check that everything went well
 			if ($result)
@@ -183,6 +186,12 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
 			<p class="pageinput"><textarea class="pagetextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
+			<p class="pageinput">
+				<input type="text" name="media_type" maxlength="255" value="<?php echo $media_type?>" />				
+			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>

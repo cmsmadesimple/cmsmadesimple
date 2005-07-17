@@ -468,22 +468,13 @@ function set_preference($userid, $prefname, $value)
  *
  * @since 0.1
  */
-function get_stylesheet($template_id)
+function get_stylesheet($template_id, $media_type = '')
 {
 	$result = array();
 	$css = "";
 
 	global $gCms;
 	$db = $gCms->db;
-
-	#$query = "SELECT stylesheet, encoding FROM ".cms_db_prefix()."templates WHERE template_id = ".$template_id;
-	#$result = $db->Execute($query);
-
-	#if ($result && $result->RowCount() > 0) {
-	#	$line = $result->FetchRow();
-	#	$css = $line['stylesheet'];
-	#	header("Content-Type: text/html; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
-	#}
 
 	$templateobj = FALSE;
 
@@ -507,18 +498,22 @@ function get_stylesheet($template_id)
 			$result['encoding'] = get_encoding();
 		}
 
-		#Load in the "standard" template CSS
-		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
+		#Load in the "standard" template CSS if media type is empty
+		if ($media_type == '')
 		{
-			$css .= $templateobj->stylesheet;
+			if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
+			{
+				$css .= $templateobj->stylesheet;
+			}
 		}
 
 		#Handle "advanced" CSS Management
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
+		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
 			WHERE	css_id		= assoc_css_id
 			AND		assoc_type	= 'template'
-			AND		assoc_to_id = '".$template_id."'";
-		$cssresult = $db->Execute($cssquery);
+			AND		assoc_to_id = ?
+			AND		c.media_type = ?";
+		$cssresult = $db->Execute($cssquery, array($template_id, $media_type));
 
 		if ($cssresult && $cssresult->RowCount() > 0)
 		{
@@ -536,6 +531,47 @@ function get_stylesheet($template_id)
 
 	#$css = preg_replace("/[\r\n]/", "", $css); //hack for tinymce
 	$result['stylesheet'] = $css;
+
+	return $result;
+}
+
+function get_stylesheet_media_types($template_id)
+{
+	$result = array('');
+
+	global $gCms;
+	$db = $gCms->db;
+
+	$templateobj = FALSE;
+
+	#Grab template id and make sure it's actually "somewhat" valid
+	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
+	{
+		#Ok, it's valid, let's load the bugger
+		$templateobj = TemplateOperations::LoadTemplateById($template_id);
+	}
+
+	#If it's valid after loading, then start the process...
+	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
+	{
+		#Handle "advanced" CSS Management
+		$cssquery = "SELECT DISTINCT media_type FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
+			WHERE	css_id		= assoc_css_id
+			AND		assoc_type	= 'template'
+			AND		assoc_to_id = ?";
+		$cssresult = $db->Execute($cssquery, array($template_id));
+
+		if ($cssresult && $cssresult->RowCount() > 0)
+		{
+			while ($cssline = $cssresult->FetchRow())
+			{
+				if ($cssline['media_type'] != '')
+				{
+					array_push($result, $cssline['media_type']);
+				}
+			}
+		}
+	}
 
 	return $result;
 }

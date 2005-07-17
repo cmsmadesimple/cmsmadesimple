@@ -68,6 +68,9 @@ $css_id = -1;
 if (isset($_POST["css_id"])) $css_id = $_POST["css_id"];
 else if (isset($_GET["css_id"])) $css_id = $_GET["css_id"];
 
+$media_type = '';
+if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
+
 # if the form has beeen cancelled, we redirect
 if (isset($_POST["cancel"]))
 {
@@ -121,8 +124,8 @@ if ($access)
 #******************************************************************************
 		if ($validinfo)
 		{
-			$query = "UPDATE ".cms_db_prefix()."css SET css_name = ".$db->qstr($css_name).", css_text = ".$db->qstr($css_text).", modified_date = '".$db->DBTimeStamp(time())."' WHERE css_id = $css_id";
-			$result = $db->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
+			$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
 
 			if ($result)
 			{
@@ -178,6 +181,7 @@ if ($access)
 			$css_name		= $row["css_name"];
 			$orig_css_name	= $row["css_name"];
 			$css_text		= $row["css_text"];
+			$media_type		= $row["media_type"];
 		}
 		else
 		{
@@ -226,6 +230,12 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
 			<p class="pageinput"><textarea class="pagetextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
+			<p class="pageinput">
+				<input type="text" name="media_type" maxlength="255" value="<?php echo $media_type?>" />				
+			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
