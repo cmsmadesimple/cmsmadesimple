@@ -399,7 +399,7 @@ class UserOperations
 		$query = "DELETE FROM ".cms_db_prefix()."users where user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		$query = "DELETE FROM ".cms_db_prefix()."user_prefs where user_id = ?";
+		$query = "DELETE FROM ".cms_db_prefix()."userprefs where user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult !== false)
