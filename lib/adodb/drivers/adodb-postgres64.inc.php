@@ -1,6 +1,6 @@
 <?php
 /*
- V4.61 24 Feb 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+ V4.64 20 June 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -91,8 +91,8 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 	var $hasAffectedRows = true;
 	var $hasLimit = false;	// set to true for pgsql 7 only. support pgsql/mysql SELECT * FROM TABLE LIMIT 10
 	// below suggested by Freek Dijkstra 
-	var $true = 't';		// string that represents TRUE for a database
-	var $false = 'f';		// string that represents FALSE for a database
+	var $true = 'TRUE';		// string that represents TRUE for a database
+	var $false = 'FALSE';		// string that represents FALSE for a database
 	var $fmtDate = "Y-m-d";	// used by DBDate() as the default date format used by the database
 	var $fmtTimeStamp = "Y-m-d G:i:s"; // used by DBTimeStamp as the default timestamp fmt.
 	var $hasMoveFirst = true;
@@ -106,6 +106,7 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 							// http://bugs.php.net/bug.php?id=25404
 							
 	var $_bindInputArray = false; // requires postgresql 7.3+ and ability to modify database
+	var $disableBlobs = false; // set to true to disable blob checking, resulting in 2-5% improvement in performance.
 	
 	// The last (fmtTimeStamp is not entirely correct: 
 	// PostgreSQL also has support for time zones, 
@@ -176,10 +177,10 @@ a different OID if a database must be reloaded. */
 		return @pg_Exec($this->_connectionID, "begin");
 	}
 	
-	function RowLock($tables,$where) 
+	function RowLock($tables,$where,$flds='1 as ignore') 
 	{
 		if (!$this->transCnt) $this->BeginTrans();
-		return $this->GetOne("select 1 as ignore from $tables where $where for update");
+		return $this->GetOne("select $flds from $tables where $where for update");
 	}
 
 	// returns true/false. 
@@ -302,6 +303,14 @@ select viewname,'V' from pg_views where viewname like $mask";
 			case 'a':
 			case 'A':
 				$s .= 'AM';
+				break;
+				
+			case 'w':
+				$s .= 'D';
+				break;
+			
+			case 'l':
+				$s .= 'DAY';
 				break;
 				
 			default:
@@ -430,6 +439,7 @@ select viewname,'V' from pg_views where viewname like $mask";
 	global $ADODB_FETCH_MODE;
 	
 		$schema = false;
+		$false = false;
 		$this->_findschema($table,$schema);
 		
 		if ($normalize) $table = strtolower($table);
@@ -444,7 +454,6 @@ select viewname,'V' from pg_views where viewname like $mask";
 		$ADODB_FETCH_MODE = $save;
 		
 		if ($rs === false) {
-			$false = false;
 			return $false;
 		}
 		if (!empty($this->metaKeySQL)) {
@@ -469,12 +478,6 @@ select viewname,'V' from pg_views where viewname like $mask";
 		if (!empty($this->metaDefaultsSQL)) {
 			$ADODB_FETCH_MODE = ADODB_FETCH_ASSOC;
 			$sql = sprintf($this->metaDefaultsSQL, ($table));
-			global $gCms;
-			global $sql_queries;
-			if ($gCms->config["debug"] == true)
-			{
-				$sql_queries .= "<p>$sql</p>\n";
-			}
 			$rsdef = $this->Execute($sql);
 			if (isset($savem)) $this->SetFetchMode($savem);
 			$ADODB_FETCH_MODE = $save;
@@ -517,16 +520,16 @@ select viewname,'V' from pg_views where viewname like $mask";
 			}
 
 			//Freek
-			if ($rs->fields[4] == $this->true) {
+			if ($rs->fields[4] == 't') {
 				$fld->not_null = true;
 			}
 			
 			// Freek
 			if (is_array($keys)) {
 				foreach($keys as $key) {
-					if ($fld->name == $key['column_name'] AND $key['primary_key'] == $this->true) 
+					if ($fld->name == $key['column_name'] AND $key['primary_key'] == 't') 
 						$fld->primary_key = true;
-					if ($fld->name == $key['column_name'] AND $key['unique_key'] == $this->true) 
+					if ($fld->name == $key['column_name'] AND $key['unique_key'] == 't') 
 						$fld->unique = true; // What name is more compatible?
 				}
 			}
@@ -537,7 +540,10 @@ select viewname,'V' from pg_views where viewname like $mask";
 			$rs->MoveNext();
 		}
 		$rs->Close();
-		return empty($retarr) ? false : $retarr;	
+		if (empty($retarr))
+			return  $false;
+		else
+			return $retarr;	
 		
 	}
 
@@ -624,6 +630,7 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 				if ($host[0]) $str = "host=".adodb_addslashes($host[0]);
 				else $str = 'host=localhost';
 				if (isset($host[1])) $str .= " port=$host[1]";
+				else if (!empty($this->port)) $str .= " port=".$this->port;
 			}
 		   		if ($user) $str .= " user=".$user;
 		   		if ($pwd)  $str .= " password=".$pwd;
@@ -698,13 +705,6 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 			
 			if ($execp) $exsql = "EXECUTE $plan ($execp)";
 			else $exsql = "EXECUTE $plan";
-
-			global $gCms;
-			global $sql_queries;
-			if ($gCms->config["debug"] == true)
-			{
-				$sql_queries .= "<p>$exsql</p>\n";
-			}
 			
 			$rez = @pg_exec($this->_connectionID,$exsql);
 			if (!$rez) {
@@ -730,13 +730,6 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 				}
 				$s = "PREPARE $plan ($params) AS ".substr($sql,0,strlen($sql)-2);		
 				//adodb_pr($s);
-				global $gCms;
-				global $sql_queries;
-				if ($gCms->config["debug"] == true)
-				{
-					$sql_queries .= "<p>$s</p>\n";
-				}
-
 				pg_exec($this->_connectionID,$s);
 				echo $this->ErrorMsg();
 			}
@@ -745,12 +738,6 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 		} else {
 			$this->_errorMsg = false;
 			//adodb_backtrace();
-			global $gCms;
-			global $sql_queries;
-			if ($gCms->config["debug"] == true)
-			{
-				$sql_queries .= "<p>$sql</p>\n";
-			}
 			$rez = pg_exec($this->_connectionID,$sql);
 		}
 		// check if no data returned, then no need to create real recordset
@@ -870,6 +857,8 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 		$this->_numOfFields = @pg_numfields($qid);
 		
 		// cache types for blob decode check
+		// apparently pg_fieldtype actually performs an sql query on the database to get the type.
+		if (empty($this->connection->noBlobs))
 		for ($i=0, $max = $this->_numOfFields; $i < $max; $i++) {  
 			if (pg_fieldtype($qid,$i) == 'bytea') {
 				$this->_blobArr[$i] = pg_fieldname($qid,$i);
@@ -954,7 +943,7 @@ class ADORecordSet_postgres64 extends ADORecordSet{
 
 		$this->fields = @pg_fetch_array($this->_queryID,$this->_currentRow,$this->fetchMode);
 		
-	if ($this->fields && isset($this->_blobArr)) $this->_fixblobs();
+		if ($this->fields && isset($this->_blobArr)) $this->_fixblobs();
 			
 		return (is_array($this->fields));
 	}

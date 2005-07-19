@@ -1,6 +1,6 @@
 <?php
 /*
-V4.61 24 Feb 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.64 20 June 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -18,13 +18,15 @@ Based on adodb 3.40
 
 if (! defined("_ADODB_MYSQLI_LAYER")) {
  define("_ADODB_MYSQLI_LAYER", 1 );
+ 
+ if (!defined('MYSQLI_READ_DEFAULT_GROUP')) define('MYSQLI_READ_DEFAULT_GROUP',1);
 
  // disable adodb extension - currently incompatible.
  global $ADODB_EXTENSION; $ADODB_EXTENSION = false;
 
 class ADODB_mysqli extends ADOConnection {
 	var $databaseType = 'mysqli';
-	var $dataProvider = 'mysql';
+	var $dataProvider = 'native';
 	var $hasInsertID = true;
 	var $hasAffectedRows = true;	
 	var $metaTablesSQL = "SHOW TABLES";	
@@ -36,7 +38,7 @@ class ADODB_mysqli extends ADOConnection {
 	var $isoDates = true; // accepts dates in ISO format
 	var $sysDate = 'CURDATE()';
 	var $sysTimeStamp = 'NOW()';
-	var $hasTransactions = false;
+	var $hasTransactions = true;
 	var $forceNewConnect = false;
 	var $poorAffectedRows = true;
 	var $clientFlags = 0;
@@ -45,6 +47,7 @@ class ADODB_mysqli extends ADOConnection {
 	var $socket = false;
 	var $_bindInputArray = false;
 	var $nameQuote = '`';		/// string to use to quote identifiers and names
+	var $optionFlags = array(array(MYSQLI_READ_DEFAULT_GROUP,0));
 	
 	function ADODB_mysqli() 
 	{			
@@ -73,29 +76,33 @@ class ADODB_mysqli extends ADOConnection {
 				ADOConnection::outp("mysqli_init() failed : "  . $this->ErrorMsg());
 	      return false;
 	    }
-	    // Set connection options
-	    // Not implemented now
-	    // mysqli_options($this->_connection,,);
- 	    if (mysqli_real_connect($this->_connectionID,
+		/*
+		I suggest a simple fix which would enable adodb and mysqli driver to
+		read connection options from the standard mysql configuration file
+		/etc/my.cnf - "Bastien Duclaux" <bduclaux#yahoo.com>
+		*/
+		foreach($this->optionFlags as $arr) {	
+			mysqli_options($this->_connectionID,$arr[0],$arr[1]);
+		}
+
+		$ok = mysqli_real_connect($this->_connectionID,
  				    $argHostname,
  				    $argUsername,
  				    $argPassword,
  				    $argDatabasename,
 					$this->port,
 					$this->socket,
-					$this->clientFlags))
- 	      {
- 		if ($argDatabasename)  return $this->SelectDB($argDatabasename);
-		  
-		
- 		return true;
- 	   }
- 	    else {
+					$this->clientFlags);
+ 	     
+		if ($ok) {
+	 		if ($argDatabasename)  return $this->SelectDB($argDatabasename);
+ 			return true;
+ 	   } else {
 			if ($this->debug) 
 		  		ADOConnection::outp("Could't connect : "  . $this->ErrorMsg());
 			return false;
-	      }
-	  }
+	   }
+	}
 	
 	// returns true or false
 	// How to force a persistent connection
@@ -164,7 +171,7 @@ class ADODB_mysqli extends ADOConnection {
 	// ensure that the variable is not quoted twice, once by qstr and once 
 	// by the magic_quotes_gpc.
 	//
-	//Eg. $s = $db->qstr(HTTP_GET_VARS['name'],get_magic_quotes_gpc());
+	//Eg. $s = $db->qstr(_GET['name'],get_magic_quotes_gpc());
 	function qstr($s, $magic_quotes = false)
 	{
 		if (!$magic_quotes) {
@@ -251,6 +258,7 @@ class ADODB_mysqli extends ADOConnection {
 		// save old fetch mode
 		global $ADODB_FETCH_MODE;
 		
+		$false = false;
 		$save = $ADODB_FETCH_MODE;
 		$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
 		if ($this->fetchMode !== FALSE) {
@@ -267,7 +275,7 @@ class ADODB_mysqli extends ADOConnection {
 		$ADODB_FETCH_MODE = $save;
 		
 		if (!is_object($rs)) {
-		        return FALSE;
+		        return $false;
 		}
 		
 		$indexes = array ();
@@ -352,6 +360,14 @@ class ADODB_mysqli extends ADOConnection {
 			case 'A':
 				$s .= '%p';
 				break;
+			
+			case 'w':
+				$s .= '%w';
+				break;
+				
+			case 'l':
+				$s .= '%W';
+				break;
 				
 			default:
 				
@@ -389,11 +405,28 @@ class ADODB_mysqli extends ADOConnection {
 		return "from_unixtime(unix_timestamp($date)+($dayFraction)*24*3600)";
 	}
 	
+	function &MetaTables($ttype=false,$showSchema=false,$mask=false) 
+	{	
+		$save = $this->metaTablesSQL;
+		if ($showSchema && is_string($showSchema)) {
+			$this->metaTablesSQL .= " from $showSchema";
+		}
+		
+		if ($mask) {
+			$mask = $this->qstr($mask);
+			$this->metaTablesSQL .= " like $mask";
+		}
+		$ret =& ADOConnection::MetaTables($ttype,$showSchema);
+		
+		$this->metaTablesSQL = $save;
+		return $ret;
+	}
 	
  	function &MetaColumns($table) 
 	{
+		$false = false;
 		if (!$this->metaColumnsSQL)
-			return false;
+			return $false;
 		
 		global $ADODB_FETCH_MODE;
 		$save = $ADODB_FETCH_MODE;
@@ -404,7 +437,7 @@ class ADODB_mysqli extends ADOConnection {
 		if (isset($savem)) $this->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
 		if (!is_object($rs))
-			return false;
+			return $false;
 		
 		$retarr = array();
 		while (!$rs->EOF) {
@@ -481,6 +514,7 @@ class ADODB_mysqli extends ADOConnection {
 			      $secs = 0)
 	{
 		$offsetStr = ($offset >= 0) ? "$offset," : '';
+		if ($nrows < 0) $nrows = '18446744073709551615';
 		
 		if ($secs)
 			$rs =& $this->CacheExecute($secs, $sql . " LIMIT $offsetStr$nrows" , $inputarr , $arg3);
@@ -524,14 +558,12 @@ class ADODB_mysqli extends ADOConnection {
 			$ret = mysqli_stmt_execute($stmt);
 			return $ret;
 		}
-
-		global $gCms;
-		global $sql_queries;
-		if ($gCms->config["debug"] == true)
-		{
-			$sql_queries .= "<p>$sql</p>\n";
-		}
-
+               global $gCms;
+               global $sql_queries;
+               if ($gCms->config["debug"] == true)
+               {
+                       $sql_queries .= "<p>$sql</p>\n";
+               }
 		if (!$mysql_res =  mysqli_query($this->_connectionID, $sql, ($ADODB_COUNTRECS) ? MYSQLI_STORE_RESULT : MYSQLI_USE_RESULT)) {
 		    if ($this->debug) ADOConnection::outp("Query: " . $sql . " failed. " . $this->ErrorMsg());
 		    return false;
@@ -741,13 +773,13 @@ class ADORecordSet_mysqli extends ADORecordSet{
 		
 		 $len = -1; // mysql max_length is not accurate
 		 switch (strtoupper($t)) {
-		/* case 'STRING': 
+		 case 'STRING': 
 		 case 'CHAR':
 		 case 'VARCHAR': 
 		 case 'TINYBLOB': 
 		 case 'TINYTEXT': 
 		 case 'ENUM': 
-		 case 'SET': */
+		 case 'SET': 
 		
 		case MYSQLI_TYPE_TINY_BLOB :
 		case MYSQLI_TYPE_CHAR :
@@ -757,34 +789,34 @@ class ADORecordSet_mysqli extends ADORecordSet{
 		case 253 :
 		   if ($len <= $this->blobSize) return 'C';
 		   
-		/*case 'TEXT':
+		case 'TEXT':
 		case 'LONGTEXT': 
-		case 'MEDIUMTEXT':*/
+		case 'MEDIUMTEXT':
 		   return 'X';
 		
 		
 		   // php_mysql extension always returns 'blob' even if 'text'
 		   // so we have to check whether binary...
-		/*case 'IMAGE':
+		case 'IMAGE':
 		case 'LONGBLOB': 
 		case 'BLOB':
-		case 'MEDIUMBLOB':*/
+		case 'MEDIUMBLOB':
 		
 		case MYSQLI_TYPE_BLOB :
 		case MYSQLI_TYPE_LONG_BLOB :
 		case MYSQLI_TYPE_MEDIUM_BLOB :
 		
 		   return !empty($fieldobj->binary) ? 'B' : 'X';
-		/*case 'YEAR':
-		case 'DATE': */
+		case 'YEAR':
+		case 'DATE': 
 		case MYSQLI_TYPE_DATE :
 		case MYSQLI_TYPE_YEAR :
 		
 		   return 'D';
 		
-		/*case 'TIME':
+		case 'TIME':
 		case 'DATETIME':
-		case 'TIMESTAMP':*/
+		case 'TIMESTAMP':
 		
 		case MYSQLI_TYPE_DATETIME :
 		case MYSQLI_TYPE_NEWDATE :
@@ -793,13 +825,13 @@ class ADORecordSet_mysqli extends ADORecordSet{
 		
 			return 'T';
 		
-		/*case 'INT': 
+		case 'INT': 
 		case 'INTEGER':
 		case 'BIGINT':
 		case 'TINYINT':
 		case 'MEDIUMINT':
 		case 'SMALLINT': 
-		*/
+		
 		case MYSQLI_TYPE_INT24 :
 		case MYSQLI_TYPE_LONG :
 		case MYSQLI_TYPE_LONGLONG :
@@ -810,7 +842,7 @@ class ADORecordSet_mysqli extends ADORecordSet{
 		   
 		   return 'I';
 		
-		/*
+		
 		   // Added floating-point types
 		   // Maybe not necessery.
 		 case 'FLOAT':
@@ -818,9 +850,9 @@ class ADORecordSet_mysqli extends ADORecordSet{
 		   //		case 'DOUBLE PRECISION':
 		 case 'DECIMAL':
 		 case 'DEC':
-		 case 'FIXED':*/
+		 case 'FIXED':
 		 default:
-		 	if (!is_numeric($t)) echo "<p>--- Error in type matching $t -----</p>"; 
+		 	//if (!is_numeric($t)) echo "<p>--- Error in type matching $t -----</p>"; 
 		 	return 'N';
 		}
 	} // function

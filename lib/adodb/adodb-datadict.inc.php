@@ -1,7 +1,7 @@
 <?php
 
 /**
-  V4.61 24 Feb 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+  V4.64 20 June 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -171,6 +171,7 @@ class ADODB_DataDict {
 	var $dropCol = ' DROP COLUMN';
 	var $renameColumn = 'ALTER TABLE %s RENAME COLUMN %s TO %s';	// table, old-column, new-column, column-definitions (not used by default)
 	var $nameRegex = '\w';
+	var $nameRegexBrackets = 'a-zA-Z0-9_\(\)';
 	var $schema = false;
 	var $serverInfo = array();
 	var $autoIncrement = false;
@@ -218,7 +219,7 @@ class ADODB_DataDict {
 		return ADORecordSet::MetaType($t,$len,$fieldobj);
 	}
 	
-	function NameQuote($name = NULL)
+	function NameQuote($name = NULL,$allowBrackets=false)
 	{
 		if (!is_string($name)) {
 			return FALSE;
@@ -238,7 +239,9 @@ class ADODB_DataDict {
 		}
 		
 		// if name contains special characters, quote it
-		if ( !preg_match('/^[' . $this->nameRegex . ']+$/', $name) ) {
+		$regex = ($allowBrackets) ? $this->nameRegexBrackets : $this->nameRegex;
+		
+		if ( !preg_match('/^[' . $regex . ']+$/', $name) ) {
 			return $quote . $name . $quote;
 		}
 		
@@ -319,7 +322,8 @@ class ADODB_DataDict {
 		}
 		
 		foreach($flds as $key => $fld) {
-			$flds[$key] = $this->NameQuote($fld);
+			# some indexes can use partial fields, eg. index first 32 chars of "name" with NAME(32)
+			$flds[$key] = $this->NameQuote($fld,$allowBrackets=true);
 		}
 		
 		return $this->_IndexSQL($this->NameQuote($idxname), $this->TableName($tabname), $flds, $this->_Options($idxoptions));
@@ -565,7 +569,7 @@ class ADODB_DataDict {
 				} else {
 					$fdefault = $this->connection->sysDate;
 				}
-			} else if (strlen($fdefault) && !$fnoquote)
+			} else if ($fdefault !== false && !$fnoquote)
 				if ($ty == 'C' or $ty == 'X' or 
 					( substr($fdefault,0,1) != "'" && !is_numeric($fdefault)))
 					if (strlen($fdefault) != 1 && substr($fdefault,0,1) == ' ' && substr($fdefault,strlen($fdefault)-1) == ' ') 
@@ -713,7 +717,10 @@ class ADODB_DataDict {
 		if ($this->connection->fetchMode !== false) $savem = $this->connection->SetFetchMode(false);
 		
 		// check table exists
+		$save_handler = $this->connection->raiseErrorFn;
+		$this->connection->raiseErrorFn = '';
 		$cols = &$this->MetaColumns($tablename);
+		$this->connection->raiseErrorFn = $save_handler;
 		
 		if (isset($savem)) $this->connection->SetFetchMode($savem);
 		$ADODB_FETCH_MODE = $save;
