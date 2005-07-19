@@ -31,47 +31,82 @@
  */
 function redirect($to, $noappend=false)
 {
-	global $gCms;
-	$config = $gCms->config;
+    global $gCms;
+    $config = $gCms->config;
 
-	$schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
-	$host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
-	if (ini_get("session.use_trans_sid") != "0" && $noappend == false)
-	{
-		$to = $to."?".session_name()."=".session_id();
-	}
-	if (headers_sent())
-	{
-		// use javascript instead
-		echo '<script type="text/javascript">
-			<!--
-				location.replace("'.$url.'");
-			// -->
-			</script>
-			<noscript>
-				<meta http-equiv="Refresh" content="0;URL='.$url.'">
-			</noscript>';
-		exit;
+    $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
+    $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
 
-	}
-	else
-	{
-		if (isset($config) and $config['debug'] == true)
-		{
-			echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
-			echo "<a href=\"".$to."\">".$to."</a><br />";
-			global $sql_queries;
-			if (isset($sql_queries))
-			{
-				echo $sql_queries;
-			}
-			exit();
-		}
-		else
-		{
-			header("Location: $to");
-			exit();
-		}
+    $components = parse_url($to);
+    if(count($components) > 0)
+    {
+        $to =  (isset($components['scheme']) ? $components['scheme'] : $schema) . '://';
+        $to .= isset($components['host']) ? $components['host'] : $host;
+        $to .= isset($components['port']) ? ':' . $components['port'] : '';
+        if(isset($components['path']))
+        {
+            if(in_array(substr($components['path'],0,1),array('\\','/')))//Path is absolute, just append.
+            {
+                $to .= $components['path'];
+            }
+            else//Path is relative, append current directory first.
+            {
+                $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
+            }
+        }
+        $to .= isset($components['query']) ? '?' . $components['query'] : '';
+        $to .= isset($components['fragment']) ? '#' . $components['fragment'] : '';
+    }
+    else
+    {
+        $to = $schema."://".$host."/".$to;
+    }
+
+    //If session trans-id is being used, and they is on yo website, add it.
+    if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
+    {
+        if(strpos($to,'?') !== false)//If there are no arguments start a querystring
+        {
+            $to = $to."?".session_name()."=".session_id();
+        }
+        else//There are arguments, print an arg seperator
+        {
+            $to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
+        }
+    }
+
+    if (headers_sent())
+    {
+        // use javascript instead
+        echo '<script type="text/javascript">
+            <!--
+                location.replace("'.$url.'");
+            // -->
+            </script>
+            <noscript>
+                <meta http-equiv="Refresh" content="0;URL='.$url.'">
+            </noscript>';
+        exit;
+
+    }
+    else
+    {
+        if (isset($config) and $config['debug'] == true)
+        {
+            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+            echo "<a href=\"".$to."\">".$to."</a><br />";
+            global $sql_queries;
+            if (isset($sql_queries))
+            {
+                echo $sql_queries;
+            }
+            exit();
+        }
+        else
+        {
+            header("Location: $to");
+            exit();
+        }
 	}
 }
 

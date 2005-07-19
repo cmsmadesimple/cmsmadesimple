@@ -6,6 +6,7 @@ Version 0.10.1 "Willoughby" -- Subversion
 insensitive
 * Changed logic of included htaccess so that html can be used
 as the default extension for friendly urls
+* Fixed a bug where IIS users couldn't login correctly
 * Fixed a bug where IIS didn't always report QUERY_STRING, which
 would generate a warning message
 * Fixed a bug where all users can't get to user preferences
@@ -14,6 +15,7 @@ template does
 * Fixed a few bugs with the css assocation page
 * Fixed a few bugs with the News module
 * Fixed a bug where debug mode would cause a warning error
+* Fixed bug where deleting a user didn't delete their preferences
 * Fixed bug with phplayers not displaying correctly if the body tag
 of the template had any attributes
 * Fixed bug where custom 404 message didn't show existing value
