@@ -67,11 +67,11 @@ function redirect($to, $noappend=false)
     {
         if(strpos($to,'?') !== false)//If there are no arguments start a querystring
         {
-            $to = $to."?".session_name()."=".session_id();
+            //$to = $to."?".session_name()."=".session_id();
         }
         else//There are arguments, print an arg seperator
         {
-            $to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
+            //$to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
         }
     }
 
