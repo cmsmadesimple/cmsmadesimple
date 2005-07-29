@@ -2,6 +2,8 @@ Version 0.10.1 "Willoughby" -- Subversion
 -----------------
 
 * Added ability to set a media type for a stylesheet
+* Added some database checks to installer.  Should help to
+stop some install problems people are having.
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used
