@@ -346,9 +346,30 @@ function showPageFour($sqlloaded = 0) {
 
 		if (!$result)
 		{
-			showPageThree('Cound not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
+			showPageThree('Could not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
 			return;
 		}
+
+		//Try to create and drop a dummy table (with appropriate prefix)
+		@$db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
+		$result = $db->Execute('CREATE TABLE ' . $db_prefix . 'dummyinstall (i int)');
+		if ($result)
+		{
+			$result = $db->Execute('DROP TABLE ' . $db_prefix . 'dummyinstall');
+			if (!$result)
+			{
+				//could not drop table
+				showPageThree('Could not drop a table.  Verify that the user has privileges to drop tables in the given database.');
+				return;
+			}
+		}
+		else
+		{
+			//could not create table
+			showPageThree('Could not create a table.  Verify that the user has privileges to create tables in the given database.');
+			return;
+		}
+
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 		$CMS_INSTALL_DROP_TABLES=1;
