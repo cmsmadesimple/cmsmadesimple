@@ -234,9 +234,13 @@ there will be no other way to login to your CMS Made Simple admin system without
 
 } ## showPageTwo()
 
-function showPageThree()
+function showPageThree($errorMessage='')
 {
 
+	if ($errorMessage != '')
+	{
+		echo "<p class=\"error\">$errorMessage</p>";
+	}
 # Do check that username and password are filled out.
 # Skip back to showPageTwo() if necessary
 # Put given variables into hidden fields so they can up UPDATEd later on in step 4 (post schema install)
@@ -280,39 +284,40 @@ Please complete the following fields:
 	<TD>Database Type:</TD>
 	<TD>
 		<SELECT NAME="dbms">
-			<OPTION VALUE="mysql">MySQL (3 and 4.0)</OPTION>
-			<OPTION VALUE="mysqli">MySQL (4.1+)</OPTION>
-			<OPTION VALUE="postgres7">PostgreSQL 7/8</OPTION>
+			<OPTION VALUE="mysql" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysql'?'selected="selected"':'') ?>>MySQL (3 and 4.0)</OPTION>
+			<OPTION VALUE="mysqli" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysqli'?'selected="selected"':'') ?>>MySQL (4.1+)</OPTION>
+			<OPTION VALUE="postgres7" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'postgres7'?'selected="selected"':'') ?>>PostgreSQL 7/8</OPTION>
 		</SELECT>
 	</TD>
 </TR>
 <TR CLASS="row1">
 <TD>Database host address</TD>
-<TD><INPUT TYPE="text" NAME="host" VALUE="localhost" LENGTH="20" MAXLENGTH="50" /></TD>
+<TD><INPUT TYPE="text" NAME="host" VALUE="<?php echo (isset($_POST['host'])?$_POST['host']:'localhost') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
 <TR CLASS="row2">
 <TD>Database host port</TD>
-<TD><INPUT TYPE="text" NAME="port" VALUE="3306" LENGTH="20" MAXLENGTH="50" /></TD>
+<TD><INPUT TYPE="text" NAME="port" VALUE="<?php echo (isset($_POST['port'])?$_POST['port']:'3306') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
 <TR CLASS="row1">
 <TD>Database name</TD>
-<TD><INPUT TYPE="text" NAME="database" VALUE="cms" LENGTH="20" MAXLENGTH="50" /></TD>
+<TD><INPUT TYPE="text" NAME="database" VALUE="<?php echo (isset($_POST['database'])?$_POST['database']:'cms') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
 <TR CLASS="row2">
 <TD>Username</TD>
-<TD><INPUT TYPE="text" NAME="username" VALUE="cms_user" LENGTH="20" MAXLENGTH="50" /></TD>
+<TD><INPUT TYPE="text" NAME="username" VALUE="<?php echo (isset($_POST['username'])?$_POST['username']:'cms_user') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
 <TR CLASS="row1">
 <TD>Password</TD>
-<TD><INPUT TYPE="password" NAME="password" VALUE="cms_pass" LENGTH="20" MAXLENGTH="50" /></TD>
+<TD><INPUT TYPE="password" NAME="password" VALUE="<?php echo (isset($_POST['password'])?$_POST['password']:'cms_pass') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
 <TR CLASS="row2">
 <TD>Table prefix</TD>
-<TD><INPUT TYPE="text" NAME="prefix" VALUE="cms_" LENGTH="20" MAXLENGTH="50" />
+<TD><INPUT TYPE="text" NAME="prefix" VALUE="<?php echo (isset($_POST['prefix'])?$_POST['prefix']:'cms_') ?>" LENGTH="20" MAXLENGTH="50" />
 <INPUT TYPE="hidden" NAME="page" VALUE="4" />
 <input type="hidden" name="adminusername" value="<?php echo $adminusername ?>" />
 <input type="hidden" name="adminemail" value="<?php echo $adminemail ?>" />
 <input type="hidden" name="adminpassword" value="<?php echo $adminpassword ?>" />
+<input type="hidden" name="adminpasswordagain" value="<?php echo $adminpassword ?>" />
 </TD>
 </TR>
 <TR CLASS="row1">
@@ -335,11 +340,15 @@ function showPageFour($sqlloaded = 0) {
 
 		$db = &ADONewConnection($_POST['dbms']);
 		#$db->debug = true;
-		$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
+		$result = @$db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
 
 		$db_prefix = $_POST['prefix'];
 
-		if (!$result) die("Connection failed");
+		if (!$result)
+		{
+			showPageThree('Cound not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
+			return;
+		}
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 		$CMS_INSTALL_DROP_TABLES=1;
