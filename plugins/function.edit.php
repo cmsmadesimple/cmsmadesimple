@@ -20,14 +20,11 @@ function smarty_cms_function_edit($params, &$smarty)
 {
 	global $gCms;
 		
-		$userid = get_userid(false);
-		if(!$userid) return;
-	
-		$access = check_permission($userid, 'Modify Any Page');
-		if (!$access) return;
-		
-	
-	
+	$userid = get_userid(false);
+	if(!$userid) return;
+
+	$access = check_permission($userid, 'Modify Any Page');
+	if (!$access) return;
 
 	$text = 'Edit This Page';
 
@@ -39,11 +36,11 @@ function smarty_cms_function_edit($params, &$smarty)
 	//will this work if using htaccess? (Yes! -Wishy)
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="/admin/editcontent.php?content_id='.$gCms->variables['page_id'].'&amp;print=true"><img border="0" src="/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->variables['root_url'].'/admin/editcontent.php?content_id='.$gCms->variables['page_id'].'&amp;print=true"><img border="0" src="/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="/admin/editcontent.php?content_id='.$gCms->variables['page_id'].'&amp;print=true">'.$text.'</a>';
+		return '<a href="'.$gCms->variables['root_url'].'/admin/editcontent.php?content_id='.$gCms->variables['page_id'].'&amp;print=true">'.$text.'</a>';
 	}
 }
 
