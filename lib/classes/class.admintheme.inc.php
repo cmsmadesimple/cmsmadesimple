@@ -1155,6 +1155,7 @@ class AdminTheme
     function DisplayHTMLHeader()
     {
 ?><head>
+<meta name="robots" content="noindex, nofollow" />
 <title><?php echo $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <!--[if IE]>

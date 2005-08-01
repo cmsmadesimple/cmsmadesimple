@@ -284,7 +284,7 @@ $tabnames = $contentobj->TabNames();
 	}
 	?>
 	<div style="clear: both;"></div>
-	<form method="post" action="editcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" action="editcontent.php" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" /> 	                  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 	<div id="page_content">
 		<?php

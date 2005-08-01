@@ -252,7 +252,7 @@ $tabnames = $contentobj->TabNames();
 	}
 	?>
 	<div style="clear: both;"></div>
-	<form method="post" action="addcontent.php" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>			
+	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>			
 	<div id="page_content">
 		<?php
 		$numberoftabs = count($tabnames);
