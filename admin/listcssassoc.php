@@ -194,13 +194,13 @@ else {
 	# we generate the dropdown
 	if ("" == $notinto)
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id ORDER BY css_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
 		$result = $db->Execute($query);
 	}
 	else
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (SELECT assoc_css_id FROM ".cms_db_prefix()."css_assoc WHERE assoc_type = 'template' AND assoc_to_id = ?) ORDER BY css_name";
-		$result = $db->Execute($query, array($id));
+		$result = $db->Execute($query, $id);
 	}
 
 

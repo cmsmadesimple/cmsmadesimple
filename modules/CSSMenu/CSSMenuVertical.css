@@ -1,0 +1,59 @@
+ul.cssmenu-vertical,
+ul.cssmenu-vertical ul {
+  margin: 0;
+  padding: 0;
+  width: 120px; /* Width of Menu Items */
+  border-bottom: 1px solid #ccc;
+  background: #fff; /* IE6 Bug */
+  font-size: 100%;
+  }
+
+ul.cssmenu-vertical li {
+  position: relative;
+  list-style: none;
+  }
+
+ul.cssmenu-vertical li a {
+  display: block;
+  text-decoration: none;
+  color: #777;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  }
+
+/* Fix IE. Hide from IE Mac \*/
+* html ul.cssmenu-vertical li { float: left; height: 1%; }
+* html ul.cssmenu-vertical li a { height: 1%; }
+/* End */
+
+ul.cssmenu-vertical ul {
+  position: absolute;
+  display: none;
+  left: 119px; /* Set 1px less than menu width */
+  top: 0;
+  }
+
+ul.cssmenu-vertical li ul li a { padding: 2px 5px; } /* Sub Menu Styles */
+
+ul.cssmenu-vertical li:hover ul ul,
+ul.cssmenu-vertical li:hover ul ul ul,
+ul.cssmenu-vertical li.over ul ul,
+ul.cssmenu-vertical li.over ul ul ul { display: none; } /* Hide sub-menus initially */
+
+ul.cssmenu-vertical li:hover ul,
+ul.cssmenu-vertical li li:hover ul,
+ul.cssmenu-vertical li li li:hover ul,
+ul.cssmenu-vertical li.over ul,
+ul.cssmenu-vertical li li.over ul,
+ul.cssmenu-vertical li li li.over ul { display: block; } /* The magic */
+
+.cssmenu-vertical ul, ul.cssmenu-vertical li.menuparent { background: transparent url(modules/CSSMenu/images/arrow.gif) right center no-repeat; }
+/* fixed image flicker by adding .cssmenu-vertical ul */
+
+ul.cssmenu-vertical li.menuparent:hover,
+ul.cssmenu-vertical li.over { background-color: #f9f9f9; }
+
+ul.cssmenu-vertical li a:hover { color: #E2144A; }
+
+ul.cssmenu-vertical .sectionheader { font-weight: bold; }

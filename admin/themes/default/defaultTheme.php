@@ -137,7 +137,7 @@ class defaultTheme extends AdminTheme
 
 	function DisplayDocType() {
 	
-		echo '<?xml version="1.0" encoding="UTF-8"?>'."\n";
+		echo '<?xml version="1.0" encoding="'.get_encoding().'"?>'."\n";
 		echo '<!DOCTYPE html'."\n";
 		echo '	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
 		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";

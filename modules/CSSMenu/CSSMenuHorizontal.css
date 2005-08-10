@@ -1,0 +1,75 @@
+body { font: normal 62.5% verdana; }
+
+ul.cssmenu-horizontal,
+ul.cssmenu-horizontal ul {
+  width: 150px;
+  margin: 0;
+  padding: 0;
+  background: #ccc; /* IE6 Bug */
+  font-size: 100%;
+  }
+
+ul.cssmenu-horizontal {
+  float: left;
+  width: 100%;
+  }
+
+ul.cssmenu-horizontal:after {
+  content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+
+ul.cssmenu-horizontal li {
+  position: relative;
+  list-style: none;
+  float: left;
+  width: 150px; /* Width of Menu Items */
+  }
+
+ul.cssmenu-horizontal li a,
+ul.cssmenu-horizontal li li a {
+  display: block;
+  text-decoration: none;
+  color: #777;
+  padding: 5px;
+  }
+
+/* Fix IE. Hide from IE Mac \*/
+* html ul.cssmenu-horizontal li { float: left; height: 1%; }
+* html ul.cssmenu-horizontal li a { height: 1%; }
+/* End */
+
+ul.cssmenu-horizontal ul {
+  position: absolute;
+  display: none;
+  }
+
+ul.cssmenu-horizontal ul ul {
+  left: 150px;
+  top: 0;
+  }
+
+ul.cssmenu-horizontal li ul li a { padding: 2px 5px; } /* Sub Menu Styles */
+
+ul.cssmenu-horizontal li:hover ul ul,
+ul.cssmenu-horizontal li:hover ul ul ul,
+ul.cssmenu-horizontal li.over ul ul,
+ul.cssmenu-horizontal li.over ul ul ul { display: none; } /* Hide sub-menus initially */
+
+ul.cssmenu-horizontal li:hover ul,
+ul.cssmenu-horizontal li li:hover ul,
+ul.cssmenu-horizontal li li li:hover ul,
+ul.cssmenu-horizontal li.over ul,
+ul.cssmenu-horizontal li li.over ul,
+ul.cssmenu-horizontal li li li.over ul { display: block; } /* The magic */
+
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li.menuparent { background: transparent url(modules/CSSMenu/arrow-down.gif) right center no-repeat; }
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li li.menuparent { background: transparent url(modules/CSSMenu/arrow-right.gif) right center no-repeat; }
+
+ul.cssmenu-horizontal li.menuparent:hover,
+ul.cssmenu-horizontal li.over { background-color: #f9f9f9 !important; }
+
+ul.cssmenu-horizontal li a:hover { color: #E2144A; }
