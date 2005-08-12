@@ -239,6 +239,11 @@ class Smarty_ModuleInterface extends Smarty {
 			}
 			
 			header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+			if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
+			{
+				header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
+				header("Pragma: public");
+			}
 
 			return true;
 		}

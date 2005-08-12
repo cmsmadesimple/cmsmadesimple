@@ -612,6 +612,7 @@ Posted: {$entry->postdate|date_format}
 				#Display template
 				$variables = &$this->cms->variables;
 				$variables['content-type'] = 'application/rss+xml';
+				$variables['content-filename'] = 'news.rdf';
 
 				echo $this->ProcessTemplate('rssfeed.tpl');
 
