@@ -51,9 +51,13 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	}
 
 
-	if ($url != "") {
-		$result = "";
-		$result .= '<a href="'.$url.'"';
+	if ($url != '') {
+		$result = '';
+		$anchor = '';
+		if (isset($params['anchor'])) {
+			$anchor .= '#'.$params['anchor'];
+		}
+		$result .= '<a href="'.$url.$anchor'"';
 
 		if (isset($params['target'])) {
 			$result .= ' target="'.$params['target'].'"';
@@ -86,6 +90,7 @@ function smarty_cms_help_function_cms_selflink() {
 	<ul>
 		<li><tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the page variable is used instead.</li>
+		<li><em>(optional)</em> <tt>anchor</tt> - Will make the link go to a particular anchor on the target page.</li>
 		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
 	</ul>
 	</p>
