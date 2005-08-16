@@ -1478,6 +1478,7 @@ class NewsModule extends CMSModuleContentType
 	function Show()
 	{
 		global $gCms;
+		$variables = &$gCms->variables;
 
 		$params = array();
 
@@ -1498,7 +1499,7 @@ class NewsModule extends CMSModuleContentType
 
 		//Buffer all this crap spit out by the News module and return it
 		@ob_start();
-		$newnews->DoAction('default', 'newsmodule', $params);
+		$newnews->DoAction('default', 'newsmodule', $params, $variables['page_id']);
 		$text .= @ob_get_contents();
 		@ob_end_clean();
 		return $text;

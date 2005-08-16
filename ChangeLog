@@ -4,6 +4,7 @@ Version 0.10.1 "Willoughby" -- Subversion
 * Added ability to set a media type for a stylesheet
 * Added some database checks to installer.  Should help to
 stop some install problems people are having.
+* Added ability to link to an anchor with cms_selflink
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used
@@ -23,6 +24,8 @@ of the template had any attributes
 * Fixed bug where custom 404 message didn't show existing value
 * Fixed bug with template/css associations not working properly on
 Postgres
+* Fixed bug with News content type where clicking on details would
+link to the admin
 * Swedish translation was incorrectly usinng se_SE instead of sv_SE
 as it's locale name.
 * Updated ADODB to 4.64
