@@ -57,7 +57,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		if (isset($params['anchor'])) {
 			$anchor .= '#'.$params['anchor'];
 		}
-		$result .= '<a href="'.$url.$anchor'"';
+		$result .= '<a href="'.$url.$anchor.'"';
 
 		if (isset($params['target'])) {
 			$result .= ' target="'.$params['target'].'"';
