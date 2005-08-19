@@ -28,7 +28,7 @@ Postgres
 link to the admin
 * Swedish translation was incorrectly usinng se_SE instead of sv_SE
 as it's locale name.
-* Updated ADODB to 4.64
+* Updated ADODB to 4.65
 * XHTML header did not pass along proper encoding in the admin
 
 Version 0.10 "Antigua" -- Tue Jul 05 2005

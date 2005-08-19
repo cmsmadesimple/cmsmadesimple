@@ -1,6 +1,6 @@
 <?php
 /*
-V4.64 20 June 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
+V4.65 22 July 2005  (c) 2000-2005 John Lim (jlim@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence.
@@ -85,6 +85,7 @@ class ADODB_mysqli extends ADOConnection {
 			mysqli_options($this->_connectionID,$arr[0],$arr[1]);
 		}
 
+		if (!empty($this->port)) $argHostname .= ":".$this->port;
 		$ok = mysqli_real_connect($this->_connectionID,
  				    $argHostname,
  				    $argUsername,
@@ -249,7 +250,16 @@ class ADODB_mysqli extends ADOConnection {
 	{
 		$query = "SHOW DATABASES";
 		$ret =& $this->Execute($query);
-		return $ret;
+		if ($ret && is_object($ret)){
+		   $arr = array();
+			while (!$ret->EOF){
+				$db = $ret->Fields('Database');
+				if ($db != 'mysql') $arr[] = $db;
+				$ret->MoveNext();
+			}
+   		   return $arr;
+		}
+        return $ret;
 	}
 
 	  
@@ -422,6 +432,42 @@ class ADODB_mysqli extends ADOConnection {
 		return $ret;
 	}
 	
+	// "Innox - Juan Carlos Gonzalez" <jgonzalez#innox.com.mx>
+	function MetaForeignKeys( $table, $owner = FALSE, $upper = FALSE, $asociative = FALSE )
+     {
+         if ( !empty($owner) ) {
+            $table = "$owner.$table";
+         }
+         $a_create_table = $this->getRow(sprintf('SHOW CREATE TABLE %s', $table));
+         $create_sql     = $a_create_table[1];
+
+         $matches        = array();
+         $foreign_keys   = array();
+         if ( preg_match_all("/FOREIGN KEY \(`(.*?)`\) REFERENCES `(.*?)` \(`(.*?)`\)/", $create_sql, $matches) ) {
+             $num_keys = count($matches[0]);
+             for ( $i = 0;  $i < $num_keys;  $i ++ ) {
+                 $my_field  = explode('`, `', $matches[1][$i]);
+                 $ref_table = $matches[2][$i];
+                 $ref_field = explode('`, `', $matches[3][$i]);
+
+                 if ( $upper ) {
+                     $ref_table = strtoupper($ref_table);
+                 }
+
+                 $foreign_keys[$ref_table] = array();
+                 $num_fields               = count($my_field);
+                 for ( $j = 0;  $j < $num_fields;  $j ++ ) {
+                     if ( $asociative ) {
+                         $foreign_keys[$ref_table][$ref_field[$j]] = $my_field[$j];
+                     } else {
+                         $foreign_keys[$ref_table][] = "{$my_field[$j]}={$ref_field[$j]}";
+                     }
+                 }
+             }
+         }
+         return  $foreign_keys;
+     }
+	
  	function &MetaColumns($table) 
 	{
 		$false = false;
@@ -558,12 +604,6 @@ class ADODB_mysqli extends ADOConnection {
 			$ret = mysqli_stmt_execute($stmt);
 			return $ret;
 		}
-               global $gCms;
-               global $sql_queries;
-               if ($gCms->config["debug"] == true)
-               {
-                       $sql_queries .= "<p>$sql</p>\n";
-               }
 		if (!$mysql_res =  mysqli_query($this->_connectionID, $sql, ($ADODB_COUNTRECS) ? MYSQLI_STORE_RESULT : MYSQLI_USE_RESULT)) {
 		    if ($this->debug) ADOConnection::outp("Query: " . $sql . " failed. " . $this->ErrorMsg());
 		    return false;

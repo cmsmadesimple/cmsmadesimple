@@ -242,10 +242,11 @@ b. Implement daylight savings, which looks awfully complicated, see
 
 CHANGELOG
 
-- ? ? 2005  0.18
+- 18 July  2005  0.21
 - In PHP 4.3.11, the 'r' format has changed. Leading 0 in day is added. Changed for compat.
+- Added support for negative months in adodb_mktime().
 
-- 24 Feb 2005 
+- 24 Feb 2005 0.20
 Added limited strftime/gmstrftime support. x10 improvement in performance of adodb_date().
 
 - 21 Dec 2004 0.17
@@ -358,7 +359,7 @@ First implementation.
 /*
 	Version Number
 */
-define('ADODB_DATE_VERSION',0.18);
+define('ADODB_DATE_VERSION',0.21);
 
 /*
 	This code was originally for windows. But apparently this problem happens 
@@ -1110,11 +1111,15 @@ function adodb_mktime($hr,$min,$sec,$mon=false,$day=false,$year=false,$is_dst=fa
 	
 	
 	$year = adodb_year_digit_check($year);
-	
+
 	if ($mon > 12) {
 		$y = floor($mon / 12);
 		$year += $y;
 		$mon -= $y*12;
+	} else if ($mon < 1) {
+		$y = ceil((1-$mon) / 12);
+		$year -= $y;
+		$mon += $y*12;
 	}
 	
 	$_day_power = 86400;

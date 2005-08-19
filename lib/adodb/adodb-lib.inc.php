@@ -7,7 +7,7 @@ global $ADODB_INCLUDED_LIB;
 $ADODB_INCLUDED_LIB = 1;
 
 /* 
- @version V4.64 20 June 2005 (c) 2000-2005 John Lim (jlim\@natsoft.com.my). All rights reserved.
+ @version V4.65 22 July 2005 (c) 2000-2005 John Lim (jlim\@natsoft.com.my). All rights reserved.
   Released under both BSD license and Lesser GPL library license. 
   Whenever there is any discrepancy between the two licenses, 
   the BSD license will take precedence. See License.txt. 
@@ -133,7 +133,7 @@ function _adodb_getmenu(&$zthis, $name,$defstr='',$blank1stItem=true,$multiple=f
 	$value = '';
     $optgroup = null;
     $firstgroup = true;
-    $fieldsize = sizeof($zthis->fields);
+    $fieldsize = $zthis->FieldCount();
 	while(!$zthis->EOF) {
 		$zval = rtrim(reset($zthis->fields));
 
@@ -584,8 +584,10 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 		if ($fieldUpdatedCount > 0 || $forceUpdate) {
 					// Get the table name from the existing query.
 			if (!empty($rs->tableName)) $tableName = $rs->tableName;
-			else preg_match("/FROM\s+".ADODB_TABLE_REGEX."/is", $rs->sql, $tableName);
-	
+			else {
+				preg_match("/FROM\s+".ADODB_TABLE_REGEX."/is", $rs->sql, $tableName);
+				$tableName = $tableName[1];
+			}
 			// Get the full where clause excluding the word "WHERE" from
 			// the existing query.
 			preg_match('/\sWHERE\s(.*)/is', $rs->sql, $whereClause);
@@ -602,11 +604,11 @@ function _adodb_getupdatesql(&$zthis,&$rs, $arrFields,$forceUpdate=false,$magicq
 			if ($discard)
 				$whereClause[1] = substr($whereClause[1], 0, strlen($whereClause[1]) - strlen($discard[1]));
 			
-		$sql = 'UPDATE '.$tableName[1].' SET '.substr($setFields, 0, -2);
-		if (strlen($whereClause[1]) > 0) 
-			$sql .= ' WHERE '.$whereClause[1];
+			$sql = 'UPDATE '.$tableName.' SET '.substr($setFields, 0, -2);
+			if (strlen($whereClause[1]) > 0) 
+				$sql .= ' WHERE '.$whereClause[1];
 
-		return $sql;
+			return $sql;
 
 		} else {
 			return false;
@@ -655,7 +657,7 @@ static $cacheCols;
 		//because we have to call MetaType.
 		//php can't do a $rsclass::MetaType()
 		$rsclass = $zthis->rsPrefix.$zthis->databaseType;
-		$recordSet =& new $rsclass(-1,$zthis->fetchMode);
+		$recordSet = new $rsclass(-1,$zthis->fetchMode);
 		$recordSet->connection = &$zthis;
 		
 		if (is_string($cacheRS) && $cacheRS == $rs) {
@@ -948,7 +950,7 @@ function _adodb_debug_execute(&$zthis, $sql, $inputarr)
 
 function _adodb_backtrace($printOrArr=true,$levels=9999,$skippy=0)
 {
-	if (PHPVERSION() < 4.3) return '';
+	if ((float) PHPVERSION() < 4.3) return '';
 	 
 	$html =  (isset($_SERVER['HTTP_USER_AGENT']));
 	$fmt =  ($html) ? "</font><font color=#808080 size=-1> %% line %4d, file: <a href=\"file:/%s\">%s</a></font>" : "%% line %4d, file: %s";

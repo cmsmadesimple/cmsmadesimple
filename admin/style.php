@@ -1,7 +1,7 @@
 <?php
 
 //CHANGED
-Header ("Content-type: text/css");
+header("Content-type: text/css");
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme");
