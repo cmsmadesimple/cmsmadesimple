@@ -50,7 +50,6 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		$url="";
 	}
 
-
 	if ($url != '') {
 		$result = '';
 		$anchor = '';
@@ -61,6 +60,12 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 		if (isset($params['target'])) {
 			$result .= ' target="'.$params['target'].'"';
+		}
+		if (isset($params['id'])) {
+			$result .= ' id="'.$params['id'].'"';
+		}
+		if (isset($params['class'])) {
+			$result .= ' class="'.$params['class'].'"';
 		}
 		$result .= '>';
 		
@@ -92,6 +97,8 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the page variable is used instead.</li>
 		<li><em>(optional)</em> <tt>anchor</tt> - Will make the link go to a particular anchor on the target page.</li>
 		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
+		<li><em>(optional}</em> <tt>class</tt> - Optional class for the a tag.
+		<li><em>(optional}</em> <tt>id</tt> - Optional id for the a tag.
 	</ul>
 	</p>
 
