@@ -217,7 +217,7 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 		$this->cms = &$gCms;
-		$this->curlang = '';
+		$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
 		$this->langhash = array();
 
 		$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
@@ -1414,19 +1414,24 @@ class CMSModule extends ModuleOperations
 	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the form is submitted
 	 * @param string The id to eventually return to when the module is finished it's task
+	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
 	 */
-	function Redirect($id, $action, $returnid='')
+	function Redirect($id, $action, $returnid='', $params=array())
 	{
 		global $gCms;
 		$config = $gCms->config;
 
 		$name = $this->GetName();
 
-		$text = 'moduleinterface.php?module='.$name.'&amp;'.$id.'action='.$action.'&amp;id='.$id;
+		$text = 'moduleinterface.php?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
 		if ($returnid != '')
 		{
-			$text .= '&amp;'.$id.'returnid='.$returnid;
+			$text .= '&'.$id.'returnid='.$returnid;
 		}
+		foreach ($params as $key=>$value)
+		{
+			$text .= '&'.$id.$key.'='.$value;
+		}		
 		redirect($text);
 	}
 

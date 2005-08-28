@@ -175,7 +175,7 @@ class Smarty_CMS extends Smarty {
 					$gCms->variables['page'] = $contentobj->Id();
 					$gCms->variables['page_id'] = $contentobj->Id();
 
-					$gCms->variables['page_name'] = $tpl_name;
+					$gCms->variables['page_name'] = $contentobj->Alias();
 					$gCms->variables['position'] = $contentobj->Hierarchy();
 
 					$content = $contentobj->Show();

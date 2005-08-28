@@ -28,7 +28,9 @@ $starttime = microtime();
 @ob_start();
 
 clearstatcache();
-if (!file_exists("config.php") || filesize("config.php") == 0)
+
+#if (!file_exists("config.php") || filesize("config.php") == 0)
+if (!file_exists("config.php") || filesize("config.php") < 800)
 {
     require_once("lib/misc.functions.php");
     redirect("install/install.php");

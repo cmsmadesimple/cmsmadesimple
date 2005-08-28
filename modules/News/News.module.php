@@ -473,12 +473,11 @@ Posted: {$entry->postdate|date_format}
 					$onerow->id = $row['news_id'];
 					$onerow->title = $row['news_title'];
 					$onerow->content = $row['news_data'];
-					$onerow->summary = $row['summary'];
+					$onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
 					$onerow->category = $row['news_category_name'];
-
 
 					$moretext = isset($params['moretext'])?$params['moretext']:$this->Lang('more');
 					$sendtodetail = array('articleid'=>$row['news_id']);

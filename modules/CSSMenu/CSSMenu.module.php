@@ -252,7 +252,7 @@ class CSSMenu extends CMSModule
 
           if ($onecontent->Type() == 'separator')
           {
-            $menu .= '<li class="separator"><a href="#"></a>';
+            $menu .= '<li class="separator">';
           }
           else if ($onecontent->Type() == 'sectionheader')
           {

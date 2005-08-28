@@ -5,10 +5,14 @@ Version 0.10.1 "Willoughby" -- Subversion
 * Added some database checks to installer.  Should help to
 stop some install problems people are having.
 * Added ability to link to an anchor with cms_selflink
+* Added CSSMenu module and made it the default menu for new
+installs
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used
 as the default extension for friendly urls
+* Fixed a bug with $gCms->variables['page_name'] not always
+returning the alias
 * Fixed a bug where IIS users couldn't login correctly
 * Fixed a bug where IIS didn't always report QUERY_STRING, which
 would generate a warning message
