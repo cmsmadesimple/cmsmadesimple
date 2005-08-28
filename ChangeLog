@@ -7,6 +7,8 @@ stop some install problems people are having.
 * Added ability to link to an anchor with cms_selflink
 * Added CSSMenu module and made it the default menu for new
 installs
+* Added id and class parameters to the cms_selflink tag
+* Added apply button to editing HTML Blobs
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used
