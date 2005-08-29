@@ -17,7 +17,9 @@
 				<p>
 					Enter a valid user credential to get access to the administration console. <br /><br />
 					<?php
-						if (isset($error) && $error != '') {
+						debug_buffer('Debug in the page is: ' . $error);
+						if (isset($error) && $error != '')
+						{
 							echo '<span class="loginerror">'.$error.'</span>';
 						}
 					?>

@@ -53,7 +53,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	debug_buffer("Got user by username");
 	debug_buffer($oneuser);
 
-	if ($username != "" && $password != "" && isset($oneuser) && isset($_POST["loginsubmit"]))
+	if ($username != "" && $password != "" && isset($oneuser) && $oneuser == true && isset($_POST["loginsubmit"]))
 	{
 		debug_buffer("Starting login procedure.  Setting userid so that other pages will pick it up and set a cookie.");
 		#generate_user_object($oneuser->id);
@@ -80,12 +80,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			if (isset($gCms->config) and $gCms->config['debug'] == true)
 			{
-				echo "Debug is on.  Redirecting disabled...  Please click this link to continue. (1)<br />";
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"".$_SESSION["redirect_url"]."\">".$_SESSION["redirect_url"]."</a><br />";
 				global $sql_queries;
 				if (isset($sql_queries))
 				{
 					echo $sql_queries;
+				}
+				foreach ($gCms->errors as $globalerror)
+				{
+					echo $globalerror;
 				}
 			}
 			else
@@ -101,12 +105,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			if (isset($config) and $config['debug'] == true)
 			{
-				echo "Debug is on.  Redirecting disabled...  Please click this link to continue. (2)<br />";
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"index.php\">index.php</a><br />";
 				global $sql_queries;
 				if (isset($sql_queries))
 				{
 					echo $sql_queries;
+				}
+				foreach ($gCms->errors as $globalerror)
+				{
+					echo $globalerror;
 				}
 			}
 			else
@@ -118,10 +126,13 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		return;
 		#redirect("index.php");
 	}
-	else if (isset($_POST["loginsubmit"])) { //No error if changing languages
-		$error .= "<p>".lang('usernameincorrect')."</p>";
-		echo "login failed";
-		#debug_buffer("Login failed.  Error is: " . $error);
+	else if (isset($_POST['loginsubmit'])) { //No error if changing languages
+		$error .= lang('usernameincorrect');
+		debug_buffer("Login failed.  Error is: " . $error);
+	}
+	else
+	{
+		debug_buffer($_POST["loginsubmit"]);
 	}
 
 }
@@ -134,6 +145,7 @@ header("Content-Type: text/html; charset=" . get_encoding());
 //CHANGED
 $theme=get_site_preference('logintheme', 'default');
 //echo "theme:$theme";
+debug_buffer('debug is:' . $error);
 if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
 	include(dirname(__FILE__)."/themes/$theme/login.php");
 } else {
@@ -149,6 +161,10 @@ if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
 		if (isset($sql_queries))
 		{
 			echo $sql_queries;
+		}
+		foreach ($gCms->errors as $globalerror)
+		{
+			echo $globalerror;
 		}
 	}
 # vim:ts=4 sw=4 noet
