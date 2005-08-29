@@ -84,9 +84,20 @@ class RSS extends CMSModule
 					}
 
 					foreach ($items as $item ) {
-						$title = $item[title];
-						$url   = $item[link];
-						echo "<div class=\"modulerssentry\"><a href=\"$url\">$title</a><br /></div>\n";
+						$title = $item['title'];
+						$url   = $item['link'];
+						$desc  = $item['description'];
+						echo "<div class=\"modulerssentry\"><a href=\"$url\"";
+						if (isset($params['target']))
+						{
+							echo ' target="'.$params['target'].'"';
+						}
+						echo ">$title</a><br />";
+						if (isset($params['descriptions']))
+						{
+							echo $desc;
+						}
+						echo "</div>\n";
 					}
 				}
 			}

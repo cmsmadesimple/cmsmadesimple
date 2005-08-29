@@ -11,6 +11,8 @@ $lang['help'] = <<<EOF
             <ul>
                 <li>url="http://feed_url" - RSS feed URL</li>
                 <li><em>(optional)</em>numbertoshow="5" - Maximum number of items to display -- leaving empty will show all items</li>
+		<li><em>(optional)</em>target="" - Adds a target param to the title link.  Set to "_blank" to open in a few page.</li>
+		<li><em>(optional)</em>descriptions="1" = Show the description of the rss articles.</li>
             </ul>
             </p>
 EOF;
