@@ -80,7 +80,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			if (isset($gCms->config) and $gCms->config['debug'] == true)
 			{
-				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue. (1)<br />";
 				echo "<a href=\"".$_SESSION["redirect_url"]."\">".$_SESSION["redirect_url"]."</a><br />";
 				global $sql_queries;
 				if (isset($sql_queries))
@@ -101,7 +101,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			if (isset($config) and $config['debug'] == true)
 			{
-				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
+				echo "Debug is on.  Redirecting disabled...  Please click this link to continue. (2)<br />";
 				echo "<a href=\"index.php\">index.php</a><br />";
 				global $sql_queries;
 				if (isset($sql_queries))
@@ -120,6 +120,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	}
 	else if (isset($_POST["loginsubmit"])) { //No error if changing languages
 		$error .= "<p>".lang('usernameincorrect')."</p>";
+		echo "login failed";
+		#debug_buffer("Login failed.  Error is: " . $error);
 	}
 
 }

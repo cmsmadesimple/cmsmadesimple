@@ -302,7 +302,7 @@ class CSSMenu extends CMSModule
 		echo $this->StartTab('horizontal');
 
 		@ob_start();
-		@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
+		@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
 		$stylesheet = @ob_get_contents() . $stylesheet;
 		@ob_end_clean();
 
@@ -313,7 +313,7 @@ class CSSMenu extends CMSModule
 		echo $this->StartTab('vertical');
 
 		@ob_start();
-		@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
+		@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
 		$stylesheet = @ob_get_contents() . $stylesheet;
 		@ob_end_clean();
 
