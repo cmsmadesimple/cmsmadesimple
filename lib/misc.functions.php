@@ -63,6 +63,7 @@ function redirect($to, $noappend=false)
     }
 
     //If session trans-id is being used, and they is on yo website, add it.
+	/*
     if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
     {
         if(strpos($to,'?') !== false)//If there are no arguments start a querystring
@@ -74,6 +75,7 @@ function redirect($to, $noappend=false)
             //$to = $to.ini_get('arg_separator.input').session_name()."=".session_id();
         }
     }
+	*/
 
     if (headers_sent())
     {
