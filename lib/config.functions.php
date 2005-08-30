@@ -109,9 +109,9 @@ function cms_config_load($loadLocal = true)
 
 	if ($loadLocal == true)
 	{
-		if (file_exists(dirname(dirname(__FILE__))."/config.php") && !cms_config_check_old_config())
+		if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
 		{
-			include(dirname(dirname(__FILE__))."/config.php");
+			include(CONFIG_FILE_LOCATION);
 		}
 	}
 
@@ -129,8 +129,8 @@ function cms_config_load($loadLocal = true)
  */
 function cms_config_save($config)
 {
-	$newfiledir = dirname(dirname(__FILE__));
-	$newfilename = "$newfiledir/config.php";
+	$newfiledir = dirname(CONFIG_FILE_LOCATION);
+	$newfilename = CONFIG_FILE_LOCATION;
 	if (is_writable($newfilename) || is_writable($newfiledir))
 	{
 		$handle = fopen($newfilename, "w");
@@ -166,8 +166,8 @@ function cms_config_save($config)
 function cms_config_upgrade()
 {
 	#Get my lazy on and just do some regex magic...
-	$newfiledir = dirname(dirname(__FILE__));
-	$newfilename = "$newfiledir/config.php";
+	$newfiledir = dirname(CONFIG_FILE_LOCATION);
+	$newfilename = CONFIG_FILE_LOCATION;
 	$oldconfiglines = array();
 	if (is_writable($newfilename) || is_writable($newfiledir))
 	{
@@ -206,8 +206,8 @@ function cms_config_check_old_config()
 {
 	$result = false;
 
-	$newfiledir = dirname(dirname(__FILE__));
-	$newfilename = "$newfiledir/config.php";
+	$newfiledir = dirname(CONFIG_FILE_LOCATION);
+	$newfilename = CONFIG_FILE_LOCATION;
 	$handle = fopen($newfilename, "r");
 	if ($handle)
 	{

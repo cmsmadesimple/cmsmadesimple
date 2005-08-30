@@ -18,6 +18,8 @@
 #
 #$Id$
 
+require_once(dirname(__FILE__).'/fileloc.php');
+
 /**
  * Entry point for all non-admin pages
  *
@@ -29,19 +31,19 @@ $starttime = microtime();
 
 clearstatcache();
 
-#if (!file_exists("config.php") || filesize("config.php") == 0)
-if (!file_exists("config.php") || filesize("config.php") < 800)
+#if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) == 0)
+if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
     require_once("lib/misc.functions.php");
     redirect("install/install.php");
 }
-else if (file_exists(dirname(__FILE__)."/tmp/cache/SITEDOWN"))
+else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {
 	echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
 	exit;
 }
 
-if (!is_writable(dirname(__FILE__).'/tmp/templates_c') || !is_writable(dirname(__FILE__).'/tmp/cache'))
+if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 {
 	echo '<html><title>Error</title></head><body>';
 	echo '<p>The following directories must be writable by the web server:<br />';

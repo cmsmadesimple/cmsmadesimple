@@ -18,6 +18,8 @@
 #
 #$Id$
 
+require_once(dirname(__FILE__).'/fileloc.php');
+
 #xdebug_start_profiling();
 
 /**

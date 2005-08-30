@@ -18,6 +18,8 @@
 
 #$DONT_LOAD_DB=1;
 $LOAD_ALL_MODULES=1;
+
+require_once(dirname(dirname(__FILE__))."/fileloc.php");
 require_once(dirname(dirname(__FILE__))."/include.php");
 
 //Do module autoupgrades 
@@ -82,7 +84,7 @@ function module_autoupgrade()
 <?php
 
 clearstatcache();
-if (!is_writable(dirname(dirname(__FILE__)).'/tmp/templates_c') || !is_writable(dirname(dirname(__FILE__)).'/tmp/cache'))
+if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 {
 	echo '<p>The following directories must be writable by the web server:<br />';
 	echo 'tmp/cache<br />';
@@ -99,7 +101,7 @@ if (!isset($_GET["doupgrade"])) {
 	echo "<p>In order to upgrade properly, upgrade needs to have write access to your config.php file.  This is so any extra settings that have been introduced in this version can be set to their defaults.</p>";
 }
 
-if (!is_writable(dirname(dirname(__FILE__))."/config.php"))
+if (!is_writable(CONFIG_FILE_LOCATION))
 {
 	?>
 	<p><strong>Problem:</strong> config.php is not writable by the web server.  Please fix the permissions and click the button below to check again.</p>
@@ -127,7 +129,7 @@ else
 	echo "<p>Clearning cache dirs...";
 
 	//Clear cache dirs
-	$cpath = dirname(dirname(__FILE__))."/tmp/cache/";
+	$cpath = TMP_CACHE_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
 		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
@@ -135,7 +137,7 @@ else
 			unlink($cpath.$cfile);
 		}
 	}
-	$cpath = dirname(dirname(__FILE__))."/tmp/templates_c/";
+	$cpath = TMP_TEMPLATES_C_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
 		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
@@ -188,9 +190,9 @@ else
 
 		module_autoupgrade();
 
-		if (file_exists(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+		if (file_exists(TMP_CACHE_LOCATION."/SITEDOWN"))
 		{
-			if (!unlink(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+			if (!unlink(TMP_CACHE_LOCATION."/SITEDOWN"))
 			{
 				echo "<p class=\"error\">Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.</p>";
 			}

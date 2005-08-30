@@ -16,7 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-$config = dirname(dirname(__FILE__))."/config.php";
+require(dirname(dirname(__FILE__)).'/fileloc.php');
+
+$config = CONFIG_FILE_LOCATION;
 if (!file_exists($config)) {
     $file = @fopen($config, "w");
     if ($file != 0) {
@@ -125,7 +127,8 @@ function showPageOne() {
     ## check file perms
 	$continueon = true;
     echo "<h3>Checking file permissions:</h3>\n";
-    $files = array(dirname(dirname(__FILE__)).'/tmp/cache', dirname(dirname(__FILE__)).'/tmp/templates_c', dirname(dirname(__FILE__)).'/uploads', dirname(dirname(__FILE__)).'/config.php');
+    #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
+    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION);
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
@@ -484,7 +487,7 @@ function showPageFive() {
 	$newconfig['query_var'] = $_POST['querystr'];
 	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
-	$newconfig['previews_path'] = $newconfig['root_path'] . "/tmp/cache";
+	$newconfig['previews_path'] = TMP_CACHE_LOCATION;
 	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
 	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";	
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
@@ -506,7 +509,7 @@ function showPageFive() {
     $newconfig["page_extension"] = ".html";
 	$newconfig["locale"] = "en_US";
 
-    $configfile = dirname(dirname(__FILE__))."/config.php";
+    $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
 
 	/*
@@ -529,13 +532,13 @@ function showPageFive() {
     if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
 		cms_config_save($newconfig);
     } else {
-        echo "Error: Cannot write to $config.<BR />\n";
+        echo "Error: Cannot write to $config.<br />\n";
         exit;
     } ## if
 
-	if (file_exists(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+	if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 	{
-		if (!unlink(dirname(dirname(__FILE__))."/tmp/cache/SITEDOWN"))
+		if (!unlink(TMP_CACHE_LOCATION.'/SITEDOWN'))
 		{
 			echo "Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.";
 		}

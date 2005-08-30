@@ -208,7 +208,7 @@ else if ($preview)
 	}
 	else
 	{
-		$tmpfname = tempnam(dirname(dirname(__FILE__)) . '/tmp/cache', "cmspreview");
+		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
 	}
 	$handle = fopen($tmpfname, "w");
 	fwrite($handle, serialize($data));
