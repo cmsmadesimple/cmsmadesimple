@@ -289,4 +289,6 @@ $lang['admin']['adminprefs'] = 'Användarinställningar';
 $lang['admin']['adminprefsdescription'] = 'Här ställer du in val för webbplatsadminstartion.';
 $lang['admin']['managebookmarksdescription'] = 'Här hanterar du adminsitratörsbokmärken.';
 $lang['admin']['options'] = 'Inställningar';
+$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
+$lang['admin']['parameters'] = 'Parameters'; //needs translation
 ?>

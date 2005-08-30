@@ -58,6 +58,14 @@ class RSS extends CMSModule
 		return true;
 	}
 
+	function SetParameters()
+	{
+		$this->CreateParameter('descriptions', '1', $this->lang('helpdescriptions'));
+		$this->CreateParameter('target', '', $this->lang('helptarget'));
+		$this->CreateParameter('numbertoshow', '5', $this->lang('helpnumbertoshow'));
+		$this->CreateParameter('url', 'http://feed_url', $this->lang('helpurl'), false);
+	}
+
 	function DoAction($name, $id, $params)
 	{
 		if ($name == 'default')

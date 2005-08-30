@@ -289,4 +289,6 @@ $lang['admin']['adminprefs'] = 'User Voreinstellungen';
 $lang['admin']['adminprefsdescription'] = 'Hier k&ouml;nnen Sie spezielle Voreinstellungen f&uuml;r die Webadministration vornehmen.';
 $lang['admin']['managebookmarksdescription'] = 'Hier k&ouml;nnen Sie die Lesezeichen des Admins managen.';
 $lang['admin']['options'] = 'Options'; //needs translation
+$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
+$lang['admin']['parameters'] = 'Parameters'; //needs translation
 ?>

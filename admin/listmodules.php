@@ -201,6 +201,7 @@ if ($action == "showmoduleabout")
 		}
 		echo "</div>";
 	}
+	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 }
 else if ($action == "showmodulehelp")
 {
@@ -213,8 +214,25 @@ else if ($action == "showmodulehelp")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;
+		$paramarray = $gCms->modules[$module]['object']->GetParameters();
+		if (count($paramarray) > 0)
+		{
+			echo '<h3>'.lang('parameters').'</h3>';
+			echo '<ul>';
+			foreach ($paramarray as $oneparam)
+			{
+				echo '<li>';
+				if ($oneparam['optional'] == true)
+				{
+					echo '<em>(optional)</em> ';
+				}
+				echo $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
+			}
+			echo '</ul>';
+		}
 		echo "</div>";
 	}
+	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 }
 else if ($action == 'missingdeps')
 {
@@ -258,11 +276,7 @@ else if ($action == 'missingdeps')
 	echo '</tbody>';
 	echo '</table>';
 	echo '</div>';
-	?>
-	<FORM ACTION="listmodules.php" METHOD="get">
-	<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-	</FORM>
-	<?php
+	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 	}
 	else
 	{
@@ -413,9 +427,9 @@ else if ($action == 'missingdeps')
 	<?php
 	echo '</div>';
 	}
+	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
 
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 
 include_once("footer.php");

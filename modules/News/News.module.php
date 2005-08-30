@@ -55,6 +55,18 @@ class News extends CMSModule
 		return 'content';
 	}
 
+	function SetParameters()
+	{
+		$this->CreateParameter('sortasc', 'true', $this->lang('helpsortasc'));
+		$this->CreateParameter('sortby', 'news_date', $this->lang('helpsortby'));
+		$this->CreateParameter('detailtemplate', 'sometemplate.tpl', $this->lang('helpdetailtemplate'));
+		$this->CreateParameter('summarytemplate', 'sometemplate.tpl', $this->lang('helpsummarytemplate'));
+		$this->CreateParameter('moretext', 'more...', $this->lang('helpmoretext'));
+		$this->CreateParameter('category', 'category', $this->lang('helpcategory'));
+		$this->CreateParameter('makerssbutton', 'true', $this->lang('helpmakerssbutton'));
+		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
+	}
+
 	function ContentPreRender(&$content)
 	{
 		global $gCms;

@@ -186,6 +186,10 @@ $gCms->siteprefs = array();
 #Load all site preferences
 load_site_preferences();
 
+if (isset($CMS_ADMIN_PAGE)) {
+	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
+}
+
 #Load all installed module code
 if (isset($LOAD_ALL_MODULES))
 {
@@ -194,10 +198,6 @@ if (isset($LOAD_ALL_MODULES))
 else
 {
 	ModuleOperations::LoadModules(false);
-}
-
-if (isset($CMS_ADMIN_PAGE)) {
-	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
 }
 
 #Check for HTML_BBCodeParser

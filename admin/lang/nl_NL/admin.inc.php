@@ -289,4 +289,6 @@ $lang['admin']['adminprefs'] = 'Admin voorkeuren';
 $lang['admin']['adminprefsdescription'] = 'Hier zijn admin gerelateerde instellen te beheren.'; 
 $lang['admin']['managebookmarksdescription'] = 'Beheer hier uw admin Bladwijzers.'; 
 $lang['admin']['options'] = 'Opties'; 
+$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
+$lang['admin']['parameters'] = 'Parameters'; //needs translation
 ?>

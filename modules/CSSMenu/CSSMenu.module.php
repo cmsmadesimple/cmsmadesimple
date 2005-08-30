@@ -52,6 +52,14 @@ class CSSMenu extends CMSModule
     return 'ted@cmsmadesimple.org';
   }
 
+	function SetParameters()
+	{
+		$this->CreateParameter('horizontal', '1', $this->lang('helphorizontal'));
+		$this->CreateParameter('number_of_levels', '', $this->lang('helpnumber_of_levels'));
+		$this->CreateParameter('start_element', '', $this->lang('helpstart_element'));
+		$this->CreateParameter('showadmin', '1', $this->lang('helpshowadmin'));
+	}
+
   function GetChangeLog()
   {
     return "

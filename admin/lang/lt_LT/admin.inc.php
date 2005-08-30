@@ -289,4 +289,6 @@ $lang['admin']['adminprefs'] = 'Vartotojo Nustatymai'; //needs translation
 $lang['admin']['adminprefsdescription'] = 'Čia Jūs nustatote specifinius nustatymus puslapio administravimui.'; //needs translation
 $lang['admin']['managebookmarksdescription'] = 'Čia jūs galite valdyti adminitratoriaus žymeklius.'; //needs translation
 $lang['admin']['options'] = 'Options'; //needs translation
+$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
+$lang['admin']['parameters'] = 'Parameters'; //needs translation
 ?>
