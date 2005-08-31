@@ -90,12 +90,18 @@ class CmsObject {
 	var $errors;
 
 	/**
+     * nls array - This holds all of the nls information for different languages
+	 */
+	var $nls;
+
+	/**
 	 * Constructor
 	 */
 	function CmsObject()
 	{
 		$this->modules = array();
 		$this->errors = array();
+		$this->nls = array();
 		$this->variables['content-type'] = 'text/html';
 	}
 }
