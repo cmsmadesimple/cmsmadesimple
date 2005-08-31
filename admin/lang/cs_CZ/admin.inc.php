@@ -289,6 +289,6 @@ $lang['admin']['adminprefs'] = 'Nastavení administrace';
 $lang['admin']['adminprefsdescription'] = 'Zde jsou specifická nastavení administrace.';
 $lang['admin']['managebookmarksdescription'] = 'Zde můžete spravovat Vaše administrační záložky.';
 $lang['admin']['options'] = 'Volby';
-$lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
-$lang['admin']['parameters'] = 'Parameters'; //needs translation
+$lang['admin']['langparam'] = 'Tento parametr specifikuje, jaký jazyk rozhraní použít. Ne všechny moduly toto podporují nebo potřebují.';
+$lang['admin']['parameters'] = 'Parametry';
 ?>
