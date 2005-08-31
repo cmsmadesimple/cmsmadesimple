@@ -24,6 +24,9 @@ $current_language = "en_US";
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE)) {
 
+	$nls = array();
+	$lang = array();
+
 	#Read in all current languages...
 	$dir = dirname(__FILE__)."/lang";
 	$ls = dir($dir);
