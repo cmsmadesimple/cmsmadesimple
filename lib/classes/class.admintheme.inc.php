@@ -263,14 +263,13 @@ class AdminTheme
         $this->perms['pagePerms'] = check_permission($this->userid, 'Modify Any Page') |
                 check_permission($this->userid, 'Add Pages') |
                 check_permission($this->userid, 'Remove Pages');
-        $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Html Blobs') |
-                check_permission($this->userid, 'Modify Html Blobs') |
-                check_permission($this->userid, 'Delete Html Blobs');
         $this->perms['contentPerms'] = $this->perms['pagePerms'] |
-                $this->perms['htmlPerms'] |
                 (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
 
         # layout
+        $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Html Blobs') |
+                check_permission($this->userid, 'Modify Html Blobs') |
+                check_permission($this->userid, 'Delete Html Blobs');
         $this->perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
                 check_permission($this->userid, 'Modify Templates') |
                 check_permission($this->userid, 'Remove Templates');
@@ -281,7 +280,7 @@ class AdminTheme
                 check_permission($this->userid, 'Modify Stylesheet Assoc') |
                 check_permission($this->userid, 'Remove Stylesheet Assoc');
         $this->perms['layoutPerms'] = $this->perms['templatePerms'] |
-                $this->perms['cssPerms'] | $this->perms['cssAssocPerms'] |
+                $this->perms['cssPerms'] | $this->perms['cssAssocPerms'] | $this->perms['htmlPerms'] |
                 (isset($this->sectionCount['layout']) && $this->sectionCount['layout'] > 0);
 
         # file / image
