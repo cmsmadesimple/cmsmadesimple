@@ -44,8 +44,7 @@ $limit = 20;
 $page_string = "";
 $from = ($page * $limit) - $limit;
 
-$query = "SELECT * from ".cms_db_prefix()."adminlog ORDER BY timestamp DESC limit $from, $limit";
-$result = $db->Execute($query);
+$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
 
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
