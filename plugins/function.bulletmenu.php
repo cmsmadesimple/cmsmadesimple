@@ -78,7 +78,8 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 						# Make sure the parents match
 						if ($curparent != $otherparent)
 						{
-							continue;
+							# Show the submenus of siblings, that is everything whose beginning matches parent
+              if (substr($curparent,0,strlen($otherparent))!=$otherparent) continue;
 						}
 					}
 					else
