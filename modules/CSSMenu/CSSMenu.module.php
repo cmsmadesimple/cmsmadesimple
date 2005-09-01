@@ -173,7 +173,8 @@ class CSSMenu extends CMSModule
                 # Make sure the parents match
                 if ($curparent != $otherparent)
                 {
-                  continue;
+                	# Show the submenus of siblings, that is everything whose beginning matches parent
+                  if (substr($curparent,0,strlen($otherparent))!=$otherparent) continue;
                 }
               }
               else
