@@ -74,14 +74,22 @@ if (isset($CMS_ADMIN_PAGE)) {
 			}
 		}
 	}
-	#Ok, we have a language to load, let's load it already...
-	if (isset($nls['file'][$current_language]))
-	{
-		foreach ($nls['file'][$current_language] as $onefile)
-		{
-			include($onefile);
-		}
-	}
+
+    #Ok, we have a language to load, let's load it already...
+
+    #if (isset($nls['file'][$current_language]))
+    #{ 
+    #   foreach ($nls['file'][$current_language] as $onefile)
+    #   {
+    #       include($onefile);
+    #   }
+    #} 
+   
+    $file = dirname(__FILE__) . "/lang/" . $current_language . "/admin.inc.php";
+    if (is_file($file) && strlen($current_language) == 5 && strpos($current_language, ".") === false)
+    {  
+        include ($file);
+    }  
 
 	global $gCms;
 	$gCms->nls = $nls;
