@@ -54,6 +54,17 @@ class PHPLayers extends CMSModule
 		";
 	}
 
+	function SetParameters()
+	{
+		$this->CreateParameter('showadmin', '0', $this->lang('helpshowadmin'));
+		$this->CreateParameter('start_element', '1', $this->lang('helpstart_element'));
+		$this->CreateParameter('number_of_levels', '', $this->lang('helpnumber_of_levels'));
+		$this->CreateParameter('horizontal', '0', $this->lang('helphorizontal'));
+		$this->CreateParameter('id', '', $this->lang('helpid'));
+		$this->CreateParameter('relative', '0', $this->lang('helprelative'));
+		$this->CreateParameter('tree', '0', $this->lang('helptree'));
+	}
+
 	function IsPluginModule()
 	{
 		return true;

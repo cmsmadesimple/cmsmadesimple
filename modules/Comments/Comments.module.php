@@ -88,6 +88,12 @@ class Comments extends CMSModule
 		";
 	}
 
+	function SetParameters()
+	{
+		$this->CreateParameter('makerssbutton', '', $this->lang('helpdateformat'));
+		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
+	}
+
 	function IsPluginModule()
 	{
 		return true;
