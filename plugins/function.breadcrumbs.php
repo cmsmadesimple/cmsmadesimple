@@ -19,15 +19,49 @@
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
 	global $gCms; 
-	
+
 	$thispage = $gCms->variables['page'];
+
 	$trail = "";
+
+	#Check if user has specified a delimiter, otherwise use default
+	if (isset($params['delimiter'])) 
+	{
+		$delimiter = $params['delimiter'];
+	}
+	else
+	{
+		$delimiter = "&gt;&gt;";
+	}
+
+	#Check if user has requested an initial delimiter
+	if (isset($params['initial'])) 
+	{
+		if ($params['initial'] == "1")
+		{
+			$trail .= $delimiter . " ";
+		}
+	}
 
 	#Make an array for all pages
 	$allcontent = array();
 
 	#Load current content
 	$onecontent = ContentManager::LoadContentFromId($thispage, false);
+
+	#Check if user has requested the list to start with a specific page
+	if (isset($params['root'])) 
+	{
+		if (strtolower($onecontent->Alias()) != strtolower($params['root']))
+		{
+			$rootcontent = ContentManager::LoadContentFromAlias($params['root'], false);
+			if ($rootcontent) 
+			{
+				$trail .= "<a href=\"".$rootcontent->getURL()."\">".$rootcontent->MenuText()."</a> ".$delimiter." ";
+			}
+		}
+	}
+	
 	if ($onecontent !== FALSE)
 	{
 		array_push($allcontent, $onecontent);
@@ -48,22 +82,22 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 				{
 					if (getURL($thispage)!="")
 					{
-						$trail .= $onecontent->MenuText()." &gt;&gt;\n";
+						$trail .= $onecontent->MenuText()." ".$delimiter."\n";
 					}
 					else
 					{
-						$trail .= $onecontent->MenuText()." &gt;&gt; \n";
+						$trail .= $onecontent->MenuText()." ".$delimiter."\n";
 					}
 				}
 				else
 				{
 					if (getURL($thispage)!="")
 					{
-						$trail .= "<a href=\"".$onecontent->getURL()."\">".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</a> &gt;&gt;\n";
+						$trail .= "<a href=\"".$onecontent->getURL()."\">".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</a> ".$delimiter."\n";
 					}
 					else
 					{
-						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())." &gt;&gt; \n";
+						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())." ".$delimiter."\n";
 					}
 				}
 			}
@@ -90,20 +124,24 @@ function smarty_cms_help_function_breadcrumbs() {
 	<p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
 	<h3>What parameters does it take?</h3>
 	<p>
-		No parameters at the moment, a future release may allow you to change what goes between each page.
+	<ul>
+		<li><em>(optional)</em> <tt>delimiter</tt> - Text to seperate entries in the list (default "&gt;&gt;").</li>
+		<li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
+		<li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
+		    the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
+	</ul>
 	</p>
-
-
 	<?php
 }
 
 function smarty_cms_about_function_breadcrumbs() {
 	?>
 	<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-	<p>Version: 1.1</p>
+	<p>Version: 1.2</p>
 	<p>
 	Change History:<br/>
 	1.1 - Modified to use new content rewrite (wishy)<br />
+	1.2 - Added parameters: delimiter, initial, and root (arl)<br />
 	</p>
 	<?php
 }
