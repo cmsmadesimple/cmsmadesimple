@@ -1182,12 +1182,12 @@ Posted: {$entry->postdate|date_format}
 
 				if ($curcategory != '')
 				{
-					$query = "SELECT * FROM ".cms_db_prefix()."module_news WHERE news_category_id = ? ORDER by news_date DESC";
+					$query = "SELECT n.*, nc.long_name FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id WHERE n.news_category_id = ? ORDER by news_date DESC";
 					$dbresult = $db->Execute($query,array($curcategory));
 				}
 				else
 				{
-					$query = "SELECT * FROM ".cms_db_prefix()."module_news ORDER by news_date DESC";
+					$query = "SELECT n.*, nc.long_name FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id ORDER by news_date DESC";
 					$dbresult = $db->Execute($query);
 				}
 
@@ -1203,6 +1203,7 @@ Posted: {$entry->postdate|date_format}
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
+					$onerow->category = $row['long_name'];
 					$onerow->rowclass = $rowclass;
 
 					$onerow->editlink = $this->CreateLink($id, 'editarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('articleid'=>$row['news_id']));
@@ -1220,6 +1221,7 @@ Posted: {$entry->postdate|date_format}
 
 				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
 				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
 
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');

@@ -4,6 +4,7 @@
 		<tr>
 			<th>{$titletext}</th>
 			<th>{$postdatetext}</th>
+			<th>{$categorytext}</th>
 			<th class="pageicon">&nbsp;</th>
 			<th class="pageicon">&nbsp;</th>
 		</tr>
@@ -13,6 +14,7 @@
 		<tr class="{$entry->rowclass}" onmouseover="this.className='{$entry->rowclass}hover';" onmouseout="this.className='{$entry->rowclass}';">
 			<td>{$entry->title}</td>
 			<td>{$entry->postdate}</td>
+			<td>{$entry->category}</td>
 			<td>{$entry->editlink}</td>
 			<td>{$entry->deletelink}</td>
 		</tr>
