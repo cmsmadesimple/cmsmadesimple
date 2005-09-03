@@ -1460,15 +1460,25 @@ class CMSModule extends ModuleOperations
 	 * @param string The action that this form should do when the form is submitted
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
-	function Redirect($id, $action, $returnid='', $params=array())
+	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
 		global $gCms;
 		$config = $gCms->config;
 
 		$name = $this->GetName();
 
-		$text = 'moduleinterface.php?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
+		$text = '';
+		if ($inline)
+		{
+			$text .= 'index.php';
+		}
+		else
+		{
+			$text .= 'moduleinterface.php';
+		}
+		$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
 		if ($returnid != '')
 		{
 			$text .= '&'.$id.'returnid='.$returnid;
