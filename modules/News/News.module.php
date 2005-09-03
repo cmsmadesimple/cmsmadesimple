@@ -1196,7 +1196,7 @@ Posted: {$entry->postdate|date_format}
 					$onerow = new stdClass();
 
 					$onerow->id = $row['news_id'];
-					$onerow->title = $row['news_title'];
+					$onerow->title = $this->CreateLink($id, 'editarticle', $returnid, $row['news_title'], array('articleid'=>$row['news_id']));
 					$onerow->data = $row['news_data'];
 					$onerow->postdate = $row['news_date'];
 					$onerow->startdate = $row['start_time'];
