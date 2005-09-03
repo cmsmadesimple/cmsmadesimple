@@ -64,6 +64,7 @@ class News extends CMSModule
 		$this->CreateParameter('moretext', 'more...', $this->lang('helpmoretext'));
 		$this->CreateParameter('category', 'category', $this->lang('helpcategory'));
 		$this->CreateParameter('makerssbutton', 'true', $this->lang('helpmakerssbutton'));
+		$this->CreateParameter('dateformat', '%b %d, %Y', $this->lang('helpdateformat'));
 		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
 	}
 
@@ -102,9 +103,9 @@ class News extends CMSModule
 
 <br />{$entry->category}
 
-{if $entry->postdate}
+{if $entry->formatpostdate}
 
-<br />{$entry->postdate|date_format}
+<br />{$entry->formatpostdate}
 
 {/if}
 
@@ -487,6 +488,7 @@ Posted: {$entry->postdate|date_format}
 					$onerow->content = $row['news_data'];
 					$onerow->summary = (trim($row['summary'])!='<br/>'?$row['summary']:'');
 					$onerow->postdate = $row['news_date'];
+					$onerow->formatpostdate = strftime((isset($params['dateformat']) && $params['dateformat'] != ''?$params['dateformat']:'%b %d, %Y'), $db->UnixTimeStamp($row['news_date']));
 					$onerow->startdate = $row['start_time'];
 					$onerow->enddate = $row['end_time'];
 					$onerow->category = $row['news_category_name'];
