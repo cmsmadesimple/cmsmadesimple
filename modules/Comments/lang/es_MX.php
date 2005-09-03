@@ -16,7 +16,7 @@ $lang['help'] = <<<EOD
 	<p>
 	<ul>
 		<li><em>(optional)</em> number="5" - Numero maximo de comentarios a mostrar -- vacio muestra todos</li>
-		<li><em>(optional)</em> dateformat - Formato de Fecha/Hora usando parametros de la funcion strftime. Ve <a href="http://php.net/strftime" target="_blank">here</a> para consultar una lista de opciones e informacion.</li>
+		<li><em>(optional)</em> dateformat - Formato de Fecha/Hora usando parametros de la funciondate. Ve <a href="http://php.net/date" target="_blank">here</a> para consultar una lista de opciones e informacion.</li>
 	</ul>
 EOD;
 ?>

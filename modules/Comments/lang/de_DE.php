@@ -17,7 +17,7 @@ $lang['help'] = <<<EOD
 	<p>
 	<ul>
 		<li><em>(optional)</em> number="5" - Maximal anzuzeigende Kommentare -- ohne Parameter werden alle angezeigt.</li>
-		<li><em>(optional)</em> dateformat - Datum/Zeit , das Format muss dem der <a href="http://php.net/strftime" target="_blank">PHP strftime - Funktion.</a>entsprechen.</li>
+		<li><em>(optional)</em> dateformat - Datum/Zeit , das Format muss dem der <a href="http://php.net/date" target="_blank">PHP date - Funktion.</a>entsprechen.</li>
 	</ul>
 EOD;
 ?>
