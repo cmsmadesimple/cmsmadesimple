@@ -198,18 +198,36 @@ function check_permission($userid, $permname)
  * @returns mixed If they have ownership, true.  If they do not, false.
  * @since 0.1
  */
-function check_ownership($userid, $contentid = "")
+function check_ownership($userid, $contentid = '')
 {
 	$check = false;
-
 	global $gCms;
-	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE owner_id = ? AND content_id = ?";
-	$result = $db->Execute($query, array($userid, $contentid));
+	if (!isset($gCms->variables['ownerpages']))
+	{
+		$db = $gCms->db;
 
-	if ($result && $result->RowCount() > 0) {
-		$check = true;
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+		$result = $db->Execute($query, array($userid));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$variables = &$gCms->variables;
+			$variables['ownerpages'] = array();
+			
+			while ($row = $result->FetchRow())
+			{
+				array_push($variables['ownerpages'], $row['content_id']);
+			}
+		}
+	}
+
+	if (isset($gCms->variables['ownerpages']))
+	{
+		if (in_array($contentid, $gCms->variables['ownerpages']))
+		{
+			$check = true;
+		}
 	}
 
 	return $check;
@@ -223,18 +241,36 @@ function check_ownership($userid, $contentid = "")
  * @returns mixed If they have authorship, true.  If they do not, false.
  * @since 0.2
  */
-function check_authorship($userid, $contentid = "")
+function check_authorship($userid, $contentid = '')
 {
 	$check = false;
-
 	global $gCms;
-	$db = $gCms->db;
 
-	$query = "SELECT * FROM ".cms_db_prefix()."additional_users WHERE content_id = ? AND user_id = ?";
-	$result = $db->Execute($query, array($contentid, $userid));
-	if ($result && $result->RowCount() > 0)
+	if (!isset($gCms->variables['authorpages']))
 	{
-		$check = true;
+		$db = $gCms->db;
+
+		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
+		$result = $db->Execute($query, array($userid));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$variables = &$gCms->variables;
+			$variables['authorpages'] = array();
+			
+			while ($row = $result->FetchRow())
+			{
+				array_push($variables['authorpages'], $row['content_id']);
+			}
+		}
+	}
+
+	if (isset($gCms->variables['authorpages']))
+	{
+		if (in_array($contentid, $gCms->variables['authorpages']))
+		{
+			$check = true;
+		}
 	}
 
 	return $check;
