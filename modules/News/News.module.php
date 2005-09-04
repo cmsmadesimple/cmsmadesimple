@@ -444,7 +444,7 @@ Posted: {$entry->postdate|date_format}
 
 				if (isset($params["category"]))
 				{
-					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND mnc.news_category_name like '" . $params['category'] . "%' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
+					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND mnc.long_name like '" . str_replace('*', '%', $params['category']) . "' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
 				}
 				else
 				{
