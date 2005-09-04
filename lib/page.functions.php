@@ -207,14 +207,14 @@ function check_ownership($userid, $contentid = '')
 	{
 		$db = $gCms->db;
 
+		$variables = &$gCms->variables;
+		$variables['ownerpages'] = array();
+
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result = $db->Execute($query, array($userid));
 
 		if ($result && $result->RowCount() > 0)
 		{
-			$variables = &$gCms->variables;
-			$variables['ownerpages'] = array();
-			
 			while ($row = $result->FetchRow())
 			{
 				array_push($variables['ownerpages'], $row['content_id']);
@@ -250,14 +250,14 @@ function check_authorship($userid, $contentid = '')
 	{
 		$db = $gCms->db;
 
+		$variables = &$gCms->variables;
+		$variables['authorpages'] = array();
+
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
 		$result = $db->Execute($query, array($userid));
 
 		if ($result && $result->RowCount() > 0)
 		{
-			$variables = &$gCms->variables;
-			$variables['authorpages'] = array();
-			
 			while ($row = $result->FetchRow())
 			{
 				array_push($variables['authorpages'], $row['content_id']);
@@ -271,6 +271,59 @@ function check_authorship($userid, $contentid = '')
 		{
 			$check = true;
 		}
+	}
+
+	return $check;
+}
+
+/**
+ * Prepares an array with the list of the pages $userid is an author of 
+ *
+ * @returns an array in whose elements are the IDs of the pages  
+ * @since 0.11
+ */
+function author_pages($userid)
+{
+	global $gCms;
+	$db = $gCms->db;
+
+	if (!isset($gCms->variables['authorpages']))
+	{
+		$db = $gCms->db;
+
+		$variables = &$gCms->variables;
+		$variables['authorpages'] = array();
+
+		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
+		$result = $db->Execute($query, array($userid));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			while ($row = $result->FetchRow())
+			{
+				array_push($variables['authorpages'], $row['content_id']);
+			}
+		}
+	}
+
+	return $variables['authorpages'];
+}
+
+/**
+ * Quickly checks that the given userid has access to modify the given
+ * pageid.  This would mean that they were set as additional
+ * authors/editors by the owner.
+ *
+ * @returns mixed If they have authorship, true.  If they do not, false.
+ * @since 0.11
+ */
+function quick_check_authorship($contentid, $hispages)
+{
+	$check = false;
+
+	if (in_array($contentid, $hispages))
+	{
+		$check = true;
 	}
 
 	return $check;
