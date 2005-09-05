@@ -438,6 +438,15 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Display a message and a Yes/No dialog before doing an uninstall.  Returning noting
+	 * (FALSE) will go right to the uninstall.
+	 */
+	function UninstallPreMessage()
+	{
+		return FALSE;
+	}
+
+	/**
 	 * Display a message after a successful uninstall of the module.
 	 */
 	function UninstallPostMessage()

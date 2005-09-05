@@ -10,6 +10,7 @@ installs
 * Added id and class parameters to the cms_selflink tag
 * Added apply button to editing HTML Blobs
 * Added Japanese translation
+* Added UninstallPreMessage() to module API
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive
 * Changed logic of included htaccess so that html can be used

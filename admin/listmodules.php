@@ -392,7 +392,7 @@ else if ($action == 'missingdeps')
 				if (!$modinstance->CheckForDependents())
 				{
 					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
-					echo "<td><a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".lang('uninstallconfirm')."');\">".lang('uninstall')."</a></td>";
+					echo "<td><a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE?$modinstance->UninstallPreMessage():lang('uninstallconfirm'))."');\">".lang('uninstall')."</a></td>";
 				}
 				else
 				{
