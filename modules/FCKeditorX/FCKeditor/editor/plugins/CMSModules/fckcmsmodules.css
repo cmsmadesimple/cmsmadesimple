@@ -1,0 +1,35 @@
+#fckComment a, #fckComment a:visited {
+	position: relative;
+	text-decoration: none;
+	border: 0;
+}
+
+#fckComment a span {
+	display:none;
+}
+
+#fckComment a:hover {
+	color: #d00;
+	border: 0px solid #fff;
+}
+
+#fckComment a img {	
+	border: 0;
+	height: 20px;
+	width: 20px;
+}
+
+#fckComment a:hover span {
+	text-align:left;	
+	display:block;
+	border:1px solid #CCCCCC;
+	position: absolute;
+	top: 0px;
+	left: 20px;
+	width: 300px;
+	padding:5px;	
+	color:#000000;
+	background-color:#FFFFCC;
+	opacity: 0.8;
+	filter:alpha(opacity=80);
+}

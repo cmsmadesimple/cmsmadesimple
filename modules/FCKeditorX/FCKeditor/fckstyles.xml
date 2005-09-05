@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Styles>
+  <Style name="a" element="a"/>
+  <Style name="b" element="b"/>
+  <Style name="em" element="em"/>
+  <Style name="h1" element="h1"/>
+  <Style name="h2" element="h2"/>
+  <Style name="h3" element="h3"/>
+  <Style name="h4" element="h4"/>
+  <Style name="h5" element="h5"/>
+  <Style name="h6" element="h6"/>
+  <Style name="hr" element="hr"/>
+  <Style name="i" element="i"/>
+  <Style name="li" element="li"/>
+  <Style name="ol" element="ol"/>
+  <Style name="p" element="p"/>
+  <Style name="strike" element="strike"/>
+  <Style name="strong" element="strong"/>
+  <Style name="ul" element="ul"/>
+  <Style name="u" element="u"/>
+</Styles>

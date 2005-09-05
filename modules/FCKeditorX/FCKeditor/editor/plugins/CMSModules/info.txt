@@ -1,0 +1,3 @@
+(23:14:16) wishy: $gCms->modules gives you a hash of modules
+(23:14:33) wishy: To get the actual object, you do: $gCms->modules['name']['object']
+(23:14:53) wishy: From that object, you can do: ->GetParameters()

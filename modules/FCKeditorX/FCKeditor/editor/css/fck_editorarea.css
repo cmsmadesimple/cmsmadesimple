@@ -1,0 +1,367 @@
+body { font: normal 62.5% verdana; }
+
+ul.cssmenu-horizontal,
+ul.cssmenu-horizontal ul {
+  width: 150px;
+  margin: 0;
+  padding: 0;
+  background: #ccc; /* IE6 Bug */
+  font-size: 100%;
+  }
+
+ul.cssmenu-horizontal {
+  float: left;
+  width: 100%;
+  }
+
+ul.cssmenu-horizontal:after {
+  content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+  }
+
+ul.cssmenu-horizontal li {
+  position: relative;
+  list-style: none;
+  float: left;
+  width: 150px; /* Width of Menu Items */
+  }
+
+ul.cssmenu-horizontal li a,
+ul.cssmenu-horizontal li li a {
+  display: block;
+  text-decoration: none;
+  color: #777;
+  padding: 5px;
+  }
+
+/* Fix IE. Hide from IE Mac \*/
+* html ul.cssmenu-horizontal li { float: left; height: 1%; }
+* html ul.cssmenu-horizontal li a { height: 1%; }
+/* End */
+
+ul.cssmenu-horizontal ul {
+  position: absolute;
+  display: none;
+  }
+
+ul.cssmenu-horizontal ul ul {
+  left: 150px;
+  top: 0;
+  }
+
+ul.cssmenu-horizontal li ul li a { padding: 2px 5px; } /* Sub Menu Styles */
+
+ul.cssmenu-horizontal li:hover ul ul,
+ul.cssmenu-horizontal li:hover ul ul ul,
+ul.cssmenu-horizontal li.over ul ul,
+ul.cssmenu-horizontal li.over ul ul ul { display: none; } /* Hide sub-menus initially */
+
+ul.cssmenu-horizontal li:hover ul,
+ul.cssmenu-horizontal li li:hover ul,
+ul.cssmenu-horizontal li li li:hover ul,
+ul.cssmenu-horizontal li.over ul,
+ul.cssmenu-horizontal li li.over ul,
+ul.cssmenu-horizontal li li li.over ul { display: block; } /* The magic */
+
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li.menuparent { background: transparent url(modules/CSSMenu/arrow-down.gif) right center no-repeat; }
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li li.menuparent { background: transparent url(modules/CSSMenu/arrow-right.gif) right center no-repeat; }
+
+ul.cssmenu-horizontal li.menuparent:hover,
+ul.cssmenu-horizontal li.over { background-color: #f9f9f9 !important; }
+
+ul.cssmenu-horizontal li a:hover { color: #E2144A; }ul.cssmenu-vertical,
+ul.cssmenu-vertical ul {
+  margin: 0;
+  padding: 0;
+  width: 120px; /* Width of Menu Items */
+  border-bottom: 1px solid #ccc;
+  background: #fff; /* IE6 Bug */
+  font-size: 100%;
+  }
+
+ul.cssmenu-vertical li {
+  position: relative;
+  list-style: none;
+  }
+
+ul.cssmenu-vertical li a {
+  display: block;
+  text-decoration: none;
+  color: #777;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-bottom: 0;
+  }
+
+/* Fix IE. Hide from IE Mac \*/
+* html ul.cssmenu-vertical li { float: left; height: 1%; }
+* html ul.cssmenu-vertical li a { height: 1%; }
+/* End */
+
+ul.cssmenu-vertical ul {
+  position: absolute;
+  display: none;
+  left: 119px; /* Set 1px less than menu width */
+  top: 0;
+  }
+
+ul.cssmenu-vertical li ul li a { padding: 2px 5px; } /* Sub Menu Styles */
+
+ul.cssmenu-vertical li:hover ul ul,
+ul.cssmenu-vertical li:hover ul ul ul,
+ul.cssmenu-vertical li.over ul ul,
+ul.cssmenu-vertical li.over ul ul ul { display: none; } /* Hide sub-menus initially */
+
+ul.cssmenu-vertical li:hover ul,
+ul.cssmenu-vertical li li:hover ul,
+ul.cssmenu-vertical li li li:hover ul,
+ul.cssmenu-vertical li.over ul,
+ul.cssmenu-vertical li li.over ul,
+ul.cssmenu-vertical li li li.over ul { display: block; } /* The magic */
+
+.cssmenu-vertical ul, ul.cssmenu-vertical li.menuparent { background: transparent url(modules/CSSMenu/images/arrow.gif) right center no-repeat; }
+/* fixed image flicker by adding .cssmenu-vertical ul */
+
+ul.cssmenu-vertical li.menuparent:hover,
+ul.cssmenu-vertical li.over { background-color: #f9f9f9; }
+
+ul.cssmenu-vertical li a:hover { color: #E2144A; }
+
+ul.cssmenu-vertical .sectionheader { font-weight: bold; }
+body {
+	margin: 0px 0px 0px 0px;
+	padding: 0px 0px 0px 0px;
+	font-family: verdana, arial, helvetica, sans-serif;
+	color: #ccc;
+	background-color: #333;
+	}
+a {
+	text-decoration: none;
+	font-weight: bold;
+	color:  #ccc;
+	outline: none;
+	}
+a:visited {
+	color:  #ccc;
+	}
+a:active {
+	color:  #ccc;
+	}
+a:hover {
+	color: #ccc;
+	text-decoration: underline;
+	}
+.ahem {
+	display: none;
+	}
+strong, b {
+
+	font-weight: bold;
+	}
+p {
+	font-size: 12px;
+	line-height: 22px;
+	margin-top: 20px;
+	margin-bottom: 10px; 
+	}
+
+/* weird ie5win bug: all line-height to font-size ratios must agree or box gets pushed around. UPDATE: this has turned out to be very rare. my current recommendation is IGNORE this warning. at the moment i'm leaving it in only in case the issue turns up again. possibly the original bug in march 2001 was caused by an unusual combination of factors, although this solved it at the time.*/
+
+h1 {
+	font-size: 24px;
+	line-height: 44px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+h2 {
+	font-size: 18px;
+	line-height: 40px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+h3 {
+	font-size: 16px;
+	line-height: 22px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+h4 {
+	font-size: 14px;
+	line-height: 26px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+h5 {
+	font-size: 12px;
+	line-height: 22px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+h6 {
+	font-size: 10px;
+	line-height: 18px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+p.sectionname {
+	font-size: 14px;
+	line-height: 22px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+li {
+	font-size: 12px;
+	line-height: 22px;
+	margin-top: 0;
+	margin-bottom: 0;
+	}
+img {
+	border: 0;
+	}
+.nowrap {
+	white-space: nowrap;
+	font-size: 10px;
+	font-weight: bold;
+	margin-top: 0;
+	margin-bottom: 0;
+/* must be combined with nobr in html for ie5win */
+	}
+.tiny {
+	font-size: 9px;
+	line-height: 16px;
+	margin-top: 15px;
+	margin-bottom: 5px; 
+	}
+div.menu {
+	float: left;
+	padding: 10px 2% 10px 2%;
+	margin: 20px 1% 20px 2%;
+	background: #666;
+	position: fixed;
+	border: 5px solid #ccc;
+	width: 18%;
+	}
+div.content {
+	float: right;
+	padding: 10px 2% 10px 2%;
+	margin: 20px 2% 20px 1%;
+	background: #666;
+	border: 5px solid #ccc;
+	width: 68%;
+	/* height: 90%; */
+	/* overflow: scroll; */
+	}
+pre {
+	font-size: 12px;
+	line-height: 22px;
+	margin-top: 20px;
+	margin-bottom: 10px; 
+	}
+div.heading {
+    background-color: #64879d; 
+    color: #EDF2F5;
+    padding: 9px; 
+    text-align: left; 
+    font-size: 16px; 
+    font-weight: bold;  
+    text-transform: uppercase; 
+}
+div.thebody { 
+    padding: 5px; 
+    margin-left: 150px; 
+    font-size: 10pt; 
+    font-family: Tahoma; 
+}
+p.smalltitle { 
+    font-size: 12pt; 
+    font-weight: bold; 
+    margin: 0; 
+    padding: 4px; 
+    background-color: #CCCCCC; 
+    text-transform: uppercase; 
+    color: #64879d;
+}
+
+/*  All the menu css */
+.verbar {
+    color: black;
+    background-color: #64879d;
+}
+
+.submenu    {
+    position: fixed;
+    /* position: absolute; */
+    left: 0;
+    top: 0;
+    visibility: hidden;
+}
+
+.subframe   {
+    position: relative;
+    display: block;
+    background-color: #EDF2F5;
+    border: 1px solid #64879d;
+}
+
+.item   {
+    padding: 3px;
+    text-align: left;
+    white-space: nowrap;
+}
+
+.separator  {
+    background-color: #ff0000;
+    border-top: 1px solid #9e9a91;
+    border-bottom: 1px solid #ffffff;
+    margin: 2px 1px 2px 1px;    /* top right bottom left */
+    height: 0;
+    font-size: 1px;
+    line-height: 0
+}
+
+.item a {
+    position: relative;
+    display: block;
+    text-decoration: none;
+}
+
+.item a:link    {
+    color: #000000;
+    text-decoration: none;
+}
+
+.item a:visited {
+    color: #000000;
+    text-decoration: none;
+}
+
+.item a:hover   {
+    color: #ffffff;
+    background-color: #4b6983;
+    text-decoration: none;
+}
+.item a:active  {
+    color: #ff0000;
+    text-decoration: none;
+}
+
+.item .fwdarr   {
+    position: absolute;
+    top: 5px;
+    right: 7px;
+}
+
+.fwdarrrrrrrrrrrrrrrrr   {
+    color: #ff0000;
+    text-decoration: none;
+}
