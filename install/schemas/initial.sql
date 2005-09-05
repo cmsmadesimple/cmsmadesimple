@@ -92,7 +92,7 @@ INSERT INTO {DB_PREFIX}templates ( TEMPLATE_ID, TEMPLATE_NAME, TEMPLATE_CONTENT,
 INSERT INTO {DB_PREFIX}user_groups ( GROUP_ID, USER_ID, CREATE_DATE, MODIFIED_DATE ) VALUES ( 1, 1, '2005-05-17 08:10:46', '2005-05-17 08:10:46' );
 INSERT INTO {DB_PREFIX}userplugins ( USERPLUGIN_ID, USERPLUGIN_NAME, CODE, CREATE_DATE, MODIFIED_DATE ) VALUES ( 1, 'user_agent', '//Code to show the user\'s user agent information.\r\necho $_SERVER[\"HTTP_USER_AGENT\"];', '2005-05-17 08:10:46', '2005-05-17 08:10:46' );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'use_wysiwyg', '1', null );
-INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'wysiwyg', 'TinyMCE', null );
+INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'wysiwyg', 'FCKeditorX', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'default_cms_language', null, null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'admintheme', 'default', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'bookmarks', 'on', null );
