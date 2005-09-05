@@ -504,7 +504,13 @@ Posted: {$entry->postdate|date_format}
 
 					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], $sendtodetail,'',false,false,'',true);
 					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, $sendtodetail,'',false,false,'',true);
-					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
+					$sendtoprint = array('articleid'=>$row['news_id'],'showtemplate'=>'false');
+					if (isset($params['lang']))
+					{
+						$sendtodetail['lang'] = $params['lang'];
+						$sendtoprint['lang'] = $params['lang'];
+					}
+					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), $sendtoprint);
 
 					array_push($entryarray, $onerow);
 				}
@@ -541,7 +547,12 @@ Posted: {$entry->postdate|date_format}
 					$onerow->enddate = $row['end_time'];
 					$onerow->category = $row['news_category_name'];
 
-					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), array('articleid'=>$row['news_id'],'showtemplate'=>'false'));
+					$sendtoprint = array('articleid'=>$row['news_id'],'showtemplate'=>'false');
+					if (isset($params['lang']))
+					{
+						$sendtoprint['lang'] = $params['lang'];
+					}
+					$onerow->printlink = $this->CreateLink($id, 'print', $returnid, $this->Lang('print'), $sendtoprint);
 
 					$this->smarty->assign_by_ref('entry', $onerow);
 				}
