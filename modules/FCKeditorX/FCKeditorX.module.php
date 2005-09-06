@@ -286,7 +286,7 @@ class FCKeditorX extends CMSModule
 <table style="border: 1px solid #F9F2DE;">
 <tr>
 <th style="background-color:#F9F2DE;" colspan="3" align="right">
-<img src="<?php echo $this->cms->config["root_url"]; ?>/modules/FCKeditor/FCKeditor/logotop.gif" width="238" height="41">
+<img src="<?php echo $this->cms->config["root_url"]; ?>/modules/FCKeditorX/FCKeditor/logotop.gif" width="238" height="41">
 </th>
 </tr>
 <tr>
