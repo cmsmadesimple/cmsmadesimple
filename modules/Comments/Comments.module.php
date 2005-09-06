@@ -90,7 +90,7 @@ class Comments extends CMSModule
 
 	function SetParameters()
 	{
-		$this->CreateParameter('makerssbutton', '', $this->lang('helpdateformat'));
+		$this->CreateParameter('dateformat', '', $this->lang('helpdateformat'));
 		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
 	}
 
