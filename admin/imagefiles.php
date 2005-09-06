@@ -222,9 +222,7 @@ $row = "row1";
 
 $dirtext = "";
 $filetext = "";
-
-
-
+$file = "";
 
 if ($errors != "")
 {
