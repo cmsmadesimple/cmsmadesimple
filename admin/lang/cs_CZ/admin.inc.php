@@ -291,4 +291,5 @@ $lang['admin']['managebookmarksdescription'] = 'Zde můžete spravovat Vaše adm
 $lang['admin']['options'] = 'Volby';
 $lang['admin']['langparam'] = 'Tento parametr specifikuje, jaký jazyk rozhraní použít. Ne všechny moduly toto podporují nebo potřebují.';
 $lang['admin']['parameters'] = 'Parametry';
+$lang['admin']['mediatype'] = 'Media Type'; //needs translation
 ?>

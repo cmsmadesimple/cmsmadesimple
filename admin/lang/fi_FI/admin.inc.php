@@ -292,4 +292,5 @@ $lang['admin']['welcomemsg'] = 'Tervetuloa %s';
 $lang['admin']['wysiwygtouse'] = 'Valitse WYSIWYG käyttöön';
 $lang['admin']['langparam'] = 'Parameter is used to specify what language to use for display on the frontend. Not all modules support or need this.'; //needs translation
 $lang['admin']['parameters'] = 'Parameters'; //needs translation
+$lang['admin']['mediatype'] = 'Media Type'; //needs translation
 ?>

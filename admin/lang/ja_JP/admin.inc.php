@@ -289,4 +289,5 @@ $lang['admin']['adminprefs'] = 'ユーザー画面設定';
 $lang['admin']['adminprefsdescription'] = 'サイト管理の為の画面設定';
 $lang['admin']['managebookmarksdescription'] = 'ここで管理ブックマークを管理します。';
 $lang['admin']['options'] = 'オプション';
+$lang['admin']['mediatype'] = 'Media Type'; //needs translation
 ?>

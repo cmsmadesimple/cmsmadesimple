@@ -289,5 +289,4 @@ $lang['admin']['adminprefs'] = 'Administrations konfiguration';
 $lang['admin']['adminprefsdescription'] = 'Her kan du indstille dine specifikke indstillinger for administrationen.';
 $lang['admin']['managebookmarksdescription'] = 'Her kan du konfigurere dine bogmærker i administrationen.';
 $lang['admin']['options'] = 'Indstillinger';
-$lang['admin']['langparam'] = 'Dette parameter bruges til at angive på hvilket sprog frontend-delen skal vises på. Ikke alle moduler understøtter eller behøver dette.';
-$lang['admin']['parameters'] = 'Parametre';
+$lang['admin']['mediatype'] = 'Media Type'; //needs translation
