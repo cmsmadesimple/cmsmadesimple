@@ -1151,15 +1151,21 @@ class AdminTheme
      * DisplayHTMLHeader
      * This method outputs the HEAD section of the html page in the admin section.
      */
-    function DisplayHTMLHeader()
+    function DisplayHTMLHeader($showielink = false)
     {
 ?><head>
 <meta name="robots" content="noindex, nofollow" />
 <title><?php echo $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
+<?php
+	if ($showielink) {
+?>
 <!--[if IE]>
 <link rel="stylesheet" type="text/css" href="style.php?ie=1" />
 <![endif]-->
+<?php
+	}
+?>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
 </head>
