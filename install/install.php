@@ -287,10 +287,34 @@ Please complete the following fields:
 	<TD>Database Type:</TD>
 	<TD>
 		<SELECT NAME="dbms">
-			<OPTION VALUE="mysql" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysql'?'selected="selected"':'') ?>>MySQL (3 and 4.0)</OPTION>
-			<OPTION VALUE="mysqli" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysqli'?'selected="selected"':'') ?>>MySQL (4.1+)</OPTION>
-			<OPTION VALUE="postgres7" <?php echo (isset($_POST['dbms']) && $_POST['dbms'] == 'postgres7'?'selected="selected"':'') ?>>PostgreSQL 7/8</OPTION>
+<?php
+$valid_database = false;
+if (function_exists('mysql_connect'))
+	{
+	echo '<OPTION VALUE="mysql" ';
+	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysql'?'selected="selected"':'');
+	echo '>MySQL (3 and 4.0)</OPTION>';
+	$valid_database = true;
+	}
+if (function_exists('mysqli_connect'))
+	{
+	echo '<OPTION VALUE="mysqli" ';
+	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysqli'?'selected="selected"':'');
+	echo '>MySQL (4.1+)</OPTION>';
+	$valid_database = true;
+	}
+if (function_exists('pg_connect'))
+	{
+	echo '<OPTION VALUE="postgres7" ';
+	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'postgres7'?'selected="selected"':'');
+	echo '>PostgreSQL 7/8</OPTION>';
+	$valid_database = true;
+	}
+?>
 		</SELECT>
+<?php if (! $valid_database) { ?>
+<div class="error">No valid database drivers appear to be compiled into your PHP install. Please confirm that you have mysql, mysqli, and/or postgres7 support installed, and try again.</div>
+<?php } ?>
 	</TD>
 </TR>
 <TR CLASS="row1">
@@ -341,7 +365,8 @@ function showPageFour($sqlloaded = 0) {
 
         global $config, $CMS_SCHEMA_VERSION;
 
-		$db = &ADONewConnection($_POST['dbms']);
+		$db = ADONewConnection($_POST['dbms']);
+
 		#$db->debug = true;
 		$result = @$db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
 
