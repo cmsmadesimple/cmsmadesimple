@@ -140,7 +140,7 @@ class AdminTheme
             }
         else
             {
-            $this->script = array_pop(explode('/',$this->url));
+            $this->script = array_pop(@explode('/',$this->url));
     	    }
 
 	}
