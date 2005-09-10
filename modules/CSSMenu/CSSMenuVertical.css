@@ -57,3 +57,10 @@ ul.cssmenu-vertical li.over { background-color: #f9f9f9; }
 ul.cssmenu-vertical li a:hover { color: #E2144A; }
 
 ul.cssmenu-vertical .sectionheader { font-weight: bold; }
+
+.currentpage
+{
+	list-style-type: square;
+	display: inline;
+	background-color: Red;
+}

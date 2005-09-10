@@ -29,7 +29,7 @@ class CSSMenu extends CMSModule
 
   function GetVersion()
   {
-    return '1.1.6';
+    return '1.1.7';
   }
 
   function HasAdmin()
@@ -58,11 +58,14 @@ class CSSMenu extends CMSModule
 		$this->CreateParameter('number_of_levels', '', $this->lang('helpnumber_of_levels'));
 		$this->CreateParameter('start_element', '', $this->lang('helpstart_element'));
 		$this->CreateParameter('showadmin', '1', $this->lang('helpshowadmin'));
+		$this->CreateParameter('relative', '0', $this->lang('helprelative'));
+
 	}
 
   function GetChangeLog()
   {
     return "
+      1.1.7: Added parameter 'relative' for creating context sensitive menus<br />
       1.1.6: Fixed script tag to be xhtml strict<br />
       Added horizontal option.<br />
       1.1.5: Fixed section headings when used as a submenu.<br />
@@ -137,11 +140,20 @@ class CSSMenu extends CMSModule
         $basedepth = 0;
         $menu .= '<div id="listmenu">'."\n";
 
+
         #Reset the base depth if necessary...
         if (isset($params['start_element']))
         {
           $basedepth = count(split('\.', (string)$params['start_element'])) - 1;
         }
+
+        # set starting position to current page if relative defined
+		if (isset($params['relative']) && $params['relative']==1) // this is a little hack
+		{
+			$params['start_element'] = $gCms->variables['position'];
+			$basedepth = 	$params['start_element'];
+			
+		}
 
         foreach ($allcontent as $onecontent)
         {
@@ -269,13 +281,19 @@ class CSSMenu extends CMSModule
             $menu .= '<li><a href="#">'.$onecontent->MenuText().'</a>'; // Need to find a work around line # 217
           }
           else
-          {
+          { 
+          	if (! ((isset($params['relative']) || $params['relative']==1) &&
+          	       (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id']) ))
+          	       // we are not going to show current page if relative it's enabled - we'll show only his childs
+          	{
             $menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
             if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
             {
               $menu .= " class=\"currentpage\"";
             }
             $menu .= ">".$onecontent->MenuText()."</a>";
+          	}
+          	
           }
           $last_level = $depth;
           $count++;
