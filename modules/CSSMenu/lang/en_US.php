@@ -5,6 +5,7 @@ $lang['helpshowadmin'] = '1/0, whether you want to show or not the admin link.';
 $lang['helpstart_element'] = 'the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.';
 $lang['helpnumber_of_levels'] = 'an integer, the number of levels you want to show in your menu.';
 $lang['helphorizontal'] = '1/0, whether you want to have a horizontal menu instead of vertical.';
+$lang['helprelative'] = '1/0, if set the menu will generate only the childs of the current page. This is very usefull if you want to add context sensitive menus.';
 $lang['help'] = <<<EOF
   <h3>What does this do?</h3>
   <p>Prints a vertical standards compliant CSS-only menu. A small bit of JavaScript is required for IE.</p>
