@@ -117,10 +117,7 @@ else
 {
 	echo "<p>Upgrading config.php...";
 
-	if (cms_config_check_old_config())
-	{
-		cms_config_upgrade();
-	}
+	cms_config_upgrade();
 	$config = cms_config_load(true);
 	cms_config_save($config);
 
