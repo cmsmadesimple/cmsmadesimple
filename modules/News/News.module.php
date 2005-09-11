@@ -674,13 +674,13 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				#Display template
-				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'addcategory', $returnid));
-				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
-				$this->smarty->assign_by_ref('nametext', $this->Lang('name'));
-				$this->smarty->assign_by_ref('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
-				$this->smarty->assign_by_ref('parentdropdown', $this->CreateParentDropdown($id, -1, -1));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('startform', $this->CreateFormStart($id, 'addcategory', $returnid));
+				$this->smarty->assign('endform', $this->CreateFormEnd());
+				$this->smarty->assign('nametext', $this->Lang('name'));
+				$this->smarty->assign('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
+				$this->smarty->assign('parentdropdown', $this->CreateParentDropdown($id, -1, -1));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
 				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 
@@ -740,14 +740,14 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				#Display template
-				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'editcategory', $returnid));
-				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
-				$this->smarty->assign_by_ref('nametext', $this->Lang('name'));
-				$this->smarty->assign_by_ref('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
-				$this->smarty->assign_by_ref('parentdropdown', $this->CreateParentDropdown($id, $catid, $parentid));
-				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'catid', $catid));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('startform', $this->CreateFormStart($id, 'editcategory', $returnid));
+				$this->smarty->assign('endform', $this->CreateFormEnd());
+				$this->smarty->assign('nametext', $this->Lang('name'));
+				$this->smarty->assign('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
+				$this->smarty->assign('parentdropdown', $this->CreateParentDropdown($id, $catid, $parentid));
+				$this->smarty->assign('hidden', $this->CreateInputHidden($id, 'catid', $catid));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
 				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 
@@ -897,33 +897,33 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				#Display template
-				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'addarticle', $returnid));
-				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
-				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
-				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
-				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
-				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign('startform', $this->CreateFormStart($id, 'addarticle', $returnid));
+				$this->smarty->assign('endform', $this->CreateFormEnd());
+				$this->smarty->assign('titletext', $this->Lang('title'));
+				$this->smarty->assign('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
+				$this->smarty->assign('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');
-				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
+				$this->smarty->assign('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
 				$this->smarty->assign_by_ref('startdate', $startdate);
 				$this->smarty->assign('startdateprefix', $id.'startdate_');
 				$this->smarty->assign_by_ref('enddate', $enddate);
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
-				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
-				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+				$this->smarty->assign('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
+				$this->smarty->assign('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 
-				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
-				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
-				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
-				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
-				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
-				$this->smarty->assign_by_ref('statustext', lang('status'));
-				$this->smarty->assign_by_ref('useexpirationtext', $this->Lang('useexpiration'));
-				$this->smarty->assign_by_ref('startdatetext', $this->Lang('startdate'));
-				$this->smarty->assign_by_ref('enddatetext', $this->Lang('enddate'));
+				$this->smarty->assign('titletext', $this->Lang('title'));
+				$this->smarty->assign('categorytext', $this->Lang('category'));
+				$this->smarty->assign('summarytext', $this->Lang('summary'));
+				$this->smarty->assign('contenttext', $this->Lang('content'));
+				$this->smarty->assign('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign('statustext', lang('status'));
+				$this->smarty->assign('useexpirationtext', $this->Lang('useexpiration'));
+				$this->smarty->assign('startdatetext', $this->Lang('startdate'));
+				$this->smarty->assign('enddatetext', $this->Lang('enddate'));
 
 				echo $this->ProcessTemplate('editarticle.tpl');
 
@@ -1060,35 +1060,35 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				#Display template
-				$this->smarty->assign_by_ref('startform', $this->CreateFormStart($id, 'editarticle', $returnid));
-				$this->smarty->assign_by_ref('endform', $this->CreateFormEnd());
-				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
-				$this->smarty->assign_by_ref('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
-				$this->smarty->assign_by_ref('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
-				$this->smarty->assign_by_ref('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
-				$this->smarty->assign_by_ref('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
+				$this->smarty->assign('startform', $this->CreateFormStart($id, 'editarticle', $returnid));
+				$this->smarty->assign('endform', $this->CreateFormEnd());
+				$this->smarty->assign('titletext', $this->Lang('title'));
+				$this->smarty->assign('inputtitle', $this->CreateInputText($id, 'title', $title, 30, 255));
+				$this->smarty->assign('inputcontent', $this->CreateTextArea(true, $id, $content, 'content'));
+				$this->smarty->assign('inputsummary', $this->CreateTextArea(true, $id, $summary, 'summary', '', '', '', '', '80', '3'));
+				$this->smarty->assign('inputexp', $this->CreateInputCheckbox($id, 'useexp', '1', $useexp, 'class="pagecheckbox"'));
 				$this->smarty->assign_by_ref('postdate', $postdate);
 				$this->smarty->assign('postdateprefix', $id.'postdate_');
 				$this->smarty->assign_by_ref('startdate', $startdate);
 				$this->smarty->assign('startdateprefix', $id.'startdate_');
 				$this->smarty->assign_by_ref('enddate', $enddate);
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
-				$this->smarty->assign_by_ref('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
+				$this->smarty->assign('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
 				debug_buffer($categorylist);
-				$this->smarty->assign_by_ref('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
-				$this->smarty->assign_by_ref('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
-				$this->smarty->assign_by_ref('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
-				$this->smarty->assign_by_ref('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
+				$this->smarty->assign('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
+				$this->smarty->assign('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 
-				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
-				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
-				$this->smarty->assign_by_ref('summarytext', $this->Lang('summary'));
-				$this->smarty->assign_by_ref('contenttext', $this->Lang('content'));
-				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
-				$this->smarty->assign_by_ref('statustext', lang('status'));
-				$this->smarty->assign_by_ref('useexpirationtext', $this->Lang('useexpiration'));
-				$this->smarty->assign_by_ref('startdatetext', $this->Lang('startdate'));
-				$this->smarty->assign_by_ref('enddatetext', $this->Lang('enddate'));
+				$this->smarty->assign('titletext', $this->Lang('title'));
+				$this->smarty->assign('categorytext', $this->Lang('category'));
+				$this->smarty->assign('summarytext', $this->Lang('summary'));
+				$this->smarty->assign('contenttext', $this->Lang('content'));
+				$this->smarty->assign('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign('statustext', lang('status'));
+				$this->smarty->assign('useexpirationtext', $this->Lang('useexpiration'));
+				$this->smarty->assign('startdatetext', $this->Lang('startdate'));
+				$this->smarty->assign('enddatetext', $this->Lang('enddate'));
 
 				echo $this->ProcessTemplate('editarticle.tpl');
 
@@ -1226,13 +1226,13 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);
-				$this->smarty->assign_by_ref('itemcount', count($entryarray));
+				$this->smarty->assign('itemcount', count($entryarray));
 
 				$this->smarty->assign('addlink', $this->CreateLink($id, 'addarticle', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newobject.gif', $this->Lang('addarticle'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addarticle', $returnid, $this->Lang('addarticle'), array(), '', false, false, 'class="pageoptions"'));
 
-				$this->smarty->assign_by_ref('titletext', $this->Lang('title'));
-				$this->smarty->assign_by_ref('postdatetext', $this->Lang('postdate'));
-				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
+				$this->smarty->assign('titletext', $this->Lang('title'));
+				$this->smarty->assign('postdatetext', $this->Lang('postdate'));
+				$this->smarty->assign('categorytext', $this->Lang('category'));
 
 				#Display template
 				echo $this->ProcessTemplate('articlelist.tpl');
@@ -1269,13 +1269,13 @@ Posted: {$entry->postdate|date_format}
 				}
 
 				$this->smarty->assign_by_ref('items', $entryarray);
-				$this->smarty->assign_by_ref('itemcount', count($entryarray));
+				$this->smarty->assign('itemcount', count($entryarray));
 
 				#Setup links
-				$this->smarty->assign_by_ref('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
+				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 				$this->smarty->assign('addlink', $this->CreateLink($id, 'addcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/newfolder.gif', $this->Lang('addcategory'),'','','systemicon'), array(), '', false, false, '') .' '. $this->CreateLink($id, 'addcategory', $returnid, $this->Lang('addcategory'), array(), '', false, false, 'class="pageoptions"'));
 
-				$this->smarty->assign_by_ref('categorytext', $this->Lang('category'));
+				$this->smarty->assign('categorytext', $this->Lang('category'));
 
 				#Display template
 				echo $this->ProcessTemplate('categorylist.tpl');
