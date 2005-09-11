@@ -31,7 +31,7 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		else
 		{
-			return $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'));
+			return $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'), '', $pageinfo->content_id);
 		}
 	}
 	return '';

@@ -91,12 +91,12 @@ $html = "";
 if (isset($_GET["print"]))
 {
 	($smarty->is_cached('print:'.$page)?$cached="":$cached="not ");
-	$html = $smarty->fetch('print:'.$page) . "\n";
+	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }
 else
 {
 	($smarty->is_cached('template:'.$page)?$cached="":$cached="not ");
-	$html = $smarty->fetch('template:'.$page) . "\n";
+	$html = $smarty->fetch('template:'.$page, '', $pageinfo->template_id) . "\n";
 }
 
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
