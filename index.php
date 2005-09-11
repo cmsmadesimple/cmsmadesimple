@@ -90,12 +90,12 @@ if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
 $html = "";
 if (isset($_GET["print"]))
 {
-	($smarty->is_cached('print:'.$page)?$cached="":$cached="not ");
+	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
 	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }
 else
 {
-	($smarty->is_cached('template:'.$page)?$cached="":$cached="not ");
+	($smarty->is_cached('template:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
 	$html = $smarty->fetch('template:'.$page, '', $pageinfo->template_id) . "\n";
 }
 
