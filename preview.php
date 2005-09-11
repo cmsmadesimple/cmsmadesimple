@@ -19,9 +19,12 @@
 #$Id$
 
 require_once(dirname(__FILE__)."/include.php");
-require_once(dirname(__FILE__)."/lib/preview.functions.php");
+#require_once(dirname(__FILE__)."/lib/preview.functions.php");
 
-$smarty = new Smarty_Preview($config);
+#$smarty = new Smarty_Preview($config);
+#$gCms->smarty = &$smarty;
+
+$smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
 
 $page = "";

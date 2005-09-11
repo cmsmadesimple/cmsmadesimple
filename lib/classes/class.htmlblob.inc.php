@@ -30,6 +30,7 @@ class HtmlBlob
 	var $name;
 	var $content;
 	var $owner;
+	var $modified_date;
 
 	function HtmlBlob()
 	{
@@ -42,6 +43,7 @@ class HtmlBlob
 		$this->name = '';
 		$this->content = '';
 		$this->owner = -1;
+		$this->modified_date = -1;
 	}
 
 	function Save()
@@ -148,7 +150,7 @@ class HtmlBlobOperations
 
 		$result = array();
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_id";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_id";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -160,6 +162,7 @@ class HtmlBlobOperations
 				$oneblob->name = $row['htmlblob_name'];
 				$oneblob->content = $row['html'];
 				$oneblob->owner = $row['owner'];
+				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				array_push($result, $oneblob);
 			}
 		}
@@ -174,7 +177,7 @@ class HtmlBlobOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -186,6 +189,7 @@ class HtmlBlobOperations
 				$oneblob->name = $row['htmlblob_name'];
 				$oneblob->content = $row['html'];
 				$oneblob->owner = $row['owner'];
+				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				$result = $oneblob;
 			}
 		}
@@ -200,7 +204,7 @@ class HtmlBlobOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
 		$dbresult = $db->Execute($query, array($name));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -212,6 +216,7 @@ class HtmlBlobOperations
 				$oneblob->name = $row['htmlblob_name'];
 				$oneblob->content = $row['html'];
 				$oneblob->owner = $row['owner'];
+				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				$result = $oneblob;
 			}
 		}

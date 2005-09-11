@@ -47,7 +47,7 @@ class Smarty_CMS extends Smarty {
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
-		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/');
+		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
 
 		$this->caching = true;
 		$this->compile_check = true;
@@ -70,14 +70,516 @@ class Smarty_CMS extends Smarty {
 
 		load_plugins($this);
 
-		$this->register_resource("db", array(&$this, "db_get_template",
-						       "db_get_timestamp",
+		$this->register_resource("db", array(&$this, "template_get_template",
+						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
 		$this->register_resource("print", array(&$this, "db_get_template",
 						       "db_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+		$this->register_resource("htmlblob", array(&$this, "html_blob_get_template",
+						       "html_blob_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("preview", array(&$this, "preview_get_template",
+						       "preview_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("content", array(&$this, "content_get_template",
+						       "content_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("template", array(&$this, "template_get_template",
+						       "template_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("module", array(&$this, "module_get_template",
+						       "module_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+	}
+
+	function html_blob_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		debug_buffer('start html_blob_get_template');
+		global $gCms;
+
+		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($tpl_name);
+		if ($oneblob)
+		{
+			$text = $oneblob->content;
+
+			#Perform the content htmlblob callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentHtmlBlob($text);
+				}
+			}
+
+			$tpl_source = $text;
+		}
+		else
+		{
+			$tpl_source = "<!-- Html blob '" . $tpl_name . "' does not exist  -->";
+		}
+		debug_buffer('end html_blob_get_template');
+		return true;
+	}
+
+	function html_blob_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		debug_buffer('start html_blob_get_timestamp');
+		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($tpl_name);
+		if ($oneblob)
+		{
+			$tpl_timestamp = $oneblob->modified_date;
+			debug_buffer('end html_blob_get_timestamp');
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+	function preview_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		global $gCms;
+		$config = $gCms->config;
+
+		$fname = '';
+		if (is_writable($config["previews_path"]))
+		{
+			$fname = $config["previews_path"] . "/" . $tpl_name;
+		}
+		else
+		{
+			$fname = TMP_CACHE_LOCATION . '/' . $tpl_name;
+		}
+		$handle = fopen($fname, "r");
+		$data = unserialize(fread($handle, filesize($fname)));
+		fclose($handle);
+		unlink($fname);
+
+		$tpl_source = $data["template"];
+
+		#Perform the content template callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
+			}
+		}
+
+		$gCms->variables['page'] = $data['content_id'];
+		$gCms->variables['page_id'] = $data['content_id'];
+		$gCms->variables['content_id'] = $data['content_id'];
+		$gCms->variables['page_name'] = $data['title'];
+		$gCms->variables['position'] = $data['hierarchy'];
+
+		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
+
+		$stylesheet = '';
+
+		if (isset($data["stylesheet"]))
+		{
+			$stylesheet .= $data["stylesheet"];
+		}
+		
+		#Perform the content stylesheet callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			$gCms->modules[$key]['object']->ContentStylesheet($stylesheet);
+		}
+
+		$stylesheet = "<style type=\"text/css\">{literal}\n".$stylesheet."{/literal}</style>\n";
+
+		$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+
+		$content = $data["content"];
+
+		#Perform the content data callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentData($content);
+			}
+		}
+
+		$tpl_source = eregi_replace("\{content\}", $content, $tpl_source);
+
+		$title = $data['title'];
+		$menutext = $data['menutext'];
+
+		#Perform the content title callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentTitle($title);
+			}
+		}
+
+		$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+		$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
+
+		#Perform the content prerender callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+			}
+		}
+
+		return true;
+	}
+
+	function preview_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		$tpl_timestamp = time();
+		return true;
+	}
+
+	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		debug_buffer('start template_get_template');
+		global $gCms;
+
+		if (get_site_preference('enablesitedownmessage') == "1")
+		{
+			$tpl_source = get_site_preference('sitedownmessage');
+			return true;
+		}
+		else
+		{
+			$pageinfo = $gCms->variables['pageinfo'];
+
+			debug_buffer('template');
+			debug_buffer($pageinfo);
+
+			$gCms->variables['content_id'] = $pageinfo->content_id;
+			$gCms->variables['page'] = $tpl_name;
+			$gCms->variables['page_id'] = $tpl_name;
+
+			$gCms->variables['page_name'] = $pageinfo->content_alias;
+			$gCms->variables['position'] = $pageinfo->hierarchy;
+
+			if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+			{
+				$tpl_source = '{content}';
+				return true;
+			}
+			else
+			{
+				$templateobj = TemplateOperations::LoadTemplateByID($pageinfo->template_id);
+				if (isset($templateobj) && $templateobj !== FALSE)
+				{
+					#Time to fill our template content
+					#If it's in print mode, then just create a simple stupid template
+					if (isset($_GET["print"]))
+					{
+						$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}</body></html>';
+					}
+					else
+					{
+						$tpl_source = $templateobj->content;
+					}
+
+					#Perform the content template callback
+					foreach($gCms->modules as $key=>$value)
+					{
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true)
+						{
+							$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
+						}
+					}
+					debug_buffer('end template_get_template');
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		debug_buffer('start template_get_timestamp');
+		global $gCms;
+
+		if (get_site_preference('enablesitedownmessage') == "1")
+		{
+			$tpl_source = get_site_preference('sitedownmessage');
+			return true;
+		}
+		else
+		{
+			$pageinfo = &$gCms->variables['pageinfo'];
+
+			$tpl_timestamp = $pageinfo->template_modified_date;
+			debug_buffer('end template_get_timestamp');
+			return true;
+		}
+	}
+
+	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		debug_buffer('start content_get_template');
+		global $gCms;
+
+		$pageinfo = $gCms->variables['pageinfo'];
+
+		$contentobj = ContentManager::LoadContentFromId($pageinfo->content_id);
+		if (isset($contentobj) && $contentobj !== FALSE)
+		{
+			$tpl_source = $contentobj->GetPropertyValue('content_en');
+
+			#Perform the content prerender callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+				}
+			}
+
+			debug_buffer('end content_get_template');
+			return true;
+		}
+		return false;
+	}
+
+	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		debug_buffer('start content_get_timestamp');
+		global $gCms;
+
+		$pageinfo = &$gCms->variables['pageinfo'];
+
+		$tpl_timestamp = $pageinfo->content_modified_date;
+		debug_buffer('end content_get_timestamp');
+		return true;
+	}
+	
+	function module_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		global $gCms;
+		$pageinfo =& $gCms->variables['pageinfo'];
+
+		#Run the execute_user function and replace {content} with it's output 
+		if (isset($gCms->modules[$tpl_name]))
+		{
+			@ob_start();
+			$usePassedID = true;
+
+			foreach ($_REQUEST as $key=>$value)
+			{
+				if (strpos($key, 'cntnt01') !== FALSE)
+				{
+					$usePassedID = false;
+				}
+			}
+
+			if ($usePassedID)
+			{
+				$id = $smarty_obj->id;
+			}
+			else
+			{
+				$id = 'cntnt01';
+			}
+
+			$params = @ModuleOperations::GetModuleParameters($id);
+			echo $gCms->modules[$tpl_name]['object']->DoActionBase((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, isset($pageinfo)?$pageinfo->content_id:'');
+			$modoutput = @ob_get_contents();
+			@ob_end_clean();
+
+			$tpl_source = $modoutput;
+
+			#Perform the content data callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentData($modoutput);
+				}
+			}
+		}
+
+		#Perform the content prerender callback
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+			}
+		}
+		
+		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+		if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
+		{
+			header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
+			header("Pragma: public");
+		}
+
+		return true;
+		/*
+		global $gCms;
+		$config = $gCms->config;
+		$db = $gCms->db;
+		$cmsmodules = $gCms->modules;
+		$pageinfo = $gCms->variables['pageinfo'];
+
+		if (isset($pageinfo) && $pageinfo !== FALSE)
+		{
+			$gCms->variables['content_id'] = $tpl_name;
+			$gCms->variables['page'] = $tpl_name;
+			$gCms->variables['page_id'] = $pageinfo->cotent_id;
+
+			$gCms->variables['page_name'] = $pageinfo->content_name;
+
+			#Set the title
+			$title = $pageinfo->content_name;
+			$menu_text = $pageinfo->menu_text;
+
+			#Perform the content title callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentTitle($title);
+				}
+			}
+
+			#Setup the stylesheet inclusion
+			$template_id = $pageinfo->template_id;
+			#$stylesheet = '<link rel="stylesheet" type="text/css" href="stylesheet.php?templateid='.$template_id.'" />';
+
+			if ($smarty_obj->showtemplate == true)
+			{
+				$template = TemplateOperations::LoadTemplateByID($pageinfo->template_id);
+				$tpl_source = $template->content;
+
+				#Perform the content template callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
+					}
+				}
+
+				$gCms->variables['position'] = $pageinfo->hierarchy;
+
+				#$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+				#$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+
+				#So no one can do anything nasty
+				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true)) {
+					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				}
+			}
+
+			#Run the execute_user function and replace {content} with it's output 
+			if (isset($gCms->modules[$smarty_obj->module]))
+			{
+				@ob_start();
+				#call_user_func_array($gCms->modules[$smarty_obj->module]['execute_admin_function'], array($gCms,"module_".$module."_"));
+                $usePassedID = true;
+
+                foreach ($_REQUEST as $key=>$value)
+				{
+                    if (strpos($key, 'cntnt01') !== FALSE)
+					{
+                        $usePassedID = false;
+					}
+				}
+
+				if ($usePassedID)
+				{
+                    $id = $smarty_obj->id;
+				}
+                else
+				{
+				    $id = 'cntnt01';
+				}
+
+				$params = @ModuleOperations::GetModuleParameters($id);
+				echo $gCms->modules[$smarty_obj->module]['object']->DoActionBase((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, $tpl_name);
+				$modoutput = @ob_get_contents();
+				@ob_end_clean();
+
+				if ($smarty_obj->showtemplate == true)
+				{
+					#Perform the content data callback
+					foreach($gCms->modules as $key=>$value)
+					{
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true)
+						{
+							$gCms->modules[$key]['object']->ContentData($modoutput);
+						}
+					}
+
+					$tpl_source = eregi_replace("\{content\}", $modoutput, $tpl_source);
+
+					#In case any lingering tags are coming in from the content
+					$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
+					$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
+					$tpl_source = ereg_replace("\{menu_text\}", $menu_text, $tpl_source);
+				}
+				else
+				{
+					$tpl_source = $modoutput;
+				}
+			}
+
+			#Perform the content prerender callback
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+				}
+			}
+			
+			header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+			if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
+			{
+				header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
+				header("Pragma: public");
+			}
+
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+		*/
+	}
+
+	function module_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		$tpl_timestamp = time();
+		return true;
 	}
 
 	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
@@ -248,29 +750,29 @@ class Smarty_CMS extends Smarty {
 				}
 
 				#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
-				$safetycount = 0;
-				$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|i";
-				while (1 == 1)
-				{
-					$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);
-					if ($result != '' && $result != $tpl_source)
-					{
-						$tpl_source = $result;
-					}
-					else
-					{
-						break;
-					}
-
-					$safetycount++;
-
-					if ($safetycount > 15)
-					{
-						# Remove the last one so it doesn't get sent to smarty
-						$tpl_source = preg_replace($regexstr, '', $tpl_source);
-						break;
-					}
-				}
+				#$safetycount = 0;
+				#$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|i";
+				#while (1 == 1)
+				#{
+				#	$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);
+				#	if ($result != '' && $result != $tpl_source)
+				#	{
+				#		$tpl_source = $result;
+				#	}
+				#	else
+				#	{
+				#		break;
+				#	}
+				#
+				#	$safetycount++;
+				#
+				#	if ($safetycount > 15)
+				#	{
+				#		# Remove the last one so it doesn't get sent to smarty
+				#		$tpl_source = preg_replace($regexstr, '', $tpl_source);
+				#		break;
+				#	}
+				#}
 
 				#Replace stylesheet and title tags
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
@@ -407,39 +909,11 @@ function load_plugins(&$smarty)
 	$userplugins = &$gCms->userplugins;
 	$db = &$gCms->db;
 
-	$dir = dirname(dirname(__FILE__))."/plugins";
-	$ls = dir($dir);
-	while (($file = $ls->read()) != "") {
-		if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0)) {
-			if (preg_match("/^(.*?)\.(.*?)\.php/", $file, $matches)) {
-				$filename = $smarty->_get_plugin_filepath($matches[1], $matches[2]);
-				if (strpos($filename, 'function') !== false)
-				{
-					require_once $filename;
-					$smarty->register_function($matches[2], "smarty_cms_function_" . $matches[2], $smarty->cache_plugins);
-					array_push($plugins, $matches[2]);
-				}
-				else if (strpos($filename, 'compiler') !== false)
-				{
-					require_once $filename;
-					$smarty->register_compiler_function($matches[2], "smarty_cms_compiler_" . $matches[2], $smarty->cache_plugins);
-					array_push($plugins, $matches[2]);
-				}
-				else if (strpos($filename, 'prefilter') !== false)
-				{
-					require_once $filename;
-					$smarty->register_prefilter($matches[2], "smarty_cms_prefilter_" . $matches[2]);
-					array_push($plugins, $matches[2]);
-				}
-				else if (strpos($filename, 'modifier') !== false)
-				{
-					require_once $filename;
-					$smarty->register_modifier($matches[2], "smarty_cms_modifier_" . $matches[2]);
-					array_push($plugins, $matches[2]);
-				}
-			}
-		}
+	if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
+	{
+		search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
 	}
+	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
 
 	$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
 	$result = $db->Execute($query);
@@ -455,12 +929,67 @@ function load_plugins(&$smarty)
 				//Only register valid code
 				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$row['code'].'}') === FALSE))
 				{
-					$smarty->register_function($row['userplugin_name'], $functionname, $smarty->cache_plugins);
+					$smarty->register_function($row['userplugin_name'], $functionname, false);
 				}
 			}
 		}
 	}
 	sort($plugins);
+}
+
+function search_plugins(&$smarty, &$plugins, $dir, $caching)
+{
+	$ls = dir($dir);
+	while (($file = $ls->read()) != "")
+	{
+		if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+		{
+			//Valid plugins will always have a 3 part filename
+			$filearray = explode('.', $file);
+			if (count($filearray == 3))
+			{
+				$filename = $dir . '/' . $file;
+				//The part we care about is the middle one...
+				$file = $filearray[1];
+				if (strpos($filename, 'function') !== false && filesize($filename) > 50)
+				{
+					require_once $filename;
+					if (function_exists("smarty_cms_function_" . $file))
+					{
+						$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
+						array_push($plugins, $file);
+					}
+				}
+				else if (strpos($filename, 'compiler') !== false)
+				{
+					require_once $filename;
+					if (function_exists("smarty_cms_compiler_" . $file))
+					{
+						$smarty->register_compiler_function($file, "smarty_cms_compiler_" . $file, $caching);
+						array_push($plugins, $file);
+					}
+				}
+				else if (strpos($filename, 'prefilter') !== false)
+				{
+					require_once $filename;
+					if (function_exists("smarty_cms_prefilter_" . $file))
+					{
+						$smarty->register_prefilter($file, "smarty_cms_prefilter_" . $file, $caching);
+						array_push($plugins, $file);
+					}
+				}
+				else if (strpos($filename, 'modifier') !== false)
+				{
+					require_once $filename;
+					if (function_exists("smarty_cms_modifier_" . $file))
+					{
+						$smarty->register_modifier($file, "smarty_cms_modifier_" . $file, $caching);
+						array_push($plugins, $file);
+					}
+				}
+			}
+		}
+	}
 }
 
 function html_blob_regex_callback($matches)

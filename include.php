@@ -35,10 +35,10 @@ set_magic_quotes_runtime(false);
 #Setup session with different id and start it
 @session_name("CMSSESSID");
 if(!@session_id()) {
-	@session_start();
 	#Trans SID sucks also...
 	@ini_set('url_rewriter.tags', '');
 	@ini_set('session.use_trans_sid', 0);
+	@session_start();
 }
 
 require_once(dirname(__FILE__)."/lib/misc.functions.php");
@@ -104,7 +104,7 @@ function count_sql_execs($db, $sql, $inputarray)
 }
 
 if (!isset($DONT_LOAD_DB)) {
-	$db = &ADONewConnection($config['dbms']);
+	$db = &ADONewConnection($config['dbms'], 'cms:pear');
 	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 	{
 		$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
@@ -127,7 +127,8 @@ require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
-require_once(dirname(__FILE__)."/lib/sequence.functions.php");
+//require_once(dirname(__FILE__)."/lib/sequence.functions.php");
+require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.sequence.inc.php");

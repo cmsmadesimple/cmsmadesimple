@@ -30,7 +30,7 @@ $starttime = microtime();
 
 require_once(dirname(__FILE__)."/include.php");
 
-$smarty = new Smarty_ModuleInterface($config);
+$smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
 
 $smarty->id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
@@ -49,8 +49,11 @@ $smarty->showtemplate = $showtemplate;
 $params = array_merge($_GET, $_POST);
 $smarty->params = $params;
 
-$old_error_handler = set_error_handler("ErrorHandler404");
-$html = $smarty->fetch('module:'.$gCms->variables['page']) . "\n";
+//$old_error_handler = set_error_handler("ErrorHandler404");
+
+$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($gCms->variables['page']);
+$gCms->variables['pageinfo'] =& $pageinfo;
+$html = $smarty->fetch('template:'.$gCms->variables['page']) . "\n";
 
 #Perform the content postrender callback
 foreach($gCms->modules as $key=>$value)
@@ -62,7 +65,7 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
-set_error_handler($old_error_handler);
+//set_error_handler($old_error_handler);
 
 echo $html;
 

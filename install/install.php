@@ -25,7 +25,7 @@ if (!file_exists($config)) {
 		#Follow fix suggested by sig in the forums
         #$cwd = getcwd();
 		$cwd = str_replace("\\","/",dirname(__FILE__));
-        fwrite($file,"<?php\n".'$this->root_path = "'.$cwd.'";'."\n?>\n");
+        fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
         echo "Cannot create $config, please change permissions to allow this\n";
@@ -38,7 +38,7 @@ else if (filesize($config) == 0) {
 		#Follow fix suggested by sig in the forums
         #$cwd = getcwd();
 		$cwd = str_replace("\\","/",dirname(__FILE__));
-        fwrite($file,"<?php\n".'$this->root_path = "'.$cwd.'";'."\n?>\n");
+        fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
         echo "Cannot modify $config, please change permissions to allow this\n";

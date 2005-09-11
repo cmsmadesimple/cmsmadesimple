@@ -16,34 +16,28 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_content($params, &$smarty)
+function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo = $gCms->variables['pageinfo'];
-	if (isset($pageinfo) && $pageinfo !== FALSE)
-	{
-		if (isset($_GET['module']) || isset($_GET['mact']))
-		{
-			return $smarty->fetch('module:'.$_GET['module']);
-		}
-		else
-		{
-			return $smarty->fetch('content:'.$pageinfo->content_id);
-		}
-	}
-	return '';
+	return $pageinfo->content_title;
 }
 
-function smarty_cms_help_function_content()
-{
+function smarty_cms_help_function_title() {
 	?>
 	<h3>What does this do?</h3>
-	<p>Displays content</p>
+	<p>Prints the current date and time.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{current_date format="%A %d-%b-%y %T %Z"}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+	</ul>
+	</p>
 	<?php
 }
 
-function smarty_cms_about_function_content()
-{
+function smarty_cms_about_function_title() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>
@@ -53,5 +47,4 @@ function smarty_cms_about_function_content()
 	</p>
 	<?php
 }
-
 ?>

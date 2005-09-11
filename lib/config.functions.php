@@ -109,7 +109,8 @@ function cms_config_load($loadLocal = true)
 
 	if ($loadLocal == true)
 	{
-		if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
+		//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
+		if (file_exists(CONFIG_FILE_LOCATION))
 		{
 			include(CONFIG_FILE_LOCATION);
 		}
@@ -195,34 +196,6 @@ function cms_config_upgrade()
 			}
 		}
 	}
-}
-
-/**
- * Checks to see if the config file is still of the old style
- *
- * @since 0.5
- */
-function cms_config_check_old_config()
-{
-	$result = false;
-
-	$newfiledir = dirname(CONFIG_FILE_LOCATION);
-	$newfilename = CONFIG_FILE_LOCATION;
-	$handle = fopen($newfilename, "r");
-	if ($handle)
-	{
-		while (!feof($handle))
-		{
-			if (preg_match('/^\$this->.*/', fgets($handle, 4096)))
-			{
-				$result = true;
-				break;
-			}
-		}
-		fclose($handle);
-	}
-
-	return $result;
 }
 
 # vim:ts=4 sw=4 noet

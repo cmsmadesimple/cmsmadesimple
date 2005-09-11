@@ -104,7 +104,7 @@ class TemplateOperations
 
 		$result = array();
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates ORDER BY template_name";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
 		$dbresult = $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -119,6 +119,7 @@ class TemplateOperations
 				$onetemplate->content = $row['template_content'];
 				$onetemplate->encoding = $row['encoding'];
 				$onetemplate->stylesheet = $row['stylesheet'];
+				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				array_push($result, $onetemplate);
 			}
 		}
@@ -133,7 +134,7 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->db;
 
-		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RowCount() > 0)
@@ -148,7 +149,60 @@ class TemplateOperations
 				$onetemplate->encoding = $row['encoding'];
 				$onetemplate->default = $row['default_template'];
 				$onetemplate->active = $row['active'];
+				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				$result = $onetemplate;
+			}
+		}
+
+		return $result;
+	}
+
+	function LoadTemplateByContentAlias($alias)
+	{
+		$result = false;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "SELECT t.template_id, t.template_name, t.template_content, t.stylesheet, t.encoding, t.active, t.default_template, t.modified_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+		$dbresult = $db->Execute($query, array($alias, $alias));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				$onetemplate = new Template();
+				$onetemplate->id = $row['template_id'];
+				$onetemplate->name = $row['template_name'];
+				$onetemplate->content = $row['template_content'];
+				$onetemplate->stylesheet = $row['stylesheet'];
+				$onetemplate->encoding = $row['encoding'];
+				$onetemplate->default = $row['default_template'];
+				$onetemplate->active = $row['active'];
+				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
+				$result = $onetemplate;
+			}
+		}
+
+		return $result;
+	}
+
+	function LoadTemplateAndContentDates($alias)
+	{
+		$result = array();
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+		$dbresult = $db->Execute($query, array($alias, $alias));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				array_push($result, $row['c_date']);
+				array_push($result, $row['t_date']);
 			}
 		}
 
