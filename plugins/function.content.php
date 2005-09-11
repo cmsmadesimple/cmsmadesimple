@@ -24,11 +24,14 @@ function smarty_cms_function_content($params, &$smarty)
 	{
 		if (isset($_GET['module']) || isset($_GET['mact']))
 		{
-			return $smarty->fetch('module:'.$_GET['module']);
+			if (!isset($params['block']))
+			{
+				return $smarty->fetch('module:' . $_GET['module']);
+			}
 		}
 		else
 		{
-			return $smarty->fetch('content:'.$pageinfo->content_id);
+			return $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'));
 		}
 	}
 	return '';

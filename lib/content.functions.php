@@ -343,7 +343,12 @@ class Smarty_CMS extends Smarty {
 		$contentobj = ContentManager::LoadContentFromId($pageinfo->content_id);
 		if (isset($contentobj) && $contentobj !== FALSE)
 		{
-			$tpl_source = $contentobj->GetPropertyValue('content_en');
+			if ($tpl_name != 'content_en')
+			{
+				//TODO: Fix Me.  This is a super hack.
+				$contentobj->GetAdditionalContentBlocks();
+			}
+			$tpl_source = $contentobj->GetPropertyValue($tpl_name);
 
 			#Perform the content prerender callback
 			foreach($gCms->modules as $key=>$value)
