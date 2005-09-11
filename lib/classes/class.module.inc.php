@@ -1687,7 +1687,7 @@ class CMSModule extends ModuleOperations
 	function ProcessTemplate($tpl_name)
 	{
 		$smarty = &$this->smarty;
-		return $smarty->fetch($tpl_name);
+		return $smarty->fetch($tpl_name,'',$this->GetName());
 	}
 
 	function ProcessTemplateFromDatabase($tpl_name)
