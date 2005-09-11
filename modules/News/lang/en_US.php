@@ -19,6 +19,7 @@ $lang['edit'] = 'Edit';
 $lang['enddate'] = 'End Date';
 $lang['endrequiresstart'] = 'Entering an end date requires a start date also';
 $lang['entries'] = '%s Entries';
+$lang['status'] = 'Status';
 $lang['expiry'] = 'Expriry';
 $lang['filter'] = 'Filter';
 $lang['more'] = 'More';
