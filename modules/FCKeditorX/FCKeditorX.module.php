@@ -277,7 +277,7 @@ class FCKeditorX extends CMSModule
 			$d->close();
 			$num_skins = $i;
 
-			echo $this->CreateFormStart($id, $moduleaction);
+			echo $this->CreateFormStart($id, $action);
 
 			?>
 
