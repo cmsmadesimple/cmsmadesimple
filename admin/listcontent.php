@@ -134,6 +134,8 @@ if (isset($_GET["message"])) {
 	$users = array();
 
 	$menupos = array();
+	
+	$indent = get_preference($userid, 'indent');
 
 	if (count($content_array))
 	{
@@ -158,7 +160,17 @@ if (isset($_GET["message"])) {
 				{
   			    	$thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
   			    	$thelist .= "<td>".$one->Hierarchy()."</td>\n";
-                	$thelist .= "<td><a href=\"editcontent.php?content_id=".$one->Id()."\">".$one->Name()."</a></td>\n";
+                	$thelist .= "<td>";
+                    if ($indent)
+                        {
+                        $depth = count(split('\.', $one->Hierarchy()));
+                        for ($i=1;$i < $depth;$i++)
+                            {
+                            $thelist .= "-&nbsp;&nbsp;&nbsp;";
+                            }
+                        }
+
+                    $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
   					if ($templates[$one->TemplateId()]->name)
   					{
   						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
@@ -167,7 +179,7 @@ if (isset($_GET["message"])) {
 	  				{
 	  					$thelist .= "<td>&nbsp;</td>\n";
 	  				}
-	  
+
 	  				$thelist .= "<td>".$one->FriendlyName()."</td>\n";
   
 	  				if ($one->Owner() > -1)
@@ -178,7 +190,7 @@ if (isset($_GET["message"])) {
   					{
   						$thelist .= "<td>&nbsp;</td>\n";
   					}
-  
+
   					if($one->Active())
   					{
   						$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";

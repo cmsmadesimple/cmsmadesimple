@@ -36,6 +36,11 @@ $content_id = "";
 if (isset($_POST["content_id"])) $content_id = $_POST["content_id"];
 else if (isset($_GET["content_id"])) $content_id = $_GET["content_id"];
 
+$pagelist_id = "1";
+if (isset($_POST["page"])) $pagelist_id = $_POST["page"];
+else if (isset($_GET["page"])) $pagelist_id = $_GET["page"];
+
+
 $preview = false;
 if (isset($_POST["previewbutton"])) $preview = true;
 
@@ -143,7 +148,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
-				redirect("listcontent.php");
+				redirect("listcontent.php?page=".$pagelist_id);
 			}
 		}
 	}
@@ -286,6 +291,7 @@ $tabnames = $contentobj->TabNames();
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)) ?>" /> 	                  <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
+<input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
 	<div id="page_content">
 		<?php
 		$numberoftabs = count($tabnames);
@@ -325,11 +331,11 @@ $tabnames = $contentobj->TabNames();
 				<p class="pagetext">&nbsp;</p>
 				<p class="pageinput">
 					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 					<?php } ?>
-					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-					<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+					<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				</p>
 			</div>
 			<div style="clear: both;"></div>
