@@ -1367,11 +1367,11 @@ class CMSModule extends ModuleOperations
 		{
 			$id = 'cntnt01';
 		}
-		$goto = 'moduleinterface.php';
+		$goto = 'index.php';
 		$class = (isset($params['class'])?$params['class']:'');
-		if ($inline && $returnid != '')
+		if ($returnid == '')
 		{
-			$goto = 'index.php';
+			$goto = 'moduleinterface.php';
 		}
 		if (!$onlyhref)
 		{
@@ -1479,7 +1479,7 @@ class CMSModule extends ModuleOperations
 		$name = $this->GetName();
 
 		$text = '';
-		if ($inline)
+		if ($returnid != '')
 		{
 			$text .= 'index.php';
 		}

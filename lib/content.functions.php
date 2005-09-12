@@ -265,9 +265,6 @@ class Smarty_CMS extends Smarty {
 		{
 			$pageinfo = $gCms->variables['pageinfo'];
 
-			debug_buffer('template');
-			debug_buffer($pageinfo);
-
 			$gCms->variables['content_id'] = $pageinfo->content_id;
 			$gCms->variables['page'] = $tpl_name;
 			$gCms->variables['page_id'] = $tpl_name;
@@ -320,7 +317,12 @@ class Smarty_CMS extends Smarty {
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
-			$tpl_source = get_site_preference('sitedownmessage');
+			$tpl_timestamp = time();
+			return true;
+		}
+		else if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+		{
+			$tpl_timestamp = time();
 			return true;
 		}
 		else
