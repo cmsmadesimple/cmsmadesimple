@@ -22,7 +22,7 @@ function smarty_cms_function_content($params, &$smarty)
 	$pageinfo = $gCms->variables['pageinfo'];
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		if (isset($_GET['module']) || isset($_GET['mact']))
+		if (isset($_GET['module']) || isset($_POST['module']) || isset($_GET['mact']))
 		{
 			if (!isset($params['block']))
 			{

@@ -91,9 +91,9 @@ class PageInfoOperations
 				$onepageinfo->content_alias = $row['content_alias'];
 				$onepageinfo->content_menutext = $row['menu_text'];
 				$onepageinfo->content_hierarchy = $row['hierarchy'];
-				$onepageinfo->content_modified_date = $row['c_date'];
+				$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
 				$onepageinfo->template_id = $row['template_id'];
-				$onepageinfo->template_modified_date = $row['t_date'];
+				$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
 				$result = $onepageinfo;
 			}
 		}

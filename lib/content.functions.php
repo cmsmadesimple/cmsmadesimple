@@ -385,6 +385,7 @@ class Smarty_CMS extends Smarty {
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
 
+
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
 		{

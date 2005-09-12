@@ -1066,7 +1066,7 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false)
 	{
-		$goto = 'moduleinterface.php';
+		$goto = ($returnid==''?'moduleinterface.php':'index.php');
 		if ($inline && $returnid != '')
 		{
 			$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
@@ -1867,10 +1867,10 @@ class CMSModule extends ModuleOperations
 	 */
 	function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
 	{
-		$goto = 'moduleinterface.php';
-		if ($inline)
+		$goto = 'index.php';
+		if ($returnid == '')
 		{
-			$goto = 'index.php';
+			$goto = 'moduleinterface.php';
 		}
 		$link = '<a href="'.$goto.'?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'page=';
 		if ($inline)

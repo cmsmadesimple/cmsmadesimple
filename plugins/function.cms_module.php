@@ -51,7 +51,13 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					{
 						$action = $params['action'];
 					}
-					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $gCms->variables['page']);
+
+					$returnid = '';
+					if (isset($gCms->variables['pageinfo']))
+					{
+						$returnid = $gCms->variables['pageinfo']->content_id;
+					}
+					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 					if ($result !== FALSE)
 					{
 						echo $result;

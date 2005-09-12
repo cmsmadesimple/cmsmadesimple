@@ -43,7 +43,6 @@ if (isset($_POST["showtemplate"]) && $_POST["showtemplate"] == "false") $showtem
 else if (isset($_POST[$smarty->id."showtemplate"]) && $_POST[$smarty->id."showtemplate"] == "false") $showtemplate = false;
 else if (isset($_GET["showtemplate"]) && $_GET["showtemplate"] == "false") $showtemplate = false;
 else if (isset($_GET[$smarty->id."showtemplate"]) && $_GET[$smarty->id."showtemplate"] == "false") $showtemplate = false;
-
 $smarty->showtemplate = $showtemplate;
 
 $params = array_merge($_GET, $_POST);

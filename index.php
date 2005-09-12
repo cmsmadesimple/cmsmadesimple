@@ -58,6 +58,12 @@ require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
 $smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
 
+#$smarty->page = (isset($_REQUEST[$smarty->id.'returnid'])?$_REQUEST[$smarty->id.'returnid']:'');
+#$smarty->module = (isset($_REQUEST['module'])?$_REQUEST['module']:'');
+
+#$params = array_merge($_GET, $_POST);
+#$smarty->params = $params;
+
 $page = "";
 
 if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
