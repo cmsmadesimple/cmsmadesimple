@@ -20,7 +20,15 @@ function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo = $gCms->variables['pageinfo'];
-	return $pageinfo->content_title;
+	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	{
+		#We've a custom error message...  set a current timestamp
+		return "404 Error";
+	}
+	else
+	{
+		return $pageinfo->content_title;
+	}
 }
 
 function smarty_cms_help_function_title() {

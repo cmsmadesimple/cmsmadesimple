@@ -52,6 +52,7 @@ class PageInfo
 		$this->content_modified_date = -1;
 		$this->template_id = -1;
 		$this->template_modified_date = -1;
+		$this->content_cachable = false;
 	}
 }
 
@@ -94,6 +95,19 @@ class PageInfoOperations
 				$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
 				$onepageinfo->template_id = $row['template_id'];
 				$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
+				$onepageinfo->content_cachable = true;
+				$result = $onepageinfo;
+			}
+		}
+		else
+		{
+			#Page isn't found.  Should we setup an alternate page?
+			if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
+			{
+				$onepageinfo = new PageInfo();
+				$onepageinfo->caching = false;
+				$onepageinfo->template_id = get_site_preference('custom404template');
+				$onepageinfo->template_modified_date = time();
 				$result = $onepageinfo;
 			}
 		}

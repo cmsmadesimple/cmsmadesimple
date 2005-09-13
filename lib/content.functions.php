@@ -336,41 +336,63 @@ class Smarty_CMS extends Smarty {
 
 		$pageinfo = $gCms->variables['pageinfo'];
 
-		$contentobj = ContentManager::LoadContentFromId($pageinfo->content_id);
-		if (isset($contentobj) && $contentobj !== FALSE)
+		if (isset($pageinfo) && $pageinfo->content_id == -1)
 		{
-			if ($tpl_name != 'content_en')
-			{
-				//TODO: Fix Me.  This is a super hack.
-				$contentobj->GetAdditionalContentBlocks();
-			}
-			$tpl_source = $contentobj->GetPropertyValue($tpl_name);
-
-			#Perform the content prerender callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-				}
-			}
-
-			debug_buffer('end content_get_template');
+			#We've a custom error message...  return it here
+			$tpl_source = get_site_preference('custom404');
 			return true;
+		}
+		else
+		{
+			$contentobj = ContentManager::LoadContentFromId($pageinfo->content_id);
+			if (isset($contentobj) && $contentobj !== FALSE)
+			{
+				if ($tpl_name != 'content_en')
+				{
+					//TODO: Fix Me.  This is a super hack.
+					$contentobj->GetAdditionalContentBlocks();
+				}
+				$tpl_source = $contentobj->GetPropertyValue($tpl_name);
+
+				#Perform the content prerender callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
+					}
+				}
+
+				debug_buffer('end content_get_template');
+				return true;
+			}
 		}
 		return false;
 	}
 
 	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		debug_buffer('start content_get_timestamp');
 		global $gCms;
 
 		$pageinfo = &$gCms->variables['pageinfo'];
 
-		$tpl_timestamp = $pageinfo->content_modified_date;
-		debug_buffer('end content_get_timestamp');
+		if (isset($pageinfo) && $pageinfo->content_id == -1)
+		{
+			#We've a custom error message...  set a current timestamp
+			$tpl_timestamp = time();
+		}
+		else
+		{
+			if ($pageinfo->cachable_content)
+			{
+				$tpl_timestamp = $pageinfo->content_modified_date;
+			}
+			else
+			{
+				$tpl_timestamp = time();
+			}
+		}
 		return true;
 	}
 	
