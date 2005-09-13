@@ -266,13 +266,6 @@ class Smarty_CMS extends Smarty {
 		{
 			$pageinfo = $gCms->variables['pageinfo'];
 
-			$gCms->variables['content_id'] = $pageinfo->content_id;
-			$gCms->variables['page'] = $tpl_name;
-			$gCms->variables['page_id'] = $tpl_name;
-
-			$gCms->variables['page_name'] = $pageinfo->content_alias;
-			$gCms->variables['position'] = $pageinfo->hierarchy;
-
 			if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
 			{
 				$tpl_source = '{content}';

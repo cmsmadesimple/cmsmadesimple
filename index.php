@@ -90,10 +90,17 @@ if ($page == '')
 $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
 $gCms->variables['pageinfo'] =& $pageinfo;
 
+$gCms->variables['content_id'] = $pageinfo->content_id;
+$gCms->variables['page'] = $page;
+$gCms->variables['page_id'] = $page;
+
+$gCms->variables['page_name'] = $pageinfo->content_alias;
+$gCms->variables['position'] = $pageinfo->hierarchy;
+
 $old_error_handler = '';
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
 {
-	$old_error_handler = set_error_handler("ErrorHandler404");
+$old_error_handler = set_error_handler("ErrorHandler404");
 }
 
 $html = "";

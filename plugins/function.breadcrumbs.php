@@ -17,10 +17,11 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
 
-function smarty_cms_function_breadcrumbs($params, &$smarty) {
+function smarty_cms_function_breadcrumbs($params, &$smarty)
+{
 	global $gCms; 
 
-	$thispage = $gCms->variables['page'];
+	$thispage = $gCms->variables['content_id'];
 
 	$trail = "";
 
@@ -46,15 +47,16 @@ function smarty_cms_function_breadcrumbs($params, &$smarty) {
 
 	#Check if user has requested the list to start with a specific page
 	if (isset($params['root'])) {
-		if (strtolower($onecontent->Alias()) != strtolower($params['root'])) {
+		if (($onecontent == FALSE) || (strtolower($onecontent->Alias()) != strtolower($params['root']))) {
 			$rootcontent = ContentManager::LoadContentFromAlias($params['root'], false);
 			if ($rootcontent) {
-				// tdh add / modify next 5 lines:
-				if (isset($params['classid'])) {
-					$trail .= "<a href=\"" . $rootcontent->getURL() . "\" class=\"" . $params['classid'] . "\">".$rootcontent->MenuText()."</a> ".$delimiter." ";
-				} else {
-					$trail .= "<a href=\"".$rootcontent->getURL()."\">".$rootcontent->MenuText()."</a> ".$delimiter." ";
-				}
+                                $trail .= '<a href="' . $rootcontent->getURL() . '"';
+                                if (isset($params['classid'])) {
+                                        $trail .= ' class="' . $params['classid'] . '"';
+                                }
+                                $trail .= '>';
+                                $trail .= ($rootcontent->MenuText()!=''?$rootcontent->MenuText():$rootcontent->Name());
+                                $trail .= '</a> ' . $delimiter . ' ';
 			}
 		}
 	}
@@ -76,34 +78,53 @@ function smarty_cms_function_breadcrumbs($params, &$smarty) {
 		#Pull them one by one in reverse order to construct a breadcrumb list
 		while ($onecontent = array_pop($allcontent)) {
 			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
-				if ($onecontent->Type() == 'sectionheader') {
-					if (getURL($thispage)!="") {
-						$trail .= $onecontent->MenuText()." ".$delimiter."\n";
-					} else {
-						$trail .= $onecontent->MenuText()." ".$delimiter."\n";
-					}
-				} else {
-					if (getURL($thispage)!="") {
-						// tdh add / modify next 5 lines
-						if (isset($params['classid'])) {
-							$trail .= "<a href=\"".$onecontent->getURL()."\" class=\"" . $params['classid'] . "\">".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</a> ".$delimiter."\n";
-						} else {
-							$trail .= "<a href=\"".$onecontent->getURL()."\">".($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."</a> ".$delimiter."\n";
-						}
-					} else {
-						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())." ".$delimiter."\n";
-					}
-				}
+                                if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
+                                        $trail .= '<a href="' . $onecontent->getURL() . '"';
+                                        if (isset($params['classid'])) {
+                                                $trail .= ' class="' . $params['classid'] . '"';
+                                        }
+                                        $trail .= '>';
+                                        $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+                                        $trail .= '</a> ' . $delimiter . ' ';
+                                } else {
+                                        if (isset($params['classid'])) {
+                                                $trail .= '<span class="' . $params['classid'] . '">';
+                                        }
+                                        $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+                                        if (isset($params['classid'])) {
+                                                $trail .= '</span>';
+                                        }
+                                        $trail .= ' ' . $delimiter . ' ';
+                                }
 			} else {
-				$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name())."\n";
+                                if (isset($params['currentclassid'])) {
+                                        $trail .= '<span class="' . $params['currentclassid'] . '">';
+                                } else {
+                                        $trail .= '<strong>';
+                                }
+                                $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+                                if (isset($params['currentclassid'])) {
+                                        $trail .= '</span>';
+                                } else {
+                                        $trail .= '</strong>';
+                                }
 			}
 		}
 	} else {
-		$trail = "No pages";
+                if (isset($params['currentclassid'])) {
+                        $trail .= '<span class="' . $params['currentclassid'] . '">';
+                } else {
+                        $trail .= '<strong>';
+                }
+                $trail .= 'No pages';
+                if (isset($params['currentclassid'])) {
+                        $trail .= '</span>';
+                } else {
+                        $trail .= '</strong>';
+                }
 	}
 
 	return $trail;
-
 }
 
 function smarty_cms_help_function_breadcrumbs() {
@@ -120,7 +141,8 @@ function smarty_cms_help_function_breadcrumbs() {
 <li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
 <li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
     the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
-<li><em>(optional)</em> <tt>classid</tt> - The CSS class for the <a href> tags.</li>
+<li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
+<li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
 </ul>
 </p>
 <?php
@@ -129,12 +151,13 @@ function smarty_cms_help_function_breadcrumbs() {
 function smarty_cms_about_function_breadcrumbs() {
 ?>
 <p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.2</p>
+<p>Version: 1.4</p>
 <p>
 Change History:<br/>
 1.1 - Modified to use new content rewrite (wishy)<br />
 1.2 - Added parameters: delimiter, initial, and root (arl)<br />
 1.3 - Added parameter: classid (tdh / perl4ever)<br />
+1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
 </p>
 <?php
 }
