@@ -78,7 +78,7 @@ class RSS extends CMSModule
 
 			if (isset($params['url']))
 			{
-				$rss = @fetch_rss($params['url']);
+				$rss = fetch_rss($params['url']);
 				if ($rss && is_array($rss->items))
 				{
 					$items = array();
