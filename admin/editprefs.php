@@ -72,7 +72,7 @@ if (isset($_POST["submit_form"])) {
 	$old_default_cms_lang = $default_cms_lang;
 	$admintheme = get_preference($userid, 'admintheme');
     $bookmarks = get_preference($userid, 'bookmarks');
-    $indent = get_preference($userid, 'indent');
+    $indent = get_preference($userid, 'indent', true);
 }
 
 include_once("header.php");

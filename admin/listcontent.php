@@ -135,7 +135,7 @@ if (isset($_GET["message"])) {
 
 	$menupos = array();
 	
-	$indent = get_preference($userid, 'indent');
+	$indent = get_preference($userid, 'indent', true);
 
 	if (count($content_array))
 	{
