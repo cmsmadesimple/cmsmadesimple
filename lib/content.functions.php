@@ -47,7 +47,8 @@ class Smarty_CMS extends Smarty {
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
-		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
+		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
+		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/');
 
 		$this->caching = true;
 		$this->compile_check = true;
@@ -385,32 +386,20 @@ class Smarty_CMS extends Smarty {
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
 
-
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
 		{
 			@ob_start();
-			$usePassedID = true;
 
-			foreach ($_REQUEST as $key=>$value)
-			{
-				if (strpos($key, 'cntnt01') !== FALSE)
-				{
-					$usePassedID = false;
-				}
-			}
-
-			if ($usePassedID)
-			{
-				$id = $smarty_obj->id;
-			}
-			else
-			{
-				$id = 'cntnt01';
-			}
+			$id = $smarty_obj->id;
 
 			$params = @ModuleOperations::GetModuleParameters($id);
-			echo $gCms->modules[$tpl_name]['object']->DoActionBase((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'default'), $id, $params, isset($pageinfo)?$pageinfo->content_id:'');
+			$action = 'default';
+			if (isset($params['action']))
+			{
+				$action = $params['action'];
+			}
+			echo $gCms->modules[$tpl_name]['object']->DoActionBase($action, $id, $params, isset($pageinfo)?$pageinfo->content_id:'');
 			$modoutput = @ob_get_contents();
 			@ob_end_clean();
 
@@ -917,10 +906,10 @@ function load_plugins(&$smarty)
 	$userplugins = &$gCms->userplugins;
 	$db = &$gCms->db;
 
-	if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
-	{
-		search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
-	}
+	#if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
+	#{
+	#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
+	#}
 	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
 
 	$query = "SELECT * FROM ".cms_db_prefix()."userplugins";

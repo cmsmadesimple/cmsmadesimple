@@ -24,9 +24,14 @@ function smarty_cms_function_content($params, &$smarty)
 	{
 		if (isset($_GET['module']) || isset($_POST['module']) || isset($_GET['mact']))
 		{
+			$module = '';
+			if (isset($_GET['module'])) $module = $_GET['module'];
+			if (isset($_POST['module'])) $module = $_POST['module'];
+			if (isset($_GET['mact'])) $module = $_GET['mact'];
 			if (!isset($params['block']))
 			{
-				return $smarty->fetch('module:' . $_GET['module']);
+				$smarty->id = 'cntnt01';
+				return $smarty->fetch('module:' . $module);
 			}
 		}
 		else

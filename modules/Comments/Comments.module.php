@@ -105,7 +105,7 @@ class Comments extends CMSModule
 		switch ($name)
 		{
 			case 'default':
-				$query = "SELECT comment_id, comment_author, comment_data, comment_date FROM ".cms_db_prefix()."module_comments WHERE page_id = ".$this->cms->variables['page']." ORDER BY comment_date desc";
+				$query = "SELECT comment_id, comment_author, comment_data, comment_date FROM ".cms_db_prefix()."module_comments WHERE page_id = ".$return_id." ORDER BY comment_date desc";
 				if (isset($params["number"]))
 				{
 					$dbresult = $db->SelectLimit($query, $params['number']);
@@ -178,7 +178,6 @@ class Comments extends CMSModule
 						$query = "INSERT INTO ".cms_db_prefix()."module_comments (comment_id, page_id, comment_author, comment_data, comment_date, create_date) VALUES ($new_id, $return_id, ".$db->qstr($author).", ".$db->qstr($content).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
 						$dbresult = $db->Execute($query);
 						$this->RedirectContent($return_id);
-						return;
 					}
 				}
 

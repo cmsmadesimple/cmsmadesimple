@@ -33,7 +33,9 @@ require_once(dirname(__FILE__)."/include.php");
 $smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
 
-$smarty->id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+$params = array_merge($_GET, $_POST);
+
+$smarty->id = (isset($params['id'])?$params['id']:'');
 $gCms->variables['page'] = (isset($_REQUEST[$smarty->id.'returnid'])?$_REQUEST[$smarty->id.'returnid']:"");
 $smarty->page = (isset($_REQUEST[$smarty->id.'returnid'])?$_REQUEST[$smarty->id.'returnid']:'');
 $smarty->module = (isset($_REQUEST['module'])?$_REQUEST['module']:'');
@@ -45,7 +47,6 @@ else if (isset($_GET["showtemplate"]) && $_GET["showtemplate"] == "false") $show
 else if (isset($_GET[$smarty->id."showtemplate"]) && $_GET[$smarty->id."showtemplate"] == "false") $showtemplate = false;
 $smarty->showtemplate = $showtemplate;
 
-$params = array_merge($_GET, $_POST);
 $smarty->params = $params;
 
 //$old_error_handler = set_error_handler("ErrorHandler404");

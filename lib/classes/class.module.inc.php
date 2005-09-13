@@ -1067,6 +1067,7 @@ class CMSModule extends ModuleOperations
 	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false)
 	{
 		$goto = ($returnid==''?'moduleinterface.php':'index.php');
+		#$goto = 'moduleinterface.php';
 		if ($inline && $returnid != '')
 		{
 			$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
@@ -1363,7 +1364,7 @@ class CMSModule extends ModuleOperations
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false)
 	{
 		$text = '';
-		if ($targetcontentonly)
+		if ($targetcontentonly || ($returnid != '' && !$inline))
 		{
 			$id = 'cntnt01';
 		}
@@ -1513,7 +1514,7 @@ class CMSModule extends ModuleOperations
 		{
 			if ($content->GetUrl() != '')
 			{
-				redirect($content->GetUrl());				
+				redirect($content->GetUrl());
 			}
 		}
 	}
