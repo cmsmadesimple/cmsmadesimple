@@ -810,7 +810,7 @@ Posted: {$entry->postdate|date_format}
 					$summary = $params['summary'];
 				}
 
-				$status = 'draft';
+				$status = 'published';
 				if (isset($params['status']))
 				{
 					$status = $params['status'];
@@ -1257,7 +1257,8 @@ Posted: {$entry->postdate|date_format}
 					debug_buffer($row['hierarchy']);
 
 					$onerow->id = $row['news_category_id'];
-					$onerow->name = str_repeat('&nbsp;', $depth-1).$row['news_category_name'];
+					$onerow->name = str_repeat('&nbsp;', $depth-1).$this->CreateLink($id, 'editcategory', $returnid, $row['news_category_name'], array('catid'=>$row['news_category_id']));
+
 					$onerow->editlink = $this->CreateLink($id, 'editcategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/edit.gif', $this->Lang('edit'),'','','systemicon'), array('catid'=>$row['news_category_id']));
 					$onerow->deletelink = $this->CreateLink($id, 'deletecategory', $returnid, $gCms->variables['admintheme']->DisplayImage('icons/system/delete.gif', $this->Lang('delete'),'','','systemicon'), array('catid'=>$row['news_category_id']), $this->Lang('areyousure'));
 
