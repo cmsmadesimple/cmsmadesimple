@@ -394,6 +394,18 @@ if (isset($_GET["message"])) {
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
 					echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
 				?>
+			</a>&nbsp;&nbsp;&nbsp;
+			<a href="setexpand.php?expandall=1">
+				<?php 
+					echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
+					echo ' <a class="pageoptions" href="setexpand.php?expandall=1">'.lang("expandall");
+				?>
+			</a>&nbsp;&nbsp;&nbsp;
+			<a href="setexpand.php?collapseall=1">
+				<?php 
+					echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
+					echo ' <a class="pageoptions" href="setexpand.php?collapseall=1">'.lang("contractall");
+				?>
 			</a>
 		</p>
 	</div>

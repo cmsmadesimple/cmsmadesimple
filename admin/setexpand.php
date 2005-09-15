@@ -35,24 +35,34 @@ $pagelist_id = "1";
 if (isset($_POST["page"])) $pagelist_id = $_POST["page"];
 else if (isset($_GET["page"])) $pagelist_id = $_GET["page"];
 
-$collapse = true;
-if (isset($_POST["col"]))
-    {
-    if ($_POST["col"] == 0)
-        {
-        $collapse = false;
-        }
-    }
-else if (isset($_GET["col"]))
-    {
-    if ($_GET["col"] == 0)
-        {
-        $collapse = false;
-        }
-    }
-
-ContentManager::SetCollapse($content_id, $collapse);
-
+if (isset($_POST['expandall']) || isset($_GET['expandall']))
+	{
+	ContentManager::SetAllCollapse(false);
+	}
+else if (isset($_POST['collapseall']) || isset($_GET['collapseall']))
+	{
+	ContentManager::SetAllCollapse(true);
+	}
+else
+	{
+	$collapse = true;
+	if (isset($_POST["col"]))
+		{
+		if ($_POST["col"] == 0)
+			{
+			$collapse = false;
+			}
+		}
+	else if (isset($_GET["col"]))
+		{
+		if ($_GET["col"] == 0)
+			{
+			$collapse = false;
+			}
+		}
+	
+	ContentManager::SetCollapse($content_id, $collapse);
+	}
 redirect("listcontent.php?page=".$pagelist_id);
 # vim:ts=4 sw=4 noet
 ?>

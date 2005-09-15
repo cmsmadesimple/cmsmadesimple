@@ -1444,6 +1444,18 @@ class ContentManager
 		$dbresult = $db->Execute($query, array($collapsed?1:0,$content_id));
 	}
 
+	/**
+	 * Updates the collapse state of all items
+	 */
+	function SetAllCollapse($collapse=false)
+	{
+		global $gCms;
+		$db = $gCms->db;
+
+		$query = "UPDATE ".cms_db_prefix()."content SET collapsed=?";
+		$dbresult = $db->Execute($query, array($collapse?1:0));
+	}
+
 
 	function GetAllContent($loadprops=true)
 	{
