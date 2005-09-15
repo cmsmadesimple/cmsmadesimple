@@ -27,11 +27,11 @@
 
 #Norwegian (bokmål)
 #Created by: Roger "Stigma" Knutsen <stigmaster@gmail.com>
-#Maintained by: Roger "Stigma" Knutsen <stigmaster@gmail.com>
+#Maintained by: Jon Arne Holm <jaholm@start.no>
 
 #Native language name
-$nls['language']['nb_NO'] = 'Norsk';
-$nls['englishlang']['nb_NO'] = 'Norwegian';
+$nls['language']['nb_NO'] = 'Norsk bokmål';
+$nls['englishlang']['nb_NO'] = 'Norwegian bokmål';
 
 #Possible aliases for language
 $nls['alias']['no'] = 'nb_NO';
