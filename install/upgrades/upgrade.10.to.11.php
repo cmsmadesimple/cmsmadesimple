@@ -9,9 +9,12 @@ $dbdict->ExecuteSQLArray($sqlarray);
 $query = "UPDATE ".cms_db_prefix()."css SET media_type = '' WHERE media_type IS NULL";
 $db->Execute($query);
 
+echo "[done]</p>";
+
+echo "<p>Adding fields to content table...";
+
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."content", "collapsed L");
 $dbdict->ExecuteSQLArray($sqlarray);
-
 
 echo "[done]</p>";
 

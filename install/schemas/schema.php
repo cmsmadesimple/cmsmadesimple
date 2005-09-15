@@ -211,7 +211,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		css_id I KEY,
 		css_name C(255),
 		css_text X,
-		media_type C(255),
 		create_date T,
 		modified_date T
 	";
