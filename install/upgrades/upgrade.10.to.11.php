@@ -9,6 +9,10 @@ $dbdict->ExecuteSQLArray($sqlarray);
 $query = "UPDATE ".cms_db_prefix()."css SET media_type = '' WHERE media_type IS NULL";
 $db->Execute($query);
 
+$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."content", "collapsed L");
+$dbdict->ExecuteSQLArray($sqlarray);
+
+
 echo "[done]</p>";
 
 echo '<p>Updating schema version... ';

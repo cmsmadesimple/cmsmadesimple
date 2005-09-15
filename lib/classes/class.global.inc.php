@@ -95,6 +95,11 @@ class CmsObject {
 	var $nls;
 
 	/**
+     * content cache array - If something's called GetAllContent, we keep a copy around
+	 */
+	var $ContentCache;
+
+	/**
 	 * Constructor
 	 */
 	function CmsObject()

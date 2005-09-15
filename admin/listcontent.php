@@ -136,7 +136,8 @@ if (isset($_GET["message"])) {
 	$menupos = array();
 	
 	$indent = get_preference($userid, 'indent', true);
-
+    $collapsing = false;
+    $collapse_depth = -1;
 	if (count($content_array))
 	{
 		foreach ($content_array as $one)
@@ -156,14 +157,40 @@ if (isset($_GET["message"])) {
 				check_ownership($userid,$one->Id()) || 
 				quick_check_authorship($one->Id(), $mypages))
 			{
+                $depth = count(split('\.', $one->Hierarchy()));
+                if ($collapsing && $depth > $collapse_depth)
+                    {
+                    continue;
+                    }
+                else
+                    {
+                    $collapsing = false;
+                    }
 				if (($counter)  < $page*$limit && ($counter)  >= ($page*$limit)-$limit)
 				{
   			    	$thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-  			    	$thelist .= "<td>".$one->Hierarchy()."</td>\n";
+                    $thelist .= "<td>";
+                    if ($one->ChildCount() > 0)
+                        {
+                        if ($one->Collapsed())
+                            {
+                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
+                            $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
+                            $thelist .= "</a>";
+                            $collapsing = true;
+                            $collapse_depth = 1;
+                            }
+                        else
+                            {
+                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=1&page=".$page."\">";
+                            $thelist .= $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
+                            $thelist .= "</a>";
+                            }
+                        }
+                    $thelist .= "</td><td>".$one->Hierarchy()."</td>\n";
                 	$thelist .= "<td>";
                     if ($indent)
                         {
-                        $depth = count(split('\.', $one->Hierarchy()));
                         for ($i=1;$i < $depth;$i++)
                             {
                             $thelist .= "-&nbsp;&nbsp;&nbsp;";
@@ -336,6 +363,7 @@ if (isset($_GET["message"])) {
 		$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
 		$headoflist .= '<thead>';
 		$headoflist .= "<tr>\n";
+		$headoflist .= "<th>&nbsp;</th>";
 		$headoflist .= "<th>&nbsp;</th>";
 		$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
 		$headoflist .= "<th>".lang('template')."</th>\n";

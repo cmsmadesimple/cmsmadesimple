@@ -197,11 +197,13 @@ class ContentBase
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
 		$this->mCachable		= true;
+		$this->mCollapse		= false;
 		$this->mMenuText		= "" ;
 		$this->mCreationDate	= "" ;
 		$this->mModifiedDate	= "" ;
 		$this->mPreview         = false ;
 		$this->mMarkup			= 'html' ;
+		$this->mChildCount      = 0;
 	}
 
 	/**
@@ -355,6 +357,22 @@ class ContentBase
 	}
 
 	/**
+	 * Returns the collapse state for the admin
+	 */
+	function Collapsed()
+	{
+		return $this->mCollapse;
+	}
+
+	/**
+	 * Returns number of immediate child-content items of this content
+	 */
+	function ChildCount()
+	{
+		return $this->mChildCount;
+	}
+
+	/**
 	 * Returns the properties
 	 */
 	function Properties()
@@ -432,6 +450,7 @@ class ContentBase
 				$this->mMenuText		= $row['menu_text'];
 				$this->mMarkup			= $row['markup'];
 				$this->mActive			= ($row["active"] == 1?true:false);
+				$this->mCollapse		= ($row["collapsed"] == 1?true:false);
 				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
 				$this->mCachable		= ($row["cachable"] == 1?true:false);
@@ -520,6 +539,7 @@ class ContentBase
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
 		$this->mCachable		= ($data["cachable"] == 1?true:false);
+		$this->mCollapse		= ($data["collapsed"] == 1?true:false);
 		$this->mLastModifiedBy	= $data["last_modified_by"];
 		$this->mCreationDate	= $data["create_date"];
 		$this->mModifiedDate	= $data["modified_date"];
@@ -734,7 +754,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, collapsed, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -751,6 +771,7 @@ class ContentBase
 			($this->mShowInMenu==true?1:0),
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
+            ($this->mCollapse==true?1:0),
 			$this->mMarkup,
 			$this->mLastModifiedBy,
 			$db->DBTimeStamp(time()),
@@ -1411,15 +1432,36 @@ class ContentManager
 		}
 	}
 
+	/**
+	 * Updates the collapse state of an item
+	 */
+	function SetCollapse($content_id, $collapsed=false)
+	{
+		global $gCms;
+		$db = $gCms->db;
+
+		$query = "UPDATE ".cms_db_prefix()."content SET collapsed=? WHERE content_id=?";
+		$dbresult = $db->Execute($query, array($collapsed?1:0,$content_id));
+	}
+
+
 	function GetAllContent($loadprops=true)
 	{
 		global $gCms;
 		$db = $gCms->db;
 
-		$result = array();
+        if (isset($gCms->ContentCache))
+            {
+            return $gCms->ContentCache;
+            }
+
+		$gCms->ContentCache = array();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 		$dbresult = $db->Execute($query);
+
+        $map = array();
+        $count = 0;
 
 		if ($dbresult && $dbresult->RowCount() > 0)
 		{
@@ -1430,12 +1472,21 @@ class ContentManager
 				{
 					$contentobj = new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
-					array_push($result, $contentobj);
+					$map[$contentobj->Id()] = $count;
+					array_push($gCms->ContentCache, $contentobj);
+					$count++;
 				}
 			}
 		}
 
-		return $result;
+        for ($i=0;$i<$count;$i++)
+            {
+            if ($gCms->ContentCache[$i]->ParentId() != -1)
+                {
+                $gCms->ContentCache[$map[$gCms->ContentCache[$i]->ParentId()]]->mChildCount++;
+                }
+            }
+		return $gCms->ContentCache;
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
