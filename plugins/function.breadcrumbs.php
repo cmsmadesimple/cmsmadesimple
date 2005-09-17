@@ -26,15 +26,20 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	$trail = "";
 
 	#Check if user has specified a delimiter, otherwise use default
-	if (isset($params['delimiter'])) {
+	if (isset($params['delimiter']))
+	{
 		$delimiter = $params['delimiter'];
-	} else {
+	}
+	else
+	{
 		$delimiter = "&gt;&gt;";
 	}
 
 	#Check if user has requested an initial delimiter
-	if (isset($params['initial']))  {
-		if ($params['initial'] == "1") 	{
+	if (isset($params['initial']))
+	{
+		if ($params['initial'] == "1")
+		{
 			$trail .= $delimiter . " ";
 		}
 	}
@@ -46,38 +51,52 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	$onecontent = ContentManager::LoadContentFromId($thispage, false);
 
 	#Check if user has requested the list to start with a specific page
-	if (isset($params['root'])) {
-		if (($onecontent == FALSE) || (strtolower($onecontent->Alias()) != strtolower($params['root']))) {
+	if (isset($params['root']))
+	{
+		if (($onecontent == FALSE) || (strtolower($onecontent->Alias()) != strtolower($params['root'])))
+		{
 			$rootcontent = ContentManager::LoadContentFromAlias($params['root'], false);
-			if ($rootcontent) {
-                                $trail .= '<a href="' . $rootcontent->getURL() . '"';
-                                if (isset($params['classid'])) {
-                                        $trail .= ' class="' . $params['classid'] . '"';
-                                }
-                                $trail .= '>';
-                                $trail .= ($rootcontent->MenuText()!=''?$rootcontent->MenuText():$rootcontent->Name());
-                                $trail .= '</a> ' . $delimiter . ' ';
+			if ($rootcontent)
+			{
+				$trail .= '<a href="' . $rootcontent->getURL() . '"';
+				if (isset($params['classid']))
+				{
+						$trail .= ' class="' . $params['classid'] . '"';
+				}
+				$trail .= '>';
+				$trail .= ($rootcontent->MenuText()!=''?$rootcontent->MenuText():$rootcontent->Name());
+				$trail .= '</a> ' . $delimiter . ' ';
 			}
 		}
 	}
 
-	if ($onecontent !== FALSE) {
+	if ($onecontent !== FALSE)
+	{
 		array_push($allcontent, $onecontent);
 
 		#Grab all parents and put them into the array as well
-		while ($onecontent->ParentId() > 0) {
+		while ($onecontent->ParentId() > 0)
+		{
 			$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId(), false);
 			// tdh add / modify next 5 lines
-			if (isset($params['root'])) {
-				if (strtolower($onecontent->Alias()) != strtolower($params['root'])) {
+			if (isset($params['root']))
+			{
+				if (strtolower($onecontent->Alias()) != strtolower($params['root']))
+				{
 					array_push($allcontent, $onecontent);
 				}
+			}
+			else
+			{
+				array_push($allcontent, $onecontent);
 			}
 		}
 
 		#Pull them one by one in reverse order to construct a breadcrumb list
-		while ($onecontent = array_pop($allcontent)) {
-			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
+		while ($onecontent = array_pop($allcontent))
+		{
+			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator')
+			{
                                 if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
                                         $trail .= '<a href="' . $onecontent->getURL() . '"';
                                         if (isset($params['classid'])) {
