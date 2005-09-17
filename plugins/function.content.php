@@ -46,7 +46,13 @@ function smarty_cms_help_function_content()
 {
 	?>
 	<h3>What does this do?</h3>
-	<p>Displays content</p>
+	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.</li>
+	</ul>
 	<?php
 }
 

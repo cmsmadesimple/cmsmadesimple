@@ -16,25 +16,33 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_html_blob($params, &$smarty)
+function smarty_cms_function_menu_text($params, &$smarty)
 {
-	return $smarty->fetch('htmlblob:'.$params['name']);
+	global $gCms;
+	$pageinfo = $gCms->variables['pageinfo'];
+	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	{
+		#We've a custom error message...  set a message
+		return "404 Error";
+	}
+	else
+	{
+		return $pageinfo->content_menu_text;
+	}
 }
 
-function smarty_cms_help_function_html_blob() {
+function smarty_cms_help_function_menu_text() {
 	?>
 	<h3>What does this do?</h3>
-	<p>Inserts an html blob into your template or page.</p>
+	<p>Prints the menu text of the page.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{html_blob name='myblob'}</code>, where name is the name given to the blob when it was created.</p>
+	<p>Just insert the tag into your template/page like: <code>{menu_text}</code></p>
 	<h3>What parameters does it take?</h3>
-	<ul>
-		<li>name - The name of the html blob to display.</li>
-	</ul>
+	<p>None at this time.</p>
 	<?php
 }
 
-function smarty_cms_about_function_html_blob() {
+function smarty_cms_about_function_menu_text() {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
 	<p>Version: 1.0</p>
