@@ -95,7 +95,7 @@ $gCms->variables['page'] = $page;
 $gCms->variables['page_id'] = $page;
 
 $gCms->variables['page_name'] = $pageinfo->content_alias;
-$gCms->variables['position'] = $pageinfo->hierarchy;
+$gCms->variables['position'] = $pageinfo->content_hierarchy;
 
 $old_error_handler = '';
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
