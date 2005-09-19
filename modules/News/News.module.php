@@ -1509,12 +1509,12 @@ class NewsModule extends CMSModuleContentType
 
 		$params = array();
 
-		if (strlen($params['number']) > 0)
+		if (strlen($this->GetPropertyValue('number')) > 0)
 		{
 			$params['number'] = $this->GetPropertyValue('number');
 		}
 
-		if (strlen($params['category']) > 0)
+		if (strlen($this->GetPropertyValue('category')) > 0)
 		{
 			$params['category'] = $this->GetPropertyValue('category');
 		}

@@ -352,7 +352,8 @@ class Smarty_CMS extends Smarty {
 					//TODO: Fix Me.  This is a super hack.
 					$contentobj->GetAdditionalContentBlocks();
 				}
-				$tpl_source = $contentobj->GetPropertyValue($tpl_name);
+
+				$tpl_source = $contentobj->Show($tpl_name);
 
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)

@@ -129,9 +129,9 @@ class content extends ContentBase
 		}
 	}
 
-	function Show()
+	function Show($param = 'content_en')
 	{
-		return $this->GetPropertyValue('content_en');
+		return $this->GetPropertyValue($param);
 	}
 
 	function IsDefaultPossible()

@@ -917,7 +917,7 @@ class ContentBase
 	/**
 	 * Show the content
 	 */
-	function Show()
+	function Show($param = '')
 	{
 		# :TODO:
 		return "<tr><td>Show Not Defined</td></tr>";
