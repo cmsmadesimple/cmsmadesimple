@@ -18,9 +18,9 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.11-svn";
+$CMS_VERSION = "0.11-beta2";
 $CMS_VERSION_NAME = "Trinidad";
-$CMS_SCHEMA_VERSION = "11";
+$CMS_SCHEMA_VERSION = "12";
 
 # vim:ts=4 sw=4 noet
 ?>
