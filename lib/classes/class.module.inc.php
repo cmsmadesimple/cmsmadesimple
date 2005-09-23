@@ -869,8 +869,8 @@ class CMSModule extends ModuleOperations
 	 */
 	
 	/**
-	 * Called with the content of the template before content, html blobs, etc
-	 * are pasted in.
+	 * Called with the content of the template before it's sent to smarty
+	 * for processing.
 	 *
 	 * @param string The template text
 	 */
