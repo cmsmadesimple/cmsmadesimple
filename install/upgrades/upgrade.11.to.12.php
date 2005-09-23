@@ -2,6 +2,7 @@
 
 echo "<p>Adding fields to content table...";
 
+$dbdict = NewDataDictionary($db);
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."content", "collapsed L");
 $dbdict->ExecuteSQLArray($sqlarray);
 
