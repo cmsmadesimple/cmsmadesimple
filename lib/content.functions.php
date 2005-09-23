@@ -339,6 +339,7 @@ class Smarty_CMS extends Smarty {
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
 		{
 			#We've a custom error message...  return it here
+			header("HTTP/1.0 404 Not Found");
 			$tpl_source = get_site_preference('custom404');
 			return true;
 		}
