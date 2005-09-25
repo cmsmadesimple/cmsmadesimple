@@ -1,21 +1,16 @@
 <?php
+$lang['helptree'] = '1/0, angiver om der skal generes en træ-menu.';
+$lang['helprelative'] = '1/0, angiver om menuen kun skal vise underpunkterne for den aktuelle side. Dette en brugbart hvis du ønsker kontekst sensitive menuer.';
+$lang['helpid'] = 'tekst uden mellemrum eller specielle karakterer, standard: menu1. Du skal angive den hvis du benytter mere end en menu på en side.';
+$lang['helphorizontal'] = '1/0, angiver om du vil have en vandret menu i stedet for en lodret.';
+$lang['helpnumber_of_levels'] = 'et tal der angiver hvor mange niveau\' du ønsker der skal vises i menuen.';
+$lang['helpstart_element'] = 'niveau\'et som du ønsker menuen skal starte med (1.2 or 3.5.1 for example).';
+$lang['helpshowadmin'] = '1/0, angiver om du ønsker at der vises et link til administrationen.';
 $lang['help'] = <<<EOF
 	<h3>Hvad gør dette modul?</h3>
 	<p>Viser en lodret dhtml menu.</p>
 	<h3>Hvordan bruges det?</h3>
 	<p>Indsæt blot modulet i din side eller skabelon sådan her:: <code>{cms_module module='phplayers'}</code></p>
-	<h3>Hvilke parametre findes der?</h3>
-	<p>
-	<ul>
-		<li><em>(valgfrit)</em> <tt>showadmin</tt> - kan være 1 eller 0, angiver om du vil ønsker et link til administrationen vist.</li>
-		<li><em>(valgfrit)</em> <tt>start_element</tt> - hierakiet for det element du ønsker skal være roden for menuen (for eksempel: 1.2 or 3.5.1).</li>
-		<li><em>(valgfrit)</em> <tt>number_of_levels</tt> - et tal der angiver hvor mange niveau'er du ønsker der skal vises i menuen.</li>
-		<li><em>(valgfrit)</em> <tt>horizontal</tt> - kan være 1 eller 0, angiver om du vil ha en vandret menu i stedet for en lodret.</li>
-		<li><em>(valgfrit)</em> <tt>id</tt> - tekst uden mellemrum eller specielle tegn, standard: menu1. Dette skal angives hvis du ønskermere en en menu på din side.</li>
-		<li><em>(valgfrit)</em> <tt>relative</tt> - kan være 1 eller 0, angiver om menuen kun skal vise "børn" til den aktuelle side. Dette er smart til at vise kontekst sensitive menuer.</li>
-		<li><em>(valgfrit)</em> <tt>tree</tt> - kan være 1 eller0, angiver om et helt menu-træ skal vises.</li>
-
-	</ul>
 	</p>
 EOF;
 ?>

@@ -289,4 +289,4 @@ $lang['admin']['adminprefs'] = 'Administrations konfiguration';
 $lang['admin']['adminprefsdescription'] = 'Her kan du indstille dine specifikke indstillinger for administrationen.';
 $lang['admin']['managebookmarksdescription'] = 'Her kan du konfigurere dine bogmærker i administrationen.';
 $lang['admin']['options'] = 'Indstillinger';
-$lang['admin']['mediatype'] = 'Media Type'; //needs translation
+$lang['admin']['mediatype'] = 'Mediet\'s type';

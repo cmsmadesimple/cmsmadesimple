@@ -5,6 +5,7 @@ $lang['helpshowadmin'] = '1/0, angiver hvorvidt admin-linket ønskes vist i menue
 $lang['helpstart_element'] = 'placeringen i hierakiet (1.2 eller 3.5.1 for eksempel). Dette parameter angiver roden for menuen.';
 $lang['helpnumber_of_levels'] = 'et tal der angiver hvor mange niveau\'er det ønskes vist i menuen.';
 $lang['helphorizontal'] = '1/0, angiver om en horisontal menu ønskes i stedet for en vertikal.';
+$lang['helprelative'] = '1/0, angiver om menuen kun skal vise undersider til den aktuelle side. Dette er meget brugbart hvis du ønsker kontekts sensitive menuer.';
 $lang['help'] = <<<EOF
   <h3>Hvad gør dette?</h3>
   <p>Viser en vertikal menu, der overholder web-standarderne og kun benytter sig af CSS. En mindre stump JavaScript er nødvendig i Internet Explorer.</p>
