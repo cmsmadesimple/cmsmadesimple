@@ -86,6 +86,10 @@ if ($page == '')
 {
 	$page = ContentManager::GetDefaultContent();
 }
+else
+{
+    $page = preg_replace('/\</','',$page);
+}
 
 $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
 $gCms->variables['pageinfo'] =& $pageinfo;
