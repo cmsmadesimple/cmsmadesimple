@@ -21,11 +21,13 @@
 class content extends ContentBase
 {
 	var $additionalContentBlocks;
+	var $addtContentBlocksLoaded;
 	
 	function content()
 	{
 		$this->ContentBase();
 		$this->additionalContentBlocks = array();
+		$this->addtContentBlocksLoaded = false;
 	}
 	
 	function FriendlyName()
@@ -40,6 +42,14 @@ class content extends ContentBase
 
 		#Turn on preview
 		$this->mPreview = true;
+	}
+
+	/**
+	 * Use the Load callback to get the additional content blocks loaded.
+	 */
+	function Load()
+	{
+		$this->GetAdditionalContentBlocks();
 	}
 
 	function GetTabDefinitions()
@@ -131,6 +141,9 @@ class content extends ContentBase
 
 	function Show($param = 'content_en')
 	{
+		// check for additional content blocks
+		$this->GetAdditionalContentBlocks();
+
 		return $this->GetPropertyValue($param);
 	}
 
@@ -290,39 +303,43 @@ class content extends ContentBase
 	function GetAdditionalContentBlocks()
 	{
 		$result = false;
-		$this->additionalContentBlocks = array();
-		$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
-		if($template !== false)
+		if ($this->addtContentBlocksLoaded == false)
 		{
-			$content = $template->content;
-			
-			$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
-			$matches = array();
-			$result = preg_match_all($pattern, $content, $matches);
-			if($result)
+			$this->additionalContentBlocks = array();
+			$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+			if($template !== false)
 			{
-				if(count($matches[1]) > 0)
+				$content = $template->content;
+				
+				$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
+				$matches = array();
+				$result = preg_match_all($pattern, $content, $matches);
+				if($result)
 				{
-					$additionalContentBlocks = $matches[1];
-					
-					// add the ContentProperties
-					foreach($additionalContentBlocks as $blockName)
+					if(count($matches[1]) > 0)
 					{
-						$blockNameId = str_replace(' ', '_', $blockName);
-						$this->additionalContentBlocks[$blockName] = $blockNameId;
+						$additionalContentBlocks = $matches[1];
 						
-						if(!array_key_exists($blockName, $this->mProperties->mPropertyTypes))
+						// add the ContentProperties
+						foreach($additionalContentBlocks as $blockName)
 						{
-							$this->mProperties->Add("string", $blockNameId);
+							$blockNameId = str_replace(' ', '_', $blockName);
+							$this->additionalContentBlocks[$blockName] = $blockNameId;
+							
+							if(!array_key_exists($blockName, $this->mProperties->mPropertyTypes))
+							{
+								$this->mProperties->Add("string", $blockNameId);
+							}
 						}
-					}
-					
-					// force a load 
-					$this->mProperties->Load($this->mId);
+						
+						// force a load 
+						$this->mProperties->Load($this->mId);
 
-					$result = true;
+						$result = true;
+					}
 				}
 			}
+			$this->addtContentBlocksLoaded = true;
 		}
 		return $result;
 	}

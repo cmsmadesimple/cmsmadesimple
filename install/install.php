@@ -56,6 +56,7 @@ if (isset($_POST["page"])) {
 } ## if
 
 $DONT_LOAD_DB = true;
+
 if ($currentpage > 1) { require_once(dirname(dirname(__FILE__))."/include.php"); }
 
 ?>

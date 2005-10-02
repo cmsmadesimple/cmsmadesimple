@@ -137,7 +137,6 @@ require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
-
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
 $ls = dir($dir);

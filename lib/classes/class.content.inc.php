@@ -502,6 +502,8 @@ class ContentBase
 			}
 		}
 
+		$this->Load();
+
 		return $result;
 	}
 
@@ -568,7 +570,17 @@ class ContentBase
 			$this->SetInitialValues();
 		}
 
+		$this->Load();
+
 		return $result;
+	}
+
+	/**
+	 * Callback function for content types to use to preload content or other things if necessary.  This
+	 * is called right after the properties are loaded.
+	 */
+	function Load()
+	{
 	}
 
 	/**

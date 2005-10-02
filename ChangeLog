@@ -16,6 +16,9 @@ installs
 insensitive
 * Changed logic of included htaccess so that html can be used
 as the default extension for friendly urls
+* Fixed a bug where additional content blocks would disappear
+after a page was set inactive.  Fixed by adding a Load()
+callback for content types.
 * Fixed a bug with $gCms->variables['page_name'] not always
 returning the alias
 * Fixed a bug where IIS users couldn't login correctly
