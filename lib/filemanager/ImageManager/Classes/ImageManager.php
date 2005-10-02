@@ -452,7 +452,9 @@ class ImageManager
 
 		//now copy the file
 		$path = Files::makePath($this->getBaseDir(),$relative);
-		$result = Files::copyFile($file['tmp_name'], $path, $file['name']);
+
+		$filespec = preg_replace('/\.php/','',$file['name']);
+		$result = Files::copyFile($file['tmp_name'], $path, $filespec);
 
 		//no copy error
 		if(!is_int($result))
