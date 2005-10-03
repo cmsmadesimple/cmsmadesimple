@@ -254,7 +254,7 @@ class CMSModule extends ModuleOperations
 	 */
 	function GetFriendlyName()
 	{
-		return '';
+		return $this->GetName();
 	}
 
 	/**
