@@ -1074,12 +1074,12 @@ class CMSModule extends ModuleOperations
 			$goto .= '&amp;'.$id.'returnid='.$returnid;
 			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
-		$text = '<form name="'.$id.'moduleform" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+		$text = '<form id="'.$id.'moduleform" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 		if ($enctype != '')
 		{
 			$text .= ' enctype="'.$enctype.'"';
 		}
-		$text .= '><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
+		$text .= '><div class="hidden"><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
 		if ($action != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
@@ -1092,7 +1092,7 @@ class CMSModule extends ModuleOperations
 				$text .= '<input type="hidden" name="'.$this->cms->config['query_var'].'" value="'.$returnid.'" />';
 			}
 		}
-		$text .= "\n";
+		$text .= "</div>\n";
 		return $text;
 	}
 
