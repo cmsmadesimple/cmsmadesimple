@@ -229,6 +229,22 @@ class CSSMenu extends CMSModule
             array_push($disabled, $onecontent->Hierarchy() . ".");
             continue;
           }
+          else {      
+			# check for children of inactive items
+			$skip = 0;
+			foreach( $disabled as $dis )
+			{
+				if( substr( $onecontent->Hierarchy(), 0, strlen($dis) ) == $dis )
+				{
+					$skip = 1;
+					break;
+				}
+			}
+			if( $skip )
+			{
+				continue;
+			}
+		  }
 
           # Set depth to be the relative position
           $depth = $depth - $basedepth;
