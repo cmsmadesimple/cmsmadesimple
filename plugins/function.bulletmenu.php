@@ -43,6 +43,19 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		$menu .= "<div class=\"bulletmenu\">\n";
 
 		#Reset the base depth if necessary...
+		if (isset($params['start_page']))
+		{
+			foreach( $allcontent as $onecontent )
+			{
+				if( $onecontent->Alias() == $params['start_page'] || $onecontent->Id() == $params['start_page'])
+				{
+					$params['start_element'] = $onecontent->Hierarchy();
+					break;
+				}
+			}
+		}
+
+		#Reset the base depth if necessary...
 		if (isset($params['start_element']))
 		{
 			$basedepth = count(split('\.', (string)$params['start_element'])) - 1;
@@ -278,6 +291,7 @@ function smarty_cms_help_function_bulletmenu() {
 	<ul>
 		<li><em>(optional)</em> <tt>showadmin</tt> - 1/0, whether you want to show or not the admin link.</li>
 		<li><em>(optional)</em> <tt>collapse</tt> - 1/0, whether you want to collapse sub items that shouldn't be shown.  Defaults to 0.</li>
+		<li><em>(optional)</em> <tt>start_page</tt> - the page id or alias (ie : 1.2 or 3.5.1 for example). This parameter sets the root node of the menu and only shows it and it's children. (a replacement for start_element)</li>
 		<li><em>(optional)</em> <tt>start_element</tt> - the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root node of the menu and only shows it and it's children.</li>
 		<li><em>(optional)</em> <tt>show_root_siblings</tt> - 1/0, if start_element (above) is given, then show direct siblings of the give start_element as well.</li>
 		<li><em>(optional)</em> <tt>number_of_levels</tt> - an integer, the number of levels you want to show in your menu.</li>
