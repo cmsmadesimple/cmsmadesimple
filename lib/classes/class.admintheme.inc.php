@@ -140,7 +140,10 @@ class AdminTheme
             }
         else
             {
-            $this->script = array_pop(@explode('/',$this->url));
+			$toam_tmp = explode('/',$this->url);
+			$toam_tmp2 = array_pop($toam_tmp);
+			$this->script = $toam_tmp2;
+            //$this->script = array_pop(@explode('/',$this->url));
     	    }
 
 	}
