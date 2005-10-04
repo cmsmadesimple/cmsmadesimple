@@ -1,0 +1,369 @@
+*V1.5.0_pre4*
+
+* Added a queue option to effects for easy stacking and simple timeline building. Valid values are "front", "end" and "parallel" (default), see for test/functional/effects_queue_test.html for usage
+
+* Added a setup function to the core effects that gets called by Effect.Base when first entering into running state, which allows them to query the current state of an element or other page properties when queuing and/or delays are used
+
+* Added a state instance variable to Effect.Base that indicates whether a effect that uses the queue is idle, running or finished
+
+* Fixed a flicker with Effect.Puff
+
+* General code cleaning to get rid of (legitimate) Mozilla strict javascript warnings
+
+* Changes to assertVisible in unittest.js
+
+* Slight refactoring of Effect.Text, now known as Effect.multiple(), change first parameter to also accept an array of strings or elements, or a NodeList of elements (if a single element or a string is given, defaults to $('element').childNodes)
+
+* Made tagifyText work with IE. defaults to a style of "position: relative; zoom:1;" for the created SPAN wrappers. It also replaces spaces with non-breakable spaces. These sit-ups are required to work around problems with rendering elements with the proprietary IE "layout" and non-quirksmode documents.
+
+* Add a break to scriptaculous.js when the includes are done [thx to Danilo Celic]
+
+* Fixed a problem with the Autocompleter when hitting ESC would select the entry in IE and redisplay the entries box in Safari
+
+* Fixed that the onDrop callback on Droppables didn't receive the dopped element as second parameter
+
+* Make check for correct Prototype version on loading script.aculo.us
+
+* Changed implementation of Builder to an innerHTML-based approach to make it work with IE6 (note: removed special "style" handling for now)
+
+* Changed non-sync Effects to use a common setInterval call for better timing and page update speeds. See the new Effect.Queue object. 
+
+* Fixed a problem with setting opacity in Effect.Opacity to very small values
+
+* Changed the implemention of Effect.Base to use setInterval
+
+* Set version number to 1.5_pre4_trunk
+
+* Added experimental Effect.Text function that allows to start delayed text effects, see test/functional/texteffects_test.html.
+
+* Added experimental Effect.tagifyText(element) which wraps an elements text nodes characters in relatively positioned span elements
+
+* Added "delay" option to Effect.Base to start an effect only after a specified delay
+
+* Finetuning unittest.js + even more unit tests
+
+* Added support for Firefox and Konqueror automatic unit testing on Linux [Michael Schuerig]
+
+* Added basic unit test files for Effects, updated unit testing tests
+
+* Fix typo in lib/prototype.js fix in R2069 (whoops)
+
+* Added unit test for Position.clone
+
+* Made the Postition.cumulative override recognize KHTML and AppleWebKit
+
+* Fix the "hide form controls" iframe fix on the Autocompleter on Internet Explorer
+
+*V1.5.0_pre3*
+
+* More positioning fixes, expanded Element.clone [thx to Michael Schuerig]
+
+* Fixed some JavaScript warnings about redeclared vars [Courtenay]
+
+* Fixed a problem with autocompleting update divs not correctly positioned inside positioned elements [thx to Jonathan Feinberg]
+
+* Workaround for a Safari bug on absolutely positioned children of the BODY element
+
+* Added test/run_functional_test.html to more easily find your way around in the functional tests
+
+* Fixed some missing var declarations in effects.js
+
+* Support for automatic unit testing on IE/Win [Jon Tirsen]
+
+* Added loading the text for the Ajax.InPlaceEditor from the server, more CSS support [Richard Livsey, Jon Tirsen]
+
+* Made builder_test.html unit test work with Safari, fixed (one of two) caching issues with javascripttest.rb, added ajax_autocompleter_test.html to Rakefile unittests
+
+* Fixed Element.Class getting false matches on class names like classA-foobar, added unit tests [Martin Bialasinski]
+
+* Added a test to evluate the Fade/Appear effects across browsers and elements (test/functional/effects6_test.html)
+
+* Framework for completely self-running in-browser unit tests on Mac OS X (try "rake unittest") [Jon Tirsen]
+
+* Updates to Ajax.InPlaceEditor (Highlighting, Ajax options, more) [Jon Tirsen]
+
+* Made event registering on Draggables happen per drag for improved performance [thx to Cathy]
+
+* Moved Element.collectTextNodesIgnoreClass to util.js (preparation for refactoring)
+
+* Made sortable onChange option work again
+
+* Fixed a bug with Sortables resulting in wrong result when using Sortable.serialize with onUpdate on ghostly Sortables [thx Richard Livsey, Caleb Buxton]
+
+* Changed version number in scriptaculous.js to 1.5_pre3
+
+* Moved setting focus in Autocompleter to updateElement function to make it overridable [Brian Palmer]
+
+* Added special handling for style attributes to Builder [Michael Schuerig]
+
+* Changed opacity=1.0 check back to be inline with its original (pre 1.5) implementation to prevent flickering in Firefox < 1.1 on opacity-based effects (this also fixes flickering with drag-and-drop, sortable lists and autocompleting text fields). Note that this potentially breaks correct colors in some situations. [thx to David Zülke]
+
+* Automatically deactivate browser built-in autocompletion on autocompleting textfields, fixes part of Rails #1824.
+
+* Fixed a problem with Ajax.InPlaceEditor causing a JavaScript exception on Safari [thx to Patrick Lenz]
+
+*V1.5.0_pre2*
+
+* Fixed a weird character in dragdrop.js, added check to allow empty containers on Sortables (useful with dropOnEmpty option) [thx to Dave Strus]
+
+* Added unit test runner file test/run_unit_tests.html, new unit test files must be listed in test/unit/index.html
+
+* Added unit tests for Prototype string functions
+
+*V1.5.0_pre1*
+
+* Prepared README for V1.5.0_pre1
+
+* Added a main scriptaculous.js file to load in the other libraries transparently:
+
+  <script src="path/to/prototype.js" type="text/javascript"></script>
+  <script src="path/to/scriptaculous.js" type="text/javascript"></script>
+  
+  in the HEAD section of an HTML file is now all that's needed to include all of the script.aculo.us libraries, 
+  given that they all can be accessed by the same path as scriptaculous.js is.
+
+* Fixed possible problem with greedy Droppables when using the dropOnEmpty option on Sortable.create
+
+* Added new CSS/background color features to Ajax.InPlaceEditor [Jon Tirsen]
+
+* Added unit test for Autocompleter, first Version
+
+* Added Event.simulateKey/s to unittest.js. Note that due to a bug in Firefox this will only work with Firefox up to v1.0.4 (see https://bugzilla.mozilla.org/show_bug.cgi?id=289940)
+
+* Fixed a condition where standard a href=xxx links wouldn't work in autocomplete results. These do now, the onclick event is not cancelled. [thx to Jasper Slits]
+
+* Fix showing ghosting marker only on ghosting Sortables
+
+* Some more Builder stuff, expanded builder unit tests
+
+* Moved stuff that didn't belong into specific libs into util.js; util.js is now required for all script.aculo.us libs
+
+* Corrected weirdness in unittest.js
+
+* Added dropOnEmpty option to Sortables to allow dropping on empty lists (see test/functional/sortable3_test.html)
+
+* Changed algoritm for drag/drop position setting
+
+* Changed workaround for class attributes (fixes a Firefox 1.0 error) from klass to className to be more Javascriptesque [thx to Martin Bialasinski]
+
+* Fixed a typo in ajax_inplaceeditor_test.html
+
+* Updated Rakefile to add unittest.js and util.js to the package
+
+* Added util.js which contains various utlity functions and extensions to Prototype
+
+* Major restructuring
+
+* Added TEXTAREA support to Ajax.InPlaceEditor [Sanford Barr]
+
+* Added Ghost Train alpha 0.1.0. See ghosttrain/test.html.
+
+* More features for Ajax.InPlaceEditor [Jon Tirsen]
+
+* Tweaks to unittest.css [Thomas Fuchs]
+
+* Refactoring and new features in unittest.js [Thomas Fuchs] [Jon Tirsen]
+
+* Fixed a wrong variable reference in Effect.Scale
+
+* Fix Element.makePositioned to recognize the 'static' position
+
+* Allow to choose the parameter name for Ajax.Autocompleter [Cameron Braid]
+
+* Changed resolving indicator DOM element more flexibility [Cameron Braid]
+
+* Fixed a reference in Ajax.InPlaceEditor
+
+* Added contributors to unittest.js
+
+* Souped-up Ajax.InPlaceEditor, added support for a form id and specifying all the texts through options [Jon Tirsen]
+
+* Make unit testing look good [Michael Schuerig]
+
+* Changed default revert duration for Draggables to distance-dependent algorithm [suggested by San] 
+
+* Fix double unescaping in Autocompleter
+
+* Refactoring auf Autocompleter classes to use camelCase (note: changes the syntax of some of the options)
+
+* Add updateElement option to Autocompleter [Rob Sharp]
+
+* Updated Ajax.InPlaceEditor, refactoring of unit testing [Jon Tirsen]
+
+* Added preliminary version of Ajax.InPlaceEditor to controls.js; added experimental Firefox only functional testing for it (inplaceeditor_result.html) [Jon Tirsen]
+
+* Added some addtional test files.
+
+* Fixes a bug with Droppables not recognizing a drop if no hoverclass is given [thanks drewie]
+
+* Fixes to ghosting marker, allow a predefined marker (element with id "dropmarker").
+
+* Changed Effect.Opacity to better handle 100% opacity
+
+* Various fixes to ghosting, improves compatiblity with Safari and IE. [thanks to David Zülke]
+
+* Added experimental ghosting option to Sortables. See sortable_functional_ghosting.html for usage.
+
+* Renamed the clone option on Draggables to "ghosting".
+
+* Added experimental "clone" option to Draggable to so that a "clone" stays in place while dragging a translucent version of the draggable element. Currently, this requires relatively positioned elements, and doesn't work with sortable lists (but should after some tweaking). See dragdrop_function_4.html test file for details.
+
+* Added Element.getStyle to find computed CSS styles of an element. Note: doesn't work in all cases in Safari, see my bug report at http://bugzilla.opendarwin.org/show_bug.cgi?id=4125
+
+*1.1beta1*
+
+* Fixed rendering of last frame of animation when from/to is not 0.0/1.0. [thanks to David Zülke]
+
+* Updated internal Prototype JavaScript framework to version 1.4.0_pre2 (patched w/ workaround for Ajax.Updater init bug)
+
+* Some refactoring of controls.js to get rid of "dirty" implementation detail (dont' ask)
+
+* Added returning the generated combined effects to allow for .cancel() on all effects
+
+* Updated internal Prototype JavaScript framework to version 1.4.0_pre2
+
+*Rails 0.13.1*
+
+* Updated Ajax.Autocompleter to deal with parameters options correctly [Martin Marinschek]
+
+* Updated controls.js to allow multple matches in local localcompletion [Ivan Krstic]
+
+* Make version of prototype.js in lib have a nicer Event object [David Zülke]
+
+* Added incremental and local autocompleting and loads of documentation to controls.js [Ivan Krstic]
+
+* Experimental: make version of prototype.js in lib destroy events on page unload to prevent browser memory leaks
+
+* Fixed a possible memory leak in dragdrop.js
+
+* Make version of prototype.js in lib compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() for testing [David Zülke]
+
+* Make effects.js, dragdrop.js and controls.js compatible with some 3rd-party JavaScript libraries (like IE7) by refactoring to use Object.extend() [David Zülke]
+
+* Changed some tests to work better
+
+* Always reset background color on Effect.Highlight; this make change backwards-compatibility, to be sure include style="background-color:(target-color)" on your elements or else elements will fall back to their CSS rules (which is a good thing in most circumstances)
+
+* Removed a possible memory leaks with IE with sortables and droppables (removed references from elements)
+
+* Changes to class extension in effects.js
+
+* Make Effect.Highlight restore any previously set background color when finishing (makes effect work with set CSS classes)
+
+* Added capability to remove draggables/droppables and redeclare sortables in dragdrop.js
+
+* Added Effect.ScrollTo to smoothly scroll the page to an element
+
+* Better Firefox flickering handling on SlideUp/SlideDown
+
+* Some cleaning up in effects.js
+
+* Removed a possible memory leak in IE with draggables
+
+* Added support for cancelling dragging my hitting ESC
+
+* Changed logic of drag-and-drop to only include the last referenced droppable when firing a drop event. This change also offers slight performance gains. [Dominik Wagner]
+
+* Added addtional effects test page, added tests for scriptfragment matching
+
+*1.0.0*
+
+* Changed auto-hiding update div in Ajax.Autocompleter
+
+* Changed default serialization on Ajax.Autocompleter to use Form.Element.serialize
+
+* Added test file for drag/drop inside scrolled elements
+
+* Fixed dragging of unpositioned elements in Internet Explorer
+
+* Change default behaviour of Ajax.Autocompleter to do automatic overlapping, sizing and appear/fade effects
+
+* Fixed Internet Explorer hide-windowed-controls iframe handling
+
+* Changed Ajax.Autocompleter event handling
+
+* Added onShow/onHide callbacks to Ajax.Autocompleter to allow for customized handling/effects
+
+* Fixed SlideUp/SlideDown to restore the overflow CSS property (note: Firefox 1.0.X is buggy, set overflow:hidden as a workaround)
+
+* Fixed BlindUp/BlindDown to restore the overflow CSS property (note: Firefox 1.0.X is buggy, set overflow:hidden as a workaround)
+
+* Fixed draggables with revert:false on repeated drags behaving badly
+
+* Expanded the revert option on draggables to optionally take a function and revert only if it returns true
+
+* Added the dragged element as a parameter to the Draggables.notify callbacks [Michael Sokolov]
+
+* Removed a deprecated reference to Effect2 om Effect.Fold
+
+* Make the percentage on Element.setContentZoom absolute
+
+* Corrected rendering of Ajax.AutoCompleter when focus is lost while updating
+
+* Added (crude) functional tests
+
+* Some slight refactoring in controls.js
+
+* Changed dragdrop.js to use the Effect namespace for its effects
+
+* Updated to Prototype 1.3.0: removal of prototype-ext.js; refactoring.
+
+* Fixed behaviour of cursor keys in Safari on autocomplete script
+
+* Fixed Position.within_including_scrolloffsets
+
+* Fixed sortables that are absolutely positioned
+
+* Fixed unhandled whitespace in Ajax.Autocompleter
+
+* Updated prototype-ext.js to include additions for Ajax.Autocompleter
+
+* Added controls.js, contains AJAX autocompleting text fields from #960
+
+* Refactored Event object
+
+* Renamed effects2.js to effects.js
+
+* Fixed draggables on pages with no droppables
+
+* Moved Event, Position and Element.Class to prototype-ext.js in preparation to Rails 0.13
+
+* Added Effect.Transitions.pulse
+
+* Added Effect.Pulsate and Effect.Fold effect by Justin Palmer
+
+* Added transitions by Mark Pilgrim: .full, .none
+
+* Added effects by Mark Pilgrim: Effect.Grow, Effect.Shrink
+
+* Changed effects namespace to Effect. (Effect2 is deprecated, but works too)
+
+* Changed old Effect.ContentZoom class to Element.setContentZoom() function
+
+* Greatly expanded Effect.Highlight to have user-defined colors and autodetecting the background color
+
+* Converted remaining effects (Squish, Highlight) to new format
+
+* Sortable.create now passes the zindex, starteffect, reverteffect and endeffect options to the underlying Draggables
+
+* Sortable.serialize now honors the only option on Sortable.create
+
+* New overridable options on Draggables: zindex, starteffect, reverteffect, endeffect
+
+* Fix a Gecko engine flicker on Sortables in dragdrop.js
+
+* Fixed event.isLeftClick
+
+* Some small changes in effects2.js
+
+* Refactoring of dragdrop.js
+
+* Added an Object.prototype.inspect() and more verbose messages for js unit testing
+
+* Added test/unittest.js and initial tests in test/html. 
+
+* Cleaning up of effects2.js (convert tabs to spaces)
+
+* Added Rakefile for distribution packaging (default task = make distribution, rake clean for cleaning up)
+
+* Initial check-in and directory layout for the script.aculo.us JavaScripts
