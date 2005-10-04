@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
@@ -17,6 +17,9 @@
  */
 
 global $Config ;
+
+include_once('../../../../../../../include.php');
+check_login();
 
 require('util.php') ;
 

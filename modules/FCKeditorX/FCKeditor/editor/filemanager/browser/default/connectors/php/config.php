@@ -1,4 +1,4 @@
-<?php 
+<?php
 /*
  * FCKeditor - The text editor for internet
  * Copyright (C) 2003-2005 Frederico Caldeira Knabben
@@ -15,6 +15,8 @@
  * File Authors:
  * 		Frederico Caldeira Knabben (fredck@fckeditor.net)
  */
+include_once('../../../../../../../../../include.php');
+check_login();
 
 global $Config ;
 
