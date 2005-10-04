@@ -24,22 +24,7 @@ require_once("../include.php");
 
 check_login();
 $userid = get_userid();
-$use_ajax=get_preference($userid, 'ajax', false);
-if ($use_ajax)
-    {
-    $xajax = new xajax("ajax_listcontent.php");
-//    $xajax->registerFunction("usersInGroup");
-//    $xajax->registerFunction("saveChange");
-//    $xajax->registerFunction("addAll");
-    $xajax->processRequests();
-    }
-
 include_once("header.php");
-if ($use_ajax)
-    {
-    $xajax->printJavascript();
-    }
-
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
