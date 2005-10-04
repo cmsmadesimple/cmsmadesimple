@@ -65,7 +65,7 @@ if (isset($_GET["content_id"]))
 			$db->Execute($query, array($order - 1, $parent_id));
 			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1) WHERE content_id = ? AND parent_id = ?';
 			#echo $query;
-			$db->Execute($query, array($content_id, $parent_id);
+			$db->Execute($query, array($content_id, $parent_id));
 		}
 
 		ContentManager::SetAllHierarchyPositions();
