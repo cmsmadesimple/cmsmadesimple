@@ -46,7 +46,7 @@ include_once("header.php");
 	$grouplist = GroupOperations::LoadGroups();
 
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	if (count($grouplist) > $limit)
 	{

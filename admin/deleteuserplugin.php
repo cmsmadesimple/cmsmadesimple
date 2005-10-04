@@ -34,16 +34,16 @@ if (isset($_GET["userplugin_id"])) {
 
 	if ($access) {
 
-		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ".$userplugin_id;
-		$result = $db->Execute($query);
+		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
+		$result = $db->Execute($query, array($userplugin_id));
 
 		if ($result && $result->RowCount()) {
 			$row = $result->FetchRow();
 			$userplugin_name = $row['userplugin_name'];
 		}
 
-		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = $userplugin_id";
-		$result = $db->Execute($query);
+		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
+		$result = $db->Execute($query,array($userplugin_id));
 		audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
 	}
 }

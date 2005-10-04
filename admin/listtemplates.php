@@ -28,7 +28,8 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 ?>
@@ -46,8 +47,8 @@ if (isset($_GET["message"])) {
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {
-			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ".$_GET["template_id"];
-			$result = $db->Execute($query);
+			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
+			$result = $db->Execute($query, array($_GET['template_id']));
 			if ($result) {
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = '".$db->DBTimeStamp(time()) . "'";
 				$db->Execute($query);
@@ -106,7 +107,7 @@ if (isset($_GET["message"])) {
 	$templatelist = TemplateOperations::LoadTemplates();
 	
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	if (count($templatelist) > $limit)
 	{

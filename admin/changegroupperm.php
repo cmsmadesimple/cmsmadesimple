@@ -23,135 +23,101 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-
-$group_id="";
+$group_id= - 1;
 if (isset($_POST["group_id"])) $group_id = $_POST["group_id"];
 else if (isset($_GET["group_id"])) $group_id = $_GET["group_id"];
 
-$group_name = "";
+$submitted= - 1;
+if (isset($_POST["submitted"])) $submitted = $_POST["submitted"];
+else if (isset($_GET["submitted"])) $submitted = $_GET["submitted"];
 
-if (isset($_POST["cancel"]))
-{
+$group_name="";
+
+if (isset($_POST["cancel"])) {
 	redirect("topusers.php");
 	return;
 }
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Permissions");
+$access = check_permission($userid, 'Modify Permissions');
+$use_ajax=get_preference($userid, 'ajax', false);
+if ($use_ajax)
+    {
+    $xajax = new xajax("ajax_changegroupperm.php");
+    $xajax->registerFunction("permsForGroup");
+    $xajax->registerFunction("saveChange");
+    $xajax->registerFunction("addAll");
+    $xajax->processRequests();
+    }
 
 $message = '';
 
-if ($access)
-{
-	if ($group_id != '' && $group_id != '-1')
-	{
-		$query = "SELECT group_name FROM ".cms_db_prefix()."groups WHERE group_id = ".$group_id;
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0)
-		{
-			$row = $result->FetchRow();
-			$group_name = $row['group_name'];
-		}
-
-		if (isset($_POST["changeperm"]))
-		{
-			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = " . $group_id;
-			$result = $db->Execute($query);
-
-			foreach ($_POST as $key=>$value)
-			{
-				if (strpos($key,"perm-") == 0 && strpos($key,"perm-") !== false)
-				{
-					$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
-					$query = "INSERT INTO ".cms_db_prefix()."group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES ($new_id, ".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
-					$db->Execute($query);
-				}
-			}
-
-			audit($group_id, $group_name, "Changed Group Permissions");
-			$message = lang('permissionschanged');
-			#redirect("listgroups.php");
-			#return;
-
-		}
-	}
-}
-
 include_once("header.php");
+if ($use_ajax)
+    {
+    $xajax->printJavascript();
+    }
 
 if (!$access) {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
 }
 else {
 
-if ($message != '')
-{
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
-	$message = '';
-}
-
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('grouppermissions')?></p>
-
+	<p class="pageheader"><?php echo lang('grouppermissions',array($group_name))?></p>
 <?php
 
-	$groups = GroupOperations::LoadGroups();
-	if (count($groups) > 0)
-	{
-		echo '<form method="post" action="changegroupperm.php">';
-		echo '<div class="pageoverflow">';
-		echo '<p class="pagetext">Group Name:</p>';
-		echo '<p class="pageinput">';
-		echo '<select name="group_id">';
-		echo '<option value="-1">Select a Group</option>';
-		foreach ($groups as $onegroup)
-		{
-			echo '<option value="'.$onegroup->id.'"';
-			if ($onegroup->id == $group_id)
-			{
-				echo ' selected="selected"';
-			}
-			echo '>'.$onegroup->name.'</option>';
-		}
-		echo '</select> <input type="submit" value="'.lang('selectgroup').'" />';
-		echo '</p>';
-		echo '</div>';
-		echo '</form>';
-		echo '<form method="post" action="changegroupperm.php">';
-	}
+    // always display the group pulldown
+    $groups = GroupOperations::LoadGroups();
+    if (count($groups) > 0)
+        {
+        echo '<form id="groupname" method="post" action="changegroupperm.php">';
+        echo '<div class="pageoverflow">';
+        echo '<p class="pagetext">Group Name:</p>';
+        echo '<p class="pageinput">';
+        echo '<select name="group_id"';
+        if ($use_ajax)
+            {
+            echo 'onchange="xajax_permsForGroup(this.options[this.selectedIndex].value);"';
+            }
+        echo '><option value="-1">Select a Group</option>';
+        foreach ($groups as $onegroup)
+            {
+            echo '<option value="'.$onegroup->id.'"';
+            if ($onegroup->id == $group_id)
+                {
+                echo ' selected="selected"';
+                }
+            echo '>'.$onegroup->name.'</option>';
+            }
+        echo '</select>';
+        echo '<input id="groupsubmit" type="submit" value="'.lang('selectgroup').'" /></p>';
+        if ($use_ajax)
+            {
+            ?>
+            <script type="text/javascript">
+                var item=document.getElementById('groupsubmit');
+                if (item)
+                    {
+                    item.style.visibility = 'hidden';
+                    }
+            </script>
+            <br /><div id="ajaxarea"></div>
+            <?php
+            }
+        echo '</div></form>';
+        }
+    if ($group_id != -1 && $submitted == -1)
+        {
+        // a group has been selected
+        echo '<form method="post" action="changegroupperm.php">';
+        $query = "SELECT p.permission_id, p.permission_text, up.group_id FROM ".
+        	cms_db_prefix()."permissions p LEFT JOIN ".cms_db_prefix().
+        	"group_perms up ON p.permission_id = up.permission_id and group_id = ? ORDER BY p.permission_name";
 
-	if ($group_id != '' && $group_id != '-1')
-	{
-		$query = "SELECT permission_id, permission_name, permission_text FROM ".cms_db_prefix()."permissions ORDER BY permission_name";
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0)
-		{
-			while($row = $result->FetchRow())
-			{
-				$perms[$row['permission_name']] = false;
-				$perm_text[$row['permission_name']] = $row['permission_text'];
-				$ids[$row['permission_name']] = $row['permission_id'];
-			}
-
-		}
-
-		$query = "SELECT p.permission_name FROM ".cms_db_prefix()."group_perms g INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = g.permission_id WHERE g.group_id = " . $group_id;
-
-		$result = $db->Execute($query);
-
-		if ($result && $result->RowCount() > 0)
-		{
-			while($row = $result->FetchRow())
-			{
-				$tmp = $row['permission_name'];
-				$perms[$tmp] = true;
-			}
-		}
-		
+        $result = $db->Execute($query,array($group_id));
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
@@ -160,37 +126,55 @@ if ($message != '')
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
-		
 		$currow = "row1";
-
-		foreach ($perms as $key => $value)
-		{
+        while($result && $row = $result->FetchRow())
+            {
 			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo '<td>'.$perm_text[$key].'</td>'."\n";
-			echo '<td><input class="pagecheckbox" type="checkbox" name="perm-'.$ids[$key].'" value="1" '.($value == true?" checked=\"checked\"":"").'/></td>'."\n";
+            echo '<td>'.$row['permission_text'].'</td>'."\n";
+			echo '<td><input class="pagecheckbox" type="checkbox" name="permission-'.$row['permission_id'].'" value="1" '.(isset($row['group_id'])?" checked=\"checked\"":"").'/></td>'."\n";
 			echo "</tr>\n";
 
-			($currow=="row1"?$currow="row2":$currow="row1");
-		}
-		echo '</tbody>';
-		echo '</table>';
-?>
+			($currow=="row1"?$currow="row2":$currow="row1");	
+			}
+		?>
+		</tbody>
+		</table>
 		<div class="pageoptions">
 			<p class="pageoptions">
 				<input type="hidden" name="group_id" value="<?php echo $group_id?>" />
-				<input type="submit" name="changeperm" value="<?php echo lang('updateperm')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="hidden" name="submitted" value="1" />
+				<input type="submit" name="changeperm" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
-	</form>
+		</form>
+		<?php
+        }
+    else if ($group_id != -1 && $submitted != -1)
+        {
+        // we have group permissions
+		$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE group_id = ?";
+		$result = $db->Execute($query, array($group_id));
+		foreach ($_POST as $key=>$value)
+			{
+			if (strpos($key,"permission-") == 0 && strpos($key,"permission-") !== false)
+				{
+				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+				$query = "INSERT INTO ".cms_db_prefix().
+					"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".
+                	$new_id.", ".$db->qstr($group_id).", ".$db->qstr(substr($key,11)).", '".
+                	$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+                $result = $db->Execute($query);
+				}
+			}
 
-<?php
-	}
-	echo '</div>';
+		audit($group_id, 'Group ID', 'Changed Group Permissions');
+        echo '<p class="pageheader">'.lang('permissionschanged').'</p>';
+        }
+echo '</div>';
 }
-
-
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

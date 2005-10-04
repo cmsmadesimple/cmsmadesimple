@@ -48,7 +48,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
 $use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
@@ -111,8 +111,8 @@ if ($access) {
 	}
 	else if ($userplugin_id != -1) {
 
-		$query = "SELECT * from ".cms_db_prefix()."userplugins WHERE userplugin_id = " . $userplugin_id;
-		$result = $db->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
+		$result = $db->Execute($query,array($userplugin_id));
 		
 		$row = $result->FetchRow();
 

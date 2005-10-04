@@ -174,14 +174,14 @@ $owners .= "</select>";
 
 $addt_users = "";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid . " ORDER BY username";
-$result = $db->Execute($query);
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
+$result = $db->Execute($query,array($userid));
 
 while($row = $result->FetchRow())
 {
 	$addt_users .= "<option value=\"".$row["user_id"]."\"";
-	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = $htmlblob_id";
-	$newresult = $db->Execute($query);
+	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = ?";
+	$newresult = $db->Execute($query,array($htmlblob_id));
 	if ($newresult && $newresult->RowCount() > 0)
 	{
 		$addt_users .= " selected=\"true\"";

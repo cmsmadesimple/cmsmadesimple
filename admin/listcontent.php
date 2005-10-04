@@ -23,11 +23,27 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$userid = get_userid();
+$use_ajax=get_preference($userid, 'ajax', false);
+if ($use_ajax)
+    {
+    $xajax = new xajax("ajax_listcontent.php");
+//    $xajax->registerFunction("usersInGroup");
+//    $xajax->registerFunction("saveChange");
+//    $xajax->registerFunction("addAll");
+    $xajax->processRequests();
+    }
 
 include_once("header.php");
+if ($use_ajax)
+    {
+    $xajax->printJavascript();
+    }
+
 
 if (isset($_GET["message"])) {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 ?>
@@ -35,7 +51,6 @@ if (isset($_GET["message"])) {
 	<div class="pageoverflow">
 <?php
 
-	$userid = get_userid();
 	$modifyall = check_permission($userid, 'Modify Any Page');
 	$content_array = ContentManager::GetAllContent(false);
 	$mypages = author_pages($userid);
@@ -113,7 +128,7 @@ if (isset($_GET["message"])) {
     }
 
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 
 	$thelist = '';

@@ -304,6 +304,8 @@ else if ($action == 'missingdeps')
 		if (isset($_SESSION['modules_messages']) && count($_SESSION['modules_messages']) > 0)
 		{
 			echo '<ul class="messages">';
+			
+			// do we need to worry about this for XSS?
 			foreach ($_SESSION['modules_messages'] as $onemessage)
 			{
 				echo "<li>" . $onemessage . "</li>";

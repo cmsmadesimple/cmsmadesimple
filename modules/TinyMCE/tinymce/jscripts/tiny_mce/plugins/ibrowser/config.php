@@ -12,6 +12,9 @@
 // v.1.0, 2004-10-04
 // ================================================
 
+include_once('../../../../../../../include.php');
+check_login();
+
 include_once('../../../../../../../config.php');
 // directory where tinymce files are located
 $tinyMCE_dir = $config['root_path'] . '/modules/TinyMCE/tinymce/';

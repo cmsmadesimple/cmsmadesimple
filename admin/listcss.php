@@ -41,9 +41,9 @@ include_once("header.php");
 #******************************************************************************
 # first : displaying error message, if any.
 #******************************************************************************
-if (isset($_GET["message"]))
-{
-    echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+if (isset($_GET["message"])) {
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 ?>
@@ -65,7 +65,7 @@ if (isset($_GET["message"]))
 	$result = $db->Execute($query);
 
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	if ($result->RowCount() > $limit)
 	{

@@ -69,7 +69,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 
 $use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
 if ($access)
 {
@@ -185,8 +185,8 @@ else
 		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
 			WHERE	css_id		= assoc_css_id
 			AND		assoc_type	= 'template'
-			AND		assoc_to_id = '$template_id'";
-		$cssresult = $db->Execute($cssquery);
+			AND		assoc_to_id = ?";
+		$cssresult = $db->Execute($cssquery,array($template_id));
 		if ($cssresult && $cssresult->RowCount() > 0)
 		{
 			while ($cssline = $cssresult->FetchRow())

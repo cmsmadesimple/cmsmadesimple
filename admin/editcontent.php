@@ -22,13 +22,12 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
+check_login();
+
 if (isset($_POST["cancel"]))
 {
 	redirect("listcontent.php");
 }
-
-
-check_login();
 
 $error = FALSE;
 

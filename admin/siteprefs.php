@@ -60,7 +60,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
 
 $use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php");

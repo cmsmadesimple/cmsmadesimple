@@ -9,6 +9,8 @@
  * File basicly functions as a stub to facilitate future upgrading
  */
 
+include_once("../../../../../include.php");
+check_login();
 include_once("../../../../../config.php");
 
 

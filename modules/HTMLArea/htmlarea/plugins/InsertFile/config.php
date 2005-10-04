@@ -9,6 +9,8 @@
 ** Last changed..:    23 July 2004
 ***********************************************************************/
 
+include_once("../../../../../include.php");
+check_login();
 include_once("../../../../../config.php");
 
 // Error reporting should be set to E_NONE in production environment

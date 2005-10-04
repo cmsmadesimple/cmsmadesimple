@@ -66,8 +66,8 @@ if (isset($_GET["css_id"]))
 	{
 
 		# first we get the name of the css for logging
-		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = '$css_id'";
-		$result = $db->Execute($query);
+		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
+		$result = $db->Execute($query, array($css_id));
 		
 		if ($result && $result->RowCount())
 		{
@@ -84,8 +84,8 @@ if (isset($_GET["css_id"]))
 		if ($dodelete)
 		{
 			# then we check if this CSS has associations
-			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = '$css_id'";
-			$result = $db->Execute($query);
+			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = ?";
+			$result = $db->Execute($query, array($css_id));
 			
 			if ($result && $result->RowCount())
 			{
@@ -97,8 +97,8 @@ if (isset($_GET["css_id"]))
 		# everything should be ok
 		if ($dodelete)
 		{
-			$query = "DELETE FROM ".cms_db_prefix()."css where css_id = '$css_id'";
-			$result = $db->Execute($query);
+			$query = "DELETE FROM ".cms_db_prefix()."css where css_id = ?";
+			$result = $db->Execute($query, array($css_id));
 
 			if ($result)
 			{

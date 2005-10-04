@@ -28,7 +28,8 @@ check_login();
 include_once("header.php");
 
 if (isset($_GET["message"])) {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p>';
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
 ?>
@@ -41,7 +42,7 @@ if (isset($_GET["message"])) {
 	$htmlbloblist = HtmlBlobOperations::LoadHtmlBlobs();
 
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
 	echo '<p class="pageheader">'.lang('htmlblobs').'</p></div>';

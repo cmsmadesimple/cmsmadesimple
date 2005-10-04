@@ -70,8 +70,8 @@ else $error = lang('idnotvalid');
 if (isset($type) && "template" == $type) 
 {
 
-	$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = $id";
-	$result = $db->Execute($query);
+	$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
+	$result = $db->Execute($query, array($id));
 
 	if ($result)
 	{
@@ -100,9 +100,9 @@ if (isset($type) && "template" == $type)
 #******************************************************************************
 # displaying erros if any
 #******************************************************************************
-if (isset($_GET["message"]))
-{
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
+if (isset($_GET["message"])) {
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 if ("" != $error)
 {

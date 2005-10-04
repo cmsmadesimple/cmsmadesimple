@@ -114,8 +114,8 @@ include_once("header.php");
 
 $addt_users = "";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> " . $userid . " ORDER BY username";
-$result = $db->Execute($query);
+$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
+$result = $db->Execute($query, array($userid));
 
 if ($result && $result->RowCount() > 0) {
 	while($row = $result->FetchRow()) {

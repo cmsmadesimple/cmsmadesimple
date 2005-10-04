@@ -41,7 +41,7 @@ $userid = get_userid();
 $access = check_permission($userid, 'Modify Code Blocks');
 
 $use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1")$use_javasyntax = true;
+if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);

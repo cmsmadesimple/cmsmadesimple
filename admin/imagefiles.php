@@ -25,6 +25,8 @@ require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
 require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
 require_once("../include.php");
 
+check_login();
+
 $action_done='';
 
 function deldir($dir)
@@ -51,10 +53,6 @@ function deldir($dir)
 	}
 	return $success;  
 } 
-
-
-
-check_login();
 
 $errors = "";
 

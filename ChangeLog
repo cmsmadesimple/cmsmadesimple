@@ -43,12 +43,24 @@ as it's locale name.
 * Updated ADODB to 4.65
 * XHTML header did not pass along proper encoding in the admin
 
+Version 0.10.3 "Ebenezer" -- Wed Oct 03 2005
+-----------------
+
+* Fixed a security bug where pages were succeptable to cross
+site vulnerability as per BugTraq
+* More security fixes and other safeguards
+
+Version 0.10.2 "Darkwood" -- Wed Sep 24 2005
+-----------------
+
+* Fix for image manager not checking for permissions before
+allowing uploads
+
 Version 0.10.1 "Willoughby" -- Wed Aug 31 2005
 -----------------
 
 * Fix for a possible php injection in admin/lang.php.  Thanks
 to vxsfx for finding this.
-
 
 Version 0.10 "Antigua" -- Tue Jul 05 2005
 -----------------

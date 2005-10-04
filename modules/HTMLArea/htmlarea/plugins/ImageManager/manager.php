@@ -5,10 +5,9 @@
  * @version $Id: manager.php 26 2004-03-31 02:35:21Z Wei Zhuo $
  * @package ImageManager
  */
-
 	require_once('config.inc.php');
 	require_once('Classes/ImageManager.php');
-	
+
 	$manager = new ImageManager($IMConfig);
 	$dirs = $manager->getDirs();
 

@@ -134,8 +134,8 @@ if ($access)
 				# we now have to check which templates are associated with this CSS and update their modified date.
 				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc
 					WHERE	assoc_type		= 'template'
-					AND		assoc_css_id	= '$css_id'";
-				$cssresult = $db->Execute($cssquery);
+					AND		assoc_css_id	=  ?";
+				$cssresult = $db->Execute($cssquery,array($css_id));
 
 				if ($cssresult)
 				{
@@ -171,8 +171,8 @@ if ($access)
 	{
 
 		# we get the CSS in the DB
-		$query = "SELECT * from ".cms_db_prefix()."css WHERE css_id = " . $css_id;
-		$result = $db->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."css WHERE css_id = ?"; 
+		$result = $db->Execute($query,array($css_id));
 
 		# we put the content in vars
 		if ($result && $result->RowCount() > 0)

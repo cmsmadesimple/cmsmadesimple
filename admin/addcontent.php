@@ -21,6 +21,9 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
+
+check_login();
+
 require_once("header.php");
 
 if (isset($_POST["cancel"]))
@@ -28,7 +31,6 @@ if (isset($_POST["cancel"]))
 	redirect("listcontent.php");
 }
 
-check_login();
 
 $error = FALSE;
 

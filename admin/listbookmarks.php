@@ -37,7 +37,7 @@ include_once("header.php");
 	$marklist = BookmarkOperations::LoadBookmarks($userid);
 
 	$page = 1;
-	if (isset($_GET['page']))$page = $_GET['page'];
+	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	
 	if (count($marklist) > $limit)

@@ -20,14 +20,15 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
+require_once(dirname(dirname(__FILE__)) . '/include.php');
 
 check_login();
 
 $page_id = -1;
 $page = 1;
-if (isset($_GET["content_id"])) {
 
+if (isset($_GET["content_id"]))
+{
 	$content_id = $_GET["content_id"];
 	$parent_id = $_GET["parent_id"];
 	$direction = $_GET["direction"];
@@ -40,8 +41,8 @@ if (isset($_GET["content_id"])) {
 		$order = 1;
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = $content_id";
-		$result = $db->Execute($query);
+		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$result = $db->Execute($query, array($content_id));
 		$row = $result->FetchRow();
 		if (isset($row["item_order"]))
 		{
@@ -50,26 +51,23 @@ if (isset($_GET["content_id"])) {
 
 		if ($direction == "down")
 		{
-			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE item_order = " . ($order + 1) .
-				" AND parent_id = $parent_id";
-			#echo $query;
-			$db->Execute($query);
-			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order + 1 WHERE content_id = " . $content_id .
-				" AND parent_id = $parent_id";
-			#echo $query;
-			$db->Execute($query);
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1) WHERE item_order = ? AND parent_id = ?';
+			#echo $query, $order + 1, $parent_id;
+			$db->Execute($query, array($order + 1, $parent_id));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1) WHERE content_id = ? AND parent_id = ?';
+			#echo $query, $content_id, $parent_id;
+			$db->Execute($query, array($content_id, $parent_id));
 		}
 		else if ($direction == "up")
 		{
-			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order + 1 WHERE item_order = " . ($order - 1) .
-				" AND parent_id = $parent_id";
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1) WHERE item_order = ? AND parent_id = ?';
 			#echo $query;
-			$db->Execute($query);
-			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE content_id = " . $content_id .
-				" AND parent_id = $parent_id";
+			$db->Execute($query, array($order - 1, $parent_id));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1) WHERE content_id = ? AND parent_id = ?';
 			#echo $query;
-			$db->Execute($query);
+			$db->Execute($query, array($content_id, $parent_id);
 		}
+
 		ContentManager::SetAllHierarchyPositions();
 	}
 }

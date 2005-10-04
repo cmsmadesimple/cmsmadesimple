@@ -101,10 +101,10 @@ if (isset($type) && "template" == $type)
 #******************************************************************************
 # displaying erros if any
 #******************************************************************************
-	if (isset($_GET["message"]))
-	{
-		echo '<div class="pagemcontainer"><p class="pagemessage">'.$_GET["message"].'</p></div>';
-	}
+if (isset($_GET["message"])) {
+	$message = preg_replace('/\</','',$_GET['message']);
+	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+}
 	if ("" != $error)
 	{
 		echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".$error."</p></div>";
@@ -200,7 +200,7 @@ else {
 	else
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (SELECT assoc_css_id FROM ".cms_db_prefix()."css_assoc WHERE assoc_type = 'template' AND assoc_to_id = ?) ORDER BY css_name";
-		$result = $db->Execute($query, $id);
+		$result = $db->Execute($query, array($id));
 	}
 
 

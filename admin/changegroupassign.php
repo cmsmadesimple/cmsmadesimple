@@ -37,6 +37,15 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Group Assignments');
+$use_ajax=get_preference($userid, 'ajax', false);
+if ($use_ajax)
+    {
+    $xajax = new xajax("ajax_changegroupassign.php");
+    $xajax->registerFunction("usersInGroup");
+    $xajax->registerFunction("saveChange");
+    $xajax->registerFunction("addAll");
+    $xajax->processRequests();
+    }
 
 $message = '';
 
@@ -170,10 +179,27 @@ else {
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
-	</form>
-<?php
-	}
-	echo '</div>';	
+		</form>
+		<?php
+        }
+    else if ($group_id != -1 && $submitted != -1)
+        {
+        // we have group preferences
+		$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ?";
+		$result = $db->Execute($query, array($group_id));
+		foreach ($_POST as $key=>$value)
+			{
+			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false)
+				{
+				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+				$result = $db->Execute($query);
+				}
+			}
+
+		audit($group_id, 'Group ID', 'Changed Group Assignments');
+        echo '<p class="pageheader">'.lang('assignmentchanged').'</p>';
+        }
+echo '</div>';
 }
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 

@@ -5,7 +5,6 @@
  * @version $Id: images.php 27 2004-04-01 08:31:57Z Wei Zhuo $
  * @package ImageManager
  */
-
 require_once('config.inc.php');
 require_once('Classes/ImageManager.php');
 

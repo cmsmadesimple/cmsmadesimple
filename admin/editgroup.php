@@ -101,8 +101,8 @@ if ($access) {
 	}
 	else if ($group_id != -1) {
 
-		$query = "SELECT * from ".cms_db_prefix()."groups WHERE group_id = " . $group_id;
-		$result = $db->Execute($query);
+		$query = "SELECT * from ".cms_db_prefix()."groups WHERE group_id = ?";
+		$result = $db->Execute($query, array($group_id));
 		
 		$row = $result->FetchRow();
 
