@@ -43,6 +43,9 @@ if (isset($_POST['bookmarks'])) $bookmarks = $_POST['bookmarks'];
 $indent = 0;
 if (isset($_POST['indent'])) $indent = $_POST['indent'];
 
+$ajax = 0;
+if (isset($_POST['ajax'])) $ajax = $_POST['ajax'];
+
 $error = "";
 
 $wysiwyg = '';
@@ -61,6 +64,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'admintheme', $admintheme);
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'indent', $indent);
+	set_preference($userid, 'ajax', $ajax);
 	audit(-1, '', 'Edited User Preferences');
 	$error = lang('prefsupdated');
 	#redirect("index.php");
@@ -72,6 +76,7 @@ if (isset($_POST["submit_form"])) {
 	$admintheme = get_preference($userid, 'admintheme');
     $bookmarks = get_preference($userid, 'bookmarks');
     $indent = get_preference($userid, 'indent', true);
+    $ajax = get_preference($userid, 'ajax', false);
 }
 
 include_once("header.php");
@@ -150,6 +155,12 @@ if ($error != "") {
 						}
 					?>	
 				</p>					
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('adminajax'); ?>:</p>
+				<p class="pageinput">
+					<input class="pagenb" type="checkbox" name="ajax" <?php if ($ajax) echo "checked=\"checked\""; ?> /><?php echo lang('useajax') ?>
+				</p>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>

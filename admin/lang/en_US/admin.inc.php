@@ -299,4 +299,6 @@ $lang['admin']['langparam'] = 'Parameter is used to specify what language to use
 $lang['admin']['parameters'] = 'Parameters'; //needs translation
 $lang['admin']['mediatype'] = 'Media Type'; //needs translation
 $lang['admin']['assignmentchanged'] = 'Group Assignments been updated.'; //needs translation
+$lang['admin']['adminajax'] = 'Javascript Admin'; //needs translation
+$lang['admin']['useajax'] = 'Use Dynamic Drag\'n\'Drop Admin where available?'; //needs translation
 ?>
