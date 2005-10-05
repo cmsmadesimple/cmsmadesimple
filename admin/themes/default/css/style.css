@@ -88,9 +88,9 @@ a.footer { color: #ffffff; }
 
 /* Standard pages output */
 div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; }
-div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
+div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; }
 div.pageerrorinstalldir { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 50em; }
-div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; width: 76em; }
+div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; }
 div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; width: 100%;}
 div.pageoverflow a { color: #384654; }
 div.pageoverflow img { border: 0px; }
