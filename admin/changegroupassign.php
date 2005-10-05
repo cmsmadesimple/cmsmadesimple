@@ -104,7 +104,28 @@ else {
                     item.style.visibility = 'hidden';
                     }
             </script>
-            <br /><div id="ajaxarea"></div>
+            <br /><div id="ajaxarea">
+				<div class="ajaxselection">
+				<div style="float:left;"><p class="pagesubtitle">Members</p>
+				<ul class="sortable" id="members"></ul></div>
+				<div style="float:left;"><p class="pagesubtitle">Nonmembers</p><ul class="sortable" id="nonmembers"></ul></div>            
+            </div>
+       		<script type="text/javascript">
+// <![CDATA[
+Sortable.create('members',{dropOnEmpty:true,containment:['members','nonmembers'],constraint:false});
+Sortable.create('nonmembers',{dropOnEmpty:true,containment:['members','nonmembers'],constraint:false});
+// ]]>
+</script>
+           </div>
+<script type="text/javascript">
+// <![CDATA[
+var item=document.getElementById('ajaxarea');
+if (item)
+	{
+	item.style.visibility = 'hidden';
+	}
+// ]]>
+</script>
             <?php
             }
         echo '</div></form>';

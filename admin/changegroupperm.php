@@ -98,14 +98,39 @@ else {
             {
             ?>
             <script type="text/javascript">
-                var item=document.getElementById('groupsubmit');
+              // <![CDATA[
+                 var item=document.getElementById('groupsubmit');
                 if (item)
                     {
                     item.style.visibility = 'hidden';
                     }
+               // ]]>
             </script>
-            <br /><div id="ajaxarea"></div>
-            <?php
+            <br /><div id="ajaxarea">
+           <div class="ajaxselection">
+           	<div style="float:left;">
+           	<p class="pagesubtitle">Permitted</p>
+           	<ul class="sortable" id="permitted"></ul></div>
+           	<div style="float:left;"><p class="pagesubtitle">Forbidden</p>
+           	<ul class="sortable" id="notpermitted"></ul></div>
+           	</div>
+       		<script type="text/javascript">
+// <![CDATA[
+Sortable.create('permitted',{dropOnEmpty:true,containment:['permitted','notpermitted'],constraint:false});
+Sortable.create('notpermitted',{dropOnEmpty:true,containment:['permitted','notpermitted'],constraint:false});
+// ]]>
+</script>
+           </div>
+<script type="text/javascript">
+// <![CDATA[
+var item=document.getElementById('ajaxarea');
+if (item)
+	{
+	item.style.visibility = 'hidden';
+	}
+// ]]>
+</script>
+<?php
             }
         echo '</div></form>';
         }
