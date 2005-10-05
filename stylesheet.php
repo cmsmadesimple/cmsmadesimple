@@ -20,6 +20,11 @@
 
 require_once(dirname(__FILE__)."/include.php");
 
+if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+{
+	@ini_set( 'zlib.output_compression','Off' );
+}
+
 $templateid = "";
 $mediatype = '';
 $stripbackground = false;
