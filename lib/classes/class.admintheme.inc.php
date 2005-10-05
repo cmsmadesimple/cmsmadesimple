@@ -1169,8 +1169,8 @@ class AdminTheme
 <?php
 	}
 ?>
-<script src="/js/prototype.js" type="text/javascript"></script>
-<script src="/js/scriptaculous.js" type="text/javascript"></script>
+<script src="../js/prototype.js" type="text/javascript"></script>
+<script src="../js/scriptaculous.js" type="text/javascript"></script>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
 </head>
