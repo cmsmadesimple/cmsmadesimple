@@ -1205,15 +1205,32 @@ class CMSModule extends ModuleOperations
 	 * @param string The html name of the button
 	 * @param string The predefined value of the button, if any
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param string Use an image instead of a regular button
 	 */
-	function CreateInputSubmit($id, $name, $value='', $addttext='')
+	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='')
 	{
-		$text = '<input type="submit" name="'.$id.$name.'" value="'.$value.'"';
+		global $gCms;
+
+		$text = '<input name="'.$id.$name.'" value="'.$value.'" type=';
+
+		if ($image != '')
+		{
+			$text .= '"image"';
+			$img = $gCms->config['root_url'] . '/' . $image;
+			$text .= ' src="'.$img.'"';
+		}
+		else 
+		{
+			$text .= '"submit"';
+		}
+
 		if ($addttext != '')
 		{
 			$text .= ' '.$addttext;
 		}
+
 		$text .= ' />';
+
 		return $text . "\n";
 	}
 
