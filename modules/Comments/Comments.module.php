@@ -118,7 +118,8 @@ class Comments extends CMSModule
 					$dateformat = $params['dateformat'];
 				}
 				
-				echo $this->CreateLink($id, 'addcomment', $return_id, $this->Lang('addacomment'), $params, '', false, false);
+				#function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false)
+				echo $this->CreateLink($id, 'addcomment', $return_id, $this->Lang('addacomment'), $params, '', false, true);
 
 				if ($dbresult && $dbresult->RowCount())
 				{

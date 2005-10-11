@@ -23,6 +23,7 @@ rm -fr modules/LinkBlog
 rm -fr modules/HTMLArea
 rm -fr modules/PngTransparencyIE
 rm -fr modules/PermaLinks
+rm -fr modules/ProtectEmail
 rm -fr modules/faqX
 rm -fr modules/FCKeditor
 find -depth -type d -name .svn -exec rm -fr {} \;

@@ -22,7 +22,8 @@ function smarty_cms_function_content($params, &$smarty)
 	$pageinfo = $gCms->variables['pageinfo'];
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		if (isset($_GET['module']) || isset($_POST['module']) || isset($_GET['mact']))
+		if ((isset($_GET['module']) || isset($_POST['module']) || isset($_GET['mact'])) &&
+			( ( isset( $_GET['id'] ) && $_GET['id'] == 'cntnt01') || (isset($_POST['id']) && $_POST['id'] == 'cntnt01') ) )
 		{
 			$module = '';
 			if (isset($_GET['module'])) $module = $_GET['module'];
