@@ -363,8 +363,8 @@ class Faq
 	
 		$query  = "UPDATE `";
 		$query .= cms_db_prefix()."module_Faq_questions` SET ";
-		$query .= " `question` = '".$_POST[$id."faq"]."', ";
-		$query .= " `answer` = '".$_POST[$id."answer"]."', ";
+		$query .= " `question` = '".addslashes($_POST[$id."faq"])."', ";
+		$query .= " `answer` = '".addslashes($_POST[$id."answer"])."', ";
 		$query .= " `cnum` = '".$cnum."' ";
 		$query .= " WHERE `id` = '".$_POST[$id."id"]."' LIMIT 1 ;";
 

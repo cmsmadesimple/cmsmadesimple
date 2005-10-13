@@ -111,10 +111,31 @@ class faq_viewer
 	}
 
 
-	function showCategoryList()
+	function showCategoryList($faq_list)
 	{
+    if($faq_list)
+    {
+      $faq = explode(',', $faq_list);
+      if($faq[1])
+      {
+        $where = " WHERE";
+        foreach($faq as $val)
+        {
+          $where .= " title='".$val."' OR ";
+        }
+        $where = substr($where, 0, strlen($where)-3);
+      }
+      else
+      {
+        $where = " WHERE title='".$faq[0]."' ";
+      }
+      $cresult = @mysql_query("SELECT * FROM {$this->tbl_cats} $where ORDER BY id",$this->id)
+          or die("Unable to perform query: SELECT * FROM {$this->tbl_cats} ORDER BY id");
+    } else
+    {
 		$cresult = @mysql_query("SELECT * FROM {$this->tbl_cats} ORDER BY id",$this->id)
 					or die("Unable to perform query: SELECT * FROM {$this->tbl_cats} ORDER BY id");
+    }     
 		if (!@mysql_num_rows($cresult))
 		{
 			echo "<p>There are currently no categories in the FAQ.</p>\n";

@@ -73,7 +73,7 @@ function Faq_module_uninstall($cms) {
 if (!class_exists("faq_viewer"))
 	require_once("class.faqmanager.php");
 
-function Faq_module_execute($module,$id,$returnid)
+function Faq_module_execute($module,$id,$params,$returnid)
 {
   $cms = $module->cms;
 	//This is the entryway into the module.  All requests from CMS will come through here.
@@ -94,7 +94,7 @@ function Faq_module_execute($module,$id,$returnid)
 
 	if (isset($search)) $faq->searchQuestions();
 	else if (isset($_REQUEST["cat"])) $faq->showQuestionList();
-	else $faq->showCategoryList();
+	else $faq->showCategoryList($params['cat_list']);
 	echo '</td></tr></table>';
 }
 

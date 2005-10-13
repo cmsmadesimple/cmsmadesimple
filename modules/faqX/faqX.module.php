@@ -63,7 +63,6 @@ class faqX extends CMSModule
 	function DoAction($action, $id, $params, $returnid = -1)
 	{
     
-	 
 	 switch ($action) {
 			case "default":
 			 Faq_module_execute($this, $id, $params, $returnid);
@@ -98,6 +97,7 @@ class faqX extends CMSModule
 	<p>.. work in progress ....</p>
 	<p>{cms_module module="faqX"}</p>
 	<ul>
+    <li><em>(optional)</em> cat_list="xxx,qqq" - This will get only th categories named xxx and qqq</li>
 		<li><em>(optional)</em> XXX="Z" - Blabla</li>
 		<li><em>(optional)</em> YYYY - Bla bla</li>
 	</ul>
@@ -123,6 +123,9 @@ class faqX extends CMSModule
  It looks like his with permission ;)<br>
  http://php.amnuts.com/
 	</p>
+ <p>
+    Added a filter for displaing only some of the categories.
+ </p> 
 		<?php
 	}
 }
