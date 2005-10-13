@@ -61,6 +61,7 @@ class Smarty_CMS extends Smarty {
 		{
 			$this->caching = false;
 			$this->force_compile = true;
+			$this->debugging = true;
 		}
 
 		if (get_site_preference('enablesitedownmessage') == "1")
@@ -99,6 +100,76 @@ class Smarty_CMS extends Smarty {
 						       "module_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+		$this->register_resource("module_db_tpl", array(&$this, "module_db_template",
+						       "module_db_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("module_file_tpl", array(&$this, "module_file_template",
+						       "module_file_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+	}
+
+	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		$params = split(';', $tpl_name);
+		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
+		{
+			$tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
+			return true;
+		}
+		return false;
+	}
+
+	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		$params = split(';', $tpl_name);
+		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
+		{
+			$tpl_timestamp = filemtime(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
+			return true;
+		}
+		return false;
+	}
+
+	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
+	{
+		global $gCms;
+
+		$db = &$gCms->db;
+		$config = $gCms->config;
+
+		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$result = $db->Execute($query, split(';', $tpl_name));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$line = $result->FetchRow();
+			$tpl_source = $line['content'];
+			return true;
+		}
+
+		return false;
+	}
+
+	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	{
+		global $gCms;
+
+		$db = &$gCms->db;
+		$config = $gCms->config;
+
+		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$result = $db->Execute($query, split(';', $tpl_name));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			$line = $result->FetchRow();
+			$tpl_timestamp = $db->UnixTimeStamp($line['modified_date']);
+			return true;
+		}
+
+		return false;
 	}
 
 	function html_blob_get_template($tpl_name, &$tpl_source, &$smarty_obj)
@@ -274,6 +345,7 @@ class Smarty_CMS extends Smarty {
 			else
 			{
 				$templateobj = TemplateOperations::LoadTemplateByID($pageinfo->template_id);
+				debug_buffer('template loaded');
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					#Time to fill our template content
@@ -334,7 +406,7 @@ class Smarty_CMS extends Smarty {
 		debug_buffer('start content_get_template');
 		global $gCms;
 
-		$pageinfo = $gCms->variables['pageinfo'];
+		$pageinfo = &$gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
 		{
@@ -377,7 +449,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		$pageinfo = &$gCms->variables['pageinfo'];
+		$pageinfo = $gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
 		{
@@ -386,7 +458,7 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			if ($pageinfo->cachable_content)
+			if ($pageinfo->content_cachable)
 			{
 				$tpl_timestamp = $pageinfo->content_modified_date;
 			}

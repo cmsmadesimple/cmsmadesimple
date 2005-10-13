@@ -47,6 +47,12 @@ require_once(dirname(__FILE__)."/lib/misc.functions.php");
 require_once(dirname(__FILE__)."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
 
+#Setup hash for storing all modules
+$gCms->cmsmodules = array();
+$gCms->userplugins = array();
+$gCms->cmsplugins = array();
+$gCms->siteprefs = array();
+
 #Load the config file (or defaults if it doesn't exist)
 require_once(dirname(__FILE__)."/version.php");
 require_once(dirname(__FILE__)."/lib/config.functions.php");
@@ -156,6 +162,10 @@ if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');
 }
 
+#Setup global smarty object
+$smarty = new Smarty_CMS($config);
+$gCms->smarty = &$smarty;
+
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
@@ -176,15 +186,10 @@ if (!isset($_SERVER['REQUEST_URI']))
 
 #Setup the object sent to modules
 $gCms->variables["pluginnum"] = 1;
-if (isset($page)) {
+if (isset($page))
+{
 	$gCms->variables["page"] = $page;
 }
-
-#Setup hash for storing all modules
-$gCms->cmsmodules = array();
-$gCms->userplugins = array();
-$gCms->cmsplugins = array();
-$gCms->siteprefs = array();
 
 #Load all site preferences
 load_site_preferences();

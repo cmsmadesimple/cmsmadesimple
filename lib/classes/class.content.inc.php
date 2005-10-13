@@ -159,7 +159,8 @@ class ContentBase
 	var $mModifiedDate;
 
 	var $mAdditionalEditors;
-
+	
+	var $mReadyForEdit;
 	/************************************************************************/
 	/* Constructor related													*/
 	/************************************************************************/
@@ -172,6 +173,7 @@ class ContentBase
 		$this->SetInitialValues();
 		$this->SetProperties();
 		$this->mPropertiesLoaded = false;
+		$this->mReadyForEdit = false;
 	}
 
 	/**
@@ -226,6 +228,12 @@ class ContentBase
 		return $this->mId;
 	}
 
+	function SetId($id)
+	{
+		$this->DoReadyForEdit();
+		$this->mId = $id;
+	}
+
 	/**
 	 * Returns a friendly name for this content type
 	 */
@@ -240,6 +248,12 @@ class ContentBase
 	function Name()
 	{
 		return $this->mName;
+	}
+
+	function SetName($name)
+	{
+		$this->DoReadyForEdit();
+		$this->mName = $name;
 	}
 
 	/**
@@ -258,12 +272,24 @@ class ContentBase
 		return strtolower($this->mType);
 	}
 
+	function SetType($type)
+	{
+		$this->DoReadyForEdit();
+		$this->mType = strtolower($type);
+	}
+
 	/**
 	 * Returns the Owner
 	 */
 	function Owner()
 	{
 		return $this->mOwner;
+	}
+
+	function SetOwner($owner)
+	{
+		$this->DoReadyForEdit();
+		$this->mOwner = $owner;
 	}
 
 	/**
@@ -274,9 +300,21 @@ class ContentBase
 		return $this->mParentId;
 	}
 
+	function SetParentId($parentid)
+	{
+		$this->DoReadyForEdit();
+		$this->mParentId = $parentid;
+	}
+
 	function TemplateId()
 	{
 		return $this->mTemplateId;
+	}
+
+	function SetTemplateId($templateid)
+	{
+		$this->DoReadyForEdit();
+		$this->mTemplateId = $templateid;
 	}
 
 	/**
@@ -287,12 +325,24 @@ class ContentBase
 		return $this->mItemOrder;
 	}
 
+	function SetItemOrder($itemorder)
+	{
+		$this->DoReadyForEdit();
+		$this->mItemOrder = $itemorder;
+	}
+
 	/**
 	 * Returns the Hierarchy
 	 */
 	function Hierarchy()
 	{
 		return ContentManager::CreateFriendlyHierarchyPosition($this->mHierarchy);
+	}
+
+	function SetHierarchy($hierarchy)
+	{
+		$this->DoReadyForEdit();
+		$this->mHierarchy = $hierarchy;
 	}
 
 	/**
@@ -303,12 +353,24 @@ class ContentBase
 		return $this->mActive;
 	}
 
+	function SetActive($active)
+	{
+		$this->DoReadyForEdit();
+		$this->mActive = $active;
+	}
+
 	/**
 	 * Returns whether it should show in the menu
 	 */
 	function ShowInMenu()
 	{
 		return $this->mShowInMenu;
+	}
+
+	function SetShowInMenu($showinmenu)
+	{
+		$this->DoReadyForEdit();
+		$this->mShowInMenu = $showinmenu;
 	}
 
 	/**
@@ -319,9 +381,21 @@ class ContentBase
 		return $this->mDefaultContent;
 	}
 
+	function SetDefaultContent($defaultcontent)
+	{
+		$this->DoReadyForEdit();
+		$this->mDefaultContent = $defaultcontent;
+	}
+
 	function Cachable()
 	{
 		return $this->mCachable;
+	}
+
+	function SetCachable($cachable)
+	{
+		$this->DoReadyForEdit();
+		$this->mCachable = $cachable;
 	}
 	
 	function Markup()
@@ -329,13 +403,26 @@ class ContentBase
 		return $this->mMarkup;
 	}
 
+	function SetMarkup($markup)
+	{
+		$this->DoReadyForEdit();
+		$this->mMarkup = $markup;
+	}
+
 	function LastModifiedBy()
 	{
 		return $this->mLastModifiedBy;
 	}
+
+	function SetLastModifiedBy($lastmodifiedby)
+	{
+		$this->DoReadyForEdit();
+		$this->mLastModifiedBy = $lastmodifiedby;
+	}
 	
 	function SetAlias($alias)
 	{
+		$this->DoReadyForEdit();
 		global $gCms;
 
 		if ($gCms->config['auto_alias_content'] && $alias == '')
@@ -356,12 +443,24 @@ class ContentBase
 		return $this->mMenuText;
 	}
 
+	function SetMenuText($menutext)
+	{
+		$this->DoReadyForEdit();
+		$this->mMenuText = $menutext;
+	}
+
 	/**
 	 * Returns the collapse state for the admin
 	 */
 	function Collapsed()
 	{
 		return $this->mCollapse;
+	}
+
+	function SetCollapsed($collapse)
+	{
+		$this->DoReadyForEdit();
+		$this->mCollapse = $collapse;
 	}
 
 	/**
@@ -397,6 +496,7 @@ class ContentBase
 
 	function SetPropertyValue($name, $value)
 	{
+		$this->DoReadyForEdit();
 		if ($this->mPropertiesLoaded == false)
 		{
 			$this->mProperties->Load($this->mId);
@@ -408,6 +508,23 @@ class ContentBase
 	/************************************************************************/
 	/* The rest																*/
 	/************************************************************************/
+
+	/**
+	 * This is a callback function to handle any things that might need to be done before content is
+	 * edited.
+	 */
+	function ReadyForEdit()
+	{
+	}
+
+	function DoReadyForEdit()
+	{
+		if ($this->mReadyForEdit == false)
+		{
+			$this->ReadyForEdit();
+			$this->mReadyForEdit = true;
+		}
+	}
 
 	/**
 	 * Load the content of the object from an ID

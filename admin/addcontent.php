@@ -83,26 +83,26 @@ if (isset($_POST["serialized_content"]))
 		$contentobj->FillParams($_POST);
 		$newcontenttype = strtolower($content_type);
 		$tmpobj = new $newcontenttype;
-		$tmpobj->mName = $contentobj->mName;
-		$tmpobj->mMenuText = $contentobj->mMenuText;
-		$tmpobj->mTemplateId = $contentobj->mTemplateId;
-		$tmpobj->mAlias = $contentobj->mAlias;
-		$tmpobj->mOwner = $contentobj->mOwner;
-		$tmpobj->mActive = $contentobj->mActive;
-		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
-		$tmpobj->mCachable = $contentobj->mCachable;
+		$tmpobj->SetName($contentobj->Name());
+		$tmpobj->SetMenuText($contentobj->MenuText());
+		$tmpobj->SetTemplateId($contentobj->TemplateId());
+		$tmpobj->SetAlias($contentobj->Alias());
+		$tmpobj->SetOwner($contentobj->Owner());
+		$tmpobj->SetActive($contentobj->Active());
+		$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
+		$tmpobj->SetCachable($contentobj->Cachable());
 		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-		$tmpobj->mLastModifiedBy = $contentobj->mLastModifiedBy;
+		$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 		$contentobj = $tmpobj;
 	}
 }
 else
 {
 	$contentobj = new $content_type;
-	$contentobj->mOwner = $userid;
-	$contentobj->mActive = True;
-	$contentobj->mShowInMenu = True;
-	$contentobj->mLastModifiedBy = $userid;
+	$contentobj->SetOwner($userid);
+	$contentobj->SetActive(True);
+	$contentobj->SetShowInMenu(True);
+	$contentobj->SetLastModifiedBy($userid);
 }
 
 if ($access)
@@ -111,7 +111,7 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		$contentobj->mOwnerId = $userid;
+		$contentobj->SetOwnerId($userid);
 
 		#Fill Additional Editors (kind of kludgy)
 		if (isset($_POST["additional_editors"]))

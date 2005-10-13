@@ -49,18 +49,18 @@ if (isset($_GET["message"])) {
 				if ($value_copy->Id() == $_GET["makedefault"])
 				{
 					$value =& $content_array[$key];
-					if ($value->mDefaultContent != true)
+					if ($value->DefaultContent() != true)
 					{
-						$value->mDefaultContent = true;
+						$value->SetDefaultContent(true);
 						$value->Save();
 					}
 				}
 				else
 				{
 					$value =& $content_array[$key];
-					if ($value->mDefaultContent != false)
+					if ($value->DefaultContent() != false)
 					{
-						$value->mDefaultContent = false;
+						$value->SetDefaultContent(false);
 						$value->Save();
 					}
 				}
@@ -83,7 +83,7 @@ if (isset($_GET["message"])) {
 				{
 					#Modify the object inline
 					$value =& $content_array[$key];
-					$value->mActive = true;
+					$value->SetActive(true);
 					$value->Save();
 				}
 			}
@@ -105,7 +105,7 @@ if (isset($_GET["message"])) {
 				{
 					#Modify the object inline
 					$value =& $content_array[$key];
-					$value->mActive = false;
+					$value->SetActive(false);
 					$value->Save();
 				}
 			}

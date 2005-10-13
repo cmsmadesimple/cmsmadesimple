@@ -228,8 +228,8 @@ class CMSModule extends ModuleOperations
 			'optional' => true
 		));
 
-		$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
-		$this->smarty = &$smarty;
+		#$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
+		$this->smarty = &$gCms->smarty;
 
 		$this->SetParameters();
 	}
@@ -1725,13 +1725,13 @@ class CMSModule extends ModuleOperations
 	function ProcessTemplate($tpl_name)
 	{
 		$smarty = &$this->smarty;
-		return $smarty->fetch($tpl_name,'',$this->GetName());
+		return $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
 	}
 
 	function ProcessTemplateFromDatabase($tpl_name)
 	{
 		$smarty = &$this->smarty;
-		return $smarty->fetch('template:'.$tpl_name,'',$this->GetName());
+		return $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
 	}
 
 	/**
@@ -1988,104 +1988,6 @@ class CMSModuleContentType extends ContentBase
 		{
 			return 'ModuleName() not defined properly';
 		}
-	}
-}
-
-/**
- * Extended smarty class for handling database bound .tpl files.
- *
- * @since		0.9
- * @package		CMS
- */
-class CMSModuleSmarty extends Smarty
-{
-	var $modulename;
-
-	function CMSModuleSmarty(&$config, $modulename)
-	{
-		$this->Smarty();
-
-		$dir = dirname(dirname(dirname(__FILE__)))."/modules";
-
-		$ls = dir($dir);
-		while (($file = $ls->read()) != "")
-		{
-			if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
-			{
-				if (strtolower($file) == strtolower($modulename))
-				{
-					$dirname = $dir.'/'.$file.'/templates/';
-					$this->template_dir = $dirname;
-					break;
-				}
-			}
-		}
-
-		#$this->template_dir = $config["root_path"].'/tmp/templates/';
-		$this->compile_dir = TMP_TEMPLATES_C_LOCATION . '/';
-		$this->config_dir = $config["root_path"].'/tmp/configs/';
-		$this->cache_dir = TMP_CACHE_LOCATION . '/';
-
-		$this->caching = false;
-		$this->compile_check = true;
-		$this->debugging = false;
-
-		$this->modulename = $modulename;
-
-		$this->register_resource("template", array(&$this, "db_get_template",
-						       "db_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-	}
-
-	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
-	{
-		global $gCms;
-
-		$db = $gCms->db;
-		$config = $gCms->config;
-
-		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, array($this->modulename, $tpl_name));
-
-		if ($result && $result->RowCount() > 0)
-		{
-			$line = $result->FetchRow();
-			$tpl_source = $line['content'];
-			return true;
-		}
-
-		return false;
-	}
-
-	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-	{
-		global $gCms;
-
-		$db = $gCms->db;
-		$config = $gCms->config;
-
-		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, array($this->modulename, $tpl_name));
-
-		if ($result && $result->RowCount() > 0)
-		{
-			$line = $result->FetchRow();
-			$tpl_timestamp = $db->UnixTimeStamp($line['modified_date']);
-			return true;
-		}
-
-		return false;
-	}
-
-	function db_get_secure($tpl_name, &$smarty_obj)
-	{
-		return true;
-	}
-
-	function db_get_trusted($tpl_name, &$smarty_obj)
-	{
-		//not used for templates
 	}
 }
 

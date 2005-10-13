@@ -87,21 +87,21 @@ if (isset($_POST["serialized_content"]))
 		$contentobj->FillParams($_POST);
 		$newcontenttype = strtolower($content_type);
 		$tmpobj = new $newcontenttype;
-		$tmpobj->mId = $contentobj->mId;
-		$tmpobj->mName = $contentobj->mName;
-		$tmpobj->mMenuText = $contentobj->mMenuText;
-		$tmpobj->mTemplateId = $contentobj->mTemplateId;
-		$tmpobj->mParentId = $contentobj->mParentId;
-		$tmpobj->mOldParentId = $contentobj->mOldParentId;
-		$tmpobj->mAlias = $contentobj->mAlias;
-		$tmpobj->mOwner = $contentobj->mOwner;
-		$tmpobj->mActive = $contentobj->mActive;
-		$tmpobj->mItemOrder = $contentobj->mItemOrder;
-		$tmpobj->mOldItemOrder = $contentobj->mOldItemOrder;
-		$tmpobj->mShowInMenu = $contentobj->mShowInMenu;
-		$tmpobj->mCachable = $contentobj->mCachable;
-		$tmpobj->mHierarchy = $contentobj->mHierarchy;
-		$tmpobj->mLastModifiedBy = $contentobj->mLastModifiedBy;
+		$tmpobj->SetId($contentobj->Id());
+		$tmpobj->SetName($contentobj->Name());
+		$tmpobj->SetMenuText($contentobj->MenuText());
+		$tmpobj->SetTemplateId($contentobj->TemplateId());
+		$tmpobj->SetParentId($contentobj->ParentId());
+		$tmpobj->SetOldParentId($contentobj->OldParentId());
+		$tmpobj->SetAlias($contentobj->Alias());
+		$tmpobj->SetOwner($contentobj->Owner());
+		$tmpobj->SetActive($contentobj->Active());
+		$tmpobj->SetItemOrder($contentobj->ItemOrder());
+		$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
+		$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
+		$tmpobj->SetCachable($contentobj->Cachable());
+		$tmpobj->SetHierarchy($contentobj->Hierarchy());
+		$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 		$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
 		$contentobj = $tmpobj;
 	}
@@ -126,7 +126,7 @@ if ($access)
 
 		if (isset($_POST["ownerid"]))
 		{
-			$contentobj->mOwner = $_POST["ownerid"];
+			$contentobj->SetOwner($_POST["ownerid"]);
 		}
 
 		#Fill Additional Editors (kind of kludgy)
@@ -155,7 +155,7 @@ if ($access)
 	{
 		$contentobj = ContentManager::LoadContentFromId($content_id);
 		$content_type = $contentobj->Type();
-		$contentobj->mLastModifiedBy = $userid;
+		$contentobj->SetLastModifiedBy($userid);
 	}
 	else
 	{
@@ -168,10 +168,10 @@ if ($access)
 
 		if (isset($_POST["ownerid"]))
 		{
-			$contentobj->mOwner = $_POST["ownerid"];
+			$contentobj->SetOwner($_POST["ownerid"]);
 		}
 
-		$contentobj->mLastModifiedBy = $userid;
+		$contentobj->SetLastModifiedBy($userid);
 
 		#Fill Additional Editors (kind of kludgy)
 		if (isset($_POST["additional_editors"]))
@@ -186,9 +186,9 @@ if ($access)
 	}
 }
 
-if (strlen($contentobj->mName)> 0)
+if (strlen($contentobj->Name())> 0)
     {
-    $CMS_ADMIN_SUBTITLE = $contentobj->mName;
+    $CMS_ADMIN_SUBTITLE = $contentobj->Name();
     }
 include_once("header.php");
 

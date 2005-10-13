@@ -108,6 +108,7 @@ class CmsObject {
 		$this->errors = array();
 		$this->nls = array();
 		$this->variables['content-type'] = 'text/html';
+		$this->variables['modulenum'] = 1;
 	}
 }
 

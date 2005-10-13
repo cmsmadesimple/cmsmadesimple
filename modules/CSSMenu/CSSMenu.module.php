@@ -309,7 +309,7 @@ class CSSMenu extends CMSModule
           }
           else
           { 
-          	if (! ((isset($params['relative']) || $params['relative']==1) &&
+          	if (! ((isset($params['relative']) && $params['relative']==1) &&
           	       (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id']) ))
           	       // we are not going to show current page if relative it's enabled - we'll show only his childs
           	{

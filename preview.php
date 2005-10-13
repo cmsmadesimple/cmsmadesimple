@@ -24,8 +24,8 @@ require_once(dirname(__FILE__)."/include.php");
 #$smarty = new Smarty_Preview($config);
 #$gCms->smarty = &$smarty;
 
-$smarty = new Smarty_CMS($config);
-$gCms->smarty = &$smarty;
+#$smarty = new Smarty_CMS($config);
+#$gCms->smarty = &$smarty;
 
 $page = "";
 

@@ -27,7 +27,7 @@ require_once(dirname(__FILE__).'/fileloc.php');
  */	
 $starttime = microtime();
 
-@ob_start();
+#@ob_start();
 
 clearstatcache();
 
@@ -55,10 +55,10 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 
 require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
 
-$smarty = new Smarty_CMS($config);
-$gCms->smarty = &$smarty;
-
 $params = array_merge($_GET, $_POST);
+
+global $gCms;
+$smarty = &$gCms->smarty;
 $smarty->params = $params;
 
 $page = '';
@@ -91,20 +91,23 @@ else
     $page = preg_replace('/\</','',$page);
 }
 
-$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
-$gCms->variables['pageinfo'] =& $pageinfo;
-
-$gCms->variables['content_id'] = $pageinfo->content_id;
-$gCms->variables['page'] = $page;
-$gCms->variables['page_id'] = $page;
-
-$gCms->variables['page_name'] = $pageinfo->content_alias;
-$gCms->variables['position'] = $pageinfo->content_hierarchy;
-
 $old_error_handler = '';
-if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
+if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
 {
-$old_error_handler = set_error_handler("ErrorHandler404");
+	$old_error_handler = set_error_handler("ErrorHandler404");
+}
+
+$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+if (isset($pageinfo) && $pageinfo !== FALSE)
+{
+	$gCms->variables['pageinfo'] =& $pageinfo;
+
+	$gCms->variables['content_id'] = $pageinfo->content_id;
+	$gCms->variables['page'] = $page;
+	$gCms->variables['page_id'] = $page;
+
+	$gCms->variables['page_name'] = $pageinfo->content_alias;
+	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 }
 
 $html = "";
@@ -149,7 +152,7 @@ foreach($gCms->modules as $key=>$value)
 
 echo $html;
 
-@ob_flush();
+#@ob_flush();
 
 $endtime = microtime();
 

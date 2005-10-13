@@ -45,9 +45,9 @@ class content extends ContentBase
 	}
 
 	/**
-	 * Use the Load callback to get the additional content blocks loaded.
+	 * Use the ReadyForEdit callback to get the additional content blocks loaded.
 	 */
-	function Load()
+	function ReadyForEdit()
 	{
 		$this->GetAdditionalContentBlocks();
 	}
