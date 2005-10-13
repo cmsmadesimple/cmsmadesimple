@@ -87,18 +87,7 @@ class PngTransparencyIE extends CMSModule
   
   function Upgrade($oldversion, $newversion) {
     
-    $current_version = $oldversion;
-    $ret = 0; 
-    
-    switch($current_version)
-    {
-      default:break;
-    }
-    if ($current_version == $this->GetVersion()) {
       $this->Audit( 0, 'Module_PngTransparencyIE', 'Update V'.$oldversion.' &rarr; V'.$newversion);
-      return FALSE;
-    }
-    else return 'Module_PngTransparencyIE upgrade failed!';
   }
   
   
