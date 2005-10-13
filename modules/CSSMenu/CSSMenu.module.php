@@ -59,6 +59,8 @@ class CSSMenu extends CMSModule
 		$this->CreateParameter('start_element', '', $this->lang('helpstart_element'));
 		$this->CreateParameter('showadmin', '1', $this->lang('helpshowadmin'));
 		$this->CreateParameter('relative', '0', $this->lang('helprelative'));
+		$this->CreateParameter('relative_show_current', '1', $this->lang('helprelative'));
+		$this->CreateParameter('relative_show_parent', '1', $this->lang('helprelative'));
 
 	}
 
@@ -134,6 +136,10 @@ class CSSMenu extends CMSModule
       $showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
       $collapse = isset($params['collapse']) ? $params['collapse'] : 0 ;
       $horizontal = isset($params['horizontal']) ? $params['horizontal'] : 0 ;
+      $relative = isset($params['relative']) ? $params['relative'] : 0 ;
+      $relative_show_current = isset($params['relative_show_current']) ? $params['relative_show_current'] : 1 ;
+      $relative_show_parrent = isset($params['relative_show_parent']) ? $params['relative_show_parent'] : 1 ;
+      $show_root_siblings = isset($params['show_root_siblings']) ? $params['show_root_siblings'] : 0;
 
       $allcontent = ContentManager::GetAllContent(false);
 
@@ -159,13 +165,18 @@ class CSSMenu extends CMSModule
         }
 
         # set starting position to current page if relative defined
-		if (isset($params['relative']) && $params['relative']==1) // this is a little hack
+		if ($relative) // this is a little hack
 		{
-			$params['start_element'] = $gCms->variables['position'];
-			$basedepth = 	$params['start_element'];
+
+			$params['start_element'] = $gCms->variables["pageinfo"]->content_hierarchy; //$gCms->variables['position'];
+//          print "<pre>position=". $gCms->variables['position']. "</pre>";			
+//			$basedepth = 	2; // TODO: de corectat
+            $basedepth = count(split('\.', $params['start_element']));
 			
 		}
 
+//		$last_level = -1;
+		
         foreach ($allcontent as $onecontent)
         {
           #Handy little trick to figure out how deep in the tree we are
@@ -175,9 +186,12 @@ class CSSMenu extends CMSModule
           #If hierarchy starts with the start_element (if it's set), then continue on
           if (isset($params['start_element']))
           {
-            if ((strpos($onecontent->Hierarchy(), (string)$params['start_element']) === FALSE) || (strpos($onecontent->Hierarchy(), (string)$params['start_element']) != 0))
+
+			  if ((strpos($onecontent->mHierarchy, (string)$params['start_element']) === FALSE) ||
+            	 (strpos($onecontent->mHierarchy, (string)$params['start_element']) != 0))
             {
-              if (isset($params['show_root_siblings']) && $params['show_root_siblings'] == '1')
+            
+              if ($show_root_siblings)
               {
                 # Find direct parent of current item
                 $curparent = substr($onecontent->Hierarchy(), 0, strrpos($onecontent->Hierarchy(), "."));
@@ -289,6 +303,10 @@ class CSSMenu extends CMSModule
                                     $menu .= "\n<ul".($depth == 1?' id="primary-nav-horiz" class="cssmenu-horizontal"':'').">\n";
                                    else
                                     $menu .= "\n<ul".($depth == 1?' id="primary-nav-vert" class="cssmenu-vertical"':'').">\n";
+                                    
+                                    if (!((isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
+                                   ) && $depth==1 && $relative==1)
+                                     $menu .= "<li><a href='#'>" . $gCms->variables["pageinfo"]->content_menutext . "</a></li>";
                               }
                           }
 
