@@ -1358,6 +1358,12 @@ class ContentManager
 	{
 		global $gCms;
 		$db = &$gCms->db;
+		$cache = &$gCms->ContentIdCache;
+
+		if (isset($cache[$id]))
+		{
+			return $cache[$id];
+		}
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -1371,6 +1377,12 @@ class ContentManager
 				$classtype = strtolower($row['type']);
 				$contentobj = new $classtype; 
 				$contentobj->LoadFromData($row,$loadprops);
+
+				if (!isset($cache[$id]))
+				{
+					$cache[$id] = $contentobj;
+				}
+
 				return $contentobj;
 			}
 			else

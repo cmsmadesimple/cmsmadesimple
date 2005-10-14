@@ -203,6 +203,12 @@ class HtmlBlobOperations
 
 		global $gCms;
 		$db = &$gCms->db;
+		$cache = &$gCms->HtmlBlobCache;
+
+		if (isset($cache[$name]))
+		{
+			return $cache[$name];
+		}
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
 		$dbresult = $db->Execute($query, array($name));
@@ -218,6 +224,11 @@ class HtmlBlobOperations
 				$oneblob->owner = $row['owner'];
 				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				$result = $oneblob;
+
+				if (!isset($cache[$oneblob->name]))
+				{
+					$cache[$oneblob->name] = $oneblob;
+				}
 			}
 		}
 

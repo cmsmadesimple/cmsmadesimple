@@ -100,6 +100,21 @@ class CmsObject {
 	var $ContentCache;
 
 	/**
+     * content id cache array - If something's called LoadContentByID, we keep a copy around
+	 */
+	var $ContentIdCache;
+
+	/**
+     * template cache array - If something's called LoadTemplateByID, we keep a copy around
+	 */
+	var $TemplateCache;
+
+	/**
+     * html blob cache array - If something's called LoadHtmlBlobByID, we keep a copy around
+	 */
+	var $HtmlBlobCache;
+
+	/**
 	 * Constructor
 	 */
 	function CmsObject()
@@ -107,6 +122,7 @@ class CmsObject {
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
+		$this->TemplateCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 	}

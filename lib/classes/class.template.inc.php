@@ -133,6 +133,12 @@ class TemplateOperations
 
 		global $gCms;
 		$db = &$gCms->db;
+		$cache = &$gCms->TemplateCache;
+
+		if (isset($cache[$id]))
+		{
+			return $cache[$id];
+		}
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -151,6 +157,11 @@ class TemplateOperations
 				$onetemplate->active = $row['active'];
 				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
 				$result = $onetemplate;
+
+				if (!isset($cache[$onetemplate->id]))
+				{
+					$cache[$onetemplate->id] = $onetemplate;
+				}
 			}
 		}
 
