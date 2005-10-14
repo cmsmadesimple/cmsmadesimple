@@ -122,8 +122,8 @@ if (isset($_GET["print"]))
 }
 else
 {
-	($smarty->is_cached('template:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
-	$html = $smarty->fetch('template:'.$page, '', $pageinfo->template_id) . "\n";
+	($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
+	$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
 }
 
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
