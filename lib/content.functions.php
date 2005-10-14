@@ -23,9 +23,6 @@
  *
  * @package CMS
  */
-require_once(dirname(__FILE__) . '/smarty/Smarty.class.php');
-require_once(dirname(__FILE__) . '/classes/class.htmlblob.inc.php');
-require_once(dirname(__FILE__) . '/classes/class.template.inc.php');
 $sorted_sections = array();
 $sorted_content = array();
 
@@ -857,33 +854,35 @@ function load_plugins(&$smarty)
 	$plugins = &$gCms->cmsplugins;
 	$userplugins = &$gCms->userplugins;
 	$db = &$gCms->db;
-
-	#if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
-	#{
-	#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
-	#}
-	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
-
-	$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
-	$result = $db->Execute($query);
-	if ($result && $result->RowCount() > 0)
+	if (isset($db))
 	{
-		while ($row = $result->FetchRow())
+		#if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
+		#{
+		#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
+		#}
+		search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
+
+		$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
+		$result = $db->Execute($query);
+		if ($result && $result->RowCount() > 0)
 		{
-			if (!in_array($row['userplugin_name'], $plugins))
+			while ($row = $result->FetchRow())
 			{
-				array_push($plugins, $row['userplugin_name']);
-				$userplugins[$row['userplugin_name']] = $row['userplugin_id'];
-				$functionname = "cms_tmp_".$row['userplugin_name']."_userplugin_function";
-				//Only register valid code
-				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$row['code'].'}') === FALSE))
+				if (!in_array($row['userplugin_name'], $plugins))
 				{
-					$smarty->register_function($row['userplugin_name'], $functionname, false);
+					array_push($plugins, $row['userplugin_name']);
+					$userplugins[$row['userplugin_name']] = $row['userplugin_id'];
+					$functionname = "cms_tmp_".$row['userplugin_name']."_userplugin_function";
+					//Only register valid code
+					if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$row['code'].'}') === FALSE))
+					{
+						$smarty->register_function($row['userplugin_name'], $functionname, false);
+					}
 				}
 			}
 		}
+		sort($plugins);
 	}
-	sort($plugins);
 }
 
 function search_plugins(&$smarty, &$plugins, $dir, $caching)

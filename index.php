@@ -20,6 +20,10 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
+#require_once 'Benchmark/Profiler.php';
+#$profiler = new Benchmark_Profiler(FALSE);
+#$profiler->start();
+
 /**
  * Entry point for all non-admin pages
  *
@@ -27,7 +31,7 @@ require_once(dirname(__FILE__).'/fileloc.php');
  */	
 $starttime = microtime();
 
-#@ob_start();
+@ob_start();
 
 clearstatcache();
 
@@ -152,9 +156,12 @@ foreach($gCms->modules as $key=>$value)
 
 echo $html;
 
-#@ob_flush();
+@ob_flush();
 
 $endtime = microtime();
+
+#$profiler->stop();
+#$profiler->display();
 
 if ($config["debug"] == true)
 {
@@ -178,6 +185,7 @@ if ($config["debug"] == true)
 		echo $error;
 	}
 }
+
 
 # vim:ts=4 sw=4 noet
 ?>

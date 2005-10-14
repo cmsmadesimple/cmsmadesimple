@@ -18,8 +18,6 @@
 #
 #$Id$
 
-require_once(dirname(__FILE__)."/classes/class.user.inc.php");
-
 /**
  * Page related functions.  Generally these are functions not necessarily
  * related to content, but more to the underlying mechanisms of the system.

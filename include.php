@@ -20,7 +20,8 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
-#xdebug_start_profiling();
+
+#$profiler->enterSection('include.php');
 
 /**
  * This file is included in every page.  It does all seutp functions including
@@ -43,6 +44,7 @@ if(!@session_id()) {
 
 require_once(dirname(__FILE__)."/lib/misc.functions.php");
 
+#$profiler->enterSection('setup gCms');
 #Make a new CMS object
 require_once(dirname(__FILE__)."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
@@ -52,6 +54,9 @@ $gCms->cmsmodules = array();
 $gCms->userplugins = array();
 $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
+
+#$profiler->leaveSection('setup gCms');
+
 
 #Load the config file (or defaults if it doesn't exist)
 require_once(dirname(__FILE__)."/version.php");
@@ -89,6 +94,7 @@ if (isset($_SESSION["cms_admin_username"]))
 }
 
 #Setup db connection
+#$profiler->enterSection('setup db connection');
 include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 
 $sql_execs = 0;
@@ -129,22 +135,58 @@ if (!isset($DONT_LOAD_DB)) {
 	$gCms->db = &$db;
 }
 
+#$profiler->leaveSection('setup db connection');
+
+#$profiler->enterSection('include bulk of files');
+#$profiler->enterSection('include smarty functions');
+require_once(dirname(__FILE__) . '/lib/smarty/Smarty.class.php');
+#$profiler->leaveSection('include smarty functions');
+#$profiler->enterSection('include db functions');
 require_once(dirname(__FILE__)."/lib/db.functions.php");
+#$profiler->leaveSection('include db functions');
+#$profiler->enterSection('include page functions');
 require_once(dirname(__FILE__)."/lib/page.functions.php");
+#$profiler->leaveSection('include page functions');
+#$profiler->enterSection('include content functions');
 require_once(dirname(__FILE__)."/lib/content.functions.php");
+#$profiler->leaveSection('include content functions');
+#$profiler->enterSection('include module functions');
 require_once(dirname(__FILE__)."/lib/module.functions.php");
-//require_once(dirname(__FILE__)."/lib/sequence.functions.php");
+#$profiler->leaveSection('include module functions');
+#$profiler->enterSection('include pageinfo functions');
 require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
+#$profiler->leaveSection('include pageinfo functions');
+#$profiler->enterSection('include content class');
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
+#$profiler->leaveSection('include content class');
+#$profiler->enterSection('include module class');
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.sequence.inc.php");
+#$profiler->leaveSection('include module class');
+#$profiler->enterSection('include group class');
 require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
+#$profiler->leaveSection('include group class');
+#$profiler->enterSection('include user class');
 require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
+#$profiler->leaveSection('include user class');
+#$profiler->enterSection('include bookmark class');
 require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
+#$profiler->leaveSection('include bookmark class');
+#$profiler->enterSection('include html blob class');
+require_once(dirname(__FILE__) . '/lib/classes/class.htmlblob.inc.php');
+#$profiler->leaveSection('include html blob class');
+#$profiler->enterSection('include template class');
+require_once(dirname(__FILE__) . '/lib/classes/class.template.inc.php');
+#$profiler->leaveSection('include template class');
+#$profiler->enterSection('include translation functions');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
+#$profiler->leaveSection('include translation functions');
+#$profiler->enterSection('include xajax functions');
 require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
+#$profiler->leaveSection('include xajax functions');
+#$profiler->leaveSection('include bulk of files');
 
 #Load content types
+#$profiler->enterSection('load content types');
 $dir = dirname(__FILE__)."/lib/contenttypes";
 $ls = dir($dir);
 while (($file = $ls->read()) != "")
@@ -157,7 +199,9 @@ while (($file = $ls->read()) != "")
 		}
 	}
 }
+#$profiler->leaveSection('load content types');
 
+#$profiler->enterSection('setup smarty');
 if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');
 }
@@ -165,6 +209,7 @@ if (!defined('SMARTY_DIR')) {
 #Setup global smarty object
 $smarty = new Smarty_CMS($config);
 $gCms->smarty = &$smarty;
+#$profiler->leaveSection('setup smarty');
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
@@ -199,6 +244,7 @@ if (isset($CMS_ADMIN_PAGE)) {
 }
 
 #Load all installed module code
+#$profiler->enterSection('load modules');
 if (isset($LOAD_ALL_MODULES))
 {
 	ModuleOperations::LoadModules(true);
@@ -207,6 +253,7 @@ else
 {
 	ModuleOperations::LoadModules(false);
 }
+#$profiler->leaveSection('load modules');
 
 #Check for HTML_BBCodeParser
 if ($config["use_bb_code"] == true) {
@@ -217,6 +264,10 @@ if ($config["use_bb_code"] == true) {
 		}
 	#}
 }
+
+#$profiler->LeaveSection('include.php');
+
+debug_buffer('leave include.php');
 
 # vim:ts=4 sw=4 noet
 ?>
