@@ -67,9 +67,11 @@ class Smarty_CMS extends Smarty {
 			$this->force_compile = true;
 		}
 
-		if (isset($CMS_ADMIN_PAGE))
+		global $CMS_ADMIN_PAGE;
+		if (isset($CMS_ADMIN_PAGE) && $CMS_ADMIN_PAGE == 1)
 		{
 			$this->caching = false;
+			$this->force_compile = true;
 		}
 
 		load_plugins($this);
