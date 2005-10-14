@@ -1731,13 +1731,29 @@ class CMSModule extends ModuleOperations
 	function ProcessTemplate($tpl_name)
 	{
 		$smarty = &$this->smarty;
-		return $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
+
+		$oldcache = $smarty->caching;
+		$smarty->caching = false;
+
+		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
+
+		$smarty->caching = oldcache;
+
+		return $result;
 	}
 
 	function ProcessTemplateFromDatabase($tpl_name)
 	{
 		$smarty = &$this->smarty;
-		return $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
+
+		$oldcache = $smarty->caching;
+		$smarty->caching = false;
+
+		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
+
+		$smarty->caching = oldcache;
+
+		return $result;
 	}
 
 	/**
