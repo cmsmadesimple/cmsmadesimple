@@ -1516,6 +1516,12 @@ class CMSModule extends ModuleOperations
 
 		$name = $this->GetName();
 
+		#Suggestion by Calguy to make sure 2 actions don't get sent
+		if (isset($params['action']))
+		{
+			unset($params['action']);
+		}
+
 		$text = '';
 		if ($returnid != '')
 		{
