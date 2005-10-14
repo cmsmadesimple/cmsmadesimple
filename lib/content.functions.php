@@ -67,6 +67,11 @@ class Smarty_CMS extends Smarty {
 			$this->force_compile = true;
 		}
 
+		if (isset($CMS_ADMIN_PAGE))
+		{
+			$this->caching = false;
+		}
+
 		load_plugins($this);
 
 		$this->register_resource("db", array(&$this, "template_get_template",
