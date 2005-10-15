@@ -111,7 +111,7 @@ if ($access)
 	{
 		#Fill contentobj with parameters
 		$contentobj->FillParams($_POST);
-		$contentobj->SetOwnerId($userid);
+		$contentobj->SetOwner($userid);
 
 		#Fill Additional Editors (kind of kludgy)
 		if (isset($_POST["additional_editors"]))
