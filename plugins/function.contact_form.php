@@ -20,7 +20,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 
 	if (empty($params['email'])){
 		echo '<div class="formError">A email address to send to must be specified in order to use this plugin.</div>';
-		exit;
+		return;
 	}else{
 		$to = $params['email'];
 	}
