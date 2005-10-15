@@ -21,8 +21,6 @@
 require_once(dirname(__FILE__).'/fileloc.php');
 
 #require_once 'Benchmark/Profiler.php';
-#$profiler = new Benchmark_Profiler(FALSE);
-#$profiler->start();
 
 /**
  * Entry point for all non-admin pages
@@ -159,9 +157,6 @@ echo $html;
 @ob_flush();
 
 $endtime = microtime();
-
-#$profiler->stop();
-#$profiler->display();
 
 if ($config["debug"] == true)
 {
