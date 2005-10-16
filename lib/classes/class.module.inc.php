@@ -1737,7 +1737,7 @@ class CMSModule extends ModuleOperations
 
 		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
 
-		$smarty->caching = oldcache;
+		$smarty->caching = $oldcache;
 
 		return $result;
 	}
@@ -1751,7 +1751,7 @@ class CMSModule extends ModuleOperations
 
 		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name,'',$this->GetName());
 
-		$smarty->caching = oldcache;
+		$smarty->caching = $oldcache;
 
 		return $result;
 	}

@@ -679,8 +679,8 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign('nametext', $this->Lang('name'));
 				$this->smarty->assign('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
 				$this->smarty->assign('parentdropdown', $this->CreateParentDropdown($id, -1, -1));
-				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 
@@ -746,8 +746,8 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign('inputname', $this->CreateInputText($id, 'name', $name, 20, 255));
 				$this->smarty->assign('parentdropdown', $this->CreateParentDropdown($id, $catid, $parentid));
 				$this->smarty->assign('hidden', $this->CreateInputHidden($id, 'catid', $catid));
-				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', 'Submit'));
-				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', 'Cancel'));
+				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
+				$this->smarty->assign('cancel', $this->CreateInputSubmit($id, 'cancel', lang('cancel')));
 				$this->smarty->assign('parenttext', lang('parent'));
 				echo $this->ProcessTemplate('editcategory.tpl');
 

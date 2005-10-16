@@ -43,6 +43,7 @@ $lang['startdate'] = 'Anfangsdatum';
 $lang['startrequiresend'] = 'Die Eingabe eines Anfangsdatums erfordert auch die Eingabe eines Verfallsdatums.';
 $lang['submit'] = 'Speichern';
 $lang['title'] = 'Titel';
+$lang['selectcategory'] = 'Select Category'; //Needs translation
 $lang['submit'] = 'Speichern';
 $lang['summary'] = 'Zusammenfassung';
 $lang['summarytemplate'] = 'Zusammenfassungs-Template';
