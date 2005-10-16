@@ -20,9 +20,6 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
-check_login();
-
 $default_cms_lang = '';
 if (isset($_POST['default_cms_lang'])) $default_cms_lang = $_POST['default_cms_lang'];
 $old_default_cms_lang = '';
@@ -33,6 +30,9 @@ if ($default_cms_lang != '')
 {
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
+
+require_once("../include.php");
+check_login();
 
 $admintheme = 'default';
 if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
