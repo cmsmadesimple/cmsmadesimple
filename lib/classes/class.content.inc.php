@@ -306,6 +306,17 @@ class ContentBase
 		$this->mParentId = $parentid;
 	}
 
+	function OldParentId()
+	{
+		return $this->mOldParentId;
+	}
+
+	function SetOldParentId($parentid)
+	{
+		$this->DoReadyForEdit();
+		$this->mOldParentId = $parentid;
+	}
+
 	function TemplateId()
 	{
 		return $this->mTemplateId;
@@ -329,6 +340,17 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		$this->mItemOrder = $itemorder;
+	}
+
+	function OldItemOrder()
+	{
+		return $this->mOldItemOrder;
+	}
+
+	function SetOldItemOrder($itemorder)
+	{
+		$this->DoReadyForEdit();
+		$this->mOldItemOrder = $itemorder;
 	}
 
 	/**

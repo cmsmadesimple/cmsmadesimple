@@ -203,71 +203,56 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 				}
 			}
 
-			if ($onecontent->Type() == 'sectionheader')
+			if ($depth < $last_level)
 			{
-				if ($in_hr == 1)
+				for ($i = $depth; $i < $last_level; $i++)
 				{
-					$menu .= "</ul>\n";
-					$in_hr = 0;
+					$menu .= "\n</li>\n</ul>\n";
 				}
 
-				$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
-
-				if ($count > 0 && $in_hr == 0)
-				{
-					$menu .= "<ul>\n";
-					$in_hr = 1;
-				}
-			}
-			else
-			{
-				if ($depth < $last_level)
-				{
-					for ($i = $depth; $i < $last_level; $i++)
-					{
-						$menu .= "\n</li>\n</ul>\n";
-					}
-
-					if ($depth > 0)
-					{
-						$menu .= "</li>\n";
-					}
-				}
-
-				if ($depth > $last_level)
-				{
-					for ($i = $depth; $i > $last_level; $i--)
-					{
-						$menu .= "\n<ul>\n";
-					}
-				}
-
-				if ($depth == $last_level)
+				if ($depth > 0)
 				{
 					$menu .= "</li>\n";
 				}
-
-				if ($onecontent->Type() == 'separator')
-				{
-					$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\" />";
-				}
-				else
-				{
-					$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
-					if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
-					{
-						$menu .= " class=\"currentpage\"";
-					}
-					if ($onecontent->GetPropertyValue('target') != '')
-					{
-						$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
-					}
-					$menu .= ">".$onecontent->MenuText()."</a>";
-				}
-
-				$in_hr = 1;
-				$last_level = $depth;
 			}
+
+			if ($depth > $last_level)
+			{
+				for ($i = $depth; $i > $last_level; $i--)
+				{
+					$menu .= "\n<ul>\n";
+				}
+			}
+
+			if ($depth == $last_level)
+			{
+				$menu .= "</li>\n";
+			}
+
+			if ($onecontent->Type() == 'separator')
+			{
+				$menu .= "<li style=\"list-style-type: none;\"><hr class=\"separator\" />";
+			}
+			else if ($onecontent->Type() == 'sectionheader')
+			{
+				$menu .= '<a href="#" class="sectionheader">'.$onecontent->MenuText()."</a>\n";
+			}
+			else
+			{
+				$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
+				if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
+				{
+					$menu .= " class=\"currentpage\"";
+				}
+				if ($onecontent->GetPropertyValue('target') != '')
+				{
+					$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+				}
+				$menu .= ">".$onecontent->MenuText()."</a>";
+			}
+
+			$in_hr = 1;
+			$last_level = $depth;
 			$count++;
 		}
 
