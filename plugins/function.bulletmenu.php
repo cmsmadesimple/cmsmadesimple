@@ -258,6 +258,10 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 					{
 						$menu .= " class=\"currentpage\"";
 					}
+					if ($onecontent->GetPropertyValue('target') != '')
+					{
+						$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+					}
 					$menu .= ">".$onecontent->MenuText()."</a>";
 				}
 

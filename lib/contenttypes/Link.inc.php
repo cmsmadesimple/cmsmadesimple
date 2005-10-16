@@ -28,6 +28,7 @@ class link extends ContentBase
 	function SetProperties()
 	{
 		$this->mProperties->Add('string', 'url');
+		$this->mProperties->Add('string', 'target');
 
 		#Turn off caching
 		$this->mCachable = false;
@@ -37,7 +38,7 @@ class link extends ContentBase
 	{
 		if (isset($params))
 		{
-			$parameters = array('url');
+			$parameters = array('url', 'target');
 			foreach ($parameters as $oneparam)
 			{
 				if (isset($params[$oneparam]))
@@ -122,6 +123,12 @@ class link extends ContentBase
 		array_push($ret,array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
 		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
 		array_push($ret,array(lang('url').':','<input type="text" name="url" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />'));
+		$text = '<option value="">(none)</option>';
+		$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
+		$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
+		$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
+		$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
+		array_push($ret,array(lang('target').':','<select name="target">'.$text.'</select>'));
 		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
 		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
 
