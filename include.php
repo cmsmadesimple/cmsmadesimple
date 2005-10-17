@@ -51,8 +51,6 @@ $gCms->userplugins = array();
 $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
-
-
 #Load the config file (or defaults if it doesn't exist)
 require_once(dirname(__FILE__)."/version.php");
 require_once(dirname(__FILE__)."/lib/config.functions.php");
@@ -195,7 +193,8 @@ if (isset($page))
 #Load all site preferences
 load_site_preferences();
 
-if (isset($CMS_ADMIN_PAGE)) {
+if (isset($CMS_ADMIN_PAGE))
+{
 	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
 }
 

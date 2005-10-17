@@ -42,6 +42,13 @@ if (isset($CMS_ADMIN_PAGE)) {
 		$current_language = $_POST["change_cms_lang"];
 		setcookie("cms_language", $_POST["change_cms_lang"]);
 	}
+	else if (isset($_SESSION['login_cms_language']))
+	{
+		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
+		$current_language = $_SESSION['login_cms_language'];
+		setcookie('cms_language', $_SESSION['login_cms_language']);
+		unset($_SESSION['login_cms_language']);
+	}
 	else if (isset($_COOKIE["cms_language"]))
 	{
 		$current_language = $_COOKIE["cms_language"];

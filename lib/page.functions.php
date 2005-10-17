@@ -45,6 +45,7 @@ function check_login()
 
 	if (isset($_SESSION['login_cms_language']))
 	{
+		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
 		setcookie('cms_language', $_SESSION['login_cms_language']);
 		unset($_SESSION['login_cms_language']);
 	}
