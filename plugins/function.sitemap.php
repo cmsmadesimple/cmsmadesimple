@@ -70,55 +70,58 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 			}
 		}
 
+		//Not active?  Toss it.
 		if (!$onecontent->Active())
 		{
 			continue;
 		}
 
+		//It's a separator?  Toss it.
 		if ($onecontent->Type() == 'separator')
 		{
 			continue;
 		}
 
-		if ($onecontent->Type() == 'sectionheader')
+		if ($depth < $last_level)
 		{
-			if ($in_hr == 1)
+			for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
+			if ($depth > 0)
 			{
-				$menu .= "</ul>\n";
-				$in_hr = 0;
-			}
-			$menu .= "<div class=\"sectionheader\">".$onecontent->MenuText()."</div>\n";
-			if ($count > 0 && $in_hr == 0)
-			{
-				$menu .= "<ul>\n";
-				$in_hr = 1;
-			}
-		}
-		else
-		{
-			if ($depth < $last_level) {
-				for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
-				if ($depth > 0)
-				{
-					$menu .= "</li>\n";
-				}
-			}
-			if ($depth > $last_level)
-			{
-				for ($i = $depth; $i > $last_level; $i--) $menu .= "\n<ul>\n";
-			}
-			if ($depth == $last_level) {
 				$menu .= "</li>\n";
 			}
-			$menu .= "<li><h2><a href=\"".$onecontent->GetURL()."\">".$onecontent->MenuText();
-			if ($onecontent->Name() != '' && $onecontent->Name()!=$onecontent->MenuText())
-			{
-				$menu .= ' - ' . $onecontent->Name();
-			}
-			$menu .= "</a></h2>";
-			$in_hr = 1;
-			$last_level = $depth;
 		}
+		if ($depth == $last_level)
+		{
+			$menu .= "</li>\n";
+		}
+		if ($depth > $last_level)
+		{
+			$menu .= '<ul>';
+		}
+
+		if ($onecontent->Type() == 'sectionheader')
+		{
+			$menu .= '<li><a href="#">'.$onecontent->MenuText().'</a>'; // Need to find a work around line # 217
+		}
+		else
+		{ 
+			if (! ((isset($params['relative']) && $params['relative']==1) &&
+			(isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id']) ))
+			// we are not going to show current page if relative it's enabled - we'll show only his childs
+			{
+				$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
+				if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
+				{
+					$menu .= " class=\"currentpage\"";
+				}
+				if ($onecontent->GetPropertyValue('target') != '')
+				{
+					$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+				}
+				$menu .= ">".$onecontent->MenuText()."</a>";
+			}
+		}
+		$last_level = $depth;
 		$count++;
 	}
 

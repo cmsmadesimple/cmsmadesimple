@@ -235,7 +235,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			}
 			else if ($onecontent->Type() == 'sectionheader')
 			{
-				$menu .= '<a href="#" class="sectionheader">'.$onecontent->MenuText()."</a>\n";
+				$menu .= '<li><a href="#" class="sectionheader">'.$onecontent->MenuText()."</a>\n";
 			}
 			else
 			{
