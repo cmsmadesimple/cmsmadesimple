@@ -84,6 +84,23 @@ class News extends CMSModule
 		}
 	}
 
+	function ContentTemplate(&$content)
+	{
+		global $gCms;
+
+		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+		{
+			debug_buffer($content);
+			$config = $this->cms->config;
+
+			$params = array("showtemplate"=>"false");
+			$url = $config['root_url'].'/moduleinterface.php?module=News&amp;id=m222&amp;m222action=rss&amp;m222showtemplate=false&amp;m222returnid='.$gCms->variables['page'];
+
+			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
+			$content = ereg_replace("<\/head>", $text."</head>", $content);
+		}
+	}
+
     function VisibleToAdminUser()
     {
         return $this->CheckPermission('Modify News');
@@ -615,8 +632,8 @@ Posted: {$entry->postdate|date_format}
 
 					$onerow->id = $row['news_id'];
 					$onerow->title = $row['news_title'];
-					$onerow->content = $row['news_data'];
-					$onerow->summary = $row['summary'];
+					$onerow->content = strip_tags($row['news_data'], '<a><br />');
+					$onerow->summary = strip_tags($row['summary'], '<a><br />');
 					$onerow->postdate = $row['news_date'];
 					$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
 					$onerow->startdate = $row['start_time'];
