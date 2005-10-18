@@ -506,6 +506,11 @@ class ContentBase
 		return $this->mProperties;
 	}
 
+	function HasProperty($name)
+	{
+		return $this->mProperties->HasProperty($name);
+	}
+
 	function GetPropertyValue($name)
 	{
 		if ($this->mPropertiesLoaded == false)
@@ -1252,6 +1257,11 @@ class ContentProperties
 	{
 		$this->mPropertyTypes = array();
 		$this->mPropertyValues = array();
+	}
+
+	function HasProperty($name)
+	{
+		return isset($this->mPropertyTypes[$name]);
 	}
 
 	function Add($type, $name, $defaultvalue='')

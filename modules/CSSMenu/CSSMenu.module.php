@@ -336,7 +336,7 @@ class CSSMenu extends CMSModule
             {
               $menu .= " class=\"currentpage\"";
             }
-			if ($onecontent->GetPropertyValue('target') != '')
+			if ($onecontent->HasProperty('target') && $onecontent->GetPropertyValue('target') != '')
 			{
 				$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
 			}
