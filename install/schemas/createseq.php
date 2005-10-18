@@ -19,7 +19,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo "<p>Creating admin_recent_pages table sequence...";
 
 	$max = $db->GetOne("SELECT max(id) from ".$db_prefix."admin_recent_pages");
-	$db->CreateSequence(cms_db_prefix()."admin_recent_pages_seq");
+	$db->CreateSequence($db_prefix."admin_recent_pages_seq");
 
 	echo "[done]</p>";
 
