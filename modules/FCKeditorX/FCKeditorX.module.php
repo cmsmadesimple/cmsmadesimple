@@ -179,9 +179,13 @@ class FCKeditorX extends CMSModule
 		
     //GET FCKeditor CMSMS configuration
     $skin = $this->GetPreference('FCKConfig.SkinSelected');
+		if ($skin == '') $skin = 'default';
 		$lang = $this->GetPreference('FCKConfig.CMSMSLanguage');
-		$xhtml = $this->GetPreference("FCKConfig.EnableXHTML");
-		$context = $this->GetPreference("FCKConfig.ContextMenu");
+		if ($lang == '') $lang = 1;
+		$xhtml = $this->GetPreference('FCKConfig.EnableXHTML');
+		if ($xhtml == '') $xhtml = 1;
+		$context = $this->GetPreference('FCKConfig.ContextMenu');
+		if ($context == '') $context = 1;
 		
 		if ($lang)
 		  $lang = substr($this->cms->userprefs["default_cms_language"], 0, 2);
@@ -265,14 +269,19 @@ class FCKeditorX extends CMSModule
 			$skins_available = Array();
       
 			$d = dir(dirname(__FILE__).'/FCKeditor/editor/skins');
+			$dname = dirname(__FILE__).'/FCKeditor/editor/skins';
 
 			$i = 0;
 			//FIND ALL SKIN AVAILABLE
 			while ($entry = $d->read()) {
-				if (!((strcmp($entry,".")==0)||(strcmp($entry,"..")==0))) {
+				if (!((strcmp($entry,".")==0)||(strcmp($entry,"..")==0)))
+				{
+					if (is_file($dname . '/' . $entry . '/fck_editor.css'))
+					{
 			    		$skins_available[$i] = trim($entry);
 			    		$i++;
 			    	}
+				}
 			}
 			$d->close();
 			$num_skins = $i;
