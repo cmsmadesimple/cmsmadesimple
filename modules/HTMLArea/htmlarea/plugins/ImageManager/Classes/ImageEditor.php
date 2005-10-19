@@ -419,11 +419,14 @@ class ImageEditor
 		if($type != 'gif')
 			Return 0;
 
-		if(function_exists(strtolower('ImageCreateFrom'.$type))
-			&& function_exists(strtolower('image'+.type)))
-			Return 1;
+		if(function_exists(strtolower('ImageCreateFrom'.$type)) && function_exists(strtolower('image'.$type)))
+		{
+			return 1;
+		}
 		else
-			Return -1;
+		{
+			return -1;
+		}
 	}
 
 	/**

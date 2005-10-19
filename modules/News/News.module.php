@@ -632,8 +632,10 @@ Posted: {$entry->postdate|date_format}
 
 					$onerow->id = $row['news_id'];
 					$onerow->title = $row['news_title'];
-					$onerow->content = strip_tags($row['news_data'], '<a><br />');
-					$onerow->summary = strip_tags($row['summary'], '<a><br />');
+					$onerow->content = $row['news_data'];
+					$onerow->summary = $row['summary'];
+					$onerow->strippedcontent = strip_tags($onerow->content);
+					$onerow->strippedsummary = strip_tags($onerow->summary);
 					$onerow->postdate = $row['news_date'];
 					$onerow->gmdate = gmdate('D, j M Y H:i:s T', $db->UnixTimeStamp($row['news_date']));
 					$onerow->startdate = $row['start_time'];
@@ -1179,6 +1181,7 @@ Posted: {$entry->postdate|date_format}
 				echo $this->CreateFormStart($id, 'defaultadmin');
 
 				$curcategory = (isset($params['curcategory'])?$params['curcategory']:'');
+				$allcategories = (isset($params['allcategories'])?$params['allcategories']:'no');
 				$newcategory = $curcategory;
 				
 				if (isset($params['submitcategory']))
@@ -1198,7 +1201,7 @@ Posted: {$entry->postdate|date_format}
 					$categorylist[$row['long_name']] = $row['news_category_id'];
 				}
 
-				echo '<br /><p>'.$this->Lang('category').': ' . $this->CreateInputDropdown($id, 'newcategory', $categorylist, -1, $newcategory) . ' ' . $this->CreateInputSubmit($id, 'submitcategory', $this->Lang('selectcategory')) . $this->CreateInputHidden($id, 'curcategory', $curcategory) . '</p>';
+				echo '<br /><p>'.$this->Lang('category').': ' . $this->CreateInputDropdown($id, 'newcategory', $categorylist, -1, $newcategory) . ' ' . $this->Lang('showallcategories') . ': ' . $this->CreateInputCheckbox($id, 'allcategories', 'yes', $allcategories) . ' ' . $this->CreateInputSubmit($id, 'submitcategory', $this->Lang('selectcategory')) . $this->CreateInputHidden($id, 'curcategory', $curcategory) . '</p>';
 
 				echo $this->CreateFormEnd();
 

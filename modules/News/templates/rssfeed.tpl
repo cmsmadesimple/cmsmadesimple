@@ -9,8 +9,10 @@
 			<title>{$entry->title}</title>
 			<pubDate>{$entry->gmdate}</pubDate>
 			<category>{$entry->category}</category>
-			<description>{$entry->data}
-			{$entry->content}</description>
+			<description>{$entry->strippedsummary}
+			{$entry->strippedcontent}</description>
+			<content:encoded>{$entry->summary}
+			{$entry->content}</content:encoded>
 		</item>
 		{/foreach}
 	</channel>

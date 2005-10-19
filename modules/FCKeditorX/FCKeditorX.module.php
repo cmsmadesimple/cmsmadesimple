@@ -188,7 +188,10 @@ class FCKeditorX extends CMSModule
 		if ($context == '') $context = 1;
 		
 		if ($lang)
-		  $lang = substr($this->cms->userprefs["default_cms_language"], 0, 2);
+		{
+			if (isset($this->cms->userprefs['default_cms_language']))
+				$lang = substr($this->cms->userprefs['default_cms_language'], 0, 2);
+		}
 		else
 		  $lang = NULL;
     
