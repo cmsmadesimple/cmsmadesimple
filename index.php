@@ -121,7 +121,15 @@ if (isset($_GET["print"]))
 else
 {
 	($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-	$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
+	#If this is a case where a module doesn't want a template to be shown, just disable caching
+	if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+	{
+		$html = $smarty->fetch('template:notemplate') . "\n";
+	}
+	else
+	{
+		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
+	}
 }
 
 if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))

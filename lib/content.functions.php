@@ -341,7 +341,7 @@ class Smarty_CMS extends Smarty {
 		{
 			$pageinfo = $gCms->variables['pageinfo'];
 
-			if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+			if ($tpl_name == 'notemplate')
 			{
 				$tpl_source = '{content}';
 				return true;
