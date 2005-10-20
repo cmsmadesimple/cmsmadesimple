@@ -114,16 +114,39 @@ class Smarty_CMS extends Smarty {
 						       "db_get_trusted"));
 	}
 
-	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
-	{
-		$params = split(';', $tpl_name);
-		if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
-		{
-			$tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
-			return true;
-		}
-		return false;
-	}
+  function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
+    {
+        global $CMS_ADMIN_PAGE;
+        $params = split(';', $tpl_name);
+        if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
+        {   
+            $tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
+            if (!isset($CMS_ADMIN_PAGE) || $CMS_ADMIN_PAGE != 1)
+                {
+                if (strpos($tpl_source,'{literal}') !== false)
+                    {
+                    $parts = preg_split('/\{(\/*)literal\}/',$tpl_source);
+                    $tpl_source='';
+                    for ($i=0;$i<count($parts);$i++)
+                        {
+                        if ($i % 2 == 1)
+                            {
+                            $parts[$i] = str_replace('{','{ldelim',$parts[$i]);
+                            $parts[$i] = str_replace('}','{rdelim}',$parts[$i]);
+                            $parts[$i] = str_replace('{ldelim','{ldelim}',$parts[$i]);
+                            $tpl_source .= '{literal}'.$parts[$i].'{/literal}';
+                            }
+                        else
+                            {
+                            $tpl_source .= $parts[$i];
+                            }
+                        }
+                    }
+                }
+            return true;
+        }
+        return false;
+    }
 
 	function module_file_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
@@ -136,25 +159,48 @@ class Smarty_CMS extends Smarty {
 		return false;
 	}
 
-	function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
-	{
-		global $gCms;
+    function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
+    {   
+        global $gCms;
+        global $CMS_ADMIN_PAGE;
 
-		$db = &$gCms->db;
-		$config = $gCms->config;
+        $db = &$gCms->db;
+        $config = $gCms->config;
 
-		$query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, split(';', $tpl_name));
+        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+        $result = $db->Execute($query, split(';', $tpl_name));
 
-		if ($result && $result->RowCount() > 0)
-		{
-			$line = $result->FetchRow();
-			$tpl_source = $line['content'];
-			return true;
-		}
+        if ($result && $result->RowCount() > 0)
+        {
+            $line = $result->FetchRow();
+            $tpl_source = $line['content'];
+            if (!isset($CMS_ADMIN_PAGE) || $CMS_ADMIN_PAGE != 1)
+                {
+                if (strpos($tpl_source,'{literal}') !== false)
+                    {
+                    $parts = preg_split('/\{(\/*)literal\}/',$tpl_source);
+                    $tpl_source='';
+                    for ($i=0;$i<count($parts);$i++)
+                        {
+                        if ($i % 2 == 1)
+                            {
+                            $parts[$i] = str_replace('{','{ldelim',$parts[$i]);
+                            $parts[$i] = str_replace('}','{rdelim}',$parts[$i]);
+                            $parts[$i] = str_replace('{ldelim','{ldelim}',$parts[$i]);
+                            $tpl_source .= '{literal}'.$parts[$i].'{/literal}';
+                            }
+                        else
+                            {
+                            $tpl_source .= $parts[$i];
+                            }
+                        }
+                    }
+                }
+            return true;
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
