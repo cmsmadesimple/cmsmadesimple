@@ -1210,10 +1210,10 @@ Posted: {$entry->postdate|date_format}
 
 				while ($row = $dbresult->FetchRow())
 				{
-					$categorylist[$row['long_name']] = $row['news_category_id'];
+					$categorylist[$row['long_name']] = $row['long_name'];
 				}
 
-				echo '<br /><p>'.$this->Lang('category').': ' . $this->CreateInputDropdown($id, 'newcategory', $categorylist, -1, $newcategory) . ' ' . $this->Lang('showallcategories') . ': ' . $this->CreateInputCheckbox($id, 'allcategories', 'yes', $allcategories) . ' ' . $this->CreateInputSubmit($id, 'submitcategory', $this->Lang('selectcategory')) . $this->CreateInputHidden($id, 'curcategory', $curcategory) . '</p>';
+				echo '<br /><p>'.$this->Lang('category').': ' . $this->CreateInputDropdown($id, 'newcategory', $categorylist, -1, $newcategory) . ' ' . $this->Lang('showchildcategories') . ': ' . $this->CreateInputCheckbox($id, 'allcategories', 'yes', $allcategories) . ' ' . $this->CreateInputSubmit($id, 'submitcategory', $this->Lang('selectcategory')) . $this->CreateInputHidden($id, 'curcategory', $curcategory) . '</p>';
 
 				echo $this->CreateFormEnd();
 
@@ -1225,8 +1225,15 @@ Posted: {$entry->postdate|date_format}
 
 				if ($curcategory != '')
 				{
-					$query = "SELECT n.*, nc.long_name FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id WHERE n.news_category_id = ? ORDER by news_date DESC";
-					$dbresult = $db->Execute($query,array($curcategory));
+					$query = "SELECT n.*, nc.long_name FROM ".cms_db_prefix()."module_news n LEFT OUTER JOIN ".cms_db_prefix()."module_news_categories nc ON n.news_category_id = nc.news_category_id WHERE nc.long_name LIKE ? ORDER by news_date DESC";
+					if ($allcategories == 'yes')
+					{
+						$dbresult = $db->Execute($query,array($curcategory . '%'));
+					}
+					else
+					{
+						$dbresult = $db->Execute($query,array($curcategory));
+					}
 				}
 				else
 				{

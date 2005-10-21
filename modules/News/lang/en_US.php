@@ -40,6 +40,7 @@ $lang['postdate'] = 'Post Date';
 $lang['postinstall'] = 'Make sure to set the "Modify News" permission on users who will be administering News items.';
 $lang['rsstemplate'] = 'RSS Template';
 $lang['selectcategory'] = 'Select Category';
+$lang['showchildcategories'] = 'Show Child Categories';
 $lang['sortascending'] = 'Sort Ascending';
 $lang['startdate'] = 'Start Date';
 $lang['startrequiresend'] = 'Entering a start date requires an end date also';
