@@ -20,6 +20,9 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
+$log =& LoggerManager::getLogger('include.php');
+$log->debug('Starting include.php');
+
 /**
  * This file is included in every page.  It does all seutp functions including
  * importing additional functions/classes, setting up sessions and nls, and
@@ -127,7 +130,7 @@ if (!isset($DONT_LOAD_DB)) {
 	$gCms->db = &$db;
 }
 
-require_once(dirname(__FILE__) . '/lib/smarty/Smarty.class.php');
+require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
 require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
@@ -208,17 +211,7 @@ else
 	ModuleOperations::LoadModules(false);
 }
 
-#Check for HTML_BBCodeParser
-if ($config["use_bb_code"] == true) {
-	#if (include_once(dirname(__FILE__)."/lib/PEAR.php")) {
-		if (file_exists("HTML/BBCodeParser.php")) {
-			include_once("HTML/BBCodeParser.php");
-			$gCms->bbcodeparser = new HTML_BBCodeParser();
-		}
-	#}
-}
-
-debug_buffer('leave include.php');
+$log->debug('Leaving include.php');
 
 # vim:ts=4 sw=4 noet
 ?>

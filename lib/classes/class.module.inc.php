@@ -221,6 +221,7 @@ class CMSModule extends ModuleOperations
 		$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
 		$this->langhash = array();
 		$this->params = array();
+		$this->log =& LoggerManager::getLogger('module.php');
 		array_push($this->params, array(
 			'name' => 'lang',
 			'default' => 'en_US',
@@ -773,6 +774,14 @@ class CMSModule extends ModuleOperations
 	function DeleteTemplatePost(&$template)
 	{
 	}
+	
+	function TemplatePreCompile(&$template)
+	{
+	}
+
+	function TemplatePostCompile(&$template)
+	{
+	}
 
 	/**
 	 * ------------------------------------------------------------------
@@ -923,6 +932,14 @@ class CMSModule extends ModuleOperations
 	 * @param string The prerendered text
 	 */
 	function ContentPreRender(&$content)
+	{
+	}
+	
+	function ContentPreCompile(&$content)
+	{
+	}
+
+	function ContentPostCompile(&$content)
 	{
 	}
 

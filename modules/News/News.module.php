@@ -19,7 +19,13 @@
 #$Id$
 
 class News extends CMSModule
-{
+{	
+	function News()
+	{
+		parent::CMSModule();
+		$this->modifyhead = false;
+	}
+	
 	function GetName()
 	{
 		return 'News';
@@ -68,37 +74,43 @@ class News extends CMSModule
 		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
 	}
 
-	function ContentPreRender(&$content)
+	function ContentPreCompile(&$content)
 	{
-		global $gCms;
-
+		$this->log->debug('Starting ContentPreCompile');
 		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
 		{
-			$config = $this->cms->config;
-
-			$params = array("showtemplate"=>"false");
-			$url = $config['root_url'].'/moduleinterface.php?module=News&amp;id=m222&amp;m222action=rss&amp;m222showtemplate=false&amp;m222returnid='.$gCms->variables['page'];
-
-			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
-			$content = ereg_replace("<\/head>", $text."</head>", $content);
+			$this->modifyhead = true;
 		}
+		$this->log->debug('modifyhead: ' . $this->modifyhead);
+		$this->log->debug('Leaving ContentPreCompile');
 	}
 
-	function ContentTemplate(&$content)
+	function TemplatePreCompile(&$content)
 	{
-		global $gCms;
-
+		$this->log->debug('Starting TemplatePreCompile');
 		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
 		{
-			debug_buffer($content);
+			$this->modifyhead = true;
+		}
+		$this->log->debug('modifyhead: ' . $this->modifyhead);
+		$this->log->debug('Leaving TemplatePreCompile');
+	}
+	
+	function ContentPostRender(&$content)
+	{
+		$this->log->debug('Starting News ContentPostRender');
+		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+		{
+			global $gCms;
 			$config = $this->cms->config;
 
 			$params = array("showtemplate"=>"false");
-			$url = $config['root_url'].'/moduleinterface.php?module=News&amp;id=m222&amp;m222action=rss&amp;m222showtemplate=false&amp;m222returnid='.$gCms->variables['page'];
+			$url = $config['root_url'].'/index.php?module=News&amp;id=cntnt01&amp;cntnt01action=rss&amp;cntnt01showtemplate=false&amp;cntnt01returnid='.$gCms->variables['content_id'];
 
 			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
 			$content = ereg_replace("<\/head>", $text."</head>", $content);
 		}
+		$this->log->debug('Leaving News ContentPostRender');
 	}
 
     function VisibleToAdminUser()

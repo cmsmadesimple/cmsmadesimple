@@ -375,12 +375,15 @@ class Smarty_CMS extends Smarty {
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		debug_buffer('start template_get_template');
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting template_get_template');
+
 		global $gCms;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
+			$log->debug('Site down.  Leaving template_get_template');
 			return true;
 		}
 		else
@@ -390,12 +393,12 @@ class Smarty_CMS extends Smarty {
 			if ($tpl_name == 'notemplate')
 			{
 				$tpl_source = '{content}';
+				$log->debug('No Template.  Leaving template_get_template');
 				return true;
 			}
 			else
 			{
 				$templateobj = TemplateOperations::LoadTemplateByID($pageinfo->template_id);
-				debug_buffer('template loaded');
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					#Time to fill our template content
@@ -418,27 +421,32 @@ class Smarty_CMS extends Smarty {
 							$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
 						}
 					}
-					debug_buffer('end template_get_template');
+					$log->debug('Template Found.  Leaving template_get_template');
 					return true;
 				}
 			}
+			$log->warn('No Template Found.  Leaving template_get_template');
 			return false;
 		}
 	}
 
 	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		debug_buffer('start template_get_timestamp');
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting template_get_timestamp');
+
 		global $gCms;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
 			$tpl_timestamp = time();
+			$log->debug('Site down.  Leaving template_get_timestamp');
 			return true;
 		}
 		else if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
 		{
 			$tpl_timestamp = time();
+			$log->debug('No template needed.  Leaving template_get_timestamp');
 			return true;
 		}
 		else
@@ -446,14 +454,16 @@ class Smarty_CMS extends Smarty {
 			$pageinfo = &$gCms->variables['pageinfo'];
 
 			$tpl_timestamp = $pageinfo->template_modified_date;
-			debug_buffer('end template_get_timestamp');
+			$log->debug('Template found.  Leaving template_get_timestamp');
 			return true;
 		}
 	}
 
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		debug_buffer('start content_get_template');
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting content_get_template');
+
 		global $gCms;
 
 		$pageinfo = &$gCms->variables['pageinfo'];
@@ -463,6 +473,7 @@ class Smarty_CMS extends Smarty {
 			#We've a custom error message...  return it here
 			header("HTTP/1.0 404 Not Found");
 			$tpl_source = get_site_preference('custom404');
+			$log->debug('Custom 404 message.  Leaving content_get_template');
 			return true;
 		}
 		else
@@ -488,15 +499,19 @@ class Smarty_CMS extends Smarty {
 					}
 				}
 
-				debug_buffer('end content_get_template');
+				$log->debug('Content found.  Leaving content_get_template');
 				return true;
 			}
 		}
+		$log->warn('Content not found.  Leaving content_get_template');
 		return false;
 	}
 
 	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting content_get_timestamp');
+
 		global $gCms;
 
 		$pageinfo = $gCms->variables['pageinfo'];
@@ -517,6 +532,7 @@ class Smarty_CMS extends Smarty {
 				$tpl_timestamp = time();
 			}
 		}
+		$log->debug('Leaving content_get_timestamp');
 		return true;
 	}
 	
@@ -977,7 +993,25 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 						require_once $filename;
 						if (function_exists("smarty_cms_prefilter_" . $file))
 						{
-							$smarty->register_prefilter($file, "smarty_cms_prefilter_" . $file, $caching);
+							$smarty->register_prefilter("smarty_cms_prefilter_" . $file);
+							array_push($plugins, $file);
+						}
+					}
+					else if (strpos($filename, 'postfilter') !== false)
+					{
+						require_once $filename;
+						if (function_exists("smarty_cms_postfilter_" . $file))
+						{
+							$smarty->register_postfilter("smarty_cms_postfilter_" . $file);
+							array_push($plugins, $file);
+						}
+					}
+					else if (strpos($filename, 'outputfilter') !== false)
+					{
+						require_once $filename;
+						if (function_exists("smarty_cms_outputfilter_" . $file))
+						{
+							$smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
 							array_push($plugins, $file);
 						}
 					}
@@ -986,7 +1020,7 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 						require_once $filename;
 						if (function_exists("smarty_cms_modifier_" . $file))
 						{
-							$smarty->register_modifier($file, "smarty_cms_modifier_" . $file, $caching);
+							$smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
 							array_push($plugins, $file);
 						}
 					}

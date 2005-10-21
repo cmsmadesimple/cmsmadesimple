@@ -20,7 +20,9 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
-#require_once 'Benchmark/Profiler.php';
+$log =& LoggerManager::getLogger('index.php');
+$log->info('Serving URL:' . $_SERVER['REQUEST_URI']);
+$log->debug('Starting index.php');
 
 /**
  * Entry point for all non-admin pages
@@ -116,6 +118,7 @@ $html = "";
 if (isset($_GET["print"]))
 {
 	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
+	$log->debug('Fetching: print:' . $pageinfo->template_id);
 	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
 }
 else
@@ -124,10 +127,12 @@ else
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
 	if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
 	{
+		$log->debug('Fetching: template:notemplate');
 		$html = $smarty->fetch('template:notemplate') . "\n";
 	}
 	else
 	{
+		$log->debug('Fetching: template:' . $pageinfo->template_id);
 		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
 	}
 }
@@ -179,6 +184,8 @@ if (get_site_preference('enablesitedownmessage') == "1")
 	$smarty->clear_compiled_tpl();
 	$smarty->clear_all_cache();
 }
+
+$log->debug('Leaving index.php');
 
 if ($config["debug"] == true)
 {

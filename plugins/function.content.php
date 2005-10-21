@@ -18,6 +18,9 @@
 
 function smarty_cms_function_content($params, &$smarty)
 {
+	$log =& LoggerManager::getLogger('function.ccontent.php');
+	$log->debug('Starting smarty_cms_function_content');
+
 	global $gCms;
 	$pageinfo = $gCms->variables['pageinfo'];
 	if (isset($pageinfo) && $pageinfo !== FALSE)
@@ -32,14 +35,17 @@ function smarty_cms_function_content($params, &$smarty)
 			if (!isset($params['block']))
 			{
 				$smarty->id = 'cntnt01';
+				$log->debug('Leaving smarty_cms_function_content');
 				return $smarty->fetch('module:' . $module);
 			}
 		}
 		else
 		{
+			$log->debug('Leaving smarty_cms_function_content');
 			return $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'), '', $pageinfo->content_id);
 		}
 	}
+	$log->debug('Leaving smarty_cms_function_content');
 	return '';
 }
 
