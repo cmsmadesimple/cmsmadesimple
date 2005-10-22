@@ -87,18 +87,7 @@ class CSSMenu extends CMSModule
     return true;
   }
 
-  function ContentPreRender(&$content)
-  {
-    if (eregi('\{cms_module module=[\"\']?cssmenu[\"\']?', $content))
-    {
-      $config = $this->cms->config;
-      $text =  '<script type="text/javascript" src="'.$config['root_url'].'/modules/CSSMenu/CSSMenu.js"></script>' . "\n";
-
-      $content = ereg_replace("<\/head>", $text."</head>", $content);
-    }
-  }
-
-  function ContentTemplate(&$content)
+  function ContentPostRender(&$content)
   {
     if (eregi('\{cms_module module=[\"\']?cssmenu[\"\']?', $content))
     {

@@ -19,13 +19,7 @@
 #$Id$
 
 class News extends CMSModule
-{	
-	function News()
-	{
-		parent::CMSModule();
-		$this->modifyhead = false;
-	}
-	
+{		
 	function GetName()
 	{
 		return 'News';
@@ -74,28 +68,6 @@ class News extends CMSModule
 		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
 	}
 
-	function ContentPreCompile(&$content)
-	{
-		$this->log->debug('Starting ContentPreCompile');
-		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
-		{
-			$this->modifyhead = true;
-		}
-		$this->log->debug('modifyhead: ' . $this->modifyhead);
-		$this->log->debug('Leaving ContentPreCompile');
-	}
-
-	function TemplatePreCompile(&$content)
-	{
-		$this->log->debug('Starting TemplatePreCompile');
-		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
-		{
-			$this->modifyhead = true;
-		}
-		$this->log->debug('modifyhead: ' . $this->modifyhead);
-		$this->log->debug('Leaving TemplatePreCompile');
-	}
-	
 	function ContentPostRender(&$content)
 	{
 		$this->log->debug('Starting News ContentPostRender');
