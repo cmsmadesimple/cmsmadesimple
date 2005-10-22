@@ -51,7 +51,7 @@ $lang['title'] = 'Title';
 $lang['useexpiration'] = 'Use Expiration Date';
 $lang['helpnumber'] = 'Maximum number of items to display =- leaving empty will show all items.';
 $lang['helpmakerssbutton'] = 'Make a button to link to an RSS feed of the News items.';
-$lang['helpcategory'] = 'Only display items for that category and it\'s children.  leaving empty, will show all categories.';
+$lang['helpcategory'] = 'Only display items for that category. Use * after the name to show children.  Multiple categories can be used if separated with a comma. Leaving empty, will show all categories.';
 $lang['helpmoretext'] = 'Text to display at the end of a news item if it goes over the summary length.  Defaults to "more..."';
 $lang['helpsummarytemplate'] = 'Use a separate template for displaying the article summary.  It have to live in modules/News/templates.';
 $lang['helpdetailtemplate'] = 'Use a separate template for displaying the article detail.  It have to live in modules/News/templates.';

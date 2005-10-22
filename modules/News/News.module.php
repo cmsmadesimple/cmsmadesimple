@@ -427,15 +427,13 @@ Posted: {$entry->postdate|date_format}
 	function DoAction($action, $id, $params, $returnid = -1)
 	{
 		$db = $this->cms->db;
-		debug_buffer($action);
-		debug_buffer($params);
 		switch ($action)
 		{
 			case "default":
 
 				if (isset($params["makerssbutton"]))
 				{
-					debug_buffer('Making rss button');
+					$this->log->debug('Making RSS Button');
 					$params = array("showtemplate"=>"false");
 					echo $this->CreateLink($id, 'rss', $returnid, "<img border=\"0\" src=\"images/cms/xml_rss.gif\" alt=\"RSS Newsfeed\" />", $params,'',false,false,'',true);
 					return;
@@ -444,9 +442,21 @@ Posted: {$entry->postdate|date_format}
 				$entryarray = array();
 				$query = '';
 
-				if (isset($params["category"]))
+				if (isset($params["category"]) && $params["category"] != '')
 				{
-					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND mnc.long_name like '" . str_replace('*', '%', $params['category']) . "' AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
+					$categories = explode(',', $params['category']);
+					$query = "SELECT mn.*, mnc.news_category_name FROM " . cms_db_prefix() . "module_news mn LEFT OUTER JOIN " . cms_db_prefix() . "module_news_categories mnc ON mnc.news_category_id = mn.news_category_id WHERE status = 'published' AND (";
+					$count = 0;
+					foreach ($categories as $onecat)
+					{
+						if ($count > 0)
+						{
+							$query .= ' OR ';
+						}
+						$query .= "mnc.long_name like '" . trim(str_replace('*', '%', $onecat)) . "'";
+						$count++;
+					}
+					$query .= ") AND ((" . $db->IfNull('start_time', "'1/1/1900'") . " = '1/1/1900' AND " . $db->IfNull('end_time', "'1/1/1900'") . " = '1/1/1900') OR (start_time < '" . $db->DBTimeStamp(time()) . "'" . " AND end_time > '" . $db->DBTimeStamp(time())."')) ";
 				}
 				else
 				{
@@ -470,6 +480,8 @@ Posted: {$entry->postdate|date_format}
                 { 
                     $query .= "desc"; 
                 }
+                
+				$this->log->debug($query);
 
 				$dbresult = '';
 				if(isset($params['number']))
@@ -501,8 +513,6 @@ Posted: {$entry->postdate|date_format}
 					{
 						$sendtodetail['detailtemplate'] = $params['detailtemplate'];
 					}
-
-					debug_buffer($sendtodetail);
 
 					$onerow->titlelink = $this->CreateLink($id, 'detail', $returnid, $row['news_title'], $sendtodetail,'',false,false,'',true);
 					$onerow->morelink = $this->CreateLink($id, 'detail', $returnid, $moretext, $sendtodetail,'',false,false,'',true);
@@ -1080,7 +1090,6 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('enddate', $enddate);
 				$this->smarty->assign('enddateprefix', $id.'enddate_');
 				$this->smarty->assign('status', $this->CreateInputDropdown($id, 'status', $statusdropdown, -1, $status));
-				debug_buffer($categorylist);
 				$this->smarty->assign('inputcategory', $this->CreateInputDropdown($id, 'category', $categorylist, -1, $usedcategory));
 				$this->smarty->assign('hidden', $this->CreateInputHidden($id, 'articleid', $articleid));
 				$this->smarty->assign('submit', $this->CreateInputSubmit($id, 'submit', lang('submit')));
@@ -1268,7 +1277,6 @@ Posted: {$entry->postdate|date_format}
 					$onerow = new stdClass();
 
 					$depth = count(split('\.', $row['hierarchy']));
-					debug_buffer($row['hierarchy']);
 
 					$onerow->id = $row['news_category_id'];
 					$onerow->name = str_repeat('&nbsp;', $depth-1).$this->CreateLink($id, 'editcategory', $returnid, $row['news_category_name'], array('catid'=>$row['news_category_id']));
