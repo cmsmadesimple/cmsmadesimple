@@ -94,7 +94,7 @@ class CSSMenu extends CMSModule
       $config = $this->cms->config;
       $text =  '<script type="text/javascript" src="'.$config['root_url'].'/modules/CSSMenu/CSSMenu.js"></script>' . "\n";
 
-      $content = ereg_replace("<\/head>", $text."</head>", $content);
+      $content = str_replace('</head>', $text.'</head>', $content);
     }
   }
 
