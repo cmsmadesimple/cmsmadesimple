@@ -521,6 +521,7 @@ Posted: {$entry->postdate|date_format}
 
 				#Display template
 				echo "<!-- Displaying News Module -->\n";
+
 				if (isset($params['summarytemplate']))
 				{
 					echo $this->ProcessTemplate($params['summarytemplate']);

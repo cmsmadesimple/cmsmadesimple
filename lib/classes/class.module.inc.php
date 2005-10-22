@@ -248,6 +248,21 @@ class CMSModule extends ModuleOperations
 	{
 		return 'unset';
 	}
+	
+	/**
+	 * Returns the full path of the module directory.
+	 */
+	function GetModulePath()
+	{
+		if (is_subclass_of($this, 'CMSModule'))
+		{
+			return dirname(dirname(__FILE__)) . '/modules/' . $this->GetName();
+		}
+		else
+		{
+			return dirname(__FILE__);
+		}
+	}
 
 	/**
 	 * Returns a translatable name of the module.  For modulues who's names can
