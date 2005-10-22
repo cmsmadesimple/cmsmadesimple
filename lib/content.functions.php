@@ -116,33 +116,10 @@ class Smarty_CMS extends Smarty {
 
   function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
     {
-        global $CMS_ADMIN_PAGE;
         $params = split(';', $tpl_name);
         if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
         {   
             $tpl_source = @file_get_contents(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]);
-            if (!isset($CMS_ADMIN_PAGE) || $CMS_ADMIN_PAGE != 1)
-                {
-                if (strpos($tpl_source,'{literal}') !== false)
-                    {
-                    $parts = preg_split('/\{(\/*)literal\}/',$tpl_source);
-                    $tpl_source='';
-                    for ($i=0;$i<count($parts);$i++)
-                        {
-                        if ($i % 2 == 1)
-                            {
-                            $parts[$i] = str_replace('{','{ldelim',$parts[$i]);
-                            $parts[$i] = str_replace('}','{rdelim}',$parts[$i]);
-                            $parts[$i] = str_replace('{ldelim','{ldelim}',$parts[$i]);
-                            $tpl_source .= '{literal}'.$parts[$i].'{/literal}';
-                            }
-                        else
-                            {
-                            $tpl_source .= $parts[$i];
-                            }
-                        }
-                    }
-                }
             return true;
         }
         return false;
@@ -161,8 +138,10 @@ class Smarty_CMS extends Smarty {
 
     function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
     {   
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting module_db_template');
+    	
         global $gCms;
-        global $CMS_ADMIN_PAGE;
 
         $db = &$gCms->db;
         $config = $gCms->config;
@@ -174,28 +153,6 @@ class Smarty_CMS extends Smarty {
         {
             $line = $result->FetchRow();
             $tpl_source = $line['content'];
-            if (!isset($CMS_ADMIN_PAGE) || $CMS_ADMIN_PAGE != 1)
-                {
-                if (strpos($tpl_source,'{literal}') !== false)
-                    {
-                    $parts = preg_split('/\{(\/*)literal\}/',$tpl_source);
-                    $tpl_source='';
-                    for ($i=0;$i<count($parts);$i++)
-                        {
-                        if ($i % 2 == 1)
-                            {
-                            $parts[$i] = str_replace('{','{ldelim',$parts[$i]);
-                            $parts[$i] = str_replace('}','{rdelim}',$parts[$i]);
-                            $parts[$i] = str_replace('{ldelim','{ldelim}',$parts[$i]);
-                            $tpl_source .= '{literal}'.$parts[$i].'{/literal}';
-                            }
-                        else
-                            {
-                            $tpl_source .= $parts[$i];
-                            }
-                        }
-                    }
-                }
             return true;
         }
 
