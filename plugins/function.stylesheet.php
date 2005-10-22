@@ -23,20 +23,33 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 	$pageinfo = &$gCms->variables['pageinfo'];
 
 	$stylesheet = '';
-
-	foreach (get_stylesheet_media_types($pageinfo->template_id) as $media)
+	
+	if (isset($params['name']) && $params['name'] != '')
 	{
 		$stylesheet .= '<link rel="stylesheet" type="text/css" ';
-		if ($media != '')
+		if (isset($params['media']) && $params['media'] != '')
 		{
-			$stylesheet .= 'media="'.$media.'" ';
+			$stylesheet .= 'media="' . $params['media'] . '" ';
 		}
-		$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
-		if ($media != '')
+		$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?name='.$params['name'];
+		$stylesheet .= "\" />\n"; 
+	}
+	else
+	{
+		foreach (get_stylesheet_media_types($pageinfo->template_id) as $media)
 		{
-			$stylesheet .= '&amp;mediatype='.urlencode($media);
+			$stylesheet .= '<link rel="stylesheet" type="text/css" ';
+			if ($media != '')
+			{
+				$stylesheet .= 'media="'.$media.'" ';
+			}
+			$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
+			if ($media != '')
+			{
+				$stylesheet .= '&amp;mediatype='.urlencode($media);
+			}
+			$stylesheet .= "\" />\n"; 
 		}
-		$stylesheet .= '" />'."\n"; 
 	}
 
 	return $stylesheet;
@@ -45,12 +58,13 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 function smarty_cms_help_function_stylesheet() {
 	?>
 	<h3>What does this do?</h3>
-	<p>Prints the current date and time.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{current_date format="%A %d-%b-%y %T %Z"}</code></p>
+	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
+		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
 	</ul>
 	</p>
 	<?php

@@ -27,30 +27,55 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USE
 
 $templateid = "";
 $mediatype = '';
+$name = '';
+$css = '';
+$nostylesheet = false;
 $stripbackground = false;
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
+if (isset($_GET['name'])) $name = $_GET['name'];
 if (isset($_GET["stripbackground"])) $stripbackground = true;
 
-$result = get_stylesheet($templateid, $mediatype);
-
-$css = $result['stylesheet']; 
-
-#Perform the content stylesheet callback
-if (!isset($result['nostylesheet']))
+if ($name != '')
 {
-	foreach($gCms->modules as $key=>$value)
+	//TODO: Make stylesheet handling OOP
+	global $gCms;
+	$db =& $gCms->db;
+	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
+	$cssresult = $db->Execute($cssquery, $name);
+
+	if ($cssresult && $cssresult->RowCount() > 0)
 	{
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
+		while ($cssline = $cssresult->FetchRow())
 		{
-			$gCms->modules[$key]['object']->ContentStylesheet($css);
+			$css .= "\n".$cssline['css_text']."\n";
 		}
+	}	
+}
+else
+{
+	$result = get_stylesheet($templateid, $mediatype);
+	$css = $result['stylesheet']; 
+	if (isset($result['nostylesheet']))
+	{
+		#$nostylesheet = true;
+		#Perform the content stylesheet callback
+		#if ($nostylesheet == false)
+		#{
+			foreach($gCms->modules as $key=>$value)
+			{
+				if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+				{
+					$gCms->modules[$key]['object']->ContentStylesheet($css);
+				}
+			}
+		#}
 	}
 }
 
 #header("Content-Language: " . $current_language);
-header("Content-Type: text/css; charset=" . $result['encoding']);
+header("Content-Type: text/css; charset=" . (isset($result['encoding'])?$result['encoding']:'UTF-8'));
 
 if ($stripbackground)
 {
