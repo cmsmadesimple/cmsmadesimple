@@ -75,8 +75,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 				$gCms->modules[$key]['object']->LoginPost($oneuser);
 			}
 		}
+
 		// redirect to upgrade if db_schema it's old
-		$current_version = 1;
+		$current_version = $CMS_SCHEMA_VERSION;
 	
 		$query = "SELECT version from ".cms_db_prefix()."version";
 		$result = $db->Execute($query);
@@ -84,9 +85,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			$current_version = $row["version"];
 		}
-		if ($current_version < $CMS_SCHEMA_VERSION)
-			redirect("/install/upgrade.php");
 
+		if ($current_version < $CMS_SCHEMA_VERSION)
+		{
+			redirect($gCms->config['root_url'] . "/install/upgrade.php");
+		}
 		// end of version check
 
 		if (isset($_SESSION["redirect_url"]))
