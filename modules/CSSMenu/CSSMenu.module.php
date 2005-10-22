@@ -89,7 +89,7 @@ class CSSMenu extends CMSModule
 
   function ContentPostRender(&$content)
   {
-    if (eregi('\{cms_module module=[\"\']?cssmenu[\"\']?', $content))
+    if (strpos($content, '<!-- Displaying CSSMenu Module -->') !== FALSE)
     {
       $config = $this->cms->config;
       $text =  '<script type="text/javascript" src="'.$config['root_url'].'/modules/CSSMenu/CSSMenu.js"></script>' . "\n";
@@ -349,7 +349,7 @@ class CSSMenu extends CMSModule
        for ($i = 0; $i < $last_level; $i++) $menu .= "</li></ul>";
        $menu .= "</div>\n";
       }
-      return $menu;
+      return "<!-- Displaying CSSMenu Module -->\n".$menu;
     }
 	else if ($name == 'defaultadmin')
 	{

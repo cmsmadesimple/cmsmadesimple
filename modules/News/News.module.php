@@ -71,7 +71,8 @@ class News extends CMSModule
 	function ContentPostRender(&$content)
 	{
 		$this->log->debug('Starting News ContentPostRender');
-		if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+		#if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+		if (strpos($content, '<!-- Displaying News Module -->') !== FALSE)
 		{
 			global $gCms;
 			$config = $this->cms->config;
@@ -519,6 +520,7 @@ Posted: {$entry->postdate|date_format}
 				$this->smarty->assign_by_ref('items', $entryarray);
 
 				#Display template
+				echo "<!-- Displaying News Module -->\n";
 				if (isset($params['summarytemplate']))
 				{
 					echo $this->ProcessTemplate($params['summarytemplate']);
