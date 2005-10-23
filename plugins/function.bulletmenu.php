@@ -242,7 +242,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			}
 			else if ($onecontent->Type() == 'sectionheader')
 			{
-				$menu .= '<li class="bullet_sectionheader">'.$onecontent->MenuText()."\n";
+				$menu .= '<li><span class="bullet_sectionheader">'.$onecontent->MenuText()."</span>\n";
 			}
 			else
 			{
