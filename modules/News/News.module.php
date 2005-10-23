@@ -71,23 +71,35 @@ class News extends CMSModule
 	function ContentPostRender(&$content)
 	{
 		$this->log->debug('Starting News ContentPostRender');
-		#if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
-		if (strpos($content, '<!-- Displaying News Module -->') !== FALSE)
+		if ($this->GetPreference('showautodiscovery', 'yes') == 'yes')
 		{
-			global $gCms;
-			$config = $this->cms->config;
-
-			$params = array("showtemplate"=>"false");
-			$url = $config['root_url'].'/index.php?module=News&amp;id=cntnt01&amp;cntnt01action=rss&amp;cntnt01showtemplate=false&amp;cntnt01returnid='.$gCms->variables['content_id'];
-
-			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
-			if (function_exists('str_ireplace'))
+			#if (eregi('\{cms_module module=[\"\']?news[\"\']?', $content))
+			if (strpos($content, '<!-- Displaying News Module -->') !== FALSE)
 			{
-				$content = str_ireplace('</head>', $text.'</head>', $content);
-			}
-			else
-			{
-				$content = eregi_replace('<\/head>', $text.'</head>', $content);
+				global $gCms;
+				$config = $this->cms->config;
+	
+				$params = array("showtemplate"=>"false");
+				
+				$url = '';
+				if ($this->GetPreference('autodiscoverylink', '') == '')
+				{
+					$url = $config['root_url'].'/index.php?module=News&amp;id=cntnt01&amp;cntnt01action=rss&amp;cntnt01showtemplate=false&amp;cntnt01returnid='.$gCms->variables['content_id'];
+				}
+				else
+				{
+					$url = $this->GetPreference('autodiscoverylink', '');
+				}
+	
+				$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
+				if (function_exists('str_ireplace'))
+				{
+					$content = str_ireplace('</head>', $text.'</head>', $content);
+				}
+				else
+				{
+					$content = eregi_replace('<\/head>', $text.'</head>', $content);
+				}
 			}
 		}
 		$this->log->debug('Leaving News ContentPostRender');
@@ -1155,6 +1167,14 @@ Posted: {$entry->postdate|date_format}
 				$this->Redirect($id, 'defaultadmin');
 
 				break;
+				
+			case "updateoptions":
+
+				$this->SetPreference('showautodiscovery', $params['showautodiscovery']);
+				$this->SetPreference('autodiscoverylink', $params['autodiscoverylink']);
+				$this->Redirect($id, 'defaultadmin');
+
+				break;
 
 			case "defaultadmin":
 
@@ -1173,6 +1193,7 @@ Posted: {$entry->postdate|date_format}
 				echo $this->SetTabHeader('categories',$this->Lang('categories'));
 				echo $this->SetTabHeader('summary_template',$this->Lang('summarytemplate'));
 				echo $this->SetTabHeader('detail_template',$this->Lang('detailtemplate'));
+				echo $this->SetTabHeader('options',$this->Lang('options'));
 
 				echo $this->EndTabHeaders();
 
@@ -1331,6 +1352,20 @@ Posted: {$entry->postdate|date_format}
 				echo '<p>'.$this->CreateTextArea(false, $id, $this->GetTemplate('displaydetail'), 'templatecontent2', '').'</p>';
 
 				echo $this->CreateInputSubmit($id, 'rsssubmitbutton', $this->Lang('submit'));
+
+				echo $this->CreateFormEnd();
+
+				echo $this->EndTab();
+				
+				echo $this->StartTab('options');
+				
+				echo $this->CreateFormStart($id, 'updateoptions');
+				
+				echo '<p>' . $this->Lang('showautodiscovery') . ':' . $this->CreateInputCheckbox($id, 'showautodiscovery', 'yes', $this->GetPreference('showautodiscovery', 'yes')) . '</p>';
+
+				echo '<p>' . $this->Lang('autodiscoverylink') . ':' . $this->CreateInputText($id, 'autodiscoverylink', $this->GetPreference('autodiscoverylink', ''), '50', '255').'</p>';
+
+				echo $this->CreateInputSubmit($id, 'optionssubmitbutton', $this->Lang('submit'));
 
 				echo $this->CreateFormEnd();
 

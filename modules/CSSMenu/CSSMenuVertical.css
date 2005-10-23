@@ -3,9 +3,10 @@ ul.cssmenu-vertical ul {
   margin: 0;
   padding: 0;
   width: 120px; /* Width of Menu Items */
-  border-bottom: 1px solid #ccc;
-  background: #fff; /* IE6 Bug */
+  border-bottom: 1px solid #006699;
+  background: #006699; /* IE6 Bug */
   font-size: 100%;
+  color: White;
   }
 
 ul.cssmenu-vertical li {
@@ -16,9 +17,9 @@ ul.cssmenu-vertical li {
 ul.cssmenu-vertical li a {
   display: block;
   text-decoration: none;
-  color: #777;
+  color: White;
   padding: 5px;
-  border: 1px solid #ccc;
+  border: 1px solid #006699;
   border-bottom: 0;
   }
 
@@ -34,7 +35,7 @@ ul.cssmenu-vertical ul {
   top: 0;
   }
 
-ul.cssmenu-vertical li ul li a { padding: 2px 5px; } /* Sub Menu Styles */
+ul.cssmenu-vertical li ul li a { padding: 5px 5px; } /* Sub Menu Styles */
 
 ul.cssmenu-vertical li:hover ul ul,
 ul.cssmenu-vertical li:hover ul ul ul,
@@ -48,19 +49,21 @@ ul.cssmenu-vertical li.over ul,
 ul.cssmenu-vertical li li.over ul,
 ul.cssmenu-vertical li li li.over ul { display: block; } /* The magic */
 
-.cssmenu-vertical ul, ul.cssmenu-vertical li.menuparent { background: transparent url(modules/CSSMenu/images/arrow.gif) right center no-repeat; }
+.cssmenu-vertical ul, ul.cssmenu-vertical li.menuparent { background: #006699 url(modules/CSSMenu/images/arrow.gif) no-repeat right center; }
 /* fixed image flicker by adding .cssmenu-vertical ul */
 
 ul.cssmenu-vertical li.menuparent:hover,
-ul.cssmenu-vertical li.over { background-color: #f9f9f9; }
+ul.cssmenu-vertical li.over { background-color: #FF9900;  color: White;  }
 
-ul.cssmenu-vertical li a:hover { color: #E2144A; }
+ul.cssmenu-vertical li a:hover {
+	background-color: #FF9900;
+}
 
-ul.cssmenu-vertical .sectionheader { font-weight: bold; }
+ul.cssmenu-vertical .sectionheader { font-weight: bold;  background: #006699;  }
 
 .currentpage
 {
 	list-style-type: square;
 	display: inline;
-	background-color: Red;
+	background-color: Black;
 }
