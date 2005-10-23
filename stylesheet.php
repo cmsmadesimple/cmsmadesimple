@@ -56,7 +56,7 @@ else
 {
 	$result = get_stylesheet($templateid, $mediatype);
 	$css = $result['stylesheet']; 
-	if (isset($result['nostylesheet']))
+	if (!isset($result['nostylesheet']))
 	{
 		#$nostylesheet = true;
 		#Perform the content stylesheet callback
