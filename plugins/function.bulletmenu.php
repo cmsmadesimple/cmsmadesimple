@@ -251,9 +251,12 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 				{
 					$menu .= " class=\"currentpage\"";
 				}
-				if ($onecontent->HasProperty('target') && $onecontent->GetPropertyValue('target') != '')
+				if (method_exists($onecontent, 'HasProperty'))
 				{
-					$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+					if ($onecontent->HasProperty('target') && $onecontent->GetPropertyValue('target') != '')
+					{
+						$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+					}
 				}
 				$menu .= ">".$onecontent->MenuText()."</a>";
 			}
