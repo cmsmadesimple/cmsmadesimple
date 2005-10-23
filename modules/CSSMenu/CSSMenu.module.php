@@ -87,16 +87,23 @@ class CSSMenu extends CMSModule
     return true;
   }
 
-  function ContentPostRender(&$content)
-  {
-    if (strpos($content, '<!-- Displaying CSSMenu Module -->') !== FALSE)
-    {
-      $config = $this->cms->config;
-      $text =  '<script type="text/javascript" src="'.$config['root_url'].'/modules/CSSMenu/CSSMenu.js"></script>' . "\n";
-
-      $content = str_replace('</head>', $text.'</head>', $content);
-    }
-  }
+	function ContentPostRender(&$content)
+	{
+		if (strpos($content, '<!-- Displaying CSSMenu Module -->') !== FALSE)
+		{
+			$config = $this->cms->config;
+			$text =  '<script type="text/javascript" src="'.$config['root_url'].'/modules/CSSMenu/CSSMenu.js"></script>' . "\n";
+		
+			if (function_exists('str_ireplace'))
+			{
+				$content = str_ireplace('</head>', $text.'</head>', $content);
+			}
+			else
+			{
+				$content = eregi_replace('<\/head>', $text.'</head>', $content);
+			}
+		}
+	}
 
   function ContentStylesheet(&$stylesheet)
   {

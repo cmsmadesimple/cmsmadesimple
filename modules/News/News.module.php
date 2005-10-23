@@ -81,7 +81,14 @@ class News extends CMSModule
 			$url = $config['root_url'].'/index.php?module=News&amp;id=cntnt01&amp;cntnt01action=rss&amp;cntnt01showtemplate=false&amp;cntnt01returnid='.$gCms->variables['content_id'];
 
 			$text = '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="'.$url.'" />';
-			$content = str_replace('</head>', $text.'</head>', $content);
+			if (function_exists('str_ireplace'))
+			{
+				$content = str_ireplace('</head>', $text.'</head>', $content);
+			}
+			else
+			{
+				$content = eregi_replace('<\/head>', $text.'</head>', $content);
+			}
 		}
 		$this->log->debug('Leaving News ContentPostRender');
 	}
