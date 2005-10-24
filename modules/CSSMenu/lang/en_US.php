@@ -1,6 +1,8 @@
 <?php
 $lang['horizontal'] = 'Horizontal Stylesheet';
 $lang['vertical'] = 'Vertical Stylesheet';
+$lang['options'] = 'Options';
+$lang['usecss'] = 'Automatically include CSS in stylesheet tag output';
 $lang['helpshowadmin'] = '1/0, whether you want to show or not the admin link.';
 $lang['helpstart_element'] = 'the hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu.';
 $lang['helpnumber_of_levels'] = 'an integer, the number of levels you want to show in your menu.';

@@ -29,7 +29,7 @@ class CSSMenu extends CMSModule
 
   function GetVersion()
   {
-    return '1.1.7';
+    return '1.2';
   }
 
   function HasAdmin()
@@ -67,6 +67,7 @@ class CSSMenu extends CMSModule
   function GetChangeLog()
   {
     return "
+	  1.2: Admin added.  Lots of cleanup and getting ready for the 0.11 release<br />
       1.1.7: Added parameter 'relative' for creating context sensitive menus<br />
       1.1.6: Fixed script tag to be xhtml strict<br />
       Added horizontal option.<br />
@@ -105,21 +106,24 @@ class CSSMenu extends CMSModule
 		}
 	}
 
-  function ContentStylesheet(&$stylesheet)
-  {
-    if ($this->cms)
-    {
-      @ob_start();
-      @readfile(dirname(__FILE__).'/CSSMenuVertical.css');
-      $stylesheet = @ob_get_contents() . $stylesheet;
-      @ob_end_clean();
-
-      @ob_start();
-      @readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
-      $stylesheet = @ob_get_contents() . $stylesheet;
-      @ob_end_clean();
-    }
-  }
+	function ContentStylesheet(&$stylesheet)
+	{
+		if ($this->GetPreference('usecss', 'yes') == 'yes')
+		{
+			if ($this->cms)
+			{
+			@ob_start();
+			@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
+			$stylesheet = @ob_get_contents() . $stylesheet;
+			@ob_end_clean();
+			
+			@ob_start();
+			@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
+			$stylesheet = @ob_get_contents() . $stylesheet;
+			@ob_end_clean();
+			}
+		}
+	}
 
   function DoAction($name, $id, $params)
   {
@@ -358,6 +362,11 @@ class CSSMenu extends CMSModule
       }
       return "<!-- Displaying CSSMenu Module -->\n".$menu;
     }
+    else if ($name == 'updateoptions')
+    {
+		$this->SetPreference('usecss', $params['usecss']);
+		$this->Redirect($id, 'defaultadmin');
+    }
 	else if ($name == 'defaultadmin')
 	{
 		#The tabs
@@ -365,6 +374,7 @@ class CSSMenu extends CMSModule
 
 		echo $this->SetTabHeader('horizontal',$this->Lang('horizontal'));
 		echo $this->SetTabHeader('vertical',$this->Lang('vertical'));
+		echo $this->SetTabHeader('options',$this->Lang('options'));
 
 		echo $this->EndTabHeaders();
 
@@ -375,7 +385,7 @@ class CSSMenu extends CMSModule
 
 		@ob_start();
 		@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
-		$stylesheet = @ob_get_contents() . $stylesheet;
+		$stylesheet = @ob_get_contents();
 		@ob_end_clean();
 
 		echo '<p>'.$this->CreateTextArea(false, $id, $stylesheet, 'horizontalcss', '').'</p>';
@@ -386,11 +396,21 @@ class CSSMenu extends CMSModule
 
 		@ob_start();
 		@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
-		$stylesheet = @ob_get_contents() . $stylesheet;
+		$stylesheet = @ob_get_contents();
 		@ob_end_clean();
 
 		echo '<p>'.$this->CreateTextArea(false, $id, $stylesheet, 'verticalcss', '').'</p>';
 
+		echo $this->EndTab();
+		
+		echo $this->StartTab('options');
+		
+		echo $this->CreateFormStart($id, 'updateoptions');
+		
+		echo '<p>' . $this->Lang('usecss') . ':' . $this->CreateInputCheckbox($id, 'usecss', 'yes', $this->GetPreference('usecss', 'yes')) . '</p>';
+
+		echo $this->CreateInputSubmit($id, 'optionssubmitbutton', lang('submit'));
+		
 		echo $this->EndTab();
 
 		echo $this->EndTabContent();
