@@ -70,4 +70,3 @@ $lang['help'] = <<<EOF
 	<p>La façon la plus facile de l'utiliser est en conjonction avec le tag cms_module.  Cela insérera votre module dans votre template ou votre page page où vous le désirez, et y affichera les articles.  Exemple de synthaxe: <code>{cms_module module="news" number="5" category="beer"}</code></p>
 EOF;
 ?>
-
