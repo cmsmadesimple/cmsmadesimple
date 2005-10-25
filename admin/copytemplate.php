@@ -70,7 +70,7 @@ if ($access)
 			$onetemplate->id = -1; //Reset id so it will insert a new record
 			$onetemplate->name = $template; //Change name
 			$onetemplate->default = 0; //It can't be default
-			$result = $onetemplate->save();
+			$result = $onetemplate->Save();
 
 			if ($result)
 			{

@@ -7,6 +7,7 @@ stop some install problems people are having.
 * Added ability to link to an anchor with cms_selflink
 * Added CSSMenu module and made it the default menu for new
 installs
+* Added ability to copy a stylesheet
 * Added id and class parameters to the cms_selflink tag
 * Added apply button to editing HTML Blobs
 * Added Japanese translation

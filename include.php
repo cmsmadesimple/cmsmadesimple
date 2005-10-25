@@ -141,8 +141,9 @@ require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
-require_once(dirname(__FILE__) . '/lib/classes/class.htmlblob.inc.php');
-require_once(dirname(__FILE__) . '/lib/classes/class.template.inc.php');
+require_once(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
+require_once(dirname(__FILE__).'/lib/classes/class.template.inc.php');
+require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
 

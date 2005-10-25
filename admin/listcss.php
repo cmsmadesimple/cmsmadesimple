@@ -82,6 +82,7 @@ if (isset($_GET["message"])) {
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -98,6 +99,18 @@ if (isset($_GET["message"])) {
 				echo "<td><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
                 echo "</a></td>\n";
+
+				# if user has right to add (copy)
+				if ($addcss)
+				{
+					echo '<td><a href="copystylesheet.php?stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . $one['css_name'] . '">';
+                    echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
+                    echo "</a></td>\n";
+				}
+				else
+				{
+					echo "<td>&nbsp;</td>";
+				}
 
 				# if user has right to edit
 				if ($modify)
