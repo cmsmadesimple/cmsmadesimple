@@ -77,6 +77,7 @@ class CSSMenu extends CMSModule
 			$sheet->id = -1;
 			$sheet->name = 'Default CSSMenu Horizontal';
 			$sheet->value = $value;
+			$sheet->media_type = '';
 			$sheet->Save();
 		}
 		
@@ -91,9 +92,23 @@ class CSSMenu extends CMSModule
 			$sheet->id = -1;
 			$sheet->name = 'Default CSSMenu Vertical';
 			$sheet->value = $value;
+			$sheet->media_type = '';
 			$sheet->Save();
 		}
 	}
+	
+	function Upgrade($oldversion, $newversion)
+	{
+		$current_version = $oldversion;
+		switch($current_version)
+		{
+			case "1.1.5":
+			case "1.1.6":
+			case "1.1.7":
+				$this->Install();
+		}
+	}
+
 
   function GetChangeLog()
   {

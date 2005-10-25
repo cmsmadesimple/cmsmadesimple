@@ -3,7 +3,7 @@ $themeObject->DisplayMainDivEnd();
 $themeObject->OutputFooterJavascript();
 $themeObject->DisplayFooter();
 
-if ($config["debug"] == true)
+if ($gCms->config["debug"] == true)
 {
 	echo '<div id="DebugFooter">';
 	global $sql_queries;
