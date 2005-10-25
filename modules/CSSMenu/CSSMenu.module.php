@@ -29,7 +29,7 @@ class CSSMenu extends CMSModule
 
   function GetVersion()
   {
-    return '1.2';
+    return '1.2.1';
   }
 
   function HasAdmin()
@@ -113,6 +113,7 @@ class CSSMenu extends CMSModule
   function GetChangeLog()
   {
     return "
+	  1.2.1: Removed admin.  Instead creating a stylesheet on install that you attach to your template.<br />
 	  1.2: Admin added.  Lots of cleanup and getting ready for the 0.11 release<br />
       1.1.7: Added parameter 'relative' for creating context sensitive menus<br />
       1.1.6: Fixed script tag to be xhtml strict<br />
