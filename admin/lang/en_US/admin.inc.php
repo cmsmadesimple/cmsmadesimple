@@ -301,4 +301,8 @@ $lang['admin']['mediatype'] = 'Media Type'; //needs translation
 $lang['admin']['assignmentchanged'] = 'Group Assignments been updated.'; //needs translation
 $lang['admin']['adminajax'] = 'Javascript Admin'; //needs translation
 $lang['admin']['useajax'] = 'Use Dynamic Drag\'n\'Drop Admin where available?'; //needs translation
+$lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
+$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
+$lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
+$lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
 ?>

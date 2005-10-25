@@ -301,4 +301,8 @@ $lang['admin']['assignmentchanged'] = 'Group Assignments been updated.'; //needs
 $lang['admin']['adminindent'] = 'Content Display'; // needs translation //needs translation
 $lang['admin']['expand'] = 'Expand Section'; // needs translation //needs translation
 $lang['admin']['adminajax'] = 'Javascript Admin'; //needs translation
+$lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
+$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
+$lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
+$lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
 ?>

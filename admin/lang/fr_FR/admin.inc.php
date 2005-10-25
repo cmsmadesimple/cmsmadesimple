@@ -301,4 +301,8 @@ $lang['admin']['mediatype'] = 'Type de média';
 $lang['admin']['assignmentchanged'] = 'L\'assignement des utilisateus aux groupes a été modifié.';
 $lang['admin']['adminajax'] = 'Admininstration du javascript';
 $lang['admin']['useajax'] = 'Utiliser le cliquer-glisser dynamique dans l\'admin où cela est disponible?';
+$lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
+$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
+$lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
+$lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
 ?>

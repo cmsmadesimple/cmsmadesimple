@@ -59,7 +59,7 @@ if ($access)
 		{
 			if (StylesheetOperations::CheckExistingStylesheetName($stylesheet))
 			{
-				$error .= "<li>".lang('templateexists')."</li>";
+				$error .= "<li>".lang('stylesheetexists')."</li>";
 				$validinfo = false;
 			}
 		}
