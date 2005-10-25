@@ -34,7 +34,7 @@ class CSSMenu extends CMSModule
 
   function HasAdmin()
   {
-    return true;
+    return false;
   }
 
   function GetHelp($lang = 'en_US')
@@ -62,6 +62,37 @@ class CSSMenu extends CMSModule
 		$this->CreateParameter('relative_show_current', '1', $this->lang('helprelative'));
 		$this->CreateParameter('relative_show_parent', '1', $this->lang('helprelative'));
 
+	}
+	
+	function Install()
+	{
+		if (!StylesheetOperations::CheckExistingStylesheetName('Default CSSMenu Horizontal'))
+		{
+			@ob_start();
+			@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
+			$value = @ob_get_contents();
+			@ob_end_clean();
+			
+			$sheet = new Stylesheet();
+			$sheet->id = -1;
+			$sheet->name = 'Default CSSMenu Horizontal';
+			$sheet->value = $value;
+			$sheet->Save();
+		}
+		
+		if (!StylesheetOperations::CheckExistingStylesheetName('Default CSSMenu Vertical'))
+		{
+			@ob_start();
+			@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
+			$value = @ob_get_contents();
+			@ob_end_clean();
+
+			$sheet = new Stylesheet();
+			$sheet->id = -1;
+			$sheet->name = 'Default CSSMenu Vertical';
+			$sheet->value = $value;
+			$sheet->Save();
+		}
 	}
 
   function GetChangeLog()
@@ -106,24 +137,26 @@ class CSSMenu extends CMSModule
 		}
 	}
 
+	/*
 	function ContentStylesheet(&$stylesheet)
 	{
 		if ($this->GetPreference('usecss', 'yes') == 'yes')
 		{
 			if ($this->cms)
 			{
-			@ob_start();
-			@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
-			$stylesheet = @ob_get_contents() . $stylesheet;
-			@ob_end_clean();
-			
-			@ob_start();
-			@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
-			$stylesheet = @ob_get_contents() . $stylesheet;
-			@ob_end_clean();
+				@ob_start();
+				@readfile(dirname(__FILE__).'/CSSMenuVertical.css');
+				$stylesheet = @ob_get_contents() . $stylesheet;
+				@ob_end_clean();
+				
+				@ob_start();
+				@readfile(dirname(__FILE__).'/CSSMenuHorizontal.css');
+				$stylesheet = @ob_get_contents() . $stylesheet;
+				@ob_end_clean();
 			}
 		}
 	}
+	*/
 
   function DoAction($name, $id, $params)
   {
@@ -362,6 +395,7 @@ class CSSMenu extends CMSModule
       }
       return "<!-- Displaying CSSMenu Module -->\n".$menu;
     }
+    /*
     else if ($name == 'updateoptions')
     {
 		$this->SetPreference('usecss', $params['usecss']);
@@ -416,6 +450,7 @@ class CSSMenu extends CMSModule
 		echo $this->EndTabContent();
 
 	}
+	*/
   }
 }
 
