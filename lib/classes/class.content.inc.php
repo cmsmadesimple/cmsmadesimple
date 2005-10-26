@@ -531,6 +531,19 @@ class ContentBase
 		}
 		$this->mProperties->SetValue($name, $value);
 	}
+	
+	/**
+	 * Function content types to use to say whether or not they should show
+	 * up in lists where parents of content are set.  This will default to true,
+	 * but should be used in cases like Separator where you don't want it to 
+	 * have any children.
+	 * 
+	 * @since 0.11
+	 */
+	function WantsChildren()
+	{
+		return true;
+	}
 
 	/************************************************************************/
 	/* The rest																*/
@@ -1704,8 +1717,8 @@ class ContentManager
 				{
 					continue;
 				}
-				#Don't include separators either...
-				if ($one->Type() != 'separator')
+				#Don't include content types that do not want children either...
+				if ($one->WantsChildren() == true)
 				{
 					$result .= '<option value="'.$one->Id().'"';
 

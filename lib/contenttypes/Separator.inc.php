@@ -30,6 +30,11 @@ class separator extends ContentBase
 		#Turn off caching
 		$this->mCachable = false;
 	}
+	
+	function WantsChildren()
+	{
+		return false;
+	}
 
 	function FillParams($params)
 	{
