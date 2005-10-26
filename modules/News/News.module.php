@@ -19,7 +19,7 @@
 #$Id$
 
 class News extends CMSModule
-{		
+{
 	function GetName()
 	{
 		return 'News';
@@ -66,6 +66,7 @@ class News extends CMSModule
 		$this->CreateParameter('makerssbutton', 'true', $this->lang('helpmakerssbutton'));
 		$this->CreateParameter('dateformat', '%b %d, %Y', $this->lang('helpdateformat'));
 		$this->CreateParameter('number', '5', $this->lang('helpnumber'));
+		$this->mCachable = false;
 	}
 
 	function ContentPostRender(&$content)

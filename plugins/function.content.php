@@ -90,9 +90,14 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		else
 		{
+			$log->debug('Content cachable: ' . $pageinfo->content_cachable);
+			$result = '';
+			$oldvalue = $smarty->caching;
+			$smarty->caching = $pageinfo->content_cachable;
+			$result = $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'), '', $pageinfo->content_id);
+			$smarty->caching = $oldvalue;
 			$log->debug('Leaving smarty_cms_function_content');
-			#return '';
-			return $smarty->fetch('content:' . (isset($params['block'])?$params['block']:'content_en'), '', $pageinfo->content_id);
+			return $result;
 		}
 	}
 	$log->debug('Leaving smarty_cms_function_content');

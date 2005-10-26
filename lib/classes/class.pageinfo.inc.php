@@ -73,12 +73,12 @@ class PageInfoOperations
 
 		if (is_numeric($alias) && strpos($alias, '.') === FALSE && strpos($alias, ',') === FALSE) //Fix for postgres
 		{ 
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, t.template_id, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, c.cachable, t.template_id, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 			$dbresult = $db->Execute($query, array($alias, $alias));
 		}
 		else
 		{
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, t.template_id, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, c.cachable, t.template_id, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
 			$dbresult = $db->Execute($query, array($alias));
 		}
 
@@ -95,7 +95,7 @@ class PageInfoOperations
 				$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
 				$onepageinfo->template_id = $row['template_id'];
 				$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
-				$onepageinfo->content_cachable = true;
+				$onepageinfo->cachable = ($row['template_id'] == 1?true:false);
 				$result = $onepageinfo;
 			}
 		}
