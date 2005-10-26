@@ -82,33 +82,32 @@ class PHPLayers extends CMSModule
 		$_SESSION['layersmenutreeobj'] = new TreeMenu();
 	}
 
-	function ContentPreRender(&$content)
+	function ContentPostRender(&$content)
 	{
-		if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
+		#if (eregi('\{cms_module module=[\"\']?phplayers[\"\']?', $content))
+		if (strpos($content, '<!-- Displaying PHPLayers Module -->') !== FALSE)
 		{
-			$config = $this->cms->config;
+			$config =& $this->cms->config;
 			$text = '<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-browser_detection.js"></script>' . "\n" .
 			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu-library.js"></script>' . "\n".
 			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layerstreemenu-cookies.js"></script>' . "\n".
 			'<script language="JavaScript" type="text/javascript" src="'.$config['root_url'].'/modules/PHPLayers/phplayers/libjs/layersmenu.js"></script>' . "\n";
 
-			$content = ereg_replace("<\/head>", $text."</head>", $content);
+			if (function_exists('str_ireplace'))
+			{
+				$content = str_ireplace('</head>', $text.'</head>', $content);
+			}
+			else
+			{
+				$content = eregi_replace('<\/head>', $text.'</head>', $content);
+			}
 		}
-	}
-
-	function ContentPostRender(&$content)
-	{
-		global $gCms;
 		
-		#Check to see if the module had headers sent in prerender
 		if (strpos($content, 'layersmenu-library.js') !== FALSE) #No point in doing a regex...
 		{
 			$content = ereg_replace('<body([^>]*)>', '<body\1>' . $_SESSION['layersmenuobj']->getHeader(), $content);
 			$content = ereg_replace('</body>', $_SESSION['layersmenuobj']->getFooter() . '</body>' , $content);
 		}
-
-//		$_SESSION['layersmenuobj_next'] = null;
-//		$_SESSION['layersmenuobj'] = null;
 	}
 
 	function ContentStylesheet(&$stylesheet)
@@ -332,11 +331,11 @@ class PHPLayers extends CMSModule
 
 			if($tree == 1)
 			{
-				return $mid->getTreeMenu($menuid);
+				return "<!-- Displaying PHPLayers Module -->\n" . $mid->getTreeMenu($menuid);
 			}
 			else
 			{
-				return $mid->getMenu($menuid);
+				return "<!-- Displaying PHPLayers Module -->\n" . $mid->getMenu($menuid);
 			}
 		}
 

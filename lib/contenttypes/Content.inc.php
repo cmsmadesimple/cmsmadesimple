@@ -38,7 +38,6 @@ class content extends ContentBase
 	function SetProperties()
 	{
 		$this->mProperties->Add("string", "content_en"); //For later language support
-		$this->mProperties->Add("string", "headtags");
 
 		#Turn on preview
 		$this->mPreview = true;
@@ -65,7 +64,7 @@ class content extends ContentBase
 
 		if (isset($params))
 		{
-			$parameters = array('content_en', 'headtags');
+			$parameters = array('content_en');
 
 			//pick up the template id before we do parameters
 			if (isset($params['template_id']))
@@ -209,7 +208,6 @@ class content extends ContentBase
 		}
 		if ($tab == 1)
 		{
-			array_push($ret, array(lang('headtags').':',create_textarea(false, $this->GetPropertyValue('headtags'), 'headtags', 'pageheadtags', 'headtags', '', '', 80, 5)));
 			array_push($ret, array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));

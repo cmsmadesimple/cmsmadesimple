@@ -123,7 +123,7 @@ else
 
 	echo "[done]</p>";
 
-	echo "<p>Clearning cache dirs...";
+	echo "<p>Cleaning cache dirs...";
 
 	//Clear cache dirs
 	$cpath = TMP_CACHE_LOCATION;

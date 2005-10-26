@@ -41,6 +41,9 @@ of the template had any attributes
 Postgres
 * Fixed bug with News content type where clicking on details would
 link to the admin
+* Removed the head tags box for content.  Instead using a content
+block (eg. {content block='headtags'} will work the same way.
+This has an upgrade path.
 * Swedish translation was incorrectly using se_SE instead of sv_SE
 as it's locale name.
 * Updated ADODB to 4.65
