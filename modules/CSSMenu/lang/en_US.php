@@ -11,6 +11,6 @@ $lang['help'] = <<<EOF
   <h3>How do I use it?</h3>
   <p>Just insert the module into your template/page like: <code>{cms_module module='cssmenu'}</code></p>
   <p>On install, 2 stylesheets will be installed.  Attach the horizontal and/or vertical one to your template.  Copy it to make a new one without touching the original.</p>
-  <p>Note for Horizontal stylesheet, on line 14 adjust width: 600px; to suitable value for the width. (try '100%;')
+  <p>Note for Horizontal stylesheet, on line 14 adjust width: 600px; to suitable value for the width. (try '100%%;')
 EOF;
 ?>

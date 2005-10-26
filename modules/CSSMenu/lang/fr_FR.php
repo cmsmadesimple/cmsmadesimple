@@ -11,6 +11,6 @@ $lang['help'] = <<<EOF
   <h3>Comment l'utiliser?</h3>
   <p>Insérez simplement votre menu dans votre template/page ainsi: <code>{cms_module module='cssmenu'}</code></p>
   <p>A l'installation, 2 feuilles de style seront installées.  Attachez celle pour affichage horizonzal ou vertical à votre template.  Copiez-la pour créer une nouvelle feuille de style sans toucher à la feuille originale.</p>
-  <p>Note pour la feuille de style pour affichage horizontal, à la ligne 14, ajustez la largeur: 600px; à celle qui vous convient. (essayez '100%;')
+  <p>Note pour la feuille de style pour affichage horizontal, à la ligne 14, ajustez la largeur: 600px; à celle qui vous convient. (essayez '100%%;')
 EOF;
 ?>
