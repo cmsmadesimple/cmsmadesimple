@@ -13,6 +13,6 @@ $lang['help'] = <<<EOF
   <h3>Hvordan benytter jeg den?</h3>
   <p>Indsæt blot modulet i en side eller skabelon således: <code>{cms_module module='cssmenu'}</code></p>
   <p>Redigér /modules/CSSMenu/CSSMenu.css for at ændre på udseendet. Se ovenstående artikler for yderligere information.</p>
-  <p>Redigér /modules/CSSMenu/CSSMenuHorizontal.css for at ændre på udseendet. På linie 14 kan \"width: 600px;\" justeres til en passende værdi for bredden. (prøv '100%%')
+  <p>Redigér /modules/CSSMenu/CSSMenuHorizontal.css for at ændre på udseendet. På linie 14 kan \"width: 600px;\" justeres til en passende værdi for bredden. (prøv '100%;')
 EOF;
 ?>
