@@ -1684,11 +1684,28 @@ class ContentManager
 		{
 			$result .= '<select name="'.$name.'">';
 			$result .= '<option value="-1">None</option>';
+			
+			$curhierarchy = '';
 
 			foreach ($allcontent as $one)
 			{
-				#Don't include ourselves or separators
-				if ($one->Id() != $current && $one->Type() != 'separator')
+				if ($one->Id() == $current)
+				{
+					#Grab hierarchy just in case we need to check children
+					#(which will always be after)
+					$curhierarchy = $one->Hierarchy();
+					
+					#Then jump out.  We don't want ourselves in the list.
+					continue;
+				}
+				#If it's a child of the current, we don't want to show it as it
+				#could cause a deadlock.
+				if ($curhierarchy != '' && strstr($one->Hierarchy(), $curhierarchy) == $one->Hierarchy())
+				{
+					continue;
+				}
+				#Don't include separators either...
+				if ($one->Type() != 'separator')
 				{
 					$result .= '<option value="'.$one->Id().'"';
 
