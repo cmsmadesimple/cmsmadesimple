@@ -165,6 +165,8 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
+header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$$pageinfo->template_encoding:get_encoding()));
+
 echo $html;
 
 @ob_flush();
