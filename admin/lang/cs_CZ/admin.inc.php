@@ -301,8 +301,8 @@ $lang['admin']['filemanager'] = 'Správce souborů';
 $lang['admin']['useajax'] = 'Používat dynamické \'Uchop a Pusť\' menu kde je to možné';
 $lang['admin']['assignmentchanged'] = 'Přiřazení skupiny aktualizováno.';
 $lang['admin']['adminajax'] = 'Javascript administrace';
-$lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
-$lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
-$lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
-$lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
+$lang['admin']['stylesheetexists'] = 'Styl existuje';
+$lang['admin']['errorcopyingstylesheet'] = 'Chyba při kopírování stylu';
+$lang['admin']['copystylesheet'] = 'Kopírovat styl';
+$lang['admin']['newstylesheetname'] = 'Jméno nového stylu';
 ?>
