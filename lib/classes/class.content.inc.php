@@ -1081,6 +1081,19 @@ class ContentBase
 	 */
 	function GetURL()
 	{
+		global $gCms;
+		$config = &$gCms->config;
+		$url = "";
+		if ($config["assume_mod_rewrite"])
+		{
+			$url = $config["root_url"]."/".$this->mAlias.
+				(isset($config['page_extension'])?$config['page_extension']:'.shtml');
+		}
+		else
+		{
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+		}
+		return $url;
 	}
 
 	/**
@@ -1646,15 +1659,16 @@ class ContentManager
 	function GetAllContent($loadprops=true)
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db = &$gCms->db;
 
-        if (isset($gCms->ContentCache))
+        if (isset($gCms->ContentCache) &&
+            ($loadprops == false || $gCms->variables['cachedprops'] == true))
             {
             return $gCms->ContentCache;
             }
 
 		$gCms->ContentCache = array();
-
+        $gCms->variables['cachedprops'] = $loadprops;
 		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 		$dbresult = $db->Execute($query);
 
