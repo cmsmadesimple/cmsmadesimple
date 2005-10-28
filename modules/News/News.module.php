@@ -446,6 +446,9 @@ Posted: {$entry->postdate|date_format}
 
 	function DoAction($action, $id, $params, $returnid = -1)
 	{
+		$log =& LoggerManager::getLogger('News.module.php');
+		$log->debug('Starting DoAction');
+
 		$db = $this->cms->db;
 		switch ($action)
 		{
@@ -558,6 +561,7 @@ Posted: {$entry->postdate|date_format}
 				}
 				else
 				{
+					#$log->debug($this->ProcessTemplateFromDatabase('displaysummary'));
 					echo $this->ProcessTemplateFromDatabase('displaysummary');
 				}
 
@@ -598,6 +602,7 @@ Posted: {$entry->postdate|date_format}
 				}
 				else
 				{
+					#$log->debug($this->ProcessTemplateFromDatabase('displaydetail'));
 					echo $this->ProcessTemplateFromDatabase('displaydetail');
 				}
 
@@ -1572,6 +1577,9 @@ class NewsModule extends CMSModuleContentType
 		global $gCms;
 		$variables = &$gCms->variables;
 
+		$log =& LoggerManager::getLogger('News.module.php');
+		$log->debug('Starting Show');
+
 		$params = array();
 
 		if (strlen($this->GetPropertyValue('number')) > 0)
@@ -1592,9 +1600,10 @@ class NewsModule extends CMSModuleContentType
 		//Buffer all this crap spit out by the News module and return it
 		@ob_start();
 		$newnews->DoAction('default', 'newsmodule', $params, $variables['page_id']);
-		$text .= @ob_get_contents();
+		$text = @ob_get_contents();
 		@ob_end_clean();
-		return $text;
+		#return $text;
+		return '{literal}'.$text.'{/literal}';
 	}
 
 	function GetURL()
