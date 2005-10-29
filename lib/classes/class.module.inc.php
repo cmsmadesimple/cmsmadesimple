@@ -1386,6 +1386,10 @@ class CMSModule extends ModuleOperations
 		foreach ($items as $key=>$value)
 		{
 			$text .= '<input type="radio" name="'.$id.$name.'" value="'.$value.'"';
+			if ($addttext != '')
+			{
+				$text .= ' ' . $addttext;
+			}
 			if ($selectedvalue == $value)
 			{
 				$text .= ' ' . 'checked="checked"';
