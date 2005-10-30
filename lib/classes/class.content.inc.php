@@ -1751,7 +1751,30 @@ class ContentManager
 
 		return $result;
 	}
-	
+
+
+	// function to map an alias to a page id
+	// returns false if nothing cound be found.
+	function GetPageIDFromAlias( $alias )
+	{
+	  if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
+	    {
+	      return $alias;
+	    }
+
+	  $params = array($alias);
+	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+	  $dbresult = $db->Execute($query, $params);
+	  
+	  if ( !$dbresult || !$dbresult->RowCount() )
+	    {
+	      return false;
+	    }
+	  $row = $dbresult->FetchRow();
+	  return $row['content_id'];
+	}
+
+
 	function CheckAliasError($alias, $content_id = -1)
 	{
 		global $gCms;

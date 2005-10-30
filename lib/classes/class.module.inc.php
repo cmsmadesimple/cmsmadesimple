@@ -212,7 +212,8 @@ class CMSModule extends ModuleOperations
 	var $cms;
 	var $curlang;
 	var $langhash;
-	var	$params;
+	var $params;
+        var $error;
 
 	function CMSModule()
 	{
@@ -221,6 +222,7 @@ class CMSModule extends ModuleOperations
 		$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
 		$this->langhash = array();
 		$this->params = array();
+		$this->error = '';
 		$this->log =& LoggerManager::getLogger('module.php');
 		array_push($this->params, array(
 			'name' => 'lang',
@@ -233,6 +235,28 @@ class CMSModule extends ModuleOperations
 		$this->smarty = &$gCms->smarty;
 
 		$this->SetParameters();
+	}
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Error Functions
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Set an error condition
+	 */
+	function SetError($str = '')
+	{
+	  $this->error = $str;
+	}
+
+	/**
+	 * Return the last error
+	 */
+	function GetLastError()
+	{
+	  return $this->error;
 	}
 
 	/**

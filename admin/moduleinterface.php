@@ -26,7 +26,6 @@ check_login($config);
 
 $module = "";
 if (isset($_REQUEST["module"])) $module = $_REQUEST["module"];
-
 if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
 	$userid = get_userid();

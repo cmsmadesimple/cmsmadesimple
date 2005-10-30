@@ -103,14 +103,24 @@ if ($access)
 
 			#now insert a record
 
-			if (!isset($result) || $result === FALSE)
+			if( !isset( $result ) || $result === FALSE )
 			{
 				$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
 				$db->Execute($query,array($_GET['newversion'],$module));
 			}
 			else
 			{
-				//TODO: Echo error
+					@ob_start();
+					echo $modinstance->GetLastError();
+					$content = @ob_get_contents();
+					@ob_end_clean();
+					echo '<div class="pagecontainer">';
+					echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+					echo $content;
+					echo "</div>";
+					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+					include_once("footer.php");
+					exit;
 			}
 		}
 
