@@ -247,7 +247,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			else
 			{
 				$menu .= "<li><a href=\"".$onecontent->GetURL()."\"";
-				if (isset($gCms->variables['page_id']) && $onecontent->Id() == $gCms->variables['page_id'])
+				if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
 				{
 					$menu .= " class=\"currentpage\"";
 				}
