@@ -1693,6 +1693,12 @@ class CMSModule extends ModuleOperations
 				# Sucks to be here...  Don't use Lang unless there are language files...
 				# Get ready for a lot of Add Me's
 			}
+			# try to load an admin modifiable version of the lang file if one exists
+			if( is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
+			{
+ 			        include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+				$this->langhash = &$lang;
+			}
 		}
 
 		if (isset($this->langhash[$name]))
