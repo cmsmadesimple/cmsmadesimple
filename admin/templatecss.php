@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: listcssassoc.php 1418 2005-03-06 22:08:07Z wishy $
+#$Id$
 
 /**
  * This page is in charge with showing the CSS associated with an element, be it

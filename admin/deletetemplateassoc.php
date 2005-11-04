@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: deletecssassoc.php 1112 2004-12-30 14:54:53Z wishy $
+#$Id$
 
 /**
  * This page is used to delete CSS association. It doesn't show any HTML and only does

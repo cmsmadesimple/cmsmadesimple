@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.template.inc.php 1090 2004-12-28 18:12:54Z wishy $
+#$Id$
 
 /**
  * sequence - a helper class for module developers
