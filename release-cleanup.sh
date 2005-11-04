@@ -19,7 +19,7 @@ rm -fr images/cms/*.svg
 #rm -fr tmp/templates_c/*
 rm -fr svn-propset
 rm -fr svn-propset-file
-rm -fr find-mine
+rm -fr find-mime
 rm -fr admin/lang/*.sh
 rm -fr admin/lang/*.pl
 rm -fr modules/LinkBlog
