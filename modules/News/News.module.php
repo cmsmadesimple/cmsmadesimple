@@ -45,6 +45,11 @@ class News extends CMSModule
 		return '2.0';
 	}
 
+	function MinimumCMSVersion()
+	{
+		return '0.11-beta4';
+	}
+
 	function GetAdminDescription()
 	{
 		return $this->Lang('description');
@@ -247,6 +252,20 @@ Posted: {$entry->postdate|date_format}
 		$query = 'INSERT INTO '.cms_db_prefix().'module_news_categories (news_category_id, news_category_name, parent_id, create_date, modified_date) VALUES (?,?,?,?,?)';
 		$db->Execute($query, array($catid, 'General', -1, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		$this->UpdateHierarchyPositions();
+
+		# Setup permissions
+		$perm_id = $db->GetOne("SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = 'Modify News'");
+		$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Admin'");
+
+		$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+		$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", '". $db->DBTimeStamp(time()) . "', '" . $db->DBTimeStamp(time()) . "')";
+		$result = $db->Execute($query);
+
+		$group_id = $db->GetOne("SELECT group_id FROM ".cms_db_prefix()."groups WHERE group_name = 'Editor'");
+
+		$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
+		$query = "INSERT INTO " . cms_db_prefix() . "group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".$new_id.", ".$group_id.", ".$perm_id.", '". $db->DBTimeStamp(time()) . "', '" . $db->DBTimeStamp(time()) . "')";
+		$result = $db->Execute($query);
 	}
 
 	function InstallPostMessage()

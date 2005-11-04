@@ -444,7 +444,9 @@ class Smarty_CMS extends Smarty {
 					$contentobj->GetAdditionalContentBlocks();
 				}
 
+				$log->debug('Running Show() now');
 				$tpl_source = $contentobj->Show($tpl_name);
+				$log->debug('Done running Show()');
 
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)

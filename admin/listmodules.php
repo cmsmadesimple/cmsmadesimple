@@ -354,7 +354,13 @@ else if ($action == 'missingdeps')
 
 			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 			echo "<td>$key</td>\n";
-            if (!isset($dbm[$key])) #Not installed, lets put up the install button
+			#Make sure it's a valid module for this version of CMSMS
+			if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
+			{
+				echo "<td>".$dbm[$key]['Version']."</td>";
+				echo '<td colspan="3">Minimum CMSMS Version Required: '.$modinstance->MinimumCMSVersion().'</td>';
+			}
+            else if (!isset($dbm[$key])) #Not installed, lets put up the install button
             {
                 $brokendeps = 0;
 

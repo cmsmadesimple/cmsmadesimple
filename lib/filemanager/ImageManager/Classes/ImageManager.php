@@ -210,7 +210,7 @@ class ImageManager
 	{
 		$total = 0;
 
-		if(is_dir($path)) 
+		if(($path != "/") && (is_dir($path)))
 		{
 			$d = @dir($path);
 

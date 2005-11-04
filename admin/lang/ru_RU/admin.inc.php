@@ -307,4 +307,5 @@ $lang['admin']['stylesheetexists'] = 'Stylesheet Exists'; //needs translation
 $lang['admin']['errorcopyingstylesheet'] = 'Error Copying Stylesheet'; //needs translation
 $lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
 $lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
+$lang['admin']['target'] = 'Target'; //needs translation
 ?>

@@ -16,6 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+$LOAD_ALL_MODULES=1;
 require(dirname(dirname(__FILE__)).'/fileloc.php');
 
 $config = CONFIG_FILE_LOCATION;
@@ -176,7 +177,7 @@ function showPageOne() {
   
   	if ($continueon)
 	{
-		echo "<p>All of your tests show successful.  It is time to setup your database.</p>\n";
+		echo "<p>All of your tests show successful.  Please click the Continue button.</p>\n";
 		echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input type="submit" value="Continue" /></p>';
 	}
 	else
@@ -469,7 +470,10 @@ function showPageFour($sqlloaded = 0) {
 			    <INPUT TYPE="hidden" NAME="username" VALUE="<?php echo $_POST['username']?>">
 				<INPUT TYPE="hidden" NAME="password" VALUE="<?php echo $_POST['password']?>">
 			    <INPUT TYPE="hidden" NAME="prefix" VALUE="<?php echo $_POST['prefix']?>">
-				<INPUT TYPE="hidden" NAME="bbcode" VALUE="false" LENGTH="5" MAXLENGTH="5">
+				<INPUT TYPE="hidden" NAME="bbcode" VALUE="false">
+				<?php if (isset($_POST["createtables"])) { ?>
+				<INPUT TYPE="hidden" NAME="createtables" VALUE="true">
+				<?php } ?>
 			</TD>
 		</TR>
 		<!--
@@ -538,23 +542,6 @@ function showPageFive() {
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
 
-	/*
-    $content = "<?php\n\n#Database connection information'\n";
-	$content .= '$this->dbms = "mysql";'."\n";
-    $content .= '$this->db_hostname = "'.$_POST['host'].'";'."\n";
-    $content .= '$this->db_username = "'.$_POST['username'].'";'."\n";
-    $content .= '$this->db_password = "'.$_POST['password'].'";'."\n";
-    $content .= '$this->db_name = "'.$_POST['database'].'";'."\n";
-    $content .= '$this->db_prefix = "'.$_POST['prefix'].'";'."\n";
-    $content .= '$this->root_url = "'.$_POST['docroot'].'";'."\n";
-    $content .= '$this->root_path = "'.addslashes($_POST['docpath']).'";'."\n";
-    $content .= '$this->query_var = "'.$_POST['querystr'].'";'."\n";
-    $content .= '$this->use_bb_code = '.$_POST['bbcode'].';'."\n";
-	$content .= '$this->use_smarty_php_tags = false;'."\n";
-	$content .= '$this->previews_path = $this->root_path . "/tmp/cache";'."\n";
-    $content .= "\n?>\n";
-	*/
-
     if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
 		cms_config_save($newconfig);
     } else {
@@ -568,6 +555,68 @@ function showPageFive() {
 		{
 			echo "Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.";
 		}
+	}
+
+	#Do module installation
+	if (isset($_POST["createtables"]))
+	{
+		echo 'Installing modules...';
+
+		include_once dirname(dirname(__FILE__)) . '/include.php';
+
+		global $gCms;
+
+		$db = &ADONewConnection($newconfig['dbms'], 'cms:pear');
+		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
+		$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		$gCms->db =& $db;
+
+		foreach ($gCms->modules as $modulename=>$value)
+		{
+			if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
+			{
+				$modinstance = $gCms->modules[$modulename]['object'];
+				$result = $modinstance->Install();
+
+				#now insert a record
+				if (!isset($result) || $result === FALSE)
+				{
+					$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1)";
+					$db->Execute($query);
+					
+					/*
+					#and insert any dependancies
+					if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+					{
+						#Now check to see if we can satisfy any deps
+						foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+						{
+							$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
+							$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+						}
+					}
+
+					#and show the installpost if necessary...
+					if ($modinstance->InstallPostMessage() != FALSE)
+					{
+						@ob_start();
+						echo $modinstance->InstallPostMessage();
+						$content = @ob_get_contents();
+						@ob_end_clean();
+						echo '<div class="pagecontainer">';
+						echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';
+						echo $content;
+						echo "</div>";
+						echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+						include_once("footer.php");
+						exit;
+						
+					}
+					*/
+				}
+			}
+		}
+		echo 'done<br />';
 	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);

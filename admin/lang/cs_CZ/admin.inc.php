@@ -305,4 +305,5 @@ $lang['admin']['stylesheetexists'] = 'Styl existuje';
 $lang['admin']['errorcopyingstylesheet'] = 'Chyba při kopírování stylu';
 $lang['admin']['copystylesheet'] = 'Kopírovat styl';
 $lang['admin']['newstylesheetname'] = 'Jméno nového stylu';
+$lang['admin']['target'] = 'Target'; //needs translation
 ?>

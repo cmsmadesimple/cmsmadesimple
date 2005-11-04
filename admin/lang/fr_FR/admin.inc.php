@@ -305,4 +305,5 @@ $lang['admin']['stylesheetexists'] = 'La feuille de style existe';
 $lang['admin']['errorcopyingstylesheet'] = 'Erreur durant la copie de la feuille de style';
 $lang['admin']['copystylesheet'] = 'Copier la feuille de style';
 $lang['admin']['newstylesheetname'] = 'Nom de la nouvelle feuille de style';
+$lang['admin']['target'] = 'Target'; //needs translation
 ?>

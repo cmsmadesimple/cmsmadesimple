@@ -111,8 +111,9 @@ class ModuleOperations extends Smarty
 											$newmodule = new $modulename;
 											$name = $newmodule->GetName();
 
-											#Check to see if version in db matchs file version
-											if ($row['version'] == $newmodule->GetVersion())
+											#Check to see if version in db matches file version
+											global $CMS_VERSION;
+											if ($row['version'] == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 											{
 												$cmsmodules[$name]['object'] = $newmodule;
 												$cmsmodules[$name]['installed'] = true;
@@ -303,6 +304,15 @@ class CMSModule extends ModuleOperations
 	function GetVersion()
 	{
 		return '0.0.0.1';
+	}
+
+	/**
+	 * Returns the minimum version necessary to run this version of the module.
+	 */
+	function MinimumCMSVersion()
+	{
+		global $CMS_VERSION;
+		return $CMS_VERSION;
 	}
 
 	/**

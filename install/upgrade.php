@@ -37,7 +37,8 @@ function module_autoupgrade()
 
 			$query = "SELECT version from ".cms_db_prefix()."modules WHERE module_name = ?";
 			$result = $db->Execute($query, array($modulename));
-			while ($row = $result->FetchRow()) {
+			while ($row = $result->FetchRow())
+			{
 				$module_version = $row['version'];
 			}
 
