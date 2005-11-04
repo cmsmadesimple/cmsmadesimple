@@ -1233,7 +1233,7 @@ class CMSModule extends ModuleOperations
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
-	 * @param string The html name of the hidden field 
+	 * @param string The html name of the checkbox
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
@@ -1367,6 +1367,17 @@ class CMSModule extends ModuleOperations
 		return $text;
 	}
 
+	/**
+	 * Returns the xhtml equivalent of a multi-select list.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it is xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the select list
+	 * @param string An array of items to put into the list... they should be $key=>$value pairs
+	 * @param string An array of items in the list that should default to selected.
+	 * @param string The number of rows to be visible in the list (before scrolling).
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
 	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='')
 	{
 		$text = '<select name="'.$id.$name.'"';
@@ -1398,13 +1409,13 @@ class CMSModule extends ModuleOperations
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
-	 * @param string The html name of the dropdown list
-	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
-	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
-	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
+	 * @param string The html name of the radio group
+	 * @param string An array of items to create as radio buttons... they should be $key=>$value pairs
+	 * @param string The default selected index of the radio group.  Setting to -1 will result in the first choice being selected
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param string A delimiter to throw between each radio button, e.g., a <br /> tag or something for formatting
 	 */
-	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='')
+	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 	{
 		$text = '';
 		foreach ($items as $key=>$value)
@@ -1419,7 +1430,7 @@ class CMSModule extends ModuleOperations
 				$text .= ' ' . 'checked="checked"';
 			}
 			$text .= ' />';
-			$text .= $key;
+			$text .= $key . $delimiter;
 		}
 		
 		return $text;
@@ -1449,7 +1460,7 @@ class CMSModule extends ModuleOperations
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
-	 * @param string The action that this form should do when the form is submitted
+	 * @param string The action that this form should do when the link is clicked
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string The text that will have to be clicked to follow the link
 	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
