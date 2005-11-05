@@ -527,6 +527,18 @@ class CMSModule extends ModuleOperations
 	 * different distributions with different modules included in them.  Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
+	function AllowAutoInstall()
+	{
+		return TRUE;
+	}
+
+	/**
+	 * Returns whether or not modules should be autoupgraded while upgrading
+	 * CMS versions.  Generally only useful for modules included with the CMS
+	 * base install, but there could be a situation down the road where we have
+	 * different distributions with different modules included in them.  Defaults
+	 * to TRUE, as there is not many reasons to not allow it.
+	 */
 	function AllowAutoUpgrade()
 	{
 		return TRUE;
