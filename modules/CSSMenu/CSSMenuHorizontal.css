@@ -1,4 +1,4 @@
-body { font: normal 62.5% verdana; }
+#primary-nav-horiz ul { z-index: 100;}
 
 ul.cssmenu-horizontal,
 ul.cssmenu-horizontal ul {
@@ -66,8 +66,8 @@ ul.cssmenu-horizontal li.over ul,
 ul.cssmenu-horizontal li li.over ul,
 ul.cssmenu-horizontal li li li.over ul { display: block; } /* The magic */
 
-.cssmenu-horizontal ul, ul.cssmenu-horizontal li.menuparent { background: transparent url(modules/CSSMenu/images/arrow-down.gif) right center no-repeat; }
-.cssmenu-horizontal ul, ul.cssmenu-horizontal li li.menuparent { background: transparent url(modules/CSSMenu/images/arrow-right.gif) right center no-repeat; }
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li.menuparent { background: transparent url(/modules/CSSMenu/modules/CSSMenu/images/arrow-down.gif) right center no-repeat; }
+.cssmenu-horizontal ul, ul.cssmenu-horizontal li li.menuparent { background: transparent url(/modules/CSSMenu/modules/CSSMenu/images/arrow-right.gif) right center no-repeat; }
 
 ul.cssmenu-horizontal li.menuparent:hover,
 ul.cssmenu-horizontal li.over { background-color: #f9f9f9 !important; }
