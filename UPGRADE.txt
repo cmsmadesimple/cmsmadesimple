@@ -1,0 +1,21 @@
+1.  Untar the source package to document root dir or your webserver
+        - cd DOCUMENT_ROOT
+        - tar xvfz cms-VERSION.tar.gz
+OR
+    check out the latest version from subversion
+        - svn co http://svn.cmsmadesimple.org/cms/trunk
+
+2.  Copy all of the files over top of your existing installation
+
+3.  If upgrading from a version pervious to 0.5, make the uploads dir writable by the web server user.
+        - chmod 777 uploads
+
+4.  Upgrade needs write access to your config.php file.  This is only until the upgrade is complete.
+	- chmod 666 config.php
+
+5.  Point your browser to the install/upgrade.php page to be guided through the upgrade procedure.  Some releases may not have to do any upgrades, so if it says that it's up to date, don't panic.
+
+6.  After the upgrade is complete, for security sake, you should set your config.php back to a read-only state.
+        - chmod 444 config.php
+
+7.  Check your Plugin Management page to make sure there are no modules that need an upgrade.  If they do, please click the Upgrade link next to each of them.

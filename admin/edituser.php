@@ -1,0 +1,222 @@
+<?php
+#CMS - CMS Made Simple
+#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#This project's homepage is: http://cmsmadesimple.sf.net
+#
+#This program is free software; you can redistribute it and/or modify
+#it under the terms of the GNU General Public License as published by
+#the Free Software Foundation; either version 2 of the License, or
+#(at your option) any later version.
+#
+#This program is distributed in the hope that it will be useful,
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#GNU General Public License for more details.
+#You should have received a copy of the GNU General Public License
+#along with this program; if not, write to the Free Software
+#Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
+
+$CMS_ADMIN_PAGE=1;
+
+require_once("../include.php");
+require_once("../lib/classes/class.user.inc.php");
+
+check_login();
+
+$error = "";
+
+$dropdown = "";
+
+$user = "";
+if (isset($_POST["user"])) $user = $_POST["user"];
+
+$password = "";
+if (isset($_POST["password"])) $password = $_POST["password"];
+
+$passwordagain = "";
+if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
+
+$firstname = "";
+if (isset($_POST["firstname"])) $firstname = $_POST["firstname"];
+
+$lastname = "";
+if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
+
+$email = "";
+if (isset($_POST["email"])) $email = $_POST["email"];
+
+$adminaccess = 1;
+if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
+
+$active = 1;
+if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
+
+$user_id = -1;
+if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
+else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
+
+$thisuser = UserOperations::LoadUserByID($user_id);
+if (strlen($thisuser->username) > 0)
+    {
+    $CMS_ADMIN_SUBTITLE = $thisuser->username;
+    }
+
+$userid = get_userid();
+$access = check_permission($userid, 'Modify Users') || ($userid == $user_id);
+
+$use_wysiwyg = "";
+#if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
+#else{$use_wysiwyg = get_preference($userid, 'use_wysiwyg');}
+
+if ($access) {
+
+	if (isset($_POST["cancel"])) {
+		redirect("listusers.php");
+		return;
+	}
+
+	if (isset($_POST["edituser"])) {
+	
+		$validinfo = true;
+
+		if ($user == "") {
+			$validinfo = false;
+			$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
+		}
+
+		if ($password != $passwordagain) {
+			$validinfo = false;
+			$error .= "<li>".lang('nopasswordmatch')."</li>";
+		}
+
+		if ($validinfo) {
+			#set_preference($userid, 'use_wysiwyg', $use_wysiwyg);
+			#audit(-1, '', 'Edited User');
+
+			$result = false;
+			if ($thisuser)
+			{
+				$thisuser->username = $user;
+				$thisuser->firstname = $firstname;
+				$thisuser->lastname = $lastname;
+				$thisuser->email = $email;
+				$thisuser->adminaccess = $adminaccess;
+				$thisuser->active = $active;
+				if ($password != "")
+				{
+					$thisuser->SetPassword($password);
+				}
+				
+				#Perform the edituser_pre callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->EditUserPre($thisuser);
+					}
+				}
+
+
+				$result = $thisuser->save();
+			}
+
+			if ($result)
+			{
+				audit($user_id, $thisuser->username, 'Edited User');
+
+				#Perform the edituser_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->EditUserPost($thisuser);
+					}
+				}
+
+				redirect("listusers.php");
+			}
+			else {
+				$error .= "<li>".lang('errorupdatinguser')."</li>";
+			}
+		}
+
+	}
+	else if ($user_id != -1) {
+		$user = $thisuser->username;
+		$firstname = $thisuser->firstname;
+		$lastname = $thisuser->lastname;
+		$email = $thisuser->email;
+		$adminaccess = $thisuser->adminaccess;
+		$active = $thisuser->active;
+	}
+}
+
+include_once("header.php");
+
+if (!$access) {
+	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('edituser')))."</p></div>";	
+}
+else {
+
+	if ($error != "") {
+		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
+	}
+
+?>
+
+<div class="pagecontainer">
+	<p class="pageheader"><?php echo lang("edituser"); ?></p>
+	<form method="post" action="edituser.php">
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('name')?>:</p>
+			<p class="pageinput"><input type="text" name="user" maxlength="25" value="<?php echo $user?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('password')?>:</p>
+			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('passwordagain')?>:</p>
+			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('firstname')?>:</p>
+			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('lastname')?>:</p>
+			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('email')?>:</p>
+			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('active')?>:</p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">
+				<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
+				<input type="hidden" name="edituser" value="true" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
+				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+			</p>
+		</div>
+	</form>
+</div>
+<?php
+
+}
+
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
+include_once("footer.php");
+
+# vim:ts=4 sw=4 noet
+?>

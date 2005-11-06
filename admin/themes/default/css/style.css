@@ -1,0 +1,144 @@
+/* CMS Made Simple - Modern Theme */
+/* 2005 (c) Alexander Endresen - alexander@endresen.org */
+/* General tags */
+A { text-decoration: none; }
+A:hover { text-decoration: underline; }
+BODY { font-size: 62.5%; font-family: Verdana, Arial, Helvetica, sans-serif; height: 100%; margin: 0px; padding: 0px; background: #385C72; }
+H1 { font-size: 2em }
+H2 { font-size: 1.6em }
+H3 { font-size: 1.2em }
+H4 { font-size: 1em }
+BLOCKQUOTE, INPUT, LI, SELECT, TH, TD { font-size:1em; }
+P { font-size: 1em; margin: 0px; }
+FORM { margin: 0px; display: inline; }
+INPUT { font-family: Verdana, Arial, Helvetica, sans-serif; border: 1px solid #666666; font-size: 1.2em; }
+TEXTAREA { font-family: Verdana, Arial, Helvetica, sans-serif; border: 1px solid #666666; font-size: 1.2em; height: 30em; width: 48em; }
+SELECT { font-family: Verdana, Arial, Helvetica, sans-serif; border: 1px solid #666666; }
+DIV { text-align: left; }
+TH, TD { text-align: left; }
+	
+/* Login page */
+div.lblayout { width: 50em; margin-left: auto; margin-right: auto; height: auto; }
+div.lbtopmargin { margin-top: 100px; }
+div.lball { text-align: center; }
+div.lbcontainer { background: #ececec; border: 1px solid #555555; margin-top: 3px; overflow: hidden; padding: 10px; }
+div.lbinfo { background-image: url(../images/vstippled.gif); background-position: top right; background-repeat: repeat-y; float: left; padding-right: 1em; text-align: center; width: 24em; }
+div.lbfields { background-image: url(../images/vstippled.gif); background-position: top left; background-repeat: repeat-y; float: left; margin-left: -1px; padding-left: 1em; }
+div.lbfieldstext { float: left; }
+div.lbinput { float: left; margin-left: 10px; }
+input.lbsubmit { background-color: #999999; color: #ffffff; margin-top: 5px; cursor: pointer; }
+input.lbpassword { margin-top: 5px; }
+p.lbuser { color: #555555; font-size: 1.2em; }
+p.lbpass { color: #555555; font-size: 1.2em; margin-top: 10px; }
+
+/* Main Page - Menu */
+#nav, #nav ul { list-style: none; padding: 0; margin: 0; }
+#nav ul { border: 1px solid #c6c3bd; }	
+#nav a { display: block; color: #384654; text-decoration: none; padding-left: 10px; padding-right: 10px; }
+#nav li a { font-size: 13px; padding-bottom: 2px; margin-top: 2px; }
+#nav li ul a { text-align: left; padding-bottom: 0px; margin-top: 0px; position: relative; }
+#nav li { float: left; padding: 0; }
+#nav li ul { position: absolute; display: none; height: auto; width: auto; background: #F8F8F8; margin: 0; padding: 0px; }
+#nav li li { float: none; padding: 0px; margin: 0px;  }
+#nav li:hover ul ul, #nav li.cssHover ul ul { display: none; }
+#nav li:hover ul, #nav li.cssHover ul { display: block; }
+#nav li:hover, #nav li.cssHover { background: #ABB0B6; }
+li.selected { background: #BDC0C6; }
+
+/* Nav Tools */
+div.navt_menu { position: absolute; right: 0px; }
+div.navt_show { background-image:url(themes/default/images/show_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+div.navt_hide {	background-image:url(themes/default/images/hide_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+#navt_container { background-color: #BDC0C6; border: 1px solid #c6c3bd; float: left; width: 20em; }
+#navt_tabs div { background-color: #BDC0C6; color: #384654; cursor: pointer; float: left; padding-left: 8px; padding-right: 8px; text-align: center; }
+#navt_tabs div:hover, #navt_tabs div.cssHover { background-color: #ABB0B6; }
+#navt_tabs div.active { background-color: #ececec; }
+#navt_content { background-color: #ececec; color: #384654; padding: 5px; }
+#navt_content a { color: #384654; }
+.visible { display: block; }
+.invisible { display: none; }
+
+/* Page Tabs - used for all page tabs */
+#page_tabs { overflow: hidden; padding-top: 10px; }
+#page_tabs div { background: #9CA2A9; color: #ffffff; cursor: pointer; float: left; font-size: 1.1em; margin-right: 5px; padding-left: 8px; padding-right: 8px; text-align: center; }
+#page_tabs div:hover, #page_tabs div.cssHover { background-color: #7A838B; }
+#page_content { background-color: #E1E1E1; border: 1px solid #385C72; padding-bottom: 5px; padding-right: 5px; padding-left: 5px; }
+#page_tabs div.active { background: #385C72; }
+
+/* top*.php files */
+a.itemlink { color: #384654; font-size: 1.1em; font-weight: bold; }
+a.itemsublink { color: #384654; }
+div.itemmenucontainer { background-color: #ececec; border: solid 1px #666666; color: #384654; margin: 10px; padding: 5px; width: 50em;  }
+div.itemoverflow { overflow: hidden; }
+div.itemoverflow img { border: none; }
+img.itemicon { border: 0px; height: 32px; width: 32px; }
+p.itemicon { float: left; margin-right: 10px; }
+p.itemtext { float: left; width: 44em; }
+
+/* All pages - Content */
+#MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
+div.topmenucontainer { background-color: #ececec; border-bottom: 1px solid #C0C0C0; }
+div.hstippled { background-color: #FFFFFF; background-image: url(themes/default/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
+div.breadcrumbs { background-color: #ffffff; }
+p.breadcrumbs { color: #666666; padding-bottom: 3px; padding-left: 5px; padding-top: 3px; }
+p.logocontainer { padding-bottom: 5px; padding-left: 5px; padding-top: 5px; }
+.footer { color: #ffffff; padding-top: 5px; text-align: center; }
+a.breadcrumbs { color: #666666; }
+a.footer { color: #ffffff; }
+
+/* Standard pages output */
+div.pagecontainer { background: #ececec; border: 1px solid #666666; margin: 10px; padding: 5px; }
+div.pageerrorcontainer { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; }
+div.pageerrorinstalldir { background: #BA5A5A; border: 1px solid #666666; margin: 10px; padding: 5px; width: 50em; }
+div.pagemcontainer { background: #dddddd; border: 1px solid #666666; margin: 10px; padding: 5px; }
+div.pageoverflow { overflow: hidden; clear: left; padding-top: 1px; width: 100%;}
+div.pageoverflow a { color: #384654; }
+div.pageoverflow img { border: 0px; }
+div.pageoptions { padding-top: 1px; }
+img.pageicon { border: none; }
+img.systemicon { border: none; }
+a.pageoptions { color: #384654; vertical-align: 3px; }
+a.pageback { color: #384654; }
+p.pageback { margin-left: 10px; }
+p.pageerror { color: #384654; }
+p.pageheader { color: #384654; font-size: 1.1em; font-weight: bold; }
+p.pagetext { color: #384654; float: left; width: 15em; padding-right: 5px; padding-top: 5px; }
+p.pageinput { color: #384654; float: left; padding-top: 5px; }
+p.pageinputwysiwyg { padding-top: 5px; }
+p.pagemessage { color: #384654; }
+p.pageshowrows { color: #384654; float: right; margin-right: 5px; text-align: right; }
+p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
+p.pageoptions { color: #384654; padding-top: 5px; }
+table.pagetable { margin-top: 5px; margin-bottom: 5px; border: 1px solid #c6c3bd; font-size: 1em; width: 97%; }
+table.pagetable th { background: #385C72; color: #ffffff; }
+table.pagetable td { color: #384654; }
+table.pagetable a { color: #384654; }
+th.pagepos { text-align: center; }
+th.pagew10 { width: 10%; }
+th.pagew25 { width: 25%; }
+th.pagew50 { width: 50%; }
+th.pagew60 { width: 60%; }
+th.pagew70 { width: 70%; }
+th.pageicon { width: 16px; }
+td.pagew30 { width: 30%; }
+td.pagepos { text-align: center; }
+tr.row1 { background: #ffffff; }
+tr.row2 { background: #ececec; }
+tr.row1hover { background: #dddddd; }
+tr.row2hover { background: #dddddd; }
+iframe.imageframe { border: none; margin-top: 10px; width: 100%; }
+iframe.preview { background-color: #ffffff; border: 1px solid #666666; height: 400px; margin: 10px; width: 95%; }
+input.standard { }
+input.pagebutton { cursor: pointer; background-color: #D4D0C8;}
+input.pagebuttonhover { cursor: pointer; background-color: #BBBBBB;}
+input.pagecheckbox { border: none; }
+textarea.pagetextarea { height: 30em; width: 48em; }
+textarea.pageheadtags { height: 5em; }
+ul.pageerror { margin: 0px; }
+.clearb { clear: both; }
+.loginerror { color: #CE374E; }
+.logotext { color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
+#ajaxarea { margin-top: 10px; left: 10px; clear: both;}
+.ajaxbutton { padding-top: 5px; padding-left: 1px; clear: both;}
+ul.sortable { width: 250px; height: 80px; border: 1px solid black; border-collapse: collapse; margin-top:5px; margin:1px; padding:0; overflow: auto; }
+ul.sortable li {list-style: none; padding:0; margin:1px; border: 1px solid #cccccc; cursor:move; width:90%; padding-left: 5px;}

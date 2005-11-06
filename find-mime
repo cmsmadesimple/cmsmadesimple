@@ -19,7 +19,7 @@
 
 VERSION="${0##*/} Version 0.1"
 
-USAGE="Usage: ${0##*/} -t|--text | -e|--exec | -h|--help -v|--version -u|--usage [path]"
+USAGE="Usage: ${0##*/} -t|--text | -e|--exec | -b|--bin | -a|--all | -h|--help -v|--version -u|--usage [path]"
 
 HELP="This script displays filenames with their mime-types.
 
@@ -52,10 +52,8 @@ function mime_of()
 function find_mime_types()
 {
   local dir="$1"
-  # fine files only
-  find "$dir" -type f |
-  # remove the */.svn/* directories
-  grep -v '/\.svn/' |
+  # find files only, but not in .svn directories
+  find "$dir" \( -name ".svn" -prune -or \( -type f -and -print \) \) |
   # remove './' if line starts with it (beautify)
   sed 's:^\./::' |
   # find the mime types
@@ -110,6 +108,10 @@ while [ $# -gt 0 ]; do
     -b|--bin)
   		_MIME_TYPES="${NOT_BIN_MIME_TYPES[*]}"
 		REV="-v"
+		shift
+		;;
+    -a|--all)
+  		_MIME_TYPES=".*"
 		shift
 		;;
     -u|--usage)

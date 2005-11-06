@@ -1,0 +1,524 @@
+Version 0.11 "Trinidad" -- Subversion
+-----------------
+
+* Added ability to set a media type for a stylesheet
+* Added some database checks to installer.  Should help to
+stop some install problems people are having.
+* Added ability to link to an anchor with cms_selflink
+* Added CSSMenu module and made it the default menu for new
+installs
+* Added ability to copy a stylesheet
+* Added id and class parameters to the cms_selflink tag
+* Added apply button to editing HTML Blobs
+* Added Japanese translation
+* Added Polish translation
+* Added Russian translation
+* Added UninstallPreMessage() to module API
+* Changed the default WYSIWYG to FCKeditorX
+* Changed {content}, {html_blob} and {title} tags to be case
+insensitive
+* Changed logic of included htaccess so that html can be used
+as the default extension for friendly urls
+* Fixed a bug where additional content blocks would disappear
+after a page was set inactive.  Fixed by adding a Load()
+callback for content types.
+* Fixed a bug with $gCms->variables['page_name'] not always
+returning the alias
+* Fixed a bug where IIS users couldn't login correctly
+* Fixed a bug where IIS didn't always report QUERY_STRING, which
+would generate a warning message
+* Fixed a bug where all users can't get to user preferences
+* Fixed a bug where css assocations did not get deleted when a
+template does
+* Fixed a few bugs with the css assocation page
+* Fixed a few bugs with the News module
+* Fixed a bug where debug mode would cause a warning error
+* Fixed bug where deleting a user didn't delete their preferences
+* Fixed bug with phplayers not displaying correctly if the body tag
+of the template had any attributes
+* Fixed bug where custom 404 message didn't show existing value
+* Fixed bug with template/css associations not working properly on
+Postgres
+* Fixed bug with News content type where clicking on details would
+link to the admin
+* Removed the head tags box for content.  Instead using a content
+block (eg. {content block='headtags'} will work the same way.
+This has an upgrade path.
+* Swedish translation was incorrectly using se_SE instead of sv_SE
+as it's locale name.
+* Updated ADODB to 4.65
+* XHTML header did not pass along proper encoding in the admin
+
+Version 0.10.3 "Ebenezer" -- Wed Oct 03 2005
+-----------------
+
+* Fixed a security bug where pages were succeptable to cross
+site vulnerability as per BugTraq
+* More security fixes and other safeguards
+
+Version 0.10.2 "Darkwood" -- Wed Sep 24 2005
+-----------------
+
+* Fix for image manager not checking for permissions before
+allowing uploads
+
+Version 0.10.1 "Willoughby" -- Wed Aug 31 2005
+-----------------
+
+* Fix for a possible php injection in admin/lang.php.  Thanks
+to vxsfx for finding this.
+
+Version 0.10 "Antigua" -- Tue Jul 05 2005
+-----------------
+
+* Added dropdown of encodings to add/edit template pages
+* Added multiple content blocks
+* Added recursive html blobs
+* Added ability for modules to use templates, either file based
+or db based through a few API calls
+* Added support for module translations
+* Added indexes to increase performance
+* Added bookmarks and recent pages to the admin
+* Added javascript tabs to content editing
+* Added global locale option to config.php
+* Added parameter to CreateLink to allow modules to force contents
+to {content} tag, while still displaying the same content in their
+{cms_module}.
+* Changed admin interface and themes
+* Changed installer to use regular Submit buttons...  now works in
+Konqueror
+* Fixed bug with image path generation in TinyMCE
+* Fixed bug with text parameter in print plugin
+* Fixed bug with inactive pages still being accessible by page id
+* Fixed encoding problems with editing title and menu text in content
+* Removed the redirect pages while logging in or out
+* Updated ADODB to 4.61
+* Updated Smarty to 2.6.9 (Jope)
+* Updated TinyMCE to 1.4.4
+* Updated News module to 2.0 (complete rewrite, but upgradable)
+* Much Much More...
+
+Version 0.9.2 "Hatutu" -- Fri Feb 25 2005
+-----------------
+
+* Fixed bug in site preference loading
+
+Version 0.9.1 "Mohotani" -- Fri Feb 25 2005
+-----------------
+
+* Added collapse option to bulletmenu, for cases where section header
+is used as parents for other content
+* Added apply button to edit css
+* Added LoadUsersByGroup() function (sjg)
+* Added user and group classes to be loaded by default in include.php
+* Changed new default install schema (BrumalPat)
+* Changed breadcrumbs plugin to use menu text instead of title
+* Fixed CreateTextInput and CreateTextHidden to change " to &quot; in 
+value
+* Fixed bug with call to post render hook
+* Fixed nasty bug where content would have properties deleted if set
+inactive
+* Fixed bug with files.php trying to define cmsmodule more than once
+* Fixed permission check for setting active flag on content
+* Fixed automated module upgrades by making AllowAutoUpgrade() function
+return TRUE by defualt instead of FALSE (which is correct)
+* Fixed ibrowser in ImageManager to handle subdirectories properly (sjg)
+* Removed a rogue debug message
+* Removed the advanced css option.  It's on all the time now.
+* Updated some text in INSTALL and UPGRADE docs
+
+Version 0.9 "Marquesas" -- Tue Feb 22 2005
+-----------------
+
+* Rewrote module API from scratch to make it easier for a module
+dev to write modules.  Not only is it now object oriented, it is
+also better organized and navigations related functions are
+much, much easier.
+* Stylesheet URL is now absolute based on root_url in config.php
+* Fixed bug with content type changes breaking hierarchy (#000090)
+* Fixed bug with start_element in bulletmenu and phplayers
+* Fixed bug with css table not having sequence setup correctly (#000093)
+* Fixed bugs with auto alias of pages
+* Fixed contact form so that it's xhtml compliant (#000096)
+* Fixed RSS feeds to use proper content type
+* Fixed content type loading so it only loads php files
+* Fixed some bugs with handling gifs in ImageManager
+* Modified login procedure for a little more security
+* Modified install procedure to ask for admin username and password
+* Admin dir can now be changed with admin_dir paramater in config.php
+* Updated Smarty to 2.6.7 (Jope)
+
+Version 0.8.2 "Taunoa" -- Mon Jan 17 2005
+-----------------
+
+* Added wysiwyg body tag callback for making htmlarea work
+* Added additional color schemes in CSS Management for overriding
+the default theme. (BrumalPat)
+* Fixed htaccess.txt to point to a better url
+* Fixed hiding/showing of Help boxes
+* Fixed link content type so that urls are encoded properly for xhtml
+* Fixed handling of attached CSS to WYSIWYGs
+* Fixed stylesheet hook to actually send CSS
+* Fixed phplayers menu to put CSS in with template CSS so it's easily
+cascaded
+* Fixed initial database so first user created is not in the admin
+group
+* Fixed ereg_replace functions in file management (ntro)
+* Fixed bug with uploading images in TinyMCE (#000087)
+* Fixed bug with ordering if there are more than 10 pages in the 
+root of the content hierarchy
+* Fixed additional editors not always being saved properly (#000086)
+* Lots of other WYSIWYG related bugfixes
+* Removed the html blob check in the menu for now
+
+Version 0.8.1 "Papeete" -- Sat Jan 01 2005 
+-----------------
+
+* Fixed bugs with upgrading
+* Fixed html blobs
+* Fixed bug with preview path
+
+Version 0.8 "Tahiti" -- Sat Jan 01 2005 
+-----------------
+
+* Added Norwegian translation (Roger 'Stigma' Knutsen)
+* Added FCKeditor capability via module (not included)
+* Added TinyMCE capability via module (included)
+* Added versionname plugin
+* Added many many module API callbacks
+* Admin and default website are totally xhtml 1.0 transitional compliant
+* Admin menu now only shows items that the user could have access to
+* Cleaned up root directory by moving things to modules and the lib
+directory
+* Moved HTMLArea to a module (not included)
+* Moved dhtmlmenu plugin to PHPLayers module in order to fix xhtml issues
+* Rewrote all content handling from scratch for better expandibility
+* Updated Traditional Chinese translation (gobido)
+
+Version 0.7.3 -- Tue Nov 23 2004
+-----------------
+
+* Added Italian translation (emanuelez)
+* Added more callback functions to module API
+* Added config.php option to disable sending translations to htmlarea 
+(#000049)
+* Added active/inactive toggle in Content Management (Xorn725)
+* Added categories and other fixes to the News module (calguy1000)
+* Added breadcrumbs and sitemap plugins (Manarth)
+* Added clear cache button to site preferences (#000055)
+* Fixed syntax highlighting not submitting data of second textarea.
+* Fixed HTMLArea to display properly with all languages, even if some
+still default to en_US
+* Fixed bug with handling of aliases in add/editcontent
+* Fixed bug with relative paths in dhtmlmenu
+* Fixed changing ownership of html blobs
+* Fixed displaying html_blobs in modules with executeuser
+* Fixed HTML bug in print module (#000048)
+* Fixed error message with Deleting templates (Part of #000047)
+* Fixed check_ownership and check_authorship to be more consistant 
+(Xorn725)
+* Fixed htmlarea so that it doesn't convert double quotes in &quot; and
+mess up smarty tags
+* Reenabled Image Manager
+* Removed Allow Admin Access from add/edit user
+* Updated adodb to 4.54
+
+Vrersion 0.7.2 -- Wed Nov 10 2004
+-----------------
+
+* Added missing edit links to titles in CSS and News admin (#000035)
+* Added ability to invert the foreground/background color of htmlarea 
+(#0000031)
+* Added search and replace to htmlarea
+* Added ability to clean pastes from Microsoft Word in htmlarea
+* Added pagination to majority of admin list pages
+* Added google search plugin
+* Added google pagerank plugin
+* Added Expand/Collapse plugin
+* Added print page plugin
+* Added strip_tags to RSS output in News module (#000042)
+* Changed en_US to UTF-8
+* Changed with of add and edit html blob pages
+* Changed all template lists to be ordered by template name (#000038)
+* Changed edit html blob so that is only modifies the timestamps of pages it 
+is actually used on.
+* Changed all user lists to be ordered by username (#000039)
+* Changed add content so that the alias is based off of menutext instead of
+the title
+* Changed upgrade script so that it always clears the cache directories even
+if there is no schema change.
+* Fixed custom 404 error template usage
+* Fixed add and edit content pages so that the alias field is more intelligent
+when auto_alias_content is on (#000043)
+* Fixed login to redirect back to originally requested link
+* Fixed stupid encoding issue with cms_htmlentities
+* Fixed htmlarea not loading due to a notice level error (#0000034)
+* Fixed a few problems with htmlarea's fullscreen not working in Internet 
+Explorer
+* Fixed htmlblob to fill the width of the screen (#0000037)
+* Updated Smarty to 2.6.6 (jope)
+
+Version 0.7.1 -- Wed Oct 26 2004
+-----------------
+
+* Added check for session functions to install script (#000004)
+* Added newline parsing to the comments module (#000011)
+* Added encoding override on templates.  Fixed bugs with
+htmlentities. (#000002, #000006)
+* Added missing CSS to the horizontal menu (#000008)
+* Added check to lang/addline.sh to make sure line doesn't already
+exist (#000017)
+* Added German translation (Piratos)
+* Added Czech translation (peca)
+* Added new div and swaptitledate parameter to News module
+* Fixed a bug when hitting cancel on the login page (#000029)
+* Fixed bug when not saving all fields when adding a user
+* Fixed html blobs so that they can  handle smarty functions inside of them.
+* Fixed email in add/edit user to accept 255 characters (#000003)
+* Fixed htmlblob NOTICE level messages (#000005)
+* Fixed delete confirmation text in file management (#000012)
+* Fixed java syntax highlighting to submit if advnaced wasn't
+expanded (#0000016)
+* Removed most references to BBCode without breaking backwards
+compatibility (#000013)
+* Removed a rogue div from the Comments module (#000010)
+* Fixed htmlarea displaying inproper align values (#0000021)
+* Fixed css not properly displaying in htmlarea until post (#0000031)
+* Fixed default language on login page to default to english. (#0000032)
+* Changed the header slogan to be text instead of an image (#0000015)
+
+Version 0.7 -- Mon Oct 11 2004
+-----------------
+
+* Added HTML blobs for easy administration of small chunks of html (Genie #3)
+* Added Image Manager to the files section for advanced image handling
+functions
+* Added horizontal option to dhtmlmenu (leen)
+* Added new admin style
+* Added new install and upgrade look
+* Added language as a user perference and also moved it to the login page
+* Added java based syntax highlighting as a user preference
+* Added support for mysql 4.1+ using the mysqli adodb driver
+* Added cancel link to login page that redirects back to site (Genie #6)
+* Added auto_upgrade functionality to modules (Genie #4)
+* Added more intelligent handling of file types to file management
+* Added ability to override the default encoding of the whole site, admin
+included (Genie #15)
+* Fixed News module so that post date shows on newly created items (Genie #5)
+* Fixed bug with start and end dates when adding new News item (BamaRob)
+* Fixed missing template option for News module (trac #67)
+* Updated adodb to 4.53
+
+Version 0.6.3 -- Wed Sep 22 2004 
+-----------------
+
+* Fixed a very bad bug where you can login with no password
+
+Version 0.6.2 -- Tue Sep 20 2004 
+-----------------
+
+* Added Chinese translations (ray)
+* Added dateformat parameter to News
+* Added showtemplate parameter to moduleinterface.php, so you can do things
+like show just an RSS feed and nothing else.
+* Fixed a bug with html entities not getting converted properly after preview
+or saved. (Fixes #62, #65)
+* Fixed bug with bug with news when it's the content type.
+* Updated the defalt website to be a little more up to date with the current
+feature set
+
+Version 0.6.1 -- Tue Sep 14 2004
+-----------------
+
+* Added section header content type
+* Added cms_selflink plugin
+* Added some functionality to the News module (make sure you upgrade it)
+* Added Dutch translation (Thijs)
+* Changed login and logout to work properly in IIS (Fixes #60)
+* Fixed a bug with view page in listcontent (Fixes #61)
+* Fixed so only content pages can be set as default (Fixes #59)
+* Started moving code to an easy object oriented design
+* Updated smarty to 2.6.5
+
+Version 0.6 -- Wed Sep 01 2004
+-----------------
+
+* Added User Defined Tags (user defined php code editable in the admin)
+* Added advanced CSS management for doing CSS in chunks instead of entirely
+in the template
+* Added Finnish translation
+* Added user defined 404 messages
+* Added site down message
+* Added site preferences page
+* Added head tags field for putting text into the <head> tag
+* Changed layout of add and edit content pages to make for less scrolling
+* More changes to the admin site look
+* Removed gettext and instead are using a homegrown system with less weird
+dependencies and is easier to create new translations
+
+Version 0.5.1 -- Wed Aug 25 2004
+-----------------
+
+* Added assume_mod_rewrite to config if using the .htaccess and mod_rewrite
+functionality
+* Added automatic aliases option
+* Added character map to the WYSIWYG
+* Added collapsable help blurbs to some admin pages
+* Fixed upgrade path from 0.1 through to 0.5.1
+* Fixed up the admin stylesheet so it's more cross-browser friendly
+* Fixed a bug with PATH_INFO
+* Fixed a bug with Call-time pass-by-reference Warning
+* Re-added phplayers-menu.css : users should however move its content to their
+template.
+
+Version 0.5 -- Sun Aug 22 2004
+-----------------
+
+* Added page aliases
+* Added htaccess file to make pretty page aliases 
+* Added new admin stylesheet (Bewbs)
+* Added new admin icons (Graeme)
+* Added file manager
+* Added LinkBlog module
+* Added RSS module
+* Added PostgreSQL 7 support
+* Added phpdoc strings to many files and functions
+* Added module and tag self-documentation hooks
+* Added ability for module's adminexecute function to use the wysiwyg
+* Added more options to dhtmlmenu and bulletmenu
+* Changed modules page to be called plugins.  Added tags to same page.
+* Changed config file to a new format.  Upgrade script will take care
+up upgrading it automatically.
+* Changed inner workings so that code is easier to 
+understand.  We now pass one global object around and put important 
+variables and objects inside it.  Makes the code very consistent.
+* Changed inner working of the content hierarchy to allow for more
+custom menus.
+* Fixed modules to respect the installed and active flags
+* Lots of little bug fixes and changes
+* Removed lots of NOTICE level errors
+* Updated adodb to 4.5.2
+
+Version 0.4.1 -- Fri Aug 13 2004
+-----------------
+
+* Added template copying functionality (Fixes #39)
+* Added checks to make sure Template titles can't be reused
+* Added function to set template to every page (Fixes #42)
+* Added config flag for turning on smarty's {php} tags (Fixes #47)
+* Added config flag for setting preview tmp file location (Fixes #36)
+* Fixed redirection bugs in the news module
+* Fixed a bug in adding a group
+* Fixed a bug where mysql imports would not work because of spaces at the
+end of lines (Knaldgas)
+* Fixed another bug with mysql import...  this time with magic_quotes_runtime
+* Fixed several warnings and notices in later php versions
+* Fixed all call_user_func_array calls to pass by value, ref is deprecated
+in later php versions
+* Removed the section permissions in new installs (Fixes #41)
+* Removed all instances of the now() function -- for sql independence
+
+Version 0.4 -- Tue Aug 10 2004
+-----------------
+
+* Added module API
+* Added news module
+* Added comments module
+* Added copyright notice to bottom on all generated pages in a comment
+* Added dhtml menu plugin using phplayers
+* Added hierarchical content
+* Fixed modified_date plugin
+* Fixed several bugs with permissions
+* Removed sections.  Instead we have content be children of other content
+* Rewrote plugin loading so that plugins do not cache, even thought static
+content does
+* Rewrote install script to be more cross-database (even though other db
+systems are not supported yet)
+* Switched WYSIWYGs from tinymce to htmlarea
+
+Version 0.3.2 -- Thu Jul 29 2004
+-----------------
+
+* Added version check to install.php
+* Added check to make sure bbcode exists before using it
+* Fixed link to cmsmadesimple in footer
+* Fixed bug in displaying 404 pages
+* Fixed a nasty bug where link pages would file to show in the content list
+* Fixed addcontent so it sets showinmenu correctly
+
+Version 0.3.1 -- Tue Jul 27 2004
+-----------------
+
+* Added ownership change to editcontent
+* Added {title} tag (Fixes #23)
+* Added adodb for database connectivity.  Will be a good thing for down the
+road in supporting multiple databases
+* Added template name to content list page  (Fixes #28)
+* Added check to make sure users don't still own pages before the user is
+deleted
+* Added French translation (calexico@ifrance.com)
+* Fixed so that if no default page is set, system grabs first page it can find
+(Fixes #22)
+* Fixed redirection. (pdj@txnt.com) (Fixes #27)
+* Fixed nasty bug with changeperm and changeassign (fcardone@wp.pl) (Fixes
+#29, #30)
+
+Version 0.3 -- Wed Jul 21 2004
+-----------------
+
+* Added PEAR.php to the lib directory for hosts that may not have it (Fixes #13)
+* Added section reordering (Fixes #4)
+* Added index to tables to make querying faster on the frontend (Fixes #1)
+* Added password hashing for insecure hosts  (Fixes #11)
+* Added content types to content creation and editing (Fixes #5)
+* Added the link content type
+* Added proper 404 error for pages that are not found or active (Fixes #18)
+* Added admin logging and a simple report (Fixes #21)
+* Added TinyMCE WYSIWYG editor for content (Fixes #10)
+* Added user preferences page
+* Added option to turn on/off wysiwyg in user preferences
+* Changed database abstraction so that it will be able to use other db
+backends in the future (Fixes #19)
+* Fixed the install script (again) to work on Win32 (Fixes #12)
+* Fixed the css for admin site to be a little more streamlined
+
+Version 0.2.1 -- Tue Jul 13 2004
+-----------------
+
+* Added GetText.php to work with systems even without gettext support in php
+* Added gettext functionality to all admin pages
+* Added some missing mysql_free_result functions
+* Added preview functionality for adding and editing content and templates
+* Changed content url entries to automatically be lowercase with no odd chars
+* Changed admin login page so username field gets focus on load
+* Changed install.php so that it removes the test files created on page 1
+* Fixed editing content so that changing sections does not mess up ordering
+* Fixed the install script so that it works correctly on Win32 platforms
+* Moved stylesheets to display inline instead of from separate script
+* Moved menu generation code out of the bulletmenu plugin
+
+Version 0.2 -- Mon Jul 05 2004
+-----------------
+
+* Added content reordering
+* Added ability to let additional users modify content on a particular page
+* Added note to show if a template or section is still being used before it is
+deleted
+* Added a cms_version plugin
+* Added an upgrade.php
+* Added a title to the admin pages
+* Added an UPGRADE document
+* Fixed a security hole where incactive pages can still be called by URL
+* Fixed a bug in show in menu in both admin and bulletmenu
+* Fixed up install.php to fit the look of the admin seciton
+* Fixed the footer plugin to not have multiple divs
+* Fixed the wording of INSTALL to match the text in install.php
+* Fixed it so users can change their own password
+* Fixed it so textareas are filled proeperly with html encoded characters
+* Upgraded schema to version 2
+* Removed some code from install.php that was breaking on non-posix systems
+
+Version 0.1 -- Thu Jul 01 2004
+-----------------
+
+* Initial Release

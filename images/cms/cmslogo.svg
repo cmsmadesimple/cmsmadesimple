@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 20010904//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.38.1"
+   width="210mm"
+   height="688.89000pt"
+   sodipodi:docbase="/home/mudfly/development/cms/images"
+   sodipodi:docname="cmslogo.svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:xml="http://www.w3.org/XML/1998/namespace"
+   xmlns:xlink="http://www.w3.org/1999/xlink">
+  <defs
+     id="defs3">
+    <linearGradient
+       id="linearGradient829">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.74901962;"
+         offset="0.0000000"
+         id="stop830" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0.10000000;"
+         offset="1.0000000"
+         id="stop831" />
+    </linearGradient>
+    <linearGradient
+       xlink:href="#linearGradient829"
+       id="linearGradient832"
+       x1="-0.23636363"
+       y1="-0.75423729"
+       x2="0.97090912"
+       y2="0.98305082" />
+  </defs>
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="0.66662958"
+     inkscape:cx="275.36131"
+     inkscape:cy="268.94540"
+     inkscape:window-width="792"
+     inkscape:window-height="647"
+     inkscape:window-x="147"
+     inkscape:window-y="481" />
+  <rect
+     style="fill:#516870;fill-rule:evenodd;stroke-width:7.5000000;"
+     id="rect866"
+     width="736.76955"
+     height="852.70125"
+     ry="51.320739"
+     x="5.4513354"
+     y="7.3657949"
+     rx="39.416144"
+     transform="matrix(1.009613,0.000000,0.000000,1.009613,-5.321486,-7.065665)" />
+  <rect
+     style="fill:#88baca;fill-rule:evenodd;stroke-width:7.5000000;fill-opacity:1.0000000;"
+     id="rect827"
+     width="705.73186"
+     height="829.63903"
+     ry="38.018385"
+     x="20.970167"
+     y="18.896977"
+     rx="30.947552"
+     transform="matrix(1.009613,0.000000,0.000000,1.009613,-5.321486,-7.065665)" />
+  <rect
+     style="fill:#788a90;fill-rule:evenodd;stroke:#516870;stroke-width:13.305094;fill-opacity:1.0000000;stroke-opacity:1.0000000;"
+     id="rect826"
+     width="399.40432"
+     height="417.52862"
+     ry="25.129370"
+     x="261.18005"
+     y="60.177160"
+     rx="21.367588"
+     transform="matrix(1.009613,0.000000,0.000000,1.009613,-5.321486,-7.065665)" />
+  <rect
+     style="fill:#67aacb;fill-rule:evenodd;stroke:#c5dee3;stroke-width:13.305094;"
+     id="rect825"
+     width="416.79294"
+     height="435.70629"
+     ry="26.223407"
+     x="76.142609"
+     y="148.68760"
+     rx="22.297856"
+     transform="matrix(1.009613,0.000000,0.000000,1.009613,-5.321486,-7.065665)" />
+  <rect
+     style="fill:#c5dee3;fill-rule:evenodd;stroke:#61a0bf;stroke-width:13.305094;fill-opacity:1.0000000;"
+     id="rect828"
+     width="346.93738"
+     height="362.68083"
+     ry="21.828298"
+     x="270.07843"
+     y="314.36989"
+     rx="18.560679"
+     transform="matrix(1.009613,0.000000,0.000000,1.009613,-5.321486,-7.065665)" />
+  <text
+     xml:space="preserve"
+     style="font-size:64.000000;fill:#516870;stroke-width:2.6975551;font-family:A.C.M.E. Secret Agent;fill-opacity:1.0000000;"
+     x="18.790671"
+     y="406.17953"
+     id="text838"
+     sodipodi:linespacing="100%"
+     transform="scale(1.586007,2.024924)"><tspan
+       id="tspan839"
+       style="fill:#516870;fill-opacity:1.0000000;stroke:none;stroke-opacity:1.0000000;stroke-width:2.6975551;stroke-dasharray:none;">Made Simple</tspan></text>
+  <path
+     style="fill:url(#linearGradient832);fill-opacity:0.75000000;fill-rule:evenodd;stroke-width:1.0237614pt;"
+     d="M 59.387531,26.660932 C 38.593013,27.767926 31.707001,36.738827 31.013380,55.469308 L 30.011487,284.44616 C 77.766150,219.45709 376.97405,150.80130 712.08607,315.26190 L 711.67856,46.266224 C 712.01264,34.908754 706.77607,27.780841 692.18724,27.259319 L 59.387531,26.660932 z "
+     id="path857"
+     sodipodi:nodetypes="ccccccc" />
+  <text
+     xml:space="preserve"
+     style="fill:#516870;fill-opacity:1.0000000;stroke:none;font-family:A.C.M.E. Secret Agent;font-style:normal;font-weight:normal;font-size:36.000000;stroke-opacity:1;stroke-width:1pt;stroke-linejoin:miter;stroke-linecap:butt;font-stretch:normal;font-variant:normal;text-anchor:start;writing-mode:lr;"
+     x="11.497703"
+     y="205.96420"
+     id="text915"
+     sodipodi:linespacing="100%"
+     transform="scale(3.080363,3.409822)"><tspan
+       id="tspan916"
+       style="fill:#516870;fill-opacity:1.0000000;">cms</tspan></text>
+</svg>

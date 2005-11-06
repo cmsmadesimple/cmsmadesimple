@@ -22,7 +22,7 @@ D="$(dirname $0)"
 
 VERSION="${0##*/} Version 0.1"
 
-USAGE="Usage: ${0##*/} -f|--force | -n|no-commit | -t|--test | -h|--help -v|--version -u|--usage [path]"
+USAGE="Usage: ${0##*/} -f|--force | -n|no-commit | -t|--test | -h|--help | -u|--user | -v|--version | -U|--usage [path]"
 
 HELP="This script sets predefined properties for predefined mime-types in a svn repository:
 
@@ -38,7 +38,7 @@ What mime-types text-files and executables consist of is defined in the find-mim
 
 ARGS=""
 TEST=""
-COMMIT="yes"
+COMMIT="no"
 while [ $# -gt 0 ]; do
   case $1 in
     -f|--force)
@@ -50,11 +50,15 @@ while [ $# -gt 0 ]; do
 		TEST="echo"
 		shift
 		;;
-    -n|--no-commit)
-		COMMIT="no"
+    -n|--commit)
+		COMMIT="yes"
 		shift
 		;;
-    -u|--usage)
+    -u|--user)
+		USERNAME="$2"
+		shift 2
+		;;
+    -U|--usage)
   		echo "$USAGE"
 		exit 1
 		;;
@@ -73,18 +77,21 @@ while [ $# -gt 0 ]; do
   esac
 done
 
+find "${1-.}" -type f -name \*.php | xargs -i $D/svn-propset-file $ARGS svn:keywords Id {}
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Added Id keyword to text files"
+
 $D/find-mime --text "${1-.}" | xargs -i $D/svn-propset-file $ARGS svn:eol-style native {}
-[ "$COMMIT" = "yes" ] && $TEST svn commit -m "Set properties of text files to svn:eol-style native"
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Set properties of text files to svn:eol-style native"
 
 $D/find-mime --exec "${1-.}" | xargs -i $D/svn-propset-file $ARGS svn:executable '' {}
-[ "$COMMIT" = "yes" ] && $TEST svn commit -m "Set properties of executables to svn:executable"
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Set properties of executables to svn:executable"
 
 $D/find-mime --bin "${1-.}" | grep '\.png$' | xargs -i $D/svn-propset-file $ARGS svn:mime-type 'image/png' {}
-[ "$COMMIT" = "yes" ] && $TEST svn commit -m "Set properties of .png files to svn:mime-type image/png"
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Set properties of .png files to svn:mime-type image/png"
 
 $D/find-mime --bin "${1-.}" | grep '\.gif$' | xargs -i $D/svn-propset-file $ARGS svn:mime-type 'image/gif' {}
-[ "$COMMIT" = "yes" ] && $TEST svn commit -m "Set properties of .gif files to svn:mime-type image/gif"
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Set properties of .gif files to svn:mime-type image/gif"
 
 $D/find-mime --bin "${1-.}" | grep '\.jpe?g$' | xargs -i $D/svn-propset-file $ARGS svn:mime-type 'image/jpeg' {}
-[ "$COMMIT" = "yes" ] && $TEST svn commit -m "Set properties of .jpeg and .jpg files to svn:mime-type image/jpeg"
+[ "$COMMIT" = "yes" ] && $TEST svn commit ${USERNAME+--username "$USERNAME" }-m "Set properties of .jpeg and .jpg files to svn:mime-type image/jpeg"
 

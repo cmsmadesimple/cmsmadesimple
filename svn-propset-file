@@ -19,7 +19,7 @@
 
 VERSION="${0##*/} Version 0.1"
 
-USAGE="Usage: ${0##*/} -f|--force | -t|--test | -h|--help -v|--version -u|--usage [path]"
+USAGE="Usage: ${0##*/} -f|--force | -t|--test | -h|--help | -v|--version | -U|--usage [path]"
 
 HELP="This is a helper script to svn-propset.
 

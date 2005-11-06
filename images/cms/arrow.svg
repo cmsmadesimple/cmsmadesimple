@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN"
+"http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd">
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<svg
+   id="svg1"
+   sodipodi:version="0.32"
+   inkscape:version="0.38.1"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   width="210mm"
+   height="297mm"
+   sodipodi:docbase="/var/www/localhost/htdocs/cms/images"
+   sodipodi:docname="arrow.svg">
+  <defs
+     id="defs3" />
+  <sodipodi:namedview
+     id="base"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:pageopacity="0.0"
+     inkscape:pageshadow="2"
+     inkscape:zoom="1.0000000"
+     inkscape:cx="342.98756"
+     inkscape:cy="430.56171"
+     inkscape:window-width="638"
+     inkscape:window-height="735"
+     showgrid="true"
+     snaptogrid="true"
+     showguides="true"
+     snaptoguides="true"
+     inkscape:window-x="295"
+     inkscape:window-y="554" />
+  <path
+     style="fill:#63accf;fill-opacity:1.0000000;fill-rule:evenodd;stroke:none;stroke-width:1.0000000pt;"
+     d="M 283.46457,432.28344 L 354.33071,520.86612 L 425.19685,432.28344 L 283.46457,432.28344 z "
+     id="path826"
+     sodipodi:nodetypes="cccc" />
+</svg>
