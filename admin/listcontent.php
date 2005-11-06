@@ -166,8 +166,8 @@ if (isset($_GET["message"])) {
                     {
                     $collapsing = false;
                     }
-				if (($counter)  < $page*$limit && ($counter)  >= ($page*$limit)-$limit)
-				{
+				#if (($counter)  < $page*$limit && ($counter)  >= ($page*$limit)-$limit)
+				#{
   			    	$thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
                     $thelist .= "<td>";
                     if ($one->ChildCount() > 0)
@@ -301,7 +301,7 @@ if (isset($_GET["message"])) {
   								$thelist .= "</a>";
   							}
   						}
-  					}
+  					#}
 
 					if ($modifyall)
   						$thelist .= "</td>\n";
@@ -352,10 +352,10 @@ if (isset($_GET["message"])) {
 
 	$headoflist = '';
 	
-	if ($counter > $limit)
-	{
-		$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
-	}
+	#if ($counter > $limit)
+	#{
+	#	$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
+	#}
 	$headoflist .= '<p class="pageheader">'.lang('currentpages').'</p></div>';
 	if ($counter)
 	{
