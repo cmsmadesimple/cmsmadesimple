@@ -309,32 +309,51 @@ class content extends ContentBase
 			{
 				$content = $template->content;
 				
-				$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
+				$pattern = '/{content([^}]*)}/';
+				$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
 				$matches = array();
 				$result = preg_match_all($pattern, $content, $matches);
-				if($result)
+
+				if ($result && count($matches[1]) > 0)
 				{
-					if(count($matches[1]) > 0)
+					foreach ($matches[1] as $wholetag)
 					{
-						$additionalContentBlocks = $matches[1];
-						
-						// add the ContentProperties
-						foreach($additionalContentBlocks as $blockName)
+						$morematches = array();
+						$result2 = preg_match_all($pattern2, $wholetag, $morematches);
+						if ($result2)
 						{
-							$blockNameId = str_replace(' ', '_', $blockName);
-							$this->additionalContentBlocks[$blockName] = $blockNameId;
-							
-							if(!array_key_exists($blockName, $this->mProperties->mPropertyTypes))
+							$keyval = array();
+							for ($i = 0; $i < count($morematches[1]); $i++)
 							{
-								$this->mProperties->Add("string", $blockNameId);
+								$keyval[$morematches[1][$i]] = $morematches[2][$i];
+							}
+							foreach ($keyval as $key=>$val)
+							{
+								switch($key)
+								{
+									case 'block':
+										$blockNameId = str_replace(' ', '_', $val);
+										$this->additionalContentBlocks[$val] = $blockNameId;
+
+										if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+										{
+											$this->mProperties->Add("string", $blockNameId);
+										}
+
+										break;
+									case 'wysiwyg':
+										break;
+									default:
+										break;
+								}
 							}
 						}
-						
-						// force a load 
-						$this->mProperties->Load($this->mId);
-
-						$result = true;
 					}
+
+					// force a load 
+					$this->mProperties->Load($this->mId);
+
+					$result = true;
 				}
 			}
 			$this->addtContentBlocksLoaded = true;
@@ -347,22 +366,6 @@ class content extends ContentBase
 		// check for additional content blocks
 		$this->GetAdditionalContentBlocks();
 
-		// find the {content block='XXX'} and store into an array
-		$pattern = '{content[ ]+block[ ]*=["\']([a-zA-z0-9 -_]*)["\'][a-zA-z0-9\'" =_-]*}';
-		$matches = array();
-		$result = preg_match_all($pattern, $tpl_source, $matches);
-		if($result)
-		{
-			$count = count($matches[0]);
-			// iterate over each additional content block and replace with the text from the property
-			for($i = 0; $i < $count; $i++)
-			{
-				$pattern = $matches[0][$i];
-				$blockNameId = $this->additionalContentBlocks[$matches[1][$i]];
-				$replace = $this->GetPropertyValue($blockNameId);
-				$tpl_source = str_replace('{' . $pattern . '}', $replace, $tpl_source);
-			}
-		}		
 		return $tpl_source;
 	}
 }

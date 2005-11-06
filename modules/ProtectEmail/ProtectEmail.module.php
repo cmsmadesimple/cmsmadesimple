@@ -146,7 +146,7 @@ function hideEmail($content)
     if(isset($result))
       unset($result);
     preg_match($exp, $content, $result);
-    if($result[1])
+    if(isset($result) && isset($result[1]))
     {
       $params = Array();
       $params['extra'] = $result[1].' '.$result[3];
@@ -168,7 +168,7 @@ function hideEmail($content)
     if(isset($result))
       unset($result);
     preg_match($exp, $content, $result);
-    if($result[0])
+    if(isset($result) && isset($result[0]))
     {
       $params = Array();
       $params['address'] = $result[0];

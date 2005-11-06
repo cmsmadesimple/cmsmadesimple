@@ -40,7 +40,7 @@ function smarty_cms_function_edit($params, &$smarty)
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['root_url'].'/admin/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
 	}
 }
 
