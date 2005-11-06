@@ -76,7 +76,7 @@ class content extends ContentBase
 			$this->GetAdditionalContentBlocks();
 			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 			{
-				$parameters[] = $blockNameId;
+				$parameters[] = $blockNameId['id'];
 			}
 			
 			foreach ($parameters as $oneparam)
@@ -203,7 +203,14 @@ class content extends ContentBase
 			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
 			foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 			{
-				array_push($ret, array(ucwords($blockName).':',create_textarea(true, $this->GetPropertyValue($blockNameId), $blockNameId, '', $blockNameId, '', $stylesheet, 80, 10)));
+				if ($blockNameId['oneline'] == 'true')
+				{
+					array_push($ret, array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.$this->GetPropertyValue($blockNameId['id']).'" />'));
+				}
+				else
+				{
+					array_push($ret, array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $this->GetPropertyValue($blockNameId['id']), $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet)));
+				}
 			}
 		}
 		if ($tab == 1)
@@ -327,26 +334,43 @@ class content extends ContentBase
 							{
 								$keyval[$morematches[1][$i]] = $morematches[2][$i];
 							}
+
+							$id = '';
+							$name = '';
+							$usewysiwyg = 'true';
+							$oneline = 'false';
+
 							foreach ($keyval as $key=>$val)
 							{
 								switch($key)
 								{
 									case 'block':
-										$blockNameId = str_replace(' ', '_', $val);
-										$this->additionalContentBlocks[$val] = $blockNameId;
+										$id = str_replace(' ', '_', $val);
+										$name = $val;
 
 										if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
 										{
-											$this->mProperties->Add("string", $blockNameId);
+											$this->mProperties->Add("string", $id);
 										}
 
 										break;
 									case 'wysiwyg':
+										$usewysiwyg = $val;
+
+										break;
+									case 'oneline':
+										$oneline = $val;
+
 										break;
 									default:
 										break;
 								}
 							}
+
+							$this->additionalContentBlocks[$name]['id'] = $id;
+							$this->additionalContentBlocks[$name]['usewysiwyg'] = $usewysiwyg;
+							$this->additionalContentBlocks[$name]['oneline'] = $oneline;
+							
 						}
 					}
 

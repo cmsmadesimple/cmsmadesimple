@@ -12,11 +12,11 @@ if ($result && $result->RowCount() > 0)
 		$templatetxt = $row['template_content'];
 		if (function_exists('str_ireplace'))
 		{
-			$templatetxt = str_ireplace('</head>', "{content block='headtags'}\n</head>", $templatetxt);
+			$templatetxt = str_ireplace('</head>', "{content block='headtags' wysiwyg='false'}\n</head>", $templatetxt);
 		}
 		else
 		{
-			$templatetxt = eregi_replace('<\/head>', "{content block='headtags'}\n</head>", $templatetxt);
+			$templatetxt = eregi_replace('<\/head>', "{content block='headtags' wysiwyg='false'}\n</head>", $templatetxt);
 		}
 		$query = 'UPDATE ' . cms_db_prefix() . 'templates SET template_content = ?, modified_date = ? WHERE template_id = ?';
 		$db->Execute($query, array($templatetxt, $db->DBTimeStamp(time()), $row['template_id']));
