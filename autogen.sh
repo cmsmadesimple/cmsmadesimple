@@ -16,7 +16,3 @@ chmod 777 tmp/templates_c
 chmod 777 tmp/templates
 chmod 777 tmp/configs
 chmod 777 tmp/cache
-
-svn co http://svn.cmsmadesimple.org/svn/newsmodule/trunk/ modules/News
-svn co http://svn.cmsmadesimple.org/svn/cssmenu/trunk/ modules/CSSMenu
-svn co http://svn.cmsmadesimple.org/svn/fckeditorx/trunk/ modules/FCKeditorX
