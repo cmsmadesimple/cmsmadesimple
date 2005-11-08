@@ -1555,6 +1555,41 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Returns the xhtml equivalent of an href link for content links.  This is basically a nice
+         * little wrapper to make sure that we go back to where we want and that it's xhtml complient
+         *
+         * @param string the page id of the page we want to direct to
+	 */
+        function CreateContentLink($pageid,$contents='')
+        {
+	  global $gCms;
+	  $config = &$gCms->config;
+	  $text = '<a href="';
+	  if ($config["assume_mod_rewrite"])
+	    {
+	      # mod_rewrite
+	      $alias = ContentManager::GetPageAliasFromID( $pageid );
+	      if( $alias == false )
+		{
+		  return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
+		}
+              else
+		{
+		  $text .= $config["root_url"]."/".$alias.
+		    (isset($config['page_extension'])?$config['page_extension']:'.shtml');
+		}
+	    }
+	  else
+	    {
+	      # mod rewrite
+	      $text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+	    }
+	  $text .= '">'.$contents.'</a>';
+	  return $text;
+	}
+
+
+	/**
 	 * Returns the xhtml equivalent of an href link for Content links.  This is basically a nice little wrapper
 	 * to make sure that we go back to where we want to and that it's xhtml compliant.
 	 *

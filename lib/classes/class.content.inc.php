@@ -1753,10 +1753,30 @@ class ContentManager
 	}
 
 
+	// function to get the id of the default page
+	function GetDefaultPageID()
+	{
+	  global $gCms;
+	  $db = &$gCms->db;
+
+	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = ?";
+	  $dbresult = $db->Execute($query, array(1));
+	  if ( !$dbresult || !$dbresult->RowCount() )
+	    {
+	      return false;
+	    }
+	  $row = $dbresult->FetchRow();
+	  return $row['content_id'];
+	}
+
+
 	// function to map an alias to a page id
 	// returns false if nothing cound be found.
 	function GetPageIDFromAlias( $alias )
 	{
+	  global $gCms;
+	  $db = &$gCms->db;
+
 	  if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
 	    {
 	      return $alias;
@@ -1772,6 +1792,31 @@ class ContentManager
 	    }
 	  $row = $dbresult->FetchRow();
 	  return $row['content_id'];
+	}
+
+
+	// function to map an alias to a page id
+	// returns false if nothing cound be found.
+	function GetPageAliasFromID( $id )
+	{
+	  global $gCms;
+	  $db = &$gCms->db;
+
+	  if (!is_numeric($alias) && strpos($alias,'.') == TRUE && strpos($alias,',') == TRUE)
+	    {
+	      return $id;
+	    }
+
+	  $params = array($id);
+	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+	  $dbresult = $db->Execute($query, $params);
+	  
+	  if ( !$dbresult || !$dbresult->RowCount() )
+	    {
+	      return false;
+	    }
+	  $row = $dbresult->FetchRow();
+	  return $row['content_alias'];
 	}
 
 
