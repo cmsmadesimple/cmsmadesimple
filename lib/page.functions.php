@@ -285,12 +285,10 @@ function author_pages($userid)
 {
 	global $gCms;
 	$db = $gCms->db;
-
-	if (!isset($gCms->variables['authorpages']))
+    $variables = &$gCms->variables;
+	if (!isset($variables['authorpages']))
 	{
 		$db = $gCms->db;
-
-		$variables = &$gCms->variables;
 		$variables['authorpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";

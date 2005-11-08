@@ -28,6 +28,11 @@ class defaultTheme extends AdminTheme
 			{
 			return;
 			}
+		if (strlen($this->menuItems[$section]['url']) < 1)
+		    {
+            echo "<li>".$this->menuItems[$section]['title']."</li>";
+            return;
+            }
 		echo "<li><a href=\"";
 		echo $this->menuItems[$section]['url'];
 		echo "\"";
@@ -169,7 +174,7 @@ class defaultTheme extends AdminTheme
                 {
                 continue;
                 }
-            if ($menuItem['url'] == 'index.php')
+            if ($menuItem['url'] == 'index.php'  || strlen($menuItem['url']) < 1)
             	{
             	continue;
             	}
@@ -217,7 +222,7 @@ class defaultTheme extends AdminTheme
         foreach ($this->menuItems[$section]['children'] as $thisChild)
             {
             $thisItem = $this->menuItems[$thisChild];
-            if (! $thisItem['show_in_menu'])
+            if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
             	{
             	continue;
             	}
@@ -298,7 +303,7 @@ class defaultTheme extends AdminTheme
             foreach($this->menuItems[$section]['children'] as $thisChild)
                 {
                 $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu'])
+                if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
                     {
                     continue;
                     }

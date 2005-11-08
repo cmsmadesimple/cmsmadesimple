@@ -266,6 +266,11 @@ class AdminTheme
         $this->perms['pagePerms'] = check_permission($this->userid, 'Modify Any Page') |
                 check_permission($this->userid, 'Add Pages') |
                 check_permission($this->userid, 'Remove Pages');
+        $thisUserPages = author_pages($this->userid);
+        if (count($thisUserPages) > 0)
+            {
+            $this->perms['pagePerms'] = true;
+            }
         $this->perms['contentPerms'] = $this->perms['pagePerms'] |
                 (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
 
@@ -603,10 +608,10 @@ class AdminTheme
             // base content menu ---------------------------------------------------------
             'content'=>array('url'=>'topcontent.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('content')),
-                    'description'=>lang('contentdescription'),'show_in_menu'=>true),
+                    'description'=>lang('contentdescription'),'show_in_menu'=>$this->HasPerm('contentPerms')),
             'pages'=>array('url'=>'listcontent.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('pages')),
-                    'description'=>lang('pagesdescription'),'show_in_menu'=>true),
+                    'description'=>lang('pagesdescription'),'show_in_menu'=>$this->HasPerm('pagePerms')),
             'addpage'=>array('url'=>'addcontent.php','parent'=>'pages',
                     'title'=>$this->FixSpaces(lang('addcontent')),
                     'description'=>lang('addcontent'),'show_in_menu'=>false),
@@ -707,13 +712,11 @@ class AdminTheme
             'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
                     'title'=>$this->FixSpaces(lang('editusertag')),
                     'description'=>lang('editusertag'),'show_in_menu'=>false),
+            'sep'=>array('url'=>'','parent'=>'extensions','title'=>'<hr>','description'=>'','show_in_menu'=>true),
              // base admin menu ---------------------------------------------------------
             'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
                     'description'=>lang('admindescription'),'show_in_menu'=>true),
-            'preferences'=>array('url'=>'editprefs.php','parent'=>'siteadmin',
-                    'title'=>$this->FixSpaces(lang('adminprefs')),
-                    'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
             'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('globalconfig')),
                     'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
@@ -729,6 +732,16 @@ class AdminTheme
             'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
+             // my prefs menu ---------------------------------------------------------
+            'myprefs'=>array('url'=>'topmyprefs.php','parent'=>-1,
+                    'title'=>$this->FixSpaces(lang('myprefs')),
+                    'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
+            'myaccount'=>array('url'=>'edituser.php','parent'=>'myprefs',
+                    'title'=>$this->FixSpaces(lang('myaccount')),
+                    'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
+            'preferences'=>array('url'=>'editprefs.php','parent'=>'myprefs',
+                    'title'=>$this->FixSpaces(lang('adminprefs')),
+                    'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
              // base view site menu ---------------------------------------------------------
             'viewsite'=>array('url'=>'../index.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('viewsite')),
@@ -899,7 +912,7 @@ class AdminTheme
         foreach ($this->menuItems[$section]['children'] as $thisChild)
             {
             $thisItem = $this->menuItems[$thisChild];
-            if (! $thisItem['show_in_menu'])
+            if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
             	{
             	continue;
             	}
@@ -987,7 +1000,7 @@ class AdminTheme
             foreach($this->menuItems[$section]['children'] as $thisChild)
                 {
                 $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu'])
+                if (! $thisItem['show_in_menu']  || strlen($thisItem['url']) < 1)
                     {
                     continue;
                     }
@@ -1063,6 +1076,11 @@ class AdminTheme
 			{
 			return;
 			}
+		if (strlen($this->menuItems[$section]['url']) < 1)
+		    {
+            echo "<li>".$this->menuItems[$section]['title']."</li>";
+            return;
+            }
 		echo "<li><a href=\"";
 		echo $this->menuItems[$section]['url'];
 		echo "\"";
@@ -1169,8 +1187,6 @@ class AdminTheme
 <?php
 	}
 ?>
-<script src="../js/prototype.js" type="text/javascript"></script>
-<script src="../js/scriptaculous.js" type="text/javascript"></script>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
 </head>

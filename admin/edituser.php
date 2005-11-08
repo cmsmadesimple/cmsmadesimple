@@ -53,7 +53,8 @@ if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
 
-$user_id = -1;
+$userid = get_userid();
+$user_id = $userid;
 if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
 else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
 
@@ -63,8 +64,10 @@ if (strlen($thisuser->username) > 0)
     $CMS_ADMIN_SUBTITLE = $thisuser->username;
     }
 
-$userid = get_userid();
-$access = check_permission($userid, 'Modify Users') || ($userid == $user_id);
+// this is now always true... but we may want to change how things work, so I'll leave it
+$access_perm = check_permission($userid, 'Modify Users');
+$access_user = ($userid == $user_id);
+$access = $access_perm | $access_user;
 
 $use_wysiwyg = "";
 #if (isset($_POST["use_wysiwyg"])){$use_wysiwyg = $_POST["use_wysiwyg"];}
@@ -136,8 +139,15 @@ if ($access) {
 						$gCms->modules[$key]['object']->EditUserPost($thisuser);
 					}
 				}
+                if ($access_perm)
+                    {
+				    redirect("listusers.php");
+				    }
+				else
+				    {
+                    redirect("topmyprefs.php");
+                    }
 
-				redirect("listusers.php");
 			}
 			else {
 				$error .= "<li>".lang('errorupdatinguser')."</li>";

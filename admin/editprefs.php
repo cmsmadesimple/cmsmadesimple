@@ -46,6 +46,10 @@ if (isset($_POST['indent'])) $indent = $_POST['indent'];
 $ajax = 0;
 if (isset($_POST['ajax'])) $ajax = $_POST['ajax'];
 
+$paging = 0;
+if (isset($_POST['paging'])) $paging = $_POST['paging'];
+
+
 $error = "";
 
 $wysiwyg = '';
@@ -65,6 +69,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'bookmarks', $bookmarks);
 	set_preference($userid, 'indent', $indent);
 	set_preference($userid, 'ajax', $ajax);
+	set_preference($userid, 'paging', $paging);
 	audit(-1, '', 'Edited User Preferences');
 	$error = lang('prefsupdated');
 	#redirect("index.php");
@@ -77,6 +82,8 @@ if (isset($_POST["submit_form"])) {
     $bookmarks = get_preference($userid, 'bookmarks');
     $indent = get_preference($userid, 'indent', true);
     $ajax = get_preference($userid, 'ajax', false);
+    $paging = get_preference($userid, 'paging', 0);
+
 }
 
 include_once("header.php");
@@ -166,6 +173,20 @@ if ($error != "") {
 				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>
 				<p class="pageinput">
 					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
+				</p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>
+				<p class="pageinput">
+					<select name="paging">
+					<option value="0"<?php if ($paging == 0) echo " selected";?>><?php echo lang('nopaging');?></option>
+					<option value="10"<?php if ($paging == 10) echo " selected";?>>10</option>
+					<option value="20"<?php if ($paging == 20) echo " selected";?>>20</option>
+					<option value="30"<?php if ($paging == 30) echo " selected";?>>30</option>
+					<option value="40"<?php if ($paging == 40) echo " selected";?>>40</option>
+					<option value="50"<?php if ($paging == 50) echo " selected";?>>50</option>
+					<option value="100"<?php if ($paging == 100) echo " selected";?>>100</option>
+					</select>
 				</p>
 			</div>
 			<div class="pageoverflow">

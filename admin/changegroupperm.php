@@ -40,23 +40,10 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Permissions');
-$use_ajax=get_preference($userid, 'ajax', false);
-if ($use_ajax)
-    {
-    $xajax = new xajax("ajax_changegroupperm.php");
-    $xajax->registerFunction("permsForGroup");
-    $xajax->registerFunction("saveChange");
-    $xajax->registerFunction("addAll");
-    $xajax->processRequests();
-    }
 
 $message = '';
 
 include_once("header.php");
-if ($use_ajax)
-    {
-    $xajax->printJavascript();
-    }
 
 if (!$access) {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
@@ -78,10 +65,6 @@ else {
         echo '<p class="pagetext">Group Name:</p>';
         echo '<p class="pageinput">';
         echo '<select name="group_id"';
-        if ($use_ajax)
-            {
-            echo 'onchange="xajax_permsForGroup(this.options[this.selectedIndex].value);"';
-            }
         echo '><option value="-1">Select a Group</option>';
         foreach ($groups as $onegroup)
             {
@@ -94,44 +77,6 @@ else {
             }
         echo '</select>';
         echo '<input id="groupsubmit" type="submit" value="'.lang('selectgroup').'" /></p>';
-        if ($use_ajax)
-            {
-            ?>
-            <script type="text/javascript">
-              // <![CDATA[
-                 var item=document.getElementById('groupsubmit');
-                if (item)
-                    {
-                    item.style.visibility = 'hidden';
-                    }
-               // ]]>
-            </script>
-            <br /><div id="ajaxarea">
-           <div class="ajaxselection">
-           	<div style="float:left;">
-           	<p class="pagesubtitle">Permitted</p>
-           	<ul class="sortable" id="permitted"></ul></div>
-           	<div style="float:left;"><p class="pagesubtitle">Forbidden</p>
-           	<ul class="sortable" id="notpermitted"></ul></div>
-           	</div>
-       		<script type="text/javascript">
-// <![CDATA[
-Sortable.create('permitted',{dropOnEmpty:true,containment:['permitted','notpermitted'],constraint:false});
-Sortable.create('notpermitted',{dropOnEmpty:true,containment:['permitted','notpermitted'],constraint:false});
-// ]]>
-</script>
-           </div>
-<script type="text/javascript">
-// <![CDATA[
-var item=document.getElementById('ajaxarea');
-if (item)
-	{
-	item.style.visibility = 'hidden';
-	}
-// ]]>
-</script>
-<?php
-            }
         echo '</div></form>';
         }
     if ($group_id != -1 && $submitted == -1)
