@@ -198,13 +198,12 @@ else {
 	}
 	else
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (?) ORDER BY template_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (".$notinto.") ORDER BY template_name";
 	}
-	$result = $db->Execute($query, $notinto);
+	$result = $db->Execute($query);
 
 	if ($result && $result->RowCount() > 0)
 	{
-
 		echo "<form action=\"addtemplateassoc.php\" method=\"post\">";
 		echo '<div class="pageoverflow"><p class="pageoptions">';
 		echo "<select name=\"template_id\">\n";

@@ -188,10 +188,12 @@ else
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagetextarea', '', $encoding)?></p>
 		</div>
+		<?php if (TemplateOperations::StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagetextarea', '', $encoding)?></p>
 		</div>
+		<?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('encoding')?>:</p>
 			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>

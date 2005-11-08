@@ -448,6 +448,17 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = $contentobj->Show($tpl_name);
 				$log->debug('Done running Show()');
 
+				#Perform the content data callback
+				#This needs to go...
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->ContentData($content);
+					}
+				}
+
 				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
 				{

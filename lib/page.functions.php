@@ -601,6 +601,8 @@ function get_stylesheet($template_id, $media_type = '')
 			AND		c.media_type = ?";
 		$cssresult = $db->Execute($cssquery, array($template_id, $media_type));
 
+		var_dump($cssresult);
+
 		if ($cssresult && $cssresult->RowCount() > 0)
 		{
 			while ($cssline = $cssresult->FetchRow())

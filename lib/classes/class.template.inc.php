@@ -327,6 +327,28 @@ class TemplateOperations
 		return $result;
 	}
 
+	function StylesheetsUsed()
+	{
+		$result = 0;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+        $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
+        $dbresult = $db->Execute($query);
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			$row = $dbresult->FetchRow();
+			if (isset($row["count"]))
+			{
+				$result = $row["count"];
+			}
+		}
+
+		return $result;
+	}
+
 	function TouchAllTemplates($blob_name='')
 	{
 		$result = false;
