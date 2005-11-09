@@ -32,6 +32,9 @@ $page = "";
 if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
 {
 	$page = $_GET["tmpfile"];
+	$page = str_replace("..", "", $page);
+	$page = str_replace("\\", "", $page);
+	$page = str_replace("/", "", $page);
 
 	#header("Content-Language: " . $current_language);
 	#header("Content-Type: text/html; charset=" . get_encoding());

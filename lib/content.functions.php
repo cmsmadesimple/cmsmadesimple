@@ -183,6 +183,7 @@ class Smarty_CMS extends Smarty {
 	{
 		debug_buffer('start html_blob_get_template');
 		global $gCms;
+		$config =& $gCms->config;
 
 		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($tpl_name);
 		if ($oneblob)
@@ -200,6 +201,13 @@ class Smarty_CMS extends Smarty {
 			}
 
 			$tpl_source = $text;
+
+			#So no one can do anything nasty, take out the php smarty tags.  Use a user
+			#defined plugin instead.
+			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+			{
+				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+			}
 		}
 		else
 		{
@@ -321,6 +329,13 @@ class Smarty_CMS extends Smarty {
 			}
 		}
 
+		#So no one can do anything nasty, take out the php smarty tags.  Use a user
+		#defined plugin instead.
+		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+		{
+			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+		}
+
 		return true;
 	}
 
@@ -336,6 +351,7 @@ class Smarty_CMS extends Smarty {
 		$log->debug('Starting template_get_template');
 
 		global $gCms;
+		$config = $gCms->config;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
@@ -378,6 +394,14 @@ class Smarty_CMS extends Smarty {
 							$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
 						}
 					}
+
+					#So no one can do anything nasty, take out the php smarty tags.  Use a user
+					#defined plugin instead.
+					if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+					{
+						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+					}
+
 					$log->debug('Template Found.  Leaving template_get_template');
 					return true;
 				}
@@ -469,6 +493,13 @@ class Smarty_CMS extends Smarty {
 					}
 				}
 
+				#So no one can do anything nasty, take out the php smarty tags.  Use a user
+				#defined plugin instead.
+				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+				{
+					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
+				}
+
 				$log->debug('Content found.  Leaving content_get_template');
 				return true;
 			}
@@ -510,6 +541,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
+		$config = $gCms->config;
 
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
@@ -556,6 +588,13 @@ class Smarty_CMS extends Smarty {
 		{
 			header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
 			header("Pragma: public");
+		}
+
+		#So no one can do anything nasty, take out the php smarty tags.  Use a user
+		#defined plugin instead.
+		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+		{
+			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 		}
 
 		return true;
