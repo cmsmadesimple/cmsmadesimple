@@ -139,7 +139,7 @@ ul.pageerror { margin: 0px; }
 .clearb { clear: both; }
 .loginerror { color: #CE374E; }
 .logotext { color: #ffffff; font-size: 1.6em; font-weight: bold; margin-left: 15px; vertical-align: 10px; }
-#ajaxarea { margin-top: 10px; left: 10px; clear: both;}
+.imageframe { height: 300px; }
 .ajaxbutton { padding-top: 5px; padding-left: 1px; clear: both;}
 ul.sortable { width: 250px; height: 80px; border: 1px solid black; border-collapse: collapse; margin-top:5px; margin:1px; padding:0; overflow: auto; }
 ul.sortable li {list-style: none; padding:0; margin:1px; border: 1px solid #cccccc; cursor:move; width:90%; padding-left: 5px;}
