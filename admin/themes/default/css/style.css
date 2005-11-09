@@ -44,6 +44,7 @@ p.lbpass { color: #555555; font-size: 1.2em; margin-top: 10px; }
 #nav li:hover ul, #nav li.cssHover ul { display: block; }
 #nav li:hover, #nav li.cssHover { background: #ABB0B6; }
 li.selected { background: #BDC0C6; }
+#nav li.sep { line-height: 2px; border-bottom: 1px solid #c6c3bd; }
 
 /* Nav Tools */
 div.navt_menu { position: absolute; right: 0px; }

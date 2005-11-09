@@ -30,7 +30,14 @@ class defaultTheme extends AdminTheme
 			}
 		if (strlen($this->menuItems[$section]['url']) < 1)
 		    {
-            echo "<li>".$this->menuItems[$section]['title']."</li>";
+            if ($this->menuItems[$section]['title'] == '-')
+                {
+                echo "<li class=\"sep\">&nbsp;</li>";
+                }
+            else
+                {
+                echo "<li>".$this->menuItems[$section]['title']."</li>";
+                }
             return;
             }
 		echo "<li><a href=\"";
