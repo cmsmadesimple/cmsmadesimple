@@ -7,11 +7,9 @@
 <title>CMS Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
 <link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
-<script src="/js/prototype.js" type="text/javascript"></script>
-<script src="/js/scriptaculous.js" type="text/javascript"></script>
 </head>
 
-<body<?php if (isset($error) && $error != '') { echo ' onload="Effect.Shake(\'loginbox\');"';} ?>>
+<body>
 <div class="lball">
 	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Admin Login</span></p></div>
 	<div id="loginbox" class="lblayout lbcontainer">
