@@ -753,7 +753,7 @@ class ContentBase
 				$gCms->modules[$key]['active'] == true)
 			{
 				@ob_start();
-				$gCms->modules[$key]['object']->ContentEditPre();
+				$gCms->modules[$key]['object']->ContentEditPre($this);
 			}
 		}
 
@@ -777,7 +777,7 @@ class ContentBase
 				$gCms->modules[$key]['active'] == true)
 			{
 				@ob_start();
-				$gCms->modules[$key]['object']->ContentEditPost();
+				$gCms->modules[$key]['object']->ContentEditPost($this);
 			}
 		}
 		
@@ -1009,7 +1009,7 @@ class ContentBase
 				$gCms->modules[$key]['active'] == true)
 			{
 				@ob_start();
-				$gCms->modules[$key]['object']->ContentDeletePre();
+				$gCms->modules[$key]['object']->ContentDeletePre($this);
 			}
 		}
 		
@@ -1064,7 +1064,7 @@ class ContentBase
 				$gCms->modules[$key]['active'] == true)
 			{
 				@ob_start();
-				$gCms->modules[$key]['object']->ContentDeletePost();
+				$gCms->modules[$key]['object']->ContentDeletePost($this);
 			}
 		}
 	}

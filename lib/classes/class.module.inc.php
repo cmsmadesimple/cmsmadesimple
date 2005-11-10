@@ -850,19 +850,19 @@ class CMSModule extends ModuleOperations
 	 * ------------------------------------------------------------------
 	 */
 	
-	function ContentEditPre()
+	function ContentEditPre(&$content)
 	{
 	}
 	
-	function ContentEditPost()
+	function ContentEditPost(&$content)
 	{
 	}
 	
-	function ContentDeletePre()
+	function ContentDeletePre(&$content)
 	{
 	}
 	
-	function ContentDeletePost()
+	function ContentDeletePost(&$content)
 	{
 	}
 
