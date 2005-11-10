@@ -7,6 +7,7 @@ echo ------------------------------------
 sh autogen.sh
 
 rm -fr CHECKLIST
+rm -fr build
 rm -fr config.php
 rm -fr autogen.sh
 rm -fr mpd.sql
