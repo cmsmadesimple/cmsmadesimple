@@ -110,6 +110,7 @@ class PermaLinks extends CMSModule
 	}
 	    
    	function mod_rewrite_rules() {
+        global $config;
 		$site_root = $config['root_url'];
 		$home_root = $this->trailingslashit($config['root_path']);
 
@@ -138,12 +139,17 @@ class PermaLinks extends CMSModule
 			if ($match == '(.+)/?$' || $match == '([^/]+)/?$' ) {
 				//nada.
 			}
-
+/* I don't understand this section below. $home_root is a filesystem path, so the
+   rewrite would fail, it seems to me. I'm no mod_rewrite expert, though.
+   In any case, $this->index is undefined, so that first clause would never
+   get triggered. So I chopped it. SjG
 			if (strstr($query, $this->index)) {
 				$rules .= 'RewriteRule ^' . $match . ' ' . $home_root . $query . " [QSA,L]\n";
 			} else {
 				$rules .= 'RewriteRule ^' . $match . ' ' . $site_root . $query . " [QSA,L]\n";
 			}
+*/          $rules .= 'RewriteRule ^' . $match . ' ' . $site_root . $query . " [QSA,L]\n";
+
 		}
 		$rules .= "</IfModule>\n";
 
