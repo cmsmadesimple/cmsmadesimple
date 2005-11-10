@@ -712,7 +712,7 @@ class AdminTheme
             'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
                     'title'=>$this->FixSpaces(lang('editusertag')),
                     'description'=>lang('editusertag'),'show_in_menu'=>false),
-            'sep'=>array('url'=>'','parent'=>'extensions','title'=>'<hr>','description'=>'','show_in_menu'=>true),
+            'sep'=>array('url'=>'','parent'=>'extensions','title'=>'-','description'=>'','show_in_menu'=>true),
              // base admin menu ---------------------------------------------------------
             'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
