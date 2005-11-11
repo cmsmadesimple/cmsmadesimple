@@ -117,7 +117,7 @@ class PermaLinks extends CMSModule
     
 		$rules = "<IfModule mod_rewrite.c>\n";
 		$rules .= "RewriteEngine On\n";
-		$rules .= "RewriteBase $home_root\n";
+		$rules .= "RewriteBase \"$home_root\"\n";
 		$this->matches = '';
 		$rewrite = $this->rewrite_rules();
 		$num_rules = count($rewrite);
