@@ -49,6 +49,11 @@ as it's locale name.
 * Updated ADODB to 4.65
 * XHTML header did not pass along proper encoding in the admin
 
+Version 0.10.4 "Hawksbill" -- Wed Nov 09 2005
+-----------------
+
+* Fix for a possible secuirty risk in preview functionality
+
 Version 0.10.3 "Ebenezer" -- Wed Oct 03 2005
 -----------------
 
