@@ -26,7 +26,7 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Swedish (svenska)
-#Created by: Tobias Amnell <tobias.amnell@home.se>
+#Created by: Tobias Amnell <tobias.amnell@home.se> with additional translation by Daniel Westergren <daniel@wproductions.se>
 
 #Native language name
 $nls['language']['sv_SE'] = 'Svenska';

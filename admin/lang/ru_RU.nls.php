@@ -25,10 +25,9 @@
 
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
-#US English
-#Created by: Ted Kulp <tedkulp@users.sf.net>
-#Maintained by: Ted Kulp <tedkulp@users.sf.net>
-#This is the default language
+#RU Russian
+#Created by: Alexey Tyagunov <webmaster@superhonda.ru>
+#Maintained by: Alexey Tyagunov <webmaster@superhonda.ru>
 
 #Native language name
 #NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
@@ -38,7 +37,6 @@ $nls['language']['ru_RU'] = 'Russian';
 $nls['alias']['ru'] = 'ru_RU';
 $nls['alias']['russian'] = 'ru_RU' ;
 $nls['alias']['rus'] = 'ru_RU' ;
-$nls['alias']['ru_RU.ISO8859-1'] = 'ru_RU' ;
 
 #Encoding of the language
 $nls['encoding']['ru_RU'] = "utf-8";
