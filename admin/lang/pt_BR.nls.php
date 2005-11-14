@@ -5,13 +5,14 @@
 #Portuguese Brazilian
 #Created by: Camilo Leite <camilohollanda@yahoo.com.br>
 #Maintained by: Camilo Leite <camilohollanda@yahoo.com.br>
+#Revised by: José Diogenes Pedro <josediogenes@gmail.com>
 
 #Native language name
 $nls['language']['pt_BR'] = 'Brazilian Portuguese';
 
 #Possible aliases for language
 $nls['alias']['pt'] = 'pt_BR';
-$nls['alias']['portguese'] = 'pt_BR' ;
+$nls['alias']['portuguese'] = 'pt_BR' ;
 $nls['alias']['port'] = 'pt_BR' ;
 $nls['alias']['pt-BR'] = 'pt_BR' ;
 $nls['alias']['pt_BR'] = 'pt_BR' ;
