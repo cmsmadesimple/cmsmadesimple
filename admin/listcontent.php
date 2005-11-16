@@ -178,7 +178,8 @@ if (isset($_GET["message"])) {
                             $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
                             $thelist .= "</a>";
                             $collapsing = true;
-                            $collapse_depth = 1;
+                            // was collapse_depth=1
+                            $collapse_depth = $depth;
                             }
                         else
                             {
