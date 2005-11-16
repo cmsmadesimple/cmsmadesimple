@@ -732,7 +732,7 @@ class AdminTheme
             'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
-             // my prefs menu ---------------------------------------------------------
+             // base my prefs menu ---------------------------------------------------------
             'myprefs'=>array('url'=>'topmyprefs.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('myprefs')),
                     'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
