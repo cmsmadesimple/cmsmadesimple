@@ -1776,7 +1776,7 @@ class CMSModule extends ModuleOperations
 
 		if (isset($this->langhash[$name]))
 		{
-			if (isset($params))
+			if (count($params))
 			{
 				return vsprintf($this->langhash[$name], $params);
 			}
