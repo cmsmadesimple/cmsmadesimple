@@ -30,14 +30,7 @@ class defaultTheme extends AdminTheme
 			}
 		if (strlen($this->menuItems[$section]['url']) < 1)
 		    {
-            if ($this->menuItems[$section]['title'] == '-')
-                {
-                echo "<li class=\"sep\">&nbsp;</li>";
-                }
-            else
-                {
-                echo "<li>".$this->menuItems[$section]['title']."</li>";
-                }
+            echo "<li>".$this->menuItems[$section]['title']."</li>";
             return;
             }
 		echo "<li><a href=\"";
@@ -47,10 +40,32 @@ class defaultTheme extends AdminTheme
 			{
 			echo ' rel="external"';
 			}
+		$class = array();
 		if ($this->menuItems[$section]['selected'])
 			{
-			echo ' class="selected"';
+			array_push($class,'selected');
 			}
+		if (isset($this->menuItems[$section]['firstmodule']))
+		    {
+            array_push($class,'first_module');
+            }
+        else if (isset($this->menuItems[$section]['module']))
+            {
+            array_push($class,'module');
+            }
+        if (count($class) > 0)
+            {
+            echo ' class="';
+            for($i=0;$i<count($class);$i++)
+                {
+                if ($i > 0)
+                    {
+                    echo " ";
+                    }
+                echo $class[$i];
+                }
+            echo '"';
+            }
 		echo ">";
 		echo $this->menuItems[$section]['title'];
 		echo "</a>";

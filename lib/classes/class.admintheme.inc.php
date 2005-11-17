@@ -712,7 +712,6 @@ class AdminTheme
             'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
                     'title'=>$this->FixSpaces(lang('editusertag')),
                     'description'=>lang('editusertag'),'show_in_menu'=>false),
-            'sep'=>array('url'=>'','parent'=>'extensions','title'=>'-','description'=>'','show_in_menu'=>true),
              // base admin menu ---------------------------------------------------------
             'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
@@ -756,6 +755,7 @@ class AdminTheme
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
             {
             $tmpArray = $this->MenuListSectionModules($sectionKey);
+            $first = true;
             foreach ($tmpArray as $thisKey=>$thisVal)
                 {
                 $thisModuleKey = $thisKey;
@@ -774,6 +774,15 @@ class AdminTheme
                     'title'=>$this->FixSpaces($thisVal['name']),
                     'description'=>$thisVal['description'],
                     'show_in_menu'=>true);
+                if ($first)
+                    {
+                    $this->menuItems[$thisModuleKey]['firstmodule'] = 1;
+                    $first = false;
+                    }
+                else
+                    {
+                    $this->menuItems[$thisModuleKey]['module'] = 1;
+                    }
                 }
             }
 

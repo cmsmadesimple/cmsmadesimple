@@ -42,8 +42,10 @@ p.lbpass { color: #555555; font-size: 1.2em; margin-top: 10px; }
 #nav li li { float: none; padding: 0px; margin: 0px;  }
 #nav li:hover ul ul, #nav li.cssHover ul ul { display: none; }
 #nav li:hover ul, #nav li.cssHover ul { display: block; }
-#nav li:hover, #nav li.cssHover { background: #ABB0B6; }
+#nav li:hover, #nav li.cssHover, a.module:hover, a.first_module:hover { background: #ABB0B6; }
 li.selected { background: #BDC0C6; }
+a.module {background: #F0F0F0; }
+a.first_module {background: #F0F0F0; border-top: 1px solid #c6c3bd;}
 #nav li.sep { line-height: 2px; border-bottom: 1px solid #c6c3bd; }
 
 /* Nav Tools */
