@@ -2071,7 +2071,7 @@ class CMSModule extends ModuleOperations
 		{
 			$goto = 'moduleinterface.php';
 		}
-		$link = '<a href="'.$goto.'?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'page=';
+		$link = '<a href="'.$goto.'?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'action=' . $action .'&amp;'.$id.'page=';
 		if ($inline)
 		{
 			$link .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;

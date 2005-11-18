@@ -348,7 +348,7 @@ class content extends ContentBase
 										$id = str_replace(' ', '_', $val);
 										$name = $val;
 
-										if(!array_key_exists($val, $this->mProperties->mPropertyTypes))
+										if(!$this->mProperties->HasProperty($val))
 										{
 											$this->mProperties->Add("string", $id);
 										}
