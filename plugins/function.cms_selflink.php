@@ -123,9 +123,9 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		$url="";
 	}
 
+	$result = "";
 
 	if ($url != "") {
-		$result = "";
 		$result .= $label.'<a href="'.$url.'"';
 
 		if (isset($params['target'])) {

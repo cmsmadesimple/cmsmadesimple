@@ -27,7 +27,7 @@ function smarty_cms_function_menu_text($params, &$smarty)
 	}
 	else
 	{
-		return $pageinfo->content_menu_text;
+		return $pageinfo->content_menutext;
 	}
 }
 
