@@ -41,7 +41,7 @@ $nls['alias']['sv_SE.ISO8859-1'] = 'sv_SE' ;
 $nls['alias']['sv_SE.ISO8859-15'] = 'sv_SE' ;
 
 #Encoding of the language
-$nls['encoding']['sv_SE'] = "ISO-8859-15";
+$nls['encoding']['sv_SE'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['sv_SE'] = array();
