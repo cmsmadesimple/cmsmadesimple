@@ -41,7 +41,7 @@ $nls['alias']['deu'] = 'de_DE' ;
 $nls['alias']['de_DE.ISO8859-1'] = 'de_DE' ;
 
 #Encoding of the language
-$nls['encoding']['de_DE'] = "ISO-8859-1";
+$nls['encoding']['de_DE'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['de_DE'] = array();
