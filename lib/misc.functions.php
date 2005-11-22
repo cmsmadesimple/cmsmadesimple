@@ -62,7 +62,7 @@ function redirect($to, $noappend=false)
         $to = $schema."://".$host."/".$to;
     }
 
-	$to = urlencode($to);
+	$to = htmlspecialchars($to, ENT_NOQUOTES, get_encoding());
 
     //If session trans-id is being used, and they is on yo website, add it.
 	/*
