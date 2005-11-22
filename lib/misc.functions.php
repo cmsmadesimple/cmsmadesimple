@@ -62,8 +62,6 @@ function redirect($to, $noappend=false)
         $to = $schema."://".$host."/".$to;
     }
 
-	$to = htmlspecialchars($to, ENT_NOQUOTES, get_encoding());
-
     //If session trans-id is being used, and they is on yo website, add it.
 	/*
     if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
