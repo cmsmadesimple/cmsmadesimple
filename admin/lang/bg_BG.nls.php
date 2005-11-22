@@ -39,7 +39,7 @@ $nls['alias']['bulgarian'] = 'bg_BG' ;
 $nls['alias']['bul'] = 'bg_BG' ;
 
 #Encoding of the language
-$nls['encoding']['bg_BG'] = "utf-8";
+$nls['encoding']['bg_BG'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['bg_BG'] = array();

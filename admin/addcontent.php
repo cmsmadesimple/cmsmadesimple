@@ -201,6 +201,10 @@ else if ($preview)
 
 	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
 	$data['encoding'] = $stylesheetobj['encoding'];
+	if (isset($templateobj->encoding) && $templateobj->encoding != '')
+	{
+		$data['encoding'] = $templateobj->encoding;
+	}
 	$data['stylesheet'] = $stylesheetobj['stylesheet'];
 
 	$tmpfname = '';
