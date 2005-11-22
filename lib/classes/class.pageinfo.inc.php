@@ -34,6 +34,7 @@ class PageInfo
 	var $content_hierarchy;
 	var $content_type;
 	var $content_modified_date;
+	var $content_last_modified_date;
 	var $template_id;
 	var $template_encoding;
 	var $template_modified_date;
@@ -51,10 +52,25 @@ class PageInfo
 		$this->content_menutext = '';
 		$this->content_hierarchy = '';
 		$this->content_modified_date = -1;
+		$this->content_last_modified_date = -1;
 		$this->template_id = -1;
 		$this->template_modified_date = -1;
 		$this->template_encoding = '';
 		$this->content_cachable = false;
+
+		global $gCms;
+		$db = &$gCms->db;
+
+		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c WHERE c.active = 1';
+		$dbresult = $db->Execute($query);
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
+			}
+		}
 	}
 }
 

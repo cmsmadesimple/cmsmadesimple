@@ -543,6 +543,9 @@ class Smarty_CMS extends Smarty {
 		$pageinfo =& $gCms->variables['pageinfo'];
 		$config = $gCms->config;
 
+		$log =& LoggerManager::getLogger('content.functions.php');
+		$log->debug('Starting module_get_template');
+
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
 		{
@@ -583,6 +586,7 @@ class Smarty_CMS extends Smarty {
 			}
 		}
 		
+		$log->debug("Encoding: " . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 		if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
 		{

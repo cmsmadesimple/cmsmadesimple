@@ -62,6 +62,8 @@ function redirect($to, $noappend=false)
         $to = $schema."://".$host."/".$to;
     }
 
+	$to = urlencode($to);
+
     //If session trans-id is being used, and they is on yo website, add it.
 	/*
     if (ini_get("session.use_trans_sid") != "0" && $noappend == false && strpos($to,$host) !== false)
@@ -82,11 +84,11 @@ function redirect($to, $noappend=false)
         // use javascript instead
         echo '<script type="text/javascript">
             <!--
-                location.replace("'.$url.'");
+                location.replace("'.$to.'");
             // -->
             </script>
             <noscript>
-                <meta http-equiv="Refresh" content="0;URL='.$url.'">
+                <meta http-equiv="Refresh" content="0;URL='.$to.'">
             </noscript>';
         exit;
 
