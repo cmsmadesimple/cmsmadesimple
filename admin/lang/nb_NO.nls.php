@@ -25,13 +25,13 @@
 
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
-#Norwegian (bokmål)
+#Norwegian (bokmÃ¥l)
 #Created by: Roger "Stigma" Knutsen <stigmaster@gmail.com>
 #Maintained by: Jon Arne Holm <jaholm@start.no>
 
 #Native language name
-$nls['language']['nb_NO'] = 'Norsk bokmål';
-$nls['englishlang']['nb_NO'] = 'Norwegian bokmål';
+$nls['language']['nb_NO'] = 'Norsk bokmÃ¥l';
+$nls['englishlang']['nb_NO'] = 'Norwegian bokmÃ¥l';
 
 #Possible aliases for language
 $nls['alias']['no'] = 'nb_NO';
