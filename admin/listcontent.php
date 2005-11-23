@@ -199,7 +199,7 @@ if (isset($_GET["message"])) {
                         }
 
                     $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
-  					if ($templates[$one->TemplateId()]->name)
+  					if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
   					{
   						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
   					}
@@ -357,6 +357,7 @@ if (isset($_GET["message"])) {
 	{
 		$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
 	}
+
 	$headoflist .= '<p class="pageheader">'.lang('currentpages').'</p></div>';
 	if ($counter)
 	{
