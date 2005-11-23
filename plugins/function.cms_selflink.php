@@ -111,12 +111,12 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	} // end of next-prev code
 	if (isset($alias) && $alias != "") {
 		if ($config["assume_mod_rewrite"]) 
-			$url = $config["root_url"]."/".$alias.".shtml";
+			$url = $config["root_url"]."/".$alias.$config['page_extension'];
 		else 
 			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
 	} else if (isset ($pageid)) {
 		if ($config["assume_mod_rewrite"])
-			$url = $config["root_url"]."/".$pageid.".shtml";
+			$url = $config["root_url"]."/".$pageid.$config['page_extension'];
 		else 
 			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
 	} else {
