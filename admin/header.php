@@ -19,7 +19,14 @@ else
 }
 
 $gCms->variables['admintheme']=&$themeObject;
-$themeObject->SendHeaders(isset($charsetsent), get_encoding());
+if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')
+{
+	$themeObject->SendHeaders(isset($charsetsent), $gCms->config['admin_encoding']);
+}
+else
+{
+	$themeObject->SendHeaders(isset($charsetsent), get_encoding());
+}
 $themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
 
 $themeObject->DisplayDocType();

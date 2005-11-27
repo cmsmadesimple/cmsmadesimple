@@ -43,7 +43,7 @@ $nls['alias']['it_IT.ISO8859-1'] = 'it_IT' ;
 $nls['alias']['it_IT.ISO8859-15'] = 'it_IT' ;
 
 #Encoding of the language
-$nls['encoding']['it_IT'] = "ISO8859-15";
+$nls['encoding']['it_IT'] = "iso-8859-15";
 
 #Location of the file(s)
 $nls['file']['it_IT'] = array();

@@ -107,6 +107,8 @@ function cms_config_load($loadLocal = true)
 
 	$config["locale"] = "en_US";
 
+	$config["admin_encoding"] = "";
+
 	if ($loadLocal == true)
 	{
 		//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())

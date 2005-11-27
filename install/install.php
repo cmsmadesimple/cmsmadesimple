@@ -538,6 +538,7 @@ function showPageFive() {
 	$newconfig["default_upload_permission"] = '664';
     $newconfig["page_extension"] = ".html";
 	$newconfig["locale"] = "en_US";
+	$newconfig["admin_encoding"] = "";
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file

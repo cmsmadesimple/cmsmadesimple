@@ -64,6 +64,13 @@ require_once(dirname(__FILE__)."/lib/config.functions.php");
 #}
 $config = cms_config_load(true);
 
+#Check if we need a convert class for the admin encoding changes
+if (isset($config['admin_encoding']) && $config['admin_encoding'] != '')
+{
+	require_once(dirname(__FILE__).'/lib/convert/ConvertCharset.class.php');
+	$gCms->variables['convertclass'] = new ConvertCharset();
+}
+
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']); 
 
