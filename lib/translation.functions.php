@@ -65,18 +65,18 @@ function lang($name, $params = array(), $realm='admin')
 
 	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
 	{
-		if (strtolower(get_encoding()) != strtolower($gCms->config['admin_encoding']))
+		if (strtolower(get_encoding('', false)) != strtolower($gCms->config['admin_encoding']))
 		{
 			$class =& $gCms->variables['convertclass'];
-			$result = $class->Convert($result, get_encoding(), $gCms->config['admin_encoding']);
+			$result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
 		}
 	}
 
-	//return strtolower(get_encoding()) . ':' . strtolower($gCms->config['admin_encoding']) . ' - ' . $result;
+	//return strtolower(get_encoding('', false)) . ':' . strtolower($gCms->config['admin_encoding']) . ' - ' . $result;
 	return $result;
 }
 
-function get_encoding($charset='')
+function get_encoding($charset='', $defaultoverrides=true)
 {
 	global $nls;
 	global $current_language;
@@ -86,7 +86,7 @@ function get_encoding($charset='')
 	{
 		return $charset;
 	}
-	else if (isset($config['default_encoding']) && $config['default_encoding'] != "")
+	else if (isset($config['default_encoding']) && $config['default_encoding'] != "" && $defaultoverrides == true)
 	{
 		return $config['default_encoding'];
 	}

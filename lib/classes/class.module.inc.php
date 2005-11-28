@@ -1794,10 +1794,10 @@ class CMSModule extends ModuleOperations
 
 		if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
 		{
-			if (strtolower(get_encoding()) != strtolower($gCms->config['admin_encoding']))
+			if (strtolower(get_encoding('', false)) != strtolower($gCms->config['admin_encoding']))
 			{
 				$class =& $gCms->variables['convertclass'];
-				$result = $class->Convert($result, get_encoding(), $gCms->config['admin_encoding']);
+				$result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
 			}
 		}
 

@@ -25,7 +25,7 @@ if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] !=
 }
 else
 {
-	$themeObject->SendHeaders(isset($charsetsent), get_encoding());
+	$themeObject->SendHeaders(isset($charsetsent), get_encoding('', false));
 }
 $themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
 
