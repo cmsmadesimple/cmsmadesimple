@@ -38,7 +38,7 @@ $nls['alias']['polish'] = 'pl_PL' ;
 $nls['alias']['pl_PL.ISO8859-2'] = 'pl_PL' ;
 
 #Encoding of the language
-$nls['plcoding']['pl_PL'] = "UTF-8";
+$nls['encoding']['pl_PL'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['pl_PL'] = array();

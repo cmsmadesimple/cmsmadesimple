@@ -107,7 +107,7 @@ function cms_config_load($loadLocal = true)
 
 	$config["locale"] = "en_US";
 
-	$config["admin_encoding"] = "";
+	$config["admin_encoding"] = "utf-8";
 
 	if ($loadLocal == true)
 	{

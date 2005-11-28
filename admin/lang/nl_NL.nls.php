@@ -37,7 +37,7 @@ $nls['alias']['dutch'] = 'nl_NL';
 $nls['alias']['nl_NL.ISO8859-1'] = 'nl_NL' ;
 
 #Encoding of the language
-$nls['encoding']['nl_NL'] = "ISO-8859-1";
+$nls['encoding']['nl_NL'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['nl_NL'] = array();

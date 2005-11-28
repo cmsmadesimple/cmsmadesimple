@@ -28,6 +28,9 @@ function lang($name, $params = array(), $realm='admin')
 {
 	global $gCms;
 	global $lang;
+	global $nls;
+
+	//echo strtolower(get_encoding()) . ':' . strtolower($nls['encoding'][$gCms->current_language]);
 
 	$result = '';
 
@@ -47,12 +50,29 @@ function lang($name, $params = array(), $realm='admin')
 		$result = "--Add Me - $name --";
 	}
 
-	if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '' && isset($gCms->variables['convertclass']))
+	/*
+	if (isset($gCms->current_language) && isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '' && isset($gCms->variables['convertclass']) && ($nls['encoding'][$gCms->current_language] != $gCms->config['admin_encoding']))
 	{
 		$class =& $gCms->variables['convertclass'];
-		$result = $class->Convert($result, 'utf-8', $gCms->config['admin_encoding']);
+		$result = $class->Convert($result, $nls['encoding'][$gCms->current_language], $gCms->config['admin_encoding']);
+	}
+	else if (isset($gCms->current_language) && (strtolower(get_encoding()) != strtolower($nls['encoding'][$gCms->current_language])) && isset($gCms->variables['convertclass']))
+	{
+		$class =& $gCms->variables['convertclass'];
+		$result = $class->Convert($result, $nls['encoding'][$gCms->current_language], get_encoding());
+	}
+	*/
+
+	if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
+	{
+		if (strtolower(get_encoding()) != strtolower($gCms->config['admin_encoding']))
+		{
+			$class =& $gCms->variables['convertclass'];
+			$result = $class->Convert($result, get_encoding(), $gCms->config['admin_encoding']);
+		}
 	}
 
+	//return strtolower(get_encoding()) . ':' . strtolower($gCms->config['admin_encoding']) . ' - ' . $result;
 	return $result;
 }
 

@@ -1774,21 +1774,34 @@ class CMSModule extends ModuleOperations
 			}
 		}
 
+		$result = '';
+
 		if (isset($this->langhash[$name]))
 		{
 			if (count($params))
 			{
-				return vsprintf($this->langhash[$name], $params);
+				$result = vsprintf($this->langhash[$name], $params);
 			}
 			else
 			{
-				return $this->langhash[$name];
+				$result = $this->langhash[$name];
 			}
 		}
 		else
 		{
-			return "--Add Me - module:".$this->GetName()." string:$name--";
+			$result = "--Add Me - module:".$this->GetName()." string:$name--";
 		}
+
+		if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
+		{
+			if (strtolower(get_encoding()) != strtolower($gCms->config['admin_encoding']))
+			{
+				$class =& $gCms->variables['convertclass'];
+				$result = $class->Convert($result, get_encoding(), $gCms->config['admin_encoding']);
+			}
+		}
+
+		return $result;
 	}
 
 	/**
