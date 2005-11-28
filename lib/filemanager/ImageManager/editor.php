@@ -2,9 +2,12 @@
 /**
  * The PHP Image Editor user interface.
  * @author $Author: Wei Zhuo $
- * @version $Id: editor.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  */
+
+require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include.php');
+check_login();
 
 require_once('config.inc.php');
 require_once('Classes/ImageManager.php');
