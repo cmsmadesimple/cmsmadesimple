@@ -380,7 +380,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		module_name C(255),
+		module_name C(200),
 		template_name C(200),
 		content X,
 		create_date T,
