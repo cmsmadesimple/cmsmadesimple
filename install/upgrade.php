@@ -119,7 +119,7 @@ else
 	echo "<p>Upgrading config.php...";
 
 	cms_config_upgrade();
-	$config = cms_config_load(true);
+	$config = cms_config_load(true, true);
 	cms_config_save($config);
 
 	echo "[done]</p>";

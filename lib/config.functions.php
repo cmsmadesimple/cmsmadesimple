@@ -28,7 +28,7 @@
  *
  * @since 0.5
  */
-function cms_config_load($loadLocal = true)
+function cms_config_load($loadLocal = true, $upgrade = false)
 {
 	$config = array();
 
@@ -107,7 +107,8 @@ function cms_config_load($loadLocal = true)
 
 	$config["locale"] = "en_US";
 
-	$config["admin_encoding"] = "utf-8";
+	#Don't set it yet
+	#$config["admin_encoding"] = "utf-8";
 
 	if ($loadLocal == true)
 	{
@@ -115,6 +116,39 @@ function cms_config_load($loadLocal = true)
 		if (file_exists(CONFIG_FILE_LOCATION))
 		{
 			include(CONFIG_FILE_LOCATION);
+		}
+	}
+
+	#Check to see if this exists in the config.php yet
+	if (!isset($config["admin_encoding"]))
+	{
+		#So this is our first setting of it.  Is default_encoding set already?
+		#If so, set admin_encoding to match (and admin encodings should behave as before)
+		if (isset($config["default_encoding"]) && $config["default_encoding"])
+		{
+			$config['admin_encoding'] = $config['default_encoding'];
+		}
+		else
+		{
+			#Ok, so last ditch effort.  Look for the encoding of the default template
+			if ($upgrade == true)
+			{
+				global $gCms;
+				$db =& $gCms->db;
+				$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
+				if (isset($encoding) && $encoding != '')
+				{
+					$config["admin_encoding"] = $encoding;
+				}
+				else
+				{
+					$config["admin_encoding"] = "utf-8";
+				}
+			}
+			else
+			{
+				$config["admin_encoding"] = "utf-8";
+			}
 		}
 	}
 
