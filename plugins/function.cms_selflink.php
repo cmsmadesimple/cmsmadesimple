@@ -156,7 +156,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		$result .= '</a>';
 	}
 	else {
-		$result .= "<!-- Not a valid cms_selflink -->".$params['text'];
+		$result .= "<!-- Not a valid cms_selflink -->";
+		if (isset($params['text']))
+		{
+			$result .= $params['text'];
+		}
 	}
 	
 	return $result;
