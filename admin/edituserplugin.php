@@ -134,6 +134,7 @@ else {
 	if ($error != "") {
 		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";		
 	}
+
 ?>
 
 <div class="pagecontainer">

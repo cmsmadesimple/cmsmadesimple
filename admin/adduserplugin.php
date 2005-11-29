@@ -125,7 +125,7 @@ else {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('code')?></p>
-			<p class="pageinput"><textarea class="pagetextarea" name="code" rows="" cols=""></textarea></p>
+			<p class="pageinput"><textarea class="pagetextarea" name="code" rows="" cols=""><?php echo $code ?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
