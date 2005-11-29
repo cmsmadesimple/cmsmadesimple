@@ -14,6 +14,8 @@ installs
 * Added Polish translation
 * Added Russian translation
 * Added UninstallPreMessage() to module API
+* Changed encoding handling.  Now all admin encodings are
+utf-8 with a mechanism for backwards compatibility
 * Changed the default WYSIWYG to FCKeditorX
 * Changed {content}, {html_blob} and {title} tags to be case
 insensitive

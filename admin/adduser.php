@@ -171,15 +171,15 @@ else {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('firstname')?>:</p>
-			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="" /></p>
+			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('lastname')?>:</p>
-			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="" /></p>
+			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('email')?>:</p>
-			<p class="pageinput"><input type="text" name="email" maxlength="255" value="" /></p>
+			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
