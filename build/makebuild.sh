@@ -7,8 +7,13 @@ if [ "$version" = "" ]; then
 	exit 1
 fi
 
-svn co http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} cmsmadesimple-${version}
+#svn copy http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Ready for ${version} --"
+svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${version}
+
 cd cmsmadesimple-${version}
+
+svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
+
 sh autogen.sh
 sh release-cleanup.sh
 touch tmp/cache/SITEDOWN

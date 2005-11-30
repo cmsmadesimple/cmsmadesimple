@@ -1667,9 +1667,25 @@ class ContentManager
 
         if (isset($gCms->ContentCache) &&
             ($loadprops == false || $gCms->variables['cachedprops'] == true))
-            {
+		{
             return $gCms->ContentCache;
-            }
+		}
+
+		$cachefilename = dirname(dirname(dirname(__FILE__))) . '/tmp/cache/contentcache';
+
+		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+		{
+			$pageinfo =& $gCms->variables['pageinfo'];
+			#debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
+			if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+			{
+				#debug_buffer('file needs loading');
+				$handle = fopen($cachefilename, "r");
+				$data = unserialize(fread($handle, filesize($cachefilename)));
+				fclose($handle);
+				return $data;
+			}
+		}
 
 		$gCms->ContentCache = array();
         $gCms->variables['cachedprops'] = $loadprops;
@@ -1687,21 +1703,44 @@ class ContentManager
 				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 				{
 					$contentobj = new $row['type'];
-					$contentobj->LoadFromData($row, $loadprops);
+					$contentobj->LoadFromData($row, false);
 					$map[$contentobj->Id()] = $count;
 					array_push($gCms->ContentCache, $contentobj);
 					$count++;
 				}
 			}
+
+			#Load all of the content props in one shot as well
+			$query = "SELECT * FROM ".cms_db_prefix()."content_props";
+			$dbresult = $db->Execute($query);
+
+			if ($dbresult && $dbresult->RowCount() > 0)
+			{
+				while ($row = $dbresult->FetchRow())
+				{
+					if (isset($map[$row['content_id']]))
+					{
+						$content_obj =& $gCms->ContentCache[$map[$row['content_id']]];
+						$prop_name = $row['prop_name'];
+						$content_obj->mPropertyTypes[$prop_name] = $row['type'];
+						$content_obj->mPropertyValues[$prop_name] = $row['content'];
+					}
+				}
+			}
 		}
 
         for ($i=0;$i<$count;$i++)
-            {
+		{
             if ($gCms->ContentCache[$i]->ParentId() != -1)
-                {
+			{
                 $gCms->ContentCache[$map[$gCms->ContentCache[$i]->ParentId()]]->mChildCount++;
-                }
-            }
+			}
+		}
+
+		$handle = fopen($cachefilename, "w");
+		fwrite($handle, serialize($gCms->ContentCache));
+		fclose($handle);
+
 		return $gCms->ContentCache;
 	}
 
