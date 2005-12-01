@@ -1432,7 +1432,6 @@ class ContentManager
 	function LoadContentFromId($id,$loadprops=true)
 	{
 
-		/*
 		global $gCms;
 		$db = &$gCms->db;
 		$cache = &$gCms->ContentIdCache;
@@ -1472,8 +1471,7 @@ class ContentManager
 			return FALSE;
 		}
 
-		*/
-
+		/*
 		#Chances are that this is cached already
 		$allcontent = @ContentManager::GetAllContent();
 
@@ -1486,11 +1484,11 @@ class ContentManager
 		}
 
 		return FALSE;
+		*/
 	}
 
 	function LoadContentFromAlias($alias, $only_active = false)
 	{
-		/*
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1536,8 +1534,8 @@ class ContentManager
 		{
 			return FALSE;
 		}
-		*/
 
+		/*
 		#Chances are that this is cached already
 		$allcontent = @ContentManager::GetAllContent();
 
@@ -1557,6 +1555,7 @@ class ContentManager
 		}
 
 		return FALSE;
+		*/
 	}
 
 	/**
@@ -1577,7 +1576,6 @@ class ContentManager
 
 	function GetDefaultContent()
 	{
-		/*
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1603,8 +1601,8 @@ class ContentManager
 		}
 
 		return $result;
-		*/
 
+		/*
 		#Chances are that this is cached already
 		$allcontent = @ContentManager::GetAllContent();
 
@@ -1618,6 +1616,7 @@ class ContentManager
 
 		#Just get something....
 		return $allcontent[0]->Id();
+		*/
 	}
 
 	/**
