@@ -117,6 +117,46 @@ class StylesheetOperations
 		return $result;
 	}
 
+
+	function AssociateStylesheetToTemplate( $stylesheetid, $templateid )
+	{
+	  global $gCms;
+	  $db = &$gCms->db;
+	  
+	  $query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,?,?)';
+	  $dbresult = $db->Execute( $query, array( $templateid, 
+						   $stylesheetid,
+						   'template',
+						   $db->DBTimeStamp(time()),
+						   $db->DBTimeStamp(time()) ));
+	  return ($dbresult != false);
+	}
+
+
+	function GetTemplateAssociatedStylesheets($templateid)
+	{
+	  $result = false;
+
+	  global $gCms;
+	  $db = &$gCms->db;
+
+	  $query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
+              assoc_type = ? AND assoc_to_id = ?';
+	  $dbresult = $db->Execute( $query, array( 'template', $templateid ));
+	  
+	  $result = array();
+	  if( $dbresult && $dbresult->RowCount() > 0 )
+	    {
+	      while( $row = $dbresult->FetchRow() )
+		{
+		  array_push( $result, $row['assoc_css_id'] );
+		}
+	    }
+
+	  return $result;
+	}
+
+
 	function LoadStylesheetByID($id)
 	{
 		$result = false;
