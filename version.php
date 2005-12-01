@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.11-beta6";
+$CMS_VERSION = "0.11";
 $CMS_VERSION_NAME = "Trinidad";
 $CMS_SCHEMA_VERSION = "13";
 
