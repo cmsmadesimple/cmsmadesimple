@@ -9,8 +9,8 @@ touch tmp/configs/index.html
 mkdir tmp/cache
 touch tmp/cache/index.html
 
-touch uploads/index.html
-touch uploads/images/index.html
+echo "<!-- This is a dummy file for the purposes of making sure this directory is created properly.  You're welcome to remove it at any time. -->" > uploads/index.html
+echo "<!-- This is a dummy file for the purposes of making sure this directory is created properly.  You're welcome to remove it at any time. -->" > uploads/images/index.html
 
 touch tmp/cache/SITEDOWN
 chmod 777 tmp/cache/SITEDOWN
