@@ -116,8 +116,9 @@ while [ $_version = 0 ]; do
   read _v
   if [ ${_v:-notset} = notset ]; then
     _version=$_version2;
+  else
+    _version=$_v
   fi
-  _version=$_v
 done
 
 # Ask for confirmation
@@ -141,7 +142,8 @@ done
 
 # create the archive
 _destname=${_destdir}/${_name}-${_version}.tar.gz
-tar zcvXf ${_tmpfile} ${_destname} .
+cd ..
+tar zcvXf ${_tmpfile} ${_destname} ${_name}
 
 # and cleanup
 rm -f $_tmpfile 2>/dev/null
