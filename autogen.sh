@@ -9,6 +9,9 @@ touch tmp/configs/index.html
 mkdir tmp/cache
 touch tmp/cache/index.html
 
+touch uploads/index.html
+touch uploads/images/index.html
+
 touch tmp/cache/SITEDOWN
 chmod 777 tmp/cache/SITEDOWN
 

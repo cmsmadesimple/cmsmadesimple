@@ -566,6 +566,7 @@ function showPageFive() {
 		include_once dirname(dirname(__FILE__)) . '/include.php';
 
 		global $gCms;
+		$gCms->config['db_prefix'] = $_POST['prefix'];
 
 		$db = &ADONewConnection($newconfig['dbms'], 'cms:pear');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);

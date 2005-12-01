@@ -498,6 +498,7 @@ class ContentBase
 	 */
 	function Properties()
 	{
+		debug_buffer('properties called');
 		if ($this->mPropertiesLoaded == false)
 		{
 			$this->mProperties->Load($this->mId);
@@ -513,6 +514,7 @@ class ContentBase
 
 	function GetPropertyValue($name)
 	{
+		debug_buffer('getpropertyvalue called');
 		if ($this->mPropertiesLoaded == false)
 		{
 			$this->mProperties->Load($this->mId);
@@ -523,6 +525,7 @@ class ContentBase
 
 	function SetPropertyValue($name, $value)
 	{
+		debug_buffer('setpropertyvalue called');
 		$this->DoReadyForEdit();
 		if ($this->mPropertiesLoaded == false)
 		{
@@ -632,8 +635,12 @@ class ContentBase
 
 			if ($result && $loadProperties)
 			{
-				$this->mProperties->Load($this->mId);
-				$this->mPropertiesLoaded = true;
+				if ($this->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$this->mProperties->Load($this->mId);
+					$this->mPropertiesLoaded = true;
+				}
 
 				if (NULL == $this->mProperties)
 				{
@@ -707,11 +714,15 @@ class ContentBase
 		$this->mCreationDate	= $data["create_date"];
 		$this->mModifiedDate	= $data["modified_date"];
 
-		if ($loadProperties)
+		if ($loadProperties == true)
 		{
 			#$this->mProperties = ContentManager::LoadPropertiesFromData(strtolower($this->mType), $data);
-			$this->mProperties->Load($this->mId);
-			$this->mPropertiesLoaded = true;
+			if ($this->mPropertiesLoaded == false)
+			{
+				debug_buffer("load from data is loading properties");
+				$this->mProperties->Load($this->mId);
+				$this->mPropertiesLoaded = true;
+			}
 
 			if (NULL == $this->mProperties)
 			{
@@ -763,6 +774,7 @@ class ContentBase
 
 		if ($this->mPropertiesLoaded == false)
 		{
+			debug_buffer('save is loading properties');
 			$this->mProperties->Load($this->mId);
 			$this->mPropertiesLoaded = true;
 		}
@@ -1327,6 +1339,7 @@ class ContentProperties
 
 	function Load($content_id)
 	{
+		debug_buffer('load properties called');
 		if (count($this->mPropertyValues) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
@@ -1418,6 +1431,8 @@ class ContentManager
 	 */
 	function LoadContentFromId($id,$loadprops=true)
 	{
+
+		/*
 		global $gCms;
 		$db = &$gCms->db;
 		$cache = &$gCms->ContentIdCache;
@@ -1438,7 +1453,7 @@ class ContentManager
 			{
 				$classtype = strtolower($row['type']);
 				$contentobj = new $classtype; 
-				$contentobj->LoadFromData($row,$loadprops);
+				$contentobj->LoadFromData($row,false);
 
 				if (!isset($cache[$id]))
 				{
@@ -1456,10 +1471,26 @@ class ContentManager
 		{
 			return FALSE;
 		}
+
+		*/
+
+		#Chances are that this is cached already
+		$allcontent = @ContentManager::GetAllContent();
+
+		foreach ($allcontent as $oneitem)
+		{
+			if ($oneitem->Id() == $id)
+			{
+				return $oneitem;
+			}
+		}
+
+		return FALSE;
 	}
 
 	function LoadContentFromAlias($alias, $only_active = false)
 	{
+		/*
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1505,6 +1536,27 @@ class ContentManager
 		{
 			return FALSE;
 		}
+		*/
+
+		#Chances are that this is cached already
+		$allcontent = @ContentManager::GetAllContent();
+
+		foreach ($allcontent as $oneitem)
+		{
+			if ($oneitem->Alias() == $alias || $oneitem->Id() == $alias)
+			{
+				if ($only_active == true && $oneitem->Active() == true)
+				{
+					return $oneitem;
+				}
+				else if ($only_active != true)
+				{
+					return $oneitem;
+				}
+			}
+		}
+
+		return FALSE;
 	}
 
 	/**
@@ -1525,6 +1577,7 @@ class ContentManager
 
 	function GetDefaultContent()
 	{
+		/*
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1550,6 +1603,21 @@ class ContentManager
 		}
 
 		return $result;
+		*/
+
+		#Chances are that this is cached already
+		$allcontent = @ContentManager::GetAllContent();
+
+		foreach ($allcontent as $oneitem)
+		{
+			if ($oneitem->DefaultContent() == true)
+			{
+				return $oneitem->Id();
+			}
+		}
+
+		#Just get something....
+		return $allcontent[0]->Id();
 	}
 
 	/**
@@ -1662,33 +1730,48 @@ class ContentManager
 
 	function GetAllContent($loadprops=true)
 	{
+		debug_buffer('get all content...');
+
 		global $gCms;
-		$db = &$gCms->db;
+		$cachefilename = dirname(dirname(dirname(__FILE__))) . '/tmp/cache/contentcache.php';
 
-        if (isset($gCms->ContentCache) &&
-            ($loadprops == false || $gCms->variables['cachedprops'] == true))
-		{
-            return $gCms->ContentCache;
-		}
+        #if (isset($gCms->variables['contentcache']) &&
+        #    ($loadprops == false || $gCms->variables['cachedprops'] == true))
 
-		$cachefilename = dirname(dirname(dirname(__FILE__))) . '/tmp/cache/contentcache';
-
-		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
-		{
-			$pageinfo =& $gCms->variables['pageinfo'];
-			#debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-			if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+		#if ($loadprops == true)
+		#{
+			if (isset($gCms->variables['contentcache']))
 			{
-				#debug_buffer('file needs loading');
-				$handle = fopen($cachefilename, "r");
-				$data = unserialize(fread($handle, filesize($cachefilename)));
-				fclose($handle);
-				return $data;
+				debug_buffer('Using memory cache...');
+				return $gCms->variables['contentcache'];
 			}
-		}
 
-		$gCms->ContentCache = array();
-        $gCms->variables['cachedprops'] = $loadprops;
+			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+			{
+				$pageinfo =& $gCms->variables['pageinfo'];
+				debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
+				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+				{
+					debug_buffer('file needs loading');
+
+					$handle = fopen($cachefilename, "r");
+					$data = fread($handle, filesize($cachefilename));
+					fclose($handle);
+
+					$data = unserialize(substr($data, 16));
+
+					$variables =& $gCms->variables;
+					$variables['contentcache'] =& $data;
+
+					return $data;
+				}
+			}
+		#}
+
+		$contentcache = array();
+        #$gCms->variables['cachedprops'] = $loadprops;
+
+		$db = &$gCms->db;
 		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 		$dbresult = $db->Execute($query);
 
@@ -1704,51 +1787,66 @@ class ContentManager
 				{
 					$contentobj = new $row['type'];
 					$contentobj->LoadFromData($row, false);
+					#if ($loadprops == true)
+					#{
+						$contentobj->mPropertiesLoaded = true;
+					#}
 					$map[$contentobj->Id()] = $count;
-					array_push($gCms->ContentCache, $contentobj);
+					array_push($contentcache, $contentobj);
 					$count++;
 				}
 			}
 
 			#Load all of the content props in one shot as well
-			$query = "SELECT * FROM ".cms_db_prefix()."content_props";
-			$dbresult = $db->Execute($query);
+			#if ($loadprops == true)
+			#{
+				debug_buffer('load props is true...');
+				$query = "SELECT * FROM ".cms_db_prefix()."content_props";
+				$dbresult = $db->Execute($query);
 
-			if ($dbresult && $dbresult->RowCount() > 0)
-			{
-				while ($row = $dbresult->FetchRow())
+				if ($dbresult && $dbresult->RowCount() > 0)
 				{
-					if (isset($map[$row['content_id']]))
+					while ($row = $dbresult->FetchRow())
 					{
-						$content_obj =& $gCms->ContentCache[$map[$row['content_id']]];
-						$prop_name = $row['prop_name'];
-						$content_obj->mPropertyTypes[$prop_name] = $row['type'];
-						$content_obj->mPropertyValues[$prop_name] = $row['content'];
+						if (isset($map[$row['content_id']]))
+						{
+							$content_obj =& $contentcache[$map[$row['content_id']]];
+							$prop_name = $row['prop_name'];
+							$content_obj->mPropertyTypes[$prop_name] = $row['type'];
+							$content_obj->mPropertyValues[$prop_name] = $row['content'];
+							$content_obj->mPropertiesLoaded = true;
+						}
 					}
 				}
-			}
+			#}
 		}
 
         for ($i=0;$i<$count;$i++)
 		{
-            if ($gCms->ContentCache[$i]->ParentId() != -1)
+            if ($contentcache[$i]->ParentId() != -1)
 			{
-                $gCms->ContentCache[$map[$gCms->ContentCache[$i]->ParentId()]]->mChildCount++;
+                $contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
 			}
 		}
 
+		#var_export(serialize($contentcache));
+
+		debug_buffer("Serializing...");
 		$handle = fopen($cachefilename, "w");
-		fwrite($handle, serialize($gCms->ContentCache));
+		fwrite($handle, '<?php return; ?>'.serialize($contentcache));
 		fclose($handle);
 
-		return $gCms->ContentCache;
+		$variables =& $gCms->variables;
+		$variables['contentcache'] =& $contentcache;
+
+		return $contentcache;
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
 	{
 		$result = '';
 
-		$allcontent = ContentManager::GetAllContent(false);
+		$allcontent = ContentManager::GetAllContent();
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
