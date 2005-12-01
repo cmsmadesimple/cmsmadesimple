@@ -85,7 +85,7 @@ class defaultTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
-		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Administration Console</span></p></div>';
+		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Made Simple Admin Panel</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
         foreach ($this->menuItems as $key=>$menuItem) {
         	if ($menuItem['parent'] == -1) {

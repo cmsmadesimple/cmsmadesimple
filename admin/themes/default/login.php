@@ -1,4 +1,4 @@
-<?php echo '<?xml version="1.0" encoding="'.get_encoding().'"?>'."\n" ?>
+<?php echo "<?xml version=\"1.0\" encoding=\"'.get_encoding().'\"?".">"; ?>'."\n" ?>
 <!DOCTYPE html 
      PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
      "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -11,11 +11,11 @@
 
 <body>
 <div class="lball">
-	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Admin Login</span></p></div>
+	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Made Simple Admin Login</span></p></div>
 	<div id="loginbox" class="lblayout lbcontainer">
 			<div class="lbinfo">
 				<p>
-					Enter a valid user credential to get access to the administration console. <br /><br />
+					Enter a valid user credential to get access to the Admin Panel. <br /><br />
 					<?php
 						debug_buffer('Debug in the page is: ' . $error);
 						if (isset($error) && $error != '')
