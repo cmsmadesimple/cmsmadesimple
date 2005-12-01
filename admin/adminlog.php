@@ -75,7 +75,7 @@ if ($result && $result->RowCount() > 0) {
                echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
                echo "<td>".$row["item_name"]."</td>\n";
                echo "<td>".$row["action"]."</td>\n";
-               echo "<td>".date("D M j, Y G:i:s T", $row["timestamp"])."</td>\n";
+               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
                echo "</tr>\n";
 
                ($currow == "row1"?$currow="row2":$currow="row1");
