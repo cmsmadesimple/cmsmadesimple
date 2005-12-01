@@ -35,7 +35,10 @@ set_magic_quotes_runtime(false);
 
 #Setup session with different id and start it
 @session_name("CMSSESSID");
-if(!@session_id()) {
+@ini_set('url_rewriter.tags', '');
+@ini_set('session.use_trans_sid', 0);
+#if(!@session_id()) {
+if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE))) {
 	#Trans SID sucks also...
 	@ini_set('url_rewriter.tags', '');
 	@ini_set('session.use_trans_sid', 0);

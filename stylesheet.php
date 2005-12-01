@@ -84,6 +84,27 @@ if ($stripbackground)
 	$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
 }
 
+#Do cache-control stuff but only if we are running Apache
+if(function_exists('getallheaders'))
+{
+	$headers = getallheaders();
+	$hash = md5($css);
+
+	#if browser sent etag and it is the same then reply with 304
+	if (isset($headers['If-None-Match']) && $headers['If-None-Match'] == '"'.$hash.'"')
+	{
+		header('HTTP/1.1 304 Not Modified');
+		exit;
+	}
+	else {
+		header('ETag: "'.$hash.'"');
+		#header("Cache-Control: maxage=".(60*60*24));
+	}
+}
+
+#sending content length allows HTTP/1.0 persistent connections
+header("Content-Length: ".strlen($css));
+
 echo $css;
 
 # vim:ts=4 sw=4 noet
