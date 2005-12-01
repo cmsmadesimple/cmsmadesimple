@@ -111,9 +111,20 @@ class ModuleOperations extends Smarty
 											$newmodule = new $modulename;
 											$name = $newmodule->GetName();
 
-											#Check to see if version in db matches file version
 											global $CMS_VERSION;
-											if ($row['version'] == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
+											$dbversion = $row['version'];
+
+											#Check to see if there is an update and wether or not we should perform it
+											if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
+											{
+												$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
+												$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+												$result = $db->Execute($query, array($newmodule->GetVersion(), $name));
+												$dbversion = $newmodule->GetVersion();
+											}
+
+											#Check to see if version in db matches file version
+											if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 											{
 												$cmsmodules[$name]['object'] = $newmodule;
 												$cmsmodules[$name]['installed'] = true;
