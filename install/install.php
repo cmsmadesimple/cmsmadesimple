@@ -353,6 +353,10 @@ if (function_exists('pg_connect'))
 <TD>Create Tables (Warning: Deletes existing data)</TD>
 <TD><INPUT TYPE="checkbox" NAME="createtables" CHECKED="true" /></TD>
 </TR>
+<TR CLASS="row1">
+<TD>Install sample content and templates</TD>
+<TD><INPUT TYPE="checkbox" NAME="createextra" CHECKED="true" /></TD>
+</TR>
 </TABLE>
 <P ALIGN="center" CLASS="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input type="submit" value="Continue" /></P>
 <!--<p><input type="submit" value="Continue" /></p>-->
@@ -427,6 +431,30 @@ function showPageFour($sqlloaded = 0) {
 		fclose($handle);
 
 		echo "[done]</p>";
+
+		if (isset($_POST["createextra"]))
+		{
+			echo "<p>Importing sample data...";
+
+			$handle = fopen(dirname(__FILE__)."/schemas/extra.sql", 'r');
+			if ($handle) {
+				while (!feof($handle)) {
+					set_magic_quotes_runtime(false);
+					$s = fgets($handle, 32768);
+					if ($s != "") {
+						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
+						$result = $db->Execute($s);
+						if (!$result) {
+							die("Invalid query: $s");
+						} ## if
+					}
+				}
+			}
+
+			fclose($handle);
+
+			echo "[done]</p>";
+		}
 
 		echo "<p>Setting admin account information...";
 
