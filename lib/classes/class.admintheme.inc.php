@@ -274,10 +274,16 @@ class AdminTheme
         $this->perms['contentPerms'] = $this->perms['pagePerms'] |
                 (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
 
-        # layout
+        # layout        
         $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Html Blobs') |
                 check_permission($this->userid, 'Modify Html Blobs') |
                 check_permission($this->userid, 'Delete Html Blobs');
+        $thisUserBlobs = HtmlBlobOperations::AuthorBlobs($this->userid);
+        if (count($thisUserBlobs) > 0)
+            {
+            $this->perms['htmlPerms'] = true;
+            }
+
         $this->perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
                 check_permission($this->userid, 'Modify Templates') |
                 check_permission($this->userid, 'Remove Templates');

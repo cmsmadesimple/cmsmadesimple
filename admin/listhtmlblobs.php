@@ -39,7 +39,9 @@ if (isset($_GET["message"])) {
 <?php
 	$userid	= get_userid();
 
+	$modifyall = check_permission($userid, 'Modify Html Blobs');
 	$htmlbloblist = HtmlBlobOperations::LoadHtmlBlobs();
+	$myblobs = HtmlBlobOperations::AuthorBlobs($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -66,6 +68,8 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+            if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
+				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
@@ -77,6 +81,7 @@ if (isset($_GET["message"])) {
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");
+				}
 			}
 			$counter++;
 		}
@@ -86,6 +91,8 @@ if (isset($_GET["message"])) {
 	}
 
 #if ($add) {
+if (check_permission($userid, 'Add Html Blobs'))
+	{
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
@@ -97,6 +104,7 @@ if (isset($_GET["message"])) {
 			</a>
 		</p>		
 	</div>
+<?php } ?>
 </div>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 

@@ -50,8 +50,9 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Html Blobs');
-$adminaccess = check_permission($userid, 'Modify Any Page') || HtmlBlobOperations::CheckOwnership($htmlblob_id, $userid);
+$adminaccess = check_permission($userid, 'Modify Html Blobs');
+$access = check_permission($userid, 'Modify Html Blobs') || HtmlBlobOperations::CheckOwnership($htmlblob_id, $userid) ||
+HtmlBlobOperations::CheckAuthorship($htmlblob_id, $userid);
 
 $htmlarea_flag = false;
 $use_javasyntax = false;

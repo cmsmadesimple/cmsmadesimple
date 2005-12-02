@@ -143,6 +143,38 @@ class HtmlBlob
  */
 class HtmlBlobOperations
 {
+
+/**
+ * Prepares an array with the list of the html blobs $userid is an author of 
+ *
+ * @returns an array in whose elements are the IDs of the blobs  
+ * @since 0.11
+ */
+function AuthorBlobs($userid)
+{
+	global $gCms;
+	$db = $gCms->db;
+    $variables = &$gCms->variables;
+	if (!isset($variables['authorblobs']))
+	{
+		$db = $gCms->db;
+		$variables['authorblobs'] = array();
+
+		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
+		$result = $db->Execute($query, array($userid));
+
+		if ($result && $result->RowCount() > 0)
+		{
+			while ($row = $result->FetchRow())
+			{
+				array_push($variables['authorblobs'], $row['htmlblob_id']);
+			}
+		}
+	}
+
+	return $variables['authorblobs'];
+}
+
 	function LoadHtmlBlobs()
 	{
 		global $gCms;
@@ -325,24 +357,19 @@ class HtmlBlobOperations
 	}
 
 	function CheckAuthorship($id, $user_id)
-	{
-		$result = CheckOwnership($id, $user_id); //Owners are authors
+	{		
+		global $gCms;
+		$db = &$gCms->db;
+		$result = false;
 
-		if (!$result) //Might as well only check if necessary
+		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
+
+		$dbresult = $db->Execute($query, array($id, $user_id));
+
+		if ($dbresult && $dbresult->RowCount() > 0)
 		{
-			global $gCms;
-			$db = &$gCms->db;
-
-			$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND owner = ?";
-
-			$dbresult = $db->Execute($query, array($id, $user_id));
-
-			if ($dbresult && $dbresult->RowCount() > 0)
-			{
-				$result = true;
-			}
+			$result = true;
 		}
-
 		return $result;
 	}
 
