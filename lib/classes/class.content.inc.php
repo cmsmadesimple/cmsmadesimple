@@ -704,7 +704,7 @@ class ContentBase
 		$this->mOldItemOrder	= $data["item_order"];
 		$this->mHierarchy		= $data["hierarchy"];
 		$this->mMenuText		= $data['menu_text'];
-		$this->mMarkuop			= $data['markup'];
+		$this->mMarkup			= $data['markup'];
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
