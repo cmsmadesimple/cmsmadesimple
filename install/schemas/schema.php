@@ -430,7 +430,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict = NewDataDictionary($db);
 	$flds = "
 		template_id I KEY,
-		template_name C(25),
+		template_name C(255),
 		template_content X,
 		stylesheet X,
 		encoding C(25),

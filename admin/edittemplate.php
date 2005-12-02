@@ -223,7 +223,7 @@ else
 	<form method="post" action="edittemplate.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="template" maxlength="25" value="<?php echo $template?>" /></p>
+			<p class="pageinput"><input type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
