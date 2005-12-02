@@ -25,7 +25,16 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 include_once("header.php");
-
+$closedArray=array();
+if (get_preference($userid, 'collapse', '') != '')
+	{
+	$tmp  = explode('.',get_preference($userid, 'collapse'));
+	foreach ($tmp as $thisCol)
+		{
+		$colind = substr($thisCol,0,strpos($thisCol,'='));
+		$closedArray[$colind] = 1;
+		}
+	}
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
@@ -172,7 +181,7 @@ if (isset($_GET["message"])) {
                     $thelist .= "<td>";
                     if ($one->ChildCount() > 0)
                         {
-                        if ($one->Collapsed())
+                        if (isset($closedArray[$one->Id()])) //$one->Collapsed()
                             {
                             $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
                             $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');

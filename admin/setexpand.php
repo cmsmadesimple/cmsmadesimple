@@ -24,7 +24,17 @@ $CMS_EXCLUDE_FROM_RECENT=1;
 require_once("../include.php");
 
 check_login();
-
+$userid = get_userid();
+$closedArray=array();
+if (get_preference($userid, 'collapse', '') != '')
+	{
+	$tmp  = explode('.',get_preference($userid, 'collapse'));
+	foreach ($tmp as $thisCol)
+		{
+		$colind = substr($thisCol,0,strpos($thisCol,'='));
+		$closedArray[$colind] = 1;
+		}
+	}
 $error = FALSE;
 
 $content_id = "";
@@ -37,11 +47,17 @@ else if (isset($_GET["page"])) $pagelist_id = $_GET["page"];
 
 if (isset($_POST['expandall']) || isset($_GET['expandall']))
 	{
-	ContentManager::SetAllCollapse(false);
+	set_preference($userid, 'collapse', '');
 	}
 else if (isset($_POST['collapseall']) || isset($_GET['collapseall']))
 	{
-	ContentManager::SetAllCollapse(true);
+	$all = ContentManager::GetAllContent(false);
+	$cs = '';
+	foreach ($all as $thisitem)
+		{
+		$cs .= $thisitem->Id().'=1.';
+		}	
+	set_preference($userid, 'collapse', $cs);
 	}
 else
 	{
@@ -61,7 +77,24 @@ else
 			}
 		}
 	
-	ContentManager::SetCollapse($content_id, $collapse);
+	if ($collapse)
+		{
+		$closedArray[$content_id] = 1;
+		}
+	else
+		{
+		$closedArray[$content_id] = 0;
+		}
+	$cs = '';
+	foreach ($closedArray as $key=>$val)
+		{
+		if ($val == 1)
+			{
+			$cs .= $key.'=1.';
+			}
+		}
+	set_preference($userid, 'collapse', $cs);
+	//ContentManager::SetCollapse($content_id, $collapse);
 	}
 redirect("listcontent.php?page=".$pagelist_id);
 # vim:ts=4 sw=4 noet
