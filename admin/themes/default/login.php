@@ -11,11 +11,10 @@
 
 <body>
 <div class="lball">
-	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">CMS Made Simple Admin Login</span></p></div>
+	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext"><?php echo lang('logintitle')?></span></p></div>
 	<div id="loginbox" class="lblayout lbcontainer">
 			<div class="lbinfo">
-				<p>
-					Enter a valid user credential to get access to the Admin Panel. <br /><br />
+				<p><?php echo lang('loginprompt')?> <br /><br />
 					<?php
 						debug_buffer('Debug in the page is: ' . $error);
 						if (isset($error) && $error != '')
