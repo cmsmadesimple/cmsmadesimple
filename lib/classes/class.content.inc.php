@@ -199,7 +199,6 @@ class ContentBase
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
 		$this->mCachable		= true;
-		$this->mCollapse		= false;
 		$this->mMenuText		= "" ;
 		$this->mCreationDate	= "" ;
 		$this->mModifiedDate	= "" ;
@@ -472,20 +471,6 @@ class ContentBase
 	}
 
 	/**
-	 * Returns the collapse state for the admin
-	 */
-	function Collapsed()
-	{
-		return $this->mCollapse;
-	}
-
-	function SetCollapsed($collapse)
-	{
-		$this->DoReadyForEdit();
-		$this->mCollapse = $collapse;
-	}
-
-	/**
 	 * Returns number of immediate child-content items of this content
 	 */
 	function ChildCount()
@@ -614,7 +599,6 @@ class ContentBase
 				$this->mMenuText		= $row['menu_text'];
 				$this->mMarkup			= $row['markup'];
 				$this->mActive			= ($row["active"] == 1?true:false);
-				$this->mCollapse		= ($row["collapsed"] == 1?true:false);
 				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
 				$this->mCachable		= ($row["cachable"] == 1?true:false);
@@ -709,7 +693,6 @@ class ContentBase
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
 		$this->mCachable		= ($data["cachable"] == 1?true:false);
-		$this->mCollapse		= ($data["collapsed"] == 1?true:false);
 		$this->mLastModifiedBy	= $data["last_modified_by"];
 		$this->mCreationDate	= $data["create_date"];
 		$this->mModifiedDate	= $data["modified_date"];
@@ -939,7 +922,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, collapsed, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -956,7 +939,6 @@ class ContentBase
 			($this->mShowInMenu==true?1:0),
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
-            ($this->mCollapse==true?1:0),
 			$this->mMarkup,
 			$this->mLastModifiedBy,
 			$db->DBTimeStamp(time()),
@@ -1701,31 +1683,6 @@ class ContentManager
 			}
 		}
 	}
-
-	/**
-	 * Updates the collapse state of an item
-	 */
-	function SetCollapse($content_id, $collapsed=false)
-	{
-		global $gCms;
-		$db = $gCms->db;
-
-		$query = "UPDATE ".cms_db_prefix()."content SET collapsed=? WHERE content_id=?";
-		$dbresult = $db->Execute($query, array($collapsed?1:0,$content_id));
-	}
-
-	/**
-	 * Updates the collapse state of all items
-	 */
-	function SetAllCollapse($collapse=false)
-	{
-		global $gCms;
-		$db = $gCms->db;
-
-		$query = "UPDATE ".cms_db_prefix()."content SET collapsed=?";
-		$dbresult = $db->Execute($query, array($collapse?1:0));
-	}
-
 
 	function GetAllContent($loadprops=true)
 	{
