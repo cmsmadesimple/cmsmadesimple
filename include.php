@@ -93,7 +93,7 @@ if (isset($_SESSION["cms_admin_username"]))
 }
 
 #Setup db connection
-include_once(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
+include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 
 $sql_execs = 0;
 
