@@ -27,7 +27,7 @@
 
 #US English
 #Created by: Ted Kulp <tedkulp@users.sf.net>
-#Maintained by: Petr Jelinek <pjelinek@seznam.cz>
+#Maintained by: Roman Hanajik <roman.hanajik@centrum.cz>
 #This is the default language
 
 #Native language name
