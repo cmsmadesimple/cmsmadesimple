@@ -25,14 +25,14 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 include_once("header.php");
-$closedArray=array();
+$openedArray=array();
 if (get_preference($userid, 'collapse', '') != '')
 	{
 	$tmp  = explode('.',get_preference($userid, 'collapse'));
 	foreach ($tmp as $thisCol)
 		{
 		$colind = substr($thisCol,0,strpos($thisCol,'='));
-		$closedArray[$colind] = 1;
+		$openedArray[$colind] = 1;
 		}
 	}
 if (isset($_GET["message"])) {
@@ -181,7 +181,7 @@ if (isset($_GET["message"])) {
                     $thelist .= "<td>";
                     if ($one->ChildCount() > 0)
                         {
-                        if (isset($closedArray[$one->Id()])) //$one->Collapsed()
+                        if (!isset($openedArray[$one->Id()])) //$one->Collapsed()
                             {
                             $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
                             $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');

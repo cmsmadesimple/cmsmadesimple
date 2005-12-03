@@ -25,14 +25,14 @@ require_once("../include.php");
 
 check_login();
 $userid = get_userid();
-$closedArray=array();
+$openedArray=array();
 if (get_preference($userid, 'collapse', '') != '')
 	{
 	$tmp  = explode('.',get_preference($userid, 'collapse'));
 	foreach ($tmp as $thisCol)
 		{
 		$colind = substr($thisCol,0,strpos($thisCol,'='));
-		$closedArray[$colind] = 1;
+		$openedArray[$colind] = 1;
 		}
 	}
 $error = FALSE;
@@ -47,17 +47,20 @@ else if (isset($_GET["page"])) $pagelist_id = $_GET["page"];
 
 if (isset($_POST['expandall']) || isset($_GET['expandall']))
 	{
-	set_preference($userid, 'collapse', '');
-	}
-else if (isset($_POST['collapseall']) || isset($_GET['collapseall']))
-	{
 	$all = ContentManager::GetAllContent(false);
 	$cs = '';
 	foreach ($all as $thisitem)
 		{
-		$cs .= $thisitem->Id().'=1.';
+        if ($thisitem->HasChildren())
+            {
+		    $cs .= $thisitem->Id().'=1.';
+		    }
 		}	
 	set_preference($userid, 'collapse', $cs);
+	}
+else if (isset($_POST['collapseall']) || isset($_GET['collapseall']))
+	{
+	set_preference($userid, 'collapse', '');
 	}
 else
 	{
@@ -79,14 +82,14 @@ else
 	
 	if ($collapse)
 		{
-		$closedArray[$content_id] = 1;
+		$openedArray[$content_id] = 0;
 		}
 	else
 		{
-		$closedArray[$content_id] = 0;
+		$openedArray[$content_id] = 1;
 		}
 	$cs = '';
-	foreach ($closedArray as $key=>$val)
+	foreach ($openedArray as $key=>$val)
 		{
 		if ($val == 1)
 			{
