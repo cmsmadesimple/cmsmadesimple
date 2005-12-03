@@ -1,4 +1,4 @@
-Version 0.11 "Trinidad" -- Subversion
+Version 0.11 "Trinidad" -- Dec 03 2005
 -----------------
 
 * Added ability to set a media type for a stylesheet
@@ -21,6 +21,8 @@ utf-8 with a mechanism for backwards compatibility
 insensitive
 * Changed logic of included htaccess so that html can be used
 as the default extension for friendly urls
+* Fixed a potential security issue with being able to edit
+image files directly from the image manager
 * Fixed a bug where additional content blocks would disappear
 after a page was set inactive.  Fixed by adding a Load()
 callback for content types.
