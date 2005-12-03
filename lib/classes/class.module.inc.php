@@ -81,73 +81,71 @@ class ModuleOperations extends Smarty
 		if (isset($db))
 		{
 			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
-			$result = $db->Execute($query);
-			if ($result)
+			$result = &$db->Execute($query);
+			while (!$result->EOF)
 			{
-				while ($row = $result->FetchRow())
+				if (isset($result->fields['module_name']))
 				{
-					if (isset($row['module_name']))
+					$modulename = $result->fields['module_name'];
+					if (isset($modulename))
 					{
-						$modulename = $row['module_name'];
-						if (isset($modulename))
+						if ($loadall == true)
 						{
-							if ($loadall == true)
+							if (isset($cmsmodules[$modulename]))
 							{
-								if (isset($cmsmodules[$modulename]))
-								{
-									$cmsmodules[$modulename]['installed'] = true;
-									$cmsmodules[$modulename]['active'] = ($row['active']=='1'?true:false);
-								}
+								$cmsmodules[$modulename]['installed'] = true;
+								$cmsmodules[$modulename]['active'] = ($result->fields['active']=='1'?true:false);
 							}
-							else
+						}
+						else
+						{
+							if ($result->fields['active'] == '1')
 							{
-								if ($row['active'] == '1')
+								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
-									if (is_file("$dir/$modulename/$modulename.module.php"))
+									include_once("$dir/$modulename/$modulename.module.php");
+									if (class_exists($modulename))
 									{
-										include_once("$dir/$modulename/$modulename.module.php");
-										if (class_exists($modulename))
+										$newmodule = new $modulename;
+										$name = $newmodule->GetName();
+
+										global $CMS_VERSION;
+										$dbversion = $result->fields['version'];
+
+										#Check to see if there is an update and wether or not we should perform it
+										if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
 										{
-											$newmodule = new $modulename;
-											$name = $newmodule->GetName();
-
-											global $CMS_VERSION;
-											$dbversion = $row['version'];
-
-											#Check to see if there is an update and wether or not we should perform it
-											if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
-											{
-												$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
-												$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-												$result = $db->Execute($query, array($newmodule->GetVersion(), $name));
-												$dbversion = $newmodule->GetVersion();
-											}
-
-											#Check to see if version in db matches file version
-											if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
-											{
-												$cmsmodules[$name]['object'] = $newmodule;
-												$cmsmodules[$name]['installed'] = true;
-												$cmsmodules[$name]['active'] = ($row['active']=='1'?true:false);
-											}
-											else
-											{
-												unset($cmsmodules[$name]);
-											}
+											$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
+											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+											$result = $db->Execute($query, array($newmodule->GetVersion(), $name));
+											$dbversion = $newmodule->GetVersion();
 										}
-										else //No point in doing anything with it
+
+										#Check to see if version in db matches file version
+										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
+										{
+											$cmsmodules[$name]['object'] = $newmodule;
+											$cmsmodules[$name]['installed'] = true;
+											$cmsmodules[$name]['active'] = ($result->fields['active']=='1'?true:false);
+										}
+										else
 										{
 											unset($cmsmodules[$name]);
 										}
 									}
-									else
+									else //No point in doing anything with it
 									{
-										unset($cmsmodules[$modulename]);
+										unset($cmsmodules[$name]);
 									}
+								}
+								else
+								{
+									unset($cmsmodules[$modulename]);
 								}
 							}
 						}
 					}
+					$result->MoveNext();
 				}
 			}
 		}

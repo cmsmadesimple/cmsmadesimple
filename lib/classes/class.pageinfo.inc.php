@@ -62,14 +62,11 @@ class PageInfo
 		$db = &$gCms->db;
 
 		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c WHERE c.active = 1';
-		$dbresult = $db->Execute($query);
+		$row = $db->GetRow($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
-			}
+			$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
 		}
 	}
 }
@@ -89,34 +86,33 @@ class PageInfoOperations
 		global $gCms;
 		$db = &$gCms->db;
 
+		$row = '';
+
 		if (is_numeric($alias) && strpos($alias, '.') === FALSE && strpos($alias, ',') === FALSE) //Fix for postgres
 		{ 
 			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-			$dbresult = $db->Execute($query, array($alias, $alias));
+			$row = &$db->GetRow($query, array($alias, $alias));
 		}
 		else
 		{
 			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
-			$dbresult = $db->Execute($query, array($alias));
+			$row = &$db->GetRow($query, array($alias));
 		}
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onepageinfo = new PageInfo();
-				$onepageinfo->content_id = $row['content_id'];
-				$onepageinfo->content_title = $row['content_name'];
-				$onepageinfo->content_alias = $row['content_alias'];
-				$onepageinfo->content_menutext = $row['menu_text'];
-				$onepageinfo->content_hierarchy = $row['hierarchy'];
-				$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
-				$onepageinfo->template_id = $row['template_id'];
-				$onepageinfo->template_encoding = $row['encoding'];
-				$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
-				$onepageinfo->cachable = ($row['template_id'] == 1?true:false);
-				$result = $onepageinfo;
-			}
+			$onepageinfo = new PageInfo();
+			$onepageinfo->content_id = $row['content_id'];
+			$onepageinfo->content_title = $row['content_name'];
+			$onepageinfo->content_alias = $row['content_alias'];
+			$onepageinfo->content_menutext = $row['menu_text'];
+			$onepageinfo->content_hierarchy = $row['hierarchy'];
+			$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
+			$onepageinfo->template_id = $row['template_id'];
+			$onepageinfo->template_encoding = $row['encoding'];
+			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
+			$onepageinfo->cachable = ($row['template_id'] == 1?true:false);
+			$result = $onepageinfo;
 		}
 		else
 		{

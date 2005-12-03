@@ -147,12 +147,11 @@ class Smarty_CMS extends Smarty {
         $config = $gCms->config;
 
         $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-        $result = $db->Execute($query, split(';', $tpl_name));
+        $row = $db->GetRow($query, split(';', $tpl_name));
 
-        if ($result && $result->RowCount() > 0)
+        if ($row)
         {
-            $line = $result->FetchRow();
-            $tpl_source = $line['content'];
+            $tpl_source = $row['content'];
             return true;
         }
 
@@ -167,12 +166,10 @@ class Smarty_CMS extends Smarty {
 		$config = $gCms->config;
 
 		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, split(';', $tpl_name));
-
-		if ($result && $result->RowCount() > 0)
+		$row = $db->GetRow($query, split(';', $tpl_name));
+		if ($row)
 		{
-			$line = $result->FetchRow();
-			$tpl_timestamp = $db->UnixTimeStamp($line['modified_date']);
+			$tpl_timestamp = $db->UnixTimeStamp($row['modified_date']);
 			return true;
 		}
 
@@ -944,24 +941,22 @@ function load_plugins(&$smarty)
 		#}
 		search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins", false);
 
-			$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
-		$result = $db->Execute($query);
-		if ($result && $result->RowCount() > 0)
+		$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
+		$result = &$db->Execute($query);
+		while (!$result->EOF)
 		{
-			while ($row = $result->FetchRow())
+			if (!in_array($result->fields['userplugin_name'], $plugins))
 			{
-				if (!in_array($row['userplugin_name'], $plugins))
+				array_push($plugins, $result->fields['userplugin_name']);
+				$userplugins[$result->fields['userplugin_name']] = $result->fields['userplugin_id'];
+				$functionname = "cms_tmp_".$result->fields['userplugin_name']."_userplugin_function";
+				//Only register valid code
+				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
 				{
-					array_push($plugins, $row['userplugin_name']);
-					$userplugins[$row['userplugin_name']] = $row['userplugin_id'];
-					$functionname = "cms_tmp_".$row['userplugin_name']."_userplugin_function";
-					//Only register valid code
-					if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$row['code'].'}') === FALSE))
-					{
-						$smarty->register_function($row['userplugin_name'], $functionname, false);
-					}
+					$smarty->register_function($result->fields['userplugin_name'], $functionname, false);
 				}
 			}
+			$result->MoveNext();
 		}
 		sort($plugins);
 	}
