@@ -105,23 +105,21 @@ class TemplateOperations
 		$result = array();
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
-		$dbresult = $db->Execute($query);
+		$dbresult = &$db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		while (!$dbresult->EOF)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onetemplate = new Template();
-				$onetemplate->id = $row['template_id'];
-				$onetemplate->name = $row['template_name'];
-				$onetemplate->active = $row['active'];
-				$onetemplate->default = $row['default_template'];
-				$onetemplate->content = $row['template_content'];
-				$onetemplate->encoding = $row['encoding'];
-				$onetemplate->stylesheet = $row['stylesheet'];
-				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				array_push($result, $onetemplate);
-			}
+			$onetemplate = new Template();
+			$onetemplate->id = $dbresult->fields['template_id'];
+			$onetemplate->name = $dbresult->fields['template_name'];
+			$onetemplate->active = $dbresult->fields['active'];
+			$onetemplate->default = $dbresult->fields['default_template'];
+			$onetemplate->content = $dbresult->fields['template_content'];
+			$onetemplate->encoding = $dbresult->fields['encoding'];
+			$onetemplate->stylesheet = $dbresult->fields['stylesheet'];
+			$onetemplate->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
+			array_push($result, $onetemplate);
+			$dbresult->MoveNext();
 		}
 
 		return $result;
@@ -141,27 +139,24 @@ class TemplateOperations
 		}
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates WHERE template_id = ?";
-		$dbresult = $db->Execute($query, array($id));
+		$row = &$db->GetRow($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onetemplate = new Template();
-				$onetemplate->id = $row['template_id'];
-				$onetemplate->name = $row['template_name'];
-				$onetemplate->content = $row['template_content'];
-				$onetemplate->stylesheet = $row['stylesheet'];
-				$onetemplate->encoding = $row['encoding'];
-				$onetemplate->default = $row['default_template'];
-				$onetemplate->active = $row['active'];
-				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				$result = $onetemplate;
+			$onetemplate = new Template();
+			$onetemplate->id = $row['template_id'];
+			$onetemplate->name = $row['template_name'];
+			$onetemplate->content = $row['template_content'];
+			$onetemplate->stylesheet = $row['stylesheet'];
+			$onetemplate->encoding = $row['encoding'];
+			$onetemplate->default = $row['default_template'];
+			$onetemplate->active = $row['active'];
+			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$result = $onetemplate;
 
-				if (!isset($cache[$onetemplate->id]))
-				{
-					$cache[$onetemplate->id] = $onetemplate;
-				}
+			if (!isset($cache[$onetemplate->id]))
+			{
+				$cache[$onetemplate->id] = $onetemplate;
 			}
 		}
 
@@ -176,23 +171,20 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT t.template_id, t.template_name, t.template_content, t.stylesheet, t.encoding, t.active, t.default_template, t.modified_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = $db->Execute($query, array($alias, $alias));
+		$row = &$db->GetRow($query, array($alias, $alias));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onetemplate = new Template();
-				$onetemplate->id = $row['template_id'];
-				$onetemplate->name = $row['template_name'];
-				$onetemplate->content = $row['template_content'];
-				$onetemplate->stylesheet = $row['stylesheet'];
-				$onetemplate->encoding = $row['encoding'];
-				$onetemplate->default = $row['default_template'];
-				$onetemplate->active = $row['active'];
-				$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				$result = $onetemplate;
-			}
+			$onetemplate = new Template();
+			$onetemplate->id = $row['template_id'];
+			$onetemplate->name = $row['template_name'];
+			$onetemplate->content = $row['template_content'];
+			$onetemplate->stylesheet = $row['stylesheet'];
+			$onetemplate->encoding = $row['encoding'];
+			$onetemplate->default = $row['default_template'];
+			$onetemplate->active = $row['active'];
+			$onetemplate->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$result = $onetemplate;
 		}
 
 		return $result;
@@ -206,15 +198,13 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = $db->Execute($query, array($alias, $alias));
+		$dbresult = &$db->Execute($query, array($alias, $alias));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		while (!$dbresult->EOF)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				array_push($result, $row['c_date']);
-				array_push($result, $row['t_date']);
-			}
+			array_push($result, $dbresult->fields['c_date']);
+			array_push($result, $dbresult->fields['t_date']);
+			$dbresult->MoveNext();
 		}
 
 		return $result;
@@ -228,22 +218,19 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
-		$dbresult = $db->Execute($query);
+		$dbresult = &$db->GetRow($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onetemplate = new Template();
-				$onetemplate->id = $row['template_id'];
-				$onetemplate->name = $row['template_name'];
-				$onetemplate->content = $row['template_content'];
-				$onetemplate->stylesheet = $row['stylesheet'];
-				$onetemplate->encoding = $row['encoding'];
-				$onetemplate->default = $row['default_template'];
-				$onetemplate->active = $row['active'];
-				$result = $onetemplate;
-			}
+			$onetemplate = new Template();
+			$onetemplate->id = $row['template_id'];
+			$onetemplate->name = $row['template_name'];
+			$onetemplate->content = $row['template_content'];
+			$onetemplate->stylesheet = $row['stylesheet'];
+			$onetemplate->encoding = $row['encoding'];
+			$onetemplate->default = $row['default_template'];
+			$onetemplate->active = $row['active'];
+			$result = $onetemplate;
 		}
 
 		return $result;
@@ -313,11 +300,10 @@ class TemplateOperations
 		$db = &$gCms->db;
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-        $dbresult = $db->Execute($query,array($id));
+        $row = &$db->GetRow($query,array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			$row = $dbresult->FetchRow();
 			if (isset($row["count"]))
 			{
 				$result = $row["count"];
@@ -335,11 +321,10 @@ class TemplateOperations
 		$db = &$gCms->db;
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
-        $dbresult = $db->Execute($query);
+        $row = &$db->GetRow($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			$row = $dbresult->FetchRow();
 			if (isset($row["count"]))
 			{
 				$result = $row["count"];
@@ -385,9 +370,9 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
-		$dbresult = $db->Execute($query,array($name));
+		$row = &$db->GetRow($query,array($name));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
 			$result = true; 
 		}

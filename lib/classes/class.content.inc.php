@@ -577,12 +577,10 @@ class ContentBase
 		if (-1 < $id)
 		{
 			$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$dbresult	= $db->Execute($query, array($id));
+			$row		=& $db->GetRow($query, array($id));
 
-			if ($dbresult && (1 == $dbresult->RowCount()))
+			if ($row)
 			{
-				$row = $dbresult->FetchRow();
-
 				$this->mId				= $row["content_id"];
 				$this->mName			= $row["content_name"];
 				$this->mAlias			= $row["content_alias"];
@@ -802,11 +800,10 @@ class ContentBase
 		if ($this->mItemOrder < 1)
 		{
 			$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-			$dbresult = $db->Execute($query,array($this->mParentId));
+			$row = &$db->GetRow($query,array($this->mParentId));
 
-			if ($dbresult && (1 == $dbresult->RowCount()))
+			if ($row)
 			{
-				$row = $dbresult->FetchRow();
 				if ($row['new_order'] < 1)
 				{
 					$this->mItemOrder = 1;
@@ -903,11 +900,10 @@ class ContentBase
 		if ($this->mItemOrder < 1)
 		{
 			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-			$dbresult = $db->Execute($query, array($this->mParentId));
+			$row = &$db->Getrow($query, array($this->mParentId));
 
-			if ($dbresult && (1 == $dbresult->RowCount()))
+			if ($row)
 			{
-				$row = $dbresult->FetchRow();
 				if ($row['new_order'] < 1)
 				{
 					$this->mItemOrder = 1;
@@ -1183,9 +1179,9 @@ class ContentBase
 		$result = false;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$dbresult = $db->Execute($query, array($this->mId));
+		$row = &$db->Getrow($query, array($this->mId));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
 			$result = true;
 		}
@@ -1203,14 +1199,12 @@ class ContentBase
 			$this->mAdditionalEditors = array();
 
 			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-			$dbresult = $db->Execute($query,array($this->mId));
+			$dbresult = &$db->Execute($query,array($this->mId));
 
-			if ($dbresult && $dbresult->RowCount() > 0)
+			while (!$dbresult->EOF)
 			{
-				while ($row = $dbresult->FetchRow())
-				{
-					array_push($this->mAdditionalEditors, $row['user_id']);
-				}
+				array_push($this->mAdditionalEditors, $dbresult->fields['user_id']);
+				$dbresult->MoveNext();
 			}
 		}
 		return $this->mAdditionalEditors;
@@ -1328,19 +1322,17 @@ class ContentProperties
 			$db = &$gCms->db;
 
 			$query		= "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-			$dbresult	= $db->Execute($query, array($content_id));
+			$dbresult	= &$db->Execute($query, array($content_id));
 
-			if ($dbresult && $dbresult->RowCount() > 0)
+			while (!$dbresult->EOF)
 			{
-				while ($row = $dbresult->FetchRow())
+				$prop_name = $dbresult->fields['prop_name'];
+				if (isset($this->mPropertyValues[$prop_name]))
 				{
-					$prop_name = $row['prop_name'];
-					if (isset($this->mPropertyValues[$prop_name]))
-					{
-						$this->mPropertyTypes[$prop_name] = $row['type'];
-						$this->mPropertyValues[$prop_name] = $row['content'];
-					}
+					$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+					$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
 				}
+				$dbresult->MoveNext();
 			}
 		}
 	}
@@ -1424,11 +1416,9 @@ class ContentManager
 		}
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-		if ($dbresult && $dbresult->RowCount() > 0)
+		$row = &$db->GetRow($query, array($id));
+		if ($row)
 		{
-			$row = $dbresult->FetchRow();
-
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
@@ -1474,7 +1464,7 @@ class ContentManager
 		global $gCms;
 		$db = &$gCms->db;
 
-		$dbresult = '';
+		$row = '';
 
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
 		{
@@ -1483,7 +1473,7 @@ class ContentManager
 			{
 				$query .= " AND active = 1";
 			}
-			$dbresult = $db->Execute($query, array($alias,$alias));
+			$row = &$db->GetRow($query, array($alias,$alias));
 		}
 		else
 		{
@@ -1492,13 +1482,11 @@ class ContentManager
 			{
 				$query .= " AND active = 1";
 			}
-			$dbresult = $db->Execute($query, array($alias));
+			$row = &$db->GetRow($query, array($alias));
 		}
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			$row = $dbresult->FetchRow();
-
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
@@ -1564,7 +1552,7 @@ class ContentManager
 		$result = -1;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = $db->GetRow($query);
+		$row = &$db->GetRow($query);
 		if ($row)
 		{
 			$result = $row['content_id'];
@@ -1573,7 +1561,7 @@ class ContentManager
 		{
 			#Just get something...
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$row = $db->GetRow($query);
+			$row = &$db->GetRow($query);
 			if ($row)
 			{
 				$result = $row['content_id'];
@@ -1650,10 +1638,9 @@ class ContentManager
 		while ($current_parent_id > -1)
 		{
 			$query = "SELECT item_order, parent_id FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$dbresult = $db->Execute($query, array($current_parent_id));
-			if ($dbresult && $dbresult->RowCount())
+			$dbresult = &$db->GetRow($query, array($current_parent_id));
+			if ($row)
 			{
-				$row = $dbresult->FetchRow();
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
 				$current_parent_id = $row['parent_id'];
 				$count++;
@@ -1682,14 +1669,12 @@ class ContentManager
 		$db = $gCms->db;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-		$dbresult = $db->Execute($query);
+		$dbresult = &$db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		while (!$dbresult->EOF)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				ContentManager::SetHierarchyPosition($row['content_id']);
-			}
+			ContentManager::SetHierarchyPosition($dbresult->fields['content_id']);
+			$dbresult->MoveNext();
 		}
 	}
 
@@ -1738,53 +1723,49 @@ class ContentManager
 
 		$db = &$gCms->db;
 		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-		$dbresult = $db->Execute($query);
+		$dbresult = &$db->Execute($query);
 
         $map = array();
         $count = 0;
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		while (!$dbresult->EOF)
 		{
-			while ($row = $dbresult->FetchRow())
+			#Make sure the type exists.  If so, instantiate and load
+			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
-				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-				{
-					$contentobj = new $row['type'];
-					$contentobj->LoadFromData($row, false);
-					#if ($loadprops == true)
-					#{
-						$contentobj->mPropertiesLoaded = true;
-					#}
-					$map[$contentobj->Id()] = $count;
-					array_push($contentcache, $contentobj);
-					$count++;
-				}
+				$contentobj = new $dbresult->fields['type'];
+				$contentobj->LoadFromData($row, false);
+				#if ($loadprops == true)
+				#{
+					$contentobj->mPropertiesLoaded = true;
+				#}
+				$map[$contentobj->Id()] = $count;
+				array_push($contentcache, $contentobj);
+				$count++;
 			}
-
-			#Load all of the content props in one shot as well
-			#if ($loadprops == true)
-			#{
-				debug_buffer('load props is true...');
-				$query = "SELECT * FROM ".cms_db_prefix()."content_props";
-				$dbresult = $db->Execute($query);
-
-				if ($dbresult && $dbresult->RowCount() > 0)
-				{
-					while ($row = $dbresult->FetchRow())
-					{
-						if (isset($map[$row['content_id']]))
-						{
-							$content_obj =& $contentcache[$map[$row['content_id']]];
-							$prop_name = $row['prop_name'];
-							$content_obj->mPropertyTypes[$prop_name] = $row['type'];
-							$content_obj->mPropertyValues[$prop_name] = $row['content'];
-							$content_obj->mPropertiesLoaded = true;
-						}
-					}
-				}
-			#}
+			$dbresult->MoveNext();
 		}
+
+		#Load all of the content props in one shot as well
+		#if ($loadprops == true)
+		#{
+			debug_buffer('load props is true...');
+			$query = "SELECT * FROM ".cms_db_prefix()."content_props";
+			$dbresult = &$db->Execute($query);
+
+			while (!$dbresult->EOF)
+			{
+				if (isset($map[$dbresult->fields['content_id']]))
+				{
+					$content_obj =& $contentcache[$map[$dbresult->fields['content_id']]];
+					$prop_name = $dbresult->fields['prop_name'];
+					$content_obj->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+					$content_obj->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+					$content_obj->mPropertiesLoaded = true;
+				}
+				$dbresult->MoveNext();
+			}
+		#}
 
         for ($i=0;$i<$count;$i++)
 		{

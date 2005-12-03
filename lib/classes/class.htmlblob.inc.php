@@ -161,14 +161,12 @@ function AuthorBlobs($userid)
 		$variables['authorblobs'] = array();
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result = &$db->Execute($query, array($userid));
 
-		if ($result && $result->RowCount() > 0)
+		while (!$result->EOF)
 		{
-			while ($row = $result->FetchRow())
-			{
-				array_push($variables['authorblobs'], $row['htmlblob_id']);
-			}
+			array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
+			$result->MoveNext();
 		}
 	}
 
@@ -183,20 +181,18 @@ function AuthorBlobs($userid)
 		$result = array();
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_id";
-		$dbresult = $db->Execute($query);
+		$dbresult = &$db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		while (!$dbresult->EOF)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneblob = new HtmlBlob();
-				$oneblob->id = $row['htmlblob_id'];
-				$oneblob->name = $row['htmlblob_name'];
-				$oneblob->content = $row['html'];
-				$oneblob->owner = $row['owner'];
-				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				array_push($result, $oneblob);
-			}
+			$oneblob = new HtmlBlob();
+			$oneblob->id = $dbresult->fields['htmlblob_id'];
+			$oneblob->name = $dbresult->fields['htmlblob_name'];
+			$oneblob->content = $dbresult->fields['html'];
+			$oneblob->owner = $dbresult->fields['owner'];
+			$oneblob->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
+			array_push($result, $oneblob);
+			$dbresult->MoveNext();
 		}
 
 		return $result;
@@ -210,20 +206,17 @@ function AuthorBlobs($userid)
 		$db = &$gCms->db;
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
-		$dbresult = $db->Execute($query, array($id));
+		$row = &$db->GetRow($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneblob = new HtmlBlob();
-				$oneblob->id = $row['htmlblob_id'];
-				$oneblob->name = $row['htmlblob_name'];
-				$oneblob->content = $row['html'];
-				$oneblob->owner = $row['owner'];
-				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				$result = $oneblob;
-			}
+			$oneblob = new HtmlBlob();
+			$oneblob->id = $row['htmlblob_id'];
+			$oneblob->name = $row['htmlblob_name'];
+			$oneblob->content = $row['html'];
+			$oneblob->owner = $row['owner'];
+			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$result = $oneblob;
 		}
 
 		return $result;
@@ -243,24 +236,21 @@ function AuthorBlobs($userid)
 		}
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
-		$dbresult = $db->Execute($query, array($name));
+		$row = &$db->GetRow($query, array($name));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneblob = new HtmlBlob();
-				$oneblob->id = $row['htmlblob_id'];
-				$oneblob->name = $row['htmlblob_name'];
-				$oneblob->content = $row['html'];
-				$oneblob->owner = $row['owner'];
-				$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-				$result = $oneblob;
+			$oneblob = new HtmlBlob();
+			$oneblob->id = $row['htmlblob_id'];
+			$oneblob->name = $row['htmlblob_name'];
+			$oneblob->content = $row['html'];
+			$oneblob->owner = $row['owner'];
+			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
+			$result = $oneblob;
 
-				if (!isset($cache[$oneblob->name]))
-				{
-					$cache[$oneblob->name] = $oneblob;
-				}
+			if (!isset($cache[$oneblob->name]))
+			{
+				$cache[$oneblob->name] = $oneblob;
 			}
 		}
 
@@ -328,9 +318,9 @@ function AuthorBlobs($userid)
 		$db = &$gCms->db;
 
 		$query = "SELECT htmlblob_id from ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
-		$dbresult = $db->Execute($query,array($name));
+		$row = &$db->GetRow($query,array($name));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
 			$result = true; 
 		}
@@ -346,9 +336,9 @@ function AuthorBlobs($userid)
 		$db = &$gCms->db;
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ? AND owner = ?";
-		$dbresult = $db->Execute($query, array($id, $user_id));
+		$row = &$db->GetRow($query, array($id, $user_id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
 			$result = true;
 		}
@@ -363,13 +353,13 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
+		$row = &$db->GetRow($query, array($id, $user_id));
 
-		$dbresult = $db->Execute($query, array($id, $user_id));
-
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($row)
 		{
 			$result = true;
 		}
+
 		return $result;
 	}
 
