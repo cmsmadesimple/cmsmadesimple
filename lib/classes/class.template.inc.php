@@ -218,7 +218,7 @@ class TemplateOperations
 		$db = &$gCms->db;
 
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template FROM ".cms_db_prefix()."templates WHERE default_template = 1";
-		$dbresult = &$db->GetRow($query);
+		$row = &$db->GetRow($query);
 
 		if($row)
 		{

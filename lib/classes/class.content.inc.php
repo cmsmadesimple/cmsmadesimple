@@ -1638,7 +1638,7 @@ class ContentManager
 		while ($current_parent_id > -1)
 		{
 			$query = "SELECT item_order, parent_id FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$dbresult = &$db->GetRow($query, array($current_parent_id));
+			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
