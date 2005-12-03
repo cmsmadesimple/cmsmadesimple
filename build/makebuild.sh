@@ -12,11 +12,12 @@ svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${
 
 cd cmsmadesimple-${version}
 
-svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
-
 sh autogen.sh
 sh release-cleanup.sh
 touch tmp/cache/SITEDOWN
+
+svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
+
 cd ..
 tar zcf cmsmadesimple-${version}.tar.gz cmsmadesimple-${version}
 mv cmsmadesimple-${version} cmsmadesimple
