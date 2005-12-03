@@ -1929,10 +1929,10 @@ class ContentManager
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
-				$query = " AND content_id != ?";
+				$query .= " AND content_id != ?";
 				array_push($params, $content_id);
 			}
-			$row = $db->GetRow($query, $params);
+			$row = &$db->GetRow($query, $params);
 	
 			if ($row)
 			{

@@ -83,12 +83,12 @@ if ($access)
 		}
 		else if ($template != $orig_template)
 		{
-			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
-			$result = $db->Execute($query);
+			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
+			$row = &$db->GetRow($query, array($template));
 
-			if ($result && $result->RowCount() > 0)
+			if ($row)
 			{
-				$error .= "<li>".lang('errortemplateinuse')."</li>";
+				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
 			}
 		}
@@ -117,7 +117,7 @@ if ($access)
 				}
 			}
 
-			$result = $onetemplate->save();
+			$result = $onetemplate->Save();
 
 			if ($result)
 			{
