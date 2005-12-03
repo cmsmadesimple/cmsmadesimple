@@ -62,10 +62,10 @@ else {
         {
         echo '<form id="groupname" method="post" action="changegroupperm.php">';
         echo '<div class="pageoverflow">';
-        echo '<p class="pagetext">Group Name:</p>';
+        echo '<p class="pagetext">'.lang('groupname').':</p>';
         echo '<p class="pageinput">';
         echo '<select name="group_id"';
-        echo '><option value="-1">Select a Group</option>';
+        echo '><option value="-1">'.lang('selectgroup').'</option>';
         foreach ($groups as $onegroup)
             {
             echo '<option value="'.$onegroup->id.'"';
@@ -138,7 +138,7 @@ else {
 				}
 			}
 
-		audit($group_id, 'Group ID', 'Changed Group Permissions');
+		audit($group_id, 'Group ID', lang('permissionschanged'));
         echo '<p class="pageheader">'.lang('permissionschanged').'</p>';
         }
 echo '</div>';
