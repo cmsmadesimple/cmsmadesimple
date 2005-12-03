@@ -165,7 +165,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		default_content I1,
 		menu_text C(255),
 		content_alias C(255),
-		collapsed L,
 		show_in_menu I1,
 		markup C(25),
 		active I1,

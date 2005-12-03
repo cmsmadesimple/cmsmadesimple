@@ -1,7 +1,8 @@
 <?php
 
 echo "<p>Adding fields to content table...";
-
+/*
+This is SjG proving he's an idiot...
 $dbdict = NewDataDictionary($db);
 $sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."content", "collapsed L");
 $dbdict->ExecuteSQLArray($sqlarray);
@@ -12,7 +13,7 @@ echo "<p>Setting all content to collapsed...";
 
 $query = "UPDATE ".cms_db_prefix()."content SET collapsed = 1";
 $db->Execute($query);
-
+*/
 echo "[done]</p>";
 
 echo '<p>Updating schema version... ';
