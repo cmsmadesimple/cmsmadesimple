@@ -1734,7 +1734,7 @@ class ContentManager
 			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
 			{
 				$contentobj = new $dbresult->fields['type'];
-				$contentobj->LoadFromData($row, false);
+				$contentobj->LoadFromData($dbresult->FetchRow(), false);
 				#if ($loadprops == true)
 				#{
 					$contentobj->mPropertiesLoaded = true;
@@ -1743,7 +1743,10 @@ class ContentManager
 				array_push($contentcache, $contentobj);
 				$count++;
 			}
-			$dbresult->MoveNext();
+			else
+			{
+				$dbresult->MoveNext();
+			}
 		}
 
 		#Load all of the content props in one shot as well
