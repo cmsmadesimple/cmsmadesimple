@@ -114,6 +114,8 @@ function count_sql_execs($db, $sql, $inputarray)
 }
 
 if (!isset($DONT_LOAD_DB)) {
+	global $ADODB_COUNTRECS;
+	$ADODB_COUNTRECS = false;
 	$db = &ADONewConnection($config['dbms']);
 	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 	{
