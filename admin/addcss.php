@@ -181,7 +181,7 @@ else
 		<form method="post" action="addcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="css_name" maxlength="25" value="<?php echo $css_name?>" /></p>
+			<p class="pageinput"><input type="text" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
