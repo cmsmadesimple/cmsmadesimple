@@ -183,7 +183,7 @@ if (isset($_GET["message"])) {
                         {
                         if (!isset($openedArray[$one->Id()])) //$one->Collapsed()
                             {
-                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
+                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\">";
                             $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
                             $thelist .= "</a>";
                             $collapsing = true;
@@ -192,7 +192,7 @@ if (isset($_GET["message"])) {
                             }
                         else
                             {
-                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=1&page=".$page."\">";
+                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\">";
                             $thelist .= $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
                             $thelist .= "</a>";
                             }
@@ -207,7 +207,7 @@ if (isset($_GET["message"])) {
                             }
                         }
 
-                    $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
+                    $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&amp;page=".$page."\">".$one->Name()."</a></td>\n";
   					if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
   					{
   						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
