@@ -36,6 +36,7 @@ rm -fr modules/ProtectEmail
 rm -fr modules/faqX
 rm -fr modules/FCKeditor
 rm -fr modules/TinyMCE
+rm -fr scripts
 find . -depth -type d -name .svn -exec rm -fr {} \;
 find . -type d -exec chmod 775 {} \;
 rm -fr release-cleanup.sh
