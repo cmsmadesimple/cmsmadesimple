@@ -1964,6 +1964,19 @@ class ContentManager
 		$tmp = rtrim($tmp, '.');
 		return $tmp;
 	}
+
+	function CreateUnfriendlyHierarchyPosition($position)
+	{
+		#Change user-friendly values into padded numbers
+		$tmp = '';
+		$levels = split('\.', $position);
+		foreach ($levels as $onelevel)
+		{
+			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';
+		}
+		$tmp = rtrim($tmp, '.');
+		return $tmp;
+	}
 }
 
 # vim:ts=4 sw=4 noet
