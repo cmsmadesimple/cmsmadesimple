@@ -101,7 +101,7 @@ class StylesheetOperations
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css ORDER BY css_id";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -145,7 +145,7 @@ class StylesheetOperations
 	  $dbresult = $db->Execute( $query, array( 'template', $templateid ));
 	  
 	  $result = array();
-	  if( $dbresult && $dbresult->RowCount() > 0 )
+	  if( $dbresult && $dbresult->RecordCount() > 0 )
 	    {
 	      while( $row = $dbresult->FetchRow() )
 		{
@@ -167,7 +167,7 @@ class StylesheetOperations
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -249,7 +249,7 @@ class StylesheetOperations
 		$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = ?";
 		$dbresult = $db->Execute($query,array($name));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			$result = true; 
 		}

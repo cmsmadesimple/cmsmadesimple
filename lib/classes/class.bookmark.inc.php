@@ -141,7 +141,7 @@ class BookmarkOperations
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE user_id = ? ORDER BY title";
 		$dbresult = $db->Execute($query, array($user_id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -175,7 +175,7 @@ class BookmarkOperations
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{

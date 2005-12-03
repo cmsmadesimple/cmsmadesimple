@@ -864,7 +864,7 @@ class Smarty_CMS extends Smarty {
 			}
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$line = $result->FetchRow();
 

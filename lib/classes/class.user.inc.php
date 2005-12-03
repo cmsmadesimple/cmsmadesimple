@@ -180,7 +180,7 @@ class UserOperations
 		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY username";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -216,7 +216,7 @@ class UserOperations
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
 		$dbresult = $db->Execute($query, array($groupid));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -277,7 +277,7 @@ class UserOperations
 
 		$dbresult = $db->Execute($query, $params);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			$row = $dbresult->FetchRow();
 			$id = $row['user_id'];
@@ -305,7 +305,7 @@ class UserOperations
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -428,7 +428,7 @@ class UserOperations
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			$row = $dbresult->FetchRow();
 			if (isset($row["count"]))

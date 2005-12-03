@@ -93,7 +93,7 @@ if (isset($_SESSION["cms_admin_username"]))
 }
 
 #Setup db connection
-include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
+include_once(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
 
 $sql_execs = 0;
 
@@ -116,7 +116,7 @@ function count_sql_execs($db, $sql, $inputarray)
 if (!isset($DONT_LOAD_DB)) {
 	#global $ADODB_COUNTRECS;
 	#$ADODB_COUNTRECS = false;
-	$db = &ADONewConnection($config['dbms']);
+	$db = &ADONewConnection($config['dbms'], 'pear:date');
 	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 	{
 		$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
@@ -139,7 +139,7 @@ require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
 #require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
-require_once(dirname(__FILE__)."/lib/module.functions.php");
+#require_once(dirname(__FILE__)."/lib/module.functions.php");
 require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");

@@ -99,7 +99,7 @@ class GroupOperations
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -125,7 +125,7 @@ class GroupOperations
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{

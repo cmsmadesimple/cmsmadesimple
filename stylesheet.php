@@ -42,15 +42,13 @@ if ($name != '')
 	global $gCms;
 	$db =& $gCms->db;
 	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
-	$cssresult = $db->Execute($cssquery, $name);
+	$cssresult = &$db->Execute($cssquery, $name);
 
-	if ($cssresult && $cssresult->RowCount() > 0)
+	while (!$cssresult->EOF)
 	{
-		while ($cssline = $cssresult->FetchRow())
-		{
-			$css .= "\n".$cssline['css_text']."\n";
-		}
-	}	
+		$css .= "\n".$cssresult->fields['css_text']."\n";
+		$cssresult->MoveNext();
+	}
 }
 else
 {

@@ -92,7 +92,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			$query .= "AND t1.hierarchy ".$condition." t2.hierarchy ";
 			$query .= "ORDER BY t1.".$order_by." LIMIT 1";
 			$dbresult = $db->Execute($query);
-			if ($dbresult && $dbresult->RowCount() > 0)
+			if ($dbresult && $dbresult->RecordCount() > 0)
 			{
 				while ($row = $dbresult->FetchRow())
 				{

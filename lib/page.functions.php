@@ -248,14 +248,12 @@ function check_authorship($userid, $contentid = '')
 		$variables['authorpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result = &$db->Execute($query, array($userid));
 
-		if ($result && $result->RowCount() > 0)
+		while (!$result->EOF)
 		{
-			while ($row = $result->FetchRow())
-			{
-				array_push($variables['authorpages'], $row['content_id']);
-			}
+			array_push($variables['authorpages'], $result->fields['content_id']);
+			$result->MoveNext();
 		}
 	}
 
@@ -283,18 +281,16 @@ function author_pages($userid)
     $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
-		$db = $gCms->db;
+		$db = &$gCms->db;
 		$variables['authorpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result = &$db->Execute($query, array($userid));
 
-		if ($result && $result->RowCount() > 0)
+		while (!$result->EOF)
 		{
-			while ($row = $result->FetchRow())
-			{
-				array_push($variables['authorpages'], $row['content_id']);
-			}
+			array_push($variables['authorpages'], $result->fields['content_id']);
+			$result->MoveNext();
 		}
 	}
 
@@ -439,7 +435,7 @@ function set_site_preference($prefname, $value)
 	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		$doinsert = false;
 	}
@@ -524,7 +520,7 @@ function set_preference($userid, $prefname, $value)
 	$query = "SELECT value from ".cms_db_prefix()."userprefs WHERE user_id = ? AND preference = ?";
 	$result = $db->Execute($query, array($userid, $prefname));
 
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		$doinsert = false;
 	}
@@ -593,7 +589,7 @@ function get_stylesheet($template_id, $media_type = '')
 			AND		c.media_type = ?";
 		$cssresult = $db->Execute($cssquery, array($template_id, $media_type));
 
-		if ($cssresult && $cssresult->RowCount() > 0)
+		if ($cssresult && $cssresult->RecordCount() > 0)
 		{
 			while ($cssline = $cssresult->FetchRow())
 			{
@@ -637,17 +633,15 @@ function get_stylesheet_media_types($template_id)
 			WHERE	css_id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?";
-		$cssresult = $db->Execute($cssquery, array($template_id));
+		$cssresult = &$db->Execute($cssquery, array($template_id));
 
-		if ($cssresult && $cssresult->RowCount() > 0)
+		while (!$cssresult->EOF)
 		{
-			while ($cssline = $cssresult->FetchRow())
+			if ($cssreuslt->fields['media_type'] != '')
 			{
-				if ($cssline['media_type'] != '')
-				{
-					array_push($result, $cssline['media_type']);
-				}
+				array_push($result, $cssresult->fields['media_type']);
 			}
+			$cssresult->MoveNext();
 		}
 	}
 
@@ -794,11 +788,11 @@ function check_access($page_id)
 		$login_name = trim($_POST['login_name']);
 		$query = 'SELECT user_id FROM '.cms_db_prefix().'frontend_users WHERE page_id = '.$page_id;
 		$result = $db->Execute($query);
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$query = 'SELECT user_id from '.cms_db_prefix().'users WHERE `username`=\''.$login_name.'\' AND `password`=\''.md5($login_password).'\'';
 			$result = $db->Execute($query);
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$_SESSION['login_name'] = $login_name;
 				$_SESSION['login_password'] = $login_password;

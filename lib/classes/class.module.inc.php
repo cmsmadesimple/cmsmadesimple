@@ -578,7 +578,7 @@ class CMSModule extends ModuleOperations
 		$query = "SELECT * FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
 		$dbresult = $db->Execute($query, array($this->GetName()));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{   
 			$result = true;
 		}
@@ -1831,7 +1831,7 @@ class CMSModule extends ModuleOperations
 		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ?";
 		$result = $db->Execute($query, array($this->GetName()));
 
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			array_push($retresult, $result['template_name']);
 		}
@@ -1853,7 +1853,7 @@ class CMSModule extends ModuleOperations
 		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$row = $result->FetchRow();
 			return $row['content'];
@@ -1869,7 +1869,7 @@ class CMSModule extends ModuleOperations
 		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?'; 
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 
-		if ($result && $result->RowCount() < 1)
+		if ($result && $result->RecordCount() < 1)
 		{
 			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,?,?)';
 			$db->Execute($query, array($this->GetName(), $tpl_name, $content, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
@@ -2000,7 +2000,7 @@ class CMSModule extends ModuleOperations
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
 		$result = $db->Execute($query);
 
-		if ($result && $result->RowCount() < 1)
+		if ($result && $result->RecordCount() < 1)
 		{
 			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
 			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
@@ -2032,7 +2032,7 @@ class CMSModule extends ModuleOperations
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = " . $db->qstr($permission_name); 
 		$result = $db->Execute($query);
 
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$row = $result->FetchRow();
 			$id = $row["permission_id"];

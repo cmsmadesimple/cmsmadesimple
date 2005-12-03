@@ -129,7 +129,7 @@ class RecentPageOperations
             "admin_recent_pages WHERE user_id = ? ORDER BY access_time DESC";
 		$dbresult = $db->Execute($query, array($user_id));
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
@@ -190,7 +190,7 @@ class RecentPageOperations
 		$query = "SELECT id FROM ".cms_db_prefix().
             "admin_recent_pages WHERE user_id = ? ORDER BY access_time DESC limit 10000 offset ?";
 		$dbresult = $db->Execute($query, array($user_id,$count));
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{

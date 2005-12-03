@@ -31,7 +31,7 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 	$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() < 1) {
+	if ($result && $result->RecordCount() < 1) {
 
 		$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
