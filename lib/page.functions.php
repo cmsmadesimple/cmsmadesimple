@@ -934,5 +934,16 @@ function wysiwyg_form_submit()
 	
 	return $result;
 }
+
+/**
+ * Returns the currently configured database prefix.
+ *
+ * @since 0.4
+ */
+function cms_db_prefix() {
+	global $gCms;
+	return $gCms->config["db_prefix"];
+}
+
 # vim:ts=4 sw=4 noet
 ?>

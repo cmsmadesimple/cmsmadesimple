@@ -1564,20 +1564,18 @@ class ContentManager
 		$result = -1;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$dbresult = $db->Execute($query);
-		if ($dbresult && $dbresult->RowCount() > 0)
+		$row = $db->GetRow($query);
+		if ($row)
 		{
-			$row = $dbresult->FetchRow();
 			$result = $row['content_id'];
 		}
 		else
 		{
 			#Just get something...
 			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$dbresult = $db->Execute($query);
-			if ($dbresult && $dbresult->RowCount() > 0)
+			$row = $db->GetRow($query);
+			if ($row)
 			{
-				$row = $dbresult->FetchRow();
 				$result = $row['content_id'];
 			}
 		}
@@ -1606,8 +1604,16 @@ class ContentManager
 	 * The key is the name of the class that would be saved into the dabase.  The
 	 * value would be the text returned by the type's FriendlyName() method.
 	 */
-	function ListContentTypes()
+	function & ListContentTypes()
 	{
+		global $gCms;
+
+		if (isset($gCms->variables['contenttypes']))
+		{
+			$variables =& $gCms->variables;
+			return $variables['contenttypes'];
+		}
+
 		$result = array();
 
 		foreach (get_declared_classes() as $oneclass)
@@ -1622,6 +1628,9 @@ class ContentManager
 				}
 			}
 		}
+
+		$variables =& $gCms->variables;
+		$variables['contenttypes'] =& $result;
 
 		return $result;
 	}
@@ -1853,17 +1862,17 @@ class ContentManager
 	// function to get the id of the default page
 	function GetDefaultPageID()
 	{
-	  global $gCms;
-	  $db = &$gCms->db;
+		global $gCms;
+		$db = &$gCms->db;
 
-	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = ?";
-	  $dbresult = $db->Execute($query, array(1));
-	  if ( !$dbresult || !$dbresult->RowCount() )
-	    {
-	      return false;
-	    }
-	  $row = $dbresult->FetchRow();
-	  return $row['content_id'];
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
+		$row = $db->GetRow($query);
+		if (!$row)
+		{
+			return false;
+		}
+		$row = $dbresult->FetchRow();
+		return $row['content_id'];
 	}
 
 
@@ -1871,24 +1880,23 @@ class ContentManager
 	// returns false if nothing cound be found.
 	function GetPageIDFromAlias( $alias )
 	{
-	  global $gCms;
-	  $db = &$gCms->db;
+		global $gCms;
+		$db = &$gCms->db;
 
-	  if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
-	    {
-	      return $alias;
+		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
+		{
+			return $alias;
 	    }
 
-	  $params = array($alias);
-	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-	  $dbresult = $db->Execute($query, $params);
-	  
-	  if ( !$dbresult || !$dbresult->RowCount() )
+		$params = array($alias);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+		$row = $db->GetRow($query, $params);
+
+		if (!$row)
 	    {
-	      return false;
+			return false;
 	    }
-	  $row = $dbresult->FetchRow();
-	  return $row['content_id'];
+		return $row['content_id'];
 	}
 
 
@@ -1896,24 +1904,23 @@ class ContentManager
 	// returns false if nothing cound be found.
 	function GetPageAliasFromID( $id )
 	{
-	  global $gCms;
-	  $db = &$gCms->db;
+		global $gCms;
+		$db = &$gCms->db;
 
-	  if (!is_numeric($alias) && strpos($alias,'.') == TRUE && strpos($alias,',') == TRUE)
-	    {
-	      return $id;
-	    }
+		if (!is_numeric($alias) && strpos($alias,'.') == TRUE && strpos($alias,',') == TRUE)
+		{
+			return $id;
+		}
 
-	  $params = array($id);
-	  $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	  $dbresult = $db->Execute($query, $params);
-	  
-	  if ( !$dbresult || !$dbresult->RowCount() )
-	    {
-	      return false;
-	    }
-	  $row = $dbresult->FetchRow();
-	  return $row['content_alias'];
+		$params = array($id);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$row = $db->GetRow($query, $params);
+
+		if ( !$row )
+		{
+			return false;
+		}
+		return $row['content_alias'];
 	}
 
 
@@ -1941,9 +1948,9 @@ class ContentManager
 				$query = " AND content_id != ?";
 				array_push($params, $content_id);
 			}
-			$dbresult = $db->Execute($query, $params);
+			$row = $db->GetRow($query, $params);
 	
-			if ($dbresult && $dbresult->RowCount() > 0)
+			if ($row)
 			{
 				$error = lang('aliasalreadyused');
 			}

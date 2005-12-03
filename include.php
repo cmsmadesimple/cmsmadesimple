@@ -114,7 +114,7 @@ function count_sql_execs($db, $sql, $inputarray)
 }
 
 if (!isset($DONT_LOAD_DB)) {
-	$db = &ADONewConnection($config['dbms'], 'cms:pear');
+	$db = &ADONewConnection($config['dbms']);
 	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 	{
 		$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
@@ -134,7 +134,7 @@ if (!isset($DONT_LOAD_DB)) {
 }
 
 require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
-require_once(dirname(__FILE__)."/lib/db.functions.php");
+#require_once(dirname(__FILE__)."/lib/db.functions.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/module.functions.php");
@@ -148,7 +148,7 @@ require_once(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.template.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
-require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
+#require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
 
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
