@@ -150,14 +150,11 @@ function load_all_permissions($userid)
 	$perms = array();
 
 	$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ?";
-	$result = $db->Execute($query, array($userid));
-
-	if ($result && $result->RowCount() > 0)
+	$result = &$db->Execute($query, array($userid));
+	while (!$result->EOF)
 	{
-		while ($row = $result->FetchRow())
-		{
-			array_push($perms, $row['permission_name']);
-		}
+		array_push($perms, $result->fields['permission_name']);
+		$result->MoveNext();
 	}
 	$variables['userperms'] = $perms;
 }
@@ -210,14 +207,12 @@ function check_ownership($userid, $contentid = '')
 		$variables['ownerpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$result = $db->Execute($query, array($userid));
+		$result = &$db->Execute($query, array($userid));
 
-		if ($result && $result->RowCount() > 0)
+		while (!$result->EOF)
 		{
-			while ($row = $result->FetchRow())
-			{
-				array_push($variables['ownerpages'], $row['content_id']);
-			}
+			array_push($variables['ownerpages'], $result->fields['content_id']);
+			$result->MoveNext();
 		}
 	}
 
@@ -470,14 +465,12 @@ function load_all_preferences($userid)
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
-	$result = $db->Execute($query, array($userid));
+	$result = &$db->Execute($query, array($userid));
 
-	if ($result && $result->RowCount() > 0)
+	while (!$result->EOF)
 	{
-		while ($row = $result->FetchRow())
-		{
-			$variables[$row['preference']] = $row['value'];
-		}
+		$variables[$result->fields['preference']] = $result->fields['value'];
+		$result->MoveNext();
 	}
 }
 
