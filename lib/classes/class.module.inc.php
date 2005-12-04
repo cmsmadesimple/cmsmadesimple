@@ -1755,14 +1755,14 @@ class CMSModule extends ModuleOperations
 		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
 		{
 			$dir = $gCms->config['root_path'];
-			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
-			{
-				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
-				$this->langhash = &$lang;
-			}
-			else if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
+			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
+				$this->langhash = &$lang;
+			}
+			else if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
+			{
+				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
 			else if (is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
