@@ -577,32 +577,32 @@ class ContentBase
 		if (-1 < $id)
 		{
 			$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row		=& $db->GetRow($query, array($id));
+			$row		=& $db->_Execute($query, array($id));
 
-			if ($row)
+			if (!$row->EOF)
 			{
-				$this->mId				= $row["content_id"];
-				$this->mName			= $row["content_name"];
-				$this->mAlias			= $row["content_alias"];
-				$this->mOldAlias		= $row["content_alias"];
-				$this->mType			= strtolower($row["type"]);
-				$this->mOwner			= $row["owner_id"];
+				$this->mId				= $row->fields["content_id"];
+				$this->mName			= $row->fields["content_name"];
+				$this->mAlias			= $row->fields["content_alias"];
+				$this->mOldAlias		= $row->fields["content_alias"];
+				$this->mType			= strtolower($row->fields["type"]);
+				$this->mOwner			= $row->fields["owner_id"];
 				#$this->mProperties		= new ContentProperties();
-				$this->mParentId		= $row["parent_id"];
-				$this->mOldParentId		= $row["parent_id"];
-				$this->mTemplateId		= $row["template_id"];
-				$this->mItemOrder		= $row["item_order"];
-				$this->mOldItemOrder	= $row["item_order"];
-				$this->mHierarchy		= $row["hierarchy"];
-				$this->mMenuText		= $row['menu_text'];
-				$this->mMarkup			= $row['markup'];
-				$this->mActive			= ($row["active"] == 1?true:false);
-				$this->mDefaultContent	= ($row["default_content"] == 1?true:false);
-				$this->mShowInMenu		= ($row["show_in_menu"] == 1?true:false);
-				$this->mCachable		= ($row["cachable"] == 1?true:false);
-				$this->mLastModifiedBy	= $row["last_modified_by"];
-				$this->mCreationDate	= $row["create_date"];
-				$this->mModifiedDate	= $row["modified_date"];
+				$this->mParentId		= $row->fields["parent_id"];
+				$this->mOldParentId		= $row->fields["parent_id"];
+				$this->mTemplateId		= $row->fields["template_id"];
+				$this->mItemOrder		= $row->fields["item_order"];
+				$this->mOldItemOrder	= $row->fields["item_order"];
+				$this->mHierarchy		= $row->fields["hierarchy"];
+				$this->mMenuText		= $row->fields['menu_text'];
+				$this->mMarkup			= $row->fields['markup'];
+				$this->mActive			= ($row->fields["active"] == 1?true:false);
+				$this->mDefaultContent	= ($row->fields["default_content"] == 1?true:false);
+				$this->mShowInMenu		= ($row->fields["show_in_menu"] == 1?true:false);
+				$this->mCachable		= ($row->fields["cachable"] == 1?true:false);
+				$this->mLastModifiedBy	= $row->fields["last_modified_by"];
+				$this->mCreationDate	= $row->fields["create_date"];
+				$this->mModifiedDate	= $row->fields["modified_date"];
 
 				$result = true;
 			}
