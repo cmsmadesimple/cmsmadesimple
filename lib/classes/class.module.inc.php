@@ -117,7 +117,7 @@ class ModuleOperations extends Smarty
 										{
 											$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
 											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-											$result = $db->Execute($query, array($newmodule->GetVersion(), $name));
+											$db->Execute($query, array($newmodule->GetVersion(), $name));
 											$dbversion = $newmodule->GetVersion();
 										}
 
