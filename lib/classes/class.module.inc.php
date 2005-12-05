@@ -1997,14 +1997,14 @@ class CMSModule extends ModuleOperations
 	{
 		$db = $this->cms->db;
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
-		$result = $db->Execute($query);
+		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?"; 
+		$result = $db->Execute($query, array($permission_name));
 
 		if ($result && $result->RecordCount() < 1)
 		{
 			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
-			$db->Execute($query);
+			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,?,?)";
+			$db->Execute($query, array($new_id, $permission_name, $permission_text, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		}
 	}
 
@@ -2029,19 +2029,18 @@ class CMSModule extends ModuleOperations
 	{
 		$db = $this->cms->db;
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = " . $db->qstr($permission_name); 
-		$result = $db->Execute($query);
+		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?"; 
+		$row = &$db->GetRow($query, array($permission_name));
 
-		if ($result && $result->RecordCount() > 0)
+		if ($row)
 		{
-			$row = $result->FetchRow();
 			$id = $row["permission_id"];
 
-			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = $id";
-			$db->Execute($query);
+			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = ?";
+			$db->Execute($query, array($id));
 
-			$query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = $id";
-			$db->Execute($query);
+			$query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = ?";
+			$db->Execute($query, array($id));
 		}
 	}
 
