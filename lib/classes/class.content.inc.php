@@ -1762,8 +1762,8 @@ class ContentManager
 				{
 					$content_obj =& $contentcache[$map[$dbresult->fields['content_id']]];
 					$prop_name = $dbresult->fields['prop_name'];
-					$content_obj->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
-					$content_obj->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+					$content_obj->mProperties->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+					$content_obj->mProperties->mPropertyValues[$prop_name] = $dbresult->fields['content'];
 					$content_obj->mPropertiesLoaded = true;
 				}
 				$dbresult->MoveNext();
