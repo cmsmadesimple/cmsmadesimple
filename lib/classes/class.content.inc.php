@@ -1683,7 +1683,7 @@ class ContentManager
 		debug_buffer('get all content...');
 
 		global $gCms;
-		$cachefilename = dirname(dirname(dirname(__FILE__))) . '/tmp/cache/contentcache.php';
+		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 
         #if (isset($gCms->variables['contentcache']) &&
         #    ($loadprops == false || $gCms->variables['cachedprops'] == true))

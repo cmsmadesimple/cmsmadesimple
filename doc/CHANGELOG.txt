@@ -5,6 +5,10 @@ Version 0.11.1 "Tobago" -- Subversion
 stylesheet. 
 * Fixed a bug with the stylesheet query not returning
 media types.
+* Fixed the clear cache button so that it removed the
+content cache file as well.
+* Fixed the content cache file to use the TMP_LOCATION
+variable.
 * Fixed a bug with GetAllContent that was causing
 the Link content type to fail.
 * Fixed a bug with CreatePermission not working with
