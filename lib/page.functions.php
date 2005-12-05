@@ -637,7 +637,7 @@ function get_stylesheet_media_types($template_id)
 
 		while (!$cssresult->EOF)
 		{
-			if ($cssreuslt->fields['media_type'] != '')
+			if ($cssresult->fields['media_type'] != '')
 			{
 				array_push($result, $cssresult->fields['media_type']);
 			}
