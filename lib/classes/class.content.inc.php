@@ -1850,12 +1850,11 @@ class ContentManager
 		$db = &$gCms->db;
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = $db->GetRow($query);
+		$row = &$db->GetRow($query);
 		if (!$row)
 		{
 			return false;
 		}
-		$row = $dbresult->FetchRow();
 		return $row['content_id'];
 	}
 
