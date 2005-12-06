@@ -27,14 +27,33 @@ function smarty_cms_function_print($params, &$smarty)
 		$text = $params['text'];
 	}
 
+  $js = '';
+	if (!empty($params['script']) and $params['script'])
+	{
+		$js = '&js=1';
+	}
+
+	$target = '';
+	if (!empty($params['popup']) and $params['popup'])
+	{
+		$target = ' target="_blank"';
+		$goback = '&goback=0';
+	}else{
+	  $goback = '';
+	  if (!empty($params['goback']) and $params['goback'])
+	  {
+		  $goback = '&goback=1';
+	  }
+  }
+  
 	//will this work if using htaccess? (Yes! -Wishy)
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true' . $goback . $js . '"'. $target . '><img border="0" src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/></a>';
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true">'.$text.'</a>';
+		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true' . $goback . $js . '"'. $target . '>'.$text.'</a>';
 	}
 }
 
@@ -46,6 +65,9 @@ function smarty_cms_help_function_print() {
 	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
         <h3>What parameters does it take?</h3>
         <ul>
+                <li><em>(optional)</em>goback - Set to "false" and in print page you don't will by see button "Go Back".</li>
+                <li><em>(optional)</em>popup - Set to "true" and page for printing will by opened in new window.</li>
+                <li><em>(optional)</em>script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em>showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
         </ul>
 	<?php
@@ -57,7 +79,7 @@ function smarty_cms_about_function_print() {
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Modified to customize print page (roman)
 	</p>
 	<?php
 }

@@ -229,7 +229,14 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 		$this->cms = &$gCms;
-		$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
+		if (isset($CMS_ADMIN_PAGE))
+		{
+			$this->curlang = '';
+		}
+		else
+		{
+			$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
+		}
 		$this->langhash = array();
 		$this->params = array();
 		$this->error = '';
