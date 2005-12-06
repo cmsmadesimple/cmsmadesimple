@@ -15,6 +15,9 @@ the Link content type to fail.
 the mysqli driver.
 * Fixed a bug with the Dutch translation that was
 causing logins to the admin to fail.
+* Fixed a bug in GetDefaultPageID where and extra
+FetchRow was getting called and causing a message to
+show
 
 Version 0.11 "Trinidad" -- Dec 03 2005
 -----------------
