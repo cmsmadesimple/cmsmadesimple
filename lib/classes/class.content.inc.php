@@ -577,7 +577,7 @@ class ContentBase
 		if (-1 < $id)
 		{
 			$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row		=& $db->_Execute($query, array($id));
+			$row		=& $db->Execute($query, array($id));
 
 			if (!$row->EOF)
 			{
