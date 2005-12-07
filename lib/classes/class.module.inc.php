@@ -118,6 +118,11 @@ class ModuleOperations extends Smarty
 		      ModuleOperations::SetError( lang('errorattempteddowngrade') );
 		      return false;
 		    }
+                  else if ($moduledetails['version'] == $version )
+                    {
+                      ModuleOperations::SetError( lang('moduleinstalled') );
+                      return false;
+                    }
 		}
 	      break;
 	    }

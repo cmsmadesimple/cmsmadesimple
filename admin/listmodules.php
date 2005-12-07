@@ -82,7 +82,7 @@ if ($access)
 	      {
 	        echo ModuleOperations::GetLastError();
 	      }
-            if( !isset( $gCms->modules[$result['name']] ) )
+            else if( !isset( $gCms->modules[$result['name']] ) )
               {
                  // looks like we're installing this module
                  redirect("listmodules.php?action=install&module=".$result['name']);
