@@ -229,6 +229,8 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 		$this->cms = &$gCms;
+
+		global $CMS_ADMIN_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
 		{
 			$this->curlang = '';
