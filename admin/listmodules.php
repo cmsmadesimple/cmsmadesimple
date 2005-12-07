@@ -34,6 +34,9 @@ if (isset($_GET["plugin"])) $plugin = $_GET["plugin"];
 $action = "";
 if (isset($_GET["action"])) $action = $_GET["action"];
 
+$allowoverwritemodules = 0;
+if (isset($_POST["allowoverwrite"])) $allowoverwritemodules = $_POST["allowoverwrite"];
+
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
 
@@ -43,6 +46,58 @@ include_once("header.php");
 
 if ($access)
 {
+    if ($action == "exportxml")
+      {
+        $object = $gCms->modules[$module]['object'];
+        $xmltxt = $object->CreateXMLPackage();
+        $xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
+        while(@ob_end_clean());
+        header('Content-Description: File Transfer');
+        header('Content-Type: application/force-download');
+        header('Content-Disposition: attachment; filename='.$xmlname);
+    //     header('Content-Type: text/xml');
+        echo $xmltxt;
+        exit();
+      }
+
+    if ($action == "importxml" )
+    {
+        $fieldName = "browse_xml";
+        if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
+	    || !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
+          {
+	    echo "<p class=\"error\">".lang('nofileuploaded')."</p>";
+          }
+        else
+          {
+	    // normalize the file variable
+	    $file = $_FILES[$fieldName];
+
+	    // $file['tmp_name'] is the file we have to parse
+	    $xml = file_get_contents( $file['tmp_name'] );
+
+	    // and parse it
+	    $result = ModuleOperations::ExpandXMLPackage( $xml, $allowoverwritemodules );
+	    if( !$result )
+	      {
+	        echo ModuleOperations::GetLastError();
+	      }
+            if( !isset( $gCms->modules[$result['name']] ) )
+              {
+                 // looks like we're installing this module
+                 redirect("listmodules.php?action=install&module=".$result['name']);
+              }
+            else 
+              { 
+                 // allow the auto upgrade stuff to do it's thing
+                 // need new version and old version
+                 $oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
+                 $newversion = $result['version'];
+	         redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
+              }
+          }  
+      }
+
 	if ($action == "install")
 	{
 		if (isset($gCms->modules[$module]))
@@ -337,6 +392,7 @@ else if ($action == 'missingdeps')
 			<th><?php echo lang('action')?></th>
 			<th><?php echo lang('help')?></th>
 			<th><?php echo lang('about')?></th>
+                        <th><img border="0" src="images/cms/xml_rss.gif" alt="<?php echo lang('xml')?>" /></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -431,7 +487,9 @@ else if ($action == 'missingdeps')
 
 			//About is constructed from other details now
 			echo "<td><a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a></td>";
-		
+
+			//xml export
+			echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="images/cms/xml_rss.gif" alt="'.lang('xml').'"?></a></td>';
 			echo "</tr>\n";
 
 			($curclass=="row1"?$curclass="row2":$curclass="row1");
@@ -441,7 +499,26 @@ else if ($action == 'missingdeps')
 
 	</tbody>
 </table>
-
+<form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
+<div class="pageoverflow">
+	    <p class="pagetext"><?php echo lang('uploadfile')?>:</p>
+	    <p class="pageinput">
+	      <input type="file" name="browse_xml"/>
+            </p>
+</div>
+<div class="pageoverflow">
+	    <p class="pagetext"><?php echo lang('overwritemodule')?>:</p>
+	    <p class="pageinput">
+	      <input type="checkbox" name="allowoverwrite" value="1">
+            </p>
+</div>
+<div class="pageoverflow">
+	    <p class="pagetext">&nbsp;</p>
+	    <p class="pageinput">
+ 	      <input type="submit" name="submit" value="<?php echo lang('submit')?>" />
+            </p>
+</div>
+</form>
 	<?php
 	echo '</div>';
 	}

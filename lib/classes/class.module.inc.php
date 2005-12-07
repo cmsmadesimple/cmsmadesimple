@@ -27,6 +27,214 @@
  */
 class ModuleOperations extends Smarty
 {
+  /**
+   * A member to hold an error string
+   */
+  var $error;
+
+  /**
+   * ------------------------------------------------------------------
+   * Error Functions
+   * ------------------------------------------------------------------
+   */
+
+  /**
+   * Set an error condition
+   */
+  function SetError($str = '')
+  {
+    global $gCms;
+    $gCms->variables['error'] = $str;
+  }
+
+  /**
+   * Return the last error
+   */
+  function GetLastError()
+  {
+    global $gCms;
+    return $gCms->variables['error'];
+  }
+
+
+  /**
+   * Unpackage a module from an xml string
+   * does not touch the database
+   */
+  function ExpandXMLPackage( $xml, $overwrite = 0 )
+  {
+    global $gCms;
+    // first make sure that we can actually write to the module directory
+    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+
+    if( !is_writable( $dir ) )
+      {
+	// directory not writable
+	ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
+	return false;
+      }
+
+    // start parsing xml
+    $parser = xml_parser_create();
+    xml_parse_into_struct( $parser, $xml, $val, $xt );
+    xml_parser_free( $parser );
+    
+    $moduledetails = array();
+    $required = array();
+    foreach( $val as $elem )
+      {
+	$value = $elem['value'];
+	$type = $elem['type'];
+	switch( $elem['tag'] ) 
+	  {
+	  case 'NAME':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      // check if this module is already installed
+	      if( isset( $gCms->modules[$value] ) && $overwrite == 0 )
+		{
+		  ModuleOperations::SetError( lang( 'moduleinstalled' ) );
+		  return false;
+		}
+	      $moduledetails['name'] = $value;
+	      break;
+	    }
+
+	  case 'VERSION':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['version'] = $value;
+	      if( isset( $gCms->modules[$moduledetails['name']] ) )
+		{
+		  $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
+		  if( $moduledetails['version'] < $version )
+		    {
+		      ModuleOperations::SetError( lang('errorattempteddowngrade') );
+		      return false;
+		    }
+		}
+	      break;
+	    }
+
+	  case 'DESCRIPTION':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['description'] = $value;
+	      break;
+	    }
+
+	  case 'REQUIRES':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      if( count($required) != 2 )
+		{
+		  continue;
+		}
+	      if( !isset( $moduledetails['requires'] ) )
+		{
+		  $moduledetails['requires'] = array();
+		}
+	      array_push( $moduledetails['requires'], $required );
+	      $required = array();
+	    }
+
+	  case 'REQUIREDNAME':
+	    $requires['name'] = $value;
+	    break;
+
+	  case 'REQUIREDVERSION':
+	    $requires['version'] = $value;
+	    break;
+
+	  case 'FILE':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+
+	      // finished a first file
+	      if( !isset( $moduledetails['name'] )     || !isset( $moduledetails['version'] ) ||
+		  !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
+		{
+		  print_r( $moduledetails );
+		  ModuleOperations::SetError( lang('errorincompletexml') );
+		  return false;
+		}
+
+	      // ready to go
+	      $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+	      $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
+	      if( !file_exists( $moduledir ) )
+		{
+		  @mkdir( $moduledir );
+		}
+	      if( $moduledetails['isdir'] )
+		{
+		  @mkdir( $filename );
+		}
+	      else 
+		{
+		  $data = $moduledetails['filedata'];
+		  if( strlen( $data ) )
+		    {
+		      $data = base64_decode( $data );
+		    }
+		  $fp = fopen( $filename, "w" );
+		  if( !$fp )
+		    {
+		      ModuleOperations::SetError(lang('errorcanptcreatefile'));
+		    }
+		  if( strlen( $data ) )
+		    {
+		      fwrite( $fp, $data );
+		    }
+		  fclose( $fp );
+		}
+	      unset( $moduledetails['filedata'] );
+	      unset( $moduledetails['filename'] );
+	      unset( $moduledetails['isdir'] );
+	    }
+	    
+	  case 'FILENAME':
+	    $moduledetails['filename'] = $value;
+	    break;
+
+	  case 'ISDIR':
+	    $moduledetails['isdir'] = $value;
+	    break;
+
+	  case 'DATA':
+	    if( $type != 'complete' && $type != 'close' )
+	      {
+		continue;
+	      }
+	    $moduledetails['filedata'] = $value;
+	    break;
+	  }
+      }
+
+    // we've created the modules directory
+    // now we either have to upgrade or install
+    unset( $moduledetails['filedata'] );
+    unset( $moduledetails['filename'] );
+    unset( $moduledetails['isdir'] );
+    return $moduledetails;
+  }
+
+
 	/**
 	 * Loads modules from the filesystem.  If loadall is true, then it will load all
 	 * modules whether they're installed, or active.  If it is false, then it will
@@ -38,7 +246,7 @@ class ModuleOperations extends Smarty
 		$db = $gCms->db;
 		$cmsmodules = &$gCms->modules;
 
-		$dir = dirname(dirname(dirname(__FILE__)))."/modules";
+		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
 		if ($loadall == true)
 		{
@@ -223,7 +431,21 @@ class CMSModule extends ModuleOperations
 	var $curlang;
 	var $langhash;
 	var $params;
-        var $error;
+        var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	var $xmldtd = '
+<!DOCTYPE module [
+  <!ELEMENT module (name,version,description*,requires*,file+)>
+  <!ELEMENT name (#PCDATA)>
+  <!ELEMENT version (#PCDATA)>
+  <!ELEMENT description (#PCDATA)>
+  <!ELEMENT requires (requiredname,requiredversion)>
+  <!ELEMENT requiredname (#PCDATA)>
+  <!ELEMENT requiredversion (#PCDATA)>
+  <!ELEMENT file (filename,isdir,data)>
+  <!ELEMENT filename (#PCDATA)>
+  <!ELEMENT isdir (#PCDATA)>
+  <!ELEMENT data (#PCDATA)>
+]>';
 
 	function CMSModule()
 	{
@@ -254,28 +476,6 @@ class CMSModule extends ModuleOperations
 		$this->smarty = &$gCms->smarty;
 
 		$this->SetParameters();
-	}
-
-	/**
-	 * ------------------------------------------------------------------
-	 * Error Functions
-	 * ------------------------------------------------------------------
-	 */
-
-	/**
-	 * Set an error condition
-	 */
-	function SetError($str = '')
-	{
-	  $this->error = $str;
-	}
-
-	/**
-	 * Return the last error
-	 */
-	function GetLastError()
-	{
-	  return $this->error;
 	}
 
 	/**
@@ -594,6 +794,57 @@ class CMSModule extends ModuleOperations
 
 		return $result;
 	}
+
+
+	/**
+	 * Creates an xml data package from the module directory.  
+	 */
+	function CreateXMLPackage()
+	{
+	  // get a file list
+	  $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$this->GetName();
+	  $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
+
+	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
+	  $xmltxt .= $this->xmldtd."\n";
+	  $xmltxt .= "<module>\n";
+	  $xmltxt .= "  <name>".$this->GetName()."</name>\n";
+	  $xmltxt .= "  <version>".$this->GetVersion()."</version>\n";
+	  $xmltxt .= "  <description>".$this->GetDescription()."</description>\n";
+	  $depends = $this->GetDependencies();
+	  foreach( $depends as $key=>$val )
+	    {
+	      $xmltxt .= "  <requires>\n";
+              $xmltxt .= "    <requiredname>$key</requiredname>\n";
+              $xmltxt .= "    <requiredversion>$val</requiredversion>\n";
+	      $xmltxt .= "  </requires>\n";
+	    }
+	  foreach( $files as $file )
+	    {
+	      // strip off the beginning
+	      $file = preg_replace( '|^'.$dir.'/|', '', $file );
+	      if( $file == '' ) continue;
+	      
+	      $xmltxt .= "  <file>\n";
+	      $filespec = $dir.DIRECTORY_SEPARATOR.$file;
+	      $xmltxt .= "    <filename>$file</filename>\n";
+	      if( is_dir( $filespec ) )
+		{
+		  $xmltxt .= "    <isdir>1</isdir>\n";
+		}
+	      else
+		{
+		  $xmltxt .= "    <isdir>0</isdir>\n";
+		  $data = base64_encode(file_get_contents($filespec));
+		  $xmltxt .= "    <data><![CDATA[".$data."]]></data>\n";
+		}
+	      
+	      $xmltxt .= "  </file>\n";
+	    }
+          $xmltxt .= "</module>\n"; 
+	  return $xmltxt;
+	}
+
 
 	/**
 	 * Return true if there is an admin for the module.  Returns false by

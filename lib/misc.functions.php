@@ -606,5 +606,55 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 	}
 }
 
+
+function filespec_is_excluded( $file, $excludes )
+{
+  // strip the path from the file
+  foreach( $excludes as $excl )
+    {
+      if( @preg_match( "/".$excl."/i", basename($file) ) )
+	{
+	  return true;
+	}
+    }
+  return false;
+}
+
+
+/**
+ * Return an array containing a list of files in a directory
+ * performs a recursive serach
+ * @param  path      start path
+ * @param  maxdepth  how deep to browse (-1=unlimited)
+ * @param  mode      "FULL"|"DIRS"|"FILES"
+ * @param  d         for internal use only
+**/
+function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
+{
+   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
+   $dirlist = array () ;
+   if ( $mode != "FILES" ) { $dirlist[] = $path ; }
+   if ( $handle = opendir ( $path ) )
+   {
+       while ( false !== ( $file = readdir ( $handle ) ) )
+       {
+	   $excluded = filespec_is_excluded( $file, $excludes );
+           if ( $file != '.' && $file != '..' && $excluded == false )
+           {
+               $file = $path . $file ;
+               if ( ! is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+               elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
+               {
+		   $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
+                   $dirlist = array_merge ( $dirlist , $result ) ;
+               }
+       }
+       }
+       closedir ( $handle ) ;
+   }
+   if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
+   return ( $dirlist ) ;
+}
+
 # vim:ts=4 sw=4 noet
 ?>
