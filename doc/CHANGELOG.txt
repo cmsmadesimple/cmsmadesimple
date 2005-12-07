@@ -1,8 +1,12 @@
-Version 0.11.1 "Tobago" -- Subversion
+Version 0.11.1 "Tobago" -- Dec 05 2005
 -----------------
 
 * Changed location of the logo image in the default
 stylesheet. 
+* Fixed a bug where cssmenu didn't always set the
+right class name for parent nodes
+* Fixed potential security problem where php code
+could be entered into the title or menu text lines
 * Fixed a bug with the stylesheet query not returning
 media types.
 * Fixed the clear cache button so that it removed the

@@ -19,7 +19,8 @@
 function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
-	$pageinfo = $gCms->variables['pageinfo'];
+	$pageinfo = &$gCms->variables['pageinfo'];
+	$config = &$gCms->config;
 	if (isset($pageinfo) && $pageinfo->content_id == -1)
 	{
 		#We've a custom error message...  set a current timestamp
@@ -27,7 +28,12 @@ function smarty_cms_function_title($params, &$smarty)
 	}
 	else
 	{
-		return $pageinfo->content_title;
+		$result = $pageinfo->content_title;
+		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+		{
+			$result = ereg_replace("\{\/?php\}", "", $result);
+		}
+		return $result;
 	}
 }
 

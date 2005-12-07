@@ -52,6 +52,11 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 		}
 	}
 
+	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+	{
+		$stylesheet = ereg_replace("\{\/?php\}", "", $stylesheet);
+	}
+
 	return $stylesheet;
 }
 
