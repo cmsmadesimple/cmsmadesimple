@@ -21,12 +21,12 @@
  * @link http://smarty.php.net/
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
- * @version 2.6.9
+ * @version 2.6.10
  * @copyright 2001-2005 New Digital Group, Inc.
  * @package Smarty
  */
 
-/* $Id: Smarty_Compiler.class.php,v 1.367 2005/03/30 16:48:41 mohrt Exp $ */
+/* $Id$ */
 
 /**
  * Template compiling class
@@ -1250,6 +1250,13 @@ class Smarty_Compiler extends Smarty {
 
         $tokens = $match[0];
 
+        if(empty($tokens)) {
+            $_error_msg .= $elseif ? "'elseif'" : "'if'";
+            $_error_msg .= ' statement requires arguments'; 
+            $this->_syntax_error($_error_msg, E_USER_ERROR, __FILE__, __LINE__);
+        }
+            
+                
         // make sure we have balanced parenthesis
         $token_count = array_count_values($tokens);
         if(isset($token_count['(']) && $token_count['('] != $token_count[')']) {
@@ -1643,7 +1650,7 @@ class Smarty_Compiler extends Smarty {
             }
         elseif(!in_array($val, $this->_permitted_tokens) && !is_numeric($val)) {
             // literal string
-            return $this->_expand_quoted_text('"' . $val .'"');
+            return $this->_expand_quoted_text('"' . strtr($val, array('\\' => '\\\\', '"' => '\\"')) .'"');
         }
         return $val;
     }

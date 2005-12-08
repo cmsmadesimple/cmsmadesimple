@@ -392,7 +392,7 @@ else if ($action == 'missingdeps')
 			<th><?php echo lang('action')?></th>
 			<th><?php echo lang('help')?></th>
 			<th><?php echo lang('about')?></th>
-                        <th><img border="0" src="images/cms/xml_rss.gif" alt="<?php echo lang('xml')?>" /></th>
+                        <th><img border="0" src="../images/cms/xml_rss.gif" alt="<?php echo lang('xml')?>" /></th>
 		</tr>
 		</thead>
 		<tbody>
@@ -489,7 +489,7 @@ else if ($action == 'missingdeps')
 			echo "<td><a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a></td>";
 
 			//xml export
-			echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="images/cms/xml_rss.gif" alt="'.lang('xml').'"?></a></td>';
+			echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'"?></a></td>';
 			echo "</tr>\n";
 
 			($curclass=="row1"?$curclass="row2":$curclass="row1");
