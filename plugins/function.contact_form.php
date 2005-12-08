@@ -36,7 +36,12 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	$message = '';
 	if (!empty($_POST['message'])) $message = trim($_POST['message']);
 	
-	if($_SERVER['REQUEST_METHOD']=='POST'){
+	if($_SERVER['REQUEST_METHOD']=='POST')
+	{
+		$name = cfsanitize($name);
+		$email = cfsanitize($email);
+		$subject = cfsanitize($subject);
+
 		$extra = "From: $name <$email>\r\nReply-To: $email\r\n";
 		echo '<div class="contactMessage"';
 		echo ($style)?' style="font-weight: bold; color: red;"':'';
@@ -73,6 +78,11 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	</form>
 
 <?php
+}
+
+function cfsanitize($content)
+{
+	return str_replace(array("\r", "\n"), "", $content);
 }
 
 function smarty_cms_help_function_contact_form() {
