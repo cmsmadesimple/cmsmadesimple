@@ -279,6 +279,19 @@ else if ($action == "showmodulehelp")
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;
+		$dependencies = $gCms->modules[$module]['object']->GetDependencies();
+		if (count($dependencies) > 0 )
+		  {
+		    echo '<h3>'.lang('dependencies').'</h3>';
+		    echo '<ul>';
+		    foreach( $dependencies as $dep => $ver )
+		      {
+			echo '<li>';
+			echo $dep.' =&gt; '.$ver;
+			echo '</li>';
+		      }
+		    echo '</ul>';
+		  }
 		$paramarray = $gCms->modules[$module]['object']->GetParameters();
 		if (count($paramarray) > 0)
 		{

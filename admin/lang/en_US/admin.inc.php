@@ -51,6 +51,7 @@ $lang['admin']['default'] = 'Default';
 $lang['admin']['delete'] = 'Delete';
 $lang['admin']['deleteconfirm'] = 'Are you sure you want to delete?';
 $lang['admin']['deletecss'] = 'Delete CSS';
+$lang['admin']['dependencies'] = 'Dependencies';
 $lang['admin']['directoryexists'] = 'This directory already exists.';
 $lang['admin']['down'] = 'Down';
 $lang['admin']['edit'] = 'Edit';
