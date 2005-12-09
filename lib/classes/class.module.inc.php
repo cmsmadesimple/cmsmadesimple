@@ -903,6 +903,14 @@ class CMSModule extends ModuleOperations
 	}
 
 	/**
+	 * Returns true if the module acts as a soap server
+	 */
+	function IsSoapModule()
+	{
+		return false;
+	}
+
+	/**
 	 * ------------------------------------------------------------------
 	 * Login Related Functions
 	 * ------------------------------------------------------------------
