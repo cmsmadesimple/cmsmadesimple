@@ -436,7 +436,7 @@ class CMSModule extends ModuleOperations
 	var $curlang;
 	var $langhash;
 	var $params;
-        var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+    var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (name,version,description*,requires*,file+)>
@@ -827,9 +827,12 @@ class CMSModule extends ModuleOperations
 	  foreach( $files as $file )
 	    {
 	      // strip off the beginning
-	      $file = preg_replace( '|^'.$dir.'/|', '', $file );
+	      if (substr($file,0,strlen($dir)) == $dir)
+	         {
+             $file = substr($file,strlen($dir));
+             }
 	      if( $file == '' ) continue;
-	      
+
 	      $xmltxt .= "  <file>\n";
 	      $filespec = $dir.DIRECTORY_SEPARATOR.$file;
 	      $xmltxt .= "    <filename>$file</filename>\n";
