@@ -83,6 +83,7 @@ $lang['admin']['errorinsertinggroup'] = 'Error inserting group';
 $lang['admin']['errorinsertingtag'] = 'Error inserting user tag';
 $lang['admin']['errorinsertingtemplate'] = 'Error inserting template';
 $lang['admin']['errorinsertinguser'] = 'Error inserting user';
+$lang['admin']['errornofilesexported'] = 'Error exporting files to xml';
 $lang['admin']['errorretrievingcss'] = 'Error retrieving Stylesheet';
 $lang['admin']['errorretrievingtemplate'] = 'Error retrieving template';
 $lang['admin']['errortemplateinuse'] = 'This template is still in use by a page. Please remove it first.';

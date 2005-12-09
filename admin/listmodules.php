@@ -48,16 +48,28 @@ if ($access)
 {
     if ($action == "exportxml")
       {
+	// get our xml
+	$message = '';
+	$files = 0;
         $object = $gCms->modules[$module]['object'];
-        $xmltxt = $object->CreateXMLPackage();
-        $xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
-        while(@ob_end_clean());
-        header('Content-Description: File Transfer');
-        header('Content-Type: application/force-download');
-        header('Content-Disposition: attachment; filename='.$xmlname);
-    //     header('Content-Type: text/xml');
-        echo $xmltxt;
-        exit();
+        $xmltxt = $object->CreateXMLPackage($message,$files);
+	if( $files == 0 )
+	  {
+	    echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
+	  }
+	else 
+	  {
+	    $xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
+
+	    // and send the file
+	    while(@ob_end_clean());
+	    header('Content-Description: File Transfer');
+	    header('Content-Type: application/force-download');
+	    header('Content-Disposition: attachment; filename='.$xmlname);
+	    //     header('Content-Type: text/xml');
+	    echo $xmltxt;
+	    exit();
+	  }
       }
 
     if ($action == "importxml" )
@@ -248,22 +260,7 @@ if ($action == "showmoduleabout")
 	{
 		echo '<div class="pagecontainer">';
 		echo '<p class="pageheader">'.lang('moduleabout', array($module)).'</p>';
-		if ($gCms->modules[$module]['object']->GetAuthor() != '')
-		{
-			echo "<br />".lang('author').": " . $gCms->modules[$module]['object']->GetAuthor();
-			if ($gCms->modules[$module]['object']->GetAuthorEmail() != '')
-			{
-				echo ' &lt;' . $gCms->modules[$module]['object']->GetAuthorEmail() . '&gt;';
-			}
-			echo "<br />";
-		}
-		echo "<br />".lang('version').": " .$gCms->modules[$module]['object']->GetVersion() . "<br />";
-
-		if ($gCms->modules[$module]['object']->GetChangeLog() != '')
-		{
-			echo "<br />".lang('changehistory').":<br />";
-			echo $gCms->modules[$module]['object']->GetChangeLog() . '<br />';
-		}
+		echo $gCms->modules[$module]['object']->GetAbout();
 		echo "</div>";
 	}
 	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
@@ -274,40 +271,7 @@ else if ($action == "showmodulehelp")
 	{
 		echo '<div class="pagecontainer">';
 		echo '<p class="pageheader">'.lang('modulehelp', array($module)).'</p>';
-		@ob_start();
-		echo $gCms->modules[$module]['object']->GetHelp();
-		$content = @ob_get_contents();
-		@ob_end_clean();
-		echo $content;
-		$dependencies = $gCms->modules[$module]['object']->GetDependencies();
-		if (count($dependencies) > 0 )
-		  {
-		    echo '<h3>'.lang('dependencies').'</h3>';
-		    echo '<ul>';
-		    foreach( $dependencies as $dep => $ver )
-		      {
-			echo '<li>';
-			echo $dep.' =&gt; '.$ver;
-			echo '</li>';
-		      }
-		    echo '</ul>';
-		  }
-		$paramarray = $gCms->modules[$module]['object']->GetParameters();
-		if (count($paramarray) > 0)
-		{
-			echo '<h3>'.lang('parameters').'</h3>';
-			echo '<ul>';
-			foreach ($paramarray as $oneparam)
-			{
-				echo '<li>';
-				if ($oneparam['optional'] == true)
-				{
-					echo '<em>(optional)</em> ';
-				}
-				echo $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
-			}
-			echo '</ul>';
-		}
+		echo $gCms->modules[$module]['object']->GetHelpPage();
 		echo "</div>";
 	}
 	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';

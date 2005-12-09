@@ -61,7 +61,7 @@ class ModuleOperations extends Smarty
    * Unpackage a module from an xml string
    * does not touch the database
    */
-  function ExpandXMLPackage( $xml, $overwrite = 0 )
+  function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   {
     global $gCms;
     // first make sure that we can actually write to the module directory
@@ -137,6 +137,26 @@ class ModuleOperations extends Smarty
 	      break;
 	    }
 
+	  case 'HELP':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['help'] = base64_decode($value);
+	      break;
+	    }
+
+	  case 'ABOUT':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['about'] = base64_decode($value);
+	      break;
+	    }
+
 	  case 'REQUIRES':
 	    {
 	      if( $type != 'complete' && $type != 'close' )
@@ -166,6 +186,10 @@ class ModuleOperations extends Smarty
 	  case 'FILE':
 	    {
 	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      if( $brief != 0 )
 		{
 		  continue;
 		}
@@ -439,10 +463,12 @@ class CMSModule extends ModuleOperations
     var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
-  <!ELEMENT module (name,version,description*,requires*,file+)>
+  <!ELEMENT module (name,version,description*,help*,about*,requires*,file+)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT version (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
+  <!ELEMENT help (#PCDATA)>
+  <!ELEMENT about (#PCDATA)>
   <!ELEMENT requires (requiredname,requiredversion)>
   <!ELEMENT requiredname (#PCDATA)>
   <!ELEMENT requiredversion (#PCDATA)>
@@ -488,6 +514,74 @@ class CMSModule extends ModuleOperations
 	 * Basic Functions.  Name and Version MUST be overridden.
 	 * ------------------------------------------------------------------
 	 */
+
+	/**
+	 * Returns a sufficient about page for a module
+	 */
+	function GetAbout()
+	{
+	  $str = '';
+	  if ($this->GetAuthor() != '')
+	    {
+	      $str .= "<br />".lang('author').": " . $this->GetAuthor();
+	      if ($this->GetAuthorEmail() != '')
+		{
+		  $str .= ' &lt;' . $this->GetAuthorEmail() . '&gt;';
+		}
+	      $str .= "<br />";
+	    }
+	  $str .= "<br />".lang('version').": " .$this->GetVersion() . "<br />";
+	  
+	  if ($this->GetChangeLog() != '')
+	    {
+	      $str .= "<br />".lang('changehistory').":<br />";
+	      $str .= $this->GetChangeLog() . '<br />';
+	    }
+	  return $str;
+	}
+	  
+	/**
+	 * Returns a sufficient help page for a module
+	 * this function should not be overridden
+	 */
+	function GetHelpPage()
+	{
+	  $str = '';
+	  @ob_start();
+	  echo $this->GetHelp();
+	  $str .= @ob_get_contents();
+	  @ob_end_clean();
+	  $dependencies = $this->GetDependencies();
+	  if (count($dependencies) > 0 )
+	    {
+	      $str .= '<h3>'.lang('dependencies').'</h3>';
+	      $str .= '<ul>';
+	      foreach( $dependencies as $dep => $ver )
+		{
+		  $str .= '<li>';
+		  $str .= $dep.' =&gt; '.$ver;
+		  $str .= '</li>';
+		}
+	      $str .= '</ul>';
+	    }
+	  $paramarray = $this->GetParameters();
+	  if (count($paramarray) > 0)
+	    {
+	      $str .= '<h3>'.lang('parameters').'</h3>';
+	      $str .= '<ul>';
+	      foreach ($paramarray as $oneparam)
+		{
+		  $str .= '<li>';
+		  if ($oneparam['optional'] == true)
+		    {
+		      $str .= '<em>(optional)</em> ';
+		    }
+		  $str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
+		}
+	      $str .= '</ul>';
+	    }
+	  return $str;
+	}
 
 	/**
 	 * Returns the name of the module
@@ -804,9 +898,10 @@ class CMSModule extends ModuleOperations
 	/**
 	 * Creates an xml data package from the module directory.  
 	 */
-	function CreateXMLPackage()
+	function CreateXMLPackage( &$message, &$filecount )
 	{
 	  // get a file list
+	  $filecount = 0;
 	  $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$this->GetName();
 	  $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
 
@@ -815,7 +910,13 @@ class CMSModule extends ModuleOperations
 	  $xmltxt .= "<module>\n";
 	  $xmltxt .= "  <name>".$this->GetName()."</name>\n";
 	  $xmltxt .= "  <version>".$this->GetVersion()."</version>\n";
-	  $xmltxt .= "  <description>".$this->GetDescription()."</description>\n";
+	  $xmltxt .= "  <help>".base64_encode($this->GetHelpPage())."</help>\n";
+	  $xmltxt .= "  <about>".base64_encode($this->GetAbout())."</about>\n";
+	  $desc = $this->GetDescription();
+	  if( $desc != '' )
+	    {
+	      $xmltxt .= "  <description>".$this->GetDescription()."</description>\n";
+	    }
 	  $depends = $this->GetDependencies();
 	  foreach( $depends as $key=>$val )
 	    {
@@ -848,8 +949,11 @@ class CMSModule extends ModuleOperations
 		}
 	      
 	      $xmltxt .= "  </file>\n";
+	      ++$filecount;
 	    }
           $xmltxt .= "</module>\n"; 
+	  $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$this->GetName();
+	  $message .= ' including '.$filecount.' files';
 	  return $xmltxt;
 	}
 
