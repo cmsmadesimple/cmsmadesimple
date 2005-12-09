@@ -12,7 +12,7 @@ Developers Past and Present
 - Rob Allen <rob@akrabat.com>
 - Simon Brown <simon@uptoeleven.ws>
 - Sorin Sbarnea <sorin@intersol.ro>
-- Brett Batie <brett@provisiontech.net>
+- Brett Batie <brett-cms@classicwebdevelopment.com>
 - Thijs Elenbaas <thijs@contemplated.net>
 - Julien Lancien <calexico@cmsmadesimple.org>
 - Christian Page <christian@localdesert.com>

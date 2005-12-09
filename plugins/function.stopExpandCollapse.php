@@ -51,7 +51,7 @@ function smarty_cms_help_function_stopExpandCollapse() {
 
 function smarty_cms_about_function_stopExpandCollapse() {
 	?>
-	<p>Author: Brett Batie&lt;brett-cms@provisiontech.net&gt;</p>
+	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
 	<p>Version: 1.0</p>
 	<p>
 	Change History:<br/>

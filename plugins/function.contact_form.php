@@ -27,20 +27,13 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	
 	$style = true;
 	if (!empty($params['style']))$style = $params['style'];
-	$name = '';
-	if (!empty($_POST['name'])) $name = trim($_POST['name']);
-	$email = '';
-	if (!empty($_POST['email'])) $email = trim($_POST['email']);
-	$subject = '';
-	if (!empty($_POST['subject'])) $subject = trim($_POST['subject']);
-	$message = '';
-	if (!empty($_POST['message'])) $message = trim($_POST['message']);
 	
-	if($_SERVER['REQUEST_METHOD']=='POST')
-	{
-		$name = cfsanitize($name);
-		$email = cfsanitize($email);
-		$subject = cfsanitize($subject);
+	$name=$email=$subject=$message = '';
+	if($_SERVER['REQUEST_METHOD']=='POST'){
+		if (!empty($_POST['name'])) $name = cfSanitize($_POST['name']);
+		if (!empty($_POST['email'])) $email = cfSanitize($_POST['email']);
+		if (!empty($_POST['subject'])) $subject = cfSanitize($_POST['subject']);
+		if (!empty($_POST['message'])) $message = cfSanitize($_POST['message']);
 
 		$extra = "From: $name <$email>\r\nReply-To: $email\r\n";
 		echo '<div class="contactMessage"';
@@ -70,19 +63,18 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	?>
 
 	<form action="<?php $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] ?>" method="post" name="contactForm"<?php echo ($style)?' style="font-weight: bold;"':''; ?>>
-	Your Name:<input type="text" name="name" value="<?php echo $name; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
-	Your Email Address:<input type="text" name="email" value="<?php echo $email; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
-	Subject:<input type="text" name="subject" value="<?php echo $subject; ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
-	Message:<textarea name="message" cols="40" rows="10"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>><?php echo $message; ?></textarea>
+	Your Name:<input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Your Email Address:<input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Subject:<input type="text" name="subject" value="<?php echo htmlspecialchars($subject); ?>" size="50"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?> />
+	Message:<textarea name="message" cols="40" rows="10"<?php echo ($style)?' style="width: 350px; border: solid 1px black; display: block; margin-bottom: 7px;"':''; ?>><?php echo htmlspecialchars($message); ?></textarea>
 	<input type="submit" value="Submit" /><input type="reset" value="Clear" />
 	</form>
 
 <?php
 }
 
-function cfsanitize($content)
-{
-	return str_replace(array("\r", "\n"), "", $content);
+function cfsanitize($content){
+	return str_replace(array("\r", "\n"), "", trim($content));
 }
 
 function smarty_cms_help_function_contact_form() {
@@ -104,8 +96,8 @@ function smarty_cms_help_function_contact_form() {
 
 function smarty_cms_about_function_contact_form() {
 	?>
-	<p>Author: Brett Batie&lt;brett-cms@provisiontech.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
 	None
