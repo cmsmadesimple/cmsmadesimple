@@ -25,16 +25,174 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 include_once("header.php");
+
+$expandImg = &$themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
+$contractImg = &$themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
+$downImg = &$themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
+$upImg = &$themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
+$viewImg = &$themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
+$editImg = &$themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+$deleteImg = &$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+
+function display_hierarchy(&$root) {
+  global $templates;
+  global $users;
+  global $modifyall;
+  global $userid;
+  global $mypages;
+  global $currow;
+  global $themeObject;
+  global $image_true;
+  global $image_false;
+  global $config;
+  global $page;
+  global $indent;
+  global $pagelist;
+  global $expandImg;
+  global $contractImg;
+  global $downImg;
+  global $upImg;
+  global $viewImg;
+  global $editImg;
+  global $deleteImg;
+  global $openedArray;
+  
+  $one = &$root->getContent();
+  $children = &$root->getChildren();
+  $thelist ="";
+    
+  if ($one) {
+    if (!array_key_exists($one->TemplateId(), $templates)) {
+  	 $templates[$one->TemplateId()] = TemplateOperations::LoadTemplateById($one->TemplateId());
+  	}
+  	
+    if (!array_key_exists($one->Owner(), $users))	{
+  		$users[$one->Owner()] = UserOperations::LoadUserById($one->Owner());
+  	} 		
+  }
+
+  
+  if (isset($one) && ($modifyall || check_ownership($userid,$one->Id()) || quick_check_authorship($one->Id(), $mypages))) {
+        $thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+        $thelist .= "<td>";
+        if ($one->ChildCount() > 0) {
+          if (!in_array($one->Id(),$openedArray)) {
+            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
+            $thelist .= $expandImg;
+            $thelist .= "</a>";
+          } else {
+            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=1&page=".$page."\">";
+            $thelist .= $contractImg;
+            $thelist .= "</a>";
+          }
+        }
+        $thelist .= "</td><td>".$one->Hierarchy()."</td>\n";
+        
+        $thelist .= "<td>";
+        
+        if ($indent) {
+          for ($i=1;$i < $root->getLevel();$i++) {
+            $thelist .= "-&nbsp;&nbsp;&nbsp;";
+          }
+        } ## if indent
+
+        $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
+  			if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name) {
+  						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
+  			}	else {
+	  				$thelist .= "<td>&nbsp;</td>\n";
+	  		}
+
+	  		$thelist .= "<td>".$one->FriendlyName()."</td>\n";
+  
+ 				if ($one->Owner() > -1)	{
+  				$thelist .= "<td>".$users[$one->Owner()]->username."</td>\n";
+	  		}	else {
+  						$thelist .= "<td>&nbsp;</td>\n";
+  			}
+
+  			if($one->Active()) {
+  				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
+  			}	else {
+  					$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
+  			}
+  	
+				if ($one->IsDefaultPossible() == TRUE) {
+  						$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+  			}	else {
+  						$thelist .= "<td>&nbsp;</td>";
+  			}   
+        
+        // code for move up is simple
+        if ($modifyall) {
+        $thelist .= "<td>";
+          $parentNode = &$root->getParentNode();
+          if ($parentNode!=null) {
+            $sameLevel = &$parentNode->getChildren();
+            if (count($sameLevel)>1) {
+              if ($sameLevel[0]==$root) { // first 
+                $thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+    						$thelist .= $downImg;
+    						$thelist .= "</a>";
+              } else if ($sameLevel[count($sameLevel)-1]==$root) { // last
+                $thelist .= "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+    						$thelist .= $upImg;
+    						$thelist .= "</a>";
+              } else { // middle
+                $thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+    						$thelist .= $downImg;
+    						$thelist .= "</a>&nbsp;<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+    						$thelist .= $upImg;
+    						$thelist .= "</a>";
+              }
+            }
+          }
+          $thelist .= "</td>";
+        }
+        // end of move code
+        
+        if ($config["query_var"] == "")	{
+  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" rel=\"external\">";
+  						$thelist .= $viewImg;
+              $thelist .= "</a></td>\n";
+  			}	else if ($one->Alias() != "")	{
+  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" rel=\"external\">";
+                    	$thelist .= $viewImg;
+                    	$thelist .= "</a></td>\n";
+  			}	else {
+  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" rel=\"external\">";
+              $thelist .= $viewImg;
+              $thelist .= "</a></td>\n";
+  			}
+  			
+        $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
+  			$thelist .= $editImg;;
+        $thelist .= "</a></td>\n";
+  			$thelist .= "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+        $thelist .= $deleteImg;
+        $thelist .= "</a></td>\n";
+  			$thelist .= "</tr>\n";  	
+				($currow == "row1"?$currow="row2":$currow="row1");
+			}
+	
+  $pagelist[] = &$thelist;
+  if (!isset($one) || in_array($one->Id(),$openedArray)) {
+      foreach ($children as $child) { 
+        display_hierarchy($child);
+      }
+  }
+} // function display_hierarchy
+
+
 $openedArray=array();
-if (get_preference($userid, 'collapse', '') != '')
-	{
+if (get_preference($userid, 'collapse', '') != '')	{
 	$tmp  = explode('.',get_preference($userid, 'collapse'));
-	foreach ($tmp as $thisCol)
-		{
+	foreach ($tmp as $thisCol) {
 		$colind = substr($thisCol,0,strpos($thisCol,'='));
-		$openedArray[$colind] = 1;
+		if ($colind!="") $openedArray[] = $colind;
 		}
-	}
+}
+
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
@@ -46,79 +204,46 @@ if (isset($_GET["message"])) {
 <?php
 
 	$modifyall = check_permission($userid, 'Modify Any Page');
-	$content_array = ContentManager::GetAllContent(false);
-	$mypages = author_pages($userid);
-
-	if ($modifyall)
-	{
-		if (isset($_GET["makedefault"]))
-		{
-			foreach ($content_array as $key=>$value_copy)
-			{
-				if ($value_copy->Id() == $_GET["makedefault"])
-				{
-					$value =& $content_array[$key];
-					if ($value->DefaultContent() != true)
-					{
-						$value->SetDefaultContent(true);
-						$value->Save();
-					}
-				}
-				else
-				{
-					$value =& $content_array[$key];
-					if ($value->DefaultContent() != false)
-					{
-						$value->SetDefaultContent(false);
-						$value->Save();
-					}
-				}
-			}
+	if ($modifyall) {
+		if (isset($_GET["makedefault"])) {
+			ContentManager::SetDefaultContent($_GET["makedefault"]);
 		}
 	}
+
+	$hierarchy = ContentManager::GetAllContentAsHierarchy(false,$openedArray);
+	$hierManager = new ContentHierarchyManager($hierarchy);
+
+	$mypages = author_pages($userid);
+
     // check if we're activating a page
-    if (isset($_GET["setactive"])) 
-	{
-      	// to activate a page, you must be admin, owner, or additional author
-		$permission = ($modifyall || 
+    if (isset($_GET["setactive"])) {
+      // to activate a page, you must be admin, owner, or additional author
+		  $permission = ($modifyall || 
 			check_ownership($userid,$_GET["setactive"]) ||
 			check_authorship($userid,$_GET["setactive"]));
 
-		if($permission) 
-		{
-			foreach ($content_array as $key=>$value_copy)
-			{
-				if ($value_copy->Id() == $_GET["setactive"])
-				{
-					#Modify the object inline
-					$value =& $content_array[$key];
-					$value->SetActive(true);
-					$value->Save();
-				}
-			}
-    	}
+  		if($permission) {
+        $node = &$hierManager->getNodeById($_GET["setactive"]);
+			  $value = $node->getContent();
+				#Modify the object inline
+				$value->SetActive(true);
+				$value->Save();
+      }
     }
 
     // perhaps we're deactivating a page instead?
-    if (isset($_GET["setinactive"])) 
-	{
-      	// to deactivate a page, you must be admin, owner, or additional author
-      	$permission = ($modifyall || 
+    if (isset($_GET["setinactive"])) {
+     	// to deactivate a page, you must be admin, owner, or additional author
+     	$permission = ($modifyall || 
 			check_ownership($userid,$_GET["setinactive"]) || 
 			check_authorship($userid,$_GET["setinactive"]));
-      	if($permission) 
-		{
-			foreach ($content_array as $key=>$value_copy)
-			{
-				if ($value_copy->Id() == $_GET["setinactive"])
-				{
-					#Modify the object inline
-					$value =& $content_array[$key];
-					$value->SetActive(false);
-					$value->Save();
-				}
-			}
-	    }
+     	if($permission) {
+        $node = &$hierManager->getNodeById($_GET["setinactive"]);
+	   	  $value = $node->getContent();
+				#Modify the object inline
+				$value->SetActive(false);
+				$value->Save();
+      }
     }
 
 	$page = 1;
@@ -145,216 +270,16 @@ if (isset($_GET["message"])) {
 	$menupos = array();
 
 	$indent = get_preference($userid, 'indent', true);
-    $collapsing = false;
-    $collapse_depth = -1;
-	if (count($content_array))
-	{
-		foreach ($content_array as $one)
-		{
-			if (!array_key_exists($one->TemplateId(), $templates))
-			{
-				$templates[$one->TemplateId()] = TemplateOperations::LoadTemplateById($one->TemplateId());
-			}
-
-			if (!array_key_exists($one->Owner(), $users))
-			{
-				$users[$one->Owner()] = UserOperations::LoadUserById($one->Owner());
-			}
-
-             // check that permissions are good before showing -- and counting:
-            if ($modifyall || 
-				check_ownership($userid,$one->Id()) || 
-				quick_check_authorship($one->Id(), $mypages))
-			{
-                $depth = count(split('\.', $one->Hierarchy()));
-                if ($collapsing && $depth > $collapse_depth)
-                    {
-                    continue;
-                    }
-                else
-                    {
-                    $collapsing = false;
-                    }
-			if ($limit == 0 || ( ($counter)  < $page*$limit && ($counter)  >= ($page*$limit)-$limit))
-				{
-  			    	$thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-                    $thelist .= "<td>";
-                    if ($one->ChildCount() > 0)
-                        {
-                        if (!isset($openedArray[$one->Id()])) //$one->Collapsed()
-                            {
-                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\">";
-                            $thelist .= $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
-                            $thelist .= "</a>";
-                            $collapsing = true;
-                            // was collapse_depth=1
-                            $collapse_depth = $depth;
-                            }
-                        else
-                            {
-                            $thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\">";
-                            $thelist .= $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
-                            $thelist .= "</a>";
-                            }
-                        }
-                    $thelist .= "</td><td>".$one->Hierarchy()."</td>\n";
-                	$thelist .= "<td>";
-                    if ($indent)
-                        {
-                        for ($i=1;$i < $depth;$i++)
-                            {
-                            $thelist .= "-&nbsp;&nbsp;&nbsp;";
-                            }
-                        }
-
-                    $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&amp;page=".$page."\">".$one->Name()."</a></td>\n";
-  					if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
-  					{
-  						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
-  					}
-  					else
-	  				{
-	  					$thelist .= "<td>&nbsp;</td>\n";
-	  				}
-
-	  				$thelist .= "<td>".$one->FriendlyName()."</td>\n";
-  
-	  				if ($one->Owner() > -1)
-	  				{
-  					$thelist .= "<td>".$users[$one->Owner()]->username."</td>\n";
-	  				}
-  					else
-  					{
-  						$thelist .= "<td>&nbsp;</td>\n";
-  					}
-
-  					if($one->Active())
-  					{
-  						$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
-  					}
-  					else 
-  					{
-  				  		$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
-  					}
-  	
-					if ($one->IsDefaultPossible() == TRUE)
-					{
-  						$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
-  					}
-  					else
-  					{
-  						$thelist .= "<td>&nbsp;</td>";
-  					}
-  
-					if ($modifyall)
-					{
-  						$thelist .= "<td class=\"pagepos\">";
-						
-  						#Figure out some variables real quick
-  						$depth = count(split('\.', $one->Hierarchy()));
-  
-  						$item_order = substr($one->Hierarchy(), strrpos($one->Hierarchy(), '.'));
-  						if ($item_order == '')
-  						{
-  							$item_order = $one->Hierarchy();
-  						}
-  
-  						#Remove any rogue dots
-  						$item_order = trim($item_order, ".");
-  
-  						$num_same_level = 0;
-  	
-						#TODO: Handle depth correctly yet
-  						foreach ($content_array as $another)
-  						{
-  							#Are they the same level?
-  							if (count(split('\.', $another->Hierarchy())) == $depth)
-  							{
-  								#Make sure it's not top level
-  								if (count(split('\.', $another->Hierarchy())) > 1)
-  								{
-  									#So only pages with the same parents count
-  									if (substr($another->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')) == substr($one->Hierarchy(), 0, strrpos($another->Hierarchy(), '.')))
-  									{
-  										$num_same_level++;
-  									}
-  								}
-  								else
-  								{
-  									#It's top level, just increase the count
-  									$num_same_level++;	
-  								}
-  							}
-  						}
-  						
-  						if ($num_same_level > 1)
-  						{
-  							#$thelist .= "item_order: " . $item_order . " num_same_level:" . $num_same_level . "<br />";
-  							if ($item_order == 1 && $num_same_level)
-  							{
-  								$thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  								$thelist .= $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
-  								$thelist .= "</a>";
-   							}
-  							else if ($item_order == $num_same_level)
-  							{
-  								$thelist .= "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  								$thelist .= $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
-  								$thelist .= "</a>";
-  							}
-  							else
-  							{
-  								$thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  								$thelist .= $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
-  								$thelist .= "</a>&nbsp;<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-  								$thelist .= $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
-  								$thelist .= "</a>";
-  							}
-  						}
-  					}
-
-					if ($modifyall)
-  						$thelist .= "</td>\n";
-				
-  					if ($config["query_var"] == "")
-  					{
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" rel=\"external\">";
-  						$thelist .= $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
-                    	$thelist .= "</a></td>\n";
-  					}
-  					else if ($one->Alias() != "")
-  					{
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" rel=\"external\">";
-                    	$thelist .= $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
-                    	$thelist .= "</a></td>\n";
-  					}
-  					else
-  					{
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" rel=\"external\">";
-                    	$thelist .= $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
-                    	$thelist .= "</a></td>\n";
-  					}
-  					$thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
-  					$thelist .= $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                	$thelist .= "</a></td>\n";
-  					$thelist .= "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                	$thelist .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                	$thelist .= "</a></td>\n";
-  					$thelist .= "</tr>\n";
-  	
-  					$count++;
-  
-  					($currow == "row1"?$currow="row2":$currow="row1");
-					}
-				$counter++;
-				}
-			} ## foreach
-		
-		$thelist .= '</tbody>';
+	if ($hierarchy->hasChildren()){
+   display_hierarchy($hierarchy);
+   foreach ($pagelist as $item) {
+    $thelist.=$item;
+   }
+  	$thelist .= '</tbody>';
 		$thelist .= "</table>\n";
-
 	}
 	
+  $counter = 1;	
 	if (! $counter)
 	{
 		$thelist = "<p>".lang('noentries')."</p>";

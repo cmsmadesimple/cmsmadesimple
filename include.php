@@ -149,6 +149,8 @@ require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
 require_once(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.template.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
+require_once(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
+require_once(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 #require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
 

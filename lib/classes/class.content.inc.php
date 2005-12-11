@@ -1678,6 +1678,111 @@ class ContentManager
 		}
 	}
 
+	/**
+	 *  Returns a hierarchy of nodes (ContentNode)
+	 *  @param loadprops : true if properties should be loaded
+	 *  @param onlyexpanded : array of expanded contents ids. null if whole 
+	 tree should be loaded
+	 */
+	function GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null) {
+		global $gCms;
+		$db = &$gCms->db;
+
+		/*       if (isset($gCms->ContentCache) &&
+				 ($loadprops == false || $gCms->variables['cachedprops'] == 
+				 true))
+				 {
+				 return $gCms->ContentCache;
+				 }
+		 */
+
+		// first, retrieve number of children
+		$childrenCount = array();
+		$query = "SELECT parent_id, count(*) as cpt FROM 
+			".cms_db_prefix()."content GROUP BY parent_id";
+		$dbresult = $db->Execute($query);
+		while ($row = $dbresult->FetchRow()) {
+			$childrenCount[$row["parent_id"]] = $row["cpt"];
+		}
+
+		$currentNode = new ContentNode();
+		$level =0;
+		$gCms->ContentCache = &$currentNode;
+
+		$gCms->variables['cachedprops'] = $loadprops;
+		$expanded = "";
+		if (isset($onlyexpanded)) {
+			$expanded=" WHERE parent_id IN(";
+			foreach ($onlyexpanded as $id) {
+				$expanded .= $id.",";
+			}
+			$expanded.="-1)";
+		}
+		$query = "SELECT * FROM ".cms_db_prefix()."content $expanded 
+			ORDER BY hierarchy";
+		$dbresult = $db->Execute($query);
+
+		if ($dbresult && $dbresult->RowCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				#Make sure the type exists.  If so, instantiate and load
+				if (in_array($row['type'], 
+							array_keys(@ContentManager::ListContentTypes())))
+				{
+					$contentobj = new $row['type'];
+					$contentobj->LoadFromData($row, $loadprops);
+					if (isset($childrenCount[$contentobj->Id()])) {
+						$contentobj->mChildCount = $childrenCount[$contentobj->Id()];
+					}
+
+					$curlevel = substr_count($contentobj->Hierarchy(),".")+1;
+					if ($curlevel>$level) { // going farther in hierarchy
+						$level = $curlevel;
+						$node = new ContentNode($contentobj,$currentNode);
+						$currentNode = &$node;
+						$currentNode->getParentNode()->addChild($node);
+					} else if ($curlevel<$level) { // going upper
+						while ($currentNode->getLevel()!=$curlevel) {
+							$currentNode = &$currentNode->getParentNode();
+						}
+						$parentNode=&$currentNode->getParentNode();
+						$node = new ContentNode($contentobj,$parentNode);
+						$parentNode->addChild($node);
+						$level=$curlevel;
+						$currentNode = &$node;
+					} else {// same level
+						$parentNode=&$currentNode->getParentNode();
+						$node = new ContentNode($contentobj,$parentNode);
+						$parentNode->addChild($node);
+					}
+				}
+			}
+		}
+		return $gCms->ContentCache;
+
+	}
+
+	/**
+	 *  Sets the default content as id
+	 */   
+	function SetDefaultContent($id) {
+		global $gCms;
+		$db = &$gCms->db;
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$old_id = $db->GetOne($query);
+		if (isset($old_id)) {
+			$one = new Content();
+			$one->LoadFromId($old_id);
+			$one->SetDefaultContent(false);
+			$one->Save();
+		}
+		$one = new Content();
+		$one->LoadFromId($id);
+		$one->SetDefaultContent(true);
+		$one->Save();
+	}
+
 	function GetAllContent($loadprops=true)
 	{
 		debug_buffer('get all content...');
@@ -1685,110 +1790,110 @@ class ContentManager
 		global $gCms;
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 
-        #if (isset($gCms->variables['contentcache']) &&
-        #    ($loadprops == false || $gCms->variables['cachedprops'] == true))
+#if (isset($gCms->variables['contentcache']) &&
+#    ($loadprops == false || $gCms->variables['cachedprops'] == true))
 
-		#if ($loadprops == true)
-		#{
-			if (isset($gCms->variables['contentcache']))
-			{
-				debug_buffer('Using memory cache...');
-				return $gCms->variables['contentcache'];
-			}
+#if ($loadprops == true)
+#{
+	if (isset($gCms->variables['contentcache']))
+	{
+		debug_buffer('Using memory cache...');
+		return $gCms->variables['contentcache'];
+	}
 
-			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
-			{
-				$pageinfo =& $gCms->variables['pageinfo'];
-				debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
-				{
-					debug_buffer('file needs loading');
-
-					$handle = fopen($cachefilename, "r");
-					$data = fread($handle, filesize($cachefilename));
-					fclose($handle);
-
-					$data = unserialize(substr($data, 16));
-
-					$variables =& $gCms->variables;
-					$variables['contentcache'] =& $data;
-
-					return $data;
-				}
-			}
-		#}
-
-		$contentcache = array();
-        #$gCms->variables['cachedprops'] = $loadprops;
-
-		$db = &$gCms->db;
-		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-		$dbresult = &$db->Execute($query);
-
-        $map = array();
-        $count = 0;
-
-		while (!$dbresult->EOF)
+	if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+	{
+		$pageinfo =& $gCms->variables['pageinfo'];
+		debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
+		if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
 		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
-			{
-				$contentobj = new $dbresult->fields['type'];
-				$contentobj->LoadFromData($dbresult->FetchRow(), false);
-				#if ($loadprops == true)
-				#{
-					$contentobj->mPropertiesLoaded = true;
-				#}
-				$map[$contentobj->Id()] = $count;
-				array_push($contentcache, $contentobj);
-				$count++;
-			}
-			else
-			{
-				$dbresult->MoveNext();
-			}
+			debug_buffer('file needs loading');
+
+			$handle = fopen($cachefilename, "r");
+			$data = fread($handle, filesize($cachefilename));
+			fclose($handle);
+
+			$data = unserialize(substr($data, 16));
+
+			$variables =& $gCms->variables;
+			$variables['contentcache'] =& $data;
+
+			return $data;
 		}
+	}
+#}
 
-		#Load all of the content props in one shot as well
-		#if ($loadprops == true)
-		#{
-			debug_buffer('load props is true...');
-			$query = "SELECT * FROM ".cms_db_prefix()."content_props";
-			$dbresult = &$db->Execute($query);
+	$contentcache = array();
+#$gCms->variables['cachedprops'] = $loadprops;
 
-			while (!$dbresult->EOF)
-			{
-				if (isset($map[$dbresult->fields['content_id']]))
-				{
-					$content_obj =& $contentcache[$map[$dbresult->fields['content_id']]];
-					$prop_name = $dbresult->fields['prop_name'];
-					$content_obj->mProperties->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
-					$content_obj->mProperties->mPropertyValues[$prop_name] = $dbresult->fields['content'];
-					$content_obj->mPropertiesLoaded = true;
-				}
-				$dbresult->MoveNext();
-			}
-		#}
+	$db = &$gCms->db;
+	$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+	$dbresult = &$db->Execute($query);
 
-        for ($i=0;$i<$count;$i++)
+	$map = array();
+	$count = 0;
+
+	while (!$dbresult->EOF)
+	{
+#Make sure the type exists.  If so, instantiate and load
+		if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
 		{
-            if ($contentcache[$i]->ParentId() != -1)
-			{
-                $contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
-			}
+			$contentobj = new $dbresult->fields['type'];
+			$contentobj->LoadFromData($dbresult->FetchRow(), false);
+#if ($loadprops == true)
+#{
+	$contentobj->mPropertiesLoaded = true;
+#}
+	$map[$contentobj->Id()] = $count;
+	array_push($contentcache, $contentobj);
+	$count++;
 		}
+		else
+		{
+			$dbresult->MoveNext();
+		}
+	}
 
-		#var_export(serialize($contentcache));
+#Load all of the content props in one shot as well
+#if ($loadprops == true)
+#{
+	debug_buffer('load props is true...');
+	$query = "SELECT * FROM ".cms_db_prefix()."content_props";
+	$dbresult = &$db->Execute($query);
 
-		debug_buffer("Serializing...");
-		$handle = fopen($cachefilename, "w");
-		fwrite($handle, '<?php return; ?>'.serialize($contentcache));
-		fclose($handle);
+	while (!$dbresult->EOF)
+	{
+		if (isset($map[$dbresult->fields['content_id']]))
+		{
+			$content_obj =& $contentcache[$map[$dbresult->fields['content_id']]];
+			$prop_name = $dbresult->fields['prop_name'];
+			$content_obj->mProperties->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+			$content_obj->mProperties->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+			$content_obj->mPropertiesLoaded = true;
+		}
+		$dbresult->MoveNext();
+	}
+#}
 
-		$variables =& $gCms->variables;
-		$variables['contentcache'] =& $contentcache;
+	for ($i=0;$i<$count;$i++)
+	{
+		if ($contentcache[$i]->ParentId() != -1)
+		{
+			$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
+		}
+	}
 
-		return $contentcache;
+#var_export(serialize($contentcache));
+
+	debug_buffer("Serializing...");
+	$handle = fopen($cachefilename, "w");
+	fwrite($handle, '<?php return; ?>'.serialize($contentcache));
+	fclose($handle);
+
+	$variables =& $gCms->variables;
+	$variables['contentcache'] =& $contentcache;
+
+	return $contentcache;
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
@@ -1801,32 +1906,32 @@ class ContentManager
 		{
 			$result .= '<select name="'.$name.'">';
 			$result .= '<option value="-1">None</option>';
-			
+
 			$curhierarchy = '';
 
 			foreach ($allcontent as $one)
 			{
 				if ($one->Id() == $current)
 				{
-					#Grab hierarchy just in case we need to check children
-					#(which will always be after)
+#Grab hierarchy just in case we need to check children
+#(which will always be after)
 					$curhierarchy = $one->Hierarchy();
-					
-					#Then jump out.  We don't want ourselves in the list.
+
+#Then jump out.  We don't want ourselves in the list.
 					continue;
 				}
-				#If it's a child of the current, we don't want to show it as it
-				#could cause a deadlock.
+#If it's a child of the current, we don't want to show it as it
+#could cause a deadlock.
 				if ($curhierarchy != '' && strstr($one->Hierarchy(), $curhierarchy) == $one->Hierarchy())
 				{
 					continue;
 				}
-				#Don't include content types that do not want children either...
+#Don't include content types that do not want children either...
 				if ($one->WantsChildren() == true)
 				{
 					$result .= '<option value="'.$one->Id().'"';
 
-					#Select current parent if it exists
+#Select current parent if it exists
 					if ($one->Id() == $parent)
 					{
 						$result .= ' selected="true"';
@@ -1869,16 +1974,16 @@ class ContentManager
 		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
 		{
 			return $alias;
-	    }
+		}
 
 		$params = array($alias);
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 		$row = $db->GetRow($query, $params);
 
 		if (!$row)
-	    {
+		{
 			return false;
-	    }
+		}
 		return $row['content_id'];
 	}
 
@@ -1932,7 +2037,7 @@ class ContentManager
 				array_push($params, $content_id);
 			}
 			$row = &$db->GetRow($query, $params);
-	
+
 			if ($row)
 			{
 				$error = lang('aliasalreadyused');
@@ -1944,7 +2049,7 @@ class ContentManager
 
 	function CreateFriendlyHierarchyPosition($position)
 	{
-		#Change padded numbers back into user-friendly values
+#Change padded numbers back into user-friendly values
 		$tmp = '';
 		$levels = split('\.', $position);
 		foreach ($levels as $onelevel)
@@ -1957,7 +2062,7 @@ class ContentManager
 
 	function CreateUnfriendlyHierarchyPosition($position)
 	{
-		#Change user-friendly values into padded numbers
+#Change user-friendly values into padded numbers
 		$tmp = '';
 		$levels = split('\.', $position);
 		foreach ($levels as $onelevel)
