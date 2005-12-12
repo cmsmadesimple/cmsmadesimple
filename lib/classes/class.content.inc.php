@@ -1707,7 +1707,7 @@ class ContentManager
 
 		$currentNode = new ContentNode();
 		$level =0;
-		$gCms->ContentCache = &$currentNode;
+		$gCms->ContentCache = $currentNode;
 
 		$gCms->variables['cachedprops'] = $loadprops;
 		$expanded = "";
@@ -1724,13 +1724,13 @@ class ContentManager
 
 		if ($dbresult && $dbresult->RowCount() > 0)
 		{
-			while ($row = $dbresult->FetchRow())
+			while ($row = &$dbresult->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
 				if (in_array($row['type'], 
 							array_keys(@ContentManager::ListContentTypes())))
 				{
-					$contentobj = new $row['type'];
+          $contentobj = new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
 					if (isset($childrenCount[$contentobj->Id()])) {
 						$contentobj->mChildCount = $childrenCount[$contentobj->Id()];
@@ -1738,12 +1738,11 @@ class ContentManager
 
 					$curlevel = substr_count($contentobj->Hierarchy(),".")+1;
 					if ($curlevel>$level) { // going farther in hierarchy
-						$level = $curlevel;
-						$node = new ContentNode();
-						$node->init($contentobj,$currentNode);
-						$currentNode = &$node;
-						$parent =& $currentNode->getParentNode();
-						$parent->addChild($node);
+            $level = $curlevel;
+  					$node = new ContentNode();
+  					$node->init($contentobj,$currentNode);
+  					$currentNode->addChild($node);
+	          $next = $node;
 					} else if ($curlevel<$level) { // going upper
 						while ($currentNode->getLevel()!=$curlevel) {
 							$currentNode = &$currentNode->getParentNode();
@@ -1753,13 +1752,15 @@ class ContentManager
 						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
 						$level=$curlevel;
-						$currentNode = &$node;
+						$next = $node;
 					} else {// same level
 						$parentNode=&$currentNode->getParentNode();
 						$node = new ContentNode();
 						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
+						$next=$node;
 					}
+					$currentNode = $next;
 				}
 			}
 		}

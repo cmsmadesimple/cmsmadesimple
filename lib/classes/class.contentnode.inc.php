@@ -33,12 +33,16 @@ class ContentNode {
   function init(&$content, &$parentNode) {
     $this->content = $content;
     $this->parentNode = $parentNode;
-    $this->level=$parentNode->getLevel()+1;
+    if (isset($parentNode)) {
+      $this->level=$parentNode->getLevel()+1;
+    }
   }
   
   function setParentNode(&$node) {
     $this->parentNode = $node;
-    $this->level = $node->getLevel()+1;
+    if (isset($node)) {
+      $this->level=$node->getLevel()+1;
+    }
   }
   
   function setContent(&$content) {
