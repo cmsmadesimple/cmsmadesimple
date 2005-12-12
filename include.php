@@ -125,10 +125,14 @@ if (isset($CMS_ADMIN_PAGE))
 }
 
 #Load them into the usual variables.  This'll go away a little later on.
-$db =& $gCms->GetDB();
+if (!isset($DONT_LOAD_DB))
+{ 
+	$db =& $gCms->GetDB();
 
-#TODO: Move this into debug...  I think
-$db->fnExecute = 'count_sql_execs';
+	#TODO: Move this into debug...  I think
+	$db->fnExecute = 'count_sql_execs';
+}
+
 $smarty =& $gCms->GetSmarty();
 
 #Load content types
