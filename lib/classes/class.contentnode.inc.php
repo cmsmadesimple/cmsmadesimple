@@ -25,16 +25,20 @@ class ContentNode {
 
   function ContentNode() {  
     $this->children = array();
+    $this->level=0;
+    $this->parentNode=null;
+    $this->content=null;
   }
 
-  function init(&$content=null, &$parentNode=null) {
+  function init(&$content, &$parentNode) {
     $this->content = $content;
     $this->parentNode = $parentNode;
+    $this->level=$parentNode->getLevel()+1;
   }
   
   function setParentNode(&$node) {
     $this->parentNode = $node;
-    $this->level = isset($node)?($node->getLevel()+1):0;
+    $this->level = $node->getLevel()+1;
   }
   
   function setContent(&$content) {
