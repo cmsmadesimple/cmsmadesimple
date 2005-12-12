@@ -105,7 +105,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	
 	$config["page_extension"] = ".html";
 
-	$config["locale"] = "en_US";
+	$config["locale"] = "";
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";

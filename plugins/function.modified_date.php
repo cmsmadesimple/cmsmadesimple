@@ -23,7 +23,7 @@ function smarty_cms_function_modified_date($params, &$smarty)
 
 	if(empty($params['format']))
 	{
-		$format = "%b %e, %Y";
+		$format = "%x %X";
 	}
 	else
 	{

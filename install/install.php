@@ -565,7 +565,7 @@ function showPageFive() {
 	$newconfig["persistent_db_conn"] = true;
 	$newconfig["default_upload_permission"] = '664';
     $newconfig["page_extension"] = ".html";
-	$newconfig["locale"] = "en_US";
+	$newconfig["locale"] = "";
 	$newconfig["admin_encoding"] = "utf-8";
 
     $configfile = CONFIG_FILE_LOCATION;

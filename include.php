@@ -72,7 +72,7 @@ $config =& $gCms->GetConfig();
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']); 
 
 #Set the locale if it's set
-if (isset($config['locale']))
+if (isset($config['locale']) && $config['locale'] != '')
 {
 	@setlocale(LC_ALL, $config['locale']);
 }
