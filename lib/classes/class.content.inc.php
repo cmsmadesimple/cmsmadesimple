@@ -1741,7 +1741,8 @@ class ContentManager
 						$level = $curlevel;
 						$node = new ContentNode($contentobj,$currentNode);
 						$currentNode = &$node;
-						$currentNode->getParentNode()->addChild($node);
+						$parent =& $currentNode->getParentNode();
+						$parent->addChild($node);
 					} else if ($curlevel<$level) { // going upper
 						while ($currentNode->getLevel()!=$curlevel) {
 							$currentNode = &$currentNode->getParentNode();

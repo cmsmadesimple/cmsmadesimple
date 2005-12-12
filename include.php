@@ -90,10 +90,7 @@ if (isset($_SESSION["cms_admin_username"]))
 	$gCms->variables["username"] = $_SESSION["cms_admin_username"];
 }
 
-
-/*
 $sql_execs = 0;
-
 $sql_queries = "";
 
 function count_sql_execs($db, $sql, $inputarray)
@@ -104,34 +101,7 @@ function count_sql_execs($db, $sql, $inputarray)
 	if (!is_array($inputarray)) $sql_execs++;
 	else if (is_array(reset($inputarray))) $sql_execs += sizeof($inputarray);
 	else $sql_execs++;
-	if ($gCms->config["debug"] == true)
-	{
-		#$sql_queries .= "<p>$sql</p>\n";
-	}
 }
-
-if (!isset($DONT_LOAD_DB)) {
-	#global $ADODB_COUNTRECS;
-	#$ADODB_COUNTRECS = false;
-	$db = &ADONewConnection($config['dbms'], 'date:pear');
-	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-	{
-		$db->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-	}
-	else
-	{
-		$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-	}
-	if (!$db) die("Connection failed");
-	$db->SetFetchMode(ADODB_FETCH_ASSOC);
-	$db->fnExecute = 'count_sql_execs';
-	if ($gCms->config['debug'] == true)
-	{
-		#$db->debug = true;
-	}
-	$gCms->db = &$db;
-}
-*/
 
 require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
 require_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
@@ -156,6 +126,9 @@ if (isset($CMS_ADMIN_PAGE))
 
 #Load them into the usual variables.  This'll go away a little later on.
 $db =& $gCms->GetDB();
+
+#TODO: Move this into debug...  I think
+$db->fnExecute = 'count_sql_execs';
 $smarty =& $gCms->GetSmarty();
 
 #Load content types

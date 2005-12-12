@@ -23,7 +23,7 @@ class ContentNode {
   var $children;
   var $level;
 
-  function ContentNode(&$content=null, &$parentNode=null) {
+  function ContentNode($content=null, $parentNode=null) {
     $this->content = $content;
     $this->parentNode = $parentNode;
     $this->children = array();
