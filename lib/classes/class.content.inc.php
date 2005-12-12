@@ -1739,7 +1739,8 @@ class ContentManager
 					$curlevel = substr_count($contentobj->Hierarchy(),".")+1;
 					if ($curlevel>$level) { // going farther in hierarchy
 						$level = $curlevel;
-						$node = new ContentNode($contentobj,$currentNode);
+						$node = new ContentNode();
+						$node->init($contentobj,$currentNode);
 						$currentNode = &$node;
 						$parent =& $currentNode->getParentNode();
 						$parent->addChild($node);
@@ -1748,13 +1749,15 @@ class ContentManager
 							$currentNode = &$currentNode->getParentNode();
 						}
 						$parentNode=&$currentNode->getParentNode();
-						$node = new ContentNode($contentobj,$parentNode);
+						$node = new ContentNode();
+						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
 						$level=$curlevel;
 						$currentNode = &$node;
 					} else {// same level
 						$parentNode=&$currentNode->getParentNode();
-						$node = new ContentNode($contentobj,$parentNode);
+						$node = new ContentNode();
+						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
 					}
 				}

@@ -23,13 +23,24 @@ class ContentNode {
   var $children;
   var $level;
 
-  function ContentNode($content=null, $parentNode=null) {
-    $this->content = $content;
-    $this->parentNode = $parentNode;
+  function ContentNode() {  
     $this->children = array();
-    $this->level = isset($parentNode)?($parentNode->getLevel()+1):0;
   }
 
+  function init(&$content=null, &$parentNode=null) {
+    $this->content = $content;
+    $this->parentNode = $parentNode;
+  }
+  
+  function setParentNode(&$node) {
+    $this->parentNode = $node;
+    $this->level = isset($node)?($node->getLevel()+1):0;
+  }
+  
+  function setContent(&$content) {
+    $this->content = $content;
+  }
+  
   function getChildrenCount() {
     return count($this->children);
   }

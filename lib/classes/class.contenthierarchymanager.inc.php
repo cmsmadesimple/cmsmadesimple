@@ -26,9 +26,12 @@ class ContentHierarchyManager {
   /**
    *  Constructs the hierarchy index from a root node
    */
-  function ContentHierarchyManager(&$root) {
-    $this->rootNode = $root;
+  function ContentHierarchyManager() {
     $this->index = array();
+  }
+  
+  function setRoot(&$root) {
+    $this->rootNode = $root;
     $this->populateIndex($root);
   }
   

@@ -1,4 +1,4 @@
-<?php
+ba<?php
 #CMS - CMS Made Simple
 #(c)2004 by Ted Kulp (wishy@users.sf.net)
 #This project's homepage is: http://cmsmadesimple.sf.net
@@ -211,7 +211,8 @@ if (isset($_GET["message"])) {
 	}
 
 	$hierarchy = ContentManager::GetAllContentAsHierarchy(false,$openedArray);
-	$hierManager = new ContentHierarchyManager($hierarchy);
+	$hierManager = new ContentHierarchyManager();
+	$hierManager->setRoot($hierarchy);
 
 	$mypages = author_pages($userid);
 
