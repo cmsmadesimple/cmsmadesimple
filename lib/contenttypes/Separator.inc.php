@@ -94,7 +94,7 @@ class separator extends ContentBase
 		return $ret;
 	}
 
-	function GetURL()
+	function GetURL($rewrite = true)
 	{
 		return '#';
 	}

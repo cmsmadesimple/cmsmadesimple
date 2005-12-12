@@ -126,6 +126,69 @@ class CmsObject {
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 	}
+
+	function & GetDb()
+	{
+        static $dbinstance;
+
+		//Check to see if it hasn't been
+		//instantiated yet.  If not, connect
+		//and return it
+        if (is_null($dbinstance))
+		{
+			$config =& $this->GetConfig();
+			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date');
+			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
+			{
+				$dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+			}
+			else
+			{
+				$dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+			}
+			if (!$dbinstance) die("Connection failed");
+			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+			$this->db = &$dbinstance;
+		}
+
+        return $dbinstance;
+	}
+
+	function & GetConfig()
+	{
+		static $configinstance;
+
+        if (is_null($configinstance))
+		{
+			$configinstance = cms_config_load(true);
+			$this->config = &$configinstance;
+		}
+
+		return $configinstance;
+	}
+
+	function & GetSmarty()
+	{
+        static $smartyinstance;
+
+		//Check to see if it hasn't been
+		//instantiated yet.  If not, connect
+		//and return it
+        if (is_null($smartyinstance))
+		{
+			$conf =& $this->GetConfig();
+			if (!defined('SMARTY_DIR'))
+			{
+				define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');
+			}
+
+			#Setup global smarty object
+			$smartyinstance = new Smarty_CMS($conf);
+			$this->smarty = &$smartyinstance;
+		}
+
+        return $smartyinstance;
+	}
 }
 
 # vim:ts=4 sw=4 noet

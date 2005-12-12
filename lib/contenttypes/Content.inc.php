@@ -274,7 +274,8 @@ class content extends ContentBase
 		return (count($errors) > 0?$errors:FALSE);
 	}
 
-	function GetURL()
+	/*
+	function GetURL($rewrite = true)
 	{
 		global $config;
 		$url = "";
@@ -304,6 +305,7 @@ class content extends ContentBase
 
 		return $url;
 	}
+	*/
 	
 	function GetAdditionalContentBlocks()
 	{

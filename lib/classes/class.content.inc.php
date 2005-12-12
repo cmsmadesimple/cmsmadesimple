@@ -1073,12 +1073,12 @@ class ContentBase
 	/**
 	 * Function for content types to override to set their proper generated URL
 	 */
-	function GetURL()
+	function GetURL($rewrite = true)
 	{
 		global $gCms;
 		$config = &$gCms->config;
 		$url = "";
-		if ($config["assume_mod_rewrite"])
+		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
 			$url = $config["root_url"]."/".$this->mAlias.
 				(isset($config['page_extension'])?$config['page_extension']:'.shtml');

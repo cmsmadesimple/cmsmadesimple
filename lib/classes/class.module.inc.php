@@ -1994,13 +1994,13 @@ class CMSModule extends ModuleOperations
 		$content = ContentManager::LoadContentFromId($returnid);
 		if (isset($content))
 		{
-			if ($content->GetUrl() != '')
+			if ($content->GetURL(false) != '')
 			{
 				if (!$onlyhref)
 				{
 					$text .= '<a href="';
 				}
-				$text .= $content->GetUrl();
+				$text .= $content->GetURL(false);
 				foreach ($params as $key=>$value)
 				{
 					$text .= '&amp;'.$id.$key.'='.$value;

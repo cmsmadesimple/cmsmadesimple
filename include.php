@@ -92,9 +92,8 @@ if (isset($_SESSION["cms_admin_username"]))
 	$gCms->variables["username"] = $_SESSION["cms_admin_username"];
 }
 
-#Setup db connection
-include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 
+/*
 $sql_execs = 0;
 
 $sql_queries = "";
@@ -134,12 +133,12 @@ if (!isset($DONT_LOAD_DB)) {
 	}
 	$gCms->db = &$db;
 }
+*/
 
 require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
-#require_once(dirname(__FILE__)."/lib/db.functions.php");
+include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
-#require_once(dirname(__FILE__)."/lib/module.functions.php");
 require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
@@ -152,7 +151,11 @@ require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
-#require_once(dirname(__FILE__)."/lib/xajax/xajax.inc.php");
+
+#Load them into the usual variables.  This'll go away a little later on.
+$db =& $gCms->GetDB();
+$config =& $gCms->GetConfig();
+$smarty =& $gCms->GetSmarty();
 
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
@@ -173,8 +176,8 @@ if (!defined('SMARTY_DIR')) {
 }
 
 #Setup global smarty object
-$smarty = new Smarty_CMS($config);
-$gCms->smarty = &$smarty;
+#$smarty = new Smarty_CMS($config);
+#$gCms->smarty = &$smarty;
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
