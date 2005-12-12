@@ -1855,8 +1855,9 @@ class ContentManager
 	}
 
 #Load all of the content props in one shot as well
-#if ($loadprops == true)
-#{
+/*
+if ($loadprops == true)
+{
 	debug_buffer('load props is true...');
 	$query = "SELECT * FROM ".cms_db_prefix()."content_props";
 	$dbresult = &$db->Execute($query);
@@ -1873,7 +1874,8 @@ class ContentManager
 		}
 		$dbresult->MoveNext();
 	}
-#}
+}
+*/
 
 	for ($i=0;$i<$count;$i++)
 	{

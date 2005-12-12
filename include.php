@@ -65,13 +65,11 @@ require_once(dirname(__FILE__)."/lib/config.functions.php");
 #if (cms_config_check_old_config()) {
 #	cms_config_upgrade();
 #}
-$config = cms_config_load(true);
+#$config = cms_config_load(true);
+$config =& $gCms->GetConfig();
 
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']); 
-
-#Attach to global object
-$gCms->config = &$config;
 
 #Set the locale if it's set
 if (isset($config['locale']))
@@ -136,15 +134,13 @@ if (!isset($DONT_LOAD_DB)) {
 */
 
 require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
-include_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
+require_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 require_once(dirname(__FILE__)."/lib/page.functions.php");
 require_once(dirname(__FILE__)."/lib/content.functions.php");
 require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
 require_once(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.template.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
@@ -152,9 +148,14 @@ require_once(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
 require_once(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
 require_once(dirname(__FILE__)."/lib/translation.functions.php");
 
+if (isset($CMS_ADMIN_PAGE))
+{
+	require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
+	require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
+}
+
 #Load them into the usual variables.  This'll go away a little later on.
 $db =& $gCms->GetDB();
-$config =& $gCms->GetConfig();
 $smarty =& $gCms->GetSmarty();
 
 #Load content types
