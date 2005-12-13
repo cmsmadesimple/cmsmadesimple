@@ -31,37 +31,37 @@ class ContentNode {
   }
 
   function init(&$content, &$parentNode) {
-    $this->content = $content;
-    $this->parentNode = $parentNode;
+    $this->content = &$content;
+    $this->parentNode = &$parentNode;
     if (isset($parentNode)) {
       $this->level=$parentNode->getLevel()+1;
     }
   }
   
   function setParentNode(&$node) {
-    $this->parentNode = $node;
+    $this->parentNode = &$node;
     if (isset($node)) {
       $this->level=$node->getLevel()+1;
     }
   }
   
   function setContent(&$content) {
-    $this->content = $content;
+    $this->content = &$content;
   }
   
   function getChildrenCount() {
     return count($this->children);
   }
   
-  function getContent() {
+  function &getContent() {
     return $this->content;
   }
   
-  function getParentNode() {
+  function &getParentNode() {
     return $this->parentNode;
   }
   
-  function getChildren() {
+  function &getChildren() {
     return $this->children;
   }
   
@@ -74,7 +74,25 @@ class ContentNode {
   }
 
   function addChild(&$node) {
-    $this->children[] = $node;
+    $content = &$node->getContent();
+    //echo "Adding ".$content->Hierarchy()." to level $this->level<br/>";
+    $this->children[] = &$node;
+    //echo "Total nodes of level $this->level = ".count($this->children)."<br/>";
+  }
+  
+  /**
+   * Returns the position of a node into the list of children
+   * This method is a workaround for a PHP4 bug where reference testing
+   * returns a circular reference fatal error
+   * @param $node the node to find into the list of children
+   */
+  function findChildNodeIndex(&$node) {
+    $i=0;
+    foreach ($this->children as $child) {
+      if ($child->getContent()==$node->getContent()) return $i;
+      $i++;
+    }
+    return -1;
   }
   
 }

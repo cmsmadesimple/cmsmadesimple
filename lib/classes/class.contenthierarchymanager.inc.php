@@ -31,7 +31,7 @@ class ContentHierarchyManager {
   }
   
   function setRoot(&$root) {
-    $this->rootNode = $root;
+    $this->rootNode = &$root;
     $this->populateIndex($root);
   }
   
@@ -41,9 +41,9 @@ class ContentHierarchyManager {
   function populateIndex(&$root) {
     $content = &$root->getContent();
     if (isset($content)) {
-      $this->index[$content->Id()]=$root;
+      $this->index[$content->Id()]=&$root;
       if ($content->Alias()) {
-        $this->index["".$content->Alias().""] = $root; // ensure string index
+        $this->index["".$content->Alias().""] = &$root; // ensure string index
       }
     }
     $children = &$root->getChildren();

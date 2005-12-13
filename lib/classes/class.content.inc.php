@@ -1684,7 +1684,7 @@ class ContentManager
 	 *  @param onlyexpanded : array of expanded contents ids. null if whole 
 	 tree should be loaded
 	 */
-	function GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null) {
+	function &GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null) {
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1705,9 +1705,9 @@ class ContentManager
 			$childrenCount[$row["parent_id"]] = $row["cpt"];
 		}
 
-		$currentNode = new ContentNode();
+    $currentNode = &new ContentNode();
+		$root = &$currentNode;
 		$level =0;
-		$gCms->ContentCache = $currentNode;
 
 		$gCms->variables['cachedprops'] = $loadprops;
 		$expanded = "";
@@ -1730,7 +1730,7 @@ class ContentManager
 				if (in_array($row['type'], 
 							array_keys(@ContentManager::ListContentTypes())))
 				{
-          $contentobj = new $row['type'];
+          $contentobj = &new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
 					if (isset($childrenCount[$contentobj->Id()])) {
 						$contentobj->mChildCount = $childrenCount[$contentobj->Id()];
@@ -1739,32 +1739,34 @@ class ContentManager
 					$curlevel = substr_count($contentobj->Hierarchy(),".")+1;
 					if ($curlevel>$level) { // going farther in hierarchy
             $level = $curlevel;
-  					$node = new ContentNode();
+  					$node = &new ContentNode();
   					$node->init($contentobj,$currentNode);
   					$currentNode->addChild($node);
-	          $next = $node;
+	          $next = &$node;
 					} else if ($curlevel<$level) { // going upper
-						while ($currentNode->getLevel()!=$curlevel) {
+            while ($currentNode->getLevel()!=$curlevel) {
 							$currentNode = &$currentNode->getParentNode();
 						}
 						$parentNode=&$currentNode->getParentNode();
-						$node = new ContentNode();
+						$node = &new ContentNode();
 						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
 						$level=$curlevel;
-						$next = $node;
+						$next = &$node;
 					} else {// same level
-						$parentNode=&$currentNode->getParentNode();
-						$node = new ContentNode();
+            $parentNode=&$currentNode->getParentNode();
+						$node = &new ContentNode();
 						$node->init($contentobj,$parentNode);
 						$parentNode->addChild($node);
-						$next=$node;
+						$next=&$node;
 					}
-					$currentNode = $next;
+					$currentNode = &$next;
 				}
 			}
 		}
-		return $gCms->ContentCache;
+		$toReturn = new ContentHierarchyManager();
+		$toReturn->setRoot($root);
+		return $toReturn;
 
 	}
 

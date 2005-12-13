@@ -34,6 +34,19 @@ $viewImg = &$themeObject->DisplayImage('icons/system/view.gif', lang('view'),'',
 $editImg = &$themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 $deleteImg = &$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
+function show_h(&$root) {
+  $content = &$root->getContent();
+  echo "<li>".($root->getLevel()==0?"root":$content->Hierarchy())."</li>";
+  if ($root->getChildrenCount()>0) {
+    echo "<ul>";
+    $children = &$root->getChildren();
+    foreach ($children as $child) {
+      show_h($child);
+    }
+    echo "</ul>";
+  }
+}
+
 function display_hierarchy(&$root) {
   global $templates;
   global $users;
@@ -130,11 +143,11 @@ function display_hierarchy(&$root) {
           if ($parentNode!=null) {
             $sameLevel = &$parentNode->getChildren();
             if (count($sameLevel)>1) {
-              if ($sameLevel[0]==$root) { // first 
+              if ($parentNode->findChildNodeIndex($root)==0) { // first 
                 $thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
     						$thelist .= $downImg;
     						$thelist .= "</a>";
-              } else if ($sameLevel[count($sameLevel)-1]==$root) { // last
+              } else if ($parentNode->findChildNodeIndex($root)==count($sameLevel)-1) { // last
                 $thelist .= "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
     						$thelist .= $upImg;
     						$thelist .= "</a>";
@@ -183,7 +196,6 @@ function display_hierarchy(&$root) {
   }
 } // function display_hierarchy
 
-
 $openedArray=array();
 if (get_preference($userid, 'collapse', '') != '')	{
 	$tmp  = explode('.',get_preference($userid, 'collapse'));
@@ -210,9 +222,12 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-	$hierarchy = ContentManager::GetAllContentAsHierarchy(false,$openedArray);
-	$hierManager = new ContentHierarchyManager();
-	$hierManager->setRoot($hierarchy);
+  $mem1=memory_get_usage();
+	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
+	$hierarchy = &$hierManager->getRootNode();
+  $mem2=memory_get_usage();
+  $nbNodes = count($hierManager->index);
+  //echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
 
 	$mypages = author_pages($userid);
 
