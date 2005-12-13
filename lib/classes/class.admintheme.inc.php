@@ -868,6 +868,7 @@ class AdminTheme
                 // and fix up the last breadcrumb...
                 if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
                     {
+                    $this->query = preg_replace('/\&/','&amp;',$this->query);
                     $this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
                     }
                 if ($this->subtitle != '')
