@@ -111,6 +111,7 @@ if ($access)
 						$blobobj->AddAuthor($addt_user_id);
 					}
 				}
+				$blobobj->AddAuthor($userid);
 				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
 
 				#Clear cache
