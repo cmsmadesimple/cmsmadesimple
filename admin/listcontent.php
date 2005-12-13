@@ -222,10 +222,10 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-  $mem1=memory_get_usage();
+  #$mem1=memory_get_usage();
 	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
 	$hierarchy = &$hierManager->getRootNode();
-  $mem2=memory_get_usage();
+  #$mem2=memory_get_usage();
   $nbNodes = count($hierManager->index);
   //echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
 
