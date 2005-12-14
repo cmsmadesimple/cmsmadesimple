@@ -47,6 +47,9 @@ class Smarty_CMS extends Smarty {
 		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/');
 
+		$this->compiler_file = 'CMS_Compiler.class.php';
+		$this->compiler_class = 'CMS_Compiler';
+
 		$this->caching = true;
 		$this->compile_check = true;
 		$this->assign('app_name','CMS');
