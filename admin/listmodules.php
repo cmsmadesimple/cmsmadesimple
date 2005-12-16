@@ -120,8 +120,8 @@ if ($access)
 			#now insert a record
 			if (!isset($result) || $result === FALSE)
 			{
-				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($module).",".$db->qstr($modinstance->GetVersion()).",'installed',1)";
-				$db->Execute($query);
+				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (?,?,'installed',?)";
+				$db->Execute($query, array($module,$modinstance->GetVersion(),true));
 				
 				#and insert any dependancies
 				if (count($modinstance->GetDependencies()) > 0) #Check for any deps
@@ -239,15 +239,15 @@ if ($access)
 
 	if ($action == "settrue")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = 1 WHERE module_name = ?";
-		$db->Execute($query, array($module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
+		$db->Execute($query, array(true,$module));
 		redirect("listmodules.php");
 	}
 
 	if ($action == "setfalse")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = 0 WHERE module_name = ?";
-		$db->Execute($query, array($module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
+		$db->Execute($query, array(false,$module));
 		redirect("listmodules.php");
 	}
 }
@@ -432,7 +432,7 @@ else if ($action == 'missingdeps')
 			{
 				echo "<td>".$dbm[$key]['Version']."</td>";
 				echo "<td>".lang('needupgrade')."</td>";
-				echo "<td class=\"pagepos\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+				echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 				echo "<td><a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a></td>";
 			}
 			else #Must be installed
@@ -442,12 +442,12 @@ else if ($action == 'missingdeps')
 				#Can't be removed if it has a dependency...
 				if (!$modinstance->CheckForDependents())
 				{
-					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==="1"?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td><a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE?$modinstance->UninstallPreMessage():lang('uninstallconfirm'))."');\">".lang('uninstall')."</a></td>";
 				}
 				else
 				{
-					echo "<td>".($dbm[$key]['Active']==="1"?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+					echo "<td>".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td>".lang('hasdependents')."</td>";
 				}
 			}
