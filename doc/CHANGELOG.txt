@@ -1,6 +1,10 @@
 Version 0.11.2 -- Subversion
 -----------------
 
+* Fixed issue where the News content type would
+show up in multiple content blocks.
+* Fixed issue where admin password would not work
+after installation.
 * Removed log4php, since it wasn't being used to
 it's full potential
 * Updated smarty to 2.6.10
