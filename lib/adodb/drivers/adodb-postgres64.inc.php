@@ -730,14 +730,29 @@ WHERE c2.relname=\'%s\' or c2.relname=lower(\'%s\')';
 				}
 				$s = "PREPARE $plan ($params) AS ".substr($sql,0,strlen($sql)-2);		
 				//adodb_pr($s);
+		if (function_exists('debug_buffer'))
+		{
+			debug_buffer($s);
+		}
+
 				pg_exec($this->_connectionID,$s);
 				echo $this->ErrorMsg();
 			}
 			
+		if (function_exists('debug_buffer'))
+		{
+			debug_buffer($exsql);
+		}
+
 			$rez = pg_exec($this->_connectionID,$exsql);
 		} else {
 			$this->_errorMsg = false;
 			//adodb_backtrace();
+		if (function_exists('debug_buffer'))
+		{
+			debug_buffer($sql);
+		}
+			
 			$rez = pg_exec($this->_connectionID,$sql);
 		}
 		// check if no data returned, then no need to create real recordset

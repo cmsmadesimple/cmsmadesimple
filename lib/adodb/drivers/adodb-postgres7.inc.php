@@ -37,11 +37,18 @@ class ADODB_postgres7 extends ADODB_postgres64 {
 	 {
 		 $offsetStr = ($offset >= 0) ? " OFFSET $offset" : '';
 		 $limitStr  = ($nrows >= 0)  ? " LIMIT $nrows" : '';
+
+		if (function_exists('debug_buffer'))
+		{
+			debug_buffer($sql);
+		}
+
 		 if ($secs2cache)
 		  	$rs =& $this->CacheExecute($secs2cache,$sql."$limitStr$offsetStr",$inputarr);
 		 else
+		    {
 		  	$rs =& $this->Execute($sql."$limitStr$offsetStr",$inputarr);
-		
+		    }
 		return $rs;
 	 }
  	/*
