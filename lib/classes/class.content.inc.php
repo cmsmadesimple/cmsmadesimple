@@ -745,8 +745,6 @@ class ContentBase
 		global $gCms;
 		foreach($gCms->modules as $key=>$value)
 		{
-		error_log($gCms->modules[$key]['installed'] == true?'installed_':'not_');
-		error_log($gCms->modules[$key]['active'] == true?'active_':'not_');
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -772,10 +770,7 @@ class ContentBase
 		}
 		
 		foreach($gCms->modules as $key=>$value)
-		{
-		error_log($gCms->modules[$key]['installed'] == true?'installed_':'not_');
-		error_log($gCms->modules[$key]['active'] == true?'active_':'not_');
-		
+		{		
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
