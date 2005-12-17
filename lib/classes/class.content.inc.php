@@ -745,6 +745,8 @@ class ContentBase
 		global $gCms;
 		foreach($gCms->modules as $key=>$value)
 		{
+		error_log($gCms->modules[$key]['installed'] == true?'installed_':'not_');
+		error_log($gCms->modules[$key]['active'] == true?'active_':'not_');
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -759,6 +761,7 @@ class ContentBase
 			$this->mProperties->Load($this->mId);
 			$this->mPropertiesLoaded = true;
 		}
+
 		if (-1 < $this->mId)
 		{
 			$this->Update();
@@ -770,6 +773,9 @@ class ContentBase
 		
 		foreach($gCms->modules as $key=>$value)
 		{
+		error_log($gCms->modules[$key]['installed'] == true?'installed_':'not_');
+		error_log($gCms->modules[$key]['active'] == true?'active_':'not_');
+		
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -816,7 +822,6 @@ class ContentBase
 		}
 
 		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
-
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -1344,14 +1349,14 @@ class ContentProperties
 			global $gCms, $config, $sql_queries, $debug_errors;
 			$db = &$gCms->db;
 
-			//$query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-			//$dbresult = $db->Execute($query, array($content_id));
+		    $delquery = "DELETE FROM ".cms_db_prefix()."content_props where content_id=? and prop_name=?";
+			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
+
 
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
-				$query = "REPLACE INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
-
-				$dbresult = $db->Execute($query, array(
+				$dbresult = $db->Execute($delquery, array($content_id,$key));			
+				$dbresult = $db->Execute($insquery, array(
 					$content_id,
 					$this->mPropertyTypes[$key],
 					$key,
@@ -1364,7 +1369,7 @@ class ContentProperties
 				# debug mode
 				if (true == $config["debug"])
 				{
-					$sql_queries .= "<p>$query</p>\n";
+					$sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
 				}
 
 				if (! $dbresult)
