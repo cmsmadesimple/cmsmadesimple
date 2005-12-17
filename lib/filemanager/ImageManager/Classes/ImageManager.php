@@ -2,7 +2,7 @@
 /**
  * ImageManager, list images, directories, and thumbnails.
  * @author $Author: Wei Zhuo $
- * @version $Id: ImageManager.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  */
 
@@ -11,7 +11,7 @@ require_once(dirname(__FILE__).'/Files.php');
 /**
  * ImageManager Class.
  * @author $Author: Wei Zhuo $
- * @version $Id: ImageManager.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @version $Id$
  */
 class ImageManager 
 {
@@ -185,9 +185,13 @@ class ImageManager
 
 			//Add a back directory
 			
-			$backpath = $path.'/..';
+			$backpath = $fullpath.'/..';
 			$backpath = realpath($backpath);
-			$realpath = realpath($path);
+			if (substr($backpath,0,strlen($this->getBaseDir())) == $this->getBaseDir())
+				{
+				$backpath = substr($backpath,strlen($this->getBaseDir()));
+				}
+		    echo '<p class="pageheader">'.$path.'</p>';
 			if($path != '/') {
 					$relative = Files::fixPath($backpath);
 					$full = Files::fixPath($backpath);
