@@ -496,7 +496,6 @@ class CMSModule extends ModuleOperations
 		$this->langhash = array();
 		$this->params = array();
 		$this->error = '';
-		$this->log =& LoggerManager::getLogger('module.php');
 		array_push($this->params, array(
 			'name' => 'lang',
 			'default' => 'en_US',

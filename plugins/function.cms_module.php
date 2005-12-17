@@ -18,9 +18,6 @@
 
 function smarty_cms_function_cms_module($params, &$smarty)
 {
-	$log =& LoggerManager::getLogger('function.cms_module.php');
-	$log->debug('Starting smarty_cms_function_cms_module');
-
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 
@@ -70,7 +67,6 @@ function smarty_cms_function_cms_module($params, &$smarty)
 				}
 				else
 				{
-					$log->debug('Leaving smarty_cms_function_cms_module');
 					return "<!-- Not a tag module -->\n";
 				}
 			}

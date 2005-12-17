@@ -20,10 +20,6 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
-$log =& LoggerManager::getLogger('soap.php');
-$log->info('Serving URL:' . $_SERVER['REQUEST_URI']);
-$log->debug('Starting soap.php');
-
 /**
  * Entry point for all non-admin pages
  *
@@ -115,7 +111,6 @@ if (isset($cmsmodules))
 	      }
 	    else
 	      {
-		$log->debug('Leaving smarty_cms_function_cms_module');
 		return "<!-- Not a tag module -->\n";
 	      }
 	  }
@@ -129,8 +124,6 @@ echo $modresult;
 //@ob_flush();
 
 $endtime = microtime();
-
-$log->debug('Leaving soap.php');
 
 if ($config["debug"] == true)
 {

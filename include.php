@@ -20,9 +20,6 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
-$log =& LoggerManager::getLogger('include.php');
-$log->debug('Starting include.php');
-
 /**
  * This file is included in every page.  It does all seutp functions including
  * importing additional functions/classes, setting up sessions and nls, and
@@ -203,8 +200,6 @@ else
 {
 	ModuleOperations::LoadModules(false);
 }
-
-$log->debug('Leaving include.php');
 
 # vim:ts=4 sw=4 noet
 ?>

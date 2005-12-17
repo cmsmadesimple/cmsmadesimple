@@ -18,9 +18,6 @@
 
 function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 {
-	$log =& LoggerManager::getLogger('postfilter.postcompile.php');
-	$log->debug('Starting smarty_cms_postfilter_postcompilefunc');
-
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
@@ -35,7 +32,6 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$log->debug('Calling ContentPostCompile');
 						$gCms->modules[$key]['object']->ContentPostCompile($tpl_output);
 					}
 				}
@@ -47,7 +43,6 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$log->debug('Calling TemplatePostCompile');
 						$gCms->modules[$key]['object']->TemplatePostCompile($tpl_output);
 					}
 				}

@@ -18,9 +18,6 @@
 
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
-	$log =& LoggerManager::getLogger('index.php');
-	$log->debug('Starting smarty_cms_function_bulletmenu');
-
 	global $gCms;
 	global $db;
 	global $config;
@@ -181,19 +178,15 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 					# Now for the nasty part...  loop through all parents and show them and direct siblings
 					if ($skipme)
 					{
-						$log->debug('skipme is true');
 						$blah = '';
 						$count = 1;
 						foreach (split('\.', $curpos) as $level)
 						{
 							$blah .= $level . '.';
-							#$log->debug('blah is ' . $blah . ' and hierarchy is ' . $onecontent->Hierarchy());
 							if (strstr($onecontent->Hierarchy(), ContentManager::CreateFriendlyHierarchyPosition($blah)) == $onecontent->Hierarchy())
 							{
-								$log->debug('It\'s a match -- ' . $depth . ' -- ' . ($count + 1));
 								if ($depth == ($count + 1))
 								{
-									$log->debug('Setting skipme to false');
 									$skipme = false;
 									continue;
 								}

@@ -18,8 +18,6 @@
 
 function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 {
-	$log =& LoggerManager::getLogger('prefilter.precompilefunc.php');
-	$log->debug('Starting smarty_cms_prefilter_precompilefunc');
 
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
@@ -35,11 +33,9 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$log->debug('Calling ContentPreCompile');
 						$gCms->modules[$key]['object']->ContentPreCompile($tpl_output);
 						
 						#For backwards compatibility, though I think PreCompile makes more sense
-						$log->debug('Calling ContentPreRender');
 						$gCms->modules[$key]['object']->ContentPreRender($tpl_output);
 					}
 				}
@@ -51,7 +47,6 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$log->debug('Calling TemplatePreCompile');
 						$gCms->modules[$key]['object']->TemplatePreCompile($tpl_output);
 					}
 				}

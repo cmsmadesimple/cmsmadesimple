@@ -141,9 +141,6 @@ class Smarty_CMS extends Smarty {
 
     function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
     {   
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting module_db_template');
-    	
         global $gCms;
 
         $db = &$gCms->db;
@@ -347,16 +344,12 @@ class Smarty_CMS extends Smarty {
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting template_get_template');
-
 		global $gCms;
 		$config = $gCms->config;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
 			$tpl_source = get_site_preference('sitedownmessage');
-			$log->debug('Site down.  Leaving template_get_template');
 			return true;
 		}
 		else
@@ -366,7 +359,6 @@ class Smarty_CMS extends Smarty {
 			if ($tpl_name == 'notemplate')
 			{
 				$tpl_source = '{content}';
-				$log->debug('No Template.  Leaving template_get_template');
 				return true;
 			}
 			else
@@ -402,32 +394,25 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 					}
 
-					$log->debug('Template Found.  Leaving template_get_template');
 					return true;
 				}
 			}
-			$log->warn('No Template Found.  Leaving template_get_template');
 			return false;
 		}
 	}
 
 	function template_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting template_get_timestamp');
-
 		global $gCms;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
 			$tpl_timestamp = time();
-			$log->debug('Site down.  Leaving template_get_timestamp');
 			return true;
 		}
 		else if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
 		{
 			$tpl_timestamp = time();
-			$log->debug('No template needed.  Leaving template_get_timestamp');
 			return true;
 		}
 		else
@@ -435,16 +420,12 @@ class Smarty_CMS extends Smarty {
 			$pageinfo = &$gCms->variables['pageinfo'];
 
 			$tpl_timestamp = $pageinfo->template_modified_date;
-			$log->debug('Template found.  Leaving template_get_timestamp');
 			return true;
 		}
 	}
 
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting content_get_template');
-
 		global $gCms;
 
 		$pageinfo = &$gCms->variables['pageinfo'];
@@ -454,7 +435,6 @@ class Smarty_CMS extends Smarty {
 			#We've a custom error message...  return it here
 			header("HTTP/1.0 404 Not Found");
 			$tpl_source = get_site_preference('custom404');
-			$log->debug('Custom 404 message.  Leaving content_get_template');
 			return true;
 		}
 		else
@@ -468,9 +448,7 @@ class Smarty_CMS extends Smarty {
 					$contentobj->GetAdditionalContentBlocks();
 				}
 
-				$log->debug('Running Show() now');
 				$tpl_source = $contentobj->Show($tpl_name);
-				$log->debug('Done running Show()');
 
 				#Perform the content data callback
 				#This needs to go...
@@ -500,19 +478,14 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
-				$log->debug('Content found.  Leaving content_get_template');
 				return true;
 			}
 		}
-		$log->warn('Content not found.  Leaving content_get_template');
 		return false;
 	}
 
 	function content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting content_get_timestamp');
-
 		global $gCms;
 
 		$pageinfo = $gCms->variables['pageinfo'];
@@ -533,7 +506,6 @@ class Smarty_CMS extends Smarty {
 				$tpl_timestamp = time();
 			}
 		}
-		$log->debug('Leaving content_get_timestamp');
 		return true;
 	}
 	
@@ -542,9 +514,6 @@ class Smarty_CMS extends Smarty {
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
 		$config = $gCms->config;
-
-		$log =& LoggerManager::getLogger('content.functions.php');
-		$log->debug('Starting module_get_template');
 
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))
@@ -586,7 +555,6 @@ class Smarty_CMS extends Smarty {
 			}
 		}
 		
-		$log->debug("Encoding: " . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
 		if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
 		{
