@@ -40,20 +40,9 @@ foreach($gCms->modules as $key=>$value)
 		$gCms->modules[$key]['active'] == true &&
 		$gCms->modules[$key]['object']->IsWYSIWYG())
 	{
-		@ob_start();
-		$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
-		$bodytext .= @ob_get_contents();
-		@ob_end_clean();
-
-		@ob_start();
-		$gCms->modules[$key]['object']->WYSIWYGGenerateHeader();
-		$footertext .= @ob_get_contents();
-		@ob_end_clean();
-
-		@ob_start();
-		$gCms->modules[$key]['object']->WYSIWYGPageForm();
-		$formtext .= @ob_get_contents();
-		@ob_end_clean();
+		$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
+		$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader();
+		$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();		
 	}
 }
 
