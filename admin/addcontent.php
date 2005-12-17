@@ -46,6 +46,9 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
+$parent_id = -1;
+if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
+
 #Get current userid and make sure they have permission to add something
 $userid = get_userid();
 $access = check_permission($userid, 'Add Pages');
@@ -103,6 +106,7 @@ else
 	$contentobj->SetActive(True);
 	$contentobj->SetShowInMenu(True);
 	$contentobj->SetLastModifiedBy($userid);
+	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
 }
 
 if ($access)
