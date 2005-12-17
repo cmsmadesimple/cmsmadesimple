@@ -332,12 +332,12 @@ class ModuleOperations extends Smarty
 							if (isset($cmsmodules[$modulename]))
 							{
 								$cmsmodules[$modulename]['installed'] = true;
-								$cmsmodules[$modulename]['active'] = ($result->fields['active']=='1'?true:false);
+								$cmsmodules[$modulename]['active'] = $result->fields['active'];
 							}
 						}
 						else
 						{
-							if ($result->fields['active'] == '1')
+							if ($result->fields['active'] )
 							{
 								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
@@ -364,7 +364,7 @@ class ModuleOperations extends Smarty
 										{
 											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
-											$cmsmodules[$name]['active'] = ($result->fields['active']=='1'?true:false);
+											$cmsmodules[$name]['active'] = $result->fields['active'];
 										}
 										else
 										{
