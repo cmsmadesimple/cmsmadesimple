@@ -1344,12 +1344,12 @@ class ContentProperties
 			global $gCms, $config, $sql_queries, $debug_errors;
 			$db = &$gCms->db;
 
-			$query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-			$dbresult = $db->Execute($query, array($content_id));
+			//$query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+			//$dbresult = $db->Execute($query, array($content_id));
 
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
-				$query = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
+				$query = "REPLACE INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
 
 				$dbresult = $db->Execute($query, array(
 					$content_id,
