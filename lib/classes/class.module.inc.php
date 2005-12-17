@@ -67,7 +67,7 @@ class ModuleOperations extends Smarty
     // first make sure that we can actually write to the module directory
     $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-    if( !is_writable( $dir ) )
+    if( !is_writable( $dir ) && $brief != 0 )
       {
 	// directory not writable
 	ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
@@ -78,8 +78,9 @@ class ModuleOperations extends Smarty
     $parser = xml_parser_create();
     xml_parse_into_struct( $parser, $xml, $val, $xt );
     xml_parser_free( $parser );
-    
+
     $moduledetails = array();
+    $moduledetails['size'] = strlen($xml);
     $required = array();
     foreach( $val as $elem )
       {
@@ -94,7 +95,7 @@ class ModuleOperations extends Smarty
 		  continue;
 		}
 	      // check if this module is already installed
-	      if( isset( $gCms->modules[$value] ) && $overwrite == 0 )
+	      if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
 		{
 		  ModuleOperations::SetError( lang( 'moduleinstalled' ) );
 		  return false;
@@ -113,12 +114,12 @@ class ModuleOperations extends Smarty
 	      if( isset( $gCms->modules[$moduledetails['name']] ) )
 		{
 		  $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-		  if( $moduledetails['version'] < $version )
+		  if( $moduledetails['version'] < $version && $brief == 0)
 		    {
 		      ModuleOperations::SetError( lang('errorattempteddowngrade') );
 		      return false;
 		    }
-                  else if ($moduledetails['version'] == $version )
+                  else if ($moduledetails['version'] == $version && $brief == 0 )
                     {
                       ModuleOperations::SetError( lang('moduleinstalled') );
                       return false;
@@ -163,7 +164,7 @@ class ModuleOperations extends Smarty
 		{
 		  continue;
 		}
-	      if( count($required) != 2 )
+	      if( count($requires) != 2 )
 		{
 		  continue;
 		}
@@ -171,7 +172,7 @@ class ModuleOperations extends Smarty
 		{
 		  $moduledetails['requires'] = array();
 		}
-	      array_push( $moduledetails['requires'], $required );
+	      array_push( $moduledetails['requires'], $requires );
 	      $required = array();
 	    }
 
@@ -1674,7 +1675,7 @@ class CMSModule extends ModuleOperations
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Use an image instead of a regular button
 	 */
-	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='')
+	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
 	{
 		global $gCms;
 
@@ -1690,7 +1691,10 @@ class CMSModule extends ModuleOperations
 		{
 			$text .= '"submit"';
 		}
-
+		if ($confirmtext != '' )
+		  {
+		    $text .= 'onclick="return confirm(\''.$confirmtext.'\');"';
+		  }
 		if ($addttext != '')
 		{
 			$text .= ' '.$addttext;
