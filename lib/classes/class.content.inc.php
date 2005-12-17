@@ -1251,6 +1251,12 @@ class ContentBase
 	{
 		return FALSE;
 	}
+	
+	function SerializeContent()
+	{
+		return base64_encode(serialize($this));
+	}
+	
 }
 
 /**
@@ -2086,6 +2092,19 @@ if ($loadprops == true)
 		$tmp = rtrim($tmp, '.');
 		return $tmp;
 	}
+
+	function SerializeContent(&$object)
+	{
+		return base64_encode(serialize($object));
+	}
+	
+	function UnserializeContent(&$serialized)
+	{
+		return  unserialize(base64_decode($serialized));
+	}
+	
+	
+	
 }
 
 # vim:ts=4 sw=4 noet

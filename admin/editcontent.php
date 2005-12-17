@@ -76,7 +76,7 @@ else
 $contentobj = "";
 if (isset($_POST["serialized_content"]))
 {
-	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
+	$contentobj = ContentManager::UnserializeContent($_POST["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
 		#Fill up the existing object with values in form
@@ -289,7 +289,7 @@ $tabnames = $contentobj->TabNames();
 	?>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-<input type="hidden" name="serialized_content" value="<?php echo base64_encode(serialize($contentobj)); ?>" />
+<input type="hidden" name="serialized_content" value="<?php echo $contentobj->SerializeContent(); ?>" />
 <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
 	<div id="page_content">
