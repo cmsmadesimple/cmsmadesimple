@@ -266,7 +266,14 @@ function showPageThree($errorMessage='')
 	}
 	$adminusername = $_POST['adminusername'];
 	$adminemail = $_POST['adminemail'];
-	$adminpassword = md5($_POST['adminpassword']);
+	if (isset($_POST['page']) && $_POST['page'] == '4')
+	{
+		$adminpassword = $_POST['adminpassword'];
+	}
+	else
+	{
+		$adminpassword = md5($_POST['adminpassword']);
+	}
 
 ?>
 
