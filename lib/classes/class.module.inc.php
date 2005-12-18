@@ -1257,6 +1257,72 @@ class CMSModule extends ModuleOperations
 
 	/**
 	 * ------------------------------------------------------------------
+	 * Stylesheet Related Functions
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Called before a Stylesheet is added to the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param Stylesheet The stylesheet that was just created
+	 */
+	function AddStylesheetPre(&$stylesheet)
+	{
+	}
+
+	/**
+	 * Called after a stylesheet is added to the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param Stylesheet The stylesheet that was just created
+	 */
+	function AddStylesheetPost(&$stylesheet)
+	{
+	}
+
+	/**
+	 * Called before a stylesheet is saved to the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param stylesheet The stylesheet that was just edited
+	 */
+	function EditStylesheetPre(&$stylesheet)
+	{
+	}
+
+	/**
+	 * Called after a stylesheet is saved to the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param stylesheet The stylesheet that was just edited 
+	 */
+	function EditStylesheetPost(&$stylesheet)
+	{
+	}
+
+	/**
+	 * Called before a stylesheet is deleted from the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param stylesheet The stylesheet that was just deleted
+	 */
+	function DeleteStylesheetPre(&$stylesheet)
+	{
+	}
+
+	/**
+	 * Called after a stylesheet is deleted from the database.  Sends the stylesheet
+	 * object.
+	 *
+	 * @param stylesheet The stylesheet that was just deleted 
+	 */
+	function DeleteStylesheetPost(&$stylesheet)
+	{
+	}
+
+	/**
+	 * ------------------------------------------------------------------
 	 * HTML Blob Related Functions
 	 * ------------------------------------------------------------------
 	 */
@@ -1320,6 +1386,8 @@ class CMSModule extends ModuleOperations
 	function DeleteHtmlBlobPost(&$htmlblob)
 	{
 	}
+
+
 
 	/**
 	 * ------------------------------------------------------------------
