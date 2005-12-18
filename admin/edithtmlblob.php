@@ -91,6 +91,14 @@ if ($access)
 			$blobobj->content = $content;
 			$blobobj->owner = $owner_id;
 
+			$blobobj->ClearAuthors();
+			if (isset($_POST["additional_editors"])) {
+					foreach ($_POST["additional_editors"] as $addt_user_id) {
+						$blobobj->AddAuthor($addt_user_id);
+					}
+			}
+			$blobobj->AddAuthor($userid);
+
 			#Perform the edithtmlblob_pre callback
 			foreach($gCms->modules as $key=>$value)
 			{
@@ -105,13 +113,6 @@ if ($access)
 
 			if ($result)
 			{
-				$blobobj->ClearAuthors();
-				if (isset($_POST["additional_editors"])) {
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$blobobj->AddAuthor($addt_user_id);
-					}
-				}
-				$blobobj->AddAuthor($userid);
 				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
 
 				#Clear cache
@@ -231,8 +232,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="edithtmlblob" value="true" />
-				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob ?>" />
-				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id?>" />
+				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
+				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<?php if (!$adminaccess) { ?>
 					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
