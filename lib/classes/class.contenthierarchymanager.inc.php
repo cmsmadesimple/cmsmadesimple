@@ -19,7 +19,10 @@
 
 class ContentHierarchyManager {
   var $rootNode; // root node of the hierarchy
-  var $index; // index for quick node access
+  var $id_index; // index for quick node access
+  var $alias_index; // index for aliases
+  var $hier_index; // index for hierarchies
+  var $size; // number of nodes
   
   // -------------- CONSTRUCTOR AND CONSTRUCTOR HELPER ------------------
   
@@ -27,7 +30,10 @@ class ContentHierarchyManager {
    *  Constructs the hierarchy index from a root node
    */
   function ContentHierarchyManager() {
-    $this->index = array();
+    $this->id_index = array();
+    $this->alias_index = array();
+    $this->hier_index = array();
+    $this->size=0;
   }
   
   function setRoot(&$root) {
@@ -39,12 +45,14 @@ class ContentHierarchyManager {
    *  Private function which populates the index
    */
   function populateIndex(&$root) {
+    $this->size++;
     $content = &$root->getContent();
     if (isset($content)) {
-      $this->index[$content->Id()]=&$root;
+      $this->id_index[intval($content->Id())]=$root;
       if ($content->Alias()) {
-        $this->index["".$content->Alias().""] = &$root; // ensure string index
+        $this->alias_index[$content->Alias()] = $root; // ensure string index
       }
+      $this->hier_index[$content->Hierarchy()]=$root;
     }
     $children = &$root->getChildren();
     foreach ($children as $child) {
@@ -54,17 +62,44 @@ class ContentHierarchyManager {
   
   // ------------ GETTERS -------------------
   
-  function getRootNode() {
+  function &getRootNode() {
     return $this->rootNode;
   }
   
-  function getNodeById($id) {
-    return $this->index[$id];
+  function &getNodeById($id) {
+    return $this->id_index[intval($id)];
   }
   
-  function getNodeByAlias($alias) {
-    return $this->index["$alias"];
+  function &getNodeByAlias($alias) {
+    return $this->alias_index[$alias];
   }
+  
+  function &getNodeByHierarchy($hierarchy) {
+    return $this->hier_index[$hierarchy];
+  }
+  
+  function &getIndexedContent() {
+    return $this->id_index;
+  }
+  
+  function getNodeCount() {
+    return $this->size;
+  }
+  
+  // --------------- Tests --------------------
+  
+  function containsId($id) {
+    return isset($this->id_index[intval($id)]);
+  }
+  
+  function containsAlias($alias) {
+    return isset($this->alias_index[$alias]);
+  }
+  
+  function containsHierarchy($h) {
+    return isset($this->hier_index[$h]);
+  }
+  
   
 }
 ?>

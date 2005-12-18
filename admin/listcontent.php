@@ -226,8 +226,8 @@ if (isset($_GET["message"])) {
 	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
 	$hierarchy = &$hierManager->getRootNode();
   #$mem2=memory_get_usage();
-  $nbNodes = count($hierManager->index);
-  //echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
+  #$nbNodes = $hierManager->getNodeCount();
+  #echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
 
 	$mypages = author_pages($userid);
 
