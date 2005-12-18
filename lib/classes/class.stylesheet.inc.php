@@ -43,6 +43,11 @@ class Stylesheet
 		$this->value = '';
 		$this->media_type = '';
 	}
+	
+	function Id()
+	{
+		return $this->id;
+	}
 
 	function Save()
 	{

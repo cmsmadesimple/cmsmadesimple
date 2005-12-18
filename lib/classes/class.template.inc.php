@@ -50,6 +50,11 @@ class Template
 		$this->default = false;
 	}
 
+	function Id()
+	{
+		return $this->id;
+	}
+
 	function Save()
 	{
 		$result = false;

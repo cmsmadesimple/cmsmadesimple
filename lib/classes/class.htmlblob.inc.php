@@ -46,6 +46,11 @@ class HtmlBlob
 		$this->modified_date = -1;
 	}
 
+	function Id()
+	{
+		return $this->id;
+	}
+
 	function Save()
 	{
 		$result = false;
