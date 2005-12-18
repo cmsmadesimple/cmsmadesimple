@@ -656,5 +656,16 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
    return ( $dirlist ) ;
 }
 
+	function SerializeObject(&$object)
+	{
+		return base64_encode(serialize($object));
+	}
+	
+	function UnserializeObject(&$serialized)
+	{
+		return  unserialize(base64_decode($serialized));
+	}
+
+
 # vim:ts=4 sw=4 noet
 ?>
