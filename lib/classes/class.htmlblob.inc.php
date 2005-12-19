@@ -51,6 +51,11 @@ class HtmlBlob
 		return $this->id;
 	}
 
+	function Name()
+	{
+		return $this->name;
+	}
+
 	function Save()
 	{
 		$result = false;
