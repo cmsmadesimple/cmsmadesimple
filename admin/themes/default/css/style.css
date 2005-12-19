@@ -114,6 +114,9 @@ p.pagesubtitle { color: #384654; font-weight: bold; padding-top: 5px; }
 p.pageoptions { color: #384654; padding-top: 5px; }
 table.pagetable { margin-top: 5px; margin-bottom: 5px; border: 1px solid #c6c3bd; font-size: 1em; width: 97%; }
 table.pagetable th { background: #385C72; color: #ffffff; }
+table.pagetable th a { background: #385C72; color: #ffffff; text-decoration: underline;}
+table.pagetable th.active { color: #E6A2FF;}
+table.pagetable th.active a { color: #E6A2FF; text-decoration: underline;}
 table.pagetable td { color: #384654; }
 table.pagetable a { color: #384654; }
 th.pagepos { text-align: center; }
