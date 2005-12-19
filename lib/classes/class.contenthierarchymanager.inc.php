@@ -30,6 +30,7 @@ class ContentHierarchyManager {
    *  Constructs the hierarchy index from a root node
    */
   function ContentHierarchyManager() {
+    $this->rootNode = new ContentNode(); // creates a default root node
     $this->id_index = array();
     $this->alias_index = array();
     $this->hier_index = array();
@@ -45,21 +46,24 @@ class ContentHierarchyManager {
    *  Private function which populates the index
    */
   function populateIndex(&$root) {
-    $this->size++;
-    $content = &$root->getContent();
-    if (isset($content)) {
-      $this->id_index[intval($content->Id())]=$root;
-      if ($content->Alias()) {
-        $this->alias_index[$content->Alias()] = $root; // ensure string index
-      }
-      $this->hier_index[$content->Hierarchy()]=$root;
-    }
+    $this->indexNode($root);
     $children = &$root->getChildren();
     foreach ($children as $child) {
       $this->populateIndex($child);
     }
   }
   
+  function indexNode(&$node) {
+    $this->size++;
+    $content = &$node->getContent();
+    if (isset($content)) {
+      $this->id_index[intval($content->Id())]=$node;
+      if ($content->Alias()) {
+        $this->alias_index[$content->Alias()] = $node; // ensure string index
+      }
+      $this->hier_index[$content->Hierarchy()]=$node;
+    }
+  }
   // ------------ GETTERS -------------------
   
   function &getRootNode() {
@@ -100,6 +104,77 @@ class ContentHierarchyManager {
     return isset($this->hier_index[$h]);
   }
   
+  /**
+   *  Opens a node for the specified content_id
+   *  If the parent node is not loaded in the hierarchy
+   *  then the parent node is automatically loaded
+   *  @param id the content id
+   */
+  function openNodeWithId($id) {
+    if ($id==-1) return; // root node
+    if (!$this->containsId($id)) {
+      $content = &ContentManager::LoadContentFromId($id,false);
+      $this->createNodeFromContent($content);
+    }
+  }
   
+  /**
+   *  Opens a node for the specified content alias
+   *  If the parent node is not loaded in the hierarchy
+   *  then the parent node is automatically loaded
+   *  @param id the content id
+   */
+  function openNodeWithAlias($alias) {
+    if (!$this->containsAlias($alias)) {
+      $content = &ContentManager::LoadContentFromAlias($alias,false);
+      $this->createNodeFromContent($content);
+    }
+  }
+  
+  function createNodeFromContent(&$content) {
+      if ($content===FALSE) return; // not found
+      $parent_id=$content->ParentId();
+      if ($this->containsId($parent_id)) {
+        $node = new ContentNode();
+        $parentNode = &$this->getNodeById($parent_id);
+        $node->init($content,$parentNode);
+        $parentNode->addChild($node);
+        $this->indexNode($node);
+      } else if ($parent_id==-1) { // parent is root
+        $node = new ContentNode();
+        $parentNode = &$this->rootNode;
+        $node->init($content,$parentNode);
+        $parentNode->addChild($node);
+        $this->indexNode($node);
+      } else {
+        $this->openNodeWithId($parent_id);
+        $node = new ContentNode();
+        $parentNode = &$this->getNodeById($parent_id);
+        $node->init($content,$parentNode);
+        $parentNode->addChild($node);
+        $this->indexNode($node);
+      }
+  }
+  
+  # The following methods try to retrieve a content node
+  # If the node is not found in the index, then it will try to load it
+  
+  function &sureGetNodeById($id) {
+    $node = &$this->getNodeById($id);
+    if (!isset($node)) { // not found !
+      $this->openNodeWithId($id); // try to load it
+      $node=&$this->getNodeById($id); // and get it
+    }
+    return $node;
+  }
+  
+  function &sureGetNodeByAlias($alias) {
+    $node = &$this->getNodeById($alias);
+    if (!isset($node)) { // not found !
+      $this->openNodeWithAlias($alias); // try to load it
+      $node=&$this->getNodeByAlias($alias); // and get it
+    }
+    return $node;
+  }
 }
 ?>

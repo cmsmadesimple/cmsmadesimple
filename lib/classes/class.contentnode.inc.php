@@ -76,7 +76,8 @@ class ContentNode {
   function addChild(&$node) {
     $content = &$node->getContent();
     //echo "Adding ".$content->Hierarchy()." to level $this->level<br/>";
-    $this->children[] = &$node;
+    $this->children[$content->ItemOrder()] = &$node;
+    ksort($this->children);
     //echo "Total nodes of level $this->level = ".count($this->children)."<br/>";
   }
   
