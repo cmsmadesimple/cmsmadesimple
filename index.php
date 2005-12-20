@@ -84,7 +84,7 @@ if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$co
 
 if ($page == '')
 {
-	$page = ContentManager::GetDefaultContent();
+	$page =& ContentManager::GetDefaultContent();
 }
 else
 {

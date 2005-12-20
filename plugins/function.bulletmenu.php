@@ -45,8 +45,11 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 		#Reset the base depth if necessary...
 		if (isset($params['start_page']))
 		{
-			foreach( $allcontent as $onecontent )
+			#foreach( $allcontent as $onecontent )
+			reset($allcontent);
+			while (list($key) = each($allcontent))
 			{
+				$onecontent =& $allcontent[$key];
 				if( $onecontent->Alias() == $params['start_page'] || $onecontent->Id() == $params['start_page'])
 				{
 					$params['start_element'] = $onecontent->Hierarchy();
@@ -61,8 +64,12 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			$basedepth = count(split('\.', (string)$params['start_element'])) - 1;
 		}
 
-		foreach ($allcontent as &$onecontent)
+		#foreach ($allcontent as &$onecontent)
+		reset($allcontent);
+		while (list($key) = each($allcontent))
 		{
+			$onecontent =& $allcontent[$key];
+
 			#Handy little trick to figure out how deep in the tree we are
 			#Remember, content comes to use in order of how it should be displayed in the tree already
 			$depth = count(split('\.', $onecontent->Hierarchy()));
