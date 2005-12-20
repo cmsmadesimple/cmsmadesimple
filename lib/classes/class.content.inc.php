@@ -1313,6 +1313,8 @@ class ContentProperties
 
 	function HasProperty($name)
 	{
+		if (!isset($this->mPropertyNames))
+			$this->mPropertyNames = array();
 		return in_array($name, $this->mPropertyNames);
 	}
 
