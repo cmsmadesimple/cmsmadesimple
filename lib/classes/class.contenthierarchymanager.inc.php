@@ -352,13 +352,12 @@ class ContentHierarchyManager {
   # Maybe should be moved to class.content.inc.php ?
   # ###########################################################################################
   /**
-	 * Load the content of the object from an ID
+	 * Load the content of the object from a list of ID
 	 * Private method.
-	 * @param $id				the ID of the element
+	 * @param $ids	array of element ids
 	 * @param $loadProperties	whether to load or not the properties
 	 *
-	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
-	 *							If everything goes well, it returns TRUE
+	 * @returns array of content objects (empty if not found)
 	 */
 	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
 	{
@@ -431,20 +430,22 @@ class ContentHierarchyManager {
 	}
 	
 	/**
-	 * Load the content of the object from an alias
+	 * Load the content of the object from a list of aliases
+	 * Private method.
+	 * @param $ids	array of element ids
 	 * Private method
 	 *
 	 * @param $alis				the alias of the element
 	 * @param $loadProperties	whether to load or not the properties
 	 *
-	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
-	 *							If everything goes well, it returns TRUE
+	 * @returns array of content objects (empty if not found)
 	 */
 	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
     $cpt = count($ids);
-		if ($cpt==0) return array();
+    $contents=array();
+		if ($cpt==0) return $contents;
     $db = &$gCms->db;
     $id_list = '(';
     for ($i=0;$i<$cpt;$i++) {
@@ -452,8 +453,7 @@ class ContentHierarchyManager {
       if ($i<$cpt-1) $id_list .= ',';
     }
     $id_list .= ')';
-    if ($id_list=='()') return array();
-    $contents=array();
+    if ($id_list=='()') return $contents;
 		$result = false;
 		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
 		$rows		=& $db->Execute($query);
