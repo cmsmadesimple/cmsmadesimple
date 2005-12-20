@@ -20,132 +20,92 @@
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
 	global $gCms; 
-
+  $manager = &$gCms->GetHierarchyManager();
+  
 	$thispage = $gCms->variables['content_id'];
 
 	$trail = "";
 
 	#Check if user has specified a delimiter, otherwise use default
-	if (isset($params['delimiter']))
-	{
+	if (isset($params['delimiter'])) {
 		$delimiter = $params['delimiter'];
-	}
-	else
-	{
+	}	else {
 		$delimiter = "&gt;&gt;";
 	}
 
 	#Check if user has requested an initial delimiter
-	if (isset($params['initial']))
-	{
-		if ($params['initial'] == "1")
-		{
+	if (isset($params['initial'])) {
+		if ($params['initial'] == "1") {
 			$trail .= $delimiter . " ";
 		}
 	}
 
-	#Make an array for all pages
-	$allcontent = array();
-
-	#Load current content
-	$onecontent = ContentManager::LoadContentFromId($thispage, false);
-
-	#Check if user has requested the list to start with a specific page
-	if (isset($params['root']))
-	{
-		if (($onecontent == FALSE) || (strtolower($onecontent->Alias()) != strtolower($params['root'])))
-		{
-			$rootcontent = ContentManager::LoadContentFromAlias($params['root'], false);
-			if ($rootcontent)
-			{
-				$trail .= '<a href="' . $rootcontent->getURL() . '"';
-				if (isset($params['classid']))
-				{
-						$trail .= ' class="' . $params['classid'] . '"';
-				}
-				$trail .= '>';
-				$trail .= ($rootcontent->MenuText()!=''?$rootcontent->MenuText():$rootcontent->Name());
-				$trail .= '</a> ' . $delimiter . ' ';
-			}
-		}
+  $root='##ROOT_NODE##';
+  #Check if user has requested the list to start with a specific page
+	if (isset($params['root']))	{
+		$root = $params['root'];
 	}
 
-	if ($onecontent !== FALSE)
-	{
-		array_push($allcontent, $onecontent);
+	$endNode = &$manager->sureGetNodeById($thispage);
 
-		#Grab all parents and put them into the array as well
-		while ($onecontent->ParentId() > 0)
-		{
-			$onecontent = ContentManager::LoadContentFromId($onecontent->ParentId(), false);
-			// tdh add / modify next 5 lines
-			if (isset($params['root']))
-			{
-				if (strtolower($onecontent->Alias()) != strtolower($params['root']))
-				{
-					array_push($allcontent, $onecontent);
-				}
-			}
-			else
-			{
-				array_push($allcontent, $onecontent);
-			}
-		}
-
-		#Pull them one by one in reverse order to construct a breadcrumb list
-		while ($onecontent = array_pop($allcontent))
-		{
-			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator')
-			{
-                                if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
-                                        $trail .= '<a href="' . $onecontent->getURL() . '"';
-                                        if (isset($params['classid'])) {
-                                                $trail .= ' class="' . $params['classid'] . '"';
-                                        }
-                                        $trail .= '>';
-                                        $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-                                        $trail .= '</a> ' . $delimiter . ' ';
-                                } else {
-                                        if (isset($params['classid'])) {
-                                                $trail .= '<span class="' . $params['classid'] . '">';
-                                        }
-                                        $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-                                        if (isset($params['classid'])) {
-                                                $trail .= '</span>';
-                                        }
-                                        $trail .= ' ' . $delimiter . ' ';
-                                }
-			} else {
-                                if (isset($params['currentclassid'])) {
-                                        $trail .= '<span class="' . $params['currentclassid'] . '">';
-                                } else {
-                                        $trail .= '<strong>';
-                                }
-                                $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-                                if (isset($params['currentclassid'])) {
-                                        $trail .= '</span>';
-                                } else {
-                                        $trail .= '</strong>';
-                                }
-			}
-		}
-	} else {
-                if (isset($params['currentclassid'])) {
-                        $trail .= '<span class="' . $params['currentclassid'] . '">';
-                } else {
-                        $trail .= '<strong>';
-                }
-                $trail .= 'No pages';
-                if (isset($params['currentclassid'])) {
-                        $trail .= '</span>';
-                } else {
-                        $trail .= '</strong>';
-                }
+  # build path
+  $path=array($endNode);
+  $currentNode = &$endNode->getParentNode();
+  while ($currentNode->getLevel()>0) {
+    $content = &$currentNode->getContent();
+    if ((isset($content)) && (strtolower($content->Alias())!=strtolower($root))) {
+      $path[] = $currentNode;
+      $currentNode = &$currentNode->getParentNode();
+    }
+  }
+	
+	if ($root!='##ROOT_NODE##') {
+    # check if the last added is root. if not, add id
+  	$content = &$currentNode->getContent();
+  	if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
+      $node = &$manager->sureGetNodeByAlias($root);
+      if (isset($node)) {
+         $content = &$node->getContent();
+         if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
+      }
+    }
 	}
-
-	return $trail;
+	$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
+	$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
+	# now create the trail
+	for ($i=count($path)-1;$i>=0;$i--) {
+    $node = &$path[$i];
+    $onecontent = &$node->getContent();
+    if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
+      if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
+          $trail .= '<a href="' . $onecontent->getURL() . '"';
+          $trail .= $classid;
+          $trail .= '>';
+          $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+          $trail .= '</a> ' . $delimiter . ' ';
+      } else {
+         $trail .= "<span $classid>";
+         $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+         $trail .= '</span>';
+         $trail .= ' ' . $delimiter . ' ';
+      }
+		} else {
+      if (isset($params['currentclassid'])) {
+         $trail .= "<span $currentclassid>";
+      } else {
+        $trail .= '<strong>';
+      }
+      $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+      if (isset($params['currentclassid'])) {
+        $trail .= '</span>';
+      } else {
+        $trail .= '</strong>';
+      }
+		}
+	}
+  return $trail;  
 }
-
+	
 function smarty_cms_help_function_breadcrumbs() {
 // tdh added the classid help text
 ?>
@@ -170,13 +130,14 @@ function smarty_cms_help_function_breadcrumbs() {
 function smarty_cms_about_function_breadcrumbs() {
 ?>
 <p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.4</p>
+<p>Version: 1.5</p>
 <p>
 Change History:<br/>
 1.1 - Modified to use new content rewrite (wishy)<br />
 1.2 - Added parameters: delimiter, initial, and root (arl)<br />
 1.3 - Added parameter: classid (tdh / perl4ever)<br />
 1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
+1.5 - Modified to use new hierarchy manager<br />
 </p>
 <?php
 }
