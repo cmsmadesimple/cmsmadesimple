@@ -53,6 +53,9 @@ class ContentHierarchyManager {
     }
   }
   
+  /**
+   * Private function for indexing a single node
+   */
   function indexNode(&$node) {
     $this->size++;
     $content = &$node->getContent();
@@ -66,41 +69,79 @@ class ContentHierarchyManager {
   }
   // ------------ GETTERS -------------------
   
+  /**
+   * Returns the root node of the hierarchy
+   */
   function &getRootNode() {
     return $this->rootNode;
   }
   
+  /**
+   * Returns a node, given an Id. Node must have been loaded to be found
+   * @param id  the id of the searched element
+   * @see sureGetNodeById
+   */
   function &getNodeById($id) {
     return $this->id_index[intval($id)];
   }
   
+  /**
+   * Returns a node, given an alias. Node must have been loaded to be found
+   * @param alias  the alias of the searched element
+   * @see sureGetNodeByAlias
+   */
   function &getNodeByAlias($alias) {
     return $this->alias_index[$alias];
   }
   
+  
+  /**
+   * Returns a node, given a hierachy. Node must have been loaded to be found
+   * @param hierarchy  the hierarchy of the searched element, dotted notation
+   */
   function &getNodeByHierarchy($hierarchy) {
     return $this->hier_index[$hierarchy];
   }
   
+  /**
+   * Returns an array equivalent to the ContentManager::GetAllContent method
+   * Only returns elements currently loaded from the hierarchy
+   * @return array  array of ContentNode
+   */
   function &getIndexedContent() {
     return $this->id_index;
   }
   
+  /**
+   * Returns the number of indexed nodes in the hierarchy
+   */
   function getNodeCount() {
     return $this->size;
   }
   
   // --------------- Tests --------------------
   
+  /**
+   *  Returns true if an element with the specified id is loaded in the hierarchy
+   *  @param id the id of the searched element
+   */
   function containsId($id) {
     return isset($this->id_index[intval($id)]);
   }
   
-  function containsAlias($alias) {
+  /**
+   *  Returns true if an element with the specified alias is loaded in the hierarchy
+   *  @param alias the alias of the searched element
+   */
+   function containsAlias($alias) {
     return isset($this->alias_index[$alias]);
   }
   
-  function containsHierarchy($h) {
+  /**
+   *  Returns true if an element with the specified hierarchy is loaded in the hierarchy
+   *  @param hierarchy the hierarchy of the searched element (dotted notation)
+   */
+   function containsHierarchy($h) {
     return isset($this->hier_index[$h]);
   }
   
@@ -212,9 +253,17 @@ class ContentHierarchyManager {
     }
   }
   
+  
   # The following methods try to retrieve a content node
   # If the node is not found in the index, then it will try to load it
   
+  /**
+   * Returns a node, given the id of the searched element.
+   * Ensures that even if the node is not yet loaded in the hierarchy
+   * it will be found and added.
+   * @param id  the id of the element
+   * @return ContentNode the associated node. NULL if not found
+   */
   function &sureGetNodeById($id) {
     $node = &$this->getNodeById($id);
     if (!isset($node)) { // not found !
@@ -224,6 +273,13 @@ class ContentHierarchyManager {
     return $node;
   }
   
+  /**
+   * Returns a node, given the alias of the searched element.
+   * Ensures that even if the node is not yet loaded in the hierarchy
+   * it will be found and added.
+   * @param alias  the alias of the element
+   * @return ContentNode the associated node. NULL if not found
+   */
   function &sureGetNodeByAlias($alias) {
     $node = &$this->getNodeById($alias);
     if (!isset($node)) { // not found !
@@ -233,19 +289,78 @@ class ContentHierarchyManager {
     return $node;
   }
   
-  # The following method allows loading multiple instances of content in a single SQL request
-  # Maybe should be moved to class.content.inc.php ?
+  /**
+   *  This method allows expanding the tree from a node, meaning that
+   *  children nodes will be loaded.
+   *  @param id   the id to start from
+   *  @param recurse  if set true (default false), then children will be expanded too
+   */
+  function expandNodeFromId($id, $recurse=false) {
+    global $gCms;
+    $db = &$gCms->getDB();
+    $to_be_loaded=array();
+    if (($id!=-1) && (!$this->containsId($id))) {
+      $to_be_loaded[] = $id;
+    }
+    $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+    $result = &$db->Execute($query,array($id));
+    while ($row = &$result->FetchRow()) {
+      $child_id = $row['content_id'];
+      if ((!$this->containsId($child_id)) && (!in_array($child_id,$to_be_loaded))) {
+        $to_be_loaded[] = $child_id;
+      }
+    }
+    $this->openNodeWithId($to_be_loaded);
+    if ($recurse) {
+      foreach ($to_be_loaded as $c_id) {
+        if ($c_id != $id) $this->expandNodeFromId($c_id);
+      }
+    }
+  }
   
   /**
+   *  This method allows expanding the tree from a node, meaning that
+   *  children nodes will be loaded.
+   *  @param alias   the alias of the element to start from
+   *  @param recurse  if set true (default false), then children will be expanded too
+   */
+  function expandNodeFromAlias($alias, $recurse=false) {
+    global $gCms;
+    $db = &$gCms->getDB();
+    $to_be_loaded=array();
+    if (!$this->containsAlias($alias)) {
+      $this->openNodeWithAlias($alias);
+    }
+    $query = "SELECT c1.content_id FROM ".cms_db_prefix()."content as c1,".cms_db_prefix()."content as c2 WHERE c1.parent_id = c2.content_id AND c2.content_alias = ?";
+    $result = &$db->Execute($query,array($alias));
+    while ($row = &$result->FetchRow()) {
+      $child_id = $row['content_id'];
+      if ((!$this->containsId($child_id)) && (!in_array($child_id,$to_be_loaded))) {
+        $to_be_loaded[] = $child_id;
+      }
+    }
+    $this->openNodeWithId($to_be_loaded);
+    if ($recurse) {
+      foreach ($to_be_loaded as $c_id) {
+        $this->expandNodeFromId($c_id);
+      }
+    }
+  }
+  
+  # ###########################################################################################
+  # The following method allows loading multiple instances of content in a single SQL request
+  # Maybe should be moved to class.content.inc.php ?
+  # ###########################################################################################
+  /**
 	 * Load the content of the object from an ID
-	 *
+	 * Private method.
 	 * @param $id				the ID of the element
 	 * @param $loadProperties	whether to load or not the properties
 	 *
 	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
 	 *							If everything goes well, it returns TRUE
 	 */
-	function &LoadMultipleFromId($ids, $loadProperties = false)
+	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
     $cpt = count($ids);
@@ -316,6 +431,7 @@ class ContentHierarchyManager {
 	
 	/**
 	 * Load the content of the object from an alias
+	 * Private method
 	 *
 	 * @param $alis				the alias of the element
 	 * @param $loadProperties	whether to load or not the properties
@@ -323,7 +439,7 @@ class ContentHierarchyManager {
 	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
 	 *							If everything goes well, it returns TRUE
 	 */
-	function &LoadMultipleFromAlias($ids, $loadProperties = false)
+	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
     $cpt = count($ids);
