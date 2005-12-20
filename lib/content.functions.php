@@ -363,7 +363,7 @@ class Smarty_CMS extends Smarty {
 			}
 			else
 			{
-				$templateobj = TemplateOperations::LoadTemplateByID($pageinfo->template_id);
+				$templateobj =& TemplateOperations::LoadTemplateByID($pageinfo->template_id);
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					#Time to fill our template content
@@ -626,7 +626,7 @@ class Smarty_CMS extends Smarty {
 					#We don't cache error pages
 					$this->caching = false;
 					$this->force_compile = true;
-					$templateobj = TemplateOperations::LoadTemplateById(get_site_preference('custom404template'));
+					$templateobj =& TemplateOperations::LoadTemplateById(get_site_preference('custom404template'));
 					$template_id = get_site_preference('custom404template');
 				}
 			}
@@ -637,7 +637,7 @@ class Smarty_CMS extends Smarty {
 				if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
 				{
 					#Ok, it's valid, let's load the bugger
-					$templateobj = TemplateOperations::LoadTemplateById($template_id);
+					$templateobj =& TemplateOperations::LoadTemplateById($template_id);
 				}
 			}
 

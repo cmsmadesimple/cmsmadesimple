@@ -2062,7 +2062,11 @@ class CMSModule extends ModuleOperations
 	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
 		$text = '';		
-		$content = ContentManager::LoadContentFromId($returnid);
+		#$content = ContentManager::LoadContentFromId($returnid);
+		$manager =& $gCms->GetHierarchyManager();
+		$node =& $manager->sureGetNodeById($id);
+		$content =& $node->GetContent();
+
 		if (isset($content))
 		{
 			if ($content->GetURL(false) != '')
@@ -2140,7 +2144,10 @@ class CMSModule extends ModuleOperations
 	 */
 	function RedirectContent($id)
 	{
-		$content = ContentManager::LoadContentFromId($id);
+		#$content = ContentManager::LoadContentFromId($id);
+		$manager =& $gCms->GetHierarchyManager();
+		$node =& $manager->sureGetNodeById($id);
+		$content =& $node->GetContent();
 		if (isset($content))
 		{
 			if ($content->GetUrl() != '')

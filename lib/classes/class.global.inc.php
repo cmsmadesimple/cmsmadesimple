@@ -95,16 +95,6 @@ class CmsObject {
 	var $nls;
 
 	/**
-     * content cache array - If something's called GetAllContent, we keep a copy around
-	 */
-	var $ContentCache;
-
-	/**
-     * content id cache array - If something's called LoadContentByID, we keep a copy around
-	 */
-	var $ContentIdCache;
-
-	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
 	 */
 	var $TemplateCache;

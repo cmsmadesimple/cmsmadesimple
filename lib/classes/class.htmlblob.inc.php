@@ -193,7 +193,7 @@ function AuthorBlobs($userid)
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_id";
 		$dbresult = &$db->Execute($query);
 
-		while (!$dbresult->EOF)
+		while (isset($dbresult) && !$dbresult->EOF)
 		{
 			$oneblob = new HtmlBlob();
 			$oneblob->id = $dbresult->fields['htmlblob_id'];
@@ -226,13 +226,13 @@ function AuthorBlobs($userid)
 			$oneblob->content = $row['html'];
 			$oneblob->owner = $row['owner'];
 			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result = $oneblob;
+			$result =& $oneblob;
 		}
 
 		return $result;
 	}
 
-	function LoadHtmlBlobByName($name)
+	function & LoadHtmlBlobByName($name)
 	{
 		$result = false;
 
@@ -250,17 +250,17 @@ function AuthorBlobs($userid)
 
 		if ($row)
 		{
-			$oneblob = new HtmlBlob();
+			$oneblob =& new HtmlBlob();
 			$oneblob->id = $row['htmlblob_id'];
 			$oneblob->name = $row['htmlblob_name'];
 			$oneblob->content = $row['html'];
 			$oneblob->owner = $row['owner'];
 			$oneblob->modified_date = $db->UnixTimeStamp($row['modified_date']);
-			$result = $oneblob;
+			$result =& $oneblob;
 
 			if (!isset($cache[$oneblob->name]))
 			{
-				$cache[$oneblob->name] = $oneblob;
+				$cache[$oneblob->name] =& $oneblob;
 			}
 		}
 

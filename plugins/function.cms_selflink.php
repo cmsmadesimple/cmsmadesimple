@@ -28,7 +28,9 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		$name = $params['page']; //mbv - 21-06-2005
 
 		# check if the page exists in the db
-		$content = ContentManager::LoadContentFromAlias($page);
+		$manager =& $gCms->GetHierarchyManager();
+		$node =& $manager->sureGetNodeByAlias($page);
+		$content =& $node->GetContent();
 		if ($content !== FALSE)
 		{
 			$pageid = $content->Id();
