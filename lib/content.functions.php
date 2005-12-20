@@ -451,7 +451,10 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			$contentobj = ContentManager::LoadContentFromId($pageinfo->content_id);
+			$manager =& $gCms->GetHierarchyManager();
+			$node =& $manager->sureGetNodeById($pageinfo->content_id);
+			$contentobj =& $node->GetContent();
+
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
 				if ($tpl_name != 'content_en')
@@ -606,7 +609,12 @@ class Smarty_CMS extends Smarty {
 		else
 		{
 			#Find valid content by id or alias
-			$contentobj = ContentManager::LoadContentFromAlias($tpl_name, true);
+			#$contentobj =& ContentManager::LoadContentFromAlias($tpl_name, true);
+
+			$manager =& $gCms->GetHierarchyManager();
+			$node =& $manager->sureGetNodeByAlias($tpl_name);
+			$contentobj =& $node->GetContent();
+
 			$templateobj = FALSE;
 
 			#If the content object is false, then let's see if we should grab a template for a custom 404 error
@@ -975,12 +983,12 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 				{
 					if (strpos($filename, 'function') !== false && filesize($filename) > 50)
 					{
-						require_once $filename;
-						if (function_exists("smarty_cms_function_" . $file))
-						{
-							$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
-							array_push($plugins, $file);
-						}
+						#require_once $filename;
+						#if (function_exists("smarty_cms_function_" . $file))
+						#{
+						#	$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
+						#	array_push($plugins, $file);
+						#}
 					}
 					else if (strpos($filename, 'compiler') !== false)
 					{

@@ -99,6 +99,12 @@ class ContentBase
 	var $mHierarchy;
 
 	/**
+	 * The full hierarchy of the content ids
+	 * String of the form : 1.4.3
+	 */
+    var $mIdHierarchy;
+
+	/**
 	 * What should be displayed in a menu
 	 */
 	var $mMenuText;
@@ -195,6 +201,7 @@ class ContentBase
 		$this->mOldItemOrder	= -1 ;
 		$this->mLastModifiedBy	= -1 ;
 		$this->mHierarchy		= "" ;
+		$this->mIdHierarchy		= "" ;
 		$this->mActive			= false ;
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
@@ -367,6 +374,20 @@ class ContentBase
 	}
 
 	/**
+	 * Returns the Hierarchy
+	 */
+	function IdHierarchy()
+	{
+		return $this->mIdHierarchy;
+	}
+
+	function SetIdHierarchy($idhierarchy)
+	{
+		$this->DoReadyForEdit();
+		$this->mIdHierarchy = $idhierarchy;
+	}
+
+	/**
 	 * Returns the Active state
 	 */
 	function Active()
@@ -500,12 +521,16 @@ class ContentBase
 	function GetPropertyValue($name)
 	{
 		debug_buffer('getpropertyvalue called');
-		if ($this->mPropertiesLoaded == false)
+		if ($this->mProperties->HasProperty($name))
 		{
-			$this->mProperties->Load($this->mId);
-			$this->mPropertiesLoaded = true;
+			if ($this->mPropertiesLoaded == false)
+			{
+				$this->mProperties->Load($this->mId);
+				$this->mPropertiesLoaded = true;
+			}
+			return $this->mProperties->GetValue($name);
 		}
-		return $this->mProperties->GetValue($name);
+		return '';
 	}
 
 	function SetPropertyValue($name, $value)
@@ -594,6 +619,8 @@ class ContentBase
 				$this->mItemOrder		= $row->fields["item_order"];
 				$this->mOldItemOrder	= $row->fields["item_order"];
 				$this->mHierarchy		= $row->fields["hierarchy"];
+				$this->mIdHierarchy		= $row->fields["id_hierarchy"];
+				$this->mProperties->mPropertyNames = explode(',',$row->fields["id_hierarchy"]);
 				$this->mMenuText		= $row->fields['menu_text'];
 				$this->mMarkup			= $row->fields['markup'];
 				$this->mActive			= ($row->fields["active"] == 1?true:false);
@@ -685,6 +712,8 @@ class ContentBase
 		$this->mItemOrder		= $data["item_order"];
 		$this->mOldItemOrder	= $data["item_order"];
 		$this->mHierarchy		= $data["hierarchy"];
+		$this->mIdHierarchy		= $data["id_hierarchy"];
+		$this->mProperties->mPropertyNames = explode(',',$data["id_hierarchy"]);
 		$this->mMenuText		= $data['menu_text'];
 		$this->mMarkup			= $data['markup'];
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
@@ -871,6 +900,7 @@ class ContentBase
 		if (NULL != $this->mProperties)
 		{
 			# :TODO: There might be some error checking there
+			debug_buffer('save from ' . __LINE__);
 			$this->mProperties->Save($this->mId);
 		}
 		else
@@ -918,7 +948,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -930,6 +960,7 @@ class ContentBase
 			$this->mTemplateId,
 			$this->mItemOrder,
 			$this->mHierarchy,
+			$this->mIdHierarchy,
 			($this->mActive==true?1:0),
 			($this->mDefaultContent==true?1:0),
 			($this->mShowInMenu==true?1:0),
@@ -953,6 +984,7 @@ class ContentBase
 		if (NULL != $this->mProperties)
 		{
 			# :TODO: There might be some error checking there
+			debug_buffer('save from ' . __LINE__);
 			$this->mProperties->Save($newid);
 		}
 		else
@@ -1257,6 +1289,7 @@ class ContentBase
  */
 class ContentProperties
 {
+	var $mPropertyNames;
 	var $mPropertyTypes;
 	var $mPropertyValues;
 
@@ -1273,17 +1306,23 @@ class ContentProperties
 	 */
 	function SetInitialValues()
 	{
+		$this->mPropertyNames = array();
 		$this->mPropertyTypes = array();
 		$this->mPropertyValues = array();
 	}
 
 	function HasProperty($name)
 	{
-		return isset($this->mPropertyTypes[$name]);
+		return in_array($name, $this->mPropertyNames);
 	}
 
 	function Add($type, $name, $defaultvalue='')
 	{
+		//Handle names separately
+		if (!in_array($name, $this->mPropertyNames))
+		{
+			array_push($this->mPropertyNames, $name);
+		}
 		if (!array_key_exists($name, $this->mPropertyValues))
 		{
 			$this->mPropertyTypes[$name] = $type;
@@ -1293,11 +1332,14 @@ class ContentProperties
 
 	function GetValue($name)
 	{
-		if (count($this->mPropertyValues) > 0)
+		if (in_array($name, $this->mPropertyNames))
 		{
-			if (array_key_exists($name, $this->mPropertyValues))
+			if (count($this->mPropertyValues) > 0)
 			{
-				return $this->mPropertyValues[$name];
+				if (array_key_exists($name, $this->mPropertyValues))
+				{
+					return $this->mPropertyValues[$name];
+				}
 			}
 		}
 	}
@@ -1306,7 +1348,7 @@ class ContentProperties
 	{
 		if (count($this->mPropertyValues) > 0)
 		{
-			if (array_key_exists($name, $this->mPropertyValues))
+			if (in_array($name, $this->mPropertyNames))
 			{
 				$this->mPropertyValues[$name] = $value;
 			}
@@ -1316,7 +1358,7 @@ class ContentProperties
 	function Load($content_id)
 	{
 		debug_buffer('load properties called');
-		if (count($this->mPropertyValues) > 0)
+		if (count($this->mPropertyNames) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
 			$db = &$gCms->db;
@@ -1324,14 +1366,15 @@ class ContentProperties
 			$query		= "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 			$dbresult	= &$db->Execute($query, array($content_id));
 
-			while (!$dbresult->EOF)
+			while (isset($dbresult) && !$dbresult->EOF)
 			{
 				$prop_name = $dbresult->fields['prop_name'];
-				if (isset($this->mPropertyValues[$prop_name]))
+				if (!in_array($prop_name, $this->mPropertyNames))
 				{
-					$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
-					$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+					array_push($this->mPropertyNames, $prop_name);
 				}
+				$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+				$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
 				$dbresult->MoveNext();
 			}
 		}
@@ -1346,7 +1389,6 @@ class ContentProperties
 
 		    $delquery = "DELETE FROM ".cms_db_prefix()."content_props where content_id=? and prop_name=?";
 			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
-
 
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
@@ -1403,7 +1445,7 @@ class ContentManager
 	/**
 	 * Determine proper type of object, load it and return it
 	 */
-	function LoadContentFromId($id,$loadprops=true)
+	function & LoadContentFromId($id,$loadprops=true)
 	{
 
 		global $gCms;
@@ -1459,7 +1501,7 @@ class ContentManager
 		*/
 	}
 
-	function LoadContentFromAlias($alias, $only_active = false)
+	function & LoadContentFromAlias($alias, $only_active = false)
 	{
 		global $gCms;
 		$db = &$gCms->db;
@@ -1544,7 +1586,7 @@ class ContentManager
 	{
 	}
 
-	function GetDefaultContent()
+	function & GetDefaultContent()
 	{
 		global $gCms;
 		$db = &$gCms->db;
@@ -1631,7 +1673,8 @@ class ContentManager
 		global $gCms;
 		$db = $gCms->db;
 
-		$current_hierarchy_position = "";
+		$current_hierarchy_position = '';
+		$current_id_hierarchy_position = '';
 		$current_parent_id = $contentid;
 		$count = 0;
 
@@ -1642,6 +1685,7 @@ class ContentManager
 			if ($row)
 			{
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
+				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
 				$current_parent_id = $row['parent_id'];
 				$count++;
 			}
@@ -1655,9 +1699,18 @@ class ContentManager
 		{
 			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
 		}
+		if (strlen($current_id_hierarchy_position) > 0)
+		{
+			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
+		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ? WHERE content_id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $contentid));
+		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+		$prop_name_array =& $db->GetCol($query, array($contentid));
+
+		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
+
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, prop_names = ? WHERE content_id = ?";
+		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 	}
 
 	/**
@@ -1684,7 +1737,7 @@ class ContentManager
 	 *  @param onlyexpanded : array of expanded contents ids. null if whole 
 	 tree should be loaded
 	 */
-	function &GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null) {
+	function & GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null) {
 		global $gCms;
 		$db = &$gCms->db;
 
@@ -1782,15 +1835,17 @@ class ContentManager
 			$one = new Content();
 			$one->LoadFromId($old_id);
 			$one->SetDefaultContent(false);
+			debug_buffer('save from ' . __LINE__);
 			$one->Save();
 		}
 		$one = new Content();
 		$one->LoadFromId($id);
 		$one->SetDefaultContent(true);
+		debug_buffer('save from ' . __LINE__);
 		$one->Save();
 	}
 
-	function GetAllContent($loadprops=true)
+	function & GetAllContent($loadprops=true)
 	{
 		debug_buffer('get all content...');
 

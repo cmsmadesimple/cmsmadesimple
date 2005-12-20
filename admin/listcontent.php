@@ -26,13 +26,13 @@ check_login();
 $userid = get_userid();
 include_once("header.php");
 
-$expandImg = &$themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
-$contractImg = &$themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
-$downImg = &$themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
-$upImg = &$themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
-$viewImg = &$themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
-$editImg = &$themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-$deleteImg = &$themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+$expandImg =& $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
+$contractImg =& $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
+$downImg =& $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
+$upImg =& $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
+$viewImg =& $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
+$editImg =& $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+$deleteImg =& $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 
 function show_h(&$root) {
   $content = &$root->getContent();

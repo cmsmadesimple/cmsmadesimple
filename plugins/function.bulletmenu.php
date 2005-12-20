@@ -26,7 +26,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 	$collapse = isset($params['collapse']) ? $params['collapse'] : 0 ;
 
-	$allcontent = ContentManager::GetAllContent(false);
+	$allcontent =& ContentManager::GetAllContent(false);
 
 	# defining variables
 	$menu = "";
@@ -61,7 +61,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			$basedepth = count(split('\.', (string)$params['start_element'])) - 1;
 		}
 
-		foreach ($allcontent as $onecontent)
+		foreach ($allcontent as &$onecontent)
 		{
 			#Handy little trick to figure out how deep in the tree we are
 			#Remember, content comes to use in order of how it should be displayed in the tree already

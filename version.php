@@ -20,7 +20,7 @@
 
 $CMS_VERSION = "0.11.2";
 $CMS_VERSION_NAME = "Scarborough";
-$CMS_SCHEMA_VERSION = "14";
+$CMS_SCHEMA_VERSION = "15";
 
 # vim:ts=4 sw=4 noet
 ?>

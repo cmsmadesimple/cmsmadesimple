@@ -189,6 +189,24 @@ class CmsObject {
 
         return $smartyinstance;
 	}
+
+	function & GetHierarchyManager()
+	{
+		require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
+
+        static $hrinstance;
+
+		//Check to see if it hasn't been
+		//instantiated yet.  If not, connect
+		//and return it
+        if (is_null($hrinstance))
+		{
+			#Setup global smarty object
+			$hrinstance = new ContentHierarchyManager();
+		}
+
+        return $hrinstance;
+	}
 }
 
 # vim:ts=4 sw=4 noet
