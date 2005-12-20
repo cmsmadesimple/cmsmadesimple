@@ -20,6 +20,7 @@ $lang['admin']['aliasmustbelettersandnumbers'] = 'Alias must be all letters and 
 $lang['admin']['aliasnotaninteger'] = 'Alias cannot be an integer';
 $lang['admin']['assignments'] = 'Assign Users';
 $lang['admin']['associationexists'] = 'This association already exists';
+$lang['admin']['autoinstallupgrade'] = 'Automatically install or upgrade';
 $lang['admin']['back'] = 'Back to Menu';
 $lang['admin']['backtoplugins'] = 'Back to Plugins List';
 $lang['admin']['cancel'] = 'Cancel';
@@ -322,4 +323,5 @@ $lang['admin']['copystylesheet'] = 'Copy Stylesheet'; //needs translation
 $lang['admin']['newstylesheetname'] = 'New Stylesheet Name'; //needs translation
 $lang['admin']['target'] = 'Target'; //needs translation
 $lang['admin']['xml'] = 'XML';
+$lang['admin']['xmlmodulerepository'] = 'URL of ModuleRepository soap server';
 ?>
