@@ -113,12 +113,16 @@ class ContentHierarchyManager {
   function openNodeWithId($ids) {
     if (!is_array($ids)) $ids = array($ids);
     $to_be_loaded = array();
-    $contents = &$this->LoadMultipleFromId($ids);
+    foreach ($ids as $id) {
+      if (!$this->containsId($id)) $to_be_loaded[] = $id;
+    }
+    $contents = &$this->LoadMultipleFromId($to_be_loaded);
+    $to_be_loaded=array();
     foreach ($contents as $content) {
         $path = explode('.',$content->IdHierarchy());
         // build the list of content elements to be loaded
         foreach ($path as $element) {
-          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded))) {
+          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded)) && (!$this->containsId($element))) {
             $to_be_loaded[] = $element;
           }
         }
@@ -163,12 +167,16 @@ class ContentHierarchyManager {
   function openNodeWithAlias($aliases) {
     if (!is_array($aliases)) $aliases = array($aliases);
     $to_be_loaded = array();
-    $contents = &$this->LoadMultipleFromAlias($aliases);
+    foreach ($aliases as $alias) {
+      if (!$this->containsAlias($alias)) $to_be_loaded[] = $alias;
+    }
+    $contents = &$this->LoadMultipleFromAlias($to_be_loaded);
+    $to_be_loaded=array();
     foreach ($contents as $content) {
         $path = explode('.',$content->IdHierarchy());
         // build the list of content elements to be loaded
         foreach ($path as $element) {
-          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded))) {
+          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded))&& (!$this->containsId($element))) {
             $to_be_loaded[] = $element;
           }
         }
