@@ -110,50 +110,98 @@ class ContentHierarchyManager {
    *  then the parent node is automatically loaded
    *  @param id the content id
    */
-  function openNodeWithId($id) {
-    if ($id==-1) return; // root node
-    if (!$this->containsId($id)) {
-      $content = &ContentManager::LoadContentFromId($id,false);
-      $this->createNodeFromContent($content);
+  function openNodeWithId($ids) {
+    if (!is_array($ids)) $ids = array($ids);
+    $to_be_loaded = array();
+    $contents = &$this->LoadMultipleFromId($ids);
+    foreach ($contents as $content) {
+        $path = explode('.',$content->IdHierarchy());
+        // build the list of content elements to be loaded
+        foreach ($path as $element) {
+          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded))) {
+            $to_be_loaded[] = $element;
+          }
+        }
+    }
+    // load the missing elements
+    $missing=&$this->LoadMultipleFromId($to_be_loaded);
+    $complete=array_merge($contents,$missing);
+
+    // now we have all the contents, and we have to link them all
+    
+    // first loop adds the elements to the hierarchy
+    // do not use foreach since PHP4 can't manage the foreach ($complete as &$item) syntax
+    $cpt = count($complete);
+    for ($i=0; $i<$cpt; $i++) {
+      $content = &$complete[$i];
+      $node = new ContentNode();
+      $node->setContent($content); // parent is still not set !
+      $this->indexNode($node); // add it to the hierarchy
+    }
+    
+    // second loop will link the nodes
+    for ($i=0; $i<$cpt; $i++) {
+      $content = &$complete[$i];
+      $parent_id = $content->ParentId();
+      if ($parent_id==-1) {
+        $parentNode = &$this->rootNode;
+      } else {
+        $parentNode = &$this->getNodeById($parent_id);
+      }
+      $node = &$this->getNodeById($content->Id());
+      $node->setParentNode($parentNode);
+      $parentNode->addChild($node);
     }
   }
-  
-  /**
+ 
+   /**
    *  Opens a node for the specified content alias
    *  If the parent node is not loaded in the hierarchy
    *  then the parent node is automatically loaded
    *  @param id the content id
    */
-  function openNodeWithAlias($alias) {
-    if (!$this->containsAlias($alias)) {
-      $content = &ContentManager::LoadContentFromAlias($alias,false);
-      $this->createNodeFromContent($content);
+  function openNodeWithAlias($aliases) {
+    if (!is_array($aliases)) $aliases = array($aliases);
+    $to_be_loaded = array();
+    $contents = &$this->LoadMultipleFromAlias($aliases);
+    foreach ($contents as $content) {
+        $path = explode('.',$content->IdHierarchy());
+        // build the list of content elements to be loaded
+        foreach ($path as $element) {
+          if (($element!=$content->Id()) && (!in_array($element,$to_be_loaded))) {
+            $to_be_loaded[] = $element;
+          }
+        }
     }
-  }
-  
-  function createNodeFromContent(&$content) {
-      if ($content===FALSE) return; // not found
-      $parent_id=$content->ParentId();
-      if ($this->containsId($parent_id)) {
-        $node = new ContentNode();
-        $parentNode = &$this->getNodeById($parent_id);
-        $node->init($content,$parentNode);
-        $parentNode->addChild($node);
-        $this->indexNode($node);
-      } else if ($parent_id==-1) { // parent is root
-        $node = new ContentNode();
+    // load the missing elements
+    $missing=&$this->LoadMultipleFromId($to_be_loaded);
+    $complete=array_merge($contents,$missing);
+
+    // now we have all the contents, and we have to link them all
+    
+    // first loop adds the elements to the hierarchy
+    // do not use foreach since PHP4 can't manage the foreach ($complete as &$item) syntax
+    $cpt = count($complete);
+    for ($i=0; $i<$cpt; $i++) {
+      $content = &$complete[$i];
+      $node = new ContentNode();
+      $node->setContent($content); // parent is still not set !
+      $this->indexNode($node); // add it to the hierarchy
+    }
+    
+    // second loop will link the nodes
+    for ($i=0; $i<$cpt; $i++) {
+      $content = &$complete[$i];
+      $parent_id = $content->ParentId();
+      if ($parent_id==-1) {
         $parentNode = &$this->rootNode;
-        $node->init($content,$parentNode);
-        $parentNode->addChild($node);
-        $this->indexNode($node);
       } else {
-        $this->openNodeWithId($parent_id);
-        $node = new ContentNode();
         $parentNode = &$this->getNodeById($parent_id);
-        $node->init($content,$parentNode);
-        $parentNode->addChild($node);
-        $this->indexNode($node);
       }
+      $node = &$this->getNodeById($content->Id());
+      $node->setParentNode($parentNode);
+      $parentNode->addChild($node);
+    }
   }
   
   # The following methods try to retrieve a content node
@@ -176,5 +224,165 @@ class ContentHierarchyManager {
     }
     return $node;
   }
+  
+  # The following method allows loading multiple instances of content in a single SQL request
+  # Maybe should be moved to class.content.inc.php ?
+  
+  /**
+	 * Load the content of the object from an ID
+	 *
+	 * @param $id				the ID of the element
+	 * @param $loadProperties	whether to load or not the properties
+	 *
+	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
+	 *							If everything goes well, it returns TRUE
+	 */
+	function &LoadMultipleFromId($ids, $loadProperties = false)
+	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+    $cpt = count($ids);
+		if ($cpt==0) return array();
+    $db = &$gCms->db;
+    $id_list = '(';
+    for ($i=0;$i<$cpt;$i++) {
+      $id_list .= $ids[$i];
+      if ($i<$cpt-1) $id_list .= ',';
+    }
+    $id_list .= ')';
+    if ($id_list=='()') return array();
+    $contents=array();
+		$result = false;
+		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
+		$rows		=& $db->Execute($query);
+
+			while ($row=&$rows->FetchRow())
+			{
+				#Make sure the type exists.  If so, instantiate and load
+			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
+  				$classtype = strtolower($row['type']);
+  				$contentobj = new $classtype; 
+  				$contentobj->LoadFromData($row,false);
+          $contents[]=$contentobj;
+  				$result = true;
+        }
+			}
+			if (!$result)
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+				}
+			}
+
+			if ($result && $loadProperties)
+			{
+				foreach ($contents as $content) {
+          if ($content->mPropertiesLoaded == false)
+  				{
+  					debug_buffer("load from id is loading properties");
+  					$content->mProperties->Load($content->mId);
+  					$content->mPropertiesLoaded = true;
+  				}
+  
+  				if (NULL == $content->mProperties)
+  				{
+  					$result = false;
+  
+  					# debug mode
+  					if (true == $config["debug"])
+  					{
+  						# :TODO: Translate the error message
+  						$debug_errors .= "<p>Could not load properties for content</p>\n";
+  					}
+  				}
+				}
+			}
+    
+    foreach ($contents as $content) {
+     		$content->Load();
+    }
+
+		return $contents;
+	}
+	
+	/**
+	 * Load the content of the object from an alias
+	 *
+	 * @param $alis				the alias of the element
+	 * @param $loadProperties	whether to load or not the properties
+	 *
+	 * @returns bool			If it fails, the object comes back to initial values and returns FALSE
+	 *							If everything goes well, it returns TRUE
+	 */
+	function &LoadMultipleFromAlias($ids, $loadProperties = false)
+	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+    $cpt = count($ids);
+		if ($cpt==0) return array();
+    $db = &$gCms->db;
+    $id_list = '(';
+    for ($i=0;$i<$cpt;$i++) {
+      $id_list .= "'".$ids[$i]."'";
+      if ($i<$cpt-1) $id_list .= ',';
+    }
+    $id_list .= ')';
+    if ($id_list=='()') return array();
+    $contents=array();
+		$result = false;
+		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
+		$rows		=& $db->Execute($query);
+
+			while ($row=&$rows->FetchRow())
+			{
+				#Make sure the type exists.  If so, instantiate and load
+			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
+  				$classtype = strtolower($row['type']);
+  				$contentobj = new $classtype; 
+  				$contentobj->LoadFromData($row,false);
+          $contents[]=$contentobj;
+  				$result = true;
+        }
+			}
+			if (!$result)
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+				}
+			}
+
+			if ($result && $loadProperties)
+			{
+				foreach ($contents as $content) {
+          if ($content->mPropertiesLoaded == false)
+  				{
+  					debug_buffer("load from id is loading properties");
+  					$content->mProperties->Load($content->mId);
+  					$content->mPropertiesLoaded = true;
+  				}
+  
+  				if (NULL == $content->mProperties)
+  				{
+  					$result = false;
+  
+  					# debug mode
+  					if (true == $config["debug"])
+  					{
+  						# :TODO: Translate the error message
+  						$debug_errors .= "<p>Could not load properties for content</p>\n";
+  					}
+  				}
+				}
+			}
+    
+    foreach ($contents as $content) {
+     		$content->Load();
+    }
+
+		return $contents;
+	}
+	
 }
 ?>
