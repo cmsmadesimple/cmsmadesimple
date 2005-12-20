@@ -364,7 +364,8 @@ class ContentHierarchyManager {
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
     $cpt = count($ids);
-		if ($cpt==0) return array();
+    $contents=array();
+		if ($cpt==0) return $contents;
     $db = &$gCms->db;
     $id_list = '(';
     for ($i=0;$i<$cpt;$i++) {
@@ -372,8 +373,8 @@ class ContentHierarchyManager {
       if ($i<$cpt-1) $id_list .= ',';
     }
     $id_list .= ')';
-    if ($id_list=='()') return array();
-    $contents=array();
+    if ($id_list=='()') return $contents;
+
 		$result = false;
 		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
 		$rows		=& $db->Execute($query);
