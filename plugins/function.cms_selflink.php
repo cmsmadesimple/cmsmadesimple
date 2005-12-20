@@ -30,6 +30,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		# check if the page exists in the db
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($page);
+		if (!isset($node)) return;
 		$content =& $node->GetContent();
 		if ($content !== FALSE)
 		{
