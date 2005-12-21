@@ -172,7 +172,7 @@ if ($config["debug"] == true)
 }
 
 echo "<!-- Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using $sql_execs SQL queries -->\n";
-echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using $sql_execs SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
+#echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using $sql_execs SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
 if (get_site_preference('enablesitedownmessage') == "1")
