@@ -219,17 +219,17 @@ else
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('editstylesheet')?></p>
-	<form method="post" action="editcss.php">
+	<form method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/editcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput">
 				<input type="hidden" name="orig_css_name" value="<?php echo $orig_css_name?>" />
-				<input type="text" name="css_name" maxlength="255" value="<?php echo $css_name?>" />				
+				<input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" />				
 			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><textarea class="pagetextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+			<p class="pageinput"><textarea class="pagebigtextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>

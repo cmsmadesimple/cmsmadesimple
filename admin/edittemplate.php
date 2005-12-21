@@ -220,19 +220,19 @@ else
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('edittemplate')?></p>
-	<form method="post" action="edittemplate.php">
+	<form method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/edittemplate.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>
+			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagetextarea', 'content', $encoding)?>
+			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding)?>
 		</div>
 		<?php if (TemplateOperations::StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagetextarea', '', $encoding)?></p>
+			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding)?></p>
 		</div>
 		<?php } ?>
 		<div class="pageoverflow">

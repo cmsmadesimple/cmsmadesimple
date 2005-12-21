@@ -136,7 +136,7 @@ if ($message != "") {
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang("siteprefs")?></p>
-	<form id="siteprefform" method="post" action="siteprefs.php">
+	<form id="siteprefform" method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/siteprefs.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>
 			<p class="pageinput">
@@ -149,7 +149,7 @@ if ($message != "") {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('custom404')?>:</p>
-			<p class="pageinput"><textarea class="pagetextarea" name="custom404" cols="" rows=""><?php echo $custom404?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="custom404" cols="" rows=""><?php echo $custom404?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?>:</p>
@@ -175,7 +175,7 @@ if ($message != "") {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
-			<p class="pageinput"><textarea class="pagetextarea" name="sitedownmessage" cols="" rows=""><?php echo $sitedownmessage?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo $sitedownmessage?></textarea></p>
 		</div>
 		<!--
 		<div class="pageoverflow">
