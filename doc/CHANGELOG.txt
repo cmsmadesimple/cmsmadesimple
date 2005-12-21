@@ -1,13 +1,23 @@
 Version 0.11.2 -- Subversion
 -----------------
 
+* Added extra parameters to the print tag
+* Cleaned up XHTML compliance of admintheme.
+* Fixed bug in contact_form in which spammers could use it to
+send out spam floods
+* Fixed bug with News module to allow tags in the content to
+be parsed properly by smarty
+* Fixed issue with installer messing up the admin password if
+the database details page has an error
+* Fixed permissions disappearing from addional authors when
+saving an HTML Blob 
+* Fixed the locale settings to take the locale of the server unless
+told to do otherwise in config.php
 * Fixed issue where the News content type would
 show up in multiple content blocks.
 * Fixed issue where admin password would not work
 after installation.
-* Removed log4php, since it wasn't being used to
-it's full potential
-* Updated smarty to 2.6.11
+* Fixed several issues with modules on PostgreSQL
 
 Version 0.11.1 "Tobago" -- Dec 05 2005
 -----------------
