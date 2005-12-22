@@ -25,12 +25,24 @@ require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
+$dflt_content='
+<html>
+<head>
+<title>{$title}</title>
+{stylesheet}
+</head>
+<body>
+{content}
+</body>
+</html>
+';
+
 $error = "";
 
 $template = "";
 if (isset($_POST["template"])) $template = $_POST["template"];
 
-$content = "";
+$content = $dflt_content;
 if (isset($_POST["content"])) $content = $_POST["content"];
 
 $stylesheet = "";
@@ -179,7 +191,7 @@ else
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('addtemplate')?></p>
-	<form method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/addtemplate.php">
+	<form method="post" action="addtemplate.php">
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>
 			<p class="pageinput"><input class="name" type="text" name="template" maxlength="255" value="<?php echo $template?>" /></p>
@@ -207,7 +219,7 @@ else
 			<p class="pageinput">
 				<input type="hidden" name="addtemplate" value="true"/>
 				<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
