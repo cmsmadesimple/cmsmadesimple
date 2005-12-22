@@ -19,6 +19,7 @@
 #$Id$
 
 $CMS_ADMIN_PAGE=1;
+$CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
 
@@ -36,7 +37,6 @@ $access = check_permission($userid, "Modify Modules");
 #$smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
-
 if ($action == "showpluginhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))

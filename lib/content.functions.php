@@ -967,6 +967,8 @@ function load_plugins(&$smarty)
 
 function search_plugins(&$smarty, &$plugins, $dir, $caching)
 {
+        global $CMS_LOAD_ALL_PLUGINS;
+
 	$ls = dir($dir);
 	while (($file = $ls->read()) != "")
 	{
@@ -985,7 +987,8 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 				$file = $filearray[1];
 				if (!isset($plugins[$file]))
 				{
-					if (strpos($filename, 'function') !== false && filesize($filename) > 50)
+				  if ((strpos($filename, 'function') !== false) && (filesize($filename) > 50)
+			    		    && isset($CMS_LOAD_ALL_PLUGINS))
 					{
 						require_once $filename;
 						if (function_exists("smarty_cms_function_" . $file))
