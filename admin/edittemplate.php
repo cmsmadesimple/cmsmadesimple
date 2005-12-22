@@ -220,7 +220,7 @@ else
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('edittemplate')?></p>
-	<form method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/edittemplate.php">
+	<form method="post" action="edittemplate.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>

@@ -178,7 +178,7 @@ else
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('addstylesheet')?></p>
-		<form method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/addcss.php">
+		<form method="post" action="addcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>

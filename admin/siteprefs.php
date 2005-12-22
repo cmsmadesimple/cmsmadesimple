@@ -136,7 +136,7 @@ if ($message != "") {
 
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang("siteprefs")?></p>
-	<form id="siteprefform" method="post" action="file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/siteprefs.php">
+	<form id="siteprefform" method="post" action="siteprefs.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>
 			<p class="pageinput">
