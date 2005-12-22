@@ -970,7 +970,11 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	$ls = dir($dir);
 	while (($file = $ls->read()) != "")
 	{
-		if (is_file("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+		if (is_file("$dir/$file") 
+		    && (strpos($file, ".") === false || strpos($file, ".") != 0) 
+		    // && (strpos($file, '#') != 0 )
+		    && (strpos($file, '~') != (strlen($file) - 1))
+		    )
 		{
 			//Valid plugins will always have a 3 part filename
 			$filearray = explode('.', $file);
@@ -983,12 +987,12 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 				{
 					if (strpos($filename, 'function') !== false && filesize($filename) > 50)
 					{
-						#require_once $filename;
-						#if (function_exists("smarty_cms_function_" . $file))
-						#{
-						#	$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
-						#	array_push($plugins, $file);
-						#}
+						require_once $filename;
+						if (function_exists("smarty_cms_function_" . $file))
+						{
+							$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
+							array_push($plugins, $file);
+						}
 					}
 					else if (strpos($filename, 'compiler') !== false)
 					{
