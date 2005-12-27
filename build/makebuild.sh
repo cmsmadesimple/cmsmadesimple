@@ -7,18 +7,15 @@ if [ "$version" = "" ]; then
 	exit 1
 fi
 
-#svn copy http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Ready for ${version} --"
-svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${version}
+#svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${version}
+#cd cmsmadesimple-${version}
+#sh autogen.sh
+#sh release-cleanup.sh
+#touch tmp/cache/SITEDOWN
+#svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
+#cd ..
 
-cd cmsmadesimple-${version}
-
-sh autogen.sh
-sh release-cleanup.sh
-touch tmp/cache/SITEDOWN
-
-svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
-
-cd ..
+svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} cmsmadesimple-${version}
 tar zcf cmsmadesimple-${version}.tar.gz cmsmadesimple-${version}
 mv cmsmadesimple-${version} cmsmadesimple
 zip -r cmsmadesimple-${version}.zip cmsmadesimple

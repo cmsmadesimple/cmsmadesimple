@@ -520,7 +520,6 @@ class ContentBase
 
 	function GetPropertyValue($name)
 	{
-		debug_buffer('getpropertyvalue called');
 		if ($this->mProperties->HasProperty($name))
 		{
 			if ($this->mPropertiesLoaded == false)
@@ -620,7 +619,7 @@ class ContentBase
 				$this->mOldItemOrder	= $row->fields["item_order"];
 				$this->mHierarchy		= $row->fields["hierarchy"];
 				$this->mIdHierarchy		= $row->fields["id_hierarchy"];
-				$this->mProperties->mPropertyNames = explode(',',$row->fields["id_hierarchy"]);
+				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
 				$this->mMenuText		= $row->fields['menu_text'];
 				$this->mMarkup			= $row->fields['markup'];
 				$this->mActive			= ($row->fields["active"] == 1?true:false);
@@ -713,7 +712,7 @@ class ContentBase
 		$this->mOldItemOrder	= $data["item_order"];
 		$this->mHierarchy		= $data["hierarchy"];
 		$this->mIdHierarchy		= $data["id_hierarchy"];
-		$this->mProperties->mPropertyNames = explode(',',$data["id_hierarchy"]);
+		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText		= $data['menu_text'];
 		$this->mMarkup			= $data['markup'];
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
@@ -1313,6 +1312,7 @@ class ContentProperties
 
 	function HasProperty($name)
 	{
+		debug_buffer($this->mPropertyNames);
 		if (!isset($this->mPropertyNames))
 			$this->mPropertyNames = array();
 		return in_array($name, $this->mPropertyNames);
