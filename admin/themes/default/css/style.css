@@ -23,8 +23,8 @@ div.lblayout { width: 50em; margin-left: auto; margin-right: auto; height: auto;
 div.lbtopmargin { margin-top: 100px; }
 div.lball { text-align: center; }
 div.lbcontainer { background: #ececec; border: 1px solid #555555; margin-top: 3px; overflow: hidden; padding: 10px; }
-div.lbinfo { background-image:  url(file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/themes/default/images/vstippled.gif); background-position: top right; background-repeat: repeat-y; float: left; padding-right: 1em; text-align: center; width: 24em; }
-div.lbfields { background-image:  url(file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/themes/default/images/vstippled.gif); background-position: top left; background-repeat: repeat-y; float: left; margin-left: -1px; padding-left: 1em; }
+div.lbinfo { background-image:  url(themes/default/images/vstippled.gif); background-position: top right; background-repeat: repeat-y; float: left; padding-right: 1em; text-align: center; width: 24em; }
+div.lbfields { background-image:  url(themes/default/images/vstippled.gif); background-position: top left; background-repeat: repeat-y; float: left; margin-left: -1px; padding-left: 1em; }
 div.lbfieldstext { float: left; }
 div.lbinput { float: left; margin-left: 10px; }
 input.lbsubmit { background-color: #999999; color: #ffffff; margin-top: 5px; cursor: pointer; }
@@ -51,8 +51,8 @@ a.first_module {background: #F0F0F0; border-top: 1px solid #c6c3bd;}
 
 /* Nav Tools */
 div.navt_menu { position: absolute; right: 0px; }
-div.navt_show { background-image: url(file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/themes/default/css/themes/default/images/show_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
-div.navt_hide {	background-image: url(file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/themes/default/css/themes/default/images/hide_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+div.navt_show { background-image: url(themes/default/css/themes/default/images/show_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
+div.navt_hide {	background-image: url(themes/default/css/themes/default/images/hide_navtools.gif); background-repeat: no-repeat; cursor: pointer; float: left; height: 81px; width: 15px; }
 #navt_container { background-color: #BDC0C6; border: 1px solid #c6c3bd; float: left; width: 20em; }
 #navt_tabs div { background-color: #BDC0C6; color: #384654; cursor: pointer; float: left; padding-left: 8px; padding-right: 8px; text-align: center; }
 #navt_tabs div:hover, #navt_tabs div.cssHover { background-color: #ABB0B6; }
@@ -82,7 +82,7 @@ p.itemtext { float: left; width: 44em; }
 /* All pages - Content */
 #MainContent { background-color: #ffffff; padding-bottom: 5px; padding-top: 5px; }
 div.topmenucontainer { background-color: #ececec; border-bottom: 1px solid #C0C0C0; }
-div.hstippled { background-color: #FFFFFF; background-image:  url(file:///C|/Documents%20and%20Settings/Daniel%20Westergren/Mina%20dokument/Mina%20webbplatser/cms-daily/admin/themes/default/css/themes/default/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
+div.hstippled { background-color: #FFFFFF; background-image:  url(themes/default/images/hstippled.gif); background-position: center; background-repeat: repeat-x; font-size: 1px; height: 1px; }
 div.breadcrumbs { background-color: #ffffff; }
 p.breadcrumbs { color: #666666; padding-bottom: 3px; padding-left: 5px; padding-top: 3px; }
 p.logocontainer { padding-bottom: 5px; padding-left: 5px; padding-top: 5px; }
