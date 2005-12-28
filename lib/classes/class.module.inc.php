@@ -1520,8 +1520,10 @@ class CMSModule extends ModuleOperations
 	 
 	 /**
 	  * Returns header code specific to this WYSIWYG
+	  *
+	  * @param string The html-code of the page before replacing WYSIWYG-stuff
 	  */
-	  function WYSIWYGGenerateHeader()
+	  function WYSIWYGGenerateHeader($htmlresult='')
 	  {
 	  	return '';
 	  }

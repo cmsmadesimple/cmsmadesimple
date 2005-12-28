@@ -41,7 +41,7 @@ foreach($gCms->modules as $key=>$value)
 		$gCms->modules[$key]['object']->IsWYSIWYG())
 	{
 		$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
-		$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader();
+		$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
 		$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();		
 	}
 }
