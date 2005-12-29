@@ -74,6 +74,10 @@ function smarty_core_load_plugins($params, &$smarty)
                 $smarty->_trigger_fatal_error("[plugin] function $_plugin_func() not found in $_plugin_file", $_tpl_file, $_tpl_line, __FILE__, __LINE__);
                 continue;
             }
+            if (!is_callable($_plugin_func) && is_callable($_cms_plugin_func))
+            {
+            	$_plugin_func = $_cms_plugin_func;
+            }
         }
         /*
          * In case of insert plugins, their code may be loaded later via
