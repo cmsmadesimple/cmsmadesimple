@@ -38,11 +38,13 @@ foreach($gCms->modules as $key=>$value)
 {
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsWYSIWYG())
+		$gCms->modules[$key]['object']->IsWYSIWYG() &&
+		get_preference(get_userid, 'wysiwyg')==$gCms->modules[$key]['object']->GetName()
+		)
 	{
 		$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
 		$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
-		$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();		
+		$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
 	}
 }
 
