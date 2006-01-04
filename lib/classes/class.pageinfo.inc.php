@@ -40,6 +40,7 @@ class PageInfo
 	var $template_id;
 	var $template_encoding;
 	var $template_modified_date;
+	var $caching;
 
 	function PageInfo()
 	{
@@ -60,7 +61,7 @@ class PageInfo
 		$this->template_id = -1;
 		$this->template_modified_date = -1;
 		$this->template_encoding = '';
-		$this->content_cachable = false;
+		$this->cachable = false;
 
 		global $gCms;
 		$db = &$gCms->db;
@@ -118,18 +119,22 @@ class PageInfoOperations
 			$onepageinfo->template_encoding = $row['encoding'];
 			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
 			$onepageinfo->cachable = ($row['template_id'] == 1?true:false);
-			$result = $onepageinfo;
+			$result =& $onepageinfo;
 		}
 		else
 		{
 			#Page isn't found.  Should we setup an alternate page?
-			if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
+			#if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
+			if (get_site_preference('enablecustom404') == "1")
 			{
 				$onepageinfo = new PageInfo();
-				$onepageinfo->caching = false;
-				$onepageinfo->template_id = get_site_preference('custom404template');
+				$onepageinfo->cachable = false;
+				if (get_site_preference('custom404template') > 0)
+					$onepageinfo->template_id = get_site_preference('custom404template');
+				else
+					$onepageinfo->template_id = 'notemplate';
 				$onepageinfo->template_modified_date = time();
-				$result = $onepageinfo;
+				$result =& $onepageinfo;
 			}
 		}
 

@@ -417,7 +417,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		if (get_site_preference('enablesitedownmessage') == "1")
+		if (get_site_preference('enablesitedownmessage') == "1" || $tpl_name == 'notemplate')
 		{
 			$tpl_timestamp = time();
 			return true;
@@ -503,7 +503,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		$pageinfo = $gCms->variables['pageinfo'];
+		$pageinfo =& $gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
 		{
@@ -512,7 +512,7 @@ class Smarty_CMS extends Smarty {
 		}
 		else
 		{
-			if ($pageinfo->content_cachable)
+			if ($pageinfo->cachable)
 			{
 				$tpl_timestamp = $pageinfo->content_modified_date;
 			}

@@ -110,7 +110,9 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 }
 
-$html = "";
+$html = '';
+$cached = '';
+
 if (isset($_GET["print"]))
 {
 	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
@@ -118,7 +120,6 @@ if (isset($_GET["print"]))
 }
 else
 {
-	($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
 	if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
 	{
@@ -126,11 +127,12 @@ else
 	}
 	else
 	{
+		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
 		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
 	}
 }
 
-if (get_site_preference('enablecustom404') == "0" && (!$config['debug']))
+if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
 {
 	set_error_handler($old_error_handler);
 }
