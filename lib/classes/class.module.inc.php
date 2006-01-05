@@ -2220,6 +2220,11 @@ class CMSModule extends ModuleOperations
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
+			else if (is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
+			{
+				include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
+				$this->langhash = &$lang;
+			}
 			else if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
