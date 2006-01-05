@@ -107,7 +107,7 @@ class sectionheader extends ContentBase
 
 		if (!$adding && $showadmin)
 		{
-			array_push($ret,array('Owner:',@UserOperations::GenerateDropdown($this->Owner())));
+			array_push($ret,array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner())));
 		}
 
 		if ($adding || $showadmin)

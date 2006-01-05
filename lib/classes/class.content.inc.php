@@ -1250,7 +1250,7 @@ class ContentBase
 	{
 		$ret = array();
 
-		array_push($ret, 'Additional Editors');
+		array_push($ret, lang('additionaleditors'));
 		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		$allusers = UserOperations::LoadUsers();
