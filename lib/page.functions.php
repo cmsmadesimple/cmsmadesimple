@@ -556,7 +556,7 @@ function get_stylesheet($template_id, $media_type = '')
 	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
 	{
 		#Ok, it's valid, let's load the bugger
-		$templateobj = TemplateOperations::LoadTemplateById($template_id);
+		$templateobj =& TemplateOperations::LoadTemplateById($template_id);
 	}
 
 	#If it's valid after loading, then start the process...
@@ -587,7 +587,7 @@ function get_stylesheet($template_id, $media_type = '')
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?
 			AND		c.media_type = ?";
-		$cssresult = $db->Execute($cssquery, array($template_id, $media_type));
+		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
 
 		if ($cssresult && $cssresult->RecordCount() > 0)
 		{

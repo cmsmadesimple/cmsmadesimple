@@ -101,7 +101,7 @@ class Stylesheet
  */
 class StylesheetOperations
 {
-	function LoadStylesheets()
+	function & LoadStylesheets()
 	{
 		global $gCms;
 		$db = &$gCms->db;
@@ -167,12 +167,18 @@ class StylesheetOperations
 	}
 
 
-	function LoadStylesheetByID($id)
+	function & LoadStylesheetByID($id)
 	{
 		$result = false;
 
 		global $gCms;
 		$db = &$gCms->db;
+		$cache = &$gCms->StylesheetCache;
+
+		if (isset($cache[$id]))
+		{
+			return $cache[$id];
+		}
 
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -186,7 +192,12 @@ class StylesheetOperations
 				$onestylesheet->name = $row['css_name'];
 				$onestylesheet->value = $row['css_text'];
 				$onestylesheet->media_type = $row['media_type'];
-				$result = $onestylesheet;
+				$result =& $onestylesheet;
+
+				if (!isset($cache[$onestylesheet->id]))
+				{
+					$cache[$onestylesheet->id] =& $onestylesheet;
+				}
 			}
 		}
 
