@@ -1741,7 +1741,7 @@ class ContentManager
 		}
 		$query = "SELECT * FROM ".cms_db_prefix()."content $expanded 
 			ORDER BY hierarchy";
-		$dbresult = $db->Execute($query);
+		$dbresult =& $db->Execute($query);
 
 		if ($dbresult && $dbresult->RowCount() > 0)
 		{

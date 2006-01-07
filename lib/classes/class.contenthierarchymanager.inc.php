@@ -378,17 +378,19 @@ class ContentHierarchyManager {
 		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
 		$rows		=& $db->Execute($query);
 
+		if ($rows)
+		{
 			while (isset($rows) && $row = &$rows->FetchRow())
 			{
-				#Make sure the type exists.  If so, instantiate and load
-			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
-  				$classtype = strtolower($row['type']);
-  				$contentobj = new $classtype; 
-  				$contentobj->LoadFromData($row,false);
-          $contents[]=$contentobj;
-  				$result = true;
-        }
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
+					$classtype = strtolower($row['type']);
+					$contentobj = new $classtype; 
+					$contentobj->LoadFromData($row,false);
+					$contents[]=$contentobj;
+					$result = true;
+				}
 			}
+		}
 			if (!$result)
 			{
 				if (true == $config["debug"])
@@ -401,7 +403,7 @@ class ContentHierarchyManager {
 			if ($result && $loadProperties)
 			{
 				foreach ($contents as $content) {
-          if ($content->mPropertiesLoaded == false)
+				  if ($content->mPropertiesLoaded == false)
   				{
   					debug_buffer("load from id is loading properties");
   					$content->mProperties->Load($content->mId);

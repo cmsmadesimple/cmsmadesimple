@@ -2067,7 +2067,7 @@ class CMSModule extends ModuleOperations
 		global $gCms;
 		#$content = ContentManager::LoadContentFromId($returnid);
 		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeById($id);
+		$node =& $manager->sureGetNodeById($returnid);
 		$content =& $node->GetContent();
 
 		if (isset($content))
