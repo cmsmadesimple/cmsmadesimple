@@ -304,7 +304,7 @@ class ContentHierarchyManager {
     }
     $query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
     $result = &$db->Execute($query,array($id));
-    while ($row = &$result->FetchRow()) {
+    while (isset($result) && $row = &$result->FetchRow()) {
       $child_id = $row['content_id'];
       if ((!$this->containsId($child_id)) && (!in_array($child_id,$to_be_loaded))) {
         $to_be_loaded[] = $child_id;
@@ -333,7 +333,7 @@ class ContentHierarchyManager {
     }
     $query = "SELECT c1.content_id FROM ".cms_db_prefix()."content as c1,".cms_db_prefix()."content as c2 WHERE c1.parent_id = c2.content_id AND c2.content_alias = ?";
     $result = &$db->Execute($query,array($alias));
-    while ($row = &$result->FetchRow()) {
+    while (isset($result) && $row = &$result->FetchRow()) {
       $child_id = $row['content_id'];
       if ((!$this->containsId($child_id)) && (!in_array($child_id,$to_be_loaded))) {
         $to_be_loaded[] = $child_id;
@@ -378,7 +378,7 @@ class ContentHierarchyManager {
 		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
 		$rows		=& $db->Execute($query);
 
-			while ($row=&$rows->FetchRow())
+			while (isset($rows) && $row = &$rows->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
 			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
@@ -458,7 +458,7 @@ class ContentHierarchyManager {
 		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
 		$rows		=& $db->Execute($query);
 
-			while ($row=&$rows->FetchRow())
+			while (isset($rows) && $row=&$rows->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
 			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
