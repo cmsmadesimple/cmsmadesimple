@@ -2064,6 +2064,7 @@ class CMSModule extends ModuleOperations
 	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
 		$text = '';		
+		global $gCms;
 		#$content = ContentManager::LoadContentFromId($returnid);
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeById($id);
