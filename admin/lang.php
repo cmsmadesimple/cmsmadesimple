@@ -37,10 +37,17 @@ if (isset($CMS_ADMIN_PAGE)) {
 	}
 
 	#Check to see if there is already a language in use...
-	if (isset($_POST["change_cms_lang"]))
+	if (isset($_POST["default_cms_lang"]))
 	{
-		$current_language = $_POST["change_cms_lang"];
-		setcookie("cms_language", $_POST["change_cms_lang"]);
+		$current_language = $_POST["default_cms_lang"];
+		if ($current_language == '')
+		{
+			setcookie("cms_language", '', time() - 3600);
+		}
+		else
+		{
+			setcookie("cms_language", $_POST["change_cms_lang"]);
+		}
 	}
 	else if (isset($_SESSION['login_cms_language']))
 	{
@@ -53,7 +60,8 @@ if (isset($CMS_ADMIN_PAGE)) {
 	{
 		$current_language = $_COOKIE["cms_language"];
 	}
-	else
+
+	if ($current_language == '')
 	{
 		#No, take a stab at figuring out the default language...
 		#Figure out default language and set it if it exists
