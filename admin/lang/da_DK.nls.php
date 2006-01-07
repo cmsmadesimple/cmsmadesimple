@@ -14,7 +14,7 @@ $nls['alias']['da_DK'] = 'da_DK' ;
 $nls['alias']['da_DK.ISO8859-1'] = 'da_DK' ;
 
 #Encoding of the language
-$nls['encoding']['da_DK'] = "ISO-8859-1";
+$nls['encoding']['da_DK'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['da_DK'] = array();

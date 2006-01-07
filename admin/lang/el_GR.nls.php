@@ -42,7 +42,7 @@ $nls['alias']['el'] = 'el_GR' ;
 $nls['alias']['el_GR.ISO8859-7'] = 'el_GR' ;
 
 #Encoding of the language
-$nls['encoding']['el_GR'] = "ISO-8859-7";
+$nls['encoding']['el_GR'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['el_GR'] = array();

@@ -41,7 +41,7 @@ $nls['alias']['fi_FI.ISO8859-1'] = 'fi_FI' ;
 $nls['alias']['fi_FI.ISO8859-15'] = 'fi_FI' ;
 
 #Encoding of the language
-$nls['encoding']['fi_FI'] = "ISO-8859-15";
+$nls['encoding']['fi_FI'] = "UTF-8";
 
 #Location of the file(s)
 $nls['file']['fi_FI'] = array();
