@@ -230,7 +230,7 @@ if ($reldir != '')
 	}
 	$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
 	$dirtext .= "<td>";
-	$dirtext .= $themeObject->DisplayImage('icons/filetypes/folder.gif', lang('directoryabove'));
+	$dirtext .= $themeObject->DisplayImage('icons/filetypes/upfolder.gif', lang('directoryabove'));
     $dirtext .= "</td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td>&nbsp;</td>";
