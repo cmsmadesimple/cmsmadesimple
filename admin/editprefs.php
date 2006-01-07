@@ -120,7 +120,7 @@ if ($error != "") {
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('language'); ?>:</p>
 				<p class="pageinput">
-					<select name="default_cms_lang" onchange="document.prefsform.submit();" style="vertical-align: middle;">
+					<select name="default_cms_lang" style="vertical-align: middle;">
 					<option value=""><?php echo lang('nodefault'); ?></option>
 					<?php
 						asort($nls["language"]);
