@@ -31,27 +31,28 @@
 #This is the default language
 
 #Native language name
-$nls['language']['es_MX'] = 'Espa&ntilde;ol(Mexico)';
-$nls['englishlang']['es_MX'] = 'Spanish';
+$nls['language']['es_ES'] = 'Espa&ntilde;ol';
+$nls['englishlang']['es_ES'] = 'Spanish';
 
 #Possible aliases for language
-$nls['alias']['es'] = 'es_MX';
-$nls['alias']['espa&ntilde;ol'] = 'es_MX' ;
-$nls['alias']['eng'] = 'es_MX' ;
-$nls['alias']['es_AR'] = 'es_AR' ;
-$nls['alias']['es_PE'] = 'es_PE' ;
-$nls['alias']['es_US.ISO8859-1'] = 'es_MX' ;
+$nls['alias']['es'] = 'es_ES';
+$nls['alias']['espa&ntilde;ol'] = 'es_ES' ;
+$nls['alias']['eng'] = 'es_ES' ;
+$nls['alias']['es_AR'] = 'es_ES' ;
+$nls['alias']['es_PE'] = 'es_ES' ;
+$nls['alias']['es_MX'] = 'es_ES' ;
+$nls['alias']['es_US.ISO8859-1'] = 'es_ES' ;
 
 #Encoding of the language
-$nls['encoding']['en_US'] = "UTF-8";
+$nls['encoding']['es_ES'] = "UTF-8";
 
 #Location of the file(s)
-$nls['file']['es_MX'] = array();
-array_push($nls['file']['es_MX'], dirname(__FILE__)."/es_MX/admin.inc.php");
+$nls['file']['es_ES'] = array();
+array_push($nls['file']['es_ES'], dirname(__FILE__)."/es_ES/admin.inc.php");
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['es_MX'] = "es";
+$nls['htmlarea']['es_ES'] = "es";
 ?>
