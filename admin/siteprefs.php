@@ -47,6 +47,9 @@ if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage
 $sitedownmessagetemplate = "-1";
 if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
 
+$metadata = '';
+if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
+
 #$useadvancedcss = "1";
 #if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
@@ -90,6 +93,7 @@ else if (isset($_POST["editsiteprefs"]))
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
+		set_site_preference('metadata', $metadata);
 		audit(-1, '', 'Edited Site Preferences');
 		//redirect("siteprefs.php");
 		//return;
@@ -108,6 +112,7 @@ else if (isset($_POST["editsiteprefs"]))
 	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_site_preference('useadvancedcss');
 	$logintheme = get_site_preference('logintheme', 'default');
+	$metadata = get_site_preference('metadata', '');
 }
 
 $templates = array();
@@ -142,6 +147,10 @@ if ($message != "") {
 			<p class="pageinput">
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="clearcache" value="<?php echo lang('clear') ?>" />
 			</p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="" rows=""><?php echo $metadata?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('enablecustom404') ?>:</p>

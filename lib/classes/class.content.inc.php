@@ -93,6 +93,11 @@ class ContentBase
 	var $mOldItemOrder;
 
 	/**
+	 * The metadata (head tags) fir this content
+	 */
+	var $mMetadata;
+
+	/**
 	 * The full hierarchy of the content
 	 * String of the form : 1.4.3
 	 */
@@ -202,6 +207,7 @@ class ContentBase
 		$this->mLastModifiedBy	= -1 ;
 		$this->mHierarchy		= "" ;
 		$this->mIdHierarchy		= "" ;
+		$this->mMetadata		= "" ;
 		$this->mActive			= false ;
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
@@ -296,6 +302,20 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		$this->mOwner = $owner;
+	}
+
+	/**
+	 * Returns the Metadata
+	 */
+	function Metadata()
+	{
+		return $this->mMetadata;
+	}
+
+	function SetMetadata($metadata)
+	{
+		$this->DoReadyForEdit();
+		$this->mMetadata = $metadata;
 	}
 
 	/**
@@ -617,6 +637,7 @@ class ContentBase
 				$this->mTemplateId		= $row->fields["template_id"];
 				$this->mItemOrder		= $row->fields["item_order"];
 				$this->mOldItemOrder	= $row->fields["item_order"];
+				$this->mMetadata		= $row->fields['metadata'];
 				$this->mHierarchy		= $row->fields["hierarchy"];
 				$this->mIdHierarchy		= $row->fields["id_hierarchy"];
 				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
@@ -710,6 +731,7 @@ class ContentBase
 		$this->mTemplateId		= $data["template_id"];
 		$this->mItemOrder		= $data["item_order"];
 		$this->mOldItemOrder	= $data["item_order"];
+		$this->mMetadata		= $data['metadata'];
 		$this->mHierarchy		= $data["hierarchy"];
 		$this->mIdHierarchy		= $data["id_hierarchy"];
 		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
@@ -844,7 +866,7 @@ class ContentBase
 			}
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -857,6 +879,7 @@ class ContentBase
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
 			$this->mAlias,
+			$this->mMetadata,
 			$db->DBTimeStamp(time()),
 			$this->mItemOrder,
 			$this->mMarkup,
@@ -947,7 +970,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -966,6 +989,7 @@ class ContentBase
 			($this->mCachable==true?1:0),
 			$this->mMenuText,
 			$this->mMarkup,
+			$this->mMetadata,
 			$this->mLastModifiedBy,
 			$db->DBTimeStamp(time()),
 			$db->DBTimeStamp(time())

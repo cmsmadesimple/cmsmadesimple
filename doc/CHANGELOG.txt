@@ -1,4 +1,9 @@
-Version 0.11.2 -- Subversion
+Version 0.12 -- Subversion
+-----------------
+* Added the {metadata} tag for both global and page level
+metdata.
+
+Version 0.11.2 "Scarborough" -- Dec 21 2005
 -----------------
 
 * Added extra parameters to the print tag

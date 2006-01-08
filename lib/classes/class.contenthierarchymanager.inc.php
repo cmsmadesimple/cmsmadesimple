@@ -62,7 +62,7 @@ class ContentHierarchyManager {
     if (isset($content)) {
       $this->id_index[intval($content->Id())]=$node;
       if ($content->Alias()) {
-        $this->alias_index[$content->Alias()] = $node; // ensure string index
+        $this->alias_index[strtolower($content->Alias())] = $node; // ensure string index
       }
       $this->hier_index[$content->Hierarchy()]=$node;
     }
@@ -91,7 +91,7 @@ class ContentHierarchyManager {
    * @see sureGetNodeByAlias
    */
   function &getNodeByAlias($alias) {
-    return $this->alias_index[$alias];
+    return $this->alias_index[strtolower($alias)];
   }
   
   
@@ -134,7 +134,7 @@ class ContentHierarchyManager {
    *  @param alias the alias of the searched element
    */
    function containsAlias($alias) {
-    return isset($this->alias_index[$alias]);
+    return isset($this->alias_index[strtolower($alias)]);
   }
   
   /**

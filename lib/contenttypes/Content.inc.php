@@ -90,6 +90,10 @@ class content extends ContentBase
 			{
 				$this->mName = $params['title'];
 			}
+			if (isset($params['metadata']))
+			{
+				$this->mMetadata = $params['metadata'];
+			}
 			if (isset($params['menutext']))
 			{
 				$this->mMenuText = $params['menutext'];
@@ -218,6 +222,8 @@ class content extends ContentBase
 			array_push($ret, array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
 			array_push($ret, array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
+
+			array_push($ret, array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', '', 'metadata', '', '', '80', '6')));
 
 			if (!$adding && $showadmin)
 			{
