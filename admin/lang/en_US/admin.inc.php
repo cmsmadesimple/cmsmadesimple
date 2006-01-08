@@ -325,5 +325,5 @@ $lang['admin']['target'] = 'Target'; //needs translation
 $lang['admin']['xml'] = 'XML';
 $lang['admin']['xmlmodulerepository'] = 'URL of ModuleRepository soap server';
 $lang['admin']['metadata'] = 'Metadata';
-$lang['admin']['globalmetadata'] = 'Global Metadata'];
+$lang['admin']['globalmetadata'] = 'Global Metadata';
 ?>
