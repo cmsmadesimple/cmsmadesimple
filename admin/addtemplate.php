@@ -30,6 +30,7 @@ $dflt_content='
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
 <head>
 <title>{$title}</title>
+{metadata}
 {stylesheet}
 </head>
 <body>
