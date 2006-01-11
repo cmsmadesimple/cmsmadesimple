@@ -25,6 +25,8 @@
  * @since		0.9
  * @package		CMS
  */
+define( "MODULE_DTD_VERSION", "1.2" );
+
 class ModuleOperations extends Smarty
 {
   /**
@@ -79,13 +81,14 @@ class ModuleOperations extends Smarty
     xml_parse_into_struct( $parser, $xml, $val, $xt );
     xml_parser_free( $parser );
 
+    $havedtdversion = false;
     $moduledetails = array();
     $moduledetails['size'] = strlen($xml);
     $required = array();
     foreach( $val as $elem )
       {
-	$value = $elem['value'];
-	$type = $elem['type'];
+	$value = (isset($elem['value'])?$elem['value']:'');
+	$type = (isset($elem['type'])?$elem['type']:'');
 	switch( $elem['tag'] ) 
 	  {
 	  case 'NAME':
@@ -103,6 +106,21 @@ class ModuleOperations extends Smarty
 	      $moduledetails['name'] = $value;
 	      break;
 	    }
+
+	  case 'DTDVERSION':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      if( $value != MODULE_DTD_VERSION )
+		{
+		  ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+		  return false;
+		}
+	      $havedtdversion = true;
+	    }
+	    break;
 
 	  case 'VERSION':
 	    {
@@ -254,6 +272,12 @@ class ModuleOperations extends Smarty
 	    $moduledetails['filedata'] = $value;
 	    break;
 	  }
+      }
+
+    if( $havedtdversion == false )
+      {
+	ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+	return false;
       }
 
     // we've created the modules directory
@@ -464,7 +488,8 @@ class CMSModule extends ModuleOperations
     var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
-  <!ELEMENT module (name,version,description*,help*,about*,requires*,file+)>
+  <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
+  <!ELEMENT dtdversion (#PCDATA)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT version (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
@@ -908,14 +933,15 @@ class CMSModule extends ModuleOperations
 	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
 	  $xmltxt .= $this->xmldtd."\n";
 	  $xmltxt .= "<module>\n";
+          $xmltxt  = "  <dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
 	  $xmltxt .= "  <name>".$this->GetName()."</name>\n";
 	  $xmltxt .= "  <version>".$this->GetVersion()."</version>\n";
 	  $xmltxt .= "  <help>".base64_encode($this->GetHelpPage())."</help>\n";
 	  $xmltxt .= "  <about>".base64_encode($this->GetAbout())."</about>\n";
-	  $desc = $this->GetDescription();
+	  $desc = $this->GetAdminDescription();
 	  if( $desc != '' )
 	    {
-	      $xmltxt .= "  <description>".$this->GetDescription()."</description>\n";
+	      $xmltxt .= "  <description>".$desc."</description>\n";
 	    }
 	  $depends = $this->GetDependencies();
 	  foreach( $depends as $key=>$val )
