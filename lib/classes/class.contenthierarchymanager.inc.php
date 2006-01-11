@@ -157,7 +157,7 @@ class ContentHierarchyManager {
     foreach ($ids as $id) {
       if (!$this->containsId($id)) $to_be_loaded[] = $id;
     }
-    $contents = &$this->LoadMultipleFromId($to_be_loaded);
+    $contents = &ContentManager::LoadMultipleFromId($to_be_loaded);
     $to_be_loaded=array();
     foreach ($contents as $content) {
         $path = explode('.',$content->IdHierarchy());
@@ -169,7 +169,7 @@ class ContentHierarchyManager {
         }
     }
     // load the missing elements
-    $missing=&$this->LoadMultipleFromId($to_be_loaded);
+    $missing=&ContentManager::LoadMultipleFromId($to_be_loaded);
     $complete=array_merge($contents,$missing);
 
     // now we have all the contents, and we have to link them all
@@ -211,7 +211,7 @@ class ContentHierarchyManager {
     foreach ($aliases as $alias) {
       if (!$this->containsAlias($alias)) $to_be_loaded[] = $alias;
     }
-    $contents = &$this->LoadMultipleFromAlias($to_be_loaded);
+    $contents = &ContentManager::LoadMultipleFromAlias($to_be_loaded);
     $to_be_loaded=array();
     foreach ($contents as $content) {
         $path = explode('.',$content->IdHierarchy());
@@ -223,7 +223,7 @@ class ContentHierarchyManager {
         }
     }
     // load the missing elements
-    $missing=&$this->LoadMultipleFromId($to_be_loaded);
+    $missing=&ContentManager::LoadMultipleFromId($to_be_loaded);
     $complete=array_merge($contents,$missing);
 
     // now we have all the contents, and we have to link them all
@@ -346,170 +346,5 @@ class ContentHierarchyManager {
       }
     }
   }
-  
-  # ###########################################################################################
-  # The following method allows loading multiple instances of content in a single SQL request
-  # Maybe should be moved to class.content.inc.php ?
-  # ###########################################################################################
-  /**
-	 * Load the content of the object from a list of ID
-	 * Private method.
-	 * @param $ids	array of element ids
-	 * @param $loadProperties	whether to load or not the properties
-	 *
-	 * @returns array of content objects (empty if not found)
-	 */
-	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
-	{
-		global $gCms, $config, $sql_queries, $debug_errors;
-    $cpt = count($ids);
-    $contents=array();
-		if ($cpt==0) return $contents;
-    $db = &$gCms->db;
-    $id_list = '(';
-    for ($i=0;$i<$cpt;$i++) {
-      $id_list .= $ids[$i];
-      if ($i<$cpt-1) $id_list .= ',';
-    }
-    $id_list .= ')';
-    if ($id_list=='()') return $contents;
-
-		$result = false;
-		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
-		$rows		=& $db->Execute($query);
-
-		if ($rows)
-		{
-			while (isset($rows) && $row = &$rows->FetchRow())
-			{
-				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
-					$classtype = strtolower($row['type']);
-					$contentobj = new $classtype; 
-					$contentobj->LoadFromData($row,false);
-					$contents[]=$contentobj;
-					$result = true;
-				}
-			}
-		}
-			if (!$result)
-			{
-				if (true == $config["debug"])
-				{
-					# :TODO: Translate the error message
-					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-				}
-			}
-
-			if ($result && $loadProperties)
-			{
-				foreach ($contents as $content) {
-				  if ($content->mPropertiesLoaded == false)
-  				{
-  					debug_buffer("load from id is loading properties");
-  					$content->mProperties->Load($content->mId);
-  					$content->mPropertiesLoaded = true;
-  				}
-  
-  				if (NULL == $content->mProperties)
-  				{
-  					$result = false;
-  
-  					# debug mode
-  					if (true == $config["debug"])
-  					{
-  						# :TODO: Translate the error message
-  						$debug_errors .= "<p>Could not load properties for content</p>\n";
-  					}
-  				}
-				}
-			}
-    
-    foreach ($contents as $content) {
-     		$content->Load();
-    }
-
-		return $contents;
-	}
-	
-	/**
-	 * Load the content of the object from a list of aliases
-	 * Private method.
-	 * @param $ids	array of element ids
-	 * Private method
-	 *
-	 * @param $alis				the alias of the element
-	 * @param $loadProperties	whether to load or not the properties
-	 *
-	 * @returns array of content objects (empty if not found)
-	 */
-	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
-	{
-		global $gCms, $config, $sql_queries, $debug_errors;
-    $cpt = count($ids);
-    $contents=array();
-		if ($cpt==0) return $contents;
-    $db = &$gCms->db;
-    $id_list = '(';
-    for ($i=0;$i<$cpt;$i++) {
-      $id_list .= "'".$ids[$i]."'";
-      if ($i<$cpt-1) $id_list .= ',';
-    }
-    $id_list .= ')';
-    if ($id_list=='()') return $contents;
-		$result = false;
-		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
-		$rows		=& $db->Execute($query);
-
-			while (isset($rows) && $row=&$rows->FetchRow())
-			{
-				#Make sure the type exists.  If so, instantiate and load
-			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
-  				$classtype = strtolower($row['type']);
-  				$contentobj = new $classtype; 
-  				$contentobj->LoadFromData($row,false);
-          $contents[]=$contentobj;
-  				$result = true;
-        }
-			}
-			if (!$result)
-			{
-				if (true == $config["debug"])
-				{
-					# :TODO: Translate the error message
-					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-				}
-			}
-
-			if ($result && $loadProperties)
-			{
-				foreach ($contents as $content) {
-          if ($content->mPropertiesLoaded == false)
-  				{
-  					debug_buffer("load from id is loading properties");
-  					$content->mProperties->Load($content->mId);
-  					$content->mPropertiesLoaded = true;
-  				}
-  
-  				if (NULL == $content->mProperties)
-  				{
-  					$result = false;
-  
-  					# debug mode
-  					if (true == $config["debug"])
-  					{
-  						# :TODO: Translate the error message
-  						$debug_errors .= "<p>Could not load properties for content</p>\n";
-  					}
-  				}
-				}
-			}
-    
-    foreach ($contents as $content) {
-     		$content->Load();
-    }
-
-		return $contents;
-	}
-	
 }
 ?>

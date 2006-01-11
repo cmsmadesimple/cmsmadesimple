@@ -1570,6 +1570,167 @@ class ContentManager
 		*/
 	}
 
+  /**
+	 * Load the content of the object from a list of ID
+	 * Private method.
+	 * @param $ids	array of element ids
+	 * @param $loadProperties	whether to load or not the properties
+	 *
+	 * @returns array of content objects (empty if not found)
+	 */
+	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
+	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+    $cpt = count($ids);
+    $contents=array();
+		if ($cpt==0) return $contents;
+    $db = &$gCms->db;
+    $id_list = '(';
+    for ($i=0;$i<$cpt;$i++) {
+      $id_list .= $ids[$i];
+      if ($i<$cpt-1) $id_list .= ',';
+    }
+    $id_list .= ')';
+    if ($id_list=='()') return $contents;
+
+		$result = false;
+		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
+		$rows		=& $db->Execute($query);
+
+		if ($rows)
+		{
+			while (isset($rows) && $row = &$rows->FetchRow())
+			{
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
+					$classtype = strtolower($row['type']);
+					$contentobj = new $classtype; 
+					$contentobj->LoadFromData($row,false);
+					$contents[]=$contentobj;
+					$result = true;
+				}
+			}
+		}
+			if (!$result)
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+				}
+			}
+
+			if ($result && $loadProperties)
+			{
+				foreach ($contents as $content) {
+				  if ($content->mPropertiesLoaded == false)
+  				{
+  					debug_buffer("load from id is loading properties");
+  					$content->mProperties->Load($content->mId);
+  					$content->mPropertiesLoaded = true;
+  				}
+  
+  				if (NULL == $content->mProperties)
+  				{
+  					$result = false;
+  
+  					# debug mode
+  					if (true == $config["debug"])
+  					{
+  						# :TODO: Translate the error message
+  						$debug_errors .= "<p>Could not load properties for content</p>\n";
+  					}
+  				}
+				}
+			}
+    
+    foreach ($contents as $content) {
+     		$content->Load();
+    }
+
+		return $contents;
+	}
+	
+	/**
+	 * Load the content of the object from a list of aliases
+	 * Private method.
+	 * @param $ids	array of element ids
+	 * Private method
+	 *
+	 * @param $alis				the alias of the element
+	 * @param $loadProperties	whether to load or not the properties
+	 *
+	 * @returns array of content objects (empty if not found)
+	 */
+	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
+	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+    $cpt = count($ids);
+    $contents=array();
+		if ($cpt==0) return $contents;
+    $db = &$gCms->db;
+    $id_list = '(';
+    for ($i=0;$i<$cpt;$i++) {
+      $id_list .= "'".$ids[$i]."'";
+      if ($i<$cpt-1) $id_list .= ',';
+    }
+    $id_list .= ')';
+    if ($id_list=='()') return $contents;
+		$result = false;
+		$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
+		$rows		=& $db->Execute($query);
+
+			while (isset($rows) && $row=&$rows->FetchRow())
+			{
+				#Make sure the type exists.  If so, instantiate and load
+			  if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) {
+  				$classtype = strtolower($row['type']);
+  				$contentobj = new $classtype; 
+  				$contentobj->LoadFromData($row,false);
+          $contents[]=$contentobj;
+  				$result = true;
+        }
+			}
+			if (!$result)
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+				}
+			}
+
+			if ($result && $loadProperties)
+			{
+				foreach ($contents as $content) {
+          if ($content->mPropertiesLoaded == false)
+  				{
+  					debug_buffer("load from id is loading properties");
+  					$content->mProperties->Load($content->mId);
+  					$content->mPropertiesLoaded = true;
+  				}
+  
+  				if (NULL == $content->mProperties)
+  				{
+  					$result = false;
+  
+  					# debug mode
+  					if (true == $config["debug"])
+  					{
+  						# :TODO: Translate the error message
+  						$debug_errors .= "<p>Could not load properties for content</p>\n";
+  					}
+  				}
+				}
+			}
+    
+    foreach ($contents as $content) {
+     		$content->Load();
+    }
+
+		return $contents;
+	}
+
+
 	/**
 	 * Display content
 	 */
