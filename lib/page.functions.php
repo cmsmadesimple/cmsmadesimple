@@ -269,9 +269,9 @@ function check_authorship($userid, $contentid = '')
 }
 
 /**
- * Prepares an array with the list of the pages $userid is an author of 
+ * Prepares an array with the list of the pages $userid is an author of
  *
- * @returns an array in whose elements are the IDs of the pages  
+ * @returns an array in whose elements are the IDs of the pages
  * @since 0.11
  */
 function author_pages($userid)
@@ -366,7 +366,7 @@ function load_site_preferences()
 	{
 		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
 		$result = &$db->Execute($query);
-		
+
 		while (!$result->EOF)
 		{
 			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
@@ -401,7 +401,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
  * Removes the given site preference
  *
  * @param string Preference name to remove
- */ 
+ */
 function remove_site_preference($prefname)
 {
 	global $gCms;
@@ -679,7 +679,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 	{
 		$userid = get_userid();
 		$wysiwyg = get_preference($userid, 'wysiwyg');
-		
+
 		foreach($gCms->modules as $key=>$value)
 		{
 			if (get_preference(get_userid(), 'wysiwyg')!="" &&
@@ -727,10 +727,10 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
         $text = ereg_replace("\r\n", "<CMSNewLine>", $text);
         $text = ereg_replace("\r", "<CMSNewLine>", $text);
         $text = cms_htmlentities(ereg_replace("\n", "<CMSNewLine>", $text));
-                
-        // possible values for syntaxType are: Java, C/C++, LaTeX, SQL, 
+
+        // possible values for syntaxType are: Java, C/C++, LaTeX, SQL,
         // Java Properties, HTML (Simple), HTML (Complex)
-        
+
         $output = '<applet name="CMSSyntaxHighlight"
             code="org.CMSMadeSimple.Syntax.Editor.class" width="100%">
                 <param name="cache_option" VALUE="Plugin">
@@ -739,21 +739,21 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
                 <param name="content" value="'.$text.'">
                 <param name="syntaxType" value="'.$syntax_type.'">
                 Sorry, the syntax highlighted textarea will not work with your
-                browser. Please use a different browser or turn off syntax 
+                browser. Please use a different browser or turn off syntax
                 highlighting under user preferences.
             </applet>
             <input type="hidden" name="'.$name.'" value="">';
-       
+
     }
 	else
 	{
-        $output = '<textarea name="'.$name.'" cols="80" rows="24" 
+        $output = '<textarea name="'.$name.'" cols="80" rows="24"
             class="'.$class_name.'"';
         if ($id<>"")
             $output.=' id="'.$id.'"';
         $output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
     }
-    
+
     return $output;
 }
 
@@ -776,7 +776,7 @@ function check_access($page_id)
 {
 	global $gCms;
 	$db = $gCms->db;
-	
+
 	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password']))
 	{
 		return true;
@@ -804,7 +804,7 @@ function check_access($page_id)
 }
 
 /**
- * Creates a string containing links to all the pages. 
+ * Creates a string containing links to all the pages.
  * @param page - the current page to display
  * @param totalrows - the amount of items being listed
  * @param limit - the amount of items to list per page
@@ -862,8 +862,8 @@ function check_access($page_id)
 	}
 	return $page_string;
  }
- 
- 
+
+
 /**
  * Takes a page object as input
  * Returns the page's URL as a string.
@@ -883,24 +883,24 @@ function getURL($page)
 	{
 		if (isset($page->page_alias) && $page->page_alias != "")
 		{
-			if ($config["assume_mod_rewrite"]) 
+			if ($config["assume_mod_rewrite"])
 				$url = $config["root_url"]."/".$page->page_alias.$config["page_extension"];
-			else 
+			else
 				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$page->page_alias;
-			
+
 		}
 		else
 		{
 			if ($config["assume_mod_rewrite"])
 				$url = $config["root_url"]."/".$page->page_id.$config["page_extension"];
-			else 
+			else
 				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$page->page_id;
 		}
-	} 
+	}
 	return $url;
 
  }
- 
+
 function wysiwyg_form_submit()
 {
 	global $gCms;
@@ -909,7 +909,7 @@ function wysiwyg_form_submit()
 
 	$userid = get_userid();
 	$wysiwyg = get_preference($userid, 'wysiwyg');
-	
+
 	if (isset($wysiwyg) && $wysiwyg != '')
 	{
 		#Perform the content title callback
@@ -925,7 +925,7 @@ function wysiwyg_form_submit()
 			}
 		}
 	}
-	
+
 	return $result;
 }
 
@@ -935,8 +935,8 @@ function wysiwyg_form_submit()
  * @since 0.4
  */
 function cms_db_prefix() {
-	global $gCms;
-	return $gCms->config["db_prefix"];
+	global $config;
+	return $config["db_prefix"];
 }
 
 # vim:ts=4 sw=4 noet
