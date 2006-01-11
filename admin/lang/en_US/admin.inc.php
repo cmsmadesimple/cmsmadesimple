@@ -76,6 +76,7 @@ $lang['admin']['errordeletingcss'] = 'Error deleteing css';
 $lang['admin']['errordeletingdirectory'] = 'Could not delete directory. Permissions problem?';
 $lang['admin']['errordeletingfile'] = 'Could not delete file. Permissions Problem?';
 $lang['admin']['errordirectorynotwritable'] = 'No permission to write in directory';
+$lang['admin']['errordtdmismatch'] = 'DTD Version missing or incompatible in the XML file';
 $lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
 $lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
 $lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
