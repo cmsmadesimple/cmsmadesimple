@@ -82,6 +82,17 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 			continue;
 		}
 
+		//Not shown in menu?  Toss it.
+		if (!$onecontent->ShowInMenu())
+		{
+			//If param showall, display also content not shown in menu.
+			if (isset($params['showall']) && $params['showall'] == 1)  
+			{
+			}
+			
+			else continue;
+		}
+		
 		if ($depth < $last_level)
 		{
 			for ($i = $depth; $i < $last_level; $i++) $menu .= "\n</li>\n</ul>\n";
