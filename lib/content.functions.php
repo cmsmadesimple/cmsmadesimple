@@ -87,8 +87,12 @@ class Smarty_CMS extends Smarty {
 						       "db_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("htmlblob", array(&$this, "html_blob_get_template",
-						       "html_blob_get_timestamp",
+		$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
+						       "global_content_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("globalcontent", array(&$this, "global_content_get_template",
+						       "global_content_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
 		$this->register_resource("preview", array(&$this, "preview_get_template",
@@ -176,9 +180,9 @@ class Smarty_CMS extends Smarty {
 		return false;
 	}
 
-	function html_blob_get_template($tpl_name, &$tpl_source, &$smarty_obj)
+	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		debug_buffer('start html_blob_get_template');
+		debug_buffer('start global_content_get_template');
 		global $gCms;
 		$config =& $gCms->config;
 
@@ -210,18 +214,18 @@ class Smarty_CMS extends Smarty {
 		{
 			$tpl_source = "<!-- Html blob '" . $tpl_name . "' does not exist  -->";
 		}
-		debug_buffer('end html_blob_get_template');
+		debug_buffer('end global_content_get_template');
 		return true;
 	}
 
-	function html_blob_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
+	function global_content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		debug_buffer('start html_blob_get_timestamp');
+		debug_buffer('start global_content_get_timestamp');
 		$oneblob = HtmlBlobOperations::LoadHtmlBlobByName($tpl_name);
 		if ($oneblob)
 		{
 			$tpl_timestamp = $oneblob->modified_date;
-			debug_buffer('end html_blob_get_timestamp');
+			debug_buffer('end global_content_get_timestamp');
 			return true;
 		}
 		else
@@ -777,31 +781,6 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
-				#Do html_blobs (they're recursive now... but only 15 deep...  deal!)
-				#$safetycount = 0;
-				#$regexstr = "|\{html_blob name=[\'\"]?(.*?)[\'\"]?\}|i";
-				#while (1 == 1)
-				#{
-				#	$result = preg_replace_callback($regexstr, "html_blob_regex_callback", $tpl_source);
-				#	if ($result != '' && $result != $tpl_source)
-				#	{
-				#		$tpl_source = $result;
-				#	}
-				#	else
-				#	{
-				#		break;
-				#	}
-				#
-				#	$safetycount++;
-				#
-				#	if ($safetycount > 15)
-				#	{
-				#		# Remove the last one so it doesn't get sent to smarty
-				#		$tpl_source = preg_replace($regexstr, '', $tpl_source);
-				#		break;
-				#	}
-				#}
-
 				#Replace stylesheet and title tags
 				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
 				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
@@ -1048,7 +1027,7 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	}
 }
 
-function html_blob_regex_callback($matches)
+function global_content_regex_callback($matches)
 {
 	global $gCms;
 	if (isset($matches[1]))

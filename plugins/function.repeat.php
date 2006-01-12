@@ -16,26 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_html_blob($params, &$smarty)
-{
-	return $smarty->fetch('globalcontent:'.$params['name']);
-}
-
-function smarty_cms_help_function_html_blob() {
-	?>
-	<h3>What does this do?</h3>
-	<p>See the help for global_content for a description.</p>
-	<?php
-}
-
-function smarty_cms_about_function_html_blob() {
-	?>
-	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
-}
+function smarty_function_repeat($params, &$smarty) {
+	return str_repeat($params['string'], $params['times']);
+} ## smarty_function_cms_version
 ?>

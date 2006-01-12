@@ -198,7 +198,7 @@ class CmsObject {
         if (is_null($hrinstance))
 		{
 			#Setup global smarty object
-			$hrinstance = new ContentHierarchyManager();
+			$hrinstance = ContentManager::GetAllContentAsHierarchy(false);
 		}
 
         return $hrinstance;

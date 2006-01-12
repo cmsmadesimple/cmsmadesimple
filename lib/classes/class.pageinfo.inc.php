@@ -41,7 +41,7 @@ class PageInfo
 	var $template_id;
 	var $template_encoding;
 	var $template_modified_date;
-	var $caching;
+	var $cachable;
 
 	function PageInfo()
 	{
