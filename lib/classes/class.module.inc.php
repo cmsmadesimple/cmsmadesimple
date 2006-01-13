@@ -2091,7 +2091,7 @@ class CMSModule extends ModuleOperations
 	{
 		$text = '';		
 		global $gCms;
-		#$content = ContentManager::LoadContentFromId($returnid);
+		$config = &$gCms->config;
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeById($returnid);
 		$content =& $node->GetContent();
@@ -2105,9 +2105,23 @@ class CMSModule extends ModuleOperations
 					$text .= '<a href="';
 				}
 				$text .= $content->GetURL(false);
+
+				$count = 0;
 				foreach ($params as $key=>$value)
 				{
-					$text .= '&amp;'.$id.$key.'='.$value;
+					if ($count > 0)
+					{
+						if ($config["assume_mod_rewrite"] && $rewrite == true)
+							$text .= '?';
+						else
+							$text .= '&amp;';
+					}
+					else
+					{
+						$text .= '&amp;';
+					}
+					$text .= $id.$key.'='.$value;
+					$count++;
 				}		
 				if (!$onlyhref)
 				{

@@ -2,6 +2,9 @@ Version 0.12 -- Subversion
 -----------------
 * Added the {metadata} tag for both global and page level
 metdata.
+* Added the hierarchy manager for proper caching of site
+structure
+* Updated to ADODB 4.70
 
 Version 0.11.2 "Scarborough" -- Dec 21 2005
 -----------------

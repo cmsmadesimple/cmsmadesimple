@@ -108,7 +108,6 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 
 	$gCms->variables['page_name'] = $pageinfo->content_alias;
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
-	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 	$gCms->variables['friendly_position'] = ContentManager::CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
 	
 }

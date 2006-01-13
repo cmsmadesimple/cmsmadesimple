@@ -87,6 +87,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		}
 		if ($condition && $order_by)
 		{
+			/*
 			$query  = "SELECT DISTINCT t1.content_id, t1.content_alias, t1.content_name, t1.menu_text ";
 			$query .= "FROM ".cms_db_prefix()."content AS t1, ".cms_db_prefix()."content AS t2 ";
 			$query .= "WHERE t1.active = 1 ";
@@ -106,6 +107,43 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 					$menu_text = $content->mMenu_text = $row['menu_text'];
 					$url = $content->GetUrl();
 					unset($content);
+				}
+			}
+			*/
+			global $gCms;
+			$hm =& $gCms->GetHierarchyManager();
+			$flatcontent =& $hm->getFlattenedContent();
+			$number = 0;
+			for ($i = 0; $i < count($flatcontent); $i++)
+			{
+				if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
+				{
+					$number = $i;
+					break;
+				}
+			}
+			if ($condition == '<')
+			{
+				if ($number > 0)
+				{
+					$content =& $flatcontent[$number-1];
+					$pageid = $content->Id();
+					$alias = $content->Alias();
+					$name = $content->Name();
+					$menu_text = $content->MenuText();
+					$url = $content->GetURL();
+				}
+			}
+			else if ($condition == '>')
+			{
+				if ($number < count($flatcontent))
+				{
+					$content =& $flatcontent[$number+1];
+					$pageid = $content->Id();
+					$alias = $content->Alias();
+					$name = $content->Name();
+					$menu_text = $content->MenuText();
+					$url = $content->GetURL();
 				}
 			}
 		}
