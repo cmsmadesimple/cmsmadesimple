@@ -41,7 +41,7 @@ function smarty_cms_function_print($params, &$smarty)
 	}
 	else
 	{
-		$goback = '';
+		$goback = '&goback=0';
 		if (!empty($params['goback']) and $params['goback'])
 		{
 		$goback = '&goback=1';
