@@ -66,21 +66,26 @@ if (isset($CMS_ADMIN_PAGE)) {
 		#No, take a stab at figuring out the default language...
 		#Figure out default language and set it if it exists
 		if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-			$svrstring = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-			$alllang = substr($svrstring,0,strpos($svrstring, ";"));
+			$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+			if (strpos($alllang, ";") !== FALSE)
+				$alllang = substr($alllang,0,strpos($alllang, ";"));
 			$langs = explode(",", $alllang);
 
-			foreach ($langs as $onelang) {
+			foreach ($langs as $onelang)
+			{
 				#Check to see if lang exists...
-				if (isset($nls['language'][$onelang])) {
+				if (isset($nls['language'][$onelang]))
+				{
 					$current_language = $onelang;
 					setcookie("cms_language", $onelang);
 					break;
 				}
 				#Check to see if alias exists...
-				if (isset($nls['alias'][$onelang])) {
+				if (isset($nls['alias'][$onelang]))
+				{
 					$alias = $nls['alias'][$onelang];
-					if (isset($nls['language'][$alias])) {
+					if (isset($nls['language'][$alias]))
+					{
 						$current_language = $alias;
 						setcookie("cms_language", $alias);
 						break;
