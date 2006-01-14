@@ -54,7 +54,7 @@ if (isset($_GET["message"])) {
 				$db->Execute($query);
 				echo '<p>'.lang('allpagesmodified').'</p>';
 			} else {
-				echo '<p class="error">'.lang('errorupdating').'</p>';
+				echo '<p class="error">'.lang('errorupdatingpages').'</p>';
 			}
 		}
 	}
