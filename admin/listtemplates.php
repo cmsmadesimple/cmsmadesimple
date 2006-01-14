@@ -52,9 +52,9 @@ if (isset($_GET["message"])) {
 			if ($result) {
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = '".$db->DBTimeStamp(time()) . "'";
 				$db->Execute($query);
-				echo '<p>All Pages Modified!</p>';
+				echo '<p>'.lang('allpagesmodified').'</p>';
 			} else {
-				echo '<p class="error">Error updating pages</p>';
+				echo '<p class="error">'.lang('errorupdating').'</p>';
 			}
 		}
 	}
