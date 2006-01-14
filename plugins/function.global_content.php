@@ -34,7 +34,7 @@ function smarty_cms_help_function_global_content() {
 	<?php
 }
 
-function smarty_cms_about_function_html_blob() {
+function smarty_cms_about_function_global_content() {
 	?>
 	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
 	<p>Version: 1.0</p>
