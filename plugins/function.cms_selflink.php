@@ -127,11 +127,14 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 				if ($number > 0)
 				{
 					$content =& $flatcontent[$number-1];
-					$pageid = $content->Id();
-					$alias = $content->Alias();
-					$name = $content->Name();
-					$menu_text = $content->MenuText();
-					$url = $content->GetURL();
+					if (isset($content))
+					{
+						$pageid = $content->Id();
+						$alias = $content->Alias();
+						$name = $content->Name();
+						$menu_text = $content->MenuText();
+						$url = $content->GetURL();
+					}
 				}
 			}
 			else if ($condition == '>')
@@ -139,11 +142,14 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 				if ($number < count($flatcontent))
 				{
 					$content =& $flatcontent[$number+1];
-					$pageid = $content->Id();
-					$alias = $content->Alias();
-					$name = $content->Name();
-					$menu_text = $content->MenuText();
-					$url = $content->GetURL();
+					if (isset($content))
+					{
+						$pageid = $content->Id();
+						$alias = $content->Alias();
+						$name = $content->Name();
+						$menu_text = $content->MenuText();
+						$url = $content->GetURL();
+					}
 				}
 			}
 		}

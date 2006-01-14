@@ -58,13 +58,13 @@ class ContentHierarchyManager {
 	 */
 	function indexNode(&$node) {
 		$this->size++;
-		$content = &$node->getContent();
+		$content = $node->getContent();
 		if (isset($content)) {
-			$this->id_index[intval($content->Id())]=&$node;
+			$this->id_index[intval($content->Id())]=$node;
 			if ($content->Alias()) {
-				$this->alias_index[strtolower($content->Alias())] =& $node; // ensure string index
+				$this->alias_index[strtolower($content->Alias())] = $node; // ensure string index
 			}
-			$this->hier_index[$content->Hierarchy()]=&$node;
+			$this->hier_index[$content->Hierarchy()]=$node;
 		}
 	}
 	// ------------ GETTERS -------------------
