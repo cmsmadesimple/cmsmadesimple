@@ -629,11 +629,11 @@ tr.row2  {
    background-color: #ececec;
    }
 
-tr.row1:hover  {
+tr.row1hover  {
    background-color: #ddd;
    }
 
-tr.row2:hover  {
+tr.row2hover  {
    background-color: #ddd;
    }
 
