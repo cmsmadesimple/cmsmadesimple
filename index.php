@@ -142,8 +142,10 @@ if ((get_site_preference('enablecustom404') == '' || get_site_preference('enable
 if (!$cached)
 {
 	#Perform the content postrendernoncached callback
-	foreach($gCms->modules as $key=>$value)
+	reset($gCms->modules);
+	while (list($key) = each($gCms->modules))
 	{
+		$value =& $gCms->modules[$key];
 		if ($gCms->modules[$key]['installed'] == true &&
 			$gCms->modules[$key]['active'] == true)
 		{
@@ -153,8 +155,10 @@ if (!$cached)
 }
 
 #Perform the content postrender callback
-foreach($gCms->modules as $key=>$value)
+reset($gCms->modules);
+while (list($key) = each($gCms->modules))
 {
+	$value =& $gCms->modules[$key];
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true)
 	{

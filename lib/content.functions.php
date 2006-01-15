@@ -192,8 +192,10 @@ class Smarty_CMS extends Smarty {
 			$text = $oneblob->content;
 
 			#Perform the content htmlblob callback
-			foreach($gCms->modules as $key=>$value)
+			reset($gCms->modules);
+			while (list($key) = each($gCms->modules))
 			{
+				$value =& $gCms->modules[$key];
 				if ($gCms->modules[$key]['installed'] == true &&
 					$gCms->modules[$key]['active'] == true)
 				{
@@ -256,8 +258,10 @@ class Smarty_CMS extends Smarty {
 		$tpl_source = $data["template"];
 
 		#Perform the content template callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -281,8 +285,10 @@ class Smarty_CMS extends Smarty {
 		}
 		
 		#Perform the content stylesheet callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			$gCms->modules[$key]['object']->ContentStylesheet($stylesheet);
 		}
 
@@ -293,8 +299,10 @@ class Smarty_CMS extends Smarty {
 		$content = $data["content"];
 
 		#Perform the content data callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -308,8 +316,10 @@ class Smarty_CMS extends Smarty {
 		$menutext = $data['menutext'];
 
 		#Perform the content title callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -321,8 +331,10 @@ class Smarty_CMS extends Smarty {
 		$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
 
 		#Perform the content prerender callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -394,8 +406,10 @@ class Smarty_CMS extends Smarty {
 					}
 
 					#Perform the content template callback
-					foreach($gCms->modules as $key=>$value)
+					reset($gCms->modules);
+					while (list($key) = each($gCms->modules))
 					{
+						$value =& $gCms->modules[$key];
 						if ($gCms->modules[$key]['installed'] == true &&
 							$gCms->modules[$key]['active'] == true)
 						{
@@ -471,8 +485,10 @@ class Smarty_CMS extends Smarty {
 
 				#Perform the content data callback
 				#This needs to go...
-				foreach($gCms->modules as $key=>$value)
+				reset($gCms->modules);
+				while (list($key) = each($gCms->modules))
 				{
+					$value =& $gCms->modules[$key];
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
@@ -481,8 +497,10 @@ class Smarty_CMS extends Smarty {
 				}
 
 				#Perform the content prerender callback
-				foreach($gCms->modules as $key=>$value)
+				reset($gCms->modules);
+				while (list($key) = each($gCms->modules))
 				{
+					$value =& $gCms->modules[$key];
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
@@ -554,8 +572,10 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = $modoutput;
 
 			#Perform the content data callback
-			foreach($gCms->modules as $key=>$value)
+			reset($gCms->modules);
+			while (list($key) = each($gCms->modules))
 			{
+				$value =& $gCms->modules[$key];
 				if ($gCms->modules[$key]['installed'] == true &&
 					$gCms->modules[$key]['active'] == true)
 				{
@@ -565,8 +585,10 @@ class Smarty_CMS extends Smarty {
 		}
 
 		#Perform the content prerender callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
@@ -689,8 +711,10 @@ class Smarty_CMS extends Smarty {
 				}
 
 				#Perform the content template callback
-				foreach($gCms->modules as $key=>$value)
+				reset($gCms->modules);
+				while (list($key) = each($gCms->modules))
 				{
+					$value =& $gCms->modules[$key];
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
@@ -715,8 +739,10 @@ class Smarty_CMS extends Smarty {
 					$content = $contentobj->Show();
 
 					#Perform the content data callback
-					foreach($gCms->modules as $key=>$value)
+					reset($gCms->modules);
+					while (list($key) = each($gCms->modules))
 					{
+						$value =& $gCms->modules[$key];
 						if ($gCms->modules[$key]['installed'] == true &&
 							$gCms->modules[$key]['active'] == true)
 						{
@@ -728,8 +754,10 @@ class Smarty_CMS extends Smarty {
 					$menutext = $contentobj->MenuText();
 
 					#Perform the content title callback
-					foreach($gCms->modules as $key=>$value)
+					reset($gCms->modules);
+					while (list($key) = each($gCms->modules))
 					{
+						$value =& $gCms->modules[$key];
 						if ($gCms->modules[$key]['installed'] == true &&
 							$gCms->modules[$key]['active'] == true)
 						{
@@ -787,8 +815,10 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
 
 				#Perform the content prerender callback
-				foreach($gCms->modules as $key=>$value)
+				reset($gCms->modules);
+				while (list($key) = each($gCms->modules))
 				{
+					$value =& $gCms->modules[$key];
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
@@ -805,8 +835,10 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = get_site_preference('custom404');
 
 					#Perform the content prerender callback
-					foreach($gCms->modules as $key=>$value)
+					reset($gCms->modules);
+					while (list($key) = each($gCms->modules))
 					{
+						$value =& $gCms->modules[$key];
 						if ($gCms->modules[$key]['installed'] == true &&
 							$gCms->modules[$key]['active'] == true)
 						{
@@ -1038,8 +1070,10 @@ function global_content_regex_callback($matches)
 			$text = $oneblob->content;
 
 			#Perform the content htmlblob callback
-			foreach($gCms->modules as $key=>$value)
+			reset($gCms->modules);
+			while (list($key) = each($gCms->modules))
 			{
+				$value =& $gCms->modules[$key];
 				if ($gCms->modules[$key]['installed'] == true &&
 					$gCms->modules[$key]['active'] == true)
 				{

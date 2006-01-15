@@ -60,8 +60,10 @@ else
 		#Perform the content stylesheet callback
 		#if ($nostylesheet == false)
 		#{
-			foreach($gCms->modules as $key=>$value)
+			reset($gCms->modules);
+			while (list($key) = each($gCms->modules))
 			{
+				$value =& $gCms->modules[$key];
 				if ($gCms->modules[$key]['installed'] == true &&
 					$gCms->modules[$key]['active'] == true)
 				{

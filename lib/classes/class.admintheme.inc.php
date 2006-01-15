@@ -214,8 +214,10 @@ class AdminTheme
     {
     	# Are there any modules with an admin interface?
         $cmsmodules = $this->cms->modules;
-        foreach ($cmsmodules as $key=>$value)
-            {
+		reset($cmsmodules);
+		while (list($key) = each($cmsmodules))
+		{
+			$value =& $cmsmodules[$key];
             if (isset($cmsmodules[$key]['object'])
                 && $cmsmodules[$key]['installed'] == true
                 && $cmsmodules[$key]['active'] == true

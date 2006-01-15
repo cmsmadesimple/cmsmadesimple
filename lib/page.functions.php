@@ -680,8 +680,10 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		$userid = get_userid();
 		$wysiwyg = get_preference($userid, 'wysiwyg');
 
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =& $gCms->modules[$key];
 			if (get_preference(get_userid(), 'wysiwyg')!="" &&
 				$gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true &&
@@ -913,8 +915,10 @@ function wysiwyg_form_submit()
 	if (isset($wysiwyg) && $wysiwyg != '')
 	{
 		#Perform the content title callback
-		foreach($gCms->modules as $key=>$value)
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
 		{
+			$value =&  $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
