@@ -2400,12 +2400,22 @@ class CMSModule extends ModuleOperations
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 	}
 
-	function ProcessTemplate($tpl_name, $designation = '')
+	function IsFileTemplateCached($tpl, $designation = '')
+	{
+		$smarty = &$this->smarty;
+		$oldcache = $smarty->caching;
+		$smarty->caching = true;
+		$result = $smarty->is_cached('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+		$smarty->caching = $oldcache;
+		return $result;
+	}
+
+	function ProcessTemplate($tpl_name, $designation = '', $cache = false)
 	{
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = false;
+		$smarty->caching = $cache;
 
 		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
 
@@ -2414,12 +2424,22 @@ class CMSModule extends ModuleOperations
 		return $result;
 	}
 
-	function ProcessTemplateFromDatabase($tpl_name, $designation = '')
+	function IsDatabaseTemplateCached($tpl, $designation = '')
+	{
+		$smarty = &$this->smarty;
+		$oldcache = $smarty->caching;
+		$smarty->caching = true;
+		$result = $smarty->is_cached('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+		$smarty->caching = $oldcache;
+		return $result;
+	}
+
+	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false)
 	{
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = false;
+		$smarty->caching = $cache;
 
 		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
 
