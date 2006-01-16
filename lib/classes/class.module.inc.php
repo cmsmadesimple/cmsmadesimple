@@ -2400,12 +2400,20 @@ class CMSModule extends ModuleOperations
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 	}
 
-	function IsFileTemplateCached($tpl_name, $designation = '')
+	function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
+		global $gCms;
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
-		$smarty->caching = true;
+		$smarty->caching = 2;
 		$result = $smarty->is_cached('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+
+		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
+		{
+			$smarty->clear_cache('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+			$result = false;
+		}
+
 		$smarty->caching = $oldcache;
 		return $result;
 	}
@@ -2415,21 +2423,28 @@ class CMSModule extends ModuleOperations
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = $cache;
+		$smarty->caching = ($cache == true?2:false);
 
 		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
-
 		$smarty->caching = $oldcache;
 
 		return $result;
 	}
 
-	function IsDatabaseTemplateCached($tpl_name, $designation = '')
+	function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
+		global $gCms;
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
-		$smarty->caching = true;
+		$smarty->caching = 2;
 		$result = $smarty->is_cached('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+
+		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
+		{
+			$smarty->clear_cache('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
+			$result = false;
+		}
+
 		$smarty->caching = $oldcache;
 		return $result;
 	}
@@ -2439,7 +2454,7 @@ class CMSModule extends ModuleOperations
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = $cache;
+		$smarty->caching = ($cache == true?2:false);
 
 		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
 
