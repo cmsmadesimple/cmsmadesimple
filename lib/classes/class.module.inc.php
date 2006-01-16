@@ -2400,7 +2400,7 @@ class CMSModule extends ModuleOperations
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 	}
 
-	function IsFileTemplateCached($tpl, $designation = '')
+	function IsFileTemplateCached($tpl_name, $designation = '')
 	{
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
@@ -2424,7 +2424,7 @@ class CMSModule extends ModuleOperations
 		return $result;
 	}
 
-	function IsDatabaseTemplateCached($tpl, $designation = '')
+	function IsDatabaseTemplateCached($tpl_name, $designation = '')
 	{
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
