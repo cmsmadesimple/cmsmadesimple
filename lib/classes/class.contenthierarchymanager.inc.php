@@ -23,7 +23,8 @@ class ContentHierarchyManager {
 	var $alias_index; // index for aliases
 	var $hier_index; // index for hierarchies
 	var $size; // number of nodes
-
+  var $check;
+  
 	// -------------- CONSTRUCTOR AND CONSTRUCTOR HELPER ------------------
 
 	/**
@@ -57,14 +58,17 @@ class ContentHierarchyManager {
 	 * Private function for indexing a single node
 	 */
 	function indexNode(&$node) {
-		$this->size++;
+    $this->size++;
 		$content = $node->getContent();
 		if (isset($content)) {
-			$this->id_index[intval($content->Id())]=$node;
+		  $id = $content->Id();
+			$this->id_index[intval($id)]=$node;
+			// other indexes are stored with id
+			// avoids a PHP4 reference issue
 			if ($content->Alias()) {
-				$this->alias_index[strtolower($content->Alias())] = $node; // ensure string index
+				$this->alias_index[strtolower($content->Alias())] = $id; // ensure string index
 			}
-			$this->hier_index[$content->Hierarchy()]=$node;
+			$this->hier_index[$content->Hierarchy()]=$id;
 		}
 	}
 	// ------------ GETTERS -------------------
@@ -91,7 +95,10 @@ class ContentHierarchyManager {
 	 * @see sureGetNodeByAlias
 	 */
 	function &getNodeByAlias($alias) {
-		return $this->alias_index[strtolower($alias)];
+		$id = $this->alias_index[strtolower($alias)];
+		if (isset($id))
+		  return $this->id_index[$id];
+		return null;
 	}
 
 
@@ -100,7 +107,9 @@ class ContentHierarchyManager {
 	 * @param hierarchy  the hierarchy of the searched element, dotted notation
 	 */
 	function &getNodeByHierarchy($hierarchy) {
-		return $this->hier_index[$hierarchy];
+		$id = $this->hier_index[strtolower($hierarchy)];
+		if (isset($id))
+		  return $this->id_index[$id];
 	}
 
 	/**
