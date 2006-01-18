@@ -91,11 +91,11 @@ else
     $page = preg_replace('/\</','',$page);
 }
 
-$old_error_handler = '';
-if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-{
-	$old_error_handler = set_error_handler("ErrorHandler404");
-}
+#$old_error_handler = '';
+#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
+#{
+	#$old_error_handler = set_error_handler("ErrorHandler404");
+#}
 
 $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
 if (isset($pageinfo) && $pageinfo !== FALSE)
@@ -109,7 +109,11 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$gCms->variables['page_name'] = $pageinfo->content_alias;
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 	$gCms->variables['friendly_position'] = ContentManager::CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
-	
+}
+else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
+{
+	ErrorHandler404();
+	exit;
 }
 
 $html = '';
@@ -134,10 +138,10 @@ else
 	}
 }
 
-if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-{
-	set_error_handler($old_error_handler);
-}
+#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
+#{
+	#set_error_handler($old_error_handler);
+#}
 
 if (!$cached)
 {

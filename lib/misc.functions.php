@@ -132,9 +132,10 @@ function microtime_diff($a, $b) {
  *
  * @since 0.3
  */
-function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
+#function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
+function ErrorHandler404()
 {
-	if ($errno == E_USER_WARNING) {
+	#if ($errno == E_USER_WARNING) {
 		@ob_end_clean();
 		header("HTTP/1.0 404 Not Found");
 		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
@@ -145,7 +146,7 @@ function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
 <p>The requested URL was not found on this server.</p>
 </body></html>';
 		exit();
-	}
+	#}
 }
 
 /**
@@ -656,16 +657,25 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
    return ( $dirlist ) ;
 }
 
-	function SerializeObject(&$object)
-	{
-		return base64_encode(serialize($object));
-	}
-	
-	function UnserializeObject(&$serialized)
-	{
-		return  unserialize(base64_decode($serialized));
-	}
+function SerializeObject(&$object)
+{
+	return base64_encode(serialize($object));
+}
 
+function UnserializeObject(&$serialized)
+{
+	return  unserialize(base64_decode($serialized));
+}
+
+function startswith( $str, $sub )
+{
+	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
+}
+
+function endswith( $str, $sub )
+{
+	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
+}
 
 # vim:ts=4 sw=4 noet
 ?>

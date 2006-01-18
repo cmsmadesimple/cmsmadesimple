@@ -121,7 +121,12 @@ class Smarty_CMS extends Smarty {
 						       "db_get_trusted"));
 	}
 
-  function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
+    function trigger_error($error_msg, $error_type = E_USER_WARNING)
+    {   
+        var_dump("Smarty error: $error_msg");
+    }
+
+	function module_file_template($tpl_name, &$tpl_source, &$smarty_obj)
     {
         $params = split(';', $tpl_name);
         if (count($params) == 2 && file_exists(dirname(dirname(__FILE__)) . '/modules/' . $params[0] . '/templates/' . $params[1]))
