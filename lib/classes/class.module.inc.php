@@ -2334,17 +2334,18 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 
-		$db = $gCms->db;
-		$config = $gCms->config;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
 		$retresult = array();
 
-		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ?";
-		$result = $db->Execute($query, array($this->GetName()));
+		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY module_name ASC';
+		$result =& $db->Execute($query, array($this->GetName()));
 
-		if ($result && $result->RecordCount() > 0)
+		while (isset($result) && !$result->EOF)
 		{
-			array_push($retresult, $result['template_name']);
+			array_push($retresult, $result->fields['template_name']);
+			$result->MoveNext();
 		}
 
 		return $retresult;
@@ -2358,10 +2359,10 @@ class CMSModule extends ModuleOperations
 	{
 		global $gCms;
 
-		$db = $gCms->db;
-		$config = $gCms->config;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
 
-		$query = "SELECT * from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 
 		if ($result && $result->RecordCount() > 0)

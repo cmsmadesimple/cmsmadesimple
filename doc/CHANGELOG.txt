@@ -4,6 +4,9 @@ Version 0.12 -- Subversion
 metdata.
 * Added the hierarchy manager for proper caching of site
 structure
+* Changed handling of 404 errors and smarty errors.  {nocache}
+should be a thing of the past and more sane errors should
+gracefully appear.
 * Updated to ADODB 4.70
 
 Version 0.11.2 "Scarborough" -- Dec 21 2005
