@@ -89,7 +89,6 @@ function smarty_cms_function_content($params, &$smarty)
 			$result = '';
 			$oldvalue = $smarty->caching;
 			$smarty->caching = $pageinfo->cachable;
-			$smarty->compile_check = true;
 			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->content_id);
 			$smarty->caching = $oldvalue;
 			return $result;

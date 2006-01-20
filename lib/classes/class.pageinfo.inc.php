@@ -121,7 +121,7 @@ class PageInfoOperations
 			$onepageinfo->template_id = $row['template_id'];
 			$onepageinfo->template_encoding = $row['encoding'];
 			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
-			$onepageinfo->cachable = ($row['template_id'] == 1?true:false);
+			$onepageinfo->cachable = ($row['cachable'] == 1?true:false);
 			$result =& $onepageinfo;
 		}
 		else
