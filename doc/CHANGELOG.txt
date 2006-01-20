@@ -8,6 +8,7 @@ structure
 should be a thing of the past and more sane errors should
 gracefully appear.
 * Updated to ADODB 4.70
+* Updated to Smarty 2.6.12
 
 Version 0.11.2 "Scarborough" -- Dec 21 2005
 -----------------
