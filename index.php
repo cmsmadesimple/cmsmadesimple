@@ -133,8 +133,12 @@ else
 	}
 	else
 	{
+		$oldvalue = $smarty->caching;
+		$smarty->caching = true;
+		$smarty->compile_check = true;
 		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
 		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
+		$smarty->caching = $oldvalue;
 	}
 }
 
