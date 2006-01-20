@@ -677,5 +677,10 @@ function endswith( $str, $sub )
 	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
+function showmem($string = '')
+{
+	#var_dump($string . ' -- ' . memory_get_usage());
+}
+
 # vim:ts=4 sw=4 noet
 ?>

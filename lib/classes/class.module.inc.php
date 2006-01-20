@@ -27,7 +27,7 @@
  */
 define( "MODULE_DTD_VERSION", "1.2" );
 
-class ModuleOperations extends Smarty
+class ModuleOperations
 {
   /**
    * A member to hold an error string
@@ -311,7 +311,7 @@ class ModuleOperations extends Smarty
 				{
 					if (is_file("$dir/$file/$file.module.php"))
 					{
-						include_once("$dir/$file/$file.module.php");
+						include("$dir/$file/$file.module.php");
 					}
 					else
 					{
@@ -365,7 +365,9 @@ class ModuleOperations extends Smarty
 							{
 								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
-									include_once("$dir/$modulename/$modulename.module.php");
+									showmem("before including $modulename");
+									include("$dir/$modulename/$modulename.module.php");
+									showmem("after including $modulename");
 									if (class_exists($modulename))
 									{
 										$newmodule = new $modulename;
@@ -474,7 +476,7 @@ class ModuleOperations extends Smarty
  * @since		0.9
  * @package		CMS
  */
-class CMSModule extends ModuleOperations
+class CMSModule
 {
 	/**
 	 * ------------------------------------------------------------------
@@ -506,6 +508,7 @@ class CMSModule extends ModuleOperations
 
 	function CMSModule()
 	{
+		showmem('begin constructor');
 		global $gCms;
 		$this->cms = &$gCms;
 
@@ -529,9 +532,10 @@ class CMSModule extends ModuleOperations
 		));
 
 		#$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
-		$this->smarty = &$gCms->smarty;
+		$this->smarty = &$gCms->GetSmarty();
 
 		$this->SetParameters();
+		showmem('end constructor');
 	}
 
 	/**
@@ -1603,18 +1607,36 @@ class CMSModule extends ModuleOperations
 	 * @param string The ID of the module
 	 * @param string The parameters targeted for this module
 	 */
-	function DoAction($name, $id, $parameters, $returnid='')
+	function DoAction($name, $id, $params, $returnid='')
 	{
-		return '';
+		showmem('DoAction');
+		if ($name != '')
+		{
+			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+			showmem('Start including: '. $filename);
+			if (is_file($filename))
+			{
+				{
+					global $gCms;
+					$db =& $gCms->GetDb();
+					$config =& $gCms->GetConfig();
+
+					include_once($filename);
+
+					showmem('End including: '. $filename);
+				}
+			}
+		}
 	}
 
-	function DoActionBase($name, $id, $parameters, $returnid='')
+	function DoActionBase($name, $id, $params, $returnid='')
 	{
-		if (isset($parameters['lang']))
+		showmem('DoActionBase');
+		if (isset($params['lang']))
 		{
-			$this->curlang = $parameters['lang'];
+			$this->curlang = $params['lang'];
 		}
-		return $this->DoAction($name, $id, $parameters, $returnid);
+		return $this->DoAction($name, $id, $params, $returnid);
 	}
 
 	/**

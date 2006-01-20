@@ -18,7 +18,7 @@
 #
 #$Id$
 
-require_once dirname(__FILE__).'/smarty/Smarty.class.php';
+require_once(dirname(__FILE__).'/smarty/Smarty.class.php');
 
 class Smarty_Preview extends Smarty {
 

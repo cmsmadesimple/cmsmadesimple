@@ -114,6 +114,7 @@ class CmsObject {
 	 */
 	function CmsObject()
 	{
+		showmem('creating cms object');
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
@@ -121,6 +122,7 @@ class CmsObject {
 		$this->StylesheeteCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
+		showmem('done creating cms object');
 	}
 
 	function & GetDb()
@@ -132,6 +134,7 @@ class CmsObject {
 		//and return it
         if (is_null($dbinstance))
 		{
+			showmem('creating db object');
 			$config =& $this->GetConfig();
 			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date');
 			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
@@ -145,6 +148,7 @@ class CmsObject {
 			if (!$dbinstance) die("Connection failed");
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 			$this->db = &$dbinstance;
+			showmem('done creating db object');
 		}
 
         return $dbinstance;
@@ -156,8 +160,10 @@ class CmsObject {
 
         if (is_null($configinstance))
 		{
+			showmem('creating config object');
 			$configinstance = cms_config_load(true);
 			$this->config = &$configinstance;
+			showmem('done creating config object');
 		}
 
 		return $configinstance;
@@ -172,6 +178,7 @@ class CmsObject {
 		//and return it
         if (is_null($smartyinstance))
 		{
+			showmem('creating smarty object');
 			$conf =& $this->GetConfig();
 			if (!defined('SMARTY_DIR'))
 			{
@@ -181,6 +188,7 @@ class CmsObject {
 			#Setup global smarty object
 			$smartyinstance = new Smarty_CMS($conf);
 			$this->smarty = &$smartyinstance;
+			showmem('done creating smarty object');
 		}
 
         return $smartyinstance;
@@ -197,8 +205,10 @@ class CmsObject {
 		//and return it
         if (is_null($hrinstance))
 		{
+			showmem('creating hierarchy manager object');
 			#Setup global smarty object
 			$hrinstance = ContentManager::GetAllContentAsHierarchy(false);
+			showmem('done hierarchy manager object');
 		}
 
         return $hrinstance;

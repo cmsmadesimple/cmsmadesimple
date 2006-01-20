@@ -45,7 +45,7 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
 require_once(dirname(__FILE__)."/lib/misc.functions.php");
 
 #Make a new CMS object
-require_once(dirname(__FILE__)."/lib/classes/class.global.inc.php");
+require(dirname(__FILE__)."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
 
 #Setup hash for storing all modules
@@ -55,8 +55,8 @@ $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
 #Load the config file (or defaults if it doesn't exist)
-require_once(dirname(__FILE__)."/version.php");
-require_once(dirname(__FILE__)."/lib/config.functions.php");
+require(dirname(__FILE__)."/version.php");
+require(dirname(__FILE__)."/lib/config.functions.php");
 
 #make a local reference
 #if (cms_config_check_old_config()) {
@@ -100,22 +100,38 @@ function count_sql_execs($db, $sql, $inputarray)
 	else $sql_execs++;
 }
 
-require_once(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
-require_once(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
-require_once(dirname(__FILE__)."/lib/page.functions.php");
-require_once(dirname(__FILE__)."/lib/content.functions.php");
-require_once(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.content.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.module.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.user.inc.php");
-require_once(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
-require_once(dirname(__FILE__).'/lib/classes/class.template.inc.php');
-require_once(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
-require_once(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
-require_once(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
-require_once(dirname(__FILE__)."/lib/translation.functions.php");
-require_once(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
-require_once(dirname(__FILE__)."/lib/classes/class.group.inc.php");
+showmem('including smarty');
+require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
+showmem('including adodb');
+require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
+showmem('including page.functions.php');
+require(dirname(__FILE__)."/lib/page.functions.php");
+showmem('including content.functions.php');
+require(dirname(__FILE__)."/lib/content.functions.php");
+showmem('including class.pageinfo.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
+showmem('including class.content.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.content.inc.php");
+showmem('including class.module.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.module.inc.php");
+showmem('including class.pageinfo.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.user.inc.php");
+showmem('including class.htmlblob.inc.php');
+require(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
+showmem('including class.template.inc.php');
+require(dirname(__FILE__).'/lib/classes/class.template.inc.php');
+showmem('including class.stylesheet.inc.php');
+require(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
+showmem('including class.contentnode.inc.php');
+require(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
+showmem('including class.contenthierarchymamager.inc.php');
+require(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
+showmem('including translation.functions.php');
+require(dirname(__FILE__)."/lib/translation.functions.php");
+showmem('including class.bookmark.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
+showmem('including class.group.inc.php');
+require(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 
 #Load them into the usual variables.  This'll go away a little later on.
 if (!isset($DONT_LOAD_DB))
@@ -126,7 +142,9 @@ if (!isset($DONT_LOAD_DB))
 	$db->fnExecute = 'count_sql_execs';
 }
 
+showmem('before 2nd smarty');
 $smarty =& $gCms->GetSmarty();
+showmem('after 2nd smarty');
 
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
@@ -137,7 +155,7 @@ while (($file = $ls->read()) != "")
 	{
 		if (substr($file,strlen($file)-4,4) == ".php")
 		{
-			include_once("$dir/$file");
+			include("$dir/$file");
 		}
 	}
 }
@@ -182,12 +200,13 @@ if (isset($CMS_ADMIN_PAGE))
 {
 	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
 
-	require_once(dirname(__FILE__).'/lib/convert/ConvertCharset.class.php');
+	require(dirname(__FILE__).'/lib/convert/ConvertCharset.class.php');
 	$gCms->variables['convertclass'] = new ConvertCharset();
 
 }
 
 #Load all installed module code
+showmem('before load modules');
 if (isset($LOAD_ALL_MODULES))
 {
 	ModuleOperations::LoadModules(true);
@@ -196,6 +215,7 @@ else
 {
 	ModuleOperations::LoadModules(false);
 }
+showmem('after load modules');
 
 # vim:ts=4 sw=4 noet
 ?>

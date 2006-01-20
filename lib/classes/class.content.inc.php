@@ -1952,7 +1952,7 @@ class ContentManager
 			ORDER BY hierarchy";
 		$dbresult =& $db->Execute($query);
 
-		if ($dbresult && $dbresult->RowCount() > 0)
+		if (isset($dbresult) && $dbresult->RowCount() > 0)
 		{
 			while ($row = &$dbresult->FetchRow())
 			{
