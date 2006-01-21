@@ -22,6 +22,10 @@ Translators
 -----------
 Brazilian Portugese: Jose Diogenes Silva <josediogenes [AT] gmail [DOT] com>
 
+Bulgarian:  Jd Hlebarov <dichka [AT] gmail [DOT] com>
+
+Chinese (simplified): liuyi yi liu <liuyisc [AT] gmail [DOT] com>
+
 Czech: Petr Jelinek <pjelinek [AT] seznam [DOT] cz>
 
 Danish: Morten Poulsen <morten [AT] poulsen [DOT] org>
@@ -32,10 +36,14 @@ Dutch: Sjaak <sjaak [AT] nlweb [DOT] net>
 French: Herve Commowick <daycom [AT] daycom [DOT] net>,
         Patricia Brun <cmsms [AT] virtuaza [DOT] net>
 
-Finnish: Jani Mikkonen <jani [AT] mikkonen [DOT] org>
+Finnish: Jani Mikkonen <jani [AT] mikkonen [DOT] org>,
+        Tatu Wikman <tsw [AT] lemtek [DOT] fi>,
+        Teemu Koistinen <japsifoorumi [AT] kapsi [DOT] fi>
 
 German: Jan Czarnowski <czarnowski [AT] coftware [DOT] de>
         Andreas Just <andreas_just [AT] web [DOT] de>
+		
+Greek: Panagiotis Skarvelis <sl45sms [AT] yahoo [DOT] gr>
 
 Italian: Alberto Benati <benati [AT] economia.unife [DOT] it>
 
@@ -44,8 +52,8 @@ Japanese: Victor Alexander Debuque <victor [AT] nuspace.net [DOT] au>
 Lituanian: Tomas Paplauskas <tmzsegardc [AT] accessatc [DOT] net>
 
 Norwegian: Jon A Holm <jaholm [AT] start [DOT] no>,
-	   Alexander Endresen <alexander [AT] endresen [DOT] org>
-           Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
+        Alexander Endresen <alexander [AT] endresen [DOT] org>, 
+        Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
 
 Polish: Piotr Tarnowski <drfugazi [AT] drfugazi.eu [DOT] org>
 
@@ -53,9 +61,10 @@ Russian: Tyaga Alex Pool <webmaste [AT] superhonda [DOT] ru>
 
 Slovak: Roman Hanajik <roman.hanajik [AT] centrum [DOT] cz>
 
-Spanish: Carlos Urbieta <carlos [AT] urbieta [DOT] com>
+Spanish: Carlos Urbieta <carlos [AT] urbieta [DOT] com>,
+        Roberto del Pino <fexcel [AT] terra [DOT] es>
 
-Swedish: Tobias Amnell <tobias.amnell [AT] home [DOT] se>
+Swedish: Tobias Amnell <tobias.amnell [AT] home [DOT] se>,
          Daniel Westergren <daniel [AT] wproductions [DOT] se>
 
 Contributors
