@@ -18,7 +18,17 @@
 
 function smarty_cms_function_global_content($params, &$smarty)
 {
-	return $smarty->fetch('globalcontent:'.$params['name']);
+	global $gCms;
+	$config =& $gCms->GetConfig();
+
+	$oldvalue = $smarty->caching;
+	$smarty->caching = !$config['debug'];
+
+	$html = $smarty->fetch('globalcontent:'.$params['name']);
+
+	$smarty->caching = $oldvalue;
+
+	return $html;
 }
 
 function smarty_cms_help_function_global_content() {
