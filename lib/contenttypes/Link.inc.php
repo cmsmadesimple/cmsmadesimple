@@ -54,6 +54,18 @@ class link extends ContentBase
 			{
 				$this->mMenuText = $params['menutext'];
 			}
+			if (isset($params['accesskey']))
+			{
+				$this->mAccessKey = $params['accesskey'];
+			}
+			if (isset($params['titleattribute']))
+			{
+				$this->mTitleAttribute = $params['titleattribute'];
+			}
+			if (isset($params['tabindex']))
+			{
+				$this->mTabIndex = $params['tabindex'];
+			}
 			if (isset($params['alias']))
 			{
 				$this->mAlias = $params['alias'];
@@ -131,6 +143,9 @@ class link extends ContentBase
 		array_push($ret,array(lang('target').':','<select name="target">'.$text.'</select>'));
 		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
 		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
+		array_push($ret, array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" value="'.cms_htmlentities($this->mTitleAttribute).'" />'));
+		array_push($ret, array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />'));
+		array_push($ret, array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />'));
 
 		if (!$adding && $showadmin)
 		{

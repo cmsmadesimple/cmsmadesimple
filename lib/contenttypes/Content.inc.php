@@ -94,6 +94,18 @@ class content extends ContentBase
 			{
 				$this->mMetadata = $params['metadata'];
 			}
+			if (isset($params['accesskey']))
+			{
+				$this->mAccessKey = $params['accesskey'];
+			}
+			if (isset($params['titleattribute']))
+			{
+				$this->mTitleAttribute = $params['titleattribute'];
+			}
+			if (isset($params['tabindex']))
+			{
+				$this->mTabIndex = $params['tabindex'];
+			}
 			if (isset($params['menutext']))
 			{
 				$this->mMenuText = $params['menutext'];
@@ -224,6 +236,10 @@ class content extends ContentBase
 			array_push($ret, array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
 
 			array_push($ret, array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', '', 'metadata', '', '', '80', '6')));
+
+			array_push($ret, array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" value="'.cms_htmlentities($this->mTitleAttribute).'" />'));
+			array_push($ret, array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />'));
+			array_push($ret, array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />'));
 
 			if (!$adding && $showadmin)
 			{

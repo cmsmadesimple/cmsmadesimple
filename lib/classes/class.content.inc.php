@@ -97,6 +97,10 @@ class ContentBase
 	 */
 	var $mMetadata;
 
+	var $mTitleAttribute;
+	var $mAccessKey;
+	var $mTabIndex;
+
 	/**
 	 * The full hierarchy of the content
 	 * String of the form : 1.4.3
@@ -208,6 +212,9 @@ class ContentBase
 		$this->mHierarchy		= "" ;
 		$this->mIdHierarchy		= "" ;
 		$this->mMetadata		= "" ;
+		$this->mTitleAttribute	= "" ;
+		$this->mAccessKey		= "" ;
+		$this->mTabIndex		= "" ;
 		$this->mActive			= false ;
 		$this->mDefaultContent	= false ;
 		$this->mShowInMenu		= false ;
@@ -316,6 +323,39 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		$this->mMetadata = $metadata;
+	}
+
+	function TabIndex()
+	{
+		return $this->mTabIndex;
+	}
+
+	function SetTabIndex($tabindex)
+	{
+		$this->DoReadyForEdit();
+		$this->mTabIndex = $tabindex;
+	}
+
+	function TitleAttribute()
+	{
+		return $this->mTitleAttribute;
+	}
+
+	function SetTitleAttribute($titleattribute)
+	{
+		$this->DoReadyForEdit();
+		$this->mTitleAttribute = $titleattribute;
+	}
+
+	function AccessKey()
+	{
+		return $this->mAccessKey;
+	}
+
+	function SetAccessKey($accesskey)
+	{
+		$this->DoReadyForEdit();
+		$this->mAccessKey = $accesskey;
 	}
 
 	/**
@@ -643,6 +683,9 @@ class ContentBase
 				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
 				$this->mMenuText		= $row->fields['menu_text'];
 				$this->mMarkup			= $row->fields['markup'];
+				$this->mTitleAttribute	= $row->fields['titleattribute'];
+				$this->mAccessKey		= $row->fields['accesskey'];
+				$this->mTabIndex		= $row->fields['tabindex'];
 				$this->mActive			= ($row->fields["active"] == 1?true:false);
 				$this->mDefaultContent	= ($row->fields["default_content"] == 1?true:false);
 				$this->mShowInMenu		= ($row->fields["show_in_menu"] == 1?true:false);
@@ -737,6 +780,9 @@ class ContentBase
 		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText		= $data['menu_text'];
 		$this->mMarkup			= $data['markup'];
+		$this->mTitleAttribute	= $data['titleattribute'];
+		$this->mAccessKey		= $data['accesskey'];
+		$this->mTabIndex		= $data['tabindex'];
 		$this->mDefaultContent	= ($data["default_content"] == 1?true:false);
 		$this->mActive			= ($data["active"] == 1?true:false);
 		$this->mShowInMenu		= ($data["show_in_menu"] == 1?true:false);
@@ -866,7 +912,7 @@ class ContentBase
 			}
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
 			$this->mOwner,
@@ -880,6 +926,9 @@ class ContentBase
 			$this->mMenuText,
 			$this->mAlias,
 			$this->mMetadata,
+			$this->mTitleAttribute,
+			$this->mAccessKey,
+			$this->mTabIndex,
 			$db->DBTimeStamp(time()),
 			$this->mItemOrder,
 			$this->mMarkup,
@@ -970,7 +1019,7 @@ class ContentBase
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
-		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
 			$newid,
@@ -990,6 +1039,9 @@ class ContentBase
 			$this->mMenuText,
 			$this->mMarkup,
 			$this->mMetadata,
+			$this->mTitleAttribute,
+			$this->mAccessKey,
+			$this->mTabIndex,
 			$this->mLastModifiedBy,
 			$db->DBTimeStamp(time()),
 			$db->DBTimeStamp(time())
