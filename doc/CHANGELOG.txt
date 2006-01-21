@@ -1,4 +1,4 @@
-﻿Version 0.12 -- Subversion
+Version 0.12 -- Subversion
 -----------------
 * Added the {metadata} tag for both global and page level
 metdata.

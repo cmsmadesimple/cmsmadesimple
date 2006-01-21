@@ -1,4 +1,4 @@
-﻿Developers Past and Present
+Developers Past and Present
 ---------------------------
 - Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
