@@ -1621,7 +1621,7 @@ class CMSModule
 					$db =& $gCms->GetDb();
 					$config =& $gCms->GetConfig();
 
-					include_once($filename);
+					include($filename);
 
 					showmem('End including: '. $filename);
 				}
