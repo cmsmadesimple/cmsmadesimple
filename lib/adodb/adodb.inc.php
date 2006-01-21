@@ -246,8 +246,8 @@
 	var $length = 'length';		/// string length ofperator
 	var $random = 'rand()';		/// random function
 	var $upperCase = 'upper';		/// uppercase function
-	var $fmtDate = "'Y-m-d'";	/// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "'Y-m-d, h:i:s A'"; /// used by DBTimeStamp as the default timestamp fmt.
+	var $fmtDate = "Y-m-d";	/// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "Y-m-d, h:i:s A"; /// used by DBTimeStamp as the default timestamp fmt.
 	var $true = '1'; 			/// string that represents TRUE for a database
 	var $false = '0'; 			/// string that represents FALSE for a database
 	var $replaceQuote = "\\'"; 	/// string to use to replace quotes
