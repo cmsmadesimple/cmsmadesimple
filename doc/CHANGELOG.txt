@@ -1,4 +1,4 @@
-Version 0.12 -- Subversion
+﻿Version 0.12 -- Subversion
 -----------------
 * Added the {metadata} tag for both global and page level
 metdata.
@@ -523,11 +523,11 @@ road in supporting multiple databases
 * Added template name to content list page  (Fixes #28)
 * Added check to make sure users don't still own pages before the user is
 deleted
-* Added French translation (calexico@ifrance.com)
+* Added French translation (calexico [AT] ifrance [DOT] com)
 * Fixed so that if no default page is set, system grabs first page it can find
 (Fixes #22)
-* Fixed redirection. (pdj@txnt.com) (Fixes #27)
-* Fixed nasty bug with changeperm and changeassign (fcardone@wp.pl) (Fixes
+* Fixed redirection. (pdj [AT] txnt [DOT] com) (Fixes #27)
+* Fixed nasty bug with changeperm and changeassign (fcardone [AT] wp [DOT] pl) (Fixes
 #29, #30)
 
 Version 0.3 -- Wed Jul 21 2004

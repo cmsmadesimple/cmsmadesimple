@@ -1,62 +1,62 @@
-Developers Past and Present
+﻿Developers Past and Present
 ---------------------------
-- Ted Kulp <wishy@cmsmadesimple.org>
-- Samuel Goldstein <cmsmadesimple@fogbound.net>
-- Robert Campbell <rob@techcom.dyndns.org>
-- Morten Poulsen <morten@poulsen.org>
-- Alexander Endresen <alexander@endresen.org>
-- Daniel Westergren <daniel@wproductions.se>
-- Patricia Brun <net@brumalsolstice.com>
+- Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
+- Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
+- Robert Campbell <rob [AT] techcom.dyndns [DOT] org>
+- Morten Poulsen <morten [AT] poulsen [DOT] org>
+- Alexander Endresen <alexander [AT] endresen [DOT] org>
+- Daniel Westergren <daniel [AT] wproductions [DOT] se>
+- Patricia Brun <cmsms [AT] virtuaza [DOT] net>
 
-- Greg Froese <heavy_g@users.sf.net>
-- Rob Allen <rob@akrabat.com>
-- Simon Brown <simon@uptoeleven.ws>
-- Sorin Sbarnea <sorin@intersol.ro>
-- Brett Batie <brett-cms@classicwebdevelopment.com>
-- Thijs Elenbaas <thijs@contemplated.net>
-- Julien Lancien <calexico@cmsmadesimple.org>
-- Christian Page <christian@localdesert.com>
-- Darren Landrum <consul@studioconsul.net>
+- Greg Froese <heavy_g [AT] users.sf [DOT] net>
+- Rob Allen <rob [AT] akrabat [DOT] com>
+- Simon Brown <simon [AT] uptoeleven [DOT] ws>
+- Sorin Sbarnea <sorin [AT] intersol [DOT] ro>
+- Brett Batie <brett-cms [AT] classicwebdevelopment [DOT] com>
+- Thijs Elenbaas <thijs [AT] contemplated [DOT] net>
+- Julien Lancien <calexico [AT] cmsmadesimple [DOT] org>
+- Christian Page <christian [AT] localdesert [DOT] com>
+- Darren Landrum <consul [AT] studioconsul [DOT] net>
  
 Translators
 -----------
-Brazilian Portugese: Jose Diogenes Silva <josediogenes@gmail.com>
+Brazilian Portugese: Jose Diogenes Silva <josediogenes [AT] gmail [DOT] com>
 
-Czech: Petr Jelinek <pjelinek@seznam.cz>
+Czech: Petr Jelinek <pjelinek [AT] seznam [DOT] cz>
 
-Danish: Morten Poulsen <morten@poulsen.org>
+Danish: Morten Poulsen <morten [AT] poulsen [DOT] org>
 
-Dutch: Sjaak <sjaak@nlweb.net>
-       Jesca Z <jesca@zweijtzer.nl>
+Dutch: Sjaak <sjaak [AT] nlweb [DOT] net>
+       Jesca Z <jesca [AT] zweijtzer [DOT] nl>
 
-French: Herve Commowick <daycom@daycom.net>,
-        Patricia Brun <net@brumalsolstice.com>
+French: Herve Commowick <daycom [AT] daycom [DOT] net>,
+        Patricia Brun <cmsms [AT] virtuaza [DOT] net>
 
-Finnish: Jani Mikkonen <jani@mikkonen.org>
+Finnish: Jani Mikkonen <jani [AT] mikkonen [DOT] org>
 
-German: Jan Czarnowski <czarnowski@coftware.de>
-        Andreas Just <andreas_just@web.de>
+German: Jan Czarnowski <czarnowski [AT] coftware [DOT] de>
+        Andreas Just <andreas_just [AT] web [DOT] de>
 
-Italian: Alberto Benati <benati@economia.unife.it>
+Italian: Alberto Benati <benati [AT] economia.unife [DOT] it>
 
-Japanese: Victor Alexander Debuque <victor@nuspace.net.au>
+Japanese: Victor Alexander Debuque <victor [AT] nuspace.net [DOT] au>
 
-Lituanian: Tomas Paplauskas <tmzsegardc@accessatc.net>
+Lituanian: Tomas Paplauskas <tmzsegardc [AT] accessatc [DOT] net>
 
-Norwegian: Jon A Holm <jaholm@start.no>,
-	   Alexander Endresen <alexander@endresen.org>
-           Bjorn Are Solstad <basicus@gmail.com>
+Norwegian: Jon A Holm <jaholm [AT] start [DOT] no>,
+	   Alexander Endresen <alexander [AT] endresen [DOT] org>
+           Bjorn Are Solstad <basicus [AT] gmail [DOT] com>
 
-Polish: Piotr Tarnowski <drfugazi@drfugazi.eu.org>
+Polish: Piotr Tarnowski <drfugazi [AT] drfugazi.eu [DOT] org>
 
-Russian: Tyaga Alex Pool <webmaste@superhonda.ru>
+Russian: Tyaga Alex Pool <webmaste [AT] superhonda [DOT] ru>
 
-Slovak: Roman Hanajik <roman.hanajik@centrum.cz>
+Slovak: Roman Hanajik <roman.hanajik [AT] centrum [DOT] cz>
 
-Spanish: Carlos Urbieta <carlos@urbieta.com>
+Spanish: Carlos Urbieta <carlos [AT] urbieta [DOT] com>
 
-Swedish: Tobias Amnell <tobias.amnell@home.se>
-         Daniel Westergren <daniel@wproductions.se>
+Swedish: Tobias Amnell <tobias.amnell [AT] home [DOT] se>
+         Daniel Westergren <daniel [AT] wproductions [DOT] se>
 
 Contributors
 ------------
