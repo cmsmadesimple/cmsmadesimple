@@ -501,7 +501,7 @@ class Smarty_CMS extends Smarty {
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
-						$gCms->modules[$key]['object']->ContentData($content);
+						$gCms->modules[$key]['object']->ContentData($tpl_source);
 					}
 				}
 
