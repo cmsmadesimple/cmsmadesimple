@@ -330,10 +330,6 @@ if (function_exists('pg_connect'))
 <TD>Database host address</TD>
 <TD><INPUT TYPE="text" NAME="host" VALUE="<?php echo (isset($_POST['host'])?$_POST['host']:'localhost') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
 </TR>
-<TR CLASS="row2">
-<TD>Database host port</TD>
-<TD><INPUT TYPE="text" NAME="port" VALUE="<?php echo (isset($_POST['port'])?$_POST['port']:'3306') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
-</TR>
 <TR CLASS="row1">
 <TD>Database name</TD>
 <TD><INPUT TYPE="text" NAME="database" VALUE="<?php echo (isset($_POST['database'])?$_POST['database']:'cms') ?>" LENGTH="20" MAXLENGTH="50" /></TD>
@@ -501,7 +497,6 @@ function showPageFour($sqlloaded = 0) {
 				<INPUT TYPE="hidden" NAME="page" VALUE="5"><INPUT TYPE="hidden" NAME="host" VALUE="<?php echo $_POST['host']?>">
 			    <INPUT TYPE="hidden" NAME="dbms" VALUE="<?php echo $_POST['dbms']?>">
 			    <INPUT TYPE="hidden" NAME="database" VALUE="<?php echo $_POST['database']?>">
-				<INPUT TYPE="hidden" NAME="port" VALUE="<?php echo $_POST['port']?>">
 			    <INPUT TYPE="hidden" NAME="username" VALUE="<?php echo $_POST['username']?>">
 				<INPUT TYPE="hidden" NAME="password" VALUE="<?php echo $_POST['password']?>">
 			    <INPUT TYPE="hidden" NAME="prefix" VALUE="<?php echo $_POST['prefix']?>">
