@@ -31,6 +31,11 @@ $starttime = microtime();
 
 clearstatcache();
 
+if (!isset($_SERVER['REQUEST_URI']))
+{
+	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
+}
+
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
     require_once("lib/misc.functions.php");
