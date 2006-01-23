@@ -207,7 +207,7 @@ class CmsObject {
 		{
 			showmem('creating hierarchy manager object');
 			#Setup global smarty object
-			$hrinstance = ContentManager::GetAllContentAsHierarchy(false);
+			$hrinstance = ContentManager::GetAllContentAsHierarchy(false, null);
 			showmem('done hierarchy manager object');
 		}
 

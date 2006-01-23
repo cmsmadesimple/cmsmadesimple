@@ -1960,24 +1960,33 @@ class ContentManager
 		global $gCms;
 
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-		if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+		$usecache = true;
+		if (isset($onlyexpanded))
 		{
-			$pageinfo =& $gCms->variables['pageinfo'];
-			debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-			if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+			$usecache = false;
+		}
+
+		if ($usecache)
+		{
+			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
 			{
-				debug_buffer('file needs loading');
+				$pageinfo =& $gCms->variables['pageinfo'];
+				debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
+				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+				{
+					debug_buffer('file needs loading');
 
-				$handle = fopen($cachefilename, "r");
-				$data = fread($handle, filesize($cachefilename));
-				fclose($handle);
+					$handle = fopen($cachefilename, "r");
+					$data = fread($handle, filesize($cachefilename));
+					fclose($handle);
 
-				$data = unserialize(substr($data, 16));
+					$data = unserialize(substr($data, 16));
 
-				$variables =& $gCms->variables;
-				$variables['contentcache'] =& $data;
+					$variables =& $gCms->variables;
+					$variables['contentcache'] =& $data;
 
-				return $data;
+					return $data;
+				}
 			}
 		}
 
@@ -2054,10 +2063,13 @@ class ContentManager
 		$toReturn = new ContentHierarchyManager();
 		$toReturn->setRoot($root);
 
-		debug_buffer("Serializing...");
-		$handle = fopen($cachefilename, "w");
-		fwrite($handle, '<?php return; ?>'.serialize($toReturn));
-		fclose($handle);
+		if ($usecache)
+		{
+			debug_buffer("Serializing...");
+			$handle = fopen($cachefilename, "w");
+			fwrite($handle, '<?php return; ?>'.serialize($toReturn));
+			fclose($handle);
+		}
 
 		return $toReturn;
 
