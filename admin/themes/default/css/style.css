@@ -437,6 +437,10 @@ div.pagecontainer  {
    border: solid 1px #666;
    }
 
+div.pagecontainer p {
+   margin-bottom: 1em;
+}
+
 div.pageerrorcontainer  {
    background-color: #ba5a5a;
    margin: 10px;
