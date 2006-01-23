@@ -277,9 +277,9 @@ class AdminTheme
                 (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
 
         # layout        
-        $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Html Blobs') |
-                check_permission($this->userid, 'Modify Html Blobs') |
-                check_permission($this->userid, 'Delete Html Blobs');
+        $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
+                check_permission($this->userid, 'Modify Global Content Blocks') |
+                check_permission($this->userid, 'Delete Global Content Blocks');
         $thisUserBlobs = HtmlBlobOperations::AuthorBlobs($this->userid);
         if (count($thisUserBlobs) > 0)
             {
@@ -632,6 +632,15 @@ class AdminTheme
             'images'=>array('url'=>'imagefiles.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('imagemanager')),
                     'description'=>lang('imagemanagerdescription'),'show_in_menu'=>$this->HasPerm('filePerms')),
+            'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'content',
+                    'title'=>$this->FixSpaces(lang('htmlblobs')),
+                    'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->HasPerm('htmlPerms')),
+            'addblob'=>array('url'=>'addhtmlblobs.php','parent'=>'blobs',
+                    'title'=>$this->FixSpaces(lang('addhtmlblob')),
+                    'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
+            'editblob'=>array('url'=>'edithtmlblobs.php','parent'=>'blobs',
+                    'title'=>$this->FixSpaces(lang('edithtmlblob')),
+                    'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
              // base layout menu ---------------------------------------------------------
             'layout'=>array('url'=>'toplayout.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('layout')),
@@ -664,15 +673,6 @@ class AdminTheme
             'templatecss'=>array('url'=>'templatecss.php','parent'=>'stylesheets',
                     'title'=>$this->FixSpaces(lang('templatecss')),
                     'description'=>lang('templatecss'),'show_in_menu'=>false),
-            'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'layout',
-                    'title'=>$this->FixSpaces(lang('htmlblobs')),
-                    'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->HasPerm('htmlPerms')),
-            'addblob'=>array('url'=>'addhtmlblobs.php','parent'=>'blobs',
-                    'title'=>$this->FixSpaces(lang('addhtmlblob')),
-                    'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
-            'editblob'=>array('url'=>'edithtmlblobs.php','parent'=>'blobs',
-                    'title'=>$this->FixSpaces(lang('edithtmlblob')),
-                    'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
              // base user/groups menu ---------------------------------------------------------
             'usersgroups'=>array('url'=>'topusers.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('usersgroups')),
