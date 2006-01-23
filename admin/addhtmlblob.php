@@ -40,7 +40,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Add Html Blobs');
+$access = check_permission($userid, 'Add Global Content Blocks');
 
 $use_javasyntax = false;
 if (get_preference($userid, 'use_wysiwyg') == "1") {

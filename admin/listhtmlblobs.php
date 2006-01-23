@@ -39,7 +39,7 @@ if (isset($_GET["message"])) {
 <?php
 	$userid	= get_userid();
 
-	$modifyall = check_permission($userid, 'Modify Html Blobs');
+	$modifyall = check_permission($userid, 'Modify Global Content Blocks');
 	$htmlbloblist = HtmlBlobOperations::LoadHtmlBlobs();
 	$myblobs = HtmlBlobOperations::AuthorBlobs($userid);
 

@@ -32,7 +32,7 @@ if (isset($_GET["htmlblob_id"]))
 	$htmlblob_id = $_GET["htmlblob_id"];
 	$htmlblob_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Html Blobs');
+	$access = check_permission($userid, 'Remove Global Content Blocks');
 
 	if ($access)
 	{
