@@ -20,90 +20,96 @@
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
 	global $gCms; 
-  $manager = &$gCms->GetHierarchyManager();
-  
+	$manager = &$gCms->GetHierarchyManager();
+
 	$thispage = $gCms->variables['content_id'];
 
 	$trail = "";
 
-	#Check if user has specified a delimiter, otherwise use default
+#Check if user has specified a delimiter, otherwise use default
 	if (isset($params['delimiter'])) {
 		$delimiter = $params['delimiter'];
 	}	else {
 		$delimiter = "&gt;&gt;";
 	}
 
-	#Check if user has requested an initial delimiter
+#Check if user has requested an initial delimiter
 	if (isset($params['initial'])) {
 		if ($params['initial'] == "1") {
 			$trail .= $delimiter . " ";
 		}
 	}
 
-  $root='##ROOT_NODE##';
-  #Check if user has requested the list to start with a specific page
+	$root='##ROOT_NODE##';
+#Check if user has requested the list to start with a specific page
 	if (isset($params['root']))	{
 		$root = $params['root'];
 	}
 
 	$endNode = &$manager->sureGetNodeById($thispage);
 
-  # build path
-  $path=array($endNode);
-  $currentNode = &$endNode->getParentNode();
-  while ($currentNode->getLevel()>0) {
-    $content = &$currentNode->getContent();
-    if ((isset($content)) && (strtolower($content->Alias())!=strtolower($root))) {
-      $path[] = $currentNode;
-      $currentNode = &$currentNode->getParentNode();
-    }
-  }
-	
+# build path
+	$path=array($endNode);
+	$currentNode = &$endNode->getParentNode();
+	while ($currentNode->getLevel()>0) {
+		$content = &$currentNode->getContent();
+		if ((isset($content)) && (strtolower($content->Alias())!=strtolower($root))) {
+			$path[] = $currentNode;
+			$currentNode = &$currentNode->getParentNode();
+		}
+	}
+
 	if ($root!='##ROOT_NODE##') {
-    # check if the last added is root. if not, add id
-  	$content = &$currentNode->getContent();
-  	if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
-      $node = &$manager->sureGetNodeByAlias($root);
-      if (isset($node)) {
-         $content = &$node->getContent();
-         if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
-      }
-    }
+# check if the last added is root. if not, add id
+		$content = &$currentNode->getContent();
+		if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
+			$node = &$manager->sureGetNodeByAlias($root);
+			if (isset($node)) {
+				$content = &$node->getContent();
+				if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
+			}
+		}
 	}
 	$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
 	$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
-	# now create the trail
+# now create the trail
 	for ($i=count($path)-1;$i>=0;$i--) {
-    $node = &$path[$i];
-    $onecontent = &$node->getContent();
-    if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
-      if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
-          $trail .= '<a href="' . $onecontent->getURL() . '"';
-          $trail .= $classid;
-          $trail .= '>';
-          $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-          $trail .= '</a> ' . $delimiter . ' ';
-      } else {
-         $trail .= "<span $classid>";
-         $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-         $trail .= '</span>';
-         $trail .= ' ' . $delimiter . ' ';
-      }
+		$node = &$path[$i];
+		$onecontent = &$node->getContent();
+		if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
+			if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
+				$trail .= '<a href="' . $onecontent->getURL() . '"';
+				$trail .= $classid;
+				$trail .= '>';
+				$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+				$trail .= '</a> ' . $delimiter . ' ';
+			} else {
+				$trail .= "<span $classid>";
+				$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+				$trail .= '</span>';
+				$trail .= ' ' . $delimiter . ' ';
+			}
 		} else {
-      if (isset($params['currentclassid'])) {
-         $trail .= "<span $currentclassid>";
-      } else {
-        $trail .= '<strong>';
-      }
-      $trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-      if (isset($params['currentclassid'])) {
-        $trail .= '</span>';
-      } else {
-        $trail .= '</strong>';
-      }
+			if (isset($params['currentclassid'])) {
+				$trail .= "<span $currentclassid>";
+			} else {
+				$trail .= '<strong>';
+			}
+			$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+			if (isset($params['currentclassid'])) {
+				$trail .= '</span>';
+			} else {
+				$trail .= '</strong>';
+			}
 		}
 	}
-  return $trail;  
+
+	if (isset($params['starttext']) && $params['starttext'] != '')
+	{
+		$trail = $params['starttext'] . ': ' . $trail;
+	}
+
+	return $trail;  
 }
 	
 function smarty_cms_help_function_breadcrumbs() {
@@ -122,6 +128,7 @@ function smarty_cms_help_function_breadcrumbs() {
     the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
 <li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
 <li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
+<li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
 </ul>
 </p>
 <?php
