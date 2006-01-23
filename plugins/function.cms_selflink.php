@@ -22,6 +22,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	$db = $gCms->db;
 	$config = $gCms->config;
 
+	$rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
+
 	if (isset($params['page']))
 	{
 		$page = $params['page'];
@@ -38,6 +40,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			$alias = $content->Alias();
 			$name = $content->Name(); //mbv - 21-06-2005 
 			$url = $content->GetUrl();
+			$menu_text = $content->MenuText();
+			$titleattr = $content->TitleAttribute();
 		}
 			$Prev_label = "";
 			$Next_label = "";
@@ -87,29 +91,6 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		}
 		if ($condition && $order_by)
 		{
-			/*
-			$query  = "SELECT DISTINCT t1.content_id, t1.content_alias, t1.content_name, t1.menu_text ";
-			$query .= "FROM ".cms_db_prefix()."content AS t1, ".cms_db_prefix()."content AS t2 ";
-			$query .= "WHERE t1.active = 1 ";
-			$query .= "AND t1.type = 'content' "; // Added by Teemu Koistinen
-			$query .= "AND t2.content_id = ".$gCms->variables['content_id']." ";
-			$query .= "AND t1.hierarchy ".$condition." t2.hierarchy ";
-			$query .= "ORDER BY t1.".$order_by." LIMIT 1";
-			$dbresult = $db->Execute($query);
-			if ($dbresult && $dbresult->RecordCount() > 0)
-			{
-				while ($row = $dbresult->FetchRow())
-				{
-					$content = new content();
-					$pageid = $content->mId = $row['content_id'];
-					$alias = $content->mAlias = $row['content_alias'];
-					$name = $content->mName = $row['content_name'];
-					$menu_text = $content->mMenu_text = $row['menu_text'];
-					$url = $content->GetUrl();
-					unset($content);
-				}
-			}
-			*/
 			global $gCms;
 			$hm =& $gCms->GetHierarchyManager();
 			$flatcontent =& $hm->getFlattenedContent();
@@ -134,6 +115,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 						$name = $content->Name();
 						$menu_text = $content->MenuText();
 						$url = $content->GetURL();
+						$titleattr = $content->TitleAttribute();
 					}
 				}
 			}
@@ -149,6 +131,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 						$name = $content->Name();
 						$menu_text = $content->MenuText();
 						$url = $content->GetURL();
+						$titleattr = $content->TitleAttribute();
 					}
 				}
 			}
@@ -172,35 +155,57 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 	$result = "";
 
-	if ($url != "") {
-		$result .= $label.'<a href="'.$url.'"';
+	if ($url != "")
+	{
+		if ($rellink && isset($params['dir']))
+		{
+			$result .= '<link rel="';
+			if ($params['dir'] == 'prev' || $params['dir'] == 'previous')
+			{
+				$result .= 'prev';
+			}
+			else if ($params['dir'] == 'next')
+			{
+				$result .= 'next';
+			}
+			$result .= '" title="' . ($titleattr != '' ? $titleattr : $name);
+			$result .= '" href="' . $url . '" />';
+		}
+		else
+		{
+			$result .= $label.'<a href="'.$url.'"';
 
-		if (isset($params['target'])) {
-			$result .= ' target="'.$params['target'].'"';
-		}
-		
-		if (isset($params['id'])) {
-			$result .= ' id="'.$params['id'].'"';
-		}
+			if (isset($params['target']))
+			{
+				$result .= ' target="'.$params['target'].'"';
+			}
+			
+			if (isset($params['id']))
+			{
+				$result .= ' id="'.$params['id'].'"';
+			}
 
-		if (isset($params['class'])) {
-			$result .= ' class="'.$params['class'].'"';
-		}
+			if (isset($params['class']))
+			{
+				$result .= ' class="'.$params['class'].'"';
+			}
 
-		if (isset($params['more'])) {
-			$result .= ' '.$params['more'];
-		}
-		$result .= '>';
-		
-		if (isset($params['text']))	{
-			$result .= $params['text'];
-		} elseif (isset($params['menu']) && $params['menu'] == "1")	{ // mbv 
-			$result .= $menu_text;
-		} else {
-			$result .= $name; // mbv - 21-06-2005 
-		}
+			if (isset($params['more']))
+			{
+				$result .= ' '.$params['more'];
+			}
+			$result .= '>';
+			
+			if (isset($params['text'])){
+				$result .= $params['text'];
+			} elseif (isset($params['menu']) && $params['menu'] == "1")	{ // mbv 
+				$result .= $menu_text;
+			} else {
+				$result .= $name; // mbv - 21-06-2005 
+			}
 
-		$result .= '</a>';
+			$result .= '</a>';
+		}
 	}
 	else {
 		$result .= "<!-- Not a valid cms_selflink -->";
@@ -232,6 +237,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  ("Next Page"/"Previous Page") in different languages (0 for no label.) Danish (dk) or English (en), for now.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
+		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a rel link for accessibly navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
 	</ul>
 	</p>
 
