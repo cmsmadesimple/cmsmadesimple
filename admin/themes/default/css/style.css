@@ -441,7 +441,7 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
-div.pagecontainer p.pageheader {
+div.pagecontainer p.pageheader, div.pagecontainer p.pagetext, div.pagecontainer p.pageinput {
    margin-bottom: 0;
 }
 
