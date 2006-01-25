@@ -88,6 +88,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 				$order_by = 'hierarchy DESC';
 				$label=$Prev_label;
 				break;
+			case 'start':
+				$condition = '-';
+				$order_by = 'something';
+				$label = '';
+				break;
 		}
 		if ($condition && $order_by)
 		{
@@ -97,7 +102,15 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			$number = 0;
 			for ($i = 0; $i < count($flatcontent); $i++)
 			{
-				if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
+				if ($condition == '-')
+				{
+					if ($flatcontent[$i]->DefaultContent() == true)
+					{
+						$number = $i;
+						break;
+					}
+				}
+				else if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
 				{
 					$number = $i;
 					break;
@@ -135,6 +148,19 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 					}
 				}
 			}
+			else if ($condition == '-')
+			{
+				$content =& $flatcontent[$number];
+				if (isset($content))
+				{
+					$pageid = $content->Id();
+					$alias = $content->Alias();
+					$name = $content->Name();
+					$menu_text = $content->MenuText();
+					$url = $content->GetURL();
+					$titleattr = $content->TitleAttribute();
+				}
+			}
 		}
 		unset($condition);
 		unset($order_by);
@@ -163,6 +189,10 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			if ($params['dir'] == 'prev' || $params['dir'] == 'previous')
 			{
 				$result .= 'prev';
+			}
+			else if ($params['dir'] == 'start')
+			{
+				$result .= 'start';
 			}
 			else if ($params['dir'] == 'next')
 			{
