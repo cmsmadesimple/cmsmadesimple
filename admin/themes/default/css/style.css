@@ -441,10 +441,6 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
-div.pagecontainer p.pageheader, div.pagecontainer p.pagetext, div.pagecontainer p.pageinput {
-   margin-bottom: 0;
-}
-
 div.pageerrorcontainer  {
    background-color: #ba5a5a;
    margin: 10px;
@@ -511,32 +507,36 @@ p.pageerror  {
    color: #384654;
    }
 
-p.pageheader  {
+div.pagecontainer p.pageheader  {
    color: #384654;
    font-weight: bold;
    font-size: 1.1em;
+   margin-bottom: 0;
    }
 
-p.pagetext  {
+div.pagecontainer p.pagetext  {
    color: #384654;
    float: left;
    padding-top: 5px;
    padding-right: 5px;
    width: 15em;
+   margin-bottom: 0;
    }
 
-p.pageinput  {
+div.pagecontainer p.pageinput  {
    color: #384654;
    float: left;
    padding-top: 5px;
+   margin-bottom: 0;
    }
 
 p.pageinputwysiwyg  {
    padding-top: 5px;
    }
 
-p.pagemessage  {
+div.pagecontainer p.pagemessage  {
    color: #384654;
+   margin-bottom: 0;
    }
 
 p.pageshowrows  {
