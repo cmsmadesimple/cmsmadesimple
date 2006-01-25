@@ -42,7 +42,6 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			$url = $content->GetUrl();
 			$menu_text = $content->MenuText();
 			$titleattr = $content->TitleAttribute();
-			$accesskey = 
 		}
 			$Prev_label = "";
 			$Next_label = "";
