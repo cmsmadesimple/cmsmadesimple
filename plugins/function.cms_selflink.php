@@ -42,6 +42,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			$url = $content->GetUrl();
 			$menu_text = $content->MenuText();
 			$titleattr = $content->TitleAttribute();
+			$accesskey = 
 		}
 			$Prev_label = "";
 			$Next_label = "";
@@ -262,16 +263,16 @@ function smarty_cms_help_function_cms_selflink() {
 	<p>
 	<ul>
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
-		<li><em>(optional)</em> <tt>dir next/prev (previous)</tt> - If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
+		<li><em>(optional)</em> <tt>dir start/next/prev (previous)</tt> - Links to the default start page or the next or previous page. If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
 			<B>Note!</B> Only one of the above may be used in the same cms_selflink statement!!
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the Page Name is used instead.</li>
-		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text in stead of the Page Name</li> <!-- mbv - 21-06-2005 -->
+		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
 		<li><em>(optional)</em> <tt>class</tt> - Class for the &lt;a&gt; link.  Useful for styling the link.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  ("Next Page"/"Previous Page") in different languages (0 for no label.) Danish (dk) or English (en), for now.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
-		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a rel link for accessibly navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
+		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
 	</ul>
 	</p>
 
