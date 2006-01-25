@@ -205,6 +205,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		{
 			$result .= $label.'<a href="'.$url.'"';
 
+			$result .= ' title="'.($titleattr != '' ? $titleattr : $name).'"';
+
 			if (isset($params['target']))
 			{
 				$result .= ' target="'.$params['target'].'"';
