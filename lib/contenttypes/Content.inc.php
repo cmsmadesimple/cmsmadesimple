@@ -235,7 +235,7 @@ class content extends ContentBase
 
 			array_push($ret, array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />'));
 
-			array_push($ret, array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', '', 'metadata', '', '', '80', '6')));
+			array_push($ret, array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6')));
 
 			array_push($ret, array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" value="'.cms_htmlentities($this->mTitleAttribute).'" />'));
 			array_push($ret, array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />'));
