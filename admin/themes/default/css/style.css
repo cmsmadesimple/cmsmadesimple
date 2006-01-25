@@ -441,6 +441,10 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
+div.pagecontainer p.pageheader {
+   margin-bottom: 0;
+}
+
 div.pageerrorcontainer  {
    background-color: #ba5a5a;
    margin: 10px;
