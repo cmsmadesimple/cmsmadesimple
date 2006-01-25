@@ -179,6 +179,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		$url="";
 	}
 
+	if (isset($params['label']))
+	{
+		$label = $params['label'];
+	}
+
 	$result = "";
 
 	if ($url != "")
@@ -271,6 +276,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  ("Next Page"/"Previous Page") in different languages (0 for no label.) Danish (dk) or English (en), for now.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
+		<li><em>(optional)</em> <tt>label</tt> - Label to use in front of the link if applicable.</li>
 		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
 	</ul>
 	</p>
