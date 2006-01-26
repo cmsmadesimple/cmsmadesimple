@@ -265,18 +265,6 @@ class AdminTheme
     function SetAggregatePermissions()
     {
         # Content Permissions
-        $this->perms['pagePerms'] = check_permission($this->userid, 'Modify Any Page') |
-                check_permission($this->userid, 'Add Pages') |
-                check_permission($this->userid, 'Remove Pages');
-        $thisUserPages = author_pages($this->userid);
-        if (count($thisUserPages) > 0)
-            {
-            $this->perms['pagePerms'] = true;
-            }
-        $this->perms['contentPerms'] = $this->perms['pagePerms'] |
-                (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
-
-        # layout        
         $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
                 check_permission($this->userid, 'Modify Global Content Blocks') |
                 check_permission($this->userid, 'Delete Global Content Blocks');
@@ -285,6 +273,18 @@ class AdminTheme
             {
             $this->perms['htmlPerms'] = true;
             }
+        $this->perms['pagePerms'] = check_permission($this->userid, 'Modify Any Page') |
+                check_permission($this->userid, 'Add Pages') |
+                check_permission($this->userid, 'Remove Pages');
+        $thisUserPages = author_pages($this->userid);
+        if (count($thisUserPages) > 0)
+            {
+            $this->perms['pagePerms'] = true;
+            }
+        $this->perms['contentPerms'] = $this->perms['pagePerms'] | $this->perms['htmlPerms'] | 
+                (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
+
+        # layout        
 
         $this->perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
                 check_permission($this->userid, 'Modify Templates') |
@@ -296,7 +296,7 @@ class AdminTheme
                 check_permission($this->userid, 'Modify Stylesheet Assoc') |
                 check_permission($this->userid, 'Remove Stylesheet Assoc');
         $this->perms['layoutPerms'] = $this->perms['templatePerms'] |
-                $this->perms['cssPerms'] | $this->perms['cssAssocPerms'] | $this->perms['htmlPerms'] |
+                $this->perms['cssPerms'] | $this->perms['cssAssocPerms'] |
                 (isset($this->sectionCount['layout']) && $this->sectionCount['layout'] > 0);
 
         # file / image
