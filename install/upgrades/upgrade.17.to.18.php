@@ -8,6 +8,8 @@ $query = "UPDATE ".cms_db_prefix()."permissions set permission_name = 'Modify Gl
 $db->Execute($query);
 $query = "UPDATE ".cms_db_prefix()."permissions set permission_name = 'Delete Global Content Blocks', permission_text = 'Delete Global Content Blocks' WHERE permission_name = 'Delete Html Blobs'";
 $db->Execute($query);
+$query = "UPDATE ".cms_db_prefix()."permissions set permission_name = 'Delete Global Content Blocks', permission_text = 'Modify Code Blocks' WHERE permission_name = 'Modify User-defined Tags'";
+$db->Execute($query);
 
 echo "[done]</p>";
 
