@@ -348,6 +348,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		end_time T,
 		status C(25),
 		icon C(255),
+		author_id I,
 		create_date T,
 		modified_date T
 	";
