@@ -331,7 +331,7 @@ class AdminTheme
 
 
         # extensions
-        $this->perms['codeBlockPerms'] = check_permission($this->userid, 'Modify Code Blocks');
+        $this->perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
         $this->perms['modulePerms'] = check_permission($this->userid, 'Modify Modules');
         $this->perms['extensionsPerms'] = $this->perms['codeBlockPerms'] |
             $this->perms['modulePerms'] |

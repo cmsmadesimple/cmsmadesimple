@@ -30,7 +30,7 @@ if (isset($_GET["userplugin_id"])) {
 	$userplugin_id = $_GET["userplugin_id"];
 	$userplugin_name = "";
 	$userid = get_userid();
-	$access = check_permission($userid, 'Modify Code Blocks');
+	$access = check_permission($userid, 'Modify User-defined Tags');
 
 	if ($access) {
 

@@ -45,7 +45,7 @@ if (isset($_POST["cancel"])) {
 }
 
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Code Blocks');
+$access = check_permission($userid, 'Modify User-defined Tags');
 
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
