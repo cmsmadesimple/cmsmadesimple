@@ -1145,6 +1145,9 @@ class ContentBase
 				}
 			}
 
+			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+			@unlink($cachefilename);
+
 			#Fix the item_order if necessary
 			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
@@ -1641,7 +1644,7 @@ class ContentManager
     $cpt = count($ids);
     $contents=array();
 		if ($cpt==0) return $contents;
-    $db = &$gCms->db;
+    $db = &$gCms->GetDb();
     $id_list = '(';
     for ($i=0;$i<$cpt;$i++) {
       $id_list .= $ids[$i];
@@ -1724,7 +1727,7 @@ class ContentManager
     $cpt = count($ids);
     $contents=array();
 		if ($cpt==0) return $contents;
-    $db = &$gCms->db;
+    $db = &$gCms->GetDb();
     $id_list = '(';
     for ($i=0;$i<$cpt;$i++) {
       $id_list .= "'".$ids[$i]."'";
@@ -1889,7 +1892,7 @@ class ContentManager
 	function SetHierarchyPosition($contentid)
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db =& $gCms->GetDb();
 
 		$current_hierarchy_position = '';
 		$current_id_hierarchy_position = '';
@@ -1996,7 +1999,7 @@ class ContentManager
 		$childrenCount = array();
 		$query = "SELECT parent_id, count(*) as cpt FROM 
 			".cms_db_prefix()."content GROUP BY parent_id";
-		$dbresult = $db->Execute($query);
+		$dbresult =& $db->Execute($query);
 		while ($row = $dbresult->FetchRow()) {
 			$childrenCount[$row["parent_id"]] = $row["cpt"];
 		}
