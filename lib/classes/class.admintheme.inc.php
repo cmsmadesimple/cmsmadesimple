@@ -324,6 +324,10 @@ class AdminTheme
             (isset($this->sectionCount['preferences']) && $this->sectionCount['preferences'] > 0);
         $this->perms['adminPerms'] = $this->perms['sitePrefPerms'] |
             (isset($this->sectionCount['admin']) && $this->sectionCount['admin'] > 0);
+        $this->perms['siteAdminPerms'] = $this->perms['sitePrefPerms'] |
+                $this->perms['adminPerms'] |
+                (isset($this->sectionCount['admin']) &&
+                    $this->sectionCount['admin'] > 0);
 
 
         # extensions
@@ -723,7 +727,7 @@ class AdminTheme
              // base admin menu ---------------------------------------------------------
             'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('admin')),
-                    'description'=>lang('admindescription'),'show_in_menu'=>true),
+                    'description'=>lang('admindescription'),'show_in_menu'=>$this->HasPerm('siteAdminPerms')),
             'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('globalconfig')),
                     'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
