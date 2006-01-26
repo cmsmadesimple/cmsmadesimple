@@ -764,7 +764,7 @@ class CMSModule
 	 */
 	function & GetDb()
 	{
-		return $this->cms->db;
+		return $this->cms->GetDb();
 	}
 
 	/**
@@ -2567,9 +2567,9 @@ class CMSModule
 		$db = $this->cms->db;
 
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?"; 
-		$result = $db->Execute($query, array($permission_name));
+		$count = $db->GetOne($query, array($permission_name));
 
-		if ($result && $result->RecordCount() < 1)
+		if (intval($count) == 0)
 		{
 			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
 			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,?,?)";
