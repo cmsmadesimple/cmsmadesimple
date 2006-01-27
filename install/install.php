@@ -130,7 +130,7 @@ function showPageOne() {
 	$continueon = true;
     echo "<h3>Checking file permissions:</h3>\n";
     #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
-    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION);
+    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).'/modules');
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
@@ -157,15 +157,23 @@ function showPageOne() {
     foreach ($files as $f) {
         #echo "<tr><td>\n";
         ## check if we can write to the this file
-        echo "<tr class=\"$currow\"><td>Checking write permission on $f</td><td>";
+        echo "<tr class=\"$currow\"><td>Checking write permission on $f";
+		if ($f == dirname(dirname(__FILE__)).'/modules' && !is_writable($f))
+		{
+			echo '<br /><br /><em>Modules is not writable.  You can still install the system, but you will not be able to install modules via the admin panel.</em>';
+		}
+		echo "</td><td>";
 		if (is_writable($f))
 		{
             echo "Success!";
         }
 		else
 		{
-			$continueon=false;
-            echo "Failure!";
+			if (!($f == dirname(dirname(__FILE__)).'/modules'))
+			{
+				$continueon=false;
+			}
+			echo "Failure!";
         } ## if 
         echo "</td></tr>\n";
 		($currow=="row1"?$currow="row2":$currow="row1");
