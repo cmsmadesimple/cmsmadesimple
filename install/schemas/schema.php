@@ -170,6 +170,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		markup C(25),
 		active I1,
 		cachable I1,
+		id_hierarchy C(255),
+		prop_names X,
+		metadata X,
+		titleattribute C(255),
+		tabindex C(10),
+		accesskey C(5),
 		last_modified_by I,
 		create_date T,
 		modified_date T

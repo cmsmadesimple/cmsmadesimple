@@ -13,6 +13,12 @@ $db->Execute($query);
 
 echo "[done]</p>";
 
+echo '<p>Updating hierarchy positions...';
+
+ContentManager::SetAllHierarchyPositions();
+
+echo '[done]</p>';
+
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 18";
