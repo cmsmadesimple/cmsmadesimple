@@ -107,5 +107,12 @@ header("Content-Length: ".strlen($css));
 
 echo $css;
 
+if (isset($gCms->db))
+{
+    $db =& $gCms->db;
+	if ($db->IsConnected())
+		$db->Close();
+}
+
 # vim:ts=4 sw=4 noet
 ?>

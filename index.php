@@ -204,6 +204,13 @@ if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == t
 
 if ($config["debug"] == true)
 {
+	#$db->LogSQL(false); // turn off logging
+	
+	# output summary of SQL logging results
+	#$perf = NewPerfMonitor($db);
+	#echo $perf->SuspiciousSQL();
+	#echo $perf->ExpensiveSQL();
+
 	echo $sql_queries;
 	foreach ($gCms->errors as $error)
 	{
@@ -211,6 +218,12 @@ if ($config["debug"] == true)
 	}
 }
 
+if (isset($gCms->db))
+{
+    $db =& $gCms->db;
+	if ($db->IsConnected())
+		$db->Close();
+}
 
 # vim:ts=4 sw=4 noet
 ?>

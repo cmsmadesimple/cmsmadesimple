@@ -148,6 +148,10 @@ class CmsObject {
 			if (!$dbinstance) die("Connection failed");
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 			$this->db = &$dbinstance;
+
+			#if ($config['debug'] == true)
+			#	$dbinstance->LogSQL();
+
 			showmem('done creating db object');
 		}
 
@@ -188,6 +192,7 @@ class CmsObject {
 			#Setup global smarty object
 			$smartyinstance = new Smarty_CMS($conf);
 			$this->smarty = &$smartyinstance;
+
 			showmem('done creating smarty object');
 		}
 
