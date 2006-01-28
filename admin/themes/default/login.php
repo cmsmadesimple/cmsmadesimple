@@ -5,7 +5,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>CMS Login</title>
-<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<meta http-equiv="Content-Type" content="text/html; charset=<?php echo get_encoding() ?>" />
 <link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
 </head>
 
