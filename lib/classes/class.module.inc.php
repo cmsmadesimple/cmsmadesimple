@@ -356,12 +356,12 @@ class ModuleOperations
 							if (isset($cmsmodules[$modulename]))
 							{
 								$cmsmodules[$modulename]['installed'] = true;
-								$cmsmodules[$modulename]['active'] = $result->fields['active'];
+								$cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
 							}
 						}
 						else
 						{
-							if ($result->fields['active'] )
+							if ($result->fields['active'] == 1)
 							{
 								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
@@ -390,7 +390,7 @@ class ModuleOperations
 										{
 											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
-											$cmsmodules[$name]['active'] = $result->fields['active'];
+											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
 										}
 										else
 										{

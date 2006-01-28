@@ -129,7 +129,7 @@ if ($access)
 			if (!isset($result) || $result === FALSE)
 			{
 				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (?,?,'installed',?)";
-				$db->Execute($query, array($module,$modinstance->GetVersion(),true));
+				$db->Execute($query, array($module,$modinstance->GetVersion(),1));
 				
 				#and insert any dependancies
 				if (count($modinstance->GetDependencies()) > 0) #Check for any deps
@@ -248,14 +248,14 @@ if ($access)
 	if ($action == "settrue")
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(true,$module));
+		$db->Execute($query, array(1,$module));
 		redirect("listmodules.php");
 	}
 
 	if ($action == "setfalse")
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(false,$module));
+		$db->Execute($query, array(0,$module));
 		redirect("listmodules.php");
 	}
 }
@@ -342,7 +342,7 @@ else if ($action == 'missingdeps')
 			while ($row = $result->FetchRow()) {
 				$dbm[$row['module_name']]['Status'] = $row['status'];
 				$dbm[$row['module_name']]['Version'] = $row['version'];
-				$dbm[$row['module_name']]['Active'] = $row['active'];
+				$dbm[$row['module_name']]['Active'] = ($row['active'] == 1?true:false);
 			}
 
 			?>
