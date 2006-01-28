@@ -316,7 +316,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		module_name C(255),
 		status C(255),
 		version C(255),
-		active L
+		active I1
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);

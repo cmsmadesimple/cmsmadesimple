@@ -8,6 +8,14 @@ $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
 
+echo "<p>Make active boolean in modules table...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix()."modules", "active I1"); 
+$dbdict->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
 echo "<p>Fixing permission names...";
 
 $query = "UPDATE ".cms_db_prefix()."permissions set permission_name = 'Add Global Content Blocks', permission_text = 'Add Global Content Blocks' WHERE permission_name = 'Add Html Blobs'";
