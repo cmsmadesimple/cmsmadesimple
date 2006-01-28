@@ -163,10 +163,6 @@ if ($message != "") {
 			<p class="pageinput"><input class="pagenb" type="checkbox" name="enablecustom404" <?php if ($enablecustom404 == "1") echo "checked=\"checked\""?> /></p>
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('xmlmodulerepository') ?>:</p>
-			<p class="pageinput"><input class="pagenb" type="text" name="xmlmodulerepository" size="80" maxlength="255" value="<?php echo $xmlmodulerepository; ?>"/></p>
-		</div>
-		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('custom404')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="custom404" cols="" rows=""><?php echo $custom404?></textarea></p>
 		</div>
@@ -196,6 +192,12 @@ if ($message != "") {
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo $sitedownmessage?></textarea></p>
 		</div>
+		<!--
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('xmlmodulerepository') ?>:</p>
+			<p class="pageinput"><input class="pagenb" type="text" name="xmlmodulerepository" size="80" maxlength="255" value="<?php echo $xmlmodulerepository; ?>"/></p>
+		</div>
+		-->
 		<!--
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?>:</p>
