@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.12";
+$CMS_VERSION = "0.12-beta1";
 $CMS_VERSION_NAME = "Scarborough";
 $CMS_SCHEMA_VERSION = "18";
 
