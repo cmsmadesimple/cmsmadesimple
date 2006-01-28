@@ -1,5 +1,13 @@
 <?php
 
+echo "<p>Making permission field bigger...";
+
+$dbdict = NewDataDictionary($db);
+$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix()."permissions", "permission_name C(255)"); 
+$dbdict->ExecuteSQLArray($sqlarray);
+
+echo "[done]</p>";
+
 echo "<p>Fixing permission names...";
 
 $query = "UPDATE ".cms_db_prefix()."permissions set permission_name = 'Add Global Content Blocks', permission_text = 'Add Global Content Blocks' WHERE permission_name = 'Add Html Blobs'";

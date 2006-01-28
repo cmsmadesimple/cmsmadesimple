@@ -406,7 +406,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict = NewDataDictionary($db);
 	$flds = "
 		permission_id I KEY,
-		permission_name C(25),
+		permission_name C(255),
 		permission_text C(255),
 		create_date T,
 		modified_date T
