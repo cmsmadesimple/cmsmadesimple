@@ -177,7 +177,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 					}
 
 					# First, are we a direct decendant of the current position?
-					if (strstr($onecontent->Hierarchy(), $curpos) == $onecontent->Hierarchy() && $curdepth == ($depth - 1))
+					if (strstr($onecontent->Hierarchy() . '.', $curpos . '.') == $onecontent->Hierarchy() . '.' && $curdepth == ($depth - 1))
 					{
 						$skipme = false;
 					}
@@ -190,7 +190,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 						foreach (split('\.', $curpos) as $level)
 						{
 							$blah .= $level . '.';
-							if (strstr($onecontent->Hierarchy(), ContentManager::CreateFriendlyHierarchyPosition($blah)) == $onecontent->Hierarchy())
+							if (strstr($onecontent->Hierarchy() . '.', ContentManager::CreateFriendlyHierarchyPosition($blah) . '.') == $onecontent->Hierarchy() . '.')
 							{
 								if ($depth == ($count + 1))
 								{
