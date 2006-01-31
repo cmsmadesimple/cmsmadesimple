@@ -2021,7 +2021,7 @@ class ContentManager
 			ORDER BY hierarchy";
 		$dbresult =& $db->Execute($query);
 
-		if (isset($dbresult) && $dbresult->RowCount() > 0)
+		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = &$dbresult->FetchRow())
 			{

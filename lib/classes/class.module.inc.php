@@ -297,7 +297,7 @@ class ModuleOperations
 	function LoadModules($loadall = false)
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db =& $gCms->GetDb();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -510,7 +510,8 @@ class CMSModule
 	{
 		showmem('begin constructor');
 		global $gCms;
-		$this->cms = &$gCms;
+		$this->cms =& $gCms;
+		$this->config =& $gCms->GetConfig();
 
 		global $CMS_ADMIN_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
@@ -519,7 +520,7 @@ class CMSModule
 		}
 		else
 		{
-			$this->curlang = (isset($this->cms->config['locale']) && $this->cms->config['locale'] != 'en_US' ? $this->cms->config['locale'] : '');
+			$this->curlang = (isset($config['locale']) && $config['locale'] != 'en_US' ? $config['locale'] : '');
 		}
 		$this->langhash = array();
 		$this->params = array();
@@ -531,7 +532,7 @@ class CMSModule
 			'optional' => true
 		));
 
-		#$smarty = new CMSModuleSmarty($this->cms->config, $this->GetName());
+		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
 		$this->SetParameters();
@@ -908,7 +909,7 @@ class CMSModule
 	function CheckForDependents()
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db =& $gCms->GetDb();
 
 		$result = false;
 

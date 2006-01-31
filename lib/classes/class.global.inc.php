@@ -127,12 +127,13 @@ class CmsObject {
 
 	function & GetDb()
 	{
-        static $dbinstance;
+        #static $dbinstance;
 
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
-        if (is_null($dbinstance))
+        #if (!isset($dbinstance) && !isset($this->db))
+        if (!isset($this->db))
 		{
 			showmem('creating db object');
 			$config =& $this->GetConfig();
@@ -147,15 +148,21 @@ class CmsObject {
 			}
 			if (!$dbinstance) die("Connection failed");
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-			$this->db = &$dbinstance;
 
-			#if ($config['debug'] == true)
-			#	$dbinstance->LogSQL();
+			if ($config['debug'] == true)
+			{
+				$dbinstance->debug = true;
+				#$dbinstance->LogSQL();
+			}
+
+			$this->db =& $dbinstance;
 
 			showmem('done creating db object');
 		}
 
-        return $dbinstance;
+        #return $dbinstance;
+		$db =& $this->db;
+		return ($db);
 	}
 
 	function & GetConfig()
