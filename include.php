@@ -90,6 +90,7 @@ if (isset($_SESSION["cms_admin_username"]))
 $sql_execs = 0;
 $sql_queries = "";
 
+/*
 function count_sql_execs($db, $sql, $inputarray)
 {
 	global $gCms;
@@ -99,6 +100,7 @@ function count_sql_execs($db, $sql, $inputarray)
 	else if (is_array(reset($inputarray))) $sql_execs += sizeof($inputarray);
 	else $sql_execs++;
 }
+*/
 
 showmem('including smarty');
 require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
@@ -139,7 +141,7 @@ if (!isset($DONT_LOAD_DB))
 	$db =& $gCms->GetDB();
 
 	#TODO: Move this into debug...  I think
-	$db->fnExecute = 'count_sql_execs';
+	#$db->fnExecute = 'count_sql_execs';
 }
 
 showmem('before 2nd smarty');

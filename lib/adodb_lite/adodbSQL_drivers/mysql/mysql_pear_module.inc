@@ -147,11 +147,6 @@ class mysql_pear_ResultSet extends mysql_pear_resultset_EXTENDER
 		return $this->_numOfRows;
 	}
 
-	function RowCount()
-	{
-		return $this->_numOfRows;
-	}
-
 	/**
 	* PEAR DB Compatable Command
 	*/
