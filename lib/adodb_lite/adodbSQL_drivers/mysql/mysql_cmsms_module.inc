@@ -54,12 +54,15 @@ class mysql_cmsms_ADOConnection extends mysql_cmsms_EXTENDER
 	{
 		return $this->_numOfRows;
 	}
-
 }
 
 eval('class mysql_cmsms_resultset_EXTENDER extends mysql_'. $last_module . '_ResultSet { }');
 
 class mysql_cmsms_ResultSet extends mysql_cmsms_resultset_EXTENDER
 {
+	function RowCount()
+	{
+		return $this->_numOfRows;
+	}
 }
 ?>
