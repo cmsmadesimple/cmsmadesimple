@@ -577,6 +577,7 @@ function showPageFive() {
     $newconfig["page_extension"] = ".html";
 	$newconfig["locale"] = "";
 	$newconfig["admin_encoding"] = "utf-8";
+	$newconfig["use_adodb_lite"] = true;
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
@@ -608,7 +609,7 @@ function showPageFive() {
 
 		$db = &ADONewConnection($newconfig['dbms'], 'pear:cmsms:date');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
-		$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		#$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		$gCms->db =& $db;
 
 		foreach ($gCms->modules as $modulename=>$value)

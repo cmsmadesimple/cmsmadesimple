@@ -105,6 +105,8 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	
 	$config["page_extension"] = ".html";
 
+	$config["use_adodb_lite"] = true;
+
 	$config["locale"] = "";
 
 	#Don't set it yet
