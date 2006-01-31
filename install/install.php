@@ -382,7 +382,7 @@ function showPageFour($sqlloaded = 0) {
 
         global $config, $CMS_SCHEMA_VERSION;
 
-		$db = ADONewConnection($_POST['dbms']);
+		$db = ADONewConnection($_POST['dbms'], 'pear:cmsms:extend:date');
 
 		#$db->debug = true;
 		$result = @$db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
@@ -415,7 +415,7 @@ function showPageFour($sqlloaded = 0) {
 			return;
 		}
 
-		$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		#$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 		$CMS_INSTALL_DROP_TABLES=1;
 		$CMS_INSTALL_CREATE_TABLES=1;
@@ -606,7 +606,7 @@ function showPageFive() {
 		global $gCms;
 		$gCms->config['db_prefix'] = $_POST['prefix'];
 
-		$db = &ADONewConnection($newconfig['dbms'], 'cms:pear');
+		$db = &ADONewConnection($newconfig['dbms'], 'pear:cmsms:extend:date:transaction');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		$gCms->db =& $db;
