@@ -2210,6 +2210,7 @@ class CMSModule
 	function RedirectContent($id)
 	{
 		#$content = ContentManager::LoadContentFromId($id);
+ 	        global $gCms;
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeById($id);
 		$content =& $node->GetContent();
