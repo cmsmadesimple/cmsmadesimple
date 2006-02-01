@@ -66,7 +66,7 @@ class PageInfo
 		$this->cachable = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c WHERE c.active = 1';
 		$row = $db->GetRow($query);
@@ -91,7 +91,7 @@ class PageInfoOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$row = '';
 

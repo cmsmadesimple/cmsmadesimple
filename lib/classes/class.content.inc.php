@@ -1810,7 +1810,7 @@ class ContentManager
 	function & GetDefaultContent()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db =& $gCms->GetDb();
 
 		$result = -1;
 

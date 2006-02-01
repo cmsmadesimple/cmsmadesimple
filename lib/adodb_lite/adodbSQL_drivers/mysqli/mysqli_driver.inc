@@ -38,12 +38,12 @@ class mysqli_driver_ADOConnection extends ADOConnection
 
 		if($this->persistent == 1)
 		{
-			$this->connectionId = @mysqli_connect( $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
+			$this->connectionId = @mysqli_connect( $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket );
 		}
 		else
 		{
 		    $this->connectionId = @mysqli_init();
-			@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
+			@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket );
 		}
 
 		if (mysqli_connect_errno() != 0) 
@@ -296,7 +296,7 @@ class mysqli_driver_ADOConnection extends ADOConnection
 				$this->sql = $sql . $limit;
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
-				$resultId = @mysqli_query($this->connectionId,  $this->sql );
+				$resultId = mysqli_query($this->connectionId,  $this->sql );
 				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
 				if($this->debug)
 				{
