@@ -670,31 +670,31 @@ function & strip_slashes(&$str)
 	return $str;
 }
 
-function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15')
+function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='')
 {
 	global $gCms;
 	$result = '';
 
 	if ($enablewysiwyg == true)
 	{
-		$userid = get_userid();
-		$wysiwyg = get_preference($userid, 'wysiwyg');
-
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
 		{
 			$value =& $gCms->modules[$key];
-			if (get_preference(get_userid(), 'wysiwyg')!="" &&
-				$gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true &&
-				$gCms->modules[$key]['object']->IsWYSIWYG() &&
-				$gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg'))
+			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
+				$gCms->modules[$key]['active'] == true &&			 //us the module active?
+				$gCms->modules[$key]['object']->IsWYSIWYG())   //is it a wysiwyg module?
 			{
-				$result = '';
-				ob_start();
-				echo $gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
-				$result = ob_get_contents();
-				ob_end_clean();
+				if ($forcewysiwyg=='') {
+					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
+					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg')) {
+						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					}
+				} else {
+					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
+						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					}
+				}
 			}
 		}
 	}
@@ -906,7 +906,6 @@ function getURL($page)
 function wysiwyg_form_submit()
 {
 	global $gCms;
-
 	$result = '';
 
 	$userid = get_userid();

@@ -89,7 +89,7 @@ class ModuleOperations
       {
 	$value = (isset($elem['value'])?$elem['value']:'');
 	$type = (isset($elem['type'])?$elem['type']:'');
-	switch( $elem['tag'] ) 
+	switch( $elem['tag'] )
 	  {
 	  case 'NAME':
 	    {
@@ -233,7 +233,7 @@ class ModuleOperations
 		{
 		  @mkdir( $filename );
 		}
-	      else 
+	      else
 		{
 		  $data = $moduledetails['filedata'];
 		  if( strlen( $data ) )
@@ -255,7 +255,7 @@ class ModuleOperations
 	      unset( $moduledetails['filename'] );
 	      unset( $moduledetails['isdir'] );
 	    }
-	    
+
 	  case 'FILENAME':
 	    $moduledetails['filename'] = $value;
 	    break;
@@ -487,7 +487,8 @@ class CMSModule
 	var $curlang;
 	var $langhash;
 	var $params;
-    var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	var $wysiwygactive=false;
+  var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
@@ -561,7 +562,7 @@ class CMSModule
 	      $str .= "<br />";
 	    }
 	  $str .= "<br />".lang('version').": " .$this->GetVersion() . "<br />";
-	  
+
 	  if ($this->GetChangeLog() != '')
 	    {
 	      $str .= "<br />".lang('changehistory').":<br />";
@@ -569,7 +570,7 @@ class CMSModule
 	    }
 	  return $str;
 	}
-	  
+
 	/**
 	 * Returns a sufficient help page for a module
 	 * this function should not be overridden
@@ -620,7 +621,7 @@ class CMSModule
 	{
 		return 'unset';
 	}
-	
+
 	/**
 	 * Returns the full path of the module directory.
 	 */
@@ -751,7 +752,7 @@ class CMSModule
 	 * Reference functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Returns the cms->config object as a reference
 	 */
@@ -781,7 +782,7 @@ class CMSModule
 	 * Content Type Related Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Does this module support a custom content type?
 	 */
@@ -890,7 +891,7 @@ class CMSModule
 	{
 		return TRUE;
 	}
- 
+
  	/**
 	 * Returns a list of dependencies and minimum versions that this module
 	 * requires. It should return an hash, eg.
@@ -900,7 +901,7 @@ class CMSModule
 	{
 		return array();
 	}
- 
+
  	/**
 	 * Checks to see if currently installed modules depend on this module.  This is
 	 * used by the plugins.php page to make sure that a module can't be uninstalled
@@ -917,7 +918,7 @@ class CMSModule
 		$dbresult = $db->Execute($query, array($this->GetName()));
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
-		{   
+		{
 			$result = true;
 		}
 
@@ -926,7 +927,7 @@ class CMSModule
 
 
 	/**
-	 * Creates an xml data package from the module directory.  
+	 * Creates an xml data package from the module directory.
 	 */
 	function CreateXMLPackage( &$message, &$filecount )
 	{
@@ -978,11 +979,11 @@ class CMSModule
 		  $data = base64_encode(file_get_contents($filespec));
 		  $xmltxt .= "    <data><![CDATA[".$data."]]></data>\n";
 		}
-	      
+
 	      $xmltxt .= "  </file>\n";
 	      ++$filecount;
 	    }
-          $xmltxt .= "</module>\n"; 
+          $xmltxt .= "</module>\n";
 	  $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$this->GetName();
 	  $message .= ' including '.$filecount.' files';
 	  return $xmltxt;
@@ -1053,7 +1054,7 @@ class CMSModule
 	 * Login Related Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Called after a successful login.  It sends the user object.
 	 *
@@ -1075,7 +1076,7 @@ class CMSModule
 	 * User Related Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Called before a user is added to the database.  Sends the user object.
 	 *
@@ -1106,7 +1107,7 @@ class CMSModule
 	/**
 	 * Called after a user is saved to the database.  Sends the user object.
 	 *
-	 * @param User The user that was just edited 
+	 * @param User The user that was just edited
 	 */
 	function EditUserPost(&$user)
 	{
@@ -1115,7 +1116,7 @@ class CMSModule
 	/**
 	 * Called before a user is deleted from the database.  Sends the user object.
 	 *
-	 * @param User The user that was just deleted 
+	 * @param User The user that was just deleted
 	 */
 	function DeleteUserPre(&$user)
 	{
@@ -1124,7 +1125,7 @@ class CMSModule
 	/**
 	 * Called after a user is deleted from the database.  Sends the user object.
 	 *
-	 * @param User The user that was just deleted 
+	 * @param User The user that was just deleted
 	 */
 	function DeleteUserPost(&$user)
 	{
@@ -1166,7 +1167,7 @@ class CMSModule
 	/**
 	 * Called after a group is saved to the database.  Sends the group object.
 	 *
-	 * @param Group The group that was just edited 
+	 * @param Group The group that was just edited
 	 */
 	function EditGroupPost(&$group)
 	{
@@ -1184,7 +1185,7 @@ class CMSModule
 	/**
 	 * Called after a group is deleted from the database.  Sends the group object.
 	 *
-	 * @param Group The group that was just deleted 
+	 * @param Group The group that was just deleted
 	 */
 	function DeleteGroupPost(&$group)
 	{
@@ -1230,7 +1231,7 @@ class CMSModule
 	 * Called after a template is saved to the database.  Sends the template
 	 * object.
 	 *
-	 * @param Template The template that was just edited 
+	 * @param Template The template that was just edited
 	 */
 	function EditTemplatePost(&$template)
 	{
@@ -1250,12 +1251,12 @@ class CMSModule
 	 * Called after a template is deleted from the database.  Sends the template
 	 * object.
 	 *
-	 * @param Template The template that was just deleted 
+	 * @param Template The template that was just deleted
 	 */
 	function DeleteTemplatePost(&$template)
 	{
 	}
-	
+
 	function TemplatePreCompile(&$template)
 	{
 	}
@@ -1269,19 +1270,19 @@ class CMSModule
 	 * General Content Related Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	function ContentEditPre(&$content)
 	{
 	}
-	
+
 	function ContentEditPost(&$content)
 	{
 	}
-	
+
 	function ContentDeletePre(&$content)
 	{
 	}
-	
+
 	function ContentDeletePost(&$content)
 	{
 	}
@@ -1326,7 +1327,7 @@ class CMSModule
 	 * Called after a stylesheet is saved to the database.  Sends the stylesheet
 	 * object.
 	 *
-	 * @param stylesheet The stylesheet that was just edited 
+	 * @param stylesheet The stylesheet that was just edited
 	 */
 	function EditStylesheetPost(&$stylesheet)
 	{
@@ -1346,7 +1347,7 @@ class CMSModule
 	 * Called after a stylesheet is deleted from the database.  Sends the stylesheet
 	 * object.
 	 *
-	 * @param stylesheet The stylesheet that was just deleted 
+	 * @param stylesheet The stylesheet that was just deleted
 	 */
 	function DeleteStylesheetPost(&$stylesheet)
 	{
@@ -1392,7 +1393,7 @@ class CMSModule
 	 * Called after an HTML blob is saved to the database.  Sends the html blob
 	 * object.
 	 *
-	 * @param HtmlBlob The HTML blob that was just edited 
+	 * @param HtmlBlob The HTML blob that was just edited
 	 */
 	function EditHtmlBlobPost(&$htmlblob)
 	{
@@ -1412,7 +1413,7 @@ class CMSModule
 	 * Called after an HTML blob is deleted from the database.  Sends the html
 	 * blob object.
 	 *
-	 * @param HtmlBlob The HTML blob that was just deleted 
+	 * @param HtmlBlob The HTML blob that was just deleted
 	 */
 	function DeleteHtmlBlobPost(&$htmlblob)
 	{
@@ -1425,7 +1426,7 @@ class CMSModule
 	 * Content Related Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Called with the content of the template before it's sent to smarty
 	 * for processing.
@@ -1483,7 +1484,7 @@ class CMSModule
 	function ContentPreRender(&$content)
 	{
 	}
-	
+
 	function ContentPreCompile(&$content)
 	{
 	}
@@ -1529,6 +1530,16 @@ class CMSModule
 	}
 
 	/**
+	 * Returns true if this wysiwyg should be considered active, eventhough it's
+	 * not the choice of the user. Used for forcing a wysiwyg.
+	 * returns false be default.
+	 */
+	function WYSIWYGActive()
+	{
+		return $this->wysiwygactive;
+	}
+
+	/**
 	 * Returns content destined for the <form> tag.  It's useful if javascript is
 	 * needed for the onsubmit of the form.
 	 */
@@ -1548,7 +1559,7 @@ class CMSModule
 	 {
 	 	return '';
 	 }
-	 
+
 	 /**
 	  * Returns header code specific to this WYSIWYG
 	  *
@@ -1566,7 +1577,7 @@ class CMSModule
 	  {
 	  	return '';
 	  }
-	
+
 	/**
 	 * Returns the textarea specific for this WYSIWYG.
 	 *
@@ -1713,7 +1724,7 @@ class CMSModule
 		$text .= " />\n";
 		return $text;
 	}
-	
+
 	/**
 	 * Returns the xhtml equivalent of an input password-box.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
@@ -1742,7 +1753,7 @@ class CMSModule
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
-	 * @param string The html name of the hidden field 
+	 * @param string The html name of the hidden field
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
@@ -1782,7 +1793,7 @@ class CMSModule
 		return $text;
 	}
 
-	
+
 	/**
 	 * Returns the xhtml equivalent of a submit button.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
@@ -1805,7 +1816,7 @@ class CMSModule
 			$img = $gCms->config['root_url'] . '/' . $image;
 			$text .= ' src="'.$img.'"';
 		}
-		else 
+		else
 		{
 			$text .= '"submit"';
 		}
@@ -1965,7 +1976,7 @@ class CMSModule
 			$text .= ' />';
 			$text .= $key . $delimiter;
 		}
-		
+
 		return $text;
 	}
 
@@ -1982,10 +1993,11 @@ class CMSModule
 	 * @param string The text of the stylesheet associated to this content.  Only used for certain WYSIWYGs
 	 * @param string The number of characters wide (columns) the resulting textarea should be
 	 * @param string The number of characters high (rows) the resulting textarea should be
+	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15')
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="")
 	{
-		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols);
+		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols,$forcewysiwyg);
 	}
 
 	/**
@@ -2057,7 +2069,7 @@ class CMSModule
 			{
 				$text .= ' ' . $addttext;
 			}
-		
+
 			$text .= '>'.$contents.'</a>';
 
 			debug_buffer($text);
@@ -2112,7 +2124,7 @@ class CMSModule
 	 */
 	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
-		$text = '';		
+		$text = '';
 		global $gCms;
 		$config = &$gCms->config;
 		$manager =& $gCms->GetHierarchyManager();
@@ -2145,7 +2157,7 @@ class CMSModule
 					}
 					$text .= $id.$key.'='.$value;
 					$count++;
-				}		
+				}
 				if (!$onlyhref)
 				{
 					$text .= "\"";
@@ -2153,13 +2165,13 @@ class CMSModule
 				}
 			}
 		}
-		
+
 		return $text;
 	}
-	
-	
+
+
 	/**
-	 * Redirects the user to another action of the module. 
+	 * Redirects the user to another action of the module.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the form is submitted
@@ -2197,7 +2209,7 @@ class CMSModule
 		foreach ($params as $key=>$value)
 		{
 			$text .= '&'.$id.$key.'='.$value;
-		}		
+		}
 		redirect($text);
 	}
 
@@ -2229,7 +2241,7 @@ class CMSModule
 	 * Intermodule Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	function &GetModuleInstance($module)
 	{
 		global $gCms;
@@ -2249,7 +2261,7 @@ class CMSModule
 	 * Language Functions
 	 * ------------------------------------------------------------------
 	 */
-	
+
 	/**
 	 * Sets the default language (usually en_US) for the module.  There
 	 * should be at least a language file for this language if the Lang()
@@ -2259,7 +2271,7 @@ class CMSModule
 	{
 		return 'en_US';
 	}
-	
+
 	/**
 	 * Returns the corresponding translated string for the id given.
 	 *
@@ -2374,7 +2386,7 @@ class CMSModule
 
 		return $retresult;
 	}
-	
+
 	/**
 	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
 	 * follow any smarty caching rules.
@@ -2402,7 +2414,7 @@ class CMSModule
 	{
 		$db = $this->cms->db;
 
-		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?'; 
+		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 
 		if ($result && $result->RecordCount() < 1)
@@ -2421,7 +2433,7 @@ class CMSModule
 	{
 		$db = $this->cms->db;
 
-		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?"; 
+		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
 		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
 	}
 
@@ -2494,32 +2506,32 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 	function StartTabHeaders()
-	{		
+	{
 		return '<div id="page_tabs">';
 	}
-	
-	function SetTabHeader($tabid,$title,$active=false) 
+
+	function SetTabHeader($tabid,$title,$active=false)
 	{
 		$a="";
 		if ($active) $a=" class='active'";
 	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
-	
-	function EndTabHeaders() 
+
+	function EndTabHeaders()
 	{
 		return "</div><!-- EndTabHeaders -->";
 	}
 
-	function StartTabContent() 
+	function StartTabContent()
 	{
 		return '<div class="clearb"></div><div id="page_content">';
 	}
-	
-	function EndTabContent() 
+
+	function EndTabContent()
 	{
 		return '</div> <!-- EndTabContent -->';
 	}
-	
+
 	function StartTab($tabid)
 	{
 		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">';
@@ -2568,7 +2580,7 @@ class CMSModule
 	{
 		$db = $this->cms->db;
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?"; 
+		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$count = $db->GetOne($query, array($permission_name));
 
 		if (intval($count) == 0)
@@ -2590,7 +2602,7 @@ class CMSModule
 		return check_permission($userid, $permission_name);
 	}
 
-	/** 
+	/**
 	 * Removes a permission from the system.  If recreated, the
 	 * permission would have to be set to all groups again.
 	 *
@@ -2600,7 +2612,7 @@ class CMSModule
 	{
 		$db = $this->cms->db;
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?"; 
+		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$row = &$db->GetRow($query, array($permission_name));
 
 		if ($row)

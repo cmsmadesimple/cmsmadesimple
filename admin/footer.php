@@ -38,13 +38,22 @@ foreach($gCms->modules as $key=>$value)
 {
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsWYSIWYG() &&
-		get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()
+		$gCms->modules[$key]['object']->IsWYSIWYG()
 		)
 	{
-		$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
-		$footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
-		$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
+		$loadit=false;
+		if ($gCms->modules[$key]['object']->WYSIWYGActive()) {
+			$loadit=true;
+		} else {
+		  if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
+		  	$loadit=true;
+		  }
+		}
+		if ($loadit) {
+		  $bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
+		  $footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
+		  $formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
+		}
 	}
 }
 
