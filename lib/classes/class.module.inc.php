@@ -1590,6 +1590,7 @@ class CMSModule
 	 */
 	function WYSIWYGTextarea($name='textarea',$columns='80',$rows='15',$encoding='',$content='',$stylesheet='')
 	{
+		$this->wysiwygactive=true;
 		return '<textarea name="'.$name.'" cols="'.$columns.'" rows="'.$rows.'">'.$content.'</textarea>';
 	}
 
