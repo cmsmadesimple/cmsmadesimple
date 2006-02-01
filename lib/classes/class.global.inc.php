@@ -133,7 +133,8 @@ class CmsObject {
 		//instantiated yet.  If not, connect
 		//and return it
         #if (!isset($dbinstance) && !isset($this->db))
-        if (!isset($this->db))
+		global $DONT_LOAD_DB;
+        if (!isset($this->db) && !isset($DONT_LOAD_DB))
 		{
 			showmem('creating db object');
 			$config =& $this->GetConfig();

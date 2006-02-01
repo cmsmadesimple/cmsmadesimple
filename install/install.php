@@ -327,6 +327,15 @@ if (function_exists('pg_connect'))
 	echo '>PostgreSQL 7/8</OPTION>';
 	$valid_database = true;
 	}
+/*
+if (function_exists('sqlite_open'))
+	{
+	echo '<OPTION VALUE="sqlite" ';
+	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'sqlite'?'selected="selected"':'');
+	echo '>SQLite</OPTION>';
+	$valid_database = true;
+	}
+*/
 ?>
 		</SELECT>
 <?php if (! $valid_database) { ?>
@@ -384,10 +393,10 @@ function showPageFour($sqlloaded = 0) {
 
 		$db = ADONewConnection($_POST['dbms'], 'pear:cmsms:date');
 
-		#$db->debug = true;
-		$result = @$db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
+		$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
 
 		$db_prefix = $_POST['prefix'];
+		#$db->debug = true;
 
 		if (!$result)
 		{
@@ -415,7 +424,7 @@ function showPageFour($sqlloaded = 0) {
 			return;
 		}
 
-		#$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 
 		$CMS_INSTALL_DROP_TABLES=1;
 		$CMS_INSTALL_CREATE_TABLES=1;
@@ -431,6 +440,8 @@ function showPageFour($sqlloaded = 0) {
 				$s = fgets($handle, 32768);
 				if ($s != "") {
 					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
+					$s = str_replace("\\r\\n", "\r\n", $s);
+					$s = str_replace("\\'", "''", $s);
 					$result = $db->Execute($s);
 					if (!$result) {
 						die("Invalid query: $s");
@@ -454,6 +465,8 @@ function showPageFour($sqlloaded = 0) {
 					$s = fgets($handle, 32768);
 					if ($s != "") {
 						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
+						$s = str_replace("\\r\\n", "\r\n", $s);
+						$s = str_replace("\\'", "''", $s);
 						$result = $db->Execute($s);
 						if (!$result) {
 							die("Invalid query: $s");
@@ -609,7 +622,8 @@ function showPageFive() {
 
 		$db = &ADONewConnection($newconfig['dbms'], 'pear:cmsms:date');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
-		#$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		$db->SetFetchMode(ADODB_FETCH_ASSOC);
+		#$db->debug = true;
 		$gCms->db =& $db;
 
 		foreach ($gCms->modules as $modulename=>$value)

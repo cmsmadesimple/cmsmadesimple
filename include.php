@@ -105,10 +105,10 @@ function count_sql_execs($db, $sql, $inputarray)
 showmem('including smarty');
 require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
 showmem('including adodb');
-if ($config['use_adodb_lite'] == true)
-	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
-else
+if ($config['use_adodb_lite'] == false)
 	require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
+else
+	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
 showmem('including page.functions.php');
 require(dirname(__FILE__)."/lib/page.functions.php");
 showmem('including content.functions.php');
@@ -139,6 +139,7 @@ showmem('including class.group.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 
 #Load them into the usual variables.  This'll go away a little later on.
+global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 { 
 	$db =& $gCms->GetDB();

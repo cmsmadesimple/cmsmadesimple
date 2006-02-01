@@ -344,7 +344,7 @@ class ModuleOperations
 		{
 			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
 			$result = &$db->Execute($query);
-			while (!$result->EOF)
+			while ($result && !$result->EOF)
 			{
 				if (isset($result->fields['module_name']))
 				{
@@ -366,6 +366,7 @@ class ModuleOperations
 								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
 									showmem("before including $modulename");
+									#var_dump('loading module:' . $modulename);
 									include("$dir/$modulename/$modulename.module.php");
 									showmem("after including $modulename");
 									if (class_exists($modulename))

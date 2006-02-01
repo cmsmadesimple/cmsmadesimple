@@ -50,6 +50,7 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	} else $dsn_array = array('scheme'=>'');
 
 	$dbtype = strtolower($dbtype);
+	#var_dump($dbtype);
 	include_once ADODB_DIR . '/adodbSQL_drivers/' . $dbtype . '/' . $dbtype . '_driver.inc';
 	$last_module = 'driver';
 	if(!empty($modules))
@@ -66,6 +67,7 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	{
 		$extention = $dbtype . '_' . $last_module . '_ADOConnection';
 	}
+
 	$object = new $extention();
 	$object->last_module_name = $last_module;
 	$object->raiseErrorFn = (defined('ADODB_ERROR_HANDLER')) ? ADODB_ERROR_HANDLER : false;
