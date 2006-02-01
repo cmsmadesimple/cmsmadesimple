@@ -1728,6 +1728,31 @@ class CMSModule
 	}
 
 	/**
+	 * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The MIME-type to be accepted, default is all
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
+	{
+		$text='<input type="file" name="'.$id.$name.'" size="'.$size.'"';
+		if ($accept != '')
+		{
+			$text .= ' ' . $accept;
+		}
+		if ($addttext != '')
+		{
+			$text .= ' ' . $addttext;
+		}
+		$text .= " />\n";
+		return $text;
+	}
+
+	/**
 	 * Returns the xhtml equivalent of an input password-box.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
