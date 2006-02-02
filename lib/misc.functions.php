@@ -594,7 +594,7 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
 function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 {
 	global $gCms;
-	$db = &$gCms->db;
+	$db = &$gCms->GetDb();
 
 	$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
 	$result = $db->Execute($query);

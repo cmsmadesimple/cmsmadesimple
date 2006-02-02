@@ -121,7 +121,7 @@ class RecentPageOperations
 	function LoadRecentPages($user_id)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -158,7 +158,7 @@ class RecentPageOperations
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_page_id = $db->GenID(cms_db_prefix()."admin_recent_pages_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."admin_recent_pages (id, user_id, url, title, access_time) VALUES (?,?,?,?,?)";
@@ -185,7 +185,7 @@ class RecentPageOperations
 		$oldPages = array();
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT id FROM ".cms_db_prefix().
             "admin_recent_pages WHERE user_id = ? ORDER BY access_time DESC limit 10000 offset ?";

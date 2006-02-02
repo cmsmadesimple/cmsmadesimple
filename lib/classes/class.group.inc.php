@@ -92,7 +92,7 @@ class GroupOperations
 	function LoadGroups()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -120,7 +120,7 @@ class GroupOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
@@ -145,7 +145,7 @@ class GroupOperations
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,?,?)";
@@ -163,7 +163,7 @@ class GroupOperations
 		$result = false; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ? WHERE group_id = ?";
 		$dbresult = $db->Execute($query, array($group->name, $group->active, $db->DBTimeStamp(time()), $group->id));
@@ -180,7 +180,7 @@ class GroupOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."group_perms where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));

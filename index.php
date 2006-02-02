@@ -220,7 +220,7 @@ if ($config["debug"] == true)
 
 if (isset($gCms->db))
 {
-    $db =& $gCms->db;
+    $db =& $gCms->GetDb();
 	if ($db->IsConnected())
 		$db->Close();
 }

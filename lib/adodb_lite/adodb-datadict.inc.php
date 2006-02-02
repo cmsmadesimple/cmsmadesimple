@@ -400,9 +400,9 @@ class ADODB_DataDict {
 		'DATE' => 'D',
 		'D' => 'D',
 		##
-		'TIME' => 'T',
 		'TIMESTAMP' => 'T',
 		'DATETIME' => 'T',
+		'TIME' => 'T',
 		'TIMESTAMPTZ' => 'T',
 		'T' => 'T',
 		##

@@ -40,7 +40,7 @@ if ($name != '')
 {
 	//TODO: Make stylesheet handling OOP
 	global $gCms;
-	$db =& $gCms->db;
+	$db =& $gCms->GetDb();
 	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
 	$cssresult = &$db->Execute($cssquery, $name);
 
@@ -109,7 +109,7 @@ echo $css;
 
 if (isset($gCms->db))
 {
-    $db =& $gCms->db;
+    $db =& $gCms->GetDb();
 	if ($db->IsConnected())
 		$db->Close();
 }

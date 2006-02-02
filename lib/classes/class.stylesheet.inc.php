@@ -104,7 +104,7 @@ class StylesheetOperations
 	function & LoadStylesheets()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -131,7 +131,7 @@ class StylesheetOperations
 	function AssociateStylesheetToTemplate( $stylesheetid, $templateid )
 	{
 	  global $gCms;
-	  $db = &$gCms->db;
+	  $db = &$gCms->GetDb();
 	  
 	  $query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,?,?)';
 	  $dbresult = $db->Execute( $query, array( $templateid, 
@@ -148,7 +148,7 @@ class StylesheetOperations
 	  $result = false;
 
 	  global $gCms;
-	  $db = &$gCms->db;
+	  $db = &$gCms->GetDb();
 
 	  $query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
               assoc_type = ? AND assoc_to_id = ?';
@@ -172,7 +172,7 @@ class StylesheetOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$cache = &$gCms->StylesheetCache;
 
 		if (isset($cache[$id]))
@@ -209,7 +209,7 @@ class StylesheetOperations
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_stylesheet_id = $db->GenID(cms_db_prefix()."css_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,?,?)";
@@ -227,7 +227,7 @@ class StylesheetOperations
 		$result = false; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $db->DBTimeStamp(time()), $stylesheet->id));
@@ -244,7 +244,7 @@ class StylesheetOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."css_assoc where assoc_css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -265,7 +265,7 @@ class StylesheetOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = ?";
 		$dbresult = $db->Execute($query,array($name));

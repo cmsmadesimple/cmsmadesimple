@@ -136,7 +136,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 			if ($upgrade == true)
 			{
 				global $gCms;
-				$db =& $gCms->db;
+				$db =& $gCms->GetDb();
 				$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
 				if (isset($encoding) && $encoding != '')
 				{

@@ -173,7 +173,7 @@ class UserOperations
 	function LoadUsers()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -210,7 +210,7 @@ class UserOperations
 	function LoadUsersInGroup($groupid)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$result = array();
 
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
@@ -252,7 +252,7 @@ class UserOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$params = array();
 
@@ -300,7 +300,7 @@ class UserOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -338,7 +338,7 @@ class UserOperations
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?)";
@@ -365,7 +365,7 @@ class UserOperations
 		$result = false; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ?, first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
 		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $db->DBTimeStamp(time()), $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
@@ -391,7 +391,7 @@ class UserOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."additional_users where user_id = ?";
 		$db->Execute($query, array($id));
@@ -423,7 +423,7 @@ class UserOperations
 		$result = 0;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$dbresult = $db->Execute($query, array($id));

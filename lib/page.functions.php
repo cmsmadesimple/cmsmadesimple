@@ -100,7 +100,7 @@ function check_passhash($userid, $checksum)
 	$check = false;
 
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$oneuser = UserOperations::LoadUserByID($userid);
 
@@ -123,7 +123,7 @@ function check_passhash($userid, $checksum)
 function generate_user_object($userid)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$oneuser = UserOperations::LoadUserByID($userid);
 
@@ -144,7 +144,7 @@ function generate_user_object($userid)
 function load_all_permissions($userid)
 {
 	global $gCms;
-	$db = &$gCms->db;
+	$db = &$gCms->GetDb();
 	$variables = &$gCms->variables;
 
 	$perms = array();
@@ -201,7 +201,7 @@ function check_ownership($userid, $contentid = '')
 
 	if (!isset($gCms->variables['ownerpages']))
 	{
-		$db = $gCms->db;
+		$db =& $gCms->GetDb();
 
 		$variables = &$gCms->variables;
 		$variables['ownerpages'] = array();
@@ -242,7 +242,7 @@ function check_authorship($userid, $contentid = '')
 
 	if (!isset($gCms->variables['authorpages']))
 	{
-		$db = $gCms->db;
+		$db =& $gCms->GetDb();
 
 		$variables = &$gCms->variables;
 		$variables['authorpages'] = array();
@@ -277,11 +277,11 @@ function check_authorship($userid, $contentid = '')
 function author_pages($userid)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
     $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$variables['authorpages'] = array();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
@@ -326,7 +326,7 @@ function quick_check_authorship($contentid, $hispages)
 function audit($itemid, $itemname, $action)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$userid = 0;
 	$username = '';
@@ -359,7 +359,7 @@ function load_site_preferences()
 	$value = "";
 
 	global $gCms;
-	$db = &$gCms->db;
+	$db = &$gCms->GetDb();
 	$siteprefs = &$gCms->siteprefs;
 
 	if ($db)
@@ -405,7 +405,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
 function remove_site_preference($prefname)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$siteprefs = &$gCms->siteprefs;
 
@@ -428,7 +428,7 @@ function set_site_preference($prefname, $value)
 	$doinsert = true;
 
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$siteprefs = &$gCms->siteprefs;
 
@@ -456,7 +456,7 @@ function set_site_preference($prefname, $value)
 function load_all_preferences($userid)
 {
 	global $gCms;
-	$db = &$gCms->db;
+	$db = &$gCms->GetDb();
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
@@ -477,7 +477,7 @@ function load_all_preferences($userid)
 function get_preference($userid, $prefname, $default='')
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 	$userprefs = &$gCms->userprefs;
 
 	$result = '';
@@ -512,7 +512,7 @@ function set_preference($userid, $prefname, $value)
 	$doinsert = true;
 
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$userprefs = &$gCms->userprefs;
 	$userprefs[$prefname] = $value;
@@ -548,7 +548,7 @@ function get_stylesheet($template_id, $media_type = '')
 	$css = "";
 
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$templateobj = FALSE;
 
@@ -611,10 +611,10 @@ function get_stylesheet($template_id, $media_type = '')
 
 function get_stylesheet_media_types($template_id)
 {
-	$result = array('');
+	$result = array();
 
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	$templateobj = FALSE;
 
@@ -637,10 +637,10 @@ function get_stylesheet_media_types($template_id)
 
 		while (!$cssresult->EOF)
 		{
-			if ($cssresult->fields['media_type'] != '')
-			{
+			#if ($cssresult->fields['media_type'] != '')
+			#{
 				array_push($result, $cssresult->fields['media_type']);
-			}
+			#}
 			$cssresult->MoveNext();
 		}
 	}
@@ -777,7 +777,7 @@ function display_login_form()
 function check_access($page_id)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDb();
 
 	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password']))
 	{

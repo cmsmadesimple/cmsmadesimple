@@ -659,7 +659,7 @@ class ContentBase
 	function LoadFromId($id, $loadProperties = false)
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = false;
 
@@ -894,7 +894,7 @@ class ContentBase
 	function Update()
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = false;
 
@@ -998,7 +998,7 @@ class ContentBase
 	function Insert()
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = false;
 
@@ -1119,7 +1119,7 @@ class ContentBase
 			}
 		}
 		
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = false;
 
@@ -1289,7 +1289,7 @@ class ContentBase
 	function HasChildren()
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = false;
 
@@ -1309,7 +1309,7 @@ class ContentBase
 		if (!isset($this->mAdditionalEditors))
 		{
 			global $gCms;
-			$db = &$gCms->db;
+			$db = &$gCms->GetDb();
 
 			$this->mAdditionalEditors = array();
 
@@ -1447,7 +1447,7 @@ class ContentProperties
 		if (count($this->mPropertyNames) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
-			$db = &$gCms->db;
+			$db = &$gCms->GetDb();
 
 			$query		= "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 			$dbresult	= &$db->Execute($query, array($content_id));
@@ -1471,7 +1471,7 @@ class ContentProperties
 		if (count($this->mPropertyValues) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
-			$db = &$gCms->db;
+			$db = &$gCms->GetDb();
 
 		    $delquery = "DELETE FROM ".cms_db_prefix()."content_props where content_id=? and prop_name=?";
 			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
@@ -1512,7 +1512,7 @@ class ContentProperties
 		if (count($this->mPropertyValues) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
-			$db = &$gCms->db;
+			$db = &$gCms->GetDb();
 
 			$query = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 			$db->Execute($query, array($content_id));
@@ -1535,7 +1535,7 @@ class ContentManager
 	{
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
 		$row = &$db->GetRow($query, array($id));
@@ -1564,7 +1564,7 @@ class ContentManager
 	function & LoadContentFromAlias($alias, $only_active = false)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$row = '';
 
@@ -1940,7 +1940,7 @@ class ContentManager
 	function SetAllHierarchyPositions()
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db = $gCms->GetDb();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 		$dbresult = &$db->Execute($query);
@@ -2083,7 +2083,7 @@ class ContentManager
 	 */   
 	function SetDefaultContent($id) {
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id)) {
@@ -2108,7 +2108,7 @@ class ContentManager
 
 		$contentcache = array();
 
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 		$dbresult = &$db->Execute($query);
 
@@ -2199,7 +2199,7 @@ class ContentManager
 	function GetDefaultPageID()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
 		$row = &$db->GetRow($query);
@@ -2216,7 +2216,7 @@ class ContentManager
 	function GetPageIDFromAlias( $alias )
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
 		{
@@ -2240,7 +2240,7 @@ class ContentManager
 	function GetPageAliasFromID( $id )
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		if (!is_numeric($alias) && strpos($alias,'.') == TRUE && strpos($alias,',') == TRUE)
 		{
@@ -2262,7 +2262,7 @@ class ContentManager
 	function CheckAliasError($alias, $content_id = -1)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$error = FALSE;
 

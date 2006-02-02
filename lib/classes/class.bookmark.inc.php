@@ -134,7 +134,7 @@ class BookmarkOperations
 	function LoadBookmarks($user_id)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -170,7 +170,7 @@ class BookmarkOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($id));
@@ -203,7 +203,7 @@ class BookmarkOperations
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_bookmark_id = $db->GenID(cms_db_prefix()."admin_bookmarks_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."admin_bookmarks (bookmark_id, user_id, url, title) VALUES (?,?,?,?)";
@@ -228,7 +228,7 @@ class BookmarkOperations
 		$result = false; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "UPDATE ".cms_db_prefix()."admin_bookmarks SET user_id = ?, title = ?, url = ? WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($bookmark->user_id, $bookmark->title, $bookmark->url, $bookmark->bookmark_id));
@@ -252,7 +252,7 @@ class BookmarkOperations
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."admin_bookmarks where bookmark_id = ?";
 		$db->Execute($query, array($id));

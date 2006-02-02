@@ -72,20 +72,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
-	echo "<p>Creating module_news table sequence...";
-
-	$max = $db->GetOne("SELECT max(news_id) from ".$db_prefix."module_news");
-	$db->CreateSequence($db_prefix."module_news_seq", $max+1);
-
-	echo "[done]</p>";
-
-	echo "<p>Creating module_news_categories table sequence...";
-
-	$max = $db->GetOne("SELECT max(news_category_id) from ".$db_prefix."module_news_categories");
-	$db->CreateSequence($db_prefix."module_news_categories_seq", $max+1);
-
-	echo "[done]</p>";
-
 	echo "<p>Creating permissions table sequence...";
 
 	$max = $db->GetOne("SELECT max(permission_id) from ".$db_prefix."permissions");

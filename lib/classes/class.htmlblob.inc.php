@@ -163,11 +163,11 @@ class HtmlBlobOperations
 function AuthorBlobs($userid)
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db = &$gCms->GetDb();
     $variables = &$gCms->variables;
 	if (!isset($variables['authorblobs']))
 	{
-		$db = $gCms->db;
+		$db = &$gCms->GetDb();
 		$variables['authorblobs'] = array();
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
@@ -186,7 +186,7 @@ function AuthorBlobs($userid)
 	function LoadHtmlBlobs()
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$result = array();
 
@@ -213,7 +213,7 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ?";
 		$row = &$db->GetRow($query, array($id));
@@ -237,7 +237,7 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$cache = &$gCms->HtmlBlobCache;
 
 		if (isset($cache[$name]))
@@ -272,7 +272,7 @@ function AuthorBlobs($userid)
 		$result = -1; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_htmlblob_id = $db->GenID(cms_db_prefix()."htmlblobs_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."htmlblobs (htmlblob_id, htmlblob_name, html, owner, create_date, modified_date) VALUES (?,?,?,?,?,?)";
@@ -290,7 +290,7 @@ function AuthorBlobs($userid)
 		$result = false; 
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, modified_date = ? WHERE htmlblob_id = ?";
 		$dbresult = $db->Execute($query,array($htmlblob->name,$htmlblob->content,$htmlblob->owner,$db->DBTimeStamp(time()),$htmlblob->id));
@@ -307,7 +307,7 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."htmlblobs where htmlblob_id = ?";
 		$dbresult = $db->Execute($query,array($id));
@@ -325,7 +325,7 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT htmlblob_id from ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
 		$row = &$db->GetRow($query,array($name));
@@ -343,7 +343,7 @@ function AuthorBlobs($userid)
 		$result = false;
 
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."htmlblobs WHERE htmlblob_id = ? AND owner = ?";
 		$row = &$db->GetRow($query, array($id, $user_id));
@@ -359,7 +359,7 @@ function AuthorBlobs($userid)
 	function CheckAuthorship($id, $user_id)
 	{		
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$result = false;
 
 		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
@@ -376,7 +376,7 @@ function AuthorBlobs($userid)
 	function ClearAdditionalEditors($id)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$query = "DELETE FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ?";
 
@@ -386,7 +386,7 @@ function AuthorBlobs($userid)
 	function InsertAdditionalEditors($id, $user_id)
 	{
 		global $gCms;
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 
 		$new_id = $db->GenID(cms_db_prefix()."additional_htmlblob_users_seq");
 		$query = "INSERT INTO ".cms_db_prefix()."additional_htmlblob_users (additional_htmlblob_users_id, htmlblob_id, user_id) VALUES (?,?,?)";

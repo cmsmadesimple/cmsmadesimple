@@ -759,7 +759,9 @@ class CMSModule
 	 */
 	function & GetConfig()
 	{
-		return $this->cms->config;
+		global $gCms;
+		$config = &$gCms->GetConfig();
+		return $config;
 	}
 
 	/**
@@ -767,7 +769,9 @@ class CMSModule
 	 */
 	function & GetDb()
 	{
-		return $this->cms->GetDb();
+		global $gCms;
+		$db = &$gCms->GetDb();
+		return $db;
 	}
 
 	/**

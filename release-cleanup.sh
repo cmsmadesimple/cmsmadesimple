@@ -28,6 +28,7 @@ rm -fr svn-propset-file
 rm -fr find-mime
 rm -fr admin/lang/*.sh
 rm -fr admin/lang/*.pl
+rm -fr lib/adodb
 rm -fr modules/LinkBlog
 rm -fr modules/HTMLArea
 rm -fr modules/PngTransparencyIE

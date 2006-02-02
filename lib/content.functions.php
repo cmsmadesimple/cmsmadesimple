@@ -152,7 +152,7 @@ class Smarty_CMS extends Smarty {
     {   
         global $gCms;
 
-        $db = &$gCms->db;
+        $db = &$gCms->GetDb();
         $config = $gCms->config;
 
         $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
@@ -171,7 +171,7 @@ class Smarty_CMS extends Smarty {
 	{
 		global $gCms;
 
-		$db = &$gCms->db;
+		$db = &$gCms->GetDb();
 		$config = $gCms->config;
 
 		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
@@ -635,7 +635,7 @@ class Smarty_CMS extends Smarty {
 		global $gCms;
 
 		$cmsmodules = $gCms->modules;
-		$db = $gCms->db;
+		$db = $gCms->GetDb();
 		$config = $gCms->config;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
@@ -869,7 +869,7 @@ class Smarty_CMS extends Smarty {
 	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		global $gCms;
-		$db = $gCms->db;
+		$db = $gCms->GetDb();
 		$config = $gCms->config;
 
 		if (get_site_preference('enablesitedownmessage') == "1")
@@ -957,7 +957,7 @@ function load_plugins(&$smarty)
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
 	$userplugins = &$gCms->userplugins;
-	$db = &$gCms->db;
+	$db = &$gCms->GetDb();
 	if (isset($db))
 	{
 		#if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))

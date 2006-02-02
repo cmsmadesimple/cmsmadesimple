@@ -14,8 +14,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."groups_seq");
 	$db->DropSequence($db_prefix."htmlblobs_seq");
 	$db->DropSequence($db_prefix."module_deps_seq");
-	$db->DropSequence($db_prefix."module_news_seq");
-	$db->DropSequence($db_prefix."module_news_categories_seq");
 	$db->DropSequence($db_prefix."module_templates_seq");
 	$db->DropSequence($db_prefix."permissions_seq");
 	$db->DropSequence($db_prefix."templates_seq");
@@ -55,10 +53,6 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."modules");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_deps");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_news");
-	$dbdict->ExecuteSQLArray($sqlarray);
-	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_news_categories");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."module_templates");
 	$dbdict->ExecuteSQLArray($sqlarray);
@@ -339,49 +333,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	echo '[done]</p>';
-
-	echo "<p>Creating module_news table...";
-
-	$dbdict = NewDataDictionary($db);
-	$flds = "
-		news_id I KEY,
-		news_category_id I,
-		news_title C(255),
-		news_data X,
-		news_date T,
-		summary X,
-		start_time T,
-		end_time T,
-		status C(25),
-		icon C(255),
-		author_id I,
-		create_date T,
-		modified_date T
-	";
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news", $flds, $taboptarray);
-	$dbdict->ExecuteSQLArray($sqlarray);
-
-	echo "[done]</p>";
-
-	echo "<p>Creating module_news_categories table...";
-
-	$dbdict = NewDataDictionary($db);
-	$flds = "
-		news_category_id I KEY,
-		news_category_name C(255),
-		parent_id I,
-		hierarchy C(255),
-		long_name X,
-		create_date T,
-		modified_date T
-	";
-
-	$taboptarray = array('mysql' => 'TYPE=MyISAM');
-	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_news_categories", $flds, $taboptarray);
-	$dbdict->ExecuteSQLArray($sqlarray);
-
-	echo "[done]</p>";
 
 	echo "<p>Adding module_templates table...";
 
