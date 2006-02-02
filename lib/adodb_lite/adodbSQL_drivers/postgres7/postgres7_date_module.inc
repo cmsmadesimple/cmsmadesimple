@@ -12,8 +12,8 @@ eval('class postgres7_date_EXTENDER extends postgres7_'. $last_module . '_ADOCon
 
 class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 {
-	var $fmtDate = "'Y-m-d'";	// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "'Y-m-d H:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
+	var $fmtDate = "Y-m-d";	// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "Y-m-d H:i:s"; // used by DBTimeStamp as the default timestamp fmt.
 	var $emptyDate = '&nbsp;';
 	var $emptyTimeStamp = '&nbsp;';
 	var $sysDate = "CURRENT_DATE";
