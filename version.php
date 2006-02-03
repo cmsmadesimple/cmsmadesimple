@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "0.12-beta1";
-$CMS_VERSION_NAME = "Scarborough";
+$CMS_VERSION_NAME = "Fiji";
 $CMS_SCHEMA_VERSION = "18";
 
 # vim:ts=4 sw=4 noet

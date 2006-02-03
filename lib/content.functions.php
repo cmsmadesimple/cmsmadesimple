@@ -473,7 +473,10 @@ class Smarty_CMS extends Smarty {
 		{
 			#We've a custom error message...  return it here
 			header("HTTP/1.0 404 Not Found");
-			$tpl_source = get_site_preference('custom404');
+			if ($tpl_name == 'content_en')
+				$tpl_source = get_site_preference('custom404');
+			else
+				$tpl_source = '';
 			return true;
 		}
 		else
