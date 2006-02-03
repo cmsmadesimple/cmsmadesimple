@@ -307,7 +307,7 @@ class TemplateOperations
 		$result = 0;
 
 		global $gCms;
-		$db = &$gCms->GeDb();
+		$db = &$gCms->GetDb();
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
         $row = &$db->GetRow($query,array($id));
