@@ -1,13 +1,32 @@
-Version 0.12 -- Subversion
+Version 0.12 "Fiji" -- Subversion
 -----------------
 * Added the {metadata} tag for both global and page level
 metdata
 * Added the hierarchy manager for proper caching of site
 structure
+* Added ability to install xml-ified modules directly from
+the admin
+* Added menu manager module to replace cssmenu, ellnav,
+bulletmenu and the rest.  Now output is easily customized
+using Smarty templates.
 * Changed handling of 404 errors and smarty errors.  {nocache}
 should be a showing up less and more sane errors should
 gracefully appear
+* Changed html blobs to global content blocks.  {global_content}
+is the new tag, but {html_blob} will also work just fine.
+* Changed all language files to be UTF-8.
+* Fixed bug with handling of ISS not giving back all necessary
+SERVER variables
+* Fixed bug where stylesheet would print out an extra url even
+if there were no stylesheets with blank media types
 * Lots of little changes to the module API
+* Lots of additions to cms_selflink, including accessibility
+improvements
+* Moved page alias to always show.  Added automatic
+substitution of many "alternate" characters.
+* Smarty now handles the loading of our custom plugins as well.
+This means we don't load EVERY plugin and insetad only the ones
+used on that page.
 * Removed the database port from the installer
 * Updated to ADODB 4.70
 * Updated to Smarty 2.6.12
