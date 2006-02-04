@@ -36,7 +36,7 @@ function smarty_cms_help_function_global_content() {
 	<h3>What does this do?</h3>
 	<p>Inserts a global content block into your template or page.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{globa_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
+	<p>Just insert the tag into your template/page like: <code>{global_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li>name - The name of the global content block to display.</li>
