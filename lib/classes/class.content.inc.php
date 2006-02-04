@@ -1961,10 +1961,11 @@ class ContentManager
 	function & GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null)
 	{
 		global $gCms;
+		global $CMS_ADMIN_PAGE;
 
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$usecache = true;
-		if (isset($onlyexpanded))
+		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
 		{
 			$usecache = false;
 		}
