@@ -944,7 +944,7 @@ class CMSModule
 	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
 	  $xmltxt .= $this->xmldtd."\n";
 	  $xmltxt .= "<module>\n";
-          $xmltxt  = "  <dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
+          $xmltxt .= "  <dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
 	  $xmltxt .= "  <name>".$this->GetName()."</name>\n";
 	  $xmltxt .= "  <version>".$this->GetVersion()."</version>\n";
 	  $xmltxt .= "  <help>".base64_encode($this->GetHelpPage())."</help>\n";
