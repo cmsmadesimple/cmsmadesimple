@@ -2397,7 +2397,7 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-	function ListTemplates()
+	function ListTemplates($modulename = '')
 	{
 		global $gCms;
 
@@ -2407,7 +2407,7 @@ class CMSModule
 		$retresult = array();
 
 		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY module_name ASC';
-		$result =& $db->Execute($query, array($this->GetName()));
+		$result =& $db->Execute($query, array($modulename != ''?$modulename:$this->GetName()));
 
 		while (isset($result) && !$result->EOF)
 		{
@@ -2422,7 +2422,7 @@ class CMSModule
 	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
 	 * follow any smarty caching rules.
 	 */
-	function GetTemplate($tpl_name)
+	function GetTemplate($tpl_name, $modulename = '')
 	{
 		global $gCms;
 
@@ -2430,7 +2430,7 @@ class CMSModule
 		$config =& $gCms->GetConfig();
 
 		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
-		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
 
 		if ($result && $result->RecordCount() > 0)
 		{
@@ -2441,31 +2441,31 @@ class CMSModule
 		return '';
 	}
 
-	function SetTemplate($tpl_name, $content)
+	function SetTemplate($tpl_name, $content, $modulename = '')
 	{
 		$db = $this->cms->db;
 
 		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
-		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
 
 		if ($result && $result->RecordCount() < 1)
 		{
 			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,?,?)';
-			$db->Execute($query, array($this->GetName(), $tpl_name, $content, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+			$db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name, $content, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
 		}
 		else
 		{
 			$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = ? WHERE module_name = ? AND template_name = ?';
-			$db->Execute($query, array($content, $db->DBTimeStamp(time()), $this->GetName(), $tpl_name));
+			$db->Execute($query, array($content, $db->DBTimeStamp(time()), $modulename != ''?$modulename:$this->GetName(), $tpl_name));
 		}
 	}
 
-	function DeleteTemplate($tpl_name)
+	function DeleteTemplate($tpl_name, $modulename = '')
 	{
 		$db = $this->cms->db;
 
 		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, array($this->GetName(), $tpl_name));
+		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
 	}
 
 	function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
