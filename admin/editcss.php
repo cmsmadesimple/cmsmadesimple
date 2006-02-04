@@ -54,6 +54,12 @@ $error = "";
 $css_name = "";
 if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
 
+$from = "";
+if (isset($_REQUEST["from"])) $from = $_REQUEST["from"];
+
+$templateid = "";
+if (isset($_REQUEST["templateid"])) $templateid = $_REQUEST["templateid"];
+
 # the old name of the css (if it has changed, we'll have to check that the new
 # one is not already used.&
 $orig_css_name = "";
@@ -74,7 +80,10 @@ if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 # if the form has beeen cancelled, we redirect
 if (isset($_POST["cancel"]))
 {
-	redirect("listcss.php");
+	if ($from == 'templatecssassoc')
+		redirect("listcssassoc.php?type=template&id=" . $templateid);
+	else
+		redirect("listcss.php");
 	return;
 }
 
@@ -155,7 +164,10 @@ if ($access)
 					
 				if (!isset($_POST["apply"]))
 				{
-					redirect("listcss.php");
+					if ($from == 'templatecssassoc')
+						redirect("listcssassoc.php?type=template&id=" . $templateid);
+					else
+						redirect("listcss.php");
 					return;
 				}
 			}
@@ -241,6 +253,8 @@ else
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="hidden" name="css_id" value="<?php echo $css_id?>" />
+				<input type="hidden" name="from" value="<?php echo $from?>" />
+				<input type="hidden" name="templateid" value="<?php echo $templateid?>" />
 				<input type="hidden" name="editcss" value="true" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />

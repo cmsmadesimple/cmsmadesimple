@@ -42,6 +42,12 @@ if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 $encoding = "";
 if (isset($_POST["encoding"])) $encoding = $_POST["encoding"];
 
+$from = "";
+if (isset($_REQUEST["from"])) $from = $_REQUEST["from"];
+
+$cssid = "";
+if (isset($_REQUEST["cssid"])) $cssid = $_REQUEST["cssid"];
+
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
@@ -56,7 +62,12 @@ if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
 if (isset($_POST["cancel"])) {
-	redirect("listtemplates.php");
+	if ($from == 'content')
+		redirect("listcontent.php");
+	else if ($from == 'cssassoc')
+		redirect('templatecss.php?id='.$cssid.'&type=template');
+	else
+		redirect("listtemplates.php");
 	return;
 }
 
@@ -134,7 +145,12 @@ if ($access)
 				if (!$apply)
 				{
 					audit($template_id, $onetemplate->name, 'Edited Template');
-					redirect("listtemplates.php");
+					if ($from == 'content')
+						redirect("listcontent.php");
+					else if ($from == 'cssassoc')
+						redirect('templatecss.php?id='.$cssid.'&type=template');
+					else
+						redirect("listtemplates.php");
 				}
 			}
 			else
@@ -248,6 +264,8 @@ else
 			<p class="pageinput">
 				<input type="hidden" name="orig_template" value="<?php echo $orig_template?>" />
 				<input type="hidden" name="template_id" value="<?php echo $template_id?>" />
+				<input type="hidden" name="from" value="<?php echo $from?>" />
+				<input type="hidden" name="cssid" value="<?php echo $cssid?>" />
 				<input type="hidden" name="edittemplate" value="true" />
 				<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="button" onmouseover="this.className='buttonHover'" onmouseout="this.className='button'" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />

@@ -111,7 +111,7 @@ function display_hierarchy(&$root) {
 
         $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
   			if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name) {
-  						 $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
+  						 $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".$templates[$one->TemplateId()]->name."</a></td>\n";
   			}	else {
 	  				$thelist .= "<td>&nbsp;</td>\n";
 	  		}

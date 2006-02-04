@@ -152,7 +152,7 @@ else {
 			array_push($csslist,$one["assoc_to_id"]);
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-			echo "<td><a href=\"edittemplate.php?template_id=".$one["assoc_to_id"]."\">".$one["template_name"]."</a></td>\n";
+			echo "<td><a href=\"edittemplate.php?template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";
 
 			# if user has right to delete
 			if ($delasso)
