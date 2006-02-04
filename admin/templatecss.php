@@ -194,11 +194,11 @@ else {
 	# we generate the dropdown
 	if ("" == $notinto)
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE active = 1 ORDER BY template_name";
 	}
 	else
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (".$notinto.") ORDER BY template_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (".$notinto.") AND active = 1 ORDER BY template_name";
 	}
 	$result = $db->Execute($query);
 
