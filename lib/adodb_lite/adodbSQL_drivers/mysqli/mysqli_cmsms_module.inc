@@ -11,6 +11,7 @@ class mysqli_cmsms_ADOConnection extends mysqli_cmsms_EXTENDER
  	var $_genIDSQL = "update %s set id=LAST_INSERT_ID(id+1);";
 	var $_genSeqSQL = "create table %s (id int not null)";
 	var $_genSeq2SQL = "insert into %s values (%s)";
+	var $_dropSeqSQL = "drop table %s";
 	var $genID = 0;
 
 	function GenID($seqname='adodbseq', $startID=1)
