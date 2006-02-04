@@ -49,9 +49,9 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	$endNode = &$manager->sureGetNodeById($thispage);
 
 # build path
-	$path=array($endNode);
-	if (isset($node))
+	if (isset($endNode))
 	{
+		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
 		while ($currentNode->getLevel()>0) {
 			$content = &$currentNode->getContent();
@@ -60,54 +60,54 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 				$currentNode = &$currentNode->getParentNode();
 			}
 		}
-	}
 
-	if ($root!='##ROOT_NODE##') {
-# check if the last added is root. if not, add id
-		if (isset($currentNode))
-		{
-			$content = &$currentNode->getContent();
-			if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
-				$node = &$manager->sureGetNodeByAlias($root);
-				if (isset($node)) {
-					$content = &$node->getContent();
-					if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
+		if ($root!='##ROOT_NODE##') {
+	# check if the last added is root. if not, add id
+			if (isset($currentNode))
+			{
+				$content = &$currentNode->getContent();
+				if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
+					$node = &$manager->sureGetNodeByAlias($root);
+					if (isset($node)) {
+						$content = &$node->getContent();
+						if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
+					}
 				}
 			}
 		}
-	}
-	$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
-	$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
-# now create the trail
-	for ($i=count($path)-1;$i>=0;$i--) {
-		$node = &$path[$i];
-		if (isset($node))
-		{
-			$onecontent = &$node->getContent();
-			if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
-				if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
-					$trail .= '<a href="' . $onecontent->getURL() . '"';
-					$trail .= $classid;
-					$trail .= '>';
+		$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
+		$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
+	# now create the trail
+		for ($i=count($path)-1;$i>=0;$i--) {
+			$node = &$path[$i];
+			if (isset($node))
+			{
+				$onecontent = &$node->getContent();
+				if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
+					if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
+						$trail .= '<a href="' . $onecontent->getURL() . '"';
+						$trail .= $classid;
+						$trail .= '>';
+						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= '</a> ' . $delimiter . ' ';
+					} else {
+						$trail .= "<span $classid>";
+						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= '</span>';
+						$trail .= ' ' . $delimiter . ' ';
+					}
+				} else {
+					if (isset($params['currentclassid'])) {
+						$trail .= "<span $currentclassid>";
+					} else {
+						$trail .= '<strong>';
+					}
 					$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-					$trail .= '</a> ' . $delimiter . ' ';
-				} else {
-					$trail .= "<span $classid>";
-					$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-					$trail .= '</span>';
-					$trail .= ' ' . $delimiter . ' ';
-				}
-			} else {
-				if (isset($params['currentclassid'])) {
-					$trail .= "<span $currentclassid>";
-				} else {
-					$trail .= '<strong>';
-				}
-				$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-				if (isset($params['currentclassid'])) {
-					$trail .= '</span>';
-				} else {
-					$trail .= '</strong>';
+					if (isset($params['currentclassid'])) {
+						$trail .= '</span>';
+					} else {
+						$trail .= '</strong>';
+					}
 				}
 			}
 		}
