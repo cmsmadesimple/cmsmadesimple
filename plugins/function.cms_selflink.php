@@ -165,6 +165,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		unset($condition);
 		unset($order_by);
 	} // end of next-prev code
+	/*
 	if (isset($alias) && $alias != "") {
 		if ($config["assume_mod_rewrite"]) 
 			$url = $config["root_url"]."/".$alias.$config['page_extension'];
@@ -178,6 +179,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	} else {
 		$url="";
 	}
+	*/
 
 	if (isset($params['label']))
 	{
