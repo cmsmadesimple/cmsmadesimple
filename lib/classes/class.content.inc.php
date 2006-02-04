@@ -2023,7 +2023,7 @@ class ContentManager
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
-			while ($row = &$dbresult->FetchRow())
+			while ($row = $dbresult->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
 				if (in_array($row['type'], 
