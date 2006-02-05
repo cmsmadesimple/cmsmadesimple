@@ -121,6 +121,22 @@ class Smarty_CMS extends Smarty {
 						       "db_get_trusted"));
 	}
 
+    /**
+     * wrapper for include() retaining $this
+     * @return mixed
+     */
+    function _include($filename, $once=false, $params=null)
+    {
+        if ($filename != '')
+        {
+			if ($once) {
+				return include_once($filename);
+			} else {
+				return include($filename);
+			}
+        }
+    }
+
     function trigger_error($error_msg, $error_type = E_USER_WARNING)
     {   
         var_dump("Smarty error: $error_msg");

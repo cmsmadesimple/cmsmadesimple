@@ -1490,18 +1490,30 @@ class CMSModule
 	{
 	}
 
+	/**
+	 * Called before the content is sent off to smarty for processing.  Basically 
+	 * overlaps with ContentPreRender, but it makes more sense to be named 
+	 * PreCompile.
+	 *
+	 * @param string The precompiled text
+	 */
 	function ContentPreCompile(&$content)
 	{
 	}
 
+	/**
+	 * Called right after smarty is done processing and ready to head off to the 
+	 * cache.  Does the same as PostRenderNonCached, but with a better name.
+	 *
+	 * @param string The postcompiled text
+	 */
 	function ContentPostCompile(&$content)
 	{
 	}
 
 	/**
-	 * Called after content is sent to smarty for processing and right before
-	 * display.  Cached content will still not call this function before display.
-     * This only exists because we didn't want to break backwards compatibility.
+	 * This serves no purpose anymore.  Template, content and html blobs are 
+	 * never pushed together at any point and cached.
 	 *
 	 * @param string The postrendered text
 	 */
@@ -1511,7 +1523,8 @@ class CMSModule
 
 	/**
 	 * Called after content is sent to smarty for processing and right before
-	 * display.  Cached content will still call this function before display.
+	 * display.  Cached content will still call this function before display,
+	 * but it is called EVERY time a page is requested.
 	 *
 	 * @param string The postrendered text
 	 */
