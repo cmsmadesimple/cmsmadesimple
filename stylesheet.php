@@ -103,7 +103,8 @@ if(function_exists('getallheaders'))
 }
 
 #sending content length allows HTTP/1.0 persistent connections
-header("Content-Length: ".strlen($css));
+#(and also breaks if gzip is on)
+//header("Content-Length: ".strlen($css));
 
 echo $css;
 
