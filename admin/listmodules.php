@@ -37,8 +37,7 @@ if (isset($_GET["action"])) $action = $_GET["action"];
 $allowoverwritemodules = 0;
 if (isset($_POST["allowoverwrite"])) $allowoverwritemodules = $_POST["allowoverwrite"];
 
-$autoinstallupgrade = 0;
-if (isset($_POST["autoinstallupgrade"])) $autoinstallupgra = $_POST["autoinstallupgrade"];
+$autoinstallupgrade = 0; // keep this here for a bit, just incase
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
@@ -102,6 +101,9 @@ if ($access)
 		// no auto install or upgrade
 		redirect("listmodules.php");
 	      }
+	    // note, wishy, when you dig in here next, everything below here
+	    // can probably go.
+	    /*
             else if( !isset( $gCms->modules[$result['name']] ) )
               {
                  // looks like we're installing this module
@@ -115,6 +117,7 @@ if ($access)
                  $newversion = $result['version'];
 	         redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
               }
+	    */
           }  
       }
 
@@ -496,12 +499,6 @@ else if ($action == 'missingdeps')
 	    <p class="pageinput">
 	      <input type="checkbox" name="allowoverwrite" value="1">
             </p>
-<div class="pageoverflow">
-	    <p class="pagetext"><?php echo lang('autoinstallupgrade')?>:</p>
-	    <p class="pageinput">
-	      <input type="checkbox" name="autoinstallupgrade" value="1" checked>
-            </p>
-</div>
 <div class="pageoverflow">
 	    <p class="pagetext">&nbsp;</p>
 	    <p class="pageinput">
