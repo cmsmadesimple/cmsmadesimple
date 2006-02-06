@@ -20,7 +20,6 @@ rm -fr makedoc.sh
 rm -fr cleardb.sh
 rm -fr generatedump.php
 rm -fr images/cms/*.svg
-rm -fr admin/lang/bg_BG.nls.php
 #rm -fr tmp/cache/*
 #rm -fr tmp/templates_c/*
 rm -fr svn-propset

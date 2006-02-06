@@ -1193,14 +1193,15 @@ class ContentBase
 		global $gCms;
 		$config = &$gCms->config;
 		$url = "";
+		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
-			$url = $config["root_url"]."/".$this->mAlias.
+			$url = $config["root_url"]."/".$alias.
 				(isset($config['page_extension'])?$config['page_extension']:'.shtml');
 		}
 		else
 		{
-			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
+			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
 		}
 		return $url;
 	}
