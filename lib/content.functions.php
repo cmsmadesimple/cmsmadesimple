@@ -83,8 +83,12 @@ class Smarty_CMS extends Smarty {
 						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
-		$this->register_resource("print", array(&$this, "db_get_template",
-						       "db_get_timestamp",
+		$this->register_resource("print", array(&$this, "template_get_template",
+						       "template_get_timestamp",
+						       "db_get_secure",
+						       "db_get_trusted"));
+		$this->register_resource("template", array(&$this, "template_get_template",
+						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
 		$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
@@ -101,10 +105,6 @@ class Smarty_CMS extends Smarty {
 						       "db_get_trusted"));
 		$this->register_resource("content", array(&$this, "content_get_template",
 						       "content_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("template", array(&$this, "template_get_template",
-						       "template_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
 		$this->register_resource("module", array(&$this, "module_get_template",
@@ -213,6 +213,7 @@ class Smarty_CMS extends Smarty {
 			$text = $oneblob->content;
 
 			#Perform the content htmlblob callback
+			/*
 			reset($gCms->modules);
 			while (list($key) = each($gCms->modules))
 			{
@@ -223,6 +224,7 @@ class Smarty_CMS extends Smarty {
 					$gCms->modules[$key]['object']->ContentHtmlBlob($text);
 				}
 			}
+			*/
 
 			$tpl_source = $text;
 
@@ -319,7 +321,6 @@ class Smarty_CMS extends Smarty {
 
 		$content = $data["content"];
 
-		#Perform the content data callback
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
 		{
@@ -327,7 +328,7 @@ class Smarty_CMS extends Smarty {
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
-				$gCms->modules[$key]['object']->ContentData($content);
+				$gCms->modules[$key]['object']->ContentPreCompile($content);
 			}
 		}
 
@@ -337,6 +338,7 @@ class Smarty_CMS extends Smarty {
 		$menutext = $data['menutext'];
 
 		#Perform the content title callback
+		/*
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
 		{
@@ -347,21 +349,10 @@ class Smarty_CMS extends Smarty {
 				$gCms->modules[$key]['object']->ContentTitle($title);
 			}
 		}
+		*/
 
 		$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
 		$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
-
-		#Perform the content prerender callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-			}
-		}
 
 		#So no one can do anything nasty, take out the php smarty tags.  Use a user
 		#defined plugin instead.
@@ -383,7 +374,7 @@ class Smarty_CMS extends Smarty {
 	{
 		showmem('start template_get_template');
 		global $gCms;
-		$config = $gCms->config;
+		$config =& $gCms->GetConfig();
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
@@ -397,6 +388,27 @@ class Smarty_CMS extends Smarty {
 			if ($tpl_name == 'notemplate')
 			{
 				$tpl_source = '{content}';
+
+				showmem('end template_get_template');
+				return true;
+			}
+			else if (isset($_GET["print"]))
+			{
+				$script = '';
+
+				if (isset($_GET["js"]) and $_GET["js"] == 1)
+					$script = '<script language="JavaScript">window.print();</script>';
+
+				if (isset($_GET["goback"]) and $_GET["goback"] == 0)
+				{
+					$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;">{content}</body></html>';
+				}
+				else
+				{
+					$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}'.$script.'</body></html>';
+				}
+
+				showmem('end template_get_template');
 				return true;
 			}
 			else
@@ -404,40 +416,7 @@ class Smarty_CMS extends Smarty {
 				$templateobj =& TemplateOperations::LoadTemplateByID($pageinfo->template_id);
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
-					#Time to fill our template content
-					#If it's in print mode, then just create a simple stupid template, or template without button :)
-					if (isset($_GET["print"]))
-					{
-						$script = '';
-
-						if (isset($_GET["js"]) and $_GET["js"] == 1)
-							$script = '<script language="JavaScript">window.print();</script>';
-
-						if (isset($_GET["goback"]) and $_GET["goback"] == 0)
-						{
-							$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;">{content}</body></html>';
-						}
-						else
-						{
-							$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}'.$script.'</body></html>';
-						}
-					}
-					else
-					{
-						$tpl_source = $templateobj->content;
-					}
-
-					#Perform the content template callback
-					reset($gCms->modules);
-					while (list($key) = each($gCms->modules))
-					{
-						$value =& $gCms->modules[$key];
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true)
-						{
-							$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
-						}
-					}
+					$tpl_source = $templateobj->content;
 
 					#So no one can do anything nasty, take out the php smarty tags.  Use a user
 					#defined plugin instead.
@@ -465,6 +444,11 @@ class Smarty_CMS extends Smarty {
 			return true;
 		}
 		else if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+		{
+			$tpl_timestamp = time();
+			return true;
+		}
+		else if (isset($_GET['print']))
 		{
 			$tpl_timestamp = time();
 			return true;
@@ -513,6 +497,7 @@ class Smarty_CMS extends Smarty {
 
 				#Perform the content data callback
 				#This needs to go...
+				/*
 				reset($gCms->modules);
 				while (list($key) = each($gCms->modules))
 				{
@@ -523,8 +508,10 @@ class Smarty_CMS extends Smarty {
 						$gCms->modules[$key]['object']->ContentData($tpl_source);
 					}
 				}
+				*/
 
 				#Perform the content prerender callback
+				/*
 				reset($gCms->modules);
 				while (list($key) = each($gCms->modules))
 				{
@@ -535,6 +522,7 @@ class Smarty_CMS extends Smarty {
 						$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
 					}
 				}
+				*/
 
 				#So no one can do anything nasty, take out the php smarty tags.  Use a user
 				#defined plugin instead.
@@ -600,30 +588,6 @@ class Smarty_CMS extends Smarty {
 			@ob_end_clean();
 
 			$tpl_source = $modoutput;
-
-			#Perform the content data callback
-			reset($gCms->modules);
-			while (list($key) = each($gCms->modules))
-			{
-				$value =& $gCms->modules[$key];
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->ContentData($modoutput);
-				}
-			}
-		}
-
-		#Perform the content prerender callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-			}
 		}
 		
 		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
@@ -647,311 +611,6 @@ class Smarty_CMS extends Smarty {
 	{
 		$tpl_timestamp = time();
 		return true;
-	}
-
-	function db_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
-	{
-		global $gCms;
-
-		$cmsmodules = $gCms->modules;
-		$db = $gCms->GetDb();
-		$config = $gCms->config;
-
-		if (get_site_preference('enablesitedownmessage') == "1")
-		{
-			$tpl_source = get_site_preference('sitedownmessage');
-			return true;
-		}
-		else
-		{
-			#Find valid content by id or alias
-			#$contentobj =& ContentManager::LoadContentFromAlias($tpl_name, true);
-
-			$manager =& $gCms->GetHierarchyManager();
-			$node =& $manager->sureGetNodeByAlias($tpl_name);
-			$contentobj =& $node->GetContent();
-
-			$templateobj = FALSE;
-
-			#If the content object is false, then let's see if we should grab a template for a custom 404 error
-			#If not, then let's see if there is a template for this content
-			if ($contentobj === FALSE || $contentobj->Active() === FALSE)
-			{
-				if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
-				{
-					#We don't cache error pages
-					$this->caching = false;
-					$this->force_compile = true;
-					$templateobj =& TemplateOperations::LoadTemplateById(get_site_preference('custom404template'));
-					$template_id = get_site_preference('custom404template');
-				}
-			}
-			else
-			{
-				#Grab template id and make sure it's actually "somewhat" valid
-				$template_id = $contentobj->TemplateId();
-				if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-				{
-					#Ok, it's valid, let's load the bugger
-					$templateobj =& TemplateOperations::LoadTemplateById($template_id);
-				}
-			}
-
-			#If this fails, then it basically is a standard 404 error or a custom with no template
-			if (!($contentobj === FALSE && $templateobj === FALSE))
-			{
-				$stylesheet = '';
-
-				foreach (get_stylesheet_media_types($template_id) as $media)
-				{
-					$stylesheet .= '<link rel="stylesheet" type="text/css" ';
-					if ($media != '')
-					{
-						$stylesheet .= 'media="'.$media.'" ';
-					}
-					$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$template_id;
-					if ($media != '')
-					{
-						$stylesheet .= '&amp;mediatype='.urlencode($media);
-					}
-					$stylesheet .= '" />'."\n"; 
-				}
-
-				#Time to fill our template content
-				#If it's in print mode, then just create a simple stupid template, or template without button :)
-				if (isset($_GET["print"]))
-				{
-					$script = '';
-
-					if (isset($_GET["js"]) and $_GET["js"] == 1)
-						$script = '<script language="JavaScript">window.print();</script>';
-
-					if (isset($_GET["goback"]) and $_GET["goback"] == 0)
-					{
-						$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;">{content}</body></html>';
-					}
-					else
-					{
-						$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}'.$script.'</body></html>';
-					}
-				}
-				else
-				{
-					$tpl_source = $templateobj->content;
-				}
-
-				#Perform the content template callback
-				reset($gCms->modules);
-				while (list($key) = each($gCms->modules))
-				{
-					$value =& $gCms->modules[$key];
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
-					}
-				}
-
-				#Fill some variables with various information
-				$content = '';
-				$head_tags = '';
-				$header_script = '';
-
-				if ($contentobj !== FALSE)
-				{
-					$gCms->variables['content_id'] = $contentobj->Id();
-					$gCms->variables['page'] = $contentobj->Id();
-					$gCms->variables['page_id'] = $contentobj->Id();
-
-					$gCms->variables['page_name'] = $contentobj->Alias();
-					$gCms->variables['position'] = $contentobj->Hierarchy();
-
-					$content = $contentobj->Show();
-
-					#Perform the content data callback
-					reset($gCms->modules);
-					while (list($key) = each($gCms->modules))
-					{
-						$value =& $gCms->modules[$key];
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true)
-						{
-							$gCms->modules[$key]['object']->ContentData($content);
-						}
-					}
-
-					$title = $contentobj->Name();
-					$menutext = $contentobj->MenuText();
-
-					#Perform the content title callback
-					reset($gCms->modules);
-					while (list($key) = each($gCms->modules))
-					{
-						$value =& $gCms->modules[$key];
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true)
-						{
-							$gCms->modules[$key]['object']->ContentTitle($title);
-						}
-					}
-
-					$head_tags = $contentobj->mProperties->GetValue('headtags');
-					$header_script = $contentobj->mProperties->GetValue('page_header');
-				}
-
-				#Pop the head tags in if they exist
-				if (isset($head_tags) && $head_tags != "")
-				{
-					$tpl_source = ereg_replace("<\/head>", $head_tags."</head>", $tpl_source);
-				}
-
-				#Check to see if Show() actually gave us something
-				if ($content != '')
-				{
-
-					#If it's regular content, do this...
-					$tpl_source = eregi_replace("\{content\}", $content, $tpl_source);
-
-					// now do prerender
-					$tpl_source = $contentobj->ContentPreRender($tpl_source);
-
-					if ($config["use_bb_code"] == true && isset($gCms->bbcodeparser))
-					{
-						$tpl_source = $gCms->bbcodeparser->qparse($tpl_source);
-					}
-					
-				}
-				else
-				{
-					$tpl_source = eregi_replace("\{content\}", get_site_preference('custom404'), $tpl_source);
-					$tpl_source = eregi_replace("\{title\}", 'Page Not Found!', $tpl_source);
-
-					if ($header_script && $header_script != '')
-					{
-						$tpl_source = $header_script.$tpl_source;
-					}
-				}
-
-				#So no one can do anything nasty, take out the php smarty tags.  Use a user
-				#defined plugin instead.
-				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-				{
-					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-				}
-
-				#Replace stylesheet and title tags
-				$tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-				$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
-				$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
-
-				#Perform the content prerender callback
-				reset($gCms->modules);
-				while (list($key) = each($gCms->modules))
-				{
-					$value =& $gCms->modules[$key];
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-					}
-				}
-
-				return true;
-			}
-			else
-			{
-				if (get_site_preference('enablecustom404') == "1")
-				{
-					$tpl_source = get_site_preference('custom404');
-
-					#Perform the content prerender callback
-					reset($gCms->modules);
-					while (list($key) = each($gCms->modules))
-					{
-						$value =& $gCms->modules[$key];
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true)
-						{
-							$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-						}
-					}
-					return true;	
-				}
-				else
-				{
-					return false;
-				}
-			}
-		}
-	}
-
-	function db_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-	{
-		global $gCms;
-		$db = $gCms->GetDb();
-		$config = $gCms->config;
-
-		if (get_site_preference('enablesitedownmessage') == "1")
-		{
-			$tpl_timestamp = time();
-			return true;
-		}
-		else
-		{
-			if (is_numeric($tpl_name) && strpos($tpl_name,'.') === FALSE && strpos($tpl_name,',') === FALSE) //Fix for postgres
-			{ 
-				$query = "SELECT c.content_id, c.cachable, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE (c.content_id = ".$db->qstr($tpl_name)." OR c.content_alias=".$db->qstr($tpl_name).") AND c.active = 1";
-			}
-			else
-			{
-				$query = "SELECT c.content_id, c.cachable, t.modified_date as template_date, c.modified_date as content_date, c.type, c.hierarchy, t.encoding FROM ".cms_db_prefix()."content c INNER JOIN ".cms_db_prefix()."templates t ON t.template_id = c.template_id WHERE c.content_alias=".$db->qstr($tpl_name)." AND c.active = 1";
-			}
-			$result = $db->Execute($query);
-
-			if ($result && $result->RecordCount() > 0)
-			{
-				$line = $result->FetchRow();
-
-				#This way the id is right, even if an alias is given
-				$gCms->variables['content_id'] = $line['content_id'];
-				$gCms->variables['page'] = $line['content_id'];
-				$gCms->variables['page_id'] = $line['content_id'];
-
-				$gCms->variables['page_name'] = $tpl_name;
-				$gCms->variables['position'] = ContentManager::CreateFriendlyHierarchyPosition($line['hierarchy']);
-
-				$content_date = $db->UnixTimeStamp($line['content_date']);
-				$template_date = $db->UnixTimeStamp($line['template_date']);
-
-				$smarty_obj->assign('modified_date',($content_date<$template_date?$template_date:$content_date));
-
-				#We only want to cache "static" content
-				if ($line['type'] == 'content')
-				{
-					header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
-					if ($line['cachable'] == 1)
-					{
-						$tpl_timestamp = ($content_date<$template_date?$template_date:$content_date);
-					}
-					else
-					{
-						$tpl_timestamp = time();
-					}
-					return true;
-				}
-				else
-				{
-					$tpl_timestamp = time();
-					return true;
-				}
-			}
-			else
-			{
-				$smarty_obj->assign('modified_date',time());
-				$tpl_timestamp = time();
-				return true;
-			}
-		}
 	}
 
 	function db_get_secure($tpl_name, &$smarty_obj)
@@ -1107,7 +766,7 @@ function global_content_regex_callback($matches)
 				if ($gCms->modules[$key]['installed'] == true &&
 					$gCms->modules[$key]['active'] == true)
 				{
-					$gCms->modules[$key]['object']->ContentHtmlBlob($text);
+					$gCms->modules[$key]['object']->GlobalContentPreCompile($text);
 				}
 			}
 

@@ -18,30 +18,24 @@
 
 function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 {
+	global $gCms;
 
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
-		global $gCms;
-
 		switch ($result[0])
 		{
 			case "content":
-				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
 						$gCms->modules[$key]['active'] == true)
 					{
 						$gCms->modules[$key]['object']->ContentPreCompile($tpl_output);
-						
-						#For backwards compatibility, though I think PreCompile makes more sense
-						$gCms->modules[$key]['object']->ContentPreRender($tpl_output);
 					}
 				}
 				break;
 			case "template":
-				#Perform the content prerender callback
 				foreach($gCms->modules as $key=>$value)
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
@@ -51,10 +45,31 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 					}
 				}
 				break;
+			case "globalcontent":
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->GlobalContentPreCompile($tpl_output);
+					}
+				}
+				break;
 			default:
 				break;
 		}
+
 	}
+
+	foreach($gCms->modules as $key=>$value)
+	{
+		if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+		{
+			$gCms->modules[$key]['object']->SmartyPreCompile($tpl_output);
+		}
+	}
+
 	return $tpl_output;
 }
 ?>

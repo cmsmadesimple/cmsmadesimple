@@ -18,11 +18,11 @@
 
 function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 {
+	global $gCms;
+
 	$result = explode(':', $smarty->_current_file);
 	if (count($result) > 1)
 	{
-		global $gCms;
-
 		switch ($result[0])
 		{
 			case "content":
@@ -47,10 +47,31 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					}
 				}
 				break;
+			case "globalcontent":
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->GlobalContentPostCompile($tpl_output);
+					}
+				}
+				break;
 			default:
 				break;
 		}
+
 	}
+
+	foreach($gCms->modules as $key=>$value)
+	{
+		if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+		{
+			$gCms->modules[$key]['object']->SmartyPostCompile($tpl_output);
+		}
+	}
+
 	return $tpl_output;
 }
 ?>

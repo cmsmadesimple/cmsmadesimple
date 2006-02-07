@@ -1424,6 +1424,13 @@ class CMSModule
 	{
 	}
 
+	function GlobalContentPreCompile(&$gc)
+	{
+	}
+
+	function GlobalContentPostCompile(&$gc)
+	{
+	}
 
 
 	/**
@@ -1435,6 +1442,8 @@ class CMSModule
 	/**
 	 * Called with the content of the template before it's sent to smarty
 	 * for processing.
+	 *
+	 * Deprecated:  This isn't called anymore.
 	 *
 	 * @param string The template text
 	 */
@@ -1455,6 +1464,8 @@ class CMSModule
 	/**
 	 * Called with the title before it is pasted into the template.
 	 *
+	 * Deprecated:  This isn't called anymore.
+	 *
 	 * @param string The title text
 	 */
 	function ContentTitle(&$title)
@@ -1463,6 +1474,8 @@ class CMSModule
 
 	/**
 	 * Called with the content data before it is pasted into the template.
+	 *
+	 * Deprecated:  This isn't called anymore.  Use ContentPreCompile.
 	 *
 	 * @param string The content text
 	 */
@@ -1474,6 +1487,8 @@ class CMSModule
 	 * Called with the content of the html blob before it is pasted into the
 	 * template (but after content is pasted in)
 	 *
+	 * Deprecated:  This isn't called anymore.  Use GlobalContentPreCompile.
+	 *
 	 * @param string The html blob text
 	 */
 	function ContentHtmlBlob(&$htmlblob)
@@ -1483,6 +1498,8 @@ class CMSModule
 	/**
 	 * Called before the pasted together template/content/html blobs/etc are
 	 * sent to smarty for processing.
+	 *
+	 * Deprecated:  Not useful anymore, since it's all handled separately now
 	 *
 	 * @param string The prerendered text
 	 */
@@ -1515,6 +1532,8 @@ class CMSModule
 	 * This serves no purpose anymore.  Template, content and html blobs are 
 	 * never pushed together at any point and cached.
 	 *
+	 * Deprecated
+	 *
 	 * @param string The postrendered text
 	 */
 	function ContentPostRenderNonCached(&$content)
@@ -1529,6 +1548,28 @@ class CMSModule
 	 * @param string The postrendered text
 	 */
 	function ContentPostRender(&$content)
+	{
+	}
+
+	/**
+	 * Called before any smarty "template" (content blocks/content tempaltes/modules)
+	 * gets pushed off for compilation.
+	 * (new in 0.12)
+	 *
+	 * @param string The precompiled text
+	 */
+	function SmartyPreCompile(&$content)
+	{
+	}
+
+	/**
+	 * Called after any smarty "template" (content blocks/content tempaltes/modules)
+	 * is done being compiled by smarty, but before caching.
+	 * (new in 0.12)
+	 *
+	 * @param string The precompiled text
+	 */
+	function SmartyPostCompile(&$content)
 	{
 	}
 
