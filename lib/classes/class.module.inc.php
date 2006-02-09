@@ -1720,15 +1720,20 @@ class CMSModule
 	 * @param string Method to use for the form tag.  Defaults to 'post'
 	 * @param string Optional enctype to use, Good for situations where files are being uploaded
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+	 * @param string Text to append to the end of the id and name of the form
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false)
+	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='')
 	{
 		global $gCms;
 
 		$formcount = 1;
 		$variables = &$gCms->variables;
+
 		if (isset($variables['formcount']))
 			$formcount = $variables['formcount'];
+
+		if ($idsuffix != '')
+			$idsuffix = $formcount;
 
 		$goto = ($returnid==''?'moduleinterface.php':'index.php');
 		#$goto = 'moduleinterface.php';
@@ -1738,7 +1743,7 @@ class CMSModule
 			$goto .= '&amp;'.$id.'returnid='.$returnid;
 			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
-		$text = '<form id="'.$id.'moduleform-'.$formcount.'" name="'.$id.'moduleform-'.$formcount.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+		$text = '<form id="'.$id.'moduleform-'.$idsuffix.'" name="'.$id.'moduleform-'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 		if ($enctype != '')
 		{
 			$text .= ' enctype="'.$enctype.'"';
