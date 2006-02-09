@@ -306,21 +306,21 @@ Please complete the following fields:
 		<SELECT NAME="dbms">
 <?php
 $valid_database = false;
-if (function_exists('mysql_connect'))
+if (extension_loaded('mysql'))
 	{
 	echo '<OPTION VALUE="mysql" ';
 	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysql'?'selected="selected"':'');
 	echo '>MySQL (3 and 4.0)</OPTION>';
 	$valid_database = true;
 	}
-if (function_exists('mysqli_connect'))
+if (extension_loaded('mysqli'))
 	{
 	echo '<OPTION VALUE="mysqli" ';
 	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysqli'?'selected="selected"':'');
 	echo '>MySQL (4.1+)</OPTION>';
 	$valid_database = true;
 	}
-if (function_exists('pg_connect'))
+if (extension_loaded('pgsql'))
 	{
 	echo '<OPTION VALUE="postgres7" ';
 	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'postgres7'?'selected="selected"':'');
@@ -328,7 +328,7 @@ if (function_exists('pg_connect'))
 	$valid_database = true;
 	}
 /*
-if (function_exists('sqlite_open'))
+if (extension_loaded('sqlite'))
 	{
 	echo '<OPTION VALUE="sqlite" ';
 	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'sqlite'?'selected="selected"':'');

@@ -1723,6 +1723,13 @@ class CMSModule
 	 */
 	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false)
 	{
+		global $gCms;
+
+		$formcount = 1;
+		$variables = &$gCms->variables;
+		if (isset($variables['formcount']))
+			$formcount = $variables['formcount'];
+
 		$goto = ($returnid==''?'moduleinterface.php':'index.php');
 		#$goto = 'moduleinterface.php';
 		if ($inline && $returnid != '')
@@ -1731,7 +1738,7 @@ class CMSModule
 			$goto .= '&amp;'.$id.'returnid='.$returnid;
 			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
-		$text = '<form id="'.$id.'moduleform" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+		$text = '<form id="'.$id.'moduleform-'.$formcount.'" name="'.$id.'moduleform-'.$formcount.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 		if ($enctype != '')
 		{
 			$text .= ' enctype="'.$enctype.'"';
@@ -1750,6 +1757,10 @@ class CMSModule
 			}
 		}
 		$text .= "</div>\n";
+
+		$formcount = $formcount + 1;
+		$variables['formcount'] = $formcount;
+
 		return $text;
 	}
 
