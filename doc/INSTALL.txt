@@ -1,5 +1,5 @@
 Requirements:
-    PHP 4+
+    PHP 4.2+
     MySQL
     Apache webserver (or another php enabled webserver)
     BBCodeParser (optional)
@@ -28,6 +28,9 @@ OR
 	- chmod 777 tmp/cache
 	- chmod 777 uploads
 	- chmod 777 uploads/images
+
+	optionally, if you would like to be able to install modules via the admin panel:
+	- chmod 777 modules
 
 5.  Open up your new CMS site in your webbrowser and you will be guided through a short install.
 
