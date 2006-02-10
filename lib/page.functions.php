@@ -623,6 +623,10 @@ function get_stylesheet_media_types($template_id)
 	{
 		#Ok, it's valid, let's load the bugger
 		$templateobj = TemplateOperations::LoadTemplateById($template_id);
+		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
+		{
+			array_push($result, '');
+		}
 	}
 
 	#If it's valid after loading, then start the process...
@@ -637,10 +641,8 @@ function get_stylesheet_media_types($template_id)
 
 		while (!$cssresult->EOF)
 		{
-			#if ($cssresult->fields['media_type'] != '')
-			#{
+			if (!in_array($cssresult->fields['media_type'], $result))
 				array_push($result, $cssresult->fields['media_type']);
-			#}
 			$cssresult->MoveNext();
 		}
 	}
