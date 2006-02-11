@@ -188,19 +188,19 @@ else
 
 		module_autoupgrade();
 
-		if (file_exists(TMP_CACHE_LOCATION."/SITEDOWN"))
-		{
-			if (!unlink(TMP_CACHE_LOCATION."/SITEDOWN"))
-			{
-				echo "<p class=\"error\">Error: Could not remove the tmp/cache/SITEDOWN file.  Please remove manually.</p>";
-			}
-		}
 
 		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
 		echo "<p>CMS is up to date.  Please click <a href=\"../index.php\">here</a> to go to your CMS site.</p>";
 
 	}
 
+	if (file_exists(TMP_CACHE_LOCATION."/SITEDOWN"))
+	{
+		if (!unlink(TMP_CACHE_LOCATION."/SITEDOWN"))
+		{
+			echo "<p class=\"error\"><strong>Error:</strong> Could not remove the tmp/cache/SITEDOWN file.  Please remove manually or you will continue to show a \"Site Down for Maintainence\" message on your site.</p>";
+		}
+	}
 }
 
 ?>

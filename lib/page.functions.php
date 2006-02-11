@@ -52,23 +52,32 @@ function check_login()
 
 	if (!isset($_SESSION["cms_admin_user_id"]))
 	{
+		debug_buffer('No session found.  Now check for cookies');
 		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
 		{
+			debug_buffer('Cookies found, do a passhash check');
 			if (check_passhash(isset($_COOKIE["cms_admin_user_id"]), isset($_COOKIE["cms_passhash"])))
 			{
+				debug_buffer('passhash check succeeded...  creating session object');
 				generate_user_object($_COOKIE["cms_admin_user_id"]);
 			}
 			else
 			{
+				debug_buffer('passhash check failed...  redirect to login');
 				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 				redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
 			}
 		}
 		else
 		{
+			debug_buffer('No cookies found.  Redirect to login.');
 			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
 		}
+	}
+	else
+	{
+		debug_buffer('Session found.  Moving on...');
 	}
 }
 

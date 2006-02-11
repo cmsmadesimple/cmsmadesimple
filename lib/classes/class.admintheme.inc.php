@@ -1269,13 +1269,16 @@ class AdminTheme
      * Outputs warning if the install directory is still there.
      *
      * @param file file or dir to check for
+	 * @param message to display if it does exist
      */
-    function DisplayDashboardCallout($file)
+    function DisplayDashboardCallout($file, $message = '')
     {
+		if ($message == '')
+			$message = lang('installdirwarning');
         echo "<div class=\"DashboardCallout\">\n";
         if (file_exists($file))
         {
-	       echo '<p>'.lang('installdirwarning').'</p>';
+	       echo '<p>'.$message.'</p>';
         }
         echo "</div> <!-- end DashboardCallout -->\n";
     }

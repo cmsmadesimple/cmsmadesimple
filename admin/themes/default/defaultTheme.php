@@ -176,13 +176,16 @@ class defaultTheme extends AdminTheme
 		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
    }
 
-    function DisplayDashboardCallout($file)
+    function DisplayDashboardCallout($file, $message = '')
     {
+	if ($message == '')
+		$message = lang('installdirwarning');
+
         if (file_exists($file))
         {
-	       echo "<div class=\"DashboardCallout\">\n";
-		   echo "<div class=\"pageerrorinstalldir\"><p class=\"pageerror\">".lang('installdirwarning')."</p></div>";
-	       echo "</div> <!-- end DashboardCallout -->\n";
+		echo "<div class=\"DashboardCallout\">\n";
+		echo "<div class=\"pageerrorinstalldir\"><p class=\"pageerror\">".$message."</p></div>";
+		echo "</div> <!-- end DashboardCallout -->\n";
         }
     }
 	
