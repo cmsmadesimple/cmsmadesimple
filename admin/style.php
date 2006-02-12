@@ -1,6 +1,9 @@
 <?php
 
-//CHANGED
+if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
+{
+	@ini_set( 'zlib.output_compression','Off' );
+}
 header("Content-type: text/css");
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
