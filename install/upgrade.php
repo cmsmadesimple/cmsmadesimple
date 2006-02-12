@@ -126,21 +126,23 @@ else
 
 	echo "<p>Cleaning cache dirs...";
 
+	@clearstatcache();
+
 	//Clear cache dirs
 	$cpath = TMP_CACHE_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
-		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
-			#echo ($cpath.$cfile);
-			unlink($cpath.$cfile);
+		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.'/'.$cfile), true) . "<br />";
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.'/'.$cfile)) {
+			unlink($cpath.'/'.$cfile);
 		}
 	}
 	$cpath = TMP_TEMPLATES_C_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
-		if ($cfile != "." && $cfile != ".." && is_file($cpath.$cfile)) {
-			#echo ($cpath.$cfile);
-			unlink($cpath.$cfile);
+		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.'/'.$cfile), true) . "<br />";
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.'/'.$cfile)) {
+			unlink($cpath.'/'.$cfile);
 		}
 	}
 
