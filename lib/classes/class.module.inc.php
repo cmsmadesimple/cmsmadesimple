@@ -2513,7 +2513,8 @@ class CMSModule
 
 	function SetTemplate($tpl_name, $content, $modulename = '')
 	{
-		$db = $this->cms->db;
+		global $gCms;
+		$db =& $gCms->GetDB();
 
 		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
@@ -2532,7 +2533,8 @@ class CMSModule
 
 	function DeleteTemplate($tpl_name, $modulename = '')
 	{
-		$db = $this->cms->db;
+		global $gCms;
+		$db =& $gCms->GetDB();
 
 		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
 		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
@@ -2679,7 +2681,8 @@ class CMSModule
 	 */
 	function CreatePermission($permission_name, $permission_text)
 	{
-		$db = $this->cms->db;
+		global $gCms;
+		$db =& $gCms->GetDB();
 
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$count = $db->GetOne($query, array($permission_name));
@@ -2711,7 +2714,8 @@ class CMSModule
 	 */
 	function RemovePermission($permission_name)
 	{
-		$db = $this->cms->db;
+		global $gCms;
+		$db =& $gCms->GetDB();
 
 		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$row = &$db->GetRow($query, array($permission_name));
