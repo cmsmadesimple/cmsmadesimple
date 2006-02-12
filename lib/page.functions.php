@@ -376,7 +376,7 @@ function load_site_preferences()
 		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
 		$result = &$db->Execute($query);
 
-		while (!$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
 			$result->MoveNext();

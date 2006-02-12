@@ -646,7 +646,7 @@ function load_plugins(&$smarty)
 
 		$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
 		$result = &$db->Execute($query);
-		while (isset($result) && !$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			if (!in_array($result->fields['userplugin_name'], $plugins))
 			{
