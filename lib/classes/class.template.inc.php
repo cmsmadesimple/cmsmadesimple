@@ -117,7 +117,7 @@ class TemplateOperations
 		$query = "SELECT template_id, template_name, template_content, stylesheet, encoding, active, default_template, modified_date FROM ".cms_db_prefix()."templates ORDER BY template_name";
 		$dbresult = &$db->Execute($query);
 
-		while (!$dbresult->EOF)
+		while ($dbresult && !$dbresult->EOF)
 		{
 			$onetemplate = new Template();
 			$onetemplate->id = $dbresult->fields['template_id'];

@@ -2002,7 +2002,7 @@ class ContentManager
 		$query = "SELECT parent_id, count(*) as cpt FROM 
 			".cms_db_prefix()."content GROUP BY parent_id";
 		$dbresult =& $db->Execute($query);
-		while ($row = $dbresult->FetchRow()) {
+		while ($dbresult && $row = $dbresult->FetchRow()) {
 			$childrenCount[$row["parent_id"]] = $row["cpt"];
 		}
 

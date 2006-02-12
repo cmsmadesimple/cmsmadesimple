@@ -160,7 +160,7 @@ function load_all_permissions($userid)
 
 	$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ?";
 	$result = &$db->Execute($query, array($userid));
-	while (!$result->EOF)
+	while ($result && !$result->EOF)
 	{
 		array_push($perms, $result->fields['permission_name']);
 		$result->MoveNext();
@@ -296,7 +296,7 @@ function author_pages($userid)
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
-		while (!$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			array_push($variables['authorpages'], $result->fields['content_id']);
 			$result->MoveNext();
@@ -471,7 +471,7 @@ function load_all_preferences($userid)
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
 	$result = &$db->Execute($query, array($userid));
 
-	while (!$result->EOF)
+	while ($result && !$result->EOF)
 	{
 		$variables[$result->fields['preference']] = $result->fields['value'];
 		$result->MoveNext();

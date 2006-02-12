@@ -177,7 +177,7 @@ echo '[done]</p>';
 
 echo '<p>Changing dhtmlmenu to phplayers module on templates...';
 
-$alltemplates = @TemplateOperations::LoadTemplates();
+$alltemplates = TemplateOperations::LoadTemplates();
 foreach ($alltemplates as $onetemplate)
 {
 	#Fix for dhtmlmenu

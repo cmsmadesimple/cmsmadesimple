@@ -71,7 +71,7 @@ echo "<p>Clearing cache and template directories... ";
 
 function clear_dir_6($dir){
 
-	$path = dirname(dirname(__FILE__))."/smarty/cms/".$dir."/";
+	$path = dirname(dirname(__FILE__))."/tmp/".$dir."/";
 
 	$handle=opendir($path);
 	while ($file = readdir($handle)) {

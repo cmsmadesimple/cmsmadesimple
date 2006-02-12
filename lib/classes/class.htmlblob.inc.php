@@ -173,7 +173,7 @@ function AuthorBlobs($userid)
 		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
-		while (!$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
 			$result->MoveNext();
