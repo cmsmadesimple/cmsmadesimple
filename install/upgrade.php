@@ -26,7 +26,7 @@ require_once(dirname(dirname(__FILE__))."/include.php");
 function module_autoupgrade()
 {
 	global $gCms;
-	$db = $gCms->db;
+	$db =& $gCms->GetDB();
 
 	foreach ($gCms->modules as $modulename=>$value)
 	{
@@ -146,7 +146,7 @@ else
 
 	echo "[done]</p>";
 
-	$db = &ADONewConnection($config["dbms"], 'pear:cmsms:date');
+	$db = &ADONewConnection($config["dbms"], 'pear:date:cmsms');
 	$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
