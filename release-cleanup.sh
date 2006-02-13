@@ -6,9 +6,9 @@ echo ------------------------------------
 
 sh autogen.sh
 
-cd admin/lang
-perl findmissing.pl
-cd ../..
+#cd admin/lang
+#perl findmissing.pl
+#cd ../..
 
 rm -fr CHECKLIST
 rm -fr build

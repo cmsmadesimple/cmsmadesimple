@@ -7,12 +7,13 @@ if [ "$version" = "" ]; then
 	exit 1
 fi
 
-svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${version}
+perl svncopy.pl --pin-externals http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk/ http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
+svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version}/trunk/ cmsmadesimple-${version}
 cd cmsmadesimple-${version}
 sh autogen.sh
 sh release-cleanup.sh
 touch tmp/cache/SITEDOWN
-svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
+#svn import http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
 cd ..
 
 #svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} cmsmadesimple-${version}
