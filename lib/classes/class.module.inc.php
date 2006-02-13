@@ -2147,7 +2147,7 @@ class CMSModule
 
 		foreach ($params as $key=>$value)
 		{
-			$text .= '&amp;'.$id.$key.'='.$value;
+			$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
 		if ($returnid != '')
 		{
