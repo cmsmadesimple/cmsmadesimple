@@ -203,7 +203,7 @@ function smarty_cms_about_function_sitemap()
 {
         ?>
         <p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-        <p>Version: 1.2</p>
+        <p>Version: 1.22</p>
         <p>
         Change History:<br/>
         1.22 - Modified to use the new parameters class, delimiter, initial und add_elements (LeisureLarry)<br />
