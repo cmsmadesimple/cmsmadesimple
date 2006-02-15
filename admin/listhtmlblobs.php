@@ -91,7 +91,7 @@ if (isset($_GET["message"])) {
 	}
 
 #if ($add) {
-if (check_permission($userid, 'Add Html Blobs'))
+if (check_permission($userid, 'Add Global Content Blocks'))
 	{
 ?>
 	<div class="pageoptions">
