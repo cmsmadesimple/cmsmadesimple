@@ -22,7 +22,11 @@ function smarty_cms_function_current_date($params, &$smarty) {
 	else
 		$format = $params['format'];
 
-	return strftime($format,time());
+	$string = strftime($format,time());
+
+	if($params['ucwords']) $string = ucwords($string);
+
+	return htmlentities($string);
 }
 
 function smarty_cms_help_function_current_date() {
@@ -34,6 +38,7 @@ function smarty_cms_help_function_current_date() {
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+		<li><em>(optional)</em>ucword - If true return uppercase the first character of each word.</li>
 	</ul>
 	</p>
 	<?php
