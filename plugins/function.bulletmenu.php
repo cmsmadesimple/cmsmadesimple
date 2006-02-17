@@ -89,7 +89,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 						}
 
 						# Find direct parent of start_element
-						$otherparent = substr((string)$params['start_element'], 0, strpos((string)$params['start_element'], "."));
+						$otherparent = substr((string)$params['start_element'], 0, strrpos((string)$params['start_element'], "."));
 						if ($otherparent != '')
 						{
 							$otherparent = $otherparent . ".";
@@ -158,7 +158,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			# Now try to remove items that shouldn't be shown, based on current location
 			if ($collapse == 1)
 			{
-				if ($depth > 1) # All root level items should show 
+				if ($depth > 1) # All root level items should show
 				{
 					$curpos = $gCms->variables['position'];
 					$curdepth = count(split('\.', $curpos)) - $basedepth;
