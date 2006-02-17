@@ -229,12 +229,12 @@ class sqlitepo_date_ResultSet extends sqlitepo_date_resultset_EXTENDER
 
 	function UnixDate($v)
 	{
-		return ADOConnection::UnixDate($v);
+		return sqlitepo_date_ADOConnection::UnixDate($v);
 	}
 
 	function UnixTimeStamp($v)
 	{
-		return ADOConnection::UnixTimeStamp($v);
+		return sqlitepo_date_ADOConnection::UnixTimeStamp($v);
 	}
 
 }

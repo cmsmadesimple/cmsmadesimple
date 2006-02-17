@@ -457,7 +457,6 @@ class msql_driver_ResultSet
    		if ($this->_numOfRows > 0){
 			if ($rowNumber >= $this->_numOfRows - 1){
 				$rowNumber = $this->_numOfRows - 1;
-				$this->EOF = true;
 			}
   		}
 
@@ -530,10 +529,6 @@ class msql_driver_ResultSet
 			$results[] = $this->fields;
 			$this->MoveNext();
 			$cnt++;
-		}
-		if($this->EOF && $nRows != 0 && $cnt == 0)
-		{
-			$results[] = $this->fields;
 		}
 		return $results;
 	} 

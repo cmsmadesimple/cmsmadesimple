@@ -38,12 +38,12 @@ class mysqli_driver_ADOConnection extends ADOConnection
 
 		if($this->persistent == 1)
 		{
-			$this->connectionId = @mysqli_connect( $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket );
+			$this->connectionId = @mysqli_connect( $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
 		}
 		else
 		{
 		    $this->connectionId = @mysqli_init();
-			@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket );
+			@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
 		}
 
 		if (mysqli_connect_errno() != 0) 
@@ -296,7 +296,7 @@ class mysqli_driver_ADOConnection extends ADOConnection
 				$this->sql = $sql . $limit;
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
-				$resultId = mysqli_query($this->connectionId,  $this->sql );
+				$resultId = @mysqli_query($this->connectionId,  $this->sql );
 				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
 				if($this->debug)
 				{
@@ -492,7 +492,6 @@ class mysqli_driver_ResultSet
    		if ($this->_numOfRows > 0){
 			if ($rowNumber >= $this->_numOfRows - 1){
 				$rowNumber = $this->_numOfRows - 1;
-				$this->EOF = true;
 			}
   		}
 
@@ -565,10 +564,6 @@ class mysqli_driver_ResultSet
 			$results[] = $this->fields;
 			$this->MoveNext();
 			$cnt++;
-		}
-		if($this->EOF && $nRows != 0 && $cnt == 0)
-		{
-			$results[] = $this->fields;
 		}
 		return $results;
 	} 

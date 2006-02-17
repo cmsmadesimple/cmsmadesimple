@@ -10,9 +10,9 @@
  * build a database on any ADOdb-supported platform using a simple
  * XML schema.
  *
- * Last Editor: $Author: jlim $
+ * Last Editor: $Author: Mark Dickenson $
  * @author Richard Tango-Lowy & Dan Cech
- * @version $Revision: 1.12 $
+ * @version $Revision: 1.13 $
  *
  * @package axmls
  * @tutorial getting_started.pkg
@@ -1907,15 +1907,23 @@ class adoSchema {
 	* @param boolean $data Include data in schema dump
 	* @return string Generated XML schema
 	*/
-	function ExtractSchema( $data = FALSE ) {
+	function ExtractSchema( $data = FALSE, $sep_tables = FALSE ) {
 		$old_mode = $this->db->SetFetchMode( ADODB_FETCH_NUM );
+		
+		if($sep_tables)
+		{
+			$xml_table_array = array();
+			$schema_header = '<?xml version="1.0"?>' . "\n"
+					. '<schema version="' . $this->schemaVersion . '">' . "\n";
+			$schema_footer .= '</schema>';
+		}
 		
 		$schema = '<?xml version="1.0"?>' . "\n"
 				. '<schema version="' . $this->schemaVersion . '">' . "\n";
 		
 		if( is_array( $tables = $this->dict->MetaTables( 'TABLES' ) ) ) {
 			foreach( $tables as $table ) {
-				$schema .= '	<table name="' . $table . '">' . "\n";
+				$schema_temp = '	<table name="' . $table . '">' . "\n";
 				
 				// grab details from database
 				$rs = $this->db->Execute( 'SELECT * FROM ' . $table . ' WHERE 1=1' );
@@ -1951,29 +1959,29 @@ class adoSchema {
 						//$type = $rs->MetaType( $details );
 						$type = $this->dict->MetaType($details);
 						
-						$schema .= '		<field name="' . $details->name . '" type="' . $type . '"' . $extra . '>';
+						$schema_temp .= '		<field name="' . $details->name . '" type="' . $type . '"' . $extra . '>';
 						
 						if( !empty( $content ) ) {
-							$schema .= "\n			" . implode( "\n			", $content ) . "\n		";
+							$schema_temp .= "\n			" . implode( "\n			", $content ) . "\n		";
 						}
 						
-						$schema .= '</field>' . "\n";
+						$schema_temp .= '</field>' . "\n";
 					}
 				}
 				
 				if( is_array( $indexes ) ) {
 					foreach( $indexes as $index => $details ) {
-						$schema .= '		<index name="' . $index . '">' . "\n";
+						$schema_temp .= '		<index name="' . $index . '">' . "\n";
 						
 						if( $details['unique'] ) {
-							$schema .= '			<UNIQUE/>' . "\n";
+							$schema_temp .= '			<UNIQUE/>' . "\n";
 						}
 						
 						foreach( $details['columns'] as $column ) {
-							$schema .= '			<col>' . $column . '</col>' . "\n";
+							$schema_temp .= '			<col>' . $column . '</col>' . "\n";
 						}
 						
-						$schema .= '		</index>' . "\n";
+						$schema_temp .= '		</index>' . "\n";
 					}
 				}
 				
@@ -1981,7 +1989,7 @@ class adoSchema {
 					$rs = $this->db->Execute( 'SELECT * FROM ' . $table );
 					
 					if( is_object( $rs ) ) {
-						$schema .= '		<data>' . "\n";
+						$schema_temp .= '		<data>' . "\n";
 						
 						while(!$rs->EOF)
 						{
@@ -1992,22 +2000,31 @@ class adoSchema {
 								$row[$key] = htmlentities($val);
 							}
 							
-							$schema .= '			<row><f>' . implode( '</f><f>', $row ) . '</f></row>' . "\n";
+							$schema_temp .= '			<row><f>' . implode( '</f><f>', $row ) . '</f></row>' . "\n";
 							$rs->MoveNext();
 						}
 						
-						$schema .= '		</data>' . "\n";
+						$schema_temp .= '		</data>' . "\n";
 					}
 				}
 				
-				$schema .= '	</table>' . "\n";
+				$schema_temp .= '	</table>' . "\n";
+				$schema .= $schema_temp;
+				$xml_table_array[] = $schema_header . $schema_temp . $schema_footer;
 			}
 		}
 		
 		$this->db->SetFetchMode( $old_mode );
 		
 		$schema .= '</schema>';
-		return $schema;
+		if($sep_tables)
+		{
+			return $xml_table_array;
+		}
+		else
+		{
+			return $schema;
+		}
 	}
 	
 

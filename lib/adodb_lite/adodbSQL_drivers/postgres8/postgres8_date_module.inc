@@ -304,12 +304,12 @@ class postgres8_date_ResultSet extends postgres8_date_resultset_EXTENDER
 
 	function UnixDate($v)
 	{
-		return ADOConnection::UnixDate($v);
+		return postgres8_date_ADOConnection::UnixDate($v);
 	}
 
 	function UnixTimeStamp($v)
 	{
-		return ADOConnection::UnixTimeStamp($v);
+		return postgres8_date_ADOConnection::UnixTimeStamp($v);
 	}
 
 }

@@ -310,12 +310,12 @@ class mysql_date_ResultSet extends mysql_date_resultset_EXTENDER
 
 	function UnixDate($v)
 	{
-		return ADOConnection::UnixDate($v);
+		return mysql_date_ADOConnection::UnixDate($v);
 	}
 
 	function UnixTimeStamp($v)
 	{
-		return ADOConnection::UnixTimeStamp($v);
+		return mysql_date_ADOConnection::UnixTimeStamp($v);
 	}
 }
 ?>

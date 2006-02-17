@@ -123,12 +123,7 @@ class sqlitepo_driver_ADOConnection extends ADOConnection
 
 	function Affected_Rows()
 	{
-		if (function_exists('sqlite_rows_affected'))
-			return sqlite_rows_affected( $this->connectionId );
-		else if (function_exists('sqlite_changes'))
-			return sqlite_changes( $this->connectionId );
-		else
-			return 0;
+		return @sqlite_rows_affected( $this->connectionId );
 	} 
 
 	/**
@@ -476,7 +471,6 @@ class sqlitepo_driver_ResultSet
    		if ($this->_numOfRows > 0){
 			if ($rowNumber >= $this->_numOfRows - 1){
 				$rowNumber = $this->_numOfRows - 1;
-				$this->EOF = true;
 			}
   		}
 
@@ -557,10 +551,6 @@ class sqlitepo_driver_ResultSet
 			$results[] = $this->fields;
 			$this->MoveNext();
 			$cnt++;
-		}
-		if($this->EOF && $nRows != 0 && $cnt == 0)
-		{
-			$results[] = $this->fields;
 		}
 		return $results;
 	} 

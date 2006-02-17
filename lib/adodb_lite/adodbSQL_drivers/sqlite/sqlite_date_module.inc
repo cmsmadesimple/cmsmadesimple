@@ -12,8 +12,8 @@ eval('class sqlite_date_EXTENDER extends sqlite_'. $last_module . '_ADOConnectio
 
 class sqlite_date_ADOConnection extends sqlite_date_EXTENDER
 {
-	var $fmtDate = "Y-m-d";	/// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "Y-m-d H:i:s";
+	var $fmtDate = "'Y-m-d'";	/// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $emptyDate = '&nbsp;';
 	var $emptyTimeStamp = '&nbsp;';
 	var $sysDate = "adodb_date('Y-m-d')";
@@ -229,12 +229,12 @@ class sqlite_date_ResultSet extends sqlite_date_resultset_EXTENDER
 
 	function UnixDate($v)
 	{
-		return ADOConnection::UnixDate($v);
+		return sqlite_date_ADOConnection::UnixDate($v);
 	}
 
 	function UnixTimeStamp($v)
 	{
-		return ADOConnection::UnixTimeStamp($v);
+		return sqlite_date_ADOConnection::UnixTimeStamp($v);
 	}
 
 }

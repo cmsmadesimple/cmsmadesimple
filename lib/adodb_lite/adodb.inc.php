@@ -14,7 +14,7 @@ if (!defined('_ADODB_LAYER'))
 if (!defined('ADODB_DIR'))
 	define('ADODB_DIR', dirname(__FILE__));
 
-$ADODB_vers = 'V1.12 ADOdb Lite 29 November 2005  (c) 2005 Mark Dickenson. All rights reserved. Released LGPL.';
+$ADODB_vers = 'V1.14 ADOdb Lite 9 February 2006  (c) 2005, 2006 Mark Dickenson. All rights reserved. Released LGPL.';
 
 define('ADODB_FETCH_DEFAULT',0);
 define('ADODB_FETCH_NUM',1);
@@ -50,7 +50,6 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	} else $dsn_array = array('scheme'=>'');
 
 	$dbtype = strtolower($dbtype);
-	#var_dump($dbtype);
 	include_once ADODB_DIR . '/adodbSQL_drivers/' . $dbtype . '/' . $dbtype . '_driver.inc';
 	$last_module = 'driver';
 	if(!empty($modules))
@@ -67,7 +66,6 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	{
 		$extention = $dbtype . '_' . $last_module . '_ADOConnection';
 	}
-
 	$object = new $extention();
 	$object->last_module_name = $last_module;
 	$object->raiseErrorFn = (defined('ADODB_ERROR_HANDLER')) ? ADODB_ERROR_HANDLER : false;

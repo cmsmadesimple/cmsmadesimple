@@ -46,7 +46,7 @@ class mysqli_extend_ADOConnection extends mysqli_extend_EXTENDER
 			$this->Execute(sprintf($this->_genSeq2SQL, $seqname, $startID-1));
 			$result = $this->Execute($getnext);
 		}
-		$this->genID = mysqli_insert_id($this->_connectionID);
+		$this->genID = mysqli_insert_id($this->connectionId);
 
 		if ($result)
 			$result->Close();
