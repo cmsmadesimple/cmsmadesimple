@@ -164,19 +164,17 @@ function display_hierarchy(&$root) {
         }
         // end of move code
         
-        if ($config["query_var"] == "")	{
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php/".$one->Id()."\" rel=\"external\">";
-  						$thelist .= $viewImg;
-              $thelist .= "</a></td>\n";
-  			}	else if ($one->Alias() != "")	{
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Alias()."\" rel=\"external\">";
-                    	$thelist .= $viewImg;
-                    	$thelist .= "</a></td>\n";
-  			}	else {
-  						$thelist .= "<td class=\"pagepos\"><a href=\"".$config["root_url"]."/index.php?".$config['query_var']."=".$one->Id()."\" rel=\"external\">";
-              $thelist .= $viewImg;
-              $thelist .= "</a></td>\n";
-  			}
+		$url = $one->GetURL();
+		if ($url != '')
+		{
+			$thelist .= "<td class=\"pagepos\"><a href=\"".$one->GetURL()."\" rel=\"external\">";
+			$thelist .= $viewImg;
+		  $thelist .= "</a></td>\n";
+		}
+		else
+		{
+			$thelist .= '<td>&nbsp;</td>' . "\n";
+		}
   			
         $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
   			$thelist .= $editImg;;
