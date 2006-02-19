@@ -538,14 +538,6 @@ class ImageManager
 		if(!is_array($imgInfo))
 			Return $this->getDefaultThumb();
 
-		//the original image is smaller than thumbnails,
-		//so just return the url to the original image.
-		if ($imgInfo[0] <= $this->config['thumbnail_width']
-		 && $imgInfo[1] <= $this->config['thumbnail_height'])
-			Return $this->getFileURL($relative);
-
-		$thumbnail = $this->getThumbName($fullpath);
-		
 		//check for thumbnails, if exists and
 		// it is up-to-date, return the thumbnail url
 		if(is_file($thumbnail))

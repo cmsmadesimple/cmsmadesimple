@@ -43,14 +43,6 @@ if(!is_array($imgInfo))
 		exit();
 	}
 }
-//if the image is less than the thumbnail dimensions
-//send the original image as thumbnail
-if ($imgInfo[0] <= $IMConfig['thumbnail_width']
- && $imgInfo[1] <= $IMConfig['thumbnail_height'])
- {
-	 header('Location: '.$manager->getFileURL($image));
-	 exit();
- }
 
 //Check for thumbnails
 $thumbnail = $manager->getThumbName($fullpath);
@@ -65,8 +57,18 @@ if(is_file($thumbnail))
 }
 
 //creating thumbnails
-$thumbnailer = new Thumbnail($IMConfig['thumbnail_width'],$IMConfig['thumbnail_height']);
-$thumbnailer->createThumbnail($fullpath, $thumbnail);
+// if image smaller than config size for thumbs
+	if ($imgInfo[0] <= $IMConfig['thumbnail_width'] && $imgInfo[1] <= $IMConfig['thumbnail_height'])
+	{
+		$thumbnailer = new Thumbnail($imgInfo[0],$imgInfo[1]);
+		$thumbnailer->createThumbnail($fullpath, $thumbnail);
+	}
+ 
+// if image bigger than config size for thumbs
+	else {
+		$thumbnailer = new Thumbnail($IMConfig['thumbnail_width'],$IMConfig['thumbnail_height']);
+		$thumbnailer->createThumbnail($fullpath, $thumbnail);
+	}
 
 //Check for NEW thumbnails
 if(is_file($thumbnail))
