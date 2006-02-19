@@ -538,6 +538,8 @@ class ImageManager
 		if(!is_array($imgInfo))
 			Return $this->getDefaultThumb();
 
+		$thumbnail = $this->getThumbName($fullpath);
+		
 		//check for thumbnails, if exists and
 		// it is up-to-date, return the thumbnail url
 		if(is_file($thumbnail))
