@@ -148,20 +148,8 @@ if ($access)
 				#and show the installpost if necessary...
 				if ($modinstance->InstallPostMessage() != FALSE)
 				{
-					@ob_start();
-					echo $modinstance->InstallPostMessage();
-					$content = @ob_get_contents();
-					@ob_end_clean();
-					echo '<div class="pagecontainer">';
-					echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
-					echo $content;
-					echo "</div>";
-					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
-					include_once("footer.php");
-					exit;
-					
+					redirect("listmodules.php?action=showpostinstall&module=".$module);
 				}
-
 			}
 			else
 			{
@@ -170,6 +158,28 @@ if ($access)
 		}
 		
 		redirect("listmodules.php");
+	}
+
+	if ($action == 'showpostinstall')
+	{
+		if (isset($gCms->modules[$module]))
+		{
+			$modinstance = $gCms->modules[$module]['object'];
+			if ($modinstance->InstallPostMessage() != FALSE)
+			{
+				@ob_start();
+				echo $modinstance->InstallPostMessage();
+				$content = @ob_get_contents();
+				@ob_end_clean();
+				echo '<div class="pagecontainer">';
+				echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
+				echo $content;
+				echo "</div>";
+				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
+				include_once("footer.php");
+				exit;
+			}
+		}
 	}
 
 	if ($action == 'upgrade')
@@ -188,17 +198,17 @@ if ($access)
 			}
 			else
 			{
-					@ob_start();
-					echo $modinstance->GetLastError();
-					$content = @ob_get_contents();
-					@ob_end_clean();
-					echo '<div class="pagecontainer">';
-					echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
-					echo $content;
-					echo "</div>";
-					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-					include_once("footer.php");
-					exit;
+				@ob_start();
+				echo $modinstance->GetLastError();
+				$content = @ob_get_contents();
+				@ob_end_clean();
+				echo '<div class="pagecontainer">';
+				echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+				echo $content;
+				echo "</div>";
+				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+				include_once("footer.php");
+				exit;
 			}
 		}
 

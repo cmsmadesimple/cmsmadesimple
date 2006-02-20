@@ -1692,6 +1692,7 @@ class CMSModule
 					global $gCms;
 					$db =& $gCms->GetDb();
 					$config =& $gCms->GetConfig();
+					$smarty =& $gCms->GetSmarty();
 
 					include($filename);
 
@@ -1732,7 +1733,7 @@ class CMSModule
 		if (isset($variables['formcount']))
 			$formcount = $variables['formcount'];
 
-		if ($idsuffix != '')
+		if ($idsuffix == '')
 			$idsuffix = $formcount;
 
 		$goto = ($returnid==''?'moduleinterface.php':'index.php');
