@@ -2,17 +2,55 @@
 
 echo "<p>Making permission field bigger...";
 
-$dbdict = NewDataDictionary($db);
-$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix()."permissions", "permission_name C(255)"); 
-$dbdict->ExecuteSQLArray($sqlarray);
+if ($config["dbms"] == 'postgres7')
+{
+	$dbdict = NewDataDictionary($db);
+	$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."permissions", "tmp C(255)"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$query = "UPDATE ".cms_db_prefix()."permissions SET tmp = permission_name";
+	$db->Execute($query);
+	$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."permissions", "permission_name"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."permissions", "permission_name C(255)"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$query = "UPDATE ".cms_db_prefix()."permissions SET permission_name = tmp";
+	$db->Execute($query);
+	$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."permissions", "tmp"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+}
+else
+{
+	$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix()."permissions", "permission_name C(255)"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+}
 
 echo "[done]</p>";
 
 echo "<p>Make active boolean in modules table...";
 
 $dbdict = NewDataDictionary($db);
-$sqlarray = $dbdict->AlterColumnSQL(cms_db_prefix()."modules", "active I1"); 
-$dbdict->ExecuteSQLArray($sqlarray);
+if ($config["dbms"] == 'postgres7')
+{
+	$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."modules", "tmp I1"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$query = "UPDATE ".cms_db_prefix()."modules SET tmp = 1 WHERE active = true";
+	$db->Execute($query);
+	$query = "UPDATE ".cms_db_prefix()."modules SET tmp = 0 WHERE active = false";
+	$db->Execute($query);
+	$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."modules", "active"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."modules", "active I1"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$query = "UPDATE ".cms_db_prefix()."modules SET active = tmp";
+	$db->Execute($query);
+	$sqlarray = $dbdict->DropColumnSQL(cms_db_prefix()."modules", "tmp"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+}
+else
+{
+	$sqlarray = $dbdict->AddColumnSQL(cms_db_prefix()."modules", "active I1"); 
+	$dbdict->ExecuteSQLArray($sqlarray);
+}
 
 echo "[done]</p>";
 

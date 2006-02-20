@@ -18,6 +18,7 @@
 
 #$DONT_LOAD_DB=1;
 $LOAD_ALL_MODULES=1;
+$USE_OLD_ADODB=1;
 
 require_once(dirname(dirname(__FILE__))."/fileloc.php");
 require_once(dirname(dirname(__FILE__))."/include.php");

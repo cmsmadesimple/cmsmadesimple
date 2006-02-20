@@ -105,7 +105,7 @@ function count_sql_execs($db, $sql, $inputarray)
 showmem('including smarty');
 require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
 showmem('including adodb');
-if ($config['use_adodb_lite'] == false)
+if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__)."/lib/adodb/adodb.inc.php")))
 	require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 else
 	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
