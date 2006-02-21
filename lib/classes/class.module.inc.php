@@ -2023,15 +2023,20 @@ class CMSModule
 	 * @param string An array of items in the list that should default to selected.
 	 * @param string The number of rows to be visible in the list (before scrolling).
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param boolean indicates wether multiple selections are allowed (defaults to true)
 	 */
-	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='')
+	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 	{
 		$text = '<select name="'.$id.$name.'"';
 		if ($addttext != '')
 		{
 			$text .= ' ' . $addttext;
 		}
-		$text .= ' multiple="multiple" size="'.$size.'">';
+		if( $multiple )
+		  {
+		    $text .= ' multiple="multiple"';
+		  }
+		$text .= 'size="'.$size.'">';
 		$count = 0;
 		foreach ($items as $key=>$value)
 		{
@@ -2511,6 +2516,7 @@ class CMSModule
 
 		return '';
 	}
+
 
 	function SetTemplate($tpl_name, $content, $modulename = '')
 	{
