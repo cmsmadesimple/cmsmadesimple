@@ -522,26 +522,35 @@ class ContentBase
 		$this->mLastModifiedBy = $lastmodifiedby;
 	}
 	
-	function SetAlias($alias)
-	{
-		$this->DoReadyForEdit();
-		global $gCms;
+function SetAlias($alias)
+    {
+        $this->DoReadyForEdit();
+        global $gCms;
 
-		if ($alias == '')
-		{
-			$alias = trim($this->mMenuText);
-		}
+        $tolower = 0;
 
+        if ($alias == '')
+        {
+            $alias = trim($this->mMenuText);
+            $tolower = 1;
+        }
+
+        // replacement.php is encoded utf-8 and must be the first modification of alias
         include(dirname(dirname(__FILE__)) . '/replacement.php');
+        $alias = str_replace($toreplace, $replacement, $alias);
+        
+        // lowercase only on empty aliases
+        if ($tolower == 1)
+            {
+            $alias = strtolower($alias);
+            }
+            
+        $alias = preg_replace("/[_-\W]+/", "_", $alias);
+        $alias = trim($alias, '_');
 
-		$alias = str_replace($toreplace, $replacement, $alias);
-		$alias = strtolower($alias);
-		$alias = preg_replace("/[_-\W]+/", "_", $alias);
-		$alias = trim($alias, '_');
-
-		$this->mAlias = $alias;
-	}
-
+        $this->mAlias = $alias;
+    } 
+	
 	/**
 	 * Returns the menu text for this content
 	 */
