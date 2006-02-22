@@ -441,7 +441,7 @@ class ModuleOperations
 	 * modules loaded by LoadModules, which could either be all or them,
 	 * or just ones that are active and installed.
 	 */
-	function GetAllModules()
+	function & GetAllModules()
 	{
 		global $gCms;
 		$cmsmodules = &$gCms->modules;
@@ -1740,7 +1740,8 @@ class CMSModule
 		#$goto = 'moduleinterface.php';
 		if ($inline && $returnid != '')
 		{
-			$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+			#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+			$goto = 'index.php?mact='.$this->GetName().':'.$id.':'.$action;
 			$goto .= '&amp;'.$id.'returnid='.$returnid;
 			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
@@ -1749,11 +1750,14 @@ class CMSModule
 		{
 			$text .= ' enctype="'.$enctype.'"';
 		}
+		/*
 		$text .= '><div class="hidden"><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
 		if ($action != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
 		}
+		*/
+		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().':'.$id.':'.$action.'" />';
 		if ($returnid != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
@@ -2149,7 +2153,8 @@ class CMSModule
 			$text .= '/'.$this->cms->config['admin_dir'];
 		}
 
-		$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+		#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+		$text .= '/'.$goto.'?mact='.$this->GetName().':'.$id.':'.$action;
 
 		foreach ($params as $key=>$value)
 		{

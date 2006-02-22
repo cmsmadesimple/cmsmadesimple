@@ -24,8 +24,23 @@ require_once("../include.php");
 
 check_login($config);
 
-$module = "";
-if (isset($_REQUEST["module"])) $module = $_REQUEST["module"];
+$id = '';
+$module = '';
+$action = 'defaultadmin';
+if (isset($_REQUEST['module'])) $module = $_REQUEST['module'];
+if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+if (isset($_REQUEST['id']))
+{
+	$id = $_REQUEST['id'];
+}
+elseif (isset($_REQUEST['mact']))
+{
+	$ary = explode(':', $_REQUEST['mact'], 3);
+	$module = (isset($ary[0])?$ary[0]:'');
+	$id = (isset($ary[1])?$ary[1]:'');
+	$action = (isset($ary[2])?$ary[2]:'');
+}
+
 if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
 	$userid = get_userid();
@@ -49,7 +64,7 @@ if (count($gCms->modules) > 0)
 		@ob_start();
 		$id = 'm1_';
 		$params = @ModuleOperations::GetModuleParameters($id);
-		echo $gCms->modules[$module]['object']->DoActionBase((isset($_REQUEST[$id.'action'])?$_REQUEST[$id.'action']:'defaultadmin'), $id, $params);
+		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
 		$content = @ob_get_contents();
 		@ob_end_clean();
 		echo $content;

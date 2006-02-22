@@ -22,13 +22,25 @@ function smarty_cms_function_content($params, &$smarty)
 	$pageinfo =& $gCms->variables['pageinfo'];
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		if ((isset($_GET['module']) || isset($_POST['module']) || isset($_GET['mact'])) &&
-			( ( isset( $_GET['id'] ) && $_GET['id'] == 'cntnt01') || (isset($_POST['id']) && $_POST['id'] == 'cntnt01') ) )
+		$id = '';
+		$modulename = '';
+		$action = '';
+		if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
+		if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+		if (isset($_REQUEST['id']))
 		{
-			$modulename = '';
-			if (isset($_GET['module'])) $modulename = $_GET['module'];
-			if (isset($_POST['module'])) $modulename = $_POST['module'];
-			if (isset($_GET['mact'])) $modulename = $_GET['mact'];
+			$id = $_REQUEST['id'];
+		}
+		elseif (isset($_REQUEST['mact']))
+		{
+			$ary = explode(':', $_REQUEST['mact'], 3);
+			$modulename = (isset($ary[0])?$ary[0]:'');
+			$id = (isset($ary[1])?$ary[1]:'');
+			$action = (isset($ary[2])?$ary[2]:'');
+		}
+
+		if ($id != '' && $id == 'cntnt01')
+		{
 			if (!isset($params['block']))
 			{
 				$cmsmodules = &$gCms->modules;
@@ -53,13 +65,7 @@ function smarty_cms_function_content($params, &$smarty)
 								&& $cmsmodules[$modulename]['object']->IsPluginModule())
 							{
 								@ob_start();
-								$id = 'cntnt01';
 								$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
-								$action = 'default';
-								if (isset($params['action']))
-								{
-									$action = $params['action'];
-								}
 			
 								$returnid = '';
 								if (isset($gCms->variables['pageinfo']))
@@ -125,4 +131,5 @@ function smarty_cms_about_function_content()
 	<?php
 }
 
+# vim:ts=4 sw=4 noet
 ?>

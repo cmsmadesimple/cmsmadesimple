@@ -39,6 +39,7 @@ rm -fr modules/TinyMCE
 rm -fr scripts
 find . -depth -type d -name .svn -exec rm -fr {} \;
 find . -type d -exec chmod 775 {} \;
+find . -type f -name "*.php" chmod -x {} \;
 rm -fr release-cleanup.sh
 
 echo ------------------------------------

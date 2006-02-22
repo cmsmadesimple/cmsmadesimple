@@ -68,10 +68,19 @@ $smarty->params = $params;
 
 $page = '';
 
-$smarty->id = (isset($params['id'])?$params['id']:'');
-if (isset($params['id']) && isset($params[$params['id'] . 'returnid']))
+if (isset($params['mact']))
 {
-	$page = $params[$params['id'] . 'returnid'];
+	$ary = explode(':', $params['mact'], 3);
+	$smarty->id = (isset($ary[1])?$ary[1]:'');
+}
+else
+{
+	$smarty->id = (isset($params['id'])?$params['id']:'');
+}
+
+if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
+{
+	$page = $params[$smarty->id . 'returnid'];
 }
 
 if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
@@ -132,7 +141,7 @@ if (isset($_GET["print"]))
 else
 {
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
-	if (isset($_GET['id']) && isset($_GET[$_GET['id'].'showtemplate']) && $_GET[$_GET['id'].'showtemplate'] == 'false')
+	if (isset($smarty->id) && $smarty->id != '' && isset($_GET[$smarty->id.'showtemplate']) && $_GET[$smarty->id.'showtemplate'] == 'false')
 	{
 		$html = $smarty->fetch('template:notemplate') . "\n";
 	}
