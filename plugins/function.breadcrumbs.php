@@ -53,11 +53,29 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	{
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
-		while ($currentNode->getLevel()>0) {
+		while (isset($currentNode) && $currentNode->getLevel() > 0)
+		{
 			$content = &$currentNode->getContent();
-			if ((isset($content)) && (strtolower($content->Alias())!=strtolower($root))) {
+			if (isset($content))
+			{
+				//Add current node to the path and then check to see if
+				//current node is the set root
 				$path[] = $currentNode;
-				$currentNode = &$currentNode->getParentNode();
+				if (strtolower($content->Alias())!=strtolower($root))
+				{
+					//Get the parent node and loop
+					$currentNode = &$currentNode->getParentNode();
+				}
+				else
+				{
+					//No need to get the parent node -- we're the set root already
+					break;
+				}
+			}
+			else
+			{
+				//There are more serious problems here, dump out while we can
+				break;
 			}
 		}
 

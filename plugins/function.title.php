@@ -20,7 +20,7 @@ function smarty_cms_function_title($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo = &$gCms->variables['pageinfo'];
-	$config = &$gCms->config;
+	$config = &$gCms->GetConfig();
 	if (isset($pageinfo) && $pageinfo->content_id == -1)
 	{
 		#We've a custom error message...  set a current timestamp
