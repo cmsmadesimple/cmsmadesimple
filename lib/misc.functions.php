@@ -32,7 +32,7 @@
 function redirect($to, $noappend=false)
 {
     global $gCms;
-    $config = $gCms->config;
+    $config =& $gCms->GetConfig();
 
     $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
     $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
@@ -40,7 +40,7 @@ function redirect($to, $noappend=false)
     $components = parse_url($to);
     if(count($components) > 0)
     {
-        $to =  (isset($components['scheme']) ? $components['scheme'] : $schema) . '://';
+        $to =  (isset($components['scheme']) && startswith($components['scheme'], 'http') ? $components['scheme'] : $schema) . '://';
         $to .= isset($components['host']) ? $components['host'] : $host;
         $to .= isset($components['port']) ? ':' . $components['port'] : '';
         if(isset($components['path']))

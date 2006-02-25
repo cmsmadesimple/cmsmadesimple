@@ -35,7 +35,7 @@ if (isset($_REQUEST['id']))
 }
 elseif (isset($_REQUEST['mact']))
 {
-	$ary = explode(':', $_REQUEST['mact'], 3);
+	$ary = explode(',', $_REQUEST['mact'], 3);
 	$module = (isset($ary[0])?$ary[0]:'');
 	$id = (isset($ary[1])?$ary[1]:'');
 	$action = (isset($ary[2])?$ary[2]:'');

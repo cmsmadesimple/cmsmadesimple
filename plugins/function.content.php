@@ -33,7 +33,7 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		elseif (isset($_REQUEST['mact']))
 		{
-			$ary = explode(':', $_REQUEST['mact'], 3);
+			$ary = explode(',', $_REQUEST['mact'], 3);
 			$modulename = (isset($ary[0])?$ary[0]:'');
 			$id = (isset($ary[1])?$ary[1]:'');
 			$action = (isset($ary[2])?$ary[2]:'');

@@ -1741,7 +1741,7 @@ class CMSModule
 		if ($inline && $returnid != '')
 		{
 			#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-			$goto = 'index.php?mact='.$this->GetName().':'.$id.':'.$action;
+			$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
 			$goto .= '&amp;'.$id.'returnid='.$returnid;
 			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
@@ -1757,7 +1757,7 @@ class CMSModule
 			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
 		}
 		*/
-		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().':'.$id.':'.$action.'" />';
+		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().','.$id.','.$action.'" />';
 		if ($returnid != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
@@ -2154,7 +2154,7 @@ class CMSModule
 		}
 
 		#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		$text .= '/'.$goto.'?mact='.$this->GetName().':'.$id.':'.$action;
+		$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action;
 
 		foreach ($params as $key=>$value)
 		{
@@ -2313,7 +2313,8 @@ class CMSModule
 		{
 			$text .= 'moduleinterface.php';
 		}
-		$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
+		#$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
+		$text .= '?mact='.$name.','.$id.','.$action;
 		if ($returnid != '')
 		{
 			$text .= '&'.$id.'returnid='.$returnid;
@@ -2322,6 +2323,7 @@ class CMSModule
 		{
 			$text .= '&'.$id.$key.'='.$value;
 		}
+		#var_dump($text);
 		redirect($text);
 	}
 
