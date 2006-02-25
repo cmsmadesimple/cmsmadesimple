@@ -66,12 +66,18 @@ function smarty_cms_function_content($params, &$smarty)
 							{
 								@ob_start();
 								$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
-			
+
 								$returnid = '';
-								if (isset($gCms->variables['pageinfo']))
+								if (isset($params['returnid']))
 								{
-									$returnid = $gCms->variables['pageinfo']->content_id;
+									$returnid = $params['returnid'];
 								}
+								else if (isset($pageinfo))
+								{
+									$returnid = $pageinfo->content_id;
+								}
+								var_dump($action . ":" . $id);
+								var_dump($params);
 								$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 								if ($result !== FALSE)
 								{

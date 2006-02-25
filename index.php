@@ -70,7 +70,7 @@ $page = '';
 
 if (isset($params['mact']))
 {
-	$ary = explode(':', $params['mact'], 3);
+	$ary = explode(',', $params['mact'], 3);
 	$smarty->id = (isset($ary[1])?$ary[1]:'');
 }
 else
@@ -82,8 +82,7 @@ if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
 {
 	$page = $params[$smarty->id . 'returnid'];
 }
-
-if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
+else if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
 {
 	$page = $_GET[$config["query_var"]];
 }
