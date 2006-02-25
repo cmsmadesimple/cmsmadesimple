@@ -76,8 +76,6 @@ function smarty_cms_function_content($params, &$smarty)
 								{
 									$returnid = $pageinfo->content_id;
 								}
-								var_dump($action . ":" . $id);
-								var_dump($params);
 								$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 								if ($result !== FALSE)
 								{
