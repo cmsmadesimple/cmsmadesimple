@@ -55,6 +55,12 @@ class mysql_cmsms_ADOConnection extends mysql_cmsms_EXTENDER
 	{
 		return $this->_numOfRows;
 	}
+
+	function outp($text, $newline = false)
+	{
+		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg();
+		debug_buffer($this->debug_output);
+	}
 }
 
 eval('class mysql_cmsms_resultset_EXTENDER extends mysql_'. $last_module . '_ResultSet { }');

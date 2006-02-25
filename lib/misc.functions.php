@@ -77,7 +77,7 @@ function redirect($to, $noappend=false)
     }
 	*/
 
-    if (headers_sent())
+    if (headers_sent() && !(isset($config) && $config['debug'] == true))
     {
         // use javascript instead
         echo '<script type="text/javascript">
@@ -93,7 +93,7 @@ function redirect($to, $noappend=false)
     }
     else
     {
-        if (isset($config) and $config['debug'] == true)
+        if (isset($config) && $config['debug'] == true)
         {
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a href=\"".$to."\">".$to."</a><br />";

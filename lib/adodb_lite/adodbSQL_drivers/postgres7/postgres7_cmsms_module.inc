@@ -53,6 +53,12 @@ class postgres7_cmsms_ADOConnection extends postgres7_cmsms_EXTENDER
 	{
 		return $this->_numOfRows;
 	}
+
+	function outp($text, $newline = false)
+	{
+		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg();
+		debug_buffer($this->debug_output);
+	}
 }
 
 eval('class postgres7_cmsms_resultset_EXTENDER extends postgres7_'. $last_module . '_ResultSet { }');
