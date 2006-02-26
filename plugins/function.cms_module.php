@@ -21,6 +21,23 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 
+	$id = '';
+	$modulename = '';
+	$action = '';
+	if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
+	if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+	if (isset($_REQUEST['id']))
+	{
+		$id = $_REQUEST['id'];
+	}
+	elseif (isset($_REQUEST['mact']))
+	{
+		$ary = explode(',', $_REQUEST['mact'], 3);
+		$modulename = (isset($ary[0])?$ary[0]:'');
+		$id = (isset($ary[1])?$ary[1]:'');
+		$action = (isset($ary[2])?$ary[2]:'');
+	}
+
 	if (isset($cmsmodules))
 	{
 		$modulename = $params['module'];
@@ -45,11 +62,15 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					@ob_start();
 					$id = 'm' . ++$gCms->variables["modulenum"];
 					$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+					/*
 					$action = 'default';
 					if (isset($params['action']))
 					{
 						$action = $params['action'];
 					}
+					*/
+					if ($action == '')
+						$action = 'default';
 
 					$returnid = '';
 					if (isset($gCms->variables['pageinfo']))

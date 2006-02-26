@@ -1741,9 +1741,9 @@ class CMSModule
 		if ($inline && $returnid != '')
 		{
 			#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-			$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
-			$goto .= '&amp;'.$id.'returnid='.$returnid;
-			$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+			#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
+			#$goto .= '&amp;'.$id.'returnid='.$returnid;
+			#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 		}
 		$text = '<form id="'.$id.'moduleform-'.$idsuffix.'" name="'.$id.'moduleform-'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 		if ($enctype != '')
