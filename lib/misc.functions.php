@@ -32,7 +32,10 @@
 function redirect($to, $noappend=false)
 {
     global $gCms;
-    $config =& $gCms->GetConfig();
+	if (isset($gCms))
+		$config =& $gCms->GetConfig();
+	else
+		$config = array();
 
     $schema = $_SERVER['SERVER_PORT'] == '443' ? 'https' : 'http';
     $host = strlen($_SERVER['HTTP_HOST'])?$_SERVER['HTTP_HOST']:$_SERVER['SERVER_NAME'];
