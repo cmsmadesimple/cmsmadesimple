@@ -1757,7 +1757,7 @@ class CMSModule
 			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
 		}
 		*/
-		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().','.$id.','.$action.'" />';
+		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />';
 		if ($returnid != '')
 		{
 			$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
@@ -2154,7 +2154,7 @@ class CMSModule
 		}
 
 		#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action;
+		$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action.','.($inline == true?1:0);
 
 		foreach ($params as $key=>$value)
 		{

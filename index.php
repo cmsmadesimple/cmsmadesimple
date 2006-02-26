@@ -70,7 +70,7 @@ $page = '';
 
 if (isset($params['mact']))
 {
-	$ary = explode(',', $params['mact'], 3);
+	$ary = explode(',', $params['mact'], 4);
 	$smarty->id = (isset($ary[1])?$ary[1]:'');
 }
 else

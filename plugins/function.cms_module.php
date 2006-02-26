@@ -24,6 +24,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	$id = '';
 	$modulename = '';
 	$action = '';
+	$inline = false;
 	if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
 	if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 	if (isset($_REQUEST['id']))
@@ -32,10 +33,11 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	}
 	elseif (isset($_REQUEST['mact']))
 	{
-		$ary = explode(',', $_REQUEST['mact'], 3);
+		$ary = explode(',', $_REQUEST['mact'], 4);
 		$modulename = (isset($ary[0])?$ary[0]:'');
 		$id = (isset($ary[1])?$ary[1]:'');
 		$action = (isset($ary[2])?$ary[2]:'');
+		$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 	}
 
 	if (isset($cmsmodules))
@@ -69,7 +71,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 						$action = $params['action'];
 					}
 					*/
-					if ($action == '')
+					if ($inline == false || $action == '')
 						$action = 'default';
 
 					$returnid = '';

@@ -20,11 +20,13 @@ function smarty_cms_function_content($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo =& $gCms->variables['pageinfo'];
+	$config =& $gCms->GetConfig();
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
 		$id = '';
 		$modulename = '';
 		$action = '';
+		$inline = false;
 		if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
 		if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 		if (isset($_REQUEST['id']))
@@ -33,13 +35,14 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		elseif (isset($_REQUEST['mact']))
 		{
-			$ary = explode(',', $_REQUEST['mact'], 3);
+			$ary = explode(',', $_REQUEST['mact'], 4);
 			$modulename = (isset($ary[0])?$ary[0]:'');
 			$id = (isset($ary[1])?$ary[1]:'');
 			$action = (isset($ary[2])?$ary[2]:'');
+			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 		}
 
-		if ($id != '' && $id == 'cntnt01')
+		if ($id == 'cntnt01' || ($id != '' && $inline == false))
 		{
 			if (!isset($params['block']))
 			{
