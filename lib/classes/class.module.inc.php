@@ -1709,6 +1709,10 @@ class CMSModule
 		{
 			$this->curlang = $params['lang'];
 		}
+        if( !isset($params['action']) )
+        {
+            $params['action'] = $name;
+        }
 		return $this->DoAction($name, $id, $params, $returnid);
 	}
 
