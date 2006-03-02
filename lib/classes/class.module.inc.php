@@ -2318,7 +2318,7 @@ class CMSModule
 			$text .= 'moduleinterface.php';
 		}
 		#$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
-		$text .= '?mact='.$name.','.$id.','.$action;
+		$text .= '?mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
 		if ($returnid != '')
 		{
 			$text .= '&'.$id.'returnid='.$returnid;
