@@ -2337,7 +2337,7 @@ class CMSModule
 		}
 		foreach ($params as $key=>$value)
 		{
-			$text .= '&'.$id.$key.'='.$value;
+			$text .= '&'.$id.$key.'='.rawurlencode($value);
 		}
 		#var_dump($text);
 		redirect($text);
