@@ -926,6 +926,8 @@ function SetAlias($alias)
 			}
 		}
 
+		$this->mModifiedDate = $db->DBTimeStamp(time());
+
 		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
 		$dbresult = $db->Execute($query, array(
 			$this->mName,
@@ -943,7 +945,7 @@ function SetAlias($alias)
 			$this->mTitleAttribute,
 			$this->mAccessKey,
 			$this->mTabIndex,
-			$db->DBTimeStamp(time()),
+			$this->mModifiedDate,
 			$this->mItemOrder,
 			$this->mMarkup,
 			$this->mLastModifiedBy,
@@ -1033,6 +1035,8 @@ function SetAlias($alias)
 		$newid = $db->GenID(cms_db_prefix()."content_seq");
 		$this->mId = $newid;
 
+		$this->mModifiedDate = $this->mCreationDate = $db->DBTimeStamp(time());
+
 		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 
 		$dbresult = $db->Execute($query, array(
@@ -1057,8 +1061,8 @@ function SetAlias($alias)
 			$this->mAccessKey,
 			$this->mTabIndex,
 			$this->mLastModifiedBy,
-			$db->DBTimeStamp(time()),
-			$db->DBTimeStamp(time())
+			$this->mModifiedDate,
+			$this->mCreationDate
 			));
 
 		if (! $dbresult)
