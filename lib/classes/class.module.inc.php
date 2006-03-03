@@ -2162,7 +2162,8 @@ class CMSModule
 
 		foreach ($params as $key=>$value)
 		{
-			$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
+			if ($key != 'module')
+				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
 		if ($returnid != '')
 		{
@@ -2325,7 +2326,8 @@ class CMSModule
 		}
 		foreach ($params as $key=>$value)
 		{
-			$text .= '&'.$id.$key.'='.$value;
+			if ($key != 'module')
+				$text .= '&'.$id.$key.'='.$value;
 		}
 		#var_dump($text);
 		redirect($text);
