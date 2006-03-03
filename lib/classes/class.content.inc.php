@@ -2183,7 +2183,7 @@ class ContentManager
 				}
 #If it's a child of the current, we don't want to show it as it
 #could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->Hierarchy(), $curhierarchy) == $one->Hierarchy())
+				if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
 				{
 					continue;
 				}
