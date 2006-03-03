@@ -25,6 +25,10 @@ require_once(dirname(__FILE__).'/fileloc.php');
  *
  * @package CMS
  */	
+#echo '<code style="align: left;">';
+#var_dump($_SERVER);
+#echo '</code>';
+
 $starttime = microtime();
 
 @ob_start();
@@ -78,6 +82,8 @@ else
 	$smarty->id = (isset($params['id'])?$params['id']:'');
 }
 
+#var_dump($smarty->id);
+
 if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
 {
 	$page = $params[$smarty->id . 'returnid'];
@@ -87,13 +93,19 @@ else if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GE
 	$page = $_GET[$config["query_var"]];
 }
 #else if (isset($_SERVER["PATH_INFO"]) && (isset($_SERVER["SCRIPT_URL"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"])))
-#{
-#	$page = $_SERVER["PATH_INFO"];
-#}
+else if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
+{
+	$matches = array();
+	if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+		#var_dump($matches);
+		$page = $matches[1];
+}
 #else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false)
 #{
 #	$page = $_SERVER["QUERY_STRING"];
 #}
+
+#var_dump($page);
 
 if ($page == '')
 {
@@ -104,13 +116,8 @@ else
     $page = preg_replace('/\</','',$page);
 }
 
-#$old_error_handler = '';
-#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-#{
-	#$old_error_handler = set_error_handler("ErrorHandler404");
-#}
-
 $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+#var_dump($pageinfo);
 if (isset($pageinfo) && $pageinfo !== FALSE)
 {
 	$gCms->variables['pageinfo'] =& $pageinfo;

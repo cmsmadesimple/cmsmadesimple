@@ -35,8 +35,11 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	{
 		$ary = explode(',', $_REQUEST['mact'], 4);
 		$modulename = (isset($ary[0])?$ary[0]:'');
-		$id = (isset($ary[1])?$ary[1]:'');
-		$action = (isset($ary[2])?$ary[2]:'');
+		if (strtolower($modulename) == strtolower($params['module']))
+		{
+			$id = (isset($ary[1])?$ary[1]:'');
+			$action = (isset($ary[2])?$ary[2]:'');
+		}
 		$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 	}
 

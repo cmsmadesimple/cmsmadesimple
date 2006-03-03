@@ -1200,7 +1200,7 @@ function SetAlias($alias)
 	function GetURL($rewrite = true)
 	{
 		global $gCms;
-		$config = &$gCms->config;
+		$config = &$gCms->GetConfig();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
@@ -1210,7 +1210,10 @@ function SetAlias($alias)
 		}
 		else
 		{
-			$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
+			#if (isset($_SERVER['PHP_SELF']))
+			#	$url = $config["root_url"]."/index.php/".$alias;
+			#else
+				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
 		}
 		return $url;
 	}

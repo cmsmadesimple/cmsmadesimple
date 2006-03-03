@@ -42,56 +42,58 @@ function smarty_cms_function_content($params, &$smarty)
 			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 		}
 
-		if ($id == 'cntnt01' || ($id != '' && $inline == false))
+		//Only consider doing module processing if
+		//a. There is no block parameter
+		//b. then
+		//   1. $id is cntnt01
+		//   2. or inline is false
+		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
-			if (!isset($params['block']))
+			$cmsmodules = &$gCms->modules;
+		
+			if (isset($cmsmodules))
 			{
-				$cmsmodules = &$gCms->modules;
-			
-				if (isset($cmsmodules))
+				foreach ($cmsmodules as $key=>$value)
 				{
-					foreach ($cmsmodules as $key=>$value)
+					if (strtolower($modulename) == strtolower($key))
 					{
-						if (strtolower($modulename) == strtolower($key))
-						{
-							$modulename = $key;
-						}
+						$modulename = $key;
 					}
-			
-					if (isset($modulename))
+				}
+		
+				if (isset($modulename))
+				{
+					if (isset($cmsmodules[$modulename]))
 					{
-						if (isset($cmsmodules[$modulename]))
+						if (isset($cmsmodules[$modulename]['object'])
+							&& $cmsmodules[$modulename]['installed'] == true
+							&& $cmsmodules[$modulename]['active'] == true
+							&& $cmsmodules[$modulename]['object']->IsPluginModule())
 						{
-							if (isset($cmsmodules[$modulename]['object'])
-								&& $cmsmodules[$modulename]['installed'] == true
-								&& $cmsmodules[$modulename]['active'] == true
-								&& $cmsmodules[$modulename]['object']->IsPluginModule())
-							{
-								@ob_start();
-								$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+							@ob_start();
+							$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
 
-								$returnid = '';
-								if (isset($params['returnid']))
-								{
-									$returnid = $params['returnid'];
-								}
-								else if (isset($pageinfo))
-								{
-									$returnid = $pageinfo->content_id;
-								}
-								$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-								if ($result !== FALSE)
-								{
-									echo $result;
-								}
-								$modresult = @ob_get_contents();
-								@ob_end_clean();
-								return $modresult;
-							}
-							else
+							$returnid = '';
+							if (isset($params['returnid']))
 							{
-								return "<!-- Not a tag module -->\n";
+								$returnid = $params['returnid'];
 							}
+							else if (isset($pageinfo))
+							{
+								$returnid = $pageinfo->content_id;
+							}
+							$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
+							if ($result !== FALSE)
+							{
+								echo $result;
+							}
+							$modresult = @ob_get_contents();
+							@ob_end_clean();
+							return $modresult;
+						}
+						else
+						{
+							return "<!-- Not a tag module -->\n";
 						}
 					}
 				}
