@@ -2308,6 +2308,17 @@ class CMSModule
 		{
 			unset($params['action']);
 		}
+		if (isset($params['id']))
+		{
+			unset($params['id']);
+		}
+		if (isset($params['module']))
+		{
+			unset($params['module']);
+		}
+
+		if (!$inline && $returnid != '')
+			$id = 'cntnt01';
 
 		$text = '';
 		if ($returnid != '')
@@ -2326,8 +2337,7 @@ class CMSModule
 		}
 		foreach ($params as $key=>$value)
 		{
-			if ($key != 'module')
-				$text .= '&'.$id.$key.'='.$value;
+			$text .= '&'.$id.$key.'='.$value;
 		}
 		#var_dump($text);
 		redirect($text);
