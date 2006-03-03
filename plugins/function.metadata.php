@@ -30,7 +30,13 @@ function smarty_cms_function_metadata($params, &$smarty)
 		}
 	}
 
-	return $result;
+	$smarty->_compile_source('metadata template', $result, $_compiled);
+	@ob_start();
+	$smarty->_eval('?>' . $_compiled);
+	$_contents = @ob_get_contents();
+	@ob_end_clean();
+
+	return $_contents;
 }
 
 function smarty_cms_help_function_metadata() {
