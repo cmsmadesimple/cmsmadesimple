@@ -639,10 +639,10 @@ class AdminTheme
             'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('htmlblobs')),
                     'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->HasPerm('htmlPerms')),
-            'addblob'=>array('url'=>'addhtmlblobs.php','parent'=>'blobs',
+            'addblob'=>array('url'=>'addhtmlblob.php','parent'=>'blobs',
                     'title'=>$this->FixSpaces(lang('addhtmlblob')),
                     'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
-            'editblob'=>array('url'=>'edithtmlblobs.php','parent'=>'blobs',
+            'editblob'=>array('url'=>'edithtmlblob.php','parent'=>'blobs',
                     'title'=>$this->FixSpaces(lang('edithtmlblob')),
                     'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
              // base layout menu ---------------------------------------------------------
