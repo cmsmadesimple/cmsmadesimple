@@ -591,11 +591,11 @@ function get_stylesheet($template_id, $media_type = '')
 		}
 
 		#Handle "advanced" CSS Management
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
+		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc ca
 			WHERE	css_id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?
-			AND		c.media_type = ?";
+			AND		c.media_type = ? ORDER BY ca.create_date";
 		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
 
 		if ($cssresult && $cssresult->RecordCount() > 0)
