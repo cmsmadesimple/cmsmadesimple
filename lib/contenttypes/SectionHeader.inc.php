@@ -31,6 +31,11 @@ class sectionheader extends ContentBase
 		$this->mCachable = false;
 	}
 
+    function HasUsableLink()
+	{
+		return false;
+	}
+
 	function FillParams($params)
 	{
 		if (isset($params))

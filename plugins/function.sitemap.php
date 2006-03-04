@@ -79,13 +79,13 @@ function smarty_cms_function_sitemap($params, &$smarty) {
                 //Not active?  Toss it.
                 if (!$onecontent->Active())
                 {
-                        continue;
+					continue;
                 }
 
-                //It's a separator?  Toss it.
-                if ($onecontent->Type() == 'separator')
+                //It's a separator or section header?  Toss it.
+                if (!$onecontent->HasUsableLink())
                 {
-                        continue;
+					continue;
                 }
 
                 //Not shown in menu?  Toss it.
@@ -129,43 +129,36 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 
                 }
 
-                if ($onecontent->Type() == 'sectionheader')
-                {
-                        $menu .= '<li><a href="#">'.$onecontent->MenuText().'</a>'; // Need to find a work around line # 217
-                }
-                else
-                {
-                        if (! ((isset($params['relative']) && $params['relative']==1) &&
-                        (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id']) ))
-                        // we are not going to show current page if relative it's enabled - we'll show only his childs
-                        {
+				if (! ((isset($params['relative']) && $params['relative']==1) &&
+					(isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id']) ))
+				// we are not going to show current page if relative it's enabled - we'll show only his childs
+				{
 
-                                /* Leisure Larry - Begin */
-                                $menu .= "<li>";
+						/* Leisure Larry - Begin */
+						$menu .= "<li>";
 
-                                if ((isset($params['delimiter']) || $params['delimiter'] != '') && ($depth > 1))
-                                {
-                                        $ddepth = (split('\.', $onecontent->Hierarchy()));
-                                        if (($ddepth[sizeof($ddepth)-1] > 1) || (isset($params['initial']) && $params['initial'] == '1'))
-                                        {
-                                                $menu .= $params['delimiter'];
-                                        }
-                                }
+						if ((isset($params['delimiter']) || $params['delimiter'] != '') && ($depth > 1))
+						{
+								$ddepth = (split('\.', $onecontent->Hierarchy()));
+								if (($ddepth[sizeof($ddepth)-1] > 1) || (isset($params['initial']) && $params['initial'] == '1'))
+								{
+										$menu .= $params['delimiter'];
+								}
+						}
 
-                                $menu .= "<a href=\"".$onecontent->GetURL()."\"";
-                                /* Leisure Larry - End */
+						$menu .= "<a href=\"".$onecontent->GetURL()."\"";
+						/* Leisure Larry - End */
 
-                                if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
-                                {
-                                        $menu .= " class=\"currentpage\"";
-                                }
-                                if ($onecontent->GetPropertyValue('target') != '')
-                                {
-                                        $menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
-                                }
-                                $menu .= ">".$onecontent->MenuText()."</a>";
-                        }
-                }
+						if (isset($gCms->variables['content_id']) && $onecontent->Id() == $gCms->variables['content_id'])
+						{
+								$menu .= " class=\"currentpage\"";
+						}
+						if ($onecontent->GetPropertyValue('target') != '')
+						{
+								$menu .= ' target="'.$onecontent->GetPropertyValue('target').'"';
+						}
+						$menu .= ">".$onecontent->MenuText()."</a>";
+				}
                 $last_level = $depth;
                 $count++;
         }

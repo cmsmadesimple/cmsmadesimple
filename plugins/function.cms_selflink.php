@@ -133,7 +133,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 									$content =& $flatcontent[$i];
 									if (isset($content))
 									{
-										if ($content->Active())
+										if ($content->Active() && $content->HasUsableLink())
 										{
 											$pageid = $content->Id();
 											$alias = $content->Alias();
@@ -160,7 +160,7 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 									$content =& $flatcontent[$i];
 									if (isset($content))
 									{
-										if ($content->Active())
+										if ($content->Active() && $content->HasUsableLink())
 										{
 											$pageid = $content->Id();
 											$alias = $content->Alias();

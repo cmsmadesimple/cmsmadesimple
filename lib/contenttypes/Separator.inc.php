@@ -31,6 +31,11 @@ class separator extends ContentBase
 		$this->mCachable = false;
 	}
 	
+    function HasUsableLink()
+	{
+		return false;
+	}
+
 	function WantsChildren()
 	{
 		return false;

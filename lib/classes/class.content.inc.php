@@ -635,6 +635,15 @@ function SetAlias($alias)
 	{
 	}
 
+	/**
+	 * Should this link be used in various places where a link is the only
+	 * useful output?  (Like next/previous links in cms_selflink, for example)
+	 */
+	function HasUsableLink()
+	{
+		return true;
+	}
+
 	/************************************************************************/
 	/* The rest																*/
 	/************************************************************************/
