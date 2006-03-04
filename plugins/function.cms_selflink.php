@@ -51,8 +51,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
                         $menu_text = $content->MenuText();
                         $titleattr = $content->TitleAttribute();
                 }
-                        $Prev_label = "";
-                        $Next_label = "";
+				$Prev_label = "";
+				$Next_label = "";
         }
         elseif (isset($params['dir'])) // this part is by mbv built on a proposal by 100rk
         {
@@ -126,48 +126,70 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
                         }
                         if ($condition == '<')
                         {
-                                if ($number > 0)
-                                {
-                                        $content =& $flatcontent[$number-1];
-                                        if (isset($content))
-                                        {
-                                                $pageid = $content->Id();
-                                                $alias = $content->Alias();
-                                                $name = $content->Name();
-                                                $menu_text = $content->MenuText();
-                                                $url = $content->GetURL();
-                                                $titleattr = $content->TitleAttribute();
-                                        }
-                                }
+							if ($number > 0)
+							{
+								for ($i = $number - 1; $i >= 0; $i--)
+								{
+									$content =& $flatcontent[$i];
+									if (isset($content))
+									{
+										if ($content->Active())
+										{
+											$pageid = $content->Id();
+											$alias = $content->Alias();
+											$name = $content->Name();
+											$menu_text = $content->MenuText();
+											$url = $content->GetURL();
+											$titleattr = $content->TitleAttribute();
+											break;
+										}
+									}
+									else
+									{
+										break;
+									}
+								}
+							}
                         }
                         else if ($condition == '>')
                         {
-                                if ($number < count($flatcontent))
-                                {
-                                        $content =& $flatcontent[$number+1];
-                                        if (isset($content))
-                                        {
-                                                $pageid = $content->Id();
-                                                $alias = $content->Alias();
-                                                $name = $content->Name();
-                                                $menu_text = $content->MenuText();
-                                                $url = $content->GetURL();
-                                                $titleattr = $content->TitleAttribute();
-                                        }
-                                }
+							if ($number < count($flatcontent))
+							{
+								for ($i = $number + 1; $i < count($flatcontent); $i++)
+								{
+									$content =& $flatcontent[$i];
+									if (isset($content))
+									{
+										if ($content->Active())
+										{
+											$pageid = $content->Id();
+											$alias = $content->Alias();
+											$name = $content->Name();
+											$menu_text = $content->MenuText();
+											$url = $content->GetURL();
+											$titleattr = $content->TitleAttribute();
+											break;
+										}
+									}
+									else
+									{
+										break;
+									}
+								}
+							}
                         }
                         else if ($condition == '-')
                         {
-                                $content =& $flatcontent[$number];
-                                if (isset($content))
-                                {
-                                        $pageid = $content->Id();
-                                        $alias = $content->Alias();
-                                        $name = $content->Name();
-                                        $menu_text = $content->MenuText();
-                                        $url = $content->GetURL();
-                                        $titleattr = $content->TitleAttribute();
-                                }
+							$content =& $flatcontent[$number];
+							if (isset($content))
+							{
+								$pageid = $content->Id();
+								$alias = $content->Alias();
+								$name = $content->Name();
+								$menu_text = $content->MenuText();
+								$url = $content->GetURL();
+								$titleattr = $content->TitleAttribute();
+							}
                         }
                 }
                 unset($condition);
