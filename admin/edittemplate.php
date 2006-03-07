@@ -132,6 +132,9 @@ if ($access)
 
 			if ($result)
 			{
+				#Make sure the new name is used if this is an apply
+				$orig_template = $template;
+
 				#Perform the edittemplate_post callback
 				foreach($gCms->modules as $key=>$value)
 				{

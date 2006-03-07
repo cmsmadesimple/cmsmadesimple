@@ -138,6 +138,9 @@ if ($access)
 
 			if ($result)
 			{
+				#Start using new name, just in case this is an apply
+				$orig_css_name = $css_name;
+
 				audit($css_id, $css_name, 'Edited CSS');
 
 				# we now have to check which templates are associated with this CSS and update their modified date.
