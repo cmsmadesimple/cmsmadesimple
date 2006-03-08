@@ -19,8 +19,8 @@
 function smarty_cms_function_cms_selflink($params, &$smarty) {
 
         global $gCms;
-        $db = $gCms->db;
-        $config = $gCms->config;
+        $db =& $gCms->GetDb();
+        $config =& $gCms->GetConfig();
 
         $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
 

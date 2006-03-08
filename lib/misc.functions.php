@@ -80,6 +80,13 @@ function redirect($to, $noappend=false)
     }
 	*/
 
+	if (isset($gCms->db))
+	{
+		$db =& $gCms->GetDb();
+		if ($db->IsConnected())
+			$db->Close();
+	}
+
     if (headers_sent() && !(isset($config) && $config['debug'] == true))
     {
         // use javascript instead

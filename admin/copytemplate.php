@@ -75,7 +75,7 @@ if ($access)
 			if ($result)
 			{
 				//Copy attached CSS templates as well...
-				$db = &$gCms->db;
+				$db = &$gCms->GetDb();
 
 				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = '$template_id' AND assoc_css_id = css_id";
 				debug_buffer($query);
