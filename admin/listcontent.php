@@ -238,7 +238,7 @@ if (isset($_GET["message"])) {
 
   		if($permission) {
         $node = &$hierManager->getNodeById($_GET["setactive"]);
-			  $value = $node->getContent();
+			  $value =& $node->getContent();
 				#Modify the object inline
 				$value->SetActive(true);
 				$value->Save();
@@ -253,7 +253,7 @@ if (isset($_GET["message"])) {
 			check_authorship($userid,$_GET["setinactive"]));
      	if($permission) {
         $node = &$hierManager->getNodeById($_GET["setinactive"]);
-	   	  $value = $node->getContent();
+	   	  $value =& $node->getContent();
 				#Modify the object inline
 				$value->SetActive(false);
 				$value->Save();
