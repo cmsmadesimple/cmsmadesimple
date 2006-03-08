@@ -68,7 +68,7 @@ class PageInfo
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c WHERE c.active = 1';
+		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c';
 		$row = $db->GetRow($query);
 
 		if ($row)

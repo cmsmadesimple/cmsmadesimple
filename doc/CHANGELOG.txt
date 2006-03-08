@@ -1,5 +1,6 @@
-Version 0.12 "Fiji" -- Subversion
+Version 0.12 "Fiji" -- Mar 08 2006
 -----------------
+
 * Added the {metadata} tag for both global and page level
 metdata
 * Added the hierarchy manager for proper caching of site
