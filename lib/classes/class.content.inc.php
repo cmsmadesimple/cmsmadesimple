@@ -1952,7 +1952,7 @@ class ContentManager
 		}
 
 		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-		$prop_name_array =& $db->GetCol($query, array($contentid));
+		$prop_name_array = $db->GetCol($query, array($contentid));
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 

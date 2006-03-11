@@ -57,7 +57,7 @@ function smarty_cms_help_function_image()
   <h3>What does this do?</h3>
   <p>Creates an image tag to an image stored within your images directory</p>
   <h3>How do I use it?</h3>
-  <p>Just insert the tag into your template/page like: <code>{image name="something.jpg"}</code></p>
+  <p>Just insert the tag into your template/page like: <code>{image src="something.jpg"}</code></p>
   <h3>What parameters does it take?</h3>
   <p>
   <ul>
