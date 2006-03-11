@@ -585,7 +585,7 @@ function showPageFive() {
 	$newconfig["default_encoding"] = "";
 	$newconfig["disable_htmlarea_translation"] = false;
 	$newconfig["admin_dir"] = "admin";
-	$newconfig["persistent_db_conn"] = true;
+	$newconfig["persistent_db_conn"] = false;
 	$newconfig["default_upload_permission"] = '664';
     $newconfig["page_extension"] = ".html";
 	$newconfig["locale"] = "";

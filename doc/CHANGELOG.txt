@@ -1,3 +1,9 @@
+Version 0.12.1 "Savusavu" -- Subversion
+-----------------
+
+* Fixed a reference bug in the content class
+* Fixed the help of the image tag to be src, not name
+
 Version 0.12 "Fiji" -- Mar 08 2006
 -----------------
 
