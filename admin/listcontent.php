@@ -84,6 +84,7 @@ function display_hierarchy(&$root) {
   	} 		
   }
 
+
   
   if (isset($one) && ($modifyall || check_ownership($userid,$one->Id()) || quick_check_authorship($one->Id(), $mypages))) {
         $thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
@@ -108,6 +109,7 @@ function display_hierarchy(&$root) {
             $thelist .= "-&nbsp;&nbsp;&nbsp;";
           }
         } ## if indent
+
 
         $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
   			if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name) {
@@ -182,6 +184,7 @@ function display_hierarchy(&$root) {
   			$thelist .= "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
         $thelist .= $deleteImg;
         $thelist .= "</a></td>\n";
+		$thelist .= '<td class="pagepos"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
   			$thelist .= "</tr>\n";  	
 				($currow == "row1"?$currow="row2":$currow="row1");
 			}
@@ -213,16 +216,32 @@ if (isset($_GET["message"])) {
 	<div class="pageoverflow">
 <?php
 
+	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
+	$hierarchy = &$hierManager->getRootNode();
+
 	$modifyall = check_permission($userid, 'Modify Any Page');
 	if ($modifyall) {
 		if (isset($_GET["makedefault"])) {
-			ContentManager::SetDefaultContent($_GET["makedefault"]);
+			$node = &$hierManager->getNodeById($_GET["makedefault"]);
+			if (isset($node))
+			{
+				$value =& $node->getContent();
+				if (isset($value))
+				{
+					if (!$value->Active())
+					{
+						#Modify the object inline
+						$value->SetActive(true);
+						$value->Save();
+					}
+				}
+			}
+			ContentManager::SetDefaultContent($_GET['makedefault']);
+			redirect('listcontent.php?page=' . $page);
 		}
 	}
 
   #$mem1=memory_get_usage();
-	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
-	$hierarchy = &$hierManager->getRootNode();
   #$mem2=memory_get_usage();
   #$nbNodes = $hierManager->getNodeCount();
   #echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
@@ -283,6 +302,7 @@ if (isset($_GET["message"])) {
 
 	$menupos = array();
 
+
 	$indent = get_preference($userid, 'indent', true);
 	if ($hierarchy->hasChildren()){
    display_hierarchy($hierarchy);
@@ -300,6 +320,8 @@ if (isset($_GET["message"])) {
 	}
 
 	$headoflist = '';
+
+	$headoflist .= '<form action="multicontent.php" method="post">';
 	
 	if ($limit != 0 && $counter > $limit)
 	{
@@ -328,6 +350,7 @@ if (isset($_GET["message"])) {
 		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 		$headoflist .= "</tr>\n";
 		$headoflist .= '</thead>';
 		$headoflist .= '<tbody>';
@@ -339,6 +362,7 @@ if (isset($_GET["message"])) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
+			<span style="float: left;">
 			<a href="addcontent.php">
 				<?php 
 					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
@@ -357,9 +381,20 @@ if (isset($_GET["message"])) {
 					echo ' <a class="pageoptions" href="setexpand.php?collapseall=1">'.lang("contractall");
 				?>
 			</a>
+			</span>
+			<span style="margin-right: 30px; float: right; align: right">
+				Selected Items: <select name="multiaction">
+					<option value="delete"><?php echo lang('delete') ?></option>
+					<option value="active"><?php echo lang('active') ?></option>
+					<option value="inactive"><?php echo lang('inactive') ?></option>
+				</select>
+				<input type="submit" value="<?php echo lang('submit') ?>" />
+			</span>
+			<br />
 		</p>
 	</div>
 </div>
+</form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 <?php
 	}

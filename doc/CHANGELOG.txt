@@ -1,6 +1,9 @@
 Version 0.12.1 "Savusavu" -- Subversion
 -----------------
 
+* Added check if setting inactive page to the 
+default, it automatically makes it active
+* Default persistent_db_conn setting is now false
 * Fixed a reference bug in the content class
 * Fixed the help of the image tag to be src, not name
 
