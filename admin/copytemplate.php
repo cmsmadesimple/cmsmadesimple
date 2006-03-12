@@ -131,7 +131,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('newtemplatename'); ?>:</p>
-			<p class="pageinput"><input type="text" name="template" maxlength="25" value="<?php echo $template?>"></p>
+			<p class="pageinput"><input type="text" name="template" maxlength="255" value="<?php echo $template?>"></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
