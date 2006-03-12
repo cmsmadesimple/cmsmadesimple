@@ -30,21 +30,21 @@ function smarty_cms_function_print($params, &$smarty)
 	$js = '';
 	if (!empty($params['script']) and $params['script'])
 	{
-		$js = '&js=1';
+		$js = '&amp;js=1';
 	}
 
 	$target = '';
 	if (!empty($params['popup']) and $params['popup'])
 	{
 		$target = ' target="_blank"';
-		$goback = '&goback=0';
+		$goback = '&amp;goback=0';
 	}
 	else
 	{
-		$goback = '&goback=0';
+		$goback = '&amp;goback=0';
 		if (!empty($params['goback']) and $params['goback'])
 		{
-		$goback = '&goback=1';
+		$goback = '&amp;goback=1';
 		}
 	}
 	  
