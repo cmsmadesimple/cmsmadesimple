@@ -42,7 +42,17 @@ function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 	{
 		if (!$checkdefault || ($checkdefault && !$content->DefaultContent()))
 		{
-			if (!in_array($content, $list))
+			$inarray = false;
+			foreach ($list as $oneitem)
+			{
+				if ($oneitem == $content)
+				{
+					$inarray = true;
+					break;
+				}
+			}
+
+			if (!$inarray)
 				$list[] =& $content;
 
 			if ($checkchildren)
