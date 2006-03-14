@@ -218,7 +218,7 @@ function check_ownership($userid, $contentid = '')
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
-		while (!$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			array_push($variables['ownerpages'], $result->fields['content_id']);
 			$result->MoveNext();
@@ -259,7 +259,7 @@ function check_authorship($userid, $contentid = '')
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
-		while (!$result->EOF)
+		while ($result && !$result->EOF)
 		{
 			array_push($variables['authorpages'], $result->fields['content_id']);
 			$result->MoveNext();
@@ -648,7 +648,7 @@ function get_stylesheet_media_types($template_id)
 			AND		assoc_to_id = ?";
 		$cssresult = &$db->Execute($cssquery, array($template_id));
 
-		while (!$cssresult->EOF)
+		while ($cssresult && !$cssresult->EOF)
 		{
 			if (!in_array($cssresult->fields['media_type'], $result))
 				array_push($result, $cssresult->fields['media_type']);

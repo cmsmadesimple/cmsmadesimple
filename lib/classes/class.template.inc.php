@@ -210,7 +210,7 @@ class TemplateOperations
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 		$dbresult = &$db->Execute($query, array($alias, $alias));
 
-		while (!$dbresult->EOF)
+		while ($dbresult && !$dbresult->EOF)
 		{
 			array_push($result, $dbresult->fields['c_date']);
 			array_push($result, $dbresult->fields['t_date']);

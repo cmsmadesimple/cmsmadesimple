@@ -44,7 +44,7 @@ if ($name != '')
 	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
 	$cssresult = &$db->Execute($cssquery, $name);
 
-	while (!$cssresult->EOF)
+	while ($cssresult && !$cssresult->EOF)
 	{
 		$css .= "\n".$cssresult->fields['css_text']."\n";
 		$cssresult->MoveNext();

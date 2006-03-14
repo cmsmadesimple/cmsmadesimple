@@ -545,7 +545,7 @@ function SetAlias($alias)
             $alias = strtolower($alias);
             }
             
-        $alias = preg_replace("/[_-\W]+/", "_", $alias);
+        $alias = preg_replace("/[^\w-]+/", "_", $alias);
         $alias = trim($alias, '_');
 
         $this->mAlias = $alias;
@@ -686,7 +686,7 @@ function SetAlias($alias)
 			$query		= "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			$row		=& $db->Execute($query, array($id));
 
-			if (!$row->EOF)
+			if ($row && !$row->EOF)
 			{
 				$this->mId				= $row->fields["content_id"];
 				$this->mName			= $row->fields["content_name"];
@@ -1342,7 +1342,7 @@ function SetAlias($alias)
 			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
 			$dbresult = &$db->Execute($query,array($this->mId));
 
-			while (!$dbresult->EOF)
+			while ($dbresult && !$dbresult->EOF)
 			{
 				array_push($this->mAdditionalEditors, $dbresult->fields['user_id']);
 				$dbresult->MoveNext();
@@ -1478,7 +1478,7 @@ class ContentProperties
 			$query		= "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 			$dbresult	= &$db->Execute($query, array($content_id));
 
-			while (isset($dbresult) && !$dbresult->EOF)
+			while ($dbresult && !$dbresult->EOF)
 			{
 				$prop_name = $dbresult->fields['prop_name'];
 				if (!in_array($prop_name, $this->mPropertyNames))
@@ -1971,7 +1971,7 @@ class ContentManager
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
 		$dbresult = &$db->Execute($query);
 
-		while (!$dbresult->EOF)
+		while ($dbresult && !$dbresult->EOF)
 		{
 			ContentManager::SetHierarchyPosition($dbresult->fields['content_id']);
 			$dbresult->MoveNext();
@@ -2142,7 +2142,7 @@ class ContentManager
 		$map = array();
 		$count = 0;
 
-		while (!$dbresult->EOF)
+		while ($dbresult && !$dbresult->EOF)
 		{
 			#Make sure the type exists.  If so, instantiate and load
 			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
