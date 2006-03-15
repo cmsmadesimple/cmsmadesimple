@@ -102,40 +102,24 @@ function count_sql_execs($db, $sql, $inputarray)
 }
 */
 
-showmem('including smarty');
 require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
-showmem('including adodb');
 if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__)."/lib/adodb/adodb.inc.php")))
 	require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 else
 	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
-showmem('including page.functions.php');
 require(dirname(__FILE__)."/lib/page.functions.php");
-showmem('including content.functions.php');
 require(dirname(__FILE__)."/lib/content.functions.php");
-showmem('including class.pageinfo.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
-showmem('including class.content.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.content.inc.php");
-showmem('including class.module.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.module.inc.php");
-showmem('including class.pageinfo.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.user.inc.php");
-showmem('including class.htmlblob.inc.php');
 require(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
-showmem('including class.template.inc.php');
 require(dirname(__FILE__).'/lib/classes/class.template.inc.php');
-showmem('including class.stylesheet.inc.php');
 require(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
-showmem('including class.contentnode.inc.php');
 require(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
-showmem('including class.contenthierarchymamager.inc.php');
 require(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
-showmem('including translation.functions.php');
 require(dirname(__FILE__)."/lib/translation.functions.php");
-showmem('including class.bookmark.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
-showmem('including class.group.inc.php');
 require(dirname(__FILE__)."/lib/classes/class.group.inc.php");
 
 #Load them into the usual variables.  This'll go away a little later on.
@@ -148,9 +132,7 @@ if (!isset($DONT_LOAD_DB))
 	#$db->fnExecute = 'count_sql_execs';
 }
 
-showmem('before 2nd smarty');
 $smarty =& $gCms->GetSmarty();
-showmem('after 2nd smarty');
 
 #Load content types
 $dir = dirname(__FILE__)."/lib/contenttypes";
@@ -212,7 +194,6 @@ if (isset($CMS_ADMIN_PAGE))
 }
 
 #Load all installed module code
-showmem('before load modules');
 if (isset($LOAD_ALL_MODULES))
 {
 	ModuleOperations::LoadModules(true);
@@ -221,7 +202,6 @@ else
 {
 	ModuleOperations::LoadModules(false);
 }
-showmem('after load modules');
 
 # vim:ts=4 sw=4 noet
 ?>

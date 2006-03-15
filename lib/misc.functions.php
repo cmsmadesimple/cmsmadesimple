@@ -689,7 +689,7 @@ function endswith( $str, $sub )
 
 function showmem($string = '')
 {
-	#var_dump($string . ' -- ' . memory_get_usage());
+	var_dump($string . ' -- ' . memory_get_usage());
 }
 
 # vim:ts=4 sw=4 noet

@@ -372,7 +372,6 @@ class Smarty_CMS extends Smarty {
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		showmem('start template_get_template');
 		global $gCms;
 		$config =& $gCms->GetConfig();
 
@@ -389,7 +388,6 @@ class Smarty_CMS extends Smarty {
 			{
 				$tpl_source = '{content}';
 
-				showmem('end template_get_template');
 				return true;
 			}
 			else if (isset($_GET["print"]))
@@ -408,7 +406,6 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none;"><form action="index.php?page='.$tpl_name.'" method="post"><input type="submit" value="Go Back"></form>{content}'.$script.'</body></html>';
 				}
 
-				showmem('end template_get_template');
 				return true;
 			}
 			else
@@ -425,11 +422,9 @@ class Smarty_CMS extends Smarty {
 						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 					}
 
-					showmem('end template_get_template');
 					return true;
 				}
 			}
-			showmem('end template_get_template');
 			return false;
 		}
 	}
@@ -464,7 +459,6 @@ class Smarty_CMS extends Smarty {
 
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
-		showmem('start content_get_template');
 		global $gCms;
 
 		$pageinfo = &$gCms->variables['pageinfo'];
@@ -531,11 +525,9 @@ class Smarty_CMS extends Smarty {
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
 
-				showmem('end content_get_template');
 				return true;
 			}
 		}
-		showmem('end content_get_template');
 		return false;
 	}
 

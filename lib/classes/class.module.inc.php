@@ -365,10 +365,8 @@ class ModuleOperations
 							{
 								if (is_file("$dir/$modulename/$modulename.module.php"))
 								{
-									showmem("before including $modulename");
 									#var_dump('loading module:' . $modulename);
 									include("$dir/$modulename/$modulename.module.php");
-									showmem("after including $modulename");
 									if (class_exists($modulename))
 									{
 										$newmodule = new $modulename;
@@ -510,7 +508,6 @@ class CMSModule
 
 	function CMSModule()
 	{
-		showmem('begin constructor');
 		global $gCms;
 		$this->cms =& $gCms;
 		$this->config =& $gCms->GetConfig();
@@ -538,7 +535,6 @@ class CMSModule
 		$this->smarty = &$gCms->GetSmarty();
 
 		$this->SetParameters();
-		showmem('end constructor');
 	}
 
 	/**
@@ -1681,11 +1677,9 @@ class CMSModule
 	 */
 	function DoAction($name, $id, $params, $returnid='')
 	{
-		showmem('DoAction');
 		if ($name != '')
 		{
 			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-			showmem('Start including: '. $filename);
 			if (is_file($filename))
 			{
 				{
@@ -1696,7 +1690,6 @@ class CMSModule
 
 					include($filename);
 
-					showmem('End including: '. $filename);
 				}
 			}
 		}
@@ -1704,7 +1697,6 @@ class CMSModule
 
 	function DoActionBase($name, $id, $params, $returnid='')
 	{
-		showmem('DoActionBase');
 		if (isset($params['lang']))
 		{
 			$this->curlang = $params['lang'];
