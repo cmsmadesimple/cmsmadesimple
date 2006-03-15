@@ -139,6 +139,10 @@ if ($access)
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
 		}
+		else
+		{
+			$contentobj->SetAdditionalEditors(array());
+		}
 
 		if ($error === FALSE)
 		{
@@ -182,6 +186,10 @@ if ($access)
 				array_push($addtarray, $addt_user_id);
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
+		}
+		else
+		{
+			$contentobj->SetAdditionalEditors(array());
 		}
 	}
 }
