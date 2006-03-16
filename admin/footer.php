@@ -63,12 +63,5 @@ $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlres
 
 echo $htmlresult;
 
-if (isset($gCms->db))
-{
-	$db =& $gCms->GetDb();
-	if ($db->IsConnected())
-		$db->Close();
-}
-
 # vim:ts=4 sw=4 noet
 ?>

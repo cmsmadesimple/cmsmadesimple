@@ -108,12 +108,5 @@ if(function_exists('getallheaders'))
 
 echo $css;
 
-if (isset($gCms->db))
-{
-    $db =& $gCms->GetDb();
-	if ($db->IsConnected())
-		$db->Close();
-}
-
 # vim:ts=4 sw=4 noet
 ?>

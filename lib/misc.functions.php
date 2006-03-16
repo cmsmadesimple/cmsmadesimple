@@ -80,13 +80,6 @@ function redirect($to, $noappend=false)
     }
 	*/
 
-	if (isset($gCms->db))
-	{
-		$db =& $gCms->GetDb();
-		if ($db->IsConnected())
-			$db->Close();
-	}
-
     if (headers_sent() && !(isset($config) && $config['debug'] == true))
     {
         // use javascript instead
@@ -690,6 +683,20 @@ function endswith( $str, $sub )
 function showmem($string = '')
 {
 	var_dump($string . ' -- ' . memory_get_usage());
+}
+
+if(!function_exists("file_get_contents"))
+{
+   function file_get_contents($filename)
+   {
+	   if(($contents = file($filename)))
+	   {
+		   $contents = implode('', $contents);
+		   return $contents;
+	   }
+	   else
+		   return false;
+   }
 }
 
 # vim:ts=4 sw=4 noet

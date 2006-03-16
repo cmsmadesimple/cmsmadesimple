@@ -23,13 +23,5 @@ else if (file_exists(dirname(__FILE__)."/themes/default/css/".$style))
 	readfile(dirname(__FILE__)."/themes/default/css/".$style);
 }
 
-global $gCms;
-if (isset($gCms) && isset($gCms->db))
-{
-	$db =& $gCms->GetDb();
-	if ($db->IsConnected())
-		$db->Close();
-}
-
 # vim:ts=4 sw=4 noet
 ?>
