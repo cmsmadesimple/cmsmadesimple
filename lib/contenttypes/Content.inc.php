@@ -69,6 +69,8 @@ class content extends ContentBase
 			//pick up the template id before we do parameters
 			if (isset($params['template_id']))
 			{
+				if ($this->mTemplateId != $params['template_id'])
+					$this->addtContentBlocksLoaded = false;
 				$this->mTemplateId = $params['template_id'];
 			}
 
@@ -177,7 +179,7 @@ class content extends ContentBase
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 		global $gCms;
-		$config = $gCms->config;
+		$config = $gCms->GetConfig();
 		$ret = array();
 		$stylesheet = '';
 		if ($this->TemplateId() > 0)
@@ -210,7 +212,7 @@ class content extends ContentBase
 					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				}
 			}
-			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId)));
+			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"')));
 			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet)));
 			
 			// add additional content blocks if required
@@ -296,46 +298,17 @@ class content extends ContentBase
 		return (count($errors) > 0?$errors:FALSE);
 	}
 
-	/*
-	function GetURL($rewrite = true)
-	{
-		global $config;
-		$url = "";
-
-		if ($config["assume_mod_rewrite"])
-		{
-			if ($this->mAlias != '')
-			{
-				$url = $config["root_url"]."/".$this->mAlias.$config["page_extension"];
-			}
-			else
-			{
-				$url = $config["root_url"]."/".$this->mId.$config["page_extension"];
-			}
-		}
-		else
-		{
-			if ($this->mAlias != '')
-			{
-				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mAlias;
-			}
-			else
-			{
-				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$this->mId;
-			}
-		}
-
-		return $url;
-	}
-	*/
-	
 	function GetAdditionalContentBlocks()
 	{
 		$result = false;
 		if ($this->addtContentBlocksLoaded == false)
 		{
 			$this->additionalContentBlocks = array();
-			$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+			if ($this->TemplateId() && $this->TemplateId() > -1)
+				$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+			else
+				$template = TemplateOperations::LoadDefaultTemplate();
+
 			if($template !== false)
 			{
 				$content = $template->content;

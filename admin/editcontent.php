@@ -39,7 +39,6 @@ $pagelist_id = "1";
 if (isset($_POST["page"])) $pagelist_id = $_POST["page"];
 else if (isset($_GET["page"])) $pagelist_id = $_GET["page"];
 
-
 $preview = false;
 if (isset($_POST["previewbutton"])) $preview = true;
 
@@ -50,9 +49,9 @@ $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
 if ($preview || $apply)
-    {
-    	$CMS_EXCLUDE_FROM_RECENT=1;
-    }
+{
+	$CMS_EXCLUDE_FROM_RECENT=1;
+}
 
 #Get a list of content types and pick a default if necessary
 $existingtypes = ContentManager::ListContentTypes();
@@ -194,12 +193,12 @@ if ($access)
 	}
 }
 
-if (strlen($contentobj->Name())> 0)
-    {
-    $CMS_ADMIN_SUBTITLE = $contentobj->Name();
-    }
-include_once("header.php");
+if (strlen($contentobj->Name()) > 0)
+{
+	$CMS_ADMIN_SUBTITLE = $contentobj->Name();
+}
 
+include_once("header.php");
 
 if (!$access)
 {
