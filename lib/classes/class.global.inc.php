@@ -121,6 +121,8 @@ class CmsObject {
 		$this->StylesheeteCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
+
+		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
 	function & GetDb()
@@ -215,6 +217,16 @@ class CmsObject {
 		}
 
         return $hrinstance;
+	}
+
+	function dbshutdown()
+	{
+		if (isset($this->db))
+		{
+			$db =& $this->db;
+			if ($db->IsConnected())
+				$db->Close();
+		}
 	}
 }
 
