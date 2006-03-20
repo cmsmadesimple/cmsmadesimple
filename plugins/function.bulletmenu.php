@@ -140,7 +140,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 			foreach ($disabled as $onepos)
 			{
 				# Why php doesn't have a starts_with function is beyond me...
-				if (strstr($onecontent->Hierarchy(), $onepos) == $onecontent->Hierarchy())
+				if (strstr($onecontent->Hierarchy() . '.', $onepos) == $onecontent->Hierarchy() . '.')
 				{
 					$disableme = true;
 					continue; # Break from THIS foreach
