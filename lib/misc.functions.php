@@ -646,7 +646,7 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
            if ( $file != '.' && $file != '..' && $excluded == false )
            {
                $file = $path . $file ;
-               if ( ! is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+               if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
                elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
                {
 		   $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;

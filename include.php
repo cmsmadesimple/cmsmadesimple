@@ -139,7 +139,7 @@ $dir = dirname(__FILE__)."/lib/contenttypes";
 $ls = dir($dir);
 while (($file = $ls->read()) != "")
 {
-	if (!is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+	if (!@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
 	{
 		if (substr($file,strlen($file)-4,4) == ".php")
 		{

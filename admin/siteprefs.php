@@ -227,7 +227,7 @@ if ($message != "") {
 		<select name="logintheme">
 			<?php
 			  while (($file = readdir($dir)) !== false) {
-				  	if (is_dir("themes/".$file) && ($file[0]!='.')) {
+				  	if (@is_dir("themes/".$file) && ($file[0]!='.')) {
 			?>
 		  		<option value="<?php echo $file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?php echo $file?></option>				  
 				  <?php

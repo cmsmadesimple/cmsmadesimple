@@ -147,7 +147,7 @@ if ($error != "") {
 						if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 								echo '<select name="admintheme">';
 									while (($file = readdir($dir)) !== false) {
-										if (is_dir("themes/".$file) && ( $file[0] != '.')) {
+										if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
 											echo '<option value="'.$file.'"';
 											echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
 											echo '>'.$file.'</option>';

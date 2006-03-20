@@ -203,8 +203,6 @@ class CmsObject {
 
 	function & GetHierarchyManager()
 	{
-		require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
-
         static $hrinstance;
 
 		//Check to see if it hasn't been
@@ -212,12 +210,32 @@ class CmsObject {
 		//and return it
         if (is_null($hrinstance))
 		{
+			require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
+
 			#Setup global smarty object
 			$hrinstance = ContentManager::GetAllContentAsHierarchy(false, null);
 		}
 
         return $hrinstance;
 	}
+
+	/*
+	function & GetXajax()
+	{
+		static $ourxajax;
+
+		if (is_null($outxajax))
+		{
+			require_once(dirname(dirname(__FILE__)) . '/xajax/xajax.inc.php');
+			$ourajax = new xajax();
+
+			$smarty =& $this->GetSmarty();
+			$smarty->assign('xajax_javascript', $ourxajax->getJavascript());
+		}
+
+		return $ourxajax;
+	}
+	*/
 
 	function dbshutdown()
 	{

@@ -630,7 +630,7 @@ function load_plugins(&$smarty)
 	$db = &$gCms->GetDb();
 	if (isset($db))
 	{
-		#if (is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
+		#if (@is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
 		#{
 		#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
 		#}
@@ -664,7 +664,7 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	$ls = dir($dir);
 	while (($file = $ls->read()) != "")
 	{
-		if (is_file("$dir/$file") 
+		if (@is_file("$dir/$file") 
 		    && (strpos($file, ".") === false || strpos($file, ".") != 0) 
 		    // && (strpos($file, '#') != 0 )
 		    && (strpos($file, '~') != (strlen($file) - 1))

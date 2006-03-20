@@ -36,7 +36,7 @@ function deldir($dir)
 	{
 		if($FolderOrFile != "." && $FolderOrFile != "..") 
 		{  
-			if(is_dir("$dir/$FolderOrFile")) 
+			if(@is_dir("$dir/$FolderOrFile")) 
 			{
 				deldir("$dir/$FolderOrFile");
 			}  // recursive
@@ -159,7 +159,7 @@ else if (isset($_GET['action']) && $_GET['action'] == "deletedir")
 {
 	if ($access)
 	{
-		if (is_dir($dir . "/" . $_GET['file']))
+		if (@is_dir($dir . "/" . $_GET['file']))
 		{
 			if (!(deldir($dir . "/" . $_GET['file'])))
 			{

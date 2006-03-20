@@ -307,9 +307,9 @@ class ModuleOperations
 			$ls = dir($dir);
 			while (($file = $ls->read()) != "")
 			{
-				if (is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+				if (@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
 				{
-					if (is_file("$dir/$file/$file.module.php"))
+					if (@is_file("$dir/$file/$file.module.php"))
 					{
 						include("$dir/$file/$file.module.php");
 					}
@@ -363,7 +363,7 @@ class ModuleOperations
 						{
 							if ($result->fields['active'] == 1)
 							{
-								if (is_file("$dir/$modulename/$modulename.module.php"))
+								if (@is_file("$dir/$modulename/$modulename.module.php"))
 								{
 									#var_dump('loading module:' . $modulename);
 									include("$dir/$modulename/$modulename.module.php");
@@ -970,7 +970,7 @@ class CMSModule
 	      $xmltxt .= "  <file>\n";
 	      $filespec = $dir.DIRECTORY_SEPARATOR.$file;
 	      $xmltxt .= "    <filename>$file</filename>\n";
-	      if( is_dir( $filespec ) )
+	      if( @is_dir( $filespec ) )
 		{
 		  $xmltxt .= "    <isdir>1</isdir>\n";
 		}
@@ -1680,7 +1680,7 @@ class CMSModule
 		if ($name != '')
 		{
 			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
-			if (is_file($filename))
+			if (@is_file($filename))
 			{
 				{
 					global $gCms;
@@ -2154,7 +2154,7 @@ class CMSModule
 
 		foreach ($params as $key=>$value)
 		{
-			if ($key != 'module')
+			if ($key != 'module' && $key != 'action' && $key != 'id')
 				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
 		if ($returnid != '')
@@ -2414,27 +2414,27 @@ class CMSModule
 		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
 		{
 			$dir = $gCms->config['root_path'];
-			if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
+			if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
-			else if (is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
+			else if (@is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
 				$this->langhash = &$lang;
 			}
-			else if (is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
+			else if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
-			else if (is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
+			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
 				$this->langhash = &$lang;
 			}
-			else if (is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
+			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 				$this->langhash = &$lang;
@@ -2445,7 +2445,7 @@ class CMSModule
 				# Get ready for a lot of Add Me's
 			}
 			# try to load an admin modifiable version of the lang file if one exists
-			if( is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
+			if( @is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
 			{
  			        include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 				$this->langhash = &$lang;
