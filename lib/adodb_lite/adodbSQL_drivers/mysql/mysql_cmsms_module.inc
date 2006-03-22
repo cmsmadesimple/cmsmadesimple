@@ -58,7 +58,7 @@ class mysql_cmsms_ADOConnection extends mysql_cmsms_EXTENDER
 
 	function outp($text, $newline = false)
 	{
-		$this->debug_output = "(" . $this->dbtype . "): ".htmlspecialchars($text)."\n Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg();
+		$this->debug_output = "(" . $this->dbtype . "): ".$text." - Error (" . $this->ErrorNo() .'): '. $this->ErrorMsg();
 		debug_buffer($this->debug_output);
 	}
 }

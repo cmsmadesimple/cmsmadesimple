@@ -24,6 +24,8 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
         $rellink = (isset($params['rellink']) && $params['rellink'] == '1' ? true : false);
 
+		$url = '';
+
         /* LeisureLarry - Changed if statement */
         if (isset($params['page']) or isset($params['href']))
         {

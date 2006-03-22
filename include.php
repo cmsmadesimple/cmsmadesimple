@@ -102,13 +102,18 @@ function count_sql_execs($db, $sql, $inputarray)
 }
 */
 
+debug_buffer('loading smarty');
 require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
+debug_buffer('loading adodb');
 if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__)."/lib/adodb/adodb.inc.php")))
 	require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
 else
 	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
+debug_buffer('loading page functions');
 require(dirname(__FILE__)."/lib/page.functions.php");
+debug_buffer('loading content functions');
 require(dirname(__FILE__)."/lib/content.functions.php");
+debug_buffer('loading pageinfo functions');
 require(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
 require(dirname(__FILE__)."/lib/classes/class.content.inc.php");
 require(dirname(__FILE__)."/lib/classes/class.module.inc.php");
@@ -121,6 +126,8 @@ require(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
 require(dirname(__FILE__)."/lib/translation.functions.php");
 require(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
 require(dirname(__FILE__)."/lib/classes/class.group.inc.php");
+
+debug_buffer('done loading files');
 
 #Load them into the usual variables.  This'll go away a little later on.
 global $DONT_LOAD_DB;

@@ -318,7 +318,7 @@ function debug_bt()
 * @param boolean $echo_to_screen (optional)
 * @return string
 */
-function debug_display($var, $title="", $echo_to_screen = true)
+function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
 	$titleText = "Debug: ";
 	if($title)
@@ -327,7 +327,9 @@ function debug_display($var, $title="", $echo_to_screen = true)
 	}
 
 	ob_start();
-	echo "<p><b>$titleText</b><pre>\n";
+	if ($use_html)
+		echo "<p><b>$titleText</b><pre>\n";
+
 	if(is_array($var))
 	{
 		echo "Number of elements: " . count($var) . "\n";
@@ -350,7 +352,9 @@ function debug_display($var, $title="", $echo_to_screen = true)
 		print_r($var);
 	}
 
-	echo "</pre></p>\n";
+	if ($use_html)
+		echo "</pre></p>\n";
+
 	$output = ob_get_contents();
 	ob_end_clean();
 
@@ -390,10 +394,10 @@ function debug_buffer($var, $title="")
 	global $gCms;
 	$errors = &$gCms->errors;
 
-	#if($gCms->config["debug"] == true)
-	#{
-		array_push($errors, debug_display($var, $title, false));
-	#}
+	if($gCms->config["debug"] == true)
+	{
+		array_push($errors, debug_display($var, $title, false, true));
+	}
 }
 
 /**
