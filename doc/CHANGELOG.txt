@@ -5,9 +5,16 @@ Version 0.12.1 "Savusavu" -- Subversion
 default, it automatically makes it active
 * Added ability to delete/active/inactive multiple pages 
 * Added handling of target parameter to Menu Manager
+* Added ordering of stylsheets so that they're displayed in
+the order they're attached to the template
+* Added permissions to Menu Manager
 * Default persistent_db_conn setting is now false
 * Fixed a reference bug in the content class
 * Fixed the help of the image tag to be src, not name
+* Fixed several bugs with Menu Manager in handling of
+depths
+* Fixed an issue with links not having a proper returnid
+when using the News content type
 
 Version 0.12 "Fiji" -- Mar 08 2006
 -----------------

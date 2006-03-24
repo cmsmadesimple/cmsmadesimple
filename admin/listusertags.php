@@ -107,7 +107,7 @@ else if ($action == "showpluginabout")
 			if (array_key_exists($oneplugin, $gCms->userplugins))
 			{
 				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-				echo "<td>$oneplugin</td>\n";
+				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
 				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";

@@ -41,8 +41,22 @@ function smarty_cms_function_cms_module($params, &$smarty)
 		}
 		$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 	}
-	if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
-	else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+
+	$actioninparams = false;
+
+	if (isset($_REQUEST[$id.'action']))
+	{
+		$action = $_REQUEST[$id.'action'];
+	}
+	else if (isset($_REQUEST['action']))
+	{
+		$action = $_REQUEST['action'];
+	}
+	else if (isset($params['action']) && $params['action'] != '')
+	{
+		$action = $params['action'];
+		$actioninparams = true;
+	}
 
 	if (isset($cmsmodules))
 	{
@@ -68,14 +82,8 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					@ob_start();
 					$id = 'm' . ++$gCms->variables["modulenum"];
 					$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
-					/*
-					$action = 'default';
-					if (isset($params['action']))
-					{
-						$action = $params['action'];
-					}
-					*/
-					if ($inline == false || $action == '')
+
+					if (($inline == false && $actioninparams == false) || $action == '')
 						$action = 'default';
 
 					$returnid = '';
@@ -83,6 +91,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					{
 						$returnid = $gCms->variables['pageinfo']->content_id;
 					}
+
 					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 					if ($result !== FALSE)
 					{
