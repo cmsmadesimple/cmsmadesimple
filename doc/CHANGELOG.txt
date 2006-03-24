@@ -9,12 +9,15 @@ default, it automatically makes it active
 the order they're attached to the template
 * Added permissions to Menu Manager
 * Default persistent_db_conn setting is now false
+* Fixed cms_selflink so next/previous links respect the
+show in menu flag
 * Fixed a reference bug in the content class
 * Fixed the help of the image tag to be src, not name
 * Fixed several bugs with Menu Manager in handling of
 depths
 * Fixed an issue with links not having a proper returnid
 when using the News content type
+* Made title in user defined tags clickable to edit it
 
 Version 0.12 "Fiji" -- Mar 08 2006
 -----------------
