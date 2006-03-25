@@ -24,7 +24,7 @@ $manager->deleteFiles();
 $refreshDir = false;
 //process any directory functions
 if($manager->deleteDirs() || $manager->processNewDir())
-	$refreshDir = true;
+        $refreshDir = true;
 
 //check for any sub-directory request
 //check that the requested sub-directory exists
@@ -32,9 +32,9 @@ if($manager->deleteDirs() || $manager->processNewDir())
 
 if(isset($_REQUEST['dir']))
 {
-	$path = rawurldecode($_REQUEST['dir']);
-	if($manager->validRelativePath($path))
-		$relative = $path;
+        $path = rawurldecode($_REQUEST['dir']);
+        if($manager->validRelativePath($path))
+                $relative = $path;
 }
 
 
@@ -52,26 +52,53 @@ $list = $manager->getFiles($relative);
  */
 function drawFiles($list, &$manager, $i)
 {
-	global $relative;
-	$image_per_line = 5;
+        global $relative;
+        $image_per_line = 5;
 
-	foreach($list as $entry => $file) 
-	{ 
-		$i++;
-		if ($i==1) { echo "<tr>";}
-		?> 
-		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-			<a href="<?php echo "{$manager->config['base_url']}{$file['relative']}";?>" TARGET="_blank" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php echo $manager->getThumbnail($file['relative']); ?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
-		</td></tr><tr><td class="edit">
-			<a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
-		<?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
-		</td></tr></table></td> 
-	  <?php 
-		if ($i==$image_per_line) { 			
-			echo "</tr>";
-			$i=0;
-		}
-	}//foreach
+        foreach($list as $entry => $file)
+        {
+                $i++;
+                if ($i==1) { echo "<tr>";}
+                ?>
+                <td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
+                        <a href="<?php echo "{$manager->config['base_url']}{$file['relative']}";?>" TARGET="_blank" title="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"><img src="<?php
+
+        if (function_exists('imagecreate'))
+        {
+                echo $manager->getThumbnail($file['relative']);
+        } else {
+                if ($file['image']) {
+                        $size_x = $file['image'][0];
+                        $size_y = $file['image'][1];
+                }
+                if (($size_x < 96) && ($size_y < 96))
+                {
+                }
+                elseif ($size_x > $size_y)
+                {
+                        $size_y = round($size_y / ($size_x / 96));
+                        $size_x = 96;
+                }
+                else
+                {
+                        $size_x = round($size_x / ($size_y / 96));
+                        $size_y = 96;
+                }
+                echo "{$manager->config['base_url']}{$file['relative']}";
+                echo "\" width=\"$size_x\" height=\"$size_y";
+        }
+
+?>" alt="<?php echo $entry; ?> - <?php echo Files::formatSize($file['stat']['size']); ?>"/></a>
+                </td></tr><tr><td class="edit">
+                        <a href="images.php?dir=<?php echo $relative; ?>&amp;delf=<?php echo rawurlencode($file['relative']);?>" title="Trash" onclick="return confirmDeleteFile('<?php echo $entry; ?>');"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a><a href="javascript:;" title="Edit" onclick="editImage('<?php echo rawurlencode($file['relative']);?>');"><img src="img/edit_pencil.gif" height="15" width="15" alt="Edit"/></a>
+                <?php if($file['image']){ echo $file['image'][0].'x'.$file['image'][1]; } else echo $entry;?>
+                </td></tr></table></td>
+          <?php
+                if ($i==$image_per_line) {
+                        echo "</tr>";
+                        $i=0;
+                }
+        }//foreach
 
     return ($i);
 
@@ -81,53 +108,53 @@ function drawFiles($list, &$manager, $i)
 /**
  * Draw the directory.
  */
-function drawDirs($list, &$manager, $i) 
+function drawDirs($list, &$manager, $i)
 {
-	global $relative;
+        global $relative;
 
-	$image_per_line = 5;
-	foreach($list as $path => $dir) 
-	{ 
-		$i++;
-		if ($i==1) { echo "<tr>";}
-		?> 	
-		<td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
-		<a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
-		</td></tr><tr>
-		<td class="edit">
-			<?php if ($dir['entry']!='..') { ?>
-			<a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
-			<?php }; ?>
-			<?php echo $dir['entry']; ?>
-		
-		</td>
-		</tr></table></td>
-	  <?php 
-		if ($i==$image_per_line) { 			
-			echo "</tr>";
-			$i=0;
-		}
-	} //foreach
+        $image_per_line = 5;
+        foreach($list as $path => $dir)
+        {
+                $i++;
+                if ($i==1) { echo "<tr>";}
+                ?>
+                <td><table width="100" cellpadding="0" cellspacing="0"><tr><td class="block">
+                <a href="images.php?dir=<?php echo rawurlencode($path); ?>" onclick="updateDir('<?php echo $path; ?>')" title="<?php echo $dir['entry']; ?>"><img src="img/folder.gif" height="80" width="80" alt="<?php echo $dir['entry']; ?>" /></a>
+                </td></tr><tr>
+                <td class="edit">
+                        <?php if ($dir['entry']!='..') { ?>
+                        <a href="images.php?dir=<?php echo $relative; ?>&amp;deld=<?php echo rawurlencode($path); ?>" title="Trash" onclick="return confirmDeleteDir('<?php echo $dir['entry']; ?>', <?php echo $dir['count']; ?>);"><img src="img/edit_trash.gif" height="15" width="15" alt="Trash"/></a>
+                        <?php }; ?>
+                        <?php echo $dir['entry']; ?>
+
+                </td>
+                </tr></table></td>
+          <?php
+                if ($i==$image_per_line) {
+                        echo "</tr>";
+                        $i=0;
+                }
+        } //foreach
     return ($i);
 }//function drawDirs
 
-function addEmpties($list, &$manager, $j) 
+function addEmpties($list, &$manager, $j)
 {
-	global $relative;
+        global $relative;
 
-	$image_per_line = 5;
-	
-	if ($j != 0) {
-		for ($i=$j; $i <= $image_per_line; $i++) {		 
-		?>
-			<td></td>
-		<?php 
-			if ($i==$image_per_line) { 			
-				echo "</tr>";
-				$i=0;
-				break;
-		        }
-		} //for
+        $image_per_line = 5;
+
+        if ($j != 0) {
+                for ($i=$j; $i <= $image_per_line; $i++) {
+                ?>
+                        <td></td>
+                <?php
+                        if ($i==$image_per_line) {
+                                echo "</tr>";
+                                $i=0;
+                                break;
+                        }
+                } //for
        }
 }//function addEmpties
 
@@ -136,7 +163,7 @@ function addEmpties($list, &$manager, $j)
 /**
  * No directories and no files.
  */
-function drawNoResults() 
+function drawNoResults()
 {
 ?>
 <table width="100%">
@@ -144,13 +171,13 @@ function drawNoResults()
     <td class="noResult">No Images Found</td>
   </tr>
 </table>
-<?php	
+<?php
 }
 
 /**
  * No directories and no files.
  */
-function drawErrorBase(&$manager) 
+function drawErrorBase(&$manager)
 {
 ?>
 <table width="100%">
@@ -158,7 +185,7 @@ function drawErrorBase(&$manager)
     <td class="error">Invalid base directory: <?php echo $manager->config['base_dir']; ?></td>
   </tr>
 </table>
-<?php	
+<?php
 }
 
 ?>
@@ -166,76 +193,76 @@ function drawErrorBase(&$manager)
 
 <html>
 <head>
-	<title>Image List</title>
+        <title>Image List</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
+        <link href="assets/imagelist.css" rel="stylesheet" type="text/css" />
 <script type="text/javascript" src="assets/dialog.js"></script>
 <script type="text/javascript">
 
 /*<![CDATA[*/
 
-	if(window.top)
-		I18N = window.top.I18N;
-	
-	
-	function hideMessage()
-	{
-		var topDoc = window.top.document;
-		var messages = topDoc.getElementById('messages');
-		if(messages)
-			messages.style.display = "none";
-	}
+        if(window.top)
+                I18N = window.top.I18N;
 
-	init = function()
-	{
-		hideMessage();
-		var topDoc = window.top.document;
-		window.parent.document.uploader.reldir.value = "<?php echo $relative; ?>";
 
-<?php 
-	//we need to refesh the drop directory list
-	//save the current dir, delete all select options
-	//add the new list, re-select the saved dir.
-	if($refreshDir) 
-	{ 
-		$dirs = $manager->getDirs();
+        function hideMessage()
+        {
+                var topDoc = window.top.document;
+                var messages = topDoc.getElementById('messages');
+                if(messages)
+                        messages.style.display = "none";
+        }
+
+        init = function()
+        {
+                hideMessage();
+                var topDoc = window.top.document;
+                window.parent.document.uploader.reldir.value = "<?php echo $relative; ?>";
+
+<?php
+        //we need to refesh the drop directory list
+        //save the current dir, delete all select options
+        //add the new list, re-select the saved dir.
+        if($refreshDir)
+        {
+                $dirs = $manager->getDirs();
 ?>
-		var selection = topDoc.getElementById('dirPath');
-		var currentDir = selection.options[selection.selectedIndex].text;
+                var selection = topDoc.getElementById('dirPath');
+                var currentDir = selection.options[selection.selectedIndex].text;
 
-		while(selection.length > 0)
-		{	selection.remove(0); }
-		
-		selection.options[selection.length] = new Option("/","<?php echo rawurlencode('/'); ?>");	
-		<?php foreach($dirs as $relative=>$fullpath) { ?>
-		selection.options[selection.length] = new Option("<?php echo $relative; ?>","<?php echo rawurlencode($relative); ?>");		
-		<?php } ?>
-		
-		for(var i = 0; i < selection.length; i++)
-		{
-			var thisDir = selection.options[i].text;
-			if(thisDir == currentDir)
-			{
-				selection.selectedIndex = i;
-				break;
-			}
-		}		
+                while(selection.length > 0)
+                {        selection.remove(0); }
+
+                selection.options[selection.length] = new Option("/","<?php echo rawurlencode('/'); ?>");
+                <?php foreach($dirs as $relative=>$fullpath) { ?>
+                selection.options[selection.length] = new Option("<?php echo $relative; ?>","<?php echo rawurlencode($relative); ?>");
+                <?php } ?>
+
+                for(var i = 0; i < selection.length; i++)
+                {
+                        var thisDir = selection.options[i].text;
+                        if(thisDir == currentDir)
+                        {
+                                selection.selectedIndex = i;
+                                break;
+                        }
+                }
 <?php } ?>
-	}	
+        }
 
-	function editImage(image) 
-	{
-		var url = "editor.php?img="+image;
-		Dialog(url, function(param) 
-		{
-			if (!param) // user must have pressed Cancel
-				return false;
-			else
-			{
-				return true;
-			}
-		}, null);		
-	}
+        function editImage(image)
+        {
+                var url = "editor.php?img="+image;
+                Dialog(url, function(param)
+                {
+                        if (!param) // user must have pressed Cancel
+                                return false;
+                        else
+                        {
+                                return true;
+                        }
+                }, null);
+        }
 
 /*]]>*/
 </script>
@@ -248,17 +275,17 @@ function drawErrorBase(&$manager)
 <body>
 
 
-<?php if ($manager->isValidBase() == false) { drawErrorBase($manager); } 
+<?php if ($manager->isValidBase() == false) { drawErrorBase($manager); }
 
-	elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
+        elseif(count($list[0]) > 0 || count($list[1]) > 0) { ?>
 
 <table width="560" cellpadding="0" cellspacing="0">
-	<?php 
-		$i = 0;
-		$i = drawDirs($list[0], $manager,$i); 
-		$i = drawFiles($list[1], $manager,$i); 
-		addEmpties($list[1], $manager,$i); 
-	?>
+        <?php
+                $i = 0;
+                $i = drawDirs($list[0], $manager,$i);
+                $i = drawFiles($list[1], $manager,$i);
+                addEmpties($list[1], $manager,$i);
+        ?>
 
 </table>
 <?php } else { drawNoResults(); } ?>
