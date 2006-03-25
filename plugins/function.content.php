@@ -90,11 +90,11 @@ function smarty_cms_function_content($params, &$smarty)
 							}
 							$modresult = @ob_get_contents();
 							@ob_end_clean();
-							return $modresult;
+							return _smarty_cms_function_content_return($modresult, $params, $smarty);
 						}
 						else
 						{
-							return "<!-- Not a tag module -->\n";
+						  return _smarty_cms_function_content_return("<!-- Not a tag module -->\n", $params, $smarty);
 						}
 					}
 				}
@@ -107,10 +107,23 @@ function smarty_cms_function_content($params, &$smarty)
 			$smarty->caching = $pageinfo->cachable;
 			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->content_id);
 			$smarty->caching = $oldvalue;
-			return $result;
+			return _smarty_cms_function_content_return($result, $params, $smarty);
 		}
 	}
-	return '';
+	return _smarty_cms_function_content_return('', $params, $smarty);
+}
+
+function _smarty_cms_function_content_return($result, &$params, &$smarty)
+{
+	if ( empty($params['assign']) )
+	{
+		return $result;
+	}
+	else
+	{
+		$smarty->assign($params['assign'], $result);
+		return '';
+	}
 }
 
 function smarty_cms_help_function_content()
@@ -125,6 +138,7 @@ function smarty_cms_help_function_content()
 		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.</li>
 		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
+		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.</li>
 	</ul>
 	<?php
 }
@@ -133,10 +147,11 @@ function smarty_cms_about_function_content()
 {
 	?>
 	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
-	<p>Version: 1.0</p>
+	<p>Version: 1.1</p>
 	<p>
 	Change History:<br/>
-	None
+	1.1 - Added assign parameter from djnz's patch in the forge<br />
+	1.0 - Initial version
 	</p>
 	<?php
 }

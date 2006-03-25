@@ -3,6 +3,9 @@ Version 0.12.1 "Savusavu" -- Mar 25 2006
 
 * Added check if setting inactive page to the 
 default, it automatically makes it active
+* Added assign parameter to content tag, which will assign
+the output to a smarty parameter and can then be tested
+properly for existing output
 * Added ability to delete/active/inactive multiple pages 
 * Added handling of target parameter to Menu Manager
 * Added ordering of stylesheets so that they're displayed in
