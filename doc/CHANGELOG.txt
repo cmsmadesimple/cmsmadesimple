@@ -1,16 +1,24 @@
-Version 0.12.1 "Savusavu" -- Subversion
+Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------
 
 * Added check if setting inactive page to the 
 default, it automatically makes it active
 * Added ability to delete/active/inactive multiple pages 
 * Added handling of target parameter to Menu Manager
-* Added ordering of stylsheets so that they're displayed in
+* Added ordering of stylesheets so that they're displayed in
 the order they're attached to the template
 * Added permissions to Menu Manager
+* Added entity escaping to title and breadcrumbs plugins
+* Added changes to bulletmenu-accessible.tpl by nils73
 * Default persistent_db_conn setting is now false
+* Changed page alias replacement to allow for hyphens
+* Fixed issue with FCKeditorX where it wasn't changing the
+protocol automatically on the insert link page
 * Fixed cms_selflink so next/previous links respect the
 show in menu flag
+* Fixed length on template name in template copy command
+* Fixed link at bottom of admin log
+* Changed {$title} to {title} in new template page
 * Fixed a reference bug in the content class
 * Fixed the help of the image tag to be src, not name
 * Fixed several bugs with Menu Manager in handling of

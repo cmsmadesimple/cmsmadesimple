@@ -541,9 +541,9 @@ function SetAlias($alias)
         
         // lowercase only on empty aliases
         if ($tolower == 1)
-            {
+		{
             $alias = strtolower($alias);
-            }
+		}
             
         $alias = preg_replace("/[^\w-]+/", "_", $alias);
         $alias = trim($alias, '_');
