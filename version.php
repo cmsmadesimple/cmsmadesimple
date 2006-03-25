@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.12";
-$CMS_VERSION_NAME = "Fiji";
+$CMS_VERSION = "0.12.1";
+$CMS_VERSION_NAME = "Savusavu";
 $CMS_SCHEMA_VERSION = "18";
 
 # vim:ts=4 sw=4 noet

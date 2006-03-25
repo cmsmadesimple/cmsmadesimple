@@ -106,11 +106,11 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 						$trail .= '<a href="' . $onecontent->getURL() . '"';
 						$trail .= $classid;
 						$trail .= '>';
-						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 						$trail .= '</a> ' . $delimiter . ' ';
 					} else {
 						$trail .= "<span $classid>";
-						$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 						$trail .= '</span>';
 						$trail .= ' ' . $delimiter . ' ';
 					}
@@ -120,7 +120,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 					} else {
 						$trail .= '<strong>';
 					}
-					$trail .= ($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
+					$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 					if (isset($params['currentclassid'])) {
 						$trail .= '</span>';
 					} else {

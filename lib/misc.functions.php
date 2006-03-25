@@ -237,7 +237,7 @@ function my_htmlentities($val)
 	$val = str_replace( "<"            , "&lt;"          , $val ); 
 	
 	
-	//$val = str_replace( "\""           , "&quot;"        , $val ); 
+	$val = str_replace( "\""           , "&quot;"        , $val ); 
 
 	// Uncomment it if you need to convert literal newlines 
 	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
