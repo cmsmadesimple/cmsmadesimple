@@ -24,7 +24,7 @@ if ($gCms->config["debug"] == true)
 
 #Pull the stuff out of the buffer...
 $htmlresult = '';
-if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false) || isset($_REQUEST['disable_buffer']))
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 {
 	$htmlresult = @ob_get_contents();
 	@ob_end_clean();

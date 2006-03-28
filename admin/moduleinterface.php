@@ -51,9 +51,17 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 }
 
 $USE_OUTPUT_BUFFERING = true;
-if (isset($gCms->modules[$module]['object']))
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
 {
-	$USE_OUTPUT_BUFFERING = $gCms->modules[$module]['object']->HasAdminBuffering();
+	$USE_OUTPUT_BUFFERING = false;
+}
+else if (isset($_REQUEST[$id . 'disable_buffer']))
+{
+	$USE_OUTPUT_BUFFERING = false;
+}
+else if (isset($_REQUEST['disable_buffer']))
+{
+	$USE_OUTPUT_BUFFERING = false;
 }
 
 include_once("header.php");

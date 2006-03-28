@@ -1,6 +1,6 @@
 <?php
 
-if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false) || isset($_REQUEST['disable_buffer']))
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 {
 	@ob_start();
 }
