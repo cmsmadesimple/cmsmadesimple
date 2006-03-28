@@ -2401,9 +2401,30 @@ class CMSModule
 	 * @param array Corresponding params for string that require replacement.
 	 *        These params use the vsprintf command and it's style of replacement.
 	 */
-	function Lang($name, $params=array())
+	function Lang()
 	{
 		global $gCms;
+
+		$name = '';
+		$params = array();
+
+		if (func_num_args() > 0)
+		{
+			$name = func_get_arg(0);
+			if (func_num_args() == 2 && is_array(func_get_arg(1)))
+			{
+				$params = func_get_arg(1);
+			}
+			else if (func_num_args() > 1)
+			{
+				$params = array_slice(func_get_args(), 1);
+			}
+		}
+		else
+		{
+			return '';
+		}
+
 		if ($this->curlang == '' && isset($gCms->current_language))
 		{
 			$this->curlang = $gCms->current_language;

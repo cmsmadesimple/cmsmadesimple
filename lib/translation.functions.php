@@ -24,11 +24,32 @@
  * @package CMS
  */
 
-function lang($name, $params = array(), $realm='admin')
+function lang()
 {
 	global $gCms;
 	global $lang;
 	global $nls;
+
+	$name = '';
+	$params = array();
+	$realm = 'admin';
+
+	if (func_num_args() > 0)
+	{
+		$name = func_get_arg(0);
+		if (func_num_args() == 2 && is_array(func_get_arg(1)))
+		{
+			$params = func_get_arg(1);
+		}
+		else if (func_num_args() > 1)
+		{
+			$params = array_slice(func_get_args(), 1);
+		}
+	}
+	else
+	{
+		return '';
+	}
 
 	//echo strtolower(get_encoding()) . ':' . strtolower($nls['encoding'][$gCms->current_language]);
 
