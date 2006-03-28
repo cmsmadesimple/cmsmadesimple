@@ -50,6 +50,12 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 	}
 }
 
+$USE_OUTPUT_BUFFERING = true;
+if (isset($gCms->modules[$module]['object']))
+{
+	$USE_OUTPUT_BUFFERING = $gCms->modules[$module]['object']->HasAdminBuffering();
+}
+
 include_once("header.php");
 
 if (count($gCms->modules) > 0)

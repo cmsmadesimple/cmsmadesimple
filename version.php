@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.12.1";
+$CMS_VERSION = "0.12.2-svn";
 $CMS_VERSION_NAME = "Savusavu";
 $CMS_SCHEMA_VERSION = "18";
 

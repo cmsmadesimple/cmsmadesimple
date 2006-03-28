@@ -1,6 +1,9 @@
 <?php
 
-@ob_start();
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false) || isset($_REQUEST['disable_buffer']))
+{
+	@ob_start();
+}
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
@@ -11,11 +14,11 @@ $userid = get_userid();
 if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
 {
 	include(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php");
-    $themeObject = new $themeObjectName($gCms, $userid, $themeName);
+	$themeObject = new $themeObjectName($gCms, $userid, $themeName);
 }
 else
 {
-    $themeObject = new AdminTheme($gCms, $userid, $themeName);
+	$themeObject = new AdminTheme($gCms, $userid, $themeName);
 }
 
 $gCms->variables['admintheme']=&$themeObject;

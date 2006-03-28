@@ -1009,6 +1009,14 @@ class CMSModule
 	}
 
 	/**
+	 * Should we use output buffering in the admin for this module?
+	 */
+	function HasAdminBuffering()
+	{
+		return true;
+	}
+
+	/**
 	 * Returns which admin section this module belongs to.
 	 * this is used to place the module in the appropriate admin navigation
 	 * section. Valid options are currently:

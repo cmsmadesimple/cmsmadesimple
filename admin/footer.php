@@ -23,8 +23,12 @@ if ($gCms->config["debug"] == true)
 <?php
 
 #Pull the stuff out of the buffer...
-$htmlresult = @ob_get_contents();
-@ob_end_clean();
+$htmlresult = '';
+if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false) || isset($_REQUEST['disable_buffer']))
+{
+	$htmlresult = @ob_get_contents();
+	@ob_end_clean();
+}
 
 #Do any header replacements (this is for WYSIWYG stuff)
 $footertext = '';
