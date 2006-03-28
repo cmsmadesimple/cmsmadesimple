@@ -55,7 +55,9 @@ class ModuleOperations
   function GetLastError()
   {
     global $gCms;
-    return $gCms->variables['error'];
+    if( isset( $gCms->variables['error'] ) )
+      return $gCms->variables['error'];
+    return "";
   }
 
 
@@ -78,8 +80,14 @@ class ModuleOperations
 
     // start parsing xml
     $parser = xml_parser_create();
-    xml_parse_into_struct( $parser, $xml, $val, $xt );
+    $ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
     xml_parser_free( $parser );
+
+    if( $ret == 0 )
+      {
+	ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
+	return false;
+      }
 
     $havedtdversion = false;
     $moduledetails = array();
@@ -119,8 +127,8 @@ class ModuleOperations
 		  return false;
 		}
 	      $havedtdversion = true;
+	      break;
 	    }
-	    break;
 
 	  case 'VERSION':
 	    {
@@ -2630,6 +2638,20 @@ class CMSModule
 
 		$smarty->caching = $oldcache;
 		return $result;
+	}
+
+	/**
+	 * Given a template in a variable, this method processes it through smarty
+	 * note, there is no caching involved.
+	 */
+	function ProcessTemplateFromData( $data )
+	{
+	  $this->smarty->_compile_source('temporary template', $data, $_compiled );
+	  @ob_start();
+	  $this->smarty->_eval('?>' . $_compiled);
+	  $_contents = @ob_get_contents();
+	  @ob_end_clean();
+	  return $_contents;
 	}
 
 	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false)
