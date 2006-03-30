@@ -60,6 +60,14 @@ class Template
 		return $this->name;
 	}
 
+	function UsageCount()
+	{
+		if ($this->id > -1)
+			return TemplateOperations::UsageCount($this->id);
+		else
+			return 0;
+	}
+
 	function Save()
 	{
 		$result = false;
@@ -243,6 +251,24 @@ class TemplateOperations
 			$result = $onetemplate;
 		}
 
+		return $result;
+	}
+
+	function UsageCount($id)
+	{
+		$result = 0;
+
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
+		$row = &$db->GetRow($query, array($id));
+
+		if($row)
+		{
+			$result = $row['the_count'];
+		}
+	
 		return $result;
 	}
 

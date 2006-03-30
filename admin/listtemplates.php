@@ -34,6 +34,7 @@ if (isset($_GET["message"])) {
 
 ?>
 
+<form action="multitemplate.php" method="post">
 <div class="pagecontainer">
 	<div class="pageoverflow">
 
@@ -67,6 +68,7 @@ if (isset($_GET["message"])) {
 			if ($onetemplate->id == $_GET['setdefault'])
 			{
 				$onetemplate->default = 1;
+				$onetemplate->active = 1;
 				$onetemplate->Save();
 			}
 			else
@@ -131,6 +133,7 @@ if (isset($_GET["message"])) {
 			echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		if ($all)
 			echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 
 		echo "</tr>\n";
 		echo '</thead>';
@@ -151,7 +154,10 @@ if (isset($_GET["message"])) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">".$onetemplate->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onetemplate->default == 1?$default_true:$default_false)."</td>\n";
-				echo "<td class=\"pagepos\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
+				if ($onetemplate->default)
+					echo "<td class=\"pagepos\">".$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon')."</td>\n";
+				else
+					echo "<td class=\"pagepos\">".($onetemplate->active == 1?$image_true:$image_false)."</td>\n";
 
 				# set template to all content
 				if ($all)
@@ -164,27 +170,31 @@ if (isset($_GET["message"])) {
 
 				# add new template
 				if ($add)
-				    {
+				{
 					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".$onetemplate->name."\">";
                     echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
-                    }
+				}
 
 				# edit template
 				if ($edit)
-				    {
+				{
 					echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
-                    }
+				}
 
 				# remove template
 				if ($remove)
-				    {
+				{
 					echo "<td><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
-        }
+				}
+				if ($onetemplate->default)
+					echo '<td>&nbsp;</td>';
+				else
+					echo '<td><input type="checkbox" name="multitemplate-'.$onetemplate->id.'" /></td>';
 				echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");
@@ -202,15 +212,27 @@ if ($add) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addtemplate.php">
-				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
-				?>
-			</a>
+			<span style="float: left;">
+				<a href="addtemplate.php">
+					<?php 
+						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addtemplate'),'','','systemicon').'</a>';
+						echo ' <a class="pageoptions" href="addtemplate.php">'.lang("addtemplate");
+					?>
+				</a>
+			</span>
+			<span style="margin-right: 30px; float: right; align: right">
+				Selected Items: <select name="multiaction">
+				<option value="delete"><?php echo lang('delete') ?></option>
+				<option value="active"><?php echo lang('active') ?></option>
+				<option value="inactive"><?php echo lang('inactive') ?></option>
+				</select>
+				<input type="submit" value="<?php echo lang('submit') ?>" />
+			</span>
+			<br />
 		</p>		
 	</div>
 </div>
+</form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php

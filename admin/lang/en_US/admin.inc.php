@@ -337,4 +337,7 @@ $lang['admin']['deletecontent'] = 'Delete Content';
 $lang['admin']['deletepages'] = 'Delete these pages?';
 $lang['admin']['selecteditems'] = 'Selected Items';
 $lang['admin']['inactive'] = 'Inactive';
+$lang['admin']['deletetemplates'] = 'Delete Templates';
+$lang['admin']['templatestodelete'] = 'These templates will be deleted';
+$lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will not be deleted';
 ?>

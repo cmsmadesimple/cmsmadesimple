@@ -1,3 +1,11 @@
+Version 0.12.2 -- Subversion
+-----------------
+
+* Added bulk delete/active/inactive of templates
+* Fixed bug where default template could be set inactive
+* Fixed bug where an inactive template set to default would
+not be made active automatically
+
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------
 
