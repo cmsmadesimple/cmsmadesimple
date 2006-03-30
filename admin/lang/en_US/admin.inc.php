@@ -69,6 +69,7 @@ $lang['admin']['email'] = 'Email Address';
 $lang['admin']['errorattempteddowngrade'] = 'Installing this module would result in a downgrade.  Operation aborted';
 $lang['admin']['errorchildcontent'] = 'Content still contains child contents. Please remove them first.';
 $lang['admin']['errorcopyingtemplate'] = 'Error Copying Template';
+$lang['admin']['errorcouldnotparsexml'] = 'Error parsing XML file';
 $lang['admin']['errorcreatingassociation'] = 'Error creating association';
 $lang['admin']['errorcssinuse'] = 'This Stylesheet is still used by template or pages. Please remove those associations first.';
 $lang['admin']['errordefaultpage'] = 'Can not delete the current default page. Please set a different one first.';

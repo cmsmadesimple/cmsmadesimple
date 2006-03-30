@@ -1,7 +1,14 @@
 <?php
-$themeObject->DisplayMainDivEnd();
-$themeObject->OutputFooterJavascript();
-$themeObject->DisplayFooter();
+if (isset($USE_THEME) && $USE_THEME == false)
+  {
+    echo '<!-- admin theme disabled -->';
+  }
+else
+  {
+    $themeObject->DisplayMainDivEnd();
+    $themeObject->OutputFooterJavascript();
+    $themeObject->DisplayFooter();
+  }
 
 if ($gCms->config["debug"] == true)
 {

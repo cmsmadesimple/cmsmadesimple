@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANthe TY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -64,25 +64,45 @@ else if (isset($_REQUEST['disable_buffer']))
 	$USE_OUTPUT_BUFFERING = false;
 }
 
+$USE_THEME = true;
+if( isset( $_REQUEST[$id . 'disable_theme'] ))
+  {
+    $USE_THEME = false;
+  }
+else if( isset( $_REQUET['disable_theme'] ))
+  {
+    $USE_THEME = false;
+  }
+
 include_once("header.php");
 
 if (count($gCms->modules) > 0)
 {
-
+  if (isset($USE_THEME) && $USE_THEME == false)
+    {
+      echo '';
+    }
+  else
+    {
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
 	echo '<p class="pageheader">'.$gCms->modules[$module]['object']->GetFriendlyName().'</p></div>';
+    }
 
 	if (isset($gCms->modules[$module]))
 	{
-		@ob_start();
+	  if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
+	    @ob_start();
+	  }
 		$id = 'm1_';
 		$params = @ModuleOperations::GetModuleParameters($id);
 		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
-		$content = @ob_get_contents();
-		@ob_end_clean();
-		echo $content;
-		echo '</div>';
+	  if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
+	    $content = @ob_get_contents();
+	    @ob_end_clean();
+	    echo $content;
+	  }
+	  echo '</div>';
 	}
 	else
 	{
@@ -90,7 +110,14 @@ if (count($gCms->modules) > 0)
 	}
 }
 
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+if (isset($USE_THEME) && $USE_THEME == false)
+  {
+    echo '';
+  }
+else
+  {
+    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+  }
 
 include_once("footer.php");
 
