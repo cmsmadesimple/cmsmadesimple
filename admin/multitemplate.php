@@ -61,7 +61,7 @@ else
 
 include_once("header.php");
 
-if (count($nodelist) == 0)
+if (count($nodelist) == 0 && count($badlist) == 0)
 {
 	redirect("listtemplates.php");
 }
@@ -78,14 +78,17 @@ else
 		if ($access)
 		{
 			echo '<form method="post" action="multitemplate.php">' . "\n";
-			echo '<p>'.lang('templatestodelete').'</p><p>' . "\n";
 			$idlist = array();
-			foreach ($nodelist as $node)
+			if (count($nodelist) > 0)
 			{
-				echo $node->name . '<br />' . "\n";
-				$idlist[] = $node->id;
+				echo '<p>'.lang('templatestodelete').'</p><p>' . "\n";
+				foreach ($nodelist as $node)
+				{
+					echo $node->name . '<br />' . "\n";
+					$idlist[] = $node->id;
+				}
+				echo '</p>';
 			}
-			echo '</p>';
 
 			if (count($badlist) > 0)
 			{
@@ -103,7 +106,7 @@ else
 
 			echo '<input type="hidden" name="multiaction" value="dodelete" /><input type="hidden" name="idlist" value="'.implode(':', $idlist).'" />' . "\n";
 			?>
-								<input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+								<?php if (count($nodelist) > 0) { ?><input type="submit" name="confirm" value="<?php echo lang('submit') ?>"  class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /><?php } ?>
 								<input type="submit" name="cancel" value="<?php echo lang('cancel') ?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 							</p>
 						</div>
