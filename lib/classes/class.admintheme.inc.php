@@ -816,7 +816,7 @@ class AdminTheme
 			if ($this->script == 'moduleinterface.php')
 				{
                 $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
-                if ($a > 0 && strpos($matches[2],$sectionKey) !== false)
+                if ($a > 0 && $matches[2] == $sectionKey)
 					{
             		$this->menuItems[$sectionKey]['selected'] = true;
             		$this->title .= $sectionArray['title'];
