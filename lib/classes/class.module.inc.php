@@ -1725,6 +1725,24 @@ class CMSModule
 	}
 
 	/**
+	 * Returns the start of a module form, optimized for frontend use
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The id to eventually return to when the module is finished it's task
+	 * @param string The action that this form should do when the form is submitted
+	 * @param string Method to use for the form tag.  Defaults to 'post'
+	 * @param string Optional enctype to use, Good for situations where files are being uploaded
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+	 * @param string Text to append to the end of the id and name of the form
+	 */
+	function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
+					 $enctype='',$inline=true,$idsuffix='')
+	{
+	  return $this->CreateFormStart($id,$action,$returnid,$method,$post,$enctype,$inline,$idsuffix);
+	}
+
+
+	/**
 	 * Returns the start of a module form
 	 *
 	 * @param string The id given to the module on execution
@@ -2128,6 +2146,27 @@ class CMSModule
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
+	 * @param string The id to eventually return to when the module is finished it's task
+	 * @param string The action that this form should do when the link is clicked
+	 * @param string The text that will have to be clicked to follow the link
+	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
+	 * @param boolean A flag to determine if only the href section should be returned
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
+				     $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false )
+	{
+	  return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
+				    $inline, $addtext, $targetcontentonly );
+	}
+
+	/**
+	 * Returns the xhtml equivalent of an href link  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the link is clicked
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string The text that will have to be clicked to follow the link
@@ -2294,6 +2333,21 @@ class CMSModule
 		return $text;
 	}
 
+
+	/**
+	 * Redirects the user to another action of the module.
+	 * This function is optimized for frontend use.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The action that this form should do when the form is submitted
+	 * @param string The id to eventually return to when the module is finished it's task
+	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
+	 */
+	function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
+	{
+	  return $this->Redirect($id, $action, $returnid, $params, $inline );
+	}
 
 	/**
 	 * Redirects the user to another action of the module.
