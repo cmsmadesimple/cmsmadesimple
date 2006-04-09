@@ -2,6 +2,7 @@ Version 0.12.2 -- Subversion
 -----------------
 
 * Added bulk delete/active/inactive of templates
+* Added bulk delete of stylesheets
 * Fixed bug where default template could be set inactive
 * Fixed bug where an inactive template set to default would
 not be made active automatically
