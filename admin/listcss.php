@@ -71,6 +71,7 @@ if (isset($_GET["message"])) {
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RowCount(), $limit)."</p>";
 	}
+	echo '<form action="multistylesheet.php" method="post">';
 	echo '<p class="pageheader">'.lang('liststylesheets').'</p></div>';
 	if ($result && $result->RowCount() > 0)
 	{
@@ -79,6 +80,7 @@ if (isset($_GET["message"])) {
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th>".lang('title')."</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
@@ -135,7 +137,7 @@ if (isset($_GET["message"])) {
 				{
 					echo "<td>&nbsp;</td>";
 				}
-
+				echo '<td><input type="checkbox" name="multistylesheet-'.$one['css_id'].'" /></td>';
 				echo "</tr>\n";
 
 				("row1" == $currow) ? $currow="row2" : $currow="row1";
@@ -154,15 +156,29 @@ if (isset($_GET["message"])) {
 ?>
 	<div class="pageoptions">
 		<p class="pageoptions">
-			<a href="addcontent.php">
-				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
-				?>
-			</a>
+			<span style="float: left;">
+				<a href="addcontent.php">
+					<?php 
+						echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addstylesheet'),'','','systemicon').'</a>';
+						echo ' <a class="pageoptions" href="addcss.php">'.lang("addstylesheet");
+					?>
+				</a>
+			</span>
+			<span style="margin-right: 30px; float: right; align: right">
+				Selected Items: <select name="multiaction">
+				<option value="delete"><?php echo lang('delete') ?></option>
+				<!--
+				<option value="active"><?php echo lang('active') ?></option>
+				<option value="inactive"><?php echo lang('inactive') ?></option>
+				-->
+				</select>
+				<input type="submit" value="<?php echo lang('submit') ?>" />
+			</span>
+			<br />
 		</p>
 	</div>
 </div>
+</form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php

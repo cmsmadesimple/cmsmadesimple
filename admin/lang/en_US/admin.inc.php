@@ -341,4 +341,6 @@ $lang['admin']['inactive'] = 'Inactive';
 $lang['admin']['deletetemplates'] = 'Delete Templates';
 $lang['admin']['templatestodelete'] = 'These templates will be deleted';
 $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will not be deleted';
+$lang['admin']['deletetemplate'] = 'Delete Stylesheets';
+$lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 ?>
