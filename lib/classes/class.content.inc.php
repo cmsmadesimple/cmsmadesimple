@@ -1223,12 +1223,41 @@ function SetAlias($alias)
 		}
 		else
 		{
-			#if (isset($_SERVER['PHP_SELF']))
-			#	$url = $config["root_url"]."/index.php/".$alias;
-			#else
+			if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
+			{
+				if ($config['internal_hierarchy'] == true)
+					$url = $config["root_url"]."/index.php".$this->MakeHierarchyURL();
+				else
+					$url = $config["root_url"]."/index.php/".$alias;
+			}
+			else
 				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
 		}
 		return $url;
+	}
+
+	function MakeHierarchyURL($ext='')
+	{
+		global $gCms;
+		$hm =& $gCms->GetHierarchyManager();
+
+		$path = '/' . $this->Alias();
+
+		$node =& $hm->getNodeById($this->ParentId());
+		while($node)
+		{
+			$content =& $node->GetContent();
+			if (isset($content))
+			{
+				$path = '/' . $content->Alias() . $path;
+				$node =& $hm->getNodeById($content->ParentId());
+			}
+		}
+
+		$result = $path;
+		if ($ext != '')
+			$result = $path . '.' . $ext;
+		return $result;
 	}
 
 	/**

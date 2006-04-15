@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.12.2-svn";
-$CMS_VERSION_NAME = "Savusavu";
+$CMS_VERSION = "0.13-svn";
+$CMS_VERSION_NAME = "Canary";
 $CMS_SCHEMA_VERSION = "18";
 
 # vim:ts=4 sw=4 noet

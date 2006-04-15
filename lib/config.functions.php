@@ -32,81 +32,40 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 {
 	$config = array();
 
-	#Database connection information
+	#Set some defaults, just in case the config file is corrupted or
+	#we're coming from an upgrade
 	$config["dbms"] = "mysql";
 	$config["db_hostname"] = "localhost";
 	$config["db_username"] = "cms";
 	$config["db_password"] = "cms";
 	$config["db_name"] = "cms";
-
-	#If app needs to coexist with other tables in the same db,
-	#put a prefix here.  e.g. "cms_"
 	$config["db_prefix"] = "cms_";
-
-	#Document root as seen from the webserver.  No slash at the end
-	#e.g. http://blah.com
 	$config["root_url"] = "http://www.something.com";
-
-	#Path to document root
-	#e.g. /var/www/localhost
 	$config["root_path"] = dirname(dirname(__FILE__));
-
-	#For using a particular querystring variable.  Turning off
-	#produces variables like: http://cms.wishy.org/index.php/somecontent
-	#where as setting to page would make:
-	#http://cms.wishy.org/?page=somecontent
 	$config["query_var"] = "page";
-
-	#Install BBCodeParser from the PEAR library
-	#and then set this to true for BBCode usage in content
-	#and tables.
 	$config["use_bb_code"] = false;
-
-	#Allow smarty {php} tags?  These could be dangerous.
 	$config["use_smarty_php_tags"] = false;
-
-	#Where do previews get saved?
 	$config["previews_path"] = $config["root_path"] . "/tmp/cache";
-
-	#Where are uploaded files put?
 	$config["uploads_path"] = $config["root_path"] . "/uploads";
-
-	#Where is the url to this directory?
 	$config["uploads_url"] = $config["root_url"] . "/uploads";
-
-	#Maxium upload size (in bytes)?
 	$config["max_upload_size"] = 1000000;
-
-	#CMS Debug Mode?
 	$config["debug"] = false;
-
-	#Show mod_rewrite URLs in the menu?
 	$config["assume_mod_rewrite"] = false;
-
-	#Automatically assign alias based on page title?
+	$config['internal_pretty_urls'] = false;
+	$config['internal_hierarchy'] = false;
 	$config["auto_alias_content"] = true;
-
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 	$config["use_Indite"] = true;
-
 	$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
 	$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
-
 	$config["default_encoding"] = "";
-
 	$config["disable_htmlarea_translation"] = false;
-
 	$config["admin_dir"] = "admin";
-
 	$config["persistent_db_conn"] = false;
-
 	$config["default_upload_permission"] = '664';
-	
 	$config["page_extension"] = ".html";
-
 	$config["use_adodb_lite"] = true;
-
 	$config["locale"] = "";
 
 	#Don't set it yet
@@ -157,6 +116,153 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	return $config;
 }
 
+function cms_config_text($config)
+{
+	$true = 'true';
+	$false = 'false';
+	$result = <<<EOF
+
+#CMS Made Simple Configuration File
+#Please clear the cache (Site Admin->Global Settings in the admin panel)
+#after making any changes to path or url related options
+
+#-----------------
+#Database Settings
+#-----------------
+
+#This is your database connection information.  Name of the server,
+#username, password and a database with proper permissions should
+#all be setup before CMS Made Simple is installed.
+\$config['dbms'] = '{$config['dbms']}';
+\$config['db_hostname'] = '{$config['db_hostname']}';
+\$config['db_username'] = '{$config['db_username']}';
+\$config['db_password'] = '{$config['db_password']}';
+\$config['db_name'] = '{$config['db_name']}';
+
+#If app needs to coexist with other tables in the same db,
+#put a prefix here.  e.g. "cms_"
+\$config['db_prefix'] = '{$config['db_prefix']}';
+
+#Use persistent connections?  They're generally faster, but not all hosts
+#allow them.
+\$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
+
+#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
+#tweaks might have to be made to date handling in a "regular" adodb
+#install before it can be used.
+\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
+
+#-------------
+#Path Settings
+#-------------
+
+#Document root as seen from the webserver.  No slash at the end
+#e.g. http://blah.com
+\$config['root_url'] = '{$config['root_url']}';
+
+#Path to document root. This should be the directory this file is in.
+#e.g. /var/www/localhost
+\$config['root_path'] = '{$config['root_path']}';
+
+#Name of the admin directory
+\$config['admin_dir'] = '{$config['admin_dir']}';
+
+#Where do previews get stored temporarily?  It defaults to tmp/cache.
+\$config['previews_path'] = '{$config['previews_path']}';
+
+#Where are uploaded files put?  This defaults to uploads.
+\$config['uploads_path'] = '{$config['uploads_path']}';
+
+#Where is the url to this uploads directory?
+\$config['uploads_url'] = '{$config['uploads_url']}';
+
+#---------------
+#Upload Settings
+#---------------
+
+#Maxium upload size (in bytes)?
+\$config['max_upload_size'] = {$config['max_upload_size']};
+
+#Permissions for uploaded files.  This only really needs changing if your
+#host has a weird permissions scheme.
+\$config['default_upload_permission'] = '{$config['default_upload_permission']}';
+
+#------------------
+#Usability Settings
+#------------------
+
+#Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
+\$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
+
+#CMSMS Debug Mode?  Turn is on to get a better error when you
+#see {nocache} errors.
+\$config['debug'] = ${$config['debug']?'true':'false'};
+
+#Automatically assign alias based on page title?
+\$config['auto_alias_content'] = ${$config['auto_alias_content']?'true':'false'};
+
+#------------
+#URL Settings
+#------------
+
+#Show mod_rewrite URLs in the menu?
+\$config['assume_mod_rewrite'] = ${$config['assume_mod_rewrite']?'true':'false'};
+
+#Extension to use if you're using mod_rewrite for pretty URLs.
+\$config['page_extension'] = '{$config['page_extension']}';
+
+#If you don't use mod_rewrite, then would you like to use the built-in
+#pretty url mechanism?  This will not work with IIS and the {metadata} tag
+#should be in all of your templates before enabling.
+\$config['internal_pretty_urls'] = ${$config['internal_pretty_urls']?'true':'false'};
+
+#If you're using the internal pretty url mechanism, would you like to show urls
+#in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
+\$config['internal_hierarchy'] = ${$config['internal_hierarchy']?'true':'false'};
+
+#If using none of the above options, what should we be using for the query string
+#variable?  (ex. http://www.mysite.com/index.php?page=somecontent)
+\$config['query_var'] = '{$config['query_var']}';
+
+#--------------
+#Image Settings
+#--------------
+
+#Which program should be used for handling thumbnails in the image manager.
+#See http://wiki.cmsmadesimple.org/en:adminpanel:content:imagemanager for more
+#info on what this all means
+\$config['image_manipulation_prog'] = '{$config['image_manipulation_prog']}';
+\$config['image_transform_lib_path'] = '{$config['image_transform_lib_path']}';
+
+#Default path and URL for uploaded images in the image manager
+\$config['image_uploads_path'] = '{$config['image_uploads_path']}';
+\$config['image_uploads_url'] = '{$config['image_uploads_url']}'; 
+
+#------------------------
+#Locale/Encoding Settings
+#------------------------
+
+#Locale to use for various default date handling functions, etc.  Leaving
+#this blank will use the server's default.  This might not be good if the
+#site is hosted in a different country than it's intended audience.
+\$config['locale'] = '{$config['locale']}';
+
+#In almost all cases, default_encoding should be empty (which defaults to utf-8)
+#and admin_encoding should be utf-8.  If you'd like this to be different, change
+#both.  Keep in mind, however, that the admin interface translations are all in
+#utf-8, and will be converted on the fly to match the admin_encoding.  This
+#could seriously slow down the admin interfaces for users.
+\$config['default_encoding'] = '{$config['default_encoding']}';
+\$config['admin_encoding'] = '{$config['admin_encoding']}';
+
+#---------------------------------------------
+#Not used anymore... kept around, just in case
+\$config['disable_htmlarea_translation'] = false;
+\$config['use_Indite'] = true;
+EOF;
+	return $result;
+}
+
 /**
  * Saves config.php
  * 
@@ -176,21 +282,7 @@ function cms_config_save($config)
 		if ($handle)
 		{
 			fwrite($handle, "<?php\n\n");
-			foreach ($config as $key=>$value)
-			{
-				if (is_string($value))
-				{
-					fwrite($handle, "\$config['$key'] = '$value';\n");
-				}
-				else if (is_bool($value))
-				{
-					fwrite($handle, "\$config['$key'] = ".($value?"true":"false").";\n");
-				}
-				else
-				{
-					fwrite($handle, "\$config['$key'] = ".strval($value).";\n");
-				}
-			}
+			fwrite($handle, cms_config_text($config));
 			fwrite($handle, "\n?>");
 			fclose($handle);
 		}

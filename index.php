@@ -96,9 +96,11 @@ else if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GE
 else if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
 {
 	$matches = array();
-	if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+	if (preg_match('/.*index\.php.*\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+	{
 		#var_dump($matches);
 		$page = $matches[1];
+	}
 }
 #else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false)
 #{

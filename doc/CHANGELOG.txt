@@ -1,11 +1,20 @@
-Version 0.12.2 -- Subversion
+Version 0.13 -- Subversion
 -----------------
 
 * Added bulk delete/active/inactive of templates
 * Added bulk delete of stylesheets
+* Added internal pretty url handling mechanism.  It's
+going to be turned off on upgrades, but on with new
+installs.  Make sure the {metadata} tag is in your template
+if you plan on using it.
+* Added hierarchical url handling as well on the interal
+mechanism.  You especially want the {metadata} tag with
+this option.  It's on in new installs.
 * Fixed bug where default template could be set inactive
 * Fixed bug where an inactive template set to default would
 not be made active automatically
+* Modified config.php file so that it explains what the
+different options are
 
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------

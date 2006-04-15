@@ -21,6 +21,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 	$result = get_site_preference('metadata', '');
 
 	global $gCms;
+	$config =& $gCms->GetConfig();
 	$pageinfo =& $gCms->variables['pageinfo'];
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
@@ -35,6 +36,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 	$smarty->_eval('?>' . $_compiled);
 	$_contents = @ob_get_contents();
 	@ob_end_clean();
+	$_contents .= "\n<base href=\"".$config['root_url']."/\" />\n";
 
 	return $_contents;
 }

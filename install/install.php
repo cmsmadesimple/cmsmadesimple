@@ -555,7 +555,7 @@ function showPageFive() {
 
 	require_once(dirname(dirname(__FILE__))."/lib/config.functions.php");
 
-	$newconfig = cms_config_load();;
+	$newconfig = cms_config_load();
 
 	$newconfig['dbms'] = $_POST['dbms'];
 	$newconfig['db_hostname'] = $_POST['host'];
@@ -591,6 +591,8 @@ function showPageFive() {
 	$newconfig["locale"] = "";
 	$newconfig["admin_encoding"] = "utf-8";
 	$newconfig["use_adodb_lite"] = true;
+	$newconfig['internal_pretty_urls'] = true;
+	$newconfig['internal_hierarchy'] = true;
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
