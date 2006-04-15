@@ -88,7 +88,7 @@ if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
 {
 	$page = $params[$smarty->id . 'returnid'];
 }
-else if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GET[$config["query_var"]]))
+else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
 {
 	$page = $_GET[$config["query_var"]];
 }
@@ -96,18 +96,13 @@ else if (isset($config["query_var"]) && $config["query_var"] != "" && isset($_GE
 else if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
 {
 	$matches = array();
+	//Handle routes here...  this could get hairy
 	if (preg_match('/.*index\.php.*\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
 	{
-		#var_dump($matches);
+		//var_dump($matches);
 		$page = $matches[1];
 	}
 }
-#else if (isset($_SERVER["QUERY_STRING"]) && strpos($_SERVER["QUERY_STRING"], 'deleteinstall') === false)
-#{
-#	$page = $_SERVER["QUERY_STRING"];
-#}
-
-#var_dump($page);
 
 if ($page == '')
 {

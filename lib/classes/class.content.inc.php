@@ -1218,8 +1218,10 @@ function SetAlias($alias)
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
-			$url = $config["root_url"]."/".$alias.
-				(isset($config['page_extension'])?$config['page_extension']:'.shtml');
+			if ($config['internal_hierarchy'] == true)
+				$url = $config["root_url"].$this->MakeHierarchyURL(isset($config['page_extension'])?$config['page_extension']:'.html');
+			else
+				$url = $config["root_url"]."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
 		{
@@ -1256,7 +1258,7 @@ function SetAlias($alias)
 
 		$result = $path;
 		if ($ext != '')
-			$result = $path . '.' . $ext;
+			$result = $path . $ext;
 		return $result;
 	}
 
