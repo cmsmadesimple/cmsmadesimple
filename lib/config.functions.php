@@ -52,7 +52,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["debug"] = false;
 	$config["assume_mod_rewrite"] = false;
 	$config['internal_pretty_urls'] = false;
-	$config['internal_hierarchy'] = false;
+	$config['use_hierarchy'] = false;
 	$config["auto_alias_content"] = true;
 	$config["image_manipulation_prog"] = "GD";
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
@@ -216,9 +216,9 @@ function cms_config_text($config)
 #should be in all of your templates before enabling.
 \$config['internal_pretty_urls'] = ${$config['internal_pretty_urls']?'true':'false'};
 
-#If you're using the internal pretty url mechanism, would you like to show urls
-#in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
-\$config['internal_hierarchy'] = ${$config['internal_hierarchy']?'true':'false'};
+#If you're using the internal pretty url mechanism or mod_rewrite, would you like to
+#show urls in their hierarchy?  (ex. http://www.mysite.com/parent/parent/childpage)
+\$config['use_hierarchy'] = ${$config['use_hierarchy']?'true':'false'};
 
 #If using none of the above options, what should we be using for the query string
 #variable?  (ex. http://www.mysite.com/index.php?page=somecontent)

@@ -592,7 +592,7 @@ function showPageFive() {
 	$newconfig["admin_encoding"] = "utf-8";
 	$newconfig["use_adodb_lite"] = true;
 	$newconfig['internal_pretty_urls'] = true;
-	$newconfig['internal_hierarchy'] = true;
+	$newconfig['use_hierarchy'] = true;
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file

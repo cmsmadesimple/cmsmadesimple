@@ -1218,7 +1218,7 @@ function SetAlias($alias)
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
-			if ($config['internal_hierarchy'] == true)
+			if ($config['use_hierarchy'] == true)
 				$url = $config["root_url"].$this->MakeHierarchyURL(isset($config['page_extension'])?$config['page_extension']:'.html');
 			else
 				$url = $config["root_url"]."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.html');
@@ -1227,7 +1227,7 @@ function SetAlias($alias)
 		{
 			if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
 			{
-				if ($config['internal_hierarchy'] == true)
+				if ($config['use_hierarchy'] == true)
 					$url = $config["root_url"]."/index.php".$this->MakeHierarchyURL();
 				else
 					$url = $config["root_url"]."/index.php/".$alias;
