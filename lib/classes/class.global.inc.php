@@ -249,5 +249,12 @@ class CmsObject {
 	}
 }
 
+class CmsRoute
+{
+	var $module;
+	var $regex;
+	var $defaults;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

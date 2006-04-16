@@ -104,13 +104,12 @@ $page = rtrim($page, '/');
 if (strpos($page, '/') !== FALSE)
 {
 	$routes =& $gCms->variables['routes'];
-	$routes[] = '/(?P<module>News)\/(?P<action>detail)\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)/';
 	
 	$matched = false;
 	foreach ($routes as $route)
 	{
 		$matches = array();
-		if (preg_match($route, $page, $matches))
+		if (preg_match($route->regex, $page, $matches))
 		{
 			//Now setup some assumptions
 			if (!isset($matches['id']))
@@ -121,6 +120,8 @@ if (strpos($page, '/') !== FALSE)
 				$matches['inline'] = 0;
 			if (!isset($matches['returnid']))
 				$matches['returnid'] = 1;
+			if (!isset($matches['module']))
+				$matches['returnid'] = $route->module;
 
 			//Get rid of numeric matches
 			foreach ($matches as $key=>$val)
@@ -136,7 +137,18 @@ if (strpos($page, '/') !== FALSE)
 				}
 			}
 
+			//Now set any defaults that might not have been in the url
+			if (isset($route->defaults) && count($route->defaults) > 0)
+			{
+				foreach ($route->defaults as $key=>$val)
+				{
+					$_REQUEST[$matches['id'] . $key] = $val;
+				}
+			}
+
+
 			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+			$smarty->id = $matches['id'];
 
 			$matched = true;
 			$page = '';
@@ -189,7 +201,7 @@ if (isset($_GET["print"]))
 else
 {
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
-	if (isset($smarty->id) && $smarty->id != '' && isset($_GET[$smarty->id.'showtemplate']) && $_GET[$smarty->id.'showtemplate'] == 'false')
+	if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
 	{
 		$html = $smarty->fetch('template:notemplate') . "\n";
 	}

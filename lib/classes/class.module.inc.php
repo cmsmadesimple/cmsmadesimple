@@ -683,12 +683,17 @@ class CMSModule
 	 * Register a route to use for pretty url parsing
 	 *
 	 * @param string Route to register
+	 * @param array Defaults for parameters that might not be included in the url
 	 */
-	function RegisterRoute($route)
+	function RegisterRoute($routeregex, $defaults = array())
 	{
 		global $gCms;
+		$route =& new CmsRoute();
+		$route->module = $this->GetName();
+		$route->defaults = $defaults;
+		$route->regex = $routeregex;
 		$routes =& $gCms->variables['routes'];
-		$routes[] = $route;
+		$routes[] =& $route;
 	}
 
 	/**
