@@ -169,13 +169,13 @@ class CmsObject {
 	{
 		static $configinstance;
 
-        if (is_null($configinstance))
+        if (!isset($this->config))
 		{
 			$configinstance = cms_config_load(true);
 			$this->config = &$configinstance;
 		}
 
-		return $configinstance;
+		return $this->config;
 	}
 
 	function & GetSmarty()

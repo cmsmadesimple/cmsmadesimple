@@ -2168,10 +2168,10 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
 	function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
-				     $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false )
+				     $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false, $prettyurl='' )
 	{
 	  return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
-				    $inline, $addtext, $targetcontentonly );
+				    $inline, $addtext, $targetcontentonly, $prettyurl );
 	}
 
 	/**
@@ -2188,54 +2188,69 @@ class CMSModule
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false)
+	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 	{
-		$text = '';
-		if ($targetcontentonly || ($returnid != '' && !$inline))
-		{
-			$id = 'cntnt01';
-		}
-		$goto = 'index.php';
+		global $gCms;
+		$config =& $gCms->GetConfig();
+
 		$class = (isset($params['class'])?$params['class']:'');
-		if ($returnid == '')
+
+		if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
 		{
-			$goto = 'moduleinterface.php';
+			$text = $config['root_url'] . '/' . $prettyurl;
 		}
+		else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
+		{
+			$text = $config['root_url'] . '/index.php/' . $prettyurl;
+		}
+		else
+		{
+			$text = '';
+			if ($targetcontentonly || ($returnid != '' && !$inline))
+			{
+				$id = 'cntnt01';
+			}
+			$goto = 'index.php';
+			if ($returnid == '')
+			{
+				$goto = 'moduleinterface.php';
+			}
+			if (!$onlyhref)
+			{
+			}
+			$text .= $this->cms->config['root_url'];
+			if (!($returnid != '' && $returnid > -1))
+			{
+				$text .= '/'.$this->cms->config['admin_dir'];
+			}
+
+			#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+			$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action.','.($inline == true?1:0);
+
+			foreach ($params as $key=>$value)
+			{
+				if ($key != 'module' && $key != 'action' && $key != 'id')
+					$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
+			}
+			if ($returnid != '')
+			{
+				$text .= '&amp;'.$id.'returnid='.$returnid;
+				if ($inline)
+				{
+					$text .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
+				}
+			}
+		}
+
 		if (!$onlyhref)
 		{
-			$text .= '<a';
+			$beginning = '<a';
 			if ($class != '')
 			{
-				$text .= ' class="'.$class.'"';
+				$beginning .= ' class="'.$class.'"';
 			}
-			$text .= ' href="';
-		}
-		$text .= $this->cms->config['root_url'];
-		if (!($returnid != '' && $returnid > -1))
-		{
-			$text .= '/'.$this->cms->config['admin_dir'];
-		}
-
-		#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action.','.($inline == true?1:0);
-
-		foreach ($params as $key=>$value)
-		{
-			if ($key != 'module' && $key != 'action' && $key != 'id')
-				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
-		}
-		if ($returnid != '')
-		{
-			$text .= '&amp;'.$id.'returnid='.$returnid;
-			if ($inline)
-			{
-				$text .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-			}
-		}
-
-		if (!$onlyhref)
-		{
-			$text .= "\"";
+			$beginning .= ' href="';
+			$text = $beginning . $text . "\"";
 			if ($warn_message != '')
 			{
 				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
