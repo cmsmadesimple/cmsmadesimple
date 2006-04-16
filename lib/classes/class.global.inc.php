@@ -121,6 +121,7 @@ class CmsObject {
 		$this->StylesheeteCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
+		$this->variables['routes'] = array();
 
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}

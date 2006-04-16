@@ -82,8 +82,6 @@ else
 	$smarty->id = (isset($params['id'])?$params['id']:'');
 }
 
-#var_dump($smarty->id);
-
 if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
 {
 	$page = $params[$smarty->id . 'returnid'];
@@ -92,15 +90,62 @@ else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GE
 {
 	$page = $_GET[$config["query_var"]];
 }
-#else if (isset($_SERVER["PATH_INFO"]) && (isset($_SERVER["SCRIPT_URL"]) && ($_SERVER["PATH_INFO"] != $_SERVER["SCRIPT_URL"])))
 else if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
 {
 	$matches = array();
-	//Handle routes here...  this could get hairy
-	if (preg_match('/.*index\.php.*\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+	if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
 	{
-		//var_dump($matches);
 		$page = $matches[1];
+	}
+}
+
+//See if our page matches any predefined routes
+$page = rtrim($page, '/');
+if (strpos($page, '/') !== FALSE)
+{
+	$routes =& $gCms->variables['routes'];
+	$routes[] = '/(?P<module>News)\/(?P<action>detail)\/(?P<articleid>[0-9]+)\/(?P<returnid>[0-9]+)/';
+	
+	$matched = false;
+	foreach ($routes as $route)
+	{
+		$matches = array();
+		if (preg_match($route, $page, $matches))
+		{
+			//Now setup some assumptions
+			if (!isset($matches['id']))
+				$matches['id'] = 'cntnt01';
+			if (!isset($matches['action']))
+				$matches['action'] = 'defaulturl';
+			if (!isset($matches['inline']))
+				$matches['inline'] = 0;
+			if (!isset($matches['returnid']))
+				$matches['returnid'] = 1;
+
+			//Get rid of numeric matches
+			foreach ($matches as $key=>$val)
+			{
+				if (is_int($key))
+				{
+					unset($matches[$key]);
+				}
+				else
+				{
+					if ($key != 'id')
+						$_REQUEST[$matches['id'] . $key] = $val;
+				}
+			}
+
+			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+
+			$matched = true;
+			$page = '';
+		}
+	}
+
+	if (!$matched)
+	{
+		$page = substr($page, strrpos($page, '/') + 1);
 	}
 }
 
@@ -114,7 +159,7 @@ else
 }
 
 $pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
-#var_dump($pageinfo);
+
 if (isset($pageinfo) && $pageinfo !== FALSE)
 {
 	$gCms->variables['pageinfo'] =& $pageinfo;

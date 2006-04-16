@@ -680,6 +680,18 @@ class CMSModule
 	}
 
 	/**
+	 * Register a route to use for pretty url parsing
+	 *
+	 * @param string Route to register
+	 */
+	function RegisterRoute($route)
+	{
+		global $gCms;
+		$routes =& $gCms->variables['routes'];
+		$routes[] = $route;
+	}
+
+	/**
  	 * Returns a list of parameters and their help strings in a hash.  This is generally
      * used internally.
 	 */
