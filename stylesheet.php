@@ -42,7 +42,7 @@ if ($name != '')
 	global $gCms;
 	$db =& $gCms->GetDb();
 	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
-	$cssresult = &$db->Execute($cssquery, $name);
+	$cssresult = &$db->Execute($cssquery, array($name));
 
 	while ($cssresult && !$cssresult->EOF)
 	{

@@ -162,7 +162,7 @@ else
 		$access = check_permission($userid, 'Remove Pages');
 		if ($access)
 		{
-			foreach ($nodelist as $node)
+			foreach (array_reverse($nodelist) as $node)
 			{
 				$id = $node->Id();
 				$title = $node->Name();
@@ -171,6 +171,7 @@ else
 			}
 			ContentManager::SetAllHierarchyPositions();
 		}
+		include_once("footer.php");
 		redirect("listcontent.php");
 	}
 	else if ($action == 'inactive')

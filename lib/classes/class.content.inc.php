@@ -2192,7 +2192,7 @@ class ContentManager
 
 		for ($i=0;$i<$count;$i++)
 		{
-			if ($contentcache[$i]->ParentId() != -1)
+			if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
 			{
 				$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
 			}
