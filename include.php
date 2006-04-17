@@ -163,6 +163,8 @@ if (!defined('SMARTY_DIR')) {
 #$smarty = new Smarty_CMS($config);
 #$gCms->smarty = &$smarty;
 
+$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {

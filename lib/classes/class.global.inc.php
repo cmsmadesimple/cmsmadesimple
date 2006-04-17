@@ -167,8 +167,6 @@ class CmsObject {
 
 	function & GetConfig()
 	{
-		static $configinstance;
-
         if (!isset($this->config))
 		{
 			$configinstance = cms_config_load(true);

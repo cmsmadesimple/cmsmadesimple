@@ -42,8 +42,8 @@ if (!isset($_SERVER['REQUEST_URI']))
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
-    require_once("lib/misc.functions.php");
-    redirect("install/install.php");
+    require_once(dirname(__FILE__)."/lib/misc.functions.php");
+    redirect('install/install.php');
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {

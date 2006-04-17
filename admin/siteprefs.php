@@ -53,6 +53,9 @@ if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST[
 $metadata = '';
 if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
 
+$sitename = '';
+if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
+
 #$useadvancedcss = "1";
 #if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
@@ -98,6 +101,7 @@ else if (isset($_POST["editsiteprefs"]))
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
 		set_site_preference('metadata', $metadata);
+		set_site_preference('sitename', $sitename);
 		audit(-1, '', 'Edited Site Preferences');
 		//redirect("siteprefs.php");
 		//return;
@@ -118,6 +122,7 @@ else if (isset($_POST["editsiteprefs"]))
 	#$useadvancedcss = get_site_preference('useadvancedcss');
 	$logintheme = get_site_preference('logintheme', 'default');
 	$metadata = get_site_preference('metadata', '');
+	$sitename = get_site_preference('sitename', 'CMSMS Site');
 }
 
 
@@ -153,6 +158,10 @@ if ($message != "") {
 			<p class="pageinput">
 				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="clearcache" value="<?php echo lang('clear') ?>" />
 			</p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('sitename')?>:</p>
+			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="<?php echo $sitename?>" /></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>

@@ -285,6 +285,14 @@ function showPageThree($errorMessage='')
 
 ?>
 
+<FORM ACTION="install.php" METHOD="post" NAME="page3form" ID="page3form">
+
+<h3>Site Name</h3>
+
+<p>This is the name of your site.  It will be used in various places of the default templates and can be used anywhere with the
+{sitename} tag.</p>
+<p style="text-align: center;"><input type="text" name="sitename" size="40" value="<?php echo isset($_POST['sitename'])?$_POST['sitename']:'CMS Made Simple Site' ?>" /></p>
+
 <h3>Database Information</h3>
 
 <P>Make sure you have created your database and granted full privileges to a user to use that database.</P>
@@ -297,7 +305,6 @@ function showPageThree($errorMessage='')
 <P />
 
 Please complete the following fields:
-<FORM ACTION="install.php" METHOD="post" NAME="page3form" ID="page3form">
 
 <TABLE CELLPADDING="2" BORDER="1" CLASS="regtable">
 <TR CLASS="row2">
@@ -484,6 +491,13 @@ function showPageFour($sqlloaded = 0) {
 
 		$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
 		$db->Execute($sql, array($_POST['adminusername'], $_POST['adminpassword'], $_POST['adminemail']));
+
+		echo "[done]</p>";
+
+		echo "<p>Setting sitename...";
+
+		$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
+		$db->Execute($query, array('sitename', $_POST['sitename']));
 
 		echo "[done]</p>";
 

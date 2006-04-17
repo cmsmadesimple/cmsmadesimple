@@ -9,4 +9,3 @@ RewriteEngine On
 #Rewrites page.shtml as index.php?page
 RewriteCond %{REQUEST_FILENAME} !-f [NC]
 RewriteRule ^(.+)\.html$ index.php?page=$1 [QSA]
-RewriteRule ^(.+/)?(.+)\.html$ index.php?page=$2 [QSA]
