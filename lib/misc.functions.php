@@ -31,6 +31,8 @@
  */
 function redirect($to, $noappend=false)
 {
+	$_SERVER['PHP_SELF'] = null;
+
     global $gCms;
 	if (isset($gCms))
 		$config =& $gCms->GetConfig();
@@ -52,9 +54,14 @@ function redirect($to, $noappend=false)
             {
                 $to .= $components['path'];
             }
-            else//Path is relative, append current directory first.
+            //Path is relative, append current directory first.
+			else if (isset($_SERVER['PHP_SELF'])) //Apache
             {
                 $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
+            }
+			else if (isset($_SERVER['REQUEST_URI'])) //Lighttpd
+            {
+                $to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ?  dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
             }
         }
         $to .= isset($components['query']) ? '?' . $components['query'] : '';
@@ -204,6 +211,37 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 	#$result = htmlentities($string, $param, $charset);
 	$result = my_htmlentities($string);
 	return $result;
+}
+
+/**
+ * Figures out the page name from the uri string.  Has to use different logic
+ * based on the type of httpd server.
+ */
+function cms_calculate_url()
+{
+	$result = '';
+
+	//Apache
+	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
+	{
+		$matches = array();
+		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+		{
+			$result = $matches[1];
+		}
+	}
+	//lighttpd
+	else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+	{
+		$matches = array();
+		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
+		{
+			$result = $matches[1];
+		}
+	}
+
+	return $result;
+	
 }
 
 /**

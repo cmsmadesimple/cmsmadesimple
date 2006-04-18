@@ -3,6 +3,7 @@ Version 0.13 -- Subversion
 
 * Added bulk delete/active/inactive of templates
 * Added bulk delete of stylesheets
+* Added support for lighttpd web server
 * Added internal pretty url handling mechanism.  It's
 going to be turned off on upgrades, but on with new
 installs.  Make sure the {metadata} tag is in your template

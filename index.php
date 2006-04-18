@@ -90,13 +90,11 @@ else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GE
 {
 	$page = $_GET[$config["query_var"]];
 }
-else if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
+else
 {
-	$matches = array();
-	if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
-	{
-		$page = $matches[1];
-	}
+	$calced = cms_calculate_url();
+	if ($calced != '')
+		$page = $calced;
 }
 
 //See if our page matches any predefined routes

@@ -2,7 +2,6 @@ Requirements:
     PHP 4.2+
     MySQL
     Apache webserver (or another php enabled webserver)
-    BBCodeParser (optional)
 
 
 1.  Untar the source package to document root dir or your webserver
@@ -63,7 +62,3 @@ Optional:
     	CMS features a realtime HTML validation plugin for the WYSIWYG editor, which will insure valid HTML content
         This is turned off by default, since it will also disable the use of tables and markup tags.
         - $config["use_Indite"] = false;
-
-
-
-

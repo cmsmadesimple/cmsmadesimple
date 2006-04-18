@@ -117,7 +117,7 @@ function smarty_cms_function_sitemap($params, &$smarty) {
                 {
 
                         /* Leisure Larry - Begin */
-                        if ((isset($params['class']) || $params['class'] != '') && ($count == 0))
+                        if ((isset($params['class']) && $params['class'] != '') && ($count == 0))
                         {
                                 $menu .= '<ul class="'.$params['class'].'">'."\n";
                         }
@@ -137,7 +137,7 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 						/* Leisure Larry - Begin */
 						$menu .= "<li>";
 
-						if ((isset($params['delimiter']) || $params['delimiter'] != '') && ($depth > 1))
+						if ((isset($params['delimiter']) && $params['delimiter'] != '') && ($depth > 1))
 						{
 								$ddepth = (split('\.', $onecontent->Hierarchy()));
 								if (($ddepth[sizeof($ddepth)-1] > 1) || (isset($params['initial']) && $params['initial'] == '1'))
