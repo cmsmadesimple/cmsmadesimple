@@ -11,6 +11,7 @@ if you plan on using it.
 * Added hierarchical url handling as well on the interal
 mechanism.  You especially want the {metadata} tag with
 this option.  It's on in new installs.
+* Added alt tag and removed extra html from the image tag
 * Fixed bug with {stylesheet name=""} not working properly
 * Fixed bug where default template could be set inactive
 * Fixed bug where an inactive template set to default would

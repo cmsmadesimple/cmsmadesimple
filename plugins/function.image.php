@@ -35,6 +35,10 @@ function smarty_cms_function_image($params, &$smarty)
 	{
 		$text .= ' height="'.$params['height'].'"';
 	}
+	if( !empty($params['alt'] ) )
+	{
+		$text .= ' alt="'.$params['alt'].'"';
+	}
 	if( !empty($params['addtext'] ) )
 	{
 	        $text .= ' ' . $params['addtext'];
@@ -47,7 +51,7 @@ function smarty_cms_function_image($params, &$smarty)
 	{
 		$text = '<!-- empty results from image plugin -->';
 	}
-	return $text."</img>";	
+	return $text;	
 }
 
 
@@ -64,6 +68,7 @@ function smarty_cms_help_function_image()
      <li><em>(required)</em>  <tt>src</tt> - Image filename within your images directory.</li>
      <li><em>(optional)</em>  <tt>width</tt> - Width of the image within the page</li>
      <li><em>(optional)</em>  <tt>height</tt> - Height of the image within the page</li>
+     <li><em>(optional)</em>  <tt>alt</tt> - Alt text for the image -- needed for xhtml compliance</li>
      <li><em>(optional)</em>  <tt>addtext</tt> - Additional text to put into the tag</li>
   </ul>
   </p>
@@ -77,6 +82,7 @@ function smarty_cms_about_function_image()
   <p>Author:  Robert Campbell &lt;calguy1000@hotmail.com&gt;</p>
   <p>Version 1.0</p>
   <p>Change History<br/>
+     1.1 - Added alt param and removed the </img><br />
      1.0 - Initial release<br/>
   </p>
 <?php
