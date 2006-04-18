@@ -21,41 +21,51 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	global $gCms;
 	$cmsmodules = &$gCms->modules;
 
-	$id = '';
+	$id = 'm' . ++$gCms->variables["modulenum"];
+	$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+
 	$modulename = '';
-	$action = '';
+	$action = 'default';
 	$inline = false;
-	if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
-	if (isset($_REQUEST['id']))
+
+	$checkid = '';
+
+	if (isset($params['module'])) $modulename = $params['module'];
+	if (isset($_REQUEST['id'])) //Not really needed now...
 	{
-		$id = $_REQUEST['id'];
+		$checkid = $_REQUEST['id'];
 	}
-	elseif (isset($_REQUEST['mact']))
+	else if (isset($_REQUEST['mact']))
 	{
 		$ary = explode(',', $_REQUEST['mact'], 4);
-		$modulename = (isset($ary[0])?$ary[0]:'');
-		if (strtolower($modulename) == strtolower($params['module']))
+		$mactmodulename = (isset($ary[0])?$ary[0]:'');
+		if (strtolower($mactmodulename) == strtolower($params['module']))
 		{
-			$id = (isset($ary[1])?$ary[1]:'');
-			$action = (isset($ary[2])?$ary[2]:'');
+			$checkid = (isset($ary[1])?$ary[1]:'');
+			$mactaction = (isset($ary[2])?$ary[2]:'');
 		}
-		$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
+		$mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+		if ($checkid == $id)
+		{
+			$action = $mactaction;
+			$inline = $macinline;
+		}
 	}
 
-	$actioninparams = false;
+	#$actioninparams = false;
 
-	if (isset($_REQUEST[$id.'action']))
-	{
-		$action = $_REQUEST[$id.'action'];
-	}
-	else if (isset($_REQUEST['action']))
-	{
-		$action = $_REQUEST['action'];
-	}
-	else if (isset($params['action']) && $params['action'] != '')
+	#if (isset($_REQUEST[$id.'action']))
+	#{
+	#	$action = $_REQUEST[$id.'action'];
+	#}
+	#else if (isset($_REQUEST['action']))
+	#{
+	#	$action = $_REQUEST['action'];
+	#}
+	if (isset($params['action']) && $params['action'] != '')
 	{
 		$action = $params['action'];
-		$actioninparams = true;
+		#$actioninparams = true;
 	}
 
 	if (isset($cmsmodules))
@@ -80,11 +90,9 @@ function smarty_cms_function_cms_module($params, &$smarty)
 					&& $cmsmodules[$modulename]['object']->IsPluginModule())
 				{
 					@ob_start();
-					$id = 'm' . ++$gCms->variables["modulenum"];
-					$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
 
-					if (($inline == false && $actioninparams == false) || $action == '')
-						$action = 'default';
+					#if (($inline == false && $actioninparams == false) || $action == '')
+					#	$action = 'default';
 
 					$returnid = '';
 					if (isset($gCms->variables['pageinfo']))
