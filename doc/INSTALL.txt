@@ -6,7 +6,7 @@ Requirements:
 
 1.  Untar the source package to document root dir or your webserver
         - cd DOCUMENT_ROOT
-        - tar xvfz cms-VERSION.tar.gz
+        - tar zxvf cms-VERSION.tar.gz
 OR
     check out the latest version from subversion
         - svn co http://svn.cmsmadesimple.org/cms/trunk
