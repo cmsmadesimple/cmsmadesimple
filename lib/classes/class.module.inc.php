@@ -2202,7 +2202,7 @@ class CMSModule
 
 		if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
 		{
-			$text = $config['root_url'] . '/' . $prettyurl;
+			$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 		}
 		else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
 		{
