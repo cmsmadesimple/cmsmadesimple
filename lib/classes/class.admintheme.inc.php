@@ -1197,6 +1197,8 @@ class AdminTheme
      */
     function DisplayHTMLHeader($showielink = false)
     {
+		global $gCms;
+		$config =& $gCms->GetConfig();
 ?><head>
 <meta name="robots" content="noindex, nofollow" />
 <title><?php echo $this->title ?></title>
@@ -1212,6 +1214,7 @@ class AdminTheme
 ?>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
+<base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
 <?php
     }

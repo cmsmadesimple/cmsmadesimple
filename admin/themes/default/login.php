@@ -7,6 +7,7 @@
 <title>CMS Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo get_encoding() ?>" />
 <link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
+<base href="<?php global $gCms; $config =& $gCms->GetConfig(); echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
 
 <body>
