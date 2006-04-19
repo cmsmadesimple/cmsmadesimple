@@ -68,7 +68,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo "<p>Creating additional_htmlblob_users table sequence...";
 
 	$max = $db->GetOne("SELECT max(additional_htmlblob_users_id) from ".$db_prefix."additional_htmlblob_users");
-	$db->CreateSequence($db_prefix."additional_htmlblobs_users_seq", $max+1);
+	$db->CreateSequence($db_prefix."additional_htmlblob_users_seq", $max+1);
 
 	echo "[done]</p>";
 
