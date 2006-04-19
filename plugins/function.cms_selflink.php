@@ -239,14 +239,14 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
                         {
                                 $result .= 'next';
                         }
-                        $result .= '" title="' . ($titleattr != '' ? $titleattr : $name);
+                        $result .= '" title="' . (isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name));
                         $result .= '" href="' . $url . '" />';
                 }
                 else
                 {
                         $result .= $label.'<a href="'.$url.'"';
 
-                        $result .= ' title="'.($titleattr != '' ? $titleattr : $name).'"';
+                        $result .= ' title="'.(isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name)).'"';
 
                         if (isset($params['target']))
                         {
@@ -322,6 +322,7 @@ function smarty_cms_help_function_cms_selflink() {
                 <li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
                 <li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
                 <li><em>(optional)</em> <tt>label</tt> - Label to use in front of the link if applicable.</li>
+                <li><em>(optional)</em> <tt>title</tt> - Text to use in the title attribute.  If none is given, then the title of the page will be used for the title.</li>
                 <li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
                 <li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <B>Example:</B> &lt;a href="{cms_selflink href="alias"}"&gt;&lt;img src=""&gt;&lt;/a&gt;</li>
         </ul>
