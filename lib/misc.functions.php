@@ -55,13 +55,16 @@ function redirect($to, $noappend=false)
                 $to .= $components['path'];
             }
             //Path is relative, append current directory first.
-			else if (isset($_SERVER['PHP_SELF'])) //Apache
+			else if (isset($_SERVER['PHP_SELF']) && !is_null($_SERVER['PHP_SELF'])) //Apache
             {
                 $to .= (strlen(dirname($_SERVER['PHP_SELF'])) > 1 ?  dirname($_SERVER['PHP_SELF']).'/' : '/') . $components['path'];
             }
-			else if (isset($_SERVER['REQUEST_URI'])) //Lighttpd
+			else if (isset($_SERVER['REQUEST_URI']) && !is_null($_SERVER['REQUEST_URI'])) //Lighttpd
             {
-                $to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ?  dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
+				if (endswith($_SERVER['REQUEST_URI'], '/'))
+					$to .= (strlen($_SERVER['REQUEST_URI']) > 1 ? $_SERVER['REQUEST_URI'] : '/') . $components['path'];
+				else
+					$to .= (strlen(dirname($_SERVER['REQUEST_URI'])) > 1 ? dirname($_SERVER['REQUEST_URI']).'/' : '/') . $components['path'];
             }
         }
         $to .= isset($components['query']) ? '?' . $components['query'] : '';
