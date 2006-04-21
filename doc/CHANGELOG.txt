@@ -27,6 +27,8 @@ module twice, causing issues later on
 different options are
 * Updated adodb lite to 1.20
 * Updated smarty to 2.6.13
+* Added module API method so modules can output extra CSS for
+their admin panels
 
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------
