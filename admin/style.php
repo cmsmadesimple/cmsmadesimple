@@ -28,7 +28,13 @@ global $gCms;
 while (list($key) = each($gCms->modules))
     {
 	$modptr =& $gCms->modules[$key];
-	echo $modptr->AdminStyle();
+    if (isset($modptr['object'])
+        && $modptr['installed'] == true
+        && $modptr['active'] == true
+        && $modptr['object']->HasAdmin())
+        {
+	    echo $modptr['object']->AdminStyle();
+	    }
 	}
 
 # vim:ts=4 sw=4 noet
