@@ -2810,6 +2810,16 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
+     /**
+      *
+      * Module can spit out extra CSS for the admin side
+      *
+      */
+    function AdminStyle()
+    {
+      return '';
+    }
+
 	/**
 	 * Set the content-type header.
 	 *
