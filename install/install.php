@@ -648,44 +648,48 @@ function showPageFive() {
 		{
 			if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
 			{
-				$modinstance = $gCms->modules[$modulename]['object'];
-				$result = $modinstance->Install();
-
-				#now insert a record
-				if (!isset($result) || $result === FALSE)
+				$count = $db->GetOne('SELECT count(*) as count FROM '.cms_db_prefix().'modules WHERE module_name = ?');
+				if (!isset($count) || $count == 0)
 				{
-					$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1)";
-					$db->Execute($query);
-					
-					/*
-					#and insert any dependancies
-					if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-					{
-						#Now check to see if we can satisfy any deps
-						foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-						{
-							$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
-							$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
-						}
-					}
+					$modinstance = $gCms->modules[$modulename]['object'];
+					$result = $modinstance->Install();
 
-					#and show the installpost if necessary...
-					if ($modinstance->InstallPostMessage() != FALSE)
+					#now insert a record
+					if (!isset($result) || $result === FALSE)
 					{
-						@ob_start();
-						echo $modinstance->InstallPostMessage();
-						$content = @ob_get_contents();
-						@ob_end_clean();
-						echo '<div class="pagecontainer">';
-						echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';
-						echo $content;
-						echo "</div>";
-						echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-						include_once("footer.php");
-						exit;
+						$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1)";
+						$db->Execute($query);
 						
+						/*
+						#and insert any dependancies
+						if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+						{
+							#Now check to see if we can satisfy any deps
+							foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+							{
+								$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
+								$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+							}
+						}
+
+						#and show the installpost if necessary...
+						if ($modinstance->InstallPostMessage() != FALSE)
+						{
+							@ob_start();
+							echo $modinstance->InstallPostMessage();
+							$content = @ob_get_contents();
+							@ob_end_clean();
+							echo '<div class="pagecontainer">';
+							echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';
+							echo $content;
+							echo "</div>";
+							echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+							include_once("footer.php");
+							exit;
+							
+						}
+						*/
 					}
-					*/
 				}
 			}
 		}
