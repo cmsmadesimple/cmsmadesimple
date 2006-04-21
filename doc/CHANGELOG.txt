@@ -1,4 +1,4 @@
-Version 0.13 -- Subversion
+Version 0.13 "Canary" -- Subversion
 -----------------
 
 * Added bulk delete/active/inactive of templates
@@ -21,6 +21,8 @@ default when linking to another page in the site
 not be made active automatically
 * Fixed bug with deleting multiple pages and not having
 hierarchy gettin reset properly
+* Fixed bug where installer would sometimes install a
+module twice, causing issues later on
 * Modified config.php file so that it explains what the
 different options are
 * Updated adodb lite to 1.20
