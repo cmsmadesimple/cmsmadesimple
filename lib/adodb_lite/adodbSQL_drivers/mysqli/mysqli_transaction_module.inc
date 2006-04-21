@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class mysqli_transaction_EXTENDER extends mysqli_'. $last_module . '_ADOConnection { }');
+eval('class mysqli_transaction_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class mysqli_transaction_ADOConnection extends mysqli_transaction_EXTENDER
 {
@@ -130,7 +130,7 @@ class mysqli_transaction_ADOConnection extends mysqli_transaction_EXTENDER
 
 }
 
-eval('class mysqli_transaction_resultset_EXTENDER extends mysqli_'. $last_module . '_ResultSet { }');
+eval('class mysqli_transaction_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class mysqli_transaction_ResultSet extends mysqli_transaction_resultset_EXTENDER
 {

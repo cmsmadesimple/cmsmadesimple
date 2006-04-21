@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class mysqli_cmsms_EXTENDER extends mysqli_'. $last_module . '_ADOConnection { }');
+eval('class mysqli_cmsms_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class mysqli_cmsms_ADOConnection extends mysqli_cmsms_EXTENDER
 {
@@ -63,7 +63,7 @@ class mysqli_cmsms_ADOConnection extends mysqli_cmsms_EXTENDER
 	}
 }
 
-eval('class mysqli_cmsms_resultset_EXTENDER extends mysqli_'. $last_module . '_ResultSet { }');
+eval('class mysqli_cmsms_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class mysqli_cmsms_ResultSet extends mysqli_cmsms_resultset_EXTENDER
 {

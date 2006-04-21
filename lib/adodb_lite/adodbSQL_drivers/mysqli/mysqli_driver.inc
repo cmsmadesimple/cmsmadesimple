@@ -36,15 +36,8 @@ class mysqli_driver_ADOConnection extends ADOConnection
 		$this->persistent = $persistent;
 		$this->forcenewconnection = $forcenew;
 
-		if($this->persistent == 1)
-		{
-			$this->connectionId = @mysqli_connect( $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
-		}
-		else
-		{
-		    $this->connectionId = @mysqli_init();
-			@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
-		}
+	    $this->connectionId = @mysqli_init();
+		@mysqli_real_connect( $this->connectionId, $this->host, $this->username, $this->password, $this->database, $this->port, $this->socket, $this->clientFlags );
 
 		if (mysqli_connect_errno() != 0) 
 		{
@@ -302,7 +295,11 @@ class mysqli_driver_ADOConnection extends ADOConnection
 				{
 					$this->outp($sql . $limit);
 				}
-				if ($resultId === false) return $false;
+				if ($resultId === false) { // error handling if query fails
+					if ($fn = $this->raiseErrorFn)
+						$fn($this->dbtype, 'EXECUTE', $this->ErrorNo(), $this->ErrorMsg(), $this->sql, $inputarr, $this);
+					return $false;
+				} 
 			}
 		}
 		else
@@ -329,7 +326,7 @@ class mysqli_driver_ADOConnection extends ADOConnection
 			return $rs;
 		}
 
-		$resultset_name = "mysqli_" . $this->last_module_name . "_ResultSet";
+		$resultset_name = $this->last_module_name . "_ResultSet";
 		$recordset = new $resultset_name( $resultId, $this->connectionId );
 
 		$recordset->_currentRow = 0;
@@ -556,7 +553,7 @@ class mysqli_driver_ResultSet
 	 * @param [nRows]  is the number of rows to return. -1 means every row.
 	 */
 
-	function GetArray($nRows = -1)
+	function &GetArray($nRows = -1)
 	{
 		$results = array();
 		$cnt = 0;

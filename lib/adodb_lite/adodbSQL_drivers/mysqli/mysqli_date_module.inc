@@ -8,7 +8,7 @@ if (!defined('TIMESTAMP_FIRST_YEAR')) define('TIMESTAMP_FIRST_YEAR',100);
 
 @include(ADODB_DIR . '/adodb-time.inc.php');
 
-eval('class mysqli_date_EXTENDER extends mysqli_'. $last_module . '_ADOConnection { }');
+eval('class mysqli_date_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class mysqli_date_ADOConnection extends mysqli_date_EXTENDER
 {
@@ -272,7 +272,7 @@ class mysqli_date_ADOConnection extends mysqli_date_EXTENDER
 	}
 }
 
-eval('class mysqli_date_resultset_EXTENDER extends mysqli_'. $last_module . '_ResultSet { }');
+eval('class mysqli_date_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class mysqli_date_ResultSet extends mysqli_date_resultset_EXTENDER
 {

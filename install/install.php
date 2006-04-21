@@ -449,6 +449,7 @@ function showPageFour($sqlloaded = 0) {
 					$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
 					$s = str_replace("\\r\\n", "\r\n", $s);
 					$s = str_replace("\\'", "''", $s);
+					$s = str_replace('\\"', '"', $s);
 					$result = $db->Execute($s);
 					if (!$result) {
 						die("Invalid query: $s");
@@ -474,6 +475,7 @@ function showPageFour($sqlloaded = 0) {
 						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
 						$s = str_replace("\\r\\n", "\r\n", $s);
 						$s = str_replace("\\'", "''", $s);
+						$s = str_replace('\\"', '"', $s);
 						$result = $db->Execute($s);
 						if (!$result) {
 							die("Invalid query: $s");

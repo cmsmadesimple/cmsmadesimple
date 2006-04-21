@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class postgres7_extend_EXTENDER extends postgres7_'. $last_module . '_ADOConnection { }');
+eval('class postgres7_extend_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class postgres7_extend_ADOConnection extends postgres7_extend_EXTENDER
 {
@@ -57,9 +57,19 @@ class postgres7_extend_ADOConnection extends postgres7_extend_EXTENDER
 		return $this->genID;
 	}
 
+	function CreateSequence($seqname='adodbseq', $startID=1)
+	{
+		return $this->Execute(sprintf($this->_genSeqSQL, $seqname, $startID));
+	}
+
+	function DropSequence($seqname='adodbseq')
+	{
+		return $this->Execute(sprintf($this->_dropSeqSQL, $seqname));
+	}
+
 }
 
-eval('class postgres7_extend_resultset_EXTENDER extends postgres7_'. $last_module . '_ResultSet { }');
+eval('class postgres7_extend_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class postgres7_extend_ResultSet extends postgres7_extend_resultset_EXTENDER
 {
@@ -99,6 +109,38 @@ class postgres7_extend_ResultSet extends postgres7_extend_resultset_EXTENDER
 			}
 		}
 		return $results; 
+	}
+
+	function PO_RecordCount($table="", $condition="")
+	{
+		$lnumrows = $this->_numOfRows;
+		if($lnumrows == -1 && $this->connectionId)
+		{
+			if($table)
+			{
+				if ($condition)
+					$condition = " WHERE " . $condition; 
+				$resultrows = &$this->connectionId->Execute("SELECT COUNT(*) FROM $table $condition");
+				if ($resultrows)
+					$lnumrows = reset($resultrows->fields);
+			}
+		}
+		return $lnumrows;
+	}
+
+	function CurrentRow()
+	{
+		return $this->_currentRow;
+	}
+
+	function AbsolutePosition()
+	{
+		return $this->_currentRow;
+	}
+
+	function NextRecordSet()
+	{
+		return false;
 	}
 
 }

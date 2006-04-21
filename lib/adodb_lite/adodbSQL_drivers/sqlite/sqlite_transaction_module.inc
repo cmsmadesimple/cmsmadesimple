@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class sqlite_transaction_EXTENDER extends sqlite_'. $last_module . '_ADOConnection { }');
+eval('class sqlite_transaction_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class sqlite_transaction_ADOConnection extends sqlite_transaction_EXTENDER
 {
@@ -124,7 +124,7 @@ class sqlite_transaction_ADOConnection extends sqlite_transaction_EXTENDER
 
 }
 
-eval('class sqlite_transaction_resultset_EXTENDER extends sqlite_'. $last_module . '_ResultSet { }');
+eval('class sqlite_transaction_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class sqlite_transaction_ResultSet extends sqlite_transaction_resultset_EXTENDER
 {

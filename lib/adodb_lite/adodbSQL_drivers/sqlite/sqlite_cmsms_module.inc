@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class sqlite_cmsms_EXTENDER extends sqlite_'. $last_module . '_ADOConnection { }');
+eval('class sqlite_cmsms_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class sqlite_cmsms_ADOConnection extends sqlite_cmsms_EXTENDER
 {
@@ -27,39 +27,41 @@ class sqlite_cmsms_ADOConnection extends sqlite_cmsms_EXTENDER
 		return $this->Execute(sprintf($this->_dropSeqSQL,$seqname));
 	}
 
-	function GenID($seqname='adodbseq', $startID=1)
+	function GenID($seq='adodbseq', $startID=1)
 	{
 		$MAXLOOPS = 100;
 		while (--$MAXLOOPS>=0) {
-			@($num = $this->GetOne("select id from $seqname"));
+			@($num = $this->GetOne("select id from $seq"));
 			if ($num === false) {
-				$this->Execute(sprintf($this->_genSeqSQL, $seqname));
+				$this->Execute(sprintf($this->_genSeqSQL, $seq));	
 				$start -= 1;
 				$num = '0';
-				$result = $this->Execute("insert into $seqname values($start)");
+				$result = $this->Execute("insert into $seq values($start)");
 				if (!$result)
 					return false;
 			}
-			$this->Execute("update $seqname set id=id+1 where id=$num");
-
-			var_dump('here');
-
-			if ($this->affected_rows() > 0) {
-				$num += 1;
-				$this->genID = $num;
-				return $num;
+			else {
+				$num = $num['id'];
 			}
 
-			var_dump('here 2');
+			$this->Execute("update $seq set id=id+1 where id=$num");
+
+			var_dump($this->Affected_Rows());
+			if ($this->Affected_Rows() > 0) {
+				$num += 1;
+				$this->genID = $num;
+				var_dump($num);
+				return $num;
+			}
 		}
 		if ($fn = $this->raiseErrorFn) {
-			$fn($this->databaseType, 'GENID',-32000,"Unable to generate unique id after $MAXLOOPS attempts", $seqname, $num);
+			$fn($this->databaseType, 'GENID',-32000,"Unable to generate unique id after $MAXLOOPS attempts", $seq, $num);
 		}
 		return false;
 	}
 }
 
-eval('class sqlite_cmsms_resultset_EXTENDER extends sqlite_'. $last_module . '_ResultSet { }');
+eval('class sqlite_cmsms_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class sqlite_cmsms_ResultSet extends sqlite_cmsms_resultset_EXTENDER
 {

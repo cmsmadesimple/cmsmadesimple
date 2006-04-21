@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class postgres7_transaction_EXTENDER extends postgres7_'. $last_module . '_ADOConnection { }');
+eval('class postgres7_transaction_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class postgres7_transaction_ADOConnection extends postgres7_transaction_EXTENDER
 {
@@ -120,7 +120,7 @@ class postgres7_transaction_ADOConnection extends postgres7_transaction_EXTENDER
 
 }
 
-eval('class postgres7_transaction_resultset_EXTENDER extends postgres7_'. $last_module . '_ResultSet { }');
+eval('class postgres7_transaction_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class postgres7_transaction_ResultSet extends postgres7_transaction_resultset_EXTENDER
 {

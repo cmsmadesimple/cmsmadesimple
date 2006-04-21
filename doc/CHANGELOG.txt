@@ -23,6 +23,8 @@ not be made active automatically
 hierarchy gettin reset properly
 * Modified config.php file so that it explains what the
 different options are
+* Updated adodb lite to 1.20
+* Updated smarty to 2.6.13
 
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------

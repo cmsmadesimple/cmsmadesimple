@@ -8,7 +8,7 @@ if (!defined('TIMESTAMP_FIRST_YEAR')) define('TIMESTAMP_FIRST_YEAR',100);
 
 @include(ADODB_DIR . '/adodb-time.inc.php');
 
-eval('class postgres7_date_EXTENDER extends postgres7_'. $last_module . '_ADOConnection { }');
+eval('class postgres7_date_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 {
@@ -48,31 +48,31 @@ class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 		switch (strtoupper($locale))
 		{
 			case 'EN':
-				$this->fmtDate="'Y-m-d'";
-				$this->fmtTimeStamp = "'Y-m-d H:i:s'";
+				$this->fmtDate="Y-m-d";
+				$this->fmtTimeStamp = "Y-m-d H:i:s";
 				break;
 
 			case 'US':
-				$this->fmtDate = "'m-d-Y'";
-				$this->fmtTimeStamp = "'m-d-Y H:i:s'";
+				$this->fmtDate = "m-d-Y";
+				$this->fmtTimeStamp = "m-d-Y H:i:s";
 				break;
 
 			case 'NL':
 			case 'FR':
 			case 'RO':
 			case 'IT':
-				$this->fmtDate="'d-m-Y'";
-				$this->fmtTimeStamp = "'d-m-Y H:i:s'";
+				$this->fmtDate="d-m-Y";
+				$this->fmtTimeStamp = "d-m-Y H:i:s";
 				break;
 
 			case 'GE':
-				$this->fmtDate="'d.m.Y'";
-				$this->fmtTimeStamp = "'d.m.Y H:i:s'";
+				$this->fmtDate="d.m.Y";
+				$this->fmtTimeStamp = "d.m.Y H:i:s";
 				break;
 
 			default:
-				$this->fmtDate="'Y-m-d'";
-				$this->fmtTimeStamp = "'Y-m-d H:i:s'";
+				$this->fmtDate="Y-m-d";
+				$this->fmtTimeStamp = "Y-m-d H:i:s";
 				break;
 		}
 	}
@@ -266,7 +266,7 @@ class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 	}
 }
 
-eval('class postgres7_date_resultset_EXTENDER extends postgres7_'. $last_module . '_ResultSet { }');
+eval('class postgres7_date_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class postgres7_date_ResultSet extends postgres7_date_resultset_EXTENDER
 {

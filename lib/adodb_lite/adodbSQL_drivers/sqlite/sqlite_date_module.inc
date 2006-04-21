@@ -8,12 +8,12 @@ if (!defined('TIMESTAMP_FIRST_YEAR')) define('TIMESTAMP_FIRST_YEAR',100);
 
 @include(ADODB_DIR . '/adodb-time.inc.php');
 
-eval('class sqlite_date_EXTENDER extends sqlite_'. $last_module . '_ADOConnection { }');
+eval('class sqlite_date_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class sqlite_date_ADOConnection extends sqlite_date_EXTENDER
 {
-	var $fmtDate = "'Y-m-d'";	/// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "'Y-m-d H:i:s'";
+	var $fmtDate = "Y-m-d";	/// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "Y-m-d H:i:s";
 	var $emptyDate = '&nbsp;';
 	var $emptyTimeStamp = '&nbsp;';
 	var $sysDate = "adodb_date('Y-m-d')";
@@ -191,7 +191,7 @@ class sqlite_date_ADOConnection extends sqlite_date_EXTENDER
 	}
 }
 
-eval('class sqlite_date_resultset_EXTENDER extends sqlite_'. $last_module . '_ResultSet { }');
+eval('class sqlite_date_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class sqlite_date_ResultSet extends sqlite_date_resultset_EXTENDER
 {

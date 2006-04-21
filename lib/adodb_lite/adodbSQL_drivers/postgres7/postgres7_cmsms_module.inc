@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class postgres7_cmsms_EXTENDER extends postgres7_'. $last_module . '_ADOConnection { }');
+eval('class postgres7_cmsms_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class postgres7_cmsms_ADOConnection extends postgres7_cmsms_EXTENDER
 {
@@ -61,7 +61,7 @@ class postgres7_cmsms_ADOConnection extends postgres7_cmsms_EXTENDER
 	}
 }
 
-eval('class postgres7_cmsms_resultset_EXTENDER extends postgres7_'. $last_module . '_ResultSet { }');
+eval('class postgres7_cmsms_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class postgres7_cmsms_ResultSet extends postgres7_cmsms_resultset_EXTENDER
 {

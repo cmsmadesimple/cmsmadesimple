@@ -336,7 +336,11 @@ class postgres7_driver_ADOConnection extends ADOConnection
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
 				}
-				if ($resultId === false) return $false;
+				if ($resultId === false) { // error handling if query fails
+					if ($fn = $this->raiseErrorFn)
+						$fn($this->dbtype, 'EXECUTE', $this->ErrorNo(), $this->ErrorMsg(), $this->sql, $inputarr, $this);
+					return $false;
+				} 
 			}
 		}
 		else
@@ -364,7 +368,7 @@ class postgres7_driver_ADOConnection extends ADOConnection
 			return $rs;
 		}
 
-		$resultset_name = "postgres7_" . $this->last_module_name . "_ResultSet";
+		$resultset_name = $this->last_module_name . "_ResultSet";
 		$recordset = new $resultset_name( $resultId, $this->connectionId );
 		$this->record_set = $recordset;
 
@@ -608,7 +612,7 @@ class postgres7_driver_ResultSet
 	 * @param [nRows]  is the number of rows to return. -1 means every row.
 	 */
 
-	function GetArray($nRows = -1)
+	function &GetArray($nRows = -1)
 	{
 		$results = array();
 		$cnt = 0;

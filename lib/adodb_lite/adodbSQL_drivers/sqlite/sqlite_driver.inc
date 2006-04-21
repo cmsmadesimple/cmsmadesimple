@@ -50,6 +50,10 @@ class sqlite_driver_ADOConnection extends ADOConnection
 				$fn($this->dbtype, 'CONNECT', $this->ErrorNo(), $this->ErrorMsg(), $this->host, $this->database, $this);
 			return false;
 		}
+		else
+		{
+			$this->Execute('PRAGMA short_column_names = ON');
+		}
 
 		return true;
 	} 
@@ -66,8 +70,7 @@ class sqlite_driver_ADOConnection extends ADOConnection
 	{
 		$this->database = $dbname;
 
-		$closeConnection = $this->dbtype;
-		$this->connectionId = $closeConnection( $this->connectionId );
+		$this->connectionId = sqlite_close( $this->connectionId );
 
 		if($this->persistent == 1)
 		{
@@ -123,7 +126,12 @@ class sqlite_driver_ADOConnection extends ADOConnection
 
 	function Affected_Rows()
 	{
-		return @sqlite_rows_affected( $this->connectionId );
+		if (function_exists('sqlite_rows_affected')) 
+			return sqlite_rows_affected( $this->connectionId ); 
+		else if (function_exists('sqlite_changes')) 
+			return sqlite_changes( $this->connectionId ); 
+		else 
+			return 0; 
 	} 
 
 	/**
@@ -281,7 +289,11 @@ class sqlite_driver_ADOConnection extends ADOConnection
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
 				}
-				if ($resultId === false) return $false;
+				if ($resultId === false) { // error handling if query fails
+					if ($fn = $this->raiseErrorFn)
+						$fn($this->dbtype, 'EXECUTE', $this->ErrorNo(), $this->ErrorMsg(), $this->sql, $inputarr, $this);
+					return $false;
+				} 
 			}
 		}
 		else
@@ -308,7 +320,7 @@ class sqlite_driver_ADOConnection extends ADOConnection
 			return $rs;
 		}
 
-		$resultset_name = "sqlite_" . $this->last_module_name . "_ResultSet";
+		$resultset_name = $this->last_module_name . "_ResultSet";
 		$recordset = new $resultset_name( $resultId, $this->connectionId );
 
 		$recordset->_currentRow = 0;
@@ -368,9 +380,10 @@ class sqlite_driver_ResultSet
 	 * @access public 
 	 */
 
-	function close()
+	function Close()
 	{
-		@sqlite_free_result( $this->resultId );
+		if (function_exists('sqlite_free_result'))
+			@sqlite_free_result( $this->resultId );
 		$this->fields = array();
 		$this->resultId = false;
 	} 
@@ -535,7 +548,7 @@ class sqlite_driver_ResultSet
 	 * @param [nRows]  is the number of rows to return. -1 means every row.
 	 */
 
-	function GetArray($nRows = -1)
+	function &GetArray($nRows = -1)
 	{
 		$results = array();
 		$cnt = 0;

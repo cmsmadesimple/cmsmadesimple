@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class sqlite_extend_EXTENDER extends sqlite_'. $last_module . '_ADOConnection { }');
+eval('class sqlite_extend_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class sqlite_extend_ADOConnection extends sqlite_extend_EXTENDER
 {
@@ -29,6 +29,7 @@ class sqlite_extend_ADOConnection extends sqlite_extend_EXTENDER
 	 */
 
 	var $_genSeqSQL = "create table %s (id integer)";
+	var $_dropSeqSQL = 'drop table %s';
 	var $genID = 0;
 
 	function GenID($seqname='adodbseq', $startID=1)
@@ -58,9 +59,23 @@ class sqlite_extend_ADOConnection extends sqlite_extend_EXTENDER
 		return false;
 	}
 
+	function CreateSequence($seqname='adodbseq', $start=1)
+	{
+		$ok = $this->Execute(sprintf($this->_genSeqSQL, $seqname));
+		if (!$ok)
+			return false;
+		$start -= 1;
+		return $this->Execute("insert into $seqname values($start)");
+	}
+
+	function DropSequence($seqname)
+	{
+		return $this->Execute(sprintf($this->_dropSeqSQL, $seqname));
+	}
+
 }
 
-eval('class sqlite_extend_resultset_EXTENDER extends sqlite_'. $last_module . '_ResultSet { }');
+eval('class sqlite_extend_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class sqlite_extend_ResultSet extends sqlite_extend_resultset_EXTENDER
 {
@@ -100,6 +115,38 @@ class sqlite_extend_ResultSet extends sqlite_extend_resultset_EXTENDER
 			}
 		}
 		return $results; 
+	}
+
+	function PO_RecordCount($table="", $condition="")
+	{
+		$lnumrows = $this->_numOfRows;
+		if($lnumrows == -1 && $this->connectionId)
+		{
+			if($table)
+			{
+				if ($condition)
+					$condition = " WHERE " . $condition; 
+				$resultrows = &$this->connectionId->Execute("SELECT COUNT(*) FROM $table $condition");
+				if ($resultrows)
+					$lnumrows = reset($resultrows->fields);
+			}
+		}
+		return $lnumrows;
+	}
+
+	function CurrentRow()
+	{
+		return $this->_currentRow;
+	}
+
+	function AbsolutePosition()
+	{
+		return $this->_currentRow;
+	}
+
+	function NextRecordSet()
+	{
+		return false;
 	}
 
 }

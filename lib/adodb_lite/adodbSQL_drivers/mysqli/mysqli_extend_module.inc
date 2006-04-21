@@ -4,7 +4,7 @@
  * 
  */
 
-eval('class mysqli_extend_EXTENDER extends mysqli_'. $last_module . '_ADOConnection { }');
+eval('class mysqli_extend_EXTENDER extends '. $last_module . '_ADOConnection { }');
 
 class mysqli_extend_ADOConnection extends mysqli_extend_EXTENDER
 {
@@ -31,6 +31,7 @@ class mysqli_extend_ADOConnection extends mysqli_extend_EXTENDER
  	var $_genIDSQL = "update %s set id=LAST_INSERT_ID(id+1);";
 	var $_genSeqSQL = "create table %s (id int not null)";
 	var $_genSeq2SQL = "insert into %s values (%s)";
+	var $_dropSeqSQL = "drop table %s";
 	var $genID = 0;
 
 	function GenID($seqname='adodbseq', $startID=1)
@@ -54,9 +55,24 @@ class mysqli_extend_ADOConnection extends mysqli_extend_EXTENDER
 		return $this->genID;
 	}
 
+	function CreateSequence($seqname='adodbseq',$startID=1)
+	{
+		$u = strtoupper($seqname);
+
+		$ok = $this->Execute(sprintf($this->_genSeqSQL, $seqname));
+		if (!$ok)
+			return false;
+		return $this->Execute(sprintf($this->_genSeq2SQL, $seqname, $startID-1));
+	}
+
+	function DropSequence($seqname='adodbseq')
+	{
+		return $this->Execute(sprintf($this->_dropSeqSQL, $seqname));
+	}
+
 }
 
-eval('class mysqli_extend_resultset_EXTENDER extends mysqli_'. $last_module . '_ResultSet { }');
+eval('class mysqli_extend_resultset_EXTENDER extends '. $last_module . '_ResultSet { }');
 
 class mysqli_extend_ResultSet extends mysqli_extend_resultset_EXTENDER
 {
@@ -96,6 +112,38 @@ class mysqli_extend_ResultSet extends mysqli_extend_resultset_EXTENDER
 			}
 		}
 		return $results; 
+	}
+
+	function PO_RecordCount($table="", $condition="")
+	{
+		$lnumrows = $this->_numOfRows;
+		if($lnumrows == -1 && $this->connectionId)
+		{
+			if($table)
+			{
+				if ($condition)
+					$condition = " WHERE " . $condition; 
+				$resultrows = &$this->connectionId->Execute("SELECT COUNT(*) FROM $table $condition");
+				if ($resultrows)
+					$lnumrows = reset($resultrows->fields);
+			}
+		}
+		return $lnumrows;
+	}
+
+	function CurrentRow()
+	{
+		return $this->_currentRow;
+	}
+
+	function AbsolutePosition()
+	{
+		return $this->_currentRow;
+	}
+
+	function NextRecordSet()
+	{
+		return false;
 	}
 
 }
