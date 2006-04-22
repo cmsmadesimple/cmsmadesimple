@@ -165,6 +165,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		active I1,
 		cachable I1,
 		id_hierarchy C(255),
+		hierarchy_path X,
 		prop_names X,
 		metadata X,
 		titleattribute C(255),

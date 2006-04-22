@@ -114,6 +114,12 @@ class ContentBase
     var $mIdHierarchy;
 
 	/**
+	 * The full path through the hierarchy
+	 * String of the form : parent/parent/child
+	 */
+    var $mHierarchyPath;
+
+	/**
 	 * What should be displayed in a menu
 	 */
 	var $mMenuText;
@@ -211,6 +217,7 @@ class ContentBase
 		$this->mLastModifiedBy	= -1 ;
 		$this->mHierarchy		= "" ;
 		$this->mIdHierarchy		= "" ;
+		$this->mHierarchyPath	= "" ;
 		$this->mMetadata		= "" ;
 		$this->mTitleAttribute	= "" ;
 		$this->mAccessKey		= "" ;
@@ -445,6 +452,20 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		$this->mIdHierarchy = $idhierarchy;
+	}
+
+	/**
+	 * Returns the Hierarchy
+	 */
+	function HierarchyPath()
+	{
+		return $this->mHierarchyPath;
+	}
+
+	function SetHierarchyPath($hierarchypath)
+	{
+		$this->DoReadyForEdit();
+		$this->mHierarchyPath = $hierarchypath;
 	}
 
 	/**
@@ -703,6 +724,7 @@ function SetAlias($alias)
 				$this->mMetadata		= $row->fields['metadata'];
 				$this->mHierarchy		= $row->fields["hierarchy"];
 				$this->mIdHierarchy		= $row->fields["id_hierarchy"];
+				$this->mHierarchyPath	= $row->fields["hierarchy_path"];
 				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
 				$this->mMenuText		= $row->fields['menu_text'];
 				$this->mMarkup			= $row->fields['markup'];
@@ -800,6 +822,7 @@ function SetAlias($alias)
 		$this->mMetadata		= $data['metadata'];
 		$this->mHierarchy		= $data["hierarchy"];
 		$this->mIdHierarchy		= $data["id_hierarchy"];
+		$this->mHierarchyPath	= $data["hierarchy_path"];
 		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
 		$this->mMenuText		= $data['menu_text'];
 		$this->mMarkup			= $data['markup'];
@@ -1219,25 +1242,26 @@ function SetAlias($alias)
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
 			if ($config['use_hierarchy'] == true)
-				$url = $config["root_url"].$this->MakeHierarchyURL(isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $config["root_url"]. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 			else
-				$url = $config["root_url"]."/".$alias.(isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $config["root_url"]. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
 		{
 			if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
 			{
 				if ($config['use_hierarchy'] == true)
-					$url = $config["root_url"]."/index.php".$this->MakeHierarchyURL();
+					$url = $config["root_url"] . '/index.php/' . $this->HierarchyPath();
 				else
-					$url = $config["root_url"]."/index.php/".$alias;
+					$url = $config['root_url'] . '/index.php/' . $alias;
 			}
 			else
-				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$alias;
+				$url = $config['root_url'] . '/index.php?' . $config["query_var"] . '=' . $alias;
 		}
 		return $url;
 	}
 
+	/*
 	function MakeHierarchyURL($ext='')
 	{
 		global $gCms;
@@ -1246,21 +1270,23 @@ function SetAlias($alias)
 		$path = '/' . $this->Alias();
 
 		$node =& $hm->getNodeById($this->ParentId());
-		while($node)
+		if(isset($node))
 		{
 			$content =& $node->GetContent();
 			if (isset($content))
 			{
-				$path = '/' . $content->Alias() . $path;
-				$node =& $hm->getNodeById($content->ParentId());
+				$path = '/' . $content->HierarchyPath();
 			}
 		}
 
 		$result = $path;
+
 		if ($ext != '')
 			$result = $path . $ext;
+
 		return $result;
 	}
+	*/
 
 	/**
 	 * Show the content
@@ -1953,17 +1979,19 @@ class ContentManager
 
 		$current_hierarchy_position = '';
 		$current_id_hierarchy_position = '';
+		$current_hierarchy_path = '';
 		$current_parent_id = $contentid;
 		$count = 0;
 
 		while ($current_parent_id > -1)
 		{
-			$query = "SELECT item_order, parent_id FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
 				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
 				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
+				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
 				$current_parent_id = $row['parent_id'];
 				$count++;
 			}
@@ -1981,14 +2009,18 @@ class ContentManager
 		{
 			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
 		}
+		if (strlen($current_hierarchy_path) > 0)
+		{
+			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
+		}
 
 		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
 		$prop_name_array = $db->GetCol($query, array($contentid));
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, prop_names = ? WHERE content_id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 
 	/**

@@ -631,7 +631,7 @@ function showPageFive() {
 	#Do module installation
 	if (isset($_POST["createtables"]))
 	{
-		echo 'Installing modules...';
+		echo 'Updating hierarchy positions...';
 
 		include_once dirname(dirname(__FILE__)) . '/include.php';
 
@@ -643,6 +643,12 @@ function showPageFive() {
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
 		$gCms->db =& $db;
+
+		ContentManager::SetAllHierarchyPositions();
+
+		echo 'done<br />';
+
+		echo 'Installing modules...';
 
 		foreach ($gCms->modules as $modulename=>$value)
 		{
