@@ -13,6 +13,10 @@ mechanism.  You especially want the {metadata} tag with
 this option.  It's on in new installs.
 * Added base tags to the default admin theme
 * Added alt tag and removed extra html from the image tag
+* Added module API method so modules can output extra CSS for
+their admin panels
+* Changed module API so that Install, Upgrade, and Uninstall can
+now live in method.xxxx.php (lowercase) if the file can be found.
 * Changed FCKeditor so that it inserts cms_selflink tags by
 default when linking to another page in the site
 * Fixed bug with {stylesheet name=""} not working properly
@@ -27,8 +31,6 @@ module twice, causing issues later on
 different options are
 * Updated adodb lite to 1.20
 * Updated smarty to 2.6.13
-* Added module API method so modules can output extra CSS for
-their admin panels
 
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------
