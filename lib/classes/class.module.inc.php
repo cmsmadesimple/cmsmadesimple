@@ -839,7 +839,23 @@ class CMSModule
 	 */
 	function Install()
 	{
-		return FALSE;
+	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	    '/modules/'.$this->GetName().'/method.install.php';
+	  if (@is_file($filename))
+	    {
+	      {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
+		$smarty =& $gCms->GetSmarty();
+		
+		include($filename);
+	      }
+	    }
+	  else
+	    {
+	      return FALSE;
+	    }
 	}
 
 	/**
@@ -858,7 +874,23 @@ class CMSModule
 	 */
 	function Uninstall()
 	{
-		return FALSE;
+	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	    '/modules/'.$this->GetName().'/method.uninstall.php';
+	  if (@is_file($filename))
+	    {
+	      {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
+		$smarty =& $gCms->GetSmarty();
+		
+		include($filename);
+	      }
+	    }
+	  else
+	    {
+	      return FALSE;
+	    }
 	}
 
 	/**
@@ -891,7 +923,23 @@ class CMSModule
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
-		return FALSE;
+	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	    '/modules/'.$this->GetName().'/method.upgrade.php';
+	  if (@is_file($filename))
+	    {
+	      {
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$config =& $gCms->GetConfig();
+		$smarty =& $gCms->GetSmarty();
+		
+		include($filename);
+	      }
+	    }
+	  else
+	    {
+	      return FALSE;
+	    }
 	}
 
 	/**
@@ -2920,7 +2968,7 @@ class CMSModule
 	 */
 	function SetPreference($preference_name, $value)
 	{
-		return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
+	  return set_site_preference($this->GetName() . "_mapi_pref_" . $preference_name, $value);
 	}
 
 	/**
