@@ -543,19 +543,20 @@ class ContentBase
 		$this->mLastModifiedBy = $lastmodifiedby;
 	}
 	
-function SetAlias($alias)
+	function SetAlias($alias)
     {
         $this->DoReadyForEdit();
         global $gCms;
 
-        $tolower = 0;
+        $tolower = false;
 
         if ($alias == '')
         {
             $alias = trim($this->mMenuText);
-            $tolower = 1;
+            $tolower = true;
         }
 
+		/*
         // replacement.php is encoded utf-8 and must be the first modification of alias
         include(dirname(dirname(__FILE__)) . '/replacement.php');
         $alias = str_replace($toreplace, $replacement, $alias);
@@ -568,8 +569,9 @@ function SetAlias($alias)
             
         $alias = preg_replace("/[^\w-]+/", "_", $alias);
         $alias = trim($alias, '_');
+		*/
 
-        $this->mAlias = $alias;
+        $this->mAlias = munge_string_to_url($alias, $tolower);
     } 
 	
 	/**

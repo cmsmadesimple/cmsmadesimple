@@ -730,6 +730,24 @@ function showmem($string = '')
 	var_dump($string . ' -- ' . memory_get_usage());
 }
 
+function munge_string_to_url($alias, $tolower = false)
+{
+	// replacement.php is encoded utf-8 and must be the first modification of alias
+	include(dirname(__FILE__) . '/replacement.php');
+	$alias = str_replace($toreplace, $replacement, $alias);
+	
+	// lowercase only on empty aliases
+	if ($tolower == true)
+	{
+		$alias = strtolower($alias);
+	}
+		
+	$alias = preg_replace("/[^\w-]+/", "_", $alias);
+	$alias = trim($alias, '_');
+
+	return $alias;
+}
+
 if(!function_exists("file_get_contents"))
 {
    function file_get_contents($filename)
