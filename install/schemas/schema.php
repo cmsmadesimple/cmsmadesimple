@@ -180,7 +180,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict->ExecuteSQLArray($sqlarray);
 
 	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias, active)");
-	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias)");
+	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (default_content)");
+	$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (parent_id)");
 
 	echo "[done]</p>";
 
@@ -188,9 +189,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		content_id I KEY,
+		content_id I,
 		type C(25),
-		prop_name C(255) KEY,
+		prop_name C(255),
 		param1 C(255),
 		param2 C(255),
 		param3 C(255),
@@ -202,7 +203,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
-	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id, prop_name)");
+	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
 
 	echo "[done]</p>";
 
@@ -221,6 +222,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
+	$db->Execute("ALTER TABLE ".$db_prefix."css ADD INDEX (css_name)");
+
 	echo "[done]</p>";
 
 	echo "<p>Creating css_assoc table...";
@@ -236,6 +239,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_to_id)");
+	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
 
 	echo "[done]</p>";
 
@@ -288,6 +294,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 
+	$db->Execute("ALTER TABLE ".$db_prefix."htmlblobs ADD INDEX (htmlblob_name)");
+
 	echo "[done]</p>";
 
 	echo "<p>Creating additional_htmlblob_users table...";
@@ -316,6 +324,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."modules ADD INDEX (module_name)");
 
 	echo "[done]</p>";
 
@@ -373,7 +383,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	$dbdict = NewDataDictionary($db);
 	$flds = "
-		sitepref_name C(255),
+		sitepref_name C(255) KEY,
 		sitepref_value text,
 		create_date T,
 		modified_date T
@@ -401,6 +411,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."templates ADD INDEX (template_name)");
 
 	echo "[done]</p>";
 

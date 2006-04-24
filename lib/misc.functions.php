@@ -225,6 +225,7 @@ function cms_calculate_url()
 	$result = '';
 
 	//Apache
+	/*
 	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
 	{
 		$matches = array();
@@ -241,8 +242,12 @@ function cms_calculate_url()
 			$result = $_SERVER['PHP_SELF'];
 		}
 	}
+	*/
 	//lighttpd
-	else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+	#else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+
+	//apache and lighttpd
+	if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
 	{
 		$matches = array();
 		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
