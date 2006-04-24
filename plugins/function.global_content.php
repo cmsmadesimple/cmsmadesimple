@@ -22,7 +22,7 @@ function smarty_cms_function_global_content($params, &$smarty)
 	$config =& $gCms->GetConfig();
 
 	$oldvalue = $smarty->caching;
-	$smarty->caching = !$config['debug'];
+	$smarty->caching = false;
 
 	$html = $smarty->fetch('globalcontent:'.$params['name']);
 

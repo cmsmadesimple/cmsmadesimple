@@ -2738,7 +2738,7 @@ class CMSModule
 		global $gCms;
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
-		$smarty->caching = 2;
+		$smarty->caching = false;
 		$result = $smarty->is_cached('module_file_tpl:'.$this->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$this->GetName()));
 
 		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
@@ -2756,7 +2756,7 @@ class CMSModule
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = ($cache == true?2:false);
+		$smarty->caching = false;
 
 		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$this->GetName()));
 		$smarty->caching = $oldcache;
@@ -2769,7 +2769,7 @@ class CMSModule
 		global $gCms;
 		$smarty = &$this->smarty;
 		$oldcache = $smarty->caching;
-		$smarty->caching = 2;
+		$smarty->caching = false;
 		$result = $smarty->is_cached('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
 
 		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
@@ -2801,7 +2801,7 @@ class CMSModule
 		$smarty = &$this->smarty;
 
 		$oldcache = $smarty->caching;
-		$smarty->caching = ($cache == true?2:false);
+		$smarty->caching = false;
 
 		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
 
