@@ -228,9 +228,17 @@ function cms_calculate_url()
 	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
 	{
 		$matches = array();
-		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+
+		//Seems like PHP_SELF has whatever is after index.php in certain situations
+		if (strpos($_SERVER['PHP_SELF'], 'index.php') !== FALSE) {
+			if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+			{
+				$result = $matches[1];
+			}
+		}
+		else
 		{
-			$result = $matches[1];
+			$result = $_SERVER['PHP_SELF'];
 		}
 	}
 	//lighttpd
