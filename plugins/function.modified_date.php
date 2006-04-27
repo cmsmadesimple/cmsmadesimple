@@ -32,7 +32,7 @@ function smarty_cms_function_modified_date($params, &$smarty)
 
 	if (isset($pageinfo) && $pageinfo->content_modified_date > -1)
 	{
-		return strftime($format, $pageinfo->content_modified_date);
+		return htmlentities(strftime($format, $pageinfo->content_modified_date));
 	}
 	else
 	{

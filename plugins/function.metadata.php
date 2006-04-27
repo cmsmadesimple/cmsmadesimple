@@ -23,6 +23,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 	global $gCms;
 	$config =& $gCms->GetConfig();
 	$pageinfo =& $gCms->variables['pageinfo'];
+
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
 		if ($pageinfo->content_metadata != '')
@@ -31,14 +32,17 @@ function smarty_cms_function_metadata($params, &$smarty)
 		}
 	}
 
-	$smarty->_compile_source('metadata template', $result, $_compiled);
-	@ob_start();
-	$smarty->_eval('?>' . $_compiled);
-	$_contents = @ob_get_contents();
-	@ob_end_clean();
-	$_contents .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
+	{
+		$smarty->_compile_source('metadata template', $result, $_compiled);
+		@ob_start();
+		$smarty->_eval('?>' . $_compiled);
+		$result = @ob_get_contents();
+		@ob_end_clean();
+	}
 
-	return $_contents;
+	$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	return $result;
 }
 
 function smarty_cms_help_function_metadata() {
