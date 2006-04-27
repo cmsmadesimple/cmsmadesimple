@@ -2629,7 +2629,7 @@ class CMSModule
 		{
 			if (count($params))
 			{
-				$result = vsprintf($this->langhash[$name], $params);
+				$result = @vsprintf($this->langhash[$name], $params);
 			}
 			else
 			{
