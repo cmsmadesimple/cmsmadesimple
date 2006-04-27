@@ -71,10 +71,7 @@ class pear_ADOConnection extends pear_EXTENDER
 		if ($result) {
 			if ($getone)
 			{
-				if (!$result->EOF) {
-					reset($result->fields);
-					$data = $result->fields;
-				}
+				if (!$result->EOF) $data = reset($result->fields);
 			}
 			else
 			{
