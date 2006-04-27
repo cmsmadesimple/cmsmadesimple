@@ -27,6 +27,11 @@ not be made active automatically
 hierarchy gettin reset properly
 * Fixed bug where installer would sometimes install a
 module twice, causing issues later on
+* Fixed bug where query_count doesn't exist when using
+regular adodb
+* Fixed bug where the module api will complain if the number
+of parameters (%s) didn't match in the translated string.  Now
+it just silently fails.
 * Modified config.php file so that it explains what the
 different options are
 * Updated adodb lite to 1.20
