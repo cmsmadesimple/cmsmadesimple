@@ -64,7 +64,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["admin_dir"] = "admin";
 	$config["persistent_db_conn"] = false;
 	$config["default_upload_permission"] = '664';
-	$config["page_extension"] = ".html";
+	$config["page_extension"] = "";
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
 

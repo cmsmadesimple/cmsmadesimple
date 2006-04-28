@@ -18,7 +18,8 @@
 #
 #$Id$
 
-require_once(dirname(__FILE__).'/fileloc.php');
+$dirname = dirname(__FILE__);
+require_once($dirname.'/fileloc.php');
 
 /**
  * This file is included in every page.  It does all seutp functions including
@@ -42,10 +43,10 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
 	@session_start();
 }
 
-require_once(dirname(__FILE__)."/lib/misc.functions.php");
+require_once($dirname."/lib/misc.functions.php");
 
 #Make a new CMS object
-require(dirname(__FILE__)."/lib/classes/class.global.inc.php");
+require($dirname."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
 
 #Setup hash for storing all modules
@@ -55,8 +56,8 @@ $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
 #Load the config file (or defaults if it doesn't exist)
-require(dirname(__FILE__)."/version.php");
-require(dirname(__FILE__)."/lib/config.functions.php");
+require($dirname.'/version.php');
+require($dirname."/lib/config.functions.php");
 
 #make a local reference
 #if (cms_config_check_old_config()) {
@@ -103,29 +104,29 @@ function count_sql_execs($db, $sql, $inputarray)
 */
 
 debug_buffer('loading smarty');
-require(dirname(__FILE__).'/lib/smarty/Smarty.class.php');
+require($dirname.'/lib/smarty/Smarty.class.php');
 debug_buffer('loading adodb');
 if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__)."/lib/adodb/adodb.inc.php")))
-	require(dirname(__FILE__)."/lib/adodb/adodb.inc.php");
+	require($dirname."/lib/adodb/adodb.inc.php");
 else
-	require(dirname(__FILE__)."/lib/adodb_lite/adodb.inc.php");
+	require($dirname."/lib/adodb_lite/adodb.inc.php");
 debug_buffer('loading page functions');
-require(dirname(__FILE__)."/lib/page.functions.php");
+require($dirname."/lib/page.functions.php");
 debug_buffer('loading content functions');
-require(dirname(__FILE__)."/lib/content.functions.php");
+require($dirname."/lib/content.functions.php");
 debug_buffer('loading pageinfo functions');
-require(dirname(__FILE__)."/lib/classes/class.pageinfo.inc.php");
-require(dirname(__FILE__)."/lib/classes/class.content.inc.php");
-require(dirname(__FILE__)."/lib/classes/class.module.inc.php");
-require(dirname(__FILE__)."/lib/classes/class.user.inc.php");
-require(dirname(__FILE__).'/lib/classes/class.htmlblob.inc.php');
-require(dirname(__FILE__).'/lib/classes/class.template.inc.php');
-require(dirname(__FILE__).'/lib/classes/class.stylesheet.inc.php');
-require(dirname(__FILE__).'/lib/classes/class.contentnode.inc.php');
-require(dirname(__FILE__).'/lib/classes/class.contenthierarchymanager.inc.php');
-require(dirname(__FILE__)."/lib/translation.functions.php");
-require(dirname(__FILE__)."/lib/classes/class.bookmark.inc.php");
-require(dirname(__FILE__)."/lib/classes/class.group.inc.php");
+require($dirname."/lib/classes/class.pageinfo.inc.php");
+require($dirname."/lib/classes/class.content.inc.php");
+require($dirname."/lib/classes/class.module.inc.php");
+require($dirname."/lib/classes/class.user.inc.php");
+require($dirname.'/lib/classes/class.htmlblob.inc.php');
+require($dirname.'/lib/classes/class.template.inc.php');
+require($dirname.'/lib/classes/class.stylesheet.inc.php');
+require($dirname.'/lib/classes/class.contentnode.inc.php');
+require($dirname.'/lib/classes/class.contenthierarchymanager.inc.php');
+require($dirname."/lib/translation.functions.php");
+require($dirname."/lib/classes/class.bookmark.inc.php");
+require($dirname."/lib/classes/class.group.inc.php");
 
 debug_buffer('done loading files');
 
@@ -142,7 +143,7 @@ if (!isset($DONT_LOAD_DB))
 $smarty =& $gCms->GetSmarty();
 
 #Load content types
-$dir = dirname(__FILE__)."/lib/contenttypes";
+$dir = $dirname."/lib/contenttypes";
 $ls = dir($dir);
 while (($file = $ls->read()) != "")
 {
@@ -156,7 +157,7 @@ while (($file = $ls->read()) != "")
 }
 
 if (!defined('SMARTY_DIR')) {
-	define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');
+	define('SMARTY_DIR', $dirname.'/lib/smarty/');
 }
 
 #Setup global smarty object
@@ -195,9 +196,9 @@ $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
 if (isset($CMS_ADMIN_PAGE))
 {
-	include_once(dirname(__FILE__)."/".$config['admin_dir']."/lang.php");
+	include_once($dirname.'/'.$config['admin_dir']."/lang.php");
 
-	require(dirname(__FILE__).'/lib/convert/ConvertCharset.class.php');
+	require($dirname.'/lib/convert/ConvertCharset.class.php');
 	$gCms->variables['convertclass'] = new ConvertCharset();
 
 }

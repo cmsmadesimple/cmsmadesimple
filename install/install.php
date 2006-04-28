@@ -603,7 +603,7 @@ function showPageFive() {
 	$newconfig["admin_dir"] = "admin";
 	$newconfig["persistent_db_conn"] = false;
 	$newconfig["default_upload_permission"] = '664';
-    $newconfig["page_extension"] = ".html";
+    $newconfig["page_extension"] = "";
 	$newconfig["locale"] = "";
 	$newconfig["admin_encoding"] = "utf-8";
 	$newconfig["use_adodb_lite"] = true;

@@ -50,6 +50,7 @@ class Smarty_CMS extends Smarty {
 		$this->compiler_file = 'CMS_Compiler.class.php';
 		$this->compiler_class = 'CMS_Compiler';
 
+		$this->use_sub_dirs = true;
 		$this->caching = false;
 		$this->compile_check = true;
 		$this->assign('app_name','CMS');
