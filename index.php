@@ -18,7 +18,8 @@
 #
 #$Id$
 
-require_once(dirname(__FILE__).'/fileloc.php');
+$dirname = dirname(__FILE__);
+require_once($dirname.'/fileloc.php');
 
 /**
  * Entry point for all non-admin pages
@@ -42,7 +43,7 @@ if (!isset($_SERVER['REQUEST_URI']))
 
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
-    require_once(dirname(__FILE__)."/lib/misc.functions.php");
+    require_once($dirname.'/lib/misc.functions.php');
     redirect('install/install.php');
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
@@ -62,7 +63,7 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
+require_once($dirname.'/include.php'); #Makes gCms object
 
 $params = array_merge($_GET, $_POST);
 
@@ -117,9 +118,9 @@ if (strpos($page, '/') !== FALSE)
 			if (!isset($matches['inline']))
 				$matches['inline'] = 0;
 			if (!isset($matches['returnid']))
-				$matches['returnid'] = 1;
+				$matches['returnid'] = ''; #Default page
 			if (!isset($matches['module']))
-				$matches['returnid'] = $route->module;
+				$matches['module'] = $route->module;
 
 			//Get rid of numeric matches
 			foreach ($matches as $key=>$val)
@@ -144,12 +145,11 @@ if (strpos($page, '/') !== FALSE)
 				}
 			}
 
-
 			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+			$page = $matches['returnid'];
 			$smarty->id = $matches['id'];
 
 			$matched = true;
-			$page = '';
 		}
 	}
 
@@ -216,7 +216,7 @@ else
 
 #if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
 #{
-	#set_error_handler($old_error_handler);
+#	set_error_handler($old_error_handler);
 #}
 
 if (!$cached)
@@ -259,8 +259,8 @@ if ($config["debug"] == true)
 	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 }
 
-echo "<!-- Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using $db->query_count SQL queries -->\n";
-#echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using $db->query_count SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
+echo "<!-- Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using (isset($db->query_count)?$db->query_count:'') SQL queries -->\n";
+#echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple $CMS_VERSION (".$cached."cached) using (isset($db->query_count)?$db->query_count:'') SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)

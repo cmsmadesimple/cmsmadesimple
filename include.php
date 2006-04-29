@@ -144,6 +144,13 @@ $smarty =& $gCms->GetSmarty();
 
 #Load content types
 $dir = $dirname."/lib/contenttypes";
+$handle=opendir($dir);
+while ($file = readdir ($handle)) {
+   $path_parts = pathinfo($file);
+   if ($path_parts['extension'] == 'php') include("$dir/$file");
+}
+closedir($handle);
+/*
 $ls = dir($dir);
 while (($file = $ls->read()) != "")
 {
@@ -155,6 +162,7 @@ while (($file = $ls->read()) != "")
 		}
 	}
 }
+*/
 
 if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', $dirname.'/lib/smarty/');

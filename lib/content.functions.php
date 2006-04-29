@@ -658,6 +658,7 @@ function load_plugins(&$smarty)
 	}
 }
 
+/*
 function search_plugins(&$smarty, &$plugins, $dir, $caching)
 {
         global $CMS_LOAD_ALL_PLUGINS;
@@ -740,6 +741,61 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 		}
 	}
 }
+*/
+
+function search_plugins(&$smarty, &$plugins, $dir, $caching)
+{
+	global $CMS_LOAD_ALL_PLUGINS;
+
+	$types=array('function','compiler','prefilter','postfilter','outputfilter','modifier');
+	$handle=opendir($dir);
+	while ($file = readdir($handle))
+	{
+		$path_parts = pathinfo($file);
+		if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
+		{
+			//Valid plugins will always have a 3 part filename
+			$filearray = explode('.', $path_parts['basename']);
+			if (count($filearray == 3))
+			{
+				$filename = $dir . '/' . $file;
+				//The part we care about is the middle one...
+				$file = $filearray[1];
+				if (!isset($plugins[$file]) && in_array($filearray[0],$types))
+				{
+					$key=array_search($filearray[0],$types);
+					$load=true;
+					switch ($key)
+					{
+						case 0:
+								if (isset($CMS_LOAD_ALL_PLUGINS))
+									$smarty->register_function($file, "smarty_cms_function_" . $file, $caching);
+								else $load=false;
+								break;
+						case 1:
+								$smarty->register_compiler_function($file, "smarty_cms_compiler_" .  $file, $caching);
+								break;
+						case 2:
+								$smarty->register_prefilter("smarty_cms_prefilter_" . $file);
+								break;
+						case 3:
+								$smarty->register_postfilter("smarty_cms_postfilter_" . $file);
+								break;
+						case 4:
+								$smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
+								break;
+						case 5: $smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
+								break;
+					}
+					if ($load){ $plugins[]=$file;
+						require_once($filename);}
+				}
+			}
+		}
+	}
+	closedir($handle);
+}
+
 
 function global_content_regex_callback($matches)
 {

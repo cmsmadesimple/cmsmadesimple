@@ -312,6 +312,7 @@ class ModuleOperations
 
 		if ($loadall == true)
 		{
+			/*
 			$ls = dir($dir);
 			while (($file = $ls->read()) != "")
 			{
@@ -327,6 +328,25 @@ class ModuleOperations
 					}
 				}
 			}
+			*/
+			$handle=opendir($dir);
+			while ($file = readdir($handle))
+			{
+				$path_parts = pathinfo($file);
+				if ($path_parts['extension'] == 'php')
+				{
+					if (@is_file("$dir/$file/$file.module.php"))
+					{
+						include("$dir/$file/$file.module.php");
+					}
+					else
+					{
+						unset($cmsmodules[$file]);
+					}
+				}
+			}
+			closedir($handle);
+
 			//Find modules and instantiate them
 			$allmodules = @ModuleOperations::FindModules();
 			foreach ($allmodules as $onemodule)
