@@ -845,6 +845,10 @@ class CMSModule
 		return FALSE;
 	}
 
+	function IsExclusive() {
+    returnFALSE;
+	}
+
 	/**
 	 * ------------------------------------------------------------------
 	 * Installation Related Functions
@@ -859,7 +863,7 @@ class CMSModule
 	 */
 	function Install()
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	  $filename = dirname(dirname(dirname(__FILE__))) .
 	    '/modules/'.$this->GetName().'/method.install.php';
 	  if (@is_file($filename))
 	    {
@@ -868,7 +872,7 @@ class CMSModule
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
-		
+
 		include($filename);
 	      }
 	    }
@@ -894,7 +898,7 @@ class CMSModule
 	 */
 	function Uninstall()
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	  $filename = dirname(dirname(dirname(__FILE__))) .
 	    '/modules/'.$this->GetName().'/method.uninstall.php';
 	  if (@is_file($filename))
 	    {
@@ -903,7 +907,7 @@ class CMSModule
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
-		
+
 		include($filename);
 	      }
 	    }
@@ -943,7 +947,7 @@ class CMSModule
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) . 
+	  $filename = dirname(dirname(dirname(__FILE__))) .
 	    '/modules/'.$this->GetName().'/method.upgrade.php';
 	  if (@is_file($filename))
 	    {
@@ -952,7 +956,7 @@ class CMSModule
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
-		
+
 		include($filename);
 	      }
 	    }
@@ -1605,8 +1609,8 @@ class CMSModule
 	}
 
 	/**
-	 * Called before the content is sent off to smarty for processing.  Basically 
-	 * overlaps with ContentPreRender, but it makes more sense to be named 
+	 * Called before the content is sent off to smarty for processing.  Basically
+	 * overlaps with ContentPreRender, but it makes more sense to be named
 	 * PreCompile.
 	 *
 	 * @param string The precompiled text
@@ -1616,7 +1620,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called right after smarty is done processing and ready to head off to the 
+	 * Called right after smarty is done processing and ready to head off to the
 	 * cache.  Does the same as PostRenderNonCached, but with a better name.
 	 *
 	 * @param string The postcompiled text
@@ -1626,7 +1630,7 @@ class CMSModule
 	}
 
 	/**
-	 * This serves no purpose anymore.  Template, content and html blobs are 
+	 * This serves no purpose anymore.  Template, content and html blobs are
 	 * never pushed together at any point and cached.
 	 *
 	 * Deprecated
@@ -2518,9 +2522,9 @@ class CMSModule
 	function RedirectContent($id)
 	{
 		#$content = ContentManager::LoadContentFromId($id);
- 	        global $gCms;
+ 	  global $gCms;
 		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeById($id);
+		$node =& $manager->sureGetNodeByAlias($id);
 		$content =& $node->GetContent();
 		if (isset($content))
 		{
