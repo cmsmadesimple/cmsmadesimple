@@ -1940,7 +1940,7 @@ class CMSModule
 		$text='<input type="file" name="'.$id.$name.'" size="'.$size.'"';
 		if ($accept != '')
 		{
-			$text .= ' ' . $accept;
+			$text .= ' accept="' . $accept.'"';
 		}
 		if ($addttext != '')
 		{
