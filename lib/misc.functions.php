@@ -450,7 +450,7 @@ function debug_buffer($var, $title="")
 
 	if($gCms->config["debug"] == true)
 	{
-		array_push($errors, debug_display($var, $title, false, true));
+		$errors[] = debug_display($var, $title, false, true);
 	}
 }
 

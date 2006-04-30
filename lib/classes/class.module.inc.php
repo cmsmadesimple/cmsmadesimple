@@ -2393,39 +2393,42 @@ class CMSModule
 		$config = &$gCms->config;
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeById($returnid);
-		$content =& $node->GetContent();
-
-		if (isset($content))
+		if (isset($node))
 		{
-			if ($content->GetURL(false) != '')
-			{
-				if (!$onlyhref)
-				{
-					$text .= '<a href="';
-				}
-				$text .= $content->GetURL(false);
+			$content =& $node->GetContent();
 
-				$count = 0;
-				foreach ($params as $key=>$value)
+			if (isset($content))
+			{
+				if ($content->GetURL(false) != '')
 				{
-					if ($count > 0)
+					if (!$onlyhref)
 					{
-						if ($config["assume_mod_rewrite"] && $rewrite == true)
-							$text .= '?';
+						$text .= '<a href="';
+					}
+					$text .= $content->GetURL(false);
+
+					$count = 0;
+					foreach ($params as $key=>$value)
+					{
+						if ($count > 0)
+						{
+							if ($config["assume_mod_rewrite"] && $rewrite == true)
+								$text .= '?';
+							else
+								$text .= '&amp;';
+						}
 						else
+						{
 							$text .= '&amp;';
+						}
+						$text .= $id.$key.'='.$value;
+						$count++;
 					}
-					else
+					if (!$onlyhref)
 					{
-						$text .= '&amp;';
+						$text .= "\"";
+						$text .= '>'.$contents.'</a>';
 					}
-					$text .= $id.$key.'='.$value;
-					$count++;
-				}
-				if (!$onlyhref)
-				{
-					$text .= "\"";
-					$text .= '>'.$contents.'</a>';
 				}
 			}
 		}

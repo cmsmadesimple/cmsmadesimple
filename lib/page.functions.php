@@ -162,7 +162,7 @@ function load_all_permissions($userid)
 	$result = &$db->Execute($query, array($userid));
 	while ($result && !$result->EOF)
 	{
-		array_push($perms, $result->fields['permission_name']);
+		$perms[] =& $result->fields['permission_name'];
 		$result->MoveNext();
 	}
 	$variables['userperms'] = $perms;
@@ -220,7 +220,7 @@ function check_ownership($userid, $contentid = '')
 
 		while ($result && !$result->EOF)
 		{
-			array_push($variables['ownerpages'], $result->fields['content_id']);
+			$variables['ownerpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
 	}
@@ -261,7 +261,7 @@ function check_authorship($userid, $contentid = '')
 
 		while ($result && !$result->EOF)
 		{
-			array_push($variables['authorpages'], $result->fields['content_id']);
+			$variables['authorpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
 	}
@@ -298,7 +298,7 @@ function author_pages($userid)
 
 		while ($result && !$result->EOF)
 		{
-			array_push($variables['authorpages'], $result->fields['content_id']);
+			$variables['authorpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
 	}
@@ -634,7 +634,7 @@ function get_stylesheet_media_types($template_id)
 		$templateobj = TemplateOperations::LoadTemplateById($template_id);
 		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
 		{
-			array_push($result, '');
+			$result[] = '';
 		}
 	}
 
@@ -651,7 +651,7 @@ function get_stylesheet_media_types($template_id)
 		while ($cssresult && !$cssresult->EOF)
 		{
 			if (!in_array($cssresult->fields['media_type'], $result))
-				array_push($result, $cssresult->fields['media_type']);
+				$result[] =& $cssresult->fields['media_type'];
 			$cssresult->MoveNext();
 		}
 	}

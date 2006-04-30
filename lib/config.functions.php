@@ -307,7 +307,7 @@ function cms_config_upgrade()
 		{
 			while (!feof($handle))
 			{
-				array_push($oldconfiglines,fgets($handle, 4096));
+				$oldconfiglines[] = fgets($handle, 4096);
 			}
 			fclose($handle);
 			$handle = fopen($newfilename, "w");
