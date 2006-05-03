@@ -67,7 +67,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["page_extension"] = "";
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
-	$config['old_stylesheet'] = false;
+	$config['old_stylesheet'] = true;
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
