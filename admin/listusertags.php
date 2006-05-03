@@ -24,102 +24,52 @@ require_once("../include.php");
 
 check_login();
 
-$plugin = "";
-if (isset($_GET["plugin"])) $plugin = $_GET["plugin"];
+$plugin = '';
+if (isset($_GET['plugin'])) $plugin = $_GET['plugin'];
 
-$action = "";
-if (isset($_GET["action"])) $action = $_GET["action"];
+$action = '';
+if (isset($_GET['action'])) $action = $_GET['action'];
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Modules");
+$access = check_permission($userid, 'Modify Modules');
 
 $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 
-if ($action == "showpluginhelp")
+echo '<div class="pagecontainer">';
+echo '<div class="pageoverflow">';
+echo '<p class="pageheader">'.lang('userdefinedtags').'</p></div>';
+echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+echo '<thead>';
+echo "<tr>\n";
+echo "<th>".lang('name')."</th>\n";
+echo "<th class=\"pageicon\">&nbsp;</th>\n";
+echo "<th class=\"pageicon\">&nbsp;</th>\n";
+echo "</tr>\n";
+echo '</thead>';
+echo '<tbody>';
+
+$curclass = "row1";
+
+foreach($gCms->cmsplugins as $oneplugin)
 {
-	if (function_exists('smarty_cms_help_function_'.$plugin))
+	if (array_key_exists($oneplugin, $gCms->userplugins))
 	{
-		@ob_start();
-		call_user_func_array('smarty_cms_help_function_'.$plugin, array());
-		$content = @ob_get_contents();
-		@ob_end_clean();
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('pluginhelp', array($plugin))."</h2>";
-		echo $content;
-		?>
-		<FORM ACTION="listtags.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
-		echo "</div>";
-	}
-	else
-	{
-		?>
-		<P>No help text available for this plugin.</P>
-		<?php
+		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
+		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
+		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+		echo "</a></td>\n";
+		echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+		echo "</a></td>\n";
+
+		echo "</tr>\n";
+
+		($curclass=="row1"?$curclass="row2":$curclass="row1");
 	}
 }
-else if ($action == "showpluginabout")
-{
-	if (function_exists('smarty_cms_about_function_'.$plugin))
-	{
-		@ob_start();
-		call_user_func_array('smarty_cms_about_function_'.$plugin, array());
-		$content = @ob_get_contents();
-		@ob_end_clean();
-		echo "<div class=\"moduleabout\">";
-		echo "<h2>".lang('pluginabout', array($plugin))."</h2>";
-		echo $content;
-		?>
-		<FORM ACTION="listtags.php" METHOD="get">
-		<P><INPUT TYPE="submit" VALUE="<?php echo lang('backtoplugins')?>" CLASS="button" onMouseOver="this.className='buttonHover'" onMouseOut="this.className='button'"></P>
-		</FORM>
-		<?php
-		echo "</div>";
-	}
-	else
-	{
-		?>
-		<P>No about text available for this tag.</P>
-		<?php
-	}
-}
-	echo '<div class="pagecontainer">';
-	echo '<div class="pageoverflow">';
-	echo '<p class="pageheader">'.lang('userdefinedtags').'</p></div>';
-	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-	echo '<thead>';
-	echo "<tr>\n";
-	echo "<th>".lang('name')."</th>\n";
-	echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	echo "<th class=\"pageicon\">&nbsp;</th>\n";
-	echo "</tr>\n";
-	echo '</thead>';
-	echo '<tbody>';
-
-		$curclass = "row1";
-
-		foreach($gCms->cmsplugins as $oneplugin)
-		{
-			if (array_key_exists($oneplugin, $gCms->userplugins))
-			{
-				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
-				echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
-                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                echo "</a></td>\n";
-				echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                echo "</a></td>\n";
-
-				echo "</tr>\n";
-		
-				($curclass=="row1"?$curclass="row2":$curclass="row1");
-			}
-		}
 
 	?>
 	</tbody>

@@ -67,6 +67,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["page_extension"] = "";
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
+	$config['old_stylesheet'] = false;
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
@@ -229,7 +230,7 @@ function cms_config_text($config)
 #--------------
 
 #Which program should be used for handling thumbnails in the image manager.
-#See http://wiki.cmsmadesimple.org/en:adminpanel:content:imagemanager for more
+#See http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Content/Image_Manager for more
 #info on what this all means
 \$config['image_manipulation_prog'] = '{$config['image_manipulation_prog']}';
 \$config['image_transform_lib_path'] = '{$config['image_transform_lib_path']}';
@@ -256,6 +257,10 @@ function cms_config_text($config)
 \$config['admin_encoding'] = '{$config['admin_encoding']}';
 
 #---------------------------------------------
+#Use the old stylesheet logic?  It's much slower, but it works with older
+#versions of CMSMS.  Leave it as false instead you really need it.
+\$config['old_stylesheet'] = ${$config['old_stylesheet']?'true':'false'};
+
 #Not used anymore... kept around, just in case
 \$config['disable_htmlarea_translation'] = false;
 \$config['use_Indite'] = true;

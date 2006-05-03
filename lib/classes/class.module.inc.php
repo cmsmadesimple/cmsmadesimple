@@ -10,11 +10,11 @@
 #
 # This program is distributed in the hope that it will be useful,
 # BUT withOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the
 # GNU General Public License for more details.
 # You should have received a copy of the GNU General Public License
 # along with this program; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
 #
 #$Id$
 
@@ -45,8 +45,8 @@ class ModuleOperations
    */
   function SetError($str = '')
   {
-    global $gCms;
-    $gCms->variables['error'] = $str;
+	global $gCms;
+	$gCms->variables['error'] = $str;
   }
 
   /**
@@ -54,10 +54,10 @@ class ModuleOperations
    */
   function GetLastError()
   {
-    global $gCms;
-    if( isset( $gCms->variables['error'] ) )
-      return $gCms->variables['error'];
-    return "";
+	global $gCms;
+	if( isset( $gCms->variables['error'] ) )
+	  return $gCms->variables['error'];
+	return "";
   }
 
 
@@ -67,162 +67,162 @@ class ModuleOperations
    */
   function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   {
-    global $gCms;
-    // first make sure that we can actually write to the module directory
-    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+	global $gCms;
+	// first make sure that we can actually write to the module directory
+	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
-    if( !is_writable( $dir ) && $brief != 0 )
-      {
+	if( !is_writable( $dir ) && $brief != 0 )
+	  {
 	// directory not writable
 	ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
 	return false;
-      }
+	  }
 
-    // start parsing xml
-    $parser = xml_parser_create();
-    $ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
-    xml_parser_free( $parser );
+	// start parsing xml
+	$parser = xml_parser_create();
+	$ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
+	xml_parser_free( $parser );
 
-    if( $ret == 0 )
-      {
+	if( $ret == 0 )
+	  {
 	ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
 	return false;
-      }
+	  }
 
-    $havedtdversion = false;
-    $moduledetails = array();
-    $moduledetails['size'] = strlen($xml);
-    $required = array();
-    foreach( $val as $elem )
-      {
+	$havedtdversion = false;
+	$moduledetails = array();
+	$moduledetails['size'] = strlen($xml);
+	$required = array();
+	foreach( $val as $elem )
+	  {
 	$value = (isset($elem['value'])?$elem['value']:'');
 	$type = (isset($elem['type'])?$elem['type']:'');
 	switch( $elem['tag'] )
 	  {
 	  case 'NAME':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      // check if this module is already installed
-	      if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
+		  // check if this module is already installed
+		  if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
 		{
 		  ModuleOperations::SetError( lang( 'moduleinstalled' ) );
 		  return false;
 		}
-	      $moduledetails['name'] = $value;
-	      break;
-	    }
+		  $moduledetails['name'] = $value;
+		  break;
+		}
 
 	  case 'DTDVERSION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      if( $value != MODULE_DTD_VERSION )
+		  if( $value != MODULE_DTD_VERSION )
 		{
 		  ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
 		  return false;
 		}
-	      $havedtdversion = true;
-	      break;
-	    }
+		  $havedtdversion = true;
+		  break;
+		}
 
 	  case 'VERSION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      $moduledetails['version'] = $value;
-	      if( isset( $gCms->modules[$moduledetails['name']] ) )
+		  $moduledetails['version'] = $value;
+		  if( isset( $gCms->modules[$moduledetails['name']] ) )
 		{
 		  $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
 		  if( $moduledetails['version'] < $version && $brief == 0)
-		    {
-		      ModuleOperations::SetError( lang('errorattempteddowngrade') );
-		      return false;
-		    }
-                  else if ($moduledetails['version'] == $version && $brief == 0 )
-                    {
-                      ModuleOperations::SetError( lang('moduleinstalled') );
-                      return false;
-                    }
+			{
+			  ModuleOperations::SetError( lang('errorattempteddowngrade') );
+			  return false;
+			}
+				  else if ($moduledetails['version'] == $version && $brief == 0 )
+					{
+					  ModuleOperations::SetError( lang('moduleinstalled') );
+					  return false;
+					}
 		}
-	      break;
-	    }
+		  break;
+		}
 
 	  case 'DESCRIPTION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      $moduledetails['description'] = $value;
-	      break;
-	    }
+		  $moduledetails['description'] = $value;
+		  break;
+		}
 
 	  case 'HELP':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      $moduledetails['help'] = base64_decode($value);
-	      break;
-	    }
+		  $moduledetails['help'] = base64_decode($value);
+		  break;
+		}
 
 	  case 'ABOUT':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      $moduledetails['about'] = base64_decode($value);
-	      break;
-	    }
+		  $moduledetails['about'] = base64_decode($value);
+		  break;
+		}
 
 	  case 'REQUIRES':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      if( count($requires) != 2 )
+		  if( count($requires) != 2 )
 		{
 		  continue;
 		}
-	      if( !isset( $moduledetails['requires'] ) )
+		  if( !isset( $moduledetails['requires'] ) )
 		{
 		  $moduledetails['requires'] = array();
 		}
-	      array_push( $moduledetails['requires'], $requires );
-	      $required = array();
-	    }
+		  array_push( $moduledetails['requires'], $requires );
+		  $required = array();
+		}
 
 	  case 'REQUIREDNAME':
-	    $requires['name'] = $value;
-	    break;
+		$requires['name'] = $value;
+		break;
 
 	  case 'REQUIREDVERSION':
-	    $requires['version'] = $value;
-	    break;
+		$requires['version'] = $value;
+		break;
 
 	  case 'FILE':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+		{
+		  if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-	      if( $brief != 0 )
+		  if( $brief != 0 )
 		{
 		  continue;
 		}
 
-	      // finished a first file
-	      if( !isset( $moduledetails['name'] )     || !isset( $moduledetails['version'] ) ||
+		  // finished a first file
+		  if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
 		  !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
 		{
 		  print_r( $moduledetails );
@@ -230,70 +230,70 @@ class ModuleOperations
 		  return false;
 		}
 
-	      // ready to go
-	      $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-	      $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
-	      if( !file_exists( $moduledir ) )
+		  // ready to go
+		  $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+		  $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
+		  if( !file_exists( $moduledir ) )
 		{
 		  @mkdir( $moduledir );
 		}
-	      if( $moduledetails['isdir'] )
+		  if( $moduledetails['isdir'] )
 		{
 		  @mkdir( $filename );
 		}
-	      else
+		  else
 		{
 		  $data = $moduledetails['filedata'];
 		  if( strlen( $data ) )
-		    {
-		      $data = base64_decode( $data );
-		    }
+			{
+			  $data = base64_decode( $data );
+			}
 		  $fp = fopen( $filename, "w" );
 		  if( !$fp )
-		    {
-		      ModuleOperations::SetError(lang('errorcanptcreatefile'));
-		    }
+			{
+			  ModuleOperations::SetError(lang('errorcanptcreatefile'));
+			}
 		  if( strlen( $data ) )
-		    {
-		      fwrite( $fp, $data );
-		    }
+			{
+			  fwrite( $fp, $data );
+			}
 		  fclose( $fp );
 		}
-	      unset( $moduledetails['filedata'] );
-	      unset( $moduledetails['filename'] );
-	      unset( $moduledetails['isdir'] );
-	    }
+		  unset( $moduledetails['filedata'] );
+		  unset( $moduledetails['filename'] );
+		  unset( $moduledetails['isdir'] );
+		}
 
 	  case 'FILENAME':
-	    $moduledetails['filename'] = $value;
-	    break;
+		$moduledetails['filename'] = $value;
+		break;
 
 	  case 'ISDIR':
-	    $moduledetails['isdir'] = $value;
-	    break;
+		$moduledetails['isdir'] = $value;
+		break;
 
 	  case 'DATA':
-	    if( $type != 'complete' && $type != 'close' )
-	      {
+		if( $type != 'complete' && $type != 'close' )
+		  {
 		continue;
-	      }
-	    $moduledetails['filedata'] = $value;
-	    break;
+		  }
+		$moduledetails['filedata'] = $value;
+		break;
 	  }
-      }
+	  }
 
-    if( $havedtdversion == false )
-      {
+	if( $havedtdversion == false )
+	  {
 	ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
 	return false;
-      }
+	  }
 
-    // we've created the modules directory
-    // now we either have to upgrade or install
-    unset( $moduledetails['filedata'] );
-    unset( $moduledetails['filename'] );
-    unset( $moduledetails['isdir'] );
-    return $moduledetails;
+	// we've created the modules directory
+	// now we either have to upgrade or install
+	unset( $moduledetails['filedata'] );
+	unset( $moduledetails['filename'] );
+	unset( $moduledetails['isdir'] );
+	return $moduledetails;
   }
 
 
@@ -332,17 +332,13 @@ class ModuleOperations
 			$handle=opendir($dir);
 			while ($file = readdir($handle))
 			{
-				$path_parts = pathinfo($file);
-				if ($path_parts['extension'] == 'php')
+				if (@is_file("$dir/$file/$file.module.php"))
 				{
-					if (@is_file("$dir/$file/$file.module.php"))
-					{
-						include("$dir/$file/$file.module.php");
-					}
-					else
-					{
-						unset($cmsmodules[$file]);
-					}
+					include("$dir/$file/$file.module.php");
+				}
+				else
+				{
+					unset($cmsmodules[$file]);
 				}
 			}
 			closedir($handle);
@@ -567,7 +563,7 @@ class CMSModule
 
 	/**
 	 * ------------------------------------------------------------------
-	 * Basic Functions.  Name and Version MUST be overridden.
+	 * Basic Functions.	 Name and Version MUST be overridden.
 	 * ------------------------------------------------------------------
 	 */
 
@@ -578,21 +574,21 @@ class CMSModule
 	{
 	  $str = '';
 	  if ($this->GetAuthor() != '')
-	    {
-	      $str .= "<br />".lang('author').": " . $this->GetAuthor();
-	      if ($this->GetAuthorEmail() != '')
+		{
+		  $str .= "<br />".lang('author').": " . $this->GetAuthor();
+		  if ($this->GetAuthorEmail() != '')
 		{
 		  $str .= ' &lt;' . $this->GetAuthorEmail() . '&gt;';
 		}
-	      $str .= "<br />";
-	    }
+		  $str .= "<br />";
+		}
 	  $str .= "<br />".lang('version').": " .$this->GetVersion() . "<br />";
 
 	  if ($this->GetChangeLog() != '')
-	    {
-	      $str .= "<br />".lang('changehistory').":<br />";
-	      $str .= $this->GetChangeLog() . '<br />';
-	    }
+		{
+		  $str .= "<br />".lang('changehistory').":<br />";
+		  $str .= $this->GetChangeLog() . '<br />';
+		}
 	  return $str;
 	}
 
@@ -609,33 +605,33 @@ class CMSModule
 	  @ob_end_clean();
 	  $dependencies = $this->GetDependencies();
 	  if (count($dependencies) > 0 )
-	    {
-	      $str .= '<h3>'.lang('dependencies').'</h3>';
-	      $str .= '<ul>';
-	      foreach( $dependencies as $dep => $ver )
+		{
+		  $str .= '<h3>'.lang('dependencies').'</h3>';
+		  $str .= '<ul>';
+		  foreach( $dependencies as $dep => $ver )
 		{
 		  $str .= '<li>';
 		  $str .= $dep.' =&gt; '.$ver;
 		  $str .= '</li>';
 		}
-	      $str .= '</ul>';
-	    }
+		  $str .= '</ul>';
+		}
 	  $paramarray = $this->GetParameters();
 	  if (count($paramarray) > 0)
-	    {
-	      $str .= '<h3>'.lang('parameters').'</h3>';
-	      $str .= '<ul>';
-	      foreach ($paramarray as $oneparam)
+		{
+		  $str .= '<h3>'.lang('parameters').'</h3>';
+		  $str .= '<ul>';
+		  foreach ($paramarray as $oneparam)
 		{
 		  $str .= '<li>';
 		  if ($oneparam['optional'] == true)
-		    {
-		      $str .= '<em>(optional)</em> ';
-		    }
+			{
+			  $str .= '<em>(optional)</em> ';
+			}
 		  $str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
 		}
-	      $str .= '</ul>';
-	    }
+		  $str .= '</ul>';
+		}
 	  return $str;
 	}
 
@@ -691,7 +687,7 @@ class CMSModule
 	/**
 	 * Returns the help for the module
 	 *
-	 * @param string Optional language that the admin is using.  If that language
+	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
 	function GetHelp($lang = 'en_US')
@@ -717,8 +713,8 @@ class CMSModule
 	}
 
 	/**
- 	 * Returns a list of parameters and their help strings in a hash.  This is generally
-     * used internally.
+	 * Returns a list of parameters and their help strings in a hash.  This is generally
+	 * used internally.
 	 */
 	function GetParameters()
 	{
@@ -727,8 +723,8 @@ class CMSModule
 
 	/**
 	 * Setup you parameters here.  It doesn't have to be here, but it makes the
-     * code more legible.
-     */
+	 * code more legible.
+	 */
 	function SetParameters()
 	{
 	}
@@ -746,7 +742,7 @@ class CMSModule
 	/**
 	 * Returns a short description of the module
 	 *
-	 * @param string Optional language that the admin is using.  If that language
+	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
 	function GetDescription($lang = 'en_US')
@@ -757,7 +753,7 @@ class CMSModule
 	/**
 	 * Returns a description of what the admin link does.
 	 *
-	 * @param string Optional language that the admin is using.  If that language
+	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
 	function GetAdminDescription($lang = 'en_US')
@@ -846,7 +842,7 @@ class CMSModule
 	}
 
 	function IsExclusive() {
-    returnFALSE;
+	returnFALSE;
 	}
 
 	/**
@@ -864,22 +860,22 @@ class CMSModule
 	function Install()
 	{
 	  $filename = dirname(dirname(dirname(__FILE__))) .
-	    '/modules/'.$this->GetName().'/method.install.php';
+		'/modules/'.$this->GetName().'/method.install.php';
 	  if (@is_file($filename))
-	    {
-	      {
+		{
+		  {
 		global $gCms;
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
 
 		include($filename);
-	      }
-	    }
+		  }
+		}
 	  else
-	    {
-	      return FALSE;
-	    }
+		{
+		  return FALSE;
+		}
 	}
 
 	/**
@@ -899,26 +895,26 @@ class CMSModule
 	function Uninstall()
 	{
 	  $filename = dirname(dirname(dirname(__FILE__))) .
-	    '/modules/'.$this->GetName().'/method.uninstall.php';
+		'/modules/'.$this->GetName().'/method.uninstall.php';
 	  if (@is_file($filename))
-	    {
-	      {
+		{
+		  {
 		global $gCms;
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
 
 		include($filename);
-	      }
-	    }
+		  }
+		}
 	  else
-	    {
-	      return FALSE;
-	    }
+		{
+		  return FALSE;
+		}
 	}
 
 	/**
-	 * Display a message and a Yes/No dialog before doing an uninstall.  Returning noting
+	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting
 	 * (FALSE) will go right to the uninstall.
 	 */
 	function UninstallPreMessage()
@@ -948,29 +944,29 @@ class CMSModule
 	function Upgrade($oldversion, $newversion)
 	{
 	  $filename = dirname(dirname(dirname(__FILE__))) .
-	    '/modules/'.$this->GetName().'/method.upgrade.php';
+		'/modules/'.$this->GetName().'/method.upgrade.php';
 	  if (@is_file($filename))
-	    {
-	      {
+		{
+		  {
 		global $gCms;
 		$db =& $gCms->GetDb();
 		$config =& $gCms->GetConfig();
 		$smarty =& $gCms->GetSmarty();
 
 		include($filename);
-	      }
-	    }
+		  }
+		}
 	  else
-	    {
-	      return FALSE;
-	    }
+		{
+		  return FALSE;
+		}
 	}
 
 	/**
 	 * Returns whether or not modules should be autoupgraded while upgrading
 	 * CMS versions.  Generally only useful for modules included with the CMS
 	 * base install, but there could be a situation down the road where we have
-	 * different distributions with different modules included in them.  Defaults
+	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
 	function AllowAutoInstall()
@@ -982,7 +978,7 @@ class CMSModule
 	 * Returns whether or not modules should be autoupgraded while upgrading
 	 * CMS versions.  Generally only useful for modules included with the CMS
 	 * base install, but there could be a situation down the road where we have
-	 * different distributions with different modules included in them.  Defaults
+	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
 	function AllowAutoUpgrade()
@@ -990,7 +986,7 @@ class CMSModule
 		return TRUE;
 	}
 
- 	/**
+	/**
 	 * Returns a list of dependencies and minimum versions that this module
 	 * requires. It should return an hash, eg.
 	 * return array('somemodule'=>'1.0', 'othermodule'=>'1.1');
@@ -1000,8 +996,8 @@ class CMSModule
 		return array();
 	}
 
- 	/**
-	 * Checks to see if currently installed modules depend on this module.  This is
+	/**
+	 * Checks to see if currently installed modules depend on this module.	This is
 	 * used by the plugins.php page to make sure that a module can't be uninstalled
 	 * before any modules depending on it are uninstalled first.
 	 */
@@ -1037,51 +1033,51 @@ class CMSModule
 	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
 	  $xmltxt .= $this->xmldtd."\n";
 	  $xmltxt .= "<module>\n";
-          $xmltxt .= "  <dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
-	  $xmltxt .= "  <name>".$this->GetName()."</name>\n";
-	  $xmltxt .= "  <version>".$this->GetVersion()."</version>\n";
-	  $xmltxt .= "  <help>".base64_encode($this->GetHelpPage())."</help>\n";
-	  $xmltxt .= "  <about>".base64_encode($this->GetAbout())."</about>\n";
+		  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
+	  $xmltxt .= "	<name>".$this->GetName()."</name>\n";
+	  $xmltxt .= "	<version>".$this->GetVersion()."</version>\n";
+	  $xmltxt .= "	<help>".base64_encode($this->GetHelpPage())."</help>\n";
+	  $xmltxt .= "	<about>".base64_encode($this->GetAbout())."</about>\n";
 	  $desc = $this->GetAdminDescription();
 	  if( $desc != '' )
-	    {
-	      $xmltxt .= "  <description>".$desc."</description>\n";
-	    }
+		{
+		  $xmltxt .= "	<description>".$desc."</description>\n";
+		}
 	  $depends = $this->GetDependencies();
 	  foreach( $depends as $key=>$val )
-	    {
-	      $xmltxt .= "  <requires>\n";
-              $xmltxt .= "    <requiredname>$key</requiredname>\n";
-              $xmltxt .= "    <requiredversion>$val</requiredversion>\n";
-	      $xmltxt .= "  </requires>\n";
-	    }
+		{
+		  $xmltxt .= "	<requires>\n";
+			  $xmltxt .= "	  <requiredname>$key</requiredname>\n";
+			  $xmltxt .= "	  <requiredversion>$val</requiredversion>\n";
+		  $xmltxt .= "	</requires>\n";
+		}
 	  foreach( $files as $file )
-	    {
-	      // strip off the beginning
-	      if (substr($file,0,strlen($dir)) == $dir)
-	         {
-             $file = substr($file,strlen($dir));
-             }
-	      if( $file == '' ) continue;
+		{
+		  // strip off the beginning
+		  if (substr($file,0,strlen($dir)) == $dir)
+			 {
+			 $file = substr($file,strlen($dir));
+			 }
+		  if( $file == '' ) continue;
 
-	      $xmltxt .= "  <file>\n";
-	      $filespec = $dir.DIRECTORY_SEPARATOR.$file;
-	      $xmltxt .= "    <filename>$file</filename>\n";
-	      if( @is_dir( $filespec ) )
+		  $xmltxt .= "	<file>\n";
+		  $filespec = $dir.DIRECTORY_SEPARATOR.$file;
+		  $xmltxt .= "	  <filename>$file</filename>\n";
+		  if( @is_dir( $filespec ) )
 		{
-		  $xmltxt .= "    <isdir>1</isdir>\n";
+		  $xmltxt .= "	  <isdir>1</isdir>\n";
 		}
-	      else
+		  else
 		{
-		  $xmltxt .= "    <isdir>0</isdir>\n";
+		  $xmltxt .= "	  <isdir>0</isdir>\n";
 		  $data = base64_encode(file_get_contents($filespec));
-		  $xmltxt .= "    <data><![CDATA[".$data."]]></data>\n";
+		  $xmltxt .= "	  <data><![CDATA[".$data."]]></data>\n";
 		}
 
-	      $xmltxt .= "  </file>\n";
-	      ++$filecount;
-	    }
-          $xmltxt .= "</module>\n";
+		  $xmltxt .= "	</file>\n";
+		  ++$filecount;
+		}
+		  $xmltxt .= "</module>\n";
 	  $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$this->GetName();
 	  $message .= ' including '.$filecount.' files';
 	  return $xmltxt;
@@ -1089,7 +1085,7 @@ class CMSModule
 
 
 	/**
-	 * Return true if there is an admin for the module.  Returns false by
+	 * Return true if there is an admin for the module.	 Returns false by
 	 * default.
 	 */
 	function HasAdmin()
@@ -1111,23 +1107,23 @@ class CMSModule
 	 * section. Valid options are currently:
 	 *
 	 * content, layout, files, usersgroups, extensions, preferences, admin
-     *
+	 *
 	 */
 	function GetAdminSection()
 	{
 		return 'extensions';
 	}
 
-    /**
-     * Returns true or false, depending on whether the user has the
-     * right permissions to see the module in their Admin menus.
-     *
-     * Defaults to true.
-     */
-    function VisibleToAdminUser()
-    {
-    	return true;
-    }
+	/**
+	 * Returns true or false, depending on whether the user has the
+	 * right permissions to see the module in their Admin menus.
+	 *
+	 * Defaults to true.
+	 */
+	function VisibleToAdminUser()
+	{
+		return true;
+	}
 
 	/**
 	 * Returns true if the module should be treated as a content module.
@@ -1140,7 +1136,7 @@ class CMSModule
 
 	/**
 	 * Returns true if the module should be treated as a plugin module (like
-	 * {cms_module module='name'}.  Returns false by default.
+	 * {cms_module module='name'}.	Returns false by default.
 	 */
 	function IsPluginModule()
 	{
@@ -1162,7 +1158,7 @@ class CMSModule
 	 */
 
 	/**
-	 * Called after a successful login.  It sends the user object.
+	 * Called after a successful login.	 It sends the user object.
 	 *
 	 * @param User The user that just logged in
 	 */
@@ -1244,7 +1240,7 @@ class CMSModule
 	 */
 
 	/**
-	 * Called before a group is added to the database.  Sends the group object.
+	 * Called before a group is added to the database.	Sends the group object.
 	 *
 	 * @param Group The group that was just created
 	 */
@@ -1262,7 +1258,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before a group is saved to the database.  Sends the group object.
+	 * Called before a group is saved to the database.	Sends the group object.
 	 *
 	 * @param Group The group that was just edited
 	 */
@@ -1280,7 +1276,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before a group is deleted from the database.  Sends the group object.
+	 * Called before a group is deleted from the database.	Sends the group object.
 	 *
 	 * @param Group The group that was just deleted
 	 */
@@ -1400,7 +1396,7 @@ class CMSModule
 	 */
 
 	/**
-	 * Called before a Stylesheet is added to the database.  Sends the stylesheet
+	 * Called before a Stylesheet is added to the database.	 Sends the stylesheet
 	 * object.
 	 *
 	 * @param Stylesheet The stylesheet that was just created
@@ -1410,7 +1406,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after a stylesheet is added to the database.  Sends the stylesheet
+	 * Called after a stylesheet is added to the database.	Sends the stylesheet
 	 * object.
 	 *
 	 * @param Stylesheet The stylesheet that was just created
@@ -1420,7 +1416,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before a stylesheet is saved to the database.  Sends the stylesheet
+	 * Called before a stylesheet is saved to the database.	 Sends the stylesheet
 	 * object.
 	 *
 	 * @param stylesheet The stylesheet that was just edited
@@ -1430,7 +1426,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after a stylesheet is saved to the database.  Sends the stylesheet
+	 * Called after a stylesheet is saved to the database.	Sends the stylesheet
 	 * object.
 	 *
 	 * @param stylesheet The stylesheet that was just edited
@@ -1440,7 +1436,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before a stylesheet is deleted from the database.  Sends the stylesheet
+	 * Called before a stylesheet is deleted from the database.	 Sends the stylesheet
 	 * object.
 	 *
 	 * @param stylesheet The stylesheet that was just deleted
@@ -1450,7 +1446,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after a stylesheet is deleted from the database.  Sends the stylesheet
+	 * Called after a stylesheet is deleted from the database.	Sends the stylesheet
 	 * object.
 	 *
 	 * @param stylesheet The stylesheet that was just deleted
@@ -1466,7 +1462,7 @@ class CMSModule
 	 */
 
 	/**
-	 * Called before an HTML blob is added to the database.  Sends the html blob
+	 * Called before an HTML blob is added to the database.	 Sends the html blob
 	 * object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just created
@@ -1476,7 +1472,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after an HTML blob is added to the database.  Sends the html blob
+	 * Called after an HTML blob is added to the database.	Sends the html blob
 	 * object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just created
@@ -1486,7 +1482,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before an HTML blob is saved to the database.  Sends the html blob
+	 * Called before an HTML blob is saved to the database.	 Sends the html blob
 	 * object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just edited
@@ -1496,7 +1492,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after an HTML blob is saved to the database.  Sends the html blob
+	 * Called after an HTML blob is saved to the database.	Sends the html blob
 	 * object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just edited
@@ -1506,7 +1502,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before an HTML blob is deleted from the database.  Sends the html
+	 * Called before an HTML blob is deleted from the database.	 Sends the html
 	 * blob object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just deleted
@@ -1516,7 +1512,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called after an HTML blob is deleted from the database.  Sends the html
+	 * Called after an HTML blob is deleted from the database.	Sends the html
 	 * blob object.
 	 *
 	 * @param HtmlBlob The HTML blob that was just deleted
@@ -1544,7 +1540,7 @@ class CMSModule
 	 * Called with the content of the template before it's sent to smarty
 	 * for processing.
 	 *
-	 * Deprecated:  This isn't called anymore.
+	 * Deprecated:	This isn't called anymore.
 	 *
 	 * @param string The template text
 	 */
@@ -1565,7 +1561,7 @@ class CMSModule
 	/**
 	 * Called with the title before it is pasted into the template.
 	 *
-	 * Deprecated:  This isn't called anymore.
+	 * Deprecated:	This isn't called anymore.
 	 *
 	 * @param string The title text
 	 */
@@ -1576,7 +1572,7 @@ class CMSModule
 	/**
 	 * Called with the content data before it is pasted into the template.
 	 *
-	 * Deprecated:  This isn't called anymore.  Use ContentPreCompile.
+	 * Deprecated:	This isn't called anymore.	Use ContentPreCompile.
 	 *
 	 * @param string The content text
 	 */
@@ -1588,7 +1584,7 @@ class CMSModule
 	 * Called with the content of the html blob before it is pasted into the
 	 * template (but after content is pasted in)
 	 *
-	 * Deprecated:  This isn't called anymore.  Use GlobalContentPreCompile.
+	 * Deprecated:	This isn't called anymore.	Use GlobalContentPreCompile.
 	 *
 	 * @param string The html blob text
 	 */
@@ -1600,7 +1596,7 @@ class CMSModule
 	 * Called before the pasted together template/content/html blobs/etc are
 	 * sent to smarty for processing.
 	 *
-	 * Deprecated:  Not useful anymore, since it's all handled separately now
+	 * Deprecated:	Not useful anymore, since it's all handled separately now
 	 *
 	 * @param string The prerendered text
 	 */
@@ -1609,7 +1605,7 @@ class CMSModule
 	}
 
 	/**
-	 * Called before the content is sent off to smarty for processing.  Basically
+	 * Called before the content is sent off to smarty for processing.	Basically
 	 * overlaps with ContentPreRender, but it makes more sense to be named
 	 * PreCompile.
 	 *
@@ -1630,7 +1626,7 @@ class CMSModule
 	}
 
 	/**
-	 * This serves no purpose anymore.  Template, content and html blobs are
+	 * This serves no purpose anymore.	Template, content and html blobs are
 	 * never pushed together at any point and cached.
 	 *
 	 * Deprecated
@@ -1643,7 +1639,7 @@ class CMSModule
 
 	/**
 	 * Called after content is sent to smarty for processing and right before
-	 * display.  Cached content will still call this function before display,
+	 * display.	 Cached content will still call this function before display,
 	 * but it is called EVERY time a page is requested.
 	 *
 	 * @param string The postrendered text
@@ -1700,7 +1696,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns content destined for the <form> tag.  It's useful if javascript is
+	 * Returns content destined for the <form> tag.	 It's useful if javascript is
 	 * needed for the onsubmit of the form.
 	 */
 	function WYSIWYGPageForm()
@@ -1717,7 +1713,7 @@ class CMSModule
 	 */
 	 function WYSIWYGPageFormSubmit()
 	 {
-	 	return '';
+		return '';
 	 }
 
 	 /**
@@ -1727,7 +1723,7 @@ class CMSModule
 	  */
 	  function WYSIWYGGenerateHeader($htmlresult='')
 	  {
-	  	return '';
+		return '';
 	  }
 
 	 /**
@@ -1735,7 +1731,7 @@ class CMSModule
 	  */
 	  function WYSIWYGGenerateBody()
 	  {
-	  	return '';
+		return '';
 	  }
 
 	/**
@@ -1756,7 +1752,7 @@ class CMSModule
 
 	/**
 	 * Returns whether or not this module should show in any module lists generated by a WYSIWYG.
-     */
+	 */
 	function ShowInWYSIWYG()
 	{
 		return true;
@@ -1769,7 +1765,7 @@ class CMSModule
 	 */
 
 	/**
-	 * Used for navigation between "pages" of a module.  Forms and links should
+	 * Used for navigation between "pages" of a module.	 Forms and links should
 	 * pass an action with them so that the module will know what to do next.
 	 * By default, DoAction will be passed 'default' and 'defaultadmin',
 	 * depending on where the module was called from.  If being used as a module
@@ -1806,10 +1802,10 @@ class CMSModule
 		{
 			$this->curlang = $params['lang'];
 		}
-        if( !isset($params['action']) )
-        {
-            $params['action'] = $name;
-        }
+		if( !isset($params['action']) )
+		{
+			$params['action'] = $name;
+		}
 		return $this->DoAction($name, $id, $params, $returnid);
 	}
 
@@ -1974,7 +1970,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a hidden field.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a hidden field.	This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -1995,7 +1991,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a checkbox.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a checkbox.	This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2020,7 +2016,7 @@ class CMSModule
 
 
 	/**
-	 * Returns the xhtml equivalent of a submit button.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a submit button.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2047,7 +2043,7 @@ class CMSModule
 		}
 		if ($confirmtext != '' )
 		  {
-		    $text .= 'onclick="return confirm(\''.$confirmtext.'\');"';
+			$text .= 'onclick="return confirm(\''.$confirmtext.'\');"';
 		  }
 		if ($addttext != '')
 		{
@@ -2060,7 +2056,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a reset button.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a reset button.	This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2080,7 +2076,7 @@ class CMSModule
 	 }
 
 	/**
-	 * Returns the xhtml equivalent of a file upload input.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a file upload input.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2100,7 +2096,7 @@ class CMSModule
 
 
 	/**
-	 * Returns the xhtml equivalent of a dropdown list.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a dropdown list.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2137,7 +2133,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a multi-select list.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a multi-select list.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
@@ -2157,7 +2153,7 @@ class CMSModule
 		}
 		if( $multiple )
 		  {
-		    $text .= ' multiple="multiple"';
+			$text .= ' multiple="multiple"';
 		  }
 		$text .= 'size="'.$size.'">';
 		$count = 0;
@@ -2179,13 +2175,13 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a set of radio buttons.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of a set of radio buttons.	This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The html name of the radio group
 	 * @param string An array of items to create as radio buttons... they should be $key=>$value pairs
-	 * @param string The default selected index of the radio group.  Setting to -1 will result in the first choice being selected
+	 * @param string The default selected index of the radio group.	 Setting to -1 will result in the first choice being selected
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string A delimiter to throw between each radio button, e.g., a <br /> tag or something for formatting
 	 */
@@ -2211,7 +2207,7 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of a textarea.  Also takes WYSIWYG preference into consideration if it's called from the admin side.
+	 * Returns the xhtml equivalent of a textarea.	Also takes WYSIWYG preference into consideration if it's called from the admin side.
 	 *
 	 * @param bool Should we try to create a WYSIWYG for this textarea?
 	 * @param string The id given to the module on execution
@@ -2220,7 +2216,7 @@ class CMSModule
 	 * @param string The CSS class to associate this textarea to
 	 * @param string The html id to give to this textarea
 	 * @param string The encoding to use for the content
-	 * @param string The text of the stylesheet associated to this content.  Only used for certain WYSIWYGs
+	 * @param string The text of the stylesheet associated to this content.	 Only used for certain WYSIWYGs
 	 * @param string The number of characters wide (columns) the resulting textarea should be
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
@@ -2231,35 +2227,35 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of an href link  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of an href link	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string The action that this form should do when the link is clicked
 	 * @param string The text that will have to be clicked to follow the link
-	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
 	function CreateFrontendLink( $id, $returnid, $action, $contents='', $params=array(), $warn_message='',
-				     $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false, $prettyurl='' )
+					 $onlyhref=false, $inline=true, $addtext='', $targetcontentonly=false, $prettyurl='' )
 	{
 	  return $this->CreateLink( $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref,
-				    $inline, $addtext, $targetcontentonly, $prettyurl );
+					$inline, $addtext, $targetcontentonly, $prettyurl );
 	}
 
 	/**
-	 * Returns the xhtml equivalent of an href link  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of an href link	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the link is clicked
 	 * @param string The id to eventually return to when the module is finished it's task
 	 * @param string The text that will have to be clicked to follow the link
-	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param string Text to display in a javascript warning box.  If they click no, the link is not followed by the browser.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
@@ -2346,48 +2342,48 @@ class CMSModule
 	}
 
 	/**
-	 * Returns the xhtml equivalent of an href link for content links.  This is basically a nice
-         * little wrapper to make sure that we go back to where we want and that it's xhtml complient
-         *
-         * @param string the page id of the page we want to direct to
+	 * Returns the xhtml equivalent of an href link for content links.	This is basically a nice
+		 * little wrapper to make sure that we go back to where we want and that it's xhtml complient
+		 *
+		 * @param string the page id of the page we want to direct to
 	 */
-        function CreateContentLink($pageid,$contents='')
-        {
+		function CreateContentLink($pageid,$contents='')
+		{
 	  global $gCms;
 	  $config = &$gCms->config;
 	  $text = '<a href="';
 	  if ($config["assume_mod_rewrite"])
-	    {
-	      # mod_rewrite
-	      $alias = ContentManager::GetPageAliasFromID( $pageid );
-	      if( $alias == false )
+		{
+		  # mod_rewrite
+		  $alias = ContentManager::GetPageAliasFromID( $pageid );
+		  if( $alias == false )
 		{
 		  return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
 		}
-              else
+			  else
 		{
 		  $text .= $config["root_url"]."/".$alias.
-		    (isset($config['page_extension'])?$config['page_extension']:'.shtml');
+			(isset($config['page_extension'])?$config['page_extension']:'.shtml');
 		}
-	    }
+		}
 	  else
-	    {
-	      # mod rewrite
-	      $text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
-	    }
+		{
+		  # mod rewrite
+		  $text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
+		}
 	  $text .= '">'.$contents.'</a>';
 	  return $text;
 	}
 
 
 	/**
-	 * Returns the xhtml equivalent of an href link for Content links.  This is basically a nice little wrapper
+	 * Returns the xhtml equivalent of an href link for Content links.	This is basically a nice little wrapper
 	 * to make sure that we go back to where we want to and that it's xhtml compliant.
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The id to return to when the module is finished it's task
 	 * @param string The text that will have to be clicked to follow the link
-	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 */
 	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
@@ -2448,7 +2444,7 @@ class CMSModule
 	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the form is submitted
 	 * @param string The id to eventually return to when the module is finished it's task
-	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
 	function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
@@ -2462,7 +2458,7 @@ class CMSModule
 	 * @param string The id given to the module on execution
 	 * @param string The action that this form should do when the form is submitted
 	 * @param string The id to eventually return to when the module is finished it's task
-	 * @param string An array of params that should be inlucded in the URL of the link.  These should be in a $key=>$value format.
+	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 */
 	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
@@ -2513,7 +2509,7 @@ class CMSModule
 	}
 
 	/**
-	 * Redirects the user to a content page outside of the module.  The passed around returnid is
+	 * Redirects the user to a content page outside of the module.	The passed around returnid is
 	 * frequently used for this so that the user will return back to the page from which they first
 	 * entered the module.
 	 *
@@ -2522,7 +2518,7 @@ class CMSModule
 	function RedirectContent($id)
 	{
 		#$content = ContentManager::LoadContentFromId($id);
- 	  global $gCms;
+	  global $gCms;
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($id);
 		$content =& $node->GetContent();
@@ -2576,7 +2572,7 @@ class CMSModule
 	 *
 	 * @param string Id of the string to lookup and return
 	 * @param array Corresponding params for string that require replacement.
-	 *        These params use the vsprintf command and it's style of replacement.
+	 *		  These params use the vsprintf command and it's style of replacement.
 	 */
 	function Lang()
 	{
@@ -2645,7 +2641,7 @@ class CMSModule
 			# try to load an admin modifiable version of the lang file if one exists
 			if( @is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
 			{
- 			        include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+				include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 				$this->langhash = &$lang;
 			}
 		}
@@ -2885,15 +2881,15 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 
-     /**
-      *
-      * Module can spit out extra CSS for the admin side
-      *
-      */
-    function AdminStyle()
-    {
-      return '';
-    }
+	 /**
+	  *
+	  * Module can spit out extra CSS for the admin side
+	  *
+	  */
+	function AdminStyle()
+	{
+	  return '';
+	}
 
 	/**
 	 * Set the content-type header.
@@ -2907,15 +2903,15 @@ class CMSModule
 	}
 
 	/**
-	 * Put an event into the audit (admin) log.  This should be
+	 * Put an event into the audit (admin) log.	 This should be
 	 * done on most admin events for consistency.
 	 */
 	function Audit($itemid, $itemname, $action)
 	{
 		#$userid = get_userid();
 		#$username = $_SESSION["cms_admin_username"];
-        audit($itemid,$itemname,$action);
-    }
+		audit($itemid,$itemname,$action);
+	}
 
 	/**
 	 * Create's a new permission for use by the module.

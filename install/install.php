@@ -609,6 +609,7 @@ function showPageFive() {
 	$newconfig["use_adodb_lite"] = true;
 	$newconfig['internal_pretty_urls'] = true;
 	$newconfig['use_hierarchy'] = true;
+	$newconfig['old_stylesheet'] = false;
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file

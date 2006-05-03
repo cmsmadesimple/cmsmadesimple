@@ -18,71 +18,139 @@
 #
 #$Id$
 
-require_once(dirname(__FILE__)."/include.php");
-
 if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
 {
 	@ini_set( 'zlib.output_compression','Off' );
 }
 
-$templateid = "";
-$mediatype = '';
-$name = '';
-$css = '';
-$nostylesheet = false;
-$stripbackground = false;
+$templateid = '';
 if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
+
+$mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
+
+$name = '';
 if (isset($_GET['name'])) $name = $_GET['name'];
-if (isset($_GET["stripbackground"])) $stripbackground = true;
 
-if ($name != '')
+if ($templateid == '' && $name == '') return '';
+
+require_once('config.php');
+
+$css='';
+
+if (!isset($config['old_stylesheet']) || $config['old_stylesheet'] == false)
 {
-	//TODO: Make stylesheet handling OOP
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
-	$cssresult = &$db->Execute($cssquery, array($name));
 
-	while ($cssresult && !$cssresult->EOF)
+	$encoding = '';
+
+	if ($config['default_encoding'] =='')
+		$encoding = $config['admin_encoding'];
+	else
+		$encoding = $config['default_encoding'];
+
+	if ($encoding=='')
+		$encoding = 'UTF-8';
+
+
+	if ($config['dbms'] == 'mysqli' || $config['dbms'] == 'mysql')
 	{
-		$css .= "\n".$cssresult->fields['css_text']."\n";
-		$cssresult->MoveNext();
+		$db = mysql_connect($config['db_hostname'], $config['db_username'], $config['db_password']);
+		mysql_select_db($config['db_name']);
+		if ($name != '')
+			$sql="SELECT css_text FROM ".$config['db_prefix']."css WHERE css_name = '" . mysql_real_escape_string($name, $db) . "'";
+		else
+			$sql="SELECT c.css_text,c.css_id FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . mysql_real_escape_string($mediatype, $db) . "'";
+		$result=mysql_query($sql);
+		while ($result && $row = mysql_fetch_assoc($result))
+		{
+			$css .= $row['css_text'];
+		}
 	}
+	else
+	{
+		$db=pg_connect("host=".$config['db_hostname']." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
+		$result=pg_query($db, $sql);
+		if ($name != '')
+			$sql="SELECT css_text FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
+		else
+			$sql="SELECT c.css_text,c.css_id FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . pg_escape_string($mediatype) . "'";
+		while ($result && $row = pg_fetch_array($result, null, PGSQL_ASSOC))
+		{
+			$css .= $row['css_text'];
+		}
+	}
+
+	header("Content-Type: text/css; charset=" .$encoding);
+
 }
 else
 {
-	$result = get_stylesheet($templateid, $mediatype);
-	$css = $result['stylesheet']; 
-	if (!isset($result['nostylesheet']))
+
+	require_once(dirname(__FILE__)."/include.php");
+
+	$templateid = "";
+	$mediatype = '';
+	$name = '';
+	$css = '';
+	$nostylesheet = false;
+	$stripbackground = false;
+	if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
+	if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
+	if (isset($_GET['name'])) $name = $_GET['name'];
+	if (isset($_GET["stripbackground"])) $stripbackground = true;
+
+	if ($name != '')
 	{
-		#$nostylesheet = true;
-		#Perform the content stylesheet callback
-		#if ($nostylesheet == false)
-		#{
-			reset($gCms->modules);
-			while (list($key) = each($gCms->modules))
-			{
-				$value =& $gCms->modules[$key];
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->ContentStylesheet($css);
-				}
-			}
-		#}
+		//TODO: Make stylesheet handling OOP
+		global $gCms;
+		$db =& $gCms->GetDb();
+		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
+		$cssresult = &$db->Execute($cssquery, array($name));
+
+		while ($cssresult && !$cssresult->EOF)
+		{
+			$css .= "\n".$cssresult->fields['css_text']."\n";
+			$cssresult->MoveNext();
+		}
 	}
+	else
+	{
+		$result = get_stylesheet($templateid, $mediatype);
+		$css = $result['stylesheet']; 
+		if (!isset($result['nostylesheet']))
+		{
+			#$nostylesheet = true;
+			#Perform the content stylesheet callback
+			#if ($nostylesheet == false)
+			#{
+				reset($gCms->modules);
+				while (list($key) = each($gCms->modules))
+				{
+					$value =& $gCms->modules[$key];
+					if ($gCms->modules[$key]['installed'] == true &&
+						$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->ContentStylesheet($css);
+					}
+				}
+			#}
+		}
+	}
+
+	header("Content-Type: text/css; charset=" . (isset($result['encoding'])?$result['encoding']:'UTF-8'));
+
+	if ($stripbackground)
+	{
+		#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
+		$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
+		$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
+	}
+
 }
 
-#header("Content-Language: " . $current_language);
-header("Content-Type: text/css; charset=" . (isset($result['encoding'])?$result['encoding']:'UTF-8'));
-
-if ($stripbackground)
-{
-	#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
-	$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
-	$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
-}
+#sending content length allows HTTP/1.0 persistent connections
+#(and also breaks if gzip is on)
+#header("Content-Length: ".strlen($css));
 
 #Do cache-control stuff but only if we are running Apache
 if(function_exists('getallheaders'))
@@ -98,13 +166,8 @@ if(function_exists('getallheaders'))
 	}
 	else {
 		header('ETag: "'.$hash.'"');
-		#header("Cache-Control: maxage=".(60*60*24));
 	}
 }
-
-#sending content length allows HTTP/1.0 persistent connections
-#(and also breaks if gzip is on)
-//header("Content-Length: ".strlen($css));
 
 echo $css;
 

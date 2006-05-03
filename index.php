@@ -118,7 +118,7 @@ if (strpos($page, '/') !== FALSE)
 			if (!isset($matches['inline']))
 				$matches['inline'] = 0;
 			if (!isset($matches['returnid']))
-				$matches['returnid'] = ''; #Default page
+				$matches['returnid'] = ''; #Look for default page
 			if (!isset($matches['module']))
 				$matches['module'] = $route->module;
 
@@ -143,6 +143,11 @@ if (strpos($page, '/') !== FALSE)
 				{
 					$_REQUEST[$matches['id'] . $key] = $val;
 				}
+			}
+
+			//Get a decent returnid
+			if ($matches['returnid'] == '') {
+				$matches['returnid'] = ContentManager::GetDefaultPageID();
 			}
 
 			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];

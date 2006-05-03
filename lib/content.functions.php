@@ -628,6 +628,7 @@ function load_plugins(&$smarty)
 	global $gCms;
 	$plugins = &$gCms->cmsplugins;
 	$userplugins = &$gCms->userplugins;
+	$userpluginfunctions = &$gCms->userpluginfunctions;
 	$db = &$gCms->GetDb();
 	if (isset($db))
 	{
@@ -650,6 +651,9 @@ function load_plugins(&$smarty)
 				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
 				{
 					$smarty->register_function($result->fields['userplugin_name'], $functionname, false);
+
+					//Register the function in a hash so that we can call it from other places by name
+					$userpluginfunctions[$result->fields['userplugin_name']] = $functionname;
 				}
 			}
 			$result->MoveNext();

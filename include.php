@@ -49,9 +49,10 @@ require_once($dirname."/lib/misc.functions.php");
 require($dirname."/lib/classes/class.global.inc.php");
 $gCms = new CmsObject();
 
-#Setup hash for storing all modules
+#Setup hash for storing all modules and plugins
 $gCms->cmsmodules = array();
 $gCms->userplugins = array();
+$gCms->userpluginfunctions = array();
 $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
@@ -150,19 +151,6 @@ while ($file = readdir ($handle)) {
    if ($path_parts['extension'] == 'php') include("$dir/$file");
 }
 closedir($handle);
-/*
-$ls = dir($dir);
-while (($file = $ls->read()) != "")
-{
-	if (!@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
-	{
-		if (substr($file,strlen($file)-4,4) == ".php")
-		{
-			include("$dir/$file");
-		}
-	}
-}
-*/
 
 if (!defined('SMARTY_DIR')) {
 	define('SMARTY_DIR', $dirname.'/lib/smarty/');
