@@ -32,13 +32,16 @@ if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
 $name = '';
 if (isset($_GET['name'])) $name = $_GET['name'];
 
+$stripbackground = false;
+if (isset($_GET["stripbackground"])) $stripbackground = true;
+
 if ($templateid == '' && $name == '') return '';
 
 require_once('config.php');
 
 $css='';
 
-if (!isset($config['old_stylesheet']) || $config['old_stylesheet'] == false)
+if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 {
 
 	$encoding = '';
@@ -88,17 +91,6 @@ else
 
 	require_once(dirname(__FILE__)."/include.php");
 
-	$templateid = "";
-	$mediatype = '';
-	$name = '';
-	$css = '';
-	$nostylesheet = false;
-	$stripbackground = false;
-	if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
-	if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
-	if (isset($_GET['name'])) $name = $_GET['name'];
-	if (isset($_GET["stripbackground"])) $stripbackground = true;
-
 	if ($name != '')
 	{
 		//TODO: Make stylesheet handling OOP
@@ -139,18 +131,19 @@ else
 
 	header("Content-Type: text/css; charset=" . (isset($result['encoding'])?$result['encoding']:'UTF-8'));
 
-	if ($stripbackground)
-	{
-		#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
-		$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
-		$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
-	}
 
 }
 
 #sending content length allows HTTP/1.0 persistent connections
 #(and also breaks if gzip is on)
 #header("Content-Length: ".strlen($css));
+
+if ($stripbackground)
+{
+	#$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '', $css);
+	$css = preg_replace('/(\w*?background-color.*?\:\w*?).*?(;.*?)/', '\\1transparent\\2', $css);
+	$css = preg_replace('/(\w*?background-image.*?\:\w*?).*?(;.*?)/', '', $css);
+}
 
 #Do cache-control stuff but only if we are running Apache
 if(function_exists('getallheaders'))
