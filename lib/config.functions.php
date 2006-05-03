@@ -258,7 +258,9 @@ function cms_config_text($config)
 
 #---------------------------------------------
 #Use the old stylesheet logic?  It's much slower, but it works with older
-#versions of CMSMS.  Leave it as false instead you really need it.
+#versions of CMSMS.  You'll also need this set to true if there is a module
+#that uses a stylesheet callback.  Leave it as false instead you really
+#need it.
 \$config['old_stylesheet'] = ${$config['old_stylesheet']?'true':'false'};
 
 #Not used anymore... kept around, just in case
