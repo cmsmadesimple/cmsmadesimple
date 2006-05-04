@@ -41,7 +41,11 @@ function smarty_cms_function_metadata($params, &$smarty)
 		@ob_end_clean();
 	}
 
-	$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	if (!isset($params['showblock']) || $params['showblock'] != 'false')
+	{
+		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	}
+
 	return $result;
 }
 
@@ -52,7 +56,9 @@ function smarty_cms_help_function_metadata() {
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
+	<ul>
+		<li><em>(optional)</em>showblock (true/false) - If set to false, the base tag will not be sent to the browser.  Default to true.</li>
+	</ul>
 	<?php
 }
 
