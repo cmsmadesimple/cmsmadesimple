@@ -18,17 +18,7 @@
 
 function smarty_cms_function_html_blob($params, &$smarty)
 {
-	global $gCms;
-	$config =& $gCms->GetConfig();
-
-	$oldvalue = $smarty->caching;
-	$smarty->caching = false;
-
-	$html = $smarty->fetch('globalcontent:'.$params['name']);
-
-	$smarty->caching = $oldvalue;
-
-	return $html;
+	return $smarty->fetch('globalcontent:'.$params['name']);
 }
 
 function smarty_cms_help_function_html_blob() {

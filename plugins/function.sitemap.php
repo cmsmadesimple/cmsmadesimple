@@ -19,7 +19,6 @@
 function smarty_cms_function_sitemap($params, &$smarty) {
 
         global $gCms;
-        $db =& $gCms->GetDb();
 
         $allcontent = ContentManager::GetAllContent();
 

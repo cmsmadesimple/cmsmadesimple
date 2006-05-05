@@ -20,7 +20,6 @@ function smarty_cms_function_content($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo =& $gCms->variables['pageinfo'];
-	$config =& $gCms->GetConfig();
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
 		$id = '';
@@ -79,7 +78,7 @@ function smarty_cms_function_content($params, &$smarty)
 							{
 								$returnid = $params['returnid'];
 							}
-							else if (isset($pageinfo))
+							else
 							{
 								$returnid = $pageinfo->content_id;
 							}
