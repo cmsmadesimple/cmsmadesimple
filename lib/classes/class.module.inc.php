@@ -1819,11 +1819,12 @@ class CMSModule
 	 * @param string Optional enctype to use, Good for situations where files are being uploaded
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Text to append to the end of the id and name of the form
+	 * @param array Extra parameters to pass along when the form is submitted
 	 */
 	function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
-					 $enctype='',$inline=true,$idsuffix='')
+					 $enctype='',$inline=true,$idsuffix='',$params=array())
 	{
-	  return $this->CreateFormStart($id,$action,$returnid,$method,$post,$enctype,$inline,$idsuffix);
+	  return $this->CreateFormStart($id,$action,$returnid,$method,$post,$enctype,$inline,$idsuffix,$params);
 	}
 
 
@@ -1837,8 +1838,9 @@ class CMSModule
 	 * @param string Optional enctype to use, Good for situations where files are being uploaded
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Text to append to the end of the id and name of the form
+	 * @param array Extra parameters to pass along when the form is submitted
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='')
+	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array())
 	{
 		global $gCms;
 
@@ -1880,6 +1882,11 @@ class CMSModule
 			{
 				$text .= '<input type="hidden" name="'.$this->cms->config['query_var'].'" value="'.$returnid.'" />';
 			}
+		}
+		foreach ($params as $key=>$value)
+		{
+			if ($key != 'module' && $key != 'action' && $key != 'id')
+				$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />';
 		}
 		$text .= "</div>\n";
 

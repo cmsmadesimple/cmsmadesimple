@@ -2335,7 +2335,7 @@ class ContentManager
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		if (!is_numeric($alias) && strpos($alias,'.') == TRUE && strpos($alias,',') == TRUE)
+		if (!is_numeric($id) && strpos($id,'.') == TRUE && strpos($id,',') == TRUE)
 		{
 			return $id;
 		}

@@ -163,7 +163,7 @@ $owners = "<select name=\"owner_id\">";
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
 $result = $db->Execute($query);
 
-while($row = $result->FetchRow())
+while($result && $row = $result->FetchRow())
 {
 	$owners .= "<option value=\"".$row["user_id"]."\"";
 	if ($row["user_id"] == $owner_id)
@@ -180,7 +180,7 @@ $addt_users = "";
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
 $result = $db->Execute($query,array($userid));
 
-while($row = $result->FetchRow())
+while($result && $row = $result->FetchRow())
 {
 	$addt_users .= "<option value=\"".$row["user_id"]."\"";
 	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = ?";

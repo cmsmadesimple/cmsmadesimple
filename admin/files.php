@@ -240,12 +240,10 @@ if ($reldir != '')
 }
 
 #First do dirs
-$ls = dir($dir);
 $dirs = array();
-while (($file = $ls->read()) != "")
-{
-	array_push($dirs, $file);
-}
+$handle = opendir($dir);
+while (false!==($file = readdir($handle))) $dirs[]=$file;
+closedir($handle);
 sort($dirs);
 foreach ($dirs as $file)
 {

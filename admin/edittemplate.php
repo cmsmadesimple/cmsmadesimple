@@ -206,12 +206,9 @@ else
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?";
 		$cssresult = $db->Execute($cssquery,array($template_id));
-		if ($cssresult && $cssresult->RowCount() > 0)
+		while ($cssresult && $cssline = $cssresult->FetchRow())
 		{
-			while ($cssline = $cssresult->FetchRow())
-			{
-				$data["stylesheet"] .= "\n".$cssline['css_text']."\n";
-			}
+			$data["stylesheet"] .= "\n".$cssline['css_text']."\n";
 		}
 
 		$tmpfname = '';

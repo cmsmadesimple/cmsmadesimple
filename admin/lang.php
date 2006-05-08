@@ -29,12 +29,14 @@ if (isset($CMS_ADMIN_PAGE)) {
 
 	#Read in all current languages...
 	$dir = dirname(__FILE__)."/lang";
-	$ls = dir($dir);
-	while (($file = $ls->read()) != "") {
+
+	$handle = opendir($dir);
+	while (false!==($file = readdir($handle))) {
 		if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
 			include("$dir/$file");
 		}
 	}
+	closedir($handle);
 
 	#Check to see if there is already a language in use...
 	if (isset($_POST["default_cms_lang"]))
