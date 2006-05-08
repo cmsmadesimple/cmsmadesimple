@@ -90,6 +90,12 @@ if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
 else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
 {
 	$page = $_GET[$config["query_var"]];
+
+    //trim off the extension, if there is one set
+    if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
+    {   
+        $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
+    }
 }
 else
 {

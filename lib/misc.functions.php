@@ -223,6 +223,9 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 function cms_calculate_url()
 {
 	$result = '';
+	
+    global $gCms;
+    $config =& $gCms->GetConfig();
 
 	//Apache
 	/*
@@ -254,6 +257,12 @@ function cms_calculate_url()
 		{
 			$result = $matches[1];
 		}
+	}
+	
+	//trim off the extension, if there is one set
+	if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
+	{
+		$result = substr($result, 0, strlen($result) - strlen($config['page_extension']));
 	}
 
 	return $result;

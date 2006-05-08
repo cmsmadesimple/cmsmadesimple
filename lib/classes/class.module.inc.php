@@ -2281,7 +2281,7 @@ class CMSModule
 		}
 		else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
 		{
-			$text = $config['root_url'] . '/index.php/' . $prettyurl;
+			$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
 		}
 		else
 		{

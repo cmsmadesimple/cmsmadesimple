@@ -151,8 +151,20 @@ function showPageOne() {
 		$continueon = false;
 	}
 	echo "</td></tr>\n";
+	
+	echo "<tr class=\"row1\"><td>Checking for md5 Function</td><td>";
+	if (function_exists("md5"))
+	{
+		echo "Success!";
+	}
+	else
+	{
+		echo "Failed!";
+		$continueon = false;
+	}
+	echo "</td></tr>\n";
 
-	$currow = "row1";
+	$currow = "row2";
 
     foreach ($files as $f) {
         #echo "<tr><td>\n";

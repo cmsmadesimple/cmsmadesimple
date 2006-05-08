@@ -1253,9 +1253,9 @@ class ContentBase
 			if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
 			{
 				if ($config['use_hierarchy'] == true)
-					$url = $config["root_url"] . '/index.php/' . $this->HierarchyPath();
+					$url = $config["root_url"] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 				else
-					$url = $config['root_url'] . '/index.php/' . $alias;
+					$url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 			}
 			else
 				$url = $config['root_url'] . '/index.php?' . $config["query_var"] . '=' . $alias;

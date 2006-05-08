@@ -9,4 +9,4 @@ RewriteEngine On
 #Rewrites page.shtml as index.php?page
 RewriteCond %{REQUEST_FILENAME} !-f [NC]
 RewriteCond %{REQUEST_FILENAME} !-d [NC]
-RewriteRule ^(.+)\.html$ index.php?page=$1 [QSA]
+RewriteRule ^(.+)$ index.php?page=$1 [QSA]

@@ -461,7 +461,7 @@ class Smarty_CMS extends Smarty {
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-
+		$config =& $gCms->GetConfig();
 		$pageinfo = &$gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
