@@ -98,6 +98,7 @@ $lang['admin']['errorupdatingtemplate'] = 'Error updating template';
 $lang['admin']['errorupdatinguser'] = 'Error updating user';
 $lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
 $lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
+$lang['admin']['export'] = 'Export';
 $lang['admin']['false'] = 'False';
 $lang['admin']['filecreatedirnodoubledot'] = 'Directory cannot contain \'..\'.';
 $lang['admin']['filecreatedirnoname'] = 'Cannot create a directory with no name.';

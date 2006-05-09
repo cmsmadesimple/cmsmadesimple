@@ -390,7 +390,7 @@ else if ($action == 'missingdeps')
 			<th><?php echo lang('action')?></th>
 			<th><?php echo lang('help')?></th>
 			<th><?php echo lang('about')?></th>
-                        <th><img border="0" src="../images/cms/xml_rss.gif" alt="<?php echo lang('xml')?>" /></th>
+            <th><?php echo lang('export')?></th>
 		</tr>
 		</thead>
 		<tbody>
