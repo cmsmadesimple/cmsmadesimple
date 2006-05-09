@@ -1,6 +1,6 @@
-php_flag magic_quotes_gpc Off
-php_flag register_globals Off
-php_flag session.use_trans_sid Off
+#php_flag magic_quotes_gpc Off
+#php_flag register_globals Off
+#php_flag session.use_trans_sid Off
 
 # Make sure you have Options FollowSymLinks
 # and Allow on
