@@ -149,19 +149,16 @@ if ($access)
 					AND		assoc_css_id	=  ?";
 				$cssresult = $db->Execute($cssquery,array($css_id));
 
-				if ($cssresult)
+				# now updating templates
+				while ($cssresult && $line = $cssresult->FetchRow())
 				{
-					# now updating templates
-					while ($line = $cssresult->FetchRow())
-					{
-						$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."' 
-							WHERE template_id = '".$line["assoc_to_id"]."'";
-						$result = $db->Execute($query);
+					$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = '".$db->DBTimeStamp(time())."' 
+						WHERE template_id = '".$line["assoc_to_id"]."'";
+					$result = $db->Execute($query);
 
-						if (FALSE == $result)
-						{
-							$error .= "<li>".lang('errorupdatingtemplate')."</li>";
-						}
+					if (FALSE == $result)
+					{
+						$error .= "<li>".lang('errorupdatingtemplate')."</li>";
 					}
 				}
 					

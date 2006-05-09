@@ -352,7 +352,7 @@ else if ($action == 'missingdeps')
 
 			$query = "SELECT * from ".cms_db_prefix()."modules";
 			$result = $db->Execute($query);
-			while ($row = $result->FetchRow()) {
+			while ($result && $row = $result->FetchRow()) {
 				$dbm[$row['module_name']]['Status'] = $row['status'];
 				$dbm[$row['module_name']]['Version'] = $row['version'];
 				$dbm[$row['module_name']]['Active'] = ($row['active'] == 1?true:false);

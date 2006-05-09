@@ -141,17 +141,14 @@ class BookmarkOperations
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE user_id = ? ORDER BY title";
 		$dbresult = $db->Execute($query, array($user_id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onemark = new Bookmark();
-				$onemark->bookmark_id = $row['bookmark_id'];
-				$onemark->user_id = $row['user_id'];
-				$onemark->url = $row['url'];
-				$onemark->title = $row['title'];
-				array_push($result, $onemark);
-			}
+			$onemark = new Bookmark();
+			$onemark->bookmark_id = $row['bookmark_id'];
+			$onemark->user_id = $row['user_id'];
+			$onemark->url = $row['url'];
+			$onemark->title = $row['title'];
+			array_push($result, $onemark);
 		}
 
 		return $result;
@@ -175,17 +172,14 @@ class BookmarkOperations
 		$query = "SELECT bookmark_id, user_id, title, url FROM ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onemark = new Bookmark();
-				$onemark->bookmark_id = $row['bookmark_id'];
-				$onemark->user_id = $row['user_id'];
-				$onemark->url = $row['url'];
-				$onemark->title = $row['title'];
-				$result = $onemark;
-			}
+			$onemark = new Bookmark();
+			$onemark->bookmark_id = $row['bookmark_id'];
+			$onemark->user_id = $row['user_id'];
+			$onemark->url = $row['url'];
+			$onemark->title = $row['title'];
+			$result = $onemark;
 		}
 
 		return $result;

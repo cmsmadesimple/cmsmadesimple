@@ -129,18 +129,15 @@ class RecentPageOperations
             "admin_recent_pages WHERE user_id = ? ORDER BY access_time DESC";
 		$dbresult = $db->Execute($query, array($user_id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onepage = new RecentPage();
-				$onepage->id = $row['id'];
-				$onepage->user_id = $row['user_id'];
-				$onepage->url = $row['url'];
-				$onepage->title = $row['title'];
-				$onepage->timestamp = $row['access_time'];
-				array_push($result, $onepage);
-			}
+			$onepage = new RecentPage();
+			$onepage->id = $row['id'];
+			$onepage->user_id = $row['user_id'];
+			$onepage->url = $row['url'];
+			$onepage->title = $row['title'];
+			$onepage->timestamp = $row['access_time'];
+			array_push($result, $onepage);
 		}
 
 		return $result;
@@ -190,12 +187,9 @@ class RecentPageOperations
 		$query = "SELECT id FROM ".cms_db_prefix().
             "admin_recent_pages WHERE user_id = ? ORDER BY access_time DESC limit 10000 offset ?";
 		$dbresult = $db->Execute($query, array($user_id,$count));
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				array_push($oldPages, array($row['id']));
-			}
+			array_push($oldPages, array($row['id']));
 		}
 
 		$query = "DELETE FROM ".cms_db_prefix()."admin_recent_pages where id=?";

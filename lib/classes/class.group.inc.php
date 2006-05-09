@@ -99,16 +99,13 @@ class GroupOperations
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onegroup = new Group();
-				$onegroup->id = $row['group_id'];
-				$onegroup->name = $row['group_name'];
-				$onegroup->active = $row['active'];
-				array_push($result, $onegroup);
-			}
+			$onegroup = new Group();
+			$onegroup->id = $row['group_id'];
+			$onegroup->name = $row['group_name'];
+			$onegroup->active = $row['active'];
+			array_push($result, $onegroup);
 		}
 
 		return $result;
@@ -125,16 +122,13 @@ class GroupOperations
 		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onegroup = new Group();
-				$onegroup->id = $row['group_id'];
-				$onegroup->name = $row['group_name'];
-				$onegroup->active = $row['active'];
-				$result = $onegroup;
-			}
+			$onegroup = new Group();
+			$onegroup->id = $row['group_id'];
+			$onegroup->name = $row['group_name'];
+			$onegroup->active = $row['active'];
+			$result = $onegroup;
 		}
 
 		return $result;

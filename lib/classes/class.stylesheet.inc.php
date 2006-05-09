@@ -111,17 +111,14 @@ class StylesheetOperations
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css ORDER BY css_id";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onestylesheet = new Stylesheet();
-				$onestylesheet->id = $row['css_id'];
-				$onestylesheet->name = $row['css_name'];
-				$onestylesheet->value = $row['css_text'];
-				$onestylesheet->media_type = $row['media_type'];
-				array_push($result, $onestylesheet);
-			}
+			$onestylesheet = new Stylesheet();
+			$onestylesheet->id = $row['css_id'];
+			$onestylesheet->name = $row['css_name'];
+			$onestylesheet->value = $row['css_text'];
+			$onestylesheet->media_type = $row['media_type'];
+			array_push($result, $onestylesheet);
 		}
 
 		return $result;
@@ -145,25 +142,22 @@ class StylesheetOperations
 
 	function GetTemplateAssociatedStylesheets($templateid)
 	{
-	  $result = false;
+		$result = false;
 
-	  global $gCms;
-	  $db = &$gCms->GetDb();
+		global $gCms;
+		$db = &$gCms->GetDb();
 
-	  $query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
-              assoc_type = ? AND assoc_to_id = ?';
-	  $dbresult = $db->Execute( $query, array( 'template', $templateid ));
-	  
-	  $result = array();
-	  if( $dbresult && $dbresult->RecordCount() > 0 )
-	    {
-	      while( $row = $dbresult->FetchRow() )
+		$query = 'SELECT assoc_css_id FROM '.cms_db_prefix().'css_assoc WHERE
+		           assoc_type = ? AND assoc_to_id = ?';
+		$dbresult = $db->Execute($query, array('template', $templateid));
+
+		$result = array();
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-		  array_push( $result, $row['assoc_css_id'] );
+			$result[] = $row['assoc_css_id'];
 		}
-	    }
 
-	  return $result;
+		return $result;
 	}
 
 
@@ -183,21 +177,18 @@ class StylesheetOperations
 		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$onestylesheet = new Stylesheet();
-				$onestylesheet->id = $row['css_id'];
-				$onestylesheet->name = $row['css_name'];
-				$onestylesheet->value = $row['css_text'];
-				$onestylesheet->media_type = $row['media_type'];
-				$result =& $onestylesheet;
+			$onestylesheet = new Stylesheet();
+			$onestylesheet->id = $row['css_id'];
+			$onestylesheet->name = $row['css_name'];
+			$onestylesheet->value = $row['css_text'];
+			$onestylesheet->media_type = $row['media_type'];
+			$result =& $onestylesheet;
 
-				if (!isset($cache[$onestylesheet->id]))
-				{
-					$cache[$onestylesheet->id] =& $onestylesheet;
-				}
+			if (!isset($cache[$onestylesheet->id]))
+			{
+				$cache[$onestylesheet->id] =& $onestylesheet;
 			}
 		}
 

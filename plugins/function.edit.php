@@ -19,6 +19,20 @@
 function smarty_cms_function_edit($params, &$smarty)
 {
 	global $gCms;
+
+	if (!check_permission(get_userid(false), 'Modify Any Page')) return;
+
+	$text = isset($params['text']) ? $params['text']:'Edit This Page';
+	if (isset($params["showbutton"]))
+	{
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+	}
+	else
+	{
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
+	}
+	/*
+	global $gCms;
 		
 	$userid = get_userid(false);
 	if(!$userid) return;
@@ -42,6 +56,7 @@ function smarty_cms_function_edit($params, &$smarty)
 	{
 		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'">'.$text.'</a>';
 	}
+	*/
 }
 
 function smarty_cms_help_function_edit() {

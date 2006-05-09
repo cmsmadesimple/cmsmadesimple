@@ -601,7 +601,31 @@ function showPageFive() {
 	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";	
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
 	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
-	$newconfig["max_upload_size"] = 1000000;
+	$maxFileSize = ini_get('upload_max_filesize');
+	if (!is_numeric($maxFileSize))
+	{
+		$l=strlen($maxFileSize);
+		$i=0;$ss='';$x=0;
+		while ($i < $l)
+		{
+			if (is_numeric($maxFileSize[$i]))
+				{$ss .= $maxFileSize[$i];}
+			else
+			{
+				if (strtolower($maxFileSize[$i]) == 'm') $x=1000000;
+				if (strtolower($maxFileSize[$i]) == 'k') $x=1000;
+			}
+			$i ++;
+		}
+		$maxFileSize=$ss;
+		if ($x >0) $maxFileSize = $ss * $x;
+	}
+	else
+	{
+		$maxFileSize = 1000000;
+	}
+	$newconfig["max_upload_size"] = $maxFileSize;
+	//$newconfig["max_upload_size"] = 1000000;
 	$newconfig["debug"] = false;
 	$newconfig["assume_mod_rewrite"] = false;
 	$newconfig["auto_alias_content"] = true;

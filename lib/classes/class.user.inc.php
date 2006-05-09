@@ -180,21 +180,18 @@ class UserOperations
 		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY username";
 		$dbresult = $db->Execute($query);
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneuser = new User();
-				$oneuser->id = $row['user_id'];
-				$oneuser->username = $row['username'];
-				$oneuser->firstname = $row['first_name'];
-				$oneuser->lastname = $row['last_name'];
-				$oneuser->email = $row['email'];
-				$oneuser->password = $row['password'];
-				$oneuser->active = $row['active'];
-				$oneuser->adminaccess = $row['admin_access'];
-				array_push($result, $oneuser);
-			}
+			$oneuser = new User();
+			$oneuser->id = $row['user_id'];
+			$oneuser->username = $row['username'];
+			$oneuser->firstname = $row['first_name'];
+			$oneuser->lastname = $row['last_name'];
+			$oneuser->email = $row['email'];
+			$oneuser->password = $row['password'];
+			$oneuser->active = $row['active'];
+			$oneuser->adminaccess = $row['admin_access'];
+			array_push($result, $oneuser);
 		}
 
 		return $result;
@@ -216,21 +213,18 @@ class UserOperations
 		$query = "SELECT u.user_id, u.username, u.password, u.first_name, u.last_name, u.email, u.active, u.admin_access FROM ".cms_db_prefix()."users u, ".cms_db_prefix()."groups g, ".cms_db_prefix()."user_groups cg where cg.user_id = u.user_id and cg.group_id = g.group_id and g.group_id =? ORDER BY username";
 		$dbresult = $db->Execute($query, array($groupid));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneuser = new User();
-				$oneuser->id = $row['user_id'];
-				$oneuser->username = $row['username'];
-				$oneuser->firstname = $row['first_name'];
-				$oneuser->lastname = $row['last_name'];
-				$oneuser->email = $row['email'];
-				$oneuser->password = $row['password'];
-				$oneuser->active = $row['active'];
-				$oneuser->adminaccess = $row['admin_access'];
-				array_push($result, $oneuser);
-			}
+			$oneuser = new User();
+			$oneuser->id = $row['user_id'];
+			$oneuser->username = $row['username'];
+			$oneuser->firstname = $row['first_name'];
+			$oneuser->lastname = $row['last_name'];
+			$oneuser->email = $row['email'];
+			$oneuser->password = $row['password'];
+			$oneuser->active = $row['active'];
+			$oneuser->adminaccess = $row['admin_access'];
+			array_push($result, $oneuser);
 		}
 
 		return $result;
@@ -305,21 +299,18 @@ class UserOperations
 		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-		if ($dbresult && $dbresult->RecordCount() > 0)
+		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			while ($row = $dbresult->FetchRow())
-			{
-				$oneuser = new User();
-				$oneuser->id = $id;
-				$oneuser->username = $row['username'];
-				$oneuser->password = $row['password'];
-				$oneuser->firstname = $row['first_name'];
-				$oneuser->lastname = $row['last_name'];
-				$oneuser->email = $row['email'];
-				$oneuser->adminaccess = $row['admin_access'];
-				$oneuser->active = $row['active'];
-				$result = $oneuser;
-			}
+			$oneuser = new User();
+			$oneuser->id = $id;
+			$oneuser->username = $row['username'];
+			$oneuser->password = $row['password'];
+			$oneuser->firstname = $row['first_name'];
+			$oneuser->lastname = $row['last_name'];
+			$oneuser->email = $row['email'];
+			$oneuser->adminaccess = $row['admin_access'];
+			$oneuser->active = $row['active'];
+			$result = $oneuser;
 		}
 
 		return $result;

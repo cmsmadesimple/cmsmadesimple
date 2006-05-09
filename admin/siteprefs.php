@@ -132,12 +132,9 @@ $templates['-1'] = 'None';
 $query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
 $result = $db->Execute($query);
 
-if ($result && $result->RowCount() > 0)
+while ($result && $row = $result->FetchRow())
 {
-	while ($row = $result->FetchRow())
-	{
-		$templates[$row['template_id']] = $row['template_name'];
-	}
+	$templates[$row['template_id']] = $row['template_name'];
 }
 
 include_once("header.php");

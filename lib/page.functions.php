@@ -598,12 +598,9 @@ function get_stylesheet($template_id, $media_type = '')
 			AND		c.media_type = ? ORDER BY ca.create_date";
 		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
 
-		if ($cssresult && $cssresult->RecordCount() > 0)
+		while ($cssresult && $cssline = $cssresult->FetchRow())
 		{
-			while ($cssline = $cssresult->FetchRow())
-			{
-				$css .= "\n".$cssline['css_text']."\n";
-			}
+			$css .= "\n".$cssline['css_text']."\n";
 		}
 	}
 	else

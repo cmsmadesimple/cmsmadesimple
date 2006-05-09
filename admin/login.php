@@ -80,11 +80,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$current_version = $CMS_SCHEMA_VERSION;
 	
 		$query = "SELECT version from ".cms_db_prefix()."version";
-		$result = $db->Execute($query);
-		while($row = $result->FetchRow())
-		{
-			$current_version = $row["version"];
-		}
+		$row = $db->GetRow($query);
+		if ($row) $current_version = $row["version"];
 
 		if ($current_version < $CMS_SCHEMA_VERSION)
 		{

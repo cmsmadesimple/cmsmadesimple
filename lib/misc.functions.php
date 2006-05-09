@@ -455,11 +455,10 @@ function debug_output($var, $title="")
 function debug_buffer($var, $title="")
 {
 	global $gCms;
-	$errors = &$gCms->errors;
 
 	if($gCms->config["debug"] == true)
 	{
-		$errors[] = debug_display($var, $title, false, true);
+		$gCms->errors[] = debug_display($var, $title, false, true);
 	}
 }
 
