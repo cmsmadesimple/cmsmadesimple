@@ -138,7 +138,7 @@ if ($access)
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
 		}
-		else
+		else if ($adminaccess)
 		{
 			$contentobj->SetAdditionalEditors(array());
 		}
@@ -186,7 +186,7 @@ if ($access)
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
 		}
-		else
+		else if ($adminaccess)
 		{
 			$contentobj->SetAdditionalEditors(array());
 		}
