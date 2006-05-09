@@ -221,7 +221,7 @@ if ($add) {
 				</a>
 			</span>
 			<span style="margin-right: 30px; float: right; align: right">
-				Selected Items: <select name="multiaction">
+				<?php echo lang("selecteditems"); ?>: <select name="multiaction">
 				<option value="delete"><?php echo lang('delete') ?></option>
 				<option value="active"><?php echo lang('active') ?></option>
 				<option value="inactive"><?php echo lang('inactive') ?></option>
