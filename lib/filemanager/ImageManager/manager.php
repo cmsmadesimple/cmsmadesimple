@@ -2,12 +2,15 @@
 /**
  * The main GUI for the ImageManager.
  * @author $Author: Wei Zhuo $
- * @version $Id: manager.php 26 2004-03-31 02:35:21Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  */
 
 	require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/include.php');
 	check_login();
+	
+	$userid = get_userid();
+	if (!check_permission($userid, 'Modify Files')) die();
 
 	require_once('config.inc.php');
 	require_once('Classes/ImageManager.php');

@@ -234,7 +234,8 @@ if ($reldir != '')
     $dirtext .= "</td>";
 	$dirtext .= '<td><a href="files.php'.$newdir.'">..</a></td>';
 	$dirtext .= "<td>&nbsp;</td>";
-	$dirtext .= "<td>&nbsp;</td>";
+	if ($access)
+		$dirtext .= "<td>&nbsp;</td>";
 	$dirtext .= "</tr>";
 	$row = "row2";
 }
@@ -258,9 +259,12 @@ foreach ($dirs as $file)
             $dirtext .= "</td>";
 			$dirtext .= '<td><a href="files.php?reldir='.$tmp.'">'.$file.'</a></td>';
 			$dirtext .= "<td>&nbsp;</td>";
-			$dirtext .= "<td class=\"pagepos\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\">";
-            $dirtext .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-            $dirtext .= "</a></td>";
+			if ($access)
+			{
+				$dirtext .= "<td class=\"pagepos\"><a href=\"files.php?action=deletedir&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('confirmdeletedir')."');\">";
+	            $dirtext .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+            	$dirtext .= "</a></td>";
+			}
 			$dirtext .= "</tr>";
 			($row=="row1"?$row="row2":$row="row1");
 		}
@@ -306,9 +310,12 @@ foreach ($files as $file)
 					}
 				}
 				$filetext .= "<td>".$sizestr."</td>";
-				$filetext .= "<td><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                $filetext .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                $filetext .= "</a></td>";
+				if ($access)
+				{
+					$filetext .= "<td><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+	                $filetext .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+	                $filetext .= "</a></td>";
+				}
 				$filetext .= "</tr>";
 				($row=="row1"?$row="row2":$row="row1");
 			}
