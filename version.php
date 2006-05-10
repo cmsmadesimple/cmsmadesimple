@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "0.13-beta3";
+$CMS_VERSION = "0.13-beta4";
 $CMS_VERSION_NAME = "Canary";
 $CMS_SCHEMA_VERSION = "19";
 
