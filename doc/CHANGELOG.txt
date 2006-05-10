@@ -37,6 +37,11 @@ different options are
 * Updated adodb lite to 1.20
 * Updated smarty to 2.6.13
 
+Version 0.12.2 "Savusavu" -- May 10 2006
+-----------------
+
+* Fixed security flaw in FCKeditor
+
 Version 0.12.1 "Savusavu" -- Mar 25 2006
 -----------------
 
