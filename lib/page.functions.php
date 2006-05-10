@@ -292,6 +292,15 @@ function author_pages($userid)
 	{
 		$db = &$gCms->GetDb();
 		$variables['authorpages'] = array();
+		
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;
+		$result =& $db->Execute($query);
+		
+		while ($result && !$result->EOF)
+		{
+			$variables['authorpages'][] =& $result->fields['content_id'];
+			$result->MoveNext();
+		}
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
 		$result = &$db->Execute($query, array($userid));
