@@ -7,7 +7,6 @@ if [ "$version" = "" ]; then
 	exit 1
 fi
 
-#perl svncopy.pl --pin-externals http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk/ http://svn.cmsmadesimple.org/svn/cmsmadesimple/tags/version-${version} -m "-- Release ${version} --"
 svn export http://svn.cmsmadesimple.org/svn/cmsmadesimple/trunk cmsmadesimple-${version}
 cd cmsmadesimple-${version}
 sh autogen.sh
