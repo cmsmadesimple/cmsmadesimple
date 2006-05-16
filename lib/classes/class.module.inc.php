@@ -2862,7 +2862,7 @@ class CMSModule
 	function CallUserTag($name, $params = array())
 	{
 		global $gCms;
-		$smarty =& $this->GetSmarty();
+		$smarty =& $this->smarty;
 		$userpluginfunctions =& $gCms->userpluginfunctions;
 		
 		$result = '';
