@@ -140,7 +140,7 @@ function showPageOne() {
 	(@version_compare(phpversion(),"4.2.0") > -1?null:$continueon=false);
 	echo "</td></tr>\n";
 
-	echo "<tr class=\"row2\"><td>Checking for Session Functions</td><td>";
+	echo "<tr class=\"row2\"><td>Checking for session functions</td><td>";
 	if (function_exists("session_start"))
 	{
 		echo "Success!";
@@ -152,7 +152,7 @@ function showPageOne() {
 	}
 	echo "</td></tr>\n";
 	
-	echo "<tr class=\"row1\"><td>Checking for md5 Function</td><td>";
+	echo "<tr class=\"row1\"><td>Checking for md5 function</td><td>";
 	if (function_exists("md5"))
 	{
 		echo "Success!";
@@ -163,8 +163,20 @@ function showPageOne() {
 		$continueon = false;
 	}
 	echo "</td></tr>\n";
+	
+	echo "<tr class=\"row2\"><td>Checking for tokenizer functions</td><td>";
+	if (function_exists("token_get_all"))
+	{
+		echo "Success!";
+	}
+	else
+	{
+		echo "Failed!";
+		$continueon = false;
+	}
+	echo "</td></tr>\n";
 
-	$currow = "row2";
+	$currow = "row1";
 
     foreach ($files as $f) {
         #echo "<tr><td>\n";
