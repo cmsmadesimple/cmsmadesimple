@@ -2870,7 +2870,7 @@ class CMSModule
 		if ($userpluginfunctions[$name] && function_exists($userpluginfunctions[$name]))
 		{
 			$functionname = $userpluginfunctions[$name];
-			$result = call_user_func_array($functionname, array(&$smarty, $params));
+			$result = call_user_func_array($functionname, array($params, &$smarty));
 		}
 		
 		return $result;
