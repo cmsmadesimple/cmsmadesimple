@@ -126,7 +126,7 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('editgroup')?></p>
+	<?php echo $themeObject->ShowHeader('editgroup'); ?>
 	<form method="post" action="editgroup.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>

@@ -68,6 +68,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["use_adodb_lite"] = true;
 	$config["locale"] = "";
 	$config['old_stylesheet'] = true;
+	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
@@ -262,6 +263,9 @@ function cms_config_text($config)
 #that uses a stylesheet callback.  Leave it as false instead you really
 #need it.
 \$config['old_stylesheet'] = ${$config['old_stylesheet']?'true':'false'};
+
+# URL of the Admin Panel section of the User Handbook
+\$config['wiki_url'] = '{$config['wiki_url']}';
 
 #Not used anymore... kept around, just in case
 \$config['disable_htmlarea_translation'] = false;

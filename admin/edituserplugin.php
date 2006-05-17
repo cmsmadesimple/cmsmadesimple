@@ -138,7 +138,7 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang("editusertag")?></p>
+	<?php echo $themeObject->ShowHeader('editusertag'); ?>
 		<form enctype="multipart/form-data" action="edituserplugin.php" method="post">
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>

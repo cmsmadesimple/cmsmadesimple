@@ -177,7 +177,7 @@ else
 
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('addstylesheet')?></p>
+	<?php echo $themeObject->ShowHeader('addstylesheet'); ?>
 		<form method="post" action="addcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>

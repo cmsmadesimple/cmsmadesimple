@@ -72,7 +72,7 @@ if (isset($_GET["message"])) {
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RowCount(), $limit)."</p>";
 	}
 	echo '<form action="multistylesheet.php" method="post">';
-	echo '<p class="pageheader">'.lang('liststylesheets').'</p></div>';
+	echo $themeObject->ShowHeader('liststylesheets').'</div>';
 	if ($result && $result->RowCount() > 0)
 	{
 		# displaying the table header

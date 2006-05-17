@@ -274,8 +274,8 @@ $tabnames = $contentobj->TabNames();
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('editcontent')?></p>
 	<?php
+	echo $themeObject->ShowHeader('editcontent');
 	if (count($tabnames) > 0)
 	{
 	?>

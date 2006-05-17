@@ -115,7 +115,7 @@ if (isset($_GET["message"])) {
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($templatelist), $limit)."</p>";
 	}
-	echo '<p class="pageheader">'.lang('currenttemplates').'</p></div>';
+	echo $themeObject->ShowHeader('currenttemplates').'</div>';
 	if ($templatelist && count($templatelist) > 0) {
 
 		echo '<table cellspacing="0" class="pagetable">';

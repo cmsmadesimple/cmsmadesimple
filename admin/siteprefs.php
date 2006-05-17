@@ -148,7 +148,7 @@ if ($message != "") {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang("siteprefs")?></p>
+	<?php echo $themeObject->ShowHeader('siteprefs'); ?>
 	<form id="siteprefform" method="post" action="siteprefs.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>

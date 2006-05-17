@@ -109,7 +109,7 @@ else
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('addgroup')?></p>
+	<?php echo $themeObject->ShowHeader('addgroup'); ?>
 	<form method="post" action="addgroup.php">
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>

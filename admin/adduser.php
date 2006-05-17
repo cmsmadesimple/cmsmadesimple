@@ -155,7 +155,7 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang("adduser"); ?></p>
+	<?php echo $themeObject->ShowHeader('adduser'); ?>
 	<form method="post" action="adduser.php">		
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>

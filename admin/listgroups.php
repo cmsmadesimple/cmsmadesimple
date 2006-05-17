@@ -52,7 +52,7 @@ include_once("header.php");
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
 	}
-	echo '<p class="pageheader">'.lang('currentgroups').'</p></div>';	
+	echo $themeObject->ShowHeader('currentgroups').'</div>';
 	if (count($grouplist) > 0) {
 
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";

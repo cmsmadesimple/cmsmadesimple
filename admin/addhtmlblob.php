@@ -137,7 +137,7 @@ else
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('addhtmlblob')?></p>
+	<?php echo $themeObject->ShowHeader('addhtmlblob'); ?>
 	<form method="post" action="addhtmlblob.php">
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('name')?>:</p>

@@ -39,7 +39,7 @@ include_once("header.php");
 
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
-echo '<p class="pageheader">'.lang('userdefinedtags').'</p></div>';
+echo $themeObject->ShowHeader('userdefinedtags');
 echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 echo '<thead>';
 echo "<tr>\n";

@@ -104,7 +104,7 @@ if ($error != "")
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('editbookmark')?></p>
+	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
 	<form method="post" action="editbookmark.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('title')?>:</p>

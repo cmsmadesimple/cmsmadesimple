@@ -44,7 +44,7 @@ include_once("header.php");
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($marklist), $limit)."</p>";
 	}
-	echo '<p class="pageheader">'.lang('bookmarks').'</p></div>';
+	echo $themeObject->ShowHeader('bookmarks').'</div>';
 
 	if (count($marklist) > 0) {
 

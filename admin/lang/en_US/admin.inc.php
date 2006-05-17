@@ -4,7 +4,7 @@ $lang['admin']['about'] = 'About';
 $lang['admin']['action'] = 'Action';
 $lang['admin']['active'] = 'Active';
 $lang['admin']['addcontent'] = 'Add New Content';
-$lang['admin']['addcss'] = 'Add New CSS';
+$lang['admin']['addcss'] = 'Add a Stylesheet';
 $lang['admin']['addgroup'] = 'Add New Group';
 $lang['admin']['additionaleditors'] = 'Additional Editors';
 $lang['admin']['addtemplate'] = 'Add New Template';
@@ -345,4 +345,5 @@ $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will
 $lang['admin']['deletetemplate'] = 'Delete Stylesheets';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
+$lang['admin']['siteadmin'] = 'Site Admin'; // Only used by admintheme::ShowHeader
 ?>

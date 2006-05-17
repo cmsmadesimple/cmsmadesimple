@@ -179,7 +179,7 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang("edituser"); ?></p>
+	<?php echo $themeObject->ShowHeader('edituser'); ?>
 	<form method="post" action="edituser.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>

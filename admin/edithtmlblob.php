@@ -206,7 +206,7 @@ else
 
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('edithtmlblob')?></p>
+	<?php echo $themeObject->ShowHeader('edithtmlblob'); ?>
 	<form method="post" action="edithtmlblob.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>

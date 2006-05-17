@@ -79,7 +79,7 @@ if ($error != "")
 
 <div class="pagecontainer">
 	<div class="pageoverflow">
-			<p class="pageheader"><?php echo lang("addbookmark"); ?></p>
+			<?php echo $themeObject->ShowHeader('addbookmark'); ?>
 			<form method="post" action="addbookmark.php">
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('title')?>:</p>

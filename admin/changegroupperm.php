@@ -53,9 +53,8 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('grouppermissions',array($group_name))?></p>
 <?php
-
+	echo $themeObject->ShowHeader('grouppermissions',array($group_name));
     // always display the group pulldown
     $groups = GroupOperations::LoadGroups();
     if (count($groups) > 0)

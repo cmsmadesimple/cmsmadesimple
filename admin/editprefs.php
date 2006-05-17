@@ -91,7 +91,7 @@ if ($error != "") {
 
 <div class="pagecontainer">
 	<div class="pageoverflow">
-		<p class="pageheader"><?php echo lang("userprefs"); ?></p>
+		<?php echo $themeObject->ShowHeader('userprefs'); ?>
 		<form method="post" action="editprefs.php" name="prefsform">
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>

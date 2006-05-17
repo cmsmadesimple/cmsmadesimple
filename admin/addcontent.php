@@ -241,8 +241,8 @@ $tabnames = $contentobj->TabNames();
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('addcontent')?></p>
 	<?php
+	echo $themeObject->ShowHeader('addcontent');
 	if (count($tabnames) > 0)
 	{
 	?>

@@ -52,7 +52,7 @@ $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY t
 if ($result && $result->RowCount() > 0) {
 	$page_string = pagination($page, $totalrows, $limit);
 	echo "<p class=\"pageshowrows\">".$page_string."</p>";
-	echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+	echo $themeObject->ShowHeader('adminlog').'</div>';
 
 	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	echo '<thead>';

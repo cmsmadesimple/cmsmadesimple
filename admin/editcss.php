@@ -230,7 +230,7 @@ else
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('editstylesheet')?></p>
+	<?php echo $themeObject->ShowHeader('editstylesheet'); ?>
 	<form method="post" action="editcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>

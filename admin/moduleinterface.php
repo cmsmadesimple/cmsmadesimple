@@ -86,7 +86,7 @@ if (count($gCms->modules) > 0)
     {
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
-	echo '<p class="pageheader">'.$gCms->modules[$module]['object']->GetFriendlyName().'</p></div>';
+	echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName()).'</div>';
     }
 
 	if (isset($gCms->modules[$module]))

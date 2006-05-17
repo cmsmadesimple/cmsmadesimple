@@ -204,7 +204,7 @@ if ($errors != "")
 }
 
 echo '<div class="pagecontainer">';
-echo '<p class="pageheader">'.lang("filemanagement").'</p>';
+echo $themeObject->ShowHeader('filemanagement');
 echo '<p class="pagesubtitle">'.lang('currentdirectory').': '.($reldir==""?"/":$reldir)."</p>";
 echo '<table cellspacing="0" class="pagetable">'."\n";
 echo '<thead>';

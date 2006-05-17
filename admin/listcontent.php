@@ -432,7 +432,7 @@ if ($limit != 0 && $counter > $limit)
 	$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
 }
 
-$headoflist .= '<p class="pageheader">'.lang('currentpages').'</p></div>';
+$headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
 if ($counter)
 {
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";

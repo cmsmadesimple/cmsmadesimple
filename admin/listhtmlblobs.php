@@ -47,7 +47,7 @@ if (isset($_GET["message"])) {
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
 	echo "<p class=\"pageshowrows\">".pagination($page, count($htmlbloblist), $limit)."</p>";
-	echo '<p class="pageheader">'.lang('htmlblobs').'</p></div>';
+	echo $themeObject->ShowHeader('htmlblobs').'</div>';
 
 	if ($htmlbloblist && count($htmlbloblist) > 0) {
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";

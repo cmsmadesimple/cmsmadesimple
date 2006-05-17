@@ -228,7 +228,7 @@ if ($errors != "")
 }
 
 echo '<div class="pagecontainer">';
-echo '<p class="pageheader">'.lang("imagemanagement").'</p>';
+echo $themeObject->ShowHeader('imagemanagement');
 
 ?>
 <iframe class="imageframe" src="../lib/filemanager/ImageManager/images.php?dir=<?php echo "$reldir" ?>" name="imgManager" title="Image Selection"></iframe>

@@ -624,7 +624,7 @@ class AdminTheme
             'pages'=>array('url'=>'listcontent.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('pages')),
                     'description'=>lang('pagesdescription'),'show_in_menu'=>$this->HasPerm('pagePerms')),
-            'addpage'=>array('url'=>'addcontent.php','parent'=>'pages',
+            'addcontent'=>array('url'=>'addcontent.php','parent'=>'pages',
                     'title'=>$this->FixSpaces(lang('addcontent')),
                     'description'=>lang('addcontent'),'show_in_menu'=>false),
             'editpage'=>array('url'=>'editcontent.php','parent'=>'pages',
@@ -633,35 +633,35 @@ class AdminTheme
             'files'=>array('url'=>'files.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('filemanager')),
                     'description'=>lang('filemanagerdescription'),'show_in_menu'=>$this->HasPerm('filePerms')),
-            'images'=>array('url'=>'imagefiles.php','parent'=>'content',
+            'imagemanager'=>array('url'=>'imagefiles.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('imagemanager')),
                     'description'=>lang('imagemanagerdescription'),'show_in_menu'=>$this->HasPerm('filePerms')),
-            'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'content',
+            'htmlblobs'=>array('url'=>'listhtmlblobs.php','parent'=>'content',
                     'title'=>$this->FixSpaces(lang('htmlblobs')),
                     'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->HasPerm('htmlPerms')),
-            'addblob'=>array('url'=>'addhtmlblob.php','parent'=>'blobs',
+            'addhtmlblob'=>array('url'=>'addhtmlblob.php','parent'=>'htmlblobs',
                     'title'=>$this->FixSpaces(lang('addhtmlblob')),
                     'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
-            'editblob'=>array('url'=>'edithtmlblob.php','parent'=>'blobs',
+            'edithtmlblob'=>array('url'=>'edithtmlblob.php','parent'=>'htmlblobs',
                     'title'=>$this->FixSpaces(lang('edithtmlblob')),
                     'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
              // base layout menu ---------------------------------------------------------
             'layout'=>array('url'=>'toplayout.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('layout')),
                     'description'=>lang('layoutdescription'),'show_in_menu'=>$this->HasPerm('layoutPerms')),
-            'template'=>array('url'=>'listtemplates.php','parent'=>'layout',
+            'templates'=>array('url'=>'listtemplates.php','parent'=>'layout',
                     'title'=>$this->FixSpaces(lang('templates')),
                     'description'=>lang('templatesdescription'),'show_in_menu'=>$this->HasPerm('templatePerms')),
-            'addtemplate'=>array('url'=>'addtemplate.php','parent'=>'template',
+            'addtemplate'=>array('url'=>'addtemplate.php','parent'=>'templates',
                     'title'=>$this->FixSpaces(lang('addtemplate')),
                     'description'=>lang('addtemplate'),'show_in_menu'=>false),
-            'edittemplate'=>array('url'=>'edittemplate.php','parent'=>'template',
+            'edittemplate'=>array('url'=>'edittemplate.php','parent'=>'templates',
                     'title'=>$this->FixSpaces(lang('edittemplate')),
                     'description'=>lang('edittemplate'),'show_in_menu'=>false),
-            'listcssassoc'=>array('url'=>'listcssassoc.php','parent'=>'template',
+            'currentassociations'=>array('url'=>'listcssassoc.php','parent'=>'templates',
                     'title'=>$this->FixSpaces(lang('currentassociations')),
                     'description'=>lang('currentassociations'),'show_in_menu'=>false),
-            'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
+            'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'templates',
                     'title'=>$this->FixSpaces(lang('copytemplate')),
                     'description'=>lang('copytemplate'),'show_in_menu'=>false),
             'stylesheets'=>array('url'=>'listcss.php','parent'=>'layout',
@@ -699,7 +699,7 @@ class AdminTheme
             'editgroup'=>array('url'=>'editgroup.php','parent'=>'groups',
                     'title'=>$this->FixSpaces(lang('editgroup')),
                     'description'=>lang('editgroup'),'show_in_menu'=>false),
-            'groupmembers'=>array('url'=>'changegroupassign.php','parent'=>'usersgroups',
+            'groupassignments'=>array('url'=>'changegroupassign.php','parent'=>'usersgroups',
                     'title'=>$this->FixSpaces(lang('groupassignments')),
                     'description'=>lang('groupassignmentdescription'),'show_in_menu'=>$this->HasPerm('groupMemberPerms')),                    
             'groupperms'=>array('url'=>'changegroupperm.php','parent'=>'usersgroups',
@@ -1340,6 +1340,81 @@ class AdminTheme
             }
         $retStr .= ' />';
         return $retStr;
+    }
+
+    /**
+     * ShowHeader
+     * Outputs the page header title along with a help link to that section in the wiki.
+     * 
+     * @param title - page heading title
+     */
+    function ShowHeader($title_name, $extra_lang_param=array())
+    {
+        // Don't make link if this is a module's Friendly name
+        // (We can't link to help for modules)  
+        if (FALSE == preg_match('/^[A-Z]$/', substr($title_name, 0, 1)))
+        { 
+            // Include English translation of titles. (Can't find better way to get them)
+            $dirname = dirname(__FILE__);
+            include($dirname.'/../../admin/lang/en_US/admin.inc.php');
+            $wikiUrl = $this->cms->config['wiki_url'];
+            foreach ($this->breadcrumbs AS $key => $value)
+            {
+                $title = $value['title'];
+                // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
+                $colonLocation = strrchr($title, ':');
+                if($colonLocation !== false)
+                {
+                    $title = substr($title, 0, -strlen($colonLocation));
+                }
+                // Get the key of the title so we can use the en_US version for the URL 		
+                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems); 
+                $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
+            }
+            // Clean up URL
+            $wikiUrl = str_replace(' ', '_', $wikiUrl);
+            $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+            // Make link to go the translated version of page if lang is not en_US
+            /* Disabled as suggested by westis
+            $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+            if ($lang != 'en_US') {
+                $wikiUrl .= '/'.substr($lang, 0, 2);
+            }
+            */
+            $header  = '<p class="pageheader">'.lang($title_name, $extra_lang_param);
+            $header .= ' <a href="'.$wikiUrl.'" target="_blank">('.lang('help').')</a></p>';
+        } else {
+            $header  = '<p class="pageheader">'.$title_name.'</p>';
+        } 
+        return $header;
+    }
+
+    /**
+     * _ArraySearchRecursive
+     * recursively descend an arbitrarily deep multidimensional
+     * array, stopping at the first occurence of scalar $needle.
+     * return the path to $needle as an array (list) of keys
+     * if not found, return null.
+     * (will infinitely recurse on self-referential structures)
+     * From: http://us3.php.net/function.array-search
+     */
+    function _ArraySearchRecursive($needle, $haystack)
+    {
+       $path = NULL;
+       $keys = array_keys($haystack);
+       while (!$path && (list($toss,$k)=each($keys))) {
+         $v = $haystack[$k];
+         if (is_scalar($v)) {
+             if ($v===$needle) {
+               $path = array($k);
+             }
+         } elseif (is_array($v)) {
+             if ($path=$this->_ArraySearchRecursive( $needle, $v )) {
+               array_unshift($path,$k);
+             }
+         }
+       }
+       return $path;
     }
 
 }

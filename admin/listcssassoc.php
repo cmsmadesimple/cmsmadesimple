@@ -121,7 +121,7 @@ else {
 ?>
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('currentassociations')?></p>
+	<?php echo $themeObject->ShowHeader('currentassociations'); ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?> :</p>
 			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>

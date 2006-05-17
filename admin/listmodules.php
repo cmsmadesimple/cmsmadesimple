@@ -379,7 +379,7 @@ else if ($action == 'missingdeps')
 
 		?>
 
-	<?php echo '<p class="pageheader">'.lang('modules').'</p></div>'; ?>
+	<?php echo $themeObject->ShowHeader('modules').'</div>'; ?>
 	<table cellspacing="0" class="pagetable">
 		<thead>
 		<tr>

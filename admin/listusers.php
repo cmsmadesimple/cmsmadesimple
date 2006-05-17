@@ -55,7 +55,7 @@ if (isset($_GET["message"])) {
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
 	}
-	echo '<p class="pageheader">'.lang('currentusers').'</p></div>';
+	echo $themeObject->ShowHeader('currentusers').'</div>';
 	if ($userlist && count($userlist) > 0){
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
