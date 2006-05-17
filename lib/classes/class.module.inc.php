@@ -2852,7 +2852,7 @@ class CMSModule
 
 		while ($result && !$result->EOF)
 		{
-			$plugins[] =& $result->fields['userplugin_name'];
+			$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
 			$result->MoveNext();
 		}
 		
