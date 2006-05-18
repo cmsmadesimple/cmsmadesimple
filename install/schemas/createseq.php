@@ -30,13 +30,6 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 
 	echo "[done]</p>";
 
-	echo "<p>Creating content_props table sequence...";
-
-	$max = $db->GetOne("SELECT max(content_prop_id) from ".$db_prefix."content_props");
-	$db->CreateSequence($db_prefix."content_props_seq", (int)$max+1);
-
-	echo "[done]</p>";
-
 	echo "<p>Creating css table sequence...";
 
 	$max = $db->GetOne("SELECT max(css_id) from ".$db_prefix."css");

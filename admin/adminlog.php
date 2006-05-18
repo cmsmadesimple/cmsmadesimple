@@ -90,7 +90,7 @@ if ($result && $result->RowCount() > 0) {
 		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
 	}
 
-if ($access && $result->RowCount() > 0) {
+if ($access && $result && $result->RowCount() > 0) {
 	echo '<div class="pageoptions">';
 	echo '<p class="pageoptions">';
 	echo '<a href="adminlog.php?clear=true">';
