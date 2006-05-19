@@ -192,6 +192,13 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$gCms->variables['page_name'] = $pageinfo->content_alias;
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 	$gCms->variables['friendly_position'] = ContentManager::CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
+	
+	$smarty->assign('content_id', $pageinfo->config_id);
+	$smarty->assign('page', $page);
+	$smarty->assign('page_id', $page);	
+	$smarty->assign('page_name', $pageinfo->content_alias);
+	$smarty->assign('position', $pageinfo->content_hierarchy);
+	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
 }
 else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
 {

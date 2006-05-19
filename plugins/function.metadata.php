@@ -40,8 +40,29 @@ function smarty_cms_function_metadata($params, &$smarty)
 		$result = @ob_get_contents();
 		@ob_end_clean();
 	}
+	
+	$showbase = true;
+	
+	//Write logic out long hand to make sure it's easy to maintain
+	//Basically, showbase takes precedence
+	//If it's not set, then look at use_hierarchy and internal_pretty_urls in config.php
+	//and decide what to do
+	if (isset($params['showbase']))
+	{
+		if ($params['showbase'] == 'false')
+		{
+			$showbase = false;
+		}
+	}
+	else
+	{
+		if ($config['use_hierarchy'] != true || $config['internal_pretty_urls'] != true)
+		{
+			$showbase = false;
+		}
+	}
 
-	if (!isset($params['showblock']) || $params['showblock'] != 'false')
+	if ($showbase)
 	{
 		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
 	}
@@ -57,7 +78,7 @@ function smarty_cms_help_function_metadata() {
 	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>showblock (true/false) - If set to false, the base tag will not be sent to the browser.  Default to true.</li>
+		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy or internal_pretty_urls are set to true in config.php.</li>
 	</ul>
 	<?php
 }
