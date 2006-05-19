@@ -345,5 +345,9 @@ $lang['admin']['wontdeletetemplateinuse'] = 'These templates are in use and will
 $lang['admin']['deletetemplate'] = 'Delete Stylesheets';
 $lang['admin']['stylesheetstodelete'] = 'These stylesheets will be deleted';
 $lang['admin']['sitename'] = 'Site Name';
-$lang['admin']['siteadmin'] = 'Site Admin'; // Only used by admintheme::ShowHeader
+// Only used by admintheme::ShowHeader
+$lang['admin']['siteadmin'] = $lang['admin']['admin'];
+$lang['admin']['images'] = $lang['admin']['imagemanager'];
+$lang['admin']['blobs'] = $lang['admin']['htmlblobs'];
+$lang['admin']['groupmembers'] = $lang['admin']['groupassignments'];
 ?>
