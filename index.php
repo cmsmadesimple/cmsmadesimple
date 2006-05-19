@@ -193,7 +193,7 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
 	$gCms->variables['friendly_position'] = ContentManager::CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
 	
-	$smarty->assign('content_id', $pageinfo->config_id);
+	$smarty->assign('content_id', $pageinfo->content_id);
 	$smarty->assign('page', $page);
 	$smarty->assign('page_id', $page);	
 	$smarty->assign('page_name', $pageinfo->content_alias);
