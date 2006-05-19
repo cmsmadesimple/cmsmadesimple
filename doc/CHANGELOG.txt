@@ -1,4 +1,4 @@
-Version 0.13 "Canary" -- Subversion
+Version 0.13 "Canary" -- May 18 2006
 -----------------
 
 * Added bulk delete/active/inactive of templates
