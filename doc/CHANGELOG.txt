@@ -1,3 +1,10 @@
+Version 0.14 "Barbados" -- Subversion
+-----------------
+
+* Fixed a bug in the metadata tag where showbase would
+default to false, even when it should be true
+* Fixed a bug with displaying a few admin images
+
 Version 0.13 "Canary" -- May 18 2006
 -----------------
 

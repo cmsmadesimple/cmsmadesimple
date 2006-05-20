@@ -67,7 +67,6 @@ require_once($dirname.'/include.php'); #Makes gCms object
 
 $params = array_merge($_GET, $_POST);
 
-global $gCms;
 $smarty = &$gCms->smarty;
 $smarty->params = $params;
 

@@ -56,7 +56,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 	}
 	else
 	{
-		if ($config['use_hierarchy'] != true || $config['internal_pretty_urls'] != true)
+		if ($config['internal_pretty_urls'] != true)
 		{
 			$showbase = false;
 		}

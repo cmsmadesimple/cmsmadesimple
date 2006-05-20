@@ -44,7 +44,8 @@ elseif (isset($_REQUEST['mact']))
 if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
 	$userid = get_userid();
-	if (get_preference($userid, 'use_wysiwyg') == "1") {
+	if (get_preference($userid, 'use_wysiwyg') == "1")
+	{
 		$htmlarea_flag = "true";
 		$htmlarea_replaceall = true;
 	}
@@ -66,43 +67,45 @@ else if (isset($_REQUEST['disable_buffer']))
 
 $USE_THEME = true;
 if( isset( $_REQUEST[$id . 'disable_theme'] ))
-  {
-    $USE_THEME = false;
-  }
+{
+	$USE_THEME = false;
+}
 else if( isset( $_REQUET['disable_theme'] ))
-  {
-    $USE_THEME = false;
-  }
+{
+	$USE_THEME = false;
+}
 
 include_once("header.php");
 
 if (count($gCms->modules) > 0)
 {
-  if (isset($USE_THEME) && $USE_THEME == false)
-    {
-      echo '';
-    }
-  else
-    {
-	echo '<div class="pagecontainer">';
-	echo '<div class="pageoverflow">';
-	echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName()).'</div>';
-    }
+	if (isset($USE_THEME) && $USE_THEME == false)
+	{
+		echo '';
+	}
+	else
+	{
+		echo '<div class="pagecontainer">';
+		echo '<div class="pageoverflow">';
+		echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName()).'</div>';
+	}
 
 	if (isset($gCms->modules[$module]))
 	{
-	  if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
-	    @ob_start();
-	  }
+		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+		{
+			@ob_start();
+		}
 		$id = 'm1_';
 		$params = @ModuleOperations::GetModuleParameters($id);
 		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
-	  if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false)) {
-	    $content = @ob_get_contents();
-	    @ob_end_clean();
-	    echo $content;
-	  }
-	  echo '</div>';
+		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
+		{
+			$content = @ob_get_contents();
+			@ob_end_clean();
+			echo $content;
+		}
+		echo '</div>';
 	}
 	else
 	{
@@ -111,13 +114,13 @@ if (count($gCms->modules) > 0)
 }
 
 if (isset($USE_THEME) && $USE_THEME == false)
-  {
-    echo '';
-  }
+{
+	echo '';
+}
 else
-  {
-    echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-  }
+{
+	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+}
 
 include_once("footer.php");
 
