@@ -52,6 +52,32 @@ class Events
 
 
   /**
+   * Get a list of all of the known events
+   *
+   * @returns mixed If successful, a list of all the known events.  If it fails, false
+   */
+  function ListEvents()
+  {
+    global $gCms;
+    $db = &$gCms->GetDb();
+
+    $q = "SELECT * FROM ".cms_db_prefix()."eventhandlers";
+    $dbresult = $db->Execute( $q );
+    if( $dbresult == false )
+      {
+	return false;
+      }
+
+    $result = array();
+    while( $row = $dbresult->FetchRow() )
+      {
+	$result[] = $row;
+      }
+    return $result;
+  }
+
+
+  /**
    * Set an event handler for a module event
    *
    * @params string $modulename The name of the module sending the event
@@ -93,7 +119,7 @@ class Events
           SET handler_name = ?
           WHERE module_name = ? AND event_name = ?";
     $dbresult = $db->Execute( $q, array( null, $modulename, $eventname ) );
-    if( $dbresult !== false )
+    if( $dbresult == false )
       {
 	return true;
       }

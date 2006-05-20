@@ -3120,21 +3120,29 @@ class CMSModule
 	 * Event Handler Related functions
 	 * ------------------------------------------------------------------
 	 */
+
+
 	function CreateEvent( $name )
 	{
 	  $db =& $this->GetDb();
 	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers 
              values (?,?,?)";
-          $db->Execute( $db, array( $this->GetName(), $name, null ));
+          $db->Execute( $q, array( $this->GetName(), $name, null ));
 	}
 
+
+	// must be over-ridden
+	function GetEventDescription( $name )
+	{
+	  return "";
+	}
 
 	function RemoveEvent( $name )
 	{
 	  $db =& $this->GetDb();
 	  $q = "DELETE FROM ".cms_db_prefix()."eventhandlers WHERE
                 module_name = ? AND event_name = ?";
-	  $db->Execute( $db, array( $this->GetName(), $name ));
+	  $db->Execute( $q, array( $this->GetName(), $name ));
 	}
 
 
@@ -3143,7 +3151,7 @@ class CMSModule
 	  $db =& $this->GetDb();
 	  $q = "SELECT handler_name FROM ".cms_db_prefix()."eventhandlers WHERE
                 module_name = ? AND event_name = ?";
-          $dbresult = $db->Execute( $db, array( $this->GetName( $name ), $name ) );
+          $dbresult = $db->Execute( $q, array( $this->GetName( $name ), $name ) );
 	  if( $dbresult && ($dbresult->RowCount() == 1) )
 	    {
 	      $row = $dbresult->FetchRow();

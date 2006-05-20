@@ -128,6 +128,8 @@ require($dirname.'/lib/classes/class.contenthierarchymanager.inc.php');
 require($dirname."/lib/translation.functions.php");
 require($dirname."/lib/classes/class.bookmark.inc.php");
 require($dirname."/lib/classes/class.group.inc.php");
+require($dirname."/lib/classes/class.events.inc.php");
+require($dirname."/lib/classes/class.usertags.inc.php");
 
 debug_buffer('done loading files');
 

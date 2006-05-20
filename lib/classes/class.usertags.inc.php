@@ -35,6 +35,7 @@ class UserTags
    */
   function AddUserTag( $name, $text )
   {
+    // todo
   }
 
 
@@ -47,6 +48,7 @@ class UserTags
    */
   function GetUserTag( $name )
   {
+    // todo
   }
 
 
@@ -59,6 +61,7 @@ class UserTags
    */
   function RemoveUserTag( $name )
   {
+    // todo
   }
 
 
@@ -69,6 +72,21 @@ class UserTags
    */
   function ListUserTags()
   {
+    global $gCms;
+    $db =& $gCms->GetDb();
+    
+    $plugins = array();
+    
+    $query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
+    $result = &$db->Execute($query);
+    
+    while ($result && !$result->EOF)
+      {
+	$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
+	$result->MoveNext();
+      }
+    
+    return $plugins;
   }
 
 } // class

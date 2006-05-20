@@ -23,6 +23,23 @@ $CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
 
+function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
+{
+  $text  = '<select name="'.$name.'">';
+  foreach( $usertags as $key => $value )
+    {
+      $text .= '<option value="'.$value.'"';
+      if( $selitem == $value )
+	{
+	  $text .= ' selected="selected"';
+	}
+      $text .= '>'.$key;
+      $text .= '</option>';
+    }
+  $text .= '</select>';
+  return $text;
+}
+
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
 
@@ -33,6 +50,40 @@ include_once("header.php");
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
+
+$tmp1 = array('None' => null);
+$tmp2 = UserTags::ListUserTags();
+$tags = array_merge( $tmp1, $tmp2 );
+$events = Events::ListEvents();
+
+echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+echo '<thead>';
+echo "  <tr>\n";
+echo "    <th>".lang('module')."</th>\n";
+echo "    <th>".lang('event')."</th>\n";
+echo "    <th>".lang('description')."</th>";
+echo "    <th>".lang('handler')."</th>";
+echo "  </tr>\n";
+echo '</thead>';
+echo '<tbody>';
+
+if( is_array($events) )
+  {
+    $rowclass = 'row1';
+    foreach( $events as $oneevent )
+      {
+	echo "  <tr>\n";
+	echo "    <td>".$oneevent['module_name']."</td>\n";
+	echo "    <td>".$oneevent['event_name']."</td>\n";
+	echo "    <td>".$gCms->modules[$oneevent['module_name']]['object']->GetEventDescription($oneevent['event_name']);
+	echo "    <td>".eventhandler_usertag_dropdown( $oneevent['module_name'].'_'.$oneevent['event_name'],
+						       $oneevent['handler_name'], $tags );
+	echo "  </tr>\n"; 
+      }
+  }
+
+
+echo '</tbody>';
 echo '</div>';
 echo '</div>';
 
