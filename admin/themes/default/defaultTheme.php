@@ -191,49 +191,49 @@ class defaultTheme extends AdminTheme
 	
 	function DisplayAllSectionPages()
 	{
-        foreach ($this->menuItems as $thisSection=>$menuItem)
+	  foreach ($this->menuItems as $thisSection=>$menuItem)
             {
-            if ($menuItem['parent'] != -1)
+	      if ($menuItem['parent'] != -1)
             	{
-            	continue;
+		  continue;
             	}
-            if (! $menuItem['show_in_menu'])
+	      if (! $menuItem['show_in_menu'])
                 {
-                continue;
+		  continue;
                 }
-            if ($menuItem['url'] == 'index.php'  || strlen($menuItem['url']) < 1)
+	      if ($menuItem['url'] == 'index.php'  || strlen($menuItem['url']) < 1)
             	{
-            	continue;
+		  continue;
             	}
-				
-            echo "<div class=\"itemmenucontainer\">";
-            echo '<div class="itemoverflow">';
-			echo '<p class="itemicon">';
-            $iconSpec = $thisSection;
-            if ($menuItem['url'] == '../index.php')
+	      
+	      echo "<div class=\"itemmenucontainer\">";
+	      echo '<div class="itemoverflow">';
+	      echo '<p class="itemicon">';
+	      $iconSpec = $thisSection;
+	      if ($menuItem['url'] == '../index.php')
                 {
-                $iconSpec = 'viewsite';
+		  $iconSpec = 'viewsite';
                 }
-		    echo '<a href="'.$menuItem['url'].'">';
-            echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', $iconSpec, '', '', 'itemicon');
-            echo '</a>';
-			echo '</p>';
-			echo '<p class="itemtext">';
-            echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
-			if (array_key_exists('target', $menuItem))
-				{
-				echo ' rel="external"';
-				}
-
-            echo ">".$menuItem['title']."</a><br />\n";
-            if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
+	      echo '<a href="'.$menuItem['url'].'">';
+	      echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', $iconSpec, '', '', 'itemicon');
+	      echo '</a>';
+	      echo '</p>';
+	      echo '<p class="itemtext">';
+	      echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
+	      if (array_key_exists('target', $menuItem))
+		{
+		  echo ' rel="external"';
+		}
+	      
+	      echo ">".$menuItem['title']."</a><br />\n";
+	      if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
                 {
-                echo $menuItem['description']."<br />";
+		  echo $menuItem['description']."<br />";
                 }
-            $this->ListSectionPages($thisSection);
-			echo '</p>';
-            echo "</div>";
-			echo '</div>';
+	      $this->ListSectionPages($thisSection);
+	      echo '</p>';
+	      echo "</div>";
+	      echo '</div>';
             }
     }
 

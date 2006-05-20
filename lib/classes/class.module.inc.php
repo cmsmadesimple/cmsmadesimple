@@ -3113,6 +3113,53 @@ class CMSModule
 
 		return $page_string;
 	}
+
+
+	/**
+	 * ------------------------------------------------------------------
+	 * Event Handler Related functions
+	 * ------------------------------------------------------------------
+	 */
+	function CreateEvent( $name )
+	{
+	  $db =& $this->GetDb();
+	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers 
+             values (?,?,?)";
+          $db->Execute( $db, array( $this->GetName(), $name, null ));
+	}
+
+
+	function RemoveEvent( $name )
+	{
+	  $db =& $this->GetDb();
+	  $q = "DELETE FROM ".cms_db_prefix()."eventhandlers WHERE
+                module_name = ? AND event_name = ?";
+	  $db->Execute( $db, array( $this->GetName(), $name ));
+	}
+
+
+	function SendEvent( $name, $params )
+	{
+	  $db =& $this->GetDb();
+	  $q = "SELECT handler_name FROM ".cms_db_prefix()."eventhandlers WHERE
+                module_name = ? AND event_name = ?";
+          $dbresult = $db->Execute( $db, array( $this->GetName( $name ), $name ) );
+	  if( $dbresult && ($dbresult->RowCount() == 1) )
+	    {
+	      $row = $dbresult->FetchRow();
+	      $fn = $row['handler_name'];
+	      if( $fn != '' )
+		{
+		  $this->CallUserTag( $fn, $params );
+		}
+	    }
+	}
+
+	// todo, add functions into other files
+	// AddUserTag, RemoveUserTag, SetEventHandler
+	// GetEventHandler
+
+
 }
 
 /**
@@ -3142,6 +3189,7 @@ class CMSModuleContentType extends ContentBase
 			return 'ModuleName() not defined properly';
 		}
 	}
+
 }
 
 # vim:ts=4 sw=4 noet

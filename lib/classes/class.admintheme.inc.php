@@ -715,6 +715,9 @@ class AdminTheme
             'tags'=>array('url'=>'listtags.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('tags')),
                     'description'=>lang('tagdescription'),'show_in_menu'=>true),
+            'eventhandlers'=>array('url'=>'eventhandlers.php','parent'=>'extensions',
+                    'title'=>$this->FixSpaces(lang('eventhandlers')),
+                    'description'=>lang('eventhandlerdescription'),'show_in_menu'=>true),
             'usertags'=>array('url'=>'listusertags.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('usertags')),
                     'description'=>lang('usertagdescription'),'show_in_menu'=>$this->HasPerm('codeBlockPerms')),
@@ -1228,6 +1231,7 @@ class AdminTheme
     {
         echo "<body##BODYSUBMITSTUFFGOESHERE##>\n";
     }
+
     
     /**
      * DisplayMainDivStart
@@ -1238,6 +1242,7 @@ class AdminTheme
     {
     	echo "<div id=\"MainContent\">\n";
     }
+
 
     /**
      * DisplayMainDivEnd
@@ -1259,6 +1264,7 @@ class AdminTheme
         echo "<div class=\"MainMenu\">\n";
     }
 
+
     /**
      * DisplaySectionMenuDivEnd
      * Outputs the close div tag for the main section pages.
@@ -1267,6 +1273,7 @@ class AdminTheme
     {
         echo "</div>\n";
     }
+
 
     /**
      * DisplayDashboardCallout
@@ -1342,6 +1349,7 @@ class AdminTheme
         return $retStr;
     }
 
+
     /**
      * ShowHeader
      * Outputs the page header title along with a help link to that section in the wiki.
@@ -1388,6 +1396,7 @@ class AdminTheme
         } 
         return $header;
     }
+
 
     /**
      * _ArraySearchRecursive
