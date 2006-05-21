@@ -487,7 +487,7 @@ else if ($action == 'missingdeps')
 			echo "<td><a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a></td>";
 
 			//xml export
-			echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'"?></a></td>';
+			echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a></td>';
 			echo "</tr>\n";
 
 			($curclass=="row1"?$curclass="row2":$curclass="row1");
@@ -507,8 +507,9 @@ else if ($action == 'missingdeps')
 <div class="pageoverflow">
 	    <p class="pagetext"><?php echo lang('overwritemodule')?>:</p>
 	    <p class="pageinput">
-	      <input type="checkbox" name="allowoverwrite" value="1">
+	      <input type="checkbox" name="allowoverwrite" value="1" />
             </p>
+</div>
 <div class="pageoverflow">
 	    <p class="pagetext">&nbsp;</p>
 	    <p class="pageinput">
