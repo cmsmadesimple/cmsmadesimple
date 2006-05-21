@@ -424,6 +424,8 @@ class Smarty_CMS extends Smarty {
 					{
 						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 					}
+					
+					//do_cross_reference($pageinfo->template_id, 'template', $tpl_source);
 
 					return true;
 				}
@@ -527,6 +529,8 @@ class Smarty_CMS extends Smarty {
 				{
 					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 				}
+				
+				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
 
 				return true;
 			}
@@ -717,6 +721,54 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	closedir($handle);
 }
 
+function do_cross_reference($parent_id, $parent_type, $content)
+{
+	global $gCms;
+	$db =& $gCms->GetDb();
+	
+	//Delete old ones from the database
+	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
+	$db->Execute($query, array($parent_id, $parent_type));
+	
+	//Do global content blocks
+	$matches = array();
+	preg_match_all('/\{(?:html_blob|global_content).*?name=["\']([^"]+)["\'].*?\}/', $content, $matches);
+	if (isset($matches[1]))
+	{
+		$selquery = 'SELECT htmlblob_id FROM '.cms_db_prefix().'htmlblobs WHERE htmlblob_name = ?';
+		$insquery = 'INSERT INTO '.cms_db_prefix().'crossref (parent_id, parent_type, child_id, child_type, create_date, modified_date)
+						VALUES (?,?,?,\'global_content\',\''.$db->DBTimeStamp(time()).'\',\''.$db->DBTimeStamp(time()).'\')';
+		foreach ($matches[1] as $name)
+		{
+			$result = &$db->Execute($selquery, array($name));
+			while ($result && !$result->EOF)
+			{
+				$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));
+				$result->MoveNext();
+			}
+		}
+	}
+}
+
+function remove_cross_references($parent_id, $parent_type)
+{
+	global $gCms;
+	$db =& $gCms->GetDb();
+	
+	//Delete old ones from the database
+	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
+	$db->Execute($query, array($parent_id, $parent_type));
+}
+
+function remove_cross_references_by_child($child_id, $child_type)
+{
+	global $gCms;
+	$db =& $gCms->GetDb();
+	
+	//Delete old ones from the database
+	$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE child_id = ? AND child_type = ?';
+	$db->Execute($query, array($child_id, $child_type));
+}
 
 function global_content_regex_callback($matches)
 {

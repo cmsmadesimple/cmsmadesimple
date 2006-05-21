@@ -1198,6 +1198,9 @@ class ContentBase
 			#Fix the item_order if necessary
 			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+			
+			#Remove the cross references
+			remove_cross_references($this->mId, 'content');
 
 			if (NULL != $this->mProperties)
 			{
@@ -1560,6 +1563,8 @@ class ContentProperties
 
 		    $delquery = "DELETE FROM ".cms_db_prefix()."content_props where content_id=? and prop_name=?";
 			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
+			
+			$concat = '';
 
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
@@ -1573,6 +1578,8 @@ class ContentProperties
 					'',
 					$this->mPropertyValues[$key],
 					));
+					
+				$concat .= $this->mPropertyValues[$key];
 
 				# debug mode
 				if (true == $config["debug"])
@@ -1588,6 +1595,11 @@ class ContentProperties
 						$debug_errors .= "<p>Error updating content property</p>\n";
 					}
 				}
+			}
+			
+			if ($concat != '')
+			{
+				do_cross_reference($content_id, 'content', $concat);
 			}
 		}
 	}

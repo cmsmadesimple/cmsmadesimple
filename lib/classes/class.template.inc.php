@@ -285,6 +285,7 @@ class TemplateOperations
 		if ($dbresult !== false)
 		{
 			$result = $new_template_id;
+			do_cross_reference($new_template_id, 'template', $template->content);
 		}
 
 		return $result;
@@ -302,6 +303,7 @@ class TemplateOperations
 		if ($dbresult !== false)
 		{
 			$result = true;
+			do_cross_reference($new_template_id, 'template', $template->content);
 		}
 
 		return $result;
@@ -323,6 +325,7 @@ class TemplateOperations
 		if ($dbresult !== false)
 		{
 			$result = true;
+			remove_cross_references($id, 'template');
 		}
 
 		return $result;
