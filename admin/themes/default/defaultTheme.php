@@ -166,14 +166,13 @@ class defaultTheme extends AdminTheme
 
 	function DisplayDocType() {
 	
-		echo '<?xml version="1.0" encoding="'.get_encoding().'"?>'."\n";
-		echo '<!DOCTYPE html'."\n";
-		echo '	PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
+#      		echo '<QUESTION_MARK xml version="1.0" encoding="'.get_encoding().'"QUESTION_MARK>'."\n";
+		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
 		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 	}
 
    function DisplayHTMLStartTag() {
-		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">';
+		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'."\n\n";
    }
 
     function DisplayDashboardCallout($file, $message = '')
