@@ -740,7 +740,7 @@ ul.sortable  {
 
 ul.sortable li  {
    list-style-type: none;
-   list-style-position: ;
+/*   list-style-position: ; */
    margin: 1px;
    padding: 0 0 0 5px;
    border: solid 1px #cccccc;
