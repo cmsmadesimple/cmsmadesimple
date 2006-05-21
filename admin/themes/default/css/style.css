@@ -194,6 +194,9 @@ p.lbpass  {
    width: auto;
    height: auto;
    display: none;
+position:absolute;
+z-index:999;
+
    }
 
 #nav li li  {
