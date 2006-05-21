@@ -6,6 +6,8 @@
 <head>
 <title>CMS Login</title>
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo get_encoding() ?>" />
+<script src="themes/default/includes/defaultfocus.js" type="text/javascript"></script>
+
 <link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
 <base href="<?php global $gCms; $config =& $gCms->GetConfig(); echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
@@ -21,7 +23,7 @@
 						if (isset($error) && $error != '')
 						{
 							echo '<span class="loginerror">'.$error.'</span>';
-                        }
+						}
 					?>
 				</p>
 			</div>
@@ -33,8 +35,12 @@
 				<div class="lbinput">
 					<form method="post" action="login.php">
 						<p>
-							<input name="username" type="text" size="15" value="<?php echo (isset($_POST['username'])?$_POST['username']:'')?>" /><br />
-							<input class="lbpassword" name="password" type="password" size="15" value="<?php echo (isset($_POST['password'])?$_POST['password']:'')?>" /><br />
+							<input name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo (isset($_POST['username'])?$_POST['username']:'')?>" /><br />
+						<?php if(isset($error) && $error!='') {
+						  echo '<input class="lbpassword defaultfocus" name="password" type="password" size="15" /><br />';
+						} else {
+						  echo '<input class="lbpassword" name="password" type="password" size="15" /><br />';
+						} ?>
 							<input class="lbsubmit" name="loginsubmit" type="submit" value="<?php echo lang('submit')?>" /> 
 							<input class="lbsubmit" name="logincancel" type="submit" value="<?php echo lang('cancel')?>" />
 						</p>
