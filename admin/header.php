@@ -38,7 +38,7 @@ else
       }
     $themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
     
-    ///$themeObject->DisplayDocType();
+      $themeObject->DisplayDocType();
       $themeObject->DisplayHTMLStartTag();
       $themeObject->DisplayHTMLHeader();
       $themeObject->DisplayBodyTag();
