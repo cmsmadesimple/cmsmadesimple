@@ -133,13 +133,13 @@ function display_hierarchy(&$root)
 		{
 			if (!in_array($one->Id(),$openedArray))
 			{
-				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=0&page=".$page."\">";
+				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\">";
 				$thelist .= $expandImg;
 				$thelist .= "</a>";
 			}
 			else
 			{
-				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&col=1&page=".$page."\">";
+				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\">";
 				$thelist .= $contractImg;
 				$thelist .= "</a>";
 			}
@@ -157,7 +157,7 @@ function display_hierarchy(&$root)
 		} ## if indent
 
 		if ($display == 'edit')
-			$thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&page=".$page."\">".$one->Name()."</a></td>\n";
+			$thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&amp;page=".$page."\">".$one->Name()."</a></td>\n";
 		else
 			$thelist .= $one->Name()."</td>\n";
 
@@ -425,7 +425,6 @@ if (!$counter)
 
 $headoflist = '';
 
-$headoflist .= '<form action="multicontent.php" method="post">';
 
 if ($limit != 0 && $counter > $limit)
 {
@@ -433,6 +432,7 @@ if ($limit != 0 && $counter > $limit)
 }
 
 $headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
+$headoflist .= '<form action="multicontent.php" method="post">';
 if ($counter)
 {
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
@@ -499,8 +499,8 @@ if (check_permission($userid, 'Add Pages'))
 		<br />
 		</p>
 		</div>
-		</div>
 		</form>
+		</div>
 		<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 		<?php
 
