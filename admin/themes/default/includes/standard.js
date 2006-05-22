@@ -14,7 +14,9 @@ window.onload = function() {
 }
 
 function IEhover() {
-		cssHover('nav','LI');	
+		if (document.getElementById('nav')) {
+			cssHover('nav','LI');	
+		}
 	 	if (document.getElementById('navt_tabs')) {
 			cssHover('navt_tabs','DIV');
 		}
@@ -92,23 +94,32 @@ function linksExternal()	{
 }
 
 //use <input class="defaultfocus" ...>
-//todo: ie doesnt work
 function defaultFocus() {
-    if (!document.getElementsByTagName) {
-        return;
-    }
-    var anchors = document.getElementsByTagName("input");
-    for (var i=0; i<anchors.length; i++) {
-        var anchor = anchors[i];
-        var classvalue = anchor.getAttribute("class");
 
-	if (classvalue!=null) {
-	        var defaultfocuslocation = classvalue.indexOf("defaultfocus");
-        	if (defaultfocuslocation != -1) {
-            	// anchor.target = "_blank";
-            	anchor.focus();
-//		anchor.select();
-        	}
-	}
-    }
+   if (!document.getElementsByTagName) {
+        return;
+   }
+
+   var anchors = document.getElementsByTagName("input");
+   for (var i=0; i<anchors.length; i++) {
+      var anchor = anchors[i];
+      var classvalue;
+
+      //IE is broken! 
+      if(navigator.appName == 'Microsoft Internet Explorer') {
+            classvalue = anchor.getAttribute('className');
+      } else {
+            classvalue = anchor.getAttribute('class');
+      }
+
+      if (classvalue!=null) {
+                var defaultfocuslocation = classvalue.indexOf("defaultfocus");
+                if (defaultfocuslocation != -1) {
+                	// anchor.target = "_blank";
+                	anchor.focus();
+			//might be used in the future maybe class="selectall" 
+			//anchor.select();
+                }
+        }
+   }
 }
