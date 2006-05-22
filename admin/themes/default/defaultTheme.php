@@ -120,7 +120,7 @@ class defaultTheme extends AdminTheme
 	
 	function OutputHeaderJavascript() {
 		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>';
-		echo '<script src="themes/default/includes/defaultfocus.js" type="text/javascript"></script>';
+
 	}
 
 	function StartRighthandColumn() {
