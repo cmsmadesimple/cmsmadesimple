@@ -3156,7 +3156,7 @@ class CMSModule
 	    {
 	      $row = $dbresult->FetchRow();
 	      $fn = $row['handler_name'];
-	      if( $fn != '' )
+	      if( isset($fn) && $fn != '' )
 		{
 		  $this->CallUserTag( $fn, $params );
 		}

@@ -92,9 +92,9 @@ class Events
     $db = &$gCms->GetDb();
 
     $q = "UPDATE ".cms_db_prefix()."eventhandlers SET handler_name = ?
-          WHERE module_name = ?, and event_name = ?";
+          WHERE module_name = ? and event_name = ?";
     $dbresult = $db->Execute( $q, array( $tagname, $modulename, $eventname ));
-    if( $dbresult !== false )
+    if( $dbresult != false )
       {
 	return true;
       }
