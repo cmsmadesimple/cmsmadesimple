@@ -1360,43 +1360,63 @@ class AdminTheme
      */
     function ShowHeader($title_name, $extra_lang_param=array())
     {
-        // Don't make link if this is a module's Friendly name
-        // (We can't link to help for modules)  
-        if (FALSE == preg_match('/^[A-Z]$/', substr($title_name, 0, 1)))
-        { 
-            // Include English translation of titles. (Can't find better way to get them)
-            $dirname = dirname(__FILE__);
-            include($dirname.'/../../admin/lang/en_US/admin.inc.php');
-            $wikiUrl = $this->cms->config['wiki_url'];
-            foreach ($this->breadcrumbs AS $key => $value)
+        $wikiUrl = $this->cms->config['wiki_url'];
+        // Include English translation of titles. (Can't find better way to get them)
+        $dirname = dirname(__FILE__);
+        include($dirname.'/../../admin/lang/en_US/admin.inc.php');
+		// Check if this is a module
+        if (FALSE == empty($_GET['module'])  || FALSE == empty($_GET['mact'])) {
+			$isModule = TRUE;
+		} else {
+			$isModule = FALSE;
+		}
+        foreach ($this->breadcrumbs AS $key => $value)
+        {
+            $title = $value['title'];
+            // If this is a module and the last part of the breadcrumbs
+            if (TRUE == $isModule && TRUE == empty($this->breadcrumbs[$key + 1]))
             {
-                $title = $value['title'];
+				if (FALSE == empty($_GET['module'])) {
+					$module_name = $_GET['module'];
+				} else {
+					$module_name = substr($_GET['mact'], 0, strpos($_GET['mact'], ','));
+				}
+                // Turn ModuleName into _Module_Name
+                $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+                $wikiUrl .= '/'.substr($moduleName, 1);
+            } else {
                 // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
                 $colonLocation = strrchr($title, ':');
                 if($colonLocation !== false)
                 {
                     $title = substr($title, 0, -strlen($colonLocation));
                 }
-                // Get the key of the title so we can use the en_US version for the URL 		
-                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems); 
+                // Get the key of the title so we can use the en_US version for the URL
+                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
                 $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
             }
-            // Clean up URL
-            $wikiUrl = str_replace(' ', '_', $wikiUrl);
-            $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-            // Make link to go the translated version of page if lang is not en_US
-            /* Disabled as suggested by westis
-            $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
-            if ($lang != 'en_US') {
-                $wikiUrl .= '/'.substr($lang, 0, 2);
-            }
-            */
-            $header  = '<p class="pageheader">'.lang($title_name, $extra_lang_param);
-            $header .= ' <a href="'.$wikiUrl.'" target="_blank">('.lang('help').')</a></p>';
+        }
+        // Clean up URL
+        $wikiUrl = str_replace(' ', '_', $wikiUrl);
+        $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+        // Make link to go the translated version of page if lang is not en_US
+        /* Disabled as suggested by westis
+        $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+        if ($lang != 'en_US') {
+            $wikiUrl .= '/'.substr($lang, 0, 2);
+        }
+        */
+
+        $header  = '<p class="pageheader">';
+        if (TRUE == $isModule) {
+            $header .= $title_name;        
         } else {
-            $header  = '<p class="pageheader">'.$title_name.'</p>';
-        } 
+            $header .= lang($title_name, $extra_lang_param);
+        }  
+        $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+        $header .= ' <a href="'.$wikiUrl.'" target="_blank">'.$image_help.'</a></p>';
         return $header;
+
     }
 
 
