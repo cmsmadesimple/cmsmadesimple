@@ -45,7 +45,6 @@ $access = check_permission($userid, "Modify Modules");
 
 check_login();
 
-include_once("header.php");
 
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
@@ -56,6 +55,7 @@ $tmp2 = UserTags::ListUserTags();
 $tags = array_merge( $tmp1, $tmp2 );
 $events = Events::ListEvents();
 
+echo '<form id="eventhandlerform" method="post" action="eventhandlers.php">';
 echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 echo '<thead>';
 echo "  <tr>\n";
@@ -69,25 +69,30 @@ echo '<tbody>';
 
 if( is_array($events) )
   {
-    $rowclass = 'row1';
+    $curclass = 'row1';
     foreach( $events as $oneevent )
       {
-	echo "  <tr>\n";
+	echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+
 	echo "    <td>".$oneevent['module_name']."</td>\n";
 	echo "    <td>".$oneevent['event_name']."</td>\n";
 	echo "    <td>".$gCms->modules[$oneevent['module_name']]['object']->GetEventDescription($oneevent['event_name']);
 	echo "    <td>".eventhandler_usertag_dropdown( $oneevent['module_name'].'_'.$oneevent['event_name'],
 						       $oneevent['handler_name'], $tags );
 	echo "  </tr>\n"; 
+	($curclass=="row1"?$curclass="row2":$curclass="row1");
       }
   }
 
 
 echo '</tbody>';
+echo '</table>';
+echo '<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
+echo "</form>\n";
+echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 echo '</div>';
 echo '</div>';
 
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
 
