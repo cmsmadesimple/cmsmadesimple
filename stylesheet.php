@@ -60,13 +60,13 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 		$db = mysql_connect($config['db_hostname'], $config['db_username'], $config['db_password']);
 		mysql_select_db($config['db_name']);
 		if ($name != '')
-			$sql="SELECT css_text FROM ".$config['db_prefix']."css WHERE css_name = '" . mysql_real_escape_string($name, $db) . "'";
+			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . mysql_real_escape_string($name, $db) . "'";
 		else
-			$sql="SELECT c.css_text,c.css_id FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . mysql_real_escape_string($mediatype, $db) . "'";
+			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . mysql_real_escape_string($mediatype, $db) . "'";
 		$result=mysql_query($sql);
 		while ($result && $row = mysql_fetch_assoc($result))
 		{
-			$css .= $row['css_text'];
+			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n";
 		}
 	}
 	else
@@ -74,12 +74,12 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 		$db=pg_connect("host=".$config['db_hostname']." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
 		$result=pg_query($db, $sql);
 		if ($name != '')
-			$sql="SELECT css_text FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
+			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
 		else
-			$sql="SELECT c.css_text,c.css_id FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . pg_escape_string($mediatype) . "'";
+			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . pg_escape_string($mediatype) . "'";
 		while ($result && $row = pg_fetch_array($result, null, PGSQL_ASSOC))
 		{
-			$css .= $row['css_text'];
+			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n";
 		}
 	}
 
@@ -96,11 +96,12 @@ else
 		//TODO: Make stylesheet handling OOP
 		global $gCms;
 		$db =& $gCms->GetDb();
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css WHERE css_name = ?";
+		$cssquery = "SELECT css_text, css_name FROM ".cms_db_prefix()."css WHERE css_name = ?";
 		$cssresult = &$db->Execute($cssquery, array($name));
 
 		while ($cssresult && !$cssresult->EOF)
 		{
+			$css .= "/* Start of CMSMS style sheet '{$cssresult->fields['css_name']}' */\n{$cssresult->fields['css_text']}\n/* End of '{$cssresult->fields['css_name']}' */\n";
 			$css .= "\n".$cssresult->fields['css_text']."\n";
 			$cssresult->MoveNext();
 		}
