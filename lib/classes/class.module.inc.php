@@ -3131,7 +3131,7 @@ class CMSModule
 	function CreateEvent( $eventname )
 	{
 	  $db =& $this->GetDb();
-	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers 
+	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers (module_name, event_name)
              values (?,?)";
           $db->Execute( $q, array( $this->GetName(), $eventname ));
 	}

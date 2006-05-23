@@ -1365,7 +1365,7 @@ class AdminTheme
         $dirname = dirname(__FILE__);
         include($dirname.'/../../admin/lang/en_US/admin.inc.php');
 		// Check if this is a module
-        if (FALSE == empty($_GET['module'])  || FALSE == empty($_GET['mact'])) {
+        if (FALSE == empty($_GET['module'])  || FALSE == empty($_REQUEST['mact'])) {
 			$isModule = TRUE;
 		} else {
 			$isModule = FALSE;
@@ -1379,7 +1379,7 @@ class AdminTheme
 				if (FALSE == empty($_GET['module'])) {
 					$module_name = $_GET['module'];
 				} else {
-					$module_name = substr($_GET['mact'], 0, strpos($_GET['mact'], ','));
+					$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
 				}
                 // Turn ModuleName into _Module_Name
                 $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);

@@ -324,7 +324,7 @@ else if ($action == 'missingdeps')
 				if (isset($gCms->modules[$onedepkey]) && 
 					$gCms->modules[$onedepkey]['installed'] == true &&
 					$gCms->modules[$onedepkey]['active'] == true &&
-					version_compare($gCms->modules[$onedepkey]['Version'], $onedepvalue) > -1)
+					version_compare($gCms->modules[$onedepkey]['object']->GetVersion(), $onedepvalue) > -1)
 				{
 					$havedep = true;
 				}
