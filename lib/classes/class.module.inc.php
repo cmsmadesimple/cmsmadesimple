@@ -3126,6 +3126,7 @@ class CMSModule
 	 * Inform the system about a new event that can be generated
 	 *
 	 * @param string The name of the event
+	 * @returns nothing
 	 */
 	function CreateEvent( $eventname )
 	{
@@ -3144,6 +3145,7 @@ class CMSModule
 	 * @param string The name of the originating module
 	 * @param string The name of the event
 	 * @param array  Array of parameters provided with the event.
+	 * @returns boolean
 	 */
 	function DoEvent( $originator, $eventname, $params )
 	{
@@ -3156,6 +3158,7 @@ class CMSModule
 	 * This method must be over-ridden if this module created any events.
 	 *
 	 * @param string The name of the event
+	 * @returns text string
 	 */
 	function GetEventDescription( $eventname )
 	{
@@ -3184,6 +3187,7 @@ class CMSModule
 	 * Note, only events created by this module can be removed.
 	 *
 	 * @param string The name of the event
+	 * @returns nothing
 	 */
 	function RemoveEvent( $eventname )
 	{
@@ -3200,6 +3204,7 @@ class CMSModule
 	 *
 	 * @param string The name of the event
 	 * @param array  The parameters associated with this event.
+	 * @returns nothing
 	 */
 	function SendEvent( $eventname, $params )
 	{
@@ -3210,7 +3215,7 @@ class CMSModule
 	  $q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
                 module_name = ? AND event_name = ?";
           $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
-	  if( $dbresult && ($dbresult->RowCount() == 1) )
+	  if( $dbresult && $dbresult->RowCount() )
 	    {
 	      while( $row = $dbresult->FetchRow() )
 		{
