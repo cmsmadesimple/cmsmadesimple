@@ -18,18 +18,22 @@
 
 function smarty_cms_function_startExpandCollapse($params, &$smarty)
 {
-       static $firstExpandCollapse = true;//only gets set one time per page
+	static $firstExpandCollapse = true;//only gets set one time per page
+	
+	global $gCms;
+	$config =& $gCms->GetConfig();
 
-       if (!empty($params['id']) && !empty($params['title'])){
-               $id = $params['id'];
-               $title = $params['title'];
-       }else{
-	       echo 'Error: The expand/collapse plugin requires that both parameters (id,title) are used.';
-               return;
-       }
+	if (!empty($params['id']) && !empty($params['title'])) {
+		$id = $params['id'];
+		$title = $params['title'];
+	}
+	else {
+		echo 'Error: The expand/collapse plugin requires that both parameters (id,title) are used.';
+		return;
+	}
 
 	if ($firstExpandCollapse) {
-		echo '<script type="text/javascript" language="javascript" src="lib/helparea.js"></script>';
+		echo '<script type="text/javascript" language="javascript" src="'.$config['root_url'].'/lib/helparea.js"></script>';
 		$firstExpandCollapse = false;
 	}
 

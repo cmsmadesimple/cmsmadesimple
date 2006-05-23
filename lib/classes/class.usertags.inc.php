@@ -25,70 +25,123 @@
  */
 class UserTags
 {
-  /**
-   * Add a named user defined tag into the database
-   *
-   * @params string $name User defined tag name
-   * @params string $text Body of user defined tag
-   *
-   * @returns mixed If successful, true.  If it fails, false.
-   */
-  function AddUserTag( $name, $text )
-  {
-    // todo
-  }
+	/**
+	 * Retrieve the body of a user defined tag
+	 *
+	 * @params string $name User defined tag name
+	 *
+	 * @returns mixed If successfull, the body of the user tag (string).  If it fails, false
+	 */
+	function GetUserTag( $name )
+	{
+		$code = false;
+
+		global $gCms;
+		$db =& $gCms->GetDb();
+		
+		$query = 'SELECT userplugin_id, code FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
+		$result = &$db->Execute($query, array($name));
+
+		while ($result && !$result->EOF)
+		{
+			$code = $result->fields['code'];
+			$result->MoveNext();
+		}
+		
+		return $code;
+	}
 
 
-  /**
-   * Retrieve the body of a user defined tag
-   *
-   * @params string $name User defined tag name
-   *
-   * @returns mixed If successfull, the body of the user tag (string).  If it fails, false
-   */
-  function GetUserTag( $name )
-  {
-    // todo
-  }
+	/**
+	 * Add or update a named user defined tag into the database
+	 *
+	 * @params string $name User defined tag name
+	 * @params string $text Body of user defined tag
+	 *
+	 * @returns mixed If successful, true.  If it fails, false.
+	 */
+	function SetUserTag( $name, $text )
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+		
+		$existing = $this->GetUserTag($name);
+		if (!$existing)
+		{
+			$query = "INSERT INTO userplugins (userplugin_name, code, create_date, modified_date) VALUES (?,?,'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+			$result = $db->Execute($query, array($name, $text));
+			if ($result)
+				return true;
+			else
+				return false;
+		}
+		else
+		{
+			$query = 'UPDATE userplugins SET code = ?, modified_date = \''.$db->DBTimeStamp(time()).'\' WHERE userplugin_name = ?';
+			$result = $db->Execute($query, array($text, $name));
+			if ($result)
+				return true;
+			else
+				return false;
+		}
+	}
 
 
-  /**
-   * Remove a named user defined tag from the database
-   *
-   * @params string $name User defined tag name
-   *
-   * @returns mixed If successful, true.  If it fails, false.
-   */
-  function RemoveUserTag( $name )
-  {
-    // todo
-  }
+	/**
+	 * Remove a named user defined tag from the database
+	 *
+	 * @params string $name User defined tag name
+	 *
+	 * @returns mixed If successful, true.  If it fails, false.
+	 */
+	function RemoveUserTag( $name )
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+		
+		$query = 'DELETE FROM '.cms_db_prefix().'userplugins WHERE userplugin_name = ?';
+		$result = &$db->Execute($query, array($name));
+
+		if ($result)
+		{
+			return true;
+		}
+		
+		return false;
+	}
 
 
-  /**
-   * Return a list (suitable for use in a pulldown) of user tags.
-   *
-   * @returns mixed If successful, an array.  If it fails, false.
-   */
-  function ListUserTags()
-  {
-    // copied from the module api
-    global $gCms;
-    $db =& $gCms->GetDb();
-    
-    $plugins = array();
-    
-    $query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
-    $result = &$db->Execute($query);
-    
-    while ($result && !$result->EOF)
-      {
-	$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
-	$result->MoveNext();
-      }
-    
-    return $plugins;
-  }
+ 	/**
+	 * Return a list (suitable for use in a pulldown) of user tags.
+	 *
+	 * @returns mixed If successful, an array.  If it fails, false.
+	 */
+	function ListUserTags()
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+
+		$plugins = array();
+		
+		//var_dump($db);
+
+		$query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
+		//var_dump($db->Execute($query));
+		$result = &$db->Execute($query);
+		
+		var_dump($result);
+
+		while ($result && !$result->EOF)
+		{
+			$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
+			$result->MoveNext();
+		}
+		
+		if (count($plugins) == 0)
+			$plugins = false;
+
+		return $plugins;
+	}
 
 } // class
 # vim:ts=4 sw=4 noet
