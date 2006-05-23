@@ -23,94 +23,111 @@ $CMS_LOAD_ALL_PLUGINS=1;
 
 require_once("../include.php");
 
-function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
-{
-  $text  = '<select name="'.$name.'">';
-  foreach( $usertags as $key => $value )
-    {
-      $text .= '<option value="'.$value.'"';
-      if( $selitem == $value )
-	{
-	  $text .= ' selected="selected"';
-	}
-      $text .= '>'.$key;
-      $text .= '</option>';
-    }
-  $text .= '</select>';
-  return $text;
-}
+// function eventhandler_usertag_dropdown( $name, $selitem, $usertags )
+// {
+//   $text  = '<select name="'.$name.'">';
+//   foreach( $usertags as $key => $value )
+//     {
+//       $text .= '<option value="'.$value.'"';
+//       if( $selitem == $value )
+// 	{
+// 	  $text .= ' selected="selected"';
+// 	}
+//       $text .= '>'.$key;
+//       $text .= '</option>';
+//     }
+//   $text .= '</select>';
+//   return $text;
+// }
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
 
 check_login();
 
-// handle a submit
-if( isset( $_POST['goforit'] ) )
+// here we'll handle setting $action based on _POST['action']
+$action = "";
+$module = "";
+$event = "";
+if( isset( $_GET['action'] ) && $_GET['action'] != '' )
   {
-    foreach( $_POST as $key => $value )
-      {
-	if( strstr( $key, 'handler_' ) != FALSE )
-	  {
-	    $key = substr( $key, strlen('handler_') );
-	    $p1 = strpos( $key, '_' );
-	    $modulename = substr( $key, 0, $p1 );
-	    $eventname  = substr( $key, $p1+1 );
-	    Events::AddEventHandler( $modulename, $eventname, $value );
-	  }
-      }
+    $action = $_GET['action'];
+  }
+if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+  {
+    $module = $_GET['module'];
+  }
+if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+  {
+    $event = $_GET['event'];
   }
 
 // display the page
 include_once("header.php");
+
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
 
-$tmp1 = array('None' => null);
-$tmp2 = UserTags::ListUserTags();
-$tags = array_merge( $tmp1, $tmp2 );
-$events = Events::ListEvents();
-
-echo '<form id="eventhandlerform" method="post" action="eventhandlers.php">';
-echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-echo '<thead>';
-echo "  <tr>\n";
-echo "    <th>".lang('module')."</th>\n";
-echo "    <th>".lang('event')."</th>\n";
-echo "    <th>".lang('description')."</th>";
-echo "    <th>".lang('handler')."</th>";
-echo "  </tr>\n";
-echo '</thead>';
-echo '<tbody>';
-
-if( is_array($events) )
+switch( $action )
   {
-    $curclass = 'row1';
-    foreach( $events as $oneevent )
-      {
-	echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+  case 'showeventhelp':
+    {
+      $text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+      if( $text == "" )
+	{
+	  echo "No text returned";
+	}
+      else
+	{
+	  echo $text;
+	}
+      break;
+    }
 
-	echo "    <td>".$oneevent['module_name']."</td>\n";
-	echo "    <td>".$oneevent['event_name']."</td>\n";
-	echo "    <td>".$gCms->modules[$oneevent['module_name']]['object']->GetEventDescription($oneevent['event_name']);
-	echo "    <td>".eventhandler_usertag_dropdown( 'handler_'.$oneevent['module_name'].'_'.$oneevent['event_name'],
-						       $oneevent['handler_name'], $tags );
-	echo "  </tr>\n"; 
-	($curclass=="row1"?$curclass="row2":$curclass="row1");
-      }
-  }
+  default:
+    {
+      $events = Events::ListEvents();
+      
+      echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+      echo "<thead>\n";
+      echo "  <tr>\n";
+      echo "    <th>".lang('module')."</th>\n";
+      echo "    <th>".lang('event')."</th>\n";
+      echo "    <th>".lang('description')."</th>\n";
+      echo "    <th>".lang('help')."</cdth>\n";
+      echo "    <th>".lang('edit')."</th>\n";
+      echo "  </tr>\n";
+      echo "</thead>\n";
+      echo "<tbody>\n";
+      
+      if( is_array($events) )
+	{
+	  $curclass = 'row1';
+	  foreach( $events as $oneevent )
+	    {
+	      echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+	      
+	      echo "    <td>".$oneevent['module_name']."</td>\n";
+	      echo "    <td>".$oneevent['event_name']."</td>\n";
+	      echo "    <td>".$gCms->modules[$oneevent['module_name']]['object']->GetEventDescription($oneevent['event_name'])."</td>\n";
+	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['module_name']."&amp;event=".$oneevent['event_name']."\">".lang('help')."</a></td>\n";
+	      echo "    <td>TODO: edit link</td>\n";
+	      echo "  </tr>\n"; 
+	      ($curclass=="row1"?$curclass="row2":$curclass="row1");
+	    }
+	}
+      
+      echo "</tbody>\n";
+      echo "</table>\n";
+      echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
+    } // default action
+      
+  } // switch
 
 
-echo '</tbody>';
-echo '</table>';
-echo '<input type="hidden" name="goforit" value="1">';
-echo '<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\';" onmouseout="this.className=\'pagebutton\';" />';
-echo "</form>\n";
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-echo '</div>';
-echo '</div>';
-
+echo "</div>\n";
+echo "</div>\n";
 
 include_once("footer.php");
 
