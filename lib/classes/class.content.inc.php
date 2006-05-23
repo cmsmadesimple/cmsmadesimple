@@ -348,6 +348,16 @@ class ContentBase
 		return $this->mTitleAttribute;
 	}
 
+	function GetCreationDate()
+	{
+		return $this->mCreationDate;
+	}
+	
+	function GetModifiedDate()
+	{
+		return $this->mModifiedDate;
+	}
+
 	function SetTitleAttribute($titleattribute)
 	{
 		$this->DoReadyForEdit();
