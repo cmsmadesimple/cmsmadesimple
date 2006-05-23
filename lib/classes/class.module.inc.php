@@ -2412,7 +2412,7 @@ class CMSModule
 					{
 						$text .= '<a href="';
 					}
-					$text .= $content->GetURL(false);
+					$text .= $content->GetURL($config['assume_mod_rewrite']);
 
 					$count = 0;
 					foreach ($params as $key=>$value)
