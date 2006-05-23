@@ -26,26 +26,32 @@
 class Events
 {
   /**
-   * Return the name of a user tag defined as a handler
-   * for an event.
+   * Return the list of event handlers for a particular event
    *
    * @params string $modulename The name of the module sending the event
    * @params string $eventname  The name of the event
    *
-   * @returns mixed If successful, string.  If it fails, false.
+   * @returns mixed If successful, an array of arrays, each element
+   * in the array contains two elements 'handler_name', and 'module_handler',
+   * any one of these could be null. If it fails, false is returned.
    */
-  function GetEventHandler( $modulename, $eventname )
+  function ListEventHandlers( $modulename, $eventname )
   {
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "SELECT handler_name FROM ".cms_db_prefix()."eventhandlers WHERE
+    $q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
           module_name = ? AND event_name = ?";
     $dbresult = $db->Execute( $query, array( $modulename, $eventname ));
+
     if( $dbresult !== false )
       {
-	$row = $dbresult->FetchRow();
-	return $row['handler_name'];
+	$result = array();
+	while( $row = $dbresult->FetchRow() )
+	  {
+	    $result[] = $row;
+	  }
+	return $result;
       }
     return false;
   }
@@ -78,7 +84,7 @@ class Events
 
 
   /**
-   * Set an event handler for a module event
+   * Add an event handler for a module event
    *
    * @params string $modulename The name of the module sending the event
    * @params string $eventname  The name of the event
@@ -86,14 +92,32 @@ class Events
    *
    * @returns mixed If successful, true.  If it fails, false.
    */
-  function SetEventHandler( $modulename, $eventname, $tagname )
+  function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
   {
+    if( $tag_name == false && $module_handler == false )
+      {
+	return false;
+      }
+    if( $tag_name != false && $module_handler != false )
+      {
+	return false;
+      }
+
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "UPDATE ".cms_db_prefix()."eventhandlers SET handler_name = ?
-          WHERE module_name = ? and event_name = ?";
-    $dbresult = $db->Execute( $q, array( $tagname, $modulename, $eventname ));
+    $params = array();
+    $params[] = $tag_name;
+    $q = "UPDATE ".cms_db_prefix()."eventhandlers SET handler_name = ?";
+    if( $module_handler != false )
+      {
+	$q = "UPDATE ".cms_db_prefix()."eventhandlers SET module_handler = ?";
+	$params = array( $module_handler );
+      }
+    $q .= "WHERE module_name = ? and event_name = ?";
+    $params[] = $modulename;
+    $params[] = $eventname;
+    $dbresult = $db->Execute( $q, $params );
     if( $dbresult != false )
       {
 	return true;
@@ -110,15 +134,42 @@ class Events
    *
    * @returns mixed If successful, true.  If it fails, false.
    */
-  function RemoveEventHandler( $modulename, $eventname )
+  function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
+  {
+    if( $tag_name != false && $module_handler != false )
+      {
+	return false;
+      }
+    $field = 'handler_name';
+    if( $module_handler != false )
+      {
+	$field = 'module_handler';
+      }
+
+    global $gCms;
+    $db = &$gCms->GetDb();
+
+    $q = "UPDATE ".cms_db_prefix()."eventhandlers;
+          SET $field = ? 
+          WHERE module_name = ? AND event_name = ?";
+    $dbresult = $db->Execute( $q, array( null, $modulename, $eventname ) );
+    if( $dbresult == false )
+      {
+	return true;
+      }
+    return false;
+  }
+
+
+  function RemoveAllEventHandlers( $modulename, $eventname )
   {
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "UPDATE ".cms_db_prefix()."eventhandlers 
-          SET handler_name = ?
+    $q = "UPDATE ".cms_db_prefix()."eventhandlers;
+          SET handler_name = ?, module_handler = ?
           WHERE module_name = ? AND event_name = ?";
-    $dbresult = $db->Execute( $q, array( null, $modulename, $eventname ) );
+    $dbresul = $db->Execute( $q, array( $modulename, $eventname ) );
     if( $dbresult == false )
       {
 	return true;

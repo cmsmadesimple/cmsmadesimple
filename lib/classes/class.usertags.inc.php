@@ -72,6 +72,7 @@ class UserTags
    */
   function ListUserTags()
   {
+    // copied from the module api
     global $gCms;
     $db =& $gCms->GetDb();
     

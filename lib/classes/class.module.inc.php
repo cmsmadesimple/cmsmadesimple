@@ -3122,52 +3122,121 @@ class CMSModule
 	 */
 
 
-	function CreateEvent( $name )
+	/**
+	 * Inform the system about a new event that can be generated
+	 *
+	 * @param string The name of the event
+	 */
+	function CreateEvent( $eventname )
 	{
 	  $db =& $this->GetDb();
 	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers 
-             values (?,?,?)";
-          $db->Execute( $q, array( $this->GetName(), $name, null ));
+             values (?,?)";
+          $db->Execute( $q, array( $this->GetName(), $eventname ));
 	}
 
 
-	// must be over-ridden
-	function GetEventDescription( $name )
+	/**
+	 * Handle an event triggered by another module
+	 * This method must be over-ridden if this module is capable of handling events.
+	 * of any type.
+	 *
+	 * @param string The name of the originating module
+	 * @param string The name of the event
+	 * @param array  Array of parameters provided with the event.
+	 */
+	function DoEvent( $originator, $eventname, $params )
+	{
+	  return true;
+	}
+
+
+	/**
+	 * Get a (langified) description for an event this module created.
+	 * This method must be over-ridden if this module created any events.
+	 *
+	 * @param string The name of the event
+	 */
+	function GetEventDescription( $eventname )
 	{
 	  return "";
 	}
 
-	function RemoveEvent( $name )
+
+	/**
+	 * Get a (langified) descriptionof the details about when an event is
+	 * created, and the parameters that are attached with it.
+	 * This method must be over-ridden if this module created any events.
+	 *
+	 * @param string The name of the event
+	 */
+	function GetEventHelp( $eventname )
+	{
+	  return "";
+	}
+
+
+	/**
+	 * Remove an event from the CMS system
+	 * This function removes all handlers to the event, and completely removes
+	 * all references to this event from the database
+	 *
+	 * Note, only events created by this module can be removed.
+	 *
+	 * @param string The name of the event
+	 */
+	function RemoveEvent( $eventname )
 	{
 	  $db =& $this->GetDb();
 	  $q = "DELETE FROM ".cms_db_prefix()."eventhandlers WHERE
                 module_name = ? AND event_name = ?";
-	  $db->Execute( $q, array( $this->GetName(), $name ));
+	  $db->Execute( $q, array( $this->GetName(), $eventname ));
 	}
 
 
-	function SendEvent( $name, $params )
+	/**
+	 * Trigger an event.
+	 * This function will call all registered event handlers for the event
+	 *
+	 * @param string The name of the event
+	 * @param array  The parameters associated with this event.
+	 */
+	function SendEvent( $eventname, $params )
 	{
+	  $params['module'] = $this->GetName();
+	  $params['event'] = $eventname;
+
 	  $db =& $this->GetDb();
-	  $q = "SELECT handler_name FROM ".cms_db_prefix()."eventhandlers WHERE
+	  $q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
                 module_name = ? AND event_name = ?";
-          $dbresult = $db->Execute( $q, array( $this->GetName( $name ), $name ) );
+          $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
 	  if( $dbresult && ($dbresult->RowCount() == 1) )
 	    {
-	      $row = $dbresult->FetchRow();
-	      $fn = $row['handler_name'];
-	      if( isset($fn) && $fn != '' )
+	      while( $row = $dbresult->FetchRow() )
 		{
-		  $this->CallUserTag( $fn, $params );
+		  if( isset( $row['handlername'] ) && $row['handlername'] != '' )
+		    {
+		      $this->CallUserTag( $row['handlername'], $params );
+		    }
+		  else if( isset( $row['module_handler'] ) && $row['module_handler'] != '' )
+		    {
+		      // here's a quick check to make sure that we're not calling the module
+		      // DoEvent function for an event originated by the same module.
+		      if( $row['module_handler'] == $this->GetName() )
+			{
+			  continue;
+			}
+
+		      // and call the module event handler.
+		      $obj = $this->GetModuleInstance($row['module_handler']);
+		      if( $obj )
+			{
+			  $obj->DoEvent( $this->GetName, $eventname, $params ); 
+			}
+		    }
 		}
 	    }
 	}
-
-	// todo, add functions into other files
-	// AddUserTag, RemoveUserTag, SetEventHandler
-	// GetEventHandler
-
-
 }
 
 /**
@@ -3183,6 +3252,7 @@ class CMSModuleContentType extends ContentBase
 	{
 		return '';
 	}
+
 
 	function Lang($name, $params=array())
 	{

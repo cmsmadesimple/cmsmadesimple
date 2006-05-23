@@ -56,7 +56,7 @@ if( isset( $_POST['goforit'] ) )
 	    $p1 = strpos( $key, '_' );
 	    $modulename = substr( $key, 0, $p1 );
 	    $eventname  = substr( $key, $p1+1 );
-	    Events::SetEventHandler( $modulename, $eventname, $value );
+	    Events::AddEventHandler( $modulename, $eventname, $value );
 	  }
       }
   }
