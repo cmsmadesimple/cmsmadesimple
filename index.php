@@ -36,7 +36,7 @@ $starttime = microtime();
 
 clearstatcache();
 
-if (!isset($_SERVER['REQUEST_URI']))
+if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 {
 	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
 }
