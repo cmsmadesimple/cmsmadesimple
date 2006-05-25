@@ -40,15 +40,29 @@ class Events
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
-          module_name = ? AND event_name = ?";
-    $dbresult = $db->Execute( $query, array( $modulename, $eventname ));
+    // find the id
+    $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+          originator = ? AND event_name = ?";
+    $dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
+    if( $dbresult == false || $dbresult->RowCount() == 0 )
+      {
+	// query failed, event not found
+	return false;
+      }
+    $row = $dbresult->FetchRow();
+    $id = $row['event_id'];
+
+    // now get the handlers
+    $q = "SELECT handler_name,module_handler,handler_order FROM ".cms_db_prefix()."event_handlers WHERE
+          event_id = ? ORDER BY handler_order ASC";
+    $dbresult = $db->Execute( $q, array( $id ));
 
     if( $dbresult !== false )
       {
 	$result = array();
 	while( $row = $dbresult->FetchRow() )
 	  {
+	    print_r( $row ); echo " DEBUG<br/>";
 	    $result[] = $row;
 	  }
 	return $result;
@@ -67,7 +81,7 @@ class Events
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "SELECT * FROM ".cms_db_prefix()."eventhandlers";
+    $q = "SELECT * FROM ".cms_db_prefix()."events";
     $dbresult = $db->Execute( $q );
     if( $dbresult == false )
       {
@@ -106,17 +120,55 @@ class Events
     global $gCms;
     $db = &$gCms->GetDb();
 
+    // find the id
+    $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+          originator = ? AND event_name = ?";
+    $dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
+    if( $dbresult == false || $dbresult->RowCount() == 0 )
+      {
+	// query failed, event not found
+	return false;
+      }
+    $row = $dbresult->FetchRow();
+    $id = $row['event_id'];
+
+    // now see if there's nothing already existing for this
+    $q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
+          event_id = ? AND ( tag_name = ? OR module_name = ? )";
+    $dbresult = $db->Execute( $q, array( $id, $tag_name, $event_name ) );
+    if( $dbresult != false )
+      {
+	// hmmm, something matches already
+	return false;
+      }
+
+    // now see if we can get a new id
+    $order = 1;
+    $q = "SELECT max(event_id) AS newid FROM ".cms_db_prefix()."event_handlers
+          WHERE event_id = ?";
+    $dbresult = $db->Execute( $q, array( $id ) );
+    if( $dbresult != false || $dbresult->RowCount() == 0)
+      {
+	$row = $db->FetchRow();
+	$order = $row['newid'] + 1;
+      }
+
+    // okay, we can insert
     $params = array();
-    $params[] = $tag_name;
-    $q = "UPDATE ".cms_db_prefix()."eventhandlers SET handler_name = ?";
+    $params[] = $id;
+    $q = "INSERT INTO ".cms_db_prefix()."event_handlers ";
     if( $module_handler != false )
       {
-	$q = "UPDATE ".cms_db_prefix()."eventhandlers SET module_handler = ?";
-	$params = array( $module_handler );
+	$q .= '(event_id,module_name,removable,handler_order)';
+	$params[] = $module_handler;
       }
-    $q .= "WHERE module_name = ? and event_name = ?";
-    $params[] = $modulename;
-    $params[] = $eventname;
+    else
+      {
+	$q .= '(event_id,tag_name,removable,handler_order)';
+	$params[] = $tag_name;
+      }
+    $params[] = $removable;
+    $params[] = $order;
     $dbresult = $db->Execute( $q, $params );
     if( $dbresult != false )
       {
@@ -149,9 +201,32 @@ class Events
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "UPDATE ".cms_db_prefix()."eventhandlers;
-          SET $field = ? 
-          WHERE module_name = ? AND event_name = ?";
+    // find the id
+    $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+          originator = ? AND event_name = ?";
+    $dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
+    if( $dbresult == false || $dbresult->RowCount() == 0 )
+      {
+	// query failed, event not found
+	return false;
+      }
+    $row = $dbresult->FetchRow();
+    $id = $row['event_id'];
+
+    // delete the record
+    $params = array( $id );
+    $q = "DELETE FROM ".cms_db_prefix()."event_handlers;
+          WHERE event_id = ? AND ";
+    if( $modulename != false )
+      {
+	$q .- 'module_name = ?';
+	$params[] = $module_handler;
+      }
+    else
+      {
+	$q .= 'tag_name = ?';
+	$params[] = $tag_name;
+      }
     $dbresult = $db->Execute( $q, array( null, $modulename, $eventname ) );
     if( $dbresult == false )
       {
@@ -166,10 +241,22 @@ class Events
     global $gCms;
     $db = &$gCms->GetDb();
 
-    $q = "UPDATE ".cms_db_prefix()."eventhandlers;
-          SET handler_name = ?, module_handler = ?
-          WHERE module_name = ? AND event_name = ?";
-    $dbresul = $db->Execute( $q, array( $modulename, $eventname ) );
+    // find the id
+    $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+          originator = ? AND event_name = ?";
+    $dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
+    if( $dbresult == false || $dbresult->RowCount() == 0 )
+      {
+	// query failed, event not found
+	return false;
+      }
+    $row = $dbresult->FetchRow();
+    $id = $row['event_id'];
+
+    // and delete the handlers
+    $q = "DELETE FROM ".cms_db_prefix()."event_handlers 
+          WHERE event_id = ?";
+    $dbresult = $db->Execute( $q, array( $id ) );
     if( $dbresult == false )
       {
 	return true;

@@ -3131,9 +3131,10 @@ class CMSModule
 	function CreateEvent( $eventname )
 	{
 	  $db =& $this->GetDb();
-	  $q = "INSERT INTO ".cms_db_prefix()."eventhandlers (module_name, event_name)
-             values (?,?)";
-          $db->Execute( $q, array( $this->GetName(), $eventname ));
+	  $id = $db->GenID( cms_db_prefix()."events_seq" );
+	  $q = "INSERT INTO ".cms_db_prefix()."events
+             values (?,?,?)";
+          $db->Execute( $q, array( $this->GetName(), $eventname, $id ));
 	}
 
 
@@ -3192,9 +3193,28 @@ class CMSModule
 	function RemoveEvent( $eventname )
 	{
 	  $db =& $this->GetDb();
-	  $q = "DELETE FROM ".cms_db_prefix()."eventhandlers WHERE
-                module_name = ? AND event_name = ?";
-	  $db->Execute( $q, array( $this->GetName(), $eventname ));
+
+	  // get the id
+	  $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+                originator = ? AND event_name = ?";
+	  $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
+	  if( $dbresult == false || $dbresult->RowCount() == 0 )
+	    {
+	      // query failed, event not found
+	      return false;
+	    }
+	  $row = $dbresult->FetchRow();
+	  $id = $row['event_id'];
+	  
+	  // delete all the handlers
+	  $q = "DELETE FROM ".cms_db_prefix()."event_handlers WHERE
+                event_id = ?";
+          $db->Execute( $q, array( $id ) );
+
+	  // then delete the event
+	  $q = "DELETE FROM ".cms_db_prefix()."events WHERE
+                event_id = ?";
+	  $db->Execute( $q, array( $id ) );
 	}
 
 
@@ -3208,32 +3228,44 @@ class CMSModule
 	 */
 	function SendEvent( $eventname, $params )
 	{
+	  // get the id
+	  $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
+               originator = ? AND event_name = ?";
+	  $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
+	  if( $dbresult == false || $dbresult->RowCount() == 0 )
+	    {
+	      // query failed, event not found
+	      return false;
+	    }
+	  $row = $dbresult->FetchRow();
+	  $id = $row['event_id'];
+	  
 	  $params['module'] = $this->GetName();
 	  $params['event'] = $eventname;
 
 	  $db =& $this->GetDb();
 	  $q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
-                module_name = ? AND event_name = ?";
-          $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
+                event_id = ? ORDER BY handler_order ASC";
+          $dbresult = $db->Execute( $q, array( $id ) );
 	  if( $dbresult && $dbresult->RowCount() )
 	    {
 	      while( $row = $dbresult->FetchRow() )
 		{
-		  if( isset( $row['handlername'] ) && $row['handlername'] != '' )
+		  if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 		    {
-		      $this->CallUserTag( $row['handlername'], $params );
+		      $this->CallUserTag( $row['tag_name'], $params );
 		    }
-		  else if( isset( $row['module_handler'] ) && $row['module_handler'] != '' )
+		  else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
 		    {
 		      // here's a quick check to make sure that we're not calling the module
 		      // DoEvent function for an event originated by the same module.
-		      if( $row['module_handler'] == $this->GetName() )
+		      if( $row['module_name'] == $this->GetName() )
 			{
 			  continue;
 			}
 
 		      // and call the module event handler.
-		      $obj = $this->GetModuleInstance($row['module_handler']);
+		      $obj = $this->GetModuleInstance($row['module_name']);
 		      if( $obj )
 			{
 			  $obj->DoEvent( $this->GetName, $eventname, $params ); 

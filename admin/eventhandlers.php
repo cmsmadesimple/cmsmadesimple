@@ -88,7 +88,6 @@ switch( $action )
   default:
     {
       $events = Events::ListEvents();
-      
       echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
       echo "<thead>\n";
       echo "  <tr>\n";
@@ -108,11 +107,11 @@ switch( $action )
 	    {
 	      echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 	      
-	      echo "    <td>".$oneevent['module_name']."</td>\n";
+	      echo "    <td>".$oneevent['originator']."</td>\n";
 	      echo "    <td>".$oneevent['event_name']."</td>\n";
-	      echo "    <td>".$gCms->modules[$oneevent['module_name']]['object']->GetEventDescription($oneevent['event_name'])."</td>\n";
-	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['module_name']."&amp;event=".$oneevent['event_name']."\">".lang('help')."</a></td>\n";
-	      echo "    <td>TODO: edit link</td>\n";
+	      echo "    <td>".$gCms->modules[$oneevent['originator']]['object']->GetEventDescription($oneevent['event_name'])."</td>\n";
+	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".lang('help')."</a></td>\n";
+	      echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".lang('edit')."</a></td>\n";
 	      echo "  </tr>\n"; 
 	      ($curclass=="row1"?$curclass="row2":$curclass="row1");
 	    }
@@ -120,11 +119,11 @@ switch( $action )
       
       echo "</tbody>\n";
       echo "</table>\n";
-      echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
     } // default action
       
   } // switch
 
+echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 
 echo "</div>\n";
 echo "</div>\n";

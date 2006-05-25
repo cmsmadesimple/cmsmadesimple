@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['module_name'] = 'Module Name';
+$lang['admin']['event_name'] = 'Event Name';
+$lang['admin']['event_description'] = 'Event Description';
+$lang['admin']['order'] = 'Order';
+$lang['admin']['user_tag'] = 'User Tag';
+$lang['admin']['add'] = 'Add';
 $lang['admin']['CSS'] = 'CSS';
 $lang['admin']['about'] = 'About';
 $lang['admin']['action'] = 'Action';
@@ -99,7 +105,7 @@ $lang['admin']['errorupdatingtemplate'] = 'Error updating template';
 $lang['admin']['errorupdatinguser'] = 'Error updating user';
 $lang['admin']['errorupdatingusertag'] = 'Error updating user tag';
 $lang['admin']['erroruserinuse'] = 'This user still owns content pages. Please change ownership to another user before deleting.';
-$lang['admin']['eventhandlers'] = 'Event Handlers';
+$lang['admin']['eventhandlers'] = 'Events Manager';
 $lang['admin']['eventhandlerdescription'] = 'Associate user tags with events';
 $lang['admin']['export'] = 'Export';
 $lang['admin']['event'] = 'Event';
