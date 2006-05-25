@@ -31,24 +31,58 @@ check_login();
 $action = "";
 $module = "";
 $event = "";
-if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+if( isset( $_POST['add'] ) )
   {
-    $action = $_GET['action'];
+    // we're adding some funky event handler
+    if( isset( $_POST['module'] ) && $_POST['module'] != '' )
+      {
+	$module = $_POST['module'];
+      }
+    if( isset( $_POST['event'] ) && $_POST['event'] != '' )
+      {
+	$event = $_POST['event'];
+      }
+    if( isset( $_POST['handler'] ) )
+      {
+	// handler is set, we just have to try to set it
+	$handler = $_POST['handler'];
+      }
+    if( $module && $event && $handler )
+      {
+	if( strstr( $handler, "m:" ) == 0 )
+	  {
+	    $handler = substr( $handler, 2 );
+	    Events::AddEventHandler( $module, $event, false, $handler );
+	  }
+	else
+	  {
+	    Events::AddEventHandler( $module, $event, $handler );
+	  }
+      }
   }
-if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+else
   {
-    $module = $_GET['module'];
+    // we're processing an up/down or delete
+    if( isset( $_GET['action'] ) && $_GET['action'] != '' )
+      {
+	$action = $_GET['action'];
+      }
+    if( isset( $_GET['module'] ) && $_GET['module'] != '' )
+      {
+	$module = $_GET['module'];
+      }
+    if( isset( $_GET['event'] ) && $_GET['event'] != '' )
+      {
+	$event = $_GET['event'];
+      }
   }
-if( isset( $_GET['event'] ) && $_GET['event'] != '' )
-  {
-    $event = $_GET['event'];
-  }
-
+    
 // get the event description
 $description = $gCms->modules[$module]['object']->GetEventDescription($event);
 
 // and now get the list of handlers for this event
 $handlers = Events::ListEventHandlers( $module, $event );
+
 // and the list of all available handlers
 $allhandlers = array();
 // we get the list of user tags, and add them to the list
@@ -60,7 +94,7 @@ foreach( $usertags as $key => $value )
 // and the list of modules, and add them
 foreach( $gCms->modules as $key => $value )
 {
-  $allhandlers[$key] = 'm'.$key;
+  $allhandlers[$key] = 'm:'.$key;
 }
 
 include_once("header.php");
@@ -106,12 +140,12 @@ if( $handlers != false )
     foreach( $handlers as $onehandler )
       {
 	echo "<tr class=\"$rowclass\">\n";
-	echo "  <td>".$row['handler_order']."</td>\n";
-	echo "  <td>".$row['tag_name']."</td>\n";
-	echo "  <td>".$row['module_name']."</td>\n";
-	echo "  <td><a href=\"editevent.php?action=up&amp;handler=".$row['handler_id']."\">$upImg</a></td>\n";
-	echo "  <td><a href=\"editevent.php?action=down&amp;handler=".$row['handler_id']."\">$downImg</a></td>\n";
-	echo "  <td><a href=\"editevent.php?action=delete&amp;handler=".$row['handler_id']."\">$deleteImg</a></td>\n";
+	echo "  <td>".$onehandler['handler_order']."</td>\n";
+	echo "  <td>".$onehandler['tag_name']."</td>\n";
+	echo "  <td>".$onehandler['module_name']."</td>\n";
+	echo "  <td><a href=\"editevent.php?action=up&amp;handler=".$onehandler['handler_id']."\">$upImg</a></td>\n";
+	echo "  <td><a href=\"editevent.php?action=down&amp;handler=".$onehandler['handler_id']."\">$downImg</a></td>\n";
+	echo "  <td><a href=\"editevent.php?action=delete&amp;handler=".$onehandler['handler_id']."\">$deleteImg</a></td>\n";
 	echo "</tr>\n";
       }
     echo "</tbody>\n";
@@ -125,7 +159,9 @@ foreach( $allhandlers as $key => $value )
   echo "<option value=\"$value\">$key</option>\n";
 }
 echo "</select>\n";
-echo "<input type=\"submit\" value=\"".lang('add')."\">";
+echo "<input type=\"hidden\" name=\"module\" value=\"$module\">\n";
+echo "<input type=\"hidden\" name=\"event\" value=\"$event\">\n";
+echo "<input type=\"submit\" name=\"add\" value=\"".lang('add')."\">";
 echo "</form>\n";
 echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 

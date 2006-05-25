@@ -53,7 +53,7 @@ class Events
     $id = $row['event_id'];
 
     // now get the handlers
-    $q = "SELECT handler_name,module_handler,handler_order FROM ".cms_db_prefix()."event_handlers WHERE
+    $q = "SELECT tag_name,module_name,handler_order,handler_id FROM ".cms_db_prefix()."event_handlers WHERE
           event_id = ? ORDER BY handler_order ASC";
     $dbresult = $db->Execute( $q, array( $id ));
 
@@ -62,11 +62,11 @@ class Events
 	$result = array();
 	while( $row = $dbresult->FetchRow() )
 	  {
-	    print_r( $row ); echo " DEBUG<br/>";
 	    $result[] = $row;
 	  }
 	return $result;
       }
+    echo "DEBUG bad $q, $id<br/>";
     return false;
   }
 
@@ -106,7 +106,8 @@ class Events
    *
    * @returns mixed If successful, true.  If it fails, false.
    */
-  function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
+  function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false,
+			    $removable = true)
   {
     if( $tag_name == false && $module_handler == false )
       {
@@ -116,6 +117,7 @@ class Events
       {
 	return false;
       }
+
 
     global $gCms;
     $db = &$gCms->GetDb();
@@ -133,12 +135,26 @@ class Events
     $id = $row['event_id'];
 
     // now see if there's nothing already existing for this
+    // tag or module and this id
     $q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
-          event_id = ? AND ( tag_name = ? OR module_name = ? )";
-    $dbresult = $db->Execute( $q, array( $id, $tag_name, $event_name ) );
-    if( $dbresult != false )
+          event_id = ? AND ";
+    $params = array();
+    $params[] = $id;
+    if( $tag_name != "" )
+      {
+	$q .= "tag_name = ?";
+	$params[] = $tag_name;
+      }
+    else
+      {
+	$q .= "module_name = ?";
+	$params[] = $module_handler;
+      }
+    $dbresult = $db->Execute( $q, $params );
+    if( $dbresult != false && $dbresult->RowCount() > 0 )
       {
 	// hmmm, something matches already
+	die( "error in query" );
 	return false;
       }
 
@@ -147,11 +163,13 @@ class Events
     $q = "SELECT max(event_id) AS newid FROM ".cms_db_prefix()."event_handlers
           WHERE event_id = ?";
     $dbresult = $db->Execute( $q, array( $id ) );
-    if( $dbresult != false || $dbresult->RowCount() == 0)
+    if( $dbresult != false && $dbresult->RowCount() != 0)
       {
-	$row = $db->FetchRow();
+	$row = $dbresult->FetchRow();
 	$order = $row['newid'] + 1;
       }
+
+    $handler_id = $db->GenId( cms_db_prefix()."event_handler_seq" );
 
     // okay, we can insert
     $params = array();
@@ -159,16 +177,18 @@ class Events
     $q = "INSERT INTO ".cms_db_prefix()."event_handlers ";
     if( $module_handler != false )
       {
-	$q .= '(event_id,module_name,removable,handler_order)';
+	$q .= '(event_id,module_name,removable,handler_order,handler_id)';
 	$params[] = $module_handler;
       }
     else
       {
-	$q .= '(event_id,tag_name,removable,handler_order)';
+	$q .= '(event_id,tag_name,removable,handler_order,handler_id)';
 	$params[] = $tag_name;
       }
+    $q .= "VALUES (?,?,?,?)";
     $params[] = $removable;
     $params[] = $order;
+    $params[] = $handler_id;
     $dbresult = $db->Execute( $q, $params );
     if( $dbresult != false )
       {

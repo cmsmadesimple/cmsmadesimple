@@ -129,7 +129,7 @@ class UserTags
 		//var_dump($db->Execute($query));
 		$result = &$db->Execute($query);
 		
-		var_dump($result);
+		//var_dump($result);
 
 		while ($result && !$result->EOF)
 		{
