@@ -39,6 +39,8 @@ if(isset($params['thumbPicTitleTag'])) $thumbPicTitleTag = $params['thumbPicTitl
 if(isset($params['sortBy'])) $sortBy = $params['sortBy'];
 if(isset($params['sortByOrder'])) $sortByOrder = $params['sortByOrder'];
 
+
+
 //Read Image Folder
 $selfA = explode('/', $_SERVER["PHP_SELF"]);
 $self = $selfA[sizeOf($selfA)-1] . '?page=' . $_GET['page'];
@@ -73,6 +75,10 @@ $liste = $tmp['file'];
 //Output
 $count = 1;
 $output = '';
+
+ if($type=="popup") {
+   $output .= generate_javascript();
+ }
 
 //thumbcount
 $deci = array();
@@ -422,7 +428,9 @@ good for most people :) </p>
 </pre>
 <br/>
 
-	<h4>The popup javascript</h4>
+	<h4>The popup javascript is now included in plugin code and will be generated automatically if you still have javascript in your template please remove it.</h4>
+<?php
+/*
 <pre>
 {literal}
 &lt;script type=&quot;text/javascript&quot;&gt;
@@ -447,6 +455,8 @@ function PopupPic(bigPic,title,w,h) {
 {/literal}
 </pre>
 <br />
+*/
+?>
 	<?php
 }
 
@@ -469,6 +479,41 @@ function smarty_cms_about_function_ImageGallery() {
 	<p>All credit where credit is due :)</p>
 
 	<?php
+}
+
+function generate_javascript() {
+global $gCms;
+$config=$gCms->config; 
+
+static $count;
+if ($count==0) {
+
+$out = "
+<script type=\"text/javascript\">
+<!--
+function PopupPic(bigPic,title,w,h) {
+var winl = (screen.width - w) / 2;
+var wint = (screen.height - h) / 2;
+var smarty_hack = 'head';
+newWindow = window.open('',title,'height='+h+',width='+w+',top='+wint+',left='+winl+',resizable=0,scrollbars=0');
+newWindow.document.write('<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd\">');
+newWindow.document.write('<html><head><title>'+title+'</title><base href=\"".$config[root_url]."/\" />');
+newWindow.document.write('<meta http-equiv=\"content-type\" content=\"text/html; charset=UTF-8\" />');
+newWindow.document.write('<style type=\"text/css\"><!-- html, body {margin: 0px; background-color: #000;} --></style>');
+newWindow.document.write('</'+smarty_hack+'><body onclick=\"self.close()\">');
+newWindow.document.write('<p><img src=\"'+bigPic+'\" alt=\"'+title+'\" /></p>');
+newWindow.document.write('</body></html>');
+newWindow.document.close();
+newWindow.focus();
+}
+-->
+</script>
+";
+}
+
+$count++;
+
+return $out;
 }
 
 ?>
