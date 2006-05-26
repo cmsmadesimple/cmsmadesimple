@@ -115,10 +115,11 @@ function defaultFocus() {
       if (classvalue!=null) {
                 var defaultfocuslocation = classvalue.indexOf("defaultfocus");
                 if (defaultfocuslocation != -1) {
-                	// anchor.target = "_blank";
                 	anchor.focus();
-			//might be used in the future maybe class="selectall" 
-			//anchor.select();
+			var defaultfocusselect = classvalue.indexOf("selectall");
+			if (defaultfocusselect != -1) {
+				anchor.select();
+			}
                 }
         }
    }

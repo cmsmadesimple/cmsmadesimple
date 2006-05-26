@@ -63,7 +63,8 @@ function module_autoupgrade()
 
 ?>
 
-<html>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 	<title>CMS Made Simple Upgrade</title>
 	<link rel="stylesheet" type="text/css" href="install.css" />
@@ -73,7 +74,7 @@ function module_autoupgrade()
 
 <div class="body">
 
-<img src="../images/cms/cmsbanner.gif" width="449" height="114" alt="CMS Banner Logo" />
+<img src="../images/cms/cmsbanner.jpg" width="800" height="100" alt="CMS Banner Logo" />
 
 <div class="headerish">
 
@@ -174,9 +175,8 @@ else
 		{
 			module_autoupgrade();
 
-			echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
-			echo "<p>You should also check that all of your modules are up to date, by going to the Plugins page and looking for any listed as 'Needs Upgrade'.</p>";
-			echo "<p>The CMS database is up to date using schema version ".$current_version.".  Please remove this file when possible.  Click <a href=\"../index.php\">here</a> to go to your CMS site.</p>";
+			echo "<p>Please review config.php, modify any new settings as necessary and then reset it's permissions back to a locked state. You should also check that all of your modules are up to date, by going to the Plugins page and looking for any listed as 'Needs Upgrade'.</p>";
+			echo "<p>The CMS database is up to date using schema version ".$current_version.". Please remove this file when possible. Click <a href=\"../index.php\">here</a> to go to your CMS site.</p><br />";
 		}
 
 	}
@@ -192,8 +192,8 @@ else
 		module_autoupgrade();
 
 
-		echo "<p>Please review config.php,  modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
-		echo "<p>CMS is up to date.  Please click <a href=\"../index.php\">here</a> to go to your CMS site or you can <a href=\"../admin/\">go to the Admin Panel</a></p>";
+		echo "<p>Please review config.php, modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
+		echo "<p>CMS is up to date. Please click <a href=\"../index.php\">here</a> to go to your CMS site or you can <a href=\"../admin/\">go to the Admin Panel</a></p>";
 
 	}
 
