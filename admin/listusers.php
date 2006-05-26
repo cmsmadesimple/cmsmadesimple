@@ -32,6 +32,64 @@ if (isset($_GET["message"])) {
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
+
+if (isset($_GET["toggleactive"]))
+{
+ if($_GET["toggleactive"]==1) {
+   $error .= "<li>".lang('errorupdatinguser')."</li>";
+ } else {
+  $thisuser = UserOperations::LoadUserByID($_GET["toggleactive"]);
+
+  if($thisuser) {
+
+//modify users, is this enough?
+    $userid = get_userid();
+    $permission = check_permission($userid, 'Modify Users');
+
+    $result = false;
+    if($permission)
+      {
+
+    $thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
+
+        #Perform the edituser_pre callback
+        foreach($gCms->modules as $key=>$value)
+              {
+                 if ($gCms->modules[$key]['installed'] == true &&
+                       $gCms->modules[$key]['active'] == true)
+                        {
+                         $gCms->modules[$key]['object']->EditUserPre($thisuser);
+                        }
+                 }
+
+        $result = $thisuser->save();
+
+      }
+
+      if ($result)
+         {
+           audit($user_id, $thisuser->username, 'Edited User');
+           #Perform the edituser_post callback
+           foreach($gCms->modules as $key=>$value)
+                  {
+                   if ($gCms->modules[$key]['installed'] == true &&
+                          $gCms->modules[$key]['active'] == true)
+                       {
+                          $gCms->modules[$key]['object']->EditUserPost($thisuser);
+                       }
+                  }
+        } else {
+           $error .= "<li>".lang('errorupdatinguser')."</li>";
+        }
+   }
+}
+}
+
+ if ($error != "") {
+     echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";
+ }
+
+
 ?>
 
 <div class="pagecontainer">
@@ -79,7 +137,7 @@ if (isset($_GET["message"])) {
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
-				echo "<td class=\"pagepos\">".($oneuser->active == 1?$image_true:$image_false)."</td>\n";
+				echo "<td class=\"pagepos\"><a href=\"listusers.php?toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				if ($edit || $userid == $oneuser->id)
 				    {
 					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
