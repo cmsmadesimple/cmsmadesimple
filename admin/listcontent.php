@@ -432,6 +432,12 @@ if ($limit != 0 && $counter > $limit)
 }
 
 $headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
+if (check_permission($userid, 'Add Pages'))
+{
+	$headoflist .=  '<p class="pageoptions"><a href="addcontent.php">';
+	$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+	$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a></p>';
+}
 $headoflist .= '<form action="multicontent.php" method="post">';
 if ($counter)
 {
