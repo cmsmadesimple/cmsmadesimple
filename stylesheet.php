@@ -72,11 +72,11 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 	else
 	{
 		$db=pg_connect("host=".$config['db_hostname']." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
-		$result=pg_query($db, $sql);
 		if ($name != '')
 			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
 		else
 			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . pg_escape_string($mediatype) . "' ORDER BY ac.create_date";
+		$result=pg_query($db, $sql);
 		while ($result && $row = pg_fetch_array($result, null, PGSQL_ASSOC))
 		{
 			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n";
