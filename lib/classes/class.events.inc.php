@@ -154,13 +154,12 @@ class Events
     if( $dbresult != false && $dbresult->RowCount() > 0 )
       {
 	// hmmm, something matches already
-	die( "error in query" );
 	return false;
       }
 
     // now see if we can get a new id
     $order = 1;
-    $q = "SELECT max(event_id) AS newid FROM ".cms_db_prefix()."event_handlers
+    $q = "SELECT max(handler_order) AS newid FROM ".cms_db_prefix()."event_handlers
           WHERE event_id = ?";
     $dbresult = $db->Execute( $q, array( $id ) );
     if( $dbresult != false && $dbresult->RowCount() != 0)
@@ -185,7 +184,7 @@ class Events
 	$q .= '(event_id,tag_name,removable,handler_order,handler_id)';
 	$params[] = $tag_name;
       }
-    $q .= "VALUES (?,?,?,?)";
+    $q .= "VALUES (?,?,?,?,?)";
     $params[] = $removable;
     $params[] = $order;
     $params[] = $handler_id;

@@ -65,6 +65,9 @@ if( isset( $_GET['event'] ) && $_GET['event'] != '' )
 // display the page
 include_once("header.php");
 
+$editImg = $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+$infoImg = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
@@ -94,8 +97,8 @@ switch( $action )
       echo "    <th>".lang('module')."</th>\n";
       echo "    <th>".lang('event')."</th>\n";
       echo "    <th>".lang('description')."</th>\n";
-      echo "    <th>".lang('help')."</cdth>\n";
-      echo "    <th>".lang('edit')."</th>\n";
+      echo "    <th class=\"pageicon\">&nbsp;</th>\n";
+      echo "    <th class=\"pageicon\">&nbsp;</th>\n";
       echo "  </tr>\n";
       echo "</thead>\n";
       echo "<tbody>\n";
@@ -110,8 +113,8 @@ switch( $action )
 	      echo "    <td>".$oneevent['originator']."</td>\n";
 	      echo "    <td>".$oneevent['event_name']."</td>\n";
 	      echo "    <td>".$gCms->modules[$oneevent['originator']]['object']->GetEventDescription($oneevent['event_name'])."</td>\n";
-	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".lang('help')."</a></td>\n";
-	      echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".lang('edit')."</a></td>\n";
+	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+	      echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
 	      echo "  </tr>\n"; 
 	      ($curclass=="row1"?$curclass="row2":$curclass="row1");
 	    }
