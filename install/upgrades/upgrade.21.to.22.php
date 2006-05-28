@@ -10,7 +10,7 @@ $flds = "
           module_name   c(255),
           removable     I,
           handler_order I,
-          handler_id    I,
+          handler_id    I
         ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."event_handlers", $flds, $taboptarray);
