@@ -1363,7 +1363,7 @@ class AdminTheme
         $wikiUrl = $this->cms->config['wiki_url'];
         // Include English translation of titles. (Can't find better way to get them)
         $dirname = dirname(__FILE__);
-        include($dirname.'/../../admin/lang/en_US/admin.inc.php');
+        include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
 		// Check if this is a module
         if (FALSE == empty($_GET['module'])  || FALSE == empty($_REQUEST['mact'])) {
 			$isModule = TRUE;
