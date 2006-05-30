@@ -1824,7 +1824,7 @@ class CMSModule
 	function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
 					 $enctype='',$inline=true,$idsuffix='',$params=array())
 	{
-	  return $this->CreateFormStart($id,$action,$returnid,$method,$post,$enctype,$inline,$idsuffix,$params);
+	  return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
 	}
 
 
@@ -3229,6 +3229,8 @@ class CMSModule
 	function SendEvent( $eventname, $params )
 	{
 	  // get the id
+	  $db =& $this->GetDb();
+
 	  $q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
                originator = ? AND event_name = ?";
 	  $dbresult = $db->Execute( $q, array( $this->GetName(), $eventname ) );
