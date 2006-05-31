@@ -411,7 +411,12 @@ else if ($action == 'missingdeps')
 			#Make sure it's a valid module for this version of CMSMS
 			if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
 			{
-				echo "<td>".$dbm[$key]['Version']."</td>";
+				// Fix undefined index error if module is not already installed.
+				if (FALSE == empty($dbm[$key]['Version'])) {
+					echo "<td>".$dbm[$key]['Version']."</td>";
+				} else {
+					echo "<td>&nbsp</td>";
+				}
 				echo '<td colspan="3">Minimum CMSMS Version Required: '.$modinstance->MinimumCMSVersion().'</td>';
 			}
             else if (!isset($dbm[$key])) #Not installed, lets put up the install button
