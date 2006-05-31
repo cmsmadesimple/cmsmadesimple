@@ -204,11 +204,11 @@ if (isset($CMS_ADMIN_PAGE))
 #Load all installed module code
 if (isset($LOAD_ALL_MODULES))
 {
-	ModuleOperations::LoadModules(true);
+	ModuleOperations::LoadModules(true,!isset($CMS_ADMIN_PAGE));
 }
 else
 {
-	ModuleOperations::LoadModules(false);
+	ModuleOperations::LoadModules(false,!isset($CMS_ADMIN_PAGE));
 }
 
 # vim:ts=4 sw=4 noet

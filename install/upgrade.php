@@ -52,8 +52,8 @@ function module_autoupgrade()
 				{
 					echo "<p>Upgrading $modulename module from $module_version to $file_version...";
 					$gCms->modules[$modulename]['object']->Upgrade($module_version, $file_version);
-					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-					$result = $db->Execute($query, array($file_version, $modulename));
+					$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
+					$result = $db->Execute($query, array($file_version, ($gCms->modules[$modulename]['object']->IsAdminOnly()==true?1:0), $modulename));
 					echo "[Done]</p>";
 				}
 			}

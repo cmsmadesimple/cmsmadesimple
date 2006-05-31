@@ -302,7 +302,7 @@ class ModuleOperations
 	 * modules whether they're installed, or active.  If it is false, then it will
 	 * only load modules which are installed and active.
 	 */
-	function LoadModules($loadall = false)
+	function LoadModules($loadall = false, $noadmin = false)
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
@@ -366,7 +366,11 @@ class ModuleOperations
 		#Load them if loadall is false
 		if (isset($db))
 		{
-			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
+			$query = '';
+			if ($noadmin)
+				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
+			else
+				$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
 			$result = &$db->Execute($query);
 			while ($result && !$result->EOF)
 			{
@@ -759,6 +763,14 @@ class CMSModule
 	function GetAdminDescription($lang = 'en_US')
 	{
 		return '';
+	}
+	
+	/**
+	 * Returns whether this module should only be loaded from the admin
+	 */
+	function IsAdminOnly()
+	{
+		return false;
 	}
 
 	/**

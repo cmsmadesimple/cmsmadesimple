@@ -131,8 +131,8 @@ if ($access)
 			#now insert a record
 			if (!isset($result) || $result === FALSE)
 			{
-				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (?,?,'installed',?)";
-				$db->Execute($query, array($module,$modinstance->GetVersion(),1));
+				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
+				$db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
 				
 				#and insert any dependancies
 				if (count($modinstance->GetDependencies()) > 0) #Check for any deps
@@ -193,8 +193,8 @@ if ($access)
 
 			if( !isset( $result ) || $result === FALSE )
 			{
-				$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-				$db->Execute($query,array($_GET['newversion'],$module));
+				$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
+				$db->Execute($query,array($_GET['newversion'],($modinstance->IsAdminOnly()==true?1:0),$module));
 			}
 			else
 			{
@@ -260,15 +260,15 @@ if ($access)
 
 	if ($action == "settrue")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(1,$module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ?, admin_only = ? WHERE module_name = ?";
+		$db->Execute($query, array(1,($modinstance->IsAdminOnly()==true?1:0),$module));
 		redirect("listmodules.php");
 	}
 
 	if ($action == "setfalse")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(0,$module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ?, admin_only = ? WHERE module_name = ?";
+		$db->Execute($query, array(0,($modinstance->IsAdminOnly()==true?1:0),$module));
 		redirect("listmodules.php");
 	}
 }
