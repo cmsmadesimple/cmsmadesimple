@@ -77,6 +77,7 @@ switch( $action )
   case 'showeventhelp':
     {
       $text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+	  echo "<h3>$event</h3>";
       if( $text == "" )
 	{
 	  echo "No text returned";
