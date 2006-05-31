@@ -134,7 +134,10 @@ function smarty_cms_help_function_content()
 	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.</li>
+		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
+<p>Example:</p>
+<pre>{content block="Second Content Block"}</pre>
+<p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
 		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.</li>
