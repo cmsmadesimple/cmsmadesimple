@@ -51,6 +51,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 # build path
 	if (isset($endNode))
 	{
+	        $content = $endNode->getContent();
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() > 0)
@@ -58,24 +59,28 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			$content = &$currentNode->getContent();
 			if (isset($content))
 			{
-				//Add current node to the path and then check to see if
-				//current node is the set root
+			  //Add current node to the path and then check to see if
+			  //current node is the set root
+			  //as long as it's not hidden
+			  if( $content->ShowInMenu() )
+			    {
 				$path[] = $currentNode;
-				if (strtolower($content->Alias())!=strtolower($root))
-				{
-					//Get the parent node and loop
-					$currentNode = &$currentNode->getParentNode();
-				}
-				else
-				{
-					//No need to get the parent node -- we're the set root already
-					break;
-				}
+			    }
+			  if (strtolower($content->Alias())!=strtolower($root))
+			    {
+			      //Get the parent node and loop
+			      $currentNode = &$currentNode->getParentNode();
+			    }
+			  else
+			    {
+			      //No need to get the parent node -- we're the set root already
+			      break;
+			    }
 			}
 			else
 			{
-				//There are more serious problems here, dump out while we can
-				break;
+			  //There are more serious problems here, dump out while we can
+			  break;
 			}
 		}
 
@@ -95,7 +100,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 		}
 		$classid=isset($params['classid'])?(' class="' . $params['classid'] . '"'):'';
 		$currentclassid=isset($params['currentclassid'])?(' class="' . $params['currentclassid'] . '"'):'';
-	# now create the trail
+	# now create the trail (by iterating through the path we built, backwards)
 		for ($i=count($path)-1;$i>=0;$i--) {
 			$node = &$path[$i];
 			if (isset($node))
@@ -107,13 +112,14 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 						$trail .= $classid;
 						$trail .= '>';
 						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
-						$trail .= '</a> ' . $delimiter . ' ';
+						$trail .= '</a> ';
 					} else {
 						$trail .= "<span $classid>";
 						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 						$trail .= '</span>';
-						$trail .= ' ' . $delimiter . ' ';
+						$trail .= ' ';
 					}
+					$trail .= $delimiter . ' ';
 				} else {
 					if (isset($params['currentclassid'])) {
 						$trail .= "<span $currentclassid>";
@@ -164,7 +170,7 @@ function smarty_cms_help_function_breadcrumbs() {
 function smarty_cms_about_function_breadcrumbs() {
 ?>
 <p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.5</p>
+<p>Version: 1.6</p>
 <p>
 Change History:<br/>
 1.1 - Modified to use new content rewrite (wishy)<br />
@@ -172,6 +178,7 @@ Change History:<br/>
 1.3 - Added parameter: classid (tdh / perl4ever)<br />
 1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
 1.5 - Modified to use new hierarchy manager<br />
+1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
 </p>
 <?php
 }
