@@ -192,12 +192,14 @@ $special_failed=false;
 	if ($f == dirname(dirname(__FILE__)).'/modules' && !is_writable($f))
 	{
 	 echo '<br /><br /><em>Modules is not writable. You can still install the system, but you will not be able to install modules via the admin panel.</em>';
+$special_failed=true;
 	}
 
 //special check for uploads dir
         if ($f == dirname(dirname(__FILE__)).'/uploads' && !is_writable($f))
         {
         echo '<br /><br /><em>Uploads is not writable. You can still install the system, but you will not be able to upload files via the admin panel.</em>';
+$special_failed=true;
         }
         echo "</td><td class=\"col2\">";
 
@@ -207,20 +209,12 @@ $special_failed=false;
         } else {
 
 //special check for modules dir
-	    if (!($f == dirname(dirname(__FILE__)).'/modules'))
+	    if (!(($f == dirname(dirname(__FILE__)).'/modules') || ($f == dirname(dirname(__FILE__)).'/uploads')))
 		{
-//			$continueon=false;
-                        $special_failed=true;
-		}
-
-//special check for uploads dir
-            if (!($f == dirname(dirname(__FILE__)).'/uploads'))
-                {
-//                        $continueon=false;
-                        $special_failed=true;
+			$continueon=false;
                 }
 
-      	echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+        	echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
         } ## if 
         echo "</td></tr>\n";
 		($currow=="row1"?$currow="row2":$currow="row1");
