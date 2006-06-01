@@ -171,11 +171,9 @@ if (!$access) {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('edituser')))."</p></div>";	
 }
 else {
-
-	if ($error != "") {
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
+	if (FALSE == empty($error)) {
+	    echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 	}
-
 ?>
 
 <div class="pagecontainer">

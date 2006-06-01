@@ -85,9 +85,9 @@ if (isset($_GET["toggleactive"]))
 }
 }
 
- if ($error != "") {
-     echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";
- }
+if (FALSE == empty($error)) {
+	echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
+}
 
 
 ?>
