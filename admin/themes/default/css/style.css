@@ -449,7 +449,12 @@ div.pageerrorcontainer  {
    margin: 10px;
    padding: 5px;
    border: solid 1px #666;
+   color: #fff;
    }
+div.pageerrorcontainer a {
+   color: #fff;
+   text-decoration: underline;
+}
 
 div.pageerrorinstalldir  {
    background-color: #ba5a5a;
@@ -457,6 +462,7 @@ div.pageerrorinstalldir  {
    padding: 5px;
    border: solid 1px #666;
    width: 50em;
+   color: #fff;
    }
 
 div.pagemcontainer  {
@@ -504,10 +510,6 @@ a.pageback  {
 
 p.pageback  {
    margin-left: 10px;
-   }
-
-p.pageerror  {
-   color: #384654;
    }
 
 div.pagecontainer p.pageheader  {
