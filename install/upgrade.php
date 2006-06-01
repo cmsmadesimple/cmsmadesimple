@@ -20,8 +20,8 @@
 $LOAD_ALL_MODULES=1;
 $USE_OLD_ADODB=1;
 
-require_once(dirname(dirname(__FILE__))."/fileloc.php");
-require_once(dirname(dirname(__FILE__))."/include.php");
+require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."fileloc.php");
+require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php");
 
 //Do module autoupgrades 
 function module_autoupgrade()
@@ -134,17 +134,17 @@ else
 	$cpath = TMP_CACHE_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
-		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.'/'.$cfile), true) . "<br />";
-		if ($cfile != "." && $cfile != ".." && is_file($cpath.'/'.$cfile)) {
-			unlink($cpath.'/'.$cfile);
+		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.DIRECTORY_SEPARATOR.$cfile), true) . "<br />";
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.DIRECTORY_SEPARATOR.$cfile)) {
+			unlink($cpath.DIRECTORY_SEPARATOR.$cfile);
 		}
 	}
 	$cpath = TMP_TEMPLATES_C_LOCATION;
 	$handle=opendir($cpath);
 	while ($cfile = readdir($handle)) {
-		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.'/'.$cfile), true) . "<br />";
-		if ($cfile != "." && $cfile != ".." && is_file($cpath.'/'.$cfile)) {
-			unlink($cpath.'/'.$cfile);
+		#echo $cpath.$cfile . '--' . var_export(is_file($cpath.DIRECTORY_SEPARATOR.$cfile), true) . "<br />";
+		if ($cfile != "." && $cfile != ".." && is_file($cpath.DIRECTORY_SEPARATOR.$cfile)) {
+			unlink($cpath.DIRECTORY_SEPARATOR.$cfile);
 		}
 	}
 
@@ -184,7 +184,7 @@ else
 	{
 		while ($current_version < $CMS_SCHEMA_VERSION)
 		{
-			$filename = "upgrades/upgrade.".$current_version.".to.".($current_version+1).".php";
+			$filename = "upgrades".DIRECTORY_SEPARATOR."upgrade.".$current_version.".to.".($current_version+1).".php";
 			include($filename);
 			$current_version++;
 		}
@@ -197,9 +197,9 @@ else
 
 	}
 
-	if (file_exists(TMP_CACHE_LOCATION."/SITEDOWN"))
+	if (file_exists(TMP_CACHE_LOCATION.DIRECTORY_SEPARATOR."SITEDOWN"))
 	{
-		if (!unlink(TMP_CACHE_LOCATION."/SITEDOWN"))
+		if (!unlink(TMP_CACHE_LOCATION.DIRECTORY_SEPARATOR."SITEDOWN"))
 		{
 			echo "<p class=\"error\"><strong>Error:</strong> Could not remove the tmp/cache/SITEDOWN file.  Please remove manually or you will continue to show a \"Site Down for Maintainence\" message on your site.</p>";
 		}

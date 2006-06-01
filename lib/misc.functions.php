@@ -137,6 +137,30 @@ function microtime_diff($a, $b) {
 }
 
 /**
+ * Joins a path together using proper directory separators
+ * Taken from: http://www.php.net/manual/en/ref.dir.php
+ *
+ * @since 0.14
+ */
+function cms_join_path()
+{
+ 	$num_args = func_num_args();
+	$args = func_get_args();
+	$path = $args[0];
+
+	if( $num_args > 1 )
+	{
+		for ($i = 1; $i < $num_args; $i++)
+		{
+			$path .= DIRECTORY_SEPARATOR.$args[$i];
+		}
+	}
+
+	return $path;
+}
+
+
+/**
  * Shows a very close approximation of an Apache generated 404 error.
  *
  * Shows a very close approximation of an Apache generated 404 error.

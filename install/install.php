@@ -17,15 +17,13 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 $LOAD_ALL_MODULES=1;
-require(dirname(dirname(__FILE__)).'/fileloc.php');
+require(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
 
 $config = CONFIG_FILE_LOCATION;
 if (!file_exists($config)) {
     $file = @fopen($config, "w");
     if ($file != 0) {
-	#Follow fix suggested by sig in the forums
-        #$cwd = getcwd();
-	$cwd = str_replace("\\","/",dirname(__FILE__));
+		$cwd = addslashes(dirname(dirname(__FILE__)));
         fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
@@ -36,9 +34,7 @@ if (!file_exists($config)) {
 else if (filesize($config) == 0) {
     $file = @fopen($config, "w");
     if ($file != 0) {
-	#Follow fix suggested by sig in the forums
-        #$cwd = getcwd();
-	$cwd = str_replace("\\","/",dirname(__FILE__));
+		$cwd = addslashes(dirname(dirname(__FILE__)));
         fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
@@ -58,7 +54,7 @@ if (isset($_POST["page"])) {
 
 $DONT_LOAD_DB = true;
 
-if ($currentpage > 1) { require_once(dirname(dirname(__FILE__))."/include.php"); }
+if ($currentpage > 1) { require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php"); }
 
 ?>
 
@@ -133,7 +129,7 @@ function showPageOne() {
 	$continueon = true;
     echo "<h3>Checking file permissions</h3>\n";
     #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
-    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).'/modules', dirname(dirname(__FILE__)).'/uploads' );
+    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );
 
     echo "<table class=\"regtable\" border=\"1\">\n";
     echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
@@ -189,14 +185,14 @@ $special_failed=false;
         echo "<tr class=\"$currow\"><td>Checking write permission on $f";
 
 //special check for modules dir
-	if ($f == dirname(dirname(__FILE__)).'/modules' && !is_writable($f))
+	if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules' && !is_writable($f))
 	{
 	 echo '<br /><br /><em>Modules is not writable. You can still install the system, but you will not be able to install modules via the admin panel.</em>';
 $special_failed=true;
 	}
 
 //special check for uploads dir
-        if ($f == dirname(dirname(__FILE__)).'/uploads' && !is_writable($f))
+        if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' && !is_writable($f))
         {
         echo '<br /><br /><em>Uploads is not writable. You can still install the system, but you will not be able to upload files via the admin panel.</em>';
 $special_failed=true;
@@ -209,7 +205,7 @@ $special_failed=true;
         } else {
 
 //special check for modules dir
-	    if (!(($f == dirname(dirname(__FILE__)).'/modules') || ($f == dirname(dirname(__FILE__)).'/uploads')))
+	    if (!(($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules') || ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads')))
 		{
 			$continueon=false;
                 }
@@ -480,11 +476,11 @@ function showPageFour($sqlloaded = 0) {
 		$CMS_INSTALL_DROP_TABLES=1;
 		$CMS_INSTALL_CREATE_TABLES=1;
 
-		include_once(dirname(__FILE__)."/schemas/schema.php");
+		include_once(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."schema.php");
 
 		echo "<p>Importing initial data...";
 
-		$handle = fopen(dirname(__FILE__)."/schemas/initial.sql", 'r');
+		$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."initial.sql", 'r');
 		if ($handle) {
 			while (!feof($handle)) {
 				set_magic_quotes_runtime(false);
@@ -510,7 +506,7 @@ function showPageFour($sqlloaded = 0) {
 		{
 			echo "<p>Importing sample data...";
 
-			$handle = fopen(dirname(__FILE__)."/schemas/extra.sql", 'r');
+			$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."extra.sql", 'r');
 			if ($handle) {
 				while (!feof($handle)) {
 					set_magic_quotes_runtime(false);
@@ -547,7 +543,7 @@ function showPageFour($sqlloaded = 0) {
 
 		echo "[done]</p>";
 
-		include_once(dirname(__FILE__)."/schemas/createseq.php");
+		include_once(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."createseq.php");
 
 		$db->Close();
         echo '<p class="success">Success!</p>';
@@ -612,7 +608,7 @@ function showPageFive() {
     } ## if
 	*/
 
-	require_once(dirname(dirname(__FILE__))."/lib/config.functions.php");
+	require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."config.functions.php");
 
 	$newconfig = cms_config_load();
 
@@ -628,10 +624,10 @@ function showPageFive() {
 	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = TMP_CACHE_LOCATION;
-	$newconfig["uploads_path"] = $newconfig['root_path'] . "/uploads";
-	$newconfig["uploads_url"] = $newconfig['root_url'] ."/uploads";	
-	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
-	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
+	$newconfig["uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads";
+	$newconfig["uploads_url"] = $newconfig['root_url'] . DIRECTORY_SEPARATOR . "uploads";	
+	$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads".DIRECTORY_SEPARATOR."images";
+	$newconfig["image_uploads_url"] = $newconfig['root_url'] .DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."images";
 	$maxFileSize = ini_get('upload_max_filesize');
 	if (!is_numeric($maxFileSize))
 	{
@@ -663,8 +659,8 @@ function showPageFive() {
 	$newconfig["image_manipulation_prog"] = "GD";
 	$newconfig["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 	$newconfig["use_Indite"] = false;
-	$newconfig["image_uploads_path"] = $newconfig['root_path'] . "/uploads/images";
-	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
+	$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "images";
+	$newconfig["image_uploads_url"] = $newconfig['root_url'] . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "images";
 	$newconfig["default_encoding"] = "";
 	$newconfig["disable_htmlarea_translation"] = false;
 	$newconfig["admin_dir"] = "admin";
@@ -701,7 +697,7 @@ function showPageFive() {
 	{
 		echo '<p>Updating hierarchy positions...';
 
-		include_once dirname(dirname(__FILE__)) . '/include.php';
+		include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'include.php';
 
 		global $gCms;
 		$gCms->config['db_prefix'] = $_POST['prefix'];

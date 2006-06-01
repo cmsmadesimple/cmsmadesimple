@@ -19,7 +19,7 @@
 #$Id$
 
 $dirname = dirname(__FILE__);
-require_once($dirname.'/fileloc.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
 /**
  * This file is included in every page.  It does all seutp functions including
@@ -43,10 +43,10 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
 	@session_start();
 }
 
-require_once($dirname."/lib/misc.functions.php");
+require_once($dirname.DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."misc.functions.php");
 
 #Make a new CMS object
-require($dirname."/lib/classes/class.global.inc.php");
+require(cms_join_path($dirname,"lib","classes","class.global.inc.php"));
 $gCms = new CmsObject();
 
 #Setup hash for storing all modules and plugins
@@ -57,8 +57,8 @@ $gCms->cmsplugins = array();
 $gCms->siteprefs = array();
 
 #Load the config file (or defaults if it doesn't exist)
-require($dirname.'/version.php');
-require($dirname."/lib/config.functions.php");
+require(cms_join_path($dirname,'version.php'));
+require(cms_join_path($dirname,"lib","config.functions.php"));
 
 #make a local reference
 #if (cms_config_check_old_config()) {
@@ -105,31 +105,31 @@ function count_sql_execs($db, $sql, $inputarray)
 */
 
 debug_buffer('loading smarty');
-require($dirname.'/lib/smarty/Smarty.class.php');
+require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
 debug_buffer('loading adodb');
-if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__)."/lib/adodb/adodb.inc.php")))
-	require($dirname."/lib/adodb/adodb.inc.php");
+if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1 && file_exists(dirname(__FILE__).DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."adodb".DIRECTORY_SEPARATOR."adodb.inc.php")))
+	require(cms_join_path($dirname,"lib",'adodb','adodb.inc.php'));
 else
-	require($dirname."/lib/adodb_lite/adodb.inc.php");
+	require(cms_join_path($dirname,"lib","adodb_lite","adodb.inc.php"));
 debug_buffer('loading page functions');
-require($dirname."/lib/page.functions.php");
+require(cms_join_path($dirname,"lib","page.functions.php"));
 debug_buffer('loading content functions');
-require($dirname."/lib/content.functions.php");
+require(cms_join_path($dirname,"lib","content.functions.php"));
 debug_buffer('loading pageinfo functions');
-require($dirname."/lib/classes/class.pageinfo.inc.php");
-require($dirname."/lib/classes/class.content.inc.php");
-require($dirname."/lib/classes/class.module.inc.php");
-require($dirname."/lib/classes/class.user.inc.php");
-require($dirname.'/lib/classes/class.htmlblob.inc.php');
-require($dirname.'/lib/classes/class.template.inc.php');
-require($dirname.'/lib/classes/class.stylesheet.inc.php');
-require($dirname.'/lib/classes/class.contentnode.inc.php');
-require($dirname.'/lib/classes/class.contenthierarchymanager.inc.php');
-require($dirname."/lib/translation.functions.php");
-require($dirname."/lib/classes/class.bookmark.inc.php");
-require($dirname."/lib/classes/class.group.inc.php");
-require($dirname."/lib/classes/class.events.inc.php");
-require($dirname."/lib/classes/class.usertags.inc.php");
+require(cms_join_path($dirname,"lib","classes","class.pageinfo.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.content.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.module.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.user.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.htmlblob.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.template.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.stylesheet.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.contentnode.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.contenthierarchymanager.inc.php"));
+require(cms_join_path($dirname,"lib","translation.functions.php"));
+require(cms_join_path($dirname,"lib","classes","class.bookmark.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.group.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.events.inc.php"));
+require(cms_join_path($dirname,"lib","classes","class.usertags.inc.php"));
 
 debug_buffer('done loading files');
 
@@ -150,12 +150,12 @@ $dir = $dirname."/lib/contenttypes";
 $handle=opendir($dir);
 while ($file = readdir ($handle)) {
    $path_parts = pathinfo($file);
-   if ($path_parts['extension'] == 'php') include("$dir/$file");
+   if ($path_parts['extension'] == 'php') include("$dir".DIRECTORY_SEPARATOR."$file");
 }
 closedir($handle);
 
 if (!defined('SMARTY_DIR')) {
-	define('SMARTY_DIR', $dirname.'/lib/smarty/');
+	define('SMARTY_DIR', $dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'smarty'.DIRECTORY_SEPARATOR);
 }
 
 #Setup global smarty object
@@ -194,9 +194,9 @@ $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
 if (isset($CMS_ADMIN_PAGE))
 {
-	include_once($dirname.'/'.$config['admin_dir']."/lang.php");
+	include_once($dirname.DIRECTORY_SEPARATOR.$config['admin_dir'].DIRECTORY_SEPARATOR."lang.php");
 
-	require($dirname.'/lib/convert/ConvertCharset.class.php');
+	require($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'convert'.DIRECTORY_SEPARATOR.'ConvertCharset.class.php');
 	$gCms->variables['convertclass'] = new ConvertCharset();
 
 }

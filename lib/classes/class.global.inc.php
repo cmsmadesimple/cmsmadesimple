@@ -147,8 +147,9 @@ class CmsObject {
 			{
 				$dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 			}
-			if (!$dbinstance || TRUE == empty($dbinstance->connectionId))
+			if (!$dbinstance || (TRUE == empty($dbinstance->_connectionID) && TRUE == empty($dbinstance->connectionId)))
 			{
+				var_dump($dbinstance);
 				die("Database Connection failed");
 			}
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
