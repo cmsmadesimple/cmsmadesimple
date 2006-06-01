@@ -1448,6 +1448,34 @@ class AdminTheme
        return $path;
     }
 
+
+
+	/**
+	 * ShowError
+	 * Outputs supplied errors with a link to the wiki for troublshooting.
+	 *
+	 * @param errors - 1 or more errors to be shown
+	 */
+	function ShowErrors($errors)
+	{
+		$wikiUrl = $this->cms->config['wiki_url'];
+
+		if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact'])) {
+			if (FALSE == empty($_REQUEST['module'])) {
+				$wikiUrl .= '/'.$_REQUEST['module'];
+			} else {
+					$wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+			}
+		}
+		$wikiUrl .= '/Troubleshooting';
+
+		$output  = '<div class="pageerrorcontainer">'.$errors;
+		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
+
+		return $output;
+	}
+
+
 }
 
 # vim:ts=4 sw=4 noet

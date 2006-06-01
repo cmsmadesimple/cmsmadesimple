@@ -224,7 +224,8 @@ $file = "";
 
 if ($errors != "")
 {
-	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
+	// echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$errors."</ul></div>";
+	echo $themeObject->ShowErrors('<ul class="error">'.$errors.'</ul>');
 }
 
 echo '<div class="pagecontainer">';
