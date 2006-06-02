@@ -349,9 +349,9 @@ class ModuleOperations
 			{
 				if (class_exists($onemodule))
 				{
-					$newmodule = new $onemodule;
+					$newmodule =& new $onemodule;
 					$name = $newmodule->GetName();
-					$cmsmodules[$name]['object'] = $newmodule;
+					$cmsmodules[$name]['object'] =& $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
 				}
@@ -397,7 +397,7 @@ class ModuleOperations
 									include("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
-										$newmodule = new $modulename;
+										$newmodule =& new $modulename;
 										$name = $newmodule->GetName();
 
 										global $CMS_VERSION;
@@ -415,7 +415,7 @@ class ModuleOperations
 										#Check to see if version in db matches file version
 										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 										{
-											$cmsmodules[$name]['object'] = $newmodule;
+											$cmsmodules[$name]['object'] =& $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
 										}
@@ -2629,11 +2629,13 @@ class CMSModule
 			$dir = $gCms->config['root_path'];
 			if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
 			{
+			  if( isset( $gCms->config['rcdebug'] ) ) echo "DEBUG1<br/>";
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
 				$this->langhash = &$lang;
 			}
 			else if (@is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
 			{
+			  if( isset( $gCms->config['rcdebug'] ) ) echo "DEBUG2<br/>";
 				include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
 				$this->langhash = &$lang;
 			}
@@ -2641,6 +2643,7 @@ class CMSModule
 			{
 				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				$this->langhash = &$lang;
+
 			}
 			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
 			{
