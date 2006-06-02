@@ -362,5 +362,5 @@ $lang['admin']['images'] = $lang['admin']['imagemanager'];
 $lang['admin']['blobs'] = $lang['admin']['htmlblobs'];
 $lang['admin']['groupmembers'] = $lang['admin']['groupassignments'];
 // Used in adminTheme:showErrors
-$lang['admin']['troubleshooting'] = 'Troubleshooting';
+$lang['admin']['troubleshooting'] = '(Troubleshooting)';
 ?>
