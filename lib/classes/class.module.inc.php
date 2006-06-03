@@ -853,8 +853,9 @@ class CMSModule
 		return FALSE;
 	}
 
-	function IsExclusive() {
-	returnFALSE;
+	function IsExclusive()
+	{
+		return FALSE;
 	}
 
 	/**
@@ -3060,6 +3061,8 @@ class CMSModule
 	{
 		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
+	
+	
 
 	/**
 	 * Creates a string containing links to all the pages.
@@ -3127,6 +3130,23 @@ class CMSModule
 		}
 
 		return $page_string;
+	}
+	
+    /**
+     * ShowMessage
+     * Outputs a page status message
+     *
+     * @param message - Message to be shown
+     */
+    function ShowMessage($message)
+    {
+		global $gCms;
+		if (isset($gCms->variables['admintheme']))
+		{
+			$admintheme =& $gCms->variables['admintheme']; //php4 friendly
+			return $admintheme->ShowMessage($message);
+		}
+		return '';
 	}
 
 
