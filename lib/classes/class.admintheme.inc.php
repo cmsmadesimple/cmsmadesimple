@@ -1479,7 +1479,7 @@ class AdminTheme
 			$output .= '</ul>';
 		} else {
 			$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
-			$output  = $image_error.' '.$errors;
+			$output  .= $image_error.' '.$errors;
 		}
 		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
 
