@@ -24,7 +24,7 @@ require_once("../include.php");
 
 check_login();
 
-$error = "";
+$error = array();
 
 $userplugin_id = "";
 if (isset($_POST["userplugin_id"])) $userplugin_id = $_POST["userplugin_id"];
@@ -59,20 +59,20 @@ if ($access) {
         $CMS_EXCLUDE_FROM_RECENT = 1;
 		$validinfo = true;
 		if ($plugin_name == "") {
-			$error .= "<li>".lang('nofieldgiven', array(lang('editusertag')))."</li>";
+			$error[] = lang('nofieldgiven', array(lang('editusertag')));
 			$validinfo = false;
 		}
 		else
 		{
 			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
 			{
-				$error .= "<li>".lang('usertagexists')."</li>";
+				$error[] = lang('usertagexists');
 				$validinfo = false;
 			}
 		}
 
 		if ($code == "") {
-			$error .= "<li>".lang('nofieldgiven', array(lang('code')))."</li>";
+			$error[] = lang('nofieldgiven', array(lang('code')));
 			$validinfo = false;
 		}
 		else if (strrpos($code, '{') !== FALSE)
@@ -81,7 +81,7 @@ if ($access) {
 			$lastclosebrace = strrpos($code, '}');
 			if ($lastopenbrace > $lastclosebrace)
 			{
-				$error .= "<li>".lang('invalidcode')."</li>";
+				$error[] = lang('invalidcode');
 				$validinfo = false;
 			}
 		}
@@ -91,7 +91,7 @@ if ($access) {
 			srand();
 			if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
 			{
-				$error .= "<li>".lang('invalidcode')."</li>";
+				$error[] = lang('invalidcode');
 				$validinfo = false;
 			}
 		}
@@ -105,7 +105,7 @@ if ($access) {
 				return;
 			}
 			else {
-				$error .= "<li>".lang('errorupdatingusertag')."</li>";
+				$error[] = lang('errorupdatingusertag');
 			}
 		}
 	}
@@ -131,8 +131,8 @@ if (!$access) {
 	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
 }
 else {
-	if ($error != "") {
-		echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');		
+	if (FALSE == empty($error)) {
+		echo $themeObject->ShowErrors($error);		
 	}
 
 ?>
