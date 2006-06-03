@@ -37,6 +37,10 @@ $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 
+if (FALSE == empty($_GET['page_message'])) {
+    echo $themeObject->ShowPageMessage(lang($_GET['page_message']));
+}
+
 echo '<div class="pagecontainer">';
 echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('userdefinedtags');

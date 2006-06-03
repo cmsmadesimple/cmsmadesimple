@@ -101,7 +101,7 @@ if ($access) {
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
-				redirect("listusertags.php");
+				redirect("listusertags.php?page_message=usertagupdated");
 				return;
 			}
 			else {
@@ -132,7 +132,7 @@ if (!$access) {
 }
 else {
 	if ($error != "") {
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";		
+		echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');		
 	}
 
 ?>

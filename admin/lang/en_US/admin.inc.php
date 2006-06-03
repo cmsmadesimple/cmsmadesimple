@@ -72,6 +72,7 @@ $lang['admin']['editpage'] = 'Edit Page';
 $lang['admin']['edittemplate'] = 'Edit Template';
 $lang['admin']['edituser'] = 'Edit User';
 $lang['admin']['editusertag'] = 'Edit User Defined Tag';
+$lang['admin']['usertagupdated'] = 'The User Defined Tag was successfully updated.'; 
 $lang['admin']['email'] = 'Email Address';
 $lang['admin']['errorattempteddowngrade'] = 'Installing this module would result in a downgrade.  Operation aborted';
 $lang['admin']['errorchildcontent'] = 'Content still contains child contents. Please remove them first.';
