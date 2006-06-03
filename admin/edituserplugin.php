@@ -82,6 +82,7 @@ if ($access) {
 			if ($lastopenbrace > $lastclosebrace)
 			{
 				$error[] = lang('invalidcode');
+                                $error[] = lang('invalidcode_brace_missing');
 				$validinfo = false;
 			}
 		}
@@ -92,6 +93,12 @@ if ($access) {
 			if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
 			{
 				$error[] = lang('invalidcode');
+                                //catch the error
+                                ob_start();
+                                eval('function testfunction'.rand().'() {'.$code.'}');
+                                $buffer = ob_get_clean();
+                                //add error
+                                $error[] = preg_replace('/<br \/>/', '', $buffer ); 
 				$validinfo = false;
 			}
 		}
