@@ -42,13 +42,13 @@ if (isset($_GET["content_id"])) {
 			#Check for children
 			if ($contentobj->HasChildren())
 			{
-				redirect("listcontent.php?message=".lang('errorchildcontent'));
+				redirect('listcontent.php?error=errorchildcontent');
 			}
 	
 			#Check for default
 			if ($contentobj->DefaultContent())
 			{
-				redirect("listcontent.php?message=".lang('errordefaultpage'));
+				redirect('listcontent.php?error=errordefaultpage');
 			}
 			
 			$title = $contentobj->Name();
@@ -59,7 +59,7 @@ if (isset($_GET["content_id"])) {
 	}
 }
 
-redirect("listcontent.php");
+redirect("listcontent.php?message=contentdeleted");
 
 # vim:ts=4 sw=4 noet
 ?>

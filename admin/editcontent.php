@@ -150,7 +150,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
-				redirect("listcontent.php?page=".$pagelist_id);
+				redirect("listcontent.php?page=".$pagelist_id.'&message=contentupdated');
 			}
 		}
 	}
@@ -219,14 +219,9 @@ else
 	}
 	$typesdropdown .= "</select>";
 
-	if (isset($error) && $error !== FALSE)
+	if (FALSE == empty($error))
 	{
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">";
-		foreach ($error as $oneerror)
-		{
-			echo '<li>'.$oneerror.'</li>';
-		}
-		echo "</ul></div>";
+    	echo $themeObject->ShowErrors($error);
 	}
 	else if ($preview)
 	{

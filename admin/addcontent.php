@@ -136,7 +136,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-				redirect("listcontent.php");
+				redirect('listcontent.php?message=contentadded');
 			}
 		}
 	}
@@ -182,14 +182,9 @@ foreach ($existingtypes as $onetype=>$name)
 }
 $typesdropdown .= "</select>";
 
-if ($error !== FALSE)
+if (FALSE == empty($error))
 {
-	echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">";
-	foreach ($error as $oneerror)
-	{
-		echo '<li>'.$oneerror.'</li>';
-	}
-	echo "</ul></div>";
+	echo $themeObject->ShowErrors($error);
 }
 else if ($preview)
 {

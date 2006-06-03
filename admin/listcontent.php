@@ -295,10 +295,11 @@ if (get_preference($userid, 'collapse', '') != '')
 	}
 }
 
-if (isset($_GET["message"]))
-{
-	$message = preg_replace('/\</','',$_GET['message']);
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+if (FALSE == empty($_GET['message'])) {
+    echo $themeObject->ShowMessage(lang($_GET['message']));
+}
+if (FALSE == empty($_GET['error'])) {
+    echo $themeObject->ShowErrors(lang($_GET['error']));
 }
 
 ?>
