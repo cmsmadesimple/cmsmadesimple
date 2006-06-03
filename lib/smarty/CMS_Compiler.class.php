@@ -114,6 +114,24 @@ class CMS_Compiler extends Smarty_Compiler {
 
         return true;
     }
+
+    /**
+     * display Smarty syntax error
+     *
+     * @param string $error_msg
+     * @param integer $error_type
+     * @param string $file
+     * @param integer $line
+     */
+    function _syntax_error($error_msg, $error_type = E_USER_ERROR, $file=null, $line=null)
+    {
+        $this->_trigger_fatal_error("syntax error: $error_msg", $this->_current_file, $this->_current_line_no, $file, $line, $error_type);
+    }
+
+    function trigger_error($error_msg, $error_type = E_USER_WARNING)
+    {   
+        var_dump("Smarty error: $error_msg");
+    }
 }
 
 /* vim: set et: */
