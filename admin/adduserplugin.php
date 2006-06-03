@@ -24,7 +24,7 @@ require_once("../include.php");
 
 check_login();
 
-$error = "";
+$error = array();
 
 $plugin_name= "";
 if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
@@ -51,19 +51,19 @@ if ($access) {
 
 		$validinfo = true;
 		if ($plugin_name == "") {
-			$error .= "<li>".lang('nofieldgiven',array(lang('name')))."</li>";
+			$error[] = lang('nofieldgiven',array(lang('name')));
 			$validinfo = false;
 		}
 		else
 		{
 			if (in_array($plugin_name, $gCms->cmsplugins))
 			{
-				$error .= "<li>".lang('usertagexists')."</li>";
+				$error[] = lang('usertagexists');
 				$validinfo = false;
 			}
 		}
 		if ($code == "") {
-			$error .= "<li>".lang('nofieldgiven',array(lang('code')))."</li>";
+			$error[] = lang('nofieldgiven',array(lang('code')));
 			$validinfo = false;
 		}
 		else if (strrpos($code, '{') !== FALSE)
@@ -72,7 +72,7 @@ if ($access) {
 			$lastclosebrace = strrpos($code, '}');
 			if ($lastopenbrace > $lastclosebrace)
 			{
-				$error .= "<li>".lang('invalidcode')."</li>";
+				$error[] = lang('invalidcode');
 				$validinfo = false;
 			}
 		}
@@ -82,7 +82,7 @@ if ($access) {
 			srand();
 			if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
 			{
-				$error .= "<li>".lang('invalidcode')."</li>";
+				$error[] = lang('invalidcode');
 				$validinfo = false;
 			}
 		}
@@ -93,11 +93,11 @@ if ($access) {
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($new_usertag_id, $plugin_name, 'Added User Defined Tag');
-				redirect("listusertags.php");
+				redirect("listusertags.php?message=usertagadded");
 				return;
 			}
 			else {
-				$error .= "<li>".lang('errorinsertingtag')."</li>";
+				$error .= lang('errorinsertingtag');
 			}
 		}
 	}
@@ -109,9 +109,9 @@ if (!$access) {
 	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
 }
 else {
-	if ($error != "") {
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
-	}
+    if (FALSE == empty($error)) {
+        echo $themeObject->ShowErrors($error);
+    }
 ?>
 
 <div class="pagecontainer">
