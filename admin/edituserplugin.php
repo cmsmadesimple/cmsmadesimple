@@ -101,7 +101,7 @@ if ($access) {
 			$result = $db->Execute($query);
 			if ($result) {
 				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
-				redirect("listusertags.php?page_message=usertagupdated");
+				redirect("listusertags.php?message=usertagupdated");
 				return;
 			}
 			else {
