@@ -47,7 +47,7 @@ $paging = 0;
 if (isset($_POST['paging'])) $paging = $_POST['paging'];
 
 
-$error = "";
+$page_message = '';
 
 $wysiwyg = '';
 if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
@@ -67,7 +67,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'indent', $indent);
 	set_preference($userid, 'paging', $paging);
 	audit(-1, '', 'Edited User Preferences');
-	$error = lang('prefsupdated');
+	$page_message = lang('prefsupdated');
 	#redirect("index.php");
 	#return;
 } else if (!isset($_POST["edituserprefs"])) {
@@ -83,8 +83,8 @@ if (isset($_POST["submit_form"])) {
 
 include_once("header.php");
 
-if ($error != "") {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$error.'</p></div>';
+if (FALSE == empty($page_message)) {
+	echo $themeObject->ShowPageMessage($page_message);
 }
 
 ?>

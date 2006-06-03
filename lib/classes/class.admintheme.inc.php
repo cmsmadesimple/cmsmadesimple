@@ -1475,7 +1475,16 @@ class AdminTheme
 		return $output;
 	}
 
-
+    /**
+     * ShowPageMessage
+     * Outputs a page status message
+     *
+     * @param message - Message to be shown
+     */
+    function ShowPageMessage($message)
+    {
+		return '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+	}
 }
 
 # vim:ts=4 sw=4 noet
