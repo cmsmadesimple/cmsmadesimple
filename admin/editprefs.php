@@ -84,7 +84,7 @@ if (isset($_POST["submit_form"])) {
 include_once("header.php");
 
 if (FALSE == empty($page_message)) {
-	echo $themeObject->ShowPageMessage($page_message);
+	echo $themeObject->ShowMessage($page_message);
 }
 
 ?>
