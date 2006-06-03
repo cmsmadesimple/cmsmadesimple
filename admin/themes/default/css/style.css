@@ -704,7 +704,9 @@ textarea.pageheadtags  {
 ul.pageerror  {
    margin: 0px;
    }
-
+ul.pageerror li {
+   list-style-image: url("themes/default/images/icons/system/stop.gif");
+   }
 .clearb  {
    clear: both;
    }
