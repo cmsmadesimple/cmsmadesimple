@@ -1454,7 +1454,7 @@ class AdminTheme
 	 * ShowError
 	 * Outputs supplied errors with a link to the wiki for troublshooting.
 	 *
-	 * @param errors - 1 or more errors to be shown
+	 * @param errors - array or string of 1 or more errors to be shown
 	 */
 	function ShowErrors($errors)
 	{
@@ -1469,7 +1469,18 @@ class AdminTheme
 		}
 		$wikiUrl .= '/Troubleshooting';
 		$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
-		$output  = '<div class="pageerrorcontainer">'.$image_error.' '.$errors;
+		$output  = '<div class="pageerrorcontainer">';
+		if (FALSE != is_array($errors)) {
+			$output .= '<ul class="pageerror">';
+			foreach ($errors as $oneerror)
+			{
+				$output .= '<li>'.$oneerror.'</li>';
+			}
+			$output .= '</ul>';
+		} else {
+			$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
+			$output  = $image_error.' '.$errors;
+		}
 		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
 
 		return $output;
