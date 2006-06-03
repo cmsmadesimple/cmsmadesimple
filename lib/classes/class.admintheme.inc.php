@@ -1468,8 +1468,8 @@ class AdminTheme
 			}
 		}
 		$wikiUrl .= '/Troubleshooting';
-
-		$output  = '<div class="pageerrorcontainer">'.$errors;
+		$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
+		$output  = '<div class="pageerrorcontainer">'.$image_error.' '.$errors;
 		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
 
 		return $output;
