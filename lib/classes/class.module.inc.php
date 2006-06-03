@@ -3149,6 +3149,22 @@ class CMSModule
 		return '';
 	}
 
+    /**
+     * ShowErrors
+     * Outputs errors in a nice error box with a troubleshooting link to the wiki
+     *
+     * @param errors - array or string of errors to be shown
+     */
+    function ShowErrors($errors)
+    {
+        global $gCms;
+        if (isset($gCms->variables['admintheme']))
+        {
+            $admintheme =& $gCms->variables['admintheme']; //php4 friendly
+            return $admintheme->ShowErrors($errors);
+        }
+        return '';
+    }
 
 	/**
 	 * ------------------------------------------------------------------
