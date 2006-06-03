@@ -38,7 +38,7 @@ $smarty = new Smarty_CMS($gCms->config);
 include_once("header.php");
 
 if (FALSE == empty($_GET['message'])) {
-    echo $themeObject->ShowPageMessage(lang($_GET['message']));
+    echo $themeObject->ShowMessage(lang($_GET['message']));
 }
 
 echo '<div class="pagecontainer">';

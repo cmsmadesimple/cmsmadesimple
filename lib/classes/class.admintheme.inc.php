@@ -1476,12 +1476,12 @@ class AdminTheme
 	}
 
     /**
-     * ShowPageMessage
+     * ShowMessage
      * Outputs a page status message
      *
      * @param message - Message to be shown
      */
-    function ShowPageMessage($message)
+    function ShowMessage($message)
     {
 		$image_done = $this->DisplayImage('icons/system/accept.gif', '','','','systemicon');
 		return '<div class="pagemcontainer"><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
