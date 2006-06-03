@@ -497,6 +497,7 @@ img.pageicon  {
 
 img.systemicon  {
    border: none;
+   vertical-align: middle;
    }
 
 a.pageoptions  {

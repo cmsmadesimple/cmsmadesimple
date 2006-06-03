@@ -1483,7 +1483,8 @@ class AdminTheme
      */
     function ShowPageMessage($message)
     {
-		return '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+		$image_done = $this->DisplayImage('icons/system/accept.gif', '','','','systemicon');
+		return '<div class="pagemcontainer"><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
 	}
 }
 
