@@ -35,6 +35,11 @@ class ModuleOperations
   var $error;
 
   /**
+   * A member to hold the id of the active tab
+   */
+  var $mActiveTab = '';
+
+  /**
    * ------------------------------------------------------------------
    * Error Functions
    * ------------------------------------------------------------------
@@ -2905,7 +2910,11 @@ class CMSModule
 	function SetTabHeader($tabid,$title,$active=false)
 	{
 		$a="";
-		if ($active) $a=" class='active'";
+		if (TRUE == $active)
+		{
+			$a=" class='active'";
+			$this->mActiveTab = $tabid;
+		}
 	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
 	}
 
@@ -2924,9 +2933,14 @@ class CMSModule
 		return '</div> <!-- EndTabContent -->';
 	}
 
-	function StartTab($tabid)
+	function StartTab($tabid, $params = array())
 	{
-		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">';
+		if ($tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
+			$message = $this->ShowMessage($this->Lang($params['tab_message']));
+		} else {
+			$message = '';
+		}
+		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
 	}
 
 	function EndTab()
