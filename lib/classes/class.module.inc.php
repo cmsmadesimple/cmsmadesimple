@@ -2935,7 +2935,7 @@ class CMSModule
 
 	function StartTab($tabid, $params = array())
 	{
-		if ($tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
+		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
 			$message = $this->ShowMessage($this->Lang($params['tab_message']));
 		} else {
 			$message = '';
