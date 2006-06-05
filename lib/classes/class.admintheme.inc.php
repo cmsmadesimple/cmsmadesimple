@@ -1386,7 +1386,11 @@ class AdminTheme
                 $wikiUrl .= '/'.substr($moduleName, 1);
             } else {
                 // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
-				$title = substr($title,0,strpos($title,':'));
+				$colonLocation = strrchr($title, ':');
+				if ($colonLocation !== false)
+				{
+					$title = substr($title,0,strpos($title,':'));
+				}
                 // Get the key of the title so we can use the en_US version for the URL
                 $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
                 $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
