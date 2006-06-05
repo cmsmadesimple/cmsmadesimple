@@ -1381,9 +1381,14 @@ class AdminTheme
 				} else {
 					$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
 				}
-                // Turn ModuleName into _Module_Name
-                $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-                $wikiUrl .= '/'.substr($moduleName, 1);
+				// Turn ModuleName into _Module_Name
+				$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+				$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+				if ($moduleName{0} == '_') {
+					$wikiUrl .= '/'.substr($moduleName, 1);
+				} else {
+					$wikiUrl .= '/'.$moduleName;
+				}
             } else {
                 // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
 				$colonLocation = strrchr($title, ':');
