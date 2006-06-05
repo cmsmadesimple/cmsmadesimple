@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Page Info -- Represents a "page" which consists of different variabels virtually
+ * Page Info -- Represents a "page" which consists of different variables virtually
  * composited together.
  *
  * @since		0.11
@@ -31,6 +31,7 @@ class PageInfo
 	var $content_title;
 	var $content_alias;
 	var $content_menutext;
+	var $content_titleattribute;
 	var $content_hierarchy;
 	var $content_id_hierarchy;
 	var $content_type;
@@ -54,6 +55,7 @@ class PageInfo
 		$this->content_title = '';
 		$this->content_alias = '';
 		$this->content_menutext = '';
+		$this->content_titleattribute = '';
 		$this->content_hierarchy = '';
 		$this->content_metadata = '';
 		$this->content_id_hierarchy = '';
@@ -97,12 +99,12 @@ class PageInfoOperations
 
 		if (is_numeric($alias) && strpos($alias, '.') === FALSE && strpos($alias, ',') === FALSE) //Fix for postgres
 		{ 
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 			$row = &$db->GetRow($query, array($alias, $alias));
 		}
 		else
 		{
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
 			$row = &$db->GetRow($query, array($alias));
 		}
 
@@ -113,6 +115,7 @@ class PageInfoOperations
 			$onepageinfo->content_title = $row['content_name'];
 			$onepageinfo->content_alias = $row['content_alias'];
 			$onepageinfo->content_menutext = $row['menu_text'];
+			$onepageinfo->content_titleattribute = $row['titleattribute'];
 			$onepageinfo->content_hierarchy = $row['hierarchy'];
 			$onepageinfo->content_id_hierarchy = $row['id_hierarchy'];
 			$onepageinfo->content_metadata = $row['metadata'];
