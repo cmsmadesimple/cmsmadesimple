@@ -1376,6 +1376,7 @@ class AdminTheme
             // If this is a module and the last part of the breadcrumbs
             if (TRUE == $isModule && TRUE == empty($this->breadcrumbs[$key + 1]))
             {
+				$help_title = $title;
 				if (FALSE == empty($_GET['module'])) {
 					$module_name = $_GET['module'];
 				} else {
@@ -1399,6 +1400,7 @@ class AdminTheme
                 // Get the key of the title so we can use the en_US version for the URL
                 $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
                 $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
+				$help_title = $value['title'];
             }
         }
         // Clean up URL
@@ -1419,7 +1421,7 @@ class AdminTheme
             $header .= lang($title_name, $extra_lang_param);
         }  
         $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-        $header .= ' <a href="'.$wikiUrl.'" target="_blank">'.$image_help.'</a></p>';
+        $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.lang('helpwithsection', $help_title).'</a>)</p>';
         return $header;
 
     }
