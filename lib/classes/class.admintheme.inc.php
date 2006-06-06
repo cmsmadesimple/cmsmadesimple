@@ -1352,13 +1352,15 @@ class AdminTheme
     }
 
 
-    /**
-     * ShowHeader
-     * Outputs the page header title along with a help link to that section in the wiki.
-     * 
-     * @param title - page heading title
-     */
-    function ShowHeader($title_name, $extra_lang_param=array())
+   /**
+	* ShowHeader
+	* Outputs the page header title along with a help link to that section in the wiki.
+	* 
+	* @param title_name - page heading title
+	* @param extra_lang_param - extra parameters to pass to lang() (I don't think this parm is needed)
+	* @param link_text - Override the text to use for the help link.
+	*/
+    function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '')
     {
         $wikiUrl = $this->cms->config['wiki_url'];
         // Include English translation of titles. (Can't find better way to get them)
@@ -1413,7 +1415,12 @@ class AdminTheme
             $wikiUrl .= '/'.substr($lang, 0, 2);
         }
         */
-
+		if (FALSE == empty($link_text))
+		{
+			$help_title = $link_text;
+		} else {
+			$help_title = lang('helpwithsection', $help_title);
+		}
         $header  = '<p class="pageheader">';
         if (TRUE == $isModule) {
             $header .= $title_name;        
@@ -1421,7 +1428,7 @@ class AdminTheme
             $header .= lang($title_name, $extra_lang_param);
         }  
         $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-        $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.lang('helpwithsection', $help_title).'</a>)</p>';
+        $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)</p>';
         return $header;
 
     }

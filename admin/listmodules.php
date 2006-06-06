@@ -291,7 +291,7 @@ else if ($action == "showmodulehelp")
 	if (isset($gCms->modules[$module]['object']))
 	{
 		echo '<div class="pagecontainer">';
-		echo '<p class="pageheader">'.lang('modulehelp', array($module)).'</p>';
+		echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('morehelpwith', $module));
 		echo $gCms->modules[$module]['object']->GetHelpPage();
 		echo "</div>";
 	}
