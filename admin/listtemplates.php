@@ -145,10 +145,10 @@ if (isset($_GET["message"])) {
 		foreach ($templatelist as $onetemplate)
 		{
 			// construct true/false button images
-            $image_true = "<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon')."</a>";
-            $image_false = "<a href=\"listtemplates.php?setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon')."</a>";
+            $image_true = "<a href=\"listtemplates.php?setinactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon')."</a>";
+            $image_false = "<a href=\"listtemplates.php?setactive=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon')."</a>";
 			$default_true =$themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon')."</a>";
+			$default_false ="<a href=\"listtemplates.php?setdefault=".$onetemplate->id."\">".$themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon')."</a>";
 
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";

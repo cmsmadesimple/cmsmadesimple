@@ -392,8 +392,8 @@ $count = 0;
 $currow = "row1";
 
 // construct true/false button images
-$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
+$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon');
+$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon');
 
 $counter = 0;
 
