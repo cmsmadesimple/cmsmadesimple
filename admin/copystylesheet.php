@@ -111,7 +111,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('newstylesheetname'); ?>:</p>
-			<p class="pageinput"><input type="text" name="stylesheet" maxlength="25" value="<?php echo $stylesheet?>"></p>
+			<p class="pageinput"><input type="text" name="stylesheet" maxlength="255" value="<?php echo $stylesheet?>"></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
