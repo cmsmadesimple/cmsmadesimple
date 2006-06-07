@@ -38,6 +38,7 @@ class PageInfo
 	var $content_props;
 	var $content_metadata;
 	var $content_modified_date;
+        var $content_created_date;
 	var $content_last_modified_date;
 	var $template_id;
 	var $template_encoding;
@@ -99,12 +100,12 @@ class PageInfoOperations
 
 		if (is_numeric($alias) && strpos($alias, '.') === FALSE && strpos($alias, ',') === FALSE) //Fix for postgres
 		{ 
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
 			$row = &$db->GetRow($query, array($alias, $alias));
 		}
 		else
 		{
-			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
+			$query = "SELECT c.content_id, c.content_name, c.content_alias, c.menu_text, c.titleattribute, c.hierarchy, c.metadata, c.id_hierarchy, c.prop_names, c.create_date AS c_create_date, c.modified_date AS c_date, c.cachable, t.template_id, t.encoding, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE c.content_alias = ? AND c.active = 1";
 			$row = &$db->GetRow($query, array($alias));
 		}
 
@@ -119,6 +120,7 @@ class PageInfoOperations
 			$onepageinfo->content_hierarchy = $row['hierarchy'];
 			$onepageinfo->content_id_hierarchy = $row['id_hierarchy'];
 			$onepageinfo->content_metadata = $row['metadata'];
+			$onepageinfo->content_created_date = $db->UnixTimeStamp($row['c_create_date']);
 			$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
 			$onepageinfo->content_props = explode(',', $row['prop_names']);
 			$onepageinfo->template_id = $row['template_id'];
