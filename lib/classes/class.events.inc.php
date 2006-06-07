@@ -200,7 +200,7 @@ class Events
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$q = "SELECT * FROM ".cms_db_prefix()."events";
+		$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
 		$dbresult = $db->Execute( $q );
 		if( $dbresult == false )
 		{
