@@ -68,6 +68,8 @@ if ($access)
 					$gCms->modules[$key]['object']->AddGroupPre($groupobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'AddGroupPre', array(&$groupobj));
 
 			$result = $groupobj->save();
 
@@ -82,6 +84,7 @@ if ($access)
 						$gCms->modules[$key]['object']->AddGroupPost($groupobj);
 					}
 				}
+				Events::SendEvent('Core', 'AddGroupPost', array(&$groupobj));
 				audit($groupobj->id, $groupobj->name, 'Added Group');
 				redirect("listgroups.php");
 				return;

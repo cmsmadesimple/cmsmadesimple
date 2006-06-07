@@ -127,6 +127,8 @@ if ($access)
 					$gCms->modules[$key]['object']->EditTemplatePre($onetemplate);
 				}
 			}
+			
+			Events::SendEvent('Core', 'EditTemplatePre', array(&$onetemplate));
 
 			$result = $onetemplate->Save();
 
@@ -144,6 +146,8 @@ if ($access)
 						$gCms->modules[$key]['object']->EditTemplatePost($onetemplate);
 					}
 				}
+				
+				Events::SendEvent('Core', 'EditTemplatePost', array(&$onetemplate));
 
 				if (!$apply)
 				{

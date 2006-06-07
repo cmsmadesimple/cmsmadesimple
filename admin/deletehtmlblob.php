@@ -52,6 +52,8 @@ if (isset($_GET["htmlblob_id"]))
 					$gCms->modules[$key]['object']->DeleteHtmlBlobPre($blobobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'DeleteGlobalContentPre', array(&$blobobj));
 
 			$result = $blobobj->Delete();
 		}
@@ -67,6 +69,8 @@ if (isset($_GET["htmlblob_id"]))
 					$gCms->modules[$key]['object']->DeleteHtmlBlobPost($blobobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'DeleteGlobalContentPost', array(&$blobobj));
 
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
 

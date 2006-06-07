@@ -73,59 +73,71 @@ echo '<div class="pageoverflow">';
 echo $themeObject->ShowHeader('eventhandlers');
 
 switch( $action )
-  {
-  case 'showeventhelp':
-    {
-      $text = $gCms->modules[$module]['object']->GetEventHelp( $event );
-	  echo "<h3>$event</h3>";
-      if( $text == "" )
+{
+	case 'showeventhelp':
 	{
-	  echo "No text returned";
+		if ($module == 'Core')
+			$text = Events::GetEventHelp($event);
+		else
+			$text = $gCms->modules[$module]['object']->GetEventHelp( $event );
+		echo "<h3>$event</h3>";
+		if( $text == "" )
+		{
+			echo "No text returned";
+		}
+		else
+		{
+			echo $text;
+		}
+		break;
 	}
-      else
-	{
-	  echo $text;
-	}
-      break;
-    }
 
-  default:
-    {
-      $events = Events::ListEvents();
-      echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-      echo "<thead>\n";
-      echo "  <tr>\n";
-      echo "    <th>".lang('module')."</th>\n";
-      echo "    <th>".lang('event')."</th>\n";
-      echo "    <th>".lang('description')."</th>\n";
-      echo "    <th class=\"pageicon\">&nbsp;</th>\n";
-      echo "    <th class=\"pageicon\">&nbsp;</th>\n";
-      echo "  </tr>\n";
-      echo "</thead>\n";
-      echo "<tbody>\n";
-      
-      if( is_array($events) )
+	default:
 	{
-	  $curclass = 'row1';
-	  foreach( $events as $oneevent )
-	    {
-	      echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-	      
-	      echo "    <td>".$oneevent['originator']."</td>\n";
-	      echo "    <td>".$oneevent['event_name']."</td>\n";
-	      echo "    <td>".$gCms->modules[$oneevent['originator']]['object']->GetEventDescription($oneevent['event_name'])."</td>\n";
-	      echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
-	      echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
-	      echo "  </tr>\n"; 
-	      ($curclass=="row1"?$curclass="row2":$curclass="row1");
-	    }
-	}
-      
-      echo "</tbody>\n";
-      echo "</table>\n";
-    } // default action
-      
-  } // switch
+		$events = Events::ListEvents();
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo "<thead>\n";
+		echo "  <tr>\n";
+		echo "    <th>".lang('module')."</th>\n";
+		echo "    <th>".lang('event')."</th>\n";
+		echo "    <th>".lang('description')."</th>\n";
+		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
+		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
+		echo "  </tr>\n";
+		echo "</thead>\n";
+		echo "<tbody>\n";
+
+		if( is_array($events) )
+		{
+			$curclass = 'row1';
+			foreach( $events as $oneevent )
+			{
+				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+
+				$desctext = '';
+				if ($oneevent['originator'] == 'Core') {
+					$desctext = Events::GetEventDescription($oneevent['event_name']);
+				}
+				else if (isset($gCms->modules[$oneevent['originator']])) {
+					$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
+					$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
+				}
+
+				echo "    <td>".$oneevent['originator']."</td>\n";
+				echo "    <td>".$oneevent['event_name']."</td>\n";
+				echo "    <td>".$desctext."</td>\n";
+				echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+				echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+				echo "  </tr>\n"; 
+				($curclass=="row1"?$curclass="row2":$curclass="row1");
+			}
+		}
+
+		echo "</tbody>\n";
+		echo "</table>\n";
+	} // default action
+
+} // switch
 
 echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 

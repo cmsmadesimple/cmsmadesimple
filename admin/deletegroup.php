@@ -49,6 +49,8 @@ if (isset($_GET["group_id"]))
 				$gCms->modules[$key]['object']->DeleteGroupPre($groupobj);
 			}
 		}
+		
+		Events::SendEvent('Core', 'DeleteGroupPre', array(&$groupobj));
 
 		if ($groupobj)
 		{
@@ -64,6 +66,8 @@ if (isset($_GET["group_id"]))
 				$gCms->modules[$key]['object']->DeleteGroupPost($groupobj);
 			}
 		}
+		
+		Events::SendEvent('Core', 'DeleteGroupPost', array(&$groupobj));
 
 		if ($result == true)
 		{

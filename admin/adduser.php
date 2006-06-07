@@ -104,6 +104,8 @@ if (isset($_POST["adduser"]))
 				$gCms->modules[$key]['object']->AddUserPre($newuser);
 			}
 		}
+		
+		Events::SendEvent('Core', 'AddUserPre', array(&$newuser));
 
 		$result = $newuser->save();
 
@@ -118,6 +120,8 @@ if (isset($_POST["adduser"]))
 					$gCms->modules[$key]['object']->AddUserPost($newuser);
 				}
 			}
+			
+			Events::SendEvent('Core', 'AddUserPost', array(&$newuser));
 
 			# set some default preferences, based on the user creating this user
 			$adminid = get_userid();

@@ -126,6 +126,8 @@ else
 						$gCms->modules[$key]['object']->ContentStylesheet($css);
 					}
 				}
+				
+				Events::SendEvent('Core', 'ContentStylesheet', array(&$stylesheet));
 			#}
 		}
 	}

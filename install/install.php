@@ -711,6 +711,12 @@ function showPageFive() {
 		ContentManager::SetAllHierarchyPositions();
 
 		echo 'done</p>';
+		
+		echo '<p>Setting up core events...';
+		
+		Events::SetupCoreEvents();
+		
+		echo 'done</p>';
 
 		echo '<p>Installing modules...';
 

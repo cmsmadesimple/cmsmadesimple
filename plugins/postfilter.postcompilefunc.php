@@ -35,6 +35,9 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->ContentPostCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'ContentPostCompile', array(&$tpl_output));
+				
 				break;
 			case "template":
 				#Perform the content prerender callback
@@ -46,6 +49,9 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->TemplatePostCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'TemplatePostCompile', array(&$tpl_output));
+				
 				break;
 			case "globalcontent":
 				foreach($gCms->modules as $key=>$value)
@@ -56,6 +62,9 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->GlobalContentPostCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'GlobalContentPostCompile', array(&$tpl_output));
+				
 				break;
 			default:
 				break;
@@ -71,6 +80,8 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 			$gCms->modules[$key]['object']->SmartyPostCompile($tpl_output);
 		}
 	}
+	
+	Events::SendEvent('Core', 'SmartyPostCompile', array(&$tpl_output));
 
 	return $tpl_output;
 }

@@ -206,6 +206,27 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
 
 	echo "[done]</p>";
+	
+	echo "<p>Adding crossref table...";
+
+	$dbdict = NewDataDictionary($db);
+	$flds = '
+		child_type C(100),
+		child_id I,
+		parent_type C(100),
+		parent_id I,
+		create_date T,
+		modified_date T
+	';
+
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+
+	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (child_type, child_id)");
+	$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (parent_type, parent_id)");
+
+	echo '[done]</p>';
 
 	echo "<p>Creating css table...";
 
@@ -244,7 +265,40 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
 
 	echo "[done]</p>";
+	
+	echo "<p>Creating event_handlers table...";
 
+	$dbdict = NewDataDictionary($db);
+
+	$flds = "
+	          event_id      I KEY,
+	          tag_name      c(255),
+	          module_name   c(255),
+	          removable     I,
+	          handler_order I,
+	          handler_id    I
+	        ";
+
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."event_handlers", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	
+	echo "[done]</p>";
+	
+	echo "<p>Creating events table...";
+
+	$flds = "
+	          originator   c(200) NOTNULL KEY,
+	          event_name   c(200) NOTNULL KEY,
+	          event_id     I
+	        ";
+
+	$taboptarray = array('mysql' => 'TYPE=MyISAM');
+	$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
+	$dbdict->ExecuteSQLArray($sqlarray);
+	
+	echo "[done]</p>";
+	
 	echo "<p>Creating group_perms table...";
 
 	$dbdict = NewDataDictionary($db);
@@ -319,6 +373,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		module_name C(255),
 		status C(255),
 		version C(255),
+		admin_only I1 DEFAULT 0,
 		active I1
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -437,7 +492,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		user_id I,
 		preference C(50),
-		value C(255),
+		value X,
 		type C(25)
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');

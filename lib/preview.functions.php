@@ -105,6 +105,8 @@ class Smarty_Preview extends Smarty {
 			$value =& $gCms->modules[$key];
 			$gCms->modules[$key]['object']->ContentStylesheet($stylesheet);
 		}
+		
+		Events::SendEvent('Core', 'ContentStylesheet', array(&$stylesheet));
 
 		$stylesheet = "<style type=\"text/css\">{literal}\n".$stylesheet."{/literal}</style>\n";
 

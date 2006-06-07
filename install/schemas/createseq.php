@@ -48,6 +48,22 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$db->CreateSequence($db_prefix."css_seq", $max);
 
 	echo "[done]</p>";
+	
+	echo "<p>Creating events table sequence...";
+
+	$max = $db->Execute("SELECT max(event_id) from ".$db_prefix."events");
+    if ($max && $row=$max->FetchRow()) $max =$row['max(event_id)']+1; else $max=1;
+	$db->CreateSequence($db_prefix."events_seq", $max);
+
+	echo "[done]</p>";
+	
+	echo "<p>Creating event_handlers table sequence...";
+
+	$max = $db->Execute("SELECT max(handler_id) from ".$db_prefix."event_handlers");
+    if ($max && $row=$max->FetchRow()) $max =$row['max(handler_id)']+1; else $max=1;
+	$db->CreateSequence($db_prefix."event_handler_seq", $max);
+
+	echo "[done]</p>";
 
 	echo "<p>Creating group_perms table sequence...";
 

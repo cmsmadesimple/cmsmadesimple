@@ -108,6 +108,8 @@ if ($access)
 					$gCms->modules[$key]['object']->EditHtmlBlobPre($blobobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'EditGlobalContentPre', array(&$blobobj));
 
 			$result = $blobobj->save();
 
@@ -129,6 +131,8 @@ if ($access)
 						$gCms->modules[$key]['object']->EditHtmlBlobPost($blobobj);
 					}
 				}
+				
+				Events::SendEvent('Core', 'EditGlobalContentPost', array(&$blobobj));
 
 				if (!isset($_POST['apply'])) {
 					redirect('listhtmlblobs.php');

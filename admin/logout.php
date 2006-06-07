@@ -38,6 +38,9 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
+#Now call the event
+Events::SendEvent('Core', 'LogoutPost');
+
 #echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./login.php"></head><body>Logging out.  Redirecting to <a href="./login.php">login</a> page...</body></html>');
 $_SESSION['logout_user_now'] = "1";
 redirect("login.php");

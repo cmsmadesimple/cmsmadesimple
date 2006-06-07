@@ -34,6 +34,9 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->ContentPreCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'ContentPreCompile', array(&$tpl_output));
+				
 				break;
 			case "template":
 				foreach($gCms->modules as $key=>$value)
@@ -44,6 +47,9 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->TemplatePreCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'TemplatePreCompile', array(&$tpl_output));
+				
 				break;
 			case "globalcontent":
 				foreach($gCms->modules as $key=>$value)
@@ -54,6 +60,9 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 						$gCms->modules[$key]['object']->GlobalContentPreCompile($tpl_output);
 					}
 				}
+				
+				Events::SendEvent('Core', 'GlobalContentPreCompile', array(&$tpl_output));
+				
 				break;
 			default:
 				break;
@@ -69,6 +78,8 @@ function smarty_cms_prefilter_precompilefunc($tpl_output, &$smarty)
 			$gCms->modules[$key]['object']->SmartyPreCompile($tpl_output);
 		}
 	}
+	
+	Events::SendEvent('Core', 'SmartyPreCompile', array(&$tpl_output));
 
 	return $tpl_output;
 }

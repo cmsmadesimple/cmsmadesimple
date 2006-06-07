@@ -78,6 +78,8 @@ if ($access) {
 					$gCms->modules[$key]['object']->AddHtmlBlobPre($blobobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'AddGlobalContentPre', array(&$blobobj));
 
 			$result = $blobobj->save();
 
@@ -99,6 +101,8 @@ if ($access) {
 						$gCms->modules[$key]['object']->AddHtmlBlobPost($blobobj);
 					}
 				}
+				
+				Events::SendEvent('Core', 'AddGlobalContentPost', array(&$blobobj));
 
 				redirect("listhtmlblobs.php");
 				return;

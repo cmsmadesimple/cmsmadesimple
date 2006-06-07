@@ -1,5 +1,7 @@
 <?php
 
+/*
+#No point in even creating this table if we're going to drop it in 21-22.
 echo "<p>Adding Event Handler Table(s)...";
 
 
@@ -14,6 +16,7 @@ echo "<p>Adding Event Handler Table(s)...";
         $dbdict->ExecuteSQLArray($sqlarray);
 
 echo "[done]</p>";
+*/
 
 echo '<p>Updating schema version... ';
 

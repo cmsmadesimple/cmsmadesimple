@@ -27,6 +27,12 @@ else
 
 echo '[done]</p>';
 
+echo '<p>Setting up core events...';
+
+Events::SetupCoreEvents();
+
+echo '[done]</p>';
+
 echo '<p>Updating schema version... ';
 
 $query = "UPDATE ".cms_db_prefix()."version SET version = 24";

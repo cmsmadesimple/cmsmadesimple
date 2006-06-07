@@ -294,6 +294,8 @@ class Smarty_CMS extends Smarty {
 				$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
 			}
 		}
+		
+		Events::SendEvent('Core', 'ContentTemplate', array(&$tpl_source));
 
 		$gCms->variables['page'] = $data['content_id'];
 		$gCms->variables['page_id'] = $data['content_id'];
@@ -317,6 +319,8 @@ class Smarty_CMS extends Smarty {
 			$value =& $gCms->modules[$key];
 			$gCms->modules[$key]['object']->ContentStylesheet($stylesheet);
 		}
+		
+		Events::SendEvent('Core', 'ContentStylesheet', array(&$stylesheet));
 
 		$stylesheet = "<style type=\"text/css\">{literal}\n".$stylesheet."{/literal}</style>\n";
 
@@ -334,6 +338,8 @@ class Smarty_CMS extends Smarty {
 				$gCms->modules[$key]['object']->ContentPreCompile($content);
 			}
 		}
+		
+		Events::SendEvent('Core', 'ContentPreCompile', array(&$content));
 
 		$tpl_source = eregi_replace("\{content\}", $content, $tpl_source);
 
@@ -791,6 +797,8 @@ function global_content_regex_callback($matches)
 					$gCms->modules[$key]['object']->GlobalContentPreCompile($text);
 				}
 			}
+			
+			Events::SendEvent('Core', 'GlobalContentPreCompile', array(&$text));
 
 			return $text;
 		}

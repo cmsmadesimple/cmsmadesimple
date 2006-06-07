@@ -54,6 +54,8 @@ if (isset($_GET["template_id"]))
 					$gCms->modules[$key]['object']->DeleteTemplatePre($onetemplate);
 				}
 			}
+			
+			Events::SendEvent('Core', 'DeleteTemplatePre', array(&$onetemplate));
 
 			$result = TemplateOperations::DeleteTemplateByID($template_id);
 
@@ -68,6 +70,8 @@ if (isset($_GET["template_id"]))
 						$gCms->modules[$key]['object']->DeleteTemplatePost($onetemplate);
 					}
 				}
+				
+				Events::SendEvent('Core', 'DeleteTemplatePost', array(&$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Deleted Template');
 			}

@@ -74,6 +74,8 @@ if ($access) {
 					$gCms->modules[$key]['object']->EditGroupPre($groupobj);
 				}
 			}
+			
+			Events::SendEvent('Core', 'EditGroupPre', array(&$groupobj));
 
 			$result = $groupobj->save();
 
@@ -88,6 +90,8 @@ if ($access) {
 						$gCms->modules[$key]['object']->EditGroupPost($groupobj);
 					}
 				}
+				
+				Events::SendEvent('Core', 'EditGroupPost', array(&$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
 				redirect("listgroups.php");

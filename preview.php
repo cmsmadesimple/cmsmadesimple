@@ -52,6 +52,8 @@ if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
 			$gCms->modules[$key]['object']->ContentPostRender($html);
 		}
 	}
+	
+	Events::SendEvent('Core', 'ContentPostRender', array(&$html));
 
 	echo $html;
 }

@@ -56,6 +56,8 @@ if (isset($_GET["user_id"]))
 					$gCms->modules[$key]['object']->DeleteUserPre($oneuser);
 				}
 			}
+			
+			Events::SendEvent('Core', 'DeleteUserPre', array(&$oneuser));
 
 			$oneuser->Delete();
 
@@ -68,6 +70,8 @@ if (isset($_GET["user_id"]))
 					$gCms->modules[$key]['object']->DeleteUserPost($oneuser);
 				}
 			}
+			
+			Events::SendEvent('Core', 'DeleteUserPost', array(&$oneuser));
 
 			audit($user_id, $user_name, 'Deleted User');
 		}

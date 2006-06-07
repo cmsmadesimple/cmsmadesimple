@@ -24,11 +24,11 @@ $flds = "
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."events", $flds, $taboptarray);
 $dbdict->ExecuteSQLArray($sqlarray);
-$db->Execute( 'ALTER TABLE '.cms_db_prefix()."events ADD PRIMARY KEY (originator,event_name)" );
 
 $db->CreateSequence(cms_db_prefix()."events_seq");
 $db->CreateSequence(cms_db_prefix()."event_handler_seq");
 
+//Just in case someone has the table in 19-20
 $db->Execute( 'DROP TABLE '.cms_db_prefix().'eventhandlers' );
 
 echo "[done]</p>";

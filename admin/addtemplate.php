@@ -119,6 +119,8 @@ if ($access)
 					$gCms->modules[$key]['object']->AddTemplatePre($newtemplate);
 				}
 			}
+			
+			Events::SendEvent('Core', 'AddTemplatePre', array(&$newtemplate));
 
 			$result = $newtemplate->save();
 
@@ -133,6 +135,8 @@ if ($access)
 						$gCms->modules[$key]['object']->AddTemplatePost($newtemplate);
 					}
 				}
+				
+				Events::SendEvent('Core', 'AddTemplatePost', array(&$newtemplate));
 
 				audit($newtemplate->id, $template, 'Added Template');
 				redirect("listtemplates.php");

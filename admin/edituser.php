@@ -121,6 +121,8 @@ if ($access) {
 						$gCms->modules[$key]['object']->EditUserPre($thisuser);
 					}
 				}
+				
+				Events::SendEvent('Core', 'EditUserPre', array(&$thisuser));
 
 
 				$result = $thisuser->save();
@@ -139,6 +141,9 @@ if ($access) {
 						$gCms->modules[$key]['object']->EditUserPost($thisuser);
 					}
 				}
+				
+				Events::SendEvent('Core', 'EditUserPost', array(&$thisuser));
+				
                 if ($access_perm)
                     {
 				    redirect("listusers.php");

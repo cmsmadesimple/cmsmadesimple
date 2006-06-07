@@ -66,7 +66,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		}
 		audit(-1, '', 'User Login');
 
-		#Perform the login_post callback
+		#Perform the login_post callback  TODO: Remove me
 		foreach($gCms->modules as $key=>$value)
 		{
 			if ($gCms->modules[$key]['installed'] == true &&
@@ -75,6 +75,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 				$gCms->modules[$key]['object']->LoginPost($oneuser);
 			}
 		}
+		
+		#Now call the event
+		Events::SendEvent('Core', 'LoginPost', array(&$oneuser));
 
 		// redirect to upgrade if db_schema it's old
 		$current_version = $CMS_SCHEMA_VERSION;

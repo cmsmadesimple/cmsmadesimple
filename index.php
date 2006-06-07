@@ -247,6 +247,7 @@ if (!$cached)
 			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
 		}
 	}
+	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
 }
 
 #Perform the content postrender callback
@@ -260,6 +261,8 @@ while (list($key) = each($gCms->modules))
 		$gCms->modules[$key]['object']->ContentPostRender($html);
 	}
 }
+
+Events::SendEvent('Core', 'ContentPostRender', array(&$html));
 
 header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
 
