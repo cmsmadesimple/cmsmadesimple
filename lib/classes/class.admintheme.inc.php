@@ -720,7 +720,7 @@ class AdminTheme
                     'description'=>lang('eventhandlerdescription'),'show_in_menu'=>true),
             'editeventhandler'=>array('url'=>'editevent.php','parent'=>'eventhandlers',
                     'title'=>$this->FixSpaces(lang('editeventhandler')),
-                    'description'=>lang('editeventshandlerdescription'),'show_in_menu'=>false),
+                    'description'=>lang('editeventshandler'),'show_in_menu'=>false),
             'usertags'=>array('url'=>'listusertags.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('usertags')),
                     'description'=>lang('usertagdescription'),'show_in_menu'=>$this->HasPerm('codeBlockPerms')),
