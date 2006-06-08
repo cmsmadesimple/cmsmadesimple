@@ -415,7 +415,7 @@ class Events
 	 */
 	function GetEventHelp($eventname)
 	{
-		return "";
+		return lang('event_help_'.strtolower($eventname));
 	}
 	
 	
@@ -432,7 +432,7 @@ class Events
 	 */
 	function GetEventDescription($eventname)
 	{
-		return "";
+		return lang('event_desc_'.strtolower($eventname));
 	}
 	
 	
