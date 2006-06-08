@@ -3198,6 +3198,24 @@ class CMSModule
 
 
 	/**
+	* Add an event handler for a module event
+	*
+	* @params string $modulename      The name of the module sending the event
+	* @params string $eventname       The name of the event
+	* @params string $tag_name        The name of a user defined tag
+	* @params string $module_handler  The name of the module
+	* @params boolean $removable      Can this event be removed from the list?
+	*
+	* @returns mixed If successful, true.  If it fails, false.
+	*/
+        function AddEventHandler( $modulename, $eventname, $removable = true )
+	{
+	  Events::AddEventHandler( $modulename, $eventname, 
+				   false, $this->GetName(), $removable );
+	}
+
+
+	/**
 	 * Inform the system about a new event that can be generated
 	 *
 	 * @param string The name of the event

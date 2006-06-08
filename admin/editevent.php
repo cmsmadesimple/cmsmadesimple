@@ -201,6 +201,7 @@ $description = $gCms->modules[$module]['object']->GetEventDescription($event);
 
 // and now get the list of handlers for this event
 $handlers = Events::ListEventHandlers( $module, $event );
+print_r( $handlers ); echo "<br/><br/>";
 
 // and the list of all available handlers
 $allhandlers = array();
@@ -269,7 +270,14 @@ if( $handlers != false )
 	  {
 	    echo "<td>&nbsp;</td>";
 	  }
-	echo "  <td><a href=\"".$url."&amp;action=delete&amp;order=".$onehandler['handler_order']."&amp;handler=".$onehandler['handler_id']."\">$deleteImg</a></td>\n";
+	if( $onehandler['removable'] == 1 )
+	  {
+	    echo "  <td><a href=\"".$url."&amp;action=delete&amp;order=".$onehandler['handler_order']."&amp;handler=".$onehandler['handler_id']."\">$deleteImg</a></td>\n";
+	  }
+	else
+	  {
+	    echo "  <td>&nbsp;</td>\n";
+	  }
 	echo "</tr>\n";
 
 	$idx++;

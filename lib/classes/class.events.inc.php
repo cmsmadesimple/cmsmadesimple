@@ -172,7 +172,7 @@ class Events
 		$id = $row['event_id'];
 
 		// now get the handlers
-		$q = "SELECT tag_name,module_name,handler_order,handler_id FROM ".cms_db_prefix()."event_handlers WHERE
+		$q = "SELECT tag_name,module_name,handler_order,handler_id,removable FROM ".cms_db_prefix()."event_handlers WHERE
 		event_id = ? ORDER BY handler_order ASC";
 		$dbresult = $db->Execute( $q, array( $id ));
 
@@ -185,7 +185,6 @@ class Events
 			}
 			return $result;
 		}
-		echo "DEBUG bad $q, $id<br/>";
 		return false;
 	}
 
