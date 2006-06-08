@@ -471,4 +471,6 @@ $lang['admin']['event_help_contentpostcompile'] = '';
 $lang['admin']['event_help_contentpostrender'] = '';
 $lang['admin']['event_help_smartyprecompile'] = '';
 $lang['admin']['event_help_smartypostcompile'] = '';
+$lang['admin']['filterbymodule'] = 'Filter By Module';
+$lang['admin']['showall'] = 'Show All';
 ?>

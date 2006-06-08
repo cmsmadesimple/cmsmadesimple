@@ -49,6 +49,7 @@ check_login();
 $action = "";
 $module = "";
 $event = "";
+$modulefilter = '';
 if( isset( $_GET['action'] ) && $_GET['action'] != '' )
   {
     $action = $_GET['action'];
@@ -60,6 +61,10 @@ if( isset( $_GET['module'] ) && $_GET['module'] != '' )
 if( isset( $_GET['event'] ) && $_GET['event'] != '' )
   {
     $event = $_GET['event'];
+  }
+if( isset( $_GET['modulefilter'] ) && $_GET['modulefilter'] != '' )
+  {
+    $modulefilter = $_GET['modulefilter'];
   }
 
 // display the page
@@ -93,8 +98,32 @@ switch( $action )
 	}
 
 	default:
-	{
+	{		
 		$events = Events::ListEvents();
+		
+		echo '<br /><p><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
+		echo '<option value="">'.lang('showall').'</option>';
+		$modlist = array();
+		if( is_array($events) )
+		{
+			foreach( $events as $oneevent )
+			{
+				if (!in_array($oneevent['originator'], $modlist))
+					$modlist[] = $oneevent['originator'];
+			}
+		}
+		if (count($modlist) > 0)
+		{
+			foreach($modlist as $onemod)
+			{
+				echo '<option value="'.$onemod.'"';
+				if ($onemod == $modulefilter)
+					echo ' selected="selected"';
+				echo '>'.$onemod.'</option>';
+			}
+		}
+		echo "</select> <input type=\"submit\" value=\"submit\" /></form></p>\n\n";
+		
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo "<thead>\n";
 		echo "  <tr>\n";
@@ -112,24 +141,27 @@ switch( $action )
 			$curclass = 'row1';
 			foreach( $events as $oneevent )
 			{
-				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+				if ($modulefilter == '' || $modulefilter == $oneevent['originator'])
+				{
+					echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 
-				$desctext = '';
-				if ($oneevent['originator'] == 'Core') {
-					$desctext = Events::GetEventDescription($oneevent['event_name']);
-				}
-				else if (isset($gCms->modules[$oneevent['originator']])) {
-					$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
-					$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
-				}
+					$desctext = '';
+					if ($oneevent['originator'] == 'Core') {
+						$desctext = Events::GetEventDescription($oneevent['event_name']);
+					}
+					else if (isset($gCms->modules[$oneevent['originator']])) {
+						$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
+						$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
+					}
 
-				echo "    <td>".$oneevent['originator']."</td>\n";
-				echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
-				echo "    <td>".$desctext."</td>\n";
-				echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
-				echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
-				echo "  </tr>\n"; 
-				($curclass=="row1"?$curclass="row2":$curclass="row1");
+					echo "    <td>".$oneevent['originator']."</td>\n";
+					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
+					echo "    <td>".$desctext."</td>\n";
+					echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+					echo "  </tr>\n"; 
+					($curclass=="row1"?$curclass="row2":$curclass="row1");
+				}
 			}
 		}
 
