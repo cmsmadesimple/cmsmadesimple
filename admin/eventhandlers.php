@@ -148,13 +148,13 @@ switch( $action )
 					$desctext = '';
 					if ($oneevent['originator'] == 'Core') {
 						$desctext = Events::GetEventDescription($oneevent['event_name']);
+						echo "    <td>".lang('core')."</td>\n";
 					}
 					else if (isset($gCms->modules[$oneevent['originator']])) {
 						$objinstance =& $gCms->modules[$oneevent['originator']]['object'];
 						$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
+						echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
 					}
-
-					echo "    <td>".$oneevent['originator']."</td>\n";
 					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";

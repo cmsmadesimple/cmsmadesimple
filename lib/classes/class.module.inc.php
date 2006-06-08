@@ -2641,6 +2641,10 @@ class CMSModule
 			{
 				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
 			}
+			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
+			{
+				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+			}
 			
 			//Now load the other language if necessary
 			if (count($lang) == 0 || $this->DefaultLanguage() != $ourlang)
