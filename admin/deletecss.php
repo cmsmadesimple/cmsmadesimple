@@ -96,12 +96,16 @@ if (isset($_GET["css_id"]))
 
 		# everything should be ok
 		if ($dodelete)
-		{
-			$query = "DELETE FROM ".cms_db_prefix()."css where css_id = ?";
-			$result = $db->Execute($query, array($css_id));
+		{	
+			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
+			
+			Events::SendEvent('Core', 'DeleteStylesheetPre', array(&$onestylesheet));
+			
+			$result = StylesheetOperations::DeleteStylesheetById($css_id);
 
 			if ($result)
 			{
+				Events::SendEvent('Core', 'DeleteStylesheetPost', array(&$onestylesheet));
 				audit($css_id, $css_name, 'Deleted CSS');
 			}
 			else

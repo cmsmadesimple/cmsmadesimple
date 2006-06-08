@@ -133,13 +133,24 @@ if ($access)
 #******************************************************************************
 		if ($validinfo)
 		{
-			$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
-			$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
+			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
+			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
+			
+			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
+			$onestylesheet->name = $css_name;
+			$onestylesheet->value = $css_text;
+			$onestylesheet->media_type = $media_type;
+			
+			Events::SendEvent('Core', 'EditStylesheetPre', array(&$onestylesheet));
+			
+			$result = $onestylesheet->Save();
 
 			if ($result)
 			{
 				#Start using new name, just in case this is an apply
 				$orig_css_name = $css_name;
+				
+				Events::SendEvent('Core', 'EditStylesheetPost', array(&$onestylesheet));
 
 				audit($css_id, $css_name, 'Edited CSS');
 

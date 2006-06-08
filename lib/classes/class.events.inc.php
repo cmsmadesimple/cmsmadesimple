@@ -440,22 +440,22 @@ class Events
 	{
 		$modulename = 'Core';
 
-		Events::CreateEvent( $modulename, 'LoginPost'); //Done
-		Events::CreateEvent( $modulename, 'LogoutPost'); //Done
+		Events::CreateEvent( $modulename, 'LoginPost');
+		Events::CreateEvent( $modulename, 'LogoutPost');
 		
-		Events::CreateEvent( $modulename, 'AddUserPre'); //Done
-		Events::CreateEvent( $modulename, 'AddUserPost'); //Done
-		Events::CreateEvent( $modulename, 'EditUserPre'); //Done
-		Events::CreateEvent( $modulename, 'EditUserPost'); //Done
-		Events::CreateEvent( $modulename, 'DeleteUserPre'); //Done
-		Events::CreateEvent( $modulename, 'DeleteUserPost'); //Done
+		Events::CreateEvent( $modulename, 'AddUserPre');
+		Events::CreateEvent( $modulename, 'AddUserPost');
+		Events::CreateEvent( $modulename, 'EditUserPre');
+		Events::CreateEvent( $modulename, 'EditUserPost');
+		Events::CreateEvent( $modulename, 'DeleteUserPre');
+		Events::CreateEvent( $modulename, 'DeleteUserPost');
 		
-		Events::CreateEvent( $modulename, 'AddGroupPre'); //Done
-		Events::CreateEvent( $modulename, 'AddGroupPost'); //Done
-		Events::CreateEvent( $modulename, 'EditGroupPre'); //Done
-		Events::CreateEvent( $modulename, 'EditGroupPost'); //Done
-		Events::CreateEvent( $modulename, 'DeleteGroupPre'); //Done
-		Events::CreateEvent( $modulename, 'DeleteGroupPost'); //Done
+		Events::CreateEvent( $modulename, 'AddGroupPre');
+		Events::CreateEvent( $modulename, 'AddGroupPost');
+		Events::CreateEvent( $modulename, 'EditGroupPre');
+		Events::CreateEvent( $modulename, 'EditGroupPost');
+		Events::CreateEvent( $modulename, 'DeleteGroupPre');
+		Events::CreateEvent( $modulename, 'DeleteGroupPost');
 		
 		Events::CreateEvent( $modulename, 'AddStylesheetPre');
 		Events::CreateEvent( $modulename, 'AddStylesheetPost');
@@ -464,35 +464,35 @@ class Events
 		Events::CreateEvent( $modulename, 'DeleteStylesheetPre');
 		Events::CreateEvent( $modulename, 'DeleteStylesheetPost');
 		
-		Events::CreateEvent( $modulename, 'AddTemplatePre'); //Done
-		Events::CreateEvent( $modulename, 'AddTemplatePost'); //Done
-		Events::CreateEvent( $modulename, 'EditTemplatePre'); //Done
-		Events::CreateEvent( $modulename, 'EditTemplatePost'); //Done
-		Events::CreateEvent( $modulename, 'DeleteTemplatePre'); //Done
-		Events::CreateEvent( $modulename, 'DeleteTemplatePost'); //Done
-		Events::CreateEvent( $modulename, 'TemplatePreCompile'); //Done
-		Events::CreateEvent( $modulename, 'TemplatePostCompile'); //Done
+		Events::CreateEvent( $modulename, 'AddTemplatePre');
+		Events::CreateEvent( $modulename, 'AddTemplatePost');
+		Events::CreateEvent( $modulename, 'EditTemplatePre');
+		Events::CreateEvent( $modulename, 'EditTemplatePost');
+		Events::CreateEvent( $modulename, 'DeleteTemplatePre');
+		Events::CreateEvent( $modulename, 'DeleteTemplatePost');
+		Events::CreateEvent( $modulename, 'TemplatePreCompile');
+		Events::CreateEvent( $modulename, 'TemplatePostCompile');
 		
-		Events::CreateEvent( $modulename, 'AddGlobalContentPre'); //Done
-		Events::CreateEvent( $modulename, 'AddGlobalContentPost'); //Done
-		Events::CreateEvent( $modulename, 'EditGlobalContentPre'); //Done
-		Events::CreateEvent( $modulename, 'EditGlobalContentPost'); //Done
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPre'); //Done
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPost'); //Done
-		Events::CreateEvent( $modulename, 'GlobalContentPreCompile'); //Done
-		Events::CreateEvent( $modulename, 'GlobalContentPostCompile'); //Done
+		Events::CreateEvent( $modulename, 'AddGlobalContentPre');
+		Events::CreateEvent( $modulename, 'AddGlobalContentPost');
+		Events::CreateEvent( $modulename, 'EditGlobalContentPre');
+		Events::CreateEvent( $modulename, 'EditGlobalContentPost');
+		Events::CreateEvent( $modulename, 'DeleteGlobalContentPre');
+		Events::CreateEvent( $modulename, 'DeleteGlobalContentPost');
+		Events::CreateEvent( $modulename, 'GlobalContentPreCompile');
+		Events::CreateEvent( $modulename, 'GlobalContentPostCompile');
 		
-		Events::CreateEvent( $modulename, 'ContentEditPre'); //Done
-		Events::CreateEvent( $modulename, 'ContentEditPost'); //Done
-		Events::CreateEvent( $modulename, 'ContentDeletePre'); //Done
-		Events::CreateEvent( $modulename, 'ContentDeletePost'); //Done
+		Events::CreateEvent( $modulename, 'ContentEditPre');
+		Events::CreateEvent( $modulename, 'ContentEditPost');
+		Events::CreateEvent( $modulename, 'ContentDeletePre');
+		Events::CreateEvent( $modulename, 'ContentDeletePost');
 		
-		Events::CreateEvent( $modulename, 'ContentStylesheet'); //Done
-		Events::CreateEvent( $modulename, 'ContentPreCompile'); //Done
-		Events::CreateEvent( $modulename, 'ContentPostCompile'); //Done
-		Events::CreateEvent( $modulename, 'ContentPostRender'); //Done
-		Events::CreateEvent( $modulename, 'SmartyPreCompile'); //Done
-		Events::CreateEvent( $modulename, 'SmartyPostCompile'); //Done
+		Events::CreateEvent( $modulename, 'ContentStylesheet');
+		Events::CreateEvent( $modulename, 'ContentPreCompile');
+		Events::CreateEvent( $modulename, 'ContentPostCompile');
+		Events::CreateEvent( $modulename, 'ContentPostRender');
+		Events::CreateEvent( $modulename, 'SmartyPreCompile');
+		Events::CreateEvent( $modulename, 'SmartyPostCompile');
 	}
 
 } // class

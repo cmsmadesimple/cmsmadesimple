@@ -122,20 +122,23 @@ if ($access)
 #******************************************************************************
 		if ($validinfo)
 		{
-			# this is used to get a unique ID for the CSS
-			$new_css_id = $db->GenID(cms_db_prefix()."css_seq");
+			$newstylesheet = new Stylesheet();
+			$newstylesheet->name = $css_name;
+			$newstylesheet->value = $css_text;
+			$newstylesheet->media_type = $media_type;
+			
+			Events::SendEvent('Core', 'AddStylesheetPre', array(&$newstylesheet));
 
-			# we then generate the request
-			$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,?,?)";
-
-			# and execute it
-			$result = $db->Execute($query,array($new_css_id, $css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+			$result = $newstylesheet->Save();
 
 			# we now have to check that everything went well
 			if ($result)
 			{
+				#Sent the post event
+				Events::SendEvent('Core', 'AddStylesheetPost', array(&$newstylesheet));
+				
 				# it's ok, we record the operation in the admin log
-				audit($new_css_id, $css_name, 'Added CSS');
+				audit($newstylesheet->id, $css_name, 'Added CSS');
 
 				# and goes back to the css list
 				redirect("listcss.php");
