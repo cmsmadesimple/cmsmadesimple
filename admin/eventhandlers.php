@@ -98,7 +98,7 @@ switch( $action )
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo "<thead>\n";
 		echo "  <tr>\n";
-		echo "    <th>".lang('module')."</th>\n";
+		echo "    <th>".lang('originator')."</th>\n";
 		echo "    <th>".lang('event')."</th>\n";
 		echo "    <th>".lang('description')."</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
@@ -124,10 +124,10 @@ switch( $action )
 				}
 
 				echo "    <td>".$oneevent['originator']."</td>\n";
-				echo "    <td>".$oneevent['event_name']."</td>\n";
+				echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
 				echo "    <td>".$desctext."</td>\n";
 				echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
-				echo "    <td><a href=\"editevent.php?action=action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+				echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
 				echo "  </tr>\n"; 
 				($curclass=="row1"?$curclass="row2":$curclass="row1");
 			}
