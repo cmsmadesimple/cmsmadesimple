@@ -718,6 +718,9 @@ class AdminTheme
             'eventhandlers'=>array('url'=>'eventhandlers.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('eventhandlers')),
                     'description'=>lang('eventhandlerdescription'),'show_in_menu'=>true),
+            'editeventhandler'=>array('url'=>'editevent.php','parent'=>'eventhandlers',
+                    'title'=>$this->FixSpaces(lang('editeventhandler')),
+                    'description'=>lang('editeventshandlerdescription'),'show_in_menu'=>false),
             'usertags'=>array('url'=>'listusertags.php','parent'=>'extensions',
                     'title'=>$this->FixSpaces(lang('usertags')),
                     'description'=>lang('usertagdescription'),'show_in_menu'=>$this->HasPerm('codeBlockPerms')),
@@ -1360,18 +1363,12 @@ class AdminTheme
 	* @param extra_lang_param - extra parameters to pass to lang() (I don't think this parm is needed)
 	* @param link_text - Override the text to use for the help link.
 	*/
-    function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '')
+    function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $isModule = FALSE)
     {
         $wikiUrl = $this->cms->config['wiki_url'];
         // Include English translation of titles. (Can't find better way to get them)
         $dirname = dirname(__FILE__);
         include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
-		// Check if this is a module
-        if (FALSE == empty($_GET['module'])  || FALSE == empty($_REQUEST['mact'])) {
-			$isModule = TRUE;
-		} else {
-			$isModule = FALSE;
-		}
         foreach ($this->breadcrumbs AS $key => $value)
         {
             $title = $value['title'];

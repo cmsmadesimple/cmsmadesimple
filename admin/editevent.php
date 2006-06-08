@@ -40,7 +40,7 @@ $deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'
 
 echo "<div class=\"pagecontainer\">\n";
 echo "<div class=\"pageoverflow\">\n";
-echo $themeObject->ShowHeader('eventhandlers');
+echo $themeObject->ShowHeader('editeventhandler');
 echo "</div>\n";
 
 $action = "";
