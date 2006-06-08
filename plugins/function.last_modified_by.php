@@ -45,9 +45,9 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
   if($format==="id") {
      return $id;
   } else if ($format==="username") {
-     return $thisuser->username;
+     return htmlentities($thisuser->username);
   } else if ($format==="fullname") {
-     return $thisuser->firstname ." ". $thisuser->lastname;
+     return htmlentities($thisuser->firstname ." ". $thisuser->lastname);
   } else {
      return "";
   }
