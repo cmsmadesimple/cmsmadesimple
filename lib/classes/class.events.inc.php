@@ -112,7 +112,7 @@ class Events
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
 
-		$q = "SELECT handler_name,module_handler FROM ".cms_db_prefix()."eventhandlers WHERE
+		$q = "SELECT tag_name,module_name FROM ".cms_db_prefix()."event_handlers WHERE
 		event_id = ? ORDER BY handler_order ASC";
 		$dbresult = $db->Execute( $q, array( $id ) );
 		if( $dbresult && $dbresult->RowCount() )
