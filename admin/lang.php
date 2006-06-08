@@ -97,17 +97,23 @@ if (isset($CMS_ADMIN_PAGE)) {
 		}
 	}
 
-    #Ok, we have a language to load, let's load it already...
-    $file = dirname(__FILE__) . "/lang/ext/" . $current_language . "/admin.inc.php";
-	if (!is_file($file))
+	#First load the english one so that we have strings to fall back on
+	@include(dirname(__FILE__) . DIRECTORY_SEPARATOR . "lang" . DIRECTORY_SEPARATOR . 'en_US' . DIRECTORY_SEPARATOR . "admin.inc.php");
+	
+	#Now load the real file
+	if ($lang != 'en_US')
 	{
-		$file = dirname(__FILE__) . "/lang/" . $current_language . "/admin.inc.php";
-	}
+	    $file = dirname(__FILE__) . "/lang/ext/" . $current_language . "/admin.inc.php";
+		if (!is_file($file))
+		{
+			$file = dirname(__FILE__) . "/lang/" . $current_language . "/admin.inc.php";
+		}
 
-    if (is_file($file) && strlen($current_language) == 5 && strpos($current_language, ".") === false)
-    {  
-        include ($file);
-    }  
+	    if (is_file($file) && strlen($current_language) == 5 && strpos($current_language, ".") === false)
+	    {  
+	        include ($file);
+	    }
+	}
 
 	global $gCms;
 	$gCms->nls = $nls;

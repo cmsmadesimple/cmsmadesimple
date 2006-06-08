@@ -2633,45 +2633,55 @@ class CMSModule
 		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
 		{
 			$dir = $gCms->config['root_path'];
-			if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
-			{
-			  if( isset( $gCms->config['rcdebug'] ) ) echo "DEBUG1<br/>";
-				include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
-				$this->langhash = &$lang;
-			}
-			else if (@is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
-			{
-			  if( isset( $gCms->config['rcdebug'] ) ) echo "DEBUG2<br/>";
-				include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
-				$this->langhash = &$lang;
-			}
-			else if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
-			{
-				include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
-				$this->langhash = &$lang;
+			
+			$lang = array();
 
-			}
-			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
+			//First load the default language to remove any "Add Me's"
+			if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
 			{
 				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
-				$this->langhash = &$lang;
 			}
-			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
+			
+			//Now load the other language if necessary
+			if (count($lang) == 0 || $this->DefaultLanguage() != $ourlang)
 			{
-				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
-				$this->langhash = &$lang;
+				if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
+				{
+					include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
+				}
+				else if (@is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
+				{
+					include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
+				}
+				else if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
+				{
+					include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
+				}
+				else if (count($lang) == 0)
+				{					
+					if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
+					{
+						include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
+					}
+					else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
+					{
+						include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
+					}
+				}
+				else
+				{
+					# Sucks to be here...  Don't use Lang unless there are language files...
+					# Get ready for a lot of Add Me's
+				}
 			}
-			else
-			{
-				# Sucks to be here...  Don't use Lang unless there are language files...
-				# Get ready for a lot of Add Me's
-			}
+
 			# try to load an admin modifiable version of the lang file if one exists
 			if( @is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
 			{
 				include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
-				$this->langhash = &$lang;
 			}
+			
+			$this->langhash = &$lang;
 		}
 
 		$result = '';
