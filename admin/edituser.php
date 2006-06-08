@@ -190,11 +190,11 @@ else {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('password')?>:</p>
-			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+	   <p class="pageinput"><input type="password" name="password" maxlength="25" value="" />&nbsp;<?php echo lang('info_edituser_password') ?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('passwordagain')?>:</p>
-			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" /></p>
+													   <p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;<? echo lang('info_edituser_passwordagain') ?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('firstname')?>:</p>
@@ -208,10 +208,16 @@ else {
 			<p class="pagetext"><?php echo lang('email')?>:</p>
 			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
 		</div>
+	   <?php
+	   if( $access_perm && !$access_user ) {
+           ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
+	   <?php
+	   }
+           ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
+$lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
+$lang['admin']['originator'] = 'Originator';
 $lang['admin']['module_name'] = 'Module Name';
 $lang['admin']['event_name'] = 'Event Name';
 $lang['admin']['event_description'] = 'Event Description';
