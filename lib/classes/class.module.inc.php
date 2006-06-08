@@ -3241,7 +3241,7 @@ class CMSModule
 	 * @param array  Array of parameters provided with the event.
 	 * @returns boolean
 	 */
-	function DoEvent( $originator, $eventname, $params )
+	function DoEvent( $originator, $eventname, &$params )
 	{
 	  return true;
 	}
