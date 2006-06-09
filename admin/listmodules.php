@@ -291,7 +291,7 @@ else if ($action == "showmodulehelp")
 	if (isset($gCms->modules[$module]['object']))
 	{
 		echo '<div class="pagecontainer">';
-		echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('morehelpwith', $module));
+		echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('morehelpwith', $module), TRUE);
 		echo $gCms->modules[$module]['object']->GetHelpPage();
 		echo "</div>";
 	}
@@ -407,7 +407,15 @@ else if ($action == 'missingdeps')
 			$modinstance = $value['object'];
 
 			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-			echo "<td>$key</td>\n";
+			//Is there help?
+			if ($modinstance->GetHelp() != '')
+			{
+				echo "<td><a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a></td>";
+			}
+			else
+			{
+				echo "<td>$key</td>\n";
+			}
 			#Make sure it's a valid module for this version of CMSMS
 			if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
 			{
