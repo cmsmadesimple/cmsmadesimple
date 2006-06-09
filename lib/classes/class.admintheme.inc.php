@@ -1365,67 +1365,70 @@ class AdminTheme
 	*/
     function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $isModule = FALSE)
     {
-        $wikiUrl = $this->cms->config['wiki_url'];
-        // Include English translation of titles. (Can't find better way to get them)
-        $dirname = dirname(__FILE__);
-        include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
-        foreach ($this->breadcrumbs AS $key => $value)
-        {
-            $title = $value['title'];
-            // If this is a module and the last part of the breadcrumbs
-            if (TRUE == $isModule && TRUE == empty($this->breadcrumbs[$key + 1]))
-            {
-				$help_title = $title;
-				if (FALSE == empty($_GET['module'])) {
-					$module_name = $_GET['module'];
-				} else {
-					$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-				}
-				// Turn ModuleName into _Module_Name
-				$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-				$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-				if ($moduleName{0} == '_') {
-					$wikiUrl .= '/'.substr($moduleName, 1);
-				} else {
-					$wikiUrl .= '/'.$moduleName;
-				}
-            } else {
-                // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
-				$colonLocation = strrchr($title, ':');
-				if ($colonLocation !== false)
-				{
-					$title = substr($title,0,strpos($title,':'));
-				}
-                // Get the key of the title so we can use the en_US version for the URL
-                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-                $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
-				$help_title = $value['title'];
-            }
-        }
-        // Clean up URL
-        $wikiUrl = str_replace(' ', '_', $wikiUrl);
-        $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-        // Make link to go the translated version of page if lang is not en_US
-        /* Disabled as suggested by westis
-        $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
-        if ($lang != 'en_US') {
-            $wikiUrl .= '/'.substr($lang, 0, 2);
-        }
-        */
-		if (FALSE == empty($link_text))
-		{
-			$help_title = $link_text;
+		$header  = '<p class="pageheader">';
+		if (TRUE == $isModule) {
+			$header .= $title_name;
 		} else {
-			$help_title = lang('helpwithsection', $help_title);
+			$header .= lang($title_name, $extra_lang_param);
+ 		}
+		if (FALSE == empty($this->breadcrumbs)) {
+	        $wikiUrl = $this->cms->config['wiki_url'];
+    	    // Include English translation of titles. (Can't find better way to get them)
+	        $dirname = dirname(__FILE__);
+	        include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
+	        foreach ($this->breadcrumbs AS $key => $value)
+	        {
+	            $title = $value['title'];
+	            // If this is a module and the last part of the breadcrumbs
+	            if (TRUE == $isModule && TRUE == empty($this->breadcrumbs[$key + 1]))
+	            {
+					$help_title = $title;
+					if (FALSE == empty($_GET['module'])) {
+						$module_name = $_GET['module'];
+					} else {
+						$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+					}
+					// Turn ModuleName into _Module_Name
+					$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+					$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+					if ($moduleName{0} == '_') {
+						$wikiUrl .= '/'.substr($moduleName, 1);
+					} else {
+						$wikiUrl .= '/'.$moduleName;
+					}
+	            } else {
+	                // Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
+					$colonLocation = strrchr($title, ':');
+					if ($colonLocation !== false)
+					{
+						$title = substr($title,0,strpos($title,':'));
+					}
+	                // Get the key of the title so we can use the en_US version for the URL
+	                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
+	                $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
+					$help_title = $value['title'];
+	            }
+	        }
+	        // Clean up URL
+	        $wikiUrl = str_replace(' ', '_', $wikiUrl);
+	        $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+	        // Make link to go the translated version of page if lang is not en_US
+	        /* Disabled as suggested by westis
+	        $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+	        if ($lang != 'en_US') {
+	            $wikiUrl .= '/'.substr($lang, 0, 2);
+	        }
+	        */
+			if (FALSE == empty($link_text))
+			{
+				$help_title = $link_text;
+			} else {
+				$help_title = lang('helpwithsection', $help_title);
+			}
+	        $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+	        $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)';
 		}
-        $header  = '<p class="pageheader">';
-        if (TRUE == $isModule) {
-            $header .= $title_name;        
-        } else {
-            $header .= lang($title_name, $extra_lang_param);
-        }  
-        $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-        $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)</p>';
+		$header .= '</p>';
         return $header;
 
     }
