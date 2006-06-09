@@ -197,7 +197,19 @@ else
     
 // get the event description
 global $gCms;
-$description = $gCms->modules[$module]['object']->GetEventDescription($event);
+//$description = $gCms->modules[$module]['object']->GetEventDescription($event);
+
+$description = '';
+$modulename = '';
+if ($module == 'Core') {
+	$description = Events::GetEventDescription($event);
+	$modulename = lang('core');
+}
+else if (isset($gCms->modules[$module])) {
+	$objinstance =& $gCms->modules[$module]['object'];
+	$description = $objinstance->GetEventDescription($event);
+	$modulename = $objinstance->GetFriendlyName();
+}
 
 // and now get the list of handlers for this event
 $handlers = Events::ListEventHandlers( $module, $event );
@@ -219,7 +231,7 @@ foreach( $gCms->modules as $key => $value )
 
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("module_name").":</p>\n";
-echo "<p class=\"pageinput\">".$module.":</p>\n";
+echo "<p class=\"pageinput\">".$modulename.":</p>\n";
 echo "</div>\n";
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("event_name").":</p>\n";
