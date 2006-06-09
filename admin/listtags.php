@@ -111,8 +111,14 @@ else
 			{
 				echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 
-				echo "<td>$oneplugin</td>\n";
-
+				if (function_exists('smarty_cms_help_function_'.$oneplugin))
+				{
+					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".$oneplugin."</a></td>";
+				}
+				else
+				{
+					echo "<td>$oneplugin</td>\n";
+				}
 				if (function_exists('smarty_cms_help_function_'.$oneplugin))
 				{
 					echo "<td><a href=\"listtags.php?action=showpluginhelp&amp;plugin=".$oneplugin."\">".lang('help')."</a></td>";
