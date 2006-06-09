@@ -20,7 +20,7 @@ function smarty_cms_function_content($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo =& $gCms->variables['pageinfo'];
-	if (isset($pageinfo) && $pageinfo !== FALSE)
+	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id) )
 	{
 		$id = '';
 		$modulename = '';
