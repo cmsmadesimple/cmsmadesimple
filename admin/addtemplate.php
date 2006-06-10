@@ -34,7 +34,26 @@ $dflt_content='
 {stylesheet}
 </head>
 <body>
-{content}
+
+<!-- start header -->
+<div id="header">
+  <h1>{sitename}</h1>
+</div>
+<!-- end header -->
+
+<!-- start menu -->
+<div id="menu">
+  {cms_module module="menumanager"}
+</div>
+<!-- end menu -->
+
+<!-- start content -->
+<div id="content">
+  <h1>{title}</h1>
+  {content}
+</div>
+<!-- end content -->
+
 </body>
 </html>
 ';
