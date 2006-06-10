@@ -232,7 +232,7 @@ $special_failed=true;
 	else
 	{
 		echo '<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>';
-		echo '<p class="continue" align="center"><input class="defaultfocus"type="Submit" value="Try Again" /></p>';
+		echo '<p class="continue" align="center"><input class="defaultfocus" type="Submit" value="Try Again" /></p>';
 	}
 	echo '</form>';
 
@@ -425,7 +425,12 @@ if (extension_loaded('sqlite'))
 <td><input type="checkbox" name="createextra" checked="true" /></td>
 </tr>
 </table>
-<p align="center" class="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input type="submit" value="Continue" /></p>
+<p align="center" class="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>-->
+<?php if (! $valid_database) { ?>
+<input type="submit" value="Retry" /></p>
+<?php } else { ?>
+<input type="submit" value="Continue" /></p>
+<?php } ?>
 <!--<p><input type="submit" value="Continue" /></p>-->
 </form>
 <?php
@@ -433,6 +438,17 @@ if (extension_loaded('sqlite'))
 } ## showPageThree
 
 function showPageFour($sqlloaded = 0) {
+
+# Do check that database information has been entered
+# Skip back to showPageThree() if necessary
+
+        if ($_POST['dbms'] == '')
+        {
+                showPageThree('No dbms selected!');
+                return;
+        }
+
+
     ## don't load statements if they've already been loaded
     if ($sqlloaded == 0 && isset($_POST["createtables"])) {
 
