@@ -37,9 +37,23 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 		$firstExpandCollapse = false;
 	}
 
-	echo '<a href="#'.$id.'" onClick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br>
+	echo '<a href="'. selfURL() .'#'. $id .'" onClick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br>
 	<div id="'.$id.'" class="expand">';
 }
+
+
+/**
+* Should always get this page url even when using internal pretty urls
+*/
+function selfURL() { 
+  $s = empty($_SERVER["HTTPS"]) ? '' : ($_SERVER["HTTPS"] == "on") ? "s" : ""; 
+  $protocol = strleft(strtolower($_SERVER["SERVER_PROTOCOL"]), "/").$s; 
+  $port = ($_SERVER["SERVER_PORT"] == "80") ? "" : (":".$_SERVER["SERVER_PORT"]); 
+  return $protocol."://".$_SERVER['SERVER_NAME'].$port.$_SERVER['REQUEST_URI']; 
+} 
+
+function strleft($s1, $s2) { return substr($s1, 0, strpos($s1, $s2)); }
+
 
 function smarty_cms_help_function_startExpandCollapse() {
 	?>
