@@ -268,7 +268,7 @@ header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (iss
 
 echo $html;
 
-@ob_flush();
+//@ob_flush();
 
 $endtime = microtime();
 

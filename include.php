@@ -70,12 +70,6 @@ $config =& $gCms->GetConfig();
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']); 
 
-#Set the locale if it's set
-if (isset($config['locale']) && $config['locale'] != '')
-{
-	@setlocale(LC_ALL, $config['locale']);
-}
-
 #Add users if they exist in the session
 $gCms->variables["user_id"] = "";
 if (isset($_SESSION["cms_admin_user_id"]))
@@ -190,7 +184,21 @@ if (isset($page))
 #Load all site preferences
 load_site_preferences();
 
+#Set the locale if it's set
+#either in the config, or as a site preference.
+$frontendlang = get_site_preference('frontendlang','');
+if (isset($config['locale']) && $config['locale'] != '')
+{
+  $frontendlang = $config['locale'];
+}
+if( $frontendlang != '' )
+  {
+    @setlocale(LC_ALL, $frontendlang);
+  }
+
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+$smarty->assign('lang',$frontendlang);
+$smarty->assign('encoding',get_encoding());
 
 if (isset($CMS_ADMIN_PAGE))
 {

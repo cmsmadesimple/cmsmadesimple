@@ -70,7 +70,7 @@ function smarty_cms_function_content($params, &$smarty)
 							&& $cmsmodules[$modulename]['active'] == true
 							&& $cmsmodules[$modulename]['object']->IsPluginModule())
 						{
-							@ob_start();
+						        @ob_start();
 							$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
 
 							$returnid = '';
