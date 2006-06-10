@@ -303,7 +303,7 @@ class Events
 			$params[] = $tag_name;
 		}
 		$q .= "VALUES (?,?,?,?,?)";
-		$params[] = $removable;
+		$params[] = ($removable?1:0);
 		$params[] = $order;
 		$params[] = $handler_id;
 		$dbresult = $db->Execute( $q, $params );
