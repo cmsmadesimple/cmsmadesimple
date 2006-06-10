@@ -642,13 +642,13 @@ $lang['admin']['event_help_globalcontentpostcompile'] = '<p>Sent after a global 
 <li>Reference to the affected global content block text.</li>
 </ol>
 ';
-$lang['admin']['event_help_contenteditpre'] = '<p>Sent before new content is created.</p>
+$lang['admin']['event_help_contenteditpre'] = '<p>Sent before edits to content are saved.</p>
 <h4>Parameters</h4>
 <ol>
 <li>Reference to the affected content object.</li>
 </ol>
 ';
-$lang['admin']['event_help_contenteditpost'] = '<p>Sent after new content is created.</p>
+$lang['admin']['event_help_contenteditpost'] = '<p>Sent after edits to content are saved.</p>
 <h4>Parameters</h4>
 <ol>
 <li>Reference to the affected content object.</li>
