@@ -213,7 +213,7 @@ else if (isset($gCms->modules[$module])) {
 
 // and now get the list of handlers for this event
 $handlers = Events::ListEventHandlers( $module, $event );
-print_r( $handlers ); echo "<br/><br/>";
+//print_r( $handlers ); echo "<br/><br/>";
 
 // and the list of all available handlers
 $allhandlers = array();
