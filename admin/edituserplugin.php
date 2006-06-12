@@ -90,16 +90,20 @@ if ($access) {
 		if ($validinfo)
 		{
 			srand();
-			if (@eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
+			ob_start();
+			if (eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
 			{
 				$error[] = lang('invalidcode');
                                 //catch the error
-                                ob_start();
-                                eval('function testfunction'.rand().'() {'.$code.'}');
+                                //eval('function testfunction'.rand().'() {'.$code.'}');
                                 $buffer = ob_get_clean();
                                 //add error
                                 $error[] = preg_replace('/<br \/>/', '', $buffer ); 
 				$validinfo = false;
+			}
+			else
+			{
+				ob_get_clean();
 			}
 		}
 
