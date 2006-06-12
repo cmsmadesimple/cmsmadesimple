@@ -678,7 +678,7 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 {
 	global $CMS_LOAD_ALL_PLUGINS;
 
-	$types=array('function','compiler','prefilter','postfilter','outputfilter','modifier');
+	$types=array('function','compiler','prefilter','postfilter','outputfilter','modifier','block');
 	$handle=opendir($dir);
 	while ($file = readdir($handle))
 	{
@@ -715,7 +715,11 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 						case 4:
 								$smarty->register_outputfilter("smarty_cms_outputfilter_" . $file);
 								break;
-						case 5: $smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
+						case 5:
+								$smarty->register_modifier($file, "smarty_cms_modifier_" . $file);
+								break;
+						case 6:
+								$smarty->register_block($file, "smarty_cms_block_" . $file);
 								break;
 					}
 					if ($load){ $plugins[]=$file;
