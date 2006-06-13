@@ -2774,6 +2774,23 @@ class CMSModule
 		return '';
 	}
 
+	/**
+	 * Returns contents of the template that resides in modules/ModuleName/templates/{template_name}.tpl
+	 * Code adapted from the Guestbook module
+	 */
+	function GetTemplateFromFile($template_name)
+	{
+		$tpl_base  = $this->cms->config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
+		$tpl_base .= $this->GetName().DIRECTORY_SEPARATOR.'templates';
+		$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name.'.tpl';
+		if (is_file($template)) {
+			return file_get_contents($template);
+		}
+		else
+		{
+			return lang('errorinsertingtemplate');
+		}
+	}
 
 	function SetTemplate($tpl_name, $content, $modulename = '')
 	{
