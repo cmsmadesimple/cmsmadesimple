@@ -1406,7 +1406,7 @@ class AdminTheme
 	                // Get the key of the title so we can use the en_US version for the URL
 	                $title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
 	                $wikiUrl .= '/'.$lang['admin'][$title_key[0]];
-					$help_title = $value['title'];
+					$help_title = $title;
 	            }
 	        }
 	        // Clean up URL
