@@ -660,7 +660,7 @@ function load_plugins(&$smarty)
 				$userplugins[$result->fields['userplugin_name']] = $result->fields['userplugin_id'];
 				$functionname = "cms_tmp_".$result->fields['userplugin_name']."_userplugin_function";
 				//Only register valid code
-				if (!(@eval('function '.$functionname.'(&$params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
+				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
 				{
 					$smarty->register_function($result->fields['userplugin_name'], $functionname, false);
 
