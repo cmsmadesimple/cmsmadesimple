@@ -1,7 +1,5 @@
 <?php
-v v v v v v v
 $lang['admin']['frontendlang'] = 'Default language for the frontend';
-^ ^ ^ ^ ^ ^ ^
 $lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
 $lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
 $lang['admin']['originator'] = 'Originator';

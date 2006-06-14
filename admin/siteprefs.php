@@ -16,9 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-v v v v v v v
 #$Id$
-^ ^ ^ ^ ^ ^ ^
 
 $CMS_ADMIN_PAGE=1;
 $CMS_TOP_MENU='admin';
@@ -61,11 +59,9 @@ if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
 #$useadvancedcss = "1";
 #if (isset($_POST["useadvancedcss"])) $useadvancedcss = $_POST["useadvancedcss"];
 
-v v v v v v v
 $frontendlang = '';
 if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 
-^ ^ ^ ^ ^ ^ ^
 // ADDED
 $logintheme = "default";
 if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
@@ -98,9 +94,7 @@ else if (isset($_POST["editsiteprefs"]))
 {
 	if ($access)
 	{
-v v v v v v v
 	  set_site_preference('frontendlang', $frontendlang);
-^ ^ ^ ^ ^ ^ ^
 		set_site_preference('enablecustom404', $enablecustom404);
 		set_site_preference('xmlmodulerepository', $xmlmodulerepository);
 		set_site_preference('custom404', $custom404);
@@ -122,9 +116,7 @@ v v v v v v v
 		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
 	}
 } else if (!isset($_POST["submit"])) {
-v v v v v v v
         $frontendlang = get_site_preference('frontendlang');
-^ ^ ^ ^ ^ ^ ^
 	$enablecustom404 = get_site_preference('enablecustom404');
 	$custom404 = get_site_preference('custom404');
 	$custom404template = get_site_preference('custom404template');
@@ -173,7 +165,6 @@ if ($message != "") {
 			<p class="pagetext"><?php echo lang('sitename')?>:</p>
 			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="<?php echo $sitename?>" /></p>
 		</div>
-v v v v v v v
 		<div class="pageoverflow">
                    <p class="pagetext"><?php echo lang('frontendlang')?>:</p>
 	              <select name="frontendlang" style="vertical-align: middle;">
@@ -196,7 +187,6 @@ v v v v v v v
 		      </select>
 		      </p>
 		</div>
-^ ^ ^ ^ ^ ^ ^
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="" rows=""><?php echo $metadata?></textarea></p>

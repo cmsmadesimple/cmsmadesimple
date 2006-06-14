@@ -16,9 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-v v v v v v v
 #$Id$
-^ ^ ^ ^ ^ ^ ^
 
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
@@ -72,8 +70,6 @@ $config =& $gCms->GetConfig();
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']); 
 
-v v v v v v v
-^ ^ ^ ^ ^ ^ ^
 #Add users if they exist in the session
 $gCms->variables["user_id"] = "";
 if (isset($_SESSION["cms_admin_user_id"]))
@@ -188,7 +184,6 @@ if (isset($page))
 #Load all site preferences
 load_site_preferences();
 
-v v v v v v v
 #Set the locale if it's set
 #either in the config, or as a site preference.
 $frontendlang = get_site_preference('frontendlang','');
@@ -201,12 +196,9 @@ if( $frontendlang != '' )
     @setlocale(LC_ALL, $frontendlang);
   }
 
-^ ^ ^ ^ ^ ^ ^
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
-v v v v v v v
 $smarty->assign('lang',$frontendlang);
 $smarty->assign('encoding',get_encoding());
-^ ^ ^ ^ ^ ^ ^
 
 if (isset($CMS_ADMIN_PAGE))
 {

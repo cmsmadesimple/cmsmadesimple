@@ -16,11 +16,7 @@
 # along with this program; if not, write to the Free Software
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
 #
-v v v v v v v
 #$Id$
-*************
-#$Id$
-^ ^ ^ ^ ^ ^ ^
 
 /**
  * "Static" module functions for internal use and module development.  CMSModule
@@ -556,7 +552,6 @@ class CMSModule
 		}
 		else
 		{
-v v v v v v v
 		  $this->curlang = get_site_preference('frontendlang','');
 		  if (isset($config['locale']) && $config['locale'] != '') {
 		      $this->curlang = $config['locale'];
@@ -564,7 +559,6 @@ v v v v v v v
 		  if( $this->curlang == '' ) { 
 		    $this->curlang = 'en_US'; 
 		  }
-^ ^ ^ ^ ^ ^ ^
 		}
 		$this->langhash = array();
 		$this->params = array();
