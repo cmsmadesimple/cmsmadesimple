@@ -16,7 +16,9 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
+v v v v v v v
 #$Id$
+^ ^ ^ ^ ^ ^ ^
 
 $dirname = dirname(__FILE__);
 require_once($dirname.'/fileloc.php');
@@ -268,7 +270,9 @@ header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (iss
 
 echo $html;
 
+v v v v v v v
 //@ob_flush();
+^ ^ ^ ^ ^ ^ ^
 
 $endtime = microtime();
 
