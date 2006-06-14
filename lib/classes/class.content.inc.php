@@ -564,6 +564,13 @@ class ContentBase
         {
             $alias = trim($this->mMenuText);
             $tolower = true;
+			$alias = munge_string_to_url($alias, $tolower);
+			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+			$error = @ContentManager::CheckAliasError($alias);
+			if ($error !== FALSE)
+			{
+				$alias .= '-2';
+			}
         }
 
 		/*
