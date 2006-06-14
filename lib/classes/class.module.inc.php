@@ -2900,38 +2900,12 @@ class CMSModule
 	
 	function ListUserTags()
 	{
-		global $gCms;
-		$db =& $this->GetDb();
-		
-		$plugins = array();
-		
-		$query = 'SELECT userplugin_name FROM '.cms_db_prefix().'userplugins ORDER BY userplugin_name';
-		$result = &$db->Execute($query);
-
-		while ($result && !$result->EOF)
-		{
-			$plugins[$result->fields['userplugin_name']] =& $result->fields['userplugin_name'];
-			$result->MoveNext();
-		}
-		
-		return $plugins;
+		return UserTags::ListUserTags();
 	}
 	
 	function CallUserTag($name, $params = array())
 	{
-		global $gCms;
-		$smarty =& $this->smarty;
-		$userpluginfunctions =& $gCms->userpluginfunctions;
-		
-		$result = '';
-		
-		if ($userpluginfunctions[$name] && function_exists($userpluginfunctions[$name]))
-		{
-			$functionname = $userpluginfunctions[$name];
-			$result = call_user_func_array($functionname, array($params, &$smarty));
-		}
-		
-		return $result;
+		return UserTags::CallUserTag($name, $params);
 	}
 
 	/**

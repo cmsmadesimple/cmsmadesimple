@@ -121,7 +121,7 @@ class Events
 			{
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 				{
-					$this->CallUserTag( $row['tag_name'], $params );
+					UserTags::CallUserTag( $row['tag_name'], $params );
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
 				{

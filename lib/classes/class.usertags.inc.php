@@ -142,6 +142,23 @@ class UserTags
 
 		return $plugins;
 	}
+	
+	function CallUserTag($name, $params = array())
+	{
+		global $gCms;
+		$smarty =& $gCms->GetSmarty();
+		$userpluginfunctions =& $gCms->userpluginfunctions;
+		
+		$result = '';
+		
+		if ($userpluginfunctions[$name] && function_exists($userpluginfunctions[$name]))
+		{
+			$functionname = $userpluginfunctions[$name];
+			$result = call_user_func_array($functionname, array($params, &$smarty));
+		}
+		
+		return $result;
+	}
 
 } // class
 # vim:ts=4 sw=4 noet
