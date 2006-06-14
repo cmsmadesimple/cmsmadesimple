@@ -2739,7 +2739,7 @@ class CMSModule
 
 		$retresult = array();
 
-		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY module_name ASC';
+		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY template_name ASC';
 		$result =& $db->Execute($query, array($modulename != ''?$modulename:$this->GetName()));
 
 		while (isset($result) && !$result->EOF)
