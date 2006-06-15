@@ -53,7 +53,7 @@ if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
 		}
 	}
 	
-	Events::SendEvent('Core', 'ContentPostRender', array(&$html));
+	Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
 	echo $html;
 }

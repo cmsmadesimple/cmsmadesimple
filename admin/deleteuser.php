@@ -57,7 +57,7 @@ if (isset($_GET["user_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteUserPre', array(&$oneuser));
+			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
 
 			$oneuser->Delete();
 
@@ -71,7 +71,7 @@ if (isset($_GET["user_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteUserPost', array(&$oneuser));
+			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
 
 			audit($user_id, $user_name, 'Deleted User');
 		}

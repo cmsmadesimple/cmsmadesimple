@@ -143,18 +143,21 @@ class UserTags
 		return $plugins;
 	}
 	
-	function CallUserTag($name, $params = array())
+	function CallUserTag($name, &$params)
 	{
 		global $gCms;
 		$smarty =& $gCms->GetSmarty();
 		$userpluginfunctions =& $gCms->userpluginfunctions;
 		
-		$result = '';
+		$code = UserTags::GetUserTag($name);
 		
-		if ($userpluginfunctions[$name] && function_exists($userpluginfunctions[$name]))
+		$result = FALSE;
+		
+		$functionname = "tmpcallusertag_".$name."_userplugin_function";
+		
+		if (!(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code.'}') === FALSE))
 		{
-			$functionname = $userpluginfunctions[$name];
-			$result = call_user_func_array($functionname, array($params, &$smarty));
+			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}
 		
 		return $result;

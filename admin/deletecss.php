@@ -99,13 +99,13 @@ if (isset($_GET["css_id"]))
 		{	
 			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
 			
-			Events::SendEvent('Core', 'DeleteStylesheetPre', array(&$onestylesheet));
+			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
 			$result = StylesheetOperations::DeleteStylesheetById($css_id);
 
 			if ($result)
 			{
-				Events::SendEvent('Core', 'DeleteStylesheetPost', array(&$onestylesheet));
+				Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
 				audit($css_id, $css_name, 'Deleted CSS');
 			}
 			else

@@ -77,7 +77,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		}
 		
 		#Now call the event
-		Events::SendEvent('Core', 'LoginPost', array(&$oneuser));
+		Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
 
 		// redirect to upgrade if db_schema it's old
 		$current_version = $CMS_SCHEMA_VERSION;

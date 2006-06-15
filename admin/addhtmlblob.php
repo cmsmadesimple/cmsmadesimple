@@ -79,7 +79,7 @@ if ($access) {
 				}
 			}
 			
-			Events::SendEvent('Core', 'AddGlobalContentPre', array(&$blobobj));
+			Events::SendEvent('Core', 'AddGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->save();
 
@@ -102,7 +102,7 @@ if ($access) {
 					}
 				}
 				
-				Events::SendEvent('Core', 'AddGlobalContentPost', array(&$blobobj));
+				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
 
 				redirect("listhtmlblobs.php");
 				return;

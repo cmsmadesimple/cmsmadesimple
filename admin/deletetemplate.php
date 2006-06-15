@@ -55,7 +55,7 @@ if (isset($_GET["template_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteTemplatePre', array(&$onetemplate));
+			Events::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
 
 			$result = TemplateOperations::DeleteTemplateByID($template_id);
 
@@ -71,7 +71,7 @@ if (isset($_GET["template_id"]))
 					}
 				}
 				
-				Events::SendEvent('Core', 'DeleteTemplatePost', array(&$onetemplate));
+				Events::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Deleted Template');
 			}

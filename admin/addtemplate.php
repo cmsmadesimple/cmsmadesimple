@@ -139,7 +139,7 @@ if ($access)
 				}
 			}
 			
-			Events::SendEvent('Core', 'AddTemplatePre', array(&$newtemplate));
+			Events::SendEvent('Core', 'AddTemplatePre', array('template' => &$newtemplate));
 
 			$result = $newtemplate->save();
 
@@ -155,7 +155,7 @@ if ($access)
 					}
 				}
 				
-				Events::SendEvent('Core', 'AddTemplatePost', array(&$newtemplate));
+				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
 
 				audit($newtemplate->id, $template, 'Added Template');
 				redirect("listtemplates.php");

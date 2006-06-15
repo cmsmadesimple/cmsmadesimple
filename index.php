@@ -262,7 +262,7 @@ while (list($key) = each($gCms->modules))
 	}
 }
 
-Events::SendEvent('Core', 'ContentPostRender', array(&$html));
+Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
 
 header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
 

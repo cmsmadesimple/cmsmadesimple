@@ -75,7 +75,7 @@ if ($access) {
 				}
 			}
 			
-			Events::SendEvent('Core', 'EditGroupPre', array(&$groupobj));
+			Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
@@ -91,7 +91,7 @@ if ($access) {
 					}
 				}
 				
-				Events::SendEvent('Core', 'EditGroupPost', array(&$groupobj));
+				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
 				redirect("listgroups.php");

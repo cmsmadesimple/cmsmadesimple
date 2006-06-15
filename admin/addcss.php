@@ -127,7 +127,7 @@ if ($access)
 			$newstylesheet->value = $css_text;
 			$newstylesheet->media_type = $media_type;
 			
-			Events::SendEvent('Core', 'AddStylesheetPre', array(&$newstylesheet));
+			Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
 
 			$result = $newstylesheet->Save();
 
@@ -135,7 +135,7 @@ if ($access)
 			if ($result)
 			{
 				#Sent the post event
-				Events::SendEvent('Core', 'AddStylesheetPost', array(&$newstylesheet));
+				Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
 				
 				# it's ok, we record the operation in the admin log
 				audit($newstylesheet->id, $css_name, 'Added CSS');

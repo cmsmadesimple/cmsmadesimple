@@ -914,7 +914,7 @@ class ContentBase
 			}
 		}
 		
-		Events::SendEvent('Core', 'ContentEditPre', array(&$this));
+		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
 		if ($this->mPropertiesLoaded == false)
 		{
@@ -942,7 +942,7 @@ class ContentBase
 			}
 		}
 		
-		Events::SendEvent('Core', 'ContentEditPost', array(&$this));
+		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 		
 	}
 
@@ -1187,7 +1187,7 @@ class ContentBase
 			}
 		}
 		
-		Events::SendEvent('Core', 'ContentDeletePre', array(&$this));
+		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 		
 		$db = &$gCms->GetDb();
 
@@ -1250,7 +1250,7 @@ class ContentBase
 			}
 		}
 		
-		Events::SendEvent('Core', 'ContentDeletePost', array(&$this));
+		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 		
 	}
 

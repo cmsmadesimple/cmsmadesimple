@@ -127,7 +127,7 @@ else
 					}
 				}
 				
-				Events::SendEvent('Core', 'ContentStylesheet', array(&$stylesheet));
+				Events::SendEvent('Core', 'ContentStylesheet', array('stylesheet' => &$stylesheet));
 			#}
 		}
 	}

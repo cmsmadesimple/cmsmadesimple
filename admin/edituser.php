@@ -122,7 +122,7 @@ if ($access) {
 					}
 				}
 				
-				Events::SendEvent('Core', 'EditUserPre', array(&$thisuser));
+				Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
 
 
 				$result = $thisuser->save();
@@ -142,7 +142,7 @@ if ($access) {
 					}
 				}
 				
-				Events::SendEvent('Core', 'EditUserPost', array(&$thisuser));
+				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
 				
                 if ($access_perm)
                     {

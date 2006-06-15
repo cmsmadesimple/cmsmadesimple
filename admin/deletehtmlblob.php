@@ -53,7 +53,7 @@ if (isset($_GET["htmlblob_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteGlobalContentPre', array(&$blobobj));
+			Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->Delete();
 		}
@@ -70,7 +70,7 @@ if (isset($_GET["htmlblob_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteGlobalContentPost', array(&$blobobj));
+			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
 
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
 

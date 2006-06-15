@@ -105,7 +105,7 @@ if (isset($_POST["adduser"]))
 			}
 		}
 		
-		Events::SendEvent('Core', 'AddUserPre', array(&$newuser));
+		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
 
 		$result = $newuser->save();
 
@@ -121,7 +121,7 @@ if (isset($_POST["adduser"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'AddUserPost', array(&$newuser));
+			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
 
 			# set some default preferences, based on the user creating this user
 			$adminid = get_userid();

@@ -128,7 +128,7 @@ if ($access)
 				}
 			}
 			
-			Events::SendEvent('Core', 'EditTemplatePre', array(&$onetemplate));
+			Events::SendEvent('Core', 'EditTemplatePre', array('template' => &$onetemplate));
 
 			$result = $onetemplate->Save();
 
@@ -147,7 +147,7 @@ if ($access)
 					}
 				}
 				
-				Events::SendEvent('Core', 'EditTemplatePost', array(&$onetemplate));
+				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
 				if (!$apply)
 				{

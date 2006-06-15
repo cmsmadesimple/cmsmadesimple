@@ -50,7 +50,7 @@ if (isset($_GET["group_id"]))
 			}
 		}
 		
-		Events::SendEvent('Core', 'DeleteGroupPre', array(&$groupobj));
+		Events::SendEvent('Core', 'DeleteGroupPre', array('group' => &$groupobj));
 
 		if ($groupobj)
 		{
@@ -67,7 +67,7 @@ if (isset($_GET["group_id"]))
 			}
 		}
 		
-		Events::SendEvent('Core', 'DeleteGroupPost', array(&$groupobj));
+		Events::SendEvent('Core', 'DeleteGroupPost', array('group' => &$groupobj));
 
 		if ($result == true)
 		{

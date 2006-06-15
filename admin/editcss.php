@@ -141,7 +141,7 @@ if ($access)
 			$onestylesheet->value = $css_text;
 			$onestylesheet->media_type = $media_type;
 			
-			Events::SendEvent('Core', 'EditStylesheetPre', array(&$onestylesheet));
+			Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
 			$result = $onestylesheet->Save();
 
@@ -150,7 +150,7 @@ if ($access)
 				#Start using new name, just in case this is an apply
 				$orig_css_name = $css_name;
 				
-				Events::SendEvent('Core', 'EditStylesheetPost', array(&$onestylesheet));
+				Events::SendEvent('Core', 'EditStylesheetPost', array('stylesheet' => &$onestylesheet));
 
 				audit($css_id, $css_name, 'Edited CSS');
 

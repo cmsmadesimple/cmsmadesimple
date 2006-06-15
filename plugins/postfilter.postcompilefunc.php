@@ -36,7 +36,7 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					}
 				}
 				
-				Events::SendEvent('Core', 'ContentPostCompile', array(&$tpl_output));
+				Events::SendEvent('Core', 'ContentPostCompile', array('content' => &$tpl_output));
 				
 				break;
 			case "template":
@@ -50,7 +50,7 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					}
 				}
 				
-				Events::SendEvent('Core', 'TemplatePostCompile', array(&$tpl_output));
+				Events::SendEvent('Core', 'TemplatePostCompile', array('template' => &$tpl_output));
 				
 				break;
 			case "globalcontent":
@@ -63,7 +63,7 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 					}
 				}
 				
-				Events::SendEvent('Core', 'GlobalContentPostCompile', array(&$tpl_output));
+				Events::SendEvent('Core', 'GlobalContentPostCompile', array('global_content' => &$tpl_output));
 				
 				break;
 			default:
@@ -81,7 +81,7 @@ function smarty_cms_postfilter_postcompilefunc($tpl_output, &$smarty)
 		}
 	}
 	
-	Events::SendEvent('Core', 'SmartyPostCompile', array(&$tpl_output));
+	Events::SendEvent('Core', 'SmartyPostCompile', array('content' => &$tpl_output));
 
 	return $tpl_output;
 }
