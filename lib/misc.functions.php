@@ -175,6 +175,7 @@ function ErrorHandler404()
 	#if ($errno == E_USER_WARNING) {
 		@ob_end_clean();
 		header("HTTP/1.0 404 Not Found");
+		header("Status: 404 Not Found");
 		echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN">
 <html><head>
 <title>404 Not Found</title>
