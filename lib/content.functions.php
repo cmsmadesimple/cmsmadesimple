@@ -51,8 +51,8 @@ class Smarty_CMS extends Smarty {
 		$this->compiler_class = 'CMS_Compiler';
 
 		//use_sub_dirs doesn't work in safe mode
-		if (ini_get("safe_mode") != "1")
-			$this->use_sub_dirs = true;
+		//if (ini_get("safe_mode") != "1")
+		//	$this->use_sub_dirs = true;
 		$this->caching = false;
 		$this->compile_check = true;
 		$this->assign('app_name','CMS');

@@ -470,6 +470,19 @@ function debug_output($var, $title="")
 
 }
 
+function debug_to_log($var, $title='')
+{
+	global $gCms;
+
+	$errlines = explode("\n",debug_display($var, $title, false, false));
+	$filename = TMP_CACHE_LOCATION . '/debug.log';
+	//$filename = dirname(dirname(__FILE__)) . '/uploads/debug.log';
+	foreach ($errlines as $txt)
+	{
+		error_log($txt . "\n", 3, $filename);
+	}
+}
+
 /**
  * Display $var nicely to the $gCms->errors array if $config['debug'] is set
  *
@@ -479,11 +492,14 @@ function debug_output($var, $title="")
 function debug_buffer($var, $title="")
 {
 	global $gCms;
+	
+	//debug_to_log($var, $title='');
 
 	if($gCms->config["debug"] == true)
 	{
 		$gCms->errors[] = debug_display($var, $title, false, true);
 	}
+	
 }
 
 /**

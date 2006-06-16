@@ -153,6 +153,7 @@ class CmsObject {
 			}
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 
+			//$dbinstance->debug = true;
 			if ($config['debug'] == true)
 			{
 				$dbinstance->debug = true;

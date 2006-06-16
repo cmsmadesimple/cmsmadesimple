@@ -146,6 +146,9 @@ if ($access)
 				}
 
 				#and show the installpost if necessary...
+				
+				Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
+				
 				if ($modinstance->InstallPostMessage() != FALSE)
 				{
 					redirect("listmodules.php?action=showpostinstall&module=".$module);
@@ -195,6 +198,8 @@ if ($access)
 			{
 				$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
 				$db->Execute($query,array($_GET['newversion'],($modinstance->IsAdminOnly()==true?1:0),$module));
+				
+				Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 'oldversion' => $_GET['oldversion'], 'newversion' => $_GET['newversion']));
 			}
 			else
 			{
@@ -232,6 +237,8 @@ if ($access)
 				#delete any dependencies
 				$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
 				$db->Execute($query, array($module));
+				
+				Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 
 				#and show the uninstallpost if necessary...
 				if ($modinstance->UninstallPostMessage() != FALSE)
@@ -260,15 +267,15 @@ if ($access)
 
 	if ($action == "settrue")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ?, admin_only = ? WHERE module_name = ?";
-		$db->Execute($query, array(1,($modinstance->IsAdminOnly()==true?1:0),$module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
+		$db->Execute($query, array(1,$module));
 		redirect("listmodules.php");
 	}
 
 	if ($action == "setfalse")
 	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ?, admin_only = ? WHERE module_name = ?";
-		$db->Execute($query, array(0,($modinstance->IsAdminOnly()==true?1:0),$module));
+		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
+		$db->Execute($query, array(0,$module));
 		redirect("listmodules.php");
 	}
 }

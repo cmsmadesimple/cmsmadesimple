@@ -98,6 +98,7 @@ class Events
 		global $gCms;
 		$db =& $gCms->GetDb();
 
+		/*
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
@@ -108,13 +109,17 @@ class Events
 		}
 		$row = $dbresult->FetchRow();
 		$id = $row['event_id'];
+		*/
 
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
 
-		$q = "SELECT tag_name,module_name FROM ".cms_db_prefix()."event_handlers WHERE
-		event_id = ? ORDER BY handler_order ASC";
-		$dbresult = $db->Execute( $q, array( $id ) );
+		$q = "SELECT eh.tag_name, eh.module_name FROM ".cms_db_prefix()."event_handlers eh
+			INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
+			WHERE e.originator = ? AND e.event_name = ? ORDER BY eh.handler_order ASC";
+
+		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
+
 		if( $dbresult && $dbresult->RowCount() )
 		{
 			while( $row = $dbresult->FetchRow() )
@@ -485,6 +490,17 @@ class Events
 		Events::CreateEvent( $modulename, 'ContentEditPost');
 		Events::CreateEvent( $modulename, 'ContentDeletePre');
 		Events::CreateEvent( $modulename, 'ContentDeletePost');
+		
+		Events::CreateEvent( $modulename, 'AddUserDefinedTagPre');
+		Events::CreateEvent( $modulename, 'AddUserDefinedTagPost');
+		Events::CreateEvent( $modulename, 'EditUserDefinedTagPre');
+		Events::CreateEvent( $modulename, 'EditUserDefinedTagPost');
+		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPre');
+		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPost');
+		
+		Events::CreateEvent( $modulename, 'ModuleInstalled');
+		Events::CreateEvent( $modulename, 'ModuleUninstalled');
+		Events::CreateEvent( $modulename, 'ModuleUpgraded');
 		
 		Events::CreateEvent( $modulename, 'ContentStylesheet');
 		Events::CreateEvent( $modulename, 'ContentPreCompile');

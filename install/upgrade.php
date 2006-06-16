@@ -54,6 +54,7 @@ function module_autoupgrade()
 					$gCms->modules[$modulename]['object']->Upgrade($module_version, $file_version);
 					$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
 					$result = $db->Execute($query, array($file_version, ($gCms->modules[$modulename]['object']->IsAdminOnly()==true?1:0), $modulename));
+					Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $modulename, 'oldversion' => $module_version, 'newversion' => $file_version));
 					echo "[Done]</p>";
 				}
 			}

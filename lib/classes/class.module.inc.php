@@ -414,6 +414,7 @@ class ModuleOperations
 											$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
 											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
 											$db->Execute($query, array($newmodule->GetVersion(), $name));
+											Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->GetVersion()));
 											$dbversion = $newmodule->GetVersion();
 										}
 

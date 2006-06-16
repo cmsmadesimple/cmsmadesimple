@@ -42,9 +42,14 @@ if (isset($_GET["userplugin_id"])) {
 			$userplugin_name = $row['userplugin_name'];
 		}
 
+		Events::SendEvent('Core', 'DeleteUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$userplugin_name));
 		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
 		$result = $db->Execute($query,array($userplugin_id));
-		audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
+		if ($result)
+		{
+			Events::SendEvent('Core', 'DeleteUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$userplugin_name));
+			audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
+		}
 	}
 }
 
