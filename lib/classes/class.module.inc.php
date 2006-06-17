@@ -557,8 +557,8 @@ class CMSModule
 		  if (isset($config['locale']) && $config['locale'] != '') {
 		      $this->curlang = $config['locale'];
 		    }
-		  if( $this->curlang == '' ) { 
-		    $this->curlang = 'en_US'; 
+		  if( $this->curlang == '' ) {
+		    $this->curlang = 'en_US';
 		  }
 		}
 		$this->langhash = array();
@@ -776,7 +776,7 @@ class CMSModule
 	{
 		return '';
 	}
-	
+
 	/**
 	 * Returns whether this module should only be loaded from the admin
 	 */
@@ -1864,8 +1864,9 @@ class CMSModule
 	 * @param boolean A flag to determine if actions should be handled inline (no moduleinterface.php -- only works for frontend)
 	 * @param string Text to append to the end of the id and name of the form
 	 * @param array Extra parameters to pass along when the form is submitted
+	 * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array())
+	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 	{
 		global $gCms;
 
@@ -1899,6 +1900,10 @@ class CMSModule
 			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
 		}
 		*/
+		if ($extra != '')
+		{
+			$text .= ' '.$extra;
+		}
 		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />';
 		if ($returnid != '')
 		{
@@ -2640,7 +2645,7 @@ class CMSModule
 		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
 		{
 			$dir = $gCms->config['root_path'];
-			
+
 			$lang = array();
 
 			//First load the default language to remove any "Add Me's"
@@ -2652,7 +2657,7 @@ class CMSModule
 			{
 				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 			}
-			
+
 			//Now load the other language if necessary
 			if (count($lang) == 0 || $this->DefaultLanguage() != $ourlang)
 			{
@@ -2669,7 +2674,7 @@ class CMSModule
 					include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
 				}
 				else if (count($lang) == 0)
-				{					
+				{
 					if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
 					{
 						include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
@@ -2691,7 +2696,7 @@ class CMSModule
 			{
 				include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 			}
-			
+
 			$this->langhash = &$lang;
 		}
 
@@ -2898,12 +2903,12 @@ class CMSModule
 
 		return $result;
 	}
-	
+
 	function ListUserTags()
 	{
 		return UserTags::ListUserTags();
 	}
-	
+
 	function CallUserTag($name, $params = array())
 	{
 		return UserTags::CallUserTag($name, $params);
@@ -3087,8 +3092,8 @@ class CMSModule
 	{
 		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
-	
-	
+
+
 
 	/**
 	 * Creates a string containing links to all the pages.
@@ -3157,7 +3162,7 @@ class CMSModule
 
 		return $page_string;
 	}
-	
+
     /**
      * ShowMessage
      * Outputs a page status message
@@ -3212,7 +3217,7 @@ class CMSModule
 	*/
         function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
-	  Events::AddEventHandler( $modulename, $eventname, 
+	  Events::AddEventHandler( $modulename, $eventname,
 				   false, $this->GetName(), $removable );
 	}
 
