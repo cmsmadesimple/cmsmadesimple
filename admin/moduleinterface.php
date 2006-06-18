@@ -87,7 +87,7 @@ if (count($gCms->modules) > 0)
 	{
 		$params = @ModuleOperations::GetModuleParameters($id);
 		if (FALSE == empty($params['message'])) {
-			echo $themeObject->ShowMessage($gCms->modules[$module]['object']->Lang($params['message']));
+		  echo $themeObject->ShowMessage(($params['message']));
 		}
 		echo '<div class="pagecontainer">';
 		echo '<div class="pageoverflow">';
