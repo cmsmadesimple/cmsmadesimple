@@ -94,7 +94,7 @@ if ($access)
 	    $result = ModuleOperations::ExpandXMLPackage( $xml, $allowoverwritemodules );
 	    if( !$result )
 	      {
-	        echo ModuleOperations::GetLastError();
+	        echo $themeObject->ShowErrors(ModuleOperations::GetLastError());
 	      }
 	    else if( $autoinstallupgrade == 0 )
 	      {
