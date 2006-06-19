@@ -517,6 +517,15 @@ else if ($action == 'missingdeps')
 
 	</tbody>
 </table>
+<?php
+// Only show XML upload form if the modules folder is writable
+if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'modules'))
+{
+	echo $themeObject->ShowErrors(lang('modulesnotwritable'));
+}
+else
+{
+?>
 <form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
 <div class="pageoverflow">
 	    <p class="pagetext"><?php echo lang('uploadfile')?>:</p>
@@ -538,6 +547,7 @@ else if ($action == 'missingdeps')
 </div>
 </form>
 	<?php
+}
 	echo '</div>';
 	}
 	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

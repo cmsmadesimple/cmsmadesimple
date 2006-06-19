@@ -99,6 +99,7 @@ $lang['admin']['errordtdmismatch'] = 'DTD Version missing or incompatible in the
 $lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
 $lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
 $lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
+$lang['admin']['modulesnotwritable'] = 'The modules folder is not writable, if you would like to install modules via by uploading an XML file you need to make the modules folder have full read/write/execute permissions (chmod 777).';
 $lang['admin']['errorinsertingcss'] = 'Error inserting Stylesheet';
 $lang['admin']['errorinsertinggroup'] = 'Error inserting group';
 $lang['admin']['errorinsertingtag'] = 'Error inserting user tag';
