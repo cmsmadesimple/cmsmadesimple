@@ -79,9 +79,9 @@ if ($access)
         $fieldName = "browse_xml";
         if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
 	    || !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
-          {
-	    echo "<p class=\"error\">".lang('nofileuploaded')."</p>";
-          }
+		{
+			echo $themeObject->ShowErrors(lang('noxmlfileuploaded'));
+		}
         else
           {
 	    // normalize the file variable
