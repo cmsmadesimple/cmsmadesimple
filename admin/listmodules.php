@@ -527,6 +527,8 @@ else
 {
 ?>
 <form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
+<fieldset>
+<legend><?php echo lang('uploadxmlfile')?></legend>
 <div class="pageoverflow">
 	    <p class="pagetext"><?php echo lang('uploadfile')?>:</p>
 	    <p class="pageinput">
@@ -545,6 +547,7 @@ else
  	      <input type="submit" name="submit" value="<?php echo lang('submit')?>" />
             </p>
 </div>
+</fieldset>
 </form>
 	<?php
 }
