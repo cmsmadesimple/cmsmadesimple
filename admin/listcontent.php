@@ -504,7 +504,7 @@ if (check_permission($userid, 'Add Pages'))
 	?>
 		</a>
 		</span>
-		<span style="margin-right: 30px; float: right; align: right">
+		<span style="margin-right: 30px; float: right; text-align: right">
 		<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
 		<script type="text/javascript">
 		/*<![CDATA[*/
