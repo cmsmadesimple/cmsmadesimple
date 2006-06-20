@@ -44,7 +44,11 @@ if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
     require_once($dirname.'/lib/misc.functions.php');
-    redirect('install/install.php');
+    if (FALSE == is_file($dirname.'/install/install.php')) {
+        die ('There is no config.php file or install/install.php please correct one these errors!');
+    } else {
+        redirect('install/install.php');
+    }
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {
