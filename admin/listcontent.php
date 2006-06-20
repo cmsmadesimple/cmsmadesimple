@@ -260,10 +260,17 @@ function display_hierarchy(&$root)
 			$thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
 			$thelist .= $editImg;;
 			$thelist .= "</a></td>\n";
+        if ($one->DefaultContent() != true) {
 			$thelist .= "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
 			$thelist .= $deleteImg;
 			$thelist .= "</a></td>\n";
 			$thelist .= '<td class="pagepos"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+		}
+		else
+		{
+			$thelist .= '<td>&nbsp;</td>' . "\n";
+			$thelist .= '<td>&nbsp;</td>' . "\n";
+		}
 			$thelist .= "</tr>\n";  	
 		}
 		else
