@@ -27,7 +27,7 @@
  * @author Monte Ohrt <monte at ohrt dot com>
  * @author Andrei Zmievski <andrei@php.net>
  * @package Smarty
- * @version 2.6.12
+ * @version 2.6.14
  */
 
 /* $Id$ */
@@ -464,7 +464,7 @@ class Smarty
      *
      * @var string
      */
-    var $_version              = '2.6.12';
+    var $_version              = '2.6.14';
 
     /**
      * current template inclusion depth
@@ -1897,7 +1897,7 @@ class Smarty
     function &_smarty_cache_attrs($cache_serial, $count) {
         $_cache_attrs =& $this->_cache_info['cache_attrs'][$cache_serial][$count];
 
-        if ($this->_cache_including && isset($_cache_attrs)) {
+        if ($this->_cache_including) {
             /* return next set of cache_attrs */
             $_return = current($_cache_attrs);
             next($_cache_attrs);
