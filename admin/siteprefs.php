@@ -148,7 +148,7 @@ if ($error != "") {
 	echo "<div class=\"pageerrorcontainer\"><ul class=\"error\">".$error."</ul></div>";	
 }
 if ($message != "") {
-	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
+	echo $themeObject->ShowMessage($message);
 }
 ?>
 
