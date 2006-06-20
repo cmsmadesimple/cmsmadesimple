@@ -81,7 +81,8 @@ function display_hierarchy(&$root)
 	global $currow;
 	global $themeObject;
 	global $image_true;
-	global $image_false;
+	global $image_set_false;
+	global $image_set_true;
 	global $config;
 	global $page;
 	global $indent;
@@ -186,11 +187,11 @@ function display_hierarchy(&$root)
 		{
 			if($one->Active())
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_true."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_set_false."</a>")."</td>\n";
 			}
 			else
 			{
-				$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_false."</a></td>\n";
+				$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_set_true."</a></td>\n";
 			}
 		}
 		else
@@ -200,7 +201,7 @@ function display_hierarchy(&$root)
 
 		if ($one->IsDefaultPossible() == TRUE && $display == 'edit')
 		{
-			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_false."</a>")."</td>\n";
+			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_set_true."</a>")."</td>\n";
 		}
 		else
 		{
@@ -399,8 +400,9 @@ $count = 0;
 $currow = "row1";
 
 // construct true/false button images
-$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon');
-$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon');
+$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+$image_set_false = $themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon');
+$image_set_true = $themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon');
 
 $counter = 0;
 
