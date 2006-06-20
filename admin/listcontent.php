@@ -503,6 +503,20 @@ if (check_permission($userid, 'Add Pages'))
 		</a>
 		</span>
 		<span style="margin-right: 30px; float: right; align: right">
+		<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
+		<script type="text/javascript">
+		/*<![CDATA[*/
+		function selectall()
+		{
+	        checkboxes = document.getElementsByTagName("input");
+	        for (i=0; i<checkboxes.length ; i++)
+	        {
+	                if (checkboxes[i].type == "checkbox") checkboxes[i].checked=true;
+	        }
+		}
+		/*]]>*/
+		</script>
+
 		<?php echo lang("selecteditems"); ?>: <select name="multiaction">
 		<option value="delete"><?php echo lang('delete') ?></option>
 		<option value="active"><?php echo lang('active') ?></option>

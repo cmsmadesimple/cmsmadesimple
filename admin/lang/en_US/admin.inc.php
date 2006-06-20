@@ -367,6 +367,7 @@ $lang['admin']['accesskey'] = 'Access Key';
 $lang['admin']['sitedownwarning'] = '<strong>Warning:</strong> Your site is currently showing a "Site Down for Maintainence" message.  Remove the %s file to resolve this.';
 $lang['admin']['deletecontent'] = 'Delete Content';
 $lang['admin']['deletepages'] = 'Delete these pages?';
+$lang['admin']['selectall'] = '(Select All)';
 $lang['admin']['selecteditems'] = 'Selected Items';
 $lang['admin']['inactive'] = 'Inactive';
 $lang['admin']['deletetemplates'] = 'Delete Templates';
