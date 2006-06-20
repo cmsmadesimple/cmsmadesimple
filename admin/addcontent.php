@@ -288,7 +288,7 @@ $tabnames = $contentobj->TabNames();
 				?>
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
-					<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
+					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
 				</div>
 				<?php
 			}
@@ -298,10 +298,10 @@ $tabnames = $contentobj->TabNames();
 				<p class="pageinput">
 					<input type="hidden" name="firsttime" value="0" />
 					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 					<?php } ?>
-					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'">
+					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				</p>
 			</div>
 			<div style="clear: both;"></div>
