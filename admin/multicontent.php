@@ -131,7 +131,7 @@ else
 			$idlist = array();
 			foreach ($nodelist as $node)
 			{
-				echo $node->Name() . '<br />' . "\n";
+				echo $node->Name() . ' (' . $node->Hierarchy() . ')' . '<br />' . "\n";
 				$idlist[] = $node->Id();
 			}
 			echo '</p>';
@@ -164,14 +164,16 @@ else
 		{
 			foreach (array_reverse($nodelist) as $node)
 			{
+
 				$id = $node->Id();
-				$title = $node->Name();
+				$title = $node->Name() . ' (' . $node->Hierarchy() . ')';
+				//echo 'Deleting:' . $title . '<br />';
 				$node->Delete();
 				audit($id, $title, 'Deleted Content');
 			}
 			ContentManager::SetAllHierarchyPositions();
 		}
-		include_once("footer.php");
+		//include_once("footer.php");
 		redirect("listcontent.php");
 	}
 	else if ($action == 'inactive')

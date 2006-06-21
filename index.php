@@ -200,6 +200,7 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	$smarty->assign('page', $page);
 	$smarty->assign('page_id', $page);	
 	$smarty->assign('page_name', $pageinfo->content_alias);
+	$smarty->assign('page_alias', $pageinfo->content_alias);
 	$smarty->assign('position', $pageinfo->content_hierarchy);
 	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
 }

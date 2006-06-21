@@ -78,7 +78,7 @@ function smarty_cms_help_function_metadata() {
 	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy or internal_pretty_urls are set to true in config.php.</li>
+		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
 	</ul>
 	<?php
 }

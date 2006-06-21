@@ -3207,18 +3207,15 @@ class CMSModule
 	/**
 	* Add an event handler for a module event
 	*
-	* @params string $modulename      The name of the module sending the event
-	* @params string $eventname       The name of the event
-	* @params string $tag_name        The name of a user defined tag
-	* @params string $module_handler  The name of the module
-	* @params boolean $removable      Can this event be removed from the list?
+	* @param string $modulename      The name of the module sending the event
+	* @param string $eventname       The name of the event
+	* @param boolean $removable      Can this event be removed from the list?
 	*
 	* @returns mixed If successful, true.  If it fails, false.
 	*/
-        function AddEventHandler( $modulename, $eventname, $removable = true )
+	function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
-	  Events::AddEventHandler( $modulename, $eventname,
-				   false, $this->GetName(), $removable );
+		Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
 	}
 
 
@@ -3226,6 +3223,7 @@ class CMSModule
 	 * Inform the system about a new event that can be generated
 	 *
 	 * @param string The name of the event
+	 *
 	 * @returns nothing
 	 */
 	function CreateEvent( $eventname )
@@ -3242,6 +3240,7 @@ class CMSModule
 	 * @param string The name of the originating module
 	 * @param string The name of the event
 	 * @param array  Array of parameters provided with the event.
+	 *
 	 * @returns boolean
 	 */
 	function DoEvent( $originator, $eventname, &$params )
@@ -3255,6 +3254,7 @@ class CMSModule
 	 * This method must be over-ridden if this module created any events.
 	 *
 	 * @param string The name of the event
+	 *
 	 * @returns text string
 	 */
 	function GetEventDescription( $eventname )
@@ -3284,6 +3284,7 @@ class CMSModule
 	 * Note, only events created by this module can be removed.
 	 *
 	 * @param string The name of the event
+	 *
 	 * @returns nothing
 	 */
 	function RemoveEvent( $eventname )
@@ -3298,6 +3299,7 @@ class CMSModule
 	 *
 	 * @param string The name of the event
 	 * @param array  The parameters associated with this event.
+	 *
 	 * @returns nothing
 	 */
 	function SendEvent( $eventname, $params )

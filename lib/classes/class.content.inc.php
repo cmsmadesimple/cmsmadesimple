@@ -909,7 +909,6 @@ class ContentBase
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
-				@ob_start();
 				$gCms->modules[$key]['object']->ContentEditPre($this);
 			}
 		}
@@ -937,7 +936,6 @@ class ContentBase
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
-				@ob_start();
 				$gCms->modules[$key]['object']->ContentEditPost($this);
 			}
 		}
@@ -1182,7 +1180,6 @@ class ContentBase
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
-				@ob_start();
 				$gCms->modules[$key]['object']->ContentDeletePre($this);
 			}
 		}
@@ -1214,16 +1211,16 @@ class ContentBase
 					$debug_errors .= "<p>Error deleting content</p>\n";
 				}
 			}
-
-			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-			@unlink($cachefilename);
-
+			
 			#Fix the item_order if necessary
 			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
 			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 			
 			#Remove the cross references
 			remove_cross_references($this->mId, 'content');
+			
+			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+			@unlink($cachefilename);
 
 			if (NULL != $this->mProperties)
 			{
@@ -1245,13 +1242,11 @@ class ContentBase
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true)
 			{
-				@ob_start();
 				$gCms->modules[$key]['object']->ContentDeletePost($this);
 			}
 		}
 		
 		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
-		
 	}
 
 	/**
