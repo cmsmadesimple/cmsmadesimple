@@ -20,6 +20,32 @@
 
 require_once(dirname(__FILE__).'/fileloc.php');
 
+function soap_error( $str )
+{
+  $namespaces = array(
+		      'SOAP-ENV' => 'http://schemas.xmlsoap.org/soap/envelope/',
+		      'xsd' => 'http://www.w3.org/2001/XMLSchema',
+		      'xsi' => 'http://www.w3.org/2001/XMLSchema-instance',
+		      'SOAP-ENC' => 'http://schemas.xmlsoap.org/soap/encoding/'
+		      );
+  $ns_string = '';
+  foreach( $namespaces as $k => $v )
+    {
+      $ns_string .= "\n  xmlns:$k=\"$v\"";
+    }
+  $txt = 
+        '<?xml version="1.0" encoding="ISO-8859-1"?>'.
+        '<SOAP-ENV:Envelope SOAP-ENV:encodingStyle="http://schemas.xmlsoap.org/soap/encoding/"'.$ns_string.">\n".
+		'<SOAP-ENV:Body>'. 
+		'<SOAP-ENV:Fault>'.
+                '<faultcode>Server</faultcode>'.
+	        '<faultstring>'.$str.'</faultstring>'.
+		'</SOAP-ENV:Fault>'.
+		'</SOAP-ENV:Body>'.
+	'</SOAP-ENV:Envelope>';
+  echo $txt;
+}
+
 /**
  * Entry point for all non-admin pages
  *
@@ -36,8 +62,8 @@ if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {
-	echo "<html><head><title>Maintenance</title></head><body><p>Site down for maintenance.</p></body></html>";
-	exit;
+  echo soap_error('site down for maintenance');
+  exit;
 }
 
 require_once(dirname(__FILE__)."/include.php"); #Makes gCms object
@@ -45,25 +71,20 @@ $params = array_merge($_GET, $_POST);
 
 if( !isset( $params['module'] ) )
   {
-    echo "<html><head><title>Error</title></head><body><p>Missing module parameter</p></body></html>";
+    echo soap_error('missing module parameter');
     exit;
   }
 if( !isset( $gCms->modules[$params['module']] ) )
   {
-    echo "<html><head><title>Error</title></head><body><p>module not found</p></body></html>";
+    header('Content-Type: text/xml');
+    echo soap_error("module ".$params['module']." not found");  
     exit;
   }
-
-if( isset( $params['debug'] ) )
-  {
-    echo "<html><body>";
-  }
-
-// soap stuff goes here
 
 // this code copied from function.cms_module.php
 // then slightly hacked
 $cmsmodules = &$gCms->modules;
+
 $modresult = '';
 if (isset($cmsmodules))
   {
@@ -96,7 +117,7 @@ if (isset($cmsmodules))
 		  }
 		
 		$returnid = '';
-		if (isset($gCms->variables['pageinfo']))
+		if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id) )
 		  {
 		    $returnid = $gCms->variables['pageinfo']->content_id;
 		  }
