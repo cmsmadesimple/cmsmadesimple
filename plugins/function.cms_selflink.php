@@ -241,6 +241,13 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 	{
 		$label = $params['label'];
 	}
+	else
+	{
+	  if (!isset($label))
+	    {
+	      $label = '';
+	    }
+	}
 	$result = "";
 
 	/* LeisureLarry - Changes if statement */
