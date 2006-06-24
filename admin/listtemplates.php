@@ -171,7 +171,7 @@ if (isset($_GET["message"])) {
 				# add new template
 				if ($add)
 				{
-					echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".$onetemplate->name."\">";
+				  echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".urlencode($onetemplate->name)."\">";
                     echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
 				}
