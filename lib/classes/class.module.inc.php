@@ -2423,7 +2423,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 */
-	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+	function GetHierarchyManager($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
 		$text = '';
 		global $gCms;
@@ -2436,13 +2436,13 @@ class CMSModule
 
 			if (isset($content))
 			{
-				if ($content->GetURL(false) != '')
+				if ($content->GetURL() != '')
 				{
 					if (!$onlyhref)
 					{
 						$text .= '<a href="';
 					}
-					$text .= $content->GetURL($config['assume_mod_rewrite']);
+					$text .= $content->GetURL();
 
 					$count = 0;
 					foreach ($params as $key=>$value)
@@ -2554,16 +2554,15 @@ class CMSModule
 	 */
 	function RedirectContent($id)
 	{
-		#$content = ContentManager::LoadContentFromId($id);
-	  global $gCms;
+		global $gCms;
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($id);
 		$content =& $node->GetContent();
 		if (isset($content))
 		{
-			if ($content->GetUrl() != '')
+			if ($content->GetURL() != '')
 			{
-				redirect($content->GetUrl());
+				redirect($content->GetURL());
 			}
 		}
 	}
