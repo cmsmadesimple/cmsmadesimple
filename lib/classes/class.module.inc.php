@@ -459,7 +459,7 @@ class ModuleOperations
 		{
 			if (strtolower(get_parent_class($oneclass)) == 'cmsmodule')
 			{
-				array_push($result, strtolower($oneclass));
+				$result[] = strtolower($oneclass);
 			}
 		}
 
@@ -2749,7 +2749,7 @@ class CMSModule
 
 		while (isset($result) && !$result->EOF)
 		{
-			array_push($retresult, $result->fields['template_name']);
+			$retresult[] = $result->fields['template_name'];
 			$result->MoveNext();
 		}
 

@@ -118,7 +118,7 @@ class StylesheetOperations
 			$onestylesheet->name = $row['css_name'];
 			$onestylesheet->value = $row['css_text'];
 			$onestylesheet->media_type = $row['media_type'];
-			array_push($result, $onestylesheet);
+			$result[] = $onestylesheet;
 		}
 
 		return $result;

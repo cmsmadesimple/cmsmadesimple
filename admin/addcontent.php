@@ -123,7 +123,7 @@ if ($access)
 			$addtarray = array();
 			foreach ($_POST["additional_editors"] as $addt_user_id)
 			{
-				array_push($addtarray, $addt_user_id);
+				$addtarray[] = $addt_user_id;
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
 		}
@@ -152,7 +152,7 @@ if ($access)
 			$addtarray = array();
 			foreach ($_POST["additional_editors"] as $addt_user_id)
 			{
-				array_push($addtarray, $addt_user_id);
+				$addtarray[] = $addt_user_id;
 			}
 			$contentobj->SetAdditionalEditors($addtarray);
 		}

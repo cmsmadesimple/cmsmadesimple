@@ -191,7 +191,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			array_push($result, $oneuser);
+			$result[] = $oneuser;
 		}
 
 		return $result;
@@ -224,7 +224,7 @@ class UserOperations
 			$oneuser->password = $row['password'];
 			$oneuser->active = $row['active'];
 			$oneuser->adminaccess = $row['admin_access'];
-			array_push($result, $oneuser);
+			$result[] = $oneuser;
 		}
 
 		return $result;
@@ -251,12 +251,12 @@ class UserOperations
 		$params = array();
 
 		$query = "SELECT user_id FROM ".cms_db_prefix()."users WHERE username = ?";
-		array_push($params, $username);
+		$params[] = $username;
 
 		if ($password != '')
 		{
 			$query .= " AND password = ?";
-			array_push($params, md5($password));
+			$params[] = md5($password);
 		}
 
 		if ($activeonly == true)

@@ -201,7 +201,7 @@ function AuthorBlobs($userid)
 			$oneblob->content = $dbresult->fields['html'];
 			$oneblob->owner = $dbresult->fields['owner'];
 			$oneblob->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
-			array_push($result, $oneblob);
+			$result[] = $oneblob;
 			$dbresult->MoveNext();
 		}
 

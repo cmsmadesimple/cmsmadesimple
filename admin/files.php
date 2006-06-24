@@ -277,7 +277,7 @@ $ls = dir($dir);
 $files = array();
 while (($file = $ls->read()) != "")
 {
-	array_push($files, $file);
+	$files[] = $file;
 }
 sort($files);
 foreach ($files as $file)

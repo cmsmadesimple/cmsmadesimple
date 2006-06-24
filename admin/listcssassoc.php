@@ -149,7 +149,7 @@ else {
 		{
 
 			# we store ids of css found for them not to appear in the dropdown
-			array_push($csslist,$one["assoc_css_id"]);
+			$csslist[] = $one["assoc_css_id"];
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";		 
 			echo "<td><a href=\"editcss.php?css_id=".$one["assoc_css_id"]."&amp;from=templatecssassoc&amp;templateid=".$id."\">".$one["css_name"]."</a></td>\n";

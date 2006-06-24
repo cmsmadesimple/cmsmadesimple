@@ -136,7 +136,7 @@ class TemplateOperations
 			$onetemplate->encoding = $dbresult->fields['encoding'];
 			$onetemplate->stylesheet = $dbresult->fields['stylesheet'];
 			$onetemplate->modified_date = $db->UnixTimeStamp($dbresult->fields['modified_date']);
-			array_push($result, $onetemplate);
+			$result[] = $onetemplate;
 			$dbresult->MoveNext();
 		}
 
@@ -220,8 +220,8 @@ class TemplateOperations
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			array_push($result, $dbresult->fields['c_date']);
-			array_push($result, $dbresult->fields['t_date']);
+			$result[] = $dbresult->fields['c_date'];
+			$result[] = $dbresult->fields['t_date'];
 			$dbresult->MoveNext();
 		}
 

@@ -149,7 +149,7 @@ else {
 		{
 
 			# we store ids of templates found for them not to appear in the dropdown
-			array_push($csslist,$one["assoc_to_id"]);
+			$csslist[] = $one["assoc_to_id"];
 		 
 			echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 			echo "<td><a href=\"edittemplate.php?template_id=".$one["assoc_to_id"]."&amp;from=cssassoc&amp;cssid=".$id."\">".$one["template_name"]."</a></td>\n";

@@ -1427,7 +1427,7 @@ class ContentBase
 
 			while ($dbresult && !$dbresult->EOF)
 			{
-				array_push($this->mAdditionalEditors, $dbresult->fields['user_id']);
+				$this->mAdditionalEditors[] = $dbresult->fields['user_id'];
 				$dbresult->MoveNext();
 			}
 		}
@@ -1443,7 +1443,7 @@ class ContentBase
 	{
 		$ret = array();
 
-		array_push($ret, lang('additionaleditors'));
+		$ret[] = lang('additionaleditors');
 		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
 
 		$allusers = UserOperations::LoadUsers();
@@ -1462,7 +1462,7 @@ class ContentBase
 		}
 
 		$text .= '</select>';
-        array_push($ret,$text);
+        $ret[] = $text;
 		return $ret;
 	}
 
@@ -1516,7 +1516,7 @@ class ContentProperties
 		//Handle names separately
 		if (!in_array($name, $this->mPropertyNames))
 		{
-			array_push($this->mPropertyNames, $name);
+			$this->mPropertyNames[] = $name;
 		}
 		if (!array_key_exists($name, $this->mPropertyValues))
 		{
@@ -1566,7 +1566,7 @@ class ContentProperties
 				$prop_name = $dbresult->fields['prop_name'];
 				if (!in_array($prop_name, $this->mPropertyNames))
 				{
-					array_push($this->mPropertyNames, $prop_name);
+					$this->mPropertyNames[] = $prop_name;
 				}
 				$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
 				$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
@@ -2249,7 +2249,7 @@ class ContentManager
 				$contentobj = new $dbresult->fields['type'];
 				$contentobj->LoadFromData($dbresult->FetchRow(), false);
 				$map[$contentobj->Id()] = $count;
-				array_push($contentcache, $contentobj);
+				$contentcache[] = $contentobj;
 				$count++;
 			}
 			else
@@ -2407,7 +2407,7 @@ class ContentManager
 			if ($content_id > -1)
 			{
 				$query .= " AND content_id != ?";
-				array_push($params, $content_id);
+				$params[] = $content_id;
 			}
 			$row = &$db->GetRow($query, $params);
 

@@ -376,7 +376,7 @@ class ContentHierarchyManager {
                 $onechild =& $children[$key];
                 $content =& $onechild->GetContent();
 				$content->flatIndex = $count;
-				array_push($nodelist, $content);
+				$nodelist[] = $content;
 				$count++;
 				$this->getFlattenedChildren($onechild, $nodelist, $count);
 			}

@@ -105,7 +105,7 @@ class GroupOperations
 			$onegroup->id = $row['group_id'];
 			$onegroup->name = $row['group_name'];
 			$onegroup->active = $row['active'];
-			array_push($result, $onegroup);
+			$result[] = $onegroup;
 		}
 
 		return $result;
