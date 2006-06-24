@@ -1441,7 +1441,7 @@ class AdminTheme
 	  $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
 	  if ('both' == $module_help_type)
 	    {
-	      $module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&module='.$module_name;
+	      $module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
 	      $header .= ' (<a href="'.$module_help_link.'">'.$image_help.' '.lang('modulehelp', $module_name).'</a>, ';
 	      $header .= '<a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>)';
 	    }
