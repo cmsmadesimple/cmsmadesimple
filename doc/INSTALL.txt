@@ -1,5 +1,5 @@
 Requirements:
-    PHP 4.2+
+    PHP 4.2+ (4.3.3+ required for pretty urls)
     MySQL
     Apache webserver (or another php enabled webserver)
 
