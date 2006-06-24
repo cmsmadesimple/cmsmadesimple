@@ -416,7 +416,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	ob_start();
 	if ($use_html)
-		echo "<p><b>$titleText</b><pre>\n";
+		echo "<div><b>$titleText</b><pre>\n";
 
 	if(is_array($var))
 	{
@@ -441,7 +441,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 	}
 
 	if ($use_html)
-		echo "</pre></p>\n";
+		echo "</pre></div>\n";
 
 	$output = ob_get_contents();
 	ob_end_clean();
