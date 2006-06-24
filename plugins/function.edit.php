@@ -25,7 +25,7 @@ function smarty_cms_function_edit($params, &$smarty)
 	$text = isset($params['text']) ? $params['text']:'Edit This Page';
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
@@ -50,7 +50,7 @@ function smarty_cms_function_edit($params, &$smarty)
 	//will this work if using htaccess? (Yes! -Wishy)
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img border="0" src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
+		return '<a href="'.$gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/editcontent.php?content_id='.$gCms->variables['content_id'].'"><img src="'.$gCms->config['root_url'].'/images/cms/editbutton.png" alt="'.$text.'"/></a>';
 	}
 	else
 	{
