@@ -62,6 +62,7 @@ if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 {
+  header('Content-Type: text/xml');
   echo soap_error('site down for maintenance');
   exit;
 }
@@ -71,6 +72,7 @@ $params = array_merge($_GET, $_POST);
 
 if( !isset( $params['module'] ) )
   {
+    header('Content-Type: text/xml');
     echo soap_error('missing module parameter');
     exit;
   }
