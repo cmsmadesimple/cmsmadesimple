@@ -2423,7 +2423,7 @@ class CMSModule
 	 * @param string An array of params that should be inlucded in the URL of the link.	 These should be in a $key=>$value format.
 	 * @param boolean A flag to determine if only the href section should be returned
 	 */
-	function GetHierarchyManager($id, $returnid, $contents='', $params=array(), $onlyhref=false)
+	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
 		$text = '';
 		global $gCms;
