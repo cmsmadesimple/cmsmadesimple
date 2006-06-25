@@ -198,7 +198,7 @@ if ($access)
 		$result = $db->Execute($query,array($css_id));
 
 		# we put the content in vars
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$row = $result->FetchRow();
 			$css_name		= $row["css_name"];
