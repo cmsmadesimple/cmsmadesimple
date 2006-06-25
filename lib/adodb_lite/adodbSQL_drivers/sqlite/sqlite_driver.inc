@@ -50,10 +50,6 @@ class sqlite_driver_ADOConnection extends ADOConnection
 				$fn($this->dbtype, 'CONNECT', $this->ErrorNo(), $this->ErrorMsg(), $this->host, $this->database, $this);
 			return false;
 		}
-		else
-		{
-			$this->Execute('PRAGMA short_column_names = ON');
-		}
 
 		return true;
 	} 
@@ -126,12 +122,7 @@ class sqlite_driver_ADOConnection extends ADOConnection
 
 	function Affected_Rows()
 	{
-		if (function_exists('sqlite_rows_affected')) 
-			return sqlite_rows_affected( $this->connectionId ); 
-		else if (function_exists('sqlite_changes')) 
-			return sqlite_changes( $this->connectionId ); 
-		else 
-			return 0; 
+		return @sqlite_rows_affected( $this->connectionId );
 	} 
 
 	/**
@@ -380,10 +371,9 @@ class sqlite_driver_ResultSet
 	 * @access public 
 	 */
 
-	function Close()
+	function close()
 	{
-		if (function_exists('sqlite_free_result'))
-			@sqlite_free_result( $this->resultId );
+		@sqlite_free_result( $this->resultId );
 		$this->fields = array();
 		$this->resultId = false;
 	} 

@@ -7,8 +7,8 @@ $flds = "
 	module_name C(255),
 	template_name C(200),
 	content X,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_templates", $flds, $taboptarray);
@@ -103,7 +103,7 @@ $flds = "
 	user_id I,
 	title C(255),
 	url C(255),
-    access_time T
+    access_time DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."admin_recent_pages", $flds, $taboptarray);

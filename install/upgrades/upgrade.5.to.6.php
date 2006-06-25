@@ -7,8 +7,8 @@ $flds = "
 	userplugin_id I,
 	userplugin_name C(255),
 	code X,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."userplugins", $flds, $taboptarray);
@@ -25,8 +25,8 @@ $flds = "
 	css_id I,
 	css_name C(255),
 	css_text X,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css", $flds, $taboptarray);
@@ -43,8 +43,8 @@ $flds = "
 	assoc_to_id I,
 	assoc_css_id I,
 	assoc_type C(80),
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."css_assoc", $flds, $taboptarray);
@@ -58,8 +58,8 @@ $dbdict = NewDataDictionary($db);
 $flds = "
 	sitepref_name C(255),
 	sitepref_value text,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL($config["db_prefix"]."siteprefs", $flds, $taboptarray);

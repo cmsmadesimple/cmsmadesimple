@@ -171,7 +171,7 @@ else
 	  $q = "SELECT * FROM ".cms_db_prefix()."event_handlers WHERE
                     handler_id = ?";
 	  $dbresult = $db->Execute( $q, array( $handler ) );
-	  if( $dbresult && $dbresult->RowCount() )
+	  if( $dbresult && $dbresult->RecordCount() )
 	    {
 	      $row = $dbresult->FetchRow();
 	      $event_id = $row['event_id'];

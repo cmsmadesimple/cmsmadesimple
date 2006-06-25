@@ -103,7 +103,7 @@ if ($access)
 			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . $db->qstr($css_name);
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$error .= "<li>".lang('cssalreadyused')."</li>";
 				$validinfo = false;

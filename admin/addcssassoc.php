@@ -88,7 +88,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = ? AND assoc_type = ? AND assoc_css_id = ?";
 		$result = $db->Execute($query, array($id, $type, $css_id));
 
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$error = lang('associationexists');
 			$doadd = false;
@@ -100,7 +100,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 			$result = $db->Execute($query, array($id));
 			
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$line = $result->FetchRow();
 				$name = $line["template_name"];
@@ -115,10 +115,11 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
+			$time = $db->DBTimeStamp(time());
 			$query = "INSERT INTO ".cms_db_prefix().
                 "css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date)" .
-				" VALUES (?,?,?,?,?)";
-			$result = $db->Execute($query, array($id,$css_id,$type,$db->DBTimeStamp(time()),$db->DBTimeStamp(time())));
+				" VALUES (?,?,?,".$time.",".$time.")";
+			$result = $db->Execute($query, array($id,$css_id,$type));
 
 			if ($result)
 			{
@@ -126,9 +127,10 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 
 				if ("template" == $type)
 				{
+					$time = $db->DBTimeStamp(time());
 					$tplquery = "UPDATE ".cms_db_prefix().
-                    "templates SET modified_date = ?  WHERE template_id = ?";
-					$tplresult = $db->Execute($tplquery, array($db->DBTimeStamp(time()), $id));
+                    "templates SET modified_date = ".$time."  WHERE template_id = ?";
+					$tplresult = $db->Execute($tplquery, array($id));
 				}
 			}
 			else

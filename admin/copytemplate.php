@@ -87,7 +87,7 @@ if ($access)
 				{
 					while ($row = $result2->FetchRow())
 					{
-						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."','".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+						$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES ('".$onetemplate->id."','".$row['assoc_css_id']."','".$row['assoc_type']."',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 						debug_buffer($query);
 						$db->Execute($query);
 					}

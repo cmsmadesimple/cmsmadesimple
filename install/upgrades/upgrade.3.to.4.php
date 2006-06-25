@@ -66,7 +66,7 @@ echo "[done]</p>";
 echo "<p>Adding module admin permission... ";
 
 $new_id = $db->GenID($config["db_prefix"]."permissions_seq");
-$query = "INSERT INTO ".$config["db_prefix"]."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id,'Modify Modules','Modify Modules','".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+$query = "INSERT INTO ".$config["db_prefix"]."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id,'Modify Modules','Modify Modules',".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 $db->Execute($query);
 
 echo "[done]</p>";

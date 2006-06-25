@@ -51,7 +51,7 @@ if (isset($_GET["message"])) {
 			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
 			$result = $db->Execute($query, array($_GET['template_id']));
 			if ($result) {
-				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = '".$db->DBTimeStamp(time()) . "'";
+				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
 				echo '<p>'.lang('allpagesmodified').'</p>';
 			} else {

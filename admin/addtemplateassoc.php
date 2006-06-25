@@ -89,7 +89,7 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
             "css_assoc WHERE assoc_css_id = ? AND assoc_type = ? AND assoc_to_id = ?";
 		$result = $db->Execute($query, array($id, $type, $template_id ));
 
-		if ($result && $result->RowCount() > 0)
+		if ($result && $result->RecordCount() > 0)
 		{
 			$error = lang('associationexists');
 			$doadd = false;
@@ -101,7 +101,7 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 			$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
 			$result = $db->Execute($query, array($id));
 			
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$line = $result->FetchRow();
 				$name = $line["css_name"];
@@ -116,8 +116,9 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 		# everything is ok, we can insert the element.
 		if ($doadd)
 		{
-			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES (?, ?, ?, ?, ?)";
-			$result = $db->Execute($query, array($template_id, $id, $type, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+			$time = $db->DBTimeStamp(time());
+			$query = "INSERT INTO ".cms_db_prefix()."css_assoc (assoc_to_id,assoc_css_id,assoc_type,create_date,modified_date) VALUES (?, ?, ?, ".$time.", ".$time.")";
+			$result = $db->Execute($query, array($template_id, $id, $type));
 
 			if ($result)
 			{
@@ -125,8 +126,9 @@ if (isset($_POST["template_id"]) && isset($_POST["id"]) && isset($_POST["type"])
 
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ? WHERE template_id = ?";
-					$tplresult = $db->Execute($tplquery, array($db->DBTimeStamp(time()),$template_id));
+					$time = $db->DBTimeStamp(time());
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_id = ?";
+					$tplresult = $db->Execute($tplquery, array($template_id));
 				}
 			}
 			else

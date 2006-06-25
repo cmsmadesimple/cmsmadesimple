@@ -138,7 +138,7 @@ class CmsObject {
         if (!isset($this->db) && !isset($DONT_LOAD_DB))
 		{
 			$config =& $this->GetConfig();
-			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:cmsms');
+			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 			{
 				$dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);

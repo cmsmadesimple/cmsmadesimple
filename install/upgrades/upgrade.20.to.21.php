@@ -8,8 +8,8 @@ $flds = '
 	child_id I,
 	parent_type C(100),
 	parent_id I,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ';
 		
 $taboptarray = array('mysql' => 'TYPE=MyISAM');

@@ -2805,15 +2805,16 @@ class CMSModule
 		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
 		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
 
+		$time = $db->DBTimeStamp(time());
 		if ($result && $result->RecordCount() < 1)
 		{
-			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,?,?)';
-			$db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name, $content, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
+			$db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name, $content));
 		}
 		else
 		{
-			$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = ? WHERE module_name = ? AND template_name = ?';
-			$db->Execute($query, array($content, $db->DBTimeStamp(time()), $modulename != ''?$modulename:$this->GetName(), $tpl_name));
+			$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = '.$time.' WHERE module_name = ? AND template_name = ?';
+			$db->Execute($query, array($content, $modulename != ''?$modulename:$this->GetName(), $tpl_name));
 		}
 	}
 
@@ -3019,8 +3020,9 @@ class CMSModule
 		if (intval($count) == 0)
 		{
 			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,?,?)";
-			$db->Execute($query, array($new_id, $permission_name, $permission_text, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+			$time = $db->DBTimeStamp(time());
+			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+			$db->Execute($query, array($new_id, $permission_name, $permission_text));
 		}
 	}
 

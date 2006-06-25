@@ -68,7 +68,7 @@ class UserTags
 		$existing = $this->GetUserTag($name);
 		if (!$existing)
 		{
-			$query = "INSERT INTO userplugins (userplugin_name, code, create_date, modified_date) VALUES (?,?,'".$db->DBTimeStamp(time())."','".$db->DBTimeStamp(time())."')";
+			$query = "INSERT INTO userplugins (userplugin_name, code, create_date, modified_date) VALUES (?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 			$result = $db->Execute($query, array($name, $text));
 			if ($result)
 				return true;
@@ -77,7 +77,7 @@ class UserTags
 		}
 		else
 		{
-			$query = 'UPDATE userplugins SET code = ?, modified_date = \''.$db->DBTimeStamp(time()).'\' WHERE userplugin_name = ?';
+			$query = 'UPDATE userplugins SET code = ?, modified_date = '.$db->DBTimeStamp(time()).' WHERE userplugin_name = ?';
 			$result = $db->Execute($query, array($text, $name));
 			if ($result)
 				return true;

@@ -38,7 +38,7 @@ $page = 1;
 if (isset($_GET['page']))$page = $_GET['page'];
 
 $result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
-$totalrows = $result->RowCount();
+$totalrows = $result->RecordCount();
 
 $limit = 20;
 $page_string = "";
@@ -49,7 +49,7 @@ $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY t
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
 
-if ($result && $result->RowCount() > 0) {
+if ($result && $result->RecordCount() > 0) {
 	$page_string = pagination($page, $totalrows, $limit);
 	echo "<p class=\"pageshowrows\">".$page_string."</p>";
 	echo $themeObject->ShowHeader('adminlog').'</div>';
@@ -90,7 +90,7 @@ if ($result && $result->RowCount() > 0) {
 		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
 	}
 
-if ($access && $result && $result->RowCount() > 0) {
+if ($access && $result && $result->RecordCount() > 0) {
 	echo '<div class="pageoptions">';
 	echo '<p class="pageoptions">';
 	echo '<a href="adminlog.php?clear=true">';

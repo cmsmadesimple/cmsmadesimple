@@ -748,7 +748,7 @@ function do_cross_reference($parent_id, $parent_type, $content)
 	{
 		$selquery = 'SELECT htmlblob_id FROM '.cms_db_prefix().'htmlblobs WHERE htmlblob_name = ?';
 		$insquery = 'INSERT INTO '.cms_db_prefix().'crossref (parent_id, parent_type, child_id, child_type, create_date, modified_date)
-						VALUES (?,?,?,\'global_content\',\''.$db->DBTimeStamp(time()).'\',\''.$db->DBTimeStamp(time()).'\')';
+						VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
 		foreach ($matches[1] as $name)
 		{
 			$result = &$db->Execute($selquery, array($name));

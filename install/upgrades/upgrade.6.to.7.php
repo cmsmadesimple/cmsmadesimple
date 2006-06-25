@@ -34,8 +34,8 @@ $flds = "
 	htmlblob_name C(255),
 	html X,
 	owner I,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."htmlblobs", $flds, $taboptarray);

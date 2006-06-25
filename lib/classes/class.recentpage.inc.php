@@ -158,9 +158,10 @@ class RecentPageOperations
 		$db = &$gCms->GetDb();
 
 		$new_page_id = $db->GenID(cms_db_prefix()."admin_recent_pages_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."admin_recent_pages (id, user_id, url, title, access_time) VALUES (?,?,?,?,?)";
+		$time = $db->DBTimeStamp(time());
+		$query = "INSERT INTO ".cms_db_prefix()."admin_recent_pages (id, user_id, url, title, access_time) VALUES (?,?,?,?,".$time.")";
 		$dbresult = $db->Execute($query, array($new_page_id, $page->user_id, $page->url,
-            $page->title,$db->DBTimeStamp(time())));
+            $page->title));
 		if ($dbresult !== false)
 		{
 			$result = $new_page_id;

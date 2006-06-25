@@ -275,8 +275,9 @@ function AuthorBlobs($userid)
 		$db = &$gCms->GetDb();
 
 		$new_htmlblob_id = $db->GenID(cms_db_prefix()."htmlblobs_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."htmlblobs (htmlblob_id, htmlblob_name, html, owner, create_date, modified_date) VALUES (?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_htmlblob_id, $htmlblob->name, $htmlblob->content, $htmlblob->owner, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$time = $db->DBTimeStamp(time());
+		$query = "INSERT INTO ".cms_db_prefix()."htmlblobs (htmlblob_id, htmlblob_name, html, owner, create_date, modified_date) VALUES (?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_htmlblob_id, $htmlblob->name, $htmlblob->content, $htmlblob->owner));
 		if ($dbresult !== false)
 		{
 			$result = $new_htmlblob_id;
@@ -292,8 +293,9 @@ function AuthorBlobs($userid)
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, modified_date = ? WHERE htmlblob_id = ?";
-		$dbresult = $db->Execute($query,array($htmlblob->name,$htmlblob->content,$htmlblob->owner,$db->DBTimeStamp(time()),$htmlblob->id));
+		$time = $db->DBTimeStamp(time());
+		$query = "UPDATE ".cms_db_prefix()."htmlblobs SET htmlblob_name = ?, html = ?, owner = ?, modified_date = ".$time." WHERE htmlblob_id = ?";
+		$dbresult = $db->Execute($query,array($htmlblob->name,$htmlblob->content,$htmlblob->owner,$htmlblob->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

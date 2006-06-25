@@ -63,7 +63,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;
@@ -102,7 +102,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;
@@ -120,7 +120,7 @@ class Events
 
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
 
-		if( $dbresult && $dbresult->RowCount() )
+		if( $dbresult && $dbresult->RecordCount() )
 		{
 			while( $row = $dbresult->FetchRow() )
 			{
@@ -168,7 +168,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;
@@ -249,7 +249,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;
@@ -274,7 +274,7 @@ class Events
 			$params[] = $module_handler;
 		}
 		$dbresult = $db->Execute( $q, $params );
-		if( $dbresult != false && $dbresult->RowCount() > 0 )
+		if( $dbresult != false && $dbresult->RecordCount() > 0 )
 		{
 			// hmmm, something matches already
 			return false;
@@ -285,7 +285,7 @@ class Events
 		$q = "SELECT max(handler_order) AS newid FROM ".cms_db_prefix()."event_handlers
 		WHERE event_id = ?";
 		$dbresult = $db->Execute( $q, array( $id ) );
-		if( $dbresult != false && $dbresult->RowCount() != 0)
+		if( $dbresult != false && $dbresult->RecordCount() != 0)
 		{
 			$row = $dbresult->FetchRow();
 			$order = $row['newid'] + 1;
@@ -347,7 +347,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;
@@ -387,7 +387,7 @@ class Events
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
 		originator = ? AND event_name = ?";
 		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RowCount() == 0 )
+		if( $dbresult == false || $dbresult->RecordCount() == 0 )
 		{
 			// query failed, event not found
 			return false;

@@ -130,7 +130,7 @@ else {
 <?php
 
 	# if any css was found.
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
@@ -202,7 +202,7 @@ else {
 	}
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		$form = "<form action=\"addcssassoc.php\" method=\"post\">";
 	

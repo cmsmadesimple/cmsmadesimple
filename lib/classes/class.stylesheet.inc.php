@@ -127,16 +127,15 @@ class StylesheetOperations
 
 	function AssociateStylesheetToTemplate( $stylesheetid, $templateid )
 	{
-	  global $gCms;
-	  $db = &$gCms->GetDb();
-	  
-	  $query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,?,?)';
-	  $dbresult = $db->Execute( $query, array( $templateid, 
-						   $stylesheetid,
-						   'template',
-						   $db->DBTimeStamp(time()),
-						   $db->DBTimeStamp(time()) ));
-	  return ($dbresult != false);
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$time = $db->DBTimeStamp(time());
+		$query = 'INSERT INTO '.cms_db_prefix().'css_assoc VALUES (?,?,?,'.$time.','.$time.')';
+		$dbresult = $db->Execute( $query, array( $templateid, 
+			$stylesheetid,
+			'template'));
+			return ($dbresult != false);
 	}
 
 
@@ -203,8 +202,9 @@ class StylesheetOperations
 		$db = &$gCms->GetDb();
 
 		$new_stylesheet_id = $db->GenID(cms_db_prefix()."css_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_stylesheet_id, $stylesheet->name, $stylesheet->value, $stylesheet->media_type, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$time = $db->DBTimeStamp(time());
+		$query = "INSERT INTO ".cms_db_prefix()."css (css_id, css_name, css_text, media_type, create_date, modified_date) VALUES (?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_stylesheet_id, $stylesheet->name, $stylesheet->value, $stylesheet->media_type));
 		if ($dbresult !== false)
 		{
 			$result = $new_stylesheet_id;
@@ -220,8 +220,9 @@ class StylesheetOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
-		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $db->DBTimeStamp(time()), $stylesheet->id));
+		$time = $db->DBTimeStamp(time());
+		$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?,css_text = ?, media_type = ?, modified_date = ".$time." WHERE css_id = ?";
+		$dbresult = $db->Execute($query, array($stylesheet->name, $stylesheet->value, $stylesheet->media_type, $stylesheet->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

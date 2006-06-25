@@ -189,7 +189,7 @@ while($result && $row = $result->FetchRow())
 	$addt_users .= "<option value=\"".$row["user_id"]."\"";
 	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = ?";
 	$newresult = $db->Execute($query,array($htmlblob_id));
-	if ($newresult && $newresult->RowCount() > 0)
+	if ($newresult && $newresult->RecordCount() > 0)
 	{
 		$addt_users .= " selected=\"true\"";
 	}

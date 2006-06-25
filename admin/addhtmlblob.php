@@ -121,7 +121,7 @@ $addt_users = "";
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
 $result = $db->Execute($query, array($userid));
 
-if ($result && $result->RowCount() > 0) {
+if ($result && $result->RecordCount() > 0) {
 	while($row = $result->FetchRow()) {
 		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
 	}

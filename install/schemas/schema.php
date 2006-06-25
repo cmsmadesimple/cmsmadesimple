@@ -136,7 +136,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		user_id I,
 		title C(255),
 		url C(255),
-		access_time T
+		access_time DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
@@ -172,8 +172,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		tabindex C(10),
 		accesskey C(5),
 		last_modified_by I,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
@@ -196,8 +196,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		param2 C(255),
 		param3 C(255),
 		content X,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
@@ -215,8 +215,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		child_id I,
 		parent_type C(100),
 		parent_id I,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	';
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -236,8 +236,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		css_name C(255),
 		css_text X,
 		media_type C(255),
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
@@ -254,8 +254,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		assoc_to_id I,
 		assoc_css_id I,
 		assoc_type C(80),
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
@@ -306,8 +306,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		group_perm_id I KEY,
 		group_id I,
 		permission_id I,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
@@ -324,8 +324,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		group_id I KEY,
 		group_name C(25),
 		active I1,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
@@ -341,8 +341,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		htmlblob_name C(255),
 		html X,
 		owner I,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
@@ -391,8 +391,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		parent_module C(25),
 		child_module C(25),
 		minimum_version C(25),
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
@@ -407,8 +407,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		module_name C(200),
 		template_name C(200),
 		content X,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
@@ -425,8 +425,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		permission_id I KEY,
 		permission_name C(255),
 		permission_text C(255),
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
@@ -440,8 +440,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		sitepref_name C(255) KEY,
 		sitepref_value text,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
@@ -460,8 +460,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		encoding C(25),
 		active I1,
 		default_template I1,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
@@ -477,8 +477,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 		group_id I,
 		user_id I,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
@@ -515,8 +515,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		last_name C(50),
 		email C(255),
 		active I1,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
@@ -531,8 +531,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		userplugin_id I KEY,
 		userplugin_name C(255),
 		code X,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
@@ -562,8 +562,8 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 		sequence_actions X,
 		sequence_panic X,
 		active I1,
-		create_date T,
-		modified_date T
+		create_date DT,
+		modified_date DT
 	";
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."sequence", $flds, $taboptarray);

@@ -12,8 +12,8 @@ eval('class postgres7_date_EXTENDER extends '. $last_module . '_ADOConnection { 
 
 class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 {
-	var $fmtDate = "Y-m-d";	// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "Y-m-d H:i:s"; // used by DBTimeStamp as the default timestamp fmt.
+	var $fmtDate = "'Y-m-d'";	// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "'Y-m-d H:i:s'"; // used by DBTimeStamp as the default timestamp fmt.
 	var $emptyDate = '&nbsp;';
 	var $emptyTimeStamp = '&nbsp;';
 	var $sysDate = "CURRENT_DATE";
@@ -48,31 +48,31 @@ class postgres7_date_ADOConnection extends postgres7_date_EXTENDER
 		switch (strtoupper($locale))
 		{
 			case 'EN':
-				$this->fmtDate="Y-m-d";
-				$this->fmtTimeStamp = "Y-m-d H:i:s";
+				$this->fmtDate="'Y-m-d'";
+				$this->fmtTimeStamp = "'Y-m-d H:i:s'";
 				break;
 
 			case 'US':
-				$this->fmtDate = "m-d-Y";
-				$this->fmtTimeStamp = "m-d-Y H:i:s";
+				$this->fmtDate = "'m-d-Y'";
+				$this->fmtTimeStamp = "'m-d-Y H:i:s'";
 				break;
 
 			case 'NL':
 			case 'FR':
 			case 'RO':
 			case 'IT':
-				$this->fmtDate="d-m-Y";
-				$this->fmtTimeStamp = "d-m-Y H:i:s";
+				$this->fmtDate="'d-m-Y'";
+				$this->fmtTimeStamp = "'d-m-Y H:i:s'";
 				break;
 
 			case 'GE':
-				$this->fmtDate="d.m.Y";
-				$this->fmtTimeStamp = "d.m.Y H:i:s";
+				$this->fmtDate="'d.m.Y'";
+				$this->fmtTimeStamp = "'d.m.Y H:i:s'";
 				break;
 
 			default:
-				$this->fmtDate="Y-m-d";
-				$this->fmtTimeStamp = "Y-m-d H:i:s";
+				$this->fmtDate="'Y-m-d'";
+				$this->fmtTimeStamp = "'Y-m-d H:i:s'";
 				break;
 		}
 	}

@@ -80,7 +80,7 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
 			$result = $db->Execute($query,array($id));
 
-			if ($result && $result->RowCount())
+			if ($result && $result->RecordCount())
 			{
 				$line = $result->FetchRow();
 				$name = $line['template_name'];
@@ -107,8 +107,9 @@ if (isset($_GET["css_id"]) && isset($_GET["id"]) && isset($_GET["type"]))
 				# now updating template
 				if ("template" == $type)
 				{
-					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ? WHERE template_id = ?";
-					$tplresult = $db->Execute($tplquery, array($db->DBTimeStamp(time()),$id));
+					$time = $db->DBTimeStamp(time());
+					$tplquery = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_id = ?";
+					$tplresult = $db->Execute($tplquery, array($id));
 				}
 			}
 			else

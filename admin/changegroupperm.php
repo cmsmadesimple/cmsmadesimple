@@ -131,8 +131,8 @@ else {
 				$new_id = $db->GenID(cms_db_prefix()."group_perms_seq");
 				$query = "INSERT INTO ".cms_db_prefix().
 					"group_perms (group_perm_id, group_id, permission_id, create_date, modified_date) VALUES (".
-                	$new_id.", ".$db->qstr($group_id).", ".$db->qstr(substr($key,11)).", '".
-                	$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
+                	$new_id.", ".$db->qstr($group_id).", ".$db->qstr(substr($key,11)).", ".
+                	$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
                 $result = $db->Execute($query);
 				}
 			}

@@ -19,8 +19,8 @@ $flds = "
 	markup C(25),
 	active I1,
 	cachable I1,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."content", $flds, $taboptarray);
@@ -42,8 +42,8 @@ $flds = "
 	param2 C(255),
 	param3 C(255),
 	content X,
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."content_props", $flds, $taboptarray);
@@ -58,7 +58,7 @@ echo "<p>Converting existing content...";
 $query = "SELECT * from ".cms_db_prefix()."pages ORDER BY hierarchy_position";
 $result = $db->Execute($query);
 
-if ($result && $result->RowCount() > 0)
+if ($result && $result->RecordCount() > 0)
 {
 	$idmap = array();
 
@@ -76,7 +76,7 @@ if ($result && $result->RowCount() > 0)
 			$row['parent_id'],
 			$row['item_order'],
 			$row['create_date'],
-			$db->DBTimeStamp(time()),
+			trim($db->DBTimeStamp(time()), "'"),
 			$row['active'],
 			$row['default_page'],
 			$row['template_id'],
@@ -127,7 +127,7 @@ if ($result && $result->RowCount() > 0)
 	$query = "SELECT content_id, parent_id from ".cms_db_prefix()."content";
 	$result = $db->Execute($query);
 
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		while ($row = $result->FetchRow())
 		{
@@ -160,8 +160,8 @@ $flds = "
 	parent_module C(25),
 	child_module C(25),
 	minimum_version C(25),
-	create_date T,
-	modified_date T
+	create_date DT,
+	modified_date DT
 ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."module_deps", $flds, $taboptarray);
@@ -192,7 +192,7 @@ echo '<p>"Installing" phplayers module (if necessary)... ';
 $query = "SELECT * from ".cms_db_prefix()."modules WHERE module_name = 'PHPLayers'";
 $result = $db->Execute($query);
 
-if ($result && $result->RowCount() < 1)
+if ($result && $result->RecordCount() < 1)
 {
 	$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, status, version, active) VALUES ('PHPLayers', 'Installed', '1.0', 1)";
 	$result = $db->Execute($query);
@@ -209,7 +209,7 @@ $dbdict->ExecuteSQLArray($sqlarray);
 $query = "SELECT * from ".cms_db_prefix()."additional_users";
 $result = $db->Execute($query);
 
-if ($result && $result->RowCount() > 0)
+if ($result && $result->RecordCount() > 0)
 {
 	while ($row = $result->FetchRow())
 	{

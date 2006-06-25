@@ -140,8 +140,9 @@ if ($access)
 					#Now check to see if we can satisfy any deps
 					foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
 					{
-						$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
-						$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+						$time = $db->DBTimeStamp(time());
+						$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+						$db->Execute($query, array($onedepkey, $module, $onedepvalue));
 					}
 				}
 

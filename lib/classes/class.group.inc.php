@@ -142,8 +142,9 @@ class GroupOperations
 		$db = &$gCms->GetDb();
 
 		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->active, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$time = $db->DBTimeStamp(time());
+		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,".$time.", ".$time.")";
+		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->active));
 		if ($dbresult !== false)
 		{
 			$result = $new_group_id;
@@ -159,8 +160,9 @@ class GroupOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ? WHERE group_id = ?";
-		$dbresult = $db->Execute($query, array($group->name, $group->active, $db->DBTimeStamp(time()), $group->id));
+		$time = $db->DBTimeStamp(time());
+		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
+		$dbresult = $db->Execute($query, array($group->name, $group->active, $group->id));
 		if ($dbresult !== false)
 		{
 			$result = true;

@@ -12,8 +12,8 @@ eval('class sqlite_date_EXTENDER extends '. $last_module . '_ADOConnection { }')
 
 class sqlite_date_ADOConnection extends sqlite_date_EXTENDER
 {
-	var $fmtDate = "Y-m-d";	/// used by DBDate() as the default date format used by the database
-	var $fmtTimeStamp = "Y-m-d H:i:s";
+	var $fmtDate = "'Y-m-d'";	/// used by DBDate() as the default date format used by the database
+	var $fmtTimeStamp = "'Y-m-d H:i:s'";
 	var $emptyDate = '&nbsp;';
 	var $emptyTimeStamp = '&nbsp;';
 	var $sysDate = "adodb_date('Y-m-d')";

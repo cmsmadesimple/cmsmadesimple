@@ -67,13 +67,13 @@ if (isset($_GET["message"])) {
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;
-	if ($result->RowCount() > $limit)
+	if ($result->RecordCount() > $limit)
 	{
-		echo "<p class=\"pageshowrows\">".pagination($page, $result->RowCount(), $limit)."</p>";
+		echo "<p class=\"pageshowrows\">".pagination($page, $result->RecordCount(), $limit)."</p>";
 	}
 	echo '<form action="multistylesheet.php" method="post">';
 	echo $themeObject->ShowHeader('liststylesheets').'</div>';
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		# displaying the table header
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";

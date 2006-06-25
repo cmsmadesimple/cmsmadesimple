@@ -37,7 +37,7 @@ if (isset($_GET["userplugin_id"])) {
 		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
 		$result = $db->Execute($query, array($userplugin_id));
 
-		if ($result && $result->RowCount()) {
+		if ($result && $result->RecordCount()) {
 			$row = $result->FetchRow();
 			$userplugin_name = $row['userplugin_name'];
 		}

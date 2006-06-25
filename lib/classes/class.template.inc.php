@@ -279,9 +279,10 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$time = $db->DBTimeStamp(time());
 		$new_template_id = $db->GenID(cms_db_prefix()."templates_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, default_template, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?)";
-		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->encoding, $template->active, $template->default, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+		$query = "INSERT INTO ".cms_db_prefix()."templates (template_id, template_name, template_content, stylesheet, encoding, active, default_template, create_date, modified_date) VALUES (?,?,?,?,?,?,?,".$time.",".$time.")";
+		$dbresult = $db->Execute($query, array($new_template_id, $template->name, $template->content, $template->stylesheet, $template->encoding, $template->active, $template->default));
 		if ($dbresult !== false)
 		{
 			$result = $new_template_id;
@@ -298,8 +299,9 @@ class TemplateOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, encoding = ?, active = ?, default_template = ?, modified_date = ? WHERE template_id = ?";
-		$dbresult = $db->Execute($query,array($template->name,$template->content,$template->stylesheet,$template->encoding,$template->active,$template->default,$db->DBTimeStamp(time()),$template->id));
+		$time = $db->DBTimeStamp(time());
+		$query = "UPDATE ".cms_db_prefix()."templates SET template_name = ?, template_content = ?, stylesheet = ?, encoding = ?, active = ?, default_template = ?, modified_date = ".$time." WHERE template_id = ?";
+		$dbresult = $db->Execute($query,array($template->name,$template->content,$template->stylesheet,$template->encoding,$template->active,$template->default,$template->id));
 		if ($dbresult !== false)
 		{
 			$result = true;
@@ -382,15 +384,16 @@ class TemplateOperations
 
 		$dbresult = false;
 
+		$time = $db->DBTimeStamp(time());
 		if ($blob_name != '')
 		{
-			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ? WHERE template_content like ?";
-			$dbresult = $db->Execute($query,array($db->DBTimeStamp(time()),'%{html_blob name="'.$blob_name.'"}%'));
+			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_content like ?";
+			$dbresult = $db->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
 		}
 		else
 		{
-			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ?";
-			$dbresult = $db->Execute($query,array($db->DBTimeStamp(time())));
+			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time;
+			$dbresult = $db->Execute($query);
 		}
 
 		if ($dbresult !== false)

@@ -69,7 +69,7 @@ if (isset($_GET["css_id"]))
 		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
 		$result = $db->Execute($query, array($css_id));
 		
-		if ($result && $result->RowCount())
+		if ($result && $result->RecordCount())
 		{
 			$row = $result->FetchRow();
 			$css_name = $row['css_name'];
@@ -87,7 +87,7 @@ if (isset($_GET["css_id"]))
 			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = ?";
 			$result = $db->Execute($query, array($css_id));
 			
-			if ($result && $result->RowCount())
+			if ($result && $result->RecordCount())
 			{
 				$dodelete = false;
 				$error =  lang('errorcssinuse');

@@ -95,7 +95,7 @@ class ADODB2_mysql extends ADODB_DataDict {
 			
 		case 'D': return 'DATE';
 		case 'DT': return 'DATETIME';
-		case 'T': return 'DATETIME';
+		case 'T': return 'TIME';
 		case 'TS': return 'TIMESTAMP';
 		case 'L': return 'TINYINT';
 		

@@ -106,7 +106,7 @@ if ($access)
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = " . $db->qstr($template);
 			$result = $db->Execute($query);
 
-			if ($result && $result->RowCount() > 0)
+			if ($result && $result->RecordCount() > 0)
 			{
 				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;

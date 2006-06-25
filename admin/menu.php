@@ -78,7 +78,7 @@ if (isset($config['assume_mod_rewrite']) && $config['assume_mod_rewrite'] == tru
 {
 	$query = "SELECT content_alias, content_id FROM " . cms_db_prefix() . "content WHERE default_content = '1'";
 	$result = $db->query($query);
-	if ($result && $result->RowCount() > 0)
+	if ($result && $result->RecordCount() > 0)
 	{
 		$row = $result->FetchRow();
 		if ($row['content_alias'] != '')

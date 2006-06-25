@@ -454,7 +454,7 @@ function showPageFour($sqlloaded = 0) {
 
         global $config, $CMS_SCHEMA_VERSION;
 
-		$db = ADONewConnection($_POST['dbms'], 'pear:cmsms:date');
+		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 
 		$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
 
@@ -718,7 +718,7 @@ function showPageFive() {
 		global $gCms;
 		$gCms->config['db_prefix'] = $_POST['prefix'];
 
-		$db = &ADONewConnection($newconfig['dbms'], 'pear:cmsms:date');
+		$db = &ADONewConnection($newconfig['dbms'], 'pear:date:extend:transaction');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
@@ -760,8 +760,9 @@ function showPageFive() {
 							#Now check to see if we can satisfy any deps
 							foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
 							{
-								$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,?,?)";
-								$db->Execute($query, array($onedepkey, $module, $onedepvalue, $db->DBTimeStamp(time()), $db->DBTimeStamp(time())));
+								$time = $db->DBTimeStamp(time());
+								$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+								$db->Execute($query, array($onedepkey, $module, $onedepvalue));
 							}
 						}
 

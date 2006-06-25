@@ -49,23 +49,24 @@ if (isset($_GET["content_id"]))
 			$order = $row["item_order"];	
 		}
 
+		$time = $db->DBTimeStamp(time());
 		if ($direction == "down")
 		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = ? WHERE item_order = ? AND parent_id = ?';
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
 			#echo $query, $order + 1, $parent_id;
-			$db->Execute($query, array($db->DBTimeStamp(time()), $order + 1, $parent_id));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = ? WHERE content_id = ? AND parent_id = ?';
+			$db->Execute($query, array($order + 1, $parent_id));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
 			#echo $query, $content_id, $parent_id;
-			$db->Execute($query, array($db->DBTimeStamp(time()), $content_id, $parent_id));
+			$db->Execute($query, array($content_id, $parent_id));
 		}
 		else if ($direction == "up")
 		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = ? WHERE item_order = ? AND parent_id = ?';
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
 			#echo $query;
-			$db->Execute($query, array($db->DBTimeStamp(time()), $order - 1, $parent_id));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = ? WHERE content_id = ? AND parent_id = ?';
+			$db->Execute($query, array($order - 1, $parent_id));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
 			#echo $query;
-			$db->Execute($query, array($db->DBTimeStamp(time()), $content_id, $parent_id));
+			$db->Execute($query, array($content_id, $parent_id));
 		}
 
 		ContentManager::SetAllHierarchyPositions();
