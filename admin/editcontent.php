@@ -294,8 +294,21 @@ $tabnames = $contentobj->TabNames();
 <input type="hidden" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
 <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
-	<div id="page_content">
-		<?php
+<div id="page_content">
+<?php
+$submit_buttons = '<div class="pageoverflow">
+<p class="pagetext">&nbsp;</p>
+<p class="pageinput">
+ <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
+if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
+  {
+    $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" />';
+  }
+$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
+$submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />
+</p>
+</div>';
+echo $submit_buttons;
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;
 		if ($numberoftabs == 0)
@@ -328,18 +341,8 @@ $tabnames = $contentobj->TabNames();
 				</div>
 				<?php
 			}
+			echo $submit_buttons;
 			?>
-			<div class="pageoverflow">
-				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
-					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					<?php } ?>
-					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					<input type="submit" name="applybutton" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				</p>
-			</div>
 			<div style="clear: both;"></div>
 		</div>
 		<?php
