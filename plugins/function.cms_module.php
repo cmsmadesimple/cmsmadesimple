@@ -48,7 +48,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 		if ($checkid == $id)
 		{
 			$action = $mactaction;
-			$inline = $macinline;
+			$inline = $mactinline;
 		}
 	}
 

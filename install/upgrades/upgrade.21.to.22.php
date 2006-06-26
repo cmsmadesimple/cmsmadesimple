@@ -10,7 +10,7 @@ $flds = "
           module_name   c(255),
           removable     I,
           handler_order I,
-          handler_id    I
+          handler_id    I KEY
         ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."event_handlers", $flds, $taboptarray);
@@ -19,7 +19,7 @@ $dbdict->ExecuteSQLArray($sqlarray);
 $flds = "
           originator   c(200) NOTNULL,
           event_name   c(200) NOTNULL,
-          event_id     I
+          event_id     I KEY
         ";
 $taboptarray = array('mysql' => 'TYPE=MyISAM');
 $sqlarray = $dbdict->CreateTableSQL(cms_db_prefix()."events", $flds, $taboptarray);

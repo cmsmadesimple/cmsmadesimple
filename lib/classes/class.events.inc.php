@@ -94,38 +94,17 @@ class Events
 	*/
 	function SendEvent( $modulename, $eventname, $params )
 	{
-		// get the id
 		global $gCms;
-		$db =& $gCms->GetDb();
 
-		/*
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
-		originator = ? AND event_name = ?";
-		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
-		{
-			// query failed, event not found
-			return false;
-		}
-		$row = $dbresult->FetchRow();
-		$id = $row['event_id'];
-		*/
-
-		$params['module'] = $modulename;
-		$params['event'] = $eventname;
-
-		$q = "SELECT eh.tag_name, eh.module_name FROM ".cms_db_prefix()."event_handlers eh
-			INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
-			WHERE e.originator = ? AND e.event_name = ? ORDER BY eh.handler_order ASC";
-
-		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-
-		if( $dbresult && $dbresult->RecordCount() )
-		{
-			while( $row = $dbresult->FetchRow() )
+		$results = Events::ListEventHandlers($modulename, $eventname);
+		
+		if ($results != false)
+		{		
+			foreach( $results as $row )
 			{
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 				{
+					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
 					UserTags::CallUserTag( $row['tag_name'], $params );
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
@@ -141,6 +120,7 @@ class Events
 					$obj =& CMSModule::GetModuleInstance($row['module_name']);
 					if( $obj )
 					{
+						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
 						$obj->DoEvent( $modulename, $eventname, $params );
 					}
 				}
@@ -163,34 +143,42 @@ class Events
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
-
-		// find the id
-		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
-		originator = ? AND event_name = ?";
-		$dbresult = $db->Execute( $q, array( $modulename, $eventname ) );
-		if( $dbresult == false || $dbresult->RecordCount() == 0 )
+		$variables =& $gCms->variables;
+		
+		$params['module'] = $modulename;
+		$params['event'] = $eventname;
+		
+		$handlers = array();
+		
+		if (!isset($variables['handlercache']))
 		{
-			// query failed, event not found
-			return false;
-		}
-		$row = $dbresult->FetchRow();
-		$id = $row['event_id'];
+			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
+				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
+				ORDER BY eh.handler_order ASC";
 
-		// now get the handlers
-		$q = "SELECT tag_name,module_name,handler_order,handler_id,removable FROM ".cms_db_prefix()."event_handlers WHERE
-		event_id = ? ORDER BY handler_order ASC";
-		$dbresult = $db->Execute( $q, array( $id ));
-
-		if( $dbresult !== false )
-		{
+			$dbresult = $db->Execute( $q );
+			
 			$result = array();
-			while( $row = $dbresult->FetchRow() )
+
+			while( $dbresult && $row = $dbresult->FetchRow() )
 			{
 				$result[] = $row;
 			}
-			return $result;
+			$variables['handlercache'] = $result;
 		}
-		return false;
+
+		foreach ($variables['handlercache'] as $row)
+		{
+			if ($row['originator'] == $modulename && $row['event_name'] == $eventname)
+			{
+				$handlers[] = $row;
+			}
+		}
+		
+		if (count($handlers) > 0)
+			return $handlers;
+		else
+			return false;
 	}
 
 

@@ -271,12 +271,12 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$dbdict = NewDataDictionary($db);
 
 	$flds = "
-	          event_id      I KEY,
+	          event_id      I,
 	          tag_name      c(255),
 	          module_name   c(255),
 	          removable     I,
 	          handler_order I,
-	          handler_id    I
+	          handler_id    I KEY
 	        ";
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
@@ -290,7 +290,7 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$flds = "
 	          originator   c(200) NOTNULL KEY,
 	          event_name   c(200) NOTNULL KEY,
-	          event_id     I
+	          event_id     I KEY
 	        ";
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
