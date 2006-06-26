@@ -47,16 +47,29 @@ function smarty_cms_function_print($params, &$smarty)
 		$goback = '&amp;goback=1';
 		}
 	}
-	  
-	//will this work if using htaccess? (Yes! -Wishy)
+	if (true == $gCms->config['assume_mod_rewrite'])
+	  {
+	    $hm =& $gCms->GetHierarchyManager();
+	    $curnode =& $hm->getNodeById($gCms->variables['content_id']);
+	    $curcontent =& $curnode->GetContent();
+	    $page_url = $curcontent->GetURL().'?print=true';
+	  }
+	else
+	  {
+	    $page_url = $gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true';
+	  }
+       //will this work if using htaccess? (Yes! -Wishy)
+
+	$output = '<a href="' . $page_url . $goback . $js . '"'. $target . '>';
 	if (isset($params["showbutton"]))
 	{
-		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true' . $goback . $js . '"'. $target . '><img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/></a>';
+		$output .= '<img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/>';
 	}
 	else
 	{
-		return '<a href="'.$gCms->config['root_url'].'/index.php?page='.$gCms->variables['content_id'].'&amp;print=true' . $goback . $js . '"'. $target . '>'.$text.'</a>';
+		$output .=  $text;
 	}
+	return $output.'</a>';
 }
 
 function smarty_cms_help_function_print() {
