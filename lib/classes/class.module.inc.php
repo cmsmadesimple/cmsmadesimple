@@ -3278,6 +3278,15 @@ class CMSModule
 
 
 	/**
+	 * A callback indicating if this module has a DoEvent method to
+	 * handle incoming events.
+         */
+	function HandlesEvents()
+	{
+	  return false;
+	}
+
+	/**
 	 * Remove an event from the CMS system
 	 * This function removes all handlers to the event, and completely removes
 	 * all references to this event from the database

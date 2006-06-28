@@ -226,7 +226,15 @@ foreach( $usertags as $key => $value )
 // and the list of modules, and add them
 foreach( $gCms->modules as $key => $value )
 {
-  $allhandlers[$key] = 'm:'.$key;
+  if( $key == $modulename )
+    {
+      continue;
+    }
+
+  if( $gCms->modules[$key]['object']->HandlesEvents() )
+    {
+      $allhandlers[$key] = 'm:'.$key;
+    }
 }
 
 echo "<div class=\"pageoverflow\">\n";
