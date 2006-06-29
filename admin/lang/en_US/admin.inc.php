@@ -42,6 +42,7 @@ $lang['admin']['autoinstallupgrade'] = 'Automatically install or upgrade';
 $lang['admin']['back'] = 'Back to Menu';
 $lang['admin']['backtoplugins'] = 'Back to Plugins List';
 $lang['admin']['cancel'] = 'Cancel';
+$lang['admin']['confirmcancel'] = 'Are you sure you want to discard your changes? Click OK to discard all changes. Click Cancel to continue editing.';
 $lang['admin']['canceldescription'] = 'Discard Changes';
 $lang['admin']['clearadminlog'] = 'Clear Admin Log';
 $lang['admin']['code'] = 'Code';
