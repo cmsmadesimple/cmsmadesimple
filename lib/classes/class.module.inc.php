@@ -307,7 +307,7 @@ class ModuleOperations
    */
   function InstallModule($module, $loadifnecessary = false)
   {
-
+    global $gCms;
     if( !isset( $gCms->modules[$module] ) )
       {
 	if( $loadifnecessary == false )
@@ -323,7 +323,6 @@ class ModuleOperations
 	  }
       }
  
-    global $gCms;
     $db =& $gCms->GetDb();
     if (isset($gCms->modules[$module]))
       {

@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
 $lang['admin']['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
 $lang['admin']['errorinstallfialed'] = 'Module installation failed';
 $lang['admin']['errormodulewontload'] = 'Problem instantiating an available module';
@@ -269,6 +270,7 @@ $lang['admin']['depsformodule'] = 'Dependencies for %s Module';
 $lang['admin']['installed'] = 'Installed';
 $lang['admin']['author'] = 'Author';
 $lang['admin']['changehistory'] = 'Change History';
+$lang['admin']['moduleerrormessage'] = 'Error Message for %s Module';
 $lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module';
 $lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module';
 $lang['admin']['admintheme'] = 'Administration Theme';

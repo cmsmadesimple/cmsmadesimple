@@ -121,51 +121,40 @@ if ($access)
           }  
       }
 
-	if ($action == "install")
-	{
-		if (isset($gCms->modules[$module]))
-		{
-			$modinstance = $gCms->modules[$module]['object'];
-			$result = $modinstance->Install();
-
-			#now insert a record
-			if (!isset($result) || $result === FALSE)
-			{
-				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
-				$db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
-				
-				#and insert any dependancies
-				if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-				{
-					#Now check to see if we can satisfy any deps
-					foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-					{
-						$time = $db->DBTimeStamp(time());
-						$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-						$db->Execute($query, array($onedepkey, $module, $onedepvalue));
-					}
-				}
-
-				#and show the installpost if necessary...
-				
-				Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
-				
-				if ($modinstance->InstallPostMessage() != FALSE)
-				{
-					redirect("listmodules.php?action=showpostinstall&module=".$module);
-				}
-			}
-			else
-			{
-				//TODO: Echo error
-			}
-		}
-		
-		redirect("listmodules.php");
-	}
+    if ($action == "install")
+      {
+	$result = ModuleOperations::InstallModule($module,false);
+	if( $result[0] == false )
+	  {
+	    echo '<div class="pagecontainer">';
+	    echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
+	    echo $result[1];
+	    echo "</div>";
+	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	    include_once("footer.php");
+	    exit;
+	  }
+	else
+	  {
+	    $content = $gCms->modules[$module]['object']->InstallPostMessage();
+	    if( $content != FALSE )
+	      {
+		echo '<div class="pagecontainer">';
+		echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
+		echo $content;
+		echo "</div>";
+		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
+		include_once("footer.php");
+		exit;
+	      }
+	    // all is good, but no postinstall message
+	    redirect("listmodules.php");
+	  }
+      }
 
 	if ($action == 'showpostinstall')
 	{
+	  // this is probably dead code now
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance = $gCms->modules[$module]['object'];
