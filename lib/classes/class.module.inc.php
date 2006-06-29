@@ -78,9 +78,9 @@ class ModuleOperations
 
 	if( !is_writable( $dir ) && $brief != 0 )
 	  {
-	// directory not writable
-	ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
-	return false;
+	    // directory not writable
+	    ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
+	    return false;
 	  }
 
 	// start parsing xml
@@ -90,8 +90,8 @@ class ModuleOperations
 
 	if( $ret == 0 )
 	  {
-	ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
-	return false;
+	    ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
+	    return false;
 	  }
 
 	$havedtdversion = false;
@@ -302,151 +302,249 @@ class ModuleOperations
   }
 
 
-	/**
-	 * Loads modules from the filesystem.  If loadall is true, then it will load all
-	 * modules whether they're installed, or active.  If it is false, then it will
-	 * only load modules which are installed and active.
-	 */
-	function LoadModules($loadall = false, $noadmin = false)
-	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$cmsmodules = &$gCms->modules;
+  /**
+   * Install a module into the database
+   */
+  function InstallModule($module, $loadifnecessary = false)
+  {
 
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+    if( !isset( $gCms->modules[$module] ) )
+      {
+	if( $loadifnecessary == false )
+	  {
+	    return array(false,lang('errormodulenotloaded'));
+	  }
+	else
+	  {
+	    if( !ModuleOperations::LoadNewModule( $module ) )
+	      {
+		return array(false,lang('errormodulewontload'));
+	      }
+	  }
+      }
+ 
+    global $gCms;
+    $db =& $gCms->GetDb();
+    if (isset($gCms->modules[$module]))
+      {
+	$modinstance = $gCms->modules[$module]['object'];
+	$result = $modinstance->Install();
+	
+        #now insert a record
+	if (!isset($result) || $result === FALSE)
+	  {
+	    $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
+	    $db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
+	    
+            #and insert any dependancies
+	    if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+	      {
+                #Now check to see if we can satisfy any deps
+		foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+		  {
+		    $time = $db->DBTimeStamp(time());
+		    $query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+		    $db->Execute($query, array($onedepkey, $module, $onedepvalue));
+		  }
+	      }
+	    
+            #send an event saying the module has been installed
+	    Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
+	    
+	    // and we're done
+	    return array(true);
+	  }
+	else
+	  {
+	    return array(false,lang('errorinstallfailed'));;
+	  }
+      }    
+    else
+      {
+	return array(false,lang('errormodulenotfound'));
+      }
+  }
 
-		if ($loadall == true)
-		{
-			/*
-			$ls = dir($dir);
-			while (($file = $ls->read()) != "")
-			{
-				if (@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
-				{
-					if (@is_file("$dir/$file/$file.module.php"))
-					{
-						include("$dir/$file/$file.module.php");
-					}
-					else
-					{
-						unset($cmsmodules[$file]);
-					}
-				}
-			}
-			*/
-			$handle=opendir($dir);
-			while ($file = readdir($handle))
-			{
-				if (@is_file("$dir/$file/$file.module.php"))
-				{
-					include("$dir/$file/$file.module.php");
-				}
-				else
-				{
-					unset($cmsmodules[$file]);
-				}
-			}
-			closedir($handle);
 
-			//Find modules and instantiate them
-			$allmodules = @ModuleOperations::FindModules();
-			foreach ($allmodules as $onemodule)
-			{
-				if (class_exists($onemodule))
-				{
-					$newmodule =& new $onemodule;
-					$name = $newmodule->GetName();
+  /**
+   * Load a single module from the filesystem
+   */
+  function LoadNewModule( $modulename )
+  {
+    global $gCms;
+    $db =& $gCms->GetDb();
+    $cmsmodules = &$gCms->modules;
+    
+    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+
+    if (@is_file("$dir/$modulename/$modulename.module.php"))
+      {
+	// question: is this a potential XSS vulnerability
+	include("$dir/$modulename/$modulename.module.php");
+	if( !class_exists( $modulename ) )
+	  {
+	    return false;
+	  }
+
+	$newmodule =& new $modulename;
+	$name = $newmodule->GetName();
+	$cmsmodules[$name]['object'] =& $newmodule;
+	$cmsmodules[$name]['installed'] = false;
+	$cmsmodules[$name]['active'] = false;
+      }
+    else
+      {
+	unset($cmsmodules[$module]);
+	return false;
+      }
+    return true;
+  }
+
+  /**
+   * Loads modules from the filesystem.  If loadall is true, then it will load all
+   * modules whether they're installed, or active.  If it is false, then it will
+   * only load modules which are installed and active.
+   */
+  function LoadModules($loadall = false, $noadmin = false)
+  {
+    global $gCms;
+    $db =& $gCms->GetDb();
+    $cmsmodules = &$gCms->modules;
+
+    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+
+    if ($loadall == true)
+      {
+	/*
+	 $ls = dir($dir);
+	 while (($file = $ls->read()) != "")
+	 {
+	 if (@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
+	 {
+	 if (@is_file("$dir/$file/$file.module.php"))
+	 {
+	 include("$dir/$file/$file.module.php");
+	 }
+	 else
+	 {
+	 unset($cmsmodules[$file]);
+	 }
+	 }
+	 }
+	*/
+	$handle=opendir($dir);
+	while ($file = readdir($handle))
+	  {
+	    if (@is_file("$dir/$file/$file.module.php"))
+	      {
+		include("$dir/$file/$file.module.php");
+	      }
+	    else
+	      {
+		unset($cmsmodules[$file]);
+	      }
+	  }
+	closedir($handle);
+
+	//Find modules and instantiate them
+	$allmodules = @ModuleOperations::FindModules();
+	foreach ($allmodules as $onemodule)
+	  {
+	    if (class_exists($onemodule))
+	      {
+		$newmodule =& new $onemodule;
+		$name = $newmodule->GetName();
+		$cmsmodules[$name]['object'] =& $newmodule;
+		$cmsmodules[$name]['installed'] = false;
+		$cmsmodules[$name]['active'] = false;
+	      }
+	    else
+	      {
+		unset($cmsmodules[$name]);
+	      }
+	  }
+      }
+
+    #Figger out what modules are active and/or installed
+    #Load them if loadall is false
+    if (isset($db))
+      {
+	$query = '';
+	if ($noadmin)
+	  $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
+	else
+	  $query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
+	$result = &$db->Execute($query);
+	while ($result && !$result->EOF)
+	  {
+	    if (isset($result->fields['module_name']))
+	      {
+		$modulename = $result->fields['module_name'];
+		if (isset($modulename))
+		  {
+		    if ($loadall == true)
+		      {
+			if (isset($cmsmodules[$modulename]))
+			  {
+			    $cmsmodules[$modulename]['installed'] = true;
+			    $cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
+			  }
+		      }
+		    else
+		      {
+			if ($result->fields['active'] == 1)
+			  {
+			    if (@is_file("$dir/$modulename/$modulename.module.php"))
+			      {
+#var_dump('loading module:' . $modulename);
+				include("$dir/$modulename/$modulename.module.php");
+				if (class_exists($modulename))
+				  {
+				    $newmodule =& new $modulename;
+				    $name = $newmodule->GetName();
+
+				    global $CMS_VERSION;
+				    $dbversion = $result->fields['version'];
+
+#Check to see if there is an update and wether or not we should perform it
+				    if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
+				      {
+					$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
+					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+					$db->Execute($query, array($newmodule->GetVersion(), $name));
+					Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->GetVersion()));
+					$dbversion = $newmodule->GetVersion();
+				      }
+
+#Check to see if version in db matches file version
+				    if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
+				      {
 					$cmsmodules[$name]['object'] =& $newmodule;
-					$cmsmodules[$name]['installed'] = false;
-					$cmsmodules[$name]['active'] = false;
-				}
-				else
-				{
+					$cmsmodules[$name]['installed'] = true;
+					$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
+				      }
+				    else
+				      {
 					unset($cmsmodules[$name]);
-				}
-			}
-		}
-
-		#Figger out what modules are active and/or installed
-		#Load them if loadall is false
-		if (isset($db))
-		{
-			$query = '';
-			if ($noadmin)
-				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
-			else
-				$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
-			$result = &$db->Execute($query);
-			while ($result && !$result->EOF)
-			{
-				if (isset($result->fields['module_name']))
-				{
-					$modulename = $result->fields['module_name'];
-					if (isset($modulename))
-					{
-						if ($loadall == true)
-						{
-							if (isset($cmsmodules[$modulename]))
-							{
-								$cmsmodules[$modulename]['installed'] = true;
-								$cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
-							}
-						}
-						else
-						{
-							if ($result->fields['active'] == 1)
-							{
-								if (@is_file("$dir/$modulename/$modulename.module.php"))
-								{
-									#var_dump('loading module:' . $modulename);
-									include("$dir/$modulename/$modulename.module.php");
-									if (class_exists($modulename))
-									{
-										$newmodule =& new $modulename;
-										$name = $newmodule->GetName();
-
-										global $CMS_VERSION;
-										$dbversion = $result->fields['version'];
-
-										#Check to see if there is an update and wether or not we should perform it
-										if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
-										{
-											$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
-											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-											$db->Execute($query, array($newmodule->GetVersion(), $name));
-											Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->GetVersion()));
-											$dbversion = $newmodule->GetVersion();
-										}
-
-										#Check to see if version in db matches file version
-										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
-										{
-											$cmsmodules[$name]['object'] =& $newmodule;
-											$cmsmodules[$name]['installed'] = true;
-											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
-										}
-										else
-										{
-											unset($cmsmodules[$name]);
-										}
-									}
-									else //No point in doing anything with it
-									{
-										unset($cmsmodules[$name]);
-									}
-								}
-								else
-								{
-									unset($cmsmodules[$modulename]);
-								}
-							}
-						}
-					}
-					$result->MoveNext();
-				}
-			}
-		}
-	}
+				      }
+				  }
+				else //No point in doing anything with it
+				  {
+				    unset($cmsmodules[$name]);
+				  }
+			      }
+			    else
+			      {
+				unset($cmsmodules[$modulename]);
+			      }
+			  }
+		      }
+		  }
+		$result->MoveNext();
+	      }
+	  }
+      }
+  }
 
 	/**
 	 * Finds all classes extending cmsmodule for loading

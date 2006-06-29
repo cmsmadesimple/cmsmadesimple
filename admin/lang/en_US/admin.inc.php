@@ -1,4 +1,7 @@
 <?php
+$lang['admin']['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
+$lang['admin']['errorinstallfialed'] = 'Module installation failed';
+$lang['admin']['errormodulewontload'] = 'Problem instantiating an available module';
 $lang['admin']['frontendlang'] = 'Default language for the frontend';
 $lang['admin']['info_edituser_password'] = 'Change this field to change the user\'s password';
 $lang['admin']['info_edituser_passwordagain'] = 'Change this field to change the user\'s password';
