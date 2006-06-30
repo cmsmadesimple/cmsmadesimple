@@ -92,6 +92,8 @@ if ($access)
 
 	    // and parse it
 	    $result = ModuleOperations::ExpandXMLPackage( $xml, $allowoverwritemodules );
+	    // at this point, all of the files in that module may have become unusable
+	    // in the current version of cms.
 	    if( !$result )
 	      {
 	        echo $themeObject->ShowErrors(ModuleOperations::GetLastError());

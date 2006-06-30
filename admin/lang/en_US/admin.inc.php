@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
 $lang['admin']['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
 $lang['admin']['errormodulenotfound'] = 'Internal error, could not find the instance of a module';
 $lang['admin']['errorinstallfialed'] = 'Module installation failed';

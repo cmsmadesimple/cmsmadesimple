@@ -25,7 +25,7 @@
  * @since		0.9
  * @package		CMS
  */
-define( "MODULE_DTD_VERSION", "1.2" );
+define( "MODULE_DTD_VERSION", "1.3" );
 
 class ModuleOperations
 {
@@ -159,6 +159,26 @@ class ModuleOperations
 		  break;
 		}
 		
+	  case 'MINCMSVERSION':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['mincmsversion'] = $value;
+	      break;
+	    }
+
+	  case 'MAXCMSVERSION':
+	    {
+	      if( $type != 'complete' && $type != 'close' )
+		{
+		  continue;
+		}
+	      $moduledetails['maxcmsversion'] = $value;
+	      break;
+	    }
+  
 	  case 'DESCRIPTION':
 	    {
 	      if( $type != 'complete' && $type != 'close' )
@@ -293,8 +313,7 @@ class ModuleOperations
 	    return false;
 	  }
 
-	// we've created the modules directory
-	// now we either have to upgrade or install
+	// we've created the module's directory
 	unset( $moduledetails['filedata'] );
 	unset( $moduledetails['filename'] );
 	unset( $moduledetails['isdir'] );
@@ -657,6 +676,7 @@ class CMSModule
   <!ELEMENT dtdversion (#PCDATA)>
   <!ELEMENT name (#PCDATA)>
   <!ELEMENT version (#PCDATA)>
+  <!ELEMENT mincmsversion (#PCDATA)>
   <!ELEMENT description (#PCDATA)>
   <!ELEMENT help (#PCDATA)>
   <!ELEMENT about (#PCDATA)>
@@ -824,6 +844,15 @@ class CMSModule
 	 * Returns the minimum version necessary to run this version of the module.
 	 */
 	function MinimumCMSVersion()
+	{
+		global $CMS_VERSION;
+		return $CMS_VERSION;
+	}
+
+	/**
+	 * Returns the maximum version necessary to run this version of the module.
+	 */
+	function MaximumCMSVersion()
 	{
 		global $CMS_VERSION;
 		return $CMS_VERSION;
@@ -1190,6 +1219,7 @@ class CMSModule
 		  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
 	  $xmltxt .= "	<name>".$this->GetName()."</name>\n";
 	  $xmltxt .= "	<version>".$this->GetVersion()."</version>\n";
+	  $xmltxt .= "  <mincmsversion>".$this->MinimumCMSVersion()."</mincmsversion>\n";
 	  $xmltxt .= "	<help>".base64_encode($this->GetHelpPage())."</help>\n";
 	  $xmltxt .= "	<about>".base64_encode($this->GetAbout())."</about>\n";
 	  $desc = $this->GetAdminDescription();
