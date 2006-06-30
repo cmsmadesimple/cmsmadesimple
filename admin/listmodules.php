@@ -411,7 +411,17 @@ else if ($action == 'missingdeps')
 				} else {
 					echo "<td>&nbsp</td>";
 				}
-				echo '<td colspan="3">Minimum CMSMS Version Required: '.$modinstance->MinimumCMSVersion().'</td>';
+				echo '<td colspan="3">'.lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion().'</td>';
+			}
+			else if (version_compare($modinstance->MaximumCMSVersion(), $CMS_VERSION) == -1)
+			{
+				// Fix undefined index error if module is not already installed.
+				if (FALSE == empty($dbm[$key]['Version'])) {
+					echo "<td>".$dbm[$key]['Version']."</td>";
+				} else {
+					echo "<td>&nbsp</td>";
+				}
+				echo '<td colspan="3">'.lang('maximumversionsupported').': '.$modinstance->MaximumCMSVersion().'</td>';
 			}
             else if (!isset($dbm[$key])) #Not installed, lets put up the install button
             {
@@ -467,7 +477,7 @@ else if ($action == 'missingdeps')
 				}
 				else
 				{
-					echo "<td>".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
+					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
 					echo "<td>".lang('hasdependents')."</td>";
 				}
 			}
