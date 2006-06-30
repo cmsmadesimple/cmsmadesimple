@@ -145,8 +145,22 @@ function display_hierarchy(&$root)
 				$thelist .= "</a>";
 			}
 		}
-		$thelist .= "</td><td>".$one->Hierarchy()."</td>\n";
-
+		$thelist .= "</td><td>";
+		if ($modifyall)
+		  {
+		    $pos = strrpos($one->Hierarchy(), '.');
+		    if ($pos != false)
+		      {
+			$thelist .= substr($one->Hierarchy(), 0, $pos)."\n";
+		      }
+		    
+		    $thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
+		  }
+		else
+		  {
+		   $thelist .= $one->Hierarchy();
+		  }
+		 $thelist .= "</td>\n";
 		$thelist .= "<td>";
 
 		if ($indent)
@@ -240,10 +254,6 @@ function display_hierarchy(&$root)
 					}
 				}
 			}
-		$thelist .= '</td><td class="pagepos">';
-		$thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
-		$thelist .= "</td>\n";
-
 			$thelist .= "</td>";
 		}
 		// end of move code
@@ -469,7 +479,6 @@ if ($counter)
 	if ($modifyall)
 	{
 		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
-		$headoflist .= "<th class=\"pagepos\">".lang('order')."</th>\n";
 	}
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
