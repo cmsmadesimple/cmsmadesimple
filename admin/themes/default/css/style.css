@@ -137,6 +137,11 @@ input.lbpassword  {
    margin-top: 5px;
    }
 
+input.order { 
+   width:2em;
+   font-size: 1em;
+   }
+
 p.lbuser  {
    color: #555555;
    font-size: 1.2em;

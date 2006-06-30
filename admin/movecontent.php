@@ -73,7 +73,7 @@ if (isset($_GET["content_id"]))
 	}
 }
 
-redirect("listcontent.php?page=$page");
+redirect('listcontent.php?page='.$page.'&message=page_reordered');
 
 # vim:ts=4 sw=4 noet
 ?>

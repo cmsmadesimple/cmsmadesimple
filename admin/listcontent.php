@@ -240,6 +240,10 @@ function display_hierarchy(&$root)
 					}
 				}
 			}
+		$thelist .= '</td><td class="pagepos">';
+		$thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
+		$thelist .= "</td>\n";
+
 			$thelist .= "</td>";
 		}
 		// end of move code
@@ -465,6 +469,7 @@ if ($counter)
 	if ($modifyall)
 	{
 		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
+		$headoflist .= "<th class=\"pagepos\">".lang('order')."</th>\n";
 	}
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
@@ -519,7 +524,8 @@ if (check_permission($userid, 'Add Pages'))
 		/*]]>*/
 		</script>
 
-		<?php echo lang("selecteditems"); ?>: <select name="multiaction">
+		<?php echo lang('multi_page_actions'); ?>: <select name="multiaction">
+	        <option value="reorder"><?php echo lang('reorder') ?></option>
 		<option value="delete"><?php echo lang('delete') ?></option>
 		<option value="active"><?php echo lang('active') ?></option>
 		<option value="inactive"><?php echo lang('inactive') ?></option>

@@ -30,6 +30,8 @@ check_login();
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 
+include_once("header.php");
+
 global $gCms;
 $hm =& $gCms->GetHierarchyManager();
 
@@ -71,7 +73,7 @@ function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 		}
 	}
 }
-
+$reorder_error = FALSE;
 if (isset($_POST['idlist']))
 {
 	foreach (explode(':', $_POST['idlist']) as $id)
@@ -105,12 +107,62 @@ else
 					DoContent($nodelist, $node);
 			}
 		}
+		if ($action == 'reorder')
+		  {	  
+		    if (startswith($k, 'order-'))
+		      {
+			$id = substr($k, strlen('order-'));
+			$node =& $hm->sureGetNodeById($id);
+			$one =& $node->getContent();
+			$parentNode = &$node->getParentNode();
+			if (FALSE == empty($reorder_parents_array[$one->ParentId()]) && array_key_exists($v, $reorder_parents_array[$one->ParentId()]))
+			  {
+			    $reorder_error = 'sibling_duplicate_order';
+			  }
+			else if ($v > count($parentNode->getChildren()))
+			  {
+			    $reorder_error = 'order_too_large';
+			  }
+			else if (0 == $v)
+			  {
+			    $reorder_error = 'order_too_small';
+			  }
+			else
+			  {
+			    $reorder_array[$id] = $v;
+			    $reorder_parents_array[$one->ParentId()][$v] = $v;
+			  }
+		      }
+
+		  }
 	}
-}
+	if ($action == 'reorder' && $reorder_error == FALSE)
+	  {
+	    $order_changed = FALSE;
+	    foreach ($reorder_array AS $page_id => $page_order)
+	      {
+		$node =& $hm->sureGetNodeById($page_id);
+		$one =& $node->getContent();
+		// Only update if order has changed.
+		if ($one->ItemOrder() != $page_order)
+		  {
+		    $order_changed = TRUE;
+		    $query = 'UPDATE '.cms_db_prefix().'content SET item_order ='.intval($page_order).' WHERE content_id = ?';
+		    $db->Execute($query, array($page_id));
+		  }
+	      }
+	    if (TRUE == $order_changed)
+	      {
+		ContentManager::SetAllHierarchyPositions();
+	      }
+	    else
+	      {
+		$reorder_error = 'no_orders_changed';
+	      }
+	  }
+ }
 
-include_once("header.php");
-
-if (count($nodelist) == 0)
+if (count($nodelist) == 0 && 'reorder' != $action)
 {
 	redirect("listcontent.php");
 }
@@ -216,9 +268,20 @@ else
 		}
 		redirect("listcontent.php");
 	}
+	else if ($action == 'reorder')
+	{
+	  if (FALSE == $reorder_error)
+	    {
+	      redirect('listcontent.php?message=pages_reordered');
+	    }
+	  else
+	    {
+	      redirect('listcontent.php?error='.$reorder_error);
+	    }
+	}
 	else
 	{
-		redirect("listcontent.php");
+		redirect('listcontent.php');
 	}
 }
 
