@@ -1420,36 +1420,38 @@ class AdminTheme
 		$help_title = $title;
 	      }
 	    }
-	  // Clean up URL
-	  $wikiUrl = str_replace(' ', '_', $wikiUrl);
-	  $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-	  // Make link to go the translated version of page if lang is not en_US
-	  /* Disabled as suggested by westis
-	   $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
-	   if ($lang != 'en_US') {
-	   $wikiUrl .= '/'.substr($lang, 0, 2);
-	   }
-	  */
-	  if (FALSE == empty($link_text))
-	    {
-	      $help_title = $link_text;
-	    }
-	  else
-	    {
-	    $help_title = lang('helpwithsection', $help_title);
-	    }
-	  $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-	  if ('both' == $module_help_type)
-	    {
-	      $module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-	      $header .= ' (<a href="'.$module_help_link.'">'.$image_help.' '.lang('modulehelp', $module_name).'</a>, ';
-	      $header .= '<a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>)';
-	    }
-	  else
-	    {
-	      $header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)';
-	    }
-	}
+	  if (get_preference($this->userid, 'show_help_links')) {
+	    // Clean up URL
+	    $wikiUrl = str_replace(' ', '_', $wikiUrl);
+	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+	    // Make link to go the translated version of page if lang is not en_US
+	    /* Disabled as suggested by westis
+	     $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+	     if ($lang != 'en_US') {
+	     $wikiUrl .= '/'.substr($lang, 0, 2);
+	     }
+	    */
+	    if (FALSE == empty($link_text))
+	      {
+		$help_title = $link_text;
+	      }
+	    else
+	      {
+		$help_title = lang('helpwithsection', $help_title);
+	      }
+	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+	    if ('both' == $module_help_type)
+	      {
+		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
+		$header .= ' (<a href="'.$module_help_link.'">'.$image_help.' '.lang('modulehelp', $module_name).'</a>, ';
+		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>)';
+	      }
+	    else
+	      {
+		$header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)';
+	      }
+	  }
+    }
       $header .= '</p>';
       return $header;     
     }
