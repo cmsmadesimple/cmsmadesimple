@@ -107,15 +107,15 @@ class ModuleOperations
 	  case 'NAME':
 		{
 		  if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
+		    {
+		      continue;
+		    }
 		  // check if this module is already installed
 		  if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
-		{
-		  ModuleOperations::SetError( lang( 'moduleinstalled' ) );
-		  return false;
-		}
+		    {
+		      ModuleOperations::SetError( lang( 'moduleinstalled' ) );
+		      return false;
+		    }
 		  $moduledetails['name'] = $value;
 		  break;
 		}
@@ -123,14 +123,14 @@ class ModuleOperations
 	  case 'DTDVERSION':
 		{
 		  if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
+		    {
+		      continue;
+		    }
 		  if( $value != MODULE_DTD_VERSION )
-		{
-		  ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-		  return false;
-		}
+		    {
+		      ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+		      return false;
+		    }
 		  $havedtdversion = true;
 		  break;
 		}
@@ -138,96 +138,96 @@ class ModuleOperations
 	  case 'VERSION':
 		{
 		  if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
+		    {
+		      continue;
+		    }
 		  $moduledetails['version'] = $value;
 		  if( isset( $gCms->modules[$moduledetails['name']] ) )
-		{
-		  $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-		  if( $moduledetails['version'] < $version && $brief == 0)
+		    {
+		      $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
+		      if( $moduledetails['version'] < $version && $brief == 0)
 			{
 			  ModuleOperations::SetError( lang('errorattempteddowngrade') );
 			  return false;
 			}
-				  else if ($moduledetails['version'] == $version && $brief == 0 )
-					{
-					  ModuleOperations::SetError( lang('moduleinstalled') );
-					  return false;
-					}
-		}
+		      else if ($moduledetails['version'] == $version && $brief == 0 )
+			{
+			  ModuleOperations::SetError( lang('moduleinstalled') );
+			  return false;
+			}
+		    }
 		  break;
 		}
-
+		
 	  case 'DESCRIPTION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
+	    {
+	      if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-		  $moduledetails['description'] = $value;
-		  break;
-		}
-
+	      $moduledetails['description'] = $value;
+	      break;
+	    }
+	    
 	  case 'HELP':
-		{
-		  if( $type != 'complete' && $type != 'close' )
+	    {
+	      if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-		  $moduledetails['help'] = base64_decode($value);
-		  break;
-		}
-
+	      $moduledetails['help'] = base64_decode($value);
+	      break;
+	    }
+	    
 	  case 'ABOUT':
-		{
-		  if( $type != 'complete' && $type != 'close' )
+	    {
+	      if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-		  $moduledetails['about'] = base64_decode($value);
-		  break;
-		}
-
+	      $moduledetails['about'] = base64_decode($value);
+	      break;
+	    }
+	    
 	  case 'REQUIRES':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-		  if( count($requires) != 2 )
+	    {
+	      if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-		  if( !isset( $moduledetails['requires'] ) )
+	      if( count($requires) != 2 )
+		{
+		  continue;
+		}
+	      if( !isset( $moduledetails['requires'] ) )
 		{
 		  $moduledetails['requires'] = array();
 		}
-		  array_push( $moduledetails['requires'], $requires );
-		  $required = array();
-		}
-
+	      array_push( $moduledetails['requires'], $requires );
+	      $required = array();
+	    }
+	    
 	  case 'REQUIREDNAME':
-		$requires['name'] = $value;
-		break;
+	    $requires['name'] = $value;
+	    break;
 
 	  case 'REQUIREDVERSION':
-		$requires['version'] = $value;
-		break;
+	    $requires['version'] = $value;
+	    break;
 
 	  case 'FILE':
-		{
-		  if( $type != 'complete' && $type != 'close' )
+	    {
+	      if( $type != 'complete' && $type != 'close' )
 		{
 		  continue;
 		}
-		  if( $brief != 0 )
+	      if( $brief != 0 )
 		{
 		  continue;
 		}
 
-		  // finished a first file
-		  if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+	      // finished a first file
+	      if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
 		  !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
 		{
 		  print_r( $moduledetails );
@@ -235,62 +235,62 @@ class ModuleOperations
 		  return false;
 		}
 
-		  // ready to go
-		  $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-		  $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
-		  if( !file_exists( $moduledir ) )
+	      // ready to go
+	      $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+	      $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
+	      if( !file_exists( $moduledir ) )
 		{
 		  @mkdir( $moduledir );
 		}
-		  if( $moduledetails['isdir'] )
+	      if( $moduledetails['isdir'] )
 		{
 		  @mkdir( $filename );
 		}
-		  else
+	      else
 		{
 		  $data = $moduledetails['filedata'];
 		  if( strlen( $data ) )
-			{
-			  $data = base64_decode( $data );
-			}
+		    {
+		      $data = base64_decode( $data );
+		    }
 		  $fp = fopen( $filename, "w" );
 		  if( !$fp )
-			{
-			  ModuleOperations::SetError(lang('errorcanptcreatefile'));
-			}
+		    {
+		      ModuleOperations::SetError(lang('errorcanptcreatefile'));
+		    }
 		  if( strlen( $data ) )
-			{
-			  fwrite( $fp, $data );
-			}
+		    {
+		      fwrite( $fp, $data );
+		    }
 		  fclose( $fp );
 		}
-		  unset( $moduledetails['filedata'] );
-		  unset( $moduledetails['filename'] );
-		  unset( $moduledetails['isdir'] );
-		}
+	      unset( $moduledetails['filedata'] );
+	      unset( $moduledetails['filename'] );
+	      unset( $moduledetails['isdir'] );
+	    }
 
 	  case 'FILENAME':
-		$moduledetails['filename'] = $value;
-		break;
+	    $moduledetails['filename'] = $value;
+	    break;
 
 	  case 'ISDIR':
-		$moduledetails['isdir'] = $value;
-		break;
+	    $moduledetails['isdir'] = $value;
+	    break;
 
 	  case 'DATA':
-		if( $type != 'complete' && $type != 'close' )
-		  {
+	    if( $type != 'complete' && $type != 'close' )
+	      {
 		continue;
-		  }
-		$moduledetails['filedata'] = $value;
-		break;
+	      }
+	    $moduledetails['filedata'] = $value;
+	    break;
 	  }
 	  }
 
 	if( $havedtdversion == false )
 	  {
-	ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-	return false;
+	    ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
+	    return false;
 	  }
 
 	// we've created the modules directory
@@ -544,6 +544,38 @@ class ModuleOperations
 	  }
       }
   }
+
+
+  /**
+   * Upgrade a module
+   */
+  function UpgradeModule( $module, $oldversion, $newversion )
+  {
+    global $gCms;
+    $db =& $gCms->GetDb();
+
+    if (!isset($gCms->modules[$module]))
+      {
+	return false;
+      }
+
+    $modinstance = $gCms->modules[$module]['object'];
+    $result = $modinstance->Upgrade($oldversion, $newversion);
+    if( $result === FALSE )
+      {
+	return false;
+      }
+
+    $query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
+    $db->Execute($query,array($newversion,($modinstance->IsAdminOnly()==true?1:0),$module));
+    
+    Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
+						      'oldversion' => $oldversion, 
+						      'newversion' => $oldversion));
+
+    return true;
+  }
+
 
 	/**
 	 * Finds all classes extending cmsmodule for loading

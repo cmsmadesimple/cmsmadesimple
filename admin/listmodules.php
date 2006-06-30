@@ -177,38 +177,25 @@ if ($access)
 
 	if ($action == 'upgrade')
 	{
-		if (isset($gCms->modules[$module]))
-		{
-			$modinstance = $gCms->modules[$module]['object'];
-			$result = $modinstance->Upgrade($_GET['oldversion'], $_GET['newversion']);
-
-			#now insert a record
-
-			if( !isset( $result ) || $result === FALSE )
-			{
-				$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
-				$db->Execute($query,array($_GET['newversion'],($modinstance->IsAdminOnly()==true?1:0),$module));
-				
-				Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 'oldversion' => $_GET['oldversion'], 'newversion' => $_GET['newversion']));
-			}
-			else
-			{
-				@ob_start();
-				echo $modinstance->GetLastError();
-				$content = @ob_get_contents();
-				@ob_end_clean();
-				echo '<div class="pagecontainer">';
-				echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
-				echo $content;
-				echo "</div>";
-				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-				include_once("footer.php");
-				exit;
-			}
-		}
-
-		redirect("listmodules.php");
+	  $result = ModuleOperations::UpgradeModule( $module, 
+						     $_GET['oldversion'], $_GET['newversion'] );	  
+	  if( !$result )
+	    {
+	      @ob_start();
+	      echo $modinstance->GetLastError();
+	      $content = @ob_get_contents();
+	      @ob_end_clean();
+	      echo '<div class="pagecontainer">';
+	      echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+	      echo $content;
+	      echo "</div>";
+	      echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	      include_once("footer.php");
+	      exit;
+	    }
+	  redirect("listmodules.php");
 	}
+
 
 	if ($action == "uninstall")
 	{
