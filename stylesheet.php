@@ -102,7 +102,6 @@ else
 		while ($cssresult && !$cssresult->EOF)
 		{
 			$css .= "/* Start of CMSMS style sheet '{$cssresult->fields['css_name']}' */\n{$cssresult->fields['css_text']}\n/* End of '{$cssresult->fields['css_name']}' */\n";
-			$css .= "\n".$cssresult->fields['css_text']."\n";
 			$cssresult->MoveNext();
 		}
 	}
