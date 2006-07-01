@@ -2742,8 +2742,9 @@ class CMSModule
 		{
 			return $gCms->modules[$module]['object'];
 		}
-
-		return FALSE;
+		// Fix only variable references should be returned by reference
+		$tmp = FALSE;
+		return $tmp;
 	}
 
 	/**
