@@ -1201,7 +1201,7 @@ class AdminTheme
      * DisplayHTMLHeader
      * This method outputs the HEAD section of the html page in the admin section.
      */
-    function DisplayHTMLHeader($showielink = false)
+    function DisplayHTMLHeader($showielink = false, $addt = '')
     {
 		global $gCms;
 		$config =& $gCms->GetConfig();
@@ -1222,6 +1222,7 @@ class AdminTheme
 ?>
 <!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
 <?php $this->OutputHeaderJavascript(); ?>
+<?php echo $addt ?>
 <base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
 <?php
@@ -1534,6 +1535,31 @@ class AdminTheme
       $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
 		return '<div class="pagemcontainer"><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
 	}
+	
+	function &GetThemeObject()
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+	    $themeName = get_preference(get_userid(), 'admintheme', 'default');
+	    $themeObjectName = $themeName."Theme";
+	    $userid = get_userid();
+	
+		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php"))
+		{
+			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php");
+			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
+		}
+		else
+		{
+			$themeObject = new AdminTheme($gCms, $userid, $themeName);
+		}
+
+		$gCms->variables['admintheme']=&$themeObject;
+		
+		return $themeObject;
+	
+	}
+	
 }
 
 # vim:ts=4 sw=4 noet

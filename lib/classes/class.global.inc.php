@@ -222,22 +222,6 @@ class CmsObject {
         return $hrinstance;
 	}
 
-	function & GetXajax()
-	{
-		static $ourxajax;
-
-		if (is_null($ourxajax))
-		{
-			require_once(dirname(dirname(__FILE__)) . '/xajax/xajax.inc.php');
-			$ourajax = new xajax();
-
-			$smarty =& $this->GetSmarty();
-			$smarty->assign('xajax_javascript', $ourxajax->getJavascript());
-		}
-
-		return $ourxajax;
-	}
-
 	function dbshutdown()
 	{
 		if (isset($this->db))

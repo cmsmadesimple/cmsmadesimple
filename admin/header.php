@@ -40,7 +40,7 @@ else
     
       $themeObject->DisplayDocType();
       $themeObject->DisplayHTMLStartTag();
-      $themeObject->DisplayHTMLHeader();
+      $themeObject->DisplayHTMLHeader(false, isset($headtext)?$headtext:'');
       $themeObject->DisplayBodyTag();
       $themeObject->DoTopMenu();
       $themeObject->DisplayMainDivStart();

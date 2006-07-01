@@ -24,15 +24,117 @@ require_once("../include.php");
 
 check_login();
 $userid = get_userid();
+
+include_once("../lib/classes/class.admintheme.inc.php");
+
+require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+$xajax->registerFunction('content_list_ajax');
+$xajax->registerFunction('content_setactive');
+$xajax->registerFunction('content_setinactive');
+$xajax->registerFunction('content_setdefault');
+
+$xajax->processRequests();
+$headtext = $xajax->getJavascript('../lib/xajax');
+
 include_once("header.php");
 
-$expandImg = $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
-$contractImg = $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
-$downImg = $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
-$upImg = $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
-$viewImg = $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
-$editImg = $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+//echo '<a onclick="xajax_content_list_ajax();">Test</a>';
+
+function content_list_ajax()
+{
+	$objResponse = new xajaxResponse();
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function check_modify_all($userid)
+{
+	return check_permission($userid, 'Modify Any Page');
+}
+
+function setdefault($contentid)
+{
+	global $gCms;
+	$userid = get_userid();
+
+	if (check_modify_all($userid))
+	{
+		$hierManager =& $gCms->GetHierarchyManager();
+		$node = &$hierManager->getNodeById($contentid);
+		if (isset($node))
+		{
+			$value =& $node->getContent();
+			if (isset($value))
+			{
+				if (!$value->Active())
+				{
+					#Modify the object inline
+					$value->SetActive(true);
+					$value->Save();
+				}
+			}
+		}
+		ContentManager::SetDefaultContent($contentid);
+		$result = true;
+	}
+	return $result;
+}
+
+function content_setdefault($contentid)
+{
+	$objResponse = new xajaxResponse();
+	
+	setdefault($contentid);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function content_setactive($contentid)
+{
+	$objResponse = new xajaxResponse();
+	
+	setactive($contentid);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function content_setinactive($contentid)
+{
+	$objResponse = new xajaxResponse();
+	
+	setactive($contentid, false);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function setactive($contentid, $active = true)
+{
+	global $gCms;
+	$userid = get_userid();
+	
+	$hierManager =& $gCms->GetHierarchyManager();
+	
+	// to activate a page, you must be admin, owner, or additional author
+	$permission = (check_modify_all($userid) || 
+			check_ownership($userid, $contentid) ||
+			check_authorship($userid, $contentid));
+
+	if($permission)
+	{
+		$node = &$hierManager->getNodeById($contentid);
+		$value =& $node->getContent();
+		$value->SetActive($active);
+		$value->Save();
+	}
+}
 
 function show_h(&$root)
 {
@@ -71,30 +173,12 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
-function display_hierarchy(&$root)
+function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages)
 {
-	global $templates;
-	global $users;
-	global $modifyall;
-	global $userid;
-	global $mypages;
 	global $currow;
-	global $themeObject;
-	global $image_true;
-	global $image_set_false;
-	global $image_set_true;
 	global $config;
 	global $page;
 	global $indent;
-	global $pagelist;
-	global $expandImg;
-	global $contractImg;
-	global $downImg;
-	global $upImg;
-	global $viewImg;
-	global $editImg;
-	global $deleteImg;
-	global $openedArray;
 
 	$one =& $root->getContent();
 	$children =& $root->getChildren();
@@ -116,7 +200,7 @@ function display_hierarchy(&$root)
 	$display = 'none';
 	if (isset($one))
 	{
-		if ($modifyall || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+		if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
 		{
 			$display = 'edit';
 		}
@@ -146,7 +230,7 @@ function display_hierarchy(&$root)
 			}
 		}
 		$thelist .= "</td><td>";
-		if ($modifyall)
+		if (check_modify_all($userid))
 		  {
 		    $pos = strrpos($one->Hierarchy(), '.');
 		    if ($pos != false)
@@ -201,11 +285,11 @@ function display_hierarchy(&$root)
 		{
 			if($one->Active())
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\">".$image_set_false."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
 			}
 			else
 			{
-				$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\">".$image_set_true."</a></td>\n";
+				$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
 			}
 		}
 		else
@@ -215,7 +299,7 @@ function display_hierarchy(&$root)
 
 		if ($one->IsDefaultPossible() == TRUE && $display == 'edit')
 		{
-			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"return confirm('".lang("confirmdefault")."');\">".$image_set_true."</a>")."</td>\n";
+			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 		}
 		else
 		{
@@ -223,7 +307,7 @@ function display_hierarchy(&$root)
 		}   
 
 		// code for move up is simple
-		if ($modifyall)
+		if (check_modify_all($userid))
 		{
 			$thelist .= "<td>";
 			$parentNode = &$root->getParentNode();
@@ -300,22 +384,140 @@ function display_hierarchy(&$root)
 	{
 		foreach ($children as $child)
 		{ 
-			display_hierarchy($child);
+			display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages);
 		}
 	}
 } // function display_hierarchy
 
-$openedArray=array();
-if (get_preference($userid, 'collapse', '') != '')
+function display_content_list(&$themeObject = null)
 {
-	$tmp  = explode('.',get_preference($userid, 'collapse'));
-	foreach ($tmp as $thisCol)
+	$CMS_ADMIN_PAGE=1;
+
+	require_once("../include.php");
+
+	check_login();
+	$userid = get_userid();
+	
+	$mypages = author_pages($userid);
+	
+	$page = 1;
+	if (isset($_GET['page']))
+		$page = $_GET['page'];
+	$limit = get_preference($userid, 'paging', 0);
+
+	$thelist = '';
+	$count = 0;
+
+	$currow = "row1";
+	
+	if ($themeObject == null)
+		$themeObject =& AdminTheme::GetThemeObject();
+
+	// construct true/false button images
+	$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
+	$image_set_false = $themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon');
+	$image_set_true = $themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon');
+	$expandImg = $themeObject->DisplayImage('icons/system/expand.gif', lang('expand'),'','','systemicon');
+	$contractImg = $themeObject->DisplayImage('icons/system/contract.gif', lang('contract'),'','','systemicon');
+	$downImg = $themeObject->DisplayImage('icons/system/arrow-d.gif', lang('down'),'','','systemicon');
+	$upImg = $themeObject->DisplayImage('icons/system/arrow-u.gif', lang('up'),'','','systemicon');
+	$viewImg = $themeObject->DisplayImage('icons/system/view.gif', lang('view'),'','','systemicon');
+	$editImg = $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	$deleteImg = $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+
+	$counter = 0;
+
+	#Setup array so we don't load more templates than we need to
+	$templates = array();
+
+	#Ditto with users
+	$users = array();
+
+	$menupos = array();
+	
+	$openedArray=array();
+	if (get_preference($userid, 'collapse', '') != '')
 	{
-		$colind = substr($thisCol,0,strpos($thisCol,'='));
-		if ($colind!="")
-			$openedArray[] = $colind;
+		$tmp  = explode('.',get_preference($userid, 'collapse'));
+		foreach ($tmp as $thisCol)
+		{
+			$colind = substr($thisCol,0,strpos($thisCol,'='));
+			if ($colind!="")
+				$openedArray[] = $colind;
+		}
 	}
+
+	if (check_modify_all($userid))
+		$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
+	else
+		$hierManager =& $gCms->GetHierarchyManager();
+
+	$hierarchy = &$hierManager->getRootNode();
+
+	$indent = get_preference($userid, 'indent', true);
+	if ($hierarchy->hasChildren())
+	{
+		$pagelist = array();
+		display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages);
+		foreach ($pagelist as $item)
+		{
+			$thelist.=$item;
+		}
+		$thelist .= '</tbody>';
+		$thelist .= "</table>\n";
+	}
+
+	$counter = 1;	
+	if (!$counter)
+	{
+		$thelist = "<p>".lang('noentries')."</p>";
+	}
+
+	$headoflist = '<div class="pageoverflow">';
+
+
+	if ($limit != 0 && $counter > $limit)
+	{
+		$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
+	}
+
+	$headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
+	//$headoflist .= $themeObject->ShowHeader('currentpages');
+	if (check_permission($userid, 'Add Pages'))
+	{
+		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php">';
+		$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a></p>';
+	}
+	$headoflist .= '<form action="multicontent.php" method="post">';
+	if ($counter)
+	{
+		$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
+		$headoflist .= '<thead>';
+		$headoflist .= "<tr>\n";
+		$headoflist .= "<th>&nbsp;</th>";
+		$headoflist .= "<th>&nbsp;</th>";
+		$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
+		$headoflist .= "<th>".lang('template')."</th>\n";
+		$headoflist .= "<th>".lang('type')."</th>\n";
+		$headoflist .= "<th>".lang('owner')."</th>\n";
+		$headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+		$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+		if (check_modify_all($userid))
+		{
+			$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
+		}
+		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+		$headoflist .= "</tr>\n";
+		$headoflist .= '</thead>';
+		$headoflist .= '<tbody>';
+	}
+	return $headoflist . $thelist;
 }
+
 
 if (FALSE == empty($_GET['message'])) {
     echo $themeObject->ShowMessage(lang($_GET['message']));
@@ -326,169 +528,28 @@ if (FALSE == empty($_GET['error'])) {
 
 ?>
 <div class="pagecontainer">
-<div class="pageoverflow">
 <?php
 
-$modifyall = check_permission($userid, 'Modify Any Page');
+$hierManager =& $gCms->GetHierarchyManager();
 
-if ($modifyall)
-	$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
-else
-	$hierManager =& $gCms->GetHierarchyManager();
-
-$hierarchy = &$hierManager->getRootNode();
-
-if ($modifyall)
+if (isset($_GET["makedefault"]))
 {
-	if (isset($_GET["makedefault"]))
-	{
-		$node = &$hierManager->getNodeById($_GET["makedefault"]);
-		if (isset($node))
-		{
-			$value =& $node->getContent();
-			if (isset($value))
-			{
-				if (!$value->Active())
-				{
-					#Modify the object inline
-					$value->SetActive(true);
-					$value->Save();
-				}
-			}
-		}
-		ContentManager::SetDefaultContent($_GET['makedefault']);
-		redirect('listcontent.php?page=' . $page);
-	}
+	setdefault($_GET['makedefault']);
 }
-
-#$mem1=memory_get_usage();
-#$mem2=memory_get_usage();
-#$nbNodes = $hierManager->getNodeCount();
-#echo ($mem2-$mem1)." bytes used for hierarchy of $nbNodes nodes";
-
-$mypages = author_pages($userid);
 
 // check if we're activating a page
 if (isset($_GET["setactive"]))
 {
-	// to activate a page, you must be admin, owner, or additional author
-	$permission = ($modifyall || 
-			check_ownership($userid,$_GET["setactive"]) ||
-			check_authorship($userid,$_GET["setactive"]));
-
-	if($permission)
-	{
-		$node = &$hierManager->getNodeById($_GET["setactive"]);
-		$value =& $node->getContent();
-#Modify the object inline
-		$value->SetActive(true);
-		$value->Save();
-	}
+	setactive($_GET["setactive"]);
 }
 
 // perhaps we're deactivating a page instead?
 if (isset($_GET["setinactive"]))
 {
-	// to deactivate a page, you must be admin, owner, or additional author
-	$permission = ($modifyall || 
-			check_ownership($userid,$_GET["setinactive"]) || 
-			check_authorship($userid,$_GET["setinactive"]));
-	if($permission)
-	{
-		$node = &$hierManager->getNodeById($_GET["setinactive"]);
-		$value =& $node->getContent();
-		#Modify the object inline
-		$value->SetActive(false);
-		$value->Save();
-	}
+	setactive($_GET["setinactive"], false);
 }
 
-$page = 1;
-if (isset($_GET['page']))
-	$page = $_GET['page'];
-$limit = get_preference($userid, 'paging', 0);
-
-$thelist = '';
-$count = 0;
-
-$currow = "row1";
-
-// construct true/false button images
-$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-$image_set_false = $themeObject->DisplayImage('icons/system/true.gif', lang('setfalse'),'','','systemicon');
-$image_set_true = $themeObject->DisplayImage('icons/system/false.gif', lang('settrue'),'','','systemicon');
-
-$counter = 0;
-
-#Setup array so we don't load more templates than we need to
-$templates = array();
-
-#Ditto with users
-$users = array();
-
-$menupos = array();
-
-
-$indent = get_preference($userid, 'indent', true);
-if ($hierarchy->hasChildren())
-{
-	display_hierarchy($hierarchy);
-	foreach ($pagelist as $item)
-	{
-		$thelist.=$item;
-	}
-	$thelist .= '</tbody>';
-	$thelist .= "</table>\n";
-}
-
-$counter = 1;	
-if (!$counter)
-{
-	$thelist = "<p>".lang('noentries')."</p>";
-}
-
-$headoflist = '';
-
-
-if ($limit != 0 && $counter > $limit)
-{
-	$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
-}
-
-$headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
-if (check_permission($userid, 'Add Pages'))
-{
-	$headoflist .=  '<p class="pageoptions"><a href="addcontent.php">';
-	$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-	$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a></p>';
-}
-$headoflist .= '<form action="multicontent.php" method="post">';
-if ($counter)
-{
-	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
-	$headoflist .= '<thead>';
-	$headoflist .= "<tr>\n";
-	$headoflist .= "<th>&nbsp;</th>";
-	$headoflist .= "<th>&nbsp;</th>";
-	$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
-	$headoflist .= "<th>".lang('template')."</th>\n";
-	$headoflist .= "<th>".lang('type')."</th>\n";
-	$headoflist .= "<th>".lang('owner')."</th>\n";
-	$headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
-	$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
-	if ($modifyall)
-	{
-		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
-	}
-	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "</tr>\n";
-	$headoflist .= '</thead>';
-	$headoflist .= '<tbody>';
-}
-echo $headoflist . $thelist;
+echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 
 ?>
 		<div class="pageoptions">
