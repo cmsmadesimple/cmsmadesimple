@@ -22,7 +22,6 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-
 check_login();
 $userid = get_userid();
 include_once("header.php");
@@ -30,7 +29,7 @@ include_once("header.php");
 require(cms_join_path($dirname,'lib', 'sllists','SLLists.class.php'));
 $sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
 
-function show_h(&$root, &$sortableLists, &$listArray)
+function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
   $content = &$root->getContent();
   
@@ -40,26 +39,25 @@ function show_h(&$root, &$sortableLists, &$listArray)
     }
   else
     {
-      echo '<li id="item_'.$content->mId.'">'."\n";
-      echo $content->mName;
-      //	print_r($content);
+      $output .= '<li id="item_'.$content->mId.'">'."\n";
+      $output .= $content->mName;
     }
   if ($root->getChildrenCount()>0)
     {
       $sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
       $listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
-      echo '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+      $output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
       
       $children = &$root->getChildren();
       foreach ($children as $child)
 	{
-	  show_h($child, $sortableLists, $listArray);
+	  show_h($child, $sortableLists, $listArray, $output);
 	}
-      echo "</ul>\n";
+      $output .= "</ul>\n";
     }
   else 
     {
-      echo "</li>\n";
+      $output .= "</li>\n";
     }
 }
 ?>
@@ -86,13 +84,13 @@ $hierarchy = &$hierManager->getRootNode();
 if ($hierarchy->hasChildren())
   {
     $listArray = array();
-    show_h($hierarchy, $sortableLists, $listArray);
+    $output = '';
+    show_h($hierarchy, $sortableLists, $listArray, $output);
+    if(!isset($_POST['sortableListsSubmitted']))
+      {
+	echo $output;
+      }
   }
-
-// $sortableLists->debug = true;
-$sortableLists->printTopJS();
-
-$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
 
 if(isset($_POST['sortableListsSubmitted']))
   {
@@ -117,10 +115,22 @@ if(isset($_POST['sortableListsSubmitted']))
       }
     if (TRUE == $order_changed) {
       ContentManager::SetAllHierarchyPositions();
-    } 
+      echo 'Order was updated';
+    }
+    else
+      {
+	echo 'Nothing was reorderd';
+      }
   }
+ else
+   {
+     // $sortableLists->debug = true;
+     $sortableLists->printTopJS();
+     
+     $sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
+     $sortableLists->printBottomJS();    
+   }
 
-$sortableLists->printBottomJS();
 echo '</div></div>';
 include_once("footer.php");
 ?>
