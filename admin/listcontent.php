@@ -36,9 +36,12 @@ $xajax->registerFunction('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
 $xajax->registerFunction('content_toggleexpand');
+$xajax->registerFunction('content_delete');
 
 $xajax->processRequests();
-$headtext = $xajax->getJavascript('../lib/xajax');
+$headtext = $xajax->getJavascript('../lib/xajax')."\n";
+$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
+$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
 
 include_once("header.php");
 
@@ -172,6 +175,17 @@ function content_toggleexpand($contentid, $collapse)
 	return $objResponse->getXML();
 }
 
+function content_delete($contentid)
+{
+	$objResponse = new xajaxResponse();
+	
+	deletecontent($contentid);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
 function toggleexpand($contentid, $collapse = false)
 {
 	$userid = get_userid();
@@ -222,6 +236,41 @@ function setactive($contentid, $active = true)
 		$value =& $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
+	}
+}
+
+function deletecontent($contentid)
+{
+	$userid = get_userid();
+	$access = check_permission($userid, 'Remove Pages');
+
+	if ($access)
+	{
+		$contentobj = ContentManager::LoadContentFromId($contentid);
+
+		if ($contentobj)
+		{
+			$title = $contentobj->Name();
+	
+			#Check for children
+			if ($contentobj->HasChildren())
+			{
+				$_GET['error'] = 'errorchildcontent';
+			}
+	
+			#Check for default
+			if ($contentobj->DefaultContent())
+			{
+				$_GET['error'] = 'errordefaultpage';
+			}
+			
+			$title = $contentobj->Name();
+			$contentobj->Delete();
+			ContentManager::SetAllHierarchyPositions();
+			audit($contentid, $title, 'Deleted Content');
+			
+			$_GET['message'] = 'contentdeleted';
+		}
 	}
 }
 
@@ -448,17 +497,24 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			$thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
 			$thelist .= $editImg;;
 			$thelist .= "</a></td>\n";
-        if ($one->DefaultContent() != true) {
-			$thelist .= "<td class=\"pagepos\"><a href=\"deletecontent.php?content_id=".$one->Id()."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-			$thelist .= $deleteImg;
-			$thelist .= "</a></td>\n";
-			$thelist .= '<td class="pagepos"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
-		}
-		else
-		{
-			$thelist .= '<td>&nbsp;</td>' . "\n";
-			$thelist .= '<td>&nbsp;</td>' . "\n";
-		}
+	        if ($one->DefaultContent() != true) {
+				if (count($children) == 0)
+				{
+					$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
+					$thelist .= $deleteImg;
+					$thelist .= "</a></td>\n";
+				}
+				else
+				{
+					$thelist .= '<td>&nbsp;</td>' . "\n";
+				}
+				$thelist .= '<td class="pagepos"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+			}
+			else
+			{
+				$thelist .= '<td>&nbsp;</td>' . "\n";
+				$thelist .= '<td>&nbsp;</td>' . "\n";
+			}
 			$thelist .= "</tr>\n";  	
 		}
 		else
@@ -642,6 +698,11 @@ if (isset($_GET['expandall']))
 if (isset($_GET['collapseall']))
 {
 	collapseall();
+}
+
+if (isset($_GET['deletecontent']))
+{
+	deletecontent($_GET['deletecontent']);
 }
 
 if (isset($_GET['col']) && isset($_GET['content_id']))
