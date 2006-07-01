@@ -222,12 +222,11 @@ class CmsObject {
         return $hrinstance;
 	}
 
-	/*
 	function & GetXajax()
 	{
 		static $ourxajax;
 
-		if (is_null($outxajax))
+		if (is_null($ourxajax))
 		{
 			require_once(dirname(dirname(__FILE__)) . '/xajax/xajax.inc.php');
 			$ourajax = new xajax();
@@ -238,7 +237,6 @@ class CmsObject {
 
 		return $ourxajax;
 	}
-	*/
 
 	function dbshutdown()
 	{

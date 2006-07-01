@@ -21,3 +21,7 @@ distribution.  Their website is located at: http://smarty.php.net
 CMS includes the XML-RPC library written by Keith Devens.  It is released 
 under the Artistic license and can be found at:
 http://keithdevens.com/software/xmlrpc
+
+CMS includes the xajax library written by Jared White & J. Max Wilson.  It 
+is released under the LGPL license and is located at: 
+http://www.xajaxproject.org/
