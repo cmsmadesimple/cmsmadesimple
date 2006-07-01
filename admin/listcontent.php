@@ -534,7 +534,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	}
 } // function display_hierarchy
 
-function display_content_list(&$themeObject = null)
+function display_content_list($themeObject = null)
 {
 	check_login();
 	$userid = get_userid();
