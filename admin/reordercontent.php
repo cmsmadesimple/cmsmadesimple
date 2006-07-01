@@ -41,8 +41,7 @@ function show_h(&$root, &$sortableLists, &$listArray)
   else
     {
       echo '<li id="item_'.$content->mId.'">'."\n";
-      echo 'h: '.$content->Hierarchy();
-      echo ' id: '.$content->mId.' '.$content->mName;
+      echo $content->mName;
       //	print_r($content);
     }
   if ($root->getChildrenCount()>0)

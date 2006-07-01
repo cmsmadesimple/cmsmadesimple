@@ -763,12 +763,24 @@ ul.sortableList {
 	list-style-type: none;
 	padding: 6px;
 	margin: 2px;
-/*	width: 300px; */
+	width: 300px; 
 }
 ul.sortableList li {
 	cursor: move;
 	padding: 2px 2px; 
 	margin: 2px 0px; 
 	border: 1px solid #000000;
-	background-color: #daeda3;
+	background-color: #ffffff;
 }
+ul.sortableList li li { 
+	background-color: #ececec
+ }
+ul.sortableList li li li { 
+	background-color:  #ffffff;
+ }
+ul.sortableList li li li li { 
+	background-color: #ececec
+ }
+ul.sortableList li li li li li { 
+	background-color:  #ffffff;
+ }
