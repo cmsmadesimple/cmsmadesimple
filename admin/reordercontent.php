@@ -89,7 +89,7 @@ if ($hierarchy->hasChildren())
     show_h($hierarchy, $sortableLists, $listArray);
   }
 
-$sortableLists->debug = true;
+// $sortableLists->debug = true;
 $sortableLists->printTopJS();
 
 $sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
