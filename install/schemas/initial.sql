@@ -132,7 +132,6 @@ INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'default_cms_language', null, null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'admintheme', 'default', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'bookmarks', 'on', null );
-INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'show_help_links', 'on', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'recent', 'on', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'indent', 'on', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'ajax', '0', null );

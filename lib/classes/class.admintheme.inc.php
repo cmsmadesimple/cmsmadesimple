@@ -1420,7 +1420,7 @@ class AdminTheme
 		$help_title = $title;
 	      }
 	    }
-	  if (get_preference($this->userid, 'show_help_links')) {
+	  if (FALSE == get_preference($this->userid, 'hide_help_links')) {
 	    // Clean up URL
 	    $wikiUrl = str_replace(' ', '_', $wikiUrl);
 	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);

@@ -40,8 +40,8 @@ if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
 $bookmarks = 0;
 if (isset($_POST['bookmarks'])) $bookmarks = $_POST['bookmarks'];
 
-$show_help_links = 0;
-if (isset($_POST['show_help_links'])) $show_help_links = $_POST['show_help_links'];
+$hide_help_links = 0;
+if (isset($_POST['hide_help_links'])) $hide_help_links = $_POST['hide_help_links'];
 
 $indent = 0;
 if (isset($_POST['indent'])) $indent = $_POST['indent'];
@@ -67,7 +67,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	set_preference($userid, 'admintheme', $admintheme);
 	set_preference($userid, 'bookmarks', $bookmarks);
-	set_preference($userid, 'show_help_links', $show_help_links);
+	set_preference($userid, 'hide_help_links', $hide_help_links);
 	set_preference($userid, 'indent', $indent);
 	set_preference($userid, 'paging', $paging);
 	audit(-1, '', 'Edited User Preferences');
@@ -82,7 +82,7 @@ if (isset($_POST["submit_form"])) {
     $bookmarks = get_preference($userid, 'bookmarks');
     $indent = get_preference($userid, 'indent', true);
     $paging = get_preference($userid, 'paging', 0);
-    $show_help_links = get_preference($userid, 'show_help_links');
+    $hide_help_links = get_preference($userid, 'hide_help_links');
 
 }
 
@@ -170,10 +170,9 @@ if (FALSE == empty($page_message)) {
 				</p>
 			</div>
 			<div class="pageoverflow">
-	<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('show_help_links'); ?>:</p>
+				<p class="pagetext"><?php echo lang('hide_help_links'); ?>:</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="show_help_links" <?php if ($show_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('show_help_links') ?>
+					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links') ?>
 				</p>
 			</div>
 			<div class="pageoverflow">
