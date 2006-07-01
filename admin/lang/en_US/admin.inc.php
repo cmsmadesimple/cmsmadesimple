@@ -29,6 +29,7 @@ $lang['admin']['addcontent'] = 'Add New Content';
 $lang['admin']['contentadded'] = 'The content was successfully added to the database.';
 $lang['admin']['contentupdated'] = 'The content was successfully updated.';
 $lang['admin']['contentdeleted'] = 'The content was successfully removed from the database.';
+$lang['admin']['success'] = 'Success';
 $lang['admin']['addcss'] = 'Add a Stylesheet';
 $lang['admin']['addgroup'] = 'Add New Group';
 $lang['admin']['additionaleditors'] = 'Additional Editors';

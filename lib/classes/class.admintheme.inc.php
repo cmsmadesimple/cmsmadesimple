@@ -1515,7 +1515,7 @@ class AdminTheme
 			}
 			$output .= '</ul>';
 		} else {
-			$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
+		  $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
 			$output  .= $image_error.' '.$errors;
 		}
 		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
@@ -1531,7 +1531,7 @@ class AdminTheme
      */
     function ShowMessage($message)
     {
-		$image_done = $this->DisplayImage('icons/system/accept.gif', '','','','systemicon');
+      $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
 		return '<div class="pagemcontainer"><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
 	}
 }
