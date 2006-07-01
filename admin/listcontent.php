@@ -33,6 +33,9 @@ $xajax->registerFunction('content_list_ajax');
 $xajax->registerFunction('content_setactive');
 $xajax->registerFunction('content_setinactive');
 $xajax->registerFunction('content_setdefault');
+$xajax->registerFunction('content_expandall');
+$xajax->registerFunction('content_collapseall');
+$xajax->registerFunction('content_toggleexpand');
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript('../lib/xajax');
@@ -115,6 +118,92 @@ function content_setinactive($contentid)
 	return $objResponse->getXML();
 }
 
+function content_expandall()
+{
+	$objResponse = new xajaxResponse();
+	
+	expandall();
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function content_collapseall()
+{
+	$objResponse = new xajaxResponse();
+	
+	collapseall();
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function expandall()
+{
+	$userid = get_userid();
+	$all = ContentManager::GetAllContent(false);
+	$cs = '';
+	foreach ($all as $thisitem)
+	{
+		if ($thisitem->HasChildren())
+		{
+			$cs .= $thisitem->Id().'=1.';
+		}
+	}
+	set_preference($userid, 'collapse', $cs);
+}
+
+function collapseall()
+{
+	$userid = get_userid();
+	set_preference($userid, 'collapse', '');
+}
+
+function content_toggleexpand($contentid, $collapse)
+{
+	$objResponse = new xajaxResponse();
+	
+	toggleexpand($contentid, $collapse=='true'?true:false);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function toggleexpand($contentid, $collapse = false)
+{
+	$userid = get_userid();
+	$openedArray=array();
+	if (get_preference($userid, 'collapse', '') != '')
+	{
+		$tmp  = explode('.',get_preference($userid, 'collapse'));
+		foreach ($tmp as $thisCol)
+		{
+			$colind = substr($thisCol,0,strpos($thisCol,'='));
+			$openedArray[$colind] = 1;
+		}
+	}
+	if ($collapse)
+	{
+		$openedArray[$contentid] = 0;
+	}
+	else
+	{
+		$openedArray[$contentid] = 1;
+	}
+	$cs = '';
+	foreach ($openedArray as $key=>$val)
+	{
+		if ($val == 1)
+		{
+			$cs .= $key.'=1.';
+		}
+	}
+	set_preference($userid, 'collapse', $cs);
+}
+
 function setactive($contentid, $active = true)
 {
 	global $gCms;
@@ -173,7 +262,7 @@ function check_children(&$root, &$mypages, &$userid)
 	return $result;
 }
 
-function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages)
+function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &$menupos, &$openedArray, &$pagelist, &$image_true, &$image_set_false, &$image_set_true, &$upImg, &$downImg, &$viewImg, &$editImg, &$deleteImg, &$expandImg, &$contractImg, &$mypages, &$page)
 {
 	global $currow;
 	global $config;
@@ -218,13 +307,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if (!in_array($one->Id(),$openedArray))
 			{
-				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\">";
+				$thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
 				$thelist .= $expandImg;
 				$thelist .= "</a>";
 			}
 			else
 			{
-				$thelist .= "<a href=\"setexpand.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\">";
+				$thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
 				$thelist .= $contractImg;
 				$thelist .= "</a>";
 			}
@@ -384,17 +473,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 		foreach ($children as $child)
 		{ 
-			display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages);
+			display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
 		}
 	}
 } // function display_hierarchy
 
 function display_content_list(&$themeObject = null)
 {
-	$CMS_ADMIN_PAGE=1;
-
-	require_once("../include.php");
-
 	check_login();
 	$userid = get_userid();
 	
@@ -458,7 +543,7 @@ function display_content_list(&$themeObject = null)
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
-		display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages);
+		display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
 		foreach ($pagelist as $item)
 		{
 			$thelist.=$item;
@@ -549,6 +634,21 @@ if (isset($_GET["setinactive"]))
 	setactive($_GET["setinactive"], false);
 }
 
+if (isset($_GET['expandall']))
+{
+	expandall();
+}
+
+if (isset($_GET['collapseall']))
+{
+	collapseall();
+}
+
+if (isset($_GET['col']) && isset($_GET['content_id']))
+{
+	toggleexpand($_GET['content_id'], $_GET['col']=='1'?true:false);
+}
+
 echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 
 ?>
@@ -566,16 +666,16 @@ if (check_permission($userid, 'Add Pages'))
 	?>
 		</a>&nbsp;&nbsp;&nbsp;
 <?php } ?>
-	<a href="setexpand.php?expandall=1">
+	<a href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
 		<?php 
 		echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
-	echo ' <a class="pageoptions" href="setexpand.php?expandall=1">'.lang("expandall");
+	echo ' <a class="pageoptions" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
 	?>
 		</a>&nbsp;&nbsp;&nbsp;
-	<a href="setexpand.php?collapseall=1">
+	<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
 		<?php 
 		echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
-	echo ' <a class="pageoptions" href="setexpand.php?collapseall=1">'.lang("contractall");
+	echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall");
 	?>
 		</a>
 		</span>
