@@ -172,7 +172,7 @@ if (FALSE == empty($page_message)) {
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('hide_help_links'); ?>:</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links') ?>
+					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
 				</p>
 			</div>
 			<div class="pageoverflow">
