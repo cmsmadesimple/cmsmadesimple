@@ -20,7 +20,7 @@ function smarty_cms_function_anchor($params, &$smarty)
 {
 	global $gCms;
 	
-	if (isset($_SERVER['REQUEST_URL']))
+	if (isset($_SERVER['REQUEST_URI']))
 	{
 		$url = $_SERVER['REQUEST_URI'].'#'.$params['anchor'];
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
