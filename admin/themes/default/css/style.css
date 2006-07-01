@@ -736,7 +736,7 @@ ul.pageerror li {
    padding-top: 5px;
    padding-left: 1px;
    }
-
+/* Unused it seems.
 ul.sortable  {
    margin: 1px;
    padding: 0;
@@ -749,10 +749,26 @@ ul.sortable  {
 
 ul.sortable li  {
    list-style-type: none;
+*/
 /*   list-style-position: ; */
+/*
    margin: 1px;
    padding: 0 0 0 5px;
    border: solid 1px #cccccc;
    width: 90%;
    cursor: move;
    }
+*/
+ul.sortableList {
+	list-style-type: none;
+	padding: 6px;
+	margin: 2px;
+/*	width: 300px; */
+}
+ul.sortableList li {
+	cursor: move;
+	padding: 2px 2px; 
+	margin: 2px 0px; 
+	border: 1px solid #000000;
+	background-color: #daeda3;
+}
