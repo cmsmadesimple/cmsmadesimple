@@ -30,14 +30,13 @@ include_once("header.php");
 require(cms_join_path($dirname,'lib', 'sllists','SLLists.class.php'));
 $sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
 
-function show_h(&$root, &$sortableLists)
+function show_h(&$root, &$sortableLists, &$listArray)
 {
   $content = &$root->getContent();
   
   if ($root->getLevel()==0)
     {
-      //	echo "<li>\n";
-      //   echo	    "root";
+      $content->mId = 0;
     }
   else
     {
@@ -45,23 +44,17 @@ function show_h(&$root, &$sortableLists)
       echo 'h: '.$content->Hierarchy();
       echo ' id: '.$content->mId.' '.$content->mName;
       //	print_r($content);
-       }
+    }
   if ($root->getChildrenCount()>0)
     {
-      if ($root->getLevel()==0)
-	{
-	  $sortableLists->addList('content0','content0ListOrder');
-	  echo '<ul id="content0" class="sortableList">'."\n";
-	}
-      else
-	{
-	  $sortableLists->addList('content'.$content->mId,'content'.$content->mId.'ListOrder');
-	  echo '<ul id="content'.$content->mId.'" class="sortableList">'."\n";
-	}
+      $sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
+      $listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
+      echo '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+      
       $children = &$root->getChildren();
       foreach ($children as $child)
 	{
-	  show_h($child, $sortableLists);
+	  show_h($child, $sortableLists, $listArray);
 	}
       echo "</ul>\n";
     }
@@ -93,7 +86,8 @@ $hierarchy = &$hierManager->getRootNode();
 
 if ($hierarchy->hasChildren())
   {
-    show_h($hierarchy, $sortableLists);
+    $listArray = array();
+    show_h($hierarchy, $sortableLists, $listArray);
   }
 
 $sortableLists->debug = true;
@@ -101,23 +95,32 @@ $sortableLists->printTopJS();
 
 $sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
 
-if(isset($_POST['sortableListsSubmitted'])) {
-	?>
-	<br><br>
-	The update statements below would update the database with the new order:<br><br>
-	<div style="margin-left:40px;">
-	<?
-	$orderArray = SLLists::getOrderArray($_POST['categoriesListOrder'],'categories');
-	foreach($orderArray as $item) {
-		$sql = "UPDATE categories set orderid=".$item['order']." WHERE carid=".$item['element'];
-		echo $sql.'<br>';
-	}
-	?>
-	</div>
-	<?
-}
-?>
-<?php
+if(isset($_POST['sortableListsSubmitted']))
+  {
+    global $gCms;
+    $hm =& $gCms->GetHierarchyManager();
+    $order_changed = FALSE;
+    foreach ($listArray AS $parent_id => $order)
+      {
+	$orderArray = SLLists::getOrderArray($_POST[$order], 'parent'.$parent_id);
+	foreach($orderArray as $item)
+	  {
+	    $node =& $hm->sureGetNodeById($item['element']);
+	    $one =& $node->getContent();
+	    // Only update if order has changed.
+	    if ($one->ItemOrder() != $item['order'])
+	      {
+		$order_changed = TRUE;
+		$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
+		$db->Execute($query, array($item['order'], $item['element']));
+	      }
+	  }
+      }
+    if (TRUE == $order_changed) {
+      ContentManager::SetAllHierarchyPositions();
+    } 
+  }
+
 $sortableLists->printBottomJS();
 echo '</div></div>';
 include_once("footer.php");
