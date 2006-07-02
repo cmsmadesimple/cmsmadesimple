@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_search($params, &$smarty) {
+function smarty_cms_function_google_search($params, &$smarty) {
 	$domain = $_SERVER['SERVER_NAME'];
 	$buttonText = 'Search Site';
 	if (!empty($params['domain']))
@@ -36,12 +36,12 @@ function smarty_cms_function_search($params, &$smarty) {
 
 }
 
-function smarty_cms_help_function_search() {
+function smarty_cms_help_function_google_search() {
 	?>
 	<h3>What does this do?</h3>
 	<p>Search's your website using Google's search engine.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{search}</code><br>
+	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br>
 	<br>
 	Note: Google needs to have your website indexed for this to work. You can submit your website to google <a href="http://www.google.com/addurl.html">here</a>.</p>
 	<h3>What if I want to change the look of the textbox or button?</h3>
@@ -56,7 +56,7 @@ function smarty_cms_help_function_search() {
 	<?php
 }
 
-function smarty_cms_about_function_search() {
+function smarty_cms_about_function_google_search() {
 	?>
 	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
 	<p>Version: 1.0</p>
