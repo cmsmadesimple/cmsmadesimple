@@ -484,9 +484,9 @@ div.pageoverflow  {
    overflow: hidden;
    }
 
-div.pageoverflow a  {
+div.pageoverflow a, div.pagecontainer a  {
    color: #384654;
-   }
+      }
 
 div.pageoverflow img  {
    border: 0px;
@@ -518,13 +518,18 @@ p.pageback  {
    margin-left: 10px;
    }
 
-div.pagecontainer p.pageheader  {
+div.pagecontainer div.pageheader  {
    color: #384654;
    font-weight: bold;
    font-size: 1.1em;
    margin-bottom: 0;
+   border-bottom: 1px solid #ccc;
    }
 
+div.pagecontainer div.headertitle  {
+   float: left;
+   }
+	
 div.pagecontainer p.pagetext  {
    color: #384654;
    float: left;
@@ -534,6 +539,13 @@ div.pagecontainer p.pagetext  {
    margin-bottom: 0;
    }
 
+div.pagecontainer span.helptext {
+	font-size: 0.9em;
+	font-weight: normal;
+	margin-left: 1em;
+	padding: 2px;
+	}
+	
 div.pagecontainer p.pageinput  {
    color: #384654;
    float: left;

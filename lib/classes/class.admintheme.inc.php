@@ -1370,7 +1370,7 @@ class AdminTheme
     {
       $cms = $this->cms;
       $config = $cms->GetConfig();             
-      $header  = '<p class="pageheader">';
+      $header  = '<div class="pageheader"><div class="headertitle">';
       if (FALSE != $module_help_type)
 	{
 	  $header .= $title_name;
@@ -1438,22 +1438,23 @@ class AdminTheme
 	      }
 	    else
 	      {
-		$help_title = lang('helpwithsection', $help_title);
+		$help_title = lang('help');
 	      }
 	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
 	    if ('both' == $module_help_type)
 	      {
 		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-		$header .= ' (<a href="'.$module_help_link.'">'.$image_help.' '.lang('modulehelp', $module_name).'</a>, ';
-		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>)';
+		$header .= '</div><span class="helptext"><a href="'.$module_help_link.'">'.$image_help.' '.lang('help').'</a> | ';
+		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.lang('wikihelp').'</a></span>';
 	      }
 	    else
 	      {
-		$header .= ' (<a href="'.$wikiUrl.'" target="_blank">'.$image_help.' '.$help_title.'</a>)';
+		$header .= '</div><span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.$help_title.'</a></span>';
 	      }
 	  }
     }
-      $header .= '</p>';
+	  $header .= '</div>';
       return $header;     
     }
 
