@@ -4,11 +4,21 @@
 a  {
    text-decoration: none;
    }
-
+   
 a:hover  {
    text-decoration: underline;
    }
 
+.pagecontainer a {
+	text-decoration: underline;
+}
+
+.pagecontainer a:hover {
+	text-decoration: none;
+	background-color: #385C72;
+	color: #fff;
+}
+	
 body  {
    font-size: 70%;
    font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -518,7 +528,7 @@ p.pageback  {
    margin-left: 10px;
    }
 
-div.pagecontainer div.pageheader  {
+div.pagecontainer .pageheader  {
    color: #384654;
    font-weight: bold;
    font-size: 1.1em;
