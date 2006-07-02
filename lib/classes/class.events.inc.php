@@ -92,7 +92,7 @@ class Events
 	* @param array  The parameters associated with this event.
 	* @returns nothing
 	*/
-	function SendEvent( $modulename, $eventname, $params )
+	function SendEvent( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
 
