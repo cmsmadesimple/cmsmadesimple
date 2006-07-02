@@ -66,7 +66,7 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 		$result=mysql_query($sql);
 		while ($result && $row = mysql_fetch_assoc($result))
 		{
-			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n";
+			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
 		}
 	}
 	else
@@ -79,7 +79,7 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 		$result=pg_query($db, $sql);
 		while ($result && $row = pg_fetch_array($result, null, PGSQL_ASSOC))
 		{
-			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n";
+			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
 		}
 	}
 

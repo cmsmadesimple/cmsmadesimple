@@ -29,6 +29,8 @@ include_once("../lib/classes/class.admintheme.inc.php");
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
+//$xajax->debugOn();
+//$xajax->errorHandlerOn();
 $xajax->registerFunction('content_list_ajax');
 $xajax->registerFunction('content_setactive');
 $xajax->registerFunction('content_setinactive');
@@ -36,7 +38,9 @@ $xajax->registerFunction('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
 $xajax->registerFunction('content_toggleexpand');
+$xajax->registerFunction('content_move');
 $xajax->registerFunction('content_delete');
+$xajax->registerFunction('reorder_display_list');
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
@@ -45,7 +49,7 @@ $headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptacu
 
 include_once("header.php");
 
-//echo '<a onclick="xajax_content_list_ajax();">Test</a>';
+//echo '<a onclick="xajax_reorder_display_list();">Test</a>';
 
 function content_list_ajax()
 {
@@ -239,6 +243,60 @@ function setactive($contentid, $active = true)
 	}
 }
 
+function content_move($contentid, $parentid, $direction)
+{
+	$objResponse = new xajaxResponse();
+	
+	movecontent($contentid, $parentid, $direction);
+
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
+function movecontent($contentid, $parentid, $direction = 'down')
+{
+	global $gCms;
+	$db =& $gCms->GetDb();
+	$userid = get_userid();
+
+	if (check_modify_all($userid))
+	{
+		$order = 1;
+
+		#Grab necessary info for fixing the item_order
+		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$result = $db->Execute($query, array($contentid));
+		$row = $result->FetchRow();
+		if (isset($row["item_order"]))
+		{
+			$order = $row["item_order"];	
+		}
+
+		$time = $db->DBTimeStamp(time());
+		if ($direction == "down")
+		{
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
+			#echo $query, $order + 1, $parent_id;
+			$db->Execute($query, array($order + 1, $parentid));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+			#echo $query, $content_id, $parent_id;
+			$db->Execute($query, array($contentid, $parentid));
+		}
+		else if ($direction == "up")
+		{
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
+			#echo $query;
+			$db->Execute($query, array($order - 1, $parentid));
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+			#echo $query;
+			$db->Execute($query, array($contentid, $parentid));
+		}
+
+		ContentManager::SetAllHierarchyPositions();
+	}
+}
+
 function deletecontent($contentid)
 {
 	$userid = get_userid();
@@ -274,19 +332,74 @@ function deletecontent($contentid)
 	}
 }
 
-function show_h(&$root)
+function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
 	$content = &$root->getContent();
-	echo "<li>".($root->getLevel()==0?"root":$content->Hierarchy())."</li>";
+
+	if ($root->getLevel()==0)
+	{
+		$content->mId = 0;
+	}
+	else
+	{
+		$output .= '<li id="item_'.$content->mId.'">'."\n";
+		$output .= $content->mName;
+	}
 	if ($root->getChildrenCount()>0)
 	{
-		echo "<ul>";
+		$sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
+		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
+		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+
 		$children = &$root->getChildren();
 		foreach ($children as $child)
 		{
-			show_h($child);
+			show_h($child, $sortableLists, $listArray, $output);
 		}
-		echo "</ul>";
+		$output .= "</ul>\n";
+	}
+	else 
+	{
+		$output .= "</li>\n";
+	}
+}
+
+function reorder_display_list()
+{
+	global $gCms;
+	$config =& $gCms->GetConfig();
+	
+	$userid = get_userid();
+	
+	require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
+	$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
+	
+	$hierManager =& $gCms->GetHierarchyManager();
+	$hierarchy = &$hierManager->getRootNode();
+	
+	if ($hierarchy->hasChildren())
+	{
+		$listArray = array();
+		$output = '';
+		$objResponse = new xajaxResponse();
+		show_h($hierarchy, $sortableLists, $listArray, $output);
+
+		ob_start();
+		echo $output;
+		$sortableLists->printTopJS();
+		$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
+		$contents = ob_get_contents();
+		ob_end_clean();
+		
+		ob_start();
+		$sortableLists->printBottomJS();
+		$script = ob_get_contents();
+		ob_end_clean();
+		
+		$objResponse->addClear("contentlist", "innerHTML");
+		$objResponse->addAssign("contentlist", "innerHTML", $contents);
+		$objResponse->addScript($script);
+		return $objResponse->getXML();
 	}
 }
 
@@ -456,21 +569,21 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				{
 					if ($parentNode->findChildNodeIndex($root)==0) #first
 					{ 
-						$thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+						$thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $downImg;
 						$thelist .= "</a>";
 					}
 					else if ($parentNode->findChildNodeIndex($root)==count($sameLevel)-1) #last
 					{
-						$thelist .= "<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+						$thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $upImg;
 						$thelist .= "</a>";
 					}
 					else #middle
 					{
-						$thelist .= "<a href=\"movecontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+						$thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $downImg;
-						$thelist .= "</a>&nbsp;<a href=\"movecontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+						$thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $upImg;
 						$thelist .= "</a>";
 					}
@@ -497,8 +610,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			$thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
 			$thelist .= $editImg;;
 			$thelist .= "</a></td>\n";
-	        if ($one->DefaultContent() != true) {
-				if (count($children) == 0)
+	        if ($one->DefaultContent() != true)
+			{
+				if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
 				{
 					$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
 					$thelist .= $deleteImg;
@@ -544,7 +658,8 @@ function display_content_list($themeObject = null)
 	$page = 1;
 	if (isset($_GET['page']))
 		$page = $_GET['page'];
-	$limit = get_preference($userid, 'paging', 0);
+	//$limit = get_preference($userid, 'paging', 0);
+	$limit = 0; //Took out pagination
 
 	$thelist = '';
 	$count = 0;
@@ -608,55 +723,91 @@ function display_content_list($themeObject = null)
 		$thelist .= "</table>\n";
 	}
 
-	$counter = 1;	
-	if (!$counter)
-	{
-		$thelist = "<p>".lang('noentries')."</p>";
-	}
+	$headoflist = '';
 
-	$headoflist = '<div class="pageoverflow">';
-
-
-	if ($limit != 0 && $counter > $limit)
-	{
-		$headoflist .= "<p class=\"pageshowrows\">".pagination($page, $counter, $limit)."</p>";
-	}
-
-	$headoflist .= $themeObject->ShowHeader('currentpages').'</div>';
-	//$headoflist .= $themeObject->ShowHeader('currentpages');
-	if (check_permission($userid, 'Add Pages'))
+	if (check_permission($userid, 'Add Pages') || check_modify_all($userid))
 	{
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php">';
 		$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a></p>';
-	}
-	$headoflist .= '<form action="multicontent.php" method="post">';
-	if ($counter)
-	{
-		$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
-		$headoflist .= '<thead>';
-		$headoflist .= "<tr>\n";
-		$headoflist .= "<th>&nbsp;</th>";
-		$headoflist .= "<th>&nbsp;</th>";
-		$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
-		$headoflist .= "<th>".lang('template')."</th>\n";
-		$headoflist .= "<th>".lang('type')."</th>\n";
-		$headoflist .= "<th>".lang('owner')."</th>\n";
-		$headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
-		$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 		if (check_modify_all($userid))
 		{
-			$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
+			$headoflist .= '<a style="margin-left: 100px;" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
-		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-		$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-		$headoflist .= "</tr>\n";
-		$headoflist .= '</thead>';
-		$headoflist .= '<tbody>';
+		$headoflist .='</p>';
 	}
-	return $headoflist . $thelist;
+	$headoflist .= '<form action="multicontent.php" method="post">';
+	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
+	$headoflist .= '<thead>';
+	$headoflist .= "<tr>\n";
+	$headoflist .= "<th>&nbsp;</th>";
+	$headoflist .= "<th>&nbsp;</th>";
+	$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
+	$headoflist .= "<th>".lang('template')."</th>\n";
+	$headoflist .= "<th>".lang('type')."</th>\n";
+	$headoflist .= "<th>".lang('owner')."</th>\n";
+	$headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+	$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+	if (check_modify_all($userid))
+	{
+		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
+	}
+	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+	$headoflist .= "</tr>\n";
+	$headoflist .= '</thead>';
+	$headoflist .= '<tbody>';
+	
+	ob_start();
+	?>
+			<div class="pageoptions">
+			<p class="pageoptions">
+			<span style="float: left;">
+	<?php
+	if (check_permission($userid, 'Add Pages'))
+	{
+		?>
+			<a href="addcontent.php">
+			<?php 
+			echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+		echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
+		?>
+			</a>
+	<?php } ?>
+		<a style="margin-left: 10px;" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
+			<?php 
+			echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
+		echo ' <a class="pageoptions" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
+		?>
+			</a>&nbsp;&nbsp;&nbsp;
+		<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
+			<?php 
+			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
+		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall");
+		?>
+			</a>
+			</span>
+			<span style="margin-right: 30px; float: right; text-align: right">
+			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
+
+			<?php echo lang('multi_page_actions'); ?>: <select name="multiaction">
+		        <option value="reorder"><?php echo lang('reorder') ?></option>
+			<option value="delete"><?php echo lang('delete') ?></option>
+			<option value="active"><?php echo lang('active') ?></option>
+			<option value="inactive"><?php echo lang('inactive') ?></option>
+			</select>
+			<input type="submit" value="<?php echo lang('submit') ?>" />
+			</span>
+			<br />
+			</p>
+			</div>
+	<?php
+	$footer = ob_get_contents();
+	ob_end_clean();
+	
+	return $headoflist . $thelist . $footer .'</form></div>';
 }
 
 
@@ -705,45 +856,25 @@ if (isset($_GET['deletecontent']))
 	deletecontent($_GET['deletecontent']);
 }
 
+if (isset($_GET['direction']))
+{
+	movecontent($_GET['content_id'], $_GET['parent_id'], $_GET['direction']);
+}
+
 if (isset($_GET['col']) && isset($_GET['content_id']))
 {
 	toggleexpand($_GET['content_id'], $_GET['col']=='1'?true:false);
 }
 
+echo '<div class="pageoverflow">';
+echo $themeObject->ShowHeader('currentpages').'</div>';
 echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 
 ?>
-		<div class="pageoptions">
-		<p class="pageoptions">
-		<span style="float: left;">
-<?php
-if (check_permission($userid, 'Add Pages'))
-{
-	?>
-		<a href="addcontent.php">
-		<?php 
-		echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-	echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
-	?>
-		</a>&nbsp;&nbsp;&nbsp;
-<?php } ?>
-	<a href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
-		<?php 
-		echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
-	echo ' <a class="pageoptions" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
-	?>
-		</a>&nbsp;&nbsp;&nbsp;
-	<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
-		<?php 
-		echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
-	echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall");
-	?>
-		</a>
-		</span>
-		<span style="margin-right: 30px; float: right; text-align: right">
-		<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
+
+		<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 		<script type="text/javascript">
-		/*<![CDATA[*/
+		//<![CDATA[
 		function selectall()
 		{
 	        checkboxes = document.getElementsByTagName("input");
@@ -752,23 +883,8 @@ if (check_permission($userid, 'Add Pages'))
 	                if (checkboxes[i].type == "checkbox") checkboxes[i].checked=true;
 	        }
 		}
-		/*]]>*/
+		//]]>
 		</script>
-
-		<?php echo lang('multi_page_actions'); ?>: <select name="multiaction">
-	        <option value="reorder"><?php echo lang('reorder') ?></option>
-		<option value="delete"><?php echo lang('delete') ?></option>
-		<option value="active"><?php echo lang('active') ?></option>
-		<option value="inactive"><?php echo lang('inactive') ?></option>
-		</select>
-		<input type="submit" value="<?php echo lang('submit') ?>" />
-		</span>
-		<br />
-		</p>
-		</div>
-		</form>
-		</div>
-		<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 		<?php
 
 include_once("footer.php");

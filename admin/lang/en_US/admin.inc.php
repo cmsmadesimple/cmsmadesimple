@@ -12,6 +12,7 @@ $lang['admin']['module_name'] = 'Module Name';
 $lang['admin']['event_name'] = 'Event Name';
 $lang['admin']['event_description'] = 'Event Description';
 $lang['admin']['order'] = 'Order';
+$lang['admin']['reorderpages'] = 'Reorder Pages';
 $lang['admin']['reorder'] = 'Reorder';
 $lang['admin']['page_reordered'] = 'Page was successfully reordered.';
 $lang['admin']['pages_reordered'] = 'Pages were successfully reordered';
