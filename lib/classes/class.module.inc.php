@@ -870,6 +870,14 @@ class CMSModule
 	}
 
 	/**
+	 * Returns XHTML that nees to go between the <head> tags
+	 */
+	function GetHeaderHTML()
+	{
+	  return '';
+	}
+
+	/**
 	 * Register a route to use for pretty url parsing
 	 *
 	 * @param string Route to register

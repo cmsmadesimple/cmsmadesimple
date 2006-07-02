@@ -74,7 +74,14 @@ else if( isset( $_REQUET['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->GetHeaderHTML() != false)
+  {
+    $headtext =  $gCms->modules[$module]['object']->GetHeaderHTML();
+  }
+ else
+   {
+     $headtext = '';
+   }
 include_once("header.php");
 
 if (count($gCms->modules) > 0)
