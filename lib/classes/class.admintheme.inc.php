@@ -1438,7 +1438,7 @@ class AdminTheme
 	      }
 	    else
 	      {
-		$help_title = lang('help');
+		$help_title = lang('help_external');
 	      }
 	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
 	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		

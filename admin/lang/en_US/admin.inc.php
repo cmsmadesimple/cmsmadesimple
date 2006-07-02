@@ -154,6 +154,7 @@ $lang['admin']['grouppermissions'] = 'Group Permissions';
 $lang['admin']['handler'] = 'Handler (user defined tag)';
 $lang['admin']['headtags'] = 'Head Tags';
 $lang['admin']['help'] = 'Help';
+$lang['admin']['help_external'] = 'Help (new window)';
 $lang['admin']['helpwithsection'] = '%s Help';
 $lang['admin']['helpaddtemplate'] = '<p>A template is what controls the look and feel of your site\'s content.</p><p>Create the layout here and also add your CSS in the Stylesheet section to control the look of your various elements.</p>';
 $lang['admin']['helplisttemplate'] = '<p>This page allows you to edit, delete, and create templates.</p><p>To create a new template, click on the <u>Add New Template</u> button.</p><p>If you wish to set all content pages to use the same template, click on the <u>Set All Content</u> link.</p><p>If you wish to duplicate a template, click on the <u>Copy</u> icon and you will be prompted to name the new duplicate template.</p>';
