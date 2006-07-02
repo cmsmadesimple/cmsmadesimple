@@ -222,8 +222,10 @@ else if ($preview)
 ?>
 
 <div class="pagecontainer">
+<div class="pageoverflow">
 	<p class="pageheader"><?php echo lang('preview')?></p>
 	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
+</div>
 </div>
 <?php
 }
@@ -236,6 +238,7 @@ $tabnames = $contentobj->TabNames();
 ?>
 
 <div class="pagecontainer">
+<div class="pageoverflow">
 	<?php
 	echo $themeObject->ShowHeader('addcontent');
 	if (count($tabnames) > 0)
@@ -311,6 +314,7 @@ $tabnames = $contentobj->TabNames();
 		?>
 	</div>
 	</form>
+</div>
 </div>
 
 <?php
