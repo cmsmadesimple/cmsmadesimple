@@ -1370,7 +1370,7 @@ class AdminTheme
     {
       $cms = $this->cms;
       $config = $cms->GetConfig();             
-      $header  = '<div class="pageheader"><div class="headertitle">';
+      $header  = '<div class="pageheader">';
       if (FALSE != $module_help_type)
 	{
 	  $header .= $title_name;
@@ -1445,12 +1445,12 @@ class AdminTheme
 	    if ('both' == $module_help_type)
 	      {
 		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-		$header .= '</div><span class="helptext"><a href="'.$module_help_link.'">'.$image_help.' '.lang('help').'</a> | ';
+		$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.' '.lang('help').'</a> | ';
 		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.lang('wikihelp').'</a></span>';
 	      }
 	    else
 	      {
-		$header .= '</div><span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.$help_title.'</a></span>';
+		$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.$help_title.'</a></span>';
 	      }
 	  }
     }

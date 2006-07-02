@@ -526,10 +526,6 @@ div.pagecontainer div.pageheader  {
    border-bottom: 1px solid #ccc;
    }
 
-div.pagecontainer div.headertitle  {
-   float: left;
-   }
-	
 div.pagecontainer p.pagetext  {
    color: #384654;
    float: left;
