@@ -1445,12 +1445,12 @@ class AdminTheme
 	    if ('both' == $module_help_type)
 	      {
 		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.' '.lang('help').'</a> | ';
-		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.lang('wikihelp').'</a></span>';
+		$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('help').'</a> | ';
+		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a></span>';
 	      }
 	    else
 	      {
-		$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.' '.$help_title.'</a></span>';
+		$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.$help_title.'</a></span>';
 	      }
 	  }
     }

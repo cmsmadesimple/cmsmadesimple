@@ -731,8 +731,9 @@ function display_content_list($themeObject = null)
 		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 		if (check_modify_all($userid))
 		{
-		        $image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			$headoflist .= '&nbsp;&nbsp;&nbsp; <a href="#" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
+		    $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="#" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+			$headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
+			$headoflist .= ' <a href="#" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 		$headoflist .='</p>';
 	}
@@ -785,11 +786,11 @@ function display_content_list($themeObject = null)
 		<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
 			<?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall");
+		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
 		if (check_modify_all($userid))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
+			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 		?>
 			</a>
