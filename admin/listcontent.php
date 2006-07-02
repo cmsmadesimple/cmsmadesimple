@@ -732,7 +732,8 @@ function display_content_list($themeObject = null)
 		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 		if (check_modify_all($userid))
 		{
-			$headoflist .= '<a style="margin-left: 100px;" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+		        $image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
+			$headoflist .= '<a style="margin-left: 100px;" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
 		}
 		$headoflist .='</p>';
 	}
