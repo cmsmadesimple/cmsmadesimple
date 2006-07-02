@@ -65,9 +65,12 @@ class SLLists {
 		if ($this->debug) echo '<br />';
 	}
 	
-	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '', $formName = 'sortableListForm', $cancelText = 'Cancel') {
+	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '', $formName = 'sortableListForm', $cancelText = 'Cancel', $listcontent = '') {
 		?>
 		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onSubmit="populateHiddenVars();" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
+			<input type="submit" value="<?php echo $submitText ?>" class="<?php echo $submitClass;?>">
+			<input type="button" value="<?php echo $cancelText; ?>" class="<?php echo $submitClass;?>" onclick="xajax_content_list_ajax(); return false;">
+			<?php echo $listcontent ?>
 			<?php $this->printHiddenInputs();?>
 			<input type="hidden" name="sortableListsSubmitted" value="true">
 			<?php

@@ -343,7 +343,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	else
 	{
 		$output .= '<li id="item_'.$content->mId.'">'."\n";
-		$output .= $content->mName;
+		$output .= '('.ContentManager::CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
 	}
 	if ($root->getChildrenCount()>0)
 	{
@@ -385,9 +385,8 @@ function reorder_display_list()
 		show_h($hierarchy, $sortableLists, $listArray, $output);
 
 		ob_start();
-		echo $output;
 		$sortableLists->printTopJS();
-		$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button');
+		$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button', 'sortableListForm', 'Cancel', $output);
 		$contents = ob_get_contents();
 		ob_end_clean();
 		
@@ -733,7 +732,7 @@ function display_content_list($themeObject = null)
 		if (check_modify_all($userid))
 		{
 		        $image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
-			$headoflist .= '<a style="margin-left: 100px;" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
+			$headoflist .= '&nbsp;&nbsp;&nbsp; <a href="#" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
 		}
 		$headoflist .='</p>';
 	}
@@ -787,6 +786,11 @@ function display_content_list($themeObject = null)
 			<?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall");
+		if (check_modify_all($userid))
+		{
+			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
+			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.' '.lang('reorderpages').'</a>';
+		}
 		?>
 			</a>
 			</span>
