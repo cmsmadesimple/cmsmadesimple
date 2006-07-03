@@ -844,7 +844,6 @@ function display_content_list($themeObject = null)
 			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 		?>
-			</a>
 			</span>
 			<span style="margin-right: 30px; float: right; text-align: right">
 			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
