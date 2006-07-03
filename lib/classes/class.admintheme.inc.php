@@ -1508,7 +1508,7 @@ class AdminTheme
 		}
 		$wikiUrl .= '/Troubleshooting';
 		$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
-		$output  = '<div class="pageerrorcontainer">';
+		$output  = '<div class="pageerrorcontainer pageoverflow">';
 		if (FALSE != is_array($errors)) {
 			$output .= '<ul class="pageerror">';
 			foreach ($errors as $oneerror)

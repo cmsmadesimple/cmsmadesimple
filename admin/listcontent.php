@@ -726,7 +726,7 @@ function display_content_list($themeObject = null)
 
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid))
 	{
-		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php">';
+		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
 		$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
 		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 		if (check_modify_all($userid))
@@ -770,7 +770,7 @@ function display_content_list($themeObject = null)
 	if (check_permission($userid, 'Add Pages'))
 	{
 		?>
-			<a href="addcontent.php">
+			<a href="addcontent.php" class="pageoptions">
 			<?php 
 			echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");

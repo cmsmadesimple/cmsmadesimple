@@ -165,7 +165,7 @@ if ($access)
 
 if (!$access)
 {
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
+	echo "<div class=\"pageerrorcontainer pageoverflow\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
 }
 else
 {
@@ -222,10 +222,8 @@ else if ($preview)
 ?>
 
 <div class="pagecontainer">
-<div class="pageoverflow">
 	<p class="pageheader"><?php echo lang('preview')?></p>
 	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
-</div>
 </div>
 <?php
 }
@@ -240,11 +238,10 @@ $tabnames = $contentobj->TabNames();
 <div class="pagecontainer">
 <div class="pageoverflow">
 	<?php
-	echo $themeObject->ShowHeader('addcontent');
+	echo $themeObject->ShowHeader('addcontent').'</div>';
 	if (count($tabnames) > 0)
 	{
 	?>
-	</div>
 	<div id="page_tabs">
 		<?php
 		$count = 0;
@@ -260,7 +257,7 @@ $tabnames = $contentobj->TabNames();
 	<?php
 	}
 	?>
-	<div style="clear: both;></div>
+	<div style="clear: both;"></div>
 	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>			
 	<div id="page_content">
 		<?php
