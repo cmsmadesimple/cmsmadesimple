@@ -727,11 +727,17 @@ textarea.pageheadtags  {
    }
 
 ul.pageerror  {
-   margin: 0px;
+   margin: 5px 0 10px 0;
+   padding-left: 10px;
    }
 ul.pageerror li {
+	padding-left: 5px;
+	margin-left: 15px;
    list-style-image: url("themes/default/images/icons/system/stop.gif");
    }
+div.pageerrorcontainer a {
+	color: #fff;
+	}
 .clearb  {
    clear: both;
    }

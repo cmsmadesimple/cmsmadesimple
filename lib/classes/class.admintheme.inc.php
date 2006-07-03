@@ -1508,7 +1508,7 @@ class AdminTheme
 		}
 		$wikiUrl .= '/Troubleshooting';
 		$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
-		$output  = '<div class="pageerrorcontainer pageoverflow">';
+		$output  = '<div class="pageerrorcontainer"><div class="pageoverflow">';
 		if (FALSE != is_array($errors)) {
 			$output .= '<ul class="pageerror">';
 			foreach ($errors as $oneerror)
@@ -1520,7 +1520,7 @@ class AdminTheme
 		  $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
 			$output  .= $image_error.' '.$errors;
 		}
-		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div>';
+		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div></div>';
 
 		return $output;
 	}
