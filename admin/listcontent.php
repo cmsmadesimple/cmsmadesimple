@@ -29,7 +29,7 @@ include_once("../lib/classes/class.admintheme.inc.php");
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
-$xajax->debugOn();
+//$xajax->debugOn();
 //$xajax->errorHandlerOn();
 $xajax->registerFunction('content_list_ajax');
 $xajax->registerFunction('content_setactive');
