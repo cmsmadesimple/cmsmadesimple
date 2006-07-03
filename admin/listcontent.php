@@ -29,7 +29,7 @@ include_once("../lib/classes/class.admintheme.inc.php");
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
-//$xajax->debugOn();
+$xajax->debugOn();
 //$xajax->errorHandlerOn();
 $xajax->registerFunction('content_list_ajax');
 $xajax->registerFunction('content_setactive');
@@ -41,6 +41,7 @@ $xajax->registerFunction('content_toggleexpand');
 $xajax->registerFunction('content_move');
 $xajax->registerFunction('content_delete');
 $xajax->registerFunction('reorder_display_list');
+$xajax->registerFunction('reorder_process');
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
@@ -391,7 +392,7 @@ function reorder_display_list()
 		ob_end_clean();
 		
 		ob_start();
-		$sortableLists->printBottomJS();
+		$sortableLists->printBottomJs();
 		$script = ob_get_contents();
 		ob_end_clean();
 		
@@ -400,6 +401,56 @@ function reorder_display_list()
 		$objResponse->addScript($script);
 		return $objResponse->getXML();
 	}
+}
+
+function reorder_process($get)
+{
+	$userid = get_userid();
+	$objResponse = new xajaxResponse();
+
+	if (check_modify_all($userid))
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+		$db =& $gCms->GetDb();
+	    $hm = &ContentManager::GetAllContentAsHierarchy(false);
+		$hierarchy = &$hm->getRootNode();
+	
+		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
+		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
+	
+		if ($hierarchy->hasChildren())
+		{
+			$listArray = array();
+			$output = '';
+			show_h($hierarchy, $sortableLists, $listArray, $output);
+		}
+	
+		$order_changed = FALSE;
+		foreach ($listArray AS $parent_id => $order)
+		{
+			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
+			foreach($orderArray as $item)
+			{
+				$node =& $hm->sureGetNodeById($item['element']);
+				$one =& $node->getContent();
+				// Only update if order has changed.
+				if ($one->ItemOrder() != $item['order'])
+				{
+					$order_changed = TRUE;
+					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
+					$db->Execute($query, array($item['order'], $item['element']));
+				}
+			}
+		}
+		if (TRUE == $order_changed) {
+			ContentManager::SetAllHierarchyPositions();
+		}
+	}
+	
+	$objResponse->addClear("contentlist", "innerHTML");
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
 }
 
 function check_children(&$root, &$mypages, &$userid)

@@ -25,20 +25,16 @@ class SLLists {
 		?>
 		<script src="<?php echo $this->jsPath;?>/prototype.js" type="text/javascript"></script>
 		<script src="<?php echo $this->jsPath;?>/scriptaculous.js" type="text/javascript"></script>
-		<script language="JavaScript" type="text/javascript"><!--
-			function populateHiddenVars() {
-				<?php
-				foreach($this->lists as $list) {
-					?>
-					document.getElementById('<?php echo $list['input'];?>').value = Sortable.serialize('<?php echo $list['list'];?>');
-					<?php
-				}
-				?>
-				return true;
-			}
-			//-->
-		</script>
 		<?php
+	}
+	
+	function printJSFunction()
+	{
+		$result = '';
+		foreach($this->lists as $list) {
+			$result .= 'document.getElementById(\''.$list['input'].'\').value = Sortable.serialize(\''.$list['list'].'\');';
+		}
+		return $result;
 	}
 	
 	function printBottomJs() {
@@ -67,19 +63,19 @@ class SLLists {
 	
 	function printForm($action, $method = 'POST', $submitText = 'Submit', $submitClass = '', $formName = 'sortableListForm', $cancelText = 'Cancel', $listcontent = '') {
 		?>
-		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onSubmit="populateHiddenVars();" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
-			<input type="submit" value="<?php echo $submitText ?>" class="<?php echo $submitClass;?>">
-			<input type="button" value="<?php echo $cancelText; ?>" class="<?php echo $submitClass;?>" onclick="xajax_content_list_ajax(); return false;">
+		<form action="<?php echo $action;?>" method="<?php echo $method;?>" onsubmit="<?php echo $this->printJSFunction(); ?>xajax_reorder_process(xajax.getFormValues('<?php echo $formName;?>'));return false;" name="<?php echo $formName;?>" id="<?php echo $formName;?>">
+			<input type="submit" value="<?php echo $submitText ?>" class="<?php echo $submitClass;?>" />
+			<input type="button" value="<?php echo $cancelText; ?>" class="<?php echo $submitClass;?>" onclick="xajax_content_list_ajax(); return false;" />
 			<?php echo $listcontent ?>
 			<?php $this->printHiddenInputs();?>
-			<input type="hidden" name="sortableListsSubmitted" value="true">
+			<input type="hidden" name="sortableListsSubmitted" value="true" />
 			<?php
 			if ($this->debug) {
-				?><input type="button" value="View Serialized Lists" class="<?php echo $submitClass;?>" onClick="populateHiddenVars();"><br /><?php
+				?><input type="button" value="View Serialized Lists" class="<?php echo $submitClass;?>" onClick="populateHiddenVars();" /><br /><?php
 			}
 			?>
-			<input type="submit" value="<?php echo $submitText ?>" class="<?php echo $submitClass;?>">
-			<input type="button" value="<?php echo $cancelText; ?>" class="<?php echo $submitClass;?>" onclick="xajax_content_list_ajax(); return false;">
+			<input type="submit" value="<?php echo $submitText ?>" class="<?php echo $submitClass;?>" />
+			<input type="button" value="<?php echo $cancelText; ?>" class="<?php echo $submitClass;?>" onclick="xajax_content_list_ajax(); return false;" />
 		</form>
 		<?php
 	}
