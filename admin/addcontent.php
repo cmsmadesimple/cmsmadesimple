@@ -244,6 +244,7 @@ $tabnames = $contentobj->TabNames();
 	if (count($tabnames) > 0)
 	{
 	?>
+	</div>
 	<div id="page_tabs">
 		<?php
 		$count = 0;
@@ -259,7 +260,7 @@ $tabnames = $contentobj->TabNames();
 	<?php
 	}
 	?>
-	<div style="clear: both;"></div>
+	<div style="clear: both;></div>
 	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>			
 	<div id="page_content">
 		<?php
@@ -314,7 +315,6 @@ $tabnames = $contentobj->TabNames();
 		?>
 	</div>
 	</form>
-</div>
 </div>
 
 <?php
