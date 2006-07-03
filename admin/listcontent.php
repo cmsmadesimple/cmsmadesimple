@@ -536,6 +536,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			}
 		}
 		$thelist .= "</td><td>";
+		/*
 		if (check_modify_all($userid))
 		  {
 		    $pos = strrpos($one->Hierarchy(), '.');
@@ -548,8 +549,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		  }
 		else
 		  {
+			*/
 		   $thelist .= $one->Hierarchy();
-		  }
+		  //}
 		 $thelist .= "</td>\n";
 		$thelist .= "<td>";
 
@@ -645,6 +647,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				}
 			}
 			$thelist .= "</td>";
+			$thelist .= '<td style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
 		}
 		// end of move code
 
@@ -808,6 +811,7 @@ function display_content_list($themeObject = null)
 	if (check_modify_all($userid))
 	{
 		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
+		$headoflist .= "<th class=\"pagepos\">".lang('order')."</th>\n";
 	}
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";

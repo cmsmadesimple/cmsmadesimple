@@ -154,8 +154,9 @@ input.lbpassword  {
    }
 
 input.order { 
-   width:1.5em;
+   width:2em;
    font-size: 1em;
+	text-align: center;
    }
 
 p.lbuser  {
