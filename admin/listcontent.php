@@ -101,6 +101,7 @@ function content_setdefault($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
 	return $objResponse->getXML();
 }
 
@@ -112,6 +113,7 @@ function content_setactive($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
 	return $objResponse->getXML();
 }
 
@@ -123,6 +125,7 @@ function content_setinactive($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
 	return $objResponse->getXML();
 }
 
@@ -177,6 +180,7 @@ function content_toggleexpand($contentid, $collapse)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
 	return $objResponse->getXML();
 }
 
@@ -252,6 +256,7 @@ function content_move($contentid, $parentid, $direction)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
 	return $objResponse->getXML();
 }
 
@@ -513,7 +518,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 	if ($display != 'none')
 	{
-		$thelist .= "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+		$thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 		$thelist .= "<td>";
 		if ($one->ChildCount() > 0)
 		{
