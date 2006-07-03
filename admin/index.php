@@ -29,7 +29,7 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
-
+$themeObject->ShowShortcuts();
 $themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)).'/install');
 $themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
 $themeObject->DisplaySectionMenuDivStart();

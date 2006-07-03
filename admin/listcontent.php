@@ -875,14 +875,8 @@ function display_content_list($themeObject = null)
 	return $headoflist . $thelist . $footer .'</form></div>';
 }
 
-
-if (FALSE == empty($_GET['message'])) {
-    echo $themeObject->ShowMessage(lang($_GET['message']));
-}
-if (FALSE == empty($_GET['error'])) {
-    echo $themeObject->ShowErrors(lang($_GET['error']));
-}
-
+echo $themeObject->ShowMessage('', 'message');
+echo $themeObject->ShowErrors('' ,'error');
 ?>
 <div class="pagecontainer">
 <?php

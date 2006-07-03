@@ -25,6 +25,7 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
+$themeObject->ShowShortcuts();
 $themeObject->DisplaySectionMenuDivStart();
 $themeObject->DisplaySectionPages('usersgroups');
 $themeObject->DisplaySectionMenuDivEnd();

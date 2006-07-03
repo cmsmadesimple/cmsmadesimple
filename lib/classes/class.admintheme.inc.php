@@ -439,6 +439,38 @@ class AdminTheme
         $this->DisplayBookmarks($marks);
     }
 
+
+    /**
+     * DoBookmarks
+     * Method for displaying admin bookmarks (shortcuts) & help links.
+     */
+    function ShowShortcuts()
+    {
+      echo '<div class="itemmenucontainer"style="float:right; width:12em;">';
+      echo '<div class="itemoverflow">';
+      echo '<h2 style="margin:0;">'.lang('bookmarks').'</h2>';
+      echo '<a href="listbookmarks.php">'.lang('managebookmarks').'</a>';
+      echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+      $marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
+      $marks = array_reverse($marks);
+      echo '<ul style="margin:0">';
+      foreach($marks as $mark)
+	{
+	  echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+	}
+      echo "</ul>\n";
+      echo '<h3 style="margin:0;">'.lang('help').'</h3>';
+      echo '<ul style="margin:0;">';
+      echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
+      echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
+      echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+      echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
+      echo '</ul>';
+      echo '</div>';
+      echo '</div>';
+    }
+    
+
     /**
      * DisplayBookmarks
      * Output bookmark data. Over-ride this to alter display of Bookmark information.
@@ -463,6 +495,8 @@ class AdminTheme
         echo "</ul>\n";
         echo "</div>\n";
     }
+
+
 
 
     /**
@@ -1488,55 +1522,93 @@ class AdminTheme
     }
 
 
+    /**
+     * ShowError
+     * Outputs supplied errors with a link to the wiki for troublshooting.
+     *
+     * @param errors - array or string of 1 or more errors to be shown
+     * @param get_var - Name of the _GET variable that contains the 
+     *                  name of the message lang string
+     */
+    function ShowErrors($errors, $get_var = '')
+    {
+      global $gCms;
+      $config =& $gCms->GetConfig();
+      $wikiUrl = $config['wiki_url'];
 
-	/**
-	 * ShowError
-	 * Outputs supplied errors with a link to the wiki for troublshooting.
-	 *
-	 * @param errors - array or string of 1 or more errors to be shown
-	 */
-	function ShowErrors($errors)
+      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
 	{
-		$wikiUrl = $this->cms->config['wiki_url'];
-
-		if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact'])) {
-			if (FALSE == empty($_REQUEST['module'])) {
-				$wikiUrl .= '/'.$_REQUEST['module'];
-			} else {
-					$wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-			}
-		}
-		$wikiUrl .= '/Troubleshooting';
-		$image_error = $this->DisplayImage('icons/system/stop.gif', '','','','systemicon');
-		$output  = '<div class="pageerrorcontainer"><div class="pageoverflow">';
-		if (FALSE != is_array($errors)) {
-			$output .= '<ul class="pageerror">';
-			foreach ($errors as $oneerror)
-			{
-				$output .= '<li>'.$oneerror.'</li>';
-			}
-			$output .= '</ul>';
-		} else {
-		  $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
-			$output  .= $image_error.' '.$errors;
-		}
-		$output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div></div>';
-
-		return $output;
+	  if (FALSE == empty($_REQUEST['module']))
+	    {
+	      $wikiUrl .= '/'.$_REQUEST['module'];
+	    }
+	  else
+	    {
+	      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+	    }
 	}
-
+      $wikiUrl .= '/Troubleshooting';
+      $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
+      $output  = '<div class="pageerrorcontainer"';
+      if (FALSE == empty($get_var))
+	{
+	  if (FALSE == empty($_GET[$get_var]))
+	    {
+	      $errors = lang($_GET[$get_var]);
+	    }
+	  else
+	    {
+	      $errors = '';
+	      $output .= ' style="display:none;"';
+	    }
+	}
+      $output .= '><div class="pageoverflow">';
+      if (FALSE != is_array($errors))
+	{
+	  $output .= '<ul class="pageerror">';
+	  foreach ($errors as $oneerror)
+	    {
+	      $output .= '<li>'.$oneerror.'</li>';
+	    }
+	  $output .= '</ul>';
+	}
+      else
+	{
+	  $output  .= $image_error.' '.$errors;
+	}
+      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div></div>';
+      
+      return $output;
+    }
+    
     /**
      * ShowMessage
      * Outputs a page status message
      *
      * @param message - Message to be shown
+     * @param get_var - Name of the _GET variable that contains the 
+     *                  name of the message lang string
      */
-    function ShowMessage($message)
+    function ShowMessage($message, $get_var = '')
     {
       $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
-		return '<div class="pagemcontainer"><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
+      $output = '<div class="pagemcontainer"';
+      if (FALSE == empty($get_var))
+	{
+	  if (FALSE == empty($_GET[$get_var]))
+	    {
+	      $message = lang($_GET[$get_var]);
+	    }
+	  else
+	    {
+	      $message = '';
+	      $output .= ' style="display:none;"';
+	    }
 	}
-	
+      $output .= '><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
+      return $output;
+    }
+    
 	function &GetThemeObject()
 	{
 		global $gCms;
