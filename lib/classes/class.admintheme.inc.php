@@ -446,10 +446,10 @@ class AdminTheme
      */
     function ShowShortcuts()
     {
-      echo '<div class="itemmenucontainer"style="float:right; width:12em;">';
+      echo '<div class="itemmenucontainer shortcuts" style="float:right;">';
       echo '<div class="itemoverflow">';
-      echo '<h2 style="margin:0;">'.lang('bookmarks').'</h2>';
-      echo '<a href="listbookmarks.php">'.lang('managebookmarks').'</a>';
+      echo '<h2>'.lang('bookmarks').'</h2>';
+      echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
       echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
       $marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
       $marks = array_reverse($marks);
