@@ -74,15 +74,12 @@ function smarty_cms_function_search($params, &$smarty)
 function smarty_cms_help_function_search() {
 	?>
 	<h3>What does this do?</h3>
-	<p>This tag is used to insert modules into your templates and pages.  If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
-	<h3>How do I use it?</h3>
-	<p>It's just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_module module="somemodulename"}</code>
-	<h3>What parameters does it take?</h3>
-	<p>There is only one required parameter.  All other parameters are passed on to the module.
-	<ul>
-		<li>module - Name of the module to insert.  This is not case sensitive.</li>
-	</ul>
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module</a> to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
 	</p>
+	<h3>How do I use it?</h3>
+	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module help</a>.
+
 	<?php
 }
 
