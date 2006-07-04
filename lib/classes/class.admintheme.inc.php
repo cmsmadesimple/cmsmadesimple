@@ -446,7 +446,7 @@ class AdminTheme
      */
     function ShowShortcuts()
     {
-      echo '<div class="itemmenucontainer shortcuts" style="float:right;">';
+      echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
       echo '<div class="itemoverflow">';
       echo '<h2>'.lang('bookmarks').'</h2>';
       echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
@@ -1291,7 +1291,7 @@ class AdminTheme
      */
     function DisplayMainDivEnd()
     {
-    	echo "</div><!-- end MainContent -->\n";
+    	echo '<div class="clearb"></div></div><!-- end MainContent -->\n';
     }
 
 
