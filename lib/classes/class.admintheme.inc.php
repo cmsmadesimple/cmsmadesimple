@@ -1291,7 +1291,8 @@ class AdminTheme
      */
     function DisplayMainDivEnd()
     {
-    	echo '<div class="clearb"></div></div><!-- end MainContent -->\n';
+      echo '<div class="clearb"></div>';
+      echo "</div><!-- end MainContent -->\n";
     }
 
 
