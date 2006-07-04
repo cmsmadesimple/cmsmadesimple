@@ -62,10 +62,10 @@ foreach($gCms->cmsplugins as $oneplugin)
 	{
 		echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">$oneplugin</a></td>\n";
-		echo "<td><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
+		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
-		echo "<td><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 
@@ -88,6 +88,7 @@ foreach($gCms->cmsplugins as $oneplugin)
 			</a>
 		</p>
 	</div>
+</div>
 </div>
 <?php
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

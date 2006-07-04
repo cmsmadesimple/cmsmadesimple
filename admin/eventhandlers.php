@@ -157,8 +157,8 @@ switch( $action )
 					}
 					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
 					echo "    <td>".$desctext."</td>\n";
-					echo "    <td><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
-					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+					echo "    <td class=\"icons_wide\"><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
 					echo "  </tr>\n"; 
 					($curclass=="row1"?$curclass="row2":$curclass="row1");
 				}
