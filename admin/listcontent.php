@@ -190,8 +190,9 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	$objResponse->addClear("contentlist", "innerHTML");
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	//$objResponse->addClear("contentlist", "innerHTML");
+	//$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
 	return $objResponse->getXML();
 }
 
@@ -307,33 +308,66 @@ function deletecontent($contentid)
 {
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Pages');
+	
+	global $gCms;
+	$hierManager =& $gCms->GetHierarchyManager();
 
 	if ($access)
 	{
-		$contentobj = ContentManager::LoadContentFromId($contentid);
-
-		if ($contentobj)
+		$node = &$hierManager->getNodeById($contentid);
+		if ($node)
 		{
-			$title = $contentobj->Name();
-	
-			#Check for children
-			if ($contentobj->HasChildren())
+			$contentobj =& $node->getContent();
+			$childcount = 0;
+			$parentid = -1;
+			if (isset($node->parentNode))
 			{
-				$_GET['error'] = 'errorchildcontent';
+				$parent =& $node->parentNode;
+				if (isset($parent))
+				{
+					$parentContent =& $parent->getContent();
+					if (isset($parentContent))
+					{
+						$parentid = $parentContent->Id();
+						$childcount = $parent->getChildrenCount();
+					}
+				}
 			}
-	
-			#Check for default
-			if ($contentobj->DefaultContent())
+
+			if ($contentobj)
 			{
-				$_GET['error'] = 'errordefaultpage';
+				$title = $contentobj->Name();
+	
+				#Check for children
+				if ($contentobj->HasChildren())
+				{
+					$_GET['error'] = 'errorchildcontent';
+				}
+	
+				#Check for default
+				if ($contentobj->DefaultContent())
+				{
+					$_GET['error'] = 'errordefaultpage';
+				}
+			
+				$title = $contentobj->Name();
+				$contentobj->Delete();
+				ContentManager::SetAllHierarchyPositions();
+				
+				#See if this is the last child... if so, remove
+				#the expand for it
+				if ($childcount == 1 && $parentid > -1)
+				{
+					toggleexpand($parentid, true);
+				}
+				
+				#Do the same with this page as well
+				toggleexpand($contentid, true);
+				
+				audit($contentid, $title, 'Deleted Content');
+			
+				$_GET['message'] = 'contentdeleted';
 			}
-			
-			$title = $contentobj->Name();
-			$contentobj->Delete();
-			ContentManager::SetAllHierarchyPositions();
-			audit($contentid, $title, 'Deleted Content');
-			
-			$_GET['message'] = 'contentdeleted';
 		}
 	}
 }
@@ -889,6 +923,7 @@ $hierManager =& $gCms->GetHierarchyManager();
 if (isset($_GET["makedefault"]))
 {
 	setdefault($_GET['makedefault']);
+	redirect('listcontent.php');
 }
 
 // check if we're activating a page
@@ -916,6 +951,7 @@ if (isset($_GET['collapseall']))
 if (isset($_GET['deletecontent']))
 {
 	deletecontent($_GET['deletecontent']);
+	redirect('listcontent.php');
 }
 
 if (isset($_GET['direction']))
