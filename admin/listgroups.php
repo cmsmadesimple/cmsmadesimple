@@ -87,18 +87,18 @@ include_once("header.php");
 				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
 				if ($perm)
-					echo "<td class=\"pagepos\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
+					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
 				if ($assign)
-					echo "<td class=\"pagepos\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
+					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
 				if ($edit)
 				    {
-					echo "<td class=\"pageicon\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
+					echo "<td class=\"icons_wide\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
 				if ($remove)
 				    {
-					echo "<td class=\"pageicon\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
                     }
