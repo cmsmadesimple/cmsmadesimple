@@ -825,6 +825,17 @@ function display_content_list($themeObject = null)
 	?>
 			<div class="pageoptions">
 			<p class="pageoptions">
+			<span style="margin-right: 30px; float: right; text-align: right">
+			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
+		        <option value="reorder"><?php echo lang('reorder') ?></option>
+			<option value="delete"><?php echo lang('delete') ?></option>
+			<option value="active"><?php echo lang('active') ?></option>
+			<option value="inactive"><?php echo lang('inactive') ?></option>
+			</select>
+			<input type="submit" value="<?php echo lang('submit') ?>" />
+
+			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
+			</span>
 			<span style="float: left;">
 	<?php
 	if (check_permission($userid, 'Add Pages'))
@@ -854,19 +865,10 @@ function display_content_list($themeObject = null)
 		}
 		?>
 			</span>
-			<span style="margin-right: 30px; float: right; text-align: right">
-			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
 
-			<?php echo lang('multi_page_actions'); ?>: <select name="multiaction">
-		        <option value="reorder"><?php echo lang('reorder') ?></option>
-			<option value="delete"><?php echo lang('delete') ?></option>
-			<option value="active"><?php echo lang('active') ?></option>
-			<option value="inactive"><?php echo lang('inactive') ?></option>
-			</select>
-			<input type="submit" value="<?php echo lang('submit') ?>" />
-			</span>
 			<br />
 			</p>
+			<div class="clearb"></div>
 			</div>
 	<?php
 	$footer = ob_get_contents();
