@@ -101,7 +101,7 @@ function content_setdefault($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
 }
 
@@ -113,7 +113,7 @@ function content_setactive($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
 }
 
@@ -125,7 +125,7 @@ function content_setinactive($contentid)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
 }
 
@@ -180,7 +180,7 @@ function content_toggleexpand($contentid, $collapse)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
 }
 
@@ -256,7 +256,7 @@ function content_move($contentid, $parentid, $direction)
 
 	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid');");
+	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
 }
 
