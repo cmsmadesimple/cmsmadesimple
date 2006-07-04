@@ -719,7 +719,11 @@ tr.row2hover  {
 td.pageicon  {
    background-color: #fff !important;
    }
-   
+
+td.icons_wide {
+	width: 25px;
+	}
+	
 iframe.imageframe  {
    margin-top: 10px;
    border: none;

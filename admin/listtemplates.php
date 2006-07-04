@@ -164,14 +164,14 @@ if (isset($_GET["message"])) {
 					echo "<td class=\"pagepos\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 				# view css association
-				echo "<td><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
+				echo "<td class=\"icons_wide\"><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon');
                 echo "</a></td>\n";
 
 				# add new template
 				if ($add)
 				{
-				  echo "<td><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".urlencode($onetemplate->name)."\">";
+				  echo "<td class=\"icons_wide\"><a href=\"copytemplate.php?template_id=".$onetemplate->id."&amp;template_name=".urlencode($onetemplate->name)."\">";
                     echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -179,7 +179,7 @@ if (isset($_GET["message"])) {
 				# edit template
 				if ($edit)
 				{
-					echo "<td><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
+					echo "<td class=\"icons_wide\"><a href=\"edittemplate.php?template_id=".$onetemplate->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -187,7 +187,7 @@ if (isset($_GET["message"])) {
 				# remove template
 				if ($remove)
 				{
-					echo "<td><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 				}
