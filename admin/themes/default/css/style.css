@@ -257,6 +257,9 @@ a.first_module  {
 
 
 /* Nav Tools */
+div.MainMenu { 
+   float:left;
+}
 div.navt_menu  {
    position: absolute;
    right: 0px;
@@ -469,6 +472,7 @@ p.logocontainer  {
    color: #fff;
    text-align: center;
    padding-top: 5px;
+   clear:both;
    }
 
 a.breadcrumbs  {
