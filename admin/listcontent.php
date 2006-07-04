@@ -617,7 +617,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		// code for move up is simple
 		if (check_modify_all($userid))
 		{
-			$thelist .= "<td>";
+			$thelist .= "<td class=\"move\">";
 			$parentNode = &$root->getParentNode();
 			if ($parentNode!=null)
 			{
@@ -647,7 +647,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				}
 			}
 			$thelist .= "</td>";
-			$thelist .= '<td style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
+			$thelist .= '<td class="invisible" style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
 		}
 		// end of move code
 
@@ -680,7 +680,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				{
 					$thelist .= '<td>&nbsp;</td>' . "\n";
 				}
-				$thelist .= '<td class="pagepos"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+				$thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
 			}
 			else
 			{
@@ -810,13 +810,13 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
 	if (check_modify_all($userid))
 	{
-		$headoflist .= "<th class=\"pagepos\">".lang('move')."</th>\n";
-		$headoflist .= "<th class=\"pagepos\">".lang('order')."</th>\n";
+		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
+		$headoflist .= "<th class=\"pagepos invisible\">".lang('order')."</th>\n";
 	}
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
+	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';

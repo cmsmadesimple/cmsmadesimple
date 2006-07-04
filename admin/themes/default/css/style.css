@@ -15,14 +15,12 @@ a:hover  {
 
 .pagecontainer a:hover, .breadcrumbs a:hover, .pageback a:hover, .MainMenu a:hover, .itemmenucontainer a:hover  {
 	text-decoration: none;
-	background-color: #385C72;
+	background: #385C72;
 	color: #fff;
 }
 
-.pagecontainer a img:hover {
-	text-decoration: none;
-	background-color: transparent;
-	color: #fff;
+a:hover img {
+	background: transparent;
 }
 	
 body  {
@@ -660,6 +658,16 @@ th.pagepos  {
    text-align: center;
    }
 
+.move  {
+   width: 60px;
+   text-align: left;
+   padding-left: 5px;
+   }
+
+.checkbox {
+   padding-left: 10px;
+   }
+	
 th.pagew10  {
    width: 10%;
    }
@@ -691,7 +699,7 @@ td.pagew30  {
 td.pagepos  {
    text-align: center;
    }
-
+ 
 tr.row1  {
    background-color: #fff;
    }
@@ -699,7 +707,7 @@ tr.row1  {
 tr.row2  {
    background-color: #ececec;
    }
-
+   
 tr.row1hover  {
    background-color: #ddd;
    }
@@ -707,7 +715,11 @@ tr.row1hover  {
 tr.row2hover  {
    background-color: #ddd;
    }
-
+   
+td.pageicon  {
+   background-color: #fff !important;
+   }
+   
 iframe.imageframe  {
    margin-top: 10px;
    border: none;
