@@ -824,8 +824,8 @@ function display_content_list($themeObject = null)
 	ob_start();
 	?>
 			<div class="pageoptions">
-			<p class="pageoptions">
-			<span style="margin-right: 30px; float: right; text-align: right">
+			<div class="pageoptions">
+			<div style="margin-right: 30px; margin-top: 0; float: right; text-align: right">
 			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
 		        <option value="reorder"><?php echo lang('reorder') ?></option>
 			<option value="delete"><?php echo lang('delete') ?></option>
@@ -833,10 +833,11 @@ function display_content_list($themeObject = null)
 			<option value="inactive"><?php echo lang('inactive') ?></option>
 			</select>
 			<input type="submit" value="<?php echo lang('submit') ?>" />
-
+			<span style="margin-left: 10px;">
 			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
 			</span>
-			<span style="float: left;">
+			</div>
+			<div style="float: left;">
 	<?php
 	if (check_permission($userid, 'Add Pages'))
 	{
@@ -864,10 +865,10 @@ function display_content_list($themeObject = null)
 			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="#" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
 		?>
-			</span>
+			</div>
 
 			<br />
-			</p>
+			</div>
 			<div class="clearb"></div>
 			</div>
 	<?php
