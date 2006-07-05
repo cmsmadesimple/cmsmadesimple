@@ -216,6 +216,28 @@ $special_failed=true;
 		($currow=="row1"?$currow="row2":$currow="row1");
     } ## foreach
 
+	echo "<tr class=\"row2\"><td>Checking if session.save_path is set and writable";
+	if (session_save_path() == '')
+	{
+		echo '<br /><br /><em>session.save_path is not set. Not having a session.save_path disallows any logins to the admin panel.  Please adjust before continuing..</em>';
+		echo '</td><td class=\"col2\"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+		$continueon = false;
+	}
+	else
+	{
+		if (is_writable(session_save_path()))
+		{
+			echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+		}
+		else
+		{
+			echo '<br /><br /><em>session.save_path("'.session_save_path().'") is not writable. Not having this as writable disallows any logins to the admin panel.  Please adjust before continuing..</em>';
+			echo '</td><td class="col2"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+			$continueon = false;
+		}
+	}
+	echo "</td></tr>\n";
+
     echo "</tbody></table>\n";
 
 	echo '<form method="post" action="install.php">';
