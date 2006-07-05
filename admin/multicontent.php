@@ -29,6 +29,7 @@ check_login();
 
 $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
+if (isset($_POST['reorderpages'])) $action = 'reorder';
 
 include_once("header.php");
 

@@ -811,6 +811,9 @@ function display_content_list($themeObject = null)
 		{
 			$thelist.=$item;
 		}
+		$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
+<td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
 		$thelist .= '</tbody>';
 		$thelist .= "</table>\n";
 	}
@@ -861,7 +864,6 @@ function display_content_list($themeObject = null)
 			<div class="pageoptions">
 			<div style="margin-right: 30px; margin-top: 0; float: right; text-align: right">
 			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
-		        <option value="reorder"><?php echo lang('reorder') ?></option>
 			<option value="delete"><?php echo lang('delete') ?></option>
 			<option value="active"><?php echo lang('active') ?></option>
 			<option value="inactive"><?php echo lang('inactive') ?></option>
