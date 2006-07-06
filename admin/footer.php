@@ -43,6 +43,7 @@ if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 #Do any header replacements (this is for WYSIWYG stuff)
 $footertext = '';
 $formtext = '';
+$formsubmittext = '';
 $bodytext = '';
 
 $userid = get_userid();
@@ -67,12 +68,14 @@ foreach($gCms->modules as $key=>$value)
 		  $bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
 		  $footertext.=$gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult);
 		  $formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
+		  $formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 		}
 	}
 }
 
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
+$htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);
 $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlresult);
 
 echo $htmlresult;

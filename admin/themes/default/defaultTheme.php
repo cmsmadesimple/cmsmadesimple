@@ -120,7 +120,9 @@ class defaultTheme extends AdminTheme
 	
 	function OutputHeaderJavascript() {
 		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>';
-
+		echo '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
+		echo '<script type="text/javascript" src="../lib/scriptaculous/stdext.js"></script>';
+		echo '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
 	}
 
 	function StartRighthandColumn() {

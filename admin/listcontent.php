@@ -29,8 +29,6 @@ include_once("../lib/classes/class.admintheme.inc.php");
 
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
-//$xajax->debugOn();
-//$xajax->errorHandlerOn();
 $xajax->registerFunction('content_list_ajax');
 $xajax->registerFunction('content_setactive');
 $xajax->registerFunction('content_setinactive');
@@ -45,8 +43,8 @@ $xajax->registerFunction('reorder_process');
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
-$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
-$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
+//$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
+//$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
 
 include_once("header.php");
 
@@ -190,8 +188,6 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	//$objResponse->addClear("contentlist", "innerHTML");
-	//$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
 	return $objResponse->getXML();
 }
