@@ -33,8 +33,6 @@ $xajax->registerFunction('ajaxpreview');
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript('../lib/xajax')."\n";
-$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
-$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
 
 if (isset($_POST["cancel"]))
 {
