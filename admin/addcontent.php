@@ -423,10 +423,7 @@ $tabnames = $contentobj->TabNames();
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
-				<div class="pagecontainer">
-					<p class="pageheader"><?php echo lang('preview')?></p>
 					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
-				</div>
 				<?php
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';
