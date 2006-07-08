@@ -60,6 +60,7 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 			
 		case 'D': return 'DATE';
 		case 'T': return 'TIMESTAMP';
+		case 'DT': return 'TIMESTAMP';
 		
 		case 'L': return 'BOOLEAN';
 		case 'I': return 'INTEGER';
