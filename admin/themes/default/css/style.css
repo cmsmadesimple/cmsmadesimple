@@ -580,7 +580,7 @@ div.pagecontainer p.pagetext  {
    padding-top: 5px;
    padding-right: 5px;
    width: 15em;
-   margin-bottom: 0;
+   margin-bottom: 0.5em;
    }
 
 div.pagecontainer span.helptext {
@@ -594,7 +594,7 @@ div.pagecontainer p.pageinput  {
    color: #384654;
    float: left;
    padding-top: 5px;
-   margin-bottom: 0;
+   margin-bottom: 0.5em;
    }
 
 p.pageinputwysiwyg  {
@@ -649,7 +649,11 @@ table.pagetable th.active a {
 	color: #E6A2FF; 
 	text-decoration: underline;
 	}
-	
+
+table.pagetable tr  {
+   height: 1.8em;
+   }
+   
 table.pagetable td  {
    color: #384654;
    }
