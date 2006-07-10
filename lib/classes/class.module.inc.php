@@ -815,7 +815,7 @@ class CMSModule
 	{
 		if (is_subclass_of($this, 'CMSModule'))
 		{
-			return dirname(dirname(__FILE__)) . '/modules/' . $this->GetName();
+			return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
 		}
 		else
 		{
