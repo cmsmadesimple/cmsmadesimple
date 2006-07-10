@@ -185,7 +185,7 @@ if ($message != "") {
 			}
                       ?>
 		      </select>
-		      </p>
+		      <br />
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
