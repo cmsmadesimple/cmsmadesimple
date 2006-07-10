@@ -47,6 +47,8 @@ if (isset($_GET["message"])) {
 }
 
 ?>
+<form action="multistylesheet.php" method="post">
+
 <div class="pagecontainer">
 	<div class="pageoverflow">
 <?php
@@ -71,7 +73,6 @@ if (isset($_GET["message"])) {
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, $result->RecordCount(), $limit)."</p>";
 	}
-	echo '<form action="multistylesheet.php" method="post">';
 	echo $themeObject->ShowHeader('liststylesheets').'</div>';
 	if ($result && $result->RecordCount() > 0)
 	{
@@ -105,7 +106,7 @@ if (isset($_GET["message"])) {
 				# if user has right to add (copy)
 				if ($addcss)
 				{
-					echo '<td class="icons_wide"><a href="copystylesheet.php?stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . $one['css_name'] . '">';
+					echo '<td class="icons_wide"><a href="copystylesheet.php?stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . urlencode($one['css_name']) . '">';
                     echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -178,6 +179,7 @@ if (isset($_GET["message"])) {
 		</p>
 	</div>
 </div>
+
 </form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 

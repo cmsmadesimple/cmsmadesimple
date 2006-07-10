@@ -252,7 +252,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><textarea class="pagebigtextarea" name="css_text" cols="" rows=""><?php echo $css_text?></textarea></p>
+			<p class="pageinput"><textarea class="pagebigtextarea" name="css_text"><?php echo $css_text?></textarea></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
