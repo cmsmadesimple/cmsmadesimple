@@ -73,7 +73,7 @@ function ajaxpreview($params)
 		copycontentobj($contentobj, $content_type, $params);
 	}
 	updatecontentobj($contentobj, true, $params);
-	$tmpfname = createtmpfname(&$contentobj);
+	$tmpfname = createtmpfname($contentobj);
 	$url = $config["root_url"].'/preview.php?tmpfile='.urlencode(basename($tmpfname));
 	
 	$objResponse = new xajaxResponse();
