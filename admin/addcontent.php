@@ -158,7 +158,7 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-	$contentobj =& $tmpobj;
+	$contentobj = $tmpobj;
 }
 
 function createtmpfname(&$contentobj)
@@ -344,39 +344,56 @@ $tabnames = $contentobj->TabNames();
 <div class="pageoverflow">
 	<?php
 	echo $themeObject->ShowHeader('addcontent').'</div>';
-	if (count($tabnames) > 0)
-	{
 	?>
 	<div id="page_tabs">
 		<?php
 		$count = 0;
-		foreach ($tabnames as $onetab)
+
+		#We have preview, but no tabs
+		if (count($tabnames) == 0)
 		{
 			?>
-			<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
+			<div id="editab0" class="active"><?php echo lang('content')?></div>
 			<?php
-			$count++;
 		}
+		else
+		{
+			foreach ($tabnames as $onetab)
+			{
+				?>
+				<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
+				<?php
+				$count++;
+			}
+		}
+
 		if ($contentobj->mPreview)
 		{
 			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;">'.lang('preview').'</div>';
 		}
 		?>
 	</div>
-	<?php
-	}
-	?>
 	<div style="clear: both;"></div>
 	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />			
 	<div id="page_content">
 		<?php
+		
+		$submit_buttons = '<div class="pageoverflow">
+			<p class="pagetext">&nbsp;</p>
+			<p class="pageinput">';
+		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
+			$submit_buttons .= '<input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
+		}
+		$submit_buttons .= '<input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
+		$submit_buttons .= '<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
+		
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;
 		if ($numberoftabs == 0)
 		{
 			$numberoftabs = 1;
-			$showtabs = 0;
+			$showtabs = 1;
 		}
 		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
 		{
@@ -386,6 +403,7 @@ $tabnames = $contentobj->TabNames();
 			}
 			if ($currenttab == 0)
 			{
+				echo $submit_buttons;
 				?>
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
@@ -403,16 +421,8 @@ $tabnames = $contentobj->TabNames();
 				</div>
 				<?php
 			}
-			?>
-			<div class="pageoverflow">
-				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
-					<input type="hidden" name="firsttime" value="0" />
-					<?php if (isset($contentobj->mPreview) && $contentobj->mPreview == true) { ?>
-						<input type="submit" name="previewbutton" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;" />
-					<?php } ?>
-					<input type="submit" name="submitbutton" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			echo '<input type="hidden" name="firsttime" value="0" />';
+					?>
 				</p>
 			</div>
 			<div style="clear: both;"></div>
@@ -428,6 +438,7 @@ $tabnames = $contentobj->TabNames();
 			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';
 		}
+		echo $submit_buttons;
 		?>
 	</div>
 	</form>

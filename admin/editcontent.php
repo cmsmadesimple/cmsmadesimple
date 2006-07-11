@@ -150,7 +150,7 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-	$contentobj =& $tmpobj;
+	$contentobj = $tmpobj;
 }
 
 function createtmpfname(&$contentobj)
@@ -332,28 +332,37 @@ $tabnames = $contentobj->TabNames();
 <div class="pagecontainer">
 	<?php
 	echo $themeObject->ShowHeader('editcontent');
-	if (count($tabnames) > 0)
-	{
 	?>
 	<div id="page_tabs">
 		<?php
 		$count = 0;
-		foreach ($tabnames as $onetab)
+
+		#We have preview, but no tabs
+		if (count($tabnames) == 0)
 		{
 			?>
-			<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
+			<div id="editab0"><?php echo lang('content')?></div>
 			<?php
-			$count++;
 		}
+		else
+		{
+			foreach ($tabnames as $onetab)
+			{
+				?>
+				<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
+				<?php
+				$count++;
+			}
+		}
+		
+		#Make a preview tab
 		if ($contentobj->mPreview)
 		{
 			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;">'.lang('preview').'</div>';
 		}
+
 		?>
 	</div>
-	<?php
-	}
-	?>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
@@ -379,7 +388,7 @@ $submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('appl
 		if ($numberoftabs == 0)
 		{
 			$numberoftabs = 1;
-			$showtabs = 0;
+			$showtabs = 1;
 		}
 		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
 		{
