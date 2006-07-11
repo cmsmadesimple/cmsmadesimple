@@ -48,115 +48,110 @@ include_once("header.php");
 
 if ($access)
 {
-    if ($action == "exportxml")
-      {
-	// get our xml
-	$message = '';
-	$files = 0;
-        $object = $gCms->modules[$module]['object'];
-        $xmltxt = $object->CreateXMLPackage($message,$files);
-	if( $files == 0 )
-	  {
-	    echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
-	  }
-	else 
-	  {
-	    $xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
+	if ($action == "exportxml")
+	{
+		// get our xml
+		$message = '';
+		$files = 0;
+		$object = $gCms->modules[$module]['object'];
+		$xmltxt = $object->CreateXMLPackage($message,$files);
+		if( $files == 0 )
+		{
+			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
+		}
+		else 
+		{
+			$xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
 
-	    // and send the file
-	    while(@ob_end_clean());
-	    header('Content-Description: File Transfer');
-	    header('Content-Type: application/force-download');
-	    header('Content-Disposition: attachment; filename='.$xmlname);
-	    //     header('Content-Type: text/xml');
-	    echo $xmltxt;
-	    exit();
-	  }
-      }
+			// and send the file
+			while(@ob_end_clean());
+			header('Content-Description: File Transfer');
+			header('Content-Type: application/force-download');
+			header('Content-Disposition: attachment; filename='.$xmlname);
+			//     header('Content-Type: text/xml');
+			echo $xmltxt;
+			exit();
+		}
+	}
 
-    if ($action == "importxml" )
-    {
-        $fieldName = "browse_xml";
-        if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
-	    || !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
+	if ($action == "importxml" )
+	{
+		$fieldName = "browse_xml";
+		if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
+		|| !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
 		{
 			echo $themeObject->ShowErrors(lang('noxmlfileuploaded'));
 		}
-        else
-          {
-	    // normalize the file variable
-	    $file = $_FILES[$fieldName];
+		else
+		{
+			// normalize the file variable
+			$file = $_FILES[$fieldName];
 
-	    // $file['tmp_name'] is the file we have to parse
-	    $xml = file_get_contents( $file['tmp_name'] );
+			// $file['tmp_name'] is the file we have to parse
+			$xml = file_get_contents( $file['tmp_name'] );
 
-	    // and parse it
-	    $result = ModuleOperations::ExpandXMLPackage( $xml, $allowoverwritemodules );
-	    // at this point, all of the files in that module may have become unusable
-	    // in the current version of cms.
-	    if( !$result )
-	      {
-	        echo $themeObject->ShowErrors(ModuleOperations::GetLastError());
-	      }
-	    else if( $autoinstallupgrade == 0 )
-	      {
-		// no auto install or upgrade
-		redirect("listmodules.php");
-	      }
-	    // note, wishy, when you dig in here next, everything below here
-	    // can probably go.
-	    /*
-            else if( !isset( $gCms->modules[$result['name']] ) )
-              {
-                 // looks like we're installing this module
-                 redirect("listmodules.php?action=install&module=".$result['name']);
-              }
-            else 
-              { 
-                 // allow the auto upgrade stuff to do it's thing
-                 // need new version and old version
-                 $oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
-                 $newversion = $result['version'];
-	         redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
-              }
-	    */
-          }  
-      }
+			// and parse it
+			$result = ModuleOperations::ExpandXMLPackage( $xml, $allowoverwritemodules );
+			// at this point, all of the files in that module may have become unusable
+			// in the current version of cms.
+			if( !$result )
+			{
+				echo $themeObject->ShowErrors(ModuleOperations::GetLastError());
+			}
+			else if( $autoinstallupgrade == 0 )
+			{
+				// no auto install or upgrade
+				redirect("listmodules.php");
+			}
+			// note, wishy, when you dig in here next, everything below here
+			// can probably go.
+			/*
+			else if( !isset( $gCms->modules[$result['name']] ) )
+			{
+				// looks like we're installing this module
+				redirect("listmodules.php?action=install&module=".$result['name']);
+			}
+			else 
+			{ 
+				// allow the auto upgrade stuff to do it's thing
+				// need new version and old version
+				$oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
+				$newversion = $result['version'];
+				redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
+			}
+			*/
+		}  
+	}
 
-    if ($action == "install")
-      {
-	$result = ModuleOperations::InstallModule($module,false);
-	if( $result[0] == false )
-	  {
-	    echo '<div class="pagecontainer">';
-	    echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
-	    echo $result[1];
-	    echo "</div>";
-	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-	    include_once("footer.php");
-	    exit;
-	  }
-	else
-	  {
-	    $content = $gCms->modules[$module]['object']->InstallPostMessage();
-	    if( $content != FALSE )
-	      {
-		echo '<div class="pagecontainer">';
-		echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
-		echo $content;
-		echo "</div>";
-		echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
-		include_once("footer.php");
-		exit;
-	      }
-	    // all is good, but no postinstall message
-	    redirect("listmodules.php");
-	  }
-      }
+	if ($action == "install")
+	{
+		$result = ModuleOperations::InstallModule($module,false);
+		if( $result[0] == false )
+		{
+			echo '<div class="pagecontainer">';
+			echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
+			echo $result[1];
+			echo "</div>";
+			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+			include_once("footer.php");
+			exit;
+		}
+		else
+		{
+			$content = $gCms->modules[$module]['object']->InstallPostMessage();
+			if( $content != FALSE )
+			{
+				//Redirect right away so that the installed module shows in the menu
+				redirect('listmodules.php?action=showpostinstall&module='.$module);
+			}
+			// all is good, but no postinstall message
+			redirect("listmodules.php");
+		}
+	}
 
 	if ($action == 'showpostinstall')
 	{
-	  // this is probably dead code now
+		// this is probably dead code now
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance = $gCms->modules[$module]['object'];
@@ -179,23 +174,22 @@ if ($access)
 
 	if ($action == 'upgrade')
 	{
-	  $result = ModuleOperations::UpgradeModule( $module, 
-						     $_GET['oldversion'], $_GET['newversion'] );	  
-	  if( !$result )
-	    {
-	      @ob_start();
-	      echo $modinstance->GetLastError();
-	      $content = @ob_get_contents();
-	      @ob_end_clean();
-	      echo '<div class="pagecontainer">';
-	      echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
-	      echo $content;
-	      echo "</div>";
-	      echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-	      include_once("footer.php");
-	      exit;
-	    }
-	  redirect("listmodules.php");
+		$result = ModuleOperations::UpgradeModule( $module, $_GET['oldversion'], $_GET['newversion'] );	  
+		if( !$result )
+		{
+			@ob_start();
+			echo $modinstance->GetLastError();
+			$content = @ob_get_contents();
+			@ob_end_clean();
+			echo '<div class="pagecontainer">';
+			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+			echo $content;
+			echo "</div>";
+			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+			include_once("footer.php");
+			exit;
+		}
+		redirect("listmodules.php");
 	}
 
 
@@ -212,11 +206,11 @@ if ($access)
 				#now delete the record
 				$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
 				$db->Execute($query, array($module));
-				
+
 				#delete any dependencies
 				$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
 				$db->Execute($query, array($module));
-				
+
 				Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 
 				#and show the uninstallpost if necessary...
@@ -240,7 +234,7 @@ if ($access)
 				//TODO: Echo error
 			}
 		}
-		
+
 		redirect("listmodules.php");
 	}
 
