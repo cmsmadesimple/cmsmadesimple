@@ -38,6 +38,38 @@ $hm =& $gCms->GetHierarchyManager();
 
 $nodelist = array();
 
+function toggleexpand($contentid, $collapse = false)
+{
+	$userid = get_userid();
+	$openedArray=array();
+	if (get_preference($userid, 'collapse', '') != '')
+	{
+		$tmp  = explode('.',get_preference($userid, 'collapse'));
+		foreach ($tmp as $thisCol)
+		{
+			$colind = substr($thisCol,0,strpos($thisCol,'='));
+			$openedArray[$colind] = 1;
+		}
+	}
+	if ($collapse)
+	{
+		$openedArray[$contentid] = 0;
+	}
+	else
+	{
+		$openedArray[$contentid] = 1;
+	}
+	$cs = '';
+	foreach ($openedArray as $key=>$val)
+	{
+		if ($val == 1)
+		{
+			$cs .= $key.'=1.';
+		}
+	}
+	set_preference($userid, 'collapse', $cs);
+}
+
 function DoContent(&$list, &$node, $checkdefault = true, $checkchildren = true)
 {
 	$content =& $node->GetContent();
@@ -215,13 +247,47 @@ else
 		$access = check_permission($userid, 'Remove Pages');
 		if ($access)
 		{
+			global $gCms;
+			$db = $gCms->GetDb();
 			foreach (array_reverse($nodelist) as $node)
 			{
-
 				$id = $node->Id();
-				$title = $node->Name() . ' (' . $node->Hierarchy() . ')';
-				//echo 'Deleting:' . $title . '<br />';
+				$title = $node->Name() . ' (' . $node->Hierarchy() . ') -- ' . $id;
+				
+				$childcount = 0;
+				$parentid = -1;
+
+				#Hack alert...  hierarchy manager doesn't take into account for deleted nodes
+				$query = 'SELECT parent_id FROM '.cms_db_prefix().'content WHERE content_id = '.$db->qstr($id);
+				$result = &$db->Execute($query);
+
+				while ($result && !$result->EOF)
+				{
+					$parentid = $result->fields['parent_id'];
+					$result->MoveNext();
+				}
+				
+				$query = 'SELECT count(*) as thecount FROM '.cms_db_prefix().'content WHERE parent_id = '.$db->qstr($parentid);
+				$result = &$db->Execute($query);
+
+				while ($result && !$result->EOF)
+				{
+					$childcount = $result->fields['thecount'];
+					$result->MoveNext();
+				}
+				
 				$node->Delete();
+
+				#See if this is the last child... if so, remove
+				#the expand for it
+				if ($childcount == 1 && $parentid > -1)
+				{
+					toggleexpand($parentid, true);
+				}
+				
+				#Do the same with this page as well
+				toggleexpand($id, true);
+
 				audit($id, $title, 'Deleted Content');
 			}
 			ContentManager::SetAllHierarchyPositions();
