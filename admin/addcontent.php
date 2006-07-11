@@ -72,7 +72,7 @@ function ajaxpreview($params)
 		$content_type = $params['content_type'];
 		if (strtolower(get_class($contentobj)) != strtolower($content_type))
 		{
-			copycontentobj(&$contentobj, $content_type, $params);
+			copycontentobj($contentobj, $content_type, $params);
 		}
 	}
 	else
@@ -80,7 +80,7 @@ function ajaxpreview($params)
 		$content_type = $params['content_type'];
 		$contentobj = new $content_type;
 	}
-	updatecontentobj(&$contentobj, true, $params);
+	updatecontentobj($contentobj, true, $params);
 	$tmpfname = createtmpfname(&$contentobj);
 	$url = $config["root_url"].'/preview.php?tmpfile='.urlencode(basename($tmpfname));
 	
