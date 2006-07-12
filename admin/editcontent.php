@@ -146,7 +146,9 @@ function copycontentobj(&$contentobj, $content_type, $params = null)
 	$tmpobj->SetItemOrder($contentobj->ItemOrder());
 	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
 	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
-	$tmpobj->SetCachable($contentobj->Cachable());
+	//Some content types default to false for a reason... don't override it
+	if (!(!$tmpobj->mCachable && $contentobj->Cachable()))
+		$tmpobj->SetCachable($contentobj->Cachable());
 	$tmpobj->SetHierarchy($contentobj->Hierarchy());
 	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
 	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
