@@ -216,17 +216,8 @@ if ($access)
 				#and show the uninstallpost if necessary...
 				if ($modinstance->UninstallPostMessage() != FALSE)
 				{
-					@ob_start();
-					echo $modinstance->UninstallPostMessage();
-					$content = @ob_get_contents();
-					@ob_end_clean();
-					echo '<div class="pagecontainer">';
-					echo '<p class="pageheader">'.lang('moduleuninstallmessage', array($module)).'</p>';					
-					echo $content;
-					echo "</div>";
-					echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-					include_once("footer.php");
-					exit;
+					//Redirect right away so that the uninstalled module is removed from the menu
+					redirect('listmodules.php?action=showpostuninstall&module='.$module);
 				}
 			}
 			else
@@ -236,6 +227,29 @@ if ($access)
 		}
 
 		redirect("listmodules.php");
+	}
+	
+	if ($action == 'showpostuninstall')
+	{
+		// this is probably dead code now
+		if (isset($gCms->modules[$module]))
+		{
+			$modinstance = $gCms->modules[$module]['object'];
+			if ($modinstance->UninstallPostMessage() != FALSE)
+			{
+				@ob_start();
+				echo $modinstance->UninstallPostMessage();
+				$content = @ob_get_contents();
+				@ob_end_clean();
+				echo '<div class="pagecontainer">';
+				echo '<p class="pageheader">'.lang('moduleuninstallmessage', array($module)).'</p>';					
+				echo $content;
+				echo "</div>";
+				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
+				include_once("footer.php");
+				exit;
+			}
+		}
 	}
 
 	if ($action == "settrue")
