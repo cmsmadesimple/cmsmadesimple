@@ -190,7 +190,7 @@ function AuthorBlobs($userid)
 
 		$result = array();
 
-		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_id";
+		$query = "SELECT htmlblob_id, htmlblob_name, html, owner, modified_date FROM ".cms_db_prefix()."htmlblobs ORDER BY htmlblob_name";
 		$dbresult = &$db->Execute($query);
 
 		while (isset($dbresult) && !$dbresult->EOF)
@@ -232,7 +232,7 @@ function AuthorBlobs($userid)
 		return $result;
 	}
 
-	function & LoadHtmlBlobByName($name)
+	function &LoadHtmlBlobByName($name)
 	{
 		$result = false;
 
