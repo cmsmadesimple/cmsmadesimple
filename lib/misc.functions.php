@@ -733,6 +733,46 @@ function filespec_is_excluded( $file, $excludes )
 
 
 /**
+ * Check the permissions of a directory recursively to make sure that
+ * we have write permission to all files
+ * &param  path      start path
+*/
+function is_directory_writable( $path )
+{
+   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
+   $result = true;
+   if( $handle = opendir( $path ) )
+     {
+       while( false !== ( $file = readdir( $handle ) ) )
+	 {
+	   if( $file == '.' || $file == '..' )
+	     {
+	       continue;
+	     }
+
+	   $p = $path.$file;
+
+	   if( !@is_writable( $p ) )
+	     {
+	       return false;
+	     }
+
+	   if( @is_dir( $p ) )
+	     {
+	       $result = is_directory_writable( $p );
+	       if( !$result )
+		 {
+		   return false;
+		 }
+	     }
+	 }
+       @closedir( $handle );
+     }
+
+   return true;
+}
+
+/**
  * Return an array containing a list of files in a directory
  * performs a recursive serach
  * @param  path      start path
@@ -766,6 +806,52 @@ function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "
    if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
    return ( $dirlist ) ;
 }
+
+
+function recursive_delete( $dirname )
+{
+  // all subdirectories and contents:
+  if(is_dir($dirname))$dir_handle=opendir($dirname);
+  while($file=readdir($dir_handle))
+  {
+    if($file!="." && $file!="..")
+    {
+      if(!is_dir($dirname."/".$file))unlink ($dirname."/".$file);
+      else recursive_delete($dirname."/".$file);
+    }
+  }
+  closedir($dir_handle);
+  rmdir($dirname);
+  return true;
+}
+
+
+function chmod_r( $path, $mode )
+{
+  if( !is_dir( $path ) )
+    return chmod( $path, $mode );
+
+  $dh = @opendir( $path );
+  if( !$dh ) return FALSE;
+
+  while( $file = readdir( $dh ) )
+  {
+    if( $file == '.' || $file == '..' ) continue;
+    
+    $p = $path.DIRECTORY_SEPARATOR.$file;
+    if( is_dir( $p ) )
+    {
+      @chmod_r( $p, $mode );
+    }
+    else if( !is_link( $p ) )
+    {
+      @chmod( $p, $mode );
+    }
+  }
+  @closedir( $dh );
+  return @chmod( $path, $mode );
+}
+
 
 function SerializeObject(&$object)
 {

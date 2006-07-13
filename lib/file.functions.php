@@ -75,5 +75,26 @@ function display_file($filename) {
 }
 
 
+function is_removeable($fname)
+{
+  if( is_dir( $fname ) )
+    {
+      $folder = opendir($fname);
+      while($file = readdir( $folder ))
+	if($file != '.' && $file != '..' &&
+	   ( !is_writable(  $fname."/".$file  ) ||
+	     (  is_dir(  $fname."/".$file  ) && !is_removeable(  $fname."/".$file  )  ) ))
+	  {
+	    closedir($fname);
+	    return false;
+	  }
+      closedir($fname);
+      return true;
+    }
+  else
+    {
+      return is_writable( $fname );
+    }
+}
 # vim:ts=4 sw=4 noet
 ?>

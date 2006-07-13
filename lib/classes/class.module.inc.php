@@ -73,6 +73,7 @@ class ModuleOperations
   function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
   {
 	global $gCms;
+
 	// first make sure that we can actually write to the module directory
 	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
 
@@ -82,6 +83,13 @@ class ModuleOperations
 	    ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
 	    return false;
 	  }
+
+	// set a umask to try to make permissions wide open
+	// this will hopefully (in most cases) allow users who install
+	// modules via XML to still delete them via ftp
+	// however, the 0111 makes all files world writable
+	// which I don't really like.
+	umask(0111);
 
 	// start parsing xml
 	$parser = xml_parser_create();

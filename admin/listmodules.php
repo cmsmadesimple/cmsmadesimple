@@ -48,6 +48,22 @@ include_once("header.php");
 
 if ($access)
   {
+    if ($action == "chmod" )
+      {
+	$result = chmod_r( $config['root_path'].DIRECTORY_SEPARATOR.
+			   'modules'.DIRECTORY_SEPARATOR.$module, 0777 );
+	if( !$result )
+	  {
+	    echo '<div class="pagecontainer">';
+	    echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+	    echo lang('cantremovefiles');
+	    echo "</div>";
+	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	    include_once("footer.php");
+	  }
+	redirect("listmodules.php");
+      }
+
     if ($action == "exportxml")
       {
 	// get our xml
@@ -170,6 +186,22 @@ if ($access)
 		exit;
 	      }
 	  }
+      }
+
+    if ($action == 'remove')
+      {
+	$result = recursive_delete( $config['root_path'].DIRECTORY_SEPARATOR.
+				    'modules'.DIRECTORY_SEPARATOR.$module );
+	if( !$result )
+	  {
+	    echo '<div class="pagecontainer">';
+	    echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+	    echo lang('cantremovefiles');
+	    echo "</div>";
+	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+	    include_once("footer.php");
+	  }
+	redirect("listmodules.php");
       }
 
     if ($action == 'upgrade')
@@ -381,7 +413,6 @@ if ($action == "showmoduleabout")
 	      <th><?php echo lang('version')?></th>
 	      <th><?php echo lang('status')?></th>
 	      <th class="pagepos"><?php echo lang('active')?></th>
-	      <th><?php echo lang('status')?></th>
 	      <th><?php echo lang('action')?></th>
 	      <th><?php echo lang('help')?></th>
 	      <th><?php echo lang('about')?></th>
@@ -399,37 +430,48 @@ if ($action == "showmoduleabout")
        foreach($gCms->modules as $key=>$value)
 	 {
 	   $modinstance = $value['object'];
+	   
+	   $namecol = $key;
+	   $versioncol = "&nbsp;";
+	   $statuscol = "&nbsp;";
+	   $statusspans = false;
+	   $actioncol = "&nbsp;";
+	   $activecol = "&nbsp;";
+	   $helpcol = "&nbsp;";
+	   $aboutcol = "&nbsp;";
+	   $xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 
-	   echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+
 	   //Is there help?
 	   if ($modinstance->GetHelp() != '')
 	     {
-	       echo "<td><a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a></td>";
+	       $namecol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a>";
 	     }
-	   else
-	     {
-	       echo "<td>$key</td>\n";
-	     }
-#Make sure it's a valid module for this version of CMSMS
+
+	   // check these modules permissions to see if we can uninstall this thing
+	   $permsok = is_directory_writable( $config['root_path'].DIRECTORY_SEPARATOR.
+					     'modules'.DIRECTORY_SEPARATOR.$key );
+
+           #Make sure it's a valid module for this version of CMSMS
 	   if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
 	     {
 	       // Fix undefined index error if module is not already installed.
 	       if (FALSE == empty($dbm[$key]['Version'])) {
 		 echo "<td>".$dbm[$key]['Version']."</td>";
-	       } else {
-		 echo "<td>&nbsp</td>";
 	       }
-	       echo '<td colspan="3">'.lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion().'</td>';
+               $statuscol = lang('minimumcmsversionrequired').': '.$modinstance->MinimumCMSVersion();
+	       $xmlcol = "&nbsp;";
+	       $statusspans = true;
 	     }
 	   else if (version_compare($modinstance->MaximumCMSVersion(), $CMS_VERSION) == -1)
 	     {
 	       // Fix undefined index error if module is not already installed.
 	       if (FALSE == empty($dbm[$key]['Version'])) {
 		 echo "<td>".$dbm[$key]['Version']."</td>";
-	       } else {
-		 echo "<td>&nbsp</td>";
 	       }
-	       echo '<td colspan="3">'.lang('maximumversionsupported').': '.$modinstance->MaximumCMSVersion().'</td>';
+	       $statuspans = true;
+	       $xmlcol = "&nbsp;";
+	       $statuscol  = lang('maximumversionsupported').': '.$modinstance->MaximumCMSVersion();
 	     }
 	   else if (!isset($dbm[$key])) #Not installed, lets put up the install button
 	     {
@@ -439,7 +481,7 @@ if ($action == "showmoduleabout")
 
 	       if (count($dependencies) > 0) #Check for any deps
 		 {
-#Now check to see if we can satisfy any deps
+                   #Now check to see if we can satisfy any deps
 		   foreach ($dependencies as $onedepkey=>$onedepvalue)
 		     {
 		       if (!isset($gCms->modules[$onedepkey]) ||
@@ -452,36 +494,46 @@ if ($action == "showmoduleabout")
 		     }
 		 }
 
-	       echo "<td>".$modinstance->GetVersion()."</td>";
-	       echo "<td>".lang('notinstalled')."</td>";
+	       $versioncol = $modinstance->GetVersion();
+	       $statuscol = lang('notinstalled');
 
 	       if ($brokendeps > 0)
 		 {
-		   echo "<td>&nbsp;</td>";
-		   echo '<td><a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a></td>';
+		   $actioncol = '<a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
 		 }
 	       else
 		 {
-		   echo "<td>&nbsp;</td>";
-		   echo "<td><a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a></td>";
+		   $actioncol = "<a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a>";
+		   $xmlcol = '&nbsp;';
+		 }
+
+	       if( $permsok )
+		 {
+		   $actioncol .= "<br/><a href='listmodules.php?action=remove&amp;module=$key'>".lang('remove').'</a>';
+		 }
+	       else
+		 {
+		   $actioncol .= "<br/><a href='listmodules.php?action=chmod&amp;module=$key'>".lang('changepermissions').'</a>';
 		 }
 	     }
 	   else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
 	     {
-	       echo "<td>".$dbm[$key]['Version']."</td>";
-	       echo "<td>".lang('needupgrade')."</td>";
-	       echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
-	       echo "<td><a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a></td>";
+               $versioncol = $dbm[$key]['Version'];
+	       $statuscol  = lang('needupgrade');
+	       $activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
+	       $actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
+	       $xmlcol = '&nbsp;';
 	     }
 	   else #Must be installed
 	     {
-	       echo "<td>".$dbm[$key]['Version']."</td>";
-	       echo "<td>".lang('installed')."</td>";
-#Can't be removed if it has a dependency...
+               $versioncol = $dbm[$key]['Version'];
+	       $statuscol  = lang('installed');
+
+               #Can't be removed if it has a dependency...
 	       if (!$modinstance->CheckForDependents())
 		 {
-		   echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
-		   echo "<td><a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE?$modinstance->UninstallPreMessage():lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a></td>";
+		   $activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
+		   $actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE?$modinstance->UninstallPreMessage():lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 		 }
 	       else
 		 {
@@ -494,28 +546,44 @@ if ($action == "showmoduleabout")
 		     $dependentof[$row['child_module']] = "";
 		   }
 		   $str = implode(array_keys($dependentof),",");
-		   echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."&quot;</td>";
-		   echo "<td>".lang('hasdependents')."
-					     (<strong>$str</strong>)</td>";
+		   $activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."&quot;";
+		   $statuscol .= "<br/>".lang('hasdependents')."(<strong>$str</strong>)";
 		   // END HAS DEPENDENTS ===========
+		 }
+	       
+	       if( !$permsok )
+		 {
+		   $statuscol .= "<br/>".lang('cantremove');
+		   $actioncol .= "<br/><a href='listmodules.php?action=chmod&amp;module=$key'>".lang('changepermissions').'</a>';
 		 }
 	     }
 
 	   //Is there help?
 	   if ($modinstance->GetHelp() != '')
 	     {
-	       echo "<td><a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a></td>";
-	     }
-	   else
-	     {
-	       echo "<td>&nbsp;</td>";
+	       $helpcol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a>";
 	     }
 
 	   //About is constructed from other details now
-	   echo "<td><a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a></td>";
+	   $aboutcol = "<a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a>";
 
-	   //xml export
-	   echo '<td><a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a></td>';
+           // row output
+	   echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
+	   echo "<td>$namecol</td>";
+	   echo "<td>$versioncol</td>";
+	   if( $statusspans )
+	     {
+	       echo "<td colspan=\"3\">$statuscol</td>";
+	     }
+	   else
+	     {
+	       echo "<td>$statuscol</td>";
+	       echo '<td class="pagepos">'.$activecol.'</td>';
+	       echo "<td>$actioncol</td>";
+	     }
+	   echo "<td>$helpcol</td>";
+	   echo "<td>$aboutcol</td>";
+	   echo "<td>$xmlcol</td>";
 	   echo "</tr>\n";
 
 	   ($curclass=="row1"?$curclass="row2":$curclass="row1");
