@@ -56,12 +56,15 @@ if ($access)
 	  {
 	    echo '<div class="pagecontainer">';
 	    echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
-	    echo lang('cantremovefiles');
+	    echo lang('cantchmodfiles');
 	    echo "</div>";
 	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 	    include_once("footer.php");
 	  }
-	redirect("listmodules.php");
+	else
+	  {
+	    redirect("listmodules.php");
+	  }
       }
 
     if ($action == "exportxml")
@@ -201,7 +204,10 @@ if ($access)
 	    echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 	    include_once("footer.php");
 	  }
-	redirect("listmodules.php");
+	else
+	  {
+	    redirect("listmodules.php");
+	  }
       }
 
     if ($action == 'upgrade')

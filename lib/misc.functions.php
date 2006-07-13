@@ -816,12 +816,25 @@ function recursive_delete( $dirname )
   {
     if($file!="." && $file!="..")
     {
-      if(!is_dir($dirname."/".$file))unlink ($dirname."/".$file);
-      else recursive_delete($dirname."/".$file);
+      if(!is_dir($dirname."/".$file))
+	{
+	  if( !@unlink ($dirname."/".$file) )
+	    {
+	      closedir( $dir_handle );
+	      return false;
+	    }
+	}
+      else 
+	{
+	  recursive_delete($dirname."/".$file);
+	}
     }
   }
   closedir($dir_handle);
-  rmdir($dirname);
+  if( ! @rmdir($dirname) )
+    {
+      return false;
+    }
   return true;
 }
 
@@ -841,11 +854,19 @@ function chmod_r( $path, $mode )
     $p = $path.DIRECTORY_SEPARATOR.$file;
     if( is_dir( $p ) )
     {
-      @chmod_r( $p, $mode );
+      if( !@chmod_r( $p, $mode ) )
+	{
+	  closedir( $dh );
+	  return false;
+	}
     }
     else if( !is_link( $p ) )
     {
-      @chmod( $p, $mode );
+      if( !@chmod( $p, $mode ) )
+	{
+	  closedir( $dh );
+	  return false;
+	}
     }
   }
   @closedir( $dh );
