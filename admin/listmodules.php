@@ -485,8 +485,19 @@ else if ($action == 'missingdeps')
 				}
 				else
 				{
-					echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."</td>";
-					echo "<td>".lang('hasdependents')."</td>";
+				  // HAS DEPENDENTS ===============
+				  $result = $db->Execute("SELECT child_module from
+".cms_db_prefix()."module_deps WHERE parent_module='$key'");
+
+				  $dependentof = "";
+				  while ($result && $row = $result->FetchRow()) {
+				    $dependentof .= $row['child_module'].",";
+				  }
+
+				  echo "<td class=\"pagepos\">".($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."&quot;</td>";
+				  echo "<td>".lang('hasdependents')."
+					     (<strong>$dependentof</strong>)</td>";
+				  // END HAS DEPENDENTS ===========
 				}
 			}
 
