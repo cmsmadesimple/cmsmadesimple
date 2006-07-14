@@ -140,7 +140,13 @@ function smarty_cms_help_function_content()
 <p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
 		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
 		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.</li>
+		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
+<p>Example of passing page content to a User Defined Tag as a parameter:</p>
+<pre>
+         {content assign=pagecontent}
+         {table_of_contents thepagecontent="$pagecontent"}
+</pre>
+</li>
 	</ul>
 	<?php
 }
