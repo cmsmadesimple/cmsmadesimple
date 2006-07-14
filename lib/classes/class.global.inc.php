@@ -141,16 +141,16 @@ class CmsObject {
 			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 			{
-				$dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+				$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 			}
 			else
 			{
-				$dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+				$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 			}
-			if (!$dbinstance || !$dbinstance->IsConnected())
-			{
-				die("Database Connection failed");
-			}
+			if (FALSE == $connect_result)
+			  {
+			    die('Database Connection failed');
+			  }
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 
 			//$dbinstance->debug = true;
