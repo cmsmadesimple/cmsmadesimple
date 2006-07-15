@@ -277,7 +277,11 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		}
 		else
 		{
-			$result .= $label.'<a href="'.$url.'"';
+			if (! isset($params['label_side']) || $params['label_side'] == 'left')
+				{
+				$result .= $label;
+				}
+			$result .= '<a href="'.$url.'"';
 
 			$result .= ' title="'.(isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name)).'"';
 
@@ -326,6 +330,10 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 			}
 
 			$result .= '</a>';
+			if (isset($params['label_side']) && $params['label_side'] == 'right')
+				{
+				$result .= $label;
+				}
 
 
 		}
@@ -374,7 +382,8 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  (&quot;Next Page&quot;/&quot;Previous Page&quot;) in different languages (0 for no label.) Danish (dk) or English (en), for now.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
-		<li><em>(optional)</em> <tt>label</tt> - Label to use in front of the link if applicable.</li>
+		<li><em>(optional)</em> <tt>label</tt> - Label to use in with the link if applicable.</li>
+		<li><em>(optional)</em> <tt>label_side left/right</tt> - Side of link to place the label (defaults to "left").</li>
 		<li><em>(optional)</em> <tt>title</tt> - Text to use in the title attribute.  If none is given, then the title of the page will be used for the title.</li>
 		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
 		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <B>Example:</B> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
