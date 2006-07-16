@@ -727,6 +727,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	}
 
 	$pagelist[] = &$thelist;
+	$indent = get_preference($userid, 'indent', true);
 	if (!isset($one) || in_array($one->Id(),$openedArray))
 	{
 		foreach ($children as $child)
@@ -798,7 +799,6 @@ function display_content_list($themeObject = null)
 
 	$hierarchy = &$hierManager->getRootNode();
 
-	$indent = get_preference($userid, 'indent', true);
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
