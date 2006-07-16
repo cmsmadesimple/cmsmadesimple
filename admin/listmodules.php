@@ -238,20 +238,20 @@ if ($access)
 	    $modinstance = $gCms->modules[$module]['object'];
 	    $result = $modinstance->Uninstall();
 
-#now insert a record
+            #now insert a record
 	    if (!isset($result) || $result === FALSE)
 	      {
-#now delete the record
+                #now delete the record
 		$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
 		$db->Execute($query, array($module));
 
-#delete any dependencies
+                #delete any dependencies
 		$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
 		$db->Execute($query, array($module));
 
 		Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 
-#and show the uninstallpost if necessary...
+                #and show the uninstallpost if necessary...
 		if ($modinstance->UninstallPostMessage() != FALSE)
 		  {
 		    //Redirect right away so that the uninstalled module is removed from the menu
@@ -515,11 +515,11 @@ if ($action == "showmoduleabout")
 
 	       if( $permsok )
 		 {
-		   $actioncol = "<a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
+		   $actioncol .= "<br/><a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
 		 }
 	       else
 		 {
-		   $actioncol = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+		   $actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 		 }
 	     }
 	   else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade

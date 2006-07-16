@@ -345,19 +345,19 @@ class Events
 
 		// delete the record
 		$params = array( $id );
-		$q = "DELETE FROM ".cms_db_prefix()."event_handlers;
-		WHERE event_id = ? AND ";
+		$query = "DELETE FROM ".cms_db_prefix()."event_handlers
+ 		          WHERE event_id = ? AND ";
 		if( $modulename != false )
 		{
-			$q .- 'module_name = ?';
+			$query .= 'module_name = ?';
 			$params[] = $module_handler;
 		}
 		else
 		{
-			$q .= 'tag_name = ?';
+			$query .= 'tag_name = ?';
 			$params[] = $tag_name;
 		}
-		$dbresult = $db->Execute( $q, array( null, $modulename, $eventname ) );
+		$dbresult = $db->Execute( $query, $params );
 		if( $dbresult == false )
 		{
 			return true;

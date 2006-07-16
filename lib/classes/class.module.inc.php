@@ -89,7 +89,7 @@ class ModuleOperations
 	// modules via XML to still delete them via ftp
 	// however, the 0111 makes all files world writable
 	// which I don't really like.
-	umask(0111);
+	umask(0022);
 
 	// start parsing xml
 	$parser = xml_parser_create();
@@ -102,17 +102,18 @@ class ModuleOperations
 	    return false;
 	  }
 
+	ModuleOperations::SetError( "" );
 	$havedtdversion = false;
 	$moduledetails = array();
 	$moduledetails['size'] = strlen($xml);
 	$required = array();
 	foreach( $val as $elem )
 	  {
-	$value = (isset($elem['value'])?$elem['value']:'');
-	$type = (isset($elem['type'])?$elem['type']:'');
-	switch( $elem['tag'] )
-	  {
-	  case 'NAME':
+	    $value = (isset($elem['value'])?$elem['value']:'');
+	    $type = (isset($elem['type'])?$elem['type']:'');
+	    switch( $elem['tag'] )
+	      {
+	      case 'NAME':
 		{
 		  if( $type != 'complete' && $type != 'close' )
 		    {
@@ -128,7 +129,7 @@ class ModuleOperations
 		  break;
 		}
 
-	  case 'DTDVERSION':
+	      case 'DTDVERSION':
 		{
 		  if( $type != 'complete' && $type != 'close' )
 		    {
@@ -143,7 +144,7 @@ class ModuleOperations
 		  break;
 		}
 
-	  case 'VERSION':
+	      case 'VERSION':
 		{
 		  if( $type != 'complete' && $type != 'close' )
 		    {
@@ -167,164 +168,176 @@ class ModuleOperations
 		  break;
 		}
 		
-	  case 'MINCMSVERSION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
+	      case 'MINCMSVERSION':
 		{
-		  continue;
-		}
-	      $moduledetails['mincmsversion'] = $value;
-	      break;
-	    }
-
-	  case 'MAXCMSVERSION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      $moduledetails['maxcmsversion'] = $value;
-	      break;
-	    }
-  
-	  case 'DESCRIPTION':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      $moduledetails['description'] = $value;
-	      break;
-	    }
-	    
-	  case 'HELP':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      $moduledetails['help'] = base64_decode($value);
-	      break;
-	    }
-	    
-	  case 'ABOUT':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      $moduledetails['about'] = base64_decode($value);
-	      break;
-	    }
-	    
-	  case 'REQUIRES':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      if( count($requires) != 2 )
-		{
-		  continue;
-		}
-	      if( !isset( $moduledetails['requires'] ) )
-		{
-		  $moduledetails['requires'] = array();
-		}
-	      array_push( $moduledetails['requires'], $requires );
-	      $required = array();
-	    }
-	    
-	  case 'REQUIREDNAME':
-	    $requires['name'] = $value;
-	    break;
-
-	  case 'REQUIREDVERSION':
-	    $requires['version'] = $value;
-	    break;
-
-	  case 'FILE':
-	    {
-	      if( $type != 'complete' && $type != 'close' )
-		{
-		  continue;
-		}
-	      if( $brief != 0 )
-		{
-		  continue;
-		}
-
-	      // finished a first file
-	      if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
-		  !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
-		{
-		  print_r( $moduledetails );
-		  ModuleOperations::SetError( lang('errorincompletexml') );
-		  return false;
-		}
-
-	      // ready to go
-	      $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-	      $filename=$moduledir.DIRECTORY_SEPARATOR.$moduledetails['filename'];
-	      if( !file_exists( $moduledir ) )
-		{
-		  @mkdir( $moduledir );
-		}
-	      if( $moduledetails['isdir'] )
-		{
-		  @mkdir( $filename );
-		}
-	      else
-		{
-		  $data = $moduledetails['filedata'];
-		  if( strlen( $data ) )
+		  if( $type != 'complete' && $type != 'close' )
 		    {
-		      $data = base64_decode( $data );
+		      continue;
 		    }
-		  $fp = fopen( $filename, "w" );
-		  if( !$fp )
-		    {
-		      ModuleOperations::SetError(lang('errorcanptcreatefile'));
-		    }
-		  if( strlen( $data ) )
-		    {
-		      fwrite( $fp, $data );
-		    }
-		  fclose( $fp );
+		  $moduledetails['mincmsversion'] = $value;
+		  break;
 		}
-	      unset( $moduledetails['filedata'] );
-	      unset( $moduledetails['filename'] );
-	      unset( $moduledetails['isdir'] );
-	    }
+		
+	      case 'MAXCMSVERSION':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  $moduledetails['maxcmsversion'] = $value;
+		  break;
+		}
+		
+	      case 'DESCRIPTION':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  $moduledetails['description'] = $value;
+		  break;
+		}
+		
+	      case 'HELP':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  $moduledetails['help'] = base64_decode($value);
+		  break;
+		}
+		
+	      case 'ABOUT':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  $moduledetails['about'] = base64_decode($value);
+		  break;
+		}
+	    
+	      case 'REQUIRES':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  if( count($requires) != 2 )
+		    {
+		      continue;
+		    }
+		  if( !isset( $moduledetails['requires'] ) )
+		    {
+		      $moduledetails['requires'] = array();
+		    }
+		  array_push( $moduledetails['requires'], $requires );
+		  $required = array();
+		}
+	    
+	      case 'REQUIREDNAME':
+		$requires['name'] = $value;
+		break;
 
-	  case 'FILENAME':
-	    $moduledetails['filename'] = $value;
-	    break;
+	      case 'REQUIREDVERSION':
+		$requires['version'] = $value;
+		break;
 
-	  case 'ISDIR':
-	    $moduledetails['isdir'] = $value;
-	    break;
+	      case 'FILE':
+		{
+		  if( $type != 'complete' && $type != 'close' )
+		    {
+		      continue;
+		    }
+		  if( $brief != 0 )
+		    {
+		      continue;
+		    }
 
-	  case 'DATA':
-	    if( $type != 'complete' && $type != 'close' )
-	      {
-		continue;
+		  // finished a first file
+		  if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
+		      !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
+		    {
+		      print_r( $moduledetails );
+		      ModuleOperations::SetError( lang('errorincompletexml') );
+		      return false;
+		    }
+
+		  // ready to go
+		  $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
+		  $filename=$moduledir.$moduledetails['filename'];
+		  if( !file_exists( $moduledir ) )
+		    {
+		      if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
+			{
+			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$moduledir);
+			  break;
+			}
+		    }
+		  if( $moduledetails['isdir'] )
+		    {
+		      if( !@mkdir( $filename ) && !is_dir( $filename ) )
+			{
+			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+			  break;
+			}
+		    }
+		  else
+		    {
+		      $data = $moduledetails['filedata'];
+		      if( strlen( $data ) )
+			{
+			  $data = base64_decode( $data );
+			}
+		      $fp = @fopen( $filename, "w" );
+		      if( !$fp )
+			{
+			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
+			}
+		      if( strlen( $data ) )
+			{
+			  @fwrite( $fp, $data );
+			}
+		      @fclose( $fp );
+		    }
+		  unset( $moduledetails['filedata'] );
+		  unset( $moduledetails['filename'] );
+		  unset( $moduledetails['isdir'] );
+		}
+
+	      case 'FILENAME':
+		$moduledetails['filename'] = $value;
+		break;
+
+	      case 'ISDIR':
+		$moduledetails['isdir'] = $value;
+		break;
+
+	      case 'DATA':
+		if( $type != 'complete' && $type != 'close' )
+		  {
+		    continue;
+		  }
+		$moduledetails['filedata'] = $value;
+		break;
 	      }
-	    $moduledetails['filedata'] = $value;
-	    break;
-	  }
-	  }
+	  } // foreach
 
 	if( $havedtdversion == false )
 	  {
 	    ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-	    return false;
 	  }
 
 	// we've created the module's directory
 	unset( $moduledetails['filedata'] );
 	unset( $moduledetails['filename'] );
 	unset( $moduledetails['isdir'] );
+
+	if( ModuleOperations::GetLastError() != "" )
+	  {
+	    return false;
+	  }
 	return $moduledetails;
   }
 
@@ -420,7 +433,7 @@ class ModuleOperations
       }
     else
       {
-	unset($cmsmodules[$module]);
+	unset($cmsmodules[$modulename]);
 	return false;
       }
     return true;
@@ -3392,7 +3405,7 @@ class CMSModule
 	*/
 	function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
-		Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
+	  Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
 	}
 
 
@@ -3405,7 +3418,7 @@ class CMSModule
 	 */
 	function CreateEvent( $eventname )
 	{
-		Events::CreateEvent($this->GetName(), $eventname);
+	  Events::CreateEvent($this->GetName(), $eventname);
 	}
 
 
@@ -3475,7 +3488,24 @@ class CMSModule
 	 */
 	function RemoveEvent( $eventname )
 	{
-		Events::RemoveEvent($this->GetName(), $eventname);
+	  Events::RemoveEvent($this->GetName(), $eventname);
+	}
+
+	/**
+	 * Remove an event from the CMS system
+	 * This function removes all handlers to the event, and completely removes
+	 * all references to this event from the database
+	 *
+	 * Note, only events created by this module can be removed.
+	 *
+	 * @param string The name of the event
+	 *
+	 * @returns nothing
+	 */
+	function RemoveEventHandler( $modulename, $eventname )
+	{
+	  Events::RemoveEventHandler($modulename, $eventname, false, 
+				     $this->GetName());
 	}
 
 
