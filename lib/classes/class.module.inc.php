@@ -3342,7 +3342,7 @@ class CMSModule
 
     /**
      * ShowMessage
-     * Outputs a page status message
+     * Returns a formatted page status message
      *
      * @param message - Message to be shown
      */
