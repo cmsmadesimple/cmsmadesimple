@@ -257,7 +257,39 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
 			<p class="pageinput">
-				<input type="text" name="media_type" maxlength="255" value="<?php echo $media_type?>" />				
+<?php
+
+$existingtypes = array("", 
+		       "all", 
+		       "aural", 
+		       "braille", 
+		       "embossed", 
+		       "handheld", 
+		       "print", 
+		       "projection", 
+		       "screen", 
+		       "tty", 
+		       "tv"
+		       );
+
+$typesdropdown = '<select name="media_type">';
+foreach ($existingtypes as $onetype)
+ {
+  $typesdropdown .= "<option value=\"$onetype\"";
+
+  if ($onetype == $media_type)
+     {
+       $typesdropdown .= ' selected="selected"';
+     }
+
+  $typesdropdown .= ">". lang("mediatype_".$onetype) ."</option>";
+ }
+$typesdropdown .= "</select>";
+
+ echo $typesdropdown;
+?>
+
+
 			</p>
 		</div>
 		<div class="pageoverflow">
