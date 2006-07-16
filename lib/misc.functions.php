@@ -741,7 +741,7 @@ function is_directory_writable( $path )
 {
    if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
    $result = true;
-   if( $handle = opendir( $path ) )
+   if( $handle = @opendir( $path ) )
      {
        while( false !== ( $file = readdir( $handle ) ) )
 	 {
@@ -767,6 +767,10 @@ function is_directory_writable( $path )
 	     }
 	 }
        @closedir( $handle );
+     }
+   else
+     {
+       return false;
      }
 
    return true;
