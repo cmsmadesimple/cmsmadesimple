@@ -515,11 +515,11 @@ if ($action == "showmoduleabout")
 
 	       if( $permsok )
 		 {
-		   $actioncol .= "<br/><a href='listmodules.php?action=remove&amp;module=$key'>".lang('remove').'</a>';
+		   $actioncol = "<a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
 		 }
 	       else
 		 {
-		   $actioncol .= "<br/><a href='listmodules.php?action=chmod&amp;module=$key'>".lang('changepermissions').'</a>';
+		   $actioncol = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 		 }
 	     }
 	   else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
@@ -560,7 +560,7 @@ if ($action == "showmoduleabout")
 	       if( !$permsok )
 		 {
 		   $statuscol .= "<br/>".lang('cantremove');
-		   $actioncol .= "<br/><a href='listmodules.php?action=chmod&amp;module=$key'>".lang('changepermissions').'</a>';
+		   $actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 		 }
 	     }
 
