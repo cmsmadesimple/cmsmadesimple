@@ -93,9 +93,14 @@ if (count($gCms->modules) > 0)
 	else
 	{
 		$params = @ModuleOperations::GetModuleParameters($id);
-		if (FALSE == empty($params['module_message'])) {
-		  echo $themeObject->ShowMessage(($params['module_message']));
-		}
+		if (FALSE == empty($params['module_message']))
+		  {
+		    echo $themeObject->ShowMessage($params['module_message']);
+		  }
+		if (FALSE == empty($params['module_error']))
+		  {
+		    echo $themeObject->ShowErrors($params['module_error']);
+		  }
 		echo '<div class="pagecontainer">';
 		echo '<div class="pageoverflow">';
 		echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
