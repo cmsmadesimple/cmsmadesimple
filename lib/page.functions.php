@@ -29,8 +29,10 @@
  * to the admin login.
  *
  * @since 0.1
+ * @param string no_redirect - If true, then don't redirect if not logged in
+ * @returns If they're logged in, true.  If not logged in, false. 
  */
-function check_login()
+function check_login($no_redirect = false)
 {
 	global $gCms;
 	$config = $gCms->config;
@@ -65,19 +67,28 @@ function check_login()
 			{
 				debug_buffer('passhash check failed...  redirect to login');
 				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-				redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+				if (false == $no_redirect)
+				  {
+				    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+				  }
+				return false;
 			}
 		}
 		else
 		{
 			debug_buffer('No cookies found.  Redirect to login.');
 			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+			if (false == $no_redirect)
+			  {
+			    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+			  }
+			return false;
 		}
 	}
 	else
 	{
 		debug_buffer('Session found.  Moving on...');
+		return true;
 	}
 }
 

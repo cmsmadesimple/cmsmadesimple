@@ -26,14 +26,22 @@ require_once("../lib/classes/class.user.inc.php");
 $error = "";
 
 if (isset($_SESSION['logout_user_now']))
-{
-	debug_buffer("Logging out.  Clearning cookies and session variables.");
-	unset($_SESSION['logout_user_now']);
-	unset($_SESSION['cms_admin_user_id']);
-	setcookie('cms_admin_user_id', '', time() - 3600);
-	setcookie('cms_passhash', '', time() - 3600);
-}
-
+  {
+    debug_buffer("Logging out.  Clearning cookies and session variables.");
+    unset($_SESSION['logout_user_now']);
+    unset($_SESSION['cms_admin_user_id']);
+    setcookie('cms_admin_user_id', '', time() - 3600);
+    setcookie('cms_passhash', '', time() - 3600);
+  }
+ else
+   {
+     $no_redirect = true;
+     $is_logged_in = check_login($no_redirect);
+     if (true == $is_logged_in)
+       {
+	 redirect($gCms->config['root_url'].'/'.$config['admin_dir'].'/index.php');
+       }
+   }
 if (isset($_POST["logincancel"]))
 {
 	debug_buffer("Login cancelled.  Returning to content.");
