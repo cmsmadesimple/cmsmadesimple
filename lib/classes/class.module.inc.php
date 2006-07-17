@@ -233,7 +233,7 @@ class ModuleOperations
 		      $moduledetails['requires'] = array();
 		    }
 		  array_push( $moduledetails['requires'], $requires );
-		  $required = array();
+		  $requires = array();
 		}
 	    
 	      case 'REQUIREDNAME':
