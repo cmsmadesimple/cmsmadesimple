@@ -62,6 +62,9 @@ if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
 $frontendlang = '';
 if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 
+$global_umask = '022';
+if (isset($_POST['global_umask'])) $global_umask = $_POST['global_umask'];
+
 // ADDED
 $logintheme = "default";
 if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
@@ -94,6 +97,7 @@ else if (isset($_POST["editsiteprefs"]))
 {
 	if ($access)
 	{
+	  set_site_preference('global_umask', $global_umask);
 	  set_site_preference('frontendlang', $frontendlang);
 		set_site_preference('enablecustom404', $enablecustom404);
 		set_site_preference('xmlmodulerepository', $xmlmodulerepository);
@@ -116,6 +120,7 @@ else if (isset($_POST["editsiteprefs"]))
 		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
 	}
 } else if (!isset($_POST["submit"])) {
+  $global_umask = get_site_preference('global_umask',$global_umask);
         $frontendlang = get_site_preference('frontendlang');
 	$enablecustom404 = get_site_preference('enablecustom404');
 	$custom404 = get_site_preference('custom404');
@@ -164,6 +169,10 @@ if ($message != "") {
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitename')?>:</p>
 			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="sitename" size="30" value="<?php echo $sitename?>" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('global_umask')?>:</p>
+			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="<?php echo $global_umask?>" /></p>
 		</div>
 		<div class="pageoverflow">
                    <p class="pagetext"><?php echo lang('frontendlang')?>:</p>

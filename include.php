@@ -216,6 +216,13 @@ if (isset($page))
 #Load all site preferences
 load_site_preferences();
 
+#Set a umask
+$global_umask = get_site_preference('global_umask','');
+if( $global_umask != '' )
+{
+  @umask( $global_umask );
+}
+
 #Set the locale if it's set
 #either in the config, or as a site preference.
 $frontendlang = get_site_preference('frontendlang','');

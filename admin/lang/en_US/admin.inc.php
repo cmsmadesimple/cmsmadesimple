@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['global_umask'] = 'File Creation Mask (umask)';
 $lang['admin']['errorcantcreatefile'] = 'Could not create a file (permissions problem?)';
 $lang['admin']['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
 $lang['admin']['errormodulenotloaded'] = 'Internal error, the module has not been instantiated';
