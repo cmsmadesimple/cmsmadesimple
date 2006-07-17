@@ -84,13 +84,6 @@ class ModuleOperations
 	    return false;
 	  }
 
-	// set a umask to try to make permissions wide open
-	// this will hopefully (in most cases) allow users who install
-	// modules via XML to still delete them via ftp
-	// however, the 0111 makes all files world writable
-	// which I don't really like.
-	umask(0022);
-
 	// start parsing xml
 	$parser = xml_parser_create();
 	$ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
