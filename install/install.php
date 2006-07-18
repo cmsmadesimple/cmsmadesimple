@@ -360,7 +360,7 @@ function showPageOne() {
       if($special_failed) {
 	echo '<p class="failure" align="center">One or more tests have failed. You can still install the system but some functions may not work correctly. Please click the Continue button.</p>';
       } else {
-	echo '<p class="success" align="center">All of your tests show successful. Please click the Continue button.</p>';
+	echo '<p class="success" align="center">All tests passed (at least at a minimum level). Please click the Continue button.</p>';
       }
       echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input class="defaultfocus" type="submit" value="Continue" /></p>';
     }
