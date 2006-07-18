@@ -33,6 +33,12 @@ function smarty_cms_function_print($params, &$smarty)
 		$js = '&amp;js=1';
 	}
 
+        $class = 'noprint';
+        if (!empty($params['class']) and $params['class'])
+        {
+          $class = $params['class'];
+        }
+
 	$target = '';
 	if (!empty($params['popup']) and $params['popup'])
 	{
@@ -60,7 +66,7 @@ function smarty_cms_function_print($params, &$smarty)
 	  }
        //will this work if using htaccess? (Yes! -Wishy)
 
-	$output = '<a href="' . $page_url . $goback . $js . '"'. $target . '>';
+	$output = '<a class="'. $class .'" href="' . $page_url . $goback . $js . '"'. $target . '>';
 	if (isset($params["showbutton"]))
 	{
 		$output .= '<img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/>';
@@ -84,6 +90,7 @@ function smarty_cms_help_function_print() {
                 <li><em>(optional)</em>popup - Set to "true" and page for printing will by opened in new window.</li>
                 <li><em>(optional)</em>script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em>showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
+                <li><em>(optional)</em>class - class for the link, defaults to "noprint".</li>
         </ul>
 	<?php
 }
