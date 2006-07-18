@@ -213,8 +213,8 @@ function showPageOne() {
   echo '<tr><td><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" /></td><td>A required test passed</td></tr>';
   echo '<tr><td><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A required test failed</td></tr>';
   echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required minumum value</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td><p>A setting is above the required value, but below the recommended value</p><p>or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
-  echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td><p>A setting meets or exceeds the recommended threshhold</p><p>or... A capability that <em>may</em> be required for some optional functionality is available</p></td></tr>';
+  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td>A setting is above the required value, but below the recommended value<br /><br />or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
+  echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td>A setting meets or exceeds the recommended threshhold<br /><br />or... A capability that <em>may</em> be required for some optional functionality is available</td></tr>';
   echo "</tbody>\n";
   echo "</table><br/>\n";
 
