@@ -31,7 +31,7 @@ function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
       $ret = true;
     }
 
-  echo "<tr class=\"$row\"><td>$desc have $str</td><td class=\"col2\">";
+  echo "<tr class=\"$row\"><td><span class=\"have\">You have $str</span>$desc </td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
@@ -80,7 +80,7 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 	  $ret = true;
 	}
     }
-  echo "<tr class=\"$row\"><td>$desc have \"$str\"";
+  echo "<tr class=\"$row\"><td><span class=\"have\">You have \"$str\"</span>$desc";
   if( isset( $warning ) && $warning != "" )
     {
       echo "<br/>$warning";

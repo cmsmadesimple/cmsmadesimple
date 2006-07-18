@@ -95,6 +95,11 @@ td, th {
 	text-align: center;
 }
 
+.have {
+	float: right;
+	color: #30529C;
+	}
+
 .tbhead {
 	color: #fff; 
 	font-weight: bold; 
