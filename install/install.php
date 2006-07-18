@@ -18,18 +18,20 @@
 
 function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
 {
-  echo "<tr class=\"$row\"><td>$desc</td><td class=\"col2\">";
   $icon = 'false.gif';
   $alt = 'Failure';
   $ret = false;
   
   $str = (bool) ini_get( $name );
+  $str = ($str) ? 1 : 0;
   if( $success == $str )
     {
       $icon = 'true.gif';
       $alt = 'Success';
       $ret = true;
     }
+
+  echo "<tr class=\"$row\"><td>$desc have $str</td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
@@ -37,20 +39,19 @@ function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
 
 function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2' )
 {
-  echo "<tr class=\"$row\"><td>$desc</td><td class=\"col2\">";
   $icon = 'red.gif';
   $alt="Failure";
   $ret = false;
   if( is_int( $yellowlimit ) && is_int( $greenlimit ) )
     {
-      $val = (int) ini_get( $name );
-      if( $yellowlimit >= $val )
+      $str = (int) ini_get( $name );
+      if( $yellowlimit >= $str )
 	{
 	  $alt = 'Caution';
 	  $icon = 'yellow.gif';
 	  $ret = true;
 	}
-      else if( $greenlimit >= $val )
+      else if( $greenlimit >= $str )
 	{
 	  $alt = 'Success';
 	  $icon = 'green.gif';
@@ -60,19 +61,20 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
   else
     {
       $str = strtoupper(ini_get( $name ));
-      if( strcmp( $yellowlimit, $str ) >= 0 )
+      if( strcmp( $str, $yellowlimit ) >= 0 )
 	{
 	  $alt = 'Caution';
 	  $icon = 'yellow.gif';
 	  $ret = true;
 	}
-      else if( strcmp( $greenlimit, $str ) >= 0 )
+      if( strcmp( $str, $greenlimit ) >= 0 )
 	{
 	  $alt = 'Success';
 	  $icon = 'green.gif';
 	  $ret = true;
 	}
     }
+  echo "<tr class=\"$row\"><td>$desc have $str</td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
@@ -251,22 +253,20 @@ function showPageOne() {
   echo "</td></tr>\n";
 
   $currow = "row1";
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (12M)", "12M", "16M", $currow );
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M)", "12M", "16M", $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (45s)", 45, 60, $currow );
+  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s)", 45, 60, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (30s)", 30, 45, $currow );
+  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s)", 30, 45, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_bool( "magic_quotes_gpc", "Checking magic quotes (off)", 0, $currow );
+  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (on)", 1, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (2M)", "2M", "10M", $currow );
+  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
 
   // do we have the file_get_contents function
   echo "<tr class=\"$currow\"><td>Checking for file_get_contents<br/><br/>
-        <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly, it may be advisable to upgrade to PHP 4.3 or greater.</em>
+        <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly in PHP 4.2, it may be advisable to upgrade to PHP 4.3 or greater.</em>
         </td><td class=\"col2\">";
   if (function_exists("file_get_contents"))
     {
