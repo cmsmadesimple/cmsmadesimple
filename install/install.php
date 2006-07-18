@@ -74,7 +74,7 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 	  $ret = true;
 	}
     }
-  echo "<tr class=\"$row\"><td>$desc have $str</td><td class=\"col2\">";
+  echo "<tr class=\"$row\"><td>$desc have \"$str\"</td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
