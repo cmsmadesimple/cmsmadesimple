@@ -60,7 +60,13 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
     }
   else
     {
+      $warning = "";
       $str = strtoupper(ini_get( $name ));
+      if( $str == "" )
+	{
+	  $str = $yellowlimit;
+	  $warning = "Could not retrieve a value.... passing anyways";
+	}
       if( strcmp( $str, $yellowlimit ) >= 0 )
 	{
 	  $alt = 'Caution';
@@ -74,7 +80,12 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 	  $ret = true;
 	}
     }
-  echo "<tr class=\"$row\"><td>$desc have \"$str\"</td><td class=\"col2\">";
+  echo "<tr class=\"$row\"><td>$desc have \"$str\"";
+  if( isset( $warning ) && $warning != "" )
+    {
+      echo "<br/>$warning";
+    }
+  echo "</td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
