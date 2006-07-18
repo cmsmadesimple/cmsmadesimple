@@ -45,16 +45,16 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
   if( is_int( $yellowlimit ) && is_int( $greenlimit ) )
     {
       $str = (int) ini_get( $name );
-      if( $yellowlimit >= $str )
-	{
-	  $alt = 'Caution';
-	  $icon = 'yellow.gif';
-	  $ret = true;
-	}
-      else if( $greenlimit >= $str )
+      if( $str >= $greenlimit )
 	{
 	  $alt = 'Success';
 	  $icon = 'green.gif';
+	  $ret = true;
+	}
+      else if( $str >= $yellowlimit )
+	{
+	  $alt = 'Caution';
+	  $icon = 'yellow.gif';
 	  $ret = true;
 	}
     }
@@ -201,8 +201,8 @@ function showPageOne() {
   echo "<tbody>\n";
   echo '<tr><td><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" /></td><td>A required test passed</td></tr>';
   echo '<tr><td><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A required test failed</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required threshhold</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td><p>A setting is above the required threshhold, but below recommended values</p><p>or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
+  echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required minumum value</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td><p>A setting is above the required value, but below the recommended value</p><p>or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
   echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td><p>A setting meets or exceeds the recommended threshhold</p><p>or... A capability that <em>may</em> be required for some optional functionality is available</p></td></tr>';
   echo "</tbody>\n";
   echo "</table><br/>\n";
@@ -253,11 +253,11 @@ function showPageOne() {
   echo "</td></tr>\n";
 
   $currow = "row1";
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M)", "12M", "16M", $currow );
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s)", 45, 60, $currow );
+  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s)", 30, 45, $currow );
+  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s, recommend 45s)", 30, 45, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
