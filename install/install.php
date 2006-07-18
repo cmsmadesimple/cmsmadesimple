@@ -16,6 +16,68 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
+{
+  echo "<tr class=\"$row\"><td>$desc</td><td class=\"col2\">";
+  $icon = 'false.gif';
+  $alt = 'Failure';
+  $ret = false;
+  
+  $str = (bool) ini_get( $name );
+  if( $success == $str )
+    {
+      $icon = 'true.gif';
+      $alt = 'Success';
+      $ret = true;
+    }
+  echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
+  echo "</td></tr>\n";
+  return $ret;
+}
+
+function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2' )
+{
+  echo "<tr class=\"$row\"><td>$desc</td><td class=\"col2\">";
+  $icon = 'red.gif';
+  $alt="Failure";
+  $ret = false;
+  if( is_int( $yellowlimit ) && is_int( $greenlimit ) )
+    {
+      $val = (int) ini_get( $name );
+      if( $yellowlimit >= $val )
+	{
+	  $alt = 'Caution';
+	  $icon = 'yellow.gif';
+	  $ret = true;
+	}
+      else if( $greenlimit >= $val )
+	{
+	  $alt = 'Success';
+	  $icon = 'green.gif';
+	  $ret = true;
+	}
+    }
+  else
+    {
+      $str = strtoupper(ini_get( $name ));
+      if( strcmp( $yellowlimit, $str ) >= 0 )
+	{
+	  $alt = 'Caution';
+	  $icon = 'yellow.gif';
+	  $ret = true;
+	}
+      else if( strcmp( $greenlimit, $str ) >= 0 )
+	{
+	  $alt = 'Success';
+	  $icon = 'green.gif';
+	  $ret = true;
+	}
+    }
+  echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
+  echo "</td></tr>\n";
+  return $ret;
+}
+
 $LOAD_ALL_MODULES=1;
 require(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
 
@@ -34,12 +96,12 @@ if (!file_exists($config)) {
 else if (filesize($config) == 0) {
     $file = @fopen($config, "w");
     if ($file != 0) {
-		$cwd = addslashes(dirname(dirname(__FILE__)));
-        fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
-        fclose($file);
+      $cwd = addslashes(dirname(dirname(__FILE__)));
+      fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
+      fclose($file);
     } else {
-        echo "Cannot modify $config, please change permissions to allow this\n";
-        exit;
+      echo "Cannot modify $config, please change permissions to allow this\n";
+      exit;
     } ## if
 }
 
@@ -114,149 +176,200 @@ switch ($currentpage) {
 } ## switch
 
 function showPageOne() {
-    ## test file permissions
-    ## apache (or other webserver) user needs to have write access to the cache and template_c dirs
-    ## as well as the cms root for config.php to be created.
+  ## test file permissions
+  ## apache (or other webserver) user needs to have write access to the cache and template_c dirs
+  ## as well as the cms root for config.php to be created.
 
-    ## find the user running this script
-    #$userid = posix_getuid();
-    #$userdata = posix_getpwuid($userid);
-    #$username = $userdata['name'];
+  ## find the user running this script
+  #$userid = posix_getuid();
+  #$userdata = posix_getpwuid($userid);
+  #$username = $userdata['name'];
 
-    ## echo "Userid ($userid) is named $username is running this script<p>\n";
+  ## echo "Userid ($userid) is named $username is running this script<p>\n";
 
-    ## check file perms
-	$continueon = true;
-    echo "<h3>Checking file permissions</h3>\n";
-    #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
-    $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );
+  ## check file perms
+  $continueon = true;
+  echo "<h3>Checking permissions and PHP settings</h3>\n";
+  #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
+  $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );
 
-    echo "<table class=\"regtable\" border=\"1\">\n";
-    echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
+  // legend
+  echo "<table class=\"regtable\" border=\"1\">\n";
+  echo "<thead class=\"tbhead\"><tr><th>Symbol</th><th>Definition</th><tr></thead>\n";
+  echo "<tbody>\n";
+  echo '<tr><td><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" /></td><td>A required test passed</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A required test failed</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required threshhold</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td><p>A setting is above the required threshhold, but below recommended values</p><p>or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
+  echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td><p>A setting meets or exceeds the recommended threshhold</p><p>or... A capability that <em>may</em> be required for some optional functionality is available</p></td></tr>';
+  echo "</tbody>\n";
+  echo "</table><br/>\n";
 
-    echo "<tr class=\"row1\"><td>Checking for PHP version 4.2+</td><td class=\"col2\">";
-	echo (@version_compare(phpversion(),"4.2.0") > -1?'<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />':'<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />');
-	(@version_compare(phpversion(),"4.2.0") > -1?null:$continueon=false);
-	echo "</td></tr>\n";
+  // body
+  echo "<table class=\"regtable\" border=\"1\">\n";
+  echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
-	echo "<tr class=\"row2\"><td>Checking for Session Functions</td><td class=\"col2\">";
-	if (function_exists("session_start"))
-	{
-		echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-	}
-	else
-	{
-		echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-		$continueon = false;
-	}
-	echo "</td></tr>\n";
-	
-	echo "<tr class=\"row1\"><td>Checking for md5 Function</td><td class=\"col2\">";
-	if (function_exists("md5"))
-	{
-		echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-	}
-	else
-	{
-		echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-		$continueon = false;
-	}
-	echo "</td></tr>\n";
+  echo "<tr class=\"row1\"><td>Checking for PHP version 4.2+</td><td class=\"col2\">";
+  echo (@version_compare(phpversion(),"4.2.0") > -1?'<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />':'<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />');
+  (@version_compare(phpversion(),"4.2.0") > -1?null:$continueon=false);
+  echo "</td></tr>\n";
+    
+  echo "<tr class=\"row2\"><td>Checking for Session Functions</td><td class=\"col2\">";
+  if (function_exists("session_start"))
+    {
+      echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      $continueon = false;
+    }
+  echo "</td></tr>\n";
+    
+  echo "<tr class=\"row1\"><td>Checking for md5 Function</td><td class=\"col2\">";
+  if (function_exists("md5"))
+    {
+      echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      $continueon = false;
+    }
+  echo "</td></tr>\n";
+    
+  echo "<tr class=\"row2\"><td>Checking for tokenizer functions</td><td class=\"col2\">";
+  if (function_exists("token_get_all"))
+    {
+      echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      $continueon = false;
+    }
+  echo "</td></tr>\n";
 
-        echo "<tr class=\"row2\"><td>Checking for tokenizer functions</td><td class=\"col2\">";
-        if (function_exists("token_get_all"))
-        {
-                echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-        }
-        else
-        {
-                echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-                $continueon = false;
-        }
-        echo "</td></tr>\n";
-
-
-
-	$currow = "row1";
-$special_failed=false;
-    foreach ($files as $f) {
-        #echo "<tr><td>\n";
-        ## check if we can write to the this file
-        echo "<tr class=\"$currow\"><td>Checking write permission on $f";
-
-//special check for modules dir
-	if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules' && !is_writable($f))
-	{
-	 echo '<br /><br /><em>Modules is not writable. You can still install the system, but you will not be able to install modules via the admin panel.</em>';
-$special_failed=true;
-	}
-
-//special check for uploads dir
-        if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' && !is_writable($f))
-        {
-        echo '<br /><br /><em>Uploads is not writable. You can still install the system, but you will not be able to upload files via the admin panel.</em>';
-$special_failed=true;
-        }
-        echo "</td><td class=\"col2\">";
-
-	if (is_writable($f))
-	{
-            echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-        } else {
-
-//special check for modules dir
-	    if (!(($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules') || ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads')))
-		{
-			$continueon=false;
-                }
-
-        	echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-        } ## if 
-        echo "</td></tr>\n";
-		($currow=="row1"?$currow="row2":$currow="row1");
-    } ## foreach
-
-	echo "<tr class=\"row2\"><td>Checking if session.save_path is set and writable";
-	if (session_save_path() == '')
-	{
-		echo '<br /><br /><em>session.save_path is not set. Not having a session.save_path disallows any logins to the admin panel.  Please adjust before continuing..</em>';
-		echo '</td><td class=\"col2\"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-		$continueon = false;
-	}
-	else
-	{
-		if (is_writable(session_save_path()))
-		{
-			echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-		}
-		else
-		{
-			echo '<br /><br /><em>session.save_path("'.session_save_path().'") is not writable. Not having this as writable disallows any logins to the admin panel.  Please adjust before continuing..</em>';
-			echo '</td><td class="col2"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-			$continueon = false;
-		}
-	}
-	echo "</td></tr>\n";
-
-    echo "</tbody></table>\n";
-
-	echo '<form method="post" action="install.php">';
+  $currow = "row1";
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (12M)", "12M", "16M", $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (45s)", 45, 60, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (30s)", 30, 45, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_bool( "magic_quotes_gpc", "Checking magic quotes (off)", 0, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (on)", 1, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (2M)", "2M", "10M", $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
   
-  	if ($continueon)
+  // do we have the file_get_contents function
+  echo "<tr class=\"$currow\"><td>Checking for file_get_contents</td><td class=\"col2\">";
+  if (function_exists("file_get_contents"))
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+  // can we set a php ini variable
+  echo "<tr class=\"$currow\"><td>Checking if ini_set works</td><td class=\"col2\">";
+  ini_set( 'max_execution_time', '123' );
+  if( ini_get('max_execution_time') == 123 )
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  
+  $special_failed=false;
+  foreach ($files as $f) {
+    #echo "<tr><td>\n";
+    ## check if we can write to the this file
+    echo "<tr class=\"$currow\"><td>Checking write permission on $f";
+      
+    //special check for modules dir
+    if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules' && !is_writable($f))
+      {
+	echo '<br /><br /><em>Modules is not writable. You can still install the system, but you will not be able to install modules via the admin panel.</em>';
+	$special_failed=true;
+      }
+      
+    //special check for uploads dir
+    if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' && !is_writable($f))
+      {
+	echo '<br /><br /><em>Uploads is not writable. You can still install the system, but you will not be able to upload files via the admin panel.</em>';
+	$special_failed=true;
+      }
+    echo "</td><td class=\"col2\">";
+      
+    if (is_writable($f))
+      {
+	echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+      } else {
+	
+      //special check for modules dir
+      if (!(($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules') || ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads')))
 	{
-            if($special_failed) {
-		echo '<p class="failure" align="center">One or more tests have failed. You can still install the system but some functions may not work correctly. Please click the Continue button.</p>';
-            } else {
-		echo '<p class="success" align="center">All of your tests show successful. Please click the Continue button.</p>';
-            }
-		echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input class="defaultfocus" type="submit" value="Continue" /></p>';
+	  $continueon=false;
 	}
-	else
+	
+      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+    } ## if 
+    echo "</td></tr>\n";
+    ($currow=="row1"?$currow="row2":$currow="row1");
+  } ## foreach
+    
+  echo "<tr class=\"$currow\"><td>Checking if session.save_path is set and writable";
+  if (session_save_path() == '')
+    {
+      echo '<br /><br /><em>session.save_path is not set. Not having a session.save_path disallows any logins to the admin panel.  Please adjust before continuing..</em>';
+      echo '</td><td class=\"col2\"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      $continueon = false;
+    }
+  else
+    {
+      if (is_writable(session_save_path()))
 	{
-		echo '<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>';
-		echo '<p class="continue" align="center"><input class="defaultfocus" type="Submit" value="Try Again" /></p>';
+	  echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
 	}
-	echo '</form>';
+      else
+	{
+	  echo '<br /><br /><em>session.save_path("'.session_save_path().'") is not writable. Not having this as writable disallows any logins to the admin panel.  Please adjust before continuing..</em>';
+	  echo '</td><td class="col2"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+	  $continueon = false;
+	}
+    }
+  echo "</td></tr>\n";
+    
+  echo "</tbody></table>\n";
+    
+  echo '<form method="post" action="install.php">';
+    
+  if ($continueon)
+    {
+      if($special_failed) {
+	echo '<p class="failure" align="center">One or more tests have failed. You can still install the system but some functions may not work correctly. Please click the Continue button.</p>';
+      } else {
+	echo '<p class="success" align="center">All of your tests show successful. Please click the Continue button.</p>';
+      }
+      echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input class="defaultfocus" type="submit" value="Continue" /></p>';
+    }
+  else
+    {
+      echo '<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>';
+      echo '<p class="continue" align="center"><input class="defaultfocus" type="Submit" value="Try Again" /></p>';
+    }
+  echo '</form>';
 
 } ## showPageOne
 
