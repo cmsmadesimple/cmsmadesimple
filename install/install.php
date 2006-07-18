@@ -263,9 +263,11 @@ function showPageOne() {
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (2M)", "2M", "10M", $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  
+
   // do we have the file_get_contents function
-  echo "<tr class=\"$currow\"><td>Checking for file_get_contents</td><td class=\"col2\">";
+  echo "<tr class=\"$currow\"><td>Checking for file_get_contents<br/><br/>
+        <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly, it may be advisable to upgrade to PHP 4.3 or greater.</em>
+        </td><td class=\"col2\">";
   if (function_exists("file_get_contents"))
     {
       echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
@@ -278,7 +280,9 @@ function showPageOne() {
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
 
   // can we set a php ini variable
-  echo "<tr class=\"$currow\"><td>Checking if ini_set works</td><td class=\"col2\">";
+  echo "<tr class=\"$currow\"><td>Checking if ini_set works<br/><br/>
+        <em>Although the ability to override php ini settings is not mandatory, some addon (optional) functionality uses ini_set to extend timeouts, and allow uploading of larger files, etc.  You may have difficulty with some addon functionality without this capability.</em>
+        </td><td class=\"col2\">";
   ini_set( 'max_execution_time', '123' );
   if( ini_get('max_execution_time') == 123 )
     {
