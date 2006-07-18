@@ -395,7 +395,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 function smarty_cms_help_function_cms_selflink() {
 	?>
 		<h3>What does this do?</h3>
-		<p>Creates a link to another cms content page inside your template or content.</p>
+		<p>Creates a link to another CMSMS content page inside your template or content. Can also be used for external links with the ext parameter.</p>
 		<h3>How do I use it?</h3>
 		<p>Just insert the tag into your template/page like: <code>{cms_selflink page=&quot;1&quot;}</code> or  <code>{cms_selflink page=&quot;alias&quot;}</code></p>
 		<h3>What parameters does it take?</h3>
