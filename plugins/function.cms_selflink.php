@@ -24,6 +24,38 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 	$url = '';
 
+/* ugly hack by tsw for external links with wiki styling */
+if ( isset($params['ext']) ) {
+
+/* thanks elijah */
+$url = $params['ext'];
+$text = $params['ext'];
+
+if ( isset($params['text'] )) {
+$text = $params['text'];
+}
+
+$title= '';
+if ( isset($params['title']) ) {
+$title=' title="'.$params['title'].'" ';
+}
+
+$target = '';
+if ( isset($params['target']) ) {
+$target=' target="'.$params['taget'].'" ';
+}
+
+$external_text = '(external link)';
+if ( isset($params['ext_info']) ) {
+$external_text ='( '.$ext_info.' )';
+}
+
+
+return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
+}
+
+
+
 	/* LeisureLarry - Changed if statement */
 	if (isset($params['page']) or isset($params['href']))
 	{
@@ -386,9 +418,11 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>label_side left/right</tt> - Side of link to place the label (defaults to "left").</li>
 		<li><em>(optional)</em> <tt>title</tt> - Text to use in the title attribute.  If none is given, then the title of the page will be used for the title.</li>
 		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
-		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <B>Example:</B> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
-		<li><em>(optional)</em> <tt>image</tt> - A url of an image to use in the link. <B>Example:</B> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot;}</li>
+		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <strong>Example:</strong> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
+		<li><em>(optional)</em> <tt>image</tt> - A url of an image to use in the link. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot;}</li>
 		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <B>Example:</B> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
+		<li><em>(optional)</em> <tt>ext</tt> - For external links, will add class=&quot;external and info text. <strong>warning:</strong> only text, target and title parameters are compatible with this parameter</li>
+		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link)</li>
 		</ul>
 		</p>
 
@@ -405,9 +439,12 @@ function smarty_cms_about_function_cms_selflink() {
 		<p>Version: 1.42</p>
 		<p>Modified: Marcus Bointon &lt;coolbru@users.sf.net&gt;</p>
 		<p>Version: 1.43</p>
+<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
+<p>Version: 1.44</p>
 
 		<p>
 		Change History:<br/>
+1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
 		1.43 - Added new parameters &quot;image&quot; and &quot;imageonly&quot; to allow attachment of images to be used for page links, either instead of or in addition to text links. (Marcus Bointon)<br />
 		1.42 - Added new parameter &quot;anchorlink&quot; and a new option for &quot;dir&quot; namely, &quot;anchor&quot;, for internal page links. e.g. dir=&quot;anchor&quot; anchorlink=&quot;internal_link&quot;. (Russ)<br />
 		1.41 - added new parameter &quot;href&quot; (LeisureLarry)<br />
