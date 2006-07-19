@@ -41,7 +41,7 @@ $title=' title="'.$params['title'].'" ';
 }
 
 $target = '';
-if ( isset($params['target']) ) {
+if ( isset($params['target']) && ( strlen($params['target'] > 0 ) ) ) {
 $target=' target="'.$params['taget'].'" ';
 }
 
