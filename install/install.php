@@ -158,11 +158,11 @@ if ($currentpage > 1) { require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARA
 
 echo "<h2>Thanks for installing CMS Made Simple</h2>\n";
 echo "<table class=\"countdown\" cellspacing=\"2\" cellpadding=\"2\"><tr>";
-echo "<td><img src=\"../images/cms/install/".($currentpage>=1?"1":"1off").".gif\" alt=\"Step 1\" /></td>";
-echo "<td><img src=\"../images/cms/install/".($currentpage>=2?"2":"2off").".gif\" alt=\"Step 2\" /></td>";
-echo "<td><img src=\"../images/cms/install/".($currentpage>=3?"3":"3off").".gif\" alt=\"Step 3\" /></td>";
-echo "<td><img src=\"../images/cms/install/".($currentpage>=4?"4":"4off").".gif\" alt=\"Step 4\" /></td>";
-echo "<td><img src=\"../images/cms/install/".($currentpage>=5?"5":"5off").".gif\" alt=\"Step 5\" /></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage==1?"1":"1off").".gif\" alt=\"Step 1\" /></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage==2?"2":"2off").".gif\" alt=\"Step 2\" /></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage==3?"3":"3off").".gif\" alt=\"Step 3\" /></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage==4?"4":"4off").".gif\" alt=\"Step 4\" /></td>";
+echo "<td><img src=\"../images/cms/install/".($currentpage==5?"5":"5off").".gif\" alt=\"Step 5\" /></td>";
 echo "</tr></table>\n";
 echo "<br />";
 
