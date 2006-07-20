@@ -209,7 +209,7 @@ function showPageOne() {
 
 
   // body
-  echo "<table class=\"regtable\" border=\"0\">\n";
+  echo "<table class=\"settings\" border=\"0\">\n";
   echo "<caption class=\"tbcaption\">Required settings</caption>\n";
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
@@ -322,7 +322,7 @@ function showPageOne() {
  echo "<br /><br />\n";
  
  // Checking for recommended settings
-  echo "<table class=\"regtable\" border=\"0\">\n";
+  echo "<table class=\"settings\" border=\"0\">\n";
   echo "<caption class=\"tbcaption\">Recommended settings</caption>\n";
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
   
@@ -424,7 +424,7 @@ there will be no other way to login to your CMS Made Simple admin system without
 
 <form action="install.php" method="post" name="page2form" id="page2form">
 
-<table cellpadding="2" border="1" class="regtable">
+<table border="0" class="adminaccount">
 
 	<tr class="row1">
 		<td>Username</td>
@@ -562,19 +562,19 @@ if (extension_loaded('sqlite'))
 <td>Database host address</td>
 <td><input type="text" name="host" value="<?php echo (isset($_POST['host'])?$_POST['host']:'localhost') ?>" size="20" maxlength="50" /></td>
 </tr>
-<tr class="row1">
+<tr class="row2">
 <td>Database name</td>
 <td><input type="text" name="database" value="<?php echo (isset($_POST['database'])?$_POST['database']:'cms') ?>" size="20" maxlength="50" /></td>
 </tr>
-<tr class="row2">
+<tr class="row1">
 <td>Username</td>
 <td><input type="text" name="username" value="<?php echo (isset($_POST['username'])?$_POST['username']:'cms_user') ?>" size="20" maxlength="50" /></td>
 </tr>
-<tr class="row1">
+<tr class="row2">
 <td>Password</td>
 <td><input type="password" name="password" value="<?php echo (isset($_POST['password'])?$_POST['password']:'cms_pass') ?>" size="20" maxlength="50" /></td>
 </tr>
-<tr CLASS="row2">
+<tr class="row1">
 <td>Table prefix</td>
 <td><input type="text" name="prefix" value="<?php echo (isset($_POST['prefix'])?$_POST['prefix']:'cms_') ?>" size="20" maxlength="50" />
 <input type="hidden" name="page" value="4" />
@@ -584,7 +584,7 @@ if (extension_loaded('sqlite'))
 <input type="hidden" name="adminpasswordagain" value="<?php echo $adminpassword ?>" />
 </td>
 </tr>
-<tr class="row1">
+<tr class="row2">
 <td>Create Tables (Warning: Deletes existing data)</td>
 <td><input type="checkbox" name="createtables" checked="true" /></td>
 </tr>

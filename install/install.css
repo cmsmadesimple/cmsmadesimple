@@ -65,7 +65,7 @@ h3   {
 
 td, th { 
 	padding: 0.4em; 
-	border: 1px solid #000;
+	border: 1px solid #7F7F7F;
 }
 
 .success {
@@ -86,21 +86,23 @@ table {
 	background: #fff;
 	color: #000;
 	font-size: 1em;
-}
-
-table.regtable {
-	border: 1px #000 solid;
+	border: 1px #7F7F7F solid;
 	border-spacing: 0px;
 	border-collapse: collapse;
+}
+
+table.countdown {
+	border-style: none;
+}
+
+table.settings {
 	width: 50em;
 }
 
 table.legend {
-	border: 1px #000 solid;
-	border-spacing: 0px;
-	border-collapse: collapse;
 	width: 35em;
 }
+
 
 .error {
 	color: red;
