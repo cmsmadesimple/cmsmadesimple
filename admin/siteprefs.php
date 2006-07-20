@@ -84,13 +84,7 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST['clearcache']))
 {
-	$smarty = new Smarty_CMS($config);
-	$smarty->clear_all_cache();
-	$smarty->clear_compiled_tpl();
-	if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
-	{
-		unlink(TMP_CACHE_LOCATION . '/contentcache.php');
-	}
+	ContentManager::ClearCache();
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))

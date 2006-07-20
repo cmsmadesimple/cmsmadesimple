@@ -2419,6 +2419,20 @@ class ContentManager
 
 		return $error;
 	}
+	
+	function ClearCache()
+	{
+		global $gCms;
+		$smarty =& $gCms->GetSmarty();
+		
+		$smarty->clear_all_cache();
+		$smarty->clear_compiled_tpl();
+
+		if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
+		{
+			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
+		}
+	}
 
 	function CreateFriendlyHierarchyPosition($position)
 	{

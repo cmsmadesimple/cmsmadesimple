@@ -87,6 +87,7 @@ function setdefault($contentid)
 		}
 		ContentManager::SetDefaultContent($contentid);
 		$result = true;
+		ContentManager::ClearCache();
 	}
 	return $result;
 }
@@ -242,6 +243,7 @@ function setactive($contentid, $active = true)
 		$value =& $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
+		ContentManager::ClearCache();
 	}
 }
 
@@ -297,6 +299,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 		}
 
 		ContentManager::SetAllHierarchyPositions();
+		ContentManager::ClearCache();
 	}
 }
 
@@ -361,6 +364,8 @@ function deletecontent($contentid)
 				toggleexpand($contentid, true);
 				
 				audit($contentid, $title, 'Deleted Content');
+				
+				ContentManager::ClearCache();
 			
 				$_GET['message'] = 'contentdeleted';
 			}
@@ -480,6 +485,7 @@ function reorder_process($get)
 		}
 		if (TRUE == $order_changed) {
 			ContentManager::SetAllHierarchyPositions();
+			ContentManager::ClearCache();
 		}
 	}
 	
