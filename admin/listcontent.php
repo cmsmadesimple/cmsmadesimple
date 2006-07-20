@@ -702,11 +702,12 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		if ($display == 'edit')
 		{
 			$thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
-			$thelist .= $editImg;;
+			$thelist .= $editImg;
 			$thelist .= "</a></td>\n";
 	        if ($one->DefaultContent() != true)
 			{
-				if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
+				//if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
+				if ($one->ChildCount() == 0)
 				{
 					$thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
 					$thelist .= $deleteImg;
@@ -745,6 +746,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
 function display_content_list($themeObject = null)
 {
+	global $gCms;
+
 	check_login();
 	$userid = get_userid();
 	
@@ -798,9 +801,9 @@ function display_content_list($themeObject = null)
 		}
 	}
 
-	if (check_modify_all($userid))
-		$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
-	else
+	//if (check_modify_all($userid))
+		//$hierManager = &ContentManager::GetAllContentAsHierarchy(false,$openedArray);
+	//else
 		$hierManager =& $gCms->GetHierarchyManager();
 
 	$hierarchy = &$hierManager->getRootNode();
