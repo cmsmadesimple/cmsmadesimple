@@ -31,7 +31,7 @@ function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
       $ret = true;
     }
 
-  echo "<tr class=\"$row\"><td><span class=\"have\">You have $str</span>$desc </td><td class=\"col2\">";
+  echo "<tr class=\"$row\"><td>$desc </td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
@@ -206,20 +206,11 @@ function showPageOne() {
   #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
   $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );
 
-  // legend
-  echo "<table class=\"regtable\" border=\"1\">\n";
-  echo "<thead class=\"tbhead\"><tr><th>Symbol</th><th>Definition</th><tr></thead>\n";
-  echo "<tbody>\n";
-  echo '<tr><td><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" /></td><td>A required test passed</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A required test failed</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required minumum value</td></tr>';
-  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td>A setting is above the required value, but below the recommended value<br /><br />or... A capability that <em>may</em> be required for some optional functionality is unavailable</p></td></tr>';
-  echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td>A setting meets or exceeds the recommended threshhold<br /><br />or... A capability that <em>may</em> be required for some optional functionality is available</td></tr>';
-  echo "</tbody>\n";
-  echo "</table><br/>\n";
+
 
   // body
-  echo "<table class=\"regtable\" border=\"1\">\n";
+  echo "<table class=\"regtable\" border=\"0\">\n";
+  echo "<caption class=\"tbcaption\">Required settings</caption>\n";
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
   echo "<tr class=\"row1\"><td>Checking for PHP version 4.2+</td><td class=\"col2\">";
@@ -263,50 +254,7 @@ function showPageOne() {
     }
   echo "</td></tr>\n";
 
-  $currow = "row1";
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s, recommend 45s)", 30, 45, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
 
-  // do we have the file_get_contents function
-  echo "<tr class=\"$currow\"><td>Checking for file_get_contents<br/><br/>
-        <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly in PHP 4.2, it may be advisable to upgrade to PHP 4.3 or greater.</em>
-        </td><td class=\"col2\">";
-  if (function_exists("file_get_contents"))
-    {
-      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
-    }
-  else
-    {
-      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
-    }
-  echo "</td></tr>\n";
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-
-  // can we set a php ini variable
-  echo "<tr class=\"$currow\"><td>Checking if ini_set works<br/><br/>
-        <em>Although the ability to override php ini settings is not mandatory, some addon (optional) functionality uses ini_set to extend timeouts, and allow uploading of larger files, etc.  You may have difficulty with some addon functionality without this capability.</em>
-        </td><td class=\"col2\">";
-  ini_set( 'max_execution_time', '123' );
-  if( ini_get('max_execution_time') == 123 )
-    {
-      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
-    }
-  else
-    {
-      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
-    }
-  echo "</td></tr>\n";
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  
-  $special_failed=false;
   foreach ($files as $f) {
     #echo "<tr><td>\n";
     ## check if we can write to the this file
@@ -365,9 +313,79 @@ function showPageOne() {
 	}
     }
   echo "</td></tr>\n";
+  
+      $currow = "row2";
+    $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
     
   echo "</tbody></table>\n";
-    
+ 
+ echo "<br /><br />\n";
+ 
+ // Checking for recommended settings
+  echo "<table class=\"regtable\" border=\"0\">\n";
+  echo "<caption class=\"tbcaption\">Recommended settings</caption>\n";
+  echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
+  
+    $currow = "row1";
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s, recommend 45s)", 30, 45, $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow );
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  
+    // do we have the file_get_contents function
+  echo "<tr class=\"$currow\"><td>Checking for file_get_contents<br/><br/>
+        <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly in PHP 4.2, it may be advisable to upgrade to PHP 4.3 or greater.</em>
+        </td><td class=\"col2\">";
+  if (function_exists("file_get_contents"))
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+  // can we set a php ini variable
+  echo "<tr class=\"$currow\"><td>Checking if ini_set works<br/><br/>
+        <em>Although the ability to override php ini settings is not mandatory, some addon (optional) functionality uses ini_set to extend timeouts, and allow uploading of larger files, etc.  You may have difficulty with some addon functionality without this capability.</em>
+        </td><td class=\"col2\">";
+  ini_set( 'max_execution_time', '123' );
+  if( ini_get('max_execution_time') == 123 )
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+  
+  $special_failed=false;
+    echo "</tbody></table>\n";
+
+  echo "<br /><br />\n";
+	
+  // legend
+  echo "<table class=\"legend\" border=\"0\">\n";
+  echo "<caption class=\"tbcaption\">Legend</caption>\n";
+  echo "<thead class=\"tbhead\"><tr><th>Symbol</th><th>Definition</th></tr></thead>\n";
+  echo "<tbody>\n";
+  echo '<tr><td><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" /></td><td>A required test passed</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A required test failed</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/red.gif" alt="Failure" height="16" width="16" border="0" /></td><td>A setting is below a required minumum value</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" /></td><td>A setting is above the required value, but below the recommended value<br /><br />or... A capability that <em>may</em> be required for some optional functionality is unavailable</td></tr>';
+  echo '<tr><td><img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" /></td><td>A setting meets or exceeds the recommended threshhold<br /><br />or... A capability that <em>may</em> be required for some optional functionality is available</td></tr>';
+  echo "</tbody>\n";
+  echo "</table><br/>\n";
+  
+	
   echo '<form method="post" action="install.php">';
     
   if ($continueon)

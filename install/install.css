@@ -4,7 +4,7 @@ body {
 	padding: 0px;
 	background: #ccc;
 	color: #00ff33;
-	font-size: 10pt;
+	font-size: 75.01%;
 }
 
 .body img {
@@ -16,7 +16,7 @@ body {
 .body  { 
 	color: #333; 
 	background: #fff; 
-	margin: 10px auto; 
+	margin: 1em auto; 
 	padding: 0; 
 	width: 800px; 
 	border: solid 1px #999;
@@ -24,7 +24,7 @@ body {
 
 p  { 
 	color: #333; 
-	font-size: 10pt; 
+	font-size: 1em; 
 	font-family: Verdana, serif; 
 	background-color: white;
 }
@@ -42,7 +42,7 @@ h1  {
 
 h2 { 
 	color: #0f337f; 
-	font-size: 12pt; 
+	font-size: 1.2em; 
 	font-family: Verdana, serif; 
 	font-weight: bold; 
 	background-color: white; 
@@ -51,19 +51,21 @@ h2 {
 
 h3   { 
 	color: #0f337f; 
-	font-size: 12pt; 
+	font-size: 1.2em; 
 	font-family: Verdana, serif; 
 	background-color: white; 
 	text-align: left; 
-	padding-left: 3px;
+	padding-left: 0.3em;
 	padding-bottom: 1px;
-	margin-top: 25px;
-	margin-bottom: 20px;
+	margin-top: 2.5em;
+	margin-bottom: 2em;
 	border-bottom: 1px solid #e7ab0b; 
-	border-left: 13px solid #e7ab0b; }
+	border-left: 1.3em solid #e7ab0b; }
+
 
 td, th { 
-	padding: 4px; 
+	padding: 0.4em; 
+	border: 1px solid #000;
 }
 
 .success {
@@ -76,17 +78,28 @@ td, th {
 	font-weight: bold;
 }
 
-.regtable {
+table {
 	margin-left: auto;
 	margin-right: auto;
-	border: 1px #000 solid;
-	border-collapse: collapse;
-	border-spacing: 0px;
-	padding: 2px;
+	padding: 0.2em;
 	font-family: Verdana, sans-serif;
 	background: #fff;
 	color: #000;
-	font-size: 10pt;
+	font-size: 1em;
+}
+
+table.regtable {
+	border: 1px #000 solid;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	width: 50em;
+}
+
+table.legend {
+	border: 1px #000 solid;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	width: 35em;
 }
 
 .error {
@@ -100,15 +113,28 @@ td, th {
 	color: #30529C;
 	}
 
-.tbhead {
+.tbcaption {
+	margin-left: auto;
+	margin-right: auto;
 	color: #fff; 
 	font-weight: bold; 
-	background:  #30529C !important; 
-	margin-bottom: 15px; 
+	font-size: 1.2em;
+	background:  #30529C; 
+	padding: 1em 0;
+	border: 1px #000 solid;
+	border-spacing: 0px;
+	border-collapse: collapse;
+	border-bottom: none;
+}
+.tbhead {
+	color: #30529C; 
+	font-weight: bold; 
+	background:  #FFE9AF !important; 
+	margin-bottom: 1.5em; 
 	width: 100%; 
 	text-align: left; 
-	
 }
+
 
 .row1 {
 	background: #e7e7e7;
@@ -119,16 +145,16 @@ td, th {
 }
 
 .col2  { 
-	padding-left: 20px;
+	padding-left: 2em;
 }
 
-a:link, a:active, a:visited  { color: #30529c; font-weight: bold; text-decoration: none }
+a:link, a:active, a:visited  { color: #30529c; font-weight: bold; }
 
 a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 
 .main {
-	padding-right: 20px;
-	padding-left: 20px;
+	padding-right: 2em;
+	padding-left: 2em;
 }
 
 .main table {
@@ -138,18 +164,18 @@ a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 
 .headerish {
 	font-family: Verdana, serif;
-	font-size: 12px;
+	font-size: 1.2em;
 	text-align: center;
-	font-size: 16px;
+	font-size: 1.6em;
 	color: #000;	
 }
 
 .countdown td {
-	padding: 5px;
+	padding: 0.5em;
 	font-family: Verdana, sans-serif;
 	background: #fff;
 	color: #000;
-	font-size: 12pt;
+	font-size: 1.2em;
 	border: 0px;
 }
 
@@ -165,8 +191,8 @@ a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 	text-decoration: none; 
 	text-align: left;
 	background-color: #eea351; 
-	border: white 4px outset; 
-	padding: 2px 11px 2px 10px; 
+	border: white 0.4em outset; 
+	padding: 0.2em 1.1em 0.2em 1em; 
 	display: block; 
 	margin: 1px; 
 }
@@ -174,6 +200,6 @@ a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 .continue a:hover {
 	color: #ccc; 
 	background-color: #ea8618;
-	border: white 4px inset; 
-	padding-left: 11px; 
+	border: white 0.4em inset; 
+	padding-left: 1.1em; 
 }
