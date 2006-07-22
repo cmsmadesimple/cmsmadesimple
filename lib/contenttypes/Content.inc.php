@@ -263,14 +263,28 @@ class content extends ContentBase
 
 		if ($this->mName == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('title'))));
-			$result = false;
+		  if ($this->mMenuText != '')
+		    {
+		      $this->mName = $this->mMenuText;
+		    }
+		  else
+		    {
+		      array_push($errors, lang('nofieldgiven',array(lang('title'))));
+		      $result = false;
+		    }
 		}
 
 		if ($this->mMenuText == '')
 		{
+		  if ($this->mName != '')
+		    {
+		      $this->mMenuText = $this->mName;
+		    }
+		  else
+		    {
 			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
 			$result = false;
+		    }
 		}
 		
 		if ($this->mAlias != $this->mOldAlias)
