@@ -254,7 +254,7 @@ function showPageOne() {
     }
   echo "</td></tr>\n";
 
-
+  $currow = 'row1';
   foreach ($files as $f) {
     #echo "<tr><td>\n";
     ## check if we can write to the this file
