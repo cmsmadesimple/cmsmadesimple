@@ -137,7 +137,7 @@ else
 				else if ($action == 'active')
 					DoContent($nodelist, $node, false, false);
 				else if ($action == 'delete')
-					DoContent($nodelist, $node);
+ 				  DoContent($nodelist, $node, false, true);
 			}
 		}
 		if ($action == 'reorder')
@@ -216,6 +216,11 @@ else
 			$idlist = array();
 			foreach ($nodelist as $node)
 			{
+			  if ($node->DefaultContent())
+			    {
+			      redirect('listcontent.php?error=error_delete_default_parent');
+			    }
+
 				echo $node->Name() . ' (' . $node->Hierarchy() . ')' . '<br />' . "\n";
 				$idlist[] = $node->Id();
 			}

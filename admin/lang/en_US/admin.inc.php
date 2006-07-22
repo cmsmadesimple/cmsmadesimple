@@ -13,6 +13,7 @@ $lang['admin']['originator'] = 'Originator';
 $lang['admin']['module_name'] = 'Module Name';
 $lang['admin']['event_name'] = 'Event Name';
 $lang['admin']['event_description'] = 'Event Description';
+$lang['admin']['error_delete_default_parent'] = 'You cannot delete the parent of a the default page.';
 $lang['admin']['order'] = 'Order';
 $lang['admin']['reorderpages'] = 'Reorder Pages';
 $lang['admin']['reorder'] = 'Reorder';
