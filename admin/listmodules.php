@@ -525,7 +525,7 @@ if ($action == "showmoduleabout")
 	   else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
 	     {
                $versioncol = $dbm[$key]['Version'];
-	       $statuscol  = lang('needupgrade');
+	       $statuscol  = '<span class="important">'.lang('needupgrade').'</span>';
 	       $activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
 	       $actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
 	       $xmlcol = '&nbsp;';

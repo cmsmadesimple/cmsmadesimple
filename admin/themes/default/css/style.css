@@ -867,3 +867,6 @@ ul.sortableList li li li li {
 ul.sortableList li li li li li { 
 	background-color:  #ffffff;
  }
+.important {
+ color: red;
+}
