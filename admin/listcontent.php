@@ -85,7 +85,33 @@ function setdefault($contentid)
 				}
 			}
 		}
-		ContentManager::SetDefaultContent($contentid);
+		
+		$db = &$gCms->GetDb();
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$old_id = $db->GetOne($query);
+		if (isset($old_id))
+		{
+			$node = &$hierManager->getNodeById($old_id);
+			if (isset($node))
+			{
+				$value =& $node->getContent();
+				if (isset($value))
+				{
+					$value->SetDefaultContent(false);
+				}
+			}
+		}
+		
+		$node = &$hierManager->getNodeById($contentid);
+		if (isset($node))
+		{
+			$value =& $node->getContent();
+			if (isset($value))
+			{
+				$value->SetDefaultContent(true);
+			}
+		}
+
 		$result = true;
 		ContentManager::ClearCache();
 	}
@@ -629,7 +655,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if($one->Active())
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == 1?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
 			}
 			else
 			{
@@ -641,9 +667,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			$thelist .= "<td>&nbsp;</td>\n";
 		}
 
-		if ($one->IsDefaultPossible() == TRUE && $display == 'edit')
+		if ($one->IsDefaultPossible() && $display == 'edit')
 		{
-			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent() == true?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+			$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 		}
 		else
 		{
