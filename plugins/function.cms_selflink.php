@@ -354,7 +354,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			}
 			if (isset($params['image']) and !empty($params['image'])) {
 				$result .= "<img src=\"{$params['image']}\" alt=\"$linktext\" />";
-				if (isset($params['imageonly']) and $params['imageonly']) {
+				if (!(isset($params['imageonly']) and $params['imageonly'])) {
 					$result .= " $linktext";
 				}
 			} else {
