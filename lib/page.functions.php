@@ -121,10 +121,11 @@ function check_passhash($userid, $checksum)
 
 	global $gCms;
 	$db =& $gCms->GetDb();
+	$config =& $gCms->GetConfig();
 
 	$oneuser = UserOperations::LoadUserByID($userid);
 
-	if ($oneuser && $checksum == md5(md5($oneuser->password)))
+	if ($oneuser && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
 	{
 		$check = true;
 	}
@@ -144,6 +145,7 @@ function generate_user_object($userid)
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
+	$config =& $gCms->GetConfig();
 
 	$oneuser = UserOperations::LoadUserByID($userid);
 
@@ -152,7 +154,7 @@ function generate_user_object($userid)
 		$_SESSION['cms_admin_user_id'] = $userid;
 		$_SESSION['cms_admin_username'] = $oneuser->username;
 		setcookie('cms_admin_user_id', $oneuser->id);
-		setcookie('cms_passhash', md5(md5($oneuser->password)));
+		setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
 	}
 }
 
