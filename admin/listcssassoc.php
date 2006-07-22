@@ -124,7 +124,7 @@ else {
 	<?php echo $themeObject->ShowHeader('currentassociations'); ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('template')?> :</p>
-			<p class="pageinput"><?php echo (isset($name)?$name:"")?></p>
+		        <p class="pageinput"><?php echo '<a href="edittemplate.php?template_id='.$_GET['id'].'"  name="edittemplate">'.(isset($name)?$name:"").'</a>';?></p>
 		</div>
 
 <?php
