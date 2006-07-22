@@ -395,12 +395,12 @@ function showPageOne() {
       } else {
 	echo '<p class="success" align="center">All tests passed (at least at a minimum level). Please click the Continue button.</p>';
       }
-      echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input class="defaultfocus" type="submit" value="Continue" /></p>';
+      echo '<p class="continue" align="center"><input type="hidden" name="page" value="2" /><input type="submit" value="Continue" /></p>';
     }
   else
     {
       echo '<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>';
-      echo '<p class="continue" align="center"><input class="defaultfocus" type="Submit" value="Try Again" /></p>';
+      echo '<p class="continue" align="center"><input type="Submit" value="Try Again" /></p>';
     }
   echo '</form>';
 
@@ -775,7 +775,7 @@ function showPageFour($sqlloaded = 0) {
 		</tr>
 		-->
     </table>
-    <p align="center" class="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input class="defaultfocus" type="submit" value="Continue" /></p>
+    <p align="center" class="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>--><input type="submit" value="Continue" /></p>
 	</form>
 
 	<?php
