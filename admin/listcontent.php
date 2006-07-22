@@ -98,6 +98,7 @@ function setdefault($contentid)
 				if (isset($value))
 				{
 					$value->SetDefaultContent(false);
+					$value->Save();
 				}
 			}
 		}
@@ -109,6 +110,7 @@ function setdefault($contentid)
 			if (isset($value))
 			{
 				$value->SetDefaultContent(true);
+				$value->Save();
 			}
 		}
 
