@@ -86,6 +86,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 		$Prev_label = "";
 		$Next_label = "";
 		$Anchor_label = ""; //*Russ
+		$Parent_label = "Parent page: "; //uplink
 	}
 	elseif (isset($params['dir'])) // this part is by mbv built on a proposal by 100rk
 	{
@@ -108,6 +109,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				case 'en':
 					$Prev_label = "Previous page: ";
 					$Next_label = "Next page: ";
+					$Parent_label = "Parent page: "; //uplink
 					break;
 				case '0':
 					$Prev_label = "";
@@ -116,12 +118,15 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				default:
 					$Prev_label = "Previous page: ";
 					$Next_label = "Next page: ";
+					$Parent_label = "Parent page: "; //uplink
+					break;
 			}
 		}
 		else
 		{
 			$Prev_label = "Previous page: ";
 			$Next_label = "Next page: ";
+			$Parent_label = "Parent page: "; //uplink
 		}
 		$condition = $order_by = false;
 		switch (strtolower($params['dir']))
@@ -147,29 +152,37 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				$order_by = 'something';
 				$label = '';
 				break;
+			case 'up': //* Start uplink
+				$condition = '|';
+				$order_by = '-';
+				$label='';
+				break; //* End uplink
 		}
 		if ($condition && $order_by)
 		{
 			global $gCms;
 			$hm =& $gCms->GetHierarchyManager();
-			$flatcontent =& $hm->getFlattenedContent();
-			$number = 0;
-			for ($i = 0; $i < count($flatcontent); $i++)
-			{
-				if ($condition == '-')
-				{
-					if ($flatcontent[$i]->DefaultContent() == true)
-					{
-						$number = $i;
-						break;
-					}
-				}
-				else if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
-				{
+			if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
+			  {
+			    $flatcontent =& $hm->getFlattenedContent();
+			    $number = 0;
+			    for ($i = 0; $i < count($flatcontent); $i++)
+			      {
+    				if ($condition == '-')
+				  {
+				    if ($flatcontent[$i]->DefaultContent() == true)
+				      {
 					$number = $i;
 					break;
-				}
-			}
+				      }
+				  }
+    				else if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
+				  {
+				    $number = $i;
+				    break;
+				  }
+			      }
+			  } //* uplink addition
 			if ($condition == '<')
 			{
 				if ($number > 0)
@@ -251,6 +264,26 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 					}
 				}
 			} //* End Russ addition
+			else if ($condition == '|') //* Start uplink
+			{
+				$node =& $hm->getNodeById($gCms->variables['content_id']);
+				$node =& $node->getParentNode();
+				//				print_r($node);
+				if (!isset($node)) return;
+				$content =& $node->GetContent();
+				if ($content != FALSE)
+				{
+					if ($content->Active() && $content->HasUsableLink())
+					{
+						$pageid = $content->Id();
+						$alias = $content->Alias();
+						$name = $content->Name();
+						$menu_text = $content->MenuText();
+						$url = $content->GetURL();
+						$titleattr = $content->TitleAttribute();
+					}
+				}
+			} //* End uplink
 			else if ($condition == '-')
 			{
 				$content =& $flatcontent[$number];
@@ -304,6 +337,10 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			{
 				$result .= 'next';
 			}
+			else if ($params['dir'] == 'up')//* Start uplink
+			{
+				$result .= 'up';
+			}//* End uplink
 			$result .= '" title="' . (isset($params['title']) ? $params['title'] : ($titleattr != '' ? $titleattr : $name));
 			$result .= '" href="' . $url . '" />';
 		}
@@ -405,7 +442,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
 		<li><em>(optional)</em> <tt>anchorlink</tt> - New paramater for an internal page link. If this is used then <tt>dir =&quot;anchor&quot;</tt> should also be set. No need to add the #, because it is added automatically.</li> <!-- Russ - 25-04-2006 -->
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
-		<li><em>(optional)</em> <tt>dir start/next/prev (previous)</tt> - Links to the default start page or the next or previous page. If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
+									     <li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
 		<B>Note!</B> Only one of the above may be used in the same cms_selflink statement!!
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the Page Name is used instead.</li>
 		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
@@ -439,12 +476,15 @@ function smarty_cms_about_function_cms_selflink() {
 		<p>Version: 1.42</p>
 		<p>Modified: Marcus Bointon &lt;coolbru@users.sf.net&gt;</p>
 		<p>Version: 1.43</p>
-<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
-<p>Version: 1.44</p>
+		<p>Modified: Tatu Wikman &lt;tsw@backspace.fi&gt;</p>
+		<p>Version: 1.44</p>
+		<p>Modified: Hans Mogren &lt;http://hans.bymarken.net/&gt;</p>
+		<p>Version: 1.45</p>
 
 		<p>
 		Change History:<br/>
-1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
+		1.45 - Added a new option for &quot;dir&quot;, &quot;up&quot;, for links to the parent page e.g. dir=&quot;up&quot; (Hans Mogren).<br />
+		1.44 - Added new parameters &quot;ext&quot; and &quot;ext_info&quot; to allow external links with class=&quot;external&quot; and info text after the link, ugly hack but works thinking about rewriting this(Tatu Wikman)<br />
 		1.43 - Added new parameters &quot;image&quot; and &quot;imageonly&quot; to allow attachment of images to be used for page links, either instead of or in addition to text links. (Marcus Bointon)<br />
 		1.42 - Added new parameter &quot;anchorlink&quot; and a new option for &quot;dir&quot; namely, &quot;anchor&quot;, for internal page links. e.g. dir=&quot;anchor&quot; anchorlink=&quot;internal_link&quot;. (Russ)<br />
 		1.41 - added new parameter &quot;href&quot; (LeisureLarry)<br />
