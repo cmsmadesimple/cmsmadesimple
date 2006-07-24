@@ -172,7 +172,7 @@ function smarty_cms_help_function_breadcrumbs() {
 <li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
 <li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
     the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
-<li><em>(optional)</em> <tt>root_url</tt> - Override the URL of the root page. Useful for making link be to '/' instead of '/home/'. This requires that the root pages be set as the default page.</li>
+<li><em>(optional)</em> <tt>root_url</tt> - Override the URL of the root page. Useful for making link be to '/' instead of '/home/'. This requires that the root page be set as the default page.</li>
 
 <li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
 <li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
