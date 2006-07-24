@@ -2169,6 +2169,30 @@ class CMSModule
 		return $text;
 	}
 
+
+	/**
+	 * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the textbox
+	 * @param string The predefined value of the textbox, if any
+	 * @param string The number of columns wide the textbox should be displayed
+	 * @param string The maximum number of characters that should be allowed to be entered
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param string The text for label 
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
+	{
+	        if ($label != '') {
+		  $label = $name;
+		}
+		$text = '<label for="'.$name.'" '.$labeladdtext.'>'.$label.'</label>';
+		$text .= CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
+		return $text;
+	}
+
 	/**
 	 * Returns the xhtml equivalent of a file-selector field.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
