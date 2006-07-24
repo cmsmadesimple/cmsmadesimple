@@ -2007,6 +2007,8 @@ class CMSModule
 		if (isset($params['lang']))
 		{
 			$this->curlang = $params['lang'];
+			#clear langhash so that new language can be loaded
+			$this->langhash = array();
 		}
 		if( !isset($params['action']) )
 		{
