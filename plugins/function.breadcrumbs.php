@@ -185,7 +185,7 @@ function smarty_cms_help_function_breadcrumbs() {
 function smarty_cms_about_function_breadcrumbs() {
 ?>
 <p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.6</p>
+<p>Version: 1.7</p>
 <p>
 Change History:<br/>
 1.1 - Modified to use new content rewrite (wishy)<br />
