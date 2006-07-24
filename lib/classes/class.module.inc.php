@@ -2880,7 +2880,7 @@ class CMSModule
 		$ourlang = $this->curlang;
 
 		#Load the language if it's not loaded
-		if ((is_array($this->langhash) && count(array_keys($this->langhash)) == 0) || !isset($this->langhash) || !is_array($this->langhash))
+		if ((is_array($this->langhash[$ourlang]) && count(array_keys($this->langhash[$ourlang])) == 0) || !isset($this->langhash[$ourlang]) || !is_array($this->langhash[$ourlang]))
 		{
 			$dir = $gCms->config['root_path'];
 
@@ -2935,20 +2935,20 @@ class CMSModule
 				include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
 			}
 
-			$this->langhash = &$lang;
+			$this->langhash[$ourlang] = &$lang;
 		}
 
 		$result = '';
 
-		if (isset($this->langhash[$name]))
+		if (isset($this->langhash[$ourlang][$name]))
 		{
 			if (count($params))
 			{
-				$result = @vsprintf($this->langhash[$name], $params);
+				$result = @vsprintf($this->langhash[$ourlang][$name], $params);
 			}
 			else
 			{
-				$result = $this->langhash[$name];
+				$result = $this->langhash[$ourlang][$name];
 			}
 		}
 		else
