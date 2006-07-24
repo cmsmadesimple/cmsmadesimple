@@ -32,10 +32,12 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	if (!empty($params['style'])) $style = $params['style']; // Except if "false" given in params
 	
 	// Default styles
-	$inputStyle = 'style="width: 350px; border: 1px solid black"'; // input boxes
-	$taStyle = 'style="width: 350px; border: 1px solid black;"'; // TextArea boxes
-	$formStyle = 'style="font-weight: bold;"'; // form
+	$inputStyle = 'style="width:100%;border: 1px solid black; margin:0 0 1em 0;"'; // input boxes
+	$taStyle = 'style="width:100%; border: 1px solid black;"'; // TextArea boxes
+	$formStyle = 'style="width:30em; important; font-weight: bold;"'; // form
 	$errorsStyle = 'style="color: white; background-color: red; font-weight: bold; border: 3px solid black; margin: 1em;"'; // Errors box (div)
+        $labelStyle = '"style="display:block;"';
+        $buttonStyle = 'style="float:left; width:49%; margin-top:1em;"';
 
 	$errors=$name=$email=$subject=$message = '';
 	if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -75,20 +77,23 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 
 	<!-- CONTACT_FORM -->
 	<form action="<?php $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] ?>" method="post" <?php echo ($style) ? $formStyle:''; ?>>
-		<p>
-			<label>Your name :</label>
-			<input type="text" name="name" value="<?php echo htmlspecialchars($name); ?>" size="50" <?php echo ($style) ? $inputStyle:''; ?>/></p>
-		<p>
-			<label>Your email address : </label>
-			<input type="text" name="email" value="<?php echo htmlspecialchars($email); ?>" size="50" <?php echo ($style) ? $inputStyle:''; ?>/></p>
-		<p>
-			<label>Subject : </label>
-			<input type="text" name="subject" value="<?php echo htmlspecialchars($subject); ?>" size="50" <?php echo ($style) ? $inputStyle:''; ?>/></p>
-		<p>
-			<label>Message : </label><br />
-			<textarea name="message" cols="40" rows="10" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
-		</p>
-		<p><input type="submit" value="Submit" /> <input type="reset" value="Clear" /></p>
+                 <fieldset>
+                        <legend>Contact</legend>
+			<label for="name" <?php echo ($style) ? $labelStyle:''; ?> >Your name :</label>
+			<input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+
+			<label for="email" <?php echo ($style) ? $labelStyle:''; ?> >Your email address : </label>
+			<input type="text" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+
+			<label for="subject" <?php echo ($style) ? $labelStyle:''; ?> >Subject : </label>
+			<input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+
+			<label for="message" <?php echo ($style) ? $labelStyle:''; ?> >Message : </label>
+			<textarea name="message" id="message" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
+
+		        <input type="submit" class="button" value="Submit" <?php echo ($style) ? $buttonStyle: ''; ?> /> 
+                        <input class="button" type="reset" value="Clear" <?php echo ($style) ? $buttonStyle: ''; ?> />
+                 </fieldset>
 	</form>
 	<!-- END of CONTACT_FORM -->
 
