@@ -2188,8 +2188,9 @@ class CMSModule
 	        if ($label == '') {
 		  $label = $name;
 		}
-		$text = '<label for="'.$name.'" '.$labeladdtext.'>'.$label.'</label>';
+		$text = '<label for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
 		$text .= $this->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
+		$text .= "\n";
 		return $text;
 	}
 
