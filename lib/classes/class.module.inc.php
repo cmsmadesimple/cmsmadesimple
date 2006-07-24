@@ -2185,7 +2185,7 @@ class CMSModule
 	 */
 	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 	{
-	        if ($label != '') {
+	        if ($label == '') {
 		  $label = $name;
 		}
 		$text = '<label for="'.$name.'" '.$labeladdtext.'>'.$label.'</label>';
