@@ -45,6 +45,12 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	if (isset($params['root']))	{
 		$root = $params['root'];
 	}
+	$root_url='';
+#Check if user has requested to overrided the root URL
+	if (isset($params['root_url']))	{
+		$root_url = $params['root_url'];
+	}
+
 
 	$endNode = &$manager->sureGetNodeById($thispage);
 
@@ -108,7 +114,14 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 				$onecontent = &$node->getContent();
 				if ($onecontent->Id() != $thispage && $onecontent->Type() != 'seperator') {
 					if (($onecontent->getURL() != "") && ($onecontent->Type() != 'sectionheader')) {
-						$trail .= '<a href="' . $onecontent->getURL() . '"';
+					  if ($onecontent->DefaultContent() && false == empty($root_url))
+					    {
+					      $trail .= '<a href="' . $root_url . '"';     
+					    }
+					      else
+						{
+						  $trail .= '<a href="' . $onecontent->getURL() . '"';
+						}
 						$trail .= $classid;
 						$trail .= '>';
 						$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
@@ -159,6 +172,8 @@ function smarty_cms_help_function_breadcrumbs() {
 <li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
 <li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
     the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
+<li><em>(optional)</em> <tt>root_url</tt> - Override the URL of the root page. Useful for making link be to '/' instead of '/home/'. This requires that the root pages be set as the default page.</li>
+
 <li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
 <li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
 <li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
@@ -179,6 +194,7 @@ Change History:<br/>
 1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
 1.5 - Modified to use new hierarchy manager<br />
 1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
+1.7 - Added root_url parameter (elijahlofgren)<br />
 </p>
 <?php
 }
