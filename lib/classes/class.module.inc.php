@@ -2189,7 +2189,7 @@ class CMSModule
 		  $label = $name;
 		}
 		$text = '<label for="'.$name.'" '.$labeladdtext.'>'.$label.'</label>';
-		$text .= CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
+		$text .= $this->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
 		return $text;
 	}
 
