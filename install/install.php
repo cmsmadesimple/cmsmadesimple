@@ -659,12 +659,22 @@ function showPageFour($sqlloaded = 0) {
 
 		$CMS_INSTALL_DROP_TABLES=1;
 		$CMS_INSTALL_CREATE_TABLES=1;
-
+		
 		include_once(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."schema.php");
+		
+		echo "<p>Importing sample data...";
+		
+		$handle = '';
 
-		echo "<p>Importing initial data...";
+		if (isset($_POST["createextra"]))
+		{
+			$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."extra.sql", 'r');
+		}
+		else
+		{
+			$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."initial.sql", 'r');
+		}
 
-		$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."initial.sql", 'r');
 		if ($handle) {
 			while (!feof($handle)) {
 				set_magic_quotes_runtime(false);
@@ -685,33 +695,6 @@ function showPageFour($sqlloaded = 0) {
 		fclose($handle);
 
 		echo "[done]</p>";
-
-		if (isset($_POST["createextra"]))
-		{
-			echo "<p>Importing sample data...";
-
-			$handle = fopen(dirname(__FILE__).DIRECTORY_SEPARATOR."schemas".DIRECTORY_SEPARATOR."extra.sql", 'r');
-			if ($handle) {
-				while (!feof($handle)) {
-					set_magic_quotes_runtime(false);
-					$s = fgets($handle, 32768);
-					if ($s != "") {
-						$s = trim(str_replace("{DB_PREFIX}", $db_prefix, $s));
-						$s = str_replace("\\r\\n", "\r\n", $s);
-						$s = str_replace("\\'", "''", $s);
-						$s = str_replace('\\"', '"', $s);
-						$result = $db->Execute($s);
-						if (!$result) {
-							die("Invalid query: $s");
-						} ## if
-					}
-				}
-			}
-
-			fclose($handle);
-
-			echo "[done]</p>";
-		}
 
 		echo "<p>Setting admin account information...";
 
@@ -894,13 +877,13 @@ function showPageFive() {
 
 		ContentManager::SetAllHierarchyPositions();
 
-		echo 'done</p>';
+		echo "[done]</p>";
 		
 		echo '<p>Setting up core events...';
 		
 		Events::SetupCoreEvents();
 		
-		echo 'done</p>';
+		echo "[done]</p>";
 
 		echo '<p>Installing modules...';
 
@@ -952,10 +935,20 @@ function showPageFive() {
 						}
 						*/
 					}
+					
+					if (strtolower($modulename) == 'search')
+					{
+						echo '<p>Index Search...';
+
+						@$modinstance->Reindex();
+
+						echo "[done]</p>";
+					}
+					
 				}
 			}
 		}
-		echo 'done</p>';
+		echo "[done]</p>";
 	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
