@@ -903,6 +903,8 @@ function showPageFive() {
 						//$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active, admin_only) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1,".($modinstance->IsAdminOnly()==true?1:0).")";
 						$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, active) VALUES (".$db->qstr($modulename).",".$db->qstr($modinstance->GetVersion()).",'installed',1)";
 						$db->Execute($query);
+						$gCms->modules[$modulename]['installed'] = true;
+						$gCms->modules[$modulename]['active'] = true;
 						
 						/*
 						#and insert any dependancies
