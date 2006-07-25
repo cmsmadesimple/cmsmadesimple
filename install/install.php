@@ -286,7 +286,7 @@ function showPageOne() {
 	  $continueon=false;
 	}
 	
-      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
     } ## if 
     echo "</td></tr>\n";
     ($currow=="row1"?$currow="row2":$currow="row1");
@@ -314,11 +314,12 @@ function showPageOne() {
     }
   echo "</td></tr>\n";
 
-  echo "<tr class=\"$currow\"><td>Checking for basic XML support</td>";
+  echo "<tr class=\"row1\"><td>Checking for basic XML (expat) support";
   if( !function_exists( "xml_parser_create" ) )
     {
-      echo '</td><td class="col2"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-      $continueon = false;
+	  echo '<br /><br /><em>XML support is not compiled into your php install.  You can still use the system, but will not be able to use any of the remote module installation functions.</em>';
+      echo '</td><td class="col2"><img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+      $special_failed=true;
     }
   else
     {
@@ -327,7 +328,7 @@ function showPageOne() {
   echo "</td></tr>\n";
 
   ($currow=="row1"?$currow="row2":$currow="row1");
-  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
+  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, 'row2' );
   
   
   echo "</tbody></table>\n";
