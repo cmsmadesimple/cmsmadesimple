@@ -55,6 +55,11 @@ class CmsObject {
 	var $cmsmodules;
 
 	/**
+	 * System Modules - a list (hardcoded) of all system modules
+	 */
+	var $cmssystemmodules;
+
+	/**
 	 * Plugins object - holds list of all registered plugins 
 	 */
 	var $cmsplugins;
@@ -114,16 +119,19 @@ class CmsObject {
 	 */
 	function CmsObject()
 	{
-		$this->modules = array();
-		$this->errors = array();
-		$this->nls = array();
-		$this->TemplateCache = array();
-		$this->StylesheeteCache = array();
-		$this->variables['content-type'] = 'text/html';
-		$this->variables['modulenum'] = 1;
-		$this->variables['routes'] = array();
-
-		register_shutdown_function(array(&$this, 'dbshutdown'));
+	  $this->cmssystemmodules = 
+	    array( 'Search', 'nuSOAP', 'CMSMailer', 'News', 'MenuManager', 'ThemeManager', 
+		   'ModuleManager', 'FckEditorX'  );
+	  $this->modules = array();
+	  $this->errors = array();
+	  $this->nls = array();
+	  $this->TemplateCache = array();
+	  $this->StylesheeteCache = array();
+	  $this->variables['content-type'] = 'text/html';
+	  $this->variables['modulenum'] = 1;
+	  $this->variables['routes'] = array();
+	  
+	  register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
 	function & GetDb()
@@ -137,30 +145,30 @@ class CmsObject {
 		global $DONT_LOAD_DB;
         if (!isset($this->db) && !isset($DONT_LOAD_DB))
 		{
-			$config =& $this->GetConfig();
-			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-			{
-				$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			else
-			{
-				$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			if (FALSE == $connect_result)
-			  {
-			    die('Database Connection failed');
-			  }
-			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+		  $config =& $this->GetConfig();
+		  $dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+		  if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
+		    {
+		      $connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+		    }
+		  else
+		    {
+		      $connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+		    }
+		  if (FALSE == $connect_result)
+		    {
+		      die('Database Connection failed');
+		    }
+		  $dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 
-			//$dbinstance->debug = true;
-			if ($config['debug'] == true)
-			{
-				$dbinstance->debug = true;
-				#$dbinstance->LogSQL();
-			}
-
-			$this->db =& $dbinstance;
+		  //$dbinstance->debug = true;
+		  if ($config['debug'] == true)
+		    {
+		      $dbinstance->debug = true;
+		      #$dbinstance->LogSQL();
+		    }
+		  
+		  $this->db =& $dbinstance;
 
 		}
 

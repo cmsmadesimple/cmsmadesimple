@@ -436,7 +436,7 @@ if ($action == "showmoduleabout")
        foreach($gCms->modules as $key=>$value)
 	 {
 	   $modinstance = $value['object'];
-	   
+	   $is_sysmodule = array_search( $key, $gCms->cmssystemmodules );
 	   $namecol = $key;
 	   $versioncol = "&nbsp;";
 	   $statuscol = "&nbsp;";
@@ -445,8 +445,12 @@ if ($action == "showmoduleabout")
 	   $activecol = "&nbsp;";
 	   $helpcol = "&nbsp;";
 	   $aboutcol = "&nbsp;";
-	   $xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 
+	   $xmlcol = "&nbsp;";
+	   if( !$is_sysmodule )
+	     {
+	       $xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
+	     }
 
 	   //Is there help?
 	   if ($modinstance->GetHelp() != '')
