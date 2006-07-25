@@ -324,6 +324,7 @@ function showPageOne() {
     {
       echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
     }
+  echo "</td></tr>\n";
 
   ($currow=="row1"?$currow="row2":$currow="row1");
   $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, $currow );
