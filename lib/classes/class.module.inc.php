@@ -2880,7 +2880,8 @@ class CMSModule
 		$ourlang = $this->curlang;
 
 		#Load the language if it's not loaded
-		if ((is_array($this->langhash[$ourlang]) && count(array_keys($this->langhash[$ourlang])) == 0) || !isset($this->langhash[$ourlang]) || !is_array($this->langhash[$ourlang]))
+		if (!isset($this->langhash[$ourlang]) || !is_array($this->langhash[$ourlang]) || 
+		    (is_array($this->langhash[$ourlang]) && count(array_keys($this->langhash[$ourlang])) == 0))
 		{
 			$dir = $gCms->config['root_path'];
 
