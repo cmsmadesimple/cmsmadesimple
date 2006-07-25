@@ -16,6 +16,23 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+function return_bytes($val) {
+   $val = trim($val);
+   $last = strtolower($val{strlen($val)-1});
+   switch($last) 
+   {
+       // The 'G' modifier is available since PHP 5.1.0
+       case 'g':
+           $val *= 1024;
+       case 'm':
+           $val *= 1024;
+       case 'k':
+           $val *= 1024;
+   }
+   return $val;
+}
+
+
 function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
 {
   $icon = 'false.gif';
@@ -37,14 +54,40 @@ function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
   return $ret;
 }
 
-function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2' )
+function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2', $compare_as_bytes = FALSE )
 {
   $icon = 'red.gif';
   $alt="Failure";
   $ret = false;
+  
+  if (! is_int( $yellowlimit ) && ! is_int( $greenlimit ) && $compare_as_bytes == TRUE)
+    {
+      $yellowlimit_org = $yellowlimit;
+      $yellowlimit = return_bytes( $yellowlimit );
+      $greenlimit  = return_bytes( $greenlimit );
+    }
+  
   if( is_int( $yellowlimit ) && is_int( $greenlimit ) )
     {
-      $str = (int) ini_get( $name );
+      if ($compare_as_bytes)
+        {
+          $str = ini_get( $name );
+          if ( $str == '' )
+            {
+              $warning = "Could not retrieve a value.... passing anyways";
+              $str = $yellowlimit;
+              $show_value = $yellowlimit_org;
+            }
+          else
+            {
+              $show_value = $str;
+              $str = return_bytes($str);
+            }
+        }
+      else
+        {
+        $str = (int) ini_get( $name );
+        }
       if( $str >= $greenlimit )
 	{
 	  $alt = 'Success';
@@ -57,6 +100,10 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 	  $icon = 'yellow.gif';
 	  $ret = true;
 	}
+	if ($compare_as_bytes) 
+    { 
+      $str = $show_value; 
+    }
     }
   else
     {
@@ -341,13 +388,13 @@ function showPageOne() {
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
   
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow );
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 30s, recommend 45s)", 30, 45, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow );
+  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   
     // do we have the file_get_contents function
