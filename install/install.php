@@ -935,20 +935,20 @@ function showPageFive() {
 						}
 						*/
 					}
-					
-					if (strtolower($modulename) == 'search')
-					{
-						echo '<p>Index Search...';
-
-						@$modinstance->Reindex();
-
-						echo "[done]</p>";
-					}
-					
 				}
 			}
 		}
 		echo "[done]</p>";
+		
+		if (isset($gCms->modules['Search']) && isset($gCms->modules['Search']['object']))
+		{
+			echo '<p>Index Search...';
+			
+			$modinstance =& $gCms->modules['Search']['object'];
+			@$modinstance->Reindex();
+
+			echo "[done]</p>";
+		}
 	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
