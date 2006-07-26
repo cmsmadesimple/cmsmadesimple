@@ -297,7 +297,11 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
 	
-	$db->Execute("ALTER TABLE ".$db_prefix."events ADD INDEX (originator, event_name, event_id)");
+	$sqlarray = $dbdict->CreateIndexSQL('originator', $db_prefix."events", 'originator');
+	$dbdict->ExecuteSQLArray($sqlarray);
+    
+	$sqlarray = $dbdict->CreateIndexSQL('event_name', $db_prefix."events", 'event_name');
+	$dbdict->ExecuteSQLArray($sqlarray);
 	
 	echo "[done]</p>";
 	

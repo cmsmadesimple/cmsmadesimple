@@ -29,6 +29,7 @@ rm -fr admin/lang/*.sh
 rm -fr admin/lang/*.pl
 rm -fr admin/editconfig.php
 rm -fr lib/adodb
+rm -fr lib/preview.functions.php
 rm -fr modules/LinkBlog
 rm -fr modules/HTMLArea
 rm -fr modules/PngTransparencyIE
