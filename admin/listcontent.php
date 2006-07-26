@@ -42,9 +42,7 @@ $xajax->registerFunction('reorder_display_list');
 $xajax->registerFunction('reorder_process');
 
 $xajax->processRequests();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
-//$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
-//$headtext .= '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
+$headtext = $xajax->getJavascript(dirname(dirname(__FILE__)) . '/lib/xajax')."\n";
 
 include_once("header.php");
 
