@@ -426,13 +426,17 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 
 function reorder_display_list()
 {
+	$objResponse = new xajaxResponse();
 	global $gCms;
 	$config =& $gCms->GetConfig();
 	
 	$userid = get_userid();
 	
-	require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
-	$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
+
+	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
+	require($path);
+
+	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
 	
 	$hierManager =& $gCms->GetHierarchyManager();
 	$hierarchy = &$hierManager->getRootNode();
@@ -441,11 +445,10 @@ function reorder_display_list()
 	{
 		$listArray = array();
 		$output = '';
-		$objResponse = new xajaxResponse();
 		show_h($hierarchy, $sortableLists, $listArray, $output);
 
 		ob_start();
-		$sortableLists->printTopJS();
+		//$sortableLists->printTopJS();
 		$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button', 'sortableListForm', 'Cancel', $output);
 		$contents = ob_get_contents();
 		ob_end_clean();

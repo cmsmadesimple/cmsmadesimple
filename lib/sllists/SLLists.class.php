@@ -1,4 +1,4 @@
-<?
+<?php
 /*
 * This class implements a PHP wrapper around the scriptaculous javascript libraries created by
 * Thomas Fuchs (http://script.aculo.us/).
@@ -8,12 +8,14 @@
 */
 class SLLists {
 
-	var $lists = array();
+	var $lists;
 	var $jsPath;
-	var $debug = false;
+	var $debug;
 	
 	function SLLists($jsPath) {
+		$this->lists = array();
 		$this->jsPath = $jsPath;
+		$this->debug = false;
 	}
 	
 	function addList($list, $input, $tag = 'li', $additionalOptions = '') {
