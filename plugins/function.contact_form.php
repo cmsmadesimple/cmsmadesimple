@@ -36,7 +36,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	$taStyle = 'style="width:100%; border: 1px solid black;"'; // TextArea boxes
 	$formStyle = 'style="width:30em; important; font-weight: bold;"'; // form
 	$errorsStyle = 'style="color: white; background-color: red; font-weight: bold; border: 3px solid black; margin: 1em;"'; // Errors box (div)
-        $labelStyle = '"style="display:block;"';
+        $labelStyle = 'style="display:block;"';
         $buttonStyle = 'style="float:left; width:49%; margin-top:1em;"';
 
 	$errors=$name=$email=$subject=$message = '';
