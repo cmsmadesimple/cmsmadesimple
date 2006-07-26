@@ -59,7 +59,7 @@ if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
 $css_name = "";
 if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
 
-$media_type = '';
+$media_type = array();
 if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 
 #******************************************************************************
@@ -125,7 +125,19 @@ if ($access)
 			$newstylesheet = new Stylesheet();
 			$newstylesheet->name = $css_name;
 			$newstylesheet->value = $css_text;
-			$newstylesheet->media_type = $media_type;
+			$types = "";
+                        
+			#generate comma separated list
+			foreach ($media_type as $onetype) {
+                          $types .= "$onetype, ";
+                        }
+                        if ($types!='') {
+			  $types = substr($types, 0, -2); #strip last space and comma
+			} else {
+			  $types='';
+			}
+
+			$newstylesheet->media_type = $types;
 			
 			Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
 
@@ -193,7 +205,42 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
 			<p class="pageinput">
-				<input type="text" name="media_type" maxlength="255" value="<?php echo $media_type?>" />				
+<?php
+		   $existingtypes = array("all",
+					  "aural",
+					  "braille",
+					  "embossed",
+					  "handheld",
+					  "print",
+					  "projection",
+					  "screen",
+					  "tty",
+                       "tv"
+					  );
+
+        $types = "";
+        $types .= "<fieldset style=\"width:60em;\">\n";
+        $types .= "<legend>Media type</legend>\n";
+        foreach ($existingtypes as $onetype)
+          {
+            $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
+
+            if (is_array($media_type)) {
+              if (in_array($onetype, $media_type) )
+                {
+                  $types .= ' checked="checked" ';
+                }
+            }
+            $types .= " />\n\n";
+            $types .= '<label for="media_type['.$i.']">'. lang("mediatype_".$onetype) ."</label>\n<br />";
+
+          }
+        $types .= "</fieldset>";
+
+        echo $types;
+?>
+
+
 			</p>
 		</div>
 		<div class="pageoverflow">

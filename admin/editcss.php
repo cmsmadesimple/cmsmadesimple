@@ -74,7 +74,7 @@ $css_id = -1;
 if (isset($_POST["css_id"])) $css_id = $_POST["css_id"];
 else if (isset($_GET["css_id"])) $css_id = $_GET["css_id"];
 
-$media_type = '';
+$media_type = array();
 if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 
 # if the form has beeen cancelled, we redirect
@@ -139,7 +139,18 @@ if ($access)
 			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
 			$onestylesheet->name = $css_name;
 			$onestylesheet->value = $css_text;
-			$onestylesheet->media_type = $media_type;
+
+                        #generate comma seperated list from media types
+                        $types = "";
+                        foreach ($media_type as $onetype) {
+                          $types .= "$onetype, ";
+                        }
+                        if ($types!='') {
+                        $types = substr($types, 0, -2); #strip last space and comma
+                        } else {
+                        $types='';
+                        }
+			$onestylesheet->media_type = $types;
 			
 			Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
@@ -259,8 +270,14 @@ else
 			<p class="pageinput">
 <?php
 
-$existingtypes = array("", 
-		       "all", 
+#open up the list to array
+
+
+if (!is_array($media_type)) {
+  $media_type = split (", " , $media_type);
+}
+
+$existingtypes = array("all", 
 		       "aural", 
 		       "braille", 
 		       "embossed", 
@@ -272,21 +289,25 @@ $existingtypes = array("",
 		       "tv"
 		       );
 
-$typesdropdown = '<select name="media_type">';
-foreach ($existingtypes as $onetype)
- {
-  $typesdropdown .= "<option value=\"$onetype\"";
+	$types = "";
+	$types .= "<fieldset style=\"width:60em;\">\n";
+	$types .= "<legend>Media type</legend>\n\n";
+	foreach ($existingtypes as $onetype)
+	  {
+	    $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
 
-  if ($onetype == $media_type)
-     {
-       $typesdropdown .= ' selected="selected"';
-     }
+	    if (is_array($media_type)) {
+	      if (in_array($onetype, $media_type) )
+		{
+		  $types .= ' checked="checked" ';
+		}
+	    }
+	    $types .= " />\n\n";
+	    $types .= '<label for="media_type">'. lang("mediatype_".$onetype) .'</label><br />'."\n";
+	  }
+	$types .= "</fieldset>";
 
-  $typesdropdown .= ">". lang("mediatype_".$onetype) ."</option>";
- }
-$typesdropdown .= "</select>";
-
- echo $typesdropdown;
+	echo $types;
 ?>
 
 
