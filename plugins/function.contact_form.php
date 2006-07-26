@@ -37,7 +37,8 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	$formStyle = 'style="width:30em; important; font-weight: bold;"'; // form
 	$errorsStyle = 'style="color: white; background-color: red; font-weight: bold; border: 3px solid black; margin: 1em;"'; // Errors box (div)
         $labelStyle = 'style="display:block;"';
-        $buttonStyle = 'style="float:left; width:49%; margin-top:1em;"';
+        $buttonStyle = 'style="float:left; width:50%; margin-top:1em;"';
+        $fieldsetStyle = 'style="padding:1em;"';
 
 	$errors=$name=$email=$subject=$message = '';
 	if($_SERVER['REQUEST_METHOD']=='POST'){
@@ -77,7 +78,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 
 	<!-- CONTACT_FORM -->
 	<form action="<?php $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] ?>" method="post" <?php echo ($style) ? $formStyle:''; ?>>
-                 <fieldset>
+                 <fieldset <?php echo ($style) ? $fieldsetStyle:''; ?>>
                         <legend>Contact</legend>
 			<label for="name" <?php echo ($style) ? $labelStyle:''; ?> >Your name :</label>
 			<input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
