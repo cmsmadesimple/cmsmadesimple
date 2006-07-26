@@ -42,7 +42,7 @@ $xajax->registerFunction('reorder_display_list');
 $xajax->registerFunction('reorder_process');
 
 $xajax->processRequests();
-$headtext = $xajax->getJavascript(dirname(dirname(__FILE__)) . '/lib/xajax')."\n";
+$headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
 
 include_once("header.php");
 
@@ -124,7 +124,6 @@ function content_setdefault($contentid)
 	
 	setdefault($contentid);
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
@@ -136,7 +135,6 @@ function content_setactive($contentid)
 	
 	setactive($contentid);
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
@@ -148,7 +146,6 @@ function content_setinactive($contentid)
 	
 	setactive($contentid, false);
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
@@ -160,7 +157,6 @@ function content_expandall()
 	
 	expandall();
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	return $objResponse->getXML();
 }
@@ -171,7 +167,6 @@ function content_collapseall()
 	
 	collapseall();
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	return $objResponse->getXML();
 }
@@ -203,7 +198,6 @@ function content_toggleexpand($contentid, $collapse)
 	
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
@@ -279,7 +273,6 @@ function content_move($contentid, $parentid, $direction)
 	
 	movecontent($contentid, $parentid, $direction);
 
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
 	return $objResponse->getXML();
@@ -462,11 +455,10 @@ function reorder_display_list()
 		$script = ob_get_contents();
 		ob_end_clean();
 		
-		$objResponse->addClear("contentlist", "innerHTML");
 		$objResponse->addAssign("contentlist", "innerHTML", $contents);
 		$objResponse->addScript($script);
-		return $objResponse->getXML();
 	}
+	return $objResponse->getXML();
 }
 
 function reorder_process($get)
@@ -515,7 +507,6 @@ function reorder_process($get)
 		}
 	}
 	
-	$objResponse->addClear("contentlist", "innerHTML");
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	return $objResponse->getXML();
 }
