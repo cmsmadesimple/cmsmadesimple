@@ -216,6 +216,8 @@ else {
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
 		</div>
 	   <?php
+	   } else {
+			echo '<input type="hidden" name="active" value="'.$active.'" />';
 	   }
            ?>
 		<div class="pageoverflow">
