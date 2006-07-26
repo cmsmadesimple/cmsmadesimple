@@ -288,14 +288,16 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
 	echo "<p>Creating events table...";
 
 	$flds = "
-	          originator   c(200) NOTNULL KEY,
-	          event_name   c(200) NOTNULL KEY,
+	          originator   c(200) NOTNULL,
+	          event_name   c(200) NOTNULL,
 	          event_id     I KEY
 	        ";
 
 	$taboptarray = array('mysql' => 'TYPE=MyISAM');
 	$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
 	$dbdict->ExecuteSQLArray($sqlarray);
+	
+	$db->Execute("ALTER TABLE ".$db_prefix."events ADD INDEX (originator, event_name, event_id)");
 	
 	echo "[done]</p>";
 	
