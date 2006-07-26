@@ -1,9 +1,119 @@
-Version 0.14 "Barbados" -- Subversion
+Version 1.0 "Hawaii" -- In Beta
 -----------------
 
-* Fixed a bug in the metadata tag where showbase would
-default to false, even when it should be true
-* Fixed a bug with displaying a few admin images
+* Events
+
+  A workflow system.  Events are generated either by the core, or by a module
+  and can be handled either by other modules, or by User Defined Tags.  The 
+  administrator can add, remove, or re-order any of the event handlers
+  for a particular event.  This functionality allows site administrators to
+  add custom behavior and workflow to their system that have not been
+  coded directly into the core or into other third party modules.
+  
+  For example, with a simple user defined Tag, it is now possible for
+  a news article to automatically be added whenever a file is uploaded
+  in the Uploads module.
+
+* Search
+
+  A brand new search module has been written that allows indexing of content,
+  excluding certain words, and unlimited customization.  It is possible for 
+  third party module developers to write some code into their modules to 
+  allow searching of module content.
+
+* Module Manager
+  
+  The module manager allows querying, and installing of modules hosted
+  on a remote server.  The Module Manager allows an administrator to
+  see the help, and about information, the dependencies, and other
+  details of a module before downloading it.
+ 
+* Module List Improvements
+
+  The Module list as been optimized and some new functionality added:
+  - Core modules can no longer be exported to XML
+  - Only installed third party modules can be exported to XML
+  - There is an option to completely remove all of the module files
+    after a module has been uninstalled (if sufficient permissions exist).
+  - A check is done for permissions to indicate that there may be a 
+    problem removing the files.
+ 
+* Improved Installer
+       
+  The installer has been given some tweaks, and some additional checks
+  to hopefully ward off some of the more common installation issues, and
+  to ensure that most of the functionality of CMS will work properly
+  after installation.
+
+* Simplified Default Stylesheets
+
+  The default stylesheets have been simplified and documented, so that
+  it is (hopefully) easier for somebody to start modifying their site
+  given the standard stylesheets
+
+* Improved default templates and content
+
+  The default templates and content have been improved in appearance and
+  in content, and thoroughly documented.
+
+* Improved content list
+
+  Content list has been given an overhaul:
+  - Active, Default, Collapse and Move buttons now work via AJAX calls 
+    for faster response.
+  - A drag and drop reodering system
+  - Reordering boxes for the css/javascript impaired
+
+* AJAX Content Preview
+
+  The preview has been moved to a tab and will update as soon as you click
+  on it.
+
+* Admin interface improvements
+
+  The appearance of the admin interface has been improved significantly.
+  There are now help links in each module and in other core locations that 
+  will link back to the wiki.
+
+* New default layouts
+
+  tested with all major browsers (including Internet Explorer 7 beta 3)
+  Styles and templates now have comments so editing is easier
+  sample stylesheets for handheld devices and print
+
+* Improved plugins
+
+  The image, cms_selflink, anchor, breadcrumbs, and other plugins have all 
+  been improved, and other plugins added, such as "recently_updated"
+
+* New System Modules
+
+  nuSOAP and CMSMailer are now included in the default install, since so 
+  many modules rely on them for basic functionality.
+
+* Upgraded smarty to 2.6.14
+
+* Upgrade ADODB Lite
+
+  CMSMS doesn't require that adodb or adodb lite be modified anymore.  If you need a different 
+  version, just download from their site and you're good to go.
+
+  *** IMPORTANT NOTE ***
+
+  Modules that use timestamps, or that use the RowCount() method in CMS 0.13 or 
+  earlier, will need to be upgraded.  This accounts for a large majority of modules and 
+  hopefully new versions of most modules will be out by the final release.
+
+* Some of the bigger bugs that were fixed
+
+  - Fixed a bug in the metadata tag where showbase would default to false, even when 
+    it should be true
+  - Fixed a bug with displaying a few admin images
+  - Fixed most of the -- Add Me -- messages when using other languages besides the default
+    one for that module
+  - Fixed bug with IIS support
+  - Fixed bug with stylesheet display in postgres
+  - Fixed bug where content type changes wouldn't stick
 
 Version 0.13 "Canary" -- May 18 2006
 -----------------
