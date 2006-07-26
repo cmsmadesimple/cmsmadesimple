@@ -10,6 +10,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."content_seq");
 	$db->DropSequence($db_prefix."content_prop_seq");
 	$db->DropSequence($db_prefix."css_seq");
+	$db->DropSequence($db_prefix."events");
 	$db->DropSequence($db_prefix."group_perms_seq");
 	$db->DropSequence($db_prefix."groups_seq");
 	$db->DropSequence($db_prefix."htmlblobs_seq");
@@ -43,6 +44,8 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."css");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."css_assoc");
+	$dbdict->ExecuteSQLArray($sqlarray);
+	$sqlarray = $dbdict->DropTableSQL($db_prefix."events");
 	$dbdict->ExecuteSQLArray($sqlarray);
 	$sqlarray = $dbdict->DropTableSQL($db_prefix."group_perms");
 	$dbdict->ExecuteSQLArray($sqlarray);
