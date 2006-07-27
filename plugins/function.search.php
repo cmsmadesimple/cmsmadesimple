@@ -24,6 +24,7 @@ function smarty_cms_function_search($params, &$smarty)
 	if (isset($cmsmodules))
 	{
 		$modulename = 'search';
+		$inline = false;
 
 		foreach ($cmsmodules as $key=>$value)
 		{

@@ -24,6 +24,7 @@ function smarty_cms_function_menu($params, &$smarty)
 	if (isset($cmsmodules))
 	{
 		$modulename = 'menumanager';
+		$inline = false;
 
 		foreach ($cmsmodules as $key=>$value)
 		{

@@ -24,6 +24,7 @@ function smarty_cms_function_news($params, &$smarty)
 	if (isset($cmsmodules))
 	{
 		$modulename = 'news';
+		$inline = false;
 
 		foreach ($cmsmodules as $key=>$value)
 		{
