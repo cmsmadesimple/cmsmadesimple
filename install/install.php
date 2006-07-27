@@ -86,15 +86,22 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
         }
       else
         {
-        $str = (int) ini_get( $name );
+          $str = (int) ini_get( $name );
         }
-      if( $str >= $greenlimit )
+
+    if( $str < 0 )
+      {
+        $alt = 'Success (unlimited)';
+        $icon = 'green.gif';
+        $ret = true;
+      }
+    else if( $str >= $greenlimit )
 	{
 	  $alt = 'Success';
 	  $icon = 'green.gif';
 	  $ret = true;
 	}
-      else if( $str >= $yellowlimit )
+    else if( $str >= $yellowlimit )
 	{
 	  $alt = 'Caution';
 	  $icon = 'yellow.gif';
