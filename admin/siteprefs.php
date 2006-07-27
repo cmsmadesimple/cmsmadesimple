@@ -149,6 +149,13 @@ if ($error != "") {
 if ($message != "") {
 	echo $themeObject->ShowMessage($message);
 }
+
+// Make sure cache folder is writable
+if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'))
+{
+  echo $themeObject->ShowErrors(lang('cachenotwritable'));
+}
+
 ?>
 
 <div class="pagecontainer">

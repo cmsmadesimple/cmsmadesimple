@@ -125,6 +125,7 @@ $lang['admin']['errorgettingcssname'] = 'Error getting Stylesheet name';
 $lang['admin']['errorgettingtemplatename'] = 'Error getting template name';
 $lang['admin']['errorincompletexml'] = 'XML File is incomplete or invalid';
 $lang['admin']['uploadxmlfile'] = 'Install module via XML file';
+$lang['admin']['cachenotwritable'] = 'Cache folder is not writable. Clearing cache will not work. Please make the tmp/cache folder have full read/write/execute permissions (chmod 777)';
 $lang['admin']['modulesnotwritable'] = 'The modules folder is not writable, if you would like to install modules by uploading an XML file you need to make the modules folder have full read/write/execute permissions (chmod 777).';
 $lang['admin']['noxmlfileuploaded'] = 'No file was uploaded. To install a module via XML you must choose and upload an module .xml file from your computer.';
 $lang['admin']['errorinsertingcss'] = 'Error inserting Stylesheet';
