@@ -292,8 +292,10 @@ $existingtypes = array("all",
 	$types = "";
 	$types .= "<fieldset style=\"width:60em;\">\n";
 	$types .= "<legend>Media type</legend>\n\n";
+	$i = 0;
 	foreach ($existingtypes as $onetype)
 	  {
+	    $i++;
 	    $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
 
 	    if (is_array($media_type)) {
