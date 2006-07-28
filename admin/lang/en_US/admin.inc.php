@@ -1,4 +1,13 @@
 <?php
+$lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
+$lang['admin']['event_desc_moduleinstalled'] = 'Sent after a module is installed';
+$lang['admin']['event_desc_moduleuninstalled'] = 'Sent after a module is uninstalled';
+$lang['admin']['event_desc_edituserdefinedtagpost'] = 'Sent after a user defined tag is updated';
+$lang['admin']['event_desc_edituserdefinedtagpre'] = 'Sent prior to a user defined tag update';
+$lang['admin']['event_desc_deleteuserdefinedtagpre'] = 'Sent prior to deleting a user defined tag';
+$lang['admin']['event_desc_deleteuserdefinedtagpost'] = 'Sent after a user defined tag is deleted';
+$lang['admin']['event_desc_adduserdefinedtagpost'] = 'Sent after a user defined tag is inserted';
+$lang['admin']['event_desc_adduserdefinedtagpre'] = 'Sent prior to a user defined tag insert';
 $lang['admin']['global_umask'] = 'File Creation Mask (umask)';
 $lang['admin']['errorcantcreatefile'] = 'Could not create a file (permissions problem?)';
 $lang['admin']['errormoduleversionincompatible'] = 'Module is incompatible with this version of CMS';
