@@ -81,19 +81,19 @@ function smarty_cms_function_contact_form($params, &$smarty) {
                  <fieldset <?php echo ($style) ? $fieldsetStyle:''; ?>>
                         <legend>Contact</legend>
 			<label for="name" <?php echo ($style) ? $labelStyle:''; ?> >Your name :</label>
-			<input type="text" id="name" value="<?php echo htmlspecialchars($name); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+			<input type="text" id="name" name="name" value="<?php echo htmlspecialchars($name); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
 
 			<label for="email" <?php echo ($style) ? $labelStyle:''; ?> >Your email address : </label>
-			<input type="text" id="email" value="<?php echo htmlspecialchars($email); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+			<input type="text" id="email" name="email" value="<?php echo htmlspecialchars($email); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
 
 			<label for="subject" <?php echo ($style) ? $labelStyle:''; ?> >Subject : </label>
-			<input type="text" id="subject"  value="<?php echo htmlspecialchars($subject); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
+			<input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
 
 			<label for="message" <?php echo ($style) ? $labelStyle:''; ?> >Message : </label>
-			<textarea id="message" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
+			<textarea id="message" name="message" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
 
 		        <input type="submit" class="button" value="Submit" <?php echo ($style) ? $buttonStyle: ''; ?> /> 
-                        <input class="button" type="reset" value="Clear" <?php echo ($style) ? $buttonStyle: ''; ?> />
+                        <input type="reset"  class="button" value="Clear" <?php echo ($style) ? $buttonStyle: ''; ?> />
                  </fieldset>
 	</form>
 	<!-- END of CONTACT_FORM -->
