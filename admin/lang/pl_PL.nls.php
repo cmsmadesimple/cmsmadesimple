@@ -30,7 +30,8 @@
 #Maintained by: Michael Mrowiec <tedkulp@gmail.com>
 
 #Native language name
-$nls['language']['pl_PL'] = 'Polish';
+$nls['language']['pl_PL'] = 'Polski';
+$nls['englishlang']['pl_PL'] = 'Polish';
 
 #Possible aliases for language
 $nls['alias']['pl'] = 'pl_PL';

@@ -31,7 +31,8 @@
 
 #Native language name
 #NOTE: Enocde me with HTML escape chars like &#231; or &ntilde; so I work on every page
-$nls['language']['bg_BG'] = 'Bulgarian';
+$nls['language']['bg_BG'] = 'Български';
+$nls['englishlang']['bg_BG'] = 'Bulgarian';
 
 #Possible aliases for language
 $nls['alias']['bg'] = 'bg_BG';
