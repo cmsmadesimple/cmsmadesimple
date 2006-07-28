@@ -556,8 +556,8 @@ if ($action == "showmoduleabout")
 		     $dependentof[$row['child_module']] = "";
 		   }
 		   $str = implode(array_keys($dependentof),",");
-		   $activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>")."&quot;";
-		   $statuscol .= "<br/>".lang('hasdependents')."(<strong>$str</strong>)";
+		   $activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
+		   $statuscol .= "<br/>".lang('hasdependents')." (<strong>$str</strong>)";
 		   // END HAS DEPENDENTS ===========
 		 }
 	       
