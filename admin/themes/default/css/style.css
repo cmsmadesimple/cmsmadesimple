@@ -203,6 +203,7 @@ p.lbpass  {
 
 #nav li  {
    float: left;
+
    padding: 0;
    }
 
@@ -214,16 +215,15 @@ p.lbpass  {
    width: auto;
    height: auto;
    display: none;
-position:absolute;
-z-index:999;
-
-   }
+   position:absolute;
+   z-index:999;
+}
 
 #nav li li  {
    float: none;
    margin: 0px;
    padding: 0px;
-   }
+}
 
 #nav li:hover ul ul, #nav li.cssHover ul ul  {
    display: none;
@@ -443,6 +443,7 @@ div.shortcuts a {
 div.topmenucontainer  {
    background-color: #ececec;
    border-bottom: 1px solid #c0c0c0;
+width:100%;
    }
 
 div.hstippled  {
