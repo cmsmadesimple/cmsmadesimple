@@ -68,7 +68,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			  //Add current node to the path and then check to see if
 			  //current node is the set root
 			  //as long as it's not hidden
-			  if( $content->ShowInMenu() )
+			  if( $content->ShowInMenu() && $content->Active() )
 			    {
 				$path[] = $currentNode;
 			    }
