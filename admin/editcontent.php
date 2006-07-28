@@ -331,7 +331,7 @@ $tabnames = $contentobj->TabNames();
 
 ?>
 
-<div class="pagecontainer">
+<div class="pagecontainer pageoverflow">
 	<?php
 	echo $themeObject->ShowHeader('editcontent');
 	?>
