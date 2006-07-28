@@ -886,9 +886,8 @@ $headoflist .= '<div class="pageoverflow">';
 	
 	ob_start();
 	?>
-			<div class="pageoptions">
-			<div class="pageoptions">
-			<div style="margin-right: 30px; margin-top: 0; float: right; text-align: right">
+			<div class="pageoptions" style="margin-right: 3%;" >
+			<div style="margin-top: 0; float: right; text-align: right">
 			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
 			<option value="delete"><?php echo lang('delete') ?></option>
 			<option value="active"><?php echo lang('active') ?></option>
@@ -932,7 +931,6 @@ $headoflist .= '<div class="pageoverflow">';
 			<br />
 			</div>
 			<div class="clearb"></div>
-			</div>
 	<?php
 	$footer = ob_get_contents();
 	ob_end_clean();
