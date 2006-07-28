@@ -623,6 +623,10 @@ p.pageoptions  {
    padding-top: 5px;
    }
 
+.pagerows {
+   font-size: 1.3em;
+}
+
 table.pagetable  {
    font-size: 1em;
    margin-bottom: 5px;
