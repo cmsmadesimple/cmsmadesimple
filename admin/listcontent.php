@@ -847,6 +847,7 @@ function display_content_list($themeObject = null)
 
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid))
 	{
+$headoflist .= '<div class="pageoverflow">';
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
 		$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
 		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
@@ -856,7 +857,7 @@ function display_content_list($themeObject = null)
 			$headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
 			$headoflist .= ' <a href="#" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
-		$headoflist .='</p>';
+		$headoflist .='</p></div>';
 	}
 	$headoflist .= '<form action="multicontent.php" method="post">';
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
