@@ -340,7 +340,7 @@ function showPageOne() {
 	  $continueon=false;
 	}
 	
-      echo '<img src="../images/cms/install/false.gif" alt="Caution" height="16" width="16" border="0" />';
+      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
     } ## if 
     echo "</td></tr>\n";
     ($currow=="row1"?$currow="row2":$currow="row1");
