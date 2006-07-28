@@ -502,6 +502,7 @@ div.pageerrorcontainer  {
    padding: 5px;
    border: solid 1px #666;
    color: #fff;
+   width: 95%;
    }
 div.pageerrorcontainer a {
    color: #fff;
