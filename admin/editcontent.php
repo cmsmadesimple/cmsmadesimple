@@ -335,7 +335,7 @@ $tabnames = $contentobj->TabNames();
 	<?php
 	echo $themeObject->ShowHeader('editcontent');
 	?>
-	<div id="page_tabs">
+	<div id="page_tabs" style="width:100%;">
 		<?php
 		$count = 0;
 
