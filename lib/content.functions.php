@@ -308,26 +308,6 @@ class Smarty_CMS extends Smarty {
 		$gCms->variables['pageinfo'] = $pageinfo;
 		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
 
-		
-		$stylesheet = ''; 	 
-		if (isset($data["stylesheet"])) 	 
-		  { 	 
-		    $stylesheet .= $data["stylesheet"]; 	
-		    
-		    //Perform the content stylesheet callback 	 
-		    reset($gCms->modules); 	 
-		    while (list($key) = each($gCms->modules)) 	 
-		      { 	 
-			$value =& $gCms->modules[$key]; 	 
-			$gCms->modules[$key]['object']->ContentStylesheet($stylesheet); 	 
-		      } 	 
-		    
-		    Events::SendEvent('Core', 'ContentStylesheet', array('stylesheet' => &$stylesheet)); 	 
-		    
-		    $stylesheet = "<style type=\"text/css\">{literal}\n".$stylesheet."{/literal}</style>\n";
-		    $tpl_source = ereg_replace("\{stylesheet\}", $stylesheet, $tpl_source);
-		  }
-		
 		$content = $data["content"];
 		 
 		reset($gCms->modules);

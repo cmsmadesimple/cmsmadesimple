@@ -199,21 +199,10 @@ else
 	{
 		$data["title"] = "TITLE HERE";
 		$data["content"] = "Test Content";
-		#$data["template_id"] = $template_id;
+		$data["template_id"] = $template_id;
 		$data["stylesheet"] = $stylesheet;
 		$data["encoding"] = $encoding;
 		$data["template"] = $content;
-
-		# add linked CSS if any
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css, ".cms_db_prefix()."css_assoc
-			WHERE	css_id		= assoc_css_id
-			AND		assoc_type	= 'template'
-			AND		assoc_to_id = ?";
-		$cssresult = $db->Execute($cssquery,array($template_id));
-		while ($cssresult && $cssline = $cssresult->FetchRow())
-		{
-			$data["stylesheet"] .= "\n".$cssline['css_text']."\n";
-		}
 
 		$tmpfname = '';
 		if (is_writable($config["previews_path"]))
