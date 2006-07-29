@@ -304,6 +304,7 @@ class Smarty_CMS extends Smarty {
 		$gCms->variables['position'] = $data['hierarchy'];
 		$pageinfo = new StdClass();
 		$pageinfo->template_id =  $data['template_id'];
+		$pageinfo->content_title = $data['title'];
 		$gCms->variables['pageinfo'] = $pageinfo;
 		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
 
