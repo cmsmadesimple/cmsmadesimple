@@ -433,10 +433,12 @@ if ($action == "showmoduleabout")
        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
+       print_r( $gCms->cmssystemmodules ); echo "<br/>";
+
        foreach($gCms->modules as $key=>$value)
 	 {
 	   $modinstance = $value['object'];
-	   $is_sysmodule = array_search( $key, $gCms->cmssystemmodules );
+	   $is_sysmodule = (array_search( $key, $gCms->cmssystemmodules ) !== FALSE);
 	   $namecol = $key;
 	   $versioncol = "&nbsp;";
 	   $statuscol = "&nbsp;";
@@ -517,13 +519,16 @@ if ($action == "showmoduleabout")
 		   $xmlcol = '&nbsp;';
 		 }
 
-	       if( $permsok )
+	       if( !$is_sysmodule )
 		 {
-		   $actioncol .= "<br/><a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
-		 }
-	       else
-		 {
-		   $actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+		   if( $permsok )
+		     {
+		       $actioncol .= "<br/><a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
+		     }
+		   else
+		     {
+		       $actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+		     }
 		 }
 	     }
 	   else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
@@ -538,6 +543,7 @@ if ($action == "showmoduleabout")
 	     {
                $versioncol = $dbm[$key]['Version'];
 	       $statuscol  = lang('installed');
+	       $actioncol  = "&nbsp;";
 
                #Can't be removed if it has a dependency...
 	       if (!$modinstance->CheckForDependents())
