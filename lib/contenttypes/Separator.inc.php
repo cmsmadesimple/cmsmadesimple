@@ -82,18 +82,18 @@ class separator extends ContentBase
 	{
 		$ret = array();
 
-		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
-		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
-		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
+		$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+		$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
+		$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 
 		if (!$adding && $showadmin)
 		{
-			array_push($ret,array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner())));
+			$ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
 		}
 
 		if ($adding || $showadmin)
 		{
-			array_push($ret,$this->ShowAdditionalEditors());
+			$ret[]= $this->ShowAdditionalEditors();
 		}
 
 		return $ret;

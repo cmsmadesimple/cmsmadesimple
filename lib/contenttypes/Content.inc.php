@@ -197,9 +197,9 @@ class content extends ContentBase
 		}
 		if ($tab == 0)
 		{
-			array_push($ret, array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />'));
-			array_push($ret, array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
-			array_push($ret, array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
+			$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+			$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+			$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
 			$additionalcall = '';
 			foreach($gCms->modules as $key=>$value)
 			{
@@ -212,8 +212,9 @@ class content extends ContentBase
 					$additionalcall = $gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				}
 			}
-			array_push($ret, array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"')));
-			array_push($ret, array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet)));
+			
+			$ret[]= array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+			$ret[]= array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
 			
 			// add additional content blocks if required
 			$this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
@@ -221,36 +222,37 @@ class content extends ContentBase
 			{
 				if ($blockNameId['oneline'] == 'true')
 				{
-					array_push($ret, array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.$this->GetPropertyValue($blockNameId['id']).'" />'));
+					$ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.$this->GetPropertyValue($blockNameId['id']).'" />');
 				}
 				else
 				{
-					array_push($ret, array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $this->GetPropertyValue($blockNameId['id']), $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet)));
+					$ret[]= array(ucwords($blockName).':',create_textarea(($blockNameId['usewysiwyg'] == 'false'?false:true), $this->GetPropertyValue($blockNameId['id']), $blockNameId['id'], '', $blockNameId['id'], '', $stylesheet));
 				}
 			}
 		}
 		if ($tab == 1)
 		{
-			array_push($ret, array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
-			array_push($ret, array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
-			array_push($ret, array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />'));
+		  
+			$ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
+			$ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+			$ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
 
-			array_push($ret, array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />'));
+			$ret[]=	array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
 
-			array_push($ret, array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6')));
+			$ret[]= array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
-			array_push($ret, array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />'));
-			array_push($ret, array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />'));
-			array_push($ret, array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />'));
+			$ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+			$ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
+			$ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
 			if (!$adding && $showadmin)
 			{
-				array_push($ret, array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner())));
+				$ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
 			}
 
 			if ($adding || $showadmin)
 			{
-				array_push($ret, $this->ShowAdditionalEditors());
+			  	$ret[]= $this->ShowAdditionalEditors();
 			}
 		}
         return $ret;
@@ -269,7 +271,7 @@ class content extends ContentBase
 		    }
 		  else
 		    {
-		      array_push($errors, lang('nofieldgiven',array(lang('title'))));
+		      $errors[]= lang('nofieldgiven',array(lang('title')));
 		      $result = false;
 		    }
 		}
@@ -282,7 +284,7 @@ class content extends ContentBase
 		    }
 		  else
 		    {
-			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
+		      	$errors[]=lang('nofieldgiven',array(lang('menutext')));
 			$result = false;
 		    }
 		}
@@ -292,20 +294,20 @@ class content extends ContentBase
 			$error = @ContentManager::CheckAliasError($this->mAlias, $this->mId);
 			if ($error !== FALSE)
 			{
-				array_push($errors, $error);
+				$errors[]= $error;
 				$result = false;
 			}
 		}
 
 		if ($this->mTemplateId == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('template'))));
+			$errors[]= lang('nofieldgiven',array(lang('template')));
 			$result = false;
 		}
 
 		if ($this->GetPropertyValue('content_en') == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('content'))));
+			$errors[]= lang('nofieldgiven',array(lang('content')));
 			$result = false;
 		}
 

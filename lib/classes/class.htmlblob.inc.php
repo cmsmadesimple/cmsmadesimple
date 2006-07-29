@@ -175,7 +175,8 @@ function AuthorBlobs($userid)
 
 		while ($result && !$result->EOF)
 		{
-			array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
+		  $variables['authorblobs'][] = $result->fields['htmlblob_id'];
+// 			array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
 			$result->MoveNext();
 		}
 	}

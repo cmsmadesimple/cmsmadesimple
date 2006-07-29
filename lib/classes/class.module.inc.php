@@ -225,7 +225,8 @@ class ModuleOperations
 		    {
 		      $moduledetails['requires'] = array();
 		    }
-		  array_push( $moduledetails['requires'], $requires );
+		  $moduledetails['requires'][] = $requires;
+// 		  array_push( $moduledetails['requires'], $requires );
 		  $requires = array();
 		}
 	    
@@ -727,12 +728,17 @@ class CMSModule
 		$this->langhash = array();
 		$this->params = array();
 		$this->error = '';
-		array_push($this->params, array(
-			'name' => 'lang',
-			'default' => 'en_US',
-			'help' => lang('langparam'),
-			'optional' => true
-		));
+		$this->params[] = array(
+					'name' => 'lang',
+					'default' => 'en_US',
+					'help' => lang('langparam'),
+					'optional' => true);
+// 		array_push($this->params, array(
+// 			'name' => 'lang',
+// 			'default' => 'en_US',
+// 			'help' => lang('langparam'),
+// 			'optional' => true
+// 		));
 
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();

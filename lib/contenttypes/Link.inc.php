@@ -104,19 +104,19 @@ class link extends ContentBase
 
 		if ($this->mName == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('title'))));
+			$errors[]= lang('nofieldgiven',array(lang('title')));
 			$result = false;
 		}
 
 		if ($this->mMenuText == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('menutext'))));
+			$errors[]= lang('nofieldgiven',array(lang('menutext')));
 			$result = false;
 		}
 
 		if ($this->GetPropertyValue('url') == '')
 		{
-			array_push($errors, lang('nofieldgiven',array(lang('url'))));
+			$errors[]= lang('nofieldgiven',array(lang('url')));
 			$result = false;
 		}
 
@@ -131,30 +131,30 @@ class link extends ContentBase
     {
 		$ret = array();
 
-		array_push($ret,array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />'));
-		array_push($ret,array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />'));
-		array_push($ret,array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId)));
-		array_push($ret,array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />'));
+		$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
+		$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+		$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+		$ret[]= array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
 		$text = '<option value="">(none)</option>';
 		$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
 		$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 		$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
 		$text .= '<option value="_top"'.($this->GetPropertyValue('target')=='_top'?' selected="selected"':'').'>_top</option>';
-		array_push($ret,array(lang('target').':','<select name="target">'.$text.'</select>'));
-		array_push($ret,array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />'));
-		array_push($ret,array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />'));
-		array_push($ret, array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />'));
-		array_push($ret, array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />'));
-		array_push($ret, array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />'));
+		$ret[]= array(lang('target').':','<select name="target">'.$text.'</select>');
+		$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
+		$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+		$ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
+		$ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
+		$ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
 		if (!$adding && $showadmin)
 		{
-			array_push($ret,array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner())));
+			$ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
 		}
 
 		if ($adding || $showadmin)
 		{
-			array_push($ret,$this->ShowAdditionalEditors());
+			$ret[]= $this->ShowAdditionalEditors();
 		}
 
 		return $ret;

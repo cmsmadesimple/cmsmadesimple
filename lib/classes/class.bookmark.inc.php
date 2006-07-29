@@ -148,7 +148,7 @@ class BookmarkOperations
 			$onemark->user_id = $row['user_id'];
 			$onemark->url = $row['url'];
 			$onemark->title = $row['title'];
-			array_push($result, $onemark);
+			$result[] = $onemark;
 		}
 
 		return $result;
