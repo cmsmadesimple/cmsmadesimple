@@ -42,15 +42,15 @@ class defaultTheme extends AdminTheme
     $class = array();
     if ($this->menuItems[$section]['selected'])
       {
-	array_push($class,'selected');
+	$class[] = 'selected';
       }
     if (isset($this->menuItems[$section]['firstmodule']))
       {
-	array_push($class,'first_module');
+	$class[] = 'first_module';
       }
     else if (isset($this->menuItems[$section]['module']))
       {
-	array_push($class,'module');
+	$class[] = 'module';
       }
     if (count($class) > 0)
       {

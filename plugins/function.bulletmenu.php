@@ -128,7 +128,7 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 				# children that shouldn't be showing.  Put the dot on the end
 				# since it will only affect children anyway...  saves from a
 				# .1 matching .11
-				array_push($disabled, $onecontent->Hierarchy() . ".");
+				$disabled[] = $onecontent->Hierarchy() . ".";
 				continue;
 			}
 
