@@ -20,7 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-// in filetypes.inc.php filetypes are defined 
+// in filetypes.inc.php filetypes are defined
 require_once(dirname(dirname(__FILE__))."/lib/filemanager/filetypes.inc.php");
 require_once(dirname(dirname(__FILE__))."/lib/file.functions.php");
 require_once("../include.php");
@@ -32,9 +32,9 @@ function deldir($dir)
 	$handle = opendir($dir);
 	while (false!==($FolderOrFile = readdir($handle)))
 	{
-		if($FolderOrFile != "." && $FolderOrFile != "..") 
-		{  
-			if(@is_dir("$dir/$FolderOrFile")) 
+		if($FolderOrFile != "." && $FolderOrFile != "..")
+		{
+			if(@is_dir("$dir/$FolderOrFile"))
 			{
 				deldir("$dir/$FolderOrFile");
 			}  // recursive
@@ -42,15 +42,15 @@ function deldir($dir)
 			{
 				unlink("$dir/$FolderOrFile");
 			}
-		}  
+		}
 	}
 	closedir($handle);
 	if(rmdir($dir))
 	{
 		$success = true;
 	}
-	return $success;  
-} 
+	return $success;
+}
 
 
 $errors = "";
@@ -89,7 +89,7 @@ if (isset($_FILES) && isset($_FILES['uploadfile']) && isset($_FILES['uploadfile'
 {
 	if ($access)
 	{
-		if (!move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
+		if (!@move_uploaded_file($_FILES['uploadfile']['tmp_name'], $dir."/".$_FILES['uploadfile']['name']))
 		{
 			$errors .= "<li>".lang('filenotuploaded')."</li>";
 		}
@@ -253,7 +253,7 @@ foreach ($dirs as $file)
 		if (@is_dir("$dir/$file"))
 		{
 			$tmp=urlencode($reldir."/".$file);
-			$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">"; 
+			$dirtext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
 			$dirtext .= "<td>";
             $dirtext .= $themeObject->DisplayImage('icons/filetypes/folder.gif', lang('directoryabove'));
             $dirtext .= "</td>";
@@ -288,18 +288,18 @@ foreach ($files as $file)
 			if (is_file("$dir/$file"))
 			{
 				$extension = get_file_extention($file);
-				// set template vars						
+				// set template vars
 				$template_vars['file']  			= $file;
 				$template_vars['dir_file']				= $reldir."/".$file;
 				$template_vars['url_dir_file']				= $url.$reldir."/".$file;
-	
+
 				// parse little template
 				$file_links = parse_template($filetype[$extension]['link']['view'], $template_vars,0);
 		//		$file_links = $filetype[$extension]['link']['view'];
-				
+
                 $image_icon = $themeObject->DisplayImage("icons/filetypes/".$filetype[$extension]['img'].".gif", $filetype[$extension]['desc']);
                 //$image_icon = "<img src=\"../images/cms/icons/filetypes/".$filetype[$extension]['img'].".gif\" alt=\"".$filetype[$extension]['desc']."\" title=\"".$filetype[$extension]['desc']."\" border=\"0\" />";
-	
+
 				$filetext .= "<tr class=\"$row\" onmouseover=\"this.className='".$row.'hover'."';\" onmouseout=\"this.className='".$row."';\">";
 				$filetext .= "<td>{$image_icon}</td>";
 				$filetext .= '<td><a href="'.$file_links.'" rel="external">'.$file.'</a></td>';
