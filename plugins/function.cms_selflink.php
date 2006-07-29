@@ -111,6 +111,11 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 					$Next_label = "Next page: ";
 					$Parent_label = "Parent page: "; //uplink
 					break;
+				case 'fr':
+					$Prev_label = "Page pr&eacute;c&eacute;dente&nbsp;: ";
+					$Next_label = "Page suivante&nbsp;: ";
+					$Parent_label = "Page ascendante&nbsp;: "; //uplink
+					break;
 				case '0':
 					$Prev_label = "";
 					$Next_label = "";
@@ -448,7 +453,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>target</tt> - Optional target for the a link to point to.  Useful for frame and javascript situations.</li>
 		<li><em>(optional)</em> <tt>class</tt> - Class for the &lt;a&gt; link. Useful for styling the link.</li> <!-- mbv - 21-06-2005 -->
-		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  (&quot;Next Page&quot;/&quot;Previous Page&quot;) in different languages (0 for no label.) Danish (dk) or English (en), for now.</li> <!-- mbv - 21-06-2005 -->
+		<li><em>(optional)</em> <tt>lang</tt> - Display link-labels  (&quot;Next Page&quot;/&quot;Previous Page&quot;) in different languages (0 for no label.) Danish (dk), English (en) or French (fr), for now.</li> <!-- mbv - 21-06-2005 -->
 		<li><em>(optional)</em> <tt>id</tt> - Optional css_id for the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>more</tt> - place additional options inside the &lt;a&gt; link.</li> <!-- mbv - 29-06-2005 -->
 		<li><em>(optional)</em> <tt>label</tt> - Label to use in with the link if applicable.</li>
