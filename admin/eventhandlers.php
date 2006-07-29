@@ -98,9 +98,9 @@ switch( $action )
 	}
 
 	default:
-	{		
+	{
 		$events = Events::ListEvents();
-		
+
 		echo '<br /><p><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
 		echo '<option value="">'.lang('showall').'</option>';
 		$modlist = array();
@@ -123,13 +123,13 @@ switch( $action )
 			}
 		}
 		echo "</select> <input type=\"submit\" value=\"submit\" /></form></p>\n\n";
-		
+
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo "<thead>\n";
 		echo "  <tr>\n";
 		echo "    <th>".lang('originator')."</th>\n";
 		echo "    <th>".lang('event')."</th>\n";
-		echo "    <th>".lang('description')."</th>\n";
+		echo "    <th width='50%'>".lang('description')."</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "    <th class=\"pageicon\">&nbsp;</th>\n";
 		echo "  </tr>\n";
@@ -159,7 +159,7 @@ switch( $action )
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
-					echo "  </tr>\n"; 
+					echo "  </tr>\n";
 					($curclass=="row1"?$curclass="row2":$curclass="row1");
 				}
 			}
