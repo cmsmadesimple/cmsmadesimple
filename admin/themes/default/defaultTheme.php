@@ -17,70 +17,69 @@
 
 class defaultTheme extends AdminTheme
 {
-
-	function renderMenuSection($section, $depth, $maxdepth)
-	{
-		if ($maxdepth > 0 && $depth > $maxdepth)
-			{
-			return;
-			}
-		if (! $this->menuItems[$section]['show_in_menu'])
-			{
-			return;
-			}
-		if (strlen($this->menuItems[$section]['url']) < 1)
-		    {
-            echo "<li>".$this->menuItems[$section]['title']."</li>";
-            return;
-            }
-		echo "<li><a href=\"";
-		echo $this->menuItems[$section]['url'];
-		echo "\"";
-		if (array_key_exists('target', $this->menuItems[$section]))
-			{
-			echo ' rel="external"';
-			}
-		$class = array();
-		if ($this->menuItems[$section]['selected'])
-			{
-			array_push($class,'selected');
-			}
-		if (isset($this->menuItems[$section]['firstmodule']))
-		    {
-            array_push($class,'first_module');
-            }
-        else if (isset($this->menuItems[$section]['module']))
-            {
-            array_push($class,'module');
-            }
-        if (count($class) > 0)
-            {
-            echo ' class="';
-            for($i=0;$i<count($class);$i++)
-                {
-                if ($i > 0)
-                    {
-                    echo " ";
-                    }
-                echo $class[$i];
-                }
-            echo '"';
-            }
-		echo ">";
-		echo $this->menuItems[$section]['title'];
-		echo "</a>";
-		if ($this->HasDisplayableChildren($section))
-			{
-			echo "<ul>";
-			foreach ($this->menuItems[$section]['children'] as $child)
-				{
-				$this->renderMenuSection($child, $depth+1, $maxdepth);
-				}
-			echo "</ul>";
-			}
-		echo "</li>";
-		return;
-	}
+  function renderMenuSection($section, $depth, $maxdepth)
+  {
+    if ($maxdepth > 0 && $depth > $maxdepth)
+      {
+	return;
+      }
+    if (! $this->menuItems[$section]['show_in_menu'])
+      {
+	return;
+      }
+    if (strlen($this->menuItems[$section]['url']) < 1)
+      {
+	echo "<li>".$this->menuItems[$section]['title']."</li>";
+	return;
+      }
+    echo "<li><a href=\"";
+    echo $this->menuItems[$section]['url'];
+    echo "\"";
+    if (array_key_exists('target', $this->menuItems[$section]))
+      {
+	echo ' rel="external"';
+      }
+    $class = array();
+    if ($this->menuItems[$section]['selected'])
+      {
+	array_push($class,'selected');
+      }
+    if (isset($this->menuItems[$section]['firstmodule']))
+      {
+	array_push($class,'first_module');
+      }
+    else if (isset($this->menuItems[$section]['module']))
+      {
+	array_push($class,'module');
+      }
+    if (count($class) > 0)
+      {
+	echo ' class="';
+	for($i=0;$i<count($class);$i++)
+	  {
+	    if ($i > 0)
+	      {
+		echo " ";
+	      }
+	    echo $class[$i];
+	  }
+	echo '"';
+      }
+    echo ">";
+    echo $this->menuItems[$section]['title'];
+    echo "</a>";
+    if ($this->HasDisplayableChildren($section))
+      {
+	echo "<ul>";
+	foreach ($this->menuItems[$section]['children'] as $child)
+	  {
+	    $this->renderMenuSection($child, $depth+1, $maxdepth);
+	  }
+	echo "</ul>";
+      }
+    echo "</li>";
+    return;
+  }
 
 
     function DisplayTopMenu()
@@ -198,161 +197,176 @@ class defaultTheme extends AdminTheme
         }
     }
 	
-	function DisplayAllSectionPages()
+    function DisplayAllSectionPages()
+    {
+      foreach ($this->menuItems as $thisSection=>$menuItem)
 	{
-	  foreach ($this->menuItems as $thisSection=>$menuItem)
-            {
-	      if ($menuItem['parent'] != -1)
-            	{
-		  continue;
-            	}
-	      if (! $menuItem['show_in_menu'])
-                {
-		  continue;
-                }
-	      if ($menuItem['url'] == 'index.php'  || strlen($menuItem['url']) < 1)
-            	{
-		  continue;
-            	}
+	  if ($menuItem['parent'] != -1)
+	    {
+	      continue;
+	    }
+	  if (! $menuItem['show_in_menu'])
+	    {
+	      continue;
+	    }
+	  if ($menuItem['url'] == 'index.php'  || strlen($menuItem['url']) < 1)
+	    {
+	      continue;
+	    }
 	      
-	      echo "<div class=\"itemmenucontainer\">";
-	      echo '<div class="itemoverflow">';
-	      echo '<p class="itemicon">';
-	      $iconSpec = $thisSection;
-	      if ($menuItem['url'] == '../index.php')
-                {
-		  $iconSpec = 'viewsite';
-                }
-	      echo '<a href="'.$menuItem['url'].'">';
-	      echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', $iconSpec, '', '', 'itemicon');
-	      echo '</a>';
-	      echo '</p>';
-	      echo '<p class="itemtext">';
-	      echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
-	      if (array_key_exists('target', $menuItem))
-		{
-		  echo ' rel="external"';
-		}
+	  echo "<div class=\"itemmenucontainer\">";
+	  echo '<div class="itemoverflow">';
+	  echo '<p class="itemicon">';
+	  $iconSpec = $thisSection;
+	  if ($menuItem['url'] == '../index.php')
+	    {
+	      $iconSpec = 'viewsite';
+	    }
+	  echo '<a href="'.$menuItem['url'].'">';
+	  echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', $iconSpec, '', '', 'itemicon');
+	  echo '</a>';
+	  echo '</p>';
+	  echo '<p class="itemtext">';
+	  echo "<a class=\"itemlink\" href=\"".$menuItem['url']."\"";
+	  if (array_key_exists('target', $menuItem))
+	    {
+	      echo ' rel="external"';
+	    }
 	      
-	      echo ">".$menuItem['title']."</a><br />\n";
-	      if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
-                {
-		  echo $menuItem['description']."<br />";
-                }
-	      $this->ListSectionPages($thisSection);
-	      echo '</p>';
-	      echo "</div>";
-	      echo '</div>';
-            }
+	  echo ">".$menuItem['title']."</a><br />\n";
+	  if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
+	    {
+	      echo $menuItem['description']."<br />";
+	    }
+	  $this->ListSectionPages($thisSection);
+	  echo '</p>';
+	  echo "</div>";
+	  echo '</div>';
+	}
     }
 
     function DisplaySectionPages($section)
     {
-    	if (count($this->menuItems) < 1)
-            {
-            // menu should be initialized before this gets called.
-            // TODO: try to do initialization.
-            // Problem: current page selection, url, etc?
-            return -1;
-            }
-        foreach ($this->menuItems[$section]['children'] as $thisChild)
-            {
-            $thisItem = $this->menuItems[$thisChild];
-            if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-            	{
-            	continue;
-            	}
+      global $gCms;
+      if (count($this->menuItems) < 1)
+	{
+	  // menu should be initialized before this gets called.
+	  // TODO: try to do initialization.
+	  // Problem: current page selection, url, etc?
+	  return -1;
+	}
 
-            echo "<div class=\"itemmenucontainer\">\n";
-			echo '<div class="itemoverflow">';
- 			echo '<p class="itemicon">';
-            $moduleIcon = false;
-            $iconSpec = $thisChild;
-            // handle module icons
-            if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
-				{
-					if ($tmp[1] == 'News')
-					   {
-					   	$iconSpec = 'newsmodule';
-					   }
-					else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
-					   {
-					   	$iconSpec = 'wysiwyg';
-					   }
-					else
-					   {
-					   $imageSpec = dirname($this->cms->config['root_path'] .
-						  '/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
-					   if (file_exists($imageSpec))
-						  {
-						  echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
-							$this->cms->config['root_url'] .
-                            '/modules/' . $tmp[1] . '/images/' .
-							'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
-						  $moduleIcon = true;
-                            }
-					   else
-						  {
-						  $iconSpec=$this->TopParent($thisChild);
-						  }
-						}
-				}
-            if (! $moduleIcon)
-                {
-                if ($thisItem['url'] == '../index.php')
-                    {
-                    $iconSpec = 'viewsite';
-                    }
-		        echo '<a href="'.$thisItem['url'].'">';
-                echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
-                echo '</a>';
-                }
-			echo '</p>';
-			echo '<p class="itemtext">';
-            echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
-			if (array_key_exists('target', $thisItem))
-				{
-				echo ' rel="external"';
-				}
-            echo ">".$thisItem['title']."</a><br />\n";
-            if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-                {
-                echo $thisItem['description']."<br />";
-                }
-			echo '</p>';
-            echo "</div>";
-			echo '</div>';			
+      $firstmodule = true;
+      foreach ($this->menuItems[$section]['children'] as $thisChild)
+	{
+	  $thisItem = $this->menuItems[$thisChild];
+	  if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
+	    {
+	      continue;
+	    }
+
+	  // separate system modules from the rest.
+	  if( preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp) )
+	    {
+	      if( array_search( $tmp[1], $gCms->cmssystemmodules ) === FALSE && $firstmodule == true )
+		{
+		  echo "<hr width=\"90%\"/>";
+		  $firstmodule = false;
+		}
+	    }
+
+	  echo "<div class=\"itemmenucontainer\">\n";
+	  echo '<div class="itemoverflow">';
+	  echo '<p class="itemicon">';
+	  $moduleIcon = false;
+	  $iconSpec = $thisChild;
+	  
+	  // handle module icons
+	  if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
+	    {
+	      if ($tmp[1] == 'News')
+		{
+		  $iconSpec = 'newsmodule';
+		}
+	      else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
+		{
+		  $iconSpec = 'wysiwyg';
+		}
+	      else
+		{
+		  $imageSpec = dirname($this->cms->config['root_path'] .
+				       '/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
+		  if (file_exists($imageSpec))
+		    {
+		      echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
+			$this->cms->config['root_url'] .
+			'/modules/' . $tmp[1] . '/images/' .
+			'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
+		      $moduleIcon = true;
+		    }
+		  else
+		    {
+		      $iconSpec=$this->TopParent($thisChild);
+		    }
+		}
+	    }
+	  if (! $moduleIcon)
+	    {
+	      if ($thisItem['url'] == '../index.php')
+		{
+		  $iconSpec = 'viewsite';
+		}
+	      echo '<a href="'.$thisItem['url'].'">';
+	      echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
+	      echo '</a>';
+	    }
+	  echo '</p>';
+	  echo '<p class="itemtext">';
+	  echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
+	  if (array_key_exists('target', $thisItem))
+	    {
+	      echo ' rel="external"';
+	    }
+	  echo ">".$thisItem['title']."</a><br />\n";
+	  if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
+	    {
+	      echo $thisItem['description']."<br />";
+	    }
+	  echo '</p>';
+	  echo "</div>";
+	  echo '</div>';			
         }
+
     }
 	
    function ListSectionPages($section)
     {
-        if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
-            {
-            return;
-            }
-
-        if ($this->HasDisplayableChildren($section))
-            {
-            echo " ".lang('subitems').": ";
-            $count = 0;
-            foreach($this->menuItems[$section]['children'] as $thisChild)
-                {
-                $thisItem = $this->menuItems[$thisChild];
-                if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-                    {
-                    continue;
-                    }
-                if ($count++ > 0)
-                    {
-                    echo ", ";
-                    }
-                echo "<a class=\"itemsublink\" href=\"".$thisItem['url'];
-                echo "\">".$thisItem['title']."</a>";
-                }
-            }
+      if (! isset($this->menuItems[$section]['children']) || count($this->menuItems[$section]['children']) < 1)
+	{
+	  return;
+	}
+      
+      if ($this->HasDisplayableChildren($section))
+	{
+	  echo " ".lang('subitems').": ";
+	  $count = 0;
+	  foreach($this->menuItems[$section]['children'] as $thisChild)
+	    {
+	      $thisItem = $this->menuItems[$thisChild];
+	      if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
+		{
+		  continue;
+		}
+	      if ($count++ > 0)
+		{
+		  echo ", ";
+		}
+	      echo "<a class=\"itemsublink\" href=\"".$thisItem['url'];
+	      echo "\">".$thisItem['title']."</a>";
+	    }
+	}
     }
-
+   
 	/* Functions that we want dont want the standard output from */
 	function OutputFooterJavascript() {}	
 }

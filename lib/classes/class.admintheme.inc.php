@@ -193,12 +193,12 @@ class AdminTheme
         if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
             {
             foreach($this->modulesBySection[$section] as $sectionModule)
-                {
+	      {
                 $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
-                    $sectionModule['key'];
+		  $sectionModule['key'];
                 $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
                 $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
-                }
+	      }
             }
         return $modList;
     }
@@ -805,134 +805,183 @@ class AdminTheme
                     'description'=>'','show_in_menu'=>true),
     	);
 
-		// add in all of the modules
+	// add in all of the 'system' modules todo
+	global $gCms;
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
-            {
+	  {
             $tmpArray = $this->MenuListSectionModules($sectionKey);
             $first = true;
             foreach ($tmpArray as $thisKey=>$thisVal)
-                {
+	      {
                 $thisModuleKey = $thisKey;
                 $counter = 0;
+
                 // don't clobber existing keys
                 if (array_key_exists($thisModuleKey,$this->menuItems))
-                    {
-                    while (array_key_exists($thisModuleKey,$this->menuItems))
-                        {
-                        $thisModuleKey = $thisKey.$counter;
-                        $counter++;
-                        }
-                    }
+		  {
+		    while (array_key_exists($thisModuleKey,$this->menuItems))
+		      {
+			$thisModuleKey = $thisKey.$counter;
+			$counter++;
+		      }
+		  }
+
+		// if it's not a system module...
+		if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
+		  {
+		    $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+							   'parent'=>$sectionKey,
+							   'title'=>$this->FixSpaces($thisVal['name']),
+							   'description'=>$thisVal['description'],
+							   'show_in_menu'=>true);
+
+// 		    Commenting out this code ensures that the module is thought of as (built in)
+// 		    if ($first)
+// 		      {
+// 			$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
+// 			$first = false;
+// 		      }
+// 		    else
+// 		      {
+// 			$this->menuItems[$thisModuleKey]['module'] = 1;
+// 		      }
+		  }
+	      }
+	  }
+
+	// add in all of the modules
+        foreach ($this->menuItems as $sectionKey=>$sectionArray)
+	  {
+            $tmpArray = $this->MenuListSectionModules($sectionKey);
+            $first = true;
+            foreach ($tmpArray as $thisKey=>$thisVal)
+	      {
+                $thisModuleKey = $thisKey;
+                $counter = 0;
+
+                // don't clobber existing keys
+                if (array_key_exists($thisModuleKey,$this->menuItems))
+		  {
+		    while (array_key_exists($thisModuleKey,$this->menuItems))
+		      {
+			$thisModuleKey = $thisKey.$counter;
+			$counter++;
+		      }
+		    if( $counter > 0 )
+		      {
+			continue;
+		      }
+		  }
                 $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-                    'parent'=>$sectionKey,
-                    'title'=>$this->FixSpaces($thisVal['name']),
-                    'description'=>$thisVal['description'],
-                    'show_in_menu'=>true);
+						       'parent'=>$sectionKey,
+						       'title'=>$this->FixSpaces($thisVal['name']),
+						       'description'=>$thisVal['description'],
+						       'show_in_menu'=>true);
                 if ($first)
-                    {
+		  {
                     $this->menuItems[$thisModuleKey]['firstmodule'] = 1;
                     $first = false;
-                    }
+		  }
                 else
-                    {
+		  {
                     $this->menuItems[$thisModuleKey]['module'] = 1;
-                    }
-                }
-            }
-
-		// resolve the tree to be doubly-linked,
-		// and make sure the selections are selected            
+		  }
+	      }
+	  }
+	
+	// resolve the tree to be doubly-linked,
+	// and make sure the selections are selected            
         foreach ($this->menuItems as $sectionKey=>$sectionArray)
-            {
+	  {
             // link the children to the parents; a little clumsy since we can't
             // assume php5-style references in a foreach.
             $this->menuItems[$sectionKey]['children'] = array();
             foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
-            	{
+	      {
             	if ($subsectionArray['parent'] == $sectionKey)
-            		{
-            		array_push($this->menuItems[$sectionKey]['children'], $subsectionKey);
-            		}
-            	}
+		  {
+		    array_push($this->menuItems[$sectionKey]['children'], $subsectionKey);
+		  }
+	      }
             // set selected
-			if ($this->script == 'moduleinterface.php')
-				{
+	    if ($this->script == 'moduleinterface.php')
+	      {
                 $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
                 if ($a > 0 && $matches[2] == $sectionKey)
-					{
-            		$this->menuItems[$sectionKey]['selected'] = true;
-            		$this->title .= $sectionArray['title'];
-            		if ($sectionArray['parent'] != -1)
-            			{
-            			$parent = $sectionArray['parent'];
-            			while ($parent != -1)
-            				{
-            				$this->menuItems[$parent]['selected'] = true;
-            				$parent = $this->menuItems[$parent]['parent'];
-            				}
-            			}
-					}
-				else
-					{
-					$this->menuItems[$sectionKey]['selected'] = false;
-					}
-				}
+		  {
+		    $this->menuItems[$sectionKey]['selected'] = true;
+		    $this->title .= $sectionArray['title'];
+		    if ($sectionArray['parent'] != -1)
+		      {
+			$parent = $sectionArray['parent'];
+			while ($parent != -1)
+			  {
+			    $this->menuItems[$parent]['selected'] = true;
+			    $parent = $this->menuItems[$parent]['parent'];
+			  }
+		      }
+		  }
+		else
+		  {
+		    $this->menuItems[$sectionKey]['selected'] = false;
+		  }
+	      }
             else if ($sectionArray['url'] == $this->script)
-            	{
+	      {
             	$this->menuItems[$sectionKey]['selected'] = true;
             	$this->title .= $sectionArray['title'];
             	if ($sectionArray['parent'] != -1)
-            		{
-            		$parent = $sectionArray['parent'];
-            		while ($parent != -1)
-            			{
-            			$this->menuItems[$parent]['selected'] = true;
-            			$parent = $this->menuItems[$parent]['parent'];
-            			}
-            		}
-            	}
+		  {
+		    $parent = $sectionArray['parent'];
+		    while ($parent != -1)
+		      {
+			$this->menuItems[$parent]['selected'] = true;
+			$parent = $this->menuItems[$parent]['parent'];
+		      }
+		  }
+	      }
             else
-            	{
+	      {
             	$this->menuItems[$sectionKey]['selected'] = false;
-            	}
-            }
-            // fix subtitle, if any
-            if ($subtitle != '')
-                {
-                $this->title .= ': '.$subtitle;
-                }
-            // generate breadcrumb array
-
-            $count = 0;
-            foreach ($this->menuItems as $key=>$menuItem)
-                {
-			    if ($menuItem['selected'])
-                    {
-				    array_push($this->breadcrumbs, array('title'=>$menuItem['title'], 'url'=>$menuItem['url']));
-			        $count++;
-                    }
-			    }
-		    if ($count > 0)
-                {
-                // and fix up the last breadcrumb...
-                if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
-                    {
-                    $this->query = preg_replace('/\&/','&amp;',$this->query);
-                    $this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
-                    }
-                if ($this->subtitle != '')
-                    {
-                    $this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
-                    }
-                }
-        }
-
+	      }
+	  }
+	// fix subtitle, if any
+	if ($subtitle != '')
+	  {
+	    $this->title .= ': '.$subtitle;
+	  }
+	// generate breadcrumb array
+	
+	$count = 0;
+	foreach ($this->menuItems as $key=>$menuItem)
+	  {
+	    if ($menuItem['selected'])
+	      {
+		array_push($this->breadcrumbs, array('title'=>$menuItem['title'], 'url'=>$menuItem['url']));
+		$count++;
+	      }
+	  }
+	if ($count > 0)
+	  {
+	    // and fix up the last breadcrumb...
+	    if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
+	      {
+		$this->query = preg_replace('/\&/','&amp;',$this->query);
+		$this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
+	      }
+	    if ($this->subtitle != '')
+	      {
+		$this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
+	      }
+	  }
+    }
+    
     /**
      *  BackUrl
      *  "Back" Url - link to the next-to-last item in the breadcrumbs
      *  for the back button.
      */
-     function BackUrl()
+    function BackUrl()
      {
      	$count = count($this->breadcrumbs) - 2;
      	if ($count > -1)
@@ -967,38 +1016,40 @@ class AdminTheme
      */
     function DisplaySectionPages($section)
     {
-    	if (count($this->menuItems) < 1)
-            {
-            // menu should be initialized before this gets called.
-            // TODO: try to do initialization.
-            // Problem: current page selection, url, etc?
-            return -1;
-            }
-        foreach ($this->menuItems[$section]['children'] as $thisChild)
-            {
-            $thisItem = $this->menuItems[$thisChild];
-            if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-            	{
-            	continue;
-            	}
-            echo "<div class=\"MainMenuItem\">\n";
-            echo "<a href=\"".$thisItem['url']."\"";
-			if (array_key_exists('target', $thisItem))
-				{
-				echo " target=" . $thisItem['target'];
-				}
-			if ($thisItem['selected'])
-				{
-				echo " class=\"selected\"";
-				}
-            echo ">".$thisItem['title']."</a>\n";
-            if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-                {
-                echo "<span class=\"description\">";
-                echo $thisItem['description'];
-                echo "</span>\n";
-                }
-            echo "</div>\n";
+      if (count($this->menuItems) < 1)
+	{
+	  // menu should be initialized before this gets called.
+	  // TODO: try to do initialization.
+	  // Problem: current page selection, url, etc?
+	  return -1;
+	}
+
+      foreach ($this->menuItems[$section]['children'] as $thisChild)
+	{
+	  $thisItem = $this->menuItems[$thisChild];
+	  if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
+	    {
+	      continue;
+	    }
+
+	  echo "<div class=\"MainMenuItem\">\n";
+	  echo "<a href=\"".$thisItem['url']."\"";
+	  if (array_key_exists('target', $thisItem))
+	    {
+	      echo " target=" . $thisItem['target'];
+	    }
+	  if ($thisItem['selected'])
+	    {
+	      echo " class=\"selected\"";
+	    }
+	  echo ">".$thisItem['title']."</a>\n";
+	  if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
+	    {
+	      echo "<span class=\"description\">";
+	      echo $thisItem['description'];
+	      echo "</span>\n";
+	    }
+	  echo "</div>\n";
         }
     }
 
@@ -1616,9 +1667,9 @@ class AdminTheme
 	{
 		global $gCms;
 		$config =& $gCms->GetConfig();
-	    $themeName = get_preference(get_userid(), 'admintheme', 'default');
-	    $themeObjectName = $themeName."Theme";
-	    $userid = get_userid();
+		$themeName = get_preference(get_userid(), 'admintheme', 'default');
+		$themeObjectName = $themeName."Theme";
+		$userid = get_userid();
 	
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR.$config['admin_dir']."/themes/${themeName}/${themeObjectName}.php"))
 		{
