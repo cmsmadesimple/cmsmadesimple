@@ -433,8 +433,6 @@ if ($action == "showmoduleabout")
        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
-       print_r( $gCms->cmssystemmodules ); echo "<br/>";
-
        foreach($gCms->modules as $key=>$value)
 	 {
 	   $modinstance = $value['object'];
