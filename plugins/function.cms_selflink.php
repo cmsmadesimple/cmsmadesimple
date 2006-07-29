@@ -106,6 +106,10 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 					$Prev_label = "Forrige side: ";
 					$Next_label = "N&aelig;ste side: ";
 					break;
+			        case 'nl':
+                                        $Prev_label = "Vorige pagina: ";
+                                        $Next_label = "Volgende pagina: ";
+                                        break;
 				case 'en':
 					$Prev_label = "Previous page: ";
 					$Next_label = "Next page: ";
