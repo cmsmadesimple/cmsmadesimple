@@ -446,28 +446,30 @@ class AdminTheme
      */
     function ShowShortcuts()
     {
-      echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
-      echo '<div class="itemoverflow">';
-      echo '<h2>'.lang('bookmarks').'</h2>';
-      echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
-      echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
-      $marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
-      $marks = array_reverse($marks);
-      echo '<ul style="margin:0">';
-      foreach($marks as $mark)
-	{
-	  echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-	}
-      echo "</ul>\n";
-      echo '<h3 style="margin:0;">'.lang('help').'</h3>';
-      echo '<ul style="margin:0;">';
-      echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-      echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
-      echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-      echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
-      echo '</ul>';
-      echo '</div>';
-      echo '</div>';
+      if (get_preference($this->userid, 'bookmarks')) {
+	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
+	echo '<div class="itemoverflow">';
+	echo '<h2>'.lang('bookmarks').'</h2>';
+	echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
+	echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+	$marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
+	$marks = array_reverse($marks);
+	echo '<ul style="margin:0">';
+	foreach($marks as $mark)
+	  {
+	    echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+	  }
+	echo "</ul>\n";
+	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
+	echo '<ul style="margin:0;">';
+	echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
+	echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
+	echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+	echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
+	echo '</ul>';
+	echo '</div>';
+	echo '</div>';
+      }
     }
     
 
