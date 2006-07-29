@@ -172,7 +172,7 @@ function createtmpfname(&$contentobj)
 
 	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
 	$data['encoding'] = $stylesheetobj['encoding'];
-	$data['stylesheet'] = $stylesheetobj['stylesheet'];
+	// $data['stylesheet'] = $stylesheetobj['stylesheet'];
 
 	$tmpfname = '';
 	if (is_writable($config["previews_path"]))
