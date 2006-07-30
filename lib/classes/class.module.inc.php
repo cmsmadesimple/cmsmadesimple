@@ -1167,10 +1167,6 @@ class CMSModule
 		include($filename);
 		  }
 		}
-	  else
-		{
-		  return FALSE;
-		}
 	}
 
 	/**
