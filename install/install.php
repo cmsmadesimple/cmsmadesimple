@@ -386,7 +386,7 @@ function showPageOne() {
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
   
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 12M, recommend 16M)", "12M", "16M", $currow, TRUE );
+  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 8M, recommend 16M)", "8M", "16M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
