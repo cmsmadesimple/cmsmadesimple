@@ -207,7 +207,7 @@ function cms_config_text($config)
 #URL Settings
 #------------
 
-#Show mod_rewrite URLs in the menu?
+#Show mod_rewrite URLs in the menu? You must enable 'use_hierarchy' for this to work 
 \$config['assume_mod_rewrite'] = ${$config['assume_mod_rewrite']?'true':'false'};
 
 #Extension to use if you're using mod_rewrite for pretty URLs.
