@@ -346,7 +346,7 @@ function showPageOne() {
     ($currow=="row1"?$currow="row2":$currow="row1");
   } ## foreach
     
-  echo "<tr class=\"$currow\"><td>Checking if session.save_path is set and writable";
+  echo "<tr class=\"$currow\"><td>Checking if session.save_path is set.";
   if (session_save_path() == '')
     {
       echo '<br /><br /><em>session.save_path is not set. Not having a session.save_path disallows any logins to the admin panel.  Please adjust before continuing..</em>';
@@ -355,16 +355,7 @@ function showPageOne() {
     }
   else
     {
-      if (is_writable(session_save_path()))
-	{
-	  echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-	}
-      else
-	{
-	  echo '<br /><br /><em>session.save_path("'.session_save_path().'") is not writable. Not having this as writable disallows any logins to the admin panel.  Please adjust before continuing..</em>';
-	  echo '</td><td class="col2"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-	  $continueon = false;
-	}
+      echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
     }
   echo "</td></tr>\n";
 
@@ -412,6 +403,21 @@ function showPageOne() {
     {
       echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
     }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+   // is session_save_path writable?
+  echo "<tr class=\"$currow\"><td>Checking if session.save_path is writable<br/><br/>";
+  echo '<em>Your session.save_path is "'.session_save_path().'". Not having this as writable may make logins to the Admin Panel not work. You may want to look into making this path writable if you have trouble logging into the Admin Panel.</em>
+       </td><td class="col2">';
+  if (is_writable(session_save_path()))
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+	}
   else
     {
       echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
