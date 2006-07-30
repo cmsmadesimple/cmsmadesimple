@@ -470,7 +470,7 @@ if ($action == "showmoduleabout")
 	       if (FALSE == empty($dbm[$key]['Version'])) {
 		 echo "<td>".$dbm[$key]['Version']."</td>";
 	       }
-               $statuscol = lang('minimumcmsversionrequired').': '.$modinstance->MinimumCMSVersion();
+               $statuscol = lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion();
 	       $xmlcol = "&nbsp;";
 	       $statusspans = true;
 	     }
