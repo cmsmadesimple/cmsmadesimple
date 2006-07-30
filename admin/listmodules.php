@@ -216,9 +216,10 @@ if ($access)
 	if( !$result )
 	  {
 	    @ob_start();
-	    echo $modinstance->GetLastError();
+	    echo ModuleOperations::GetLastError();
 	    $content = @ob_get_contents();
 	    @ob_end_clean();
+	    echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
 	    echo '<div class="pagecontainer">';
 	    echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
 	    echo $content;

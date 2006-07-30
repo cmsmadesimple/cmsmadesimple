@@ -306,6 +306,7 @@ $lang['admin']['installed'] = 'Installed';
 $lang['admin']['author'] = 'Author';
 $lang['admin']['changehistory'] = 'Change History';
 $lang['admin']['moduleerrormessage'] = 'Error Message for %s Module';
+$lang['admin']['moduleupgradeerror'] = 'There was an error upgrading the module.';
 $lang['admin']['moduleinstallmessage'] = 'Install Message for %s Module';
 $lang['admin']['moduleuninstallmessage'] = 'Uninstall Message for %s Module';
 $lang['admin']['admintheme'] = 'Administration Theme';
