@@ -256,6 +256,7 @@ function showPageOne() {
 
   ## check file perms
   $continueon = true;
+  echo '<p class="important">Please read the <a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Troubleshooting">Installation Troubleshooting</a> page in the CMS Made Simple Documentation Wiki.</p>';
   echo "<h3>Checking permissions and PHP settings</h3>\n";
   #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
   $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );

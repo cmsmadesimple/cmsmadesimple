@@ -205,3 +205,6 @@ a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 	border: white 0.4em inset; 
 	padding-left: 1.1em; 
 }
+.important {
+	color: red;
+}
