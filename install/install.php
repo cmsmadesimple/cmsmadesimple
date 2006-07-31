@@ -966,7 +966,9 @@ function showPageFive() {
 		{
 			if ($gCms->modules[$modulename]['object']->AllowAutoInstall() == true)
 			{
-				$count = $db->GetOne('SELECT count(*) as count FROM '.cms_db_prefix().'modules WHERE module_name = ?');
+			  $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE module_name = ?";
+			  $dbresult = $db->Execute($query, array($modulename));
+			  $count = $dbresult->RecordCount();
 				if (!isset($count) || $count == 0)
 				{
 					$modinstance = $gCms->modules[$modulename]['object'];
