@@ -37,7 +37,7 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 		$firstExpandCollapse = false;
 	}
 
-	echo '<a href="'. $_SERVER['REQUEST_URI'] .'#'. $id .'" onClick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br />
+	echo '<a href="'. $_SERVER['REQUEST_URI'] .'#'. $id .'" onclick="expandcontent(\''.$id.'\')" style="cursor:hand; cursor:pointer">'.$title.'</a><br />
 	<div id="'.$id.'" class="expand">';
 }
 
