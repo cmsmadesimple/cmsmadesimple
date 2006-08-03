@@ -171,34 +171,37 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 		{
 			global $gCms;
 			$hm =& $gCms->GetHierarchyManager();
+			$flatcontent = array();
 			if ($condition != '|') // uplink (we don't need the flatcontent for an uplink)
-			  {
-			    $flatcontent =& $hm->getFlattenedContent();
-			    $number = 0;
-			    for ($i = 0; $i < count($flatcontent); $i++)
-			      {
-    				if ($condition == '-')
-				  {
-				    if ($flatcontent[$i]->DefaultContent() == true)
-				      {
-					$number = $i;
-					break;
-				      }
-				  }
-    				else if ($flatcontent[$i]->Id() == $gCms->variables['content_id'])
-				  {
-				    $number = $i;
-				    break;
-				  }
-			      }
-			  } //* uplink addition
+			{
+				#return '';
+				$flatcontent =& $hm->getFlatList();
+				$number = 0;
+				for ($i = 0; $i < count($flatcontent); $i++)
+				{
+					if ($condition == '-')
+					{
+						$defaultid = ContentManager::GetDefaultPageID();
+						if ($flatcontent[$i]->getTag() == $defaultid)
+						{
+							$number = $i;
+							break;
+						}
+					}
+					else if ($flatcontent[$i]->getTag() == $gCms->variables['content_id'])
+					{
+						$number = $i;
+						break;
+					}
+				}
+			} //* uplink addition
 			if ($condition == '<')
 			{
 				if ($number > 0)
 				{
 					for ($i = $number - 1; $i >= 0; $i--)
 					{
-						$content =& $flatcontent[$i];
+						$content =& $flatcontent[$i]->getContent();
 						if (isset($content))
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -225,7 +228,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				{
 					for ($i = $number + 1; $i < count($flatcontent); $i++)
 					{
-						$content =& $flatcontent[$i];
+						$content =& $flatcontent[$i]->getContent();
 						if (isset($content))
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -252,7 +255,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				{
 					for ($i = $number; $i < count($flatcontent); $i++)
 					{
-						$content =& $flatcontent[$i];
+						$content =& $flatcontent[$i]->getContent();
 						if (isset($content))
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
@@ -295,7 +298,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			} //* End uplink
 			else if ($condition == '-')
 			{
-				$content =& $flatcontent[$number];
+				$content =& $flatcontent[$number]->getContent();
 				if (isset($content))
 				{
 					$pageid = $content->Id();

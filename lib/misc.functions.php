@@ -408,11 +408,21 @@ function debug_bt()
 */
 function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
 {
+	global $gCms;
+	$variables =& $gCms->variables;
+
+	$starttime = microtime();
+	if (isset($variables['starttime']))
+		$starttime = $variables['starttime'];
+	else
+		$variables['starttime'] = $starttime;
+	
 	$titleText = "Debug: ";
 	if($title)
 	{
 		$titleText = "Debug display of '$title':";
 	}
+	$titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
 
 	ob_start();
 	if ($use_html)
@@ -462,7 +472,6 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_output($var, $title="")
 {
-	
 	global $gCms;
 	if($gCms->config["debug"] == true)
 	{
@@ -493,14 +502,31 @@ function debug_to_log($var, $title='')
 function debug_buffer($var, $title="")
 {
 	global $gCms;
-	
-	//debug_to_log($var, $title='');
-
-	if($gCms->config["debug"] == true)
+	if ($gCms)
 	{
-		$gCms->errors[] = debug_display($var, $title, false, true);
-	}
+		$config =& $gCms->GetConfig();
 	
+		//debug_to_log($var, $title='');
+
+		if($config["debug"] == true)
+		{
+			$gCms->errors[] = debug_display($var, $title, false, true);
+		}
+	}
+}
+
+function debug_sql($str, $newline)
+{
+	global $gCms;
+	if ($gCms)
+	{
+		$config =& $gCms->GetConfig();
+	
+		if($config["debug"] == true)
+		{
+			$gCms->errors[] = debug_display($str, '', false, true);
+		}
+	}
 }
 
 /**

@@ -289,7 +289,7 @@ echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
 {
 	$smarty->clear_compiled_tpl();
-	$smarty->clear_all_cache();
+	#$smarty->clear_all_cache();
 }
 
 if ($config["debug"] == true)

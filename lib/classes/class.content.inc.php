@@ -1512,7 +1512,7 @@ class ContentProperties
 
 	function HasProperty($name)
 	{
-		debug_buffer($this->mPropertyNames);
+		#debug_buffer($this->mPropertyNames);
 		if (!isset($this->mPropertyNames))
 			$this->mPropertyNames = array();
 		return in_array($name, $this->mPropertyNames);
@@ -1656,8 +1656,9 @@ class ContentManager
 	/**
 	 * Determine proper type of object, load it and return it
 	 */
-	function & LoadContentFromId($id,$loadprops=true)
+	function &LoadContentFromId($id,$loadprops=true)
 	{
+		$result = FALSE;
 
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -1677,16 +1678,16 @@ class ContentManager
 			}
 			else
 			{
-				return FALSE;
+				return $result;
 			}
 		}
 		else
 		{
-			return FALSE;
+			return $result;
 		}
 	}
 
-	function & LoadContentFromAlias($alias, $only_active = false)
+	function &LoadContentFromAlias($alias, $only_active = false)
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -1732,28 +1733,6 @@ class ContentManager
 		{
 			return FALSE;
 		}
-
-		/*
-		#Chances are that this is cached already
-		$allcontent = @ContentManager::GetAllContent();
-
-		foreach ($allcontent as $oneitem)
-		{
-			if ($oneitem->Alias() == $alias || $oneitem->Id() == $alias)
-			{
-				if ($only_active == true && $oneitem->Active() == true)
-				{
-					return $oneitem;
-				}
-				else if ($only_active != true)
-				{
-					return $oneitem;
-				}
-			}
-		}
-
-		return FALSE;
-		*/
 	}
 
   /**
@@ -2083,24 +2062,25 @@ class ContentManager
 			$dbresult->MoveNext();
 		}
 	}
-
-	/**
-	 *  Returns a hierarchy of nodes (ContentNode)
-	 *  @param loadprops : true if properties should be loaded
-	 *  @param onlyexpanded : array of expanded contents ids. null if whole 
-	 tree should be loaded
-	 */
-	function & GetAllContentAsHierarchy($loadprops=true,$onlyexpanded=null)
+	
+	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
 	{
+		debug_buffer('', 'starting tree');
+		
+		include(dirname(dirname(__FILE__)).'/Tree/Tree.php');
+		
+		$nodes = array();
 		global $gCms;
-		global $CMS_ADMIN_PAGE;
-
+		$db = &$gCms->GetDb();
+		
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
 		$usecache = true;
 		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
 		{
-			$usecache = false;
+			#$usecache = false;
 		}
+		
+		$loadedcache = false;
 
 		if ($usecache)
 		{
@@ -2116,99 +2096,70 @@ class ContentManager
 					$data = fread($handle, filesize($cachefilename));
 					fclose($handle);
 
-					$data = unserialize(substr($data, 16));
+					$tree = unserialize(substr($data, 16));
 
-					$variables =& $gCms->variables;
-					$variables['contentcache'] =& $data;
-
-					return $data;
+					#$variables =& $gCms->variables;
+					#$variables['contentcache'] =& $tree;
+					$loadedcache = true;
 				}
 			}
 		}
 
+		if (!$loadedcache)
+		{
+			$query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+			$dbresult =& $db->Execute($query);
+		
+			if ($dbresult && $dbresult->RecordCount() > 0)
+			{
+				while ($row = $dbresult->FetchRow())
+				{
+					$nodes[] = $row['id_hierarchy'];
+				}
+			}
+
+			$tree = &new Tree();
+			debug_buffer('', 'Start Loading Children into Tree');
+			$tree = &Tree::createFromList($nodes, '.');
+			debug_buffer('', 'End Loading Children into Tree');
+		}
+
+		if (!$loadedcache && $usecache)
+		{
+			debug_buffer("Serializing...");
+			$handle = fopen($cachefilename, "w");
+			fwrite($handle, '<?php return; ?>'.serialize($tree));
+			fclose($handle);
+		}
+		
+		ContentManager::LoadChildrenIntoTree(-1, $tree);
+		
+		debug_buffer('', 'ending tree');
+		
+		return $tree;
+	}
+	
+	function LoadChildrenIntoTree($id, &$tree, $loadprops = false) {
+		
+		global $gCms;
 		$db = &$gCms->GetDb();
 
-		// first, retrieve number of children
-		$childrenCount = array();
-		$query = "SELECT parent_id, count(*) as cpt FROM 
-			".cms_db_prefix()."content GROUP BY parent_id";
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
 		$dbresult =& $db->Execute($query);
-		while ($dbresult && $row = $dbresult->FetchRow()) {
-			$childrenCount[$row["parent_id"]] = $row["cpt"];
-		}
-
-    $currentNode = &new ContentNode();
-		$root = &$currentNode;
-		$level =0;
-
-		$gCms->variables['cachedprops'] = $loadprops;
-		$expanded = "";
-		if (isset($onlyexpanded)) {
-			$expanded=" WHERE parent_id IN(";
-			foreach ($onlyexpanded as $id) {
-				$expanded .= $id.",";
-			}
-			$expanded.="-1)";
-		}
-		$query = "SELECT * FROM ".cms_db_prefix()."content $expanded 
-			ORDER BY hierarchy";
-		$dbresult =& $db->Execute($query);
-
+		
 		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
 			while ($row = $dbresult->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], 
-							array_keys(@ContentManager::ListContentTypes())))
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
 				{
-          $contentobj = &new $row['type'];
+					$contentobj = &new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
-					if (isset($childrenCount[$contentobj->Id()])) {
-						$contentobj->mChildCount = $childrenCount[$contentobj->Id()];
-					}
-
-					$curlevel = substr_count($contentobj->Hierarchy(),".")+1;
-					if ($curlevel>$level) { // going farther in hierarchy
-            $level = $curlevel;
-  					$node = &new ContentNode();
-  					$node->init($contentobj,$currentNode);
-  					$currentNode->addChild($node);
-	          $next = &$node;
-					} else if ($curlevel<$level) { // going upper
-            while ($currentNode->getLevel()!=$curlevel) {
-							$currentNode = &$currentNode->getParentNode();
-						}
-						$parentNode=&$currentNode->getParentNode();
-						$node = &new ContentNode();
-						$node->init($contentobj,$parentNode);
-						$parentNode->addChild($node);
-						$level=$curlevel;
-						$next = &$node;
-					} else {// same level
-            $parentNode=&$currentNode->getParentNode();
-						$node = &new ContentNode();
-						$node->init($contentobj,$parentNode);
-						$parentNode->addChild($node);
-						$next=&$node;
-					}
-					$currentNode = &$next;
+					$tree->content[$row['content_id']] =& $contentobj;
 				}
 			}
 		}
-		$toReturn = new ContentHierarchyManager();
-		$toReturn->setRoot($root);
-
-		if ($usecache)
-		{
-			debug_buffer("Serializing...");
-			$handle = fopen($cachefilename, "w");
-			fwrite($handle, '<?php return; ?>'.serialize($toReturn));
-			fclose($handle);
-		}
-
-		return $toReturn;
-
 	}
 
 	/**
@@ -2233,7 +2184,7 @@ class ContentManager
 		$one->Save();
 	}
 
-	function & GetAllContent($loadprops=true)
+	function &GetAllContent($loadprops=true)
 	{
 		debug_buffer('get all content...');
 
@@ -2359,6 +2310,21 @@ class ContentManager
 		$params = array($alias);
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 		$row = $db->GetRow($query, $params);
+
+		if (!$row)
+		{
+			return false;
+		}
+		return $row['content_id'];
+	}
+	
+	function GetPageIDFromHierarchy($position)
+	{
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
+		$row = $db->GetRow($query, array(ContentManager::CreateUnfriendlyHierarchyPosition($position)));
 
 		if (!$row)
 		{

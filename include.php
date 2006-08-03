@@ -18,6 +18,8 @@
 #
 #$Id$
 
+define('ADODB_OUTP', 'debug_sql');
+
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
@@ -44,10 +46,13 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
 }
 
 require_once($dirname.DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."misc.functions.php");
+debug_buffer('', 'Start of include');
 
 #Make a new CMS object
 require(cms_join_path($dirname,"lib","classes","class.global.inc.php"));
 $gCms = new CmsObject();
+if (isset($starttime))
+	$gCms->variables['starttime'] = $starttime;
 
 #Setup hash for storing all modules and plugins
 $gCms->cmsmodules = array();
@@ -149,8 +154,6 @@ require(cms_join_path($dirname,"lib","classes","class.user.inc.php"));
 require(cms_join_path($dirname,"lib","classes","class.htmlblob.inc.php"));
 require(cms_join_path($dirname,"lib","classes","class.template.inc.php"));
 require(cms_join_path($dirname,"lib","classes","class.stylesheet.inc.php"));
-require(cms_join_path($dirname,"lib","classes","class.contentnode.inc.php"));
-require(cms_join_path($dirname,"lib","classes","class.contenthierarchymanager.inc.php"));
 require(cms_join_path($dirname,"lib","translation.functions.php"));
 require(cms_join_path($dirname,"lib","classes","class.bookmark.inc.php"));
 require(cms_join_path($dirname,"lib","classes","class.group.inc.php"));
@@ -257,6 +260,8 @@ else
 {
 	ModuleOperations::LoadModules(false,!isset($CMS_ADMIN_PAGE));
 }
+
+debug_buffer('', 'End of include');
 
 # vim:ts=4 sw=4 noet
 ?>

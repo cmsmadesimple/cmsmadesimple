@@ -136,43 +136,43 @@ class CmsObject {
 
 	function & GetDb()
 	{
-        #static $dbinstance;
+		#static $dbinstance;
 
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
-        #if (!isset($dbinstance) && !isset($this->db))
+		#if (!isset($dbinstance) && !isset($this->db))
 		global $DONT_LOAD_DB;
-        if (!isset($this->db) && !isset($DONT_LOAD_DB))
+		if (!isset($this->db) && !isset($DONT_LOAD_DB))
 		{
-		  $config =& $this->GetConfig();
-		  $dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-		  if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-		    {
-		      $connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-		    }
-		  else
-		    {
-		      $connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-		    }
-		  if (FALSE == $connect_result)
-		    {
-		      die('Database Connection failed');
-		    }
-		  $dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+			$config =& $this->GetConfig();
+			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
+			{
+				$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+			}
+			else
+			{
+				$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
+			}
+			if (FALSE == $connect_result)
+			{
+				die('Database Connection failed');
+			}
+			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 
-		  //$dbinstance->debug = true;
-		  if ($config['debug'] == true)
-		    {
-		      $dbinstance->debug = true;
-		      #$dbinstance->LogSQL();
-		    }
-		  
-		  $this->db =& $dbinstance;
+			//$dbinstance->debug = true;
+			if ($config['debug'] == true)
+			{
+				$dbinstance->debug = true;
+				#$dbinstance->LogSQL();
+			}
+
+			$this->db =& $dbinstance;
 
 		}
 
-        #return $dbinstance;
+		#return $dbinstance;
 		$db =& $this->db;
 		return ($db);
 	}
@@ -206,7 +206,6 @@ class CmsObject {
 			#Setup global smarty object
 			$smartyinstance = new Smarty_CMS($conf);
 			$this->smarty = &$smartyinstance;
-
 		}
 
         return $smartyinstance;
@@ -219,15 +218,17 @@ class CmsObject {
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
-        if (is_null($hrinstance))
+        if (!isset($this->hrinstance))
 		{
+			debug_buffer('', 'Start Loading Hierarchy Manager');
 			require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
 
 			#Setup global smarty object
-			$hrinstance = ContentManager::GetAllContentAsHierarchy(false, null);
+			$this->hrinstance =& ContentManager::GetAllContentAsHierarchy(false, array());
+			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
 
-        return $hrinstance;
+        return $this->hrinstance;
 	}
 
 	function dbshutdown()
