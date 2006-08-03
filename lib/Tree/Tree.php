@@ -492,6 +492,17 @@ class Tree_Node
 
         return null;
     }
+
+	function getSiblingCount()
+	{
+        if (!empty($this->parent)) {
+            $parentObj = &$this->parent;
+        } else {
+            $parentObj = &$this->tree;
+        }
+		
+		return $parentObj->nodes->getNodeCount();
+	}
     
     /**
     * Removes this node from its' parent. If this

@@ -576,7 +576,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 	{
 		$thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 		$thelist .= "<td>";
-		if ($one->ChildCount() > 0)
+		if ($root->hasChildren())
 		{
 			if (!in_array($one->Id(),$openedArray))
 			{
@@ -674,19 +674,19 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		if (check_modify_all($userid))
 		{
 			$thelist .= "<td class=\"move\">";
-			$parentNode = &$root->getParentNode();
-			if ($parentNode!=null)
-			{
-				$sameLevel = &$parentNode->getChildren();
-				if (count($sameLevel)>1)
+			//$parentNode = &$root->getParentNode();
+			//if ($parentNode!=null)
+			//{
+				$sameLevel = &$root->getSiblingCount();
+				if ($sameLevel>1)
 				{
-					if ($parentNode->findChildNodeIndex($root)==0) #first
+					if (($one->ItemOrder() - 1)==0) #first
 					{ 
 						$thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $downImg;
 						$thelist .= "</a>";
 					}
-					else if ($parentNode->findChildNodeIndex($root)==count($sameLevel)-1) #last
+					else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
 					{
 						$thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
 						$thelist .= $upImg;
@@ -701,7 +701,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 						$thelist .= "</a>";
 					}
 				}
-			}
+			//}
 			$thelist .= "</td>";
 			$thelist .= '<td class="invisible" style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
 		}
@@ -831,7 +831,11 @@ function display_content_list($themeObject = null)
 	if ($hierarchy->hasChildren())
 	{
 		$pagelist = array();
-		display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
+		foreach ($hierarchy->getChildren() as $child)
+		{ 
+			display_hierarchy($child, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
+		}
+		#display_hierarchy($hierarchy, $userid, check_modify_all($userid), $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
 		foreach ($pagelist as $item)
 		{
 			$thelist.=$item;
