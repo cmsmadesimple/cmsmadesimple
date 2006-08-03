@@ -221,7 +221,7 @@ class CmsObject {
         if (!isset($this->hrinstance))
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
+			#require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
 
 			#Setup global smarty object
 			$this->hrinstance =& ContentManager::GetAllContentAsHierarchy(false, array());
