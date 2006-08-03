@@ -143,7 +143,8 @@ class Tree
 		if ($id)
 		{
 			debug_buffer('start findNodeByTag');
-			$result =& $this->findNodeByTag($id);
+			$ref = null;
+			$result =& $this->findNodeByTag($id, $ref);
 			debug_buffer('end findNodeByTag');
 		}
 		return $result;
@@ -214,7 +215,7 @@ class Tree
 	* 
 	* @return object The found node
 	*/
-	function &findNodeByTag($tagname, &$col = null)
+	function &findNodeByTag($tagname, &$col)
 	{
 		if ($col == null)
 			$col = $this;
@@ -591,7 +592,8 @@ class Tree_Node
 		if ($this->hasChildren()) {
 			$node =& $this->nodes->nodes[0];
 			$checkid = $node->getTag();
-			if (!isset($this->getTree()->content[$checkid])) {
+			$tree =& $this->getTree();
+			if (!isset($tree->content[$checkid])) {
 				ContentManager::LoadChildrenIntoTree($this->getTag(), $this->tree);
 			}
 		}

@@ -2156,7 +2156,9 @@ class ContentManager
 				{
 					$contentobj = &new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
-					$tree->content[$row['content_id']] =& $contentobj;
+					$contentcache =& $this->tree->content;
+					$id = $row['content_id'];
+					$contentcache[$id] =& $contentobj;
 				}
 			}
 		}
