@@ -120,6 +120,11 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 					$Next_label = "Page suivante&nbsp;: ";
 					$Parent_label = "Page ascendante&nbsp;: "; //uplink
 					break;
+				case 'no':
+					$Prev_label = "Forrige side : ";
+					$Next_label = "Neste side: ";
+					$Parent_label = "Side opp: "; //uplink
+					break;
 				case '0':
 					$Prev_label = "";
 					$Next_label = "";
