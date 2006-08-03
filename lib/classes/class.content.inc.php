@@ -2067,7 +2067,7 @@ class ContentManager
 	{
 		debug_buffer('', 'starting tree');
 		
-		include(dirname(dirname(__FILE__)).'/Tree/Tree.php');
+		require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
 		
 		$nodes = array();
 		global $gCms;
@@ -2139,8 +2139,8 @@ class ContentManager
 		return $tree;
 	}
 	
-	function LoadChildrenIntoTree($id, &$tree, $loadprops = false) {
-		
+	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
+	{	
 		global $gCms;
 		$db = &$gCms->GetDb();
 
@@ -2156,7 +2156,7 @@ class ContentManager
 				{
 					$contentobj = &new $row['type'];
 					$contentobj->LoadFromData($row, $loadprops);
-					$contentcache =& $this->tree->content;
+					$contentcache =& $tree->content;
 					$id = $row['content_id'];
 					$contentcache[$id] =& $contentobj;
 				}

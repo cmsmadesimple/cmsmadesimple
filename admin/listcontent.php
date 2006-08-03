@@ -396,15 +396,9 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
 	$content = &$root->getContent();
 
-	if ($root->getLevel()==0)
-	{
-		$content->mId = 0;
-	}
-	else
-	{
-		$output .= '<li id="item_'.$content->mId.'">'."\n";
-		$output .= '('.ContentManager::CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
-	}
+	$output .= '<li id="item_'.$content->mId.'">'."\n";
+	$output .= '('.ContentManager::CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
+
 	if ($root->getChildrenCount()>0)
 	{
 		$sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
@@ -432,7 +426,6 @@ function reorder_display_list()
 	
 	$userid = get_userid();
 	
-
 	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
 	require($path);
 
@@ -441,26 +434,34 @@ function reorder_display_list()
 	$hierManager =& $gCms->GetHierarchyManager();
 	$hierarchy = &$hierManager->getRootNode();
 	
-	if ($hierarchy->hasChildren())
+	$listArray = array();
+	$output = '';
+	
+	$sortableLists->addList('parent0','parent0ListOrder');
+	$listArray[0] = 'parent0ListOrder';
+	$output .= '<ul id="parent0" class="sortableList">'."\n";
+	
+	foreach ($hierarchy->getChildren() as $child)
 	{
-		$listArray = array();
-		$output = '';
-		show_h($hierarchy, $sortableLists, $listArray, $output);
-
-		ob_start();
-		//$sortableLists->printTopJS();
-		$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button', 'sortableListForm', 'Cancel', $output);
-		$contents = ob_get_contents();
-		ob_end_clean();
-		
-		ob_start();
-		$sortableLists->printBottomJs();
-		$script = ob_get_contents();
-		ob_end_clean();
-		
-		$objResponse->addAssign("contentlist", "innerHTML", $contents);
-		$objResponse->addScript($script);
+		show_h($child, $sortableLists, $listArray, $output);
 	}
+	
+	$output .= '</ul>';
+
+	ob_start();
+	//$sortableLists->printTopJS();
+	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button', 'sortableListForm', 'Cancel', $output);
+	$contents = ob_get_contents();
+	ob_end_clean();
+	
+	ob_start();
+	$sortableLists->printBottomJs();
+	$script = ob_get_contents();
+	ob_end_clean();
+	
+	$objResponse->addAssign("contentlist", "innerHTML", $contents);
+	$objResponse->addScript($script);
+
 	return $objResponse->getXML();
 }
 
@@ -480,12 +481,19 @@ function reorder_process($get)
 		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
 		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
 	
-		if ($hierarchy->hasChildren())
+		$listArray = array();
+		$output = '';
+		
+		$sortableLists->addList('parent0','parent0ListOrder');
+		$listArray[0] = 'parent0ListOrder';
+		$output .= '<ul id="parent0" class="sortableList">'."\n";
+
+		foreach ($hierarchy->getChildren() as $child)
 		{
-			$listArray = array();
-			$output = '';
-			show_h($hierarchy, $sortableLists, $listArray, $output);
+			show_h($child, $sortableLists, $listArray, $output);
 		}
+		
+		$output .= '</ul>';
 	
 		$order_changed = FALSE;
 		foreach ($listArray AS $parent_id => $order)
