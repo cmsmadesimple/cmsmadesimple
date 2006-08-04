@@ -41,6 +41,10 @@ function smarty_cms_function_contact_form($params, &$smarty) {
         $fieldsetStyle = 'style="padding:1em;"';
 
 	$errors=$name=$email=$subject=$message = '';
+	if (FALSE == empty($params['subject_get_var']) && FALSE == empty($_GET[$params['subject_get_var']]))
+	  {
+	    $subject = $_GET[$params['subject_get_var']];
+	  }
 	if($_SERVER['REQUEST_METHOD']=='POST'){
 		if (!empty($_POST['name'])) $name = cfSanitize($_POST['name']);
 		if (!empty($_POST['email'])) $email = cfSanitize($_POST['email']);
@@ -113,6 +117,12 @@ function smarty_cms_help_function_contact_form() {
 	<ul>
 		<li>email - The email address that the message will be sent to.</li>
 		<li><em>(optional)</em>style - true/false, use the predefined styles. Default is true.</li>
+		<li><em>(optional)</em>subject_get_var - string, allows you to specify which _GET var to use as the default value for subject.
+               <p>Example:</p>
+               <pre>{contact_form email="yourname@yourdomain.com" subject_get_var="subject"}</pre>
+             <p>Then call the page with the form on it like this: /index.php?page=contact&subject=test+subject</p>
+             <p>And the following will appear in the "Subject" box: "test subject"
+           </li>
 	</ul>
 	</p>
 	<?php
@@ -121,10 +131,13 @@ function smarty_cms_help_function_contact_form() {
 function smarty_cms_about_function_contact_form() {
 	?>
 	<p>Author: Brett Batie &lt;brett-cms@classicwebdevelopment.com&gt; &amp; Simon van der Linden &lt;ifmy@geekbox.be&gt;</p>
-	<p>Version: 1.2 (20060416)</p>
+	<p>Version: 1.3 (20060803)</p>
 	<p>
 	Change History:<br/>
-	1.2 : various improvements (errors handling, etc.)
+        <ul>
+        <li>l.2 : various improvements (errors handling, etc.)</li>
+        <li>1.3 : added subject_get_var parameter (by elijahlofgren)</li>
+        </ul>
 	</p>
 	<?php
 }
