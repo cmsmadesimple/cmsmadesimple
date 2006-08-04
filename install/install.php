@@ -144,14 +144,6 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
   echo "</td></tr>\n";
   return $ret;
 }
-@session_start();
-if (!isset($_GET['sessiontest']))
-{
-  $_SESSION['test'] = TRUE;
-  $http = (isset($_SERVER['HTTPS'])) ? 'https' : 'http';
-  $redirect = $http . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
-  header("Location: $redirect");
-}
 
 $LOAD_ALL_MODULES=1;
 require(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
@@ -188,6 +180,19 @@ if (isset($_POST["page"])) {
 } else {  
     $currentpage = 1;
 } ## if
+
+// Test for sessions if this is the first page of the install
+if (1 == $currentpage)
+  {
+    @session_start();
+    if (!isset($_GET['sessiontest']))
+      {
+	$_SESSION['test'] = TRUE;
+	$http = (isset($_SERVER['HTTPS'])) ? 'https' : 'http';
+	$redirect = $http . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
+	header("Location: $redirect");
+      }
+  }
 
 $DONT_LOAD_DB = true;
 
