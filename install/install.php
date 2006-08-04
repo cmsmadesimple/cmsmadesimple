@@ -144,6 +144,14 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
   echo "</td></tr>\n";
   return $ret;
 }
+@session_start();
+if (!isset($_GET['sessiontest']))
+{
+  $_SESSION['test'] = TRUE;
+  $http = (isset($_SERVER['HTTPS'])) ? 'https' : 'http';
+  $redirect = $http . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
+  header("Location: $redirect");
+}
 
 $LOAD_ALL_MODULES=1;
 require(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
@@ -255,6 +263,7 @@ function showPageOne() {
   ## echo "Userid ($userid) is named $username is running this script<p>\n";
 
   ## check file perms
+  
   $continueon = true;
   echo '<p class="important">Please read the <a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Troubleshooting">Installation Troubleshooting</a> page in the CMS Made Simple Documentation Wiki.</p>';
   echo "<h3>Checking permissions and PHP settings</h3>\n";
@@ -347,19 +356,6 @@ function showPageOne() {
     ($currow=="row1"?$currow="row2":$currow="row1");
   } ## foreach
     
-  echo "<tr class=\"$currow\"><td>Checking if session.save_path is set.";
-  if (session_save_path() == '')
-    {
-      echo '<br /><br /><em>session.save_path is not set. Not having a session.save_path disallows any logins to the admin panel.  Please adjust before continuing..</em>';
-      echo '</td><td class=\"col2\"><img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-      $continueon = false;
-    }
-  else
-    {
-      echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-    }
-  echo "</td></tr>\n";
-
   echo "<tr class=\"row1\"><td>Checking for basic XML (expat) support";
   if( !function_exists( "xml_parser_create" ) )
     {
@@ -432,6 +428,21 @@ function showPageOne() {
         </td><td class=\"col2\">";
   ini_set( 'max_execution_time', '123' );
   if( ini_get('max_execution_time') == 123 )
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+  // are sessions enabled?
+  echo "<tr class=\"$currow\"><td>Checking if sessions are enabled<br/><br/>
+        <em>Although the PHP support for sessions is not mandatory, it is highly recommended. Logins and other things may slow down and you may have difficulty with some addon functionality without this capability.</em>
+        </td><td class=\"col2\">";
+  if( isset($_GET['sessiontest']) && isset($_SESSION['test']) )
     {
       echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
     }
