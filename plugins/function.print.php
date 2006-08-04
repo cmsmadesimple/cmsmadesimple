@@ -91,6 +91,10 @@ function smarty_cms_help_function_print() {
                 <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
                 <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
+                <li><em>(optional</em> text - Text to use instead of "Print This Page" for the print link.
+                    <p>Example:</p>
+                     <pre>{print text="Printable Page"}</pre>      
+                     </li>
         </ul>
 	<?php
 }
