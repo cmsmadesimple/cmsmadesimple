@@ -120,6 +120,9 @@ function smarty_cms_help_function_embed() {
 	that works without modifing the embeded application.</p>
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{embed url=http://www.google.com/}</code><br></p>
+        <h4>Example to make the iframe larger</h4>
+	<p>Add the following to your style sheet:</p>
+        <pre>#myframe { height: 600px; }</pre>
         <h3>What parameters does it take?</h3>
         <ul>
                <li><em>(required)</em>url - the url to be included 
