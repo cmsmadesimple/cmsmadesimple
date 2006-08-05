@@ -1044,6 +1044,9 @@ function showPageFive() {
 
 			echo "[done]</p>";
 		}
+		echo '<p>Clearing site cache (if any)...';
+                ContentManager::ClearCache();
+		echo "[done]</p>";
 	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
