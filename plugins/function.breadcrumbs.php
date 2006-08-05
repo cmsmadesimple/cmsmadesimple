@@ -19,6 +19,7 @@
 
 function smarty_cms_function_breadcrumbs($params, &$smarty)
 {
+
 	global $gCms; 
 	$manager = &$gCms->GetHierarchyManager();
 
@@ -60,7 +61,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	        $content = $endNode->getContent();
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
-		while (isset($currentNode) && $currentNode->getLevel() > 0)
+		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
 			$content = &$currentNode->getContent();
 			if (isset($content))
@@ -92,14 +93,16 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 
 		if ($root!='##ROOT_NODE##') {
 	# check if the last added is root. if not, add id
+                    $currentNode = &$manager->sureGetNodeByAlias($root);
 			if (isset($currentNode))
 			{
 				$content = &$currentNode->getContent();
-				if (!isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
-					$node = &$manager->sureGetNodeByAlias($root);
+				if (isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
+                              		$node = &$manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
 						$content = &$node->getContent();
-						if ($content->Id()!=$thispage) $path[] = $node; # do not add if this is the current page
+						if ($content->Id()!=$thispage) 
+                                                      $path[] = $node; # do not add if this is the current page
 					}
 				}
 			}
@@ -156,6 +159,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	}
 
 	return $trail;  
+
 }
 	
 function smarty_cms_help_function_breadcrumbs() {
