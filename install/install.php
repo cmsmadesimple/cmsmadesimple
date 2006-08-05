@@ -883,9 +883,11 @@ function showPageFive() {
 	$newconfig['use_smarty_php_tags'] = false;
 	$newconfig['previews_path'] = TMP_CACHE_LOCATION;
 	$newconfig["uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads";
-	$newconfig["uploads_url"] = $newconfig['root_url'] . DIRECTORY_SEPARATOR . "uploads";	
+        // Note: leave the / slashes for the URLs
+	$newconfig["uploads_url"] = $newconfig['root_url'] . "/uploads";	
 	$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads".DIRECTORY_SEPARATOR."images";
-	$newconfig["image_uploads_url"] = $newconfig['root_url'] .DIRECTORY_SEPARATOR."uploads".DIRECTORY_SEPARATOR."images";
+        // Note: leave the / slashes for the URLs
+	$newconfig["image_uploads_url"] = $newconfig['root_url'] ."/uploads/images";
 	$maxFileSize = ini_get('upload_max_filesize');
 	if (!is_numeric($maxFileSize))
 	{
