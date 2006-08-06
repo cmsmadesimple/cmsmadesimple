@@ -151,7 +151,7 @@ else
 
 	echo "[done]</p>";
 
-	$db = &ADONewConnection($config["dbms"], 'pear:date:cmsms');
+	$db = &ADONewConnection($config["dbms"], 'pear:date:extend:transaction');
 	$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
