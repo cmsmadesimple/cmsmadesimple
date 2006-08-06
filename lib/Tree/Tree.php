@@ -911,7 +911,8 @@ class Tree_NodeCollection
             
             return $count;
         } else {
-            return count($this->nodes);
+	    $count = count($this->nodes);
+            return $count;
         }
     }
     
