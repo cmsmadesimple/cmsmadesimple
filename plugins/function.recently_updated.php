@@ -27,7 +27,7 @@ function smarty_cms_function_recently_updated($params, &$smarty)
       $number = $params['number'];
     }
 
-$output .= '<ul>';
+$output = '<ul>';
 global $gCms;
 $hm =& $gCms->GetHierarchyManager();
 $db = &$gCms->db;
