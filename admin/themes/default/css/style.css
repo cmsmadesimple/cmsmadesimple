@@ -420,7 +420,7 @@ div.shortcuts ul {
   }
   
 div.shortcuts li {
-   background-image: url(http://localhost/svn/admin/themes/default/images/icons/topfiles/shortcut.gif);
+   background-image: url(themes/default/images/icons/topfiles/shortcut.gif);
    background-repeat: no-repeat;
    background-position: 1em 0.3em;
    padding-left: 2.5em;
