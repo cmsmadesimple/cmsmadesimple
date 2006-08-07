@@ -239,7 +239,7 @@ foreach( $gCms->modules as $key => $value )
 
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("module_name").":</p>\n";
-echo "<p class=\"pageinput\">".$modulename.":</p>\n";
+echo "<p class=\"pageinput\">".$modulename."</p>\n";
 echo "</div>\n";
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("event_name").":</p>\n";
