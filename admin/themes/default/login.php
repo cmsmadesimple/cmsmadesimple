@@ -8,7 +8,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=<?php echo get_encoding() ?>" />
 <script src="themes/default/includes/standard.js" type="text/javascript"></script>
 
-<link rel="stylesheet" type="text/css" media="screen, projection" href="themes/default/css/style.css" />
+<link rel="stylesheet" type="text/css" media="screen, projection" href="loginstyle.php" />
 <base href="<?php global $gCms; $config =& $gCms->GetConfig(); echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
 </head>
 
