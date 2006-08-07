@@ -451,15 +451,18 @@ class AdminTheme
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
 	echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
-	echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
 	$marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
 	$marks = array_reverse($marks);
-	echo '<ul style="margin:0">';
-	foreach($marks as $mark)
+	if (FALSE == empty($marks))
 	  {
-	    echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+	    echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+	    echo '<ul style="margin:0">';
+	    foreach($marks as $mark)
+	      {
+		echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+	      }
+	    echo "</ul>\n";
 	  }
-	echo "</ul>\n";
 	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
 	echo '<ul style="margin:0;">';
 	echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
