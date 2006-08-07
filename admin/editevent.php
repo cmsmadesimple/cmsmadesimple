@@ -243,11 +243,11 @@ echo "<p class=\"pageinput\">".$modulename."</p>\n";
 echo "</div>\n";
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("event_name").":</p>\n";
-echo "<p class=\"pageinput\">".$event.":</p>\n";
+echo "<p class=\"pageinput\">".$event."</p>\n";
 echo "</div>\n";
 echo "<div class=\"pageoverflow\">\n";
 echo "<p class=\"pagetext\">".lang("event_description").":</p>\n";
-echo "<p class=\"pageinput\">".$description.":</p>\n";
+echo "<p class=\"pageinput\">".$description."</p>\n";
 echo "</div>\n";
 
 echo "<br/><table cellspacing=\"0\" class=\"pagetable\">\n";
