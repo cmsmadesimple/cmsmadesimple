@@ -58,7 +58,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 # build path
 	if (isset($endNode))
 	{
-	        $content = $endNode->getContent();
+	        $content =& $endNode->getContent();
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
 		while (isset($currentNode) && $currentNode->getLevel() >= 0)

@@ -685,7 +685,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 			//$parentNode = &$root->getParentNode();
 			//if ($parentNode!=null)
 			//{
-				$sameLevel = &$root->getSiblingCount();
+				$sameLevel = $root->getSiblingCount();
 				if ($sameLevel>1)
 				{
 					if (($one->ItemOrder() - 1)==0) #first
