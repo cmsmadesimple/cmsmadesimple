@@ -571,7 +571,14 @@ class ContentBase
 			  {
 			    if (FALSE == empty($alias))
 			      {
-				$alias .= '-2';
+				$alias_num_add = 2;
+				// If a '-2' version of the alias already exists
+				// Check the '-3' version etc.
+				while (@ContentManager::CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+				  {
+				    $alias_num_add++;
+				  }
+				$alias .= '-'.$alias_num_add;
 			      }
 			    else
 			      {
