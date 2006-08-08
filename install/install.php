@@ -311,18 +311,6 @@ function showPageOne() {
     }
   echo "</td></tr>\n";
     
-  echo "<tr class=\"row2\"><td>Checking for tokenizer functions</td><td class=\"col2\">";
-  if (function_exists("token_get_all"))
-    {
-      echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-    }
-  else
-    {
-      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-      $continueon = false;
-    }
-  echo "</td></tr>\n";
-
   $currow = 'row1';
   foreach ($files as $f) {
     #echo "<tr><td>\n";
@@ -458,6 +446,20 @@ function showPageOne() {
   echo "</td></tr>\n";
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   
+  // Do tokenizer functions exist?
+  echo "<tr class=\"$currow\"><td>Checking for tokenizer functions<br/><br/>
+        <em>Not having the tokenizer could cause pages to render as purely white.  We recommend you have this installed, but your website may work fine without it.</em>
+        </td><td class=\"col2\">";
+  if (function_exists("token_get_all"))
+    {
+     echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+
   $special_failed=false;
     echo "</tbody></table>\n";
 
