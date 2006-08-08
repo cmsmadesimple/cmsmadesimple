@@ -2100,7 +2100,10 @@ class ContentManager
 
 					#$variables =& $gCms->variables;
 					#$variables['contentcache'] =& $tree;
-					$loadedcache = true;
+					if (strtolower(get_class($tree)) == 'tree')
+						$loadedcache = true;
+					else
+						$loadedcache = false;
 				}
 			}
 		}
