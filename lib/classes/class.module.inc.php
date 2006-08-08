@@ -3604,6 +3604,25 @@ class CMSModuleContentType extends ContentBase
 		{
 			return 'ModuleName() not defined properly';
 		}
+        }
+
+
+	/*
+	 * Returns the instance of the module this content type belongs to
+	 *
+	 */
+	function GetModuleInstance() 
+	{
+		global $gCms;
+		$cmsmodules = &$gCms->modules;
+		if (array_key_exists($this->ModuleName(), $cmsmodules))
+		{
+			return $cmsmodules[$this->ModuleName()]['object'];
+		}
+		else
+		{
+			return 'ModuleName() not defined properly';
+		}
 	}
 
 }
