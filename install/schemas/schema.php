@@ -8,7 +8,7 @@ if (isset($CMS_INSTALL_DROP_TABLES)) {
 	$db->DropSequence($db_prefix."admin_recent_pages_seq");
 	$db->DropSequence($db_prefix."additional_users_seq");
 	$db->DropSequence($db_prefix."content_seq");
-	$db->DropSequence($db_prefix."content_prop_seq");
+	$db->DropSequence($db_prefix."content_props_seq");
 	$db->DropSequence($db_prefix."css_seq");
 	$db->DropSequence($db_prefix."events");
 	$db->DropSequence($db_prefix."group_perms_seq");
