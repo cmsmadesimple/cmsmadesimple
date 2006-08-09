@@ -408,7 +408,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				$linktext = $name; // mbv - 21-06-2005
 			}
 			if (isset($params['image']) and !empty($params['image'])) {
-				$result .= "<img src=\"{$params['image']}\" alt=\"$linktext\" />";
+				$result .= "<img src=\"{$params['image']}\" alt=\"\" />";
 				if (!(isset($params['imageonly']) and $params['imageonly'])) {
 					$result .= " $linktext";
 				}
