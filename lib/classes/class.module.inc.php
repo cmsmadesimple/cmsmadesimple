@@ -924,7 +924,7 @@ class CMSModule
 	}
 
 	/**
-	 * Setup you parameters here.  It doesn't have to be here, but it makes the
+	 * Setup your parameters here.  It doesn't have to be here, but it makes the
 	 * code more legible.
 	 */
 	function SetParameters()
