@@ -208,6 +208,10 @@ class Tree
 	{
 		return $this->nodes->getFlatList();
 	}
+	function &getFlattenedChildren()
+	{
+		return $this->nodes->getFlatList();
+	}
 	
 	/**
 	* Returns a node anywhere in the tree given a tag name.
