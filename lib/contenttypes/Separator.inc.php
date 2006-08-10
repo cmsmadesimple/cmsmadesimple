@@ -21,88 +21,88 @@
 class separator extends ContentBase
 {
     function FriendlyName()
-	{
-		return 'Separator';
-	}
+    {
+	return 'Separator';
+    }
 
-	function SetProperties()
-	{
-		#Turn off caching
-		$this->mCachable = false;
-	}
+    function SetProperties()
+    {
+	#Turn off caching
+	$this->mCachable = false;
+    }
 	
     function HasUsableLink()
-	{
-		return false;
-	}
+    {
+	return false;
+    }
 
-	function WantsChildren()
-	{
-		return false;
-	}
+    function WantsChildren()
+    {
+	return false;
+    }
 
-	function FillParams($params)
+    function FillParams($params)
+    {
+	if (isset($params))
 	{
-		if (isset($params))
+	    $this->mName = '--------';
+	    if (isset($params['parent_id']))
+	    {
+		if ($this->mParentId != $params['parent_id'])
 		{
-			$this->mName = '--------';
-			if (isset($params['parent_id']))
-			{
-				if ($this->mParentId != $params['parent_id'])
-				{
-					$this->mHierarchy = '';
-					$this->mItemOrder = -1;
-				}
-				$this->mParentId = $params['parent_id'];
-			}
-			if (isset($params['active']))
-			{
-				$this->mActive = true;
-			}
-			else
-			{
-				$this->mActive = false;
-			}
-			if (isset($params['showinmenu']))
-			{
-				$this->mShowInMenu = true;
-			}
-			else
-			{
-				$this->mShowInMenu = false;
-			}
+		    $this->mHierarchy = '';
+		    $this->mItemOrder = -1;
 		}
+		$this->mParentId = $params['parent_id'];
+	    }
+	    if (isset($params['active']))
+	    {
+		$this->mActive = true;
+	    }
+	    else
+	    {
+		$this->mActive = false;
+	    }
+	    if (isset($params['showinmenu']))
+	    {
+		$this->mShowInMenu = true;
+	    }
+	    else
+	    {
+		$this->mShowInMenu = false;
+	    }
 	}
+    }
 
-	function Show()
+    function Show()
+    {
+    }
+
+    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+    {
+	$ret = array();
+
+	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
+	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+
+	if (!$adding && $showadmin)
 	{
+	    $ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
 	}
 
-	function EditAsArray($adding = false, $tab = 0, $showadmin = false)
+	if ($adding || $showadmin)
 	{
-		$ret = array();
-
-		$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
-		$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-		$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-
-		if (!$adding && $showadmin)
-		{
-			$ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
-		}
-
-		if ($adding || $showadmin)
-		{
-			$ret[]= $this->ShowAdditionalEditors();
-		}
-
-		return $ret;
+	    $ret[]= $this->ShowAdditionalEditors();
 	}
 
-	function GetURL($rewrite = true)
-	{
-		return '#';
-	}
+	return $ret;
+    }
+
+    function GetURL($rewrite = true)
+    {
+	return '#';
+    }
 }
 
 # vim:ts=4 sw=4 noet
