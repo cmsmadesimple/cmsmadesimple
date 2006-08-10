@@ -85,6 +85,7 @@ function &ADONewConnection( $dbtype = 'mysql', $modules = '' )
 	$object->raiseErrorFn = (defined('ADODB_ERROR_HANDLER')) ? ADODB_ERROR_HANDLER : false;
 	$object->query_count = 0;
 	$object->query_time_total = 0;
+	$object->dbtype = $dbtype;
 
 	if(!empty($dsn_array['scheme']))
 	{
@@ -152,6 +153,7 @@ function &NewADOConnection($dbtype='', $module = '' )
 
 function &NewDataDictionary(&$connection, $dbtype=false)
 {
+	var_dump($connection);
 	if(!$dbtype)
 		$dbtype = $connection->dbtype;
 	include_once ADODB_DIR . '/adodb-datadict.inc.php';

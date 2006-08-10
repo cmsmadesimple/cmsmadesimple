@@ -266,7 +266,7 @@ class Tree
     function &createFromList($data, $separator = '/')
     {
         $nodeList = array();
-        $tree     = new Tree();
+        $tree     =& new Tree();
 
         for ($i=0; $i<count($data); $i++) {
             $pathParts = explode($separator, $data[$i]);
@@ -501,11 +501,12 @@ class Tree_Node
 	{
         if (!empty($this->parent)) {
             $parentObj = &$this->parent;
+		return $parentObj->nodes->getNodeCount();
         } else {
             $parentObj = &$this->tree;
+		return $parentObj->getChildrenCount();
         }
 		
-		return $parentObj->nodes->getNodeCount();
 	}
     
     /**

@@ -7,7 +7,7 @@ function execute_dump(&$result) {
 	while ($row = $result->FetchRow()) {
 		$now = $db->DBTimeStamp(time());
 		$length = strlen($now);
-		#$now = substr($now, 1, $length - 2);
+		$now = substr($now, 1, $length - 2);
 		$row["create_date"] = $now;
 		$row["modified_date"] = $now;
 		echo $db->GetInsertSQL($result, $row, false, true) . ";\n";
