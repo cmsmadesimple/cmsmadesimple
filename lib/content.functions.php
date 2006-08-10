@@ -59,7 +59,6 @@ class Smarty_CMS extends Smarty {
 		$this->debugging = false;
 		$this->force_compile = false;
 		$this->cache_plugins = false;
-		$this->use_sub_dirs = true;
 
 		if ($config["debug"] == true)
 		{

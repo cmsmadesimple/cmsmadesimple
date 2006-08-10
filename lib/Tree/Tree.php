@@ -501,12 +501,11 @@ class Tree_Node
 	{
         if (!empty($this->parent)) {
             $parentObj = &$this->parent;
-		return $parentObj->nodes->getNodeCount();
         } else {
             $parentObj = &$this->tree;
-		return $parentObj->getChildrenCount();
         }
 		
+		return $parentObj->nodes->getNodeCount();
 	}
     
     /**

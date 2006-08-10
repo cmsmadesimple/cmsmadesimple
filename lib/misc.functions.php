@@ -252,9 +252,6 @@ function cms_calculate_url()
     global $gCms;
     $config =& $gCms->GetConfig();
 
-	global $gCms;
-	$config =& $gCms->GetConfig();
-
 	//Apache
 	/*
 	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
@@ -287,12 +284,6 @@ function cms_calculate_url()
 		}
 	}
 	
-	//trim off the extension, if there is one set
-	if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
-	{
-		$result = substr($result, 0, strlen($result) - strlen($config['page_extension']));
-	}
-
 	//trim off the extension, if there is one set
 	if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
 	{
