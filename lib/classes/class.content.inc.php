@@ -742,35 +742,35 @@ class ContentBase
 
 	    if ($row && !$row->EOF)
 	    {
-		$this->mId				= $row->fields["content_id"];
-		$this->mName			= $row->fields["content_name"];
-		$this->mAlias			= $row->fields["content_alias"];
-		$this->mOldAlias		= $row->fields["content_alias"];
-		$this->mType			= strtolower($row->fields["type"]);
-		$this->mOwner			= $row->fields["owner_id"];
-		#$this->mProperties		= new ContentProperties();
-		$this->mParentId		= $row->fields["parent_id"];
-		$this->mOldParentId		= $row->fields["parent_id"];
-		$this->mTemplateId		= $row->fields["template_id"];
-		$this->mItemOrder		= $row->fields["item_order"];
-		$this->mOldItemOrder	= $row->fields["item_order"];
-		$this->mMetadata		= $row->fields['metadata'];
-		$this->mHierarchy		= $row->fields["hierarchy"];
-		$this->mIdHierarchy		= $row->fields["id_hierarchy"];
-		$this->mHierarchyPath	= $row->fields["hierarchy_path"];
+		$this->mId                         = $row->fields["content_id"];
+		$this->mName                       = $row->fields["content_name"];
+		$this->mAlias                      = $row->fields["content_alias"];
+		$this->mOldAlias                   = $row->fields["content_alias"];
+		$this->mType                       = strtolower($row->fields["type"]);
+		$this->mOwner                      = $row->fields["owner_id"];
+		#$this->mProperties                = new ContentProperties();
+		$this->mParentId                   = $row->fields["parent_id"];
+		$this->mOldParentId                = $row->fields["parent_id"];
+		$this->mTemplateId                 = $row->fields["template_id"];
+		$this->mItemOrder                  = $row->fields["item_order"];
+		$this->mOldItemOrder               = $row->fields["item_order"];
+		$this->mMetadata                   = $row->fields['metadata'];
+		$this->mHierarchy                  = $row->fields["hierarchy"];
+		$this->mIdHierarchy                = $row->fields["id_hierarchy"];
+		$this->mHierarchyPath              = $row->fields["hierarchy_path"];
 		$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
-		$this->mMenuText		= $row->fields['menu_text'];
-		$this->mMarkup			= $row->fields['markup'];
-		$this->mTitleAttribute	= $row->fields['titleattribute'];
-		$this->mAccessKey		= $row->fields['accesskey'];
-		$this->mTabIndex		= $row->fields['tabindex'];
-		$this->mActive			= ($row->fields["active"] == 1?true:false);
-		$this->mDefaultContent	= ($row->fields["default_content"] == 1?true:false);
-		$this->mShowInMenu		= ($row->fields["show_in_menu"] == 1?true:false);
-		$this->mCachable		= ($row->fields["cachable"] == 1?true:false);
-		$this->mLastModifiedBy	= $row->fields["last_modified_by"];
-		$this->mCreationDate	= $row->fields["create_date"];
-		$this->mModifiedDate	= $row->fields["modified_date"];
+		$this->mMenuText                   = $row->fields['menu_text'];
+		$this->mMarkup                     = $row->fields['markup'];
+		$this->mTitleAttribute             = $row->fields['titleattribute'];
+		$this->mAccessKey                  = $row->fields['accesskey'];
+		$this->mTabIndex                   = $row->fields['tabindex'];
+		$this->mActive                     = ($row->fields["active"] == 1          ? true : false);
+		$this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
+		$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
+		$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
+		$this->mLastModifiedBy             = $row->fields["last_modified_by"];
+		$this->mCreationDate               = $row->fields["create_date"];
+		$this->mModifiedDate               = $row->fields["modified_date"];
 
 		$result = true;
 	    }
@@ -863,9 +863,9 @@ class ContentBase
 	$this->mAccessKey                  = $data['accesskey'];
 	$this->mTabIndex                   = $data['tabindex'];
 	$this->mDefaultContent             = ($data["default_content"] == 1 ? true : false);
-	$this->mActive                     = ($data["active"] == 1 ? true : false);
-	$this->mShowInMenu                 = ($data["show_in_menu"] == 1 ? true : false);
-	$this->mCachable                   = ($data["cachable"] == 1 ? true : false);
+	$this->mActive                     = ($data["active"] == 1          ? true : false);
+	$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
+	$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
 	$this->mLastModifiedBy             = $data["last_modified_by"];
 	$this->mCreationDate               = $data["create_date"];
 	$this->mModifiedDate               = $data["modified_date"];
@@ -1002,10 +1002,10 @@ class ContentBase
 	    strtolower($this->mType),
 	    $this->mTemplateId,
 	    $this->mParentId,
-	    ($this->mActive == true ? 1 : 0),
+	    ($this->mActive == true         ? 1 : 0),
 	    ($this->mDefaultContent == true ? 1 : 0),
-	    ($this->mShowInMenu == true ? 1 : 0),
-	    ($this->mCachable == true ? 1 : 0),
+	    ($this->mShowInMenu == true     ? 1 : 0),
+	    ($this->mCachable == true       ? 1 : 0),
 	    $this->mMenuText,
 	    $this->mAlias,
 	    $this->mMetadata,
@@ -1117,10 +1117,10 @@ class ContentBase
 	    $this->mItemOrder,
 	    $this->mHierarchy,
 	    $this->mIdHierarchy,
-	    ($this->mActive == true ? 1 : 0),
+	    ($this->mActive == true         ? 1 : 0),
 	    ($this->mDefaultContent == true ? 1 : 0),
-	    ($this->mShowInMenu == true ? 1 : 0),
-	    ($this->mCachable == true ? 1 : 0),
+	    ($this->mShowInMenu == true     ? 1 : 0),
+	    ($this->mCachable == true       ? 1 : 0),
 	    $this->mMenuText,
 	    $this->mMarkup,
 	    $this->mMetadata,
