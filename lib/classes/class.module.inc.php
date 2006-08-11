@@ -360,7 +360,7 @@ class ModuleOperations
     $db =& $gCms->GetDb();
     if (isset($gCms->modules[$module]))
       {
-	$modinstance = $gCms->modules[$module]['object'];
+	$modinstance =& $gCms->modules[$module]['object'];
 	$result = $modinstance->Install();
 	
         #now insert a record
