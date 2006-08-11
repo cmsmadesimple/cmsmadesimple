@@ -860,6 +860,8 @@ function showPageFour($sqlloaded = 0) {
 
 function showPageFive() {
 
+	global $gCms;
+
 	/*
     if ($_POST['bbcode'] != 'false' and $_POST['bbcode'] != 'true') {
         echo "<p>BB Code needs to be either 'true' or 'false'</p>\n";
@@ -961,7 +963,6 @@ function showPageFive() {
 
 		include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'include.php';
 
-		global $gCms;
 		$gCms->config['db_prefix'] = $_POST['prefix'];
 
 		$db = &ADONewConnection($newconfig['dbms'], 'pear:date:extend:transaction');
