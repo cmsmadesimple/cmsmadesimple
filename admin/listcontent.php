@@ -554,220 +554,222 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     $children =& $root->getChildren();
     $thelist = '';
 
-    if (isset($one) && $one != NULL)
+    if (!(isset($one) && $one != NULL))
     {
-        if (!array_key_exists($one->TemplateId(), $templates))
+        return;
+    }
+
+    if (!array_key_exists($one->TemplateId(), $templates))
+    {
+        $templates[$one->TemplateId()] = TemplateOperations::LoadTemplateById($one->TemplateId());
+    }
+    
+    if (!array_key_exists($one->Owner(), $users))
+    {
+        $users[$one->Owner()] = UserOperations::LoadUserById($one->Owner());
+    }
+    
+    $display = 'none';
+    
+    if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+    {
+        $display = 'edit';
+    }
+    else if (check_children($root, $mypages, $userid))
+    {
+        $display = 'view';
+    }
+    
+    if ($display != 'none')
+    {
+        $thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+        $thelist .= "<td>";
+        if ($root->hasChildren())
         {
-            $templates[$one->TemplateId()] = TemplateOperations::LoadTemplateById($one->TemplateId());
+            if (!in_array($one->Id(),$openedArray))
+            {
+                $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
+                $thelist .= $expandImg;
+                $thelist .= "</a>";
+            }
+            else
+            {
+                $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
+                $thelist .= $contractImg;
+                $thelist .= "</a>";
+            }
         }
-        
-        if (!array_key_exists($one->Owner(), $users))
+        $thelist .= "</td><td>";
+        /*
+        if (check_modify_all($userid))
         {
-            $users[$one->Owner()] = UserOperations::LoadUserById($one->Owner());
+            $pos = strrpos($one->Hierarchy(), '.');
+            if ($pos != false)
+            {
+            $thelist .= substr($one->Hierarchy(), 0, $pos)."\n";
+            }
+            
+            $thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
         }
-        
-        $display = 'none';
-        
-        if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+        else
         {
-            $display = 'edit';
+            */
+        $thelist .= $one->Hierarchy();
+        //}
+        $thelist .= "</td>\n";
+        $thelist .= "<td>";
+
+        if ($indent)
+        {
+            for ($i=1;$i < $root->getLevel();$i++)
+            {
+                $thelist .= "-&nbsp;&nbsp;&nbsp;";
+            }
+        } ## if indent
+
+        if ($display == 'edit')
+            $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&amp;page=".$page."\">".$one->Name()."</a></td>\n";
+        else
+            $thelist .= $one->Name()."</td>\n";
+
+
+        if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
+        {
+            $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".$templates[$one->TemplateId()]->name."</a></td>\n";
         }
-        else if (check_children($root, $mypages, $userid))
+        else
         {
-            $display = 'view';
+            $thelist .= "<td>&nbsp;</td>\n";
         }
-        
-        if ($display != 'none')
+
+        $thelist .= "<td>".$one->FriendlyName()."</td>\n";
+
+        if ($one->Owner() > -1)
         {
-            $thelist .= "<tr id=\"tr_".$one->Id()."\" class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-            $thelist .= "<td>";
-            if ($root->hasChildren())
+            $thelist .= "<td>".$users[$one->Owner()]->username."</td>\n";
+        }
+        else
+        {
+            $thelist .= "<td>&nbsp;</td>\n";
+        }
+
+        if ($display == 'edit')
+        {
+            if($one->Active())
             {
-                if (!in_array($one->Id(),$openedArray))
-                {
-                    $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=0&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'false'); return false;\">";
-                    $thelist .= $expandImg;
-                    $thelist .= "</a>";
-                }
-                else
-                {
-                    $thelist .= "<a href=\"listcontent.php?content_id=".$one->Id()."&amp;col=1&amp;page=".$page."\" onclick=\"xajax_content_toggleexpand(".$one->Id().", 'true'); return false;\">";
-                    $thelist .= $contractImg;
-                    $thelist .= "</a>";
-                }
-            }
-            $thelist .= "</td><td>";
-            /*
-            if (check_modify_all($userid))
-            {
-                $pos = strrpos($one->Hierarchy(), '.');
-                if ($pos != false)
-                {
-                $thelist .= substr($one->Hierarchy(), 0, $pos)."\n";
-                }
-                
-                $thelist .= '<input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."\n";
+                $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
             }
             else
             {
-                */
-            $thelist .= $one->Hierarchy();
-            //}
-            $thelist .= "</td>\n";
-            $thelist .= "<td>";
-    
-            if ($indent)
-            {
-                for ($i=1;$i < $root->getLevel();$i++)
+                $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
+            }
+        }
+        else
+        {
+            $thelist .= "<td>&nbsp;</td>\n";
+        }
+
+        if ($one->IsDefaultPossible() && $display == 'edit')
+        {
+            $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+        }
+        else
+        {
+            $thelist .= "<td>&nbsp;</td>";
+        }   
+
+        // code for move up is simple
+        if (check_modify_all($userid))
+        {
+            $thelist .= "<td class=\"move\">";
+            //$parentNode = &$root->getParentNode();
+            //if ($parentNode!=null)
+            //{
+                $sameLevel = $root->getSiblingCount();
+                if ($sameLevel>1)
                 {
-                    $thelist .= "-&nbsp;&nbsp;&nbsp;";
-                }
-            } ## if indent
-    
-            if ($display == 'edit')
-                $thelist .= "<a href=\"editcontent.php?content_id=".$one->Id()."&amp;page=".$page."\">".$one->Name()."</a></td>\n";
-            else
-                $thelist .= $one->Name()."</td>\n";
-    
-    
-            if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
-            {
-                $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".$templates[$one->TemplateId()]->name."</a></td>\n";
-            }
-            else
-            {
-                $thelist .= "<td>&nbsp;</td>\n";
-            }
-    
-            $thelist .= "<td>".$one->FriendlyName()."</td>\n";
-    
-            if ($one->Owner() > -1)
-            {
-                $thelist .= "<td>".$users[$one->Owner()]->username."</td>\n";
-            }
-            else
-            {
-                $thelist .= "<td>&nbsp;</td>\n";
-            }
-    
-            if ($display == 'edit')
-            {
-                if($one->Active())
-                {
-                    $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
-                }
-                else
-                {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
-                }
-            }
-            else
-            {
-                $thelist .= "<td>&nbsp;</td>\n";
-            }
-    
-            if ($one->IsDefaultPossible() && $display == 'edit')
-            {
-                $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
-            }
-            else
-            {
-                $thelist .= "<td>&nbsp;</td>";
-            }   
-    
-            // code for move up is simple
-            if (check_modify_all($userid))
-            {
-                $thelist .= "<td class=\"move\">";
-                //$parentNode = &$root->getParentNode();
-                //if ($parentNode!=null)
-                //{
-                    $sameLevel = $root->getSiblingCount();
-                    if ($sameLevel>1)
-                    {
-                        if (($one->ItemOrder() - 1)==0) #first
-                        { 
-                            $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-                            $thelist .= $downImg;
-                            $thelist .= "</a>";
-                        }
-                        else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
-                        {
-                            $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-                            $thelist .= $upImg;
-                            $thelist .= "</a>";
-                        }
-                        else #middle
-                        {
-                            $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-                            $thelist .= $downImg;
-                            $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
-                            $thelist .= $upImg;
-                            $thelist .= "</a>";
-                        }
+                    if (($one->ItemOrder() - 1)==0) #first
+                    { 
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= $downImg;
+                        $thelist .= "</a>";
                     }
-                //}
-                $thelist .= "</td>";
-                $thelist .= '<td class="invisible" style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
-            }
-            // end of move code
-    
-            $url = $one->GetURL();
-            if ($url != '')
+                    else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
+                    {
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= $upImg;
+                        $thelist .= "</a>";
+                    }
+                    else #middle
+                    {
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= $downImg;
+                        $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= $upImg;
+                        $thelist .= "</a>";
+                    }
+                }
+            //}
+            $thelist .= "</td>";
+            $thelist .= '<td class="invisible" style="text-align: center;"><input type="text" name="order-'. $one->Id().'" value="'.$one->ItemOrder().'" class="order" /> '."</td>\n";
+        }
+        // end of move code
+
+        $url = $one->GetURL();
+        if ($url != '')
+        {
+            $thelist .= "<td class=\"pagepos\"><a href=\"".$one->GetURL()."\" rel=\"external\">";
+            $thelist .= $viewImg;
+            $thelist .= "</a></td>\n";
+        }
+        else
+        {
+            $thelist .= '<td>&nbsp;</td>' . "\n";
+        }
+
+        if ($display == 'edit')
+        {
+            $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
+            $thelist .= $editImg;
+            $thelist .= "</a></td>\n";
+            if ($one->DefaultContent() != true)
             {
-                $thelist .= "<td class=\"pagepos\"><a href=\"".$one->GetURL()."\" rel=\"external\">";
-                $thelist .= $viewImg;
-                $thelist .= "</a></td>\n";
+                //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
+                if ($one->ChildCount() == 0)
+                {
+                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
+                    $thelist .= $deleteImg;
+                    $thelist .= "</a></td>\n";
+                }
+                else
+                {
+                    $thelist .= '<td>&nbsp;</td>' . "\n";
+                }
+                $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
             }
             else
             {
                 $thelist .= '<td>&nbsp;</td>' . "\n";
+                $thelist .= '<td>&nbsp;</td>' . "\n";
             }
-    
-            if ($display == 'edit')
-            {
-                $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
-                $thelist .= $editImg;
-                $thelist .= "</a></td>\n";
-                if ($one->DefaultContent() != true)
-                {
-                    //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
-                    if ($one->ChildCount() == 0)
-                    {
-                        $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
-                        $thelist .= $deleteImg;
-                        $thelist .= "</a></td>\n";
-                    }
-                    else
-                    {
-                        $thelist .= '<td>&nbsp;</td>' . "\n";
-                    }
-                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
-                }
-                else
-                {
-                    $thelist .= '<td>&nbsp;</td>' . "\n";
-                    $thelist .= '<td>&nbsp;</td>' . "\n";
-                }
-                $thelist .= "</tr>\n";  	
-            }
-            else
-            {
-                $thelist .= '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' . "\n";
-            }
-            ($currow == "row1"?$currow="row2":$currow="row1");
+            $thelist .= "</tr>\n";  	
         }
-    
-        $pagelist[] = &$thelist;
-
-        $indent = get_preference($userid, 'indent', true);
-    
-        if (in_array($one->Id(),$openedArray))
+        else
         {
-            foreach ($children as $child)
-            { 
-                display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
-            }
+            $thelist .= '<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>' . "\n";
+        }
+        ($currow == "row1"?$currow="row2":$currow="row1");
+    }
+
+    $pagelist[] = &$thelist;
+
+    $indent = get_preference($userid, 'indent', true);
+
+    if (in_array($one->Id(),$openedArray))
+    {
+        foreach ($children as $child)
+        { 
+            display_hierarchy($child, $userid, $modifyall, $templates, $users, $menupos, $openedArray, $pagelist, $image_true, $image_set_false, $image_set_true, $upImg, $downImg, $viewImg, $editImg, $deleteImg, $expandImg, $contractImg, $mypages, $page);
         }
     }
 } // function display_hierarchy
