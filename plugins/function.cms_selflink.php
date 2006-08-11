@@ -208,7 +208,7 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 					for ($i = $number - 1; $i >= 0; $i--)
 					{
 						$content =& $flatcontent[$i]->getContent();
-						if (isset($content))
+						if (isset($content) && $content != NULL)
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
 							{
