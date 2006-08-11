@@ -680,11 +680,13 @@ class CMSModule
 	 * ------------------------------------------------------------------
 	 */
 	var $cms;
+	var $config;
 	var $curlang;
 	var $langhash;
 	var $params;
-	var $wysiwygactive=false;
-  var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
+	var $wysiwygactive;
+	var $error;
+	var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
   <!ELEMENT module (dtdversion,name,version,description*,help*,about*,requires*,file+)>
@@ -707,6 +709,7 @@ class CMSModule
 	function CMSModule()
 	{
 		global $gCms;
+		
 		$this->cms =& $gCms;
 		$this->config =& $gCms->GetConfig();
 
@@ -727,7 +730,9 @@ class CMSModule
 		}
 		$this->langhash = array();
 		$this->params = array();
+		$this->wysiwygactive = false;
 		$this->error = '';
+		
 		$this->params[] = array(
 					'name' => 'lang',
 					'default' => 'en_US',
