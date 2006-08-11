@@ -705,6 +705,7 @@ class CMSModule
   <!ELEMENT isdir (#PCDATA)>
   <!ELEMENT data (#PCDATA)>
 ]>';
+	var $smarty;
 
 	function CMSModule()
 	{
