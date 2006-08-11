@@ -502,13 +502,16 @@ function reorder_process($get)
 			foreach($orderArray as $item)
 			{
 				$node =& $hm->sureGetNodeById($item['element']);
-				$one =& $node->getContent();
-				// Only update if order has changed.
-				if ($one->ItemOrder() != $item['order'])
+				if ($node != NULL)
 				{
+				    $one =& $node->getContent();
+				    // Only update if order has changed.
+				    if ($one->ItemOrder() != $item['order'])
+				    {
 					$order_changed = TRUE;
 					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
 					$db->Execute($query, array($item['order'], $item['element']));
+				    }
 				}
 			}
 		}
