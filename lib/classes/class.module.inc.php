@@ -389,7 +389,11 @@ class ModuleOperations
 	  }
 	else
 	  {
-	    return array(false,lang('errorinstallfailed'));;
+	    if( trim($result) == "" )
+	      {
+		$result = lang('errorinstallfailed');
+	      }
+	    return array(false,$result);
 	  }
       }    
     else
