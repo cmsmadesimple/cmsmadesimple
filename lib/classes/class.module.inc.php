@@ -3498,7 +3498,23 @@ class CMSModule
 	 */
 	function DoEvent( $originator, $eventname, &$params )
 	{
-	  return true;
+	  if ($originator != '' && $eventname != '')
+	    {
+	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
+		. $originator . $eventname . '.php';
+	      if (@is_file($filename))
+		{
+		  {
+		    global $gCms;
+		    $db =& $gCms->GetDb();
+		    $config =& $gCms->GetConfig();
+		    $smarty =& $gCms->GetSmarty();
+		    
+		    include($filename);
+		    
+		  }
+		}
+	    }
 	}
 
 
