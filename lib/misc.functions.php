@@ -961,5 +961,48 @@ if(!function_exists("file_get_contents"))
    }
 }
 
+// create the array_walk_recursive function in PHP4
+// from http://www.php.net/manual/en/function.array-walk-recursive.php
+if (!function_exists('array_walk_recursive'))
+{
+   function array_walk_recursive(&$input, $funcname, $userdata = "")
+   {
+       if (!is_callable($funcname))
+       {
+           return false;
+       }
+      
+       if (!is_array($input))
+       {
+           return false;
+       }
+      
+       foreach ($input AS $key => $value)
+       {
+           if (is_array($input[$key]))
+           {
+               array_walk_recursive($input[$key], $funcname, $userdata);
+           }
+           else
+           {
+               $saved_value = $value;
+               if (!empty($userdata))
+               {
+                   $funcname($value, $key, $userdata);
+               }
+               else
+               {
+                   $funcname($value, $key);
+               }
+              
+               if ($value != $saved_value)
+               {
+                   $input[$key] = $value;
+               }
+           }
+       }
+       return true;
+   }
+}
 # vim:ts=4 sw=4 noet
 ?>

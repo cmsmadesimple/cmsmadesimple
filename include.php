@@ -49,6 +49,9 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 debug_buffer('', 'Start of include');
 
+# sanitize $_GET
+array_walk_recursive($_GET, 'sanitize_get_var'); 
+
 #Make a new CMS object
 require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
 $gCms = new CmsObject();
@@ -264,6 +267,11 @@ if (isset($CMS_ADMIN_PAGE))
 ModuleOperations::LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 
 debug_buffer('', 'End of include');
+
+function sanitize_get_var($value, &$key)
+{
+    ereg_replace('\<.*\>', '', $value);
+}
 
 # vim:ts=4 sw=4 noet
 ?>
