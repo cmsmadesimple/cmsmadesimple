@@ -268,9 +268,10 @@ ModuleOperations::LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE))
 
 debug_buffer('', 'End of include');
 
-function sanitize_get_var($value, &$key)
+function sanitize_get_var($value, $key)
 {
-    ereg_replace('\<.*\>', '', $value);
+    global $_GET;
+    $_GET[$key] = ereg_replace('\<.*\>', '', $value);
 }
 
 # vim:ts=4 sw=4 noet
