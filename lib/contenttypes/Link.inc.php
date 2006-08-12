@@ -95,6 +95,7 @@ class link extends ContentBase
 	    {
 		$this->mShowInMenu = false;
 	    }
+	    $this->mTemplateId = 0;
 	}
     }
 
