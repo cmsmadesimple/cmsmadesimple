@@ -71,6 +71,8 @@ class separator extends ContentBase
 	    {
 		$this->mShowInMenu = false;
 	    }
+	    $this->mProperties->mPropertyValues['content_en'] = '';
+	    $this->mProperties->mPropertyValues['url'] = '';
 	}
     }
 
