@@ -86,7 +86,7 @@ function smarty_cms_help_function_print() {
 	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
         <h3>What parameters does it take?</h3>
         <ul>
-                <li><em>(optional)</em> goback - Set to "false" and in print page you don't will by see button "Go Back".</li>
+                <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
                 <li><em>(optional)</em> popup - Set to "true" and page for printing will by opened in new window.</li>
                 <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
