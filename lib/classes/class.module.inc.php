@@ -3501,7 +3501,8 @@ class CMSModule
 	  if ($originator != '' && $eventname != '')
 	    {
 	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
-		. $originator . $eventname . '.php';
+		. $originator . "." . $eventname . '.php';
+
 	      if (@is_file($filename))
 		{
 		  {
