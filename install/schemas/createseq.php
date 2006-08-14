@@ -24,7 +24,9 @@ if (isset($CMS_INSTALL_CREATE_TABLES)) {
     foreach ($table_ids as $tablename => $tableinfo)
     {
         echo "<p>Creating $tablename table sequence...";
-        $max = $db->Execute('SELECT max(' . $tableinfo['id'] . ') AS maxid FROM '.$db_prefix.$tablename);
+        $max = $db->Execute(
+            'SELECT max(' . $tableinfo['id'] . ') AS maxid FROM '.$db_prefix.$tablename
+        );
         $max = ($max && $row = $max->FetchRow()) ? $row['maxid']+1 : 1;
         $tableinfo['seq'] = isset($tableinfo['seq']) ? $tableinfo['seq'] : $tablename . '_seq';
         $db->CreateSequence($db_prefix.$tableinfo['seq'], $max);
