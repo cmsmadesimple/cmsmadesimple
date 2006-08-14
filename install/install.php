@@ -963,7 +963,7 @@ function showPageFive() {
 
 		include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'include.php';
 
-		$gCms->config['db_prefix'] = $_POST['prefix'];
+		$gCms->config = $newconfig;
 
 		$db = &ADONewConnection($newconfig['dbms'], 'pear:date:extend:transaction');
 		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
