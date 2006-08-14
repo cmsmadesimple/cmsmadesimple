@@ -20,7 +20,7 @@
 
 $CMS_VERSION = "1.0-beta4";
 $CMS_VERSION_NAME = "Hawaii";
-$CMS_SCHEMA_VERSION = "24";
+$CMS_SCHEMA_VERSION = "25";
 
 # vim:ts=4 sw=4 noet
 ?>
