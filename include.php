@@ -270,7 +270,7 @@ debug_buffer('', 'End of include');
 
 function sanitize_get_var(&$value, $key)
 {
-    $value = ereg_replace('\<.*\>', '', $value);
+    $value = ereg_replace('\<\/?script[^\>]*\>', '', $value);
 }
 
 # vim:ts=4 sw=4 noet
