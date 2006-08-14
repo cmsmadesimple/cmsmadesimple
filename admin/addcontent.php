@@ -199,7 +199,7 @@ function createtmpfname(&$contentobj)
 }
 
 #Get current userid and make sure they have permission to add something
-$access = check_permission($userid, 'Add Pages');
+$access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
 
 #Get a list of content types and pick a default if necessary
 $existingtypes = ContentManager::ListContentTypes();

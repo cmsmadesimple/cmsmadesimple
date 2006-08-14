@@ -114,7 +114,10 @@ class sectionheader extends ContentBase
 	$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+    if (check_permission($userid, 'Modify Page Structure'))
+    {
+    	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+    }
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 

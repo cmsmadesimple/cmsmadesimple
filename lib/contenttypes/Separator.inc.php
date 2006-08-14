@@ -85,7 +85,10 @@ class separator extends ContentBase
     {
 	$ret = array();
 
-	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+    if (check_permission($userid, 'Modify Page Structure'))
+    {
+    	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+    }
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 

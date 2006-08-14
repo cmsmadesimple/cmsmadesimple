@@ -205,6 +205,11 @@ function content_toggleexpand($contentid, $collapse)
 
 function content_delete($contentid)
 {
+    if (! check_permission($userid, 'Modify Page Structure'))
+    {
+        return;
+    }
+
 	$objResponse = new xajaxResponse();
 	
 	deletecontent($contentid);
@@ -738,7 +743,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             if ($one->DefaultContent() != true)
             {
                 //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
-                if ($one->ChildCount() == 0)
+                if ($one->ChildCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
                     $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
@@ -853,9 +858,11 @@ function display_content_list($themeObject = null)
 		{
 			$thelist.=$item;
 		}
+
 		$thelist .= '<tr class="invisible"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 <td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
 <td>&nbsp;</td><td><input type="submit" name="reorderpages" value="'.lang('reorderpages').'" /></td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
+
 		$thelist .= '</tbody>';
 		$thelist .= "</table>\n";
 	}
@@ -864,16 +871,19 @@ function display_content_list($themeObject = null)
 
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid))
 	{
-$headoflist .= '<div class="pageoverflow">';
+        $headoflist .= '<div class="pageoverflow">';
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
-		$headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-		$headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
-		if (check_modify_all($userid))
-		{
-		    $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
-			$headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
-			$headoflist .= ' <a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
-		}
+        $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+        $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
+		if (check_permission($userid, 'Modify Page Structure'))
+        {
+            if (check_modify_all($userid))
+            {
+                $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
+                $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
+                $headoflist .= ' <a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
+            }
+        }
 		$headoflist .='</p></div>';
 	}
 	$headoflist .= '<form action="multicontent.php" method="post">';
@@ -917,16 +927,18 @@ $headoflist .= '<div class="pageoverflow">';
 			</div>
 			<div style="float: left;">
 	<?php
-	if (check_permission($userid, 'Add Pages'))
+	if (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'))
 	{
 		?>
 			<a href="addcontent.php" class="pageoptions">
 			<?php 
-			echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-		echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
+            echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
+            echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
 		?>
 			</a>
-	<?php } ?>
+	<?php 
+    } 
+    ?>
 		<a style="margin-left: 10px;" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
 			<?php 
 			echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
@@ -937,7 +949,7 @@ $headoflist .= '<div class="pageoverflow">';
 			<?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
-		if (check_modify_all($userid))
+		if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 		{
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
 			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';

@@ -408,6 +408,7 @@ $submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('appl
 				</div>
 				<?php
 			}
+			
 			$contentarray = $contentobj->EditAsArray(false, $currenttab, $adminaccess);
 			for($i=0;$i<count($contentarray);$i++)
 			{
@@ -418,6 +419,7 @@ $submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('appl
 				</div>
 				<?php
 			}
+            
 			?>
 			<div style="clear: both;"></div>
 		</div>
