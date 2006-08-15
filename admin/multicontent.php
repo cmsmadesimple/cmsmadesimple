@@ -250,7 +250,7 @@ else
 	else if ($action == 'dodelete')
 	{
 		$userid = get_userid();
-		$access = check_permission($userid, 'Remove Pages');
+		$access = check_permission($userid, 'Remove Pages' || check_persmission($userid, 'Modify Page Structure'));
 		if ($access)
 		{
 			global $gCms;
@@ -308,7 +308,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
 
 			if ($permission)
 			{
@@ -328,7 +328,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()));
+			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
 
 			if ($permission)
 			{

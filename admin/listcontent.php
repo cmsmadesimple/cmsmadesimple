@@ -286,7 +286,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	$db =& $gCms->GetDb();
 	$userid = get_userid();
 
-	if (check_modify_all($userid))
+	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
 		$order = 1;
 
@@ -679,7 +679,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= "<td>&nbsp;</td>\n";
             }
         }
-        if ($one->IsDefaultPossible() && $display == 'edit')
+        if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
         {
             $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
         }
