@@ -30,7 +30,7 @@ $error = "";
 $dropdown = "";
 
 $user = "";
-if (isset($_POST["user"])) $user = $_POST["user"];
+if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
 
 $password = "";
 if (isset($_POST["password"])) $password = $_POST["password"];
@@ -39,13 +39,13 @@ $passwordagain = "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $firstname = "";
-if (isset($_POST["firstname"])) $firstname = $_POST["firstname"];
+if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
 
 $lastname = "";
-if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
+if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
 $email = "";
-if (isset($_POST["email"])) $email = $_POST["email"];
+if (isset($_POST["email"])) $email = cleanValue($_POST["email"]);
 
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
@@ -55,8 +55,8 @@ if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
 
 $userid = get_userid();
 $user_id = $userid;
-if (isset($_POST["user_id"])) $user_id = $_POST["user_id"];
-else if (isset($_GET["user_id"])) $user_id = $_GET["user_id"];
+if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
+else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
 
 $thisuser = UserOperations::LoadUserByID($user_id);
 if (strlen($thisuser->username) > 0)

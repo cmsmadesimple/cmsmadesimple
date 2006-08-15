@@ -28,13 +28,13 @@ check_login();
 $error = "";
 
 $user= "";
-if (isset($_POST["user"])) $user = $_POST["user"];
+if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
 
 $firstname = "";
-if (isset($_POST["firstname"])) $firstname = $_POST["firstname"];
+if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
 
 $lastname = "";
-if (isset($_POST["lastname"])) $lastname = $_POST["lastname"];
+if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
 
 $password= "";
 if (isset($_POST["password"])) $password = $_POST["password"];
@@ -43,7 +43,7 @@ $passwordagain= "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $email = "";
-if (isset($_POST["email"])) $email = $_POST["email"];
+if (isset($_POST["email"])) $email = cleanValue($_POST["email"]);
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
