@@ -689,7 +689,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }   
 
         // code for move up is simple
-        if (check_permission($userid, 'Modify Page Structure') || (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure')))
+        if (check_permission($userid, 'Modify Page Structure'))
         {
             $thelist .= "<td class=\"move\">";
             //$parentNode = &$root->getParentNode();
