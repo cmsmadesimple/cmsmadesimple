@@ -170,7 +170,7 @@ else
 	{
 		if ($current_version < $CMS_SCHEMA_VERSION)
 		{
-			echo "<p>CMS is in need of an upgrade.<p>You are now running schema version ".$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.".</p>Please click <a href=\"upgrade.php?doupgrade=true\">here</a> to complete it.</p>";
+			echo "<p>CMS is in need of an upgrade.</p><p>You are now running schema version ".$current_version." and you need to be upgraded to version ".$CMS_SCHEMA_VERSION.'.</p><p class="important">Please click <a href="upgrade.php?doupgrade=true">here</a> to complete the upgrade.</p>';
 		}
 		else
 		{
