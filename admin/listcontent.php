@@ -576,13 +576,17 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     
     $display = 'none';
     
-    if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages) || check_permission($userid, 'Modify Page Structure'))
+    if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
     {
         $display = 'edit';
     }
     else if (check_children($root, $mypages, $userid))
     {
         $display = 'view';
+    }
+    else if (check_permission($userid, 'Modify Page Structure'))
+    {
+        $display = 'structure';
     }
     
     if ($display != 'none')
@@ -659,7 +663,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }
         if (check_permission($userid, 'Modify Page Structure'))
         {
-            if ($display == 'edit')
+            if ($display == 'edit' || $display == 'structure')
             {
                 if($one->Active())
                 {
@@ -685,7 +689,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }   
 
         // code for move up is simple
-        if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
+        if (check_permission($userid, 'Modify Page Structure') || (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure')))
         {
             $thelist .= "<td class=\"move\">";
             //$parentNode = &$root->getParentNode();
@@ -733,11 +737,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             $thelist .= '<td>&nbsp;</td>' . "\n";
         }
 
-        if ($display == 'edit')
+        if ($display == 'edit' || $display == 'structure')
         {
-            $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
-            $thelist .= $editImg;
-            $thelist .= "</a></td>\n";
+            if (! $display == 'structure')
+            {
+                $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
+                $thelist .= $editImg;
+                $thelist .= "</a></td>\n";
+            }
             if ($one->DefaultContent() != true)
             {
                 //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
@@ -751,10 +758,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
-                if (check_permission($userid, 'Modify Page Structure'))
-                {
-                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
-                }
+                $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
             }
             else
             {
@@ -870,7 +874,7 @@ function display_content_list($themeObject = null)
 
 	$headoflist = '';
 
-	if (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'))
+	if (check_permission($userid, 'Add Pages'))
 	{
         $headoflist .= '<div class="pageoverflow">';
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
@@ -942,7 +946,7 @@ function display_content_list($themeObject = null)
 ?>
 			<div style="float: left;">
 <?php
-	if (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'))
+	if (check_permission($userid, 'Add Pages'))
 	{
 ?>
 			<a href="addcontent.php" class="pageoptions">
