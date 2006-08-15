@@ -202,6 +202,7 @@ class content extends ContentBase
 	{
 	    $ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	    $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
+	    $userid = get_userid();
         if (check_permission($userid, 'Modify Page Structure'))
         {
             $ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
