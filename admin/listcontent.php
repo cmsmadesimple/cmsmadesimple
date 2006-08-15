@@ -205,11 +205,6 @@ function content_toggleexpand($contentid, $collapse)
 
 function content_delete($contentid)
 {
-    if (! check_permission($userid, 'Modify Page Structure'))
-    {
-        return;
-    }
-
 	$objResponse = new xajaxResponse();
 	
 	deletecontent($contentid);
@@ -260,7 +255,9 @@ function setactive($contentid, $active = true)
 	// to activate a page, you must be admin, owner, or additional author
 	$permission = (check_modify_all($userid) || 
 			check_ownership($userid, $contentid) ||
-			check_authorship($userid, $contentid));
+			check_authorship($userid, $contentid) ||
+			check_permission($userid, 'Modify Page Structure')
+	);
 
 	if($permission)
 	{
@@ -330,7 +327,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 function deletecontent($contentid)
 {
 	$userid = get_userid();
-	$access = check_permission($userid, 'Remove Pages');
+	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
 	
 	global $gCms;
 	$hierManager =& $gCms->GetHierarchyManager();
@@ -579,7 +576,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     
     $display = 'none';
     
-    if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages))
+    if (check_modify_all($userid) || check_ownership($userid, $one->Id()) || quick_check_authorship($one->Id(), $mypages) || check_permission($userid, 'Modify Page Structure'))
     {
         $display = 'edit';
     }
@@ -869,7 +866,7 @@ function display_content_list($themeObject = null)
 
 	$headoflist = '';
 
-	if (check_permission($userid, 'Add Pages') || check_modify_all($userid))
+	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
         $headoflist .= '<div class="pageoverflow">';
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
@@ -877,7 +874,7 @@ function display_content_list($themeObject = null)
         $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 		if (check_permission($userid, 'Modify Page Structure'))
         {
-            if (check_modify_all($userid))
+            if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
             {
                 $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
                 $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';

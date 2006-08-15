@@ -273,9 +273,12 @@ class AdminTheme
             {
             $this->perms['htmlPerms'] = true;
             }
-        $this->perms['pagePerms'] = check_permission($this->userid, 'Modify Any Page') |
-                check_permission($this->userid, 'Add Pages') |
-                check_permission($this->userid, 'Remove Pages');
+        $this->perms['pagePerms'] = (
+                check_permission($this->userid, 'Modify Any Page') ||
+                check_permission($this->userid, 'Add Pages') ||
+                check_permission($this->userid, 'Remove Pages') ||
+                check_permission($this->userid, 'Modify Page Structure')
+        );
         $thisUserPages = author_pages($this->userid);
         if (count($thisUserPages) > 0)
             {

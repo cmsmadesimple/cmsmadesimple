@@ -103,7 +103,11 @@ function updatecontentobj(&$contentobj, $preview, $params = null)
 		$params = $_POST;
 
 	$userid = get_userid();
-	$adminaccess = check_ownership($userid, $contentobj->Id()) || check_permission($userid, 'Modify Any Page');
+	$adminaccess = (
+        check_ownership($userid, $contentobj->Id()) ||
+        check_permission($userid, 'Modify Any Page') || 
+        check_permission($userid, 'Modify Page Structure')
+	);
 		
 	#Fill contentobj with parameters
 	$contentobj->FillParams($params);

@@ -208,7 +208,8 @@ else
 			<p class="pageheader"><?php echo lang('deletecontent') ?></p><br />
 		<?php
 		$userid = get_userid();
-		$access = check_permission($userid, 'Remove Pages');
+		$access = (check_permission($userid, 'Remove Pages') ||
+            check_permission($userid, 'Modify Page Structure'));
 		if ($access)
 		{
 			echo '<form method="post" action="multicontent.php">' . "\n";
