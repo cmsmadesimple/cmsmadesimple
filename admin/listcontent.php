@@ -657,23 +657,24 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             $thelist .= "<td>&nbsp;</td>\n";
         }
-
-        if ($display == 'edit')
+        if (check_permission($userid, 'Modify Page Structure'))
         {
-            if($one->Active())
+            if ($display == 'edit')
             {
-                $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
+                if($one->Active())
+                {
+                    $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?setinactive=".$one->Id()."\" onclick=\"xajax_content_setinactive(".$one->Id().");return false;\">".$image_set_false."</a>")."</td>\n";
+                }
+                else
+                {
+                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
+                }
             }
             else
             {
-                $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?setactive=".$one->Id()."\" onclick=\"xajax_content_setactive(".$one->Id().");return false;\">".$image_set_true."</a></td>\n";
+                $thelist .= "<td>&nbsp;</td>\n";
             }
         }
-        else
-        {
-            $thelist .= "<td>&nbsp;</td>\n";
-        }
-
         if ($one->IsDefaultPossible() && $display == 'edit')
         {
             $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
@@ -684,7 +685,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }   
 
         // code for move up is simple
-        if (check_modify_all($userid))
+        if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
         {
             $thelist .= "<td class=\"move\">";
             //$parentNode = &$root->getParentNode();
@@ -750,7 +751,10 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
-                $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+                if (check_permission($userid, 'Modify Page Structure'))
+                {
+                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+                }
             }
             else
             {
@@ -866,12 +870,15 @@ function display_content_list($themeObject = null)
 
 	$headoflist = '';
 
-	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
+	if (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'))
 	{
         $headoflist .= '<div class="pageoverflow">';
 		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
         $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
         $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
+	}
+	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
+	{
 		if (check_permission($userid, 'Modify Page Structure'))
         {
             if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
@@ -893,9 +900,12 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th>".lang('template')."</th>\n";
 	$headoflist .= "<th>".lang('type')."</th>\n";
 	$headoflist .= "<th>".lang('owner')."</th>\n";
-	$headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+	if (check_permission($userid, 'Modify Page Structure'))
+    {
+	   $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
+    }
 	$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
-	if (check_modify_all($userid))
+	if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 	{
 		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
 		$headoflist .= "<th class=\"pagepos invisible\">".lang('order')."</th>\n";
@@ -903,13 +913,18 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
+	if (check_permission($userid, 'Modify Page Structure'))
+	{
+	   $headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
+	}
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
 	
 	ob_start();
-	?>
+	if (check_permission($userid, 'Modify Page Structure')) 
+    {
+?>
 			<div class="pageoptions" style="margin-right: 3%;" >
 			<div style="margin-top: 0; float: right; text-align: right">
 			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
@@ -922,28 +937,31 @@ function display_content_list($themeObject = null)
 			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
 			</span>
 			</div>
+<?php
+    }
+?>
 			<div style="float: left;">
-	<?php
+<?php
 	if (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'))
 	{
-		?>
+?>
 			<a href="addcontent.php" class="pageoptions">
-			<?php 
+<?php 
             echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
             echo ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent");
-		?>
+?>
 			</a>
-	<?php 
+<?php 
     } 
-    ?>
+?>
 		<a style="margin-left: 10px;" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">
-			<?php 
+<?php 
 			echo $themeObject->DisplayImage('icons/system/expandall.gif', lang('expandall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="listcontent.php?expandall=1" onclick="xajax_content_expandall(); return false;">'.lang("expandall");
-		?>
+?>
 			</a>&nbsp;&nbsp;&nbsp;
 		<a href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">
-			<?php 
+<?php 
 			echo $themeObject->DisplayImage('icons/system/contractall.gif', lang('contractall'),'','','systemicon').'</a>';
 		echo ' <a class="pageoptions" href="listcontent.php?collapseall=1" onclick="xajax_content_collapseall(); return false;">'.lang("contractall").'</a>';
 		if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
@@ -951,13 +969,13 @@ function display_content_list($themeObject = null)
 			$image_reorder = $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon');
 			echo '&nbsp;&nbsp;&nbsp; <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.$image_reorder.'</a> <a class="pageoptions" href="listcontent.php?error=jsdisabled" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
 		}
-		?>
+?>
 			</div>
 
 			<br />
 			</div>
 			<div class="clearb"></div>
-	<?php
+<?php
 	$footer = ob_get_contents();
 	ob_end_clean();
 	
