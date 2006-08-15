@@ -273,7 +273,7 @@ function showPageOne() {
   echo '<p class="important">Please read the <a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Installation/Troubleshooting">Installation Troubleshooting</a> page in the CMS Made Simple Documentation Wiki.</p>';
   echo "<h3>Checking permissions and PHP settings</h3>\n";
   #$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, dirname(dirname(__FILE__)).'/uploads', CONFIG_FILE_LOCATION);
-  $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION, dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules', dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' );
+  $files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION);
 
 
 
@@ -316,35 +316,18 @@ function showPageOne() {
     #echo "<tr><td>\n";
     ## check if we can write to the this file
     echo "<tr class=\"$currow\"><td>Checking write permission on $f";
-      
-    //special check for modules dir
-    if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules' && !is_writable($f))
-      {
-	echo '<br /><br /><em>Modules is not writable. You can still install the system, but you will not be able to install modules via the admin panel.</em>';
-	$special_failed=true;
-      }
-      
-    //special check for uploads dir
-    if ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads' && !is_writable($f))
-      {
-	echo '<br /><br /><em>Uploads is not writable. You can still install the system, but you will not be able to upload files via the admin panel.</em>';
-	$special_failed=true;
-      }
+
     echo "</td><td class=\"col2\">";
       
     if (is_writable($f))
       {
 	echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
-      } else {
-	
-      //special check for modules dir
-      if (!(($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules') || ($f == dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads')))
-	{
-	  $continueon=false;
-	}
-	
-      echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
-    } ## if 
+      }
+    else
+      {
+	$continueon=false;
+	echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+      } ## if 
     echo "</td></tr>\n";
     ($currow=="row1"?$currow="row2":$currow="row1");
   } ## foreach
@@ -384,7 +367,41 @@ function showPageOne() {
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M)", "2M", "10M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  
+ 
+  // is uploads dir writable?
+  $f = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'uploads';
+  echo "<tr class=\"$currow\"><td>Checking if $f is writable<br/><br/>
+        <em>If uploads is not writable you can still install the system, but you will not be able to upload files via the Admin Panel.</em>
+        </td><td class=\"col2\">";
+  if (is_writable($f))
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+
+  // is modules dir writable?
+  $f = dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'modules';
+  echo "<tr class=\"$currow\"><td>Checking if $f is writable<br/><br/>
+        <em>If modules is not writable you can still install the system, but you will not be able to install modules via the Admin Panel.</em>
+        </td><td class=\"col2\">";
+  if (is_writable($f))
+    {
+      echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+    }
+  else
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+ 
     // do we have the file_get_contents function
   echo "<tr class=\"$currow\"><td>Checking for file_get_contents<br/><br/>
         <em>The file_get_contents function was added in PHP 4.3 and although a workaround has been added that should allow most functionality that uses this function to work properly in PHP 4.2, it may be advisable to upgrade to PHP 4.3 or greater.</em>
