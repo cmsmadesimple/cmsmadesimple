@@ -85,7 +85,7 @@ class separator extends ContentBase
     {
 	$ret = array();
 
-    if (check_permission($userid, 'Modify Page Structure'))
+    if (check_permission(get_userid(), 'Modify Page Structure'))
     {
     	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
     }

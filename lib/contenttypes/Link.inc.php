@@ -132,10 +132,10 @@ class link extends ContentBase
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	$ret = array();
-
+	
 	$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
 	$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-    if (check_permission($userid, 'Modify Page Structure'))
+    if (check_permission(get_userid(), 'Modify Page Structure'))
     {
     	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
