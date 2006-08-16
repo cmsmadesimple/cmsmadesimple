@@ -54,7 +54,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	if (isset($_POST["username"])) $username = cleanValue($_POST["username"]);
 
 	$password = "";
-	if (isset($_POST["password"])) $password = ($_POST["password"];
+	if (isset($_POST["password"])) $password = $_POST["password"];
 
 	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
 	
