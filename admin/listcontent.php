@@ -739,7 +739,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
         if ($display == 'edit' || $display == 'structure')
         {
-            if (! $display == 'structure')
+            if ($display == 'edit')
             {
                 $thelist .= "<td class=\"pagepos\"><a href=\"editcontent.php?content_id=".$one->Id()."\">";
                 $thelist .= $editImg;
