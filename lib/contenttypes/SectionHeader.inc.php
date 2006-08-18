@@ -77,9 +77,6 @@ class sectionheader extends ContentBase
 	    {
 		$this->SetAlias($params['alias']);
 	    }
-	    $this->mTemplateId = 0;
-	    $this->mProperties->mPropertyValues['content_en'] = '';
-	    $this->mProperties->mPropertyValues['url'] = '';
 	}
     }
 

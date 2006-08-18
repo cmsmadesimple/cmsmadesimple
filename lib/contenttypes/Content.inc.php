@@ -157,7 +157,6 @@ class content extends ContentBase
 	    {
 		$this->mCachable = false;
 	    }
-	    $this->mProperties->mPropertyValues['url'] = '';
 	}
     }
 
