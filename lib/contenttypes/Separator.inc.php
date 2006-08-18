@@ -45,7 +45,6 @@ class separator extends ContentBase
     {
 	if (isset($params))
 	{
-	    $this->mName = '--------';
 	    if (isset($params['parent_id']))
 	    {
 		if ($this->mParentId != $params['parent_id'])
@@ -105,6 +104,11 @@ class separator extends ContentBase
     function GetURL($rewrite = true)
     {
 	return '#';
+    }
+    function Save()
+    {
+        $this->mName = '--------';
+        ContentBase::Save();
     }
 }
 
