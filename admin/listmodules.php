@@ -448,10 +448,10 @@ if ($action == "showmoduleabout")
 	   $aboutcol = "&nbsp;";
 
 	   $xmlcol = "&nbsp;";
-	   if( !$is_sysmodule )
-	     {
+// 	   if( !$is_sysmodule )
+// 	     {
 	       $xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
-	     }
+// 	     }
 
 	   //Is there help?
 	   if ($modinstance->GetHelp() != '')
