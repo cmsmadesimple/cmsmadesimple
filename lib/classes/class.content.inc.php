@@ -1625,6 +1625,8 @@ class ContentProperties
 	    $dbresult = $db->Execute($delquery);			
 	    foreach ($this->mPropertyValues as $key=>$value)
 	    {
+		if (in_array($key, $this->GetAllowedPropertyNames()))
+        {
 		$dbresult = $db->Execute($insquery, array(
 		    $content_id,
 		    $this->mPropertyTypes[$key],
@@ -1652,6 +1654,7 @@ class ContentProperties
 		    }
 		}
 	    }
+        }
 			
 	    if ($concat != '')
 	    {
