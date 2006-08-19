@@ -18,14 +18,15 @@
 #
 #$Id$
 
-class content extends ContentBase
+class Content extends ContentBase
 {
     var $additionalContentBlocks;
     var $addtContentBlocksLoaded;
 	
-    function content()
+    function Content()
     {
 	$this->ContentBase();
+	$this->mProperties->SetAllowedPropertyNames(array('content_en'));
 	$this->additionalContentBlocks = array();
 	$this->addtContentBlocksLoaded = false;
     }

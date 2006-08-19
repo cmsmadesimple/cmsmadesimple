@@ -18,8 +18,14 @@
 #
 #$Id$
 
-class link extends ContentBase
+class Link extends ContentBase
 {
+
+    function Link() {
+        $this->ContentBase();
+        $this->mProperties->SetAllowedPropertyNames(array('url', 'target'));
+    }
+
     function FriendlyName()
     {
 	return 'Link';

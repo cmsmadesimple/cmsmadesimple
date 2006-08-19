@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class sectionheader extends ContentBase
+class SectionHeader extends ContentBase
 {
     function FriendlyName()
     {

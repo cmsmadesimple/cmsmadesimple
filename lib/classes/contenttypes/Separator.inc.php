@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class separator extends ContentBase
+class Separator extends ContentBase
 {
     function FriendlyName()
     {
@@ -71,6 +71,7 @@ class separator extends ContentBase
 		$this->mShowInMenu = false;
 	    }
 	}
+//        echo '<pre>'; print_r($this); echo '<pre>'; die();
     }
 
     function Show()
@@ -110,6 +111,7 @@ class separator extends ContentBase
         $this->mName = '--------';
         ContentBase::Save();
     }
+    
 }
 
 # vim:ts=4 sw=4 noet

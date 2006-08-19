@@ -181,7 +181,7 @@ if (!isset($DONT_LOAD_DB))
 $smarty =& $gCms->GetSmarty();
 
 #Load content types
-$dir = cms_join_path($dirname,'lib','contenttypes');
+$dir = cms_join_path($dirname,'lib','classes','contenttypes');
 $handle=opendir($dir);
 while ($file = readdir ($handle)) 
 {
