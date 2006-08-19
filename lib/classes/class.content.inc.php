@@ -64,6 +64,8 @@ class ContentBase
      * It should contain all treatments specific to this type of content
      */
      var $mProperties;
+     
+     var $mPropertiesLoaded;
 
     /**
      * The ID of the parent, 0 if none
@@ -232,6 +234,7 @@ class ContentBase
 	$this->mPreview        = false ;
 	$this->mMarkup         = 'html' ;
 	$this->mChildCount     = 0;
+	$this->mPropertiesLoaded = false;
     }
 
     /**
@@ -242,6 +245,7 @@ class ContentBase
     {
     }
 
+    
     /************************************************************************/
     /* Functions giving access to needed elements of the content			*/
     /************************************************************************/
@@ -1506,13 +1510,19 @@ class ContentProperties
     var $mPropertyNames;
     var $mPropertyTypes;
     var $mPropertyValues;
+     
+    /**
+     * The (content type specific) allowed properties of the content.
+    */
+     var $mAllowedPropertyNames;
 
     /**
      * Generic constructor. Runs the SetInitialValues fuction.
      */
-    function ContentProperties()
+    function ContentProperties($allowed_property_names = array())
     {
 	$this->SetInitialValues();
+	$this->SetAllowedPropertyNames($allowed_property_names);
     }
 
     /**
@@ -1586,12 +1596,15 @@ class ContentProperties
 	    while ($dbresult && !$dbresult->EOF)
 	    {
 		$prop_name = $dbresult->fields['prop_name'];
-		if (!in_array($prop_name, $this->mPropertyNames))
-		{
-		    $this->mPropertyNames[] = $prop_name;
-		}
-		$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
-		$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+		if (in_array($prop_name, $this->GetAllowedPropertyNames()))
+        {
+            if (!in_array($prop_name, $this->mPropertyNames))
+            {
+                $this->mPropertyNames[] = $prop_name;
+            }
+            $this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+            $this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+        }
 		$dbresult->MoveNext();
 	    }
 	}
@@ -1608,7 +1621,7 @@ class ContentProperties
 			
 	    $concat = '';
 
-	    $delquery = "DELETE FROM ".cms_db_prefix()."content_props where content_id = '$content_id'";
+	    $delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
 	    $dbresult = $db->Execute($delquery);			
 	    foreach ($this->mPropertyValues as $key=>$value)
 	    {
@@ -1658,7 +1671,27 @@ class ContentProperties
 	    $db->Execute($query, array($content_id));
 	}
     }
-}
+
+    /**
+     * Subclasses should fill this array with strings containing the name of
+     * the allowed property
+     * @param array
+    */
+    function SetAllowedPropertyNames($array)
+    {
+        $this->mAllowedPropertyNames = $array;
+    }
+    
+    /**
+     * Subclasses should fill this array with strings containing the name of
+     * the allowed property
+     * @return array
+    */
+    function GetAllowedPropertyNames()
+    {
+        return $this->mAllowedPropertyNames;
+    }
+} // end of class ContentProperties
 
 /**
  * Class for static methods related to content
