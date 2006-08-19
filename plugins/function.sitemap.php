@@ -27,6 +27,8 @@ function smarty_cms_function_sitemap($params, &$smarty) {
         $last_level = 0;
         $count = 0;
         $in_hr = 0;
+        // Line added by joeli
+        $notshow_hier = '';
 
         /* LeisureLarry - Begin */
         $add_elements = isset($params["add_elements"]) ? $params["add_elements"] : 0 ;
@@ -35,6 +37,19 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 
         foreach ($allcontent as $onecontent)
         {
+                // Start added by joeli
+                if ($notshow_hier != '')
+                {
+                        if (strpos($onecontent->mHierarchy, $notshow_hier) !== 0)
+                        {
+                            $notshow_hier = '';
+                        }
+                        else
+                        {
+                            continue;
+                        }
+                }
+                // End added by joeli
                 #Handy little trick to figure out how deep in the tree we are
                 #Remember, content comes to use in order of how it should be displayed in the tree already
                 $depth = count(split('\.', $onecontent->Hierarchy()));
@@ -96,8 +111,14 @@ function smarty_cms_function_sitemap($params, &$smarty) {
                         ($add_elements && in_array($onecontent->Alias(),$add_element)))
                         {
                         }
+                        // Start modified by joeli
+                        else
+						{
+							$notshow_hier = $onecontent->mHierarchy;
+							continue;
+                        }
+                        // End modified by joeli
 
-                        else continue;
                 }
 
                 if ($depth < $last_level)
