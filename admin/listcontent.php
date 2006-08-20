@@ -706,7 +706,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                     }
                     else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
                     {
-                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }
