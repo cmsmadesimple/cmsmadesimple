@@ -47,7 +47,7 @@ function cms_module_GetAbout(&$modinstance)
 	return $str;
 }
 
-function GetHelpPage(&$modinstance)
+function cms_module_GetHelpPage(&$modinstance)
 {
 	$str = '';
 	@ob_start();
