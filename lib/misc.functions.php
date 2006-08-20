@@ -1105,5 +1105,26 @@ function cleanHtml($string, $remove = false) {
 	}
 	return $string;
 }
+
+/**
+ * Returns all parameters sent that are destined for the module with
+ * the given $id
+ */
+function GetModuleParameters($id)
+{
+	$params = array();
+
+	foreach ($_REQUEST as $key=>$value)
+	{
+		if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+		{
+			$key = str_replace($id, '', $key);
+			$params[$key] = $value;
+		}
+	}
+
+	return $params;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

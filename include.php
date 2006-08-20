@@ -264,7 +264,8 @@ if (isset($CMS_ADMIN_PAGE))
 }
 
 #Load all installed module code
-ModuleOperations::LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+$modload =& $gCms->GetModuleLoader();
+$modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 
 debug_buffer('', 'End of include');
 

@@ -111,7 +111,7 @@ if (isset($cmsmodules))
 	      {
 		//@ob_start();
 		$id = 'm' . ++$gCms->variables["modulenum"];
-		$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+		$params = array_merge($params, GetModuleParameters($id));
 		$action = 'soap';
 		if (isset($params['action']))
 		  {

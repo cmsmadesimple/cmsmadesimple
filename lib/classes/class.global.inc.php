@@ -186,6 +186,30 @@ class CmsObject {
 
 		return $this->config;
 	}
+	
+	function & GetModuleLoader()
+	{
+        if (!isset($this->moduleloader))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
+			$moduleloader =& new ModuleLoader();
+			$this->moduleloader = &$moduleloader;
+		}
+
+		return $this->moduleloader;
+	}
+	
+	function & GetModuleOperations()
+	{
+        if (!isset($this->moduleoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
+			$moduleoperations =& new ModuleOperations();
+			$this->moduleoperations = &$moduleoperations;
+		}
+
+		return $this->moduleoperations;
+	}
 
 	function & GetSmarty()
 	{

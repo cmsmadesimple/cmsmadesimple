@@ -71,7 +71,7 @@ function smarty_cms_function_content($params, &$smarty)
 							&& $cmsmodules[$modulename]['object']->IsPluginModule())
 						{
 							@ob_start();
-							$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+							$params = array_merge($params, GetModuleParameters($id));
 
 							$returnid = '';
 							if (isset($params['returnid']))

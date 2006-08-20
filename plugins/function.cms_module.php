@@ -22,7 +22,7 @@ function smarty_cms_function_cms_module($params, &$smarty)
 	$cmsmodules = &$gCms->modules;
 
 	$id = 'm' . ++$gCms->variables["modulenum"];
-	$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+	$params = array_merge($params, GetModuleParameters($id));
 
 	$modulename = '';
 	$action = 'default';

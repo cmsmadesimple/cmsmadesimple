@@ -45,7 +45,7 @@ function smarty_cms_function_search($params, &$smarty)
 				{
 					@ob_start();
 					$id = 'm' . ++$gCms->variables["modulenum"];
-					$params = array_merge($params, @ModuleOperations::GetModuleParameters($id));
+					$params = array_merge($params, GetModuleParameters($id));
 					if ($inline == false || $action == '')
 						$action = 'default';
 

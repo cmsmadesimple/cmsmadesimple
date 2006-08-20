@@ -577,7 +577,7 @@ class Smarty_CMS extends Smarty {
 
 			$id = $smarty_obj->id;
 
-			$params = @ModuleOperations::GetModuleParameters($id);
+			$params = GetModuleParameters($id);
 			$action = 'default';
 			if (isset($params['action']))
 			{

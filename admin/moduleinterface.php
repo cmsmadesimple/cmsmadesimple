@@ -92,7 +92,7 @@ if (count($gCms->modules) > 0)
 	}
 	else
 	{
-		$params = @ModuleOperations::GetModuleParameters($id);
+		$params = GetModuleParameters($id);
 		if (FALSE == empty($params['module_message']))
 		  {
 		    echo $themeObject->ShowMessage($params['module_message']);
@@ -113,7 +113,7 @@ if (count($gCms->modules) > 0)
 			@ob_start();
 		}
 		$id = 'm1_';
-		$params = @ModuleOperations::GetModuleParameters($id);
+		$params = GetModuleParameters($id);
 		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
 		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 		{

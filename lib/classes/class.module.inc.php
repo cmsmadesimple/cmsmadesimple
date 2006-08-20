@@ -1,6 +1,6 @@
 <?php
 # CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
+# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
 # This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
@@ -17,656 +17,6 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA	02111-1307	USA
 #
 #$Id$
-
-/**
- * "Static" module functions for internal use and module development.  CMSModule
- * extends this so that it has internal access to the functions.
- *
- * @since		0.9
- * @package		CMS
- */
-define( "MODULE_DTD_VERSION", "1.3" );
-
-class ModuleOperations
-{
-  /**
-   * A member to hold an error string
-   */
-  var $error;
-
-  /**
-   * A member to hold the id of the active tab
-   */
-  var $mActiveTab = '';
-
-  /**
-   * ------------------------------------------------------------------
-   * Error Functions
-   * ------------------------------------------------------------------
-   */
-
-  /**
-   * Set an error condition
-   */
-  function SetError($str = '')
-  {
-	global $gCms;
-	$gCms->variables['error'] = $str;
-  }
-
-  /**
-   * Return the last error
-   */
-  function GetLastError()
-  {
-	global $gCms;
-	if( isset( $gCms->variables['error'] ) )
-	  return $gCms->variables['error'];
-	return "";
-  }
-
-
-  /**
-   * Unpackage a module from an xml string
-   * does not touch the database
-   */
-  function ExpandXMLPackage( $xml, $overwrite = 0, $brief = 0 )
-  {
-	global $gCms;
-
-	// first make sure that we can actually write to the module directory
-	$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-
-	if( !is_writable( $dir ) && $brief != 0 )
-	  {
-	    // directory not writable
-	    ModuleOperations::SetError( lang( 'errordirectorynotwritable' ) );
-	    return false;
-	  }
-
-	// start parsing xml
-	$parser = xml_parser_create();
-	$ret = xml_parse_into_struct( $parser, $xml, $val, $xt );
-	xml_parser_free( $parser );
-
-	if( $ret == 0 )
-	  {
-	    ModuleOperations::SetError( lang( 'errorcouldnotparsexml' ) );
-	    return false;
-	  }
-
-	ModuleOperations::SetError( "" );
-	$havedtdversion = false;
-	$moduledetails = array();
-	$moduledetails['size'] = strlen($xml);
-	$required = array();
-	foreach( $val as $elem )
-	  {
-	    $value = (isset($elem['value'])?$elem['value']:'');
-	    $type = (isset($elem['type'])?$elem['type']:'');
-	    switch( $elem['tag'] )
-	      {
-	      case 'NAME':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  // check if this module is already installed
-		  if( isset( $gCms->modules[$value] ) && $overwrite == 0 && $brief == 0 )
-		    {
-		      ModuleOperations::SetError( lang( 'moduleinstalled' ) );
-		      return false;
-		    }
-		  $moduledetails['name'] = $value;
-		  break;
-		}
-
-	      case 'DTDVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( $value != MODULE_DTD_VERSION )
-		    {
-		      ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-		      return false;
-		    }
-		  $havedtdversion = true;
-		  break;
-		}
-
-	      case 'VERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['version'] = $value;
-		  if( isset( $gCms->modules[$moduledetails['name']] ) )
-		    {
-		      $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-		      if( $moduledetails['version'] < $version && $brief == 0)
-			{
-			  ModuleOperations::SetError( lang('errorattempteddowngrade') );
-			  return false;
-			}
-		      else if ($moduledetails['version'] == $version && $brief == 0 )
-			{
-			  ModuleOperations::SetError( lang('moduleinstalled') );
-			  return false;
-			}
-		    }
-		  break;
-		}
-		
-	      case 'MINCMSVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['mincmsversion'] = $value;
-		  break;
-		}
-		
-	      case 'MAXCMSVERSION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['maxcmsversion'] = $value;
-		  break;
-		}
-		
-	      case 'DESCRIPTION':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['description'] = $value;
-		  break;
-		}
-		
-	      case 'HELP':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['help'] = base64_decode($value);
-		  break;
-		}
-		
-	      case 'ABOUT':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  $moduledetails['about'] = base64_decode($value);
-		  break;
-		}
-	    
-	      case 'REQUIRES':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( count($requires) != 2 )
-		    {
-		      continue;
-		    }
-		  if( !isset( $moduledetails['requires'] ) )
-		    {
-		      $moduledetails['requires'] = array();
-		    }
-		  $moduledetails['requires'][] = $requires;
-// 		  array_push( $moduledetails['requires'], $requires );
-		  $requires = array();
-		}
-	    
-	      case 'REQUIREDNAME':
-		$requires['name'] = $value;
-		break;
-
-	      case 'REQUIREDVERSION':
-		$requires['version'] = $value;
-		break;
-
-	      case 'FILE':
-		{
-		  if( $type != 'complete' && $type != 'close' )
-		    {
-		      continue;
-		    }
-		  if( $brief != 0 )
-		    {
-		      continue;
-		    }
-
-		  // finished a first file
-		  if( !isset( $moduledetails['name'] )	   || !isset( $moduledetails['version'] ) ||
-		      !isset( $moduledetails['filename'] ) || !isset( $moduledetails['isdir'] ) )
-		    {
-		      print_r( $moduledetails );
-		      ModuleOperations::SetError( lang('errorincompletexml') );
-		      return false;
-		    }
-
-		  // ready to go
-		  $moduledir=$dir.DIRECTORY_SEPARATOR.$moduledetails['name'];
-		  $filename=$moduledir.$moduledetails['filename'];
-		  if( !file_exists( $moduledir ) )
-		    {
-		      if( !@mkdir( $moduledir ) && !is_dir( $moduledir ) )
-			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$moduledir);
-			  break;
-			}
-		    }
-		  if( $moduledetails['isdir'] )
-		    {
-		      if( !@mkdir( $filename ) && !is_dir( $filename ) )
-			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
-			  break;
-			}
-		    }
-		  else
-		    {
-		      $data = $moduledetails['filedata'];
-		      if( strlen( $data ) )
-			{
-			  $data = base64_decode( $data );
-			}
-		      $fp = @fopen( $filename, "w" );
-		      if( !$fp )
-			{
-			  ModuleOperations::SetError(lang('errorcantcreatefile').' '.$filename);
-			}
-		      if( strlen( $data ) )
-			{
-			  @fwrite( $fp, $data );
-			}
-		      @fclose( $fp );
-		    }
-		  unset( $moduledetails['filedata'] );
-		  unset( $moduledetails['filename'] );
-		  unset( $moduledetails['isdir'] );
-		}
-
-	      case 'FILENAME':
-		$moduledetails['filename'] = $value;
-		break;
-
-	      case 'ISDIR':
-		$moduledetails['isdir'] = $value;
-		break;
-
-	      case 'DATA':
-		if( $type != 'complete' && $type != 'close' )
-		  {
-		    continue;
-		  }
-		$moduledetails['filedata'] = $value;
-		break;
-	      }
-	  } // foreach
-
-	if( $havedtdversion == false )
-	  {
-	    ModuleOperations::SetError( lang( 'errordtdmismatch' ) );
-	  }
-
-	// we've created the module's directory
-	unset( $moduledetails['filedata'] );
-	unset( $moduledetails['filename'] );
-	unset( $moduledetails['isdir'] );
-
-	if( ModuleOperations::GetLastError() != "" )
-	  {
-	    return false;
-	  }
-	return $moduledetails;
-  }
-
-
-  /**
-   * Install a module into the database
-   */
-  function InstallModule($module, $loadifnecessary = false)
-  {
-    global $gCms;
-    if( !isset( $gCms->modules[$module] ) )
-      {
-	if( $loadifnecessary == false )
-	  {
-	    return array(false,lang('errormodulenotloaded'));
-	  }
-	else
-	  {
-	    if( !ModuleOperations::LoadNewModule( $module ) )
-	      {
-		return array(false,lang('errormodulewontload'));
-	      }
-	  }
-      }
- 
-    $db =& $gCms->GetDb();
-    if (isset($gCms->modules[$module]))
-      {
-	$modinstance =& $gCms->modules[$module]['object'];
-	$result = $modinstance->Install();
-	
-        #now insert a record
-	if (!isset($result) || $result === FALSE)
-	  {
-	    $query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
-	    $db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
-	    
-            #and insert any dependancies
-	    if (count($modinstance->GetDependencies()) > 0) #Check for any deps
-	      {
-                #Now check to see if we can satisfy any deps
-		foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
-		  {
-		    $time = $db->DBTimeStamp(time());
-		    $query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-		    $db->Execute($query, array($onedepkey, $module, $onedepvalue));
-		  }
-	      }
-	    
-            #send an event saying the module has been installed
-	    Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
-	    
-	    // and we're done
-	    return array(true);
-	  }
-	else
-	  {
-	    if( trim($result) == "" )
-	      {
-		$result = lang('errorinstallfailed');
-	      }
-	    return array(false,$result);
-	  }
-      }    
-    else
-      {
-	return array(false,lang('errormodulenotfound'));
-      }
-  }
-
-
-  /**
-   * Load a single module from the filesystem
-   */
-  function LoadNewModule( $modulename )
-  {
-    global $gCms;
-    $db =& $gCms->GetDb();
-    $cmsmodules = &$gCms->modules;
-    
-    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-
-    if (@is_file("$dir/$modulename/$modulename.module.php"))
-      {
-	// question: is this a potential XSS vulnerability
-	include("$dir/$modulename/$modulename.module.php");
-	if( !class_exists( $modulename ) )
-	  {
-	    return false;
-	  }
-
-	$newmodule =& new $modulename;
-	$name = $newmodule->GetName();
-	$cmsmodules[$name]['object'] =& $newmodule;
-	$cmsmodules[$name]['installed'] = false;
-	$cmsmodules[$name]['active'] = false;
-      }
-    else
-      {
-	unset($cmsmodules[$modulename]);
-	return false;
-      }
-    return true;
-  }
-
-  /**
-   * Loads modules from the filesystem.  If loadall is true, then it will load all
-   * modules whether they're installed, or active.  If it is false, then it will
-   * only load modules which are installed and active.
-   */
-  function LoadModules($loadall = false, $noadmin = false)
-  {
-    global $gCms;
-    $db =& $gCms->GetDb();
-    $cmsmodules = &$gCms->modules;
-
-    $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
-
-    if ($loadall == true)
-      {
-	/*
-	 $ls = dir($dir);
-	 while (($file = $ls->read()) != "")
-	 {
-	 if (@is_dir("$dir/$file") && (strpos($file, ".") === false || strpos($file, ".") != 0))
-	 {
-	 if (@is_file("$dir/$file/$file.module.php"))
-	 {
-	 include("$dir/$file/$file.module.php");
-	 }
-	 else
-	 {
-	 unset($cmsmodules[$file]);
-	 }
-	 }
-	 }
-	*/
-	$handle=opendir($dir);
-	while ($file = readdir($handle))
-	  {
-	    if (@is_file("$dir/$file/$file.module.php"))
-	      {
-		include("$dir/$file/$file.module.php");
-	      }
-	    else
-	      {
-		unset($cmsmodules[$file]);
-	      }
-	  }
-	closedir($handle);
-
-	//Find modules and instantiate them
-	$allmodules = @ModuleOperations::FindModules();
-	foreach ($allmodules as $onemodule)
-	  {
-	    if (class_exists($onemodule))
-	      {
-		$newmodule =& new $onemodule;
-		$name = $newmodule->GetName();
-		$cmsmodules[$name]['object'] =& $newmodule;
-		$cmsmodules[$name]['installed'] = false;
-		$cmsmodules[$name]['active'] = false;
-	      }
-	    else
-	      {
-		unset($cmsmodules[$name]);
-	      }
-	  }
-      }
-
-    #Figger out what modules are active and/or installed
-    #Load them if loadall is false
-    if (isset($db))
-      {
-	$query = '';
-	if ($noadmin)
-	  $query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
-	else
-	  $query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
-	$result = &$db->Execute($query);
-	while ($result && !$result->EOF)
-	  {
-	    if (isset($result->fields['module_name']))
-	      {
-		$modulename = $result->fields['module_name'];
-		if (isset($modulename))
-		  {
-		    if ($loadall == true)
-		      {
-			if (isset($cmsmodules[$modulename]))
-			  {
-			    $cmsmodules[$modulename]['installed'] = true;
-			    $cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
-			  }
-		      }
-		    else
-		      {
-			if ($result->fields['active'] == 1)
-			  {
-			    if (@is_file("$dir/$modulename/$modulename.module.php"))
-			      {
-#var_dump('loading module:' . $modulename);
-				include("$dir/$modulename/$modulename.module.php");
-				if (class_exists($modulename))
-				  {
-				    $newmodule =& new $modulename;
-				    $name = $newmodule->GetName();
-
-				    global $CMS_VERSION;
-				    $dbversion = $result->fields['version'];
-
-#Check to see if there is an update and wether or not we should perform it
-				    if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
-				      {
-					$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
-					$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-					$db->Execute($query, array($newmodule->GetVersion(), $name));
-					Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->GetVersion()));
-					$dbversion = $newmodule->GetVersion();
-				      }
-
-#Check to see if version in db matches file version
-				    if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
-				      {
-					$cmsmodules[$name]['object'] =& $newmodule;
-					$cmsmodules[$name]['installed'] = true;
-					$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
-				      }
-				    else
-				      {
-					unset($cmsmodules[$name]);
-				      }
-				  }
-				else //No point in doing anything with it
-				  {
-				    unset($cmsmodules[$name]);
-				  }
-			      }
-			    else
-			      {
-				unset($cmsmodules[$modulename]);
-			      }
-			  }
-		      }
-		  }
-		$result->MoveNext();
-	      }
-	  }
-      }
-  }
-
-
-  /**
-   * Upgrade a module
-   */
-  function UpgradeModule( $module, $oldversion, $newversion )
-  {
-    global $gCms;
-    $db =& $gCms->GetDb();
-
-    if (!isset($gCms->modules[$module]))
-      {
-	return false;
-      }
-
-    $modinstance = $gCms->modules[$module]['object'];
-    $result = $modinstance->Upgrade($oldversion, $newversion);
-    if( $result === FALSE )
-      {
-	return false;
-      }
-
-    $query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
-    $db->Execute($query,array($newversion,($modinstance->IsAdminOnly()==true?1:0),$module));
-    
-    Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
-						      'oldversion' => $oldversion, 
-						      'newversion' => $oldversion));
-
-    return true;
-  }
-
-
-	/**
-	 * Finds all classes extending cmsmodule for loading
-	 */
-	function FindModules()
-	{
-		$result = array();
-
-		foreach (get_declared_classes() as $oneclass)
-		{
-			if (strtolower(get_parent_class($oneclass)) == 'cmsmodule')
-			{
-				$result[] = strtolower($oneclass);
-			}
-		}
-
-		sort($result);
-
-		return $result;
-	}
-
-	/**
-	 * Returns a hash of all loaded modules.  This will include all
-	 * modules loaded by LoadModules, which could either be all or them,
-	 * or just ones that are active and installed.
-	 */
-	function & GetAllModules()
-	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		return $cmsmodules;
-	}
-
-	/**
-	 * Returns all parameters sent that are destined for the module with
-	 * the given $id
-	 */
-	function GetModuleParameters($id)
-	{
-		$params = array();
-
-		foreach ($_REQUEST as $key=>$value)
-		{
-			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
-			{
-				$key = str_replace($id, '', $key);
-				$params[$key] = $value;
-			}
-		}
-
-		return $params;
-	}
-}
 
 /**
  * Base module class.
@@ -690,6 +40,7 @@ class CMSModule
 	var $params;
 	var $wysiwygactive;
 	var $error;
+	var $modlang;
 	var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
@@ -754,6 +105,67 @@ class CMSModule
 		$this->smarty = &$gCms->GetSmarty();
 
 		$this->SetParameters();
+		
+		$this->modinstall = false;
+		$this->modtemplates = false;
+		$this->modlang = false;
+		$this->modform = false;
+		$this->modredirect = false;
+		$this->modmisc = false;
+	}
+	
+	function LoadInstallMethods()
+	{
+		if (!$this->modinstall)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modinstall.inc.php'));
+			$this->modinstall = true;
+		}
+	}
+	
+	function LoadTemplateMethods()
+	{
+		if (!$this->modtemplates)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
+			$this->modtemplates = true;
+		}
+	}
+	
+	function LoadLangMethods()
+	{
+		if (!$this->modlang)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modlang.inc.php'));
+			$this->modlang = true;
+		}
+	}
+	
+	function LoadFormMethods()
+	{
+		if (!$this->modform)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modform.inc.php'));
+			$this->modform = true;
+		}
+	}
+	
+	function LoadRedirectMethods()
+	{
+		if (!$this->modredirect)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modredirect.inc.php'));
+			$this->modredirect = true;
+		}
+	}
+	
+	function LoadMiscMethods()
+	{
+		if (!$this->modmisc)
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modmisc.inc.php'));
+			$this->modmisc = true;
+		}
 	}
 
 	/**
@@ -767,24 +179,8 @@ class CMSModule
 	 */
 	function GetAbout()
 	{
-	  $str = '';
-	  if ($this->GetAuthor() != '')
-		{
-		  $str .= "<br />".lang('author').": " . $this->GetAuthor();
-		  if ($this->GetAuthorEmail() != '')
-		{
-		  $str .= ' &lt;' . $this->GetAuthorEmail() . '&gt;';
-		}
-		  $str .= "<br />";
-		}
-	  $str .= "<br />".lang('version').": " .$this->GetVersion() . "<br />";
-
-	  if ($this->GetChangeLog() != '')
-		{
-		  $str .= "<br />".lang('changehistory').":<br />";
-		  $str .= $this->GetChangeLog() . '<br />';
-		}
-	  return $str;
+		$this->LoadMiscMethods();
+		return cms_module_GetAbout($this);
 	}
 
 	/**
@@ -793,41 +189,8 @@ class CMSModule
 	 */
 	function GetHelpPage()
 	{
-	  $str = '';
-	  @ob_start();
-	  echo $this->GetHelp();
-	  $str .= @ob_get_contents();
-	  @ob_end_clean();
-	  $dependencies = $this->GetDependencies();
-	  if (count($dependencies) > 0 )
-		{
-		  $str .= '<h3>'.lang('dependencies').'</h3>';
-		  $str .= '<ul>';
-		  foreach( $dependencies as $dep => $ver )
-		{
-		  $str .= '<li>';
-		  $str .= $dep.' =&gt; '.$ver;
-		  $str .= '</li>';
-		}
-		  $str .= '</ul>';
-		}
-	  $paramarray = $this->GetParameters();
-	  if (count($paramarray) > 0)
-		{
-		  $str .= '<h3>'.lang('parameters').'</h3>';
-		  $str .= '<ul>';
-		  foreach ($paramarray as $oneparam)
-		{
-		  $str .= '<li>';
-		  if ($oneparam['optional'] == true)
-			{
-			  $str .= '<em>(optional)</em> ';
-			}
-		  $str .= $oneparam['name'].'="'.$oneparam['default'].'" - '.$oneparam['help'].'</li>';
-		}
-		  $str .= '</ul>';
-		}
-	  return $str;
+		$this->LoadMiscMethods();
+		return cms_module_GetHelpPage($this);
 	}
 
 	/**
@@ -1080,23 +443,8 @@ class CMSModule
 	 */
 	function Install()
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) .
-		'/modules/'.$this->GetName().'/method.install.php';
-	  if (@is_file($filename))
-		{
-		  {
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-		$smarty =& $gCms->GetSmarty();
-
-		include($filename);
-		  }
-		}
-	  else
-		{
-		  return FALSE;
-		}
+		$this->LoadInstallMethods();
+		return cms_module_Install($this);
 	}
 
 	/**
@@ -1115,23 +463,8 @@ class CMSModule
 	 */
 	function Uninstall()
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) .
-		'/modules/'.$this->GetName().'/method.uninstall.php';
-	  if (@is_file($filename))
-		{
-		  {
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-		$smarty =& $gCms->GetSmarty();
-
-		include($filename);
-		  }
-		}
-	  else
-		{
-		  return FALSE;
-		}
+		$this->LoadInstallMethods();
+		return cms_module_Uninstall($this);
 	}
 
 	/**
@@ -1157,26 +490,15 @@ class CMSModule
 	 * return a string message if there is a failure. Returning nothing (FALSE)
 	 * will allow the upgrade procedure to proceed. Upgrades should have a path
 	 * so that they can be upgraded from more than one version back.  While not
-	 * a requirement, it makes like easy for your users.
+	 * a requirement, it makes life easy for your users.
 	 *
 	 * @param string The version we are upgrading from
 	 * @param string The version we are upgrading to
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
-	  $filename = dirname(dirname(dirname(__FILE__))) .
-		'/modules/'.$this->GetName().'/method.upgrade.php';
-	  if (@is_file($filename))
-		{
-		  {
-		global $gCms;
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-		$smarty =& $gCms->GetSmarty();
-
-		include($filename);
-		  }
-		}
+		$this->LoadInstallMethods();
+		return cms_module_Upgrade($this, $oldversion, $newversion);
 	}
 
 	/**
@@ -1242,63 +564,9 @@ class CMSModule
 	 */
 	function CreateXMLPackage( &$message, &$filecount )
 	{
-	  // get a file list
-	  $filecount = 0;
-	  $dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$this->GetName();
-	  $files = get_recursive_file_list( $dir, $this->xml_exclude_files );
-
-	  $xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
-	  $xmltxt .= $this->xmldtd."\n";
-	  $xmltxt .= "<module>\n";
-		  $xmltxt .= "	<dtdversion>".MODULE_DTD_VERSION."</dtdversion>\n";
-	  $xmltxt .= "	<name>".$this->GetName()."</name>\n";
-	  $xmltxt .= "	<version>".$this->GetVersion()."</version>\n";
-	  $xmltxt .= "  <mincmsversion>".$this->MinimumCMSVersion()."</mincmsversion>\n";
-	  $xmltxt .= "	<help>".base64_encode($this->GetHelpPage())."</help>\n";
-	  $xmltxt .= "	<about>".base64_encode($this->GetAbout())."</about>\n";
-	  $desc = $this->GetAdminDescription();
-	  if( $desc != '' )
-		{
-		  $xmltxt .= "	<description>".$desc."</description>\n";
-		}
-	  $depends = $this->GetDependencies();
-	  foreach( $depends as $key=>$val )
-		{
-		  $xmltxt .= "	<requires>\n";
-			  $xmltxt .= "	  <requiredname>$key</requiredname>\n";
-			  $xmltxt .= "	  <requiredversion>$val</requiredversion>\n";
-		  $xmltxt .= "	</requires>\n";
-		}
-	  foreach( $files as $file )
-		{
-		  // strip off the beginning
-		  if (substr($file,0,strlen($dir)) == $dir)
-			 {
-			 $file = substr($file,strlen($dir));
-			 }
-		  if( $file == '' ) continue;
-
-		  $xmltxt .= "	<file>\n";
-		  $filespec = $dir.DIRECTORY_SEPARATOR.$file;
-		  $xmltxt .= "	  <filename>$file</filename>\n";
-		  if( @is_dir( $filespec ) )
-		{
-		  $xmltxt .= "	  <isdir>1</isdir>\n";
-		}
-		  else
-		{
-		  $xmltxt .= "	  <isdir>0</isdir>\n";
-		  $data = base64_encode(file_get_contents($filespec));
-		  $xmltxt .= "	  <data><![CDATA[".$data."]]></data>\n";
-		}
-
-		  $xmltxt .= "	</file>\n";
-		  ++$filecount;
-		}
-		  $xmltxt .= "</module>\n";
-	  $message = 'XML package of '.strlen($xmltxt).' bytes created for '.$this->GetName();
-	  $message .= ' including '.$filecount.' files';
-	  return $xmltxt;
+		global $gCms;
+		$modops =& $gCms->GetModuleOperations();
+		return $modops->CreateXmlPackage($this, $message, $filecount);
 	}
 
 
@@ -2040,22 +1308,19 @@ class CMSModule
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Any additional text that should be added into the legend tag when rendered
 	 */
-        function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
-        {
-	       $text = '<fieldset '. $addtext. '>'."\n";
-	       $text .= '<legend '. $addtext_legend .'>'."\n";
-	       $text .= $legend_text;
-	       $text .= '</legend>';
-	       return $text;
+	function CreateFieldsetStart( $id, $name, $legend_text='', $addtext='', $addtext_legend='' )
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateFieldsetStart($this, $id, $name, $legend_text, $addtext, $addtext_legend);
 	}
 
-        /**
-	 * Returns the end of the fieldset in a  form.  This is basically just a wrapper around </form>, but
-	 * could be extended later on down the road.  It's here mainly for consistency.
-	 */
-        function CreateFieldsetEnd()
-        {
-	       return '</fieldset>'."\n";
+	/**
+	* Returns the end of the fieldset in a  form.  This is basically just a wrapper around </form>, but
+	* could be extended later on down the road.  It's here mainly for consistency.
+	*/
+	function CreateFieldsetEnd()
+	{
+		return '</fieldset>'."\n";
 	}
 
 
@@ -2093,62 +1358,8 @@ class CMSModule
 	 */
 	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
 	{
-		global $gCms;
-
-		$formcount = 1;
-		$variables = &$gCms->variables;
-
-		if (isset($variables['formcount']))
-			$formcount = $variables['formcount'];
-
-		if ($idsuffix == '')
-			$idsuffix = $formcount;
-
-		$goto = ($returnid==''?'moduleinterface.php':'index.php');
-		#$goto = 'moduleinterface.php';
-		if ($inline && $returnid != '')
-		{
-			#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-			#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
-			#$goto .= '&amp;'.$id.'returnid='.$returnid;
-			#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-		}
-		$text = '<form id="'.$id.'moduleform-'.$idsuffix.'" name="'.$id.'moduleform-'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
-		if ($enctype != '')
-		{
-			$text .= ' enctype="'.$enctype.'"';
-		}
-		/*
-		$text .= '><div class="hidden"><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
-		if ($action != '')
-		{
-			$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
-		}
-		*/
-		if ($extra != '')
-		{
-			$text .= ' '.$extra;
-		}
-		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$this->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />';
-		if ($returnid != '')
-		{
-			$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
-			if ($inline)
-			{
-				$text .= '<input type="hidden" name="'.$this->cms->config['query_var'].'" value="'.$returnid.'" />';
-			}
-		}
-		foreach ($params as $key=>$value)
-		{
-			if ($key != 'module' && $key != 'action' && $key != 'id')
-				$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />';
-		}
-		$text .= "</div>\n";
-
-		$formcount = $formcount + 1;
-		$variables['formcount'] = $formcount;
-
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
 	}
 
 	/**
@@ -2173,14 +1384,8 @@ class CMSModule
 	 */
 	function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 	{
-		$value = str_replace('"', '&quot;', $value);
-		$text = '<input type="text" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		$text .= " />\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
 	}
 
 
@@ -2199,13 +1404,8 @@ class CMSModule
 	 */
 	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 	{
-	        if ($label == '') {
-		  $label = $name;
-		}
-		$text = '<label for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
-		$text .= $this->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
-		$text .= "\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext);
 	}
 
 	/**
@@ -2220,17 +1420,8 @@ class CMSModule
 	 */
 	function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
 	{
-		$text='<input type="file" name="'.$id.$name.'" size="'.$size.'"';
-		if ($accept != '')
-		{
-			$text .= ' accept="' . $accept.'"';
-		}
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		$text .= " />\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
 	}
 
 	/**
@@ -2246,14 +1437,8 @@ class CMSModule
 	 */
 	function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 	{
-		$value = str_replace('"', '&quot;', $value);
-		$text = '<input type="password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		$text .= " />\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
 	}
 
 	/**
@@ -2267,14 +1452,8 @@ class CMSModule
 	 */
 	function CreateInputHidden($id, $name, $value='', $addttext='')
 	{
-		$value = str_replace('"', '&quot;', $value);
-		$text = '<input type="hidden" name="'.$id.$name.'" value="'.$value.'"';
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		$text .= " />\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
 	}
 
 	/**
@@ -2288,17 +1467,8 @@ class CMSModule
 	 */
 	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
 	{
-		$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
-		if ($selectedvalue == $value)
-		{
-			$text .= ' ' . 'checked="checked"';
-		}
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		$text .= " />\n";
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
 	}
 
 
@@ -2314,32 +1484,8 @@ class CMSModule
 	 */
 	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
 	{
-		global $gCms;
-
-		$text = '<input name="'.$id.$name.'" value="'.$value.'" type=';
-
-		if ($image != '')
-		{
-			$text .= '"image"';
-			$img = $gCms->config['root_url'] . '/' . $image;
-			$text .= ' src="'.$img.'"';
-		}
-		else
-		{
-			$text .= '"submit"';
-		}
-		if ($confirmtext != '' )
-		  {
-			$text .= 'onclick="return confirm(\''.$confirmtext.'\');"';
-		  }
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-
-		$text .= ' />';
-
-		return $text . "\n";
+		$this->LoadFormMethods();
+		return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
 	}
 
 	/**
@@ -2353,13 +1499,8 @@ class CMSModule
 	 */
 	function CreateInputReset($id, $name, $value='Reset', $addttext='')
 	{
-		$text = '<input type="reset" name="'.$id.$name.'" value="'.$value.'"';
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		$text .= ' />';
-		return $text . "\n";
+		$this->LoadFormMethods();
+		return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
 	 }
 
 	/**
@@ -2372,13 +1513,8 @@ class CMSModule
 	 */
 	function CreateFileUploadInput($id, $name, $addttext='')
 	{
-		$text = '<input type="file" name="'.$id.$name.'"';
-		if ($addttext != '')
-		{
-			$text .= ' '.$addttext;
-		}
-		$text .= ' />';
-		return $text . "\n";
+		$this->LoadFormMethods();
+		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext);
 	}
 
 
@@ -2395,28 +1531,8 @@ class CMSModule
 	 */
 	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
 	{
-		$text = '<select name="'.$id.$name.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		$text .= '>';
-		$count = 0;
-		foreach ($items as $key=>$value)
-		{
-			$text .= '<option value="'.$value.'"';
-			if ($selectedindex == $count || $selectedvalue == $value)
-			{
-				$text .= ' ' . 'selected="selected"';
-			}
-			$text .= '>';
-			$text .= $key;
-			$text .= '</option>';
-			$count++;
-		}
-		$text .= '</select>'."\n";
-
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
 	}
 
 	/**
@@ -2433,32 +1549,8 @@ class CMSModule
 	 */
 	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 	{
-		$text = '<select name="'.$id.$name.'"';
-		if ($addttext != '')
-		{
-			$text .= ' ' . $addttext;
-		}
-		if( $multiple )
-		  {
-			$text .= ' multiple="multiple"';
-		  }
-		$text .= 'size="'.$size.'">';
-		$count = 0;
-		foreach ($items as $key=>$value)
-		{
-			$text .= '<option value="'.$value.'"';
-			if (in_array($value, $selecteditems))
-			{
-				$text .= ' ' . 'selected="selected"';
-			}
-			$text .= '>';
-			$text .= $key;
-			$text .= '</option>';
-			$count++;
-		}
-		$text .= '</select>'."\n";
-
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
 	}
 
 	/**
@@ -2474,23 +1566,8 @@ class CMSModule
 	 */
 	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 	{
-		$text = '';
-		foreach ($items as $key=>$value)
-		{
-			$text .= '<input type="radio" name="'.$id.$name.'" value="'.$value.'"';
-			if ($addttext != '')
-			{
-				$text .= ' ' . $addttext;
-			}
-			if ($selectedvalue == $value)
-			{
-				$text .= ' ' . 'checked="checked"';
-			}
-			$text .= ' />';
-			$text .= $key . $delimiter;
-		}
-
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
 	}
 
 	/**
@@ -2550,82 +1627,8 @@ class CMSModule
 	 */
 	function CreateLink($id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 	{
-		global $gCms;
-		$config =& $gCms->GetConfig();
-
-		$class = (isset($params['class'])?$params['class']:'');
-
-		if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
-		{
-			$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
-		}
-		else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
-		{
-			$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
-		}
-		else
-		{
-			$text = '';
-			if ($targetcontentonly || ($returnid != '' && !$inline))
-			{
-				$id = 'cntnt01';
-			}
-			$goto = 'index.php';
-			if ($returnid == '')
-			{
-				$goto = 'moduleinterface.php';
-			}
-			if (!$onlyhref)
-			{
-			}
-			$text .= $this->cms->config['root_url'];
-			if (!($returnid != '' && $returnid > -1))
-			{
-				$text .= '/'.$this->cms->config['admin_dir'];
-			}
-
-			#$text .= '/'.$goto.'?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-			$text .= '/'.$goto.'?mact='.$this->GetName().','.$id.','.$action.','.($inline == true?1:0);
-
-			foreach ($params as $key=>$value)
-			{
-				if ($key != 'module' && $key != 'action' && $key != 'id')
-					$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
-			}
-			if ($returnid != '')
-			{
-				$text .= '&amp;'.$id.'returnid='.$returnid;
-				if ($inline)
-				{
-					$text .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-				}
-			}
-		}
-
-		if (!$onlyhref)
-		{
-			$beginning = '<a';
-			if ($class != '')
-			{
-				$beginning .= ' class="'.$class.'"';
-			}
-			$beginning .= ' href="';
-			$text = $beginning . $text . "\"";
-			if ($warn_message != '')
-			{
-				$text .= ' onclick="return confirm(\''.$warn_message.'\');"';
-			}
-
-			if ($addttext != '')
-			{
-				$text .= ' ' . $addttext;
-			}
-
-			$text .= '>'.$contents.'</a>';
-
-			debug_buffer($text);
-		}
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateLink($this, $id, $action, $returnid, $contents, $params, $warn_message, $onlyhref, $inline, $addttext, $targetcontentonly, $prettyurl);
 	}
 
 	/**
@@ -2636,30 +1639,8 @@ class CMSModule
 	*/
 	function CreateContentLink($pageid, $contents='')
 	{
-		global $gCms;
-		$config = &$gCms->config;
-		$text = '<a href="';
-		if ($config["assume_mod_rewrite"])
-		{
-			# mod_rewrite
-			$alias = ContentManager::GetPageAliasFromID( $pageid );
-			if( $alias == false )
-			{
-				return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';
-			}
-			else
-			{
-				$text .= $config["root_url"]."/".$alias.
-				(isset($config['page_extension'])?$config['page_extension']:'.shtml');
-			}
-		}
-		else
-		{
-			# mod rewrite
-			$text .= $config["root_url"]."/index.php?".$config["query_var"]."=".$pageid;
-		}
-		$text .= '">'.$contents.'</a>';
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateContentLink($this, $pageid, $contents);
 	}
 
 
@@ -2675,52 +1656,8 @@ class CMSModule
 	 */
 	function CreateReturnLink($id, $returnid, $contents='', $params=array(), $onlyhref=false)
 	{
-		$text = '';
-		global $gCms;
-		$config = &$gCms->config;
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeById($returnid);
-		if (isset($node))
-		{
-			$content =& $node->GetContent();
-
-			if (isset($content))
-			{
-				if ($content->GetURL() != '')
-				{
-					if (!$onlyhref)
-					{
-						$text .= '<a href="';
-					}
-					$text .= $content->GetURL();
-
-					$count = 0;
-					foreach ($params as $key=>$value)
-					{
-						if ($count > 0)
-						{
-							if ($config["assume_mod_rewrite"] && $rewrite == true)
-								$text .= '?';
-							else
-								$text .= '&amp;';
-						}
-						else
-						{
-							$text .= '&amp;';
-						}
-						$text .= $id.$key.'='.$value;
-						$count++;
-					}
-					if (!$onlyhref)
-					{
-						$text .= "\"";
-						$text .= '>'.$contents.'</a>';
-					}
-				}
-			}
-		}
-
-		return $text;
+		$this->LoadFormMethods();
+		return cms_module_CreateReturnLink($this, $id, $returnid, $contents, $params, $onlyhref);
 	}
 
 
@@ -2750,49 +1687,8 @@ class CMSModule
 	 */
 	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
-		global $gCms;
-		$config = $gCms->config;
-
-		$name = $this->GetName();
-
-		#Suggestion by Calguy to make sure 2 actions don't get sent
-		if (isset($params['action']))
-		{
-			unset($params['action']);
-		}
-		if (isset($params['id']))
-		{
-			unset($params['id']);
-		}
-		if (isset($params['module']))
-		{
-			unset($params['module']);
-		}
-
-		if (!$inline && $returnid != '')
-			$id = 'cntnt01';
-
-		$text = '';
-		if ($returnid != '')
-		{
-			$text .= 'index.php';
-		}
-		else
-		{
-			$text .= 'moduleinterface.php';
-		}
-		#$text .= '?module='.$name.'&'.$id.'action='.$action.'&id='.$id;
-		$text .= '?mact='.$name.','.$id.','.$action.','.($inline == true?1:0);
-		if ($returnid != '')
-		{
-			$text .= '&'.$id.'returnid='.$returnid;
-		}
-		foreach ($params as $key=>$value)
-		{
-			$text .= '&'.$id.$key.'='.rawurlencode($value);
-		}
-		#var_dump($text);
-		redirect($text);
+		$this->LoadRedirectMethods();
+		return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
 	}
 
 	/**
@@ -2804,17 +1700,8 @@ class CMSModule
 	 */
 	function RedirectContent($id)
 	{
-		global $gCms;
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeByAlias($id);
-		$content =& $node->GetContent();
-		if (isset($content))
-		{
-			if ($content->GetURL() != '')
-			{
-				redirect($content->GetURL());
-			}
-		}
+		$this->LoadRedirectMethods();
+		return cms_module_RedirectContent($this, $id);
 	}
 
 	/**
@@ -2863,122 +1750,14 @@ class CMSModule
 	 */
 	function Lang()
 	{
-		global $gCms;
+		$this->LoadLangMethods();
+		
+		//Push $this onto front of array
+		$args = func_get_args();
+		array_unshift($args,'');
+		$args[0] = $this;
 
-		$name = '';
-		$params = array();
-
-		if (func_num_args() > 0)
-		{
-			$name = func_get_arg(0);
-			if (func_num_args() == 2 && is_array(func_get_arg(1)))
-			{
-				$params = func_get_arg(1);
-			}
-			else if (func_num_args() > 1)
-			{
-				$params = array_slice(func_get_args(), 1);
-			}
-		}
-		else
-		{
-			return '';
-		}
-
-		if ($this->curlang == '' && isset($gCms->current_language))
-		{
-			$this->curlang = $gCms->current_language;
-		}
-		$ourlang = $this->curlang;
-
-		#Load the language if it's not loaded
-		if (!isset($this->langhash[$ourlang]) || !is_array($this->langhash[$ourlang]) || 
-		    (is_array($this->langhash[$ourlang]) && count(array_keys($this->langhash[$ourlang])) == 0))
-		{
-			$dir = $gCms->config['root_path'];
-
-			$lang = array();
-
-			//First load the default language to remove any "Add Me's"
-			if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
-			{
-				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
-			}
-			else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
-			{
-				include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
-			}
-
-			//Now load the other language if necessary
-			if (count($lang) == 0 || $this->DefaultLanguage() != $ourlang)
-			{
-				if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php"))
-				{
-					include("$dir/modules/".$this->GetName()."/lang/$ourlang/$ourlang.php");
-				}
-				else if (@is_file("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php"))
-				{
-					include("$dir/modules/".$this->GetName()."/lang/ext/$ourlang.php");
-				}
-				else if (@is_file("$dir/modules/".$this->GetName()."/lang/$ourlang.php"))
-				{
-					include("$dir/modules/".$this->GetName()."/lang/$ourlang.php");
-				}
-				else if (count($lang) == 0)
-				{
-					if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php"))
-					{
-						include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage()."/".$this->DefaultLanguage().".php");
-					}
-					else if (@is_file("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php"))
-					{
-						include("$dir/modules/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
-					}
-				}
-				else
-				{
-					# Sucks to be here...  Don't use Lang unless there are language files...
-					# Get ready for a lot of Add Me's
-				}
-			}
-
-			# try to load an admin modifiable version of the lang file if one exists
-			if( @is_file("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php") )
-			{
-				include("$dir/module_custom/".$this->GetName()."/lang/".$this->DefaultLanguage().".php");
-			}
-
-			$this->langhash[$ourlang] = &$lang;
-		}
-
-		$result = '';
-
-		if (isset($this->langhash[$ourlang][$name]))
-		{
-			if (count($params))
-			{
-				$result = @vsprintf($this->langhash[$ourlang][$name], $params);
-			}
-			else
-			{
-				$result = $this->langhash[$ourlang][$name];
-			}
-		}
-		else
-		{
-			$result = "--Add Me - module:".$this->GetName()." string:$name--";
-		}
-
-		if (isset($gCms->config['admin_encoding']) && isset($gCms->variables['convertclass']))
-		{
-			if (strtolower(get_encoding('', false)) != strtolower($gCms->config['admin_encoding']))
-			{
-				$class =& $gCms->variables['convertclass'];
-				$result = $class->Convert($result, get_encoding('', false), $gCms->config['admin_encoding']);
-			}
-		}
-
-		return $result;
+		return call_user_func_array('cms_module_Lang', $args);
 	}
 
 	/**
@@ -2989,23 +1768,8 @@ class CMSModule
 
 	function ListTemplates($modulename = '')
 	{
-		global $gCms;
-
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-
-		$retresult = array();
-
-		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? ORDER BY template_name ASC';
-		$result =& $db->Execute($query, array($modulename != ''?$modulename:$this->GetName()));
-
-		while (isset($result) && !$result->EOF)
-		{
-			$retresult[] = $result->fields['template_name'];
-			$result->MoveNext();
-		}
-
-		return $retresult;
+		$this->LoadTemplateMethods();
+		return cms_module_ListTemplates($this, $modulename);
 	}
 
 	/**
@@ -3014,21 +1778,8 @@ class CMSModule
 	 */
 	function GetTemplate($tpl_name, $modulename = '')
 	{
-		global $gCms;
-
-		$db =& $gCms->GetDb();
-		$config =& $gCms->GetConfig();
-
-		$query = 'SELECT * from '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
-		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
-
-		if ($result && $result->RecordCount() > 0)
-		{
-			$row = $result->FetchRow();
-			return $row['content'];
-		}
-
-		return '';
+		$this->LoadTemplateMethods();
+		return cms_module_GetTemplate($this, $tpl_name, $modulename);
 	}
 
 	/**
@@ -3037,95 +1788,38 @@ class CMSModule
 	 */
 	function GetTemplateFromFile($template_name)
 	{
-		$tpl_base  = $this->cms->config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
-		$tpl_base .= $this->GetName().DIRECTORY_SEPARATOR.'templates';
-		$template = $tpl_base.DIRECTORY_SEPARATOR.$template_name.'.tpl';
-		if (is_file($template)) {
-			return file_get_contents($template);
-		}
-		else
-		{
-			return lang('errorinsertingtemplate');
-		}
+		$this->LoadTemplateMethods();
+		return cms_module_GetTemplateFromFile($this, $template_name);
 	}
 
 	function SetTemplate($tpl_name, $content, $modulename = '')
 	{
-		global $gCms;
-		$db =& $gCms->GetDB();
-
-		$query = 'SELECT module_name FROM '.cms_db_prefix().'module_templates WHERE module_name = ? and template_name = ?';
-		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
-
-		$time = $db->DBTimeStamp(time());
-		if ($result && $result->RecordCount() < 1)
-		{
-			$query = 'INSERT INTO '.cms_db_prefix().'module_templates (module_name, template_name, content, create_date, modified_date) VALUES (?,?,?,'.$time.','.$time.')';
-			$db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name, $content));
-		}
-		else
-		{
-			$query = 'UPDATE '.cms_db_prefix().'module_templates SET content = ?, modified_date = '.$time.' WHERE module_name = ? AND template_name = ?';
-			$db->Execute($query, array($content, $modulename != ''?$modulename:$this->GetName(), $tpl_name));
-		}
+		$this->LoadTemplateMethods();
+		return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
 	}
 
 	function DeleteTemplate($tpl_name, $modulename = '')
 	{
-		global $gCms;
-		$db =& $gCms->GetDB();
-
-		$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-		$result = $db->Execute($query, array($modulename != ''?$modulename:$this->GetName(), $tpl_name));
+		$this->LoadTemplateMethods();
+		return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
 	}
 
 	function IsFileTemplateCached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 	{
-		global $gCms;
-		$smarty = &$this->smarty;
-		$oldcache = $smarty->caching;
-		$smarty->caching = false;
-		$result = $smarty->is_cached('module_file_tpl:'.$this->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$this->GetName()));
-
-		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
-		{
-			$smarty->clear_cache('module_file_tpl:'.$this->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$this->GetName()));
-			$result = false;
-		}
-
-		$smarty->caching = $oldcache;
-		return $result;
+		$this->LoadTemplateMethods();
+		return cms_module_IsFileTemplateCached($this, $tpl_name, $designation, $timestamp, $cacheid);
 	}
 
 	function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
 	{
-		$smarty = &$this->smarty;
-
-		$oldcache = $smarty->caching;
-		$smarty->caching = false;
-
-		$result = $smarty->fetch('module_file_tpl:'.$this->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$this->GetName()));
-		$smarty->caching = $oldcache;
-
-		return $result;
+		$this->LoadTemplateMethods();
+		return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
 	}
 
 	function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
 	{
-		global $gCms;
-		$smarty = &$this->smarty;
-		$oldcache = $smarty->caching;
-		$smarty->caching = false;
-		$result = $smarty->is_cached('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
-
-		if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))
-		{
-			$smarty->clear_cache('module_file_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
-			$result = false;
-		}
-
-		$smarty->caching = $oldcache;
-		return $result;
+		$this->LoadTemplateMethods();
+		return cms_module_IsDatabaseTemplateCached($this, $tpl_name, $designation, $timestamp);
 	}
 
 	/**
@@ -3134,26 +1828,14 @@ class CMSModule
 	 */
 	function ProcessTemplateFromData( $data )
 	{
-	  $this->smarty->_compile_source('temporary template', $data, $_compiled );
-	  @ob_start();
-	  $this->smarty->_eval('?>' . $_compiled);
-	  $_contents = @ob_get_contents();
-	  @ob_end_clean();
-	  return $_contents;
+		$this->LoadTemplateMethods();
+		return cms_module_ProcessTemplateFromData($this, $data);
 	}
 
 	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false)
 	{
-		$smarty = &$this->smarty;
-
-		$oldcache = $smarty->caching;
-		$smarty->caching = false;
-
-		$result = $smarty->fetch('module_db_tpl:'.$this->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$this->GetName()));
-
-		$smarty->caching = $oldcache;
-
-		return $result;
+		$this->LoadTemplateMethods();
+		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache);
 	}
 
 	function ListUserTags()
@@ -3346,8 +2028,6 @@ class CMSModule
 		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
 
-
-
 	/**
 	 * Creates a string containing links to all the pages.
 	 * @param string The id given to the module on execution
@@ -3360,60 +2040,8 @@ class CMSModule
 	 */
 	function CreatePagination($id, $action, $returnid, $page, $totalrows, $limit, $inline=false)
 	{
-		$goto = 'index.php';
-		if ($returnid == '')
-		{
-			$goto = 'moduleinterface.php';
-		}
-		$link = '<a href="'.$goto.'?module='.$this->GetName().'&amp;'.$id.'returnid='.$id.$returnid.'&amp;'.$id.'action=' . $action .'&amp;'.$id.'page=';
-		if ($inline)
-		{
-			$link .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-		}
-		$page_string = "";
-		$from = ($page * $limit) - $limit;
-		$numofpages = floor($totalrows / $limit);
-		if ($numofpages * $limit < $totalrows)
-		{
-			$numofpages++;
-		}
-
-		if ($numofpages > 1)
-		{
-			if($page != 1)
-			{
-				$pageprev = $page-1;
-				$page_string .= $link.$pageprev."\">".lang('previous')."</a>&nbsp;";
-			}
-			else
-			{
-				$page_string .= lang('previous')." ";
-			}
-
-			for($i = 1; $i <= $numofpages; $i++)
-			{
-				if($i == $page)
-				{
-					 $page_string .= $i."&nbsp;";
-				}
-				else
-				{
-					 $page_string .= $link.$i."\">$i</a>&nbsp;";
-				}
-			}
-
-			if (($totalrows - ($limit * $page)) > 0)
-			{
-				$pagenext = $page+1;
-				$page_string .= $link.$pagenext."\">".lang('next')."</a>";
-			}
-			else
-			{
-				$page_string .= lang('next')." ";
-			}
-		}
-
-		return $page_string;
+		$this->LoadMiscMethods();
+		return cms_module_CreatePagination($this, $id, $action, $returnid, $page, $totalrows, $limit, $inline);
 	}
 
     /**
@@ -3468,7 +2096,7 @@ class CMSModule
 	*/
 	function AddEventHandler( $modulename, $eventname, $removable = true )
 	{
-	  Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
+		Events::AddEventHandler( $modulename, $eventname, false, $this->GetName(), $removable );
 	}
 
 
@@ -3481,7 +2109,7 @@ class CMSModule
 	 */
 	function CreateEvent( $eventname )
 	{
-	  Events::CreateEvent($this->GetName(), $eventname);
+		Events::CreateEvent($this->GetName(), $eventname);
 	}
 
 
@@ -3498,24 +2126,24 @@ class CMSModule
 	 */
 	function DoEvent( $originator, $eventname, &$params )
 	{
-	  if ($originator != '' && $eventname != '')
-	    {
-	      $filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
-		. $originator . "." . $eventname . '.php';
-
-	      if (@is_file($filename))
+		if ($originator != '' && $eventname != '')
 		{
-		  {
-		    global $gCms;
-		    $db =& $gCms->GetDb();
-		    $config =& $gCms->GetConfig();
-		    $smarty =& $gCms->GetSmarty();
-		    
-		    include($filename);
-		    
-		  }
+			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
+			. $originator . "." . $eventname . '.php';
+
+			if (@is_file($filename))
+			{
+				{
+					global $gCms;
+					$db =& $gCms->GetDb();
+					$config =& $gCms->GetConfig();
+					$smarty =& $gCms->GetSmarty();
+
+					include($filename);
+
+				}
+			}
 		}
-	    }
 	}
 
 
@@ -3529,7 +2157,7 @@ class CMSModule
 	 */
 	function GetEventDescription( $eventname )
 	{
-	  return "";
+		return "";
 	}
 
 
@@ -3542,7 +2170,7 @@ class CMSModule
 	 */
 	function GetEventHelp( $eventname )
 	{
-	  return "";
+		return "";
 	}
 
 
@@ -3552,7 +2180,7 @@ class CMSModule
          */
 	function HandlesEvents()
 	{
-	  return false;
+		return false;
 	}
 
 	/**
@@ -3568,7 +2196,7 @@ class CMSModule
 	 */
 	function RemoveEvent( $eventname )
 	{
-	  Events::RemoveEvent($this->GetName(), $eventname);
+		Events::RemoveEvent($this->GetName(), $eventname);
 	}
 
 	/**
@@ -3584,8 +2212,7 @@ class CMSModule
 	 */
 	function RemoveEventHandler( $modulename, $eventname )
 	{
-	  Events::RemoveEventHandler($modulename, $eventname, false, 
-				     $this->GetName());
+		Events::RemoveEventHandler($modulename, $eventname, false, $this->GetName());
 	}
 
 
@@ -3618,7 +2245,6 @@ class CMSModuleContentType extends ContentBase
 		return '';
 	}
 
-
 	function Lang($name, $params=array())
 	{
 		global $gCms;
@@ -3631,13 +2257,12 @@ class CMSModuleContentType extends ContentBase
 		{
 			return 'ModuleName() not defined properly';
 		}
-        }
-
+	}
 
 	/*
-	 * Returns the instance of the module this content type belongs to
-	 *
-	 */
+	* Returns the instance of the module this content type belongs to
+	*
+	*/
 	function GetModuleInstance() 
 	{
 		global $gCms;
@@ -3651,7 +2276,6 @@ class CMSModuleContentType extends ContentBase
 			return 'ModuleName() not defined properly';
 		}
 	}
-
 }
 
 # vim:ts=4 sw=4 noet
