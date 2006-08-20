@@ -37,7 +37,7 @@
 		), 
 	    "zip"  =>Array("img"=>"fzip","desc"=>"Zip archive",
 			"link"=>Array(
-				"view"=>'/{file}'
+				"view"=>'{url_dir_file}'
 			),
 			"alias"=>Array("tar","gz","rar","arc")	
 		), 
