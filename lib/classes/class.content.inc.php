@@ -1514,15 +1514,15 @@ class ContentProperties
     /**
      * The (content type specific) allowed properties of the content.
     */
-     var $mAllowedPropertyNames;
+    var $mAllowedPropertyNames;
 
     /**
      * Generic constructor. Runs the SetInitialValues fuction.
      */
-    function ContentProperties($allowed_property_names = array())
+    function ContentProperties()
     {
 	$this->SetInitialValues();
-	$this->SetAllowedPropertyNames($allowed_property_names);
+	$this->SetAllowedPropertyNames(NULL);
     }
 
     /**
@@ -1596,7 +1596,7 @@ class ContentProperties
 	    while ($dbresult && !$dbresult->EOF)
 	    {
 		$prop_name = $dbresult->fields['prop_name'];
-		if (in_array($prop_name, $this->GetAllowedPropertyNames()))
+		if ($this->GetAllowedPropertyNames() == NULL || in_array($prop_name, $this->GetAllowedPropertyNames()))
         {
             if (!in_array($prop_name, $this->mPropertyNames))
             {
@@ -1622,10 +1622,10 @@ class ContentProperties
 	    $concat = '';
 
 	    $delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
-	    $dbresult = $db->Execute($delquery);			
+	    $dbresult = $db->Execute($delquery);
 	    foreach ($this->mPropertyValues as $key=>$value)
 	    {
-		if (in_array($key, $this->GetAllowedPropertyNames()))
+		if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
         {
 		$dbresult = $db->Execute($insquery, array(
 		    $content_id,

@@ -20,6 +20,12 @@
 
 class SectionHeader extends ContentBase
 {
+
+    function SectionHeader() {
+        $this->ContentBase();
+        $this->mProperties->SetAllowedPropertyNames(array());
+    }
+
     function FriendlyName()
     {
 	return 'Section Header';

@@ -20,6 +20,12 @@
 
 class Separator extends ContentBase
 {
+
+    function Separator() {
+        $this->ContentBase();
+        $this->mProperties->SetAllowedPropertyNames(array());
+    }
+    
     function FriendlyName()
     {
 	return 'Separator';
