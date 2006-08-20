@@ -366,6 +366,14 @@ function audit($itemid, $itemname, $action)
 	{
 		$userid = $_SESSION["cms_admin_user_id"];
 	}
+	else
+	{
+	    if (isset($_SESSION['login_user_id']))
+	    {
+		$userid = $_SESSION['login_user_id'];
+		$username = $_SESSION['login_user_username'];
+	    }
+	}
 
 	if (isset($_SESSION["cms_admin_username"]))
 	{

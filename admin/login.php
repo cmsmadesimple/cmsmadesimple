@@ -66,6 +66,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		debug_buffer("Starting login procedure.  Setting userid so that other pages will pick it up and set a cookie.");
 		#generate_user_object($oneuser->id);
 		$_SESSION['login_user_id'] = $oneuser->id;
+		$_SESSION['login_user_username'] = $oneuser->username;
 		$default_cms_lang = get_preference($oneuser->id, 'default_cms_language');
 		if ($default_cms_lang != '')
 		{
