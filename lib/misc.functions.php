@@ -356,6 +356,62 @@ function my_htmlentities($val)
 }
 
 
+/**
+ * Enter description here...
+ *
+ * @param unknown $val
+ * @return unknown
+ */
+function cms_utf8entities($val)
+{
+	if ($val == "")
+	{
+		return "";
+	}
+	$val = str_replace( "&#032;", " ", $val ); 
+
+	//Remove sneaky spaces 
+	// $val = str_replace( chr(0xCA), "", $val );   
+
+	$val = str_replace( "&"            , "\u0026"         , $val ); 
+#	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val ); 
+#	$val = str_replace( "-->"          , "--&#62;"       , $val ); 
+#	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val ); 
+	$val = str_replace( ">"            , "\u003E"          , $val ); 
+	$val = str_replace( "<"            , "\u003C"          , $val ); 
+	
+	
+	$val = str_replace( "\""           , "\u0022"        , $val ); 
+
+	// Uncomment it if you need to convert literal newlines 
+	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
+
+	#$val = preg_replace( "/\\$/"      , "&#036;"        , $val ); 
+
+	// Uncomment it if you need to remove literal carriage returns 
+	//$val = preg_replace( "/\r/"        , ""              , $val ); 
+
+	$val = str_replace( "!"            , "\u0021"         , $val ); 
+	$val = str_replace( "'"            , "\u0027"         , $val ); 
+	 
+	// Uncomment if you need to convert unicode chars 
+	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val ); 
+
+	// Strip slashes if not already done so. 
+
+	//if ( get_magic_quotes_gpc() ) 
+	//{ 
+	//	$val = stripslashes($val); 
+	//} 
+
+	// Swop user inputted backslashes 
+
+	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
+
+	return $val;
+}
+
+
 //Taken from http://www.webmasterworld.com/forum88/164.htm
 function nl2pnbr( $text )
 {

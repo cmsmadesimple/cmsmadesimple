@@ -583,7 +583,7 @@ if ($action == "showmoduleabout")
 	       if (!$modinstance->CheckForDependents())
 		 {
 		   $activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-		   $actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE?$modinstance->UninstallPreMessage():lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
+		   $actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 		 }
 	       else
 		 {
