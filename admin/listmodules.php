@@ -320,15 +320,50 @@ if ($action == "showmoduleabout")
     echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
   }
  else if ($action == "showmodulehelp")
-   {
-     if (isset($gCms->modules[$module]['object']))
-       {
-	 echo '<div class="pagecontainer">';
-	 echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('wikihelp', $module), 'wiki');
-	 echo $gCms->modules[$module]['object']->GetHelpPage();
-	 echo "</div>";
-       }
-     echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
+  {
+    if (isset($gCms->modules[$module]['object']))
+	{
+		echo '<div class="pagecontainer">';
+		// Commented out because of bug #914 and had to use code extra below
+		// echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('wikihelp', $module), 'wiki');
+		
+		$header  = '<div class="pageheader">';
+		$header .= lang('modulehelp', array($module));
+		$wikiUrl = $config['wiki_url'];
+		$module_name = $gCms->modules[$module]['object']->GetName();
+		// Turn ModuleName into _Module_Name
+		$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+		$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+		if ($moduleName{0} == '_')
+		{
+			$moduleName = substr($moduleName, 1);
+		}
+		// Include English translation of titles. (Can't find better way to get them)
+		$dirname = dirname(__FILE__);
+		include($dirname.'/lang/en_US/admin.inc.php');
+		$section = $lang['admin'][$gCms->modules[$module]['object']->GetAdminSection()];
+		$wikiUrl .= '/'.$section.'/'.$moduleName;
+		if (FALSE == get_preference($userid, 'hide_help_links'))
+		{
+			// Clean up URL
+			$wikiUrl = str_replace(' ', '_', $wikiUrl);
+			$wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+			
+			$help_title = lang('help_external');
+			
+			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
+			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+		}
+		
+		$header .= '</div>';
+		echo $header;     
+		
+		echo $gCms->modules[$module]['object']->GetHelpPage();
+		echo "</div>";
+	}
+
+	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
    }
  else if ($action == 'missingdeps')
    {
