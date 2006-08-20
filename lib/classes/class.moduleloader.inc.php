@@ -152,6 +152,8 @@ class ModuleLoader
 					$result->MoveNext();
 				}
 			}
+			
+			if ($result) $result->Close();
 		}
 	}
 

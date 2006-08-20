@@ -751,6 +751,7 @@ function do_cross_reference($parent_id, $parent_type, $content)
 				$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));
 				$result->MoveNext();
 			}
+			if ($result) $result->Close();
 		}
 	}
 }

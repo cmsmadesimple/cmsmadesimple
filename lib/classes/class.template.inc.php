@@ -139,6 +139,8 @@ class TemplateOperations
 			$result[] = $onetemplate;
 			$dbresult->MoveNext();
 		}
+		
+		if ($dbresult) $dbreuslt->Close();
 
 		return $result;
 	}
@@ -224,6 +226,8 @@ class TemplateOperations
 			$result[] = $dbresult->fields['t_date'];
 			$dbresult->MoveNext();
 		}
+		
+		if ($dbresult) $dbreuslt->Close();
 
 		return $result;
 	}

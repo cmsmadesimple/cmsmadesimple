@@ -479,6 +479,11 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 		$titleText = "Debug display of '$title':";
 	}
 	$titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
+	
+	if (function_exists('memory_get_usage'))
+	{
+		$titleText .= ' - ('.memory_get_usage().')';
+	}
 
 	ob_start();
 	if ($use_html)
@@ -797,6 +802,8 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text)
 		$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 		$db->Execute($query);
 	}
+	
+	if ($result) $result->Close();
 }
 
 

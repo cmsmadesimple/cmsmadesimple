@@ -178,6 +178,9 @@ function load_all_permissions($userid)
 		$perms[] =& $result->fields['permission_name'];
 		$result->MoveNext();
 	}
+	
+	if ($result) $result->Close();
+
 	$variables['userperms'] = $perms;
 }
 
@@ -236,6 +239,8 @@ function check_ownership($userid, $contentid = '')
 			$variables['ownerpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 	}
 
 	if (isset($gCms->variables['ownerpages']))
@@ -277,6 +282,8 @@ function check_authorship($userid, $contentid = '')
 			$variables['authorpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 	}
 
 	if (isset($gCms->variables['authorpages']))
@@ -314,6 +321,8 @@ function author_pages($userid)
 			$variables['authorpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
 		$result = &$db->Execute($query, array($userid));
@@ -323,6 +332,8 @@ function author_pages($userid)
 			$variables['authorpages'][] =& $result->fields['content_id'];
 			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 	}
 
 	return $variables['authorpages'];
@@ -411,6 +422,8 @@ function load_site_preferences()
 			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
 			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 	}
 
 	return $value;
@@ -455,6 +468,8 @@ function remove_site_preference($prefname)
 	{
 		unset($siteprefs[$prefname]);
 	}
+	
+	if ($result) $result->Close();
 }
 
 /**
@@ -478,6 +493,8 @@ function set_site_preference($prefname, $value)
 	{
 		$doinsert = false;
 	}
+	
+	if ($result) $result->Close();
 
 	if ($doinsert)
 	{
@@ -506,6 +523,8 @@ function load_all_preferences($userid)
 		$variables[$result->fields['preference']] = $result->fields['value'];
 		$result->MoveNext();
 	}
+	
+	if ($result) $result->Close();
 }
 
 /**
@@ -563,6 +582,8 @@ function set_preference($userid, $prefname, $value)
 	{
 		$doinsert = false;
 	}
+	
+	if ($result) $result->Close();
 
 	if ($doinsert)
 	{
@@ -632,6 +653,8 @@ function get_stylesheet($template_id, $media_type = '')
 		{
 			$css .= "\n".$cssline['css_text']."\n";
 		}
+		
+		if ($cssresult) $cssresult->Close();
 	}
 	else
 	{
@@ -681,6 +704,8 @@ function get_stylesheet_media_types($template_id)
 				$result[] =& $cssresult->fields['media_type'];
 			$cssresult->MoveNext();
 		}
+		
+		if ($cssresult) $cssresult->Close();
 	}
 
 	return $result;
@@ -839,6 +864,7 @@ function check_access($page_id)
 				return true;
 			}
 		}
+		if ($result) $result->Close();
 	}
 	return false;
 }

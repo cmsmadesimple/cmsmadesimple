@@ -535,146 +535,131 @@ class ContentBase
 	$this->mCachable = $cachable;
     }
 	
-    function Markup()
-    {
-	return $this->mMarkup;
-    }
-
-    function SetMarkup($markup)
-    {
-	$this->DoReadyForEdit();
-	$this->mMarkup = $markup;
-    }
-
-    function LastModifiedBy()
-    {
-	return $this->mLastModifiedBy;
-    }
-
-    function SetLastModifiedBy($lastmodifiedby)
-    {
-	$this->DoReadyForEdit();
-	$this->mLastModifiedBy = $lastmodifiedby;
-    }
-	
-    function SetAlias($alias)
-    {
-	$this->DoReadyForEdit();
-        global $gCms;
-
-        $tolower = false;
-
-        if ($alias == '')
-        {
-            $alias = trim($this->mMenuText);
-            $tolower = true;
-	    $alias = munge_string_to_url($alias, $tolower);
-	    // Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-	    $error = @ContentManager::CheckAliasError($alias);
-	    if ($error !== FALSE)
-	    {
-		if (FALSE == empty($alias))
-		{
-		    $alias_num_add = 2;
-		    // If a '-2' version of the alias already exists
-		    // Check the '-3' version etc.
-		    while (@ContentManager::CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
-		    {
-			$alias_num_add++;
-		    }
-		    $alias .= '-'.$alias_num_add;
-		}
-		else
-		{
-		    $alias = '';
-		}
-	    }
-        }
-
-	/*
-        // replacement.php is encoded utf-8 and must be the first modification of alias
-        include(dirname(dirname(__FILE__)) . '/replacement.php');
-        $alias = str_replace($toreplace, $replacement, $alias);
-        
-        // lowercase only on empty aliases
-        if ($tolower == 1)
+	function Markup()
 	{
-	    $alias = strtolower($alias);
+		return $this->mMarkup;
 	}
-            
-        $alias = preg_replace("/[^\w-]+/", "_", $alias);
-        $alias = trim($alias, '_');
-	*/
 
-	$this->mAlias = munge_string_to_url($alias, $tolower);
-    } 
+	function SetMarkup($markup)
+	{
+		$this->DoReadyForEdit();
+		$this->mMarkup = $markup;
+	}
+
+	function LastModifiedBy()
+	{
+		return $this->mLastModifiedBy;
+	}
+
+	function SetLastModifiedBy($lastmodifiedby)
+	{
+		$this->DoReadyForEdit();
+		$this->mLastModifiedBy = $lastmodifiedby;
+	}
+	
+	function SetAlias($alias)
+	{
+		$this->DoReadyForEdit();
+		global $gCms;
+
+		$tolower = false;
+
+		if ($alias == '')
+		{
+			$alias = trim($this->mMenuText);
+			$tolower = true;
+			$alias = munge_string_to_url($alias, $tolower);
+			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+			$error = @ContentManager::CheckAliasError($alias);
+			if ($error !== FALSE)
+			{
+				if (FALSE == empty($alias))
+				{
+					$alias_num_add = 2;
+					// If a '-2' version of the alias already exists
+					// Check the '-3' version etc.
+					while (@ContentManager::CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+					{
+						$alias_num_add++;
+					}
+					$alias .= '-'.$alias_num_add;
+				}
+				else
+				{
+					$alias = '';
+				}
+			}
+		}
+
+		$this->mAlias = munge_string_to_url($alias, $tolower);
+	} 
 	
     /**
      * Returns the menu text for this content
      */
-    function MenuText()
-    {
-	return $this->mMenuText;
-    }
+	function MenuText()
+	{
+		return $this->mMenuText;
+	}
 
-    function SetMenuText($menutext)
-    {
-	$this->DoReadyForEdit();
-	$this->mMenuText = $menutext;
-    }
+	function SetMenuText($menutext)
+	{
+		$this->DoReadyForEdit();
+		$this->mMenuText = $menutext;
+	}
 
     /**
      * Returns number of immediate child-content items of this content
      */
-    function ChildCount()
-    {
-	return $this->mChildCount;
-    }
+	function ChildCount()
+	{
+		return $this->mChildCount;
+	}
 
     /**
      * Returns the properties
      */
-    function Properties()
-    {
-	debug_buffer('properties called');
-	if ($this->mPropertiesLoaded == false)
+	function Properties()
 	{
-	    $this->mProperties->Load($this->mId);
-	    $this->mPropertiesLoaded = true;
+		debug_buffer('properties called');
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
+		return $this->mProperties;
 	}
-	return $this->mProperties;
-    }
 
-    function HasProperty($name)
-    {
-	return $this->mProperties->HasProperty($name);
-    }
-
-    function GetPropertyValue($name)
-    {
-	if ($this->mProperties->HasProperty($name))
+	function HasProperty($name)
 	{
-	    if ($this->mPropertiesLoaded == false)
-	    {
-		$this->mProperties->Load($this->mId);
-		$this->mPropertiesLoaded = true;
-	    }
-	    return $this->mProperties->GetValue($name);
+		return $this->mProperties->HasProperty($name);
 	}
-	return '';
-    }
+
+	function GetPropertyValue($name)
+	{
+		if ($this->mProperties->HasProperty($name))
+		{
+			if ($this->mPropertiesLoaded == false)
+			{
+				$this->mProperties->Load($this->mId);
+				$this->mPropertiesLoaded = true;
+			}
+			return $this->mProperties->GetValue($name);
+		}
+		return '';
+	}
     
-    function SetPropertyValue($name, $value)
-    {
-	debug_buffer('setpropertyvalue called');
-	$this->DoReadyForEdit();
-	if ($this->mPropertiesLoaded == false)
+	function SetPropertyValue($name, $value)
 	{
-	    $this->mProperties->Load($this->mId);
-	    $this->mPropertiesLoaded = true;
+		debug_buffer('setpropertyvalue called');
+		$this->DoReadyForEdit();
+		if ($this->mPropertiesLoaded == false)
+		{
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
+		$this->mProperties->SetValue($name, $value);
 	}
-	$this->mProperties->SetValue($name, $value);
-    }
 	
     /**
      * Function content types to use to say whether or not they should show
@@ -714,14 +699,14 @@ class ContentBase
     {
     }
 
-    function DoReadyForEdit()
-    {
-	if ($this->mReadyForEdit == false)
+	function DoReadyForEdit()
 	{
-	    $this->ReadyForEdit();
-	    $this->mReadyForEdit = true;
+		if ($this->mReadyForEdit == false)
+		{
+			$this->ReadyForEdit();
+			$this->mReadyForEdit = true;
+		}
 	}
-    }
 
     /**
      * Load the content of the object from an ID
@@ -732,102 +717,104 @@ class ContentBase
      * @returns bool		If it fails, the object comes back to initial values and returns FALSE
      *				If everything goes well, it returns TRUE
      */
-    function LoadFromId($id, $loadProperties = false)
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$db = &$gCms->GetDb();
-
-	$result = false;
-
-	if (-1 < $id)
+	function LoadFromId($id, $loadProperties = false)
 	{
-	    $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	    $row =& $db->Execute($query, array($id));
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$db = &$gCms->GetDb();
 
-	    if ($row && !$row->EOF)
-	    {
-		$this->mId                         = $row->fields["content_id"];
-		$this->mName                       = $row->fields["content_name"];
-		$this->mAlias                      = $row->fields["content_alias"];
-		$this->mOldAlias                   = $row->fields["content_alias"];
-		$this->mType                       = strtolower($row->fields["type"]);
-		$this->mOwner                      = $row->fields["owner_id"];
-		#$this->mProperties                = new ContentProperties();
-		$this->mParentId                   = $row->fields["parent_id"];
-		$this->mOldParentId                = $row->fields["parent_id"];
-		$this->mTemplateId                 = $row->fields["template_id"];
-		$this->mItemOrder                  = $row->fields["item_order"];
-		$this->mOldItemOrder               = $row->fields["item_order"];
-		$this->mMetadata                   = $row->fields['metadata'];
-		$this->mHierarchy                  = $row->fields["hierarchy"];
-		$this->mIdHierarchy                = $row->fields["id_hierarchy"];
-		$this->mHierarchyPath              = $row->fields["hierarchy_path"];
-		$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
-		$this->mMenuText                   = $row->fields['menu_text'];
-		$this->mMarkup                     = $row->fields['markup'];
-		$this->mTitleAttribute             = $row->fields['titleattribute'];
-		$this->mAccessKey                  = $row->fields['accesskey'];
-		$this->mTabIndex                   = $row->fields['tabindex'];
-		$this->mActive                     = ($row->fields["active"] == 1          ? true : false);
-		$this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
-		$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
-		$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
-		$this->mLastModifiedBy             = $row->fields["last_modified_by"];
-		$this->mCreationDate               = $row->fields["create_date"];
-		$this->mModifiedDate               = $row->fields["modified_date"];
+		$result = false;
 
-		$result = true;
-	    }
-	    else
-	    {
-		if (true == $config["debug"])
+		if (-1 < $id)
 		{
-		    # :TODO: Translate the error message
-		    $debug_errors .= "<p>Could not retrieve content from db</p>\n";
-		}
-	    }
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$row =& $db->Execute($query, array($id));
 
-	    if ($result && $loadProperties)
-	    {
-		if ($this->mPropertiesLoaded == false)
+			if ($row && !$row->EOF)
+			{
+				$this->mId                         = $row->fields["content_id"];
+				$this->mName                       = $row->fields["content_name"];
+				$this->mAlias                      = $row->fields["content_alias"];
+				$this->mOldAlias                   = $row->fields["content_alias"];
+				$this->mType                       = strtolower($row->fields["type"]);
+				$this->mOwner                      = $row->fields["owner_id"];
+				#$this->mProperties                = new ContentProperties();
+				$this->mParentId                   = $row->fields["parent_id"];
+				$this->mOldParentId                = $row->fields["parent_id"];
+				$this->mTemplateId                 = $row->fields["template_id"];
+				$this->mItemOrder                  = $row->fields["item_order"];
+				$this->mOldItemOrder               = $row->fields["item_order"];
+				$this->mMetadata                   = $row->fields['metadata'];
+				$this->mHierarchy                  = $row->fields["hierarchy"];
+				$this->mIdHierarchy                = $row->fields["id_hierarchy"];
+				$this->mHierarchyPath              = $row->fields["hierarchy_path"];
+				$this->mProperties->mPropertyNames = explode(',',$row->fields["prop_names"]);
+				$this->mMenuText                   = $row->fields['menu_text'];
+				$this->mMarkup                     = $row->fields['markup'];
+				$this->mTitleAttribute             = $row->fields['titleattribute'];
+				$this->mAccessKey                  = $row->fields['accesskey'];
+				$this->mTabIndex                   = $row->fields['tabindex'];
+				$this->mActive                     = ($row->fields["active"] == 1          ? true : false);
+				$this->mDefaultContent             = ($row->fields["default_content"] == 1 ? true : false);
+				$this->mShowInMenu                 = ($row->fields["show_in_menu"] == 1    ? true : false);
+				$this->mCachable                   = ($row->fields["cachable"] == 1        ? true : false);
+				$this->mLastModifiedBy             = $row->fields["last_modified_by"];
+				$this->mCreationDate               = $row->fields["create_date"];
+				$this->mModifiedDate               = $row->fields["modified_date"];
+
+				$result = true;
+			}
+			else
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+				}
+			}
+
+			if ($row) $row->Close();
+
+			if ($result && $loadProperties)
+			{
+				if ($this->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$this->mProperties->Load($this->mId);
+					$this->mPropertiesLoaded = true;
+				}
+
+				if (NULL == $this->mProperties)
+				{
+					$result = false;
+
+					# debug mode
+					if (true == $config["debug"])
+					{
+						# :TODO: Translate the error message
+						$debug_errors .= "<p>Could not load properties for content</p>\n";
+					}
+				}
+			}
+
+			if (false == $result)
+			{
+				$this->SetInitialValues();
+			}
+		}
+		else
 		{
-		    debug_buffer("load from id is loading properties");
-		    $this->mProperties->Load($this->mId);
-		    $this->mPropertiesLoaded = true;
+			# debug mode
+			if ($config["debug"] == true)
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>The id wasn't valid : $id</p>\n";
+			}
 		}
 
-		if (NULL == $this->mProperties)
-		{
-		    $result = false;
+		$this->Load();
 
-		    # debug mode
-		    if (true == $config["debug"])
-		    {
-			# :TODO: Translate the error message
-			$debug_errors .= "<p>Could not load properties for content</p>\n";
-		    }
-		}
-	    }
-
-	    if (false == $result)
-	    {
-		$this->SetInitialValues();
-	    }
+		return $result;
 	}
-	else
-	{
-	    # debug mode
-	    if ($config["debug"] == true)
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>The id wasn't valid : $id</p>\n";
-	    }
-	}
-
-	$this->Load();
-
-	return $result;
-    }
 
     /**
      * Load the content of the object from an array
@@ -838,74 +825,74 @@ class ContentBase
      * @returns	bool		If it fails, the object comes back to initial values and returns FALSE
      *				If everything goes well, it returns TRUE
      */
-    function LoadFromData($data, $loadProperties = false)
-    {
-	global $config, $debug_errors;
-
-	$result = true;
-
-	$this->mId                         = $data["content_id"];
-	$this->mName                       = $data["content_name"];
-	$this->mAlias                      = $data["content_alias"];
-	$this->mOldAlias                   = $data["content_alias"];
-	$this->mType                       = strtolower($data["type"]);
-	$this->mOwner                      = $data["owner_id"];
-	#$this->mProperties                = new ContentProperties();
-	$this->mParentId                   = $data["parent_id"];
-	$this->mOldParentId                = $data["parent_id"];
-        $this->mTemplateId                 = $data["template_id"];
-	$this->mItemOrder                  = $data["item_order"];
-	$this->mOldItemOrder               = $data["item_order"];
-	$this->mMetadata                   = $data['metadata'];
-	$this->mHierarchy                  = $data["hierarchy"];
-	$this->mIdHierarchy                = $data["id_hierarchy"];
-	$this->mHierarchyPath              = $data["hierarchy_path"];
-	$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
-	$this->mMenuText                   = $data['menu_text'];
-	$this->mMarkup                     = $data['markup'];
-	$this->mTitleAttribute             = $data['titleattribute'];
-	$this->mAccessKey                  = $data['accesskey'];
-	$this->mTabIndex                   = $data['tabindex'];
-	$this->mDefaultContent             = ($data["default_content"] == 1 ? true : false);
-	$this->mActive                     = ($data["active"] == 1          ? true : false);
-	$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
-	$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
-	$this->mLastModifiedBy             = $data["last_modified_by"];
-	$this->mCreationDate               = $data["create_date"];
-	$this->mModifiedDate               = $data["modified_date"];
-
-	if ($loadProperties == true)
+	function LoadFromData($data, $loadProperties = false)
 	{
-	    #$this->mProperties = ContentManager::LoadPropertiesFromData(strtolower($this->mType), $data);
-	    if ($this->mPropertiesLoaded == false)
-	    {
-		debug_buffer("load from data is loading properties");
-		$this->mProperties->Load($this->mId);
-		$this->mPropertiesLoaded = true;
-	    }
+		global $config, $debug_errors;
 
-	    if (NULL == $this->mProperties)
-	    {
-		$result = false;
+		$result = true;
 
-		# debug mode
-		if (true == $config["debug"])
+		$this->mId                         = $data["content_id"];
+		$this->mName                       = $data["content_name"];
+		$this->mAlias                      = $data["content_alias"];
+		$this->mOldAlias                   = $data["content_alias"];
+		$this->mType                       = strtolower($data["type"]);
+		$this->mOwner                      = $data["owner_id"];
+		#$this->mProperties                = new ContentProperties();
+		$this->mParentId                   = $data["parent_id"];
+		$this->mOldParentId                = $data["parent_id"];
+		$this->mTemplateId                 = $data["template_id"];
+		$this->mItemOrder                  = $data["item_order"];
+		$this->mOldItemOrder               = $data["item_order"];
+		$this->mMetadata                   = $data['metadata'];
+		$this->mHierarchy                  = $data["hierarchy"];
+		$this->mIdHierarchy                = $data["id_hierarchy"];
+		$this->mHierarchyPath              = $data["hierarchy_path"];
+		$this->mProperties->mPropertyNames = explode(',',$data["prop_names"]);
+		$this->mMenuText                   = $data['menu_text'];
+		$this->mMarkup                     = $data['markup'];
+		$this->mTitleAttribute             = $data['titleattribute'];
+		$this->mAccessKey                  = $data['accesskey'];
+		$this->mTabIndex                   = $data['tabindex'];
+		$this->mDefaultContent             = ($data["default_content"] == 1 ? true : false);
+		$this->mActive                     = ($data["active"] == 1          ? true : false);
+		$this->mShowInMenu                 = ($data["show_in_menu"] == 1    ? true : false);
+		$this->mCachable                   = ($data["cachable"] == 1        ? true : false);
+		$this->mLastModifiedBy             = $data["last_modified_by"];
+		$this->mCreationDate               = $data["create_date"];
+		$this->mModifiedDate               = $data["modified_date"];
+
+		if ($loadProperties == true)
 		{
-		    # :TODO: Translate the error message
-		    $debug_errors .= "<p>Could not load properties for content</p>\n";
+			#$this->mProperties = ContentManager::LoadPropertiesFromData(strtolower($this->mType), $data);
+			if ($this->mPropertiesLoaded == false)
+			{
+				debug_buffer("load from data is loading properties");
+				$this->mProperties->Load($this->mId);
+				$this->mPropertiesLoaded = true;
+			}
+
+			if (NULL == $this->mProperties)
+			{
+				$result = false;
+
+				# debug mode
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Could not load properties for content</p>\n";
+				}
+			}
 		}
-	    }
+
+		if (false == $result)
+		{
+			$this->SetInitialValues();
+		}
+
+		$this->Load();
+
+		return $result;
 	}
-
-	if (false == $result)
-	{
-	    $this->SetInitialValues();
-	}
-
-	$this->Load();
-
-	return $result;
-    }
 
     /**
      * Callback function for content types to use to preload content or other things if necessary.  This
@@ -919,48 +906,47 @@ class ContentBase
      * Save or update the content
      */
     # :TODO: This function should return something
-    function Save()
-    {
-	global $gCms;
-	foreach($gCms->modules as $key=>$value)
+	function Save()
 	{
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	    {
-		$gCms->modules[$key]['object']->ContentEditPre($this);
-	    }
-	}
-		
-	Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+		global $gCms;
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentEditPre($this);
+			}
+		}
 
-	if ($this->mPropertiesLoaded == false)
-	{
-	    debug_buffer('save is loading properties');
-	    $this->mProperties->Load($this->mId);
-	    $this->mPropertiesLoaded = true;
-	}
+		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 
-	if (-1 < $this->mId)
-	{
-	    $this->Update();
+		if ($this->mPropertiesLoaded == false)
+		{
+			debug_buffer('save is loading properties');
+			$this->mProperties->Load($this->mId);
+			$this->mPropertiesLoaded = true;
+		}
+
+		if (-1 < $this->mId)
+		{
+			$this->Update();
+		}
+		else
+		{
+			$this->Insert();
+		}
+
+		foreach($gCms->modules as $key=>$value)
+		{		
+			if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentEditPost($this);
+			}
+		}
+
+		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
-	else
-	{
-	    $this->Insert();
-	}
-		
-	foreach($gCms->modules as $key=>$value)
-	{		
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	    {
-		$gCms->modules[$key]['object']->ContentEditPost($this);
-	    }
-	}
-		
-	Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
-	
-    }
 
     /**
      * Update the content
@@ -971,105 +957,105 @@ class ContentBase
      * on the disk, it only knows its own content. It's the same here.
      */
     # :TODO: This function should return something
-    function Update()
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$db = &$gCms->GetDb();
-
-	$result = false;
-
-	#Figure out the item_order (if necessary)
-	if ($this->mItemOrder < 1)
+	function Update()
 	{
-	    $query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	    $row = &$db->GetRow($query,array($this->mParentId));
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$db = &$gCms->GetDb();
 
-	    if ($row)
-	    {
-		if ($row['new_order'] < 1)
+		$result = false;
+
+		#Figure out the item_order (if necessary)
+		if ($this->mItemOrder < 1)
 		{
-		    $this->mItemOrder = 1;
+			$query = "SELECT ".$db->IfNull('max(item_order)','0')." as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$row = &$db->GetRow($query,array($this->mParentId));
+
+			if ($row)
+			{
+				if ($row['new_order'] < 1)
+				{
+					$this->mItemOrder = 1;
+				}
+				else
+				{
+					$this->mItemOrder = $row['new_order'] + 1;
+				}
+			}
+		}
+
+		$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
+
+		$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
+		$dbresult = $db->Execute($query, array(
+			$this->mName,
+			$this->mOwner,
+			strtolower($this->mType),
+			$this->mTemplateId,
+			$this->mParentId,
+			($this->mActive == true         ? 1 : 0),
+			($this->mDefaultContent == true ? 1 : 0),
+			($this->mShowInMenu == true     ? 1 : 0),
+			($this->mCachable == true       ? 1 : 0),
+			$this->mMenuText,
+			$this->mAlias,
+			$this->mMetadata,
+			$this->mTitleAttribute,
+			$this->mAccessKey,
+			$this->mTabIndex,
+			$this->mModifiedDate,
+			$this->mItemOrder,
+			$this->mMarkup,
+			$this->mLastModifiedBy,
+			$this->mId
+			));
+
+		if (!$dbresult)
+		{
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Error updating content</p>\n";
+			}
+		}
+
+		if ($this->mOldParentId != $this->mParentId)
+		{
+			#Fix the item_order if necessary
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+			$result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
+
+			$this->mOldParentId = $this->mParentId;
+			$this->mOldItemOrder = $this->mItemOrder;
+		}
+
+		if (isset($this->mAdditionalEditors))
+		{
+			$query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+			$db->Execute($query, array($this->Id()));
+
+			foreach ($this->mAdditionalEditors as $oneeditor)
+			{
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+			}
+		}
+
+		if (NULL != $this->mProperties)
+		{
+			# :TODO: There might be some error checking there
+			debug_buffer('save from ' . __LINE__);
+			$this->mProperties->Save($this->mId);
 		}
 		else
 		{
-		    $this->mItemOrder = $row['new_order'] + 1;
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Error updating : the content has no properties</p>\n";
+			}
 		}
-	    }
 	}
-
-	$this->mModifiedDate = trim($db->DBTimeStamp(time()), "'");
-
-	$query = "UPDATE ".cms_db_prefix()."content SET content_name = ?, owner_id = ?, type = ?, template_id = ?, parent_id = ?, active = ?, default_content = ?, show_in_menu = ?, cachable = ?, menu_text = ?, content_alias = ?, metadata = ?, titleattribute = ?, accesskey = ?, tabindex = ?, modified_date = ?, item_order = ?, markup = ?, last_modified_by = ? WHERE content_id = ?";
-	$dbresult = $db->Execute($query, array(
-	    $this->mName,
-	    $this->mOwner,
-	    strtolower($this->mType),
-	    $this->mTemplateId,
-	    $this->mParentId,
-	    ($this->mActive == true         ? 1 : 0),
-	    ($this->mDefaultContent == true ? 1 : 0),
-	    ($this->mShowInMenu == true     ? 1 : 0),
-	    ($this->mCachable == true       ? 1 : 0),
-	    $this->mMenuText,
-	    $this->mAlias,
-	    $this->mMetadata,
-	    $this->mTitleAttribute,
-	    $this->mAccessKey,
-	    $this->mTabIndex,
-	    $this->mModifiedDate,
-	    $this->mItemOrder,
-	    $this->mMarkup,
-	    $this->mLastModifiedBy,
-	    $this->mId
-	));
-
-	if (!$dbresult)
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Error updating content</p>\n";
-	    }
-	}
-
-	if ($this->mOldParentId != $this->mParentId)
-	{
-	    #Fix the item_order if necessary
-	    $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	    $result = $db->Execute($query, array($this->mOldParentId,$this->mOldItemOrder));
-
-	    $this->mOldParentId = $this->mParentId;
-	    $this->mOldItemOrder = $this->mItemOrder;
-	}
-
-	if (isset($this->mAdditionalEditors))
-	{
-	    $query = "DELETE FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	    $db->Execute($query, array($this->Id()));
-
-	    foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-		$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-		$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
-	}
-
-	if (NULL != $this->mProperties)
-	{
-	    # :TODO: There might be some error checking there
-	    debug_buffer('save from ' . __LINE__);
-	    $this->mProperties->Save($this->mId);
-	}
-	else
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Error updating : the content has no properties</p>\n";
-	    }
-	}
-    }
 
     /**
      * Insert the content in the db
@@ -1077,98 +1063,98 @@ class ContentBase
     # :TODO: This function should return something
     # :TODO: Take care bout hierarchy here, it has no value !
     # :TODO: Figure out proper item_order
-    function Insert()
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$db = &$gCms->GetDb();
-
-	$result = false;
-
-	#Figure out the item_order
-	if ($this->mItemOrder < 1)
+	function Insert()
 	{
-	    $query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	    $row = &$db->Getrow($query, array($this->mParentId));
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$db = &$gCms->GetDb();
 
-	    if ($row)
-	    {
-		if ($row['new_order'] < 1)
+		$result = false;
+
+		#Figure out the item_order
+		if ($this->mItemOrder < 1)
 		{
-		    $this->mItemOrder = 1;
+			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$row = &$db->Getrow($query, array($this->mParentId));
+
+			if ($row)
+			{
+				if ($row['new_order'] < 1)
+				{
+					$this->mItemOrder = 1;
+				}
+				else
+				{
+					$this->mItemOrder = $row['new_order'] + 1;
+				}
+			}
+		}
+
+		$newid = $db->GenID(cms_db_prefix()."content_seq");
+		$this->mId = $newid;
+
+		$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
+
+		$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
+
+		$dbresult = $db->Execute($query, array(
+			$newid,
+			$this->mName,
+			$this->mAlias,
+			strtolower($this->mType),
+			$this->mOwner,
+			$this->mParentId,
+			$this->mTemplateId,
+			$this->mItemOrder,
+			$this->mHierarchy,
+			$this->mIdHierarchy,
+			($this->mActive == true         ? 1 : 0),
+			($this->mDefaultContent == true ? 1 : 0),
+			($this->mShowInMenu == true     ? 1 : 0),
+			($this->mCachable == true       ? 1 : 0),
+			$this->mMenuText,
+			$this->mMarkup,
+			$this->mMetadata,
+			$this->mTitleAttribute,
+			$this->mAccessKey,
+			$this->mTabIndex,
+			$this->mLastModifiedBy,
+			$this->mModifiedDate,
+			$this->mCreationDate
+			));
+
+		if (! $dbresult)
+		{
+			if ($config["debug"] == true)
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Error inserting content</p>\n";
+			}
+		}
+
+		if (NULL != $this->mProperties)
+		{
+			# :TODO: There might be some error checking there
+			debug_buffer('save from ' . __LINE__);
+			$this->mProperties->Save($newid);
 		}
 		else
 		{
-		    $this->mItemOrder = $row['new_order'] + 1;
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
+			}
 		}
-	    }
+		if (isset($this->mAdditionalEditors))
+		{
+			foreach ($this->mAdditionalEditors as $oneeditor)
+			{
+				$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
+				$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
+				$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
+			}
+		}
 	}
-
-	$newid = $db->GenID(cms_db_prefix()."content_seq");
-	$this->mId = $newid;
-
-	$this->mModifiedDate = $this->mCreationDate = trim($db->DBTimeStamp(time()), "'");
-
-	$query = "INSERT INTO ".$config["db_prefix"]."content (content_id, content_name, content_alias, type, owner_id, parent_id, template_id, item_order, hierarchy, id_hierarchy, active, default_content, show_in_menu, cachable, menu_text, markup, metadata, titleattribute, accesskey, tabindex, last_modified_by, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
-
-	$dbresult = $db->Execute($query, array(
-	    $newid,
-	    $this->mName,
-	    $this->mAlias,
-	    strtolower($this->mType),
-	    $this->mOwner,
-	    $this->mParentId,
-	    $this->mTemplateId,
-	    $this->mItemOrder,
-	    $this->mHierarchy,
-	    $this->mIdHierarchy,
-	    ($this->mActive == true         ? 1 : 0),
-	    ($this->mDefaultContent == true ? 1 : 0),
-	    ($this->mShowInMenu == true     ? 1 : 0),
-	    ($this->mCachable == true       ? 1 : 0),
-	    $this->mMenuText,
-	    $this->mMarkup,
-	    $this->mMetadata,
-	    $this->mTitleAttribute,
-	    $this->mAccessKey,
-	    $this->mTabIndex,
-	    $this->mLastModifiedBy,
-	    $this->mModifiedDate,
-	    $this->mCreationDate
-	));
-
-	if (! $dbresult)
-	{
-	    if ($config["debug"] == true)
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Error inserting content</p>\n";
-	    }
-	}
-
-	if (NULL != $this->mProperties)
-	{
-	    # :TODO: There might be some error checking there
-	    debug_buffer('save from ' . __LINE__);
-	    $this->mProperties->Save($newid);
-	}
-	else
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Error inserting : the content has no properties</p>\n";
-	    }
-	}
-	if (isset($this->mAdditionalEditors))
-	{
-	    foreach ($this->mAdditionalEditors as $oneeditor)
-	    {
-		$new_addt_id = $db->GenID(cms_db_prefix()."additional_users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."additional_users (additional_users_id, user_id, content_id) VALUES (?,?,?)";
-		$db->Execute($query, array($new_addt_id, $oneeditor, $this->Id()));
-	    }
-	}
-    }
 
     /**
      * Test if the array given contains valid data for the object
@@ -1180,92 +1166,92 @@ class ContentBase
      *
      * @returns	FALSE if data is ok, and an array of invalid parameters else
      */
-    function ValidateData()
-    {
-	return FALSE;
-    }
+	function ValidateData()
+	{
+		return FALSE;
+	}
 
     /**
      * Delete the content
      */
     # :TODO: This function should return something
-    function Delete()
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-
-	foreach($gCms->modules as $key=>$value)
+	function Delete()
 	{
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	    {
-		$gCms->modules[$key]['object']->ContentDeletePre($this);
-	    }
-	}
-		
-	Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
-		
-	$db = &$gCms->GetDb();
+		global $gCms, $config, $sql_queries, $debug_errors;
 
-	$result = false;
-
-        if (-1 > $this->mId)
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
-	    }
-	}
-	else
-	{
-	    $query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	    $dbresult = $db->Execute($query, array($this->mId));
-
-	    if (! $dbresult)
-	    {
-		if (true == $config["debug"])
+		foreach($gCms->modules as $key=>$value)
 		{
-		    # :TODO: Translate the error message
-		    $debug_errors .= "<p>Error deleting content</p>\n";
+			if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentDeletePre($this);
+			}
 		}
-	    }
-			
-	    #Fix the item_order if necessary
-	    $query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-	    $result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
 
-	    #Remove the cross references
-	    remove_cross_references($this->mId, 'content');
-	    
-	    $cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	    @unlink($cachefilename);
+		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
 
-	    if (NULL != $this->mProperties)
-	    {
-		# :TODO: There might be some error checking there
-		$this->mProperties->Delete($this->mId);
-	    }
-	    else
-	    {
-		if (true == $config["debug"])
+		$db = &$gCms->GetDb();
+
+		$result = false;
+
+		if (-1 > $this->mId)
 		{
-		    # :TODO: Translate the error message
-		    $debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Could not delete content : invalid Id</p>\n";
+			}
 		}
-	    }
+		else
+		{
+			$query = "DELETE FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$dbresult = $db->Execute($query, array($this->mId));
+
+			if (! $dbresult)
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Error deleting content</p>\n";
+				}
+			}
+
+			#Fix the item_order if necessary
+			$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+			$result = $db->Execute($query,array($this->ParentId(),$this->ItemOrder()));
+
+			#Remove the cross references
+			remove_cross_references($this->mId, 'content');
+
+			$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+			@unlink($cachefilename);
+
+			if (NULL != $this->mProperties)
+			{
+				# :TODO: There might be some error checking there
+				$this->mProperties->Delete($this->mId);
+			}
+			else
+			{
+				if (true == $config["debug"])
+				{
+					# :TODO: Translate the error message
+					$debug_errors .= "<p>Error deleting : the content has no properties</p>\n";
+				}
+			}
+		}
+
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+			$gCms->modules[$key]['active'] == true)
+			{
+				$gCms->modules[$key]['object']->ContentDeletePost($this);
+			}
+		}
+
+		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 	}
-		
-	foreach($gCms->modules as $key=>$value)
-	{
-	    if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	    {
-		$gCms->modules[$key]['object']->ContentDeletePost($this);
-	    }
-	}
-		
-	Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
-    }
 
     /**
      * Function for the subclass to parse out data for it's parameters (usually from $_POST)
@@ -1421,81 +1407,83 @@ class ContentBase
     /**
      * Does this have children?
      */
-    function HasChildren()
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$db = &$gCms->GetDb();
-
-	$result = false;
-
-	$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-	$row = &$db->Getrow($query, array($this->mId));
-
-	if ($row)
+	function HasChildren()
 	{
-	    $result = true;
-	}
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$db = &$gCms->GetDb();
 
-	return $result;
-    }
+		$result = false;
 
-    function GetAdditionalEditors()
-    {
-	if (!isset($this->mAdditionalEditors))
-	{
-	    global $gCms;
-	    $db = &$gCms->GetDb();
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+		$row = &$db->GetRow($query, array($this->mId));
 
-	    $this->mAdditionalEditors = array();
-
-	    $query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
-	    $dbresult = &$db->Execute($query,array($this->mId));
-
-	    while ($dbresult && !$dbresult->EOF)
-	    {
-		$this->mAdditionalEditors[] = $dbresult->fields['user_id'];
-		$dbresult->MoveNext();
-	    }
-	}
-	return $this->mAdditionalEditors;
-    }
-
-    function SetAdditionalEditors($editorarray)
-    {
-	$this->mAdditionalEditors = $editorarray;
-    }
-
-    function ShowAdditionalEditors()
-    {
-	$ret = array();
-
-	$ret[] = lang('additionaleditors');
-	$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
-
-	$allusers = UserOperations::LoadUsers();
-	$addteditors = $this->GetAdditionalEditors();
-	foreach ($allusers as $oneuser)
-	{
-	    if ($oneuser->id != $this->Owner())
-	    {
-		$text .= '<option value="'.$oneuser->id.'"';
-		if (in_array($oneuser->id, $addteditors))
+		if ($row)
 		{
-		    $text .= ' selected="selected"';
+			$result = true;
 		}
-		$text .= '>'.$oneuser->username.'</option>';
-	    }
-	}
-	
-	$text .= '</select>';
-	$ret[] = $text;
-	return $ret;
-    }
 
-    function IsDefaultPossible()
-    {
-	return FALSE;
-    }
+		return $result;
+	}
+
+	function GetAdditionalEditors()
+	{
+		if (!isset($this->mAdditionalEditors))
+		{
+			global $gCms;
+			$db = &$gCms->GetDb();
+
+			$this->mAdditionalEditors = array();
+
+			$query = "SELECT user_id FROM ".cms_db_prefix()."additional_users WHERE content_id = ?";
+			$dbresult = &$db->Execute($query,array($this->mId));
+
+			while ($dbresult && !$dbresult->EOF)
+			{
+				$this->mAdditionalEditors[] = $dbresult->fields['user_id'];
+				$dbresult->MoveNext();
+			}
+
+			if ($dbresult) $dbresult->Close();
+		}
+		return $this->mAdditionalEditors;
+	}
+
+	function SetAdditionalEditors($editorarray)
+	{
+		$this->mAdditionalEditors = $editorarray;
+	}
+
+	function ShowAdditionalEditors()
+	{
+		$ret = array();
+
+		$ret[] = lang('additionaleditors');
+		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
+
+		$allusers = UserOperations::LoadUsers();
+		$addteditors = $this->GetAdditionalEditors();
+		foreach ($allusers as $oneuser)
+		{
+			if ($oneuser->id != $this->Owner())
+			{
+				$text .= '<option value="'.$oneuser->id.'"';
+				if (in_array($oneuser->id, $addteditors))
+				{
+					$text .= ' selected="selected"';
+				}
+				$text .= '>'.$oneuser->username.'</option>';
+			}
+		}
+
+		$text .= '</select>';
+		$ret[] = $text;
+		return $ret;
+	}
+
+	function IsDefaultPossible()
+	{
+		return FALSE;
+	}
 }
 
 /**
@@ -1519,149 +1507,151 @@ class ContentProperties
     /**
      * Generic constructor. Runs the SetInitialValues fuction.
      */
-    function ContentProperties()
-    {
-	$this->SetInitialValues();
-	$this->SetAllowedPropertyNames(NULL);
-    }
+	function ContentProperties()
+	{
+		$this->SetInitialValues();
+		$this->SetAllowedPropertyNames(NULL);
+	}
 
     /**
      * Sets object to some sane initial values
      */
-    function SetInitialValues()
-    {
-	$this->mPropertyNames = array();
-	$this->mPropertyTypes = array();
-	$this->mPropertyValues = array();
-    }
-
-    function HasProperty($name)
-    {
-	#debug_buffer($this->mPropertyNames);
-	if (!isset($this->mPropertyNames))
-	    $this->mPropertyNames = array();
-	    return in_array($name, $this->mPropertyNames);
-    }
-
-    function Add($type, $name, $defaultvalue='')
-    {
-	//Handle names separately
-	if (!in_array($name, $this->mPropertyNames))
+	function SetInitialValues()
 	{
-	    $this->mPropertyNames[] = $name;
+		$this->mPropertyNames = array();
+		$this->mPropertyTypes = array();
+		$this->mPropertyValues = array();
 	}
-	if (!array_key_exists($name, $this->mPropertyValues))
-	{
-	    $this->mPropertyTypes[$name] = $type;
-	    $this->mPropertyValues[$name] = $defaultvalue;
-	}
-    }
 
-    function GetValue($name)
-    {
-	if (in_array($name, $this->mPropertyNames))
+	function HasProperty($name)
 	{
-	    if (count($this->mPropertyValues) > 0)
-	    {
-		if (array_key_exists($name, $this->mPropertyValues))
+		#debug_buffer($this->mPropertyNames);
+		if (!isset($this->mPropertyNames))
+		$this->mPropertyNames = array();
+		return in_array($name, $this->mPropertyNames);
+	}
+
+	function Add($type, $name, $defaultvalue='')
+	{
+		//Handle names separately
+		if (!in_array($name, $this->mPropertyNames))
 		{
-		    return $this->mPropertyValues[$name];
+			$this->mPropertyNames[] = $name;
 		}
-	    }
+		if (!array_key_exists($name, $this->mPropertyValues))
+		{
+			$this->mPropertyTypes[$name] = $type;
+			$this->mPropertyValues[$name] = $defaultvalue;
+		}
 	}
-    }
 
-    function SetValue($name, $value)
-    {
-	if (count($this->mPropertyValues) > 0)
+	function GetValue($name)
 	{
-	    if (in_array($name, $this->mPropertyNames))
-	    {
-		$this->mPropertyValues[$name] = $value;
-	    }
+		if (in_array($name, $this->mPropertyNames))
+		{
+			if (count($this->mPropertyValues) > 0)
+			{
+				if (array_key_exists($name, $this->mPropertyValues))
+				{
+					return $this->mPropertyValues[$name];
+				}
+			}
+		}
 	}
-    }
 
-    function Load($content_id)
-    {
-	debug_buffer('load properties called');
-	if (count($this->mPropertyNames) > 0)
+	function SetValue($name, $value)
 	{
-	    global $gCms, $config, $sql_queries, $debug_errors;
-	    $db = &$gCms->GetDb();
-
-	    $query = "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-	    $dbresult = &$db->Execute($query, array($content_id));
-
-	    while ($dbresult && !$dbresult->EOF)
-	    {
-		$prop_name = $dbresult->fields['prop_name'];
-		if ($this->GetAllowedPropertyNames() == NULL || in_array($prop_name, $this->GetAllowedPropertyNames()))
-        {
-            if (!in_array($prop_name, $this->mPropertyNames))
-            {
-                $this->mPropertyNames[] = $prop_name;
-            }
-            $this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
-            $this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
-        }
-		$dbresult->MoveNext();
-	    }
+		if (count($this->mPropertyValues) > 0)
+		{
+			if (in_array($name, $this->mPropertyNames))
+			{
+				$this->mPropertyValues[$name] = $value;
+			}
+		}
 	}
-    }
 
-    function Save($content_id)
-    {
-	if (count($this->mPropertyValues) > 0)
+	function Load($content_id)
 	{
-	    global $gCms, $config, $sql_queries, $debug_errors;
-	    $db = &$gCms->GetDb();
+		debug_buffer('load properties called');
+		if (count($this->mPropertyNames) > 0)
+		{
+			global $gCms, $config, $sql_queries, $debug_errors;
+			$db = &$gCms->GetDb();
 
-	    $insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
+			$query = "SELECT * FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+			$dbresult = &$db->Execute($query, array($content_id));
+
+			while ($dbresult && !$dbresult->EOF)
+			{
+				$prop_name = $dbresult->fields['prop_name'];
+				if ($this->GetAllowedPropertyNames() == NULL || in_array($prop_name, $this->GetAllowedPropertyNames()))
+				{
+					if (!in_array($prop_name, $this->mPropertyNames))
+					{
+						$this->mPropertyNames[] = $prop_name;
+					}
+					$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
+					$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
+				}
+				$dbresult->MoveNext();
+			}
 			
-	    $concat = '';
-
-	    $delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
-	    $dbresult = $db->Execute($delquery);
-	    foreach ($this->mPropertyValues as $key=>$value)
-	    {
-		if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
-        {
-		$dbresult = $db->Execute($insquery, array(
-		    $content_id,
-		    $this->mPropertyTypes[$key],
-		    $key,
-		    '',
-		    '',
-		    '',
-		    $this->mPropertyValues[$key],
-		));
-				
-		$concat .= $this->mPropertyValues[$key];
-
-		# debug mode
-		if (true == $config["debug"])
-		{
-		    $sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
+			if ($dbresult) $dbresult->Close();
 		}
-
-		if (! $dbresult)
-		{
-		    if (true == $config["debug"])
-		    {
-			# :TODO: Translate the error message
-			$debug_errors .= "<p>Error updating content property</p>\n";
-		    }
-		}
-	    }
-        }
-			
-	    if ($concat != '')
-	    {
-		do_cross_reference($content_id, 'content', $concat);
-	    }
 	}
-    }
+
+	function Save($content_id)
+	{
+		if (count($this->mPropertyValues) > 0)
+		{
+			global $gCms, $config, $sql_queries, $debug_errors;
+			$db = &$gCms->GetDb();
+
+			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
+
+			$concat = '';
+
+			$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
+			$dbresult = $db->Execute($delquery);
+			foreach ($this->mPropertyValues as $key=>$value)
+			{
+				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
+				{
+					$dbresult = $db->Execute($insquery, array(
+						$content_id,
+						$this->mPropertyTypes[$key],
+						$key,
+						'',
+						'',
+						'',
+						$this->mPropertyValues[$key],
+						));
+
+						$concat .= $this->mPropertyValues[$key];
+
+						# debug mode
+						if (true == $config["debug"])
+						{
+							$sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
+						}
+
+						if (! $dbresult)
+						{
+							if (true == $config["debug"])
+							{
+								# :TODO: Translate the error message
+								$debug_errors .= "<p>Error updating content property</p>\n";
+							}
+						}
+					}
+				}
+
+				if ($concat != '')
+				{
+					do_cross_reference($content_id, 'content', $concat);
+				}
+			}
+		}
 
     function Delete($content_id)
     {
@@ -1707,84 +1697,84 @@ class ContentManager
     /**
      * Determine proper type of object, load it and return it
      */
-    function &LoadContentFromId($id,$loadprops=true)
-    {
-	$result = FALSE;
-
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	$row = &$db->GetRow($query, array($id));
-	if ($row)
+	function &LoadContentFromId($id,$loadprops=true)
 	{
-	    #Make sure the type exists.  If so, instantiate and load
-	    if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-	    {
-		$classtype = strtolower($row['type']);
-		$contentobj = new $classtype; 
-		$contentobj->LoadFromData($row, FALSE);
-		
-		return $contentobj;
-	    }
-	    else
-	    {
-		return $result;
-	    }
-	}
-	else
-	{
-	    return $result;
-	}
-    }
+		$result = FALSE;
 
-    function &LoadContentFromAlias($alias, $only_active = false)
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
+		global $gCms;
+		$db = &$gCms->GetDb();
 
-	$row = '';
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$row = &$db->GetRow($query, array($id));
+		if ($row)
+		{
+			#Make sure the type exists.  If so, instantiate and load
+			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
+			{
+				$classtype = strtolower($row['type']);
+				$contentobj = new $classtype; 
+				$contentobj->LoadFromData($row, FALSE);
 
-	if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
-	{
-	    //$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ? OR content_alias = ?";
-	    $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	    if ($only_active == true)
-	    {
-		$query .= " AND active = 1";
-	    }
-	    $row = &$db->GetRow($query, array($alias,$alias));
-	}
-	else
-	{
-	    $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-	    if ($only_active == true)
-	    {
-	        $query .= " AND active = 1";
-	    }
-	    $row = &$db->GetRow($query, array($alias));
+				return $contentobj;
+			}
+			else
+			{
+				return $result;
+			}
+		}
+		else
+		{
+			return $result;
+		}
 	}
 
-	if ($row)
+	function &LoadContentFromAlias($alias, $only_active = false)
 	{
-	    #Make sure the type exists.  If so, instantiate and load
-	    if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-	    {
-		$classtype = strtolower($row['type']);
-		$contentobj = new $classtype;
-		$contentobj->LoadFromData($row, TRUE);
-		return $contentobj;
-	    }
-	    else
-	    {
-		return FALSE;
-	    }
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$row = '';
+
+		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
+		{
+			//$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ? OR content_alias = ?";
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			if ($only_active == true)
+			{
+				$query .= " AND active = 1";
+			}
+			$row = &$db->GetRow($query, array($alias,$alias));
+		}
+		else
+		{
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			if ($only_active == true)
+			{
+				$query .= " AND active = 1";
+			}
+			$row = &$db->GetRow($query, array($alias));
+		}
+
+		if ($row)
+		{
+			#Make sure the type exists.  If so, instantiate and load
+			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
+			{
+				$classtype = strtolower($row['type']);
+				$contentobj = new $classtype;
+				$contentobj->LoadFromData($row, TRUE);
+				return $contentobj;
+			}
+			else
+			{
+				return FALSE;
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
-	else
-	{
-	    return FALSE;
-	}
-    }
 
      /**
      * Load the content of the object from a list of ID
@@ -1794,89 +1784,90 @@ class ContentManager
      *
      * @returns array of content objects (empty if not found)
      */
-    /*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$cpt = count($ids);
-	$contents=array();
-	if ($cpt==0) 
+	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
 	{
-	    return $contents;
-	}
-	$db = &$gCms->GetDb();
-	$id_list = '(';
-	for ($i=0;$i<$cpt;$i++) 
-	{
-	    $id_list .= $ids[$i];
-    	    if ($i<$cpt-1)
-	    {
-		$id_list .= ',';
-	    }
-	}
-	$id_list .= ')';
-	if ($id_list=='()') 
-	{
-	     return $contents;
-	}
-	$result = false;
-	$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
-	$rows   =& $db->Execute($query);
-
-	if ($rows)
-	{
-	    while (isset($rows) && $row = &$rows->FetchRow())
-	    {
-		if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$cpt = count($ids);
+		$contents=array();
+		if ($cpt==0) 
 		{
-		    $classtype = strtolower($row['type']);
-		    $contentobj = new $classtype; 
-		    $contentobj->LoadFromData($row,false);
-		    $contents[]=$contentobj;
-		    $result = true;
+			return $contents;
 		}
-	    }
-	}
-	if (!$result)
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-	    }
-	}
-
-	if ($result && $loadProperties)
-	{
-	    foreach ($contents as $content) 
-	    {
-		if ($content->mPropertiesLoaded == false)
+		$db = &$gCms->GetDb();
+		$id_list = '(';
+		for ($i=0;$i<$cpt;$i++) 
 		{
-		    debug_buffer("load from id is loading properties");
-		    $content->mProperties->Load($content->mId);
-		    $content->mPropertiesLoaded = true;
+			$id_list .= $ids[$i];
+			if ($i<$cpt-1)
+			{
+				$id_list .= ',';
+			}
 		}
-  
-		if (NULL == $content->mProperties)
+		$id_list .= ')';
+		if ($id_list=='()') 
 		{
-		    $result = false;
-  
-		    # debug mode
-		    if (true == $config["debug"])
-		    {
-			# :TODO: Translate the error message
-			$debug_errors .= "<p>Could not load properties for content</p>\n";
-		    }
+			return $contents;
 		}
-	    }
-	}
-    
-	foreach ($contents as $content) 
-	{
-	    $content->Load();
-	}
+		$result = false;
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
+		$rows   =& $db->Execute($query);
 
-	return $contents;
-    }
+		if ($rows)
+		{
+			while (isset($rows) && $row = &$rows->FetchRow())
+			{
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
+				{
+					$classtype = strtolower($row['type']);
+					$contentobj = new $classtype; 
+					$contentobj->LoadFromData($row,false);
+					$contents[]=$contentobj;
+					$result = true;
+				}
+			}
+			$rows->Close();
+		}
+		if (!$result)
+		{
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+			}
+		}
+
+		if ($result && $loadProperties)
+		{
+			foreach ($contents as $content) 
+			{
+				if ($content->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$content->mProperties->Load($content->mId);
+					$content->mPropertiesLoaded = true;
+				}
+
+				if (NULL == $content->mProperties)
+				{
+					$result = false;
+
+					# debug mode
+					if (true == $config["debug"])
+					{
+						# :TODO: Translate the error message
+						$debug_errors .= "<p>Could not load properties for content</p>\n";
+					}
+				}
+			}
+		}
+
+		foreach ($contents as $content) 
+		{
+			$content->Load();
+		}
+
+		return $contents;
+	}
 	
     /**
      * Load the content of the object from a list of aliases
@@ -1889,95 +1880,98 @@ class ContentManager
      *
      * @returns array of content objects (empty if not found)
      */
-    /*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
-    {
-	global $gCms, $config, $sql_queries, $debug_errors;
-	$cpt = count($ids);
-        $contents=array();
-	if ($cpt == 0)
+	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
-	    return $contents;
-	}
-	$db = &$gCms->GetDb();
-	$id_list = '(';
-	for ($i=0; $i<$cpt; $i++) 
-	{
-	    $id_list .= "'".$ids[$i]."'";
-	    if ($i<$cpt-1)
-	    {
-		$id_list .= ',';
-	    }
-	}
-	$id_list .= ')';
-	if ($id_list == '()')
-	{
-	    return $contents;
-	}
-	$result = false;
-	$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
-	$rows   =& $db->Execute($query);
-
-	while (isset($rows) && $row=&$rows->FetchRow())
-	{
-	    #Make sure the type exists.  If so, instantiate and load
-	    if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
-	    {
-		$classtype = strtolower($row['type']);
-		$contentobj = new $classtype; 
-		$contentobj->LoadFromData($row,false);
-		$contents[] = $contentobj;
-		$result = true;
-	    }
-	}
-	if (!$result)
-	{
-	    if (true == $config["debug"])
-	    {
-		# :TODO: Translate the error message
-		$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-	    }
-	}
-
-	if ($result && $loadProperties)
-	{
-	    foreach ($contents as $content) 
-	    {
-		if ($content->mPropertiesLoaded == false)
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$cpt = count($ids);
+		$contents=array();
+		if ($cpt == 0)
 		{
-		    debug_buffer("load from id is loading properties");
-		    $content->mProperties->Load($content->mId);
-		    $content->mPropertiesLoaded = true;
+			return $contents;
 		}
-  
-		if (NULL == $content->mProperties)
+		$db = &$gCms->GetDb();
+		$id_list = '(';
+		for ($i=0; $i<$cpt; $i++) 
 		{
-		    $result = false;
-  
-		    # debug mode
-		    if (true == $config["debug"])
-		    {
-			# :TODO: Translate the error message
-			$debug_errors .= "<p>Could not load properties for content</p>\n";
-		    }
+			$id_list .= "'".$ids[$i]."'";
+			if ($i<$cpt-1)
+			{
+				$id_list .= ',';
+			}
 		}
-	    }
+		$id_list .= ')';
+		if ($id_list == '()')
+		{
+			return $contents;
+		}
+		$result = false;
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
+		$rows   =& $db->Execute($query);
+
+		while (isset($rows) && $row=&$rows->FetchRow())
+		{
+			#Make sure the type exists.  If so, instantiate and load
+			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
+			{
+				$classtype = strtolower($row['type']);
+				$contentobj = new $classtype; 
+				$contentobj->LoadFromData($row,false);
+				$contents[] = $contentobj;
+				$result = true;
+			}
+		}
+
+		if ($rows) $rows->Close();
+
+		if (!$result)
+		{
+			if (true == $config["debug"])
+			{
+				# :TODO: Translate the error message
+				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
+			}
+		}
+
+		if ($result && $loadProperties)
+		{
+			foreach ($contents as $content) 
+			{
+				if ($content->mPropertiesLoaded == false)
+				{
+					debug_buffer("load from id is loading properties");
+					$content->mProperties->Load($content->mId);
+					$content->mPropertiesLoaded = true;
+				}
+
+				if (NULL == $content->mProperties)
+				{
+					$result = false;
+
+					# debug mode
+					if (true == $config["debug"])
+					{
+						# :TODO: Translate the error message
+						$debug_errors .= "<p>Could not load properties for content</p>\n";
+					}
+				}
+			}
+		}
+		foreach ($contents as $content) 
+		{
+			$content->Load();
+		}
+		return $contents;
 	}
-	foreach ($contents as $content) 
-	{
-	    $content->Load();
-	}
-	return $contents;
-    }
 
 
     /**
      * Display content
      */
-    function DisplayContent($content)
-    {
-	//This should be straight forward, since the content will pretty much determine how it is displayed
-	$content->Show();
-    }
+	function DisplayContent($content)
+	{
+		//This should be straight forward, since the content will pretty much determine how it is displayed
+		$content->Show();
+	}
 
     /**
      * Determine if content should be loaded from cache
@@ -1986,535 +1980,526 @@ class ContentManager
     {
     }
 
-    function & GetDefaultContent()
-    {
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$result = -1;
-
-	$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-	$row = &$db->GetRow($query);
-	if ($row)
+	function & GetDefaultContent()
 	{
-	    $result = $row['content_id'];
+		global $gCms;
+		$db =& $gCms->GetDb();
+
+		$result = -1;
+
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
+		$row = &$db->GetRow($query);
+		if ($row)
+		{
+			$result = $row['content_id'];
+		}
+		else
+		{
+			#Just get something...
+			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+			$row = &$db->GetRow($query);
+			if ($row)
+			{
+				$result = $row['content_id'];
+			}
+		}
+
+		return $result;
 	}
-	else
-	{
-	    #Just get something...
-	    $query = "SELECT content_id FROM ".cms_db_prefix()."content";
-	    $row = &$db->GetRow($query);
-	    if ($row)
-	    {
-		$result = $row['content_id'];
-	    }
-	}
-
-	return $result;
-
-	/*
-	#Chances are that this is cached already
-	$allcontent = @ContentManager::GetAllContent();
-
-	foreach ($allcontent as $oneitem)
-	{
-	    if ($oneitem->DefaultContent() == true)
-	    {
-		return $oneitem->Id();
-	    }
-	}
-
-	#Just get something....
-	return $allcontent[0]->Id();
-	*/
-    }
 
     /**
      * Returns a hash of valid content types (classes that extend ContentBase)
      * The key is the name of the class that would be saved into the dabase.  The
      * value would be the text returned by the type's FriendlyName() method.
      */
-    function & ListContentTypes()
-    {
-	global $gCms;
-
-	if (isset($gCms->variables['contenttypes']))
+	function & ListContentTypes()
 	{
-	    $variables =& $gCms->variables;
-	    return $variables['contenttypes'];
-	}
+		global $gCms;
 
-	$result = array();
-
-	foreach (get_declared_classes() as $oneclass)
-	{
-	    if (strtolower(get_parent_class($oneclass)) == 'contentbase' || strtolower(get_parent_class($oneclass)) == 'cmsmodulecontenttype')
-	    {
-		if (strtolower($oneclass) != 'cmsmodulecontenttype')
+		if (isset($gCms->variables['contenttypes']))
 		{
-		    #array_push($result, strtolower($oneclass));
-		    $tmpobj = new $oneclass;
-		    $result[strtolower($oneclass)] = $tmpobj->FriendlyName();
+			$variables =& $gCms->variables;
+			return $variables['contenttypes'];
 		}
-	    }
+
+		$result = array();
+
+		foreach (get_declared_classes() as $oneclass)
+		{
+			if (strtolower(get_parent_class($oneclass)) == 'contentbase' || strtolower(get_parent_class($oneclass)) == 'cmsmodulecontenttype')
+			{
+				if (strtolower($oneclass) != 'cmsmodulecontenttype')
+				{
+					#array_push($result, strtolower($oneclass));
+					$tmpobj = new $oneclass;
+					$result[strtolower($oneclass)] = $tmpobj->FriendlyName();
+				}
+			}
+		}
+
+		$variables =& $gCms->variables;
+		$variables['contenttypes'] =& $result;
+
+		return $result;
 	}
-
-	$variables =& $gCms->variables;
-	$variables['contenttypes'] =& $result;
-
-	return $result;
-    }
 
     /**
      * Updates the hierarchy position of one item
      */
-    function SetHierarchyPosition($contentid)
-    {
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$current_hierarchy_position = '';
-	$current_id_hierarchy_position = '';
-	$current_hierarchy_path = '';
-	$current_parent_id = $contentid;
-	$count = 0;
-
-	while ($current_parent_id > -1)
+	function SetHierarchyPosition($contentid)
 	{
-	    $query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	    $row = &$db->GetRow($query, array($current_parent_id));
-	    if ($row)
-	    {
-		$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
-		$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
-		$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
-		$current_parent_id = $row['parent_id'];
-		$count++;
-	    }
-	    else
-	    {
-		$current_parent_id = 0;
-	    }
-	}
+		global $gCms;
+		$db =& $gCms->GetDb();
 
-	if (strlen($current_hierarchy_position) > 0)
-	{
-	    $current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
-	}
-	if (strlen($current_id_hierarchy_position) > 0)
-	{
-	    $current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
-	}
-	if (strlen($current_hierarchy_path) > 0)
-	{
-	    $current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
-	}
+		$current_hierarchy_position = '';
+		$current_id_hierarchy_position = '';
+		$current_hierarchy_path = '';
+		$current_parent_id = $contentid;
+		$count = 0;
 
-	$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-	$prop_name_array = $db->GetCol($query, array($contentid));
+		while ($current_parent_id > -1)
+		{
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$row = &$db->GetRow($query, array($current_parent_id));
+			if ($row)
+			{
+				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
+				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
+				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
+				$current_parent_id = $row['parent_id'];
+				$count++;
+			}
+			else
+			{
+				$current_parent_id = 0;
+			}
+		}
 
-	debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
+		if (strlen($current_hierarchy_position) > 0)
+		{
+			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
+		}
+		if (strlen($current_id_hierarchy_position) > 0)
+		{
+			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
+		}
+		if (strlen($current_hierarchy_path) > 0)
+		{
+			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
+		}
 
-	$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
-	$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
-    }
+		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
+		$prop_name_array = $db->GetCol($query, array($contentid));
+
+		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
+
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
+	}
 
     /**
      * Updates the hierarchy position of all items
      */
-    function SetAllHierarchyPositions()
-    {
-	global $gCms;
-	$db = $gCms->GetDb();
-
-	$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-        $dbresult = &$db->Execute($query);
-
-	while ($dbresult && !$dbresult->EOF)
+	function SetAllHierarchyPositions()
 	{
-	    ContentManager::SetHierarchyPosition($dbresult->fields['content_id']);
-	    $dbresult->MoveNext();
+		global $gCms;
+		$db = $gCms->GetDb();
+
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+		$dbresult = &$db->Execute($query);
+
+		while ($dbresult && !$dbresult->EOF)
+		{
+			ContentManager::SetHierarchyPosition($dbresult->fields['content_id']);
+			$dbresult->MoveNext();
+		}
+		
+		if ($dbresult) $dbresult->Close();
 	}
-    }
 	
-    function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
-    {
-	debug_buffer('', 'starting tree');
-		
-	require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
-		
-	$nodes = array();
-	global $gCms;
-	$db = &$gCms->GetDb();
-		
-	$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-	$usecache = true;
-	if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
+	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
 	{
-	    #$usecache = false;
-	}
+		debug_buffer('', 'starting tree');
 
-	$loadedcache = false;
+		require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
 
-	if ($usecache)
-	{
-	    if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
-	    {
-		$pageinfo =& $gCms->variables['pageinfo'];
-		debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-		if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+		$nodes = array();
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
+		$usecache = true;
+		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
 		{
-		    debug_buffer('file needs loading');
-		    
-		    $handle = fopen($cachefilename, "r");
-		    $data = fread($handle, filesize($cachefilename));
-		    fclose($handle);
-
-		    $tree = unserialize(substr($data, 16));
-
-		    #$variables =& $gCms->variables;
-		    #$variables['contentcache'] =& $tree;
-		    if (strtolower(get_class($tree)) == 'tree')
-		    {
-			$loadedcache = true;
-		    }
-		    else
-		    {
-			$loadedcache = false;
-		    }
+			#$usecache = false;
 		}
-	    }
-	}
 
-	if (!$loadedcache)
-	{
-	    $query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-	    $dbresult =& $db->Execute($query);
-		
-	    if ($dbresult && $dbresult->RecordCount() > 0)
-	    {
-		while ($row = $dbresult->FetchRow())
+		$loadedcache = false;
+
+		if ($usecache)
 		{
-		    $nodes[] = $row['id_hierarchy'];
+			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
+			{
+				$pageinfo =& $gCms->variables['pageinfo'];
+				debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
+				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
+				{
+					debug_buffer('file needs loading');
+
+					$handle = fopen($cachefilename, "r");
+					$data = fread($handle, filesize($cachefilename));
+					fclose($handle);
+
+					$tree = unserialize(substr($data, 16));
+
+					#$variables =& $gCms->variables;
+					#$variables['contentcache'] =& $tree;
+					if (strtolower(get_class($tree)) == 'tree')
+					{
+						$loadedcache = true;
+					}
+					else
+					{
+						$loadedcache = false;
+					}
+				}
+			}
 		}
-	    }
 
-	    $tree = &new Tree();
-	    debug_buffer('', 'Start Loading Children into Tree');
-	    $tree = &Tree::createFromList($nodes, '.');
-	    debug_buffer('', 'End Loading Children into Tree');
+		if (!$loadedcache)
+		{
+			$query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+			$dbresult =& $db->Execute($query);
+
+			if ($dbresult && $dbresult->RecordCount() > 0)
+			{
+				while ($row = $dbresult->FetchRow())
+				{
+					$nodes[] = $row['id_hierarchy'];
+				}
+			}
+
+			$tree = &new Tree();
+			debug_buffer('', 'Start Loading Children into Tree');
+			$tree = &Tree::createFromList($nodes, '.');
+			debug_buffer('', 'End Loading Children into Tree');
+		}
+
+		if (!$loadedcache && $usecache)
+		{
+			debug_buffer("Serializing...");
+			$handle = fopen($cachefilename, "w");
+			fwrite($handle, '<?php return; ?>'.serialize($tree));
+			fclose($handle);
+		}
+
+		ContentManager::LoadChildrenIntoTree(-1, $tree);
+
+		debug_buffer('', 'ending tree');
+
+		return $tree;
 	}
-
-	if (!$loadedcache && $usecache)
-	{
-	    debug_buffer("Serializing...");
-	    $handle = fopen($cachefilename, "w");
-	    fwrite($handle, '<?php return; ?>'.serialize($tree));
-	    fclose($handle);
-	}
-		
-	ContentManager::LoadChildrenIntoTree(-1, $tree);
-
-	debug_buffer('', 'ending tree');
 	
-	return $tree;
-    }
-	
-    function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
-    {	
-	global $gCms;
-	$db = &$gCms->GetDb();
+	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
+	{	
+		global $gCms;
+		$db = &$gCms->GetDb();
 
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
-	$dbresult =& $db->Execute($query);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
+		$dbresult =& $db->Execute($query);
+
+		if ($dbresult && $dbresult->RecordCount() > 0)
+		{
+			while ($row = $dbresult->FetchRow())
+			{
+				#Make sure the type exists.  If so, instantiate and load
+				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
+				{
+					$contentobj = &new $row['type'];
+					$contentobj->LoadFromData($row, $loadprops);
+					$contentcache =& $tree->content;
+					$id = $row['content_id'];
+					$contentcache[$id] =& $contentobj;
+				}
+			}
+		}
 		
-        if ($dbresult && $dbresult->RecordCount() > 0)
-	{
-	    while ($row = $dbresult->FetchRow())
-	    {
-		#Make sure the type exists.  If so, instantiate and load
-		if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
+		if ($dbresult) $dbresult->Close();
+	}
+
+	/**
+	*  Sets the default content as id
+	*/   
+	function SetDefaultContent($id) {
+		global $gCms;
+		$db = &$gCms->GetDb();
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$old_id = $db->GetOne($query);
+		if (isset($old_id)) 
 		{
-		    $contentobj = &new $row['type'];
-		    $contentobj->LoadFromData($row, $loadprops);
-		    $contentcache =& $tree->content;
-		    $id = $row['content_id'];
-		    $contentcache[$id] =& $contentobj;
+			$one = new Content();
+			$one->LoadFromId($old_id);
+			$one->SetDefaultContent(false);
+			debug_buffer('save from ' . __LINE__);
+			$one->Save();
 		}
-	    }
-	}
-    }
-
-    /**
-     *  Sets the default content as id
-     */   
-    function SetDefaultContent($id) {
-	global $gCms;
-	$db = &$gCms->GetDb();
-	$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
-	$old_id = $db->GetOne($query);
-	if (isset($old_id)) 
-	{
-	    $one = new Content();
-	    $one->LoadFromId($old_id);
-	    $one->SetDefaultContent(false);
-	    debug_buffer('save from ' . __LINE__);
-	    $one->Save();
-	}
-	$one = new Content();
-	$one->LoadFromId($id);
-	$one->SetDefaultContent(true);
-	debug_buffer('save from ' . __LINE__);
-	$one->Save();
-    }
-
-    function &GetAllContent($loadprops=true)
-    {
-	debug_buffer('get all content...');
-
-	global $gCms;
-
-	$contentcache = array();
-
-	$db = &$gCms->GetDb();
-	$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-	$dbresult = &$db->Execute($query);
-
-	$map = array();
-	$count = 0;
-
-	while ($dbresult && !$dbresult->EOF)
-	{
-	    #Make sure the type exists.  If so, instantiate and load
-	    if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
-	    {
-		$contentobj = new $dbresult->fields['type'];
-		$contentobj->LoadFromData($dbresult->FetchRow(), false);
-		$map[$contentobj->Id()] = $count;
-		$contentcache[] = $contentobj;
-		$count++;
-	    }
-	    else
-	    {
-		$dbresult->MoveNext();
-	    }
+		$one = new Content();
+		$one->LoadFromId($id);
+		$one->SetDefaultContent(true);
+		debug_buffer('save from ' . __LINE__);
+		$one->Save();
 	}
 
-	for ($i=0;$i<$count;$i++)
+	function &GetAllContent($loadprops=true)
 	{
-	    if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
-	    {
-		$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
-	    }
-	}
+		debug_buffer('get all content...');
 
-	return $contentcache;
-    }
+		global $gCms;
 
-    function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
-    {
-	$result = '';
+		$contentcache = array();
 
-	$allcontent = ContentManager::GetAllContent();
+		$db = &$gCms->GetDb();
+		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+		$dbresult = &$db->Execute($query);
 
-	if ($allcontent !== FALSE && count($allcontent) > 0)
-	{
-	    $result .= '<select name="'.$name.'">';
-	    $result .= '<option value="-1">None</option>';
+		$map = array();
+		$count = 0;
 
-	    $curhierarchy = '';
-
-	    foreach ($allcontent as $one)
-	    {
-		if ($one->Id() == $current)
+		while ($dbresult && !$dbresult->EOF)
 		{
-#Grab hierarchy just in case we need to check children
-#(which will always be after)
-		    $curhierarchy = $one->Hierarchy();
-
-#Then jump out.  We don't want ourselves in the list.
-		    continue;
+			#Make sure the type exists.  If so, instantiate and load
+			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
+			{
+				$contentobj = new $dbresult->fields['type'];
+				$contentobj->LoadFromData($dbresult->FetchRow(), false);
+				$map[$contentobj->Id()] = $count;
+				$contentcache[] = $contentobj;
+				$count++;
+			}
+			else
+			{
+				$dbresult->MoveNext();
+			}
 		}
-#If it's a child of the current, we don't want to show it as it
-#could cause a deadlock.
-		if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+
+		if ($dbresult) $dbresult->Close();
+
+		for ($i=0;$i<$count;$i++)
 		{
-		    continue;
+			if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
+			{
+				$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
+			}
 		}
-#Don't include content types that do not want children either...
-		if ($one->WantsChildren() == true)
-		{
-		    $result .= '<option value="'.$one->Id().'"';
 
-#Select current parent if it exists
-		    if ($one->Id() == $parent)
-		    {
-			$result .= ' selected="true"';
-		    }
-
-		    $result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
-		}
-	    }
-
-	    $result .= '</select>';
+		return $contentcache;
 	}
 
-	return $result;
-    }
+	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
+	{
+		$result = '';
+
+		$allcontent = ContentManager::GetAllContent();
+
+		if ($allcontent !== FALSE && count($allcontent) > 0)
+		{
+			$result .= '<select name="'.$name.'">';
+			$result .= '<option value="-1">None</option>';
+
+			$curhierarchy = '';
+
+			foreach ($allcontent as $one)
+			{
+				if ($one->Id() == $current)
+				{
+					#Grab hierarchy just in case we need to check children
+					#(which will always be after)
+					$curhierarchy = $one->Hierarchy();
+
+					#Then jump out.  We don't want ourselves in the list.
+					continue;
+				}
+				#If it's a child of the current, we don't want to show it as it
+				#could cause a deadlock.
+				if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+				{
+					continue;
+				}
+				#Don't include content types that do not want children either...
+				if ($one->WantsChildren() == true)
+				{
+					$result .= '<option value="'.$one->Id().'"';
+
+					#Select current parent if it exists
+					if ($one->Id() == $parent)
+					{
+						$result .= ' selected="true"';
+					}
+
+					$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+				}
+			}
+
+			$result .= '</select>';
+		}
+
+		return $result;
+	}
 
 
     // function to get the id of the default page
-    function GetDefaultPageID()
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
-	$row = &$db->GetRow($query);
-	if (!$row)
+	function GetDefaultPageID()
 	{
-	    return false;
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
+		$row = &$db->GetRow($query);
+		if (!$row)
+		{
+			return false;
+		}
+		return $row['content_id'];
 	}
-	return $row['content_id'];
-    }
 
 
     // function to map an alias to a page id
     // returns false if nothing cound be found.
-    function GetPageIDFromAlias( $alias )
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
+	function GetPageIDFromAlias( $alias )
 	{
-	    return $alias;
-	}
+		global $gCms;
+		$db = &$gCms->GetDb();
 
-	$params = array($alias);
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-	$row = $db->GetRow($query, $params);
+		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
+		{
+			return $alias;
+		}
 
-	if (!$row)
-	{
-	    return false;
+		$params = array($alias);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+		$row = $db->GetRow($query, $params);
+
+		if (!$row)
+		{
+			return false;
+		}
+		
+		return $row['content_id'];
 	}
-	return $row['content_id'];
-    }
 	
-    function GetPageIDFromHierarchy($position)
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
-	$row = $db->GetRow($query, array(ContentManager::CreateUnfriendlyHierarchyPosition($position)));
-
-	if (!$row)
+	function GetPageIDFromHierarchy($position)
 	{
-	    return false;
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
+		$row = $db->GetRow($query, array(ContentManager::CreateUnfriendlyHierarchyPosition($position)));
+
+		if (!$row)
+		{
+			return false;
+		}
+		return $row['content_id'];
 	}
-	return $row['content_id'];
-    }
 
 
     // function to map an alias to a page id
     // returns false if nothing cound be found.
-    function GetPageAliasFromID( $id )
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	if (!is_numeric($id) && strpos($id,'.') == TRUE && strpos($id,',') == TRUE)
+	function GetPageAliasFromID( $id )
 	{
-	    return $id;
+		global $gCms;
+		$db = &$gCms->GetDb();
+
+		if (!is_numeric($id) && strpos($id,'.') == TRUE && strpos($id,',') == TRUE)
+		{
+			return $id;
+		}
+
+		$params = array($id);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$row = $db->GetRow($query, $params);
+
+		if ( !$row )
+		{
+			return false;
+		}
+		return $row['content_alias'];
 	}
 
-	$params = array($id);
-	$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-	$row = $db->GetRow($query, $params);
-
-	if ( !$row )
+	function CheckAliasError($alias, $content_id = -1)
 	{
-	    return false;
-	}
-	    return $row['content_alias'];
-	}
+		global $gCms;
+		$db = &$gCms->GetDb();
 
-    function CheckAliasError($alias, $content_id = -1)
-    {
-	global $gCms;
-	$db = &$gCms->GetDb();
+		$error = FALSE;
 
-	$error = FALSE;
+		if (preg_match('/^\d+$/', $alias))
+		{
+			$error = lang('aliasnotaninteger');
+		}
+		else if (!preg_match('/^[\-\_\w]+$/', $alias))
+		{
+			$error = lang('aliasmustbelettersandnumbers');
+		}
+		else
+		{
+			$params = array($alias);
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
+			if ($content_id > -1)
+			{
+				$query .= " AND content_id != ?";
+				$params[] = $content_id;
+			}
+			$row = &$db->GetRow($query, $params);
 
-	if (preg_match('/^\d+$/', $alias))
-	{
-	    $error = lang('aliasnotaninteger');
+			if ($row)
+			{
+				$error = lang('aliasalreadyused');
+			}
+		}
+
+		return $error;
 	}
-	else if (!preg_match('/^[\-\_\w]+$/', $alias))
-	{
-	    $error = lang('aliasmustbelettersandnumbers');
-	}
-	else
-	{
-	    $params = array($alias);
-	    $query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-	    if ($content_id > -1)
-	    {
-		$query .= " AND content_id != ?";
-		$params[] = $content_id;
-	    }
-	    $row = &$db->GetRow($query, $params);
-
-	    if ($row)
-	    {
-		$error = lang('aliasalreadyused');
-	    }
-	}
-
-	return $error;
-    }
 	
-    function ClearCache()
-    {
-	global $gCms;
-	$smarty =& $gCms->GetSmarty();
-	
-	$smarty->clear_all_cache();
-	$smarty->clear_compiled_tpl();
-
-	if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
+	function ClearCache()
 	{
-	    unlink(TMP_CACHE_LOCATION . '/contentcache.php');
-	}
-    }
+		global $gCms;
+		$smarty =& $gCms->GetSmarty();
 
-    function CreateFriendlyHierarchyPosition($position)
-    {
-#Change padded numbers back into user-friendly values
-	$tmp = '';
-	$levels = split('\.', $position);
-	foreach ($levels as $onelevel)
-	{
-	    $tmp .= ltrim($onelevel, '0') . '.';
-	}
-	$tmp = rtrim($tmp, '.');
-	return $tmp;
-    }
+		$smarty->clear_all_cache();
+		$smarty->clear_compiled_tpl();
 
-    function CreateUnfriendlyHierarchyPosition($position)
-    {
-#Change user-friendly values into padded numbers
-	$tmp = '';
-	$levels = split('\.', $position);
-	foreach ($levels as $onelevel)
-	{
-	    $tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';
+		if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
+		{
+			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
+		}
 	}
-	$tmp = rtrim($tmp, '.');
-	return $tmp;
-    }
+
+	function CreateFriendlyHierarchyPosition($position)
+	{
+		#Change padded numbers back into user-friendly values
+		$tmp = '';
+		$levels = split('\.', $position);
+		foreach ($levels as $onelevel)
+		{
+			$tmp .= ltrim($onelevel, '0') . '.';
+		}
+		$tmp = rtrim($tmp, '.');
+		return $tmp;
+	}
+
+	function CreateUnfriendlyHierarchyPosition($position)
+	{
+		#Change user-friendly values into padded numbers
+		$tmp = '';
+		$levels = split('\.', $position);
+		foreach ($levels as $onelevel)
+		{
+			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';
+		}
+		$tmp = rtrim($tmp, '.');
+		return $tmp;
+	}
 	
 }
 
