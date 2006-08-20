@@ -1114,12 +1114,15 @@ function GetModuleParameters($id)
 {
 	$params = array();
 
-	foreach ($_REQUEST as $key=>$value)
+	if ($id != '')
 	{
-		if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+		foreach ($_REQUEST as $key=>$value)
 		{
-			$key = str_replace($id, '', $key);
-			$params[$key] = $value;
+			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+			{
+				$key = str_replace($id, '', $key);
+				$params[$key] = $value;
+			}
 		}
 	}
 
