@@ -1011,8 +1011,12 @@ function showPageFive() {
 		echo '<p>Updating hierarchy positions...';
 
 		include_once dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'include.php';
-
+		
+		#Set $gCms->config - somehow it doesn't get set by include.php
 		$gCms->config = $newconfig;
+
+		#Define the CMS_ADODB_DT constant - somehow it doesn't get set by include.php
+		define('CMS_ADODB_DT', $newconfig['use_adodb_lite'] ? 'DT' : 'T');
 
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
@@ -1040,7 +1044,7 @@ function showPageFive() {
 			  $count = $dbresult->RecordCount();
 				if (!isset($count) || $count == 0)
 				{
-					$modinstance = $gCms->modules[$modulename]['object'];
+					$modinstance =& $gCms->modules[$modulename]['object'];
 					$result = $modinstance->Install();
 
 					#now insert a record
