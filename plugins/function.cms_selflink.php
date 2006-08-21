@@ -83,6 +83,14 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			$menu_text = $content->MenuText();
 			$titleattr = $content->TitleAttribute();
 		}
+
+			/* Mod by Nemesis */
+		if (isset($params['anchorlink']))
+		{
+		    $url .= '#' . $params['anchorlink'];
+		}
+			/* End mod Nemesis */
+		
 		$Prev_label = "";
 		$Next_label = "";
 		$Anchor_label = ""; //*Russ
