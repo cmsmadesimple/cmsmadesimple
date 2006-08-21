@@ -106,7 +106,7 @@ class ModuleLoader
 								if (@is_file("$dir/$modulename/$modulename.module.php"))
 								{
 									#var_dump('loading module:' . $modulename);
-									include("$dir/$modulename/$modulename.module.php");
+									include_once("$dir/$modulename/$modulename.module.php");
 									if (class_exists($modulename))
 									{
 										$newmodule =& new $modulename;
