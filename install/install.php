@@ -516,7 +516,7 @@ function showPageOne() {
 
 } ## showPageOne
 
-function showPageTwo($errorMessage='',$username='',$email='')
+function showPageTwo($errorMessage='',$username='',$email='',$email_accountinfo='0')
 {
 
 	if ($errorMessage != '')
@@ -542,7 +542,7 @@ there will be no other way to login to your CMS Made Simple admin system without
 	</tr>
 
 	<tr class="row2">
-		<td>Email Address</td>
+		<td>E-mail Address</td>
 		<td><input type="text" name="adminemail" value="<?php echo $email?>" size="20" maxlength="50" /></td>
 	</tr>
 
@@ -555,7 +555,17 @@ there will be no other way to login to your CMS Made Simple admin system without
 		<td>Password Again</td>
 		<td><input type="password" name="adminpasswordagain" value="" size="20" maxlength="50" /></td>
 	</tr>
-
+<?php
+if (function_exists('mail'))
+{
+?>
+	<tr class="row1">
+		<td>E-Mail Account Information</td>
+		<td><input type="checkbox" name="email_accountinfo" value="1" <?php if ($email_accountinfo == 1) echo ' checked="checked"' ?> /></td>
+	</tr>
+<?php
+}
+?>
 </table>
 
 <p align="center" class="continue"><input type="hidden" name="page" value="3" /><input type="submit" value="Continue" /><!--<a onclick="document.page2form.submit()" href="#">Continue</a>--></p>
@@ -568,6 +578,7 @@ there will be no other way to login to your CMS Made Simple admin system without
 
 function showPageThree($errorMessage='')
 {
+    $email_accountinfo = isset($_POST['email_accountinfo']) ? true : false;
 
 	if ($errorMessage != '')
 	{
@@ -578,30 +589,28 @@ function showPageThree($errorMessage='')
 # Put given variables into hidden fields so they can up UPDATEd later on in step 4 (post schema install)
 	if ($_POST['adminusername'] == '')
 	{
-		showPageTwo('Username not given!', '', $_POST['adminemail']);
+		showPageTwo('Username not given!', '', $_POST['adminemail'], ($email_accountinfo ? '1' : '0'));
 		return;
 	}
 	else if ($_POST['adminpassword'] == '' || $_POST['adminpasswordagain'] == '')
 	{
-		showPageTwo('Both password fields not given!', $_POST['adminusername'], $_POST['adminemail']);
+		showPageTwo('Both password fields not given!', $_POST['adminusername'], $_POST['adminemail'], ($email_accountinfo ? '1' : '0'));
 		return;
 	}
 	else if ($_POST['adminpassword'] != $_POST['adminpasswordagain'])
 	{
-		showPageTwo('Password fields do not match!', $_POST['adminusername'], $_POST['adminemail']);
+		showPageTwo('Password fields do not match!', $_POST['adminusername'], $_POST['adminemail'], ($email_accountinfo ? '1' : '0'));
 		return;
 	}
+	if ($email_accountinfo && trim($_POST['adminemail'] == ''))
+    {
+		showPageTwo('E-mail accountinfo selected, but no E-mail address given!', $_POST['adminusername'], $_POST['adminemail'], '1'));
+		return;
+    }
+	
 	$adminusername = $_POST['adminusername'];
 	$adminemail = $_POST['adminemail'];
-	if (isset($_POST['page']) && $_POST['page'] == '4')
-	{
-		$adminpassword = $_POST['adminpassword'];
-	}
-	else
-	{
-		$adminpassword = md5($_POST['adminpassword']);
-	}
-
+	$adminpassword = $_POST['adminpassword'];
 ?>
 
 <form action="install.php" method="post" name="page3form" id="page3form">
@@ -692,6 +701,14 @@ if (extension_loaded('sqlite'))
 <input type="hidden" name="adminemail" value="<?php echo $adminemail ?>" />
 <input type="hidden" name="adminpassword" value="<?php echo $adminpassword ?>" />
 <input type="hidden" name="adminpasswordagain" value="<?php echo $adminpassword ?>" />
+<?php
+if ($email_accountinfo) 
+{
+?>
+<input type="hidden" name="email_accountinfo" value="<?php echo $_POST['adminemail'] ?>" />
+<?php
+}
+?>
 </td>
 </tr>
 <tr class="row2">
@@ -809,10 +826,10 @@ function showPageFour($sqlloaded = 0) {
 		echo "<p>Setting admin account information...";
 
 		$sql = 'UPDATE ' . $db_prefix . 'users SET username = ?, password = ?, email = ? WHERE user_id = 1';
-		$db->Execute($sql, array($_POST['adminusername'], $_POST['adminpassword'], $_POST['adminemail']));
+		$db->Execute($sql, array($_POST['adminusername'], md5($_POST['adminpassword']), $_POST['adminemail']));
 
 		echo "[done]</p>";
-
+		
 		echo "<p>Setting sitename...";
 
 		$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
@@ -856,6 +873,11 @@ function showPageFour($sqlloaded = 0) {
 				<input type="hidden" name="bbcode" value="false" />
 				<?php if (isset($_POST["createtables"])) { ?>
 				<input type="hidden" name="createtables" value="true" />
+				<?php } ?>
+				<?php if (isset($_POST["email_accountinfo"])) { ?>
+				<input type="hidden" name="email_accountinfo" value="<?php echo $_POST['email_accountinfo'] ?>" />
+				<input type="hidden" name="adminusername" value="<?php echo $_POST['adminusername'] ?>" />
+				<input type="hidden" name="adminpassword" value="<?php echo $_POST['adminpassword'] ?>" />
 				<?php } ?>
 			</td>
 		</tr>
@@ -1072,6 +1094,32 @@ function showPageFive() {
 	}
  
 	$link = str_replace(" ", "%20", $_POST['docroot']);
+	
+    if (isset($_POST["email_accountinfo"])) 
+    {
+        echo "<p>E-mailing admin account information...";
+        $to      = $_POST['email_accountinfo'];
+        $subject = 'CMS Made Simple Admin Account Information';
+        $message = <<<EOF
+Thank you for installing CMS Made Simple.
+
+This is your new account information:
+username: {$_POST['adminusername']}
+password: {$_POST['adminpassword']}
+
+Log into the site admin here: $link/admin/
+EOF;
+        echo (
+            @mail(
+                $to,
+                $subject,
+                $message
+            )
+            ? '[done]'
+            : '<strong>[failed]</strong>'
+        );
+    }
+    echo '</p>';
     echo "<h4 class=\"success\">Congratulations, you are all setup - here is your <a href=\"".$link."\">CMS site</a>.</h4>";
 
 } ## showPageFour
