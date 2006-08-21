@@ -117,14 +117,8 @@ class Content extends ContentBase
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->SetAlias($params['alias']);
+		$this->SetAlias(trim($params['alias']));
 	    }
-	    /*
-	    else
-	    {
-		$this->SetAlias('');
-	    }
-	    */
 	    if (isset($params['parent_id']))
 	    {
 		if ($this->mParentId != $params['parent_id'])

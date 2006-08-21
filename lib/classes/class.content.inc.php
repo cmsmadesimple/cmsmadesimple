@@ -566,6 +566,11 @@ class ContentBase
 		if ($alias == '')
 		{
 			$alias = trim($this->mMenuText);
+			if ($alias == '')
+			{
+			    $alias = trim($this->mName);
+			}
+			
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
