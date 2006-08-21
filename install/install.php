@@ -1015,9 +1015,6 @@ function showPageFive() {
 		#Set $gCms->config - somehow it doesn't get set by include.php
 		$gCms->config = $newconfig;
 
-		#Define the CMS_ADODB_DT constant - somehow it doesn't get set by include.php
-		define('CMS_ADODB_DT', $newconfig['use_adodb_lite'] ? 'DT' : 'T');
-
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
 		$gCms->db =& $db;
