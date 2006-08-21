@@ -1118,16 +1118,12 @@ password: {$_POST['adminpassword']}
 Log into the site admin here: $link/admin/
 EOF;
         echo (
-            @mail(
-                $to,
-                $subject,
-                $message
-            )
+            @mail($to, $subject, $message)
             ? '[done]'
             : '<strong>[failed]</strong>'
         );
+        echo '</p>';
     }
-    echo '</p>';
     echo "<h4 class=\"success\">Congratulations, you are all setup - here is your <a href=\"".$link."\">CMS site</a>.</h4>";
 
 } ## showPageFour
