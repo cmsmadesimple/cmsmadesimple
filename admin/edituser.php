@@ -58,7 +58,9 @@ $user_id = $userid;
 if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
 else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
 
-$thisuser = UserOperations::LoadUserByID($user_id);
+global $gCms;
+$userops =& $gCms->GetUserOperations();
+$thisuser = $userops->LoadUserByID($user_id);
 if (strlen($thisuser->username) > 0)
     {
     $CMS_ADMIN_SUBTITLE = $thisuser->username;

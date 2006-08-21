@@ -50,7 +50,7 @@ function smarty_cms_function_search($params, &$smarty)
 						$action = 'default';
 
 					$returnid = '';
-					if (isset($gCms->variables['pageinfo']))
+					if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
 					{
 						$returnid = $gCms->variables['pageinfo']->content_id;
 					}

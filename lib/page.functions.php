@@ -123,7 +123,9 @@ function check_passhash($userid, $checksum)
 	$db =& $gCms->GetDb();
 	$config =& $gCms->GetConfig();
 
-	$oneuser = UserOperations::LoadUserByID($userid);
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$oneuser =& $userops->LoadUserByID($userid);
 
 	if ($oneuser && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
 	{
@@ -147,7 +149,9 @@ function generate_user_object($userid)
 	$db =& $gCms->GetDb();
 	$config =& $gCms->GetConfig();
 
-	$oneuser = UserOperations::LoadUserByID($userid);
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$oneuser =& $userops->LoadUserByID($userid);
 
 	if ($oneuser)
 	{

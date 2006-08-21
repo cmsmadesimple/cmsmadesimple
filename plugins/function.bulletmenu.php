@@ -26,7 +26,9 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 	$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 	$collapse = isset($params['collapse']) ? $params['collapse'] : 0 ;
 
-	$allcontent =& ContentManager::GetAllContent(false);
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$allcontent =& $contentops->GetAllContent(false);
 
 	# defining variables
 	$menu = "";
@@ -190,7 +192,9 @@ function smarty_cms_function_bulletmenu($params, &$smarty) {
 						foreach (split('\.', $curpos) as $level)
 						{
 							$blah .= $level . '.';
-							if (strstr($onecontent->Hierarchy() . '.', ContentManager::CreateFriendlyHierarchyPosition($blah) . '.') == $onecontent->Hierarchy() . '.')
+							global $gCms;
+							$contentops =& $gCms->GetContentOperations();
+							if (strstr($onecontent->Hierarchy() . '.', $contentops->CreateFriendlyHierarchyPosition($blah) . '.') == $onecontent->Hierarchy() . '.')
 							{
 								if ($depth == ($count + 1))
 								{

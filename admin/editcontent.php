@@ -65,9 +65,11 @@ function ajaxpreview($params)
 {
 	global $gCms;
 	$config =& $gCms->GetConfig();
+	$contentops =& $gCms->GetContentOperations();
 
-	$contentobj = UnserializeObject($params["serialized_content"]);
 	$content_type = $params['content_type'];
+	$contentops->LoadContentType($content_type);
+	$contentobj = UnserializeObject($params["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
 		copycontentobj($contentobj, $content_type, $params);
@@ -129,11 +131,16 @@ function updatecontentobj(&$contentobj, $preview, $params = null)
 
 function copycontentobj(&$contentobj, $content_type, $params = null)
 {
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	
 	if ($params == null)
 		$params = $_POST;
-	$contentobj->FillParams($params);
+
 	$newcontenttype = strtolower($content_type);
-	$tmpobj = new $newcontenttype;
+	$contentops->LoadContentType($newcontenttype);
+	$contentobj->FillParams($params);
+	$tmpobj = $contentops->CreateNewContent($newcontenttype);
 	$tmpobj->SetId($contentobj->Id());
 	$tmpobj->SetName($contentobj->Name());
 	$tmpobj->SetMenuText($contentobj->MenuText());
@@ -191,7 +198,9 @@ function createtmpfname(&$contentobj)
 }
 
 #Get a list of content types and pick a default if necessary
-$existingtypes = ContentManager::ListContentTypes();
+global $gCms;
+$contentops =& $gCms->GetContentOperations();
+$existingtypes = $contentops->ListContentTypes();
 $content_type = "";
 if (isset($_POST["content_type"]))
 {
@@ -212,6 +221,8 @@ else
 $contentobj = "";
 if (isset($_POST["serialized_content"]))
 {
+	$contentops =& $gCms->GetContentOperations();
+	$contentops->LoadContentType($_POST['orig_content_type']);
 	$contentobj = UnserializeObject($_POST["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -263,7 +274,9 @@ if ($access)
 		if ($error === FALSE)
 		{
 			$contentobj->Save();
-			ContentManager::SetAllHierarchyPositions();
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{
 				audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
@@ -273,7 +286,9 @@ if ($access)
 	}
 	else if ($content_id != -1 && !$preview && strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
-		$contentobj = ContentManager::LoadContentFromId($content_id);
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$contentobj = $contentops->LoadContentFromId($content_id);
 		$content_type = $contentobj->Type();
 		$contentobj->SetLastModifiedBy($userid);
 	}
@@ -300,14 +315,16 @@ else
 {
 	#Get a list of content_types and build the dropdown to select one
 	$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
-	foreach ($existingtypes as $onetype=>$name)
+	$cur_content_type = '';
+	foreach ($gCms->contenttypes as $onetype)
 	{
-		$typesdropdown .= "<option value=\"$onetype\"";
-		if ($onetype == $content_type)
+		$typesdropdown .= '<option value="' . $onetype->type . '"';
+		if ($onetype->type == $content_type)
 		{
-			$typesdropdown .= ' selected="selected"';
+			$typesdropdown .= " selected ";
+			$cur_content_type = $onetype->type;
 		}
-		$typesdropdown .= ">".$name."</option>";
+		$typesdropdown .= ">".($onetype->friendlyname)."</option>";
 	}
 	$typesdropdown .= "</select>";
 
@@ -370,6 +387,7 @@ $tabnames = $contentobj->TabNames();
 <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
 <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
+<input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />
 <div id="page_content">
 <?php
 $submit_buttons = '<div class="pageoverflow">

@@ -988,7 +988,8 @@ function showPageFive() {
 		#$db->debug = true;
 		$gCms->db =& $db;
 
-		ContentManager::SetAllHierarchyPositions();
+		$contentops =& $gCms->GetContentOperations();
+		$contentops->SetAllHierarchyPositions();
 
 		echo "[done]</p>";
 		
@@ -1066,7 +1067,7 @@ function showPageFive() {
 			echo "[done]</p>";
 		}
 		echo '<p>Clearing site cache (if any)...';
-                ContentManager::ClearCache();
+                $contentops->ClearCache();
 		echo "[done]</p>";
 	}
  

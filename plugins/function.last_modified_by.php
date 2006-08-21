@@ -37,7 +37,9 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
 	else
 	{
 		$format = $params['format'];
-                $thisuser = UserOperations::LoadUserByID($id);
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+		$thisuser =& $userops->LoadUserByID($id);
 	}
 
 

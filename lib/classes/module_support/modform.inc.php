@@ -378,7 +378,8 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 	if ($config["assume_mod_rewrite"])
 	{
 		# mod_rewrite
-		$alias = ContentManager::GetPageAliasFromID( $pageid );
+		$contentops =& $gCms->GetContentOperations();
+		$alias = $contentops->GetPageAliasFromID( $pageid );
 		if( $alias == false )
 		{
 			return '<!-- ERROR: could not get an alias for pageid='.$pageid.'-->';

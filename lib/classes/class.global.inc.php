@@ -113,6 +113,11 @@ class CmsObject {
      * html blob cache array - If something's called LoadHtmlBlobByID, we keep a copy around
 	 */
 	var $HtmlBlobCache;
+	
+	/**
+	 * content types array - List of available content types
+	 */
+	var $contenttypes;
 
 	/**
 	 * Constructor
@@ -124,6 +129,7 @@ class CmsObject {
 	  $this->modules = array();
 	  $this->errors = array();
 	  $this->nls = array();
+	  $this->contenttypes = array();
 	  $this->TemplateCache = array();
 	  $this->StylesheeteCache = array();
 	  $this->variables['content-type'] = 'text/html';
@@ -210,6 +216,30 @@ class CmsObject {
 
 		return $this->moduleoperations;
 	}
+	
+	function & GetUserOperations()
+	{
+        if (!isset($this->useroperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
+			$useroperations =& new UserOperations();
+			$this->useroperations = &$useroperations;
+		}
+
+		return $this->useroperations;
+	}
+	
+	function & GetContentOperations()
+	{
+        if (!isset($this->contentoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
+			$contentoperations =& new ContentOperations();
+			$this->contentoperations = &$contentoperations;
+		}
+
+		return $this->contentoperations;
+	}
 
 	function & GetSmarty()
 	{
@@ -247,7 +277,8 @@ class CmsObject {
 			#require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
 
 			#Setup global smarty object
-			$this->hrinstance =& ContentManager::GetAllContentAsHierarchy(false, array());
+			$contentops =& $this->GetContentOperations();
+			$this->hrinstance =& $contentops->GetAllContentAsHierarchy(false, array());
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
 
@@ -270,6 +301,14 @@ class CmsRoute
 	var $module;
 	var $regex;
 	var $defaults;
+}
+
+class CmsContentTypePlaceholder
+{
+	var $type;
+	var $filename;
+	var $friendlyname;
+	var $loaded;
 }
 
 # vim:ts=4 sw=4 noet

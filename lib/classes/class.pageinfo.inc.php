@@ -125,13 +125,13 @@ class PageInfoOperations
 			$onepageinfo->content_metadata = $row['metadata'];
 			$onepageinfo->content_created_date = $db->UnixTimeStamp($row['c_create_date']);
 			$onepageinfo->content_modified_date = $db->UnixTimeStamp($row['c_date']);
-                        $onepageinfo->content_last_modified_by_id = $row['last_modified_by'];
+            $onepageinfo->content_last_modified_by_id = $row['last_modified_by'];
 			$onepageinfo->content_props = explode(',', $row['prop_names']);
 			$onepageinfo->template_id = $row['template_id'];
 			$onepageinfo->template_encoding = $row['encoding'];
 			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
 			$onepageinfo->cachable = ($row['cachable'] == 1?true:false);
-			$result =& $onepageinfo;
+			$result = $onepageinfo;
 		}
 		else
 		{
@@ -146,7 +146,7 @@ class PageInfoOperations
 				else
 					$onepageinfo->template_id = 'notemplate';
 				$onepageinfo->template_modified_date = time();
-				$result =& $onepageinfo;
+				$result = $onepageinfo;
 			}
 		}
 

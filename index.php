@@ -156,7 +156,9 @@ if (strpos($page, '/') !== FALSE)
 
 			//Get a decent returnid
 			if ($matches['returnid'] == '') {
-				$matches['returnid'] = ContentManager::GetDefaultPageID();
+				global $gCms;
+				$contentops =& $gCms->GetContentOperations();
+				$matches['returnid'] = $contentops->GetDefaultPageID();
 			}
 
 			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
@@ -175,7 +177,9 @@ if (strpos($page, '/') !== FALSE)
 
 if ($page == '')
 {
-	$page =& ContentManager::GetDefaultContent();
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$page =& $contentops->GetDefaultContent();
 }
 else
 {
@@ -194,7 +198,9 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 
 	$gCms->variables['page_name'] = $pageinfo->content_alias;
 	$gCms->variables['position'] = $pageinfo->content_hierarchy;
-	$gCms->variables['friendly_position'] = ContentManager::CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
 	
 	$smarty->assign('content_id', $pageinfo->content_id);
 	$smarty->assign('page', $page);

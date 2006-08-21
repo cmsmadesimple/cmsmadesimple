@@ -113,7 +113,9 @@ function setdefault($contentid)
 		}
 
 		$result = true;
-		ContentManager::ClearCache();
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$contentops->ClearCache();
 	}
 	return $result;
 }
@@ -174,7 +176,9 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	$all = ContentManager::GetAllContent(false);
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$all = $contentops->GetAllContent(false);
 	$cs = '';
 	foreach ($all as $thisitem)
 	{
@@ -265,7 +269,9 @@ function setactive($contentid, $active = true)
 		$value =& $node->getContent();
 		$value->SetActive($active);
 		$value->Save();
-		ContentManager::ClearCache();
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$contentops->ClearCache();
 	}
 }
 
@@ -319,8 +325,10 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$db->Execute($query, array($contentid, $parentid));
 		}
 
-		ContentManager::SetAllHierarchyPositions();
-		ContentManager::ClearCache();
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$contentops->SetAllHierarchyPositions();
+		$contentops->ClearCache();
 	}
 }
 
@@ -372,7 +380,9 @@ function deletecontent($contentid)
 			
 				$title = $contentobj->Name();
 				$contentobj->Delete();
-				ContentManager::SetAllHierarchyPositions();
+
+				$contentops =& $gCms->GetContentOperations();
+				$contentops->SetAllHierarchyPositions();
 				
 				#See if this is the last child... if so, remove
 				#the expand for it
@@ -386,7 +396,7 @@ function deletecontent($contentid)
 				
 				audit($contentid, $title, 'Deleted Content');
 				
-				ContentManager::ClearCache();
+				$contentops->ClearCache();
 			
 				$_GET['message'] = 'contentdeleted';
 			}
@@ -398,8 +408,11 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 {
 	$content = &$root->getContent();
 
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+
 	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.ContentManager::CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
 
 	if ($root->getChildrenCount()>0)
 	{
@@ -477,7 +490,8 @@ function reorder_process($get)
 		global $gCms;
 		$config =& $gCms->GetConfig();
 		$db =& $gCms->GetDb();
-	    $hm = &ContentManager::GetAllContentAsHierarchy(false);
+		$contentops =& $gCms->GetContentOperations();
+	    $hm = $contentops->GetAllContentAsHierarchy(false);
 		$hierarchy = &$hm->getRootNode();
 	
 		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
@@ -518,8 +532,10 @@ function reorder_process($get)
 			}
 		}
 		if (TRUE == $order_changed) {
-			ContentManager::SetAllHierarchyPositions();
-			ContentManager::ClearCache();
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$contentops->SetAllHierarchyPositions();
+			$contentops->ClearCache();
 		}
 	}
 	
@@ -571,7 +587,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     
     if (!array_key_exists($one->Owner(), $users))
     {
-        $users[$one->Owner()] = UserOperations::LoadUserById($one->Owner());
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+        $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
     }
     
     $display = 'none';

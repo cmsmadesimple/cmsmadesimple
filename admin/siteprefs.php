@@ -84,7 +84,9 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST['clearcache']))
 {
-	ContentManager::ClearCache();
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+	$contentops->ClearCache();
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))

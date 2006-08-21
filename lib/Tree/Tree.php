@@ -158,7 +158,9 @@ class Tree
 	function &getNodeByAlias($alias)
 	{
 		$result = null;
-		$id = ContentManager::GetPageIDFromAlias($alias);
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$id = $contentops->GetPageIDFromAlias($alias);
 		if ($id)
 		{
 			$result =& $this->getNodeById($id);
@@ -174,7 +176,9 @@ class Tree
 	function &getNodeByHierarchy($position)
 	{
 		$result = null;
-		$id = ContentManager::GetPageIDFromHierarchy($position);
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		$id = $contentops->GetPageIDFromHierarchy($position);
 		if ($id)
 		{
 			$result =& $this->getNodeById($id);
@@ -398,7 +402,9 @@ class Tree_Node
 			//Basic one.  Just try to load it separately
 			//into our list.  Get the props, since a one timer
 			//will probably have some property shown
-			$content =& ContentManager::LoadContentFromId($this->getTag(), true);
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$content =& $contentops->LoadContentFromId($this->getTag(), true);
 			$tree->content[$this->getTag()] =& $content;
 		}
 		return $content;
@@ -609,7 +615,9 @@ class Tree_Node
 			$checkid = $node->getTag();
 			$tree =& $this->getTree();
 			if (!isset($tree->content[$checkid])) {
-				ContentManager::LoadChildrenIntoTree($this->getTag(), $this->tree);
+				global $gCms;
+				$contentops =& $gCms->GetContentOperations();
+				$contentops->LoadChildrenIntoTree($this->getTag(), $this->tree);
 			}
 		}
 		return $this->nodes->nodes;

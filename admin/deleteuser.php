@@ -36,9 +36,11 @@ if (isset($_GET["user_id"]))
 
 	if ($access)
 	{
-		$oneuser = UserOperations::LoadUserByID($user_id);
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+		$oneuser = $userops->LoadUserByID($user_id);
 		$user_name = $oneuser->username;
-		$ownercount = UserOperations::CountPageOwnershipByID($user_id);
+		$ownercount = $userops->CountPageOwnershipByID($user_id);
 
 		if ($ownercount > 0)
 		{

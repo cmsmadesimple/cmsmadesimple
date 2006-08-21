@@ -204,7 +204,9 @@ class Content extends ContentBase
 	    $ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
 	    if (check_permission(get_userid(), 'Modify Page Structure'))
         {
-            $ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+            $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
         }
 	    $additionalcall = '';
 	    foreach($gCms->modules as $key=>$value)
@@ -250,7 +252,9 @@ class Content extends ContentBase
 
 	    if (!$adding && $showadmin)
 	    {
-		$ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
+			global $gCms;
+			$userops =& $gCms->GetUserOperations();
+			$ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	    }
 
 	    if ($adding || $showadmin)
@@ -294,7 +298,9 @@ class Content extends ContentBase
 		
 	if ($this->mAlias != $this->mOldAlias)
 	{
-	    $error = @ContentManager::CheckAliasError($this->mAlias, $this->mId);
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+	    $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
 	    if ($error !== FALSE)
 	    {
 		$errors[]= $error;

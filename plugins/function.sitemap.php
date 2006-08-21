@@ -20,7 +20,8 @@ function smarty_cms_function_sitemap($params, &$smarty) {
 
         global $gCms;
 
-        $allcontent = ContentManager::GetAllContent();
+		$contentops =& $gCms->GetContentOperations();
+        $allcontent = $contentops->GetAllContent();
 
         # defining variables
         $menu = "";

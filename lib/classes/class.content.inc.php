@@ -20,10 +20,6 @@
 #$Id$
 
 /**
- * This file respect the PHP Coding Standards : http://alltasks.net/code/php_coding_standard.html
- */
-
-/**
  * Generic content class.
  *
  * As for some treatment we don't need the extra properties of the content
@@ -33,6 +29,7 @@
  * @since		0.8
  * @package		CMS
  */
+
 class ContentBase
 {
     /**
@@ -445,7 +442,9 @@ class ContentBase
      */
     function Hierarchy()
     {
-	return ContentManager::CreateFriendlyHierarchyPosition($this->mHierarchy);
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		return $contentops->CreateFriendlyHierarchyPosition($this->mHierarchy);
     }
 
     function SetHierarchy($hierarchy)
@@ -570,7 +569,9 @@ class ContentBase
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			$error = @ContentManager::CheckAliasError($alias);
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$error = $contentops->CheckAliasError($alias);
 			if ($error !== FALSE)
 			{
 				if (FALSE == empty($alias))
@@ -578,7 +579,7 @@ class ContentBase
 					$alias_num_add = 2;
 					// If a '-2' version of the alias already exists
 					// Check the '-3' version etc.
-					while (@ContentManager::CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
 					{
 						$alias_num_add++;
 					}
@@ -1460,7 +1461,9 @@ class ContentBase
 		$ret[] = lang('additionaleditors');
 		$text = '<select name="additional_editors[]" multiple="multiple" size="5">';
 
-		$allusers = UserOperations::LoadUsers();
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+		$allusers =& $userops->LoadUsers();
 		$addteditors = $this->GetAdditionalEditors();
 		foreach ($allusers as $oneuser)
 		{
@@ -1684,823 +1687,54 @@ class ContentProperties
     {
         return $this->mAllowedPropertyNames;
     }
+
 } // end of class ContentProperties
 
 /**
- * Class for static methods related to content
+ * Class that module defined content types must extend.
  *
- * @since		0.8
+ * @since		0.9
  * @package		CMS
  */
-class ContentManager
+class CMSModuleContentType extends ContentBase
 {
-    /**
-     * Determine proper type of object, load it and return it
-     */
-	function &LoadContentFromId($id,$loadprops=true)
+	//What module do I belong to?  (needed for things like Lang to work right)
+	function ModuleName()
 	{
-		$result = FALSE;
+		return '';
+	}
 
+	function Lang($name, $params=array())
+	{
 		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-		$row = &$db->GetRow($query, array($id));
-		if ($row)
+		$cmsmodules = &$gCms->modules;
+		if (array_key_exists($this->ModuleName(), $cmsmodules))
 		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-			{
-				$classtype = strtolower($row['type']);
-				$contentobj = new $classtype; 
-				$contentobj->LoadFromData($row, FALSE);
-
-				return $contentobj;
-			}
-			else
-			{
-				return $result;
-			}
+			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
 		}
 		else
 		{
-			return $result;
+			return 'ModuleName() not defined properly';
 		}
 	}
 
-	function &LoadContentFromAlias($alias, $only_active = false)
+	/*
+	* Returns the instance of the module this content type belongs to
+	*
+	*/
+	function GetModuleInstance() 
 	{
 		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$row = '';
-
-		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
+		$cmsmodules = &$gCms->modules;
+		if (array_key_exists($this->ModuleName(), $cmsmodules))
 		{
-			//$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ? OR content_alias = ?";
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			if ($only_active == true)
-			{
-				$query .= " AND active = 1";
-			}
-			$row = &$db->GetRow($query, array($alias,$alias));
+			return $cmsmodules[$this->ModuleName()]['object'];
 		}
 		else
 		{
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-			if ($only_active == true)
-			{
-				$query .= " AND active = 1";
-			}
-			$row = &$db->GetRow($query, array($alias));
-		}
-
-		if ($row)
-		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-			{
-				$classtype = strtolower($row['type']);
-				$contentobj = new $classtype;
-				$contentobj->LoadFromData($row, TRUE);
-				return $contentobj;
-			}
-			else
-			{
-				return FALSE;
-			}
-		}
-		else
-		{
-			return FALSE;
+			return 'ModuleName() not defined properly';
 		}
 	}
-
-     /**
-     * Load the content of the object from a list of ID
-     * Private method.
-     * @param $ids	array of element ids
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns array of content objects (empty if not found)
-     */
-	/*private*/ function &LoadMultipleFromId($ids, $loadProperties = false)
-	{
-		global $gCms, $config, $sql_queries, $debug_errors;
-		$cpt = count($ids);
-		$contents=array();
-		if ($cpt==0) 
-		{
-			return $contents;
-		}
-		$db = &$gCms->GetDb();
-		$id_list = '(';
-		for ($i=0;$i<$cpt;$i++) 
-		{
-			$id_list .= $ids[$i];
-			if ($i<$cpt-1)
-			{
-				$id_list .= ',';
-			}
-		}
-		$id_list .= ')';
-		if ($id_list=='()') 
-		{
-			return $contents;
-		}
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
-		$rows   =& $db->Execute($query);
-
-		if ($rows)
-		{
-			while (isset($rows) && $row = &$rows->FetchRow())
-			{
-				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
-				{
-					$classtype = strtolower($row['type']);
-					$contentobj = new $classtype; 
-					$contentobj->LoadFromData($row,false);
-					$contents[]=$contentobj;
-					$result = true;
-				}
-			}
-			$rows->Close();
-		}
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-
-		return $contents;
-	}
-	
-    /**
-     * Load the content of the object from a list of aliases
-     * Private method.
-     * @param $ids	array of element ids
-     * Private method
-     *
-     * @param $alis				the alias of the element
-     * @param $loadProperties	whether to load or not the properties
-     *
-     * @returns array of content objects (empty if not found)
-     */
-	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
-	{
-		global $gCms, $config, $sql_queries, $debug_errors;
-		$cpt = count($ids);
-		$contents=array();
-		if ($cpt == 0)
-		{
-			return $contents;
-		}
-		$db = &$gCms->GetDb();
-		$id_list = '(';
-		for ($i=0; $i<$cpt; $i++) 
-		{
-			$id_list .= "'".$ids[$i]."'";
-			if ($i<$cpt-1)
-			{
-				$id_list .= ',';
-			}
-		}
-		$id_list .= ')';
-		if ($id_list == '()')
-		{
-			return $contents;
-		}
-		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
-		$rows   =& $db->Execute($query);
-
-		while (isset($rows) && $row=&$rows->FetchRow())
-		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes()))) 
-			{
-				$classtype = strtolower($row['type']);
-				$contentobj = new $classtype; 
-				$contentobj->LoadFromData($row,false);
-				$contents[] = $contentobj;
-				$result = true;
-			}
-		}
-
-		if ($rows) $rows->Close();
-
-		if (!$result)
-		{
-			if (true == $config["debug"])
-			{
-				# :TODO: Translate the error message
-				$debug_errors .= "<p>Could not retrieve content from db</p>\n";
-			}
-		}
-
-		if ($result && $loadProperties)
-		{
-			foreach ($contents as $content) 
-			{
-				if ($content->mPropertiesLoaded == false)
-				{
-					debug_buffer("load from id is loading properties");
-					$content->mProperties->Load($content->mId);
-					$content->mPropertiesLoaded = true;
-				}
-
-				if (NULL == $content->mProperties)
-				{
-					$result = false;
-
-					# debug mode
-					if (true == $config["debug"])
-					{
-						# :TODO: Translate the error message
-						$debug_errors .= "<p>Could not load properties for content</p>\n";
-					}
-				}
-			}
-		}
-		foreach ($contents as $content) 
-		{
-			$content->Load();
-		}
-		return $contents;
-	}
-
-
-    /**
-     * Display content
-     */
-	function DisplayContent($content)
-	{
-		//This should be straight forward, since the content will pretty much determine how it is displayed
-		$content->Show();
-	}
-
-    /**
-     * Determine if content should be loaded from cache
-     */
-    function IsCached($id)
-    {
-    }
-
-	function & GetDefaultContent()
-	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-
-		$result = -1;
-
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
-		if ($row)
-		{
-			$result = $row['content_id'];
-		}
-		else
-		{
-			#Just get something...
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-			$row = &$db->GetRow($query);
-			if ($row)
-			{
-				$result = $row['content_id'];
-			}
-		}
-
-		return $result;
-	}
-
-    /**
-     * Returns a hash of valid content types (classes that extend ContentBase)
-     * The key is the name of the class that would be saved into the dabase.  The
-     * value would be the text returned by the type's FriendlyName() method.
-     */
-	function & ListContentTypes()
-	{
-		global $gCms;
-
-		if (isset($gCms->variables['contenttypes']))
-		{
-			$variables =& $gCms->variables;
-			return $variables['contenttypes'];
-		}
-
-		$result = array();
-
-		foreach (get_declared_classes() as $oneclass)
-		{
-			if (strtolower(get_parent_class($oneclass)) == 'contentbase' || strtolower(get_parent_class($oneclass)) == 'cmsmodulecontenttype')
-			{
-				if (strtolower($oneclass) != 'cmsmodulecontenttype')
-				{
-					#array_push($result, strtolower($oneclass));
-					$tmpobj = new $oneclass;
-					$result[strtolower($oneclass)] = $tmpobj->FriendlyName();
-				}
-			}
-		}
-
-		$variables =& $gCms->variables;
-		$variables['contenttypes'] =& $result;
-
-		return $result;
-	}
-
-    /**
-     * Updates the hierarchy position of one item
-     */
-	function SetHierarchyPosition($contentid)
-	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-
-		$current_hierarchy_position = '';
-		$current_id_hierarchy_position = '';
-		$current_hierarchy_path = '';
-		$current_parent_id = $contentid;
-		$count = 0;
-
-		while ($current_parent_id > -1)
-		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
-			$row = &$db->GetRow($query, array($current_parent_id));
-			if ($row)
-			{
-				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
-				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
-				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
-				$current_parent_id = $row['parent_id'];
-				$count++;
-			}
-			else
-			{
-				$current_parent_id = 0;
-			}
-		}
-
-		if (strlen($current_hierarchy_position) > 0)
-		{
-			$current_hierarchy_position = substr($current_hierarchy_position, 0, strlen($current_hierarchy_position) - 1);
-		}
-		if (strlen($current_id_hierarchy_position) > 0)
-		{
-			$current_id_hierarchy_position = substr($current_id_hierarchy_position, 0, strlen($current_id_hierarchy_position) - 1);
-		}
-		if (strlen($current_hierarchy_path) > 0)
-		{
-			$current_hierarchy_path = substr($current_hierarchy_path, 0, strlen($current_hierarchy_path) - 1);
-		}
-
-		$query = "SELECT prop_name FROM ".cms_db_prefix()."content_props WHERE content_id = ?";
-		$prop_name_array = $db->GetCol($query, array($contentid));
-
-		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
-
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
-		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
-	}
-
-    /**
-     * Updates the hierarchy position of all items
-     */
-	function SetAllHierarchyPositions()
-	{
-		global $gCms;
-		$db = $gCms->GetDb();
-
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
-		$dbresult = &$db->Execute($query);
-
-		while ($dbresult && !$dbresult->EOF)
-		{
-			ContentManager::SetHierarchyPosition($dbresult->fields['content_id']);
-			$dbresult->MoveNext();
-		}
-		
-		if ($dbresult) $dbresult->Close();
-	}
-	
-	function &GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
-	{
-		debug_buffer('', 'starting tree');
-
-		require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
-
-		$nodes = array();
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-		$usecache = true;
-		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
-		{
-			#$usecache = false;
-		}
-
-		$loadedcache = false;
-
-		if ($usecache)
-		{
-			if (isset($gCms->variables['pageinfo']) && file_exists($cachefilename))
-			{
-				$pageinfo =& $gCms->variables['pageinfo'];
-				debug_buffer('content cache file exists... file: ' . filemtime($cachefilename) . ' content:' . $pageinfo->content_last_modified_date);
-				if (isset($pageinfo->content_last_modified_date) && $pageinfo->content_last_modified_date < filemtime($cachefilename))
-				{
-					debug_buffer('file needs loading');
-
-					$handle = fopen($cachefilename, "r");
-					$data = fread($handle, filesize($cachefilename));
-					fclose($handle);
-
-					$tree = unserialize(substr($data, 16));
-
-					#$variables =& $gCms->variables;
-					#$variables['contentcache'] =& $tree;
-					if (strtolower(get_class($tree)) == 'tree')
-					{
-						$loadedcache = true;
-					}
-					else
-					{
-						$loadedcache = false;
-					}
-				}
-			}
-		}
-
-		if (!$loadedcache)
-		{
-			$query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-			$dbresult =& $db->Execute($query);
-
-			if ($dbresult && $dbresult->RecordCount() > 0)
-			{
-				while ($row = $dbresult->FetchRow())
-				{
-					$nodes[] = $row['id_hierarchy'];
-				}
-			}
-
-			$tree = &new Tree();
-			debug_buffer('', 'Start Loading Children into Tree');
-			$tree = &Tree::createFromList($nodes, '.');
-			debug_buffer('', 'End Loading Children into Tree');
-		}
-
-		if (!$loadedcache && $usecache)
-		{
-			debug_buffer("Serializing...");
-			$handle = fopen($cachefilename, "w");
-			fwrite($handle, '<?php return; ?>'.serialize($tree));
-			fclose($handle);
-		}
-
-		ContentManager::LoadChildrenIntoTree(-1, $tree);
-
-		debug_buffer('', 'ending tree');
-
-		return $tree;
-	}
-	
-	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
-	{	
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
-		$dbresult =& $db->Execute($query);
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			while ($row = $dbresult->FetchRow())
-			{
-				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], array_keys(@ContentManager::ListContentTypes())))
-				{
-					$contentobj = &new $row['type'];
-					$contentobj->LoadFromData($row, $loadprops);
-					$contentcache =& $tree->content;
-					$id = $row['content_id'];
-					$contentcache[$id] =& $contentobj;
-				}
-			}
-		}
-		
-		if ($dbresult) $dbresult->Close();
-	}
-
-	/**
-	*  Sets the default content as id
-	*/   
-	function SetDefaultContent($id) {
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
-		$old_id = $db->GetOne($query);
-		if (isset($old_id)) 
-		{
-			$one = new Content();
-			$one->LoadFromId($old_id);
-			$one->SetDefaultContent(false);
-			debug_buffer('save from ' . __LINE__);
-			$one->Save();
-		}
-		$one = new Content();
-		$one->LoadFromId($id);
-		$one->SetDefaultContent(true);
-		debug_buffer('save from ' . __LINE__);
-		$one->Save();
-	}
-
-	function &GetAllContent($loadprops=true)
-	{
-		debug_buffer('get all content...');
-
-		global $gCms;
-
-		$contentcache = array();
-
-		$db = &$gCms->GetDb();
-		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-		$dbresult = &$db->Execute($query);
-
-		$map = array();
-		$count = 0;
-
-		while ($dbresult && !$dbresult->EOF)
-		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys(@ContentManager::ListContentTypes())))
-			{
-				$contentobj = new $dbresult->fields['type'];
-				$contentobj->LoadFromData($dbresult->FetchRow(), false);
-				$map[$contentobj->Id()] = $count;
-				$contentcache[] = $contentobj;
-				$count++;
-			}
-			else
-			{
-				$dbresult->MoveNext();
-			}
-		}
-
-		if ($dbresult) $dbresult->Close();
-
-		for ($i=0;$i<$count;$i++)
-		{
-			if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
-			{
-				$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
-			}
-		}
-
-		return $contentcache;
-	}
-
-	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
-	{
-		$result = '';
-
-		$allcontent = ContentManager::GetAllContent();
-
-		if ($allcontent !== FALSE && count($allcontent) > 0)
-		{
-			$result .= '<select name="'.$name.'">';
-			$result .= '<option value="-1">None</option>';
-
-			$curhierarchy = '';
-
-			foreach ($allcontent as $one)
-			{
-				if ($one->Id() == $current)
-				{
-					#Grab hierarchy just in case we need to check children
-					#(which will always be after)
-					$curhierarchy = $one->Hierarchy();
-
-					#Then jump out.  We don't want ourselves in the list.
-					continue;
-				}
-				#If it's a child of the current, we don't want to show it as it
-				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
-				{
-					continue;
-				}
-				#Don't include content types that do not want children either...
-				if ($one->WantsChildren() == true)
-				{
-					$result .= '<option value="'.$one->Id().'"';
-
-					#Select current parent if it exists
-					if ($one->Id() == $parent)
-					{
-						$result .= ' selected="true"';
-					}
-
-					$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
-				}
-			}
-
-			$result .= '</select>';
-		}
-
-		return $result;
-	}
-
-
-    // function to get the id of the default page
-	function GetDefaultPageID()
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
-		if (!$row)
-		{
-			return false;
-		}
-		return $row['content_id'];
-	}
-
-
-    // function to map an alias to a page id
-    // returns false if nothing cound be found.
-	function GetPageIDFromAlias( $alias )
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		if (is_numeric($alias) && strpos($alias,'.') == FALSE && strpos($alias,',') == FALSE)
-		{
-			return $alias;
-		}
-
-		$params = array($alias);
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-		$row = $db->GetRow($query, $params);
-
-		if (!$row)
-		{
-			return false;
-		}
-		
-		return $row['content_id'];
-	}
-	
-	function GetPageIDFromHierarchy($position)
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
-		$row = $db->GetRow($query, array(ContentManager::CreateUnfriendlyHierarchyPosition($position)));
-
-		if (!$row)
-		{
-			return false;
-		}
-		return $row['content_id'];
-	}
-
-
-    // function to map an alias to a page id
-    // returns false if nothing cound be found.
-	function GetPageAliasFromID( $id )
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		if (!is_numeric($id) && strpos($id,'.') == TRUE && strpos($id,',') == TRUE)
-		{
-			return $id;
-		}
-
-		$params = array($id);
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
-		$row = $db->GetRow($query, $params);
-
-		if ( !$row )
-		{
-			return false;
-		}
-		return $row['content_alias'];
-	}
-
-	function CheckAliasError($alias, $content_id = -1)
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$error = FALSE;
-
-		if (preg_match('/^\d+$/', $alias))
-		{
-			$error = lang('aliasnotaninteger');
-		}
-		else if (!preg_match('/^[\-\_\w]+$/', $alias))
-		{
-			$error = lang('aliasmustbelettersandnumbers');
-		}
-		else
-		{
-			$params = array($alias);
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
-			if ($content_id > -1)
-			{
-				$query .= " AND content_id != ?";
-				$params[] = $content_id;
-			}
-			$row = &$db->GetRow($query, $params);
-
-			if ($row)
-			{
-				$error = lang('aliasalreadyused');
-			}
-		}
-
-		return $error;
-	}
-	
-	function ClearCache()
-	{
-		global $gCms;
-		$smarty =& $gCms->GetSmarty();
-
-		$smarty->clear_all_cache();
-		$smarty->clear_compiled_tpl();
-
-		if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
-		{
-			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
-		}
-	}
-
-	function CreateFriendlyHierarchyPosition($position)
-	{
-		#Change padded numbers back into user-friendly values
-		$tmp = '';
-		$levels = split('\.', $position);
-		foreach ($levels as $onelevel)
-		{
-			$tmp .= ltrim($onelevel, '0') . '.';
-		}
-		$tmp = rtrim($tmp, '.');
-		return $tmp;
-	}
-
-	function CreateUnfriendlyHierarchyPosition($position)
-	{
-		#Change user-friendly values into padded numbers
-		$tmp = '';
-		$levels = split('\.', $position);
-		foreach ($levels as $onelevel)
-		{
-			$tmp .= str_pad($onelevel, 5, '0', STR_PAD_LEFT) . '.';
-		}
-		$tmp = rtrim($tmp, '.');
-		return $tmp;
-	}
-	
 }
 
 # vim:ts=4 sw=4 noet

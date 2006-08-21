@@ -185,9 +185,11 @@ else
 		  }
 	      }
 	    if (TRUE == $order_changed)
-	      {
-		ContentManager::SetAllHierarchyPositions();
-	      }
+	    {
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$contentops->SetAllHierarchyPositions();
+	    }
 	    else
 	      {
 		$reorder_error = 'no_orders_changed';

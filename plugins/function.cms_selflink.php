@@ -195,7 +195,9 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 				{
 					if ($condition == '-')
 					{
-						$defaultid = ContentManager::GetDefaultPageID();
+						global $gCms;
+						$contentops =& $gCms->GetContentOperations();
+						$defaultid = $contentops->GetDefaultPageID();
 						if ($flatcontent[$i]->getTag() == $defaultid)
 						{
 							$number = $i;

@@ -26,7 +26,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
-		if ($pageinfo->content_metadata != '')
+		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
 		{
 			$result .= "\n" . $pageinfo->content_metadata;
 		}

@@ -38,7 +38,9 @@ if (isset($_GET["toggleactive"]))
  if($_GET["toggleactive"]==1) {
    $error .= "<li>".lang('errorupdatinguser')."</li>";
  } else {
-  $thisuser = UserOperations::LoadUserByID($_GET["toggleactive"]);
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+  $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
 
   if($thisuser) {
 
@@ -104,7 +106,9 @@ if (FALSE == empty($error)) {
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
 	$result = $db->Execute($query);
 
-	$userlist = UserOperations::LoadUsers();
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$userlist =& $userops->LoadUsers();
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

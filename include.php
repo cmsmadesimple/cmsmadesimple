@@ -154,24 +154,30 @@ debug_buffer('loading content functions');
 require(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-debug_buffer('loading content class');
-require(cms_join_path($dirname,'lib','classes','class.content.inc.php'));
+/*
 debug_buffer('loading module class');
 require(cms_join_path($dirname,'lib','classes','class.module.inc.php'));
-debug_buffer('loading user functions');
-require(cms_join_path($dirname,'lib','classes','class.user.inc.php'));
+*/
 debug_buffer('loading gcb functions');
 require(cms_join_path($dirname,'lib','classes','class.htmlblob.inc.php'));
 debug_buffer('loading template functions');
 require(cms_join_path($dirname,'lib','classes','class.template.inc.php'));
-debug_buffer('loading stylesheet functions');
-require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
 debug_buffer('loading translation functions');
 require(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading bookmark functions');
 require(cms_join_path($dirname,'lib','classes','class.bookmark.inc.php'));
+
+/*
+debug_buffer('loading content class');
+require(cms_join_path($dirname,'lib','classes','class.content.inc.php'));
+debug_buffer('loading user functions');
+require(cms_join_path($dirname,'lib','classes','class.user.inc.php'));
+*/
+debug_buffer('loading stylesheet functions');
+require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
 debug_buffer('loading group functions');
 require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
+
 debug_buffer('loading events functions');
 require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading user tags functions');
@@ -190,6 +196,7 @@ if (!isset($DONT_LOAD_DB))
 }
 
 $smarty =& $gCms->GetSmarty();
+$contenttypes =& $gCms->contenttypes;
 
 #Load content types
 $dir = cms_join_path($dirname,'lib','classes','contenttypes');
@@ -199,7 +206,12 @@ while ($file = readdir ($handle))
     $path_parts = pathinfo($file);
     if ($path_parts['extension'] == 'php')
     {
-        include(cms_join_path($dir,$file));
+		$obj =& new CmsContentTypePlaceholder();
+		$obj->type = strtolower(basename($file, '.inc.php'));
+		$obj->filename = cms_join_path($dir,$file);
+		$obj->loaded = false;
+		$obj->friendlyname = basename($file, '.inc.php');
+		$contenttypes[strtolower(basename($file, '.inc.php'))] =& $obj;
     }
 }
 closedir($handle);

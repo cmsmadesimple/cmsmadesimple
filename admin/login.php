@@ -56,7 +56,9 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
-	$oneuser = UserOperations::LoadUserByUsername($username, $password, true, true);
+	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$oneuser =& $userops->LoadUserByUsername($username, $password, true, true);
 	
 	debug_buffer("Got user by username");
 	debug_buffer($oneuser);

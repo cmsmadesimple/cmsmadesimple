@@ -114,15 +114,6 @@ class CMSModule
 		$this->modmisc = false;
 	}
 	
-	function LoadInstallMethods()
-	{
-		if (!$this->modinstall)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modinstall.inc.php'));
-			$this->modinstall = true;
-		}
-	}
-	
 	function LoadTemplateMethods()
 	{
 		if (!$this->modtemplates)
@@ -415,6 +406,21 @@ class CMSModule
 	{
 		return FALSE;
 	}
+	
+	function RegisterContentType($name, $file, $friendlyname = '')
+	{
+		global $gCms;
+		$contenttypes =& $gCms->contenttypes;
+		if (!isset($contenttypes[strtolower($name)]))
+		{
+			$obj =& new CmsContentTypePlaceholder();
+			$obj->type = strtolower($name);
+			$obj->filename = $file;
+			$obj->loaded = false;
+			$obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
+			$contenttypes[strtolower($name)] =& $obj;
+		}
+	}
 
 	/**
 	 * Return an instance of the new content type
@@ -443,8 +449,22 @@ class CMSModule
 	 */
 	function Install()
 	{
-		$this->LoadInstallMethods();
-		return cms_module_Install($this);
+		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.install.php';
+		if (@is_file($filename))
+		{
+			{
+				global $gCms;
+				$db =& $gCms->GetDb();
+				$config =& $gCms->GetConfig();
+				$smarty =& $gCms->GetSmarty();
+
+				include($filename);
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 	/**
@@ -463,8 +483,22 @@ class CMSModule
 	 */
 	function Uninstall()
 	{
-		$this->LoadInstallMethods();
-		return cms_module_Uninstall($this);
+		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
+		if (@is_file($filename))
+		{
+			{
+				global $gCms;
+				$db =& $gCms->GetDb();
+				$config =& $gCms->GetConfig();
+				$smarty =& $gCms->GetSmarty();
+
+				include($filename);
+			}
+		}
+		else
+		{
+			return FALSE;
+		}
 	}
 
 	/**
@@ -497,8 +531,18 @@ class CMSModule
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
-		$this->LoadInstallMethods();
-		return cms_module_Upgrade($this, $oldversion, $newversion);
+		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.upgrade.php';
+		if (@is_file($filename))
+		{
+			{
+				global $gCms;
+				$db =& $gCms->GetDb();
+				$config =& $gCms->GetConfig();
+				$smarty =& $gCms->GetSmarty();
+
+				include($filename);
+			}
+		}
 	}
 
 	/**
@@ -2228,53 +2272,6 @@ class CMSModule
 	function SendEvent( $eventname, $params )
 	{
 		Events::SendEvent($this->GetName(), $eventname, $params);
-	}
-}
-
-/**
- * Class that module defined content types must extend.
- *
- * @since		0.9
- * @package		CMS
- */
-class CMSModuleContentType extends ContentBase
-{
-	//What module do I belong to?  (needed for things like Lang to work right)
-	function ModuleName()
-	{
-		return '';
-	}
-
-	function Lang($name, $params=array())
-	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		if (array_key_exists($this->ModuleName(), $cmsmodules))
-		{
-			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
-		}
-		else
-		{
-			return 'ModuleName() not defined properly';
-		}
-	}
-
-	/*
-	* Returns the instance of the module this content type belongs to
-	*
-	*/
-	function GetModuleInstance() 
-	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
-		if (array_key_exists($this->ModuleName(), $cmsmodules))
-		{
-			return $cmsmodules[$this->ModuleName()]['object'];
-		}
-		else
-		{
-			return 'ModuleName() not defined properly';
-		}
 	}
 }
 

@@ -119,14 +119,18 @@ class SectionHeader extends ContentBase
 	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
     if (check_permission(get_userid(), 'Modify Page Structure'))
     {
-    	$ret[]= array(lang('parent').':',ContentManager::CreateHierarchyDropdown($this->mId, $this->mParentId));
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+    	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 
 	if (!$adding && $showadmin)
 	{
-	    $ret[]= array(lang('owner').':',@UserOperations::GenerateDropdown($this->Owner()));
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	}
 
 	if ($adding || $showadmin)
