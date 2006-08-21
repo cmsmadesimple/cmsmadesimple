@@ -1592,15 +1592,15 @@ class ContentProperties
 			while ($dbresult && !$dbresult->EOF)
 			{
 				$prop_name = $dbresult->fields['prop_name'];
-				if ($this->GetAllowedPropertyNames() == NULL || in_array($prop_name, $this->GetAllowedPropertyNames()))
-				{
+//				if ($this->GetAllowedPropertyNames() == NULL || in_array($prop_name, $this->GetAllowedPropertyNames()))
+//				{
 					if (!in_array($prop_name, $this->mPropertyNames))
 					{
 						$this->mPropertyNames[] = $prop_name;
 					}
 					$this->mPropertyTypes[$prop_name] = $dbresult->fields['type'];
 					$this->mPropertyValues[$prop_name] = $dbresult->fields['content'];
-				}
+//				}
 				$dbresult->MoveNext();
 			}
 			
@@ -1615,25 +1615,39 @@ class ContentProperties
 			global $gCms, $config, $sql_queries, $debug_errors;
 			$db = &$gCms->GetDb();
 
-			$insquery = "INSERT INTO ".cms_db_prefix()."content_props (content_id, type, prop_name, param1, param2, param3, content) VALUES (?,?,?,?,?,?,?)";
-
 			$concat = '';
 
 			$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
 			$dbresult = $db->Execute($delquery);
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
-				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
-				{
-					$dbresult = $db->Execute($insquery, array(
-						$content_id,
-						$this->mPropertyTypes[$key],
-						$key,
-						'',
-						'',
-						'',
-						$this->mPropertyValues[$key],
-						));
+//				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
+//				{
+
+					$insquery = "
+                        INSERT INTO 
+                            ".cms_db_prefix()."content_props 
+                        (
+                            content_id, 
+                            type, 
+                            prop_name, 
+                            param1, 
+                            param2, 
+                            param3, 
+                            content
+                        ) 
+                            VALUES 
+                        (
+                            '$content_id',
+                            '{$this->mPropertyTypes[$key]}',
+                            '$key',
+                            '',
+                            '',
+                            '',
+                            '{$this->mPropertyValues[$key]}'
+                        )
+                    ";
+					$dbresult = $db->Execute($insquery);
 
 						$concat .= $this->mPropertyValues[$key];
 
@@ -1652,7 +1666,7 @@ class ContentProperties
 							}
 						}
 					}
-				}
+//				}
 
 				if ($concat != '')
 				{
