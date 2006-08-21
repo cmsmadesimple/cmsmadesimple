@@ -33,6 +33,7 @@ function smarty_cms_function_anchor($params, &$smarty)
 	if (isset($_SERVER['REQUEST_URI']))
 	{
 		$url = $_SERVER['REQUEST_URI'].'#'.$params['anchor'];
+		$url = str_replace('&', '&amp;', $url);
 		if (isset($params['onlyhref']) && ($params['onlyhref'] == '1' || $params['onlyhref'] == 'true'))
 			#Note if you set 'onlyheref' that is what you get - no class or title or tabindex or text
 			echo $url;
