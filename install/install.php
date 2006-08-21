@@ -908,8 +908,18 @@ function showPageFive() {
         exit;
     } ## if
 	*/
-
-	require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."lib".DIRECTORY_SEPARATOR."config.functions.php");
+	
+	require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR."config.functions.php");
+	
+	// check if db info is correct as it should at this point to prevent an undeleted installation dir
+	// to be used for sending spam by messing up $_POST variables
+	$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
+	
+    if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
+	{
+		showPageThree('Could not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
+		return;
+	}
 
 	$newconfig = cms_config_load();
 
@@ -1004,8 +1014,6 @@ function showPageFive() {
 
 		$gCms->config = $newconfig;
 
-		$db = &ADONewConnection($newconfig['dbms'], 'pear:date:extend:transaction');
-		$db->Connect($newconfig["db_hostname"],$newconfig["db_username"],$newconfig["db_password"],$newconfig["db_name"]);
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
 		$gCms->db =& $db;
