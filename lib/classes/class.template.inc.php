@@ -140,7 +140,7 @@ class TemplateOperations
 			$dbresult->MoveNext();
 		}
 		
-		if ($dbresult) $dbreuslt->Close();
+		if ($dbresult) $dbresult->Close();
 
 		return $result;
 	}
@@ -227,7 +227,7 @@ class TemplateOperations
 			$dbresult->MoveNext();
 		}
 		
-		if ($dbresult) $dbreuslt->Close();
+		if ($dbresult) $dbresult->Close();
 
 		return $result;
 	}
