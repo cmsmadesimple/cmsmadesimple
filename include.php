@@ -78,6 +78,9 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #$config = cms_config_load(true);
 $config =& $gCms->GetConfig();
 
+#Define the CMS_ADODB_DT constant
+define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
+
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']);
 
