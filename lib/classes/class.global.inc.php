@@ -240,6 +240,18 @@ class CmsObject {
 
 		return $this->contentoperations;
 	}
+	
+	function & GetBookmarkOperations()
+	{
+        if (!isset($this->bookmarkoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
+			$bookmarkoperations =& new BookmarkOperations();
+			$this->bookmarkoperations = &$bookmarkoperations;
+		}
+
+		return $this->bookmarkoperations;
+	}
 
 	function & GetSmarty()
 	{

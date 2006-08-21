@@ -33,8 +33,10 @@ include_once("header.php");
 <?php
 
 	$userid = get_userid();
-
-	$marklist = BookmarkOperations::LoadBookmarks($userid);
+	
+	global $gCms;
+	$bookops =& $gCms->GetBookmarkOperations();
+	$marklist =& $bookops->LoadBookmarks($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

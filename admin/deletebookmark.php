@@ -32,7 +32,9 @@ if (isset($_GET["bookmark_id"]))
 
 	$result = false;
 
-	$markobj = BookmarkOperations::LoadBookmarkByID($bookmark_id);
+	global $gCms;
+	$bookops =& $gCms->GetBookmarkOperations();
+	$markobj = $bookops->LoadBookmarkByID($bookmark_id);
 
 	if ($markobj)
 	{

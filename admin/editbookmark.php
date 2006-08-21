@@ -59,7 +59,9 @@ if (isset($_POST["editbookmark"]))
 
 	if ($validinfo)
 		{
-		$markobj = new Bookmark();
+		global $gCms;
+		$gCms->GetBookmarkOperations();
+		$markobj =& new Bookmark();
 		$markobj->bookmark_id = $bookmark_id;
 		$markobj->title = $title;
 		$markobj->url = $url;

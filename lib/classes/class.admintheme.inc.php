@@ -429,7 +429,9 @@ class AdminTheme
      */
     function DoBookmarks()
     {
-        $marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
+		global $gCms;
+		$bookops =& $gCms->GetBookmarkOperations();
+        $marks = array_reverse($bookops->LoadBookmarks($this->userid));
         $tmpMark = new Bookmark();
         $tmpMark->title = lang('addbookmark');
         $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
@@ -454,7 +456,9 @@ class AdminTheme
 	echo '<div class="itemoverflow">';
 	echo '<h2>'.lang('bookmarks').'</h2>';
 	echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
-	$marks = array_reverse(BookmarkOperations::LoadBookmarks($this->userid));
+	global $gCms;
+	$bookops =& $gCms->GetBookmarkOperations();
+	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
 	$marks = array_reverse($marks);
 	if (FALSE == empty($marks))
 	  {
