@@ -604,7 +604,7 @@ function showPageThree($errorMessage='')
 	}
 	if ($email_accountinfo && trim($_POST['adminemail'] == ''))
     {
-		showPageTwo('E-mail accountinfo selected, but no E-mail address given!', $_POST['adminusername'], $_POST['adminemail'], '1'));
+		showPageTwo('E-mail accountinfo selected, but no E-mail address given!', $_POST['adminusername'], $_POST['adminemail'], '1');
 		return;
     }
 	
