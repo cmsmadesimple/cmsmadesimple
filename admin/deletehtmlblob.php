@@ -40,6 +40,7 @@ if (isset($_GET["htmlblob_id"]))
 		
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
+		$templateops =& $gCms->GetTemplateOperations();
 
 		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob_name = $blobobj->name;
@@ -77,7 +78,7 @@ if (isset($_GET["htmlblob_id"]))
 
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
 
-			TemplateOperations::TouchAllTemplates(); #So pages recompile
+			$templateops->TouchAllTemplates(); #So pages recompile
 		}
 	}
 }

@@ -613,6 +613,7 @@ function get_stylesheet($template_id, $media_type = '')
 
 	global $gCms;
 	$db =& $gCms->GetDb();
+	$templateops =& $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
 
@@ -620,7 +621,7 @@ function get_stylesheet($template_id, $media_type = '')
 	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
 	{
 		#Ok, it's valid, let's load the bugger
-		$templateobj =& TemplateOperations::LoadTemplateById($template_id);
+		$templateobj =& $templateops->LoadTemplateById($template_id);
 	}
 
 	#If it's valid after loading, then start the process...
@@ -678,6 +679,7 @@ function get_stylesheet_media_types($template_id)
 
 	global $gCms;
 	$db =& $gCms->GetDb();
+	$templateops =& $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
 
@@ -685,7 +687,7 @@ function get_stylesheet_media_types($template_id)
 	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
 	{
 		#Ok, it's valid, let's load the bugger
-		$templateobj = TemplateOperations::LoadTemplateById($template_id);
+		$templateobj = $templateops->LoadTemplateById($template_id);
 		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
 		{
 			$result[] = '';

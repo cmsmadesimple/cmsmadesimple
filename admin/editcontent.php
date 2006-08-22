@@ -166,6 +166,7 @@ function createtmpfname(&$contentobj)
 {
 	global $gCms;
 	$config =& $gCms->GetConfig();
+	$templateops =& $gCms->GetTemplateOperations();
 
 	$data["content_id"] = $contentobj->Id();
 	$data["title"] = $contentobj->Name();
@@ -174,7 +175,7 @@ function createtmpfname(&$contentobj)
 	$data["template_id"] = $contentobj->TemplateId();
 	$data["hierarchy"] = $contentobj->Hierarchy();
 	
-	$templateobj = TemplateOperations::LoadTemplateById($contentobj->TemplateId());
+	$templateobj = $templateops->LoadTemplateById($contentobj->TemplateId());
 	$data['template'] = $templateobj->content;
 
 	$stylesheetobj = get_stylesheet($contentobj->TemplateId());

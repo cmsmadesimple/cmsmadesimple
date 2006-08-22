@@ -253,6 +253,18 @@ class CmsObject {
 		return $this->bookmarkoperations;
 	}
 	
+	function & GetTemplateOperations()
+	{
+        if (!isset($this->templateoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
+			$templateoperations =& new TemplateOperations();
+			$this->templateoperations = &$templateoperations;
+		}
+
+		return $this->templateoperations;
+	}
+	
 	function & GetGroupOperations()
 	{
         if (!isset($this->groupoperations))

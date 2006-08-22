@@ -157,12 +157,12 @@ debug_buffer('loading content functions');
 require(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-debug_buffer('loading template functions');
-require(cms_join_path($dirname,'lib','classes','class.template.inc.php'));
 debug_buffer('loading translation functions');
 require(cms_join_path($dirname,'lib','translation.functions.php'));
 
 /*
+debug_buffer('loading template functions');
+require(cms_join_path($dirname,'lib','classes','class.template.inc.php'));
 debug_buffer('loading gcb functions');
 require(cms_join_path($dirname,'lib','classes','class.htmlblob.inc.php'));
 debug_buffer('loading module class');

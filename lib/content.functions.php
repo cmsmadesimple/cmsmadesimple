@@ -416,7 +416,9 @@ class Smarty_CMS extends Smarty {
 			}
 			else
 			{
-				$templateobj =& TemplateOperations::LoadTemplateByID($pageinfo->template_id);
+				global $gCms;
+				$templateops =& $gCms->GetTemplateOperations();
+				$templateobj =& $templateops->LoadTemplateByID($pageinfo->template_id);
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
 					$tpl_source = $templateobj->content;

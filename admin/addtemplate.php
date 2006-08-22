@@ -84,6 +84,9 @@ if (isset($_POST["cancel"]))
 	return;
 }
 
+global $gCms;
+$templateops =& $gCms->GetTemplateOperations();
+
 $userid = get_userid();
 $access = check_permission($userid, 'Add Templates');
 
@@ -225,7 +228,7 @@ else
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', '', $encoding)?></p>
 		</div>
-		<?php if (TemplateOperations::StylesheetsUsed() > 0) { ?>
+		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding)?></p>

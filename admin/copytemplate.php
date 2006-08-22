@@ -45,6 +45,9 @@ if (isset($_POST["cancel"]))
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 
+global $gCms;
+$templateops =& $gCms->GetTemplateOperations();
+
 if ($access)
 {
 	if (isset($_POST["copytemplate"]))
@@ -57,7 +60,7 @@ if ($access)
 		}
 		else
 		{
-			if (TemplateOperations::CheckExistingTemplateName($template))
+			if ($templateops->CheckExistingTemplateName($template))
 			{
 				$error .= "<li>".lang('templateexists')."</li>";
 				$validinfo = false;
@@ -66,7 +69,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+			$onetemplate = $templateops->LoadTemplateByID($template_id);
 			$onetemplate->id = -1; //Reset id so it will insert a new record
 			$onetemplate->name = $template; //Change name
 			$onetemplate->default = 0; //It can't be default

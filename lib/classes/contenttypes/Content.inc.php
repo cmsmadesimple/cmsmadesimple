@@ -177,6 +177,7 @@ class Content extends ContentBase
     {
 	global $gCms;
 	$config = $gCms->GetConfig();
+	$templateops =& $gCms->GetTemplateOperations();
 	$ret = array();
 	$stylesheet = '';
 	if ($this->TemplateId() > 0)
@@ -185,7 +186,7 @@ class Content extends ContentBase
 	}
 	else
 	{
-	    $defaulttemplate = TemplateOperations::LoadDefaultTemplate();
+	    $defaulttemplate = $templateops->LoadDefaultTemplate();
 	    if (isset($defaulttemplate))
 	    {
 		$this->mTemplateId = $defaulttemplate->id;
@@ -215,7 +216,7 @@ class Content extends ContentBase
 		}
 	    }
 			
-	    $ret[]= array(lang('template').':',TemplateOperations::TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+	    $ret[]= array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
 	    $ret[]= array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
 
 	    // add additional content blocks if required
@@ -320,16 +321,18 @@ class Content extends ContentBase
     function GetAdditionalContentBlocks()
     {
 	$result = false;
+	global $gCms;
+	$templateops =& $gCms->GetTemplateOperations();
 	if ($this->addtContentBlocksLoaded == false)
 	{
 	    $this->additionalContentBlocks = array();
 	    if ($this->TemplateId() && $this->TemplateId() > -1)
 	    {
-		$template = TemplateOperations::LoadTemplateByID($this->TemplateId()); /* @var $template Template */
+		$template = $templateops->LoadTemplateByID($this->TemplateId()); /* @var $template Template */
 	    }
 	    else
 	    {
-		$template = TemplateOperations::LoadDefaultTemplate();
+		$template = $templateops->LoadDefaultTemplate();
 	    }
 	    if($template !== false)
 	    {

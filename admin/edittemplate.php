@@ -82,6 +82,9 @@ $access = check_permission($userid, 'Modify Templates');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
+global $gCms;
+$templateops =& $gCms->GetTemplateOperations();
+
 if ($access)
 {
 	if (isset($_POST["edittemplate"]) && !$preview)
@@ -111,7 +114,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+			$onetemplate = $templateops->LoadTemplateByID($template_id);
 			$onetemplate->name = $template;
 			$onetemplate->content = $content;
 			$onetemplate->stylesheet = $stylesheet;
@@ -168,7 +171,7 @@ if ($access)
 	}
 	else if ($template_id != -1 && !$preview)
 	{
-		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+		$onetemplate = $templateops->LoadTemplateByID($template_id);
 		$template = $onetemplate->name;
 		$orig_template = $onetemplate->name;
 		$content = $onetemplate->content;
@@ -238,7 +241,7 @@ else
 			<p class="pagetext"><?php echo lang('content')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding)?>
 		</div>
-		<?php if (TemplateOperations::StylesheetsUsed() > 0) { ?>
+		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
 			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding)?></p>

@@ -582,7 +582,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
     if (!array_key_exists($one->TemplateId(), $templates))
     {
-        $templates[$one->TemplateId()] = TemplateOperations::LoadTemplateById($one->TemplateId());
+		global $gCms;
+		$templateops =& $gCms->GetTemplateOperations();
+        $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
     }
     
     if (!array_key_exists($one->Owner(), $users))

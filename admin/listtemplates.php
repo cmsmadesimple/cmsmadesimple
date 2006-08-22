@@ -45,6 +45,9 @@ if (isset($_GET["message"])) {
 	$edit = check_permission($userid, 'Modify Templates');
 	$all = check_permission($userid, 'Modify Any Page');
 	$remove	= check_permission($userid, 'Remove Templates');
+	
+	global $gCms;
+	$templateops =& $gCms->GetTemplateOperations();
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
 		if (isset($_GET["template_id"])) {
@@ -62,7 +65,7 @@ if (isset($_GET["message"])) {
 
 	if (isset($_GET['setdefault']))
 	{
-		$templatelist = TemplateOperations::LoadTemplates();
+		$templatelist = $templateops->LoadTemplates();
 		foreach ($templatelist as $onetemplate)
 		{
 			if ($onetemplate->id == $_GET['setdefault'])
@@ -90,7 +93,7 @@ if (isset($_GET["message"])) {
 		{
 			$theid = $_GET['setinactive'];
 		}
-		$thetemplate = TemplateOperations::LoadTemplateByID($theid);
+		$thetemplate = $templateops->LoadTemplateByID($theid);
 		if (isset($thetemplate))
 		{
 			if (isset($_GET['setactive']))
@@ -106,7 +109,7 @@ if (isset($_GET["message"])) {
 		}
 	}
 
-	$templatelist = TemplateOperations::LoadTemplates();
+	$templatelist = $templateops->LoadTemplates();
 	
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

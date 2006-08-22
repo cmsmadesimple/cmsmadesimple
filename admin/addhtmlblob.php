@@ -55,6 +55,7 @@ if ($access) {
 		
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
+		$templateops =& $gCms->GetTemplateOperations();
 
 		$validinfo = true;
 		if ($htmlblob == ""){
@@ -96,7 +97,7 @@ if ($access) {
 					}
 				}
 				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
-				TemplateOperations::TouchAllTemplates(); #So pages recompile
+				$templateops->TouchAllTemplates(); #So pages recompile
 
 				#Perform the addhtmlblob_post callback
 				foreach($gCms->modules as $key=>$value)

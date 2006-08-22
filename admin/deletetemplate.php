@@ -36,9 +36,11 @@ if (isset($_GET["template_id"]))
 
 	if ($access)
 	{
-		$onetemplate = TemplateOperations::LoadTemplateByID($template_id);
+		global $gCms;
+		$templateops =& $gCms->GetTemplateOperations();
+		$onetemplate = $templateops->LoadTemplateByID($template_id);
 
-		if (TemplateOperations::CountPagesUsingTemplateByID($template_id) > 0)
+		if ($templateops->CountPagesUsingTemplateByID($template_id) > 0)
 		{
 			$dodelete = false;
 		}
@@ -57,7 +59,7 @@ if (isset($_GET["template_id"]))
 			
 			Events::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
 
-			$result = TemplateOperations::DeleteTemplateByID($template_id);
+			$result = $templateops->DeleteTemplateByID($template_id);
 
 			if ($result)
 			{

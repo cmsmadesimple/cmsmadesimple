@@ -35,11 +35,13 @@ global $gCms;
 $nodelist = array();
 $badlist = array();
 
+$templateops =& $gCms->GetTemplateOperations();
+
 if (isset($_POST['idlist']))
 {
 	foreach (explode(':', $_POST['idlist']) as $id)
 	{
-		$template =& TemplateOperations::LoadTemplateByID($id);
+		$template =& $templateops->LoadTemplateByID($id);
 		$nodelist[] =& $template;
 	}
 }
@@ -50,7 +52,7 @@ else
 		if (startswith($k, 'multitemplate-'))
 		{
 			$id = substr($k, strlen('multitemplate-'));
-			$template =& TemplateOperations::LoadTemplateByID($id);
+			$template =& $templateops->LoadTemplateByID($id);
 			if ($action == 'delete' && $template->UsageCount() > 0)
 				$badlist[] =& $template; 
 			else
