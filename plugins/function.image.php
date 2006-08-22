@@ -26,7 +26,7 @@ function smarty_cms_function_image($params, &$smarty)
 	if( !empty($params['src'] ) )
 	{
 		$text = $imgstart .= '"'.$gCms->config['image_uploads_url'].'/'.$params['src'].'"';
-		$size = getimagesize($gCms->config['image_uploads_path'].'/'.$params['src']);
+		$size = @getimagesize($gCms->config['image_uploads_path'].'/'.$params['src']);
 		
 				if( !empty($params['width'] ) ) {
 					$text .= ' width="'.$params['width'].'"';
@@ -41,10 +41,22 @@ function smarty_cms_function_image($params, &$smarty)
 				}
 				if( !empty($params['alt'] ) )
 				{
-					$text .= ' alt="'.$params['alt'].'"';
+					$alt = $params['alt'];
 				} else {
-					$text .= ' alt="['.$params['src'].']"';
+					$alt = '['.$params['src'].']';
 				}
+				$text .= ' alt="'.$alt.'"';
+				if( !empty($params['title'] ) )
+				{
+					$text .= ' title="'.$params['title'].'"';
+				} else {
+					$text .= ' title="'.$alt.'"';
+				}
+				if( !empty($params['class'] ) )
+				{
+					$text .= ' class="'.$params['class'].'"';
+				}
+				
 				if( !empty($params['addtext'] ) )
 				{
 						$text .= ' ' . $params['addtext'];
@@ -70,6 +82,8 @@ function smarty_cms_help_function_image()
      <li><em>(optional)</em>  <tt>width</tt> - Width of the image within the page. Defaults to true size.</li>
      <li><em>(optional)</em>  <tt>height</tt> - Height of the image within the page. Defaults to true size.</li>
      <li><em>(optional)</em>  <tt>alt</tt> - Alt text for the image -- needed for xhtml compliance. Defaults to filename.</li>
+     <li><em>(optional)</em>  <tt>class</tt> - CSS class for the image.</li>
+     <li><em>(optional)</em>  <tt>title</tt> - Mouse over text for the image. Defaults to Alt text.</li>
      <li><em>(optional)</em>  <tt>addtext</tt> - Additional text to put into the tag</li>
   </ul>
   <?php
