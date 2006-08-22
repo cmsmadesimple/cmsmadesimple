@@ -150,8 +150,8 @@ INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_
 INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 30, 'Add Global Content Blocks', 'Add Global Content Blocks', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
 INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 31, 'Modify Global Content Blocks', 'Modify Global Content Blocks', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
 INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 32, 'Remove Global Content Blocks', 'Remove Global Content Blocks', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
-INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 34, 'Modify FCKeditorX', 'Modify FCKeditorX', '2006-01-27 20:06:58', '2006-01-27 20:06:58' );
 INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 33, 'Modify Page Structure', 'Modify Page Structure', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
+INSERT INTO {DB_PREFIX}permissions ( PERMISSION_ID, PERMISSION_NAME, PERMISSION_TEXT, CREATE_DATE, MODIFIED_DATE ) VALUES ( 34, 'Modify FCKeditorX', 'Modify FCKeditorX', '2006-01-27 20:06:58', '2006-01-27 20:06:58' );
 INSERT INTO {DB_PREFIX}siteprefs ( SITEPREF_NAME, SITEPREF_VALUE, CREATE_DATE, MODIFIED_DATE ) VALUES ( 'enablecustom404', '0', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
 INSERT INTO {DB_PREFIX}siteprefs ( SITEPREF_NAME, SITEPREF_VALUE, CREATE_DATE, MODIFIED_DATE ) VALUES ( 'custom404', '<p>Page could not be found.</p>', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
 INSERT INTO {DB_PREFIX}siteprefs ( SITEPREF_NAME, SITEPREF_VALUE, CREATE_DATE, MODIFIED_DATE ) VALUES ( 'custom404template', '-1', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
@@ -169,7 +169,6 @@ INSERT INTO {DB_PREFIX}userplugins ( USERPLUGIN_ID, USERPLUGIN_NAME, CODE, CREAT
 INSERT INTO {DB_PREFIX}userplugins ( USERPLUGIN_ID, USERPLUGIN_NAME, CODE, CREATE_DATE, MODIFIED_DATE ) VALUES ( 2, 'custom_copyright', '//set start to date your site was published\r\n$startCopyRight=\'2004\';\r\n\r\n// check if start year is this year\r\nif(date(\'Y\') == $startCopyRight){\r\n// it was, just print this year\r\n    echo $startCopyRight;\r\n}else{\r\n// it wasnt, print startyear and this year delimited with a dash\r\n    echo $startCopyRight.\'-\'. date(\'Y\');\r\n}', '2006-07-25 21:22:33', '2006-07-25 21:22:33' );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'use_wysiwyg', '1', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'wysiwyg', 'FCKeditorX', null );
-INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'wysiwyg', null, null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'default_cms_language', 'en_US', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'admintheme', 'default', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'bookmarks', 'on', null );
