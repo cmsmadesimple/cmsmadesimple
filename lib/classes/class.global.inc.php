@@ -233,9 +233,11 @@ class CmsObject {
 	{
         if (!isset($this->contentoperations))
 		{
+			debug_buffer('', 'Load Content Operations');
 			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
 			$contentoperations =& new ContentOperations();
 			$this->contentoperations = &$contentoperations;
+			debug_buffer('', 'End Load Content Operations');
 		}
 
 		return $this->contentoperations;

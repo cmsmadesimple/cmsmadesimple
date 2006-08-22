@@ -159,6 +159,8 @@ debug_buffer('loading pageinfo functions');
 require(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
 require(cms_join_path($dirname,'lib','translation.functions.php'));
+debug_buffer('loading events functions');
+require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 
 /*
 debug_buffer('loading template functions');
@@ -179,9 +181,6 @@ debug_buffer('loading stylesheet functions');
 require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
 */
 
-
-debug_buffer('loading events functions');
-require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading user tags functions');
 require(cms_join_path($dirname,'lib','classes','class.usertags.inc.php'));
 
@@ -254,7 +253,7 @@ if (isset($page))
 }
 
 #Load all site preferences
-load_site_preferences();
+//load_site_preferences();
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');

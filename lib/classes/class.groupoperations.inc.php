@@ -25,7 +25,7 @@
  * @package		CMS
  */
 
-include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.groupoperations.inc.php');
+include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
 class GroupOperations
 {

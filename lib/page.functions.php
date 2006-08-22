@@ -444,6 +444,11 @@ function get_site_preference($prefname, $defaultvalue = '') {
 
 	global $gCms;
 	$siteprefs = $gCms->siteprefs;
+	
+	if (count($siteprefs) == 0)
+	{
+		load_site_preferences();
+	}
 
 	if (isset($siteprefs[$prefname]))
 	{
