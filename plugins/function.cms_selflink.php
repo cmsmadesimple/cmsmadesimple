@@ -92,13 +92,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		/* Mod by Nemesis */
 		if (isset($params['anchorlink']))
 		{
-		    $url .= '#' . $params['anchorlink'];
+		    $url .= '#' . ltrim($params['anchorlink'], '#');
 		}
 
 		if (isset($params['urlparam']))
-		  {
+		{
 		    $url .= trim($params['urlparam']);
-		  }
+		}
 
 			/* End mod Nemesis */
 		
@@ -112,12 +112,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		/* Russ - Begin */
 		if (isset($params['anchorlink']))
 		{
-			$anchorlink = $params['anchorlink'];
+			$anchorlink = ltrim($params['anchorlink'], '#');
 			//Param to set anchor link
 		}
 		/* Russ - End */
 
-		if (isset($params['lang'])){
+		if (isset($params['lang']))
+		{
 			switch (strtolower($params['lang']))
 			{
 				case 'dk':
@@ -125,11 +126,11 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 					$Prev_label = "Forrige side: ";
 					$Next_label = "N&aelig;ste side: ";
 					break;
-			        case 'nl':
-                                        $Prev_label = "Vorige pagina: ";
-                                        $Next_label = "Volgende pagina: ";
-                                        $Parent_label = "Bovenliggende pagina: "; // uplink
-                                        break;
+				case 'nl':
+					$Prev_label = "Vorige pagina: ";
+					$Next_label = "Volgende pagina: ";
+					$Parent_label = "Bovenliggende pagina: "; // uplink
+					break;
 				case 'en':
 					$Prev_label = "Previous page: ";
 					$Next_label = "Next page: ";
@@ -481,9 +482,9 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
 		<li><em>(optional)</em> <tt>anchorlink</tt> - New paramater for an internal page link. If this is used then <tt>dir =&quot;anchor&quot;</tt> should also be set. No need to add the #, because it is added automatically.</li> <!-- Russ - 25-04-2006 -->
-  															        <li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</em></strong>
+		<li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</em></strong>
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
-									     <li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
+		<li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
 		<B>Note!</B> Only one of the above may be used in the same cms_selflink statement!!
 		<li><em>(optional)</em> <tt>text</tt> - Text to show for the link.  If not given, the Page Name is used instead.</li>
 		<li><em>(optional)</em> <tt>menu 1/0</tt> - If 1 the Menu Text is used for the link text instead of the Page Name</li> <!-- mbv - 21-06-2005 -->
