@@ -72,7 +72,6 @@ class GlobalContentOperations
 
 		while (isset($dbresult) && !$dbresult->EOF)
 		{
-			$gCms->GetGlobalOperations();
 			$oneblob = new GlobalContent();
 			$oneblob->id = $dbresult->fields['htmlblob_id'];
 			$oneblob->name = $dbresult->fields['htmlblob_name'];
@@ -98,7 +97,6 @@ class GlobalContentOperations
 
 		if ($row)
 		{
-			$gCms->GetGlobalOperations();
 			$oneblob = new GlobalContent();
 			$oneblob->id = $row['htmlblob_id'];
 			$oneblob->name = $row['htmlblob_name'];

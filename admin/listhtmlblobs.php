@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.htmlblob.inc.php");
+//require_once("../lib/classes/class.htmlblob.inc.php");
 
 check_login();
 
