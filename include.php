@@ -157,14 +157,14 @@ debug_buffer('loading content functions');
 require(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
 require(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-debug_buffer('loading gcb functions');
-require(cms_join_path($dirname,'lib','classes','class.htmlblob.inc.php'));
 debug_buffer('loading template functions');
 require(cms_join_path($dirname,'lib','classes','class.template.inc.php'));
 debug_buffer('loading translation functions');
 require(cms_join_path($dirname,'lib','translation.functions.php'));
 
 /*
+debug_buffer('loading gcb functions');
+require(cms_join_path($dirname,'lib','classes','class.htmlblob.inc.php'));
 debug_buffer('loading module class');
 require(cms_join_path($dirname,'lib','classes','class.module.inc.php'));
 debug_buffer('loading bookmark functions');
@@ -173,12 +173,12 @@ debug_buffer('loading content class');
 require(cms_join_path($dirname,'lib','classes','class.content.inc.php'));
 debug_buffer('loading user functions');
 require(cms_join_path($dirname,'lib','classes','class.user.inc.php'));
+debug_buffer('loading group functions');
+require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
 */
 
 debug_buffer('loading stylesheet functions');
 require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
-debug_buffer('loading group functions');
-require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
 debug_buffer('loading events functions');
 require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading user tags functions');

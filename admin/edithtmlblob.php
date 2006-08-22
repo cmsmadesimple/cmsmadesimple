@@ -49,10 +49,13 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
+global $gCms;
+$gcbops =& $gCms->GetGlobalContentOperations();
+
 $userid = get_userid();
 $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
-$access = check_permission($userid, 'Modify Global Content Blocks') || HtmlBlobOperations::CheckOwnership($htmlblob_id, $userid) ||
-HtmlBlobOperations::CheckAuthorship($htmlblob_id, $userid);
+$access = check_permission($userid, 'Modify Global Content Blocks') || $gcbops->CheckOwnership($htmlblob_id, $userid) ||
+$gcbops->CheckAuthorship($htmlblob_id, $userid);
 
 $htmlarea_flag = false;
 $use_javasyntax = false;
@@ -77,7 +80,7 @@ if ($access)
 			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
 			$validinfo = false;
 		}
-		else if ($htmlblob != $oldhtmlblob && HtmlBlobOperations::CheckExistingHtmlBlobName($htmlblob))
+		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob))
 		{
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
@@ -85,7 +88,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$blobobj = new HtmlBlob();
+			$blobobj =& new GlobalContent();
 			$blobobj->id = $htmlblob_id;
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
@@ -147,7 +150,7 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = HtmlBlobOperations::LoadHtmlBlobByID($htmlblob_id);
+		$onehtmlblob = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;

@@ -52,19 +52,25 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
 
 if ($access) {
 	if (isset($_POST["addhtmlblob"])) {
+		
+		global $gCms;
+		$gcbops =& $gCms->GetGlobalContentOperations();
 
 		$validinfo = true;
 		if ($htmlblob == ""){
 			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
 			$validinfo = false;
 		}
-		else if (HtmlBlobOperations::CheckExistingHtmlBlobName($htmlblob)){
+		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
 
 		if ($validinfo) {
-			$blobobj = new HtmlBlob();
+			global $gCms;
+			$gcbops =& $gCms->GetGlobalContentOperations();
+
+			$blobobj =& new GlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;

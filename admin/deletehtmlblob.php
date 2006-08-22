@@ -37,8 +37,11 @@ if (isset($_GET["htmlblob_id"]))
 	if ($access)
 	{
 		$result = false;
+		
+		global $gCms;
+		$gcbops =& $gCms->GetGlobalContentOperations();
 
-		$blobobj = HtmlBlobOperations::LoadHtmlBlobByID($htmlblob_id);
+		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
 		$htmlblob_name = $blobobj->name;
 
 		if ($blobobj)

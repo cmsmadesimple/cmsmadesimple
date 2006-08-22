@@ -252,6 +252,30 @@ class CmsObject {
 
 		return $this->bookmarkoperations;
 	}
+	
+	function & GetGroupOperations()
+	{
+        if (!isset($this->groupoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
+			$groupoperations =& new GroupOperations();
+			$this->groupoperations = &$groupoperations;
+		}
+
+		return $this->groupoperations;
+	}
+	
+	function & GetGlobalContentOperations()
+	{
+        if (!isset($this->globalcontentoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
+			$globalcontentoperations =& new GlobalContentOperations();
+			$this->globalcontentoperations = &$globalcontentoperations;
+		}
+
+		return $this->globalcontentoperations;
+	}
 
 	function & GetSmarty()
 	{

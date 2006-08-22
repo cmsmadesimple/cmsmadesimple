@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -19,170 +19,46 @@
 #$Id$
 
 /**
- * Generic html blob class. This can be used for any logged in blob or blob related function.
- *
- * @since		0.6
- * @package		CMS
- */
-class HtmlBlob
-{
-	var $id;
-	var $name;
-	var $content;
-	var $owner;
-	var $modified_date;
-
-	function HtmlBlob()
-	{
-		$this->SetInitialValues();
-	}
-
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->name = '';
-		$this->content = '';
-		$this->owner = -1;
-		$this->modified_date = -1;
-	}
-
-	function Id()
-	{
-		return $this->id;
-	}
-
-	function Name()
-	{
-		return $this->name;
-	}
-
-	function Save()
-	{
-		$result = false;
-		
-		if ($this->id > -1)
-		{
-			$result = HtmlBlobOperations::UpdateHtmlBlob($this);
-		}
-		else
-		{
-			$newid = HtmlBlobOperations::InsertHtmlBlob($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			$result = HtmlBlobOperations::DeleteHtmlBlobByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
-
-	function IsOwner($user_id)
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			$result = HtmlBlobOperations::CheckOwnership($this->id, $user_id);
-		}
-
-		return $result;
-	}
-
-	function IsAuthor($user_id)
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			$result = HtmlBlobOperations::CheckAuthorship($this->id, $user_id);
-		}
-
-		return $result;
-	}
-
-	function ClearAuthors()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			HtmlBlobOperations::ClearAdditionalEditors($this->id);
-			$result = true;
-		}
-
-		return $result;
-	}
-
-	function AddAuthor($user_id)
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			HtmlBlobOperations::InsertAdditionalEditors($this->id, $user_id);
-			$result = true;
-		}
-
-		return $result;
-	}
-}
-
-/**
  * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
  *
  * @since		0.6
  * @package		CMS
  */
-class HtmlBlobOperations
+
+include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
+
+class GlobalContentOperations
 {
 
-/**
- * Prepares an array with the list of the html blobs $userid is an author of 
- *
- * @returns an array in whose elements are the IDs of the blobs  
- * @since 0.11
- */
-function AuthorBlobs($userid)
-{
-	global $gCms;
-	$db = &$gCms->GetDb();
-    $variables = &$gCms->variables;
-	if (!isset($variables['authorblobs']))
+	/**
+	 * Prepares an array with the list of the html blobs $userid is an author of 
+	 *
+	 * @returns an array in whose elements are the IDs of the blobs  
+	 * @since 0.11
+	 */
+	function AuthorBlobs($userid)
 	{
+		global $gCms;
 		$db = &$gCms->GetDb();
-		$variables['authorblobs'] = array();
-
-		$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
-		$result = &$db->Execute($query, array($userid));
-
-		while ($result && !$result->EOF)
+	    $variables = &$gCms->variables;
+		if (!isset($variables['authorblobs']))
 		{
-		  $variables['authorblobs'][] = $result->fields['htmlblob_id'];
-// 			array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
-			$result->MoveNext();
-		}
-	}
+			$db = &$gCms->GetDb();
+			$variables['authorblobs'] = array();
 
-	return $variables['authorblobs'];
-}
+			$query = "SELECT htmlblob_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ?";
+			$result = &$db->Execute($query, array($userid));
+
+			while ($result && !$result->EOF)
+			{
+				$variables['authorblobs'][] = $result->fields['htmlblob_id'];
+				//array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
+				$result->MoveNext();
+			}
+		}
+
+		return $variables['authorblobs'];
+	}
 
 	function LoadHtmlBlobs()
 	{
@@ -196,7 +72,8 @@ function AuthorBlobs($userid)
 
 		while (isset($dbresult) && !$dbresult->EOF)
 		{
-			$oneblob = new HtmlBlob();
+			$gCms->GetGlobalOperations();
+			$oneblob = new GlobalContent();
 			$oneblob->id = $dbresult->fields['htmlblob_id'];
 			$oneblob->name = $dbresult->fields['htmlblob_name'];
 			$oneblob->content = $dbresult->fields['html'];
@@ -221,7 +98,8 @@ function AuthorBlobs($userid)
 
 		if ($row)
 		{
-			$oneblob = new HtmlBlob();
+			$gCms->GetGlobalOperations();
+			$oneblob = new GlobalContent();
 			$oneblob->id = $row['htmlblob_id'];
 			$oneblob->name = $row['htmlblob_name'];
 			$oneblob->content = $row['html'];
@@ -239,6 +117,7 @@ function AuthorBlobs($userid)
 
 		global $gCms;
 		$db = &$gCms->GetDb();
+		$gcbops =& $gCms->GetGlobalContentOperations();
 		$cache = &$gCms->HtmlBlobCache;
 
 		if (isset($cache[$name]))
@@ -251,7 +130,7 @@ function AuthorBlobs($userid)
 
 		if ($row)
 		{
-			$oneblob =& new HtmlBlob();
+			$oneblob = new GlobalContent();
 			$oneblob->id = $row['htmlblob_id'];
 			$oneblob->name = $row['htmlblob_name'];
 			$oneblob->content = $row['html'];
@@ -398,5 +277,8 @@ function AuthorBlobs($userid)
 	}
 }
 
-# vim:ts=4 sw=4 noet
+class HtmlBlobOperations extends GlobalContentOperations
+{
+}
+
 ?>

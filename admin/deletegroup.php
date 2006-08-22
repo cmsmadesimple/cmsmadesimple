@@ -37,7 +37,9 @@ if (isset($_GET["group_id"]))
 	{
 		$result = false;
 
-		$groupobj = GroupOperations::LoadGroupByID($group_id);
+		global $gCms;
+		$groupops =& $gCms->GetGroupOperations();
+		$groupobj = $groupops->LoadGroupByID($group_id);
 		$group_name = $groupobj->name;
 
 		#Perform the deletegroup_pre callback

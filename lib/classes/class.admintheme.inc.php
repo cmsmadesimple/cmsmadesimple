@@ -268,7 +268,11 @@ class AdminTheme
         $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
                 check_permission($this->userid, 'Modify Global Content Blocks') |
                 check_permission($this->userid, 'Delete Global Content Blocks');
-        $thisUserBlobs = HtmlBlobOperations::AuthorBlobs($this->userid);
+
+		global $gCms;
+		$gcbops =& $gCms->GetGlobalContentOperations();
+
+        $thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
         if (count($thisUserBlobs) > 0)
             {
             $this->perms['htmlPerms'] = true;

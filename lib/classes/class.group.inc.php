@@ -24,6 +24,7 @@
  * @since		0.9
  * @package		CMS
  */
+
 class Group
 {
 	var $id;
@@ -46,13 +47,16 @@ class Group
 	{
 		$result = false;
 		
+		global $gCms;
+		$groupops =& $gCms->GetGroupOperations();
+		
 		if ($this->id > -1)
 		{
-			$result = GroupOperations::UpdateGroup($this);
+			$result = $groupops->UpdateGroup($this);
 		}
 		else
 		{
-			$newid = GroupOperations::InsertGroup($this);
+			$newid = $groupops->InsertGroup($this);
 			if ($newid > -1)
 			{
 				$this->id = $newid;
@@ -70,123 +74,13 @@ class Group
 
 		if ($this->id > -1)
 		{
-			$result = GroupOperations::DeleteGroupByID($this->id);
+			global $gCms;
+			$groupops =& $gCms->GetGroupOperations();
+			$result = $groupops->DeleteGroupByID($this->id);
 			if ($result)
 			{
 				$this->SetInitialValues();
 			}
-		}
-
-		return $result;
-	}
-}
-
-/**
- * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
- *
- * @since		0.6
- * @package		CMS
- */
-class GroupOperations
-{
-	function LoadGroups()
-	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$result = array();
-
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
-		$dbresult = $db->Execute($query);
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->active = $row['active'];
-			$result[] = $onegroup;
-		}
-
-		return $result;
-	}
-
-	function LoadGroupByID($id)
-	{
-
-		$result = false;
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
-		$dbresult = $db->Execute($query, array($id));
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->active = $row['active'];
-			$result = $onegroup;
-		}
-
-		return $result;
-	}
-
-	function InsertGroup($group)
-	{
-		$result = -1; 
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$new_group_id = $db->GenID(cms_db_prefix()."groups_seq");
-		$time = $db->DBTimeStamp(time());
-		$query = "INSERT INTO ".cms_db_prefix()."groups (group_id, group_name, active, create_date, modified_date) VALUES (?,?,?,".$time.", ".$time.")";
-		$dbresult = $db->Execute($query, array($new_group_id, $group->name, $group->active));
-		if ($dbresult !== false)
-		{
-			$result = $new_group_id;
-		}
-
-		return $result;
-	}
-
-	function UpdateGroup($group)
-	{
-		$result = false; 
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."groups SET group_name = ?, active = ?, modified_date = ".$time." WHERE group_id = ?";
-		$dbresult = $db->Execute($query, array($group->name, $group->active, $group->id));
-		if ($dbresult !== false)
-		{
-			$result = true;
-		}
-
-		return $result;
-	}
-
-	function DeleteGroupByID($id)
-	{
-		$result = false;
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "DELETE FROM ".cms_db_prefix()."group_perms where group_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		$query = "DELETE FROM ".cms_db_prefix()."groups where group_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		if ($dbresult !== false)
-		{
-			$result = true;
 		}
 
 		return $result;

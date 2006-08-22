@@ -56,7 +56,9 @@ else {
 <?php
     echo $themeObject->ShowHeader('usersassignedtogroup',array($group_name));
     // always display the group pulldown
-    $groups = GroupOperations::LoadGroups();
+	global $gCms;
+	$groupops =& $gCms->GetGroupOperations();
+    $groups = $groupops->LoadGroups();
     if (count($groups) > 0)
         {
         echo '<form id="groupname" method="post" action="changegroupassign.php">';

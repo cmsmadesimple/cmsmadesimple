@@ -43,7 +43,9 @@ include_once("header.php");
 	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 	#$result = $db->Execute($query);
 
-	$grouplist = GroupOperations::LoadGroups();
+	global $gCms;
+	$groupops =& $gCms->GetGroupOperations();
+	$grouplist = $groupops->LoadGroups();
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
