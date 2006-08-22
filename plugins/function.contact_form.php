@@ -94,7 +94,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 			<input type="text" id="subject" name="subject" value="<?php echo htmlspecialchars($subject); ?>" <?php echo ($style) ? $inputStyle:''; ?>/>
 
 			<label for="message" <?php echo ($style) ? $labelStyle:''; ?> >Message : </label>
-			<textarea id="message" name="message" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
+			<textarea id="message" name="message" rows="12" cols="48" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
 
 		        <input type="submit" class="button" value="Submit" <?php echo ($style) ? $buttonStyle: ''; ?> /> 
                         <input type="reset"  class="button" value="Clear" <?php echo ($style) ? $buttonStyle: ''; ?> />
