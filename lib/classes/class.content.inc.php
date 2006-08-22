@@ -1613,9 +1613,10 @@ class ContentProperties
 		if (count($this->mPropertyValues) > 0)
 		{
 			global $gCms, $config, $sql_queries, $debug_errors;
-			$db = &$gCms->GetDb();
-
-			$concat = '';
+			
+			$db        =& $gCms->GetDb();
+			$concat    =  '';
+			$timestamp =  $db->DBTimeStamp(time());
 
 			$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
 			$dbresult = $db->Execute($delquery);
@@ -1634,7 +1635,8 @@ class ContentProperties
                             param1, 
                             param2, 
                             param3, 
-                            content
+                            content,
+                            modified_date
                         ) 
                             VALUES 
                         (
@@ -1644,7 +1646,8 @@ class ContentProperties
                             '',
                             '',
                             '',
-                            '{$this->mPropertyValues[$key]}'
+                            '{$this->mPropertyValues[$key]}',
+                            $timestamp
                         )
                     ";
 					$dbresult = $db->Execute($insquery);
