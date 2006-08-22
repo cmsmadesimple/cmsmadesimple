@@ -417,9 +417,10 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			} else {
 				$linktext = $name; // mbv - 21-06-2005
 			}
-			if (isset($params['image']) and !empty($params['image'])) {
-				$result .= "<img src=\"{$params['image']}\" alt=\"\" />";
-				if (!(isset($params['imageonly']) and $params['imageonly'])) {
+			if (isset($params['image']) && ! empty($params['image'])) {
+				$alt = (isset($params['alt']) && ! empty($params['alt'])) ? $params['alt'] : '';
+				$result .= "<img src=\"{$params['image']}\" alt=\"$alt\" />";
+				if (! (isset($params['imageonly']) && $params['imageonly'])) {
 					$result .= " $linktext";
 				}
 			} else {
@@ -485,6 +486,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>rellink 1/0</tt> - Make a relational link for accessible navigation.  Only works if the dir parameter is set and should only go in the head section of a template.</li>
 		<li><em>(optional)</em> <tt>href</tt> - If href is used only the href value is generated (no other parameters possible). <strong>Example:</strong> &lt;a href=&quot;{cms_selflink href=&quot;alias&quot;}&quot;&gt;&lt;img src=&quot;&quot;&gt;&lt;/a&gt;</li>
 		<li><em>(optional)</em> <tt>image</tt> - A url of an image to use in the link. <strong>Example:</strong> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot;}</li>
+		<li><em>(optional)</em> <tt>alt</tt> - Alternative text to be used with image (alt="" will be used if no alt parameter is given).</li>
 		<li><em>(optional)</em> <tt>imageonly</tt> - If using an image, whether to suppress display of text links. If you want no text in the link at all, also set lang=0 to suppress the label. <B>Example:</B> {cms_selflink dir=&quot;next&quot; image=&quot;next.png&quot; text=&quot;Next&quot; imageonly=1}</li>
 		<li><em>(optional)</em> <tt>ext</tt> - For external links, will add class=&quot;external and info text. <strong>warning:</strong> only text, target and title parameters are compatible with this parameter</li>
 		<li><em>(optional)</em> <tt>ext_info</tt> - Used together with &quot;ext&quot; defaults to (external link)</li>
