@@ -54,6 +54,11 @@ $external_text ='( '.$ext_info.' )';
 return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
 }
 
+$urlparams = '';
+if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
+  $urlparams =$params['urlparams'];
+}
+
 
 
 	/* LeisureLarry - Changed if statement */
@@ -84,11 +89,17 @@ return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span
 			$titleattr = $content->TitleAttribute();
 		}
 
-			/* Mod by Nemesis */
+		/* Mod by Nemesis */
 		if (isset($params['anchorlink']))
 		{
 		    $url .= '#' . $params['anchorlink'];
 		}
+
+		if (isset($params['urlparam']))
+		  {
+		    $url .= trim($params['urlparam']);
+		  }
+
 			/* End mod Nemesis */
 		
 		$Prev_label = "";
@@ -470,6 +481,7 @@ function smarty_cms_help_function_cms_selflink() {
 		<li><em>(optional)</em> <tt>page</tt> - Page ID or alias to link to.</li>
 		<li><em>(optional)</em> <tt>dir anchor (internal links)</tt> - New option for an internal page link. If this is used then <tt>anchorlink</tt> should be set to your link. </li> <!-- Russ - 25-04-2006 -->
 		<li><em>(optional)</em> <tt>anchorlink</tt> - New paramater for an internal page link. If this is used then <tt>dir =&quot;anchor&quot;</tt> should also be set. No need to add the #, because it is added automatically.</li> <!-- Russ - 25-04-2006 -->
+  															        <li><em>(optional)</em> <tt>urlparam</tt> - Specify additional parameters to the URL.  <strong>Do not use this in conjunction with the <em>anchorlink</em> parameter</em></strong>
 		<li><em>(optional)</em> <tt>tabindex =&quot;a value&quot;</tt> - Set a tabindex for the link.</li> <!-- Russ - 22-06-2005 -->
 									     <li><em>(optional)</em> <tt>dir start/next/prev/up (previous)</tt> - Links to the default start page or the next or previous page, or the parent page (up). If this is used <tt>page</tt> should not be set.</li> <!-- mbv - 21-06-2005 -->
 		<B>Note!</B> Only one of the above may be used in the same cms_selflink statement!!
