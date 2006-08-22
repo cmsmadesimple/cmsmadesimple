@@ -65,7 +65,7 @@ class UserTagOperations
 		global $gCms;
 		$db =& $gCms->GetDb();
 		
-		$existing = $this->GetUserTag($name);
+		$existing = UserTagOperations::GetUserTag($name);
 		if (!$existing)
 		{
 			$query = "INSERT INTO userplugins (userplugin_name, code, create_date, modified_date) VALUES (?,?,".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";

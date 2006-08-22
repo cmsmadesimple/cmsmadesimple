@@ -56,7 +56,7 @@ class ContentOperations
 
 		$result = NULL;
 		
-		if ($this->LoadContentType($type))
+		if (ContentOperations::LoadContentType($type))
 		{
 			$result =& new $type;
 		}
@@ -79,10 +79,10 @@ class ContentOperations
 		if ($row)
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys($this->ListContentTypes())))
+			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& $this->CreateNewContent($classtype);
+				$contentobj =& ContentOperations::CreateNewContent($classtype);
 				$contentobj->LoadFromData($row, FALSE);
 
 				return $contentobj;
@@ -128,10 +128,10 @@ class ContentOperations
 		if ($row)
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys($this->ListContentTypes())))
+			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& $this->CreateNewContent($classtype);
+				$contentobj =& ContentOperations::CreateNewContent($classtype);
 				$contentobj->LoadFromData($row, TRUE);
 				return $contentobj;
 			}
@@ -186,10 +186,10 @@ class ContentOperations
 		{
 			while (isset($rows) && $row = &$rows->FetchRow())
 			{
-				if (in_array($row['type'], array_keys($this->ListContentTypes()))) 
+				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
 				{
 					$classtype = strtolower($row['type']);
-					$contentobj =& $this->CreateNewContent($classtype);
+					$contentobj =& ContentOperations::CreateNewContent($classtype);
 					$contentobj->LoadFromData($row,false);
 					$contents[]=$contentobj;
 					$result = true;
@@ -281,10 +281,10 @@ class ContentOperations
 		while (isset($rows) && $row=&$rows->FetchRow())
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($row['type'], array_keys($this->ListContentTypes()))) 
+			if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes()))) 
 			{
 				$classtype = strtolower($row['type']);
-				$contentobj =& $this->CreateNewContent($classtype);
+				$contentobj =& ContentOperations::CreateNewContent($classtype);
 				$contentobj->LoadFromData($row,false);
 				$contents[] =& $contentobj;
 				$result = true;
@@ -475,7 +475,7 @@ class ContentOperations
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			$this->SetHierarchyPosition($dbresult->fields['content_id']);
+			ContentOperations::SetHierarchyPosition($dbresult->fields['content_id']);
 			$dbresult->MoveNext();
 		}
 		
@@ -558,7 +558,7 @@ class ContentOperations
 			fclose($handle);
 		}
 
-		$this->LoadChildrenIntoTree(-1, $tree);
+		ContentOperations::LoadChildrenIntoTree(-1, $tree);
 
 		debug_buffer('', 'ending tree');
 
@@ -578,9 +578,9 @@ class ContentOperations
 			while ($row = $dbresult->FetchRow())
 			{
 				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], array_keys($this->ListContentTypes())))
+				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 				{
-					$contentobj =& $this->CreateNewContent($row['type']);
+					$contentobj =& ContentOperations::CreateNewContent($row['type']);
 					$contentobj->LoadFromData($row, $loadprops);
 					$contentcache =& $tree->content;
 					$id = $row['content_id'];
@@ -633,9 +633,9 @@ class ContentOperations
 		while ($dbresult && !$dbresult->EOF)
 		{
 			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys($this->ListContentTypes())))
+			if (in_array($dbresult->fields['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
-				$contentobj =& $this->CreateNewContent($dbresult->fields['type']);
+				$contentobj =& ContentOperations::CreateNewContent($dbresult->fields['type']);
 				$contentobj->LoadFromData($dbresult->FetchRow(), false);
 				$map[$contentobj->Id()] = $count;
 				$contentcache[] = $contentobj;
@@ -664,7 +664,7 @@ class ContentOperations
 	{
 		$result = '';
 
-		$allcontent =& $this->GetAllContent();
+		$allcontent =& ContentOperations::GetAllContent();
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -758,7 +758,7 @@ class ContentOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE hierarchy = ?";
-		$row = $db->GetRow($query, array($this->CreateUnfriendlyHierarchyPosition($position)));
+		$row = $db->GetRow($query, array(ContentOperations::CreateUnfriendlyHierarchyPosition($position)));
 
 		if (!$row)
 		{

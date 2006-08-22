@@ -69,6 +69,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["locale"] = "";
 	$config['old_stylesheet'] = true;
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
+	$config['backwards_compatible'] = false;
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
@@ -266,6 +267,11 @@ function cms_config_text($config)
 
 # URL of the Admin Panel section of the User Handbook
 \$config['wiki_url'] = '{$config['wiki_url']}';
+
+#Enable backwards compatibility mode?  This basically will allow some 
+#modules written before 1.0 was released to work.  Keep in mind that this 
+#will use a lot more memory and isn't guaranteed to fix the problem.
+\$config['backwards_compatible'] = ${$config['backwards_compatible']?'true':'false'};
 
 #Not used anymore... kept around, just in case
 \$config['disable_htmlarea_translation'] = false;

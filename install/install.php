@@ -986,6 +986,8 @@ function showPageFive() {
 	$newconfig['internal_pretty_urls'] = false;
 	$newconfig['use_hierarchy'] = false;
 	$newconfig['old_stylesheet'] = false;
+	$newconfig['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
+	$newconfig['backwards_compatible'] = false;
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file

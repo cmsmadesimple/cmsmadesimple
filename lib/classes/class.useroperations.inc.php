@@ -141,7 +141,7 @@ class UserOperations
 		{
 			$row = $dbresult->FetchRow();
 			$id = $row['user_id'];
-			$result =& $this->LoadUserByID($id);
+			$result =& UserOperations::LoadUserByID($id);
 		}
 
 		return $result;
@@ -303,7 +303,7 @@ class UserOperations
 	{
 		$result = '';
 
-		$allusers = $this->LoadUsers();
+		$allusers = UserOperations::LoadUsers();
 
 		if (count($allusers) > 0)
 		{

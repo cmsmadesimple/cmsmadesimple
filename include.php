@@ -162,26 +162,27 @@ require(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
 require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 
-/*
-debug_buffer('loading template functions');
-require(cms_join_path($dirname,'lib','classes','class.template.inc.php'));
-debug_buffer('loading gcb functions');
-require(cms_join_path($dirname,'lib','classes','class.htmlblob.inc.php'));
-debug_buffer('loading module class');
-require(cms_join_path($dirname,'lib','classes','class.module.inc.php'));
-debug_buffer('loading bookmark functions');
-require(cms_join_path($dirname,'lib','classes','class.bookmark.inc.php'));
-debug_buffer('loading content class');
-require(cms_join_path($dirname,'lib','classes','class.content.inc.php'));
-debug_buffer('loading user functions');
-require(cms_join_path($dirname,'lib','classes','class.user.inc.php'));
-debug_buffer('loading group functions');
-require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
-debug_buffer('loading stylesheet functions');
-require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
-debug_buffer('loading user tags functions');
-require(cms_join_path($dirname,'lib','classes','class.usertags.inc.php'));
-*/
+if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
+{
+	debug_buffer('loading template functions');
+	require(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
+	debug_buffer('loading gcb functions');
+	require(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
+	debug_buffer('loading module class');
+	require(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
+	debug_buffer('loading bookmark functions');
+	require(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
+	debug_buffer('loading content class');
+	require(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
+	debug_buffer('loading user functions');
+	require(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
+	debug_buffer('loading group functions');
+	require(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
+	debug_buffer('loading stylesheet functions');
+	require(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
+	debug_buffer('loading user tags functions');
+	require(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
+}
 
 debug_buffer('done loading files');
 
