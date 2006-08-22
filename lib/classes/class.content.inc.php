@@ -1625,6 +1625,8 @@ class ContentProperties
 					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id' AND prop_name = '$key'";
 					$dbresult = $db->Execute($delquery);
 
+					$type    = addslashes($this->mPropertyTypes[$key]);
+					$content = addslashes($this->mPropertyValues[$key]);
 					$insquery = "
                         INSERT INTO 
                             ".cms_db_prefix()."content_props 
@@ -1641,12 +1643,12 @@ class ContentProperties
                             VALUES 
                         (
                             '$content_id',
-                            '{$this->mPropertyTypes[$key]}',
+                            '$type',
                             '$key',
                             '',
                             '',
                             '',
-                            '{$this->mPropertyValues[$key]}',
+                            '$content',
                             $timestamp
                         )
                     ";
