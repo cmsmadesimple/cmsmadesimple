@@ -97,11 +97,13 @@ if (isset($_GET["css_id"]))
 		# everything should be ok
 		if ($dodelete)
 		{	
-			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
+			global $gCms;
+			$styleops =& $gCms->GetStylesheetOperations();
+			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			
 			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
-			$result = StylesheetOperations::DeleteStylesheetById($css_id);
+			$result = $styleops->DeleteStylesheetById($css_id);
 
 			if ($result)
 			{

@@ -49,6 +49,8 @@ if ($access)
 {
 	if (isset($_POST["copystylesheet"]))
 	{
+		global $gCms;
+		$styleops =& $gCms->GetStylesheetOperations();
 		$validinfo = true;
 		if ($stylesheet == "")
 		{
@@ -57,7 +59,7 @@ if ($access)
 		}
 		else
 		{
-			if (StylesheetOperations::CheckExistingStylesheetName($stylesheet))
+			if ($styleops->CheckExistingStylesheetName($stylesheet))
 			{
 				$error .= "<li>".lang('stylesheetexists')."</li>";
 				$validinfo = false;
@@ -66,7 +68,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$onestylesheet = StylesheetOperations::LoadStylesheetByID($stylesheet_id);
+			$onestylesheet = $styleops->LoadStylesheetByID($stylesheet_id);
 			$onestylesheet->id = -1; //Reset id so it will insert a new record
 			$onestylesheet->name = $stylesheet; //Change name
 			$result = $onestylesheet->Save();

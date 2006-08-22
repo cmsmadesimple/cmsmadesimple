@@ -175,10 +175,11 @@ debug_buffer('loading user functions');
 require(cms_join_path($dirname,'lib','classes','class.user.inc.php'));
 debug_buffer('loading group functions');
 require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
-*/
-
 debug_buffer('loading stylesheet functions');
 require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
+*/
+
+
 debug_buffer('loading events functions');
 require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 debug_buffer('loading user tags functions');

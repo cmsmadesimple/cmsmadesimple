@@ -31,6 +31,7 @@ $action = '';
 if (isset($_POST['multiaction'])) $action = $_POST['multiaction'];
 
 global $gCms;
+$styleops =& $gCms->GetStylesheetOperations();
 
 $nodelist = array();
 
@@ -38,7 +39,7 @@ if (isset($_POST['idlist']))
 {
 	foreach (explode(':', $_POST['idlist']) as $id)
 	{
-		$stylesheet =& StylesheetOperations::LoadStylesheetByID($id);
+		$stylesheet =& $styleops->LoadStylesheetByID($id);
 		$nodelist[] =& $stylesheet;
 	}
 }
@@ -49,7 +50,7 @@ else
 		if (startswith($k, 'multistylesheet-'))
 		{
 			$id = substr($k, strlen('multistylesheet-'));
-			$stylesheet =& StylesheetOperations::LoadStylesheetByID($id);
+			$stylesheet =& $styleops->LoadStylesheetByID($id);
 			$nodelist[] =& $stylesheet; 
 		}
 	}

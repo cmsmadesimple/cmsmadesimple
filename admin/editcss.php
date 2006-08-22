@@ -136,7 +136,10 @@ if ($access)
 			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
 			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
 			
-			$onestylesheet = StylesheetOperations::LoadStylesheetByID($css_id);
+			global $gCms;
+			$styleops =& $gCms->GetStylesheetOperations();
+			
+			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
 			$onestylesheet->name = $css_name;
 			$onestylesheet->value = $css_text;
 
