@@ -39,6 +39,9 @@ require_once("../include.php");
 
 check_login();
 
+global $gCms;
+$styleops =& $gCms->GetStylesheetOperations();
+
 #******************************************************************************
 # Definition of global vars
 #******************************************************************************

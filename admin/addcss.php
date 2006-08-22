@@ -40,6 +40,9 @@ require_once("../include.php");
 
 check_login();
 
+global $gCms;
+$styleops =& $gCms->GetStylesheetOperations();
+
 #******************************************************************************
 # global variables definitions
 #******************************************************************************

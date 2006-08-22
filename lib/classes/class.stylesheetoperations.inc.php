@@ -24,6 +24,9 @@
  * @since		0.11
  * @package		CMS
  */
+
+require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.stylesheet.inc.php');
+
 class StylesheetOperations
 {
 	function & LoadStylesheets()
