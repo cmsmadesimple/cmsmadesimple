@@ -23,7 +23,7 @@
  *
  * @package CMS
  */
-class UserTags
+class UserTagOperations
 {
 	/**
 	 * Retrieve the body of a user defined tag
@@ -164,5 +164,9 @@ class UserTags
 	}
 
 } // class
+
+class UserTags extends UserTagOperations
+{}
+
 # vim:ts=4 sw=4 noet
 ?>

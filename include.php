@@ -179,10 +179,9 @@ debug_buffer('loading group functions');
 require(cms_join_path($dirname,'lib','classes','class.group.inc.php'));
 debug_buffer('loading stylesheet functions');
 require(cms_join_path($dirname,'lib','classes','class.stylesheet.inc.php'));
-*/
-
 debug_buffer('loading user tags functions');
 require(cms_join_path($dirname,'lib','classes','class.usertags.inc.php'));
+*/
 
 debug_buffer('done loading files');
 

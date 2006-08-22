@@ -1884,12 +1884,16 @@ class CMSModule
 
 	function ListUserTags()
 	{
-		return UserTags::ListUserTags();
+		global $gCms;
+		$usertagops =& $gCms->GetUserTagOperations();
+		return $usertagops->ListUserTags();
 	}
 
 	function CallUserTag($name, $params = array())
 	{
-		return UserTags::CallUserTag($name, $params);
+		global $gCms;
+		$usertagops =& $gCms->GetUserTagOperations();
+		return $usertagops->CallUserTag($name, $params);
 	}
 
 	/**

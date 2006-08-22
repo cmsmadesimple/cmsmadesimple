@@ -95,6 +95,7 @@ class Events
 	function SendEvent( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
+		$usertagops =& $gCms->GetUserTagOperations();
 
 		$results = Events::ListEventHandlers($modulename, $eventname);
 		
@@ -105,7 +106,7 @@ class Events
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 				{
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
-					UserTags::CallUserTag( $row['tag_name'], $params );
+					$usertagops->CallUserTag( $row['tag_name'], $params );
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
 				{

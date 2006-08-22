@@ -197,6 +197,7 @@ else
     
 // get the event description
 global $gCms;
+$usertagops =& $gCms->GetUserTagOperations();
 //$description = $gCms->modules[$module]['object']->GetEventDescription($event);
 
 $description = '';
@@ -218,7 +219,7 @@ $handlers = Events::ListEventHandlers( $module, $event );
 // and the list of all available handlers
 $allhandlers = array();
 // we get the list of user tags, and add them to the list
-$usertags = UserTags::ListUserTags();
+$usertags = $usertagops->ListUserTags();
 foreach( $usertags as $key => $value )
 {
   $allhandlers[$value] = $key;

@@ -302,6 +302,18 @@ class CmsObject {
 
 		return $this->globalcontentoperations;
 	}
+	
+	function & GetUserTagOperations()
+	{
+        if (!isset($this->usertagoperations))
+		{
+			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
+			$usertagoperations =& new UserTagOperations();
+			$this->usertagoperations = &$usertagoperations;
+		}
+
+		return $this->usertagoperations;
+	}
 
 	function & GetSmarty()
 	{
