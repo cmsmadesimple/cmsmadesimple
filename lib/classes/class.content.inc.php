@@ -1618,12 +1618,12 @@ class ContentProperties
 			$concat    =  '';
 			$timestamp =  $db->DBTimeStamp(time());
 
-			$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id'";
-			$dbresult = $db->Execute($delquery);
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
 //				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
 //				{
+					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id' AND prop_name = '$key'";
+					$dbresult = $db->Execute($delquery);
 
 					$insquery = "
                         INSERT INTO 
