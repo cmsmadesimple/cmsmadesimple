@@ -32,7 +32,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
     $last_level = 0;
     $count      = 0;
     $in_hr      = 0;
-    $no_li      = false;
+    $relative   = false;
 
     $add_elements = isset($params['add_elements']) ? $params['add_elements'] : 0;
     $add_element  = explode(',', $add_elements);
@@ -181,7 +181,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
         }
         else
         {
-            $no_li = true;
+            $relative = true;
         }
 
         $last_level = $depth;
@@ -190,7 +190,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
 
     for ($i = 0; $i < $last_level; $i++)
     {
-        if ($no_li != true)
+        if (! $relative)
         {
             $menu .= '</li>';
         }
