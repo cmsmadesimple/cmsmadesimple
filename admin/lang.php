@@ -19,7 +19,7 @@
 #$Id$
 
 #Nice decent default
-$current_language = "en_US";
+$current_language = isset($frontendlang) ? $frontendlang : 'en_US';
 
 #Only do language stuff for admin pages
 if (isset($CMS_ADMIN_PAGE)) {
