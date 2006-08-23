@@ -65,32 +65,41 @@ if (isset($CMS_ADMIN_PAGE)) {
 
 	if ($current_language == '')
 	{
-		#No, take a stab at figuring out the default language...
-		#Figure out default language and set it if it exists
-		if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) {
-			$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
-			if (strpos($alllang, ";") !== FALSE)
-				$alllang = substr($alllang,0,strpos($alllang, ";"));
-			$langs = explode(",", $alllang);
-
-			foreach ($langs as $onelang)
+		if (isset($gCms->config['locale']) && $gCms->config['locale'] != '')
+		{
+			$current_language = $gCms->config['locale'];
+		}
+		else
+		{
+		
+			#No, take a stab at figuring out the default language...
+			#Figure out default language and set it if it exists
+			if (isset($_SERVER["HTTP_ACCEPT_LANGUAGE"])) 
 			{
-				#Check to see if lang exists...
-				if (isset($nls['language'][$onelang]))
+				$alllang = $_SERVER["HTTP_ACCEPT_LANGUAGE"];
+				if (strpos($alllang, ";") !== FALSE)
+					$alllang = substr($alllang,0,strpos($alllang, ";"));
+				$langs = explode(",", $alllang);
+
+				foreach ($langs as $onelang)
 				{
-					$current_language = $onelang;
-					setcookie("cms_language", $onelang);
-					break;
-				}
-				#Check to see if alias exists...
-				if (isset($nls['alias'][$onelang]))
-				{
-					$alias = $nls['alias'][$onelang];
-					if (isset($nls['language'][$alias]))
+					#Check to see if lang exists...
+					if (isset($nls['language'][$onelang]))
 					{
-						$current_language = $alias;
-						setcookie("cms_language", $alias);
+						$current_language = $onelang;
+						setcookie("cms_language", $onelang);
 						break;
+					}
+					#Check to see if alias exists...
+					if (isset($nls['alias'][$onelang]))
+					{
+						$alias = $nls['alias'][$onelang];
+						if (isset($nls['language'][$alias]))
+						{
+							$current_language = $alias;
+							setcookie("cms_language", $alias);
+							break;
+						}
 					}
 				}
 			}
