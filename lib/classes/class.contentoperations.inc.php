@@ -83,8 +83,10 @@ class ContentOperations
 			{
 				$classtype = strtolower($row['type']);
 				$contentobj =& ContentOperations::CreateNewContent($classtype);
-				$contentobj->LoadFromData($row, FALSE);
-
+				if ($contentobj)
+				{
+					$contentobj->LoadFromData($row, FALSE);
+				}
 				return $contentobj;
 			}
 			else
@@ -581,10 +583,13 @@ class ContentOperations
 				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
 				{
 					$contentobj =& ContentOperations::CreateNewContent($row['type']);
-					$contentobj->LoadFromData($row, $loadprops);
-					$contentcache =& $tree->content;
-					$id = $row['content_id'];
-					$contentcache[$id] =& $contentobj;
+					if ($contentobj)
+					{
+						$contentobj->LoadFromData($row, $loadprops);
+						$contentcache =& $tree->content;
+						$id = $row['content_id'];
+						$contentcache[$id] =& $contentobj;
+					}
 				}
 			}
 		}
