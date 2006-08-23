@@ -1618,67 +1618,64 @@ class ContentProperties
 			$concat    =  '';
 			$timestamp =  $db->DBTimeStamp(time());
 
+			$insquery = "
+				INSERT INTO ".cms_db_prefix()."content_props 
+				(
+					content_id, 
+					type, 
+					prop_name, 
+					param1, 
+					param2, 
+					param3, 
+					content,
+					modified_date
+				) 
+					VALUES 
+				(
+					?,?,?,'','','',?,$timestamp
+				)
+			";
+
 			foreach ($this->mPropertyValues as $key=>$value)
 			{
 //				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
 //				{
 					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id' AND prop_name = '$key'";
 					$dbresult = $db->Execute($delquery);
+					
+					$sql_vars = array(
+						$content_id,
+						$this->mPropertyTypes[$key],
+						$key,
+						$this->mPropertyValues[$key]
+					);
+					$dbresult = $db->Execute($insquery, $sql_vars);
 
-					$type    = addslashes($this->mPropertyTypes[$key]);
-					$content = addslashes($this->mPropertyValues[$key]);
-					$insquery = "
-                        INSERT INTO 
-                            ".cms_db_prefix()."content_props 
-                        (
-                            content_id, 
-                            type, 
-                            prop_name, 
-                            param1, 
-                            param2, 
-                            param3, 
-                            content,
-                            modified_date
-                        ) 
-                            VALUES 
-                        (
-                            '$content_id',
-                            '$type',
-                            '$key',
-                            '',
-                            '',
-                            '',
-                            '$content',
-                            $timestamp
-                        )
-                    ";
-					$dbresult = $db->Execute($insquery);
+					$concat .= $this->mPropertyValues[$key];
 
-						$concat .= $this->mPropertyValues[$key];
+					# debug mode
+					if (true == $config["debug"])
+					{
+						$sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
+					}
 
-						# debug mode
+					if (! $dbresult)
+					{
 						if (true == $config["debug"])
 						{
-							$sql_queries .= "<p>$delquery</p>\n<p>$insquery</p>\n";
-						}
-
-						if (! $dbresult)
-						{
-							if (true == $config["debug"])
-							{
-								# :TODO: Translate the error message
-								$debug_errors .= "<p>Error updating content property</p>\n";
-							}
+							# :TODO: Translate the error message
+							$debug_errors .= "<p>Error updating content property</p>\n";
 						}
 					}
 //				}
+			}
 
-				if ($concat != '')
-				{
-					do_cross_reference($content_id, 'content', $concat);
-				}
+			if ($concat != '')
+			{
+				do_cross_reference($content_id, 'content', $concat);
 			}
 		}
+	}
 
     function Delete($content_id)
     {
