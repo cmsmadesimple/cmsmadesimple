@@ -124,19 +124,26 @@ class CmsObject {
 	 */
 	function CmsObject()
 	{
-	  $this->cmssystemmodules = 
-	    array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
-	  $this->modules = array();
-	  $this->errors = array();
-	  $this->nls = array();
-	  $this->contenttypes = array();
-	  $this->TemplateCache = array();
-	  $this->StylesheeteCache = array();
-	  $this->variables['content-type'] = 'text/html';
-	  $this->variables['modulenum'] = 1;
-	  $this->variables['routes'] = array();
-	  
-	  register_shutdown_function(array(&$this, 'dbshutdown'));
+		$this->cmssystemmodules = 
+		array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
+		$this->modules = array();
+		$this->errors = array();
+		$this->nls = array();
+		$this->contenttypes = array();
+		$this->TemplateCache = array();
+		$this->StylesheeteCache = array();
+		$this->variables['content-type'] = 'text/html';
+		$this->variables['modulenum'] = 1;
+		$this->variables['routes'] = array();
+
+		#Setup hash for storing all modules and plugins
+		$gCms->cmsmodules          = array();
+		$gCms->userplugins         = array();
+		$gCms->userpluginfunctions = array();
+		$gCms->cmsplugins          = array();
+		$gCms->siteprefs           = array();
+
+		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
 
 	function & GetDb()

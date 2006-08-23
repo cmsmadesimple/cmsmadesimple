@@ -54,28 +54,17 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 
 #Make a new CMS object
 require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms = new CmsObject();
+$gCms =& new CmsObject();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;
 }
 
-#Setup hash for storing all modules and plugins
-$gCms->cmsmodules          = array();
-$gCms->userplugins         = array();
-$gCms->userpluginfunctions = array();
-$gCms->cmsplugins          = array();
-$gCms->siteprefs           = array();
-
 #Load the config file (or defaults if it doesn't exist)
 require(cms_join_path($dirname,'version.php'));
 require(cms_join_path($dirname,'lib','config.functions.php'));
 
-#make a local reference
-#if (cms_config_check_old_config()) {
-#	cms_config_upgrade();
-#}
-#$config = cms_config_load(true);
+#Grab the current configuration
 $config =& $gCms->GetConfig();
 
 #Define the CMS_ADODB_DT constant
@@ -96,21 +85,6 @@ if (isset($_SESSION['cms_admin_username']))
 {
     $gCms->variables['username'] = $_SESSION['cms_admin_username'];
 }
-
-$sql_execs = 0;
-$sql_queries = '';
-
-/*
-function count_sql_execs($db, $sql, $inputarray)
-{
-    global $gCms;
-    global $sql_execs;
-    global $sql_queries;
-    if (!is_array($inputarray)) $sql_execs++;
-    else if (is_array(reset($inputarray))) $sql_execs += sizeof($inputarray);
-    else $sql_execs++;
-}
-*/
 
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
@@ -191,9 +165,6 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
     $db =& $gCms->GetDB();
-
-    #TODO: Move this into debug...  I think
-    #$db->fnExecute = 'count_sql_execs';
 }
 
 $smarty =& $gCms->GetSmarty();
@@ -282,9 +253,12 @@ if (isset($CMS_ADMIN_PAGE))
 {
     include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));
 
-    require(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-    $gCms->variables['convertclass'] = new ConvertCharset();
-
+	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
+	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
+	{
+		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
+		$gCms->variables['convertclass'] =& new ConvertCharset();
+	}
 }
 
 #Load all installed module code
