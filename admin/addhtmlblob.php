@@ -42,6 +42,7 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Add Global Content Blocks');
 
+/*
 $use_javasyntax = false;
 if (get_preference($userid, 'use_wysiwyg') == "1") {
 	$htmlarea_flag = true;
@@ -49,6 +50,9 @@ if (get_preference($userid, 'use_wysiwyg') == "1") {
 }else if (get_preference($userid, 'use_javasyntax') == "1"){
     $use_javasyntax = true;
 }
+*/
+$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+
 
 if ($access) {
 	if (isset($_POST["addhtmlblob"])) {
@@ -156,7 +160,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(true, $content, 'content', 'wysiwyg', 'content'); ?>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>

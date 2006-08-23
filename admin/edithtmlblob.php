@@ -57,6 +57,7 @@ $adminaccess = check_permission($userid, 'Modify Global Content Blocks');
 $access = check_permission($userid, 'Modify Global Content Blocks') || $gcbops->CheckOwnership($htmlblob_id, $userid) ||
 $gcbops->CheckAuthorship($htmlblob_id, $userid);
 
+/*
 $htmlarea_flag = false;
 $use_javasyntax = false;
 
@@ -69,6 +70,8 @@ else if (get_preference($userid, 'use_javasyntax') == "1")
 {
     $use_javasyntax = true;
 }
+*/
+$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 
 if ($access)
 {
@@ -221,7 +224,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(true, $content, 'content', 'wysiwyg', 'content');?></p>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
 		</div>
 	<?php if ($adminaccess) { ?>
 		<div class="pageoverflow">

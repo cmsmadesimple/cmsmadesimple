@@ -55,6 +55,9 @@ $page_message = '';
 $wysiwyg = '';
 if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
 
+$gcb_wysiwyg = 0;
+if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = $_POST['gcb_wysiwyg'];
+
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
@@ -63,6 +66,7 @@ if (isset($_POST["cancel"])) {
 }
 
 if (isset($_POST["submit_form"])) {
+	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
 	set_preference($userid, 'wysiwyg', $wysiwyg);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	set_preference($userid, 'admintheme', $admintheme);
@@ -75,6 +79,7 @@ if (isset($_POST["submit_form"])) {
 	#redirect("index.php");
 	#return;
 } else if (!isset($_POST["edituserprefs"])) {
+	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 	$wysiwyg = get_preference($userid, 'wysiwyg');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
@@ -123,6 +128,12 @@ if (FALSE == empty($page_message)) {
 				</p>
 			</div>
 			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</p>
+				<p class="pageinput">
+					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
+				</p>
+			</div>
+				<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('language'); ?>:</p>
 				<p class="pageinput">
 					<select name="default_cms_lang" style="vertical-align: middle;">
@@ -145,7 +156,7 @@ if (FALSE == empty($page_message)) {
 					</select>
 				</p>
 			</div>
-			<div class="pageoverflow">
+            <div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('admintheme');  ?>:</p>
 				<p class="pageinput">
 					<?php
