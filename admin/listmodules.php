@@ -44,7 +44,13 @@ $access = check_permission($userid, "Modify Modules");
 
 $smarty = new Smarty_CMS($gCms->config);
 
-include_once("header.php");
+//Errorstring for module operations
+$moduleerror="";
+
+//Messagestring (success) for module operations
+$modulemessage="";
+
+//include_once("header.php");
 
 if ($access)
 {
@@ -54,17 +60,19 @@ if ($access)
 		'modules'.DIRECTORY_SEPARATOR.$module, 0777 );
 		if( !$result )
 		{
-			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+			$moduleerror=lang('moduleerrormessage', array($module));
+			/*echo '<div class="pagecontainer">';
+			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';
 			echo lang('cantchmodfiles');
 			echo "</div>";
 			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 			include_once("footer.php");
+			*/
 		}
-		else
+		/*else
 		{
-			redirect("listmodules.php");
-		}
+			redirect("listmodules.php")
+		}*/
 	}
 
 	if ($action == "exportxml")
@@ -77,9 +85,10 @@ if ($access)
 		$xmltxt = $modops->CreateXMLPackage($object,$message,$files);
 		if( $files == 0 )
 		{
-			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
+			$moduleerror=lang('errornofilesexported');
+			//echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
 		}
-		else 
+		else
 		{
 			$xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
 
@@ -100,7 +109,8 @@ if ($access)
 		if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
 		|| !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
 		{
-			echo $themeObject->ShowErrors(lang('noxmlfileuploaded'));
+				$moduleerror=lang('noxmlfileuploaded');
+			//echo $themeObject->ShowErrors(lang('noxmlfileuploaded'));
 		}
 		else
 		{
@@ -117,11 +127,14 @@ if ($access)
 			// in the current version of cms.
 			if( !$result )
 			{
-				echo $themeObject->ShowErrors($modops->GetLastError());
+					$moduleerror=$modops->GetLastError();
+				//echo $themeObject->ShowErrors($modops->GetLastError());
 			}
 			else if( $autoinstallupgrade == 0 )
 			{
 				// no auto install or upgrade
+
+				//needed for new module to appear on list
 				redirect("listmodules.php");
 			}
 			// note, wishy, when you dig in here next, everything below here
@@ -132,8 +145,8 @@ if ($access)
 				// looks like we're installing this module
 				redirect("listmodules.php?action=install&module=".$result['name']);
 			}
-			else 
-			{ 
+			else
+			{
 				// allow the auto upgrade stuff to do it's thing
 				// need new version and old version
 				$oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
@@ -141,7 +154,7 @@ if ($access)
 				redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
 			}
 			*/
-		}  
+		}
 	}
 
 	if ($action == "install")
@@ -150,28 +163,32 @@ if ($access)
 		$result = $modops->InstallModule($module,false);
 		if( $result[0] == false )
 		{
-			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
+		  $moduleerror=lang('moduleerrormessage',$module);
+
+			/*echo '<div class="pagecontainer">';
+			echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';
 			echo $result[1];
 			echo "</div>";
 			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 			include_once("footer.php");
-			exit;
+			exit;*/
 		}
 		else
 		{
 			$content = $gCms->modules[$module]['object']->InstallPostMessage();
 			if( $content != FALSE )
 			{
+
+			  $modulemessage=$content;
 				//Redirect right away so that the installed module shows in the menu
-				redirect('listmodules.php?action=showpostinstall&module='.$module);
+				//redirect('listmodules.php?action=showpostinstall&module='.$module);
 			}
 			// all is good, but no postinstall message
-			redirect("listmodules.php");
+			//redirect("listmodules.php");
 		}
 	}
 
-	if ($action == 'showpostinstall')
+	/*if (action == 'showpostinstall')
 	{
 		// this is probably dead code now
 		if (isset($gCms->modules[$module]))
@@ -184,15 +201,16 @@ if ($access)
 				$content = @ob_get_contents();
 				@ob_end_clean();
 				echo '<div class="pagecontainer">';
-				echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';					
+				echo '<p class="pageheader">'.lang('moduleinstallmessage', array($module)).'</p>';
 				echo $content;
 				echo "</div>";
-				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
+				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 				include_once("footer.php");
 				exit;
 			}
 		}
-	}
+
+	}*/
 
 	if ($action == 'remove')
 	{
@@ -200,15 +218,18 @@ if ($access)
 		'modules'.DIRECTORY_SEPARATOR.$module );
 		if( !$result )
 		{
-			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+			/*echo '<div class="pagecontainer">';
+			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';
 			echo lang('cantremovefiles');
 			echo "</div>";
 			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-			include_once("footer.php");
+			include_once("footer.php");*/
+			$moduleerror="<p>".lang('moduleerrormessage', array($module))."</p>";
+			$moduleerror.="<p>".lang('cantremovefiles')."</p>";
 		}
 		else
 		{
+			//Needed for module to dissappear from list
 			redirect("listmodules.php");
 		}
 	}
@@ -216,23 +237,26 @@ if ($access)
 	if ($action == 'upgrade')
 	{
 		$modops =& $gCms->GetModuleOperations();
-		$result = $modops->UpgradeModule( $module, $_GET['oldversion'], $_GET['newversion'] );	  
+		$result = $modops->UpgradeModule( $module, $_GET['oldversion'], $_GET['newversion'] );
 		if( !$result )
 		{
 			@ob_start();
 			echo $modops->GetLastError();
 			$content = @ob_get_contents();
 			@ob_end_clean();
-			echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
+			$moduleerror="<p>".lang('moduleupgradeerror')."</p>";
+			$moduleerror.="<p>".lang('moduleerrormessage', array($module))."</p>";
+			$moduleerror.="<p>".$content."</p>";
+			/*echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
 			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
+			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';
 			echo $content;
 			echo "</div>";
 			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 			include_once("footer.php");
-			exit;
+			exit;*/
 		}
-		redirect("listmodules.php");
+		//redirect("listmodules.php");
 	}
 
 
@@ -257,22 +281,24 @@ if ($access)
 				Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
 
 				#and show the uninstallpost if necessary...
-				if ($modinstance->UninstallPostMessage() != FALSE)
+				$content=$modinstance->UninstallPostMessage();
+				if ($content != FALSE)
 				{
 					//Redirect right away so that the uninstalled module is removed from the menu
-					redirect('listmodules.php?action=showpostuninstall&module='.$module);
+					//redirect('listmodules.php?action=showpostuninstall&module='.$module);
+					$modulemessage=$content;
 				}
 			}
-			else
+			/*else
 			{
 				//TODO: Echo error
-			}
+			}*/
 		}
 
-		redirect("listmodules.php");
+		//redirect("listmodules.php");
 	}
 
-	if ($action == 'showpostuninstall')
+	/*if ($action == 'showpostuninstall')
 	{
 		// this is probably dead code now
 		if (isset($gCms->modules[$module]))
@@ -285,32 +311,41 @@ if ($access)
 				$content = @ob_get_contents();
 				@ob_end_clean();
 				echo '<div class="pagecontainer">';
-				echo '<p class="pageheader">'.lang('moduleuninstallmessage', array($module)).'</p>';					
+				echo '<p class="pageheader">'.lang('moduleuninstallmessage', array($module)).'</p>';
 				echo $content;
 				echo "</div>";
-				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';					
+				echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 				include_once("footer.php");
 				exit;
 			}
 		}
 	}
-
+*/
 	if ($action == "settrue")
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(1,$module));
-		redirect("listmodules.php");
+	//	redirect("listmodules.php");
 	}
 
 	if ($action == "setfalse")
 	{
 		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
 		$db->Execute($query, array(0,$module));
-		redirect("listmodules.php");
+//		redirect("listmodules.php");
 	}
 }
 
 include_once("header.php");
+
+if ($moduleerror!="") {
+	echo $themeObject->ShowErrors($moduleerror);
+}
+
+if ($modulemessage!="") {
+	echo $themeObject->ShowMessage($modulemessage);
+}
+
 
 if ($action == "showmoduleabout")
 {
@@ -356,12 +391,12 @@ else if ($action == "showmodulehelp")
 			$help_title = lang('help_external');
 
 			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
+			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');
 			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
 		}
 
 		$header .= '</div>';
-		echo $header;     
+		echo $header;
 
 		echo $gCms->modules[$module]['object']->GetHelpPage();
 		echo "</div>";
@@ -393,7 +428,7 @@ else if ($action == 'missingdeps')
 
 				$havedep = false;
 
-				if (isset($gCms->modules[$onedepkey]) && 
+				if (isset($gCms->modules[$onedepkey]) &&
 				$gCms->modules[$onedepkey]['installed'] == true &&
 				$gCms->modules[$onedepkey]['active'] == true &&
 				version_compare($gCms->modules[$onedepkey]['object']->GetVersion(), $onedepvalue) > -1)
