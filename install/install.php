@@ -627,7 +627,7 @@ function showPageThree($errorMessage='')
 <p>For MySQL, use the following:</p>
 <p>Log in to mysql from a console and run the following commands:</p>
 <ol>
-<li>create database cms; (use whatever name you want here but make sure to remember it, you'll need to enter it on this page)</li>
+<li>create database cms; (use whatever name you want here but make sure to remember it, you&apos;ll need to enter it on this page)</li>
 <li>grant all privileges on cms.* to cms_user@localhost identified by 'cms_pass';</li>
 </ol>
 
@@ -715,10 +715,12 @@ if ($email_accountinfo)
 <td>Create Tables (Warning: Deletes existing data)</td>
 <td><input type="checkbox" name="createtables" checked="true" /></td>
 </tr>
+<?php if (is_file(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'schemas' . DIRECTORY_SEPARATOR . 'extra.sql')) { ?>
 <tr class="row1">
 <td>Install sample content and templates</td>
 <td><input type="checkbox" name="createextra" checked="true" /></td>
 </tr>
+<?php } ?>
 </table>
 <p align="center" class="continue"><!--<a onclick="document.page3form.submit()" href="#">Continue</a>-->
 <?php if (! $valid_database) { ?>

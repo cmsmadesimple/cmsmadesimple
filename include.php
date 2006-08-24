@@ -192,10 +192,6 @@ if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 }
 
-#Setup global smarty object
-#$smarty = new Smarty_CMS($config);
-#$gCms->smarty = &$smarty;
-
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
@@ -222,9 +218,6 @@ if (isset($page))
 {
 	$gCms->variables['page'] = $page;
 }
-
-#Load all site preferences
-//load_site_preferences();
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');

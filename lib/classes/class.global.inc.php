@@ -324,31 +324,27 @@ class CmsObject {
 
 	function & GetSmarty()
 	{
-        static $smartyinstance;
-
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
-        if (is_null($smartyinstance))
+		if (!isset($this->smarty))
 		{
 			$conf =& $this->GetConfig();
+
 			if (!defined('SMARTY_DIR'))
 			{
-				define('SMARTY_DIR', dirname(__FILE__).'/lib/smarty/');
+				define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 			}
 
 			#Setup global smarty object
-			$smartyinstance = new Smarty_CMS($conf);
-			$this->smarty = &$smartyinstance;
+			$this->smarty =& new Smarty_CMS($conf);
 		}
 
-        return $smartyinstance;
+        return $this->smarty;
 	}
 
 	function & GetHierarchyManager()
 	{
-        static $hrinstance;
-
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
 		//and return it
