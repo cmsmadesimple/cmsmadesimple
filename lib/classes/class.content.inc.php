@@ -560,10 +560,11 @@ class ContentBase
 	{
 		$this->DoReadyForEdit();
 		global $gCms;
+		$config =& $gCms->GetConfig();
 
 		$tolower = false;
 
-		if ($alias == '')
+		if ($alias == '' && $config['auto_alias_content'] == true)
 		{
 			$alias = trim($this->mMenuText);
 			if ($alias == '')

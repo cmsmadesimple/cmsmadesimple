@@ -291,7 +291,7 @@ class Content extends ContentBase
 	    }
 	}
 		
-	if ($this->mAlias != $this->mOldAlias)
+	if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
 	{
 		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
