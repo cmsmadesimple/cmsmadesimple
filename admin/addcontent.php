@@ -413,11 +413,13 @@ $tabnames = $contentobj->TabNames();
 		
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;
+
 		if ($numberoftabs == 0)
 		{
 			$numberoftabs = 1;
 			$showtabs = 1;
 		}
+
 		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
 		{
 			if ($showtabs == 1)
@@ -434,7 +436,9 @@ $tabnames = $contentobj->TabNames();
 				</div>
 				<?php
 			}
+
 			$contentarray = $contentobj->EditAsArray(true, $currenttab, $access);
+
 			for($i=0;$i<count($contentarray);$i++)
 			{
 				?>
@@ -448,10 +452,11 @@ $tabnames = $contentobj->TabNames();
 					?>
 				</p>
 			</div>
+<? 				    } ?>
 			<div style="clear: both;"></div>
-		</div>
+</div>
 		<?php
-		}
+
 		if ($contentobj->mPreview)
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
@@ -463,7 +468,7 @@ $tabnames = $contentobj->TabNames();
 		}
 		echo $submit_buttons;
 		?>
-	</div>
+</div>
 	</form>
 </div>
 
@@ -471,7 +476,7 @@ $tabnames = $contentobj->TabNames();
 
 }
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-
+echo '</div>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
