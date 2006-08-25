@@ -23,6 +23,8 @@ $USE_OLD_ADODB=1;
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."fileloc.php");
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php");
 
+load_backwards_compatibility();
+
 //Do module autoupgrades 
 function module_autoupgrade()
 {
@@ -155,6 +157,7 @@ else
 	$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
+	global $gCms;
 	$gCms->db = &$db;
 
 	$current_version = 1;

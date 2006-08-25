@@ -126,36 +126,19 @@ if (!$loaded_adodb)
 }
 
 debug_buffer('loading page functions');
-require(cms_join_path($dirname,'lib','page.functions.php'));
+require_once(cms_join_path($dirname,'lib','page.functions.php'));
 debug_buffer('loading content functions');
-require(cms_join_path($dirname,'lib','content.functions.php'));
+require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading pageinfo functions');
-require(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
-require(cms_join_path($dirname,'lib','translation.functions.php'));
+require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
-require(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 
 if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
 {
-	debug_buffer('loading template functions');
-	require(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
-	debug_buffer('loading gcb functions');
-	require(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
-	debug_buffer('loading module class');
-	require(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
-	debug_buffer('loading bookmark functions');
-	require(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
-	debug_buffer('loading content class');
-	require(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
-	debug_buffer('loading user functions');
-	require(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
-	debug_buffer('loading group functions');
-	require(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
-	debug_buffer('loading stylesheet functions');
-	require(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
-	debug_buffer('loading user tags functions');
-	require(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
+	load_backwards_compatibility();
 }
 
 debug_buffer('done loading files');
@@ -263,6 +246,29 @@ debug_buffer('', 'End of include');
 function sanitize_get_var(&$value, $key)
 {
     $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
+}
+
+function load_backwards_compatibility()
+{
+	$dirname = dirname(__FILE__);
+	debug_buffer('loading template functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
+	debug_buffer('loading gcb functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
+	debug_buffer('loading module class');
+	require_once(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
+	debug_buffer('loading bookmark functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
+	debug_buffer('loading content class');
+	require_once(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
+	debug_buffer('loading user functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
+	debug_buffer('loading group functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
+	debug_buffer('loading stylesheet functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
+	debug_buffer('loading user tags functions');
+	require_once(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
 }
 
 # vim:ts=4 sw=4 noet
