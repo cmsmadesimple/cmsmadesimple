@@ -452,7 +452,7 @@ $tabnames = $contentobj->TabNames();
 					?>
 				</p>
 			</div>
-<? 				    } ?>
+<?php 				    } ?>
 			<div style="clear: both;"></div>
 </div>
 		<?php
