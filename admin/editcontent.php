@@ -322,7 +322,7 @@ else
 		$typesdropdown .= '<option value="' . $onetype->type . '"';
 		if ($onetype->type == $content_type)
 		{
-			$typesdropdown .= " selected ";
+			$typesdropdown .= ' selected="selected" ';
 			$cur_content_type = $onetype->type;
 		}
 		$typesdropdown .= ">".($onetype->friendlyname)."</option>";

@@ -330,7 +330,7 @@ foreach ($gCms->contenttypes as $onetype)
 	$typesdropdown .= '<option value="' . $onetype->type . '"';
 	if ($onetype->type == $content_type)
 	{
-		$typesdropdown .= " selected ";
+		$typesdropdown .= ' selected="selected" ';
 		$cur_content_type = $onetype->type;
 	}
 	$typesdropdown .= ">".($onetype->friendlyname)."</option>";
@@ -400,26 +400,25 @@ $tabnames = $contentobj->TabNames();
 	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />			
 	<div id="page_content">
+		<div class="pageoverflow">	
 		<?php
 		
-		$submit_buttons = '<div class="pageoverflow">
+		$submit_buttons = '
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">';
 		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
 		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
 			$submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
 		}
-		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
+		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></p>';
 		
 		$numberoftabs = count($tabnames);
 		$showtabs = 1;
-
 		if ($numberoftabs == 0)
 		{
 			$numberoftabs = 1;
 			$showtabs = 1;
 		}
-
 		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
 		{
 			if ($showtabs == 1)
@@ -430,15 +429,14 @@ $tabnames = $contentobj->TabNames();
 			{
 				echo $submit_buttons;
 				?>
+
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
 					<p class="pageinput"><?php echo $typesdropdown; ?></p>
 				</div>
 				<?php
 			}
-
 			$contentarray = $contentobj->EditAsArray(true, $currenttab, $access);
-
 			for($i=0;$i<count($contentarray);$i++)
 			{
 				?>
@@ -450,33 +448,32 @@ $tabnames = $contentobj->TabNames();
 			}
 			echo '<input type="hidden" name="firsttime" value="0" /><input type="hidden" name="orig_content_type" value="'.$cur_content_type.'" />';
 					?>
-				</p>
 			</div>
-<?php 				    } ?>
 			<div style="clear: both;"></div>
-</div>
-		<?php
-
+				  <?php
+		}
 		if ($contentobj->mPreview)
 		{
 			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
 				?>
 					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
 				<?php
-			echo '</div></div>';
 			echo '<div style="clear: both;"></div>';
 		}
-		echo $submit_buttons;
-		?>
+?>
 </div>
-	</form>
 </div>
-
+<div class="pageoverflow">
 <?php
-
+echo $submit_buttons;
+?>
+</div>
+</div>
+</div>
+</form>
+</div>
+<?php
 }
-echo '</div>';
-
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
 include_once("footer.php");
