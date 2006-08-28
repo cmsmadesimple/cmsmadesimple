@@ -2,15 +2,15 @@
 /**
  * Image Manager configuration file.
  * @author $Author: Wei Zhuo $
- * @version $Id: config.inc.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  *
  * Updated by Thijs (thijs@contemplated) to work with CMS made easy
  * File basicly functions as a stub to facilitate future upgrading
  */
 
-include_once("../../../config.php");
-
+global $gCms;
+$config = $gCms->GetConfig();
 
 /* 
  File system path to the directory you want to manage the images
