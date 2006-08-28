@@ -224,17 +224,20 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	}
 	$text .= '>';
 	$count = 0;
-	foreach ($items as $key=>$value)
+	if (is_array($items) && count($items) > 0)
 	{
-		$text .= '<option value="'.$value.'"';
-		if ($selectedindex == $count || $selectedvalue == $value)
+		foreach ($items as $key=>$value)
 		{
-			$text .= ' ' . 'selected="selected"';
+			$text .= '<option value="'.$value.'"';
+			if ($selectedindex == $count || $selectedvalue == $value)
+			{
+				$text .= ' ' . 'selected="selected"';
+			}
+			$text .= '>';
+			$text .= $key;
+			$text .= '</option>';
+			$count++;
 		}
-		$text .= '>';
-		$text .= $key;
-		$text .= '</option>';
-		$count++;
 	}
 	$text .= '</select>'."\n";
 

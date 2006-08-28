@@ -43,20 +43,11 @@ function smarty_cms_function_metadata($params, &$smarty)
 	
 	$showbase = true;
 	
-	//Write logic out long hand to make sure it's easy to maintain
-	//Basically, showbase takes precedence
-	//If it's not set, then look at use_hierarchy and internal_pretty_urls in config.php
-	//and decide what to do
+	#Show a base tag unless showbase is false in config.php
+	#It really can't hinder, only help.
 	if (isset($params['showbase']))
 	{
 		if ($params['showbase'] == 'false')
-		{
-			$showbase = false;
-		}
-	}
-	else
-	{
-		if ($config['use_hierarchy'] != true)
 		{
 			$showbase = false;
 		}

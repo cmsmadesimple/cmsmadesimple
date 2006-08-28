@@ -307,7 +307,7 @@ if ($config["debug"] == true)
 	#echo $perf->SuspiciousSQL();
 	#echo $perf->ExpensiveSQL();
 
-	echo $sql_queries;
+	#echo $sql_queries;
 	foreach ($gCms->errors as $error)
 	{
 		echo $error;
