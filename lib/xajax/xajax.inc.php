@@ -772,7 +772,7 @@ class xajax
 	 */
 	function getJavascriptConfig()
 	{
-		$html  = "\t<script type=\"text/javascript\">\n";
+		$html  = "\t<script type=\"text/javascript\">\n\t<!--\n";
 		$html .= "var xajaxRequestUri=\"".str_replace('&', '&amp;', $this->sRequestURI)."\";\n";
 		$html .= "var xajaxDebug=".($this->bDebug?"true":"false").";\n";
 		$html .= "var xajaxStatusMessages=".($this->bStatusMessages?"true":"false").";\n";
@@ -785,7 +785,7 @@ class xajax
 			$html .= $this->_wrap($sFunction,$this->aFunctionRequestTypes[$sFunction]);
 		}
 
-		$html .= "\t</script>\n";
+		$html .= "\t-->\n\t</script>\n";
 		return $html;		
 	}
 	
@@ -813,9 +813,9 @@ class xajax
 		if ($sJsURI != "" && substr($sJsURI, -1) != "/") $sJsURI .= "/";
 		
 		$html = "\t<script type=\"text/javascript\" src=\"" . $sJsURI . $sJsFile . "\"></script>\n";	
-		$html .= "\t<script type=\"text/javascript\">\n";
+		$html .= "\t<script type=\"text/javascript\">\n\t<!--\n";
 		$html .= "window.setTimeout(function () { if (!xajaxLoaded) { alert('Error: the xajax Javascript file could not be included. Perhaps the URL is incorrect?\\nURL: {$sJsURI}{$sJsFile}'); } }, 6000);\n";
-		$html .= "\t</script>\n";
+		$html .= "\t-->\n\t</script>\n";
 		return $html;
 	}
 
