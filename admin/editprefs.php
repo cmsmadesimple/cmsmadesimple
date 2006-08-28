@@ -130,7 +130,7 @@ if (FALSE == empty($page_message)) {
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
+					<input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
 				</p>
 			</div>
 				<div class="pageoverflow">
