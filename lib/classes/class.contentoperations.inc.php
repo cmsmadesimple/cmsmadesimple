@@ -703,7 +703,7 @@ class ContentOperations
 					#Select current parent if it exists
 					if ($one->Id() == $parent)
 					{
-						$result .= ' selected="true"';
+						$result .= ' selected="selected"';
 					}
 
 					$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';

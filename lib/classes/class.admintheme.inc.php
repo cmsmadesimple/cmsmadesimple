@@ -810,7 +810,7 @@ class AdminTheme
                     'title'=>$this->FixSpaces(lang('editbookmark')),
                     'description'=>lang('editbookmark'),'show_in_menu'=>false),
              // base view site menu ---------------------------------------------------------
-            'viewsite'=>array('url'=>'../index.php','parent'=>-1,
+            'viewsite'=>array('url'=>'../','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('viewsite')),
                     'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
              // base logout menu ---------------------------------------------------------
