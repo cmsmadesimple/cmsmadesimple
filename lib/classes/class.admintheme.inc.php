@@ -1622,7 +1622,7 @@ class AdminTheme
 	{
 	  if (FALSE == empty($_GET[$get_var]))
 	    {
-	      $errors = lang($_GET[$get_var]);
+	      $errors = cleanValue(lang(cleanValue($_GET[$get_var])));
 	    }
 	  else
 	    {
@@ -1665,7 +1665,7 @@ class AdminTheme
 	{
 	  if (FALSE == empty($_GET[$get_var]))
 	    {
-	      $message = lang($_GET[$get_var]);
+	      $message = cleanValue(lang(cleanValue($_GET[$get_var])));
 	    }
 	  else
 	    {
