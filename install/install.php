@@ -188,8 +188,8 @@ if (1 == $currentpage)
     if (!isset($_GET['sessiontest']))
       {
 	$_SESSION['test'] = TRUE;
-	$http = (isset($_SERVER['HTTPS'])) ? 'https' : 'http';
-	$redirect = $http . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
+	$scheme = ((! isset($_SERVER['HTTPS'])) || strtolower($_SERVER['HTTPS']) != 'on') ? 'http' : 'https';
+	$redirect = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
 	header("Location: $redirect");
       }
   }
