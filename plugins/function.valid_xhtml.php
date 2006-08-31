@@ -55,10 +55,29 @@ function smarty_cms_function_valid_xhtml($params, &$smarty)
     
     $image_alt = isset($params['alt']) ? $params['alt'] : $link_text;
     
+    $image_width = 
+	(isset($params['width']) && trim($params['width']) != '') 
+	? $params['width'] 
+	: '88'
+    ;
+    $image_height = 
+	(isset($params['height']) && trim($params['height']) != '') 
+	? $params['height'] 
+	: '31'
+    ;
+    $image_size_html = ' width="' . $image_width . '" height="' . $image_height . '"';
+    
+    $image_class =
+	(isset($params['image_class']) && trim($params['image_class']) != '')
+	? $params['image_class']
+	: ''
+    ;
+    $image_class_html  = $image_class  != '' ? ' class="'  . $image_class  . '"' : '';
+    
     $html = '<a href="' . $link_url . '"' . $link_class_html . $link_target_html . '>';
     $html .= 
 	$use_image
-	? '<img src="' . $image_src . '" alt="' . $image_alt . '" height="31" width="88" border="0" />' 
+	? '<img src="' . $image_src . '" alt="' . $image_alt . '"' . $image_size_html . $image_class_html . ' border="0" />' 
 	: $link_text;
     $html .= '</a>';
     
@@ -75,13 +94,16 @@ function smarty_cms_help_function_valid_xhtml()
 <h3>What parameters does it take?</h3>
 <p>
     <ul>
-	<li><em>(optional)</em> url    (string)     - The URL used for validation, if none is given http://validator.w3.org/check/referer is used.</li>
-	<li><em>(optional)</em> class  (string)     - If set, this will be used as class attribute for the link element</li>
-	<li><em>(optional)</em> target (string)     - If set, this will be used as target attribute for the link element</li>
-	<li><em>(optional)</em> image  (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
-	<li><em>(optional)</em> text   (string)     - If set, this will be used for the link text or alternate text for the image. Default is 'valid XHTML 1.0 Transitional'.<br /> When an image is used, the given string will also be used for the image alt attribute (by default, this can be overridden by using the 'alt' parameter).</li>
-	<li><em>(optional)</em> src    (string)     - Only if 'image' is not set to false. The icon to show. Default is http://www.w3.org/Icons/valid-xhtml10</li>
-	<li><em>(optional)</em> alt    (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
+	<li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://validator.w3.org/check/referer is used.</li>
+	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
+	<li><em>(optional)</em> target      (string)     - If set, this will be used as target attribute for the link (a) element</li>
+	<li><em>(optional)</em> image       (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
+	<li><em>(optional)</em> text        (string)     - If set, this will be used for the link text or alternate text for the image. Default is 'valid XHTML 1.0 Transitional'.<br /> When an image is used, the given string will also be used for the image alt attribute (by default, this can be overridden by using the 'alt' parameter).</li>
+	<li><em>(optional)</em> image_class (string)     - Only if 'image' is not set to false. If set, this will be used as class attribute for the image (img) element</li>
+	<li><em>(optional)</em> src         (string)     - Only if 'image' is not set to false. The icon to show. Default is http://www.w3.org/Icons/valid-xhtml10</li>
+	<li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://www.w3.org/Icons/valid-xhtml10)</li>
+	<li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://www.w3.org/Icons/valid-xhtml10)</li>
+	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
     </ul>
 </p>
 <?php
