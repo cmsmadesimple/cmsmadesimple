@@ -289,7 +289,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 			$text .= ' ' . 'checked="checked"';
 		}
 		$text .= ' />';
-		$text .= $key . $delimiter;
+		$text .= '<label for="'.$id.$name.'">'.$key .'</label>' . $delimiter;
 	}
 
 	return $text;
