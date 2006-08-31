@@ -85,6 +85,19 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	return $text;
 }
 
+function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
+{
+  $labeltext = cms_htmlentities($labeltext);
+  $text = '<label for="'.$id.$name.'" id="'.$id.$name.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= '>'.$labeltext.'</label>'."\n";
+  return $text;
+
+}
+
 function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
 	$value = str_replace('"', '&quot;', $value);

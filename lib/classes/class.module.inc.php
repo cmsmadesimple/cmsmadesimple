@@ -1432,6 +1432,20 @@ class CMSModule
 		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
 	}
 
+        /**
+         * Returns the xhtml equivalent of an label for input field.  This is basically a nice little wrapper
+         * to make sure that id's are placed in names and also that it's xhtml compliant.
+         *
+         * @param string The id given to the module on execution
+         * @param string The html name of the input field this label is associated to
+         * @param string The text in the label
+         * @param string Any additional text that should be added into the tag when rendered
+         */
+        function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
+        {
+	        $this->LoadFormMethods();
+	        return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
+        }
 
 	/**
 	 * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
