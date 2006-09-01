@@ -39,15 +39,14 @@ $nls['alias']['polish'] = 'pl_PL' ;
 $nls['alias']['pl_PL.ISO8859-2'] = 'pl_PL' ;
 
 #Encoding of the language
-$nls['encoding']['pl_PL'] = "UTF-8";
+$nls['encoding']['pl_PL'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['pl_PL'] = array();
-array_push($nls['file']['pl_PL'], dirname(__FILE__)."/pl_PL/admin.inc.php");
+$nls['file']['pl_PL'] = array(dirname(__FILE__).'/pl_PL/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this whpl translations exist in HTMLarea and plugin dirs
 # (please spld language files to HTMLarea developmplt)
 
-$nls['htmlarea']['pl_PL'] = "pl";
+$nls['htmlarea']['pl_PL'] = 'pl';
 ?>

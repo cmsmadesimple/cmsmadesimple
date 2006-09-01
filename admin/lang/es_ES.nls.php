@@ -44,15 +44,14 @@ $nls['alias']['es_MX'] = 'es_ES' ;
 $nls['alias']['es_US.ISO8859-1'] = 'es_ES' ;
 
 #Encoding of the language
-$nls['encoding']['es_ES'] = "UTF-8";
+$nls['encoding']['es_ES'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['es_ES'] = array();
-array_push($nls['file']['es_ES'], dirname(__FILE__)."/es_ES/admin.inc.php");
+$nls['file']['es_ES'] = array(dirname(__FILE__).'/es_ES/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['es_ES'] = "es";
+$nls['htmlarea']['es_ES'] = 'es';
 ?>

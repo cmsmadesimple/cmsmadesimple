@@ -41,15 +41,14 @@ $nls['alias']['deu'] = 'de_DE' ;
 $nls['alias']['de_DE.ISO8859-1'] = 'de_DE' ;
 
 #Encoding of the language
-$nls['encoding']['de_DE'] = "UTF-8";
+$nls['encoding']['de_DE'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['de_DE'] = array();
-array_push($nls['file']['de_DE'], dirname(__FILE__)."/de_DE/admin.inc.php");
+$nls['file']['de_DE'] = array(dirname(__FILE__).'/de_DE/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['de_DE'] = "de";
+$nls['htmlarea']['de_DE'] = 'de';
 ?>

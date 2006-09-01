@@ -43,12 +43,11 @@ $nls['alias']['rus'] = 'ru_RU' ;
 $nls['encoding']['ru_RU'] = "utf-8";
 
 #Location of the file(s)
-$nls['file']['ru_RU'] = array();
-array_push($nls['file']['ru_RU'], dirname(__FILE__)."/ru_RU/admin.inc.php");
+$nls['file']['ru_RU'] = array(dirname(__FILE__).'/ru_RU/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ru_RU'] = "ru";
+$nls['htmlarea']['ru_RU'] = 'ru';
 ?>

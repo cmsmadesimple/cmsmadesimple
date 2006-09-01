@@ -94,12 +94,6 @@ class CMSModule
 					'default' => 'en_US',
 					'help' => lang('langparam'),
 					'optional' => true);
-// 		array_push($this->params, array(
-// 			'name' => 'lang',
-// 			'default' => 'en_US',
-// 			'help' => lang('langparam'),
-// 			'optional' => true
-// 		));
 
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();

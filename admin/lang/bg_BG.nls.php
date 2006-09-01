@@ -40,15 +40,14 @@ $nls['alias']['bulgarian'] = 'bg_BG' ;
 $nls['alias']['bul'] = 'bg_BG' ;
 
 #Encoding of the language
-$nls['encoding']['bg_BG'] = "UTF-8";
+$nls['encoding']['bg_BG'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['bg_BG'] = array();
-array_push($nls['file']['bg_BG'], dirname(__FILE__)."/bg_BG/admin.inc.php");
+$nls['file']['bg_BG'] = array(dirname(__FILE__).'/bg_BG/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['bg_BG'] = "bg";
+$nls['htmlarea']['bg_BG'] = 'bg';
 ?>

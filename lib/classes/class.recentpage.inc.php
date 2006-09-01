@@ -138,7 +138,6 @@ class RecentPageOperations
 			$onepage->title = $row['title'];
 			$onepage->timestamp = $row['access_time'];
 			$result[] = $onepage;
-// 			array_push($result, $onepage);
 		}
 
 		return $result;
@@ -192,7 +191,6 @@ class RecentPageOperations
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
 		  $oldPages[] = array( $row['id'] );
-// 			array_push($oldPages, array($row['id']));
 		}
 
 		$query = "DELETE FROM ".cms_db_prefix()."admin_recent_pages where id=?";

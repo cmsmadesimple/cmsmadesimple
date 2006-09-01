@@ -40,13 +40,12 @@ $nls['alias']['fr_CH'] = 'fr_FR' ;
 $nls['alias']['fr_FR.ISO8859-1'] = 'fr_FR' ;
 
 #Encoding of the language
-$nls['encoding']['fr_FR'] = "UTF-8";
+$nls['encoding']['fr_FR'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['fr_FR'] = array();
-array_push($nls['file']['fr_FR'], dirname(__FILE__)."/fr_FR/admin.inc.php");
+$nls['file']['fr_FR'] = array(dirname(__FILE__).'/fr_FR/admin.inc.php');
 
 #Language setting for HTML area
-$nls['htmlarea']['fr_FR'] = "fr";
+$nls['htmlarea']['fr_FR'] = 'fr';
 
 ?>

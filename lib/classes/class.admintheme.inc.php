@@ -417,7 +417,7 @@ class AdminTheme
             $rp->setValues($this->title, $this->url, $this->userid);
             $rp->Save();
             $this->recent = array_reverse($this->recent);
-            array_push($this->recent, $rp);
+            $this->recent[] = $rp;
             if (count($this->recent) > 5)
                 {
                 array_shift($this->recent);
@@ -439,12 +439,12 @@ class AdminTheme
         $tmpMark = new Bookmark();
         $tmpMark->title = lang('addbookmark');
         $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
-        array_push($marks,$tmpMark);
+        $marks[] = $tmpMark;
         $marks = array_reverse($marks);
         $tmpMark = new Bookmark();
         $tmpMark->title = lang('managebookmarks');
         $tmpMark->url = 'listbookmarks.php';
-        array_push($marks,$tmpMark);
+        $marks[] = $tmpMark;
         $this->DisplayBookmarks($marks);
     }
 
@@ -914,7 +914,7 @@ class AdminTheme
 	      {
             	if ($subsectionArray['parent'] == $sectionKey)
 		  {
-		    array_push($this->menuItems[$sectionKey]['children'], $subsectionKey);
+		    $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
 		  }
 	      }
             // set selected
@@ -971,7 +971,7 @@ class AdminTheme
 	  {
 	    if ($menuItem['selected'])
 	      {
-		array_push($this->breadcrumbs, array('title'=>$menuItem['title'], 'url'=>$menuItem['url']));
+		$this->breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
 		$count++;
 	      }
 	  }

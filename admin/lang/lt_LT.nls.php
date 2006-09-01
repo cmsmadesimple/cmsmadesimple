@@ -10,16 +10,15 @@ $nls['alias']['lt_LT'] = 'lt_LT' ;
 $nls['alias']['lt_LT.ISO8859-13'] = 'lt_LT' ;
 
 #Encoding of the language
-$nls['encoding']['lt_LT'] = "UTF-8";
+$nls['encoding']['lt_LT'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['lt_LT'] = array();
-array_push($nls['file']['lt_LT'], dirname(__FILE__)."/lt_LT/admin.inc.php");
+$nls['file']['lt_LT'] = array(dirname(__FILE__).'/lt_LT/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['lt_LT'] = "en";
+$nls['htmlarea']['lt_LT'] = 'en';
 
 ?>

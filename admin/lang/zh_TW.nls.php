@@ -39,11 +39,10 @@ $nls['alias']['chinese'] = 'zh_TW' ;
 $nls['alias']['zh_TW.Big5'] = 'zh_TW' ;
 
 #Encoding of the language
-$nls['encoding']['zh_TW'] = "UTF-8";
+$nls['encoding']['zh_TW'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['zh_TW'] = array();
-array_push($nls['file']['zh_TW'], dirname(__FILE__)."/zh_TW/admin.inc.php");
+$nls['file']['zh_TW'] = array(dirname(__FILE__).'/zh_TW/admin.inc.php');
 
-$nls['htmlarea']['zh_TW'] = "en";
+$nls['htmlarea']['zh_TW'] = 'en';
 ?>

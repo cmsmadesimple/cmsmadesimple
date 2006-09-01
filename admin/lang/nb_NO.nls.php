@@ -26,7 +26,7 @@
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
 #Norwegian (bokmål)
-#Created by: Roger "Stigma" Knutsen <stigmaster@gmail.com>
+#Created by: Roger 'Stigma' Knutsen <stigmaster@gmail.com>
 #Maintained by: Jon Arne Holm <jaholm@start.no>
 
 #Native language name
@@ -43,16 +43,15 @@ $nls['alias']['nb_NO.ISO8859-1'] = 'nb_NO' ;
 $nls['alias']['nb_NO.ISO8859-15'] = 'nb_NO' ;
 
 #Encoding of the language
-$nls['encoding']['nb_NO'] = "UTF-8";
+$nls['encoding']['nb_NO'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['nb_NO'] = array();
-array_push($nls['file']['nb_NO'], dirname(__FILE__)."/nb_NO/admin.inc.php");
+$nls['file']['nb_NO'] = array(dirname(__FILE__).'/nb_NO/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['nb_NO'] = "en";
+$nls['htmlarea']['nb_NO'] = 'en';
 
 ?>

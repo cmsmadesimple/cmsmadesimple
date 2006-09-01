@@ -39,15 +39,14 @@ $nls['alias']['id_ID'] = 'id_ID' ;
 $nls['alias']['id_ID.ISO8859-15'] = 'id_ID' ;
 
 #Encoding of the language
-$nls['encoding']['id_ID'] = "UTF-8";
+$nls['encoding']['id_ID'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['id_ID'] = array();
-array_push($nls['file']['id_ID'], dirname(__FILE__)."/id_ID/admin.inc.php");
+$nls['file']['id_ID'] = array(dirname(__FILE__).'/id_ID/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['id_ID'] = "en";
+$nls['htmlarea']['id_ID'] = 'en';
 ?>

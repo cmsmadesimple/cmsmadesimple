@@ -14,15 +14,14 @@ $nls['alias']['da_DK'] = 'da_DK' ;
 $nls['alias']['da_DK.ISO8859-1'] = 'da_DK' ;
 
 #Encoding of the language
-$nls['encoding']['da_DK'] = "UTF-8";
+$nls['encoding']['da_DK'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['da_DK'] = array();
-array_push($nls['file']['da_DK'], dirname(__FILE__)."/da_DK/admin.inc.php");
+$nls['file']['da_DK'] = array(dirname(__FILE__).'/da_DK/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['da_DK'] = "da";
+$nls['htmlarea']['da_DK'] = 'da';
 ?>

@@ -52,7 +52,6 @@ class GlobalContentOperations
 			while ($result && !$result->EOF)
 			{
 				$variables['authorblobs'][] = $result->fields['htmlblob_id'];
-				//array_push($variables['authorblobs'], $result->fields['htmlblob_id']);
 				$result->MoveNext();
 			}
 		}

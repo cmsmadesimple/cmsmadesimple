@@ -41,16 +41,15 @@ $nls['alias']['fi_FI.ISO8859-1'] = 'fi_FI' ;
 $nls['alias']['fi_FI.ISO8859-15'] = 'fi_FI' ;
 
 #Encoding of the language
-$nls['encoding']['fi_FI'] = "UTF-8";
+$nls['encoding']['fi_FI'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['fi_FI'] = array();
-array_push($nls['file']['fi_FI'], dirname(__FILE__)."/fi_FI/admin.inc.php");
+$nls['file']['fi_FI'] = array(dirname(__FILE__).'/fi_FI/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['fi_FI'] = "en";
+$nls['htmlarea']['fi_FI'] = 'en';
 
 ?>

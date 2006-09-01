@@ -45,12 +45,11 @@ $nls['alias']['el_GR.ISO8859-7'] = 'el_GR' ;
 $nls['encoding']['el_GR'] = "UTF-8";
 
 #Location of the file(s)
-$nls['file']['el_GR'] = array();
-array_push($nls['file']['el_GR'], dirname(__FILE__)."/el_GR/admin.inc.php");
+$nls['file']['el_GR'] = array(dirname(__FILE__).'/el_GR/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['en_US'] = "en";
+$nls['htmlarea']['en_US'] = 'en';
 ?>

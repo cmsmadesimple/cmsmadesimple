@@ -41,15 +41,14 @@ $nls['alias']['sr_YU.ISO8859-2'] = 'sr_YU' ;
 $nls['alias']['sr_YU.UTF-8'] = 'sr_YU' ;
 
 #Encoding of the language
-$nls['encoding']['sr_YU'] = "UTF-8";
+$nls['encoding']['sr_YU'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['sr_YU'] = array();
-array_push($nls['file']['sr_YU'], dirname(__FILE__)."/sr_YU/admin.inc.php");
+$nls['file']['sr_YU'] = array(dirname(__FILE__).'/sr_YU/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['sr_YU'] = "en";
+$nls['htmlarea']['sr_YU'] = 'en';
 ?>

@@ -40,15 +40,14 @@ $nls['alias']['ja_JP.Shift_JIS'] = 'ja_JP' ;
 $nls['alias']['ja_JP.UTF-8'] = 'ja_JP' ;
 
 #Encoding of the language
-$nls['encoding']['ja_JP'] = "UTF-8";
+$nls['encoding']['ja_JP'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['ja_JP'] = array();
-array_push($nls['file']['ja_JP'], dirname(__FILE__)."/ja_JP/admin.inc.php");
+$nls['file']['ja_JP'] = array(dirname(__FILE__).'/ja_JP/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['ja_JP'] = "ja";
+$nls['htmlarea']['ja_JP'] = 'ja';
 ?>

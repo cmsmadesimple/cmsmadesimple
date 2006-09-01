@@ -42,15 +42,14 @@ $nls['alias']['hu_HU.WINDOWS-1250'] = 'hu_HU' ;
 $nls['alias']['hu_HU.ISO8859-2'] = 'hu_HU' ;
 
 #Encoding of the language
-$nls['encoding']['hu_HU'] = "UTF-8";
+$nls['encoding']['hu_HU'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['hu_HU'] = array();
-array_push($nls['file']['hu_HU'], dirname(__FILE__)."/hu_HU/admin.inc.php");
+$nls['file']['hu_HU'] = array(dirname(__FILE__).'/hu_HU/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['hu_HU'] = "hu";
+$nls['htmlarea']['hu_HU'] = 'hu';
 ?>

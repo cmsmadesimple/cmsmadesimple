@@ -41,15 +41,14 @@ $nls['alias']['sv_SE.ISO8859-1'] = 'sv_SE' ;
 $nls['alias']['sv_SE.ISO8859-15'] = 'sv_SE' ;
 
 #Encoding of the language
-$nls['encoding']['sv_SE'] = "UTF-8";
+$nls['encoding']['sv_SE'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['sv_SE'] = array();
-array_push($nls['file']['sv_SE'], dirname(__FILE__)."/sv_SE/admin.inc.php");
+$nls['file']['sv_SE'] = array(dirname(__FILE__).'/sv_SE/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['sv_SE'] = "en";
+$nls['htmlarea']['sv_SE'] = 'en';
 ?>

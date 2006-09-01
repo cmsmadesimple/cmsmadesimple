@@ -291,7 +291,6 @@ class ModuleOperations
 		      $moduledetails['requires'] = array();
 		    }
 		  $moduledetails['requires'][] = $requires;
-// 		  array_push( $moduledetails['requires'], $requires );
 		  $requires = array();
 		}
 	    

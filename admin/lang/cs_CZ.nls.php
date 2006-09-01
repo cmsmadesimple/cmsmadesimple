@@ -43,15 +43,14 @@ $nls['alias']['cs_CZ.WINDOWS-1250'] = 'cs_CZ' ;
 $nls['alias']['cs_CZ.ISO8859-2'] = 'cs_CZ' ;
 
 #Encoding of the language
-$nls['encoding']['cs_CZ'] = "UTF-8";
+$nls['encoding']['cs_CZ'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['cs_CZ'] = array();
-array_push($nls['file']['cs_CZ'], dirname(__FILE__)."/cs_CZ/admin.inc.php");
+$nls['file']['cs_CZ'] = array(dirname(__FILE__).'/cs_CZ/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['cs_CZ'] = "cz";
+$nls['htmlarea']['cs_CZ'] = 'cz';
 ?>

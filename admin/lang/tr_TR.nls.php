@@ -39,16 +39,15 @@ $nls['alias']['tr_TR.ISO8859-9'] = 'tr_TR' ;
 $nls['alias']['tr_TR.UTF-8'] = 'tr_TR' ;
 
 #Encoding of the language
-$nls['encoding']['tr_TR'] = "UTF-8";
+$nls['encoding']['tr_TR'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['tr_TR'] = array();
-array_push($nls['file']['tr_TR'], dirname(__FILE__)."/tr_TR/admin.inc.php");
+$nls['file']['tr_TR'] = array(dirname(__FILE__).'/tr_TR/admin.inc.php');
 
 #Language setting for HTML area
 # Only change this when translations exist in HTMLarea and plugin dirs
 # (please send language files to HTMLarea development)
 
-$nls['htmlarea']['tr_TR'] = "en";
+$nls['htmlarea']['tr_TR'] = 'en';
 
 ?>

@@ -39,11 +39,10 @@ $nls['alias']['zh_CN.EUC'] = 'zh_CN' ;
 $nls['alias']['chinese_gb2312'] = 'zh_CN' ;
 
 #Encoding of the language
-$nls['encoding']['zh_CN'] = "UTF-8";
+$nls['encoding']['zh_CN'] = 'UTF-8';
 
 #Location of the file(s)
-$nls['file']['zh_CN'] = array();
-array_push($nls['file']['zh_CN'], dirname(__FILE__)."/zh_CN/admin.inc.php");
+$nls['file']['zh_CN'] = array(dirname(__FILE__).'/zh_CN/admin.inc.php');
 
-$nls['htmlarea']['zh_CN'] = "en";
+$nls['htmlarea']['zh_CN'] = 'en';
 ?>
