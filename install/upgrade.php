@@ -197,7 +197,7 @@ else
 
 
 		echo "<p>Please review config.php, modify any new settings as necessary and then reset it's permissions back to a locked state.</p>";
-		echo "<p>CMS is up to date. Please click <a href=\"../index.php\">here</a> to go to your CMS site or you can <a href=\"../admin/\">go to the Admin Panel</a>.</p>";
+		echo "<p>CMS is up to date. Please click <a href=\"../index.php\">here</a> to go to your CMS site or you can <a href=\"../".$config["admin_dir"]."/\">go to the Admin Panel</a>.</p>";
 
 	}
 

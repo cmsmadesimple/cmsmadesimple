@@ -146,7 +146,7 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 }
 
 $LOAD_ALL_MODULES=1;
-require(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
+require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'fileloc.php');
 
 $config = CONFIG_FILE_LOCATION;
 if (!file_exists($config)) {
