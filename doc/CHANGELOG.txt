@@ -1,4 +1,4 @@
-Version 1.0 "Hawaii" -- In Beta
+Version 1.0 "Hawaii" -- Sep 10 2006
 -----------------
 
 * Events
@@ -93,7 +93,7 @@ Version 1.0 "Hawaii" -- In Beta
 
 * Upgraded smarty to 2.6.14
 
-* Upgrade ADODB Lite
+* Upgrade ADODB Lite to 1.20
 
   CMSMS doesn't require that adodb or adodb lite be modified anymore.  If you need a different 
   version, just download from their site and you're good to go.
