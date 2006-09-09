@@ -69,7 +69,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["locale"] = "";
 	$config['old_stylesheet'] = true;
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
-	$config['backwards_compatible'] = false;
+	$config['backwards_compatible'] = true;
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
