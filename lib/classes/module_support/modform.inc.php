@@ -290,9 +290,11 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 {
 	$text = '';
+	$counter = 0;
 	foreach ($items as $key=>$value)
 	{
-		$text .= '<input type="radio" name="'.$id.$name.'" value="'.$value.'"';
+		$counter = $counter + 1;
+		$text .= '<input type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
 		if ($addttext != '')
 		{
 			$text .= ' ' . $addttext;
@@ -302,7 +304,7 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 			$text .= ' ' . 'checked="checked"';
 		}
 		$text .= ' />';
-		$text .= '<label for="'.$id.$name.'">'.$key .'</label>' . $delimiter;
+		$text .= '<label for="'.$id.$name.$counter.'">'.$key .'</label>' . $delimiter;
 	}
 
 	return $text;
