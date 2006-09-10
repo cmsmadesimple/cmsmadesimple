@@ -148,15 +148,5 @@ echo $modresult;
 
 $endtime = microtime();
 
-if ($config["debug"] == true)
-{
-	echo $sql_queries;
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
-}
-
-
 # vim:ts=4 sw=4 noet
 ?>

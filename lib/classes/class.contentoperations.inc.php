@@ -109,13 +109,12 @@ class ContentOperations
 
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
 		{
-			//$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ? OR content_alias = ?";
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
 			if ($only_active == true)
 			{
 				$query .= " AND active = 1";
 			}
-			$row = &$db->GetRow($query, array($alias,$alias));
+			$row = &$db->GetRow($query, array($alias));
 		}
 		else
 		{

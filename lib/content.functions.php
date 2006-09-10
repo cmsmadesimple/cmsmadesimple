@@ -53,16 +53,16 @@ class Smarty_CMS extends Smarty {
 		//use_sub_dirs doesn't work in safe mode
 		//if (ini_get("safe_mode") != "1")
 		//	$this->use_sub_dirs = true;
-		$this->caching = false;
-		$this->compile_check = true;
+		//$this->caching = false;
+		//$this->compile_check = true;
 		$this->assign('app_name','CMS');
-		$this->debugging = false;
-		$this->force_compile = false;
+		//$this->debugging = false;
+		//$this->force_compile = false;
 		$this->cache_plugins = false;
 
 		if ($config["debug"] == true)
 		{
-			$this->caching = false;
+			//$this->caching = false;
 			$this->force_compile = true;
 			$this->debugging = true;
 		}

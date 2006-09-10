@@ -109,11 +109,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			{
 				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"".$_SESSION["redirect_url"]."\">".$_SESSION["redirect_url"]."</a><br />";
-				global $sql_queries;
-				if (isset($sql_queries))
-				{
-					echo $sql_queries;
-				}
 				foreach ($gCms->errors as $globalerror)
 				{
 					echo $globalerror;
@@ -134,11 +129,6 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			{
 				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"index.php\">index.php</a><br />";
-				global $sql_queries;
-				if (isset($sql_queries))
-				{
-					echo $sql_queries;
-				}
 				foreach ($gCms->errors as $globalerror)
 				{
 					echo $globalerror;
@@ -184,11 +174,6 @@ if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
 <?php
 	if (isset($gCms->config) and $gCms->config['debug'] == true)
 	{
-		global $sql_queries;
-		if (isset($sql_queries))
-		{
-			echo $sql_queries;
-		}
 		foreach ($gCms->errors as $globalerror)
 		{
 			echo $globalerror;

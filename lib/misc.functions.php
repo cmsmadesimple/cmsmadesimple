@@ -110,11 +110,6 @@ function redirect($to, $noappend=false)
         {
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a href=\"".$to."\">".$to."</a><br />";
-            global $sql_queries;
-            if (isset($sql_queries))
-            {
-                echo $sql_queries;
-            }
             exit();
         }
         else
