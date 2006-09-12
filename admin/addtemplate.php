@@ -43,7 +43,7 @@ $dflt_content='
 
 <!-- start menu -->
 <div id="menu">
-  {cms_module module="menumanager"}
+  {menu}
 </div>
 <!-- end menu -->
 
