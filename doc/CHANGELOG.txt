@@ -1,4 +1,4 @@
-Version 1.0.1 "Oahu" -- Beta
+Version 1.0.1 "Oahu" -- Sep 12 2006
 -----------------
 
 - Removed a few checks from the installer.
