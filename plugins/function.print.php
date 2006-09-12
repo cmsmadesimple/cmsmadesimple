@@ -54,18 +54,21 @@ function smarty_cms_function_print($params, &$smarty)
 		}
 	}
 	if (true == $gCms->config['assume_mod_rewrite'])
-	  {
-	    $hm =& $gCms->GetHierarchyManager();
-	    $curnode =& $hm->getNodeById($gCms->variables['content_id']);
-	    $curcontent =& $curnode->GetContent();
-	    $page_url = $curcontent->GetURL().'?'.$gCms->config['query_var'].'=true';
-	  }
+	{
+		$hm =& $gCms->GetHierarchyManager();
+		$curnode =& $hm->getNodeById($gCms->variables['content_id']);
+		if (isset($curnode))
+		{
+			$curcontent =& $curnode->GetContent();
+			$page_url = $curcontent->GetURL().'?'.$gCms->config['query_var'].'=true';
+		}
+	}
 	else
-	  {
-	    $page_url = $gCms->config['root_url'].'/index.php?'.$gCms->config['query_var'].'='.$gCms->variables['content_id'].'&amp;print=true';
-	  }
-       //will this work if using htaccess? (Yes! -Wishy)
+	{
+		$page_url = $gCms->config['root_url'].'/index.php?'.$gCms->config['query_var'].'='.$gCms->variables['content_id'].'&amp;print=true';
+	}
 
+	//will this work if using htaccess? (Yes! -Wishy)
 	$output = '<a class="'. $class .'" href="' . $page_url . $goback . $js . '"'. $target . '>';
 	if (isset($params["showbutton"]))
 	{
