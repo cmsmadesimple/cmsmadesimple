@@ -3,6 +3,10 @@ Version 1.0.1 "Oahu" -- Beta
 
 - Removed a few checks from the installer.
 - Fixed a bug in the print tag during previewing an unsaved page.
+- Fixed issue where bad content types will causes errors while
+  editing content.
+- Fixed issues with login/logout not making proper admin log
+  reports
 
 Version 1.0 "Hawaii" -- Sep 10 2006
 -----------------

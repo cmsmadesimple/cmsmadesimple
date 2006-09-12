@@ -640,10 +640,17 @@ class ContentOperations
 			if (in_array($dbresult->fields['type'], array_keys(ContentOperations::ListContentTypes())))
 			{
 				$contentobj =& ContentOperations::CreateNewContent($dbresult->fields['type']);
-				$contentobj->LoadFromData($dbresult->FetchRow(), false);
-				$map[$contentobj->Id()] = $count;
-				$contentcache[] = $contentobj;
-				$count++;
+				if (isset($contentobj))
+				{
+					$contentobj->LoadFromData($dbresult->FetchRow(), false);
+					$map[$contentobj->Id()] = $count;
+					$contentcache[] = $contentobj;
+					$count++;
+				}
+				else
+				{
+					$dbresult->MoveNext();
+				}
 			}
 			else
 			{
