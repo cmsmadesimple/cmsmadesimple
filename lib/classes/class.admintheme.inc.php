@@ -1665,7 +1665,7 @@ class AdminTheme
 	{
 	  if (FALSE == empty($_GET[$get_var]))
 	    {
-	      $message = cleanValue(lang(cleanValue($_GET[$get_var])));
+	      $message = lang(cleanValue($_GET[$get_var]));
 	    }
 	  else
 	    {
