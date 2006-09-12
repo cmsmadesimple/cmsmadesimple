@@ -22,7 +22,7 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-audit(-1, '', 'User Logout');
+audit($_SESSION['login_user_id'], $_SESSION['login_user_username'], 'User Logout');
 
 #unset($_SESSION['cms_admin_user_id']);
 #setcookie('cms_admin_user_id', '', time() - 3600);

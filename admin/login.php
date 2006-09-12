@@ -75,7 +75,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			#setcookie('cms_language', $default_cms_lang);
 			$_SESSION['login_cms_language'] = $default_cms_lang;
 		}
-		audit(-1, '', 'User Login');
+		audit($oneuser->id, $oneuser->username, 'User Login');
 
 		#Perform the login_post callback  TODO: Remove me
 		foreach($gCms->modules as $key=>$value)
