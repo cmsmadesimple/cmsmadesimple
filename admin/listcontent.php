@@ -465,7 +465,7 @@ function reorder_display_list()
 
 	ob_start();
 	//$sortableLists->printTopJS();
-	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', 'Submit', 'button', 'sortableListForm', 'Cancel', $output);
+	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', lang('submit'), 'button', 'sortableListForm', lang('cancel'), $output);
 	$contents = ob_get_contents();
 	ob_end_clean();
 	
