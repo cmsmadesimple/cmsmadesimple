@@ -361,10 +361,6 @@ function showPageOne() {
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 8M, recommend 16M)", "8M", "16M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_input_time", "Checking max input time (min 45s, recommend 60s)", 45, 60, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "max_execution_time", "Checking max execution time (min 10s, recommend 45s)", 10, 45, $currow );
-  $currow = ($currow == 'row1') ? 'row2' : 'row1';
   $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M, recommend 10M)", "2M", "10M", $currow, TRUE );
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
  
