@@ -33,7 +33,7 @@ function return_bytes($val) {
 }
 
 
-function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
+function test_cfg_var_bool( $name, $desc, $success, $row = 'row2', $warning_message = '' )
 {
   $icon = 'false.gif';
   $alt = 'Failure';
@@ -48,13 +48,18 @@ function test_cfg_var_bool( $name, $desc, $success, $row = 'row2' )
       $ret = true;
     }
 
-  echo "<tr class=\"$row\"><td>$desc </td><td class=\"col2\">";
+  echo "<tr class=\"$row\"><td>$desc";
+  if ($warning_message != '' && $ret == false)
+  {
+    echo "<br/><br /><em>$warning_message</em>";
+  }
+  echo " </td><td class=\"col2\">";
   echo "<img src=\"../images/cms/install/$icon\" alt=\"$alt\" height=\"16\" width=\"16\" border=\"0\" />";
   echo "</td></tr>\n";
   return $ret;
 }
 
-function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2', $compare_as_bytes = FALSE )
+function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'row2', $compare_as_bytes = FALSE, $warning_message = '' )
 {
   $icon = 'red.gif';
   $alt="Failure";
@@ -135,6 +140,9 @@ function test_cfg_var_range( $name, $desc, $yellowlimit, $greenlimit, $row = 'ro
 	}
     }
   echo "<tr class=\"$row\"><td><span class=\"have\">You have \"$str\"</span>$desc";
+  if ($warning_message != '') {
+    $warning = '<br /><em>' . $warning_message . '</em>';
+  }
   if( isset( $warning ) && $warning != "" )
     {
       echo "<br/>$warning";
@@ -311,7 +319,7 @@ function showPageOne() {
     }
   echo "</td></tr>\n";
     
-  $currow = 'row1';
+  $currow = 'row2';
   foreach ($files as $f) {
     #echo "<tr><td>\n";
     ## check if we can write to the this file
@@ -344,11 +352,6 @@ function showPageOne() {
       echo '</td><td class="col2"><img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
     }
   echo "</td></tr>\n";
-
-  ($currow=="row1"?$currow="row2":$currow="row1");
-  $continueon &= test_cfg_var_bool( "file_uploads", "Checking file uploads (require on)", 1, 'row2' );
-  
-  
   echo "</tbody></table>\n";
  
  echo "<br /><br />\n";
@@ -358,10 +361,22 @@ function showPageOne() {
   echo "<caption class=\"tbcaption\">Recommended settings</caption>\n";
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
   
+  ($currow=="row1"?$currow="row2":$currow="row1");
+  if (!test_cfg_var_bool( "file_uploads", "Checking file uploads", 1, $currow, 'You will not be able to use any of the file uploading facilities included in CMS Made Simple.  If possible, this restriction should be lifted by your system admin to properly use all file management features of the system.  Proceed with caution.' ))
+  {
+    $special_failed=true;
+  }
+  
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 8M, recommend 16M)", "8M", "16M", $currow, TRUE );
+  if(!test_cfg_var_range( "memory_limit", "Checking PHP memory limit (min 8M, recommend 16M)", "8M", "16M", $currow, TRUE, 'You may not have enough memory to run CMSMS correctly. If possible, you should try to get your system admin to raise this value to the minimum 8M or great. Proceed with caution.'))
+  {
+    $special_failed=true;
+  }
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
-  $continueon &= test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M, recommend 10M)", "2M", "10M", $currow, TRUE );
+  if (!test_cfg_var_range( "upload_max_filesize", "Checking max upload file size (min 2M, recommend 10M)", "2M", "10M", $currow, TRUE, 'You probably will not be able to upload any files using any of the included file management functions.  Please be aware of this restriction.' ))
+  {
+    $special_failed=true;
+  }
   $currow = ($currow == 'row1') ? 'row2' : 'row1';
  
   // is uploads dir writable?
