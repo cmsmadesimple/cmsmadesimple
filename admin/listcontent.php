@@ -650,7 +650,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
         if ($indent)
         {
-            for ($i=1;$i < $root->getLevel();$i++)
+            for ($i=0;$i < $root->getLevel();$i++)
             {
                 $thelist .= "-&nbsp;&nbsp;&nbsp;";
             }
