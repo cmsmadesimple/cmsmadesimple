@@ -29,7 +29,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	}
 	
 	$style = true; // Use default styles
-	if (!empty($params['style'])) $style = $params['style']; // Except if "false" given in params
+	if ($params['style'] === "false" ) $style = false; // Except if "false" given in params
 	
 	// Default styles
 	$inputStyle = 'style="width:100%;border: 1px solid black; margin:0 0 1em 0;"'; // input boxes
