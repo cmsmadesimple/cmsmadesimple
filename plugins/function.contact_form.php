@@ -78,10 +78,18 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 			return;
 		}
 	}
+
+$action = "";
+if (isset($_SERVER['PHP_SELF'])) {
+   $action = $_SERVER['PHP_SELF'];
+}
+if (isset($_SERVER['QUERY_STRING'])) {
+   $action .= '?'.$_SERVER['QUERY_STRING'];
+}
 	?>
 
 	<!-- CONTACT_FORM -->
-	<form action="<?php $_SERVER['PHP_SELF'].'?'.$_SERVER['QUERY_STRING'] ?>" method="post" <?php echo ($style) ? $formStyle:''; ?>>
+	<form action="<?php echo $action ?>" method="post" <?php echo ($style) ? $formStyle:''; ?>>
                  <fieldset <?php echo ($style) ? $fieldsetStyle:''; ?>>
                         <legend>Contact</legend>
 			<label for="name" <?php echo ($style) ? $labelStyle:''; ?> >Your name :</label>
