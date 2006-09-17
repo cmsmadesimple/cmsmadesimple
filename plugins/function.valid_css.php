@@ -21,7 +21,7 @@ function smarty_cms_function_valid_css($params, &$smarty)
     $link_url = 
 	(isset($params['url']) && trim($params['url']) != '')
 	? $params['url']
-        : 'http://jigsaw.w3.org/css-validator/validator?uri='.$_SERVER['HTTP_HOST'].$_SERVER['REQUEST_URI']
+        : 'http://jigsaw.w3.org/css-validator/check/referer'
     ;
     
     $link_target =
@@ -93,7 +93,7 @@ function smarty_cms_help_function_valid_css()
 <h3>What parameters does it take?</h3>
 <p>
     <ul>
-        <li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given  http://jigsaw.w3.org/css-validator/validator?uri= is used.</li>
+        <li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://jigsaw.w3.org/css-validator/check/referer is used.</li>
 	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
 	<li><em>(optional)</em> target      (string)     - If set, this will be used as target attribute for the link (a) element</li>
 	<li><em>(optional)</em> image       (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
