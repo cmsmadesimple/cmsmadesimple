@@ -630,7 +630,7 @@ function showPageThree($errorMessage='')
 
 <p>This is the name of your site.  It will be used in various places of the default templates and can be used anywhere with the
 {sitename} tag.</p>
-<p style="text-align: center;"><input class="defaultfocus selectall" type="text" name="sitename" size="40" value="<?php echo isset($_POST['sitename'])?$_POST['sitename']:'CMS Made Simple Site' ?>" /></p>
+<p style="text-align: center;"><input class="defaultfocus selectall" type="text" name="sitename" size="40" value="<?php echo isset($_POST['sitename'])? htmlentities($_POST['sitename']):'CMS Made Simple Site' ?>" /></p>
 
 <h3>Database Information</h3>
 
@@ -846,7 +846,7 @@ function showPageFour($sqlloaded = 0) {
 		echo "<p>Setting sitename...";
 
 		$query = "INSERT INTO ". $db_prefix ."siteprefs (sitepref_name, sitepref_value) VALUES (?,?)";
-		$db->Execute($query, array('sitename', $_POST['sitename']));
+		$db->Execute($query, array('sitename', htmlentities($_POST['sitename'])));
 
 		echo "[done]</p>";
 
