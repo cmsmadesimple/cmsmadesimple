@@ -534,7 +534,7 @@ div.pagemcontainer  {
 div.pageoverflow  {
    clear: left;
    padding-top: 1px;
-   width: 100%;
+   width: 97%; 
    overflow: hidden;
    }
 
