@@ -60,7 +60,7 @@ function smarty_cms_function_print($params, &$smarty)
 		if (isset($curnode))
 		{
 			$curcontent =& $curnode->GetContent();
-			$page_url = $curcontent->GetURL().'?'.$gCms->config['query_var'].'=true';
+                        $page_url = $curcontent->GetURL().'?print=true';
 		}
 	}
 	else
@@ -70,9 +70,9 @@ function smarty_cms_function_print($params, &$smarty)
 
 	//will this work if using htaccess? (Yes! -Wishy)
 	$output = '<a class="'. $class .'" href="' . $page_url . $goback . $js . '"'. $target . '>';
-	if (isset($params["showbutton"]))
+	if (isset($params['showbutton']))
 	{
-		$output .= '<img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" alt="'.$text.'"/>';
+		$output .= '<img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" title="'.$text.'" alt="'.$text.'"/>';
 	}
 	else
 	{
@@ -94,7 +94,7 @@ function smarty_cms_help_function_print() {
                 <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
                 <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
                 <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
-                <li><em>(optional</em> text - Text to use instead of "Print This Page" for the print link.
+                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.
                     <p>Example:</p>
                      <pre>{print text="Printable Page"}</pre>      
                      </li>
