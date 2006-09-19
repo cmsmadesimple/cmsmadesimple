@@ -278,9 +278,9 @@ if ($access)
 			global $gCms;
 			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
+			audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 			if ($submit)
 			{
-				audit($contentobj->Id(), $contentobj->Name(), 'Edited Content');
 				redirect("listcontent.php?page=".$pagelist_id.'&message=contentupdated');
 			}
 		}
