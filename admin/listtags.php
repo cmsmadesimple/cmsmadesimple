@@ -104,7 +104,8 @@ else
 	echo '<tbody>';
 
 		$curclass = "row1";
-
+		$gCms->userplugins = isset($gCms->userplugins) ? $gCms->userplugins : array();
+		
 		foreach($gCms->cmsplugins as $oneplugin)
 		{
 			if (!array_key_exists($oneplugin, $gCms->userplugins))
