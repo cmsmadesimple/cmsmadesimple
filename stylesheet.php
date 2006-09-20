@@ -71,7 +71,7 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 	}
 	else
 	{
-		$db=pg_connect("host=".$config['db_hostname']." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
+		$db=pg_connect((isset($config['db_hostname']) && $config['db_hostname'] ? "host=".$config['db_hostname'] : '')." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
 		if ($name != '')
 			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
 		else
