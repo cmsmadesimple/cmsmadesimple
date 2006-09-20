@@ -197,7 +197,7 @@ if (1 == $currentpage)
       {
 	$_SESSION['test'] = TRUE;
 	$scheme = ((! isset($_SERVER['HTTPS'])) || strtolower($_SERVER['HTTPS']) != 'on') ? 'http' : 'https';
-	$redirect = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['SCRIPT_NAME'] . '?sessiontest=1&' . SID;
+	$redirect = $scheme . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['PHP_SELF'] . '?sessiontest=1&' . SID;
 	header("Location: $redirect");
       }
   }
