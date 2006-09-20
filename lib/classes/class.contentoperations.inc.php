@@ -437,7 +437,7 @@ class ContentOperations
 			}
 			else
 			{
-				$current_parent_id = 0;
+				$current_parent_id = -1;
 			}
 		}
 

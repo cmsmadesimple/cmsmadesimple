@@ -768,7 +768,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             if ($one->DefaultContent() != true)
             {
                 //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
-                if ($one->ChildCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
+				//var_dump($one->ChildCount());
+                if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
                     $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
