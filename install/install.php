@@ -857,7 +857,7 @@ function showPageFour($sqlloaded = 0) {
 
     } ## if
 
-    $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['SCRIPT_NAME'],0,strlen($_SERVER['SCRIPT_NAME'])-20);
+    $docroot = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0,strlen($_SERVER['PHP_SELF'])-20);
     $docpath = dirname(dirname(__FILE__)); 
 
 	?>
