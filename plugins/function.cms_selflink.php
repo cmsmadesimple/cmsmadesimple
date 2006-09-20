@@ -257,7 +257,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 					for ($i = $number + 1; $i < count($flatcontent); $i++)
 					{
 						$content =& $flatcontent[$i]->getContent();
-						if (isset($content))
+						if(isset($content) && $content != NULL)
 						{
 							if ($content->Active() && $content->ShowInMenu() && $content->HasUsableLink())
 							{
