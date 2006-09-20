@@ -55,7 +55,6 @@ echo '</thead>';
 echo '<tbody>';
 
 $curclass = "row1";
-$gCms->userplugins = isset($gCms->userplugins) ? $gCms->userplugins : array();
 
 foreach($gCms->cmsplugins as $oneplugin)
 {

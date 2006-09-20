@@ -135,13 +135,13 @@ class CmsObject {
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 		$this->variables['routes'] = array();
-
+		
 		#Setup hash for storing all modules and plugins
-		$gCms->cmsmodules          = array();
-		$gCms->userplugins         = array();
-		$gCms->userpluginfunctions = array();
-		$gCms->cmsplugins          = array();
-		$gCms->siteprefs           = array();
+		$this->cmsmodules          = array();
+		$this->userplugins         = array();
+		$this->userpluginfunctions = array();
+		$this->cmsplugins          = array();
+		$this->siteprefs           = array();
 
 		register_shutdown_function(array(&$this, 'dbshutdown'));
 	}
