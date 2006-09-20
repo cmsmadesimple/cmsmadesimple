@@ -655,7 +655,7 @@ if (extension_loaded('mysql'))
 	{
 	echo '<option value="mysql" ';
 	echo (isset($_POST['dbms']) && $_POST['dbms'] == 'mysql'?'selected="selected"':'');
-	echo '>MySQL (3 and 4.0)</option>';
+	echo '>MySQL</option>';
 	$valid_database = true;
 	}
 if (extension_loaded('mysqli'))
