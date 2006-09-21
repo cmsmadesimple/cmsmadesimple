@@ -1,3 +1,15 @@
+Version 1.0.2 "Maui" -- Sep 20 2006
+-----------------
+
+- Added valid_css tag
+- Fix default template prev and next links positions
+- Fix the print tag with mod_rewrite
+- Fix undefined index during logout
+- Fix sitename htmlentities in installer
+- Fixes for various issues in the contact form
+- Fixes for issues with search with non-English characters
+- Various other little fixes
+
 Version 1.0.1 "Oahu" -- Sep 12 2006
 -----------------
 
