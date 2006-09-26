@@ -6,6 +6,10 @@ $perm_id = $db->GenID(cms_db_prefix() . 'permissions_seq');
 $table  = cms_db_prefix() . 'permissions';
 $name   = 'Modify Page Structure';
 $timestamp = $db->DBTimeStamp(time());
+if ($timestamp[0] != "'")
+{
+    $timestamp = "'$timestamp'";
+}
 $query ="
     INSERT INTO 
         `$table`
