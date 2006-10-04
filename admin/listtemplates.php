@@ -190,9 +190,18 @@ if (isset($_GET["message"])) {
 				# remove template
 				if ($remove)
 				{
-					echo "<td class=\"icons_wide\"><a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                    echo "</a></td>\n";
+					echo "<td class=\"icons_wide\">";
+					if ($onetemplate->default)
+					{
+						echo '&nbsp;';
+					}
+					else
+					{
+						echo "<a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+						echo "</a>";
+					}
+					echo "</td>\n";
 				}
 				if ($onetemplate->default)
 					echo '<td>&nbsp;</td>';
