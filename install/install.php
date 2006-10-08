@@ -672,7 +672,6 @@ if (extension_loaded('pgsql'))
 	echo '>PostgreSQL 7/8</option>';
 	$valid_database = true;
 	}
-/*
 if (extension_loaded('sqlite'))
 	{
 	echo '<option value="sqlite" ';
@@ -680,7 +679,6 @@ if (extension_loaded('sqlite'))
 	echo '>SQLite</option>';
 	$valid_database = true;
 	}
-*/
 ?>
 		</select>
 <?php if (! $valid_database) { ?>

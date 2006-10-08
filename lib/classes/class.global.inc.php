@@ -172,7 +172,12 @@ class CmsObject {
 				die('Database Connection failed');
 			}
 			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-
+			
+			if ($config['dbms'] == 'sqlite')
+			{
+				$dbinstance->Execute("PRAGMA short_column_names = 1;");
+			}
+			
 			//$dbinstance->debug = true;
 			if ($config['debug'] == true)
 			{
