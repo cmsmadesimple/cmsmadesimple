@@ -87,7 +87,7 @@ class Separator extends ContentBase
     {
 	$ret = array();
 
-    if (check_permission(get_userid(), 'Modify Page Structure'))
+    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
     {
 		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
