@@ -176,6 +176,7 @@ class Content extends ContentBase
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
 	global $gCms;
+	
 	$config = $gCms->GetConfig();
 	$templateops =& $gCms->GetTemplateOperations();
 	$ret = array();
@@ -246,7 +247,6 @@ class Content extends ContentBase
 
 	    if (!$adding && $showadmin)
 	    {
-			global $gCms;
 			$userops =& $gCms->GetUserOperations();
 			$ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	    }

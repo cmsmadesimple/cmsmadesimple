@@ -112,6 +112,8 @@ class SectionHeader extends ContentBase
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
+	global $gCms;
+	
 	$ret = array();
 
 	$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
@@ -119,7 +121,6 @@ class SectionHeader extends ContentBase
 	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
     if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
     {
-		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
     	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
@@ -128,7 +129,6 @@ class SectionHeader extends ContentBase
 
 	if (!$adding && $showadmin)
 	{
-		global $gCms;
 		$userops =& $gCms->GetUserOperations();
 	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	}

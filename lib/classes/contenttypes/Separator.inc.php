@@ -85,11 +85,12 @@ class Separator extends ContentBase
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
     {
+	global $gCms;
+	
 	$ret = array();
 
     if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
     {
-		global $gCms;
 		$contentops =& $gCms->GetContentOperations();
     	$ret[] = array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
@@ -98,7 +99,6 @@ class Separator extends ContentBase
 
 	if (!$adding && $showadmin)
 	{
-		global $gCms;
 		$userops =& $gCms->GetUserOperations();
 	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	}
