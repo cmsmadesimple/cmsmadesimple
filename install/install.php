@@ -758,12 +758,17 @@ function showPageFour($sqlloaded = 0) {
     ## don't load statements if they've already been loaded
     if ($sqlloaded == 0 && isset($_POST["createtables"])) {
 
-        global $config, $CMS_SCHEMA_VERSION;
+        global $config, $CMS_SCHEMA_VERSION, $ADODB_vers;
 
 		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
+		
+		if ($_POST['dbms'] == 'sqlite' && strstr($ADODB_vers, 'ADOdb Lite'))
+		{
+			showPageThree('Currently Database Type SQLite will not work with ADOdb Lite.<br /> Add $config[\'use_adodb_lite\'] = false; to your config.php and make sure there is a full version of adodb present in the lib/adodb directory within your CMS Made Simple installation.');
+			return;
+		}
 
 		$result = $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']);
-
 		$db_prefix = $_POST['prefix'];
 		#$db->debug = true;
 
