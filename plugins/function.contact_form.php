@@ -21,6 +21,13 @@
 
 function smarty_cms_function_contact_form($params, &$smarty) {
 
+    global $gCms;
+
+    if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+    {
+        $captcha =& $gCms->modules['Captcha']['object'];
+    }
+
 	if (empty($params['email'])){
 		echo '<div class="formError">An email address must be specified in order to use this plugin.</div>';
 		return;
@@ -50,6 +57,11 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		if (!empty($_POST['email'])) $email = cfSanitize($_POST['email']);
 		if (!empty($_POST['subject'])) $subject = cfSanitize($_POST['subject']);
 		if (!empty($_POST['message'])) $message = $_POST['message'];
+		
+		if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+		{
+		    if (!empty($_POST['captcha_resp'])) { $captcha_resp = $_POST['captcha_resp']; }
+		}
 
 		//Mail headers
 		$extra = "From: $name <$email>\r\n";
@@ -59,6 +71,11 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		if (empty($email)) $errors .= "\t\t<li>" . 'Please Enter Your Email Address' . "</li>\n";
 		if (empty($subject)) $errors .= "\t\t<li>" . 'Please Enter a Subject' . "</li>\n";
 		if (empty($message)) $errors .= "\t\t<li>" . 'Please Enter a Message' . "</li>\n";
+		if ($params['captcha'] && isset($gCms->modules['Captcha']))
+		{
+		    if (empty($captcha_resp)) $errors .= "\t\t<li>" . 'Please Enter a Captcha response' . "</li>\n";
+		    elseif (! ($captcha->checkCaptcha($captcha_resp))) $errors .= "\t\t<li>" . 'Invalid Captcha response' . "</li>\n";
+		}
 		if (!validEmail($email)) $errors .= "\t\t<li>" . 'Your Email Address is Not Valid' . "</li>\n";
 		
 		if (!empty($errors)) {
@@ -104,6 +121,18 @@ if (isset($_SERVER['QUERY_STRING'])) {
 			<label for="message" <?php echo ($style) ? $labelStyle:''; ?> >Message : </label>
 			<textarea id="message" name="message" rows="12" cols="48" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
 
+<?php
+if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+{
+?>
+			<label for="captcha_resp" <?php echo ($style) ? $labelStyle:''; ?> >Enter the text from the image below : </label>
+			<input type="text" id="captcha_resp" name="captcha_resp" value="" <?php echo ($style) ? $inputStyle:''; ?>/>
+
+<?php
+    echo $captcha->getCaptcha();
+}
+?>
+
 		        <input type="submit" class="button" value="Submit" <?php echo ($style) ? $buttonStyle: ''; ?> /> 
                         <input type="reset"  class="button" value="Clear" <?php echo ($style) ? $buttonStyle: ''; ?> />
                  </fieldset>
@@ -131,6 +160,7 @@ function smarty_cms_help_function_contact_form() {
              <p>Then call the page with the form on it like this: /index.php?page=contact&subject=test+subject</p>
              <p>And the following will appear in the "Subject" box: "test subject"
            </li>
+		<li><em>(optional)</em>captcha - true/false, use Captcha response test (Captcha module must be installed). Default is false.</li>
 	</ul>
 	</p>
 	<?php
@@ -139,12 +169,13 @@ function smarty_cms_help_function_contact_form() {
 function smarty_cms_about_function_contact_form() {
 	?>
 	<p>Author: Brett Batie &lt;brett-cms@classicwebdevelopment.com&gt; &amp; Simon van der Linden &lt;ifmy@geekbox.be&gt;</p>
-	<p>Version: 1.3 (20060803)</p>
+	<p>Version: 1.4 (20061010)</p>
 	<p>
 	Change History:<br/>
         <ul>
         <li>l.2 : various improvements (errors handling, etc.)</li>
         <li>1.3 : added subject_get_var parameter (by elijahlofgren)</li>
+        <li>1.4 : added captcha module support (by Dick Ittmann)</li>
         </ul>
 	</p>
 	<?php
