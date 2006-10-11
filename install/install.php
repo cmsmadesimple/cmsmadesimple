@@ -487,6 +487,23 @@ function showPageOne() {
       echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
     }
   echo "</td></tr>\n";
+  $currow = ($currow == 'row1') ? 'row2' : 'row1';
+
+  // Safe mode?
+  echo "<tr class=\"$currow\"><td>Checking for Safe mode<br/><br/>
+        <em>PHP Safe mode could create some problems with uploading files and other functions. It all depends on how strict your server safe mode settings are.</em>
+        </td><td class=\"col2\">";
+  if (ini_get('safe_mode'))
+    {
+      echo '<img src="../images/cms/install/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
+    }
+  else
+    {
+     echo '<img src="../images/cms/install/green.gif" alt="Success" height="16" width="16" border="0" />';
+
+    }
+  echo "</td></tr>\n";
+
 
   $special_failed=false;
     echo "</tbody></table>\n";
