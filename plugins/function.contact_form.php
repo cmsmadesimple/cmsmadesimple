@@ -40,12 +40,13 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	
 	// Default styles
 	$inputStyle = 'style="width:100%;border: 1px solid black; margin:0 0 1em 0;"'; // input boxes
-	$taStyle = 'style="width:100%; border: 1px solid black;"'; // TextArea boxes
+	$taStyle = 'style="width:100%; border: 1px solid black; margin:0 0 1em 0;"'; // TextArea boxes
 	$formStyle = 'style="width:30em; important; font-weight: bold;"'; // form
 	$errorsStyle = 'style="color: white; background-color: red; font-weight: bold; border: 3px solid black; margin: 1em;"'; // Errors box (div)
         $labelStyle = 'style="display:block;"';
-        $buttonStyle = 'style="float:left; width:50%; margin-top:1em;"';
+        $buttonStyle = 'style="float:left; width:50%;"';
         $fieldsetStyle = 'style="padding:1em;"';
+        $captchaStyle = 'style="margin-bottom:1em; text-align: center;"';
 
 	$errors=$name=$email=$subject=$message = '';
 	if (FALSE == empty($params['subject_get_var']) && FALSE == empty($_GET[$params['subject_get_var']]))
@@ -69,14 +70,14 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		
 		if (empty($name)) $errors .= "\t\t<li>" . 'Please Enter Your Name' . "</li>\n";
 		if (empty($email)) $errors .= "\t\t<li>" . 'Please Enter Your Email Address' . "</li>\n";
+		elseif (!validEmail($email)) $errors .= "\t\t<li>" . 'Your Email Address is Not Valid' . "</li>\n";
 		if (empty($subject)) $errors .= "\t\t<li>" . 'Please Enter a Subject' . "</li>\n";
 		if (empty($message)) $errors .= "\t\t<li>" . 'Please Enter a Message' . "</li>\n";
 		if ($params['captcha'] && isset($gCms->modules['Captcha']))
 		{
-		    if (empty($captcha_resp)) $errors .= "\t\t<li>" . 'Please Enter a Captcha response' . "</li>\n";
-		    elseif (! ($captcha->checkCaptcha($captcha_resp))) $errors .= "\t\t<li>" . 'Invalid Captcha response' . "</li>\n";
+		    if (empty($captcha_resp)) $errors .= "\t\t<li>" . 'Please enter the text in the image' . "</li>\n";
+		    elseif (! ($captcha->checkCaptcha($captcha_resp))) $errors .= "\t\t<li>" . 'The text from the image was not entered correctly' . "</li>\n";
 		}
-		if (!validEmail($email)) $errors .= "\t\t<li>" . 'Your Email Address is Not Valid' . "</li>\n";
 		
 		if (!empty($errors)) {
 			echo '<div class="formError" ' . (($style) ? $errorsStyle:'') . '>' . "\n";
@@ -129,7 +130,7 @@ if ($params['captcha'] && isset($gCms->modules['Captcha']))
 			<input type="text" id="captcha_resp" name="captcha_resp" value="" <?php echo ($style) ? $inputStyle:''; ?>/>
 
 <?php
-    echo $captcha->getCaptcha();
+    echo "<div $captchaStyle>" . $captcha->getCaptcha() . '</div>';
 }
 ?>
 
