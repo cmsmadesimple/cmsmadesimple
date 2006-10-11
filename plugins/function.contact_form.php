@@ -101,7 +101,7 @@ $action = "";
 if (isset($_SERVER['PHP_SELF'])) {
    $action = $_SERVER['PHP_SELF'];
 }
-if (isset($_SERVER['QUERY_STRING'])) {
+if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '') {
    $action .= '?'.$_SERVER['QUERY_STRING'];
 }
 	?>
