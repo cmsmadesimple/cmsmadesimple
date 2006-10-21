@@ -25,10 +25,10 @@
 
 #Ideas from Gallery's implementation made to CMS by Ted Kulp
 
-#Finnish
+#Turkish
 
 #Native language name
-$nls['language']['tr_TR'] = 'Türk';
+$nls['language']['tr_TR'] = 'Türkçe';
 $nls['englishlang']['tr_TR'] = 'Turkish';
 
 #Possible aliases for language
