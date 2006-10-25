@@ -53,7 +53,8 @@ debug_buffer('', 'Start of include');
 array_walk_recursive($_GET, 'sanitize_get_var'); 
 
 #Make a new CMS object
-require(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
 $gCms =& new CmsObject();
 if (isset($starttime))
 {
@@ -135,6 +136,7 @@ debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
 require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
 
 if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
 {

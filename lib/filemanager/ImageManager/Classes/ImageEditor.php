@@ -2,7 +2,7 @@
 /**
  * Image Editor. Editing tools, crop, rotate, scale and save.
  * @author $Author: Wei Zhuo $
- * @version $Id: ImageEditor.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  */
 
@@ -11,7 +11,7 @@ require_once(dirname(__FILE__)."/Transform.php");
 /**
  * Handles the basic image editing capbabilities.
  * @author $Author: Wei Zhuo $
- * @version $Id: ImageEditor.php 27 2004-04-01 08:31:57Z Wei Zhuo $
+ * @version $Id$
  * @package ImageManager
  * @subpackage Editor
  */

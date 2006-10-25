@@ -57,7 +57,7 @@ class Smarty_CMS extends Smarty {
 		//$this->compile_check = true;
 		$this->assign('app_name','CMS');
 		//$this->debugging = false;
-		//$this->force_compile = false;
+		//$this->force_compile = true;
 		$this->cache_plugins = false;
 
 		if ($config["debug"] == true)
