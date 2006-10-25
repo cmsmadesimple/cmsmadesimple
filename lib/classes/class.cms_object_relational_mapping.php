@@ -76,7 +76,12 @@ class CmsObjectRelationalMappting extends Overloader
 		$ormclasses =& $gCms->orm;
 		
 		$name = underscore($classname);
-		$ormclasses->$name = new $classname;
+		$ormclasses[$name] = new $classname;
+		
+		if (function_exists("overload") && phpversion() < 5)
+		{
+		   overload($classname);
+		}
 	}
 	
 	// Getter

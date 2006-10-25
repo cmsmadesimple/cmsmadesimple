@@ -32,21 +32,21 @@ class TemplateOperations
 	function LoadTemplates()
 	{	
 		global $gCms;
-		$template = $gCms->orm->template;
+		$template =& $gCms->GetOrmClass('template');
 		return $template->find_all(array('order' => 'template_name ASC'));
 	}
 
 	function LoadTemplateByID($id)
 	{
 		global $gCms;
-		$template = $gCms->orm->template;
+		$template =& $gCms->GetOrmClass('template');
 		return $template->find_by_id($id);
 	}
 
 	function LoadTemplateByContentAlias($alias)
 	{
 		global $gCms;
-		$template = $gCms->orm->template;
+		$template =& $gCms->GetOrmClass('template');
 		return $template->find_by_query("SELECT t.* FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1", array($alias, $alias));
 	}
 
@@ -75,7 +75,7 @@ class TemplateOperations
 	function LoadDefaultTemplate()
 	{
 		global $gCms;
-		$template = $gCms->orm->template;
+		$template =& $gCms->GetOrmClass('template');
 		return $template->find_by_default(1);
 	}
 
@@ -130,7 +130,7 @@ class TemplateOperations
 	function DeleteTemplateByID($id)
 	{
 		global $gCms;
-		$template = $gCms->orm->template;
+		$template =& $gCms->GetOrmClass('template');
 		return $template->delete($id);
 	}
 

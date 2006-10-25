@@ -32,10 +32,6 @@ class Stylesheet extends CmsObjectRelationalMappting
 	var $sequence = 'css_seq';
 }
 
-if (function_exists("overload") && phpversion() < 5)
-{
-   overload("Stylesheet");
-}
 Stylesheet::register_orm_class('Stylesheet');
 
 # vim:ts=4 sw=4 noet

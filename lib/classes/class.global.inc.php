@@ -32,8 +32,6 @@ else
 	include_once('class.overloader.php5.php');
 }
 
-include_once('class.ormholder.php');
-
 /**
  * Simple global object to hold references to other objects
  *
@@ -186,8 +184,7 @@ class CmsObject extends Object {
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
 		$this->siteprefs           = array();
-		
-		$this->orm = new OrmHolder();
+		$this->orm                 = array();
 	}
 
 	function & GetDb()
@@ -236,6 +233,14 @@ class CmsObject extends Object {
 		#return $dbinstance;
 		$db =& $this->db;
 		return ($db);
+	}
+	
+	function & GetOrmClass($name)
+	{
+		if (isset($this->orm[$name]))
+			return $this->orm[$name];
+		elseif (isset($this->orm[underscore($name)]))
+			return $this->orm[underscore($name)];
 	}
 
 	function & GetConfig()

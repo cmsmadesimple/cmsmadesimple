@@ -41,7 +41,7 @@ class UserOperations
 	function &LoadUsers()
 	{
 		global $gCms;
-		$user = $gCms->orm->user;
+		$user =& $gCms->GetOrmClass('user');
 		$obj = $user->find_all(array('order' => 'username'));
 		return $obj;
 	}
@@ -92,7 +92,7 @@ class UserOperations
 	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
 		global $gCms;
-		$user = $gCms->orm->user;
+		$user =& $gCms->GetOrmClass('user');
 		
 		$condstring = 'username = ?';
 		$params = array();
@@ -128,7 +128,7 @@ class UserOperations
 	function &LoadUserByID($id)
 	{
 		global $gCms;
-		$user = $gCms->orm->user;
+		$user =& $gCms->GetOrmClass('user');
 		$obj = $user->find_by_id($id);
 		return $obj;
 	}
@@ -170,7 +170,7 @@ class UserOperations
 	function DeleteUserByID($id)
 	{
 		global $gCms;
-		$user = $gCms->orm->user;
+		$user =& $gCms->GetOrmClass('user');
 		return $user->delete($id);
 	}
 

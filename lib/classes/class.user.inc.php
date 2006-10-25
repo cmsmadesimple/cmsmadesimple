@@ -29,7 +29,7 @@ debug_buffer('', 'Start Loading User');
 class User extends CmsObjectRelationalMappting
 {
 	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
-	var $field_maps = array('user_id' => 'id', 'first_name' => 'firstname', 'last_name' => 'lastname');
+	var $field_maps = array('user_id' => 'id', 'first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess');
 	var $table = 'users';
 	var $sequence = 'users_seq';
 
@@ -44,10 +44,6 @@ class User extends CmsObjectRelationalMappting
 	}
 }
 
-if (function_exists("overload") && phpversion() < 5)
-{
-   overload("User");
-}
 User::register_orm_class('User');
 
 debug_buffer('', 'End Loading User');

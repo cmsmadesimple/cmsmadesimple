@@ -42,10 +42,6 @@ class Template extends CmsObjectRelationalMappting
 	}
 }
 
-if (function_exists("overload") && phpversion() < 5)
-{
-   overload("Template");
-}
 Template::register_orm_class('Template');
 
 # vim:ts=4 sw=4 noet

@@ -32,7 +32,7 @@ class StylesheetOperations
 	function &LoadStylesheets()
 	{
 		global $gCms;
-		$stylesheet = $gCms->orm->stylesheet;
+		$stylesheet =& $gCms->GetOrmClass('stylesheet');
 		return $stylesheet->find_all(array('order' => 'css_id'));
 	}
 
@@ -75,7 +75,7 @@ class StylesheetOperations
 	function &LoadStylesheetByID($id)
 	{
 		global $gCms;
-		$stylesheet = $gCms->orm->stylesheet;
+		$stylesheet =& $gCms->GetOrmClass('stylesheet');
 		return $stylesheet->find_by_id($id);
 	}
 
@@ -92,7 +92,7 @@ class StylesheetOperations
 	function DeleteStylesheetByID($id)
 	{
 		global $gCms;
-		$stylesheet = $gCms->orm->stylesheet;
+		$stylesheet =& $gCms->GetOrmClass('stylesheet');
 		return $stylesheet->delete($id);
 	}
 
