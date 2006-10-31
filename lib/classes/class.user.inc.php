@@ -26,7 +26,7 @@
  */
 debug_buffer('', 'Start Loading User');
 
-class User extends CmsObjectRelationalMappting
+class User extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
 	var $field_maps = array('user_id' => 'id', 'first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess');

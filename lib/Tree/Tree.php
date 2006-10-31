@@ -281,7 +281,7 @@ class Tree
                 if (!empty($nodeList[$pathParts[0]])) {
                     continue;
                 } else {
-                    $nodeList[$pathParts[0]] = &new Tree_Node(array($pathParts[0], $data[$i]));
+                    $nodeList[$pathParts[0]] = &new Node(array($pathParts[0], $data[$i]));
                     $tree->nodes->addNode($nodeList[$pathParts[0]]);
                 }
 
@@ -297,7 +297,7 @@ class Tree
                         $parentObj = &$nodeList[$currentPath];
                         continue;
                     } else {
-                        $nodeList[$currentPath] = &new Tree_Node(array($pathParts[$j], $currentPath));
+                        $nodeList[$currentPath] = &new Node(array($pathParts[$j], $currentPath));
                         // Update parent object to be the new node
                         $parentObj = &$parentObj->nodes->addNode($nodeList[$currentPath]);
                     }
@@ -341,7 +341,7 @@ class Tree
 * A node class to complement the above
 * tree class
 */
-class Tree_Node
+class Node extends CMSObjectRelationalMapping
 {
     /**
     * The data that this node holds
@@ -372,7 +372,7 @@ class Tree_Node
     *
     * @param mixed $tag The data that this node represents
     */
-    function Tree_Node($tag = null)
+    function Node($tag = null)
     {
         $this->parent = null;
         $this->nodes  = new Tree_NodeCollection($this);
@@ -690,7 +690,7 @@ class Tree_Node
 			$this->tree->nodes->nodes = array_values($this->tree->nodes->nodes);
 		}
 
-		if (strcasecmp(get_class($newParent), 'Tree_Node') == 0) {
+		if (strcasecmp(get_class($newParent), 'Node') == 0) {
 			$this->parent = &$newParent;
 		} else {
 			unset($this->parent);
@@ -709,7 +709,7 @@ class Tree_Node
     */
 	function &copyTo(&$newParent)
 	{
-		$newNode = &$newParent->nodes->addNode(new Tree_node($this->getTag()));
+		$newNode = &$newParent->nodes->addNode(new Node($this->getTag()));
 
 		for ($i=0; $i<count($this->nodes->nodes); $i++) {
 			$this->nodes->nodes[$i]->copyTo($newNode);
@@ -718,6 +718,8 @@ class Tree_Node
 		return $newNode;
 	}
 }
+
+Node::register_orm_class('Node');
 
 /**
 * A class to represent a collection of child nodes
@@ -763,7 +765,7 @@ class Tree_NodeCollection
         $this->nodes = array();
         $this->container = &$container;
         $this->containerIsTree = (strtolower(get_class($container)) == 'tree');
-        $this->containerIsNode = (strtolower(get_class($container)) == 'tree_node');
+        $this->containerIsNode = (strtolower(get_class($container)) == 'node');
     }
 
     /**
@@ -992,7 +994,7 @@ class Tree_NodeCollection
 		
 		$result = null;
 
-		if (is_object($data) AND strcasecmp(get_class($data), 'Tree_Node') == 0) {
+		if (is_object($data) AND strcasecmp(get_class($data), 'Node') == 0) {
 			// Inside traversion
 			if (empty($this->searchFoundNode) AND ($comparisonType ? ($data->getTag() === $searchData) : ($data->getTag() == $searchData))) {
 				$this->searchFoundNode = &$data;

@@ -18,9 +18,9 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.0.2";
-$CMS_VERSION_NAME = "Maui";
-$CMS_SCHEMA_VERSION = "25";
+$CMS_VERSION = "1.1";
+$CMS_VERSION_NAME = "Jamaica";
+$CMS_SCHEMA_VERSION = "26";
 
 # vim:ts=4 sw=4 noet
 ?>

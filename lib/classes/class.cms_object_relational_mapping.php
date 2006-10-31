@@ -20,7 +20,7 @@
 
 debug_buffer('', 'Start Loading ORM');
 
-class CmsObjectRelationalMappting extends Overloader
+class CmsObjectRelationalMapping extends Overloader
 {
 	/**
 	 * Used to define any default settings for this object.  Not
@@ -143,7 +143,6 @@ class CmsObjectRelationalMappting extends Overloader
 	 */
 	function find_all_by_($function, $arguments)
 	{
-		var_dump('function');
 		$field = str_replace('find_all_by_', '', $function);
 		
 		//Figure out if we need to replace the field from the field mappings

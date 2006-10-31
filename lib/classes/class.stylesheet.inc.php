@@ -24,7 +24,7 @@
  * @since		0.11
  * @package		CMS
  */
-class Stylesheet extends CmsObjectRelationalMappting
+class Stylesheet extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => '');
 	var $field_maps = array('css_id' => 'id', 'css_name' => 'name', 'css_text' => 'value');
