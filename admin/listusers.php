@@ -32,59 +32,61 @@ if (isset($_GET["message"])) {
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
 
+$error = '';
 
 if (isset($_GET["toggleactive"]))
 {
- if($_GET["toggleactive"]==1) {
-   $error .= "<li>".lang('errorupdatinguser')."</li>";
- } else {
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-  $thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
+	if($_GET["toggleactive"]==1)
+	{
+		$error .= "<li>".lang('errorupdatinguser')."</li>";
+	} 
+	else {
+		global $gCms;
+		$userops =& $gCms->GetUserOperations();
+		$thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
 
-  if($thisuser) {
+		if($thisuser)
+		{
+			//modify users, is this enough?
+			$userid = get_userid();
+			$permission = check_permission($userid, 'Modify Users');
 
-//modify users, is this enough?
-    $userid = get_userid();
-    $permission = check_permission($userid, 'Modify Users');
+			$result = false;
+			if($permission)
+			{
+				$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
 
-    $result = false;
-    if($permission)
-      {
+				#Perform the edituser_pre callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true && $gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->EditUserPre($thisuser);
+					}
+				}
 
-    $thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
+				$result = $thisuser->save();
+			}
 
-        #Perform the edituser_pre callback
-        foreach($gCms->modules as $key=>$value)
-              {
-                 if ($gCms->modules[$key]['installed'] == true &&
-                       $gCms->modules[$key]['active'] == true)
-                        {
-                         $gCms->modules[$key]['object']->EditUserPre($thisuser);
-                        }
-                 }
-
-        $result = $thisuser->save();
-
-      }
-
-      if ($result)
-         {
-           audit($user_id, $thisuser->username, 'Edited User');
-           #Perform the edituser_post callback
-           foreach($gCms->modules as $key=>$value)
-                  {
-                   if ($gCms->modules[$key]['installed'] == true &&
-                          $gCms->modules[$key]['active'] == true)
-                       {
-                          $gCms->modules[$key]['object']->EditUserPost($thisuser);
-                       }
-                  }
-        } else {
-           $error .= "<li>".lang('errorupdatinguser')."</li>";
-        }
-   }
-}
+			if ($result)
+			{
+				audit($_GET["toggleactive"], $thisuser->username, 'Edited User');
+				#Perform the edituser_post callback
+				foreach($gCms->modules as $key=>$value)
+				{
+					if ($gCms->modules[$key]['installed'] == true &&
+					$gCms->modules[$key]['active'] == true)
+					{
+						$gCms->modules[$key]['object']->EditUserPost($thisuser);
+					}
+				}
+			}
+			else
+			{
+				$error .= "<li>".lang('errorupdatinguser')."</li>";
+			}
+		}
+	}
 }
 
 if (FALSE == empty($error)) {

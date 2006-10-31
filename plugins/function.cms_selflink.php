@@ -24,42 +24,44 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 	$url = '';
 
-/* ugly hack by tsw for external links with wiki styling */
-if ( isset($params['ext']) ) {
+	/* ugly hack by tsw for external links with wiki styling */
+	if ( isset($params['ext']) )
+	{
+		/* thanks elijah */
+		$url = $params['ext'];
+		$text = $params['ext'];
 
-/* thanks elijah */
-$url = $params['ext'];
-$text = $params['ext'];
+		if ( isset($params['text'] ))
+		{
+			$text = $params['text'];
+		}
 
-if ( isset($params['text'] )) {
-$text = $params['text'];
-}
+		$title= '';
+		if ( isset($params['title']) )
+		{
+			$title=' title="'.$params['title'].'" ';
+		}
 
-$title= '';
-if ( isset($params['title']) ) {
-$title=' title="'.$params['title'].'" ';
-}
+		$target = '';
+		if ( isset($params['target']) && ( strlen($params['target'] > 0 ) ) )
+		{
+			$target=' target="'.$params['taget'].'" ';
+		}
 
-$target = '';
-if ( isset($params['target']) && ( strlen($params['target'] > 0 ) ) ) {
-$target=' target="'.$params['taget'].'" ';
-}
+		$external_text = '(external link)';
+		if ( isset($params['ext_info']) )
+		{
+			$external_text ='( '.$ext_info.' )';
+		}
 
-$external_text = '(external link)';
-if ( isset($params['ext_info']) ) {
-$external_text ='( '.$ext_info.' )';
-}
+		return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
+	}
 
-
-return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
-}
-
-$urlparams = '';
-if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
-  $urlparams =$params['urlparams'];
-}
-
-
+	$urlparams = '';
+	if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) )
+	{
+		$urlparams =$params['urlparams'];
+	}
 
 	/* LeisureLarry - Changed if statement */
 	if (isset($params['page']) or isset($params['href']))
@@ -77,7 +79,9 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		# check if the page exists in the db
 		$manager =& $gCms->GetHierarchyManager();
 		$node =& $manager->sureGetNodeByAlias($page);
+
 		if (!isset($node)) return;
+
 		$content =& $node->GetContent();
 		if ($content !== FALSE)
 		{
@@ -100,12 +104,12 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 		    $url .= trim($params['urlparam']);
 		}
 
-			/* End mod Nemesis */
-		
+		/* End mod Nemesis */
 		$Prev_label = "";
 		$Next_label = "";
 		$Anchor_label = ""; //*Russ
 		$Parent_label = "Parent page: "; //uplink
+
 	}
 	elseif (isset($params['dir'])) // this part is by mbv built on a proposal by 100rk
 	{
@@ -163,6 +167,7 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			$Next_label = "Next page: ";
 			$Parent_label = "Parent page: "; //uplink
 		}
+
 		$condition = $order_by = false;
 		switch (strtolower($params['dir']))
 		{

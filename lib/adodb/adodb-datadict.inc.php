@@ -480,7 +480,7 @@ class ADODB_DataDict {
 		$pkey = array();
 		foreach($flds as $fld) {
 			$fld = _array_change_key_case($fld);
-
+		
 			$fname = false;
 			$fdefault = false;
 			$fautoinc = false;
@@ -529,7 +529,7 @@ class ADODB_DataDict {
 				case 'CONSTRAINT': $fconstraint = $v; break;
 				} //switch
 			} // foreach $fld
-
+			
 			//--------------------
 			// VALIDATE FIELD INFO
 			if (!strlen($fname)) {
@@ -584,7 +584,7 @@ class ADODB_DataDict {
 			
 			if ($fautoinc) $this->autoIncrement = true;
 		} // foreach $flds
-
+		
 		return array($lines,$pkey);
 	}
 	/*

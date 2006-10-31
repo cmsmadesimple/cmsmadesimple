@@ -87,8 +87,12 @@ class CmsObjectRelationalMapping extends Overloader
 	// Getter
 	function _get($n, &$v)
 	{
-		$v = $this->params[$n];
-		return true;
+		if (isset($this->params[$n]))
+		{
+			$v = $this->params[$n];
+			return true;
+		}
+		return false;
 	}
 
 	// Setter
@@ -143,6 +147,7 @@ class CmsObjectRelationalMapping extends Overloader
 	 */
 	function find_all_by_($function, $arguments)
 	{
+		var_dump('function');
 		$field = str_replace('find_all_by_', '', $function);
 		
 		//Figure out if we need to replace the field from the field mappings
