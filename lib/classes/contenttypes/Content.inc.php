@@ -25,23 +25,25 @@ class Content extends ContentBase
 	
     function Content()
     {
-	$this->ContentBase();
-	$this->mProperties->SetAllowedPropertyNames(array('content_en'));
-	$this->additionalContentBlocks = array();
-	$this->addtContentBlocksLoaded = false;
+		//$this->ContentBase();
+		parent::__construct();
+
+		//$this->mProperties->SetAllowedPropertyNames(array('content_en'));
+		$this->additionalContentBlocks = array();
+		$this->addtContentBlocksLoaded = false;
     }
 	
     function FriendlyName()
     {
-	return 'Content';
+		return 'Content';
     }
 
     function SetProperties()
     {
-	$this->mProperties->Add("string", "content_en"); //For later language support
+		$this->mProperties->Add("string", "content_en"); //For later language support
 
-	#Turn on preview
-	$this->mPreview = true;
+		#Turn on preview
+		$this->mPreview = true;
     }
 
     /**
@@ -49,13 +51,13 @@ class Content extends ContentBase
      */
     function ReadyForEdit()
     {
-	$this->GetAdditionalContentBlocks();
+		$this->GetAdditionalContentBlocks();
     }
 
     function GetTabDefinitions()
     {
-	return array('Basic', 'Advanced');
-	#return array();
+		return array('Basic', 'Advanced');
+		#return array();
     }
 
     function FillParams($params)
@@ -70,18 +72,18 @@ class Content extends ContentBase
 	    //pick up the template id before we do parameters
 	    if (isset($params['template_id']))
 	    {
-		if ($this->mTemplateId != $params['template_id'])
-		{
-		    $this->addtContentBlocksLoaded = false;
-		}
-		$this->mTemplateId = $params['template_id'];
+			if ($this->mTemplateId != $params['template_id'])
+			{
+			    $this->addtContentBlocksLoaded = false;
+			}
+			$this->mTemplateId = $params['template_id'];
 	    }
 
 	    // add additional content blocks
 	    $this->GetAdditionalContentBlocks();
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
-		$parameters[] = $blockNameId['id'];
+			$parameters[] = $blockNameId['id'];
 	    }
 			
 	    foreach ($parameters as $oneparam)
@@ -93,31 +95,31 @@ class Content extends ContentBase
 	    }
 	    if (isset($params['title']))
 	    {
-		$this->mName = $params['title'];
+			$this->mName = $params['title'];
 	    }
 	    if (isset($params['metadata']))
 	    {
-		$this->mMetadata = $params['metadata'];
+			$this->mMetadata = $params['metadata'];
 	    }
 	    if (isset($params['accesskey']))
 	    {
-		$this->mAccessKey = $params['accesskey'];
+			$this->mAccessKey = $params['accesskey'];
 	    }
 	    if (isset($params['titleattribute']))
 	    {
-		$this->mTitleAttribute = $params['titleattribute'];
+			$this->mTitleAttribute = $params['titleattribute'];
 	    }
 	    if (isset($params['tabindex']))
 	    {
-		$this->mTabIndex = $params['tabindex'];
+			$this->mTabIndex = $params['tabindex'];
 	    }
 	    if (isset($params['menutext']))
 	    {
-		$this->mMenuText = $params['menutext'];
+			$this->mMenuText = $params['menutext'];
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->SetAlias(trim($params['alias']));
+			$this->SetAlias(trim($params['alias']));
 	    }
 	    if (isset($params['parent_id']))
 	    {
@@ -157,20 +159,20 @@ class Content extends ContentBase
 
     function Show($param = 'content_en')
     {
-	// check for additional content blocks
-	$this->GetAdditionalContentBlocks();
+		// check for additional content blocks
+		//$this->GetAdditionalContentBlocks();
 	
-	return $this->GetPropertyValue($param);
+		return $this->GetPropertyValue($param);
     }
 
     function IsDefaultPossible()
     {
-	return TRUE;
+		return TRUE;
     }
 
     function TabNames()
     {
-	return array(lang('main'), lang('options'));
+		return array(lang('main'), lang('options'));
     }
 
     function EditAsArray($adding = false, $tab = 0, $showadmin = false)
@@ -410,6 +412,8 @@ class Content extends ContentBase
 	return $tpl_source;
     }
 }
+
+Content::register_orm_class('Content');
 
 # vim:ts=4 sw=4 noet
 ?>

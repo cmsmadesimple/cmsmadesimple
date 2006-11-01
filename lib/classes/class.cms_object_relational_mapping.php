@@ -82,6 +82,8 @@ class CmsObjectRelationalMapping extends Overloader
 		{
 		   overload($classname);
 		}
+		
+		return FALSE;
 	}
 	
 	// Getter
@@ -106,6 +108,9 @@ class CmsObjectRelationalMapping extends Overloader
 	// Caller, applied when $function isn't defined
 	function _call($function, $arguments, &$return)
 	{
+		$function_converted = underscore($function);
+		if (array_key_exists($function, $this->field_maps)) $function_converted = $this->field_maps[$function];
+
 		if (startswith($function, 'find_by_'))
 		{
 			$return = $this->find_by_($function, $arguments);
@@ -113,6 +118,16 @@ class CmsObjectRelationalMapping extends Overloader
 		else if (startswith($function, 'find_all_by_'))
 		{
 			$return = $this->find_all_by_($function, $arguments);
+		}
+		else if (array_key_exists($function_converted, $this->params))
+		{
+			#This handles the SomeParam() dynamic function calls
+			$return = $this->params[$function_converted];
+		}
+		else
+		{
+			#Remove me...  this is just to see what methods being called don't do anything yet
+			#var_dump($function);
 		}
 	}
 	
@@ -147,7 +162,6 @@ class CmsObjectRelationalMapping extends Overloader
 	 */
 	function find_all_by_($function, $arguments)
 	{
-		var_dump('function');
 		$field = str_replace('find_all_by_', '', $function);
 		
 		//Figure out if we need to replace the field from the field mappings
@@ -193,7 +207,21 @@ class CmsObjectRelationalMapping extends Overloader
 
 		if($row)
 		{
-			$oneobj =& new $classname;
+			//Basically give before_load a chance to load that class type if necessary
+			$newclassname = $classname;
+			if (isset($row['type']))
+			{
+				$newclassname = $row['type'];
+			}
+			
+			$this->before_load($newclassname, $row);
+			
+			if (!($newclassname != $classname && class_exists($newclassname)))
+			{
+				$newclassname = $classname;
+			}
+
+			$oneobj =& new $newclassname;
 			$oneobj = $this->fill_object($row, $oneobj);
 			return $oneobj;
 		}
@@ -225,7 +253,21 @@ class CmsObjectRelationalMapping extends Overloader
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			$oneobj =& new $classname;
+			//Basically give before_load a chance to load that class type if necessary
+			$newclassname = $classname;
+			if (isset($dbresult->fields['type']))
+			{
+				$newclassname = $dbresult->fields['type'];
+			}
+			
+			$this->before_load($newclassname, $dbresult->fields);
+
+			if (!($newclassname != $classname && class_exists($newclassname)))
+			{
+				$newclassname = $classname;
+			}
+
+			$oneobj =& new $newclassname;
 			$oneobj = $this->fill_object($dbresult->fields, $oneobj);
 			$result[] =& $oneobj;
 			$dbresult->MoveNext();
@@ -381,6 +423,8 @@ class CmsObjectRelationalMapping extends Overloader
 		{
 			$object->$k = $v;
 		}
+		
+		$object->after_load();
 
 		return $object;
 	}
@@ -438,6 +482,21 @@ class CmsObjectRelationalMapping extends Overloader
 		
 		$this->_cacheDescription($fields);
 		return $fields;
+	}
+	
+	/**
+	 * Callback to call before the class is instantiated and the fields
+	 * are set.  Keep in mind the scopes of before_load and after_load.
+	 * before_load is called on the orm object, so keep it's implementation
+	 * sort of "static" in nature.  after_load is called on the instantiated
+	 * object.
+	 */
+	function before_load($type, $fields)
+	{
+	}
+	
+	function after_load()
+	{	
 	}
 	
 	function _cacheDescription($fields)

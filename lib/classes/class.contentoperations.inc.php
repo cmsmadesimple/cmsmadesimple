@@ -73,8 +73,14 @@ class ContentOperations
 
 		global $gCms;
 		$db = &$gCms->GetDb();
+		
+		$content =& $gCms->GetOrmClass('content_base');
+		$result = $content->find_by_id($id);
+		
+		return $result;
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		/*
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE id = ?";
 		$row = &$db->GetRow($query, array($id));
 		if ($row)
 		{
@@ -98,6 +104,7 @@ class ContentOperations
 		{
 			return $result;
 		}
+		*/
 	}
 
 	function &LoadContentFromAlias($alias, $only_active = false)
@@ -109,7 +116,7 @@ class ContentOperations
 
 		if (is_numeric($alias) && strpos($alias,'.') === FALSE && strpos($alias,',') === FALSE) //Fix for postgres
 		{
-			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE id = ?";
 			if ($only_active == true)
 			{
 				$query .= " AND active = 1";
@@ -180,7 +187,7 @@ class ContentOperations
 			return $contents;
 		}
 		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id IN $id_list";
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE id IN $id_list";
 		$rows   =& $db->Execute($query);
 
 		if ($rows)
@@ -351,27 +358,27 @@ class ContentOperations
     {
     }
 
-	function & GetDefaultContent()
+	function &GetDefaultContent()
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
 
 		$result = -1;
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content = 1";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content = 1";
 		$row = &$db->GetRow($query);
 		if ($row)
 		{
-			$result = $row['content_id'];
+			$result = $row['id'];
 		}
 		else
 		{
 			#Just get something...
-			$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+			$query = "SELECT id FROM ".cms_db_prefix()."content";
 			$row = &$db->GetRow($query);
 			if ($row)
 			{
-				$result = $row['content_id'];
+				$result = $row['id'];
 			}
 		}
 
@@ -425,7 +432,7 @@ class ContentOperations
 
 		while ($current_parent_id > -1)
 		{
-			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE content_id = ?";
+			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE id = ?";
 			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
@@ -459,7 +466,7 @@ class ContentOperations
 
 		debug_buffer(array($current_hierarchy_position, $current_id_hierarchy_position, implode(',', $prop_name_array), $contentid));
 
-		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE content_id = ?";
+		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
 
@@ -471,12 +478,12 @@ class ContentOperations
 		global $gCms;
 		$db = $gCms->GetDb();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content";
+		$query = "SELECT id FROM ".cms_db_prefix()."content";
 		$dbresult = &$db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			ContentOperations::SetHierarchyPosition($dbresult->fields['content_id']);
+			ContentOperations::SetHierarchyPosition($dbresult->fields['id']);
 			$dbresult->MoveNext();
 		}
 		
@@ -494,7 +501,7 @@ class ContentOperations
 		$db = &$gCms->GetDb();
 
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-		$usecache = true;
+		$usecache = false;
 		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
 		{
 			#$usecache = false;
@@ -570,30 +577,15 @@ class ContentOperations
 	{	
 		global $gCms;
 		$db = &$gCms->GetDb();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
-		$dbresult =& $db->Execute($query);
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			while ($row = $dbresult->FetchRow())
-			{
-				#Make sure the type exists.  If so, instantiate and load
-				if (in_array($row['type'], array_keys(ContentOperations::ListContentTypes())))
-				{
-					$contentobj =& ContentOperations::CreateNewContent($row['type']);
-					if ($contentobj)
-					{
-						$contentobj->LoadFromData($row, $loadprops);
-						$contentcache =& $tree->content;
-						$id = $row['content_id'];
-						$contentcache[$id] =& $contentobj;
-					}
-				}
-			}
-		}
 		
-		if ($dbresult) $dbresult->Close();
+		$contentbase =& $gCms->GetOrmClass('content_base');
+		$result = $contentbase->find_all_by_parent_id($id);
+		
+		$contentcache =& $tree->content;
+		foreach ($result as $one)
+		{
+			$contentcache[$one->id] = $one;
+		}
 	}
 
 	/**
@@ -602,7 +594,7 @@ class ContentOperations
 	function SetDefaultContent($id) {
 		global $gCms;
 		$db = &$gCms->GetDb();
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id)) 
 		{
@@ -735,7 +727,7 @@ class ContentOperations
 		{
 			return false;
 		}
-		return $row['content_id'];
+		return $row['id'];
 	}
 
 
@@ -760,7 +752,7 @@ class ContentOperations
 			return false;
 		}
 		
-		return $row['content_id'];
+		return $row['id'];
 	}
 	
 	function GetPageIDFromHierarchy($position)
@@ -775,7 +767,7 @@ class ContentOperations
 		{
 			return false;
 		}
-		return $row['content_id'];
+		return $row['id'];
 	}
 
 
@@ -792,7 +784,7 @@ class ContentOperations
 		}
 
 		$params = array($id);
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE id = ?";
 		$row = $db->GetRow($query, $params);
 
 		if ( !$row )
@@ -823,7 +815,7 @@ class ContentOperations
 			$query = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias = ?";
 			if ($content_id > -1)
 			{
-				$query .= " AND content_id != ?";
+				$query .= " AND id != ?";
 				$params[] = $content_id;
 			}
 			$row = &$db->GetRow($query, $params);

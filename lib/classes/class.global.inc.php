@@ -187,7 +187,7 @@ class CmsObject extends Object {
 		$this->orm                 = array();
 	}
 
-	function & GetDb()
+	function &GetDb()
 	{
 		#static $dbinstance;
 
@@ -235,7 +235,7 @@ class CmsObject extends Object {
 		return ($db);
 	}
 	
-	function & GetOrmClass($name)
+	function &GetOrmClass($name)
 	{
 		if (isset($this->orm[$name]))
 			return $this->orm[$name];
@@ -243,7 +243,7 @@ class CmsObject extends Object {
 			return $this->orm[underscore($name)];
 	}
 
-	function & GetConfig()
+	function &GetConfig()
 	{
         if (!isset($this->config))
 		{
@@ -254,7 +254,7 @@ class CmsObject extends Object {
 		return $this->config;
 	}
 	
-	function & GetModuleLoader()
+	function &GetModuleLoader()
 	{
         if (!isset($this->moduleloader))
 		{
@@ -266,7 +266,7 @@ class CmsObject extends Object {
 		return $this->moduleloader;
 	}
 	
-	function & GetModuleOperations()
+	function &GetModuleOperations()
 	{
         if (!isset($this->moduleoperations))
 		{
@@ -278,7 +278,7 @@ class CmsObject extends Object {
 		return $this->moduleoperations;
 	}
 	
-	function & GetUserOperations()
+	function &GetUserOperations()
 	{
         if (!isset($this->useroperations))
 		{
@@ -290,7 +290,7 @@ class CmsObject extends Object {
 		return $this->useroperations;
 	}
 	
-	function & GetContentOperations()
+	function &GetContentOperations()
 	{
         if (!isset($this->contentoperations))
 		{

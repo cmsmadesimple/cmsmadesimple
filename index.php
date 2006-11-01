@@ -212,8 +212,8 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 }
 else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
 {
-	ErrorHandler404();
-	exit;
+	//ErrorHandler404();
+	//exit;
 }
 
 $html = '';

@@ -488,7 +488,7 @@ class Smarty_CMS extends Smarty {
 		{
 			$manager =& $gCms->GetHierarchyManager();
 			$node =& $manager->sureGetNodeById($pageinfo->content_id);
-			$contentobj =& $node->GetContent();
+			$contentobj =& $node->getContent();
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
