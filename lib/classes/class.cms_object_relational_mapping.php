@@ -460,7 +460,7 @@ class CmsObjectRelationalMapping extends Overloader
 		$db =& $gCms->GetDb();
 
 		if ($id == -1)
-			$id = $this->$id;
+			$id = $this->$id_field;
 			
 		$table = $this->get_table();
 		$id_field = $this->id_field;
