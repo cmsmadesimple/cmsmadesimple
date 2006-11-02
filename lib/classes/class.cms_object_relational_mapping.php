@@ -128,6 +128,10 @@ class CmsObjectRelationalMapping extends Overloader
 		{
 			$return = $this->find_all_by_($function, $arguments);
 		}
+		else if (startswith($function, 'find_count_by_'))
+		{
+			$return = $this->find_count_by_($function, $arguments);
+		}
 		else if (array_key_exists($function_converted, $this->params))
 		{
 			#This handles the SomeParam() dynamic function calls
@@ -185,6 +189,26 @@ class CmsObjectRelationalMapping extends Overloader
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
 		return $this->find_all(array('conditions' => array($field . ' = ?', array($arguments[0]))));
+	}
+	
+	/**
+	 * Method for handling the dynamic find_count_by_* functionality.  It basically figures out
+	 * what field is being searched for and creates a query based on that field.
+	 *
+	 * @param $function The name of the function that came into the __call method
+	 * @param $arguments The arguments that came into the __call method
+	 *
+	 * @return The result of the find_count
+	 */
+	function find_count_by_($function, $arguments)
+	{
+		$field = str_replace('find_count_by_', '', $function);
+		
+		//Figure out if we need to replace the field from the field mappings
+		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
+		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
+		
+		return $this->find_count(array('conditions' => array($field . ' = ?', array($arguments[0]))));
 	}
 	
 	/**
@@ -290,6 +314,21 @@ class CmsObjectRelationalMapping extends Overloader
 		}
 		
 		return $result;
+	}
+	
+	function find_count($arguments = array())
+	{
+		global $gCms;
+		$db =& $gCms->GetDb();
+
+		$table = $this->get_table();
+		
+		$query = '';
+		$queryparams = array();
+		
+		list($query, $queryparams) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams, true);
+		
+		return $db->GetOne($query, $queryparams);
 	}
 	
 	function save()
@@ -479,9 +518,10 @@ class CmsObjectRelationalMapping extends Overloader
 	 *
 	 * @return An array of $query and $queryparams
 	 */
-	function generate_select_query_and_parameters($table, $arguments, $query, $queryparams)
+	function generate_select_query_and_parameters($table, $arguments, $query, $queryparams, $count = false)
 	{
 		$query = "SELECT * FROM " . $table;
+		if ($count) $query = "SELECT count(*) as the_count FROM " . $table;
 		if (array_key_exists('conditions', $arguments))
 		{
 			$query .= ' WHERE ' . $arguments['conditions'][0];

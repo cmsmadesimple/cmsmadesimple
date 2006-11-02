@@ -62,20 +62,14 @@ class ContentBase extends CmsObjectRelationalMapping
      */
 	function HasChildren()
 	{
-		global $gCms, $config, $sql_queries, $debug_errors;
-		$db = &$gCms->GetDb();
-
-		$result = false;
-
-		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$row = &$db->GetRow($query, array($this->id));
-
-		if ($row)
-		{
-			$result = true;
-		}
-
-		return $result;
+		global $gCms;
+		$content_base =& $gCms->GetOrmClass('content_base');
+		$count = $content_base->find_count_by_parent_id($this->id);
+		
+		if (isset($count) && $count > 0)
+			return true;
+		
+		return false;
 	}
 	
 	function HasProperty($name)
