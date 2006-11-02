@@ -38,7 +38,7 @@ class ContentBase extends CmsObjectRelationalMapping
 
      var $mProperties = array();
 
-	function ContentBase()
+	function __construct()
 	{
 		parent::__construct();
 	}
@@ -50,15 +50,37 @@ class ContentBase extends CmsObjectRelationalMapping
 		$ops->LoadContentType($type);
 	}
 	
-	function after_load()
+	function LoadProperties()
 	{
 		global $gCms;
 		$content_property =& $gCms->GetOrmClass('content_property');
 		$this->mProperties = $content_property->find_all_by_content_id($this->id);
 	}
 	
+    /**
+     * Does this have children?
+     */
+	function HasChildren()
+	{
+		global $gCms, $config, $sql_queries, $debug_errors;
+		$db = &$gCms->GetDb();
+
+		$result = false;
+
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+		$row = &$db->GetRow($query, array($this->id));
+
+		if ($row)
+		{
+			$result = true;
+		}
+
+		return $result;
+	}
+	
 	function HasProperty($name)
 	{
+		$this->LoadProperties();
 		foreach ($this->mProperties as $prop)
 		{
 			if ($prop->prop_name == $name)
@@ -72,6 +94,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function GetPropertyValue($name)
 	{
+		$this->LoadProperties();
 		foreach ($this->mProperties as $prop)
 		{
 			if ($prop->prop_name == $name)
@@ -82,6 +105,16 @@ class ContentBase extends CmsObjectRelationalMapping
 
 		return '';
 	}
+	
+    /**
+     * Returns the Hierarchy
+     */
+    function Hierarchy()
+    {
+		global $gCms;
+		$contentops =& $gCms->GetContentOperations();
+		return $contentops->CreateFriendlyHierarchyPosition($this->hierarchy);
+    }
 	
     function GetURL($rewrite = true)
     {
@@ -120,6 +153,71 @@ class ContentBase extends CmsObjectRelationalMapping
 		}
 		return $url;
     }
+
+	function SetAlias($alias)
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+
+		$tolower = false;
+
+		if ($alias == '' && $config['auto_alias_content'] == true)
+		{
+			$alias = trim($this->mMenuText);
+			if ($alias == '')
+			{
+			    $alias = trim($this->mName);
+			}
+			
+			$tolower = true;
+			$alias = munge_string_to_url($alias, $tolower);
+			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
+			$contentops =& $gCms->GetContentOperations();
+			$error = $contentops->CheckAliasError($alias);
+			if ($error !== FALSE)
+			{
+				if (FALSE == empty($alias))
+				{
+					$alias_num_add = 2;
+					// If a '-2' version of the alias already exists
+					// Check the '-3' version etc.
+					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+					{
+						$alias_num_add++;
+					}
+					$alias .= '-'.$alias_num_add;
+				}
+				else
+				{
+					$alias = '';
+				}
+			}
+		}
+
+		$this->alias = munge_string_to_url($alias, $tolower);
+	}
+
+    /**
+     * Function content types to use to say whether or not they should show
+     * up in lists where parents of content are set.  This will default to true,
+     * but should be used in cases like Separator where you don't want it to 
+     * have any children.
+     * 
+     * @since 0.11
+     */
+    function WantsChildren()
+    {
+		return true;
+    }
+
+    /**
+     * Should this link be used in various places where a link is the only
+     * useful output?  (Like next/previous links in cms_selflink, for example)
+     */
+    function HasUsableLink()
+    {
+		return true;
+    }
 }
 
 ContentBase::register_orm_class('ContentBase');
@@ -128,7 +226,7 @@ class ContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
 	
-	function ContentProperty()
+	function __construct()
 	{
 		parent::__construct();
 	}
@@ -144,6 +242,11 @@ ContentProperty::register_orm_class('ContentProperty');
  */
 class CMSModuleContentType extends ContentBase
 {
+	function __construct()
+	{
+		parent::__construct();
+	}
+
 	//What module do I belong to?  (needed for things like Lang to work right)
 	function ModuleName()
 	{

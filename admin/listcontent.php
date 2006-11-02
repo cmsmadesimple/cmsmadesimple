@@ -85,7 +85,7 @@ function setdefault($contentid)
 		}
 		
 		$db = &$gCms->GetDb();
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE default_content=1";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content=1";
 		$old_id = $db->GetOne($query);
 		if (isset($old_id))
 		{
@@ -184,7 +184,7 @@ function expandall()
 	{
 		if ($thisitem->HasChildren())
 		{
-			$cs .= $thisitem->Id().'=1.';
+			$cs .= $thisitem->id . '=1.';
 		}
 	}
 	set_preference($userid, 'collapse', $cs);
@@ -297,12 +297,12 @@ function movecontent($contentid, $parentid, $direction = 'down')
 		$order = 1;
 
 		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE content_id = ?";
+		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE id = ?";
 		$result = $db->Execute($query, array($contentid));
 		$row = $result->FetchRow();
 		if (isset($row["item_order"]))
 		{
-			$order = $row["item_order"];	
+			$order = $row["item_order"];
 		}
 
 		$time = $db->DBTimeStamp(time());
@@ -311,7 +311,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
 			#echo $query, $order + 1, $parent_id;
 			$db->Execute($query, array($order + 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE id = ? AND parent_id = ?';
 			#echo $query, $content_id, $parent_id;
 			$db->Execute($query, array($contentid, $parentid));
 		}
@@ -320,7 +320,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
 			#echo $query;
 			$db->Execute($query, array($order - 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE content_id = ? AND parent_id = ?';
+			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE id = ? AND parent_id = ?';
 			#echo $query;
 			$db->Execute($query, array($contentid, $parentid));
 		}
@@ -525,7 +525,7 @@ function reorder_process($get)
 				    if ($one->ItemOrder() != $item['order'])
 				    {
 					$order_changed = TRUE;
-					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE content_id = ?';
+					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE id = ?';
 					$db->Execute($query, array($item['order'], $item['element']));
 				    }
 				}
@@ -587,11 +587,11 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         $templates[$one->TemplateId()] = $templateops->LoadTemplateById($one->TemplateId());
     }
     
-    if (!array_key_exists($one->Owner(), $users))
+    if (!array_key_exists($one->OwnerId(), $users))
     {
 		global $gCms;
 		$userops =& $gCms->GetUserOperations();
-        $users[$one->Owner()] =& $userops->LoadUserById($one->Owner());
+        $users[$one->OwnerId()] =& $userops->LoadUserById($one->OwnerId());
     }
     
     $display = 'none';
@@ -673,9 +673,9 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
         $thelist .= "<td>".$one->FriendlyName()."</td>\n";
 
-        if ($one->Owner() > -1)
+        if ($one->OwnerId() > -1)
         {
-            $thelist .= "<td>".$users[$one->Owner()]->username."</td>\n";
+            $thelist .= "<td>".$users[$one->OwnerId()]->username."</td>\n";
         }
         else
         {

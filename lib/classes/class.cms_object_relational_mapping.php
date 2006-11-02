@@ -65,6 +65,14 @@ class CmsObjectRelationalMapping extends Overloader
 	 */
 	var $modified_date_field = 'modified_date';
 	
+	/**
+	 * Used to only update objects (not insert) that have changed
+	 * any of their properties.  This means you should be using properites
+	 * ($obj->some_field or $obj->SetSomeField()) so that the dirty bit
+	 * gets flipped properly.
+	 */
+	var $dirty = false;
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -102,6 +110,7 @@ class CmsObjectRelationalMapping extends Overloader
 	{
 		if (array_key_exists($n, $this->field_maps)) $n = $this->field_maps[$n];
 		$this->params[$n] = $val;
+		$this->dirty = true;
 		return true;
 	}
 	
@@ -124,10 +133,17 @@ class CmsObjectRelationalMapping extends Overloader
 			#This handles the SomeParam() dynamic function calls
 			$return = $this->params[$function_converted];
 		}
+		else if (startswith($function_converted, 'set_') && array_key_exists(substr($function_converted, 4), $this->params))
+		{
+			#This handles the SetSomeParam() dynamic function calls
+			$this->params[substr($function_converted, 4)] = $arguments[0];
+			$this->dirty = true;
+			$return = true;
+		}
 		else
 		{
 			#Remove me...  this is just to see what methods being called don't do anything yet
-			#var_dump($function);
+			var_dump($function);
 		}
 	}
 	
@@ -184,7 +200,7 @@ class CmsObjectRelationalMapping extends Overloader
 		return $table;
 	}
 	
-	function find($arguments)
+	function find($arguments = array())
 	{
 		$table = $this->get_table();
 		
@@ -229,7 +245,7 @@ class CmsObjectRelationalMapping extends Overloader
 		return FALSE;
 	}
 	
-	function find_all($arguments)
+	function find_all($arguments = array())
 	{
 		$table = $this->get_table();
 		
@@ -298,39 +314,45 @@ class CmsObjectRelationalMapping extends Overloader
 		//If not, do an insert.
 		if (isset($id) && $id > 0)
 		{
-			$query = 'UPDATE ' . $table . ' SET ';
-			$midpart = '';
-			$queryparams = array();
-
-			foreach($fields as $onefield)
+			if ($this->dirty)
 			{
-				$localname = $onefield;
-				if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
-				if ($onefield == $this->modified_date_field)
+				$query = 'UPDATE ' . $table . ' SET ';
+				$midpart = '';
+				$queryparams = array();
+
+				foreach($fields as $onefield)
 				{
-					#$queryparams[] = $time;
-					$midpart .= $onefield . ' = ' . $time . ', ';
-					$this->$onefield = time();
+					$localname = $onefield;
+					if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
+					if ($onefield == $this->modified_date_field)
+					{
+						#$queryparams[] = $time;
+						$midpart .= $onefield . ' = ' . $time . ', ';
+						$this->$onefield = time();
+					}
+					else if (array_key_exists($localname, $this->params))
+					{
+						$queryparams[] = $this->params[$localname];
+						$midpart .= $onefield . ' = ?, ';
+					}
 				}
-				else if (array_key_exists($localname, $this->params))
-				{
-					$queryparams[] = $this->params[$localname];
-					$midpart .= $onefield . ' = ?, ';
+			
+				if ($midpart != '')
+				{	
+					$midpart = substr($midpart, 0, -2);
+					$query .= $midpart . ' WHERE ' . $id_field . ' = ?';
+					$queryparams[] = $id;
 				}
-			}
 			
-			if ($midpart != '')
-			{	
-				$midpart = substr($midpart, 0, -2);
-				$query .= $midpart . ' WHERE ' . $id_field . ' = ?';
-				$queryparams[] = $id;
-			}
+				$this->dirty = false;
 			
-			return $db->Execute($query, $queryparams);
+				return $db->Execute($query, $queryparams);
+			}
 		}
 		else
 		{
 			$new_id = -1;
+
 			if ($this->sequence != '')
 			{
 				$new_id = $db->GenID(cms_db_prefix() . $this->sequence);
@@ -378,6 +400,8 @@ class CmsObjectRelationalMapping extends Overloader
 				$this->$id_field = $new_id;
 			}
 			
+			$this->dirty = false;
+			
 			return $result;
 		}
 	}
@@ -409,6 +433,19 @@ class CmsObjectRelationalMapping extends Overloader
 		return $db->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
 	}
 	
+	function update_parameters($params)
+	{
+		foreach ($params as $k=>$v)
+		{
+			if (array_key_exists($k, $this->params))
+			{
+				//Just in case there is an override
+				$this->$k = $v;
+				$this->dirty = true;
+			}
+		}
+	}
+	
 	/**
 	 * Fills an object with the fields from the database.
 	 *
@@ -423,6 +460,8 @@ class CmsObjectRelationalMapping extends Overloader
 		{
 			$object->$k = $v;
 		}
+		
+		$this->dirty = false;
 		
 		$object->after_load();
 

@@ -613,54 +613,11 @@ class ContentOperations
 
 	function &GetAllContent($loadprops=true)
 	{
-		debug_buffer('get all content...');
-
 		global $gCms;
-
-		$contentcache = array();
-
-		$db = &$gCms->GetDb();
-		$query = "SELECT * FROM ".cms_db_prefix()."content ORDER BY hierarchy";
-		$dbresult = &$db->Execute($query);
-
-		$map = array();
-		$count = 0;
-
-		while ($dbresult && !$dbresult->EOF)
-		{
-			#Make sure the type exists.  If so, instantiate and load
-			if (in_array($dbresult->fields['type'], array_keys(ContentOperations::ListContentTypes())))
-			{
-				$contentobj =& ContentOperations::CreateNewContent($dbresult->fields['type']);
-				if (isset($contentobj))
-				{
-					$contentobj->LoadFromData($dbresult->FetchRow(), false);
-					$map[$contentobj->Id()] = $count;
-					$contentcache[] = $contentobj;
-					$count++;
-				}
-				else
-				{
-					$dbresult->MoveNext();
-				}
-			}
-			else
-			{
-				$dbresult->MoveNext();
-			}
-		}
-
-		if ($dbresult) $dbresult->Close();
-
-		for ($i=0;$i<$count;$i++)
-		{
-			if ($contentcache[$i]->ParentId() != -1 && isset($map[$contentcache[$i]->ParentId()]))
-			{
-				$contentcache[$map[$contentcache[$i]->ParentId()]]->mChildCount++;
-			}
-		}
-
-		return $contentcache;
+		$contentbase =& $gCms->GetOrmClass('content_base');
+		$result = $contentbase->find_all();
+		
+		return $result;
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')

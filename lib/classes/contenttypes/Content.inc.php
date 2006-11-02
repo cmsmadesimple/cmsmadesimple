@@ -23,15 +23,15 @@ class Content extends ContentBase
     var $additionalContentBlocks;
     var $addtContentBlocksLoaded;
 	
-    function Content()
-    {
+	function __construct()
+	{
 		//$this->ContentBase();
 		parent::__construct();
 
 		//$this->mProperties->SetAllowedPropertyNames(array('content_en'));
 		$this->additionalContentBlocks = array();
 		$this->addtContentBlocksLoaded = false;
-    }
+	}
 	
     function FriendlyName()
     {
