@@ -602,7 +602,7 @@ class CmsObjectRelationalMapping extends Overloader
 
 if (function_exists("overload") && phpversion() < 5)
 {
-   overload("CmsObjectRelationalMappting");
+   overload("CmsObjectRelationalMapping");
 }
 
 debug_buffer('', 'End Loading ORM');
