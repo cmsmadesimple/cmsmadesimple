@@ -72,13 +72,27 @@ input  {
    border: solid 1px #666666;
    }
 
+
 textarea  {
    font-size: 1.2em;
    font-family: Verdana, Arial, Helvetica, sans-serif;
    border: solid 1px #666666;
+/* disabled default size so that module devs can change size if they want
    width: 48em;
-   height: 30em;
-   }
+   height: 30em; 
+*/
+  }
+
+
+textarea.large { 
+                 width: 48em;
+                 height: 30em; 
+ }
+
+textarea.small { 
+                 width: 48em;
+                 height: 5em; 
+ }
 
 select  {
    font-family: Verdana, Arial, Helvetica, sans-serif;
