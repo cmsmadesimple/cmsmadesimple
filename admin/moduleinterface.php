@@ -70,7 +70,7 @@ if( isset( $_REQUEST[$id . 'disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-else if( isset( $_REQUET['disable_theme'] ))
+else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
