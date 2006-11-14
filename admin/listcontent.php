@@ -895,26 +895,26 @@ function display_content_list($themeObject = null)
 
 	$headoflist = '';
 
+        $headoflist .= '<div class="pageoverflow">';
 	if (check_permission($userid, 'Add Pages'))
 	{
-        $headoflist .= '<div class="pageoverflow">';
-		$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
+	$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
         $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
         $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
 	}
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
-		if (check_permission($userid, 'Modify Page Structure'))
-        {
+          if (check_permission($userid, 'Modify Page Structure'))      {
             if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
             {
                 $headoflist .= '&nbsp;&nbsp;&nbsp;<a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">';
                 $headoflist .= $themeObject->DisplayImage('icons/system/reorder.gif', lang('reorderpages'),'','','systemicon').'</a>';
                 $headoflist .= ' <a href="listcontent.php?error=jsdisabled" class="pageoptions" onclick="xajax_reorder_display_list();return false;">'.lang('reorderpages').'</a>';
             }
-        }
-		$headoflist .='</p></div>';
+           $headoflist .='</p>';
+          }
 	}
+	$headoflist .='</div>';
 	$headoflist .= '<form action="multicontent.php" method="post">';
 	$headoflist .= '<table cellspacing="0" class="pagetable">'."\n";
 	$headoflist .= '<thead>';
@@ -945,7 +945,6 @@ function display_content_list($themeObject = null)
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
-	
 	ob_start();
 	if (check_permission($userid, 'Modify Page Structure')) 
     {
@@ -962,6 +961,7 @@ function display_content_list($themeObject = null)
 			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
 			</span>
 			</div>
+                        </div>
 <?php
     }
 ?>
@@ -998,7 +998,7 @@ function display_content_list($themeObject = null)
 			</div>
 
 			<br />
-			</div>
+
 			<div class="clearb"></div>
 <?php
 	$footer = ob_get_contents();
