@@ -22,17 +22,18 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-global $gCms;
-$smarty =& $gCms->smarty;
-$contentops =& $gCms->GetContentOperations();
-
-check_login();
-$userid = get_userid();
-
 if (isset($_POST["cancel"]))
 {
 	redirect("listcontent.php");
 }
+
+global $gCms;
+$smarty =& $gCms->smarty;
+$contentops =& $gCms->GetContentOperations();
+
+#Make sure we're logged in and get that user id
+check_login();
+$userid = get_userid();
 
 //See if some variables are returned
 $page_type = coalesce_key($_REQUEST, 'page_type', 'link');
@@ -41,10 +42,18 @@ $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
 
-#Get current userid and make sure they have permission to add something
+#See what kind of permissions we have
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
 
 require_once("header.php");
+
+#No access?  Just display an error and exit.
+if (!$access) {
+	$smarty->assign('error_message', lang('noaccessto',array(lang('addcontent'))));
+	$smarty->display('pageerror.tpl');
+	include_once('footer.php');
+	exit;
+}
 
 function get_type($n)
 {
@@ -54,6 +63,21 @@ function get_type($n)
 function get_friendlyname($n)
 {
 	return $n->friendlyname;
+}
+
+function copycontentobj(&$page_object, $page_type)
+{
+	global $gCms;
+	$contentops =& $gCms->GetContentOperations();
+
+	$newcontenttype = strtolower($page_type);
+	$contentops->LoadContentType($newcontenttype);
+	$tmpobj = $contentops->CreateNewContent($newcontenttype);
+
+	$tmpobj->params = $page_object->params;
+	$tmpobj->mProperties = $page_object->mProperties;
+
+	$page_object = $tmpobj;
 }
 
 function &get_page_object($page_type, &$orig_page_type, $userid)
@@ -68,16 +92,11 @@ function &get_page_object($page_type, &$orig_page_type, $userid)
 		$contentops->LoadContentType($orig_page_type);
 		$page_object = unserialize(base64_decode($_POST["serialized_content"]));
 		$page_object->update_parameters($_REQUEST['content']);
-		/*
-		if (strtolower(get_class($contentobj)) != $content_type)
+		if (strtolower(get_class($page_object)) != $page_type)
 		{
-			#Fill up the existing object with values in form
-			#Create new object
-			#Copy important fields to new object
-			#Put new object on top of old on
-			copycontentobj($contentobj, $content_type);
+			copycontentobj($page_object, $page_type);
+			$orig_page_type = $page_type;
 		}
-		*/
 	}
 	else
 	{
@@ -87,7 +106,6 @@ function &get_page_object($page_type, &$orig_page_type, $userid)
 		$page_object->active = TRUE;
 		$page_object->show_in_menu = TRUE;
 		$page_object->last_modified_by = $userid;
-		//if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
 	}
 	
 	return $page_object;
@@ -105,7 +123,7 @@ if ($access)
 			if ($submit)
 			{
 				audit($page_object->Id(), $page_object->Name(), 'Added Content');
-				//redirect('listcontent.php?message=contentadded');
+				redirect('listcontent.php?message=contentadded');
 			}
 		}
 	}
@@ -129,7 +147,7 @@ $smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $pag
 
 //Set the users
 $userops =& $gCms->GetUserOperations();
-$smarty->assign('show_owner_dropdown', true);
+$smarty->assign('show_owner_dropdown', false);
 $smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
 
 //Other fields that aren't easily done with smarty

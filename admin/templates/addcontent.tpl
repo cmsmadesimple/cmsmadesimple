@@ -139,7 +139,7 @@
       </div>
     {/if}
     
-    {* Tab Index *}
+    {* Access Key *}
     {if $page_object->field_used('access_key')}
       <div class="pageoverflow">
       	<p class="pagetext">{lang string='accesskey'}:</p>
@@ -150,6 +150,7 @@
     {/if}
     
     <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+    <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 
   </form>
 
