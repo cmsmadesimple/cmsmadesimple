@@ -56,6 +56,12 @@ class CmsObjectRelationalMapping extends Overloader
 	var $sequence = '';
 	
 	/**
+	 * Used to store validation error messages if a save does not go as
+	 * expected.
+	 */
+	var $validation_errors = array();
+	
+	/**
 	 * Used to define which field holds the record create date.
 	 */
 	var $create_date_field = 'create_date';
@@ -73,9 +79,21 @@ class CmsObjectRelationalMapping extends Overloader
 	 */
 	var $dirty = false;
 	
+	//var $validations = array();
+	
 	function __construct()
 	{
 		parent::__construct();
+
+		$fields = $this->get_columns_in_table();
+		if (count($fields) > 0) {
+			foreach ($fields as $field) {
+				if (array_key_exists($field, $this->field_maps)) $field = $this->field_maps[$field];
+				if (!array_key_exists($field, $this->params)) {
+					$this->params[$field] = '';
+				}
+			}
+		}
 	}
 	
 	function register_orm_class($classname)
@@ -97,7 +115,7 @@ class CmsObjectRelationalMapping extends Overloader
 	// Getter
 	function _get($n, &$v)
 	{
-		if (isset($this->params[$n]))
+		if (array_key_exists($n, $this->params))
 		{
 			$v = $this->params[$n];
 			return true;
@@ -132,22 +150,25 @@ class CmsObjectRelationalMapping extends Overloader
 		{
 			$return = $this->find_count_by_($function, $arguments);
 		}
-		else if (array_key_exists($function_converted, $this->params))
-		{
-			#This handles the SomeParam() dynamic function calls
-			$return = $this->params[$function_converted];
-		}
-		else if (startswith($function_converted, 'set_') && array_key_exists(substr($function_converted, 4), $this->params))
+		else if (startswith($function_converted, 'set_'))
 		{
 			#This handles the SetSomeParam() dynamic function calls
-			$this->params[substr($function_converted, 4)] = $arguments[0];
-			$this->dirty = true;
-			$return = true;
+			return $this->_set(substr($function_converted, 4), $arguments[0]);
 		}
+		#else if (array_key_exists($function_converted, $this->params))
 		else
 		{
-			#Remove me...  this is just to see what methods being called don't do anything yet
-			var_dump($function);
+			#This handles the SomeParam() dynamic function calls
+			$v = FALSE;
+			$this->_get($function_converted, $v);
+			if ($v == FALSE) {
+				//var_dump($function_converted);
+			}
+			else {
+				$return = $v;
+				return true;
+			}
+			return false;
 		}
 	}
 	
@@ -333,6 +354,11 @@ class CmsObjectRelationalMapping extends Overloader
 	
 	function save()
 	{
+		if ($this->call_validation())
+			return false;
+			
+		$this->before_save();
+
 		global $gCms;
 		$db =& $gCms->GetDb();
 
@@ -383,9 +409,15 @@ class CmsObjectRelationalMapping extends Overloader
 					$queryparams[] = $id;
 				}
 			
-				$this->dirty = false;
-			
-				return $db->Execute($query, $queryparams);
+				$result = $db->Execute($query, $queryparams);
+				
+				if ($result)
+				{
+					$this->dirty = false;
+					$this->after_save();
+				}
+				
+				return $result;
 			}
 		}
 		else
@@ -415,7 +447,7 @@ class CmsObjectRelationalMapping extends Overloader
 				}
 				else if (array_key_exists($localname, $this->params))
 				{
-					if (!($new_id == -1 && $localname == $this->$id_field))
+					if (!($new_id == -1 && $localname == $this->id_field))
 					{
 						$queryparams[] = $this->params[$localname];
 						$midpart .= $onefield . ', ';
@@ -433,13 +465,17 @@ class CmsObjectRelationalMapping extends Overloader
 			
 			$result = $db->Execute($query, $queryparams);
 			
-			if ($new_id == -1)
+			if ($result)
 			{
-				$new_id = $db->Insert_ID();
-				$this->$id_field = $new_id;
+				if ($new_id == -1)
+				{
+					$new_id = $db->Insert_ID();
+					$this->$id_field = $new_id;
+				}
+		
+				$this->dirty = false;
+				$this->after_save();
 			}
-			
-			$this->dirty = false;
 			
 			return $result;
 		}
@@ -458,12 +494,12 @@ class CmsObjectRelationalMapping extends Overloader
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
+		
+		$table = $this->get_table();
+		$id_field = $this->id_field;
 
 		if ($id == -1)
 			$id = $this->$id_field;
-			
-		$table = $this->get_table();
-		$id_field = $this->id_field;
 		
 		//Figure out if we need to replace the field from the field mappings
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
@@ -472,6 +508,12 @@ class CmsObjectRelationalMapping extends Overloader
 		return $db->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
 	}
 	
+	/**
+	 * Used to push a hash of keys and values to the object.  This is very helpful
+	 * for updating an object based on the fields in a form.
+	 *
+	 * @param $params The has of keys and values to set in the object
+	 */
 	function update_parameters($params)
 	{
 		foreach ($params as $k=>$v)
@@ -578,6 +620,34 @@ class CmsObjectRelationalMapping extends Overloader
 	{	
 	}
 	
+	function call_validation()
+	{
+		//Clear them out first
+		$this->validation_errors = array();
+		
+		//Call the validate method
+		$this->validate();
+		
+		return (count($this->validation_errors) > 0);
+	}
+	
+	function validate()
+	{
+	}
+	
+	function validate_not_blank($field, $message = '')
+	{
+		if ($this->$field == null || $this->$field == '')
+		{
+			$this->add_validation_error(($message != '' ? $message : lang('nofieldgiven',array($field))));
+		}
+	}
+	
+	function add_validation_error($message)
+	{
+		$this->validation_errors[] = $message;
+	}
+	
 	function _cacheDescription($fields)
 	{
 		global $gCms;
@@ -598,6 +668,26 @@ class CmsObjectRelationalMapping extends Overloader
 
 		return FALSE;
 	}
+	
+	/*
+	function field_exists($field, $error = '')
+	{
+		$this->validations[] = array('field' => $field, 'function' => 'validate_field_exists', 'error' => $error != '' ? $error : ($field . ' must be filled in') );
+
+		if (!function_exists('validate_field_exists'))
+		{
+			function validate_field_exists($validation_item)
+			{
+				$field = $validation_item['field'];
+				if ($this->$fieldname == FALSE || $this->$field != '')
+				{
+					return $field['error'];
+				}
+				return FALSE;
+			}
+		}
+	}
+	*/
 }
 
 if (function_exists("overload") && phpversion() < 5)

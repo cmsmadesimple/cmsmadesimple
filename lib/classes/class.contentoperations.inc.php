@@ -615,7 +615,7 @@ class ContentOperations
 	{
 		global $gCms;
 		$contentbase =& $gCms->GetOrmClass('content_base');
-		$result = $contentbase->find_all();
+		$result = $contentbase->find_all(array('order' => 'hierarchy ASC'));
 		
 		return $result;
 	}
@@ -656,12 +656,12 @@ class ContentOperations
 					$result .= '<option value="'.$one->Id().'"';
 
 					#Select current parent if it exists
-					if ($one->Id() == $parent)
+					if ($one->id == $parent)
 					{
 						$result .= ' selected="selected"';
 					}
 
-					$result .= '>'.$one->Hierarchy().'. - '.$one->Name().'</option>';
+					$result .= '>'.$one->Hierarchy().'. - '.$one->name.'</option>';
 				}
 			}
 

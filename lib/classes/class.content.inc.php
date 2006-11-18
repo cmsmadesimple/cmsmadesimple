@@ -33,10 +33,16 @@
 class ContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
+	var $params = array('id' => -1, 'template_id' => -1, 'name' => '', 'menu_text' => '', 'active' => true, 'default_content' => false);
 	var $field_maps = array('content_name' => 'name', 'content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 
 	'tabindex' => 'tab_index');
+	var $unused_fields = array();
 
-     var $mProperties = array();
+	var $mProperties = array();
+
+	var $preview = false;
+	
+	var $props_loaded = false;
 
 	function __construct()
 	{
@@ -50,17 +56,110 @@ class ContentBase extends CmsObjectRelationalMapping
 		$ops->LoadContentType($type);
 	}
 	
-	function LoadProperties()
+	function after_load()
 	{
-		global $gCms;
-		$content_property =& $gCms->GetOrmClass('content_property');
-		$this->mProperties = $content_property->find_all_by_content_id($this->id);
+		//$this->LoadProperties();
+	}
+	
+	function before_save()
+	{
+		$this->prop_names = implode(',', $this->get_property_names());
+		if ($this->id == -1)
+		{
+			global $gCms;
+			$db =& $gCms->GetDb();
+
+			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+			$row = &$db->GetRow($query, array($this->parent_id));
+
+			if ($row)
+			{
+				if ($row['new_order'] < 1)
+				{
+					$this->item_order = 1;
+				}
+				else
+				{
+					$this->item_order = $row['new_order'] + 1;
+				}
+			}
+		}
+	}
+	
+	function after_save()
+	{
+		foreach ($this->mProperties as $prop)
+		{
+			$prop->content_id = $this->id;
+			$prop->save();
+		}
+	}
+	
+	function validate()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
+		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+	}
+	
+	/**
+	 * Overloaded so that we can pull out properties and set them separately
+	 */
+	function update_parameters($params)
+	{
+		if (isset($params['property']) && is_array($params['property']))
+		{
+			foreach ($params['property'] as $k=>$v)
+			{
+				$this->set_property_value($k, $v);
+			}
+		}
+		parent::update_parameters($params);
+	}
+	
+	function load_properties()
+	{
+		if (!$this->props_loaded)
+		{
+			global $gCms;
+			$content_property =& $gCms->GetOrmClass('content_property');
+			$this->mProperties = $content_property->find_all_by_content_id($this->id);
+			$props_loaded = true;
+		}
+	}
+	
+	function set_property_value($name, $value)
+	{
+		$this->LoadProperties();
+		foreach ($this->mProperties as $prop)
+		{
+			if ($prop->prop_name == $name)
+			{
+				$prop->content = $value;
+				return;
+			}
+		}
+		
+		//No property exists
+		$newprop = new ContentProperty();
+		$newprop->prop_name = $name;
+		$newprop->content = $value;
+		$this->mProperties[] = $newprop;
+	}
+	
+	function get_property_names()
+	{
+		$result = array();
+		foreach ($this->mProperties as $prop)
+		{
+			$result[] = $prop->prop_name;
+		}
+		return $result;
 	}
 	
     /**
      * Does this have children?
      */
-	function HasChildren()
+	function has_children()
 	{
 		global $gCms;
 		$content_base =& $gCms->GetOrmClass('content_base');
@@ -72,9 +171,9 @@ class ContentBase extends CmsObjectRelationalMapping
 		return false;
 	}
 	
-	function HasProperty($name)
+	function has_property($name)
 	{
-		$this->LoadProperties();
+		//$this->LoadProperties();
 		foreach ($this->mProperties as $prop)
 		{
 			if ($prop->prop_name == $name)
@@ -86,9 +185,9 @@ class ContentBase extends CmsObjectRelationalMapping
 		return false;
 	}
 	
-	function GetPropertyValue($name)
+	function get_property_value($name)
 	{
-		$this->LoadProperties();
+		//$this->LoadProperties();
 		foreach ($this->mProperties as $prop)
 		{
 			if ($prop->prop_name == $name)
@@ -212,6 +311,14 @@ class ContentBase extends CmsObjectRelationalMapping
     {
 		return true;
     }
+
+	/**
+	 * Checks to see if this conte type uses the given field.
+	 */
+	function field_used($name)
+	{
+		return !in_array($name, $this->unused_fields);
+	}
 }
 
 ContentBase::register_orm_class('ContentBase');
@@ -279,5 +386,7 @@ class CMSModuleContentType extends ContentBase
 		}
 	}
 }
+
+CMSModuleContentType::register_orm_class('CMSModuleContentType');
 
 ?>

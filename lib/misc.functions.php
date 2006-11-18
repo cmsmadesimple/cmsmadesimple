@@ -1171,5 +1171,21 @@ function GetModuleParameters($id)
 	return $params;
 }
 
+function coalesce_key($array, $val1, $val2)
+{
+	if (isset($array[$val1]))
+	{
+		return $array[$val1];
+	}
+	return $val2;
+}
+
+if (! function_exists('array_combine')) {
+	function array_combine($keys, $values) {
+		foreach($keys as $key) $out[$key] = array_shift($values);
+		return $out;
+	}
+}
+
 # vim:ts=4 sw=4 noet
 ?>

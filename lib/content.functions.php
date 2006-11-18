@@ -41,11 +41,17 @@ class Smarty_CMS extends Smarty {
 		$this->Smarty();
 
 		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
+			$this->template_dir = $config["root_path"].'/admin/templates/';
+		}
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
 		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/');
+		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
+			$this->plugins_dir[] = $config['root_path'] . '/admin/plugins/';
+		}
 
 		$this->compiler_file = 'CMS_Compiler.class.php';
 		$this->compiler_class = 'CMS_Compiler';
