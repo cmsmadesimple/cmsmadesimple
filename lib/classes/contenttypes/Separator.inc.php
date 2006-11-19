@@ -20,7 +20,7 @@
 
 class Separator extends ContentBase
 {
-	var $unused_fields = array('name', 'menu_text', 'cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key');
+	var $unused_fields = array('name', 'menu_text', 'cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key', 'template_id');
 
 	function __construct()
 	{

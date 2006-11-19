@@ -20,6 +20,13 @@
 
 debug_buffer('', 'Start Loading ORM');
 
+/**
+ * Base class for all things ORM.  All classes that want to be part of
+ * the ORM system need to extend this class.  They also need to call the
+ * static register_orm_class() method after the class is defined in order
+ * to be reigstered for the system (and allow things like find_by_* to 
+ * work).
+ */
 class CmsObjectRelationalMapping extends Overloader
 {
 	/**
@@ -79,12 +86,11 @@ class CmsObjectRelationalMapping extends Overloader
 	 */
 	var $dirty = false;
 	
-	//var $validations = array();
-	
 	function __construct()
 	{
 		parent::__construct();
 
+		//Setup the predefined fields in the $params array.  Relax: The definitions are cached.
 		$fields = $this->get_columns_in_table();
 		if (count($fields) > 0) {
 			foreach ($fields as $field) {
@@ -367,7 +373,7 @@ class CmsObjectRelationalMapping extends Overloader
 	 * any low level changes to the $params array directly, you should set the dirty flag to true
 	 * to make sure any changes are saved.
 	 *
-	 * @return boolean Wether or not the save was successful or not.  If it wasn't, check the
+	 * @return boolean Whether or not the save was successful or not.  If it wasn't, check the
 	 *                 validation stack for errors.
 	 */
 	function save()

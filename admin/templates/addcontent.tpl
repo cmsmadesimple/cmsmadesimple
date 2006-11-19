@@ -51,6 +51,16 @@
       </div>
     {/if}
     
+    {* Template Dropdown *}
+    {if $page_object->field_used('template_id')}
+      <div class="pageoverflow">
+      	<p class="pagetext">{lang string='template'}:</p>
+      	<p class="pageinput">
+      	  {$template_names}
+      	</p>
+      </div>
+    {/if}
+    
     {section name=onefile loop=$include_templates}
       {include file=$include_templates[onefile]}
     {/section}

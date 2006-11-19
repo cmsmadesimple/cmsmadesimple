@@ -20,7 +20,7 @@
 
 class Link extends ContentBase
 {
-	var $unused_fields = array('cachable', 'alias', 'metadata');
+	var $unused_fields = array('cachable', 'alias', 'metadata', 'template_id');
 
 	function __construct()
 	{
