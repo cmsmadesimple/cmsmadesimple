@@ -1,7 +1,7 @@
 <?php
 # CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -20,107 +20,39 @@
 
 class Separator extends ContentBase
 {
+	var $unused_fields = array('name', 'menu_text', 'cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key');
 
-    function Separator() {
-        $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array());
-    }
+	function __construct()
+	{
+		parent::__construct();
+		$this->cachable = false;
+	}
     
-    function FriendlyName()
-    {
-	return 'Separator';
-    }
-
-    function SetProperties()
-    {
-	#Turn off caching
-	$this->mCachable = false;
-    }
+	function FriendlyName()
+	{
+		return 'Separator';
+	}
 	
-    function HasUsableLink()
-    {
-	return false;
-    }
-
-    function WantsChildren()
-    {
-	return false;
-    }
-
-    function FillParams($params)
-    {
-	if (isset($params))
+	function HasUsableLink()
 	{
-	    if (isset($params['parent_id']))
-	    {
-		if ($this->mParentId != $params['parent_id'])
-		{
-		    $this->mHierarchy = '';
-		    $this->mItemOrder = -1;
-		}
-		$this->mParentId = $params['parent_id'];
-	    }
-	    if (isset($params['active']))
-	    {
-		$this->mActive = true;
-	    }
-	    else
-	    {
-		$this->mActive = false;
-	    }
-	    if (isset($params['showinmenu']))
-	    {
-		$this->mShowInMenu = true;
-	    }
-	    else
-	    {
-		$this->mShowInMenu = false;
-	    }
-	}
-    }
-
-    function Show()
-    {
-    }
-
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-	global $gCms;
-	
-	$ret = array();
-
-    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
-    {
-		$contentops =& $gCms->GetContentOperations();
-    	$ret[] = array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
-    }
-	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
-	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-
-	if (!$adding && $showadmin)
-	{
-		$userops =& $gCms->GetUserOperations();
-	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+		return false;
 	}
 
-	if ($adding || $showadmin)
+	function WantsChildren()
 	{
-	    $ret[]= $this->ShowAdditionalEditors();
+		return false;
 	}
 
-	return $ret;
-    }
+	function update_parameters($params)
+	{
+		parent::update_parameters($params);
+		$this->name = '--------';
+	}
 
     function GetURL($rewrite = true)
     {
-	return '#';
+		return '#';
     }
-    function Save()
-    {
-        $this->mName = '--------';
-        ContentBase::Save();
-    }
-    
 }
 
 # vim:ts=4 sw=4 noet

@@ -1,8 +1,7 @@
 <?php
-
 # CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -197,6 +196,16 @@ class ContentBase extends CmsObjectRelationalMapping
 		}
 
 		return '';
+	}
+	
+	function add_template(&$smarty)
+	{
+		return array();
+	}
+	
+	function edit_template(&$smarty)
+	{
+		return array();
 	}
 	
     /**

@@ -51,13 +51,9 @@
       </div>
     {/if}
     
-    {* URL -- Remove me and add to Link type *}
-    <div class="pageoverflow">
-    	<p class="pagetext">{lang string='url'}:</p>
-    	<p class="pageinput">
-    	  {html_input id='content_property_url' name='content[property][url]' value=$page_object->get_property_value('url')}
-    	</p>
-    </div>
+    {section name=onefile loop=$include_templates}
+      {include file=$include_templates[onefile]}
+    {/section}
     
     {* Parent Dropdown *}
     {if $show_parent_dropdown eq true}

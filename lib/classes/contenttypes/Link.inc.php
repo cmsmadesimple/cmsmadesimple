@@ -1,7 +1,7 @@
 <?php
 # CMS - CMS Made Simple
-# (c)2004 by Ted Kulp (tedkulp@users.sf.net)
-# This project's homepage is: http://cmsmadesimple.org
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -45,6 +45,18 @@ class Link extends ContentBase
 	function GetURL($rewrite = true)
 	{
 		return cms_htmlentities($this->get_property_value('url'));
+	}
+	
+	function add_template(&$smarty)
+	{
+		$smarty->assign('link_targets', array('' => '(none)', '_blank' => '_blank', '_parent' => '_parent', '_self' => '_self', '_top' => '_top'));
+		return array(cms_join_path(dirname(__FILE__), 'Link.tpl'));
+	}
+	
+	function edit_template(&$smarty)
+	{
+		$smarty->assign('link_targets', array('' => '(none)', '_blank' => '_blank', '_parent' => '_parent', '_self' => '_self', '_top' => '_top'));
+		return array(cms_join_path(dirname(__FILE__), 'Link.tpl'));
 	}
 }
 
