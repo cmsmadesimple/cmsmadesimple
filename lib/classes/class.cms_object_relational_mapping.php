@@ -96,6 +96,12 @@ class CmsObjectRelationalMapping extends Overloader
 		}
 	}
 	
+	/**
+	 * "Static" method to register this class with the orm system.  This must be called
+	 * right after an ORM class has been defined.
+	 *
+	 * @param $classname Name of the class to register with the ORM system
+	 */
 	function register_orm_class($classname)
 	{
 		global $gCms;
@@ -352,9 +358,21 @@ class CmsObjectRelationalMapping extends Overloader
 		return $db->GetOne($query, $queryparams);
 	}
 	
+	/**
+	 * Saves the ORM'd object back to the database.  First it calls the validation method to make
+	 * sure that all validation passes.  If successful, it then determines if this is a new record
+	 * or updated record and INSERTs or UPDATEs accordingly.
+	 *
+	 * Updated records are only saved if they have been changed (dirty flag is set).  If you're doing
+	 * any low level changes to the $params array directly, you should set the dirty flag to true
+	 * to make sure any changes are saved.
+	 *
+	 * @return boolean Wether or not the save was successful or not.  If it wasn't, check the
+	 *                 validation stack for errors.
+	 */
 	function save()
 	{
-		if ($this->call_validation())
+		if ($this->_call_validation())
 			return false;
 			
 		$this->before_save();
@@ -484,7 +502,8 @@ class CmsObjectRelationalMapping extends Overloader
 	/**
 	 * Deletes a record from the table that persists this class.  If no id is given, then
 	 * it deletes the object given.  If an id is given, then it deletes that one from the
-	 * database directly.
+	 * database directly.  Keep in mind that deleting a object from the database directly
+	 * while having one in memory simultaniously could cause issues.
 	 *
 	 * @param $id The id to delete.  If none, then deletes the object called on.
 	 *
@@ -611,30 +630,40 @@ class CmsObjectRelationalMapping extends Overloader
 	 * before_load is called on the orm object, so keep it's implementation
 	 * sort of "static" in nature.  after_load is called on the instantiated
 	 * object.
+	 *
+	 * @param $type Name of the class that we're going to instantiate
+	 * @param $fields Hash of the fields that will be inserted into the object
 	 */
 	function before_load($type, $fields)
 	{
 	}
 	
+	/**
+	 * Callback after object is loaded.  This allows the object to do any
+	 * housekeeping, setting up other fields, etc before it's returned.
+	 */
 	function after_load()
 	{	
 	}
 	
-	function call_validation()
-	{
-		//Clear them out first
-		$this->validation_errors = array();
-		
-		//Call the validate method
-		$this->validate();
-		
-		return (count($this->validation_errors) > 0);
-	}
-	
+	/**
+	 * Virtual function that is called before a save operation can be
+	 * completed.  Allows the object to make sure that all the necessary
+	 * fields are filled in, they're in the proper range, etc.
+	 */
 	function validate()
 	{
 	}
 	
+	/**
+	 * Validation method to see if a parameter has been filled in.  This should
+	 * be called from an object's validate() method on each field that needs to be
+	 * filled in before it can be saved.
+	 *
+	 * @param $field Name of the field to check
+	 * @param $message If given, this is the message that will be set in the object
+	 *                 if the method didn't succed.
+	 */
 	function validate_not_blank($field, $message = '')
 	{
 		if ($this->$field == null || $this->$field == '')
@@ -643,9 +672,26 @@ class CmsObjectRelationalMapping extends Overloader
 		}
 	}
 	
+	/**
+	 * Method for quickly adding a new validation error to the object.  If this is
+	 * called, then it's a safe bet that save() will fail.
+	 *
+	 * @param $message Message to add to the validation error stack
+	 */
 	function add_validation_error($message)
 	{
 		$this->validation_errors[] = $message;
+	}
+	
+	function _call_validation()
+	{
+		//Clear them out first
+		$this->validation_errors = array();
+		
+		//Call the validate method
+		$this->validate();
+		
+		return (count($this->validation_errors) > 0);
 	}
 	
 	function _cacheDescription($fields)
