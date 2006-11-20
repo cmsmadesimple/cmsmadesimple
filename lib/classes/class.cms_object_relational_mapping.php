@@ -30,6 +30,24 @@ debug_buffer('', 'Start Loading ORM');
 class CmsObjectRelationalMapping extends Overloader
 {
 	/**
+	 * The ORM version number.  This basically is a number that
+	 * should be incremented when an object has a major change.
+	 *
+	 * Adding or removing fields from the table doesn't really
+	 * constitute a change.  It's more like changes to a table
+	 * name, enabling or disabling a sequence or changing the
+	 * name of an id field.  Since some areas of CMSMS store
+	 * serialized versions of objects, there could be a
+	 * discrepency between the current version and the version
+	 * that was just unserialized.  We can use the version number
+	 * to test to see if it's the same.
+	 *
+	 * If not set, then it defaults to 1.  If you never really
+	 * change the object, then you shouldn't need to modify it.
+	 */
+	var $orm_version = 1;
+
+	/**
 	 * Used to define any default settings for this object.  Not
 	 * all fields need to be defined, as they'll come out of the
 	 * database field names anyway.

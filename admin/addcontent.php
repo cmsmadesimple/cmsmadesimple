@@ -37,8 +37,8 @@ check_login();
 $userid = get_userid();
 
 //See if some variables are returned
-$page_type = coalesce_key($_REQUEST, 'page_type', 'link');
-$orig_page_type = coalesce_key($_POST, 'orig_page_type', 'link');
+$page_type = coalesce_key($_REQUEST, 'page_type', 'content');
+$orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
 $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
