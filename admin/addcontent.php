@@ -103,7 +103,7 @@ function &get_page_object($page_type, &$orig_page_type, $userid)
 	{
 		$contentops =& $gCms->GetContentOperations();
 		$page_object = $contentops->CreateNewContent($page_type);
-		$page_object->owner = $userid;
+		$page_object->owner_id = $userid;
 		$page_object->active = TRUE;
 		$page_object->show_in_menu = TRUE;
 		$page_object->last_modified_by = $userid;

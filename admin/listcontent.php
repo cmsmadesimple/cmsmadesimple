@@ -379,7 +379,7 @@ function deletecontent($contentid)
 				}
 			
 				$title = $contentobj->Name();
-				$contentobj->Delete();
+				$contentobj->delete();
 
 				$contentops =& $gCms->GetContentOperations();
 				$contentops->SetAllHierarchyPositions();
@@ -675,7 +675,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 
         if ($one->OwnerId() > -1)
         {
-            $thelist .= "<td>".$users[$one->OwnerId()]->username."</td>\n";
+            $thelist .= "<td>".$users[$one->owner_id]->username."</td>\n";
         }
         else
         {

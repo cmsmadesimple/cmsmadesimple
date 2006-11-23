@@ -211,10 +211,9 @@ class ContentBase extends CmsObjectRelationalMapping
 		return $contentops->CreateFriendlyHierarchyPosition($this->hierarchy);
     }
 	
-    function GetURL($rewrite = true)
+    function get_url($rewrite = true)
     {
-		global $gCms;
-		$config = &$gCms->GetConfig();
+		$config = config();
 		$url = "";
 		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
@@ -248,6 +247,11 @@ class ContentBase extends CmsObjectRelationalMapping
 		}
 		return $url;
     }
+
+    function GetURL($rewrite = true)
+    {
+		return $this->get_url($rewrite);
+	}
 
 	function SetAlias($alias)
 	{
@@ -320,6 +324,22 @@ class ContentBase extends CmsObjectRelationalMapping
 	function field_used($name)
 	{
 		return !in_array($name, $this->unused_fields);
+	}
+	
+	function after_delete()
+	{
+		$items =& cmsms()->content_property->find_all_by_content_id($this->id);
+		foreach ($items as &$item)
+		{
+			$item->delete();
+		}
+		
+		#Fix the item_order if necessary
+		$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+		$result = db()->Execute($query, array($this->parent_id, $this->item_order));
+		
+		#Remove the cross references
+		remove_cross_references($this->id, 'content');
 	}
 }
 

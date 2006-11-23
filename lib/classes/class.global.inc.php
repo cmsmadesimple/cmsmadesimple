@@ -200,7 +200,7 @@ class CmsObject extends Object {
 		return self::$instance;
 	}
 
-	function &GetDb()
+	function &get_db()
 	{
 		#static $dbinstance;
 
@@ -246,6 +246,11 @@ class CmsObject extends Object {
 		#return $dbinstance;
 		$db =& $this->db;
 		return ($db);
+	}
+	
+	function &GetDb()
+	{
+		return $this->get_db();
 	}
 	
 	function __get($name)
@@ -456,7 +461,12 @@ function cmsms()
 
 function db()
 {
-	return cmsms()->GetDb();
+	return cmsms()->get_db();
+}
+
+function &config()
+{
+	return cmsms()->get_config();
 }
 
 class CmsRoute

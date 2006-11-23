@@ -42,7 +42,7 @@ class Link extends ContentBase
 		}
 	}
 
-	function GetURL($rewrite = true)
+	function get_url($rewrite = true)
 	{
 		return cms_htmlentities($this->get_property_value('url'));
 	}

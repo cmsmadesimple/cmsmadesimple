@@ -104,6 +104,16 @@ class CmsObjectRelationalMapping extends Object
 	 */
 	var $dirty = false;
 	
+	/**
+	 * Used in situations where we're doing a bit of polymorphism.  The type 
+	 * field will store the name of the class that this object currently is.
+	 * Then, when it's loaded, we will automatically instantiate that type of 
+	 * object again and not just go by the name of the class that called the 
+	 * find.  If you want this functionality to not exist, make this variable
+	 * blank.
+	 */
+	var $type_field = 'type';
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -283,9 +293,9 @@ class CmsObjectRelationalMapping extends Object
 		{
 			//Basically give before_load a chance to load that class type if necessary
 			$newclassname = $classname;
-			if (isset($row['type']))
+			if ($this->type_field != '' && isset($row[$this->type_field]))
 			{
-				$newclassname = $row['type'];
+				$newclassname = $row[$this->type_field];
 			}
 			
 			$this->before_load($newclassname, $row);
@@ -329,9 +339,9 @@ class CmsObjectRelationalMapping extends Object
 		{
 			//Basically give before_load a chance to load that class type if necessary
 			$newclassname = $classname;
-			if (isset($dbresult->fields['type']))
+			if ($this->type_field != '' && isset($dbresult->fields[$this->type_field]))
 			{
-				$newclassname = $dbresult->fields['type'];
+				$newclassname = $dbresult->fields[$this->type_field];
 			}
 			
 			$this->before_load($newclassname, $dbresult->fields);
@@ -420,6 +430,12 @@ class CmsObjectRelationalMapping extends Object
 						$midpart .= $onefield . ' = ' . $time . ', ';
 						$this->$onefield = time();
 					}
+					else if ($this->type_field != '' && $this->type_field == $onefield)
+					{
+						$this->$onefield = strtolower(get_class($this));
+						$queryparams[] = strtolower(get_class($this));
+						$midpart .= $onefield . ' = ?, ';
+					}
 					else if (array_key_exists($localname, $this->params))
 					{
 						$queryparams[] = $this->params[$localname];
@@ -470,6 +486,12 @@ class CmsObjectRelationalMapping extends Object
 					$midpart .= $onefield . ', ';
 					$this->$onefield = time();
 				}
+				else if ($this->type_field != '' && $this->type_field == $onefield)
+				{
+					$queryparams[] = strtolower(get_class($this));
+					$midpart .= $onefield . ', ';
+					$this->$onefield = strtolower(get_class($this));
+				}
 				else if (array_key_exists($localname, $this->params))
 				{
 					if (!($new_id == -1 && $localname == $this->id_field))
@@ -517,21 +539,36 @@ class CmsObjectRelationalMapping extends Object
 	 * @return Boolean based on whether or not the delete was successful.
 	 */
 	function delete($id = -1)
-	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-		
+	{		
 		$table = $this->get_table();
 		$id_field = $this->id_field;
+		
+		$do_after_delete = false;
 
 		if ($id == -1)
+		{
 			$id = $this->$id_field;
+			$do_after_delete = true;
+		}
+		
+		if ($do_after_delete)
+		{
+			$this->before_delete();
+		}
 		
 		//Figure out if we need to replace the field from the field mappings
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-		return $db->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
+		$result = db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
+		
+		if ($do_after_delete)
+		{
+			if ($result)
+				$this->after_delete();
+		}
+		
+		return $result;
 	}
 	
 	/**
@@ -617,10 +654,9 @@ class CmsObjectRelationalMapping extends Object
 		if ($cache !== FALSE)
 			return $cache;
 
-		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config =& config();
 
-		$dbms = $gCms->config['dbms'];
+		$dbms = $config['dbms'];
 		if ($dbms == 'mysqli') $dbms = 'mysql';
 
 		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'dbo' . DIRECTORY_SEPARATOR . $dbms . '.get_columns_in_table.php');
@@ -650,7 +686,23 @@ class CmsObjectRelationalMapping extends Object
 	 * housekeeping, setting up other fields, etc before it's returned.
 	 */
 	function after_load()
-	{	
+	{
+	}
+	
+	function before_save()
+	{
+	}
+	
+	function after_save()
+	{
+	}
+	
+	function before_delete()
+	{
+	}
+	
+	function after_delete()
+	{
 	}
 	
 	/**
