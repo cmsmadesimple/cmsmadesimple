@@ -27,8 +27,8 @@ if (isset($_POST["cancel"]))
 	redirect("listcontent.php");
 }
 
-global $gCms;
-$smarty =& $gCms->smarty;
+$gCms = cmsms();
+$smarty = smarty();
 $contentops =& $gCms->GetContentOperations();
 $templateops =& $gCms->GetTemplateOperations();
 
@@ -91,7 +91,7 @@ function &get_page_object($page_type, &$orig_page_type, $userid)
 	{
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->LoadContentType($orig_page_type);
-		$page_object = unserialize(base64_decode($_POST["serialized_content"]));
+		$page_object = unserialize_object($_POST["serialized_content"]);
 		$page_object->update_parameters($_REQUEST['content']);
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
@@ -113,7 +113,7 @@ function &get_page_object($page_type, &$orig_page_type, $userid)
 }
 
 //Get a working page object
-$page_object =& get_page_object($page_type, $orig_page_type, $userid);
+$page_object = get_page_object($page_type, $orig_page_type, $userid);
 if ($access)
 {
 	if ($submit || $apply)
@@ -135,7 +135,7 @@ $smarty->assign('header_name', $themeObject->ShowHeader('addcontent'));
 
 //Setup the page object
 $smarty->assign_by_ref('page_object', $page_object);
-$smarty->assign('serialized_object', SerializeObject($page_object));
+$smarty->assign('serialized_object', serialize_object($page_object));
 $smarty->assign('orig_page_type', $orig_page_type);
 
 //Set the pagetypes

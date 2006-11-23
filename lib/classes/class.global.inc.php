@@ -23,6 +23,7 @@
  * @package CMS
  */
 
+/*
 if (phpversion() < 5)
 {
 	include_once('class.overloader.php4.php');
@@ -31,6 +32,7 @@ else
 {
 	include_once('class.overloader.php5.php');
 }
+*/
 
 /**
  * Simple global object to hold references to other objects
@@ -96,7 +98,7 @@ class CmsObject extends Object {
 	/**
 	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
 	 */
-	var $smarty;
+	public $smarty = NULL;
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
@@ -161,11 +163,13 @@ class CmsObject extends Object {
 	var $userpluginfunctions;
 	
 	var $orm;
+	
+	static private $instance = NULL;
 
 	/**
 	 * Constructor
 	 */
-	function CmsObject()
+	function __construct()
 	{
 		$this->cmssystemmodules = array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
 		$this->modules = array();
@@ -185,6 +189,15 @@ class CmsObject extends Object {
 		$this->cmsplugins          = array();
 		$this->siteprefs           = array();
 		$this->orm                 = array();
+	}
+	
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsObject();
+		}
+		return self::$instance;
 	}
 
 	function &GetDb()
@@ -235,15 +248,28 @@ class CmsObject extends Object {
 		return ($db);
 	}
 	
-	function &GetOrmClass($name)
+	function __get($name)
 	{
 		if (isset($this->orm[$name]))
 			return $this->orm[$name];
 		elseif (isset($this->orm[underscore($name)]))
 			return $this->orm[underscore($name)];
 	}
-
-	function &GetConfig()
+	
+	function get_orm_class($name)
+	{
+		if (isset($this->orm[$name]))
+			return $this->orm[$name];
+		elseif (isset($this->orm[underscore($name)]))
+			return $this->orm[underscore($name)];
+	}
+	
+	function GetOrmClass($name)
+	{
+		return $this->get_orm_class($name);
+	}
+	
+	function &get_config()
 	{
         if (!isset($this->config))
 		{
@@ -252,6 +278,11 @@ class CmsObject extends Object {
 		}
 
 		return $this->config;
+	}
+
+	function &GetConfig()
+	{
+		return $this->get_config();
 	}
 	
 	function &GetModuleLoader()
@@ -376,28 +407,19 @@ class CmsObject extends Object {
 		return $this->usertagoperations;
 	}
 
-	function & GetSmarty()
+	function GetSmarty()
 	{
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-		if (!isset($this->smarty))
-		{
-			$conf =& $this->GetConfig();
-
-			if (!defined('SMARTY_DIR'))
-			{
-				define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
-			}
-
-			#Setup global smarty object
-			$this->smarty =& new Smarty_CMS($conf);
-		}
-
-        return $this->smarty;
+		return $this->get_smarty();
+	}
+	
+	function get_smarty()
+	{
+		if ($this->smarty == NULL)
+			$this->smarty = smarty();
+		return smarty();
 	}
 
-	function & GetHierarchyManager()
+	function &GetHierarchyManager()
 	{
 		//Check to see if it hasn't been
 		//instantiated yet.  If not, connect
@@ -425,6 +447,16 @@ class CmsObject extends Object {
 				$db->Close();
 		}
 	}
+}
+
+function cmsms()
+{
+	return CmsObject::get_instance();
+}
+
+function db()
+{
+	return cmsms()->GetDb();
 }
 
 class CmsRoute

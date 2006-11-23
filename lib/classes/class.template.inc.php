@@ -38,8 +38,7 @@ class Template extends CmsObjectRelationalMapping
 	
 	function usage_count()
 	{
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+		$templateops =& cmsms()->GetTemplateOperations();
 		if ($this->id > -1)
 			return $templateops->UsageCount($this->id);
 		else

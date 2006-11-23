@@ -55,7 +55,7 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 #Make a new CMS object
 require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
 require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms =& new CmsObject();
+$gCms = cmsms();
 if (isset($starttime))
 {
     $gCms->variables['starttime'] = $starttime;

@@ -69,7 +69,7 @@ function ajaxpreview($params)
 
 	$content_type = $params['content_type'];
 	$contentops->LoadContentType($content_type);
-	$contentobj = UnserializeObject($params["serialized_content"]);
+	$contentobj = unserialize_object($params["serialized_content"]);
 	if (strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
 		copycontentobj($contentobj, $content_type, $params);
@@ -385,7 +385,7 @@ $tabnames = $contentobj->TabNames();
 	</div>
 	<div style="clear: both;"></div>
 	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
+<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo serialize_object($contentobj); ?>" />
 <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
 <input type="hidden" name="orig_content_type" value="<?php echo $cur_content_type ?>" />

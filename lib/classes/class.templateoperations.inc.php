@@ -31,34 +31,25 @@ class TemplateOperations
 {
 	function LoadTemplates()
 	{	
-		global $gCms;
-		$template =& $gCms->GetOrmClass('template');
-		return $template->find_all(array('order' => 'template_name ASC'));
+		return cmsms()->template->find_all(array('order' => 'template_name ASC'));
 	}
 
 	function LoadTemplateByID($id)
 	{
-		global $gCms;
-		$template =& $gCms->GetOrmClass('template');
-		return $template->find_by_id($id);
+		return cmsms()->template->find_by_id($id);
 	}
 
 	function LoadTemplateByContentAlias($alias)
 	{
-		global $gCms;
-		$template =& $gCms->GetOrmClass('template');
-		return $template->find_by_query("SELECT t.* FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1", array($alias, $alias));
+		return cmsms()->template->find_by_query("SELECT t.* FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1", array($alias, $alias));
 	}
 
 	function LoadTemplateAndContentDates($alias)
 	{
 		$result = array();
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = &$db->Execute($query, array($alias, $alias));
+		$dbresult = db()->Execute($query, array($alias, $alias));
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -74,20 +65,15 @@ class TemplateOperations
 
 	function LoadDefaultTemplate()
 	{
-		global $gCms;
-		$template =& $gCms->GetOrmClass('template');
-		return $template->find_by_default(1);
+		return cmsms()->template->find_by_default(1);
 	}
 
 	function UsageCount($id)
 	{
 		$result = 0;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
 		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-		$row = &$db->GetRow($query, array($id));
+		$row = db()->GetRow($query, array($id));
 
 		if($row)
 		{
@@ -129,20 +115,15 @@ class TemplateOperations
 
 	function DeleteTemplateByID($id)
 	{
-		global $gCms;
-		$template =& $gCms->GetOrmClass('template');
-		return $template->delete($id);
+		return cmsms()->template->delete($id);
 	}
 
 	function CountPagesUsingTemplateByID($id)
 	{
 		$result = 0;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-        $row = &$db->GetRow($query,array($id));
+        $row = db()->GetRow($query,array($id));
 
 		if ($row)
 		{
@@ -159,11 +140,8 @@ class TemplateOperations
 	{
 		$result = 0;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
-        $row = &$db->GetRow($query);
+        $row = db()->GetRow($query);
 
 		if ($row)
 		{
@@ -180,21 +158,18 @@ class TemplateOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
 		$dbresult = false;
 
-		$time = $db->DBTimeStamp(time());
+		$time = db()->DBTimeStamp(time());
 		if ($blob_name != '')
 		{
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_content like ?";
-			$dbresult = $db->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
+			$dbresult = db()->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
 		}
 		else
 		{
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time;
-			$dbresult = $db->Execute($query);
+			$dbresult = db()->Execute($query);
 		}
 
 		if ($dbresult !== false)
@@ -209,11 +184,8 @@ class TemplateOperations
 	{
 		$result = false;
 
-		global $gCms;
-		$db = &$gCms->GetDb();
-
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
-		$row = &$db->GetRow($query,array($name));
+		$row = db()->GetRow($query,array($name));
 
 		if ($row)
 		{
@@ -227,8 +199,7 @@ class TemplateOperations
 	{
 		$result = "";
 		
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
+		$templateops =& cmsms()->GetTemplateOperations();
 
 		$alltemplates = $templateops->LoadTemplates();
 		
@@ -259,6 +230,5 @@ class TemplateOperations
 		return $result;
 	}
 }
-
 
 ?>

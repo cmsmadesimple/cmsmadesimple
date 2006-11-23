@@ -27,7 +27,7 @@ debug_buffer('', 'Start Loading ORM');
  * to be reigstered for the system (and allow things like find_by_* to 
  * work).
  */
-class CmsObjectRelationalMapping extends Overloader
+class CmsObjectRelationalMapping extends Object
 {
 	/**
 	 * The ORM version number.  This basically is a number that
@@ -134,51 +134,43 @@ class CmsObjectRelationalMapping extends Overloader
 		$name = underscore($classname);
 		$ormclasses[$name] = new $classname;
 		
-		if (function_exists("overload") && phpversion() < 5)
-		{
-		   overload($classname);
-		}
-		
 		return FALSE;
 	}
 	
 	// Getter
-	function _get($n, &$v)
+	function __get($n)
 	{
 		if (array_key_exists($n, $this->params))
 		{
-			$v = $this->params[$n];
-			return true;
+			return $this->params[$n];
 		}
-		return false;
 	}
 
 	// Setter
-	function _set($n, $val)
+	function __set($n, $val)
 	{
 		if (array_key_exists($n, $this->field_maps)) $n = $this->field_maps[$n];
 		$this->params[$n] = $val;
 		$this->dirty = true;
-		return true;
 	}
 	
 	// Caller, applied when $function isn't defined
-	function _call($function, $arguments, &$return)
+	function __call($function, $arguments)
 	{
 		$function_converted = underscore($function);
 		if (array_key_exists($function, $this->field_maps)) $function_converted = $this->field_maps[$function];
 
 		if (startswith($function, 'find_by_'))
 		{
-			$return = $this->find_by_($function, $arguments);
+			return $this->find_by_($function, $arguments);
 		}
 		else if (startswith($function, 'find_all_by_'))
 		{
-			$return = $this->find_all_by_($function, $arguments);
+			return $this->find_all_by_($function, $arguments);
 		}
 		else if (startswith($function, 'find_count_by_'))
 		{
-			$return = $this->find_count_by_($function, $arguments);
+			return $this->find_count_by_($function, $arguments);
 		}
 		else if (startswith($function_converted, 'set_'))
 		{
@@ -189,16 +181,7 @@ class CmsObjectRelationalMapping extends Overloader
 		else
 		{
 			#This handles the SomeParam() dynamic function calls
-			$v = FALSE;
-			$this->_get($function_converted, $v);
-			if ($v == FALSE) {
-				//var_dump($function_converted);
-			}
-			else {
-				$return = $v;
-				return true;
-			}
-			return false;
+			return $this->__get($function_converted);
 		}
 	}
 	
@@ -760,10 +743,7 @@ class CmsObjectRelationalMapping extends Overloader
 	*/
 }
 
-if (function_exists("overload") && phpversion() < 5)
-{
-   overload("CmsObjectRelationalMapping");
-}
+//ContentBase::register_orm_class('ContentBase');
 
 debug_buffer('', 'End Loading ORM');
 

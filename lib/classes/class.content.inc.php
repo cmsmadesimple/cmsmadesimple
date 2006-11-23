@@ -42,11 +42,6 @@ class ContentBase extends CmsObjectRelationalMapping
 	var $preview = false;
 	
 	var $props_loaded = false;
-
-	function __construct()
-	{
-		parent::__construct();
-	}
 	
 	function before_load($type, $fields)
 	{
@@ -120,8 +115,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		if (!$this->props_loaded)
 		{
 			global $gCms;
-			$content_property =& $gCms->GetOrmClass('content_property');
-			$this->mProperties = $content_property->find_all_by_content_id($this->id);
+			$this->mProperties = cmsms()->content_property->find_all_by_content_id($this->id);
 			$props_loaded = true;
 		}
 	}
@@ -161,8 +155,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	function has_children()
 	{
 		global $gCms;
-		$content_base =& $gCms->GetOrmClass('content_base');
-		$count = $content_base->find_count_by_parent_id($this->id);
+		$count = cmsms()->content_base->find_count_by_parent_id($this->id);
 		
 		if (isset($count) && $count > 0)
 			return true;
@@ -335,11 +328,6 @@ ContentBase::register_orm_class('ContentBase');
 class ContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
 }
 
 ContentProperty::register_orm_class('ContentProperty');
@@ -352,11 +340,6 @@ ContentProperty::register_orm_class('ContentProperty');
  */
 class CMSModuleContentType extends ContentBase
 {
-	function __construct()
-	{
-		parent::__construct();
-	}
-
 	//What module do I belong to?  (needed for things like Lang to work right)
 	function ModuleName()
 	{

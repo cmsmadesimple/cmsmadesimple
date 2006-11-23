@@ -36,10 +36,13 @@ $sorted_content = array();
  */
 class Smarty_CMS extends Smarty {
 	
-	function Smarty_CMS(&$config)
+	static private $instance = NULL;
+	
+	function __construct()
 	{
 		$this->Smarty();
-
+		$config =& cmsms()->GetConfig();
+		
 		$this->template_dir = $config["root_path"].'/tmp/templates/';
 		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
 			$this->template_dir = $config["root_path"].'/admin/templates/';
@@ -128,6 +131,15 @@ class Smarty_CMS extends Smarty {
 						       "module_file_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
+	}
+	
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new Smarty_CMS();
+		}
+		return self::$instance;
 	}
 
     /**
@@ -634,6 +646,11 @@ class Smarty_CMS extends Smarty {
 	{
 		// not used for templates
 	}
+}
+
+function smarty()
+{
+	return Smarty_CMS::get_instance();
 }
 
 /**

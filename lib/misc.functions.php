@@ -165,7 +165,7 @@ function cms_join_path()
  * @since 0.3
  */
 #function ErrorHandler404($errno, $errmsg, $filename, $linenum, $vars)
-function ErrorHandler404()
+function error_handler_404()
 {
 	#if ($errno == E_USER_WARNING) {
 		@ob_end_clean();
@@ -187,53 +187,57 @@ function ErrorHandler404()
  *
  * @since 0.6.1
  */
-
-	function parse_template ($template, $tpl_array, $warn=0)
+function parse_template($template, $tpl_array, $warn=0)
+{
+	while ( list ($key,$val) = each ($tpl_array) )
 	{
-		while ( list ($key,$val) = each ($tpl_array) )
+		if (!(empty($key)))
 		{
-			if (!(empty($key)))
+			if(gettype($val) != "string")
 			{
-				if(gettype($val) != "string")
-				{
-					settype($val,"string");
-				}
-				$template = eregi_replace('\{' . $key . '\}',$val,$template);
+				settype($val,"string");
 			}
+			$template = eregi_replace('\{' . $key . '\}',$val,$template);
 		}
+	}
 
-		if(!$warn)
-		{
-			// Silently remove anything not already found
+	if(!$warn)
+	{
+		// Silently remove anything not already found
 
-			$template = ereg_replace('\{[A-Z0-9_]+\}', "", $template);
-		}
-		else
+		$template = ereg_replace('\{[A-Z0-9_]+\}', "", $template);
+	}
+	else
+	{
+		// Warn about unresolved template variables
+		if (ereg('\{[A-Z0-9_]+\}',$template))
 		{
-			// Warn about unresolved template variables
-			if (ereg('\{[A-Z0-9_]+\}',$template))
+			$unknown = split("\n",$template);
+			while (list ($Element,$Line) = each($unknown) )
 			{
-				$unknown = split("\n",$template);
-				while (list ($Element,$Line) = each($unknown) )
+				$UnkVar = $Line;
+				if(!(empty($UnkVar)))
 				{
-					$UnkVar = $Line;
-					if(!(empty($UnkVar)))
-					{
-						$this->show_unknowns($UnkVar);
-					}
+					$this->show_unknowns($UnkVar);
 				}
 			}
 		}
-		return $template;
+	}
+	return $template;
 
-	}	// end parse_template();
+}	// end parse_template();
 
-function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
+function cms_html_entities($string, $param=ENT_QUOTES, $charset="UTF-8")
 {
 	$result = "";
 	#$result = htmlentities($string, $param, $charset);
 	$result = my_htmlentities($string);
 	return $result;
+}
+
+function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
+{
+	return cms_html_entities($string, $param, $charset);
 }
 
 /**
@@ -357,7 +361,7 @@ function my_htmlentities($val)
  * @param unknown $val
  * @return unknown
  */
-function cms_utf8entities($val)
+function cms_utf8_entities($val)
 {
 	if ($val == "")
 	{
@@ -406,6 +410,10 @@ function cms_utf8entities($val)
 	return $val;
 }
 
+function cms_utf8entities($val)
+{
+	return cms_utf8_entities($val);
+}
 
 //Taken from http://www.webmasterworld.com/forum88/164.htm
 function nl2pnbr( $text )
@@ -423,30 +431,6 @@ function nl2pnbr( $text )
 	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
 
 	return $text;
-}
-
-function debug_bt() 
-{ 
-    $bt=debug_backtrace(); 
-    $file = $bt[0]['file']; 
-    $line = $bt[0]['line']; 
- 
-    echo "\n\n<p><b>Backtrace in $file on line $line</b></p>\n"; 
- 
-    $bt = array_reverse($bt); 
-    echo "<pre><dl>\n"; 
-    foreach($bt as $trace) 
-    { 
-        $file = $trace['file']; 
-        $line = $trace['line']; 
-        $function = $trace['function']; 
-        $args = implode(',', $trace['args']); 
-        echo "
-        <dt><b>$function</b>($args) </dt> 
-        <dd>$file on line $line</dd> 
-		";
-	} 
-    echo "</dl></pre>\n"; 
 }
 
 /**
@@ -521,35 +505,6 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 }
 
 /**
- * Display $var nicely only if $config["debug"] is set
- *
- * @param mixed $var
- * @param string $title
- */
-function debug_output($var, $title="")
-{
-	global $gCms;
-	if($gCms->config["debug"] == true)
-	{
-		debug_display($var, $title, true);
-	}
-
-}
-
-function debug_to_log($var, $title='')
-{
-	global $gCms;
-
-	$errlines = explode("\n",debug_display($var, $title, false, false));
-	$filename = TMP_CACHE_LOCATION . '/debug.log';
-	//$filename = dirname(dirname(__FILE__)) . '/uploads/debug.log';
-	foreach ($errlines as $txt)
-	{
-		error_log($txt . "\n", 3, $filename);
-	}
-}
-
-/**
  * Display $var nicely to the $gCms->errors array if $config['debug'] is set
  *
  * @param mixed $var
@@ -561,9 +516,7 @@ function debug_buffer($var, $title="")
 	if ($gCms)
 	{
 		$config =& $gCms->GetConfig();
-	
 		//debug_to_log($var, $title='');
-
 		if($config["debug"] == true)
 		{
 			$gCms->errors[] = debug_display($var, $title, false, true);
@@ -577,189 +530,11 @@ function debug_sql($str, $newline)
 	if ($gCms)
 	{
 		$config =& $gCms->GetConfig();
-	
 		if($config["debug"] == true)
 		{
 			$gCms->errors[] = debug_display($str, '', false, true);
 		}
 	}
-}
-
-/**
-* Retrieve value from $_REQUEST. Returns $default_value if
-*		value is not in $_REQUEST or is not the same basic type as
-*		$default_value.
-*		If $session_key is set, then will return session value in preference
-*		to $default_value if $_REQUEST[$value] is not set.
-* 
-* @param string $value
-* @param mixed $default_value (optional)
-* @param string $session_key (optional)
-* @return mixed
-*/
-function get_request_value($value, $default_value = '', $session_key = '')
-{
-	if($session_key != '')
-	{
-		if(isset($_SESSION['request_values'][$session_key][$value]))
-		{
-			$default_value = $_SESSION['request_values'][$session_key][$value];
-		}
-	}
-	if(isset($_REQUEST[$value]))
-	{
-		$result = get_value_with_default($_REQUEST[$value], $default_value);
-	}
-	else
-	{
-		$result = $default_value;
-	}
-
-	if($session_key != '')
-	{
-		$_SESSION['request_values'][$session_key][$value] = $result;
-	}
-
-	return $result;
-}
-
-/**
-* Return $value if it's set and same basic type as $default_value,
-*			otherwise return $default_value. Note. Also will trim($value)
-*			if $value is not numeric.
-* 
-* @param string $value
-* @param mixed $default_value
-* @return mixed
-*/
-function get_value_with_default($value, $default_value = '', $session_key = '')
-{
-	if($session_key != '')
-	{
-		if(isset($_SESSION['default_values'][$session_key]))
-		{
-			$default_value = $_SESSION['default_values'][$session_key];
-		}
-	}
-
-	// set our return value to the default initially and overwrite with $value if we like it.
-	$return_value = $default_value;
-
-	if(isset($value))
-	{
-		if(is_array($value))
-		{
-			// $value is an array - validate each element.
-			$return_value = array();
-			foreach($value as $element)
-			{
-				$return_value[] = get_value_with_default($element, $default_value);
-			}
-		}
-		else
-		{
-			if(is_numeric($default_value))
-			{
-				if(is_numeric($value))
-				{
-					$return_value = $value;
-				}
-			}
-			else
-			{
-				$return_value = trim($value);
-			}
-		}
-	}
-	
-	if($session_key != '')
-	{
-		$_SESSION['default_values'][$session_key] = $return_value;
-	}
-	
-	return $return_value;
-}
-
-/**
- * Retrieve the $value from the $parameters array checking for
- * $parameters[$value] and $params[$id.$value]. Returns $default
- * if $value is not in $params array. 
- * Note: This function will also trim() string values.
- *
- * @param array $parameters
- * @param string $value
- * @param mixed $default_value
- * @param string $session_key
- * @return mixed
- */
-function get_parameter_value($parameters, $value, $default_value = '', $session_key = '')
-{
-	if($session_key != '')
-	{
-		if(isset($_SESSION['parameter_values'][$session_key]))
-		{
-			$default_value = $_SESSION['parameter_values'][$session_key];
-		}
-	}
-
-	// set our return value to the default initially and overwrite with $value if we like it.
-	$return_value = $default_value;
-	if(isset($parameters[$value]))
-	{
-		if(is_bool($default_value))
-		{
-			// want a boolean return_value
-			if(isset($parameters[$value]))
-			{
-				$return_value = (boolean)$parameters[$value];
-			}
-		}
-		else
-		{
-			// is $default_value a number?
-			$is_number = false;
-			if(is_numeric($default_value))
-			{
-				$is_number = true;
-			}
-		
-			if(is_array($parameters[$value]))
-			{
-				// $parameters[$value] is an array - validate each element.
-				$return_value = array();
-				foreach($parameters[$value] as $element)
-				{
-					$return_value[] = get_value_with_default($element, $default_value);
-				}
-			}
-			else
-			{
-				if(is_numeric($default_value))
-				{
-					// default value is a number, we only like $parameters[$value] if it's a number too.
-					if(is_numeric($parameters[$value]))
-					{
-						$return_value = $parameters[$value];
-					}
-				}
-				elseif(is_string($default_value))
-				{
-					$return_value = trim($parameters[$value]);
-				}
-				else
-				{
-					$return_value = $parameters[$value];
-				}
-			}
-		}
-	}
-
-	if($session_key != '')
-	{
-		$_SESSION['parameter_values'][$session_key] = $return_value;
-	}
-	
-	return $return_value;
 }
 
 function create_encoding_dropdown($name = 'encoding', $selected = '')
@@ -783,38 +558,18 @@ function create_encoding_dropdown($name = 'encoding', $selected = '')
 	return $result;
 }
 
-function cms_mapi_create_permission($cms, $permission_name, $permission_text)
-{
-	global $gCms;
-	$db = &$gCms->GetDb();
-
-	$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name =" . $db->qstr($permission_name); 
-	$result = $db->Execute($query);
-
-	if ($result && $result->RecordCount() < 1) {
-
-		$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
-		$db->Execute($query);
-	}
-	
-	if ($result) $result->Close();
-}
-
-
 function filespec_is_excluded( $file, $excludes )
 {
-  // strip the path from the file
-  foreach( $excludes as $excl )
-    {
-      if( @preg_match( "/".$excl."/i", basename($file) ) )
+	// strip the path from the file
+	foreach( $excludes as $excl )
 	{
-	  return true;
+		if( @preg_match( "/".$excl."/i", basename($file) ) )
+		{
+			return true;
+		}
 	}
-    }
-  return false;
+	return false;
 }
-
 
 /**
  * Check the permissions of a directory recursively to make sure that
@@ -823,168 +578,180 @@ function filespec_is_excluded( $file, $excludes )
 */
 function is_directory_writable( $path )
 {
-   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
-   $result = true;
-   if( $handle = @opendir( $path ) )
-     {
-       while( false !== ( $file = readdir( $handle ) ) )
-	 {
-	   if( $file == '.' || $file == '..' )
-	     {
-	       continue;
-	     }
+	if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
+	$result = true;
+	if( $handle = @opendir( $path ) )
+	{
+		while( false !== ( $file = readdir( $handle ) ) )
+		{
+			if( $file == '.' || $file == '..' )
+			{
+				continue;
+			}
 
-	   $p = $path.$file;
+			$p = $path.$file;
 
-	   if( !@is_writable( $p ) )
-	     {
-	       return false;
-	     }
+			if( !@is_writable( $p ) )
+			{
+				return false;
+			}
 
-	   if( @is_dir( $p ) )
-	     {
-	       $result = is_directory_writable( $p );
-	       if( !$result )
-		 {
-		   return false;
-		 }
-	     }
-	 }
-       @closedir( $handle );
-     }
-   else
-     {
-       return false;
-     }
+			if( @is_dir( $p ) )
+			{
+				$result = is_directory_writable( $p );
+				if( !$result )
+				{
+					return false;
+				}
+			}
+		}
+		@closedir( $handle );
+	}
+	else
+	{
+		return false;
+	}
 
-   return true;
+	return true;
 }
 
 /**
- * Return an array containing a list of files in a directory
- * performs a recursive serach
- * @param  path      start path
- * @param  maxdepth  how deep to browse (-1=unlimited)
- * @param  mode      "FULL"|"DIRS"|"FILES"
- * @param  d         for internal use only
+* Return an array containing a list of files in a directory
+* performs a recursive serach
+* @param  path      start path
+* @param  maxdepth  how deep to browse (-1=unlimited)
+* @param  mode      "FULL"|"DIRS"|"FILES"
+* @param  d         for internal use only
 **/
 function get_recursive_file_list ( $path , $excludes, $maxdepth = -1 , $mode = "FULL" , $d = 0 )
 {
-   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
-   $dirlist = array () ;
-   if ( $mode != "FILES" ) { $dirlist[] = $path ; }
-   if ( $handle = opendir ( $path ) )
-   {
-       while ( false !== ( $file = readdir ( $handle ) ) )
-       {
-	   $excluded = filespec_is_excluded( $file, $excludes );
-           if ( $file != '.' && $file != '..' && $excluded == false )
-           {
-               $file = $path . $file ;
-               if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
-               elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
-               {
-		   $result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
-                   $dirlist = array_merge ( $dirlist , $result ) ;
-               }
-       }
-       }
-       closedir ( $handle ) ;
-   }
-   if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
-   return ( $dirlist ) ;
+	if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
+	$dirlist = array () ;
+	if ( $mode != "FILES" ) { $dirlist[] = $path ; }
+	if ( $handle = opendir ( $path ) )
+	{
+		while ( false !== ( $file = readdir ( $handle ) ) )
+		{
+			$excluded = filespec_is_excluded( $file, $excludes );
+			if ( $file != '.' && $file != '..' && $excluded == false )
+			{
+				$file = $path . $file ;
+				if ( ! @is_dir ( $file ) ) { if ( $mode != "DIRS" ) { $dirlist[] = $file ; } }
+				elseif ( $d >=0 && ($d < $maxdepth || $maxdepth < 0) )
+				{
+					$result = get_recursive_file_list ( $file . '/' , $excludes, $maxdepth , $mode , $d + 1 ) ;
+					$dirlist = array_merge ( $dirlist , $result ) ;
+				}
+			}
+		}
+		closedir ( $handle ) ;
+	}
+	if ( $d == 0 ) { natcasesort ( $dirlist ) ; }
+	return ( $dirlist ) ;
 }
-
 
 function recursive_delete( $dirname )
 {
-  // all subdirectories and contents:
-  if(is_dir($dirname))$dir_handle=opendir($dirname);
-  while($file=readdir($dir_handle))
-  {
-    if($file!="." && $file!="..")
-    {
-      if(!is_dir($dirname."/".$file))
+	// all subdirectories and contents:
+	if(is_dir($dirname))$dir_handle=opendir($dirname);
+	while($file=readdir($dir_handle))
 	{
-	  if( !@unlink ($dirname."/".$file) )
-	    {
-	      closedir( $dir_handle );
-	      return false;
-	    }
+		if($file!="." && $file!="..")
+		{
+			if(!is_dir($dirname."/".$file))
+			{
+				if( !@unlink ($dirname."/".$file) )
+				{
+					closedir( $dir_handle );
+					return false;
+				}
+			}
+			else 
+			{
+				recursive_delete($dirname."/".$file);
+			}
+		}
 	}
-      else 
+	closedir($dir_handle);
+	if( ! @rmdir($dirname) )
 	{
-	  recursive_delete($dirname."/".$file);
+		return false;
 	}
-    }
-  }
-  closedir($dir_handle);
-  if( ! @rmdir($dirname) )
-    {
-      return false;
-    }
-  return true;
+	return true;
 }
-
 
 function chmod_r( $path, $mode )
 {
-  if( !is_dir( $path ) )
-    return chmod( $path, $mode );
+	if( !is_dir( $path ) )
+	return chmod( $path, $mode );
 
-  $dh = @opendir( $path );
-  if( !$dh ) return FALSE;
+	$dh = @opendir( $path );
+	if( !$dh ) return FALSE;
 
-  while( $file = readdir( $dh ) )
-  {
-    if( $file == '.' || $file == '..' ) continue;
-    
-    $p = $path.DIRECTORY_SEPARATOR.$file;
-    if( is_dir( $p ) )
-    {
-      if( !@chmod_r( $p, $mode ) )
+	while( $file = readdir( $dh ) )
 	{
-	  closedir( $dh );
-	  return false;
+		if( $file == '.' || $file == '..' ) continue;
+
+		$p = $path.DIRECTORY_SEPARATOR.$file;
+		if( is_dir( $p ) )
+		{
+			if( !@chmod_r( $p, $mode ) )
+			{
+				closedir( $dh );
+				return false;
+			}
+		}
+		else if( !is_link( $p ) )
+		{
+			if( !@chmod( $p, $mode ) )
+			{
+				closedir( $dh );
+				return false;
+			}
+		}
 	}
-    }
-    else if( !is_link( $p ) )
-    {
-      if( !@chmod( $p, $mode ) )
-	{
-	  closedir( $dh );
-	  return false;
-	}
-    }
-  }
-  @closedir( $dh );
-  return @chmod( $path, $mode );
+	@closedir( $dh );
+	return @chmod( $path, $mode );
 }
 
-
-function SerializeObject(&$object)
+function serialize_object(&$object)
 {
 	return base64_encode(serialize($object));
 }
 
-function UnserializeObject(&$serialized)
+function unserialize_object(&$serialized)
 {
 	return  unserialize(base64_decode($serialized));
 }
 
-function startswith( $str, $sub )
+function starts_with($str, $sub)
 {
 	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
 }
 
-function endswith( $str, $sub )
+function startswith( $str, $sub )
+{
+	return starts_with($str, $sub);
+}
+
+function ends_with( $str, $sub )
 {
 	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
 }
 
-function showmem($string = '')
+function endswith( $str, $sub )
+{
+	return ends_with($str, $sub);
+}
+
+function show_mem($string = '')
 {
 	var_dump($string . ' -- ' . memory_get_usage());
+}
+
+function showmem($string = '')
+{
+	return show_mem($string);
 }
 
 function munge_string_to_url($alias, $tolower = false)
@@ -1005,70 +772,13 @@ function munge_string_to_url($alias, $tolower = false)
 	return $alias;
 }
 
-if(!function_exists("file_get_contents"))
-{
-   function file_get_contents($filename)
-   {
-	   if(($contents = file($filename)))
-	   {
-		   $contents = implode('', $contents);
-		   return $contents;
-	   }
-	   else
-		   return false;
-   }
-}
-
-// create the array_walk_recursive function in PHP4
-// from http://www.php.net/manual/en/function.array-walk-recursive.php
-if (!function_exists('array_walk_recursive'))
-{
-   function array_walk_recursive(&$input, $funcname, $userdata = "")
-   {
-       if (!is_callable($funcname))
-       {
-           return false;
-       }
-      
-       if (!is_array($input))
-       {
-           return false;
-       }
-      
-       foreach ($input AS $key => $value)
-       {
-           if (is_array($input[$key]))
-           {
-               array_walk_recursive($input[$key], $funcname, $userdata);
-           }
-           else
-           {
-               $saved_value = $value;
-               if (!empty($userdata))
-               {
-                   $funcname($value, $key, $userdata);
-               }
-               else
-               {
-                   $funcname($value, $key);
-               }
-              
-               if ($value != $saved_value)
-               {
-                   $input[$key] = $value;
-               }
-           }
-       }
-       return true;
-	}
-}
-
 /*
  * Sanitize input to prevent against XSS and other nasty stuff.
  * Taken from cakephp (http://cakephp.org)
  * Licensed under the MIT License
  */
-function cleanValue($val) {
+function clean_value($val)
+{
 	if ($val == "") {
 		return $val;
 	}
@@ -1076,7 +786,7 @@ function cleanValue($val) {
 	$val = str_replace(" ", " ", $val);
 	$val = str_replace(chr(0xCA), "", $val);
 	//Encode any HTML to entities (including \n --> <br />)
-	$val = cleanHtml($val);
+	$val = clean_html($val);
 	//Double-check special chars and remove carriage returns
 	//For increased SQL security
 	$val = preg_replace("/\\\$/", "$", $val);
@@ -1092,12 +802,18 @@ function cleanValue($val) {
 	return $val;
 }
 
+function cleanValue($val)
+{
+	return clean_value($val);
+}
+
 /*
  * Method to sanitize incoming html.
  * Take from cakephp (http://cakephp.org)
  * Licensed under the MIT License
  */
-function cleanHtml($string, $remove = false) {
+function clean_html($string, $remove = false)
+{
 	if ($remove) {
 		$string = strip_tags($string);
 	} else {
@@ -1106,6 +822,11 @@ function cleanHtml($string, $remove = false) {
 		$string = preg_replace($patterns, $replacements, $string);
 	}
 	return $string;
+}
+
+function cleanHtml($string, $remove = false)
+{
+	return clean_html($string, $remove);
 }
 
 /**
@@ -1152,7 +873,7 @@ function humanize($lowerCaseAndUnderscoredWord) {
  * Returns all parameters sent that are destined for the module with
  * the given $id
  */
-function GetModuleParameters($id)
+function get_module_parameters($id)
 {
 	$params = array();
 
@@ -1171,6 +892,11 @@ function GetModuleParameters($id)
 	return $params;
 }
 
+function GetModuleParameters($id)
+{
+	return get_module_parameters($id);
+}
+
 function coalesce_key($array, $val1, $val2)
 {
 	if (isset($array[$val1]))
@@ -1178,13 +904,6 @@ function coalesce_key($array, $val1, $val2)
 		return $array[$val1];
 	}
 	return $val2;
-}
-
-if (! function_exists('array_combine')) {
-	function array_combine($keys, $values) {
-		foreach($keys as $key) $out[$key] = array_shift($values);
-		return $out;
-	}
 }
 
 # vim:ts=4 sw=4 noet
