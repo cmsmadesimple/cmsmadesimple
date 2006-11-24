@@ -41,7 +41,7 @@ class UserOperations
 	function &LoadUsers()
 	{
 		global $gCms;
-		$user =& $gCms->GetOrmClass('user');
+		$user = $gCms->GetOrmClass('user');
 		$obj = $user->find_all(array('order' => 'username'));
 		return $obj;
 	}

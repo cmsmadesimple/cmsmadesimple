@@ -68,6 +68,11 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #Grab the current configuration
 $config =& $gCms->GetConfig();
 
+#define timezone
+if( isset($config['timezone']) && $config['timezone'] != "" ) {
+date_default_timezone_set($config['timezone']);
+}
+
 #Define the CMS_ADODB_DT constant
 define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 

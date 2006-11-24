@@ -70,6 +70,8 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config['old_stylesheet'] = true;
 	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$config['backwards_compatible'] = true;
+	$config['timezone'] = 'Etc/GMT+0';
+
 
 	#Don't set it yet
 	#$config["admin_encoding"] = "utf-8";
@@ -257,6 +259,12 @@ function cms_config_text($config)
 #could seriously slow down the admin interfaces for users.
 \$config['default_encoding'] = '{$config['default_encoding']}';
 \$config['admin_encoding'] = '{$config['admin_encoding']}';
+
+
+#Timezone for this site.
+#Check http://php.net/manual/en/timezones.php for available timezones
+\$config['timezone'] = 'Etc/GMT+0';
+
 
 #---------------------------------------------
 #Use the old stylesheet logic?  It's much slower, but it works with older

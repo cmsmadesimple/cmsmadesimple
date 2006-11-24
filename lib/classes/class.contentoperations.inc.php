@@ -614,7 +614,7 @@ class ContentOperations
 	function &GetAllContent($loadprops=true)
 	{
 		global $gCms;
-		$contentbase =& $gCms->GetOrmClass('content_base');
+		$contentbase = $gCms->GetOrmClass('content_base');
 		$result = $contentbase->find_all(array('order' => 'hierarchy ASC'));
 		
 		return $result;
