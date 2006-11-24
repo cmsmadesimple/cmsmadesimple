@@ -25,8 +25,6 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 
-include_once("../lib/classes/class.admintheme.inc.php");
-
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('content_list_ajax');
@@ -40,6 +38,8 @@ $xajax->registerFunction('content_move');
 $xajax->registerFunction('content_delete');
 $xajax->registerFunction('reorder_display_list');
 $xajax->registerFunction('reorder_process');
+
+include_once("../lib/classes/class.admintheme.inc.php");
 
 $xajax->processRequests();
 $headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
@@ -411,14 +411,14 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
 
-	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
+	$output .= '<li id="item_'.$content->id.'">'."\n";
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->hierarchy).') '.$content->name;
 
 	if ($root->getChildrenCount()>0)
 	{
-		$sortableLists->addList('parent'.$content->mId,'parent'.$content->mId.'ListOrder');
-		$listArray[$content->mId] = 'parent'.$content->mId.'ListOrder';
-		$output .= '<ul id="parent'.$content->mId.'" class="sortableList">'."\n";
+		$sortableLists->addList('parent'.$content->id,'parent'.$content->id.'ListOrder');
+		$listArray[$content->id] = 'parent'.$content->id.'ListOrder';
+		$output .= '<ul id="parent'.$content->id.'" class="sortableList">'."\n";
 
 		$children = &$root->getChildren();
 		foreach ($children as $child)
@@ -671,7 +671,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             $thelist .= "<td>&nbsp;</td>\n";
         }
 
-        $thelist .= "<td>".$one->FriendlyName()."</td>\n";
+        $thelist .= "<td>".$one->friendly_name()."</td>\n";
 
         if ($one->OwnerId() > -1)
         {
@@ -720,21 +720,21 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     if (($one->ItemOrder() - 1)==0) #first
                     { 
-                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->parent_id . ", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->parent_id . "&amp;page=".$page."\">";
                         $thelist .= $downImg;
                         $thelist .= "</a>";
                     }
                     else if (($one->ItemOrder() - 1) == $sameLevel-1) #last
                     {
-                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "&nbsp;<a class=\"move_up\" onclick=\"xajax_content_move(".$one->Id().", ".$one->parent_id .", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->parent_id ."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }
                     else #middle
                     {
-                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "<a onclick=\"xajax_content_move(".$one->Id().", ".$one->parent_id .", 'down'); return false;\" href=\"listcontent.php?direction=down&amp;content_id=".$one->Id()."&amp;parent_id=".$one->parent_id ."&amp;page=".$page."\">";
                         $thelist .= $downImg;
-                        $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->ParentId().", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->ParentId()."&amp;page=".$page."\">";
+                        $thelist .= "</a>&nbsp;<a onclick=\"xajax_content_move(".$one->Id().", ".$one->parent_id .", 'up'); return false;\" href=\"listcontent.php?direction=up&amp;content_id=".$one->Id()."&amp;parent_id=".$one->parent_id ."&amp;page=".$page."\">";
                         $thelist .= $upImg;
                         $thelist .= "</a>";
                     }

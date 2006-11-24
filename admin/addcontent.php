@@ -81,7 +81,7 @@ function copycontentobj(&$page_object, $page_type)
 	$page_object = $tmpobj;
 }
 
-function &get_page_object($page_type, &$orig_page_type, $userid)
+function &get_page_object($&page_type, &$orig_page_type, $userid)
 {
 	global $gCms;
 
@@ -124,7 +124,8 @@ if ($access)
 			if ($submit)
 			{
 				audit($page_object->Id(), $page_object->Name(), 'Added Content');
-				redirect('listcontent.php?message=contentadded');
+				if ($submit)
+					redirect('listcontent.php?message=contentadded');
 			}
 		}
 	}

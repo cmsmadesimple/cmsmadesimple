@@ -124,7 +124,8 @@ if ($access)
 			if ($submit)
 			{
 				audit($page_object->id, $page_object->name, 'Edited Content');
-				redirect('listcontent.php?message=contentupdated');
+				if ($submit)
+					redirect('listcontent.php?message=contentupdated');
 			}
 		}
 	}
