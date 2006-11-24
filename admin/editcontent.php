@@ -84,7 +84,7 @@ function copycontentobj(&$page_object, $page_type)
 	$page_object = $tmpobj;
 }
 
-function &get_page_object($page_type, &$orig_page_type, $userid, $content_id)
+function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id)
 {
 	global $gCms;
 
@@ -104,7 +104,8 @@ function &get_page_object($page_type, &$orig_page_type, $userid, $content_id)
 	else
 	{
 		$page_object = cmsms()->GetContentOperations()->LoadContentFromId($content_id);
-		$content_type = $page_object->type;
+		$page_type = $page_object->type;
+		$orig_page_type = $page_object->type;
 		$page_object->last_modified_by = $userid;
 	}
 	

@@ -73,14 +73,9 @@ class ContentBase extends CmsObjectRelationalMapping
 		cmsms()->GetContentOperations()->LoadContentType($type);
 	}
 	
-	function after_load()
-	{
-		//$this->load_properties();
-	}
-	
 	function before_save()
 	{
-		$this->prop_names = implode(',', $this->get_property_names());
+		//$this->prop_names = implode(',', $this->get_loaded_property_names());
 		if ($this->id == -1)
 		{
 			global $gCms;
@@ -107,7 +102,8 @@ class ContentBase extends CmsObjectRelationalMapping
 	{
 		foreach ($this->mProperties as &$prop)
 		{
-			$prop->content_id = $this->id;
+			if ($prop->content_id != $this->id)
+				$prop->content_id = $this->id;
 			$prop->save();
 		}
 	}
@@ -133,18 +129,11 @@ class ContentBase extends CmsObjectRelationalMapping
 		parent::update_parameters($params);
 	}
 	
-	function load_properties()
-	{
-		if (!$this->props_loaded)
-		{
-			$this->mProperties = cmsms()->content_property->find_all_by_content_id($this->id);
-			$props_loaded = true;
-		}
-	}
-	
 	function set_property_value($name, $value)
 	{
-		$this->load_properties();
+		if ($this->prop_names != '' && count($this->mProperties) == 0)
+			$this->load_properties();
+
 		foreach ($this->mProperties as &$prop)
 		{
 			if ($prop->prop_name == $name)
@@ -159,9 +148,12 @@ class ContentBase extends CmsObjectRelationalMapping
 		$newprop->prop_name = $name;
 		$newprop->content = $value;
 		$this->mProperties[] = $newprop;
+		
+		if (!$this->has_property($name))
+			$this->prop_names = implode(',', array_merge(explode(',', $this->propnames), array($name)));
 	}
 	
-	function get_property_names()
+	function get_loaded_property_names()
 	{
 		$result = array();
 		foreach ($this->mProperties as &$prop)
@@ -186,26 +178,46 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function has_property($name)
 	{
-		//$this->load_properties();
-		foreach ($this->mProperties as &$prop)
+		return in_array($name, explode(',', $this->prop_names));
+	}
+	
+	function load_properties()
+	{
+		//No go.  Ok, load all of them...
+		$props = cmsms()->content_property->find_all_by_content_id($this->id);
+		foreach ($props as &$prop)
 		{
-			if ($prop->prop_name == $name)
+			//Make sure we don't overwrite any newly set properties
+			if (!in_array($prop->name, $this->get_loaded_property_names()))
 			{
-				return true;
+				$this->mProperties[] =& $prop;
 			}
 		}
-
-		return false;
 	}
 	
 	function get_property_value($name)
 	{
-		//$this->load_properties();
-		foreach ($this->mProperties as &$prop)
+		//See if it exists...
+		if ($this->has_property($name))
 		{
-			if ($prop->prop_name == $name)
+			//Loop through and see if it's loaded
+			foreach ($this->mProperties as &$prop)
 			{
-				return $prop->content;
+				if ($prop->prop_name == $name)
+				{
+					return $prop->content;
+				}
+			}
+			
+			$this->load_properties();
+			
+			//Loop through and see if it's loaded now
+			foreach ($this->mProperties as &$prop)
+			{
+				if ($prop->prop_name == $name)
+				{
+					return $prop->content;
+				}
 			}
 		}
 

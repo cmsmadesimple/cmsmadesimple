@@ -6,7 +6,7 @@
     {$header_name}
   </div>
 
-  <form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform">
+  <form method="post" name="contentform" enctype="multipart/form-data" id="contentform">
 
     {html_hidden id='serialized_content' name='serialized_content' value=$serialized_object}
     {html_hidden id='orig_page_type' name='orig_page_type' value=$orig_page_type}
