@@ -170,22 +170,22 @@ class CmsObjectRelationalMapping extends Object
 		$function_converted = underscore($function);
 		if (array_key_exists($function, $this->field_maps)) $function_converted = $this->field_maps[$function];
 
-		if (startswith($function, 'find_by_'))
+		if (starts_with($function, 'find_by_'))
 		{
 			return $this->find_by_($function, $arguments);
 		}
-		else if (startswith($function, 'find_all_by_'))
+		else if (starts_with($function, 'find_all_by_'))
 		{
 			return $this->find_all_by_($function, $arguments);
 		}
-		else if (startswith($function, 'find_count_by_'))
+		else if (starts_with($function, 'find_count_by_'))
 		{
 			return $this->find_count_by_($function, $arguments);
 		}
-		else if (startswith($function_converted, 'set_'))
+		else if (starts_with($function_converted, 'set_'))
 		{
 			#This handles the SetSomeParam() dynamic function calls
-			return $this->_set(substr($function_converted, 4), $arguments[0]);
+			return $this->__set(substr($function_converted, 4), $arguments[0]);
 		}
 		#else if (array_key_exists($function_converted, $this->params))
 		else
