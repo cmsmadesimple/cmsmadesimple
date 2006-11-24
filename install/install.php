@@ -1021,6 +1021,7 @@ function showPageFive() {
 	$newconfig['old_stylesheet'] = false;
 	$newconfig['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 	$newconfig['backwards_compatible'] = false;
+	$newconfig['timezone'] = 'Etc/GMT+0';
 
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
