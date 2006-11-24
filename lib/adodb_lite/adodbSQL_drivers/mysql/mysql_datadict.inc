@@ -244,7 +244,7 @@ class ADODB2_mysql extends ADODB_DataDict {
 	 *
 	 * @return  array of ADOFieldObjects for current table.
 	 */
- 	function MetaColumns($table) 
+ 	function MetaColumns($table, $upper=true, $schema=false) 
 	{
 		$this->_findschema($table,$schema);
 		if ($schema) {
@@ -333,7 +333,7 @@ class ADODB2_mysql extends ADODB_DataDict {
 	/**
 	 * @returns an array with the primary key columns in it.
 	 */
-	function MetaPrimaryKeys($table, $owner=false)
+	function MetaPrimaryKeys($table, $owner=false, $intkey=false)
 	{
 	// owner not used in base class - see oci8
 		$p = array();

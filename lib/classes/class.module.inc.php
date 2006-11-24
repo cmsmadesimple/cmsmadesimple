@@ -96,7 +96,7 @@ class CMSModule
 					'optional' => true);
 
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
-		$this->smarty = &$gCms->GetSmarty();
+		$this->smarty = $gCms->GetSmarty();
 
 		$this->SetParameters();
 		
@@ -264,7 +264,7 @@ class CMSModule
 	function RegisterRoute($routeregex, $defaults = array())
 	{
 		global $gCms;
-		$route =& new CmsRoute();
+		$route = new CmsRoute();
 		$route->module = $this->GetName();
 		$route->defaults = $defaults;
 		$route->regex = $routeregex;
@@ -407,7 +407,7 @@ class CMSModule
 		$contenttypes =& $gCms->contenttypes;
 		if (!isset($contenttypes[strtolower($name)]))
 		{
-			$obj =& new CmsContentTypePlaceholder();
+			$obj = new CmsContentTypePlaceholder();
 			$obj->type = strtolower($name);
 			$obj->filename = $file;
 			$obj->loaded = false;
@@ -532,7 +532,7 @@ class CMSModule
 				global $gCms;
 				$db =& $gCms->GetDb();
 				$config =& $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
+				$smarty = $gCms->GetSmarty();
 
 				include($filename);
 			}

@@ -58,7 +58,7 @@ class ContentOperations
 		
 		if (ContentOperations::LoadContentType($type))
 		{
-			$result =& new $type;
+			$result = new $type;
 		}
 		
 		return $result;
@@ -74,7 +74,7 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 		
-		$content =& $gCms->GetOrmClass('content_base');
+		$content = $gCms->GetOrmClass('content_base');
 		$result = $content->find_by_id($id);
 		
 		return $result;
@@ -552,7 +552,7 @@ class ContentOperations
 				}
 			}
 
-			$tree = &new Tree();
+			$tree = new Tree();
 			debug_buffer('', 'Start Loading Children into Tree');
 			$tree = &Tree::createFromList($nodes, '.');
 			debug_buffer('', 'End Loading Children into Tree');
@@ -578,7 +578,7 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 		
-		$contentbase =& $gCms->GetOrmClass('content_base');
+		$contentbase = $gCms->GetOrmClass('content_base');
 		$result = $contentbase->find_all_by_parent_id($id);
 		
 		$contentcache =& $tree->content;

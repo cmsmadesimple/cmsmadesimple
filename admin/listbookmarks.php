@@ -36,7 +36,7 @@ include_once("header.php");
 	
 	global $gCms;
 	$bookops =& $gCms->GetBookmarkOperations();
-	$marklist =& $bookops->LoadBookmarks($userid);
+	$marklist = $bookops->LoadBookmarks($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

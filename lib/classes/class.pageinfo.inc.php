@@ -92,7 +92,7 @@ class PageInfo
  */
 class PageInfoOperations
 {
-	function LoadPageInfoByContentAlias($alias)
+	static function LoadPageInfoByContentAlias($alias)
 	{
 		$result = false;
 

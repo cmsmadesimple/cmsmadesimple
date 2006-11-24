@@ -63,7 +63,7 @@ class UserOperations
 
 		while ($dbresult && $row = $dbresult->FetchRow())
 		{
-			$oneuser =& new User();
+			$oneuser = new User();
 			$oneuser->id = $row['user_id'];
 			$oneuser->username = $row['username'];
 			$oneuser->firstname = $row['first_name'];
@@ -128,7 +128,7 @@ class UserOperations
 	function &LoadUserByID($id)
 	{
 		global $gCms;
-		$user =& $gCms->GetOrmClass('user');
+		$user = $gCms->GetOrmClass('user');
 		$obj = $user->find_by_id($id);
 		return $obj;
 	}

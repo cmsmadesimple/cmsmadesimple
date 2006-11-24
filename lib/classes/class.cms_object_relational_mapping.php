@@ -136,7 +136,7 @@ class CmsObjectRelationalMapping extends Object
 	 *
 	 * @param $classname Name of the class to register with the ORM system
 	 */
-	function register_orm_class($classname)
+	static function register_orm_class($classname)
 	{
 		global $gCms;
 		$ormclasses =& $gCms->orm;
@@ -305,7 +305,7 @@ class CmsObjectRelationalMapping extends Object
 				$newclassname = $classname;
 			}
 
-			$oneobj =& new $newclassname;
+			$oneobj = new $newclassname;
 			$oneobj = $this->fill_object($row, $oneobj);
 			return $oneobj;
 		}
@@ -351,7 +351,7 @@ class CmsObjectRelationalMapping extends Object
 				$newclassname = $classname;
 			}
 
-			$oneobj =& new $newclassname;
+			$oneobj = new $newclassname;
 			$oneobj = $this->fill_object($dbresult->fields, $oneobj);
 			$result[] =& $oneobj;
 			$dbresult->MoveNext();

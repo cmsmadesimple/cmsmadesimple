@@ -140,7 +140,7 @@ require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational
 
 if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
 {
-	load_backwards_compatibility();
+#	load_backwards_compatibility();
 }
 
 debug_buffer('done loading files');
@@ -152,7 +152,7 @@ if (!isset($DONT_LOAD_DB))
     $db =& $gCms->GetDB();
 }
 
-$smarty =& $gCms->GetSmarty();
+$smarty = $gCms->GetSmarty();
 $contenttypes =& $gCms->contenttypes;
 
 #Load content types
@@ -163,7 +163,7 @@ while ($file = readdir ($handle))
     $path_parts = pathinfo($file);
     if ($path_parts['extension'] == 'php')
     {
-		$obj =& new CmsContentTypePlaceholder();
+		$obj = new CmsContentTypePlaceholder();
 		$obj->type = strtolower(basename($file, '.inc.php'));
 		$obj->filename = cms_join_path($dir,$file);
 		$obj->loaded = false;
@@ -235,7 +235,7 @@ if (isset($CMS_ADMIN_PAGE))
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
 		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] =& new ConvertCharset();
+		$gCms->variables['convertclass'] = new ConvertCharset();
 	}
 }
 

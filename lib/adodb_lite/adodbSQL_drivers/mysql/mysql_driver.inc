@@ -332,7 +332,7 @@ class mysql_driver_ADOConnection extends ADOConnection
 		} 
 
 		if ($resultId === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
-			$rs =& new ADORecordSet_empty();
+			$rs = new ADORecordSet_empty();
 			return $rs;
 		}
 
