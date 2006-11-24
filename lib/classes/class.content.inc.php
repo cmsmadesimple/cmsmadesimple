@@ -43,16 +43,39 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	var $props_loaded = false;
 	
+	/*
+	
+	new object
+	no properties exist
+	has_property of anythig will fail
+	property is set
+	has_property will work from the mProperties array
+	
+	
+	loaded object
+	prop_names exists
+	has_property should work from prop_names
+	if a property is loaded, load them all
+	has_property then works from mProperties array
+	
+	So we know if we have properties in the prop_names if
+	($prop_names != '' && count($this->mProperties) == 0)
+	
+	*/
+	
+	function friendly_name()
+	{
+		return '';
+	}
+	
 	function before_load($type, $fields)
 	{
-		global $gCms;
-		$ops =& $gCms->GetContentOperations();
-		$ops->LoadContentType($type);
+		cmsms()->GetContentOperations()->LoadContentType($type);
 	}
 	
 	function after_load()
 	{
-		//$this->LoadProperties();
+		//$this->load_properties();
 	}
 	
 	function before_save()
@@ -82,7 +105,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function after_save()
 	{
-		foreach ($this->mProperties as $prop)
+		foreach ($this->mProperties as &$prop)
 		{
 			$prop->content_id = $this->id;
 			$prop->save();
@@ -114,7 +137,6 @@ class ContentBase extends CmsObjectRelationalMapping
 	{
 		if (!$this->props_loaded)
 		{
-			global $gCms;
 			$this->mProperties = cmsms()->content_property->find_all_by_content_id($this->id);
 			$props_loaded = true;
 		}
@@ -122,8 +144,8 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function set_property_value($name, $value)
 	{
-		$this->LoadProperties();
-		foreach ($this->mProperties as $prop)
+		$this->load_properties();
+		foreach ($this->mProperties as &$prop)
 		{
 			if ($prop->prop_name == $name)
 			{
@@ -142,7 +164,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	function get_property_names()
 	{
 		$result = array();
-		foreach ($this->mProperties as $prop)
+		foreach ($this->mProperties as &$prop)
 		{
 			$result[] = $prop->prop_name;
 		}
@@ -154,7 +176,6 @@ class ContentBase extends CmsObjectRelationalMapping
      */
 	function has_children()
 	{
-		global $gCms;
 		$count = cmsms()->content_base->find_count_by_parent_id($this->id);
 		
 		if (isset($count) && $count > 0)
@@ -165,8 +186,8 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function has_property($name)
 	{
-		//$this->LoadProperties();
-		foreach ($this->mProperties as $prop)
+		//$this->load_properties();
+		foreach ($this->mProperties as &$prop)
 		{
 			if ($prop->prop_name == $name)
 			{
@@ -179,8 +200,8 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	function get_property_value($name)
 	{
-		//$this->LoadProperties();
-		foreach ($this->mProperties as $prop)
+		//$this->load_properties();
+		foreach ($this->mProperties as &$prop)
 		{
 			if ($prop->prop_name == $name)
 			{
@@ -206,9 +227,7 @@ class ContentBase extends CmsObjectRelationalMapping
      */
     function Hierarchy()
     {
-		global $gCms;
-		$contentops =& $gCms->GetContentOperations();
-		return $contentops->CreateFriendlyHierarchyPosition($this->hierarchy);
+		return cmsms()->GetContentOperations()->CreateFriendlyHierarchyPosition($this->hierarchy);
     }
 	
     function get_url($rewrite = true)
@@ -255,8 +274,7 @@ class ContentBase extends CmsObjectRelationalMapping
 
 	function SetAlias($alias)
 	{
-		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config =& $config();
 
 		$tolower = false;
 
@@ -271,8 +289,7 @@ class ContentBase extends CmsObjectRelationalMapping
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
-			$contentops =& $gCms->GetContentOperations();
-			$error = $contentops->CheckAliasError($alias);
+			$error = cmsms()->GetContentOperations()->CheckAliasError($alias);
 			if ($error !== FALSE)
 			{
 				if (FALSE == empty($alias))
@@ -280,7 +297,7 @@ class ContentBase extends CmsObjectRelationalMapping
 					$alias_num_add = 2;
 					// If a '-2' version of the alias already exists
 					// Check the '-3' version etc.
-					while ($contentops->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
+					while (cmsms()->GetContentOperations()->CheckAliasError($alias.'-'.$alias_num_add) !== FALSE)
 					{
 						$alias_num_add++;
 					}
@@ -368,8 +385,7 @@ class CMSModuleContentType extends ContentBase
 
 	function Lang($name, $params=array())
 	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
+		$cmsmodules =& cmsms()->modules;
 		if (array_key_exists($this->ModuleName(), $cmsmodules))
 		{
 			return $cmsmodules[$this->ModuleName()]['object']->Lang($name, $params);
@@ -386,8 +402,7 @@ class CMSModuleContentType extends ContentBase
 	*/
 	function GetModuleInstance() 
 	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
+		$cmsmodules =& cmsms()->modules;
 		if (array_key_exists($this->ModuleName(), $cmsmodules))
 		{
 			return $cmsmodules[$this->ModuleName()]['object'];

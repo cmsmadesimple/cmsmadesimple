@@ -28,7 +28,7 @@ class Link extends ContentBase
 		$this->cachable = false;
 	}
 
-	function FriendlyName()
+	function friendly_name()
 	{
 		return 'Link';
 	}
