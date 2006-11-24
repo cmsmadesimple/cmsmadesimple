@@ -81,7 +81,7 @@ function copycontentobj(&$page_object, $page_type)
 	$page_object = $tmpobj;
 }
 
-function &get_page_object($&page_type, &$orig_page_type, $userid)
+function &get_page_object(&$page_type, &$orig_page_type, $userid)
 {
 	global $gCms;
 
