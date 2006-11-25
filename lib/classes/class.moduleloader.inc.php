@@ -60,13 +60,13 @@ class ModuleLoader
 
 			//Find modules and instantiate them
 			$allmodules = $this->FindModules();
-			foreach ($allmodules as $onemodule)
+			foreach ($allmodules as &$onemodule)
 			{
 				if (class_exists($onemodule))
 				{
 					$newmodule = new $onemodule;
 					$name = $newmodule->GetName();
-					$cmsmodules[$name]['object'] =& $newmodule;
+					$cmsmodules[$name]['object'] = $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
 				}
@@ -83,9 +83,9 @@ class ModuleLoader
 		{
 			$query = '';
 			if ($noadmin)
-			$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
+				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
 			else
-			$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
+				$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
 			$result = &$db->Execute($query);
 			while ($result && !$result->EOF)
 			{
