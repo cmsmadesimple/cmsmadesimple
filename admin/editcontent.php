@@ -72,7 +72,7 @@ function get_friendlyname($n)
 
 function copycontentobj(&$page_object, $page_type)
 {
-	$contentops =& cmsms()->GetContentOperations();
+	$contentops = cmsms()->GetContentOperations();
 
 	$newcontenttype = strtolower($page_type);
 	$contentops->LoadContentType($newcontenttype);

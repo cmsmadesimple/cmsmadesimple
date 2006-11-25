@@ -173,7 +173,7 @@ while ($file = readdir ($handle))
 		$obj->filename = cms_join_path($dir,$file);
 		$obj->loaded = false;
 		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] =& $obj;
+		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
     }
 }
 closedir($handle);

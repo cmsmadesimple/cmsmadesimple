@@ -287,7 +287,7 @@ class CmsObjectRelationalMapping extends Object
 		
 		$classname = get_class($this);
 
-		$row =& $db->GetRow($query, $queryparams);
+		$row = $db->GetRow($query, $queryparams);
 
 		if($row)
 		{
@@ -327,8 +327,7 @@ class CmsObjectRelationalMapping extends Object
 	
 	function find_all_by_query($query, $queryparams = array())
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = db();
 		
 		$classname = get_class($this);
 
@@ -353,7 +352,7 @@ class CmsObjectRelationalMapping extends Object
 
 			$oneobj = new $newclassname;
 			$oneobj = $this->fill_object($dbresult->fields, $oneobj);
-			$result[] =& $oneobj;
+			$result[] = $oneobj;
 			$dbresult->MoveNext();
 		}
 		

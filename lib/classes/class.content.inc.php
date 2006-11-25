@@ -139,6 +139,10 @@ class ContentBase extends CmsObjectRelationalMapping
 			if ($prop->prop_name == $name)
 			{
 				$prop->content = $value;
+
+				if (!$this->has_property($name))
+					$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
+
 				return;
 			}
 		}
@@ -150,7 +154,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		$this->mProperties[] = $newprop;
 		
 		if (!$this->has_property($name))
-			$this->prop_names = implode(',', array_merge(explode(',', $this->propnames), array($name)));
+			$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
 	}
 	
 	function get_loaded_property_names()
@@ -199,7 +203,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	{
 		//See if it exists...
 		if ($this->has_property($name))
-		{
+		{	
 			//Loop through and see if it's loaded
 			foreach ($this->mProperties as &$prop)
 			{
