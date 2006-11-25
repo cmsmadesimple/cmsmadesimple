@@ -131,7 +131,7 @@ class ModuleLoader
 										#Check to see if version in db matches file version
 										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
 										{
-											$cmsmodules[$name]['object'] =& $newmodule;
+											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
 										}

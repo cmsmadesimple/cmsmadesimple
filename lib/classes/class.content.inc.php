@@ -43,26 +43,6 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	var $props_loaded = false;
 	
-	/*
-	
-	new object
-	no properties exist
-	has_property of anythig will fail
-	property is set
-	has_property will work from the mProperties array
-	
-	
-	loaded object
-	prop_names exists
-	has_property should work from prop_names
-	if a property is loaded, load them all
-	has_property then works from mProperties array
-	
-	So we know if we have properties in the prop_names if
-	($prop_names != '' && count($this->mProperties) == 0)
-	
-	*/
-	
 	function friendly_name()
 	{
 		return '';
@@ -237,14 +217,11 @@ class ContentBase extends CmsObjectRelationalMapping
 	{
 		return array();
 	}
-	
-    /**
-     * Returns the Hierarchy
-     */
-    function Hierarchy()
-    {
+
+	function hierarchy()
+	{
 		return cmsms()->GetContentOperations()->CreateFriendlyHierarchyPosition($this->hierarchy);
-    }
+	}
 	
     function get_url($rewrite = true)
     {
@@ -288,7 +265,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		return $this->get_url($rewrite);
 	}
 
-	function SetAlias($alias)
+	function set_alias($alias)
 	{
 		$config =& $config();
 
@@ -327,6 +304,11 @@ class ContentBase extends CmsObjectRelationalMapping
 		}
 
 		$this->alias = munge_string_to_url($alias, $tolower);
+	}
+	
+	function SetAlias($alias)
+	{
+		return $this->set_alias($alias);
 	}
 
     /**
