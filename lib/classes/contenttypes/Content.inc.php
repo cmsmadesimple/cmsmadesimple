@@ -79,7 +79,7 @@ class Content extends ContentBase
 				<div class="pageoverflow">
 		      		<p class="pagetext">'.humanize($block['id']).':</p>
 		      		<p class="pageinput">
-		      	  		'.$class->block_add_template($this, $block['id']).'
+		      	  		'.$class->block_add_template($this, $block['id'], $template).'
 		      		</p>
 		      	</div>
 			';
@@ -114,7 +114,7 @@ class Content extends ContentBase
 				<div class="pageoverflow">
 		      		<p class="pagetext">'.humanize($block['id']).':</p>
 		      		<p class="pageinput">
-		      	  		'.$class->block_edit_template($this, $block['id']).'
+		      	  		'.$class->block_edit_template($this, $block['id'], $template).'
 		      		</p>
 		      	</div>
 			';

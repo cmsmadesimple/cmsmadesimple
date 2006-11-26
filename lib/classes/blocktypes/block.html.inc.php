@@ -43,12 +43,12 @@ class BlockHtml extends Object
 		}
 	}
 	
-	function block_add_template(&$page, $block_name)
+	function block_add_template(&$page, $block_name, &$template)
 	{
-		return '<textarea name="content[property][' . $block_name . '-content]" id="content_' . $block_name . '_block">' . $page->get_property_value($block_name . '-content') . '</textarea>';
+		return create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '');
 	}
 	
-	function block_edit_template(&$page, $block_name)
+	function block_edit_template(&$page, $block_name, &$template)
 	{
 		return $this->block_add_template($page, $block_name);
 	}
