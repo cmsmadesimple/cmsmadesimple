@@ -290,9 +290,15 @@ function showPageOne() {
   echo "<caption class=\"tbcaption\">Required settings</caption>\n";
   echo "<thead class=\"tbhead\"><tr><th>Test</th><th>Result</th></tr></thead><tbody>\n";
 
-  echo "<tr class=\"row1\"><td>Checking for PHP version 4.2+</td><td class=\"col2\">";
-  echo (@version_compare(phpversion(),"4.2.0") > -1?'<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />':'<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />');
-  (@version_compare(phpversion(),"4.2.0") > -1?null:$continueon=false);
+  echo "<tr class=\"row1\"><td>Checking for PHP version 5+</td><td class=\"col2\">";
+  $version = explode('.', phpversion());
+  
+  if ((int) $version[0] < 5) {
+    echo '<img src="../images/cms/install/false.gif" alt="Failure" height="16" width="16" border="0" />';
+    $continueon = false;
+  } else {
+    echo '<img src="../images/cms/install/true.gif" alt="Success" height="16" width="16" border="0" />';
+  }
   echo "</td></tr>\n";
     
   echo "<tr class=\"row2\"><td>Checking for Session Functions</td><td class=\"col2\">";

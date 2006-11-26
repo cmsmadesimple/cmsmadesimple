@@ -17,6 +17,14 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #$DONT_LOAD_DB=1;
+
+// check PHP version
+$version = explode('.', phpversion());
+if ((int) $version[0] < 5)
+{
+    echo 'Unable to upgrade. This version of CMS Made Simple requires at least PHP5 and this server is using an older version ('. phpversion() . ').'; die();
+}
+
 $LOAD_ALL_MODULES=1;
 $USE_OLD_ADODB=1;
 
