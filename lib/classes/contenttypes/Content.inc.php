@@ -25,23 +25,104 @@ class Content extends ContentBase
 		parent::__construct();
 	}
 
-	function FriendlyName()
+	function friendly_name()
 	{
 		return 'Content';
 	}
 	
-	function add_template(&$smarty)
+	function validate()
 	{
-		global $gCms;
-		$templateorm =& $gCms->GetOrmClass('template');
-	
+		parent::validate();
+		
 		$template = null;
 		if ($this->template_id == '' || $this->template_id == -1)
-			$template = $templateorm->find_by_default_template(1);
+			$template = cmsms()->template->find_by_default_template(1);
 		else
-			$template = $templateorm->find_by_id($this->template_id);
+			$template = cmsms()->template->find_by_id($this->template_id);
 
-		var_dump($this->parse_content_blocks_from_template($template));
+		$blocks = $this->parse_content_blocks_from_template($template);
+		
+		foreach ($blocks as $block)
+		{
+			$type = 'html';
+			
+			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+			
+			$class_name = camelize('block_' . $type);
+			$class = new $class_name;
+			
+			$class->validate($this, $block['id']);
+		}
+	}
+	
+	function add_template(&$smarty)
+	{
+		$template = null;
+		if ($this->template_id == '' || $this->template_id == -1)
+			$template = cmsms()->template->find_by_default_template(1);
+		else
+			$template = cmsms()->template->find_by_id($this->template_id);
+
+		$blocks = $this->parse_content_blocks_from_template($template);
+		$smarty_tpl = '';
+		
+		foreach ($blocks as $block)
+		{
+			$type = 'html';
+			
+			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+			
+			$class_name = camelize('block_' . $type);
+			$class = new $class_name;
+			
+			$smarty_tpl .= '
+				<div class="pageoverflow">
+		      		<p class="pagetext">'.humanize($block['id']).':</p>
+		      		<p class="pageinput">
+		      	  		'.$class->block_add_template($this, $block['id']).'
+		      		</p>
+		      	</div>
+			';
+		}
+		
+		$smarty->assign('cntnttemplate', $smarty_tpl);
+
+		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
+	}
+	
+	function edit_template(&$smarty)
+	{
+		$template = null;
+		if ($this->template_id == '' || $this->template_id == -1)
+			$template = cmsms()->template->find_by_default_template(1);
+		else
+			$template = cmsms()->template->find_by_id($this->template_id);
+
+		$blocks = $this->parse_content_blocks_from_template($template);
+		$smarty_tpl = '';
+		
+		foreach ($blocks as $block)
+		{
+			$type = 'html';
+			
+			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+			
+			$class_name = camelize('block_' . $type);
+			$class = new $class_name;
+			
+			$smarty_tpl .= '
+				<div class="pageoverflow">
+		      		<p class="pagetext">'.humanize($block['id']).':</p>
+		      		<p class="pageinput">
+		      	  		'.$class->block_edit_template($this, $block['id']).'
+		      		</p>
+		      	</div>
+			';
+		}
+		
+		$smarty->assign('cntnttemplate', $smarty_tpl);
+
+		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
 	}
 	
 	function parse_content_blocks_from_template(&$template)
