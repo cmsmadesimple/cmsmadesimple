@@ -69,8 +69,9 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 $config =& $gCms->GetConfig();
 
 #define timezone
-if( isset($config['timezone']) && $config['timezone'] != "" ) {
-date_default_timezone_set($config['timezone']);
+if (function_exists('date_default_timezone_set') && isset($config['timezone']) && $config['timezone'] != '') 
+{
+    date_default_timezone_set($config['timezone']);
 }
 
 #Define the CMS_ADODB_DT constant
