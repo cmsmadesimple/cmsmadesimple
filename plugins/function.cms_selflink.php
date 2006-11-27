@@ -26,29 +26,28 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 
 /* ugly hack by tsw for external links with wiki styling */
 if ( isset($params['ext']) ) {
+   /* thanks elijah */
+   $url = $params['ext'];
+   $text = $params['ext'];
 
-/* thanks elijah */
-$url = $params['ext'];
-$text = $params['ext'];
+   if ( isset($params['text'] )) {
+      $text = $params['text'];
+   }
 
-if ( isset($params['text'] )) {
-$text = $params['text'];
-}
+   $title= '';
+   if ( isset($params['title']) ) {
+      $title=' title="'.$params['title'].'" ';
+   }
 
-$title= '';
-if ( isset($params['title']) ) {
-$title=' title="'.$params['title'].'" ';
-}
+   $target = '';
+   if ( isset($params['target']) && ( strlen($params['target']) > 0 ) )  {
+      $target=' target="'.$params['target'].'" ';
+   }
 
-$target = '';
-if ( isset($params['target']) && ( strlen($params['target'] > 0 ) ) ) {
-$target=' target="'.$params['target'].'" ';
-}
-
-$external_text = '(external link)';
-if ( isset($params['ext_info']) ) {
-$external_text ='( '.$ext_info.' )';
-}
+   $external_text = '(external link)';
+   if ( isset($params['ext_info']) ) {
+      $external_text ='( '.$ext_info.' )';
+   }
 
 
 return '<a class="external" href="'.$url.'" '.$title.''.$target.'>'.$text.'<span>'.$external_text.'</span></a>';
