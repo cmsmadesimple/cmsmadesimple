@@ -125,6 +125,25 @@ class Content extends ContentBase
 		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
 	}
 	
+	function show($block_name = 'default')
+	{
+		$type = 'html';
+		
+		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+		
+		$class_name = camelize('block_' . $type);
+		
+		try
+		{
+			$class = new $class_name;
+			return $class->show($this, $block_name);
+		}
+		catch (Exception $e)
+		{
+			return '';
+		}
+	}
+	
 	function parse_content_blocks_from_template(&$template)
 	{
 		$blocks = array();

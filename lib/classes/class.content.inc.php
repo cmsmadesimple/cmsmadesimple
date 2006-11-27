@@ -99,12 +99,10 @@ class ContentBase extends CmsObjectRelationalMapping
 	 */
 	function update_parameters($params)
 	{
-		var_dump($params);
 		if (isset($params['property']) && is_array($params['property']))
 		{
 			foreach ($params['property'] as $k=>$v)
 			{
-				//var_dump($k . ":" . $v);
 				$this->set_property_value($k, $v);
 			}
 		}

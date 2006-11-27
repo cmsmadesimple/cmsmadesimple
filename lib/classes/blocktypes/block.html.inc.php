@@ -35,6 +35,11 @@ class BlockHtml extends Object
 		return 'HTML Text';
 	}
 	
+	function show(&$page, $block_name)
+	{
+		return $page->get_property_value($block_name . '-content');
+	}
+	
 	function validate(&$page, $block_name)
 	{
 		if ($page->get_property_value($block_name . '-content') == '')

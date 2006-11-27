@@ -496,7 +496,7 @@ class Smarty_CMS extends Smarty {
 			#We've a custom error message...  return it here
 			header("HTTP/1.0 404 Not Found");
 			header("Status: 404 Not Found");
-			if ($tpl_name == 'content_en')
+			if ($tpl_name == 'default')
 				$tpl_source = get_site_preference('custom404');
 			else
 				$tpl_source = '';
@@ -510,13 +510,7 @@ class Smarty_CMS extends Smarty {
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
-				if ($tpl_name != 'content_en')
-				{
-					//TODO: Fix Me.  This is a super hack.
-					$contentobj->GetAdditionalContentBlocks();
-				}
-
-				$tpl_source = $contentobj->Show($tpl_name);
+				$tpl_source = $contentobj->show($tpl_name);
 
 				#Perform the content data callback
 				#This needs to go...
