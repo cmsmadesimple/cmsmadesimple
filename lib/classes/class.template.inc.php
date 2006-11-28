@@ -46,7 +46,7 @@ class Template extends CmsObjectRelationalMapping
 	}
 }
 
-Template::register_orm_class('Template');
+//Template::register_orm_class('Template');
 
 # vim:ts=4 sw=4 noet
 ?>

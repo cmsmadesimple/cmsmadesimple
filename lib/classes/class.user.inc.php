@@ -44,7 +44,7 @@ class User extends CmsObjectRelationalMapping
 	}
 }
 
-User::register_orm_class('User');
+//User::register_orm_class('User');
 
 debug_buffer('', 'End Loading User');
 

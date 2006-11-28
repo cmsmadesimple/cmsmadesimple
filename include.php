@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -20,16 +20,6 @@
 
 define('ADODB_OUTP', 'debug_sql');
 
-$dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
-
-/**
- * This file is included in every page.  It does all seutp functions including
- * importing additional functions/classes, setting up sessions and nls, and
- * construction of various important variables like $gCms.
- *
- * @package CMS
- */
 #magic_quotes_runtime is a nuisance...  turn it off before it messes something up
 set_magic_quotes_runtime(false);
 
@@ -46,14 +36,46 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
     @session_start();
 }
 
+# sanitize $_GET
+array_walk_recursive($_GET, 'sanitize_get_var');
+
+$dirname = dirname(__FILE__);
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+
+//So we have the camelize, etc functions loaded for __autoload
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 debug_buffer('', 'Start of include');
 
-# sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var'); 
+/**
+ * The one and only autoload function for the system.  This basically allows us 
+ * to remove a lot of the require_once BS and keep the file loading to as much 
+ * of a minimum as possible.
+ */
+function __autoload($class_name)
+{
+	$dirname = dirname(__FILE__);
+
+	//We do this in order of importance...  classes first
+	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
+	}
+}
 
 #Make a new CMS object
-require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
+//require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
 require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
 $gCms = cmsms();
 if (isset($starttime))
@@ -141,8 +163,8 @@ require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 debug_buffer('loading events functions');
-require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
-require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
+//require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
+//require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
 
 if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
 {

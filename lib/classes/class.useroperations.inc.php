@@ -28,7 +28,7 @@
 
 debug_buffer('', 'Start Loading User Operations');
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
+//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
 
 class UserOperations
 {

@@ -26,7 +26,7 @@
  * @package		CMS
  */
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
+//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 class ContentOperations
 {

@@ -358,14 +358,14 @@ class ContentBase extends CmsObjectRelationalMapping
 	}
 }
 
-ContentBase::register_orm_class('ContentBase');
+//ContentBase::register_orm_class('ContentBase');
 
 class ContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
 }
 
-ContentProperty::register_orm_class('ContentProperty');
+//ContentProperty::register_orm_class('ContentProperty');
 
 /**
  * Class that module defined content types must extend.
@@ -412,6 +412,6 @@ class CMSModuleContentType extends ContentBase
 	}
 }
 
-CMSModuleContentType::register_orm_class('CMSModuleContentType');
+//CMSModuleContentType::register_orm_class('CMSModuleContentType');
 
 ?>

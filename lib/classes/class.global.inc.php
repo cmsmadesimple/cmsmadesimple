@@ -255,10 +255,7 @@ class CmsObject extends Object {
 	
 	function __get($name)
 	{
-		if (isset($this->orm[$name]))
-			return $this->orm[$name];
-		elseif (isset($this->orm[underscore($name)]))
-			return $this->orm[underscore($name)];
+		return $this->get_orm_class($name);
 	}
 	
 	function get_orm_class($name)
@@ -267,6 +264,19 @@ class CmsObject extends Object {
 			return $this->orm[$name];
 		elseif (isset($this->orm[underscore($name)]))
 			return $this->orm[underscore($name)];
+		else
+		{
+			// Let's try to load the thing dynamically
+			try
+			{
+				$name = camelize($name);
+				$this->orm[underscore($name)] = new $name;
+				return $this->orm[underscore($name)];
+			}
+			catch (Excpetion $e)
+			{
+			}
+		}
 	}
 	
 	function GetOrmClass($name)
@@ -294,7 +304,7 @@ class CmsObject extends Object {
 	{
         if (!isset($this->moduleloader))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
 			$moduleloader = new ModuleLoader();
 			$this->moduleloader = &$moduleloader;
 		}
@@ -306,7 +316,7 @@ class CmsObject extends Object {
 	{
         if (!isset($this->moduleoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
 			$moduleoperations = new ModuleOperations();
 			$this->moduleoperations = &$moduleoperations;
 		}
@@ -318,7 +328,7 @@ class CmsObject extends Object {
 	{
         if (!isset($this->useroperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
 			$useroperations = new UserOperations();
 			$this->useroperations = &$useroperations;
 		}
@@ -331,7 +341,7 @@ class CmsObject extends Object {
         if (!isset($this->contentoperations))
 		{
 			debug_buffer('', 'Load Content Operations');
-			require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
 			$contentoperations = new ContentOperations();
 			$this->contentoperations = &$contentoperations;
 			debug_buffer('', 'End Load Content Operations');
@@ -340,11 +350,11 @@ class CmsObject extends Object {
 		return $this->contentoperations;
 	}
 	
-	function & GetBookmarkOperations()
+	function &GetBookmarkOperations()
 	{
         if (!isset($this->bookmarkoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
 			$bookmarkoperations = new BookmarkOperations();
 			$this->bookmarkoperations = &$bookmarkoperations;
 		}
@@ -352,11 +362,11 @@ class CmsObject extends Object {
 		return $this->bookmarkoperations;
 	}
 	
-	function & GetTemplateOperations()
+	function &GetTemplateOperations()
 	{
         if (!isset($this->templateoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
 			$templateoperations = new TemplateOperations();
 			$this->templateoperations = &$templateoperations;
 		}
@@ -364,11 +374,11 @@ class CmsObject extends Object {
 		return $this->templateoperations;
 	}
 	
-	function & GetStylesheetOperations()
+	function &GetStylesheetOperations()
 	{
         if (!isset($this->stylesheetoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
 			$stylesheetoperations = new StylesheetOperations();
 			$this->stylesheetoperations = &$stylesheetoperations;
 		}
@@ -376,11 +386,11 @@ class CmsObject extends Object {
 		return $this->stylesheetoperations;
 	}
 	
-	function & GetGroupOperations()
+	function &GetGroupOperations()
 	{
         if (!isset($this->groupoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
 			$groupoperations = new GroupOperations();
 			$this->groupoperations = &$groupoperations;
 		}
@@ -388,11 +398,11 @@ class CmsObject extends Object {
 		return $this->groupoperations;
 	}
 	
-	function & GetGlobalContentOperations()
+	function &GetGlobalContentOperations()
 	{
         if (!isset($this->globalcontentoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
 			$globalcontentoperations = new GlobalContentOperations();
 			$this->globalcontentoperations = &$globalcontentoperations;
 		}
@@ -400,11 +410,11 @@ class CmsObject extends Object {
 		return $this->globalcontentoperations;
 	}
 	
-	function & GetUserTagOperations()
+	function &GetUserTagOperations()
 	{
         if (!isset($this->usertagoperations))
 		{
-			require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
+			//require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
 			$usertagoperations = new UserTagOperations();
 			$this->usertagoperations = &$usertagoperations;
 		}

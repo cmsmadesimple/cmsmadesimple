@@ -32,7 +32,7 @@ class Stylesheet extends CmsObjectRelationalMapping
 	var $sequence = 'css_seq';
 }
 
-Stylesheet::register_orm_class('Stylesheet');
+//Stylesheet::register_orm_class('Stylesheet');
 
 # vim:ts=4 sw=4 noet
 ?>
