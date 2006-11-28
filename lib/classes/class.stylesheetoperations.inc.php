@@ -36,7 +36,7 @@ class StylesheetOperations
 
 		$result = array();
 
-		$query = "SELECT css_id, css_name, css_text, media_type FROM ".cms_db_prefix()."css ORDER BY css_id";
+		$query = "SELECT css_id, css_name, css_text, media_type, modified_date FROM ".cms_db_prefix()."css ORDER BY css_id";
 		$dbresult = $db->Execute($query);
 
 		while ($dbresult && $row = $dbresult->FetchRow())
@@ -46,9 +46,9 @@ class StylesheetOperations
 			$onestylesheet->name = $row['css_name'];
 			$onestylesheet->value = $row['css_text'];
 			$onestylesheet->media_type = $row['media_type'];
+			$onestylesheet->modified_date = $db->UnixTimeStamp($row['modified_date']);
 			$result[] = $onestylesheet;
 		}
-
 		return $result;
 	}
 
