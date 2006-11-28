@@ -148,6 +148,10 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
     $db =& $gCms->GetDB();
+    if($config['dbms'] == 'sqlite')
+    {
+        sqlite_create_function($db->_connectionID,'now','time',0);
+    }
 }
 
 $smarty =& $gCms->GetSmarty();
