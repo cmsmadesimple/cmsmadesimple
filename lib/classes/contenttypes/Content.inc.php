@@ -45,6 +45,10 @@ class Content extends ContentBase
 		foreach ($blocks as $block)
 		{
 			$type = 'html';
+			if ($this->has_property($block['id'] . '-block-type'))
+			{
+				$type = $this->get_property_value($block['id'] . '-block-type');
+			}
 			
 			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
 			
@@ -69,6 +73,10 @@ class Content extends ContentBase
 		foreach ($blocks as $block)
 		{
 			$type = 'html';
+			if ($this->has_property($block['id'] . '-block-type'))
+			{
+				$type = $this->get_property_value($block['id'] . '-block-type');
+			}
 			
 			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
 			
@@ -82,6 +90,7 @@ class Content extends ContentBase
 		      	  		'.$class->block_add_template($this, $block['id'], $template).'
 		      		</p>
 		      	</div>
+				<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
 			';
 		}
 		
@@ -104,6 +113,10 @@ class Content extends ContentBase
 		foreach ($blocks as $block)
 		{
 			$type = 'html';
+			if ($this->has_property($block['id'] . '-block-type'))
+			{
+				$type = $this->get_property_value($block['id'] . '-block-type');
+			}
 			
 			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
 			
@@ -117,6 +130,7 @@ class Content extends ContentBase
 		      	  		'.$class->block_edit_template($this, $block['id'], $template).'
 		      		</p>
 		      	</div>
+				<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
 			';
 		}
 		
@@ -128,6 +142,10 @@ class Content extends ContentBase
 	function show($block_name = 'default')
 	{
 		$type = 'html';
+		if ($this->has_property($block_name . '-block-type'))
+		{
+			$type = $this->get_property_value($block_name . '-block-type');
+		}
 		
 		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
 		
@@ -176,7 +194,7 @@ class Content extends ContentBase
 						{
 							case 'block':
 							case 'name':
-								$id = str_replace(' ', '_', $val);
+								$id = strtolower(str_replace(' ', '_', $val));
 								$name = $val;
 								break;
 						}

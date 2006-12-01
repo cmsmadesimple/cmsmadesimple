@@ -27,7 +27,7 @@ debug_buffer('', 'Start Loading ORM');
  * to be reigstered for the system (and allow things like find_by_* to 
  * work).
  */
-class CmsObjectRelationalMapping extends Object
+class CmsObjectRelationalMapping extends Object implements ArrayAccess
 {
 	/**
 	 * The ORM version number.  This basically is a number that
@@ -128,6 +128,34 @@ class CmsObjectRelationalMapping extends Object
 				}
 			}
 		}
+	}
+	
+	function offsetSet($key, $value)
+	{
+		if (array_key_exists($key, $this->field_maps)) $key = $this->field_maps[$key];
+		$this->params[$key] = $value;
+		$this->dirty = true;
+	}
+
+	function offsetGet($key)
+	{
+		if (array_key_exists($key, $this->params))
+		{
+			return $this->params[$key];
+		}
+	}
+
+	function offsetUnset($key)
+	{
+		if (array_key_exists($key, $this->params))
+		{
+			unset($this->params[$key]);
+		}
+	}
+
+	function offsetExists($offset)
+	{
+		return array_key_exists($offset, $this->params);
 	}
 	
 	/**

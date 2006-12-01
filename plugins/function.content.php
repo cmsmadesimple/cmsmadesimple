@@ -48,6 +48,8 @@ function smarty_cms_function_content($params, &$smarty)
 		else if (isset($params['name']))
 			$block_name = $params['name'];
 
+		$block_name = strtolower(str_replace(' ', '_', $block_name));
+
 		//Only consider doing module processing if
 		//a. There is no block parameter
 		//b. then
