@@ -201,6 +201,28 @@ while ($file = readdir ($handle))
 }
 closedir($handle);
 
+/*
+$blocktypes =& $gCms->blocktypes;
+
+#Load block types
+$dir = cms_join_path($dirname,'lib','classes','blocktypes');
+$handle=opendir($dir);
+while ($file = readdir ($handle)) 
+{
+    $path_parts = pathinfo($file);
+    if ($path_parts['extension'] == 'php')
+    {
+		$obj = new CmsBlockTypePlaceholder();
+		$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
+		$obj->filename = cms_join_path($dir, $file);
+		$obj->loaded = false;
+		$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
+		$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
+    }
+}
+closedir($handle);
+*/
+
 if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 }

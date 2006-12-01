@@ -130,6 +130,11 @@ class CmsObject extends Object {
 	 */
 	var $contenttypes;
 	
+	/**
+	 * block types array - List of available block types
+	 */
+	var $blocktypes;
+	
 	var $ormclasses;
 	
 	var $moduleloader;
@@ -493,6 +498,12 @@ class CmsContentTypePlaceholder
 	var $friendlyname;
 	var $loaded;
 }
+
+/*
+class CmsBlockTypePlaceholder extends CmsContentTypePlaceholder
+{
+}
+*/
 
 # vim:ts=4 sw=4 noet
 ?>
