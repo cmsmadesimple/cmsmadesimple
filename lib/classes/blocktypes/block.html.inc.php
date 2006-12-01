@@ -55,7 +55,7 @@ class BlockHtml extends Object
 	
 	function block_edit_template(&$page, $block_name, &$template)
 	{
-		return $this->block_add_template($page, $block_name);
+		return $this->block_add_template($page, $block_name, $template);
 	}
 }
 
