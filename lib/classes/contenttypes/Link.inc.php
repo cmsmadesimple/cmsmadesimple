@@ -47,6 +47,11 @@ class Link extends ContentBase
 		return cms_htmlentities($this->get_property_value('url'));
 	}
 	
+	function is_default_possible()
+	{
+		return false;
+	}
+	
 	function add_template(&$smarty)
 	{
 		$smarty->assign('link_targets', array('' => '(none)', '_blank' => '_blank', '_parent' => '_parent', '_self' => '_self', '_top' => '_top'));
@@ -64,4 +69,3 @@ Link::register_orm_class('Link');
 
 # vim:ts=4 sw=4 noet
 ?>
-

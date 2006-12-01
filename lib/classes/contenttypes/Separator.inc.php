@@ -28,17 +28,22 @@ class Separator extends ContentBase
 		$this->cachable = false;
 	}
     
-	function FriendlyName()
+	function friendly_name()
 	{
 		return 'Separator';
 	}
 	
-	function HasUsableLink()
+	function has_usable_link()
 	{
 		return false;
 	}
 
-	function WantsChildren()
+	function wants_children()
+	{
+		return false;
+	}
+	
+	function is_default_possible()
 	{
 		return false;
 	}
@@ -49,7 +54,7 @@ class Separator extends ContentBase
 		$this->name = '--------';
 	}
 
-    function GetURL($rewrite = true)
+    function get_url($rewrite = true)
     {
 		return '#';
     }

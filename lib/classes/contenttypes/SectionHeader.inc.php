@@ -20,130 +20,32 @@
 
 class SectionHeader extends ContentBase
 {
-
-    function SectionHeader() {
-        $this->ContentBase();
-        $this->mProperties->SetAllowedPropertyNames(array());
-    }
-
-    function FriendlyName()
-    {
-	return 'Section Header';
-    }
-
-    function SetProperties()
-    {
-	#Turn off caching
-	$this->mCachable = false;
-    }
-
-    function HasUsableLink()
-    {
-	return false;
-    }
-
-    function FillParams($params)
-    {
-	if (isset($params))
-	{
-	    if (isset($params['title']))
-	    {
-		$this->mName = $params['title'];
-	    }
-	    if (isset($params['menutext']))
-	    {
-		$this->mMenuText = $params['menutext'];
-	    }
-	    if (isset($params['parent_id']))
-	    {
-		if ($this->mParentId != $params['parent_id'])
-		{
-		    $this->mHierarchy = '';
-		    $this->mItemOrder = -1;
-		}
-		$this->mParentId = $params['parent_id'];
-	    }
-	    if (isset($params['active']))
-	    {
-		$this->mActive = true;
-	    }
-	    else
-	    {
-		$this->mActive = false;
-	    }
-	    if (isset($params['showinmenu']))
-	    {
-		$this->mShowInMenu = true;
-	    }
-	    else
-	    {
-		$this->mShowInMenu = false;
-	    }
-	    if (isset($params['alias']))
-	    {
-		$this->SetAlias($params['alias']);
-	    }
-	}
-    }
-
-    function ValidateData()
-    {
-	$result = true;
-	$errors = array();
+	var $unused_fields = array('cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key', 'template_id');
 	
-	if ($this->mName == '')
+	function __construct()
 	{
-	    $errors[]= lang('nofieldgiven',array(lang('title')));
-	    $result = false;
+		parent::__construct();
+		$this->cachable = false;
 	}
 
-	if ($this->mMenuText == '')
+    function friendly_name()
+    {
+		return 'Section Header';
+    }
+
+	function has_usable_link()
 	{
-	    $errors[]= lang('nofieldgiven',array(lang('menutext')));
-	    $result = false;
+		return false;
 	}
-
-	return (count($errors) > 0?$errors:FALSE);
-    }
-
-    function Show()
-    {
-    }
-
-    function EditAsArray($adding = false, $tab = 0, $showadmin = false)
-    {
-	global $gCms;
 	
-	$ret = array();
-
-	$ret[]= array(lang('title').':','<input type="text" name="title" value="'.cms_htmlentities($this->mName).'" />');
-	$ret[]= array(lang('menutext').':','<input type="text" name="menutext" value="'.cms_htmlentities($this->mMenuText).'" />');
-	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
-    if (check_permission(get_userid(), 'Modify Page Structure') || ($adding == true && check_permission(get_userid(), 'Add Pages')))
-    {
-		$contentops =& $gCms->GetContentOperations();
-    	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
-    }
-	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />') ;
-	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
-
-	if (!$adding && $showadmin)
+	function is_default_possible()
 	{
-		$userops =& $gCms->GetUserOperations();
-	    $ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
+		return false;
 	}
 
-	if ($adding || $showadmin)
-	{
-	    $ret[]= $this->ShowAdditionalEditors();
-	}
-
-	return $ret;
-    }
-
-    function GetURL($rewrite = true)
+    function get_url($rewrite = true)
     {
-	return '#';
+		return '#';
     }
 }
 

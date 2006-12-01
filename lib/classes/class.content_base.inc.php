@@ -319,19 +319,39 @@ class ContentBase extends CmsObjectRelationalMapping
      * 
      * @since 0.11
      */
+	function wants_children()
+	{
+		return true;
+	}
+
     function WantsChildren()
     {
-		return true;
+		return $this->wants_children();
     }
 
     /**
      * Should this link be used in various places where a link is the only
      * useful output?  (Like next/previous links in cms_selflink, for example)
      */
+	function has_usable_link()
+	{
+		return true;
+	}
+
     function HasUsableLink()
     {
-		return true;
+		return $this->has_usable_link();
     }
+
+	function is_default_possible()
+	{
+		return true;
+	}
+
+	function IsDefaultPossible()
+	{
+		return $this->is_default_possible();
+	}
 
 	/**
 	 * Checks to see if this conte type uses the given field.
