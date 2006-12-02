@@ -25,6 +25,21 @@ class Content extends ContentBase
 		parent::__construct();
 		$this->preview = true;
 	}
+	
+	static function &create_preview_object(&$template_object)
+	{
+		$obj = new Content();
+		$blocks = $obj->parse_content_blocks_from_template($template_object);
+		
+		foreach ($blocks as $block)
+		{
+			$type = 'html';
+			$obj->set_property_value($block['id'] . '-block-type', $type);
+			$obj->set_property_value($block['id'] . '-content', 'This is the content for block: ' . $block['id']);
+		}
+		
+		return $obj;
+	}
 
 	function friendly_name()
 	{

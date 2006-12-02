@@ -38,15 +38,27 @@ class Template extends CmsObjectRelationalMapping
 	
 	function usage_count()
 	{
-		$templateops =& cmsms()->GetTemplateOperations();
+		$templateops = cmsms()->GetTemplateOperations();
 		if ($this->id > -1)
 			return $templateops->UsageCount($this->id);
 		else
 			return 0;
 	}
+	
+	function validate()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
+		$this->validate_not_blank('content', lang('nofieldgiven',array(lang('content'))));
+		if ($this->name != '')
+		{
+			$result = $this->find_all_by_name($this->name);
+			if (count($result) > 0)
+			{
+				$this->add_validation_error(lang('templateexists'));
+			}
+		}
+	}
 }
-
-//Template::register_orm_class('Template');
 
 # vim:ts=4 sw=4 noet
 ?>

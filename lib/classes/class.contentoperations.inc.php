@@ -29,8 +29,8 @@
 //require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
 class ContentOperations
-{
-	function LoadContentType($type)
+{	
+	static function load_content_type($type)
 	{
 		$type = strtolower($type);
 
@@ -48,6 +48,11 @@ class ContentOperations
 			return true;
 		}
 		return false;
+	}
+
+	static function LoadContentType($type)
+	{
+		return ContentOperations::load_content_type($type);
 	}
 
 	function &CreateNewContent($type)

@@ -72,6 +72,9 @@ function __autoload($class_name)
 	{
 		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
 	}
+	else if (ContentOperations::load_content_type($class_name))
+	{
+	}
 }
 
 #Make a new CMS object
