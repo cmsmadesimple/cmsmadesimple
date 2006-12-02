@@ -23,6 +23,7 @@ class Content extends ContentBase
 	function __construct()
 	{
 		parent::__construct();
+		$this->preview = true;
 	}
 
 	function friendly_name()

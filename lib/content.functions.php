@@ -402,6 +402,36 @@ class Smarty_CMS extends Smarty {
 
 				return true;
 			}
+			else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+			{
+				$fname = $_GET["tmpfile"];
+				$fname = str_replace("..", "", $fname);
+				$fname = str_replace("\\", "", $fname);
+				$fname = str_replace("/", "", $fname);
+				$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
+				$fname = basename($fname);
+
+				if (is_writable($config["previews_path"]))
+				{
+					$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
+				}
+				else
+				{
+					$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
+				}
+				$handle = fopen($fname, "r");
+				$data = unserialize(fread($handle, filesize($fname)));
+				fclose($handle);
+				//unlink($fname);
+
+				$tpl_source = '{content}';
+				if (is_array($data) && count($data) == 2)
+				{
+					if ($data[0] instanceof Template)
+						$tpl_source = $data[0]->content;
+				}
+				return true;
+			}
 			else if (isset($_GET["print"]))
 			{
 				$script = '';
@@ -471,6 +501,11 @@ class Smarty_CMS extends Smarty {
 			$tpl_timestamp = time();
 			return true;
 		}
+		else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+		{
+			$tpl_timestamp = time();
+			return true;
+		}
 		else if (isset($_GET['print']))
 		{
 			$tpl_timestamp = time();
@@ -500,6 +535,35 @@ class Smarty_CMS extends Smarty {
 				$tpl_source = get_site_preference('custom404');
 			else
 				$tpl_source = '';
+			return true;
+		}
+		else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+		{
+			$fname = $_GET["tmpfile"];
+			$fname = str_replace("..", "", $fname);
+			$fname = str_replace("\\", "", $fname);
+			$fname = str_replace("/", "", $fname);
+			$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
+			$fname = basename($fname);
+
+			if (is_writable($config["previews_path"]))
+			{
+				$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
+			}
+			else
+			{
+				$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
+			}
+			$handle = fopen($fname, "r");
+			$data = unserialize(fread($handle, filesize($fname)));
+			fclose($handle);
+			//unlink($fname);
+
+			$tpl_source = 'No Content Found in Preview File';
+			if (is_array($data) && count($data) == 2)
+			{
+				$tpl_source = $data[1]->show($tpl_name);
+			}
 			return true;
 		}
 		else
@@ -566,6 +630,11 @@ class Smarty_CMS extends Smarty {
 		{
 			#We've a custom error message...  set a current timestamp
 			$tpl_timestamp = time();
+		}
+		else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+		{
+			$tpl_timestamp = time();
+			return true;
 		}
 		else
 		{

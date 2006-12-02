@@ -112,9 +112,46 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid)
 	return $page_object;
 }
 
+function create_preview(&$page_object)
+{
+	$config =& cmsms()->GetConfig();
+	$templateops = cmsms()->GetTemplateOperations();
+	$templateobj = $templateops->LoadTemplateById($page_object->template_id);
+
+	$tmpfname = '';
+	if (is_writable($config["previews_path"]))
+	{
+		$tmpfname = tempnam($config["previews_path"], "cmspreview");
+	}
+	else
+	{
+		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
+	}
+	$handle = fopen($tmpfname, "w");
+	fwrite($handle, serialize(array($templateobj, $page_object)));
+	fclose($handle);
+	
+	return $tmpfname;
+}
+
 //Get a working page object
 $page_object = get_page_object($page_type, $orig_page_type, $userid);
-if ($access)
+
+//Preview?
+$smarty->assign('showpreview', false);
+if ($preview)
+{
+	if (!$page_object->_call_validation())
+	{
+		$tmpfname = create_preview($page_object);
+		if ($tmpfname != '')
+		{
+			$smarty->assign('showpreview', true);
+			$smarty->assign('previewfname', $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
+		}
+	}
+}
+else if ($access)
 {
 	if ($submit || $apply)
 	{
@@ -123,7 +160,7 @@ if ($access)
 			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{
-				audit($page_object->Id(), $page_object->Name(), 'Added Content');
+				audit($page_object->id, $page_object->name, 'Added Content');
 				if ($submit)
 					redirect('listcontent.php?message=contentadded');
 			}
@@ -138,6 +175,9 @@ $smarty->assign('header_name', $themeObject->ShowHeader('addcontent'));
 $smarty->assign_by_ref('page_object', $page_object);
 $smarty->assign('serialized_object', serialize_object($page_object));
 $smarty->assign('orig_page_type', $orig_page_type);
+
+//Can we preview?
+$smarty->assign('can_preview', $page_object->preview);
 
 //Set the pagetypes
 $smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));

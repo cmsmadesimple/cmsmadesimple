@@ -155,9 +155,17 @@
       </div>
     {/if}
     
+    {* Preview *}
+    {if $showpreview eq true}
+      <iframe name="previewframe" class="preview" id="previewframe" src="{$previewfname}"></iframe>
+    {/if}
+    
     <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
     <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
     <input type="submit" name="applybutton" value="{lang string='apply'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'"   onmouseout="this.className='pagebutton'" />
+    {if $can_preview eq true}
+      <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+    {/if}
 
   </form>
 

@@ -316,5 +316,26 @@ if ($config["debug"] == true)
 	}
 }
 
+//If we're in a preview, remove the file
+if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+{
+	$fname = $_GET["tmpfile"];
+	$fname = str_replace('.', '', $fname);
+	$fname = str_replace("\\", '', $fname);
+	$fname = str_replace('/', '', $fname);
+	$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
+	$fname = basename($fname);
+
+	if (is_writable($config["previews_path"]))
+	{
+		$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
+	}
+	else
+	{
+		$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
+	}
+	unlink($fname);
+}
+
 # vim:ts=4 sw=4 noet
 ?>
