@@ -53,6 +53,9 @@
     {if $can_preview eq true}
       <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
     {/if}
+    
+    {html_hidden name='is_postback' value='true'}
+    {html_hidden name='template[id]' value=$template_object->id}
 
   </form>
 

@@ -418,7 +418,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	{
 		if ($this->_call_validation())
 			return false;
-			
+
 		$this->before_save();
 
 		global $gCms;
@@ -469,7 +469,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 						$midpart .= $onefield . ' = ?, ';
 					}
 				}
-			
+
 				if ($midpart != '')
 				{	
 					$midpart = substr($midpart, 0, -2);
@@ -487,6 +487,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 				
 				return $result;
 			}
+			
+			return true;
 		}
 		else
 		{

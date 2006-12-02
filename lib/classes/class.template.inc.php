@@ -54,7 +54,10 @@ class Template extends CmsObjectRelationalMapping
 			$result = $this->find_all_by_name($this->name);
 			if (count($result) > 0)
 			{
-				$this->add_validation_error(lang('templateexists'));
+				if ($result[0]->id != $this->id)
+				{
+					$this->add_validation_error(lang('templateexists'));
+				}
 			}
 		}
 	}
