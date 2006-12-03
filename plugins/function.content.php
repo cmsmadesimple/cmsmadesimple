@@ -109,11 +109,11 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		else
 		{
-			$result = '';
-			$oldvalue = $smarty->caching;
-			$smarty->caching = false;
 			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block_name), '', $pageinfo->content_id);
-			$smarty->caching = $oldvalue;
+			if (isset($_REQUEST['tmpfile']))
+			{
+				$smarty->clear_compiled_tpl(str_replace(' ', '_', 'content:' . $block_name), $pageinfo->content_id);
+			}
 			return _smarty_cms_function_content_return($result, $params, $smarty);
 		}
 	}

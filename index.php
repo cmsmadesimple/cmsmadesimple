@@ -233,12 +233,17 @@ else
 	}
 	else
 	{
-	if(null != $pageinfo) {
-		$smarty->caching = false;
-		$smarty->compile_check = true;
-		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
-	}
+		if(null != $pageinfo)
+		{
+			$smarty->caching = false;
+			$smarty->compile_check = true;
+			($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
+			$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
+			if (isset($_REQUEST['tmpfile']))
+			{
+				$smarty->clear_compiled_tpl('template:'.$pageinfo->template_id);
+			}
+		}
 	}
 }
 

@@ -179,6 +179,9 @@ $smarty->assign('orig_page_type', $orig_page_type);
 //Can we preview?
 $smarty->assign('can_preview', $page_object->preview);
 
+//How about apply?
+$smarty->assign('can_apply', true);
+
 //Set the pagetypes
 $smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
 $smarty->assign('selected_page_type', $page_type);
