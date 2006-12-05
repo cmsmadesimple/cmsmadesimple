@@ -120,7 +120,7 @@
     {/if}
     
     {* Owner Dropdown *}
-    {if !$show_owner_dropdown eq true}
+    {if $show_owner_dropdown eq true}
       <div class="pageoverflow50">
       	<p class="pagetext">{lang string='owner'}:</p>
       	<p class="pageinput">
