@@ -47,7 +47,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 	}
-	$text = '<form id="'.$id.'moduleform-'.$idsuffix.'" name="'.$id.'moduleform-'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
 	if ($enctype != '')
 	{
 		$text .= ' enctype="'.$enctype.'"';
@@ -266,7 +266,7 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 	}
 	if( $multiple )
 	  {
-		$text .= ' multiple="multiple"';
+		$text .= ' multiple="multiple" ';
 	  }
 	$text .= 'size="'.$size.'">';
 	$count = 0;
