@@ -227,7 +227,7 @@ class ContentBase extends CmsObjectRelationalMapping
     {
 		$config = config();
 		$url = "";
-		$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
+		$alias = ($this->alias != ''?$this->alias:$this->id);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
 		    if ($config['use_hierarchy'] == true)
@@ -273,10 +273,10 @@ class ContentBase extends CmsObjectRelationalMapping
 
 		if ($alias == '' && $config['auto_alias_content'] == true)
 		{
-			$alias = trim($this->mMenuText);
+			$alias = trim($this->menu_text);
 			if ($alias == '')
 			{
-			    $alias = trim($this->mName);
+			    $alias = trim($this->name);
 			}
 			
 			$tolower = true;
