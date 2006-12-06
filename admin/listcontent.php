@@ -480,5 +480,142 @@ function deletecontent($contentid)
 	}
 }
 
+function show_h(&$root, &$sortableLists, &$listArray, &$output)
+{
+	$content = &$root->getContent();
+
+	$contentops = cmsms()->GetContentOperations();
+
+	$output .= '<li id="item_'.$content->id.'">'."\n";
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->hierarchy).') '.$content->name;
+
+	if ($root->getChildrenCount()>0)
+	{
+		$sortableLists->addList('parent'.$content->id,'parent'.$content->id.'ListOrder');
+		$listArray[$content->id] = 'parent'.$content->id.'ListOrder';
+		$output .= '<ul id="parent'.$content->id.'" class="sortableList">'."\n";
+
+		$children = &$root->getChildren();
+		foreach ($children as $child)
+		{
+			show_h($child, $sortableLists, $listArray, $output);
+		}
+		$output .= "</ul>\n";
+	}
+	else 
+	{
+		$output .= "</li>\n";
+	}
+}
+
+function reorder_display_list()
+{
+	$objResponse = new xajaxResponse();
+
+	$config =& cmsms()->GetConfig();	
+	$userid = get_userid();
+	
+	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
+	require($path);
+
+	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
+	
+	$hierManager = cmsms()->GetHierarchyManager();
+	$hierarchy = $hierManager->getRootNode();
+	
+	$listArray = array();
+	$output = '';
+	
+	$sortableLists->addList('parent0','parent0ListOrder');
+	$listArray[0] = 'parent0ListOrder';
+	$output .= '<ul id="parent0" class="sortableList">'."\n";
+	
+	foreach ($hierarchy->getChildren() as $child)
+	{
+		show_h($child, $sortableLists, $listArray, $output);
+	}
+	
+	$output .= '</ul>';
+
+	ob_start();
+	//$sortableLists->printTopJS();
+	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', lang('submit'), 'button', 'sortableListForm', lang('cancel'), $output);
+	$contents = ob_get_contents();
+	ob_end_clean();
+	
+	ob_start();
+	$sortableLists->printBottomJs();
+	$script = ob_get_contents();
+	ob_end_clean();
+	
+	$objResponse->addAssign("contentlist", "innerHTML", $contents);
+	$objResponse->addScript($script);
+
+	return $objResponse->getXML();
+}
+
+function reorder_process($get)
+{
+	$userid = get_userid();
+	$objResponse = new xajaxResponse();
+
+	if (check_modify_all($userid))
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+		$db =& $gCms->GetDb();
+		$contentops =& $gCms->GetContentOperations();
+	    $hm = $contentops->GetAllContentAsHierarchy(false);
+		$hierarchy = &$hm->getRootNode();
+	
+		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
+		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
+	
+		$listArray = array();
+		$output = '';
+		
+		$sortableLists->addList('parent0','parent0ListOrder');
+		$listArray[0] = 'parent0ListOrder';
+		$output .= '<ul id="parent0" class="sortableList">'."\n";
+
+		foreach ($hierarchy->getChildren() as $child)
+		{
+			show_h($child, $sortableLists, $listArray, $output);
+		}
+		
+		$output .= '</ul>';
+	
+		$order_changed = FALSE;
+		foreach ($listArray AS $parent_id => $order)
+		{
+			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
+			foreach($orderArray as $item)
+			{
+				$node =& $hm->sureGetNodeById($item['element']);
+				if ($node != NULL)
+				{
+				    $one =& $node->getContent();
+				    // Only update if order has changed.
+				    if ($one->ItemOrder() != $item['order'])
+				    {
+					$order_changed = TRUE;
+					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE id = ?';
+					$db->Execute($query, array($item['order'], $item['element']));
+				    }
+				}
+			}
+		}
+		if (TRUE == $order_changed) {
+			global $gCms;
+			$contentops =& $gCms->GetContentOperations();
+			$contentops->SetAllHierarchyPositions();
+			$contentops->ClearCache();
+		}
+	}
+	
+	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
+	return $objResponse->getXML();
+}
+
 # vim:ts=4 sw=4 noet
 ?>

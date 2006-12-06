@@ -15,7 +15,7 @@
   <table cellspacing="0" class="pagetable">
     <thead>
       <tr>
-        <th>&nbsp;</th>
+        <th width="12">&nbsp;</th>
         <th>&nbsp;</th>
         <th class="pagew25">{lang string='title'}</th>
         <th>{lang string='template'}</th>

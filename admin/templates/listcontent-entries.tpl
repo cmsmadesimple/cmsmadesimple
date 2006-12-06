@@ -10,7 +10,7 @@
   <tr id="tr_{$content_item->id}" class="{cycle name="1" values="row1,row2"}" onmouseover="this.className='{cycle name="2" values="row1,row2"}hover';" onmouseout="this.className='{cycle name="3" values="row1,row2"}';">
     
     {* Collapse/Expand Links *}
-    <td>
+    <td width="12">
       {if $current->hasChildren()}
         {if in_array($content_item->id, $opened_items)}
           <a href="listcontent.php?content_id={$content_item->id}&amp;col=1" onclick="xajax_content_toggleexpand({$content_item->id}, 'true'); return false;">{$contract_image}</a>
