@@ -188,7 +188,7 @@ $smarty->assign('selected_page_type', $page_type);
 
 //Set the parent dropdown
 $smarty->assign('show_parent_dropdown', $access);
-$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $page_object->parent_id, 'content[parent_id]'));
+$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_object->id, $page_object->parent_id, 'content[parent_id]'));
 
 //Se the template dropdown
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));

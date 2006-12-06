@@ -629,7 +629,7 @@ class ContentOperations
 	{
 		$result = '';
 
-		$allcontent =& ContentOperations::GetAllContent();
+		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
@@ -640,25 +640,25 @@ class ContentOperations
 
 			foreach ($allcontent as $one)
 			{
-				if ($one->Id() == $current)
+				if ($one->id == $current)
 				{
 					#Grab hierarchy just in case we need to check children
 					#(which will always be after)
-					$curhierarchy = $one->Hierarchy();
+					$curhierarchy = $one->hierarchy;
 
 					#Then jump out.  We don't want ourselves in the list.
 					continue;
 				}
 				#If it's a child of the current, we don't want to show it as it
 				#could cause a deadlock.
-				if ($curhierarchy != '' && strstr($one->Hierarchy() . '.', $curhierarchy . '.') == $one->Hierarchy() . '.')
+				if ($curhierarchy != '' && strstr($one->hierarchy . '.', $curhierarchy . '.') == $one->hierarchy . '.')
 				{
 					continue;
 				}
 				#Don't include content types that do not want children either...
 				if ($one->WantsChildren() == true)
 				{
-					$result .= '<option value="'.$one->Id().'"';
+					$result .= '<option value="'.$one->id.'"';
 
 					#Select current parent if it exists
 					if ($one->id == $parent)
@@ -666,7 +666,7 @@ class ContentOperations
 						$result .= ' selected="selected"';
 					}
 
-					$result .= '>'.$one->Hierarchy().'. - '.$one->name.'</option>';
+					$result .= '>'.$one->hierarchy().'. - '.$one->name.'</option>';
 				}
 			}
 
