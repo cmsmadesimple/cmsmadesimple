@@ -13,19 +13,7 @@ if (isset($USE_THEME) && $USE_THEME == false)
   }
 else
   {
-    $themeName=get_preference(get_userid(), 'admintheme', 'default');
-    $themeObjectName = $themeName."Theme";
-    $userid = get_userid();
-    
-    if (file_exists(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php"))
-      {
-	include(dirname(__FILE__)."/themes/${themeName}/${themeObjectName}.php");
-	$themeObject = new $themeObjectName($gCms, $userid, $themeName);
-      }
-    else
-      {
-	$themeObject = new AdminTheme($gCms, $userid, $themeName);
-      }
+	$themeObject = AdminTheme::get_theme_for_user($userid);
     
     $gCms->variables['admintheme']=&$themeObject;
     if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')

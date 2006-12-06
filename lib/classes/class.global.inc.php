@@ -311,7 +311,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
 			$moduleloader = new ModuleLoader();
-			$this->moduleloader = &$moduleloader;
+			$this->moduleloader = $moduleloader;
 		}
 
 		return $this->moduleloader;
@@ -323,7 +323,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
 			$moduleoperations = new ModuleOperations();
-			$this->moduleoperations = &$moduleoperations;
+			$this->moduleoperations = $moduleoperations;
 		}
 
 		return $this->moduleoperations;
@@ -335,7 +335,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
 			$useroperations = new UserOperations();
-			$this->useroperations = &$useroperations;
+			$this->useroperations = $useroperations;
 		}
 
 		return $this->useroperations;
@@ -348,7 +348,7 @@ class CmsObject extends Object {
 			debug_buffer('', 'Load Content Operations');
 			//require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
 			$contentoperations = new ContentOperations();
-			$this->contentoperations = &$contentoperations;
+			$this->contentoperations = $contentoperations;
 			debug_buffer('', 'End Load Content Operations');
 		}
 
@@ -361,7 +361,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
 			$bookmarkoperations = new BookmarkOperations();
-			$this->bookmarkoperations = &$bookmarkoperations;
+			$this->bookmarkoperations = $bookmarkoperations;
 		}
 
 		return $this->bookmarkoperations;
@@ -373,7 +373,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
 			$templateoperations = new TemplateOperations();
-			$this->templateoperations = &$templateoperations;
+			$this->templateoperations = $templateoperations;
 		}
 
 		return $this->templateoperations;
@@ -385,7 +385,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
 			$stylesheetoperations = new StylesheetOperations();
-			$this->stylesheetoperations = &$stylesheetoperations;
+			$this->stylesheetoperations = $stylesheetoperations;
 		}
 
 		return $this->stylesheetoperations;
@@ -397,7 +397,7 @@ class CmsObject extends Object {
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
 			$groupoperations = new GroupOperations();
-			$this->groupoperations = &$groupoperations;
+			$this->groupoperations = $groupoperations;
 		}
 
 		return $this->groupoperations;

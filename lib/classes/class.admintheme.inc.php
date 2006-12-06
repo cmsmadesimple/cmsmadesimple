@@ -108,6 +108,27 @@ class AdminTheme
 	{
 		$this->SetInitialValues($cms, $userid, $themeName);
 	}
+	
+	static function get_theme_for_user($userid)
+	{
+		$gCms = cmsms();
+
+	    $themeName=get_preference(get_userid(), 'admintheme', 'default');
+	    $themeObjectName = $themeName."Theme";
+	    $userid = get_userid();
+
+		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php"))
+		{
+			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php");
+			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
+		}
+		else
+		{
+			$themeObject = new AdminTheme($gCms, $userid, $themeName);
+		}
+		
+		return $themeObject;
+	}
 
 	/**
 	 * Sets object to some sane initial values

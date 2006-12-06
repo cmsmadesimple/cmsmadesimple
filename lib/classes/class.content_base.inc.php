@@ -376,6 +376,18 @@ class ContentBase extends CmsObjectRelationalMapping
 		#Remove the cross references
 		remove_cross_references($this->id, 'content');
 	}
+	
+	function template_name()
+	{
+		try
+		{
+			return cmsms()->template->find_by_template_id($this->template_id)->name;
+		}
+		catch (Exception $e)
+		{
+			return '';
+		}
+	}
 }
 
 //ContentBase::register_orm_class('ContentBase');

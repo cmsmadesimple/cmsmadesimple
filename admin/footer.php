@@ -80,7 +80,7 @@ $htmlresult = str_replace('##BODYSUBMITSTUFFGOESHERE##', ' '.$bodytext, $htmlres
 
 echo $htmlresult;
 
-#var_dump(memory_get_usage());
+var_dump(memory_get_usage());
 
 # vim:ts=4 sw=4 noet
 ?>

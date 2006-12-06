@@ -66,12 +66,19 @@ class Content extends ContentBase
 				$type = $this->get_property_value($block['id'] . '-block-type');
 			}
 			
-			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+			try
+			{
+				include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
 			
-			$class_name = camelize('block_' . $type);
-			$class = new $class_name;
+				$class_name = camelize('block_' . $type);
+				$class = new $class_name;
 			
-			$class->validate($this, $block['id']);
+				$class->validate($this, $block['id']);
+			}
+			catch (Exception $e)
+			{
+				$this->add_validation_error(lang('unknownvalidationerror'));
+			}
 		}
 	}
 	
