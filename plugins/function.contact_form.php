@@ -97,14 +97,19 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		}
 	}
 
-$action = "";
-if (isset($_SERVER['PHP_SELF'])) {
-   $action = $_SERVER['PHP_SELF'];
-}
-if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '') {
-   $action .= '?'.$_SERVER['QUERY_STRING'];
-}
-	?>
+    if (isset($_SERVER['REQUEST_URI'])) 
+    {
+	$action = $_SERVER['REQUEST_URI'];
+    }
+    else
+    {
+	$action = isset($_SERVER['PHP_SELF']) ? $_SERVER['PHP_SELF'] : '';
+	if (isset($_SERVER['QUERY_STRING']) && $_SERVER['QUERY_STRING'] != '') 
+	{
+	    $action .= '?'.$_SERVER['QUERY_STRING'];
+	}
+    }
+?>
 
 	<!-- CONTACT_FORM -->
 	<form action="<?php echo $action ?>" method="post" <?php echo ($style) ? $formStyle:''; ?>>
