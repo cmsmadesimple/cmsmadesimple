@@ -258,13 +258,11 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$all = $contentops->GetAllContent(false);
+	$all = cmsms()->GetContentOperations()->GetAllContent(false);
 	$cs = '';
-	foreach ($all as $thisitem)
+	foreach ($all as &$thisitem)
 	{
-		if ($thisitem->HasChildren())
+		if ($thisitem->has_children())
 		{
 			$cs .= $thisitem->id . '=1.';
 		}
