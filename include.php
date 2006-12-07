@@ -182,11 +182,11 @@ if (!defined('SMARTY_DIR')) {
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
-    strip_slashes($_GET);
-    strip_slashes($_POST);
-    strip_slashes($_REQUEST);
-    strip_slashes($_COOKIE);
-    strip_slashes($_SESSIONS);
+    strip_slashes_deep($_GET);
+    strip_slashes_deep($_POST);
+    strip_slashes_deep($_REQUEST);
+    strip_slashes_deep($_COOKIE);
+    strip_slashes_deep($_SESSIONS);
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
