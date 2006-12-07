@@ -23,7 +23,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 
     global $gCms;
 
-    if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+    if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha'])) 
     {
         $captcha =& $gCms->modules['Captcha']['object'];
     }
@@ -36,7 +36,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 	}
 	
 	$style = true; // Use default styles
-	if ($params['style'] === "false" ) $style = false; // Except if "false" given in params
+	if (FALSE == empty($params['style']) && $params['style'] === "false" ) $style = false; // Except if "false" given in params
 	
 	// Default styles
 	$inputStyle = 'style="width:100%;border: 1px solid black; margin:0 0 1em 0;"'; // input boxes
@@ -59,7 +59,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		if (!empty($_POST['subject'])) $subject = cfSanitize($_POST['subject']);
 		if (!empty($_POST['message'])) $message = $_POST['message'];
 		
-		if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+		if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha'])) 
 		{
 		    if (!empty($_POST['captcha_resp'])) { $captcha_resp = $_POST['captcha_resp']; }
 		}
@@ -73,7 +73,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		elseif (!validEmail($email)) $errors .= "\t\t<li>" . 'Your Email Address is Not Valid' . "</li>\n";
 		if (empty($subject)) $errors .= "\t\t<li>" . 'Please Enter a Subject' . "</li>\n";
 		if (empty($message)) $errors .= "\t\t<li>" . 'Please Enter a Message' . "</li>\n";
-		if ($params['captcha'] && isset($gCms->modules['Captcha']))
+		if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha']))
 		{
 		    if (empty($captcha_resp)) $errors .= "\t\t<li>" . 'Please enter the text in the image' . "</li>\n";
 		    elseif (! ($captcha->checkCaptcha($captcha_resp))) $errors .= "\t\t<li>" . 'The text from the image was not entered correctly' . "</li>\n";
@@ -128,7 +128,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 			<textarea id="message" name="message" rows="12" cols="48" <?php echo ($style) ? $taStyle:''; ?>><?php echo $message; ?></textarea>
 
 <?php
-if ($params['captcha'] && isset($gCms->modules['Captcha'])) 
+if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha'])) 
 {
 ?>
 			<label for="captcha_resp" <?php echo ($style) ? $labelStyle:''; ?> >Enter the text from the image below : </label>
