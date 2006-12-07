@@ -1131,7 +1131,7 @@ function GetModuleParameters($id)
 	return $params;
 }
 
-function strip_slashes_deep($value)
+function stripslashes_deep($value)
 {
 	if (is_array($value))
 	{
