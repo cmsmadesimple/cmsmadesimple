@@ -186,7 +186,7 @@ if(get_magic_quotes_gpc())
     strip_slashes_deep($_POST);
     strip_slashes_deep($_REQUEST);
     strip_slashes_deep($_COOKIE);
-    strip_slashes_deep($_SESSIONS);
+    strip_slashes_deep($_SESSION);
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in
