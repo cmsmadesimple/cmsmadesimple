@@ -129,8 +129,15 @@ class PageInfoOperations
 			$onepageinfo->content_props = explode(',', $row['prop_names']);
 			$onepageinfo->template_id = $row['template_id'];
 			$onepageinfo->template_encoding = $row['encoding'];
-			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
 			$onepageinfo->cachable = ($row['cachable'] == 1?true:false);
+			$onepageinfo->template_modified_date = $db->UnixTimeStamp($row['t_date']);
+			if( !$onepageinfo->cachable )
+			  {
+			    // calguy1000 - if the page is not cachable, don't cache
+			    // the template either.  This trick forces smarty to 
+			    // refresh the template cache.
+			    $onepageinfo->template_modified_date = time();
+			  }
 			$result = $onepageinfo;
 		}
 		else
