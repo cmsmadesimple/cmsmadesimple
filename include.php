@@ -23,18 +23,10 @@ define('ADODB_OUTP', 'debug_sql');
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
-/**
- * This file is included in every page.  It does all seutp functions including
- * importing additional functions/classes, setting up sessions and nls, and
- * construction of various important variables like $gCms.
- *
- * @package CMS
- */
-#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-set_magic_quotes_runtime(false);
+$session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
-@session_name('CMSSESSID');
+@session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
 #if(!@session_id()) {
@@ -45,6 +37,16 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
     @ini_set('session.use_trans_sid', 0);
     @session_start();
 }
+
+/**
+ * This file is included in every page.  It does all seutp functions including
+ * importing additional functions/classes, setting up sessions and nls, and
+ * construction of various important variables like $gCms.
+ *
+ * @package CMS
+ */
+#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
+set_magic_quotes_runtime(false);
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 debug_buffer('', 'Start of include');
