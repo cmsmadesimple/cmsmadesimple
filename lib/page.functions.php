@@ -724,26 +724,20 @@ function get_stylesheet_media_types($template_id)
 
 /**
  * Strips slashes from an array of values.
- *
- * @since 0.1
  */
-function & strip_slashes(&$str)
-{
-	if(is_array($str))
-	{
-		while(list($key, $val) = each($str))
-		{
-			$str[$key] = strip_slashes($val);
-		}
-	}
-	else
-	{
-		$str = stripslashes($str);
-	}
-
-	return $str;
+function & stripslashes_deep(&$value) 
+{ 
+        if (is_array($value)) 
+        { 
+                $value = array_map('stripslashes_deep', $value); 
+        } 
+        elseif (!empty($value) && is_string($value)) 
+        { 
+                $value = stripslashes($value); 
+        } 
+        return $value;
 }
-
+	
 function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='')
 {
 	global $gCms;
