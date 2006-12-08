@@ -914,6 +914,8 @@ class xajax
 
 		if (!empty($aURL['query'])) {
 			$aURL['query'] = '?'.$aURL['query'];
+		} else {
+		$aURL['query'] = '';
 		}
 
 		// Build the URL: Start with scheme, user and pass

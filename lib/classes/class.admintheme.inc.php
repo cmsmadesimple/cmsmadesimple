@@ -213,6 +213,14 @@ class AdminTheme
     	$modList = array();
         if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
             {
+            # Sort modules by name
+            $names = array();
+            foreach($this->modulesBySection[$section] as $key => $row)
+            {
+            	$names[$key] = $this->modulesBySection[$section][$key]['name'];
+            }
+            array_multisort($names, SORT_ASC, $this->modulesBySection[$section]);
+
             foreach($this->modulesBySection[$section] as $sectionModule)
 	      {
                 $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".

@@ -130,6 +130,13 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		}
 	}
 	
+	/*
+	function __sleep()
+	{
+		return array('params', 'orm_version', 'create_date_field', 'modified_date_field');
+	}
+	*/
+	
 	function offsetSet($key, $value)
 	{
 		if (array_key_exists($key, $this->field_maps)) $key = $this->field_maps[$key];

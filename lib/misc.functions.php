@@ -906,5 +906,18 @@ function coalesce_key($array, $val1, $val2)
 	return $val2;
 }
 
+function stripslashes_deep($value)
+{
+	if (is_array($value))
+	{
+		$value = array_map('stripslashes_deep', $value);
+	}
+	elseif (!empty($value) && is_string($value))
+	{
+		$value = stripslashes($value);
+	}
+	return $value;
+}
+
 # vim:ts=4 sw=4 noet
 ?>

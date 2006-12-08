@@ -69,6 +69,19 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
 		}
 	}
+	else if($config['dbms'] == 'sqlite') {
+		$db = sqlite_open($config['db_hostname']);
+		sqlite_exec($db,'PRAGMA short_column_names = 1;');
+		if ($name != '')
+			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . sqlite_escape_string($name) . "'";
+		else
+			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . sqlite_escape_string($mediatype) . "' ORDER BY ac.create_date";
+		$result=sqlite_array_query($db,$sql,SQLITE_ASSOC);
+		foreach($result as $row)
+		{
+			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
+		}
+	}
 	else
 	{
 		$db=pg_connect((isset($config['db_hostname']) && $config['db_hostname'] ? "host=".$config['db_hostname'] : '')." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);

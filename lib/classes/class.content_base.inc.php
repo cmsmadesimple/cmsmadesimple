@@ -43,6 +43,16 @@ class ContentBase extends CmsObjectRelationalMapping
 	
 	var $props_loaded = false;
 	
+	/*
+	function __sleep()
+	{
+		//This way if we serialize out to, say, a versioning piece,
+		//all the properties are stored as well...
+		$this->load_properties();
+		return array_merge(parent::__sleep(), array('mProperties', 'props_loaded', 'preview', 'unused_fields', 'field_maps', 'table', 'params'));
+	}
+	*/
+	
 	function friendly_name()
 	{
 		return '';
@@ -174,7 +184,7 @@ class ContentBase extends CmsObjectRelationalMapping
 			//Make sure we don't overwrite any newly set properties
 			if (!in_array($prop->name, $this->get_loaded_property_names()))
 			{
-				$this->mProperties[] =& $prop;
+				$this->mProperties[] = $prop;
 			}
 		}
 	}

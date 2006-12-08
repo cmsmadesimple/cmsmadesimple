@@ -941,43 +941,6 @@ function check_access($page_id)
  }
 
 
-/**
- * Takes a page object as input
- * Returns the page's URL as a string.
- * If the page cannot have a valid URL (e.g. content_type='seperator'), it returns an empty string.
- */
-function getURL($page)
-{
-	global $config;
-	$url = "";
-
-	# Fix URL where appropriate
-	if ($page->page_type == "link")
-	{
-		$url = $page->page_url;
-	}
-	elseif ($page->page_type != "sectionheader")
-	{
-		if (isset($page->page_alias) && $page->page_alias != "")
-		{
-			if ($config["assume_mod_rewrite"])
-				$url = $config["root_url"]."/".$page->page_alias.$config["page_extension"];
-			else
-				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$page->page_alias;
-
-		}
-		else
-		{
-			if ($config["assume_mod_rewrite"])
-				$url = $config["root_url"]."/".$page->page_id.$config["page_extension"];
-			else
-				$url = $config["root_url"]."/index.php?".$config["query_var"]."=".$page->page_id;
-		}
-	}
-	return $url;
-
- }
-
 function wysiwyg_form_submit()
 {
 	global $gCms;

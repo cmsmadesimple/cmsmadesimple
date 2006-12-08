@@ -123,7 +123,7 @@ if (isset($cmsmodules))
 		  {
 		    $returnid = $gCms->variables['pageinfo']->content_id;
 		  }
-		$params['HTTP_RAW_POST_DATA'] = $HTTP_RAW_POST_DATA;
+		$params['HTTP_RAW_POST_DATA'] = isset($HTTP_RAW_POST_DATA) ? $HTTP_RAW_POST_DATA : '';
 		$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 		if ($result !== FALSE)
 		  {

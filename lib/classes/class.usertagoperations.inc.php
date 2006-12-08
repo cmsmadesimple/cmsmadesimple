@@ -155,7 +155,7 @@ class UserTagOperations
 		
 		$functionname = "tmpcallusertag_".$name."_userplugin_function";
 		
-		if (!(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code.'}') === FALSE))
+		if (function_exists($functionname) || !(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code.'}') === FALSE))
 		{
 			$result = call_user_func_array($functionname, array(&$params, &$smarty));
 		}

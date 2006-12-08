@@ -181,6 +181,10 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
     $db =& $gCms->GetDB();
+    if($config['dbms'] == 'sqlite')
+    {
+        sqlite_create_function($db->_connectionID,'now','time',0);
+    }
 }
 
 $smarty = $gCms->GetSmarty();
@@ -233,11 +237,11 @@ if (!defined('SMARTY_DIR')) {
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
-    strip_slashes($_GET);
-    strip_slashes($_POST);
-    strip_slashes($_REQUEST);
-    strip_slashes($_COOKIE);
-    strip_slashes($_SESSIONS);
+    stripslashes_deep($_GET);
+    stripslashes_deep($_POST);
+    stripslashes_deep($_REQUEST);
+    stripslashes_deep($_COOKIE);
+    stripslashes_deep($_SESSION);
 }
 
 #Fix for IIS (and others) to make sure REQUEST_URI is filled in

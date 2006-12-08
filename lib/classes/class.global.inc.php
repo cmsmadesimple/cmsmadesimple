@@ -182,7 +182,7 @@ class CmsObject extends Object {
 		$this->nls = array();
 		$this->contenttypes = array();
 		$this->TemplateCache = array();
-		$this->StylesheeteCache = array();
+		$this->StylesheetCache = array();
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 		$this->variables['routes'] = array();

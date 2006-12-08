@@ -30,6 +30,9 @@ function smarty_cms_function_cms_selflink($params, &$smarty) {
 		/* thanks elijah */
 		$url = $params['ext'];
 		$text = $params['ext'];
+   /* thanks elijah */
+   $url = $params['ext'];
+   $text = $params['ext'];
 
 		if ( isset($params['text'] ))
 		{

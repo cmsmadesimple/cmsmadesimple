@@ -31,9 +31,7 @@ class StylesheetOperations
 {
 	function &LoadStylesheets()
 	{
-		global $gCms;
-		$stylesheet =& $gCms->GetOrmClass('stylesheet');
-		return $stylesheet->find_all(array('order' => 'css_id'));
+		return cmsms()->stylesheet->find_all(array('order' => 'css_id'));
 	}
 
 
