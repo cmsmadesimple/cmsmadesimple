@@ -163,7 +163,7 @@ $handle=opendir($dir);
 while ($file = readdir ($handle)) 
 {
     $path_parts = pathinfo($file);
-    if ($path_parts['extension'] == 'php')
+    if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
     {
 		$obj =& new CmsContentTypePlaceholder();
 		$obj->type = strtolower(basename($file, '.inc.php'));
