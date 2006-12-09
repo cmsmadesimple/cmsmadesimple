@@ -50,7 +50,7 @@ class BlockHtml extends Object
 	
 	function block_add_template(&$page, $block_name, &$template)
 	{
-		return create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '');
+		return "{literal}" . create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '') . "{/literal}";
 	}
 	
 	function block_edit_template(&$page, $block_name, &$template)

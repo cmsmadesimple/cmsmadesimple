@@ -43,6 +43,13 @@ $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
 
+require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+$xajax->registerFunction('ajaxpreview');
+
+$xajax->processRequests();
+$headtext = $xajax->getJavascript('../lib/xajax')."\n";
+
 #See what kind of permissions we have
 $access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
 
@@ -81,18 +88,14 @@ function copycontentobj(&$page_object, $page_type)
 	$page_object = $tmpobj;
 }
 
-function &get_page_object(&$page_type, &$orig_page_type, $userid)
+function &get_page_object(&$page_type, &$orig_page_type, $userid, $params)
 {
-	global $gCms;
-
 	$page_object = new StdClass();
 
-	if (isset($_POST["serialized_content"]))
+	if (isset($params["serialized_content"]))
 	{
-		$contentops =& $gCms->GetContentOperations();
-		$contentops->LoadContentType($orig_page_type);
-		$page_object = unserialize_object($_POST["serialized_content"]);
-		$page_object->update_parameters($_REQUEST['content']);
+		$page_object = unserialize_object($params["serialized_content"]);
+		$page_object->update_parameters($params['content']);
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
 			copycontentobj($page_object, $page_type);
@@ -101,8 +104,7 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid)
 	}
 	else
 	{
-		$contentops =& $gCms->GetContentOperations();
-		$page_object = $contentops->CreateNewContent($page_type);
+		$page_object = cmsms()->GetContentOperations()->CreateNewContent($page_type);
 		$page_object->owner_id = $userid;
 		$page_object->active = TRUE;
 		$page_object->show_in_menu = TRUE;
@@ -134,8 +136,34 @@ function create_preview(&$page_object)
 	return $tmpfname;
 }
 
+function ajaxpreview($params)
+{
+	$page_type = coalesce_key($params, 'page_type', 'content');
+	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
+	$userid = get_userid();
+	
+	$config =& cmsms()->GetConfig();
+
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params);
+	$tmpfname = create_preview($page_object);
+	$url = $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname));
+	
+	$objResponse = new xajaxResponse();
+	$objResponse->addAssign("previewframe", "src", $url);
+	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
+	$count = 0;
+
+	foreach (array("content", "advanced") as $tabname)
+	{
+		$objResponse->addScript("Element.removeClassName('".$tabname."', 'active');Element.removeClassName('".$tabname."_c', 'active');$('".$tabname."_c').style.display = 'none';");
+	}
+	$objResponse->addScript("Element.addClassName('preview', 'active');Element.addClassName('preview_c', 'active');$('preview_c').style.display = '';");
+
+	return $objResponse->getXML();
+}
+
 //Get a working page object
-$page_object = get_page_object($page_type, $orig_page_type, $userid);
+$page_object = get_page_object($page_type, $orig_page_type, $userid, $_REQUEST);
 
 //Preview?
 $smarty->assign('showpreview', false);

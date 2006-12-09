@@ -10,6 +10,9 @@
 <div id="page_tabs">
 	<div id="content">Content</div>
 	<div id="advanced">Advanced</div>
+	{if $can_preview eq true}
+	  <div id="preview"{if $showpreview eq true} class="active"{/if} onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;">Preview</div>
+	{/if}
 </div>    
 
 
@@ -26,7 +29,7 @@
   {/if}
 
 
-  <form method="post" name="contentform" enctype="multipart/form-data" id="contentform" action="">
+  <form method="post" name="contentform" enctype="multipart/form-data" id="contentform">
 
     {html_hidden id='serialized_content' name='serialized_content' value=$serialized_object}
     {html_hidden id='orig_page_type' name='orig_page_type' value=$orig_page_type}
@@ -183,13 +186,18 @@
     <div class="clearb"></div>
 
 </div>
+
+{if $can_preview eq true}
+<div id="preview_c">
+  <iframe name="previewframe" class="preview" id="previewframe" src="{$previewfname}"></iframe>
+</div>
+{/if}
+
 </div>
 
 <div class="footerbuttons">
     {* Preview *}
-    {if $showpreview eq true}
-      <iframe name="previewframe" class="preview" id="previewframe" src="{$previewfname}"></iframe>
-    {/if}
+
     
     <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
     <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
@@ -197,7 +205,7 @@
       <input type="submit" name="applybutton" value="{lang string='apply'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'"   onmouseout="this.className='pagebutton'" />
     {/if}
     {if $can_preview eq true}
-      <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+      <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;" />
     {/if}
 </div>
 

@@ -20,11 +20,13 @@
 
 define('ADODB_OUTP', 'debug_sql');
 
-#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-set_magic_quotes_runtime(false);
+$dirname = dirname(__FILE__);
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+
+$session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
-@session_name('CMSSESSID');
+@session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
 #if(!@session_id()) {
@@ -36,11 +38,11 @@ if(!@session_id() && (isset($_REQUEST[session_name()]) || isset($CMS_ADMIN_PAGE)
     @session_start();
 }
 
+#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
+set_magic_quotes_runtime(false);
+
 # sanitize $_GET
 array_walk_recursive($_GET, 'sanitize_get_var');
-
-$dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
 //So we have the camelize, etc functions loaded for __autoload
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');

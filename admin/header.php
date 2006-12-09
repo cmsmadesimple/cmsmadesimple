@@ -13,7 +13,7 @@ if (isset($USE_THEME) && $USE_THEME == false)
   }
 else
   {
-	$themeObject = AdminTheme::get_theme_for_user($userid);
+	$themeObject = AdminTheme::get_theme_for_user(get_userid());
     
     $gCms->variables['admintheme']=&$themeObject;
     if (isset($gCms->config['admin_encoding']) && $gCms->config['admin_encoding'] != '')
@@ -34,7 +34,7 @@ else
       $themeObject->DisplayMainDivStart();
       // we've removed the Recent Pages stuff, but other things could go in this box
       // so I'll leave some of the logic there. We can remove it later if it makes sense. SjG
-      $marks = get_preference($userid, 'bookmarks');
+      $marks = get_preference(get_userid(), 'bookmarks');
       if ($marks)
 	{
 	  $themeObject->StartRighthandColumn();
