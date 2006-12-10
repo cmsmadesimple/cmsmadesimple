@@ -66,7 +66,8 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 
 		//Mail headers
 		$extra = "From: $name <$email>\r\n";
-		$extra .= "Content-Type: text/plain\r\n";
+		$charset = isset($gCms->config['default_encoding']) && $gCms->config['default_encoding'] != '' ? $gCms->config['default_encoding'] : 'utf-8';
+		$extra .= "Content-Type: text/plain; charset=" . $charset . "\r\n";
 		
 		if (empty($name)) $errors .= "\t\t<li>" . 'Please Enter Your Name' . "</li>\n";
 		if (empty($email)) $errors .= "\t\t<li>" . 'Please Enter Your Email Address' . "</li>\n";
