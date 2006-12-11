@@ -310,9 +310,9 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$query = '';
 		$queryparams = array();
 		
-		list($query, $queryparams) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams);
+		list($query, $queryparams, $numrows, $offset) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams);
 		
-		return $this->find_by_query($query, $queryparams);
+		return $this->find_by_query($query, $queryparams, $numrows, $offset);
 	}
 	
 	function find_by_query($query, $queryparams = array())
@@ -355,19 +355,19 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$query = '';
 		$queryparams = array();
 		
-		list($query, $queryparams) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams);
+		list($query, $queryparams, $numrows, $offset) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams);
 		
-		return $this->find_all_by_query($query, $queryparams);
+		return $this->find_all_by_query($query, $queryparams, $numrows, $offset);
 	}
 	
-	function find_all_by_query($query, $queryparams = array())
+	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
 		$db = db();
 		
 		$classname = get_class($this);
 
 		$result = array();
-		$dbresult = &$db->Execute($query, $queryparams);
+		$dbresult = &$db->SelectLimit($query, $numrows, $offset, $queryparams);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -404,7 +404,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$query = '';
 		$queryparams = array();
 		
-		list($query, $queryparams) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams, true);
+		list($query, $queryparams, $numrows, $offset) = $this->generate_select_query_and_parameters($table, $arguments, $query, $queryparams, true);
 		
 		return $db->GetOne($query, $queryparams);
 	}
@@ -661,8 +661,12 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 */
 	function generate_select_query_and_parameters($table, $arguments, $query, $queryparams, $count = false)
 	{
+		$numrows = -1;
+		$offset = -1;
+
 		$query = "SELECT * FROM " . $table;
 		if ($count) $query = "SELECT count(*) as the_count FROM " . $table;
+
 		if (array_key_exists('conditions', $arguments))
 		{
 			$query .= ' WHERE ' . $arguments['conditions'][0];
@@ -671,12 +675,19 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 				$queryparams = array_merge($queryparams, $arguments['conditions'][1]);
 			}
 		}
+
 		if (array_key_exists('order', $arguments))
 		{
 			$query .= ' ORDER BY ' . $arguments['order'];
 		}
 		
-		return array($query, $queryparams);
+		if (array_key_exists('limit', $arguments))
+		{
+			$offset = $arguments['limit'][0];
+			$numrows = $arguments['limit'][1];
+		}
+		
+		return array($query, $queryparams, $numrows, $offset);
 	}
 	
 	/**

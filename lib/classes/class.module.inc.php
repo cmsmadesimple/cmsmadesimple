@@ -428,6 +428,23 @@ class CMSModule
 	{
 		return FALSE;
 	}
+	
+	/**
+	 * ------------------------------------------------------------------
+	 * ORM Related Functions
+	 * ------------------------------------------------------------------
+	 */
+	
+	function register_data_object($class_name, $file_name)
+	{
+		if (include($file_name))
+		{
+			$orm =& cmsms()->orm;
+			$orm[underscore($class_name)] = new $class_name;
+			return true;
+		}
+		return false;
+	}
 
 	/**
 	 * ------------------------------------------------------------------
@@ -1862,10 +1879,19 @@ class CMSModule
 		return cms_module_IsFileTemplateCached($this, $tpl_name, $designation, $timestamp, $cacheid);
 	}
 
+	/**
+	 * Backwards compatibility with 1.0
+	 */
 	function ProcessTemplate($tpl_name, $designation = '', $cache = false, $cacheid = '')
 	{
 		$this->LoadTemplateMethods();
-		return cms_module_ProcessTemplate($this, $tpl_name, $designation, $cache = false, $cacheid);
+		return cms_module_process_template($this, $tpl_name, '', '', $designation, $cache = false, $cacheid);
+	}
+	
+	function process_template($tpl_name, $id, $return_id, $designation = '', $cache = false, $cacheid = '')
+	{
+		$this->LoadTemplateMethods();
+		return cms_module_process_template($this, $tpl_name, $id, $return_id, $designation, $cache = false, $cacheid);
 	}
 
 	function IsDatabaseTemplateCached($tpl_name, $designation = '', $timestamp = '')
@@ -1884,10 +1910,19 @@ class CMSModule
 		return cms_module_ProcessTemplateFromData($this, $data);
 	}
 
+	/**
+	 * Backwards compatibility with 1.0
+	 */
 	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false)
 	{
 		$this->LoadTemplateMethods();
-		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache);
+		return cms_module_process_template_from_database($this, $tpl_name, '', '', $designation, $cache);
+	}
+	
+	function process_template_from_database($tpl_name, $id, $return_id, $designation = '', $cache = false)
+	{
+		$this->LoadTemplateMethods();
+		return cms_module_process_template_from_database($this, $tpl_name, $id, $return_id, $designation, $cache);
 	}
 
 	function ListUserTags()

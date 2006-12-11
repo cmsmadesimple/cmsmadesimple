@@ -58,11 +58,6 @@ class ContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
-	function before_load($type, $fields)
-	{
-		cmsms()->GetContentOperations()->LoadContentType($type);
-	}
-	
 	function before_save()
 	{
 		//$this->prop_names = implode(',', $this->get_loaded_property_names());
@@ -86,16 +81,25 @@ class ContentBase extends CmsObjectRelationalMapping
 				}
 			}
 		}
+		
+		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
 	}
 	
 	function after_save()
 	{
+		$concat = '';
 		foreach ($this->mProperties as &$prop)
 		{
 			if ($prop->content_id != $this->id)
 				$prop->content_id = $this->id;
 			$prop->save();
+			$concat .= $prop->content;
 		}
+		
+		if ($concat != '')
+			do_cross_reference($this->id, 'content', $concat);
+		
+		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
 	
 	function validate()
@@ -371,6 +375,11 @@ class ContentBase extends CmsObjectRelationalMapping
 		return !in_array($name, $this->unused_fields);
 	}
 	
+	function before_delete()
+	{
+		Events::SendEvent('Core', 'ContentDeletePre', array('content' => &$this));
+	}
+	
 	function after_delete()
 	{
 		$items =& cmsms()->content_property->find_all_by_content_id($this->id);
@@ -385,6 +394,8 @@ class ContentBase extends CmsObjectRelationalMapping
 		
 		#Remove the cross references
 		remove_cross_references($this->id, 'content');
+		
+		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 	}
 	
 	function template_name()

@@ -137,16 +137,15 @@ function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation 
 	return $result;
 }
 
-function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '', $cache = false, $cacheid = '')
+function cms_module_process_template(&$modinstance, $tpl_name, $id, $return_id, $designation = '', $cache = false, $cacheid = '')
 {
-	global $gCms;
-	$smarty = &$gCms->GetSmarty();
-
-	$oldcache = $smarty->caching;
-	$smarty->caching = false;
+	$smarty = smarty();
+	
+	$smarty->assign_by_ref('cms_mapi_module', $modinstance);
+	$smarty->assign('cms_mapi_id', $id);
+	$smarty->assign('cms_mapi_return_id', $return_id);
 
 	$result = $smarty->fetch('module_file_tpl:'.$modinstance->GetName().';'.$tpl_name, $cacheid, ($designation != ''?$designation:$modinstance->GetName()));
-	$smarty->caching = $oldcache;
 
 	return $result;
 }
@@ -185,17 +184,15 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 	return $_contents;
 }
 
-function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false)
+function cms_module_process_template_from_database(&$modinstance, $tpl_name, $id, $return_id, $designation = '', $cache = false)
 {
-	global $gCms;
-	$smarty = &$gCms->GetSmarty();
-
-	$oldcache = $smarty->caching;
-	$smarty->caching = false;
+	$smarty = smarty();
+	
+	$smarty->assign_by_ref('cms_mapi_module', $modinstance);
+	$smarty->assign('cms_mapi_id', $id);
+	$smarty->assign('cms_mapi_return_id', $return_id);
 
 	$result = $smarty->fetch('module_db_tpl:'.$modinstance->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$modinstance->GetName()));
-
-	$smarty->caching = $oldcache;
 
 	return $result;
 }
