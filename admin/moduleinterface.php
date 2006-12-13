@@ -27,6 +27,7 @@ check_login();
 $id = '';
 $module = '';
 $action = 'defaultadmin';
+$suppressOutput = false;
 if (isset($_REQUEST['module'])) $module = $_REQUEST['module'];
 if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
 if (isset($_REQUEST['id']))
@@ -70,7 +71,7 @@ if( isset( $_REQUEST[$id . 'disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-else if( isset( $_REQUET['disable_theme'] ))
+else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
@@ -82,7 +83,15 @@ if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object'
    {
      $headtext = '';
    }
-include_once("header.php");
+
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->SuppressAdminOutput() != false)
+	{
+	$suppressOutput = true;
+	}
+else
+	{
+	include_once("header.php");
+ 	}
 
 if (count($gCms->modules) > 0)
 {
@@ -101,9 +110,12 @@ if (count($gCms->modules) > 0)
 		  {
 		    echo $themeObject->ShowErrors($params['module_error']);
 		  }
-		echo '<div class="pagecontainer">';
-		echo '<div class="pageoverflow">';
-		echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
+		if (!$suppressOutput)
+			{
+			echo '<div class="pagecontainer">';
+			echo '<div class="pageoverflow">';
+			echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
+			}
 	}
 
 	if (isset($gCms->modules[$module]))
@@ -121,7 +133,10 @@ if (count($gCms->modules) > 0)
 			@ob_end_clean();
 			echo $content;
 		}
-		echo '</div>';
+		if (!$suppressOutput)
+			{
+			echo '</div>';
+			}
 	}
 	else
 	{
@@ -133,12 +148,13 @@ if (isset($USE_THEME) && $USE_THEME == false)
 {
 	echo '';
 }
-else
+elseif (!$suppressOutput)
 {
 	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 }
-
-include_once("footer.php");
-
+if (!$suppressOutput)
+	{
+	include_once("footer.php");
+ 	}
 # vim:ts=4 sw=4 noet
 ?>

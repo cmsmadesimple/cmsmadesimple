@@ -256,6 +256,17 @@ class CMSModule
 	}
 
 	/**
+	 * Use this method to prevent the admin interface from outputting header, footer,
+	 * theme, etc, so your module can output files directly to the administrator.
+	 * Do this by returning true.
+	 *
+	 */
+	function SuppressAdminOutput()
+	{
+		return false;
+	}
+
+	/**
 	 * Register a route to use for pretty url parsing
 	 *
 	 * @param string Route to register
