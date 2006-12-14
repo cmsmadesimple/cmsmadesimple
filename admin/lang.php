@@ -124,7 +124,7 @@ if (isset($CMS_ADMIN_PAGE)) {
 	    }
 	}
 	
-	$nls['direction'] = isset($nls['direction']) ? $nls['direction'] : 'ltr';
+	$nls['direction'] = (isset($nls['direction']) && $nls['direction'] == 'rtl') ? 'rtl' : 'ltr';
 
 	global $gCms;
 	$gCms->nls = $nls;
