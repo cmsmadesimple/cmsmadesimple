@@ -82,7 +82,7 @@ if ($access)
 			$xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
 
 			// and send the file
-			while(@ob_end_clean());
+			ob_end_clean();
 			header('Content-Description: File Transfer');
 			header('Content-Type: application/force-download');
 			header('Content-Disposition: attachment; filename='.$xmlname);
