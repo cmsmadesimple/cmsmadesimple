@@ -333,7 +333,7 @@ class ModuleOperations
 			  break;
 			}
 		    }
-		  if( $moduledetails['isdir'] )
+		  else if( $moduledetails['isdir'] )
 		    {
 		      if( !@mkdir( $filename ) && !is_dir( $filename ) )
 			{
