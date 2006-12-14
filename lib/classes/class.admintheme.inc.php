@@ -1303,7 +1303,7 @@ class AdminTheme
      */
     function DisplayHTMLStartTag()
     {
-    	echo "<html>\n";
+    	echo $this->cms->nls['direction'] == 'rtl' ? "<html dir=\"rtl\"\n>" : "<html>\n";
     }
 
     /**

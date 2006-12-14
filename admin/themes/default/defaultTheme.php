@@ -180,9 +180,15 @@ class defaultTheme extends AdminTheme
 		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
 	}
 
-   function DisplayHTMLStartTag() {
-		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'."\n\n";
-   }
+	function DisplayHTMLStartTag() {
+		$tag = '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en"';
+		if ($this->cms->nls['direction'] == 'rtl')
+		{
+			$tag .= ' dir="rtl"';
+		}
+		$tag .= ">\n\n";
+		echo $tag;
+	}
 
     function DisplayDashboardCallout($file, $message = '')
     {

@@ -123,6 +123,8 @@ if (isset($CMS_ADMIN_PAGE)) {
 	        include ($file);
 	    }
 	}
+	
+	$nls['direction'] = isset($nls['direction']) ? $nls['direction'] : 'ltr';
 
 	global $gCms;
 	$gCms->nls = $nls;
