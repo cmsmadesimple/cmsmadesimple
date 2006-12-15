@@ -670,7 +670,7 @@ class AdminTheme
             }
         $this->subtitle = $subtitle;
     	    
-    	$menuitems = array(
+    	$this->menuItems = array(
     	    // base main menu ---------------------------------------------------------
             'main'=>array('url'=>'index.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('main')),
@@ -826,7 +826,6 @@ class AdminTheme
                     'title'=>$this->FixSpaces(lang('logout')),
                     'description'=>'','show_in_menu'=>true),
     	);
-		$this->menuItems = $this->cms->nls['direction'] == 'rtl' ? array_reverse($menuitems) : $menuitems;
 
 	// add in all of the 'system' modules todo
 	global $gCms;

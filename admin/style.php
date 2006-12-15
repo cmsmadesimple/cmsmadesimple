@@ -1,5 +1,7 @@
 <?php
 
+$CMS_STYLESHEET = TRUE;
+
 if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USER_AGENT']))
 {
 	@ini_set( 'zlib.output_compression','Off' );
@@ -10,6 +12,12 @@ require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 $theme=get_preference(get_userid(),"admintheme");
 $style="style";
+
+if ($gCms->nls['direction'] == 'rtl')
+{
+	$style.="-rtl";
+}
+
 if (isset($_GET['ie']))
     {
     $style.="_ie";
