@@ -261,7 +261,7 @@ class CMSModule
 	 * Do this by returning true.
 	 *
 	 */
-	function SuppressAdminOutput()
+	function SuppressAdminOutput(&$request)
 	{
 		return false;
 	}
