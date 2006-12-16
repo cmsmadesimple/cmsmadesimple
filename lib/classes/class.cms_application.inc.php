@@ -194,63 +194,22 @@ class CmsApplication extends CmsObject {
 		return self::$instance;
 	}
 
-	function &get_db()
+	function get_db()
 	{
-		#static $dbinstance;
-
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-		#if (!isset($dbinstance) && !isset($this->db))
-		global $DONT_LOAD_DB;
-		if (!isset($this->db) && !isset($DONT_LOAD_DB))
-		{
-			$config =& $this->GetConfig();
-			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-			{
-				$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			else
-			{
-				$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			if (FALSE == $connect_result)
-			{
-				die('Database Connection failed');
-			}
-			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-			
-			if ($config['dbms'] == 'sqlite')
-			{
-				$dbinstance->Execute("PRAGMA short_column_names = 1;");
-			}
-			
-			//$dbinstance->debug = true;
-			if ($config['debug'] == true)
-			{
-				$dbinstance->debug = true;
-				#$dbinstance->LogSQL();
-			}
-
-			$this->db =& $dbinstance;
-
-		}
-
-		#return $dbinstance;
-		$db =& $this->db;
-		return ($db);
+		return CmsDatabase::get_instance();
 	}
 	
-	function &GetDb()
+	function GetDb()
 	{
-		return $this->get_db();
+		return CmsDatabase::get_instance();
 	}
 	
 	function __get($name)
 	{
 		if ($name == 'config')
 			return $this->get_config();
+		else if ($name == 'db')
+			return $this->get_db();
 		else
 			return $this->get_orm_class($name);
 	}
@@ -462,7 +421,7 @@ function cmsms()
 
 function db()
 {
-	return cmsms()->get_db();
+	return CmsDatabase::get_instance();
 }
 
 function config()
