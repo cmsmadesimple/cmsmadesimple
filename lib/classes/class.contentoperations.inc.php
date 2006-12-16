@@ -54,6 +54,27 @@ class ContentOperations
 	{
 		return ContentOperations::load_content_type($type);
 	}
+	
+	static function find_content_types()
+	{
+		$contenttypes =& cmsms()->contenttypes;
+		$dir = cms_join_path(dirname(__FILE__),'contenttypes');
+		$handle=opendir($dir);
+		while ($file = readdir ($handle)) 
+		{
+		    $path_parts = pathinfo($file);
+		    if ($path_parts['extension'] == 'php')
+		    {
+				$obj = new CmsContentTypePlaceholder();
+				$obj->type = strtolower(basename($file, '.inc.php'));
+				$obj->filename = cms_join_path($dir,$file);
+				$obj->loaded = false;
+				$obj->friendlyname = basename($file, '.inc.php');
+				$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
+		    }
+		}
+		closedir($handle);
+	}
 
 	function &CreateNewContent($type)
 	{

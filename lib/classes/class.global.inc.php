@@ -48,7 +48,7 @@ class CmsObject extends Object {
 	/**
 	 * Config object - hash containing variables from config.php
 	 */
-	var $config;
+	#var $config;
 
 	/**
 	 * Database object - adodb reference to the current database
@@ -260,7 +260,10 @@ class CmsObject extends Object {
 	
 	function __get($name)
 	{
-		return $this->get_orm_class($name);
+		if ($name == 'config')
+			return $this->get_config();
+		else
+			return $this->get_orm_class($name);
 	}
 	
 	function get_orm_class($name)
@@ -289,20 +292,14 @@ class CmsObject extends Object {
 		return $this->get_orm_class($name);
 	}
 	
-	function &get_config()
+	function get_config()
 	{
-        if (!isset($this->config))
-		{
-			$configinstance = cms_config_load(true);
-			$this->config = &$configinstance;
-		}
-
-		return $this->config;
+		return CmsConfig::get_instance();
 	}
 
-	function &GetConfig()
+	function GetConfig()
 	{
-		return $this->get_config();
+		return CmsConfig::get_instance();
 	}
 	
 	function &GetModuleLoader()
@@ -479,9 +476,9 @@ function db()
 	return cmsms()->get_db();
 }
 
-function &config()
+function config()
 {
-	return cmsms()->get_config();
+	return CmsConfig::get_instance();
 }
 
 class CmsRoute

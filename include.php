@@ -48,37 +48,6 @@ array_walk_recursive($_GET, 'sanitize_get_var');
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 debug_buffer('', 'Start of include');
 
-/**
- * The one and only autoload function for the system.  This basically allows us 
- * to remove a lot of the require_once BS and keep the file loading to as much 
- * of a minimum as possible.
- */
-function __autoload($class_name)
-{
-	$dirname = dirname(__FILE__);
-
-	//We do this in order of importance...  classes first
-	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
-	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
-	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
-	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
-	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
-	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
-	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
-	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
-	}
-	else if (ContentOperations::load_content_type($class_name))
-	{
-	}
-}
-
 #Make a new CMS object
 //require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
 require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
@@ -90,10 +59,10 @@ if (isset($starttime))
 
 #Load the config file (or defaults if it doesn't exist)
 require(cms_join_path($dirname,'version.php'));
-require(cms_join_path($dirname,'lib','config.functions.php'));
+//require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
-$config =& $gCms->GetConfig();
+$config = config();
 
 #define timezone
 if (function_exists('date_default_timezone_set') && isset($config['timezone']) && $config['timezone'] != '') 
@@ -163,18 +132,13 @@ debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
 debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
-debug_buffer('loading pageinfo functions');
-require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
+//debug_buffer('loading pageinfo functions');
+//require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
-debug_buffer('loading events functions');
+//debug_buffer('loading events functions');
 //require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
 //require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
-
-if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
-{
-#	load_backwards_compatibility();
-}
 
 debug_buffer('done loading files');
 
@@ -189,52 +153,8 @@ if (!isset($DONT_LOAD_DB))
     }
 }
 
-$smarty = $gCms->GetSmarty();
-$contenttypes =& $gCms->contenttypes;
-
-#Load content types
-$dir = cms_join_path($dirname,'lib','classes','contenttypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if ($path_parts['extension'] == 'php')
-    {
-		$obj = new CmsContentTypePlaceholder();
-		$obj->type = strtolower(basename($file, '.inc.php'));
-		$obj->filename = cms_join_path($dir,$file);
-		$obj->loaded = false;
-		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] = $obj;
-    }
-}
-closedir($handle);
-
-/*
-$blocktypes =& $gCms->blocktypes;
-
-#Load block types
-$dir = cms_join_path($dirname,'lib','classes','blocktypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if ($path_parts['extension'] == 'php')
-    {
-		$obj = new CmsBlockTypePlaceholder();
-		$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
-		$obj->filename = cms_join_path($dir, $file);
-		$obj->loaded = false;
-		$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
-		$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
-    }
-}
-closedir($handle);
-*/
-
-if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
-}
+#Preload content types
+cmsms()->GetContentOperations()->find_content_types();
 
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
@@ -282,9 +202,9 @@ if ($frontendlang != '')
     @setlocale(LC_ALL, $frontendlang);
 }
 
-$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
-$smarty->assign('lang',$frontendlang);
-$smarty->assign('encoding',get_encoding());
+smarty()->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+smarty()->assign('lang',$frontendlang);
+smarty()->assign('encoding',get_encoding());
 
 if (isset($CMS_ADMIN_PAGE))
 {
@@ -309,27 +229,35 @@ function sanitize_get_var(&$value, $key)
     $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
 }
 
-function load_backwards_compatibility()
+/**
+ * The one and only autoload function for the system.  This basically allows us 
+ * to remove a lot of the require_once BS and keep the file loading to as much 
+ * of a minimum as possible.
+ */
+function __autoload($class_name)
 {
 	$dirname = dirname(__FILE__);
-	debug_buffer('loading template functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
-	debug_buffer('loading gcb functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
-	debug_buffer('loading module class');
-	require_once(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
-	debug_buffer('loading bookmark functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
-	debug_buffer('loading content class');
-	require_once(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
-	debug_buffer('loading user functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
-	debug_buffer('loading group functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
-	debug_buffer('loading stylesheet functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
-	debug_buffer('loading user tags functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
+
+	//We do this in order of importance...  classes first
+	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
+	{
+		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
+	}
+	else if (ContentOperations::load_content_type($class_name))
+	{
+	}
 }
 
 # vim:ts=4 sw=4 noet

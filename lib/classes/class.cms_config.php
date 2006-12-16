@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -18,114 +18,163 @@
 #
 #$Id$
 
-/**
- * Functions relating to the config hash and config files
- *
- * @package CMS
- */
-/**
- * Loads the config file with defaults and then with specific values from config.php
- *
- * @since 0.5
- */
-function cms_config_load($loadLocal = true, $upgrade = false)
+class CmsConfig extends Object implements ArrayAccess
 {
-	$config = array();
+	var $params;
+	static private $instance = NULL;
 
-	#Set some defaults, just in case the config file is corrupted or
-	#we're coming from an upgrade
-	$config["dbms"] = "mysql";
-	$config["db_hostname"] = "localhost";
-	$config["db_username"] = "cms";
-	$config["db_password"] = "cms";
-	$config["db_name"] = "cms";
-	$config["db_prefix"] = "cms_";
-	$config["root_url"] = "http://www.something.com";
-	$config["root_path"] = dirname(dirname(__FILE__));
-	$config["query_var"] = "page";
-	$config["use_bb_code"] = false;
-	$config["use_smarty_php_tags"] = false;
-	$config["previews_path"] = $config["root_path"] . "/tmp/cache";
-	$config["uploads_path"] = $config["root_path"] . "/uploads";
-	$config["uploads_url"] = $config["root_url"] . "/uploads";
-	$config["max_upload_size"] = 1000000;
-	$config["debug"] = false;
-	$config["assume_mod_rewrite"] = false;
-	$config['internal_pretty_urls'] = false;
-	$config['use_hierarchy'] = false;
-	$config["auto_alias_content"] = true;
-	$config["image_manipulation_prog"] = "GD";
-	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
-	$config["use_Indite"] = true;
-	$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
-	$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
-	$config["default_encoding"] = "";
-	$config["disable_htmlarea_translation"] = false;
-	$config["admin_dir"] = "admin";
-	$config["persistent_db_conn"] = false;
-	$config["default_upload_permission"] = '664';
-	$config["page_extension"] = "";
-	$config["use_adodb_lite"] = true;
-	$config["locale"] = "";
-	$config['old_stylesheet'] = true;
-	$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
-	$config['backwards_compatible'] = true;
-	$config['timezone'] = 'Etc/GMT+0';
-
-
-	#Don't set it yet
-	#$config["admin_encoding"] = "utf-8";
-
-	if ($loadLocal == true)
+	function __construct()
 	{
-		//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
-		if (file_exists(CONFIG_FILE_LOCATION))
+		parent::__construct();
+		$this->params = array();
+	}
+	
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
 		{
-			include(CONFIG_FILE_LOCATION);
+			self::$instance = new CmsConfig();
+			self::$instance->load();
+		}
+		return self::$instance;
+	}
+	
+	function offsetSet($key, $value)
+	{
+		$this->params[$key] = $value;
+	}
+
+	function offsetGet($key)
+	{
+		if (array_key_exists($key, $this->params))
+		{
+			return $this->params[$key];
 		}
 	}
 
-	#Check to see if this exists in the config.php yet
-	if (!isset($config["admin_encoding"]))
+	function offsetUnset($key)
 	{
-		#So this is our first setting of it.  Is default_encoding set already?
-		#If so, set admin_encoding to match (and admin encodings should behave as before)
-		if (isset($config["default_encoding"]) && $config["default_encoding"])
+		if (array_key_exists($key, $this->params))
 		{
-			$config['admin_encoding'] = $config['default_encoding'];
+			unset($this->params[$key]);
 		}
-		else
+	}
+
+	function offsetExists($offset)
+	{
+		return array_key_exists($offset, $this->params);
+	}
+	
+	function load($loadLocal = true, $upgrade = false)
+	{
+		$config = array();
+
+		#Set some defaults, just in case the config file is corrupted or
+		#we're coming from an upgrade
+		$config["dbms"] = "mysql";
+		$config["db_hostname"] = "localhost";
+		$config["db_username"] = "cms";
+		$config["db_password"] = "cms";
+		$config["db_name"] = "cms";
+		$config["db_prefix"] = "cms_";
+		$config["root_url"] = "http://www.something.com";
+		$config["root_path"] = dirname(dirname(__FILE__));
+		$config["query_var"] = "page";
+		$config["use_bb_code"] = false;
+		$config["use_smarty_php_tags"] = false;
+		$config["previews_path"] = $config["root_path"] . "/tmp/cache";
+		$config["uploads_path"] = $config["root_path"] . "/uploads";
+		$config["uploads_url"] = $config["root_url"] . "/uploads";
+		$config["max_upload_size"] = 1000000;
+		$config["debug"] = false;
+		$config["assume_mod_rewrite"] = false;
+		$config['internal_pretty_urls'] = false;
+		$config['use_hierarchy'] = false;
+		$config["auto_alias_content"] = true;
+		$config["image_manipulation_prog"] = "GD";
+		$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
+		$config["use_Indite"] = true;
+		$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
+		$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
+		$config["default_encoding"] = "";
+		$config["disable_htmlarea_translation"] = false;
+		$config["admin_dir"] = "admin";
+		$config["persistent_db_conn"] = false;
+		$config["default_upload_permission"] = '664';
+		$config["page_extension"] = "";
+		$config["use_adodb_lite"] = true;
+		$config["locale"] = "";
+		$config['old_stylesheet'] = true;
+		$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
+		$config['backwards_compatible'] = true;
+		$config['timezone'] = 'Etc/GMT+0';
+
+		if ($loadLocal == true)
 		{
-			#Ok, so last ditch effort.  Look for the encoding of the default template
-			if ($upgrade == true)
+			//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
+			if (file_exists(CONFIG_FILE_LOCATION))
 			{
-				global $gCms;
-				$db =& $gCms->GetDb();
-				$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
-				if (isset($encoding) && $encoding != '')
+				include(CONFIG_FILE_LOCATION);
+			}
+		}
+
+		#Check to see if this exists in the config.php yet
+		if (!isset($config["admin_encoding"]))
+		{
+			#So this is our first setting of it.  Is default_encoding set already?
+			#If so, set admin_encoding to match (and admin encodings should behave as before)
+			if (isset($config["default_encoding"]) && $config["default_encoding"])
+			{
+				$config['admin_encoding'] = $config['default_encoding'];
+			}
+			else
+			{
+				#Ok, so last ditch effort.  Look for the encoding of the default template
+				if ($upgrade == true)
 				{
-					$config["admin_encoding"] = $encoding;
+					$db =& db();
+					$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
+					if (isset($encoding) && $encoding != '')
+					{
+						$config["admin_encoding"] = $encoding;
+					}
+					else
+					{
+						$config["admin_encoding"] = "utf-8";
+					}
 				}
 				else
 				{
 					$config["admin_encoding"] = "utf-8";
 				}
 			}
-			else
+		}
+		
+		$this->params = $config;
+	}
+	
+	function save()
+	{
+		$newfiledir = dirname(CONFIG_FILE_LOCATION);
+		$newfilename = CONFIG_FILE_LOCATION;
+		if (is_writable($newfilename) || is_writable($newfiledir))
+		{
+			$handle = fopen($newfilename, "w");
+			if ($handle)
 			{
-				$config["admin_encoding"] = "utf-8";
+				fwrite($handle, "<?php\n\n");
+				fwrite($handle, cms_config_text($this->params));
+				fwrite($handle, "\n?>");
+				fclose($handle);
 			}
 		}
 	}
-
-	return $config;
-}
-
-function cms_config_text($config)
-{
-	$true = 'true';
-	$false = 'false';
-	$result = <<<EOF
+	
+	function config_text($config)
+	{
+		$true = 'true';
+		$false = 'false';
+		$result = <<<EOF
 
 #CMS Made Simple Configuration File
 #Please clear the cache (Site Admin->Global Settings in the admin panel)
@@ -286,72 +335,8 @@ function cms_config_text($config)
 \$config['use_Indite'] = true;
 EOF;
 	return $result;
-}
-
-/**
- * Saves config.php
- * 
- * Loops through the config hash given and save it's values
- * out to the config.php in the filesystem.  Files quietly
- * if there is no access to the file;
- *
- * @since 0.5
- */
-function cms_config_save($config)
-{
-	$newfiledir = dirname(CONFIG_FILE_LOCATION);
-	$newfilename = CONFIG_FILE_LOCATION;
-	if (is_writable($newfilename) || is_writable($newfiledir))
-	{
-		$handle = fopen($newfilename, "w");
-		if ($handle)
-		{
-			fwrite($handle, "<?php\n\n");
-			fwrite($handle, cms_config_text($config));
-			fwrite($handle, "\n?>");
-			fclose($handle);
-		}
 	}
+	
 }
 
-/**
- * Upgrades config.php from the old style
- *
- * @since 0.5
- */
-function cms_config_upgrade()
-{
-	#Get my lazy on and just do some regex magic...
-	$newfiledir = dirname(CONFIG_FILE_LOCATION);
-	$newfilename = CONFIG_FILE_LOCATION;
-	$oldconfiglines = array();
-	if (is_writable($newfilename) || is_writable($newfiledir))
-	{
-		$handle = fopen($newfilename, "r");
-		if ($handle)
-		{
-			while (!feof($handle))
-			{
-				$oldconfiglines[] = fgets($handle, 4096);
-			}
-			fclose($handle);
-			$handle = fopen($newfilename, "w");
-			if ($handle)
-			{
-				foreach ($oldconfiglines as $oneline)
-				{
-					$newline = trim(preg_replace('/\$this-\>(\S+)/', '$config["$1"]', $oneline));
-					if ($newline != "?>")
-					{
-						$newline .= "\n";
-					}
-					fwrite($handle, $newline);
-				}
-				fclose($handle);
-			}
-		}
-	}
-}
-
-# vim:ts=4 sw=4 noet
 ?>

@@ -976,8 +976,8 @@ function wysiwyg_form_submit()
  * @since 0.4
  */
 function cms_db_prefix() {
-	global $config;
-	return $config["db_prefix"];
+	$config =& config();
+	return $config['db_prefix'];
 }
 
 # vim:ts=4 sw=4 noet
