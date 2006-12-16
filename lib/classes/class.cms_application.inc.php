@@ -23,17 +23,6 @@
  * @package CMS
  */
 
-/*
-if (phpversion() < 5)
-{
-	include_once('class.overloader.php4.php');
-}
-else
-{
-	include_once('class.overloader.php5.php');
-}
-*/
-
 /**
  * Simple global object to hold references to other objects
  *
@@ -43,7 +32,7 @@ else
  *
  * @since 0.5
  */
-class CmsObject extends Object {
+class CmsApplication extends CmsObject {
 
 	/**
 	 * Config object - hash containing variables from config.php
@@ -200,7 +189,7 @@ class CmsObject extends Object {
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new CmsObject();
+			self::$instance = new CmsApplication();
 		}
 		return self::$instance;
 	}
@@ -468,7 +457,7 @@ class CmsObject extends Object {
 
 function cmsms()
 {
-	return CmsObject::get_instance();
+	return CmsApplication::get_instance();
 }
 
 function db()

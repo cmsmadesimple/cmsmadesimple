@@ -186,31 +186,9 @@ else
     $page = preg_replace('/\</','',$page);
 }
 
-$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
+$pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 
-if (isset($pageinfo) && $pageinfo !== FALSE)
-{
-	$gCms->variables['pageinfo'] =& $pageinfo;
-
-	$gCms->variables['content_id'] = $pageinfo->content_id;
-	$gCms->variables['page'] = $page;
-	$gCms->variables['page_id'] = $page;
-
-	$gCms->variables['page_name'] = $pageinfo->content_alias;
-	$gCms->variables['position'] = $pageinfo->content_hierarchy;
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
-	
-	$smarty->assign('content_id', $pageinfo->content_id);
-	$smarty->assign('page', $page);
-	$smarty->assign('page_id', $page);	
-	$smarty->assign('page_name', $pageinfo->content_alias);
-	$smarty->assign('page_alias', $pageinfo->content_alias);
-	$smarty->assign('position', $pageinfo->content_hierarchy);
-	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
-}
-else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
+if ($pageinfo == null)
 {
 	//error_handler_404();
 	//exit;
@@ -246,11 +224,6 @@ else
 		}
 	}
 }
-
-#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-#{
-#	set_error_handler($old_error_handler);
-#}
 
 if (!$cached)
 {

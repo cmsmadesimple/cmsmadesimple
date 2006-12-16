@@ -24,11 +24,11 @@
  * @since		0.6
  * @package		CMS
  */
-class PageInfoOperations extends Object
+class CmsPageInfoOperations extends CmsObject
 {
-	static function LoadPageInfoByContentAlias($alias)
+	static function load_page_info_by_content_alias($alias)
 	{
-		$result = false;
+		$result = null;
 
 		$db = db();
 
@@ -82,9 +82,37 @@ class PageInfoOperations extends Object
 				$result = $onepageinfo;
 			}
 		}
+		
+		$gCms = cmsms();
+
+		$gCms->variables['pageinfo'] =& $result;
+
+		$gCms->variables['content_id'] = $result->content_id;
+		$gCms->variables['page'] = $result->content_alias;
+		$gCms->variables['page_id'] = $result->content_id;
+
+		$gCms->variables['page_name'] = $result->content_alias;
+		$gCms->variables['position'] = $result->content_hierarchy;
+
+		$gCms->variables['friendly_position'] = CmsContentOperations::create_friendly_hierarchy_position($result->content_hierarchy);
+		
+		$smarty = smarty();
+
+		$smarty->assign('content_id', $result->content_id);
+		$smarty->assign('page', $result->content_alias);
+		$smarty->assign('page_id', $result->content_id);	
+		$smarty->assign('page_name', $result->content_alias);
+		$smarty->assign('page_alias', $result->content_alias);
+		$smarty->assign('position', $result->content_hierarchy);
+		$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
 
 		return $result;
 	}
+	static function LoadPageInfoByContentAlias($alias)
+	{
+		return CmsPageInfoOperations::load_page_info_by_content_alias($alias);
+	}
+
 }
 
 # vim:ts=4 sw=4 noet

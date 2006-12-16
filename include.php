@@ -50,7 +50,7 @@ debug_buffer('', 'Start of include');
 
 #Make a new CMS object
 //require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
-require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
+require_once(cms_join_path($dirname,'lib','classes','class.cms_application.inc.php'));
 $gCms = cmsms();
 if (isset($starttime))
 {
@@ -59,7 +59,6 @@ if (isset($starttime))
 
 #Load the config file (or defaults if it doesn't exist)
 require(cms_join_path($dirname,'version.php'));
-//require(cms_join_path($dirname,'lib','config.functions.php'));
 
 #Grab the current configuration
 $config = config();
@@ -132,13 +131,8 @@ debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
 debug_buffer('loading content functions');
 require_once(cms_join_path($dirname,'lib','content.functions.php'));
-//debug_buffer('loading pageinfo functions');
-//require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
-//debug_buffer('loading events functions');
-//require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
-//require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
 
 debug_buffer('done loading files');
 

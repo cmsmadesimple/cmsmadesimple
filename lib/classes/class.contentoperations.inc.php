@@ -28,7 +28,7 @@
 
 //require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
 
-class ContentOperations
+class CmsContentOperations extends CmsObject
 {	
 	static function load_content_type($type)
 	{
@@ -825,8 +825,8 @@ class ContentOperations
 			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
 		}
 	}
-
-	function CreateFriendlyHierarchyPosition($position)
+	
+	static function create_friendly_hierarchy_position($position)
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
@@ -839,7 +839,12 @@ class ContentOperations
 		return $tmp;
 	}
 
-	function CreateUnfriendlyHierarchyPosition($position)
+	static function CreateFriendlyHierarchyPosition($position)
+	{
+		return CmsContentOperations::create_friendly_hierarchy_position($position);
+	}
+	
+	static function create_unfriendly_hierarchy_position($position)
 	{
 		#Change user-friendly values into padded numbers
 		$tmp = '';
@@ -851,7 +856,16 @@ class ContentOperations
 		$tmp = rtrim($tmp, '.');
 		return $tmp;
 	}
+
+	static function CreateUnfriendlyHierarchyPosition($position)
+	{
+		return CmsContentOperations::create_friendly_hierarchy_position($position);
+	}
 	
+}
+
+class ContentOperations extends CmsContentOperations
+{
 }
 
 class ContentManager extends ContentOperations

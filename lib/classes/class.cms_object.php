@@ -5,7 +5,7 @@
  * classes inheriently.  All classes in CMSMS should extend this
  * if possible.
  */
-class Object
+class CmsObject
 {
 	/**
 	 * Class constructor, overridden in descendant classes.
@@ -13,6 +13,10 @@ class Object
 	function __construct()
 	{
 	}
+}
+
+class Object extends CmsObject
+{
 }
 
 ?>
