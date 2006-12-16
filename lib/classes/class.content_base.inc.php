@@ -97,7 +97,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		}
 		
 		if ($concat != '')
-			do_cross_reference($this->id, 'content', $concat);
+			CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
 		
 		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
 	}
@@ -393,7 +393,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		$result = db()->Execute($query, array($this->parent_id, $this->item_order));
 		
 		#Remove the cross references
-		remove_cross_references($this->id, 'content');
+		CmsContentOperations::remove_cross_references($this->id, 'content');
 		
 		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
 	}

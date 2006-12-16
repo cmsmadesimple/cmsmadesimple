@@ -30,6 +30,17 @@
 
 class CmsContentOperations extends CmsObject
 {	
+	static private $instance = NULL;
+	
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsContentOperations();
+		}
+		return self::$instance;
+	}
+
 	static function load_content_type($type)
 	{
 		$type = strtolower($type);
@@ -812,7 +823,7 @@ class CmsContentOperations extends CmsObject
 		return $error;
 	}
 	
-	function ClearCache()
+	static function clear_cache()
 	{
 		global $gCms;
 		$smarty =& $gCms->GetSmarty();
@@ -824,6 +835,11 @@ class CmsContentOperations extends CmsObject
 		{
 			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
 		}
+	}
+	
+	static function ClearCache()
+	{
+		CmsContentOperations::clear_cache();
 	}
 	
 	static function create_friendly_hierarchy_position($position)
@@ -862,6 +878,53 @@ class CmsContentOperations extends CmsObject
 		return CmsContentOperations::create_friendly_hierarchy_position($position);
 	}
 	
+	static function do_cross_reference($parent_id, $parent_type, $content)
+	{
+		$db = db();
+
+		//Delete old ones from the database
+		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
+		$db->Execute($query, array($parent_id, $parent_type));
+
+		//Do global content blocks
+		$matches = array();
+		preg_match_all('/\{(?:html_blob|global_content).*?name=["\']([^"]+)["\'].*?\}/', $content, $matches);
+		if (isset($matches[1]))
+		{
+			$selquery = 'SELECT htmlblob_id FROM '.cms_db_prefix().'htmlblobs WHERE htmlblob_name = ?';
+			$insquery = 'INSERT INTO '.cms_db_prefix().'crossref (parent_id, parent_type, child_id, child_type, create_date, modified_date)
+							VALUES (?,?,?,\'global_content\','.$db->DBTimeStamp(time()).','.$db->DBTimeStamp(time()).')';
+			foreach ($matches[1] as $name)
+			{
+				$result = &$db->Execute($selquery, array($name));
+				while ($result && !$result->EOF)
+				{
+					$db->Execute($insquery, array($parent_id, $parent_type, $result->fields['htmlblob_id']));
+					$result->MoveNext();
+				}
+				if ($result) $result->Close();
+			}
+		}
+	}
+
+	static function remove_cross_references($parent_id, $parent_type)
+	{
+		$db = db();
+
+		//Delete old ones from the database
+		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';
+		$db->Execute($query, array($parent_id, $parent_type));
+	}
+
+	static function remove_cross_references_by_child($child_id, $child_type)
+	{
+		$db = db();
+
+		//Delete old ones from the database
+		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE child_id = ? AND child_type = ?';
+		$db->Execute($query, array($child_id, $child_type));
+	}
+
 }
 
 class ContentOperations extends CmsContentOperations

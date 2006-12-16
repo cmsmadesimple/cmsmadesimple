@@ -88,14 +88,10 @@ if (isset($_SESSION['cms_admin_username']))
     $gCms->variables['username'] = $_SESSION['cms_admin_username'];
 }
 
-debug_buffer('loading smarty');
-require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
-//debug_buffer('loading adodb');
-
 debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
-debug_buffer('loading content functions');
-require_once(cms_join_path($dirname,'lib','content.functions.php'));
+//debug_buffer('loading content functions');
+//require_once(cms_join_path($dirname,'lib','content.functions.php'));
 debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 

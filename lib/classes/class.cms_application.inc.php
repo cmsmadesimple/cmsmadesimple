@@ -42,7 +42,7 @@ class CmsApplication extends CmsObject {
 	/**
 	 * Database object - adodb reference to the current database
 	 */
-	var $db;
+	//var $db;
 
 	/**
 	 * Variables object - various objects and strings needing to be passed 
@@ -87,7 +87,7 @@ class CmsApplication extends CmsObject {
 	/**
 	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
 	 */
-	public $smarty = NULL;
+	//public $smarty = NULL;
 
 	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
@@ -207,9 +207,11 @@ class CmsApplication extends CmsObject {
 	function __get($name)
 	{
 		if ($name == 'config')
-			return $this->get_config();
+			return CmsConfig::get_instance();
 		else if ($name == 'db')
-			return $this->get_db();
+			return CmsDatabase::get_instance();
+		else if ($name == 'smarty')
+			return CmsSmarty::get_instance();
 		else
 			return $this->get_orm_class($name);
 	}
@@ -286,18 +288,9 @@ class CmsApplication extends CmsObject {
 		return $this->useroperations;
 	}
 	
-	function &GetContentOperations()
+	function GetContentOperations()
 	{
-        if (!isset($this->contentoperations))
-		{
-			debug_buffer('', 'Load Content Operations');
-			//require_once(cms_join_path(dirname(__FILE__), 'class.contentoperations.inc.php'));
-			$contentoperations = new ContentOperations();
-			$this->contentoperations = $contentoperations;
-			debug_buffer('', 'End Load Content Operations');
-		}
-
-		return $this->contentoperations;
+		return CmsContentOperations::get_instance();
 	}
 	
 	function &GetBookmarkOperations()
@@ -374,14 +367,12 @@ class CmsApplication extends CmsObject {
 
 	function GetSmarty()
 	{
-		return $this->get_smarty();
+		return CmsSmarty::get_instance();
 	}
 	
 	function get_smarty()
 	{
-		if ($this->smarty == NULL)
-			$this->smarty = smarty();
-		return smarty();
+		return CmsSmarty::get_instance();
 	}
 
 	function &GetHierarchyManager()
@@ -427,6 +418,11 @@ function db()
 function config()
 {
 	return CmsConfig::get_instance();
+}
+
+function smarty()
+{
+	return CmsSmarty::get_instance();
 }
 
 class CmsRoute

@@ -92,7 +92,7 @@ class TemplateOperations
 		if ($dbresult !== false)
 		{
 			$result = $template->id;
-			do_cross_reference($result, 'template', $template->content);
+			CmsContentOperations::do_cross_reference($result, 'template', $template->content);
 		}
 
 		return $result;
@@ -107,7 +107,7 @@ class TemplateOperations
 		if ($dbresult !== false)
 		{
 			$result = true;
-			do_cross_reference($template->id, 'template', $template->content);
+			CmsContentOperations::do_cross_reference($template->id, 'template', $template->content);
 		}
 
 		return $result;
