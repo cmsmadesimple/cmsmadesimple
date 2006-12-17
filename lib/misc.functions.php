@@ -121,17 +121,6 @@ function redirect($to, $noappend=false)
 }
 
 /**
- * Shows the difference in seconds between two microtime() values
- *
- * @since 0.3
- */
-function microtime_diff($a, $b) {
-	list($a_dec, $a_sec) = explode(" ", $a);
-	list($b_dec, $b_sec) = explode(" ", $b);
-	return $b_sec - $a_sec + $b_dec - $a_dec;
-}
-
-/**
  * Shows a very close approximation of an Apache generated 404 error.
  *
  * Shows a very close approximation of an Apache generated 404 error.
@@ -214,59 +203,6 @@ function cms_html_entities($string, $param=ENT_QUOTES, $charset="UTF-8")
 function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 {
 	return cms_html_entities($string, $param, $charset);
-}
-
-/**
- * Figures out the page name from the uri string.  Has to use different logic
- * based on the type of httpd server.
- */
-function cms_calculate_url()
-{
-	$result = '';
-	
-    global $gCms;
-    $config =& $gCms->GetConfig();
-
-	//Apache
-	/*
-	if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
-	{
-		$matches = array();
-
-		//Seems like PHP_SELF has whatever is after index.php in certain situations
-		if (strpos($_SERVER['PHP_SELF'], 'index.php') !== FALSE) {
-			if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
-			{
-				$result = $matches[1];
-			}
-		}
-		else
-		{
-			$result = $_SERVER['PHP_SELF'];
-		}
-	}
-	*/
-	//lighttpd
-	#else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
-
-	//apache and lighttpd
-	if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
-	{
-		$matches = array();
-		if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
-		{
-			$result = $matches[1];
-		}
-	}
-	
-	//trim off the extension, if there is one set
-	if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
-	{
-		$result = substr($result, 0, strlen($result) - strlen($config['page_extension']));
-	}
-
-	return $result;
-	
 }
 
 /**

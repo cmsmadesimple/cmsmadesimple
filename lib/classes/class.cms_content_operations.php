@@ -395,15 +395,18 @@ class CmsContentOperations extends CmsObject
     {
     }
 
-	function &GetDefaultContent()
+	/**
+	 * Returns the id of the page that is marked as the default
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public static function get_default_page_id()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-
 		$result = -1;
 
 		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
+		$row = db()->GetRow($query);
 		if ($row)
 		{
 			$result = $row['id'];
@@ -412,7 +415,7 @@ class CmsContentOperations extends CmsObject
 		{
 			#Just get something...
 			$query = "SELECT id FROM ".cms_db_prefix()."content";
-			$row = &$db->GetRow($query);
+			$row = db()->GetRow($query);
 			if ($row)
 			{
 				$result = $row['id'];

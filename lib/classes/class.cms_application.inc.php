@@ -392,13 +392,6 @@ class CmsApplication extends CmsObject {
 	}
 }
 
-class CmsRoute
-{
-	var $module;
-	var $regex;
-	var $defaults;
-}
-
 class CmsContentTypePlaceholder
 {
 	var $type;

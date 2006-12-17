@@ -121,6 +121,26 @@ class CmsSmarty extends Smarty {
 		}
 		return self::$instance;
 	}
+	
+	/**
+	 * Sets the internal id based on variables sent in from
+	 * the request.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function set_id_from_request()
+	{
+		if (isset($_REQUEST['mact']))
+		{
+			$ary = explode(',', $_REQUEST['mact'], 4);
+			$this->id = (isset($ary[1])?$ary[1]:'');
+		}
+		else
+		{
+			$this->id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+		}
+	}
 
     /**
      * wrapper for include() retaining $this

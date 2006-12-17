@@ -63,6 +63,89 @@ class CmsRequest extends CmsObject
 		$value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
 	}
 	
+	public static function calculate_page_from_request()
+	{
+		$smarty = smarty();
+		$config = config();
+		$page = '';
+
+		if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
+		{
+			$page = $_REQUEST[$smarty->id . 'returnid'];
+		}
+		else if (CmsConfig::exists("query_var") && $config['query_var'] != '' && isset($_GET[$config['query_var']]))
+		{
+			$page = $_GET[$config["query_var"]];
+
+		    //trim off the extension, if there is one set
+		    if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
+		    {   
+		        $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
+		    }
+		}
+		else
+		{
+			$calced = CmsRequest::cms_calculate_url();
+			if ($calced != '')
+				$page = $calced;
+		}
+		
+		return rtrim($page, '/');
+	}
+	
+	/**
+	 * Figures out the page name from the uri string.  Has to use different logic
+	 * based on the type of httpd server.
+	 */
+	function cms_calculate_url()
+	{
+		$result = '';
+
+	    $config = config();
+
+		//Apache
+		/*
+		if (isset($_SERVER["PHP_SELF"]) && !endswith($_SERVER['PHP_SELF'], 'index.php'))
+		{
+			$matches = array();
+
+			//Seems like PHP_SELF has whatever is after index.php in certain situations
+			if (strpos($_SERVER['PHP_SELF'], 'index.php') !== FALSE) {
+				if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['PHP_SELF'], $matches))
+				{
+					$result = $matches[1];
+				}
+			}
+			else
+			{
+				$result = $_SERVER['PHP_SELF'];
+			}
+		}
+		*/
+		//lighttpd
+		#else if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+
+		//apache and lighttpd
+		if (isset($_SERVER["REQUEST_URI"]) && !endswith($_SERVER['REQUEST_URI'], 'index.php'))
+		{
+			$matches = array();
+			if (preg_match('/.*index\.php\/(.*?)$/', $_SERVER['REQUEST_URI'], $matches))
+			{
+				$result = $matches[1];
+			}
+		}
+
+		//trim off the extension, if there is one set
+		if ($config['page_extension'] != '' && endswith($result, $config['page_extension']))
+		{
+			$result = substr($result, 0, strlen($result) - strlen($config['page_extension']));
+		}
+
+		return $result;
+
+	}
+
+	
 	/**
 	 * Strips the slashes from all incoming superglobals,
 	 * if necessary.
