@@ -63,6 +63,12 @@ class CmsPageInfo extends CmsObject
 		}
 	}
 	
+	public function send_headers()
+	{
+		header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=" . 
+			(isset($this->template_encoding) && $this->template_encoding != ''?$this->template_encoding:get_encoding()));
+	}
+	
 	/**
 	 * Renders the given pageinfo object based on it's assigned content and template
 	 * parts.

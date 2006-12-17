@@ -109,11 +109,14 @@ if ($pageinfo == null)
 	//exit;
 }
 
-//Send any headers
-header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
-
 //Render the pageinfo object
 echo $pageinfo->render();
+
+//Send any headers.  After the render?  Sure, because modules that
+//have been processed could have changed what values should be in the
+//headers.  Plus, it's output buffered, so the content isn't actually
+//getting sent until the ob_flush below this.
+echo $pageinfo->send_headers();
 
 //Flush the buffer out to the browser
 @ob_flush();
