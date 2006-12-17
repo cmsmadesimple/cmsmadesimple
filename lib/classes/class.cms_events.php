@@ -34,7 +34,7 @@ class CmsEvents extends CmsObject
 	 **/
 	public static function create_event( $modulename, $eventname )
 	{
-		$db = db();
+		$db = cms_db();
 		$id = $db->GenID( cms_db_prefix()."events_seq" );
 		$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
 		$db->Execute( $q, array( $modulename, $eventname, $id ));
@@ -62,7 +62,7 @@ class CmsEvents extends CmsObject
 	 **/
 	public static function remove_event( $modulename, $eventname )
 	{
-		$db = db();
+		$db = cms_db();
 
 		// get the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -213,7 +213,7 @@ class CmsEvents extends CmsObject
 	*/
 	public static function list_events()
 	{
-		$db = db();
+		$db = cms_db();
 
 		$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
 		$dbresult = $db->Execute( $q );
@@ -261,7 +261,7 @@ class CmsEvents extends CmsObject
 			return false;
 		}
 
-		$db = db();
+		$db = cms_db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -365,7 +365,7 @@ class CmsEvents extends CmsObject
 			$field = 'module_handler';
 		}
 
-		$db = db();
+		$db = cms_db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -419,7 +419,7 @@ class CmsEvents extends CmsObject
 	 **/
 	public static function remove_all_event_handlers( $modulename, $eventname )
 	{
-		$db = db();
+		$db = cms_db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 

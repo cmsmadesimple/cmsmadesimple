@@ -239,7 +239,7 @@ class ContentBase extends CmsObjectRelationalMapping
 	
     function get_url($rewrite = true)
     {
-		$config = config();
+		$config = cms_config();
 		$url = "";
 		$alias = ($this->alias != ''?$this->alias:$this->id);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
@@ -281,7 +281,7 @@ class ContentBase extends CmsObjectRelationalMapping
 
 	function set_alias($alias)
 	{
-		$config =& $config();
+		$config = cms_config();
 
 		$tolower = false;
 
@@ -390,7 +390,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		
 		#Fix the item_order if necessary
 		$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
-		$result = db()->Execute($query, array($this->parent_id, $this->item_order));
+		$result = cms_db()->Execute($query, array($this->parent_id, $this->item_order));
 		
 		#Remove the cross references
 		CmsContentOperations::remove_cross_references($this->id, 'content');

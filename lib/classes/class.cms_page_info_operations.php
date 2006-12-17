@@ -30,7 +30,7 @@ class CmsPageInfoOperations extends CmsObject
 	{
 		$result = null;
 
-		$db = db();
+		$db = cms_db();
 
 		$row = '';
 
@@ -96,7 +96,7 @@ class CmsPageInfoOperations extends CmsObject
 
 		$gCms->variables['friendly_position'] = CmsContentOperations::create_friendly_hierarchy_position($result->content_hierarchy);
 		
-		$smarty = smarty();
+		$smarty = cms_smarty();
 
 		$smarty->assign('content_id', $result->content_id);
 		$smarty->assign('page', $result->content_alias);

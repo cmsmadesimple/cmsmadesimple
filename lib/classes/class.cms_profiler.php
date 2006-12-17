@@ -98,7 +98,7 @@ class CmsProfiler extends CmsObject
 	 **/
 	function report( $memory = true, $database = true, $glue='' )
 	{
-		$db = db();
+		$db = cms_db();
 
 		echo implode( $glue, $this->_buffer );
 		if ($memory)

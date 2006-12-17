@@ -28,7 +28,7 @@ if (isset($_POST["cancel"]))
 }
 
 $gCms = cmsms();
-$smarty = smarty();
+$smarty = cms_smarty();
 $contentops =& $gCms->GetContentOperations();
 $templateops =& $gCms->GetTemplateOperations();
 

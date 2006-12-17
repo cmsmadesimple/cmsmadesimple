@@ -72,7 +72,7 @@ class PageInfo extends Object
 		$this->template_encoding = '';
 		$this->cachable = false;
 
-		$db = db();
+		$db = cms_db();
 
 		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c';
 		$row = $db->GetRow($query);

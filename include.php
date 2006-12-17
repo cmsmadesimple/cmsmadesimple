@@ -72,8 +72,8 @@ if ($frontendlang != '')
     @setlocale(LC_ALL, $frontendlang);
 }
 
-smarty()->assign('lang', $frontendlang);
-smarty()->assign('encoding', get_encoding());
+cms_smarty()->assign('lang', $frontendlang);
+cms_smarty()->assign('encoding', get_encoding());
 
 if (isset($CMS_ADMIN_PAGE))
 {

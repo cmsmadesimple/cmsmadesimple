@@ -76,7 +76,7 @@ function cmsms()
  * Returns a reference to the adodb(lite) connection singleton object.
  * Replaces the global $gCms; $db =& $gCms->GetDb(); routine.
  */
-function db()
+function cms_db()
 {
 	return CmsDatabase::get_instance();
 }
@@ -85,7 +85,7 @@ function db()
  * Returns a reference to the config object (used to be a hash).  Replaces
  * the global $gCms; $config =& $gCms->GetConfig() routine.
  */
-function config()
+function cms_config()
 {
 	return CmsConfig::get_instance();
 }
@@ -94,7 +94,7 @@ function config()
  * Returns a reference to the global smarty object.  Replaces
  * the global $gCms; $config =& $gCms->GetSmarty() routine.
  */
-function smarty()
+function cms_smarty()
 {
 	return CmsSmarty::get_instance();
 }

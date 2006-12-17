@@ -38,7 +38,7 @@ class CmsDatabase extends CmsObject
 	static function start()
 	{
 		$gCms = cmsms();
-		$config = config();
+		$config = cms_config();
 
 		global $USE_OLD_ADODB;
 		

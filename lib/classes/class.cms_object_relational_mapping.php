@@ -362,7 +362,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	
 	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
-		$db = db();
+		$db = cms_db();
 		
 		$classname = get_class($this);
 
@@ -596,7 +596,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-		$result = db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
+		$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
 		
 		if ($do_after_delete)
 		{
@@ -701,7 +701,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		if ($cache !== FALSE)
 			return $cache;
 
-		$config =& config();
+		$config = cms_config();
 
 		$dbms = $config['dbms'];
 		if ($dbms == 'mysqli') $dbms = 'mysql';

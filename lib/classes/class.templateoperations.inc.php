@@ -49,7 +49,7 @@ class TemplateOperations
 		$result = array();
 
 		$query = "SELECT c.modified_date AS c_date, t.modified_date AS t_date FROM ".cms_db_prefix()."templates t INNER JOIN ".cms_db_prefix()."content c ON c.template_id = t.template_id WHERE (c.content_alias = ? OR c.content_id = ?) AND c.active = 1";
-		$dbresult = db()->Execute($query, array($alias, $alias));
+		$dbresult = cms_db()->Execute($query, array($alias, $alias));
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -73,7 +73,7 @@ class TemplateOperations
 		$result = 0;
 
 		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-		$row = db()->GetRow($query, array($id));
+		$row = cms_db()->GetRow($query, array($id));
 
 		if($row)
 		{
@@ -123,7 +123,7 @@ class TemplateOperations
 		$result = 0;
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-        $row = db()->GetRow($query,array($id));
+        $row = cms_db()->GetRow($query,array($id));
 
 		if ($row)
 		{
@@ -141,7 +141,7 @@ class TemplateOperations
 		$result = 0;
 
         $query = "SELECT count(*) AS count FROM ".cms_db_prefix()."templates WHERE stylesheet is not null and stylesheet != ''";
-        $row = db()->GetRow($query);
+        $row = cms_db()->GetRow($query);
 
 		if ($row)
 		{
@@ -160,16 +160,16 @@ class TemplateOperations
 
 		$dbresult = false;
 
-		$time = db()->DBTimeStamp(time());
+		$time = cms_db()->DBTimeStamp(time());
 		if ($blob_name != '')
 		{
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time." WHERE template_content like ?";
-			$dbresult = db()->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
+			$dbresult = cms_db()->Execute($query,array('%{html_blob name="'.$blob_name.'"}%'));
 		}
 		else
 		{
 			$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$time;
-			$dbresult = db()->Execute($query);
+			$dbresult = cms_db()->Execute($query);
 		}
 
 		if ($dbresult !== false)
@@ -185,7 +185,7 @@ class TemplateOperations
 		$result = false;
 
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
-		$row = db()->GetRow($query,array($name));
+		$row = cms_db()->GetRow($query,array($name));
 
 		if ($row)
 		{

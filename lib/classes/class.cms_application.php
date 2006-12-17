@@ -357,7 +357,7 @@ class CmsApplication extends CmsObject {
 		return CmsSmarty::get_instance();
 	}
 	
-	function get_smarty()
+	function get_cms_smarty()
 	{
 		return CmsSmarty::get_instance();
 	}

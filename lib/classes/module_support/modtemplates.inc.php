@@ -139,7 +139,7 @@ function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation 
 
 function cms_module_process_template(&$modinstance, $tpl_name, $id, $return_id, $designation = '', $cache = false, $cacheid = '')
 {
-	$smarty = smarty();
+	$smarty = cms_smarty();
 	
 	$smarty->assign_by_ref('cms_mapi_module', $modinstance);
 	$smarty->assign('cms_mapi_id', $id);
@@ -186,7 +186,7 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 
 function cms_module_process_template_from_database(&$modinstance, $tpl_name, $id, $return_id, $designation = '', $cache = false)
 {
-	$smarty = smarty();
+	$smarty = cms_smarty();
 	
 	$smarty->assign_by_ref('cms_mapi_module', $modinstance);
 	$smarty->assign('cms_mapi_id', $id);

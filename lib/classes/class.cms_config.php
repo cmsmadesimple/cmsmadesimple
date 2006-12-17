@@ -144,7 +144,7 @@ class CmsConfig extends Object implements ArrayAccess
 				#Ok, so last ditch effort.  Look for the encoding of the default template
 				if ($upgrade == true)
 				{
-					$db =& db();
+					$db = cms_db();
 					$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
 					if (isset($encoding) && $encoding != '')
 					{

@@ -406,7 +406,7 @@ class CmsContentOperations extends CmsObject
 		$result = -1;
 
 		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = db()->GetRow($query);
+		$row = cms_db()->GetRow($query);
 		if ($row)
 		{
 			$result = $row['id'];

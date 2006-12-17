@@ -44,7 +44,7 @@ function check_modify_all($userid)
 }
 
 $gCms = cmsms();
-$smarty = smarty();
+$smarty = cms_smarty();
 $contentops =& $gCms->GetContentOperations();
 $templateops =& $gCms->GetTemplateOperations();
 
@@ -112,7 +112,7 @@ include_once("footer.php");
 
 function setup_smarty($themeObject)
 {
-	$smarty = smarty();
+	$smarty = cms_smarty();
 	$userid = get_userid();
 
 	//Set permissions
@@ -160,7 +160,7 @@ function display_content_list()
 {
 	$userid = get_userid();
 	$themeObject = AdminTheme::get_theme_for_user($userid);
-	$smarty = smarty();
+	$smarty = cms_smarty();
 	setup_smarty($themeObject);
 	return $smarty->fetch('listcontent-tree.tpl');
 }

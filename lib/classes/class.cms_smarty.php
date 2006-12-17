@@ -18,7 +18,7 @@ class CmsSmarty extends Smarty {
 	{
 		parent::__construct();
 
-		$config = config();
+		$config = cms_config();
 		
 		$this->template_dir = $config["root_path"].'/tmp/templates/';
 		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
@@ -721,7 +721,7 @@ class CmsSmarty extends Smarty {
 		$plugins = &$gCms->cmsplugins;
 		$userplugins = &$gCms->userplugins;
 		$userpluginfunctions = &$gCms->userpluginfunctions;
-		$db = db();
+		$db = cms_db();
 
 		#if (@is_dir(dirname(dirname(__FILE__))."/plugins/cache"))
 		#{

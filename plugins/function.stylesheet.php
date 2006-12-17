@@ -19,7 +19,7 @@
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
 	global $gCms;
-	$config = config();
+	$config = cms_config();
 	$pageinfo = &$gCms->variables['pageinfo'];
 
 	$stylesheet = '';

@@ -80,7 +80,7 @@ require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
 $profiler = CmsProfiler::get_instance('', $start_time);
 
 //Global smarty object.  We probably should dump this...
-$smarty = smarty();
+$smarty = cms_smarty();
 
 //Make sure the id is set inside smarty if needed for modules
 $smarty->set_id_from_request();

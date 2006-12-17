@@ -65,8 +65,8 @@ class CmsRequest extends CmsObject
 	
 	public static function calculate_page_from_request()
 	{
-		$smarty = smarty();
-		$config = config();
+		$smarty = cms_smarty();
+		$config = cms_config();
 		$page = '';
 
 		if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
@@ -101,7 +101,7 @@ class CmsRequest extends CmsObject
 	{
 		$result = '';
 
-	    $config = config();
+	    $config = cms_config();
 
 		//Apache
 		/*

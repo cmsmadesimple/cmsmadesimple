@@ -37,7 +37,7 @@ class CmsModuleLoader extends CmsObject
 	public static function LoadModules($loadall = false, $noadmin = false)
 	{
 		$gCms = cmsms();
-		$db = db();
+		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
