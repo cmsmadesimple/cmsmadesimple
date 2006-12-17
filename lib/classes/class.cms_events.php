@@ -504,7 +504,7 @@ class CmsEvents extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	public static function SetupCoreEvents()
+	public static function setup_core_events()
 	{
 		$modulename = 'Core';
 
