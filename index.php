@@ -82,9 +82,6 @@ $profiler = CmsProfiler::get_instance('', $start_time);
 //Global smarty object.  We probably should dump this...
 $smarty = smarty();
 
-//Variable for what our page will be after much deliberation
-$page = '';
-
 //Make sure the id is set inside smarty if needed for modules
 $smarty->set_id_from_request();
 
@@ -92,15 +89,15 @@ $smarty->set_id_from_request();
 $page = CmsRequest::calculate_page_from_request();
 
 //See if our page matches any predefined routes.  If so,
-//the updated $page will be returned.
-$page = CmsRoute::match_route($page);
+//the updated $page will be returned. (No point in matching
+//if we have no page to match).
+if ($page != '')
+	$page = CmsRoute::match_route($page);
 
 //Last ditch effort.  If we still have no page, then
 //grab the default.
 if ($page == '')
-{
 	$page = CmsContentOperations::get_default_page_id();
-}
 
 //Ok, we should have SOMETHING at this point.  Grab it's info
 //from the database.
