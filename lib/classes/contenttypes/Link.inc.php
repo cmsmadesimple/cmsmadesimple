@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class Link extends ContentBase
+class Link extends CmsContentBase
 {
 	var $unused_fields = array('cachable', 'alias', 'metadata', 'template_id');
 
@@ -64,8 +64,6 @@ class Link extends ContentBase
 		return array(cms_join_path(dirname(__FILE__), 'Link.tpl'));
 	}
 }
-
-Link::register_orm_class('Link');
 
 # vim:ts=4 sw=4 noet
 ?>

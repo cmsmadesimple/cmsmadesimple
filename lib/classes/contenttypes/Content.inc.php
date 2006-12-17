@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class Content extends ContentBase
+class Content extends CmsContentBase
 {	
 	function __construct()
 	{

@@ -29,7 +29,7 @@
  * @package		CMS
  */
 
-class ContentBase extends CmsObjectRelationalMapping
+class CmsContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
 	var $params = array('id' => -1, 'template_id' => -1, 'name' => '', 'menu_text' => '', 'active' => true, 'default_content' => false);
@@ -82,7 +82,7 @@ class ContentBase extends CmsObjectRelationalMapping
 			}
 		}
 		
-		Events::SendEvent('Core', 'ContentEditPre', array('content' => &$this));
+		CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
 	}
 	
 	function after_save()
@@ -99,7 +99,7 @@ class ContentBase extends CmsObjectRelationalMapping
 		if ($concat != '')
 			CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
 		
-		Events::SendEvent('Core', 'ContentEditPost', array('content' => &$this));
+		CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
 	}
 	
 	function validate()
@@ -411,6 +411,6 @@ class ContentBase extends CmsObjectRelationalMapping
 	}
 }
 
-//ContentBase::register_orm_class('ContentBase');
+class ContentBase extends CmsContentBase {}
 
 ?>

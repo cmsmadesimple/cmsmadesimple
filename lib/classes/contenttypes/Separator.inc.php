@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class Separator extends ContentBase
+class Separator extends CmsContentBase
 {
 	var $unused_fields = array('name', 'menu_text', 'cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key', 'template_id');
 

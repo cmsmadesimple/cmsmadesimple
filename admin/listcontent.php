@@ -45,6 +45,7 @@ function check_modify_all($userid)
 
 $gCms = cmsms();
 $smarty = cms_smarty();
+$config = cms_config();
 $contentops =& $gCms->GetContentOperations();
 $templateops =& $gCms->GetTemplateOperations();
 

@@ -34,12 +34,13 @@ function __autoload($class_name)
 {
 	$dirname = dirname(dirname(__FILE__));
 	
-	//Hack for modules that might be using the wrong case.  We can take it out later,
-	//but it's not hurting anything.
+	//Fix references to older classes
 	if ($class_name == 'CMSModule')
 		$class_name = 'CmsModule';
 	else if ($class_name == 'Events')
 		$class_name = 'CmsEvents';
+	else if ($class_name == 'ContentBase')
+		$class_name = 'CmsContentBase';
 
 	//We do this in order of importance...  classes first
 	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))

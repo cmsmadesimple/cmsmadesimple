@@ -215,7 +215,7 @@ class CmsApplication extends CmsObject {
 			return $this->get_orm_class($name);
 	}
 	
-	function get_orm_class($name)
+	function get_orm_class($name, $try_prefix = true)
 	{
 		if (isset($this->orm[$name]))
 			return $this->orm[$name];
@@ -232,6 +232,12 @@ class CmsApplication extends CmsObject {
 			}
 			catch (Excpetion $e)
 			{
+				//Maybe it's an older reference of a class...  let's
+				//toss a cms_ in front and try again
+				if ($try_prefix)
+				{
+					return $this->get_orm_class('cms_', $name, false);
+				}
 			}
 		}
 	}
@@ -357,7 +363,7 @@ class CmsApplication extends CmsObject {
 		return CmsSmarty::get_instance();
 	}
 	
-	function get_cms_smarty()
+	function get_smarty()
 	{
 		return CmsSmarty::get_instance();
 	}

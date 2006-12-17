@@ -23,6 +23,4 @@ class ContentProperty extends CmsObjectRelationalMapping
 	var $table = 'content_props';
 }
 
-//ContentProperty::register_orm_class('ContentProperty');
-
 ?>

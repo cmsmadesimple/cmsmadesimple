@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class SectionHeader extends ContentBase
+class SectionHeader extends CmsContentBase
 {
 	var $unused_fields = array('cachable', 'alias', 'metadata', 'title_attribute', 'tab_index', 'access_key', 'template_id');
 	
