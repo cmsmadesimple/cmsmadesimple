@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,55 +9,60 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.bookmark.inc.php 2746 2006-05-09 01:18:15Z wishy $
+#$Id$
 
 /**
  * Events class for admin
  *
  * @package CMS
  */
-class Events
+class CmsEvents extends CmsObject
 {
-	
 	/**
-	* Inform the system about a new event that can be generated
-	*
-	* @param string The name of the module that is sending the event
-	* @param string The name of the event
-	* @returns nothing
-	*/
-	static function CreateEvent( $modulename, $eventname )
+	 * Inform the system about a new event that can be generated
+	 *
+	 * @param string The name of the module that is sending the event
+	 * @param string The name of the event
+	 * @return void
+	 **/
+	public static function create_event( $modulename, $eventname )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = db();
 		$id = $db->GenID( cms_db_prefix()."events_seq" );
 		$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
 		$db->Execute( $q, array( $modulename, $eventname, $id ));
 	}
 	
+	/**
+	 * Deprecated.  Use create_event.
+	 **/
+	public static function CreateEvent( $modulename, $eventname )
+	{
+		CmsEvents::create_event( $modulename, $eventname );
+	}
+	
 
 	/**
-	* Remove an event from the CMS system
-	* This function removes all handlers to the event, and completely removes
-	* all references to this event from the database
-	*
-	* Note, only events created by this module can be removed.
-	*
-	* @param string The name of the module that is sending the event
-	* @param string The name of the event
-	* @returns nothing
-	*/
-	function RemoveEvent( $modulename, $eventname )
+	 * Remove an event from the CMS system
+	 * This function removes all handlers to the event, and completely removes
+	 * all references to this event from the database
+	 *
+	 * Note, only events created by this module can be removed.
+	 *
+	 * @param string The name of the module that is sending the event
+	 * @param string The name of the event
+	 * @return void
+	 **/
+	public static function remove_event( $modulename, $eventname )
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = db();
 
 		// get the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -82,22 +87,30 @@ class Events
 		$db->Execute( $q, array( $id ) );
 	}
 	
+	/**
+	 * Deprecated.  Use remove_event.
+	 **/
+	public static function RemoveEvent( $modulename, $eventname )
+	{
+		CmsModule::remove_event( $modulename, $eventname );
+	}
+	
 	
 	/**
-	* Trigger an event.
-	* This function will call all registered event handlers for the event
-	*
-	* @param string The name of the module that is sending the event
-	* @param string The name of the event
-	* @param array  The parameters associated with this event.
-	* @returns nothing
-	*/
-	static function SendEvent( $modulename, $eventname, $params = array() )
+	 * Trigger an event.
+	 * This function will call all registered event handlers for the event
+	 *
+	 * @param string The name of the module that is sending the event
+	 * @param string The name of the event
+	 * @param array  The parameters associated with this event.
+	 * @return void
+	 **/
+	public static function send_event( $modulename, $eventname, $params = array() )
 	{
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
 
-		$results = Events::ListEventHandlers($modulename, $eventname);
+		$results = CmsEvents::list_event_handlers($modulename, $eventname);
 		
 		if ($results != false)
 		{		
@@ -118,7 +131,7 @@ class Events
 					}
 
 					// and call the module event handler.
-					$obj =& CMSModule::GetModuleInstance($row['module_name']);
+					$obj =& CmsModule::GetModuleInstance($row['module_name']);
 					if( $obj )
 					{
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
@@ -129,18 +142,24 @@ class Events
 		}
 	}
 	
+	/**
+	 * Deprecated.  Use send_event instead.
+	 **/
+	public static function SendEvent( $modulename, $eventname, $params = array() )
+	{
+		CmsEvents::send_event( $modulename, $eventname, $params );
+	}
 	
 	/**
-	* Return the list of event handlers for a particular event
-	*
-	* @params string $modulename The name of the module sending the event
-	* @params string $eventname  The name of the event
-	*
-	* @returns mixed If successful, an array of arrays, each element
-	* in the array contains two elements 'handler_name', and 'module_handler',
-	* any one of these could be null. If it fails, false is returned.
-	*/
-	static function ListEventHandlers( $modulename, $eventname )
+	 * Return the list of event handlers for a particular event
+	 *
+	 * @param string $modulename The name of the module sending the event
+	 * @param string $eventname  The name of the event
+	 * @return mixed If successful, an array of arrays, each element
+	 * in the array contains two elements 'handler_name', and 'module_handler',
+	 * any one of these could be null. If it fails, false is returned.
+	 **/
+	public static function list_event_handlers( $modulename, $eventname )
 	{
 		global $gCms;
 		$db = &$gCms->GetDb();
@@ -181,17 +200,20 @@ class Events
 		else
 			return false;
 	}
-
+	
+	public static function ListEventHandlers( $modulename, $eventname )
+	{
+		return CmsEvents::list_event_handlers( $modulename, $eventname );
+	}
 
 	/**
 	* Get a list of all of the known events
 	*
-	* @returns mixed If successful, a list of all the known events.  If it fails, false
+	* @return mixed If successful, a list of all the known events.  If it fails, false
 	*/
-	function ListEvents()
+	public static function list_events()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = db();
 
 		$q = "SELECT * FROM ".cms_db_prefix()."events ORDER BY originator,event_name";
 		$dbresult = $db->Execute( $q );
@@ -205,22 +227,30 @@ class Events
 		{
 			$result[] = $row;
 		}
+
 		return $result;
 	}
-
+	
+	/**
+	 * Deprecated.  Use list_events() instead.
+	 */
+	public static function ListEvents()
+	{
+		return CmsEvents::list_events();
+	}
 
 	/**
 	* Add an event handler for a module event
 	*
-	* @params string $modulename      The name of the module sending the event
-	* @params string $eventname       The name of the event
-	* @params string $tag_name        The name of a user defined tag
-	* @params string $module_handler  The name of the module
-	* @params boolean $removable      Can this event be removed from the list?
+	* @param string $modulename      The name of the module sending the event
+	* @param string $eventname       The name of the event
+	* @param string $tag_name        The name of a user defined tag
+	* @param string $module_handler  The name of the module
+	* @param boolean $removable      Can this event be removed from the list?
 	*
-	* @returns mixed If successful, true.  If it fails, false.
+	* @return mixed If successful, true.  If it fails, false.
 	*/
-	static function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
+	public static function add_event_handler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
 		if( $tag_name == false && $module_handler == false )
 		{
@@ -231,8 +261,7 @@ class Events
 			return false;
 		}
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -307,17 +336,24 @@ class Events
 		}
 		return false;
 	}
-
+	
+	/**
+	 * Deprecated.  Use add_event_handler instead.
+	 **/
+	public static function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
+	{
+		return CmsEvents::add_event_handler( $modulename, $eventname, $tag_name, $module_handler, $removable );
+	}
 
 	/**
-	* Remove an event handler for a particular event
-	*
-	* @params string $modulename The name of the module sending the event
-	* @params string $eventname  The name of the event
-	*
-	* @returns mixed If successful, true.  If it fails, false.
-	*/
-	function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
+	 * Remove an event handler for a particular event
+	 *
+	 * @param string $modulename The name of the module sending the event
+	 * @param string $eventname  The name of the event
+	 *
+	 * @return mixed If successful, true.  If it fails, false.
+	 */
+	public static function remove_event_handler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
 		if( $tag_name != false && $module_handler != false )
 		{
@@ -329,8 +365,7 @@ class Events
 			$field = 'module_handler';
 		}
 
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -365,12 +400,26 @@ class Events
 		}
 		return false;
 	}
-
-
-	function RemoveAllEventHandlers( $modulename, $eventname )
+	
+	/**
+	 * Deprecated.  Use remove_event_handler instead.
+	 **/
+	public static function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		return CmsEvents::remove_event_handler( $modulename, $eventname, $tag_name, $module_handler );
+	}
+
+	/**
+	 * Removes all event handlers for the given event.
+	 *
+	 * @param string $modulename The name of the module sending the event
+	 * @param string $eventname  The name of the event
+	 *
+	 * @return mixed If successful, true.  If it fails, false.
+	 **/
+	public static function remove_all_event_handlers( $modulename, $eventname )
+	{
+		$db = db();
 
 		// find the id
 		$q = "SELECT event_id FROM ".cms_db_prefix()."events WHERE 
@@ -395,110 +444,146 @@ class Events
 		return false;
 	}
 	
+	/**
+	 * Deprecated.  Use remove_all_event_handlers instead.
+	 **/
+	public static function RemoveAllEventHandlers( $modulename, $eventname )
+	{
+		return CmsEvents::remove_all_event_handlers( $modulename, $eventname );
+	}
 	
 	/**
 	 * Place to handle the help messages for core events.  Basically just going to
 	 * call out to the lang() function.
 	 *
-	 * @params string $eventname  The name of the event
+	 * @param string $eventname  The name of the event
 	 *
-	 * @returns string Returns the help string for the event.  Empty string if nothing
+	 * @return string Returns the help string for the event.  Empty string if nothing
 	 * is found.
-	 *
-	 */
-	function GetEventHelp($eventname)
+	 **/
+	public static function get_event_help( $eventname )
 	{
 		return lang('event_help_'.strtolower($eventname));
 	}
 	
-	
+	/**
+	 * Deprecated.  Use get_event_help instead.
+	 **/
+	public static function GetEventHelp( $eventname )
+	{
+		return CmsEvents::get_event_help( $eventname );
+	}
 	
 	/**
 	 * Place to handle the description strings for core events.  Basically just going to
 	 * call out to the lang() function.
 	 *
-	 * @params string $eventname  The name of the event
+	 * @param string $eventname  The name of the event
 	 *
-	 * @returns string Returns the description string for the event.  Empty string if nothing
+	 * @return string Returns the description string for the event.  Empty string if nothing
 	 * is found.
 	 *
-	 */
-	function GetEventDescription($eventname)
+	 **/
+	public static function get_event_description( $eventname )
 	{
 		return lang('event_desc_'.strtolower($eventname));
 	}
 	
+	/**
+	 * Deprecated.  Use get_event_description instead.
+	 **/
+	public static function GetEventDescription( $eventname )
+	{
+		return CmsEvents::get_event_description( $eventname );
+	}
 	
-	static function SetupCoreEvents()
+	/**
+	 * Used by the install script to setup the core events
+	 * for a default install.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public static function SetupCoreEvents()
 	{
 		$modulename = 'Core';
 
-		Events::CreateEvent( $modulename, 'LoginPost');
-		Events::CreateEvent( $modulename, 'LogoutPost');
+		CmsEvents::create_event( $modulename, 'LoginPost');
+		CmsEvents::create_event( $modulename, 'LogoutPost');
 		
-		Events::CreateEvent( $modulename, 'AddUserPre');
-		Events::CreateEvent( $modulename, 'AddUserPost');
-		Events::CreateEvent( $modulename, 'EditUserPre');
-		Events::CreateEvent( $modulename, 'EditUserPost');
-		Events::CreateEvent( $modulename, 'DeleteUserPre');
-		Events::CreateEvent( $modulename, 'DeleteUserPost');
+		CmsEvents::create_event( $modulename, 'AddUserPre');
+		CmsEvents::create_event( $modulename, 'AddUserPost');
+		CmsEvents::create_event( $modulename, 'EditUserPre');
+		CmsEvents::create_event( $modulename, 'EditUserPost');
+		CmsEvents::create_event( $modulename, 'DeleteUserPre');
+		CmsEvents::create_event( $modulename, 'DeleteUserPost');
 		
-		Events::CreateEvent( $modulename, 'AddGroupPre');
-		Events::CreateEvent( $modulename, 'AddGroupPost');
-		Events::CreateEvent( $modulename, 'EditGroupPre');
-		Events::CreateEvent( $modulename, 'EditGroupPost');
-		Events::CreateEvent( $modulename, 'DeleteGroupPre');
-		Events::CreateEvent( $modulename, 'DeleteGroupPost');
+		CmsEvents::create_event( $modulename, 'AddGroupPre');
+		CmsEvents::create_event( $modulename, 'AddGroupPost');
+		CmsEvents::create_event( $modulename, 'EditGroupPre');
+		CmsEvents::create_event( $modulename, 'EditGroupPost');
+		CmsEvents::create_event( $modulename, 'DeleteGroupPre');
+		CmsEvents::create_event( $modulename, 'DeleteGroupPost');
 		
-		Events::CreateEvent( $modulename, 'AddStylesheetPre');
-		Events::CreateEvent( $modulename, 'AddStylesheetPost');
-		Events::CreateEvent( $modulename, 'EditStylesheetPre');
-		Events::CreateEvent( $modulename, 'EditStylesheetPost');
-		Events::CreateEvent( $modulename, 'DeleteStylesheetPre');
-		Events::CreateEvent( $modulename, 'DeleteStylesheetPost');
+		CmsEvents::create_event( $modulename, 'AddStylesheetPre');
+		CmsEvents::create_event( $modulename, 'AddStylesheetPost');
+		CmsEvents::create_event( $modulename, 'EditStylesheetPre');
+		CmsEvents::create_event( $modulename, 'EditStylesheetPost');
+		CmsEvents::create_event( $modulename, 'DeleteStylesheetPre');
+		CmsEvents::create_event( $modulename, 'DeleteStylesheetPost');
 		
-		Events::CreateEvent( $modulename, 'AddTemplatePre');
-		Events::CreateEvent( $modulename, 'AddTemplatePost');
-		Events::CreateEvent( $modulename, 'EditTemplatePre');
-		Events::CreateEvent( $modulename, 'EditTemplatePost');
-		Events::CreateEvent( $modulename, 'DeleteTemplatePre');
-		Events::CreateEvent( $modulename, 'DeleteTemplatePost');
-		Events::CreateEvent( $modulename, 'TemplatePreCompile');
-		Events::CreateEvent( $modulename, 'TemplatePostCompile');
+		CmsEvents::create_event( $modulename, 'AddTemplatePre');
+		CmsEvents::create_event( $modulename, 'AddTemplatePost');
+		CmsEvents::create_event( $modulename, 'EditTemplatePre');
+		CmsEvents::create_event( $modulename, 'EditTemplatePost');
+		CmsEvents::create_event( $modulename, 'DeleteTemplatePre');
+		CmsEvents::create_event( $modulename, 'DeleteTemplatePost');
+		CmsEvents::create_event( $modulename, 'TemplatePreCompile');
+		CmsEvents::create_event( $modulename, 'TemplatePostCompile');
 		
-		Events::CreateEvent( $modulename, 'AddGlobalContentPre');
-		Events::CreateEvent( $modulename, 'AddGlobalContentPost');
-		Events::CreateEvent( $modulename, 'EditGlobalContentPre');
-		Events::CreateEvent( $modulename, 'EditGlobalContentPost');
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPre');
-		Events::CreateEvent( $modulename, 'DeleteGlobalContentPost');
-		Events::CreateEvent( $modulename, 'GlobalContentPreCompile');
-		Events::CreateEvent( $modulename, 'GlobalContentPostCompile');
+		CmsEvents::create_event( $modulename, 'AddGlobalContentPre');
+		CmsEvents::create_event( $modulename, 'AddGlobalContentPost');
+		CmsEvents::create_event( $modulename, 'EditGlobalContentPre');
+		CmsEvents::create_event( $modulename, 'EditGlobalContentPost');
+		CmsEvents::create_event( $modulename, 'DeleteGlobalContentPre');
+		CmsEvents::create_event( $modulename, 'DeleteGlobalContentPost');
+		CmsEvents::create_event( $modulename, 'GlobalContentPreCompile');
+		CmsEvents::create_event( $modulename, 'GlobalContentPostCompile');
 		
-		Events::CreateEvent( $modulename, 'ContentEditPre');
-		Events::CreateEvent( $modulename, 'ContentEditPost');
-		Events::CreateEvent( $modulename, 'ContentDeletePre');
-		Events::CreateEvent( $modulename, 'ContentDeletePost');
+		CmsEvents::create_event( $modulename, 'ContentEditPre');
+		CmsEvents::create_event( $modulename, 'ContentEditPost');
+		CmsEvents::create_event( $modulename, 'ContentDeletePre');
+		CmsEvents::create_event( $modulename, 'ContentDeletePost');
 		
-		Events::CreateEvent( $modulename, 'AddUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'AddUserDefinedTagPost');
-		Events::CreateEvent( $modulename, 'EditUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'EditUserDefinedTagPost');
-		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPre');
-		Events::CreateEvent( $modulename, 'DeleteUserDefinedTagPost');
+		CmsEvents::create_event( $modulename, 'AddUserDefinedTagPre');
+		CmsEvents::create_event( $modulename, 'AddUserDefinedTagPost');
+		CmsEvents::create_event( $modulename, 'EditUserDefinedTagPre');
+		CmsEvents::create_event( $modulename, 'EditUserDefinedTagPost');
+		CmsEvents::create_event( $modulename, 'DeleteUserDefinedTagPre');
+		CmsEvents::create_event( $modulename, 'DeleteUserDefinedTagPost');
 		
-		Events::CreateEvent( $modulename, 'ModuleInstalled');
-		Events::CreateEvent( $modulename, 'ModuleUninstalled');
-		Events::CreateEvent( $modulename, 'ModuleUpgraded');
+		CmsEvents::create_event( $modulename, 'ModuleInstalled');
+		CmsEvents::create_event( $modulename, 'ModuleUninstalled');
+		CmsEvents::create_event( $modulename, 'ModuleUpgraded');
 		
-		Events::CreateEvent( $modulename, 'ContentStylesheet');
-		Events::CreateEvent( $modulename, 'ContentPreCompile');
-		Events::CreateEvent( $modulename, 'ContentPostCompile');
-		Events::CreateEvent( $modulename, 'ContentPostRender');
-		Events::CreateEvent( $modulename, 'SmartyPreCompile');
-		Events::CreateEvent( $modulename, 'SmartyPostCompile');
+		CmsEvents::create_event( $modulename, 'ContentStylesheet');
+		CmsEvents::create_event( $modulename, 'ContentPreCompile');
+		CmsEvents::create_event( $modulename, 'ContentPostCompile');
+		CmsEvents::create_event( $modulename, 'ContentPostRender');
+		CmsEvents::create_event( $modulename, 'SmartyPreCompile');
+		CmsEvents::create_event( $modulename, 'SmartyPostCompile');
 	}
+	
+	/**
+	 * Deprecated.  Use setup_core_events instead.
+	 **/
+	public static function SetupCoreEvents()
+	{
+		CmsEvents::setup_core_events();
+	}
+}
 
-} // class
+class Events extends CmsEvents {}
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -38,6 +38,8 @@ function __autoload($class_name)
 	//but it's not hurting anything.
 	if ($class_name == 'CMSModule')
 		$class_name = 'CmsModule';
+	else if ($class_name == 'Events')
+		$class_name = 'CmsEvents';
 
 	//We do this in order of importance...  classes first
 	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
