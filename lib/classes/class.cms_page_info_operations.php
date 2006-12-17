@@ -47,7 +47,7 @@ class CmsPageInfoOperations extends CmsObject
 
 		if ($row)
 		{
-			$onepageinfo = new PageInfo();
+			$onepageinfo = new CmsPageInfo();
 			$onepageinfo->content_id = $row['id'];
 			$onepageinfo->content_title = $row['content_name'];
 			$onepageinfo->content_alias = $row['content_alias'];
@@ -72,7 +72,7 @@ class CmsPageInfoOperations extends CmsObject
 			#if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
 			if (get_site_preference('enablecustom404') == "1")
 			{
-				$onepageinfo = new PageInfo();
+				$onepageinfo = new CmsPageInfo();
 				$onepageinfo->cachable = false;
 				if (get_site_preference('custom404template') > 0)
 					$onepageinfo->template_id = get_site_preference('custom404template');
@@ -108,6 +108,10 @@ class CmsPageInfoOperations extends CmsObject
 
 		return $result;
 	}
+	
+	/**
+	 * Deprecated.  Use load_page_info_by_content_alias instead.
+	 **/
 	static function LoadPageInfoByContentAlias($alias)
 	{
 		return CmsPageInfoOperations::load_page_info_by_content_alias($alias);

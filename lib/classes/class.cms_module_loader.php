@@ -25,8 +25,6 @@
  * @package		CMS
  */
 
-//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
-
 class CmsModuleLoader extends CmsObject
 {
 	/**
@@ -34,7 +32,7 @@ class CmsModuleLoader extends CmsObject
 	* modules whether they're installed, or active.  If it is false, then it will
 	* only load modules which are installed and active.
 	*/
-	public static function LoadModules($loadall = false, $noadmin = false)
+	public static function load_modules($loadall = false, $noadmin = false)
 	{
 		$gCms = cmsms();
 		$db = cms_db();
@@ -59,7 +57,7 @@ class CmsModuleLoader extends CmsObject
 			closedir($handle);
 
 			//Find modules and instantiate them
-			$allmodules = CmsModuleLoader::FindModules();
+			$allmodules = CmsModuleLoader::find_modules();
 			foreach ($allmodules as &$onemodule)
 			{
 				if (class_exists($onemodule))
@@ -159,11 +157,19 @@ class CmsModuleLoader extends CmsObject
 			if ($result) $result->Close();
 		}
 	}
+	
+	/**
+	 * Deprecated.  Use loag_modules instead.
+	 **/
+	public static function LoadModules($loadall = false, $noadmin = false)
+	{
+		return CmsModuleLoader::load_modules($loadall, $noadmin);
+	}
 
 	/**
 	 * Finds all classes extending cmsmodule for loading
 	 */
-	public static function FindModules()
+	public static function find_modules()
 	{
 		$result = array();
 
@@ -178,6 +184,14 @@ class CmsModuleLoader extends CmsObject
 		sort($result);
 
 		return $result;
+	}
+	
+	/**
+	 * Deprecated.  Use find_modules instead.
+	 **/
+	public static function FindModules()
+	{
+		return CmsModuleLoader::find_modules();
 	}
 }
 

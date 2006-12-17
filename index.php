@@ -104,7 +104,7 @@ if ($page == '')
 $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 
 //No info?  Then it's a bum page.  If we had a custom 404, then it's info
-//would've been returned.  The only option left is to show the generic
+//would've been returned earlier.  The only option left is to show the generic
 //404 message and exit out.
 if ($pageinfo == null)
 {
@@ -112,73 +112,16 @@ if ($pageinfo == null)
 	//exit;
 }
 
-$html = '';
-$cached = '';
-
-if (isset($_GET["print"]))
-{
-	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
-	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
-}
-else
-{
-	#If this is a case where a module doesn't want a template to be shown, just disable caching
-	if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
-	{
-		$html = $smarty->fetch('template:notemplate') . "\n";
-	}
-	else
-	{
-		if(null != $pageinfo)
-		{
-			$smarty->caching = false;
-			$smarty->compile_check = true;
-			($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-			$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
-			if (isset($_REQUEST['tmpfile']))
-			{
-				$smarty->clear_compiled_tpl('template:'.$pageinfo->template_id);
-			}
-		}
-	}
-}
-
-if (!$cached)
-{
-	#Perform the content postrendernoncached callback
-	reset($gCms->modules);
-	while (list($key) = each($gCms->modules))
-	{
-		$value =& $gCms->modules[$key];
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-		}
-	}
-	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-}
-
-#Perform the content postrender callback
-reset($gCms->modules);
-while (list($key) = each($gCms->modules))
-{
-	$value =& $gCms->modules[$key];
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	{
-		$gCms->modules[$key]['object']->ContentPostRender($html);
-	}
-}
-
-Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
-
+//Send any headers
 header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
 
-echo $html;
+//Render the pageinfo object
+echo $pageinfo->render();
 
+//Flush the buffer out to the browser
 @ob_flush();
 
+//Calculate our profiler data
 $endtime = $profiler->get_time();
 $memory = $profiler->get_memory();
 

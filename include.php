@@ -88,7 +88,7 @@ if (isset($CMS_ADMIN_PAGE))
 }
 
 #Load all installed module code
-CmsModuleLoader::LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
+CmsModuleLoader::load_modules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 
 # vim:ts=4 sw=4 noet
 ?>
