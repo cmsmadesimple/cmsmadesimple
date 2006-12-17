@@ -126,8 +126,6 @@ class CmsApplication extends CmsObject {
 	
 	var $ormclasses;
 	
-	var $moduleloader;
-	
 	var $globalcontentoperations;
 	
 	var $bookmarkoperations;
@@ -175,6 +173,7 @@ class CmsApplication extends CmsObject {
 		$this->variables['content-type'] = 'text/html';
 		$this->variables['modulenum'] = 1;
 		$this->variables['routes'] = array();
+		$this->variables['pluginnum'] = 1;
 		
 		#Setup hash for storing all modules and plugins
 		$this->cmsmodules          = array();
@@ -251,19 +250,7 @@ class CmsApplication extends CmsObject {
 	{
 		return CmsConfig::get_instance();
 	}
-	
-	function &GetModuleLoader()
-	{
-        if (!isset($this->moduleloader))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleloader.inc.php'));
-			$moduleloader = new ModuleLoader();
-			$this->moduleloader = $moduleloader;
-		}
-
-		return $this->moduleloader;
-	}
-	
+		
 	function &GetModuleOperations()
 	{
         if (!isset($this->moduleoperations))
@@ -403,26 +390,6 @@ class CmsApplication extends CmsObject {
 				$db->Close();
 		}
 	}
-}
-
-function cmsms()
-{
-	return CmsApplication::get_instance();
-}
-
-function db()
-{
-	return CmsDatabase::get_instance();
-}
-
-function config()
-{
-	return CmsConfig::get_instance();
-}
-
-function smarty()
-{
-	return CmsSmarty::get_instance();
 }
 
 class CmsRoute

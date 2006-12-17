@@ -18,6 +18,10 @@
 #
 #$Id$
 
+//Database related defines
+define('ADODB_OUTP', 'debug_sql');
+define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
+
 class CmsDatabase extends CmsObject
 {
 	static private $instance = NULL;

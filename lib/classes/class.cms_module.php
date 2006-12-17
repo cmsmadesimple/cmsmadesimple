@@ -26,7 +26,7 @@
  * @since		0.9
  * @package		CMS
  */
-class CMSModule
+class CmsModule
 {
 	/**
 	 * ------------------------------------------------------------------

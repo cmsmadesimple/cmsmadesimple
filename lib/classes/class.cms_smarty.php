@@ -45,6 +45,9 @@ class CmsSmarty extends Smarty {
 		//$this->debugging = false;
 		//$this->force_compile = true;
 		$this->cache_plugins = false;
+		
+		#Setup the site name
+		$this->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 
 		if ($config["debug"] == true)
 		{

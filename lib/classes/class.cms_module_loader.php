@@ -25,19 +25,19 @@
  * @package		CMS
  */
 
-require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
+//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.module.inc.php');
 
-class ModuleLoader
+class CmsModuleLoader extends CmsObject
 {
 	/**
 	* Loads modules from the filesystem.  If loadall is true, then it will load all
 	* modules whether they're installed, or active.  If it is false, then it will
 	* only load modules which are installed and active.
 	*/
-	function LoadModules($loadall = false, $noadmin = false)
+	public static function LoadModules($loadall = false, $noadmin = false)
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = db();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
@@ -59,7 +59,7 @@ class ModuleLoader
 			closedir($handle);
 
 			//Find modules and instantiate them
-			$allmodules = $this->FindModules();
+			$allmodules = CmsModuleLoader::FindModules();
 			foreach ($allmodules as &$onemodule)
 			{
 				if (class_exists($onemodule))
@@ -163,7 +163,7 @@ class ModuleLoader
 	/**
 	 * Finds all classes extending cmsmodule for loading
 	 */
-	function FindModules()
+	public static function FindModules()
 	{
 		$result = array();
 

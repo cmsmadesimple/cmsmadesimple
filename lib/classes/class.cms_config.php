@@ -39,6 +39,18 @@ class CmsConfig extends Object implements ArrayAccess
 		return self::$instance;
 	}
 	
+	static public function exists($key)
+	{
+		$config = CmsConfig::get_instance();
+		return array_key_exists($key, $config->params);
+	}
+	
+	static public function get($key)
+	{
+		$config = CmsConfig::get_instance();
+		return $config[$key];
+	}
+	
 	function offsetSet($key, $value)
 	{
 		$this->params[$key] = $value;

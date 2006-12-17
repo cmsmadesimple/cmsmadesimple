@@ -132,30 +132,6 @@ function microtime_diff($a, $b) {
 }
 
 /**
- * Joins a path together using proper directory separators
- * Taken from: http://www.php.net/manual/en/ref.dir.php
- *
- * @since 0.14
- */
-function cms_join_path()
-{
- 	$num_args = func_num_args();
-	$args = func_get_args();
-	$path = $args[0];
-
-	if( $num_args > 1 )
-	{
-		for ($i = 1; $i < $num_args; $i++)
-		{
-			$path .= DIRECTORY_SEPARATOR.$args[$i];
-		}
-	}
-
-	return $path;
-}
-
-
-/**
  * Shows a very close approximation of an Apache generated 404 error.
  *
  * Shows a very close approximation of an Apache generated 404 error.
@@ -721,27 +697,7 @@ function serialize_object(&$object)
 
 function unserialize_object(&$serialized)
 {
-	return  unserialize(base64_decode($serialized));
-}
-
-function starts_with($str, $sub)
-{
-	return ( substr( $str, 0, strlen( $sub ) ) == $sub );
-}
-
-function startswith( $str, $sub )
-{
-	return starts_with($str, $sub);
-}
-
-function ends_with( $str, $sub )
-{
-	return ( substr( $str, strlen( $str ) - strlen( $sub ) ) == $sub );
-}
-
-function endswith( $str, $sub )
-{
-	return ends_with($str, $sub);
+	return unserialize(base64_decode($serialized));
 }
 
 function show_mem($string = '')
@@ -772,103 +728,6 @@ function munge_string_to_url($alias, $tolower = false)
 	return $alias;
 }
 
-/*
- * Sanitize input to prevent against XSS and other nasty stuff.
- * Taken from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- */
-function clean_value($val)
-{
-	if ($val == "") {
-		return $val;
-	}
-	//Replace odd spaces with safe ones
-	$val = str_replace(" ", " ", $val);
-	$val = str_replace(chr(0xCA), "", $val);
-	//Encode any HTML to entities (including \n --> <br />)
-	$val = clean_html($val);
-	//Double-check special chars and remove carriage returns
-	//For increased SQL security
-	$val = preg_replace("/\\\$/", "$", $val);
-	$val = preg_replace("/\r/", "", $val);
-	$val = str_replace("!", "!", $val);
-	$val = str_replace("'", "'", $val);
-	//Allow unicode (?)
-	$val = preg_replace("/&amp;#([0-9]+);/s", "&#\\1;", $val);
-	//Add slashes for SQL
-	//$val = $this->sql($val);
-	//Swap user-inputted backslashes (?)
-	$val = preg_replace("/\\\(?!&amp;#|\?#)/", "\\", $val);
-	return $val;
-}
-
-function cleanValue($val)
-{
-	return clean_value($val);
-}
-
-/*
- * Method to sanitize incoming html.
- * Take from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- */
-function clean_html($string, $remove = false)
-{
-	if ($remove) {
-		$string = strip_tags($string);
-	} else {
-		$patterns = array("/\&/", "/%/", "/</", "/>/", '/"/', "/'/", "/\(/", "/\)/", "/\+/", "/-/");
-		$replacements = array("&amp;", "&#37;", "&lt;", "&gt;", "&quot;", "&#39;", "&#40;", "&#41;", "&#43;", "&#45;");
-		$string = preg_replace($patterns, $replacements, $string);
-	}
-	return $string;
-}
-
-function cleanHtml($string, $remove = false)
-{
-	return clean_html($string, $remove);
-}
-
-/**
- * Returns given $lower_case_and_underscored_word as a camelCased word.
- * Take from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- *
- * @param string $lower_case_and_underscored_word Word to camelize
- * @return string Camelized word. likeThis.
- */
-function camelize($lowerCaseAndUnderscoredWord) {
-	$replace = str_replace(" ", "", ucwords(str_replace("_", " ", $lowerCaseAndUnderscoredWord)));
-	return $replace;
-}
-
-/**
- * Returns an underscore-syntaxed ($like_this_dear_reader) version of the $camel_cased_word.
- * Take from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- *
- * @param string $camel_cased_word Camel-cased word to be "underscorized"
- * @return string Underscore-syntaxed version of the $camel_cased_word
- */
-function underscore($camelCasedWord) {
-	$replace = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $camelCasedWord));
-	return $replace;
-}
-
-/**
- * Returns a human-readable string from $lower_case_and_underscored_word,
- * by replacing underscores with a space, and by upper-casing the initial characters.
- * Take from cakephp (http://cakephp.org)
- * Licensed under the MIT License
- *
- * @param string $lower_case_and_underscored_word String to be made more readable
- * @return string Human-readable string
- */
-function humanize($lowerCaseAndUnderscoredWord) {
-	$replace = ucwords(str_replace("_", " ", $lowerCaseAndUnderscoredWord));
-	return $replace;
-}
-
 /**
  * Returns all parameters sent that are destined for the module with
  * the given $id
@@ -895,28 +754,6 @@ function get_module_parameters($id)
 function GetModuleParameters($id)
 {
 	return get_module_parameters($id);
-}
-
-function coalesce_key($array, $val1, $val2)
-{
-	if (isset($array[$val1]))
-	{
-		return $array[$val1];
-	}
-	return $val2;
-}
-
-function stripslashes_deep($value)
-{
-	if (is_array($value))
-	{
-		$value = array_map('stripslashes_deep', $value);
-	}
-	elseif (!empty($value) && is_string($value))
-	{
-		$value = stripslashes($value);
-	}
-	return $value;
 }
 
 # vim:ts=4 sw=4 noet
