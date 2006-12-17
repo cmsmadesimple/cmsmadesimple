@@ -402,27 +402,9 @@ class CmsSmarty extends Smarty {
 
 				return true;
 			}
-			else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+			else if (CmsPreview::has_preview())
 			{
-				$fname = $_GET["tmpfile"];
-				$fname = str_replace("..", "", $fname);
-				$fname = str_replace("\\", "", $fname);
-				$fname = str_replace("/", "", $fname);
-				$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
-				$fname = basename($fname);
-
-				if (is_writable($config["previews_path"]))
-				{
-					$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
-				}
-				else
-				{
-					$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
-				}
-				$handle = fopen($fname, "r");
-				$data = unserialize(fread($handle, filesize($fname)));
-				fclose($handle);
-				//unlink($fname);
+				$data = CmsPreview::get_preview();
 
 				$tpl_source = '{content}';
 				if (is_array($data) && count($data) == 2)
@@ -430,6 +412,7 @@ class CmsSmarty extends Smarty {
 					if ($data[0] instanceof Template)
 						$tpl_source = $data[0]->content;
 				}
+
 				return true;
 			}
 			else if (isset($_GET["print"]))
@@ -537,27 +520,9 @@ class CmsSmarty extends Smarty {
 				$tpl_source = '';
 			return true;
 		}
-		else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
+		else if (CmsPreview::has_preview())
 		{
-			$fname = $_GET["tmpfile"];
-			$fname = str_replace("..", "", $fname);
-			$fname = str_replace("\\", "", $fname);
-			$fname = str_replace("/", "", $fname);
-			$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
-			$fname = basename($fname);
-
-			if (is_writable($config["previews_path"]))
-			{
-				$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
-			}
-			else
-			{
-				$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
-			}
-			$handle = fopen($fname, "r");
-			$data = unserialize(fread($handle, filesize($fname)));
-			fclose($handle);
-			//unlink($fname);
+			$data = CmsPreview::get_preview();
 
 			$tpl_source = 'No Content Found in Preview File';
 			if (is_array($data) && count($data) == 2)

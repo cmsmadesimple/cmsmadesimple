@@ -79,11 +79,8 @@ require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
 //the start time we generated way up at the top.
 $profiler = CmsProfiler::get_instance('', $start_time);
 
-//Global smarty object.  We probably should dump this...
-$smarty = cms_smarty();
-
 //Make sure the id is set inside smarty if needed for modules
-$smarty->set_id_from_request();
+cms_smarty()->set_id_from_request();
 
 //Can we find a page somewhere in the request?
 $page = CmsRequest::calculate_page_from_request();
@@ -125,57 +122,22 @@ echo $pageinfo->render();
 $endtime = $profiler->get_time();
 $memory = $profiler->get_memory();
 
-if ($config["debug"] == true)
-{
-	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and " . $memory . " bytes of memory</p>";
-}
-
 echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries -->\n";
-echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and " . $memory . " bytes of memory</p>";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+
+#if ($config["debug"] == true)
+#{
+	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and " . $memory . " bytes of memory</p>";
+	echo CmsProfiler::get_instance()->report();
+#}
 
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
 {
-	$smarty->clear_compiled_tpl();
-	#$smarty->clear_all_cache();
+	cms_smarty()->clear_compiled_tpl();
 }
 
-if ($config["debug"] == true)
-{
-	#$db->LogSQL(false); // turn off logging
-	
-	# output summary of SQL logging results
-	#$perf = NewPerfMonitor($db);
-	#echo $perf->SuspiciousSQL();
-	#echo $perf->ExpensiveSQL();
-
-	#echo $sql_queries;
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
-}
-
-//If we're in a preview, remove the file
-if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
-{
-	$fname = $_GET["tmpfile"];
-	$fname = str_replace('.', '', $fname);
-	$fname = str_replace("\\", '', $fname);
-	$fname = str_replace('/', '', $fname);
-	$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
-	$fname = basename($fname);
-
-	if (is_writable($config["previews_path"]))
-	{
-		$fname = $config["previews_path"] . DIRECTORY_SEPARATOR . $fname;
-	}
-	else
-	{
-		$fname = TMP_CACHE_LOCATION . DIRECTORY_SEPARATOR . $fname;
-	}
-	unlink($fname);
-}
+//Clear out any previews that may be going on
+CmsPreview::clear_preview();
 
 # vim:ts=4 sw=4 noet
 ?>

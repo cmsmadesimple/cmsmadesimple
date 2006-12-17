@@ -99,6 +99,8 @@ class CmsProfiler extends CmsObject
 	function report( $memory = true, $database = true, $glue='' )
 	{
 		$db = cms_db();
+		
+		echo '<div id="profiler_output" style="font-size: .75em;">';
 
 		echo implode( $glue, $this->_buffer );
 		if ($memory)
@@ -118,6 +120,8 @@ class CmsProfiler extends CmsObject
 			echo '</pre>';
 			*/
 		}
+		
+		echo '</div>';
 	}
 	
 	/**

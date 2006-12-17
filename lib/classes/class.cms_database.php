@@ -19,7 +19,7 @@
 #$Id$
 
 //Database related defines
-define('ADODB_OUTP', 'debug_sql');
+define('ADODB_OUTP', 'mark_sql');
 define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
 
 class CmsDatabase extends CmsObject
@@ -43,6 +43,7 @@ class CmsDatabase extends CmsObject
 		global $USE_OLD_ADODB;
 		
 		$loaded_adodb = false;
+		$dbinstance = null;
 
 		if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1))
 		{
@@ -57,6 +58,7 @@ class CmsDatabase extends CmsObject
 		    {
 		        # Load (full) ADOdb
 		        require($full_adodb);
+				$dbinstance = &ADONewConnection($config['dbms']);
 		        $loaded_adodb = true;
 		    }
 		}
@@ -68,6 +70,8 @@ class CmsDatabase extends CmsObject
 		    {
 		        # Load ADOdb Lite
 		        require($adodb_light);
+				$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+				$loaded_adodb = true;
 		    }
 		    else
 		    {
@@ -76,8 +80,7 @@ class CmsDatabase extends CmsObject
 		        die();
 		    }
 		}
-		
-		$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+	
 		if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
 		{
 			$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
@@ -98,11 +101,10 @@ class CmsDatabase extends CmsObject
 		}
 		
 		//$dbinstance->debug = true;
-		if ($config['debug'] == true)
-		{
+		#if ($config['debug'] == true)
+		#{
 			$dbinstance->debug = true;
-			#$dbinstance->LogSQL();
-		}
+		#}
 		
 	    if ($config['dbms'] == 'sqlite')
 	    {
@@ -111,6 +113,14 @@ class CmsDatabase extends CmsObject
 
 		return $dbinstance;
 	}
+}
+
+/**
+ * Function for adodb to call back to log sql queries and errors.
+ **/
+function mark_sql($sql, $newline)
+{
+	CmsProfiler::get_instance()->mark($sql);
 }
 
 # vim:ts=4 sw=4 noet

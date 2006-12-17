@@ -45,19 +45,19 @@ function __autoload($class_name)
 	//We do this in order of importance...  classes first
 	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
 	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
+		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
 	}
 	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
 	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
+		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
 	}
 	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
 	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
+		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
 	}
 	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
 	{
-		require_once(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
+		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
 	}
 	else if (CmsContentOperations::load_content_type($class_name))
 	{
