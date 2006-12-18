@@ -47,6 +47,9 @@ if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage = "1";
 $sitedownmessage = "<p>Site is current down.  Check back later.</p>";
 if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
 
+$defaultpagecontent = '';
+if (isset($_POST['defaultpagecontent'])) $defaultpagecontent = $_POST['defaultpagecontent'];
+
 $sitedownmessagetemplate = "-1";
 if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
 
@@ -101,6 +104,7 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('custom404template', $custom404template);
 		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
+		set_site_preference('defaultpagecontent', $defaulpagecontent);
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
@@ -123,6 +127,7 @@ else if (isset($_POST["editsiteprefs"]))
 	$custom404template = get_site_preference('custom404template');
 	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
 	$sitedownmessage = get_site_preference('sitedownmessage');
+	$defaultpagecontent = get_site_preference('defaultpagecontent');
 	$xmlmodulerepository = get_site_preference('xmlmodulerepository');
 	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_site_preference('useadvancedcss');
@@ -284,7 +289,10 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 	</div>
 	<?php }?>
 	
-	
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('defaultpagecontent')?>:</p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="defaulpagecontent" cols="" rows=""><?php echo $defaultpagecontent?></textarea></p>
+		</div>	
 	<?php if ($access) { ?>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>

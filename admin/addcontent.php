@@ -257,6 +257,7 @@ else
 	$contentobj->SetActive(True);
 	$contentobj->SetShowInMenu(True);
 	$contentobj->SetLastModifiedBy($userid);
+	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent'));
 	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
 }
 
