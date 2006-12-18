@@ -110,13 +110,20 @@ function cms_module_SetTemplate(&$modinstance, $tpl_name, $content, $modulename 
 	}
 }
 
-function cms_module_DeleteTemplate(&$modinstance, $tpl_name, $modulename = '')
+function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = '')
 {
 	global $gCms;
 	$db =& $gCms->GetDB();
 
-	$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
-	$result = $db->Execute($query, array($modulename != ''?$modulename:$modinstance->GetName(), $tpl_name));
+	$parms = array($modulename != ''?$modulename:$modinstance->GetName());
+	$query = "DELETE FROM ".cms_db_prefix()."module_templates WHERE module_name = ?";
+	if( $tpl_name != '' )
+	  {
+	    $query .= 'AND template_name = ?';
+	    $parms[] = $tpl_name;
+	  }
+	$result = $db->Execute($query, $parms);
+	return ($result == false)?false:true;
 }
 
 function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '', $cacheid = '')

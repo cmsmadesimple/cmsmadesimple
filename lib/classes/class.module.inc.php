@@ -1866,7 +1866,7 @@ class CMSModule
 		return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
 	}
 
-	function DeleteTemplate($tpl_name, $modulename = '')
+	function DeleteTemplate($tpl_name = '', $modulename = '')
 	{
 		$this->LoadTemplateMethods();
 		return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
@@ -2092,12 +2092,18 @@ class CMSModule
 	}
 
 	/**
-	 * Removes a module preference.
+	 * Removes a module preference.  If no preference name
+	 * is specified, removes all module preferences.
+	 *
 	 * @param string The name of the preference to remove
 	 */
-	function RemovePreference($preference_name)
+	function RemovePreference($preference_name='')
 	{
-		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
+	  if( $preference_name == '' )
+	    {
+	      return remove_site_preference("^".$this->GetName()."_mapi_pref_",true);
+	    }
+	  return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
 
 	/**
