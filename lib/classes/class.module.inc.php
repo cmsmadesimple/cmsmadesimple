@@ -40,7 +40,12 @@ class CMSModule
 	var $params;
 	var $wysiwygactive;
 	var $error;
+	var $modinstall;
+	var $modtemplates;
 	var $modlang;
+	var $modform;
+	var $modredirect;
+	var $modmisc;
 	var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
