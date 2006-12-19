@@ -52,6 +52,10 @@ class Link extends ContentBase
 		    $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
+	    if (FALSE == empty($_POST['file_url']))
+	    {
+	    	$this->SetPropertyValue('url', $params['file_url']);
+            } 
 	    if (isset($params['title']))
 	    {
 		$this->mName = $params['title'];
@@ -120,7 +124,7 @@ class Link extends ContentBase
 	    $result = false;
 	}
 
-	if ($this->GetPropertyValue('url') == '')
+	if ($this->GetPropertyValue('url') == '' && TRUE == empty($_POST['file_url']))
 	{
 	    $errors[]= lang('nofieldgiven',array(lang('url')));
 	    $result = false;
@@ -146,8 +150,14 @@ class Link extends ContentBase
 		$contentops =& $gCms->GetContentOperations();
     	$ret[]= array(lang('parent').':', $contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
     }
+
 	$ret[]= array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
-	$text = '<option value="">(none)</option>';
+
+	$text = '<option value="">'.lang('no_file_url').'</option>';
+	$text .= $this->directoryToSelect($gCms->config['uploads_path'], true, $gCms->config['uploads_path'], $this->GetPropertyValue('url'));
+	$ret[]= array(lang('file_url').':','<select name="file_url">'.$text.'</select>');
+	
+	$text = '<option value="">'.lang('none').'</option>';
 	$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
 	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 	$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
@@ -172,6 +182,39 @@ class Link extends ContentBase
 
 	return $ret;
     }
+
+	/* Modfied from the Diagnostics module's directoryToArray. Thanks to SjG */
+	function directoryToSelect($directory, $recursive, &$orig_dir, $url)
+	{
+		$select = '';
+		if ($handle = opendir($directory)) {
+			while (false !== ($file = readdir($handle))) {
+				if ($file != "." && $file != ".." && $file[0] != '.') { // Mod Skip hidden file/dir
+					if (is_dir($directory. "/" . $file)) {
+						if($recursive) {
+							$select .= $this->directoryToSelect($directory. "/" . $file, $recursive, $orig_dir, $url);
+						}
+						$file = $directory . "/" . $file;
+						$file = preg_replace("/\/\//si", "/", $file);
+						// $array_items[$file] = "(dir)";
+					} else {
+						$file = $directory . "/" . $file;
+						// $stats = stat ( $file );
+						$file = preg_replace("/\/\//si", "/", $file);
+						// $array_items[$file] = "(".$stats[7].") " . date("Y-m-d H:i:s",$stats[9]);
+						$uploads_dir = basename($orig_dir);
+						$file = str_replace($orig_dir, '', $file);
+						$file = $uploads_dir.$file;
+						// $array_items[$file] = $file;
+						$select .= '<option value="'.$file.'"'.($url==$file?' selected="selected"':'').'>'.$file.'</option>';
+					}
+				}
+			}
+			closedir($handle);
+		}
+		return $select;
+	}
+
 
     function GetURL($rewrite = true)
     {

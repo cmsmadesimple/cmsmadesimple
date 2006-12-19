@@ -777,4 +777,7 @@ $lang['admin']['filterbymodule'] = 'Filter By Module';
 $lang['admin']['showall'] = 'Show All';
 $lang['admin']['core'] = 'Core';
 $lang['admin']['defaultpagecontent'] = 'Default Page Content';
+$lang['admin']['file_url'] = 'Link to file (instead of URL)';
+$lang['admin']['no_file_url'] = 'None (Use URL Above)';
+$lang['admin']['none'] = 'none';
 ?>
