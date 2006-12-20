@@ -45,6 +45,9 @@ $message = '';
 
 include_once("header.php");
 
+global $gCms;
+$db =& $gCms->GetDb();
+
 if (!$access) {
 	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto',array(lang('modifygrouppermissions')))."</p></div>";
 }

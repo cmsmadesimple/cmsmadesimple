@@ -26,6 +26,8 @@ require_once("../lib/classes/class.user.inc.php");
 check_login();
 
 include_once("header.php");
+global $gCms;
+$db =& $gCms->GetDb();
 
 if (isset($_GET["message"])) {
 	$message = preg_replace('/\</','',$_GET['message']);

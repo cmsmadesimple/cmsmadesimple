@@ -89,6 +89,8 @@ if ($access)
 #******************************************************************************
 	if (isset($_POST["addcss"]))
 	{
+	  global $gCms;
+	  $db =& $gcms->GetDb();
 
 		# used to check if we will save the form or not
 		$validinfo = true;

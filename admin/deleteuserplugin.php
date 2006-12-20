@@ -24,6 +24,9 @@ require_once("../include.php");
 
 check_login();
 
+global $gCms;
+$db =& $gCms->GetDb();
+
 $userplugin_id = -1;
 if (isset($_GET["userplugin_id"])) {
 

@@ -167,6 +167,8 @@ if (strlen($htmlblob) > 0)
     }
 
 include_once("header.php");
+global $gCms;
+$db =& $gCms->GetDb();
 
 $owners = "<select name=\"owner_id\">";
 

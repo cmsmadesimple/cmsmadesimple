@@ -25,6 +25,8 @@ $CMS_ADMIN_TITLE='preferences';
 require_once("../include.php");
 
 check_login();
+global $gCms;
+$db =& $gCms->GetDb();
 
 $error = "";
 $message = "";

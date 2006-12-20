@@ -34,6 +34,7 @@ if (isset($_POST['reorderpages'])) $action = 'reorder';
 include_once("header.php");
 
 global $gCms;
+$db =& $gCms->GetDb();
 $hm =& $gCms->GetHierarchyManager();
 
 $nodelist = array();

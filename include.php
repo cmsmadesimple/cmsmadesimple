@@ -149,10 +149,10 @@ debug_buffer('done loading files');
 global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
-    $db =& $gCms->GetDB();
+    $cmsdb =& $gCms->GetDB();
     if($config['dbms'] == 'sqlite')
     {
-        sqlite_create_function($db->_connectionID,'now','time',0);
+        sqlite_create_function($cmsdb->_connectionID,'now','time',0);
     }
 }
 

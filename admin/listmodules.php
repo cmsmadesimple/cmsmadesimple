@@ -43,6 +43,7 @@ $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
 
 $smarty = new Smarty_CMS($gCms->config);
+$db =& $gCms->GetDb();
 
 //Messagestring (success) for module operations
 $modulemessage="";

@@ -127,6 +127,8 @@ if ($access) {
 
 include_once("header.php");
 
+global $gCms; $db =& $gCms->GetDb();
+
 $addt_users = "";
 
 $query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";

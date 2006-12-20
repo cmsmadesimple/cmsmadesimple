@@ -37,6 +37,8 @@ require_once("../include.php");
 check_login();
 
 include_once("header.php");
+global $gCms;
+$db =& $gCms->GetDb();
 
 #******************************************************************************
 # first : displaying error message, if any.

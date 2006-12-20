@@ -85,6 +85,7 @@ if (isset($_POST["cancel"]))
 }
 
 global $gCms;
+$db =& $gCms->GetDb();
 $templateops =& $gCms->GetTemplateOperations();
 
 $userid = get_userid();

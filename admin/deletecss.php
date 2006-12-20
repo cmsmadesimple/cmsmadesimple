@@ -40,6 +40,7 @@ check_login();
 
 global $gCms;
 $styleops =& $gCms->GetStylesheetOperations();
+$db =& $gCms->GetDb();
 
 #******************************************************************************
 # Definition of global vars

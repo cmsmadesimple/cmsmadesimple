@@ -22,6 +22,8 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
+global $gCms;
+$db =& $gCms->GetDb();
 
 $error = "";
 

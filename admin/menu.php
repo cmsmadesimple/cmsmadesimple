@@ -3,6 +3,8 @@
 <?php
 
 $userid = get_userid();
+global $gCms;
+$db =& $gCms->GetDb();
 
 ?>
 

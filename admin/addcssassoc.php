@@ -84,6 +84,9 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 	if ($access)
 	{
 
+	  global $gCms;
+	  $db =& $gCms->GetDb();
+
 		# first check if this association already exists
 		$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_to_id = ? AND assoc_type = ? AND assoc_css_id = ?";
 		$result = $db->Execute($query, array($id, $type, $css_id));

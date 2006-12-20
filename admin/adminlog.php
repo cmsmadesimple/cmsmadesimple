@@ -26,6 +26,9 @@ check_login();
 
 include_once("header.php");
 
+global $gCms;
+$db =& $gCms->GetDb();
+
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 

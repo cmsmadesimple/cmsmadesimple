@@ -24,6 +24,8 @@ require_once("../include.php");
 require_once("../lib/classes/class.group.inc.php");
 
 check_login();
+global $gCms;
+$db =& $gCms->GetDb();
 
 $error = "";
 
