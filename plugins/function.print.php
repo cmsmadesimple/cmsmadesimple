@@ -19,7 +19,7 @@
 function smarty_cms_function_print($params, &$smarty)
 {
 	global $gCms;
-
+	$page_url = ''; // Initialize var to prevent errors on preview
 	$text = 'Print This Page';
 
 	if (!empty($params['text']))
