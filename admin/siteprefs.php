@@ -106,7 +106,7 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('custom404template', $custom404template);
 		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
-		set_site_preference('defaultpagecontent', $defaulpagecontent);
+		set_site_preference('defaultpagecontent', $defaultpagecontent);
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
