@@ -35,6 +35,7 @@ $access = check_permission($userid, 'Clear Admin Log');
 if (isset($_GET['clear']) && $access) {
        $query = "DELETE FROM ".cms_db_prefix()."adminlog";
        $db->Execute($query);
+       echo $themeObject->ShowMessage(lang('adminlogcleared'));
 }
 
 $page = 1;
@@ -91,6 +92,7 @@ if ($result && $result->RecordCount() > 0) {
 	}
 	else {
 		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+		echo '<p>'.lang('adminlogempty').'</p>';
 	}
 
 if ($access && $result && $result->RecordCount() > 0) {
