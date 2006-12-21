@@ -19,14 +19,12 @@
 function smarty_cms_function_bulletmenu($params, &$smarty) {
 
 	global $gCms;
-	global $db;
 	global $config;
 
 	# getting menu parameters
 	$showadmin = isset($params['showadmin']) ? $params['showadmin'] : 0 ;
 	$collapse = isset($params['collapse']) ? $params['collapse'] : 0 ;
 
-	global $gCms;
 	$contentops =& $gCms->GetContentOperations();
 	$allcontent =& $contentops->GetAllContent(false);
 
