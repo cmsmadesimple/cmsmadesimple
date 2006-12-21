@@ -72,6 +72,7 @@ function ADODB_Error_PEAR($dbms, $fn, $errno, $errmsg, $p1=false, $p2=false)
 	$class = ADODB_PEAR_ERROR_CLASS;
 	$ADODB_Last_PEAR_Error = new $class($s, $errno, $GLOBALS['_PEAR_default_error_mode'], $GLOBALS['_PEAR_default_error_options'], $errmsg);
 	//print "<p>!$s</p>";
+	trigger_error($s, E_USER_WARNING); // Just warning so that error will not be hidden by CMSMS tabs
 }
 
 /**

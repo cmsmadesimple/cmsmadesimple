@@ -69,6 +69,11 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #Grab the current configuration
 $config =& $gCms->GetConfig();
 
+if ($config['debug'] == true && $config['use_adodb_lite'] == true)
+{
+	require_once($dirname.DIRECTORY_SEPARATOR."lib/adodb_lite/adodb-errorpear.inc.php");
+}
+
 #Define the CMS_ADODB_DT constant
 define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 
