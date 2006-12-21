@@ -1515,7 +1515,6 @@ class AdminTheme
 	  $wikiUrl = $config['wiki_url'];
 	  // Include English translation of titles. (Can't find better way to get them)
 	  $dirname = dirname(__FILE__);
-	  include($dirname.'/../../'.$this->cms->config['admin_dir'].'/lang/en_US/admin.inc.php');
 	  foreach ($this->breadcrumbs AS $key => $value)
 	    {
 	      $title = $value['title'];
@@ -1548,7 +1547,7 @@ class AdminTheme
 		  }
 		// Get the key of the title so we can use the en_US version for the URL
 		$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-		$wikiUrl .= '/'.$lang['admin'][$title_key[0]];
+		$wikiUrl .= '/'. CmsLanguage::translate($title_key[0], array(), 'core', 'en_US');
 		$help_title = $title;
 	      }
 	    }

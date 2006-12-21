@@ -105,8 +105,7 @@ $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 //404 message and exit out.
 if ($pageinfo == null)
 {
-	//error_handler_404();
-	//exit;
+	//CmsResponse::send_error_404();
 }
 
 //Render the pageinfo object

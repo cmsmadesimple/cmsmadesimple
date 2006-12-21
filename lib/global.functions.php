@@ -203,4 +203,25 @@ function coalesce_key($array, $val1, $val2)
 	return $val2;
 }
 
+/**
+ * Global wrapper for CmsResponse::redirect()
+ *
+ * @param $to The url to redirect to
+ *
+ * @return void
+ * @author Ted Kulp
+ **/
+function redirect($to)
+{
+	CmsResponse::redirect($to);
+}
+
+function lang()
+{
+	$ary = func_get_args();
+	//var_dump($ary);
+	//return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
+	return CmsLanguage::translate($ary[0], array_slice($ary, 1));
+}
+
 ?>
