@@ -230,7 +230,11 @@ if ($frontendlang != '')
 $smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
 $smarty->assign('lang',$frontendlang);
 $smarty->assign('encoding',get_encoding());
-
+if ($config['debug'] == true)
+{
+	$smarty->debugging = true;
+	$smarty->error_reporting = 'E_ALL';
+}
 if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
 {
     include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));

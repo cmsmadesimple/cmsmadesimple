@@ -73,11 +73,6 @@ $params = array_merge($_GET, $_POST);
 
 $smarty = &$gCms->smarty;
 $smarty->params = $params;
-if ($config['debug'] == true)
-{
-	$smarty->debugging = true;
-	$smarty->error_reporting = 'E_ALL';
-}
 
 $page = '';
 
