@@ -482,32 +482,42 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 
 	ob_start();
 	if ($use_html)
-		echo "<div><b>$titleText</b><pre>\n";
+		echo "<div><b>$titleText</b>\n";
 
-	if(is_array($var))
+	if(FALSE == empty($var))
 	{
-		echo "Number of elements: " . count($var) . "\n";
-		print_r($var);
+		if ($use_html)
+		{
+			echo '<pre>';
+		}
+		if(is_array($var))
+		{
+			echo "Number of elements: " . count($var) . "\n";
+			print_r($var);
+		}
+		elseif(is_object($var))
+		{
+			print_r($var);
+		}
+		elseif(is_string($var))
+		{
+			print_r(htmlentities(str_replace("\t", '  ', $var)));
+		}
+		elseif(is_bool($var))
+		{
+			echo $var === true ? 'true' : 'false';
+		}
+		else
+		{
+			print_r($var);
+		}
+		if ($use_html)
+		{
+			echo '</pre>';
+		}
 	}
-	elseif(is_object($var))
-	{
-		print_r($var);
-	}
-	elseif(is_string($var))
-	{
-		print_r(htmlentities(str_replace("\t", '  ', $var)));
-	}
-	elseif(is_bool($var))
-	{
-		echo $var === true ? 'true' : 'false';
-	}
-	else
-	{
-		print_r($var);
-	}
-
 	if ($use_html)
-		echo "</pre></div>\n";
+		echo "</div>\n";
 
 	$output = ob_get_contents();
 	ob_end_clean();
