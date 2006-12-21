@@ -102,7 +102,6 @@ class CmsModule
 		
 		$this->modinstall = false;
 		$this->modtemplates = false;
-		$this->modlang = false;
 		$this->modform = false;
 		$this->modredirect = false;
 		$this->modmisc = false;
@@ -114,15 +113,6 @@ class CmsModule
 		{
 			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modtemplates.inc.php'));
 			$this->modtemplates = true;
-		}
-	}
-	
-	function LoadLangMethods()
-	{
-		if (!$this->modlang)
-		{
-			require_once(cms_join_path(dirname(__FILE__), 'module_support', 'modlang.inc.php'));
-			$this->modlang = true;
 		}
 	}
 	
@@ -1817,16 +1807,10 @@ class CmsModule
 	 * @param array Corresponding params for string that require replacement.
 	 *		  These params use the vsprintf command and it's style of replacement.
 	 */
-	function Lang()
+	function lang()
 	{
-		$this->LoadLangMethods();
-		
-		//Push $this onto front of array
 		$args = func_get_args();
-		array_unshift($args,'');
-		$args[0] = $this;
-
-		return call_user_func_array('cms_module_Lang', $args);
+		return CmsLanguage::translate($args[0], array_slice($args, 1), $this->GetName(), '', $this->DefaultLanguage());
 	}
 
 	/**

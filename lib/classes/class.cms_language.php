@@ -32,19 +32,17 @@ class CmsLanguage extends CmsObject
 	public static function translate($name, $params = array(), $module = 'core', $current_language = '', $default_language = 'en_US')
 	{
 		if (self::$nls == null)
-			self::$nls =& CmsLanguage::load_nls_files();
+			CmsLanguage::load_nls_files();
 		
 		$current_language = $current_language != '' ? $current_language : CmsLanguage::get_current_language();
 		
 		if (!array_key_exists($module, self::$lang) || !array_key_exists($current_language, self::$lang[$module]))
 		{
-			$result =& CmsLanguage::load_lang_file($module, $default_language);
-			self::$lang[$module][$default_language] =& $result;
+			CmsLanguage::load_lang_file($module, $default_language);
 			
 			if ($current_language != $default_language)
 			{
-				$result =& CmsLanguage::load_lang_file($module, $current_language);
-				self::$lang[$module][$current_language] =& $result;
+				CmsLanguage::load_lang_file($module, $current_language);
 			}
 		}
 		
@@ -56,31 +54,46 @@ class CmsLanguage extends CmsObject
 			return "--Add Me - $name --";
 	}
 	
-	private static function &load_lang_file($module, $language)
+	private static function load_lang_file($module, $language)
 	{
 		$lang = array();
 		
 		$root = dirname(dirname(dirname(__FILE__)));
 
-	    $file = cms_join_path($root, "admin", "lang", "ext", $language, "admin.inc.php");
+		$file = cms_join_path($root, "lang", $module . '.' . $language . ".php");
 		if (!is_file($file))
 		{
-			$file = cms_join_path($root, "admin", "lang", $language, "admin.inc.php");
+			if ($module == 'core')
+			{
+			    $file = cms_join_path($root, "admin", "lang", "ext", $language, "admin.inc.php");
+				if (!is_file($file))
+				{
+					$file = cms_join_path($root, "admin", "lang", $language, "admin.inc.php");
+				}
+			}
+			else
+			{
+			    $file = cms_join_path($root, "modules", $module, "lang", "ext", $language . ".php");
+				if (!is_file($file))
+				{
+					$file = cms_join_path($root, "modules", $module, "lang", $language . ".php");
+				}
+			}
 		}
 
 	    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === false)
-	    {  
+	    {
 	        include ($file);
-			if (is_array($lang['admin']) && count($lang['admin'] > 1))
+			if (isset($lang['admin']) && is_array($lang['admin']) && count($lang['admin'] > 1))
 			{
 				$lang = $lang['admin'];
 			}
 	    }
 		
-		return $lang;
+		self::$lang[$module][$language] =& $lang;
 	}
 	
-	private static function &load_nls_files()
+	private static function load_nls_files()
 	{
 		$nls = array();
 		
@@ -96,7 +109,7 @@ class CmsLanguage extends CmsObject
 
 		closedir($handle);
 		
-		return $nls;
+		self::$nls =& $nls;
 	}
 	
 	private static function get_current_language()
