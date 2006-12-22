@@ -26,8 +26,6 @@
  * @package		CMS
  */
 
-//require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.content.inc.php');
-
 class CmsContentOperations extends CmsObject
 {	
 	static private $instance = NULL;
@@ -111,8 +109,7 @@ class CmsContentOperations extends CmsObject
 		global $gCms;
 		$db = &$gCms->GetDb();
 		
-		$content = $gCms->GetOrmClass('content_base');
-		$result = $content->find_by_id($id);
+		$result = cmsms()->content_base->find_by_id($id);
 		
 		return $result;
 
@@ -615,11 +612,7 @@ class CmsContentOperations extends CmsObject
 	
 	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
 	{	
-		global $gCms;
-		$db = &$gCms->GetDb();
-		
-		$contentbase = $gCms->GetOrmClass('content_base');
-		$result = $contentbase->find_all_by_parent_id($id);
+		$result = cmsms()->content_base->find_all_by_parent_id($id);
 		
 		$contentcache =& $tree->content;
 		foreach ($result as $one)
@@ -628,36 +621,14 @@ class CmsContentOperations extends CmsObject
 		}
 	}
 
-	/**
-	*  Sets the default content as id
-	*/   
-	function SetDefaultContent($id) {
-		global $gCms;
-		$db = &$gCms->GetDb();
-		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content=1";
-		$old_id = $db->GetOne($query);
-		if (isset($old_id)) 
-		{
-			$one = new Content();
-			$one->LoadFromId($old_id);
-			$one->SetDefaultContent(false);
-			debug_buffer('save from ' . __LINE__);
-			$one->Save();
-		}
-		$one = new Content();
-		$one->LoadFromId($id);
-		$one->SetDefaultContent(true);
-		debug_buffer('save from ' . __LINE__);
-		$one->Save();
+	function get_all_content($loadprops=true)
+	{
+		return cmsms()->content_base->find_all(array('order' => 'hierarchy ASC'));
 	}
-
+	
 	function &GetAllContent($loadprops=true)
 	{
-		global $gCms;
-		$contentbase = $gCms->GetOrmClass('content_base');
-		$result = $contentbase->find_all(array('order' => 'hierarchy ASC'));
-		
-		return $result;
+		return CmsContentOperations::get_all_content($loadprops);
 	}
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
@@ -715,8 +686,7 @@ class CmsContentOperations extends CmsObject
     // function to get the id of the default page
 	function GetDefaultPageID()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 
 		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
 		$row = &$db->GetRow($query);
@@ -788,6 +758,7 @@ class CmsContentOperations extends CmsObject
 		{
 			return false;
 		}
+
 		return $row['content_alias'];
 	}
 
@@ -828,8 +799,7 @@ class CmsContentOperations extends CmsObject
 	
 	static function clear_cache()
 	{
-		global $gCms;
-		$smarty =& $gCms->GetSmarty();
+		$smarty = smarty();
 
 		$smarty->clear_all_cache();
 		$smarty->clear_compiled_tpl();
@@ -845,7 +815,7 @@ class CmsContentOperations extends CmsObject
 		CmsContentOperations::clear_cache();
 	}
 	
-	static function create_friendly_hierarchy_position($position)
+	public static function create_friendly_hierarchy_position($position)
 	{
 		#Change padded numbers back into user-friendly values
 		$tmp = '';
@@ -858,12 +828,12 @@ class CmsContentOperations extends CmsObject
 		return $tmp;
 	}
 
-	static function CreateFriendlyHierarchyPosition($position)
+	public static function CreateFriendlyHierarchyPosition($position)
 	{
 		return CmsContentOperations::create_friendly_hierarchy_position($position);
 	}
 	
-	static function create_unfriendly_hierarchy_position($position)
+	public static function create_unfriendly_hierarchy_position($position)
 	{
 		#Change user-friendly values into padded numbers
 		$tmp = '';
@@ -876,12 +846,12 @@ class CmsContentOperations extends CmsObject
 		return $tmp;
 	}
 
-	static function CreateUnfriendlyHierarchyPosition($position)
+	public static function CreateUnfriendlyHierarchyPosition($position)
 	{
 		return CmsContentOperations::create_friendly_hierarchy_position($position);
 	}
 	
-	static function do_cross_reference($parent_id, $parent_type, $content)
+	public static function do_cross_reference($parent_id, $parent_type, $content)
 	{
 		$db = db();
 
@@ -910,7 +880,7 @@ class CmsContentOperations extends CmsObject
 		}
 	}
 
-	static function remove_cross_references($parent_id, $parent_type)
+	public static function remove_cross_references($parent_id, $parent_type)
 	{
 		$db = db();
 
@@ -919,7 +889,7 @@ class CmsContentOperations extends CmsObject
 		$db->Execute($query, array($parent_id, $parent_type));
 	}
 
-	static function remove_cross_references_by_child($child_id, $child_type)
+	public static function remove_cross_references_by_child($child_id, $child_type)
 	{
 		$db = db();
 
