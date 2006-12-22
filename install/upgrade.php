@@ -31,7 +31,7 @@ $USE_OLD_ADODB=1;
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."fileloc.php");
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php");
 
-load_backwards_compatibility();
+//load_backwards_compatibility();
 
 //Do module autoupgrades 
 function module_autoupgrade()
@@ -131,9 +131,9 @@ else
 {
 	echo "<p>Upgrading config.php...";
 
-	cms_config_upgrade();
-	$config = cms_config_load(true, true);
-	cms_config_save($config);
+	$config = CmsConfig::get_instance();
+	$config->load(true, true);
+	$config->save();
 
 	echo "[done]</p>";
 
@@ -161,12 +161,16 @@ else
 
 	echo "[done]</p>";
 
+	/*
 	$db = &ADONewConnection($config["dbms"], 'pear:date:extend:transaction');
 	$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
 	global $gCms;
-	$gCms->db = &$db;
+	$gCms->db = $db;
+	*/
+	
+	$db = cms_db();
 
 	$current_version = 1;
 

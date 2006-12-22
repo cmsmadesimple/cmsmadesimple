@@ -175,7 +175,7 @@ class CmsConfig extends Object implements ArrayAccess
 			if ($handle)
 			{
 				fwrite($handle, "<?php\n\n");
-				fwrite($handle, cms_config_text($this->params));
+				fwrite($handle, $this->config_text($this->params));
 				fwrite($handle, "\n?>");
 				fclose($handle);
 			}

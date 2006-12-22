@@ -246,7 +246,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
 	{
 		$titleText = "Debug display of '$title':";
 	}
-	$titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
+	//$titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
 	
 	if (function_exists('memory_get_usage'))
 	{

@@ -317,8 +317,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	
 	function find_by_query($query, $queryparams = array())
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cms_db();
 		
 		$classname = get_class($this);
 
@@ -391,13 +390,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 			$dbresult->MoveNext();
 		}
 		
+		if ($dbresult) $dbresult->Close();
+		
 		return $result;
 	}
 	
 	function find_count($arguments = array())
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cms_db();
 
 		$table = $this->get_table();
 		
