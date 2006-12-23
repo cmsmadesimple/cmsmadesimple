@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -41,6 +41,7 @@ class CmsUser extends CmsObjectRelationalMapping
 	 */
 	function set_password($password)
 	{
+		//Set params directly so that we don't get caught in a loop
 		$this->params['password'] = md5($password);
 	}
 	
@@ -52,6 +53,7 @@ class CmsUser extends CmsObjectRelationalMapping
 		$this->set_password($password);
 	}
 	
+	//Callback handlers
 	function before_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddUserPre' : 'EditUserPre'), array('user' => &$this));

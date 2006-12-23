@@ -135,6 +135,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	}
 	*/
 	
+	/**
+	 * Used for the ArrayAccessor implementation.
+	 *
+	 * @param string The key to set with the given value
+	 * @param mixed The value to set for the given key
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function offsetSet($key, $value)
 	{
 		if (array_key_exists($key, $this->field_maps)) $key = $this->field_maps[$key];
@@ -142,6 +150,13 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$this->dirty = true;
 	}
 
+	/**
+	 * Used for the ArrayAccessor implementation.
+	 *
+	 * @param string The key to look up
+	 * @return mixed The value of the $obj['field']
+	 * @author Ted Kulp
+	 **/
 	function offsetGet($key)
 	{
 		if (array_key_exists($key, $this->params))
@@ -150,6 +165,13 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		}
 	}
 
+	/**
+	 * Used for the ArrayAccessor implementation.
+	 *
+	 * @param string The key to unset
+	 * @return bool Whether or not it does exist
+	 * @author Ted Kulp
+	 **/
 	function offsetUnset($key)
 	{
 		if (array_key_exists($key, $this->params))
@@ -158,6 +180,13 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		}
 	}
 
+	/**
+	 * Used for the ArrayAccessor implementation.
+	 *
+	 * @param string The key to lookup to see if it exists
+	 * @return bool Whether or not it does exist
+	 * @author Ted Kulp
+	 **/
 	function offsetExists($offset)
 	{
 		return array_key_exists($offset, $this->params);
@@ -168,6 +197,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * right after an ORM class has been defined.
 	 *
 	 * @param $classname Name of the class to register with the ORM system
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	static function register_orm_class($classname)
 	{
@@ -180,7 +211,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return FALSE;
 	}
 	
-	// Getter
+	/**
+	 * Getter overload method.  Called when an $obj->field and field
+	 * does not exist in the object's variable list.
+	 *
+	 * @param string The field to look up
+	 * @return mixed The value for that field, if it exists
+	 * @author Ted Kulp
+	 **/
 	function __get($n)
 	{
 		if (array_key_exists($n, $this->params))
@@ -192,7 +230,15 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		}
 	}
 
-	// Setter
+	/**
+	 * Setter overload method.  Called when an $obj->field = '' and field
+	 * does not exist in the object's variable list.
+	 *
+	 * @param string The field to set
+	 * @param mixed The value to set for said field
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function __set($n, $val)
 	{
 		if (array_key_exists($n, $this->field_maps)) $n = $this->field_maps[$n];
@@ -203,7 +249,15 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		$this->dirty = true;
 	}
 	
-	// Caller, applied when $function isn't defined
+	/**
+	 * Caller overload method.  Called when an $obj->method() is called and
+	 * that method does not exist.
+	 *
+	 * @param string The name of the method called
+	 * @param array The parameters sent along with that method call
+	 * @return mixed The result of the method call
+	 * @author Ted Kulp
+	 **/
 	function __call($function, $arguments)
 	{
 		$function_converted = underscore($function);
@@ -240,8 +294,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 *
 	 * @param $function The name of the function that came into the __call method
 	 * @param $arguments The arguments that came into the __call method
-	 *
 	 * @return The results of the find
+	 * @author Ted Kulp
 	 */
 	function find_by_($function, $arguments)
 	{
@@ -260,8 +314,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 *
 	 * @param $function The name of the function that came into the __call method
 	 * @param $arguments The arguments that came into the __call method
-	 *
 	 * @return The results of the find_all
+	 * @author Ted Kulp
 	 */
 	function find_all_by_($function, $arguments)
 	{
@@ -280,8 +334,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 *
 	 * @param $function The name of the function that came into the __call method
 	 * @param $arguments The arguments that came into the __call method
-	 *
 	 * @return The result of the find_count
+	 * @author Ted Kulp
 	 */
 	function find_count_by_($function, $arguments)
 	{
@@ -298,6 +352,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * Figures out the proper name of the table that's persisting this class.
 	 *
 	 * @return Name of the table to use
+	 * @author Ted Kulp
 	 */
 	function get_table()
 	{
@@ -307,6 +362,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return $table;
 	}
 	
+	/**
+	 * The generic catch-all find method.  Takes all the given parameters, constructs a query, and calls find_by_query
+	 * on it.  It returns the results of find_by_query.
+	 *
+	 * @param array The list of parameters that we should calculate to constuct the select query
+	 * @return mixed The object that is found, or null if none is found in the database.
+	 * @author Ted Kulp
+	 **/
 	function find($arguments = array())
 	{
 		$table = $this->get_table();
@@ -319,6 +382,15 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return $this->find_by_query($query, $queryparams, $numrows, $offset);
 	}
 	
+	/**
+	 * Takes a SQL query related to the class, executes it, and loads the object, if found.
+	 * If it's not found, we return null.
+	 *
+	 * @param string The SELECT query to run
+	 * @param array An array of query parameters to replace the ? in the query with
+	 * @return mixed The found object, or null if none are found
+	 * @author Ted Kulp
+	 **/
 	function find_by_query($query, $queryparams = array())
 	{
 		$db = cms_db();
@@ -348,9 +420,17 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 			return $oneobj;
 		}
 
-		return FALSE;
+		return null;
 	}
 	
+	/**
+	 * The generic catch-all find_all method.  Takes all the given parameters, constructs a query, and calls find_all_by_query
+	 * on it.  It returns the results of find_all_by_query.
+	 *
+	 * @param array The list of parameters that we should calculate to constuct the select query
+	 * @return array An array of objects if found.  If none are found, it will be an empty array.
+	 * @author Ted Kulp
+	 **/
 	function find_all($arguments = array())
 	{
 		$table = $this->get_table();
@@ -363,6 +443,15 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return $this->find_all_by_query($query, $queryparams, $numrows, $offset);
 	}
 	
+	/**
+	 * Takes a SQL query related to the class, executes it, and loads the object(s), if found.
+	 * If it's not found, we return an empty array.
+	 *
+	 * @param string The SELECT query to run
+	 * @param array An array of query parameters to replace the ? in the query with
+	 * @return mixed The found object(s), or empty array if none are found
+	 * @author Ted Kulp
+	 **/
 	function find_all_by_query($query, $queryparams = array(), $numrows = -1, $offset = -1)
 	{
 		$db = cms_db();
@@ -399,6 +488,13 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return $result;
 	}
 	
+	/**
+	 * Used exactly like find_all, but returns a count instead of the actual objects.
+	 *
+	 * @param array The parameters used to the construct the SQL query
+	 * @return int The resulting count
+	 * @author Ted Kulp
+	 **/
 	function find_count($arguments = array())
 	{
 		$db = cms_db();
@@ -695,7 +791,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	}
 	
 	/**
-	 * Generates an array of column names in the table that perists this class.
+	 * Generates an array of column names in the table that perists this class.  This
+	 * list is then cached during the life of the request.
 	 *
 	 * @return An array of column names
 	 */
@@ -806,20 +903,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	
 	function _cacheDescription($fields)
 	{
-		global $gCms;
-		$cache =& $gCms->desccache;
-		
-		$cache[$this->get_table()] =& $fields;
+		cmsms()->desccache[$this->get_table()] = $fields;
 	}
 	
 	function _getDescriptionCache()
-	{
-		global $gCms;
-		$cache =& $gCms->desccache;
-		
-		if (isset($cache[$this->get_table()]))
+	{		
+		if (isset(cmsms()->desccache[$this->get_table()]))
 		{
-			return $cache[$this->get_table()];
+			return cmsms()->desccache[$this->get_table()];
 		}
 
 		return FALSE;
