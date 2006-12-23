@@ -20,14 +20,14 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
-require_once("../lib/classes/class.user.inc.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "include.php");
 
 check_login();
 
 include_once("header.php");
 
-if (isset($_GET["message"])) {
+if (isset($_GET["message"]))
+{
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
@@ -40,10 +40,9 @@ if (isset($_GET["toggleactive"]))
 	{
 		$error .= "<li>".lang('errorupdatinguser')."</li>";
 	} 
-	else {
-		global $gCms;
-		$userops =& $gCms->GetUserOperations();
-		$thisuser =& $userops->LoadUserByID($_GET["toggleactive"]);
+	else
+	{
+		$thisuser = CmsUserOperations::load_user_by_id($_GET["toggleactive"]);
 
 		if($thisuser)
 		{
@@ -52,18 +51,9 @@ if (isset($_GET["toggleactive"]))
 			$permission = check_permission($userid, 'Modify Users');
 
 			$result = false;
-			if($permission)
+			if ($permission)
 			{
-				$thisuser->active == 1 ? $thisuser->active = 0 : $thisuser->active=1;
-
-				#Perform the edituser_pre callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true && $gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditUserPre($thisuser);
-					}
-				}
+				$thisuser->active = ($thisuser->active ? false : true);
 
 				$result = $thisuser->save();
 			}
@@ -71,15 +61,6 @@ if (isset($_GET["toggleactive"]))
 			if ($result)
 			{
 				audit($_GET["toggleactive"], $thisuser->username, 'Edited User');
-				#Perform the edituser_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditUserPost($thisuser);
-					}
-				}
 			}
 			else
 			{
@@ -89,7 +70,8 @@ if (isset($_GET["toggleactive"]))
 	}
 }
 
-if (FALSE == empty($error)) {
+if (FALSE == empty($error))
+{
 	echo $themeObject->ShowErrors('<ul class="error">'.$error.'</ul>');
 }
 
@@ -103,14 +85,12 @@ if (FALSE == empty($error)) {
 
 	$userid = get_userid();
 	$edit = check_permission($userid, 'Modify Users');
-        $remove = check_permission($userid, 'Remove Users');
+	$remove = check_permission($userid, 'Remove Users');
 
 	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
-	$result = $db->Execute($query);
+	$result = cms_db()->Execute($query);
 
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$userlist =& $userops->LoadUsers();
+	$userlist = CmsUserOperations::load_users();
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -120,7 +100,8 @@ if (FALSE == empty($error)) {
 		echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
 	}
 	echo $themeObject->ShowHeader('currentusers').'</div>';
-	if ($userlist && count($userlist) > 0){
+	if ($userlist && count($userlist) > 0)
+	{
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
@@ -139,27 +120,33 @@ if (FALSE == empty($error)) {
         $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
 
 		$counter=0;
-		foreach ($userlist as $oneuser){
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+		foreach ($userlist as $oneuser)
+		{
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit)
+			{
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
 				echo "<td class=\"pagepos\"><a href=\"listusers.php?toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				if ($edit || $userid == $oneuser->id)
-				    {
+				{
 					echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
-                    }
+				}
 				else
-				    {
+				{
 					echo "<td>&nbsp;</td>\n";
-					}
+				}
 				if ($remove && $oneuser->id != 1)
-				    {
+				{
 					echo "<td><a href=\"deleteuser.php?user_id=".$oneuser->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
-		            }
+				}
+				else
+				{
+					echo "<td>&nbsp;</td>\n";
+				}
         		echo "</tr>\n";
 
 				($currow=="row1"?$currow="row2":$currow="row1");

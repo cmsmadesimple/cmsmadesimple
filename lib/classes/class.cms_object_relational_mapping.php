@@ -18,8 +18,6 @@
 #
 #$Id$
 
-debug_buffer('', 'Start Loading ORM');
-
 /**
  * Base class for all things ORM.  All classes that want to be part of
  * the ORM system need to extend this class.  They also need to call the
@@ -187,7 +185,10 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	{
 		if (array_key_exists($n, $this->params))
 		{
-			return $this->params[$n];
+			if (method_exists($this, 'get_' . $n))
+				return call_user_func_array(array($this, 'get_'.$n), array($val));
+			else
+				return $this->params[$n];
 		}
 	}
 
@@ -195,7 +196,10 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	function __set($n, $val)
 	{
 		if (array_key_exists($n, $this->field_maps)) $n = $this->field_maps[$n];
-		$this->params[$n] = $val;
+		if (method_exists($this, 'set_' . $n))
+			call_user_func_array(array($this, 'set_'.$n), array($val));
+		else
+			$this->params[$n] = $val;
 		$this->dirty = true;
 	}
 	
@@ -575,36 +579,35 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * @return Boolean based on whether or not the delete was successful.
 	 */
 	function delete($id = -1)
-	{		
-		$table = $this->get_table();
-		$id_field = $this->id_field;
-		
-		$do_after_delete = false;
-
-		if ($id == -1)
+	{
+		if ($id > -1)
 		{
+			$method = 'find_by_' . $this->id_field;
+			$obj = $this->$method($id);
+			if ($obj)
+				return $obj->delete();
+			return false;
+		}
+		else
+		{
+			$table = $this->get_table();
+			$id_field = $this->id_field;
+		
 			$id = $this->$id_field;
-			$do_after_delete = true;
-		}
 		
-		if ($do_after_delete)
-		{
 			$this->before_delete();
-		}
 		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
+			//Figure out if we need to replace the field from the field mappings
+			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
+			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-		$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
+			$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
 		
-		if ($do_after_delete)
-		{
 			if ($result)
 				$this->after_delete();
-		}
 		
-		return $result;
+			return $result;
+		}
 	}
 	
 	/**
@@ -620,7 +623,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 			if (array_key_exists($k, $this->params))
 			{
 				//Just in case there is an override
-				$this->$k = $v;
+				$this->params[$k] = $v;
 				$this->dirty = true;
 			}
 		}
@@ -638,7 +641,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	{
 		foreach ($resulthash as $k=>$v)
 		{
-			$object->$k = $v;
+			if (array_key_exists($k, $this->field_maps)) $k = $this->field_maps[$k];
+			$object->params[$k] = $v;
 		}
 		
 		$this->dirty = false;

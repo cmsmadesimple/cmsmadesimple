@@ -24,9 +24,8 @@
  * @since 0.6.1
  * @package CMS
  */
-debug_buffer('', 'Start Loading User');
 
-class User extends CmsObjectRelationalMapping
+class CmsUser extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
 	var $field_maps = array('user_id' => 'id', 'first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess');
@@ -36,17 +35,45 @@ class User extends CmsObjectRelationalMapping
 	/**
 	 * Encrypts and sets password for the User
 	 *
+	 * @param string The password to encrypt and set for the user
+	 *
 	 * @since 0.6.1
 	 */
+	function set_password($password)
+	{
+		$this->params['password'] = md5($password);
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Use set_password instead.
+	 **/
 	function SetPassword($password)
 	{
-		$this->password = md5($password);
+		$this->set_password($password);
+	}
+	
+	function before_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddUserPre' : 'EditUserPre'), array('user' => &$this));
+	}
+	
+	function after_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddUserPost' : 'EditUserPost'), array('user' => &$this));
+	}
+	
+	function before_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteUserPre', array('user' => &$this));
+	}
+	
+	function after_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteUserPost', array('user' => &$this));
 	}
 }
 
-//User::register_orm_class('User');
-
-debug_buffer('', 'End Loading User');
+class User extends CmsUser {}
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -107,6 +107,7 @@ class CmsEvents extends CmsObject
 	 **/
 	public static function send_event( $modulename, $eventname, $params = array() )
 	{
+		var_dump("Sending $eventname on $modulename");
 		global $gCms;
 		$usertagops =& $gCms->GetUserTagOperations();
 

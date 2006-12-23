@@ -30,7 +30,7 @@
  *
  * @since 0.1
  * @param string no_redirect - If true, then don't redirect if not logged in
- * @returns If they're logged in, true.  If not logged in, false. 
+ * @return bool If they're logged in, true.  If not logged in, false. 
  */
 function check_login($no_redirect = false)
 {

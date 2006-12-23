@@ -18,14 +18,18 @@
 #
 #$Id$
 
+//Defines
+define("ROOT_DIR", dirname(__FILE__));
+define("DS", DIRECTORY_SEPARATOR);
+
 //Where are we?
-$dirname = dirname(__FILE__);
+$dirname = ROOT_DIR;
 
 //Load file location defines
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+require_once($dirname.DS.'fileloc.php');
 
 //Load necessary global functions
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'global.functions.php');
+require_once($dirname.DS.'lib'.DS.'global.functions.php');
 
 //Load the version defines
 require_once(cms_join_path($dirname,'version.php'));

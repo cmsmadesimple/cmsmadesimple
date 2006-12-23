@@ -83,6 +83,7 @@ class CmsLanguage extends CmsObject
 
 	    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === false)
 	    {
+			CmsProfiler::get_instance()->mark('Load:' . $file);
 	        include ($file);
 			if (isset($lang['admin']) && is_array($lang['admin']) && count($lang['admin'] > 1))
 			{

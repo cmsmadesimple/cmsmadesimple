@@ -36,11 +36,9 @@ if (isset($_GET["user_id"]))
 
 	if ($access)
 	{
-		global $gCms;
-		$userops =& $gCms->GetUserOperations();
-		$oneuser = $userops->LoadUserByID($user_id);
+		$oneuser = CmsUserOperations::load_user_by_id($user_id);
 		$user_name = $oneuser->username;
-		$ownercount = $userops->CountPageOwnershipByID($user_id);
+		$ownercount = CmsUserOperations::count_page_ownership_by_id($user_id);
 
 		if ($ownercount > 0)
 		{
@@ -49,31 +47,7 @@ if (isset($_GET["user_id"]))
 
 		if ($dodelete)
 		{
-			#Perform the deleteuser_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPre($oneuser);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
-
-			$oneuser->Delete();
-
-			#Perform the deleteuser_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPost($oneuser);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
+			$oneuser->delete();
 
 			audit($user_id, $user_name, 'Deleted User');
 		}

@@ -20,8 +20,7 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
-require_once("../lib/classes/class.user.inc.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "include.php");
 
 check_login();
 
@@ -30,7 +29,7 @@ $error = "";
 $dropdown = "";
 
 $user = "";
-if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
+if (isset($_POST["user"])) $user = CmsRequest::clean_value($_POST["user"]);
 
 $password = "";
 if (isset($_POST["password"])) $password = $_POST["password"];
@@ -39,13 +38,13 @@ $passwordagain = "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $firstname = "";
-if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
+if (isset($_POST["firstname"])) $firstname = CmsRequest::clean_value($_POST["firstname"]);
 
 $lastname = "";
-if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
+if (isset($_POST["lastname"])) $lastname = CmsRequest::clean_value($_POST["lastname"]);
 
 $email = "";
-if (isset($_POST["email"])) $email = cleanValue($_POST["email"]);
+if (isset($_POST["email"])) $email = CmsRequest::clean_value($_POST["email"]);
 
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
@@ -55,16 +54,16 @@ if (!isset($_POST["active"]) && isset($_POST["edituser"])) $active = 0;
 
 $userid = get_userid();
 $user_id = $userid;
-if (isset($_POST["user_id"])) $user_id = cleanValue($_POST["user_id"]);
-else if (isset($_GET["user_id"])) $user_id = cleanValue($_GET["user_id"]);
+if (isset($_POST["user_id"])) $user_id = CmsRequest::clean_value($_POST["user_id"]);
+else if (isset($_GET["user_id"])) $user_id = CmsRequest::clean_value($_GET["user_id"]);
 
 global $gCms;
 $userops =& $gCms->GetUserOperations();
 $thisuser = $userops->LoadUserByID($user_id);
 if (strlen($thisuser->username) > 0)
-    {
-    $CMS_ADMIN_SUBTITLE = $thisuser->username;
-    }
+{
+	$CMS_ADMIN_SUBTITLE = $thisuser->username;
+}
 
 // this is now always true... but we may want to change how things work, so I'll leave it
 $access_perm = check_permission($userid, 'Modify Users');
@@ -111,10 +110,11 @@ if ($access) {
 				$thisuser->active = $active;
 				if ($password != "")
 				{
-					$thisuser->SetPassword($password);
+					$thisuser->set_password($password);
 				}
 				
 				#Perform the edituser_pre callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
@@ -125,6 +125,7 @@ if ($access) {
 				}
 				
 				Events::SendEvent('Core', 'EditUserPre', array('user' => &$thisuser));
+				*/
 
 
 				$result = $thisuser->save();
@@ -135,6 +136,7 @@ if ($access) {
 				audit($user_id, $thisuser->username, 'Edited User');
 
 				#Perform the edituser_post callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
@@ -145,24 +147,26 @@ if ($access) {
 				}
 				
 				Events::SendEvent('Core', 'EditUserPost', array('user' => &$thisuser));
+				*/
 				
                 if ($access_perm)
-                    {
+				{
 				    redirect("listusers.php");
-				    }
+				}
 				else
-				    {
+				{
                     redirect("topmyprefs.php");
-                    }
-
+				}
 			}
-			else {
+			else
+			{
 				$error .= "<li>".lang('errorupdatinguser')."</li>";
 			}
 		}
 
 	}
-	else if ($user_id != -1) {
+	else if ($user_id != -1)
+	{
 		$user = $thisuser->username;
 		$firstname = $thisuser->firstname;
 		$lastname = $thisuser->lastname;

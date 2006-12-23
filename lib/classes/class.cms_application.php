@@ -242,11 +242,6 @@ class CmsApplication extends CmsObject {
 		}
 	}
 	
-	function GetOrmClass($name)
-	{
-		return $this->get_orm_class($name);
-	}
-	
 	function get_config()
 	{
 		return CmsConfig::get_instance();
@@ -269,16 +264,9 @@ class CmsApplication extends CmsObject {
 		return $this->moduleoperations;
 	}
 	
-	function &GetUserOperations()
+	function GetUserOperations()
 	{
-        if (!isset($this->useroperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.useroperations.inc.php'));
-			$useroperations = new UserOperations();
-			$this->useroperations = $useroperations;
-		}
-
-		return $this->useroperations;
+        return CmsUserOperations::get_instance();
 	}
 	
 	function GetContentOperations()
