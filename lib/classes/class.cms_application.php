@@ -344,16 +344,12 @@ class CmsApplication extends CmsObject {
 		return $this->templateoperations;
 	}
 	
-	function &GetStylesheetOperations()
+	/**
+	 * @deprecated Deprecated.  Use CmsStylesheetOperations::some_method instead.
+	 **/
+	function GetStylesheetOperations()
 	{
-        if (!isset($this->stylesheetoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.stylesheetoperations.inc.php'));
-			$stylesheetoperations = new StylesheetOperations();
-			$this->stylesheetoperations = $stylesheetoperations;
-		}
-
-		return $this->stylesheetoperations;
+		return CmsStylesheetOperations::get_instance();
 	}
 	
 	function &GetGroupOperations()
