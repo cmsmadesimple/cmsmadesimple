@@ -114,8 +114,8 @@ if ($access)
 		# then check if new name is in use or not
 		else if ($css_name != $orig_css_name)
 		{
-			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . $db->qstr($css_name);
-			$result = $db->Execute($query);
+			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . cms_db()->qstr($css_name);
+			$result = cms_db()->Execute($query);
 
 			if ($result && $result->RecordCount() > 0)
 			{
@@ -137,12 +137,12 @@ if ($access)
 		if ($validinfo)
 		{
 			//$query = "UPDATE ".cms_db_prefix()."css SET css_name = ?, css_text = ?, media_type = ?, modified_date = ? WHERE css_id = ?";
-			//$result = $db->Execute($query,array($css_name, $css_text, $media_type, $db->DBTimeStamp(time()), $css_id));
+			//$result = cms_db()->Execute($query,array($css_name, $css_text, $media_type, cms_db()->DBTimeStamp(time()), $css_id));
 			
 			global $gCms;
 			$styleops =& $gCms->GetStylesheetOperations();
 			
-			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
+			$onestylesheet = $styleops->load_stylesheet_by_id($css_id);
 			$onestylesheet->name = $css_name;
 			$onestylesheet->value = $css_text;
 
@@ -158,16 +158,16 @@ if ($access)
                         }
 			$onestylesheet->media_type = $types;
 			
-			Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
+			//Events::SendEvent('Core', 'EditStylesheetPre', array('stylesheet' => &$onestylesheet));
 			
-			$result = $onestylesheet->Save();
+			$result = $onestylesheet->save();
 
 			if ($result)
 			{
 				#Start using new name, just in case this is an apply
 				$orig_css_name = $css_name;
 				
-				Events::SendEvent('Core', 'EditStylesheetPost', array('stylesheet' => &$onestylesheet));
+				//Events::SendEvent('Core', 'EditStylesheetPost', array('stylesheet' => &$onestylesheet));
 
 				audit($css_id, $css_name, 'Edited CSS');
 
@@ -175,14 +175,14 @@ if ($access)
 				$cssquery = "SELECT assoc_to_id FROM ".cms_db_prefix()."css_assoc
 					WHERE	assoc_type		= 'template'
 					AND		assoc_css_id	=  ?";
-				$cssresult = $db->Execute($cssquery,array($css_id));
+				$cssresult = cms_db()->Execute($cssquery,array($css_id));
 
 				# now updating templates
 				while ($cssresult && $line = $cssresult->FetchRow())
 				{
-					$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".$db->DBTimeStamp(time())." 
+					$query = "UPDATE ".cms_db_prefix()."templates SET modified_date = ".cms_db()->DBTimeStamp(time())." 
 						WHERE template_id = '".$line["assoc_to_id"]."'";
-					$result = $db->Execute($query);
+					$result = cms_db()->Execute($query);
 
 					if (FALSE == $result)
 					{
@@ -212,7 +212,7 @@ if ($access)
 
 		# we get the CSS in the DB
 		$query = "SELECT * from ".cms_db_prefix()."css WHERE css_id = ?"; 
-		$result = $db->Execute($query,array($css_id));
+		$result = cms_db()->Execute($query,array($css_id));
 
 		# we put the content in vars
 		if ($result && $result->RecordCount() > 0)

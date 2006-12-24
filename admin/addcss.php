@@ -103,8 +103,8 @@ if ($access)
 		# the CSS has a name, we check if it already exists or not
 		else 
 		{
-			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . $db->qstr($css_name);
-			$result = $db->Execute($query);
+			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . cms_db()->qstr($css_name);
+			$result = cms_db()->Execute($query);
 
 			if ($result && $result->RecordCount() > 0)
 			{
@@ -125,7 +125,7 @@ if ($access)
 #******************************************************************************
 		if ($validinfo)
 		{
-			$newstylesheet = new Stylesheet();
+			$newstylesheet = new CmsStylesheet();
 			$newstylesheet->name = $css_name;
 			$newstylesheet->value = $css_text;
 			$types = "";
@@ -142,15 +142,15 @@ if ($access)
 
 			$newstylesheet->media_type = $types;
 			
-			Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
+			//Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
 
-			$result = $newstylesheet->Save();
+			$result = $newstylesheet->save();
 
 			# we now have to check that everything went well
 			if ($result)
 			{
 				#Sent the post event
-				Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
+				//Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
 				
 				# it's ok, we record the operation in the admin log
 				audit($newstylesheet->id, $css_name, 'Added CSS');

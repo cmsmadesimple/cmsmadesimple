@@ -121,7 +121,7 @@ class CmsStylesheetOperations extends CmsObject
 	 **/
 	function GetTemplateAssociatedStylesheets($templateid)
 	{
-		return CmsStylesheetOperations::get_stylesheets_associated_to_template($templateid)
+		return CmsStylesheetOperations::get_stylesheets_associated_to_template($templateid);
 	}
 
 	/**

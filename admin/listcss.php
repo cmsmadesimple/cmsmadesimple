@@ -64,7 +64,7 @@ if (isset($_GET["message"])) {
 	$delcss = check_permission($userid, 'Remove Stylesheets');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
-	$result = $db->Execute($query);
+	$result = cms_db()->Execute($query);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

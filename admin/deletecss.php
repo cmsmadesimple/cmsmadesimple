@@ -70,7 +70,7 @@ if (isset($_GET["css_id"]))
 
 		# first we get the name of the css for logging
 		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
-		$result = $db->Execute($query, array($css_id));
+		$result = cms_db()->Execute($query, array($css_id));
 		
 		if ($result && $result->RecordCount())
 		{
@@ -88,7 +88,7 @@ if (isset($_GET["css_id"]))
 		{
 			# then we check if this CSS has associations
 			$query = "SELECT * FROM ".cms_db_prefix()."css_assoc WHERE assoc_css_id = ?";
-			$result = $db->Execute($query, array($css_id));
+			$result = cms_db()->Execute($query, array($css_id));
 			
 			if ($result && $result->RecordCount())
 			{
@@ -99,18 +99,10 @@ if (isset($_GET["css_id"]))
 
 		# everything should be ok
 		if ($dodelete)
-		{	
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
-			$onestylesheet = $styleops->LoadStylesheetByID($css_id);
-			
-			Events::SendEvent('Core', 'DeleteStylesheetPre', array('stylesheet' => &$onestylesheet));
-			
-			$result = $styleops->DeleteStylesheetById($css_id);
-
-			if ($result)
+		{
+			if (cmsms()->stylesheet->delete($css_id))
 			{
-				Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
+				//Events::SendEvent('Core', 'DeleteStylesheetPost', array('stylesheet' => &$onestylesheet));
 				audit($css_id, $css_name, 'Deleted CSS');
 			}
 			else
