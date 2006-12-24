@@ -12,16 +12,8 @@ else
 
 if ($gCms->config["debug"] == true)
 {
-	echo '<div id="DebugFooter">';
-	global $sql_queries;
-	if (FALSE == empty($sql_queries))
-	  {
-	    echo "<div>".$sql_queries."</div>\n";
-	  }
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
+	echo '<div id="_DebugFooter">';
+	echo CmsProfiler::get_instance()->report();
 	echo '</div> <!-- end DebugFooter -->';
 }
 

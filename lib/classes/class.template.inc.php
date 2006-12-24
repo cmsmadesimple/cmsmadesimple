@@ -24,7 +24,7 @@
  * @since		0.6
  * @package		CMS
  */
-class Template extends CmsObjectRelationalMapping
+class CmsTemplate extends CmsObjectRelationalMapping
 {	
 	var $params = array('id' => -1, 'name' => '', 'content' => '', 'stylesheet' => '', 'encoding' => '', 'active' => true, 'default' => false);
 	var $field_maps = array('template_id' => 'id', 'template_name' => 'name', 'default_template' => 'default', 'template_content' => 'content');
@@ -62,6 +62,8 @@ class Template extends CmsObjectRelationalMapping
 		}
 	}
 }
+
+class Template extends CmsTemplate {}
 
 # vim:ts=4 sw=4 noet
 ?>

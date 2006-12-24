@@ -98,7 +98,7 @@ class CmsProfiler extends CmsObject
 	 **/
 	function report( $memory = true, $database = true, $glue='' )
 	{
-		$db = cms_db();
+		//$db = cms_db();
 		
 		echo '<div id="profiler_output" style="font-size: .75em;">';
 
@@ -110,6 +110,7 @@ class CmsProfiler extends CmsObject
 		}
 		if ($database)
 		{
+			echo '<br />' . cms_db()->query_count . ' queries executed';
 			/*
 			echo '<br />';
 			echo $db->_ticker . ' queries executed';

@@ -25,7 +25,7 @@
  * @package		CMS
  */
 
-class Group
+class Group extends CmsObject
 {
 	var $id;
 	var $name;

@@ -23,7 +23,7 @@
  *
  * @package CMS
  */
-class UserTagOperations
+class UserTagOperations extends CmsObject
 {
 	/**
 	 * Retrieve the body of a user defined tag

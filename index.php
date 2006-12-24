@@ -87,7 +87,7 @@ $page = CmsRequest::calculate_page_from_request();
 
 //See if our page matches any predefined routes.  If so,
 //the updated $page will be returned. (No point in matching
-//if we have no page to match).
+//if we have no url to match).
 if ($page != '')
 	$page = CmsRoute::match_route($page);
 
@@ -124,12 +124,12 @@ echo $pageinfo->send_headers();
 $endtime = $profiler->get_time();
 $memory = $profiler->get_memory();
 
-echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries -->\n";
+echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries -->\n";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
 #if ($config["debug"] == true)
 #{
-	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and " . $memory . " bytes of memory</p>";
+	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries and " . $memory . " bytes of memory</p>";
 	echo CmsProfiler::get_instance()->report();
 #}
 

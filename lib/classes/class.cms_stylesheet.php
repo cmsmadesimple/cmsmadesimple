@@ -24,15 +24,53 @@
  * @since		0.11
  * @package		CMS
  */
-class Stylesheet extends CmsObjectRelationalMapping
+class CmsStylesheet extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => '');
 	var $field_maps = array('css_id' => 'id', 'css_name' => 'name', 'css_text' => 'value');
 	var $table = 'css';
 	var $sequence = 'css_seq';
+	
+	public function validation()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('name'))));
+		$this->validate_not_blank('value', lang('nofieldgiven',array(lang('content'))));
+		if ($this->name != '')
+		{
+			$result = $this->find_all_by_name($this->name);
+			if (count($result) > 0)
+			{
+				if ($result[0]->id != $this->id)
+				{
+					$this->add_validation_error(lang('stylesheetexists'));
+				}
+			}
+		}
+	}
+	
+	//Callback handlers
+	function before_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddStylesheetPre' : 'EditStylesheetPre'), array('stylesheet' => &$this));
+	}
+	
+	function after_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddStylesheetPost' : 'EditStylesheetPost'), array('stylesheet' => &$this));
+	}
+	
+	function before_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteStylesheetPre', array('stylesheet' => &$this));
+	}
+	
+	function after_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteStylesheetPost', array('stylesheet' => &$this));
+	}
 }
 
-//Stylesheet::register_orm_class('Stylesheet');
+class Stylesheet extends CmsStylesheet {}
 
 # vim:ts=4 sw=4 noet
 ?>

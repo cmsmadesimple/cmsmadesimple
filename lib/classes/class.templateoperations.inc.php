@@ -27,7 +27,7 @@
 
 //include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php');
 
-class TemplateOperations
+class TemplateOperations extends CmsObject
 {
 	function LoadTemplates()
 	{	

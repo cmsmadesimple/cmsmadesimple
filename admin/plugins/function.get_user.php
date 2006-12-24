@@ -41,7 +41,7 @@ function smarty_function_get_user($params, &$smarty)
 		$users[$params['id']] = cmsms()->user->find_by_id($params['id']);
 	}
 
-	$smarty->assign('users', $user);
+	$smarty->assign('users', $users);
 	$smarty->assign_by_ref($to, $users[$params['id']]);
 }
 

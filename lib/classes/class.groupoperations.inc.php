@@ -27,7 +27,7 @@
 
 //include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
 
-class GroupOperations
+class GroupOperations extends CmsObject
 {
 	function LoadGroups()
 	{

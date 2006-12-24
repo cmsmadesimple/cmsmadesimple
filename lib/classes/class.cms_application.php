@@ -184,6 +184,14 @@ class CmsApplication extends CmsObject {
 		$this->orm                 = array();
 	}
 	
+	/**
+	 * Returns an instnace of the CmsApplication singleton.  Most 
+	 * people can generally use cmsms() instead of this, but they 
+	 * both do the same thing.
+	 *
+	 * @return CmsApplication The singleton CmsApplication instance
+	 * @author Ted Kulp
+	 **/
 	static public function get_instance()
 	{
 		if (self::$instance == NULL)
@@ -193,16 +201,32 @@ class CmsApplication extends CmsObject {
 		return self::$instance;
 	}
 
+	/**
+	 * @deprecated Deprecated.  Use cms_db() instead.
+	 **/
 	function get_db()
 	{
 		return CmsDatabase::get_instance();
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use cms_db() instead.
+	 **/
 	function GetDb()
 	{
 		return CmsDatabase::get_instance();
 	}
 	
+	/**
+	 * Getter overload method.  Called when an $obj->field and field
+	 * does not exist in the object's variable list.  In this case,
+	 * it will get a config, db or smarty instance (for backwards 
+	 * compatibility), or call get_orm_class on the given field name.
+	 *
+	 * @param string The field to look up
+	 * @return mixed The value for that field, if it exists
+	 * @author Ted Kulp
+	 **/
 	function __get($name)
 	{
 		if ($name == 'config')
@@ -215,6 +239,13 @@ class CmsApplication extends CmsObject {
 			return $this->get_orm_class($name);
 	}
 	
+	/**
+	 * Retrieves an instance of an ORM'd object for doing
+	 * find_by_* methods.
+	 *
+	 * @return mixed The object with the given name, or null if it's not registered
+	 * @author Ted Kulp
+	 **/
 	function get_orm_class($name, $try_prefix = true)
 	{
 		if (isset($this->orm[$name]))
@@ -224,29 +255,38 @@ class CmsApplication extends CmsObject {
 		else
 		{
 			// Let's try to load the thing dynamically
-			try
+			$name = camelize($name);
+			if (class_exists($name))
 			{
-				$name = camelize($name);
 				$this->orm[underscore($name)] = new $name;
-				return $this->orm[underscore($name)];
+				return $this->orm[underscore($name)];	
 			}
-			catch (Excpetion $e)
+			else
 			{
-				//Maybe it's an older reference of a class...  let's
-				//toss a cms_ in front and try again
 				if ($try_prefix)
 				{
-					return $this->get_orm_class('cms_', $name, false);
+					return $this->get_orm_class('cms_' . $name, false);
+				}
+				else
+				{
+					var_dump('Class not found! -- ' . $name);
+					return null;
 				}
 			}
 		}
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use cms_config() instead.
+	 **/
 	function get_config()
 	{
 		return CmsConfig::get_instance();
 	}
 
+	/**
+	 * @deprecated Deprecated.  Use cms_config() instead.
+	 **/
 	function GetConfig()
 	{
 		return CmsConfig::get_instance();
@@ -264,11 +304,17 @@ class CmsApplication extends CmsObject {
 		return $this->moduleoperations;
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsUserOperations::some_method instead.
+	 **/
 	function GetUserOperations()
 	{
         return CmsUserOperations::get_instance();
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsContentOperations::some_method instead.
+	 **/
 	function GetContentOperations()
 	{
 		return CmsContentOperations::get_instance();

@@ -24,7 +24,7 @@
  * @since		0.6
  * @package		CMS
  */
-class GlobalContent
+class GlobalContent extends CmsObject
 {
 	var $id;
 	var $name;

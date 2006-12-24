@@ -30,6 +30,11 @@ class CmsUserOperations extends CmsObject
 {
 	static private $instance = NULL;
 	
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
 	/**
 	 * Get an instance of this object, though most people should be using
 	 * the static methods instead.  This is more for compatibility than
@@ -133,7 +138,7 @@ class CmsUserOperations extends CmsObject
 	 *
 	 * @param mixed User id to load
 	 *
-	 * @return mixed If successful, the filled User object.  If it fails, it returns false.
+	 * @return mixed If successful, the filled User object.  If it fails, it returns null.
 	 * @since 0.6.1
 	 **/
 	public static function load_user_by_id($id)

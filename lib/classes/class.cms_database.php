@@ -25,6 +25,11 @@ define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
 class CmsDatabase extends CmsObject
 {
 	static private $instance = NULL;
+	
+	function __construct()
+	{
+		parent::__construct();
+	}
 
 	static public function get_instance()
 	{

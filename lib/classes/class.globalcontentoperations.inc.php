@@ -27,7 +27,7 @@
 
 //include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.globalcontent.inc.php');
 
-class GlobalContentOperations
+class GlobalContentOperations extends CmsObject
 {
 
 	/**

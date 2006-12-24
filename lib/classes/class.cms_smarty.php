@@ -27,7 +27,6 @@ class CmsSmarty extends Smarty {
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
 		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
-		#$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/',$config["root_path"].'/plugins/',$config["root_path"].'/plugins/cache/');
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/', $config["root_path"].'/plugins/', $config["root_path"].'/lib/module_plugins/');
 		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
 			$this->plugins_dir[] = $config['root_path'] . '/admin/plugins/';
@@ -36,14 +35,7 @@ class CmsSmarty extends Smarty {
 		$this->compiler_file = 'CMS_Compiler.class.php';
 		$this->compiler_class = 'CMS_Compiler';
 
-		//use_sub_dirs doesn't work in safe mode
-		//if (ini_get("safe_mode") != "1")
-		//	$this->use_sub_dirs = true;
-		//$this->caching = false;
-		//$this->compile_check = true;
 		$this->assign('app_name','CMS');
-		//$this->debugging = false;
-		//$this->force_compile = true;
 		$this->cache_plugins = false;
 		
 		#Setup the site name
@@ -51,9 +43,8 @@ class CmsSmarty extends Smarty {
 
 		if ($config["debug"] == true)
 		{
-			//$this->caching = false;
 			$this->force_compile = true;
-			$this->debugging = true;
+			//$this->debugging = true;
 		}
 
 		if (get_site_preference('enablesitedownmessage') == "1")
@@ -777,6 +768,12 @@ class CmsSmarty extends Smarty {
 			}
 		}
 		closedir($handle);
+	}
+	
+	public function __toString()
+	{
+		sscanf((string)$this, "Object id #%d", $id);
+		return "Object(".get_class($this).") id #$id";
 	}
 }
 

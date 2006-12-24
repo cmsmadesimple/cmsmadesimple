@@ -537,14 +537,15 @@ class CmsContentOperations extends CmsObject
 		global $gCms;
 		$db = &$gCms->GetDb();
 
+		$loadedcache = false;
+
+		/*
 		$cachefilename = TMP_CACHE_LOCATION . '/contentcache.php';
-		$usecache = false;
+		$usecache = true;
 		if (isset($onlyexpanded) || isset($CMS_ADMIN_PAGE))
 		{
-			#$usecache = false;
+			$usecache = false;
 		}
-
-		$loadedcache = false;
 
 		if ($usecache)
 		{
@@ -575,6 +576,7 @@ class CmsContentOperations extends CmsObject
 				}
 			}
 		}
+		*/
 
 		if (!$loadedcache)
 		{
@@ -595,6 +597,7 @@ class CmsContentOperations extends CmsObject
 			debug_buffer('', 'End Loading Children into Tree');
 		}
 
+		/*
 		if (!$loadedcache && $usecache)
 		{
 			debug_buffer("Serializing...");
@@ -602,6 +605,7 @@ class CmsContentOperations extends CmsObject
 			fwrite($handle, '<?php return; ?>'.serialize($tree));
 			fclose($handle);
 		}
+		*/
 
 		ContentOperations::LoadChildrenIntoTree(-1, $tree);
 
@@ -626,7 +630,7 @@ class CmsContentOperations extends CmsObject
 		return cmsms()->content_base->find_all(array('order' => 'hierarchy ASC'));
 	}
 	
-	function &GetAllContent($loadprops=true)
+	function GetAllContent($loadprops=true)
 	{
 		return CmsContentOperations::get_all_content($loadprops);
 	}

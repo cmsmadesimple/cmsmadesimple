@@ -24,8 +24,10 @@
  * static register_orm_class() method after the class is defined in order
  * to be reigstered for the system (and allow things like find_by_* to 
  * work).
- */
-class CmsObjectRelationalMapping extends Object implements ArrayAccess
+ *
+ * @author Ted Kulp
+ **/
+abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAccess
 {
 	/**
 	 * The ORM version number.  This basically is a number that
@@ -356,8 +358,9 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 */
 	function get_table()
 	{
-		$classname = get_class($this);
-		$table = $this->table != '' ? cms_db_prefix() . $this->table : cms_db_prefix() . strtolower($classname);
+		$classname = underscore(get_class($this));
+		if (starts_with($classname, 'cms_')) $classname = substr($classname, 4);
+		$table = $this->table != '' ? cms_db_prefix() . $this->table : cms_db_prefix() . $classname;
 
 		return $table;
 	}
@@ -518,8 +521,7 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * any low level changes to the $params array directly, you should set the dirty flag to true
 	 * to make sure any changes are saved.
 	 *
-	 * @return boolean Whether or not the save was successful or not.  If it wasn't, check the
-	 *                 validation stack for errors.
+	 * @return boolean Whether or not the save was successful or not.  If it wasn't, check the validation stack for errors.
 	 */
 	function save()
 	{
@@ -824,6 +826,8 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 *
 	 * @param $type Name of the class that we're going to instantiate
 	 * @param $fields Hash of the fields that will be inserted into the object
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	function before_load($type, $fields)
 	{
@@ -832,23 +836,54 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	/**
 	 * Callback after object is loaded.  This allows the object to do any
 	 * housekeeping, setting up other fields, etc before it's returned.
+	 *
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	function after_load()
 	{
 	}
 	
+	/**
+	 * Callback sent before the object is saved.  This allows the object to
+	 * send any events, manipulate any values, etc before the objects is
+	 * persisted.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function before_save()
 	{
 	}
 	
+	/**
+	 * Callback sent after the object is saved.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function after_save()
 	{
 	}
 	
+	/**
+	 * Callback sent before the object is deleted from
+	 * the database.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function before_delete()
 	{
 	}
 	
+	/**
+	 * Callback sent after the object is deleted from
+	 * the database.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function after_delete()
 	{
 	}
@@ -857,6 +892,9 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * Virtual function that is called before a save operation can be
 	 * completed.  Allows the object to make sure that all the necessary
 	 * fields are filled in, they're in the proper range, etc.
+	 *
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	function validate()
 	{
@@ -868,8 +906,9 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * filled in before it can be saved.
 	 *
 	 * @param $field Name of the field to check
-	 * @param $message If given, this is the message that will be set in the object
-	 *                 if the method didn't succed.
+	 * @param $message If given, this is the message that will be set in the object if the method didn't succed.
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	function validate_not_blank($field, $message = '')
 	{
@@ -884,13 +923,21 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 	 * called, then it's a safe bet that save() will fail.
 	 *
 	 * @param $message Message to add to the validation error stack
+	 * @return void
+	 * @author Ted Kulp
 	 */
 	function add_validation_error($message)
 	{
 		$this->validation_errors[] = $message;
 	}
 	
-	function _call_validation()
+	/**
+	 * Private method to call the validation methods properly.
+	 *
+	 * @return int The number of validation errors
+	 * @author Ted Kulp
+	 **/
+	private function _call_validation()
 	{
 		//Clear them out first
 		$this->validation_errors = array();
@@ -901,12 +948,27 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return (count($this->validation_errors) > 0);
 	}
 	
-	function _cacheDescription($fields)
+	/**
+	 * Private method to cache the columns in a table so
+	 * we don't grab them on each loaded object.
+	 *
+	 * @param array The list of fields to cache
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	private function _cacheDescription($fields)
 	{
 		cmsms()->desccache[$this->get_table()] = $fields;
 	}
 	
-	function _getDescriptionCache()
+	/**
+	 * Private method to retrieve the cache of columns in
+	 * a table.
+	 *
+	 * @return array The list of columns
+	 * @author Ted Kulp
+	 **/
+	private function _getDescriptionCache()
 	{		
 		if (isset(cmsms()->desccache[$this->get_table()]))
 		{
@@ -916,29 +978,14 @@ class CmsObjectRelationalMapping extends Object implements ArrayAccess
 		return FALSE;
 	}
 	
-	/*
-	function field_exists($field, $error = '')
+	public function __toString()
 	{
-		$this->validations[] = array('field' => $field, 'function' => 'validate_field_exists', 'error' => $error != '' ? $error : ($field . ' must be filled in') );
-
-		if (!function_exists('validate_field_exists'))
-		{
-			function validate_field_exists($validation_item)
-			{
-				$field = $validation_item['field'];
-				if ($this->$fieldname == FALSE || $this->$field != '')
-				{
-					return $field['error'];
-				}
-				return FALSE;
-			}
-		}
+		$id_field = $this->id_field;
+		if (isset($this->$id_field))
+			return get_class($this) . '- id:' . $this->$id_field;
+		else
+			return parent::__toString();
 	}
-	*/
 }
-
-//ContentBase::register_orm_class('ContentBase');
-
-debug_buffer('', 'End Loading ORM');
 
 ?>
