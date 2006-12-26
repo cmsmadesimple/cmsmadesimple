@@ -136,7 +136,7 @@ $templates = array();
 $templates['-1'] = 'None';
 
 $query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
-$result = $db->Execute($query);
+$result = cms_db()->Execute($query);
 
 while ($result && $row = $result->FetchRow())
 {

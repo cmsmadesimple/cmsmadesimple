@@ -128,7 +128,7 @@ class CmsUserOperations extends CmsObject
 	/**
 	 * @deprecated Deprecated.  Use load_user_by_username instead.
 	 **/
-	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
+	function LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
 		return CmsUserOperations::load_user_by_username($username, $password, $activeonly, $adminaccessonly);
 	}

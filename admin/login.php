@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.user.inc.php");
+//require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
 
@@ -39,7 +39,7 @@ if (isset($_SESSION['logout_user_now']))
      $is_logged_in = check_login($no_redirect);
      if (true == $is_logged_in)
        {
-	 redirect($gCms->config['root_url'].'/'.$config['admin_dir'].'/index.php');
+	 redirect($gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/index.php');
        }
    }
 if (isset($_POST["logincancel"]))
@@ -51,7 +51,7 @@ if (isset($_POST["logincancel"]))
 if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 	$username = "";
-	if (isset($_POST["username"])) $username = cleanValue($_POST["username"]);
+	if (isset($_POST["username"])) $username = CmsRequest::clean_value($_POST["username"]);
 
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
@@ -94,7 +94,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		$current_version = $CMS_SCHEMA_VERSION;
 	
 		$query = "SELECT version from ".cms_db_prefix()."version";
-		$row = $db->GetRow($query);
+		$row = cms_db()->GetRow($query);
 		if ($row) $current_version = $row["version"];
 
 		if ($current_version < $CMS_SCHEMA_VERSION)
