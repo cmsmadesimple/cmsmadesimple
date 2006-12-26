@@ -65,7 +65,7 @@ $editor = new ImageEditor($manager);
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
 		<a href="javascript: editor.doSubmit('scale');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancle"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>	
 	<div id="tools_rotate" style="display:none;">
 		<div id="tool_inputs">
@@ -87,7 +87,7 @@ $editor = new ImageEditor($manager);
 			<img src="img/div.gif" height="30" width="2" class="div" alt="|" />
 		</div>	
 		<a href="javascript: editor.doSubmit('rotate');" class="buttons" title="OK"><img src="img/btn_ok.gif" height="30" width="30" alt="OK" /></a>
-		<a href="javascript: editor.reset();" class="buttons" title="Cancle"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
+		<a href="javascript: editor.reset();" class="buttons" title="Cancel"><img src="img/btn_cancel.gif" height="30" width="30" alt="Cancel" /></a>		
 	</div>		
 	<div id="tools_measure" style="display:none;">
 		<div id="tool_inputs">
