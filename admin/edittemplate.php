@@ -235,6 +235,11 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
 	<form method="post" action="edittemplate.php">
+		<p class="pageshowrows">
+			<a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>">
+				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
+			</a>
+		</p>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('name')?>:</p>
 			<p class="pageinput"><input type="text" class="name" name="template" maxlength="255" value="<?php echo $template?>" /></p>
