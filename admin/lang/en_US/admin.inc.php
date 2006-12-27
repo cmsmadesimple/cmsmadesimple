@@ -463,6 +463,8 @@ $lang['admin']['event_desc_deleteuserpre'] = 'Sent before a user is deleted from
 $lang['admin']['event_desc_deleteuserpost'] = 'Sent after a user is deleted from the system';
 $lang['admin']['event_desc_addgrouppre'] = 'Sent before a new group is created';
 $lang['admin']['event_desc_addgrouppost'] = 'Sent after a new group is created';
+$lang['admin']['event_desc_changegroupassignpre'] = 'Sent before group assignments are saved';
+$lang['admin']['event_desc_changegroupassignpost'] = 'Sent after group assignments are saved';
 $lang['admin']['event_desc_editgrouppre'] = 'Sent before edits to a group are saved';
 $lang['admin']['event_desc_editgrouppost'] = 'Sent after edits to a group are saved';
 $lang['admin']['event_desc_deletegrouppre'] = 'Sent before a group is deleted from the system';
@@ -558,6 +560,18 @@ $lang['admin']['event_help_addgrouppost'] = '<p>Sent after a new group is create
 <ul>
 <li>\'group\' - Reference to the affected group object.</li>
 </ul>
+';
+$lang['admin']['event_help_changegroupassignpre'] = '<p>Sent before group assignments are saved.</p>
+<h4>Parameters></h4>
+<ul>
+<li>\'group\' - Reference to the group object.</li>
+<li>\'users\' - Array of references to user objects belonging to the group.</li>
+';
+$lang['admin']['event_help_changegroupassignpost'] = '<p>Sent after group assignments are saved.</p>
+<h4>Parameters></h4>
+<ul>
+<li>\'group\' - Reference to the affected group object.</li>
+<li>\'users\' - Array of references to user objects now belonging to the affected group.</li>
 ';
 $lang['admin']['event_help_editgrouppre'] = '<p>Sent before edits to a group are saved.</p>
 <h4>Parameters</h4>

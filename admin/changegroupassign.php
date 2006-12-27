@@ -124,18 +124,25 @@ else {
         }
     else if ($group_id != -1 && $submitted != -1)
         {
-        // we have group preferences
+		// we have group preferences
+		$groupobj =& $groupops->LoadGroupByID($group_id);
+		$userops =& $gCms->GetUserOperations();
+		
+		#Send the ChangeGroupAssignPost event
+		Events::SendEvent('Core', 'ChangeGroupAssignPre', array('group' => $groupobj, 'users' => $userops->LoadUsersInGroup($group_id)));
 		$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ?";
 		$result = $db->Execute($query, array($group_id));
 		foreach ($_POST as $key=>$value)
-			{
+		{
 			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false)
-				{
+			{
 				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
 				$result = $db->Execute($query);
-				}
 			}
-
+		}
+		
+		#Send the ChangeGroupAssignPost event
+		Events::SendEvent('Core', 'ChangeGroupAssignPost', array('group' => $groupobj, 'users' => $userops->LoadUsersInGroup($group_id)));
 		audit($group_id, 'Group ID', lang('assignmentchanged'));
         echo '<p class="pageheader">'.lang('assignmentchanged').'</p>';
         }

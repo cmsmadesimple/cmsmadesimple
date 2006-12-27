@@ -497,6 +497,9 @@ class Events
 		Events::CreateEvent( $modulename, 'ContentPostRender');
 		Events::CreateEvent( $modulename, 'SmartyPreCompile');
 		Events::CreateEvent( $modulename, 'SmartyPostCompile');
+		
+		Events::CreateEvent( $modulename, 'ChangeGroupAssignPre');
+		Events::CreateEvent( $modulename, 'ChangeGroupAssignPost');
 	}
 
 } // class
