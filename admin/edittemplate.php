@@ -236,7 +236,7 @@ else
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
 	<form method="post" action="edittemplate.php">
 		<p class="pageshowrows">
-			<a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>">
+			<a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" target="_blank">
 				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>
 			</a>
 		</p>
