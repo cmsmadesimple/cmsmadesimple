@@ -47,7 +47,8 @@ class CmsTree extends CmsObject
 	
 	function &get_flat_list()
 	{
-		return $this->get_root_node()->get_flat_list();
+		$temp_var = $this->get_root_node()->get_flat_list();
+		return $temp_var;
 	}
 	
 	function &getFlatList()
