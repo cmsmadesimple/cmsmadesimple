@@ -412,7 +412,7 @@ class CmsContentOperations extends CmsObject
 		{
 			#Just get something...
 			$query = "SELECT id FROM ".cms_db_prefix()."content";
-			$row = db()->GetRow($query);
+			$row = cms_db()->GetRow($query);
 			if ($row)
 			{
 				$result = $row['id'];
@@ -809,7 +809,7 @@ class CmsContentOperations extends CmsObject
 	
 	static function clear_cache()
 	{
-		$smarty = smarty();
+		$smarty = cms_smarty();
 
 		$smarty->clear_all_cache();
 		$smarty->clear_compiled_tpl();

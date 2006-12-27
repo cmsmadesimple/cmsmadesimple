@@ -16,6 +16,18 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+
+//Where are we?
+$dirname = dirname(__FILE__);
+
+$DONT_LOAD_DB = true;
+
+//All systems are go...  let's include all the good stuff
+require_once($dirname.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'include.php');
+
+//Load necessary global functions
+require_once(ROOT_DIR.DS.'lib'.DS.'global.functions.php');
+
 function return_bytes($val) {
    $val = trim($val);
    $last = strtolower($val{strlen($val)-1});
@@ -204,7 +216,7 @@ if (1 == $currentpage)
 
 $DONT_LOAD_DB = true;
 
-if ($currentpage > 1) { require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php"); }
+// if ($currentpage > 4) { require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php"); }
 
 ?>
 
@@ -552,7 +564,6 @@ function showPageOne() {
 
 function showPageTwo($errorMessage='',$username='',$email='',$email_accountinfo='0')
 {
-
 	if ($errorMessage != '')
 	{
 		echo "<p class=\"error\">$errorMessage</p>";
@@ -782,7 +793,9 @@ function showPageFour($sqlloaded = 0) {
     if ($sqlloaded == 0 && isset($_POST["createtables"])) {
 
         global $config, $CMS_SCHEMA_VERSION, $ADODB_vers;
-
+	        $adodb_light = cms_join_path(dirname(dirname(__FILE__)),'lib','adodb_lite','adodb.inc.php');
+	        # Load ADOdb Lite
+		require_once($adodb_light);
 		$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
 		
 		if ($_POST['dbms'] == 'sqlite' && strstr($ADODB_vers, 'ADOdb Lite'))
@@ -948,19 +961,7 @@ function showPageFive() {
     } ## if
 	*/
 	
-	require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR."config.functions.php");
-	
-	// check if db info is correct as it should at this point to prevent an undeleted installation dir
-	// to be used for sending spam by messing up $_POST variables
-	$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
-	
-    if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
-	{
-		showPageThree('Could not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
-		return;
-	}
-
-	$newconfig = cms_config_load();
+//require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'classes'.DS."class.cms_config.php");
 
 	$newconfig['dbms'] = $_POST['dbms'];
 	$newconfig['db_hostname'] = $_POST['host'];
@@ -1032,8 +1033,13 @@ function showPageFive() {
     $configfile = CONFIG_FILE_LOCATION;
     ## build the content for config file
 
+    $config_object = new CmsConfig($newconfig);
+    // @TODO Remove this hack
+    $config_object->params = $newconfig;
+    $config_object->load();
+
     if ((file_exists($configfile) && is_writable($configfile)) || !file_exists($configfile)) {
-		cms_config_save($newconfig);
+		$config_object->save();
     } else {
         echo "Error: Cannot write to $config.<br />\n";
         exit;
@@ -1046,7 +1052,19 @@ function showPageFive() {
 			echo "Error: Could not remove the tmp/cache/SITEDOWN file. Please remove manually.";
 		}
 	}
-
+	
+	// check if db info is correct as it should at this point to prevent an undeleted installation dir
+	// to be used for sending spam by messing up $_POST variables
+  	$adodb_light = cms_join_path(dirname(dirname(__FILE__)),'lib','adodb_lite','adodb.inc.php');
+	# Load ADOdb Lite
+	require_once($adodb_light);	
+	$db = ADONewConnection($_POST['dbms'], 'pear:date:extend:transaction');
+	
+    if (! $db->Connect($_POST['host'],$_POST['username'],$_POST['password'],$_POST['database']))
+	{
+		showPageThree('Could not connect to database.  Verify that username and password are correct, and that the user has access to the given database.');
+		return;
+	}
 	#Do module installation
 	if (isset($_POST["createtables"]))
 	{
@@ -1059,7 +1077,8 @@ function showPageFive() {
 
 		$db->SetFetchMode(ADODB_FETCH_ASSOC);
 		#$db->debug = true;
-		$gCms->db =& $db;
+	//	$gCms->db =& $db;
+		$db = cms_db();
 
 		$contentops =& $gCms->GetContentOperations();
 		$contentops->SetAllHierarchyPositions();

@@ -74,7 +74,7 @@ class CmsDatabase extends CmsObject
 		    if (file_exists($adodb_light))
 		    {
 		        # Load ADOdb Lite
-		        require($adodb_light);
+		        require_once($adodb_light);
 				$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 				$loaded_adodb = true;
 		    }
