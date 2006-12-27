@@ -42,7 +42,8 @@ $autoinstallupgrade = 0; // keep this here for a bit, just incase
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
 
-$smarty = new Smarty_CMS($gCms->config);
+// $smarty = new Smarty_CMS($gCms->config);
+$db = cms_db();
 
 //Messagestring (success) for module operations
 $modulemessage="";
