@@ -176,13 +176,10 @@ class CmsPageNode extends CmsNode
 	
 	function get_content()
 	{
-		//TODO: Lookup node in tree's list
-		//      Pull it from the db if it's not loaded already
-		//      Lots of room for optimization here
 		$content = null;
 		
 		$tree = $this->get_tree();
-		if (isset($tree->content[$this->id]))
+		if (array_key_exists($this->id, $tree->content))
 		{
 			$content = $tree->content[$this->id];
 		}
@@ -207,7 +204,7 @@ class CmsPageNode extends CmsNode
 				$node = $this->children[0];
 			$checkid = $node->id;
 			$tree = $this->get_tree();
-			if (!isset($tree->content[$checkid]))
+			if (!array_key_exists($checkid, $tree->content))
 			{
 				CmsContentOperations::LoadChildrenIntoTree($this->id, $this->tree);
 			}

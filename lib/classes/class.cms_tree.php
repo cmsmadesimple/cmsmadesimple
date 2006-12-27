@@ -47,13 +47,14 @@ class CmsTree extends CmsObject
 	
 	function &get_flat_list()
 	{
-		$temp_var = $this->get_root_node()->get_flat_list();
+		$temp_var =& $this->get_root_node()->get_flat_list();
 		return $temp_var;
 	}
 	
 	function &getFlatList()
 	{
-		return $this->get_flat_list();
+		$temp_var =& $this->get_root_node()->get_flat_list();
+		return $temp_var;
 	}
 }
 
@@ -134,7 +135,7 @@ class CmsNode extends CmsObject
 		return $this->children;
 	}
 	
-    function get_flat_list()
+    function &get_flat_list()
     {
         $return = array();
 
@@ -150,9 +151,10 @@ class CmsNode extends CmsObject
         return $return;
     }
 
-	function getFlatList()
+	function &getFlatList()
 	{
-		return $this->get_flat_list();
+		$tmp =& $this->get_flat_list();
+		return $tmp;
 	}
 }
 
