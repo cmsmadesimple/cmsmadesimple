@@ -531,7 +531,7 @@ class CmsContentOperations extends CmsObject
 	{
 		debug_buffer('', 'starting tree');
 
-		require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
+		//require_once(dirname(dirname(__FILE__)).'/Tree/Tree.php');
 
 		$nodes = array();
 		global $gCms;
@@ -580,21 +580,26 @@ class CmsContentOperations extends CmsObject
 
 		if (!$loadedcache)
 		{
-			$query = "SELECT id_hierarchy FROM ".cms_db_prefix()."content ORDER BY hierarchy";
+			$tree = new CmsPageTree();
+
+			$query = "SELECT id_hierarchy, show_in_menu, active FROM ".cms_db_prefix()."content ORDER BY hierarchy";
 			$dbresult =& $db->Execute($query);
 
 			if ($dbresult && $dbresult->RecordCount() > 0)
 			{
+				/*
 				while ($row = $dbresult->FetchRow())
 				{
 					$nodes[] = $row['id_hierarchy'];
 				}
+				*/
+				$tree->fill_from_db($dbresult);
 			}
 
-			$tree = new Tree();
-			debug_buffer('', 'Start Loading Children into Tree');
-			$tree = &Tree::createFromList($nodes, '.');
-			debug_buffer('', 'End Loading Children into Tree');
+			//debug_buffer('', 'Start Loading Children into Tree');
+			
+			//print_r($tree);
+			//debug_buffer('', 'End Loading Children into Tree');
 		}
 
 		/*
@@ -621,7 +626,8 @@ class CmsContentOperations extends CmsObject
 		$contentcache =& $tree->content;
 		foreach ($result as $one)
 		{
-			$contentcache[$one->id] = $one;
+			if (!array_key_exists($one->id, $contentcache))
+				$contentcache[$one->id] = $one;
 		}
 	}
 

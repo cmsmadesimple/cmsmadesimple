@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class CmsConfig extends Object implements ArrayAccess
+class CmsConfig extends CmsObject implements ArrayAccess
 {
 	var $params;
 	static private $instance = NULL;
