@@ -93,7 +93,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config["root_path"] = dirname(dirname(__FILE__));
 		$config["query_var"] = "page";
 		$config["use_bb_code"] = false;
-		$config["use_smarty_php_tags"] = false;
+		$config["smarty_security"] = false;
 		$config["previews_path"] = $config["root_path"] . "/tmp/cache";
 		$config["uploads_path"] = $config["root_path"] . "/uploads";
 		$config["uploads_url"] = $config["root_url"] . "/uploads";
@@ -257,8 +257,9 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #Usability Settings
 #------------------
 
-#Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
-\$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
+#Should smarty be tightened up a bit?  This is only really necessary if you don't trust
+#your users 100%.
+\$config['smarty_security'] = ${$config['smarty_security']?'true':'false'};
 
 #CMSMS Debug Mode?  Turn is on to get a better error when you
 #see {nocache} errors.

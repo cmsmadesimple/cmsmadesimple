@@ -973,7 +973,7 @@ function showPageFive() {
 	$newconfig['root_path'] = stripslashes($_POST['docpath']);
 	$newconfig['query_var'] = $_POST['querystr'];
 	$newconfig['use_bb_code'] = false;
-	$newconfig['use_smarty_php_tags'] = false;
+	$newconfig['smarty_security'] = false;
 	$newconfig['previews_path'] = TMP_CACHE_LOCATION;
 	$newconfig["uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads";
         // Note: leave the / slashes for the URLs

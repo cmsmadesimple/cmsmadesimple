@@ -59,6 +59,17 @@ class CmsSmarty extends Smarty {
 			$this->caching = false;
 			$this->force_compile = true;
 		}
+		
+		if (CmsConfig::get('smarty_security'))
+		{
+			$this->security = true;
+		    $this->security_settings  = array(
+		                                    'PHP_HANDLING'    => true,
+		                                    'INCLUDE_ANY'     => true,
+		                                    'PHP_TAGS'        => false,
+		                                    'ALLOW_CONSTANTS'  => true
+		                                   );
+		}
 
 		$this->load_plugins();
 
@@ -80,10 +91,6 @@ class CmsSmarty extends Smarty {
 						       "db_get_trusted"));
 		$this->register_resource("globalcontent", array(&$this, "global_content_get_template",
 						       "global_content_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("preview", array(&$this, "preview_get_template",
-						       "preview_get_timestamp",
 						       "db_get_secure",
 						       "db_get_trusted"));
 		$this->register_resource("content", array(&$this, "content_get_template",
@@ -223,30 +230,7 @@ class CmsSmarty extends Smarty {
 		$oneblob = $gcbops->LoadHtmlBlobByName($tpl_name);
 		if ($oneblob)
 		{
-			$text = $oneblob->content;
-
-			#Perform the content htmlblob callback
-			/*
-			reset($gCms->modules);
-			while (list($key) = each($gCms->modules))
-			{
-				$value =& $gCms->modules[$key];
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->ContentHtmlBlob($text);
-				}
-			}
-			*/
-
-			$tpl_source = $text;
-
-			#So no one can do anything nasty, take out the php smarty tags.  Use a user
-			#defined plugin instead.
-			if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-			{
-				$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-			}
+			$tpl_source = $oneblob->content;
 		}
 		else
 		{
@@ -272,105 +256,6 @@ class CmsSmarty extends Smarty {
 		{
 			return false;
 		}
-	}
-
-	function preview_get_template ($tpl_name, &$tpl_source, &$smarty_obj)
-	{
-		global $gCms;
-		$config = $gCms->config;
-
-		$fname = '';
-		if (is_writable($config["previews_path"]))
-		{
-			$fname = $config["previews_path"] . "/" . $tpl_name;
-		}
-		else
-		{
-			$fname = TMP_CACHE_LOCATION . '/' . $tpl_name;
-		}
-		$handle = fopen($fname, "r");
-		$data = unserialize(fread($handle, filesize($fname)));
-		fclose($handle);
-		unlink($fname);
-
-		$tpl_source = $data["template"];
-
-		#Perform the content template callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentTemplate($tpl_source);
-			}
-		}
-		
-		Events::SendEvent('Core', 'ContentTemplate', array('template' => &$tpl_source));
-
-		$gCms->variables['page'] = $data['content_id'];
-		$gCms->variables['page_id'] = $data['content_id'];
-		$gCms->variables['content_id'] = $data['content_id'];
-		$gCms->variables['page_name'] = $data['title'];
-		$gCms->variables['position'] = $data['hierarchy'];
-		$pageinfo = new StdClass();
-		$pageinfo->template_id =  $data['template_id'];
-		$pageinfo->content_title = $data['title'];
-		$gCms->variables['pageinfo'] = $pageinfo;
-		header("Content-Type: text/html; charset=" . (isset($data['encoding']) && $data['encoding'] != ''?$data['encoding']:get_encoding()));
-
-		$content = $data["content"];
-		 
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentPreCompile($content);
-			}
-		}
-		
-		Events::SendEvent('Core', 'ContentPreCompile', array('content' => &$content));
-
-		$tpl_source = eregi_replace("\{content\}", $content, $tpl_source);
-
-		$title = $data['title'];
-		$menutext = $data['menutext'];
-
-		#Perform the content title callback
-		/*
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentTitle($title);
-			}
-		}
-		*/
-
-		$tpl_source = ereg_replace("\{title\}", $title, $tpl_source);
-		$tpl_source = ereg_replace("\{menutext\}", $menutext, $tpl_source);
-
-		#So no one can do anything nasty, take out the php smarty tags.  Use a user
-		#defined plugin instead.
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-		}
-
-		return true;
-	}
-
-	function preview_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
-	{
-		$tpl_timestamp = time();
-		return true;
 	}
 
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
@@ -447,10 +332,12 @@ class CmsSmarty extends Smarty {
 
 					#So no one can do anything nasty, take out the php smarty tags.  Use a user
 					#defined plugin instead.
+					/*
 					if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
 					{
 						$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 					}
+					*/
 					
 					//do_cross_reference($pageinfo->template_id, 'template', $tpl_source);
 
@@ -531,42 +418,6 @@ class CmsSmarty extends Smarty {
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
 				$tpl_source = $contentobj->show($tpl_name);
-
-				#Perform the content data callback
-				#This needs to go...
-				/*
-				reset($gCms->modules);
-				while (list($key) = each($gCms->modules))
-				{
-					$value =& $gCms->modules[$key];
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentData($tpl_source);
-					}
-				}
-				*/
-
-				#Perform the content prerender callback
-				/*
-				reset($gCms->modules);
-				while (list($key) = each($gCms->modules))
-				{
-					$value =& $gCms->modules[$key];
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->ContentPreRender($tpl_source);
-					}
-				}
-				*/
-
-				#So no one can do anything nasty, take out the php smarty tags.  Use a user
-				#defined plugin instead.
-				if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-				{
-					$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
-				}
 				
 				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
 
@@ -637,13 +488,6 @@ class CmsSmarty extends Smarty {
 		{
 			header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
 			header("Pragma: public");
-		}
-
-		#So no one can do anything nasty, take out the php smarty tags.  Use a user
-		#defined plugin instead.
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$tpl_source = ereg_replace("\{\/?php\}", "", $tpl_source);
 		}
 
 		return true;
