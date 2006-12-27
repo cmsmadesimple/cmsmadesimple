@@ -110,7 +110,7 @@ class CmsNode extends CmsObject
 	
 	function set_parent($node)
 	{
-		$this->parentnode = $parent;
+		$this->parentnode = $node;
 	}
 	
 	function has_children()
@@ -121,6 +121,11 @@ class CmsNode extends CmsObject
 	function get_children_count()
 	{
 		return count($this->children);
+	}
+	
+	function getChildrenCount()
+	{
+		return $this->get_children_count();
 	}
 
 	function &get_children()
