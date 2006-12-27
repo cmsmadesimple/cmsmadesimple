@@ -38,11 +38,11 @@ echo '[done]</p>';
 
 function find_event($arr, $name)
 {
-	foreach ($arr as $index => $event)
+	foreach ($arr as $event)
 	{
 		if ($event['event_name'] == $name)
 		{
-			return $index;
+			return $event['event_id'];
 		}
 	}
 	return false;
