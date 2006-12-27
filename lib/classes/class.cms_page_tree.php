@@ -198,7 +198,13 @@ class CmsPageNode extends CmsNode
 	{
 		if ($this->has_children())
 		{
-			$node = $this->children[0];
+			$node = null;
+			//It seems like the first child is already loaded elsewhere
+			//So we trick it a bit to make sure we get all the children
+			if (count($this->children) > 1)
+				$node = $this->children[1];
+			else
+				$node = $this->children[0];
 			$checkid = $node->id;
 			$tree = $this->get_tree();
 			if (!isset($tree->content[$checkid]))
@@ -219,9 +225,10 @@ class CmsPageNode extends CmsNode
         return $this->has_children();        
     }
     
-    public function getChildren()
+    public function &getChildren()
 	{
-        return $this->get_children();
+		$result =& $this->get_children();
+        return $result;
     }
 
 	function getTag()
