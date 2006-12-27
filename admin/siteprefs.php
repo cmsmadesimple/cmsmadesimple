@@ -170,6 +170,16 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('siteprefs'); ?>
 	<form id="siteprefform" method="post" action="siteprefs.php">
+	<?php if ($access) { ?>
+	<div class="pageoverflow">
+		<p class="pagetext">&nbsp;</p>
+		<p class="pageinput">
+			<input type="hidden" name="editsiteprefs" value="true" />
+			<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+		</p>
+	</div>
+	<?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('clearcache') ?>:</p>
 			<p class="pageinput">
