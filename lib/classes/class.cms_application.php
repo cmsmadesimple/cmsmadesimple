@@ -297,7 +297,7 @@ class CmsApplication extends CmsObject {
         if (!isset($this->moduleoperations))
 		{
 			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
-			$moduleoperations = new ModuleOperations();
+			$moduleoperations = new CmsModuleOperations();
 			$this->moduleoperations = $moduleoperations;
 		}
 
