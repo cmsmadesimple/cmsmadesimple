@@ -23,7 +23,7 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-
+$db = cms_db();
 $error = array();
 
 $userplugin_id = "";
@@ -50,8 +50,8 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new Smarty_CMS($gCms->config);
-load_plugins($smarty);
+// $smarty = new Smarty_CMS($gCms->config);
+// load_plugins($smarty);
 
 if ($access) {
 	if (isset($_POST["editplugin"])) {

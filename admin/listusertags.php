@@ -33,7 +33,7 @@ if (isset($_GET['action'])) $action = $_GET['action'];
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Modules');
 
-$smarty = new Smarty_CMS($gCms->config);
+// $smarty = new Smarty_CMS($gCms->config);
 
 include_once("header.php");
 
