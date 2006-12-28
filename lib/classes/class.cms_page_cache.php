@@ -57,6 +57,11 @@ class CmsPageCache extends CmsObject
 	{
 		return $this->cache->save($data, $id, $group);
 	}
+	
+	public function clean($group = FALSE, $mode = 'ingroup')
+	{
+		return $this->cache->clean($group, $mode);
+	}
 }
 
 # vim:ts=4 sw=4 noet

@@ -100,6 +100,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
 		
 		CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
+		CmsPageCache::get_instance()->clear();
 	}
 	
 	function validate()
