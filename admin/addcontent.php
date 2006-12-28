@@ -443,7 +443,7 @@ $tabnames = $contentobj->TabNames();
 				?>
 				<div class="pageoverflow">
 					<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
-					<div class="pageinput"><?php echo $contentarray[$i][1]; ?></div>
+					<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
 				</div>
 				<?php
 			}
