@@ -37,9 +37,6 @@ require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 list( $usec, $sec ) = explode( ' ', microtime() );
 $start_time = ((float)$usec + (float)$sec);
 
-//Startup the output buffering
-@ob_start();
-
 //If we have a missing or empty config file, then we should think
 //about redirecting to the installer.  Also, check to see if the SITEDOWN
 //file is there.  That means we're probably in mid-upgrade.
@@ -72,18 +69,47 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-//All systems are go...  let's include all the good stuff
-require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
+//Load necessary global functions.  This allows us to load a few
+//things before hand... like the configuration
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'global.functions.php');
+
+$do_cache = true;
 
 //Start up a profiler for getting render times for this page.  Use
 //the start time we generated way up at the top.
 $profiler = CmsProfiler::get_instance('', $start_time);
 
-//Make sure the id is set inside smarty if needed for modules
-cms_smarty()->set_id_from_request();
-
 //Can we find a page somewhere in the request?
 $page = CmsRequest::calculate_page_from_request();
+
+//Are we using full page caching?  Now is a good time to check and 
+//output any cached data.
+if (CmsConfig::get('full_page_caching'))
+{
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsPageCache::get_instance()->get($page))
+	{
+		echo $data;
+		$endtime = $profiler->get_time();
+		$memory = $profiler->get_memory();
+		echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple (cached) -->\n";
+		echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+		//if (CmsConfig::get('debug'))
+		//{
+			echo "<p>Generated in ".$endtime." seconds by CMS Made Simple (cached) using " . $memory . " bytes of memory</p>";
+			echo CmsProfiler::get_instance()->report();
+		//}
+		exit;
+	}
+}
+
+//Startup the output buffering
+@ob_start();
+
+//All systems are go...  let's include all the good stuff
+require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
+
+//Make sure the id is set inside smarty if needed for modules
+cms_smarty()->set_id_from_request();
 
 //See if our page matches any predefined routes.  If so,
 //the updated $page will be returned. (No point in matching
@@ -117,17 +143,29 @@ echo $pageinfo->render();
 //getting sent until the ob_flush below this.
 echo $pageinfo->send_headers();
 
-//Flush the buffer out to the browser
-@ob_flush();
-
 //Calculate our profiler data
 $endtime = $profiler->get_time();
 $memory = $profiler->get_memory();
 
+//Flush the buffer out to the browser
+//If caching is on, save the data to the cache
+//as well.
+//If not, then just flush it out and save the
+//memory of putting it into a variable.
+if (CmsConfig::get('full_page_caching'))
+{
+	$data = @ob_get_flush();
+	CmsPageCache::get_instance()->save($data);
+}
+else
+{
+	@ob_flush();
+}
+
 echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries -->\n";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
 
-#if ($config["debug"] == true)
+#if (CmsConfig::get('debug'))
 #{
 	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries and " . $memory . " bytes of memory</p>";
 	echo CmsProfiler::get_instance()->report();

@@ -129,15 +129,7 @@ class CmsSmarty extends Smarty {
 	 **/
 	public function set_id_from_request()
 	{
-		if (isset($_REQUEST['mact']))
-		{
-			$ary = explode(',', $_REQUEST['mact'], 4);
-			$this->id = (isset($ary[1])?$ary[1]:'');
-		}
-		else
-		{
-			$this->id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
-		}
+		$this->id = CmsRequest::get_id_from_request();
 	}
 
     /**

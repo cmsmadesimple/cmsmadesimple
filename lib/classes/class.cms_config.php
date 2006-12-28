@@ -120,6 +120,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
 		$config['backwards_compatible'] = true;
 		$config['timezone'] = 'Etc/GMT+0';
+		$config['full_page_caching'] = false;
 
 		if ($loadLocal == true)
 		{
@@ -260,6 +261,11 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #Should smarty be tightened up a bit?  This is only really necessary if you don't trust
 #your users 100%.
 \$config['smarty_security'] = ${$config['smarty_security']?'true':'false'};
+
+#Should we use full page caching?  This basically means that the database will not even
+#be touched and contents will only come from a file cache that is reset every hour.  Only
+#use this if you have a truly static site or in case of "slashdot" effect.
+\$config['full_page_caching'] = ${$config['full_page_caching']?'true':'false'};
 
 #CMSMS Debug Mode?  Turn is on to get a better error when you
 #see {nocache} errors.

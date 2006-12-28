@@ -63,15 +63,39 @@ class CmsRequest extends CmsObject
 		$value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
 	}
 	
+	/**
+	 * Get the internal id based on variables sent in from
+	 * the request.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	static public function get_id_from_request()
+	{
+		$id = '';
+		
+		if (isset($_REQUEST['mact']))
+		{
+			$ary = explode(',', $_REQUEST['mact'], 4);
+			$id = (isset($ary[1])?$ary[1]:'');
+		}
+		else
+		{
+			$id = (isset($_REQUEST['id'])?$_REQUEST['id']:'');
+		}
+		
+		return $id;
+	}
+	
 	public static function calculate_page_from_request()
 	{
-		$smarty = cms_smarty();
 		$config = cms_config();
 		$page = '';
+		$id = CmsRequest::get_id_from_request();
 
-		if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
+		if (isset($id) && isset($params[$id . 'returnid']))
 		{
-			$page = $_REQUEST[$smarty->id . 'returnid'];
+			$page = $_REQUEST[$id . 'returnid'];
 		}
 		else if (CmsConfig::exists("query_var") && $config['query_var'] != '' && isset($_GET[$config['query_var']]))
 		{
