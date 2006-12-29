@@ -27,8 +27,32 @@
 
 //include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php');
 
-class TemplateOperations extends CmsObject
+class CmsTemplateOperations extends CmsObject
 {
+	static private $instance = NULL;
+
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	/**
+	 * Get an instance of this object, though most people should be using
+	 * the static methods instead.  This is more for compatibility than
+	 * anything else.
+	 *
+	 * @return CmsTemplateOperations The instance of the singleton object.
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsTemplateOperations();
+		}
+		return self::$instance;
+	}
+
 	function LoadTemplates()
 	{	
 		return cmsms()->template->find_all(array('order' => 'template_name ASC'));
@@ -229,6 +253,10 @@ class TemplateOperations extends CmsObject
 		
 		return $result;
 	}
+}
+
+class TemplateOperations extends CmsTemplateOperations
+{
 }
 
 ?>

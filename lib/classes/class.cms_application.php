@@ -130,7 +130,7 @@ class CmsApplication extends CmsObject {
 	
 	var $bookmarkoperations;
 	
-	var $templateoperations;
+	//var $templateoperations;
 	
 	//var $contentoperations;
 	
@@ -332,16 +332,9 @@ class CmsApplication extends CmsObject {
 		return $this->bookmarkoperations;
 	}
 	
-	function &GetTemplateOperations()
+	function GetTemplateOperations()
 	{
-        if (!isset($this->templateoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.templateoperations.inc.php'));
-			$templateoperations = new TemplateOperations();
-			$this->templateoperations = $templateoperations;
-		}
-
-		return $this->templateoperations;
+        return CmsTemplateOperations::get_instance();
 	}
 	
 	/**
