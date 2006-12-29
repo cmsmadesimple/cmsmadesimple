@@ -48,6 +48,7 @@ abstract class CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 **/
+	/*
 	protected function __sleep()
 	{
 		$vars = (array)$this;
@@ -60,6 +61,7 @@ abstract class CmsObject
 		}   
 		return array_keys($vars);
 	}
+	*/
 	
 	public function __toString()
 	{

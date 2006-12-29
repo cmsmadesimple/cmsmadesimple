@@ -24,81 +24,12 @@
  * @since		0.6
  * @package		CMS
  */
-class GlobalContent extends CmsObject
-{
-	var $id;
-	var $name;
-	var $content;
-	var $owner;
-	var $modified_date;
-
-	function GlobalContent()
-	{
-		$this->SetInitialValues();
-	}
-
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->name = '';
-		$this->content = '';
-		$this->owner = -1;
-		$this->modified_date = -1;
-	}
-
-	function Id()
-	{
-		return $this->id;
-	}
-
-	function Name()
-	{
-		return $this->name;
-	}
-
-	function Save()
-	{
-		$result = false;
-		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		
-		if ($this->id > -1)
-		{
-			$result = $gcbops->UpdateHtmlBlob($this);
-		}
-		else
-		{
-			$newid = $gcbops->InsertHtmlBlob($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-
-		if ($this->id > -1)
-		{
-			$result = $gcbops->DeleteHtmlBlobByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
+class CmsGlobalContent extends CmsObjectRelationalMapping
+{	
+	var $params = array('id' => -1, 'name' => '', 'content' => '', 'owner' => -1);
+	var $field_maps = array('htmlblob_id' => 'id', 'htmlblob_name' => 'name', 'html' => 'content');
+	var $table = 'htmlblobs';
+	var $sequence = 'htmlblobs_seq';
 
 	function IsOwner($user_id)
 	{
@@ -161,9 +92,19 @@ class GlobalContent extends CmsObject
 
 		return $result;
 	}
+	
+	function after_save()
+	{
+		CmsPageCache::get_instance()->clear();
+		CmsFunctionCache::get_instance()->clear();
+	}
 }
 
-class HtmlBlob extends GlobalContent
+class GlobalContent extends CmsGlobalContent
+{
+}
+
+class HtmlBlob extends CmsGlobalContent
 {
 }
 

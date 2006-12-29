@@ -18,9 +18,13 @@
 #
 #$Id$
 
-class ContentProperty extends CmsObjectRelationalMapping
+class CmsContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
+}
+
+class ContentProperty extends CmsContentProperty
+{
 }
 
 ?>

@@ -97,7 +97,7 @@ class CmsApplication extends CmsObject {
 	/**
      * nls array - This holds all of the nls information for different languages
 	 */
-	var $nls;
+	//var $nls;
 
 	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
@@ -126,17 +126,17 @@ class CmsApplication extends CmsObject {
 	
 	var $ormclasses;
 	
-	var $globalcontentoperations;
+	//var $globalcontentoperations;
 	
 	var $bookmarkoperations;
 	
 	var $templateoperations;
 	
-	var $contentoperations;
+	//var $contentoperations;
 	
 	var $usertagoperations;
 	
-	var $useroperations;
+	//var $useroperations;
 	
 	var $groupoperations;
 	
@@ -146,7 +146,7 @@ class CmsApplication extends CmsObject {
 	
 	var $params = array();
 	
-	var $desccache = array();
+	//var $desccache = array();
 	
 	var $modules;
 	
@@ -364,16 +364,9 @@ class CmsApplication extends CmsObject {
 		return $this->groupoperations;
 	}
 	
-	function &GetGlobalContentOperations()
+	function GetGlobalContentOperations()
 	{
-        if (!isset($this->globalcontentoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.globalcontentoperations.inc.php'));
-			$globalcontentoperations = new GlobalContentOperations();
-			$this->globalcontentoperations = &$globalcontentoperations;
-		}
-
-		return $this->globalcontentoperations;
+		return CmsGlobalContentOperations::get_instance();
 	}
 	
 	function &GetUserTagOperations()

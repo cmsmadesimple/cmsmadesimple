@@ -1,13 +1,12 @@
 <?php
 
-function dbo_get_columns_in_table(&$objref)
+function dbo_get_columns_in_table($table)
 {
 	$fields = array();
 	
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = cms_db();
 	
-	$dbresult =& $db->Execute('DESC ' . $objref->get_table());
+	$dbresult =& $db->Execute('DESC ' . $table);
 	
 	while ($dbresult && !$dbresult->EOF)
 	{

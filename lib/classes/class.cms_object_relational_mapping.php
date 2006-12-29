@@ -800,10 +800,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function get_columns_in_table()
 	{
-		$cache = $this->_getDescriptionCache();
-		if ($cache !== FALSE)
-			return $cache;
-
+		return CmsFunctionCache::get_instance()->call(array(&$this, '_get_columns_in_table'), $this->get_table());
+	}
+	
+	function _get_columns_in_table($table)
+	{
 		$config = cms_config();
 
 		$dbms = $config['dbms'];
@@ -811,9 +812,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'dbo' . DIRECTORY_SEPARATOR . $dbms . '.get_columns_in_table.php');
 		
-		$fields = dbo_get_columns_in_table($this);
+		$fields = dbo_get_columns_in_table($table);
 		
-		$this->_cacheDescription($fields);
 		return $fields;
 	}
 	
@@ -946,36 +946,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$this->validate();
 		
 		return (count($this->validation_errors) > 0);
-	}
-	
-	/**
-	 * Private method to cache the columns in a table so
-	 * we don't grab them on each loaded object.
-	 *
-	 * @param array The list of fields to cache
-	 * @return void
-	 * @author Ted Kulp
-	 **/
-	private function _cacheDescription($fields)
-	{
-		cmsms()->desccache[$this->get_table()] = $fields;
-	}
-	
-	/**
-	 * Private method to retrieve the cache of columns in
-	 * a table.
-	 *
-	 * @return array The list of columns
-	 * @author Ted Kulp
-	 **/
-	private function _getDescriptionCache()
-	{		
-		if (isset(cmsms()->desccache[$this->get_table()]))
-		{
-			return cmsms()->desccache[$this->get_table()];
-		}
-
-		return FALSE;
 	}
 	
 	public function __toString()
