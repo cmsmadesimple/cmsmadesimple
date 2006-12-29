@@ -32,7 +32,11 @@ class CmsLanguage extends CmsObject
 	public static function translate($name, $params = array(), $module = 'core', $current_language = '', $default_language = 'en_US')
 	{
 		if (self::$nls == null)
-			CmsLanguage::load_nls_files();
+		{
+			CmsProfiler::get_instance()->mark('before nls');
+			self::$nls = CmsFunctionCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
+			CmsProfiler::get_instance()->mark('after nls');
+		}
 		
 		$current_language = $current_language != '' ? $current_language : CmsLanguage::get_current_language();
 		
@@ -94,7 +98,7 @@ class CmsLanguage extends CmsObject
 		self::$lang[$module][$language] =& $lang;
 	}
 	
-	private static function load_nls_files()
+	public static function load_nls_files()
 	{
 		$nls = array();
 		
@@ -110,7 +114,7 @@ class CmsLanguage extends CmsObject
 
 		closedir($handle);
 		
-		self::$nls =& $nls;
+		return $nls;
 	}
 	
 	private static function get_current_language()

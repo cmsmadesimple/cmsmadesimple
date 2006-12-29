@@ -73,8 +73,6 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 //things before hand... like the configuration
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'global.functions.php');
 
-$do_cache = true;
-
 //Start up a profiler for getting render times for this page.  Use
 //the start time we generated way up at the top.
 $profiler = CmsProfiler::get_instance('', $start_time);
