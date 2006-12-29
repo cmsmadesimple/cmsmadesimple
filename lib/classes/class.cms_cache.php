@@ -73,6 +73,11 @@ class CmsCache extends CmsObject
 	{
 		return $this->cache->clean($group, $mode);
 	}
+	
+	public function clear($group = FALSE, $mode = 'ingroup')
+	{
+		return $this->clean($group, $mode);
+	}
 }
 
 # vim:ts=4 sw=4 noet

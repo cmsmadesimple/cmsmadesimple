@@ -93,8 +93,26 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 		return $result;
 	}
 	
+	//Callback handlers
+	function before_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddGlobalContentPre' : 'EditGlobalContentPre'), array('global_content' => &$this));
+	}
+	
 	function after_save()
 	{
+		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
+		CmsCache::get_instance()->clear();
+	}
+	
+	function before_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteGlobalContentPre', array('global_content' => &$this));
+	}
+	
+	function after_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteGlobalContentPost', array('global_content' => &$this));
 		CmsCache::get_instance()->clear();
 	}
 }

@@ -62,8 +62,26 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		}
 	}
 	
+	//Callback handlers
+	function before_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddTemplatePre' : 'EditTemplatePre'), array('template' => &$this));
+	}
+	
 	function after_save()
 	{
+		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddTemplatePost' : 'EditTemplatePost'), array('template' => &$this));
+		CmsCache::get_instance()->clear();
+	}
+	
+	function before_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteTemplatePre', array('template' => &$this));
+	}
+	
+	function after_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteTemplatePost', array('template' => &$this));
 		CmsCache::get_instance()->clear();
 	}
 }

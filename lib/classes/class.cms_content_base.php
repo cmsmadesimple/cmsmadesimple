@@ -63,8 +63,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		//$this->prop_names = implode(',', $this->get_loaded_property_names());
 		if ($this->id == -1)
 		{
-			global $gCms;
-			$db =& $gCms->GetDb();
+			$db = cms_db();
 
 			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
 			$row = &$db->GetRow($query, array($this->parent_id));
@@ -396,7 +395,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		#Remove the cross references
 		CmsContentOperations::remove_cross_references($this->id, 'content');
 		
-		Events::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+		CmsEvents::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
+		CmsCache::get_instance()->clear();
 	}
 	
 	function template_name()

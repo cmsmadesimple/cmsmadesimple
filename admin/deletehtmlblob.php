@@ -21,8 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
-require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -42,48 +40,22 @@ if (isset($_GET["htmlblob_id"]))
 		$gcbops =& $gCms->GetGlobalContentOperations();
 		$templateops =& $gCms->GetTemplateOperations();
 
-		$blobobj = $gcbops->LoadHtmlBlobByID($htmlblob_id);
+		$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
 		$htmlblob_name = $blobobj->name;
 
 		if ($blobobj)
-		{
-			#Perform the deletehtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteHtmlBlobPre($blobobj);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteGlobalContentPre', array('global_content' => &$blobobj));
-
-			$result = $blobobj->Delete();
+		{	
+			$result = $blobobj->delete();
 		}
 
 		if ($result == true)
-		{
-			#Perform the deletehtmlblob_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteHtmlBlobPost($blobobj);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
-
+		{	
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
-
-			$templateops->TouchAllTemplates(); #So pages recompile
 		}
 	}
 }
 
-redirect("listhtmlblobs.php");
+CmsResponse::redirect("listhtmlblobs.php");
 
 # vim:ts=4 sw=4 noet
 ?>

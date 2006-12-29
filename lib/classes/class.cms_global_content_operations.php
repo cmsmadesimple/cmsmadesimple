@@ -132,7 +132,7 @@ class CmsGlobalContentOperations extends CmsObject
 	 **/
 	function DeleteHtmlBlobByID($id)
 	{
-		return cmsms->global_content->delete($id);
+		return cmsms()->global_content->delete($id);
 	}
 
 	/**
@@ -142,17 +142,17 @@ class CmsGlobalContentOperations extends CmsObject
 	 * @return bool Whether or not the block name exists
 	 * @author Ted Kulp
 	 **/
-	public static function check_existing_global_content_name($name)
+	public static function check_existing_name($name)
 	{
 		return cmsms()->global_content->find_count_by_name($name) > 0;
 	}
 	
 	/**
-	 * @deprecated Deprecated.  Use CmsGlobalContentOperations::check_existing_global_content_name($name) instead.
+	 * @deprecated Deprecated.  Use CmsGlobalContentOperations::check_existing_name($name) instead.
 	 **/
 	function CheckExistingHtmlBlobName($name)
 	{
-		return CmsGlobalContentOperations::check_existing_global_content_name($name);
+		return CmsGlobalContentOperations::check_existing_name($name);
 	}
 
 	function CheckOwnership($id, $user_id)
