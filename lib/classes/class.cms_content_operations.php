@@ -395,31 +395,28 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * Returns the id of the page that is marked as the default
 	 *
-	 * @return void
+	 * @return integer Id of the default page
 	 * @author Ted Kulp
 	 **/
 	public static function get_default_page_id()
 	{
-		$result = -1;
-
-		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = cms_db()->GetRow($query);
-		if ($row)
+		return CmsCache::get_instance()->call('CmsContentOperations::_get_default_page_id');
+	}
+	
+	/**
+	 * Non-cached version of get_default_page_id.
+	 *
+	 * @return integer Id of the default page
+	 * @author Ted Kulp
+	 **/
+	public static function _get_default_page_id()
+	{
+		$page = cmsms()->content_base->find_by_default_content(1);
+		if ($page)
 		{
-			$result = $row['id'];
+			return $page->id;
 		}
-		else
-		{
-			#Just get something...
-			$query = "SELECT id FROM ".cms_db_prefix()."content";
-			$row = cms_db()->GetRow($query);
-			if ($row)
-			{
-				$result = $row['id'];
-			}
-		}
-
-		return $result;
+		return -1;
 	}
 
     /**
@@ -693,18 +690,12 @@ class CmsContentOperations extends CmsObject
 	}
 
 
-    // function to get the id of the default page
+	/**
+	 * @deprecated Deprecated.  Use CmsContentOperations::get_default_page_id instead.
+	 **/
 	function GetDefaultPageID()
 	{
-		$db = cms_db();
-
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE default_content = 1";
-		$row = &$db->GetRow($query);
-		if (!$row)
-		{
-			return false;
-		}
-		return $row['id'];
+		return CmsContentOperations::get_default_page_id();
 	}
 
 
@@ -813,11 +804,6 @@ class CmsContentOperations extends CmsObject
 
 		$smarty->clear_all_cache();
 		$smarty->clear_compiled_tpl();
-
-		if (is_file(TMP_CACHE_LOCATION . '/contentcache.php'))
-		{
-			unlink(TMP_CACHE_LOCATION . '/contentcache.php');
-		}
 	}
 	
 	static function ClearCache()

@@ -47,7 +47,7 @@ class CmsCache extends CmsObject
 		return self::$instance;
 	}
 	
-	public function get($id, $group = 'default', $doNotTestCacheValidity = TRUE)
+	public function get($id, $group = 'default', $doNotTestCacheValidity = FALSE)
 	{
 		return $this->cache->get($id, $group, $doNotTestCacheValidity);
 	}
