@@ -25,11 +25,6 @@ define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
 class CmsDatabase extends CmsObject
 {
 	static private $instance = NULL;
-	
-	function __construct()
-	{
-		parent::__construct();
-	}
 
 	static public function get_instance()
 	{
@@ -40,7 +35,18 @@ class CmsDatabase extends CmsObject
 		return self::$instance;
 	}
 	
-	static function start()
+	static public function close()
+	{
+		if (self::$instance != NULL)
+		{
+			if (self::$instance->IsConnected())
+			{
+				self::$instance->Close();
+			}
+		}
+	}
+	
+	static private function start()
 	{
 		$gCms = cmsms();
 		$config = cms_config();

@@ -404,58 +404,13 @@ function audit($itemid, $itemname, $action)
 }
 
 /**
- * Loads a cache of site preferences so we only have to do it once.
- *
- * @since 0.6
- */
-function load_site_preferences()
-{
-	$value = "";
-
-	global $gCms;
-	$db = &$gCms->GetDb();
-	$siteprefs = &$gCms->siteprefs;
-
-	if ($db)
-	{
-		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$result = &$db->Execute($query);
-
-		while ($result && !$result->EOF)
-		{
-			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
-			$result->MoveNext();
-		}
-		
-		if ($result) $result->Close();
-	}
-
-	return $value;
-}
-
-/**
  * Gets the given site prefernce
  *
  * @since 0.6
  */
-function get_site_preference($prefname, $defaultvalue = '') {
-
-	$value = $defaultvalue;
-
-	global $gCms;
-	$siteprefs = $gCms->siteprefs;
-	
-	if (count($siteprefs) == 0)
-	{
-		load_site_preferences();
-	}
-
-	if (isset($siteprefs[$prefname]))
-	{
-		$value = $siteprefs[$prefname];
-	}
-
-	return $value;
+function get_site_preference($prefname, $defaultvalue = '')
+{
+	return cmsms()->get_preference($prefname, $defaultvalue);
 }
 
 /**
@@ -465,20 +420,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
  */
 function remove_site_preference($prefname)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
-	$result = $db->Execute($query, array($prefname));
-
-	if (isset($siteprefs[$prefname]))
-	{
-		unset($siteprefs[$prefname]);
-	}
-	
-	if ($result) $result->Close();
+	return cmsms()->remove_preference($prename);
 }
 
 /**
@@ -488,34 +430,7 @@ function remove_site_preference($prefname)
  */
 function set_site_preference($prefname, $value)
 {
-	$doinsert = true;
-
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
-	$result = $db->Execute($query);
-
-	if ($result && $result->RecordCount() > 0)
-	{
-		$doinsert = false;
-	}
-	
-	if ($result) $result->Close();
-
-	if ($doinsert)
-	{
-		$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
-		$db->Execute($query);
-	}
-	else
-	{
-		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
-		$db->Execute($query);
-	}
-	$siteprefs[$prefname] = $value;
+	cmsms()->set_preference($prefname, $value);
 }
 
 function load_all_preferences($userid)
