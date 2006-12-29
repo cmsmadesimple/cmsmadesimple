@@ -64,7 +64,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	
 	function after_save()
 	{
-		CmsPageCache::get_instance()->clear();
+		CmsCache::get_instance()->clear();
 	}
 }
 

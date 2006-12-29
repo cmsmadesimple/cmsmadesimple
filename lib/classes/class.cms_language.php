@@ -34,7 +34,7 @@ class CmsLanguage extends CmsObject
 		if (self::$nls == null)
 		{
 			CmsProfiler::get_instance()->mark('before nls');
-			self::$nls = CmsFunctionCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
+			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
 			CmsProfiler::get_instance()->mark('after nls');
 		}
 		

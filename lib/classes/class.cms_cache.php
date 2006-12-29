@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class CmsFunctionCache extends CmsObject
+class CmsCache extends CmsObject
 {
 	static private $instance = null;
 	static private $cache = null;
@@ -42,9 +42,19 @@ class CmsFunctionCache extends CmsObject
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new CmsFunctionCache();
+			self::$instance = new CmsCache();
 		}
 		return self::$instance;
+	}
+	
+	public function get($id, $group = 'default', $doNotTestCacheValidity = TRUE)
+	{
+		return $this->cache->get($id, $group, $doNotTestCacheValidity);
+	}
+	
+	public function save($data, $id = NULL, $group = 'default')
+	{
+		return $this->cache->save($data, $id, $group);
 	}
 	
 	public function call()

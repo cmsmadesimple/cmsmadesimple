@@ -215,7 +215,7 @@ class CmsSmarty extends Smarty {
 	function global_content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		debug_buffer('start global_content_get_template');
-		$oneblob = CmsFunctionCache::get_instance()->call(array(cmsms()->global_content, 'find_by_name'), $tpl_name);
+		$oneblob = CmsCache::get_instance()->call(array(cmsms()->global_content, 'find_by_name'), $tpl_name);
 		if ($oneblob)
 		{
 			$tpl_source = $oneblob->content;
@@ -231,7 +231,7 @@ class CmsSmarty extends Smarty {
 	function global_content_get_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
 		debug_buffer('start global_content_get_timestamp');
-		$oneblob = CmsFunctionCache::get_instance()->call(array(cmsms()->global_content, 'find_by_name'), $tpl_name);
+		$oneblob = CmsCache::get_instance()->call(array(cmsms()->global_content, 'find_by_name'), $tpl_name);
 		if ($oneblob)
 		{
 			$tpl_timestamp = $oneblob->modified_date;
