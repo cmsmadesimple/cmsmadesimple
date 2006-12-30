@@ -1942,7 +1942,8 @@ class CmsModule extends CmsObject
 		}
 		if (!isset($this->tab_header_shown))
 		{
-			$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
+			// TODO, If non-default theme is chosen then add templateCssPath="/path/to/TabContainer.css"
+			$output = '<div  id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
 			$this->tab_header_shown = true;
 		}
 		else

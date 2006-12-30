@@ -133,6 +133,10 @@ class defaultTheme extends AdminTheme
 			var djConfig = {  baseScriptUri: \'../lib/dojo/\', parseWidgets: false, searchIds: []  };
 		      </script>
 			<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
+			<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
+			<script type="text/javascript" src="../lib/dojo/src/widget/html/layout.js"></script>
+			<script type="text/javascript" src="../lib/dojo/src/widget/TabContainer.js"></script>
+			<script type="text/javascript" src="../lib/dojo/src/widget/ContentPane.js"></script>
 			<script type="text/javascript">
 				dojo.require("dojo.widget.TabContainer");
 				dojo.require("dojo.widget.ContentPane");
