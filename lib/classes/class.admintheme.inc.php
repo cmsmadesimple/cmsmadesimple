@@ -1644,7 +1644,19 @@ class AdminTheme
 	    }
 	}
       $wikiUrl .= '/Troubleshooting';
-      $image_error = $this->DisplayImage('icons/system/stop.gif', lang('error'),'','','systemicon');
+      $wikiLink = ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
+      if (FALSE != is_array($errors))
+	{
+	  $output = '<ul class="pageerrorcontainer">';
+	  foreach ($errors as $oneerror)
+	    {
+	      $output .= '<li>'.$oneerror.'</li>';
+	    }
+	  $output .= '<li>'.$wikiLink.'</li>';
+	  $output .= '</ul>';
+	}
+      else
+	{
       $output  = '<div class="pageerrorcontainer"';
       if (FALSE == empty($get_var))
 	{
@@ -1659,20 +1671,9 @@ class AdminTheme
 	    }
 	}
       $output .= '><div class="pageoverflow">';
-      if (FALSE != is_array($errors))
-	{
-	  $output .= '<ul class="pageerror">';
-	  foreach ($errors as $oneerror)
-	    {
-	      $output .= '<li>'.$oneerror.'</li>';
-	    }
-	  $output .= '</ul>';
+	  $output  .= $errors.$wikiLink.'</div></div>';
 	}
-      else
-	{
-	  $output  .= $image_error.' '.$errors;
-	}
-      $output .= ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a></div></div>';
+
       
       return $output;
     }
@@ -1687,7 +1688,6 @@ class AdminTheme
      */
     function ShowMessage($message, $get_var = '')
     {
-      $image_done = $this->DisplayImage('icons/system/accept.gif', lang('success'), '','','systemicon');
       $output = '<div class="pagemcontainer"';
       if (FALSE == empty($get_var))
 	{
@@ -1701,7 +1701,7 @@ class AdminTheme
 	      $output .= ' style="display:none;"';
 	    }
 	}
-      $output .= '><p class="pagemessage">'.$image_done.' '.$message.'</p></div>';
+      $output .= '><p class="pagemessage">'.$message.'</p></div>';
       return $output;
     }
     

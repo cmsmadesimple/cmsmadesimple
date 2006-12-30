@@ -516,16 +516,19 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
-div.pageerrorcontainer  {
-   background: #ba5a5a url('themes/default/images/icons/system/stop.gif') no-repeat 10px center;
+.pageerrorcontainer  {
+   background: #ba5a5a;
    margin: 10px;
    padding: 5px 0 5px 40px;
    border: solid 1px #666;
    color: #fff;	
    }
 
+div.pageerrorcontainer  {
+   background: #ba5a5a url('themes/default/images/icons/system/stop.gif') no-repeat 10px center;
+}
 
-div.pageerrorcontainer a {
+.pageerrorcontainer a {
    color: #fff;
    text-decoration: underline;
 }
@@ -828,12 +831,12 @@ ul.pageerror  {
    margin: 5px 0 10px 0;
    padding-left: 10px;
    }
-ul.pageerror li {
+ul.pageerrorcontainer li {
 	padding-left: 5px;
 	margin-left: 15px;
    list-style-image: url("themes/default/images/icons/system/stop.gif");
    }
-div.pageerrorcontainer a {
+.pageerrorcontainer a {
 	color: #fff;
 	}
 .clearb  {
