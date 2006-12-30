@@ -181,11 +181,11 @@ class CmsRequest extends CmsObject
 	{
 		if (get_magic_quotes_gpc())
 		{
-		    CmsRequest::stripslashes_deep($_GET);
-		    CmsRequest::stripslashes_deep($_POST);
-		    CmsRequest::stripslashes_deep($_REQUEST);
-		    CmsRequest::stripslashes_deep($_COOKIE);
-		    CmsRequest::stripslashes_deep($_SESSION);
+		    $_GET = CmsRequest::stripslashes_deep($_GET);
+		    $_POST = CmsRequest::stripslashes_deep($_POST);
+		    $_REQUEST = CmsRequest::stripslashes_deep($_REQUEST);
+		    $_COOKIE = CmsRequest::stripslashes_deep($_COOKIE);
+		    $_SESSION = CmsRequest::stripslashes_deep($_SESSION);
 		}
 	}
 	
