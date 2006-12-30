@@ -932,12 +932,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
-	 * Private method to call the validation methods properly.
+	 * Method to call the validation methods properly.
 	 *
 	 * @return int The number of validation errors
 	 * @author Ted Kulp
 	 **/
-	private function _call_validation()
+	public function _call_validation()
 	{
 		//Clear them out first
 		$this->validation_errors = array();

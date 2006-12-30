@@ -271,7 +271,7 @@ class CmsSmarty extends Smarty {
 				$tpl_source = '{content}';
 				if (is_array($data) && count($data) == 2)
 				{
-					if ($data[0] instanceof Template)
+					if ($data[0] instanceof CmsTemplate || $data[0] instanceof Template)
 						$tpl_source = $data[0]->content;
 				}
 

@@ -30,7 +30,8 @@ while ($result && $row = $result->FetchRow())
 		$lookup[$content_id][] = $row['prop_name'];
 	}
 }
-$result->Close();
+if ($result)
+	$result->Close();
 
 foreach ($lookup as $k=>$v)
 {

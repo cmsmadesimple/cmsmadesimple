@@ -27,9 +27,9 @@
 class CmsTemplate extends CmsObjectRelationalMapping
 {	
 	var $params = array('id' => -1, 'name' => '', 'content' => '', 'stylesheet' => '', 'encoding' => '', 'active' => true, 'default' => false);
-	var $field_maps = array('template_id' => 'id', 'template_name' => 'name', 'default_template' => 'default', 'template_content' => 'content');
+	var $field_maps = array('template_name' => 'name', 'default_template' => 'default', 'template_content' => 'content');
 	var $table = 'templates';
-	var $sequence = 'templates_seq';
+	//var $sequence = 'templates_seq';
 
 	function UsageCount()
 	{

@@ -26,7 +26,7 @@ if ((int) $version[0] < 5)
 }
 
 $LOAD_ALL_MODULES=1;
-$USE_OLD_ADODB=1;
+//$USE_OLD_ADODB=1;
 
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."fileloc.php");
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php");
@@ -171,6 +171,7 @@ else
 	*/
 	
 	$db = cms_db();
+	$db->debug = true;
 
 	$current_version = 1;
 

@@ -26,7 +26,7 @@ class Content extends CmsContentBase
 		$this->preview = true;
 	}
 	
-	static function &create_preview_object(&$template_object)
+	public static function create_preview_object($template_object)
 	{
 		$obj = new Content();
 		$blocks = $obj->parse_content_blocks_from_template($template_object);

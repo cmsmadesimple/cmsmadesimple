@@ -1,5 +1,36 @@
 <?php
 
+echo '<p>Updating table id names...';
+
+function update_table(&$db, &$dbdict, $table_name, $old_key_field)
+{
+	$result = $dbdict->RenameColumnSQL(cms_db_prefix().$table_name, $old_key_field, 'id', $old_key_field.' I');
+	var_dump($result);
+	$dbdict->ExecuteSQLArray($result);
+
+	$result = $dbdict->AlterColumnSQL(cms_db_prefix().$table_name, 'id I AUTO');
+	var_dump($result);
+	$dbdict->ExecuteSQLArray($result);
+	
+	$db->DropSequence(cms_db_prefix() . $table_name . '_seq');
+}
+
+$dbdict = NewDataDictionary($db);
+
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content_props ADD id INTEGER KEY NOT NULL AUTO_INCREMENT");
+
+$db->Execute('alter table '.cms_db_prefix().'content drop key default_content');
+$db->Execute('alter table '.cms_db_prefix().'content drop key content_alias');
+$db->Execute('alter table '.cms_db_prefix().'content drop key parent_id');
+
+update_table($db, $dbdict, 'content', 'content_id');
+update_table($db, $dbdict, 'groups', 'group_id');
+update_table($db, $dbdict, 'users', 'user_id');
+update_table($db, $dbdict, 'templates', 'template_id');
+	
+echo '[done]</p>';
+
+/*
 echo '<p>Modifying content and content props tables...';
 
 $dbdict = NewDataDictionary($db);
@@ -73,6 +104,7 @@ $ops =& $gCms->GetContentOperations();
 $ops->SetAllHierarchyPositions();
 
 echo '[done]</p>';
+*/
 
 echo '<p>Updating schema version... ';
 $query = 'UPDATE '.cms_db_prefix().'version SET version = 26';

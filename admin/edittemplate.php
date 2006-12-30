@@ -29,8 +29,6 @@ if (isset($_POST["cancel"]))
 
 $gCms = cmsms();
 $smarty = cms_smarty();
-$contentops =& $gCms->GetContentOperations();
-$templateops =& $gCms->GetTemplateOperations();
 
 #Make sure we're logged in and get that user id
 check_login();
@@ -46,7 +44,7 @@ $template_id = coalesce_key($_REQUEST, 'template_id', '-1');
 
 function &get_template_object($template_id)
 {
-	$template_object = cmsms()->template->find_by_template_id($template_id);
+	$template_object = cmsms()->template->find_by_id($template_id);
 	
 	if (isset($_REQUEST['template']))
 		$template_object->update_parameters($_REQUEST['template']);
@@ -54,10 +52,9 @@ function &get_template_object($template_id)
 	return $template_object;
 }
 
-function create_preview(&$template_object)
+function create_preview($template_object)
 {
-	$config =& cmsms()->GetConfig();
-	cmsms()->GetContentOperations()->LoadContentType('Content');
+	$config = cms_config();
 	$page_object = Content::create_preview_object($template_object);
 
 	$tmpfname = '';
@@ -89,22 +86,19 @@ if ($preview)
 		if ($tmpfname != '')
 		{
 			$smarty->assign('showpreview', true);
-			$smarty->assign('previewfname', $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
+			$smarty->assign('previewfname', CmsConfig::get("root_url") . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
 		}
 	}
 }
 else if ($access)
 {
-	var_dump('here');
 	if ($submit || $apply)
 	{
-		var_dump('here2');
 		if ($template_object->save())
 		{
-			var_dump('here3');
 			audit($template_object->id, $template_object->name, 'Edited Template');
 			if ($submit)
-				redirect("listtemplates.php");
+				CmsResponse::redirect("listtemplates.php");
 		}
 	}
 }
