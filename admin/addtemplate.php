@@ -78,7 +78,7 @@ $apply = array_key_exists('applybutton', $_POST);
 
 function &get_template_object()
 {
-	$template_object = new Template();
+	$template_object = new CmsTemplate();
 	if (isset($_REQUEST['template']))
 		$template_object->update_parameters($_REQUEST['template']);
 	return $template_object;
