@@ -52,7 +52,7 @@ if ($access) {
 
 		$validinfo = true;
 		if ($plugin_name == "") {
-			$error[] = lang('nofieldgiven',lang('name'));
+			$error[] = lang('nofieldgiven',array(lang('name')));
 			$validinfo = false;
 		}
 		else
@@ -64,7 +64,7 @@ if ($access) {
 			}
 		}
 		if ($code == "") {
-			$error[] = lang('nofieldgiven',lang('code'));
+			$error[] = lang('nofieldgiven',array(lang('code')));
 			$validinfo = false;
 		}
 		else if (strrpos($code, '{') !== FALSE)
