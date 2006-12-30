@@ -23,7 +23,8 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-
+global $gCms;
+$db =& $gCms->GetDb();
 $error = array();
 
 $plugin_name= "";
