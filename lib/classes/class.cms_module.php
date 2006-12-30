@@ -1966,7 +1966,7 @@ class CmsModule extends CmsObject
 
 	function EndTabContent()
 	{
-		return '</div> <!-- EndTabContent -->'."\n";
+		return '</div><script>djConfig.searchIds.push("mainTabContainer");</script> <!-- EndTabContent -->'."\n";
 	}
 
 	function StartTab($tabid, $params = array())
@@ -1977,7 +1977,7 @@ class CmsModule extends CmsObject
 			$message = '';
 		}
 
-		return '<div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '">'."\n";
+		return '<script>djConfig.searchIds.push("'.$tabid.'");</script><div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '">'."\n";
 	}
 
 	function EndTab()
