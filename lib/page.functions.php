@@ -420,7 +420,7 @@ function get_site_preference($prefname, $defaultvalue = '')
  */
 function remove_site_preference($prefname)
 {
-	return cmsms()->remove_preference($prename);
+	return cmsms()->remove_preference($prefname);
 }
 
 /**
