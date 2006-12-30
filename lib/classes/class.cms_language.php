@@ -50,9 +50,9 @@ class CmsLanguage extends CmsObject
 			}
 		}
 		if (array_key_exists($name, self::$lang[$module][$current_language]))
-			return vsprintf(self::$lang[$module][$current_language][$name], $params);
+			return self::$lang[$module][$current_language][$name];
 		else if ($default_language != $current_language && array_key_exists($name, self::$lang[$module][$default_language]))
-			return vsprintf(self::$lang[$module][$default_language][$name], $params);
+			return self::$lang[$module][$default_language][$name];
 		else
 			return "--Add Me - $name --";
 	}
