@@ -1930,33 +1930,45 @@ class CmsModule
 	 */
 	function StartTabHeaders()
 	{
-		return '<div id="page_tabs">';
+	//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="tab1">';
+		// return '<div id="page_tabs">';
 	}
 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-		$a="";
+		$a = '';
 		if (TRUE == $active)
 		{
-			$a=" class='active'";
+			$a = ' selectedTab="'.$tabid.'"';
 			$this->mActiveTab = $tabid;
 		}
-	  return '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+	if (!isset($this->tab_header_shown))
+	{
+		$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" dojo:closebutton="tab"    width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
+		$this->tab_header_shown = true;
+	}
+	else
+	{
+		$output = '';
+	}
+	$this->tab_titles[$tabid] = $title;
+	// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+	  return $output;
 	}
 
 	function EndTabHeaders()
 	{
-		return "</div><!-- EndTabHeaders -->";
+		// return "</div><!-- EndTabHeaders -->";
 	}
 
 	function StartTabContent()
 	{
-		return '<div class="clearb"></div><div id="page_content">';
+		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="albums">';
 	}
 
 	function EndTabContent()
 	{
-		return '</div> <!-- EndTabContent -->';
+		return '</div> <!-- EndTabContent -->'."\n";
 	}
 
 	function StartTab($tabid, $params = array())
@@ -1966,12 +1978,13 @@ class CmsModule
 		} else {
 			$message = '';
 		}
-		return '<div id="' . strtolower(str_replace(' ', '_', $tabid)) . '_c">'.$message;
+
+		return '<div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '">'."\n";
 	}
 
 	function EndTab()
 	{
-		return '</div> <!-- EndTab -->';
+		return '</div> <!-- EndTab -->'."\n";
 	}
 
 	/**
