@@ -143,7 +143,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 		
 		//No property exists
-		$newprop = new ContentProperty();
+		$newprop = new CmsContentProperty();
 		$newprop->prop_name = $name;
 		$newprop->content = $value;
 		$this->mProperties[] = $newprop;
