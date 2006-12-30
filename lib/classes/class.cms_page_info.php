@@ -51,7 +51,11 @@ class CmsPageInfo extends CmsObject
 		parent::__construct();
 
 		$this->content_props = array();
-
+		$this->content_last_modified_date = CmsCache::get_instance()->call(array(&$this, 'get_max_modified_date'));
+	}
+	
+	public function get_max_modified_date()
+	{
 		$db = cms_db();
 
 		$query = 'SELECT MAX(modified_date) AS thedate FROM '.cms_db_prefix().'content c';
@@ -59,8 +63,10 @@ class CmsPageInfo extends CmsObject
 
 		if ($row)
 		{
-			$this->content_last_modified_date = $db->UnixTimeStamp($row['thedate']);
+			return $db->UnixTimeStamp($row['thedate']);
 		}
+		
+		return -1;
 	}
 	
 	public function send_headers()

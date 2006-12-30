@@ -219,9 +219,7 @@ function redirect($to)
 function lang()
 {
 	$ary = func_get_args();
-	//var_dump($ary);
-	//return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
-	return CmsLanguage::translate($ary[0], array_slice($ary, 1));
+	return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
 }
 
 ?>

@@ -26,7 +26,7 @@
  * @since		0.9
  * @package		CMS
  */
-class CmsModule
+class CmsModule extends CmsObject
 {
 	/**
 	 * ------------------------------------------------------------------
@@ -62,12 +62,13 @@ class CmsModule
 ]>';
 	var $smarty;
 
-	function CMSModule()
+	function __construct()
 	{
-		global $gCms;
+		parent::__construct();
 		
-		$this->cms =& $gCms;
-		$this->config =& $gCms->GetConfig();
+		$gCms = cmsms();
+		$this->cms = cmsms();
+		$this->config = cms_config();
 
 		global $CMS_ADMIN_PAGE;
 		if (isset($CMS_ADMIN_PAGE))
@@ -95,8 +96,7 @@ class CmsModule
 					'help' => lang('langparam'),
 					'optional' => true);
 
-		#$smarty = new CMSModuleSmarty($config, $this->GetName());
-		$this->smarty = $gCms->GetSmarty();
+		$this->smarty = cms_smarty();
 
 		$this->SetParameters();
 		
@@ -352,27 +352,25 @@ class CmsModule
 	/**
 	 * Returns the cms->config object as a reference
 	 */
-	function & GetConfig()
+	function &GetConfig()
 	{
-		global $gCms;
-		$config = &$gCms->GetConfig();
+		$config = cms_config();
 		return $config;
 	}
 
 	/**
 	 * Returns the cms->db object as a reference
 	 */
-	function & GetDb()
+	function &GetDb()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 		return $db;
 	}
 
 	/**
 	 * Returns the cms->variables as a reference
 	 */
-	function & GetVariables()
+	function &GetVariables()
 	{
 		return $this->cms->variables;
 	}
@@ -1930,8 +1928,8 @@ class CmsModule
 	 */
 	function StartTabHeaders()
 	{
-	//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="tab1">';
-		// return '<div id="page_tabs">';
+		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="tab1">';
+		//return '<div id="page_tabs">';
 	}
 
 	function SetTabHeader($tabid,$title,$active=false)
@@ -1942,18 +1940,18 @@ class CmsModule
 			$a = ' selectedTab="'.$tabid.'"';
 			$this->mActiveTab = $tabid;
 		}
-	if (!isset($this->tab_header_shown))
-	{
-		$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" dojo:closebutton="tab"    width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
-		$this->tab_header_shown = true;
-	}
-	else
-	{
-		$output = '';
-	}
-	$this->tab_titles[$tabid] = $title;
-	// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-	  return $output;
+		if (!isset($this->tab_header_shown))
+		{
+			$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
+			$this->tab_header_shown = true;
+		}
+		else
+		{
+			$output = '';
+		}
+		$this->tab_titles[$tabid] = $title;
+		// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
+	  	return $output;
 	}
 
 	function EndTabHeaders()

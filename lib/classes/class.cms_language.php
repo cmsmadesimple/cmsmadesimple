@@ -49,12 +49,22 @@ class CmsLanguage extends CmsObject
 				CmsLanguage::load_lang_file($module, $current_language);
 			}
 		}
+
+		$result = null;
+		
 		if (array_key_exists($name, self::$lang[$module][$current_language]))
-			return self::$lang[$module][$current_language][$name];
+			$result = self::$lang[$module][$current_language][$name];
 		else if ($default_language != $current_language && array_key_exists($name, self::$lang[$module][$default_language]))
-			return self::$lang[$module][$default_language][$name];
+			$result = self::$lang[$module][$default_language][$name];
 		else
-			return "--Add Me - $name --";
+			$result = "--Add Me - $module - $name --";
+			
+		if (count($params) > 0)
+		{
+			$result = vsprintf($result, $params);
+		}
+		
+		return $result;
 	}
 	
 	private static function load_lang_file($module, $language)

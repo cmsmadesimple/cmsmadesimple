@@ -34,6 +34,10 @@ class CmsCache extends CmsObject
 		    'cacheDir' => $dirname.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache/',
 		    'lifeTime' => 300
 		);
+		
+		if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
+			$options['caching'] = false;
+		
 		require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
 		$this->cache = new Cache_Lite_Function($options);
 	}

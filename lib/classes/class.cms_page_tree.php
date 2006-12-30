@@ -98,7 +98,7 @@ class CmsPageTree extends CmsTree
 			{
 				if ($id == $node->id)
 				{
-					$result =& $node;
+					$result = $node;
 					break;
 				}
 			}
@@ -120,10 +120,10 @@ class CmsPageTree extends CmsTree
 	function get_node_by_alias($alias)
 	{
 		$result = null;
-		$id = CmsContentOperations::GetPageIDFromAlias($alias);
+		$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_alias', $alias);
 		if ($id)
 		{
-			$result =& $this->get_node_by_id($id);
+			$result = $this->get_node_by_id($id);
 		}
 		return $result;
 	}
@@ -141,10 +141,10 @@ class CmsPageTree extends CmsTree
 	function get_node_by_hierarchy($position)
 	{
 		$result = null;
-		$id = CmsContentOperations::GetPageIDFromHierarchy($position);
+		$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_hierarchy', $position);
 		if ($id)
 		{
-			$result =& $this->get_node_by_id($id);
+			$result = $this->get_node_by_id($id);
 		}
 		return $result;
 	}

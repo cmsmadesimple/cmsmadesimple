@@ -79,8 +79,8 @@ function copycontentobj(&$page_object, $page_type)
 	$contentops =& $gCms->GetContentOperations();
 
 	$newcontenttype = strtolower($page_type);
-	$contentops->LoadContentType($newcontenttype);
-	$tmpobj = $contentops->CreateNewContent($newcontenttype);
+	CmsContentOperations::LoadContentType($newcontenttype);
+	$tmpobj = CmsContentOperations::CreateNewContent($newcontenttype);
 
 	$tmpobj->params = $page_object->params;
 	$tmpobj->mProperties = $page_object->mProperties;

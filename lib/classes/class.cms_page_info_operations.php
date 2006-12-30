@@ -85,7 +85,7 @@ class CmsPageInfoOperations extends CmsObject
 		
 		$gCms = cmsms();
 
-		$gCms->variables['pageinfo'] =& $result;
+		$gCms->variables['pageinfo'] = $result;
 
 		$gCms->variables['content_id'] = $result->content_id;
 		$gCms->variables['page'] = $result->content_alias;

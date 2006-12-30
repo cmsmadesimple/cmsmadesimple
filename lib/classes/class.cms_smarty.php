@@ -540,6 +540,7 @@ class CmsSmarty extends Smarty {
 	
 	function search_plugins(&$plugins, $dir, $caching)
 	{
+		CmsProfiler::get_instance()->mark('start search_plugins');
 		global $CMS_LOAD_ALL_PLUGINS;
 
 		$types=array('function','compiler','prefilter','postfilter','outputfilter','modifier','block');
@@ -598,6 +599,7 @@ class CmsSmarty extends Smarty {
 			}
 		}
 		closedir($handle);
+		CmsProfiler::get_instance()->mark('end search_plugins');
 	}
 	
 	public function __toString()
