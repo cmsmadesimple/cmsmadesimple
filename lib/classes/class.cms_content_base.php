@@ -100,6 +100,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		
 		CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
 		CmsCache::get_instance()->clear();
+		CmsContentOperations::clear_cache();
 	}
 	
 	function validate()
@@ -149,6 +150,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		
 		if (!$this->has_property($name))
 			$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
+	}
+	
+	function get_property_names()
+	{
+		return explode(',', $this->prop_names);
 	}
 	
 	function get_loaded_property_names()

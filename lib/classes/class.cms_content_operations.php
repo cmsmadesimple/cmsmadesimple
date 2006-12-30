@@ -563,7 +563,7 @@ class CmsContentOperations extends CmsObject
 	
 	public static function do_cross_reference($parent_id, $parent_type, $content)
 	{
-		$db = db();
+		$db = cms_db();
 
 		//Delete old ones from the database
 		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE parent_id = ? AND parent_type = ?';

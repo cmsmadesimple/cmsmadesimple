@@ -218,7 +218,7 @@ function content_setactive($contentid)
 {
 	$objResponse = new xajaxResponse();
 	
-	setactive($contentid);
+	setactive($contentid, true);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
@@ -332,7 +332,6 @@ function toggleexpand($contentid, $collapse = false)
 
 function setactive($contentid, $active = true)
 {
-	global $gCms;
 	$userid = get_userid();
 	
 	// to activate a page, you must be admin, owner, or additional author
@@ -349,7 +348,6 @@ function setactive($contentid, $active = true)
 		{
 			$value->active = $active;
 			$value->save();
-			cmsms()->GetContentOperations()->ClearCache();
 		}
 	}
 }
@@ -367,8 +365,7 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = cms_db();
 	$userid = get_userid();
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
@@ -404,8 +401,8 @@ function movecontent($contentid, $parentid, $direction = 'down')
 			$db->Execute($query, array($contentid, $parentid));
 		}
 
-		cmsms()->GetContentOperations()->SetAllHierarchyPositions();
-		cmsms()->GetContentOperations()->ClearCache();
+		CmsContentOperations::SetAllHierarchyPositions();
+		CmsContentOperations::clear_cache();
 	}
 }
 
