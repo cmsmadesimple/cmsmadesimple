@@ -43,15 +43,15 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new Smarty_CMS($gCms->config);
-load_plugins($smarty);
+// $smarty = new Smarty_CMS($gCms->config);
+// load_plugins($smarty);
 
 if ($access) {
 	if (isset($_POST["addplugin"])) {
 
 		$validinfo = true;
 		if ($plugin_name == "") {
-			$error[] = lang('nofieldgiven',array(lang('name')));
+			$error[] = lang('nofieldgiven',lang('name'));
 			$validinfo = false;
 		}
 		else
@@ -63,7 +63,7 @@ if ($access) {
 			}
 		}
 		if ($code == "") {
-			$error[] = lang('nofieldgiven',array(lang('code')));
+			$error[] = lang('nofieldgiven',lang('code'));
 			$validinfo = false;
 		}
 		else if (strrpos($code, '{') !== FALSE)
