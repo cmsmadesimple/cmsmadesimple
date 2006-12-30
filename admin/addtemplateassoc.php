@@ -58,7 +58,7 @@ check_login();
 #******************************************************************************
 # global variables definition
 #******************************************************************************
-
+$db = cms_db();
 # variable to check if we'll make the association or not
 # will be set to false if an error is encountered
 $doadd = true;
