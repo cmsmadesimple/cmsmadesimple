@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t;  -*-
 #CMS - CMS Made Simple
 #(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org

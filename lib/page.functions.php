@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t;  -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -410,7 +410,7 @@ function audit($itemid, $itemname, $action)
  */
 function get_site_preference($prefname, $defaultvalue = '')
 {
-	return cmsms()->get_preference($prefname, $defaultvalue);
+	return CmsApplication::get_preference($prefname, $defaultvalue);
 }
 
 /**
@@ -420,7 +420,7 @@ function get_site_preference($prefname, $defaultvalue = '')
  */
 function remove_site_preference($prefname)
 {
-	return cmsms()->remove_preference($prefname);
+	CmsApplication::remove_preference($prefname);
 }
 
 /**
@@ -430,7 +430,7 @@ function remove_site_preference($prefname)
  */
 function set_site_preference($prefname, $value)
 {
-	cmsms()->set_preference($prefname, $value);
+	CmsApplication::set_preference($prefname, $value);
 }
 
 function load_all_preferences($userid)
@@ -883,15 +883,6 @@ function wysiwyg_form_submit()
 	}
 
 	return $result;
-}
-
-/**
- * Returns the currently configured database prefix.
- *
- * @since 0.4
- */
-function cms_db_prefix() {
-	return CmsConfig::get('db_prefix');
 }
 
 # vim:ts=4 sw=4 noet

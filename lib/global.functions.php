@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t;  -*-
 # CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
@@ -37,27 +37,23 @@ function __autoload($class_name)
 	//Fix references to older classes
 	if ($class_name == 'CMSModule')
 		$class_name = 'CmsModule';
-	else if ($class_name == 'Events')
-		$class_name = 'CmsEvents';
-	else if ($class_name == 'ContentBase')
-		$class_name = 'CmsContentBase';
 
 	//We do this in order of importance...  classes first
-	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
-	{
-		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
-	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
-	{
-		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
-	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
+	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
 	{
 		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
 	}
 	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
 	{
 		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
+	{
+		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
+	}
+	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
+	{
+		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
 	}
 	else if (CmsContentOperations::load_content_type($class_name))
 	{
@@ -220,6 +216,16 @@ function lang()
 {
 	$ary = func_get_args();
 	return call_user_func_array(array('CmsLanguage', 'translate'), $ary);
+}
+
+/**
+ * Returns the currently configured database prefix.
+ *
+ * @since 0.4
+ */
+function cms_db_prefix()
+{
+	return CmsConfig::get('db_prefix');
 }
 
 ?>
