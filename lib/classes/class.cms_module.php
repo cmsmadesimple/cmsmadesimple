@@ -1943,7 +1943,7 @@ class CmsModule extends CmsObject
 		if (!isset($this->tab_header_shown))
 		{
 			// TODO, If non-default theme is chosen then add templateCssPath="/path/to/TabContainer.css"
-			$output = '<div  id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
+			$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
 			$this->tab_header_shown = true;
 		}
 		else
@@ -1963,11 +1963,12 @@ class CmsModule extends CmsObject
 	function StartTabContent()
 	{
 		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="albums">';
+	$this->after_tabs = '';
 	}
 
 	function EndTabContent()
 	{
-		return '</div><script>djConfig.searchIds.push("mainTabContainer");</script> <!-- EndTabContent -->'."\n";
+		return '</div><script>djConfig.searchIds.push("mainTabContainer");</script>'.$this->after_tabs.' <!-- EndTabContent -->'."\n";
 	}
 
 	function StartTab($tabid, $params = array())
@@ -1977,13 +1978,13 @@ class CmsModule extends CmsObject
 		} else {
 			$message = '';
 		}
-
-		return '<script>djConfig.searchIds.push("'.$tabid.'");</script><div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '">'."\n";
+		$this->after_tabs .= '<script>djConfig.searchIds.push("'.$tabid.'");</script>';
+		return '<div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '"><div parseWidgets="false">'."\n";
 	}
 
 	function EndTab()
 	{
-		return '</div> <!-- EndTab -->'."\n";
+		return '</div></div> <!-- EndTab -->'."\n";
 	}
 
 	/**

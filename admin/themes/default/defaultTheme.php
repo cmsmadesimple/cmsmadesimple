@@ -130,7 +130,7 @@ class defaultTheme extends AdminTheme
 		echo '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
 		echo '<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>';
 		echo '<script type="text/javascript">
-			var djConfig = {  baseScriptUri: \'../lib/dojo/\', parseWidgets: false, searchIds: []  };
+			var djConfig = {  parseWidgets: false, baseScriptUri: \'../lib/dojo/\'};
 		      </script>
 			<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
 			<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
