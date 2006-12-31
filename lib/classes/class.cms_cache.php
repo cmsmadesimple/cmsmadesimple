@@ -23,7 +23,7 @@ class CmsCache extends CmsObject
 	static private $instance = null;
 	static private $cache = null;
 	
-	function __construct()
+	function __construct($type = 'function')
 	{
 		parent::__construct();
 		
@@ -34,22 +34,38 @@ class CmsCache extends CmsObject
 		    'cacheDir' => $dirname.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache/',
 		    'lifeTime' => 300
 		);
-		
-		//if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
-		if (!CmsConfig::get('function_caching'))
-			$options['caching'] = false;
-		
-		require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
-		$this->cache = new Cache_Lite_Function($options);
+
+		if ($type == 'function')
+		{
+			//if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
+			if (!CmsConfig::get('function_caching'))
+				$options['caching'] = false;
+
+			require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
+			$this->cache = new Cache_Lite_Function($options);
+		}
+		else
+		{
+			require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
+			$this->cache = new Cache_Lite($options);
+		}
 	}
 	
-	static public function get_instance()
+	public static function get_instance($type = 'function')
 	{
-		if (self::$instance == NULL)
+		static $instances;
+
+		if (!isset($instances))
 		{
-			self::$instance = new CmsCache();
+			$instances = array();
 		}
-		return self::$instance;
+
+		if (empty($instances[$type]))
+		{
+			$instances[$type] = new CmsCache($type);
+		}
+
+		return $instances[$type];
 	}
 	
 	public function get($id, $group = 'default', $doNotTestCacheValidity = FALSE)
