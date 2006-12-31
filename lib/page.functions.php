@@ -235,12 +235,12 @@ function check_ownership($userid, $contentid = '')
 		$variables = &$gCms->variables;
 		$variables['ownerpages'] = array();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
 		while ($result && !$result->EOF)
 		{
-			$variables['ownerpages'][] =& $result->fields['content_id'];
+			$variables['ownerpages'][] =& $result->fields['id'];
 			$result->MoveNext();
 		}
 		
@@ -317,12 +317,12 @@ function author_pages($userid)
 		$db = &$gCms->GetDb();
 		$variables['authorpages'] = array();
 		
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;
 		$result =& $db->Execute($query);
 		
 		while ($result && !$result->EOF)
 		{
-			$variables['authorpages'][] =& $result->fields['content_id'];
+			$variables['authorpages'][] =& $result->fields['id'];
 			$result->MoveNext();
 		}
 		

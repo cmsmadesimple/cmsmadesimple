@@ -511,16 +511,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		return $db->GetOne($query, $queryparams);
 	}
-	
-	/**
-	 * Allows validation to be turned off. Calling it simply turns off validation (useful for making templates active/inactive)
-	 *
-	 * @author Elijah Lofgren
-	 **/
-	function SkipValidation()
-	{
-		$this->skip_validation = TRUE;
-	}
 
 	/**
 	 * Saves the ORM'd object back to the database.  First it calls the validation method to make
@@ -535,13 +525,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
-		if (FALSE == $this->skip_validation && TRUE == $this->_call_validation())
+		if ($this->_call_validation())
 			return false;
 
 		$this->before_save();
 
-		global $gCms;
-		$db =& $gCms->GetDb();
+		$gCms = cmsms();
+		$db = cms_db();
 
 		$table = $this->get_table();
 
@@ -560,8 +550,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		//If not, do an insert.
 		if (isset($id) && $id > 0)
 		{
+			CmsProfiler::get_instance()->mark('Before Update');
 			if ($this->dirty)
 			{
+				CmsProfiler::get_instance()->mark('Dirty Bit Not Set');
 				$query = 'UPDATE ' . $table . ' SET ';
 				$midpart = '';
 				$queryparams = array();
@@ -607,11 +599,15 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				return $result;
 			}
 			
+			CmsProfiler::get_instance()->mark('Dirty Bit Set');
+			
 			return true;
 		}
 		else
 		{
 			$new_id = -1;
+			
+			CmsProfiler::get_instance()->mark('Before Insert');
 
 			if ($this->sequence != '')
 			{
@@ -948,7 +944,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @author Ted Kulp
 	 **/
 	public function _call_validation()
-	{
+	{	
 		//Clear them out first
 		$this->validation_errors = array();
 		

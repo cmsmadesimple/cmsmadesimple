@@ -18,7 +18,7 @@
 
 function smarty_cms_function_news($params, &$smarty)
 {
-	global $gCms;
+	$gCms = cmsms();
 	$cmsmodules = &$gCms->modules;
 
 	if (isset($cmsmodules))

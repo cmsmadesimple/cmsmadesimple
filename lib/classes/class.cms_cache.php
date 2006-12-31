@@ -35,7 +35,8 @@ class CmsCache extends CmsObject
 		    'lifeTime' => 300
 		);
 		
-		if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
+		//if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
+		if (!CmsConfig::get('function_caching'))
 			$options['caching'] = false;
 		
 		require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');

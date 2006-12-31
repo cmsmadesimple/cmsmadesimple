@@ -48,15 +48,20 @@ if (isset($_GET["message"])) {
 	global $gCms;
 	$templateops =& $gCms->GetTemplateOperations();
 
-	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
-		if (isset($_GET["template_id"])) {
+	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent")
+	{
+		if (isset($_GET["template_id"]))
+		{
 			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
 			$result = $db->Execute($query, array($_GET['template_id']));
-			if ($result) {
+			if ($result)
+			{
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
 				echo '<p>'.lang('allpagesmodified').'</p>';
-			} else {
+			}
+			else
+			{
 				echo '<p class="error">'.lang('errorupdatingpages').'</p>';
 			}
 		}
@@ -64,19 +69,37 @@ if (isset($_GET["message"])) {
 
 	if (isset($_GET['setdefault']))
 	{
-		$templatelist = $templateops->LoadTemplates();
+		$templatelist = cmsms()->template->find_all();
 		foreach ($templatelist as $onetemplate)
 		{
 			if ($onetemplate->id == $_GET['setdefault'])
 			{
 				$onetemplate->default = 1;
 				$onetemplate->active = 1;
-				$onetemplate->Save();
+				$result = $onetemplate->save();
+				if (!$result)
+				{
+					echo '<ul>';
+					foreach ($onetemplate->validation_errors as $err)
+					{
+						echo '<li>'.$err.'</li>';
+					}
+					echo '</ul>';
+				}
 			}
 			else
 			{
 				$onetemplate->default = 0;
-				$onetemplate->Save();
+				$result = $onetemplate->save();
+				if (!$result)
+				{
+					echo '<ul>';
+					foreach ($onetemplate->validation_errors as $err)
+					{
+						echo '<li>'.$err.'</li>';
+					}
+					echo '</ul>';
+				}
 			}
 		}
 	}
@@ -84,29 +107,21 @@ if (isset($_GET["message"])) {
 	if (isset($_GET['setactive']) || isset($_GET['setinactive']))
 	{
 		$theid = '';
+		$active = false;
 		if (isset($_GET['setactive']))
 		{
 			$theid = $_GET['setactive'];
+			$active = true;
 		}
 		if (isset($_GET['setinactive']))
 		{
 			$theid = $_GET['setinactive'];
 		}
-		$thetemplate = $templateops->LoadTemplateByID($theid);
-		if (isset($thetemplate))
+		$thetemplate = cmsms()->template->find_by_id($theid);
+		if ($thetemplate)
 		{
-			$thetemplate->SkipValidation(); // Turn off validation
-			if (isset($_GET['setactive']))
-			{
-				
-				$thetemplate->active = 1;
-				$thetemplate->Save();
-			}
-			if (isset($_GET['setinactive']))
-			{
-				$thetemplate->active = 0;
-				$thetemplate->Save();
-			}
+			$thetemplate->active = $active;
+			$thetemplate->save();
 		}
 	}
 

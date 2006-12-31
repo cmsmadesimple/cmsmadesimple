@@ -51,7 +51,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		$this->validate_not_blank('content', lang('nofieldgiven',array(lang('content'))));
 		if ($this->name != '')
 		{
-			$result = $this->find_all_by_name($this->name);
+			$result = cmsms()->template->find_all_by_name($this->name);
 			if (count($result) > 0)
 			{
 				if ($result[0]->id != $this->id)
@@ -72,6 +72,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	{
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddTemplatePost' : 'EditTemplatePost'), array('template' => &$this));
 		CmsCache::get_instance()->clear();
+		CmsContentOperations::clear_cache();
 	}
 	
 	function before_delete()
@@ -83,6 +84,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	{
 		CmsEvents::send_event('Core', 'DeleteTemplatePost', array('template' => &$this));
 		CmsCache::get_instance()->clear();
+		CmsContentOperations::clear_cache();
 	}
 }
 
