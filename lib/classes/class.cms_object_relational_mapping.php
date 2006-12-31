@@ -513,6 +513,16 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Allows validation to be turned off. Calling it simply turns off validation (useful for making templates active/inactive)
+	 *
+	 * @author Elijah Lofgren
+	 **/
+	function SkipValidation()
+	{
+		$this->skip_validation = TRUE;
+	}
+
+	/**
 	 * Saves the ORM'd object back to the database.  First it calls the validation method to make
 	 * sure that all validation passes.  If successful, it then determines if this is a new record
 	 * or updated record and INSERTs or UPDATEs accordingly.
@@ -525,7 +535,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
-		if ($this->_call_validation())
+		if (FALSE == $this->skip_validation && TRUE == $this->_call_validation())
 			return false;
 
 		$this->before_save();
