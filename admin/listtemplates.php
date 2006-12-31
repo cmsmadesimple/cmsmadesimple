@@ -26,7 +26,8 @@ check_login();
 
 include_once("header.php");
 
-if (isset($_GET["message"])) {
+if (isset($_GET["message"]))
+{
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }

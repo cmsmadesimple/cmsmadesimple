@@ -49,10 +49,10 @@ $config = cms_config();
 $contentops =& $gCms->GetContentOperations();
 $templateops =& $gCms->GetTemplateOperations();
 
-include_once("../lib/classes/class.admintheme.inc.php");
+//include_once("../lib/classes/class.admintheme.inc.php");
 
 $xajax->processRequests();
-$headtext = $xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n";
+CmsAdminTheme::inject_header_text($xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n");
 
 if (isset($_GET["makedefault"]))
 {

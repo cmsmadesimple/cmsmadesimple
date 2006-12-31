@@ -113,9 +113,9 @@ class AdminTheme
 	{
 		$gCms = cmsms();
 
-	    $themeName=get_preference(get_userid(), 'admintheme', 'default');
-	    $themeObjectName = $themeName."Theme";
-	    $userid = get_userid();
+		$themeName=get_preference(get_userid(), 'admintheme', 'default');
+		$themeObjectName = $themeName."Theme";
+		$userid = get_userid();
 
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php"))
 		{
@@ -126,7 +126,7 @@ class AdminTheme
 		{
 			$themeObject = new AdminTheme($gCms, $userid, $themeName);
 		}
-		
+
 		return $themeObject;
 	}
 
@@ -141,32 +141,31 @@ class AdminTheme
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if ($this->query == '' && isset($_POST['module']) && $_POST['module'] != '')
-		  {
-		  $this->query = 'module='.$_POST['module'];
-		  }
-        $this->userid = $userid;
+		{
+			$this->query = 'module='.$_POST['module'];
+		}
+		$this->userid = $userid;
 		$this->themeName = $themeName;
 		$this->perms = array();
 		$this->recent = array();
 		$this->menuItems = array();
 		$this->breadcrumbs = array();
-        $this->imageLink = array();
+		$this->imageLink = array();
 		$this->modulesBySection = array();
 		$this->sectionCount = array();
-        $this->SetModuleAdminInterfaces();
-        $this->SetAggregatePermissions();
-        if (strpos( $this->url, '/' ) === false)
-            {
-            $this->script = $this->url;
-            }
-        else
-            {
+		$this->SetModuleAdminInterfaces();
+		$this->SetAggregatePermissions();
+		if (strpos( $this->url, '/' ) === false)
+		{
+			$this->script = $this->url;
+		}
+		else
+		{
 			$toam_tmp = explode('/',$this->url);
 			$toam_tmp2 = array_pop($toam_tmp);
 			$this->script = $toam_tmp2;
-            //$this->script = array_pop(@explode('/',$this->url));
-    	    }
-
+			//$this->script = array_pop(@explode('/',$this->url));
+		}
 	}
 
     /**
@@ -208,171 +207,173 @@ class AdminTheme
      *
      * @param section - section to display
      */
-    function MenuListSectionModules($section)
-    {
-    	$modList = array();
-        if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
-            {
-            # Sort modules by name
-            $names = array();
-            foreach($this->modulesBySection[$section] as $key => $row)
-            {
-            	$names[$key] = $this->modulesBySection[$section][$key]['name'];
-            }
-            array_multisort($names, SORT_ASC, $this->modulesBySection[$section]);
+	function MenuListSectionModules($section)
+	{
+		$modList = array();
+		if (isset($this->sectionCount[$section]) && $this->sectionCount[$section] > 0)
+		{
+			# Sort modules by name
+			$names = array();
+			foreach($this->modulesBySection[$section] as $key => $row)
+			{
+				$names[$key] = $this->modulesBySection[$section][$key]['name'];
+			}
+			array_multisort($names, SORT_ASC, $this->modulesBySection[$section]);
 
-            foreach($this->modulesBySection[$section] as $sectionModule)
-	      {
-                $modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
-		  $sectionModule['key'];
-                $modList[$sectionModule['key']]['description'] = $sectionModule['description'];
-                $modList[$sectionModule['key']]['name'] = $sectionModule['name'];
-	      }
-            }
-        return $modList;
-    }
+			foreach($this->modulesBySection[$section] as $sectionModule)
+			{
+				$modList[$sectionModule['key']]['url'] = "moduleinterface.php?module=".
+				$sectionModule['key'];
+				$modList[$sectionModule['key']]['description'] = $sectionModule['description'];
+				$modList[$sectionModule['key']]['name'] = $sectionModule['name'];
+			}
+		}
+		return $modList;
+	}
 
-    /**
-     * SetModuleAdminInterfaces
-     *
-     * This function sets up data structures to place modules in the proper Admin sections
-     * for display on section pages and menus.
-     *
-     */
-    function SetModuleAdminInterfaces()
-    {
-    	# Are there any modules with an admin interface?
-        $cmsmodules = $this->cms->modules;
+	/**
+	* SetModuleAdminInterfaces
+	*
+	* This function sets up data structures to place modules in the proper Admin sections
+	* for display on section pages and menus.
+	*
+	*/
+	function SetModuleAdminInterfaces()
+	{
+		# Are there any modules with an admin interface?
+		$cmsmodules = $this->cms->modules;
 		reset($cmsmodules);
 		while (list($key) = each($cmsmodules))
 		{
 			$value =& $cmsmodules[$key];
-            if (isset($cmsmodules[$key]['object'])
-                && $cmsmodules[$key]['installed'] == true
-                && $cmsmodules[$key]['active'] == true
-                && $cmsmodules[$key]['object']->HasAdmin()
-                && $cmsmodules[$key]['object']->VisibleToAdminUser())
-                {
-                $section = $cmsmodules[$key]['object']->GetAdminSection();
-                if (! isset($this->sectionCount[$section]))
-                    {
-                    $this->sectionCount[$section] = 0;
-                    }
-                $this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
-                if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
-                       $cmsmodules[$key]['object']->GetFriendlyName();
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
-                    }
-                if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
-                        $cmsmodules[$key]['object']->GetAdminDescription();
-                    }
-                else
-                    {
-                    $this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
-                    }
-                $this->sectionCount[$section]++;
-                }
-            }
-    }
+			if (isset($cmsmodules[$key]['object'])
+			&& $cmsmodules[$key]['installed'] == true
+			&& $cmsmodules[$key]['active'] == true
+			&& $cmsmodules[$key]['object']->HasAdmin()
+			&& $cmsmodules[$key]['object']->VisibleToAdminUser())
+			{
+				$section = $cmsmodules[$key]['object']->GetAdminSection();
+				if (! isset($this->sectionCount[$section]))
+				{
+					$this->sectionCount[$section] = 0;
+				}
+				$this->modulesBySection[$section][$this->sectionCount[$section]]['key'] = $key;
+				if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
+				{
+					$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] =
+					$cmsmodules[$key]['object']->GetFriendlyName();
+				}
+				else
+				{
+					$this->modulesBySection[$section][$this->sectionCount[$section]]['name'] = $key;
+				}
+				if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
+				{
+					$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] =
+					$cmsmodules[$key]['object']->GetAdminDescription();
+				}
+				else
+				{
+					$this->modulesBySection[$section][$this->sectionCount[$section]]['description'] = "";
+				}
+				$this->sectionCount[$section]++;
+			}
+		}
+	}
 
-    /**
-     * SetAggregatePermissions
-     *
-     * This function gathers disparate permissions to come up with the visibility of
-     * various admin sections, e.g., if there is any content-related operation for
-     * which a user has permissions, the aggregate content permission is granted, so
-     * that menu item is visible.
-     *
-     */
-    function SetAggregatePermissions()
-    {
-        # Content Permissions
-        $this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
-                check_permission($this->userid, 'Modify Global Content Blocks') |
-                check_permission($this->userid, 'Delete Global Content Blocks');
+	/**
+	* SetAggregatePermissions
+	*
+	* This function gathers disparate permissions to come up with the visibility of
+	* various admin sections, e.g., if there is any content-related operation for
+	* which a user has permissions, the aggregate content permission is granted, so
+	* that menu item is visible.
+	*
+	*/
+	function SetAggregatePermissions()
+	{
+		# Content Permissions
+		$this->perms['htmlPerms'] = check_permission($this->userid, 'Add Global Content Blocks') |
+			check_permission($this->userid, 'Modify Global Content Blocks') |
+			check_permission($this->userid, 'Delete Global Content Blocks');
 
 		global $gCms;
 		$gcbops =& $gCms->GetGlobalContentOperations();
 
-        $thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
-        if (count($thisUserBlobs) > 0)
-            {
-            $this->perms['htmlPerms'] = true;
-            }
-        $this->perms['pagePerms'] = (
-                check_permission($this->userid, 'Modify Any Page') ||
-                check_permission($this->userid, 'Add Pages') ||
-                check_permission($this->userid, 'Remove Pages') ||
-                check_permission($this->userid, 'Modify Page Structure')
-        );
-        $thisUserPages = author_pages($this->userid);
-        if (count($thisUserPages) > 0)
-            {
-            $this->perms['pagePerms'] = true;
-            }
-        $this->perms['contentPerms'] = $this->perms['pagePerms'] | $this->perms['htmlPerms'] | 
-                (isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
+		$thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
+		if (count($thisUserBlobs) > 0)
+		{
+			$this->perms['htmlPerms'] = true;
+		}
 
-        # layout        
+		$this->perms['pagePerms'] = (
+			check_permission($this->userid, 'Modify Any Page') ||
+			check_permission($this->userid, 'Add Pages') ||
+			check_permission($this->userid, 'Remove Pages') ||
+			check_permission($this->userid, 'Modify Page Structure')
+			);
 
-        $this->perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
-                check_permission($this->userid, 'Modify Templates') |
-                check_permission($this->userid, 'Remove Templates');
-        $this->perms['cssPerms'] = check_permission($this->userid, 'Add Stylesheets') |
-                check_permission($this->userid, 'Modify Stylesheets') |
-                check_permission($this->userid, 'Remove Stylesheets');
-        $this->perms['cssAssocPerms'] = check_permission($this->userid, 'Add Stylesheet Assoc') |
-                check_permission($this->userid, 'Modify Stylesheet Assoc') |
-                check_permission($this->userid, 'Remove Stylesheet Assoc');
-        $this->perms['layoutPerms'] = $this->perms['templatePerms'] |
-                $this->perms['cssPerms'] | $this->perms['cssAssocPerms'] |
-                (isset($this->sectionCount['layout']) && $this->sectionCount['layout'] > 0);
+		$thisUserPages = author_pages($this->userid);
+		if (count($thisUserPages) > 0)
+		{
+			$this->perms['pagePerms'] = true;
+		}
+		$this->perms['contentPerms'] = $this->perms['pagePerms'] | $this->perms['htmlPerms'] | 
+			(isset($this->sectionCount['content']) && $this->sectionCount['content'] > 0);
 
-        # file / image
-        $this->perms['filePerms'] = check_permission($this->userid, 'Modify Files') |
-                (isset($this->sectionCount['files']) && $this->sectionCount['files'] > 0);
-    
-        # user/group
-        $this->perms['userPerms'] = check_permission($this->userid, 'Add Users') |
-                check_permission($this->userid, 'Modify Users') |
-                check_permission($this->userid, 'Remove Users');
-        $this->perms['groupPerms'] = check_permission($this->userid, 'Add Groups') |
-                check_permission($this->userid, 'Modify Groups') |
-                check_permission($this->userid, 'Remove Groups');
-        $this->perms['groupPermPerms'] = check_permission($this->userid, 'Modify Permissions');
-        $this->perms['groupMemberPerms'] =  check_permission($this->userid, 'Modify Group Assignments');
-        $this->perms['usersGroupsPerms'] = $this->perms['userPerms'] |
-                $this->perms['groupPerms'] |
-                $this->perms['groupPermPerms'] |
-                $this->perms['groupMemberPerms'] |
-                (isset($this->sectionCount['usersgroups']) &&
-                    $this->sectionCount['usersgroups'] > 0);
+		# layout        
 
-        # admin
-        $this->perms['sitePrefPerms'] = check_permission($this->userid, 'Modify Site Preferences') |
-            (isset($this->sectionCount['preferences']) && $this->sectionCount['preferences'] > 0);
-        $this->perms['adminPerms'] = $this->perms['sitePrefPerms'] |
-            (isset($this->sectionCount['admin']) && $this->sectionCount['admin'] > 0);
-        $this->perms['siteAdminPerms'] = $this->perms['sitePrefPerms'] |
-                $this->perms['adminPerms'] |
-                (isset($this->sectionCount['admin']) &&
-                    $this->sectionCount['admin'] > 0);
+		$this->perms['templatePerms'] = check_permission($this->userid, 'Add Templates') |
+			check_permission($this->userid, 'Modify Templates') |
+			check_permission($this->userid, 'Remove Templates');
+		$this->perms['cssPerms'] = check_permission($this->userid, 'Add Stylesheets') |
+			check_permission($this->userid, 'Modify Stylesheets') |
+			check_permission($this->userid, 'Remove Stylesheets');
+		$this->perms['cssAssocPerms'] = check_permission($this->userid, 'Add Stylesheet Assoc') |
+			check_permission($this->userid, 'Modify Stylesheet Assoc') |
+			check_permission($this->userid, 'Remove Stylesheet Assoc');
+		$this->perms['layoutPerms'] = $this->perms['templatePerms'] |
+			$this->perms['cssPerms'] | $this->perms['cssAssocPerms'] |
+			(isset($this->sectionCount['layout']) && $this->sectionCount['layout'] > 0);
+
+		# file / image
+		$this->perms['filePerms'] = check_permission($this->userid, 'Modify Files') |
+			(isset($this->sectionCount['files']) && $this->sectionCount['files'] > 0);
+
+		# user/group
+		$this->perms['userPerms'] = check_permission($this->userid, 'Add Users') |
+			check_permission($this->userid, 'Modify Users') |
+			check_permission($this->userid, 'Remove Users');
+		$this->perms['groupPerms'] = check_permission($this->userid, 'Add Groups') |
+			check_permission($this->userid, 'Modify Groups') |
+			check_permission($this->userid, 'Remove Groups');
+		$this->perms['groupPermPerms'] = check_permission($this->userid, 'Modify Permissions');
+		$this->perms['groupMemberPerms'] =  check_permission($this->userid, 'Modify Group Assignments');
+		$this->perms['usersGroupsPerms'] = $this->perms['userPerms'] |
+			$this->perms['groupPerms'] |
+			$this->perms['groupPermPerms'] |
+			$this->perms['groupMemberPerms'] |
+			(isset($this->sectionCount['usersgroups']) &&
+			$this->sectionCount['usersgroups'] > 0);
+
+		# admin
+		$this->perms['sitePrefPerms'] = check_permission($this->userid, 'Modify Site Preferences') |
+			(isset($this->sectionCount['preferences']) && $this->sectionCount['preferences'] > 0);
+		$this->perms['adminPerms'] = $this->perms['sitePrefPerms'] |
+			(isset($this->sectionCount['admin']) && $this->sectionCount['admin'] > 0);
+		$this->perms['siteAdminPerms'] = $this->perms['sitePrefPerms'] |
+			$this->perms['adminPerms'] |
+			(isset($this->sectionCount['admin']) &&
+			$this->sectionCount['admin'] > 0);
 
 
-        # extensions
-        $this->perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
-        $this->perms['modulePerms'] = check_permission($this->userid, 'Modify Modules');
-        $this->perms['extensionsPerms'] = $this->perms['codeBlockPerms'] |
-            $this->perms['modulePerms'] |
-            (isset($this->sectionCount['extensions']) && $this->sectionCount['extensions'] > 0);
-    }
+		# extensions
+		$this->perms['codeBlockPerms'] = check_permission($this->userid, 'Modify User-defined Tags');
+		$this->perms['modulePerms'] = check_permission($this->userid, 'Modify Modules');
+			$this->perms['extensionsPerms'] = $this->perms['codeBlockPerms'] |
+			$this->perms['modulePerms'] |
+			(isset($this->sectionCount['extensions']) && $this->sectionCount['extensions'] > 0);
+	}
     
     /**
      * HasPerm
@@ -381,17 +382,17 @@ class AdminTheme
      * 
      * @param permission the permission to check.
      */
-    function HasPerm($permission)
-    {
-    	if (isset($this->perms[$permission]) && $this->perms[$permission])
-    	   {
-    	   	return true;
-    	   }
-    	else
-    	   {
-    	   	return false;
-    	   }
-    }
+	function HasPerm($permission)
+	{
+		if (isset($this->perms[$permission]) && $this->perms[$permission])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
     
 
     /**
@@ -414,106 +415,106 @@ class AdminTheme
      * filter out top-level pages, and to avoid adding the same page multiple times.
      *
      */
-    function AddAsRecentPage()
-    {
-    	if (count($this->recent) < 1)
-    	   {
-    	   	$this->LoadRecentPages();
-    	   }
+	function AddAsRecentPage()
+	{
+		if (count($this->recent) < 1)
+		{
+			$this->LoadRecentPages();
+		}
 
-        $addToRecent = true;
-        foreach ($this->recent as $thisPage)
-            {
-            if ($thisPage->url == $this->url)
-                {
-                $addToRecent = false;
-                }
-            if ($thisPage->title == $this->title)
-                {
-                $addToRecent = false;
-                }
-            }
-        if (preg_match('/moduleinterface/', $this->url))
-        	{
-        	if (! preg_match('/module=/', $this->url))
-        		{
-        		$addToRecent = false;
-        		}
+		$addToRecent = true;
+		foreach ($this->recent as $thisPage)
+		{
+			if ($thisPage->url == $this->url)
+			{
+				$addToRecent = false;
 			}
-        if ($addToRecent)
-            {
-            $rp = new RecentPage();
-            $rp->setValues($this->title, $this->url, $this->userid);
-            $rp->Save();
-            $this->recent = array_reverse($this->recent);
-            $this->recent[] = $rp;
-            if (count($this->recent) > 5)
-                {
-                array_shift($this->recent);
-                }
-            $this->recent = array_reverse($this->recent);
-            $rp->PurgeOldPages($this->userid,5);
-            }
-    }
+			if ($thisPage->title == $this->title)
+			{
+				$addToRecent = false;
+			}
+		}
+		if (preg_match('/moduleinterface/', $this->url))
+		{
+			if (! preg_match('/module=/', $this->url))
+			{
+				$addToRecent = false;
+			}
+		}
+		if ($addToRecent)
+		{
+			$rp = new RecentPage();
+			$rp->setValues($this->title, $this->url, $this->userid);
+			$rp->Save();
+			$this->recent = array_reverse($this->recent);
+			$this->recent[] = $rp;
+			if (count($this->recent) > 5)
+			{
+				array_shift($this->recent);
+			}
+			$this->recent = array_reverse($this->recent);
+			$rp->PurgeOldPages($this->userid,5);
+		}
+	}
 
     /**
      * DoBookmarks
      * Setup method for displaying admin bookmarks.
      */
-    function DoBookmarks()
-    {
+	function DoBookmarks()
+	{
 		global $gCms;
 		$bookops =& $gCms->GetBookmarkOperations();
-        $marks = array_reverse($bookops->LoadBookmarks($this->userid));
-        $tmpMark = new Bookmark();
-        $tmpMark->title = lang('addbookmark');
-        $tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
-        $marks[] = $tmpMark;
-        $marks = array_reverse($marks);
-        $tmpMark = new Bookmark();
-        $tmpMark->title = lang('managebookmarks');
-        $tmpMark->url = 'listbookmarks.php';
-        $marks[] = $tmpMark;
-        $this->DisplayBookmarks($marks);
-    }
+		$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('addbookmark');
+		$tmpMark->url = 'makebookmark.php?title='. urlencode($this->title);
+		$marks[] = $tmpMark;
+		$marks = array_reverse($marks);
+		$tmpMark = new Bookmark();
+		$tmpMark->title = lang('managebookmarks');
+		$tmpMark->url = 'listbookmarks.php';
+		$marks[] = $tmpMark;
+		$this->DisplayBookmarks($marks);
+	}
 
 
     /**
      * DoBookmarks
      * Method for displaying admin bookmarks (shortcuts) & help links.
      */
-    function ShowShortcuts()
-    {
-      if (get_preference($this->userid, 'bookmarks')) {
-	echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
-	echo '<div class="itemoverflow">';
-	echo '<h2>'.lang('bookmarks').'</h2>';
-	echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
-	$marks = array_reverse($bookops->LoadBookmarks($this->userid));
-	$marks = array_reverse($marks);
-	if (FALSE == empty($marks))
-	  {
-	    echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
-	    echo '<ul style="margin:0">';
-	    foreach($marks as $mark)
-	      {
-		echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-	      }
-	    echo "</ul>\n";
-	  }
-	echo '<h3 style="margin:0;">'.lang('help').'</h3>';
-	echo '<ul style="margin:0;">';
-	echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
-	echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
-	echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
-	echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
-	echo '</ul>';
-	echo '</div>';
-	echo '</div>';
-      }
-    }
+	function ShowShortcuts()
+	{
+		if (get_preference($this->userid, 'bookmarks')) {
+			echo '<div class="itemmenucontainer shortcuts" style="float:left;">';
+			echo '<div class="itemoverflow">';
+			echo '<h2>'.lang('bookmarks').'</h2>';
+			echo '<p><a href="listbookmarks.php">'.lang('managebookmarks').'</a></p>';
+			global $gCms;
+			$bookops =& $gCms->GetBookmarkOperations();
+			$marks = array_reverse($bookops->LoadBookmarks($this->userid));
+			$marks = array_reverse($marks);
+			if (FALSE == empty($marks))
+			{
+				echo '<h3 style="margin:0">'.lang('user_created').'</h3>';
+				echo '<ul style="margin:0">';
+				foreach($marks as $mark)
+				{
+					echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+				}
+				echo "</ul>\n";
+			}
+			echo '<h3 style="margin:0;">'.lang('help').'</h3>';
+			echo '<ul style="margin:0;">';
+			echo '<li><a href="http://forum.cmsmadesimple.org/">'.lang('forums').'</a></li>';
+			echo '<li><a href="http://wiki.cmsmadesimple.org/">'.lang('wiki').'</a></li>';
+			echo '<li><a href="http://cmsmadesimple.org/main/support/IRC">'.lang('irc').'</a></li>';
+			echo '<li><a href="http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel/Extensions/Modules">'.lang('module_help').'</a></li>';
+			echo '</ul>';
+			echo '</div>';
+			echo '</div>';
+		}
+	}
     
 
     /**
@@ -524,22 +525,22 @@ class AdminTheme
      *
      * @param marks - this is an array of Bookmark Objects
      */
-    function DisplayBookmarks($marks)
-    {
-        //echo "<div id=\"BookmarkCallout\">";
-        echo '<div class="tab-content"><h2 class="tab">'.lang('bookmarks').'</h2>';
-        echo "<p class=\"DashboardCalloutTitle\">";
-        echo lang('bookmarks');
-        echo "</p>\n";
+	function DisplayBookmarks($marks)
+	{
+		//echo "<div id=\"BookmarkCallout\">";
+		echo '<div class="tab-content"><h2 class="tab">'.lang('bookmarks').'</h2>';
+		echo "<p class=\"DashboardCalloutTitle\">";
+		echo lang('bookmarks');
+		echo "</p>\n";
 
-        echo "<ul>";
-        foreach($marks as $mark)
-            {
-            echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
-            }
-        echo "</ul>\n";
-        echo "</div>\n";
-    }
+		echo "<ul>";
+		foreach($marks as $mark)
+		{
+			echo "<li><a href=\"". $mark->url."\">".$mark->title."</a></li>\n";
+		}
+		echo "</ul>\n";
+		echo "</div>\n";
+	}
 
 
 
@@ -572,14 +573,14 @@ class AdminTheme
      * DoRecentPages
      * Setup method for displaying recent pages.
      */
-    function DoRecentPages()
-    {
-    	if (count($this->recent) < 1)
-    	   {
-    	   	$this->LoadRecentPages();
-    	   }
-        $this->DisplayRecentPages();
-    }
+	function DoRecentPages()
+	{
+		if (count($this->recent) < 1)
+		{
+			$this->LoadRecentPages();
+		}
+		$this->DisplayRecentPages();
+	}
 
     /**
      * DisplayRecentPages
@@ -589,19 +590,19 @@ class AdminTheme
      * RecentPage objects contain two useful fields: title and url
      *
      */
-    function DisplayRecentPages()
-    {
-        //echo "<div id=\"RecentPageCallout\">\n";
-        echo '<div class="tab-content"><h2 class="tab">'.lang('recentpages').'</h2>';
-        echo "<p class=\"DashboardCalloutTitle\">".lang('recentpages')."</p>\n";
-        echo "<ul>";
-        foreach($this->recent as $pg)
-            {
-            echo "<li><a href=\"". $pg->url."\">".$pg->title."</a></li>\n";
-            }
-        echo "</ul>\n";
-        echo "</div>\n";
-    }
+	function DisplayRecentPages()
+	{
+		//echo "<div id=\"RecentPageCallout\">\n";
+		echo '<div class="tab-content"><h2 class="tab">'.lang('recentpages').'</h2>';
+		echo "<p class=\"DashboardCalloutTitle\">".lang('recentpages')."</p>\n";
+		echo "<ul>";
+		foreach($this->recent as $pg)
+		{
+			echo "<li><a href=\"". $pg->url."\">".$pg->title."</a></li>\n";
+		}
+		echo "</ul>\n";
+		echo "</div>\n";
+	}
 
     /**
      * OutputHeaderJavascript
@@ -684,11 +685,11 @@ class AdminTheme
      */
     function PopulateAdminNavigation($subtitle='')
     {
-        if (count($this->menuItems) > 0)
-            {
-            // we have already created the list
-            return;
-            }
+		if (count($this->menuItems) > 0)
+		{
+			// we have already created the list
+			return;
+		}
         $this->subtitle = $subtitle;
     	    
     	$this->menuItems = array(
@@ -848,176 +849,169 @@ class AdminTheme
                     'description'=>'','show_in_menu'=>true),
     	);
 
-	// add in all of the 'system' modules todo
-	global $gCms;
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
-	  {
-            $tmpArray = $this->MenuListSectionModules($sectionKey);
-            $first = true;
-            foreach ($tmpArray as $thisKey=>$thisVal)
-	      {
-                $thisModuleKey = $thisKey;
-                $counter = 0;
+		// add in all of the 'system' modules todo
+		global $gCms;
+		foreach ($this->menuItems as $sectionKey=>$sectionArray)
+		{
+			$tmpArray = $this->MenuListSectionModules($sectionKey);
+			$first = true;
+			foreach ($tmpArray as $thisKey=>$thisVal)
+			{
+				$thisModuleKey = $thisKey;
+				$counter = 0;
 
-                // don't clobber existing keys
-                if (array_key_exists($thisModuleKey,$this->menuItems))
-		  {
-		    while (array_key_exists($thisModuleKey,$this->menuItems))
-		      {
-			$thisModuleKey = $thisKey.$counter;
-			$counter++;
-		      }
-		  }
+				// don't clobber existing keys
+				if (array_key_exists($thisModuleKey,$this->menuItems))
+				{
+					while (array_key_exists($thisModuleKey,$this->menuItems))
+					{
+						$thisModuleKey = $thisKey.$counter;
+						$counter++;
+					}
+				}
 
-		// if it's not a system module...
-		if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
-		  {
-		    $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-							   'parent'=>$sectionKey,
-							   'title'=>$this->FixSpaces($thisVal['name']),
-							   'description'=>$thisVal['description'],
-							   'show_in_menu'=>true);
+				// if it's not a system module...
+				if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
+				{
+					$this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+						'parent'=>$sectionKey,
+						'title'=>$this->FixSpaces($thisVal['name']),
+						'description'=>$thisVal['description'],
+						'show_in_menu'=>true);
 
-// 		    Commenting out this code ensures that the module is thought of as (built in)
-// 		    if ($first)
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
-// 			$first = false;
-// 		      }
-// 		    else
-// 		      {
-// 			$this->menuItems[$thisModuleKey]['module'] = 1;
-// 		      }
-		  }
-	      }
-	  }
 
-	// add in all of the modules
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
-	  {
-            $tmpArray = $this->MenuListSectionModules($sectionKey);
-            $first = true;
-            foreach ($tmpArray as $thisKey=>$thisVal)
-	      {
-                $thisModuleKey = $thisKey;
-                $counter = 0;
+				}
+			}
+		}
 
-                // don't clobber existing keys
-                if (array_key_exists($thisModuleKey,$this->menuItems))
-		  {
-		    while (array_key_exists($thisModuleKey,$this->menuItems))
-		      {
-			$thisModuleKey = $thisKey.$counter;
-			$counter++;
-		      }
-		    if( $counter > 0 )
-		      {
-			continue;
-		      }
-		  }
-                $this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-						       'parent'=>$sectionKey,
-						       'title'=>$this->FixSpaces($thisVal['name']),
-						       'description'=>$thisVal['description'],
-						       'show_in_menu'=>true);
-                if ($first)
-		  {
-                    $this->menuItems[$thisModuleKey]['firstmodule'] = 1;
-                    $first = false;
-		  }
-                else
-		  {
-                    $this->menuItems[$thisModuleKey]['module'] = 1;
-		  }
-	      }
-	  }
+		// add in all of the modules
+		foreach ($this->menuItems as $sectionKey=>$sectionArray)
+		{
+			$tmpArray = $this->MenuListSectionModules($sectionKey);
+			$first = true;
+			foreach ($tmpArray as $thisKey=>$thisVal)
+			{
+				$thisModuleKey = $thisKey;
+				$counter = 0;
+
+				// don't clobber existing keys
+				if (array_key_exists($thisModuleKey,$this->menuItems))
+				{
+					while (array_key_exists($thisModuleKey,$this->menuItems))
+					{
+						$thisModuleKey = $thisKey.$counter;
+						$counter++;
+					}
+					if( $counter > 0 )
+					{
+						continue;
+					}
+				}
+				$this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
+					'parent'=>$sectionKey,
+					'title'=>$this->FixSpaces($thisVal['name']),
+					'description'=>$thisVal['description'],
+					'show_in_menu'=>true);
+
+				if ($first)
+				{
+					$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
+					$first = false;
+				}
+				else
+				{
+					$this->menuItems[$thisModuleKey]['module'] = 1;
+				}
+			}
+		}
 	
-	// resolve the tree to be doubly-linked,
-	// and make sure the selections are selected            
-        foreach ($this->menuItems as $sectionKey=>$sectionArray)
-	  {
-            // link the children to the parents; a little clumsy since we can't
-            // assume php5-style references in a foreach.
-            $this->menuItems[$sectionKey]['children'] = array();
-            foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
-	      {
-            	if ($subsectionArray['parent'] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['children'][] = $subsectionKey;
-		  }
-	      }
+		// resolve the tree to be doubly-linked,
+		// and make sure the selections are selected            
+		foreach ($this->menuItems as $sectionKey=>$sectionArray)
+		{
+			// link the children to the parents; a little clumsy since we can't
+			// assume php5-style references in a foreach.
+			$this->menuItems[$sectionKey]['children'] = array();
+			foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
+			{
+				if ($subsectionArray['parent'] == $sectionKey)
+				{
+					$this->menuItems[$sectionKey]['children'][] = $subsectionKey;
+				}
+			}
             // set selected
-	    if ($this->script == 'moduleinterface.php')
-	      {
-                $a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
-                if ($a > 0 && $matches[2] == $sectionKey)
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = true;
-		    $this->title .= $sectionArray['title'];
-		    if ($sectionArray['parent'] != -1)
-		      {
-			$parent = $sectionArray['parent'];
-			while ($parent != -1)
-			  {
-			    $this->menuItems[$parent]['selected'] = true;
-			    $parent = $this->menuItems[$parent]['parent'];
-			  }
-		      }
-		  }
-		else
-		  {
-		    $this->menuItems[$sectionKey]['selected'] = false;
-		  }
-	      }
-            else if ($sectionArray['url'] == $this->script)
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = true;
-            	$this->title .= $sectionArray['title'];
-            	if ($sectionArray['parent'] != -1)
-		  {
-		    $parent = $sectionArray['parent'];
-		    while ($parent != -1)
-		      {
-			$this->menuItems[$parent]['selected'] = true;
-			$parent = $this->menuItems[$parent]['parent'];
-		      }
-		  }
-	      }
-            else
-	      {
-            	$this->menuItems[$sectionKey]['selected'] = false;
-	      }
-	  }
-	// fix subtitle, if any
-	if ($subtitle != '')
-	  {
-	    $this->title .= ': '.$subtitle;
-	  }
-	// generate breadcrumb array
-	
-	$count = 0;
-	foreach ($this->menuItems as $key=>$menuItem)
-	  {
-	    if ($menuItem['selected'])
-	      {
-		$this->breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
-		$count++;
-	      }
-	  }
-	if ($count > 0)
-	  {
-	    // and fix up the last breadcrumb...
-	    if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
-	      {
-		$this->query = preg_replace('/\&/','&amp;',$this->query);
-		$this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
-	      }
-	    if ($this->subtitle != '')
-	      {
-		$this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
-	      }
-	  }
-    }
+			if ($this->script == 'moduleinterface.php')
+			{
+				$a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
+				if ($a > 0 && $matches[2] == $sectionKey)
+				{
+					$this->menuItems[$sectionKey]['selected'] = true;
+					$this->title .= $sectionArray['title'];
+					if ($sectionArray['parent'] != -1)
+					{
+						$parent = $sectionArray['parent'];
+						while ($parent != -1)
+						{
+							$this->menuItems[$parent]['selected'] = true;
+							$parent = $this->menuItems[$parent]['parent'];
+						}
+					}
+				}
+				else
+				{
+					$this->menuItems[$sectionKey]['selected'] = false;
+				}
+			}
+			else if ($sectionArray['url'] == $this->script)
+			{
+				$this->menuItems[$sectionKey]['selected'] = true;
+				$this->title .= $sectionArray['title'];
+				if ($sectionArray['parent'] != -1)
+				{
+					$parent = $sectionArray['parent'];
+					while ($parent != -1)
+					{
+						$this->menuItems[$parent]['selected'] = true;
+						$parent = $this->menuItems[$parent]['parent'];
+					}
+				}
+			}
+			else
+			{
+				$this->menuItems[$sectionKey]['selected'] = false;
+			}
+		}
+		// fix subtitle, if any
+		if ($subtitle != '')
+		{
+			$this->title .= ': '.$subtitle;
+		}
+		// generate breadcrumb array
+
+		$count = 0;
+		foreach ($this->menuItems as $key=>$menuItem)
+		{
+			if ($menuItem['selected'])
+			{
+				$this->breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
+				$count++;
+			}
+		}
+
+		if ($count > 0)
+		{
+			// and fix up the last breadcrumb...
+			if ($this->query != '' && strpos($this->breadcrumbs[$count-1]['url'],'?') === false)
+			{
+				$this->query = preg_replace('/\&/','&amp;',$this->query);
+				$this->breadcrumbs[$count-1]['url'] .= '?'.$this->query;
+			}
+			if ($this->subtitle != '')
+			{
+				$this->breadcrumbs[$count-1]['title'] .=  ': '.$this->subtitle;
+			}
+		}
+	}
     
     /**
      *  BackUrl
@@ -1280,18 +1274,18 @@ class AdminTheme
      * Cruftily written to only support a depth of two levels
      *
      */
-    function DisplayTopMenu()
-    {
-        echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
-        foreach ($this->menuItems as $key=>$menuItem)
-        	{
-        	if ($menuItem['parent'] == -1)
-        		{
-        		$this->renderMenuSection($key, 0, -1);
-        		}
-        	}
-        echo "</ul></div>\n";
-    }
+	function DisplayTopMenu()
+	{
+		echo "<div id=\"TopMenu\"><ul id=\"nav\">\n";
+		foreach ($this->menuItems as $key=>$menuItem)
+		{
+			if ($menuItem['parent'] == -1)
+			{
+				$this->renderMenuSection($key, 0, -1);
+			}
+		}
+		echo "</ul></div>\n";
+	}
 
     /**
      * DisplayFooter
@@ -1419,17 +1413,18 @@ class AdminTheme
      * @param file file or dir to check for
 	 * @param message to display if it does exist
      */
-    function DisplayDashboardCallout($file, $message = '')
-    {
+	function DisplayDashboardCallout($file, $message = '')
+	{
 		if ($message == '')
 			$message = lang('installdirwarning');
-        echo "<div class=\"DashboardCallout\">\n";
-        if (file_exists($file))
-        {
-	       echo '<p>'.$message.'</p>';
-        }
-        echo "</div> <!-- end DashboardCallout -->\n";
-    }
+
+		echo "<div class=\"DashboardCallout\">\n";
+		if (file_exists($file))
+		{
+			echo '<p>'.$message.'</p>';
+		}
+		echo "</div> <!-- end DashboardCallout -->\n";
+	}
 
     /**
      * DisplayImage will display the themed version of an image (if it exists),
@@ -1439,52 +1434,52 @@ class AdminTheme
      * @param width
      * @param height
      */
-    function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
-    {
-        if (! isset($this->imageLink[$imageName]))
-    	   {
-    	   	if (strpos($imageName,'/') !== false)
-    	   	   {
-    	   	   	$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
-    	   	   	$imageName = substr($imageName,strrpos($imageName,'/')+1);
-    	   	   }
-    	   	else
-    	   	   {
-    	   	   	$imagePath = '';
-    	   	   }
-    	   	
-    	   if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
-                '/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
-    	       {
-                $this->imageLink[$imageName] = 'themes/' .
-                    $this->themeName . '/images/' . $imagePath . $imageName;
-    	       }
-    	   else
-    	       {
-    	       $this->imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
-    	       }
-    	   }
+	function DisplayImage($imageName, $alt='', $width='', $height='', $class='')
+	{
+		if (! isset($this->imageLink[$imageName]))
+		{
+			if (strpos($imageName,'/') !== false)
+			{
+				$imagePath = substr($imageName,0,strrpos($imageName,'/')+1);
+				$imageName = substr($imageName,strrpos($imageName,'/')+1);
+			}
+			else
+			{
+				$imagePath = '';
+			}
 
-        $retStr = '<img src="'.$this->imageLink[$imageName].'"';
-        if ($class != '')
-            {
-            $retStr .= ' class="'.$class.'"';
-            }
-        if ($width != '')
-            {
-            $retStr .= ' width="'.$width.'"';
-            }
-        if ($height != '')
-            {
-            $retStr .= ' height="'.$height.'"';
-            }
-        if ($alt != '')
-            {
-            $retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
-            }
-        $retStr .= ' />';
-        return $retStr;
-    }
+			if (file_exists(dirname($this->cms->config['root_path'] . '/' . $this->cms->config['admin_dir'] .
+			'/themes/' . $this->themeName . '/images/' . $imagePath . $imageName) . '/'. $imageName))
+			{
+				$this->imageLink[$imageName] = 'themes/' .
+				$this->themeName . '/images/' . $imagePath . $imageName;
+			}
+			else
+			{
+				$this->imageLink[$imageName] = 'themes/default/images/' . $imagePath . $imageName;
+			}
+		}
+
+		$retStr = '<img src="'.$this->imageLink[$imageName].'"';
+		if ($class != '')
+		{
+			$retStr .= ' class="'.$class.'"';
+		}
+		if ($width != '')
+		{
+			$retStr .= ' width="'.$width.'"';
+		}
+		if ($height != '')
+		{
+			$retStr .= ' height="'.$height.'"';
+		}
+		if ($alt != '')
+		{
+			$retStr .= ' alt="'.$alt.'" title="'.$alt.'"';
+		}
+		$retStr .= ' />';
+		return $retStr;
+	}
 
 
    /**
@@ -1497,96 +1492,99 @@ class AdminTheme
 	* @param module_help_type - FALSE if this is not a module, 'both' if link to
 	*                           both the wiki and module help and 'builtin' if link to to the builtin help
 	*/
-    function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
-    {
-      $cms = $this->cms;
-      $config = $cms->GetConfig();             
-      $header  = '<div class="pageheader">';
-      if (FALSE != $module_help_type)
+	function ShowHeader($title_name, $extra_lang_param=array(), $link_text = '', $module_help_type = FALSE)
 	{
-	  $header .= $title_name;
-	}
-      else
-	{
-	  $header .= lang($title_name, $extra_lang_param);
-	}
-      if (FALSE == empty($this->breadcrumbs))
-	{
-	  $wikiUrl = $config['wiki_url'];
-	  // Include English translation of titles. (Can't find better way to get them)
-	  $dirname = dirname(__FILE__);
-	  foreach ($this->breadcrumbs AS $key => $value)
-	    {
-	      $title = $value['title'];
-	      // If this is a module and the last part of the breadcrumbs
-	      if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1]))
+		$cms = $this->cms;
+		$config = $cms->GetConfig();             
+		$header  = '<div class="pageheader">';
+		if (FALSE != $module_help_type)
 		{
-		  $help_title = $title;
-		  if (FALSE == empty($_GET['module']))
-		    {
-		      $module_name = $_GET['module'];
-		    }
-		  else
-		    {
-		      $module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-		    }
-		  // Turn ModuleName into _Module_Name
-		  $moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-		  $moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-		  if ($moduleName{0} == '_')
-		    {
-		      $moduleName = substr($moduleName, 1);
-		    }
-		  $wikiUrl .= '/'.$moduleName;
-		} else {
-		// Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
-		$colonLocation = strrchr($title, ':');
-		if ($colonLocation !== false)
-		  {
-		    $title = substr($title,0,strpos($title,':'));
-		  }
-		// Get the key of the title so we can use the en_US version for the URL
-		$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-		$wikiUrl .= '/'. CmsLanguage::translate($title_key[0], array(), 'core', 'en_US');
-		$help_title = $title;
-	      }
-	    }
-	  if (FALSE == get_preference($this->userid, 'hide_help_links')) {
-	    // Clean up URL
-	    $wikiUrl = str_replace(' ', '_', $wikiUrl);
-	    $wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-	    // Make link to go the translated version of page if lang is not en_US
-	    /* Disabled as suggested by westis
-	     $lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
-	     if ($lang != 'en_US') {
-	     $wikiUrl .= '/'.substr($lang, 0, 2);
-	     }
-	    */
-	    if (FALSE == empty($link_text))
-	      {
-		$help_title = $link_text;
-	      }
-	    else
-	      {
-		$help_title = lang('help_external');
-	      }
-	    $image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-	    $image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-	    if ('both' == $module_help_type)
-	      {
-		$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
-		$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('help').'</a> | ';
-		$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
-	      }
-	    else
-	      {
-		$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-	      }
-	  }
-    }
-	  $header .= '</div>';
-      return $header;     
-    }
+			$header .= $title_name;
+		}
+		else
+		{
+			$header .= lang($title_name, $extra_lang_param);
+		}
+		if (FALSE == empty($this->breadcrumbs))
+		{
+			$wikiUrl = $config['wiki_url'];
+			// Include English translation of titles. (Can't find better way to get them)
+			$dirname = dirname(__FILE__);
+			foreach ($this->breadcrumbs AS $key => $value)
+			{
+				$title = $value['title'];
+				// If this is a module and the last part of the breadcrumbs
+				if (FALSE != $module_help_type && TRUE == empty($this->breadcrumbs[$key + 1]))
+				{
+					$help_title = $title;
+					if (FALSE == empty($_GET['module']))
+					{
+						$module_name = $_GET['module'];
+					}
+					else
+					{
+						$module_name = substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+					}
+					// Turn ModuleName into _Module_Name
+					$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+					$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+					if ($moduleName{0} == '_')
+					{
+						$moduleName = substr($moduleName, 1);
+					}
+					$wikiUrl .= '/'.$moduleName;
+				}
+				else
+				{
+					// Remove colon and following (I.E. Turn "Edit Page: Title" into "Edit Page")
+					$colonLocation = strrchr($title, ':');
+					if ($colonLocation !== false)
+					{
+						$title = substr($title,0,strpos($title,':'));
+					}
+					// Get the key of the title so we can use the en_US version for the URL
+					$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
+					$wikiUrl .= '/'. CmsLanguage::translate($title_key[0], array(), 'core', 'en_US');
+					$help_title = $title;
+				}
+			}
+			if (FALSE == get_preference($this->userid, 'hide_help_links'))
+			{
+				// Clean up URL
+				$wikiUrl = str_replace(' ', '_', $wikiUrl);
+				$wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+				// Make link to go the translated version of page if lang is not en_US
+				/* Disabled as suggested by westis
+				$lang = get_preference($this->cms->variables['user_id'], 'default_cms_language');
+				if ($lang != 'en_US') {
+					$wikiUrl .= '/'.substr($lang, 0, 2);
+				}
+				*/
+				if (FALSE == empty($link_text))
+				{
+					$help_title = $link_text;
+				}
+				else
+				{
+					$help_title = lang('help_external');
+				}
+				$image_help = $this->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+				$image_help_external = $this->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
+				if ('both' == $module_help_type)
+				{
+					$module_help_link = $config['root_url'].'/'.$config['admin_dir'].'/listmodules.php?action=showmodulehelp&amp;module='.$module_name;
+					$header .= '<span class="helptext"><a href="'.$module_help_link.'">'.$image_help.'</a> <a href="'.$module_help_link.'">'.lang('help').'</a> | ';
+					$header .= '<a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('wikihelp').'</a>  ('.lang('new_window').')</span>';
+				}
+				else
+				{
+					$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+				}
+			}
+		}
+		$header .= '</div>';
+		return $header;     
+	}
 
 
     /**
@@ -1598,25 +1596,30 @@ class AdminTheme
      * (will infinitely recurse on self-referential structures)
      * From: http://us3.php.net/function.array-search
      */
-    function _ArraySearchRecursive($needle, $haystack)
-    {
-       $path = NULL;
-       $keys = array_keys($haystack);
-       while (!$path && (list($toss,$k)=each($keys))) {
-         $v = $haystack[$k];
-         if (is_scalar($v)) {
-             if ($v===$needle) {
-               $path = array($k);
-             }
-         } elseif (is_array($v)) {
-             if ($path=$this->_ArraySearchRecursive( $needle, $v )) {
-               array_unshift($path,$k);
-             }
-         }
-       }
-       return $path;
-    }
-
+	function _ArraySearchRecursive($needle, $haystack)
+	{
+		$path = NULL;
+		$keys = array_keys($haystack);
+		while (!$path && (list($toss,$k)=each($keys)))
+		{
+			$v = $haystack[$k];
+			if (is_scalar($v))
+			{
+				if ($v===$needle)
+				{
+					$path = array($k);
+				}
+			}
+			elseif (is_array($v))
+			{
+				if ($path=$this->_ArraySearchRecursive( $needle, $v ))
+				{
+					array_unshift($path,$k);
+				}
+			}
+		}
+		return $path;
+	}
 
     /**
      * ShowError
@@ -1626,56 +1629,54 @@ class AdminTheme
      * @param get_var - Name of the _GET variable that contains the 
      *                  name of the message lang string
      */
-    function ShowErrors($errors, $get_var = '')
-    {
-      global $gCms;
-      $config =& $gCms->GetConfig();
-      $wikiUrl = $config['wiki_url'];
+	function ShowErrors($errors, $get_var = '')
+	{
+		global $gCms;
+		$config =& $gCms->GetConfig();
+		$wikiUrl = $config['wiki_url'];
 
-      if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
-	{
-	  if (FALSE == empty($_REQUEST['module']))
-	    {
-	      $wikiUrl .= '/'.$_REQUEST['module'];
-	    }
-	  else
-	    {
-	      $wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
-	    }
-	}
-      $wikiUrl .= '/Troubleshooting';
-      $wikiLink = ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
-      if (FALSE != is_array($errors))
-	{
-	  $output = '<ul class="pageerrorcontainer">';
-	  foreach ($errors as $oneerror)
-	    {
-	      $output .= '<li>'.$oneerror.'</li>';
-	    }
-	  $output .= '<li>'.$wikiLink.'</li>';
-	  $output .= '</ul>';
-	}
-      else
-	{
-      $output  = '<div class="pageerrorcontainer"';
-      if (FALSE == empty($get_var))
-	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $errors = cleanValue(lang(cleanValue($_GET[$get_var])));
-	    }
-	  else
-	    {
-	      $errors = '';
-	      $output .= ' style="display:none;"';
-	    }
-	}
-      $output .= '><div class="pageoverflow">';
-	  $output  .= $errors.$wikiLink.'</div></div>';
-	}
-
-      
-      return $output;
+		if (FALSE == empty($_REQUEST['module'])  || FALSE == empty($_REQUEST['mact']))
+		{
+			if (FALSE == empty($_REQUEST['module']))
+			{
+				$wikiUrl .= '/'.$_REQUEST['module'];
+			}
+			else
+			{
+				$wikiUrl .= '/'.substr($_REQUEST['mact'], 0, strpos($_REQUEST['mact'], ','));
+			}
+		}
+		$wikiUrl .= '/Troubleshooting';
+		$wikiLink = ' <a href="'.$wikiUrl.'" target="_blank">'.lang('troubleshooting').'</a>';
+		if (FALSE != is_array($errors))
+		{
+			$output = '<ul class="pageerrorcontainer">';
+			foreach ($errors as $oneerror)
+			{
+				$output .= '<li>'.$oneerror.'</li>';
+			}
+			$output .= '<li>'.$wikiLink.'</li>';
+			$output .= '</ul>';
+		}
+		else
+		{
+			$output  = '<div class="pageerrorcontainer"';
+			if (FALSE == empty($get_var))
+			{
+				if (FALSE == empty($_GET[$get_var]))
+				{
+					$errors = cleanValue(lang(cleanValue($_GET[$get_var])));
+				}
+				else
+				{
+					$errors = '';
+					$output .= ' style="display:none;"';
+				}
+			}
+			$output .= '><div class="pageoverflow">';
+			$output  .= $errors.$wikiLink.'</div></div>';
+		}
+		return $output;
     }
     
     /**
@@ -1686,24 +1687,24 @@ class AdminTheme
      * @param get_var - Name of the _GET variable that contains the 
      *                  name of the message lang string
      */
-    function ShowMessage($message, $get_var = '')
-    {
-      $output = '<div class="pagemcontainer"';
-      if (FALSE == empty($get_var))
+	function ShowMessage($message, $get_var = '')
 	{
-	  if (FALSE == empty($_GET[$get_var]))
-	    {
-	      $message = lang(cleanValue($_GET[$get_var]));
-	    }
-	  else
-	    {
-	      $message = '';
-	      $output .= ' style="display:none;"';
-	    }
+		$output = '<div class="pagemcontainer"';
+		if (FALSE == empty($get_var))
+		{
+			if (FALSE == empty($_GET[$get_var]))
+			{
+				$message = lang(cleanValue($_GET[$get_var]));
+			}
+			else
+			{
+				$message = '';
+				$output .= ' style="display:none;"';
+			}
+		}
+		$output .= '><p class="pagemessage">'.$message.'</p></div>';
+		return $output;
 	}
-      $output .= '><p class="pagemessage">'.$message.'</p></div>';
-      return $output;
-    }
     
 	function &GetThemeObject()
 	{

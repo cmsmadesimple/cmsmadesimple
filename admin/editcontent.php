@@ -49,7 +49,6 @@ $xajax = new xajax();
 $xajax->registerFunction('ajaxpreview');
 
 $xajax->processRequests();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
 
 #See what kind of permissions we have
 $access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page');
@@ -58,6 +57,7 @@ if (!$access)
 	$access = check_authorship($userid, $content_id);
 
 require_once("header.php");
+CmsAdminTheme::inject_header_text($xajax->getJavascript('../lib/xajax')."\n");
 
 #No access?  Just display an error and exit.
 if (!$access) {

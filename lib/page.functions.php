@@ -34,62 +34,7 @@
  */
 function check_login($no_redirect = false)
 {
-	global $gCms;
-	$config = $gCms->config;
-
-	//Handle a current login if one is in queue in the SESSION
-	if (isset($_SESSION['login_user_id']))
-	{
-		debug_buffer("Found login_user_id.  Going to generate the user object.");
-		generate_user_object($_SESSION['login_user_id']);
-		unset($_SESSION['login_user_id']);
-	}
-
-	if (isset($_SESSION['login_cms_language']))
-	{
-		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-		setcookie('cms_language', $_SESSION['login_cms_language']);
-		unset($_SESSION['login_cms_language']);
-	}
-
-	if (!isset($_SESSION["cms_admin_user_id"]))
-	{
-		debug_buffer('No session found.  Now check for cookies');
-		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
-		{
-			debug_buffer('Cookies found, do a passhash check');
-			if (check_passhash(isset($_COOKIE["cms_admin_user_id"]), isset($_COOKIE["cms_passhash"])))
-			{
-				debug_buffer('passhash check succeeded...  creating session object');
-				generate_user_object($_COOKIE["cms_admin_user_id"]);
-			}
-			else
-			{
-				debug_buffer('passhash check failed...  redirect to login');
-				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-				if (false == $no_redirect)
-				  {
-				    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-				  }
-				return false;
-			}
-		}
-		else
-		{
-			debug_buffer('No cookies found.  Redirect to login.');
-			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			if (false == $no_redirect)
-			  {
-			    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-			  }
-			return false;
-		}
-	}
-	else
-	{
-		debug_buffer('Session found.  Moving on...');
-		return true;
-	}
+	return CmsAdmin::check_login($no_redirect);
 }
 
 /**
@@ -100,39 +45,12 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-	if ($check)
-	{
-		check_login(); //It'll redirect out to login if it fails
-	}
-
-	if (isset($_SESSION["cms_admin_user_id"]))
-	{
-		return $_SESSION["cms_admin_user_id"];
-	}
-	else
-	{
-		return false;
-	}
+	return CmsAdmin::get_userid($check);
 }
 
 function check_passhash($userid, $checksum)
 {
-	$check = false;
-
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
-
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
-
-	if ($oneuser && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
-	{
-		$check = true;
-	}
-
-	return $check;
+	return CmsAdmin::check_passhash($userid, $checksum);
 }
 
 /**
@@ -145,21 +63,7 @@ function check_passhash($userid, $checksum)
  */
 function generate_user_object($userid)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
-
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
-
-	if ($oneuser)
-	{
-		$_SESSION['cms_admin_user_id'] = $userid;
-		$_SESSION['cms_admin_username'] = $oneuser->username;
-		setcookie('cms_admin_user_id', $oneuser->id);
-		setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
-	}
+	return CmsAdmin::generate_user_object($userid);
 }
 
 /**
@@ -447,7 +351,7 @@ function load_all_preferences($userid)
 		$variables[$result->fields['preference']] = $result->fields['value'];
 		$result->MoveNext();
 	}
-	
+
 	if ($result) $result->Close();
 }
 

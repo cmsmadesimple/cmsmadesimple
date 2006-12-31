@@ -20,7 +20,6 @@
 
 class CmsCache extends CmsObject
 {
-	static private $instance = null;
 	static private $cache = null;
 	
 	function __construct($type = 'function')

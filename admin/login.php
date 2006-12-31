@@ -21,27 +21,28 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.user.inc.php");
 
 $error = "";
 
 if (isset($_SESSION['logout_user_now']))
-  {
-    debug_buffer("Logging out.  Clearning cookies and session variables.");
-    unset($_SESSION['logout_user_now']);
-    unset($_SESSION['cms_admin_user_id']);
-    setcookie('cms_admin_user_id', '', time() - 3600);
-    setcookie('cms_passhash', '', time() - 3600);
-  }
- else
-   {
-     $no_redirect = true;
-     $is_logged_in = check_login($no_redirect);
-     if (true == $is_logged_in)
-       {
-	 redirect($gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/index.php');
-       }
-   }
+{
+	debug_buffer("Logging out.  Clearning cookies and session variables.");
+	unset($_SESSION['logout_user_now']);
+	unset($_SESSION['cms_admin_user_id']);
+	unset($_SESSION['cms_admin_user']);
+	setcookie('cms_admin_user_id', '', time() - 3600);
+	setcookie('cms_passhash', '', time() - 3600);
+}
+else
+{
+	$no_redirect = true;
+	$is_logged_in = CmsAdmin::check_login($no_redirect);
+	if (true == $is_logged_in)
+	{
+		CmsResponse::redirect($gCms->config['root_url'].'/'.$gCms->config['admin_dir'].'/index.php');
+	}
+}
+
 if (isset($_POST["logincancel"]))
 {
 	debug_buffer("Login cancelled.  Returning to content.");
@@ -56,9 +57,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 	$password = "";
 	if (isset($_POST["password"])) $password = $_POST["password"];
 
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByUsername($username, $password, true, true);
+	$oneuser = CmsUserOperations::load_user_by_username($username, $password, true, true);
 	
 	debug_buffer("Got user by username");
 	debug_buffer($oneuser);
@@ -88,7 +87,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		}
 		
 		#Now call the event
-		Events::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
+		CmsEvents::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
 
 		// redirect to upgrade if db_schema it's old
 		$current_version = $CMS_SCHEMA_VERSION;
@@ -99,7 +98,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 
 		if ($current_version < $CMS_SCHEMA_VERSION)
 		{
-			redirect($gCms->config['root_url'] . "/install/upgrade.php");
+			redirect(CmsConfig::get('root_url') . "/install/upgrade.php");
 		}
 		// end of version check
 
@@ -125,7 +124,7 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		}
 		else
 		{
-			if (isset($config) and $config['debug'] == true)
+			if (CmsConfig::get('debug'))
 			{
 				echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 				echo "<a href=\"index.php\">index.php</a><br />";
@@ -143,7 +142,8 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		return;
 		#redirect("index.php");
 	}
-	else if (isset($_POST['loginsubmit'])) { //No error if changing languages
+	else if (isset($_POST['loginsubmit'])) //No error if changing languages
+	{
 		$error .= lang('usernameincorrect');
 		debug_buffer("Login failed.  Error is: " . $error);
 	}
@@ -163,21 +163,24 @@ header("Content-Type: text/html; charset=" . get_encoding());
 $theme=get_site_preference('logintheme', 'default');
 //echo "theme:$theme";
 debug_buffer('debug is:' . $error);
-if (file_exists(dirname(__FILE__)."/themes/$theme/login.php")) {
+if (file_exists(dirname(__FILE__)."/themes/$theme/login.php"))
+{
 	include(dirname(__FILE__)."/themes/$theme/login.php");
-} else {
+}
+else
+{
 	include(dirname(__FILE__)."/themes/default/login.php");
 }
 //STOP
 ?>
 
 <?php
-	if (isset($gCms->config) and $gCms->config['debug'] == true)
+if (CmsConfig::get('debug'))
+{
+	foreach ($gCms->errors as $globalerror)
 	{
-		foreach ($gCms->errors as $globalerror)
-		{
-			echo $globalerror;
-		}
+		echo $globalerror;
 	}
+}
 # vim:ts=4 sw=4 noet
 ?>
