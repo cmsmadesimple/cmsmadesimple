@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -84,28 +84,27 @@ if (isset($_POST["cancel"])) {
 
 if (isset($_POST['clearcache']))
 {
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$contentops->ClearCache();
+	CmsContentOperations::clear_cache();
+	CmsCache::clear();
 	$message .= lang('cachecleared');
 }
 else if (isset($_POST["editsiteprefs"]))
 {
 	if ($access)
 	{
-	  set_site_preference('global_umask', $global_umask);
-	  set_site_preference('frontendlang', $frontendlang);
-		set_site_preference('enablecustom404', $enablecustom404);
-		set_site_preference('xmlmodulerepository', $xmlmodulerepository);
-		set_site_preference('custom404', $custom404);
-		set_site_preference('custom404template', $custom404template);
-		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
-		set_site_preference('sitedownmessage', $sitedownmessage);
-		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
-		#set_site_preference('useadvancedcss', $useadvancedcss);
-		set_site_preference('logintheme', $logintheme);
-		set_site_preference('metadata', $metadata);
-		set_site_preference('sitename', $sitename);
+		CmsApplication::set_preference('global_umask', $global_umask);
+		CmsApplication::set_preference('frontendlang', $frontendlang);
+		CmsApplication::set_preference('enablecustom404', $enablecustom404);
+		CmsApplication::set_preference('xmlmodulerepository', $xmlmodulerepository);
+		CmsApplication::set_preference('custom404', $custom404);
+		CmsApplication::set_preference('custom404template', $custom404template);
+		CmsApplication::set_preference('enablesitedownmessage', $enablesitedownmessage);
+		CmsApplication::set_preference('sitedownmessage', $sitedownmessage);
+		#CmsApplication::set_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
+		#CmsApplication::set_preference('useadvancedcss', $useadvancedcss);
+		CmsApplication::set_preference('logintheme', $logintheme);
+		CmsApplication::set_preference('metadata', $metadata);
+		CmsApplication::set_preference('sitename', $sitename);
 		audit(-1, '', 'Edited Site Preferences');
 		//redirect("siteprefs.php");
 		//return;
@@ -115,32 +114,32 @@ else if (isset($_POST["editsiteprefs"]))
 	{
 		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
 	}
-} else if (!isset($_POST["submit"])) {
-  $global_umask = get_site_preference('global_umask',$global_umask);
-        $frontendlang = get_site_preference('frontendlang');
-	$enablecustom404 = get_site_preference('enablecustom404');
-	$custom404 = get_site_preference('custom404');
-	$custom404template = get_site_preference('custom404template');
-	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
-	$sitedownmessage = get_site_preference('sitedownmessage');
-	$xmlmodulerepository = get_site_preference('xmlmodulerepository');
-	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
-	#$useadvancedcss = get_site_preference('useadvancedcss');
-	$logintheme = get_site_preference('logintheme', 'default');
-	$metadata = get_site_preference('metadata', '');
-	$sitename = get_site_preference('sitename', 'CMSMS Site');
 }
-
+else if (!isset($_POST["submit"]))
+{
+	$global_umask = CmsApplication::get_preference('global_umask',$global_umask);
+	$frontendlang = CmsApplication::get_preference('frontendlang');
+	$enablecustom404 = CmsApplication::get_preference('enablecustom404');
+	$custom404 = CmsApplication::get_preference('custom404');
+	$custom404template = CmsApplication::get_preference('custom404template');
+	$enablesitedownmessage = CmsApplication::get_preference('enablesitedownmessage');
+	$sitedownmessage = CmsApplication::get_preference('sitedownmessage');
+	$xmlmodulerepository = CmsApplication::get_preference('xmlmodulerepository');
+	#$sitedownmessagetemplate = get_preference('sitedownmessagetemplate');
+	#$useadvancedcss = get_preference('useadvancedcss');
+	$logintheme = CmsApplication::get_preference('logintheme', 'default');
+	$metadata = CmsApplication::get_preference('metadata', '');
+	$sitename = CmsApplication::get_preference('sitename', 'CMSMS Site');
+}
 
 $templates = array();
 $templates['-1'] = 'None';
 
-$query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
-$result = cms_db()->Execute($query);
+$result = cmsms()->template->find_all(array('order' => 'template_name ASC'));
 
-while ($result && $row = $result->FetchRow())
+foreach ($result as &$onetemplate)
 {
-	$templates[$row['template_id']] = $row['template_name'];
+	$templates[$onetemplate['id']] = $onetemplate['name'];
 }
 
 include_once("header.php");
@@ -153,7 +152,7 @@ if ($message != "") {
 }
 
 // Make sure cache folder is writable
-if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache'))
+if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache')))
 {
   echo $themeObject->ShowErrors(lang('cachenotwritable'));
 }

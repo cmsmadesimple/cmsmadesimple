@@ -1,6 +1,6 @@
 <?php
 # CMS - CMS Made Simple
-# (c)2004-6 by Ted Kulp (ted@cmsmadesimple.org)
+# (c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 # This project's homepage is: http://cmsmadesimple.org
 #
 # This program is free software; you can redistribute it and/or modify
@@ -1313,10 +1313,10 @@ class CmsModule extends CmsObject
 			if (@is_file($filename))
 			{
 				{
-					global $gCms;
-					$db =& $gCms->GetDb();
-					$config =& $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
+					$gCms = cmsms();
+					$db = cms_db();
+					$config = cms_config();
+					$smarty = cms_smarty();
 
 					include($filename);
 

@@ -176,11 +176,8 @@ class CmsSmarty extends Smarty {
 	}
 
     function module_db_template($tpl_name, &$tpl_source, &$smarty_obj)
-    {   
-        global $gCms;
-
-        $db = &$gCms->GetDb();
-        $config = $gCms->config;
+    {
+        $db = cms_db();
 
         $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
         $row = $db->GetRow($query, split(';', $tpl_name));
@@ -196,10 +193,7 @@ class CmsSmarty extends Smarty {
 
 	function module_db_timestamp($tpl_name, &$tpl_timestamp, &$smarty_obj)
 	{
-		global $gCms;
-
-		$db = &$gCms->GetDb();
-		$config = $gCms->config;
+		$db = cms_db();
 
 		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
 		$row = $db->GetRow($query, split(';', $tpl_name));

@@ -77,7 +77,7 @@ class CmsApplication extends CmsObject {
 	/**
 	 * Site Preferences object - holds all current site preferences so they're only loaded once
 	 */
-	var $siteprefs;
+	static private $siteprefs = array();
 
 	/**
 	 * User Preferences object - holds user preferences as they're loaded so they're only loaded once
@@ -408,7 +408,7 @@ class CmsApplication extends CmsObject {
 	 *
 	 * @since 0.6
 	 */
-	function load_site_preferences()
+	public static function load_site_preferences()
 	{
 		$db = cms_db();
 		
@@ -433,18 +433,18 @@ class CmsApplication extends CmsObject {
 	 *
 	 * @since 0.6
 	 */
-	function get_preference($prefname, $defaultvalue = '')
+	public static function get_preference($prefname, $defaultvalue = '')
 	{
 		$value = $defaultvalue;
 
-		if (count($this->siteprefs) == 0)
+		if (count(self::$siteprefs) == 0)
 		{
-			$this->siteprefs = CmsCache::get_instance()->call(array(&$this, 'load_site_preferences'));
+			self::$siteprefs = CmsCache::get_instance()->call('CmsApplication::load_site_preferences');
 		}
 
-		if (isset($this->siteprefs[$prefname]))
+		if (isset(self::$siteprefs[$prefname]))
 		{
-			$value = $this->siteprefs[$prefname];
+			$value = self::$siteprefs[$prefname];
 		}
 
 		return $value;
@@ -455,16 +455,16 @@ class CmsApplication extends CmsObject {
 	 *
 	 * @param string Preference name to remove
 	 */
-	function remove_preference($prefname)
+	public static function remove_preference($prefname)
 	{
 		$db = cms_db();
 
 		$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
 		$result = $db->Execute($query, array($prefname));
 
-		if (isset($this->siteprefs[$prefname]))
+		if (isset(self::$siteprefs[$prefname]))
 		{
-			unset($this->siteprefs[$prefname]);
+			unset(self::$siteprefs[$prefname]);
 		}
 
 		if ($result) $result->Close();
@@ -475,7 +475,7 @@ class CmsApplication extends CmsObject {
 	 *
 	 * @since 0.6
 	 */
-	function set_preference($prefname, $value)
+	public static function set_preference($prefname, $value)
 	{
 		$doinsert = true;
 
@@ -501,7 +501,7 @@ class CmsApplication extends CmsObject {
 			$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
 			$db->Execute($query);
 		}
-		$this->siteprefs[$prefname] = $value;
+		self::$siteprefs[$prefname] = $value;
 	}
 
 	function __destruct()
