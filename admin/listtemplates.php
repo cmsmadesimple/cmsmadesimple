@@ -95,8 +95,10 @@ if (isset($_GET["message"])) {
 		$thetemplate = $templateops->LoadTemplateByID($theid);
 		if (isset($thetemplate))
 		{
+			$thetemplate->SkipValidation(); // Turn off validation
 			if (isset($_GET['setactive']))
 			{
+				
 				$thetemplate->active = 1;
 				$thetemplate->Save();
 			}
