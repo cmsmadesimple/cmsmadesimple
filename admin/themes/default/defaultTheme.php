@@ -26,38 +26,40 @@ class defaultTheme extends CmsAdminTheme
 		parent::__construct();
 	}
 
-	function renderMenuSection($section, $depth, $maxdepth)
+	function renderMenuSection($node, $depth, $maxdepth)
 	{
 		if ($maxdepth > 0 && $depth > $maxdepth)
 		{
 			return;
 		}
-		if (! $this->menuItems[$section]['show_in_menu'])
+		if (!$node->show_in_menu)
 		{
 			return;
 		}
-		if (strlen($this->menuItems[$section]['url']) < 1)
+		if (strlen($node->url) < 1)
 		{
-			echo "<li>".$this->menuItems[$section]['title']."</li>";
+			echo "<li>".$node->title."</li>";
 			return;
 		}
 		echo "<li><a href=\"";
-		echo $this->menuItems[$section]['url'];
+		echo $node->url;
 		echo "\"";
+		/*
 		if (array_key_exists('target', $this->menuItems[$section]))
 		{
 			echo ' rel="external"';
 		}
+		*/
 		$class = array();
-		if ($this->menuItems[$section]['selected'])
+		if ($node->selected)
 		{
 			$class[] = 'selected';
 		}
-		if (isset($this->menuItems[$section]['firstmodule']))
+		if ($node->first_module)
 		{
 			$class[] = 'first_module';
 		}
-		else if (isset($this->menuItems[$section]['module']))
+		else if ($node->module)
 		{
 			$class[] = 'module';
 		}
@@ -75,12 +77,13 @@ class defaultTheme extends CmsAdminTheme
 			echo '"';
 		}
 		echo ">";
-		echo $this->menuItems[$section]['title'];
+		echo $node->title;
 		echo "</a>";
-		if ($this->has_displayable_children($section))
+		if ($node->has_children() && $this->has_displayable_children($node))
 		{
 			echo "<ul>";
-			foreach ($this->menuItems[$section]['children'] as $child)
+			$children = $node->get_children();
+			foreach ($children as &$child)
 			{
 				$this->renderMenuSection($child, $depth+1, $maxdepth);
 			}
@@ -94,13 +97,11 @@ class defaultTheme extends CmsAdminTheme
 	{
 		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').'</span></p></div>';
 		echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
-		foreach ($this->menuItems as $key=>$menuItem)
+		$sections = CmsAdminTree::get_instance()->get_root_node()->get_children();
+		foreach ($sections as &$onesection)
 		{
-			if ($menuItem['parent'] == -1)
-			{
-				echo "\n\t\t";
-				$this->renderMenuSection($key, 0, -1);
-			}
+			echo "\n\t\t";
+			$this->renderMenuSection($onesection, 0, -1);
 		}
 		echo "\n\t</ul>\n";
 		echo "\t<div class=\"clearb\"></div>\n";
@@ -126,33 +127,6 @@ class defaultTheme extends CmsAdminTheme
 
 		echo '</p></div>';
 		echo '<div class="hstippled">&nbsp;</div>';
-	}
-
-	function DisplayFooter()
-	{
-		global $CMS_VERSION;
-		global $CMS_VERSION_NAME;
-		echo '<p class="footer"><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> '.$CMS_VERSION.' "' . $CMS_VERSION_NAME . '"<br /><a class="footer" href="http://www.cmsmadesimple.org">CMS Made Simple</a> is free software released under the General Public Licence.</p>';
-	}
-	
-	function OutputHeaderJavascript()
-	{
-		echo '<script type="text/javascript" src="themes/default/includes/standard.js"></script>';
-		echo '<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>';
-		echo '<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>';
-		echo '<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>';
-		echo '<script type="text/javascript">
-			var djConfig = {  parseWidgets: false, baseScriptUri: \'../lib/dojo/\'};
-		      </script>
-			<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
-			<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
-			<script type="text/javascript" src="../lib/dojo/src/widget/html/layout.js"></script>
-			<script type="text/javascript" src="../lib/dojo/src/widget/TabContainer.js"></script>
-			<script type="text/javascript" src="../lib/dojo/src/widget/ContentPane.js"></script>
-			<script type="text/javascript">
-				dojo.require("dojo.widget.TabContainer");
-				dojo.require("dojo.widget.ContentPane");
-			</script>';
 	}
 
 	function StartRighthandColumn()
@@ -203,17 +177,6 @@ class defaultTheme extends CmsAdminTheme
 		echo '</div>'."\n";
 		echo '<div style="clear: both;"></div>'."\n";
 		echo '</div>'."\n";
-	}
-
-	function DisplayDocType()
-	{
-		echo '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"'."\n";
-		echo '	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">'."\n";
-	}
-
-	function DisplayHTMLStartTag()
-	{
-		echo '<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">'."\n\n";
 	}
 
 	function DisplayDashboardCallout($file, $message = '')

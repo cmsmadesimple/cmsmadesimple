@@ -393,11 +393,7 @@ class CmsApplication extends CmsObject {
         if (!isset($this->hrinstance))
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			#require_once(dirname(__FILE__).'/class.contenthierarchymanager.inc.php');
-
-			#Setup global smarty object
-			$contentops =& $this->GetContentOperations();
-			$this->hrinstance =& $contentops->GetAllContentAsHierarchy(false, array());
+			$this->hrinstance = CmsContentOperations::GetAllContentAsHierarchy(false, array());
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
 
@@ -469,6 +465,7 @@ class CmsApplication extends CmsObject {
 		}
 
 		if ($result) $result->Close();
+		CmsCache::get_instance()->clear();
 	}
 
 	/**
@@ -503,6 +500,7 @@ class CmsApplication extends CmsObject {
 			$db->Execute($query);
 		}
 		self::$siteprefs[$prefname] = $value;
+		CmsCache::get_instance()->clear();
 	}
 
 	function __destruct()

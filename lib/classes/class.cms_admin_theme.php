@@ -27,10 +27,30 @@ class CmsAdminTheme extends CmsObject
 	public $headtext = '';
 	public $section_count = array();
 	public $modules_by_section = array();
+	public $url = '';
+	public $query = '';
+	public $subtitle = '';
 
 	function __construct()
 	{
 		parent::__construct();
+		$this->url = $_SERVER['SCRIPT_NAME'];
+		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
+		if ($this->query == '' && isset($_POST['module']) && $_POST['module'] != '')
+		{
+			$this->query = 'module='.$_POST['module'];
+		}
+		if (strpos( $this->url, '/' ) === false)
+		{
+			$this->script = $this->url;
+		}
+		else
+		{
+			$toam_tmp = explode('/',$this->url);
+			$toam_tmp2 = array_pop($toam_tmp);
+			$this->script = $toam_tmp2;
+			//$this->script = array_pop(@explode('/',$this->url));
+		}
 	}
 	
 	static public function get_instance()
@@ -158,9 +178,12 @@ class CmsAdminTheme extends CmsObject
 						$title = substr($title,0,strpos($title,':'));
 					}
 					// Get the key of the title so we can use the en_US version for the URL
-					$title_key = $this->_ArraySearchRecursive($title, $this->menuItems);
-					$wikiUrl .= '/'. CmsLanguage::translate($title_key[0], array(), 'core', 'en_US');
-					$help_title = $title;
+					$node = CmsAdminTree::find_node_by_title($title);
+					if ($node)
+					{
+						$wikiUrl .= '/'. CmsLanguage::translate($node->english_title, array(), 'core', 'en_US');
+						$help_title = $title;	
+					}
 				}
 			}
 			if (FALSE == get_preference($this->userid, 'hide_help_links'))
@@ -237,315 +260,67 @@ class CmsAdminTheme extends CmsObject
      */
     function populate_admin_navigation($subtitle='')
     {
-		if (count($this->menuItems) > 0)
-		{
-			// we have already created the list
-			return;
-		}
+		//Fill in the initial tree from the xml file
+		CmsAdminTree::fill_from_file($this);
+
         $this->subtitle = $subtitle;
-    	    
-    	$this->menuItems = array(
-    	    // base main menu ---------------------------------------------------------
-            'main'=>array('url'=>'index.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('main')),
-                    'description'=>'','show_in_menu'=>true),
-            // base content menu ---------------------------------------------------------
-            'content'=>array('url'=>'topcontent.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('content')),
-                    'description'=>lang('contentdescription'),'show_in_menu'=>$this->has_permission('contentPerms')),
-            'pages'=>array('url'=>'listcontent.php','parent'=>'content',
-                    'title'=>$this->fix_spaces(lang('pages')),
-                    'description'=>lang('pagesdescription'),'show_in_menu'=>$this->has_permission('pagePerms')),
-            'addcontent'=>array('url'=>'addcontent.php','parent'=>'pages',
-                    'title'=>$this->fix_spaces(lang('addcontent')),
-                    'description'=>lang('addcontent'),'show_in_menu'=>false),
-            'editpage'=>array('url'=>'editcontent.php','parent'=>'pages',
-                    'title'=>$this->fix_spaces(lang('editpage')),
-                    'description'=>lang('editpage'),'show_in_menu'=>false),
-            'files'=>array('url'=>'files.php','parent'=>'content',
-                    'title'=>$this->fix_spaces(lang('filemanager')),
-                    'description'=>lang('filemanagerdescription'),'show_in_menu'=>$this->has_permission('filePerms')),
-            'images'=>array('url'=>'imagefiles.php','parent'=>'content',
-                    'title'=>$this->fix_spaces(lang('imagemanager')),
-                    'description'=>lang('imagemanagerdescription'),'show_in_menu'=>$this->has_permission('filePerms')),
-            'blobs'=>array('url'=>'listhtmlblobs.php','parent'=>'content',
-                    'title'=>$this->fix_spaces(lang('htmlblobs')),
-                    'description'=>lang('htmlblobdescription'),'show_in_menu'=>$this->has_permission('htmlPerms')),
-            'addhtmlblob'=>array('url'=>'addhtmlblob.php','parent'=>'blobs',
-                    'title'=>$this->fix_spaces(lang('addhtmlblob')),
-                    'description'=>lang('addhtmlblob'),'show_in_menu'=>false),
-            'edithtmlblob'=>array('url'=>'edithtmlblob.php','parent'=>'blobs',
-                    'title'=>$this->fix_spaces(lang('edithtmlblob')),
-                    'description'=>lang('edithtmlblob'),'show_in_menu'=>false),
-             // base layout menu ---------------------------------------------------------
-            'layout'=>array('url'=>'toplayout.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('layout')),
-                    'description'=>lang('layoutdescription'),'show_in_menu'=>$this->has_permission('layoutPerms')),
-            'template'=>array('url'=>'listtemplates.php','parent'=>'layout',
-                    'title'=>$this->fix_spaces(lang('templates')),
-                    'description'=>lang('templatesdescription'),'show_in_menu'=>$this->has_permission('templatePerms')),
-            'addtemplate'=>array('url'=>'addtemplate.php','parent'=>'template',
-                    'title'=>$this->fix_spaces(lang('addtemplate')),
-                    'description'=>lang('addtemplate'),'show_in_menu'=>false),
-            'edittemplate'=>array('url'=>'edittemplate.php','parent'=>'template',
-                    'title'=>$this->fix_spaces(lang('edittemplate')),
-                    'description'=>lang('edittemplate'),'show_in_menu'=>false),
-            'currentassociations'=>array('url'=>'listcssassoc.php','parent'=>'template',
-                    'title'=>$this->fix_spaces(lang('currentassociations')),
-                    'description'=>lang('currentassociations'),'show_in_menu'=>false),
-            'copytemplate'=>array('url'=>'copyemplate.php','parent'=>'template',
-                    'title'=>$this->fix_spaces(lang('copytemplate')),
-                    'description'=>lang('copytemplate'),'show_in_menu'=>false),
-            'stylesheets'=>array('url'=>'listcss.php','parent'=>'layout',
-                    'title'=>$this->fix_spaces(lang('stylesheets')),
-                    'description'=>lang('stylesheetsdescription'),
-                    'show_in_menu'=>($this->has_permission('cssPerms') || $this->has_permission('cssAssocPerms'))),
-            'addcss'=>array('url'=>'addcss.php','parent'=>'stylesheets',
-                    'title'=>$this->fix_spaces(lang('addstylesheet')),
-                    'description'=>lang('addstylesheet'),'show_in_menu'=>false),
-            'editcss'=>array('url'=>'editcss.php','parent'=>'stylesheets',
-                    'title'=>$this->fix_spaces(lang('editcss')),
-                    'description'=>lang('editcss'),'show_in_menu'=>false),
-            'templatecss'=>array('url'=>'templatecss.php','parent'=>'stylesheets',
-                    'title'=>$this->fix_spaces(lang('templatecss')),
-                    'description'=>lang('templatecss'),'show_in_menu'=>false),
-             // base user/groups menu ---------------------------------------------------------
-            'usersgroups'=>array('url'=>'topusers.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('usersgroups')),
-                    'description'=>lang('usersgroupsdescription'),'show_in_menu'=>$this->has_permission('usersGroupsPerms')),
-            'users'=>array('url'=>'listusers.php','parent'=>'usersgroups',
-                    'title'=>$this->fix_spaces(lang('users')),
-                    'description'=>lang('usersdescription'),'show_in_menu'=>$this->has_permission('userPerms')),
-            'adduser'=>array('url'=>'adduser.php','parent'=>'users',
-                    'title'=>$this->fix_spaces(lang('adduser')),
-                    'description'=>lang('adduser'),'show_in_menu'=>false),
-            'edituser'=>array('url'=>'edituser.php','parent'=>'users',
-                    'title'=>$this->fix_spaces(lang('edituser')),
-                    'description'=>lang('edituser'),'show_in_menu'=>false),
-            'groups'=>array('url'=>'listgroups.php','parent'=>'usersgroups',
-                    'title'=>$this->fix_spaces(lang('groups')),
-                    'description'=>lang('groupsdescription'),'show_in_menu'=>$this->has_permission('groupPerms')),
-            'addgroup'=>array('url'=>'addgroup.php','parent'=>'groups',
-                    'title'=>$this->fix_spaces(lang('addgroup')),
-                    'description'=>lang('addgroup'),'show_in_menu'=>false),
-            'editgroup'=>array('url'=>'editgroup.php','parent'=>'groups',
-                    'title'=>$this->fix_spaces(lang('editgroup')),
-                    'description'=>lang('editgroup'),'show_in_menu'=>false),
-            'groupmembers'=>array('url'=>'changegroupassign.php','parent'=>'usersgroups',
-                    'title'=>$this->fix_spaces(lang('groupassignments')),
-                    'description'=>lang('groupassignmentdescription'),'show_in_menu'=>$this->has_permission('groupMemberPerms')),                    
-            'groupperms'=>array('url'=>'changegroupperm.php','parent'=>'usersgroups',
-                    'title'=>$this->fix_spaces(lang('groupperms')),
-                    'description'=>lang('grouppermsdescription'),'show_in_menu'=>$this->has_permission('groupPermPerms')),                    
-             // base extensions menu ---------------------------------------------------------
-            'extensions'=>array('url'=>'topextensions.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('extensions')),
-                    'description'=>lang('extensionsdescription'),'show_in_menu'=>$this->has_permission('extensionsPerms')),
-            'modules'=>array('url'=>'listmodules.php','parent'=>'extensions',
-                    'title'=>$this->fix_spaces(lang('modules')),
-                    'description'=>lang('moduledescription'),'show_in_menu'=>$this->has_permission('modulePerms')),
-            'tags'=>array('url'=>'listtags.php','parent'=>'extensions',
-                    'title'=>$this->fix_spaces(lang('tags')),
-                    'description'=>lang('tagdescription'),'show_in_menu'=>true),
-            'eventhandlers'=>array('url'=>'eventhandlers.php','parent'=>'extensions',
-                    'title'=>$this->fix_spaces(lang('eventhandlers')),
-                    'description'=>lang('eventhandlerdescription'),'show_in_menu'=>true),
-            'editeventhandler'=>array('url'=>'editevent.php','parent'=>'eventhandlers',
-                    'title'=>$this->fix_spaces(lang('editeventhandler')),
-                    'description'=>lang('editeventshandler'),'show_in_menu'=>false),
-            'usertags'=>array('url'=>'listusertags.php','parent'=>'extensions',
-                    'title'=>$this->fix_spaces(lang('usertags')),
-                    'description'=>lang('usertagdescription'),'show_in_menu'=>$this->has_permission('codeBlockPerms')),
-            'addusertag'=>array('url'=>'adduserplugin.php','parent'=>'usertags',
-                    'title'=>$this->fix_spaces(lang('addusertag')),
-                    'description'=>lang('addusertag'),'show_in_menu'=>false),
-            'editusertag'=>array('url'=>'edituserplugin.php','parent'=>'usertags',
-                    'title'=>$this->fix_spaces(lang('editusertag')),
-                    'description'=>lang('editusertag'),'show_in_menu'=>false),
-             // base admin menu ---------------------------------------------------------
-            'siteadmin'=>array('url'=>'topadmin.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('admin')),
-                    'description'=>lang('admindescription'),'show_in_menu'=>$this->has_permission('siteAdminPerms')),
-            'siteprefs'=>array('url'=>'siteprefs.php','parent'=>'siteadmin',
-                    'title'=>$this->fix_spaces(lang('globalconfig')),
-                    'description'=>lang('preferencesdescription'),'show_in_menu'=>$this->has_permission('sitePrefPerms')),
-            'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
-                    'title'=>$this->fix_spaces(lang('adminlog')),
-                    'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->has_permission('adminPerms')),
-             // base my prefs menu ---------------------------------------------------------
-            'myprefs'=>array('url'=>'topmyprefs.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('myprefs')),
-                    'description'=>lang('myprefsdescription'),'show_in_menu'=>true),
-            'myaccount'=>array('url'=>'edituser.php','parent'=>'myprefs',
-                    'title'=>$this->fix_spaces(lang('myaccount')),
-                    'description'=>lang('myaccountdescription'),'show_in_menu'=>true),
-            'preferences'=>array('url'=>'editprefs.php','parent'=>'myprefs',
-                    'title'=>$this->fix_spaces(lang('adminprefs')),
-                    'description'=>lang('adminprefsdescription'),'show_in_menu'=>true),
-            'managebookmarks'=>array('url'=>'listbookmarks.php','parent'=>'myprefs',
-                    'title'=>$this->fix_spaces(lang('managebookmarks')),
-                    'description'=>lang('managebookmarksdescription'),'show_in_menu'=>true),
-            'addbookmark'=>array('url'=>'addbookmark.php','parent'=>'myprefs',
-                    'title'=>$this->fix_spaces(lang('addbookmark')),
-                    'description'=>lang('addbookmark'),'show_in_menu'=>false),
-            'editbookmark'=>array('url'=>'editbookmark.php','parent'=>'myprefs',
-                    'title'=>$this->fix_spaces(lang('editbookmark')),
-                    'description'=>lang('editbookmark'),'show_in_menu'=>false),
-             // base view site menu ---------------------------------------------------------
-            'viewsite'=>array('url'=>'../','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('viewsite')),
-                    'description'=>'','show_in_menu'=>true, 'target'=>'_blank'),
-             // base logout menu ---------------------------------------------------------
-             'logout'=>array('url'=>'logout.php','parent'=>-1,
-                    'title'=>$this->fix_spaces(lang('logout')),
-                    'description'=>'','show_in_menu'=>true),
-    	);
 
-		// add in all of the 'system' modules todo
-		$gCms = cmsms();
-		foreach ($this->menuItems as $sectionKey=>$sectionArray)
+		//Add in modules
+		$children = CmsAdminTree::get_instance()->get_root_node()->get_children();
+		foreach ($children as &$basenode)
 		{
-			$tmpArray = $this->menu_list_section_modules($sectionKey);
 			$first = true;
-			foreach ($tmpArray as $thisKey=>$thisVal)
+			foreach ($this->menu_list_section_modules($basenode->name) as $module)
 			{
-				$thisModuleKey = $thisKey;
-				$counter = 0;
-
-				// don't clobber existing keys
-				if (array_key_exists($thisModuleKey,$this->menuItems))
-				{
-					while (array_key_exists($thisModuleKey,$this->menuItems))
-					{
-						$thisModuleKey = $thisKey.$counter;
-						$counter++;
-					}
-				}
-
-				// if it's not a system module...
-				if (array_search($thisModuleKey, $gCms->cmssystemmodules) !== FALSE)
-				{
-					$this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-						'parent'=>$sectionKey,
-						'title'=>$this->fix_spaces($thisVal['name']),
-						'description'=>$thisVal['description'],
-						'show_in_menu'=>true);
-
-
-				}
+				$newnode = CmsAdminTree::get_instance()->create_node();
+				$newnode->name = $module['name'];
+				$newnode->title = $module['name'];
+				$newnode->url = $module['url'];
+				$newnode->description = $module['description'];
+				$newnode->show_in_menu = true;
+				$newnode->first_module = $first;
+				$newnode->module = true;
+				$basenode->add_child($newnode);
+				$first = false;
 			}
 		}
-
-		// add in all of the modules
-		foreach ($this->menuItems as $sectionKey=>$sectionArray)
+		
+		//Now go through and find the selected
+		$flatlist = CmsAdminTree::get_instance()->get_flat_list();
+		foreach ($flatlist as &$onenode)
 		{
-			$tmpArray = $this->menu_list_section_modules($sectionKey);
-			$first = true;
-			foreach ($tmpArray as $thisKey=>$thisVal)
-			{
-				$thisModuleKey = $thisKey;
-				$counter = 0;
-
-				// don't clobber existing keys
-				if (array_key_exists($thisModuleKey,$this->menuItems))
-				{
-					while (array_key_exists($thisModuleKey,$this->menuItems))
-					{
-						$thisModuleKey = $thisKey.$counter;
-						$counter++;
-					}
-					if( $counter > 0 )
-					{
-						continue;
-					}
-				}
-				$this->menuItems[$thisModuleKey]=array('url'=>$thisVal['url'],
-					'parent'=>$sectionKey,
-					'title'=>$this->fix_spaces($thisVal['name']),
-					'description'=>$thisVal['description'],
-					'show_in_menu'=>true);
-
-				if ($first)
-				{
-					$this->menuItems[$thisModuleKey]['firstmodule'] = 1;
-					$first = false;
-				}
-				else
-				{
-					$this->menuItems[$thisModuleKey]['module'] = 1;
-				}
-			}
-		}
-	
-		// resolve the tree to be doubly-linked,
-		// and make sure the selections are selected            
-		foreach ($this->menuItems as $sectionKey=>$sectionArray)
-		{
-			// link the children to the parents; a little clumsy since we can't
-			// assume php5-style references in a foreach.
-			$this->menuItems[$sectionKey]['children'] = array();
-			foreach ($this->menuItems as $subsectionKey=>$subsectionArray)
-			{
-				if ($subsectionArray['parent'] == $sectionKey)
-				{
-					$this->menuItems[$sectionKey]['children'][] = $subsectionKey;
-				}
-			}
-            // set selected
 			if ($this->script == 'moduleinterface.php')
 			{
 				$a = preg_match('/(module|mact)=([^&,]+)/',$this->query,$matches);
-				if ($a > 0 && $matches[2] == $sectionKey)
+				if ($a > 0 && $matches[2] == $onenode->name)
 				{
-					$this->menuItems[$sectionKey]['selected'] = true;
-					$this->title .= $sectionArray['title'];
-					if ($sectionArray['parent'] != -1)
-					{
-						$parent = $sectionArray['parent'];
-						while ($parent != -1)
-						{
-							$this->menuItems[$parent]['selected'] = true;
-							$parent = $this->menuItems[$parent]['parent'];
-						}
-					}
-				}
-				else
-				{
-					$this->menuItems[$sectionKey]['selected'] = false;
+					$onenode->selected = true;
+					$this->title = $onenode->title;
+					$onenode->get_parent()->selected = true;
 				}
 			}
-			else if ($sectionArray['url'] == $this->script)
+			else if ($onenode->url == $this->script)
 			{
-				$this->menuItems[$sectionKey]['selected'] = true;
-				$this->title .= $sectionArray['title'];
-				if ($sectionArray['parent'] != -1)
-				{
-					$parent = $sectionArray['parent'];
-					while ($parent != -1)
-					{
-						$this->menuItems[$parent]['selected'] = true;
-						$parent = $this->menuItems[$parent]['parent'];
-					}
-				}
-			}
-			else
-			{
-				$this->menuItems[$sectionKey]['selected'] = false;
+				$onenode->selected = true;
+				$this->title = $onenode->title;
+				$onenode->get_parent()->selected = true;
 			}
 		}
+
 		// fix subtitle, if any
 		if ($subtitle != '')
 		{
 			$this->title .= ': '.$subtitle;
 		}
-		// generate breadcrumb array
 
+		// generate breadcrumb array
 		$count = 0;
-		foreach ($this->menuItems as $key=>$menuItem)
+		$flatlist = CmsAdminTree::get_instance()->get_flat_list();
+		foreach ($flatlist as &$onenode)
 		{
-			if ($menuItem['selected'])
+			if ($onenode->selected)
 			{
-				$this->breadcrumbs[] = array('title'=>$menuItem['title'], 'url'=>$menuItem['url']);
+				$this->breadcrumbs[] = array('title'=>$onenode->title, 'url'=>$onenode->url);
 				$count++;
 			}
 		}
@@ -791,18 +566,15 @@ class CmsAdminTheme extends CmsObject
      *
      * @param section - section to test
      */
-     function has_displayable_children($section)
+     function has_displayable_children($node)
      {
-        $displayableChildren=false;
-        foreach($this->menuItems[$section]['children'] as $thisChild)
-            {
-            $thisItem = $this->menuItems[$thisChild];
-            if ($thisItem['show_in_menu'])
-                {
-                $displayableChildren = true;
-                }
-            }
-        return $displayableChildren;
+		$children = $node->get_children();
+		foreach ($node as &$child)
+		{
+			if ($child->show_in_menu)
+				return true;
+		}
+        return false;
      }
 
     /**
