@@ -126,7 +126,7 @@
       <node>
         <name>stylesheets</name>
         <title>stylesheets</title>
-        <url>liststylesheets.php</url>
+        <url>listcss.php</url>
         <description>stylesheetdescription</description>
         <show_in_menu><permission>cssAssocPerms</permission></show_in_menu>
       </node>
@@ -152,6 +152,13 @@
         <show_in_menu>false</show_in_menu>
       </node>
     </children>
+  </node>
+  <node>
+    <name>viewsite</name>
+    <title>viewsite</title>
+    <url>../</url>
+    <description></description>
+    <target>_blank</target>
   </node>
   <node>
     <name>logout</name>

@@ -566,10 +566,10 @@ class CmsAdminTheme extends CmsObject
      *
      * @param section - section to test
      */
-     function has_displayable_children($node)
+     function has_displayable_children(&$node)
      {
 		$children = $node->get_children();
-		foreach ($node as &$child)
+		foreach ($children as &$child)
 		{
 			if ($child->show_in_menu)
 				return true;

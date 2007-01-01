@@ -79,13 +79,18 @@ class CmsAdminTree extends CmsTree
 		
 		if (isset($xml->name))
 			$newnode->name = (string)$xml->name;
+
 		if (isset($xml->title))
 		{
 			$newnode->title = lang((string)$xml->title);
 			$newnode->english_title = (string)$xml->title;
 		}
+
 		if (isset($xml->url))
 			$newnode->url = (string)$xml->url;
+			
+		if (isset($xml->target))
+			$newnode->target = (string)$xml->target;
 
 		if (isset($xml->description))
 		{
@@ -124,6 +129,7 @@ class CmsAdminNode extends CmsNode
 	var $english_title = '';
 	var $url = '';
 	var $description = '';
+	var $target = '';
 	var $show_in_menu = true;
 	var $first_module = false;
 	var $selected = false;

@@ -26,7 +26,7 @@ class defaultTheme extends CmsAdminTheme
 		parent::__construct();
 	}
 
-	function renderMenuSection($node, $depth, $maxdepth)
+	function render_menu_section($node, $depth, $maxdepth)
 	{
 		if ($maxdepth > 0 && $depth > $maxdepth)
 		{
@@ -44,12 +44,12 @@ class defaultTheme extends CmsAdminTheme
 		echo "<li><a href=\"";
 		echo $node->url;
 		echo "\"";
-		/*
-		if (array_key_exists('target', $this->menuItems[$section]))
+		
+		if ($node->target != '')
 		{
-			echo ' rel="external"';
+			echo ' target="'.$node->target.'" rel="external"';
 		}
-		*/
+		
 		$class = array();
 		if ($node->selected)
 		{
@@ -85,7 +85,7 @@ class defaultTheme extends CmsAdminTheme
 			$children = $node->get_children();
 			foreach ($children as &$child)
 			{
-				$this->renderMenuSection($child, $depth+1, $maxdepth);
+				$this->render_menu_section($child, $depth+1, $maxdepth);
 			}
 			echo "</ul>";
 		}
@@ -101,14 +101,15 @@ class defaultTheme extends CmsAdminTheme
 		foreach ($sections as &$onesection)
 		{
 			echo "\n\t\t";
-			$this->renderMenuSection($onesection, 0, -1);
+			$this->render_menu_section($onesection, 0, -1);
 		}
 		echo "\n\t</ul>\n";
 		echo "\t<div class=\"clearb\"></div>\n";
 		echo "</div>\n";
 		echo '<div class="breadcrumbs"><p class="breadcrumbs">';
 		$counter = 0;
-		foreach ($this->breadcrumbs as $crumb) {
+		foreach ($this->breadcrumbs as $crumb)
+		{
 			if ($counter > 0) {
 				echo " &#187; ";
 			}
