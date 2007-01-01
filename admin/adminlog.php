@@ -26,6 +26,8 @@ check_login();
 
 include_once("header.php");
 
+$db = cms_db();
+
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
