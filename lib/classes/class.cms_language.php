@@ -32,9 +32,7 @@ class CmsLanguage extends CmsObject
 	{
 		if (self::$nls == null)
 		{
-			CmsProfiler::get_instance()->mark('before nls');
 			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
-			CmsProfiler::get_instance()->mark('after nls');
 		}
 		
 		$current_language = $current_language != '' ? $current_language : CmsLanguage::get_current_language();
@@ -62,6 +60,36 @@ class CmsLanguage extends CmsObject
 		{
 			$result = vsprintf($result, $params);
 		}
+		
+		return $result;
+	}
+	
+	/**
+	 * Returns a list of all the registered languages in the system.  This does not necessarily
+	 * mean that the language file actually exists in the system, but it will be tried on all
+	 * translation calls before reverting back to the default language.
+	 *
+	 * @param boolean If you want to include the english translation of the language in the value
+	 * @return array Key/Value pairs of language id (en_US) and native names (English)
+	 * @author Ted Kulp
+	 **/
+	public static function get_language_list($show_english = false)
+	{
+		if (self::$nls == null)
+		{
+			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
+		}
+		
+		$result = array();
+		
+		asort(self::$nls['language']);
+		
+		foreach (self::$nls["language"] as $key=>$val)
+		{
+			$result[$key] = $val . (isset(self::$nls["englishlang"][$key]) && $show_english ? ' ('.self::$nls["englishlang"][$key].')' : '');
+		}
+		
+		var_dump($result);
 		
 		return $result;
 	}
@@ -114,8 +142,10 @@ class CmsLanguage extends CmsObject
 		$dir = cms_join_path(dirname(dirname(dirname(__FILE__))), 'admin', 'lang');
 
 		$handle = opendir($dir);
-		while (false!==($file = readdir($handle))) {
-			if (is_file("$dir/$file") && strpos($file, "nls.php") != 0) {
+		while (false!==($file = readdir($handle)))
+		{
+			if (is_file("$dir/$file") && strpos($file, "nls.php") != 0)
+			{
 				include("$dir/$file");
 			}
 		}

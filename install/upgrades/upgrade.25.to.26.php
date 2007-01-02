@@ -23,6 +23,7 @@ $db->Execute('alter table '.cms_db_prefix().'content drop key default_content');
 $db->Execute('alter table '.cms_db_prefix().'content drop key content_alias');
 $db->Execute('alter table '.cms_db_prefix().'content drop key parent_id');
 
+update_table($db, $dbdict, 'admin_bookmarks', 'bookmark_id');
 update_table($db, $dbdict, 'content', 'content_id');
 update_table($db, $dbdict, 'groups', 'group_id');
 update_table($db, $dbdict, 'users', 'user_id');

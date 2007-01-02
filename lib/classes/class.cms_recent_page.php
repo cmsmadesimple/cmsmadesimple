@@ -19,16 +19,16 @@
 #$Id$
 
 /**
- * Bookmark class for admin
+ * Recent Page class for admin
  *
  * @package CMS
  */
-class Bookmark
+class CmsRecentPage extends CmsObject
 {
 	/**
-	 * Bookmark ID
+	 * ID
 	 */
-	var $bookmark_id;
+	var $id;
 
 	/**
 	 * User(owner) ID
@@ -44,12 +44,18 @@ class Bookmark
 	 * Url
 	 */
 	var $url;
+	
+	/**
+	 * Timestamp
+	 */
+	var $timestamp;
 
 	/**
 	 * Generic constructor.  Runs the SetInitialValues fuction.
 	 */
-	function Bookmark()
+	function __construct()
 	{
+		parent::__construct();
 		$this->SetInitialValues();
 	}
 
@@ -59,67 +65,48 @@ class Bookmark
 	 */
 	function SetInitialValues()
 	{
-		$this->bookmark_id = -1;
+		$this->id = -1;
 		$this->title = '';
 		$this->url = '';
 		$this->user_id = -1;
+		$this->timestamp = -1;
 	}
 
+	/**
+	 * Sets object attributes in one go
+	 *
+	 */
+	function SetValues($title, $url, $userid)
+	{
+		$this->title = $title;
+		$this->url = $url;
+		$this->user_id = $userid;
+	}
 
 	/**
-	 * Saves the bookmark to the database.  If no id is set, then a new record
-	 * is created.  If the id is set, then the record is updated to all values
-	 * in the Bookmark object.
+	 * Saves the page to the database, creating a new record.
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
 	 */
 	function Save()
 	{
-		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
-		
-		if ($this->bookmark_id > -1)
-		{
-			$result = $bookops->UpdateBookmark($this);
-		}
-		else
-		{
-			$newid = $bookops->InsertBookmark($this);
-			if ($newid > -1)
-			{
-				$this->bookmark_id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
+		return RecentPageOperations::InsertPage($this);
 	}
 
 	/**
-	 * Delete the record for this Bookmark from the database and resets
-	 * all values to their initial values.
+	 * Purges oldest records from the database, preserving only the
+     * n most-recent.
 	 *
 	 * @returns mixed If successful, true.  If it fails, false.
 	 */
-	function Delete()
+	function PurgeOldPages($userid,$count=5)
 	{
-		$result = false;
-		global $gCms;
-		$bookops =& $gCms->GetBookmarkOperations();
-
-		if ($this->bookmark_id > -1)
-		{
-			$result = $bookops->DeleteBookmarkByID($this->bookmark_id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
+        return RecentPageOperations::PurgeOldPages($userid,$count);
 	}
+}
+
+class RecentPage extends CmsRecentPage
+{
 }
 
 # vim:ts=4 sw=4 noet

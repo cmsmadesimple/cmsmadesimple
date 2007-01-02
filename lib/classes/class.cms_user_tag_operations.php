@@ -23,8 +23,32 @@
  *
  * @package CMS
  */
-class UserTagOperations extends CmsObject
+class CmsUserTagOperations extends CmsObject
 {
+	static private $instance = NULL;
+	
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	/**
+	 * Get an instance of this object, though most people should be using
+	 * the static methods instead.  This is more for compatibility than
+	 * anything else.
+	 *
+	 * @return CmsUserTagOperations The instance of the singleton object.
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsUserTagOperations();
+		}
+		return self::$instance;
+	}
+	
 	/**
 	 * Retrieve the body of a user defined tag
 	 *
@@ -145,11 +169,9 @@ class UserTagOperations extends CmsObject
 	
 	function CallUserTag($name, &$params)
 	{
-		global $gCms;
-		$smarty =& $gCms->GetSmarty();
-		$userpluginfunctions =& $gCms->userpluginfunctions;
+		$smarty = cms_smarty();
 		
-		$code = UserTags::GetUserTag($name);
+		$code = self::GetUserTag($name);
 		
 		$result = FALSE;
 		
@@ -165,7 +187,7 @@ class UserTagOperations extends CmsObject
 
 } // class
 
-class UserTags extends UserTagOperations
+class UserTags extends CmsUserTagOperations
 {}
 
 # vim:ts=4 sw=4 noet

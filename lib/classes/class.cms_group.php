@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -25,66 +25,11 @@
  * @package		CMS
  */
 
-class Group extends CmsObject
+class CmsGroup extends CmsObjectRelationalMapping
 {
-	var $id;
-	var $name;
-	var $active;
-
-	function Group()
-	{
-		$this->SetInitialValues();
-	}
-
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->name = '';
-		$this->active = false;
-	}
-
-	function Save()
-	{
-		$result = false;
-		
-		global $gCms;
-		$groupops =& $gCms->GetGroupOperations();
-		
-		if ($this->id > -1)
-		{
-			$result = $groupops->UpdateGroup($this);
-		}
-		else
-		{
-			$newid = $groupops->InsertGroup($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			global $gCms;
-			$groupops =& $gCms->GetGroupOperations();
-			$result = $groupops->DeleteGroupByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
+	var $params = array('id' => -1, 'name' => '', 'active' => true);
+	var $field_maps = array('group_name' => 'name');
+	var $table = 'groups';
 }
 
 # vim:ts=4 sw=4 noet

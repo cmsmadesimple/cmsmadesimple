@@ -129,19 +129,19 @@ class CmsApplication extends CmsObject {
 	
 	//var $globalcontentoperations;
 	
-	var $bookmarkoperations;
+	//var $bookmarkoperations;
 	
 	//var $templateoperations;
 	
 	//var $contentoperations;
 	
-	var $usertagoperations;
+	//var $usertagoperations;
 	
 	//var $useroperations;
 	
-	var $groupoperations;
+	//var $groupoperations;
 	
-	var $moduleoperations;
+	//var $moduleoperations;
 	
 	var $hrinstance;
 	
@@ -293,16 +293,12 @@ class CmsApplication extends CmsObject {
 		return CmsConfig::get_instance();
 	}
 		
-	function &GetModuleOperations()
+	/**
+	 * @deprecated Deprecated.  Use CmsModuleOperations::some_method instead.
+	 **/
+	function GetModuleOperations()
 	{
-        if (!isset($this->moduleoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.moduleoperations.inc.php'));
-			$moduleoperations = new CmsModuleOperations();
-			$this->moduleoperations = $moduleoperations;
-		}
-
-		return $this->moduleoperations;
+		return CmsModuleOperations::get_instance();
 	}
 	
 	/**
@@ -321,18 +317,17 @@ class CmsApplication extends CmsObject {
 		return CmsContentOperations::get_instance();
 	}
 	
-	function &GetBookmarkOperations()
+	/**
+	 * @deprecated Deprecated.  Use CmsBookmarkOperations::some_method instead.
+	 **/
+	function GetBookmarkOperations()
 	{
-        if (!isset($this->bookmarkoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.bookmarkoperations.inc.php'));
-			$bookmarkoperations = new BookmarkOperations();
-			$this->bookmarkoperations = $bookmarkoperations;
-		}
-
-		return $this->bookmarkoperations;
+        return CmsBookmarkOperations::get_instance();
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsTemplateOperations::some_method instead.
+	 **/
 	function GetTemplateOperations()
 	{
         return CmsTemplateOperations::get_instance();
@@ -346,33 +341,28 @@ class CmsApplication extends CmsObject {
 		return CmsStylesheetOperations::get_instance();
 	}
 	
-	function &GetGroupOperations()
+	/**
+	 * @deprecated Deprecated.  Use CmsGroupOperations::some_method instead.
+	 **/
+	function GetGroupOperations()
 	{
-        if (!isset($this->groupoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.groupoperations.inc.php'));
-			$groupoperations = new GroupOperations();
-			$this->groupoperations = $groupoperations;
-		}
-
-		return $this->groupoperations;
+		return CmsGroupOperations::get_instance();
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use CmsGlobalContentOperations::some_method instead.
+	 **/
 	function GetGlobalContentOperations()
 	{
 		return CmsGlobalContentOperations::get_instance();
 	}
 	
-	function &GetUserTagOperations()
+	/**
+	 * @deprecated Deprecated.  Use CmsUserTagOperations::some_method instead.
+	 **/
+	function GetUserTagOperations()
 	{
-        if (!isset($this->usertagoperations))
-		{
-			//require_once(cms_join_path(dirname(__FILE__), 'class.usertagoperations.inc.php'));
-			$usertagoperations = new UserTagOperations();
-			$this->usertagoperations = &$usertagoperations;
-		}
-
-		return $this->usertagoperations;
+		return CmsUserTagOperations::get_instance();
 	}
 
 	function GetSmarty()

@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -36,7 +36,8 @@ $bookmark_id = -1;
 if (isset($_POST["bookmark_id"])) $bookmark_id = $_POST["bookmark_id"];
 else if (isset($_GET["bookmark_id"])) $bookmark_id = $_GET["bookmark_id"];
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listbookmarks.php");
 	return;
 }
@@ -44,25 +45,22 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 
 if (isset($_POST["editbookmark"]))
-	{
+{
 	$validinfo = true;
 	if ($title == "")
-		{
+	{
 		$validinfo = false;
 		$error .= "<li>".lang('nofieldgiven', array(lang('title')))."</li>";
-		}
+	}
 	if ($url == "")
-		{
+	{
 		$validinfo = false;
 		$error .= "<li>".lang('nofieldgiven', array(lang('url')))."</li>";
-		}
+	}
 
 	if ($validinfo)
-		{
-		global $gCms;
-		$gCms->GetBookmarkOperations();
-		$markobj =& new Bookmark();
-		$markobj->bookmark_id = $bookmark_id;
+	{
+		$markobj = cmsms()->bookmark->find_by_id($bookmark_id);
 		$markobj->title = $title;
 		$markobj->url = $url;
 		$markobj->user_id = $userid;
@@ -70,39 +68,36 @@ if (isset($_POST["editbookmark"]))
 		$result = $markobj->save();
 
 		if ($result)
-			{
-			redirect("listbookmarks.php");
+		{
+			CmsResponse::redirect("listbookmarks.php");
 			return;
-			}
-		else
-			{
-			$error .= "<li>".lang('errorupdatingbookmark')."</li>";
-			}
 		}
-
+		else
+		{
+			$error .= "<li>".lang('errorupdatingbookmark')."</li>";
+		}
 	}
+
+}
 else if ($bookmark_id != -1)
-	{
-	$query = "SELECT * from ".cms_db_prefix()."admin_bookmarks WHERE bookmark_id = ?";
-	$result = $db->Execute($query, array($bookmark_id));
-	
-	$row = $result->FetchRow();
+{
+	$row = cmsms()->bookmark->find_by_id($bookmark_id);
 
 	$url = $row["url"];
 	$title = $row["title"];
-	}
+}
 
 if (strlen($title) > 0)
-    {
-    $CMS_ADMIN_SUBTITLE = $title;
-    }
+{
+	$CMS_ADMIN_SUBTITLE = $title;
+}
 
 include_once("header.php");
 
 if ($error != "")
-	{
+{
 	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-	}
+}
 ?>
 
 <div class="pagecontainer">

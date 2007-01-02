@@ -79,6 +79,8 @@ if ($frontendlang != '')
 cms_smarty()->assign('lang', $frontendlang);
 cms_smarty()->assign('encoding', get_encoding());
 
+
+/*
 if (isset($CMS_ADMIN_PAGE))
 {
     include_once(cms_join_path($dirname, CmsConfig::get('admin_dir'), 'lang.php'));
@@ -90,6 +92,8 @@ if (isset($CMS_ADMIN_PAGE))
 		$gCms->variables['convertclass'] = new ConvertCharset();
 	}
 }
+*/
+
 
 #Load all installed module code
 CmsModuleLoader::load_modules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));

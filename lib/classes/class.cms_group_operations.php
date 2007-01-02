@@ -25,53 +25,50 @@
  * @package		CMS
  */
 
-//include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.group.inc.php');
-
-class GroupOperations extends CmsObject
+class CmsGroupOperations extends CmsObject
 {
+	static private $instance = NULL;
+	
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	/**
+	 * Get an instance of this object, though most people should be using
+	 * the static methods instead.  This is more for compatibility than
+	 * anything else.
+	 *
+	 * @return CmsGroupOperations The instance of the singleton object.
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsGroupOperations();
+		}
+		return self::$instance;
+	}
+	
+	static public function load_groups()
+	{
+		return cmsms()->group->find_all(array('order' => 'group_name ASC'));
+	}
+	
 	function LoadGroups()
 	{
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$result = array();
-
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
-		$dbresult = $db->Execute($query);
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->active = $row['active'];
-			$result[] = $onegroup;
-		}
-
-		return $result;
+		return self::load_groups();
 	}
 
+	static public function load_group_by_id($id)
+	{
+		return cmsms()->group->find_by_id($id);
+	}
+	
 	function LoadGroupByID($id)
 	{
-
-		$result = false;
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups WHERE group_id = ? ORDER BY group_id";
-		$dbresult = $db->Execute($query, array($id));
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$onegroup = new Group();
-			$onegroup->id = $row['group_id'];
-			$onegroup->name = $row['group_name'];
-			$onegroup->active = $row['active'];
-			$result = $onegroup;
-		}
-
-		return $result;
+		return self::load_group_by_id($id);
 	}
 
 	function InsertGroup($group)

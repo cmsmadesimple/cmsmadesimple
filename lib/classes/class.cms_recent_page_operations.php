@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (tedkulp@users.sf.net)
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#BUT withOUT ANY WARRANTY; without even the implied warranty of
+#but WITHOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -18,101 +18,24 @@
 #
 #$Id$
 
-/**
- * Recent Page class for admin
- *
- * @package CMS
- */
-class RecentPage
+class CmsRecentPageOperations extends CmsObject
 {
-	/**
-	 * ID
-	 */
-	var $id;
+	static private $instance = NULL;
 
-	/**
-	 * User(owner) ID
-	 */
-	var $user_id;
-
-	/**
-	 * Title
-	 */
-	var $title;
-
-	/**
-	 * Url
-	 */
-	var $url;
+	function __construct()
+	{
+		parent::__construct();
+	}
 	
-	/**
-	 * Timestamp
-	 */
-	var $timestamp;
-
-
-	/**
-	 * Generic constructor.  Runs the SetInitialValues fuction.
-	 */
-	function RecentPage()
+	static public function get_instance()
 	{
-		$this->SetInitialValues();
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsRecentPageOperations();
+		}
+		return self::$instance;
 	}
-
-	/**
-	 * Sets object to some sane initial values
-	 *
-	 */
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->title = '';
-		$this->url = '';
-		$this->user_id = -1;
-		$this->timestamp = -1;
-	}
-
-	/**
-	 * Sets object attributes in one go
-	 *
-	 */
-	function SetValues($title, $url, $userid)
-	{
-		$this->title = $title;
-		$this->url = $url;
-		$this->user_id = $userid;
-	}
-
-
-	/**
-	 * Saves the page to the database, creating a new record.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 */
-	function Save()
-	{
-		return RecentPageOperations::InsertPage($this);
-	}
-
-	/**
-	 * Purges oldest records from the database, preserving only the
-     * n most-recent.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 */
-	function PurgeOldPages($userid,$count=5)
-	{
-        return RecentPageOperations::PurgeOldPages($userid,$count);
-	}
-}
-
-/**
- * Class for doing recent page-related functions.
- *
- * @package CMS
- */
-class RecentPageOperations
-{
+	
 	/**
 	 * Gets a list of all recent pages for a given user
 	 *
@@ -202,6 +125,10 @@ class RecentPageOperations
 		}
 		return $result;
 	}
+}
+
+class RecentPageOperations extends CmsRecentPageOperations
+{
 }
 
 # vim:ts=4 sw=4 noet

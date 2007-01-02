@@ -307,7 +307,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		return $this->find(array('conditions' => array($field . ' = ?', array($arguments[0]))));
+		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
+		if (count($arguments) > 1)
+		{
+			$parameters = array_merge($parameters, $arguments[1]);
+		}
+		
+		return $this->find($parameters);
 	}
 	
 	/**
@@ -327,7 +333,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		return $this->find_all(array('conditions' => array($field . ' = ?', array($arguments[0]))));
+		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
+		if (count($arguments) > 1)
+		{
+			$parameters = array_merge($parameters, $arguments[1]);
+		}
+		
+		return $this->find_all($parameters);
 	}
 	
 	/**
@@ -347,7 +359,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		return $this->find_count(array('conditions' => array($field . ' = ?', array($arguments[0]))));
+		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
+		if (count($arguments) > 1)
+		{
+			$parameters = array_merge($parameters, $arguments[1]);
+		}
+		
+		return $this->find_count($parameters);
 	}
 	
 	/**

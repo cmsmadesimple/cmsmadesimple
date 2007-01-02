@@ -25,8 +25,6 @@
  * @package		CMS
  */
 
-//include_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.template.inc.php');
-
 class CmsTemplateOperations extends CmsObject
 {
 	static private $instance = NULL;
