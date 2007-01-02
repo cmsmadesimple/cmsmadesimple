@@ -34,7 +34,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	
-	$marklist = CmsBookmarkOperations::load_bookmarks($userid);
+	$marklist = cmsms()->bookmark->find_all_by_user_id($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

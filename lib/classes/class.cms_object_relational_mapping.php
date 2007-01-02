@@ -291,6 +291,37 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Private helper function for processing dynaimc find_by methods.  It essentially does several things...
+	 * 1. Split out any "and" or "or" clauses in a dynamic find method
+	 * 2. Pops the corresponding arguments off of the array so they don't get processed further
+	 * 3. Creates the conditions clause and returns it
+	 *
+	 * @param string The field (or fields in the case of an "and" or "or" lookup)
+	 * @param array Reference to the arguments passed to the method.  The array is modified as necessary.
+	 * @return array Conditions clause after processing
+	 * @author Ted Kulp
+	 **/
+	private function split_conditions($field, &$arguments)
+	{
+		$numparams = 1;
+		$params = array();
+		$fields = preg_split('/(_and_|_or_)/', $field, -1, PREG_SPLIT_DELIM_CAPTURE);
+		$conditions = '';
+		
+		for ($i = 0; $i < count($fields); $i=$i+2)
+		{
+			$params[] = array_shift($arguments);
+			if ($i > 0 && $fields[$i-1] == '_and_')
+				$conditions .= ' AND ';
+			else if ($i > 0 && $fields[$i-1] == '_or_')
+				$conditions .= ' OR ';
+			$conditions .= $this->get_table($fields[$i]) . ' = ?';
+		}
+		
+		return array('conditions' => array($conditions, $params));
+	}
+	
+	/**
 	 * Method for handling the dynamic find_by_* functionality.  It basically figures out
 	 * what field is being searched for and creates a query based on that field.
 	 *
@@ -307,10 +338,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
-		if (count($arguments) > 1)
+		$parameters = $this->split_conditions($field, $arguments);
+		if (count($arguments) > 0)
 		{
-			$parameters = array_merge($parameters, $arguments[1]);
+			$parameters = array_merge($parameters, $arguments[0]);
 		}
 		
 		return $this->find($parameters);
@@ -333,7 +364,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
+		$parameters = $this->split_conditions($field, $arguments);
 		if (count($arguments) > 1)
 		{
 			$parameters = array_merge($parameters, $arguments[1]);
@@ -359,7 +390,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
-		$parameters = array('conditions' => array($field . ' = ?', array($arguments[0])));
+		$parameters = $this->split_conditions($field, $arguments);
 		if (count($arguments) > 1)
 		{
 			$parameters = array_merge($parameters, $arguments[1]);
@@ -371,15 +402,16 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	/**
 	 * Figures out the proper name of the table that's persisting this class.
 	 *
-	 * @return Name of the table to use
+	 * @param string Field to append to the returned string
+	 * @return string Name of the table to use
 	 * @author Ted Kulp
 	 */
-	function get_table()
+	function get_table($fieldname = '')
 	{
 		$classname = underscore(get_class($this));
 		if (starts_with($classname, 'cms_')) $classname = substr($classname, 4);
 		$table = $this->table != '' ? cms_db_prefix() . $this->table : cms_db_prefix() . $classname;
-
+		$table = $table . ($fieldname != '' ? '.' . $fieldname : '');
 		return $table;
 	}
 	
@@ -723,7 +755,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-			$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $id_field . ' = ' . $id);
+			$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $this->get_table($id_field) . ' = ' . $id);
 		
 			if ($result)
 				$this->after_delete();
