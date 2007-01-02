@@ -63,8 +63,7 @@ if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
 $css_name = "";
 if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
 
-// Now clean up both of them
-$css_text = htmlspecialchars($css_text, ENT_NOQUOTES);
+// Now clean up name
 $css_name = htmlspecialchars($css_name, ENT_QUOTES);
 
 $media_type = array();

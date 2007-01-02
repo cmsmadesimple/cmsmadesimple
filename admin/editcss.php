@@ -73,8 +73,7 @@ if (isset($_POST["orig_css_name"])) $orig_css_name = $_POST["orig_css_name"];
 $css_text = "";
 if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
 
-// Clean up text and name
-$css_text = htmlspecialchars($css_text, ENT_NOQUOTES);
+// Clean up name
 $css_name = htmlspecialchars($css_name, ENT_QUOTES);
 
 # the ID of the CSS
