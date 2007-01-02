@@ -167,7 +167,7 @@ if (isset($_GET["message"])) {
 					?>
 				</a>
 			</span>
-			<span style="margin-right: 30px; float: right; align: right">
+			<span style="margin-right: 30px; float: right; text-align: right">
 				<?php echo lang("selecteditems"); ?>: <select name="multiaction">
 				<option value="delete"><?php echo lang('delete') ?></option>
 				<!--
