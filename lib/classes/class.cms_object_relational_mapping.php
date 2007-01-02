@@ -365,9 +365,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
 		$parameters = $this->split_conditions($field, $arguments);
-		if (count($arguments) > 1)
+		if (count($arguments) > 0)
 		{
-			$parameters = array_merge($parameters, $arguments[1]);
+			$parameters = array_merge($parameters, $arguments[0]);
 		}
 		
 		return $this->find_all($parameters);
@@ -391,9 +391,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
 		$parameters = $this->split_conditions($field, $arguments);
-		if (count($arguments) > 1)
+		if (count($arguments) > 0)
 		{
-			$parameters = array_merge($parameters, $arguments[1]);
+			$parameters = array_merge($parameters, $arguments[0]);
 		}
 		
 		return $this->find_count($parameters);
