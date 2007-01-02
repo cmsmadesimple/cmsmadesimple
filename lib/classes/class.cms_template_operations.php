@@ -92,17 +92,7 @@ class CmsTemplateOperations extends CmsObject
 
 	function UsageCount($id)
 	{
-		$result = 0;
-
-		$query = "SELECT count(*) as the_count FROM ".cms_db_prefix()."content WHERE template_id = ?";
-		$row = cms_db()->GetRow($query, array($id));
-
-		if($row)
-		{
-			$result = $row['the_count'];
-		}
-	
-		return $result;
+		return cmsms()->content->find_count_by_template_id($id);
 	}
 
 	function InsertTemplate($template)

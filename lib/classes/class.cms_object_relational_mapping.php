@@ -303,6 +303,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	private function split_conditions($field, &$arguments)
 	{
+		//Figure out if we need to replace the field from the field mappings
+		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
+		
 		$numparams = 1;
 		$params = array();
 		$fields = preg_split('/(_and_|_or_)/', $field, -1, PREG_SPLIT_DELIM_CAPTURE);
@@ -315,6 +318,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$conditions .= ' AND ';
 			else if ($i > 0 && $fields[$i-1] == '_or_')
 				$conditions .= ' OR ';
+			
+			//Make sure we're looking it up by what the class thinks the parameter is called,
+			//not the database.
+			if (array_key_exists($fields[$i], $new_map)) $fields[$i] = $new_map[$fields[$i]];
+
 			$conditions .= $this->get_table($fields[$i]) . ' = ?';
 		}
 		
@@ -333,10 +341,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function find_by_($function, $arguments)
 	{
 		$field = str_replace('find_by_', '', $function);
-		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
 		$parameters = $this->split_conditions($field, $arguments);
 		if (count($arguments) > 0)
@@ -360,10 +364,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	{
 		$field = str_replace('find_all_by_', '', $function);
 		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
-		
 		$parameters = $this->split_conditions($field, $arguments);
 		if (count($arguments) > 0)
 		{
@@ -385,10 +385,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function find_count_by_($function, $arguments)
 	{
 		$field = str_replace('find_count_by_', '', $function);
-		
-		//Figure out if we need to replace the field from the field mappings
-		$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
-		if (array_key_exists($field, $new_map)) $field = $new_map[$field];
 		
 		$parameters = $this->split_conditions($field, $arguments);
 		if (count($arguments) > 0)
