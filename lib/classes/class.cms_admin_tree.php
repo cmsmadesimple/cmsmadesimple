@@ -18,6 +18,18 @@
 #
 #$Id$
 
+/**
+ * Classes for storing the admin menu.  Includes methods to load
+ * the structure from an xml file and properly create the admin
+ * menu structure.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsAdminTree extends CmsTree
 {
 	static private $instance = NULL;

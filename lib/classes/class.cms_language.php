@@ -17,6 +17,16 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #$Id$
 
+/**
+ * Methods for handling language and translation functions.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsLanguage extends CmsObject
 {
 	private static $nls = null;

@@ -19,12 +19,16 @@
 #$Id$
 
 /**
- * Page Info -- Represents a "page" which consists of different variables virtually
+ * Represents a "page" which consists of different variables virtually
  * composited together.
  *
- * @since		0.11
- * @package		CMS
- */
+ * @author Ted Kulp
+ * @since 0.11
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsPageInfo extends CmsObject
 {
 	var $content_id = -1;

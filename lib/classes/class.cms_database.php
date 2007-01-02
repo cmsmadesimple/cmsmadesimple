@@ -22,6 +22,16 @@
 define('ADODB_OUTP', 'mark_sql');
 define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
 
+/**
+ * Singleton class to represent a connection to the database.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsDatabase extends CmsObject
 {
 	static private $instance = NULL;

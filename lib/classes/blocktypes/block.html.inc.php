@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class BlockHtml extends Object
+class BlockHtml extends CmsObject
 {
 	function __construct()
 	{

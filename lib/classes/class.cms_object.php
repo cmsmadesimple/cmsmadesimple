@@ -19,12 +19,20 @@
 #$Id$
 
 /**
-* Base class.  Allows me to implement things that belong to all
-* classes inheriently.  All classes in CMSMS should extend this
-* if possible.
- *
+ * Files related to CMS Made Simple
  * @package cms
+ */
+/**
+ * Base class.  Allows me to implement things that belong to all
+ * classes inheriently.  All classes in CMSMS should extend this
+ * if possible.
+ *
  * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
  **/
 abstract class CmsObject
 {

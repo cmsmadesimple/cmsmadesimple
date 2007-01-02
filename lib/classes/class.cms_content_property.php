@@ -18,11 +18,24 @@
 #
 #$Id$
 
+/**
+ * Class to represent content properties stored in the database.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsContentProperty extends CmsObjectRelationalMapping
 {
 	var $table = 'content_props';
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsContentProperty instead.
+ **/
 class ContentProperty extends CmsContentProperty
 {
 }

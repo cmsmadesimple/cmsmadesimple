@@ -21,8 +21,12 @@
 /**
  * Generic user class.  This can be used for any logged in user or user related function.
  *
- * @since 0.6.1
- * @package CMS
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
  */
 
 class CmsUser extends CmsObjectRelationalMapping
@@ -39,7 +43,7 @@ class CmsUser extends CmsObjectRelationalMapping
 	 *
 	 * @since 0.6.1
 	 */
-	function set_password($password)
+	public function set_password($password)
 	{
 		//Set params directly so that we don't get caught in a loop
 		$this->params['password'] = md5($password);
@@ -54,22 +58,22 @@ class CmsUser extends CmsObjectRelationalMapping
 	}
 	
 	//Callback handlers
-	function before_save()
+	protected function before_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddUserPre' : 'EditUserPre'), array('user' => &$this));
 	}
 	
-	function after_save()
+	protected function after_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddUserPost' : 'EditUserPost'), array('user' => &$this));
 	}
 	
-	function before_delete()
+	protected function before_delete()
 	{
 		CmsEvents::send_event('Core', 'DeleteUserPre', array('user' => &$this));
 	}
 	
-	function after_delete()
+	protected function after_delete()
 	{
 		CmsEvents::send_event('Core', 'DeleteUserPost', array('user' => &$this));
 	}

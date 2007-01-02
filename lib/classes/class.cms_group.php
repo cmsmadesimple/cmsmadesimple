@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Generic group class. This can be used for any logged in group or group related function.
+ * Represents a user group in the database.
  *
- * @since		0.9
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsGroup extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'active' => true);

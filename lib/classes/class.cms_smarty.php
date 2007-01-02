@@ -17,13 +17,16 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /**
- * Extends the Smarty class for content.
- *
  * Extends the Smarty class for checking timestamps and rendering
  * content to the browser.
  *
+ * @author Ted Kulp
  * @since 0.1
- */
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 require_once(cms_join_path(dirname(dirname(__FILE__)),'smarty','Smarty.class.php'));
 
 class CmsSmarty extends Smarty {

@@ -18,6 +18,17 @@
 #
 #$Id$
 
+/**
+ * Classes for storing the frontend page hierarchy.  Includes methods to load
+ * the structure from the database and properly return related Content objects.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsPageTree extends CmsTree
 {
 	var $content = array();

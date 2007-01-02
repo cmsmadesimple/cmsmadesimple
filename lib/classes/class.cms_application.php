@@ -19,19 +19,16 @@
 #$Id$
 
 /**
- * Global class for easy access to all important variables.
- *
- * @package CMS
- */
-
-/**
- * Simple global object to hold references to other objects
- *
  * Global object that holds references to various data sctructures
  * needed by classes/functions in CMS.  Initialized in include.php
  * as $gCms for use in every page.
  *
- * @since 0.5
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
  */
 class CmsApplication extends CmsObject {
 

@@ -19,11 +19,15 @@
 #$Id$
 
 /**
- * Class for doing template related functions.  Many of the Template object functions are just wrappers around these.
+ * Static methods for handling CmsPageInfo objects.
  *
- * @since		0.6
- * @package		CMS
- */
+ * @author Ted Kulp
+ * @since 0.11
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsPageInfoOperations extends CmsObject
 {
 	static function load_page_info_by_content_alias($alias)
@@ -110,7 +114,7 @@ class CmsPageInfoOperations extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use load_page_info_by_content_alias instead.
+	 * @deprecated Deprecated.  Use load_page_info_by_content_alias instead.
 	 **/
 	static function LoadPageInfoByContentAlias($alias)
 	{

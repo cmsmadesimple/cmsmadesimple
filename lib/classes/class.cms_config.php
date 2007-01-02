@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Class to hold the configuration values found in the config.php file.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsConfig extends CmsObject implements ArrayAccess
 {
 	var $params;

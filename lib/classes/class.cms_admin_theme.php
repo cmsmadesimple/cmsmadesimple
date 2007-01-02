@@ -18,6 +18,16 @@
 #
 #$Id: class.cms_config.php 3687 2006-12-31 16:36:30Z wishy $
 
+/**
+ * Class to extend in order to create a theme for the admin panel.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsAdminTheme extends CmsObject
 {
 	static private $instance = NULL;

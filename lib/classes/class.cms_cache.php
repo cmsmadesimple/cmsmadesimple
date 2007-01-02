@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Wrapper class around Cache:Lite for caching full pages and function output.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsCache extends CmsObject
 {
 	static private $cache = null;

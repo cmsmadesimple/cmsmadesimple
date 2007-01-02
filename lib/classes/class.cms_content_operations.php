@@ -21,10 +21,13 @@
 /**
  * Class for static methods related to content
  *
- * @since		0.8
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 0.8
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsContentOperations extends CmsObject
 {	
 	static private $instance = NULL;

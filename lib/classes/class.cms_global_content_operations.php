@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Class for doing html blob related functions.  Maybe of the HtmlBlob object functions are just wrappers around these.
+ * Static methods for handling global content blocks.
  *
- * @since		0.6
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsGlobalContentOperations extends CmsObject
 {
 	static private $instance = NULL;

@@ -19,11 +19,15 @@
 #$Id$
 
 /**
- * Generic html blob class. This can be used for any logged in blob or blob related function.
+ * Represents a global content block in the database.
  *
- * @since		0.6
- * @package		CMS
- */
+ * @author Ted Kulp
+ * @since 0.6
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsGlobalContent extends CmsObjectRelationalMapping
 {	
 	var $params = array('id' => -1, 'name' => '', 'content' => '', 'owner' => -1);

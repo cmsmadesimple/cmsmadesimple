@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Class for doing group related functions.  Maybe of the Group object functions are just wrappers around these.
+ * Represents a user group in the database.
  *
- * @since		0.6
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsGroupOperations extends CmsObject
 {
 	static private $instance = NULL;

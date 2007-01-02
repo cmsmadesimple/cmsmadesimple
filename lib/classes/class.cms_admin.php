@@ -18,6 +18,17 @@
 #
 #$Id$
 
+/**
+ * Class to hold static methods for various aspects of the admin panel's 
+ * inner working and security.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsAdmin extends CmsObject
 {
 	static private $instance = NULL;
@@ -42,7 +53,7 @@ class CmsAdmin extends CmsObject
 	 *
 	 * @since 0.1
 	 * @param string no_redirect - If true, then don't redirect if not logged in
-	 * @return bool If they're logged in, true.  If not logged in, false. 
+	 * @return boolean If they're logged in, true.  If not logged in, false. 
 	 */
 	static public function check_login($no_redirect = false)
 	{
@@ -106,7 +117,7 @@ class CmsAdmin extends CmsObject
 	/**
 	 * Gets the userid of the currently logged in user.
 	 *
-	 * @returns If they're logged in, the user id.  If not logged in, false.
+	 * @return CmsUser If they're logged in, the user id.  If not logged in, null.
 	 * @since 0.1
 	 */
 	static public function get_user($check = true)
@@ -122,14 +133,14 @@ class CmsAdmin extends CmsObject
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	
 	/**
 	 * Gets the userid of the currently logged in user.
 	 *
-	 * @returns If they're logged in, the user id.  If not logged in, false.
+	 * @return integer If they're logged in, the user id.  If not logged in, null.
 	 * @since 0.1
 	 */
 	static public function get_userid($check = true)
@@ -145,7 +156,7 @@ class CmsAdmin extends CmsObject
 		}
 		else
 		{
-			return false;
+			return null;
 		}
 	}
 	

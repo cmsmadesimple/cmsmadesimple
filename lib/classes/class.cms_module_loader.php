@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Class to load modules
+ * Class to load modules.
  *
- * @since		1.0
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 1.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsModuleLoader extends CmsObject
 {
 	/**

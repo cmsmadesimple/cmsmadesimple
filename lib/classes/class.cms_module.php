@@ -21,11 +21,13 @@
 /**
  * Base module class.
  *
- * All modules should inherit and extend this class with their functionality.
- *
- * @since		0.9
- * @package		CMS
- */
+ * @author Ted Kulp, Robert Campbell
+ * @since 0.9
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsModule extends CmsObject
 {
 	/**

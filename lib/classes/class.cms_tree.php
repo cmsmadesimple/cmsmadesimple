@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Generic tree and node classes for storing hierarchies of data.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsTree extends CmsObject
 {
 	var $root = null;

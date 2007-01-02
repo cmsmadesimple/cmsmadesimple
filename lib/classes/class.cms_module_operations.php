@@ -18,15 +18,18 @@
 #
 #$Id$
  
-/**
-* "Static" module functions for internal use and module development.  CMSModule
-* extends this so that it has internal access to the functions.
-*
-* @since		0.9
-* @package		CMS
-*/
 define( "MODULE_DTD_VERSION", "1.3" );
 
+/**
+ * Static module functions for internal use and module development.
+ *
+ * @author Ted Kulp
+ * @since 0.9
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsModuleOperations extends CmsObject
 {
 	/**

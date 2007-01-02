@@ -26,6 +26,11 @@
  * work).
  *
  * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
  **/
 abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAccess
 {
@@ -64,7 +69,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	/**
 	 * Used to define a different table name for this object if it
 	 * doesn't match the predetermined name based on the object's class
-	 * name.
+	 * name.  The prefix in config.php will be applied automatically.
 	 */
 	var $table = '';
 	
@@ -333,8 +338,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Method for handling the dynamic find_by_* functionality.  It basically figures out
 	 * what field is being searched for and creates a query based on that field.
 	 *
-	 * @param $function The name of the function that came into the __call method
-	 * @param $arguments The arguments that came into the __call method
+	 * @param string The name of the function that came into the __call method
+	 * @param array The arguments that came into the __call method
 	 * @return The results of the find
 	 * @author Ted Kulp
 	 */
@@ -355,8 +360,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Method for handling the dynamic find_all_by_* functionality.  It basically figures out
 	 * what field is being searched for and creates a query based on that field.
 	 *
-	 * @param $function The name of the function that came into the __call method
-	 * @param $arguments The arguments that came into the __call method
+	 * @param string The name of the function that came into the __call method
+	 * @param array The arguments that came into the __call method
 	 * @return The results of the find_all
 	 * @author Ted Kulp
 	 */
@@ -377,9 +382,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Method for handling the dynamic find_count_by_* functionality.  It basically figures out
 	 * what field is being searched for and creates a query based on that field.
 	 *
-	 * @param $function The name of the function that came into the __call method
-	 * @param $arguments The arguments that came into the __call method
-	 * @return The result of the find_count
+	 * @param string The name of the function that came into the __call method
+	 * @param array The arguments that came into the __call method
+	 * @return integer The result of the find_count
 	 * @author Ted Kulp
 	 */
 	function find_count_by_($function, $arguments)
@@ -541,7 +546,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Used exactly like find_all, but returns a count instead of the actual objects.
 	 *
 	 * @param array The parameters used to the construct the SQL query
-	 * @return int The resulting count
+	 * @return integer The resulting count
 	 * @author Ted Kulp
 	 **/
 	function find_count($arguments = array())
@@ -724,9 +729,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * database directly.  Keep in mind that deleting a object from the database directly
 	 * while having one in memory simultaniously could cause issues.
 	 *
-	 * @param $id The id to delete.  If none, then deletes the object called on.
+	 * @param integer The id to delete.  If none, then deletes the object called on.
 	 *
-	 * @return Boolean based on whether or not the delete was successful.
+	 * @return boolean Boolean based on whether or not the delete was successful.
 	 */
 	function delete($id = -1)
 	{
@@ -764,7 +769,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Used to push a hash of keys and values to the object.  This is very helpful
 	 * for updating an object based on the fields in a form.
 	 *
-	 * @param $params The has of keys and values to set in the object
+	 * @param array The hash of keys and values to set in the object
 	 */
 	function update_parameters($params)
 	{
@@ -782,8 +787,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	/**
 	 * Fills an object with the fields from the database.
 	 *
-	 * @param &$resulthash Reference to the has for this record that came from the database
-	 * @param &$object Reference to the object we should fill
+	 * @param array Reference to the hash for this record that came from the database
+	 * @param mixed Reference to the object we should fill
 	 *
 	 * @return The object we filled (php4 doesn't seem to handle the reference right)
 	 */
@@ -806,12 +811,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Generates a select query based on the arguments sent to the find and find_by
 	 * methods.
 	 * 
-	 * @param $table Name of the table that should be SELECT'd from
-	 * @param $arguments Arguments passed to the find and find_by methods
-	 * @param &$query Reference to the query string that will be modified by this method
-	 * @param &$queryparams Reference to the array of query params passed on to adodb
+	 * @param string Name of the table that should be SELECT'd from
+	 * @param array Arguments passed to the find and find_by methods
+	 * @param string Reference to the query string that will be modified by this method
+	 * @param array Reference to the array of query params passed on to adodb
 	 *
-	 * @return An array of $query and $queryparams
+	 * @return array An array of $query and $queryparams
 	 */
 	function generate_select_query_and_parameters($table, $arguments, $query, $queryparams, $count = false)
 	{
@@ -848,7 +853,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Generates an array of column names in the table that perists this class.  This
 	 * list is then cached during the life of the request.
 	 *
-	 * @return An array of column names
+	 * @return array An array of column names
 	 */
 	function get_columns_in_table()
 	{
@@ -876,12 +881,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * sort of "static" in nature.  after_load is called on the instantiated
 	 * object.
 	 *
-	 * @param $type Name of the class that we're going to instantiate
-	 * @param $fields Hash of the fields that will be inserted into the object
+	 * @param string Name of the class that we're going to instantiate
+	 * @param array Hash of the fields that will be inserted into the object
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function before_load($type, $fields)
+	protected function before_load($type, $fields)
 	{
 	}
 	
@@ -892,7 +897,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function after_load()
+	protected function after_load()
 	{
 	}
 	
@@ -904,7 +909,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	function before_save()
+	protected function before_save()
 	{
 	}
 	
@@ -914,7 +919,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	function after_save()
+	protected function after_save()
 	{
 	}
 	
@@ -925,7 +930,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	function before_delete()
+	protected function before_delete()
 	{
 	}
 	
@@ -936,7 +941,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	function after_delete()
+	protected function after_delete()
 	{
 	}
 	
@@ -957,8 +962,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * be called from an object's validate() method on each field that needs to be
 	 * filled in before it can be saved.
 	 *
-	 * @param $field Name of the field to check
-	 * @param $message If given, this is the message that will be set in the object if the method didn't succed.
+	 * @param string Name of the field to check
+	 * @param string If given, this is the message that will be set in the object if the method didn't succed.
 	 * @return void
 	 * @author Ted Kulp
 	 */
@@ -974,7 +979,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * Method for quickly adding a new validation error to the object.  If this is
 	 * called, then it's a safe bet that save() will fail.
 	 *
-	 * @param $message Message to add to the validation error stack
+	 * @param string Message to add to the validation error stack
 	 * @return void
 	 * @author Ted Kulp
 	 */

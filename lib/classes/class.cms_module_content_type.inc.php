@@ -22,7 +22,6 @@
  * Class that module defined content types must extend.
  *
  * @since		0.9
- * @package		CMS
  */
 class CmsModuleContentType extends ContentBase
 {

@@ -19,10 +19,15 @@
 #$Id$
 
 /**
- * Events class for admin
+ * Class of methods for handling Events creation, sending and handling.
  *
- * @package CMS
- */
+ * @author Robert Campbell, Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsEvents extends CmsObject
 {
 	/**
@@ -41,7 +46,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use create_event.
+	 * @deprecated Deprecated.  Use create_event instead.
 	 **/
 	public static function CreateEvent( $modulename, $eventname )
 	{
@@ -88,7 +93,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use remove_event.
+	 * @deprecated Deprecated.  Use remove_event.
 	 **/
 	public static function RemoveEvent( $modulename, $eventname )
 	{
@@ -144,7 +149,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use send_event instead.
+	 * @deprecated Deprecated.  Use send_event instead.
 	 **/
 	public static function SendEvent( $modulename, $eventname, $params = array() )
 	{
@@ -233,7 +238,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use list_events() instead.
+	 * @deprecated Deprecated.  Use list_events() instead.
 	 */
 	public static function ListEvents()
 	{
@@ -339,7 +344,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use add_event_handler instead.
+	 * @deprecated Deprecated.  Use add_event_handler instead.
 	 **/
 	public static function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
@@ -403,7 +408,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use remove_event_handler instead.
+	 * @deprecated Deprecated.  Use remove_event_handler instead.
 	 **/
 	public static function RemoveEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false )
 	{
@@ -446,7 +451,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use remove_all_event_handlers instead.
+	 * @deprecated Deprecated.  Use remove_all_event_handlers instead.
 	 **/
 	public static function RemoveAllEventHandlers( $modulename, $eventname )
 	{
@@ -468,7 +473,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use get_event_help instead.
+	 * @deprecated Deprecated.  Use get_event_help instead.
 	 **/
 	public static function GetEventHelp( $eventname )
 	{
@@ -491,7 +496,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use get_event_description instead.
+	 * @deprecated Deprecated.  Use get_event_description instead.
 	 **/
 	public static function GetEventDescription( $eventname )
 	{
@@ -576,7 +581,7 @@ class CmsEvents extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use setup_core_events instead.
+	 * @deprecated Deprecated.  Use setup_core_events instead.
 	 **/
 	public static function SetupCoreEvents()
 	{

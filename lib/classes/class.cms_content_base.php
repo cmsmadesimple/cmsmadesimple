@@ -19,16 +19,16 @@
 #$Id$
 
 /**
- * Generic content class.
+ * Base content type class.  Extend this to create new content types for
+ * the system.
  *
- * As for some treatment we don't need the extra properties of the content
- * we load them only when required. However, each function which makes use
- * of extra properties should first test if the properties object exist.
- *
- * @since		0.8
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
