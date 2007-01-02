@@ -53,7 +53,7 @@ class CmsTemplateOperations extends CmsObject
 
 	function LoadTemplates()
 	{	
-		return cmsms()->template->find_all(array('order' => 'template_name ASC'));
+		return cmsms()->template->find_all(array('order' => 'name ASC'));
 	}
 
 	function LoadTemplateByID($id)

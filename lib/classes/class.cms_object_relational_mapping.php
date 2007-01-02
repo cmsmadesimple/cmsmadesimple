@@ -789,7 +789,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *
 	 * @param array Reference to the hash for this record that came from the database
 	 * @param mixed Reference to the object we should fill
-	 *
 	 * @return The object we filled (php4 doesn't seem to handle the reference right)
 	 */
 	function fill_object(&$resulthash, &$object)
@@ -837,7 +836,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		if (array_key_exists('order', $arguments))
 		{
-			$query .= ' ORDER BY ' . $arguments['order'];
+			$args = $arguments['order'];
+			foreach ($this->field_maps as $db=>$obj)
+			{
+				$args = str_ireplace($obj, $db, $args);
+				break;
+			}
+			$query .= ' ORDER BY ' . $this->get_table($args);
 		}
 		
 		if (array_key_exists('limit', $arguments))
