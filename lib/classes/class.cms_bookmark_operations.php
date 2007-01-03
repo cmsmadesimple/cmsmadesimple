@@ -124,6 +124,9 @@ class CmsBookmarkOperations extends CmsObject
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsBookmarkOperations instead.
+ **/
 class BookmarkOperations extends CmsBookmarkOperations
 {
 }

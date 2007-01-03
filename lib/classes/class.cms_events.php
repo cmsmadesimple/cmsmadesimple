@@ -589,6 +589,9 @@ class CmsEvents extends CmsObject
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsEvents instead.
+ **/
 class Events extends CmsEvents {}
 
 # vim:ts=4 sw=4 noet

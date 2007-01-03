@@ -121,10 +121,16 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsGlobalContent instead.
+ **/
 class GlobalContent extends CmsGlobalContent
 {
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsGlobalContent instead.
+ **/
 class HtmlBlob extends CmsGlobalContent
 {
 }

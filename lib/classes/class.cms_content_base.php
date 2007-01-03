@@ -418,6 +418,9 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsContentBase instead.
+ **/
 class ContentBase extends CmsContentBase {}
 
 ?>

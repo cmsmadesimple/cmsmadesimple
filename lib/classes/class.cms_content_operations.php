@@ -612,11 +612,17 @@ class CmsContentOperations extends CmsObject
 
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsContentOperations instead.
+ **/
 class ContentOperations extends CmsContentOperations
 {
 }
 
-class ContentManager extends ContentOperations
+/**
+ * @deprecated Deprecated.  Use CmsContentOperations instead.
+ **/
+class ContentManager extends CmsContentOperations
 {
 }
 

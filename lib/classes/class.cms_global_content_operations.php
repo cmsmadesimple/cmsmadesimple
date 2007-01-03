@@ -214,10 +214,16 @@ class CmsGlobalContentOperations extends CmsObject
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsGlobalContentOperations instead.
+ **/
 class GlobalContentOperations extends CmsGlobalContentOperations
 {
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsGlobalContentOperations instead.
+ **/
 class HtmlBlobOperations extends CmsGlobalContentOperations
 {
 }

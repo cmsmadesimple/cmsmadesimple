@@ -74,6 +74,9 @@ abstract class CmsObject
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsObject instead.
+ **/
 abstract class Object extends CmsObject
 {
 }
