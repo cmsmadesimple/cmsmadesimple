@@ -97,6 +97,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $has_many = array();
 	
 	/**
+	 * Used to store any has_one relationships.
+	 **/
+	var $has_one = array();
+	
+	/**
 	 * Used to store any belongs_to relationships.
 	 **/
 	var $belongs_to = array();
@@ -166,6 +171,29 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$association->child_class = $child_class_name;
 		$association->child_field = $child_field;
 		$this->has_many[$association_name] = $association;
+	}
+	
+	/**
+	 * Used to create a has_one association.  This should be called in the constructor of
+	 * the data object.  Any associations are lazy loaded on the first call to them and are
+	 * cached for the life of the object.
+	 *
+	 * @param string The name of the association.  It will then be called via 
+	 *        $obj->assication_name.  Make sure it's not the same name as a 
+	 *        parameter, or it will never get called.
+	 * @param string The name of the class on the other end of the association.  This should
+	 *        be the name that would be used when calling from the orm (cmsms()->child_class_name).
+	 * @param string The name of the field in the association class that contains the matching id to 
+	 *        this object.
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	protected function create_has_one_association($association_name, $child_class_name, $child_field)
+	{
+		$association = new CmsHasOneAssociation($this);
+		$association->child_class = $child_class_name;
+		$association->child_field = $child_field;
+		$this->has_one[$association_name] = $association;
 	}
 	
 	/**
@@ -289,6 +317,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($n, $this->has_many))
 		{
 			return $this->has_many[$n]->get_data();
+		}
+		if (array_key_exists($n, $this->has_one))
+		{
+			return $this->has_one[$n]->get_data();
 		}
 		if (array_key_exists($n, $this->belongs_to))
 		{
