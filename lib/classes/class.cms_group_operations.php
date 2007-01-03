@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Represents a user group in the database.
+ * Static methods for handling user groups.
  *
  * @author Ted Kulp
  * @since 2.0

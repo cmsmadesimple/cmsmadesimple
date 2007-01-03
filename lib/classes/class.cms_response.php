@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Static methods for handling web responses.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsResponse extends CmsObject
 {
 	function __construct()

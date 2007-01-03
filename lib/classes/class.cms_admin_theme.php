@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.cms_config.php 3687 2006-12-31 16:36:30Z wishy $
+#$Id$
 
 /**
  * Class to extend in order to create a theme for the admin panel.

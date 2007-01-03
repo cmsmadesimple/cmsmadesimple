@@ -19,11 +19,15 @@
 #$Id$
 
 /**
- * Generic stylesheet class. This can be used for any logged in stylesheet or stylesheet related function.
+ * Represents a stylesheet in the database.
  *
- * @since		0.11
- * @package		CMS
- */
+ * @author Ted Kulp
+ * @since 0.11
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsStylesheet extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => '');

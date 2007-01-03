@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Class to handle url routes for modules to handle pretty urls.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsRoute extends CmsObject
 {
 	var $module;

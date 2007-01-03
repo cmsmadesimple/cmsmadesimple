@@ -19,10 +19,6 @@
 #$Id$
 
 /**
- * Files related to CMS Made Simple
- * @package cms
- */
-/**
  * Base class.  Allows me to implement things that belong to all
  * classes inheriently.  All classes in CMSMS should extend this
  * if possible.

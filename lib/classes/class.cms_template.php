@@ -19,11 +19,15 @@
 #$Id$
 
 /**
- * Generic template class. This can be used for any template or template related function.
+ * Represents a template in the database.
  *
- * @since		0.6
- * @package		CMS
- */
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsTemplate extends CmsObjectRelationalMapping
 {	
 	var $params = array('id' => -1, 'name' => '', 'content' => '', 'stylesheet' => '', 'encoding' => '', 'active' => true, 'default' => false);

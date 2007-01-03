@@ -19,10 +19,15 @@
 #$Id$
 
 /**
- * Bookmark class for admin
+ * Represents an admin bookmark in the database.
  *
- * @package CMS
- */
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsBookmark extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'user_id' => -1, 'title' => '', 'url' => '');

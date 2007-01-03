@@ -18,6 +18,16 @@
 #
 #$Id$
 
+/**
+ * Static methods for handling web requests.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsRequest extends CmsObject
 {
 	function __construct()

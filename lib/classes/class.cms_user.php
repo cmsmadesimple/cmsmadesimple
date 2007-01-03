@@ -27,8 +27,7 @@
  * @modifiedby $LastChangedBy$
  * @lastmodified $Date$
  * @license GPL
- */
-
+ **/
 class CmsUser extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);

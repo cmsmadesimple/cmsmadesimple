@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Class for doing template related functions.  Many of the Template object functions are just wrappers around these.
+ * Static methods for handling templates.
  *
- * @since		0.6
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsTemplateOperations extends CmsObject
 {
 	static private $instance = NULL;

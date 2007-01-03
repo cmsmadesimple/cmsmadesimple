@@ -16,13 +16,18 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.bookmark.inc.php 2746 2006-05-09 01:18:15Z wishy $
+#$Id$
 
 /**
- * UserTags class for admin
+ * Static methods for handling user defined tags.
  *
- * @package CMS
- */
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsUserTagOperations extends CmsObject
 {
 	static private $instance = NULL;

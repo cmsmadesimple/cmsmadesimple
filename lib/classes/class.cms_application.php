@@ -30,8 +30,8 @@
  * @lastmodified $Date$
  * @license GPL
  */
-class CmsApplication extends CmsObject {
-
+class CmsApplication extends CmsObject
+{
 	/**
 	 * Config object - hash containing variables from config.php
 	 */

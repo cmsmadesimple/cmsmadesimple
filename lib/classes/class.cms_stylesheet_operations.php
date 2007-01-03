@@ -19,12 +19,15 @@
 #$Id$
 
 /**
- * Class for doing stylesheet related functions.  Maybe of the Group object functions are just wrappers around these.
+ * Static methods for handling stylesheets.
  *
- * @since		0.11
- * @package		CMS
- */
-
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsStylesheetOperations extends CmsObject
 {
 	static private $instance = NULL;

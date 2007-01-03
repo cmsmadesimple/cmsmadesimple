@@ -30,6 +30,16 @@
 #other free or open source software licenses.
 #See COPYRIGHT.php for copyright notices and details.
 
+/**
+ * Class for handling profiling of various aspects of the system.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
 class CmsProfiler extends CmsObject
 {
 	/**
