@@ -131,7 +131,7 @@ class CmsAdminTheme extends CmsObject
 				{
 					//$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
 					// Add to header
-					CmsAdminTheme::inject_header_text($gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult));				
+					CmsAdminTheme::inject_header_text($gCms->modules[$key]['object']->WYSIWYGGenerateHeader());				
 					//$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
 					//$formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
 				}
