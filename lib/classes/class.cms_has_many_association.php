@@ -45,9 +45,9 @@ class CmsHasManyAssociation extends CmsObjectRelationalAssociation
 	}
 	
 	/**
-	 * undocumented function
+	 * Returns the associated has_many association's objects.
 	 *
-	 * @return void
+	 * @return array Any array of objects, if they exist.
 	 * @author Ted Kulp
 	 **/
 	public function get_data()

@@ -16,16 +16,16 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id: class.cms_has_many_association.php 3714 2007-01-03 04:40:17Z wishy $
+#$Id$
 
 /**
- * Class for handling a one-to-many assocation.
+ * Class for handling a belongs_to assocation.
  *
  * @author Ted Kulp
  * @since 2.0
- * @version $Revision: 3714 $
- * @modifiedby $LastChangedBy: wishy $
- * @lastmodified $Date: 2007-01-02 23:40:17 -0500 (Tue, 02 Jan 2007) $
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
  * @license GPL
  **/
 class CmsBelongsToAssociation extends CmsObjectRelationalAssociation
@@ -35,7 +35,7 @@ class CmsBelongsToAssociation extends CmsObjectRelationalAssociation
 	var $child_field = '';
 
 	/**
-	 * Create a new has_many association.
+	 * Create a new belongs_to association.
 	 *
 	 * @author Ted Kulp
 	 **/
@@ -45,9 +45,9 @@ class CmsBelongsToAssociation extends CmsObjectRelationalAssociation
 	}
 	
 	/**
-	 * undocumented function
+	 * Returns the associated belongs_to association's object.
 	 *
-	 * @return void
+	 * @return mixed The object, if it exists.  null if not.
 	 * @author Ted Kulp
 	 **/
 	public function get_data()
