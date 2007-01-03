@@ -192,6 +192,9 @@ class CmsUserTagOperations extends CmsObject
 
 } // class
 
+/**
+ * @deprecated Deprecated.  Use CmsUserTagOperations instead.
+ **/
 class UserTags extends CmsUserTagOperations
 {}
 

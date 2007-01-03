@@ -264,6 +264,9 @@ class CmsUserOperations extends CmsObject
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsUserOperations instead.
+ **/
 class UserOperations extends CmsUserOperations
 {}
 

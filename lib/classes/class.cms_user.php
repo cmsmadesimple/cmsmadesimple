@@ -84,6 +84,9 @@ class CmsUser extends CmsObjectRelationalMapping
 	}
 }
 
+/**
+ * @deprecated Deprecated.  Use CmsUser instead.
+ **/
 class User extends CmsUser {}
 
 # vim:ts=4 sw=4 noet
