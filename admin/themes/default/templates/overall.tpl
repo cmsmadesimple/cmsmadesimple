@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>
 	<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>
 	<script type="text/javascript">
-		var djConfig = {  parseWidgets: false, baseScriptUri: '../lib/dojo/'};
+		var djConfig = {  parseWidgets: true, baseScriptUri: '../lib/dojo/'};
 	</script>
 	<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
 	<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
