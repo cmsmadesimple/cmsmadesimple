@@ -471,7 +471,7 @@ class CmsModuleOperations extends CmsObject
 				}
 
 				#send an event saying the module has been installed
-				Events::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
+				CmsEvents::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
 
 				// and we're done
 				return array(true);
@@ -549,7 +549,7 @@ class CmsModuleOperations extends CmsObject
 		$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
 		$db->Execute($query,array($newversion,($modinstance->IsAdminOnly()==true?1:0),$module));
 
-		Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
+		CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
 		'oldversion' => $oldversion, 
 		'newversion' => $oldversion));
 
