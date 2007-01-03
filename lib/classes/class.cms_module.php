@@ -1936,30 +1936,25 @@ class CmsModule extends CmsObject
 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-		$a = '';
-		if (TRUE == $active)
-		{
-			$a = ' selectedTab="'.$tabid.'"';
-			$this->mActiveTab = $tabid;
-		}
 		if (!isset($this->tab_header_shown))
 		{
 			// TODO, If non-default theme is chosen then add templateCssPath="/path/to/TabContainer.css"
-			$output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer" '.$a.'>'."\n";
+			$this->tab_header_output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer"';
 			$this->tab_header_shown = true;
 		}
-		else
+		if (TRUE == $active)
 		{
-			$output = '';
+			$this->tab_header_output .= ' selectedChild="'.$tabid.'"';
+			// $this->mActiveTab = $tabid;
 		}
 		$this->tab_titles[$tabid] = $title;
 		// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-	  	return $output;
+	  	return '';
 	}
 
 	function EndTabHeaders()
 	{
-		// return "</div><!-- EndTabHeaders -->";
+		return $this->tab_header_output.'"><!-- EndTabHeaders -->'."\n";
 	}
 
 	function StartTabContent()
