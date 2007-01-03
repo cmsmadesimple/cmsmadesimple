@@ -37,9 +37,13 @@ class Events
 	{
 		global $gCms;
 		$db =& $gCms->GetDb();
-		$id = $db->GenID( cms_db_prefix()."events_seq" );
-		$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
-		$db->Execute( $q, array( $modulename, $eventname, $id ));
+		$count = $db->GetOne('SELECT count(*) from '.cms_db_prefix().'events where originator = ? and event_name = ?', array($modulename, $eventname));
+		if ($count < 1)
+		{
+			$id = $db->GenID( cms_db_prefix()."events_seq" );
+			$q = "INSERT INTO ".cms_db_prefix()."events values (?,?,?)";
+			$db->Execute( $q, array( $modulename, $eventname, $id ));
+		}
 	}
 	
 

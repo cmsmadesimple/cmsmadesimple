@@ -110,6 +110,17 @@ function redirect($to, $noappend=false)
         {
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a href=\"".$to."\">".$to."</a><br />";
+			echo '<div id="DebugFooter">';
+			global $sql_queries;
+			if (FALSE == empty($sql_queries))
+			  { 
+				echo "<div>".$sql_queries."</div>\n";
+			  }
+			foreach ($gCms->errors as $error)
+			{   
+				echo $error;
+			}
+			echo '</div> <!-- end DebugFooter -->';
             exit();
         }
         else
