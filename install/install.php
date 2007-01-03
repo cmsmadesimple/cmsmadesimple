@@ -1087,7 +1087,7 @@ function showPageFive() {
 		
 		echo '<p>Setting up core events...';
 		
-		Events::SetupCoreEvents();
+		CmsEvents::SetupCoreEvents();
 		
 		echo "[done]</p>";
 

@@ -173,6 +173,7 @@ class CmsAdmin extends CmsObject
 	
 	static public function generate_user_object($userid)
 	{
+		$config = cms_config();
 		$oneuser = cmsms()->user->find_by_id($userid);
 		if ($oneuser)
 		{
