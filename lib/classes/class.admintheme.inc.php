@@ -20,7 +20,7 @@
 
 /**
  * Class for Admin Theme
- *
+ * @TODO DELETE ME! (replaced by class.cms_admin_theme.php)
  * @package CMS
  */
 class AdminTheme
