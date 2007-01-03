@@ -87,10 +87,8 @@ if (FALSE == empty($error))
 	$edit = check_permission($userid, 'Modify Users');
 	$remove = check_permission($userid, 'Remove Users');
 
-	$query = "SELECT user_id, username, active FROM ".cms_db_prefix()."users ORDER BY user_id";
-	$result = cms_db()->Execute($query);
-
 	$userlist = CmsUserOperations::load_users();
+	print_r('Number of bookmarks:' . count($userlist[0]->bookmarks));
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

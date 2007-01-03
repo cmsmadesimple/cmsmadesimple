@@ -92,6 +92,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $validation_errors = array();
 	
 	/**
+	 * Used to store any has_many relationships.
+	 **/
+	var $has_many = array();
+	
+	/**
 	 * Used to define which field holds the record create date.
 	 */
 	var $create_date_field = 'create_date';
@@ -134,14 +139,21 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			}
 		}
 	}
-	
-	/*
-	function __sleep()
+
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	protected function create_has_many_association($association_name, $child_class, $child_field)
 	{
-		return array('params', 'orm_version', 'create_date_field', 'modified_date_field');
+		$association = new CmsHasManyAssociation($this);
+		$association->child_class = $child_class;
+		$association->child_field = $child_field;
+		$this->has_many[$association_name] = $association;
 	}
-	*/
-	
+
 	/**
 	 * Used for the ArrayAccessor implementation.
 	 *
@@ -234,6 +246,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				return call_user_func_array(array($this, 'get_'.$n), array($val));
 			else
 				return $this->params[$n];
+		}
+		
+		if (array_key_exists($n, $this->has_many))
+		{
+			return $this->has_many[$n]->get_data();
 		}
 	}
 
@@ -1020,4 +1037,89 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 }
 
+/**
+ * Base class for ORM assocations.  It doesn't do anything yet.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
+abstract class CmsObjectRelationalAssociation extends CmsObject
+{
+	var $loaded = false;
+	var $parent_class = null;
+
+	/**
+	 * Base constructor.  Doesn't really do anything, but
+	 * gives methods extending CmsObject something to call.
+	 *
+	 * @author Ted Kulp
+	 **/
+	public function __construct(&$parent_class)
+	{
+		parent::__construct();
+		$this->parent_class = $parent_class;
+	}
+	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function get_data()
+	{
+		
+	}
+}
+
+/**
+ * Association for handling a one-to-many assocation.
+ *
+ * @author Ted Kulp
+ * @since 2.0
+ * @version $Revision$
+ * @modifiedby $LastChangedBy$
+ * @lastmodified $Date$
+ * @license GPL
+ **/
+class CmsHasManyAssociation extends CmsObjectRelationalAssociation
+{
+	var $children = array();
+	var $child_class = '';
+	var $child_field = '';
+
+	/**
+	 * Create a new has_many association.
+	 *
+	 * @author Ted Kulp
+	 **/
+	public function __construct(&$parent_class)
+	{
+		parent::__construct($parent_class);
+	}
+	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function get_data()
+	{
+		if (!$this->loaded && $this->child_class != '' && $this->child_field != '')
+		{
+			$class = cmsms()->{$this->child_class};
+			if ($this->parent_class->{$this->parent_class->id_field} > -1)
+			{
+				$this->children = call_user_func_array(array(&$class, 'find_all_by_' . $this->child_field), $this->parent_class->{$this->parent_class->id_field});
+			}
+			$this->loaded = true;
+		}
+		return $this->children;
+	}
+}
 ?>

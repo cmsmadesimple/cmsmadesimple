@@ -34,6 +34,12 @@ class CmsUser extends CmsObjectRelationalMapping
 	var $field_maps = array('first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess');
 	var $table = 'users';
 	//var $sequence = 'users_seq';
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->create_has_many_association('bookmarks', 'bookmark', 'user_id');
+	}
 
 	/**
 	 * Encrypts and sets password for the User
