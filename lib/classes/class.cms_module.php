@@ -2194,7 +2194,7 @@ class CmsModule extends CmsObject
 	 */
 	function CreateEvent( $eventname )
 	{
-		Events::CreateEvent($this->GetName(), $eventname);
+		CmsEvents::CreateEvent($this->GetName(), $eventname);
 	}
 
 
