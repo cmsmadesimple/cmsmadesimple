@@ -106,6 +106,38 @@ class CmsAdminTheme extends CmsObject
 	
 	static public function end()
 	{
+		global $gCms;
+		// Add in stuff needed WYSIWYG editors
+		foreach($gCms->modules as $key=>$value)
+		{
+			if ($gCms->modules[$key]['installed'] == true &&
+				$gCms->modules[$key]['active'] == true &&
+				$gCms->modules[$key]['object']->IsWYSIWYG()
+				)
+			{
+				$loadit=false;
+				if ($gCms->modules[$key]['object']->WYSIWYGActive())
+				{
+					$loadit=true;
+				}
+				else
+				{
+					if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName())
+					{
+						$loadit=true;
+					}
+				}
+				if ($loadit)
+				{
+					//$bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
+					// Add to header
+					CmsAdminTheme::inject_header_text($gCms->modules[$key]['object']->WYSIWYGGenerateHeader($htmlresult));				
+					//$formtext.=$gCms->modules[$key]['object']->WYSIWYGPageForm();
+					//$formsubmittext.=$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
+				}
+			}
+		}
+
 		$result = @ob_get_clean();
 		
 		$smarty = cms_smarty();
