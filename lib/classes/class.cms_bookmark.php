@@ -32,6 +32,12 @@ class CmsBookmark extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'user_id' => -1, 'title' => '', 'url' => '');
 	var $table = 'admin_bookmarks';
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->create_belongs_to_association('user', 'user', 'user_id');
+	}
 }
 
 # vim:ts=4 sw=4 noet

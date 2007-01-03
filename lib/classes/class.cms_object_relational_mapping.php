@@ -97,6 +97,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $has_many = array();
 	
 	/**
+	 * Used to store any belongs_to relationships.
+	 **/
+	var $belongs_to = array();
+	
+	/**
 	 * Used to define which field holds the record create date.
 	 */
 	var $create_date_field = 'create_date';
@@ -146,12 +151,26 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function create_has_many_association($association_name, $child_class, $child_field)
+	protected function create_has_many_association($association_name, $child_class_name, $child_field)
 	{
 		$association = new CmsHasManyAssociation($this);
-		$association->child_class = $child_class;
+		$association->child_class = $child_class_name;
 		$association->child_field = $child_field;
 		$this->has_many[$association_name] = $association;
+	}
+	
+	/**
+	 * undocumented function
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	protected function create_belongs_to_association($association_name, $belongs_to_class_name, $child_field)
+	{
+		$association = new CmsBelongsToAssociation($this);
+		$association->belongs_to_class_name = $belongs_to_class_name;
+		$association->child_field = $child_field;
+		$this->belongs_to[$association_name] = $association;
 	}
 
 	/**
@@ -251,6 +270,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($n, $this->has_many))
 		{
 			return $this->has_many[$n]->get_data();
+		}
+		if (array_key_exists($n, $this->belongs_to))
+		{
+			return $this->belongs_to[$n]->get_data();
 		}
 	}
 
