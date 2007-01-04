@@ -30,12 +30,12 @@
 		dojo.require("dojo.lfx.html");
 		dojo.require("dojo.widget.*");
 		dojo.require("dojo.widget.Button");
-      function helloPressed(selected_action, selected_id)
+      function modifyPage(action, page_id)
       {
 		// Make the call and update the content list
-		dojo.io.updateNode(dojo.byId("contentlist"), {sync: true,  url: 'listcontent.php', content: {the_action: selected_action, the_id: selected_id }, cacheContent: false});
+		dojo.io.updateNode(dojo.byId("contentlist"), {sync: true,  url: 'listcontent.php', content: {action: action, page_id: page_id, ajax_request: 1 }, cacheContent: false});
  		// and the fancy fading effect
-        	dojo.lfx.html.highlight('tr_' + selected_id, [255, 151, 58], 700).play(300);
+        	dojo.lfx.html.highlight('tr_' + page_id, [255, 151, 58], 700).play(300);
       }
 	</script>
 

@@ -41,10 +41,10 @@
         {if $content_item->default_content eq true}
           <td class="pagepos">{$true_image}</td>
         {else}
-          <td class="pagepos"><a href="listcontent.php?setinactive={$content_item->id}" onclick="helloPressed('setinactive', {$content_item->id}); return false;">{$setfalse_image}</a></td>
+          <td class="pagepos"><a href="listcontent.php?action=setinactive&amp;page_id={$content_item->id}" onclick="modifyPage('setinactive', {$content_item->id}); return false;">{$setfalse_image}</a></td>
         {/if}
       {else}
-        <td class="pagepos"><a href="listcontent.php?setactive={$content_item->id}" onclick="helloPressed('setactive', {$content_item->id}); return false;">{$settrue_image}</a></td>
+        <td class="pagepos"><a href="listcontent.php?action=setactive&amp;page_id={$content_item->id}" onclick="modifyPage('setactive', {$content_item->id}); return false;">{$settrue_image}</a></td>
       {/if}
     {/if}
 

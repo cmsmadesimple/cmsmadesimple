@@ -24,35 +24,33 @@ require_once("../include.php");
 
 check_login();
 
-if (FALSE == empty($_GET['the_action']))
+if (FALSE == empty($_GET['action']))
 {
 	// Set action and id
-	$action = $_GET['the_action'];
-	$the_id = $_GET['the_id'];
+	$action = $_GET['action'];
+	$page_id = $_GET['page_id'];
 	
 	// check if we're activating a page
 	if ('setactive' == $action)
 	{
-		setactive($the_id);
+		setactive($page_id);
 	}
 	
 	// perhaps we're deactivating a page instead?
 	if ('setinactive' == $action)
 	{
-	
-	// print "Hello {$_GET['the_id']}, setting inactive\n";
-		setactive($the_id, false);
-	
+		setactive($page_id, false);
 	}
-	header('Content-type: text/plain');
-	echo display_content_list();
-	exit();
+	if (FALSE == empty($_GET['ajax_request']))
+	{
+		header('Content-type: text/plain');
+		echo display_content_list();
+		exit();
+	}
 }
 require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'xajax' . DIRECTORY_SEPARATOR . 'xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('content_list_ajax');
-$xajax->registerFunction('content_setactive');
-$xajax->registerFunction('content_setinactive');
 $xajax->registerFunction('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
@@ -82,18 +80,6 @@ if (isset($_GET["makedefault"]))
 {
 	setdefault($_GET['makedefault']);
 	redirect('listcontent.php');
-}
-
-// check if we're activating a page
-if (isset($_GET["setactive"]))
-{
-	setactive($_GET["setactive"]);
-}
-
-// perhaps we're deactivating a page instead?
-if (isset($_GET["setinactive"]))
-{
-	setactive($_GET["setinactive"], false);
 }
 
 if (isset($_GET['expandall']))
@@ -232,28 +218,6 @@ function content_setdefault($contentid)
 	$objResponse = new xajaxResponse();
 	
 	setdefault($contentid);
-
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
-}
-
-function content_setactive($contentid)
-{
-	$objResponse = new xajaxResponse();
-	
-	setactive($contentid, true);
-
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
-	return $objResponse->getXML();
-}
-
-function content_setinactive($contentid)
-{
-	$objResponse = new xajaxResponse();
-	
-	setactive($contentid, false);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
 	$objResponse->addScript("new Effect.Highlight('tr_$contentid', { duration: 2.0 });");
