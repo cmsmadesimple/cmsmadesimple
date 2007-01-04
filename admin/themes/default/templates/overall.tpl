@@ -15,7 +15,7 @@
 	<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>
 	<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>
 	<script type="text/javascript">
-		var djConfig = {  parseWidgets: true, baseScriptUri: '../lib/dojo/'};
+		var djConfig = {  parseWidgets: false, baseScriptUri: '../lib/dojo/'};
 	</script>
 	<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
 	<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
@@ -25,7 +25,20 @@
 	<script type="text/javascript">
 		dojo.require("dojo.widget.TabContainer");
 		dojo.require("dojo.widget.ContentPane");
+    		dojo.require("dojo.event.*");
+    		dojo.require("dojo.io.*");
+		dojo.require("dojo.lfx.html");
+		dojo.require("dojo.widget.*");
+		dojo.require("dojo.widget.Button");
+      function helloPressed(selected_action, selected_id)
+      {
+		// Make the call and update the content list
+		dojo.io.updateNode(dojo.byId("contentlist"), {sync: true,  url: 'listcontent.php', content: {the_action: selected_action, the_id: selected_id }, cacheContent: false});
+ 		// and the fancy fading effect
+        	dojo.lfx.html.highlight('tr_' + selected_id, [255, 151, 58], 700).play(300);
+      }
 	</script>
+
 	{/literal}
 	
 	{$headtext}

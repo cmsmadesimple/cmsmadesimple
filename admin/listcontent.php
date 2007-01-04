@@ -24,6 +24,30 @@ require_once("../include.php");
 
 check_login();
 
+if (FALSE == empty($_GET['the_action']))
+{
+	// Set action and id
+	$action = $_GET['the_action'];
+	$the_id = $_GET['the_id'];
+	
+	// check if we're activating a page
+	if ('setactive' == $action)
+	{
+		setactive($the_id);
+	}
+	
+	// perhaps we're deactivating a page instead?
+	if ('setinactive' == $action)
+	{
+	
+	// print "Hello {$_GET['the_id']}, setting inactive\n";
+		setactive($the_id, false);
+	
+	}
+	header('Content-type: text/plain');
+	echo display_content_list();
+	exit();
+}
 require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'xajax' . DIRECTORY_SEPARATOR . 'xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('content_list_ajax');
