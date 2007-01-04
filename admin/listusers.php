@@ -88,9 +88,12 @@ if (FALSE == empty($error))
 	$remove = check_permission($userid, 'Remove Users');
 
 	$userlist = CmsUserOperations::load_users();
+	/*
 	print_r('Number of bookmarks:' . count($userlist[0]->bookmarks));
 	if (count($userlist[0]->bookmarks) > 0)
 		print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
+	*/
+	var_dump($userlist[0]->groups);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

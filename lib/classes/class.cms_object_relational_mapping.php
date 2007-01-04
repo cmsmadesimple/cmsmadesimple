@@ -107,6 +107,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $belongs_to = array();
 	
 	/**
+	 * Used to store any has_and_belongs_to_many relationships.
+	 **/
+	var $has_and_belongs_to_many = array();
+	
+	/**
 	 * Used to define which field holds the record create date.
 	 */
 	var $create_date_field = 'create_date';
@@ -219,6 +224,32 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$association->child_field = $child_field;
 		$this->belongs_to[$association_name] = $association;
 	}
+	
+	/**
+	 * Used to create a belongs_to association.  This should be called in the constructor of
+	 * the data object.  Any associations are lazy loaded on the first call to them and are
+	 * cached for the life of the object.
+	 *
+	 * @param string The name of the association.  It will then be called via 
+	 *        $obj->assication_name.  Make sure it's not the same name as a 
+	 *        parameter, or it will never get called.
+	 * @param string The name of the class on the other end of the association.  This should
+	 *        be the name that would be used when calling from the orm (cmsms()->belongs_to_class_name).
+	 * @param string The name of the field in the this class that contains the matching id to 
+	 *        the given belongs_to_class_name.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	protected function create_has_and_belongs_to_many_association($association_name, $child_class, $join_table, $join_other_id_field, $join_this_id_field)
+	{
+		$association = new CmsHasAndBelongsToManyAssociation($this);
+		$association->child_class = $child_class;
+		$association->join_table = $join_table;
+		$association->join_other_id_field = $join_other_id_field;
+		$association->join_this_id_field = $join_this_id_field;
+		$this->has_and_belongs_to_many[$association_name] = $association;
+	}
 
 	/**
 	 * Used for the ArrayAccessor implementation.
@@ -325,6 +356,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if (array_key_exists($n, $this->belongs_to))
 		{
 			return $this->belongs_to[$n]->get_data();
+		}
+		if (array_key_exists($n, $this->has_and_belongs_to_many))
+		{
+			return $this->has_and_belongs_to_many[$n]->get_data();
 		}
 	}
 
