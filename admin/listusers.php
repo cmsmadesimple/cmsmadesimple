@@ -93,7 +93,7 @@ if (FALSE == empty($error))
 	if (count($userlist[0]->bookmarks) > 0)
 		print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
 	*/
-	var_dump($userlist[0]->groups);
+	//var_dump($userlist[0]->groups[0]->users);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

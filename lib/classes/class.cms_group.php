@@ -33,6 +33,12 @@ class CmsGroup extends CmsObjectRelationalMapping
 	var $params = array('id' => -1, 'name' => '', 'active' => true);
 	var $field_maps = array('group_name' => 'name');
 	var $table = 'groups';
+	
+	public function __construct()
+	{
+		parent::__construct();
+		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
+	}
 }
 
 # vim:ts=4 sw=4 noet
