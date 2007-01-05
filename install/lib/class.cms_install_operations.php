@@ -81,6 +81,42 @@ class CmsInstallOperations extends CmsObject
 		return $bool ? '<span class="Yes">'.self::_('Yes').'</span>' : '<span class="Yes">'.self::_('No').'</span>';
 	}
 	
+	static function required_checks()
+	{
+		$result = array();
+		
+		$result['php_version'] = version_compare(phpversion(), "5.0.4", ">=");
+		$result['has_database'] = count(self::get_loaded_database_modules()) > 0;
+		$result['which_database'] = 'No Drivers Loaded';
+		if ($result['has_database'])
+		{
+			$result['which_database'] = implode(',', self::get_loaded_database_modules());
+		}
+		$result['has_xml'] = extension_loaded('xml');
+		$result['has_simplexml'] = extension_loaded('SimpleXML');
+		$result['canwrite_templates'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'tmp','templates_c'));
+		$result['canwrite_cache'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'tmp','cache'));
+		
+		$count = count(array_keys($result, true, true));
+		$result['failure'] = ((count($result) - 1) != $count);
+		
+		return $result;
+	}
+	
+	static function get_loaded_database_modules()
+	{
+		$which = array();
+		if (extension_loaded('mysql'))
+			$which[] = 'mysql';
+		if (extension_loaded('mysqli'))
+			$which[] = 'mysqli';
+		if (extension_loaded('pgsql'))
+			$which[] = 'pgsql';
+		if (extension_loaded('SQLite'))
+			$which[] = 'SQLite';
+		return $which;
+	}
+	
 	static function _()
 	{
 		$args = func_get_args();

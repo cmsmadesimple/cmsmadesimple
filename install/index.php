@@ -40,8 +40,22 @@ switch (CmsInstallOperations::get_action())
 		
 	case "check":
 		
-		$smarty->assign('php_version', CmsInstallOperations::required_setting_output(version_compare(phpversion(), "5.0.4", ">=")));
+		$required_checks = CmsInstallOperations::required_checks();
+
+		$smarty->assign('php_version', CmsInstallOperations::required_setting_output($required_checks['php_version']));
+		$smarty->assign('has_database', CmsInstallOperations::required_setting_output($required_checks['has_database']));
+		$smarty->assign('which_database', $required_checks['which_database']);
+
+		$smarty->assign('has_xml', CmsInstallOperations::required_setting_output($required_checks['has_xml']));
+		$smarty->assign('has_simplexml', CmsInstallOperations::required_setting_output($required_checks['has_simplexml']));
 		
+		$smarty->assign('templates_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','template_c'));
+		$smarty->assign('canwrite_templates', CmsInstallOperations::required_setting_output($required_checks['canwrite_templates']));
+		$smarty->assign('cache_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','cache'));
+		$smarty->assign('canwrite_cache', CmsInstallOperations::required_setting_output($required_checks['canwrite_cache']));
+		
+		$smarty->assign('failure', $required_checks['failure']);
+
 		$smarty->assign('include_file', 'check.tpl');
 		$smarty->display('body.tpl');
 		break;
