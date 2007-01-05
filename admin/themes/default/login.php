@@ -35,7 +35,7 @@
 				<div class="lbinput">
 					<form method="post" action="login.php">
 						<p>
-							<input name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo (isset($_POST['username'])?$_POST['username']:'')?>" /><br />
+							<input name="username" <?php if(!isset($_POST['username'])) echo 'class="defaultfocus"' ?> type="text" size="15" value="<?php echo htmlentities(isset($_POST['username'])?$_POST['username']:'')?>" /><br />
 						<?php if(isset($error) && $error!='') {
 						  echo '<input class="lbpassword defaultfocus" name="password" type="password" size="15" /><br />';
 						} else {
