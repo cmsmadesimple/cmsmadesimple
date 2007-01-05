@@ -266,6 +266,33 @@ class CmsRequest extends CmsObject
 		}
 		return $string;
 	}
+	
+	public static function has($name)
+	{
+		return array_key_exists($name, $_REQUEST);
+	}
+	
+	public static function get($name, $clean = true)
+	{
+		$value = '';
+		if (array_key_exists($name, $_REQUEST))
+			$value = $_REQUEST[$name];
+		if ($clean)
+			$value = self::clean_value($value);
+		return $value;
+	}
+	
+	public static function get_cookie($name)
+	{
+		if (array_key_exists($name, $_COOKIE))
+			return self::clean_value($_COOKIE[$name]);
+		return '';
+	}
+	
+	public static function set_cookie($name, $value, $expire = null)
+	{
+		setcookie($name, $value, $expire);
+	}
 }
 
 # vim:ts=4 sw=4 noet

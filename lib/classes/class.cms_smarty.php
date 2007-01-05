@@ -33,7 +33,7 @@ class CmsSmarty extends Smarty {
 	
 	static private $instance = NULL;
 	
-	function __construct()
+	function __construct($have_db = true)
 	{
 		parent::__construct();
 
@@ -47,7 +47,8 @@ class CmsSmarty extends Smarty {
 		$this->config_dir = $config["root_path"].'/tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
 		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/', $config["root_path"].'/plugins/', $config["root_path"].'/lib/module_plugins/');
-		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
+		if (isset($GLOBALS['CMS_ADMIN_PAGE']))
+		{
 			$this->plugins_dir[] = $config['root_path'] . '/admin/plugins/';
 		}
 
@@ -57,8 +58,11 @@ class CmsSmarty extends Smarty {
 		$this->assign('app_name','CMS');
 		$this->cache_plugins = false;
 		
-		#Setup the site name
-		$this->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+		if ($have_db)
+		{
+			#Setup the site name
+			$this->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+		}
 
 		if ($config["debug"] == true)
 		{
@@ -66,7 +70,7 @@ class CmsSmarty extends Smarty {
 			//$this->debugging = true;
 		}
 
-		if (get_site_preference('enablesitedownmessage') == "1")
+		if ($have_db && get_site_preference('enablesitedownmessage') == "1")
 		{
 			$this->caching = false;
 			$this->force_compile = true;
@@ -89,52 +93,55 @@ class CmsSmarty extends Smarty {
 		                                    'ALLOW_CONSTANTS'  => true
 		                                   );
 		}
+		
+		if ($have_db)
+		{
+			$this->load_plugins();
 
-		$this->load_plugins();
-
-		$this->register_resource("db", array(&$this, "template_get_template",
-						       "template_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("print", array(&$this, "template_get_template",
-						       "template_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("template", array(&$this, "template_get_template",
-						       "template_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
-						       "global_content_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("globalcontent", array(&$this, "global_content_get_template",
-						       "global_content_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("content", array(&$this, "content_get_template",
-						       "content_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("module", array(&$this, "module_get_template",
-						       "module_get_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("module_db_tpl", array(&$this, "module_db_template",
-						       "module_db_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
-		$this->register_resource("module_file_tpl", array(&$this, "module_file_template",
-						       "module_file_timestamp",
-						       "db_get_secure",
-						       "db_get_trusted"));
+			$this->register_resource("db", array(&$this, "template_get_template",
+							       "template_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("print", array(&$this, "template_get_template",
+							       "template_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("template", array(&$this, "template_get_template",
+							       "template_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("htmlblob", array(&$this, "global_content_get_template",
+							       "global_content_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("globalcontent", array(&$this, "global_content_get_template",
+							       "global_content_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("content", array(&$this, "content_get_template",
+							       "content_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("module", array(&$this, "module_get_template",
+							       "module_get_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("module_db_tpl", array(&$this, "module_db_template",
+							       "module_db_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+			$this->register_resource("module_file_tpl", array(&$this, "module_file_template",
+							       "module_file_timestamp",
+							       "db_get_secure",
+							       "db_get_trusted"));
+		}
 	}
 	
-	static public function get_instance()
+	static public function get_instance($have_db = true)
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new CmsSmarty();
+			self::$instance = new CmsSmarty($have_db);
 		}
 		return self::$instance;
 	}
