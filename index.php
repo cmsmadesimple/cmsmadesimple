@@ -151,6 +151,10 @@ if (strpos($page, '/') !== FALSE)
 				foreach ($route->defaults as $key=>$val)
 				{
 					$_REQUEST[$matches['id'] . $key] = $val;
+					if (array_key_exists($key, $matches))
+					{ 
+						$matches[$key] = $val;
+					}
 				}
 			}
 
