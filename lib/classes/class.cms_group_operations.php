@@ -56,7 +56,7 @@ class CmsGroupOperations extends CmsObject
 	
 	static public function load_groups()
 	{
-		return cmsms()->group->find_all(array('order' => 'group_name ASC'));
+		return cmsms()->group->find_all(array('order' => 'name ASC'));
 	}
 	
 	function LoadGroups()

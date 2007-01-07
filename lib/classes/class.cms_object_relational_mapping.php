@@ -965,10 +965,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$args = $arguments['order'];
 			foreach ($this->field_maps as $db=>$obj)
 			{
-				$args = str_ireplace($obj, $db, $args);
-				break;
+				$args = preg_replace("/(^|[^_0-9A-Za-z\-])".$obj."/i", '$1'.$db, $args);
 			}
-			$query .= ' ORDER BY ' . $this->get_table($args);
+			$query .= ' ORDER BY ' . $args;
 		}
 		
 		if (array_key_exists('limit', $arguments))
