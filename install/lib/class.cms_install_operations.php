@@ -78,7 +78,12 @@ class CmsInstallOperations extends CmsObject
 	
 	static function required_setting_output($bool)
 	{
-		return $bool ? '<span class="Yes">'.self::_('Yes').'</span>' : '<span class="Yes">'.self::_('No').'</span>';
+		return $bool ? '<span class="yes">'.self::_('Yes').'</span>' : '<span class="no">'.self::_('No').'</span>';
+	}
+	
+	static function recommended_setting_output($state, $opposite = false)
+	{
+		return $state ? '<span class="yes">'.(!$opposite ? self::_('On') : self::_('Off')).'</span>' : '<span class="no">'.(!$opposite ? self::_('Off') : self::_('On')).'</span>';
 	}
 	
 	static function required_checks()
@@ -87,7 +92,7 @@ class CmsInstallOperations extends CmsObject
 		
 		$result['php_version'] = version_compare(phpversion(), "5.0.4", ">=");
 		$result['has_database'] = count(self::get_loaded_database_modules()) > 0;
-		$result['which_database'] = 'No Drivers Loaded';
+		$result['which_database'] = self::_('No Drivers Loaded');
 		if ($result['has_database'])
 		{
 			$result['which_database'] = implode(',', self::get_loaded_database_modules());
@@ -99,6 +104,24 @@ class CmsInstallOperations extends CmsObject
 		
 		$count = count(array_keys($result, true, true));
 		$result['failure'] = ((count($result) - 1) != $count);
+		
+		return $result;
+	}
+	
+	static function recommended_checks()
+	{
+		$result = array();
+
+		$result['file_uploads'] = (ini_get('file_uploads') == '1');
+		$result['safe_mode'] = (ini_get('safe_mode') != '1');
+		$result['magic_quotes_runtime'] = (ini_get('magic_quotes_runtime') != '1');
+		$result['register_globals'] = (ini_get('register_globals') != '1');
+		$result['output_buffering'] = (ini_get('output_buffering') != '1');
+		$result['canwrite_uploads'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'uploads'));
+		$result['canwrite_modules'] = is_writable(cms_join_path(dirname(dirname(dirname(__FILE__))),'modules'));
+		
+		$count = count(array_keys($result, true, true));
+		$result['failure'] = (count($result) != $count);
 		
 		return $result;
 	}

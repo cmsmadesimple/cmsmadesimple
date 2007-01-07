@@ -7,6 +7,34 @@
 
 	<title>{translate}CMS Made Simple Installation System{/translate}</title>
 	
+	{literal}
+	<style>
+	  .callout fieldset {
+	    width: 670px;
+	    margin: 10px;
+	  }
+	  .callout fieldset p {
+	    padding-left: 10px;
+	    width: 650px;
+	    clear: both;
+	  }
+	  .go_left {
+	    float: left;
+	    padding-bottom: 2px;
+	  }
+	  .go_right {
+	    float: right;
+      padding-bottom: 2px;
+	  }
+	  .yes {
+      color: green;
+	  }
+	  .no {
+	    color: red;
+	  }
+	</style>
+	{/literal}
+	
 </head>
 
 <body>

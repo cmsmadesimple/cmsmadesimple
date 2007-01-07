@@ -55,10 +55,32 @@ switch (CmsInstallOperations::get_action())
 		$smarty->assign('canwrite_cache', CmsInstallOperations::required_setting_output($required_checks['canwrite_cache']));
 		
 		$smarty->assign('failure', $required_checks['failure']);
+		
+		$recommended_checks = CmsInstallOperations::recommended_checks();
+		
+		$smarty->assign('file_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['file_uploads']));
+		$smarty->assign('safe_mode', CmsInstallOperations::recommended_setting_output($recommended_checks['safe_mode'], true));
+		$smarty->assign('magic_quotes_runtime', CmsInstallOperations::recommended_setting_output($recommended_checks['magic_quotes_runtime'], true));
+		$smarty->assign('register_globals', CmsInstallOperations::recommended_setting_output($recommended_checks['register_globals'], true));
+		$smarty->assign('output_buffering', CmsInstallOperations::recommended_setting_output($recommended_checks['output_buffering'], true));
+
+		$smarty->assign('uploads_path', cms_join_path(dirname(dirname(__FILE__)),'uploads'));
+		$smarty->assign('canwrite_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_uploads']));
+		$smarty->assign('modules_path', cms_join_path(dirname(dirname(__FILE__)),'modules'));
+		$smarty->assign('canwrite_modules', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_modules']));
+		
+		$smarty->assign('failure2', $recommended_checks['failure']);
 
 		$smarty->assign('include_file', 'check.tpl');
 		$smarty->display('body.tpl');
 		break;
+		
+	case "database":
+	
+		$smarty->assign('include_file', 'database.tpl');
+		$smarty->display('body.tpl');
+		break;
+		
 }
 
 # vim:ts=4 sw=4 noet
