@@ -39,6 +39,27 @@ class CmsGroup extends CmsObjectRelationalMapping
 		parent::__construct();
 		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
 	}
+	
+	//Callback handlers
+	function before_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddGroupPre' : 'EditGroupPre'), array('group' => &$this));
+	}
+	
+	function after_save()
+	{
+		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
+	}
+	
+	function before_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteGroupPre', array('group' => &$this));
+	}
+	
+	function after_delete()
+	{
+		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
+	}
 }
 
 # vim:ts=4 sw=4 noet

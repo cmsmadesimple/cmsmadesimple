@@ -77,6 +77,8 @@ switch (CmsInstallOperations::get_action())
 		
 	case "database":
 	
+		$smarty->assign('databases', CmsInstallOperations::get_loaded_database_modules());
+	
 		$smarty->assign('include_file', 'database.tpl');
 		$smarty->display('body.tpl');
 		break;

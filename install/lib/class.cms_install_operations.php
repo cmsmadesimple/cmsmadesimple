@@ -136,7 +136,7 @@ class CmsInstallOperations extends CmsObject
 		if (extension_loaded('pgsql'))
 			$which[] = 'pgsql';
 		if (extension_loaded('SQLite'))
-			$which[] = 'SQLite';
+			$which[] = 'sqlite';
 		return $which;
 	}
 	
