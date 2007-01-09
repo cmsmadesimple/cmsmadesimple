@@ -6,7 +6,7 @@
 	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2007 Ted Kulp. All rights reserved." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
-	<title>Tags</title>
+	<title>{translate}CMS Admin{/translate} - Tags</title>
 	<link rel="stylesheet" type="text/css" href="style.php" />
 
 	{literal}

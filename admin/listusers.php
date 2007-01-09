@@ -89,11 +89,15 @@ if (FALSE == empty($error))
 
 	$userlist = CmsUserOperations::load_users();
 	/*
-	print_r('Number of bookmarks:' . count($userlist[0]->bookmarks));
-	if (count($userlist[0]->bookmarks) > 0)
+	foreach ($userlist[0]->bookmarks as $onebook)
+	{
+		print_r($onebook);
+	}
+	print_r('Number of bookmarks:' . $userlist[0]->bookmarks->count());
+	if ($userlist[0]->bookmarks->count() > 0)
 		print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
 	*/
-	//var_dump($userlist[0]->groups[0]->users);
+	//var_dump($userlist[0]->groups[0]->users[0]);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];

@@ -140,6 +140,39 @@ class CmsInstallOperations extends CmsObject
 		return $which;
 	}
 	
+	static function test_database_connection($driver = '', $hostname = '', $username = '', $password = '', $dbname = '')
+	{
+		$drivers = self::get_loaded_database_modules();
+		$driver = $drivers[$driver];
+
+		$have_connection = false;
+		$have_create_ability = false;
+		$have_existing_db = false;
+		if ($username != '' && $hostname != '')
+		{
+			$db = CmsDatabase::connect($driver, $hostname, $username, $password, '', false, false);
+			if ($db != null && $db->IsConnected())
+			{
+				$have_connection = true;
+				//TODO: Get permissions here...
+				$db->Close();
+
+				//Ok, we have a connection.  Now, what about with the db name?
+				if ($dbname != '')
+				{
+					$db = CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false);
+					if ($db != null && $db->IsConnected())
+					{
+						$have_existing_db = true;
+						$db->Close();
+					}
+				}
+			}
+		}
+		
+		return array('have_connection' => $have_connection, 'have_create_ability' => $have_create_ability, 'have_existing_db' => $have_existing_db);
+	}
+	
 	static function _()
 	{
 		$args = func_get_args();

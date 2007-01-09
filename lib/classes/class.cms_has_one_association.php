@@ -57,7 +57,21 @@ class CmsHasOneAssociation extends CmsObjectRelationalAssociation
 			$class = cmsms()->{$this->child_class};
 			if ($this->parent_class->{$this->parent_class->id_field} > -1)
 			{
-				$this->children = call_user_func_array(array(&$class, 'find_by_' . $this->child_field), $this->parent_class->{$this->parent_class->id_field});
+				$queryattrs = $this->extra_params;
+				$conditions = "{$this->child_field} = ?";
+				$params = array($this->parent_class->{$this->parent_class->id_field});
+				
+				if (array_key_exists('conditions', $this->extra_params))
+				{
+					$conditions = "({$conditions}) AND ({$this->extra_params['conditions'][0]})";
+					if (count($this->extra_params['conditions']) > 1)
+					{
+						$params = array_merge($params, array_slice($this->extra_params['conditions'], 1));
+					}
+				}
+				$queryattrs['conditions'] = array_merge(array($conditions), $params);
+				
+				$this->children = $class->find($queryattrs);
 			}
 			$this->loaded = true;
 		}

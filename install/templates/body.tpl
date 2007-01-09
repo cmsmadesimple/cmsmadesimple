@@ -35,6 +35,11 @@
 	</style>
 	{/literal}
 	
+	<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>
+	<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js?load=effects"></script>
+
+	{$xajax_header}
+	
 </head>
 
 <body>

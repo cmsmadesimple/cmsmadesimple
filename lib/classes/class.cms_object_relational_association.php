@@ -32,6 +32,7 @@ abstract class CmsObjectRelationalAssociation extends CmsObject
 {
 	var $loaded = false;
 	var $parent_class = null;
+	var $extra_params = array();
 
 	/**
 	 * Base constructor.  Doesn't really do anything, but

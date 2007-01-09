@@ -40,7 +40,7 @@ class CmsDatabase extends CmsObject
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = CmsDatabase::start($dbms, $hostname, $username, $password, $dbname, $debug);
+			self::$instance = CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
 		}
 		return self::$instance;
 	}
@@ -56,7 +56,7 @@ class CmsDatabase extends CmsObject
 		}
 	}
 	
-	static private function start($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false)
+	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true)
 	{
 		$gCms = cmsms();
 		$use_adodb_lite = true;
@@ -124,10 +124,19 @@ class CmsDatabase extends CmsObject
 		{
 			$connect_result = $dbinstance->Connect($hostname,$username,$password,$dbname);
 		}
+		
 		if (FALSE == $connect_result)
 		{
-			die('Database Connection failed');
+			if ($die)
+			{
+				die('Database Connection failed');
+			}
+			else
+			{
+				return null;
+			}
 		}
+
 		$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 		
 		//$dbinstance->debug = true;

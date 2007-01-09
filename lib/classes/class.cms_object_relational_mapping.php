@@ -170,11 +170,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function create_has_many_association($association_name, $child_class_name, $child_field)
+	protected function create_has_many_association($association_name, $child_class_name, $child_field, $extra_params = array())
 	{
 		$association = new CmsHasManyAssociation($this);
 		$association->child_class = $child_class_name;
 		$association->child_field = $child_field;
+		$association->extra_params = $extra_params;
 		$this->has_many[$association_name] = $association;
 	}
 	
@@ -193,11 +194,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function create_has_one_association($association_name, $child_class_name, $child_field)
+	protected function create_has_one_association($association_name, $child_class_name, $child_field, $extra_params = array())
 	{
 		$association = new CmsHasOneAssociation($this);
 		$association->child_class = $child_class_name;
 		$association->child_field = $child_field;
+		$association->extra_params = $extra_params;
 		$this->has_one[$association_name] = $association;
 	}
 	
@@ -217,11 +219,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function create_belongs_to_association($association_name, $belongs_to_class_name, $child_field)
+	protected function create_belongs_to_association($association_name, $belongs_to_class_name, $child_field, $extra_params = array())
 	{
 		$association = new CmsBelongsToAssociation($this);
 		$association->belongs_to_class_name = $belongs_to_class_name;
 		$association->child_field = $child_field;
+		$association->extra_params = $extra_params;
 		$this->belongs_to[$association_name] = $association;
 	}
 	
@@ -241,13 +244,14 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	protected function create_has_and_belongs_to_many_association($association_name, $child_class, $join_table, $join_other_id_field, $join_this_id_field)
+	protected function create_has_and_belongs_to_many_association($association_name, $child_class, $join_table, $join_other_id_field, $join_this_id_field, $extra_params = array())
 	{
 		$association = new CmsHasAndBelongsToManyAssociation($this);
 		$association->child_class = $child_class;
-		$association->join_table = $join_table;
+		$association->join_table = cms_db_prefix().$join_table;
 		$association->join_other_id_field = $join_other_id_field;
 		$association->join_this_id_field = $join_this_id_field;
+		$association->extra_params = $extra_params;
 		$this->has_and_belongs_to_many[$association_name] = $association;
 	}
 
@@ -950,13 +954,26 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		$query = "SELECT * FROM " . $table;
 		if ($count) $query = "SELECT count(*) as the_count FROM " . $table;
+		
+		if (array_key_exists('joins', $arguments))
+		{
+			$query .= " {$arguments['joins']}";
+		}
 
 		if (array_key_exists('conditions', $arguments))
 		{
-			$query .= ' WHERE ' . $arguments['conditions'][0];
+			$query .= " WHERE {$arguments['conditions'][0]}";
+
+			//Handle 'conditions' => array('blah = ?', array($value))
 			if (isset($arguments['conditions'][1]) && is_array($arguments['conditions'][1]))
 			{
 				$queryparams = array_merge($queryparams, $arguments['conditions'][1]);
+			}
+
+			//Handle 'conditions' => array('blah = ?', $value)
+			else if (count($arguments['conditions']) > 1)
+			{
+				$queryparams = array_merge($queryparams, array_slice($arguments['conditions'], 1));
 			}
 		}
 
