@@ -26,7 +26,7 @@ function searchdir ( $path , $maxdepth = -1 , $mode = "FULL" , $d = 0 )
    return ( $dirlist ) ;
 }
 
-include('../lib/global.functions.php');
+include('../lib/cmsms.api.php');
 
 $dir = "../install/";
 $arDirTree = searchdir($dir, -1, 'FILES');

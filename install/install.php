@@ -25,9 +25,6 @@ $DONT_LOAD_DB = true;
 //All systems are go...  let's include all the good stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'..'.DIRECTORY_SEPARATOR.'include.php');
 
-//Load necessary global functions
-require_once(ROOT_DIR.DS.'lib'.DS.'global.functions.php');
-
 function return_bytes($val) {
    $val = trim($val);
    $last = strtolower($val{strlen($val)-1});

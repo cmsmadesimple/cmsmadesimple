@@ -18,18 +18,11 @@
 #
 #$Id$
 
-//Defines
-define("ROOT_DIR", dirname(__FILE__));
-define("DS", DIRECTORY_SEPARATOR);
+//Load necessary global functions
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
 //Where are we?
 $dirname = ROOT_DIR;
-
-//Load file location defines
-require_once($dirname.DS.'fileloc.php');
-
-//Load necessary global functions
-require_once($dirname.DS.'lib'.DS.'global.functions.php');
 
 //Load the version defines
 require_once(cms_join_path($dirname,'version.php'));

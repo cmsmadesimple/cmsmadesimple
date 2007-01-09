@@ -18,8 +18,7 @@
 #
 #$Id$
 
-require_once('../fileloc.php');
-require_once('../lib/global.functions.php');
+require_once('../lib/cmsms.api.php');
 require_once('lib/class.cms_install_operations.php');
 
 $smarty = CmsSmarty::get_instance(false);

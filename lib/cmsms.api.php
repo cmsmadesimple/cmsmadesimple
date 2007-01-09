@@ -25,6 +25,13 @@
  * @since 1.1
  */
 
+//Defines
+define("ROOT_DIR", dirname(dirname(__FILE__)));
+define("DS", DIRECTORY_SEPARATOR);
+
+//Load file location defines
+require_once(ROOT_DIR.DS.'fileloc.php');
+
 /**
  * The one and only autoload function for the system.  This basically allows us 
  * to remove a lot of the require_once BS and keep the file loading to as much 
@@ -112,7 +119,7 @@ function cms_join_path()
 	{
 		for ($i = 1; $i < $num_args; $i++)
 		{
-			$path .= DIRECTORY_SEPARATOR.$args[$i];
+			$path .= DS.$args[$i];
 		}
 	}
 
