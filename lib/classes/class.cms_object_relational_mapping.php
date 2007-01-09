@@ -167,6 +167,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *        be the name that would be used when calling from the orm (cmsms()->child_class_name).
 	 * @param string The name of the field in the association class that contains the matching id to 
 	 *        this object.
+	 * @param array Extra parameters that should be sent to the query.  Allows for things like order by, joins,
+	 *        etc when the association is queried.
 	 * @return void
 	 * @author Ted Kulp
 	 **/
@@ -191,6 +193,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *        be the name that would be used when calling from the orm (cmsms()->child_class_name).
 	 * @param string The name of the field in the association class that contains the matching id to 
 	 *        this object.
+	 * @param array Extra parameters that should be sent to the query.  Allows for things like order by, joins,
+	 *        etc when the association is queried.
 	 * @return void
 	 * @author Ted Kulp
 	 **/
@@ -215,7 +219,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *        be the name that would be used when calling from the orm (cmsms()->belongs_to_class_name).
 	 * @param string The name of the field in the this class that contains the matching id to 
 	 *        the given belongs_to_class_name.
-	 *
+	 * @param array Extra parameters that should be sent to the query.  Allows for things like order by, joins,
+	 *        etc when the association is queried.
 	 * @return void
 	 * @author Ted Kulp
 	 **/
@@ -240,7 +245,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *        be the name that would be used when calling from the orm (cmsms()->belongs_to_class_name).
 	 * @param string The name of the field in the this class that contains the matching id to 
 	 *        the given belongs_to_class_name.
-	 *
+	 * @param array Extra parameters that should be sent to the query.  Allows for things like order by, joins,
+	 *        etc when the association is queried.
 	 * @return void
 	 * @author Ted Kulp
 	 **/
