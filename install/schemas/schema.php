@@ -1,73 +1,39 @@
 <?php
-echo "<p>Creating additional_users table...";
+$db = null;
 
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'additional_users', "
 	id I KEY,
 	user_id I,
 	page_id I,
 	content_id I
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_users", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Adding admin_bookmarks table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'admin_bookmarks', "
 	id I KEY,
 	user_id I,
 	title C(255),
 	url C(255)
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_bookmarks", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'admin_bookmarks', 'user_id');
 
-$db->Execute("ALTER TABLE ".$db_prefix."admin_bookmarks ADD INDEX (user_id)");
-
-echo '[done]</p>';
-
-echo "<p>Creating adminlog table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'adminlog', "
 	timestamp I,
 	user_id I,
 	username C(25),
 	item_id I,
 	item_name C(50),
 	action C(255)
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."adminlog", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Adding admin_recent_pages table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'admin_recent_pages', "
 	id I KEY,
 	user_id I,
 	title C(255),
 	url C(255),
 	access_time DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."admin_recent_pages", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo '[done]</p>';
-
-echo "<p>Creating content table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'content', "
 	id I KEY,
 	content_name C(255),
 	type C(25),
@@ -94,21 +60,12 @@ $flds = "
 	last_modified_by I,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."content", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."content ADD INDEX (content_alias, active)");
+CmsInstallOperations::create_index($db, 'content', 'default_content');
+CmsInstallOperations::create_index($db, 'content', 'parent_id');
 
-$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (content_alias, active)");
-$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (default_content)");
-$db->Execute("ALTER TABLE ".$db_prefix."content ADD INDEX (parent_id)");
-
-echo "[done]</p>";
-
-echo "<p>Creating content_props table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'content_props', "
 	id I KEY,
 	content_id I,
 	type C(25),
@@ -119,321 +76,159 @@ $flds = "
 	content XL,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."content_props", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'content_props', 'content_id');
 
-$db->Execute("ALTER TABLE ".$db_prefix."content_props ADD INDEX (content_id)");
-
-echo "[done]</p>";
-
-echo "<p>Adding crossref table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = '
+CmsInstallOperations::create_table($db, 'crossref', "
 	child_type C(100),
 	child_id I,
 	parent_type C(100),
 	parent_id I,
 	create_date DT,
 	modified_date DT
-';
+");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (child_type, child_id)");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (parent_type, parent_id)");
 
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."crossref", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
-
-$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (child_type, child_id)");
-$db->Execute("ALTER TABLE ".$db_prefix."crossref ADD INDEX (parent_type, parent_id)");
-
-echo '[done]</p>';
-
-echo "<p>Creating css table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'css', "
 	id I KEY,
 	css_name C(255),
-	css_text X,
+	css_text XL,
 	media_type C(255),
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."css", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'css', 'css_name');
 
-$db->Execute("ALTER TABLE ".$db_prefix."css ADD INDEX (css_name)");
-
-echo "[done]</p>";
-
-echo "<p>Creating css_assoc table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'css', "
 	assoc_to_id I,
 	assoc_css_id I,
 	assoc_type C(80),
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."css_assoc", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_to_id');
+CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id');
 
-$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_to_id)");
-$db->Execute("ALTER TABLE ".$db_prefix."css_assoc ADD INDEX (assoc_css_id)");
+CmsInstallOperations::create_table($db, 'event_handlers', "
+	event_id      I,
+	tag_name      c(255),
+	module_name   c(255),
+	removable     I,
+	handler_order I,
+	id    I KEY
+");
 
-echo "[done]</p>";
+CmsInstallOperations::create_table($db, 'events', "
+	originator   c(200) NOTNULL,
+	event_name   c(200) NOTNULL,
+	id     I KEY
+");
+CmsInstallOperations::create_index($db, 'events', 'originator');
+CmsInstallOperations::create_index($db, 'events', 'event_name');
 
-echo "<p>Creating event_handlers table...";
-
-$dbdict = NewDataDictionary($db);
-
-$flds = "
-          event_id      I,
-          tag_name      c(255),
-          module_name   c(255),
-          removable     I,
-          handler_order I,
-          id    I KEY
-        ";
-
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."event_handlers", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
-
-echo "[done]</p>";
-
-echo "<p>Creating events table...";
-
-$flds = "
-          originator   c(200) NOTNULL,
-          event_name   c(200) NOTNULL,
-          id     I KEY
-        ";
-
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."events", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
-
-$sqlarray = $dbdict->CreateIndexSQL('originator', $db_prefix."events", 'originator');
-$dbdict->ExecuteSQLArray($sqlarray);
-   
-$sqlarray = $dbdict->CreateIndexSQL('event_name', $db_prefix."events", 'event_name');
-$dbdict->ExecuteSQLArray($sqlarray);
-
-echo "[done]</p>";
-
-echo "<p>Creating group_perms table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'group_perms', "
 	id I KEY,
 	group_id I,
 	permission_id I,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."group_perms", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."group_perms ADD INDEX (group_id, permission_id)");
 
-$db->Execute("ALTER TABLE ".$db_prefix."group_perms ADD INDEX (group_id, permission_id)");
-
-echo "[done]</p>";
-
-echo "<p>Creating groups table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'groups', "
 	id I KEY,
 	group_name C(25),
 	active I1,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."groups", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating htmlblobs table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'htmlblobs', "
 	id I KEY,
 	htmlblob_name C(255),
-	html X,
+	html XL,
 	owner I,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."htmlblobs", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'htmlblobs', 'htmlblob_name');
 
-$db->Execute("ALTER TABLE ".$db_prefix."htmlblobs ADD INDEX (htmlblob_name)");
-
-echo "[done]</p>";
-
-echo "<p>Creating additional_htmlblob_users table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'additional_htmlblob_users', "
 	id I KEY,
 	user_id I,
 	htmlblob_id I
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."additional_htmlblob_users", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating modules table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'modules', "
 	module_name C(255),
 	status C(255),
 	version C(255),
 	admin_only I1 DEFAULT 0,
 	active I1
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."modules", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'modules', 'module_name');
 
-$db->Execute("ALTER TABLE ".$db_prefix."modules ADD INDEX (module_name)");
-
-echo "[done]</p>";
-
-echo '<p>Creating module_deps table...';
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'module_deps', "
 	parent_module C(25),
 	child_module C(25),
 	minimum_version C(25),
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_deps", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo '[done]</p>';
-
-echo "<p>Adding module_templates table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'module_templates', "
 	module_name C(200),
 	template_name C(200),
-	content X,
+	content XL,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."module_templates", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+$db->Execute("ALTER TABLE ".cms_db_prefix()."module_templates ADD INDEX (module_name, template_name)");
 
-$db->Execute("ALTER TABLE ".$db_prefix."module_templates ADD INDEX (module_name, template_name)");
-
-echo "[done]</p>";
-
-echo "<p>Creating permissions table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'permissions', "
 	id I KEY,
 	permission_name C(255),
 	permission_text C(255),
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."permissions", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating siteprefs table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'siteprefs', "
 	sitepref_name C(255) KEY,
 	sitepref_value text,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."siteprefs", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating templates table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'templates', "
 	id I KEY,
 	template_name C(255),
-	template_content X,
-	stylesheet X,
+	template_content XL,
 	encoding C(25),
 	active I1,
 	default_template I1,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."templates", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'templates', 'template_name');
 
-$db->Execute("ALTER TABLE ".$db_prefix."templates ADD INDEX (template_name)");
-
-echo "[done]</p>";
-
-echo "<p>Creating user_groups table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'user_groups', "
 	group_id I,
 	user_id I,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."user_groups", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating userprefs table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'userprefs', "
 	user_id I,
 	preference C(50),
 	value X,
 	type C(25)
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."userprefs", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
+CmsInstallOperations::create_index($db, 'userprefs', 'user_id');
 
-$db->Execute("ALTER TABLE ".$db_prefix."userprefs ADD INDEX (user_id)");
-
-echo "[done]</p>";
-
-echo "<p>Creating users table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'userprefs', "
 	id I KEY,
 	username C(25),
 	password C(40),
@@ -444,40 +239,19 @@ $flds = "
 	active I1,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."users", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating userplugins table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'userplugins', "
 	id I KEY,
 	userplugin_name C(255),
 	code X,
 	create_date DT,
 	modified_date DT
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."userplugins", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
+");
 
-echo "[done]</p>";
-
-echo "<p>Creating version table...";
-
-$dbdict = NewDataDictionary($db);
-$flds = "
+CmsInstallOperations::create_table($db, 'version', "
 	version I
-";
-$taboptarray = array('mysql' => 'TYPE=MyISAM');
-$sqlarray = $dbdict->CreateTableSQL($db_prefix."version", $flds, $taboptarray);
-$dbdict->ExecuteSQLArray($sqlarray);
-
-echo "[done]</p>";
+");
 
 # vim:ts=4 sw=4 noet
 ?>

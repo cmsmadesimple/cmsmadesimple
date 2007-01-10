@@ -23,8 +23,8 @@ require_once('lib/class.cms_install_operations.php');
 
 $smarty = CmsSmarty::get_instance(false);
 $smarty->force_compile = true;
-$smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DIRECTORY_SEPARATOR);
-$smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','smarty','plugins'.DIRECTORY_SEPARATOR), cms_join_path(dirname(__FILE__),'plugins'.DIRECTORY_SEPARATOR));
+$smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DS);
+$smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','smarty','plugins'.DS), cms_join_path(dirname(__FILE__),'plugins'.DS));
 
 require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
 $xajax = new xajax();
@@ -92,17 +92,16 @@ switch (CmsInstallOperations::get_action())
 
 function test_connection($params)
 {
+	global $smarty; //Too lazy to set it all up again
+
 	$objResponse = new xajaxResponse();
 	
 	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname']);
 	
-	if ($result['have_connection'])
-	{
-		$objResponse->addScript("new Effect.BlindDown('connection_options');");
-	}
+	$smarty->assign('databasetestresult', $result);
+	$objResponse->addAssign("connection_options", "innerHTML", $smarty->fetch('databaseinsert.tpl'));
 	
-	//$objResponse->addAlert(print_r($result, true));
-	//$objResponse->addAlert("Have Connection:" . $result['have_connection'] . ' Have Existing Db:' . $result['have_existing_db']);
+	$objResponse->addScript("new Effect.BlindDown('connection_options');");
 
 	return $objResponse->getXML();
 }

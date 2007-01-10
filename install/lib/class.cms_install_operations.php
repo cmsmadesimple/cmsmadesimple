@@ -42,7 +42,7 @@ class CmsInstallOperations extends CmsObject
 		
 		$dbdict = NewDataDictionary($db);
 
-		$sqlarray = $dbdict->CreateIndexSQL($field, $db_prefix.$table, $field);
+		$sqlarray = $dbdict->CreateIndexSQL($field, cms_db_prefix().$table, $field);
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	

@@ -55,13 +55,12 @@
         {translate}Click here to test your connection settings{/translate}:
       </span>
       <span class="go_right">
-        <input type="submit" value="{translate}Test{/translate}" onclick="{literal}if (Element.visible('connection_options')) { Element.hide('connection_options'); } xajax_test_connection(xajax.getFormValues('connectionform')); return false;{/literal}" />
+        <input type="submit" name="test_database" value="{translate}Test{/translate}" onclick="{literal}if (Element.visible('connection_options')) { Element.hide('connection_options'); } xajax_test_connection(xajax.getFormValues('connectionform')); return false;{/literal}" />
       </span>
     </p>
     <input type="hidden" name="action" value="database" />
   </fieldset>
 </div>
-</form>
 
 <br style="clear: both;" />
 
@@ -70,8 +69,10 @@
     <legend>{translate}Connection Options{/translate}</legend>
     <div id="connection_options" style="display: none;">
     </div>
+    <input type="hidden" name="action" value="database" />
   </fieldset>
 </div>
+</form>
 
 <br style="clear: both;" />
 
