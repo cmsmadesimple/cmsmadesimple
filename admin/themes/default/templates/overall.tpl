@@ -23,20 +23,13 @@
 	<script type="text/javascript" src="../lib/dojo/src/widget/TabContainer.js"></script>
 	<script type="text/javascript" src="../lib/dojo/src/widget/ContentPane.js"></script>
 	<script type="text/javascript">
-		dojo.require("dojo.widget.TabContainer");
-		dojo.require("dojo.widget.ContentPane");
-    		dojo.require("dojo.event.*");
-    		dojo.require("dojo.io.*");
-		dojo.require("dojo.lfx.html");
-		dojo.require("dojo.widget.*");
-		dojo.require("dojo.widget.Button");
-      function modifyPage(action, page_id)
-      {
-		// Make the call and update the content list
-		dojo.io.updateNode(dojo.byId("contentlist"), {sync: true,  url: 'listcontent.php', content: {action: action, page_id: page_id, ajax_request: 1 }, cacheContent: false});
- 		// and the fancy fading effect
-        	dojo.lfx.html.highlight('tr_' + page_id, [255, 151, 58], 700).play(300);
-      }
+    dojo.require("dojo.widget.TabContainer");
+    dojo.require("dojo.widget.ContentPane");
+    dojo.require("dojo.event.*");
+    dojo.require("dojo.io.*");
+    dojo.require("dojo.lfx.html");
+    dojo.require("dojo.widget.*");
+    dojo.require("dojo.widget.Button");
 	</script>
 
 	{/literal}
