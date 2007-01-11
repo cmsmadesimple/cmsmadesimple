@@ -534,6 +534,7 @@ class CmsSmarty extends Smarty {
 		#	search_plugins($smarty, $plugins, dirname(dirname(__FILE__))."/plugins/cache", true);
 		#}
 		$this->search_plugins($plugins, cms_join_path(dirname(dirname(dirname(__FILE__))),"plugins"), false);
+		$this->search_plugins($plugins, cms_join_path(dirname(dirname(__FILE__)),'module_plugins'), false);
 
 		$query = "SELECT * FROM ".cms_db_prefix()."userplugins";
 		$result = &$db->Execute($query);

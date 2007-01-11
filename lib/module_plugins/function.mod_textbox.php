@@ -16,13 +16,13 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_mod_lang($params, &$smarty)
+function smarty_cms_function_mod_textbox($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
-	#$id = $smarty->get_template_vars('cms_mapi_id');
+	$id = $smarty->get_template_vars('cms_mapi_id');
 	#$return_id = $smarty->get_template_vars('cms_mapi_return_id');
-	if (isset($params['string']))
-		echo $module->Lang($params['string']);
+
+	return $module->CreateInputText($id, $params['name'], coalesce_key($params, 'value', ''), coalesce_key($params, 'size', '10'), coalesce_key($params, 'maxlength', '255'), coalesce_key($params, 'addttext', ''));
 }
 
 ?>

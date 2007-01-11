@@ -156,6 +156,7 @@ function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designat
 	$smarty = &$gCms->GetSmarty();
 	$oldcache = $smarty->caching;
 	$smarty->caching = false;
+	
 	$result = $smarty->is_cached('module_db_tpl:'.$modinstance->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$modinstance->GetName()));
 
 	if ($result == true && $timestamp != '' && intval($smarty->_cache_info['timestamp']) < intval($timestamp))

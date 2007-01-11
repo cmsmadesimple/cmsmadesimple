@@ -35,8 +35,8 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if (isset($variables['formcount']))
 		$formcount = $variables['formcount'];
 
-	if ($idsuffix == '')
-		$idsuffix = $formcount;
+	#if ($idsuffix == '')
+	#	$idsuffix = $formcount;
 
 	$goto = ($returnid==''?'moduleinterface.php':'index.php');
 	#$goto = 'moduleinterface.php';
@@ -47,18 +47,11 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 	}
-	$text = '<form id="'.$id.'moduleform_'.$idsuffix.'" name="'.$id.'moduleform_'.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';//moduleinterface.php
+	$text = '<form id="'.$id.$action.$idsuffix.'" name="'.$id.$action.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';
 	if ($enctype != '')
 	{
 		$text .= ' enctype="'.$enctype.'"';
 	}
-	/*
-	$text .= '><div class="hidden"><input type="hidden" name="module" value="'.$this->GetName().'" /><input type="hidden" name="id" value="'.$id.'" />';
-	if ($action != '')
-	{
-		$text .= '<input type="hidden" name="'.$id.'action" value="'.$action.'" />';
-	}
-	*/
 	if ($extra != '')
 	{
 		$text .= ' '.$extra;
@@ -87,21 +80,20 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
-  $labeltext = cms_htmlentities($labeltext);
-  $text = '<label for="'.$id.$name.'" id="'.$id.$name.'"';
-  if ($addttext != '')
-    {
-      $text .= ' ' . $addttext;
-    }
-  $text .= '>'.$labeltext.'</label>'."\n";
-  return $text;
-
+	$labeltext = cms_htmlentities($labeltext);
+	$text = '<label for="'.CmsResponse::make_dom_id($id.$name).'"';
+	if ($addttext != '')
+	{
+		$text .= ' ' . $addttext;
+	}
+	$text .= '>'.$labeltext.'</label>'."\n";
+	return $text;
 }
 
 function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
 	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="text" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+	$text = '<input type="text" name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -112,8 +104,9 @@ function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size=
 
 function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 {
-        if ($label == '') {
-	  $label = $name;
+	if ($label == '')
+	{
+		$label = $name;
 	}
 	$text = '<label for="'.$id.$name.'" '.$labeladdtext.'>'.$label.'</label>'."\n";
 	$text .= $modinstance->CreateInputText($id, $name, $value, $size, $maxlength, $addttext);
@@ -230,7 +223,7 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
 
 function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext)
 {
-	$text = '<select name="'.$id.$name.'"';
+	$text = '<select name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;
@@ -259,7 +252,7 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 
 function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 {
-	$text = '<select name="'.$id.$name.'"';
+	$text = '<select name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'"';
 	if ($addttext != '')
 	{
 		$text .= ' ' . $addttext;

@@ -16,13 +16,15 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_mod_lang($params, &$smarty)
+function smarty_cms_function_mod_textarea($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
-	#$id = $smarty->get_template_vars('cms_mapi_id');
-	#$return_id = $smarty->get_template_vars('cms_mapi_return_id');
-	if (isset($params['string']))
-		echo $module->Lang($params['string']);
+	$id = $smarty->get_template_vars('cms_mapi_id');
+
+	return $module->CreateTextArea(coalesce_key($params, 'wysiwyg', false), $id, coalesce_key($params, 'value', ''), $params['name'], 
+		coalesce_key($params, 'class_name', ''), coalesce_key($params, 'html_id', ''), '', 
+		coalesce_key($params, 'stylesheet', ''), coalesce_key($params, 'cols', '60'), coalesce_key($params, 'rows', '10'), 
+		coalesce_key($params, 'forcewysiwyg', ''));
 }
 
 ?>

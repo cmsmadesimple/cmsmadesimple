@@ -143,6 +143,18 @@ class CmsResponse extends CmsObject
 </body></html>';
 		exit();
 	}
+	
+	/**
+	 * Converts a string into a valid DOM id.
+	 *
+	 * @param string The string to be converted
+	 * @return string The converted string
+	 * @author Ted Kulp
+	 **/
+	public static function make_dom_id($text)
+	{
+		return trim(preg_replace("/[^a-z0-9_\-]+/", '_', strtolower($text)), ' _');
+	}
 }
 
 # vim:ts=4 sw=4 noet

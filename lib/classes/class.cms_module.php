@@ -1433,20 +1433,20 @@ class CmsModule extends CmsObject
 		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
 	}
 
-        /**
-         * Returns the xhtml equivalent of an label for input field.  This is basically a nice little wrapper
-         * to make sure that id's are placed in names and also that it's xhtml compliant.
-         *
-         * @param string The id given to the module on execution
-         * @param string The html name of the input field this label is associated to
-         * @param string The text in the label
-         * @param string Any additional text that should be added into the tag when rendered
-         */
-        function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
-        {
-	        $this->LoadFormMethods();
-	        return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
-        }
+	/**
+	 * Returns the xhtml equivalent of an label for input field.  This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it's xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the input field this label is associated to
+	 * @param string The text in the label
+	 * @param string Any additional text that should be added into the tag when rendered
+	 */
+	function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
+	{
+		$this->LoadFormMethods();
+		return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
+	}
 
 	/**
 	 * Returns the xhtml equivalent of an input textbox with label.  This is basically a nice little wrapper
@@ -1644,9 +1644,9 @@ class CmsModule extends CmsObject
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="")
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15', $forcewysiwyg='')
 	{
-		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols,$forcewysiwyg);
+		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid == '' ? CmsResponse::make_dom_id($id.$name) : '', $encoding, $stylesheet, $cols, $rows, $forcewysiwyg);
 	}
 
 	/**
