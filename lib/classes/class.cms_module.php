@@ -1524,10 +1524,10 @@ class CmsModule extends CmsObject
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
+	function CreateInputCheckbox($id, $name, $selected = false, $addttext='')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputCheckbox($this, $id, $name, $value, $selectedvalue, $addttext);
+		return cms_module_CreateInputCheckbox($this, $id, $name, $selected, $addttext);
 	}
 
 

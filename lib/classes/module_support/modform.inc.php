@@ -153,12 +153,13 @@ function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $add
 	return $text;
 }
 
-function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $selectedvalue='', $addttext='')
+function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $selected = false, $addttext='')
 {
-	$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
-	if ($selectedvalue == $value)
+	$text = '<input type="hidden" name="'.$id.$name.'" value="0" />';
+	$text .= '<input type="checkbox" name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'" value="1"';
+	if ($selected)
 	{
-		$text .= ' ' . 'checked="checked"';
+		$text .= ' checked="checked"';
 	}
 	if ($addttext != '')
 	{
