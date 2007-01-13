@@ -157,36 +157,7 @@ class CmsObject {
 		global $DONT_LOAD_DB;
 		if (!isset($this->db) && !isset($DONT_LOAD_DB))
 		{
-			$config =& $this->GetConfig();
-			$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-			if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-			{
-				$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			else
-			{
-				$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-			}
-			if (FALSE == $connect_result)
-			{
-				die('Database Connection failed');
-			}
-			$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-			
-			if ($config['dbms'] == 'sqlite')
-			{
-				$dbinstance->Execute("PRAGMA short_column_names = 1;");
-			}
-			
-			//$dbinstance->debug = true;
-			if ($config['debug'] == true)
-			{
-				$dbinstance->debug = true;
-				#$dbinstance->LogSQL();
-			}
-
-			$this->db =& $dbinstance;
-
+			$this->db =& adodb_connect();
 		}
 
 		#return $dbinstance;

@@ -43,57 +43,28 @@ $css='';
 
 if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 {
+	// define encoding
+	$encoding = 'UTF-8';
+	$encoding = $config['default_encoding'] != '' ? $config['default_encoding'] : $encoding;
+	$encoding = $config['admin_encoding'] != '' ? $config['admin_encoding'] : $encoding;
 
-	$encoding = '';
-
-	if ($config['default_encoding'] =='')
-		$encoding = $config['admin_encoding'];
+	// connect to the database
+	require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+	require_once(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
+	load_adodb();
+	$db = adodb_connect();
+	
+	// select the stylesheet(s)
+	if ($name != '')
+		$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = " . $db->qstr($name);
 	else
-		$encoding = $config['default_encoding'];
-
-	if ($encoding=='')
-		$encoding = 'UTF-8';
-
-
-	if ($config['dbms'] == 'mysqli' || $config['dbms'] == 'mysql')
+		$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = " . $db->qstr($mediatype) . " ORDER BY ac.create_date";
+	$result = $db->Execute($sql);
+	
+	// add a comment at the start
+	while ($result && $row = $result->FetchRow())
 	{
-		$db = mysql_connect($config['db_hostname'], $config['db_username'], $config['db_password']);
-		mysql_select_db($config['db_name']);
-		if ($name != '')
-			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . mysql_real_escape_string($name, $db) . "'";
-		else
-			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . mysql_real_escape_string($mediatype, $db) . "' ORDER BY ac.create_date";
-		$result=mysql_query($sql);
-		while ($result && $row = mysql_fetch_assoc($result))
-		{
-			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
-		}
-	}
-	else if($config['dbms'] == 'sqlite') {
-		$db = sqlite_open($config['db_hostname']);
-		sqlite_exec($db,'PRAGMA short_column_names = 1;');
-		if ($name != '')
-			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . sqlite_escape_string($name) . "'";
-		else
-			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . sqlite_escape_string($mediatype) . "' ORDER BY ac.create_date";
-		$result=sqlite_array_query($db,$sql,SQLITE_ASSOC);
-		foreach($result as $row)
-		{
-			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
-		}
-	}
-	else
-	{
-		$db=pg_connect((isset($config['db_hostname']) && $config['db_hostname'] ? "host=".$config['db_hostname'] : '')." dbname=".$config['db_name']." user=".$config['db_username']." password=".$config['db_password']);
-		if ($name != '')
-			$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = '" . pg_escape_string($name) . "'";
-		else
-			$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = '" . pg_escape_string($mediatype) . "' ORDER BY ac.create_date";
-		$result=pg_query($db, $sql);
-		while ($result && $row = pg_fetch_array($result, null, PGSQL_ASSOC))
-		{
-			$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
-		}
+		$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
 	}
 
 	header("Content-Type: text/css; charset=" .$encoding);

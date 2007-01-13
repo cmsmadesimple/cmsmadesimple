@@ -18,8 +18,6 @@
 #
 #$Id$
 
-define('ADODB_OUTP', 'debug_sql');
-
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
@@ -69,14 +67,6 @@ require(cms_join_path($dirname,'lib','config.functions.php'));
 #Grab the current configuration
 $config =& $gCms->GetConfig();
 
-if ($config['debug'] == true && $config['use_adodb_lite'] == true)
-{
-	require_once(cms_join_path($dirname, 'lib', 'adodb_lite', 'adodb-errorpear.inc.php'));
-}
-
-#Define the CMS_ADODB_DT constant
-define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
-
 #Hack for changed directory and no way to upgrade config.php
 $config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']);
 
@@ -96,42 +86,8 @@ if (isset($_SESSION['cms_admin_username']))
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
 debug_buffer('loading adodb');
-
-$loaded_adodb = false;
-
-if ($config['use_adodb_lite'] == false || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1))
-{
-# CMSMS is configured to use full ADOdb
-    $full_adodb = cms_join_path(dirname(__FILE__),'lib','adodb','adodb.inc.php');
-    if (! file_exists($full_adodb))
-    {
-        # Full ADOdb cannot be found, show a debug error message
-        $gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory. Switched back to ADOdb Lite.';
-    }
-    else
-    {
-        # Load (full) ADOdb
-        require($full_adodb);
-        $loaded_adodb = true;
-    }
-}
-if (!$loaded_adodb)
-{
-    $adodb_light = cms_join_path(dirname(__FILE__),'lib','adodb_lite','adodb.inc.php');
-    # The ADOdb library is not yet included, try ADOdb Lite
-    if (file_exists($adodb_light))
-    {
-        # Load ADOdb Lite
-        require($adodb_light);
-    }
-    else
-    {
-        # ADOdb cannot be found, show a message and stop the script execution
-        echo "The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.";
-        die();
-    }
-}
-
+require(cms_join_path($dirname,'lib','adodb.functions.php'));
+load_adodb();
 debug_buffer('loading page functions');
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
 debug_buffer('loading content functions');
@@ -155,10 +111,6 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
     $cmsdb =& $gCms->GetDB();
-    if($config['dbms'] == 'sqlite')
-    {
-        sqlite_create_function($cmsdb->_connectionID,'now','time',0);
-    }
 }
 
 $smarty =& $gCms->GetSmarty();
