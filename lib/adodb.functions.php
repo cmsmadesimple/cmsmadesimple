@@ -44,7 +44,6 @@ function load_adodb() {
 		}
 	}
 	
-	#Define the CMS_ADODB_DT constant
 	define('CMS_ADODB_DT', $config['use_adodb_lite'] ? 'DT' : 'T');
 }
 
@@ -72,7 +71,7 @@ function & adodb_connect()
 	if ($config['dbms'] == 'sqlite')
 	{
 		$dbinstance->Execute('PRAGMA short_column_names = 1;');
-		sqlite_create_function($cmsdb->_connectionID, 'now', 'time', 0);
+		sqlite_create_function($db->_connectionID, 'now', 'time', 0);
 	}
 	
 	$db =& $dbinstance;
