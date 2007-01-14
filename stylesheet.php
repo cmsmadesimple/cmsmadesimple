@@ -43,16 +43,11 @@ $css='';
 
 if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 {
-	// define encoding
-	$encoding = 'UTF-8';
-	$encoding = $config['default_encoding'] != '' ? $config['default_encoding'] : $encoding;
-	$encoding = $config['admin_encoding'] != '' ? $config['admin_encoding'] : $encoding;
-
 	// connect to the database
 	require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 	require_once(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
 	load_adodb();
-	$db = adodb_connect();
+	$db =& adodb_connect();
 	
 	// select the stylesheet(s)
 	if ($name != '')
@@ -66,15 +61,19 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 	{
 		$css .= "/* Start of CMSMS style sheet '{$row['css_name']}' */\n{$row['css_text']}\n/* End of '{$row['css_name']}' */\n\n";
 	}
-
-	header("Content-Type: text/css; charset=" .$encoding);
-
+	
+	// set encoding
+	if ($config['admin_encoding'] != '')
+		$encoding = $config['admin_encoding'];
+	elseif ($config['default_encoding'] != '')
+		$encoding = $config['default_encoding'];
+	else
+		$encoding = 'UTF-8';
 }
 else
 {
-
 	require_once(dirname(__FILE__)."/include.php");
-
+	
 	if ($name != '')
 	{
 		//TODO: Make stylesheet handling OOP
@@ -114,11 +113,13 @@ else
 			#}
 		}
 	}
-
-	header("Content-Type: text/css; charset=" . (isset($result['encoding'])?$result['encoding']:'UTF-8'));
-
-
+	// set encoding
+	$encoding = isset($result['encoding']) ? $result['encoding'] : 'UTF-8';
 }
+	
+
+// send HTTP header
+header("Content-Type: text/css; charset=$encoding");
 
 #sending content length allows HTTP/1.0 persistent connections
 #(and also breaks if gzip is on)
