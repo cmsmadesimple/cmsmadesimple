@@ -40,8 +40,7 @@ function load_adodb() {
 		else
 		{
 			# ADOdb cannot be found, show a message and stop the script execution
-			echo "The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.";
-			die();
+			die('The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.');
 		}
 	}
 	
@@ -53,33 +52,29 @@ function & adodb_connect()
 {
 	global $db, $config;
 	
-	$dbinstance = &ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
-	if (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true)
-	{
-		$connect_result = $dbinstance->PConnect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-	}
-	else
-	{
-		$connect_result = $dbinstance->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
-	}
+	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
+	$connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
+	
 	if (FALSE == $connect_result)
 	{
 		die('Database Connection failed');
 	}
+	
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
-	if ($config['dbms'] == 'sqlite')
-	{
-		$dbinstance->Execute("PRAGMA short_column_names = 1;");
-		sqlite_create_function($cmsdb->_connectionID,'now','time',0);
-	}
-	
-	//$dbinstance->debug = true;
 	if ($config['debug'] == true)
 	{
 		$dbinstance->debug = true;
 		#$dbinstance->LogSQL();
 	}
+	
+	if ($config['dbms'] == 'sqlite')
+	{
+		$dbinstance->Execute('PRAGMA short_column_names = 1;');
+		sqlite_create_function($cmsdb->_connectionID, 'now', 'time', 0);
+	}
+	
 	$db =& $dbinstance;
 	return $db;
 }
