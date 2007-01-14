@@ -71,7 +71,7 @@ function & adodb_connect()
 	if ($config['dbms'] == 'sqlite')
 	{
 		$dbinstance->Execute('PRAGMA short_column_names = 1;');
-		sqlite_create_function($db->_connectionID, 'now', 'time', 0);
+		sqlite_create_function($config['use_adodb_lite'] ? $db->connectionId : $db->_connectionID, 'now', 'time', 0);
 	}
 	
 	$db =& $dbinstance;
