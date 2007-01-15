@@ -207,6 +207,32 @@ function coalesce_key($array, $val1, $val2)
 }
 
 /**
+ * Finds all keys_to_remove in the hash, removes them,
+ * and returns the new hash.
+ *
+ * @param array The original hash
+ * @param array The names of the keys to remove
+ * @return array The result of the key removal
+ * @author Ted Kulp
+ * @since 1.1
+ */
+function remove_keys($array, $keys_to_remove)
+{
+	if (is_array($array))
+	{
+		foreach ($keys_to_remove as $k)
+		{
+			if (array_key_exists($k, $array))
+			{
+				unset($array[$k]);
+			}
+		}
+	}
+	
+	return $array;
+}
+
+/**
  * Global wrapper for CmsResponse::redirect()
  *
  * @param $to The url to redirect to
