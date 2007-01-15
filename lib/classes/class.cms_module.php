@@ -1581,17 +1581,38 @@ class CmsModule extends CmsObject
 	 * Returns the xhtml equivalent of a dropdown list.	 This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it is xhtml compliant.
 	 *
+	 * @deprecated Deprecated.  Use create_input_dropdown instead, except that this method keeps backwards compatibility by
+	 *			   having flip_array default to true.
 	 * @param string The id given to the module on execution
 	 * @param string The html name of the dropdown list
 	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
 	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
 	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
 	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
 	 */
-	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='')
+	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='', $flip_array = true)
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputDropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext);
+		return cms_module_create_input_dropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array);
+	}
+	
+	/**
+	 * Returns the xhtml equivalent of a dropdown list.	 This is basically a nice little wrapper
+	 * to make sure that id's are placed in names and also that it is xhtml compliant.
+	 *
+	 * @param string The id given to the module on execution
+	 * @param string The html name of the dropdown list
+	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
+	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
+	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
+	 * @param string Any additional text that should be added into the tag when rendered
+	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
+	 */
+	function create_input_dropdown($id, $name, $items, $selected_index = -1, $selected_value = '', $additional_text = '', $flip_array = false)
+	{
+		$this->LoadFormMethods();
+		return cms_module_create_input_dropdown($this, $id, $name, $items, $selected_index, $selected_value, $additional_text, $flip_array);
 	}
 
 	/**

@@ -222,12 +222,15 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
 	return $text . "\n";
 }
 
-function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext)
+function cms_module_create_input_dropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array)
 {
+	if ($flip_array)
+		$items = array_flip($flip_array);
+
 	$text = '<select name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'"';
 	if ($addttext != '')
 	{
-		$text .= ' ' . $addttext;
+		$text .= " $addttext";
 	}
 	$text .= '>';
 	$count = 0;
@@ -235,18 +238,16 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	{
 		foreach ($items as $key=>$value)
 		{
-			$text .= '<option value="'.$value.'"';
-			if ($selectedindex == $count || $selectedvalue == $value)
+			$text .= '<option value="'.$key.'"';
+			if ($selectedindex == $count || $selectedvalue == $key)
 			{
-				$text .= ' ' . 'selected="selected"';
+				$text .= ' selected="selected"';
 			}
-			$text .= '>';
-			$text .= $key;
-			$text .= '</option>';
+			$text .= ">$value</option>";
 			$count++;
 		}
 	}
-	$text .= '</select>'."\n";
+	$text .= "</select>\n";
 
 	return $text;
 }

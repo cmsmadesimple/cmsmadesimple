@@ -16,14 +16,16 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_mod_dropdown($params, &$smarty)
+function smarty_cms_function_mod_submit($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
-
-	return $module->create_input_dropdown($id, $params['name'], coalesce_key($params, 'items', $params['values']), 
-		coalesce_key($params, 'selected_index', '-1'), coalesce_key($params, 'selected_value', ''), 
-		coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'flip_array', false));
+	
+	$value = (isset($params['translate']) && $params['translate'] == true) ? $module->lang($params['value']) : $params['value'];
+	
+	return $module->CreateInputSubmit($id, $params['name'], $value, 
+				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
+				coalesce_key($params, 'confirm_text', ''));
 }
 
 ?>

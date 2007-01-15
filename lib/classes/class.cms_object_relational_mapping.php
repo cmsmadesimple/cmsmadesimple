@@ -958,8 +958,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$numrows = -1;
 		$offset = -1;
 
-		$query = "SELECT * FROM " . $table;
-		if ($count) $query = "SELECT count(*) as the_count FROM " . $table;
+		$query = "SELECT {$table}.* FROM {$table}";
+		if ($count) $query = "SELECT count({$table}.*) as the_count FROM {$table}";
 		
 		if (array_key_exists('joins', $arguments))
 		{
