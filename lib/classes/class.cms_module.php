@@ -1769,9 +1769,9 @@ class CmsModule extends CmsObject
 	 * ------------------------------------------------------------------
 	 */
 
-	function &GetModuleInstance($module)
+	public static function GetModuleInstance($module)
 	{
-		global $gCms;
+		$gCms = cmsms();
 
 		if (isset($gCms->modules[$module]) &&
 			$gCms->modules[$module]['installed'] == true &&
@@ -1779,9 +1779,8 @@ class CmsModule extends CmsObject
 		{
 			return $gCms->modules[$module]['object'];
 		}
-		// Fix only variable references should be returned by reference
-		$tmp = FALSE;
-		return $tmp;
+
+		return FALSE;
 	}
 
 	/**
