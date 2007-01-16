@@ -41,7 +41,7 @@ require_once("../include.php");
 // }
 
 $userid = get_userid();
-$access = check_permission($userid, "Modify Modules");
+$access = check_permission($userid, "Modify Events");
 
 check_login();
 
@@ -155,10 +155,23 @@ switch( $action )
 						$desctext = $objinstance->GetEventDescription($oneevent['event_name']);
 						echo "    <td>".$objinstance->GetFriendlyName()."</td>\n";
 					}
-					echo "    <td><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$oneevent['event_name']."</a></td>\n";
+					echo "    <td>";
+if ($access) 
+{
+					echo "<a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">";
+}
+					echo $oneevent['event_name'];
+if ($access) 
+{
+					echo "</a>";
+}
+					echo "</td>\n";
 					echo "    <td>".$desctext."</td>\n";
 					echo "    <td class=\"icons_wide\"><a href=\"eventhandlers.php?action=showeventhelp&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$infoImg."</a></td>\n";
+if ($access) 
+{
 					echo "    <td class=\"icons_wide\"><a href=\"editevent.php?action=edit&amp;module=".$oneevent['originator']."&amp;event=".$oneevent['event_name']."\">".$editImg."</a></td>\n";
+}
 					echo "  </tr>\n";
 					($curclass=="row1"?$curclass="row2":$curclass="row1");
 				}
@@ -170,6 +183,7 @@ switch( $action )
 	} // default action
 
 } // switch
+
 
 echo "<p class=\"pageback\"><a class=\"pageback\" href=\"".$themeObject->BackUrl()."\">&#171; ".lang('back')."</a></p>\n";
 

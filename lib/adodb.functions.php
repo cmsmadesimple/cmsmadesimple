@@ -1,6 +1,7 @@
 <?php
 
-function load_adodb() {
+function load_adodb() 
+{
 	global $config;
 	
 	if ($config['debug'] == true)
