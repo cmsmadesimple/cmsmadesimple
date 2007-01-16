@@ -208,8 +208,6 @@ else
 			echo "<p class=\"error\"><strong>Error:</strong> Could not remove the tmp/cache/SITEDOWN file.  Please remove manually or you will continue to show a \"Site Down for Maintainence\" message on your site.</p>";
 		}
 	}
-	
-	echo '<p><strong>Delete the file plugins/function.summarize.php</strong> if present (it was moved to plugins/modifier.summarize.php).</p>';
 }
 
 ?>
