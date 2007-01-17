@@ -682,6 +682,19 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 	$handle=opendir($dir);
 	while ($file = readdir($handle))
 	{
+		// This hides the dummy function.summarize.php
+		// (function.summarize.php was renamed to modifier.summarize.php in 1.0.3)
+		// This code can be deleted once the dummy is removed from the distribution
+		// TODO: DELETE
+		if (
+			$file == 'function.summarize.php' &&
+			substr(file_get_contents(cms_join_path($dir, $file)), 9, 9) == '__DUMMY__'
+		)
+		{
+				continue;
+		}
+		// END TODO: DELETE
+
 		$path_parts = pathinfo($file);
 		if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
 		{
@@ -689,7 +702,7 @@ function search_plugins(&$smarty, &$plugins, $dir, $caching)
 			$filearray = explode('.', $path_parts['basename']);
 			if (count($filearray == 3))
 			{
-				$filename = $dir . '/' . $file;
+				$filename = cms_join_path($dir, $file);
 				//The part we care about is the middle one...
 				$file = $filearray[1];
 				if (!isset($plugins[$file]) && in_array($filearray[0],$types))
