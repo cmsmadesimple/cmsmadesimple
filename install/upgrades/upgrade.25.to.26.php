@@ -4,25 +4,28 @@
 echo '<p>Deleting any duplicate events...';
 // remove any duplicate core events
 $all_events = Events::ListEvents();
-$core_events = array();
-foreach ($all_events as $event)
+if ($all_events !== FALSE)
 {
-	if ($event['originator'] == 'Core')
+	$core_events = array();
+	foreach ($all_events as $event)
 	{
-		if ($id = find_event($core_events, $event['event_name']) != false)
+		if ($event['originator'] == 'Core')
 		{
-			// move all the handlers
-			$q = "UPDATE ".cms_db_prefix()."event_handlers SET event_id = ? WHERE event_id = ?";
-			$db->Execute($q, array($id, $event['event_id']));
-			// then delete the event
-			$q = "DELETE FROM ".cms_db_prefix()."events WHERE  event_id = ?";
-			$db->Execute($q, array($event['event_id']));
+			if ($id = find_event($core_events, $event['event_name']) != false)
+			{
+				// move all the handlers
+				$q = "UPDATE ".cms_db_prefix()."event_handlers SET event_id = ? WHERE event_id = ?";
+				$db->Execute($q, array($id, $event['event_id']));
+				// then delete the event
+				$q = "DELETE FROM ".cms_db_prefix()."events WHERE  event_id = ?";
+				$db->Execute($q, array($event['event_id']));
+			}
+			else
+			{
+				$core_events[] = $event;
+			}
 		}
-		else
-		{
-			$core_events[] = $event;
-		}
-    }
+	}
 }
 echo '[done]</p>';
 

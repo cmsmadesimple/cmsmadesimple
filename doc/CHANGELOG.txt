@@ -1,4 +1,4 @@
-Version 1.0.3 "Kauai" -- Jan 18 2006
+Version 1.0.3 "Kauai" -- Jan 18 2007
 -----------------
 
 - Fixed several non-permenant XSS vulnerabilities
