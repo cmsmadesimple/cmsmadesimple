@@ -1,3 +1,33 @@
+Version 1.0.3 "Kauai" -- Jan 18 2006
+-----------------
+
+- Fixed several non-permenant XSS vulnerabilities
+- Fixed issue with breadcrumbs plugin displaying root node multiple
+  times
+- Fixed issue with multiple events being entered
+- Removed global references to $db from the admin and include.php
+- Added a "Modify Events" permission
+- Added event for "Change Group Permissions"
+- Added ability to select a file for the Link content type
+- Added ability to specify default boilerplate page content
+- Fixed print plugin output so that it's xhtml compliant
+- Added text direction to languages for suppot of languages like
+  Hebrew and Arabic
+- Fixed issue where 2 installs on the same domain shared login
+  sessions
+- Fixed issue with contact form with pretty_urls turned on
+- Fixed issue with LoadStylesheets() not loading the modified date
+- Changed search schema layout.  Now allows for expiration dates on
+  entries
+- Changed the icon for global content so that it doesn't look like
+  the Gentoo logo
+- Fixed issue with expanding content in the content list when user
+  didn't have the Add Page perission
+- Added catpcha module support to the contact_form plugin (you still
+  need to manually install the Captcha module for this to work)
+- Added messages when admin log is cleared
+- Much much more
+
 Version 1.0.2 "Maui" -- Sep 20 2006
 -----------------
 
