@@ -77,8 +77,6 @@ if (isset($_GET["htmlblob_id"]))
 			Events::SendEvent('Core', 'DeleteGlobalContentPost', array('global_content' => &$blobobj));
 
 			audit($htmlblob_id, $htmlblob_name, 'Deleted Html Blob');
-
-			$templateops->TouchAllTemplates(); #So pages recompile
 		}
 	}
 }

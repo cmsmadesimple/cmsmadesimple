@@ -1,7 +1,7 @@
 Version 1.0.3 "Kauai" -- Jan 18 2007
 -----------------
 
-- Fixed several non-permenant XSS vulnerabilities
+- Fixed several non-permanent XSS vulnerabilities
 - Fixed issue with breadcrumbs plugin displaying root node multiple
   times
 - Fixed issue with multiple events being entered
@@ -22,7 +22,7 @@ Version 1.0.3 "Kauai" -- Jan 18 2007
 - Changed the icon for global content so that it doesn't look like
   the Gentoo logo
 - Fixed issue with expanding content in the content list when user
-  didn't have the Add Page perission
+  didn't have the Add Page permission
 - Added catpcha module support to the contact_form plugin (you still
   need to manually install the Captcha module for this to work)
 - Added messages when admin log is cleared

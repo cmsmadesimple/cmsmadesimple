@@ -101,7 +101,6 @@ if ($access) {
 					}
 				}
 				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
-				$templateops->TouchAllTemplates(); #So pages recompile
 
 				#Perform the addhtmlblob_post callback
 				foreach($gCms->modules as $key=>$value)
