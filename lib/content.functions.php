@@ -273,19 +273,25 @@ class Smarty_CMS extends Smarty {
 		$fname = '';
 		if (is_writable($config["previews_path"]))
 		{
-			$fname = $config["previews_path"] . "/" . $tpl_name;
+			$fname = cms_join_path($config["previews_path"] , $tpl_name);
 		}
 		else
 		{
-			$fname = TMP_CACHE_LOCATION . '/' . $tpl_name;
+			$fname = cms_join_path(TMP_CACHE_LOCATION , $tpl_name);
 		}
-		$handle = fopen($fname, "r");
-		$data = unserialize(fread($handle, filesize($fname)));
-		fclose($handle);
-		unlink($fname);
-
-		$tpl_source = $data["template"];
-
+		if (true == file_exists($fname))
+		{
+			$handle = fopen($fname, "r");
+			$data = unserialize(fread($handle, filesize($fname)));
+			fclose($handle);
+			unlink($fname);
+	
+			$tpl_source = $data["template"];
+		}
+		else
+		{
+			$tpl_source = 'Error: Cache file: '.$tpl_name.' does not exist.';
+		}
 		#Perform the content template callback
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
