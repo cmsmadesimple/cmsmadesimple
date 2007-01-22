@@ -109,7 +109,6 @@ if ($access)
 
 				if (!isset($_POST['apply'])) {
 					CmsResponse::redirect('listhtmlblobs.php');
-					return;
 				}
 			}
 			else

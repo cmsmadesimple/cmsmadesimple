@@ -362,11 +362,17 @@ class CmsApplication extends CmsObject
 		return CmsUserTagOperations::get_instance();
 	}
 
+	/**
+	 * @deprecated Deprecated.  Use cms_smarty() instead.
+	 **/
 	function GetSmarty()
 	{
 		return CmsSmarty::get_instance();
 	}
 	
+	/**
+	 * @deprecated Deprecated.  Use cms_smarty() instead.
+	 **/
 	function get_smarty()
 	{
 		return CmsSmarty::get_instance();

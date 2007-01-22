@@ -28,7 +28,6 @@
   </div>
   {/if}
 
-
   <form method="post" name="contentform" enctype="multipart/form-data" id="contentform">
 
     {html_hidden id='serialized_content' name='serialized_content' value=$serialized_object}

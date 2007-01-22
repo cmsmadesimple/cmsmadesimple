@@ -598,7 +598,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$newclassname = $row[$this->type_field];
 			}
 			
-			$this->before_load($newclassname, $row);
+			$this->before_load_caller($newclassname, $row);
 			
 			if (!($newclassname != $classname && class_exists($newclassname)))
 			{
@@ -660,7 +660,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$newclassname = $dbresult->fields[$this->type_field];
 			}
 			
-			$this->before_load($newclassname, $dbresult->fields);
+			$this->before_load_caller($newclassname, $dbresult->fields);
 
 			if (!($newclassname != $classname && class_exists($newclassname)))
 			{
@@ -715,7 +715,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		if ($this->_call_validation())
 			return false;
 
-		$this->before_save();
+		$this->before_save_caller();
 
 		$gCms = cmsms();
 		$db = cms_db();
@@ -741,7 +741,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			if ($this->dirty)
 			{
 				CmsProfiler::get_instance()->mark('Dirty Bit Not Set');
-				$query = 'UPDATE ' . $table . ' SET ';
+				$query = "UPDATE {$table} SET ";
 				$midpart = '';
 				$queryparams = array();
 
@@ -752,26 +752,26 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					if ($onefield == $this->modified_date_field)
 					{
 						#$queryparams[] = $time;
-						$midpart .= $onefield . ' = ' . $time . ', ';
+						$midpart .= "{$onefield} = {$time}, ";
 						$this->$onefield = time();
 					}
 					else if ($this->type_field != '' && $this->type_field == $onefield)
 					{
 						$this->$onefield = strtolower(get_class($this));
 						$queryparams[] = strtolower(get_class($this));
-						$midpart .= $onefield . ' = ?, ';
+						$midpart .= "{$onefield} = ?, ";
 					}
 					else if (array_key_exists($localname, $this->params))
 					{
 						$queryparams[] = $this->params[$localname];
-						$midpart .= $onefield . ' = ?, ';
+						$midpart .= "{$onefield} = ?, ";
 					}
 				}
 
 				if ($midpart != '')
 				{	
 					$midpart = substr($midpart, 0, -2);
-					$query .= $midpart . ' WHERE ' . $id_field . ' = ?';
+					$query .= $midpart . " WHERE {$id_field} = ?";
 					$queryparams[] = $id;
 				}
 			
@@ -780,7 +780,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				if ($result)
 				{
 					$this->dirty = false;
-					$this->after_save();
+					$this->after_save_caller();
 				}
 				
 				return $result;
@@ -802,7 +802,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$this->$id_field = $new_id;
 			}
 
-			$query = 'INSERT INTO ' . $table . ' (';
+			$query = "INSERT INTO {$table} (";
 			$midpart = '';
 			$queryparams = array();
 			
@@ -852,7 +852,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				}
 		
 				$this->dirty = false;
-				$this->after_save();
+				$this->after_save_caller();
 			}
 			
 			return $result;
@@ -886,16 +886,16 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 			$id = $this->$id_field;
 		
-			$this->before_delete();
+			$this->before_delete_caller();
 		
 			//Figure out if we need to replace the field from the field mappings
 			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-			$result = cms_db()->Execute('DELETE FROM ' . $table . ' WHERE ' . $this->get_table($id_field) . ' = ' . $id);
+			$result = cms_db()->Execute("DELETE FROM {$table} WHERE ".$this->get_table($id_field)." = {$id}");
 		
 			if ($result)
-				$this->after_delete();
+				$this->after_delete_caller();
 		
 			return $result;
 		}
@@ -937,7 +937,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		$this->dirty = false;
 		
-		$object->after_load();
+		$object->after_load_caller();
 
 		return $object;
 	}
@@ -1020,7 +1020,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$dbms = $config['dbms'];
 		if ($dbms == 'mysqli') $dbms = 'mysql';
 
-		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'dbo' . DIRECTORY_SEPARATOR . $dbms . '.get_columns_in_table.php');
+		include_once(cms_join_path(dirname(dirname(__FILE__)), 'dbo', "{$dbms}.get_columns_in_table.php"));
 		
 		$fields = dbo_get_columns_in_table($table);
 		
@@ -1044,6 +1044,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Wrapper function for before_load.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function before_load_caller($type, $fields)
+	{
+		$this->before_load($type, $fields);
+	}
+	
+	/**
 	 * Callback after object is loaded.  This allows the object to do any
 	 * housekeeping, setting up other fields, etc before it's returned.
 	 *
@@ -1052,6 +1065,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function after_load()
 	{
+	}
+	
+	/**
+	 * Wrapper function for after_load.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function after_load_caller()
+	{
+		$this->after_load();
 	}
 	
 	/**
@@ -1067,6 +1093,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Wrapper function for before_save.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function before_save_caller()
+	{
+		$this->before_save();
+	}
+	
+	/**
 	 * Callback sent after the object is saved.
 	 *
 	 * @return void
@@ -1074,6 +1113,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function after_save()
 	{
+	}
+	
+	/**
+	 * Wrapper function for after_save.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function after_save_caller()
+	{
+		$this->after_save();
 	}
 	
 	/**
@@ -1088,6 +1140,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Wrapper function for before_delete.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function before_delete_caller()
+	{
+		$this->before_delete();
+	}
+	
+	/**
 	 * Callback sent after the object is deleted from
 	 * the database.
 	 *
@@ -1096,6 +1161,19 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function after_delete()
 	{
+	}
+	
+	/**
+	 * Wrapper function for after_delete.  Only should be 
+	 * called by classes that entend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function after_delete_caller()
+	{
+		$this->after_delete();
 	}
 	
 	/**

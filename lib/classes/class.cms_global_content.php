@@ -28,7 +28,7 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsGlobalContent extends CmsObjectRelationalMapping
+class CmsGlobalContent extends CmsVersioningExtension
 {	
 	var $params = array('id' => -1, 'name' => '', 'content' => '', 'owner' => -1);
 	var $field_maps = array('htmlblob_id' => 'id', 'htmlblob_name' => 'name', 'html' => 'content');
@@ -124,9 +124,11 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 /**
  * @deprecated Deprecated.  Use CmsGlobalContent instead.
  **/
+/*
 class GlobalContent extends CmsGlobalContent
 {
 }
+*/
 
 /**
  * @deprecated Deprecated.  Use CmsGlobalContent instead.
