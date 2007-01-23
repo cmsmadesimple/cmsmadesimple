@@ -59,6 +59,7 @@ if (isset($_GET["message"])) {
 		echo "<th>".lang('name')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
+		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
 		echo '</thead>';
 		echo '<tbody>';
@@ -75,8 +76,11 @@ if (isset($_GET["message"])) {
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
+				echo "<td><a href=\"gcbversions.php?id=".$onehtmlblob->id."\">";
+				echo $themeObject->DisplayImage('icons/system/versions.gif', lang('versions'),'','','systemicon');
+				echo "</a></td>\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
-                echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+				echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "<td><a href=\"deletehtmlblob.php?htmlblob_id=".$onehtmlblob->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');

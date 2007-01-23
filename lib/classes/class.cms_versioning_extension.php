@@ -72,17 +72,40 @@ abstract class CmsVersioningExtension extends CmsObjectRelationalMapping
 		parent::after_save_caller(); //Calls the actual after save
 	}
 	
-	public function get_versions($object_id = null)
+	public function get_version($version_number, $object_id = null)
+	{
+		$result = null;
+
+		$db = cms_db();
+		$object_id = ($object_id == NULL ? $this->id : $object_id);
+
+		$dbresult = $db->Execute("SELECT * FROM ".cms_db_prefix()."serialized_versions WHERE type = ? AND version = ? AND object_id = ?", array(get_class($this), $version_number, $object_id));
+		while ($dbresult && !$dbresult->EOF)
+		{
+			$result = unserialize(base64_decode($dbresult->fields['data']));
+			$dbresult->MoveNext();
+		}
+
+		if ($dbresult) $dbresult->Close();
+		
+		return $result;
+	}
+	
+	public function get_versions($only_ids = true, $object_id = null)
 	{
 		$result = array();
 		$db = cms_db();
 
 		$object_id = ($object_id == NULL ? $this->id : $object_id);
 		
-		$dbresult = $db->Execute("SELECT version FROM ".cms_db_prefix()."serialized_versions WHERE type = ? AND object_id = ?", array(get_class($this), $object_id));
+		$dbresult = $db->Execute("SELECT version FROM ".cms_db_prefix()."serialized_versions WHERE type = ? AND object_id = ? ORDER by version DESC", array(get_class($this), $object_id));
 		while ($dbresult && !$dbresult->EOF)
 		{
-			$result[] = $dbresult->fields['version'];
+			if ($only_ids)
+				$result[] = $dbresult->fields['version'];
+			else
+				$result[] = $this->get_version($dbresult->fields['version'], $object_id);
+			
 			$dbresult->MoveNext();
 		}
 		
@@ -101,25 +124,6 @@ abstract class CmsVersioningExtension extends CmsObjectRelationalMapping
 		$serialized = base64_encode(serialize($object));
 		$date = $db->DBTimeStamp(time());
 		return $db->Execute("INSERT INTO " . cms_db_prefix() . "serialized_versions (version, type, object_id, data, create_date, modified_date) VALUES (?, ?, ?, ?, {$date}, {$date})", array($object->version, get_class($object), $object->id, $serialized));
-	}
-	
-	public function retrieve_version($version_number, $object_id = null)
-	{
-		$result = null;
-
-		$db = cms_db();
-		$object_id = ($object_id == NULL ? $this->id : $object_id);
-
-		$dbresult = $db->Execute("SELECT * FROM ".cms_db_prefix()."serialized_versions WHERE type = ? AND version = ? AND object_id = ?", array(get_class($this), $version_number, $object_id));
-		while ($dbresult && !$dbresult->EOF)
-		{
-			$result = unserialize(base64_decode($dbresult->fields['data']));
-			$dbresult->MoveNext();
-		}
-
-		if ($dbresult) $dbresult->Close();
-		
-		return $result;
 	}
 }
 
