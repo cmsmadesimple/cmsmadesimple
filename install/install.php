@@ -162,7 +162,7 @@ $config = CONFIG_FILE_LOCATION;
 if (!file_exists($config)) {
     $file = @fopen($config, "w");
     if ($file != 0) {
-        $cwd = dirname(dirname(__FILE__));
+        $cwd = addslashes(dirname(dirname(__FILE__)));
         fwrite($file,"<?php\n".'$config[\'root_path\'] = "'.$cwd.'";'."\n?>\n");
         fclose($file);
     } else {
@@ -965,7 +965,7 @@ function showPageFive() {
 	$newconfig['db_name'] = $_POST['database'];
 	$newconfig['db_prefix'] = $_POST['prefix'];
 	$newconfig['root_url'] = $_POST['docroot'];
-	$newconfig['root_path'] = str_replace('\\', '\', $_POST['docpath']);
+	$newconfig['root_path'] = str_replace('\\', '\', addslashes($_POST['docpath']));
 	$newconfig['query_var'] = $_POST['querystr'];
 	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
