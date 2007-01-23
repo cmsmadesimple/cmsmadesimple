@@ -1,3 +1,11 @@
+Version 1.0.4 "Lanai" -- subversion
+-----------------
+
+- Fixed issue with number of queries not showing up properly at the
+  end of index.php
+- Fixed issues with breadcrumbs, including nodes not showing up and
+  duplicate nodes showing
+
 Version 1.0.3 "Kauai" -- Jan 18 2007
 -----------------
 

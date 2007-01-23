@@ -61,7 +61,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 	        $content =& $endNode->getContent();
 		$path=array($endNode);
 		$currentNode = &$endNode->getParentNode();
-		while (isset($currentNode) && $currentNode->getLevel() > 0)
+		while (isset($currentNode) && $currentNode->getLevel() >= 0)
 		{
 			$content = &$currentNode->getContent();
 			if (isset($content))
@@ -97,8 +97,9 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			if (isset($currentNode))
 			{
 				$content = &$currentNode->getContent();
-				if (isset($content) || ((isset($content)) && ((strtolower($content->Alias())!=strtolower($root))))) {
-                              		$node = &$manager->sureGetNodeByAlias($root);
+				if (isset($content) && (strtolower($content->Alias()) != strtolower($root)))
+				{
+					$node = &$manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
 						$content = &$node->getContent();
 						if ($content->Id()!=$thispage) 

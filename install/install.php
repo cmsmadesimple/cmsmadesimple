@@ -16,6 +16,8 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+set_magic_quotes_runtime(false);
+
 function return_bytes($val) {
    $val = trim($val);
    $last = strtolower($val{strlen($val)-1});
@@ -963,7 +965,7 @@ function showPageFive() {
 	$newconfig['db_name'] = $_POST['database'];
 	$newconfig['db_prefix'] = $_POST['prefix'];
 	$newconfig['root_url'] = $_POST['docroot'];
-	$newconfig['root_path'] = stripslashes($_POST['docpath']);
+	$newconfig['root_path'] = str_replace('\\', '\', $_POST['docpath']);
 	$newconfig['query_var'] = $_POST['querystr'];
 	$newconfig['use_bb_code'] = false;
 	$newconfig['use_smarty_php_tags'] = false;
