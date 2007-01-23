@@ -5,6 +5,8 @@ Version 1.0.4 "Lanai" -- subversion
   end of index.php
 - Fixed issues with breadcrumbs, including nodes not showing up and
   duplicate nodes showing
+- Fixed the warning that showed up in the 25 to 26 upgrade script
+  if you didn't have any events
 
 Version 1.0.3 "Kauai" -- Jan 18 2007
 -----------------
