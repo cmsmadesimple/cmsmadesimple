@@ -287,6 +287,8 @@ echo $html;
 
 $endtime = microtime();
 
+$db =& $gCms->GetDb();
+
 if ($config["debug"] == true)
 {
 	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
