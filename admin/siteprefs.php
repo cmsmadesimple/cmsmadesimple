@@ -58,6 +58,8 @@ if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST[
 $metadata = '';
 if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
 
+if (isset($_POST['parent_id'])) $default_parent_page = $_POST['parent_id'];
+
 $sitename = '';
 if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
 
@@ -107,6 +109,7 @@ else if (isset($_POST["editsiteprefs"]))
 		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
 		set_site_preference('sitedownmessage', $sitedownmessage);
 		set_site_preference('defaultpagecontent', $defaultpagecontent);
+		set_site_preference('default_parent_page', $default_parent_page);
 		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 		#set_site_preference('useadvancedcss', $useadvancedcss);
 		set_site_preference('logintheme', $logintheme);
@@ -130,6 +133,7 @@ else if (isset($_POST["editsiteprefs"]))
 	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
 	$sitedownmessage = get_site_preference('sitedownmessage');
 	$defaultpagecontent = get_site_preference('defaultpagecontent');
+	$default_parent_page = get_site_preference('default_parent_page');
 	$xmlmodulerepository = get_site_preference('xmlmodulerepository');
 	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
 	#$useadvancedcss = get_site_preference('useadvancedcss');
@@ -304,6 +308,15 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('defaultpagecontent')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="defaulpagecontent" cols="" rows=""><?php echo $defaultpagecontent?></textarea></p>
+		</div>	
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
+			<p class="pageinput">
+			<?php
+			$contentops =& $gCms->GetContentOperations();
+			echo $contentops->CreateHierarchyDropdown(0, $default_parent_page);
+			?>
+			</p>
 		</div>	
 	<?php if ($access) { ?>
 	<div class="pageoverflow">

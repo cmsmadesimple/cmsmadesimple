@@ -55,7 +55,7 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
-$parent_id = -1;
+$parent_id = get_site_preference('default_parent_page', -1);
 if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
 $contentobj = '';
