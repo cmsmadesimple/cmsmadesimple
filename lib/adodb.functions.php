@@ -3,7 +3,8 @@
 function load_adodb() 
 {
 	global $config;
-	
+
+	// @TODO: Remove dependence on PEAR for error handling	
 	if ($config['debug'] == true)
 	{
 		require_once(cms_join_path(dirname(__FILE__), $config['use_adodb_lite'] == true ? 'adodb_lite' : 'adodb', 'adodb-errorpear.inc.php'));
