@@ -307,7 +307,7 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 	
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('defaultpagecontent')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="defaulpagecontent" cols="" rows=""><?php echo $defaultpagecontent?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="defaultpagecontent" cols="" rows=""><?php echo $defaultpagecontent?></textarea></p>
 		</div>	
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
