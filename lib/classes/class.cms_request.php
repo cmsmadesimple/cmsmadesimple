@@ -179,7 +179,6 @@ class CmsRequest extends CmsObject
 
 	}
 
-	
 	/**
 	 * Strips the slashes from all incoming superglobals,
 	 * if necessary.

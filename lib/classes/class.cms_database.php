@@ -35,6 +35,7 @@ define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
 class CmsDatabase extends CmsObject
 {
 	static private $instance = NULL;
+	static private $prefix = NULL;
 
 	static public function get_instance($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false)
 	{
@@ -56,7 +57,16 @@ class CmsDatabase extends CmsObject
 		}
 	}
 	
-	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true)
+	static public function get_prefix()
+	{
+		if (self::$prefix == NULL)
+		{
+			self::$prefix = CmsConfig::get('db_prefix');
+		}
+		return self::$prefix;
+	}
+	
+	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = '')
 	{
 		$gCms = cmsms();
 		$use_adodb_lite = true;
@@ -73,6 +83,11 @@ class CmsDatabase extends CmsObject
 			$debug = $config['debug'];
 			$persistent = $config['persistent_db_conn'];
 			$use_adodb_lite = $config['use_adodb_lite'];
+		}
+		
+		if ($prefix != '')
+		{
+			self::$prefix = $prefix;
 		}
 
 		global $USE_OLD_ADODB;

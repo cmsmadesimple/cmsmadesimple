@@ -26,23 +26,19 @@ class CmsInstallOperations extends CmsObject
 	}
 	
 	static function create_table($db, $table, $fields)
-	{
-		$db = cms_db();
-		
+	{	
 		$dbdict = NewDataDictionary($db);
 		$taboptarray = array('mysql' => 'TYPE=MyISAM');
 
-		$sqlarray = $dbdict->CreateTableSQL(cms_db_prefix().$table, $fields, $taboptarray);
+		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
-	static function create_index($db, $table, $field)
-	{
-		$db = cms_db();
-		
+	static function create_index($db, $table, $name, $field)
+	{	
 		$dbdict = NewDataDictionary($db);
 
-		$sqlarray = $dbdict->CreateIndexSQL($field, cms_db_prefix().$table, $field);
+		$sqlarray = $dbdict->CreateIndexSQL($name, CmsDatabase::get_prefix().$table, $field);
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
@@ -171,6 +167,51 @@ class CmsInstallOperations extends CmsObject
 		}
 		
 		return array('have_connection' => $have_connection, 'have_create_ability' => $have_create_ability, 'have_existing_db' => $have_existing_db);
+	}
+	
+	static function create_database($driver = '', $hostname = '', $username = '', $password = '', $dbname = '')
+	{
+		$drivers = self::get_loaded_database_modules();
+		$driver = $drivers[$driver];
+
+		if ($username != '' && $hostname != '')
+		{
+			$db = CmsDatabase::connect($driver, $hostname, $username, $password, '', false, false);
+			if ($db != null && $db->IsConnected())
+			{
+				$dict = NewDataDictionary($db);
+				if ($dict)
+				{
+					$dict->CreateNewDatabase($dbname);
+					$db->Close();
+					$db = CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false);
+					if ($db != null && $db->IsConnected())
+					{
+						return true;
+					}
+				}
+			}
+		}
+
+		return false;
+	}
+	
+	static function install_schema($driver = '', $hostname = '', $username = '', $password = '', $dbname = '', $prefix = '')
+	{
+		$drivers = self::get_loaded_database_modules();
+		$driver = $drivers[$driver];
+
+		if ($username != '' && $hostname != '')
+		{
+			$db = CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false, $prefix);
+			if ($db != null && $db->IsConnected())
+			{
+				include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'schema.php'));
+				return true;
+			}
+		}
+		
+		return false;
 	}
 	
 	static function _()

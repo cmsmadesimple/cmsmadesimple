@@ -258,7 +258,7 @@ function lang()
  */
 function cms_db_prefix()
 {
-	return CmsConfig::get('db_prefix');
+	return CmsDatabase::get_prefix();
 }
 
 ?>

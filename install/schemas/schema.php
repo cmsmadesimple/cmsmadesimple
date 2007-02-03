@@ -1,20 +1,19 @@
 <?php
-$db = null;
 
 CmsInstallOperations::create_table($db, 'additional_users', "
-	id I KEY,
+	id I KEY AUTO,
 	user_id I,
 	page_id I,
 	content_id I
 ");
 
 CmsInstallOperations::create_table($db, 'admin_bookmarks', "
-	id I KEY,
+	id I KEY AUTO,
 	user_id I,
 	title C(255),
 	url C(255)
 ");
-CmsInstallOperations::create_index($db, 'admin_bookmarks', 'user_id');
+CmsInstallOperations::create_index($db, 'admin_bookmarks', 'user_id', 'user_id');
 
 CmsInstallOperations::create_table($db, 'adminlog', "
 	timestamp I,
@@ -26,7 +25,7 @@ CmsInstallOperations::create_table($db, 'adminlog', "
 ");
 
 CmsInstallOperations::create_table($db, 'admin_recent_pages', "
-	id I KEY,
+	id I KEY AUTO,
 	user_id I,
 	title C(255),
 	url C(255),
@@ -34,7 +33,7 @@ CmsInstallOperations::create_table($db, 'admin_recent_pages', "
 ");
 
 CmsInstallOperations::create_table($db, 'content', "
-	id I KEY,
+	id I KEY AUTO,
 	content_name C(255),
 	type C(25),
 	owner_id I,
@@ -61,12 +60,12 @@ CmsInstallOperations::create_table($db, 'content', "
 	create_date DT,
 	modified_date DT
 ");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."content ADD INDEX (content_alias, active)");
-CmsInstallOperations::create_index($db, 'content', 'default_content');
-CmsInstallOperations::create_index($db, 'content', 'parent_id');
+CmsInstallOperations::create_index($db, 'content', 'alias_and_active', 'content_alias,active');
+CmsInstallOperations::create_index($db, 'content', 'default_content', 'default_content');
+CmsInstallOperations::create_index($db, 'content', 'parent_id', 'parent_id');
 
 CmsInstallOperations::create_table($db, 'content_props', "
-	id I KEY,
+	id I KEY AUTO,
 	content_id I,
 	type C(25),
 	prop_name C(255),
@@ -77,7 +76,7 @@ CmsInstallOperations::create_table($db, 'content_props', "
 	create_date DT,
 	modified_date DT
 ");
-CmsInstallOperations::create_index($db, 'content_props', 'content_id');
+CmsInstallOperations::create_index($db, 'content_props', 'content_id', 'content_id');
 
 CmsInstallOperations::create_table($db, 'crossref', "
 	child_type C(100),
@@ -87,28 +86,29 @@ CmsInstallOperations::create_table($db, 'crossref', "
 	create_date DT,
 	modified_date DT
 ");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (child_type, child_id)");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."crossref ADD INDEX (parent_type, parent_id)");
+
+CmsInstallOperations::create_index($db, 'crossref', 'child_type_and_id', 'child_type,child_id');
+CmsInstallOperations::create_index($db, 'crossref', 'parent_type_and_id', 'parent_type,parent_id');
 
 CmsInstallOperations::create_table($db, 'css', "
-	id I KEY,
+	id I KEY AUTO,
 	css_name C(255),
 	css_text XL,
 	media_type C(255),
 	create_date DT,
 	modified_date DT
 ");
-CmsInstallOperations::create_index($db, 'css', 'css_name');
+CmsInstallOperations::create_index($db, 'css', 'css_name', 'css_name');
 
-CmsInstallOperations::create_table($db, 'css', "
+CmsInstallOperations::create_table($db, 'css_assoc', "
 	assoc_to_id I,
 	assoc_css_id I,
 	assoc_type C(80),
 	create_date DT,
 	modified_date DT
 ");
-CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_to_id');
-CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id');
+CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_to_id', 'assoc_to_id');
+CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id', 'assoc_css_id');
 
 CmsInstallOperations::create_table($db, 'event_handlers', "
 	event_id      I,
@@ -124,20 +124,20 @@ CmsInstallOperations::create_table($db, 'events', "
 	event_name   c(200) NOTNULL,
 	id     I KEY
 ");
-CmsInstallOperations::create_index($db, 'events', 'originator');
-CmsInstallOperations::create_index($db, 'events', 'event_name');
+CmsInstallOperations::create_index($db, 'events', 'originator', 'originator');
+CmsInstallOperations::create_index($db, 'events', 'event_name', 'event_name');
 
 CmsInstallOperations::create_table($db, 'group_perms', "
-	id I KEY,
+	id I KEY AUTO,
 	group_id I,
 	permission_id I,
 	create_date DT,
 	modified_date DT
 ");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."group_perms ADD INDEX (group_id, permission_id)");
+CmsInstallOperations::create_index($db, 'group_perms', 'group_and_permission', 'group_id,permission_id');
 
 CmsInstallOperations::create_table($db, 'groups', "
-	id I KEY,
+	id I KEY AUTO,
 	group_name C(25),
 	active I1,
 	create_date DT,
@@ -145,17 +145,17 @@ CmsInstallOperations::create_table($db, 'groups', "
 ");
 
 CmsInstallOperations::create_table($db, 'htmlblobs', "
-	id I KEY,
+	id I KEY AUTO,
 	htmlblob_name C(255),
 	html XL,
 	owner I,
 	create_date DT,
 	modified_date DT
 ");
-CmsInstallOperations::create_index($db, 'htmlblobs', 'htmlblob_name');
+CmsInstallOperations::create_index($db, 'htmlblobs', 'htmlblob_name', 'htmlblob_name');
 
 CmsInstallOperations::create_table($db, 'additional_htmlblob_users', "
-	id I KEY,
+	id I KEY AUTO,
 	user_id I,
 	htmlblob_id I
 ");
@@ -167,7 +167,7 @@ CmsInstallOperations::create_table($db, 'modules', "
 	admin_only I1 DEFAULT 0,
 	active I1
 ");
-CmsInstallOperations::create_index($db, 'modules', 'module_name');
+CmsInstallOperations::create_index($db, 'modules', 'module_name', 'module_name');
 
 CmsInstallOperations::create_table($db, 'module_deps', "
 	parent_module C(25),
@@ -184,10 +184,10 @@ CmsInstallOperations::create_table($db, 'module_templates', "
 	create_date DT,
 	modified_date DT
 ");
-$db->Execute("ALTER TABLE ".cms_db_prefix()."module_templates ADD INDEX (module_name, template_name)");
+CmsInstallOperations::create_index($db, 'module_templates', 'module_and_template', 'module_name,template_name');
 
 CmsInstallOperations::create_table($db, 'permissions', "
-	id I KEY,
+	id I KEY AUTO,
 	permission_name C(255),
 	permission_text C(255),
 	create_date DT,
@@ -202,7 +202,7 @@ CmsInstallOperations::create_table($db, 'siteprefs', "
 ");
 
 CmsInstallOperations::create_table($db, 'templates', "
-	id I KEY,
+	id I KEY AUTO,
 	template_name C(255),
 	template_content XL,
 	encoding C(25),
@@ -211,7 +211,7 @@ CmsInstallOperations::create_table($db, 'templates', "
 	create_date DT,
 	modified_date DT
 ");
-CmsInstallOperations::create_index($db, 'templates', 'template_name');
+CmsInstallOperations::create_index($db, 'templates', 'template_name', 'template_name');
 
 CmsInstallOperations::create_table($db, 'user_groups', "
 	group_id I,
@@ -226,10 +226,10 @@ CmsInstallOperations::create_table($db, 'userprefs', "
 	value X,
 	type C(25)
 ");
-CmsInstallOperations::create_index($db, 'userprefs', 'user_id');
+CmsInstallOperations::create_index($db, 'userprefs', 'user_id', 'user_id');
 
-CmsInstallOperations::create_table($db, 'userprefs', "
-	id I KEY,
+CmsInstallOperations::create_table($db, 'users', "
+	id I KEY AUTO,
 	username C(25),
 	password C(40),
 	admin_access I1,
@@ -242,7 +242,7 @@ CmsInstallOperations::create_table($db, 'userprefs', "
 ");
 
 CmsInstallOperations::create_table($db, 'userplugins', "
-	id I KEY,
+	id I KEY AUTO,
 	userplugin_name C(255),
 	code X,
 	create_date DT,

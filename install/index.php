@@ -29,6 +29,7 @@ $smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','sma
 require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
 $xajax = new xajax();
 $xajax->registerFunction('test_connection');
+$xajax->registerFunction('create_database');
 $xajax->processRequests();
 $smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
 
@@ -103,6 +104,22 @@ function test_connection($params)
 	
 	$objResponse->addScript("new Effect.BlindDown('connection_options');");
 
+	return $objResponse->getXML();
+}
+
+function create_database($params)
+{
+	global $smarty; //Too lazy to set it all up again
+	
+	$objResponse = new xajaxResponse();
+	
+	$result = CmsInstallOperations::install_schema($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname'], $params['connection']['table_prefix']);
+
+	//$objResponse->addScript("new Effect.BlindUp('connection_options');");
+	$objResponse->addAssign("connection_options", "innerHTML", "<p>Install: {$result}</p><p>{$params['connection']['dbname']}</p>");
+	#$objResponse->addAssign("connection_options", "innerHTML", "<p>".htmlspecialchars(CmsProfiler::get_instance()->report())."</p>");
+	//$objResponse->addScript("new Effect.BlindDown('connection_options');");
+	
 	return $objResponse->getXML();
 }
 

@@ -1,12 +1,12 @@
 {if $databasetestresult.have_connection}
-  <p>{translate}You've successfully connected to the database.{/translate}</p>
+  <p>{translate}You've successfully connected to the database server.{/translate}</p>
   {if $databasetestresult.have_existing_db}
     <p>{translate}The database name you've entered already exists.{/translate}</p>
   {else}
     {if $databasetestresult.have_create_ability}
       <p>{translate}You have permissions to create the database.{/translate}</p>
     {else}
-      <p>{translate}You do not have permission to create this database.  Please have a system administrator create it before continuing.{/translate}</p>
+      <p>{translate}You do not have permission to create this database.  Please have a system administrator create it, and then click "Test" above again to recheck your settings.{/translate}</p>
     {/if}
   {/if}
 {else}
@@ -19,6 +19,7 @@
     {translate}Drop Existing Tables{/translate}:
   </span>
   <span class="go_right">
+    <input type="hidden" name="connection[drop_tables]" value="0" />
     <input type="checkbox" id="connection_drop_tables" name="connection[drop_tables]" value="1" />
   </span>
 </p>
@@ -31,6 +32,6 @@
   </span>
 </p>
 <p style="text-align: center;">
-  <input type="submit" name="create_database" value="{translate}Create Database{/translate}" />
+  <input type="submit" name="create_database" value="{translate}Create Database{/translate}" onclick="xajax_create_database(xajax.getFormValues('connectionform')); return false;" />
 </p>
 {/if}
