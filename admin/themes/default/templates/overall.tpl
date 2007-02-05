@@ -8,35 +8,24 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{translate}CMS Admin{/translate} - Tags</title>
 	<link rel="stylesheet" type="text/css" href="style.php" />
+  <link rel="stylesheet" href="../lib/jquery/tabs/tabs.css" type="text/css" media="print, projection, screen" />
 
 	{literal}
-	<script type="text/javascript" src="themes/default/includes/standard.js"></script>
-	<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>
-	<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js"></script>
-	<script type="text/javascript" src="../lib/scriptaculous/cmsext.js"></script>
-	<script type="text/javascript">
-		var djConfig = {  parseWidgets: false, baseScriptUri: '../lib/dojo/'};
-	</script>
-	<script type="text/javascript" src="../lib/dojo/dojo.js"></script>
-	<script type="text/javascript" src="../lib/dojo/src/widget/PageContainer.js"></script>
-	<script type="text/javascript" src="../lib/dojo/src/widget/html/layout.js"></script>
-	<script type="text/javascript" src="../lib/dojo/src/widget/TabContainer.js"></script>
-	<script type="text/javascript" src="../lib/dojo/src/widget/ContentPane.js"></script>
-	<script type="text/javascript">
-    dojo.require("dojo.widget.TabContainer");
-    dojo.require("dojo.widget.ContentPane");
-    dojo.require("dojo.event.*");
-    dojo.require("dojo.io.*");
-    dojo.require("dojo.lfx.html");
-    dojo.require("dojo.widget.*");
-    dojo.require("dojo.widget.Button");
-	</script>
+	
+	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../lib/jquery/interface/interface.js"></script>
+	<!-- <script type="text/javascript" src="../lib/jquery/tabs/jquery.history.js"></script> -->
+	<script type="text/javascript" src="../lib/jquery/tabs/jquery.tabs.js"></script>
+  <script type="text/javascript">//<![CDATA[
+      // Add styles via JavaScript for graceful degradation...
+      document.write('<link rel="stylesheet" href="../lib/jquery/tabs/tabs_js.css" type="text/css" media="projection, screen" />');
+  //]]></script>
 
 	{/literal}
 	
 	{$headtext}
 	
-	<base href="{$baseurl}" />
+	<!-- <base href="{$baseurl}" /> -->
 
 </head>
 <body>

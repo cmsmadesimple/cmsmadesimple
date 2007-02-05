@@ -35,8 +35,8 @@
 	</style>
 	{/literal}
 	
-	<script type="text/javascript" src="../lib/scriptaculous/prototype.js"></script>
-	<script type="text/javascript" src="../lib/scriptaculous/scriptaculous.js?load=effects"></script>
+	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="../lib/jquery/interface/interface.js"></script>
 
 	{$xajax_header}
 	

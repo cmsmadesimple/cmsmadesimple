@@ -1952,6 +1952,7 @@ class CmsModule extends CmsObject
 	{
 		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="tab1">';
 		//return '<div id="page_tabs">';
+		return '<div id="module_page_tabs"><ul class="anchors">';
 	}
 
 	function SetTabHeader($tabid,$title,$active=false)
@@ -1959,49 +1960,50 @@ class CmsModule extends CmsObject
 		if (!isset($this->tab_header_shown))
 		{
 			// TODO, If non-default theme is chosen then add templateCssPath="/path/to/TabContainer.css"
-			$this->tab_header_output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer"';
-			$this->tab_header_shown = true;
+			//$this->tab_header_output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer"';
+			//$this->tab_header_shown = true;
 		}
 		if (TRUE == $active)
 		{
-			$this->tab_header_output .= ' selectedChild="'.$tabid.'"';
+			//$this->tab_header_output .= ' selectedChild="'.$tabid.'"';
 			// $this->mActiveTab = $tabid;
 		}
-		$this->tab_titles[$tabid] = $title;
+		//$this->tab_titles[$tabid] = $title;
 		// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-	  	return '';
+		return '<li><a href="#'.$tabid.'">'.$title.'</a></li>';
 	}
 
 	function EndTabHeaders()
 	{
-		return $this->tab_header_output.'"><!-- EndTabHeaders -->'."\n";
+		//return $this->tab_header_output.'"><!-- EndTabHeaders -->'."\n";
+		return '</ul>';
 	}
 
 	function StartTabContent()
 	{
-		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="albums">';
-	$this->after_tabs = '';
+		return '';
 	}
 
 	function EndTabContent()
 	{
-		return '</div><script>djConfig.searchIds.push("mainTabContainer");</script>'.$this->after_tabs.' <!-- EndTabContent -->'."\n";
+		return "</div><script>$('#module_page_tabs').tabs({fxAutoHeight: false});</script>";
 	}
 
 	function StartTab($tabid, $params = array())
 	{
+		/*
 		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
 			$message = $this->ShowMessage($this->Lang($params['tab_message']));
 		} else {
 			$message = '';
 		}
-		$this->after_tabs .= '<script>djConfig.searchIds.push("'.$tabid.'");</script>';
-		return '<div dojoType="ContentPane" label="'.$this->tab_titles[$tabid].'" id="' . strtolower(str_replace(' ', '_', $tabid)) . '"><div parseWidgets="false">'."\n";
+		*/
+		return '<div id="' . $tabid . '" class="fragment">';
 	}
 
 	function EndTab()
 	{
-		return '</div></div> <!-- EndTab -->'."\n";
+		return "</div> <!-- EndTab -->\n";
 	}
 
 	/**

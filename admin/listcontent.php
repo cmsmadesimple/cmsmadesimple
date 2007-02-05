@@ -181,7 +181,7 @@ function content_setactive($contentid)
 	setactive($contentid, true); 
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list()); 
-	$objResponse->addScript("dojo.lfx.html.highlight(dojo.byId('tr_$contentid'), [255, 255, 0]).play(500);");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
 	return $objResponse->getXML(); 
 }
 
@@ -192,7 +192,7 @@ function content_setinactive($contentid)
 	setactive($contentid, false); 
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("dojo.lfx.html.highlight(dojo.byId('tr_$contentid'), [255, 255, 0]).play(500);");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
 	return $objResponse->getXML(); 
 }
 
@@ -232,7 +232,7 @@ function content_setdefault($contentid)
 	setdefault($contentid);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("dojo.lfx.html.highlight(dojo.byId('tr_$contentid'), [255, 255, 0]).play(500);");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
 	return $objResponse->getXML();
 }
 
@@ -284,7 +284,7 @@ function content_toggleexpand($contentid, $collapse)
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("dojo.lfx.html.highlight(dojo.byId('tr_$contentid'), [255, 255, 0]).play(500);");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
 	return $objResponse->getXML();
 }
 
@@ -294,7 +294,8 @@ function content_delete($contentid)
 	
 	deletecontent($contentid);
 
-	$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
+	//$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
 	return $objResponse->getXML();
 }
 
@@ -359,7 +360,7 @@ function content_move($contentid, $parentid, $direction)
 	movecontent($contentid, $parentid, $direction);
 
 	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("dojo.lfx.html.highlight(dojo.byId('tr_$contentid'), [255, 255, 0]).play(500);");
+	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
 	return $objResponse->getXML();
 }
 

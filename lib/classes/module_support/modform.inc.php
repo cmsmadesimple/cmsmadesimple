@@ -224,8 +224,8 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
 
 function cms_module_create_input_dropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array)
 {
-	if ($flip_array)
-		$items = array_flip($flip_array);
+	if ($flip_array and is_array($items))
+		$items = array_flip($items);
 
 	$text = '<select name="'.$id.$name.'" id="'.CmsResponse::make_dom_id($id.$name).'"';
 	if ($addttext != '')

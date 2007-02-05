@@ -149,6 +149,7 @@ CmsInstallOperations::create_table($db, 'htmlblobs', "
 	htmlblob_name C(255),
 	html XL,
 	owner I,
+	version I,
 	create_date DT,
 	modified_date DT
 ");
@@ -190,6 +191,16 @@ CmsInstallOperations::create_table($db, 'permissions', "
 	id I KEY AUTO,
 	permission_name C(255),
 	permission_text C(255),
+	create_date DT,
+	modified_date DT
+");
+
+CmsInstallOperations::create_table($db, 'serialized_versions', "
+	id I KEY AUTO,
+	version I,
+	object_id I,
+	data B,
+	type C(255),
 	create_date DT,
 	modified_date DT
 ");

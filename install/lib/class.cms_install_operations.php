@@ -146,7 +146,7 @@ class CmsInstallOperations extends CmsObject
 		$have_existing_db = false;
 		if ($username != '' && $hostname != '')
 		{
-			$db = CmsDatabase::connect($driver, $hostname, $username, $password, '', false, false);
+			$db = self::get_database_connection($driver, $hostname, $username, $password);
 			if ($db != null && $db->IsConnected())
 			{
 				$have_connection = true;
@@ -156,7 +156,7 @@ class CmsInstallOperations extends CmsObject
 				//Ok, we have a connection.  Now, what about with the db name?
 				if ($dbname != '')
 				{
-					$db = CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false);
+					$db = self::get_database_connection($driver, $hostname, $username, $password, $dbname);
 					if ($db != null && $db->IsConnected())
 					{
 						$have_existing_db = true;
@@ -167,6 +167,11 @@ class CmsInstallOperations extends CmsObject
 		}
 		
 		return array('have_connection' => $have_connection, 'have_create_ability' => $have_create_ability, 'have_existing_db' => $have_existing_db);
+	}
+	
+	static function get_database_connection($driver = '', $hostname = '', $username = '', $password = '', $dbname = '')
+	{
+		return CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false);
 	}
 	
 	static function create_database($driver = '', $hostname = '', $username = '', $password = '', $dbname = '')
