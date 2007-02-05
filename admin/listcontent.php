@@ -259,7 +259,8 @@ function content_collapseall()
 function expandall()
 {
 	$userid = get_userid();
-	$all = cmsms()->GetContentOperations()->GetAllContent(false);
+	//$all = cmsms()->GetContentOperations()->GetAllContent(false);
+	$all = cmsms()->content->find_all(array('order' => 'hierarchy ASC'));
 	$cs = '';
 	foreach ($all as &$thisitem)
 	{
