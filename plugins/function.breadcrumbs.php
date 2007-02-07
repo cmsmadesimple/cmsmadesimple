@@ -141,13 +141,13 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 					if (isset($params['currentclassid'])) {
 						$trail .= "<span $currentclassid>";
 					} else {
-						$trail .= '<strong>';
+						$trail .= '<span class="lastitem">';
 					}
 					$trail .= cms_htmlentities($onecontent->MenuText()!=''?$onecontent->MenuText():$onecontent->Name());
 					if (isset($params['currentclassid'])) {
 						$trail .= '</span>';
 					} else {
-						$trail .= '</strong>';
+						$trail .= '</span>';
 					}
 				}
 			}
