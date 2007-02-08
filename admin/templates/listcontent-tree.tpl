@@ -37,7 +37,7 @@
         {/if}
       </tr>
     </thead>
-    <tbody>
+    <tbody id="sortparent">
       {if count($content->getChildren()) gt 0}
         {include file='listcontent-entries.tpl' content=$content->getChildren() siblingcount=$content->getChildrenCount()}
       {/if}

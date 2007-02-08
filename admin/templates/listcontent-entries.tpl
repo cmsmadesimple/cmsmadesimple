@@ -7,7 +7,7 @@
   {get_edit_permission userid=$content_item->owner_id id=$content_item->id mypages=$mypages modify_any_page=$check_modify_all to=has_edit}
   
   {* Do a row *}
-  <tr id="tr_{$content_item->id}" class="{cycle name="1" values="row1,row2"}" onmouseover="this.className='{cycle name="2" values="row1,row2"}hover';" onmouseout="this.className='{cycle name="3" values="row1,row2"}';">
+  <tr id="tr_{$content_item->id}" class="reorderable, {cycle name="1" values="row1,row2"}" onmouseover="this.className='{cycle name="2" values="row1,row2"}hover';" onmouseout="this.className='{cycle name="3" values="row1,row2"}';">
     
     {* Collapse/Expand Links *}
     <td width="12">
@@ -22,7 +22,7 @@
     
     
     {* Basic Data Fields *}
-    <td>{$content_item->hierarchy()}</td>
+    <td class="hierarchy">{$content_item->hierarchy()}</td>
     <td>
       {if $has_edit}
         <a href="editcontent.php?content_id={$content_item->id}">{$content_item->name}</a>

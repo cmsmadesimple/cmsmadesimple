@@ -1,0 +1,20 @@
+/* 
+Tabs - additional IE specific bug fixes
+
+Recommended usage (Conditional Comments):
+<!--[if lte IE 7]>
+<link rel="stylesheet" href="tabs_ie.css" type="text/css" media="projection, screen" />
+<![endif]-->
+
+*/
+.anchors { /* auto clear */
+    display: inline-block; /* @ IE 7 */
+    _height: 1%; /* @ IE 6 */
+}
+.anchors a {
+    float: left;
+}
+.anchors .tabs-disabled a {
+    filter: alpha(opacity=40);
+    zoom: 1; /* trigger filter */
+}

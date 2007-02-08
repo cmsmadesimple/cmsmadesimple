@@ -1,0 +1,13 @@
+/*
+Tabs - hide tabs before initialization to avoid flash of content
+
+Recommended usage (include in <head>):
+<script type="text/javascript">
+    // Add styles via JavaScript for graceful degradation...
+    document.write('<link rel="stylesheet" href="tabs_js.css" type="text/css" media="projection, screen" />');
+</script>
+
+*/
+.fragment {
+    display: none;
+}

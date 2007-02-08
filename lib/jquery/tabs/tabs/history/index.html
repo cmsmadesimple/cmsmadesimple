@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xml:lang="en" lang="en">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+        <meta http-equiv="Content-Style-Type" content="text/css" />
+        <meta http-equiv="Content-Script-Type" content="text/javascript" />
+        <title>jQuery history/remote - solution for hijaxing links</title>
+        <script src="../jquery-1.1.1.js" type="text/javascript"></script>
+        <script src="jquery.history.pack.js" type="text/javascript"></script>
+        <script type="text/javascript">
+            $(function() {
+                $('a.remote').remote('#chapter');
+                $.ajaxHistory.initialize();
+            });
+        </script>
+    </head>
+    <body>
+        <h1>History/Remote - jQuery plugin solution for hijaxing links</h1>
+        <p>
+            Implement Ajax driven links in a completely unobtrusive and accessible manner (also known as <a href="http://domscripting.com/blog/display/41"><q>Hijax</q></a>)
+            with support for important usability issues like the web browser's back and forward button and bookmarking.
+        </p>
+        <p>
+            The link's <code>href</code> attribute is altered to a hash, such as "#remote-1", so that it updates the browser's
+            current <abbr title="Uniform Resource Locator">URL</abbr> with this anchor hash, whereas the former value of the attribute is used to load content via
+            XmlHttpRequest and update the specified element. If no target element is found, a new div element will be
+            created and appended to the body to load the content into. The link triggers a history event on click to
+            maintain the browsers history.
+        </p>
+        <p>
+            jQuery adds a custom request header of the form "X-Requested-With: XmlHttpRequest"
+            to any Ajax request so that the called page can distinguish between a standard and a XmlHttpRequest.
+        </p>
+        <p>
+            I also use this plugin to enable history for <a href="../tabs/index.html#section-1">my Tabs plugin</a>.
+        </p>
+        <p>
+            <strong><a class="remote" href="chapter-1.html">Load Chapter 1</a></strong><br />
+            <strong><a class="remote" href="chapter-2.html">Load Chapter 2</a></strong><br />
+            <strong><a class="remote" href="chapter-3.html">Load Chapter 3</a></strong>
+        </p>
+
+        <div id="chapter"></div>
+
+        <h2>Tested with</h2>
+        <ul id="tested">
+            <li>Firefox 2.0</li>
+            <li>Opera 9.01</li>
+            <li>Safari 2.0.4</li>
+            <li><abbr title="Internet Explorer/Windows">IE</abbr> 7</li>
+            <li><abbr title="Internet Explorer/Windows">IE</abbr> 6</li>
+        </ul>
+
+    </body>
+</html>
