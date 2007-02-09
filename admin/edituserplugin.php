@@ -72,7 +72,13 @@ if ($access) {
 				$validinfo = false;
 			}
 		}
-
+		// Make sure no spaces are put into plugin name.
+		$without_spaces = str_replace(' ', '', $plugin_name);
+		if ($plugin_name != $without_spaces)
+		{
+			$error[] = lang('error_udt_name_whitespace');
+			$validinfo = false;
+		}
 		if ($code == "") {
 			$error[] = lang('nofieldgiven', array(lang('code')));
 			$validinfo = false;

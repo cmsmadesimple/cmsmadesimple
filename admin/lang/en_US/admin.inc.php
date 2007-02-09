@@ -797,4 +797,5 @@ $lang['admin']['file_url'] = 'Link to file (instead of URL)';
 $lang['admin']['no_file_url'] = 'None (Use URL Above)';
 $lang['admin']['none'] = 'none';
 $lang['admin']['defaultparentpage'] = 'Default Parent Page';
+$lang['admin']['error_udt_name_whitespace'] = 'Error: User Defined Tags cannot have spaces in their name.';
 ?>
