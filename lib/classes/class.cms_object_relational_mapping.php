@@ -717,7 +717,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		$this->before_save_caller();
 
-		$gCms = cmsms();
 		$db = cms_db();
 
 		$table = $this->get_table();

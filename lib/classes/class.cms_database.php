@@ -41,7 +41,7 @@ class CmsDatabase extends CmsObject
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
+			CmsDatabase::connect($dbms, $hostname, $username, $password, $dbname, $debug);
 		}
 		return self::$instance;
 	}
@@ -66,7 +66,7 @@ class CmsDatabase extends CmsObject
 		return self::$prefix;
 	}
 	
-	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = '')
+	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = '', $make_global = true)
 	{
 		$gCms = cmsms();
 		$use_adodb_lite = true;
@@ -165,6 +165,11 @@ class CmsDatabase extends CmsObject
 			$dbinstance->Execute("PRAGMA short_column_names = 1;");
 	        sqlite_create_function($dbinstance->_connectionID,'now','time',0);
 	    }
+	
+		if ($make_global)
+		{
+			self::$instance = $dbinstance;
+		}
 
 		return $dbinstance;
 	}

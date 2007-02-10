@@ -219,6 +219,28 @@ class CmsInstallOperations extends CmsObject
 		return false;
 	}
 	
+	static function install_account($driver = '', $hostname = '', $dbusername = '', $dbpassword = '', $dbname = '', $prefix = '', $username = '', $password = '')
+	{
+		$drivers = self::get_loaded_database_modules();
+		$driver = $drivers[$driver];
+
+		if ($username != '' && $hostname != '')
+		{
+			$db = CmsDatabase::connect($driver, $hostname, $dbusername, $dbpassword, $dbname, false, false, $prefix);
+			if ($db != null && $db->IsConnected())
+			{
+				var_dump($db);
+				$user = new CmsUser();
+				$user->username = $username;
+				$user->set_password($password);
+				$user->active = true;
+				return $user->save();
+			}
+		}
+		
+		return false;
+	}
+	
 	static function _()
 	{
 		$args = func_get_args();

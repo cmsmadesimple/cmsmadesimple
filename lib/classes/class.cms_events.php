@@ -114,7 +114,7 @@ class CmsEvents extends CmsObject
 	{
 		//var_dump("Sending $eventname on $modulename");
 		global $gCms;
-		$usertagops =& $gCms->GetUserTagOperations();
+		//$usertagops =& $gCms->GetUserTagOperations();
 
 		$results = CmsEvents::list_event_handlers($modulename, $eventname);
 		
@@ -125,7 +125,7 @@ class CmsEvents extends CmsObject
 				if( isset( $row['tag_name'] ) && $row['tag_name'] != '' )
 				{
 					debug_buffer('calling user tag ' . $row['tag_name'] . ' from event ' . $eventname);
-					$usertagops->CallUserTag( $row['tag_name'], $params );
+					CmsUserTagOperations::CallUserTag( $row['tag_name'], $params );
 				}
 				else if( isset( $row['module_name'] ) && $row['module_name'] != '' )
 				{
@@ -168,7 +168,7 @@ class CmsEvents extends CmsObject
 	public static function list_event_handlers( $modulename, $eventname )
 	{
 		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 		$variables =& $gCms->variables;
 		
 		$params['module'] = $modulename;

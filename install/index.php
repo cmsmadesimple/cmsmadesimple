@@ -21,6 +21,14 @@
 require_once('../lib/cmsms.api.php');
 require_once('lib/class.cms_install_operations.php');
 
+$session_key = substr(md5(dirname(__FILE__)), 0, 8);
+
+#Setup session with different id and start it
+@session_name('CMSSESSID' . $session_key);
+@ini_set('url_rewriter.tags', '');
+@ini_set('session.use_trans_sid', 0);
+@session_start();
+
 $smarty = CmsSmarty::get_instance(false);
 $smarty->force_compile = true;
 $smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DS);
@@ -30,6 +38,7 @@ require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.in
 $xajax = new xajax();
 $xajax->registerFunction('test_connection');
 $xajax->registerFunction('create_database');
+$xajax->registerFunction('create_account');
 $xajax->processRequests();
 $smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
 
@@ -89,9 +98,14 @@ switch (CmsInstallOperations::get_action())
 		$smarty->display('body.tpl');
 		break;
 		
+	case "account":
+		
+		$smarty->assign('include_file', 'account.tpl');
+		$smarty->display('body.tpl');
+		break;
 }
 
-function test_connection($params)
+function test_connection($params, $ajax = true)
 {
 	global $smarty; //Too lazy to set it all up again
 
@@ -99,26 +113,42 @@ function test_connection($params)
 	
 	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname']);
 	
+	$_SESSION['connection'] = $params['connection'];
+	
 	$smarty->assign('databasetestresult', $result);
 	$objResponse->addAssign("connection_options", "innerHTML", $smarty->fetch('databaseinsert.tpl'));
 	
-	$objResponse->addScript("new Effect.BlindDown('connection_options');");
+	$objResponse->addScript("$('#connection_options').slideDown('slow');");
 
 	return $objResponse->getXML();
 }
 
-function create_database($params)
+function create_database($params, $ajax = true)
 {
 	global $smarty; //Too lazy to set it all up again
 	
 	$objResponse = new xajaxResponse();
 	
 	$result = CmsInstallOperations::install_schema($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname'], $params['connection']['table_prefix']);
+	
+	$_SESSION['connection'] = $params['connection'];
 
 	//$objResponse->addScript("new Effect.BlindUp('connection_options');");
-	$objResponse->addAssign("connection_options", "innerHTML", "<p>Install: {$result}</p><p>{$params['connection']['dbname']}</p>");
-	#$objResponse->addAssign("connection_options", "innerHTML", "<p>".htmlspecialchars(CmsProfiler::get_instance()->report())."</p>");
+	if ($params['connection']['drop_tables'] == '1')
+		$objResponse->addAssign("connection_options", "innerHTML", "<p>Install: {$result}</p><p>{$params['connection']['dbname']}</p>");
+	//$objResponse->addAssign("connection_options", "innerHTML", "<p>".htmlspecialchars(CmsProfiler::get_instance()->report())."</p>");
 	//$objResponse->addScript("new Effect.BlindDown('connection_options');");
+	
+	return $objResponse->getXML();
+}
+
+function create_account($params, $ajax = true)
+{
+	global $smarty;
+	
+	$objResponse = new xajaxResponse();
+	$connection = $_SESSION['connection'];
+	$objResponse->addAlert(var_dump(CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $params['admin_account']['username'], $params['admin_account']['password'])));
 	
 	return $objResponse->getXML();
 }
