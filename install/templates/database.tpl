@@ -23,7 +23,7 @@
         {translate}Hostname{/translate}:
       </span>
       <span class="go_right">
-        <input type="text" id="connection_hostname" name="connection[hostname]" />
+        <input type="text" id="connection_hostname" name="connection[hostname]" value="{$smarty.session.connection.hostname}" />
       </span>
     </p>
     <p>
@@ -31,7 +31,7 @@
         {translate}Username{/translate}:
       </span>
       <span class="go_right">
-        <input type="text" id="connection_username" name="connection[username]" />
+        <input type="text" id="connection_username" name="connection[username]" value="{$smarty.session.connection.username}" />
       </span>
     </p>
     <p>
@@ -39,7 +39,7 @@
         {translate}Password{/translate}:
       </span>
       <span class="go_right">
-        <input type="password" id="connection_password" name="connection[password]" />
+        <input type="password" id="connection_password" name="connection[password]" value="{$smarty.session.connection.password}" />
       </span>
     </p>
     <p>
@@ -47,7 +47,24 @@
         {translate}Database Name{/translate}:
       </span>
       <span class="go_right">
-        <input type="text" id="connection_dbname" name="connection[dbname]" />
+        <input type="text" id="connection_dbname" name="connection[dbname]" value="{$smarty.session.connection.dbname}" />
+      </span>
+    </p>
+    <p>
+      <span class="go_left">
+        {translate}Drop Existing Tables{/translate}:
+      </span>
+      <span class="go_right">
+        <input type="hidden" name="connection[drop_tables]" value="0" />
+        <input type="checkbox" id="connection_drop_tables" name="connection[drop_tables]" value="1" />
+      </span>
+    </p>
+    <p>
+      <span class="go_left">
+        {translate}Table Prefix{/translate}:
+      </span>
+      <span class="go_right">
+        <input type="text" id="connection_table_prefix" name="connection[table_prefix]" value="{$smarty.session.connection.table_prefix}" />
       </span>
     </p>
     <p>
@@ -66,16 +83,17 @@
 
 <div class="callout">
   <fieldset>
-    <legend>{translate}Connection Options{/translate}</legend>
+    <legend>{translate}Test Results{/translate}</legend>
     <div id="connection_options" style="display: none;">
     </div>
   </fieldset>
 </div>
-</form>
 
 <br style="clear: both;" />
 
 <p>
-  <a href="index.php?action=check">{translate}Back{/translate}</a>
-  <a href="index.php?action=account">{translate}Next{/translate}</a>
+  <input type="submit" name="back" value="{translate}Back{/translate}" />
+  <input type="submit" name="next" value="{translate}Next{/translate}" />
 </p>
+
+</form>

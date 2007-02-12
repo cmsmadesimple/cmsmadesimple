@@ -69,9 +69,19 @@
 </div>
 
 <p>
-  {if $failure or $failure2}
-    <a href="index.php?action=check">{translate}Check Again{/translate}</a>
-  {/if}
-  <a href="index.php?action=intro">{translate}Back{/translate}</a>
-  <a href="index.php?action=database">{translate}Next{/translate}</a>
+    {if $failure or $failure2}
+      <form action="index.php" method="get" style="display: inline;">
+        <input type="submit" name="check_again" value="{translate}Check Again{/translate}" />
+        <input type="hidden" name="action" value="check" />
+      </form>
+    {/if}
+    <form action="index.php" method="get" style="display: inline;">
+      <input type="submit" name="back" value="{translate}Back{/translate}" />
+      <input type="hidden" name="action" value="intro" />
+    </form>
+    <form action="index.php" method="get" style="display: inline;">
+      <input type="submit" name="next" value="{translate}Next{/translate}" />
+      <input type="hidden" name="action" value="database" />
+    </form>
+  </form>
 </p>

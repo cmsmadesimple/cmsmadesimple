@@ -229,11 +229,11 @@ class CmsInstallOperations extends CmsObject
 			$db = CmsDatabase::connect($driver, $hostname, $dbusername, $dbpassword, $dbname, false, false, $prefix);
 			if ($db != null && $db->IsConnected())
 			{
-				var_dump($db);
 				$user = new CmsUser();
 				$user->username = $username;
 				$user->set_password($password);
 				$user->active = true;
+				$user->admin_access = true;
 				return $user->save();
 			}
 		}

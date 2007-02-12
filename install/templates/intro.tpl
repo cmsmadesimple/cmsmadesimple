@@ -15,5 +15,8 @@
 </p>
 
 <p>
-  <a href="index.php?action=check">{translate}Next{/translate}</a>
+  <form action="index.php" method="get">
+    <input type="submit" name="next" value="{translate}Next{/translate}" />
+    <input type="hidden" name="action" value="check" />
+  </form>
 </p>

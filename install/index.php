@@ -37,72 +37,131 @@ $smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','sma
 require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
 $xajax = new xajax();
 $xajax->registerFunction('test_connection');
-$xajax->registerFunction('create_database');
-$xajax->registerFunction('create_account');
+//$xajax->registerFunction('create_database');
+//$xajax->registerFunction('create_account');
 $xajax->processRequests();
 $smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
 
-switch (CmsInstallOperations::get_action())
+display_page($smarty);
+
+function display_page($smarty, $action = '')
 {
-	case "intro":
+	if ($action == '')
+		$action = CmsInstallOperations::get_action();
 	
-		$smarty->assign('languages', CmsInstallOperations::get_language_list());
-		$smarty->assign('selected_language', CmsInstallOperations::get_language_cookie());
-
-		$smarty->assign('include_file', 'intro.tpl');
-		$smarty->display('body.tpl');
-		break;
-		
-	case "check":
-		
-		$required_checks = CmsInstallOperations::required_checks();
-
-		$smarty->assign('php_version', CmsInstallOperations::required_setting_output($required_checks['php_version']));
-		$smarty->assign('has_database', CmsInstallOperations::required_setting_output($required_checks['has_database']));
-		$smarty->assign('which_database', $required_checks['which_database']);
-
-		$smarty->assign('has_xml', CmsInstallOperations::required_setting_output($required_checks['has_xml']));
-		$smarty->assign('has_simplexml', CmsInstallOperations::required_setting_output($required_checks['has_simplexml']));
-		
-		$smarty->assign('templates_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','template_c'));
-		$smarty->assign('canwrite_templates', CmsInstallOperations::required_setting_output($required_checks['canwrite_templates']));
-		$smarty->assign('cache_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','cache'));
-		$smarty->assign('canwrite_cache', CmsInstallOperations::required_setting_output($required_checks['canwrite_cache']));
-		
-		$smarty->assign('failure', $required_checks['failure']);
-		
-		$recommended_checks = CmsInstallOperations::recommended_checks();
-		
-		$smarty->assign('file_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['file_uploads']));
-		$smarty->assign('safe_mode', CmsInstallOperations::recommended_setting_output($recommended_checks['safe_mode'], true));
-		$smarty->assign('magic_quotes_runtime', CmsInstallOperations::recommended_setting_output($recommended_checks['magic_quotes_runtime'], true));
-		$smarty->assign('register_globals', CmsInstallOperations::recommended_setting_output($recommended_checks['register_globals'], true));
-		$smarty->assign('output_buffering', CmsInstallOperations::recommended_setting_output($recommended_checks['output_buffering'], true));
-
-		$smarty->assign('uploads_path', cms_join_path(dirname(dirname(__FILE__)),'uploads'));
-		$smarty->assign('canwrite_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_uploads']));
-		$smarty->assign('modules_path', cms_join_path(dirname(dirname(__FILE__)),'modules'));
-		$smarty->assign('canwrite_modules', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_modules']));
-		
-		$smarty->assign('failure2', $recommended_checks['failure']);
-
-		$smarty->assign('include_file', 'check.tpl');
-		$smarty->display('body.tpl');
-		break;
-		
-	case "database":
+	switch ($action)
+	{
+		case "intro":
 	
-		$smarty->assign('databases', CmsInstallOperations::get_loaded_database_modules());
+			$smarty->assign('languages', CmsInstallOperations::get_language_list());
+			$smarty->assign('selected_language', CmsInstallOperations::get_language_cookie());
+
+			$smarty->assign('include_file', 'intro.tpl');
+			$smarty->display('body.tpl');
+			break;
+		
+		case "check":
+		
+			$required_checks = CmsInstallOperations::required_checks();
+
+			$smarty->assign('php_version', CmsInstallOperations::required_setting_output($required_checks['php_version']));
+			$smarty->assign('has_database', CmsInstallOperations::required_setting_output($required_checks['has_database']));
+			$smarty->assign('which_database', $required_checks['which_database']);
+
+			$smarty->assign('has_xml', CmsInstallOperations::required_setting_output($required_checks['has_xml']));
+			$smarty->assign('has_simplexml', CmsInstallOperations::required_setting_output($required_checks['has_simplexml']));
+		
+			$smarty->assign('templates_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','template_c'));
+			$smarty->assign('canwrite_templates', CmsInstallOperations::required_setting_output($required_checks['canwrite_templates']));
+			$smarty->assign('cache_path', cms_join_path(dirname(dirname(__FILE__)),'tmp','cache'));
+			$smarty->assign('canwrite_cache', CmsInstallOperations::required_setting_output($required_checks['canwrite_cache']));
+		
+			$smarty->assign('failure', $required_checks['failure']);
+		
+			$recommended_checks = CmsInstallOperations::recommended_checks();
+		
+			$smarty->assign('file_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['file_uploads']));
+			$smarty->assign('safe_mode', CmsInstallOperations::recommended_setting_output($recommended_checks['safe_mode'], true));
+			$smarty->assign('magic_quotes_runtime', CmsInstallOperations::recommended_setting_output($recommended_checks['magic_quotes_runtime'], true));
+			$smarty->assign('register_globals', CmsInstallOperations::recommended_setting_output($recommended_checks['register_globals'], true));
+			$smarty->assign('output_buffering', CmsInstallOperations::recommended_setting_output($recommended_checks['output_buffering'], true));
+
+			$smarty->assign('uploads_path', cms_join_path(dirname(dirname(__FILE__)),'uploads'));
+			$smarty->assign('canwrite_uploads', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_uploads']));
+			$smarty->assign('modules_path', cms_join_path(dirname(dirname(__FILE__)),'modules'));
+			$smarty->assign('canwrite_modules', CmsInstallOperations::recommended_setting_output($recommended_checks['canwrite_modules']));
+		
+			$smarty->assign('failure2', $recommended_checks['failure']);
+
+			$smarty->assign('include_file', 'check.tpl');
+			$smarty->display('body.tpl');
+			break;
+		
+		case "database":
 	
-		$smarty->assign('include_file', 'database.tpl');
-		$smarty->display('body.tpl');
-		break;
+			$smarty->assign('databases', CmsInstallOperations::get_loaded_database_modules());
+
+			if (isset($_REQUEST['connection']))
+			{
+				$_SESSION['connection'] = $_REQUEST['connection'];
+				if (isset($_REQUEST['next']))
+				{
+					display_page($smarty, 'account');
+					return;
+				}
+				else if (isset($_REQUEST['back']))
+				{
+					display_page($smarty, 'check');
+					return;
+				}
+			}
+	
+			$smarty->assign('include_file', 'database.tpl');
+			$smarty->display('body.tpl');
+			break;
 		
-	case "account":
+		case "account":
 		
-		$smarty->assign('include_file', 'account.tpl');
-		$smarty->display('body.tpl');
-		break;
+			if (isset($_REQUEST['admin_account']))
+			{
+				$_SESSION['admin_account'] = $_REQUEST['admin_account'];
+				if (isset($_REQUEST['next']))
+				{
+					display_page($smarty, 'create_schema');
+					return;
+				}
+				else if (isset($_REQUEST['back']))
+				{
+					display_page($smarty, 'database');
+					return;
+				}
+			}
+		
+			$smarty->assign('include_file', 'account.tpl');
+			$smarty->display('body.tpl');
+			break;
+			
+		case "create_schema":
+		
+			$connection = $_SESSION['connection'];
+			$admin_account = $_SESSION['admin_account'];
+			
+			$user_created = false;
+			
+			$installed = CmsInstallOperations::install_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
+			if ($installed)
+			{
+				$user_created = CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $admin_account['username'], $admin_account['password']);
+			}
+			
+			$smarty->assign('installed', $installed);
+			$smarty->assign('user_created', $user_created);
+			
+			$smarty->assign('include_file', 'create_schema.tpl');
+			$smarty->display('body.tpl');
+		
+			break;
+	}
 }
 
 function test_connection($params, $ajax = true)
@@ -112,8 +171,6 @@ function test_connection($params, $ajax = true)
 	$objResponse = new xajaxResponse();
 	
 	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname']);
-	
-	$_SESSION['connection'] = $params['connection'];
 	
 	$smarty->assign('databasetestresult', $result);
 	$objResponse->addAssign("connection_options", "innerHTML", $smarty->fetch('databaseinsert.tpl'));
@@ -130,8 +187,6 @@ function create_database($params, $ajax = true)
 	$objResponse = new xajaxResponse();
 	
 	$result = CmsInstallOperations::install_schema($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname'], $params['connection']['table_prefix']);
-	
-	$_SESSION['connection'] = $params['connection'];
 
 	//$objResponse->addScript("new Effect.BlindUp('connection_options');");
 	if ($params['connection']['drop_tables'] == '1')
@@ -147,7 +202,7 @@ function create_account($params, $ajax = true)
 	global $smarty;
 	
 	$objResponse = new xajaxResponse();
-	$connection = $_SESSION['connection'];
+	//$connection = $_SESSION['connection'];
 	$objResponse->addAlert(var_dump(CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $params['admin_account']['username'], $params['admin_account']['password'])));
 	
 	return $objResponse->getXML();
