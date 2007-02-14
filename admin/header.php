@@ -18,9 +18,19 @@
 #
 #$Id$
 
+//var_dump('here');
+
 CmsAdminTheme::start();
+
+//var_dump('here2');
+
 $themeObject = CmsAdminTheme::get_instance();
+
+//var_dump('here3');
+
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
+
+//var_dump('here4');
 
 /*
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))

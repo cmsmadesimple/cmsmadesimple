@@ -44,6 +44,7 @@ class CmsAdminTheme extends CmsObject
 	function __construct()
 	{
 		parent::__construct();
+		
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
 		if ($this->query == '' && isset($_POST['module']) && $_POST['module'] != '')
@@ -75,11 +76,11 @@ class CmsAdminTheme extends CmsObject
 	static function get_theme_for_user()
 	{
 		$gCms = cmsms();
-		$userid = get_userid();
+		$user = CmsAdmin::get_user(true);
+		$userid = $user->id;
 
-		$themeName=get_preference(get_userid(), 'admintheme', 'default');
+		$themeName=get_preference($userid, 'admintheme', 'default');
 		$themeObjectName = $themeName."Theme";
-		$userid = get_userid();
 
 		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php"))
 		{
@@ -95,6 +96,7 @@ class CmsAdminTheme extends CmsObject
 		$themeObject->set_module_admin_interfaces();
 		$themeObject->set_aggrigate_permissions();
 		$themeObject->populate_admin_navigation();
+		//$themeObject->themeName = $themeName;
 
 		return $themeObject;
 	}

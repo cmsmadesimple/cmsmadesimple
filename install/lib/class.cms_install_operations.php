@@ -241,6 +241,40 @@ class CmsInstallOperations extends CmsObject
 		return false;
 	}
 	
+	static function load_basic_schema($driver = '', $hostname = '', $dbusername = '', $dbpassword = '', $dbname = '', $prefix = '')
+	{
+		$drivers = self::get_loaded_database_modules();
+		$driver = $drivers[$driver];
+
+		$db = CmsDatabase::connect($driver, $hostname, $dbusername, $dbpassword, $dbname, false, false, $prefix);
+		if ($db != null && $db->IsConnected())
+		{
+			$handle = fopen(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR.'schemas'.DIRECTORY_SEPARATOR.'basic.sql', 'r');
+
+			if ($handle)
+			{
+				while (!feof($handle))
+				{
+					set_magic_quotes_runtime(false);
+					$s = fgets($handle, 32768);
+					if ($s != "")
+					{
+						$s = trim(preg_replace('/^INSERT INTO /', "INSERT INTO {$prefix}", $s));
+						$s = str_replace("\\r\\n", "\r\n", $s);
+						$s = str_replace("\\'", "''", $s);
+						$s = str_replace('\\"', '"', $s);
+						$result = $db->Execute($s);
+						if (!$result)
+						{
+							die("Invalid query: $s");
+						} ## if
+					}
+				}
+				fclose($handle);
+			}
+		}
+	}
+	
 	static function _()
 	{
 		$args = func_get_args();

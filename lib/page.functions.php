@@ -363,10 +363,10 @@ function load_all_preferences($userid)
 function get_preference($userid, $prefname, $default='')
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = cms_db();
 	$userprefs = &$gCms->userprefs;
 
-	$result = '';
+	$result = $default;
 
 	if (!isset($gCms->userprefs))
 	{
@@ -378,10 +378,6 @@ function get_preference($userid, $prefname, $default='')
 		if (isset($userprefs[$prefname]))
 		{
 			$result = $userprefs[$prefname];
-		}
-		else
-		{
-			$result = $default;
 		}
 	}
 
