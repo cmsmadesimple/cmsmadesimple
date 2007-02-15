@@ -844,41 +844,50 @@ function filespec_is_excluded( $file, $excludes )
 */
 function is_directory_writable( $path )
 {
-   if ( substr ( $path , strlen ( $path ) - 1 ) != '/' ) { $path .= '/' ; }     
-   $result = true;
-   if( $handle = @opendir( $path ) )
-     {
-       while( false !== ( $file = readdir( $handle ) ) )
-	 {
-	   if( $file == '.' || $file == '..' )
-	     {
-	       continue;
-	     }
+//   if( can_admin_upload() == FALSE )
+//     {
+//       return false;
+//     }
 
-	   $p = $path.$file;
+  if ( substr ( $path , strlen ( $path ) - 1 ) != '/' )
+    { 
+      $path .= '/' ; 
+    }     
 
-	   if( !@is_writable( $p ) )
-	     {
-	       return false;
-	     }
-
-	   if( @is_dir( $p ) )
-	     {
-	       $result = is_directory_writable( $p );
-	       if( !$result )
-		 {
-		   return false;
-		 }
-	     }
-	 }
-       @closedir( $handle );
-     }
-   else
-     {
-       return false;
-     }
-
-   return true;
+  $result = true;
+  if( $handle = @opendir( $path ) )
+    {
+      while( false !== ( $file = readdir( $handle ) ) )
+	{
+	  if( $file == '.' || $file == '..' )
+	    {
+	      continue;
+	    }
+	  
+	  $p = $path.$file;
+	  
+	  if( !@is_writable( $p ) )
+	    {
+	      return false;
+	    }
+	  
+	  if( @is_dir( $p ) )
+	    {
+	      $result = is_directory_writable( $p );
+	      if( !$result )
+		{
+		  return false;
+		}
+	    }
+	}
+      @closedir( $handle );
+    }
+  else
+    {
+      return false;
+    }
+  
+  return true;
 }
 
 /**
@@ -1150,6 +1159,105 @@ function GetModuleParameters($id)
 	}
 
 	return $params;
+}
+
+
+function can_users_upload()
+{
+  # first, check to see if safe mode is enabled
+  # if it is, then check to see the owner of the index.php, moduleinterface.php
+  # and the uploads and modules directory.  if they all match, then we
+  # can upload files.
+  # if safe mode is off, then we just have to check the permissions.
+  global $gCms;
+  $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
+  $dir_uploads = $gCms->config['uploads_path'];
+
+  $stat_index = @stat($file_index);
+  $stat_uploads = @stat($dir_uploads);
+
+  if( $stat_index == FALSE || $stat_uploads == FALSE )
+    {
+      // couldn't get some necessary information.
+      return false;
+    }
+
+  $safe_mode = (strtolower(ini_get('safe_mode')) == "off")?FALSE:TRUE;  
+  if( $safe_mode == TRUE )
+    {
+      // we're in safe mode.
+      if( $stat_index[4] != $stat_uploads[4] )
+	{
+	  return FALSE;
+	}
+    }
+
+  // now check to see if we can write to the directories
+  if( !is_writable( $dir_modules ) )
+    {
+      return FALSE;
+    }
+  if( !is_writable( $dir_uploads ) )
+    {
+      return FALSE;
+    }
+  
+  // It all worked.
+  return TRUE;
+}
+
+function can_admin_upload()
+{
+  # first, check to see if safe mode is enabled
+  # if it is, then check to see the owner of the index.php, moduleinterface.php
+  # and the uploads and modules directory.  if they all match, then we
+  # can upload files.
+  # if safe mode is off, then we just have to check the permissions.
+  global $gCms;
+  $my_uid = @getmyuid();
+  $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
+  $file_moduleinterface = $gCms->config['root_path'].DIRECTORY_SEPARATOR.
+    $gCms->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
+  $dir_uploads = $gCms->config['uploads_path'];
+  $dir_modules = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'modules';
+
+  $stat_index = @stat($file_index);
+  $stat_moduleinterface = @stat($file_moduleinterface);
+  $stat_uploads = @stat($dir_uploads);
+  $stat_modules = @stat($dir_modules);
+
+  if( $my_uid == FALSE || $stat_index == FALSE || 
+      $stat_moduleinterface == FALSE || $stat_uploads == FALSE ||
+      $stat_modules == FALSE )
+    {
+      // couldn't get some necessary information.
+      return FALSE;
+    }
+
+  $safe_mode = (ini_get('safe_mode')==1)?TRUE:FALSE;
+  if( $safe_mode == TRUE )
+    {
+      // we're in safe mode.
+      if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
+	  ($stat_moduleinterface[4] != $stat_uploads[4]) )
+	{
+	  // owners don't match
+	  return FALSE;
+	}
+    }
+
+  // now check to see if we can write to the directories
+  if( !is_writable( $dir_modules ) )
+    {
+      return FALSE;
+    }
+  if( !is_writable( $dir_uploads ) )
+    {
+      return FALSE;
+    }
+  
+  // It all worked.
+  return TRUE;
 }
 
 # vim:ts=4 sw=4 noet

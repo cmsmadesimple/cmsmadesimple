@@ -625,12 +625,13 @@ else
 		</table>
 		<?php
 		// Only show XML upload form if the modules folder is writable
-		if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'modules'))
-		{
-			echo $themeObject->ShowErrors(lang('modulesnotwritable'));
-		}
+		//if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'modules'))
+	        if (FALSE == can_admin_upload())
+		  {
+		    echo $themeObject->ShowErrors(lang('modulesnotwritable'));
+		  }
 		else
-		{
+		  {
 			?>
 			<form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
 			<fieldset>
