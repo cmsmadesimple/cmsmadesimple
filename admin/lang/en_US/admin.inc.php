@@ -799,4 +799,10 @@ $lang['admin']['none'] = 'none';
 $lang['admin']['defaultparentpage'] = 'Default Parent Page';
 $lang['admin']['error_udt_name_whitespace'] = 'Error: User Defined Tags cannot have spaces in their name.';
 $lang['admin']['warning_safe_mode'] = '<strong><em>WARNING:</em></strong> PHP Safe mode is enabled.  This will cause difficulty with files uploaded via the web browser interface, including images, theme and module XML packages.  You are advised to contact your site administrator to see about disabling safe mode.';
+$lang['admin']['test'] = 'Test';
+$lang['admin']['results'] = 'Results';
+$lang['admin']['untested'] = 'Not Tested';
+$lang['admin']['owner'] = 'Owner';
+$lang['admin']['permissions'] = 'Permissions';
+$lang['admin']['unknown'] = 'Unknown';
 ?>

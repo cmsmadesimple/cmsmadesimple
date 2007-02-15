@@ -89,6 +89,44 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
+$testresults = lang('untested');
+if (isset($_POST["testumask"]))
+  {
+    $testdir = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'tmp';
+    $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
+    
+    if( !is_writable($testdir) )
+      {
+	$testresults = lang('errordirectorynotwritable');
+      }
+    else
+      {
+	@umask($global_umask);
+	$fh = @fopen($testfile,"w");
+	if( !$fh )
+	  {
+	    $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
+	  }
+	else
+	  {
+	    @fprintf($fp,"umask test");
+	    @fclose($fp);
+	    $filestat = stat($testfile);
+	    if( $filestat == FALSE )
+	      {
+		$testresults = lang('errorcantcreatefile');
+	      }
+	    $userinfo = @posix_getpwuid($filestat[4]);
+	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+	    $testresults = sprintf("%s: %s, %s: %s",
+				   lang('owner'),$username,
+				   lang('permissions'),decoct($filestat[2]));
+	    @unlink($testfile);
+	  }
+	
+      }
+  }
+
 if (isset($_POST['clearcache']))
 {
 	global $gCms;
@@ -197,6 +235,14 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('global_umask')?>:</p>
 			<p class="pageinput"><input type="text" class="pagesmalltextarea" name="global_umask" size="4" value="<?php echo $global_umask?>" /></p>
+		</div>
+		<div class="pageoverflow">
+  <p class="pagetext">&nbsp;</p>
+  <p class="pageinput"><input type="submit" name="testumask" value="<?php echo lang('test')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" /></p>
+		</div>
+  <div class="pageoverflow">
+  <p class="pagetext"><?php echo lang('results')?></p>
+  <p class="pageinput"><strong><?php echo $testresults ?></strong></p>
 		</div>
 		<div class="pageoverflow">
                    <p class="pagetext"><?php echo lang('frontendlang')?>:</p>
