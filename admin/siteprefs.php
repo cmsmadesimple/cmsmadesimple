@@ -109,8 +109,7 @@ if (isset($_POST["testumask"]))
 	  }
 	else
 	  {
-	    @fprintf($fp,"umask test");
-	    @fclose($fp);
+	    @fclose($fh);
 	    $filestat = stat($testfile);
 	    if( $filestat == FALSE )
 	      {
