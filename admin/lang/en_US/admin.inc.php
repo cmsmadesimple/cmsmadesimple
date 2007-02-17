@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['read'] = 'Read';
+$lang['admin']['write'] = 'Write';
+$lang['admin']['execute'] = 'Execute';
+$lang['admin']['group'] = 'Group';
+$lang['admin']['other'] = 'Other';
 $lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
 $lang['admin']['event_desc_moduleinstalled'] = 'Sent after a module is installed';
 $lang['admin']['event_desc_moduleuninstalled'] = 'Sent after a module is uninstalled';

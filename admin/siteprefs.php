@@ -24,6 +24,22 @@ $CMS_ADMIN_TITLE='preferences';
 
 require_once("../include.php");
 
+function siteprefs_display_permissions($permsarr)
+{
+  $tmparr = array(lang('owner'),lang('group'),lang('other'));
+  if( count($permsarr) != 3 ) return lang('permissions_parse_error');
+
+  $result = array();
+  for( $i = 0; $i < 3; $i++ )
+    {
+      $str = $tmparr[$i].': ';
+      $str .= implode(',',$permsarr[$i]);
+      $result[] = $str;
+    }
+  $str = implode('<br/>&nbsp;&nbsp;',$result);
+  return $str;
+}
+
 check_login();
 global $gCms;
 $db =& $gCms->GetDb();
@@ -117,9 +133,11 @@ if (isset($_POST["testumask"]))
 	      }
 	    $userinfo = @posix_getpwuid($filestat[4]);
 	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	    $testresults = sprintf("%s: %s, %s: %s",
+	    $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
+	    
+	    $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
 				   lang('owner'),$username,
-				   lang('permissions'),decoct($filestat[2]));
+				   lang('permissions'),$permsstr);
 	    @unlink($testfile);
 	  }
 	
