@@ -187,6 +187,18 @@ CmsInstallOperations::create_table($db, 'module_templates', "
 ");
 CmsInstallOperations::create_index($db, 'module_templates', 'module_and_template', 'module_name,template_name');
 
+CmsInstallOperations::create_table($db, 'multilanguage', "
+	id I KEY AUTO,
+	module_name C(25),
+	content_type C(25),
+	object_id I,
+	property_name C(100),
+	language C(5),
+	content XL,
+	create_date DT,
+	modified_date DT
+");
+
 CmsInstallOperations::create_table($db, 'permissions', "
 	id I KEY AUTO,
 	permission_name C(255),
