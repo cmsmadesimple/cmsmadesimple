@@ -1226,7 +1226,7 @@ function can_admin_upload()
   $stat_uploads = @stat($dir_uploads);
   $stat_modules = @stat($dir_modules);
 
-  if( $my_uid == FALSE || $stat_index == FALSE || 
+  if( $my_uid === FALSE || $stat_index == FALSE || 
       $stat_moduleinterface == FALSE || $stat_uploads == FALSE ||
       $stat_modules == FALSE )
     {
