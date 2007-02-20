@@ -25,6 +25,8 @@
  * @since      File available since Release 0.1
  */
 
+if (!defined('PEAR_ERROR_RETURN')) {
+
 /**#@+
  * ERROR constants
  */
@@ -1090,6 +1092,9 @@ class PEAR_Error
 
     // }}}
 }
+
+
+} //end of wrapper
 
 /*
  * Local Variables:
