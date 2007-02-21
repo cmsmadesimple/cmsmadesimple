@@ -657,7 +657,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         } ## if indent
 
         if ($display == 'edit')
-            $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'.$one->mName.' ('.$one->mAlias.')">'.$one->mMenuText.'</a></td>'. "\n";
+            $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. htmlspecialchars($one->mName.' ('.$one->mAlias) .')">'.$one->mMenuText.'</a></td>'. "\n";
         else
             $thelist .= $one->Name()."</td>\n";
 
