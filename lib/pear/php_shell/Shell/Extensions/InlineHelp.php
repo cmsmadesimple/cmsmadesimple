@@ -1,7 +1,7 @@
 <?php
 
-require_once "PHP/Shell/Extensions.php";
-require_once "PHP/Shell/Extensions/Prototypes.php";
+require_once "../Extensions.php";
+require_once "Prototypes.php";
 
 class PHP_Shell_Extensions_InlineHelp implements PHP_Shell_Extension {
     public function register() {

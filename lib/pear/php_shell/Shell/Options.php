@@ -1,6 +1,6 @@
 <?php
 
-require_once "PHP/Shell/Extensions.php"; /* for the PHP_Shell_Interface */
+require_once "Extensions.php"; /* for the PHP_Shell_Interface */
   
 /**
 *

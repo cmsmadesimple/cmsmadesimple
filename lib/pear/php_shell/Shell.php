@@ -88,8 +88,8 @@ SOFTWARE.
 * @package PHP
 */
 
-require_once "PHP/Shell/Commands.php";
-require_once "PHP/Shell/Options.php"; /* for the tab-complete */
+require_once "Shell/Commands.php";
+require_once "Shell/Options.php"; /* for the tab-complete */
 
 class PHP_Shell {
     /** 
