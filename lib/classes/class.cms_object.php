@@ -69,8 +69,9 @@ abstract class CmsObject
 	
 	public function __toString()
 	{
-		sscanf((string)$this, "Object id #%d", $id);
-		return "Object(".get_class($this).") id #$id";
+		//sscanf((string)$this, "Object id #%d", $id);
+		//return "Object(".get_class($this).") id #$id";
+		return "Object(".get_class($this).")";
 	}
 }
 

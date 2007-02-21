@@ -30,7 +30,7 @@ while($__shell->input()) {
 //	echo $__shell->getCode();
             $__shell_retval = eval($__shell->getCode()); 
             if (isset($__shell_retval)) {
-                print_r($__shell_retval);
+                echo($__shell_retval);
             }
             ## cleanup the variable namespace
             unset($__shell_retval);
