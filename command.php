@@ -1,130 +1,49 @@
 <?php
+@ob_end_clean();
+error_reporting(E_ALL);
+set_time_limit(0);
 
-// Load the readline library
-if (! function_exists('readline'))
-{
-    dl('readline.'. (((strtoupper(substr(PHP_OS,0,3))) == 'WIN')?'dll':'so'))
-        or die("Readline library required\n");
-}
+require_once "lib/pear/php_shell/Shell.php";
+require_once 'lib/cmsms.api.php';
+require_once 'include.php';
+    
+$__shell = new PHP_Shell();
 
-// Load the Console_Getopt class
-require 'Console/Getopt.php';
+$f = <<<EOF
+PHP-Barebone-Shell - Version %s%s
+(c) 2006, Jan Kneschke <jan@kneschke.de>
 
-require 'lib/cmsms.api.php';
-require 'include.php';
+>> use '?' to open the inline help 
 
-$o = new Console_Getopt;
-$opts = $o->getopt($o->readPHPArgv(),'hm',array('help','multiline'));
+EOF;
 
-// Quit with a usage message if the arguments are bad
-if (PEAR::isError($opts))
-{
-    print $opts->getMessage();
-    print "\n";
-    usage();
-}
+printf($f, 
+    $__shell->getVersion(), 
+    $__shell->hasReadline() ? ', with readline() support' : '');
+unset($f);
 
-// default is to evaluate each command as it's entered
-$multiline = false;
+while($__shell->input()) {
+    try {
+        if ($__shell->parse() == 0) {
+            ## we have a full command, execute it
 
-foreach ($opts[0] as $opt)
-{
-    // remove any leading -s
-    $opt[0] = preg_replace('/^-+/','',$opt[0]);
-
-    // check the first character of the argument
-    switch($opt[0][0])
-	{
-	    case 'h':
-	        // display help
-	        usage();
-	        break;
-	    case 'm':
-	        $multiline = true;
-	        break;
-    }
-}
-
-// set up error display
-ini_set('display_errors',false);
-ini_set('log_errors',true);
-
-// build readline completion table
-$functions = get_defined_functions();
-foreach ($functions['internal'] as $k => $v)
-{
-    $functions['internal'][$k] = "$v(";
-}
-foreach ($functions['user'] as $k => $v)
-{
-    $functions['internal'][$k] = "$v(";
-}
-
-function function_list($line)
-{
-    return $GLOBALS['functions']['internal'];
-}
-readline_completion_function('function_list');
-
-$cmd = '';
-$cmd_count = 1;
-
-while (true)
-{
-    // get a line of input from the user
-    $s = readline("[$cmd_count]> ");
-    // add it to the command history
-    readline_add_history($s);
-    // if we're in multiline mode:
-    if ($multiline)
-	{
-        // if just a "." has been entered
-        if ('.' == rtrim($s))
-		{
-            // eval() the code
-            eval($cmd);
-            // clear out the accumulated code
-            $cmd = '';
-            // increment the command count
-            $cmd_count++;
-            // start the next prompt on a new line
-            print "\n";
+//	echo $__shell->getCode();
+            $__shell_retval = eval($__shell->getCode()); 
+            if (isset($__shell_retval)) {
+                print_r($__shell_retval);
+            }
+            ## cleanup the variable namespace
+            unset($__shell_retval);
+            $__shell->resetCode();
         }
-		else
-		{
-            /* otherwise, add the new line to the accumulated code
-               tacking on a newline prevents //-style comments from
-               commenting out the rest of the lines entered
-            */
-            $cmd .= $s."\n";;
-        }
+    } catch(Exception $__shell_exception) {
+        print $__shell_exception->getMessage();
+        
+        $__shell->resetCode();
+
+        ## cleanup the variable namespace
+        unset($__shell_exception);
     }
-	else
-	{
-        // if we're not in multiline mode, eval() the line
-        eval($s);
-        // increment the command count
-        $cmd_count++;
-        // start the next prompt in a new line
-        print "\n";
-    }
-}
-
-// display helpful usage information
-function usage()
-{
-    $my_name = $_SERVER['argv'][0];
-
-    print<<<_USAGE_
-Usage: $my_name [-h|--help] [-m|--multiline]
-
-  -h, --help: display this help
-  -m, --multiline: execute accumulated code when "." is entered
-                   by itself on a line. The default is to execute
-                   each line after it is entered.    
-
-_USAGE_;
-    exit(-1);
 }
 
 ?>
