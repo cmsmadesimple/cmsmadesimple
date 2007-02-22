@@ -1,4 +1,4 @@
-Version 1.0.5 "" -- Subversion
+Version 1.0.5 "Molokai" -- Subversion
 -----------------
 
 Version 1.0.4 "Lanai" -- Jan 23 2007
