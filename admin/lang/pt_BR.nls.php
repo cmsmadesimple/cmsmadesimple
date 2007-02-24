@@ -12,9 +12,6 @@ $nls['language']['pt_BR'] = 'Português do Brasil';
 $nls['englishlang']['pt_BR'] = 'Brazilian Portuguese';
 
 #Possible aliases for language
-$nls['alias']['pt'] = 'pt_BR';
-$nls['alias']['portuguese'] = 'pt_BR' ;
-$nls['alias']['port'] = 'pt_BR' ;
 $nls['alias']['pt-BR'] = 'pt_BR' ;
 $nls['alias']['pt_BR'] = 'pt_BR' ;
 
