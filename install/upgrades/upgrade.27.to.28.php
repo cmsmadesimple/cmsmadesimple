@@ -1,4 +1,4 @@
-<?
+<?php
 
 $perm_table = cms_db_prefix() . 'permissions';
 $perm_seq_table = cms_db_prefix() . 'permissions_seq';
