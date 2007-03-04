@@ -340,7 +340,7 @@ function set_site_preference($prefname, $value)
 function load_all_preferences($userid)
 {
 	global $gCms;
-	$db = &$gCms->GetDb();
+	$db = cms_db();
 	$variables = &$gCms->userprefs;
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
@@ -368,12 +368,13 @@ function get_preference($userid, $prefname, $default='')
 
 	$result = $default;
 
-	if (!isset($gCms->userprefs))
+	if (!isset($userprefs))
 	{
 		load_all_preferences($userid);
+		$userprefs = &$gCms->userprefs;
 	}
 
-	if (isset($gCms->userprefs))
+	if (isset($userprefs))
 	{
 		if (isset($userprefs[$prefname]))
 		{

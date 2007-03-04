@@ -107,26 +107,24 @@ class CmsLanguage extends CmsObject
 	private static function load_lang_file($module, $language)
 	{
 		$lang = array();
-		
-		$root = dirname(dirname(dirname(__FILE__)));
 
-		$file = cms_join_path($root, "lang", $module . '.' . $language . ".php");
+		$file = cms_join_path(ROOT_DIR, "lang", $module . '.' . $language . ".php");
 		if (!is_file($file))
 		{
 			if ($module == 'core')
 			{
-			    $file = cms_join_path($root, "admin", "lang", "ext", $language, "admin.inc.php");
+			    $file = cms_join_path(ROOT_DIR, "admin", "lang", "ext", $language, "admin.inc.php");
 				if (!is_file($file))
 				{
-					$file = cms_join_path($root, "admin", "lang", $language, "admin.inc.php");
+					$file = cms_join_path(ROOT_DIR, "admin", "lang", $language, "admin.inc.php");
 				}
 			}
 			else
 			{
-			    $file = cms_join_path($root, "modules", $module, "lang", "ext", $language . ".php");
+			    $file = cms_join_path(ROOT_DIR, "modules", $module, "lang", "ext", $language . ".php");
 				if (!is_file($file))
 				{
-					$file = cms_join_path($root, "modules", $module, "lang", $language . ".php");
+					$file = cms_join_path(ROOT_DIR, "modules", $module, "lang", $language . ".php");
 				}
 			}
 		}
@@ -148,19 +146,22 @@ class CmsLanguage extends CmsObject
 	{
 		$nls = array();
 		
-		#Read in all current languages...
-		$dir = cms_join_path(dirname(dirname(dirname(__FILE__))), 'admin', 'lang');
-
-		$handle = opendir($dir);
-		while (false!==($file = readdir($handle)))
+		$xml = simplexml_load_file(cms_join_path(ROOT_DIR, 'tmp', 'translations', 'languages.xml'));
+		
+		foreach ($xml as $onelang)
 		{
-			if (is_file("$dir/$file") && strpos($file, "nls.php") != 0)
+			$code = (string)$onelang->code;
+			$nls['language'][$code] = (string)$onelang->native_name;
+			$nls['englishlang'][$code] = (string)$onelang->english_name;
+			
+			foreach ($onelang->aliases as $onealias)
 			{
-				include("$dir/$file");
+				foreach ($onealias->alias as $aliascode)
+				{
+					$nls['alias'][(string)$aliascode] = $code;	
+				}
 			}
 		}
-
-		closedir($handle);
 		
 		return $nls;
 	}
