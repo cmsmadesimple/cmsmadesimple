@@ -25,8 +25,8 @@ function smarty_function_html_textarea($params, &$smarty)
 			isset($params['id']) ? $params['id'] : '',
 			'',
 			'',
-			isset($params['width']) ? $params['width'] : '',
-			isset($params['height']) ? $params['height'] : ''
+			isset($params['width']) ? $params['width'] : '50',
+			isset($params['height']) ? $params['height'] : '8',
 			''
 	);
 }

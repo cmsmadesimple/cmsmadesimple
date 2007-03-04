@@ -23,6 +23,12 @@ function smarty_function_html_input($params, &$smarty)
 		echo ' id="'.$params['id'].'"';
 	if (isset($params['name']))
 		echo ' name="'.$params['name'].'"';
+	if (isset($params['size']))
+		echo ' size="'.$params['size'].'"';
+	if (isset($params['maxlength']))
+		echo ' maxlength="'.$params['maxlength'].'"';
+	if (isset($params['class']))
+		echo ' class="'.$params['class'].'"';
 	if (isset($params['value'])) {
 		if (isset($params['useentities']) && $params['useentities'] == 'true') {
 			echo ' value="'.cms_htmlentities($params['value']).'"';

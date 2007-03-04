@@ -26,6 +26,8 @@ require_once("../include.php");
 
 check_login();
 
+$smarty = cms_smarty();
+
 $error = "";
 $message = "";
 
@@ -118,6 +120,7 @@ else if (isset($_POST["editsiteprefs"]))
 else if (!isset($_POST["submit"]))
 {
 	$global_umask = CmsApplication::get_preference('global_umask',$global_umask);
+	
 	$frontendlang = CmsApplication::get_preference('frontendlang');
 	$enablecustom404 = CmsApplication::get_preference('enablecustom404');
 	$custom404 = CmsApplication::get_preference('custom404');
@@ -132,6 +135,18 @@ else if (!isset($_POST["submit"]))
 	$sitename = CmsApplication::get_preference('sitename', 'CMSMS Site');
 }
 
+$smarty->assign('global_umask', $global_umask);
+$smarty->assign('frontendlang', $frontendlang);
+$smarty->assign('enablecustom404', $enablecustom404);
+$smarty->assign('custom404', $custom404);
+$smarty->assign('custom404template', $custom404template);
+$smarty->assign('enablesitedownmessage', $enablesitedownmessage);
+$smarty->assign('sitedownmessage', $sitedownmessage);
+$smarty->assign('xmlmodulerepository', $xmlmodulerepository);
+$smarty->assign('logintheme', $logintheme);
+$smarty->assign('metadata', $metadata);
+$smarty->assign('sitename', $sitename);
+
 $templates = array();
 $templates['-1'] = 'None';
 
@@ -141,6 +156,8 @@ foreach ($result as &$onetemplate)
 {
 	$templates[$onetemplate['id']] = $onetemplate['name'];
 }
+
+$smarty->assign('templates', $templates);
 
 include_once("header.php");
 
@@ -154,9 +171,10 @@ if ($message != "") {
 // Make sure cache folder is writable
 if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache')))
 {
-  echo $themeObject->ShowErrors(lang('cachenotwritable'));
+	echo $themeObject->ShowErrors(lang('cachenotwritable'));
 }
 
+/*
 ?>
 
 <div class="pagecontainer">
@@ -298,6 +316,9 @@ if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache'
 </div>
 
 <?php
+*/
+
+$smarty->display('siteprefs.tpl');
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 

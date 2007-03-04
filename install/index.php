@@ -28,7 +28,7 @@ $session_key = substr(md5(dirname(__FILE__)), 0, 8);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
 @session_start();
-
+CmsRequest::setup();
 $smarty = CmsSmarty::get_instance(false);
 $smarty->force_compile = true;
 $smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DS);
@@ -98,7 +98,6 @@ function display_page($smarty, $action = '')
 			break;
 		
 		case "database":
-	
 			$smarty->assign('databases', CmsInstallOperations::get_loaded_database_modules());
 
 			if (isset($_REQUEST['connection']))
@@ -127,7 +126,7 @@ function display_page($smarty, $action = '')
 				$_SESSION['admin_account'] = $_REQUEST['admin_account'];
 				if (isset($_REQUEST['next']))
 				{
-					display_page($smarty, 'create_schema');
+					display_page($smarty, 'create_config');
 					return;
 				}
 				else if (isset($_REQUEST['back']))
@@ -138,6 +137,30 @@ function display_page($smarty, $action = '')
 			}
 		
 			$smarty->assign('include_file', 'account.tpl');
+			$smarty->display('body.tpl');
+			break;
+		
+		case "create_config":
+			if (isset($_REQUEST['config']))
+			{
+				$_SESSION['config'] = $_REQUEST['config'];
+				if (isset($_REQUEST['next']))
+				{
+					display_page($smarty, 'create_schema');
+					return;
+				}
+				else if (isset($_REQUEST['back']))
+				{
+					display_page($smarty, 'account');
+					return;
+				}
+			}
+			else
+			{
+				$_SESSION['config']['rootpath'] = dirname(dirname(__FILE__));
+				$_SESSION['config']['rooturl'] = 'http://'.$_SERVER['HTTP_HOST'].substr($_SERVER['PHP_SELF'],0,strlen($_SERVER['PHP_SELF'])-18);
+			}
+			$smarty->assign('include_file', 'config.tpl');
 			$smarty->display('body.tpl');
 			break;
 			
@@ -153,11 +176,11 @@ function display_page($smarty, $action = '')
 			{
 				$user_created = CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $admin_account['username'], $admin_account['password']);
 				$basic_loaded = CmsInstallOperations::load_basic_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
-			}
-			
+				$config_created = CmsInstallOperations::install_config($connection,$_SESSION['config']);
+			}	
 			$smarty->assign('installed', $installed);
 			$smarty->assign('user_created', $user_created);
-			
+			$smarty->assign('config_created', $config_created);
 			$smarty->assign('include_file', 'create_schema.tpl');
 			$smarty->display('body.tpl');
 		
@@ -208,6 +231,9 @@ function create_account($params, $ajax = true)
 	
 	return $objResponse->getXML();
 }
+function create_config($conn)
+{
 
+}
 # vim:ts=4 sw=4 noet
 ?>

@@ -201,6 +201,35 @@ class CmsInstallOperations extends CmsObject
 		return false;
 	}
 	
+	static function install_config($conn,$url)
+	{
+		//Get an instance of CMSConfig(we need a list of all the variables plus defaults)
+		$config = CmsConfig::get_instance();
+		$config_data = $config->params;
+		//Update the defaults with what we have. Start with database
+		$drivers = CmsInstallOperations::get_loaded_database_modules();
+		$config_data['dbms'] = $drivers[$conn['driver']];
+		$config_data['db_username'] = $conn['username'];
+		$config_data['db_hostname'] = $conn['hostname'];
+		$config_data['db_password'] = $conn['password'];
+		$config_data['db_name'] = $conn['dbname'];
+		$config_data['db_prefix'] = $conn['table_prefix'];
+		//Now location stuff
+		$config_data['root_path'] = $url['rootpath'];
+		$config_data['root_url'] = $url['rooturl'];
+		$config_data["previews_path"] = $config_data["root_path"] . "/tmp/cache";
+		$config_data["uploads_path"] = $config_data["root_path"] . "/uploads";
+		$config_data["uploads_url"] = $config_data["root_url"] . "/uploads";
+		$config["image_uploads_path"] = $config_data["root_path"] . "/uploads/images";
+		$config["image_uploads_url"] = $config_data["root_url"] . "/uploads/images";
+		//Generate the file
+		$file_data = "<?php\n";
+		$file_data .= $config->config_text($config_data);
+		$file_data .= "?>";
+		//Write the file
+		return file_put_contents(CONFIG_FILE_LOCATION,$file_data) > 0;
+	}
+	
 	static function install_schema($driver = '', $hostname = '', $username = '', $password = '', $dbname = '', $prefix = '')
 	{
 		$drivers = self::get_loaded_database_modules();
