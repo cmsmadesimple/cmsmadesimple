@@ -72,19 +72,4 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	redirect($text);
 }
 
-function cms_module_RedirectContent(&$modinstance, $id)
-{
-	global $gCms;
-	$manager =& $gCms->GetHierarchyManager();
-	$node =& $manager->sureGetNodeByAlias($id);
-	$content =& $node->GetContent();
-	if (isset($content))
-	{
-		if ($content->GetURL() != '')
-		{
-			redirect($content->GetURL());
-		}
-	}
-}
-
 ?>

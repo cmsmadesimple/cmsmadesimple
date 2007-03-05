@@ -131,6 +131,25 @@ function redirect($to, $noappend=false)
 	}
 }
 
+
+/**
+ * Given a page ID or an alias, redirect to it
+ */
+function redirect_to_alias($alias)
+{
+	global $gCms;
+	$manager =& $gCms->GetHierarchyManager();
+	$node =& $manager->sureGetNodeByAlias($alias);
+	$content =& $node->GetContent();
+	if (isset($content))
+	{
+		if ($content->GetURL() != '')
+		{
+			redirect($content->GetURL());
+		}
+	}
+}
+
 /**
  * Shows the difference in seconds between two microtime() values
  *
@@ -1214,7 +1233,6 @@ function can_admin_upload()
   # can upload files.
   # if safe mode is off, then we just have to check the permissions.
   global $gCms;
-  $my_uid = @getmyuid();
   $file_index = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'index.php';
   $file_moduleinterface = $gCms->config['root_path'].DIRECTORY_SEPARATOR.
     $gCms->config['admin_dir'].DIRECTORY_SEPARATOR.'moduleinterface.php';
@@ -1237,9 +1255,12 @@ function can_admin_upload()
   $safe_mode = (ini_get('safe_mode')==1)?TRUE:FALSE;
   if( $safe_mode == TRUE )
     {
+      $my_uid = @getmyuid();
+
       // we're in safe mode.
       if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
-	  ($stat_moduleinterface[4] != $stat_uploads[4]) )
+	  ($stat_moduleinterface[4] != $stat_uploads[4]) ||
+	  ($my_uid != $stat_moduleinterface[4]) )
 	{
 	  // owners don't match
 	  return FALSE;

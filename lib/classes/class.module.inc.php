@@ -1768,8 +1768,7 @@ class CMSModule
 	 */
 	function RedirectContent($id)
 	{
-		$this->LoadRedirectMethods();
-		return cms_module_RedirectContent($this, $id);
+	  redirect_to_alias($id);
 	}
 
 	/**
