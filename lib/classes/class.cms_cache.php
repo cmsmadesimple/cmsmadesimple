@@ -35,12 +35,10 @@ class CmsCache extends CmsObject
 	function __construct($type = 'function')
 	{
 		parent::__construct();
-		
-		$dirname = dirname(dirname(dirname(__FILE__)));
 
 		// Set a few options
 		$options = array(
-		    'cacheDir' => $dirname.DIRECTORY_SEPARATOR.'tmp'.DIRECTORY_SEPARATOR.'cache/',
+		    'cacheDir' => cms_join_path(ROOT_DIR, 'tmp', 'cache/'),
 		    'lifeTime' => 300
 		);
 
@@ -50,12 +48,12 @@ class CmsCache extends CmsObject
 			if (!CmsConfig::get('function_caching'))
 				$options['caching'] = false;
 
-			require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
+			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
 			$this->cache = new Cache_Lite_Function($options);
 		}
 		else
 		{
-			require_once($dirname.DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'pear' . DIRECTORY_SEPARATOR . 'cache'. DIRECTORY_SEPARATOR . 'lite' . DIRECTORY_SEPARATOR . 'Function.php');
+			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
 			$this->cache = new Cache_Lite($options);
 		}
 	}

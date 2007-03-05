@@ -341,7 +341,8 @@ function load_all_preferences($userid)
 {
 	global $gCms;
 	$db = cms_db();
-	$variables = &$gCms->userprefs;
+	
+	$variables = array();
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
 	$result = &$db->Execute($query, array($userid));
@@ -353,6 +354,8 @@ function load_all_preferences($userid)
 	}
 
 	if ($result) $result->Close();
+	
+	return $variables;
 }
 
 /**
@@ -364,22 +367,19 @@ function get_preference($userid, $prefname, $default='')
 {
 	global $gCms;
 	$db = cms_db();
-	$userprefs = &$gCms->userprefs;
 
+	$userprefs = $gCms->userprefs;
 	$result = $default;
 
 	if (!isset($userprefs))
 	{
-		load_all_preferences($userid);
-		$userprefs = &$gCms->userprefs;
+		$userprefs = load_all_preferences($userid);
+		$gCms->userprefs = $userprefs;
 	}
 
-	if (isset($userprefs))
+	if (isset($userprefs[$prefname]))
 	{
-		if (isset($userprefs[$prefname]))
-		{
-			$result = $userprefs[$prefname];
-		}
+		$result = $userprefs[$prefname];
 	}
 
 	return $result;

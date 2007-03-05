@@ -99,8 +99,6 @@ class CmsLanguage extends CmsObject
 			$result[$key] = $val . (isset(self::$nls["englishlang"][$key]) && $show_english ? ' ('.self::$nls["englishlang"][$key].')' : '');
 		}
 		
-		var_dump($result);
-		
 		return $result;
 	}
 	
@@ -108,23 +106,23 @@ class CmsLanguage extends CmsObject
 	{
 		$lang = array();
 
-		$file = cms_join_path(ROOT_DIR, "lang", $module . '.' . $language . ".php");
+		$file = cms_join_path(ROOT_DIR, 'lang', $module . '.' . $language . '.php');
 		if (!is_file($file))
 		{
 			if ($module == 'core')
 			{
-			    $file = cms_join_path(ROOT_DIR, "admin", "lang", "ext", $language, "admin.inc.php");
+			    $file = cms_join_path(ROOT_DIR, 'admin', 'lang', 'ext', $language, 'admin.inc.php');
 				if (!is_file($file))
 				{
-					$file = cms_join_path(ROOT_DIR, "admin", "lang", $language, "admin.inc.php");
+					$file = cms_join_path(ROOT_DIR, 'admin', 'lang', $language, 'admin.inc.php');
 				}
 			}
 			else
 			{
-			    $file = cms_join_path(ROOT_DIR, "modules", $module, "lang", "ext", $language . ".php");
+			    $file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', 'ext', $language . '.php');
 				if (!is_file($file))
 				{
-					$file = cms_join_path(ROOT_DIR, "modules", $module, "lang", $language . ".php");
+					$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', $language . '.php');
 				}
 			}
 		}
