@@ -97,7 +97,7 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 			if (isset($currentNode))
 			{
 				$content = &$currentNode->getContent();
-				if (isset($content) && (strtolower($content->Alias()) != strtolower($root)))
+				if (isset($content) && (strtolower($content->Alias()) == strtolower($root)))
 				{
 					$node = &$manager->sureGetNodeByAlias($root);
 					if (isset($node)) {
