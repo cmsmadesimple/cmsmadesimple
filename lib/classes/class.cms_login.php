@@ -115,6 +115,32 @@ class CmsLogin extends CmsObject
 	}
 	
 	/**
+	 * Given the username and password, will login the user, generate the proper session 
+	 * and cookie credentials.  It will return true if the login was successful, or false if
+	 * it wasn't.  Reasons could include an invalid username or a wrong password.
+	 *
+	 * @param string The usernname to login as.
+	 * @param string The password to check.  This should be unhashed.
+	 * @return bool Whether or not the login was successful
+	 * @author Ted Kulp
+	 */
+	static public function login($username, $password)
+	{
+		$oneuser = cmsms()->cms_user->find_by_username($username);
+
+		if ($oneuser != null && $oneuser->password == md5($password))
+		{
+			self::generate_user_object($oneuser->id);
+			CmsEvents::send_event('Core', 'LoginPost', array('user' => &$oneuser));
+			audit($oneuser->id, $oneuser->username, 'User Login');
+			
+			return true;
+		}
+		
+		return false;
+	}
+	
+	/**
 	 * Returns the currently logged in user.  If noone is logged into the system, then a 
 	 * CmsAnonymousUser object is returned.  An easy check of $user->is_anonymous() will determine 
 	 * if someone is logged in or not.

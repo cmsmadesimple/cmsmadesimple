@@ -48,15 +48,8 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 	if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
 	{
-		$oneuser = cmsms()->cms_user->find_by_username($username);
-
-		if ($oneuser != null && $oneuser->password == md5($password))
+		if (CmsLogin::login($username, $password))
 		{
-			CmsLogin::generate_user_object($oneuser->id);
-
-			#Now call the event
-			CmsEvents::SendEvent('Core', 'LoginPost', array('user' => &$oneuser));
-
 			// redirect to upgrade if db_schema it's old
 			$current_version = $CMS_SCHEMA_VERSION;
 	
@@ -66,17 +59,15 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 
 			if ($current_version < $CMS_SCHEMA_VERSION)
 			{
-				redirect(CmsConfig::get('root_url') . '/install/upgrade.php');
+				CmsResponse::redirect(CmsConfig::get('root_url') . '/install/upgrade.php');
 			}
 			// end of version check
-			
-			audit($oneuser->id, $oneuser->username, 'User Login');
 
 			if (isset($_SESSION['redirect_url']))
 			{
 				$tmp = $_SESSION['redirect_url'];
 				unset($_SESSION['redirect_url']);
-				redirect($tmp);
+				CmsResponse::redirect($tmp);
 			}
 			else
 			{
