@@ -116,7 +116,7 @@ class CmsEvents extends CmsObject
 		global $gCms;
 		//$usertagops =& $gCms->GetUserTagOperations();
 
-		$results = CmsEvents::list_event_handlers($modulename, $eventname);
+		$results = CmsCache::get_instance()->call('CmsEvents::list_event_handlers', $modulename, $eventname);
 		
 		if ($results != false)
 		{		
@@ -209,7 +209,7 @@ class CmsEvents extends CmsObject
 	
 	public static function ListEventHandlers( $modulename, $eventname )
 	{
-		return CmsEvents::list_event_handlers( $modulename, $eventname );
+		return CmsCache::get_instance()->call('CmsEvents::list_event_handlers', $modulename, $eventname);
 	}
 
 	/**
