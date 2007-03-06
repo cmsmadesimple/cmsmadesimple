@@ -127,14 +127,13 @@ class CmsResponse extends CmsObject
 	public static function redirect_to_alias($alias)
 	{
 		global $gCms;
-		$manager =& $gCms->GetHierarchyManager();
-		$node =& $manager->sureGetNodeByAlias($alias);
-		$content =& $node->GetContent();
+		$node =& CmsPageTree::get_node_by_alias($alias);
+		$content =& $node->get_content();
 		if (isset($content))
 			{
-				if ($content->GetURL() != '')
+				if ($content->get_url() != '')
 					{
-						redirect($content->GetURL());
+						redirect($content->get_url());
 					}
 			}
 	}
