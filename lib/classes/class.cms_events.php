@@ -30,6 +30,8 @@
  **/
 class CmsEvents extends CmsObject
 {
+	private static $handlercache = array();
+
 	/**
 	 * Inform the system about a new event that can be generated
 	 *
@@ -167,16 +169,14 @@ class CmsEvents extends CmsObject
 	 **/
 	public static function list_event_handlers( $modulename, $eventname )
 	{
-		global $gCms;
 		$db = cms_db();
-		$variables =& $gCms->variables;
 		
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
 		
 		$handlers = array();
 		
-		if (!isset($variables['handlercache']))
+		if (count(self::$handlercache) == 0)
 		{
 			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
 				INNER JOIN ".cms_db_prefix()."events e ON e.id = eh.event_id
@@ -190,10 +190,10 @@ class CmsEvents extends CmsObject
 			{
 				$result[] = $row;
 			}
-			$variables['handlercache'] = $result;
+			self::$handlercache = $result;
 		}
 
-		foreach ($variables['handlercache'] as $row)
+		foreach (self::$handlercache as $row)
 		{
 			if ($row['originator'] == $modulename && $row['event_name'] == $eventname)
 			{
