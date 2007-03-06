@@ -120,6 +120,25 @@ class CmsResponse extends CmsObject
 	        }
 		}
 	}
+
+	/**
+	 * Given a page ID or an alias, redirect to it
+	 */
+	public static function redirect_to_alias($alias)
+	{
+		global $gCms;
+		$manager =& $gCms->GetHierarchyManager();
+		$node =& $manager->sureGetNodeByAlias($alias);
+		$content =& $node->GetContent();
+		if (isset($content))
+			{
+				if ($content->GetURL() != '')
+					{
+						redirect($content->GetURL());
+					}
+			}
+	}
+
 	
 	/**
 	 * Shows a very close approximation of an Apache generated 404 error.
