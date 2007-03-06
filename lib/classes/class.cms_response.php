@@ -126,9 +126,8 @@ class CmsResponse extends CmsObject
 	 */
 	public static function redirect_to_alias($alias)
 	{
-		global $gCms;
-		$node =& CmsPageTree::get_node_by_alias($alias);
-		$content =& $node->get_content();
+		$node = CmsPageTree::get_node_by_alias($alias);
+		$content = $node->get_content();
 		if (isset($content))
 			{
 				if ($content->get_url() != '')
