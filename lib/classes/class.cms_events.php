@@ -178,8 +178,8 @@ class CmsEvents extends CmsObject
 		
 		if (!isset($variables['handlercache']))
 		{
-			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.handler_id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
-				INNER JOIN ".cms_db_prefix()."events e ON e.event_id = eh.event_id
+			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
+				INNER JOIN ".cms_db_prefix()."events e ON e.id = eh.event_id
 				ORDER BY eh.handler_order ASC";
 
 			$dbresult = $db->Execute( $q );
