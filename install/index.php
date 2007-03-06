@@ -37,8 +37,6 @@ $smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','sma
 require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
 $xajax = new xajax();
 $xajax->registerFunction('test_connection');
-//$xajax->registerFunction('create_database');
-//$xajax->registerFunction('create_account');
 $xajax->processRequests();
 $smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
 
@@ -98,6 +96,7 @@ function display_page($smarty, $action = '')
 			break;
 		
 		case "database":
+
 			$smarty->assign('databases', CmsInstallOperations::get_loaded_database_modules());
 
 			if (isset($_REQUEST['connection']))
@@ -141,6 +140,7 @@ function display_page($smarty, $action = '')
 			break;
 		
 		case "create_config":
+
 			if (isset($_REQUEST['config']))
 			{
 				$_SESSION['config'] = $_REQUEST['config'];
@@ -204,36 +204,5 @@ function test_connection($params, $ajax = true)
 	return $objResponse->getXML();
 }
 
-function create_database($params, $ajax = true)
-{
-	global $smarty; //Too lazy to set it all up again
-	
-	$objResponse = new xajaxResponse();
-	
-	$result = CmsInstallOperations::install_schema($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname'], $params['connection']['table_prefix']);
-
-	//$objResponse->addScript("new Effect.BlindUp('connection_options');");
-	if ($params['connection']['drop_tables'] == '1')
-		$objResponse->addAssign("connection_options", "innerHTML", "<p>Install: {$result}</p><p>{$params['connection']['dbname']}</p>");
-	//$objResponse->addAssign("connection_options", "innerHTML", "<p>".htmlspecialchars(CmsProfiler::get_instance()->report())."</p>");
-	//$objResponse->addScript("new Effect.BlindDown('connection_options');");
-	
-	return $objResponse->getXML();
-}
-
-function create_account($params, $ajax = true)
-{
-	global $smarty;
-	
-	$objResponse = new xajaxResponse();
-	//$connection = $_SESSION['connection'];
-	$objResponse->addAlert(var_dump(CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $params['admin_account']['username'], $params['admin_account']['password'])));
-	
-	return $objResponse->getXML();
-}
-function create_config($conn)
-{
-
-}
 # vim:ts=4 sw=4 noet
 ?>

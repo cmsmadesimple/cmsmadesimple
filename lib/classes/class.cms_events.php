@@ -30,7 +30,7 @@
  **/
 class CmsEvents extends CmsObject
 {
-	private static $handlercache = array();
+	private static $handlercache;
 
 	/**
 	 * Inform the system about a new event that can be generated
@@ -174,17 +174,15 @@ class CmsEvents extends CmsObject
 		$params['module'] = $modulename;
 		$params['event'] = $eventname;
 		
-		$handlers = array();
-		
-		if (count(self::$handlercache) == 0)
+		if (!isset(self::$handlercache))
 		{
+			$result = array();
+
 			$q = "SELECT eh.tag_name, eh.module_name, e.originator, e.event_name, eh.handler_order, eh.id, eh.removable FROM ".cms_db_prefix()."event_handlers eh
 				INNER JOIN ".cms_db_prefix()."events e ON e.id = eh.event_id
 				ORDER BY eh.handler_order ASC";
 
 			$dbresult = $db->Execute( $q );
-			
-			$result = array();
 
 			while( $dbresult && $row = $dbresult->FetchRow() )
 			{
@@ -192,6 +190,8 @@ class CmsEvents extends CmsObject
 			}
 			self::$handlercache = $result;
 		}
+		
+		$handlers = array();
 
 		foreach (self::$handlercache as $row)
 		{
