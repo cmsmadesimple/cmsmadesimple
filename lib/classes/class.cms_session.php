@@ -60,9 +60,9 @@ class CmsSession extends CmsObject
 		$gCms = cmsms();
 
 		$gCms->variables['user_id'] = '';
-		if (isset($_SESSION['cms_admin_user_id']))
+		if (isset($_SESSION['cmsms_user_id']))
 		{
-		    $gCms->variables['user_id'] = $_SESSION['cms_admin_user_id'];
+		    $gCms->variables['user_id'] = $_SESSION['cmsms_user_id'];
 		}
 
 		$gCms->variables['username'] = '';

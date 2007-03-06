@@ -82,6 +82,11 @@ class CmsUser extends CmsObjectRelationalMapping
 	{
 		CmsEvents::send_event('Core', 'DeleteUserPost', array('user' => &$this));
 	}
+	
+	public function is_anonymous()
+	{
+		return false;
+	}
 }
 
 /**

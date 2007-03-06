@@ -29,7 +29,7 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsAdmin extends CmsObject
+class CmsLogin extends CmsObject
 {
 	static private $instance = NULL;
 
@@ -42,7 +42,7 @@ class CmsAdmin extends CmsObject
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = new CmsAdmin();
+			self::$instance = new CmsLogin();
 		}
 		return self::$instance;
 	}
@@ -74,16 +74,16 @@ class CmsAdmin extends CmsObject
 			unset($_SESSION['login_cms_language']);
 		}
 
-		if (!isset($_SESSION["cms_admin_user_id"]))
+		if (!isset($_SESSION["cmsms_user_id"]))
 		{
 			debug_buffer('No session found.  Now check for cookies');
-			if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
+			if (isset($_COOKIE["cmsms_user_id"]) && isset($_COOKIE["cmsms_passhash"]))
 			{
 				debug_buffer('Cookies found, do a passhash check');
-				if (check_passhash(isset($_COOKIE["cms_admin_user_id"]), isset($_COOKIE["cms_passhash"])))
+				if (check_passhash(isset($_COOKIE["cmsms_user_id"]), isset($_COOKIE["cmsms_passhash"])))
 				{
 					debug_buffer('passhash check succeeded...  creating session object');
-					self::generate_user_object($_COOKIE["cms_admin_user_id"]);
+					self::generate_user_object($_COOKIE["cmsms_user_id"]);
 				}
 				else
 				{
@@ -115,7 +115,38 @@ class CmsAdmin extends CmsObject
 	}
 	
 	/**
-	 * Gets the userid of the currently logged in user.
+	 * Returns the currently logged in user.  If noone is logged into the system, then a 
+	 * CmsAnonymousUser object is returned.  An easy check of $user->is_anonymous() will determine 
+	 * if someone is logged in or not.
+	 *
+	 * @return CmsUser The user (or anonymous user) logged into the system.
+	 * @author Ted Kulp
+	 */
+	static public function get_current_user()
+	{
+		//1. Check session
+		//Return user
+		if (array_key_exists('cmsms_user', $_SESSION))
+		{
+			return $_SESSION['cmsms_user'];
+		}
+
+		//2. Check cookie
+		//Generate session, return user
+		if (array_key_exists('cmsms_user_id', $_COOKIE) && array_key_exists('cmsms_user_id', $_COOKIE))
+		{
+			if (self::check_passhash($_COOKIE['cmsms_user_id'], $_COOKIE['cmsms_passhash']))
+			{
+				return self::generate_user_object($_COOKIE['cmsms_user_id']);
+			}
+		}
+
+		//3. Return anonymous user
+		return self::get_anonymous_user();
+	}
+	
+	/**
+	 * Old method of getting the userid of the currently logged in user.
 	 *
 	 * @return CmsUser If they're logged in, the user id.  If not logged in, null.
 	 * @since 0.1
@@ -127,9 +158,9 @@ class CmsAdmin extends CmsObject
 			self::check_login(); //It'll redirect out to login if it fails
 		}
 
-		if (isset($_SESSION["cms_admin_user"]))
+		if (isset($_SESSION["cmsms_user"]))
 		{
-			return $_SESSION["cms_admin_user"];
+			return $_SESSION["cmsms_user"];
 		}
 		else
 		{
@@ -145,25 +176,20 @@ class CmsAdmin extends CmsObject
 	 */
 	static public function get_userid($check = true)
 	{
-		if ($check)
+		$user = self::get_user($check);
+		
+		if ($user != null)
 		{
-			self::check_login(); //It'll redirect out to login if it fails
+			return $user->id;
 		}
-
-		if (isset($_SESSION["cms_admin_user_id"]))
-		{
-			return $_SESSION["cms_admin_user_id"];
-		}
-		else
-		{
-			return null;
-		}
+		
+		return null;
 	}
 	
 	static public function check_passhash($userid, $checksum)
 	{
-		$oneuser = cmsms()->user->find_by_id($userid);
-		if ($oneuser && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
+		$oneuser = cmsms()->cms_user->find_by_id($userid);
+		if ($oneuser && $checksum == md5(md5(ROOT_DIR . '--' . $oneuser->password)))
 		{
 			return true;
 		}
@@ -173,16 +199,30 @@ class CmsAdmin extends CmsObject
 	
 	static public function generate_user_object($userid)
 	{
-		$config = cms_config();
-		$oneuser = cmsms()->user->find_by_id($userid);
+		$oneuser = cmsms()->cms_user->find_by_id($userid);
 		if ($oneuser)
 		{
-			$_SESSION['cms_admin_user_id'] = $userid;
-			$_SESSION['cms_admin_username'] = $oneuser->username;
-			$_SESSION['cms_admin_user'] = $oneuser;
-			setcookie('cms_admin_user_id', $oneuser->id);
-			setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
+			$_SESSION['cmsms_user'] = $oneuser;
+			$_SESSION['cmsms_user_id'] = $oneuser->id; //TODO: Remove me
+			setcookie('cmsms_user_id', $oneuser->id);
+			setcookie('cmsms_passhash', md5(md5(ROOT_DIR . '--' . $oneuser->password)));
+			return $oneuser;
 		}
+		
+		return self::get_anonymous_user();
+	}
+	
+	static public function get_anonymous_user()
+	{
+		return new CmsAnonymousUser();
+	}
+	
+	static public function logout()
+	{
+		unset($_SESSION['cmsms_user']);
+		unset($_SESSION['cmsms_user_id']); //TODO: Remove me
+		setcookie('cmsms_user_id', '', time() - 3600);
+		setcookie('cmsms_passhash', '', time() - 3600);
 	}
 }
 

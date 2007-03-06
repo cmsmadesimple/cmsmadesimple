@@ -76,7 +76,7 @@ class CmsAdminTheme extends CmsObject
 	static function get_theme_for_user()
 	{
 		$gCms = cmsms();
-		$user = CmsAdmin::get_user(true);
+		$user = CmsLogin::get_current_user();
 		$userid = $user->id;
 
 		$themeName=get_preference($userid, 'admintheme', 'default');

@@ -23,9 +23,9 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 $userid = "";
-if ($_SESSION['cms_admin_user_id'])
+if ($_SESSION['cmsms_user_id'])
 {
- 	$userid = $_SESSION['cms_admin_user_id'];
+ 	$userid = $_SESSION['cmsms_user_id'];
 }
 
 $username= "";

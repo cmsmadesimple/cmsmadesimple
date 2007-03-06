@@ -33,16 +33,6 @@
 class CmsApplication extends CmsObject
 {
 	/**
-	 * Config object - hash containing variables from config.php
-	 */
-	#var $config;
-
-	/**
-	 * Database object - adodb reference to the current database
-	 */
-	//var $db;
-
-	/**
 	 * Variables object - various objects and strings needing to be passed 
 	 */
 	var $variables;
@@ -83,19 +73,9 @@ class CmsApplication extends CmsObject
 	var $userprefs;
 
 	/**
-	 * Smarty object - holds reference to the current smarty object -- will not be set in the admin
-	 */
-	//public $smarty = NULL;
-
-	/**
 	 * Internal error array - So functions/modules can store up debug info and spit it all out at once
 	 */
 	var $errors;
-
-	/**
-     * nls array - This holds all of the nls information for different languages
-	 */
-	//var $nls;
 
 	/**
      * template cache array - If something's called LoadTemplateByID, we keep a copy around
@@ -123,28 +103,10 @@ class CmsApplication extends CmsObject
 	var $blocktypes;
 	
 	var $ormclasses;
-	
-	//var $globalcontentoperations;
-	
-	//var $bookmarkoperations;
-	
-	//var $templateoperations;
-	
-	//var $contentoperations;
-	
-	//var $usertagoperations;
-	
-	//var $useroperations;
-	
-	//var $groupoperations;
-	
-	//var $moduleoperations;
-	
+
 	var $hrinstance;
 	
 	var $params = array();
-	
-	//var $desccache = array();
 	
 	var $modules;
 	
@@ -376,6 +338,11 @@ class CmsApplication extends CmsObject
 	function get_smarty()
 	{
 		return CmsSmarty::get_instance();
+	}
+	
+	public function get_current_user()
+	{
+		return CmsLogin::get_current_user();
 	}
 
 	function &GetHierarchyManager()

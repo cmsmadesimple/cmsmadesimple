@@ -34,7 +34,7 @@
  */
 function check_login($no_redirect = false)
 {
-	return CmsAdmin::check_login($no_redirect);
+	return CmsLogin::check_login($no_redirect);
 }
 
 /**
@@ -45,12 +45,12 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-	return CmsAdmin::get_userid($check);
+	return CmsLogin::get_userid($check);
 }
 
 function check_passhash($userid, $checksum)
 {
-	return CmsAdmin::check_passhash($userid, $checksum);
+	return CmsLogin::check_passhash($userid, $checksum);
 }
 
 /**
@@ -63,7 +63,7 @@ function check_passhash($userid, $checksum)
  */
 function generate_user_object($userid)
 {
-	return CmsAdmin::generate_user_object($userid);
+	return CmsLogin::generate_user_object($userid);
 }
 
 /**
@@ -281,9 +281,9 @@ function audit($itemid, $itemname, $action)
 	$userid = 0;
 	$username = '';
 
-	if (isset($_SESSION["cms_admin_user_id"]))
+	if (isset($_SESSION["cmsms_user_id"]))
 	{
-		$userid = $_SESSION["cms_admin_user_id"];
+		$userid = $_SESSION["cmsms_user_id"];
 	}
 	else
 	{

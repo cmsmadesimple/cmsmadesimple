@@ -18,19 +18,18 @@
 #
 #$Id$
 
-//var_dump('here');
+$current_user = CmsLogin::get_current_user();
+if ($current_user->is_anonymous())
+{
+	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
+	CmsResponse::redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
+}
 
 CmsAdminTheme::start();
 
-//var_dump('here2');
-
 $themeObject = CmsAdminTheme::get_instance();
 
-//var_dump('here3');
-
 cmsms()->variables['admintheme'] = CmsAdminTheme::get_instance();
-
-//var_dump('here4');
 
 /*
 if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
