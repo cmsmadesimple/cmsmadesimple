@@ -132,6 +132,9 @@ if ($pageinfo == null)
 	//CmsResponse::send_error_404();
 }
 
+$user = CmsLogin::get_current_user();
+var_dump(CmsGacl::get_instance()->acl_check('Core:Pages', 'View', 'Users', $user->id, 'Root', $pageinfo->content_id));
+
 //Render the pageinfo object
 echo $pageinfo->render();
 
