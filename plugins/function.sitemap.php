@@ -30,6 +30,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
     // define variables
     $menu       = '';
     $last_level = 0;
+    $first_level= 0;
     $count      = 0;
     $in_hr      = 0;
     $no_end     = false;
@@ -58,6 +59,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
                 {
                      $params['start_element'] = $onecontent->Hierarchy();
                      $depth = count(split('\.', $onecontent->Hierarchy()));
+                     $first_level = $depth;
                      continue;
                 }
                 else
@@ -172,11 +174,11 @@ function smarty_cms_function_sitemap($params, &$smarty)
                 {
                     $menu .= ' target="' . $onecontent->GetPropertyValue('target') . '"';
                 }
-                $menu .= '>' . $onecontent->MenuText() . '</a>';
+                $menu .= '>' . my_htmlentities($onecontent->MenuText()) . '</a>';
             }
             else
             {
-                $menu .= $onecontent->MenuText();
+                $menu .= my_htmlentities($onecontent->MenuText());
             }
         }
         else
@@ -195,7 +197,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
         $count++;
     }
 
-    for ($i = 0; $i < $last_level; $i++)
+    for ($i = $first_level; $i < $last_level; $i++)
     {
         if ($no_end != true)
         {
