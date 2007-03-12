@@ -450,7 +450,7 @@ class CmsModule extends CmsObject
 	 */
 	function Install()
 	{
-		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.install.php';
+		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.install.php');
 		if (@is_file($filename))
 		{
 			{
@@ -484,7 +484,7 @@ class CmsModule extends CmsObject
 	 */
 	function Uninstall()
 	{
-		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.uninstall.php';
+		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.uninstall.php');
 		if (@is_file($filename))
 		{
 			{
@@ -532,7 +532,7 @@ class CmsModule extends CmsObject
 	 */
 	function Upgrade($oldversion, $newversion)
 	{
-		$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/method.upgrade.php';
+		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.upgrade.php');
 		if (@is_file($filename))
 		{
 			{
@@ -1311,7 +1311,8 @@ class CmsModule extends CmsObject
 	{
 		if ($name != '')
 		{
-			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/action.' . $name . '.php';
+			$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'action.' . $name . '.php');
+			
 			if (@is_file($filename))
 			{
 				{
@@ -2235,8 +2236,7 @@ class CmsModule extends CmsObject
 	{
 		if ($originator != '' && $eventname != '')
 		{
-			$filename = dirname(dirname(dirname(__FILE__))) . '/modules/'.$this->GetName().'/event.' 
-			. $originator . "." . $eventname . '.php';
+			$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'event.' . $originator . '.' . $eventname . '.php');
 
 			if (@is_file($filename))
 			{

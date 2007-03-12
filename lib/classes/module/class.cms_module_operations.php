@@ -99,7 +99,7 @@ class CmsModuleOperations extends CmsObject
 	{
 		// get a file list
 		$filecount = 0;
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules".DIRECTORY_SEPARATOR.$modinstance->GetName();
+		$dir = cms_join_path(ROOT_DIR, 'modules', $modinstance->GetName());
 		$files = get_recursive_file_list( $dir, $modinstance->xml_exclude_files );
 
 		$xmltxt  = '<?xml version="1.0" encoding="ISO-8859-1"?>';
@@ -165,7 +165,7 @@ class CmsModuleOperations extends CmsObject
 		global $gCms;
 
 		// first make sure that we can actually write to the module directory
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+		$dir = cms_join_path(ROOT_DIR, 'modules');
 
 		if( !is_writable( $dir ) && $brief != 0 )
 		{
@@ -501,7 +501,7 @@ class CmsModuleOperations extends CmsObject
 		$db =& $gCms->GetDb();
 		$cmsmodules = &$gCms->modules;
 
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+		$dir = cms_join_path(ROOT_DIR, 'modules');
 
 		if (@is_file("$dir/$modulename/$modulename.module.php"))
 		{

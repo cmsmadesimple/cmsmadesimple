@@ -41,7 +41,7 @@ class CmsModuleLoader extends CmsObject
 		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 
-		$dir = dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."modules";
+		$dir = cms_join_path(ROOT_DIR,'modules');
 
 		if ($loadall == true)
 		{
