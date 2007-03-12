@@ -1019,7 +1019,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$dbms = $config['dbms'];
 		if ($dbms == 'mysqli') $dbms = 'mysql';
 
-		include_once(cms_join_path(dirname(dirname(__FILE__)), 'dbo', "{$dbms}.get_columns_in_table.php"));
+		include_once(cms_join_path(ROOT_DIR, 'lib', 'dbo', "{$dbms}.get_columns_in_table.php"));
 		
 		$fields = dbo_get_columns_in_table($table);
 		
