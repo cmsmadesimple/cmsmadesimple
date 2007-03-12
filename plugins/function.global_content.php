@@ -18,7 +18,14 @@
 
 function smarty_cms_function_global_content($params, &$smarty)
 {
-	return $smarty->fetch('globalcontent:'.$params['name']);
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $smarty->fetch('globalcontent:'.$params['name']));
+	}
+	else
+	{
+		return $smarty->fetch('globalcontent:'.$params['name']);
+	}
 }
 
 function smarty_cms_help_function_global_content() {
@@ -30,6 +37,7 @@ function smarty_cms_help_function_global_content() {
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li>name - The name of the global content block to display.</li>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
 	</ul>
 	<?php
 }

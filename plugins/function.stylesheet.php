@@ -45,19 +45,26 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 			}
 			$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
 			if ($media != '')
-			{
+			{z
 				$stylesheet .= '&amp;mediatype='.urlencode($media);
 			}
 			$stylesheet .= "\" />\n"; 
 		}
 	}
 
-	if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
+	if (!(isset($config['use_smarty_php_tags']) && $config['use_smarty_php_tags'] == true))
 	{
-		$stylesheet = ereg_replace("\{\/?php\}", "", $stylesheet);
+		$stylesheet = ereg_replace("\{\/?php\}", '', $stylesheet);
 	}
-
-	return $stylesheet;
+	
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $stylesheet);
+	}
+	else
+	{
+		return $stylesheet;
+	}
 }
 
 function smarty_cms_help_function_stylesheet() {
@@ -70,6 +77,7 @@ function smarty_cms_help_function_stylesheet() {
 	<ul>
 		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
 		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
 	</ul>
 	</p>
 	<?php

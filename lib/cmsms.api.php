@@ -39,32 +39,75 @@ require_once(ROOT_DIR.DS.'fileloc.php');
  */
 function __autoload($class_name)
 {
-	$dirname = dirname(dirname(__FILE__));
+	$files = scan_classes(cms_join_path(ROOT_DIR,'lib','classes'));
 	
 	//Fix references to older classes
 	if ($class_name == 'CMSModule')
 		$class_name = 'CmsModule';
-
-	//We do this in order of importance...  classes first
-	if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php')))
+		
+	if (array_key_exists('class.' . underscore($class_name) . '.php', $files))
 	{
-		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.php'));
+		require($files['class.' . underscore($class_name) . '.php']);
 	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php')))
+	else if (array_key_exists('class.' . underscore($class_name) . '.inc.php', $files))
 	{
-		require(cms_join_path($dirname,'lib','classes','class.' . underscore($class_name) . '.inc.php'));
+		require($files['class.' . underscore($class_name) . '.inc.php']);
 	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php')))
+	else if (array_key_exists('class.' . strtolower($class_name) . '.php', $files))
 	{
-		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.php'));
+		require($files['class.' . strtolower($class_name) . '.php']);
 	}
-	else if (file_exists(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php')))
+	else if (array_key_exists('class.' . strtolower($class_name) . '.inc.php', $files))
 	{
-		require(cms_join_path($dirname,'lib','classes','class.' . strtolower($class_name) . '.inc.php'));
+		require($files['class.' . strtolower($class_name) . '.inc.php']);
 	}
 	else if (CmsContentOperations::load_content_type($class_name))
 	{
 	}
+}
+
+function scan_classes($dir)
+{
+	if (!isset($GLOBALS['dirscan']))
+	{
+		$files = array();
+		/*
+		$time1 = microtime(true);
+		*/
+		scan_classes_recursive($dir, $files);
+		/*
+		$time2 = microtime(true);
+		var_dump($time2 - $time1);
+		*/
+		$GLOBALS['dirscan'] = $files;
+		return $files;
+	}
+	else
+	{
+		return $GLOBALS['dirscan'];
+	}
+}
+
+function scan_classes_recursive($dir = '.', &$files)
+{
+	foreach(new DirectoryIterator($dir) as $file)
+	{
+		if (!$file->isDot() && $file->getFilename() != '.svn')
+		{
+			if ($file->isDir())
+			{
+				$newdir = $file->getPathname();
+				scan_classes_recursive($newdir, $files);
+			}
+			else 
+			{
+				if (starts_with(basename($file->getPathname()), 'class.'))
+					$files[basename($file->getPathname())] = $file->getPathname();
+			}
+		}
+	}
+	
+	return $files;
 }
 
 /**

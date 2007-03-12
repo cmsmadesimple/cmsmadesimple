@@ -57,8 +57,15 @@ function smarty_cms_function_metadata($params, &$smarty)
 	{
 		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
 	}
-
-	return $result;
+	
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $result);
+	}
+	else
+	{
+		return $result;
+	}
 }
 
 function smarty_cms_help_function_metadata() {
@@ -70,6 +77,7 @@ function smarty_cms_help_function_metadata() {
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
 	</ul>
 	<?php
 }

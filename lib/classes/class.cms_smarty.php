@@ -27,7 +27,7 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-require_once(cms_join_path(dirname(dirname(__FILE__)),'smarty','Smarty.class.php'));
+require_once(cms_join_path(ROOT_DIR,'lib','smarty','Smarty.class.php'));
 
 class CmsSmarty extends Smarty {
 	

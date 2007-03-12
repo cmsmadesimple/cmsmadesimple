@@ -18,7 +18,14 @@
 
 function smarty_cms_function_html_blob($params, &$smarty)
 {
-	return $smarty->fetch('globalcontent:'.$params['name']);
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $smarty->fetch('globalcontent:'.$params['name']));
+	}
+	else
+	{
+		return $smarty->fetch('globalcontent:'.$params['name']);
+	}
 }
 
 function smarty_cms_help_function_html_blob() {

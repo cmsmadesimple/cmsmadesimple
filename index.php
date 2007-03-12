@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -132,8 +132,8 @@ if ($pageinfo == null)
 	//CmsResponse::send_error_404();
 }
 
-$user = CmsLogin::get_current_user();
-var_dump(CmsGacl::get_instance()->acl_check('Core:Pages', 'View', 'Users', $user->id, 'Root', $pageinfo->content_id));
+//$user = CmsLogin::get_current_user();
+//var_dump(CmsGacl::get_instance()->acl_check('Core:Pages', 'View', 'Users', $user->id, 'Root', $pageinfo->content_id));
 
 //Render the pageinfo object
 echo $pageinfo->render();

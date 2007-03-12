@@ -21,18 +21,24 @@ function smarty_cms_function_title($params, &$smarty)
 	global $gCms;
 	$pageinfo = &$gCms->variables['pageinfo'];
 	$config = &$gCms->GetConfig();
-	if (isset($pageinfo) && $pageinfo->content_id == -1)
+	
+	$result = '404 Error';
+	
+	if (!(isset($pageinfo) && $pageinfo->content_id == -1))
 	{
-		#We've a custom error message...  set a current timestamp
-		return "404 Error";
+		$result = cms_htmlentities($pageinfo->content_title);
+		if (!(isset($config['use_smarty_php_tags']) && $config['use_smarty_php_tags'] == true))
+		{
+			$result = ereg_replace("\{\/?php\}", '', $result);
+		}
+	}
+	
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $result);
 	}
 	else
 	{
-		$result = cms_htmlentities($pageinfo->content_title);
-		if (!(isset($config["use_smarty_php_tags"]) && $config["use_smarty_php_tags"] == true))
-		{
-			$result = ereg_replace("\{\/?php\}", "", $result);
-		}
 		return $result;
 	}
 }
@@ -44,7 +50,9 @@ function smarty_cms_help_function_title() {
 	<h3>How do I use it?</h3>
 	<p>Just insert the tag into your template/page like: <code>{title}</code></p>
 	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
+	<ul>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
+	</ul>
 	<?php
 }
 
