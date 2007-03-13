@@ -57,7 +57,7 @@ class ModuleLoader
 				}
 			}
 			closedir($handle);
-
+			
 			//Find modules and instantiate them
 			$allmodules = $this->FindModules();
 			foreach ($allmodules as $onemodule)
@@ -169,10 +169,17 @@ class ModuleLoader
 
 		foreach (get_declared_classes() as $oneclass)
 		{
-			if (strtolower(get_parent_class($oneclass)) == 'cmsmodule')
+		  $parent = get_parent_class($oneclass);
+		  while( $parent !== FALSE )
+		    {
+		      $str = strtolower($parent);
+		      if( $str == 'cmsmodule' ) 
 			{
-				$result[] = strtolower($oneclass);
+			  $result[] = strtolower($oneclass);
+			  break;
 			}
+		      $parent = get_parent_class($parent);
+		    }
 		}
 
 		sort($result);
