@@ -1244,6 +1244,8 @@ function can_admin_upload()
   $stat_uploads = @stat($dir_uploads);
   $stat_modules = @stat($dir_modules);
 
+  $my_uid = @getmyuid();
+
   if( $my_uid === FALSE || $stat_index == FALSE || 
       $stat_moduleinterface == FALSE || $stat_uploads == FALSE ||
       $stat_modules == FALSE )
@@ -1255,7 +1257,6 @@ function can_admin_upload()
   $safe_mode = (ini_get('safe_mode')==1)?TRUE:FALSE;
   if( $safe_mode == TRUE )
     {
-      $my_uid = @getmyuid();
 
       // we're in safe mode.
       if( ($stat_moduleinterface[4] != $stat_modules[4]) ||
