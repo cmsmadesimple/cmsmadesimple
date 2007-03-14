@@ -18,11 +18,30 @@
 
 function smarty_cms_function_metadata($params, &$smarty)
 {
-	$result = get_site_preference('metadata', '');
-
 	global $gCms;
 	$config =& $gCms->GetConfig();
 	$pageinfo =& $gCms->variables['pageinfo'];
+
+	$result = '';	
+
+	$showbase = true;
+	
+	#Show a base tag unless showbase is false in config.php
+	#It really can't hinder, only help.
+	if (isset($params['showbase']))
+	{
+		if ($params['showbase'] == 'false')
+		{
+			$showbase = false;
+		}
+	}
+
+	if ($showbase)
+	{
+		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+	}
+
+	$result .= get_site_preference('metadata', '');
 
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{
@@ -39,23 +58,6 @@ function smarty_cms_function_metadata($params, &$smarty)
 		$smarty->_eval('?>' . $_compiled);
 		$result = @ob_get_contents();
 		@ob_end_clean();
-	}
-	
-	$showbase = true;
-	
-	#Show a base tag unless showbase is false in config.php
-	#It really can't hinder, only help.
-	if (isset($params['showbase']))
-	{
-		if ($params['showbase'] == 'false')
-		{
-			$showbase = false;
-		}
-	}
-
-	if ($showbase)
-	{
-		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
 	}
 
 	return $result;
