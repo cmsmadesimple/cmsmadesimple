@@ -51,7 +51,7 @@ function load_adodb()
 
 function & adodb_connect()
 {
-	global $db, $config;
+	global $config;
 	
 	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
 	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
