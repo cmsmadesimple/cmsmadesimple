@@ -776,12 +776,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                     $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
+                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
                 }
                 else
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
+                    $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
-                $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
             }
             else
             {
@@ -902,7 +903,7 @@ function display_content_list($themeObject = null)
 	{
 	$headoflist .=  '<p class="pageoptions"><a href="addcontent.php" class="pageoptions">';
         $headoflist .= $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon').'</a>';
-        $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a>';
+        $headoflist .= ' <a class="pageoptions" href="addcontent.php">'.lang("addcontent").'</a></p>';
 	}
 	if (check_permission($userid, 'Add Pages') || check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
 	{
