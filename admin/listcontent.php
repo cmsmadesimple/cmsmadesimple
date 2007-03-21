@@ -65,6 +65,8 @@ function setdefault($contentid)
 {
 	global $gCms;
 	$userid = get_userid();
+	
+	$result = false;
 
 	if (check_modify_all($userid))
 	{
