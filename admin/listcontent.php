@@ -701,14 +701,17 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= "<td>&nbsp;</td>\n";
             }
         }
-        if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
-        {
-            $thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
-        }
-        else
-        {
-            $thelist .= "<td>&nbsp;</td>";
-        }   
+		if (check_modify_all($userid))
+		{
+			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
+			{
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+			}
+			else
+			{
+				$thelist .= "<td>&nbsp;</td>";
+			}
+		}
 
         // code for move up is simple
         if (check_permission($userid, 'Modify Page Structure'))
@@ -780,7 +783,6 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 }
                 else
                 {
-                    $thelist .= '<td>&nbsp;</td>' . "\n";
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
             }
@@ -932,7 +934,10 @@ function display_content_list($themeObject = null)
     {
 	   $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
     }
-	$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+	if (check_modify_all($userid))
+	{
+		$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
+	}
 	if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 	{
 		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
