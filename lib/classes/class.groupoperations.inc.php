@@ -51,7 +51,7 @@ class GroupOperations
 		return $result;
 	}
 
-	function LoadGroupByID($id)
+	function & LoadGroupByID($id)
 	{
 
 		$result = false;
