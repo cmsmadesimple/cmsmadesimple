@@ -106,7 +106,7 @@ function redirect($to, $noappend=false)
     }
     else
     {
-        if (isset($config) && $config['debug'] == true)
+        if (isset($config['debug']) && $config['debug'] == true)
         {
             echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
             echo "<a href=\"".$to."\">".$to."</a><br />";
