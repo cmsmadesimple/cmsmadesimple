@@ -779,16 +779,18 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                     $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
-                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
                 }
                 else
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
+                if (check_permission($userid, 'Modify Page Structure'))
+                {
+                    $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
+                }
             }
             else
             {
-                $thelist .= '<td>&nbsp;</td>' . "\n";
                 $thelist .= '<td>&nbsp;</td>' . "\n";
             }
             $thelist .= "</tr>\n";  	
