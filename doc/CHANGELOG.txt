@@ -1,4 +1,4 @@
-Version 1.0.5 "Molokai" -- Mar 06 2007
+Version 1.0.5 "Molokai" -- Mar 26 2007
 -----------------
 - Fixes to Global Settings
 - Fixes to Delete Stylesheet Association
