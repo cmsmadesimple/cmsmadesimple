@@ -81,6 +81,7 @@ td, th {
 table {
 	margin-left: auto;
 	margin-right: auto;
+	margin-bottom: 2em;
 	padding: 0.2em;
 	font-family: Verdana, sans-serif;
 	background: #fff;

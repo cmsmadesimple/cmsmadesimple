@@ -2,7 +2,7 @@
 
 function load_adodb() 
 {
-	global $config;
+	global $config, $ADODB_vers;
 
 	// @TODO: Remove dependence on PEAR for error handling	
 	if ($config['debug'] == true)
