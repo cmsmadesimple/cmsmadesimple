@@ -28,6 +28,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 	*/
 	function CMSInstallerPage1(&$smarty, $errors)
 	{
+		$this->CMSInstallerPage(1, $smarty, $errors);
 		$this->continueon = true;
 		$this->special_failed = false;
 		$this->images = array();
@@ -36,7 +37,6 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$this->images['red'] = '<img src="images/red.gif" alt="Failure" height="16" width="16" border="0" />';
 		$this->images['yellow'] = '<img src="images/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
 		$this->images['green'] = '<img src="images/green.gif" alt="Success" height="16" width="16" border="0" />';
-		$this->CMSInstallerPage(1, $smarty, $errors);
 	}
 	
 	function assignVariables()

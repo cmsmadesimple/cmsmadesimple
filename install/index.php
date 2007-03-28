@@ -29,7 +29,7 @@ require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstaller.cla
 
 $installer =& new CMSInstaller();
 
-if ($installer->currentPage > 1)
+if ($installer->currentPage > 3)
 {
 	require_once cms_join_path(CMS_BASE, 'include.php');
 }

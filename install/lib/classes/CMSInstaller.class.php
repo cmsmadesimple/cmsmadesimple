@@ -57,6 +57,7 @@ class CMSInstaller
 	
 	/**
 	 * Loads smarty
+	 * @return boolean whether loading succeeded
 	*/
 	function loadSmarty()
 	{
@@ -99,7 +100,7 @@ class CMSInstaller
 	*/
 	function run()
 	{
-		// Load smarty
+		// Load smarty, exit if failed
 		if (! $this->loadSmarty())
 		{
 			return;
@@ -118,27 +119,28 @@ class CMSInstaller
 			}
 		}
 		
-		// Process posted form
+		// Process submitted data
 		$db = $this->processSubmit();
-		
-		// Assign smarty variables (used in header)
-		$this->smarty->assign('number_of_pages', $this->numberOfPages);
-		$this->smarty->assign('current_page', $this->currentPage);
 		
 		// Create the (current) page object
 		require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstallerPage' . $this->currentPage . '.class.php');
 		$classname = 'CMSInstallerPage' . $this->currentPage;
 		$page =& new $classname($this->smarty, $this->errors);
-
+		
+		// Assign smarty variables (used in header)
+		$this->smarty->assign('number_of_pages', $this->numberOfPages);
+		$this->smarty->assign('current_page', $this->currentPage);
+		
+		// Output HTML
 		$this->smarty->display('installer_start.tpl'); // display page start
-		$page->displayHeader();                        // display header
+		$this->smarty->display('header.tpl');          // display header
 		$page->preContent($db);		                   // pre-content
 		$page->displayContent();                       // display page content
 		$this->smarty->display('installer_end.tpl');   // display page end
 	}
 	
 	/**
-	 * Processes submitted forms, redirect to previous page if needed
+	 * Processes submitted forms, redirects to previous page if needed
 	 * @return mixed Returns a ADOdb Connection object (for re-use) if created
 	*/
 	function processSubmit()

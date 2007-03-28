@@ -16,12 +16,14 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+/**
+ * CMS Made Simple installer page base class
+*/
 class CMSInstallerPage
 {
 	var $number;
 	var $smarty;
 	var $errors;
-	var $content;
 	
 	/**
 	 * Class constructor
@@ -29,27 +31,17 @@ class CMSInstallerPage
 	function CMSInstallerPage($number, &$smarty, $errors)
 	{
 		$this->number = $number;
-		$this->smarty = $smarty;
+		$this->smarty =& $smarty;
 		$this->errors = $errors;
 	}
 	
-	function displayHeader()
-	{
-		$this->smarty->display('header.tpl');
-	}
-	
+	/**
+	 * Displays the page content, assigns smarty variables and displays the template
+	*/
 	function displayContent()
 	{
-		echo $this->fetchContent();
-	}
-	
-	/**
-	 * Fetches the page content - assigns smarty variables, fetches content HTML
-	*/
-	function fetchContent()
-	{
 		$this->assignVariables();
-		return $this->smarty->fetch('page' . $this->number . '.tpl');
+		$this->smarty->display('page' . $this->number . '.tpl');
 	}
 	
 	/**
@@ -61,9 +53,10 @@ class CMSInstallerPage
 	}
 	
 	/**
-	 * Executed before the page smarty content is displayed
+	 * Should be overridden by subpages - executed before the page smarty content is displayed
+	 * @param mixed ADOdb object when created in CMSInstaller::processSubmit or NULL
 	*/
-	function preContent()
+	function preContent(&$db)
 	{
 		
 	}
