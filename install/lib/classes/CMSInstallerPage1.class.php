@@ -18,25 +18,26 @@
 
 class CMSInstallerPage1 extends CMSInstallerPage
 {
-	
 	var $continueon;
 	var $special_failed;
 	var $images;
 	
 	/**
 	 * Class constructor
-	*/
+	 * @var object $smarty
+	 * @var array  $errors
+	 */
 	function CMSInstallerPage1(&$smarty, $errors)
 	{
 		$this->CMSInstallerPage(1, $smarty, $errors);
 		$this->continueon = true;
 		$this->special_failed = false;
 		$this->images = array();
-		$this->images['true'] = '<img src="images/true.gif" alt="Success" height="16" width="16" border="0" />';
-		$this->images['false'] = '<img src="images/false.gif" alt="Failure" height="16" width="16" border="0" />';
-		$this->images['red'] = '<img src="images/red.gif" alt="Failure" height="16" width="16" border="0" />';
+		$this->images['true']   = '<img src="images/true.gif" alt="Success" height="16" width="16" border="0" />';
+		$this->images['false']  = '<img src="images/false.gif" alt="Failure" height="16" width="16" border="0" />';
+		$this->images['red']    = '<img src="images/red.gif" alt="Failure" height="16" width="16" border="0" />';
 		$this->images['yellow'] = '<img src="images/yellow.gif" alt="Caution" height="16" width="16" border="0" />';
-		$this->images['green'] = '<img src="images/green.gif" alt="Success" height="16" width="16" border="0" />';
+		$this->images['green']  = '<img src="images/green.gif" alt="Success" height="16" width="16" border="0" />';
 	}
 	
 	function assignVariables()
@@ -54,10 +55,10 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		}
 		
 		$settings['recommended'][] = $this->testBoolean(0, 'Checking for basic XML (expat) support', function_exists('xml_parser_create'), 'XML support is not compiled into your php install.  You can still use the system, but will not be able to use any of the remote module installation functions.');
-		$settings['recommended'][] = $this->testBoolean(0, 'Checking file uploads', ini_get('file_uploads'), 'You will not be able to use any of the file uploading facilities included in CMS Made Simple.  If possible, this restriction should be lifted by your system admin to properly use all file management features of the system.  Proceed with caution.');
+		$settings['recommended'][] = $this->testIniBoolean(0, 'Checking file uploads', 'file_uploads', 'When file uploads are disabled you will not be able to use any of the file uploading facilities included in CMS Made Simple.  If possible, this restriction should be lifted by your system admin to properly use all file management features of the system.  Proceed with caution.');
 		
-		$settings['recommended'][] = $this->testRange('Checking PHP memory limit', ini_get('memory_limit'), '8M', '128M', 'You may not have enough memory to run CMSMS correctly. If possible, you should try to get your system admin to raise this value to 128M or greater. Proceed with caution.', true);
-		$settings['recommended'][] = $this->testRange('Checking max upload file size', ini_get('upload_max_filesize'), '2M', '10M', 'You will probably not be able to upload larger files using the included file management functions.  Please be aware of this restriction.', true);
+		$settings['recommended'][] = $this->testIniRange(0, 'Checking PHP memory limit', 'memory_limit', '8M', '128M', 'You may not have enough memory to run CMSMS correctly. If possible, you should try to get your system admin to raise this value. Proceed with caution.');
+		$settings['recommended'][] = $this->testIniRange(0, 'Checking max upload file size', 'upload_max_filesize', '2M', '10M', 'You will probably not be able to upload (larger) files using the included file management functions.  Please be aware of this restriction.');
 		$f = cms_join_path(CMS_BASE, 'uploads');
 		$settings['recommended'][] = $this->testBoolean(0, "Checking if $f is writable", is_writable($f), 'The uploads folder is not writable. You can still install the system, but you will not be able to upload files via the Admin Panel.');
 		$f = cms_join_path(CMS_BASE, 'modules');
@@ -69,7 +70,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$settings['recommended'][] = $this->testBoolean(0, 'Checking if ini_set works', $result, 'Although the ability to override php ini settings is not mandatory, some addon (optional) functionality uses ini_set to extend timeouts, and allow uploading of larger files, etc.  You may have difficulty with some addon functionality without this capability.');
 		$settings['recommended'][] = $this->testBoolean(0, 'Checking if sessions are enabled', isset($_GET['sessiontest']) && isset($_SESSION['test']), 'Although the PHP support for sessions is not mandatory, it is highly recommended. Logins and other things may slow down and you may have difficulty with some addon functionality without this capability.');
 		$settings['recommended'][] = $this->testBoolean(0, 'Checking for tokenizer functions', function_exists('token_get_all'), 'Not having the tokenizer could cause pages to render as purely white.  We recommend you have this installed, but your website may work fine without it.');
-		$settings['recommended'][] = $this->testBoolean(0, 'Checking for Safe mode', (! (bool) ini_get('safe_mode')), 'PHP Safe mode could create some problems with uploading files and other functions. It all depends on how strict your server safe mode settings are.');
+		$settings['recommended'][] = $this->testIniBoolean(0, 'Checking for Safe mode', 'safe_mode', 'PHP Safe mode could create some problems with uploading files and other functions. It all depends on how strict your server safe mode settings are.', true);
 		
 		// assign settings
 		$this->smarty->assign('images', $this->images);
@@ -78,44 +79,67 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$this->smarty->assign('special_failed', $this->special_failed);
 	}
 	
-	function & testBoolean($required, $title, $result, $message = NULL)
+	/**
+	 * @return object 
+	 * @var boolean $required
+	 * @var string  $title
+	 * @var boolean $result
+	 * @var string  $message
+	*/
+	function & testBoolean($required, $title, $result, $message = '')
 	{
 		$test =&new StdClass();
 		$test->title = $title;
-		if ($result == false)
+		if ((bool) $result == false)
 		{
-			if ($required)
-			{
-				$this->continueon = false;
-			}
-			else
-			{
-				$this->special_failed = true;
-			}
-			if ($message)
+			$required == true ? $this->continueon = false : $this->special_failed = true;
+			
+			if (trim($message) != '')
 			{
 				$test->message = $message;
 			}
-		}
-		if ($result == true)
-		{
-			$test->resultimage = $required ? $this->images['true'] : $this->images['green'];
+			$test->resultimage = $required ? $this->images['false'] : $this->images['yellow'];
 		}
 		else
 		{
-			$test->resultimage = $required ? $this->images['false'] : $this->images['yellow'];
+			$test->resultimage = $required ? $this->images['true'] : $this->images['green'];
 		}
 		return $test;
 	}
 	
-	function & testRange($title, $value, $minimum, $recommended, $message = NULL, $compare_as_bytes = false)
+	/**
+	 * @return object 
+	 * @var boolean $required
+	 * @var string  $title
+	 * @var boolean $result
+	 * @var string  $message
+	 * @var boolean $negative_test
+	*/
+	function & testIniBoolean($required, $title, $varname, $message = '', $negative_test = false)
+	{
+		$str = ini_get($varname);
+		$result = $negative_test ? (! (bool) $str) : (bool) $str;
+		return $this->testBoolean($required, $title, $result, $message);
+	}
+	
+	/**
+	 * @return object 
+	 * @var boolean $required
+	 * @var string  $title
+	 * @var mixed   $value
+	 * @var mixed   $minimum
+	 * @var mixed   $recommended
+	 * @var string  $message
+	 * @var boolean $test_as_bytes
+	*/
+	function & testRange($required, $title, $value, $minimum, $recommended, $message = '', $test_as_bytes = false)
 	{
 		$test =& new StdClass();
-		$test->title = $title .  " (min $minimum, recommend $recommended)";
 		
+		$test->title = $title .  " (min $minimum, recommend $recommended)";
 		$test->value = $value;
 		
-		if (! is_int($minimum) && ! is_int($recommended) && $compare_as_bytes == TRUE)
+		if ($test_as_bytes)
 		{
 			$value = $this->returnBytes($value);
 			$minimum = $this->returnBytes($minimum);
@@ -125,7 +149,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		if ($value < $minimum)
 		{
 			$test->resultimage = $this->images['red'];
-			$this->special_failed = true;
+			$required == true ? $this->continueon = false : $this->special_failed = true;
 		}
 		elseif ($value < $recommended)
 		{
@@ -136,7 +160,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 			$test->resultimage = $this->images['green'];
 		}
 		
-		if ($value < $recommended)
+		if ($value < $recommended && trim($message) != '')
 		{
 			$test->message = $message;
 		}
@@ -144,20 +168,58 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		return $test;
 	}
 	
-	function returnBytes($val) {
-		$val = trim($val);
-		$last = strtolower($val{strlen($val)-1});
-		switch($last) 
+	/**
+	 * @return object 
+	 * @var boolean $required
+	 * @var string  $title
+	 * @var string  $varname
+	 * @var string  $minimum
+	 * @var string  $recommended
+	 * @var string  $message
+	 * @var boolean $test_as_bytes
+	*/
+	function & testIniRange($required, $title, $varname, $minimum, $recommended, $message = '', $test_as_bytes = true)
+	{
+		$str = ini_get($varname);
+		if ($str == '')
 		{
-			// The 'G' modifier is available since PHP 5.1.0
-			case 'g':
-				$val *= 1024;
-			case 'm':
-				$val *= 1024;
-			case 'k':
-				$val *= 1024;
+			$error = 'Could not retrieve a value.... passing anyways.';
+			$required = false;
+			if ((string) get_cfg_var($varname) != '')
+			{
+				$str = (string) get_cfg_var($varname);
+				$error .= '<br />Displaying the value originally set in the config file (this may not be accurate).';
+			}
 		}
-		return $val;
+		$test =& $this->testRange($required, $title, $str, $minimum, $recommended, $message, $test_as_bytes);
+		if (isset($error))
+		{
+			$test->error = $error;
+		}
+		return $test;
+	}
+	
+	/**
+	 * @var string $val
+	 * @return int
+	 */
+	function returnBytes($val) 
+	{
+		if (is_string($val) && $val != '')
+		{
+			$val = trim($val);
+			$last = strtolower($val{strlen($val)-1});
+			switch($last) 
+			{
+				case 'g':
+					$val *= 1024;
+				case 'm':
+					$val *= 1024;
+				case 'k':
+					$val *= 1024;
+			}
+		}
+		return (int) $val;
 	}
 }
 

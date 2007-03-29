@@ -33,7 +33,20 @@
 	<tbody>
 {foreach from=$settings.recommended item=test}
 		<tr class="{cycle values='row1,row2'}">
-			<td>{if isset($test->value)}<span class="have">You have {$test->value}</span>{/if}{$test->title}{if isset($test->message)}<br /><br /><em>{$test->message}</em>{/if}</td>
+			<td>
+{if isset($test->value) && $test->value != ''}
+				<span class="have">You have {$test->value}</span>
+{/if}
+				{$test->title}
+{if isset($test->error)}
+				<p class="error">{$test->error}</p>
+{/if}
+{if isset($test->message)}
+				<p>
+					<em>{$test->message}</em>
+				<p>
+{/if}
+			</td>
 			<td class="col2">{$test->resultimage}</td>
 		</tr>
 {/foreach}
@@ -82,13 +95,13 @@
 {else}
 	<p class="success" align="center">All tests passed (at least at a minimum level). Please click the Continue button.</p>
 {/if}
-<p class="continue" align="center">
+	<p class="continue" align="center">
 {if $special_failed}
-	<input type="Submit" name="recheck" value="Try Again" />
+		<input type="Submit" name="recheck" value="Try Again" />
 {/if}
-	<input type="submit" value="Continue" />
-	<input type="hidden" name="page" value="2" />
-</p>
+		<input type="submit" value="Continue" />
+		<input type="hidden" name="page" value="2" />
+	</p>
 {else}
 	<p class="failure" align="center">One or more tests have failed. Please correct the problem and click the button below to recheck.</p>
 	<p class="continue" align="center"><input type="Submit" value="Try Again" /></p>

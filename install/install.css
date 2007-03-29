@@ -27,6 +27,7 @@ p  {
 	font-size: 1em; 
 	font-family: Verdana, serif; 
 	background-color: white;
+	margin: 0;
 }
 
 h1  { 
@@ -62,6 +63,9 @@ h3   {
 	border-bottom: 1px solid #e7ab0b; 
 	border-left: 1.3em solid #e7ab0b; }
 
+form {
+	margin: .5em 0 .8em 0;
+}
 
 td, th { 
 	padding: 0.4em; 
@@ -71,11 +75,13 @@ td, th {
 .success {
 	color: #0C7A14;
 	font-weight: bold;
+	margin-bottom: .5em;
 }
 
 .failure {
 	color: #990000;
 	font-weight: bold;
+	margin-bottom: .5em;
 }
 
 table {

@@ -18,34 +18,34 @@
 
 /**
  * Uses the CMSInstallerPage class
-*/
+ */
 require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstallerPage.class.php');
 
 /**
  * CMS Made Simple Installer
-*/
+ */
 class CMSInstaller
 {
 	/**
-	* @var int the total number of installer pages
-	*/
+	 * @var int the total number of installer pages
+	 */
 	var $numberOfPages;
 	/**
-	* @var int the current page
-	*/
+	 * @var int the current page
+	 */
 	var $currentPage;
 	/**
-	* @var object the Smarty object
-	*/
+	 * @var object the Smarty object
+	 */
 	var $smarty;
 	/**
-	* @var array Errors to be shown
-	*/
+	 * @var array errors to be shown
+	 */
 	var $errors;
 	
 	/**
 	 * Class constructor
-	*/
+	 */
 	function CMSInstaller()
 	{
 		$this->numberOfPages = 5;
@@ -58,7 +58,7 @@ class CMSInstaller
 	/**
 	 * Loads smarty
 	 * @return boolean whether loading succeeded
-	*/
+	 */
 	function loadSmarty()
 	{
 		if (! is_readable(cms_join_path(CMS_BASE, 'lib', 'smarty', 'Smarty.class.php')))
@@ -87,7 +87,8 @@ class CMSInstaller
 	
 	/**
 	 * Shows an error page (without use of Smarty)
-	*/
+	 * @var string $error
+	 */
 	function showErrorPage($error)
 	{
 		include cms_join_path(CMS_INSTALL_BASE, 'templates', 'installer_start.tpl');
@@ -97,7 +98,7 @@ class CMSInstaller
 	
 	/**
 	 * Runs the installer
-	*/
+	 */
 	function run()
 	{
 		// Load smarty, exit if failed
@@ -105,6 +106,9 @@ class CMSInstaller
 		{
 			return;
 		}
+		
+		// Process submitted data
+		$db = $this->processSubmit();
 		
 		// Test for sessions on the first page
 		if ($this->currentPage == 1)
@@ -118,9 +122,6 @@ class CMSInstaller
 				header("Location: $redirect");
 			}
 		}
-		
-		// Process submitted data
-		$db = $this->processSubmit();
 		
 		// Create the (current) page object
 		require_once cms_join_path(CMS_INSTALL_BASE, 'lib', 'classes', 'CMSInstallerPage' . $this->currentPage . '.class.php');
@@ -142,7 +143,7 @@ class CMSInstaller
 	/**
 	 * Processes submitted forms, redirects to previous page if needed
 	 * @return mixed Returns a ADOdb Connection object (for re-use) if created
-	*/
+	 */
 	function processSubmit()
 	{
 		switch ($this->currentPage)
