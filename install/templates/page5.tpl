@@ -2,7 +2,7 @@
 <p class="error">{$error}</p>
 {/foreach}
 {if empty($errors)}
-<h4>Congratulations, you are all setup - here is your <a href="{$base_url/}">CMS site</a></h4>
+<h4>Congratulations, you are all setup - here is your <a href="{$base_url}/">CMS site</a></h4>
 {/if}
 {if $modman_installed}
 <form action="{$base_url}/admin/login.php" method="post">
