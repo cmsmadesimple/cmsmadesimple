@@ -35,7 +35,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$link = str_replace(" ", "%20", $_POST['docroot']);
 				
 		$this->smarty->assign('values', $values);
-		$this->smarty->assign('homepage_link', $link);
+		$this->smarty->assign('base_url', $link);
 		$this->smarty->assign('errors', $this->errors);
 		
 		global $gCms;
