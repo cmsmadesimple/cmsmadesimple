@@ -37,6 +37,9 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$this->smarty->assign('values', $values);
 		$this->smarty->assign('homepage_link', $link);
 		$this->smarty->assign('errors', $this->errors);
+		
+		global $gCms;
+		$this->smarty->assign('modman_installed', isset($gCms->modules['ModuleManager']));
 	}
 	
 	function preContent()
