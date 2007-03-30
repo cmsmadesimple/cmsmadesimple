@@ -16,8 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
+global $gCms;
+
 $LOAD_ALL_MODULES = true;
-$DONT_LOAD_DB = true;
+$DONT_LOAD_DB = false;
 
 set_magic_quotes_runtime(false);
 

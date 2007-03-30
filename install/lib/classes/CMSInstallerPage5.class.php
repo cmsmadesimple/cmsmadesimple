@@ -28,9 +28,14 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	
 	function assignVariables()
 	{
+		$values = array();
+		$values['admininfo']['username'] = $_POST['adminusername'];
+		$values['admininfo']['email'] = $_POST['adminemail'];
+		$values['admininfo']['password'] = $_POST['adminpassword'];
 		$link = str_replace(" ", "%20", $_POST['docroot']);
-		$this->smarty->assign('success_message', 'Congratulations, you are all setup - here is your <a href="' . $link . '">CMS site</a>');
-		
+				
+		$this->smarty->assign('values', $values);
+		$this->smarty->assign('homepage_link', $link);
 		$this->smarty->assign('errors', $this->errors);
 	}
 	

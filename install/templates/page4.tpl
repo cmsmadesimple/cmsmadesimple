@@ -24,12 +24,10 @@
 			<input type="hidden" name="password" value="{$values.db.password}" />
 			<input type="hidden" name="prefix" value="{$values.db.prefix}" />
 			<input type="hidden" name="createtables" value="{$values.createtables}" />
-{if $values.email_accountinfo}
 			<input type="hidden" name="email_accountinfo" value="{$values.email_accountinfo}" />
 			<input type="hidden" name="adminemail" value="{$values.admininfo.email}" />
 			<input type="hidden" name="adminusername" value="{$values.admininfo.username}" />
 			<input type="hidden" name="adminpassword" value="{$values.admininfo.password}" />
-{/if}
 		</td>
 	</tr>
    </table>

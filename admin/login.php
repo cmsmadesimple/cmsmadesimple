@@ -103,8 +103,11 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 		{
 			redirect($gCms->config['root_url'] . "/install/upgrade.php");
 		}
-		// end of version check
-
+		
+		if (isset($_POST['redirect_url']))
+		{
+			$_SESSION['redirect_url'] = $_POST['redirect_url'];
+		}
 		if (isset($_SESSION["redirect_url"]))
 		{
 			if (isset($gCms->config) and $gCms->config['debug'] == true)
