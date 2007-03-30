@@ -245,7 +245,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 	
 		$link = str_replace(" ", "%20", $_POST['docroot']);
 		
-		if (isset($_POST["email_accountinfo"])) 
+		if (isset($_POST['email_accountinfo']) && $_POST['email_accountinfo'] == true) 
 		{
 			echo "<p>E-mailing admin account information...";
 			$to      = $_POST['adminemail'];
