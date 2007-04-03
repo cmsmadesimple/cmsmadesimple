@@ -50,7 +50,6 @@ if ($action == "showpluginhelp")
 		echo $content;
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
-		exit;	
 	}
 	else
 	{
@@ -59,8 +58,9 @@ if ($action == "showpluginhelp")
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
-		exit;	
 	}
+	include_once("footer.php");
+	exit;	
 }
 else if ($action == "showpluginabout")
 {
@@ -75,7 +75,6 @@ else if ($action == "showpluginabout")
 		echo $content;
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
-		exit;	
 	}
 	else
 	{
@@ -84,8 +83,9 @@ else if ($action == "showpluginabout")
 		echo '<P>No help text available for this plugin.</P>';
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
-		exit;	
 	}
+	include_once("footer.php");
+	exit;	
 }
 else
 {
