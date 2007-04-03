@@ -59,8 +59,6 @@ if ($action == "showpluginhelp")
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
 	}
-	include_once("footer.php");
-	exit;	
 }
 else if ($action == "showpluginabout")
 {
@@ -84,8 +82,6 @@ else if ($action == "showpluginabout")
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
 	}
-	include_once("footer.php");
-	exit;	
 }
 else
 {
