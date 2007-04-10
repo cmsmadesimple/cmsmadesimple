@@ -1,6 +1,6 @@
 <?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,43 +18,28 @@
 #
 #$Id$
 
-/**
- * Base class for ORM assocations.
- *
- * @author Ted Kulp
- * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
- * @license GPL
- **/
-abstract class CmsObjectRelationalAssociation extends CmsObject
-{
-	var $loaded = false;
-	var $association_name = '';
-	var $extra_params = array();
-
-	/**
-	 * Base constructor.  Doesn't really do anything, but
-	 * gives methods extending CmsObject something to call.
-	 *
-	 * @author Ted Kulp
-	 **/
-	public function __construct($association_name)
+class CmsAcl extends CmsObject
+{	
+	static private $instance = NULL;
+	
+	function __construct()
 	{
 		parent::__construct();
-		$this->association_name = $association_name;
 	}
 	
 	/**
-	 * undocumented function
+	 * Returns an instance of the CmsAcl singleton.
 	 *
-	 * @return void
+	 * @return CmsAcl The singleton CmsAcl instance
 	 * @author Ted Kulp
 	 **/
-	public function get_data(&$obj)
+	static public function get_instance()
 	{
-		
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsAcl();
+		}
+		return self::$instance;
 	}
 }
 

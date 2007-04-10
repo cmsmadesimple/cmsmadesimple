@@ -28,9 +28,8 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsHasManyAssociation extends CmsObjectRelationalAssociation implements ArrayAccess, Iterator
+class CmsHasManyAssociation extends CmsObjectRelationalAssociation
 {
-	var $children = array();
 	var $child_class = '';
 	var $child_field = '';
 
@@ -39,9 +38,9 @@ class CmsHasManyAssociation extends CmsObjectRelationalAssociation implements Ar
 	 *
 	 * @author Ted Kulp
 	 **/
-	public function __construct(&$parent_class)
+	public function __construct($association_name)
 	{
-		parent::__construct($parent_class);
+		parent::__construct($association_name);
 		$this->currentIndex = 0;
 	}
 	
@@ -51,112 +50,47 @@ class CmsHasManyAssociation extends CmsObjectRelationalAssociation implements Ar
 	 * @return array Any array of objects, if they exist.
 	 * @author Ted Kulp
 	 **/
-	public function get_data()
+	public function get_data(&$obj)
 	{
-		$this->fill_data();
-		return $this;
+		return $this->fill_data($obj);
 	}
 	
-	private function fill_data()
+	private function fill_data(&$obj)
 	{
-		if (!$this->loaded && $this->child_class != '' && $this->child_field != '')
+		$ary = null;
+		if ($obj->has_association($this->association_name))
 		{
-			$class = cmsms()->{$this->child_class};
-			if ($this->parent_class->{$this->parent_class->id_field} > -1)
-			{
-				$queryattrs = $this->extra_params;
-				$conditions = "{$this->child_field} = ?";
-				$params = array($this->parent_class->{$this->parent_class->id_field});
-				
-				if (array_key_exists('conditions', $this->extra_params))
-				{
-					$conditions = "({$conditions}) AND ({$this->extra_params['conditions'][0]})";
-					if (count($this->extra_params['conditions']) > 1)
-					{
-						$params = array_merge($params, array_slice($this->extra_params['conditions'], 1));
-					}
-				}
-				$queryattrs['conditions'] = array_merge(array($conditions), $params);
-
-				$this->children = $class->find_all($queryattrs);
-				//print_r($this->children);
-			}
-			$this->loaded = true;
+			$ary = $obj->get_association($this->association_name);
 		}
-		return $this->children;
-	}
-	
-	function count()
-	{
-		$ary = $this->fill_data();
-		return count($ary);
-	}
-	
-	//Region ArrayAccess
-	function offsetExists($offset)
-	{
-		$ary = $this->fill_data();
-		return ($offset < count($ary));
-	}
+		else
+		{
+			$ary = new CmsAssociationCollection();
+			if ($this->child_class != '' && $this->child_field != '')
+			{
+				$class = cmsms()->{$this->child_class};
+				if ($obj->{$obj->id_field} > -1)
+				{
+					$queryattrs = $this->extra_params;
+					$conditions = "{$this->child_field} = ?";
+					$params = array($obj->{$obj->id_field});
+				
+					if (array_key_exists('conditions', $this->extra_params))
+					{
+						$conditions = "({$conditions}) AND ({$this->extra_params['conditions'][0]})";
+						if (count($this->extra_params['conditions']) > 1)
+						{
+							$params = array_merge($params, array_slice($this->extra_params['conditions'], 1));
+						}
+					}
+					$queryattrs['conditions'] = array_merge(array($conditions), $params);
 
-	function offsetGet($offset)
-	{
-		$this->fill_data();
-		//print_r($this->children[$offset]);
-		return $this->children[$offset];
+					$ary->children = $class->find_all($queryattrs);
+					$obj->set_association($this->association_name, $ary);
+				}
+			}
+		}
+		return $ary;
 	}
-
-	function offsetSet($offset,$value)
-	{
-		throw new Exception("This collection is read only.");
-		//$ary = $this->fill_data();
-		//$ary[$offset] = $value;
-	}
-
-	function offsetUnset($offset)
-	{
-		throw new Exception("This collection is read only.");
-		//$ary = $this->fill_data();
-		//unset($ary[$offset]);
-	}
-	//EndRegion
-	
-	//Region Iterator
-	function current()
-	{
-		return $this->offsetGet($this->currentIndex);
-	}
-
-	function key()
-	{
-		return $this->currentIndex;
-	}
-
-	function next()
-	{
-		return $this->currentIndex++;
-	}
-
-	function rewind()
-	{
-		$this->currentIndex = 0;
-	}
-
-	function valid()
-	{
-		return ($this->offsetExists($this->currentIndex));
-	}
-
-	function append($value)
-	{
-		throw new Exception("This collection is read only");
-	}
-
-	function getIterator()
-	{
-		return $this;
-	}
-	//EndRegion
 }
 
 # vim:ts=4 sw=4 noet

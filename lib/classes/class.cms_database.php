@@ -120,7 +120,7 @@ class CmsDatabase extends CmsObject
 		    {
 		        # Load ADOdb Lite
 		        require_once($adodb_light);
-				$dbinstance = &ADONewConnection($dbms, 'pear:date:extend:transaction');
+				$dbinstance = &ADONewConnection($dbms, 'date:extend:transaction:pear');
 				$loaded_adodb = true;
 		    }
 		    else

@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Class for handling a belongs_to assocation.
+ * Base class for "acts as" ORM model extensions
  *
  * @author Ted Kulp
  * @since 2.0
@@ -28,49 +28,53 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsBelongsToAssociation extends CmsObjectRelationalAssociation
+class CmsActsAs extends CmsObject
 {
-	var $belongs_to_obj = null;
-	var $belongs_to_class_name = '';
-	var $child_field = '';
-
 	/**
-	 * Create a new belongs_to association.
+	 * Create a new acts_as.
 	 *
 	 * @author Ted Kulp
 	 **/
-	public function __construct($association_name)
+	public function __construct()
 	{
-		parent::__construct($association_name);
+		parent::__construct();
 	}
 	
-	/**
-	 * Returns the associated belongs_to association's object.
-	 *
-	 * @return mixed The object, if it exists.  null if not.
-	 * @author Ted Kulp
-	 **/
-	public function get_data(&$obj)
+	public function setup(&$obj)
 	{
-		$belongs_to = null;
-		if ($obj->has_association($this->association_name))
-		{
-			$belongs_to = $obj->get_association($this->association_name);
-		}
-		else
-		{
-			if ($this->belongs_to_class_name != '' && $this->child_field != '')
-			{
-				$class = cms_orm()->{$this->belongs_to_class_name};
-				if ($obj->{$this->child_field} > -1)
-				{
-					$belongs_to = call_user_func_array(array(&$class, 'find_by_id'), $obj->{$this->child_field});
-					$obj->set_association($this->association_name, $belongs_to);
-				}
-			}
-		}
-		return $belongs_to;
+		
 	}
+	
+	public function before_load($type, $fields)
+	{
+
+	}
+	
+	public function after_load(&$obj)
+	{
+
+	}
+	
+	public function before_save(&$obj)
+	{
+		
+	}
+	
+	public function after_save(&$obj)
+	{
+		
+	}
+	
+	public function before_delete(&$obj)
+	{
+		
+	}
+	
+	public function after_delete(&$obj)
+	{
+		
+	}
+
 }
 
 # vim:ts=4 sw=4 noet

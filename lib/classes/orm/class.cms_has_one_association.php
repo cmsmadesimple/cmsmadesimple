@@ -39,9 +39,9 @@ class CmsHasOneAssociation extends CmsObjectRelationalAssociation
 	 *
 	 * @author Ted Kulp
 	 **/
-	public function __construct(&$parent_class)
+	public function __construct($association_name)
 	{
-		parent::__construct($parent_class);
+		parent::__construct($association_name);
 	}
 	
 	/**
@@ -50,32 +50,40 @@ class CmsHasOneAssociation extends CmsObjectRelationalAssociation
 	 * @return mixed The object, if it exists.  If not, null.
 	 * @author Ted Kulp
 	 **/
-	public function get_data()
+	public function get_data(&$obj)
 	{
-		if (!$this->loaded && $this->child_class != '' && $this->child_field != '')
+		$child = null;
+		if ($obj->has_association($this->association_name))
 		{
-			$class = cmsms()->{$this->child_class};
-			if ($this->parent_class->{$this->parent_class->id_field} > -1)
-			{
-				$queryattrs = $this->extra_params;
-				$conditions = "{$this->child_field} = ?";
-				$params = array($this->parent_class->{$this->parent_class->id_field});
-				
-				if (array_key_exists('conditions', $this->extra_params))
-				{
-					$conditions = "({$conditions}) AND ({$this->extra_params['conditions'][0]})";
-					if (count($this->extra_params['conditions']) > 1)
-					{
-						$params = array_merge($params, array_slice($this->extra_params['conditions'], 1));
-					}
-				}
-				$queryattrs['conditions'] = array_merge(array($conditions), $params);
-				
-				$this->children = $class->find($queryattrs);
-			}
-			$this->loaded = true;
+			$child = $obj->get_association($this->association_name);
 		}
-		return $this->children;
+		else
+		{
+			if ($this->child_class != '' && $this->child_field != '')
+			{
+				$class = cmsms()->{$this->child_class};
+				if ($this->parent_class->{$this->parent_class->id_field} > -1)
+				{
+					$queryattrs = $this->extra_params;
+					$conditions = "{$this->child_field} = ?";
+					$params = array($this->parent_class->{$this->parent_class->id_field});
+				
+					if (array_key_exists('conditions', $this->extra_params))
+					{
+						$conditions = "({$conditions}) AND ({$this->extra_params['conditions'][0]})";
+						if (count($this->extra_params['conditions']) > 1)
+						{
+							$params = array_merge($params, array_slice($this->extra_params['conditions'], 1));
+						}
+					}
+					$queryattrs['conditions'] = array_merge(array($conditions), $params);
+				
+					$child = $class->find($queryattrs);
+					$obj->set_association($this->association_name, $child);
+				}
+			}
+		}
+		return $child;
 	}
 }
 

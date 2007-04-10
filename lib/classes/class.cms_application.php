@@ -196,7 +196,7 @@ class CmsApplication extends CmsObject
 		else if ($name == 'smarty')
 			return CmsSmarty::get_instance();
 		else
-			return $this->get_orm_class($name);
+			return cms_orm()->get_orm_class($name);
 	}
 	
 	/**
@@ -208,32 +208,7 @@ class CmsApplication extends CmsObject
 	 **/
 	function get_orm_class($name, $try_prefix = true)
 	{
-		if (isset($this->orm[$name]))
-			return $this->orm[$name];
-		elseif (isset($this->orm[underscore($name)]))
-			return $this->orm[underscore($name)];
-		else
-		{
-			// Let's try to load the thing dynamically
-			$name = camelize($name);
-			if (class_exists($name))
-			{
-				$this->orm[underscore($name)] = new $name;
-				return $this->orm[underscore($name)];	
-			}
-			else
-			{
-				if ($try_prefix)
-				{
-					return $this->get_orm_class('cms_' . $name, false);
-				}
-				else
-				{
-					var_dump('Class not found! -- ' . $name);
-					return null;
-				}
-			}
-		}
+		return cms_orm()->get_orm_class($name, $try_prefix);
 	}
 	
 	/**

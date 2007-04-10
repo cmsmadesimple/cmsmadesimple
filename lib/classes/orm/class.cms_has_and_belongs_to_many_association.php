@@ -28,9 +28,8 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation implements ArrayAccess, Iterator
+class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation
 {
-	var $children = array();
 	var $child_class = '';
 	var $join_table = '';
 	var $join_other_id_field = '';
@@ -41,9 +40,9 @@ class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation i
 	 *
 	 * @author Ted Kulp
 	 **/
-	public function __construct(&$parent_class)
+	public function __construct($association_name)
 	{
-		parent::__construct($parent_class);
+		parent::__construct($association_name);
 	}
 	
 	/**
@@ -52,102 +51,40 @@ class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation i
 	 * @return array Any array of objects, if they exist.
 	 * @author Ted Kulp
 	 **/
-	public function get_data()
+	public function get_data(&$obj)
 	{
-		$this->fill_data();
-		return $this;
+		return $this->fill_data($obj);
 	}
 	
-	private function fill_data()
+	private function fill_data(&$obj)
 	{
-		if (!$this->loaded && $this->child_class != '' && $this->join_table != '')
+		$ary = null;
+		if ($obj->has_association($this->association_name))
 		{
-			$class = cmsms()->{$this->child_class};
-			$table = $class->get_table();
-			$other_id_field = $class->id_field;
-			
-			if ($this->parent_class->{$this->parent_class->id_field} > -1)
-			{
-				$queryattrs = $this->extra_params;
-				$queryattrs['joins'] = "INNER JOIN {$this->join_table} ON {$this->join_table}.{$this->join_other_id_field} = {$table}.{$other_id_field} AND {$this->join_table}.{$this->join_this_id_field} = " . $this->parent_class->{$this->parent_class->id_field};
-				$this->children = $class->find_all($queryattrs);
-			}
-			$this->loaded = true;
+			var_dump('found');
+			$ary = $obj->get_association($this->association_name);
 		}
-		return $this->children;
+		else
+		{
+			$ary = new CmsAssociationCollection();
+			if ($this->child_class != '' && $this->join_table != '')
+			{
+				$class = cms_orm()->{$this->child_class};
+				$table = $class->get_table();
+				$other_id_field = $class->id_field;
+			
+				if ($obj->{$obj->id_field} > -1)
+				{
+					$queryattrs = $this->extra_params;
+					$queryattrs['joins'] = "INNER JOIN {$this->join_table} ON {$this->join_table}.{$this->join_other_id_field} = {$table}.{$other_id_field}";
+					$queryattrs['conditions'] = array("{$this->join_table}.{$this->join_this_id_field} = ?", $obj->{$obj->id_field});
+					$ary->children = $class->find_all($queryattrs);
+					$obj->set_association($this->association_name, $ary);
+				}
+			}
+		}
+		return $ary;
 	}
-	
-	function count()
-	{
-		$ary = $this->fill_data();
-		return count($ary);
-	}
-	
-	//Region ArrayAccess
-	function offsetExists($offset)
-	{
-		$ary = $this->fill_data();
-		return ($offset < count($ary));
-	}
-
-	function offsetGet($offset)
-	{
-		$this->fill_data();
-		//print_r($this->children[$offset]);
-		return $this->children[$offset];
-	}
-
-	function offsetSet($offset,$value)
-	{
-		throw new Exception("This collection is read only.");
-		//$ary = $this->fill_data();
-		//$ary[$offset] = $value;
-	}
-
-	function offsetUnset($offset)
-	{
-		throw new Exception("This collection is read only.");
-		//$ary = $this->fill_data();
-		//unset($ary[$offset]);
-	}
-	//EndRegion
-	
-	//Region Iterator
-	function current()
-	{
-		return $this->offsetGet($this->currentIndex);
-	}
-
-	function key()
-	{
-		return $this->currentIndex;
-	}
-
-	function next()
-	{
-		return $this->currentIndex++;
-	}
-
-	function rewind()
-	{
-		$this->currentIndex = 0;
-	}
-
-	function valid()
-	{
-		return ($this->offsetExists($this->currentIndex));
-	}
-
-	function append($value)
-	{
-		throw new Exception("This collection is read only");
-	}
-
-	function getIterator()
-	{
-		return $this;
-	}
-	//EndRegion
 }
 
 # vim:ts=4 sw=4 noet

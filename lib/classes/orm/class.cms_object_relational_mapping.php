@@ -92,24 +92,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $validation_errors = array();
 	
 	/**
-	 * Used to store any has_many relationships.
+	 * Used to store any association relationships.
 	 **/
-	var $has_many = array();
-	
-	/**
-	 * Used to store any has_one relationships.
-	 **/
-	var $has_one = array();
-	
-	/**
-	 * Used to store any belongs_to relationships.
-	 **/
-	var $belongs_to = array();
-	
-	/**
-	 * Used to store any has_and_belongs_to_many relationships.
-	 **/
-	var $has_and_belongs_to_many = array();
+	var $associations = array();
 	
 	/**
 	 * Used to define which field holds the record create date.
@@ -174,11 +159,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function create_has_many_association($association_name, $child_class_name, $child_field, $extra_params = array())
 	{
-		$association = new CmsHasManyAssociation($this);
-		$association->child_class = $child_class_name;
-		$association->child_field = $child_field;
-		$association->extra_params = $extra_params;
-		$this->has_many[$association_name] = $association;
+		cms_orm()->create_has_many_association($this, $association_name, $child_class_name, $child_field, $extra_params);
 	}
 	
 	/**
@@ -200,11 +181,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function create_has_one_association($association_name, $child_class_name, $child_field, $extra_params = array())
 	{
-		$association = new CmsHasOneAssociation($this);
-		$association->child_class = $child_class_name;
-		$association->child_field = $child_field;
-		$association->extra_params = $extra_params;
-		$this->has_one[$association_name] = $association;
+		cms_orm()->create_has_one_association($this, $association_name, $child_class_name, $child_field, $extra_params);
 	}
 	
 	/**
@@ -226,11 +203,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function create_belongs_to_association($association_name, $belongs_to_class_name, $child_field, $extra_params = array())
 	{
-		$association = new CmsBelongsToAssociation($this);
-		$association->belongs_to_class_name = $belongs_to_class_name;
-		$association->child_field = $child_field;
-		$association->extra_params = $extra_params;
-		$this->belongs_to[$association_name] = $association;
+		cms_orm()->create_belongs_to_association($this, $association_name, $belongs_to_class_name, $child_field, $extra_params);
 	}
 	
 	/**
@@ -252,13 +225,46 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 **/
 	protected function create_has_and_belongs_to_many_association($association_name, $child_class, $join_table, $join_other_id_field, $join_this_id_field, $extra_params = array())
 	{
-		$association = new CmsHasAndBelongsToManyAssociation($this);
-		$association->child_class = $child_class;
-		$association->join_table = cms_db_prefix().$join_table;
-		$association->join_other_id_field = $join_other_id_field;
-		$association->join_this_id_field = $join_this_id_field;
-		$association->extra_params = $extra_params;
-		$this->has_and_belongs_to_many[$association_name] = $association;
+		cms_orm()->create_has_and_belongs_to_many_association($this, $association_name, $child_class, $join_table, $join_other_id_field, $join_this_id_field, $extra_params);
+	}
+	
+	/**
+	 * Used to see if an association has been cached on the object yet.
+	 *
+	 * @return boolean Whether or not the association has been cached
+	 * @author Ted Kulp
+	 **/
+	public function has_association($name)
+	{
+		return array_key_exists($name, $this->associations);
+	}
+	
+	/**
+	 * Get the association that has been previously cached on this object.
+	 *
+	 * @return mixed The array or object that was cached
+	 * @author Ted Kulp
+	 **/
+	public function get_association($name)
+	{
+		return $this->associations[$name];
+	}
+	
+	/**
+	 * Set the object or array to cache so we don't need a call to the database
+	 * if it's used again.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function set_association($name, $value)
+	{
+		$this->associations[$name] = $value;
+	}
+	
+	protected function assign_acts_as($name)
+	{
+		cms_orm()->create_acts_as($this, $name);
 	}
 
 	/**
@@ -355,21 +361,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				return $this->params[$n];
 		}
 		
-		if (array_key_exists($n, $this->has_many))
+		if (cms_orm()->has_association($this, $n))
 		{
-			return $this->has_many[$n]->get_data();
-		}
-		if (array_key_exists($n, $this->has_one))
-		{
-			return $this->has_one[$n]->get_data();
-		}
-		if (array_key_exists($n, $this->belongs_to))
-		{
-			return $this->belongs_to[$n]->get_data();
-		}
-		if (array_key_exists($n, $this->has_and_belongs_to_many))
-		{
-			return $this->has_and_belongs_to_many[$n]->get_data();
+			return cms_orm()->process_association($this, $n);
 		}
 	}
 
@@ -423,9 +417,21 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			#This handles the SetSomeParam() dynamic function calls
 			return $this->__set(substr($function_converted, 4), $arguments[0]);
 		}
-		#else if (array_key_exists($function_converted, $this->params))
 		else
 		{
+			//It's possible an acts_as class has this method
+			$acts_as_list = cms_orm()->get_acts_as($this);
+			if (count($acts_as_list) > 0)
+			{
+				foreach ($acts_as_list as $one_acts_as)
+				{
+					if (method_exists($one_acts_as, $function))
+					{
+						return call_user_func_array(array($one_acts_as, $function), $arguments);
+					}
+				}
+			}
+
 			#This handles the SomeParam() dynamic function calls
 			return $this->__get($function_converted);
 		}
@@ -588,6 +594,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$classname = get_class($this);
 
 		$row = $db->GetRow($query, $queryparams);
+		
+		//var_dump($query, $queryparams, $row, '<br />');
 
 		if($row)
 		{
@@ -649,7 +657,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$classname = get_class($this);
 
 		$result = array();
-		$dbresult = &$db->SelectLimit($query, $numrows, $offset, $queryparams);
+
+		$dbresult = $db->SelectLimit($query, $numrows, $offset, $queryparams);
+		
+		//var_dump($query, $queryparams, $dbresult->EOF, '<br />');
 
 		while ($dbresult && !$dbresult->EOF)
 		{
@@ -1052,6 +1063,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function before_load_caller($type, $fields)
 	{
+		foreach (cms_orm()->get_acts_as($type) as $one_acts_as)
+		{
+			$one_acts_as->before_load($type, $fields);
+		}
 		$this->before_load($type, $fields);
 	}
 	
@@ -1076,6 +1091,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function after_load_caller()
 	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->after_load($this);
+		}
 		$this->after_load();
 	}
 	
@@ -1101,6 +1120,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function before_save_caller()
 	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->before_save($this);
+		}
 		$this->before_save();
 	}
 	
@@ -1124,6 +1147,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function after_save_caller()
 	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->after_save($this);
+		}
 		$this->after_save();
 	}
 	
@@ -1148,6 +1175,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function before_delete_caller()
 	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->before_delete($this);
+		}
 		$this->before_delete();
 	}
 	
@@ -1172,6 +1203,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function after_delete_caller()
 	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->after_delete($this);
+		}
 		$this->after_delete();
 	}
 	

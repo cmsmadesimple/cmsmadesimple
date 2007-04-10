@@ -120,12 +120,26 @@ function cmsms()
 }
 
 /**
+ * Returns the global CmsApplication singleton.  This is the equivalent of
+ * global $gCms from days gone by.
+ */
+function cms_global()
+{
+	return CmsApplication::get_instance();
+}
+
+/**
  * Returns a reference to the adodb(lite) connection singleton object.
  * Replaces the global $gCms; $db =& $gCms->GetDb(); routine.
  */
 function cms_db()
 {
 	return CmsDatabase::get_instance();
+}
+
+function cms_orm()
+{
+	return CmsObjectRelationalManager::get_instance();
 }
 
 /**

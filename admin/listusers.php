@@ -88,17 +88,23 @@ if (FALSE == empty($error))
 	$remove = check_permission($userid, 'Remove Users');
 
 	$userlist = CmsUserOperations::load_users();
+
 	/*
 	foreach ($userlist[0]->bookmarks as $onebook)
 	{
-		print_r($onebook);
+		//print_r($onebook);
 	}
-	print_r('Number of bookmarks:' . $userlist[0]->bookmarks->count());
+	//print_r('Number of bookmarks:' . $userlist[0]->bookmarks->count());
 	if ($userlist[0]->bookmarks->count() > 0)
-		print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
-	*/
-	//var_dump($userlist[0]->groups[0]->users[0]);
+	{
+		//print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
+	}
 
+	var_dump($userlist[0]->groups);
+	$group = cms_orm()->cms_group->find_by_id(1);
+	var_dump($group->users);
+	*/
+	
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
 	$limit = 20;

@@ -43,6 +43,13 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	var $props_loaded = false;
 	
+	function __construct()
+	{
+		parent::__construct();
+		$this->create_belongs_to_association('template', 'cms_template', 'template_id');
+		$this->assign_acts_as('Test');
+	}
+	
 	/*
 	function __sleep()
 	{
