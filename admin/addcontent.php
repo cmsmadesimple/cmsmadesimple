@@ -25,6 +25,7 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 
+define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('ajaxpreview');

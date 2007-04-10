@@ -27,6 +27,7 @@ $userid = get_userid();
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
+define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('content_list_ajax');
