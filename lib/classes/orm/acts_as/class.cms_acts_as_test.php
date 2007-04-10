@@ -27,17 +27,17 @@ class CmsActsAsTest extends CmsActsAs
 	
 	public function before_load($type, $fields)
 	{
-		var_dump('before load');
+		CmsProfiler::get_instance()->mark('before load -- CmsActsAsTest');
 	}
 	
 	public function after_load(&$obj)
 	{
-		var_dump('after load');
+		CmsProfiler::get_instance()->mark('after load -- CmsActsAsTest');
 	}
 	
 	public function test_me()
 	{
-		var_dump('Test Me');
+		CmsProfiler::get_instance()->mark('Test Me -- CmsActsAsTest');
 	}
 }
 

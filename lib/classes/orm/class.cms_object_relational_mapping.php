@@ -1063,7 +1063,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	protected function before_load_caller($type, $fields)
 	{
-		foreach (cms_orm()->get_acts_as($type) as $one_acts_as)
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
 		{
 			$one_acts_as->before_load($type, $fields);
 		}
