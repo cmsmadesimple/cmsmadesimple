@@ -27,7 +27,7 @@ $session_key = substr(md5($dirname), 0, 8);
 @session_name('CMSSESSID' . $session_key);
 @ini_set('url_rewriter.tags', '');
 @ini_set('session.use_trans_sid', 0);
-if(!@session_id()) {
+if(!@session_id())
 {
     #Trans SID sucks also...
     @ini_set('url_rewriter.tags', '');
