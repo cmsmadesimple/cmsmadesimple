@@ -24,7 +24,14 @@ function smarty_cms_function_get_template_vars($params, &$smarty)
 	$str = '';
 	foreach( $tpl_vars as $key => $value )
 	  {
-	    $str .= "$key = $value<br/>";
+	    if( !is_object($value) )
+             {
+	       $str .= "$key = $value<br/>";
+             }
+            else
+             {
+               $str .= "$key = Object<br/>";
+             }
 	  }
 	return $str;
 }
