@@ -142,7 +142,7 @@ class ModuleLoader
 									}
 									else //No point in doing anything with it
 									{
-										unset($cmsmodules[$name]);
+										unset($cmsmodules[$modulename]);
 									}
 								}
 								else
