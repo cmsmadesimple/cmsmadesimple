@@ -11,8 +11,8 @@ check_login();
 $userid = get_userid();
 if (!check_permission($userid, 'Modify Files')) die();
 
-require_once('config.inc.php');
-require_once('Classes/ImageManager.php');
+require_once(dirname(__FILE__).'/config.inc.php');
+require_once(dirname(__FILE__).'/Classes/ImageManager.php');
 
 //default path is /
 $relative = '/';
