@@ -88,7 +88,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
   $labeltext = cms_htmlentities($labeltext);
-  $text = '<label for="'.$id.$name.'" id="'.$id.$name.'"';
+  $text = '<label for="'.$id.$name.'"';
   if ($addttext != '')
     {
       $text .= ' ' . $addttext;
