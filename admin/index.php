@@ -36,7 +36,7 @@ $themeObject->DisplayDashboardCallout(dirname(dirname(__FILE__)).'/install');
 $themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('sitedownwarning', TMP_CACHE_LOCATION . '/SITEDOWN'));
 
 // Display a warning if safe mode is enabled
-if( ini_get('safe_mode') )
+if( strtolower(ini_get('safe_mode')) != 'off' )
   {
     echo '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">'.lang('warning_safe_mode').'</p></div></div>';
   }
