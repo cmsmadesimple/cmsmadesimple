@@ -1254,7 +1254,7 @@ function can_admin_upload()
       return FALSE;
     }
 
-  $safe_mode = (ini_get('safe_mode')==1)?TRUE:FALSE;
+  $safe_mode = (strtolower(ini_get('safe_mode')) == 'off')?FALSE:TRUE;
   if( $safe_mode == TRUE )
     {
 
