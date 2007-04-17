@@ -213,10 +213,10 @@ class ImageManager
 	function countFiles($path) 
 	{
 		$total = 0;
-
-		if(($path != "/") && (is_dir($path)))
+		global $config;
+		if(($path != "/") && (is_dir($config['image_uploads_path']."/".$path)))
 		{
-			$d = @dir($path);
+			$d = @dir($config['image_uploads_path']."/".$path);
 
 			while (false !== ($entry = $d->read())) 
 			{
