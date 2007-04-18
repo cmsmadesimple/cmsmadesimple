@@ -136,7 +136,7 @@ class PageInfoOperations
 			    // calguy1000 - if the page is not cachable, don't cache
 			    // the template either.  This trick forces smarty to 
 			    // refresh the template cache.
-			    $onepageinfo->template_modified_date = time();
+			    $onepageinfo->template_modified_date = time() + 10;
 			  }
 			$result = $onepageinfo;
 		}
