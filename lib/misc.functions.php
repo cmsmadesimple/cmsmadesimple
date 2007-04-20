@@ -1201,8 +1201,8 @@ function can_users_upload()
       return false;
     }
 
-  $safe_mode = (strtolower(ini_get('safe_mode')) == "off")?FALSE:TRUE;  
-  if( $safe_mode == TRUE )
+  $safe_mode = ini_get_boolean('safe_mode');
+  if( $safe_mode )
     {
       // we're in safe mode.
       if( $stat_index[4] != $stat_uploads[4] )
@@ -1254,8 +1254,8 @@ function can_admin_upload()
       return FALSE;
     }
 
-  $safe_mode = (strtolower(ini_get('safe_mode')) == 'off')?FALSE:TRUE;
-  if( $safe_mode == TRUE )
+  $safe_mode = ini_get_boolean('safe_mode');
+  if( $safe_mode )
     {
 
       // we're in safe mode.
@@ -1329,5 +1329,17 @@ function interpret_permissions($perms)
 
   return array($owner,$group,$other);
 }
+
+function ini_get_boolean($str)
+{
+  $val1 = ini_get($str);
+  $val2 = strtolower($val1);
+
+  $ret = 0;
+  if( $val2 == 1 || $val2 == '1' || $val2 == 'yes' || $val2 == 'true' || $val2 == 'on' )
+     $ret = 1;
+  return $ret;
+}
+
 # vim:ts=4 sw=4 noet
 ?>
