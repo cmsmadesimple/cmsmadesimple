@@ -27,12 +27,13 @@ check_login();
 global $gCms;
 $db =& $gCms->GetDb();
 
+$result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
+$totalrows = $result->RecordCount();
+
 if (isset($_GET['download']))
 {
 	header('Content-type: text/plain');
 	header('Content-Disposition: attachment; filename="adminlog.txt"');
-	$result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
-	$totalrows = $result->RecordCount();
 	if ($result && $result->RecordCount() > 0) 
 	{
 		while ($row = $result->FetchRow()) 
@@ -61,9 +62,6 @@ if (isset($_GET['clear']) && $access) {
 
 $page = 1;
 if (isset($_GET['page']))$page = $_GET['page'];
-
-$result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
-$totalrows = $result->RecordCount();
 
 $limit = 20;
 $page_string = "";
