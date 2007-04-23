@@ -24,10 +24,31 @@ require_once("../include.php");
 
 check_login();
 
-include_once("header.php");
-
 global $gCms;
 $db =& $gCms->GetDb();
+
+if (isset($_GET['download']))
+{
+	header('Content-type: text/plain');
+	header('Content-Disposition: attachment; filename="adminlog.txt"');
+	$result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
+	$totalrows = $result->RecordCount();
+	if ($result && $result->RecordCount() > 0) 
+	{
+		while ($row = $result->FetchRow()) 
+		{
+			echo date("D M j, Y G:i:s", $row["timestamp"]) . "\t";
+			echo $row['username'] . "\t";
+			echo $row['item_id'] . "\t";
+			echo $row['item_name'] . "\t";
+			echo $row['action'] . "\t";
+			echo "\n";
+		}
+	}
+	return;
+}
+
+include_once("header.php");
 
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
@@ -50,13 +71,17 @@ $from = ($page * $limit) - $limit;
 
 $result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
 
-	echo '<div class="pagecontainer">';
-	echo '<div class="pageoverflow">';
 
-if ($result && $result->RecordCount() > 0) {
+echo '<div class="pagecontainer">';
+echo '<div class="pageoverflow">';
+
+if ($result && $result->RecordCount() > 0) 
+{
+	
 	$page_string = pagination($page, $totalrows, $limit);
 	echo "<p class=\"pageshowrows\">".$page_string."</p>";
 	echo $themeObject->ShowHeader('adminlog').'</div>';
+	echo '<a href="adminlog.php?download=1">'.lang('download').'</a>';
 
 	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	echo '<thead>';
