@@ -317,8 +317,8 @@ function author_pages($userid)
 		$db = &$gCms->GetDb();
 		$variables['authorpages'] = array();
 		
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;
-		$result =& $db->Execute($query);
+		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+		$result =& $db->Execute($query, array($userid));
 		
 		while ($result && !$result->EOF)
 		{
@@ -841,41 +841,6 @@ function display_login_form()
 	'Password: <input type="password" name="login_password"><br>'.
 	'<input type="submit">'.
 	'</form>';
-}
-
-/*
- * check if the person has access to this file (frontend)
- */
-function check_access($page_id)
-{
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	if (isset($_SESSION['login_name']) && isset($_SESSION['login_password']))
-	{
-		return true;
-	}
-
-	if (isset($_POST['login_password']) && isset($_POST['login_name']))
-	{
-		$login_password = trim($_POST['login_password']);
-		$login_name = trim($_POST['login_name']);
-		$query = 'SELECT user_id FROM '.cms_db_prefix().'frontend_users WHERE page_id = '.$page_id;
-		$result = $db->Execute($query);
-		if ($result && $result->RecordCount() > 0)
-		{
-			$query = 'SELECT user_id from '.cms_db_prefix().'users WHERE `username`=\''.$login_name.'\' AND `password`=\''.md5($login_password).'\'';
-			$result = $db->Execute($query);
-			if ($result && $result->RecordCount() > 0)
-			{
-				$_SESSION['login_name'] = $login_name;
-				$_SESSION['login_password'] = $login_password;
-				return true;
-			}
-		}
-		if ($result) $result->Close();
-	}
-	return false;
 }
 
 /**
