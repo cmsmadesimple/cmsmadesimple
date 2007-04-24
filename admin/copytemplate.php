@@ -67,9 +67,20 @@ if ($access)
 			}
 		}
 
+		$onetemplate = null;
 		if ($validinfo)
 		{
 			$onetemplate = $templateops->LoadTemplateByID($template_id);
+
+			if (!$onetemplate)
+			{
+				$error .= '<li>' . lang('errorretrievingtemplate') . '</li>';
+				$validinfo = false;
+			}
+		}
+
+		if ($onetemplate)
+		{
 			$onetemplate->id = -1; //Reset id so it will insert a new record
 			$onetemplate->name = $template; //Change name
 			$onetemplate->default = 0; //It can't be default
@@ -80,7 +91,7 @@ if ($access)
 				//Copy attached CSS templates as well...
 				$db = &$gCms->GetDb();
 
-				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = '$template_id' AND assoc_css_id = css_id";
+				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = css_id";
 				debug_buffer($query);
 				$result2 = $db->Execute($query);
 				debug_buffer($result2);
