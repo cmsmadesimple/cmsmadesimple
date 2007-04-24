@@ -1288,41 +1288,41 @@ function interpret_permissions($perms)
   $group = array();
   $other = array();
 
-  if( $perms | 0400 )
+  if( $perms & 0400 )
     {
       $owner[] = lang('read');
     }
-  if( $perms | 0200 )
+  if( $perms & 0200 )
     {
       $owner[] = lang('write');
     }
-  if( $perms | 0100 )
+  if( $perms & 0100 )
     {
       $owner[] = lang('execute');
     }
 
-  if( $perms | 0040 )
+  if( $perms & 0040 )
     {
       $group[] = lang('read');
     }
-  if( $perms | 0020 )
+  if( $perms & 0020 )
     {
       $group[] = lang('write');
     }
-  if( $perms | 0010 )
+  if( $perms & 0010 )
     {
       $group[] = lang('execute');
     }
 
-  if( $perms | 0004 )
+  if( $perms & 0004 )
     {
       $other[] = lang('read');
     }
-  if( $perms | 0002 )
+  if( $perms & 0002 )
     {
       $other[] = lang('write');
     }
-  if( $perms | 0001 )
+  if( $perms & 0001 )
     {
       $other[] = lang('execute');
     }

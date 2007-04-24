@@ -86,7 +86,10 @@ $frontendlang = '';
 if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 
 $global_umask = '022';
-if (isset($_POST['global_umask'])) $global_umask = $_POST['global_umask'];
+if (isset($_POST['global_umask'])) 
+  {
+    $global_umask = $_POST['global_umask'];
+  }
 
 // ADDED
 $logintheme = "default";
