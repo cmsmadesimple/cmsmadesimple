@@ -53,7 +53,7 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 	if ($name != '')
 		$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = " . $db->qstr($name);
 	else
-		$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = $templateid AND ac.assoc_css_id = c.css_id AND c.media_type = " . $db->qstr($mediatype) . " ORDER BY ac.create_date";
+		$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = ".$db->qstr($templateid)." AND ac.assoc_css_id = c.css_id AND c.media_type = " . $db->qstr($mediatype) . " ORDER BY ac.create_date";
 	$result = $db->Execute($sql);
 	
 	// add a comment at the start
