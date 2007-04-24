@@ -61,7 +61,7 @@ $db = &$gCms->db;
 // Get list of most recently updated pages excluding the home page
 $q = "SELECT * FROM ".cms_db_prefix()."content WHERE (type='content' OR type='link')
 AND default_content != 1 AND active = 1 AND show_in_menu = 1 
-ORDER BY modified_date DESC LIMIT ".$number;
+ORDER BY modified_date DESC LIMIT ".((int)$number);
 $dbresult = $db->Execute( $q );
 if( !$dbresult )
 {
