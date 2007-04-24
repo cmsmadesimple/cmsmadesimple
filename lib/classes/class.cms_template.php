@@ -69,6 +69,11 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	//Callback handlers
 	function before_save()
 	{
+		//Make sure we have a default template set or we'll probably break stuff down the road
+		if (cms_orm()->cms_template->find_count_by_default_template(1) == 0)
+		{
+			$this->default_template = 1;
+		}
 		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddTemplatePre' : 'EditTemplatePre'), array('template' => &$this));
 	}
 	
