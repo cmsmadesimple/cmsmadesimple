@@ -78,7 +78,7 @@ class Link extends ContentBase
 	    }
 	    if (isset($params['alias']))
 	    {
-		$this->mAlias = $params['alias'];
+		$this->SetAlias(trim($params['alias']));
 	    }
 	    if (isset($params['parent_id']))
 	    {
@@ -124,6 +124,19 @@ class Link extends ContentBase
 	    $result = false;
 	}
 
+	if ($this->mAlias != $this->mOldAlias || $this->mAlias == '') #Should only be empty if auto alias is false
+	{
+     	    global $gCms;
+	    $contentops =& $gCms->GetContentOperations();
+	    $error = $contentops->CheckAliasError($this->mAlias, $this->mId);
+	    if ($error !== FALSE)
+	    {
+		$errors[]= $error;
+		$result = false;
+	    }
+	}
+
+
 	if ($this->GetPropertyValue('url') == '' && TRUE == empty($_POST['file_url']))
 	{
 	    $errors[]= lang('nofieldgiven',array(lang('url')));
@@ -165,6 +178,7 @@ class Link extends ContentBase
 	$ret[]= array(lang('target').':','<select name="target">'.$text.'</select>');
 	$ret[]= array(lang('active').':','<input type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	$ret[]= array(lang('showinmenu').':','<input type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	$ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
 	$ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
 	$ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	$ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
