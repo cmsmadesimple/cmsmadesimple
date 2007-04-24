@@ -194,6 +194,7 @@ class Content extends CmsContentBase
 		
 		$matches = array();
 		$result = preg_match_all($pattern, $template->content, $matches);
+
 		if ($result && count($matches[1]) > 0)
 		{
 			foreach ($matches[1] as $wholetag)

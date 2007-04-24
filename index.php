@@ -126,7 +126,6 @@ $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 
 $thepage = cms_orm()->cms_content_base->find_by_id($pageinfo->content_id);
 $thepage->test_me();
-var_dump($thepage->template);
 
 //No info?  Then it's a bum page.  If we had a custom 404, then it's info
 //would've been returned earlier.  The only option left is to show the generic
@@ -136,8 +135,8 @@ if ($pageinfo == null)
 	//CmsResponse::send_error_404();
 }
 
-//$user = CmsLogin::get_current_user();
-//var_dump(CmsGacl::get_instance()->acl_check('Core:Pages', 'View', 'Users', $user->id, 'Root', $pageinfo->content_id));
+$user = CmsLogin::get_current_user();
+var_dump(CmsAcl::get_instance()->check_permission('Core', 'Page', 'View', $pageinfo->content_id, null, $user));
 
 //Render the pageinfo object
 echo $pageinfo->render();

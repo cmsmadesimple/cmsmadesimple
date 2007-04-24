@@ -1,5 +1,29 @@
 <?php
 
+CmsInstallOperations::create_table($db, 'acos', "
+	id I KEY AUTO,
+	module C(50),
+	object_id I,
+	extra_attr C(50),
+	lft I,
+	rght I
+");
+
+CmsInstallOperations::create_table($db, 'aros', "
+	id I KEY AUTO,
+	object_id I,
+	type C(50),
+	lft I,
+	rght I
+");
+
+CmsInstallOperations::create_table($db, 'acos_aros', "
+	id I KEY AUTO,
+	acos_id I,
+	aros_id I,
+	permission_name C(50)
+");
+
 CmsInstallOperations::create_table($db, 'additional_users', "
 	id I KEY AUTO,
 	user_id I,

@@ -1,6 +1,6 @@
 #!/bin/sh
 
-echo "drop database cms; create database cms;" | mysql -u cms_user -pcms_pass cms
+echo "drop database cms3; create database cms3;" | mysql -u root cms3
 rm config.php
 touch config.php
 chmod 777 config.php

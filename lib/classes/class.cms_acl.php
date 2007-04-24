@@ -41,6 +41,28 @@ class CmsAcl extends CmsObject
 		}
 		return self::$instance;
 	}
+	
+	static public function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
+	{
+		$groups = array();
+		
+		if ($group == null && $user != null)
+		{
+			$groups[] = $user->group;
+		}
+		else if ($group != null && $user == null)
+		{
+			$groups[] = $group;
+		}
+		else
+		{
+			return false;
+		}
+		
+		//$query = "SELECT ";
+		
+		return false;
+	}
 }
 
 # vim:ts=4 sw=4 noet
