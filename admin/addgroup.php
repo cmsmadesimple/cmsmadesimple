@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.group.inc.php");
+#require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -55,7 +55,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$groupobj = new Group();
+			$groupobj = new CmsGroup();
 			$groupobj->name = $group;
 			$groupobj->active = $active;
 
@@ -69,7 +69,7 @@ if ($access)
 				}
 			}
 			
-			Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
+			CmsEvents::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 

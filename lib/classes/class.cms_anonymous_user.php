@@ -27,6 +27,11 @@ class CmsAnonymousUser extends CmsUser
 		parent::__construct();
 	}
 	
+	function groups()
+	{
+		return array(cms_orm()->cms_group->find_by_name('Anonymous'));
+	}
+	
 	public function set_password($password)
 	{
 	}

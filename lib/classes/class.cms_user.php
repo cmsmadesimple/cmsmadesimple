@@ -37,8 +37,12 @@ class CmsUser extends CmsObjectRelationalMapping
 	public function __construct()
 	{
 		parent::__construct();
+	}
+
+	function setup($first_time = false)
+	{
 		$this->create_has_many_association('bookmarks', 'bookmark', 'user_id');
-		$this->create_has_and_belongs_to_many_association('groups', 'group', 'user_groups', 'group_id', 'user_id');
+		$this->create_has_and_belongs_to_many_association('groups', 'group', 'user_groups', 'group_id', 'user_id');		
 	}
 
 	/**
@@ -92,7 +96,13 @@ class CmsUser extends CmsObjectRelationalMapping
 /**
  * @deprecated Deprecated.  Use CmsUser instead.
  **/
-class User extends CmsUser {}
+class User extends CmsUser
+{
+	public function __construct()
+	{
+		parent::__construct();
+	}
+}
 
 # vim:ts=4 sw=4 noet
 ?>

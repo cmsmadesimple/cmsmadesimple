@@ -61,7 +61,6 @@ class CmsHasAndBelongsToManyAssociation extends CmsObjectRelationalAssociation
 		$ary = null;
 		if ($obj->has_association($this->association_name))
 		{
-			var_dump('found');
 			$ary = $obj->get_association($this->association_name);
 		}
 		else

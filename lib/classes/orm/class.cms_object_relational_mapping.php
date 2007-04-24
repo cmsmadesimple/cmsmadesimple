@@ -138,6 +138,26 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				}
 			}
 		}
+		
+		$this->setup(true);
+	}
+	
+	public function __wakeup()
+	{
+		$this->setup();
+	}
+	
+	/**
+	 * Method for setting up various pieces of the object.  This is mainly used to setup 
+	 * associations on objects that will be used in sessions so that they get properly setup 
+	 * again after the object comes out of serialization.
+	 *
+	 * @param bool Whether or not this is the first time this was called from the constructor
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function setup($first_time = false)
+	{
 	}
 
 	/**

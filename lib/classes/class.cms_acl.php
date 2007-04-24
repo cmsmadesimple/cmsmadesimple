@@ -48,7 +48,7 @@ class CmsAcl extends CmsObject
 		
 		if ($group == null && $user != null)
 		{
-			$groups[] = $user->group;
+			$groups = $user->groups->children;
 		}
 		else if ($group != null && $user == null)
 		{
@@ -58,6 +58,8 @@ class CmsAcl extends CmsObject
 		{
 			return false;
 		}
+		
+		var_dump($groups);
 		
 		//$query = "SELECT ";
 		
