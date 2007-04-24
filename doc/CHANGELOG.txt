@@ -1,3 +1,22 @@
+Version 1.0.6 "Niihau" -- Apr 24 2007
+-----------------
+- Fixes a potential SQL injection hole in stylesheet.php
+- A new installer that uses smarty templates and classes.   
+  it doesn't look much better atm, but does have alot more power and 
+  is alot cleaner for the future.
+- Show the footer on tags about and help pages
+- Fixes to the expression that caused session_start to not always be 
+  called.
+- Fixes for errors in get_template_vars with newer php versions
+- (important) Fixes a problem where the wrong module could be unloaded
+  from memory if module files had been deleted manually, without explicitly
+  uninstalling the module first.
+- Fixes to the safe mode tests
+- Fixes for open_basedir issues in ImageManager
+- Repeated quick reloads should no longer violate the 'cachable' page property.
+- Add a download link for the admin log
+- Fixes for the umask test in global settings
+
 Version 1.0.5 "Molokai" -- Mar 26 2007
 -----------------
 - Fixes to Global Settings
