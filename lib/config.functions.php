@@ -99,7 +99,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 			{
 				global $gCms;
 				$db =& $gCms->GetDb();
-				$encoding = $db->GetOne('select encoding from '.cms_db_prefix().'templates where default_template = 1');
+				$encoding = $db->GetOne('SELECT encoding FROM '.cms_db_prefix().'templates WHERE default_template = 1');
 				if (isset($encoding) && $encoding != '')
 				{
 					$config["admin_encoding"] = $encoding;
