@@ -136,7 +136,7 @@ if ($pageinfo == null)
 }
 
 $user = CmsLogin::get_current_user();
-var_dump(CmsAcl::get_instance()->check_permission('Core', 'Page', 'View', $pageinfo->content_id, null, $user));
+var_dump("Permission: " . CmsAcl::get_instance()->check_permission('Core', 'Page', 'View', $pageinfo->content_id, null, $user) . "\n");
 
 //Render the pageinfo object
 echo $pageinfo->render();

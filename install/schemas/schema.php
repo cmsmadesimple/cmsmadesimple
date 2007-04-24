@@ -21,7 +21,8 @@ CmsInstallOperations::create_table($db, 'acos_aros', "
 	id I KEY AUTO,
 	acos_id I,
 	aros_id I,
-	permission_name C(50)
+	permission_name C(50),
+	has_access I1 DEFAULT 1
 ");
 
 CmsInstallOperations::create_table($db, 'additional_users', "

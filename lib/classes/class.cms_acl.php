@@ -59,11 +59,18 @@ class CmsAcl extends CmsObject
 			return false;
 		}
 		
-		var_dump($groups);
+		$groupids = array();
+		foreach ($groups as $group)
+		{
+			if ($group->name == 'Admin')
+				return true;
+			$groupids[] = $group->id;
+		}
+		$groupids = implode(',', $groupids);
 		
-		//$query = "SELECT ";
-		
-		return false;
+		$query = "select cr.has_access FROM cms_acos c, cms_acos c2 INNER JOIN cms_acos_aros cr ON cr.acos_id = c.id INNER JOIN cms_aros r ON r.id = cr.aros_id  WHERE c2.lft BETWEEN c.lft AND c.rght AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? AND r.object_id in ({$groupids}) AND r.type = 'Group'  ORDER BY c.lft DESC LIMIT 1";
+
+		return cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
 	}
 }
 
