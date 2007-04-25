@@ -48,7 +48,7 @@ class CmsAcl extends CmsObject
 		
 		if ($group == null && $user != null)
 		{
-			$groups = $user->groups->children;
+			$groups = $user->groups;
 		}
 		else if ($group != null && $user == null)
 		{
@@ -68,9 +68,37 @@ class CmsAcl extends CmsObject
 		}
 		$groupids = implode(',', $groupids);
 		
-		$query = "select cr.has_access FROM cms_acos c, cms_acos c2 INNER JOIN cms_acos_aros cr ON cr.acos_id = c.id INNER JOIN cms_aros r ON r.id = cr.aros_id  WHERE c2.lft BETWEEN c.lft AND c.rght AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? AND r.object_id in ({$groupids}) AND r.type = 'Group'  ORDER BY c.lft DESC LIMIT 1";
+		$query = "select cr.has_access FROM ".cms_db_prefix()."acos c, cms_acos c2 INNER JOIN ".cms_db_prefix()."acos_aros cr ON cr.acos_id = c.id INNER JOIN ".cms_db_prefix()."aros r ON r.id = cr.aros_id  WHERE c2.lft BETWEEN c.lft AND c.rght AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? AND r.object_id in ({$groupids}) AND r.type = 'Group' ORDER BY c.lft DESC LIMIT 1";
 
-		return cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
+		$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
+		if (!$result)
+		{
+			return false;
+		}
+			
+		return $result;
+	}
+	
+	static public function add_aro($object_id, $type = 'Group')
+	{
+		$max = cms_db()->GetOne("SELECT max(rght) FROM cms_aros");
+		
+		$query = "INSERT INTO cms_aros (object_id, type, lft, rght) VALUES (?, ?, ?, ?)";
+		$result = cms_db()->Execute($query, array($object_id, $type, $max + 1, $max + 2));
+		
+		if ($result)
+			return cms_db()->Insert_ID();
+
+		return false;
+	}
+	
+	static public function delete_aro($object_id, $type = 'Group')
+	{
+		$query = "DELETE FROM cms_aros INNER JOIN cms_acos_aros ON cms_acos_aros.aro_id = cms_aros.id WHERE cms_aros.object_id = ? AND cms_aros.type = ?";
+		cms_db()->Execute($query, array($object_id, $type));
+		
+		$query = "DELETE FROM cms_aros WHERE object_id = ? AND type = ?";
+		cms_db()->Execute($query, array($object_id, $type));
 	}
 }
 

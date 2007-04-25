@@ -42,9 +42,7 @@ include_once("header.php");
 	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
 	#$result = $db->Execute($query);
 
-	global $gCms;
-	$groupops =& $gCms->GetGroupOperations();
-	$grouplist = $groupops->LoadGroups();
+	$grouplist = cms_orm()->cms_group->find_all(array('order' => 'name'));
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -82,8 +80,10 @@ include_once("header.php");
         $image_permissions = $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','systemicon');
 
 		$counter=0;
-		foreach ($grouplist as $onegroup){
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
+		foreach ($grouplist as $onegroup)
+		{
+			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit)
+			{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
 				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
@@ -91,18 +91,33 @@ include_once("header.php");
 					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
 				if ($assign)
 					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
-				if ($edit)
-				    {
-					echo "<td class=\"icons_wide\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
-                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-                    echo "</a></td>\n";
-                    }
-				if ($remove)
-				    {
-					echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                    echo "</a></td>\n";
-                    }
+				if ($onegroup->name != 'Admin' && $onegroup->name != 'Anonymous')
+				{
+					if ($edit)
+					{
+						echo "<td class=\"icons_wide\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
+	                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
+	                    echo "</a></td>\n";
+					}
+					else
+					{
+						echo '<td></td>';
+					}
+					if ($remove)
+					{
+						echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+						echo "</a></td>\n";
+					}
+					else
+					{
+						echo '<td></td>';
+					}
+				}
+				else
+				{
+					echo '<td></td><td></td>';
+				}
 				echo "</tr>\n";
 
 				($currow == "row1"?$currow="row2":$currow="row1");

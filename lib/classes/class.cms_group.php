@@ -37,6 +37,10 @@ class CmsGroup extends CmsObjectRelationalMapping
 	public function __construct()
 	{
 		parent::__construct();
+	}
+	
+	public function setup()
+	{
 		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
 	}
 	
@@ -48,6 +52,12 @@ class CmsGroup extends CmsObjectRelationalMapping
 	
 	function after_save()
 	{
+		//Add the group to the aro table so we can do acls on it
+		//Only happens on a new insert
+		if ($this->create_date == $this->modified_date)
+		{
+			CmsAcl::add_aro($this->id, 'Group');
+		}
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
 	}
 	
@@ -58,6 +68,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 	
 	function after_delete()
 	{
+		CmsAcl::delete_aro($this->id, 'Group');
 		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
 	}
 }
