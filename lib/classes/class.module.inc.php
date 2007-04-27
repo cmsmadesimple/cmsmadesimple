@@ -160,6 +160,37 @@ class CMSModule
 
 	/**
 	 * ------------------------------------------------------------------
+	 * Plugin Functions.
+	 * ------------------------------------------------------------------
+	 */
+
+	/**
+	 * Callback function for module plugins
+	 * this function should not be overridden
+	 */
+	function function_plugin($params,&$smarty)
+	{
+	  $params['module'] = $this->GetName();
+	  cms_module_plugin($params,$smarty);
+	}
+
+	/**
+	 * Register a plugin to smarty with the
+	 * name of the module.  This method should be called
+	 * from the module constructor, or from the SetParameters
+	 * method.
+	 */
+	function RegisterModulePlugin()
+	{
+	  global $gCms;
+
+	  $smarty =& $gCms->GetSmarty();
+	  $smarty->register_plugin($this->GetName(),
+				   array($this,'function_plugin'));
+	}
+
+	/**
+	 * ------------------------------------------------------------------
 	 * Basic Functions.	 Name and Version MUST be overridden.
 	 * ------------------------------------------------------------------
 	 */

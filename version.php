@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.0.6";
+$CMS_VERSION = "1.1";
 $CMS_VERSION_NAME = "Niihau";
 $CMS_SCHEMA_VERSION = "28";
 
