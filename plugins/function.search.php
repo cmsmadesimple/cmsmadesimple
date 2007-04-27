@@ -18,58 +18,8 @@
 
 function smarty_cms_function_search($params, &$smarty)
 {
-	global $gCms;
-	$cmsmodules = &$gCms->modules;
-
-	if (isset($cmsmodules))
-	{
-		$modulename = 'search';
-		$inline = false;
-
-		foreach ($cmsmodules as $key=>$value)
-		{
-			if (strtolower($modulename) == strtolower($key))
-			{
-				$modulename = $key;
-			}
-		}
-
-		if (isset($modulename))
-		{
-			if (isset($cmsmodules[$modulename]))
-			{
-				if (isset($cmsmodules[$modulename]['object'])
-					&& $cmsmodules[$modulename]['installed'] == true
-					&& $cmsmodules[$modulename]['active'] == true
-					&& $cmsmodules[$modulename]['object']->IsPluginModule())
-				{
-					@ob_start();
-					$id = 'm' . ++$gCms->variables["modulenum"];
-					$params = array_merge($params, GetModuleParameters($id));
-					if ($inline == false || $action == '')
-						$action = 'default';
-
-					$returnid = '';
-					if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
-					{
-						$returnid = $gCms->variables['pageinfo']->content_id;
-					}
-					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
-					if ($result !== FALSE)
-					{
-						echo $result;
-					}
-					$modresult = @ob_get_contents();
-					@ob_end_clean();
-					return $modresult;
-				}
-				else
-				{
-					return "<!-- Not a tag module -->\n";
-				}
-			}
-		}
-	}
+  $params['module'] = 'Search';
+  return cms_module_plugin($params,$smarty);
 }
 
 function smarty_cms_help_function_search() {

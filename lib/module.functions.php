@@ -24,6 +24,7 @@
  * @package CMS
  */
 
+/* a duplicate function?
 function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 
 	$db =& $cms->db;
@@ -37,6 +38,113 @@ function cms_mapi_create_permission($cms, $permission_name, $permission_text) {
 		$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES ($new_id, ".$db->qstr($permission_name).",".$db->qstr($permission_text).",".$db->DBTimeStamp(time()).",".$db->DBTimeStamp(time()).")";
 		$db->Execute($query);
 	}
+}
+*/
+
+function cms_module_plugin($params,&$smarty)
+{
+  global $gCms;
+  $cmsmodules = &$gCms->modules;
+  
+  $id = 'm' . ++$gCms->variables["modulenum"];
+  $params = array_merge($params, GetModuleParameters($id));
+
+  $modulename = '';
+  $action = 'default';
+  $inline = false;
+  
+  $checkid = '';
+  
+  if (isset($params['module'])) 
+    $modulename = $params['module'];
+  else
+    return '<!-- ERROR: module name not specified -->';
+
+  if (isset($_REQUEST['id'])) //Not really needed now...
+    {
+      $checkid = $_REQUEST['id'];
+    }
+  else if (isset($_REQUEST['mact']))
+    {
+      $ary = explode(',', $_REQUEST['mact'], 4);
+      $mactmodulename = (isset($ary[0])?$ary[0]:'');
+      if (strtolower($mactmodulename) == strtolower($params['module']))
+	{
+	  $checkid = (isset($ary[1])?$ary[1]:'');
+	  $mactaction = (isset($ary[2])?$ary[2]:'');
+	}
+      $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+      if ($checkid == $id)
+	{
+	  $action = $mactaction;
+	  $inline = $mactinline;
+	}
+    }
+  
+  #$actioninparams = false;
+  
+#if (isset($_REQUEST[$id.'action']))
+  #{
+  #	$action = $_REQUEST[$id.'action'];
+  #}
+#else if (isset($_REQUEST['action']))
+  #{
+  #	$action = $_REQUEST['action'];
+  #}
+  if (isset($params['action']) && $params['action'] != '')
+    {
+      $action = $params['action'];
+      #$actioninparams = true;
+    }
+  
+  if (isset($cmsmodules))
+    {
+      $modulename = $params['module'];
+      
+      foreach ($cmsmodules as $key=>$value)
+	{
+	  if (strtolower($modulename) == strtolower($key))
+	    {
+	      $modulename = $key;
+	    }
+	}
+      
+      if (isset($modulename))
+	{
+	  if (isset($cmsmodules[$modulename]))
+	    {
+	      if (isset($cmsmodules[$modulename]['object'])
+		  && $cmsmodules[$modulename]['installed'] == true
+		  && $cmsmodules[$modulename]['active'] == true
+		  && $cmsmodules[$modulename]['object']->IsPluginModule())
+		{
+		  @ob_start();
+		  
+#if (($inline == false && $actioninparams == false) || $action == '')
+		  #	$action = 'default';
+		  
+		  $returnid = '';
+		  if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
+		    {
+		      $returnid = $gCms->variables['pageinfo']->content_id;
+		    }
+		  
+		  $result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
+		  if ($result !== FALSE)
+		    {
+		      echo $result;
+		    }
+		  $modresult = @ob_get_contents();
+		  @ob_end_clean();
+		  return $modresult;
+		}
+	      else
+		{
+		  return "<!-- Not a tag module -->\n";
+		}
+	    }
+	}
+    }
 }
 
 # vim:ts=4 sw=4 noet

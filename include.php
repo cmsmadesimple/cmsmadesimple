@@ -46,6 +46,7 @@ if(!@session_id())
 set_magic_quotes_runtime(false);
 
 require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
 debug_buffer('', 'Start of include');
 
 # sanitize $_GET
