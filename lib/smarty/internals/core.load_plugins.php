@@ -65,6 +65,7 @@ function smarty_core_load_plugins($params, &$smarty)
          * plugin function. In case it doesn't, simply output the error and
          * do not fall back on any other method.
          */
+
         if ($_found) {
             include_once $_plugin_file;
 
@@ -76,7 +77,7 @@ function smarty_core_load_plugins($params, &$smarty)
             }
             if (!is_callable($_plugin_func) && is_callable($_cms_plugin_func))
             {
-            	$_plugin_func = $_cms_plugin_func;
+                $_plugin_func = $_cms_plugin_func;
             }
         }
         /*
