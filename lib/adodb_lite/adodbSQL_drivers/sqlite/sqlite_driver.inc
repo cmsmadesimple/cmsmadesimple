@@ -15,7 +15,8 @@ class sqlite_driver_ADOConnection extends ADOConnection
 
 	function sqlite_driver_ADOConnection()
 	{
-		$this->dbtype = 'sqlitepo';
+		$this->dbtype = 'sqlite';
+		$this->dataProvider = 'sqlite';
 	}
 
 	/**
@@ -275,7 +276,14 @@ class sqlite_driver_ADOConnection extends ADOConnection
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @sqlite_query( $this->sql, $this->connectionId );
-				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
+				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
+				$this->query_time_total += $time_total;
+				if($this->debug_console)
+				{
+					$this->query_list[] = $this->sql;
+					$this->query_list_time[] = $time_total;
+					$this->query_list_errors[] = $this->ErrorMsg();
+				}
 				if($this->debug)
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
@@ -293,7 +301,14 @@ class sqlite_driver_ADOConnection extends ADOConnection
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @sqlite_query( $this->sql, $this->connectionId );
-				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
+				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
+				$this->query_time_total += $time_total;
+				if($this->debug_console)
+				{
+					$this->query_list[] = $this->sql;
+					$this->query_list_time[] = $time_total;
+					$this->query_list_errors[] = $this->ErrorMsg();
+				}
 				if($this->debug)
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
@@ -307,8 +322,8 @@ class sqlite_driver_ADOConnection extends ADOConnection
 		} 
 
 		if ($resultId === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
-			$rs =& new ADORecordSet_empty();
-			return $rs;
+			$recordset = new ADORecordSet_empty();
+			return $recordset;
 		}
 
 		$resultset_name = $this->last_module_name . "_ResultSet";
@@ -373,7 +388,6 @@ class sqlite_driver_ResultSet
 
 	function close()
 	{
-		@sqlite_free_result( $this->resultId );
 		$this->fields = array();
 		$this->resultId = false;
 	} 
@@ -388,7 +402,14 @@ class sqlite_driver_ResultSet
 
 	function fields( $field )
 	{
-		return $this->fields[$field];
+		if(empty($field))
+		{
+			return $this->fields;
+		}
+		else
+		{
+			return $this->fields[$field];
+		}
 	} 
 
 	/**

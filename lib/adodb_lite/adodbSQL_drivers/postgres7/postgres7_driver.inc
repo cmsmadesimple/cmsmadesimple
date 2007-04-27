@@ -18,6 +18,7 @@ class postgres7_driver_ADOConnection extends ADOConnection
 	function postgres7_driver_ADOConnection()
 	{
 		$this->dbtype = 'postgres7';
+		$this->dataProvider = 'postgres';
 	}
 
 	/**
@@ -77,7 +78,7 @@ class postgres7_driver_ADOConnection extends ADOConnection
 		}
 		else
 		{
-			if($this->forcenewconnection)
+			if(!$this->forcenewconnection)
 			{
 				$this->connectionId = @pg_connect( $this->connect_string );
 			}
@@ -296,8 +297,8 @@ class postgres7_driver_ADOConnection extends ADOConnection
 		$limitStr = '';
 		if ($offset != -1 || $nrows != -1)
 		{
-			$offsetStr = ($offset >= 0) ? " OFFSET " . $offset : '';
-			$limitStr  = ($nrows >= 0)  ? " LIMIT " . $nrows : '';
+			$offsetStr = ($offset >= 0) ? " OFFSET " . ((integer)$offset) : '';
+			$limitStr  = ($nrows >= 0)  ? " LIMIT " . ((integer)$nrows) : '';
 		}
 
 		if ($inputarr && is_array($inputarr)) {
@@ -331,7 +332,14 @@ class postgres7_driver_ADOConnection extends ADOConnection
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @pg_query( $this->sql);
-				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
+				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
+				$this->query_time_total += $time_total;
+				if($this->debug_console)
+				{
+					$this->query_list[] = $this->sql;
+					$this->query_list_time[] = $time_total;
+					$this->query_list_errors[] = $this->ErrorMsg();
+				}
 				if($this->debug)
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
@@ -349,7 +357,14 @@ class postgres7_driver_ADOConnection extends ADOConnection
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @pg_query( $this->sql);
-				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
+				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
+				$this->query_time_total += $time_total;
+				if($this->debug_console)
+				{
+					$this->query_list[] = $this->sql;
+					$this->query_list_time[] = $time_total;
+					$this->query_list_errors[] = $this->ErrorMsg();
+				}
 				if($this->debug)
 				{
 					$this->outp($sql . "$limitStr$offsetStr");
@@ -362,10 +377,10 @@ class postgres7_driver_ADOConnection extends ADOConnection
 			return $false;
 		} 
 
-		if ($resultId === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
-			$rs =& new ADORecordSet_empty();
+		if (@pg_numfields( $resultId ) <= 0) { // return simplified recordset for inserts/updates/deletes with lower overhead
+			$recordset = new ADORecordSet_empty();
 			$this->record_set = $recordset;
-			return $rs;
+			return $recordset;
 		}
 
 		$resultset_name = $this->last_module_name . "_ResultSet";
@@ -446,7 +461,14 @@ class postgres7_driver_ResultSet
 
 	function fields( $field )
 	{
-		return $this->fields[$field];
+		if(empty($field))
+		{
+			return $this->fields;
+		}
+		else
+		{
+			return $this->fields[$field];
+		}
 	} 
 
 	/**

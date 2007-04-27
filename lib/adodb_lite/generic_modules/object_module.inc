@@ -15,8 +15,8 @@ eval('class object_resultset_EXTENDER extends ' . $last_module . '_ResultSet { }
 
 class object_ResultSet extends object_resultset_EXTENDER
 {
-	var _obj;
-	var _names;
+	var $_obj;
+	var $_names;
 
 	function &FetchObj()
 	{
@@ -70,6 +70,29 @@ class object_ResultSet extends object_resultset_EXTENDER
 		}
 		$this->EOF = true;
 		return $object;
+	}
+
+	/* Load a list of database objects 
+	 * @param string The field name of a primary key 
+	 * @return array If <var>key</var> is empty as sequential list of returned records. 
+	 * If <var>key</var> is not empty then the returned array is indexed by the value 
+	 * the database key.  Returns <var>null</var> if the query fails.
+	 */
+	function &loadObjectList( $key='' )
+	{
+		$array = array();
+		while ($row = $this->FetchNextObject(false))
+		{
+			if ($key)
+			{
+				$array[$row->$key] = $row;
+			}
+			else
+			{
+				$array[] = $row;
+			}
+		}
+		return $array;
 	}
 
 }

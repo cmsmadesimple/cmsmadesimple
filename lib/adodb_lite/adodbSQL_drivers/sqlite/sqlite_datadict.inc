@@ -55,35 +55,12 @@ class ADODB2_sqlite extends ADODB_DataDict {
 		if ($this->debug) $this->outp("AlterColumnSQL not supported");
 		return array();
 	}
-	
-	
+
 	function DropColumnSQL($tabname, $flds)
 	{
 		if ($this->debug) $this->outp("DropColumnSQL not supported");
 		return array();
 	}
-
-//	function MetaType($t,$len=-1,$fieldobj=false)
-//	{
-//	}
-
-//	function &MetaTables($ttype=false,$showSchema=false,$mask=false) 
-//	{
-//		global $ADODB_FETCH_MODE;
-//	}
-
-//	function &MetaColumns($table,$upper=true) 
-//	{
-//		global $ADODB_FETCH_MODE;
-//	}
-
-//	function MetaPrimaryKeys($table, $owner=false)
-//	{
-//	}
-
-//     function &MetaIndexes($table, $primary = false, $owner = false)
-//     {
-//     }
 
 }
 

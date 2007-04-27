@@ -1141,7 +1141,8 @@ function adodb_mktime($hr,$min,$sec,$mon=false,$day=false,$year=false,$is_dst=fa
 		$y = floor($mon / 12);
 		$year += $y;
 		$mon -= $y*12;
-	} else if ($mon < 1) {
+	} 
+	if ($mon < 1) {
 		$y = ceil((1-$mon) / 12);
 		$year -= $y;
 		$mon += $y*12;

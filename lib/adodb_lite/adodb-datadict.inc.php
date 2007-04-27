@@ -214,44 +214,8 @@ class ADODB_DataDict {
 
 	function MetaTables()
 	{
-		global $ADODB_FETCH_MODE;
-
-		$false = false;
-		if ($mask) {
-			return $false;
-		}
-		if ($this->metaTablesSQL) {
-			$save = $ADODB_FETCH_MODE; 
-			$ADODB_FETCH_MODE = ADODB_FETCH_NUM; 
-
-			if ($this->fetchMode !== false) $savem = $this->SetFetchMode(false);
-
-			$rs = $this->Execute($this->metaTablesSQL);
-			if (isset($savem)) $this->SetFetchMode($savem);
-			$ADODB_FETCH_MODE = $save; 
-
-			if ($rs === false) return $false;
-			$arr =& $rs->GetArray();
-			$arr2 = array();
-
-			if ($hast = ($ttype && isset($arr[0][1]))) { 
-				$showt = strncmp($ttype,'T',1);
-			}
-
-			for ($i=0; $i < sizeof($arr); $i++) {
-				if ($hast) {
-					if ($showt == 0) {
-						if (strncmp($arr[$i][1],'T',1) == 0) $arr2[] = trim($arr[$i][0]);
-					} else {
-						if (strncmp($arr[$i][1],'V',1) == 0) $arr2[] = trim($arr[$i][0]);
-					}
-				} else
-					$arr2[] = trim($arr[$i][0]);
-			}
-			$rs->Close();
-			return $arr2;
-		}
-		return $false;
+		if (!$this->connection->IsConnected()) return array();
+		return $this->connection->MetaTables();
 	}
 
 	/**
@@ -265,52 +229,10 @@ class ADODB_DataDict {
 	 * @return  array of ADOFieldObjects for current table.
 	 */
 
-	function MetaColumns($table, $upper=true, $schema=false)
+	function MetaColumns($tab, $upper=true, $schema=false)
 	{
-		global $ADODB_FETCH_MODE;
-
-		$false = false;
-
-		if (!empty($this->metaColumnsSQL)) {
-			$schema = false;
-			$this->_findschema($table,$schema);
-
-			$save = $ADODB_FETCH_MODE;
-			$ADODB_FETCH_MODE = ADODB_FETCH_NUM;
-			if ($this->fetchMode !== false) $savem = $this->SetFetchMode(false);
-			$rs = $this->connection->Execute(sprintf($this->metaColumnsSQL,($upper)?strtoupper($table):$table));
-			if (isset($savem)) $this->SetFetchMode($savem);
-			$ADODB_FETCH_MODE = $save;
-			if ($rs === false || $rs->EOF) return $false;
-
-			$retarr = array();
-			while (!$rs->EOF) { //print_r($rs->fields);
-				$fld = new ADOFieldObject();
-				$fld->name = $rs->fields[0];
-				$fld->type = $rs->fields[1];
-				if (isset($rs->fields[3]) && $rs->fields[3]) {
-					if ($rs->fields[3]>0) $fld->max_length = $rs->fields[3];
-					$fld->scale = $rs->fields[4];
-					if ($fld->scale>0) $fld->max_length += 1;
-				} else
-					$fld->max_length = $rs->fields[2];
-
-				if ($ADODB_FETCH_MODE == ADODB_FETCH_NUM) $retarr[] = $fld;	
-				else $retarr[strtoupper($fld->name)] = $fld;
-				$rs->MoveNext();
-			}
-			$rs->Close();
-			return $retarr;	
-		}
-		return $false;
-	}
-
-	function _findschema(&$table,&$schema)
-	{
-		if (!$schema && ($at = strpos($table,'.')) !== false) {
-			$schema = substr($table,0,$at);
-			$table = substr($table,$at+1);
-		}
+		if (!$this->connection->IsConnected()) return array();
+		return $this->connection->MetaColumns($this->TableName($tab), $upper, $schema);
 	}
 
 	/**
@@ -319,19 +241,8 @@ class ADODB_DataDict {
 
 	function MetaPrimaryKeys($tab,$owner=false,$intkey=false)
 	{
-		// owner not used in base class - see oci8
-		$p = array();
-		$objs =& $this->MetaColumns($table);
-		if ($objs) {
-			foreach($objs as $v) {
-				if (!empty($v->primary_key))
-					$p[] = $v->name;
-			}
-		}
-		if (sizeof($p)) return $p;
-		if (function_exists('ADODB_VIEW_PRIMARYKEYS'))
-			return ADODB_VIEW_PRIMARYKEYS($this->databaseType, $this->database, $table, $owner);
-		return false;
+		if (!$this->connection->IsConnected()) return array();
+		return $this->connection->MetaPrimaryKeys($this->TableName($tab), $owner, $intkey);
 	}
 
 	/**
@@ -355,137 +266,18 @@ class ADODB_DataDict {
 
 	function MetaIndexes($table, $primary = false, $owner = false)
 	{
-	 		$false = false;
-			return $false;
+		if (!$this->connection->IsConnected()) return array();
+		return $this->connection->MetaIndexes($this->TableName($table), $primary, $owner);
 	}
 
 	function MetaType($t,$len=-1,$fieldobj=false)
 	{
-		if (is_object($t)) {
-			$fieldobj = $t;
-			$t = $fieldobj->type;
-			$len = $fieldobj->max_length;
-		}
-		// changed in 2.32 to hashing instead of switch stmt for speed...
-		static $typeMap = array(
-		'VARCHAR' => 'C',
-		'VARCHAR2' => 'C',
-		'CHAR' => 'C',
-		'C' => 'C',
-		'STRING' => 'C',
-		'NCHAR' => 'C',
-		'NVARCHAR' => 'C',
-		'VARYING' => 'C',
-		'BPCHAR' => 'C',
-		'CHARACTER' => 'C',
-		'INTERVAL' => 'C',  # Postgres
-		##
-		'LONGCHAR' => 'X',
-		'TEXT' => 'X',
-		'NTEXT' => 'X',
-		'M' => 'X',
-		'X' => 'X',
-		'CLOB' => 'X',
-		'NCLOB' => 'X',
-		'LVARCHAR' => 'X',
-		##
-		'BLOB' => 'B',
-		'IMAGE' => 'B',
-		'BINARY' => 'B',
-		'VARBINARY' => 'B',
-		'LONGBINARY' => 'B',
-		'B' => 'B',
-		##
-		'YEAR' => 'D', // mysql
-		'DATE' => 'D',
-		'D' => 'D',
-		##
-		'TIME' => 'T',
-		'TIMESTAMP' => 'T',
-		'DATETIME' => 'T',
-		'TIMESTAMPTZ' => 'T',
-		'T' => 'T',
-		##
-		'BOOL' => 'L',
-		'BOOLEAN' => 'L', 
-		'BIT' => 'L',
-		'L' => 'L',
-		##
-		'COUNTER' => 'R',
-		'R' => 'R',
-		'SERIAL' => 'R', // ifx
-		'INT IDENTITY' => 'R',
-		##
-		'INT' => 'I',
-		'INT2' => 'I',
-		'INT4' => 'I',
-		'INT8' => 'I',
-		'INTEGER' => 'I',
-		'INTEGER UNSIGNED' => 'I',
-		'SHORT' => 'I',
-		'TINYINT' => 'I',
-		'SMALLINT' => 'I',
-		'I' => 'I',
-		##
-		'LONG' => 'N', // interbase is numeric, oci8 is blob
-		'BIGINT' => 'N', // this is bigger than PHP 32-bit integers
-		'DECIMAL' => 'N',
-		'DEC' => 'N',
-		'REAL' => 'N',
-		'DOUBLE' => 'N',
-		'DOUBLE PRECISION' => 'N',
-		'SMALLFLOAT' => 'N',
-		'FLOAT' => 'N',
-		'NUMBER' => 'N',
-		'NUM' => 'N',
-		'NUMERIC' => 'N',
-		'MONEY' => 'N',
-		
-		## informix 9.2
-		'SQLINT' => 'I', 
-		'SQLSERIAL' => 'I', 
-		'SQLSMINT' => 'I', 
-		'SQLSMFLOAT' => 'N', 
-		'SQLFLOAT' => 'N', 
-		'SQLMONEY' => 'N', 
-		'SQLDECIMAL' => 'N', 
-		'SQLDATE' => 'D', 
-		'SQLVCHAR' => 'C', 
-		'SQLCHAR' => 'C', 
-		'SQLDTIME' => 'T', 
-		'SQLINTERVAL' => 'N', 
-		'SQLBYTES' => 'B', 
-		'SQLTEXT' => 'X' 
-		);
+		return $this->connection->MetaType($t,$len,$fieldobj);
+	}
 
-		$tmap = false;
-		$t = strtoupper($t);
-		$tmap = (isset($typeMap[$t])) ? $typeMap[$t] : 'N';
-		switch ($tmap) {
-		case 'C':
-			// is the char field is too long, return as text field... 
-			if ($this->blobSize >= 0) {
-				if ($len > $this->blobSize) return 'X';
-			} else if ($len > 250) {
-				return 'X';
-			}
-			return 'C';
-		case 'I':
-			if (!empty($fieldobj->primary_key)) return 'R';
-			return 'I';
-		case false:
-			return 'N';
-		case 'B':
-			 if (isset($fieldobj->binary)) 
-				 return ($fieldobj->binary) ? 'B' : 'X';
-			return 'B';
-		case 'D':
-			if (!empty($this->datetime)) return 'T';
-			return 'D';
-		default:
-			if ($t == 'LONG' && $this->dataProvider == 'oci8') return 'B';
-			return $tmap;
-		}
+	function ActualType($meta)
+	{
+		return $meta;
 	}
 
 	function NameQuote($name = NULL,$allowBrackets=false)
@@ -542,29 +334,6 @@ class ADODB_DataDict {
 			}
 		}
 		return $rez;
-	}
-
-	/*
-	 	Returns the actual type given a character code.
-		
-		C:  varchar
-		X:  CLOB (character large object) or largest varchar size if CLOB is not supported
-		C2: Multibyte varchar
-		X2: Multibyte CLOB
-		
-		B:  BLOB (binary large object)
-		
-		D:  Date
-		T:  Date-time 
-		L:  Integer field suitable for storing booleans (0 or 1)
-		I:  Integer
-		F:  Floating point number
-		N:  Numeric or decimal number
-	*/
-
-	function ActualType($meta)
-	{
-		return $meta;
 	}
 
 	function CreateDatabase($dbname,$options=false)

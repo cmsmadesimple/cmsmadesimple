@@ -16,35 +16,12 @@ if (!defined('ADODB_DIR')) die();
 
 class ADODB2_postgres7 extends ADODB_DataDict {
 
-	var $dbtype = 'postgres7';
+	var $dbtype = 'postgres';
 	var $seqField = false;
 	var $seqPrefix = 'SEQ_';
 	var $addCol = ' ADD COLUMN';
 	var $quote = '"';
 	var $renameTable = 'ALTER TABLE %s RENAME TO %s'; // at least since 7.1
-
-    var $metaTablesSQL = "select tablename,'T' from pg_tables where tablename not like 'pg\_%'
-	and tablename not in ('sql_features', 'sql_implementation_info', 'sql_languages',
-	 'sql_packages', 'sql_sizing', 'sql_sizing_profiles') 
-	union 
-        select viewname,'V' from pg_views where viewname not like 'pg\_%'";
-	//"select tablename from pg_tables where tablename not like 'pg_%' order by 1";
-	var $metaColumnsSQL = "SELECT a.attname,t.typname,a.attlen,a.atttypmod,a.attnotnull,a.atthasdef,a.attnum 
-		FROM pg_class c, pg_attribute a,pg_type t 
-		WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s')) and a.attname not like '....%%'
-AND a.attnum > 0 AND a.atttypid = t.oid AND a.attrelid = c.oid ORDER BY a.attnum";
-
-	// used when schema defined
-	var $metaColumnsSQL1 = "SELECT a.attname, t.typname, a.attlen, a.atttypmod, a.attnotnull, a.atthasdef, a.attnum 
-FROM pg_class c, pg_attribute a, pg_type t, pg_namespace n 
-WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
- and c.relnamespace=n.oid and n.nspname='%s' 
-	and a.attname not like '....%%' AND a.attnum > 0 
-	AND a.atttypid = t.oid AND a.attrelid = c.oid ORDER BY a.attnum";
-	
-	// get primary key etc -- from Freek Dijkstra
-	var $metaKeySQL = "SELECT ic.relname AS index_name, a.attname AS column_name,i.indisunique AS unique_key, i.indisprimary AS primary_key 
-	FROM pg_class bc, pg_class ic, pg_index i, pg_attribute a WHERE bc.oid = i.indrelid AND ic.oid = i.indexrelid AND (i.indkey[0] = a.attnum OR i.indkey[1] = a.attnum OR i.indkey[2] = a.attnum OR i.indkey[3] = a.attnum OR i.indkey[4] = a.attnum OR i.indkey[5] = a.attnum OR i.indkey[6] = a.attnum OR i.indkey[7] = a.attnum) AND a.attrelid = bc.oid AND bc.relname = '%s'";
 
  	function ActualType($meta)
 	{
@@ -60,7 +37,6 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 			
 		case 'D': return 'DATE';
 		case 'T': return 'TIMESTAMP';
-		case 'DT': return 'TIMESTAMP';
 		
 		case 'L': return 'BOOLEAN';
 		case 'I': return 'INTEGER';
@@ -146,7 +122,7 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 
 	function _DropAutoIncrement($tabname)
 	{
-		$tabname = $this->connection->quote('%'.$tabname.'%');
+		$tabname = $this->connection->qstr('%'.$tabname.'%');
 
 		$seq = $this->connection->GetOne("SELECT relname FROM pg_class WHERE NOT relname ~ 'pg_.*' AND relname LIKE $tabname AND relkind='S'");
 
@@ -184,76 +160,6 @@ WHERE relkind in ('r','v') AND (c.relname='%s' or c.relname = lower('%s'))
 		return $sql;
 	}
 
-	function MetaType($t,$len=-1,$fieldobj=false)
-	{
-		if (is_object($t)) {
-			$fieldobj = $t;
-			$t = $fieldobj->type;
-			$len = $fieldobj->max_length;
-		}
-		$is_serial = is_object($fieldobj) && $fieldobj->primary_key && $fieldobj->unique && $fieldobj->has_default && substr($fieldobj->default_value,0,8) == 'nextval(';
-		switch (strtoupper($t)) {
-			case 'INTERVAL':
-			case 'CHAR':
-			case 'CHARACTER':
-			case 'VARCHAR':
-			case 'NAME':
-	   		case 'BPCHAR':
-				if ($len <= $this->blobSize) return 'C';
-			case 'TEXT':
-				return 'X';
-			case 'IMAGE': // user defined type
-			case 'BLOB': // user defined type
-			case 'BIT':	// This is a bit string, not a single bit, so don't return 'L'
-			case 'VARBIT':
-			case 'BYTEA':
-				return 'B';
-			case 'BOOL':
-			case 'BOOLEAN':
-				return 'L';
-			case 'DATE':
-				return 'D';
-			case 'TIME':
-			case 'DATETIME':
-			case 'TIMESTAMP':
-			case 'TIMESTAMPTZ':
-				return 'T';
-			case 'INTEGER': return !$is_serial ? 'I' : 'R';
-			case 'SMALLINT': 
-			case 'INT2': return !$is_serial ? 'I2' : 'R';
-			case 'INT4': return !$is_serial ? 'I4' : 'R';
-			case 'BIGINT': 
-			case 'INT8': return !$is_serial ? 'I8' : 'R';
-			case 'OID':
-			case 'SERIAL':
-				return 'R';
-			case 'FLOAT4':
-			case 'FLOAT8':
-			case 'DOUBLE PRECISION':
-			case 'REAL':
-				return 'F';
-			default:
-			 	return 'N';
-		}
-	}
-
-//	function &MetaTables($ttype=false,$showSchema=false,$mask=false) 
-//	{
-//		global $ADODB_FETCH_MODE;
-//	}
-
-//	function &MetaColumns($table,$upper=true) 
-//	{
-//		global $ADODB_FETCH_MODE;
-//	}
-
-//	function MetaPrimaryKeys($table, $owner=false)
-//	{
-//	}
-
-//     function &MetaIndexes($table, $primary = false, $owner = false)
-//     {
-//     }
 
 	function _recreate_copy_table($tabname,$dropflds,$tableflds,$tableoptions='')
 	{
