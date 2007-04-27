@@ -122,8 +122,12 @@ if ($access) {
 			if ($result) {
 				Events::SendEvent('Core', 'EditUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
 				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
-				redirect("listusertags.php?message=usertagupdated");
-				return;
+
+				if( !isset( $_POST['apply'] ) )
+				  {
+				    redirect("listusertags.php?message=usertagupdated");
+				    return;
+				  }
 			}
 			else {
 				$error[] = lang('errorupdatingusertag');
@@ -176,6 +180,7 @@ else {
 						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
 						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				</p>
 			</div>
