@@ -160,6 +160,11 @@ class CMSInstaller
 					$this->errors[] = 'Username not given!';
 					$this->currentPage = 2;
 				}
+				else if ( !preg_match( "/^[a-zA-Z0-9]+$/", trim($_POST['adminusername']) ) )
+				{
+					$this->errors[] = 'Username contains illegal characters!';
+					$this->currentPage = 2;
+				}
 				elseif (trim($_POST['adminpassword']) == '' || trim($_POST['adminpasswordagain']) == '')
 				{
 					$this->errors[] = 'Not both password fields given!';

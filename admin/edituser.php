@@ -91,6 +91,11 @@ if ($access) {
 			$error .= "<li>".lang('nofieldgiven', array(lang('username')))."</li>";
 		}
 
+		if ( !preg_match("/^[a-zA-Z0-9]+$/", $user) ) {
+			$validinfo = false;
+			$error .= "<li>".lang('illegalcharacters', array(lang('username')))."</li>";
+		} 
+
 		if ($password != $passwordagain) {
 			$validinfo = false;
 			$error .= "<li>".lang('nopasswordmatch')."</li>";

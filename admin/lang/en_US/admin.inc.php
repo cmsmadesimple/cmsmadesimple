@@ -191,6 +191,7 @@ $lang['admin']['imagemanagement'] = 'Image Manager';
 $lang['admin']['informationmissing'] = 'Information missing';
 $lang['admin']['install'] = 'Install';
 $lang['admin']['invalidcode'] = 'Invalid code entered.';
+$lang['admin']['illegalcharacters'] = 'Invalid characters in field %s.';
 $lang['admin']['invalidcode_brace_missing'] = 'Uneven amount of braces';
 $lang['admin']['invalidtemplate'] = 'The template is not valid';
 $lang['admin']['itemid'] = 'Item ID';
