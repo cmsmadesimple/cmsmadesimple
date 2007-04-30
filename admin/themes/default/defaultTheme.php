@@ -81,10 +81,41 @@ class defaultTheme extends AdminTheme
     return;
   }
 
+    /**
+     * DisplayHTMLHeader
+     * This method outputs the HEAD section of the html page in the admin section.
+     */
+    function DisplayHTMLHeader($showielink = false, $addt = '')
+    {
+		global $gCms;
+		$config =& $gCms->GetConfig();
+?><head>
+<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-6 Ted Kulp. All rights reserved." />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="robots" content="noindex, nofollow" />
+<title><?php echo $this->cms->siteprefs[sitename] ." - ". $this->title ?></title>
+<link rel="stylesheet" type="text/css" href="style.php" />
+<?php
+	if ($showielink) {
+?>
+<!--[if IE]>
+<link rel="stylesheet" type="text/css" href="style.php?ie=1" />
+<![endif]-->
+<?php
+	}
+?>
+<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->
+<?php $this->OutputHeaderJavascript(); ?>
+<?php echo $addt ?>
+<base href="<?php echo $config['root_url'] . '/' . $config['admin_dir'] . '/'; ?>" />
+</head>
+<?php
+    }
+
 
     function DisplayTopMenu()
     {
-		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').'</span></p></div>';
+		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs[sitename] .'</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
         foreach ($this->menuItems as $key=>$menuItem) {
         	if ($menuItem['parent'] == -1) {
