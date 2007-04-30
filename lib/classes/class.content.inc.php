@@ -1641,8 +1641,8 @@ class ContentProperties
 			{
 //				if ($this->GetAllowedPropertyNames() == NULL || in_array($key, $this->GetAllowedPropertyNames()))
 //				{
-					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = '$content_id' AND prop_name = '$key'";
-					$dbresult = $db->Execute($delquery);
+					$delquery = "DELETE FROM ".cms_db_prefix()."content_props WHERE content_id = ? AND prop_name = ?";
+					$dbresult = $db->Execute($delquery, array($content_id, $key));
 					
 					$sql_vars = array(
 						$content_id,
