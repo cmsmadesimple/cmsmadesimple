@@ -168,7 +168,7 @@ class ContentOperations
 		$id_list = '(';
 		for ($i=0;$i<$cpt;$i++) 
 		{
-			$id_list .= $ids[$i];
+			$id_list .= (int)$ids[$i];
 			if ($i<$cpt-1)
 			{
 				$id_list .= ',';
@@ -254,30 +254,22 @@ class ContentOperations
 	/*private*/function &LoadMultipleFromAlias($ids, $loadProperties = false)
 	{
 		global $gCms, $config, $sql_queries, $debug_errors;
-		$cpt = count($ids);
 		$contents=array();
-		if ($cpt == 0)
+		if (!is_array($ids) || count($ids) == 0)
 		{
 			return $contents;
 		}
 		$db = &$gCms->GetDb();
-		$id_list = '(';
-		for ($i=0; $i<$cpt; $i++) 
+
+		$param_qs = array();
+		for ($i=0; $i<count($ids); $i++) 
 		{
-			$id_list .= "'".$ids[$i]."'";
-			if ($i<$cpt-1)
-			{
-				$id_list .= ',';
-			}
+			$param_qs[] = '?';
 		}
-		$id_list .= ')';
-		if ($id_list == '()')
-		{
-			return $contents;
-		}
+
 		$result = false;
-		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN $id_list";
-		$rows   =& $db->Execute($query);
+		$query  = "SELECT * FROM ".cms_db_prefix()."content WHERE content_alias IN " . join(', ', $param_qs);
+		$rows   =& $db->Execute($query, $ids);
 
 		while (isset($rows) && $row=&$rows->FetchRow())
 		{
@@ -571,8 +563,8 @@ class ContentOperations
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ".$id." ORDER BY hierarchy";
-		$dbresult =& $db->Execute($query);
+		$query = "SELECT * FROM ".cms_db_prefix()."content WHERE parent_id = ? ORDER BY hierarchy";
+		$dbresult =& $db->Execute($query, array($id));
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
 		{
