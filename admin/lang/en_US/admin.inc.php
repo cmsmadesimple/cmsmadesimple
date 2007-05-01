@@ -305,6 +305,7 @@ $lang['admin']['apply'] = 'Apply';
 $lang['admin']['applydescription'] = 'Save changes and continue to edit';
 $lang['admin']['none'] = 'None';
 $lang['admin']['wysiwygtouse'] = 'Select WYSIWYG to use';
+$lang['admin']['syntaxhighlightertouse'] = 'Select syntax highlighter to use'; 
 $lang['admin']['cachable'] = 'Cachable';
 $lang['admin']['hasdependents'] = 'Has Dependents';
 $lang['admin']['missingdependency'] = 'Missing Dependency';

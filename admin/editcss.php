@@ -281,7 +281,10 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput"><textarea class="pagebigtextarea" name="css_text"><?php echo $css_text?></textarea></p>
+			<p class="pageinput">
+			  <?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
+			<!--  <textarea class="pagebigtextarea" name="css_text"><_?php echo $css_text?></textarea>-->
+			</p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>

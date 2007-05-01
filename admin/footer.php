@@ -73,6 +73,30 @@ foreach($gCms->modules as $key=>$value)
 	}
 }
 
+foreach($gCms->modules as $key=>$value)
+{
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true &&
+		$gCms->modules[$key]['object']->IsSyntaxHighlighter()
+		)
+	{
+		$loadit=false;
+		if ($gCms->modules[$key]['object']->SyntaxActive()) {
+			$loadit=true;
+		} else {
+		  if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
+		  	$loadit=true;
+		  }
+		}
+		if ($loadit) {
+		  $bodytext.=$gCms->modules[$key]['object']->SyntaxGenerateBody();
+		  $footertext.=$gCms->modules[$key]['object']->SyntaxGenerateHeader($htmlresult);
+		  $formtext.=$gCms->modules[$key]['object']->SyntaxPageForm();
+		  $formsubmittext.=$gCms->modules[$key]['object']->SyntaxPageFormSubmit();
+		}
+	}
+}
+
 $htmlresult = str_replace('<!-- THIS IS WHERE HEADER STUFF SHOULD GO -->', $footertext, $htmlresult);
 $htmlresult = str_replace('##FORMSUBMITSTUFFGOESHERE##', ' '.$formtext, $htmlresult);
 $htmlresult = str_replace('##INLINESUBMITSTUFFGOESHERE##', ' '.$formsubmittext, $htmlresult);

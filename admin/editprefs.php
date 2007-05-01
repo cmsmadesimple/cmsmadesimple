@@ -55,6 +55,9 @@ $page_message = '';
 $wysiwyg = '';
 if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
 
+$syntaxhighlighter = '';
+if (isset($_POST["syntaxhighlighter"])) $syntaxhighlighter = $_POST["syntaxhighlighter"];
+
 $gcb_wysiwyg = 0;
 if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = $_POST['gcb_wysiwyg'];
 
@@ -68,6 +71,7 @@ if (isset($_POST["cancel"])) {
 if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'gcb_wysiwyg', $gcb_wysiwyg);
 	set_preference($userid, 'wysiwyg', $wysiwyg);
+	set_preference($userid, 'syntaxhighlighter', $syntaxhighlighter);
 	set_preference($userid, 'default_cms_language', $default_cms_lang);
 	set_preference($userid, 'admintheme', $admintheme);
 	set_preference($userid, 'bookmarks', $bookmarks);
@@ -81,6 +85,7 @@ if (isset($_POST["submit_form"])) {
 } else if (!isset($_POST["edituserprefs"])) {
 	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 	$wysiwyg = get_preference($userid, 'wysiwyg');
+	$syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
 	$admintheme = get_preference($userid, 'admintheme');
@@ -117,6 +122,30 @@ if (FALSE == empty($page_message)) {
 							{
 								echo '<option value="'.$key.'"';
 								if ($wysiwyg == $key)
+								{
+									echo ' selected="selected"';
+								}
+								echo '>'.$key.'</option>';
+							}
+						}
+					?>
+					</select>
+				</p>
+			</div>
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</p>
+				<p class="pageinput">
+					<select name="syntaxhighlighter">
+					<option value=""><?php echo lang('none'); ?></option>
+					<?php
+						foreach($gCms->modules as $key=>$value)
+						{
+							if ($gCms->modules[$key]['installed'] == true &&
+								$gCms->modules[$key]['active'] == true &&
+								$gCms->modules[$key]['object']->IsSyntaxHighlighter())
+							{
+								echo '<option value="'.$key.'"';
+								if ($syntaxhighlighter == $key)
 								{
 									echo ' selected="selected"';
 								}

@@ -742,7 +742,7 @@ function & stripslashes_deep(&$value)
         return $value;
 }
 	
-function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='')
+function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='')
 {
 	global $gCms;
 	$result = '';
@@ -765,6 +765,30 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 				} else {
 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
 						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					}
+				}
+			}
+		}
+	}
+	
+  if ($wantedsyntax!='')
+	{
+		reset($gCms->modules);
+		while (list($key) = each($gCms->modules))
+		{
+			$value =& $gCms->modules[$key];
+			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
+				$gCms->modules[$key]['active'] == true &&			 //us the module active?
+				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a wysiwyg module?
+			{
+				if ($forcewysiwyg=='') {
+					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
+					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'syntaxhighlighter')) {
+						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$stylesheet);
+					}
+				} else {
+					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
+						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$stylesheet);
 					}
 				}
 			}
@@ -794,6 +818,9 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
  * if($use_javasyntax){echo 'onSubmit="textarea_submit(
  * this, \'custom404,sitedown\');"';}
  */
+/*
+OBSOLETE!!!
+
 function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHighlight", $syntax_type="HTML (Complex)", $id="", $encoding='')
 {
     if ($use_javasyntax)
@@ -830,7 +857,7 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
 
     return $output;
 }
-
+*/
 /*
  * Displays the login form (frontend)
  */
