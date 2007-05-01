@@ -171,7 +171,10 @@ else {
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput"><?php echo textarea_highlight($use_javasyntax, $code, "code", "pagetextarea", "Java") ?></p>
+				<p class="pageinput">
+				<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
+				<?php/* echo textarea_highlight($use_javasyntax, $code, "code", "pagetextarea", "Java")*/ ?>
+				</p>
 			</div>
 			<div class="pageoverflow">
 				<p class="pagetext">&nbsp;</p>
