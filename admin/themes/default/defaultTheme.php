@@ -93,7 +93,7 @@ class defaultTheme extends AdminTheme
 <meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-6 Ted Kulp. All rights reserved." />
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="robots" content="noindex, nofollow" />
-<title><?php echo $this->cms->siteprefs[sitename] ." - ". $this->title ?></title>
+<title><?php echo $this->cms->siteprefs['sitename'] ." - ". $this->title ?></title>
 <link rel="stylesheet" type="text/css" href="style.php" />
 <?php
 	if ($showielink) {
@@ -115,7 +115,7 @@ class defaultTheme extends AdminTheme
 
     function DisplayTopMenu()
     {
-		echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs[sitename] .'</span></p></div>';
+	echo '<div><p class="logocontainer"><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">'.lang('adminpaneltitle').' - '. $this->cms->siteprefs['sitename'] .'</span></p></div>';
         echo "<div class=\"topmenucontainer\">\n\t<ul id=\"nav\">";
         foreach ($this->menuItems as $key=>$menuItem) {
         	if ($menuItem['parent'] == -1) {
