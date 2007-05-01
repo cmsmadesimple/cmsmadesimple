@@ -771,24 +771,24 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		}
 	}
 	
-  if ($wantedsyntax!='')
-	{
+  if (($result=="") && ($wantedsyntax!=''))
+	{	  
 		reset($gCms->modules);
 		while (list($key) = each($gCms->modules))
 		{
 			$value =& $gCms->modules[$key];
 			if ($gCms->modules[$key]['installed'] == true && //is the module installed?
 				$gCms->modules[$key]['active'] == true &&			 //us the module active?
-				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a wysiwyg module?
+				$gCms->modules[$key]['object']->IsSyntaxHighlighter())   //is it a syntaxhighlighter module module?
 			{
 				if ($forcewysiwyg=='') {
 					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
 					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'syntaxhighlighter')) {
-						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$stylesheet);
+						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text);
 					}
 				} else {
 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
-						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text,$stylesheet);
+						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text);
 					}
 				}
 			}
