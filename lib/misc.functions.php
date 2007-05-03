@@ -1172,7 +1172,7 @@ function GetModuleParameters($id)
 			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
 			{
 				$key = str_replace($id, '', $key);
-				$params[$key] = $value;
+				$params[$key] = cleanValue($value);
 			}
 		}
 	}
