@@ -31,7 +31,15 @@ $fullpath = Files::makeFile($manager->getBaseDir(),$image);
 
 //not a file, so exit
 if(!is_file($fullpath))
-	exit();
+{
+	//show the default image, otherwise we quit!
+	$default = $manager->getDefaultThumb();
+	if($default)
+	{
+		header('Location: '.$default);
+		exit();
+	}
+}
 
 $imgInfo = @getImageSize($fullpath);
 
