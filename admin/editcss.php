@@ -43,6 +43,8 @@ global $gCms;
 $styleops =& $gCms->GetStylesheetOperations();
 $db =& $gCms->GetDb();
 
+$dateformat = get_preference(get_userid(),'date_format_string');
+
 #******************************************************************************
 # Definition of global vars
 #******************************************************************************
@@ -226,6 +228,7 @@ if ($access)
 			$orig_css_name	= $row["css_name"];
 			$css_text		= $row["css_text"];
 			$media_type		= $row["media_type"];
+			$lastmodified		= $row["modified_date"];
 		}
 		else
 		{
@@ -336,6 +339,10 @@ $existingtypes = array("all",
 
 			</p>
 		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
+			<p class="pageinput"><?php echo  strftime( get_preference(get_userid(),'date_format_string','%x %X') , strtotime($lastmodified) )  ?></p>
+		</div>		
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">

@@ -54,7 +54,10 @@ $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
 $preview = false;
+/* there is no point for preview as there isnt any content to show
+tsw - 7.5.2007
 if (isset($_POST["preview"])) $preview = true;
+*/
 
 $apply = false;
 if (isset($_POST["apply"])) $apply = true;
@@ -180,6 +183,7 @@ if ($access)
 		$stylesheet = $onetemplate->stylesheet;
 		$encoding = $onetemplate->encoding;
 		$active = $onetemplate->active;
+		$lastedited = $onetemplate->modified_date;
 	}
 }
 
@@ -190,7 +194,7 @@ if (strlen($template) > 0)
 include_once("header.php");
 
 $submitbtns = '
-	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" />
+<!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
 	<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
@@ -206,7 +210,7 @@ else
 	{
 		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";	
 	}
-
+/*
 	if ($preview)
 	{
 		$data["title"] = "TITLE HERE";
@@ -229,14 +233,14 @@ else
 		fwrite($handle, serialize($data));
 		fclose($handle);
 
-?>
+//?>
 <div class="pagecontainer">
 	<p class="pageheader"><?php echo lang('preview')?></p>
 	<iframe class="preview" name="preview" src="<?php echo $config["root_url"]?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
 </div>
-<?php
-
+//<?php
 	}
+*/
 ?>
 
 <div class="pagecontainer">
@@ -269,7 +273,11 @@ else
 		<?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /></p>
+			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /> </p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('last_modified_at')?>:</p>
+			<p class="pageinput"><?php echo strftime( get_preference(get_userid(),'date_format_string','%x %X') ,$lastedited); ?></p>
 		</div>
 		<?php if( $encoding != "" ){ ?>
 		<div class="pageoverflow">

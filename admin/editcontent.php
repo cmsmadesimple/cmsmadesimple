@@ -27,6 +27,8 @@ $userid = get_userid();
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
+$dateformat = get_preference(get_userid(),'date_format_string');
+
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
@@ -49,7 +51,10 @@ $pagelist_id = "1";
 if (isset($_REQUEST["page"])) $pagelist_id = $_REQUEST["page"];
 
 $preview = false;
+/* preview button removed, we have the preview tab 
+   tsw - 7.5.2007
 if (isset($_POST["previewbutton"])) $preview = true;
+*/
 
 $submit = false;
 if (isset($_POST["submitbutton"])) $submit = true;
@@ -396,10 +401,12 @@ $submit_buttons = '<div class="pageoverflow">
 <p class="pagetext">&nbsp;</p>
 <p class="pageinput">
  <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('submitdescription').'" />';
+/* tsw - 7.5.2007
 if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
   {
     $submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('previewdescription').'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
   }
+*/
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
 $submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />
 </p>

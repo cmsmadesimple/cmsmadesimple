@@ -245,9 +245,9 @@ class Content extends ContentBase
 	    $ret[]= array(lang('tabindex').':','<input type="text" name="tabindex" maxlength="10" value="'.cms_htmlentities($this->mTabIndex).'" />');
 	    $ret[]= array(lang('accesskey').':','<input type="text" name="accesskey" maxlength="5" value="'.cms_htmlentities($this->mAccessKey).'" />');
 
+	    $userops =& $gCms->GetUserOperations();
 	    if (!$adding && $showadmin)
 	    {
-			$userops =& $gCms->GetUserOperations();
 			$ret[]= array(lang('owner').':', $userops->GenerateDropdown($this->Owner()));
 	    }
 
@@ -255,6 +255,9 @@ class Content extends ContentBase
 	    {
 		$ret[]= $this->ShowAdditionalEditors();
 	    }
+	    $ret[]=array(lang('last_modified_at').':', strftime( get_preference(get_userid(),'date_format_string','%x %X') , strtotime($this->mModifiedDate) ) );
+	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);
+	    $ret[]=array(lang('last_modified_by').':', $modifiedbyuser->username); 
 	}
 	return $ret;
     }
