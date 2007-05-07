@@ -27,6 +27,8 @@ check_login();
 global $gCms;
 $db =& $gCms->GetDb();
 
+$dateformat = get_preference(get_userid(),'date_format_string');
+
 $result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
 $totalrows = $result->RecordCount();
 
@@ -38,7 +40,8 @@ if (isset($_GET['download']))
 	{
 		while ($row = $result->FetchRow()) 
 		{
-			echo date("D M j, Y G:i:s", $row["timestamp"]) . "\t";
+		  echo strftime($dateformat,$db->UnixTimeStamp($row['timestamp'])).'\t';
+//			echo date("D M j, Y G:i:s", $row["timestamp"]) . "\t";
 			echo $row['username'] . "\t";
 			echo $row['item_id'] . "\t";
 			echo $row['item_name'] . "\t";
@@ -94,7 +97,6 @@ if ($result && $result->RecordCount() > 0)
 	echo '<tbody>';
 
        $currow = "row1";
-
        while ($row = $result->FetchRow()) {
 
                echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
@@ -102,7 +104,8 @@ if ($result && $result->RecordCount() > 0)
                echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
                echo "<td>".$row["item_name"]."</td>\n";
                echo "<td>".$row["action"]."</td>\n";
-               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
+	       echo "<td>".strftime($dateformat,$db->UnixTimeStamp($row['timestamp']))."</td>\n";
+	       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
                echo "</tr>\n";
 
                ($currow == "row1"?$currow="row2":$currow="row1");
