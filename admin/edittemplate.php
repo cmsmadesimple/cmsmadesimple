@@ -271,10 +271,12 @@ else
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"") ?> /></p>
 		</div>
+		<?php if( $encoding != "" ){ ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('encoding')?>:</p>
 			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>
 		</div>
+                <?php } ?>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
