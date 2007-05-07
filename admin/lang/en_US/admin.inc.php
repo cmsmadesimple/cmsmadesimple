@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['date_format_string'] = 'Date Format String';
+$lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string';
 $lang['admin']['read'] = 'Read';
 $lang['admin']['write'] = 'Write';
 $lang['admin']['execute'] = 'Execute';

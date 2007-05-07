@@ -30,7 +30,6 @@ if ($default_cms_lang != '')
 {
 	$_POST['change_cms_lang'] = $default_cms_lang;
 }
-
 require_once("../include.php");
 check_login();
 
@@ -61,6 +60,9 @@ if (isset($_POST["syntaxhighlighter"])) $syntaxhighlighter = $_POST["syntaxhighl
 $gcb_wysiwyg = 0;
 if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = $_POST['gcb_wysiwyg'];
 
+$date_format_string = '%x %X';
+if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
+
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
@@ -78,6 +80,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'hide_help_links', $hide_help_links);
 	set_preference($userid, 'indent', $indent);
 	set_preference($userid, 'paging', $paging);
+	set_preference($userid, 'date_format_string', $date_format_string);
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
 	#redirect("index.php");
@@ -89,11 +92,11 @@ if (isset($_POST["submit_form"])) {
 	$default_cms_lang = get_preference($userid, 'default_cms_language');
 	$old_default_cms_lang = $default_cms_lang;
 	$admintheme = get_preference($userid, 'admintheme');
-    $bookmarks = get_preference($userid, 'bookmarks');
-    $indent = get_preference($userid, 'indent', true);
-    $paging = get_preference($userid, 'paging', 0);
-    $hide_help_links = get_preference($userid, 'hide_help_links');
-
+	$bookmarks = get_preference($userid, 'bookmarks');
+	$indent = get_preference($userid, 'indent', true);
+	$paging = get_preference($userid, 'paging', 0);
+	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
+	$hide_help_links = get_preference($userid, 'hide_help_links');
 }
 
 include_once("header.php");
@@ -185,6 +188,12 @@ if (FALSE == empty($page_message)) {
 					</select>
 				</p>
 			</div>
+	    <div class="pageoverflow">
+		<p class="pagetext"><?php echo lang('date_format_string'); ?>:</p>
+		<p class="pageinput">
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20"><?php echo lang('date_format_string_help') ?>
+		</p>
+	    </div>
             <div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('admintheme');  ?>:</p>
 				<p class="pageinput">

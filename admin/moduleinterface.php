@@ -23,6 +23,10 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$userid = get_userid();
+
+$smarty =& $gCms->GetSmarty();
+$smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
 $id = '';
 $module = '';
@@ -44,7 +48,6 @@ elseif (isset($_REQUEST['mact']))
 
 if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
 {
-	$userid = get_userid();
 	if (get_preference($userid, 'use_wysiwyg') == "1")
 	{
 		$htmlarea_flag = "true";
