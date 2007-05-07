@@ -35,6 +35,14 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	if (isset($variables['formcount']))
 		$formcount = $variables['formcount'];
 
+	$id = cms_htmlentities($id);
+	$action = cms_htmlentities($action);
+	$returnid = cms_htmlentities($returnid);
+	$method = cms_htmlentities($method);
+	$enctype = cms_htmlentities($enctype);
+	$idsuffix = cms_htmlentities($idsuffix);
+	$extra = cms_htmlentities($extra);
+
 	if ($idsuffix == '')
 		$idsuffix = $formcount;
 
@@ -74,8 +82,9 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	}
 	foreach ($params as $key=>$value)
 	{
-		if ($key != 'module' && $key != 'action' && $key != 'id')
-			$text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />';
+	  $value = cms_htmlentities($value);
+	  if ($key != 'module' && $key != 'action' && $key != 'id')
+	    $text .= '<input type="hidden" name="'.$id.$key.'" value="'.$value.'" />';
 	}
 	$text .= "</div>\n";
 
@@ -88,7 +97,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
   $labeltext = cms_htmlentities($labeltext);
-  $text = '<label for="'.$id.$name.'"';
+  $text = '<label for="'.cms_htmlentities($id.$name).'"';
   if ($addttext != '')
     {
       $text .= ' ' . $addttext;
@@ -100,18 +109,35 @@ function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext=''
 
 function cms_module_CreateInputText(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
-	$value = str_replace('"', '&quot;', $value);
-	$text = '<input type="text" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
-	if ($addttext != '')
-	{
-		$text .= ' ' . $addttext;
-	}
-	$text .= " />\n";
-	return $text;
+  $value = cms_htmlentities($value);
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+  $addtext = cms_htmlentities($addtext);
+
+  $value = str_replace('"', '&quot;', $value);
+  
+  $text = '<input type="text" name="'.$id.$name.'" id="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
+  if ($addttext != '')
+    {
+      $text .= ' ' . $addttext;
+    }
+  $text .= " />\n";
+  return $text;
 }
 
 function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+  $addtext = cms_htmlentities($addtext);
+  $label = cms_htmlentities($label);
+  $labeladdtext = cms_htmlentities($labeladdtext);
+
         if ($label == '') {
 	  $label = $name;
 	}
@@ -123,6 +149,12 @@ function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='
 
 function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size='10',$addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $accept = cms_htmlentities($accept);
+  $size = cms_htmlentities($size);
+  $addtext = cms_htmlentities($addtext);
+
 	$text='<input type="file" name="'.$id.$name.'" size="'.$size.'"';
 	if ($accept != '')
 	{
@@ -138,6 +170,13 @@ function cms_module_CreateInputFile(&$modinstance, $id, $name, $accept='', $size
 
 function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $size='10', $maxlength='255', $addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $size = cms_htmlentities($size);
+  $maxlength = cms_htmlentities($maxlength);
+  $addtext = cms_htmlentities($addtext);
+
 	$value = str_replace('"', '&quot;', $value);
 	$text = '<input type="password" name="'.$id.$name.'" value="'.$value.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
@@ -150,6 +189,11 @@ function cms_module_CreateInputPassword(&$modinstance, $id, $name, $value='', $s
 
 function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $addtext = cms_htmlentities($addtext);
+
 	$value = str_replace('"', '&quot;', $value);
 	$text = '<input type="hidden" name="'.$id.$name.'" value="'.$value.'"';
 	if ($addttext != '')
@@ -162,6 +206,12 @@ function cms_module_CreateInputHidden(&$modinstance, $id, $name, $value='', $add
 
 function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $selectedvalue='', $addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $selectedvalue = cms_htmlentities($selectedvalue);
+  $addtext = cms_htmlentities($addtext);
+
 	$text = '<input type="checkbox" name="'.$id.$name.'" value="'.$value.'"';
 	if ($selectedvalue == $value)
 	{
@@ -177,6 +227,12 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $value='', $s
 
 function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $addttext='', $image='', $confirmtext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $image = cms_htmlentities($image);
+  $addtext = cms_htmlentities($addtext);
+
 	global $gCms;
 	$config =& $gCms->GetConfig();
 
@@ -208,6 +264,11 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 
 function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', $addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $addtext = cms_htmlentities($addtext);
+
 	$text = '<input type="reset" name="'.$id.$name.'" value="'.$value.'"';
 	if ($addttext != '')
 	{
@@ -219,6 +280,10 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
 
 function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $addtext = cms_htmlentities($addtext);
+
 	$text = '<input type="file" name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
@@ -230,6 +295,13 @@ function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='
 
 function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $selectedindex, $selectedvalue, $addttext)
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $selectedindex = cms_htmlentities($selectedindex);
+  $selectedvalue = cms_htmlentities($selectedvalue);
+  $addtext = cms_htmlentities($addtext);
+
 	$text = '<select name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
@@ -241,6 +313,8 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	{
 		foreach ($items as $key=>$value)
 		{
+		  $key = cms_htmlentities($key);
+		  $value = cms_htmlentities($value);
 			$text .= '<option value="'.$value.'"';
 			if ($selectedindex == $count || $selectedvalue == $value)
 			{
@@ -259,6 +333,13 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 
 function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $value = cms_htmlentities($value);
+  $addtext = cms_htmlentities($addtext);
+  $size = cms_htmlentities($size);
+  $multiple = cms_htmlentities($multiple);
+
 	$text = '<select name="'.$id.$name.'"';
 	if ($addttext != '')
 	{
@@ -272,6 +353,9 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 	$count = 0;
 	foreach ($items as $key=>$value)
 	{
+	  $key = cms_htmlentities($key);
+	  $value = cms_htmlentities($value);
+
 		$text .= '<option value="'.$value.'"';
 		if (in_array($value, $selecteditems))
 		{
@@ -289,10 +373,19 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 
 function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $selectedvalue = cms_htmlentities($selectedvalue);
+  $addtext = cms_htmlentities($addtext);
+  $delimiter = cms_htmlentities($delimiter);
+
 	$text = '';
 	$counter = 0;
 	foreach ($items as $key=>$value)
 	{
+	  $key = cms_htmlentities($key);
+	  $value = cms_htmlentities($value);
+
 		$counter = $counter + 1;
 		$text .= '<input type="radio" name="'.$id.$name.'" id="'.$id.$name.$counter.'" value="'.$value.'"';
 		if ($addttext != '')
@@ -312,10 +405,21 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 
 function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $contents='', $params=array(), $warn_message='', $onlyhref=false, $inline=false, $addttext='', $targetcontentonly=false, $prettyurl='')
 {
+  $id = cms_htmlentities($id);
+  $action = cms_htmlentities($action);
+  $returnid = cms_htmlentities($returnid);
+  $contents = cms_htmlentities($contents);
+  $warn_message = cms_htmlentities($warn_message);
+  $only_href = cms_htmlentities($only_href);
+  $inline = cms_htmlentities($inline);
+  $addtext = cms_htmlentities($addtext);
+  $targetcontonly = cms_htmlentities($targetcontonly);
+  $prettyurl = cms_htmlentities($prettyurl);
+
 	global $gCms;
 	$config =& $gCms->GetConfig();
 
-	$class = (isset($params['class'])?$params['class']:'');
+	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
 	if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
 	{
@@ -351,6 +455,8 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 		foreach ($params as $key=>$value)
 		{
+		  $key = cms_htmlentities($key);
+		  $value = cms_htmlentities($value);
 			if ($key != 'module' && $key != 'action' && $key != 'id')
 				$text .= '&amp;'.$id.$key.'='.rawurlencode($value);
 		}
@@ -390,6 +496,9 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 {
+  $pageid = cms_htmlentities($pageid);
+  $contents = cms_htmlentities($contents);
+
 	global $gCms;
 	$config = &$gCms->GetConfig();
 	$text = '<a href="';
@@ -419,6 +528,11 @@ function cms_module_CreateContentLink(&$modinstance, $pageid, $contents='')
 
 function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents='', $params=array(), $onlyhref=false)
 {
+  $id = cms_htmlentities($id);
+  $returnid = cms_htmlentities($returnid);
+  $contents = cms_htmlentities($contents);
+  $onlyhref = cms_htmlentities($onlyhref);
+
 	$text = '';
 	global $gCms;
 	$config = &$gCms->GetConfig();
@@ -441,6 +555,8 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 				$count = 0;
 				foreach ($params as $key=>$value)
 				{
+				  $key = cms_htmlentities($key);
+				  $value = cms_htmlentities($value);
 					if ($count > 0)
 					{
 						if ($config["assume_mod_rewrite"] && $rewrite == true)
@@ -469,6 +585,12 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 
 function cms_module_CreateFieldsetStart(&$modinstance, $id, $name, $legend_text='', $addtext='', $addtext_legend='')
 {
+  $id = cms_htmlentities($id);
+  $name = cms_htmlentities($name);
+  $legend_text = cms_htmlentities($legendtext);
+  $addtext = cms_htmlentities($addtext);
+  $addtext_legend = cms_htmlentities($addtext_legend);
+
 	$text = '<fieldset '. $addtext. '>'."\n";
 	$text .= '<legend '. $addtext_legend .'>'."\n";
 	$text .= $legend_text;

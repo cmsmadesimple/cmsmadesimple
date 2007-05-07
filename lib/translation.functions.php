@@ -102,11 +102,17 @@ function get_encoding($charset='', $defaultoverrides=true)
 	global $nls;
 	global $current_language;
 	global $config;
+	global $gCms;
+	$variables =& $gCms->variables;
 
 	if ($charset != '')
 	{
 		return $charset;
 	}
+        else if (isset($variables['current_encoding']) && $variables['current_encoding'] != "" )
+        {
+	  return $variables['current_encoding'];
+        }
 	else if (isset($config['default_encoding']) && $config['default_encoding'] != "" && $defaultoverrides == true)
 	{
 		return $config['default_encoding'];
@@ -119,6 +125,21 @@ function get_encoding($charset='', $defaultoverrides=true)
 	{
 		return "UTF-8"; //can't hurt
 	}
+}
+
+
+function set_encoding($charset)
+{
+  global $gCms;
+  $variables =& $gCms->variables;
+  
+  if( $charset == '' ) 
+    {
+      if( isset($variables['current_encoding']) )
+	unset($variables['current_encoding']);
+      return;
+    }
+  $variables['current_encoding'] =  $charset;
 }
 
 // Returns true if $string is valid UTF-8 and false otherwise.

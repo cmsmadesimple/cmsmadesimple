@@ -196,6 +196,12 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 {
 	$gCms->variables['pageinfo'] =& $pageinfo;
 
+	if( isset($pageinfo->template_encoding) && 
+	    $pageinfo->template_encoding != '' )
+	{
+	  set_encoding($pageinfo->template_encoding);
+	}
+
 	$gCms->variables['content_id'] = $pageinfo->content_id;
 	$gCms->variables['page'] = $page;
 	$gCms->variables['page_id'] = $page;

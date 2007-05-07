@@ -1161,7 +1161,7 @@ function cleanHtml($string, $remove = false) {
  * Returns all parameters sent that are destined for the module with
  * the given $id
  */
-function GetModuleParameters($id)
+function GetModuleParameters($id,$sanitize=true)
 {
 	$params = array();
 
@@ -1172,7 +1172,10 @@ function GetModuleParameters($id)
 			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
 			{
 				$key = str_replace($id, '', $key);
-				$params[$key] = cleanValue($value);
+				if( $sanitize )
+				  $params[$key] = cms_htmlentities($value,ENT_QUOTES,get_encoding());
+				else
+				  $params[$key] = cleanValue($value);
 			}
 		}
 	}

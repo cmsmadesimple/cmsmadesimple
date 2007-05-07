@@ -47,7 +47,13 @@ function cms_module_plugin($params,&$smarty)
 	$cmsmodules = &$gCms->modules;
 
 	$id = 'm' . ++$gCms->variables["modulenum"];
-	$params = array_merge($params, GetModuleParameters($id));
+
+	$returnid = '';
+	if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
+	  {
+	    $returnid = $gCms->variables['pageinfo']->content_id;
+	  }
+	$params = array_merge($params, GetModuleParameters($id,$returnid != ''));
 
 	$modulename = '';
 	$action = 'default';
@@ -119,12 +125,6 @@ function cms_module_plugin($params,&$smarty)
 					&& $cmsmodules[$modulename]['object']->IsPluginModule())
 				{
 					@ob_start();
-
-					$returnid = '';
-					if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
-					{
-						$returnid = $gCms->variables['pageinfo']->content_id;
-					}
 
 					$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
 					if ($result !== FALSE)

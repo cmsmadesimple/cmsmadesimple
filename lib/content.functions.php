@@ -587,8 +587,8 @@ class Smarty_CMS extends Smarty {
 			@ob_start();
 
 			$id = $smarty_obj->id;
-
-			$params = GetModuleParameters($id);
+			$returnid = isset($pageinfo)?$pageinfo->content_id:'';
+			$params = GetModuleParameters($id,$returnid != '');
 			$action = 'default';
 			if (isset($params['action']))
 			{
@@ -601,7 +601,7 @@ class Smarty_CMS extends Smarty {
 			$tpl_source = $modoutput;
 		}
 		
-		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . get_encoding());
 		if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
 		{
 			header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');
