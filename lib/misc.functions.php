@@ -1163,24 +1163,30 @@ function cleanHtml($string, $remove = false) {
  */
 function GetModuleParameters($id,$sanitize=true)
 {
-	$params = array();
+  // info: this was causing problems, so for now we're gonna force the old behaviour
+  $sanitize = false;
 
-	if ($id != '')
+  $params = array();
+  
+  if ($id != '')
+    {
+      foreach ($_REQUEST as $key=>$value)
 	{
-		foreach ($_REQUEST as $key=>$value)
+	  if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
+	    {
+	      $key = str_replace($id, '', $key);
+	      if( $sanitize )
+		$params[$key] = cms_htmlentities($value,ENT_QUOTES,get_encoding());
+	      else
 		{
-			if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
-			{
-				$key = str_replace($id, '', $key);
-				if( $sanitize )
-				  $params[$key] = cms_htmlentities($value,ENT_QUOTES,get_encoding());
-				else
-				  $params[$key] = cleanValue($value);
-			}
+// 		  $params[$key] = cleanValue($value);
+		  $params[$key] = $value;
 		}
+	    }
 	}
+    }
 
-	return $params;
+  return $params;
 }
 
 

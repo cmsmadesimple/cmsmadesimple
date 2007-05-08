@@ -287,7 +287,6 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $value = cms_htmlentities($value);
   $selectedindex = cms_htmlentities($selectedindex);
   $selectedvalue = cms_htmlentities($selectedvalue);
 
@@ -304,7 +303,8 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 		{
 		  $key = cms_htmlentities($key);
 		  $value = cms_htmlentities($value);
-			$text .= '<option value="'.$value.'"';
+	
+		$text .= '<option value="'.$value.'"';
 			if ($selectedindex == $count || $selectedvalue == $value)
 			{
 				$text .= ' ' . 'selected="selected"';
@@ -396,9 +396,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $action = cms_htmlentities($action);
   $returnid = cms_htmlentities($returnid);
   $warn_message = cms_htmlentities($warn_message);
-  $only_href = cms_htmlentities($only_href);
   $inline = cms_htmlentities($inline);
-  $targetcontonly = cms_htmlentities($targetcontonly);
   $prettyurl = cms_htmlentities($prettyurl);
 
 	global $gCms;
@@ -516,7 +514,6 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
   $id = cms_htmlentities($id);
   $returnid = cms_htmlentities($returnid);
   $contents = cms_htmlentities($contents);
-  $onlyhref = cms_htmlentities($onlyhref);
 
 	$text = '';
 	global $gCms;
