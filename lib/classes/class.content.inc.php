@@ -1276,6 +1276,13 @@ class ContentBase
 	$config = &$gCms->GetConfig();
 	$url = "";
 	$alias = ($this->mAlias != ''?$this->mAlias:$this->mId);
+
+	/* use root_url for default content */
+        if($this->mDefaultContent) {
+         $url =  $config['root_url']. '/';
+         return $url;
+        }
+
 	if ($config["assume_mod_rewrite"] && $rewrite == true)
 	{
 	    if ($config['use_hierarchy'] == true)
