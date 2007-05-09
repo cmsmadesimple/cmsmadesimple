@@ -65,16 +65,17 @@ function cms_module_plugin($params,&$smarty)
 	  $modulename = $params['module'];
 	else
 	  return '<!-- ERROR: module name not specified -->';
+
 	if (isset($params['idprefix'])) $id = trim($params['idprefix']);
 	if (isset($params['action']) && $params['action'] != '')
 	{
-		// action was set in the module tag
-		$action = $params['action'];
+	  // action was set in the module tag
+	  $action = $params['action'];
 	}
 
 	if (isset($_REQUEST['id'])) //Not really needed now...
 	{
-		$checkid = $_REQUEST['id'];
+	  $checkid = $_REQUEST['id'];
 	}
 	else if (isset($_REQUEST['mact']))
 	{
@@ -134,6 +135,7 @@ function cms_module_plugin($params,&$smarty)
 					$modresult = @ob_get_contents();
 					@ob_end_clean();
 					return $modresult;
+
 				}
 				else
 				{

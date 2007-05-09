@@ -177,7 +177,7 @@ class CMSModule
 	function function_plugin($params,&$smarty)
 	{
 	  $params['module'] = $this->GetName();
-	  cms_module_plugin($params,$smarty);
+	  return cms_module_plugin($params,$smarty);
 	}
 
 	/**
@@ -191,7 +191,7 @@ class CMSModule
 	  global $gCms;
 
 	  $smarty =& $gCms->GetSmarty();
-	  $smarty->register_plugin($this->GetName(),
+	  $smarty->register_function($this->GetName(),
 				   array($this,'function_plugin'));
 	}
 
