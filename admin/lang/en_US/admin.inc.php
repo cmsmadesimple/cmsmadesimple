@@ -121,6 +121,7 @@ $lang['admin']['edit'] = 'Edit';
 $lang['admin']['editconfiguration'] = 'Edit Configuration';
 $lang['admin']['editcontent'] = 'Edit Content';
 $lang['admin']['editcss'] = 'Edit Stylesheet';
+$lang['admin']['editcsssuccess'] = 'Stylesheet updated';
 $lang['admin']['editgroup'] = 'Edit Group';
 $lang['admin']['editpage'] = 'Edit Page';
 $lang['admin']['edittemplate'] = 'Edit Template';

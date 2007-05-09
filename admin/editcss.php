@@ -86,6 +86,9 @@ else if (isset($_GET["css_id"])) $css_id = $_GET["css_id"];
 $media_type = array();
 if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
 
+$ajax = false;
+if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
+
 # if the form has beeen cancelled, we redirect
 if (isset($_POST["cancel"]))
 {
@@ -211,6 +214,25 @@ if ($access)
 			}
 		} # end of updating
 	} # end of the user has submitted
+
+	if ($ajax)
+	{
+		header('Content-Type: text/xml');
+		print '<?xml version="1.0" encoding="UTF-8"?>';
+		print '<EditCSS>';
+		if ($error)
+		{
+			print '<Response>Error</Response>';
+			print '<Details><![CDATA[' . $error . ']]></Details>';
+		}
+		else
+		{
+			print '<Response>Success</Response>';
+			print '<Details><![CDATA[' . lang('editcsssuccess') . ']]></Details>';
+		}
+		print '</EditCSS>';
+		exit;
+	}
 	
 	# we've been called with a css id, we get it to show it on the form
 	else if (-1 != $css_id)
@@ -246,7 +268,64 @@ if (isset($_POST["apply"]))
     	$CMS_EXCLUDE_FROM_RECENT=1;
     }
 
+$headtext = <<<EOSCRIPT
+<script type="text/javascript">
+window.Edit_CSS_Apply = function(button)
+{
+	$('Edit_CSS_Result').innerHTML = '';
+	button.disabled = 'disabled';
+
+	var data = new Array();
+	data.push('ajax=1');
+	data.push('apply=1');
+	var elements = Form.getElements($('Edit_CSS'));
+	for (var cnt = 0; cnt < elements.length; cnt++)
+	{
+		var elem = elements[cnt];
+		if (elem.type == 'submit')
+		{
+			continue;
+		}
+		var query = Form.Element.serialize(elem);
+		data.push(query);
+	}
+
+	new Ajax.Request(
+		'{$_SERVER['REQUEST_URI']}'
+		, {
+			method: 'post'
+			, parameters: data.join('&')
+			, onSuccess: function(t)
+			{
+				button.removeAttribute('disabled');
+				var response = t.responseXML.documentElement.firstChild;
+				var details = t.responseXML.documentElement.lastChild;
+				var htmlShow = '';
+				if (response.textContent == 'Success')
+				{
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+				}
+				else
+				{
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details.textContent + '</div>';
+				}
+				$('Edit_CSS_Result').innerHTML = htmlShow;
+			}
+			, onFailure: function(t)
+			{
+				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
+			}
+		}
+	);
+	return false;
+}
+</script>
+EOSCRIPT;
+
 include_once("header.php");
+
+// AJAX result container
+print '<div id="Edit_CSS_Result"></div>';
 
 # if the user has no acess, we display an error
 if (!$access)
@@ -266,12 +345,12 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editstylesheet'); ?>
-	<form method="post" action="editcss.php">
+	<form id="Edit_CSS" method="post" action="editcss.php">
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_CSS_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
@@ -351,7 +430,7 @@ $existingtypes = array("all",
 				<input type="hidden" name="templateid" value="<?php echo $templateid?>" />
 				<input type="hidden" name="editcss" value="true" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_CSS_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>

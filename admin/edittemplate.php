@@ -217,8 +217,9 @@ if (strlen($template) > 0)
 // Encode the success message for javascript (stolen from smarty's modifier.escape.php)
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
-window.Template_Apply = function(button)
+window.Edit_Template_Apply = function(button)
 {
+	$('Edit_Template_Result').innerHTML = '';
 	button.disabled = 'disabled';
 
 	var data = new Array();
@@ -277,7 +278,7 @@ print '<div id="Edit_Template_Result"></div>';
 $submitbtns = '
 <!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
 	<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" onclick="return window.Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+	<input type="submit" onclick="return window.Edit_Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 ';
 
