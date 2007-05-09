@@ -62,6 +62,9 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
+$ajax = false;
+if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
+
 if ($preview || $apply)
 {
 	$CMS_EXCLUDE_FROM_RECENT=1;
@@ -290,6 +293,31 @@ if ($access)
 				redirect("listcontent.php?page=".$pagelist_id.'&message=contentupdated');
 			}
 		}
+
+		if ($ajax)
+		{
+			header('Content-Type: text/xml');
+			print '<?xml version="1.0" encoding="UTF-8"?>';
+			print '<EditContent>';
+			if ($error !== false)
+			{
+				print '<Response>Error</Response>';
+				print '<Details><![CDATA[';
+				if (!is_array($error))
+				{
+					$error = array($error);
+				}
+				print '<li>' . join('</li><li>', $error) . '</li>';
+				print ']]></Details>';
+			}
+			else
+			{
+				print '<Response>Success</Response>';
+				print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
+			}
+			print '</EditContent>';
+			exit;
+		}
 	}
 	else if ($content_id != -1 && !$preview && strtolower(get_class($contentobj)) != strtolower($content_type))
 	{
@@ -310,7 +338,62 @@ if (strlen($contentobj->Name()) > 0)
 	$CMS_ADMIN_SUBTITLE = $contentobj->Name();
 }
 
+$headtext .= <<<EOSCRIPT
+<script type="text/javascript">
+window.Edit_Content_Apply = function(button)
+{
+	var data = new Array();
+	data.push('ajax=1');
+	data.push('applybutton=1');
+
+	var elements = Form.getElements($('contentform'));
+	for (var cnt = 0; cnt < elements.length; cnt++)
+	{
+		var elem = elements[cnt];
+		if (elem.type == 'submit')
+		{
+			continue;
+		}
+		var query = Form.Element.serialize(elem);
+		data.push(query);
+	}
+
+	new Ajax.Request(
+		'{$_SERVER['REQUEST_URI']}'
+		, {
+			method: 'post'
+			, parameters: data.join('&')
+			, onSuccess: function(t)
+			{
+				button.removeAttribute('disabled');
+				var response = t.responseXML.documentElement.firstChild;
+				var details = t.responseXML.documentElement.lastChild;
+				var htmlShow = '';
+				if (response.textContent == 'Success')
+				{
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+				}
+				else
+				{
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details.textContent + '</ul></div>';
+				}
+				$('Edit_Content_Result').innerHTML = htmlShow;
+			}
+			, onFailure: function(t)
+			{
+				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
+			}
+		}
+	);
+
+	return false;
+}
+</script>
+EOSCRIPT;
 include_once("header.php");
+
+// AJAX result container
+print '<div id="Edit_Content_Result"></div>';
 
 $tmpfname = '';
 
@@ -390,7 +473,7 @@ $tabnames = $contentobj->TabNames();
 		?>
 	</div>
 	<div style="clear: both;"></div>
-	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" enctype="multipart/form-data" name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
+	<form method="post" action="editcontent.php<?php if (isset($content_id) && isset($pagelist_id)) echo "?content_id=$content_id&amp;page=$pagelist_id";?>" <?php // DTHOMAS enctype="multipart/form-data" ?> name="contentform" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
 <input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />
 <input type="hidden" name="content_id" value="<?php echo $content_id?>" />
 <input type="hidden" name="page" value="<?php echo $pagelist_id; ?>" />
@@ -408,7 +491,7 @@ if (isset($contentobj->mPreview) && $contentobj->mPreview == true)
   }
 */
 $submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onclick="return confirm(\''.lang('confirmcancel').'\');" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('canceldescription').'" />';
-$submit_buttons .= ' <input type="submit" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />
+$submit_buttons .= ' <input type="submit" onclick="return window.Edit_Content_Apply(this);" name="applybutton" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" title="'.lang('applydescription').'" />
 </p>
 </div>';
 //echo $submit_buttons;
