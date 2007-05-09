@@ -199,7 +199,7 @@ if (isset($_GET["message"])) {
 					}
 					else
 					{
-						echo "<a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+						echo "<a href=\"deletetemplate.php?template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onetemplate->name)."');\">";
 						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 						echo "</a>";
 					}

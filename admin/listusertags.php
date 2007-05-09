@@ -65,7 +65,7 @@ foreach($gCms->cmsplugins as $oneplugin)
 		echo "<td class=\"icons_wide\"><a href=\"edituserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\">";
 		echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
 		echo "</a></td>\n";
-		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+		echo "<td class=\"icons_wide\"><a href=\"deleteuserplugin.php?userplugin_id=".$gCms->userplugins[$oneplugin]."\" onclick=\"return confirm('".lang('deleteconfirm', $oneplugin)."');\">";
 		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 		echo "</a></td>\n";
 

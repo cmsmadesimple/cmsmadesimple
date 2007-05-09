@@ -132,7 +132,7 @@ if (isset($_GET["message"])) {
 				# if user has right to delete
 				if ($delcss)
 				{
-					echo "<td class=\"icons_wide\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm', $one['css_name'])."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 				}

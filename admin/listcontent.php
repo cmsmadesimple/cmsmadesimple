@@ -706,7 +706,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault")."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault", $one->mName)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 			}
 			else
 			{
@@ -777,7 +777,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				//var_dump($one->ChildCount());
                 if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm')."')) xajax_content_delete(".$one->Id()."); return false;\">";
+                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm', $one->mName)."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
                 }

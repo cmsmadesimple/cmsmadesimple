@@ -159,7 +159,7 @@ else {
 			# if user has right to delete
 			if ($delasso)
 			{
-				echo "<td><a href=\"deletetemplateassoc.php?id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+				echo "<td><a href=\"deletetemplateassoc.php?id=".$id."&amp;template_id=".$one["assoc_to_id"]."&amp;type=$type\" onclick=\"return confirm('".lang('deleteassociationconfirm',$one['template_name'] )."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 			}

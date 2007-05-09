@@ -312,7 +312,7 @@ foreach ($files as $file)
 				$filetext .= "<td>".$sizestr."</td>";
 				if ($access)
 				{
-					$filetext .= "<td><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					$filetext .= "<td><a href=\"files.php?action=deletefile&amp;reldir=".$reldir."&amp;file=".$file."\" onclick=\"return confirm('".lang('deleteconfirm', $file)."');\">";
 	                $filetext .= $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
 	                $filetext .= "</a></td>";
 				}

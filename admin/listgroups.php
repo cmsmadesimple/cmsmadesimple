@@ -100,7 +100,7 @@ include_once("header.php");
                     }
 				if ($remove)
 				    {
-					echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onegroup->name)."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
                     }
