@@ -190,6 +190,7 @@ if ($access)
 			else
 			{
 				print '<Response>Success</Response>';
+				print '<Details><![CDATA[' . lang('edittemplatesuccess') . ']]></Details>';
 			}
 			print '</EditTemplate>';
 			exit;
@@ -214,7 +215,6 @@ if (strlen($template) > 0)
     }
 
 // Encode the success message for javascript (stolen from smarty's modifier.escape.php)
-$successMessage = strtr(lang('edittemplatesuccess'), array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 window.Template_Apply = function(button)
@@ -247,15 +247,16 @@ window.Template_Apply = function(button)
 			{
 				button.removeAttribute('disabled');
 				var response = t.responseXML.documentElement.firstChild;
+				var details = t.responseXML.documentElement.lastChild;
 				var htmlShow = '';
 				if (response.textContent == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + "{$successMessage}" + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
 				}
 				else
 				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pagerror">';
-					htmlShow += t.responseXML.documentElement.lastChild.textContent;
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+					htmlShow += details.textContent;
 					htmlShow += '</ul></div>';
 				}
 				$('Edit_Template_Result').innerHTML = htmlShow;
