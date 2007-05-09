@@ -342,6 +342,7 @@ $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 window.Edit_Content_Apply = function(button)
 {
+	button.disabled = 'disabled';
 	var data = new Array();
 	data.push('ajax=1');
 	data.push('applybutton=1');
