@@ -40,10 +40,10 @@ if (isset($_REQUEST['id']))
 }
 elseif (isset($_REQUEST['mact']))
 {
-	$ary = explode(',', $_REQUEST['mact'], 4);
-	$module = (isset($ary[0])?$ary[0]:'');
-	$id = (isset($ary[1])?$ary[1]:'');
-	$action = (isset($ary[2])?$ary[2]:'');
+  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+  $module = (isset($ary[0])?$ary[0]:'');
+  $id = (isset($ary[1])?intval($ary[1]):'');
+  $action = (isset($ary[2])?$ary[2]:'');
 }
 
 if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
@@ -104,21 +104,21 @@ if (count($gCms->modules) > 0)
 	}
 	else
 	{
-	  $params = GetModuleParameters($id,false);
-		if (FALSE == empty($params['module_message']))
-		  {
-		    echo $themeObject->ShowMessage($params['module_message']);
-		  }
-		if (FALSE == empty($params['module_error']))
-		  {
-		    echo $themeObject->ShowErrors($params['module_error']);
-		  }
-		if (!$suppressOutput)
-			{
-			echo '<div class="pagecontainer">';
-			echo '<div class="pageoverflow">';
-			echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
-			}
+	  $params = GetModuleParameters($id);
+	  if (FALSE == empty($params['module_message']))
+	    {
+	      echo $themeObject->ShowMessage($params['module_message']);
+	    }
+	  if (FALSE == empty($params['module_error']))
+	    {
+	      echo $themeObject->ShowErrors($params['module_error']);
+	    }
+	  if (!$suppressOutput)
+	    {
+	      echo '<div class="pagecontainer">';
+	      echo '<div class="pageoverflow">';
+	      echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
+	    }
 	}
 
 	if (isset($gCms->modules[$module]))
@@ -128,7 +128,7 @@ if (count($gCms->modules) > 0)
 			@ob_start();
 		}
 		$id = 'm1_';
-		$params = GetModuleParameters($id,false);
+		$params = GetModuleParameters($id);
 		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
 		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 		{

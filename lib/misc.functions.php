@@ -1157,15 +1157,88 @@ function cleanHtml($string, $remove = false) {
 	return $string;
 }
 
+
+/**
+ * Method to sanitize all entries in 
+ * a hash
+ *
+*/
+define('CLEAN_INT','CLEAN_INT');
+define('CLEAN_FLOAT','CLEAN_FLOAT');
+define('CLEAN_NONE','CLEAN_NONE');
+define('CLEAN_STRING','CLEAN_STRING');
+function cleanParamHash($data,$map = false,$allow_unknown = false,$clean_keys = true)
+{
+  $mappedcount = 0;
+  $result = array();
+  foreach( $data as $key => $value )
+    {
+      $mapped = false;
+      if( is_array($map) )
+	{
+	  if( isset($map[$key]) )
+	    {
+	      switch( $map[$key] )
+		{
+		case 'CLEAN_INT':
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = (int) $value;
+		  break;
+		case 'CLEAN_FLOAT':
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = (float) $value;
+		  break;
+		case 'CLEAN_NONE':
+		  // pass through without cleaning.
+		  $mappedcount++;
+		  $mapped = true;
+		  break;
+		case 'CLEAN_STRING':
+		  $value = cms_htmlentities($value);
+		  $mappedcount++;
+		  $mapped = true;
+		  break;
+		default:
+		  $mappedcount++;
+		  $mapped = true;
+		  $value = cms_htmlentities($value);
+		  break;
+		}
+	    }
+	}
+      else
+	{
+	  // the map isn't set,
+	  if( $allow_unknown )
+	    {
+	      // but we're allowing unknown stuff so we'll just clean it.
+	      $value = cms_htmlentities($value);
+	      $mappedcount++;
+	      $mapped = true;
+	    }
+	}
+      if( $clean_keys )
+	{
+	  $key = cms_htmlentities($key);
+	}
+      if( !$mapped && !$allow_unknown )
+	{
+	  trigger_error('Parameter '.$key.' is not known... dropped',E_USER_WARNING);
+	  continue;
+	}
+      $result[$key]=$value;
+    }
+  return $result;
+}
+
 /**
  * Returns all parameters sent that are destined for the module with
  * the given $id
  */
-function GetModuleParameters($id,$sanitize=true)
+function GetModuleParameters($id)
 {
-  // info: this was causing problems, so for now we're gonna force the old behaviour
-  $sanitize = false;
-
   $params = array();
   
   if ($id != '')
@@ -1175,13 +1248,11 @@ function GetModuleParameters($id,$sanitize=true)
 	  if (strpos($key, (string)$id) !== FALSE && strpos($key, (string)$id) == 0)
 	    {
 	      $key = str_replace($id, '', $key);
-	      if( $sanitize )
-		$params[$key] = cms_htmlentities($value,ENT_QUOTES,get_encoding());
-	      else
+	      if( $key == 'id' || $key == 'returnid' )
 		{
-// 		  $params[$key] = cleanValue($value);
-		  $params[$key] = $value;
+		  $value = (int)$value;
 		}
+	      $params[$key] = $value;
 	    }
 	}
     }

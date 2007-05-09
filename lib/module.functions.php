@@ -53,7 +53,7 @@ function cms_module_plugin($params,&$smarty)
 	  {
 	    $returnid = $gCms->variables['pageinfo']->content_id;
 	  }
-	$params = array_merge($params, GetModuleParameters($id,$returnid != ''));
+	$params = array_merge($params, GetModuleParameters($id));
 
 	$modulename = '';
 	$action = 'default';
@@ -78,27 +78,27 @@ function cms_module_plugin($params,&$smarty)
 	}
 	else if (isset($_REQUEST['mact']))
 	{
-	        // we're handling an action
-		$ary = explode(',', $_REQUEST['mact'], 4);
-		$mactmodulename = (isset($ary[0])?$ary[0]:'');
-		if (strtolower($mactmodulename) == strtolower($params['module']))
+	  // we're handling an action
+	  $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
+	  $mactmodulename = (isset($ary[0])?$ary[0]:'');
+	  if (strtolower($mactmodulename) == strtolower($params['module']))
+	    {
+	      $checkid = (isset($ary[1])?intval($ary[1]):'');
+	      $mactaction = (isset($ary[2])?$ary[2]:'');
+	    }
+	  $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
+	  
+	  if ($checkid == $id)
+	    {
+	      // the action is for this instance of the module
+	      $inline = $mactinline;
+	      if( $inline == true )
 		{
-			$checkid = (isset($ary[1])?$ary[1]:'');
-			$mactaction = (isset($ary[2])?$ary[2]:'');
+		  // and we're inline (the results are supposed to replace
+		  // the tag, not {content}
+		  $action = $mactaction;
 		}
-		$mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);
-
-		if ($checkid == $id)
-		{
-		  // the action is for this instance of the module
-		  $inline = $mactinline;
-		  if( $inline == true )
-		    {
-		      // and we're inline (the results are supposed to replace
-		      // the tag, not {content}
-		      $action = $mactaction;
-		    }
-		}
+	    }
 	}
 
 	if( $action == '' ) $action = 'default'; // probably not needed, but safe

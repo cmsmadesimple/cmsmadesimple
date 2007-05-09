@@ -588,7 +588,7 @@ class Smarty_CMS extends Smarty {
 
 			$id = $smarty_obj->id;
 			$returnid = isset($pageinfo)?$pageinfo->content_id:'';
-			$params = GetModuleParameters($id,$returnid != '');
+			$params = GetModuleParameters($id);
 			$action = 'default';
 			if (isset($params['action']))
 			{

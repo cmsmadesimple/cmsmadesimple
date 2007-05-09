@@ -78,12 +78,12 @@ $page = '';
 
 if (isset($params['mact']))
 {
-	$ary = explode(',', $params['mact'], 4);
-	$smarty->id = (isset($ary[1])?$ary[1]:'');
+  $ary = explode(',', cms_htmlentities($params['mact']), 4);
+  $smarty->id = (isset($ary[1])?intval($ary[1]):'');
 }
 else
 {
-	$smarty->id = (isset($params['id'])?$params['id']:'');
+  $smarty->id = (isset($params['id'])?intval($params['id']):'');
 }
 
 if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))

@@ -47,6 +47,8 @@ class CMSModule
 	var $modform;
 	var $modredirect;
 	var $modmisc;
+	var $param_map;
+	var $restrict_unknown_params;
 	var $xml_exclude_files = array('^\.svn' , '^CVS$' , '^\#.*\#$' , '~$', '\.bak$' );
 	var $xmldtd = '
 <!DOCTYPE module [
@@ -92,6 +94,8 @@ class CMSModule
 		}
 		$this->langhash = array();
 		$this->params = array();
+		$this->param_map = array();
+		$this->restrict_unknown_params = false;
 		$this->wysiwygactive = false;
 		$this->error = '';
 		
@@ -104,6 +108,7 @@ class CMSModule
 		#$smarty = new CMSModuleSmarty($config, $this->GetName());
 		$this->smarty = &$gCms->GetSmarty();
 
+		$this->SetParameterType('module',CLEAN_STRING);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
@@ -335,6 +340,27 @@ class CMSModule
 	 */
 	function SetParameters()
 	{
+	}
+
+	function RestrictUnknownParams($flag = true)
+	{
+	  $this->restrict_unknown_params = $flag;
+	}
+
+	function SetParameterType($param, $type)
+	{
+	  switch($type)
+	    {
+	    case CLEAN_INT:
+	    case CLEAN_FLOAT:
+	    case CLEAN_NONE:
+	    case CLEAN_STRING:
+	      $this->param_map[trim($param)] = $type;
+	      break;
+	    default:
+	      trigger_error('Attempt to set invalid parameter type');
+	      break;
+	    }
 	}
 
 	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
@@ -1463,16 +1489,32 @@ class CMSModule
 
 	function DoActionBase($name, $id, $params, $returnid='')
 	{
+	  if( $returnid != '' )
+	    {
+	      if( !$this->restrict_unknown_params )
+		{
+		  trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
+		}
+	      // used to try to avert XSS flaws, this will
+	      // clean as many parameters as possible according
+	      // to a map specified with the SetParameterType metods.
+	      $params = cleanParamHash($params,$this->param_map,
+				       !$this->restrict_unknown_params);
+	    }
+
 		if (isset($params['lang']))
 		{
 			$this->curlang = $params['lang'];
-			#clear langhash so that new language can be loaded
 			$this->langhash = array();
 		}
 		if( !isset($params['action']) )
 		{
 			$params['action'] = $name;
 		}
+		$params['action'] = cms_htmlentities($params['action']);
+		$returnid = cms_htmlentities($returnid);
+		$id = cms_htmlentities($id);
+		$name = cms_htmlentities($name);
 		return $this->DoAction($name, $id, $params, $returnid);
 	}
 
@@ -2431,6 +2473,8 @@ class CMSModule
 	{
 		Events::SendEvent($this->GetName(), $eventname, $params);
 	}
+
+	
 }
 
 # vim:ts=4 sw=4 noet
