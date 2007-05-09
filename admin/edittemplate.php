@@ -53,6 +53,9 @@ if (isset($_REQUEST["cssid"])) $cssid = $_REQUEST["cssid"];
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["edittemplate"])) $active = 0;
 
+$ajax = false;
+if (isset($_POST['ajax']) and $_POST['ajax']) $ajax = true;
+
 $preview = false;
 /* there is no point for preview as there isnt any content to show
 tsw - 7.5.2007
@@ -157,9 +160,9 @@ if ($access)
 				
 				Events::SendEvent('Core', 'EditTemplatePost', array('template' => &$onetemplate));
 
+				audit($template_id, $onetemplate->name, 'Edited Template');
 				if (!$apply)
 				{
-					audit($template_id, $onetemplate->name, 'Edited Template');
 					if ($from == 'content')
 						redirect("listcontent.php");
 					else if ($from == 'cssassoc')
@@ -172,6 +175,24 @@ if ($access)
 			{
 				$error .= "<li>".lang('errorupdatingtemplate')."</li>";
 			}
+		}
+
+		if ($ajax)
+		{
+			header('Content-Type: text/xml');
+			print '<?xml version="1.0" encoding="UTF-8"?>';
+			print '<EditTemplate>';
+			if ($error)
+			{
+				print '<Response>Error</Response>';
+				print '<Details><![CDATA[' . $error . ']]></Details>';
+			}
+			else
+			{
+				print '<Response>Success</Response>';
+			}
+			print '</EditTemplate>';
+			exit;
 		}
 	}
 	else if ($template_id != -1 && !$preview)
@@ -191,12 +212,71 @@ if (strlen($template) > 0)
     {
     $CMS_ADMIN_SUBTITLE = $template;
     }
+
+// Encode the success message for javascript (stolen from smarty's modifier.escape.php)
+$successMessage = strtr(lang('edittemplatesuccess'), array('\\'=>'\\\\',"'"=>"\\'",'"'=>'\\"',"\r"=>'\\r',"\n"=>'\\n','</'=>'<\/'));
+$headtext = <<<EOSCRIPT
+<script type="text/javascript">
+window.Template_Apply = function(button)
+{
+	button.disabled = 'disabled';
+
+	var data = new Array();
+	data.push('ajax=1');
+	data.push('apply=1');
+	// Have to handle some of the serialization here (rather than Form.serialize()) because the cancel button can break things.
+	var elements = Form.getElements($('Edit_Template'));
+	for (var cnt = 0; cnt < elements.length; cnt++)
+	{
+		var elem = elements[cnt];
+		if (elem.type == 'submit')
+		{
+			// Leave off all submit buttons
+			continue;
+		}
+		var query = Form.Element.serialize(elem);
+		data.push(query);
+	}
+
+	new Ajax.Request(
+		'{$_SERVER['REQUEST_URI']}'
+		, {
+			method: 'post'
+			, parameters: data.join('&')
+			, onSuccess: function(t) 
+			{
+				button.removeAttribute('disabled');
+				var response = t.responseXML.documentElement.firstChild;
+				var htmlShow = '';
+				if (response.textContent == 'Success')
+				{
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + "{$successMessage}" + '</p></div>';
+				}
+				else
+				{
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pagerror">';
+					htmlShow += t.responseXML.documentElement.lastChild.textContent;
+					htmlShow += '</ul></div>';
+				}
+				$('Edit_Template_Result').innerHTML = htmlShow;
+			}
+			, onFailure: function(t) 
+			{
+				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
+			}
+		}
+	);
+	return false;
+}
+</script>
+EOSCRIPT;
 include_once("header.php");
+print '<div id="Edit_Template_Result"></div>';
 
 $submitbtns = '
 <!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
 	<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+	<input type="submit" onclick="return window.Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 ';
 
@@ -245,7 +325,7 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edittemplate'); ?>
-	<form method="post" action="edittemplate.php">
+	<form id="Edit_Template" method="post" action="edittemplate.php">
 		<p class="pageshowrows">
 			<a href="listcssassoc.php?type=template&amp;id=<?php echo $onetemplate->id ?>" target="_blank">
 				<?php echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon'); ?>

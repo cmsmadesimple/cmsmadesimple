@@ -123,6 +123,7 @@ $lang['admin']['editcss'] = 'Edit Stylesheet';
 $lang['admin']['editgroup'] = 'Edit Group';
 $lang['admin']['editpage'] = 'Edit Page';
 $lang['admin']['edittemplate'] = 'Edit Template';
+$lang['admin']['edittemplatesuccess'] = 'Template updated';
 $lang['admin']['edituser'] = 'Edit User';
 $lang['admin']['editusertag'] = 'Edit User Defined Tag';
 $lang['admin']['usertagadded'] = 'The User Defined Tag was successfully added.';
