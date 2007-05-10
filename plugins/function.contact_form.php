@@ -58,7 +58,6 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		if (!empty($_POST['email'])) $email = cfSanitize($_POST['email']);
 		if (!empty($_POST['subject'])) $subject = cfSanitize($_POST['subject']);
 		if (!empty($_POST['message'])) $message = $_POST['message'];
-		
 		if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha'])) 
 		{
 		    if (!empty($_POST['captcha_resp'])) { $captcha_resp = $_POST['captcha_resp']; }
@@ -88,7 +87,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 			echo "\t</ul>\n";
 			echo "</div>";
 		}
-		elseif (@mail($to, $subject, $message, $extra)) {
+		elseif (@mail($to, $subject, $message . "\n\nsender: ".$_SERVER["REMOTE_ADDR"] . ', ' . $_SERVER["HTTP_USER_AGENT"] , $extra)) {
 			echo '<div class="formMessage">Your message was successfully sent.</div>' . "\n";
 			return;
 		}
