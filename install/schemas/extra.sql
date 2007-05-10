@@ -205,6 +205,7 @@ INSERT INTO {DB_PREFIX}userplugins ( USERPLUGIN_ID, USERPLUGIN_NAME, CODE, CREAT
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'use_wysiwyg', '1', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'wysiwyg', 'TinyMCE', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'default_cms_language', 'en_US', null );
+INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'date_format_string', '%x %X', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'admintheme', 'default', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'bookmarks', 'on', null );
 INSERT INTO {DB_PREFIX}userprefs ( USER_ID, PREFERENCE, VALUE, TYPE ) VALUES ( 1, 'recent', 'on', null );
