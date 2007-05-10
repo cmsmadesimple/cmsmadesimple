@@ -41,12 +41,42 @@ if ($action == "showpluginhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))
 	{
+		echo '<div class="pagecontainer">';
+		// Display the title along with a wiki help link
+		$header  = '<div class="pageheader">';
+		$header .= lang('pluginhelp', array($plugin));
+		$wikiUrl = $config['wiki_url'];
+		$module_name = $plugin;
+		// Turn ModuleName into _Module_Name
+		$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
+		$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
+		if ($moduleName{0} == '_')
+		{
+			$moduleName = substr($moduleName, 1);
+		}
+		$wikiUrl .= '/Tags/'.$moduleName;
+		if (FALSE == get_preference($userid, 'hide_help_links'))
+		{
+			// Clean up URL
+			$wikiUrl = str_replace(' ', '_', $wikiUrl);
+			$wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
+
+			$help_title = lang('help_external');
+
+			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
+			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
+			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
+		}
+
+		$header .= '</div>';
+		echo $header;     
+
+		// Get and display the plugin's help
 		@ob_start();
 		call_user_func_array('smarty_cms_help_function_'.$plugin, array());
 		$content = @ob_get_contents();
 		@ob_end_clean();
-		echo '<div class="pagecontainer">';
-		echo '<p class="pageheader">'.lang('pluginhelp', array($plugin)).'</p>';		
+
 		echo $content;
 		echo "</div>";
 		echo '<p class="pageback"><a class="pageback" href="listtags.php">&#171; '.lang('back').'</a></p>';
