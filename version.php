@@ -19,7 +19,7 @@
 #$Id$
 
 $CMS_VERSION = "1.1";
-$CMS_VERSION_NAME = "Niihau";
+$CMS_VERSION_NAME = "Samoa";
 $CMS_SCHEMA_VERSION = "28";
 
 # vim:ts=4 sw=4 noet
