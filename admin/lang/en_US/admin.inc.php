@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
+$lang['admin']['allowparamcheckwarnings'] = 'Allow parameter checks to create warning messages';
 $lang['admin']['date_format_string'] = 'Date Format String';
 $lang['admin']['date_format_string_help'] = '<em>strftime</em> formatted date format string';
 $lang['admin']['last_modified_at'] = 'Last modified at';

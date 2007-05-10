@@ -47,6 +47,12 @@ $db =& $gCms->GetDb();
 $error = "";
 $message = "";
 
+$disablesafemodewarning = 0;
+if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
+
+$allowparamcheckwarnings = 1;
+if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = 1;
+
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
 
@@ -156,49 +162,53 @@ if (isset($_POST['clearcache']))
 }
 else if (isset($_POST["editsiteprefs"]))
 {
-	if ($access)
-	{
-	  set_site_preference('global_umask', $global_umask);
-	  set_site_preference('frontendlang', $frontendlang);
-		set_site_preference('enablecustom404', $enablecustom404);
-		set_site_preference('xmlmodulerepository', $xmlmodulerepository);
-		set_site_preference('custom404', $custom404);
-		set_site_preference('custom404template', $custom404template);
-		set_site_preference('enablesitedownmessage', $enablesitedownmessage);
-		set_site_preference('sitedownmessage', $sitedownmessage);
-		set_site_preference('defaultpagecontent', $defaultpagecontent);
-		set_site_preference('default_parent_page', $default_parent_page);
-		#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
-		#set_site_preference('useadvancedcss', $useadvancedcss);
-		set_site_preference('logintheme', $logintheme);
-		set_site_preference('metadata', $metadata);
-		set_site_preference('sitename', $sitename);
-		audit(-1, '', 'Edited Site Preferences');
-		//redirect("siteprefs.php");
-		//return;
-		$message .= lang('prefsupdated');
-	}
-	else
-	{
-		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
-	}
-} else if (!isset($_POST["submit"])) {
+  if ($access)
+    {
+      set_site_preference('global_umask', $global_umask);
+      set_site_preference('frontendlang', $frontendlang);
+      set_site_preference('enablecustom404', $enablecustom404);
+      set_site_preference('xmlmodulerepository', $xmlmodulerepository);
+      set_site_preference('custom404', $custom404);
+      set_site_preference('custom404template', $custom404template);
+      set_site_preference('enablesitedownmessage', $enablesitedownmessage);
+      set_site_preference('sitedownmessage', $sitedownmessage);
+      set_site_preference('defaultpagecontent', $defaultpagecontent);
+      set_site_preference('default_parent_page', $default_parent_page);
+#set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
+#set_site_preference('useadvancedcss', $useadvancedcss);
+      set_site_preference('logintheme', $logintheme);
+      set_site_preference('metadata', $metadata);
+      set_site_preference('sitename', $sitename);
+      set_site_preference('disablesafemodewarning',$disablesafemodewarning);
+      set_site_preference('allowparamcheckwarnings',$allowparamcheckwarnings);
+      audit(-1, '', 'Edited Site Preferences');
+      //redirect("siteprefs.php");
+      //return;
+      $message .= lang('prefsupdated');
+    }
+  else
+    {
+      $error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+    }
+ } else if (!isset($_POST["submit"])) {
   $global_umask = get_site_preference('global_umask',$global_umask);
-        $frontendlang = get_site_preference('frontendlang');
-	$enablecustom404 = get_site_preference('enablecustom404');
-	$custom404 = get_site_preference('custom404');
-	$custom404template = get_site_preference('custom404template');
-	$enablesitedownmessage = get_site_preference('enablesitedownmessage');
-	$sitedownmessage = get_site_preference('sitedownmessage');
-	$defaultpagecontent = get_site_preference('defaultpagecontent');
-	$default_parent_page = get_site_preference('default_parent_page');
-	$xmlmodulerepository = get_site_preference('xmlmodulerepository');
-	#$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
-	#$useadvancedcss = get_site_preference('useadvancedcss');
-	$logintheme = get_site_preference('logintheme', 'default');
-	$metadata = get_site_preference('metadata', '');
-	$sitename = get_site_preference('sitename', 'CMSMS Site');
-}
+  $frontendlang = get_site_preference('frontendlang');
+  $enablecustom404 = get_site_preference('enablecustom404');
+  $custom404 = get_site_preference('custom404');
+  $custom404template = get_site_preference('custom404template');
+  $enablesitedownmessage = get_site_preference('enablesitedownmessage');
+  $sitedownmessage = get_site_preference('sitedownmessage');
+  $defaultpagecontent = get_site_preference('defaultpagecontent');
+  $default_parent_page = get_site_preference('default_parent_page');
+  $xmlmodulerepository = get_site_preference('xmlmodulerepository');
+  #$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
+  #$useadvancedcss = get_site_preference('useadvancedcss');
+  $logintheme = get_site_preference('logintheme', 'default');
+  $metadata = get_site_preference('metadata', '');
+  $sitename = get_site_preference('sitename', 'CMSMS Site');
+  $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
+  $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',1);
+ }
 
 
 $templates = array();
@@ -384,6 +394,14 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 			?>
 			</p>
 		</div>	
+                <div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('disablesafemodewarning')?>:</p>
+			<p class="pageinput"><input class="pagenb" type="checkbox" name="disablesafemodewarning" <?php if($disablesafemodewarning) echo "checked=\"checked\""?> /></p>
+                </div>
+                <div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('allowparamcheckwarnings')?>:</p>
+			<p class="pageinput"><input class="pagenb" type="checkbox" name="allowparamcheckwarnings" <?php if($allowparamcheckwarnings) echo "checked=\"checked\""?> /></p>
+                </div>
 	<?php if ($access) { ?>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>

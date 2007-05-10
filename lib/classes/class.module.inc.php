@@ -1492,7 +1492,8 @@ class CMSModule
 	{
 	  if( $returnid != '' )
 	    {
-	      if( !$this->restrict_unknown_params )
+	      if( !$this->restrict_unknown_params && 
+		  get_site_preference('allowparamcheckwarnings',1))
 		{
 		  trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
 		}
