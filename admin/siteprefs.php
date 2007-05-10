@@ -51,7 +51,10 @@ $disablesafemodewarning = 0;
 if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
 
 $allowparamcheckwarnings = 1;
-if (isset($_POST["allowparamcheckwarnings"])) $allowparamcheckwarnings = 1;
+if (!isset($_POST["allowparamcheckwarnings"])) 
+  {
+    $allowparamcheckwarnings = 0;
+  }
 
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
