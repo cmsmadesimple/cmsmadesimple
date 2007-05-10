@@ -48,12 +48,38 @@ class CMSInstallerPage1 extends CMSInstallerPage
 		$settings['required'][] = $this->testBoolean(1, 'Checking for Session Functions', function_exists('session_start'));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for md5 Function', function_exists('md5'));
 		
-		$files = array(TMP_CACHE_LOCATION, TMP_TEMPLATES_C_LOCATION, CONFIG_FILE_LOCATION);
+		
+		/*
+		 * Required Settings
+		 */
+
+		$settings['required'][] = 
+		  $this->testBoolean(1,
+				     'Checking write permission on '.
+				     TMP_CACHE_LOCATION,
+				     is_writable(TMP_CACHE_LOCATION));
+		$settings['required'][] = 
+		  $this->testBoolean(1,
+				     'Checking write permission on '.
+				     TMP_TEMPLATES_C_LOCATION,
+				     is_writable(TMP_TEMPLATES_C_LOCATION));
+		$settings['required'][] = 
+		  $this->testBoolean(1,
+				     'Checking write permission on '.
+				     CONFIG_FILE_LOCATION,
+				     is_writable(CONFIG_FILE_LOCATION),
+		  'This file may not exist yet.  If it does not, you should
+                   create an empty file with this name. Please also ensure 
+                   that this file writable by the web server process.' );
+
 		foreach ($files as $file)
 		{
 			$settings['required'][] = $this->testBoolean(1, "Checking write permission on $file", is_writable($file));
 		}
 		
+		/*
+		 * Recommended Settings
+		 */
 		$settings['recommended'][] = $this->testBoolean(0, 'Checking for basic XML (expat) support', function_exists('xml_parser_create'), 'XML support is not compiled into your php install.  You can still use the system, but will not be able to use any of the remote module installation functions.');
 		$settings['recommended'][] = $this->testIniBoolean(0, 'Checking file uploads', 'file_uploads', 'When file uploads are disabled you will not be able to use any of the file uploading facilities included in CMS Made Simple.  If possible, this restriction should be lifted by your system admin to properly use all file management features of the system.  Proceed with caution.');
 		
