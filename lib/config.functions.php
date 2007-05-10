@@ -47,7 +47,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["use_smarty_php_tags"] = false;
 	$config["previews_path"] = $config["root_path"] . "/tmp/cache";
 	$config["uploads_path"] = $config["root_path"] . "/uploads";
-	$config["uploads_url"] = $config["root_url"] . "/uploads";
+	$config["uploads_url"] = '/uploads'; 
 	$config["max_upload_size"] = 1000000;
 	$config["debug"] = false;
 	$config["assume_mod_rewrite"] = false;
@@ -58,7 +58,7 @@ function cms_config_load($loadLocal = true, $upgrade = false)
 	$config["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 	$config["use_Indite"] = true;
 	$config["image_uploads_path"] = $config["root_path"] . "/uploads/images";
-	$config["image_uploads_url"] = $config["root_url"] . "/uploads/images";
+	$config["image_uploads_url"] = '/uploads/images'; 
 	$config["default_encoding"] = "";
 	$config["disable_htmlarea_translation"] = false;
 	$config["admin_dir"] = "admin";
@@ -160,8 +160,13 @@ function cms_config_text($config)
 #-------------
 
 #Document root as seen from the webserver.  No slash at the end
+#If page is requested with https use https as root url
 #e.g. http://blah.com
 \$config['root_url'] = '{$config['root_url']}';
+if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
+{
+  \$config['root_url'] = str_replace('http','https',\$config['root_url']);
+}
 
 #Path to document root. This should be the directory this file is in.
 #e.g. /var/www/localhost
@@ -177,7 +182,7 @@ function cms_config_text($config)
 \$config['uploads_path'] = '{$config['uploads_path']}';
 
 #Where is the url to this uploads directory?
-\$config['uploads_url'] = '{$config['uploads_url']}';
+\$config['uploads_url'] = \$config['root_url'] . '{$config['uploads_url']}';
 
 #---------------
 #Upload Settings
@@ -239,7 +244,7 @@ function cms_config_text($config)
 
 #Default path and URL for uploaded images in the image manager
 \$config['image_uploads_path'] = '{$config['image_uploads_path']}';
-\$config['image_uploads_url'] = '{$config['image_uploads_url']}'; 
+\$config['image_uploads_url'] = \$config['root_url'] . '{$config['image_uploads_url']}'; 
 
 #------------------------
 #Locale/Encoding Settings
@@ -317,6 +322,7 @@ function cms_config_upgrade()
 	$newfiledir = dirname(CONFIG_FILE_LOCATION);
 	$newfilename = CONFIG_FILE_LOCATION;
 	$oldconfiglines = array();
+	$oldconfig = cms_config_load();
 	if (is_writable($newfilename) || is_writable($newfiledir))
 	{
 		$handle = fopen($newfilename, "r");
@@ -332,12 +338,26 @@ function cms_config_upgrade()
 			{
 				foreach ($oldconfiglines as $oneline)
 				{
+					/** from some ancient version? */
 					$newline = trim(preg_replace('/\$this-\>(\S+)/', '$config["$1"]', $oneline));
+
+					/* uploads_url, remove root url */
+					if(preg_match( '/\$config\[\'uploads_url\'\]/' , $oneline) ) {
+						$newline = str_replace($oldconfig['root_url'], '', $oneline);
+					}
+
+					/* image_uploads_url, remove root url */
+					if(preg_match('/\$config\[\'image_uploads_url\'\]/',$oneline)) {
+						$newline = str_replace($oldconfig['root_url'], '', $oneline);
+					}
+			
 					if ($newline != "?>")
 					{
 						$newline .= "\n";
 					}
 					fwrite($handle, $newline);
+					
+					
 				}
 				fclose($handle);
 			}
