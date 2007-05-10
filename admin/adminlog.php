@@ -27,7 +27,7 @@ check_login();
 global $gCms;
 $db =& $gCms->GetDb();
 
-$dateformat = get_preference(get_userid(),'date_format_string');
+$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
 $result = $db->Execute("SELECT * FROM ".cms_db_prefix()."adminlog ORDER BY timestamp DESC");
 $totalrows = $result->RecordCount();

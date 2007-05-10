@@ -43,7 +43,7 @@ global $gCms;
 $styleops =& $gCms->GetStylesheetOperations();
 $db =& $gCms->GetDb();
 
-$dateformat = get_preference(get_userid(),'date_format_string');
+$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
 #******************************************************************************
 # Definition of global vars

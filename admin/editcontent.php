@@ -27,7 +27,7 @@ $userid = get_userid();
 
 include_once("../lib/classes/class.admintheme.inc.php");
 
-$dateformat = get_preference(get_userid(),'date_format_string');
+$dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
