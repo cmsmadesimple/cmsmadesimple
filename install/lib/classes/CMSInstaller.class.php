@@ -182,6 +182,13 @@ class CMSInstaller
 				}
 				break;
 			case 4:
+				if( isset($_POST['prefix']) 
+				    && $_POST['prefix'] != '' 
+				    && !preg_match('/^[a-zA-Z0-9_]+$/', trim($_POST['prefix'])) )
+				{
+				  $this->errors[] = 'Database prefix contains invalid characters'; 
+				  $this->currentPage = 3;
+				}
 				if ($_POST['dbms'] == '')
 				{
 					$this->errors[] = 'No dbms selected!';
