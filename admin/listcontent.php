@@ -684,7 +684,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             $thelist .= "<td>&nbsp;</td>\n";
         }
-        if (check_permission($userid, 'Modify Page Structure'))
+        if (check_permission($userid, 'Modify Page Structure') ||
+	    check_permission($userid, 'Modify Any Page') )
         {
             if ($display == 'edit' || $display == 'structure')
             {
