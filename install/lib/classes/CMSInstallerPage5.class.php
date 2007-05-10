@@ -110,7 +110,7 @@ class CMSInstallerPage5 extends CMSInstallerPage
 		$newconfig["image_transform_lib_path"] = "/usr/bin/ImageMagick/";
 		$newconfig["use_Indite"] = false;
 		$newconfig["image_uploads_path"] = $newconfig['root_path'] . DIRECTORY_SEPARATOR . "uploads" . DIRECTORY_SEPARATOR . "images";
-		$newconfig["image_uploads_url"] = $newconfig['root_url'] . "/uploads/images";
+		$newconfig["image_uploads_url"] = "/uploads/images";
 		$newconfig["default_encoding"] = "";
 		$newconfig["disable_htmlarea_translation"] = false;
 		$newconfig["admin_dir"] = "admin";
