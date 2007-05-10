@@ -84,7 +84,7 @@ function cms_module_plugin($params,&$smarty)
 	  $mactmodulename = (isset($ary[0])?$ary[0]:'');
 	  if (strtolower($mactmodulename) == strtolower($params['module']))
 	    {
-	      $checkid = (isset($ary[1])?intval($ary[1]):'');
+	      $checkid = (isset($ary[1])?$ary[1]:'');
 	      $mactaction = (isset($ary[2])?$ary[2]:'');
 	    }
 	  $mactinline = (isset($ary[3]) && $ary[3] == 1?true:false);

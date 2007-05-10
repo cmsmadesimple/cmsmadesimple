@@ -42,7 +42,7 @@ elseif (isset($_REQUEST['mact']))
 {
   $ary = explode(',', cms_htmlentities($_REQUEST['mact']), 4);
   $module = (isset($ary[0])?$ary[0]:'');
-  $id = (isset($ary[1])?intval($ary[1]):'');
+  $id = (isset($ary[1])?$ary[1]:'');
   $action = (isset($ary[2])?$ary[2]:'');
 }
 

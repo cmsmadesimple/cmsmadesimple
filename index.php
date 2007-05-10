@@ -79,7 +79,7 @@ $page = '';
 if (isset($params['mact']))
 {
   $ary = explode(',', cms_htmlentities($params['mact']), 4);
-  $smarty->id = (isset($ary[1])?intval($ary[1]):'');
+  $smarty->id = (isset($ary[1])?$ary[1]:'');
 }
 else
 {

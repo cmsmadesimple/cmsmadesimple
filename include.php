@@ -111,6 +111,7 @@ global $DONT_LOAD_DB;
 if (!isset($DONT_LOAD_DB))
 {
     $cmsdb =& $gCms->GetDB();
+    $cmsdb->Execute('set names utf8'); // database connection with utf-8
 }
 
 $smarty =& $gCms->GetSmarty();
