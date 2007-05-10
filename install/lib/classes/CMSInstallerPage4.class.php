@@ -38,6 +38,7 @@ class CMSInstallerPage4 extends CMSInstallerPage
 		$values['admininfo']['username'] = $_POST['adminusername'];
 		$values['admininfo']['email'] = $_POST['adminemail'];
 		$values['admininfo']['password'] = $_POST['adminpassword'];
+		$values['admininfo']['email_accountinfo'] = $_POST['email_accountinfo'];
 		$values['createtables'] = isset($_POST['createtables']) ? 1 : (isset($_POST['sitename']) ? 0 : 1);
 		$this->smarty->assign('docroot', 'http://' . $_SERVER['HTTP_HOST'] . substr($_SERVER['PHP_SELF'], 0, strlen($_SERVER['PHP_SELF']) - 18));
 		$this->smarty->assign('docpath', CMS_BASE); 
