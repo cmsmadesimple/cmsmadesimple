@@ -53,6 +53,35 @@ function smarty_cms_function_print($params, &$smarty)
 		$goback = '&amp;goback=1';
 		}
 	}
+
+        if (!empty($params['title']) and $params['title'])
+        {
+                $title = ' title="'.$params['title'].'"';
+        }
+        else
+        {
+                $title = ' title="'.$text.'"';
+        }
+
+        $more = '';
+        if (!empty($params['more']) and $params['more'])
+        {
+                $more = ' '.$params['more'];
+        }
+
+        $src_img = $gCms->config['root_url'].'/images/cms/printbutton.gif';
+        if (!empty($params['src_img']) and $params['src_img'])
+        {
+                $src_img = $params['src_img'];
+        }
+
+        $class_img = '';
+        if (!empty($params['class_img']) and $params['class_img'])
+        {
+                $class_img = ' class="'. $params['class_img'] .'"';
+        }
+
+
 	if (true == $gCms->config['assume_mod_rewrite'])
 	{
 		$hm =& $gCms->GetHierarchyManager();
@@ -69,10 +98,11 @@ function smarty_cms_function_print($params, &$smarty)
 	}
 
 	//will this work if using htaccess? (Yes! -Wishy)
-	$output = '<a class="'. $class .'" href="' . $page_url . $goback . $js . '"'. $target . '>';
+        $output = '<a class="'. $class .'" href="' . $page_url . $goback . $js . '"'. $target . $title . $more . '>';
 	if (isset($params['showbutton']))
 	{
-		$output .= '<img src="'.$gCms->config['root_url'].'/images/cms/printbutton.gif" title="'.$text.'" alt="'.$text.'"/>';
+               $output .= '<img src="'.$src_img.'" alt="'.$text.'"' . $title . $class_img . ' />';
+
 	}
 	else
 	{
@@ -95,6 +125,11 @@ function smarty_cms_help_function_print() {
                 <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
                 <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
                 <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.
+                <li><em>(optional)</em> title - Text to show for title attribute. If blank show text parameter.</li>
+                <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
+                <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
+                <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
+
                     <p>Example:</p>
                      <pre>{print text="Printable Page"}</pre>      
                      </li>
@@ -109,6 +144,7 @@ function smarty_cms_about_function_print() {
 	<p>
 	Change History:<br/>
 	1.1 - Modified to customize print page (roman)
+	1.2 - Modified for xhtml, accessibility and personal image file (alby)
 	</p>
 	<?php
 }
