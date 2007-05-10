@@ -109,6 +109,7 @@ class CMSModule
 		$this->smarty = &$gCms->GetSmarty();
 
 		$this->SetParameterType('module',CLEAN_STRING);
+		$this->SetParameterType('lang',CLEAN_STRING);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
