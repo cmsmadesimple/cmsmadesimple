@@ -40,6 +40,9 @@ if (isset($_POST['content'])) $content = $_POST['content'];
 $owner_id = "";
 if (isset($_POST['owner_id'])) $owner_id = $_POST['owner_id'];
 
+$ajax = false;
+if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
+
 $htmlblob_id = -1;
 if (isset($_POST["htmlblob_id"])) $htmlblob_id = $_POST["htmlblob_id"];
 else if (isset($_GET["htmlblob_id"])) $htmlblob_id = $_GET["htmlblob_id"];
@@ -150,6 +153,25 @@ if ($access)
 				$error .= "<li>".lang('errorinsertingblob')."</li>";
 			}
 		}
+
+		if ($ajax)
+		{
+			header('Content-Type: text/xml');
+			print '<?xml version="1.0" encoding="UTF-8"?>';
+			print '<EditBlob>';
+			if ($error)
+			{
+				print '<Response>Error</Response>';
+				print '<Details><![CDATA[' . $error . ']]></Details>';
+			}
+			else
+			{
+				print '<Response>Success</Response>';
+				print '<Details><![CDATA[' . lang('edithtmlblobsuccess') . ']]></Details>';
+			}
+			print '</EditBlob>';
+			exit;
+		}
 	}
 	else if ($htmlblob_id != -1)
 	{
@@ -166,7 +188,84 @@ if (strlen($htmlblob) > 0)
     $CMS_ADMIN_SUBTITLE = $htmlblob;
     }
 
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
+	{
+		continue;
+	}
+
+	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
+	}
+}
+
+$headtext = <<<EOSCRIPT
+<script type="text/javascript">
+window.Edit_Blob_Apply = function(button)
+{
+	$addlScriptSubmit
+	$('Edit_Blob_Result').innerHTML = '';
+	button.disabled = 'disabled';
+
+	var data = new Array();
+	data.push('ajax=1');
+	data.push('apply=1');
+	var elements = Form.getElements($('Edit_Blob'));
+	for (var cnt = 0; cnt < elements.length; cnt++)
+	{
+		var elem = elements[cnt];
+		if (elem.type == 'submit')
+		{
+			continue;
+		}
+		var query = Form.Element.serialize(elem);
+		data.push(query);
+	}
+
+	new Ajax.Request(
+		'{$_SERVER['REQUEST_URI']}'
+		, {
+			method: 'post'
+			, parameters: data.join('&')
+			, onSuccess: function(t)
+			{
+				button.removeAttribute('disabled');
+				var response = t.responseXML.documentElement.firstChild;
+				var details = t.responseXML.documentElement.lastChild;
+				var htmlShow = '';
+				if (response.textContent == 'Success')
+				{
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+				}
+				else
+				{
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
+					htmlShow += details.textContent;
+					htmlShow += '</ul></div>';
+				}
+				$('Edit_Blob_Result').innerHTML = htmlShow;
+			}
+			, onFailure: function(t)
+			{
+				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
+			}
+		}
+	);
+
+	return false;
+}
+</script>
+EOSCRIPT;
+
 include_once("header.php");
+
+// Holder for AJAX apply result
+print '<div id="Edit_Blob_Result"></div>';
+
 global $gCms;
 $db =& $gCms->GetDb();
 
@@ -219,13 +318,13 @@ else
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edithtmlblob'); ?>
-	<form method="post" action="edithtmlblob.php">
+	<form id="Edit_Blob" method="post" action="edithtmlblob.php">
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
 			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
 		<div class="pageoverflow">
@@ -259,7 +358,7 @@ else
 					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
 				<?php } ?>
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
 	</form>
