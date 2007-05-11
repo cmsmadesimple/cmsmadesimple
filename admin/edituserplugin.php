@@ -55,6 +55,9 @@ if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
+$ajax = false;
+if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
+
 if ($access) {
 	if (isset($_POST["editplugin"])) {
 
@@ -133,6 +136,31 @@ if ($access) {
 				$error[] = lang('errorupdatingusertag');
 			}
 		}
+
+		if ($ajax)
+		{
+			header('Content-Type: text/xml');
+			print '<?xml version="1.0" encoding="UTF-8"?>';
+			print '<EditUserPlugin>';
+			if (sizeof($error))
+			{
+				print '<Response>Error</Response>';
+				print '<Details><![CDATA[';
+				if (!is_array($error))
+				{
+					$error = array($error);
+				}
+				print '<li>' . join('</li><li>', $error) . '</li>';
+				print ']]></Details>';
+			}
+			else
+			{
+				print '<Response>Success</Response>';
+				print '<Details><![CDATA[' . lang('usertagupdated') . ']]></Details>';
+			}
+			print '</EditUserPlugin>';
+			exit;
+		}
 	}
 	else if ($userplugin_id != -1) {
 
@@ -150,7 +178,82 @@ if (strlen($plugin_name)>0)
     {
     $CMS_ADMIN_SUBTITLE = $plugin_name;
     }
+
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
+	{
+		continue;
+	}
+
+	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
+	}
+}
+
+$headtext = <<<EOSCRIPT
+<script type="text/javascript">
+window.Edit_UserPlugin_Apply = function(button)
+{
+	$addlScriptSubmit
+	$('Edit_UserPlugin_Result').innerHTML = '';
+	button.disabled = 'disabled';
+
+	var data = new Array();
+	data.push('ajax=1');
+	data.push('apply=1');
+
+	var elements = Form.getElements($('Edit_UserPlugin'));
+	for (var cnt = 0; cnt < elements.length; cnt++)
+	{
+		var elem = elements[cnt];
+		if (elem.type == 'submit')
+		{
+			continue;
+		}
+		var query = Form.Element.serialize(elem);
+		data.push(query);
+	}
+
+	new Ajax.Request(
+		'{$_SERVER['REQUEST_URI']}'
+		, {
+			method: 'post'
+			, parameters: data.join('&')
+			, onSuccess: function(t)
+			{
+				button.removeAttribute('disabled');
+				var response = t.responseXML.documentElement.firstChild;
+				var details = t.responseXML.documentElement.lastChild;
+				var htmlShow = '';
+				if (response.textContent == 'Success')
+				{
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+				}
+				else
+				{
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details.textContent + '</ul></div>';
+				}
+				$('Edit_UserPlugin_Result').innerHTML = htmlShow;
+			}
+			, onFailure: function(t)
+			{
+				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
+			}
+		}
+	);
+
+	return false;
+}
+</script>
+EOSCRIPT;
+
 include_once("header.php");
+
+// AJAX result container is below the apply buttons, in this case (no top apply button)
 
 if (!$access) {
 	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
@@ -164,7 +267,7 @@ else {
 
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editusertag'); ?>
-		<form enctype="multipart/form-data" action="edituserplugin.php" method="post">
+		<form id="Edit_UserPlugin" enctype="multipart/form-data" action="edituserplugin.php" method="post">
 			<div class="pageoverflow">
 				<p class="pagetext">*<?php echo lang('name')?>:</p>
 				<p class="pageinput"><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
@@ -183,7 +286,7 @@ else {
 						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
 						<input type="hidden" name="editplugin" value="true" />
 						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+						<input type="submit" onclick="return window.Edit_UserPlugin_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				</p>
 			</div>
@@ -191,6 +294,7 @@ else {
 </div>
 <?php
 }
+print '<div id="Edit_UserPlugin_Result"></div>';
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
