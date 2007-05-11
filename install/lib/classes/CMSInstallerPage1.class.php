@@ -72,10 +72,13 @@ class CMSInstallerPage1 extends CMSInstallerPage
                    create an empty file with this name. Please also ensure 
                    that this file writable by the web server process.' );
 
+/* old code? */
+/*
 		foreach ($files as $file)
 		{
 			$settings['required'][] = $this->testBoolean(1, "Checking write permission on $file", is_writable($file));
 		}
+*/
 		
 		/*
 		 * Recommended Settings
