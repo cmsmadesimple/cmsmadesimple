@@ -102,7 +102,8 @@ class ImageManager
 			return $dirs;
 
 		$d = @dir($base);
-		
+		if( !$d ) return $dirs;
+	
 		while (false !== ($entry = $d->read())) 
 		{
 			//If it is a directory, and it doesn't start with
