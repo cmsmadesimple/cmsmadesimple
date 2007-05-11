@@ -104,7 +104,7 @@ if ($result && $result->RecordCount() > 0)
                echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
                echo "<td>".$row["item_name"]."</td>\n";
                echo "<td>".$row["action"]."</td>\n";
-	       echo "<td>".strftime($dateformat,$db->UnixTimeStamp($row['timestamp']))."</td>\n";
+			   echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
 	       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
                echo "</tr>\n";
 
