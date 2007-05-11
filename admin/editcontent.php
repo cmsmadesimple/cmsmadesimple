@@ -338,10 +338,27 @@ if (strlen($contentobj->Name()) > 0)
 	$CMS_ADMIN_SUBTITLE = $contentobj->Name();
 }
 
+// Detect if a WYSIWYG is in use, and grab its form submit action
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
+	{
+		continue;
+	}
+
+	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
+	}
+}
+
 $headtext .= <<<EOSCRIPT
 <script type="text/javascript">
 window.Edit_Content_Apply = function(button)
 {
+	$addlScriptSubmit
 	$('Edit_Content_Result').innerHTML = '';
 	button.disabled = 'disabled';
 	var data = new Array();
