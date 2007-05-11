@@ -40,13 +40,13 @@ if (isset($_GET['download']))
 	{
 		while ($row = $result->FetchRow()) 
 		{
-		  echo strftime($dateformat,$db->UnixTimeStamp($row['timestamp'])).'\t';
+		  echo strftime($dateformat,$row['timestamp']).'\t';
 //			echo date("D M j, Y G:i:s", $row["timestamp"]) . "\t";
-			echo $row['username'] . "\t";
-			echo $row['item_id'] . "\t";
-			echo $row['item_name'] . "\t";
-			echo $row['action'] . "\t";
-			echo "\n";
+		  echo $row['username'] . "\t";
+		  echo $row['item_id'] . "\t";
+		  echo $row['item_name'] . "\t";
+		  echo $row['action'] . "\t";
+		  echo "\n";
 		}
 	}
 	return;
