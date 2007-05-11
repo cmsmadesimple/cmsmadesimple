@@ -214,11 +214,27 @@ if (strlen($template) > 0)
     $CMS_ADMIN_SUBTITLE = $template;
     }
 
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
+	{
+		continue;
+	}
+
+	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
+	}
+}
+
 // Encode the success message for javascript (stolen from smarty's modifier.escape.php)
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 window.Edit_Template_Apply = function(button)
 {
+	$addlScriptSubmit
 	$('Edit_Template_Result').innerHTML = '';
 	button.disabled = 'disabled';
 

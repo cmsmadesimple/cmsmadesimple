@@ -268,10 +268,26 @@ if (isset($_POST["apply"]))
     	$CMS_EXCLUDE_FROM_RECENT=1;
     }
 
+$addlScriptSubmit = '';
+foreach (array_keys($gCms->modules) as $moduleKey)
+{
+	$module =& $gCms->modules[$moduleKey];
+	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
+	{
+		continue;
+	}
+
+	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
+	{
+		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
+	}
+}
+
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 window.Edit_CSS_Apply = function(button)
 {
+	$addlScriptSubmit
 	$('Edit_CSS_Result').innerHTML = '';
 	button.disabled = 'disabled';
 
