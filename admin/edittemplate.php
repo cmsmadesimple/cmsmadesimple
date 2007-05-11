@@ -229,7 +229,6 @@ foreach (array_keys($gCms->modules) as $moduleKey)
 	}
 }
 
-// Encode the success message for javascript (stolen from smarty's modifier.escape.php)
 $headtext = <<<EOSCRIPT
 <script type="text/javascript">
 window.Edit_Template_Apply = function(button)
