@@ -110,6 +110,7 @@ class CMSModule
 
 		$this->SetParameterType('module',CLEAN_STRING);
 		$this->SetParameterType('lang',CLEAN_STRING);
+		$this->SetParameterType('returnid',CLEAN_INT);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
