@@ -303,6 +303,7 @@ $lang['admin']['errorinsertingblob'] = 'There was an error inserting the Global 
 $lang['admin']['addhtmlblob'] = 'Add Global Content Block';
 $lang['admin']['edithtmlblob'] = 'Edit Global Content Block';
 $lang['admin']['edithtmlblobsuccess'] = 'Global content block updated';
+$lang['admin']['tagtousegcb'] = 'Tag to Use this Block';
 $lang['admin']['gcb_wysiwyg'] = 'Enable GCB WYSIWYG';
 $lang['admin']['gcb_wysiwyg_help'] = 'Enable the WYSIWYG editor while editing Global Content Blocks';
 $lang['admin']['filemanager'] = 'File Manager';

@@ -57,6 +57,7 @@ if (isset($_GET["message"])) {
 		echo '<thead>';
 		echo "<tr>\n";
 		echo "<th>".lang('name')."</th>\n";
+		echo "<th>".lang('tagtousegcb')."</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "<th class=\"pageicon\">&nbsp;</th>\n";
 		echo "</tr>\n";
@@ -75,6 +76,7 @@ if (isset($_GET["message"])) {
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
+				echo "<td>{global_content name='".$onehtmlblob->name."'}</td>\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
