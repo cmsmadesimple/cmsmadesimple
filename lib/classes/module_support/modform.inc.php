@@ -223,7 +223,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $value = cms_htmlentities($value);
+  //  $value = cms_htmlentities($value);
   $image = cms_htmlentities($image);
 
 	global $gCms;
