@@ -1172,64 +1172,64 @@ function cleanParamHash($data,$map = false,$allow_unknown = false,$clean_keys = 
   $mappedcount = 0;
   $result = array();
   foreach( $data as $key => $value )
-    {
-      $mapped = false;
-      if( is_array($map) )
 	{
-	  if( isset($map[$key]) )
-	    {
-	      switch( $map[$key] )
+	  $mapped = false;
+	  if( is_array($map) )
 		{
-		case 'CLEAN_INT':
-		  $mappedcount++;
-		  $mapped = true;
-		  $value = (int) $value;
-		  break;
-		case 'CLEAN_FLOAT':
-		  $mappedcount++;
-		  $mapped = true;
-		  $value = (float) $value;
-		  break;
-		case 'CLEAN_NONE':
-		  // pass through without cleaning.
-		  $mappedcount++;
-		  $mapped = true;
-		  break;
-		case 'CLEAN_STRING':
-		  $value = cms_htmlentities($value);
-		  $mappedcount++;
-		  $mapped = true;
-		  break;
-		default:
-		  $mappedcount++;
-		  $mapped = true;
-		  $value = cms_htmlentities($value);
-		  break;
+		  if( isset($map[$key]) )
+			{
+			  switch( $map[$key] )
+				{
+				case 'CLEAN_INT':
+				  $mappedcount++;
+				  $mapped = true;
+				  $value = (int) $value;
+				  break;
+				case 'CLEAN_FLOAT':
+				  $mappedcount++;
+				  $mapped = true;
+				  $value = (float) $value;
+				  break;
+				case 'CLEAN_NONE':
+				  // pass through without cleaning.
+				  $mappedcount++;
+				  $mapped = true;
+				  break;
+				case 'CLEAN_STRING':
+				  $value = cms_htmlentities($value);
+				  $mappedcount++;
+				  $mapped = true;
+				  break;
+				default:
+				  $mappedcount++;
+				  $mapped = true;
+				  $value = cms_htmlentities($value);
+				  break;
+				}
+			}
 		}
-	    }
+
+	  // we didn't clean this yet
+	  if( $allow_unknown && !$mapped )
+		{
+		  // but we're allowing unknown stuff so we'll just clean it.
+		  $value = cms_htmlentities($value);
+		  $mappedcount++;
+		  $mapped = true;
+		}
+
+	  if( $clean_keys )
+		{
+		  $key = cms_htmlentities($key);
+		}
+
+	  if( !$mapped && !$allow_unknown )
+		{
+		  trigger_error('Parameter '.$key.' is not known... dropped',E_USER_WARNING);
+		  continue;
+		}
+	  $result[$key]=$value;
 	}
-      else
-	{
-	  // the map isn't set,
-	  if( $allow_unknown )
-	    {
-	      // but we're allowing unknown stuff so we'll just clean it.
-	      $value = cms_htmlentities($value);
-	      $mappedcount++;
-	      $mapped = true;
-	    }
-	}
-      if( $clean_keys )
-	{
-	  $key = cms_htmlentities($key);
-	}
-      if( !$mapped && !$allow_unknown )
-	{
-	  trigger_error('Parameter '.$key.' is not known... dropped',E_USER_WARNING);
-	  continue;
-	}
-      $result[$key]=$value;
-    }
   return $result;
 }
 
