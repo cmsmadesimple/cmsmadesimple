@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.1";
+$CMS_VERSION = "1.1rc1";
 $CMS_VERSION_NAME = "Samoa";
 $CMS_SCHEMA_VERSION = "28";
 

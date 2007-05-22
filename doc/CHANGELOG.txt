@@ -1,3 +1,50 @@
+Version 1.1rc1 "Samoa" -- May 22 2007
+-----------------
+- Numerous changes to attempt to minimize the potential for XSS attacks
+- Cleanup SQL statements to prevent against SQL injection attacks
+- Add the page alias to the link content type
+- Add Apply/Submit/Cancel buttons to the top of the edittemplate form
+- Upgrade to Smarty 2.6.18
+- Upgrade to adodb_lite 1.42
+- Add an apply button to UDT edit page
+- Check usernames for invalid characters when creating/editing users
+- Add sitename to admin title and header text
+- Rationalization and fixes to the {menu} and {search} tags
+- Adds the ability to have a separate syntax hilighter module for templates,stylesheets, and UDT's
+- Adds a date_format_string preference in the user preferences
+  - Modify the admin log to use the date format string user preference
+  - Show the last modified date in templates, stylesheets and content, 
+    and use the date format string preference.
+- Hide the encoding dropdown from the template page, if it is not already set
+- Changes to the module api to prevent XSS vulnerabilities
+  - Call cms_htmlentities on each parameter in the form api that can be
+    output to html verbatim
+  - Add functionality for cleaning input parameters before they are
+    given to the module api.  Also allows for optionally dropping parameters
+    that are unknown to the module.
+  - Add methods SetParameterType and RestrictUnknownParams to the module
+    api so that modules can inform the core as to which parameters to expect
+    on input,and how to clean them.
+- Adds a RegisterModulePlugin method to the module api so that we can
+  use {modulename param=value...} instead of 
+  {cms_module module='modulename' param=value ...}
+- Use root url for default content in links, fixes double url issues.
+- Adds ajaxy code to the apply button when editing css, templates or 
+  stylesheets so that the text area scroll bar doesn't move.
+- Add sender ip to the contact_form message
+- Add a site preference to disable the safe_mode warning in the admin
+- Add a site preference to restrict warnings about unknown parameters
+- Now check for 'Modify Any Page' permission or 'Modify Page Structure' 
+  to allow people to activate or deactivate content. 
+- Fixes to the installer
+- Upgrade Scriptaculous to 1.7.0
+- Add some help on how to use CGB's 
+- News enhancements
+  - Frontend Pagination for summary articles
+  - Admin article pagination, sorting, and filtering
+  - Use the date_format_string preference in the admin
+  - Display more information in the article list
+
 Version 1.0.6 "Niihau" -- Apr 24 2007
 -----------------
 - Fixes a potential SQL injection hole in stylesheet.php
