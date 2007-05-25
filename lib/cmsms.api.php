@@ -32,6 +32,11 @@ define("DS", DIRECTORY_SEPARATOR);
 //Load file location defines
 require_once(ROOT_DIR.DS.'fileloc.php');
 
+//So we can use them in __autoload
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
+require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
+
 /**
  * The one and only autoload function for the system.  This basically allows us 
  * to remove a lot of the require_once BS and keep the file loading to as much 
@@ -39,7 +44,8 @@ require_once(ROOT_DIR.DS.'fileloc.php');
  */
 function __autoload($class_name)
 {
-	$files = scan_classes(cms_join_path(ROOT_DIR,'lib','classes'));
+	//$files = scan_classes();
+	$files = CmsCache::get_instance()->call('scan_classes');
 	
 	//Fix references to older classes
 	if ($class_name == 'CMSModule')
@@ -66,8 +72,9 @@ function __autoload($class_name)
 	}
 }
 
-function scan_classes($dir)
+function scan_classes()
 {
+	$dir = cms_join_path(ROOT_DIR,'lib','classes');
 	if (!isset($GLOBALS['dirscan']))
 	{
 		$files = array();

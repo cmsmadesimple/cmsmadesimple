@@ -75,7 +75,7 @@ class CmsAcl extends CmsObject
 		{
 			return false;
 		}
-			
+
 		return $result;
 	}
 	
