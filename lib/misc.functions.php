@@ -1167,46 +1167,70 @@ define('CLEAN_INT','CLEAN_INT');
 define('CLEAN_FLOAT','CLEAN_FLOAT');
 define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
-function cleanParamHash($data,$map = false,$allow_unknown = false,$clean_keys = true)
+define('CLEAN_REGEXP','regexp:');
+function cleanParamHash($data,$map = false,
+						$allow_unknown = false,$clean_keys = true)
 {
   $mappedcount = 0;
   $result = array();
   foreach( $data as $key => $value )
 	{
 	  $mapped = false;
+	  $paramtype = '';
 	  if( is_array($map) )
 		{
 		  if( isset($map[$key]) )
 			{
-			  switch( $map[$key] )
-				{
-				case 'CLEAN_INT':
+				$paramtype = $map[$key];
+			}
+		  else {
+			  // Key not found in the map
+			  // see if one matches via regular expressions
+			  foreach( $map as $mk => $mv ) {
+				  if(strstr($mk,CLEAN_REGEXP) === FALSE) continue;
+
+				  // mk is a regular expression
+				  $ss = substr($mk,strlen(CLEAN_REGEXP));
+				  if( $ss !== FALSE ) {
+					  if( preg_match($ss, $key) ) {
+						  // it matches, we now know what type to use
+						  $paramtype = $mv;
+						  break;
+					  }
+				  }
+			  }
+		  } // else
+
+		  if( $paramtype != '' ) {
+			  switch( $paramtype ) {
+			  case 'CLEAN_INT':
 				  $mappedcount++;
 				  $mapped = true;
 				  $value = (int) $value;
 				  break;
-				case 'CLEAN_FLOAT':
+			  case 'CLEAN_FLOAT':
 				  $mappedcount++;
 				  $mapped = true;
 				  $value = (float) $value;
 				  break;
-				case 'CLEAN_NONE':
+			  case 'CLEAN_NONE':
 				  // pass through without cleaning.
 				  $mappedcount++;
 				  $mapped = true;
 				  break;
-				case 'CLEAN_STRING':
+			  case 'CLEAN_STRING':
 				  $value = cms_htmlentities($value);
 				  $mappedcount++;
 				  $mapped = true;
 				  break;
-				default:
+			  default:
 				  $mappedcount++;
 				  $mapped = true;
 				  $value = cms_htmlentities($value);
 				  break;
-				}
-			}
+			  } // switch
+		  } // if $paramtype
+			  
 		}
 
 	  // we didn't clean this yet

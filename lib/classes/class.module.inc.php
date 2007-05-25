@@ -1989,7 +1989,7 @@ class CMSModule
 	function Lang()
 	{
 		$this->LoadLangMethods();
-		
+
 		//Push $this onto front of array
 		$args = func_get_args();
 		array_unshift($args,'');
