@@ -130,6 +130,8 @@ class CmsDatabase extends CmsObject
 		        die();
 		    }
 		}
+		
+		$dbinstance->raiseErrorFn = "adodb_error_handler";
 	
 		if ($persistent)
 		{
@@ -140,11 +142,13 @@ class CmsDatabase extends CmsObject
 			$connect_result = $dbinstance->Connect($hostname,$username,$password,$dbname);
 		}
 		
+		$dbinstance->raiseErrorFn = null;
+		
 		if (FALSE == $connect_result)
 		{
 			if ($die)
 			{
-				die('Database Connection failed');
+				die();
 			}
 			else
 			{
@@ -181,6 +185,15 @@ class CmsDatabase extends CmsObject
 function mark_sql($sql, $newline)
 {
 	CmsProfiler::get_instance()->mark($sql);
+}
+
+function adodb_error_handler($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
+{
+	echo "<strong>Database Connection Failed</strong><br />";
+	echo "Error: {$error_message} ({$error_number})<br />";
+	echo "Function Performed: {$function_performed}<br />";
+	echo "Host/DB: {$host}/{$database}<br />";
+	echo "Database Type: {$dbtype}<br />";
 }
 
 # vim:ts=4 sw=4 noet

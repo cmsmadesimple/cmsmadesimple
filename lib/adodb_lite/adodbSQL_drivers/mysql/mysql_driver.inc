@@ -118,7 +118,14 @@ class mysql_driver_ADOConnection extends ADOConnection
 
 	function ErrorMsg()
 	{
-		return @mysql_error($this->connectionId);
+		if ($this->connectionId === false)
+		{
+			return @mysql_error();
+		}
+		else
+		{
+			return @mysql_error($this->connectionId);
+		}
 	}
 
 	/**
@@ -130,7 +137,14 @@ class mysql_driver_ADOConnection extends ADOConnection
 
 	function ErrorNo()
 	{
-		return @mysql_errno($this->connectionId);
+		if ($this->connectionId === false)
+		{
+			return @mysql_errno();
+		}
+		else
+		{
+			return @mysql_errno($this->connectionId);
+		}
 	}
 
 	/**
