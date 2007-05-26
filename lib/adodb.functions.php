@@ -11,7 +11,7 @@ function load_adodb()
 	}
 	
 	define('ADODB_OUTP', 'debug_sql');
-	define('ADODB_ERROR_HANDLER', 'adodb_error');
+	//define('ADODB_ERROR_HANDLER', 'adodb_error');
 	
 	$loaded_adodb = false;
 	
@@ -55,6 +55,7 @@ function & adodb_connect()
 	global $config;
 	
 	$dbinstance =& ADONewConnection($config['dbms'], 'pear:date:extend:transaction');
+	$dbinstance->raiseErrorFn = "adodb_error";
 	$conn_func = (isset($config['persistent_db_conn']) && $config['persistent_db_conn'] == true) ? 'PConnect' : 'Connect';
 	$connect_result = $dbinstance->$conn_func($config['db_hostname'], $config['db_username'], $config['db_password'], $config['db_name']);
 	
@@ -62,6 +63,8 @@ function & adodb_connect()
 	{
 		die();
 	}
+
+	$dbinstance->raiseErrorFn = null;
 	
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
 	
