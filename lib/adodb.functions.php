@@ -11,6 +11,7 @@ function load_adodb()
 	}
 	
 	define('ADODB_OUTP', 'debug_sql');
+	define('ADODB_ERROR_HANDLER', 'adodb_error');
 	
 	$loaded_adodb = false;
 	
@@ -59,7 +60,7 @@ function & adodb_connect()
 	
 	if (FALSE == $connect_result)
 	{
-		die('Database Connection failed');
+		die();
 	}
 	
 	$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
@@ -78,6 +79,15 @@ function & adodb_connect()
 	
 	$db =& $dbinstance;
 	return $db;
+}
+
+function adodb_error($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
+{
+	echo "<strong>Database Connection Failed</strong><br />";
+	echo "Error: {$error_message} ({$error_number})<br />";
+	echo "Function Performed: {$function_performed}<br />";
+	echo "Host/DB: {$host}/{$database}<br />";
+	echo "Database Type: {$dbtype}<br />";
 }
 
 ?>
