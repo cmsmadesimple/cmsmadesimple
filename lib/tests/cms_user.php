@@ -45,11 +45,11 @@ class CmsUserTests extends CmsUnitTest {
     $this->test_eq($newuser->save(), true, "user created");    
     $loadeduser = CmsUserOperations::load_user_by_id($newuser->id);
 
-    var_dump($loadeduser);
-    var_dump($newuser);
+echo     var_dump($loadeduser);
+echo     var_dump($newuser);
 
     //check that users match
-    $this->test_eq($newuser, $loadeduser, "users match");
+    $this->test_deepCompare($newuser, $loadeduser, "users match");
     unset($newuser);
 
     // delete user

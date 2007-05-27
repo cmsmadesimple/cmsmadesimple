@@ -73,7 +73,40 @@ if(CMS_TEST_RUN) {
 	$this->doresult(false, $explanation);
       }
     }
-    
+
+    /**
+     * thanks to http://fi.php.net/manual/en/language.oop5.object-comparison.php#73542
+     */
+    function test_deepCompare($a,$b, $explanation) {
+      $this->run++;
+      if($this->_deepCompare($a,$b)) {
+	$this->doresult(true, $explanation);
+      } else {
+	$this->doresult(false, $explanation);
+      }
+    }
+    final protected function _deepCompare($a,$b) {
+      if(is_object($a) && is_object($b)) {
+	if(get_class($a)!=get_class($b))
+	  return false;
+	foreach($a as $key => $val) {
+	  if(!$this->_deepCompare($val,$b->$key))
+	    return false;
+	}
+	return true;
+      }
+      else if(is_array($a) && is_array($b)) {
+	while(!is_null(key($a)) && !is_null(key($b))) {
+	  if (key($a)!==key($b) || !$this->_deepCompare(current($a),current($b)))
+	    return false;
+	  next($a); next($b);
+	}
+	return is_null(key($a)) && is_null(key($b));
+      }
+      else
+	return $a===$b;
+    }
+
     public function doresult($result, $explanation) {
       $flag = 0;
       if($result == true) {
