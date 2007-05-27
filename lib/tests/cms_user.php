@@ -4,7 +4,7 @@ include(dirname(__FILE__).'/../cmsms.api.php');
 // our test class
 class CmsUserTests extends CmsUnitTest {
   public function getNumberOfTests() {
-    return 4;
+    return 5;
   }
   
   public function getTestDirectory() {
@@ -14,7 +14,9 @@ class CmsUserTests extends CmsUnitTest {
   public function run_tests() {
     $user = CmsUserOperations::load_user_by_id(1);
 
-    $this->test_eq($user->username,"tsw","user is tsw");
+    $this->test_isset($user, "user is set and loaded");
+
+    $this->test_isset($user->username,"username is set");
     $this->test_eq($user->username="asdf",true,"set username to asdf");
     $this->test_eq($user->username,"asdf","username is asdf");
     $this->test_eq($user->id,1,"id is one");

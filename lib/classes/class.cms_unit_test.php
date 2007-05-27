@@ -47,13 +47,30 @@ class CmsUnitTest {
   }
   
   final protected function test_eq($value, $expected, $explanation = "") {
-    $flag = 0;
     $this->run++;
-    if($value==$expected) {
+    if($value == $expected) {
+      $this->doresult(true, $explanation);
+    } else {
+      $this->doresult(false, $explanation);
+    }
+  }
+  
+  final protected function test_isset($value, $explanation ="") {
+    $this->run++;
+    if(isset($value)) {
+      $this->doresult(true, $explanation);
+    } else {
+      $this->doresult(false, $explanation);
+    }
+  }
+
+  public function doresult($result, $explanation) {
+    $flag = 0;
+    if($result == true) {
       echo "test $this->run ok";
     } else {
       $this->failed++;
-      echo "test $i failed";
+      echo "test $this->run failed";
       if($this->DieOnFail() == true) {
 	$flag = 1;
       }
@@ -64,7 +81,7 @@ class CmsUnitTest {
     if($flag==1)
       die("### dying as requested on failure ### \n");
   }
-  
+
   final protected function listFiles($dir) {
     $files = array();
     $dir = opendir($dir);
