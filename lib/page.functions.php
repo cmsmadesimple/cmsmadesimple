@@ -759,7 +759,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 			{
 				if ($forcewysiwyg=='') {
 					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
-					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'wysiwyg')) {
+					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
 						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
 					}
 				} else {
@@ -783,7 +783,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 			{
 				if ($forcewysiwyg=='') {
 					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
-					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(), 'syntaxhighlighter')) {
+					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'syntaxhighlighter')) {
 						$result=$gCms->modules[$key]['object']->SyntaxTextarea($name,$wantedsyntax,$width,$height,$encoding,$text);
 					}
 				} else {
@@ -936,8 +936,11 @@ function wysiwyg_form_submit()
 	global $gCms;
 	$result = '';
 
-	$userid = get_userid();
-	$wysiwyg = get_preference($userid, 'wysiwyg');
+	$userid = get_userid(false);
+    if( $userid != '' ) 
+    {
+	    $wysiwyg = get_preference($userid, 'wysiwyg');
+    }
 
 	if (isset($wysiwyg) && $wysiwyg != '')
 	{
