@@ -97,7 +97,6 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 
 function cms_module_CreateLabelForInput(&$modinstance, $id, $name, $labeltext='', $addttext='')
 {
-  $labeltext = cms_htmlentities($labeltext);
   $text = '<label for="'.cms_htmlentities($id.$name).'"';
   if ($addttext != '')
     {
@@ -134,7 +133,6 @@ function cms_module_CreateInputTextWithLabel(&$modinstance, $id, $name, $value='
   $value = cms_htmlentities($value);
   $size = cms_htmlentities($size);
   $maxlength = cms_htmlentities($maxlength);
-  $label = cms_htmlentities($label);
 
         if ($label == '') {
 	  $label = $name;
@@ -223,7 +221,6 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  //  $value = cms_htmlentities($value);
   $image = cms_htmlentities($image);
 
 	global $gCms;
@@ -302,7 +299,6 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	{
 		foreach ($items as $key=>$value)
 		{
-		  $key = cms_htmlentities($key);
 		  $value = cms_htmlentities($value);
 	
 		$text .= '<option value="'.$value.'"';
@@ -342,7 +338,6 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 	$count = 0;
 	foreach ($items as $key=>$value)
 	{
-	  $key = cms_htmlentities($key);
 	  $value = cms_htmlentities($value);
 
 		$text .= '<option value="'.$value.'"';
@@ -371,7 +366,6 @@ function cms_module_CreateInputRadioGroup(&$modinstance, $id, $name, $items, $se
 	$counter = 0;
 	foreach ($items as $key=>$value)
 	{
-	  $key = cms_htmlentities($key);
 	  $value = cms_htmlentities($value);
 
 		$counter = $counter + 1;
@@ -396,7 +390,6 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $id = cms_htmlentities($id);
   $action = cms_htmlentities($action);
   $returnid = cms_htmlentities($returnid);
-  $warn_message = cms_htmlentities($warn_message);
   $inline = cms_htmlentities($inline);
   $prettyurl = cms_htmlentities($prettyurl);
 
