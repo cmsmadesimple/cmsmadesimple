@@ -264,15 +264,18 @@ window.Edit_Template_Apply = function(button)
 				button.removeAttribute('disabled');
 				var response = t.responseXML.documentElement.childNodes[0];
 				var details = t.responseXML.documentElement.childNodes[1];
+				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
+				if (details.textContent) { details = details.textContent; } else { details = details.text; }
+				
 				var htmlShow = '';
-				if (response.textContent == 'Success')
+				if (response == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
 				}
 				else
 				{
 					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">';
-					htmlShow += details.textContent;
+					htmlShow += details;
 					htmlShow += '</ul></div>';
 				}
 				$('Edit_Template_Result').innerHTML = htmlShow;

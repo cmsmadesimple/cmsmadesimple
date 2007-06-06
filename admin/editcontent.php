@@ -385,16 +385,20 @@ window.Edit_Content_Apply = function(button)
 			, onSuccess: function(t)
 			{
 				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
+				var xml = t.responseXML;
+				var response = xml.documentElement.childNodes[0];
+				var details = xml.documentElement.childNodes[1];
+				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
+				if (details.textContent) { details = details.textContent; } else { details = details.text; }
+				
 				var htmlShow = '';
-				if (response.textContent == 'Success')
+				if (response == 'Success')
 				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details.textContent + '</p></div>';
+					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
 				}
 				else
 				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details.textContent + '</ul></div>';
+					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '</ul></div>';
 				}
 				$('Edit_Content_Result').innerHTML = htmlShow;
 			}
