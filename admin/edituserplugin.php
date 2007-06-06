@@ -183,14 +183,14 @@ $addlScriptSubmit = '';
 foreach (array_keys($gCms->modules) as $moduleKey)
 {
 	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
+	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
 	{
 		continue;
 	}
 
-	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
+	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
 	{
-		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
+		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
 	}
 }
 
