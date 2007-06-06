@@ -226,8 +226,8 @@ window.Edit_UserPlugin_Apply = function(button)
 			, onSuccess: function(t)
 			{
 				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.firstChild;
-				var details = t.responseXML.documentElement.lastChild;
+				var response = t.responseXML.documentElement.childNodes[0];
+				var details = t.responseXML.documentElement.childNodes[1];
 				var htmlShow = '';
 				if (response.textContent == 'Success')
 				{
