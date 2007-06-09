@@ -307,6 +307,8 @@ function cms_config_save($config)
 			fwrite($handle, cms_config_text($config));
 			fwrite($handle, "\n?>");
 			fclose($handle);
+			
+			cms_config_upgrade();
 		}
 	}
 }
