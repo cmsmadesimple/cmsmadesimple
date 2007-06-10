@@ -20,6 +20,7 @@
 class defaultTheme extends CmsAdminTheme
 {
 	var $themeName = 'default';
+	var $theme_name = 'default';
 	
 	function __construct()
 	{
@@ -238,99 +239,6 @@ class defaultTheme extends CmsAdminTheme
 			echo '</p>';
 			echo "</div>";
 			echo '</div>';
-		}
-	}
-
-	function DisplaySectionPages($section)
-	{
-		global $gCms;
-		if (count($this->menuItems) < 1)
-		{
-			// menu should be initialized before this gets called.
-			// TODO: try to do initialization.
-			// Problem: current page selection, url, etc?
-			return -1;
-		}
-
-		$firstmodule = true;
-		foreach ($this->menuItems[$section]['children'] as $thisChild)
-		{
-			$thisItem = $this->menuItems[$thisChild];
-			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-			{
-				continue;
-			}
-
-			// separate system modules from the rest.
-			if( preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp) )
-			{
-				if( array_search( $tmp[1], $gCms->cmssystemmodules ) === FALSE && $firstmodule == true )
-				{
-					echo "<hr width=\"90%\"/>";
-					$firstmodule = false;
-				}
-			}
-
-			echo "<div class=\"itemmenucontainer\">\n";
-			echo '<div class="itemoverflow">';
-			echo '<p class="itemicon">';
-			$moduleIcon = false;
-			$iconSpec = $thisChild;
-
-			// handle module icons
-			if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
-			{
-				if ($tmp[1] == 'News')
-				{
-					$iconSpec = 'newsmodule';
-				}
-				else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
-				{
-					$iconSpec = 'wysiwyg';
-				}
-				else
-				{
-					$imageSpec = dirname($this->cms->config['root_path'] .
-					'/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
-					if (file_exists($imageSpec))
-					{
-						echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
-						$this->cms->config['root_url'] .
-						'/modules/' . $tmp[1] . '/images/' .
-						'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
-						$moduleIcon = true;
-					}
-					else
-					{
-						$iconSpec=$this->TopParent($thisChild);
-					}
-				}
-			}
-			if (! $moduleIcon)
-			{
-				if ($thisItem['url'] == '../index.php')
-				{
-					$iconSpec = 'viewsite';
-				}
-				echo '<a href="'.$thisItem['url'].'">';
-				echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
-				echo '</a>';
-			}
-			echo '</p>';
-			echo '<p class="itemtext">';
-			echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
-			if (array_key_exists('target', $thisItem))
-			{
-				echo ' rel="external"';
-			}
-			echo ">".$thisItem['title']."</a><br />\n";
-			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-			{
-				echo $thisItem['description']."<br />";
-			}
-			echo '</p>';
-			echo "</div>";
-			echo '</div>';			
 		}
 	}
 	

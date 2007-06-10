@@ -142,6 +142,7 @@ class CmsAdminNode extends CmsNode
 	var $url = '';
 	var $description = '';
 	var $target = '';
+	var $icon_url = '';
 	var $show_in_menu = true;
 	var $first_module = false;
 	var $selected = false;

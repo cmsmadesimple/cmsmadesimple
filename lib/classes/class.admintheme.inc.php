@@ -1051,44 +1051,44 @@ class AdminTheme
      *
      * @param section - section to display
      */
-    function DisplaySectionPages($section)
-    {
-      if (count($this->menuItems) < 1)
+	function DisplaySectionPages($section)
 	{
-	  // menu should be initialized before this gets called.
-	  // TODO: try to do initialization.
-	  // Problem: current page selection, url, etc?
-	  return -1;
+		if (count($this->menuItems) < 1)
+		{
+			// menu should be initialized before this gets called.
+			// TODO: try to do initialization.
+			// Problem: current page selection, url, etc?
+			return -1;
+		}
+
+		foreach ($this->menuItems[$section]['children'] as $thisChild)
+		{
+			$thisItem = $this->menuItems[$thisChild];
+			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
+			{
+				continue;
+			}
+
+			echo "<div class=\"MainMenuItem\">\n";
+			echo "<a href=\"".$thisItem['url']."\"";
+			if (array_key_exists('target', $thisItem))
+			{
+				echo " target=" . $thisItem['target'];
+			}
+			if ($thisItem['selected'])
+			{
+				echo " class=\"selected\"";
+			}
+			echo ">".$thisItem['title']."</a>\n";
+			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
+			{
+				echo "<span class=\"description\">";
+				echo $thisItem['description'];
+				echo "</span>\n";
+			}
+			echo "</div>\n";
+		}
 	}
-
-      foreach ($this->menuItems[$section]['children'] as $thisChild)
-	{
-	  $thisItem = $this->menuItems[$thisChild];
-	  if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-	    {
-	      continue;
-	    }
-
-	  echo "<div class=\"MainMenuItem\">\n";
-	  echo "<a href=\"".$thisItem['url']."\"";
-	  if (array_key_exists('target', $thisItem))
-	    {
-	      echo " target=" . $thisItem['target'];
-	    }
-	  if ($thisItem['selected'])
-	    {
-	      echo " class=\"selected\"";
-	    }
-	  echo ">".$thisItem['title']."</a>\n";
-	  if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-	    {
-	      echo "<span class=\"description\">";
-	      echo $thisItem['description'];
-	      echo "</span>\n";
-	    }
-	  echo "</div>\n";
-        }
-    }
 
     /**
      * HasDisplayableChildren

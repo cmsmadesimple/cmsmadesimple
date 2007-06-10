@@ -104,6 +104,8 @@ class CmsAdminTheme extends CmsObject
 	static public function start()
 	{
 		@ob_start();
+		$smarty = cms_smarty();
+		$smarty->template_dir = dirname(dirname(dirname(__FILE__))) . '/admin/themes/'.self::get_instance()->themeName.'/templates/';
 	}
 	
 	static public function end()
@@ -144,7 +146,6 @@ class CmsAdminTheme extends CmsObject
 		
 		$smarty = cms_smarty();
 		$smarty->assign('admin_content', $result);
-		$smarty->template_dir = dirname(dirname(dirname(__FILE__))) . '/admin/themes/'.self::get_instance()->themeName.'/templates/';
 		
 		@ob_start();
 		self::get_instance()->display_top_menu();
@@ -309,10 +310,19 @@ class CmsAdminTheme extends CmsObject
 
         $this->subtitle = $subtitle;
 
-		//Add in modules
+		$root_path = CmsConfig::get('root_path');
+		$root_url = CmsConfig::get('root_url');
+
+		//Add in modules and icons
 		$children = CmsAdminTree::get_instance()->get_root_node()->get_children();
 		foreach ($children as &$basenode)
 		{
+			$grandchildren = $basenode->get_children();
+			foreach ($grandchildren as &$childnode)
+			{
+				$childnode->icon_url = $this->find_icon_url($childnode->name);
+			}
+
 			$first = true;
 			foreach ($this->menu_list_section_modules($basenode->name) as $module)
 			{
@@ -324,6 +334,17 @@ class CmsAdminTheme extends CmsObject
 				$newnode->show_in_menu = true;
 				$newnode->first_module = $first;
 				$newnode->module = true;
+				
+				$imageSpec = $root_path . '/modules/' . $module['name'] . '/images/icon.gif';
+				if (file_exists($imageSpec))
+				{
+					$newnode->icon_url = $root_url . '/modules/' . $module['name'] . '/images/icon.gif';
+				}
+				else
+				{
+					$newnode->icon_url = $basenode->icon;
+				}
+
 				$basenode->add_child($newnode);
 				$first = false;
 			}
@@ -744,6 +765,27 @@ class CmsAdminTheme extends CmsObject
 		return $this->display_image($imageName, $alt, $width, $height, $class);
 	}
 	
+	/**
+	 * Returns a url to an icon for the given name.  If the icon doesn't exist in
+	 * the current theme, it gives the url for the default theme instead.
+	 *
+	 * @param string The name of the icon
+	 * @return string The url to the icon
+	 * @author Ted Kulp
+	 **/
+	function find_icon_url($name)
+	{
+		$name .= '.gif';
+		if (file_exists(CmsConfig::get('root_path') . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->theme_name . '/images/icons/topfiles/' . $name))
+		{
+			return CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->theme_name . '/images/icons/topfiles/' . $name;
+		}
+		else
+		{
+			return CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/themes/default/images/icons/topfiles/' . $name;
+		}
+	}
+	
     /**
      * ShowError
      * Outputs supplied errors with a link to the wiki for troublshooting.
@@ -908,6 +950,113 @@ class CmsAdminTheme extends CmsObject
 	function DisplayAllSectionPages()
 	{
 		return $this->display_all_section_pages();
+	}
+	
+	function display_section_pages($section)
+	{	
+		$children = CmsAdminTree::get_instance()->get_root_node()->get_children();
+		$node = null;
+		foreach ($children as &$basenode)
+		{
+			if ($basenode->name == $section)
+			{
+				$node =& $basenode;
+				break;
+			}
+		}
+		
+		if ($node == null)
+		{
+			return;
+		}
+		
+		$smarty = cms_smarty();
+		
+		$smarty->assign_by_ref('topnode', $node);
+		$smarty->display('sectiontop.tpl');
+
+		/*
+		$firstmodule = true;
+		foreach ($this->menuItems[$section]['children'] as $thisChild)
+		{
+			$thisItem = $this->menuItems[$thisChild];
+			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
+			{
+				continue;
+			}
+
+			// separate system modules from the rest.
+			if( preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp) )
+			{
+				if( array_search( $tmp[1], $gCms->cmssystemmodules ) === FALSE && $firstmodule == true )
+				{
+					echo "<hr width=\"90%\"/>";
+					$firstmodule = false;
+				}
+			}
+
+			echo "<div class=\"itemmenucontainer\">\n";
+			echo '<div class="itemoverflow">';
+			echo '<p class="itemicon">';
+			$moduleIcon = false;
+			$iconSpec = $thisChild;
+
+			// handle module icons
+			if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
+			{
+				if ($tmp[1] == 'News')
+				{
+					$iconSpec = 'newsmodule';
+				}
+				else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
+				{
+					$iconSpec = 'wysiwyg';
+				}
+				else
+				{
+					$imageSpec = dirname($this->cms->config['root_path'] .
+					'/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
+					if (file_exists($imageSpec))
+					{
+						echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
+						$this->cms->config['root_url'] .
+						'/modules/' . $tmp[1] . '/images/' .
+						'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
+						$moduleIcon = true;
+					}
+					else
+					{
+						$iconSpec=$this->TopParent($thisChild);
+					}
+				}
+			}
+			if (! $moduleIcon)
+			{
+				if ($thisItem['url'] == '../index.php')
+				{
+					$iconSpec = 'viewsite';
+				}
+				echo '<a href="'.$thisItem['url'].'">';
+				echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
+				echo '</a>';
+			}
+			echo '</p>';
+			echo '<p class="itemtext">';
+			echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
+			if (array_key_exists('target', $thisItem))
+			{
+				echo ' rel="external"';
+			}
+			echo ">".$thisItem['title']."</a><br />\n";
+			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
+			{
+				echo $thisItem['description']."<br />";
+			}
+			echo '</p>';
+			echo "</div>";
+			echo '</div>';			
+		}
+		*/
 	}
 }
 
