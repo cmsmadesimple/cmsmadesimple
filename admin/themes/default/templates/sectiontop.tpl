@@ -11,7 +11,7 @@
         <p class="itemicon">
           {if $node->icon_url != ''}
             <a href="listcontent.php">
-              <img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" {if $node->target ne ''}ref="external"{/if} />
+              <img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" {if $node->target ne ''}rel="external"{/if} />
             </a>
           {/if}
         </p>

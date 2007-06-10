@@ -9,7 +9,7 @@
       <div class="itemmenucontainer">
         <div class="itemoverflow">
           <p class="itemicon">
-            <a href="{$node->url}"><img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" {if $node->target ne ''}ref="external"{/if} /></a>
+            <a href="{$node->url}"><img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" {if $node->target ne ''}rel="external"{/if} /></a>
           </p>
           <p class="itemtext">
             <a class="itemlink" href="{$node->url}">{$node->title}</a>

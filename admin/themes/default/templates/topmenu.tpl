@@ -12,13 +12,13 @@
 
       {foreach from=$root_node->get_children() item=node name=node}
       
-        <li><a href="{$node->url|escape:'html'}" class="{if $node->selected} selected{/if}">{$node->title}</a>
+        <li><a href="{$node->url|escape:'html'}" class="{if $node->selected} selected{/if}"{if $node->target ne ''} rel="external"{/if}>{$node->title}</a>
         
           {if $node->has_children()}
             <ul>
               {foreach from=$node->get_children() item=subnode name=subnode}
                 {if $subnode->show_in_menu}
-                  <li><a href="{$subnode->url|escape:'html'}" class="{if $subnode->selected} selected{/if}{if $subnode->first_module} firstmodule{elseif $subnode->module} module{/if}">{$subnode->title}</a></li>
+                  <li><a href="{$subnode->url|escape:'html'}" class="{if $subnode->selected} selected{/if}{if $subnode->first_module} firstmodule{elseif $subnode->module} module{/if}"{if $subnode->target ne ''} rel="external"{/if}>{$subnode->title}</a></li>
                 {/if}
               {/foreach}
             </ul>
