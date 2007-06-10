@@ -125,7 +125,7 @@ if ($page == '')
 $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 
 $thepage = cms_orm()->cms_content_base->find_by_id($pageinfo->content_id);
-$thepage->test_me();
+//$thepage->test_me();
 
 //No info?  Then it's a bum page.  If we had a custom 404, then it's info
 //would've been returned earlier.  The only option left is to show the generic
