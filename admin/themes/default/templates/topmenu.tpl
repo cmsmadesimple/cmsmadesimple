@@ -1,11 +1,11 @@
-{if $root_node->has_children()}
+<div>
+  <p class="logocontainer">
+    <img src="themes/default/images/logo.gif" alt="" />
+    <span class="logotext">{$adminpaneltitle}</span>
+  </p>
+</div>
 
-  <div>
-    <p class="logocontainer">
-      <img src="themes/default/images/logo.gif" alt="" />
-      <span class="logotext">{$adminpaneltitle}</span>
-    </p>
-  </div>
+{if $root_node->has_children()}
 
   <div class="topmenucontainer">
     <ul id="nav">

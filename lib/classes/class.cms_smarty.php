@@ -40,7 +40,8 @@ class CmsSmarty extends Smarty {
 		$config = cms_config();
 		
 		$this->template_dir = $config["root_path"].'/tmp/templates/';
-		if (isset($GLOBALS['CMS_ADMIN_PAGE'])) {
+		if (isset($GLOBALS['CMS_ADMIN_PAGE']))
+		{
 			$this->template_dir = $config["root_path"].'/admin/templates/';
 		}
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;

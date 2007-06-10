@@ -35,7 +35,7 @@ class defaultTheme extends CmsAdminTheme
 		echo '<div id="navt_tabs">'."\n";
 		if (get_preference($this->userid, 'bookmarks'))
 		{
-				echo '<div id="navt_bookmarks">'.lang('bookmarks').'</div>'."\n";
+			echo '<div id="navt_bookmarks">'.lang('bookmarks').'</div>'."\n";
 		}
 		echo '</div>'."\n";
 		echo '<div style="clear: both;"></div>'."\n";

@@ -25,7 +25,7 @@
 	
 	{$headtext}
 	
-	<!-- <base href="{$baseurl}" /> -->
+	<base href="{$baseurl}" />
 
 </head>
 <body>

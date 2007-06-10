@@ -40,6 +40,7 @@ class CmsAdminTheme extends CmsObject
 	public $url = '';
 	public $query = '';
 	public $subtitle = '';
+	public $theme_template_dir = '';
 
 	function __construct()
 	{
@@ -62,6 +63,8 @@ class CmsAdminTheme extends CmsObject
 			$this->script = $toam_tmp2;
 			//$this->script = array_pop(@explode('/',$this->url));
 		}
+
+		$this->theme_template_dir = dirname(dirname(dirname(__FILE__))) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->themeName . '/templates/';
 	}
 	
 	static public function get_instance()
@@ -109,7 +112,8 @@ class CmsAdminTheme extends CmsObject
 		
 		$smarty = cms_smarty();
 		$smarty->assign_by_ref('admin_theme', $admin_theme);
-		$smarty->template_dir = dirname(dirname(dirname(__FILE__))) . '/admin/themes/'.self::get_instance()->themeName.'/templates/';
+		$smarty->assign('adminpaneltitle', lang('adminpaneltitle'));
+		$smarty->assign('baseurl', CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/');
 	}
 	
 	static public function end()
@@ -158,7 +162,7 @@ class CmsAdminTheme extends CmsObject
 		
 		$smarty->assign('headtext', self::get_instance()->headtext);
 		
-		$smarty->display('overall.tpl');
+		$smarty->display(self::get_instance()->theme_template_dir . 'overall.tpl');
 		
 		echo '<div id="_DebugFooter">';
 		echo CmsProfiler::get_instance()->report();
@@ -903,7 +907,7 @@ class CmsAdminTheme extends CmsObject
 
 		$smarty->assign('subitems', lang('subitems'));
 		$smarty->assign_by_ref('root_node', $root_node);
-		$smarty->display('indexcontent.tpl');
+		$smarty->display(self::get_instance()->theme_template_dir . 'indexcontent.tpl');
 	}
 	
 	/**
@@ -935,7 +939,7 @@ class CmsAdminTheme extends CmsObject
 		$smarty = cms_smarty();
 		
 		$smarty->assign_by_ref('top_node', $node);
-		$smarty->display('sectiontop.tpl');
+		$smarty->display(self::get_instance()->theme_template_dir . 'sectiontop.tpl');
 	}
 
 	/**
@@ -951,7 +955,7 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('admin_panel_title', lang('admin_panel_title'));
 		$smarty->assign_by_ref('root_node', $root_node);
 		$smarty->assign('breadcrumbs', $this->breadcrumbs);
-		$smarty->display('topmenu.tpl');
+		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
 }
 
