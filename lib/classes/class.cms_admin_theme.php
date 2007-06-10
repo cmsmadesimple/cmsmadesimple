@@ -937,6 +937,99 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display('sectiontop.tpl');
 	}
+	
+	/**
+	 * Prints the html for a submenu for the admin menu.
+	 *
+	 * @todo Remove me...  I should be in a smarty template
+	 * @param CmsAdminNode The node to render subitems from
+	 * @param integer The current depth
+	 * @param integer The maximum depth to render
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	function render_menu_section($node, $depth, $maxdepth)
+	{
+		if ($maxdepth > 0 && $depth > $maxdepth)
+		{
+			return;
+		}
+		if (!$node->show_in_menu)
+		{
+			return;
+		}
+		if (strlen($node->url) < 1)
+		{
+			echo "<li>".$node->title."</li>";
+			return;
+		}
+		echo "<li><a href=\"";
+		echo $node->url;
+		echo "\"";
+		
+		if ($node->target != '')
+		{
+			echo ' target="'.$node->target.'" rel="external"';
+		}
+		
+		$class = array();
+		if ($node->selected)
+		{
+			$class[] = 'selected';
+		}
+		if ($node->first_module)
+		{
+			$class[] = 'first_module';
+		}
+		else if ($node->module)
+		{
+			$class[] = 'module';
+		}
+		if (count($class) > 0)
+		{
+			echo ' class="';
+			for($i=0;$i<count($class);$i++)
+			{
+				if ($i > 0)
+				{
+					echo " ";
+				}
+				echo $class[$i];
+			}
+			echo '"';
+		}
+		echo ">";
+		echo $node->title;
+		echo "</a>";
+		if ($node->has_children() && $this->has_displayable_children($node))
+		{
+			echo "<ul>";
+			$children = $node->get_children();
+			foreach ($children as &$child)
+			{
+				$this->render_menu_section($child, $depth+1, $maxdepth);
+			}
+			echo "</ul>";
+		}
+		echo "</li>";
+		return;
+	}
+
+	/**
+	 * Displays the html that makes up the admin menu.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	function display_top_menu()
+	{
+		$smarty = cms_smarty();
+		$root_node = CmsAdminTree::get_instance()->get_root_node();
+		$smarty->assign('admin_panel_title', lang('admin_panel_title'));
+		$smarty->assign_by_ref('root_node', $root_node);
+		$smarty->assign('breadcrumbs', $this->breadcrumbs);
+		$smarty->display('topmenu.tpl');
+	}
 }
 
 # vim:ts=4 sw=4 noet
