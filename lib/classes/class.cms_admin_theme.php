@@ -104,7 +104,11 @@ class CmsAdminTheme extends CmsObject
 	static public function start()
 	{
 		@ob_start();
+		
+		$admin_theme = self::get_instance();
+		
 		$smarty = cms_smarty();
+		$smarty->assign_by_ref('admin_theme', $admin_theme);
 		$smarty->template_dir = dirname(dirname(dirname(__FILE__))) . '/admin/themes/'.self::get_instance()->themeName.'/templates/';
 	}
 	
@@ -317,6 +321,10 @@ class CmsAdminTheme extends CmsObject
 		$children = CmsAdminTree::get_instance()->get_root_node()->get_children();
 		foreach ($children as &$basenode)
 		{
+			//Set icon for this item
+			$basenode->icon_url = $this->find_icon_url($basenode->name);
+			
+			//Set icons on children
 			$grandchildren = $basenode->get_children();
 			foreach ($grandchildren as &$childnode)
 			{
@@ -880,78 +888,32 @@ class CmsAdminTheme extends CmsObject
 	{
 		return $this->show_message($message, $get_var);
 	}
-	
-    /**
-     * DisplaySectionMenuDivStart
-     * Outputs the open div tag for the main section pages.
-     */
-    function DisplaySectionMenuDivStart()
-    {
-        echo "<div class=\"MainMenu\">\n";
-    }
 
     /**
-     * DisplaySectionMenuDivEnd
-     * Outputs the close div tag for the main section pages.
-     */
-    function DisplaySectionMenuDivEnd()
-    {
-        echo "</div>\n";
-    }
-
-    /**
-     * display_all_section_pages
+     * Displays the list of sections and subitems for the main menu.
      *
-     * Shows all admin section pages and modules. This is used to display the
-     * admin "main" page.
-     *
+	 * @return void
+	 * @author Ted Kulp
      */
 	function display_all_section_pages()
 	{
-		if (count($this->menuItems) < 1)
-		{
-			// menu should be initialized before this gets called.
-			// TODO: try to do initialization.
-			// Problem: current page selection, url, etc?
-			return -1;
-		}
-		foreach ($this->menuItems as $thisSection=>$menuItem)
-		{
-			if ($menuItem['parent'] != -1)
-			{
-				continue;
-			}
-			if (! $menuItem['show_in_menu'])
-			{
-				continue;
-			}
-			echo "<div class=\"MainMenuItem\">\n";
-			echo "<a href=\"".$menuItem['url']."\"";
-			if (array_key_exists('target', $menuItem))
-			{
-				echo " target=" . $menuItem['target'];
-			}
-			if ($menuItem['selected'])
-			{
-				echo " class=\"selected\"";
-			}
-			echo ">".$menuItem['title']."</a>\n";
-			echo "<span class=\"description\">";
-			if (isset($menuItem['description']) && strlen($menuItem['description']) > 0)
-			{
-				echo $menuItem['description'];
-			}
-			$this->ListSectionPages($thisSection);
-			echo "</span>\n";
-			echo "</div>\n";
-		}
+		$smarty = cms_smarty();
+		
+		$root_node = CmsAdminTree::get_instance()->get_root_node();
+
+		$smarty->assign('subitems', lang('subitems'));
+		$smarty->assign_by_ref('root_node', $root_node);
+		$smarty->display('indexcontent.tpl');
 	}
 	
-	function DisplayAllSectionPages()
-	{
-		return $this->display_all_section_pages();
-	}
-	
+	/**
+	 * Displays the subitems for the given section name.  It's used for the
+	 * admin "top*" pages.
+	 *
+	 * @param name The name of the section to display
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	function display_section_pages($section)
 	{	
 		$children = CmsAdminTree::get_instance()->get_root_node()->get_children();
@@ -972,91 +934,8 @@ class CmsAdminTheme extends CmsObject
 		
 		$smarty = cms_smarty();
 		
-		$smarty->assign_by_ref('topnode', $node);
+		$smarty->assign_by_ref('top_node', $node);
 		$smarty->display('sectiontop.tpl');
-
-		/*
-		$firstmodule = true;
-		foreach ($this->menuItems[$section]['children'] as $thisChild)
-		{
-			$thisItem = $this->menuItems[$thisChild];
-			if (! $thisItem['show_in_menu'] || strlen($thisItem['url']) < 1)
-			{
-				continue;
-			}
-
-			// separate system modules from the rest.
-			if( preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp) )
-			{
-				if( array_search( $tmp[1], $gCms->cmssystemmodules ) === FALSE && $firstmodule == true )
-				{
-					echo "<hr width=\"90%\"/>";
-					$firstmodule = false;
-				}
-			}
-
-			echo "<div class=\"itemmenucontainer\">\n";
-			echo '<div class="itemoverflow">';
-			echo '<p class="itemicon">';
-			$moduleIcon = false;
-			$iconSpec = $thisChild;
-
-			// handle module icons
-			if (preg_match( '/module=([^&]+)/', $thisItem['url'], $tmp))
-			{
-				if ($tmp[1] == 'News')
-				{
-					$iconSpec = 'newsmodule';
-				}
-				else if ($tmp[1] == 'TinyMCE' || $tmp[1] == 'HTMLArea')
-				{
-					$iconSpec = 'wysiwyg';
-				}
-				else
-				{
-					$imageSpec = dirname($this->cms->config['root_path'] .
-					'/modules/' . $tmp[1] . '/images/icon.gif') .'/icon.gif';
-					if (file_exists($imageSpec))
-					{
-						echo '<a href="'.$thisItem['url'].'"><img class="itemicon" src="'.
-						$this->cms->config['root_url'] .
-						'/modules/' . $tmp[1] . '/images/' .
-						'/icon.gif" alt="'.$thisItem['title'].'" /></a>';
-						$moduleIcon = true;
-					}
-					else
-					{
-						$iconSpec=$this->TopParent($thisChild);
-					}
-				}
-			}
-			if (! $moduleIcon)
-			{
-				if ($thisItem['url'] == '../index.php')
-				{
-					$iconSpec = 'viewsite';
-				}
-				echo '<a href="'.$thisItem['url'].'">';
-				echo $this->DisplayImage('icons/topfiles/'.$iconSpec.'.gif', ''.$thisItem['title'].'', '', '', 'itemicon');
-				echo '</a>';
-			}
-			echo '</p>';
-			echo '<p class="itemtext">';
-			echo "<a class=\"itemlink\" href=\"".$thisItem['url']."\"";
-			if (array_key_exists('target', $thisItem))
-			{
-				echo ' rel="external"';
-			}
-			echo ">".$thisItem['title']."</a><br />\n";
-			if (isset($thisItem['description']) && strlen($thisItem['description']) > 0)
-			{
-				echo $thisItem['description']."<br />";
-			}
-			echo '</p>';
-			echo "</div>";
-			echo '</div>';			
-		}
-		*/
 	}
 }
 

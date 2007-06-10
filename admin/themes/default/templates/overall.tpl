@@ -32,7 +32,7 @@
 	
 <div>
 
-	{$admin_topmenu}
+  {$admin_topmenu}
 
 	<div id="MainContent">
 		<div class="navt_menu">

@@ -1,4 +1,4 @@
-{foreach from=$topnode->get_children() item=node}
+{foreach from=$top_node->get_children() item=node}
 
   {if $node->show_in_menu}
 
@@ -11,12 +11,12 @@
         <p class="itemicon">
           {if $node->icon_url != ''}
             <a href="listcontent.php">
-              <img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" />
+              <img src="{$node->icon_url}" class="itemicon" alt="{$node->title}" title="{$node->title}" {if $node->target ne ''}ref="external"{/if} />
             </a>
           {/if}
         </p>
         <p class="itemtext">
-          <a class="itemlink" href="listcontent.php">{$node->title}</a><br />{$node->description}<br />
+          <a class="itemlink" href="{$node->url}">{$node->title}</a><br />{$node->description}<br />
         </p>
       </div>
     </div>
