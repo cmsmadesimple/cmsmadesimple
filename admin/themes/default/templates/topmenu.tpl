@@ -36,12 +36,14 @@
   <div class="breadcrumbs">
     <p class="breadcrumbs">
       {if count($breadcrumbs) gt 0}
-        &#187;
         {foreach from=$breadcrumbs item=breadcrumb name=breadcrumb}
-          {if $breadcrumb->url ne ''}
-            <a class="breadcrumbs" href="{$breadcrumb->url|escape:'html'}">{$breadcrumb->title}</a>
+          {if $breadcrumb.url ne ''}
+            <a class="breadcrumbs" href="{$breadcrumb.url|escape:'html'}">{$breadcrumb.title}</a>
           {else}
-            {$breadcrumb->title}
+            {$breadcrumb.title}
+          {/if}
+          {if !$smarty.foreach.breadcrumb.last}
+            &#187;
           {/if}
         {/foreach}
       {/if}
