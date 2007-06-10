@@ -18,7 +18,7 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.1";
+$CMS_VERSION = "2.0-svn";
 $CMS_VERSION_NAME = "Jamaica";
 $CMS_SCHEMA_VERSION = "27";
 

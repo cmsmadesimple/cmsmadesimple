@@ -214,7 +214,7 @@ class CmsTemplateOperations extends CmsObject
 	{
 		$result = "";
 		
-		$templateops =& cmsms()->GetTemplateOperations();
+		$templateops = cmsms()->GetTemplateOperations();
 
 		$alltemplates = $templateops->LoadTemplates();
 		

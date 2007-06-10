@@ -49,12 +49,12 @@ class CmsCache extends CmsObject
 				$options['caching'] = false;
 
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
-			$this->cache = new Cache_Lite_Function($options);
+			self::$cache = new Cache_Lite_Function($options);
 		}
 		else
 		{
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
-			$this->cache = new Cache_Lite($options);
+			self::$cache = new Cache_Lite($options);
 		}
 	}
 	
@@ -77,24 +77,24 @@ class CmsCache extends CmsObject
 	
 	public function get($id, $group = 'default', $doNotTestCacheValidity = FALSE)
 	{
-		return $this->cache->get($id, $group, $doNotTestCacheValidity);
+		return self::$cache->get($id, $group, $doNotTestCacheValidity);
 	}
 	
 	public function save($data, $id = NULL, $group = 'default')
 	{
-		return $this->cache->save($data, $id, $group);
+		return self::$cache->save($data, $id, $group);
 	}
 	
 	public function call()
 	{
 		$args = func_get_args();
-		return call_user_func_array(array(&$this->cache, 'call'), $args);
+		return call_user_func_array(array(&self::$cache, 'call'), $args);
 	}
 	
 	public function drop()
 	{
 		$args = func_get_args();
-		return call_user_func_array(array(&$this->cache, 'drop'), $args);
+		return call_user_func_array(array(&self::$cache, 'drop'), $args);
 	}
 	
 	public function clean($group = FALSE, $mode = 'ingroup')

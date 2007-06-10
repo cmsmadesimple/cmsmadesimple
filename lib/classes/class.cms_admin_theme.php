@@ -526,7 +526,7 @@ class CmsAdminTheme extends CmsObject
 			check_permission($this->userid, 'Delete Global Content Blocks');
 
 		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
+		$gcbops = $gCms->GetGlobalContentOperations();
 
 		$thisUserBlobs = $gcbops->AuthorBlobs($this->userid);
 		if (count($thisUserBlobs) > 0)

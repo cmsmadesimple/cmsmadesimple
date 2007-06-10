@@ -29,8 +29,8 @@ if (isset($_POST["cancel"]))
 
 $gCms = cmsms();
 $smarty = cms_smarty();
-$contentops =& $gCms->GetContentOperations();
-$templateops =& $gCms->GetTemplateOperations();
+$contentops = $gCms->GetContentOperations();
+$templateops = $gCms->GetTemplateOperations();
 
 #Make sure we're logged in and get that user id
 check_login();
@@ -222,7 +222,7 @@ $smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $pag
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
 
 //Set the users
-$userops =& $gCms->GetUserOperations();
+$userops = $gCms->GetUserOperations();
 $smarty->assign('show_owner_dropdown', false);
 $smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
 

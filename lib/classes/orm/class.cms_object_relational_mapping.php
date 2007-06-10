@@ -951,6 +951,17 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Returns wether or not the object has a particular parameter.
+	 *
+	 * @param string Name of the parameter to check for
+	 * @return bool If that parameter exists or not
+	 */
+	public function has_parameter($name)
+	{
+		return (array_key_exists($name, $this->params));
+	}
+	
+	/**
 	 * Fills an object with the fields from the database.
 	 *
 	 * @param array Reference to the hash for this record that came from the database

@@ -47,7 +47,7 @@ if (isset($_GET["message"]))
 	$remove	= check_permission($userid, 'Remove Templates');
 	
 	global $gCms;
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 
 	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent")
 	{

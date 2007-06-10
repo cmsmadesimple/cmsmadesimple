@@ -46,8 +46,8 @@ function check_modify_all($userid)
 $gCms = cmsms();
 $smarty = cms_smarty();
 $config = cms_config();
-$contentops =& $gCms->GetContentOperations();
-$templateops =& $gCms->GetTemplateOperations();
+$contentops = $gCms->GetContentOperations();
+$templateops = $gCms->GetTemplateOperations();
 
 //include_once("../lib/classes/class.admintheme.inc.php");
 

@@ -74,7 +74,7 @@ function generate_user_object($userid)
 function load_all_permissions($userid)
 {
 	global $gCms;
-	$db = &$gCms->GetDb();
+	$db = cms_db();
 	$variables = &$gCms->variables;
 
 	$perms = array();
@@ -214,11 +214,11 @@ function check_authorship($userid, $contentid = '')
 function author_pages($userid)
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = cms_db();
     $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 		$variables['authorpages'] = array();
 		
 		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;

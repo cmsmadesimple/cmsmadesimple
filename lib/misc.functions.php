@@ -304,7 +304,7 @@ function debug_buffer($var, $title="")
 	global $gCms;
 	if ($gCms)
 	{
-		$config =& $gCms->GetConfig();
+		$config = cms_config();
 		//debug_to_log($var, $title='');
 		if($config["debug"] == true)
 		{

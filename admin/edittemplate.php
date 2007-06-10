@@ -24,7 +24,7 @@ require_once("../include.php");
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcontent.php");
+	redirect("listtemplates.php");
 }
 
 $gCms = cmsms();

@@ -140,7 +140,6 @@ class CmsApplication extends CmsObject
 		$this->userplugins         = array();
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
-		$this->siteprefs           = array();
 		$this->orm                 = array();
 	}
 	
@@ -328,7 +327,7 @@ class CmsApplication extends CmsObject
         if (!isset($this->hrinstance))
 		{
 			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$this->hrinstance = CmsContentOperations::GetAllContentAsHierarchy(false, array());
+			$this->hrinstance = CmsContentOperations::get_all_content_as_hierarchy();
 			debug_buffer('', 'End Loading Hierarchy Manager');
 		}
 
