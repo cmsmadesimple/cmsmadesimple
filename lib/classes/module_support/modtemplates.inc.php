@@ -75,6 +75,9 @@ function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
  */
 function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 {
+	$ok = (strpos($tpl_name, '..') === false);
+	if (!$ok) return;
+
 	global $gCms;
 	$config = &$gCms->GetConfig();
 	$tpl_base  = $config['root_path'].DIRECTORY_SEPARATOR.'modules'.DIRECTORY_SEPARATOR;
@@ -128,6 +131,9 @@ function cms_module_DeleteTemplate(&$modinstance, $tpl_name = '', $modulename = 
 
 function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '', $cacheid = '')
 {
+	$ok = (strpos($tpl_name, '..') === false);
+	if (!$ok) return;
+
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();
 	$oldcache = $smarty->caching;
@@ -146,6 +152,9 @@ function cms_module_IsFileTemplateCached(&$modinstance, $tpl_name, $designation 
 
 function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '', $cache = false, $cacheid = '')
 {
+	$ok = (strpos($tpl_name, '..') === false);
+	if (!$ok) return;
+
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();
 
@@ -160,6 +169,9 @@ function cms_module_ProcessTemplate(&$modinstance, $tpl_name, $designation = '',
 
 function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designation = '', $timestamp = '')
 {
+	$ok = (strpos($tpl_name, '..') === false);
+	if (!$ok) return;
+
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();
 	$oldcache = $smarty->caching;
@@ -194,6 +206,9 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false)
 {
+	$ok = (strpos($tpl_name, '..') === false);
+	if (!$ok) return;
+
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();
 
