@@ -41,10 +41,14 @@ class CmsAdminTheme extends CmsObject
 	public $query = '';
 	public $subtitle = '';
 	public $theme_template_dir = '';
+	public $theme_name = '';
+	public $themeName = '';
 
-	function __construct()
+	function __construct($userid, $theme_name = 'default')
 	{
 		parent::__construct();
+		
+		$this->theme_name = $theme_name;
 		
 		$this->url = $_SERVER['SCRIPT_NAME'];
 		$this->query = (isset($_SERVER['QUERY_STRING'])?$_SERVER['QUERY_STRING']:'');
@@ -64,7 +68,7 @@ class CmsAdminTheme extends CmsObject
 			//$this->script = array_pop(@explode('/',$this->url));
 		}
 
-		$this->theme_template_dir = dirname(dirname(dirname(__FILE__))) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->themeName . '/templates/';
+		$this->theme_template_dir = dirname(dirname(dirname(__FILE__))) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->theme_name . '/templates/';
 	}
 	
 	static public function get_instance()
@@ -82,24 +86,25 @@ class CmsAdminTheme extends CmsObject
 		$user = CmsLogin::get_current_user();
 		$userid = $user->id;
 
-		$themeName=get_preference($userid, 'admintheme', 'default');
-		$themeObjectName = $themeName."Theme";
+		$theme_name = get_preference($userid, 'admintheme', 'default');
+		$theme_file_name = "{$theme_name}_theme";
+		$theme_object_name = ucfirst(camelize($theme_file_name));
 
-		if (file_exists(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php"))
+		if (file_exists(dirname(dirname(dirname(__FILE__))) . DS . "admin/themes/${theme_name}/${theme_file_name}.php"))
 		{
-			include(dirname(dirname(dirname(__FILE__))).DIRECTORY_SEPARATOR."admin/themes/${themeName}/${themeObjectName}.php");
-			$themeObject = new $themeObjectName($gCms, $userid, $themeName);
+			include(dirname(dirname(dirname(__FILE__))) . DS . "admin/themes/${theme_name}/${theme_file_name}.php");
+			$themeObject = new $theme_object_name($userid, $theme_name);
 		}
 		else
 		{
-			$themeObject = new CmsAdminTheme($gCms, $userid, $themeName);
+			include(dirname(dirname(dirname(__FILE__))) . DS . "admin/themes/default/default_theme.php");
+			$themeObject = new CmsAdminTheme($userid);
 		}
 		
 		$themeObject->userid = get_userid();
 		$themeObject->set_module_admin_interfaces();
 		$themeObject->set_aggrigate_permissions();
 		$themeObject->populate_admin_navigation();
-		//$themeObject->themeName = $themeName;
 
 		return $themeObject;
 	}
@@ -957,6 +962,60 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('breadcrumbs', $this->breadcrumbs);
 		$smarty->display(self::get_instance()->theme_template_dir . 'topmenu.tpl');
 	}
+	
+	function StartRighthandColumn()
+	{
+		echo '<div class="navt_menu">'."\n";
+		echo '<div id="navt_display" class="navt_show" onclick="change(\'navt_display\', \'navt_hide\', \'navt_show\'); change(\'navt_container\', \'invisible\', \'visible\');"></div>'."\n";
+		echo '<div id="navt_container" class="invisible">'."\n";
+		echo '<div id="navt_tabs">'."\n";
+		if (get_preference($this->userid, 'bookmarks'))
+		{
+			echo '<div id="navt_bookmarks">'.lang('bookmarks').'</div>'."\n";
+		}
+		echo '</div>'."\n";
+		echo '<div style="clear: both;"></div>'."\n";
+		echo '<div id="navt_content">'."\n";
+	}
+
+	function DisplayRecentPages()
+	{
+		if (get_preference($this->userid, 'recent'))
+		{	
+			echo '<div id="navt_recent_pages_c">'."\n";
+			$counter = 0;
+			foreach($this->recent as $pg)
+			{
+				echo "<a href=\"". $pg->url."\">".++$counter.'. '.$pg->title."</a><br />"."\n";
+			}
+			echo '</div>'."\n";
+		}
+	}
+
+	function DisplayBookmarks($marks)
+	{
+		if (get_preference($this->userid, 'bookmarks'))
+		{	
+			echo '<div id="navt_bookmarks_c">'."\n";
+			$counter = 0;
+			foreach($marks as $mark)
+			{
+				echo "<a href=\"". $mark->url."\">".++$counter.'. '.$mark->title."</a><br />"."\n";
+			}
+			echo '</div>'."\n";
+		}
+	}	 
+
+	function EndRighthandColumn()
+	{
+		echo '</div>'."\n";
+		echo '</div>'."\n";
+		echo '<div style="clear: both;"></div>'."\n";
+		echo '</div>'."\n";
+	}
+
+	/* Functions that we want dont want the standard output from */
+	function OutputFooterJavascript() {}
 }
 
 # vim:ts=4 sw=4 noet
