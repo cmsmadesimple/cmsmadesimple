@@ -1,4 +1,4 @@
-Version 1.1rc3 "Samoa" -- Jun 08 2007
+Version 1.1rc3 "Samoa" -- Jun 20 2007
 -----------------
 - Numerous changes to attempt to minimize the potential for XSS attacks
 - Cleanup SQL statements to prevent against SQL injection attacks
