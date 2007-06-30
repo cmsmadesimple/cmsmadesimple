@@ -266,7 +266,7 @@ class CmsContentOperations extends CmsObject
 		return CmsContentOperations::get_all_content_as_hierarchy();
 	}
 
-	public static function create_page_tree()
+	public static function create_page_tree($parent_id = -1, $lft = -1, $rgt = -1)
 	{
 		$tree = new CmsPageTree();
 		$db = cms_db();
@@ -290,27 +290,6 @@ class CmsContentOperations extends CmsObject
 		}
 		
 		return $tree;
-	}
-	
-	public static function fill_page_tree(&$tree, $parent_id = -1, $lft = -1, $rgt = -1)
-	{
-		$dbresult = null;
-
-		if ($lft == -1 && $rgt == -1)
-		{
-			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE parent_id = ? ORDER BY lft";
-			$dbresult =& cms_db()->Execute($query, array($parent_id));
-		}
-		else
-		{
-			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE lft > ? AND rgt < ? ORDER BY lft";
-			$dbresult =& cms_db()->Execute($query, array($lft, $rgt));
-		}
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			$tree->fill_from_db($dbresult);
-		}
 	}
 	
 	public static function load_children_into_tree($id, &$tree)

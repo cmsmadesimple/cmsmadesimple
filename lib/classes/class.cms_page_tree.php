@@ -67,7 +67,6 @@ class CmsPageTree extends CmsTree
 				{
 					$nodelist[$pathparts[0]] = $this->create_node($pathparts[0], $active, $show_in_menu);
                     $this->get_root_node()->add_child($nodelist[$pathparts[0]]);
-					$this->get_root_node()->children_loaded = true;
                 }
             }
 			else
@@ -95,7 +94,7 @@ class CmsPageTree extends CmsTree
 	
 	function create_node($id = -1, $active = false, $show_in_menu = false)
 	{
-		$node = new CmsPageNode((int)$id, $active, $show_in_menu);
+		$node = new CmsPageNode($id, $active, $show_in_menu);
 		$node->tree = $this;
 		return $node;
 	}
@@ -195,12 +194,10 @@ class CmsPageNode extends CmsNode
 		$tree = $this->get_tree();
 		if (array_key_exists($this->id, $tree->content))
 		{
-			var_dump('1');
 			$content = $tree->content[$this->id];
 		}
 		else
 		{
-			var_dump('2');
 			$content = cmsms()->content_base->find_by_id($this->id);
 			$tree->content[$this->id] = $content;
 		}
@@ -216,9 +213,10 @@ class CmsPageNode extends CmsNode
 			if (!$this->children_loaded())
 			{
 				$content = $this->get_content();
+				var_dump($content);
 				if ($content != null)
 				{
-					CmsContentOperations::fill_page_tree($this->tree, $content->id, $content->lft, $content->rgt);
+					CmsContentOperations::create_page_tree($content->id, $content->lft, $content->rgt);
 				}
 			}
 			$node = null;

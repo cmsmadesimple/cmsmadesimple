@@ -420,18 +420,15 @@ class CmsSmarty extends Smarty {
 		{
 			$manager =& $gCms->GetHierarchyManager();
 			$node = $manager->sureGetNodeById($pageinfo->content_id);
-			if ($contentobj != null)
+			$contentobj = $node->getContent();
+
+			if (isset($contentobj) && $contentobj !== FALSE)
 			{
-				$contentobj = $node->getContent();
-
-				if (isset($contentobj) && $contentobj !== FALSE)
-				{
-					$tpl_source = $contentobj->show($tpl_name);
+				$tpl_source = $contentobj->show($tpl_name);
 				
-					//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
+				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
 
-					return true;
-				}
+				return true;
 			}
 		}
 		return false;
