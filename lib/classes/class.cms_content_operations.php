@@ -266,13 +266,23 @@ class CmsContentOperations extends CmsObject
 		return CmsContentOperations::get_all_content_as_hierarchy();
 	}
 
-	public static function create_page_tree()
+	public static function create_page_tree($parent_id = -1, $lft = -1, $rgt = -1)
 	{
 		$tree = new CmsPageTree();
 		$db = cms_db();
+		
+		$dbresult = null;
 
-		$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content ORDER BY hierarchy";
-		$dbresult =& cms_db()->Execute($query);
+		if ($lft == -1 && $rgt == -1)
+		{
+			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE parent_id = ? ORDER BY lft";
+			$dbresult =& cms_db()->Execute($query, array($parent_id));
+		}
+		else
+		{
+			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE lft > ? AND rgt < ? ORDER BY lft";
+			$dbresult =& cms_db()->Execute($query, array($lft, $rgt));
+		}
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
 		{

@@ -85,6 +85,7 @@ class CmsPageTree extends CmsTree
 					{
 						$nodelist[$currentPath] = $this->create_node($pathparts[$j], $active, $show_in_menu);
                         $parentObj = $parentObj->add_child($nodelist[$currentPath]);
+						$parentObj->children_loaded = true;
                     }
                 }
             }
@@ -171,6 +172,7 @@ class CmsPageNode extends CmsNode
 	var $id = -1;
 	var $active = false;
 	var $show_in_menu = false;
+	var $children_loaded = false;
 	
 	function __construct($id = -1, $active = false, $show_in_menu = false)
 	{
@@ -206,6 +208,17 @@ class CmsPageNode extends CmsNode
 	{
 		if ($this->has_children())
 		{
+			//We know there are children, but no nodes have been
+			//created yet.  We should probably do that.
+			if (!$this->children_loaded())
+			{
+				$content = $this->get_content();
+				var_dump($content);
+				if ($content != null)
+				{
+					CmsContentOperations::create_page_tree($content->id, $content->lft, $content->rgt);
+				}
+			}
 			$node = null;
 			//It seems like the first child is already loaded elsewhere
 			//So we trick it a bit to make sure we get all the children
@@ -242,6 +255,11 @@ class CmsPageNode extends CmsNode
 	function getTag()
 	{
 		return $this->id;
+	}
+	
+	public function children_loaded()
+	{
+		return $this->children_loaded;
 	}
 }
 
