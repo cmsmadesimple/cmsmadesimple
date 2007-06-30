@@ -21,7 +21,8 @@ function smarty_function_get_content($params, &$smarty)
 	try
 	{
 		$item = $params['item'];
-		$smarty->assign_by_ref('content_item', $item->GetContent());
+		$content = $item->GetContent();
+		$smarty->assign_by_ref('content_item', $content);
 	}
 	catch (Exception $e)
 	{

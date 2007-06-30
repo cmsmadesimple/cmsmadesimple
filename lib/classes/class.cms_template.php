@@ -55,7 +55,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 		$this->validate_not_blank('content', lang('nofieldgiven',array(lang('content'))));
 		if ($this->name != '')
 		{
-			$result = cmsms()->template->find_all_by_name($this->name);
+			$result = cms_orm()->template->find_all_by_name($this->name);
 			if (count($result) > 0)
 			{
 				if ($result[0]->id != $this->id)

@@ -170,10 +170,10 @@ class CmsContentOperations extends CmsObject
     /**
      * Updates the hierarchy position of one item
      */
-	function SetHierarchyPosition($contentid)
+	public static function SetHierarchyPosition($contentid)
 	{
 		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = $gCms->GetDb();
 
 		$current_hierarchy_position = '';
 		$current_id_hierarchy_position = '';
@@ -224,7 +224,7 @@ class CmsContentOperations extends CmsObject
     /**
      * Updates the hierarchy position of all items
      */
-	function SetAllHierarchyPositions()
+	public static function SetAllHierarchyPositions()
 	{
 		global $gCms;
 		$db = $gCms->GetDb();
@@ -234,7 +234,7 @@ class CmsContentOperations extends CmsObject
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			ContentOperations::SetHierarchyPosition($dbresult->fields['id']);
+			self::SetHierarchyPosition($dbresult->fields['id']);
 			$dbresult->MoveNext();
 		}
 		
@@ -317,15 +317,13 @@ class CmsContentOperations extends CmsObject
 
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
 	{
-		$result = '';
+		$result = '<select name="'.$name.'">';
+		$result .= '<option value="-1">None</option>';
 
 		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
 
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
-			$result .= '<select name="'.$name.'">';
-			$result .= '<option value="-1">None</option>';
-
 			$curhierarchy = '';
 
 			foreach ($allcontent as $one)
@@ -359,9 +357,9 @@ class CmsContentOperations extends CmsObject
 					$result .= '>'.$one->hierarchy().'. - '.$one->name.'</option>';
 				}
 			}
-
-			$result .= '</select>';
 		}
+
+		$result .= '</select>';
 
 		return $result;
 	}
@@ -473,7 +471,7 @@ class CmsContentOperations extends CmsObject
 	function CheckAliasError($alias, $content_id = -1)
 	{
 		global $gCms;
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 
 		$error = FALSE;
 

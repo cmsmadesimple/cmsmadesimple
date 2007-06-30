@@ -65,6 +65,8 @@ CmsInstallOperations::create_table($db, 'content', "
 	parent_id I,
 	template_id I,
 	item_order I,
+	lft I,
+	rgt I,
 	hierarchy C(255),
 	default_content I1,
 	menu_text C(255),

@@ -268,7 +268,7 @@ class CmsSmarty extends Smarty {
 	function template_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = cms_config();
 
 		if (get_site_preference('enablesitedownmessage') == "1")
 		{
@@ -331,7 +331,7 @@ class CmsSmarty extends Smarty {
 			else
 			{
 				global $gCms;
-				$templateops =& $gCms->GetTemplateOperations();
+				$templateops = $gCms->GetTemplateOperations();
 				$templateobj = $templateops->LoadTemplateByID($pageinfo->template_id);
 				if (isset($templateobj) && $templateobj !== FALSE)
 				{
@@ -391,7 +391,7 @@ class CmsSmarty extends Smarty {
 	function content_get_template($tpl_name, &$tpl_source, &$smarty_obj)
 	{
 		global $gCms;
-		$config =& $gCms->GetConfig();
+		$config = cms_config();
 		$pageinfo = &$gCms->variables['pageinfo'];
 
 		if (isset($pageinfo) && $pageinfo->content_id == -1)
@@ -419,8 +419,8 @@ class CmsSmarty extends Smarty {
 		else
 		{
 			$manager =& $gCms->GetHierarchyManager();
-			$node =& $manager->sureGetNodeById($pageinfo->content_id);
-			$contentobj =& $node->getContent();
+			$node = $manager->sureGetNodeById($pageinfo->content_id);
+			$contentobj = $node->getContent();
 
 			if (isset($contentobj) && $contentobj !== FALSE)
 			{
@@ -468,7 +468,7 @@ class CmsSmarty extends Smarty {
 	{
 		global $gCms;
 		$pageinfo =& $gCms->variables['pageinfo'];
-		$config = $gCms->config;
+		$config = cms_config;
 
 		#Run the execute_user function and replace {content} with it's output 
 		if (isset($gCms->modules[$tpl_name]))

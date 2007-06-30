@@ -119,7 +119,7 @@ class CmsRequest extends CmsObject
 		}
 		else
 		{
-			$calced = CmsRequest::cms_calculate_url();
+			$calced = self::cms_calculate_url();
 			if ($calced != '')
 				$page = $calced;
 		}
@@ -131,7 +131,7 @@ class CmsRequest extends CmsObject
 	 * Figures out the page name from the uri string.  Has to use different logic
 	 * based on the type of httpd server.
 	 */
-	function cms_calculate_url()
+	public static function cms_calculate_url()
 	{
 		$result = '';
 

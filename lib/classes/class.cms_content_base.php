@@ -32,7 +32,7 @@
 class CmsContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
-	var $params = array('id' => -1, 'template_id' => -1, 'name' => '', 'menu_text' => '', 'active' => true, 'default_content' => false);
+	var $params = array('id' => -1, 'template_id' => -1, 'name' => '', 'menu_text' => '', 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
 	var $field_maps = array('content_name' => 'name', 'content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 
 	'tabindex' => 'tab_index');
 	var $unused_fields = array();
@@ -71,10 +71,30 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		if ($this->id == -1)
 		{
 			$db = cms_db();
+			
+			$right = $db->GetOne('SELECT max(rgt) FROM ' . cms_db_prefix() . 'content');
+			
+			if ($this->parent_id > -1)
+			{
+				$row = $db->GetRow('SELECT rgt FROM ' . cms_db_prefix() . 'content WHERE id = ?', array($this->parent_id));
+				if ($row)
+				{
+					$right = $row['rgt'];
+				}
 
+				$db->Execute("UPDATE ".cms_db_prefix()."content SET lft = lft + 2 WHERE lft > ?", array($right));
+				$db->Execute("UPDATE ".cms_db_prefix()."content SET rgt = rgt + 2 WHERE rgt >= ?", array($right));
+			}
+			else
+			{
+				$right = $right + 1;
+			}
+			
+			$this->lft = $right;
+			$this->rgt = $right + 1;
+			
 			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
 			$row = &$db->GetRow($query, array($this->parent_id));
-
 			if ($row)
 			{
 				if ($row['new_order'] < 1)
@@ -179,12 +199,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
      */
 	function has_children()
 	{
-		$count = cmsms()->content_base->find_count_by_parent_id($this->id);
-		
-		if (isset($count) && $count > 0)
-			return true;
-		
-		return false;
+		return $this->rgt > ($this->lft + 1);
 	}
 	
 	function has_property($name)
@@ -330,7 +345,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			}
 		}
 
-		$this->alias = munge_string_to_url($alias, $tolower);
+		$this->params['alias'] = munge_string_to_url($alias, $tolower);
 	}
 	
 	function SetAlias($alias)

@@ -217,7 +217,7 @@ class CmsPageNode extends CmsNode
 			$tree = $this->get_tree();
 			if (!array_key_exists($checkid, $tree->content))
 			{
-				CmsContentOperations::LoadChildrenIntoTree($this->id, $this->tree);
+				CmsContentOperations::load_children_into_tree($this->id, $this->tree);
 			}
 		}
 		return $this->children;

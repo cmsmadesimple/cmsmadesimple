@@ -943,8 +943,11 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		{
 			if (array_key_exists($k, $this->params))
 			{
-				//Just in case there is an override
-				$this->params[$k] = $v;
+				if (method_exists($this, 'set_' . $k))
+					call_user_func_array(array($this, 'set_'.$k), array($v));
+				else
+					//Just in case there is an override
+					$this->params[$k] = $v;
 				$this->dirty = true;
 			}
 		}
