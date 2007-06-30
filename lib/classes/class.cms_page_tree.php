@@ -31,92 +31,94 @@
  **/
 class CmsPageTree extends CmsTree
 {
-	var $content = array();
+	static public $content = array();
+	static private $instance = NULL;
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->root = new CmsPageNode();
+		$this->root = new CmsNode();
 		$this->root->tree = $this;
+		$this->load_child_nodes(); //Fill the base of the tree
+	}
+	
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsPageTree();
+		}
+		return self::$instance;
 	}
 	
 	function getRootNode()
 	{
 		return $this->root;
 	}
-	
-    public function fill_from_db($dbresult)
-    {
-        $nodelist = array();
-		$separator = '.';
 
-		while ($row = $dbresult->FetchRow())
+	public function load_child_nodes($parent_id = -1, $lft = -1, $rgt = -1)
+	{
+		$pages = array();
+
+		if ($lft == -1 && $rgt == -1)
 		{
-			$data = $row['id_hierarchy'];
-			$active = $row['active'];
-			$show_in_menu = $row['show_in_menu'];
-            $pathparts = explode($separator, $data);
-
-            if (count($pathparts) == 1)
-			{
-                if (!empty($nodelist[$pathparts[0]]))
-				{
-                    continue;
-                }
-				else
-				{
-					$nodelist[$pathparts[0]] = $this->create_node($pathparts[0], $active, $show_in_menu);
-                    $this->get_root_node()->add_child($nodelist[$pathparts[0]]);
-                }
-            }
-			else
-			{
-                $parentObj = $this->get_root_node();
-
-                for ($j=0; $j<count($pathparts); $j++)
-				{
-                    $currentPath = implode($separator, array_slice($pathparts, 0, $j + 1));
-                    if (!empty($nodelist[$currentPath]))
-					{
-                        $parentObj = $nodelist[$currentPath];
-                        continue;
-                    }
-					else
-					{
-						$nodelist[$currentPath] = $this->create_node($pathparts[$j], $active, $show_in_menu);
-                        $parentObj = $parentObj->add_child($nodelist[$currentPath]);
-						$parentObj->children_loaded = true;
-                    }
-                }
-            }
+			$pages = cms_orm()->content->find_all_by_parent_id($parent_id, array('order' => 'lft ASC'));
 		}
-    }
-	
-	function create_node($id = -1, $active = false, $show_in_menu = false)
-	{
-		$node = new CmsPageNode($id, $active, $show_in_menu);
-		$node->tree = $this;
-		return $node;
-	}
-	
-	function get_node_by_id($id)
-	{
-		$result = null;
-
-		if ($id)
+		else
 		{
-			$flatlist =& $this->get_flat_list();
-			foreach ($flatlist as &$node)
+			$pages = cms_orm()->content->find_all(array('conditions' => array('lft > ? AND rgt < ?', $lft, $rgt), 'order' => 'lft ASC'));
+		}
+		
+		foreach ($pages as $page)
+		{
+			$parent_node = $this->get_node_by_id($page->parent_id);
+			if ($parent_node != null)
 			{
-				if ($id == $node->id)
-				{
-					$result = $node;
-					break;
-				}
+				$parent_node->add_child($page);
+				self::$content[(string)$page->id] = $page; //Put a reference up so we can quickly check to see if it's loaded already
+				$parent_node->children_loaded = true;
 			}
 		}
-
-		return $result;
+	}
+	
+	public function get_node_by_id($id)
+	{
+		if ($id)
+		{
+			if ($id == -1)
+			{
+				return $this->get_root_node();
+			}
+			else if (array_key_exists((string)$id, self::$content))
+			{
+				return self::$content[(string)$id];
+			}
+			else
+			{
+				//TODO: Optimize this more -- right now we're just making sure it works
+				//First we find the page.  If it exists, we then grab the great-great-grandparent
+				//and load all of the nodes in between.
+				$page = cms_orm()->content->find_by_id($id);
+				if ($page)
+				{
+					$ancestor = null;
+					$top_nodes = $this->tree->get_root_node()->get_children();
+					foreach ($top_nodes as $one_node)
+					{
+						if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id) //Don't bother doing this if we're only level 2
+						{
+							$ancestor = $one_node;
+							break;
+						}
+					}
+					if ($ancestor != null)
+					{
+						$this->load_child_nodes(-1, $ancestor->lft, $ancestor->rgt);
+					}
+				}
+				return self::$content[(string)$id];
+			}
+		}
 	}
 	
 	function getNodeByID($id)
@@ -129,7 +131,7 @@ class CmsPageTree extends CmsTree
 		return $this->get_node_by_id($id);
 	}
 	
-	function get_node_by_alias($alias)
+	public function get_node_by_alias($alias)
 	{
 		$result = null;
 		$id = CmsCache::get_instance()->call('CmsContentOperations::get_page_id_from_alias', $alias);

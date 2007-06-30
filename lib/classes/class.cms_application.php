@@ -319,19 +319,9 @@ class CmsApplication extends CmsObject
 		return CmsLogin::get_current_user();
 	}
 
-	function &GetHierarchyManager()
+	function GetHierarchyManager()
 	{
-		//Check to see if it hasn't been
-		//instantiated yet.  If not, connect
-		//and return it
-        if (!isset($this->hrinstance))
-		{
-			debug_buffer('', 'Start Loading Hierarchy Manager');
-			$this->hrinstance = CmsContentOperations::get_all_content_as_hierarchy();
-			debug_buffer('', 'End Loading Hierarchy Manager');
-		}
-
-        return $this->hrinstance;
+		return CmsPageTree::get_instance();
 	}
 	
 	/**

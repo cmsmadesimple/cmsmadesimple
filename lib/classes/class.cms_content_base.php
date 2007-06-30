@@ -43,6 +43,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	var $props_loaded = false;
 	
+	#Stuff needed to do a doppleganger for CmsNode -- Multiple inheritence would rock right now
+	var $tree = null;
+	var $parentnode = null;
+	var $children = array();
+	
 	function __construct()
 	{
 		parent::__construct();
@@ -437,6 +442,103 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		{
 			return '';
 		}
+	}
+	
+	function add_child($node)
+	{
+		$node->set_parent($this);
+		$node->tree = $this->tree;
+		$this->children[] = $node;
+	}
+	
+	function get_tree()
+	{
+		return $this->tree;
+	}
+	
+	function depth()
+	{
+		$depth = 0;
+		$currLevel = &$this;
+
+		while ($currLevel->parentnode)
+		{
+			$depth++;
+			$currLevel = &$currLevel->parentnode;
+		}
+		
+		return $depth;
+	}
+	
+	function get_level()
+	{
+		return $this->depth();
+	}
+	
+	function getLevel()
+	{
+		return $this->depth();
+	}
+	
+	function get_parent()
+	{
+		return $this->parentnode;
+	}
+	
+	function set_parent($node)
+	{
+		$this->parentnode = $node;
+	}
+	
+	function get_children_count()
+	{
+		return count($this->children);
+	}
+	
+	function getChildrenCount()
+	{
+		return $this->get_children_count();
+	}
+
+	function &get_children()
+	{
+		if ($this->has_children())
+		{
+			//We know there are children, but no nodes have been
+			//created yet.  We should probably do that.
+			if (!$this->children_loaded())
+			{
+				$this->tree->load_child_nodes(-1, $this->lft, $this->rgt);
+			}
+		}
+		return $this->children;
+	}
+	
+    function &get_flat_list()
+    {
+        $return = array();
+
+		if ($this->has_children())
+		{
+			for ($i=0; $i<count($this->children); $i++)
+			{
+				$return[] = &$this->children[$i];
+				$return = array_merge($return, $this->children[$i]->get_flat_list());
+			}
+		}
+        
+        return $return;
+    }
+
+	function &getFlatList()
+	{
+		$tmp =& $this->get_flat_list();
+		return $tmp;
+	}
+	
+	function get_content()
+	{
+		return $this;
 	}
 }
 
