@@ -11,7 +11,7 @@
     
     {* Collapse/Expand Links *}
     <td width="12">
-      {if $current->hasChildren()}
+      {if $current->has_children()}
         {if in_array($content_item->id, $opened_items)}
           <a href="listcontent.php?content_id={$content_item->id}&amp;col=1" onclick="xajax_content_toggleexpand({$content_item->id}, 'true'); return false;">{$contract_image}</a>
         {else}
@@ -97,7 +97,7 @@
     
     {* Delete *}
     <td class="pagepos">
-      {if $content_item->default_content eq false and $current->getChildrenCount() eq 0 and ($modify_page_structure eq true or $remove_pages eq true)}
+      {if $content_item->default_content eq false and $current->get_children_count() eq 0 and ($modify_page_structure eq true or $remove_pages eq true)}
         <a href="listcontent.php?deletecontent={$content_item->id}" onclick="if (confirm('{lang string='deleteconfirm'}')) xajax_content_delete({$content_item->id}); return false;">{$delete_image}</a>
       {/if}
     </td>
@@ -113,7 +113,7 @@
   
 
   {* Handle Any Children of this node *}
-  {if count($current->getChildren()) gt 0 and in_array($content_item->id, $opened_items)}
-    {include file='listcontent-entries.tpl' content=$current->getChildren() siblingcount=$current->getChildrenCount()}
+  {if count($current->get_children()) gt 0 and in_array($content_item->id, $opened_items)}
+    {include file='listcontent-entries.tpl' content=$current->get_children() siblingcount=$current->get_children_count()}
   {/if}
 {/foreach}

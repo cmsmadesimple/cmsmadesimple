@@ -242,69 +242,6 @@ class CmsContentOperations extends CmsObject
 	}
 	
 	/**
-	 * Returns a CmsPageTree object filled with all the nodes of pages in the
-	 * hierarchy and the bottom row of nodes filled with their respective content
-	 * objects.
-	 *
-	 * @return CmsPageTree The filled page tree.
-	 * @author Ted Kulp
-	 **/
-	public static function get_all_content_as_hierarchy()
-	{
-		$tree = CmsCache::get_instance()->call('CmsContentOperations::create_page_tree');
-
-		CmsContentOperations::load_children_into_tree(-1, $tree);
-
-		return $tree;
-	}
-	
-	/**
-	 * @deprecated Deprecated.  Use CmsContentOperations::get_all_content_as_hierarchy() instead.
-	 **/
-	function GetAllContentAsHierarchy($loadprops, $onlyexpanded=null)
-	{
-		return CmsContentOperations::get_all_content_as_hierarchy();
-	}
-
-	public static function create_page_tree($parent_id = -1, $lft = -1, $rgt = -1)
-	{
-		$tree = new CmsPageTree();
-		$db = cms_db();
-		
-		$dbresult = null;
-
-		if ($lft == -1 && $rgt == -1)
-		{
-			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE parent_id = ? ORDER BY lft";
-			$dbresult =& cms_db()->Execute($query, array($parent_id));
-		}
-		else
-		{
-			$query = "SELECT id_hierarchy, show_in_menu, active FROM " . cms_db_prefix() . "content WHERE lft > ? AND rgt < ? ORDER BY lft";
-			$dbresult =& cms_db()->Execute($query, array($lft, $rgt));
-		}
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			$tree->fill_from_db($dbresult);
-		}
-		
-		return $tree;
-	}
-	
-	public static function load_children_into_tree($id, &$tree)
-	{	
-		$result = cmsms()->content_base->find_all_by_parent_id($id);
-		
-		$contentcache =& $tree->content;
-		foreach ($result as $one)
-		{
-			if (!array_key_exists($one->id, $contentcache))
-				$contentcache[$one->id] = $one;
-		}
-	}
-	
-	/**
 	 * @deprecated Deprecated.  Use CmsContentOperations::load_children_into_tree($id, $tree) instead.
 	 **/
 	function LoadChildrenIntoTree($id, &$tree, $loadprops = false)
@@ -314,7 +251,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function get_all_content($loadprops=true)
 	{
-		return cmsms()->content_base->find_all(array('order' => 'hierarchy ASC'));
+		return cmsms()->content_base->find_all(array('order' => 'lft ASC'));
 	}
 	
 	/**

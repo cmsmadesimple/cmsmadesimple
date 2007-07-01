@@ -38,8 +38,8 @@
       </tr>
     </thead>
     <tbody id="sortparent">
-      {if count($content->getChildren()) gt 0}
-        {include file='listcontent-entries.tpl' content=$content->getChildren() siblingcount=$content->getChildrenCount()}
+      {if count($content->get_children()) gt 0}
+        {include file='listcontent-entries.tpl' content=$content->get_children() siblingcount=$content->get_children_count()}
       {/if}
     </tbody>
   </table>

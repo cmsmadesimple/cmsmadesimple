@@ -565,8 +565,8 @@ function reorder_process($get)
 		$config =& $gCms->GetConfig();
 		$db =& $gCms->GetDb();
 		$contentops =& $gCms->GetContentOperations();
-	    $hm = $contentops->GetAllContentAsHierarchy(false);
-		$hierarchy = &$hm->getRootNode();
+	    $hm = CmsPageTree::get_instance();
+		$hierarchy = $hm->get_root_node();
 	
 		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
 		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
@@ -578,7 +578,7 @@ function reorder_process($get)
 		$listArray[0] = 'parent0ListOrder';
 		$output .= '<ul id="parent0" class="sortableList">'."\n";
 
-		foreach ($hierarchy->getChildren() as $child)
+		foreach ($hierarchy->get_children() as $child)
 		{
 			show_h($child, $sortableLists, $listArray, $output);
 		}

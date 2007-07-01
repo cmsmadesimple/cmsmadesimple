@@ -81,6 +81,31 @@ class CmsPageTree extends CmsTree
 		}
 	}
 	
+	public function load_parent_nodes($id)
+	{
+		//TODO: Optimize this more -- right now we're just making sure it works
+		//First we find the page.  If it exists, we then grab the great-great-grandparent
+		//and load all of the nodes in between.
+		$page = cms_orm()->content->find_by_id($id);
+		if ($page)
+		{
+			$ancestor = null;
+			$top_nodes = $this->tree->get_root_node()->get_children();
+			foreach ($top_nodes as $one_node)
+			{
+				if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id) //Don't bother doing this if we're only level 2
+				{
+					$ancestor = $one_node;
+					break;
+				}
+			}
+			if ($ancestor != null)
+			{
+				$this->load_child_nodes(-1, $ancestor->lft, $ancestor->rgt);
+			}
+		}
+	}
+	
 	public function get_node_by_id($id)
 	{
 		if ($id)
@@ -95,27 +120,7 @@ class CmsPageTree extends CmsTree
 			}
 			else
 			{
-				//TODO: Optimize this more -- right now we're just making sure it works
-				//First we find the page.  If it exists, we then grab the great-great-grandparent
-				//and load all of the nodes in between.
-				$page = cms_orm()->content->find_by_id($id);
-				if ($page)
-				{
-					$ancestor = null;
-					$top_nodes = $this->tree->get_root_node()->get_children();
-					foreach ($top_nodes as $one_node)
-					{
-						if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id) //Don't bother doing this if we're only level 2
-						{
-							$ancestor = $one_node;
-							break;
-						}
-					}
-					if ($ancestor != null)
-					{
-						$this->load_child_nodes(-1, $ancestor->lft, $ancestor->rgt);
-					}
-				}
+				$this->load_parent_nodes($id);
 				return self::$content[(string)$id];
 			}
 		}
@@ -166,102 +171,6 @@ class CmsPageTree extends CmsTree
 	function getNodeByHierarchy($position)
 	{
 		return $this->get_node_by_hierarchy($position);
-	}
-}
-
-class CmsPageNode extends CmsNode
-{
-	var $id = -1;
-	var $active = false;
-	var $show_in_menu = false;
-	var $children_loaded = false;
-	
-	function __construct($id = -1, $active = false, $show_in_menu = false)
-	{
-		parent::__construct();
-		$this->id = $id;
-		$this->active = $active;
-		$this->show_in_menu = $show_in_menu;
-	}
-	
-	function getParentNode()
-	{
-		return $this->parentnode;
-	}
-	
-	function get_content()
-	{
-		$content = null;
-		
-		$tree = $this->get_tree();
-		if (array_key_exists($this->id, $tree->content))
-		{
-			$content = $tree->content[$this->id];
-		}
-		else
-		{
-			$content = cmsms()->content_base->find_by_id($this->id);
-			$tree->content[$this->id] = $content;
-		}
-		return $content;
-	}
-	
-	function &get_children()
-	{
-		if ($this->has_children())
-		{
-			//We know there are children, but no nodes have been
-			//created yet.  We should probably do that.
-			if (!$this->children_loaded())
-			{
-				$content = $this->get_content();
-				var_dump($content);
-				if ($content != null)
-				{
-					CmsContentOperations::create_page_tree($content->id, $content->lft, $content->rgt);
-				}
-			}
-			$node = null;
-			//It seems like the first child is already loaded elsewhere
-			//So we trick it a bit to make sure we get all the children
-			if (count($this->children) > 1)
-				$node = $this->children[1];
-			else
-				$node = $this->children[0];
-			$checkid = $node->id;
-			$tree = $this->get_tree();
-			if (!array_key_exists($checkid, $tree->content))
-			{
-				CmsContentOperations::load_children_into_tree($this->id, $this->tree);
-			}
-		}
-		return $this->children;
-	}
-	
-	public function getContent()
-	{
-		return $this->get_content();
-	}
-	
-    public function hasChildren()
-	{
-        return $this->has_children();        
-    }
-    
-    public function &getChildren()
-	{
-		$result =& $this->get_children();
-        return $result;
-    }
-
-	function getTag()
-	{
-		return $this->id;
-	}
-	
-	public function children_loaded()
-	{
-		return $this->children_loaded;
 	}
 }
 
