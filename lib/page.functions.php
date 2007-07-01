@@ -520,7 +520,7 @@ function get_stylesheet_media_types($template_id)
 	{
 		#Handle "advanced" CSS Management
 		$cssquery = "SELECT DISTINCT media_type FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
-			WHERE	css_id		= assoc_css_id
+			WHERE	id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?";
 		$cssresult = &$db->Execute($cssquery, array($template_id));
