@@ -345,11 +345,14 @@ div.navt_hide  {
 
 
 /* Page Tabs - used for all page tabs */
+/*
 #page_tabs  {
    overflow: hidden;
    }
+*/
 
-#page_tabs div  {
+/*
+#page_tabs ul  {
    color: #fff;
    font-size: 1.1em;
    background-color: #9ca2a9;
@@ -360,10 +363,13 @@ div.navt_hide  {
    padding-left: 8px;
    cursor: pointer;
    }
+*/
 
+/*
 #page_tabs div:hover, #page_tabs div.cssHover  {
    background-color: #7a838b;
    }
+*/
 
 #page_content  {
    background-color: #e1e1e1;
@@ -371,9 +377,11 @@ div.navt_hide  {
    border: solid 1px #385c72;
    }
 
+/*
 #page_tabs div.active  {
    background-color: #385c72;
    }
+*/
 
 
 /* top*.php files */

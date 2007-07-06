@@ -8,7 +8,7 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{translate}CMS Admin{/translate} - Tags</title>
 	<link rel="stylesheet" type="text/css" href="style.php" />
-  <link rel="stylesheet" href="../lib/jquery/tabs/tabs.css" type="text/css" media="print, projection, screen" />
+  <link rel="stylesheet" href="../lib/jquery/tabs/jquery.tabs.css" type="text/css" media="print, projection, screen" />
 
 	{literal}
 	
