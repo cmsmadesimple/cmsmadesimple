@@ -66,9 +66,14 @@ class CmsAcl extends CmsObject
 				return true;
 			$groupids[] = $group->id;
 		}
-		$groupids = implode(',', $groupids);
 		
-		$query = "select cr.has_access FROM ".cms_db_prefix()."acos c, cms_acos c2 INNER JOIN ".cms_db_prefix()."acos_aros cr ON cr.acos_id = c.id INNER JOIN ".cms_db_prefix()."aros r ON r.id = cr.aros_id  WHERE c2.lft BETWEEN c.lft AND c.rght AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? AND r.object_id in ({$groupids}) AND r.type = 'Group' ORDER BY c.lft DESC LIMIT 1";
+		$groupids = implode(',', $groupids);
+		if ($groupids != '')
+		{
+			$groupids = "AND r.object_id in ({$groupids})";
+		}
+		
+		$query = "select cr.has_access FROM ".cms_db_prefix()."acos c, ".cms_db_prefix()."acos c2 INNER JOIN ".cms_db_prefix()."acos_aros cr ON cr.acos_id = c.id INNER JOIN ".cms_db_prefix()."aros r ON r.id = cr.aros_id  WHERE c2.lft BETWEEN c.lft AND c.rght AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? {$groupids} AND r.type = 'Group' ORDER BY c.lft DESC LIMIT 1";
 
 		$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
 		if (!$result)
