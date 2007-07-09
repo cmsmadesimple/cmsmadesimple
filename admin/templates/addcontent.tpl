@@ -18,7 +18,7 @@
   </div>
   {/if}
 
-	<form method="post" name="contentform" enctype="multipart/form-data" id="contentform">
+	<form method="post" name="contentform" enctype="multipart/form-data" id="contentform" action="{$action}">
 
 		<div id="page_tabs">
 			<ul>

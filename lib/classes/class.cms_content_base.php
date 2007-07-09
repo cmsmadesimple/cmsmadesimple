@@ -73,47 +73,99 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	function before_save()
 	{
 		//$this->prop_names = implode(',', $this->get_loaded_property_names());
-		if ($this->id == -1)
-		{
-			$db = cms_db();
-			
-			$right = $db->GetOne('SELECT max(rgt) FROM ' . cms_db_prefix() . 'content');
-			
-			if ($this->parent_id > -1)
-			{
-				$row = $db->GetRow('SELECT rgt FROM ' . cms_db_prefix() . 'content WHERE id = ?', array($this->parent_id));
-				if ($row)
-				{
-					$right = $row['rgt'];
-				}
+		$db = cms_db();
 
-				$db->Execute("UPDATE ".cms_db_prefix()."content SET lft = lft + 2 WHERE lft > ?", array($right));
-				$db->Execute("UPDATE ".cms_db_prefix()."content SET rgt = rgt + 2 WHERE rgt >= ?", array($right));
-			}
-			else
+		if ($this->id == -1)
+		{			
+			$this->make_space_for_child();
+		}
+		else
+		{
+			$old_content = cms_orm()->content->find_by_id($this->id);
+			if ($old_content)
 			{
-				$right = $right + 1;
-			}
-			
-			$this->lft = $right;
-			$this->rgt = $right + 1;
-			
-			$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-			$row = &$db->GetRow($query, array($this->parent_id));
-			if ($row)
-			{
-				if ($row['new_order'] < 1)
+				if ($this->parent_id != $old_content->parent_id)
 				{
-					$this->item_order = 1;
-				}
-				else
-				{
-					$this->item_order = $row['new_order'] + 1;
+					//TODO: Make this whole bit a transaction (after_save included)
+
+					//First reorder
+					$query = "UPDATE ".cms_db_prefix()."content SET item_order = item_order - 1 WHERE parent_id = ? AND item_order > ?";
+					$result = $db->Execute($query, array($old_content->parent_id, $old_content->item_order));
+					
+					//Flip all children over to the negative side so they don't get in the way
+					$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft * -1), rgt = (rgt * -1) WHERE lft > ? AND rgt < ?';
+					$result = $db->Execute($query, array($old_content->lft, $old_content->rgt));
+					
+					//Then move lft and rgt so that this node doesn't "exist"
+					$diff = $old_content->rgt - $old_content->lft + 1;
+
+					$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft - ?) WHERE lft > ?';
+					$result = $db->Execute($query, array($diff, $old_content->lft));
+					
+					$query = 'UPDATE ' . cms_db_prefix() . 'content SET rgt = (rgt - ?) WHERE rgt > ?';
+					$result = $db->Execute($query, array($diff, $old_content->rgt));
+					
+					//Now make a new hole under the new child
+					$this->make_space_for_child();
+					
+					//Update the ones currently in the negative space the distance that we've moved
+					$moved_by_how_much = $old_content->lft - $this->lft;
+					$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft + ?), rgt = (rgt + ?) WHERE lft < 0 AND rgt < 0';
+					$result = $db->Execute($query, array($moved_by_how_much, $moved_by_how_much));
+					
+					//And flip those back over to the positive side...  hopefully in the correct place now
+					$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft * -1), rgt = (rgt * -1) WHERE lft < 0 AND rgt < 0';
+					$result = $db->Execute($query);
 				}
 			}
 		}
 		
 		CmsEvents::send_event('Core', 'ContentEditPre', array('content' => &$this));
+	}
+	
+	function make_space_for_child()
+	{
+		$db = cms_db();
+
+		$diff = $this->rgt - $this->lft;
+		if ($diff < 2)
+		{
+			$diff = 1;
+		}
+		$right = $db->GetOne('SELECT max(rgt) FROM ' . cms_db_prefix() . 'content');
+		
+		if ($this->parent_id > -1)
+		{
+			$row = $db->GetRow('SELECT rgt FROM ' . cms_db_prefix() . 'content WHERE id = ?', array($this->parent_id));
+			if ($row)
+			{
+				$right = $row['rgt'];
+			}
+
+			$db->Execute("UPDATE ".cms_db_prefix()."content SET lft = lft + ? WHERE lft > ?", array($diff + 1, $right));
+			$db->Execute("UPDATE ".cms_db_prefix()."content SET rgt = rgt + ? WHERE rgt >= ?", array($diff + 1, $right));
+		}
+		else
+		{
+			$right = $right + $diff;
+		}
+		
+		$this->lft = $right;
+		$this->rgt = $right + $diff;
+		
+		$query = "SELECT max(item_order) as new_order FROM ".cms_db_prefix()."content WHERE parent_id = ?";
+		$row = &$db->GetRow($query, array($this->parent_id));
+		if ($row)
+		{
+			if ($row['new_order'] < 1)
+			{
+				$this->item_order = 1;
+			}
+			else
+			{
+				$this->item_order = $row['new_order'] + 1;
+			}
+		}
 	}
 	
 	function after_save()

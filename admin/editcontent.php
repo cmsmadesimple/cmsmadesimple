@@ -36,6 +36,9 @@ $templateops =& $gCms->GetTemplateOperations();
 check_login();
 $userid = get_userid();
 
+//Need to know where we're submitting to
+$smarty->assign('action', 'editcontent.php');
+
 //See if some variables are returned
 $content_id = coalesce_key($_REQUEST, 'content_id', '-1');
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
