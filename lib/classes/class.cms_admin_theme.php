@@ -359,7 +359,8 @@ class CmsAdminTheme extends CmsObject
 				}
 				else
 				{
-					$newnode->icon_url = $basenode->icon;
+					if (isset($basenode->icon))
+						$newnode->icon_url = $basenode->icon;
 				}
 
 				$basenode->add_child($newnode);
