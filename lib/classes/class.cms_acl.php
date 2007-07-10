@@ -62,9 +62,12 @@ class CmsAcl extends CmsObject
 		$groupids = array();
 		foreach ($groups as $group)
 		{
-			if ($group->name == 'Admin')
-				return true;
-			$groupids[] = $group->id;
+			if ($group != null)
+			{
+				if ($group->name == 'Admin')
+					return true;
+				$groupids[] = $group->id;
+			}
 		}
 		
 		$groupids = implode(',', $groupids);

@@ -114,7 +114,7 @@ if ($access)
 		# then check if new name is in use or not
 		else if ($css_name != $orig_css_name)
 		{
-			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . cms_db()->qstr($css_name);
+			$query = "SELECT id from ".cms_db_prefix()."css WHERE css_name = " . cms_db()->qstr($css_name);
 			$result = cms_db()->Execute($query);
 
 			if ($result && $result->RecordCount() > 0)
@@ -211,7 +211,7 @@ if ($access)
 	{
 
 		# we get the CSS in the DB
-		$query = "SELECT * from ".cms_db_prefix()."css WHERE css_id = ?"; 
+		$query = "SELECT * from ".cms_db_prefix()."css WHERE id = ?"; 
 		$result = cms_db()->Execute($query,array($css_id));
 
 		# we put the content in vars

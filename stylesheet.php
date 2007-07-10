@@ -101,7 +101,6 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 }
 else
 {
-
 	require_once(dirname(__FILE__)."/include.php");
 
 	if ($name != '')
@@ -139,7 +138,7 @@ else
 					}
 				}
 				
-				Events::SendEvent('Core', 'ContentStylesheet', array('stylesheet' => &$stylesheet));
+				CmsEvents::SendEvent('Core', 'ContentStylesheet', array('stylesheet' => &$stylesheet));
 			#}
 		}
 	}

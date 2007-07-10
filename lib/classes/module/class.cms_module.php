@@ -18,6 +18,12 @@
 #
 #$Id$
 
+define('CLEAN_INT','CLEAN_INT');
+define('CLEAN_FLOAT','CLEAN_FLOAT');
+define('CLEAN_NONE','CLEAN_NONE');
+define('CLEAN_STRING','CLEAN_STRING');
+define('CLEAN_REGEXP','regexp:');
+
 /**
  * Base module class.
  *
@@ -100,6 +106,10 @@ class CmsModule extends CmsObject
 
 		$this->smarty = cms_smarty();
 
+		$this->SetParameterType('module',CLEAN_STRING);
+		$this->SetParameterType('lang',CLEAN_STRING);
+		$this->SetParameterType('returnid',CLEAN_INT);
+		$this->SetParameterType('action',CLEAN_STRING);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
@@ -176,6 +186,16 @@ class CmsModule extends CmsObject
 	function GetName()
 	{
 		return 'unset';
+	}
+	
+	function RestrictUnknownParams()
+	{
+		
+	}
+	
+	function SetParameterType()
+	{
+		
 	}
 
 	/**
