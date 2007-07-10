@@ -33,7 +33,7 @@ $xajax->registerFunction('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
 $xajax->registerFunction('content_toggleexpand');
-//$xajax->registerFunction('content_move');
+$xajax->registerFunction('content_move');
 $xajax->registerFunction('content_delete');
 $xajax->registerFunction('reorder_display_list');
 $xajax->registerFunction('reorder_process');
