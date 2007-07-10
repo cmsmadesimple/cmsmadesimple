@@ -52,7 +52,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	{
 		parent::__construct();
 		$this->create_belongs_to_association('template', 'cms_template', 'template_id');
-		$this->assign_acts_as('Test');
+		//$this->assign_acts_as('Test');
 	}
 	
 	/*
@@ -319,7 +319,68 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 	function hierarchy()
 	{
-		return cmsms()->GetContentOperations()->CreateFriendlyHierarchyPosition($this->hierarchy);
+		return CmsContentOperations::create_friendly_hierarchy_position($this->hierarchy);
+	}
+	
+	function shift_position($direction = 'up')
+	{
+		$new_item_order = $this->item_order;
+		if ($direction == 'up')
+			$new_item_order--;
+		else
+			$new_item_order++;
+
+		$other_content = cms_orm()->content->find_by_parent_id_and_item_order($this->parent_id, $new_item_order);
+		
+		if ($other_content != null)
+		{
+			$db = cms_db();
+			
+			$old_lft = $other_content->lft;
+			$old_rgt = $other_content->rgt;
+			
+			//Assume down
+			$diff = $this->lft - $old_lft;
+			$diff2 = $this->rgt - $old_rgt;
+
+			if ($direction == 'up')
+			{
+				//Now up
+				$diff = $this->rgt - $old_rgt;
+				$diff2 = $this->lft - $old_lft;
+			}
+			
+			$time = $db->DBTimeStamp(time());
+			
+			//Flip me and children into the negative space
+			$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft * -1), rgt = (rgt * -1), modified_date = '.$time.' WHERE lft >= ? AND rgt <= ?';
+			$db->Execute($query, array($this->lft, $this->rgt));
+			
+			//Shift the other content to the new position
+			$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft + ?), rgt = (rgt + ?), modified_date = '.$time.' WHERE lft >= ? AND rgt <= ?';
+			$db->Execute($query, array($diff, $diff, $old_lft, $old_rgt));
+			
+			//Shift me to the new position in the negative space
+			$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft + ?), rgt = (rgt + ?), modified_date = '.$time.' WHERE lft < 0 AND rgt < 0';
+			$db->Execute($query, array($diff2, $diff2));
+			
+			//Flip me back over to the positive side...  hopefully in the correct place now
+			$query = 'UPDATE ' . cms_db_prefix() . 'content SET lft = (lft * -1), rgt = (rgt * -1), modified_date = '.$time.' WHERE lft < 0 AND rgt < 0';
+			$result = $db->Execute($query);
+			
+			//Now flip the item orders
+			$query = 'UPDATE ' . cms_db_prefix() . 'content SET item_order = ?, modified_date = '.$time.' WHERE id = ?';
+			$db->Execute($query, array($other_content->item_order, $this->id));
+			$db->Execute($query, array($this->item_order, $other_content->id));
+			
+			$this->lft = $this->lft - $diff2;
+			$this->rgt = $this->rgt - $diff2;
+			
+			$this->item_order = $other_content->item_order;
+			
+			CmsContentOperations::SetAllHierarchyPositions();
+			CmsCache::clear();
+		}
 	}
 	
     function get_url($rewrite = true)

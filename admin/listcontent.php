@@ -33,7 +33,7 @@ $xajax->registerFunction('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
 $xajax->registerFunction('content_toggleexpand');
-$xajax->registerFunction('content_move');
+//$xajax->registerFunction('content_move');
 $xajax->registerFunction('content_delete');
 $xajax->registerFunction('reorder_display_list');
 $xajax->registerFunction('reorder_process');
@@ -220,7 +220,7 @@ function setdefault($contentid)
 		}
 
 		$result = true;
-		cmsms()->GetContentOperations()->ClearCache();
+		CmsCache::clear();
 	}
 	return $result;
 }
@@ -352,6 +352,8 @@ function setactive($contentid, $active = true)
 			$value->save();
 		}
 	}
+	
+	CmsCache::clear();
 }
 
 function content_move($contentid, $parentid, $direction)
@@ -367,44 +369,18 @@ function content_move($contentid, $parentid, $direction)
 
 function movecontent($contentid, $parentid, $direction = 'down')
 {
-	$db = cms_db();
 	$userid = get_userid();
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
-	{
-		$order = 1;
-
-		#Grab necessary info for fixing the item_order
-		$query = "SELECT item_order FROM ".cms_db_prefix()."content WHERE id = ?";
-		$result = $db->Execute($query, array($contentid));
-		$row = $result->FetchRow();
-		if (isset($row["item_order"]))
+	{		
+		$content = cms_orm()->content->find_by_id($contentid);
+		
+		if ($content != null)
 		{
-			$order = $row["item_order"];
+			$content->shift_position($direction);
+			CmsContentOperations::SetAllHierarchyPositions();
+			CmsCache::clear();
 		}
-
-		$time = $db->DBTimeStamp(time());
-		if ($direction == "down")
-		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
-			#echo $query, $order + 1, $parent_id;
-			$db->Execute($query, array($order + 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE id = ? AND parent_id = ?';
-			#echo $query, $content_id, $parent_id;
-			$db->Execute($query, array($contentid, $parentid));
-		}
-		else if ($direction == "up")
-		{
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order + 1), modified_date = '.$time.' WHERE item_order = ? AND parent_id = ?';
-			#echo $query;
-			$db->Execute($query, array($order - 1, $parentid));
-			$query = 'UPDATE '.cms_db_prefix().'content SET item_order = (item_order - 1), modified_date = '.$time.' WHERE id = ? AND parent_id = ?';
-			#echo $query;
-			$db->Execute($query, array($contentid, $parentid));
-		}
-
-		CmsContentOperations::SetAllHierarchyPositions();
-		CmsContentOperations::clear_cache();
 	}
 }
 
