@@ -58,7 +58,7 @@ function check_login($no_redirect = false)
 		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
 		{
 			debug_buffer('Cookies found, do a passhash check');
-			if (check_passhash(isset($_COOKIE["cms_admin_user_id"]), isset($_COOKIE["cms_passhash"])))
+			if (check_passhash($_COOKIE["cms_admin_user_id"], $_COOKIE["cms_passhash"]))
 			{
 				debug_buffer('passhash check succeeded...  creating session object');
 				generate_user_object($_COOKIE["cms_admin_user_id"]);
@@ -127,7 +127,7 @@ function check_passhash($userid, $checksum)
 	$userops =& $gCms->GetUserOperations();
 	$oneuser =& $userops->LoadUserByID($userid);
 
-	if ($oneuser && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
+	if ($oneuser && (string)$checksum != '' && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
 	{
 		$check = true;
 	}

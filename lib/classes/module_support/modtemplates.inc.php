@@ -206,8 +206,8 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 
 function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false)
 {
-	$ok = (strpos($tpl_name, '..') === false);
-	if (!$ok) return;
+	#$ok = (strpos($tpl_name, '..') === false);
+	#if (!$ok) return;
 
 	global $gCms;
 	$smarty = &$gCms->GetSmarty();

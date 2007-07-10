@@ -86,7 +86,7 @@ if ($access)
 			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
 			$validinfo = false;
 		}
-		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob))
+		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob, $htmlblob_id))
 		{
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;

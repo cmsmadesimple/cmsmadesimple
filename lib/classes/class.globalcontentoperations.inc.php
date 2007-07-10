@@ -200,15 +200,24 @@ class GlobalContentOperations
 		return $result;
 	}
 
-	function CheckExistingHtmlBlobName($name)
+	function CheckExistingHtmlBlobName($name, $id = -1)
 	{
 		$result = false;
 
 		global $gCms;
 		$db = &$gCms->GetDb();
+		$row = null;
 
 		$query = "SELECT htmlblob_id from ".cms_db_prefix()."htmlblobs WHERE htmlblob_name = ?";
-		$row = &$db->GetRow($query,array($name));
+		if ($id > -1)
+		{
+			$query .= ' AND htmlblob_id <> ?';
+			$row = &$db->GetRow($query,array($name, $id));
+		}
+		else
+		{
+			$row = &$db->GetRow($query,array($name));
+		}
 
 		if ($row)
 		{
