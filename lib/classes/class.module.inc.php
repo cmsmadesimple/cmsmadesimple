@@ -1824,9 +1824,9 @@ class CMSModule
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
 	 */
-	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $width='80', $cols='15',$forcewysiwyg="",$wantedsyntax="")
+	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg="",$wantedsyntax="")
 	{
-		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $width, $cols,$forcewysiwyg,$wantedsyntax);
+		return create_textarea($enablewysiwyg, $text, $id.$name, $classname, $htmlid, $encoding, $stylesheet, $cols, $rows,$forcewysiwyg,$wantedsyntax);
 	}
 
 	/**
