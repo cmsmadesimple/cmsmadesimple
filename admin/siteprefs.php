@@ -50,10 +50,10 @@ $message = "";
 $disablesafemodewarning = 0;
 if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
 
-$allowparamcheckwarnings = 1;
-if (!isset($_POST["allowparamcheckwarnings"])) 
+$allowparamcheckwarnings = 0;
+if (isset($_POST["allowparamcheckwarnings"])) 
   {
-    $allowparamcheckwarnings = 0;
+    $allowparamcheckwarnings = 1;
   }
 
 $enablecustom404 = "0";
@@ -210,7 +210,7 @@ else if (isset($_POST["editsiteprefs"]))
   $metadata = get_site_preference('metadata', '');
   $sitename = get_site_preference('sitename', 'CMSMS Site');
   $disablesafemodewarning = get_site_preference('disablesafemodewarning',0);
-  $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',1);
+  $allowparamcheckwarnings = get_site_preference('allowparamcheckwarnings',0);
  }
 
 
