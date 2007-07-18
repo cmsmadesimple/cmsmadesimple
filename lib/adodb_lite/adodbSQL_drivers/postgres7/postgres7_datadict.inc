@@ -37,6 +37,7 @@ class ADODB2_postgres7 extends ADODB_DataDict {
 			
 		case 'D': return 'DATE';
 		case 'T': return 'TIMESTAMP';
+		case 'DT': return 'TIMESTAMP';
 		
 		case 'L': return 'BOOLEAN';
 		case 'I': return 'INTEGER';
