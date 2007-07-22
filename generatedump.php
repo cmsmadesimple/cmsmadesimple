@@ -1,9 +1,9 @@
 <?php
 
 include_once(dirname(__FILE__)."/include.php");
-
 function execute_dump(&$result) {
-	global $db;
+	global $gCms;
+	$db = $gCms->db;
 	while ($row = $result->FetchRow()) {
 		$now = $db->DBTimeStamp(time());
 		$length = strlen($now);
@@ -14,6 +14,8 @@ function execute_dump(&$result) {
 	}
 }
 
+global $gCms;
+$db = $gCms->db;
 $tablelist = $db->MetaTables('TABLES');
 foreach ($tablelist as $tablename) {
 	$result = $db->Execute("SELECT * FROM $tablename");
