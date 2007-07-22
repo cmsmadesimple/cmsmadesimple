@@ -86,6 +86,40 @@ class CmsContentOperations extends CmsObject
 		}
 		closedir($handle);
 	}
+	
+	/**
+	 * Returns an array of the available block types.
+	 *
+	 * @return array Array of BlockTypePlaceholder objects
+	 * @author Ted Kulp
+	 **/
+	static function find_block_types()
+	{
+		$blocktypes =& cmsms()->blocktypes;
+		
+		if (!count($blocktypes))
+		{
+			#Load block types
+			$dir = cms_join_path($dirname,'lib','classes','blocktypes');
+			$handle=opendir($dir);
+			while ($file = readdir ($handle)) 
+			{
+			    $path_parts = pathinfo($file);
+			    if ($path_parts['extension'] == 'php')
+			    {
+					$obj = new CmsBlockTypePlaceholder();
+					$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
+					$obj->filename = cms_join_path($dir, $file);
+					$obj->loaded = false;
+					$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
+					$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
+			    }
+			}
+			closedir($handle);
+		}
+		
+		return $blocktypes;
+	}
 
 	function &CreateNewContent($type)
 	{

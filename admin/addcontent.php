@@ -107,7 +107,7 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $params)
 	}
 	else
 	{
-		$page_object = cmsms()->GetContentOperations()->CreateNewContent($page_type);
+		$page_object = CmsContentOperations::CreateNewContent($page_type);
 		$page_object->owner_id = $userid;
 		$page_object->active = TRUE;
 		$page_object->show_in_menu = TRUE;

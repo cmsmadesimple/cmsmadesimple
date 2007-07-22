@@ -925,10 +925,35 @@ ul.sortableList li li li li li {
 }
 
 .footerbuttons {
-padding: .5em 0 0 0;
+padding: .5em 0 0 0;9
 text-align:center;
 }
-/* Dojo styles */
-.dojoTabPaneWrapper {
-	padding : 5px;
+
+/* Accordion Stuff */
+div#page_accordion
+{
+	border:1px solid #5263AB;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+}
+
+div.accordion_content
+{
+	margin: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+div.accordion_header
+{
+	color: #FFF;
+	background: #666 url(../lib/jquery/accordion/collapsed.gif) no-repeat scroll 3px 4px;
+	text-indent: 14px;
+	padding: 2px;
+}
+
+div.selected
+{
+	background-image: url(../lib/jquery/accordion/expanded.gif);
 }

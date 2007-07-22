@@ -128,6 +128,7 @@ class CmsApplication extends CmsObject
 		$this->errors = array();
 		$this->nls = array();
 		$this->contenttypes = array();
+		$this->blocktypes = array();
 		$this->TemplateCache = array();
 		$this->StylesheetCache = array();
 		$this->variables['content-type'] = 'text/html';
@@ -434,7 +435,7 @@ class CmsApplication extends CmsObject
 	}
 }
 
-class CmsContentTypePlaceholder
+class CmsContentTypePlaceholder extends CmsObject
 {
 	var $type;
 	var $filename;
@@ -442,11 +443,9 @@ class CmsContentTypePlaceholder
 	var $loaded;
 }
 
-/*
 class CmsBlockTypePlaceholder extends CmsContentTypePlaceholder
 {
 }
-*/
 
 # vim:ts=4 sw=4 noet
 ?>

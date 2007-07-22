@@ -29,6 +29,7 @@ if (isset($_POST["cancel"]))
 
 $gCms = cmsms();
 $smarty = cms_smarty();
+$smarty->assign('action', 'edittemplate.php');
 
 #Make sure we're logged in and get that user id
 check_login();
@@ -44,7 +45,8 @@ $template_id = coalesce_key($_REQUEST, 'template_id', '-1');
 
 function &get_template_object($template_id)
 {
-	$template_object = cmsms()->template->find_by_id($template_id);
+	var_dump($template_id);
+	$template_object = cmsms()->cms_template->find_by_id($template_id);
 	
 	if (isset($_REQUEST['template']))
 		$template_object->update_parameters($_REQUEST['template']);

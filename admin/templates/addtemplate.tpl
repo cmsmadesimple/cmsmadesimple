@@ -6,7 +6,7 @@
     {$header_name}
   </div>
 
-  <form method="post" name="templateform" id="templateform">
+  <form method="post" name="templateform" id="templateform" action="{$action}">
     
     {* Name *}
 		<div class="pageoverflow">
@@ -56,6 +56,7 @@
     
     {html_hidden name='is_postback' value='true'}
     {html_hidden name='template[id]' value=$template_object->id}
+    {html_hidden name='template_id' value=$template_object->id}
 
   </form>
 

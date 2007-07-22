@@ -776,4 +776,5 @@ $lang['admin']['event_help_smartypostcompile'] = '<p>Sent after any content dest
 $lang['admin']['filterbymodule'] = 'Filter By Module';
 $lang['admin']['showall'] = 'Show All';
 $lang['admin']['core'] = 'Core';
+$lang['admin']['blocktype'] = 'Block Type';
 ?>

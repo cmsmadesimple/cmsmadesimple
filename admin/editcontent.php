@@ -234,7 +234,7 @@ $smarty->assign('show_owner_dropdown', false);
 $smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
 
 //Any included smarty templates for this page type?
-$smarty->assign('include_templates', $page_object->add_template($smarty));
+$smarty->assign('include_templates', $page_object->edit_template($smarty));
 
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));

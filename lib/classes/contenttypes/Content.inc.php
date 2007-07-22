@@ -91,7 +91,7 @@ class Content extends CmsContentBase
 			$template = cmsms()->template->find_by_id($this->template_id);
 
 		$blocks = $this->parse_content_blocks_from_template($template);
-		$smarty_tpl = '';
+		$contents = '';
 		
 		foreach ($blocks as $block)
 		{
@@ -106,16 +106,40 @@ class Content extends CmsContentBase
 			$class_name = camelize('block_' . $type);
 			$class = new $class_name;
 			
-			$smarty_tpl .= '
-				<div class="pageoverflow">
-		      		<p class="pagetext">'.humanize($block['id']).':</p>
-		      		<p class="pageinput">
-		      	  		'.$class->block_add_template($this, $block['id'], $template).'
-		      		</p>
-		      	</div>
-				<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
+			$contents .= '
+				<div class="accordion_header">' . humanize($block['id']) . '</div>
+				<div class="accordion_content">
+					<div class="pageoverflow">
+						<p class="pagetext">'.lang('blocktype').':</p>
+						<p class="pageinput">
+							<select><option>HTML</option></select>
+						</p>
+					</div>
+					<div class="pageoverflow">
+			      		<p class="pagetext">'.lang('content').':</p>
+			      		<p class="pageinput">
+			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
+			      		</p>
+			      	</div>
+					<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
+				</div>
 			';
 		}
+		
+		$smarty_tpl = '
+		<div style="clear: left;">
+			<div id="page_accordion">
+				' . $contents . '
+			</div>
+			<script type="text/javascript">
+			{literal}
+			<!--
+				$(\'#page_accordion\').Accordion({ header: \'div.accordion_header\' });
+			//-->
+			{/literal}
+			</script>
+		</div>
+		';
 		
 		$smarty->assign('cntnttemplate', $smarty_tpl);
 
@@ -131,7 +155,7 @@ class Content extends CmsContentBase
 			$template = cmsms()->template->find_by_id($this->template_id);
 
 		$blocks = $this->parse_content_blocks_from_template($template);
-		$smarty_tpl = '';
+		$contents = '';
 		
 		foreach ($blocks as $block)
 		{
@@ -146,16 +170,40 @@ class Content extends CmsContentBase
 			$class_name = camelize('block_' . $type);
 			$class = new $class_name;
 			
-			$smarty_tpl .= '
-				<div class="pageoverflow">
-		      		<p class="pagetext">'.humanize($block['id']).':</p>
-		      		<p class="pageinput">
-		      	  		'.$class->block_edit_template($this, $block['id'], $template).'
-		      		</p>
-		      	</div>
-				<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
+			$contents .= '
+				<div class="accordion_header">' . humanize($block['id']) . '</div>
+				<div class="accordion_content">
+					<div class="pageoverflow">
+						<p class="pagetext">'.lang('blocktype').':</p>
+						<p class="pageinput">
+							<select><option>HTML</option></select>
+						</p>
+					</div>
+					<div class="pageoverflow">
+			      		<p class="pagetext">'.lang('content').':</p>
+			      		<p class="pageinput">
+			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
+			      		</p>
+			      	</div>
+					<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
+				</div>
 			';
 		}
+		
+		$smarty_tpl = '
+		<div style="clear: left;">
+			<div id="page_accordion">
+				' . $contents . '
+			</div>
+			<script type="text/javascript">
+			{literal}
+			<!--
+				$(\'#page_accordion\').Accordion({ header: \'div.accordion_header\' });
+			//-->
+			{/literal}
+			</script>
+		</div>
+		';
 		
 		$smarty->assign('cntnttemplate', $smarty_tpl);
 
@@ -236,28 +284,6 @@ class Content extends CmsContentBase
 	}
 
 }
-
-/*
-$blocktypes =& $gCms->blocktypes;
-
-#Load block types
-$dir = cms_join_path($dirname,'lib','classes','blocktypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if ($path_parts['extension'] == 'php')
-    {
-		$obj = new CmsBlockTypePlaceholder();
-		$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
-		$obj->filename = cms_join_path($dir, $file);
-		$obj->loaded = false;
-		$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
-		$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
-    }
-}
-closedir($handle);
-*/
 
 # vim:ts=4 sw=4 noet
 ?>

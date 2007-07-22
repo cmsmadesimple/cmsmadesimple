@@ -16,6 +16,7 @@
 	<script type="text/javascript" src="../lib/jquery/interface/interface.js"></script>
 	<!-- <script type="text/javascript" src="../lib/jquery/tabs/jquery.history.js"></script> -->
 	<script type="text/javascript" src="../lib/jquery/tabs/jquery.tabs.js"></script>
+		<script type="text/javascript" src="../lib/jquery/accordion/jquery.accordion.js"></script>
   <script type="text/javascript">//<![CDATA[
       // Add styles via JavaScript for graceful degradation...
       document.write('<link rel="stylesheet" href="../lib/jquery/tabs/tabs_js.css" type="text/css" media="projection, screen" />');
