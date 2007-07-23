@@ -112,7 +112,9 @@ class Content extends CmsContentBase
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
 						<p class="pageinput">
-							<select><option>HTML</option></select>
+							<select name="content[property]['.$block['id'].'-block-type]">
+								'.$this->create_block_type_options($type).'
+							</select>
 						</p>
 					</div>
 					<div class="pageoverflow">
@@ -121,7 +123,6 @@ class Content extends CmsContentBase
 			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
 			      		</p>
 			      	</div>
-					<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
 				</div>
 			';
 		}
@@ -175,9 +176,9 @@ class Content extends CmsContentBase
 				<div class="accordion_content">
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
-						<p class="pageinput">
-							<select><option>HTML</option></select>
-						</p>
+						<select name="content[property]['.$block['id'].'-block-type]">
+							'.$this->create_block_type_options($type).'
+						</select>
 					</div>
 					<div class="pageoverflow">
 			      		<p class="pagetext">'.lang('content').':</p>
@@ -185,7 +186,6 @@ class Content extends CmsContentBase
 			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
 			      		</p>
 			      	</div>
-					<input type="hidden" name="content[property]['.$block['id'].'-block-type]" value="'.$type.'" />
 				</div>
 			';
 		}
@@ -208,6 +208,24 @@ class Content extends CmsContentBase
 		$smarty->assign('cntnttemplate', $smarty_tpl);
 
 		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
+	}
+	
+	private function create_block_type_options($selected = '')
+	{
+		$result = '';
+		$block_types = cmsms()->blocktypes;
+		
+		foreach ($block_types as $block_type)
+		{
+			$result .= '<option value="' . $block_type->type . '"';
+			if ($block_type->type == $selected)
+			{
+				$result .= ' selected="selected"';
+			}
+			$result .= '>' . $block_type->friendlyname . '</option>';
+		}
+		
+		return $result;
 	}
 	
 	function show($block_name = 'default')

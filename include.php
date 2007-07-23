@@ -47,8 +47,11 @@ if (function_exists('date_default_timezone_set') && CmsConfig::exists('timezone'
     date_default_timezone_set(CmsConfig::get('timezone'));
 }
 
-#Preload content types
+#Preload content types (TODO: Cache me!)
 CmsContentOperations::find_content_types();
+
+#And block types (TODO: Cache me!)
+CmsContentOperations::find_block_types();
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');

@@ -66,7 +66,13 @@ class CmsContentOperations extends CmsObject
 		return ContentOperations::load_content_type($type);
 	}
 	
-	static function find_content_types()
+	/**
+	 * Returns an array of available content types.
+	 *
+	 * @return array Array of CmsContenttypePlaceholder objects
+	 * @author Ted Kulp
+	 **/
+	public static function find_content_types()
 	{
 		$contenttypes =& cmsms()->contenttypes;
 		$dir = cms_join_path(dirname(__FILE__),'contenttypes');
@@ -90,33 +96,30 @@ class CmsContentOperations extends CmsObject
 	/**
 	 * Returns an array of the available block types.
 	 *
-	 * @return array Array of BlockTypePlaceholder objects
+	 * @return array Array of CmsBlockTypePlaceholder objects
 	 * @author Ted Kulp
 	 **/
-	static function find_block_types()
+	public static function find_block_types()
 	{
 		$blocktypes =& cmsms()->blocktypes;
 		
-		if (!count($blocktypes))
+		#Load block types
+		$dir = cms_join_path(ROOT_DIR,'lib','classes','blocktypes');
+		$handle=opendir($dir);
+		while ($file = readdir ($handle)) 
 		{
-			#Load block types
-			$dir = cms_join_path($dirname,'lib','classes','blocktypes');
-			$handle=opendir($dir);
-			while ($file = readdir ($handle)) 
-			{
-			    $path_parts = pathinfo($file);
-			    if ($path_parts['extension'] == 'php')
-			    {
-					$obj = new CmsBlockTypePlaceholder();
-					$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
-					$obj->filename = cms_join_path($dir, $file);
-					$obj->loaded = false;
-					$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
-					$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
-			    }
-			}
-			closedir($handle);
+		    $path_parts = pathinfo($file);
+		    if ($path_parts['extension'] == 'php')
+		    {
+				$obj = new CmsBlockTypePlaceholder();
+				$obj->type = str_replace('block.', '', strtolower(basename($file, '.inc.php')));
+				$obj->filename = cms_join_path($dir, $file);
+				$obj->loaded = false;
+				$obj->friendlyname = str_replace('block.', '', basename($file, '.inc.php'));
+				$blocktypes[str_replace('block.', '', strtolower(basename($file, '.inc.php')))] = $obj;
+		    }
 		}
+		closedir($handle);
 		
 		return $blocktypes;
 	}

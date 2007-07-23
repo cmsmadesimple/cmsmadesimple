@@ -19,7 +19,7 @@
 #$Id$
 
 /**
- * Global object that holds references to various data sctructures
+ * Global object that holds references to various data structures
  * needed by classes/functions in CMS.  Initialized in include.php
  * as $gCms for use in every page.
  *
