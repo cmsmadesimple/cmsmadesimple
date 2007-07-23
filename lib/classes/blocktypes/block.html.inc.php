@@ -50,7 +50,12 @@ class BlockHtml extends CmsObject
 	
 	function block_add_template(&$page, $block_name, &$template)
 	{
-		return "{literal}" . create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '') . "{/literal}";
+		return "
+		<p class=\"pagetext\">".lang('content').":</p>
+  		<p class=\"pageinput\">
+			{literal}" . create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '') . "{/literal}
+		</p>	
+		";
 	}
 	
 	function block_edit_template(&$page, $block_name, &$template)

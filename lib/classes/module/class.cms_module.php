@@ -433,6 +433,29 @@ class CmsModule extends CmsObject
 	{
 		return FALSE;
 	}
+	
+	/**
+	 * Registers a block type for use while editing content pages.
+	 *
+	 * @param string Name of the block type
+	 * @param string File, relative to the module's path, the block type class resides in
+	 * @param string Friendly name of the block type, if it's different from the actual block type's name
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function register_block_type($name, $file, $friendlyname = '')
+	{
+		$block_types =& cmsms()->blocktypes;
+		if (!isset($block_types[strtolower($name)]))
+		{
+			$obj = new CmsBlockTypePlaceholder();
+			$obj->type = strtolower($name);
+			$obj->filename = cms_join_path(ROOT_DIR,'modules',$this->GetName(),$file);
+			$obj->loaded = false;
+			$obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
+			$block_types[strtolower($name)] =& $obj;
+		}
+	}
 
 	function IsExclusive()
 	{

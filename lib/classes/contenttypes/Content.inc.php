@@ -111,17 +111,12 @@ class Content extends CmsContentBase
 				<div class="accordion_content">
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
-						<p class="pageinput">
-							<select name="content[property]['.$block['id'].'-block-type]">
-								'.$this->create_block_type_options($type).'
-							</select>
-						</p>
+						<select name="content[property]['.$block['id'].'-block-type]">
+							'.$this->create_block_type_options($type).'
+						</select>
 					</div>
-					<div class="pageoverflow">
-			      		<p class="pagetext">'.lang('content').':</p>
-			      		<p class="pageinput">
-			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
-			      		</p>
+					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
+						'.$class->block_edit_template($this, $block['id'], $template).'
 			      	</div>
 				</div>
 			';
@@ -180,11 +175,8 @@ class Content extends CmsContentBase
 							'.$this->create_block_type_options($type).'
 						</select>
 					</div>
-					<div class="pageoverflow">
-			      		<p class="pagetext">'.lang('content').':</p>
-			      		<p class="pageinput">
-			      	  		'.$class->block_edit_template($this, $block['id'], $template).'
-			      		</p>
+					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
+						'.$class->block_edit_template($this, $block['id'], $template).'
 			      	</div>
 				</div>
 			';
