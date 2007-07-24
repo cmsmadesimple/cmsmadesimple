@@ -188,18 +188,19 @@ if (strlen($htmlblob) > 0)
     $CMS_ADMIN_SUBTITLE = $htmlblob;
     }
 
+// Detect if a WYSIWYG is in use, and grab its form submit action (copied from editcotent.php)
 $addlScriptSubmit = '';
 foreach (array_keys($gCms->modules) as $moduleKey)
 {
 	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
+	if (!($module['installed'] && $module['active'] && $module['object']->IsWYSIWYG()))
 	{
 		continue;
 	}
 
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
+	if ($module['object']->WYSIWYGActive() or get_preference(get_userid(), 'wysiwyg') == $module['object']->GetName())
 	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
+		$addlScriptSubmit .= $module['object']->WYSIWYGPageFormSubmit();
 	}
 }
 
