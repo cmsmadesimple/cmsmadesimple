@@ -66,14 +66,23 @@ class Content extends CmsContentBase
 				$type = $this->get_property_value($block['id'] . '-block-type');
 			}
 			
+			$block_type_obj = $this->get_block_type_object($type);
+			
 			try
 			{
-				include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+				if ($block_type_obj != null)
+				{			
+					require_once($block_type_obj->filename);
 			
-				$class_name = camelize('block_' . $type);
-				$class = new $class_name;
+					$class_name = camelize('block_' . $type);
+					$class = new $class_name;
 			
-				$class->validate($this, $block['id']);
+					$class->validate($this, $block['id']);
+				}
+				else
+				{
+					throw Exception("Unknown block type");
+				}
 			}
 			catch (Exception $e)
 			{
@@ -100,7 +109,7 @@ class Content extends CmsContentBase
 			{
 				$type = $this->get_property_value($block['id'] . '-block-type');
 			}
-						
+		
 			$contents .= '
 				<div class="accordion_header">' . humanize($block['id']) . '</div>
 				<div class="accordion_content">
@@ -111,7 +120,7 @@ class Content extends CmsContentBase
 						</select>
 					</div>
 					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
-						'.$this->create_block_type($this, $block['id'], $template).'
+						'.$this->create_block_type($block['id']).'
 			      	</div>
 				</div>
 			';
@@ -166,7 +175,7 @@ class Content extends CmsContentBase
 						</select>
 					</div>
 					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
-						'.$this->create_block_type($this, $block['id'], $template).'
+						'.$this->create_block_type($block['id']).'
 			      	</div>
 				</div>
 			';
@@ -206,15 +215,7 @@ class Content extends CmsContentBase
 			$type = $this->get_property_value($block_id . '-block-type');
 		}
 		
-		$block_type_obj = null;
-		
-		foreach(cmsms()->blocktypes as $block_type)
-		{
-			if ($block_type->type == $type)
-			{
-				$block_type_obj = $block_type;
-			}
-		}
+		$block_type_obj = $this->get_block_type_object($type);
 		
 		if ($block_type_obj != null)
 		{			
@@ -255,12 +256,16 @@ class Content extends CmsContentBase
 			$type = $this->get_property_value($block_name . '-block-type');
 		}
 		
-		include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
+		$block_type_obj = $this->get_block_type_object($type);
 		
-		$class_name = camelize('block_' . $type);
-		
+		if ($block_type_obj != null)
+		{			
+			require_once($block_type_obj->filename);
+		}
+
 		try
 		{
+			$class_name = camelize('block_' . $type);
 			$class = new $class_name;
 			return $class->show($this, $block_name);
 		}
@@ -268,6 +273,21 @@ class Content extends CmsContentBase
 		{
 			return '';
 		}
+	}
+	
+	private function get_block_type_object($type = 'html')
+	{
+		$block_type_obj = null;
+		
+		foreach(cmsms()->blocktypes as $block_type)
+		{
+			if ($block_type->type == $type)
+			{
+				$block_type_obj = $block_type;
+			}
+		}
+		
+		return $block_type_obj;
 	}
 	
 	function parse_content_blocks_from_template(&$template)
