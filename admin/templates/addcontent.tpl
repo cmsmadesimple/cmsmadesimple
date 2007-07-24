@@ -63,9 +63,11 @@
 				  </div>
 				{/if}
 
-				{section name=onefile loop=$include_templates}
-					{include file=$include_templates[onefile]}
-				{/section}
+				<div id="page_content_blocks">
+					{section name=onefile loop=$include_templates}
+						{include file=$include_templates[onefile]}
+					{/section}
+				</div>
    
 				{* Parent Dropdown *}
 				{if $show_parent_dropdown eq true}

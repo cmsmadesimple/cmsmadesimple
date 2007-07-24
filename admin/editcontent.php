@@ -50,6 +50,7 @@ $apply = array_key_exists('applybutton', $_POST);
 require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
 $xajax = new xajax();
 $xajax->registerFunction('ajaxpreview');
+$xajax->registerFunction('change_block_type');
 
 $xajax->processRequests();
 
@@ -140,6 +141,35 @@ function create_preview(&$page_object)
 	fclose($handle);
 	
 	return $tmpfname;
+}
+
+function change_block_type($params, $block_id, $new_block_type)
+{
+	$content_id = coalesce_key($params, 'content_id', '-1');
+	$page_type = coalesce_key($params, 'page_type', 'content');
+	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
+	
+	$userid = get_userid();
+	$config = cms_config();
+	$smarty = cms_smarty();
+
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $params);
+	$type_param = $block_id . '-block-type';
+	$div_id = 'content-form-' . $block_id;
+	$page_object->$type_param = $new_block_type;
+	
+	$objResponse = new xajaxResponse();
+	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
+	
+	$smarty->_compile_source('metadata template', $page_object->create_block_type($block_id), $_compiled);
+	@ob_start();
+	$smarty->_eval('?>' . $_compiled);
+	$result = @ob_get_contents();
+	@ob_end_clean();
+	
+	$objResponse->addAssign($div_id, 'innerHTML', $result);
+	
+	return $objResponse->getXML();
 }
 
 function ajaxpreview($params)

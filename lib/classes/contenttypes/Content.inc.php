@@ -100,23 +100,18 @@ class Content extends CmsContentBase
 			{
 				$type = $this->get_property_value($block['id'] . '-block-type');
 			}
-			
-			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
-			
-			$class_name = camelize('block_' . $type);
-			$class = new $class_name;
-			
+						
 			$contents .= '
 				<div class="accordion_header">' . humanize($block['id']) . '</div>
 				<div class="accordion_content">
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
-						<select name="content[property]['.$block['id'].'-block-type]">
+						<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="xajax_change_block_type(xajax.getFormValues(\'contentform\'), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
 							'.$this->create_block_type_options($type).'
 						</select>
 					</div>
 					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
-						'.$class->block_edit_template($this, $block['id'], $template).'
+						'.$this->create_block_type($this, $block['id'], $template).'
 			      	</div>
 				</div>
 			';
@@ -160,23 +155,18 @@ class Content extends CmsContentBase
 			{
 				$type = $this->get_property_value($block['id'] . '-block-type');
 			}
-			
-			include_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'blocktypes' . DIRECTORY_SEPARATOR . "block." . $type . ".inc.php");
-			
-			$class_name = camelize('block_' . $type);
-			$class = new $class_name;
-			
+						
 			$contents .= '
 				<div class="accordion_header">' . humanize($block['id']) . '</div>
 				<div class="accordion_content">
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
-						<select name="content[property]['.$block['id'].'-block-type]">
+						<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="xajax_change_block_type(xajax.getFormValues(\'contentform\'), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
 							'.$this->create_block_type_options($type).'
 						</select>
 					</div>
 					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
-						'.$class->block_edit_template($this, $block['id'], $template).'
+						'.$this->create_block_type($this, $block['id'], $template).'
 			      	</div>
 				</div>
 			';
@@ -200,6 +190,43 @@ class Content extends CmsContentBase
 		$smarty->assign('cntnttemplate', $smarty_tpl);
 
 		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
+	}
+	
+	public function create_block_type($block_id)
+	{
+		$template = null;
+		if ($this->template_id == '' || $this->template_id == -1)
+			$template = cmsms()->template->find_by_default_template(1);
+		else
+			$template = cmsms()->template->find_by_id($this->template_id);
+			
+		$type = 'html';
+		if ($this->has_property($block_id . '-block-type'))
+		{
+			$type = $this->get_property_value($block_id . '-block-type');
+		}
+		
+		$block_type_obj = null;
+		
+		foreach(cmsms()->blocktypes as $block_type)
+		{
+			if ($block_type->type == $type)
+			{
+				$block_type_obj = $block_type;
+			}
+		}
+		
+		if ($block_type_obj != null)
+		{			
+			require_once($block_type_obj->filename);
+		
+			$class_name = camelize('block_' . $block_type_obj->type);
+			$class = new $class_name;
+
+			return $class->block_edit_template($this, $block_id, $template);
+		}
+		
+		return '';
 	}
 	
 	private function create_block_type_options($selected = '')
