@@ -22,6 +22,34 @@
       document.write('<link rel="stylesheet" href="../lib/jquery/tabs/tabs_js.css" type="text/css" media="projection, screen" />');
   //]]></script>
 
+	
+  <script type="text/javascript">//<![CDATA[
+      // form handling stuff
+	$(document).ready(function() {
+	// disable all buttons
+	$('button').addClass("negative").attr("disabled", true);
+	// but enable cancel
+	$('button[@name="cancel"]').attr("disabled", false);
+	
+	// assign event for every input
+	$('form :input').one("change", function() {
+		// on change call enable form
+		enableForm(this.form);
+		// mark in title
+		if(document.title[0] != "*") {
+			document.title = "*"+document.title;
+		}
+		});
+
+	});
+
+	function enableForm(form) {
+     		var input = $('button', form);
+        	input.attr('disabled', false).removeClass('negative');
+	} 	
+
+  //]]></script>
+
 	{/literal}
 	
 	{$headtext}
