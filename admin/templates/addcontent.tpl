@@ -194,24 +194,11 @@
 
 
 		<div class="footerbuttons buttons">
-		    {* Preview *}
-<button type="submit" name="submitbutton" class="positive">
-	{$submit_image}
-	{lang string='submit'}
-</button>    
 
-<button type="submit" name="cancel" class="negative">
-	{$cancel_image}
-	{lang string='cancel'}
-</button>    
+{* generic buttons template *}
+{include file='buttons.tpl'}
 
-<button type="submit" name="previewbutton" class="positive">
-	{$preview_image}
-	{lang string='preview'}
-</button>    
-
-
-
+{* todo: remove these *}
 <!--		    <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 
 		    <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
