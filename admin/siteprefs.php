@@ -129,7 +129,7 @@ if (isset($_POST["testumask"]))
       }
     else
       {
-	@umask($global_umask);
+	@umask(octdec($global_umask));
 	$fh = @fopen($testfile,"w");
 	if( !$fh )
 	  {

@@ -170,7 +170,7 @@ if (isset($page))
 $global_umask = get_site_preference('global_umask','');
 if( $global_umask != '' )
 {
-    @umask( $global_umask );
+  @umask( octdec($global_umask) );
 }
 
 #Set the locale if it's set
