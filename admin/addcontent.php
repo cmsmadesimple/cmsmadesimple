@@ -264,6 +264,11 @@ $smarty->assign('include_templates', $page_object->add_template($smarty));
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
 
+//images for buttons
+$smarty->assign('submit_image', $themeObject->DisplayImage('icons/system/true.gif', '','','','systemicon'));
+$smarty->assign('cancel_image', $themeObject->DisplayImage('icons/system/false.gif', '','','','systemicon'));
+$smarty->assign('preview_image', $themeObject->DisplayImage('icons/system/preview.gif', '','','','systemicon'));
+
 $smarty->display('addcontent.tpl');
 
 include_once("footer.php");

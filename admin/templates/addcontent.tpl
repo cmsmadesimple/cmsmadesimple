@@ -192,16 +192,35 @@
 
 		</div> <!-- End tabs -->
 
-		<div class="footerbuttons">
+
+		<div class="footerbuttons buttons">
 		    {* Preview *}
-    
-		    <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+<button type="submit" name="submitbutton" class="positive">
+	{$submit_image}
+	{lang string='submit'}
+</button>    
+
+<button type="submit" name="cancel" class="negative">
+	{$cancel_image}
+	{lang string='cancel'}
+</button>    
+
+<button type="submit" name="previewbutton" class="positive">
+	{$preview_image}
+	{lang string='preview'}
+</button>    
+
+
+
+<!--		    <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+
 		    <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 		    {if $can_apply eq true}
 		      <input type="submit" name="applybutton" value="{lang string='apply'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'"   onmouseout="this.className='pagebutton'" />
 		    {/if}
 		    {if $can_preview eq true}
 		      <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;" />
+-->
 		    {/if}
 		</div> <!-- end footerbuttons -->
 
