@@ -21,10 +21,6 @@
 class CmsContentAcl extends CmsAcl
 {
 	static private $instance = NULL;
-	protected $aros_table = 'content';
-	protected $acos_table = 'acos';
-	protected $acos_aros_table = 'acos_aros';
-	protected $object_id_field = 'id';
 
 	function __construct()
 	{
@@ -45,6 +41,12 @@ class CmsContentAcl extends CmsAcl
 		}
 		return self::$instance;
 	}
+	
+	public function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
+	{
+		return parent::check_permission($module, $extra_attr, $permission, $object_id, $group, $user);
+	}
+
 }
 
 # vim:ts=4 sw=4 noet

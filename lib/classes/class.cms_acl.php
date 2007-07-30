@@ -21,10 +21,6 @@
 class CmsAcl extends CmsObject
 {	
 	static private $instance = NULL;
-	protected $aros_table = 'aros';
-	protected $acos_table = 'acos';
-	protected $acos_aros_table = 'acos_aros';
-	protected $object_id_field = 'object_id';
 	
 	function __construct()
 	{
@@ -49,11 +45,6 @@ class CmsAcl extends CmsObject
 	public function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
 	{
 		$groups = array();
-		
-		$local_acos_table = cms_db_prefix() . $this->acos_table;
-		$local_aros_table = cms_db_prefix() . $this->aros_table;
-		$local_acos_aros_table = cms_db_prefix() . $this->acos_aros_table;
-		$local_object_id_field = $this->object_id_field;
 		
 		if ($group == null && $user != null)
 		{
@@ -86,25 +77,72 @@ class CmsAcl extends CmsObject
 		}
 		
 		$groupids = implode(',', $groupids);
+
 		if ($groupids != '')
 		{
-			$groupids = "AND r.{$local_object_id_field} in ({$groupids})";
+			$groupids = "AND gp.group_id in ({$groupids})";
+		}
+		
+		$cms_db_prefix = cms_db_prefix();
+		$defn = self::get_permission_definition($module, $extra_attr, $permission);
+		
+		$result = false;
+		
+		if ($defn['hierarchical'])
+		{				
+			$query = "SELECT gp.has_access 
+						FROM {$cms_db_prefix}{$defn['table']} c, {$cms_db_prefix}{$defn['table']} c2 
+							INNER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
+							INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
+						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
+							AND c2.id = ? 
+							AND pd.module = ? 
+							AND pd.extra_attr = ? 
+							AND pd.name = ? 
+							{$groupids}
+						ORDER BY c.lft DESC
+						LIMIT 1";
+			
+			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
+		}
+		else
+		{		
+			$query = "SELECT gp.has_access
+						FROM {$cms_db_prefix}group_permissions gp 
+						INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
+						WHERE gp.object_id = ? AND pd.module = ? AND pd.extra_attr = ? AND pd.name = ? {$groupids}";
+					
+			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
+		}
+
+		/*
+		$typecode = '';
+		if ($this->aros_type != '')
+		{
+			$typecode = " AND r.type = '{$this->aros_type}'";
 		}
 		
 		$query = "SELECT cr.has_access
 					FROM {$local_acos_table} c, {$local_acos_table} c2
 					INNER JOIN {$local_acos_aros_table} cr ON cr.acos_id = c.id
 					INNER JOIN {$local_aros_table} r ON r.id = cr.aros_id
-					WHERE c2.lft BETWEEN c.lft AND c.rgt AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? {$groupids} AND r.type = 'Group'
+					WHERE c2.lft BETWEEN c.lft AND c.rgt AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? {$groupids} {$this->aros_type}
 					ORDER BY c.lft DESC LIMIT 1";
 
 		$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
+		*/
+
 		if (!$result)
 		{
 			return false;
 		}
 
 		return $result;
+	}
+	
+	static public function get_permission_definition($module, $extra_attr, $permission)
+	{
+		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $permission));
 	}
 	
 	static public function add_aro($object_id, $type = 'Group')

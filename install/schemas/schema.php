@@ -1,30 +1,5 @@
 <?php
 
-CmsInstallOperations::create_table($db, 'acos', "
-	id I KEY AUTO,
-	module C(50),
-	object_id I,
-	extra_attr C(50),
-	lft I,
-	rgt I
-");
-
-CmsInstallOperations::create_table($db, 'aros', "
-	id I KEY AUTO,
-	object_id I,
-	type C(50),
-	lft I,
-	rgt I
-");
-
-CmsInstallOperations::create_table($db, 'acos_aros', "
-	id I KEY AUTO,
-	acos_id I,
-	aros_id I,
-	permission_name C(50),
-	has_access I1 DEFAULT 1
-");
-
 CmsInstallOperations::create_table($db, 'additional_users', "
 	id I KEY AUTO,
 	user_id I,
@@ -163,6 +138,14 @@ CmsInstallOperations::create_table($db, 'group_perms', "
 ");
 CmsInstallOperations::create_index($db, 'group_perms', 'group_and_permission', 'group_id,permission_id');
 
+CmsInstallOperations::create_table($db, 'group_permissions', "
+	id I KEY AUTO,
+	permission_defn_id I,
+	group_id I,
+	object_id I,
+	has_access I1 DEFAULT 1
+");
+
 CmsInstallOperations::create_table($db, 'groups', "
 	id I KEY AUTO,
 	group_name C(25),
@@ -232,6 +215,15 @@ CmsInstallOperations::create_table($db, 'permissions', "
 	permission_text C(255),
 	create_date DT,
 	modified_date DT
+");
+
+CmsInstallOperations::create_table($db, 'permission_defns', "
+	id I KEY AUTO,
+	module C(50),
+	extra_attr C(50),
+	name C(50),
+	hierarchical I1 DEFAULT 0,
+	table C(50)
 ");
 
 CmsInstallOperations::create_table($db, 'serialized_versions', "
