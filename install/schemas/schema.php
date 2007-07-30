@@ -6,7 +6,7 @@ CmsInstallOperations::create_table($db, 'acos', "
 	object_id I,
 	extra_attr C(50),
 	lft I,
-	rght I
+	rgt I
 ");
 
 CmsInstallOperations::create_table($db, 'aros', "
@@ -14,7 +14,7 @@ CmsInstallOperations::create_table($db, 'aros', "
 	object_id I,
 	type C(50),
 	lft I,
-	rght I
+	rgt I
 ");
 
 CmsInstallOperations::create_table($db, 'acos_aros', "

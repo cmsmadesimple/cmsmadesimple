@@ -151,8 +151,8 @@ class CmsLogin extends CmsObject
 	static public function get_current_user()
 	{
 		//1. Check session
-		//Return user
-		if (array_key_exists('cmsms_user', $_SESSION))
+		//Return user (only if we're not in debug -- it's hard to debug users if it's being put in the session)
+		if (!in_debug() && array_key_exists('cmsms_user', $_SESSION))
 		{
 			return $_SESSION['cmsms_user'];
 		}

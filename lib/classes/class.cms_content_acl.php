@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -18,34 +18,32 @@
 #
 #$Id$
 
-class CmsAnonymousUser extends CmsUser
+class CmsContentAcl extends CmsAcl
 {
-	var $params = array('id' => 0, 'username' => 'anonymous', 'password' => '', 'firstname' => 'Anonymous', 'lastname' => 'User', 'email' => '', 'active' => true);
+	static private $instance = NULL;
+	protected $aros_table = 'content';
+	protected $acos_table = 'acos';
+	protected $acos_aros_table = 'acos_aros';
+	protected $object_id_field = 'id';
 
 	function __construct()
 	{
 		parent::__construct();
-		$this->groups = array(cms_orm()->cms_group->find_by_name('Anonymous'));
 	}
 	
-	function groups()
+	/**
+	 * Returns an instance of the CmsContentAcl singleton.
+	 *
+	 * @return CmsContentAcl The singleton CmsContentAcl instance
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
 	{
-		return $this->groups;
-	}
-	
-	function save()
-	{
-		return false;
-	}
-	
-	function delete($id)
-	{
-		return false;
-	}
-	
-	public function is_anonymous()
-	{
-		return true;
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsContentAcl();
+		}
+		return self::$instance;
 	}
 }
 

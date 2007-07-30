@@ -325,4 +325,15 @@ function cms_db_prefix()
 	return CmsDatabase::get_prefix();
 }
 
+/**
+ * Returns whether or not we're in debug mode currently.
+ *
+ * @return boolean
+ * @author Ted Kulp
+ */
+function in_debug()
+{
+	return CmsConfig::get("debug") == true;
+}
+
 ?>

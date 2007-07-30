@@ -125,6 +125,7 @@ if ($page == '')
 $pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
 
 $thepage = cms_orm()->cms_content_base->find_by_id($pageinfo->content_id);
+var_dump($thepage->check_permission());
 //$thepage->test_me();
 
 //No info?  Then it's a bum page.  If we had a custom 404, then it's info
@@ -134,9 +135,6 @@ if ($pageinfo == null)
 {
 	//CmsResponse::send_error_404();
 }
-
-$user = CmsLogin::get_current_user();
-var_dump("Permission: " . CmsAcl::check_permission('Core', 'Page', 'View', $pageinfo->content_id, null, $user) . "\n");
 
 //Render the pageinfo object
 echo $pageinfo->render();

@@ -101,12 +101,12 @@ class CmsObjectRelationalManager extends CmsObject
 	
 	function has_association(&$obj, $association_name)
 	{
-		return isset($this->assoc[get_class($obj)][$association_name]);
+		return $obj != null && isset($this->assoc[get_class($obj)][$association_name]);
 	}
 	
 	function process_association(&$obj, $association_name)
 	{
-		if (isset($this->assoc[get_class($obj)][$association_name]))
+		if ($this->has_association($obj, $association_name))
 		{
 			return $this->assoc[get_class($obj)][$association_name]->get_data($obj);
 		}

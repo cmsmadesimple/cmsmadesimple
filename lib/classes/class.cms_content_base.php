@@ -65,6 +65,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 	*/
 	
+	public function check_permission()
+	{
+		return CmsContentAcl::get_instance()->check_permission('Core', 'Page', 'View', $this->id, null, CmsLogin::get_current_user());
+	}
+	
 	function friendly_name()
 	{
 		return '';
