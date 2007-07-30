@@ -507,7 +507,7 @@ function cms_module_CreateReturnLink(&$modinstance, $id, $returnid, $contents=''
 {
   $id = cms_htmlentities($id);
   $returnid = cms_htmlentities($returnid);
-  $contents = cms_htmlentities($contents);
+  $contents = $contents;
 
 	$text = '';
 	global $gCms;
