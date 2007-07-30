@@ -57,6 +57,10 @@ class CmsAcl extends CmsObject
 		
 		if ($group == null && $user != null)
 		{
+			//Return true if we're the #1 accoutn
+			if ($user->id == 1)
+				return true;
+
 			$groups = $user->groups;
 		}
 		else if ($group != null && $user == null)
@@ -73,8 +77,10 @@ class CmsAcl extends CmsObject
 		{
 			if ($group != null)
 			{
+				//Return true if we're in the Admin group
 				if ($group->name == 'Admin')
 					return true;
+
 				$groupids[] = $group->id;
 			}
 		}

@@ -70,7 +70,7 @@ class CmsLogin extends CmsObject
 		if (isset($_SESSION['login_cms_language']))
 		{
 			debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-			setcookie('cms_language', $_SESSION['login_cms_language']);
+			setcookie('cms_language', $_SESSION['login_cms_language'], 0, self::get_cookie_path());
 			unset($_SESSION['login_cms_language']);
 		}
 
@@ -230,8 +230,8 @@ class CmsLogin extends CmsObject
 		{
 			$_SESSION['cmsms_user'] = $oneuser;
 			$_SESSION['cmsms_user_id'] = $oneuser->id; //TODO: Remove me
-			setcookie('cmsms_user_id', $oneuser->id);
-			setcookie('cmsms_passhash', md5(md5(ROOT_DIR . '--' . $oneuser->password)));
+			setcookie('cmsms_user_id', $oneuser->id, 0, self::get_cookie_path());
+			setcookie('cmsms_passhash', md5(md5(ROOT_DIR . '--' . $oneuser->password)), 0, self::get_cookie_path());
 			return $oneuser;
 		}
 		
@@ -247,8 +247,25 @@ class CmsLogin extends CmsObject
 	{
 		unset($_SESSION['cmsms_user']);
 		unset($_SESSION['cmsms_user_id']); //TODO: Remove me
-		setcookie('cmsms_user_id', '', time() - 3600);
-		setcookie('cmsms_passhash', '', time() - 3600);
+		setcookie('cmsms_user_id', '', time() - 3600, self::get_cookie_path());
+		setcookie('cmsms_passhash', '', time() - 3600, self::get_cookie_path());
+	}
+	
+	static public function get_cookie_path()
+	{
+		$result = '';
+		
+		$parts = parse_url(CmsConfig::get('root_url'));
+		if (isset($parts['path']))
+		{
+			$result = $parts['path'];
+			if (!ends_with($result, '/'))
+			{
+				$result .= '/';
+			}
+		}
+		
+		return $result;
 	}
 }
 
