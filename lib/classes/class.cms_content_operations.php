@@ -224,7 +224,7 @@ class CmsContentOperations extends CmsObject
 			$row = &$db->GetRow($query, array($current_parent_id));
 			if ($row)
 			{
-				$current_hierarchy_position = str_pad($row['item_order'], 5, '0', STR_PAD_LEFT) . "." . $current_hierarchy_position;
+				$current_hierarchy_position = $row['item_order'] . '.' . $current_hierarchy_position;
 				$current_id_hierarchy_position = $current_parent_id . '.' . $current_id_hierarchy_position;
 				$current_hierarchy_path = $row['content_alias'] . '/' . $current_hierarchy_path;
 				$current_parent_id = $row['parent_id'];

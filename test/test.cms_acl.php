@@ -28,10 +28,10 @@ class TestCmsAcl extends UnitTestCase
 	
 	function test_no_permissions()
 	{
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.1');
 		$this->assertFalse($thepage->check_permission(-1));		
 	}
 
@@ -39,7 +39,7 @@ class TestCmsAcl extends UnitTestCase
 	{
 		$this->setup_row(3, 1, 1, 1);
 
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertTrue($thepage->check_permission(-1));
 	}
 	
@@ -48,13 +48,13 @@ class TestCmsAcl extends UnitTestCase
 		$this->setup_row(3, 1, 1, 1);
 		$this->setup_row(3, 1, 2, 0);
 
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(7);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('2');
 		$this->assertTrue($thepage->check_permission(-1));
 	}
 	
@@ -64,16 +64,16 @@ class TestCmsAcl extends UnitTestCase
 		$this->setup_row(3, 1, 2, 0);
 		$this->setup_row(3, 1, 4, 1);
 
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(4);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.2');
 		$this->assertTrue($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(7);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('2');
 		$this->assertTrue($thepage->check_permission(-1));
 	}
 	
@@ -82,13 +82,13 @@ class TestCmsAcl extends UnitTestCase
 		$this->setup_row(3, -1, 1, 1);
 		$this->setup_row(3, 1, 2, 0);
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.1');
 		$this->assertFalse($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(7);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('2');
 		$this->assertTrue($thepage->check_permission(-1));
 	}
 	
@@ -97,13 +97,13 @@ class TestCmsAcl extends UnitTestCase
 		$this->setup_row(3, -1, 1, 0);
 		$this->setup_row(3, 1, 1, 1);
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1');
 		$this->assertTrue($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('1.1');
 		$this->assertTrue($thepage->check_permission(-1));
 		
-		$thepage = cms_orm()->cms_content_base->find_by_id(7);
+		$thepage = cms_orm()->cms_content_base->find_by_hierarchy('2');
 		$this->assertTrue($thepage->check_permission(-1));
 	}
 	
