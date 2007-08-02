@@ -18,8 +18,6 @@
 #
 #$Id$
 
-require_once('../lib/cmsms.api.php');
-
 class TestCmsAcl extends UnitTestCase
 {
 
@@ -27,10 +25,20 @@ class TestCmsAcl extends UnitTestCase
 	{
 		cms_db()->Execute('DELETE FROM ' . cms_db_prefix() . 'group_permissions');
 	}
+	
+	function test_no_permissions()
+	{
+		$thepage = cms_orm()->cms_content_base->find_by_id(2);
+		$this->assertFalse($thepage->check_permission(-1));
+		
+		$thepage = cms_orm()->cms_content_base->find_by_id(3);
+		$this->assertFalse($thepage->check_permission(-1));		
+	}
 
 	function test_user_has_permissions_on_root()
 	{
 		$this->setup_row(3, 1, 1, 1);
+
 		$thepage = cms_orm()->cms_content_base->find_by_id(2);
 		$this->assertTrue($thepage->check_permission(-1));
 	}

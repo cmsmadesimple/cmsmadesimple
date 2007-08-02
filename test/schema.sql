@@ -380,7 +380,7 @@ CREATE TABLE `cms2_group_permissions` (
   `object_id` int(11) default NULL,
   `has_access` tinyint(4) default '1',
   PRIMARY KEY  (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=latin1;
+) ENGINE=MyISAM AUTO_INCREMENT=95 DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `cms2_group_permissions`
@@ -388,6 +388,7 @@ CREATE TABLE `cms2_group_permissions` (
 
 LOCK TABLES `cms2_group_permissions` WRITE;
 /*!40000 ALTER TABLE `cms2_group_permissions` DISABLE KEYS */;
+INSERT INTO `cms2_group_permissions` VALUES (93,3,-1,1,0),(94,3,1,1,1);
 /*!40000 ALTER TABLE `cms2_group_permissions` ENABLE KEYS */;
 UNLOCK TABLES;
 

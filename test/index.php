@@ -20,6 +20,10 @@
 
 require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
+require_once('../lib/cmsms.api.php');
+
+$config = CmsConfig::get_instance();
+$config['db_name'] = 'cms_test';
 
 $test = &new TestSuite('All tests');
 $test->addTestFile('test.cms_acl.php');
