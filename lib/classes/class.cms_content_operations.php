@@ -218,7 +218,7 @@ class CmsContentOperations extends CmsObject
 		$current_parent_id = $contentid;
 		$count = 0;
 
-		while ($current_parent_id > -1)
+		while ($current_parent_id > 1)
 		{
 			$query = "SELECT item_order, parent_id, content_alias FROM ".cms_db_prefix()."content WHERE id = ?";
 			$row = &$db->GetRow($query, array($current_parent_id));
@@ -232,7 +232,7 @@ class CmsContentOperations extends CmsObject
 			}
 			else
 			{
-				$current_parent_id = -1;
+				$current_parent_id = 1;
 			}
 		}
 
@@ -266,7 +266,7 @@ class CmsContentOperations extends CmsObject
 		global $gCms;
 		$db = $gCms->GetDb();
 
-		$query = "SELECT id FROM ".cms_db_prefix()."content";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE id > 1";
 		$dbresult = &$db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
@@ -288,7 +288,7 @@ class CmsContentOperations extends CmsObject
 
 	public static function get_all_content($loadprops=true)
 	{
-		return cmsms()->content_base->find_all(array('order' => 'lft ASC'));
+		return cmsms()->content_base->find_all(array('conditions' => array('id > 1'), 'order' => 'lft ASC'));
 	}
 	
 	/**
@@ -302,7 +302,7 @@ class CmsContentOperations extends CmsObject
 	function CreateHierarchyDropdown($current = '', $parent = '', $name = 'parent_id')
 	{
 		$result = '<select name="'.$name.'">';
-		$result .= '<option value="-1">None</option>';
+		$result .= '<option value="1">None</option>';
 
 		$allcontent = cmsms()->GetContentOperations()->GetAllContent(false);
 

@@ -56,7 +56,7 @@ class CmsPageTree extends CmsTree
 		return $this->root;
 	}
 
-	public function load_child_nodes($parent_id = -1, $lft = -1, $rgt = -1)
+	public function load_child_nodes($parent_id = 1, $lft = -1, $rgt = -1)
 	{
 		$pages = array();
 
@@ -101,7 +101,7 @@ class CmsPageTree extends CmsTree
 			}
 			if ($ancestor != null)
 			{
-				$this->load_child_nodes(-1, $ancestor->lft, $ancestor->rgt);
+				$this->load_child_nodes(1, $ancestor->lft, $ancestor->rgt);
 			}
 		}
 	}
@@ -110,7 +110,7 @@ class CmsPageTree extends CmsTree
 	{
 		if ($id)
 		{
-			if ($id == -1)
+			if ($id == 1)
 			{
 				return $this->get_root_node();
 			}

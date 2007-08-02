@@ -1,4 +1,4 @@
-<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
+<?php
 #CMS - CMS Made Simple
 #(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
@@ -18,36 +18,12 @@
 #
 #$Id$
 
-class CmsContentAcl extends CmsAcl
-{
-	static private $instance = NULL;
+require_once('simpletest/unit_tester.php');
+require_once('simpletest/reporter.php');
 
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	/**
-	 * Returns an instance of the CmsContentAcl singleton.
-	 *
-	 * @return CmsContentAcl The singleton CmsContentAcl instance
-	 * @author Ted Kulp
-	 **/
-	static public function get_instance()
-	{
-		if (self::$instance == NULL)
-		{
-			self::$instance = new CmsContentAcl();
-		}
-		return self::$instance;
-	}
-	
-	public function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
-	{
-		return parent::check_permission($module, $extra_attr, $permission, $object_id, $group, $user);
-	}
-
-}
+$test = &new TestSuite('All tests');
+$test->addTestFile('test.cms_acl.php');
+$test->run(new HtmlReporter());
 
 # vim:ts=4 sw=4 noet
 ?>

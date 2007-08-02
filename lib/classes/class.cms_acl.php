@@ -42,13 +42,13 @@ class CmsAcl extends CmsObject
 		return self::$instance;
 	}
 	
-	public function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
+	public static function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
 	{
 		$groups = array();
 		
 		if ($group == null && $user != null)
 		{
-			//Return true if we're the #1 accoutn
+			//Return true if we're the #1 account
 			if ($user->id == 1)
 				return true;
 
@@ -63,7 +63,7 @@ class CmsAcl extends CmsObject
 			return false;
 		}
 		
-		$groupids = array();
+		$groupids = array('-1');
 		foreach ($groups as $group)
 		{
 			if ($group != null)
@@ -90,9 +90,9 @@ class CmsAcl extends CmsObject
 		
 		if ($defn['hierarchical'])
 		{				
-			$query = "SELECT gp.has_access 
+			$query = "SELECT max(gp.has_access)
 						FROM {$cms_db_prefix}{$defn['table']} c, {$cms_db_prefix}{$defn['table']} c2 
-							INNER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
+							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
 							INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
 						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
 							AND c2.id = ? 
@@ -100,7 +100,8 @@ class CmsAcl extends CmsObject
 							AND pd.extra_attr = ? 
 							AND pd.name = ? 
 							{$groupids}
-						ORDER BY c.lft DESC
+						GROUP BY gp.object_id 
+						ORDER BY c.lft DESC, gp.group_id DESC 
 						LIMIT 1";
 			
 			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
@@ -115,29 +116,15 @@ class CmsAcl extends CmsObject
 			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
 		}
 
-		/*
-		$typecode = '';
-		if ($this->aros_type != '')
-		{
-			$typecode = " AND r.type = '{$this->aros_type}'";
-		}
-		
-		$query = "SELECT cr.has_access
-					FROM {$local_acos_table} c, {$local_acos_table} c2
-					INNER JOIN {$local_acos_aros_table} cr ON cr.acos_id = c.id
-					INNER JOIN {$local_aros_table} r ON r.id = cr.aros_id
-					WHERE c2.lft BETWEEN c.lft AND c.rgt AND c2.object_id = ? AND c2.module = ? AND c2.extra_attr = ? {$groupids} {$this->aros_type}
-					ORDER BY c.lft DESC LIMIT 1";
-
-		$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr));
-		*/
-
+		//Make sure we get a real boolean...  php is so weird sometimes
 		if (!$result)
 		{
 			return false;
 		}
-
-		return $result;
+		else
+		{
+			return true;
+		}
 	}
 	
 	static public function get_permission_definition($module, $extra_attr, $permission)
@@ -145,12 +132,16 @@ class CmsAcl extends CmsObject
 		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $permission));
 	}
 	
-	static public function add_aro($object_id, $type = 'Group')
+	static public function create_permission($module, $extra_attr, $name, $hierarchical = false, $table = '')
 	{
-		$max = cms_db()->GetOne("SELECT max(rgt) FROM cms_aros");
+		$result = null;
 		
-		$query = "INSERT INTO cms_aros (object_id, type, lft, rgt) VALUES (?, ?, ?, ?)";
-		$result = cms_db()->Execute($query, array($object_id, $type, $max + 1, $max + 2));
+		$row = cms_db()->GetOne('SELECT * FROM ' . cms_db_prefix() . 'permission_defn WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
+		
+		if (!$row)
+		{
+			$result = cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . 'permission_defn (module, extra_atr, name, hierarchical, table) VALUES (?, ?, ?, ?, ?)');
+		}
 		
 		if ($result)
 			return cms_db()->Insert_ID();
@@ -158,13 +149,15 @@ class CmsAcl extends CmsObject
 		return false;
 	}
 	
-	static public function delete_aro($object_id, $type = 'Group')
+	static public function delete_permission($module, $extra_attr, $name)
 	{
-		$query = "DELETE FROM cms_aros INNER JOIN cms_acos_aros ON cms_acos_aros.aro_id = cms_aros.id WHERE cms_aros.object_id = ? AND cms_aros.type = ?";
-		cms_db()->Execute($query, array($object_id, $type));
+		$query = "DELETE FROM " . cms_db_prefix() . "permission_defn WHERE module = ? AND extra_attr = ? AND name = ?";
+		$result = cms_db()->Execute($query, array($module, $extra_attr, $name));
 		
-		$query = "DELETE FROM cms_aros WHERE object_id = ? AND type = ?";
-		cms_db()->Execute($query, array($object_id, $type));
+		if ($result)
+			return true;
+			
+		return false;
 	}
 }
 
