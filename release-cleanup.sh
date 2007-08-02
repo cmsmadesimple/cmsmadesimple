@@ -39,6 +39,7 @@ rm -fr modules/faqX
 rm -fr modules/FCKeditor
 rm -fr modules/TinyMCE
 rm -fr scripts
+rm -fr test
 rm -fr command.php
 rm -fr lib/pear/php_shell
 find . -depth -type d -name .svn -exec rm -fr {} \;
