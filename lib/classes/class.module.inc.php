@@ -112,6 +112,7 @@ class CMSModule
 		$this->SetParameterType('lang',CLEAN_STRING);
 		$this->SetParameterType('returnid',CLEAN_INT);
 		$this->SetParameterType('action',CLEAN_STRING);
+		$this->SetParameterType('showtemplate',CLEAN_STRING);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
