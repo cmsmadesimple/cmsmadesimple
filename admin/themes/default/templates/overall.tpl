@@ -27,9 +27,9 @@
       // form handling stuff
 	$(document).ready(function() {
 	// disable all buttons
-	$('button').addClass("negative").attr("disabled", true);
+	$('button').addClass("disabled").attr("disabled", true);
 	// but enable cancel
-	$('button[@name="cancel"]').attr("disabled", false);
+	$('button[@name="cancel"]').removeClass("disabled").attr("disabled", false);
 	
 	// assign event for every input
 	$('form :input').one("change", function() {
@@ -45,7 +45,7 @@
 
 	function enableForm(form) {
      		var input = $('button', form);
-        	input.attr('disabled', false).removeClass('negative');
+        	input.attr('disabled', false).removeClass('disabled');
 	} 	
 
   //]]></script>

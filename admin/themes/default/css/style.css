@@ -1000,36 +1000,39 @@ div.selected
 }                                     
 
 /* STANDARD */
-
 button:hover, .buttons a:hover{
-  background-color:#dff4ff;
+ background-color:#dff4ff;
  border:1px solid #c2e1ef;
  color:#336699;
 }
 .buttons a:active{
-  background-color:#6299c5;
+ background-color:#6299c5;
  border:1px solid #6299c5;
  color:#fff;
 }
 
 /* POSITIVE */
-
 button.positive, .buttons a.positive{
+ background: #dff4ff url('themes/default/images/icons/system/true.gif') no-repeat 10px 50%;
  color:#529214;
 }
+
+button span { 
+ margin-left:25px;              
+}
+
 .buttons a.positive:hover, button.positive:hover{
-  background-color:#E6EFC2;
+ background-color:#E6EFC2;
  border:1px solid #C6D880;
  color:#529214;
 }
 .buttons a.positive:active{
-  background-color:#529214;
+ background-color:#529214;
  border:1px solid #529214;
  color:#fff;
 }
 
 /* NEGATIVE */
-
 .buttons a.negative, button.negative{
  color:#d12f19;
 }
@@ -1039,7 +1042,22 @@ button.positive, .buttons a.positive{
  color:#d12f19;
 }
 .buttons a.negative:active{
-  background-color:#d12f19;
+ background-color:#d12f19;
  border:1px solid #d12f19;
  color:#fff;
+}
+
+/* DISABLED */
+.buttons a.disabled, button.disabled{
+ color:#aaa;
+}
+.buttons a.disabled:hover, button.disabled:hover{
+ background-color: #fbe3e4;
+ border: 1px solid #fbc2c4;
+ color: #aaa;
+}
+.buttons a.disabled:active{
+ background-color: #d12f19;
+ border: 1px solid #d12f19;
+ color: #aaa;
 }
