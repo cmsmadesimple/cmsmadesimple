@@ -299,8 +299,7 @@ function cms_module_CreateInputDropdown(&$modinstance, $id, $name, $items, $sele
 	{
 		foreach ($items as $key=>$value)
 		{
-		  $value = cms_htmlentities($value);
-	
+		  //		  $value = cms_htmlentities($value);
 		$text .= '<option value="'.$value.'"';
 			if ($selectedindex == $count || $selectedvalue == $value)
 			{
