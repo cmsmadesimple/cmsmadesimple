@@ -60,9 +60,9 @@ foreach($gCms->modules as $key=>$value)
 		if ($gCms->modules[$key]['object']->WYSIWYGActive()) {
 			$loadit=true;
 		} else {
-		  if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
+		 /* if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
 		  	$loadit=true;
-		  }
+		  }*/
 		}
 		if ($loadit) {
 		  $bodytext.=$gCms->modules[$key]['object']->WYSIWYGGenerateBody();
@@ -84,9 +84,9 @@ foreach($gCms->modules as $key=>$value)
 		if ($gCms->modules[$key]['object']->SyntaxActive()) {
 			$loadit=true;
 		} else {
-		  if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
+		 /* if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
 		  	$loadit=true;
-		  }
+		  }*/
 		}
 		if ($loadit) {
 		  $bodytext.=$gCms->modules[$key]['object']->SyntaxGenerateBody();
