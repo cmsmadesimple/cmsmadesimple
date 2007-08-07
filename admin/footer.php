@@ -60,7 +60,8 @@ foreach($gCms->modules as $key=>$value)
 		if ($gCms->modules[$key]['object']->WYSIWYGActive()) {
 			$loadit=true;
 		} else {
-		 /* if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
+		 //Silmarillion: It shouldn't be loaded unless it's in use 
+		  /*if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName()) {
 		  	$loadit=true;
 		  }*/
 		}
@@ -84,7 +85,8 @@ foreach($gCms->modules as $key=>$value)
 		if ($gCms->modules[$key]['object']->SyntaxActive()) {
 			$loadit=true;
 		} else {
-		 /* if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
+		 //Silmarillion: It shouldn't be loaded unless it's in use
+		  /*if (get_preference(get_userid(), 'syntaxhightlighter')==$gCms->modules[$key]['object']->GetName()) {
 		  	$loadit=true;
 		  }*/
 		}
