@@ -1,3 +1,16 @@
+Version 1.1.1 "Upolu" -- Aug 09 2007
+-----------------
+- Fixes to wysiwyg handling in GCB's 
+- Fixes to some over zealous input parameter cleaning
+- Fixes so that modules that used showtemplate=false wouldn't generate an error
+- Rationalization to the order of buttons (apply/submit/cancel)
+- Fixes to the umask test and global umask settings
+- Fixes to the apply button in WYSIWYGS
+- Fixes for installing on postgres
+- Fixes to the wordage (rows/columns) in the CreateTextArea method
+- Fixes to News pagination and upgrade issues (2.3.0.2 is now the version of
+  news released with 1.1.1
+
 Version 1.1 "Samoa" -- Jul 13 2007
 -----------------
 - Numerous changes to attempt to minimize the potential for XSS attacks
