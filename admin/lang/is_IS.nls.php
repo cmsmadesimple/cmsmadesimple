@@ -30,7 +30,7 @@
 #Maintained by: Rikhardur Brynjolfsson <rikhardur @nospam@ gmail.com>
 
 #Native language name
-$nls['language']['is_IS'] = 'Yslenska';
+$nls['language']['is_IS'] = 'Slenska';
 $nls['englishlang']['is_IS'] = 'Icelandic';
 
 #Possible aliases for language
