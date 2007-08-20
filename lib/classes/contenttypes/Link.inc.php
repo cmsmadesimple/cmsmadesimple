@@ -52,9 +52,14 @@ class Link extends ContentBase
 		    $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
-	    if (FALSE == empty($_POST['file_url']))
+	    if ($_POST['file_url'] != "---")
 	    {
 	    	$this->SetPropertyValue('url', $params['file_url']);
+            } 
+            # make sure target keeps empty even with the new dropdown value
+	    if ($_POST['target'] != "---")
+	    {
+	    	$this->SetPropertyValue('target', '');
             } 
 	    if (isset($params['title']))
 	    {
@@ -166,11 +171,11 @@ class Link extends ContentBase
 
 	$ret[]= array(lang('url').':','<input type="text" name="url" size="80" value="'.cms_htmlentities($this->GetPropertyValue('url')).'" />');
 
-	$text = '<option value="">'.lang('no_file_url').'</option>';
+	$text = '<option value="---">'.lang('no_file_url').'</option>';
 	$text .= $this->directoryToSelect($gCms->config['uploads_path'], true, $gCms->config['uploads_path'], $this->GetPropertyValue('url'));
 	$ret[]= array(lang('file_url').':','<select name="file_url">'.$text.'</select>');
 	
-	$text = '<option value="">'.lang('none').'</option>';
+	$text = '<option value="---">'.lang('none').'</option>';
 	$text .= '<option value="_blank"'.($this->GetPropertyValue('target')=='_blank'?' selected="selected"':'').'>_blank</option>';
 	$text .= '<option value="_parent"'.($this->GetPropertyValue('target')=='_parent'?' selected="selected"':'').'>_parent</option>';
 	$text .= '<option value="_self"'.($this->GetPropertyValue('target')=='_self'?' selected="selected"':'').'>_self</option>';
