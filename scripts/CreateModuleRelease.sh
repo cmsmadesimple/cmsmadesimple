@@ -3,10 +3,10 @@
 # within a cmsms install
 
 # finds the name
-_this=`basename $0`
+_this=`basename "$0"`
 _configfile=${HOME}/.CreateRelease.rc
-_pwd=`pwd`
-_name=`basename $_pwd`
+_pwd="`pwd`"
+_name=`basename "$_pwd"`
 _destdir=${HOME}
 _version=0
 _excludes="*~ #*# .svn CVS *.bak"
@@ -104,7 +104,7 @@ fi
 
 # find the version
 # thanks to _SjG_ the perl regexp expert
-_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*([^;]+)(.*)/$2/s' | cut -d\' -f2 | cut -d\" -f2`
+_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*[\"\047]([^;\047\"]+)(.*)/$2/s'`
 if [ ${_version2:-notset} = notset ]; then
   echo "WARNING: could not auto-detect the version from the module.php file"
 fi
