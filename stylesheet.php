@@ -29,13 +29,16 @@ if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
 $mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
 
+$cssid = '';
+if (isset($_GET['cssid'])) $cssid = $_GET['cssid'];
+
 $name = '';
 if (isset($_GET['name'])) $name = $_GET['name'];
 
 $stripbackground = false;
 if (isset($_GET["stripbackground"])) $stripbackground = true;
 
-if ($templateid == '' && $name == '') return '';
+if ($templateid == '' && $name == '' && $cssid == '') return '';
 
 require_once('config.php');
 
@@ -52,6 +55,8 @@ if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 	// select the stylesheet(s)
 	if ($name != '')
 		$sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_name = " . $db->qstr($name);
+	else if( $cssid != '' )
+	  $sql="SELECT css_text, css_name FROM ".$config['db_prefix']."css WHERE css_id = ".$db->qstr($cssid);
 	else
 		$sql="SELECT c.css_text, c.css_id, c.css_name FROM ".$config['db_prefix']."css c,".$config['db_prefix']."css_assoc ac WHERE ac.assoc_type='template' AND ac.assoc_to_id = ".$db->qstr($templateid)." AND ac.assoc_css_id = c.css_id AND c.media_type = " . $db->qstr($mediatype) . " ORDER BY ac.create_date";
 	$result = $db->Execute($sql);
