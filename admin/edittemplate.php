@@ -70,13 +70,21 @@ if (isset($_POST["template_id"])) $template_id = $_POST["template_id"];
 else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
 if (isset($_POST["cancel"])) {
-	if ($from == 'content')
-		redirect("listcontent.php");
-	else if ($from == 'cssassoc')
-		redirect('templatecss.php?id='.$cssid.'&type=template');
-	else
-		redirect("listtemplates.php");
-	return;
+  switch($from)
+    {
+    case 'content':
+      redirect("listcontent.php");
+      break;
+    case 'cssassoc':
+      redirect('templatecss.php?id='.$cssid.'&type=template');
+      break;
+    case 'module_StylesheetManager':
+      redirect('moduleinterface.php?module=StylesheetManager');
+      break;
+    default:
+      redirect("listtemplates.php");
+      break;
+    }
 }
 
 if ($preview || $apply)
@@ -163,12 +171,21 @@ if ($access)
 				audit($template_id, $onetemplate->name, 'Edited Template');
 				if (!$apply)
 				{
-					if ($from == 'content')
-						redirect("listcontent.php");
-					else if ($from == 'cssassoc')
-						redirect('templatecss.php?id='.$cssid.'&type=template');
-					else
-						redirect("listtemplates.php");
+				  switch($from)
+				    {
+				    case 'content':
+				      redirect("listcontent.php");
+				      break;
+				    case 'cssassoc':
+				      redirect('templatecss.php?id='.$cssid.'&type=template');
+				      break;
+				    case 'module_StylesheetManager':
+				      redirect('moduleinterface.php?module=StylesheetManager');
+				      break;
+				    default:
+				      redirect("listtemplates.php");
+				      break;
+				    }
 				}
 			}
 			else
@@ -296,8 +313,8 @@ print '<div id="Edit_Template_Result"></div>';
 $submitbtns = '
 <!--	<input type="submit" name="preview" value="'.lang('preview').'" class="button" onmouseover="this.className=\'buttonHover\'" onmouseout="this.className=\'button\'" /> -->
 	<input type="submit" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
-	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 	<input type="submit" onclick="return window.Edit_Template_Apply(this);" name="apply" value="'.lang('apply').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
+	<input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />
 ';
 
 if (!$access)
