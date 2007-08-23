@@ -78,9 +78,19 @@ if (isset($_POST["preview"])) $preview = true;
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["addsection"])) $active = 0;
 
+$from='listtemplates.php';
+if( isset($_GET['from'] ) )
+  {
+    $from = "moduleinterface.php?module=".$_GET['from'];
+  }
+else if( isset($_REQUEST['from']) ) 
+  {
+    $from = $_REQUEST['from'];
+  }
+
 if (isset($_POST["cancel"]))
 {
-	redirect("listtemplates.php");
+	redirect($from);
 	return;
 }
 
@@ -162,7 +172,7 @@ if ($access)
 				Events::SendEvent('Core', 'AddTemplatePost', array('template' => &$newtemplate));
 
 				audit($newtemplate->id, $template, 'Added Template');
-				redirect("listtemplates.php");
+				redirect($from);
 				return;
 			}
 			else
@@ -247,6 +257,7 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
+				<input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="hidden" name="addtemplate" value="true"/>
 				<!--<input type="submit" name="preview" value="<?php echo lang('preview')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />-->
 				<input type="submit" name="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
