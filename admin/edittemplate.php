@@ -78,8 +78,8 @@ if (isset($_POST["cancel"])) {
     case 'cssassoc':
       redirect('templatecss.php?id='.$cssid.'&type=template');
       break;
-    case 'module_StylesheetManager':
-      redirect('moduleinterface.php?module=StylesheetManager');
+    case 'module_TemplateManager':
+      redirect('moduleinterface.php?module=TemplateManager');
       break;
     default:
       redirect("listtemplates.php");
@@ -179,8 +179,8 @@ if ($access)
 				    case 'cssassoc':
 				      redirect('templatecss.php?id='.$cssid.'&type=template');
 				      break;
-				    case 'module_StylesheetManager':
-				      redirect('moduleinterface.php?module=StylesheetManager');
+				    case 'module_TemplateManager':
+				      redirect('moduleinterface.php?module=TemplateManager');
 				      break;
 				    default:
 				      redirect("listtemplates.php");
