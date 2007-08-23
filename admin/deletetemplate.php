@@ -25,6 +25,13 @@ require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
+$from = 'listtemplates.php';
+if (isset($_GET['from']) )
+  {
+    $from = 'moduleinterface.php?module='.$_GET['from'];
+  }
+
+
 $dodelete = true;
 $template_id = -1;
 if (isset($_GET["template_id"]))
@@ -83,11 +90,11 @@ if (isset($_GET["template_id"]))
 
 if ($dodelete)
 {
-	redirect("listtemplates.php");
+  redirect($from);
 }
 else
 {
-	redirect("listtemplates.php?message=".lang('errortemplateinuse'));
+  redirect($from."message=".lang('errortemplateinuse'));
 }
 
 # vim:ts=4 sw=4 noet
