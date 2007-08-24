@@ -36,9 +36,19 @@ else if (isset($_GET["template_id"])) $template_id = $_GET["template_id"];
 
 if (isset($_REQUEST["template_name"])) { $template_name = $_REQUEST["template_name"]; }
 
+$from = 'listtemplates.php';
+if (isset($_GET['from']) )
+  {
+    $from = 'moduleinterface.php?module='.$_GET['from'];
+  }
+else if( isset( $_POST['from'] ) )
+  {
+    $from = $_POST['from'];
+  }
+
 if (isset($_POST["cancel"]))
 {
-	redirect("listtemplates.php");
+	redirect($from);
 	return;
 }
 
@@ -108,7 +118,7 @@ if ($access)
 				}
 
 				audit($onetemplate->id, $onetemplate->name, 'Copied Template');
-				redirect("listtemplates.php");
+				redirect($from);
 				return;
 			}
 			else
@@ -150,7 +160,7 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
-				<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" />
+			      <input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
