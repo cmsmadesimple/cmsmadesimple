@@ -152,7 +152,7 @@ if (isset($_POST["testumask"]))
 	      
 		  if(function_exists("posix_getpwuid")) //function posix_getpwuid not available on WAMP systems
 			{
-	      $userinfo = posix_getpwuid($filestat[4]);
+	      $userinfo = @posix_getpwuid($filestat[4]);
 
   	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
 	      $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
