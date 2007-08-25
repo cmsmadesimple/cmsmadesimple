@@ -119,18 +119,23 @@ if (isset($_POST["cancel"])) {
 
 $testresults = lang('untested');
 if (isset($_POST["testumask"]))
-  {
+{
+
     $testdir = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'tmp';
     $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
     
     if( !is_writable($testdir) )
       {
 	$testresults = lang('errordirectorynotwritable');
+
       }
     else
       {
+
 	@umask(octdec($global_umask));
+
 	$fh = @fopen($testfile,"w");
+
 	if( !$fh )
 	  {
 	    $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
@@ -139,17 +144,29 @@ if (isset($_POST["testumask"]))
 	  {
 	    @fclose($fh);
 	    $filestat = stat($testfile);
+
 	    if( $filestat == FALSE )
 	      {
 		$testresults = lang('errorcantcreatefile');
 	      }
-	    $userinfo = @posix_getpwuid($filestat[4]);
-	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	    $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
-	    
-	    $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
+	      
+		  if(function_exists("posix_getpwuid")) //function posix_getpwuid not available on WAMP systems
+			{
+	      $userinfo = posix_getpwuid($filestat[4]);
+
+  	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+	      $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
+        $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
 				   lang('owner'),$username,
 				   lang('permissions'),$permsstr);
+	      
+	    
+      } else {
+        $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
+				   lang('owner'),"N/A",
+				   lang('permissions'),"N/A");
+
+      }
 	    @unlink($testfile);
 	  }
 	
