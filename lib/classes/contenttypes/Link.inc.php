@@ -57,7 +57,7 @@ class Link extends ContentBase
 	    	$this->SetPropertyValue('url', $params['file_url']);
             } 
             # make sure target keeps empty even with the new dropdown value
-	    if ($_POST['target'] != "---")
+	    if ($_POST['target'] == "---")
 	    {
 	    	$this->SetPropertyValue('target', '');
             } 
