@@ -15,16 +15,16 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
-#$Id$
+#$Id: class.cms_language.php 3807 2007-03-05 03:05:39Z wishy $
 
 /**
  * Methods for handling language and translation functions.
  *
  * @author Ted Kulp
  * @since 2.0
- * @version $Revision$
- * @modifiedby $LastChangedBy$
- * @lastmodified $Date$
+ * @version $Revision: 3807 $
+ * @modifiedby $LastChangedBy: wishy $
+ * @lastmodified $Date: 2007-03-04 20:05:39 -0700 (Sun, 04 Mar 2007) $
  * @license GPL
  **/
 class CmsLanguage extends CmsObject
@@ -64,7 +64,12 @@ class CmsLanguage extends CmsObject
 		else if ($default_language != $current_language && array_key_exists($name, self::$lang[$module][$default_language]))
 			$result = self::$lang[$module][$default_language][$name];
 		else
-			$result = "--Add Me - $module - $name --";
+			{
+				//$result = "--Add Me - $module - $name --";
+				// calguy1000 - a move to the tr plugin
+				// just return the original text
+				return $name;
+			}
 			
 		if (count($params) > 0)
 		{
