@@ -5,7 +5,7 @@
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 
-	<title>{translate}CMS Made Simple Installation System{/translate}</title>
+	<title>{tr}CMS Made Simple Installation System{/tr}</title>
 	
 	{literal}
 	<style>

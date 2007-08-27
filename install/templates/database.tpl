@@ -1,16 +1,16 @@
-<h3>{translate}Database Setup{/translate}</h3>
+<h3>{tr}Database Setup{/tr}</h3>
 
 <p>
-  {translate}This is a paragraph about the wonders of database setup.{/translate}
+  {tr}This is a paragraph about the wonders of database setup.{/tr}
 </p>
 
 <form action="index.php" method="post" id="connectionform">
 <div class="callout">
   <fieldset>
-    <legend>{translate}Connection Details{/translate}</legend>
+    <legend>{tr}Connection Details{/tr}</legend>
     <p>
       <span class="go_left">
-        {translate}Database Driver{/translate}:
+        {tr}Database Driver{/tr}:
       </span>
       <span class="go_right">
         <select id="connection_driver" name="connection[driver]">
@@ -20,7 +20,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Hostname{/translate}:
+        {tr}Hostname{/tr}:
       </span>
       <span class="go_right">
         <input type="text" id="connection_hostname" name="connection[hostname]" value="{$smarty.session.connection.hostname}" />
@@ -28,7 +28,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Username{/translate}:
+        {tr}Username{/tr}:
       </span>
       <span class="go_right">
         <input type="text" id="connection_username" name="connection[username]" value="{$smarty.session.connection.username}" />
@@ -36,7 +36,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Password{/translate}:
+        {tr}Password{/tr}:
       </span>
       <span class="go_right">
         <input type="password" id="connection_password" name="connection[password]" value="{$smarty.session.connection.password}" />
@@ -44,7 +44,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Database Name{/translate}:
+        {tr}Database Name{/tr}:
       </span>
       <span class="go_right">
         <input type="text" id="connection_dbname" name="connection[dbname]" value="{$smarty.session.connection.dbname}" />
@@ -52,7 +52,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Drop Existing Tables{/translate}:
+        {tr}Drop Existing Tables{/tr}:
       </span>
       <span class="go_right">
         <input type="hidden" name="connection[drop_tables]" value="0" />
@@ -61,7 +61,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Table Prefix{/translate}:
+        {tr}Table Prefix{/tr}:
       </span>
       <span class="go_right">
         <input type="text" id="connection_table_prefix" name="connection[table_prefix]" value="{$smarty.session.connection.table_prefix}" />
@@ -69,10 +69,10 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Click here to test your connection settings{/translate}:
+        {tr}Click here to test your connection settings{/tr}:
       </span>
       <span class="go_right">
-        <input type="submit" name="test_connection" value="{translate}Test{/translate}" onclick="{literal}$('#connection_options').hide(); xajax_test_connection(xajax.getFormValues('connectionform')); return false;{/literal}" />
+        <input type="submit" name="test_connection" value="{tr}Test{/tr}" onclick="{literal}$('#connection_options').hide(); xajax_test_connection(xajax.getFormValues('connectionform')); return false;{/literal}" />
       </span>
     </p>
     <input type="hidden" name="action" value="database" />
@@ -83,7 +83,7 @@
 
 <div class="callout">
   <fieldset>
-    <legend>{translate}Test Results{/translate}</legend>
+    <legend>{tr}Test Results{/tr}</legend>
     <div id="connection_options" style="display: none;">
     </div>
   </fieldset>
@@ -92,8 +92,8 @@
 <br style="clear: both;" />
 
 <p>
-  <input type="submit" name="back" value="{translate}Back{/translate}" />
-  <input type="submit" name="next" value="{translate}Next{/translate}" />
+  <input type="submit" name="back" value="{tr}Back{/tr}" />
+  <input type="submit" name="next" value="{tr}Next{/tr}" />
 </p>
 
 </form>

@@ -1,10 +1,10 @@
-<h3>{translate}Welcome to CMSMS!{/translate}</h3>
+<h3>{tr}Welcome to CMSMS!{/tr}</h3>
 
 <p>
-  {translate}This is an introductory paragraph.{/translate}
+  {tr}This is an introductory paragraph.{/tr}
 </p>
 
-<h4>{translate}Choose a language{/translate}</h4>
+<h4>{tr}Choose a language{/tr}</h4>
 
 <p>
   <form action="index.php" method="post">
@@ -16,7 +16,7 @@
 
 <p>
   <form action="index.php" method="get">
-    <input type="submit" name="next" value="{translate}Next{/translate}" />
+    <input type="submit" name="next" value="{tr}Next{/tr}" />
     <input type="hidden" name="action" value="check" />
   </form>
 </p>

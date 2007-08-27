@@ -50,12 +50,8 @@ class CmsSession extends CmsObject
 		
 		if(!@session_id())
 		{
-		    #Trans SID sucks also...
-		    @ini_set('url_rewriter.tags', '');
-		    @ini_set('session.use_trans_sid', 0);
 		    @session_start();
 		}
-		
 		#Add users if they exist in the session
 		$gCms = cmsms();
 

@@ -1,15 +1,15 @@
 {if $installed}
-  <p>{translate}The database was properly installed.{/translate}</p>
+  <p>{tr}The database was properly installed.{/tr}</p>
   {if $user_created}
-    <p>{translate}The user account was created successfully.{/translate}</p>
+    <p>{tr}The user account was created successfully.{/tr}</p>
 	{if $config_created}
-		<p>{translate}The config file was created.{/translate}</p>
+		<p>{tr}The config file was created.{/tr}</p>
 	{else}
-		<p>{translate}The config file could not be created{/translate}</p>
+		<p>{tr}The config file could not be created{/tr}</p>
 	{/if}
   {else}
-    <p>{translate}The user account could not be created.{/translate}</p>
+    <p>{tr}The user account could not be created.{/tr}</p>
   {/if}
 {else}
-  <p>{translate}The database could not be created.{/translate}</p>
+  <p>{tr}The database could not be created.{/tr}</p>
 {/if}

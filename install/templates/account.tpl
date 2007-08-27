@@ -1,16 +1,16 @@
-<h3>{translate}Account Setup{/translate}</h3>
+<h3>{tr}Account Setup{/tr}</h3>
 
 <p>
-  {translate}This is a paragraph about the wonders of account setup.{/translate}
+  {tr}This is a paragraph about the wonders of account setup.{/tr}
 </p>
 
 <form action="index.php" method="post" id="accountform">
 <div class="callout">
   <fieldset>
-    <legend>{translate}Admin Account{/translate}</legend>
+    <legend>{tr}Admin Account{/tr}</legend>
     <p>
       <span class="go_left">
-        {translate}Username{/translate}:
+        {tr}Username{/tr}:
       </span>
       <span class="go_right">
         <input type="text" id="admin_account_username" name="admin_account[username]" value="{$smarty.session.admin_account.username}" />
@@ -18,7 +18,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Password{/translate}:
+        {tr}Password{/tr}:
       </span>
       <span class="go_right">
         <input type="password" id="admin_account_password" name="admin_account[password]" value="{$smarty.session.admin_account.password}" />
@@ -26,7 +26,7 @@
     </p>
     <p>
       <span class="go_left">
-        {translate}Password Again{/translate}:
+        {tr}Password Again{/tr}:
       </span>
       <span class="go_right">
         <input type="password" id="admin_account_password_again" name="admin_account[password_again]" value="{$smarty.session.admin_account.password_again}" />
@@ -35,10 +35,10 @@
     <!--
     <p>
       <span class="go_left">
-        {translate}Click here to create this account{/translate}:
+        {tr}Click here to create this account{/tr}:
       </span>
       <span class="go_right">
-        <input type="submit" name="test_connection" value="{translate}Create Account{/translate}" onclick="xajax_create_account(xajax.getFormValues('accountform')); return false;" />
+        <input type="submit" name="test_connection" value="{tr}Create Account{/tr}" onclick="xajax_create_account(xajax.getFormValues('accountform')); return false;" />
       </span>
     </p>
     -->
@@ -49,8 +49,8 @@
 <br style="clear: both;" />
 
 <p>
-  <input type="submit" name="back" value="{translate}Back{/translate}" />
-  <input type="submit" name="next" value="{translate}Next{/translate}" />
+  <input type="submit" name="back" value="{tr}Back{/tr}" />
+  <input type="submit" name="next" value="{tr}Next{/tr}" />
 </p>
 
 </form>
