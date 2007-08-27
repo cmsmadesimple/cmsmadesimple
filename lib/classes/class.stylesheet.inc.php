@@ -24,79 +24,19 @@
  * @since		0.11
  * @package		CMS
  */
-class Stylesheet
+class Stylesheet extends CmsObjectRelationalMappting
 {
-	var $id;
-	var $name;
-	var $value;
-	var $media_type;
-
-	function Stylesheet()
-	{
-		$this->SetInitialValues();
-	}
-
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->name = '';
-		$this->value = '';
-		$this->media_type = '';
-	}
-	
-	function Id()
-	{
-		return $this->id;
-	}
-
-	function Name()
-	{
-		return $this->name;
-	}
-
-	function Save()
-	{
-		$result = false;
-		
-		global $gCms;
-		$styleops =& $gCms->GetStylesheetOperations();
-		
-		if ($this->id > -1)
-		{
-			$result = $styleops->UpdateStylesheet($this);
-		}
-		else
-		{
-			$newid = $styleops->InsertStylesheet($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			global $gCms;
-			$styleops =& $gCms->GetStylesheetOperations();
-			$result = $styleops->DeleteStylesheetByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
+	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => '');
+	var $field_maps = array('css_id' => 'id', 'css_name' => 'name', 'css_text' => 'value');
+	var $table = 'css';
+	var $sequence = 'css_seq';
 }
+
+if (function_exists("overload") && phpversion() < 5)
+{
+   overload("Stylesheet");
+}
+Stylesheet::register_orm_class('Stylesheet');
 
 # vim:ts=4 sw=4 noet
 ?>

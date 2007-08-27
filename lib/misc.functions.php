@@ -1258,6 +1258,46 @@ function cleanParamHash($data,$map = false,
 }
 
 /**
+ * Returns given $lower_case_and_underscored_word as a camelCased word.
+ * Take from cakephp (http://cakephp.org)
+ * Licensed under the MIT License
+ *
+ * @param string $lower_case_and_underscored_word Word to camelize
+ * @return string Camelized word. likeThis.
+ */
+function camelize($lowerCaseAndUnderscoredWord) {
+	$replace = str_replace(" ", "", ucwords(str_replace("_", " ", $lowerCaseAndUnderscoredWord)));
+	return $replace;
+}
+
+/**
+ * Returns an underscore-syntaxed ($like_this_dear_reader) version of the $camel_cased_word.
+ * Take from cakephp (http://cakephp.org)
+ * Licensed under the MIT License
+ *
+ * @param string $camel_cased_word Camel-cased word to be "underscorized"
+ * @return string Underscore-syntaxed version of the $camel_cased_word
+ */
+function underscore($camelCasedWord) {
+	$replace = strtolower(preg_replace('/(?<=\\w)([A-Z])/', '_\\1', $camelCasedWord));
+	return $replace;
+}
+
+/**
+ * Returns a human-readable string from $lower_case_and_underscored_word,
+ * by replacing underscores with a space, and by upper-casing the initial characters.
+ * Take from cakephp (http://cakephp.org)
+ * Licensed under the MIT License
+ *
+ * @param string $lower_case_and_underscored_word String to be made more readable
+ * @return string Human-readable string
+ */
+function humanize($lowerCaseAndUnderscoredWord) {
+	$replace = ucwords(str_replace("_", " ", $lowerCaseAndUnderscoredWord));
+	return $replace;
+}
+
+/**
  * Returns all parameters sent that are destined for the module with
  * the given $id
  */

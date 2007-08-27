@@ -26,6 +26,8 @@
  * @package CMS
  */
 
+debug_buffer('', 'Start Loading User Operations');
+
 require_once(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'class.user.inc.php');
 
 class UserOperations
@@ -39,30 +41,10 @@ class UserOperations
 	function &LoadUsers()
 	{
 		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$result = array();
-
-		$query = "SELECT user_id, username, password, first_name, last_name, email, active, admin_access FROM ".cms_db_prefix()."users ORDER BY username";
-		$dbresult = $db->Execute($query);
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$oneuser =& new User();
-			$oneuser->id = $row['user_id'];
-			$oneuser->username = $row['username'];
-			$oneuser->firstname = $row['first_name'];
-			$oneuser->lastname = $row['last_name'];
-			$oneuser->email = $row['email'];
-			$oneuser->password = $row['password'];
-			$oneuser->active = $row['active'];
-			$oneuser->adminaccess = $row['admin_access'];
-			$result[] =& $oneuser;
-		}
-
-		return $result;
+		$user = $gCms->orm->user;
+		$obj = $user->find_all(array('order' => 'username'));
+		return $obj;
 	}
-
 
 	/**
 	 * Gets a list of all users in a given group
@@ -109,42 +91,30 @@ class UserOperations
 	 */
 	function &LoadUserByUsername($username, $password = '', $activeonly = true, $adminaccessonly = false)
 	{
-		$result = false;
-
 		global $gCms;
-		$db = &$gCms->GetDb();
-
+		$user = $gCms->orm->user;
+		
+		$condstring = 'username = ?';
 		$params = array();
-
-		$query = "SELECT user_id FROM ".cms_db_prefix()."users WHERE username = ?";
-		$params[] = $username;
-
+		
 		if ($password != '')
 		{
-			$query .= " AND password = ?";
+			$condstring .= " AND password = ?";
 			$params[] = md5($password);
 		}
 
 		if ($activeonly == true)
 		{
-			$query .= " AND active = 1";
+			$condstring .= " AND active = 1";
 		}
 
 		if ($adminaccessonly == true)
 		{
-			$query .= " AND admin_access = 1";
+			$condstring .= " AND admin_access = 1";
 		}
-
-		$dbresult = $db->Execute($query, $params);
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			$row = $dbresult->FetchRow();
-			$id = $row['user_id'];
-			$result =& UserOperations::LoadUserByID($id);
-		}
-
-		return $result;
+		
+		$obj = $user->find(array('conditions', array($condstring, $params)));
+		return $obj;
 	}
 
 	/**
@@ -157,29 +127,10 @@ class UserOperations
 	 */
 	function &LoadUserByID($id)
 	{
-		$result = false;
-
 		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "SELECT username, password, active, first_name, last_name, admin_access, email FROM ".cms_db_prefix()."users WHERE user_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		while ($dbresult && $row = $dbresult->FetchRow())
-		{
-			$oneuser =& new User();
-			$oneuser->id = $id;
-			$oneuser->username = $row['username'];
-			$oneuser->password = $row['password'];
-			$oneuser->firstname = $row['first_name'];
-			$oneuser->lastname = $row['last_name'];
-			$oneuser->email = $row['email'];
-			$oneuser->adminaccess = $row['admin_access'];
-			$oneuser->active = $row['active'];
-			$result =& $oneuser;
-		}
-
-		return $result;
+		$user = $gCms->orm->user;
+		$obj = $user->find_by_id($id);
+		return $obj;
 	}
 
 	/**
@@ -192,22 +143,7 @@ class UserOperations
 	 */
 	function InsertUser($user)
 	{
-		$result = -1; 
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$time = $db->DBTimeStamp(time());
-		$new_user_id = $db->GenID(cms_db_prefix()."users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, first_name, last_name, email, admin_access, create_date, modified_date) VALUES (?,?,?,?,?,?,?,?,".$time.",".$time.")";
-		#$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess));
-		$dbresult = $db->Execute($query, array($new_user_id, $user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1)); //Force admin access on
-		if ($dbresult !== false)
-		{
-			$result = $new_user_id;
-		}
-
-		return $result;
+		$user->save();
 	}
 
 	/**
@@ -220,21 +156,7 @@ class UserOperations
 	 */
 	function UpdateUser($user)
 	{
-		$result = false; 
-
-		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$time = $db->DBTimeStamp(time());
-		$query = "UPDATE ".cms_db_prefix()."users SET username = ?, password = ?, active = ?, modified_date = ".$time.", first_name = ?, last_name = ?, email = ?, admin_access = ? WHERE user_id = ?";
-		#$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, $user->adminaccess, $user->id));
-		$dbresult = $db->Execute($query, array($user->username, $user->password, $user->active, $user->firstname, $user->lastname, $user->email, 1, $user->id));
-		if ($dbresult !== false)
-		{
-			$result = true;
-		}
-
-		return $result;
+		$user->save();
 	}
 
 	/**
@@ -247,26 +169,9 @@ class UserOperations
 	 */
 	function DeleteUserByID($id)
 	{
-		$result = false;
-
 		global $gCms;
-		$db = &$gCms->GetDb();
-
-		$query = "DELETE FROM ".cms_db_prefix()."additional_users where user_id = ?";
-		$db->Execute($query, array($id));
-
-		$query = "DELETE FROM ".cms_db_prefix()."users where user_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		$query = "DELETE FROM ".cms_db_prefix()."userprefs where user_id = ?";
-		$dbresult = $db->Execute($query, array($id));
-
-		if ($dbresult !== false)
-		{
-			$result = true;
-		}
-
-		return $result;
+		$user = $gCms->orm->user;
+		return $user->delete($id);
 	}
 
 	/**
@@ -323,5 +228,7 @@ class UserOperations
 		return $result;
 	}
 }
+
+debug_buffer('', 'End Loading User Operations');
 
 ?>

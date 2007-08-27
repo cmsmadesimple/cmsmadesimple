@@ -24,72 +24,14 @@
  * @since 0.6.1
  * @package CMS
  */
-class User
+debug_buffer('', 'Start Loading User');
+
+class User extends CmsObjectRelationalMappting
 {
-	/**
-	 * User ID
-	 */
-	var $id;
-
-	/**
-	 * Username
-	 */
-	var $username;
-
-	/**
-	 * Password (md5 encoded)
-	 */
-	var $password;
-
-	/**
-	 * First Name
-	 */
-	var $firstname;
-
-	/**
-	 * Last Name
-	 */
-	var $lastname;
-
-	/**
-	 * Email
-	 */
-	var $email;
-
-	/**
-	 * Active Flag
-	 */
-	var $active;
-
-	/**
-	 * Flag to tell whether user can login to admin panel
-	 */
-	var $adminaccess;
-
-	/**
-	 * Generic constructor.  Runs the SetInitialValues fuction.
-	 */
-	function User()
-	{
-		$this->SetInitialValues();
-	}
-
-	/**
-	 * Sets object to some sane initial values
-	 *
-	 * @since 0.6.1
-	 */
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->username = '';
-		$this->password = '';
-		$this->firstname = '';
-		$this->lastname = '';
-		$this->email = '';
-		$this->active = false;
-		$this->adminaccess = false;
-	}
+	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
+	var $field_maps = array('user_id' => 'id', 'first_name' => 'firstname', 'last_name' => 'lastname');
+	var $table = 'users';
+	var $sequence = 'users_seq';
 
 	/**
 	 * Encrypts and sets password for the User
@@ -100,66 +42,15 @@ class User
 	{
 		$this->password = md5($password);
 	}
-
-	/**
-	 * Saves the user to the database.  If no user_id is set, then a new record
-	 * is created.  If the uset_id is set, then the record is updated to all values
-	 * in the User object.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.6.1
-	 */
-	function Save()
-	{
-		$result = false;
-		
-		if ($this->id > -1)
-		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
-			$result = $userops->UpdateUser($this);
-		}
-		else
-		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
-			$newid = $userops->InsertUser($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	/**
-	 * Delete the record for this user from the database and resets
-	 * all values to their initial values.
-	 *
-	 * @returns mixed If successful, true.  If it fails, false.
-	 * @since 0.6.1
-	 */
-	function Delete()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			global $gCms;
-			$userops =& $gCms->GetUserOperations();
-			$result = $userops->DeleteUserByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
 }
+
+if (function_exists("overload") && phpversion() < 5)
+{
+   overload("User");
+}
+User::register_orm_class('User');
+
+debug_buffer('', 'End Loading User');
 
 # vim:ts=4 sw=4 noet
 ?>

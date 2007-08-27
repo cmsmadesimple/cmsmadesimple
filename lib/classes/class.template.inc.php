@@ -24,41 +24,12 @@
  * @since		0.6
  * @package		CMS
  */
-class Template
-{
-	var $id;
-	var $name;
-	var $content;
-	var $stylesheet;
-	var $encoding;
-	var $active;
-	var $default;
-
-	function Template()
-	{
-		$this->SetInitialValues();
-	}
-
-	function SetInitialValues()
-	{
-		$this->id = -1;
-		$this->name = '';
-		$this->content = '';
-		$this->stylesheet = '';
-		$this->encoding = '';
-		$this->active = false;
-		$this->default = false;
-	}
-
-	function Id()
-	{
-		return $this->id;
-	}
-
-	function Name()
-	{
-		return $this->name;
-	}
+class Template extends CmsObjectRelationalMappting
+{	
+	var $params = array('id' => -1, 'name' => '', 'content' => '', 'stylesheet' => '', 'encoding' => '', 'active' => true, 'default' => false);
+	var $field_maps = array('template_id' => 'id', 'template_name' => 'name', 'default_template' => 'default', 'template_content' => 'content');
+	var $table = 'templates';
+	var $sequence = 'templates_seq';
 
 	function UsageCount()
 	{
@@ -69,50 +40,13 @@ class Template
 		else
 			return 0;
 	}
-
-	function Save()
-	{
-		$result = false;
-		
-		global $gCms;
-		$templateops =& $gCms->GetTemplateOperations();
-		
-		if ($this->id > -1)
-		{
-			$result = $templateops->UpdateTemplate($this);
-		}
-		else
-		{
-			$newid = $templateops->InsertTemplate($this);
-			if ($newid > -1)
-			{
-				$this->id = $newid;
-				$result = true;
-			}
-
-		}
-
-		return $result;
-	}
-
-	function Delete()
-	{
-		$result = false;
-
-		if ($this->id > -1)
-		{
-			global $gCms;
-			$templateops =& $gCms->GetTemplateOperations();
-			$result = $templateops->DeleteTemplateByID($this->id);
-			if ($result)
-			{
-				$this->SetInitialValues();
-			}
-		}
-
-		return $result;
-	}
 }
+
+if (function_exists("overload") && phpversion() < 5)
+{
+   overload("Template");
+}
+Template::register_orm_class('Template');
 
 # vim:ts=4 sw=4 noet
 ?>

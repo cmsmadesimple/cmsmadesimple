@@ -23,6 +23,17 @@
  * @package CMS
  */
 
+if (phpversion() < 5)
+{
+	include_once('class.overloader.php4.php');
+}
+else
+{
+	include_once('class.overloader.php5.php');
+}
+
+include_once('class.ormholder.php');
+
 /**
  * Simple global object to hold references to other objects
  *
@@ -32,7 +43,7 @@
  *
  * @since 0.5
  */
-class CmsObject {
+class CmsObject extends Object {
 
 	/**
 	 * Config object - hash containing variables from config.php
@@ -118,14 +129,47 @@ class CmsObject {
 	 * content types array - List of available content types
 	 */
 	var $contenttypes;
+	
+	var $ormclasses;
+	
+	var $moduleloader;
+	
+	var $globalcontentoperations;
+	
+	var $bookmarkoperations;
+	
+	var $templateoperations;
+	
+	var $contentoperations;
+	
+	var $usertagoperations;
+	
+	var $useroperations;
+	
+	var $groupoperations;
+	
+	var $moduleoperations;
+	
+	var $hrinstance;
+	
+	var $params = array();
+	
+	var $desccache = array();
+	
+	var $modules;
+	
+	var $StylesheeteCache;
+	
+	var $userpluginfunctions;
+	
+	var $orm;
 
 	/**
 	 * Constructor
 	 */
 	function CmsObject()
 	{
-		$this->cmssystemmodules = 
-		array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
+		$this->cmssystemmodules = array( 'nuSOAP', 'MenuManager', 'ModuleManager' );
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
@@ -142,8 +186,8 @@ class CmsObject {
 		$this->userpluginfunctions = array();
 		$this->cmsplugins          = array();
 		$this->siteprefs           = array();
-
-		register_shutdown_function(array(&$this, 'dbshutdown'));
+		
+		$this->orm = new OrmHolder();
 	}
 
 	function & GetDb()
@@ -338,7 +382,7 @@ class CmsObject {
         return $this->hrinstance;
 	}
 
-	function dbshutdown()
+	function __destruct()
 	{
 		if (isset($this->db))
 		{
