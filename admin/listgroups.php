@@ -45,9 +45,7 @@ include_once("footer.php");
 
 function local_setup_smarty( &$themeObject, $page )
 {
-  $gCms = cmsms();
-  $groupops = $gCms->GetGroupOperations();
-  $grouplist = $groupops->load_groups();
+  $grouplist = CmsGroupOperations::load_groups();
   $smarty = cms_smarty();
 
   $userid = get_userid();
