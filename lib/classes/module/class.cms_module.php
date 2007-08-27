@@ -229,16 +229,6 @@ class CmsModule extends CmsObject
 	{
 		return 'unset';
 	}
-	
-	function RestrictUnknownParams()
-	{
-		
-	}
-	
-	function SetParameterType()
-	{
-		
-	}
 
 	/**
 	 * Returns the full path of the module directory.

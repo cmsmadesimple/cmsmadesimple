@@ -271,7 +271,6 @@ $smarty->assign('orig_page_type', $orig_page_type);
 
 //Can we preview?
 $smarty->assign('can_preview', $page_object->preview);
->>>>>>> 2.0:admin/editcontent.php
 
 //How about apply?
 $smarty->assign('can_apply', true);
