@@ -44,7 +44,7 @@
     {if $remove_groups eq true}
       <td class="icons_wide">
       {if $current->id != 1 && $current->name != 'Anonymous'}
-        <a href="deletegroup.php?group_id={$current->id}" onclick="return confirm('{lang string='confirm_delete'} - {$current_name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
+        <a href="deletegroup.php?group_id={$current->id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
       {else}
         &nbsp;
       {/if}

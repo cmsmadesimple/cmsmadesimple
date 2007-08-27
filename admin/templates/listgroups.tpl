@@ -1,5 +1,3 @@
-DEBUG of tr: {tr}blah blah blah{/tr}
-
 <div class="pagecontainer">
   <div class="pageoverflow">
     {$header_name}

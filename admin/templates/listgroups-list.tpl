@@ -2,7 +2,7 @@
   <p class="pageoptions">
     {if $modify_groups eq true}
       <a href="addgroup.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addgroup'}</a>
-      <a href="addgroup.php" class="pageoptions">{lang string='addgroup'}</a>
+      <a href="addgroup.php" class="pageoptions">{tr}addgroup{/tr}</a>
     {/if}
   </p>
 </div><!-- pageoverflow -->
@@ -10,8 +10,8 @@
 <table cellspacing="0" class="pagetable">
   <thead>
     <tr>
-      <th class="pagew60">{lang string='name'}</th>
-      <th class="pagepos">{lang string='active'}</th>
+      <th class="pagew60">{tr}name{/tr}</th>
+      <th class="pagepos">{tr}active{/tr}</th>
       {if $modify_permissions eq true}
         <th class="pageicon">&nbsp;</th>
       {/if}
@@ -37,7 +37,7 @@
   <p class="pageoptions">
     {if $modify_groups eq true}
       <a href="addgroup.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addgroup'}</a>
-      <a href="addgroup.php" class="pageoptions">{lang string='addgroup'}</a>
+      <a href="addgroup.php" class="pageoptions">{tr}addgroup{/tr}</a>
     {/if}
   </p>
 </div><!-- pageoverflow -->
