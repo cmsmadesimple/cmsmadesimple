@@ -24,132 +24,50 @@ require_once("../include.php");
 
 check_login();
 
+//$grouplist = cms_orm()->cms_group->find_all(array('order' => 'name'));
+
+//
+// PROCESS Any GET or POST results here
+//
+$page = 1;
+if (isset($_GET['page'])) $page = $_GET['page'];
+
+// 
+// Begin Output
+//
 include_once("header.php");
-
-?>
-
-<div class="pagecontainer">
-	<div class="pageoverflow">
-
-<?php
-
-	$userid = get_userid();
-	$perm = check_permission($userid, 'Modify Permissions');
-	$assign = check_permission($userid, 'Modify Group Assignments');
-	$edit = check_permission($userid, 'Modify Groups');
-	$remove = check_permission($userid, 'Remove Groups');
-
-	#$query = "SELECT group_id, group_name, active FROM ".cms_db_prefix()."groups ORDER BY group_id";
-	#$result = $db->Execute($query);
-
-	$grouplist = cms_orm()->cms_group->find_all(array('order' => 'name'));
-
-	$page = 1;
-	if (isset($_GET['page'])) $page = $_GET['page'];
-	$limit = 20;
-	if (count($grouplist) > $limit)
-	{
-		echo "<p class=\"pageshowrows\">".pagination($page, count($grouplist), $limit)."</p>";
-	}
-	echo $themeObject->ShowHeader('currentgroups').'</div>';
-	if (count($grouplist) > 0) {
-
-		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-		echo '<thead>';
-		echo "<tr>\n";
-		echo "<th class=\"pagew60\">".lang('name')."</th>\n";
-		echo "<th class=\"pagepos\">".lang('active')."</th>\n";
-		if ($perm)
-			echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		if ($assign)
-			echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		if ($edit)
-			echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		if ($remove)
-			echo "<th class=\"pageicon\">&nbsp;</th>\n";
-		echo "</tr>\n";
-		echo '</thead>';
-		echo '<tbody>';
-
-		$currow = "row1";
-
-		// construct true/false button images
-        $image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-        $image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
-        $image_groupassign = $themeObject->DisplayImage('icons/system/groupassign.gif', lang('assignments'),'','','systemicon');
-        $image_permissions = $themeObject->DisplayImage('icons/system/permissions.gif', lang('permissions'),'','','systemicon');
-
-		$counter=0;
-		foreach ($grouplist as $onegroup)
-		{
-			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit)
-			{
-				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editgroup.php?group_id=".$onegroup->id."\">".$onegroup->name."</a></td>\n";
-				echo "<td class=\"pagepos\">".($onegroup->active == 1?$image_true:$image_false)."</td>\n";
-				if ($perm)
-					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupperm.php?group_id=".$onegroup->id."\">".$image_permissions."</a></td>\n";
-				if ($assign)
-					echo "<td class=\"pagepos icons_wide\"><a href=\"changegroupassign.php?group_id=".$onegroup->id."\">".$image_groupassign."</a></td>\n";
-				if ($onegroup->name != 'Admin' && $onegroup->name != 'Anonymous')
-				{
-					if ($edit)
-					{
-						echo "<td class=\"icons_wide\"><a href=\"editgroup.php?group_id=".$onegroup->id."\">";
-	                    echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
-	                    echo "</a></td>\n";
-					}
-					else
-					{
-						echo '<td></td>';
-					}
-					if ($remove)
-					{
-						echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm')."');\">";
-						echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-						echo "</a></td>\n";
-					}
-					else
-					{
-						echo '<td></td>';
-					}
-				}
-				else
-				{
-					echo '<td></td><td></td>';
-				}
-				echo "</tr>\n";
-
-				($currow == "row1"?$currow="row2":$currow="row1");
-			}
-			$counter++;
-		}
-
-		echo '</tbody>';
-		echo "</table>\n";
-
-	}
-
-if (check_permission($userid, 'Add Groups')) {
-?>
-	<div class="pageoptions">
-		<p class="pageoptions">
-			<a href="addgroup.php">
-				<?php 
-					echo $themeObject->DisplayImage('icons/system/newobject.gif', lang('addgroup'),'','','systemicon').'</a>';
-					echo ' <a class="pageoptions" href="addgroup.php">'.lang("addgroup");
-				?>
-			</a>
-		</p>
-	</div>
-</div>
-
-<p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
-
-<?php
-}
-
+$smarty = cms_smarty();
+$smarty->assign('header_name',$themeObject->ShowHeader('currentgroups'));
+local_setup_smarty( $themeObject, $page );
+//$smarty->assign('group_list',$smarty->fetch('listgroups-list.tpl'));
+$smarty->display('listgroups.tpl');
 include_once("footer.php");
+
+function local_setup_smarty( &$themeObject, $page )
+{
+  $gCms = cmsms();
+  $groupops = $gCms->GetGroupOperations();
+  $grouplist = $groupops->load_groups();
+  $smarty = cms_smarty();
+
+  $userid = get_userid();
+  $perm = check_permission($userid, 'Modify Permissions');
+  $assign = check_permission($userid, 'Modify Group Assignments');
+  $edit = check_permission($userid, 'Modify Groups');
+  $remove = check_permission($userid, 'Remove Groups');
+
+  // Set permissions to smarty
+  $smarty->assign('modify_permissions',$perm);
+  $smarty->assign('modify_group_assignments',$assign);
+  $smarty->assign('modify_groups',$edit);
+  $smarty->assign('remove_groups',$remove);
+
+  $limit = get_preference($userid,'pagelimit',20);
+  $smarty->assign('pagination',$page,count($grouplist),$limit);
+  $smarty->assign('pagelimit',$limit);
+  $smarty->assign('page',$page);
+  $smarty->assign('groups',$grouplist);
+}
 
 # vim:ts=4 sw=4 noet
 ?>
