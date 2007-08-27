@@ -57,7 +57,7 @@ CmsContentOperations::find_block_types();
 $global_umask = get_site_preference('global_umask','');
 if( $global_umask != '' )
 {
-  @umask( octdec($global_umask) );
+	@umask( octdec($global_umask) );
 }
 
 #Set the locale if it's set
@@ -75,7 +75,6 @@ if ($frontendlang != '')
 cms_smarty()->assign('lang', $frontendlang);
 cms_smarty()->assign('encoding', get_encoding());
 
-
 /*
 if (isset($CMS_ADMIN_PAGE))
 {
@@ -89,7 +88,6 @@ if (isset($CMS_ADMIN_PAGE))
 	}
 }
 */
-
 
 #Load all installed module code
 CmsModuleLoader::load_modules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));

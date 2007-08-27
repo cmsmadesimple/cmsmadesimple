@@ -162,7 +162,7 @@ class CmsModuleLoader extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use loag_modules instead.
+	 * Deprecated.  Use load_modules instead.
 	 **/
 	public static function LoadModules($loadall = false, $noadmin = false)
 	{
