@@ -171,17 +171,13 @@ if (FALSE == empty($page_message)) {
 					<select name="default_cms_lang" style="vertical-align: middle;">
 					<option value=""><?php echo lang('nodefault'); ?></option>
 					<?php
-						asort($nls["language"]);
-						foreach ($nls["language"] as $key=>$val) {
+						$list = CmsLanguage::get_language_list(true);
+						foreach ($list as $key=>$val) {
 							echo "<option value=\"$key\"";
 							if ($default_cms_lang == $key) {
 								echo " selected=\"selected\"";
 							}
 							echo ">$val";
-							if (isset($nls["englishlang"][$key]))
-							{
-								echo " (".$nls["englishlang"][$key].")";
-							}
 							echo "</option>\n";
 						}
 					?>

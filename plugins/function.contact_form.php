@@ -58,6 +58,7 @@ function smarty_cms_function_contact_form($params, &$smarty) {
 		if (!empty($_POST['email'])) $email = cfSanitize($_POST['email']);
 		if (!empty($_POST['subject'])) $subject = cfSanitize($_POST['subject']);
 		if (!empty($_POST['message'])) $message = $_POST['message'];
+
 		if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->modules['Captcha'])) 
 		{
 		    if (!empty($_POST['captcha_resp'])) { $captcha_resp = $_POST['captcha_resp']; }

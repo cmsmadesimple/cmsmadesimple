@@ -21,8 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
-require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -52,7 +50,7 @@ if (isset($_POST["cancel"])) {
 	return;
 }
 
-global $gCms;
+$gCms = cmsms();
 $gcbops =& $gCms->GetGlobalContentOperations();
 
 $userid = get_userid();
@@ -86,7 +84,7 @@ if ($access)
 			$error .= "<li>".lang('nofieldgiven', array(lang('edithtmlblob')))."</li>";
 			$validinfo = false;
 		}
-		else if ($htmlblob != $oldhtmlblob && $gcbops->CheckExistingHtmlBlobName($htmlblob, $htmlblob_id))
+		else if ($htmlblob != $oldhtmlblob && CmsGlobalContentOperations::check_existing_name($htmlblob))
 		{
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
@@ -94,8 +92,7 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$blobobj =& new GlobalContent();
-			$blobobj->id = $htmlblob_id;
+			$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $owner_id;
@@ -107,45 +104,14 @@ if ($access)
 					}
 			}
 			$blobobj->AddAuthor($userid);
-
-			#Perform the edithtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->EditHtmlBlobPre($blobobj);
-				}
-			}
-			
-			Events::SendEvent('Core', 'EditGlobalContentPre', array('global_content' => &$blobobj));
-
 			$result = $blobobj->save();
 
 			if ($result)
 			{
 				audit($blobobj->id, $blobobj->name, 'Edited Html Blob');
 
-				#Clear cache
-				$smarty = new Smarty_CMS($config);
-				$smarty->clear_all_cache();
-				$smarty->clear_compiled_tpl();
-
-				#Perform the edithtmlblob_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->EditHtmlBlobPost($blobobj);
-					}
-				}
-				
-				Events::SendEvent('Core', 'EditGlobalContentPost', array('global_content' => &$blobobj));
-
 				if (!isset($_POST['apply'])) {
-					redirect('listhtmlblobs.php');
-					return;
+					CmsResponse::redirect('listhtmlblobs.php');
 				}
 			}
 			else
@@ -175,7 +141,7 @@ if ($access)
 	}
 	else if ($htmlblob_id != -1)
 	{
-		$onehtmlblob = $gcbops->LoadHtmlBlobByID($htmlblob_id);
+		$onehtmlblob = cmsms()->global_content->find_by_id($htmlblob_id);
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;
@@ -184,9 +150,9 @@ if ($access)
 }
 
 if (strlen($htmlblob) > 0)
-    {
-    $CMS_ADMIN_SUBTITLE = $htmlblob;
-    }
+{
+	$CMS_ADMIN_SUBTITLE = $htmlblob;
+}
 
 // Detect if a WYSIWYG is in use, and grab its form submit action (copied from editcotent.php)
 $addlScriptSubmit = '';
@@ -270,8 +236,7 @@ include_once("header.php");
 // Holder for AJAX apply result
 print '<div id="Edit_Blob_Result"></div>';
 
-global $gCms;
-$db =& $gCms->GetDb();
+$db = cms_db();
 
 $owners = "<select name=\"owner_id\">";
 

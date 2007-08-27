@@ -70,11 +70,13 @@ else $error = lang('typenotvalid');
 if (isset($_GET["id"]))	$id	= $_GET["id"] ;
 else $error = lang('idnotvalid');
 
+$db = cms_db();
+
 # if type is template, we get the name
 if (isset($type) && "template" == $type) 
 {
 
-	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+	$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE id = ?";
 	$result = $db->Execute($query, array($id));
 
 	if ($result)
@@ -97,7 +99,7 @@ if (isset($type) && "template" == $type)
 	$delasso = check_permission($userid, 'Remove Stylesheet Assoc');
 	$addasso = check_permission($userid, 'Add Stylesheet Assoc');
 
-	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = css_id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.create_date";
+	$query = "SELECT assoc_css_id, css_name FROM ".cms_db_prefix()."css_assoc ca INNER JOIN ".cms_db_prefix()."css ON assoc_css_id = id WHERE assoc_type=? AND assoc_to_id = ? ORDER BY ca.create_date";
 	$result = $db->Execute($query, array($type, $id));
 
 #******************************************************************************
@@ -200,7 +202,7 @@ else {
 	}
 	else
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE css_id NOT IN (".$notinto.") ORDER BY css_name";
+		$query = "SELECT * FROM ".cms_db_prefix()."css WHERE id NOT IN (".$notinto.") ORDER BY css_name";
 	}
 	$result = $db->Execute($query);
 
@@ -211,7 +213,7 @@ else {
 		$dropdown = "<select name=\"css_id\">\n";
 		while ($line = $result->FetchRow())
 		{
-			$dropdown .= "<option value=\"".$line["css_id"]."\">".$line["css_name"]."</option>\n";
+			$dropdown .= "<option value=\"".$line["id"]."\">".$line["css_name"]."</option>\n";
 		}
 		$dropdown .= "</select>";
 

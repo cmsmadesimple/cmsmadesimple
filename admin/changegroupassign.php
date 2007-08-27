@@ -87,9 +87,9 @@ else {
         {
         // a group has been selected
         echo '<form method="post" action="changegroupassign.php">';
-	    $query = "SELECT u.user_id, u.username, ug.group_id FROM ".cms_db_prefix()."users u LEFT JOIN ".
-            cms_db_prefix()."user_groups ug ON u.user_id = ug.user_id and group_id = ? ORDER BY u.username";
-        $result = $db->Execute($query,array($group_id));
+	    $query = "SELECT u.id, u.username, ug.group_id FROM ".cms_db_prefix()."users u LEFT JOIN ".
+            cms_db_prefix()."user_groups ug ON u.id = ug.user_id and ug.group_id = ? ORDER BY u.username";
+        $result = cms_db()->Execute($query,array($group_id));
 		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 		echo '<thead>';
 		echo "<tr>\n";
@@ -103,7 +103,7 @@ else {
             {
 			echo "<tr class=\"".$currow."\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
             echo '<td>'.$row['username'].'</td>'."\n";
-			echo '<td><input class="pagecheckbox" type="checkbox" name="user-'.$row['user_id'].'" value="1" '.(isset($row['group_id'])?" checked=\"checked\"":"").'/></td>'."\n";
+			echo '<td><input class="pagecheckbox" type="checkbox" name="user-'.$row['id'].'" value="1" '.(isset($row['group_id'])?" checked=\"checked\"":"").'/></td>'."\n";
 			echo "</tr>\n";
 
 			($currow=="row1"?$currow="row2":$currow="row1");	
@@ -131,13 +131,13 @@ else {
 		#Send the ChangeGroupAssignPost event
 		Events::SendEvent('Core', 'ChangeGroupAssignPre', array('group' => $groupobj, 'users' => $userops->LoadUsersInGroup($group_id)));
 		$query = "DELETE FROM ".cms_db_prefix()."user_groups WHERE group_id = ?";
-		$result = $db->Execute($query, array($group_id));
+		$result = cms_db()->Execute($query, array($group_id));
 		foreach ($_POST as $key=>$value)
 		{
 			if (strpos($key,"user-") == 0 && strpos($key,"user-") !== false)
 			{
-				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".$db->qstr($group_id).", ".$db->qstr(substr($key,5)).", ".$db->DBTimeStamp(time()).", ".$db->DBTimeStamp(time()).")";
-				$result = $db->Execute($query);
+				$query = "INSERT INTO ".cms_db_prefix()."user_groups (group_id, user_id, create_date, modified_date) VALUES (".cms_db()->qstr($group_id).", ".cms_db()->qstr(substr($key,5)).", ".cms_db()->DBTimeStamp(time()).", ".cms_db()->DBTimeStamp(time()).")";
+				$result = cms_db()->Execute($query);
 			}
 		}
 		
@@ -146,7 +146,7 @@ else {
 		audit($group_id, 'Group ID', lang('assignmentchanged'));
         echo '<p class="pageheader">'.lang('assignmentchanged').'</p>';
         }
-echo '</div>';
+		echo '</div>';
 }
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 

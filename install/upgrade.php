@@ -17,13 +17,21 @@
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #$DONT_LOAD_DB=1;
+
+// check PHP version
+$version = explode('.', phpversion());
+if ((int) $version[0] < 5)
+{
+    echo 'Unable to upgrade. This version of CMS Made Simple requires at least PHP5 and this server is using an older version ('. phpversion() . ').'; die();
+}
+
 $LOAD_ALL_MODULES=1;
-$USE_OLD_ADODB=1;
+//$USE_OLD_ADODB=1;
 
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."fileloc.php");
 require_once(dirname(dirname(__FILE__)).DIRECTORY_SEPARATOR."include.php");
 
-load_backwards_compatibility();
+//load_backwards_compatibility();
 
 //Do module autoupgrades 
 function module_autoupgrade()
@@ -56,7 +64,7 @@ function module_autoupgrade()
 					$gCms->modules[$modulename]['object']->Upgrade($module_version, $file_version);
 					$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
 					$result = $db->Execute($query, array($file_version, ($gCms->modules[$modulename]['object']->IsAdminOnly()==true?1:0), $modulename));
-					Events::SendEvent('Core', 'ModuleUpgraded', array('name' => $modulename, 'oldversion' => $module_version, 'newversion' => $file_version));
+					CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $modulename, 'oldversion' => $module_version, 'newversion' => $file_version));
 					echo "[Done]</p>";
 				}
 			}
@@ -124,9 +132,9 @@ else
 {
 	echo "<p>Upgrading config.php...";
 
-	//cms_config_upgrade();
-	$config = cms_config_load(true, true);
-	cms_config_save($config);
+	$config = CmsConfig::get_instance();
+	$config->load(true, true);
+	$config->save();
 
 	echo "[done]</p>";
 
@@ -154,12 +162,17 @@ else
 
 	echo "[done]</p>";
 
+	/*
 	$db = &ADONewConnection($config["dbms"], 'pear:date:extend:transaction');
 	$db->Connect($config["db_hostname"],$config["db_username"],$config["db_password"],$config["db_name"]);
 	if (!$db) die("Connection failed");
 	$db->SetFetchMode(ADODB_FETCH_ASSOC);
 	global $gCms;
-	$gCms->db = &$db;
+	$gCms->db = $db;
+	*/
+	
+	$db = cms_db();
+	$db->debug = true;
 
 	$current_version = 1;
 

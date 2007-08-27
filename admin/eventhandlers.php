@@ -82,7 +82,7 @@ switch( $action )
 	case 'showeventhelp':
 	{
 		if ($module == 'Core')
-			$text = Events::GetEventHelp($event);
+			$text = CmsEvents::GetEventHelp($event);
 		else
 			$text = $gCms->modules[$module]['object']->GetEventHelp( $event );
 		echo "<h3>$event</h3>";
@@ -99,7 +99,7 @@ switch( $action )
 
 	default:
 	{
-		$events = Events::ListEvents();
+		$events = CmsEvents::ListEvents();
 
 		echo '<br /><p><form action="eventhandlers.php" method="get">'.lang('filterbymodule').': <select name="modulefilter">' . "\n";
 		echo '<option value="">'.lang('showall').'</option>';
@@ -147,7 +147,7 @@ switch( $action )
 
 					$desctext = '';
 					if ($oneevent['originator'] == 'Core') {
-						$desctext = Events::GetEventDescription($oneevent['event_name']);
+						$desctext = CmsEvents::GetEventDescription($oneevent['event_name']);
 						echo "    <td>".lang('core')."</td>\n";
 					}
 					else if (isset($gCms->modules[$oneevent['originator']])) {

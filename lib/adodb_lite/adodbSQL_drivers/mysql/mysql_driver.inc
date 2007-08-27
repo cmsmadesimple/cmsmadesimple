@@ -17,7 +17,6 @@ class mysql_driver_ADOConnection extends ADOConnection
 	function mysql_driver_ADOConnection()
 	{
 		$this->dbtype = 'mysql';
-		$this->dataProvider = 'mysql';
 	}
 
 	/**
@@ -62,15 +61,7 @@ class mysql_driver_ADOConnection extends ADOConnection
 			return false;
 		}
 
-		if (!empty($this->database))
-		{
-			if($this->SelectDB( $this->database ) == false)
-			{
-				$this->connectionId = false;
-				return false;
-			}
-		}
-
+		if (!empty($this->database)) return $this->SelectDB( $this->database );
 		return true;
 	} 
 
@@ -194,7 +185,7 @@ class mysql_driver_ADOConnection extends ADOConnection
 	{
 		if (!$magic_quotes) {
 			if (strnatcmp(PHP_VERSION, '4.3.0') >= 0) {
-				return "'" . mysql_real_escape_string($string, $this->connectionId) . "'";
+				return "'" . mysql_real_escape_string($string) . "'";
 			}
 			$string = str_replace("'", "\\'" , str_replace('\\', '\\\\', str_replace("\0", "\\\0", $string)));
 			return  "'" . $string . "'"; 
@@ -286,10 +277,9 @@ class mysql_driver_ADOConnection extends ADOConnection
 		$false = false;
 
 		$limit = '';
-		if ($offset >= 0 || $nrows >= 0)
+		if ($offset != -1 || $nrows != -1)
 		{
-			$offset = ($offset >= 0) ? $offset . "," : '';
-			$nrows = ($nrows >= 0) ? $nrows : '18446744073709551615';
+			$offset = ($offset>=0) ? $offset . "," : '';
  			$limit = ' LIMIT ' . $offset . ' ' . $nrows;
 		}
 
@@ -324,14 +314,7 @@ class mysql_driver_ADOConnection extends ADOConnection
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @mysql_query( $this->sql, $this->connectionId );
-				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
-				$this->query_time_total += $time_total;
-				if($this->debug_console)
-				{
-					$this->query_list[] = $this->sql;
-					$this->query_list_time[] = $time_total;
-					$this->query_list_errors[] = $this->ErrorMsg();
-				}
+				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
 				if($this->debug)
 				{
 					$this->outp($sql . $limit);
@@ -346,18 +329,10 @@ class mysql_driver_ADOConnection extends ADOConnection
 		else
 		{
 				$this->sql = $sql . $limit;
-				$this->sql = $sql . $limit;
 				$time_start = array_sum(explode(' ', microtime()));
 				$this->query_count++;
 				$resultId = @mysql_query( $this->sql, $this->connectionId );
-				$time_total = (array_sum(explode(' ', microtime())) - $time_start);
-				$this->query_time_total += $time_total;
-				if($this->debug_console)
-				{
-					$this->query_list[] = $this->sql;
-					$this->query_list_time[] = $time_total;
-					$this->query_list_errors[] = $this->ErrorMsg();
-				}
+				$this->query_time_total += (array_sum(explode(' ', microtime())) - $time_start);
 				if($this->debug)
 				{
 					$this->outp($sql . $limit);
@@ -371,8 +346,8 @@ class mysql_driver_ADOConnection extends ADOConnection
 		} 
 
 		if ($resultId === true) { // return simplified recordset for inserts/updates/deletes with lower overhead
-			$recordset = new ADORecordSet_empty();
-			return $recordset;
+			$rs = new ADORecordSet_empty();
+			return $rs;
 		}
 
 		$resultset_name = $this->last_module_name . "_ResultSet";
@@ -452,14 +427,7 @@ class mysql_driver_ResultSet
 
 	function fields( $field )
 	{
-		if(empty($field))
-		{
-			return $this->fields;
-		}
-		else
-		{
-			return $this->fields[$field];
-		}
+		return $this->fields[$field];
 	} 
 
 	/**

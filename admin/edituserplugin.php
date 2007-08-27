@@ -23,9 +23,8 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
-global $gCms;
-$db =& $gCms->GetDb();
 
+$db = cms_db();
 $error = array();
 
 $userplugin_id = "";
@@ -52,8 +51,8 @@ $access = check_permission($userid, 'Modify User-defined Tags');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-$smarty = new Smarty_CMS($gCms->config);
-load_plugins($smarty);
+// $smarty = new Smarty_CMS($gCms->config);
+// load_plugins($smarty);
 
 $ajax = false;
 if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;

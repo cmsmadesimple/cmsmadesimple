@@ -72,13 +72,27 @@ input  {
    border: solid 1px #666666;
    }
 
+
 textarea  {
    font-size: 1.2em;
    font-family: Verdana, Arial, Helvetica, sans-serif;
    border: solid 1px #666666;
+/* disabled default size so that module devs can change size if they want
    width: 48em;
-   height: 30em;
-   }
+   height: 30em; 
+*/
+  }
+
+
+textarea.large { 
+                 width: 48em;
+                 height: 30em; 
+ }
+
+textarea.small { 
+                 width: 48em;
+                 height: 5em; 
+ }
 
 select  {
    font-family: Verdana, Arial, Helvetica, sans-serif;
@@ -331,11 +345,14 @@ div.navt_hide  {
 
 
 /* Page Tabs - used for all page tabs */
+/*
 #page_tabs  {
    overflow: hidden;
    }
+*/
 
-#page_tabs div  {
+/*
+#page_tabs ul  {
    color: #fff;
    font-size: 1.1em;
    background-color: #9ca2a9;
@@ -346,10 +363,13 @@ div.navt_hide  {
    padding-left: 8px;
    cursor: pointer;
    }
+*/
 
+/*
 #page_tabs div:hover, #page_tabs div.cssHover  {
    background-color: #7a838b;
    }
+*/
 
 #page_content  {
    background-color: #e1e1e1;
@@ -357,9 +377,11 @@ div.navt_hide  {
    border: solid 1px #385c72;
    }
 
+/*
 #page_tabs div.active  {
    background-color: #385c72;
    }
+*/
 
 
 /* top*.php files */
@@ -502,15 +524,19 @@ div.pagecontainer p {
    margin-bottom: 1em;
 }
 
-div.pageerrorcontainer  {
-   background-color: #ba5a5a;
+.pageerrorcontainer  {
+   background: #ba5a5a;
    margin: 10px;
-   padding: 5px;
+   padding: 5px 0 5px 40px;
    border: solid 1px #666;
-   color: #fff;
-   width: 95%;
+   color: #fff;	
    }
-div.pageerrorcontainer a {
+
+div.pageerrorcontainer  {
+   background: #ba5a5a url('themes/default/images/icons/system/stop.gif') no-repeat 10px center;
+}
+
+.pageerrorcontainer a {
    color: #fff;
    text-decoration: underline;
 }
@@ -524,10 +550,19 @@ div.pageerrorinstalldir  {
    color: #fff;
    }
 
+/** message **/
 div.pagemcontainer  {
-   background-color: #ccc;
+   background: #ccc url('themes/default/images/icons/system/accept.gif') no-repeat 10px center;
    margin: 10px;
-   padding: 5px;
+   padding: 5px 0 5px 40px;
+   border: solid 1px #666;
+   }
+
+/** notice **/
+div.pagencontainer  {
+   background: #ccc url('themes/default/images/icons/system/notice.gif') no-repeat 10px center;
+   margin: 10px;
+   padding: 5px 0 5px 40px;
    border: solid 1px #666;
    }
 
@@ -535,6 +570,13 @@ div.pageoverflow  {
    clear: left;
    padding-top: 1px;
    width: 97%; 
+   overflow: hidden;
+   }
+
+div.pageoverflow50  {
+   float:left;
+   width:45%;
+   padding-top: 1px;
    overflow: hidden;
    }
 
@@ -797,12 +839,12 @@ ul.pageerror  {
    margin: 5px 0 10px 0;
    padding-left: 10px;
    }
-ul.pageerror li {
+ul.pageerrorcontainer li {
 	padding-left: 5px;
 	margin-left: 15px;
    list-style-image: url("themes/default/images/icons/system/stop.gif");
    }
-div.pageerrorcontainer a {
+.pageerrorcontainer a {
 	color: #fff;
 	}
 .clearb  {
@@ -880,4 +922,142 @@ ul.sortableList li li li li li {
  }
 .important {
  color: red;
+}
+
+.footerbuttons {
+padding: .5em 0 0 0;
+text-align:center;
+}
+
+/* Accordion Stuff */
+div#page_accordion
+{
+	border:1px solid #5263AB;
+	margin:0px;
+	padding:0px;
+	text-indent:0px;
+}
+
+div.accordion_content
+{
+	margin: 0px;
+	padding-left: 5px;
+	padding-right: 5px;
+}
+
+div.accordion_header
+{
+	color: #FFF;
+	background: #666 url(../lib/jquery/accordion/collapsed.gif) no-repeat scroll 3px 4px;
+	text-indent: 14px;
+	padding: 2px;
+}
+
+div.selected
+{
+	background-image: url(../lib/jquery/accordion/expanded.gif);
+}
+
+
+
+/* BUTTONS thanks to http://particletree.com/features/rediscovering-the-button-element/ */
+.buttons a, .buttons button{ 
+  /*    display:block;
+    float:left; */
+    margin:0 7px 0 0;
+    background-color:#f5f5f5;
+    border:1px solid #dedede;
+    border-top:1px solid #eee;
+    border-left:1px solid #eee;
+
+    font-family:"Lucida Grande", Tahoma, Arial, Verdana, sans-serif;
+    font-size:100%;
+    line-height:130%;
+    text-decoration:none;
+    font-weight:bold;
+    color:#565656;
+    cursor:pointer;
+    padding:5px 10px 6px 7px; /* Links */
+}                             
+.buttons button{ 
+    width:auto;
+    overflow:visible;
+    padding:4px 10px 3px 7px; /* IE6 */
+}                 
+.buttons button[type]{ 
+    padding:5px 10px 5px 7px; /* Firefox */
+    line-height:17px; /* Safari */
+}                       
+*:first-child+html button[type]{ 
+    padding:4px 10px 3px 7px; /* IE7 */
+}                                 
+.buttons button img, .buttons a img{ 
+    margin:0 3px -3px 0 !important;
+    padding:0;
+    border:none;
+    width:16px;
+    height:16px;
+}                                     
+
+/* STANDARD */
+button:hover, .buttons a:hover{
+ background-color:#dff4ff;
+ border:1px solid #c2e1ef;
+ color:#336699;
+}
+.buttons a:active{
+ background-color:#6299c5;
+ border:1px solid #6299c5;
+ color:#fff;
+}
+
+/* POSITIVE */
+button.positive, .buttons a.positive{
+ background: #dff4ff url('themes/default/images/icons/system/true.gif') no-repeat 10px 50%;
+ color:#529214;
+}
+
+button span { 
+ margin-left:25px;              
+}
+
+.buttons a.positive:hover, button.positive:hover{
+ background-color:#E6EFC2;
+ border:1px solid #C6D880;
+ color:#529214;
+}
+.buttons a.positive:active{
+ background-color:#529214;
+ border:1px solid #529214;
+ color:#fff;
+}
+
+/* NEGATIVE */
+.buttons a.negative, button.negative{
+ color:#d12f19;
+}
+.buttons a.negative:hover, button.negative:hover{
+ background:#fbe3e4;
+ border:1px solid #fbc2c4;
+ color:#d12f19;
+}
+.buttons a.negative:active{
+ background-color:#d12f19;
+ border:1px solid #d12f19;
+ color:#fff;
+}
+
+/* DISABLED */
+.buttons a.disabled, button.disabled{
+ color:#aaa;
+}
+.buttons a.disabled:hover, button.disabled:hover{
+ background-color: #fbe3e4;
+ border: 1px solid #fbc2c4;
+ color: #aaa;
+}
+.buttons a.disabled:active{
+ background-color: #d12f19;
+ border: 1px solid #d12f19;
+ color: #aaa;
 }

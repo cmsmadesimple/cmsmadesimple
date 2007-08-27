@@ -21,8 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-//require_once("../lib/classes/class.htmlblob.inc.php");
-require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -57,40 +55,24 @@ $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 if ($access) {
 	if (isset($_POST["addhtmlblob"])) {
 		
-		global $gCms;
-		$gcbops =& $gCms->GetGlobalContentOperations();
-		$templateops =& $gCms->GetTemplateOperations();
+		$gCms = cmsms();	
 
 		$validinfo = true;
 		if ($htmlblob == ""){
 			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
 			$validinfo = false;
 		}
-		else if ($gcbops->CheckExistingHtmlBlobName($htmlblob)){
+		else if (CmsGlobalContentOperations::check_existing_name($htmlblob)){
 			$error .= "<li>".lang('blobexists')."</li>";
 			$validinfo = false;
 		}
 
-		if ($validinfo) {
-			global $gCms;
-			$gcbops =& $gCms->GetGlobalContentOperations();
-
-			$blobobj =& new GlobalContent();
+		if ($validinfo)
+		{
+			$blobobj = new CmsGlobalContent();
 			$blobobj->name = $htmlblob;
 			$blobobj->content = $content;
 			$blobobj->owner = $userid;
-
-			#Perform the addhtmlblob_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->AddHtmlBlobPre($blobobj);
-				}
-			}
-			
-			Events::SendEvent('Core', 'AddGlobalContentPre', array('global_content' => &$blobobj));
 
 			$result = $blobobj->save();
 
@@ -102,19 +84,7 @@ if ($access) {
 				}
 				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
 
-				#Perform the addhtmlblob_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->AddHtmlBlobPost($blobobj);
-					}
-				}
-				
-				Events::SendEvent('Core', 'AddGlobalContentPost', array('global_content' => &$blobobj));
-
-				redirect("listhtmlblobs.php");
+				CmsResponse::redirect("listhtmlblobs.php");
 				return;
 			}
 			else {
@@ -126,7 +96,7 @@ if ($access) {
 
 include_once("header.php");
 
-global $gCms; $db =& $gCms->GetDb();
+$db = cms_db();
 
 $addt_users = "";
 

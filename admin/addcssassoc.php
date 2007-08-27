@@ -63,6 +63,8 @@ check_login();
 # will be set to false if an error is encountered
 $doadd = true;
 
+$db = cms_db();
+
 #******************************************************************************
 # start of the treatment
 #******************************************************************************
@@ -100,7 +102,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 		# we get the name of the element (for logging)
 		if ("template" == $type && $doadd)
 		{
-			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE template_id = ?";
+			$query = "SELECT template_name FROM ".cms_db_prefix()."templates WHERE id = ?";
 			$result = $db->Execute($query, array($id));
 			
 			if ($result && $result->RecordCount() > 0)
@@ -132,7 +134,7 @@ if (isset($_POST["css_id"]) && isset($_POST["id"]) && isset($_POST["type"]))
 				{
 					$time = $db->DBTimeStamp(time());
 					$tplquery = "UPDATE ".cms_db_prefix().
-                    "templates SET modified_date = ".$time."  WHERE template_id = ?";
+                    "templates SET modified_date = ".$time."  WHERE id = ?";
 					$tplresult = $db->Execute($tplquery, array($id));
 				}
 			}

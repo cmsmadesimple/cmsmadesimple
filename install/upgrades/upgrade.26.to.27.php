@@ -1,36 +1,43 @@
 <?php
 
-echo '<p>Creating "Modify Events" permission...';
+echo '<p>Updating content objects...';
 
-$perm_id = $db->GenID(cms_db_prefix() . 'permissions_seq');
-$table  = cms_db_prefix() . 'permissions';
-$name   = 'Modify Events';
-$timestamp = $db->DBTimeStamp(time());
-if ($timestamp[0] != "'")
+$dbdict = NewDataDictionary($db);
+
+$lookup = array();
+
+$result = $db->Execute("SELECT cp.id, prop_name, cp.content_id FROM ".cms_db_prefix()."content_props cp INNER JOIN ".cms_db_prefix()."content c ON c.id = cp.content_id WHERE c.type = 'content'");
+while ($result && $row = $result->FetchRow())
 {
-    $timestamp = "'$timestamp'";
+	$content_id = $row['content_id'];
+	$prop_name = $row['prop_name'];
+	if (!array_key_exists($content_id, $lookup))
+	{
+		$lookup[$content_id] = array();
+	}
+	if ($row['prop_name'] == 'content_en')
+	{
+		$db->Execute("UPDATE ".cms_db_prefix()."content_props SET prop_name = 'default-content' WHERE id = ?", array($row['id']));
+		$lookup[$content_id][] = 'default-content';
+	}
+	else if (!ends_with($prop_name, '-content') && !ends_with($prop_name, '-block-type'))
+	{
+		$db->Execute("UPDATE ".cms_db_prefix()."content_props SET prop_name = '" . strtolower($row['prop_name']) . "-content' WHERE id = ?", array($row['id']));
+		$lookup[$content_id][] = strtolower($row['prop_name']) . '-content';
+	}
+	else
+	{
+		$lookup[$content_id][] = $row['prop_name'];
+	}
 }
-$query ="
-    INSERT INTO 
-        `$table`
-    (permission_id, permission_name, permission_text, create_date, modified_date) 
-        VALUES
-    ('$perm_id', '$name', '$name', $timestamp, $timestamp)
-";
-$result = $db->Execute($query);
-if ($result) 
+if ($result)
+	$result->Close();
+
+foreach ($lookup as $k=>$v)
 {
-    $groupperm_id = $db->GenID(cms_db_prefix() . 'group_perms_seq');
-    $table  = cms_db_prefix() . 'group_perms'; 
-    $query = "
-        INSERT INTO 
-            `$table` 
-        (group_perm_id, group_id, permission_id, create_date, modified_date) 
-            VALUES 
-        ('$groupperm_id', 1, $perm_id, $timestamp, $timestamp)
-    ";
-    $result = $db->Execute($query);
+	$db->Execute("UPDATE ".cms_db_prefix()."content SET prop_names = ? WHERE id = ?", array(implode(',', $v), $k));
 }
+
 echo '[done]</p>';
 
 echo '<p>Updating schema version... ';

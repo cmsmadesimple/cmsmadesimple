@@ -18,7 +18,7 @@
 
 function smarty_cms_function_cms_module($params, &$smarty)
 {
-  return cms_module_plugin($params,$smarty);
+	return cms_module_plugin($params,$smarty);
 }
 
 function smarty_cms_help_function_cms_module() {
@@ -31,6 +31,7 @@ function smarty_cms_help_function_cms_module() {
 	<p>There is only one required parameter.  All other parameters are passed on to the module.
 	<ul>
 		<li>module - Name of the module to insert.  This is not case sensitive.</li>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
 	</ul>
 	</p>
 	<?php

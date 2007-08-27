@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,36 +18,38 @@
 #
 #$Id$
 
-$dirname = dirname(__FILE__);
-require_once($dirname.'/fileloc.php');
-
 /**
  * Entry point for all non-admin pages
- *
- * @package CMS
- */	
-#echo '<code style="align: left;">';
-#var_dump($_SERVER);
-#echo '</code>';
+ **/
 
-$starttime = microtime();
+//Where are we?
+$dirname = dirname(__FILE__);
 
-@ob_start();
+//Yes, we do this again in include.php.  That's why we have the
+//require_once.  We need to make sure that we have a valid
+//config file location and tmp location before doing the
+//whole include.php include.  If not, then either show an
+//error or redirect to the installer.
+require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
-clearstatcache();
+//CmsProfiler isn't able to autoload yet, so we
+//calculate the start_time the hard way
+list( $usec, $sec ) = explode( ' ', microtime() );
+$start_time = ((float)$usec + (float)$sec);
 
-if (!isset($_SERVER['REQUEST_URI']) && isset($_SERVER['QUERY_STRING']))
-{
-	$_SERVER['REQUEST_URI'] = $_SERVER['PHP_SELF'] . '?' . $_SERVER['QUERY_STRING'];
-}
-
+//If we have a missing or empty config file, then we should think
+//about redirecting to the installer.  Also, check to see if the SITEDOWN
+//file is there.  That means we're probably in mid-upgrade.
 if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
 {
-    require_once($dirname.'/lib/misc.functions.php');
-    if (FALSE == is_file($dirname.'/install/index.php')) {
-        die ('There is no config.php file or install/index.php please correct one these errors!');
-    } else {
-        redirect('install/');
+    require_once($dirname.'/lib/cmsms.api.php');
+    if (FALSE == is_file($dirname.'/install/install.php'))
+	{
+        die ('There is no config.php file or install/install.php please correct one these errors!');
+    }
+	else
+	{
+        CmsResponse::redirect('install/index.php');
     }
 }
 else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
@@ -56,6 +58,9 @@ else if (file_exists(TMP_CACHE_LOCATION.'/SITEDOWN'))
 	exit;
 }
 
+//Ok, one more check.  Make sure we can write to the following locations.  If not, then 
+//we won't even be able to push stuff through smarty.  Error out now while we have the 
+//chance.
 if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 {
 	echo '<html><title>Error</title></head><body>';
@@ -67,264 +72,120 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	exit;
 }
 
-require_once($dirname.'/include.php'); #Makes gCms object
+//Load necessary global functions.  This allows us to load a few
+//things before hand... like the configuration
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
-$params = array_merge($_GET, $_POST);
+//Start up a profiler for getting render times for this page.  Use
+//the start time we generated way up at the top.
+$profiler = CmsProfiler::get_instance('', $start_time);
 
-$smarty = &$gCms->smarty;
-$smarty->params = $params;
+//Can we find a page somewhere in the request?
+$page = CmsRequest::calculate_page_from_request();
 
-$page = '';
-
-if (isset($params['mact']))
+//Are we using full page caching?  Now is a good time to check and 
+//output any cached data.
+if (CmsConfig::get('full_page_caching'))
 {
-  $ary = explode(',', cms_htmlentities($params['mact']), 4);
-  $smarty->id = (isset($ary[1])?$ary[1]:'');
-}
-else
-{
-  $smarty->id = (isset($params['id'])?intval($params['id']):'');
-}
-
-if (isset($smarty->id) && isset($params[$smarty->id . 'returnid']))
-{
-	$page = $params[$smarty->id . 'returnid'];
-}
-else if (isset($config["query_var"]) && $config["query_var"] != '' && isset($_GET[$config["query_var"]]))
-{
-	$page = $_GET[$config["query_var"]];
-
-    //trim off the extension, if there is one set
-    if ($config['page_extension'] != '' && endswith($page, $config['page_extension']))
-    {   
-        $page = substr($page, 0, strlen($page) - strlen($config['page_extension']));
-    }
-}
-else
-{
-	$calced = cms_calculate_url();
-	if ($calced != '')
-		$page = $calced;
-}
-
-//See if our page matches any predefined routes
-$page = rtrim($page, '/');
-if (strpos($page, '/') !== FALSE)
-{
-	$routes =& $gCms->variables['routes'];
-	
-	$matched = false;
-	foreach ($routes as $route)
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page))
 	{
-		$matches = array();
-		if (preg_match($route->regex, $page, $matches))
-		{
-			//Now setup some assumptions
-			if (!isset($matches['id']))
-				$matches['id'] = 'cntnt01';
-			if (!isset($matches['action']))
-				$matches['action'] = 'defaulturl';
-			if (!isset($matches['inline']))
-				$matches['inline'] = 0;
-			if (!isset($matches['returnid']))
-				$matches['returnid'] = ''; #Look for default page
-			if (!isset($matches['module']))
-				$matches['module'] = $route->module;
-
-			//Get rid of numeric matches
-			foreach ($matches as $key=>$val)
-			{
-				if (is_int($key))
-				{
-					unset($matches[$key]);
-				}
-				else
-				{
-					if ($key != 'id')
-						$_REQUEST[$matches['id'] . $key] = $val;
-				}
-			}
-
-			//Now set any defaults that might not have been in the url
-			if (isset($route->defaults) && count($route->defaults) > 0)
-			{
-				foreach ($route->defaults as $key=>$val)
-				{
-					$_REQUEST[$matches['id'] . $key] = $val;
-					if (array_key_exists($key, $matches))
-					{ 
-						$matches[$key] = $val;
-					}
-				}
-			}
-
-			//Get a decent returnid
-			if ($matches['returnid'] == '') {
-				global $gCms;
-				$contentops =& $gCms->GetContentOperations();
-				$matches['returnid'] = $contentops->GetDefaultPageID();
-			}
-
-			$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
-			$page = $matches['returnid'];
-			$smarty->id = $matches['id'];
-
-			$matched = true;
-		}
-	}
-
-	if (!$matched)
-	{
-		$page = substr($page, strrpos($page, '/') + 1);
+		echo $data;
+		$endtime = $profiler->get_time();
+		$memory = $profiler->get_memory();
+		echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple (cached) -->\n";
+		echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+		//if (CmsConfig::get('debug'))
+		//{
+			echo "<p>Generated in ".$endtime." seconds by CMS Made Simple (cached) using " . $memory . " bytes of memory</p>";
+			echo CmsProfiler::get_instance()->report();
+		//}
+		exit;
 	}
 }
 
+//Startup the output buffering
+@ob_start();
+
+//All systems are go...  let's include all the good stuff
+require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
+
+//Make sure the id is set inside smarty if needed for modules
+cms_smarty()->set_id_from_request();
+
+//See if our page matches any predefined routes.  If so,
+//the updated $page will be returned. (No point in matching
+//if we have no url to match).
+if ($page != '')
+	$page = CmsRoute::match_route($page);
+
+//Last ditch effort.  If we still have no page, then
+//grab the default.
 if ($page == '')
+	$page = CmsContentOperations::get_default_page_id();
+
+//Ok, we should have SOMETHING at this point.  Grab it's info
+//from the database.
+$pageinfo = CmsPageInfoOperations::load_page_info_by_content_alias($page);
+
+//Testing the permission check
+//$thepage = cms_orm()->cms_content_base->find_by_id($pageinfo->content_id);
+//var_dump($thepage->check_permission());
+//$thepage->test_me();
+
+//No info?  Then it's a bum page.  If we had a custom 404, then it's info
+//would've been returned earlier.  The only option left is to show the generic
+//404 message and exit out.
+if ($pageinfo == null)
 {
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$page =& $contentops->GetDefaultContent();
+	//CmsResponse::send_error_404();
+}
+
+//Render the pageinfo object
+echo $pageinfo->render();
+
+//Send any headers.  After the render?  Sure, because modules that
+//have been processed could have changed what values should be in the
+//headers.  Plus, it's output buffered, so the content isn't actually
+//getting sent until the ob_flush below this.
+echo $pageinfo->send_headers();
+
+//Calculate our profiler data
+$endtime = $profiler->get_time();
+$memory = $profiler->get_memory();
+
+//Flush the buffer out to the browser
+//If caching is on, save the data to the cache
+//as well.
+//If not, then just flush it out and save the
+//memory of putting it into a variable.
+if (CmsConfig::get('full_page_caching'))
+{
+	$data = @ob_get_flush();
+	CmsCache::get_instance('page')->save($data);
 }
 else
 {
-    $page = preg_replace('/\</','',$page);
+	@ob_flush();
 }
 
-$pageinfo = PageInfoOperations::LoadPageInfoByContentAlias($page);
-
-if (isset($pageinfo) && $pageinfo !== FALSE)
-{
-	$gCms->variables['pageinfo'] =& $pageinfo;
-
-	if( isset($pageinfo->template_encoding) && 
-	    $pageinfo->template_encoding != '' )
-	{
-	  set_encoding($pageinfo->template_encoding);
-	}
-
-	$gCms->variables['content_id'] = $pageinfo->content_id;
-	$gCms->variables['page'] = $page;
-	$gCms->variables['page_id'] = $page;
-
-	$gCms->variables['page_name'] = $pageinfo->content_alias;
-	$gCms->variables['position'] = $pageinfo->content_hierarchy;
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	$gCms->variables['friendly_position'] = $contentops->CreateFriendlyHierarchyPosition($pageinfo->content_hierarchy);
-	
-	$smarty->assign('content_id', $pageinfo->content_id);
-	$smarty->assign('page', $page);
-	$smarty->assign('page_id', $page);	
-	$smarty->assign('page_name', $pageinfo->content_alias);
-	$smarty->assign('page_alias', $pageinfo->content_alias);
-	$smarty->assign('position', $pageinfo->content_hierarchy);
-	$smarty->assign('friendly_position', $gCms->variables['friendly_position']);
-}
-else if (get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0")
-{
-	ErrorHandler404();
-	exit;
-}
-
-$html = '';
-$cached = '';
-
-if (isset($_GET["print"]))
-{
-	($smarty->is_cached('print:'.$page, '', $pageinfo->template_id)?$cached="":$cached="not ");
-	$html = $smarty->fetch('print:'.$page, '', $pageinfo->template_id) . "\n";
-}
-else
-{
-	#If this is a case where a module doesn't want a template to be shown, just disable caching
-	if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
-	{
-		$html = $smarty->fetch('template:notemplate') . "\n";
-	}
-	else
-	{
-		$smarty->caching = false;
-		$smarty->compile_check = true;
-		($smarty->is_cached('template:'.$pageinfo->template_id)?$cached="":$cached="not ");
-		$html = $smarty->fetch('template:'.$pageinfo->template_id) . "\n";
-	}
-}
-
-#if ((get_site_preference('enablecustom404') == '' || get_site_preference('enablecustom404') == "0") && (!$config['debug']))
-#{
-#	set_error_handler($old_error_handler);
-#}
-
-if (!$cached)
-{
-	#Perform the content postrendernoncached callback
-	reset($gCms->modules);
-	while (list($key) = each($gCms->modules))
-	{
-		$value =& $gCms->modules[$key];
-		if ($gCms->modules[$key]['installed'] == true &&
-			$gCms->modules[$key]['active'] == true)
-		{
-			$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-		}
-	}
-	//Events::SendEvent('Core', 'ContentPostRenderNonCached', array(&$html));
-}
-
-#Perform the content postrender callback
-reset($gCms->modules);
-while (list($key) = each($gCms->modules))
-{
-	$value =& $gCms->modules[$key];
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	{
-		$gCms->modules[$key]['object']->ContentPostRender($html);
-	}
-}
-
-Events::SendEvent('Core', 'ContentPostRender', array('content' => &$html));
-
-header("Content-Type: " . $gCms->variables['content-type'] . "; charset=" . (isset($pageinfo->template_encoding) && $pageinfo->template_encoding != ''?$pageinfo->template_encoding:get_encoding()));
-
-echo $html;
-
-@ob_flush();
-
-$endtime = microtime();
-
-$db =& $gCms->GetDb();
-
-if ($config["debug"] == true)
-{
-	echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
-}
-
-echo "<!-- Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple using ".(isset($db->query_count)?$db->query_count:'')." SQL queries -->\n";
-echo "<p>Generated in ".microtime_diff($starttime,$endtime)." seconds by CMS Made Simple (".$cached."cached) using ".(isset($db->query_count)?$db->query_count:'')." SQL queries and ".(function_exists('memory_get_usage')?memory_get_usage():'n/a')." bytes of memory</p>";
+echo "<!-- Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries -->\n";
 echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -->\n";
+
+//var_dump(CmsLogin::get_current_user());
+
+#if (CmsConfig::get('debug'))
+#{
+	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".cms_db()->query_count." SQL queries and " . $memory . " bytes of memory</p>";
+	echo CmsProfiler::get_instance()->report();
+#}
 
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
 {
-	$smarty->clear_compiled_tpl();
-	#$smarty->clear_all_cache();
+	cms_smarty()->clear_compiled_tpl();
 }
 
-if ($config["debug"] == true)
-{
-	#$db->LogSQL(false); // turn off logging
-	
-	# output summary of SQL logging results
-	#$perf = NewPerfMonitor($db);
-	#echo $perf->SuspiciousSQL();
-	#echo $perf->ExpensiveSQL();
-
-	#echo $sql_queries;
-	foreach ($gCms->errors as $error)
-	{
-		echo $error;
-	}
-}
+//Clear out any previews that may be going on
+CmsPreview::clear_preview();
 
 # vim:ts=4 sw=4 noet
 ?>

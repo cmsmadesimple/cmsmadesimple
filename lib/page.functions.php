@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t;  -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -30,66 +30,11 @@
  *
  * @since 0.1
  * @param string no_redirect - If true, then don't redirect if not logged in
- * @returns If they're logged in, true.  If not logged in, false. 
+ * @return bool If they're logged in, true.  If not logged in, false. 
  */
 function check_login($no_redirect = false)
 {
-	global $gCms;
-	$config = $gCms->config;
-
-	//Handle a current login if one is in queue in the SESSION
-	if (isset($_SESSION['login_user_id']))
-	{
-		debug_buffer("Found login_user_id.  Going to generate the user object.");
-		generate_user_object($_SESSION['login_user_id']);
-		unset($_SESSION['login_user_id']);
-	}
-
-	if (isset($_SESSION['login_cms_language']))
-	{
-		debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
-		setcookie('cms_language', $_SESSION['login_cms_language']);
-		unset($_SESSION['login_cms_language']);
-	}
-
-	if (!isset($_SESSION["cms_admin_user_id"]))
-	{
-		debug_buffer('No session found.  Now check for cookies');
-		if (isset($_COOKIE["cms_admin_user_id"]) && isset($_COOKIE["cms_passhash"]))
-		{
-			debug_buffer('Cookies found, do a passhash check');
-			if (check_passhash($_COOKIE["cms_admin_user_id"], $_COOKIE["cms_passhash"]))
-			{
-				debug_buffer('passhash check succeeded...  creating session object');
-				generate_user_object($_COOKIE["cms_admin_user_id"]);
-			}
-			else
-			{
-				debug_buffer('passhash check failed...  redirect to login');
-				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-				if (false == $no_redirect)
-				  {
-				    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-				  }
-				return false;
-			}
-		}
-		else
-		{
-			debug_buffer('No cookies found.  Redirect to login.');
-			$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
-			if (false == $no_redirect)
-			  {
-			    redirect($config["root_url"]."/".$config['admin_dir']."/login.php");
-			  }
-			return false;
-		}
-	}
-	else
-	{
-		debug_buffer('Session found.  Moving on...');
-		return true;
-	}
+	return CmsLogin::check_login($no_redirect);
 }
 
 /**
@@ -100,39 +45,12 @@ function check_login($no_redirect = false)
  */
 function get_userid($check = true)
 {
-	if ($check)
-	{
-		check_login(); //It'll redirect out to login if it fails
-	}
-
-	if (isset($_SESSION["cms_admin_user_id"]))
-	{
-		return $_SESSION["cms_admin_user_id"];
-	}
-	else
-	{
-		return false;
-	}
+	return CmsLogin::get_userid($check);
 }
 
 function check_passhash($userid, $checksum)
 {
-	$check = false;
-
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
-
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
-
-	if ($oneuser && (string)$checksum != '' && $checksum == md5(md5($config['root_path'] . '--' . $oneuser->password)))
-	{
-		$check = true;
-	}
-
-	return $check;
+	return CmsLogin::check_passhash($userid, $checksum);
 }
 
 /**
@@ -145,21 +63,7 @@ function check_passhash($userid, $checksum)
  */
 function generate_user_object($userid)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$config =& $gCms->GetConfig();
-
-	global $gCms;
-	$userops =& $gCms->GetUserOperations();
-	$oneuser =& $userops->LoadUserByID($userid);
-
-	if ($oneuser)
-	{
-		$_SESSION['cms_admin_user_id'] = $userid;
-		$_SESSION['cms_admin_username'] = $oneuser->username;
-		setcookie('cms_admin_user_id', $oneuser->id);
-		setcookie('cms_passhash', md5(md5($config['root_path'] . '--' . $oneuser->password)));
-	}
+	return CmsLogin::generate_user_object($userid);
 }
 
 /**
@@ -170,7 +74,7 @@ function generate_user_object($userid)
 function load_all_permissions($userid)
 {
 	global $gCms;
-	$db = &$gCms->GetDb();
+	$db = cms_db();
 	$variables = &$gCms->variables;
 
 	$perms = array();
@@ -235,12 +139,12 @@ function check_ownership($userid, $contentid = '')
 		$variables = &$gCms->variables;
 		$variables['ownerpages'] = array();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result = &$db->Execute($query, array($userid));
 
 		while ($result && !$result->EOF)
 		{
-			$variables['ownerpages'][] =& $result->fields['content_id'];
+			$variables['ownerpages'][] =& $result->fields['id'];
 			$result->MoveNext();
 		}
 		
@@ -310,19 +214,19 @@ function check_authorship($userid, $contentid = '')
 function author_pages($userid)
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = cms_db();
     $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
-		$db = &$gCms->GetDb();
+		$db = cms_db();
 		$variables['authorpages'] = array();
 		
-		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
-		$result =& $db->Execute($query, array($userid));
+		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE owner_id = " . $userid;
+		$result =& $db->Execute($query);
 		
 		while ($result && !$result->EOF)
 		{
-			$variables['authorpages'][] =& $result->fields['content_id'];
+			$variables['authorpages'][] =& $result->fields['id'];
 			$result->MoveNext();
 		}
 		
@@ -372,14 +276,14 @@ function quick_check_authorship($contentid, $hispages)
 function audit($itemid, $itemname, $action)
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
+	$db = $gCms->GetDb();
 
 	$userid = 0;
 	$username = '';
 
-	if (isset($_SESSION["cms_admin_user_id"]))
+	if (isset($_SESSION["cmsms_user_id"]))
 	{
-		$userid = $_SESSION["cms_admin_user_id"];
+		$userid = $_SESSION["cmsms_user_id"];
 	}
 	else
 	{
@@ -404,58 +308,13 @@ function audit($itemid, $itemname, $action)
 }
 
 /**
- * Loads a cache of site preferences so we only have to do it once.
- *
- * @since 0.6
- */
-function load_site_preferences()
-{
-	$value = "";
-
-	global $gCms;
-	$db = &$gCms->GetDb();
-	$siteprefs = &$gCms->siteprefs;
-
-	if ($db)
-	{
-		$query = "SELECT sitepref_name, sitepref_value from ".cms_db_prefix()."siteprefs";
-		$result = &$db->Execute($query);
-
-		while ($result && !$result->EOF)
-		{
-			$siteprefs[$result->fields['sitepref_name']] = $result->fields['sitepref_value'];
-			$result->MoveNext();
-		}
-		
-		if ($result) $result->Close();
-	}
-
-	return $value;
-}
-
-/**
  * Gets the given site prefernce
  *
  * @since 0.6
  */
-function get_site_preference($prefname, $defaultvalue = '') {
-
-	$value = $defaultvalue;
-
-	global $gCms;
-	$siteprefs = $gCms->siteprefs;
-	
-	if (count($siteprefs) == 0)
-	{
-		load_site_preferences();
-	}
-
-	if (isset($siteprefs[$prefname]))
-	{
-		$value = $siteprefs[$prefname];
-	}
-
-	return $value;
+function get_site_preference($prefname, $defaultvalue = '')
+{
+	return CmsApplication::get_preference($prefname, $defaultvalue);
 }
 
 /**
@@ -465,24 +324,7 @@ function get_site_preference($prefname, $defaultvalue = '') {
  */
 function remove_site_preference($prefname,$regexp=false)
 {
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ?";
-	if( $regexp == true )
-	  {
-	    $query = "DELETE from ".cms_db_prefix()."siteprefs WHERE sitepref_name REGEXP ?";
-	  }
-	$result = $db->Execute($query, array($prefname));
-
-	if (isset($siteprefs[$prefname]))
-	{
-		unset($siteprefs[$prefname]);
-	}
-	
-	if ($result) $result->Close();
+	CmsApplication::remove_preference($prefname);
 }
 
 /**
@@ -492,41 +334,15 @@ function remove_site_preference($prefname,$regexp=false)
  */
 function set_site_preference($prefname, $value)
 {
-	$doinsert = true;
-
-	global $gCms;
-	$db =& $gCms->GetDb();
-
-	$siteprefs = &$gCms->siteprefs;
-
-	$query = "SELECT sitepref_value from ".cms_db_prefix()."siteprefs WHERE sitepref_name = ".$db->qstr($prefname);
-	$result = $db->Execute($query);
-
-	if ($result && $result->RecordCount() > 0)
-	{
-		$doinsert = false;
-	}
-	
-	if ($result) $result->Close();
-
-	if ($doinsert)
-	{
-		$query = "INSERT INTO ".cms_db_prefix()."siteprefs (sitepref_name, sitepref_value) VALUES (".$db->qstr($prefname).", ".$db->qstr($value).")";
-		$db->Execute($query);
-	}
-	else
-	{
-		$query = "UPDATE ".cms_db_prefix()."siteprefs SET sitepref_value = ".$db->qstr($value)." WHERE sitepref_name = ".$db->qstr($prefname);
-		$db->Execute($query);
-	}
-	$siteprefs[$prefname] = $value;
+	CmsApplication::set_preference($prefname, $value);
 }
 
 function load_all_preferences($userid)
 {
 	global $gCms;
-	$db = &$gCms->GetDb();
-	$variables = &$gCms->userprefs;
+	$db = cms_db();
+	
+	$variables = array();
 
 	$query = 'SELECT preference, value FROM '.cms_db_prefix().'userprefs WHERE user_id = ?';
 	$result = &$db->Execute($query, array($userid));
@@ -536,8 +352,10 @@ function load_all_preferences($userid)
 		$variables[$result->fields['preference']] = $result->fields['value'];
 		$result->MoveNext();
 	}
-	
+
 	if ($result) $result->Close();
+	
+	return $variables;
 }
 
 /**
@@ -548,26 +366,20 @@ function load_all_preferences($userid)
 function get_preference($userid, $prefname, $default='')
 {
 	global $gCms;
-	$db =& $gCms->GetDb();
-	$userprefs = &$gCms->userprefs;
+	$db = cms_db();
 
-	$result = '';
+	$userprefs = $gCms->userprefs;
+	$result = $default;
 
-	if (!isset($gCms->userprefs))
+	if (!isset($userprefs))
 	{
-		load_all_preferences($userid);
+		$userprefs = load_all_preferences($userid);
+		$gCms->userprefs = $userprefs;
 	}
 
-	if (isset($gCms->userprefs))
+	if (isset($userprefs[$prefname]))
 	{
-		if (isset($userprefs[$prefname]))
-		{
-			$result = $userprefs[$prefname];
-		}
-		else
-		{
-			$result = $default;
-		}
+		$result = $userprefs[$prefname];
 	}
 
 	return $result;
@@ -621,8 +433,8 @@ function get_stylesheet($template_id, $media_type = '')
 	$css = "";
 
 	global $gCms;
-	$db =& $gCms->GetDb();
-	$templateops =& $gCms->GetTemplateOperations();
+	$db = cms_db();
+	$templateops = $gCms->GetTemplateOperations();
 
 	$templateobj = FALSE;
 
@@ -657,7 +469,7 @@ function get_stylesheet($template_id, $media_type = '')
 
 		#Handle "advanced" CSS Management
 		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc ca
-			WHERE	css_id		= assoc_css_id
+			WHERE	id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?
 			AND		c.media_type = ? ORDER BY ca.create_date";
@@ -708,7 +520,7 @@ function get_stylesheet_media_types($template_id)
 	{
 		#Handle "advanced" CSS Management
 		$cssquery = "SELECT DISTINCT media_type FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
-			WHERE	css_id		= assoc_css_id
+			WHERE	id		= assoc_css_id
 			AND		assoc_type	= 'template'
 			AND		assoc_to_id = ?";
 		$cssresult = &$db->Execute($cssquery, array($template_id));
@@ -961,16 +773,6 @@ function wysiwyg_form_submit()
 	}
 
 	return $result;
-}
-
-/**
- * Returns the currently configured database prefix.
- *
- * @since 0.4
- */
-function cms_db_prefix() {
-	global $config;
-	return $config["db_prefix"];
 }
 
 # vim:ts=4 sw=4 noet

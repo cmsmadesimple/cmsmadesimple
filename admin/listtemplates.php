@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -29,7 +28,8 @@ include_once("header.php");
 global $gCms;
 $db =& $gCms->GetDb();
 
-if (isset($_GET["message"])) {
+if (isset($_GET["message"]))
+{
 	$message = preg_replace('/\</','',$_GET['message']);
 	echo '<div class="pagemcontainer"><p class="pagemessage">'.$message.'</p></div>';
 }
@@ -49,17 +49,22 @@ if (isset($_GET["message"])) {
 	$remove	= check_permission($userid, 'Remove Templates');
 	
 	global $gCms;
-	$templateops =& $gCms->GetTemplateOperations();
+	$templateops = $gCms->GetTemplateOperations();
 
-	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent") {
-		if (isset($_GET["template_id"])) {
+	if ($all && isset($_GET["action"]) && $_GET["action"] == "setallcontent")
+	{
+		if (isset($_GET["template_id"]))
+		{
 			$query = "UPDATE ".cms_db_prefix()."content SET template_id = ?";
 			$result = $db->Execute($query, array($_GET['template_id']));
-			if ($result) {
+			if ($result)
+			{
 				$query = "UPDATE ".cms_db_prefix()."content SET modified_date = ".$db->DBTimeStamp(time());
 				$db->Execute($query);
 				echo '<p>'.lang('allpagesmodified').'</p>';
-			} else {
+			}
+			else
+			{
 				echo '<p class="error">'.lang('errorupdatingpages').'</p>';
 			}
 		}
@@ -67,19 +72,37 @@ if (isset($_GET["message"])) {
 
 	if (isset($_GET['setdefault']))
 	{
-		$templatelist = $templateops->LoadTemplates();
+		$templatelist = cmsms()->template->find_all();
 		foreach ($templatelist as $onetemplate)
 		{
 			if ($onetemplate->id == $_GET['setdefault'])
 			{
 				$onetemplate->default = 1;
 				$onetemplate->active = 1;
-				$onetemplate->Save();
+				$result = $onetemplate->save();
+				if (!$result)
+				{
+					echo '<ul>';
+					foreach ($onetemplate->validation_errors as $err)
+					{
+						echo '<li>'.$err.'</li>';
+					}
+					echo '</ul>';
+				}
 			}
 			else
 			{
 				$onetemplate->default = 0;
-				$onetemplate->Save();
+				$result = $onetemplate->save();
+				if (!$result)
+				{
+					echo '<ul>';
+					foreach ($onetemplate->validation_errors as $err)
+					{
+						echo '<li>'.$err.'</li>';
+					}
+					echo '</ul>';
+				}
 			}
 		}
 	}
@@ -87,27 +110,21 @@ if (isset($_GET["message"])) {
 	if (isset($_GET['setactive']) || isset($_GET['setinactive']))
 	{
 		$theid = '';
+		$active = false;
 		if (isset($_GET['setactive']))
 		{
 			$theid = $_GET['setactive'];
+			$active = true;
 		}
 		if (isset($_GET['setinactive']))
 		{
 			$theid = $_GET['setinactive'];
 		}
-		$thetemplate = $templateops->LoadTemplateByID($theid);
-		if (isset($thetemplate))
+		$thetemplate = cmsms()->template->find_by_id($theid);
+		if ($thetemplate)
 		{
-			if (isset($_GET['setactive']))
-			{
-				$thetemplate->active = 1;
-				$thetemplate->Save();
-			}
-			if (isset($_GET['setinactive']))
-			{
-				$thetemplate->active = 0;
-				$thetemplate->Save();
-			}
+			$thetemplate->active = $active;
+			$thetemplate->save();
 		}
 	}
 
@@ -234,7 +251,7 @@ if ($add) {
 					?>
 				</a>
 			</span>
-			<span style="margin-right: 30px; float: right; align: right">
+			<span style="margin-right: 30px; float: right; text-align: right">
 				<?php echo lang("selecteditems"); ?>: <select name="multiaction">
 				<option value="delete"><?php echo lang('delete') ?></option>
 				<option value="active"><?php echo lang('active') ?></option>

@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -18,155 +18,40 @@
 #
 #$Id$
 
-$dirname = dirname(__FILE__);
-require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
+//Load necessary global functions
+require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
-$session_key = substr(md5($dirname), 0, 8);
+//Where are we?
+$dirname = ROOT_DIR;
 
-#Setup session with different id and start it
-@session_name('CMSSESSID' . $session_key);
-@ini_set('url_rewriter.tags', '');
-@ini_set('session.use_trans_sid', 0);
-if(!@session_id())
-{
-    #Trans SID sucks also...
-    @ini_set('url_rewriter.tags', '');
-    @ini_set('session.use_trans_sid', 0);
-    @session_start();
-}
+//Load the version defines
+require_once(cms_join_path($dirname,'version.php'));
 
-/**
- * This file is included in every page.  It does all seutp functions including
- * importing additional functions/classes, setting up sessions and nls, and
- * construction of various important variables like $gCms.
- *
- * @package CMS
- */
-#magic_quotes_runtime is a nuisance...  turn it off before it messes something up
-set_magic_quotes_runtime(false);
-
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'module.functions.php');
-debug_buffer('', 'Start of include');
-
-# sanitize $_GET
-array_walk_recursive($_GET, 'sanitize_get_var'); 
-
-#Make a new CMS object
-require_once(cms_join_path($dirname,'lib','classes','class.object.php'));
-require_once(cms_join_path($dirname,'lib','classes','class.global.inc.php'));
-$gCms =& new CmsObject();
-if (isset($starttime))
-{
-    $gCms->variables['starttime'] = $starttime;
-}
-
-#Load the config file (or defaults if it doesn't exist)
-require(cms_join_path($dirname,'version.php'));
-require(cms_join_path($dirname,'lib','config.functions.php'));
-
-#Grab the current configuration
-$config =& $gCms->GetConfig();
-
-#Hack for changed directory and no way to upgrade config.php
-$config['previews_path'] = str_replace('smarty/cms', 'tmp', $config['previews_path']);
-
-#Add users if they exist in the session
-$gCms->variables['user_id'] = '';
-if (isset($_SESSION['cms_admin_user_id']))
-{
-    $gCms->variables['user_id'] = $_SESSION['cms_admin_user_id'];
-}
-
-$gCms->variables['username'] = '';
-if (isset($_SESSION['cms_admin_username']))
-{
-    $gCms->variables['username'] = $_SESSION['cms_admin_username'];
-}
-
-debug_buffer('loading smarty');
-require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
-debug_buffer('loading adodb');
-require(cms_join_path($dirname,'lib','adodb.functions.php'));
-load_adodb();
-debug_buffer('loading page functions');
+//Load stuff that hasn't been moved to static methods yet
+require_once(cms_join_path($dirname,'lib','misc.functions.php'));
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
-debug_buffer('loading content functions');
-require_once(cms_join_path($dirname,'lib','content.functions.php'));
-debug_buffer('loading pageinfo functions');
-require_once(cms_join_path($dirname,'lib','classes','class.pageinfo.inc.php'));
-debug_buffer('loading translation functions');
 require_once(cms_join_path($dirname,'lib','translation.functions.php'));
-debug_buffer('loading events functions');
-require_once(cms_join_path($dirname,'lib','classes','class.events.inc.php'));
-require_once(cms_join_path($dirname,'lib','classes','class.cms_object_relational_mapping.php'));
 
-if (isset($config['backwards_compatible']) && $config['backwards_compatible'] == true)
+//Setup the session
+CmsSession::setup();
+
+//Do any necessary stuff to the actual request
+CmsRequest::setup();
+
+//Setup a global $gCms...  this needs to die, though
+$gCms = cmsms();
+
+#define timezone
+if (function_exists('date_default_timezone_set') && CmsConfig::exists('timezone') && CmsConfig::get('timezone') != '') 
 {
-	load_backwards_compatibility();
+    date_default_timezone_set(CmsConfig::get('timezone'));
 }
 
-debug_buffer('done loading files');
+#Preload content types (TODO: Cache me!)
+CmsContentOperations::find_content_types();
 
-#Load them into the usual variables.  This'll go away a little later on.
-global $DONT_LOAD_DB;
-if (!isset($DONT_LOAD_DB))
-{
-    $cmsdb =& $gCms->GetDB();
-//    $cmsdb->Execute('set names utf8'); // database connection with utf-8
-}
-
-$smarty =& $gCms->GetSmarty();
-$contenttypes =& $gCms->contenttypes;
-
-#Load content types
-$dir = cms_join_path($dirname,'lib','classes','contenttypes');
-$handle=opendir($dir);
-while ($file = readdir ($handle)) 
-{
-    $path_parts = pathinfo($file);
-    if (isset($path_parts['extension']) && $path_parts['extension'] == 'php')
-    {
-		$obj =& new CmsContentTypePlaceholder();
-		$obj->type = strtolower(basename($file, '.inc.php'));
-		$obj->filename = cms_join_path($dir,$file);
-		$obj->loaded = false;
-		$obj->friendlyname = basename($file, '.inc.php');
-		$contenttypes[strtolower(basename($file, '.inc.php'))] =& $obj;
-    }
-}
-closedir($handle);
-
-if (!defined('SMARTY_DIR')) {
-    define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
-}
-
-#Stupid magic quotes...
-if(get_magic_quotes_gpc())
-{
-    stripslashes_deep($_GET);
-    stripslashes_deep($_POST);
-    stripslashes_deep($_REQUEST);
-    stripslashes_deep($_COOKIE);
-    stripslashes_deep($_SESSION);
-}
-
-#Fix for IIS (and others) to make sure REQUEST_URI is filled in
-if (!isset($_SERVER['REQUEST_URI']))
-{
-    $_SERVER['REQUEST_URI'] = $_SERVER['SCRIPT_NAME'];
-    if(isset($_SERVER['QUERY_STRING']))
-    {
-        $_SERVER['REQUEST_URI'] .= '?'.$_SERVER['QUERY_STRING'];
-    }
-}
-
-#Setup the object sent to modules
-$gCms->variables['pluginnum'] = 1;
-if (isset($page))
-{
-	$gCms->variables['page'] = $page;
-}
+#And block types (TODO: Cache me!)
+CmsContentOperations::find_block_types();
 
 #Set a umask
 $global_umask = get_site_preference('global_umask','');
@@ -178,70 +63,36 @@ if( $global_umask != '' )
 #Set the locale if it's set
 #either in the config, or as a site preference.
 $frontendlang = get_site_preference('frontendlang','');
-if (isset($config['locale']) && $config['locale'] != '')
+if (CmsConfig::exists('locale') && CmsConfig::get('locale') != '')
 {
-    $frontendlang = $config['locale'];
+    $frontendlang = CmsConfig::get('locale');
 }
 if ($frontendlang != '')
 {
     @setlocale(LC_ALL, $frontendlang);
 }
 
-$smarty->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
-$smarty->assign('lang',$frontendlang);
-$smarty->assign('encoding',get_encoding());
-$smarty->assign_by_ref('gCms',$gCms);
+cms_smarty()->assign('lang', $frontendlang);
+cms_smarty()->assign('encoding', get_encoding());
 
-if ($config['debug'] == true)
+
+/*
+if (isset($CMS_ADMIN_PAGE))
 {
-	$smarty->debugging = true;
-	$smarty->error_reporting = 'E_ALL';
-}
-if (isset($CMS_ADMIN_PAGE) || isset($CMS_STYLESHEET))
-{
-    include_once(cms_join_path($dirname,$config['admin_dir'],'lang.php'));
+    include_once(cms_join_path($dirname, CmsConfig::get('admin_dir'), 'lang.php'));
 
 	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
 	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
 	{
 		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] =& new ConvertCharset();
+		$gCms->variables['convertclass'] = new ConvertCharset();
 	}
 }
+*/
+
 
 #Load all installed module code
-$modload =& $gCms->GetModuleLoader();
-$modload->LoadModules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
-
-debug_buffer('', 'End of include');
-
-function sanitize_get_var(&$value, $key)
-{
-    $value = eregi_replace('\<\/?script[^\>]*\>', '', $value);
-}
-
-function load_backwards_compatibility()
-{
-	$dirname = dirname(__FILE__);
-	debug_buffer('loading template functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.templateoperations.inc.php'));
-	debug_buffer('loading gcb functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.globalcontentoperations.inc.php'));
-	debug_buffer('loading module class');
-	require_once(cms_join_path($dirname,'lib','classes','class.moduleoperations.inc.php'));
-	debug_buffer('loading bookmark functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.bookmarkoperations.inc.php'));
-	debug_buffer('loading content class');
-	require_once(cms_join_path($dirname,'lib','classes','class.contentoperations.inc.php'));
-	debug_buffer('loading user functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.useroperations.inc.php'));
-	debug_buffer('loading group functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.groupoperations.inc.php'));
-	debug_buffer('loading stylesheet functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.stylesheetoperations.inc.php'));
-	debug_buffer('loading user tags functions');
-	require_once(cms_join_path($dirname,'lib','classes','class.usertagoperations.inc.php'));
-}
+CmsModuleLoader::load_modules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));
 
 # vim:ts=4 sw=4 noet
 ?>

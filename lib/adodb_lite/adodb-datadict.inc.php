@@ -212,7 +212,7 @@ class ADODB_DataDict {
 	 * @return  array of tables for current database.
 	 */ 
 
-	function MetaTables()
+	function &MetaTables($ttype=false,$showSchema=false,$mask=false)
 	{
 		if (!$this->connection->IsConnected()) return array();
 		return $this->connection->MetaTables();
@@ -664,7 +664,7 @@ class ADODB_DataDict {
 	}
 
 	// return string must begin with space
-	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint)
+	function _CreateSuffix($fname,$ftype,$fnotnull,$fdefault,$fautoinc,$fconstraint,$funsigned)
 	{	
 		$suffix = '';
 		if (strlen($fdefault)) $suffix .= " DEFAULT $fdefault";

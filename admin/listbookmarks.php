@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -34,9 +34,7 @@ include_once("header.php");
 
 	$userid = get_userid();
 	
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
-	$marklist = $bookops->LoadBookmarks($userid);
+	$marklist = cmsms()->bookmark->find_all_by_user_id($userid);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -71,12 +69,12 @@ include_once("header.php");
 		foreach ($marklist as $onemark){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">".$onemark->title."</a></td>\n";
+				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">".$onemark->title."</a></td>\n";
 				echo "<td>".$onemark->url."</td>\n";
-				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->bookmark_id."\">";
+				echo "<td><a href=\"editbookmark.php?bookmark_id=".$onemark->id."\">";
                 echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";
-				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->bookmark_id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title)."');\">";
+				echo "<td><a href=\"deletebookmark.php?bookmark_id=".$onemark->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onemark->title))."');\">";
                 echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                 echo "</a></td>\n";
 				echo "</tr>\n";

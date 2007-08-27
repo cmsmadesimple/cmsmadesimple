@@ -40,27 +40,15 @@ function smarty_cms_function_metadata($params, &$smarty)
 	{
 		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
 	}
-
-	$result .= get_site_preference('metadata', '');
-
-	if (isset($pageinfo) && $pageinfo !== FALSE)
+	
+	if (array_key_exists('assign', $params))
 	{
-		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
-		{
-			$result .= "\n" . $pageinfo->content_metadata;
-		}
+		$smarty->assign($params['assign'], $result);
 	}
-
-	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
+	else
 	{
-		$smarty->_compile_source('metadata template', $result, $_compiled);
-		@ob_start();
-		$smarty->_eval('?>' . $_compiled);
-		$result = @ob_get_contents();
-		@ob_end_clean();
+		return $result;
 	}
-
-	return $result;
 }
 
 function smarty_cms_help_function_metadata() {
@@ -72,6 +60,7 @@ function smarty_cms_help_function_metadata() {
 	<h3>What parameters does it take?</h3>
 	<ul>
 		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
 	</ul>
 	<?php
 }

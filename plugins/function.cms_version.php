@@ -16,10 +16,19 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_cms_version() {
+function smarty_cms_function_cms_version($smarty, $params)
+{
     global $CMS_VERSION;
-    return $CMS_VERSION;
-} ## smarty_function_cms_version
+
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $CMS_VERSION);
+	}
+	else
+	{
+		return $CMS_VERSION;
+	}
+}
 
 function smarty_cms_help_function_cms_version() {
 	?>
@@ -28,7 +37,9 @@ function smarty_cms_help_function_cms_version() {
 	<h3>How do I use it?</h3>
 	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code>
 	<h3>What parameters does it take?</h3>
-	<p>It takes no parameters.</p>
+	<ul>
+		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
+	</ul>
 	<?php
 }
 

@@ -36,7 +36,9 @@ $access = check_permission($userid, "Modify Modules");
 
 #$smarty = new Smarty_CMS($gCms->config);
 
-include_once("header.php");
+//include_once("header.php");
+CmsAdminTheme::start();
+
 if ($action == "showpluginhelp")
 {
 	if (function_exists('smarty_cms_help_function_'.$plugin))
@@ -118,7 +120,7 @@ else
 
 	echo '<div class="pagecontainer">';
 	echo '<div class="pageoverflow">';
-	echo $themeObject->ShowHeader('tags').'</div>';
+	echo CmsAdminTheme::get_instance()->show_header('tags').'</div>';
 	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
 	echo '<thead>';
 	echo "<tr>\n";
@@ -175,10 +177,11 @@ else
 </div>
 
 <?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+echo '<p class="pageback"><a class="pageback" href="'.CmsAdminTheme::get_instance()->back_url().'">&#171; '.lang('back').'</a></p>';
 }
 
-include_once("footer.php");
+//include_once("footer.php");
+CmsAdminTheme::end();
 
 # vim:ts=4 sw=4 noet
 ?>

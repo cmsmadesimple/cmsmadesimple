@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -36,11 +36,9 @@ if (isset($_GET["user_id"]))
 
 	if ($access)
 	{
-		global $gCms;
-		$userops =& $gCms->GetUserOperations();
-		$oneuser = $userops->LoadUserByID($user_id);
+		$oneuser = CmsUserOperations::load_user_by_id($user_id);
 		$user_name = $oneuser->username;
-		$ownercount = $userops->CountPageOwnershipByID($user_id);
+		$ownercount = CmsUserOperations::count_page_ownership_by_id($user_id);
 
 		if ($ownercount > 0)
 		{
@@ -49,31 +47,7 @@ if (isset($_GET["user_id"]))
 
 		if ($dodelete)
 		{
-			#Perform the deleteuser_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPre($oneuser);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteUserPre', array('user' => &$oneuser));
-
-			$oneuser->Delete();
-
-			#Perform the deleteuser_post callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->DeleteUserPost($oneuser);
-				}
-			}
-			
-			Events::SendEvent('Core', 'DeleteUserPost', array('user' => &$oneuser));
+			$oneuser->delete();
 
 			audit($user_id, $user_name, 'Deleted User');
 		}

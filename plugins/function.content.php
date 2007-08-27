@@ -41,13 +41,21 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
 		else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+		
+		$block_name = 'default';
+		if (isset($params['block']))
+			$block_name = $params['block'];
+		else if (isset($params['name']))
+			$block_name = $params['name'];
+
+		$block_name = strtolower(str_replace(' ', '_', $block_name));
 
 		//Only consider doing module processing if
 		//a. There is no block parameter
 		//b. then
 		//   1. $id is cntnt01
 		//   2. or inline is false
-		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
+		if ($block_name == 'default' && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
 			$cmsmodules = &$gCms->modules;
 		
@@ -101,11 +109,11 @@ function smarty_cms_function_content($params, &$smarty)
 		}
 		else
 		{
-			$result = '';
-			$oldvalue = $smarty->caching;
-			$smarty->caching = false;
-			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . (isset($params['block'])?$params['block']:'content_en')), '', $pageinfo->content_id);
-			$smarty->caching = $oldvalue;
+			$result = $smarty->fetch(str_replace(' ', '_', 'content:' . $block_name), '', $pageinfo->content_id);
+			if (isset($_REQUEST['tmpfile']))
+			{
+				$smarty->clear_compiled_tpl(str_replace(' ', '_', 'content:' . $block_name), $pageinfo->content_id);
+			}
 			return _smarty_cms_function_content_return($result, $params, $smarty);
 		}
 	}

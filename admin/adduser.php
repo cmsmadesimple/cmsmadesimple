@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -20,21 +20,20 @@
 
 $CMS_ADMIN_PAGE=1;
 
-require_once("../include.php");
-require_once("../lib/classes/class.user.inc.php");
+require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . "include.php");
 
 check_login();
 
 $error = "";
 
 $user= "";
-if (isset($_POST["user"])) $user = cleanValue($_POST["user"]);
+if (isset($_POST["user"])) $user = CmsRequest::clean_value($_POST["user"]);
 
 $firstname = "";
-if (isset($_POST["firstname"])) $firstname = cleanValue($_POST["firstname"]);
+if (isset($_POST["firstname"])) $firstname = CmsRequest::clean_value($_POST["firstname"]);
 
 $lastname = "";
-if (isset($_POST["lastname"])) $lastname = cleanValue($_POST["lastname"]);
+if (isset($_POST["lastname"])) $lastname = CmsRequest::clean_value($_POST["lastname"]);
 
 $password= "";
 if (isset($_POST["password"])) $password = $_POST["password"];
@@ -43,7 +42,7 @@ $passwordagain= "";
 if (isset($_POST["passwordagain"])) $passwordagain = $_POST["passwordagain"];
 
 $email = "";
-if (isset($_POST["email"])) $email = cleanValue($_POST["email"]);
+if (isset($_POST["email"])) $email = CmsRequest::clean_value($_POST["email"]);
 
 $active = 1;
 if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
@@ -90,17 +89,17 @@ if (isset($_POST["adduser"]))
 		#$query = "INSERT INTO ".cms_db_prefix()."users (user_id, username, password, active, create_date, modified_date) VALUES ($new_user_id, ".$db->qstr($user).", ".$db->qstr(md5($password)).", $active, '".$db->DBTimeStamp(time())."', '".$db->DBTimeStamp(time())."')";
 		#$result = $db->Execute($query);
 
-		$newuser = new User();
+		$newuser = new CmsUser();
 		$newuser->username = $user;
-		$newuser->SetPassword($password);
 		$newuser->active = $active;
-		$newuser->firstname = $firstname;
-		$newuser->lastname = $lastname;
+		$newuser->first_name = $firstname;
+		$newuser->last_name = $lastname;
 		$newuser->email = $email;
-		$newuser->adminaccess = $adminaccess;
-		$newuser->SetPassword($password);
+		$newuser->admin_access = $adminaccess;
+		$newuser->password = $password;
 
 		#Perform the adduser_pre callback
+		/*
 		foreach($gCms->modules as $key=>$value)
 		{
 			if ($gCms->modules[$key]['installed'] == true &&
@@ -111,12 +110,14 @@ if (isset($_POST["adduser"]))
 		}
 		
 		Events::SendEvent('Core', 'AddUserPre', array('user' => &$newuser));
+		*/
 
 		$result = $newuser->save();
 
 		if ($result)
 		{
 			#Perform the adduser_post callback
+			/*
 			foreach($gCms->modules as $key=>$value)
 			{
 				if ($gCms->modules[$key]['installed'] == true &&
@@ -127,6 +128,7 @@ if (isset($_POST["adduser"]))
 			}
 			
 			Events::SendEvent('Core', 'AddUserPost', array('user' => &$newuser));
+			*/
 
 			# set some default preferences, based on the user creating this user
 			$adminid = get_userid();

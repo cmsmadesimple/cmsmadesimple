@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 global $gCms;
@@ -49,6 +48,8 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Groups');
 
+$db = cms_db();
+
 if ($access) {
 
 	if (isset($_POST["editgroup"]))
@@ -62,12 +63,13 @@ if ($access) {
 
 		if ($validinfo)
 		{
-			$groupobj = new Group();
+			$groupobj = new CmsGroup();
 			$groupobj->id = $group_id;
 			$groupobj->name = $group;
 			$groupobj->active = $active;
 
 			#Perform the editgroup_pre callback
+			/*
 			foreach($gCms->modules as $key=>$value)
 			{
 				if ($gCms->modules[$key]['installed'] == true &&
@@ -76,14 +78,16 @@ if ($access) {
 					$gCms->modules[$key]['object']->EditGroupPre($groupobj);
 				}
 			}
+			*/
 			
-			Events::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
+			//CmsEvents::SendEvent('Core', 'EditGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
 				#Perform the editgroup_post callback
+				/*
 				foreach($gCms->modules as $key=>$value)
 				{
 					if ($gCms->modules[$key]['installed'] == true &&
@@ -92,11 +96,12 @@ if ($access) {
 						$gCms->modules[$key]['object']->EditGroupPost($groupobj);
 					}
 				}
+				*/
 				
-				Events::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
+				//CmsEvents::SendEvent('Core', 'EditGroupPost', array('group' => &$groupobj));
 
 				audit($groupobj->id, $groupobj->name, 'Edited Group');
-				redirect("listgroups.php");
+				CmsResponse::redirect("listgroups.php");
 				return;
 			}
 			else {

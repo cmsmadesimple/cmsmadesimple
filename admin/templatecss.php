@@ -73,7 +73,7 @@ if (isset($type) && "template" == $type)
 {
 
 	$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
-	$result = $db->Execute($query, array($id));
+	$result = cms_db()->Execute($query, array($id));
 
 	if ($result)
 	{
@@ -97,7 +97,7 @@ if (isset($type) && "template" == $type)
 
 	$query = "SELECT assoc_to_id, template_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."templates
 		WHERE assoc_type=? AND assoc_css_id = ? AND assoc_to_id = template_id";
-	$result = $db->Execute($query, array($type, $id));
+	$result = cms_db()->Execute($query, array($type, $id));
 
 #******************************************************************************
 # displaying erros if any
@@ -202,7 +202,7 @@ else {
 	{
 		$query = "SELECT * FROM ".cms_db_prefix()."templates WHERE template_id NOT IN (".$notinto.") AND active = 1 ORDER BY template_name";
 	}
-	$result = $db->Execute($query);
+	$result = cms_db()->Execute($query);
 
 	if ($result && $result->RecordCount() > 0)
 	{

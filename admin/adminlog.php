@@ -54,10 +54,13 @@ if (isset($_GET['download']))
 
 include_once("header.php");
 
+$db = cms_db();
+
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
-if (isset($_GET['clear']) && $access) {
+if (isset($_GET['clear']) && $access)
+{
        $query = "DELETE FROM ".cms_db_prefix()."adminlog";
        $db->Execute($query);
        echo $themeObject->ShowMessage(lang('adminlogcleared'));

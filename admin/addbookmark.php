@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -9,7 +9,7 @@
 #(at your option) any later version.
 #
 #This program is distributed in the hope that it will be useful,
-#but WITHOUT ANY WARRANTY; without even the implied warranty of
+#BUT withOUT ANY WARRANTY; without even the implied warranty of
 #MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 #GNU General Public License for more details.
 #You should have received a copy of the GNU General Public License
@@ -31,7 +31,8 @@ if (isset($_POST["title"])) $title = $_POST["title"];
 $url = "";
 if (isset($_POST["url"])) $url = $_POST["url"];
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listbookmarks.php");
 	return;
 }
@@ -39,44 +40,42 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 
 if (isset($_POST["addbookmark"]))
-	{
+{
 	$validinfo = true;
 
 	if ($title == "")
-		{
+	{
 		$error .= lang('nofieldgiven', array('addbookmark'));
 		$validinfo = false;
-		}
+	}
 
 	if ($validinfo)
-		{
-		global $gCms;
-		$gCms->GetBookmarkOperations();
-		$markobj =& new Bookmark();
+	{
+		$markobj = new CmsBookmark();
 		$markobj->title = $title;
 		$markobj->url = $url;
-		$markobj->user_id=$userid;
+		$markobj->user_id = $userid;
 
 		$result = $markobj->save();
 
 		if ($result)
-			{
-			redirect("listbookmarks.php");
+		{
+			CmsResponse::redirect("listbookmarks.php");
 			return;
-			}
+		}
 		else
-			{
+		{
 			$error .= lang('errorinsertingbookmark');
-			}
 		}
 	}
+}
 
 include_once("header.php");
 
 if ($error != "")
-	{
-		echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
-	}
+{
+	echo '<div class="pageerrorcontainer"><p class="pageerror">'.$error.'</p></div>';
+}
 ?>
 
 <div class="pagecontainer">

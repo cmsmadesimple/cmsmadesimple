@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.group.inc.php");
+#require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -55,39 +55,15 @@ if ($access)
 
 		if ($validinfo)
 		{
-			$groupobj = new Group();
+			$groupobj = new CmsGroup();
 			$groupobj->name = $group;
 			$groupobj->active = $active;
-
-			#Perform the addgroup_pre callback
-			foreach($gCms->modules as $key=>$value)
-			{
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->AddGroupPre($groupobj);
-				}
-			}
-			
-			Events::SendEvent('Core', 'AddGroupPre', array('group' => &$groupobj));
 
 			$result = $groupobj->save();
 
 			if ($result)
 			{
-				#Perform the addgroup_post callback
-				foreach($gCms->modules as $key=>$value)
-				{
-					if ($gCms->modules[$key]['installed'] == true &&
-						$gCms->modules[$key]['active'] == true)
-					{
-						$gCms->modules[$key]['object']->AddGroupPost($groupobj);
-					}
-				}
-				Events::SendEvent('Core', 'AddGroupPost', array('group' => &$groupobj));
-				audit($groupobj->id, $groupobj->name, 'Added Group');
 				redirect("listgroups.php");
-				return;
 			}
 			else
 			{

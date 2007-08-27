@@ -40,6 +40,9 @@ rm -fr modules/FCKeditor
 rm -fr modules/FCKeditorX
 #rm -fr modules/TinyMCE
 rm -fr scripts
+rm -fr test
+rm -fr command.php
+rm -fr lib/pear/php_shell
 find . -depth -type d -name .svn -exec rm -fr {} \;
 find . -type d -exec chmod 775 {} \;
 find . -type f -name "*.php" chmod -x {} \;

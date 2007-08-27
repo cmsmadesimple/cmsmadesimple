@@ -18,7 +18,15 @@
 
 function smarty_cms_function_sitename($params, &$smarty)
 {
-	return get_site_preference('sitename', 'CMSMS Site');
+	$result = get_site_preference('sitename', 'CMSMS Site');
+	if (array_key_exists('assign', $params))
+	{
+		$smarty->assign($params['assign'], $result);
+	}
+	else
+	{
+		return $result;
+	}
 }
 
 function smarty_cms_help_function_sitename()
@@ -29,7 +37,9 @@ function smarty_cms_help_function_sitename()
         <h3>How do I use it?</h3>
         <p>Just insert the tag into your template/page like: <code>{sitename}</code></p>
         <h3>What parameters does it take?</h3>
-        <p>None</p>
+		<ul>
+			<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
+		</ul>
         <?php
 }
 

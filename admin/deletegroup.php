@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.group.inc.php");
 
 check_login();
 
@@ -38,42 +37,12 @@ if (isset($_GET["group_id"]))
 		$result = false;
 
 		global $gCms;
-		$groupops =& $gCms->GetGroupOperations();
-		$groupobj = $groupops->LoadGroupByID($group_id);
+		$groupobj = cms_orm()->cms_group->find_by_id($group_id);
 		$group_name = $groupobj->name;
-
-		#Perform the deletegroup_pre callback
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->DeleteGroupPre($groupobj);
-			}
-		}
-		
-		Events::SendEvent('Core', 'DeleteGroupPre', array('group' => &$groupobj));
 
 		if ($groupobj)
 		{
-			$result = $groupobj->Delete();
-		}
-
-		#Perform the deletegroup_post callback
-		foreach($gCms->modules as $key=>$value)
-		{
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->DeleteGroupPost($groupobj);
-			}
-		}
-		
-		Events::SendEvent('Core', 'DeleteGroupPost', array('group' => &$groupobj));
-
-		if ($result == true)
-		{
-			audit($group_id, $group_name, 'Deleted Group');
+			$result = $groupobj->delete();
 		}
 	}
 }

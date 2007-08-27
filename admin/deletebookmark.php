@@ -21,7 +21,6 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.bookmark.inc.php");
 
 check_login();
 
@@ -32,13 +31,11 @@ if (isset($_GET["bookmark_id"]))
 
 	$result = false;
 
-	global $gCms;
-	$bookops =& $gCms->GetBookmarkOperations();
-	$markobj = $bookops->LoadBookmarkByID($bookmark_id);
+	$markobj = cmsms()->bookmark->find_by_id($bookmark_id);
 
 	if ($markobj)
 	{
-		$result = $markobj->Delete();
+		$result = $markobj->delete();
 	}
 
 }

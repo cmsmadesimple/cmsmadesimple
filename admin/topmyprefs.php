@@ -26,9 +26,7 @@ check_login();
 
 include_once("header.php");
 $themeObject->ShowShortcuts();
-$themeObject->DisplaySectionMenuDivStart();
-$themeObject->DisplaySectionPages('myprefs');
-$themeObject->DisplaySectionMenuDivEnd();
+$themeObject->display_section_pages('myprefs');
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet

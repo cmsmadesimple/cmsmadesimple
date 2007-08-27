@@ -66,7 +66,7 @@ if (isset($_GET["message"])) {
 	$delcss = check_permission($userid, 'Remove Stylesheets');
 
 	$query = "SELECT * FROM ".cms_db_prefix()."css ORDER BY css_name";
-	$result = $db->Execute($query);
+	$result = cms_db()->Execute($query);
 
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -100,15 +100,15 @@ if (isset($_GET["message"])) {
 		while ($one = $result->FetchRow()){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"editcss.php?css_id=".$one["css_id"]."\">".$one["css_name"]."</a></td>\n";
-				echo "<td class=\"icons_wide\"><a href=\"templatecss.php?id=".$one["css_id"]."&amp;type=template\">";
+				echo "<td><a href=\"editcss.php?css_id=".$one["id"]."\">".$one["css_name"]."</a></td>\n";
+				echo "<td class=\"icons_wide\"><a href=\"templatecss.php?id=".$one["id"]."&amp;type=template\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachtotemplate'),'','','systemicon');
                 echo "</a></td>\n";
 
 				# if user has right to add (copy)
 				if ($addcss)
 				{
-					echo '<td class="icons_wide"><a href="copystylesheet.php?stylesheet_id=' . $one['css_id'] . '&amp;stylesheet_name=' . urlencode($one['css_name']) . '">';
+					echo '<td class="icons_wide"><a href="copystylesheet.php?stylesheet_id=' . $one['id'] . '&amp;stylesheet_name=' . urlencode($one['css_name']) . '">';
                     echo $themeObject->DisplayImage('icons/system/copy.gif', lang('copy'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -120,7 +120,7 @@ if (isset($_GET["message"])) {
 				# if user has right to edit
 				if ($modify)
 				{
-					echo "<td class=\"icons_wide\"><a href=\"editcss.php?css_id=".$one["css_id"]."\">";
+					echo "<td class=\"icons_wide\"><a href=\"editcss.php?css_id=".$one["id"]."\">";
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -132,7 +132,7 @@ if (isset($_GET["message"])) {
 				# if user has right to delete
 				if ($delcss)
 				{
-					echo "<td class=\"icons_wide\"><a href=\"deletecss.php?css_id=".$one["css_id"]."\" onclick=\"return confirm('".lang('deleteconfirm', $one['css_name'])."');\">";
+					echo "<td class=\"icons_wide\"><a href=\"deletecss.php?css_id=".$one["id"]."\" onclick=\"return confirm('".lang('deleteconfirm', $one['css_name'])."');\">";
                     echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
                     echo "</a></td>\n";
 				}
@@ -140,7 +140,7 @@ if (isset($_GET["message"])) {
 				{
 					echo "<td>&nbsp;</td>";
 				}
-				echo '<td><input type="checkbox" name="multistylesheet-'.$one['css_id'].'" /></td>';
+				echo '<td><input type="checkbox" name="multistylesheet-'.$one['id'].'" /></td>';
 				echo "</tr>\n";
 
 				("row1" == $currow) ? $currow="row2" : $currow="row1";

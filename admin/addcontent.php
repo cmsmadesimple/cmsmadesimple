@@ -1,7 +1,7 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -22,178 +22,107 @@ $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login();
-$userid = get_userid();
-
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
-$xajax = new xajax();
-$xajax->registerFunction('ajaxpreview');
-
-$xajax->processRequests();
-$headtext = $xajax->getJavascript('../lib/xajax')."\n";
-
 if (isset($_POST["cancel"]))
 {
 	redirect("listcontent.php");
 }
 
+$gCms = cmsms();
+$smarty = cms_smarty();
+$contentops = $gCms->GetContentOperations();
+$templateops = $gCms->GetTemplateOperations();
+
+#Make sure we're logged in and get that user id
+check_login();
+$userid = get_userid();
+
+//Need to know where we're submitting to
+$smarty->assign('action', 'addcontent.php');
+
+//See if some variables are returned
+$page_type = coalesce_key($_REQUEST, 'page_type', 'content');
+$orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
+$preview = array_key_exists('previewbutton', $_POST);
+$submit = array_key_exists('submitbutton', $_POST);
+$apply = array_key_exists('applybutton', $_POST);
+
+require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
+$xajax = new xajax();
+$xajax->registerFunction('ajaxpreview');
+$xajax->registerFunction('change_block_type');
+
+$xajax->processRequests();
+
+#See what kind of permissions we have
+$access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
+
 require_once("header.php");
+CmsAdminTheme::inject_header_text($xajax->getJavascript('../lib/xajax')."\n");
 
-$tmpfname = '';
+#No access?  Just display an error and exit.
+if (!$access) {
+	$smarty->assign('error_message', lang('noaccessto',array(lang('addcontent'))));
+	$smarty->display('pageerror.tpl');
+	include_once('footer.php');
+	exit;
+}
 
-$error = FALSE;
+function get_type($n)
+{
+	return $n->type;
+}
 
-$firsttime = "1"; #Flag to make sure we're not trying to fill params on the first display
-if (isset($_POST["firsttime"])) $firsttime = $_POST["firsttime"];
+function get_friendlyname($n)
+{
+	return $n->friendlyname;
+}
 
-$preview = false;
-if (isset($_POST["previewbutton"])) $preview = true;
-
-$submit = false;
-if (isset($_POST["submitbutton"])) $submit = true;
-
-$apply = false;
-if (isset($_POST["applybutton"])) $apply = true;
-
-$parent_id = get_site_preference('default_parent_page', -1);
-if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
-
-$contentobj = '';
-
-function ajaxpreview($params)
+function copycontentobj(&$page_object, $page_type)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
 	$contentops =& $gCms->GetContentOperations();
 
-	$contentobj = '';
-	if (isset($params["serialized_content"]) && $params["serialized_content"] != '')
+	$newcontenttype = strtolower($page_type);
+	CmsContentOperations::LoadContentType($newcontenttype);
+	$tmpobj = CmsContentOperations::CreateNewContent($newcontenttype);
+
+	$tmpobj->params = $page_object->params;
+	$tmpobj->mProperties = $page_object->mProperties;
+
+	$page_object = $tmpobj;
+}
+
+function &get_page_object(&$page_type, &$orig_page_type, $userid, $params)
+{
+	$page_object = new StdClass();
+
+	if (isset($params["serialized_content"]))
 	{
-		$content_type = $params['content_type'];
-		$contentops->LoadContentType($content_type);
-		$contentobj = UnserializeObject($params["serialized_content"]);
-		if (strtolower(get_class($contentobj)) != strtolower($content_type))
+		$page_object = unserialize_object($params["serialized_content"]);
+		$page_object->update_parameters($params['content']);
+		if (strtolower(get_class($page_object)) != $page_type)
 		{
-			copycontentobj($contentobj, $content_type, $params);
+			copycontentobj($page_object, $page_type);
+			$orig_page_type = $page_type;
 		}
 	}
 	else
 	{
-		$content_type = $params['content_type'];
-		$contentobj = $contentops->CreateNewContent($content_type);
+		$page_object = CmsContentOperations::CreateNewContent($page_type);
+		$page_object->owner_id = $userid;
+		$page_object->active = TRUE;
+		$page_object->show_in_menu = TRUE;
+		$page_object->last_modified_by = $userid;
 	}
-	updatecontentobj($contentobj, true, $params);
-	$tmpfname = createtmpfname($contentobj);
-	$url = $config["root_url"].'/preview.php?tmpfile='.urlencode(basename($tmpfname));
 	
-	$objResponse = new xajaxResponse();
-	$objResponse->addAssign("previewframe", "src", $url);
-	$objResponse->addAssign("serialized_content", "value", SerializeObject($contentobj));
-	$count = 0;
-	foreach ($contentobj->TabNames() as $tabname)
-	{
-		$objResponse->addScript("Element.removeClassName('editab".$count."', 'active');Element.removeClassName('editab".$count."_c', 'active');$('editab".$count."_c').style.display = 'none';");
-		$count++;
-	}
-	$objResponse->addScript("Element.addClassName('edittabpreview', 'active');Element.addClassName('edittabpreview_c', 'active');$('edittabpreview_c').style.display = '';");
-	return $objResponse->getXML();
+	return $page_object;
 }
 
-function updatecontentobj(&$contentobj, $preview, $params = null)
+function create_preview(&$page_object)
 {
-	if ($params == null)
-		$params = $_POST;
-
-	$userid = get_userid();
-	$adminaccess = (
-        check_ownership($userid, $contentobj->Id()) ||
-        check_permission($userid, 'Modify Any Page') || 
-        check_permission($userid, 'Modify Page Structure')
-	);
-		
-	#Fill contentobj with parameters
-	$contentobj->FillParams($params);
-	if ($preview)
-	{
-		$error = $contentobj->ValidateData();
-	}
-
-	if (isset($params["ownerid"]))
-	{
-		$contentobj->SetOwner($params["ownerid"]);
-	}
-
-	$contentobj->SetLastModifiedBy($userid);
-
-	#Fill Additional Editors (kind of kludgy)
-	if (isset($params["additional_editors"]))
-	{
-		$addtarray = array();
-		foreach ($params["additional_editors"] as $addt_user_id)
-		{
-			$addtarray[] = $addt_user_id;
-		}
-		$contentobj->SetAdditionalEditors($addtarray);
-	}
-	else if ($adminaccess)
-	{
-		$contentobj->SetAdditionalEditors(array());
-	}
-}
-
-function copycontentobj(&$contentobj, $content_type, $params = null)
-{
-	global $gCms;
-	$contentops =& $gCms->GetContentOperations();
-	
-	if ($params == null)
-		$params = $_POST;
-
-	$newcontenttype = strtolower($content_type);
-	$contentops->LoadContentType($newcontenttype);
-	$contentobj->FillParams($params);
-	$tmpobj = $contentops->CreateNewContent($newcontenttype);
-	$tmpobj->SetId($contentobj->Id());
-	$tmpobj->SetName($contentobj->Name());
-	$tmpobj->SetMenuText($contentobj->MenuText());
-	$tmpobj->SetTemplateId($contentobj->TemplateId());
-	$tmpobj->SetParentId($contentobj->ParentId());
-	$tmpobj->SetOldParentId($contentobj->OldParentId());
-	$tmpobj->SetAlias($contentobj->Alias());
-	$tmpobj->SetOwner($contentobj->Owner());
-	$tmpobj->SetActive($contentobj->Active());
-	$tmpobj->SetItemOrder($contentobj->ItemOrder());
-	$tmpobj->SetOldItemOrder($contentobj->OldItemOrder());
-	$tmpobj->SetShowInMenu($contentobj->ShowInMenu());
-	//Some content types default to false for a reason... don't override it
-	if (!(!$tmpobj->mCachable && $contentobj->Cachable()))
-		$tmpobj->SetCachable($contentobj->Cachable());
-	$tmpobj->SetHierarchy($contentobj->Hierarchy());
-	$tmpobj->SetLastModifiedBy($contentobj->LastModifiedBy());
-	$tmpobj->SetAdditionalEditors($contentobj->GetAdditionalEditors());
-	$contentobj = $tmpobj;
-}
-
-function createtmpfname(&$contentobj)
-{
-	global $gCms;
-	$config =& $gCms->GetConfig();
-	$templateops =& $gCms->GetTemplateOperations();
-
-	$data["content_id"] = $contentobj->Id();
-	$data["title"] = $contentobj->Name();
-	$data["menutext"] = $contentobj->MenuText();
-	$data["content"] = $contentobj->Show();
-	$data["template_id"] = $contentobj->TemplateId();
-	$data["hierarchy"] = $contentobj->Hierarchy();
-	
-	$templateobj = $templateops->LoadTemplateById($contentobj->TemplateId());
-	$data['template'] = $templateobj->content;
-
-	$stylesheetobj = get_stylesheet($contentobj->TemplateId());
-	$data['encoding'] = $stylesheetobj['encoding'];
-	// $data['stylesheet'] = $stylesheetobj['stylesheet'];
+	$config =& cmsms()->GetConfig();
+	$templateops = cmsms()->GetTemplateOperations();
+	$templateobj = $templateops->LoadTemplateById($page_object->template_id);
 
 	$tmpfname = '';
 	if (is_writable($config["previews_path"]))
@@ -205,278 +134,149 @@ function createtmpfname(&$contentobj)
 		$tmpfname = tempnam(TMP_CACHE_LOCATION, "cmspreview");
 	}
 	$handle = fopen($tmpfname, "w");
-	fwrite($handle, serialize($data));
+	fwrite($handle, serialize(array($templateobj, $page_object)));
 	fclose($handle);
 	
 	return $tmpfname;
 }
 
-#Get current userid and make sure they have permission to add something
-$access = (check_permission($userid, 'Add Pages') || check_permission($userid, 'Modify Page Structure'));
+function change_block_type($params, $block_id, $new_block_type)
+{
+	$page_type = coalesce_key($params, 'page_type', 'content');
+	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
+	
+	$userid = get_userid();
+	$config = cms_config();
+	$smarty = cms_smarty();
 
-#Get a list of content types and pick a default if necessary
-global $gCms;
-$contentops =& $gCms->GetContentOperations();
-$existingtypes = $contentops->ListContentTypes();
-$content_type = "";
-if (isset($_POST["content_type"]))
-{
-	$content_type = $_POST["content_type"];
-}
-else
-{
-	if (isset($existingtypes) && count($existingtypes) > 0)
-	{
-		$content_type = 'content';
-	}
-	else
-	{
-		$error = "No content types loaded!";
-	}
-}
-
-$contentobj = "";
-if (isset($_POST["serialized_content"]))
-{
-	$contentops =& $gCms->GetContentOperations();
-	$contentops->LoadContentType($_POST['orig_content_type']);
-	$contentobj = unserialize(base64_decode($_POST["serialized_content"]));
-	if (strtolower(get_class($contentobj)) != $content_type)
-	{
-		#Fill up the existing object with values in form
-		#Create new object
-		#Copy important fields to new object
-		#Put new object on top of old on
-		copycontentobj($contentobj, $content_type);
-	}
-}
-else
-{
-	$contentops =& $gCms->GetContentOperations();
-	$contentobj = $contentops->CreateNewContent($content_type);
-	$contentobj->SetOwner($userid);
-	$contentobj->SetActive(True);
-	$contentobj->SetShowInMenu(True);
-	$contentobj->SetLastModifiedBy($userid);
-	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent'));
-	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params);
+	$type_param = $block_id . '-block-type';
+	$div_id = 'content-form-' . $block_id;
+	$page_object->$type_param = $new_block_type;
+	
+	$objResponse = new xajaxResponse();
+	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
+	
+	$smarty->_compile_source('metadata template', $page_object->create_block_type($block_id), $_compiled);
+	@ob_start();
+	$smarty->_eval('?>' . $_compiled);
+	$result = @ob_get_contents();
+	@ob_end_clean();
+	
+	$objResponse->addAssign($div_id, 'innerHTML', $result);
+	
+	return $objResponse->getXML();
 }
 
-if ($access)
+function ajaxpreview($params)
+{
+	$page_type = coalesce_key($params, 'page_type', 'content');
+	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
+	$userid = get_userid();
+	
+	$config =& cmsms()->GetConfig();
+
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params);
+	$tmpfname = create_preview($page_object);
+	$url = $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname));
+	
+	$objResponse = new xajaxResponse();
+	$objResponse->addAssign("previewframe", "src", $url);
+	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
+	$count = 0;
+
+	foreach (array("content", "advanced") as $tabname)
+	{
+		$objResponse->addScript("Element.removeClassName('".$tabname."', 'active');Element.removeClassName('".$tabname."_c', 'active');$('".$tabname."_c').style.display = 'none';");
+	}
+	$objResponse->addScript("Element.addClassName('preview', 'active');Element.addClassName('preview_c', 'active');$('preview_c').style.display = '';");
+
+	return $objResponse->getXML();
+}
+
+//Get a working page object
+$page_object = get_page_object($page_type, $orig_page_type, $userid, $_REQUEST);
+
+//Preview?
+$smarty->assign('showpreview', false);
+if ($preview)
+{
+	if (!$page_object->_call_validation())
+	{
+		$tmpfname = create_preview($page_object);
+		if ($tmpfname != '')
+		{
+			$smarty->assign('showpreview', true);
+			$smarty->assign('previewfname', $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname)));
+		}
+	}
+}
+else if ($access)
 {
 	if ($submit || $apply)
 	{
-		#Fill contentobj with parameters
-		$contentobj->FillParams($_POST);
-		$contentobj->SetOwner($userid);
-
-		#Fill Additional Editors (kind of kludgy)
-		if (isset($_POST["additional_editors"]))
+		if ($page_object->save())
 		{
-			$addtarray = array();
-			foreach ($_POST["additional_editors"] as $addt_user_id)
-			{
-				$addtarray[] = $addt_user_id;
-			}
-			$contentobj->SetAdditionalEditors($addtarray);
-		}
-
-		$error = $contentobj->ValidateData();
-		if ($error === FALSE)
-		{
-			$contentobj->Save();
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
 			$contentops->SetAllHierarchyPositions();
 			if ($submit)
 			{
-				audit($contentobj->Id(), $contentobj->Name(), 'Added Content');
-				redirect('listcontent.php?message=contentadded');
+				audit($page_object->id, $page_object->name, 'Added Content');
+				if ($submit)
+					redirect('listcontent.php?message=contentadded');
 			}
 		}
 	}
-	else if ($firsttime == "0") #Either we're a preview or a template postback
-	{
-		$contentobj->FillParams($_POST);
-		if ($preview) #If preview, check for errors...
-		{
-			$error = $contentobj->ValidateData();
-		}
-		if (isset($_POST["additional_editors"]))
-		{
-			$addtarray = array();
-			foreach ($_POST["additional_editors"] as $addt_user_id)
-			{
-				$addtarray[] = $addt_user_id;
-			}
-			$contentobj->SetAdditionalEditors($addtarray);
-		}
-	}
-	else
-	{
-		$firsttime = "0";
-	}
 }
 
-if (!$access)
-{
-	echo "<div class=\"pageerrorcontainer pageoverflow\"><p class=\"pageerror\">".lang('noaccessto',array(lang('addcontent')))."</p></div>";
-}
-else
-{
-#Get a list of content_types and build the dropdown to select one
-$typesdropdown = '<select name="content_type" onchange="document.contentform.submit()" class="standard">';
-$cur_content_type = '';
-foreach ($gCms->contenttypes as $onetype)
-{
-	$typesdropdown .= '<option value="' . $onetype->type . '"';
-	if ($onetype->type == $content_type)
-	{
-		$typesdropdown .= ' selected="selected" ';
-		$cur_content_type = $onetype->type;
-	}
-	$typesdropdown .= ">".($onetype->friendlyname)."</option>";
-}
-$typesdropdown .= "</select>";
+//Set some page variables
+$smarty->assign('header_name', $themeObject->ShowHeader('addcontent'));
 
-if (FALSE == empty($error))
-{
-	echo $themeObject->ShowErrors($error);
-}
-else if ($preview)
-{
-	$tmpfname = createtmpfname($contentobj);
+//Setup the page object
+$smarty->assign_by_ref('page_object', $page_object);
+$smarty->assign('serialized_object', serialize_object($page_object));
+$smarty->assign('orig_page_type', $orig_page_type);
 
-?>
+//Can we preview?
+$smarty->assign('can_preview', $page_object->preview);
 
-<!--
-<div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('preview')?></p>
-	<iframe name="previewframe" class="preview" src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"></iframe>
-</div>
--->
-<?php
-}
+//How about apply?
+$smarty->assign('can_apply', false);
 
-#$contentarray = $contentobj->EditAsArray(true, 0);
-#$contentarray2 = $contentobj->EditAsArray(true, 1);
+//Set the pagetypes
+$smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
+$smarty->assign('selected_page_type', $page_type);
 
-$tabnames = $contentobj->TabNames();
+//Set the parent dropdown
+$smarty->assign('show_parent_dropdown', $access);
+$smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown('', $page_object->parent_id, 'content[parent_id]'));
 
-?>
+//Se the template dropdown
+$smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
 
-<div class="pagecontainer">
-<div class="pageoverflow">
-	<?php
-	echo $themeObject->ShowHeader('addcontent').'</div>';
-	?>
-	<div id="page_tabs">
-		<?php
-		$count = 0;
+//Set the users
+$userops = $gCms->GetUserOperations();
+$smarty->assign('show_owner_dropdown', false);
+$smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
 
-		#We have preview, but no tabs
-		if (count($tabnames) == 0)
-		{
-			?>
-			<div id="editab0" class="active"><?php echo lang('content')?></div>
-			<?php
-		}
-		else
-		{
-			foreach ($tabnames as $onetab)
-			{
-				?>
-				<div id="editab<?php echo $count?>"><?php echo $onetab?></div>
-				<?php
-				$count++;
-			}
-		}
+//Any included smarty templates for this page type?
+$smarty->assign('include_templates', $page_object->add_template($smarty));
 
-		if ($contentobj->mPreview)
-		{
-			echo '<div id="edittabpreview"'.($tmpfname!=''?' class="active"':'').' onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;">'.lang('preview').'</div>';
-		}
-		?>
-	</div>
-	<div style="clear: both;"></div>
-	<form method="post" action="addcontent.php" name="contentform" enctype="multipart/form-data" id="contentform"##FORMSUBMITSTUFFGOESHERE##>
-	<input type="hidden" id="serialized_content" name="serialized_content" value="<?php echo SerializeObject($contentobj); ?>" />			
-	<div id="page_content">
-		<div class="pageoverflow">	
-		<?php
-		
-		$submit_buttons = '
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">';
-		$submit_buttons .= ' <input type="submit" name="submitbutton" value="'.lang('submit').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" />';
-		if (isset($contentobj->mPreview) && $contentobj->mPreview == true) {
-			$submit_buttons .= ' <input type="submit" name="previewbutton" value="'.lang('preview').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" onclick="##INLINESUBMITSTUFFGOESHERE##xajax_ajaxpreview(xajax.getFormValues(\'contentform\'));return false;" />';
-		}
-		$submit_buttons .= ' <input type="submit" name="cancel" value="'.lang('cancel').'" class="pagebutton" onmouseover="this.className=\'pagebuttonhover\'" onmouseout="this.className=\'pagebutton\'" /></p>';
-		
-		$numberoftabs = count($tabnames);
-		$showtabs = 1;
-		if ($numberoftabs == 0)
-		{
-			$numberoftabs = 1;
-			$showtabs = 1;
-		}
-		for ($currenttab = 0; $currenttab < $numberoftabs; $currenttab++)
-		{
-			if ($showtabs == 1)
-			{
-				?><div id="editab<?php echo $currenttab ?>_c"><?php
-			}
-			if ($currenttab == 0)
-			{
-				echo $submit_buttons;
-				?>
+//Other fields that aren't easily done with smarty
+$smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
 
-				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('contenttype'); ?>:</p>
-					<p class="pageinput"><?php echo $typesdropdown; ?></p>
-				</div>
-				<?php
-			}
-			$contentarray = $contentobj->EditAsArray(true, $currenttab, $access);
-			for($i=0;$i<count($contentarray);$i++)
-			{
-				?>
-				<div class="pageoverflow">
-					<p class="pagetext"><?php echo $contentarray[$i][0]; ?></p>
-					<p class="pageinput"><?php echo $contentarray[$i][1]; ?></p>
-				</div>
-				<?php
-			}
-			echo '<input type="hidden" name="firsttime" value="0" /><input type="hidden" name="orig_content_type" value="'.$cur_content_type.'" />';
-					?>
-			</div>
-			<div style="clear: both;"></div>
-				  <?php
-		}
-		if ($contentobj->mPreview)
-		{
-			echo '<div class="pageoverflow"><div id="edittabpreview_c"'.($tmpfname!=''?' class="active"':'').'>';
-				?>
-					<iframe name="previewframe" class="preview" id="previewframe"<?php if ($tmpfname != '') { ?> src="<?php echo $config["root_url"] ?>/preview.php?tmpfile=<?php echo urlencode(basename($tmpfname))?>"<?php } ?>></iframe>
-				<?php
-			echo '<div style="clear: both;"></div>';
-		}
-?>
-</div>
-</div>
-<div class="pageoverflow">
-<?php
-echo $submit_buttons;
-?>
-</div>
-</div>
-</div>
-</form>
-</div>
-<?php
-}
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+//extra buttons
+$ExtraButtons = array(
+		      array(
+			    'name'    => 'preview',
+			    'class'   => '',
+			    'image'   => $themeObject->DisplayImage('icons/system/preview.gif', '','','',''),
+			    'caption' => lang('preview'),
+			    ),
+		      );
+
+$smarty->assign('DisplayButtons', $ExtraButtons);
+
+$smarty->display('addcontent.tpl');
 
 include_once("footer.php");
 
