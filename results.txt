@@ -81,14 +81,14 @@ Auto-merged admin/siteprefs.php
 CONFLICT (content): Merge conflict in admin/siteprefs.php  --  FIXED
 Auto-merged admin/style.php
 Auto-merged admin/templatecss.php
-CONFLICT (delete/modify): admin/themes/default/defaultTheme.php deleted in 2.0 and modified in HEAD. Version HEAD of admin/themes/default/defaultTheme.php left in tree.
+CONFLICT (delete/modify): admin/themes/default/defaultTheme.php deleted in 2.0 and modified in HEAD. Version HEAD of admin/themes/default/defaultTheme.php left in tree.  --  DELETED
 Auto-merged include.php
 CONFLICT (content): Merge conflict in include.php  --  FIXED
 Auto-merged index.php
 CONFLICT (content): Merge conflict in index.php  --  FIXED
 Auto-merged install/index.php
 CONFLICT (add/add): Merge conflict in install/index.php  --  FIXED
-CONFLICT (delete/modify): install/install.php deleted in HEAD and modified in 2.0. Version 2.0 of install/install.php left in tree.
+CONFLICT (delete/modify): install/install.php deleted in HEAD and modified in 2.0. Version 2.0 of install/install.php left in tree.  --  DELETED
 Auto-merged install/schemas/extra.sql
 CONFLICT (content): Merge conflict in install/schemas/extra.sql  --  FIXED
 Auto-merged install/upgrade.php
@@ -107,32 +107,32 @@ Auto-merged lib/classes/class.admintheme.inc.php
 CONFLICT (content): Merge conflict in lib/classes/class.admintheme.inc.php  --  FIXED
 Removed lib/classes/class.bookmark.inc.php
 Removed lib/classes/class.bookmarkoperations.inc.php
-CONFLICT (delete/modify): lib/classes/class.content.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.content.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.contentoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.contentoperations.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.events.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.events.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.global.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.global.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.globalcontentoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.globalcontentoperations.inc.php left in tree.
+CONFLICT (delete/modify): lib/classes/class.content.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.content.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.contentoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.contentoperations.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.events.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.events.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.global.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.global.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.globalcontentoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.globalcontentoperations.inc.php left in tree.  --  DELETED
 Removed lib/classes/class.group.inc.php
-CONFLICT (delete/modify): lib/classes/class.moduleoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.moduleoperations.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.pageinfo.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.pageinfo.inc.php left in tree.
+CONFLICT (delete/modify): lib/classes/class.moduleoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.moduleoperations.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.pageinfo.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.pageinfo.inc.php left in tree.  --  DELETED
 Removed lib/classes/class.recentpage.inc.php
-CONFLICT (delete/modify): lib/classes/class.stylesheet.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.stylesheet.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.stylesheetoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.stylesheetoperations.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.template.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.template.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.templateoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.templateoperations.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.user.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.user.inc.php left in tree.
-CONFLICT (delete/modify): lib/classes/class.useroperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.useroperations.inc.php left in tree.
+CONFLICT (delete/modify): lib/classes/class.stylesheet.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.stylesheet.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.stylesheetoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.stylesheetoperations.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.template.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.template.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.templateoperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.templateoperations.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.user.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.user.inc.php left in tree.  --  DELETED
+CONFLICT (delete/modify): lib/classes/class.useroperations.inc.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/classes/class.useroperations.inc.php left in tree.  --  DELETED
 Auto-merged lib/classes/contenttypes/Content.inc.php
 CONFLICT (content): Merge conflict in lib/classes/contenttypes/Content.inc.php  --  FIXED
 Auto-merged lib/classes/contenttypes/Link.inc.php
 CONFLICT (content): Merge conflict in lib/classes/contenttypes/Link.inc.php  --  FIXED
 Removed lib/classes/module_support/modlang.inc.php
-CONFLICT (delete/modify): lib/content.functions.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/content.functions.php left in tree.
+CONFLICT (delete/modify): lib/content.functions.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/content.functions.php left in tree.  --  DELETED
 Auto-merged lib/filemanager/ImageManager/Classes/Thumbnail.php
 Auto-merged lib/filemanager/ImageManager/Classes/Transform.php
 Auto-merged lib/misc.functions.php
 CONFLICT (content): Merge conflict in lib/misc.functions.php  --  FIXED (Took the 2.0 one, will have to backport methods...  but would rather find more API-like places to put these anyway)
-CONFLICT (delete/modify): lib/module.functions.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/module.functions.php left in tree.
+CONFLICT (delete/modify): lib/module.functions.php deleted in 2.0 and modified in HEAD. Version HEAD of lib/module.functions.php left in tree.  --  DELETED
 Auto-merged lib/page.functions.php
 CONFLICT (content): Merge conflict in lib/page.functions.php  --  FIXED
 Auto-merged lib/translation.functions.php
@@ -147,7 +147,7 @@ Auto-merged plugins/function.metadata.php
 CONFLICT (content): Merge conflict in plugins/function.metadata.php  --  FIXED
 Auto-merged plugins/function.news.php
 CONFLICT (content): Merge conflict in plugins/function.news.php  --  FIXED
-CONFLICT (delete/modify): preview.php deleted in 2.0 and modified in HEAD. Version HEAD of preview.php left in tree.
+CONFLICT (delete/modify): preview.php deleted in 2.0 and modified in HEAD. Version HEAD of preview.php left in tree.  --  DELETED
 Auto-merged release-cleanup.sh
 Removed stylesheet.css
 Auto-merged stylesheet.php
