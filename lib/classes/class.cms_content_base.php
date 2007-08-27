@@ -333,10 +333,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return array();
 	}
 
+	/*
 	function hierarchy()
 	{
 		return CmsContentOperations::create_friendly_hierarchy_position($this->hierarchy);
 	}
+	*/
 	
 	function shift_position($direction = 'up')
 	{

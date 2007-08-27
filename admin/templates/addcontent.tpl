@@ -24,6 +24,7 @@
 			<ul>
 				<li><a href="#content">Content</a></li>
 				<li><a href="#advanced">Advanced</a></li>
+				<li><a href="#permissions">Permissions</a></li>
 				{if $can_preview eq true}
 				  <li><a href="#preview"{if $showpreview eq true} class="active"{/if} onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;">Preview</a></li>
 				{/if}
@@ -183,6 +184,122 @@
 		    <div class="clearb"></div>
 
 			</div> <!-- End advanced -->
+			
+			<div id="permissions">
+				
+				<h4>View</h4>
+				
+				<table cellpadding="5" cellspacing="0" border="0">
+					<thead>
+						<tr>
+							<th>Group</th>
+							<th>Allow</th>
+							<th>Inherited From</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="color: #666;" class="row1">
+							<td>Everyone</td>
+							<td>True</td>
+							<td>Root</td>
+							<td></td>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<hr />
+				
+				<h4>Edit</h4>
+				
+				<table cellpadding="5" cellspacing="0" border="0">
+					<thead>
+						<tr>
+							<th>Group</th>
+							<th>Allow</th>
+							<th>Inherited From</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="color: #666;" class="row1">
+							<td>Everyone</td>
+							<td>False</td>
+							<td>Root</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="color: #666;" class="row2">
+							<td>Users</td>
+							<td>True</td>
+							<td>Root</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr class="row1">
+							<td>Designers</td>
+							<td>True</td>
+							<td></td>
+							<td><a href="#">Edit</a></td>
+							<td><a href="#">Delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<hr />
+				
+				<h4>Delete</h4>
+				
+				<table cellpadding="5" cellspacing="0" border="0">
+					<thead>
+						<tr>
+							<th>Group</th>	
+							<th>Allow</th>
+							<th>Inherited From</th>
+							<th></th>
+							<th></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr style="color: #666;" class="row1">
+							<td>Everyone</td>
+							<td>False</td>
+							<td>Root</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr style="color: #666;" class="row2">
+							<td>Designers</td>
+							<td>False</td>
+							<td>1.1 - Test 1.1</td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr class="row1">
+							<td>Editors</td>
+							<td>True</td>
+							<td></td>
+							<td><a href="#">Edit</a></td>
+							<td><a href="#">Delete</a></td>
+						</tr>
+					</tbody>
+				</table>
+				
+				<br />
+				
+				<fieldset>
+					<legend>Add Permission</legend>
+					Group: <select name="group_id"><option>Everyone</option></select><br />
+					Permission: <select name="permission"><option>View</option></select><br />
+					Allow: <input type="checkbox" /><br />
+					<input type="submit" name="Submit" value="Submit" />
+				</fieldset>
+					
+					
+			</div> <!-- End permissions -->
 
 			{if $can_preview eq true}
 			<div id="preview">

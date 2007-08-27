@@ -1,4 +1,4 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2007 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
@@ -25,7 +25,7 @@ require_once('../lib/cmsms.api.php');
 $config = CmsConfig::get_instance();
 $config['db_name'] = 'cms_test';
 
-$test = &new TestSuite('All tests');
+$test = &new TestSuite('Core Tests');
 $test->addTestFile('test.cms_acl.php');
 $test->run(new HtmlReporter());
 
