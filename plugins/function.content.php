@@ -47,6 +47,7 @@ function smarty_cms_function_content($params, &$smarty)
 		//b. then
 		//   1. $id is cntnt01
 		//   2. or inline is false
+
 		if (!isset($params['block']) && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
 			$cmsmodules = &$gCms->modules;
@@ -72,6 +73,13 @@ function smarty_cms_function_content($params, &$smarty)
 						{
 							@ob_start();
 							$params = array_merge($params, GetModuleParameters($id));
+
+							// calguy1000..... increment the modulenum 
+							// if we're not in inlined mode.
+							if( $id != 'cntnt01' )
+							  {
+								++$gCms->variables["modulenum"]; 
+							  }
 
 							$returnid = '';
 							if (isset($params['returnid']))
