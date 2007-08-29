@@ -548,7 +548,7 @@ else
 				$versioncol = $dbm[$key]['Version'];
 				$statuscol[]  = '<span class="important">'.lang('needupgrade').'</span>';
 				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-			  if( !$maxverok == 1)
+			  if( $maxverok == 1)
 			    {
 				$actioncol[]  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
 			    }
