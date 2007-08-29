@@ -457,9 +457,9 @@ else
 			$is_sysmodule = (array_search( $key, $gCms->cmssystemmodules ) !== FALSE);
 			$namecol = $key;
 			$versioncol = "&nbsp;";
-			$statuscol = "&nbsp;";
+			$statuscol = array();
 			$statusspans = false;
-			$actioncol = "&nbsp;";
+			$actioncol = array();
 			$activecol = "&nbsp;";
 			$helpcol = "&nbsp;";
 			$aboutcol = "&nbsp;";
@@ -477,29 +477,25 @@ else
 			// check these modules permissions to see if we can uninstall this thing
 			$permsok = is_directory_writable( $config['root_path'].DIRECTORY_SEPARATOR.
 			'modules'.DIRECTORY_SEPARATOR.$key );
+			$maxverok = version_compare($modinstance->MaximumCMSVersion(), $CMS_VERSION);
+			$maxverok = ($maxverok >= 0 )?1:0;
 
 			#Make sure it's a valid module for this version of CMSMS
 			if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
 			{
 				// Fix undefined index error if module is not already installed.
-				if (FALSE == empty($dbm[$key]['Version'])) {
-					echo "<td>".$dbm[$key]['Version']."</td>";
-				}
-				$statuscol = '<span class="important">'.lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion().'</span>';
+				$statuscol[] = '<span class="important">'.lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion().'</span>';
 				$xmlcol = "&nbsp;";
 				$statusspans = true;
 			}
-			else if (version_compare($modinstance->MaximumCMSVersion(), $CMS_VERSION) == -1)
+			else if( $maxverok == 0 )
 			{
-				// Fix undefined index error if module is not already installed.
-				if (FALSE == empty($dbm[$key]['Version'])) {
-					echo "<td>".$dbm[$key]['Version']."</td>";
-				}
-				$statuspans = true;
-				$xmlcol = "&nbsp;";
-				$statuscol  = lang('maximumversionsupported').': '.$modinstance->MaximumCMSVersion();
+			  // maximum cms version exceeded
+			  $xmlcol = "&nbsp;";
+			  $statuscol[]  = '<span class="important">'.lang('maximumversionsupported').' = '.$modinstance->MaximumCMSVersion()."</span>";
 			}
-			else if (!isset($dbm[$key])) #Not installed, lets put up the install button
+
+			if (!isset($dbm[$key])) #Not installed, lets put up the install button
 			{
 				$brokendeps = 0;
 
@@ -521,15 +517,15 @@ else
 				}
 
 				$versioncol = $modinstance->GetVersion();
-				$statuscol = lang('notinstalled');
+				$statuscol[] = lang('notinstalled');
 
 				if ($brokendeps > 0)
 				{
-					$actioncol = '<a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
+					$actioncol[] = '<a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
 				}
-				else
+				else if( $maxverok == 1)
 				{
-					$actioncol = "<a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a>";
+					$actioncol[] = "<a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a>";
 					$xmlcol = '&nbsp;';
 				}
 
@@ -537,33 +533,38 @@ else
 				{
 					if( $permsok )
 					{
-						$actioncol .= "<br/><a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
+						$actioncol[] .= "<a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
 					}
 					else
 					{
-						$actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+						$actioncol[] = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 					}
 				}
 			}
-			else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
+			else if (version_compare($modinstance->GetVersion(), 
+						 $dbm[$key]['Version']) == 1) 
+                           #Check for an upgrade
 			{
 				$versioncol = $dbm[$key]['Version'];
-				$statuscol  = '<span class="important">'.lang('needupgrade').'</span>';
+				$statuscol[]  = '<span class="important">'.lang('needupgrade').'</span>';
 				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-				$actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
-				$xmlcol = '&nbsp;';
+			  if( !$maxverok == 1)
+			    {
+				$actioncol[]  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
+			    }
+			  $xmlcol = '&nbsp;';
 			}
 			else #Must be installed
 			{
 				$versioncol = $dbm[$key]['Version'];
-				$statuscol  = lang('installed');
-				$actioncol  = "&nbsp;";
+				$statuscol[]  = lang('installed');
+				//$actioncol  = "&nbsp;";
 
 				#Can't be removed if it has a dependency...
 				if (!$modinstance->CheckForDependents())
 				{
 					$activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
+					$actioncol[] = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 				}
 				else
 				{
@@ -577,14 +578,14 @@ else
 					}
 					$str = implode(array_keys($dependentof),",");
 					$activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$statuscol .= "<br/>".lang('hasdependents')." (<strong>$str</strong>)";
+					$statuscol[] = lang('hasdependents')." (<strong>$str</strong>)";
 					// END HAS DEPENDENTS ===========
 				}
 
 				if( !$permsok )
 				{
-					$statuscol .= "<br/>".lang('cantremove');
-					$actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
+					$statuscol[] = lang('cantremove');
+					$actioncol[] = "<a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
 				}
 			}
 
@@ -601,15 +602,15 @@ else
 			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
 			echo "<td>$namecol</td>";
 			echo "<td>$versioncol</td>";
-			if( $statusspans )
+			if( $statusspans === true)
 			{
-				echo "<td colspan=\"3\">$statuscol</td>";
+			  echo '<td colspan="3">'.implode('<br/>',$statuscol)."</td>";
 			}
 			else
 			{
-				echo "<td>$statuscol</td>";
-				echo '<td class="pagepos">'.$activecol.'</td>';
-				echo "<td>$actioncol</td>";
+			  echo "<td>".implode('<br/>',$statuscol)."</td>";
+			  echo '<td class="pagepos">'.$activecol.'</td>';
+			  echo '<td>'.implode('<br/>',$actioncol).'</td>';
 			}
 			echo "<td>$helpcol</td>";
 			echo "<td>$aboutcol</td>";
