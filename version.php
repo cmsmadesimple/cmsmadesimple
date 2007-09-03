@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.1.1";
-$CMS_VERSION_NAME = "Upolu";
+$CMS_VERSION = "1.1.2";
+$CMS_VERSION_NAME = "Ofu";
 $CMS_SCHEMA_VERSION = "28";
 
 # vim:ts=4 sw=4 noet

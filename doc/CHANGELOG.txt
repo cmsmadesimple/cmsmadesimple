@@ -1,3 +1,12 @@
+Version 1.1.2 "Ofu" -- September 3, 2007
+-----------------
+- Fixes the order of buttons in the edit template page
+- Fixes so that you can now uninstall and remove modules even
+  if their MaximumCMSVersion is greater than the current
+- Fixes an obscure problem with parameters getting passed to the
+  wrong module if modules calls were used in a template, after they
+  were included from the content
+
 Version 1.1.1 "Upolu" -- Aug 09 2007
 -----------------
 - Fixes to wysiwyg handling in GCB's 
