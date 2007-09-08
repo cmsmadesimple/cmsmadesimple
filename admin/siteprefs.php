@@ -94,6 +94,9 @@ if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
 $frontendlang = '';
 if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 
+$frontendwysiwyg = '';
+if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
+
 $global_umask = '022';
 if (isset($_POST['global_umask'])) 
   {
@@ -185,7 +188,8 @@ else if (isset($_POST["editsiteprefs"]))
   if ($access)
     {
       set_site_preference('global_umask', $global_umask);
-      set_site_preference('frontendlang', $frontendlang);
+      set_site_preference('frontendlang', $frontendlang);      
+      set_site_preference('frontendwysiwyg', $frontendwysiwyg);
       set_site_preference('enablecustom404', $enablecustom404);
       set_site_preference('xmlmodulerepository', $xmlmodulerepository);
       set_site_preference('custom404', $custom404);
@@ -213,6 +217,7 @@ else if (isset($_POST["editsiteprefs"]))
  } else if (!isset($_POST["submit"])) {
   $global_umask = get_site_preference('global_umask',$global_umask);
   $frontendlang = get_site_preference('frontendlang');
+  $frontendwysiwyg = get_site_preference('frontendwysiwyg');
   $enablecustom404 = get_site_preference('enablecustom404');
   $custom404 = get_site_preference('custom404');
   $custom404template = get_site_preference('custom404template');
@@ -316,6 +321,34 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		      </select>
 		      <br />
 		</div>
+		
+		<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('frontendwysiwygtouse'); ?>:</p>
+				<p class="pageinput">
+					<select name="frontendwysiwyg">
+					<option value=""><?php echo lang('none'); ?></option>
+					<?php
+						foreach($gCms->modules as $key=>$value)
+						{
+							if ($gCms->modules[$key]['installed'] == true &&
+								$gCms->modules[$key]['active'] == true &&
+								$gCms->modules[$key]['object']->IsWYSIWYG())
+							{
+								echo '<option value="'.$key.'"';
+								if ($frontendwysiwyg == $key)
+								{
+									echo ' selected="selected"';
+								}
+								echo '>'.$key.'</option>';
+							}
+						}
+					?>
+					</select>
+				</p>
+			</div>
+		
+		
+		
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="" rows=""><?php echo $metadata?></textarea></p>

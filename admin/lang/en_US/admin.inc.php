@@ -824,4 +824,5 @@ $lang['admin']['owner'] = 'Owner';
 $lang['admin']['permissions'] = 'Permissions';
 $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
+$lang['admin']['frontendwysiwygtouse']="Frontend wysiwyg";
 ?>
