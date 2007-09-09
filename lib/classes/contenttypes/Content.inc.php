@@ -203,7 +203,9 @@ class Content extends ContentBase
 			$contentops =& $gCms->GetContentOperations();
             $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
         }
-	    $additionalcall = '';
+
+    if( check_permission(get_userid(), 'Modify Page Structure') ) {
+	      $additionalcall = '';
 	    foreach($gCms->modules as $key=>$value)
 	    {
 		if (get_preference(get_userid(), 'wysiwyg')!="" && 
@@ -217,6 +219,7 @@ class Content extends ContentBase
 	    }
 			
 	    $ret[]= array(lang('template').':', $templateops->TemplateDropdown('template_id', $this->mTemplateId, 'onchange="document.contentform.submit()"'));
+    }
 	    $ret[]= array(lang('content').':',create_textarea(true, $this->GetPropertyValue('content_en'), 'content_en', '', 'content_en', '', $stylesheet));
 
 	    // add additional content blocks if required
@@ -235,10 +238,14 @@ class Content extends ContentBase
 	}
 	if ($tab == 1)
 	{
+	  if( check_permission(get_userid(),'Modify Page Structure') ) {
 	    $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	  }
 	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
+	  if( check_permission(get_userid(),'Modify Page Structure') ) {
 	    $ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
+	  }
 	    $ret[]= array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
 	    $ret[]= array(lang('titleattribute').':','<input type="text" name="titleattribute" maxlength="255" size="80" value="'.cms_htmlentities($this->mTitleAttribute).'" />');
