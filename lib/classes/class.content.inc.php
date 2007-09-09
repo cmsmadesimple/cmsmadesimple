@@ -1476,8 +1476,22 @@ class ContentBase
 
 		global $gCms;
 		$userops =& $gCms->GetUserOperations();
+		$groupops =& $gCms->GetGroupOperations();
 		$allusers =& $userops->LoadUsers();
+		$allgroups =& $groupops->LoadGroups();
 		$addteditors = $this->GetAdditionalEditors();
+		foreach ($allgroups as $onegroup)
+		  {
+		    $val = $onegroup->id*-1;
+		    $text .= '<option value="'.$val.'"';
+		    if( in_array($val,$addteditors) )
+		      {
+			$text .= ' selected="selected"';
+		      }
+		    $text .= '>group:'.$onegroup->name."</option>";
+		   
+		  }
+
 		foreach ($allusers as $oneuser)
 		{
 			if ($oneuser->id != $this->Owner())

@@ -226,7 +226,7 @@ function check_permission($userid, $permname)
  * @returns mixed If they have ownership, true.  If they do not, false.
  * @since 0.1
  */
-function check_ownership($userid, $contentid = '')
+function check_ownership($userid, $contentid = '', $strict = false)
 {
 	$check = false;
 	global $gCms;
@@ -276,21 +276,22 @@ function check_authorship($userid, $contentid = '')
 
 	if (!isset($gCms->variables['authorpages']))
 	{
-		$db =& $gCms->GetDb();
+	  author_pages($userid);
+// 		$db =& $gCms->GetDb();
 
-		$variables = &$gCms->variables;
-		$variables['authorpages'] = array();
+// 		$variables = &$gCms->variables;
+// 		$variables['authorpages'] = array();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
-		$result = &$db->Execute($query, array($userid));
+// 		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
+// 		$result = &$db->Execute($query, array($userid));
 
-		while ($result && !$result->EOF)
-		{
-			$variables['authorpages'][] =& $result->fields['content_id'];
-			$result->MoveNext();
-		}
+// 		while ($result && !$result->EOF)
+// 		{
+// 			$variables['authorpages'][] =& $result->fields['content_id'];
+// 			$result->MoveNext();
+// 		}
 		
-		if ($result) $result->Close();
+// 		if ($result) $result->Close();
 	}
 
 	if (isset($gCms->variables['authorpages']))
@@ -314,12 +315,14 @@ function author_pages($userid)
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
+	$userops = $gCms->GetUserOperations();
     $variables = &$gCms->variables;
 	if (!isset($variables['authorpages']))
 	{
 		$db = &$gCms->GetDb();
 		$variables['authorpages'] = array();
 		
+		// Get all of the pages this user owns
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE owner_id = ?";
 		$result =& $db->Execute($query, array($userid));
 		
@@ -331,13 +334,27 @@ function author_pages($userid)
 		
 		if ($result) $result->Close();
 
-		$query = "SELECT content_id FROM ".cms_db_prefix()."additional_users WHERE user_id = ?";
-		$result = &$db->Execute($query, array($userid));
+		// Get all of the pages this user has access to.
+		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
+		$result = &$db->Execute($query);
 
 		while ($result && !$result->EOF)
 		{
-			$variables['authorpages'][] =& $result->fields['content_id'];
-			$result->MoveNext();
+		  $uid = $result->fields['user_id'];
+		  $content_id = $result->fields['content_id'];
+		  if( $uid == $userid )
+		    {
+		      $variables['authorpages'][] = $content_id;
+		    }
+		  else if( $uid < 0 )
+		    {
+		      $gid = $uid * -1;
+		      if( $userops->UserInGroup($userid,$gid) )
+			{
+			  $variables['authorpages'][] = $content_id;
+			}
+		    }
+		  $result->MoveNext();
 		}
 		
 		if ($result) $result->Close();
