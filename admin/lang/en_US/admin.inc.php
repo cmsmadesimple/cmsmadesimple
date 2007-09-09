@@ -340,6 +340,7 @@ $lang['admin']['attachstylesheet'] = 'Attach This Stylesheet';
 $lang['admin']['attachtemplate'] = 'Attach to this Template';
 $lang['admin']['main'] = 'Main'; //needs translation
 $lang['admin']['pages'] = 'Pages'; //needs translation
+$lang['admin']['page'] = 'Page'; //needs translation
 $lang['admin']['files'] = 'Files'; //needs translation
 $lang['admin']['layout'] = 'Layout'; //needs translation
 $lang['admin']['usersgroups'] = 'Users &amp; Groups'; //needs translation

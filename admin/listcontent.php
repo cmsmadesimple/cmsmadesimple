@@ -415,7 +415,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	$contentops =& $gCms->GetContentOperations();
 
 	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mName;
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mMenuText;
 
 	if ($root->getChildrenCount()>0)
 	{
@@ -662,7 +662,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         if ($display == 'edit')
             $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. htmlspecialchars($one->mName.' ('.$one->mAlias) .')">'.$one->mMenuText.'</a></td>'. "\n";
         else
-            $thelist .= $one->Name()."</td>\n";
+            $thelist .= $one->mMenuText()."</td>\n";
 
 
         if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
@@ -929,7 +929,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<tr>\n";
 	$headoflist .= "<th>&nbsp;</th>";
 	$headoflist .= "<th>&nbsp;</th>";
-	$headoflist .= "<th class=\"pagew25\">".lang('title')."</th>\n";
+	$headoflist .= "<th class=\"pagew25\">".lang('page')."</th>\n";
 	$headoflist .= "<th>".lang('template')."</th>\n";
 	$headoflist .= "<th>".lang('type')."</th>\n";
 	$headoflist .= "<th>".lang('owner')."</th>\n";
