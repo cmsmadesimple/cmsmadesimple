@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['adminspecialgroup'] = 'Warning: Members of this group automatically have all permissions';
 $lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
 $lang['admin']['allowparamcheckwarnings'] = 'Allow parameter checks to create warning messages';
 $lang['admin']['date_format_string'] = 'Date Format String';

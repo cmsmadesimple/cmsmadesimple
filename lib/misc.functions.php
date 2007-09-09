@@ -267,6 +267,29 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
 }
 
 /**
+ * Clean up the filename, and ensure that the filename resides underneath
+ * the cms_root directory, if it does not replace it with the hardcoded
+ * string CLEANED_FILENAME
+ */
+define('CLEANED_FILENAME','BAD_FILE');
+function cms_cleanfile($filename)
+{
+	$realpath = realpath($filename);
+	if( $realpath === FALSE ) {
+		return CLEANED_FILENAME;
+	}
+
+	// This ensures that the file specified is somewhere
+	// underneath the cms root path
+	global $gCms;
+	$config =& $gCms->GetConfig();
+	if( strpos($realpath, $config['root_path']) !== 0 ) {
+		return CLEANED_FILENAME;
+	}
+	return $realpath;
+}
+
+/**
  * Figures out the page name from the uri string.  Has to use different logic
  * based on the type of httpd server.
  */
@@ -1168,6 +1191,7 @@ define('CLEAN_FLOAT','CLEAN_FLOAT');
 define('CLEAN_NONE','CLEAN_NONE');
 define('CLEAN_STRING','CLEAN_STRING');
 define('CLEAN_REGEXP','regexp:');
+define('CLEAN_FILE','CLEAN_FILE');
 function cleanParamHash($data,$map = false,
 						$allow_unknown = false,$clean_keys = true)
 {
@@ -1223,6 +1247,11 @@ function cleanParamHash($data,$map = false,
 				  $mappedcount++;
 				  $mapped = true;
 				  break;
+			  case 'CLEAN_FILE':
+				  $value = cms_cleanfile($value);
+				  $mappedcount++;
+				  $mapped = true;
+				  break;
 			  default:
 				  $mappedcount++;
 				  $mapped = true;
@@ -1264,7 +1293,7 @@ function cleanParamHash($data,$map = false,
 function GetModuleParameters($id)
 {
   $params = array();
-  
+
   if ($id != '')
     {
       foreach ($_REQUEST as $key=>$value)

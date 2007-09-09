@@ -322,6 +322,29 @@ class UserOperations
 
 		return $result;
 	}
+
+
+	/**
+	 * Tests $uid is a member of the group identified by $gid
+	 *
+	 * @param int $uid User ID to test
+	 * @param int $gid Group ID to test
+	 * @returns true if test passes, false otherwise
+	 */
+	function UserInGroup($uid,$gid)
+	{
+	  global $gCms;
+	  $db =& $gCms->GetDb();
+	 
+	  $query = "SELECT ug.user_id FROM ".cms_db_prefix()."user_groups ug
+                     WHERE ug.user_id = ? AND ug.group_id = ?";
+	  $row = $db->GetRow( $query,array($uid,$gid));
+	  if( !$row ) 
+	    {
+	      return false;
+	    }
+	  return true;
+	}
 }
 
 ?>

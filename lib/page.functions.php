@@ -200,6 +200,8 @@ function check_permission($userid, $permname)
 	$check = false;
 
 	global $gCms;
+	$userops =& $gCms->GetUserOperations();
+	$adminuser = $userops->UserInGroup($userid,1);
 
 	if (!isset($gCms->variables['userperms']))
 	{
@@ -208,7 +210,8 @@ function check_permission($userid, $permname)
 
 	if (isset($gCms->variables['userperms']))
 	{
-		if (in_array($permname, $gCms->variables['userperms']) || $userid == 1 )
+		if (in_array($permname, $gCms->variables['userperms']) || 
+		    $adminuser )
 		{
 			$check = true;
 		}

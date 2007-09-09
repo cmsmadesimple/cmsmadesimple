@@ -57,6 +57,12 @@ else {
 <div class="pagecontainer">
 <?php
 	echo $themeObject->ShowHeader('grouppermissions',array($group_name));
+
+  if( $group_id == 1 )
+    {
+      echo $themeObject->ShowErrors(lang('adminspecialgroup'));
+    }
+
     // always display the group pulldown
 	global $gCms;
 	$groupops =& $gCms->GetGroupOperations();
