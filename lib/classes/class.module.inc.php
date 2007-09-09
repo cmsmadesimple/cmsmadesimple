@@ -1702,7 +1702,8 @@ class CMSModule
 	 *
 	 * @param string The id given to the module on execution
 	 * @param string The html name of the checkbox
-	 * @param string The predefined value of the field, if any
+	 * @param string The value returned from the input if selected
+	 * @param string The current value. If equal to $value the checkbox is selected 
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
 	function CreateInputCheckbox($id, $name, $value='', $selectedvalue='', $addttext='')
