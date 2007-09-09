@@ -662,7 +662,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         if ($display == 'edit')
             $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. htmlspecialchars($one->mName.' ('.$one->mAlias) .')">'.$one->mMenuText.'</a></td>'. "\n";
         else
-            $thelist .= $one->mMenuText()."</td>\n";
+            $thelist .= $one->mMenuText."</td>\n";
 
 
         if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
