@@ -24,9 +24,6 @@ require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cm
 //Where are we?
 $dirname = ROOT_DIR;
 
-//Load the version defines
-require_once(cms_join_path($dirname,'version.php'));
-
 //Load stuff that hasn't been moved to static methods yet
 require_once(cms_join_path($dirname,'lib','misc.functions.php'));
 require_once(cms_join_path($dirname,'lib','page.functions.php'));

@@ -22,5 +22,9 @@ $CMS_VERSION = "2.0-svn";
 $CMS_VERSION_NAME = "Jamaica";
 $CMS_SCHEMA_VERSION = "28";
 
+define("CMS_VERSION", $CMS_VERSION);
+define("CMS_VERSION_NAME", $CMS_VERSION_NAME);
+define("CMS_SCHEMA_VERSION", $CMS_SCHEMA_VERSION);
+
 # vim:ts=4 sw=4 noet
 ?>

@@ -37,18 +37,23 @@ require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 list( $usec, $sec ) = explode( ' ', microtime() );
 $start_time = ((float)$usec + (float)$sec);
 
+//Load necessary global functions.  This allows us to load a few
+//things before hand... like the configuration
+require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
+
 //If we have a missing or empty config file, then we should think
 //about redirecting to the installer.  Also, check to see if the SITEDOWN
 //file is there.  That means we're probably in mid-upgrade.
-if (!file_exists(CONFIG_FILE_LOCATION) || filesize(CONFIG_FILE_LOCATION) < 800)
+$config_location = CmsConfig::get_config_filename();
+if (!file_exists($config_location) || filesize($config_location) < 800)
 {
-    require_once($dirname.'/lib/cmsms.api.php');
     if (FALSE == is_file($dirname.'/install/install.php'))
 	{
         die ('There is no config.php file or install/install.php please correct one these errors!');
     }
 	else
 	{
+		die('Do a redirect - ' . $config_location);
         CmsResponse::redirect('install/index.php');
     }
 }
@@ -71,10 +76,6 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 	echo '</body></html>';
 	exit;
 }
-
-//Load necessary global functions.  This allows us to load a few
-//things before hand... like the configuration
-require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.php');
 
 //Start up a profiler for getting render times for this page.  Use
 //the start time we generated way up at the top.

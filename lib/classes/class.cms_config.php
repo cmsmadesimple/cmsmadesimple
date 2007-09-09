@@ -32,6 +32,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 {
 	var $params;
 	static private $instance = NULL;
+	static private $config_file_location = '';
 
 	function __construct()
 	{
@@ -47,6 +48,23 @@ class CmsConfig extends CmsObject implements ArrayAccess
 			self::$instance->load();
 		}
 		return self::$instance;
+	}
+	
+	static public function get_config_filename()
+	{
+		if (self::$config_file_location == '')
+		{
+			$filename = dirname(CONFIG_FILE_LOCATION) . DS . 'config-' . CMS_VERSION . '.php';
+			if (file_exists($filename))
+			{
+				self::$config_file_location = $filename;
+			}
+			else
+			{
+				self::$config_file_location = CONFIG_FILE_LOCATION;
+			}
+		}
+		return self::$config_file_location;
 	}
 	
 	static public function exists($key)
@@ -136,9 +154,9 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		if ($loadLocal == true)
 		{
 			//if (file_exists(CONFIG_FILE_LOCATION) && !cms_config_check_old_config())
-			if (file_exists(CONFIG_FILE_LOCATION))
+			if (file_exists(self::get_config_filename()))
 			{
-				include(CONFIG_FILE_LOCATION);
+				include(self::get_config_filename());
 			}
 		}
 
@@ -179,8 +197,8 @@ class CmsConfig extends CmsObject implements ArrayAccess
 	
 	function save()
 	{
-		$newfiledir = dirname(CONFIG_FILE_LOCATION);
-		$newfilename = CONFIG_FILE_LOCATION;
+		$newfiledir = dirname(self::get_config_filename());
+		$newfilename = self::get_config_filename();
 		if (is_writable($newfilename) || is_writable($newfiledir))
 		{
 			$handle = fopen($newfilename, "w");
