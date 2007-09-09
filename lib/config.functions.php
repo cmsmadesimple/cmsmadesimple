@@ -202,7 +202,7 @@ if(isset(\$_SERVER['HTTPS']) && \$_SERVER['HTTPS']=='on')
 #Allow smarty {php} tags?  These could be dangerous if you don't trust your users.
 \$config['use_smarty_php_tags'] = ${$config['use_smarty_php_tags']?'true':'false'};
 
-#CMSMS Debug Mode?  Turn is on to get a better error when you
+#CMSMS Debug Mode?  Turn it on to get a better error when you
 #see {nocache} errors.
 \$config['debug'] = ${$config['debug']?'true':'false'};
 
