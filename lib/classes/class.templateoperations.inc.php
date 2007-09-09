@@ -322,7 +322,7 @@ class TemplateOperations
 		return $result;
 	}
 
-	function CheckExistingTemplateName($name)
+	function CheckExistingTemplateName($name, $id = -1)
 	{
 		$result = false;
 
@@ -330,7 +330,13 @@ class TemplateOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
-		$row = &$db->GetRow($query,array($name));
+		$attrs = array($name);
+		if ($id > -1)
+		{
+			$query .= ' AND template_id != ?';
+			$attrs[] = $id;
+		}
+		$row = &$db->GetRow($query,$attrs);
 
 		if ($row)
 		{

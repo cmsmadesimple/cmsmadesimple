@@ -111,7 +111,7 @@ if ($access)
 			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
 			$validinfo = false;
 		}
-		else if ($template != $orig_template)
+		else if ($templateops->CheckExistingTemplateName($template, $template_id))
 		{
 			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
 			$row = &$db->GetRow($query, array($template));
