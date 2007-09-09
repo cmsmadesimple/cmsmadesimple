@@ -1488,7 +1488,7 @@ class ContentBase
 		      {
 			$text .= ' selected="selected"';
 		      }
-		    $text .= '>group:'.$onegroup->name."</option>";
+		    $text .= '>'.lang('group').': '.$onegroup->name."</option>";
 		   
 		  }
 
