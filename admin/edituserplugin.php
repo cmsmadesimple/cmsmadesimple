@@ -49,9 +49,6 @@ if (isset($_POST["cancel"])) {
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
 
-$use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
-
 $smarty = new Smarty_CMS($gCms->config);
 load_plugins($smarty);
 
@@ -279,7 +276,7 @@ else {
 				<p class="pagetext">*<?php echo lang('code')?></p>
 				<p class="pageinput">
 				<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
-				<?php/* echo textarea_highlight($use_javasyntax, $code, "code", "pagetextarea", "Java")*/ ?>
+				
 				</p>
 			</div>
 			<div class="pageoverflow">
