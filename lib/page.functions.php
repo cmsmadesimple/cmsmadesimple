@@ -211,7 +211,7 @@ function check_permission($userid, $permname)
 	if (isset($gCms->variables['userperms']))
 	{
 		if (in_array($permname, $gCms->variables['userperms']) || 
-		    $adminuser )
+		    $adminuser || ($userid == 1) )
 		{
 			$check = true;
 		}
