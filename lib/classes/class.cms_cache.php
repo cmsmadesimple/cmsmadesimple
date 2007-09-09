@@ -30,7 +30,8 @@
  **/
 class CmsCache extends CmsObject
 {
-	static private $cache = null;
+	static private $instances = null;
+	private $cache = null;
 	
 	function __construct($type = 'function')
 	{
@@ -49,58 +50,56 @@ class CmsCache extends CmsObject
 				$options['caching'] = false;
 
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
-			self::$cache = new Cache_Lite_Function($options);
+			$this->cache = new Cache_Lite_Function($options);
 		}
 		else
 		{
 			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
-			self::$cache = new Cache_Lite($options);
+			$this->cache = new Cache_Lite($options);
 		}
 	}
 	
 	public static function get_instance($type = 'function')
 	{
-		static $instances;
-
-		if (!isset($instances))
+		if (self::$instances == null)
 		{
-			$instances = array();
+			self::$instances = array();
 		}
 
-		if (empty($instances[$type]))
+		if (empty(self::$instances[$type]))
 		{
-			$instances[$type] = new CmsCache($type);
+			self::$instances[$type] = new CmsCache($type);
 		}
 
-		return $instances[$type];
+		return self::$instances[$type];
 	}
 	
 	public function get($id, $group = 'default', $doNotTestCacheValidity = FALSE)
 	{
-		return self::$cache->get($id, $group, $doNotTestCacheValidity);
+		return $this->cache->get($id, $group, $doNotTestCacheValidity);
 	}
 	
 	public function save($data, $id = NULL, $group = 'default')
 	{
-		return self::$cache->save($data, $id, $group);
+		return $this->cache->save($data, $id, $group);
 	}
 	
 	public function call()
 	{
 		$args = func_get_args();
-		return call_user_func_array(array(&self::$cache, 'call'), $args);
+		return call_user_func_array(array($this->cache, 'call'), $args);
 	}
 	
 	public function drop()
 	{
 		$args = func_get_args();
-		return call_user_func_array(array(&self::$cache, 'drop'), $args);
+		return call_user_func_array(array($this->cache, 'drop'), $args);
 	}
 	
 	public function clean($group = FALSE, $mode = 'ingroup')
 	{
 		CmsContentOperations::clear_cache();
-		return self::$cache->clean($group, $mode);
+		return $this->clean($group, $mode);
 	}
 	
 	static public function clear($group = FALSE, $mode = 'ingroup')
