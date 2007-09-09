@@ -22,7 +22,7 @@ function smarty_cms_function_mod_checkbox($params, &$smarty)
 	$id = $smarty->get_template_vars('cms_mapi_id');
 
 	return $module->CreateInputCheckbox($id, $params['name'], 
-		coalesce_key($params, 'selected', false), coalesce_key($params, 'additional_text', ''));
+		coalesce_key($params, 'selected', false), coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'id', ''));
 }
 
 ?>

@@ -1602,7 +1602,7 @@ class CmsModule extends CmsObject
 	function CreateFrontendFormStart($id,$returnid,$action='default',$method='post',
 					 $enctype='',$inline=true,$idsuffix='',$params=array())
 	{
-	  return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
+		return $this->CreateFormStart($id,$action,$returnid,$method,$enctype,$inline,$idsuffix,$params);
 	}
 
 
@@ -1619,10 +1619,10 @@ class CmsModule extends CmsObject
 	 * @param array Extra parameters to pass along when the form is submitted
 	 * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
 	 */
-	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='')
+	function CreateFormStart($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra);
+		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra, $html_id);
 	}
 
 	/**
@@ -1645,10 +1645,10 @@ class CmsModule extends CmsObject
 	 * @param string The maximum number of characters that should be allowed to be entered
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	function CreateInputText($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext);
+		return cms_module_CreateInputText($this, $id, $name, $value, $size, $maxlength, $addttext, $html_id);
 	}
 
 	/**
@@ -1660,10 +1660,10 @@ class CmsModule extends CmsObject
 	 * @param string The text in the label
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateLabelForInput($id, $name, $labeltext='', $addttext='')
+	function CreateLabelForInput($id, $name, $labeltext='', $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext);
+		return cms_module_CreateLabelForInput($this, $id, $name, $labeltext, $addttext, $html_id);
 	}
 
 	/**
@@ -1679,10 +1679,10 @@ class CmsModule extends CmsObject
 	 * @param string The text for label 
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='')
+	function CreateInputTextWithLabel($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $label='', $labeladdtext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext);
+		return cms_module_CreateInputTextWithLabel($this, $id, $name, $value, $size, $maxlength, $addttext, $label, $labeladdtext, $html_id);
 	}
 
 	/**
@@ -1695,10 +1695,10 @@ class CmsModule extends CmsObject
 	 * @param string The number of columns wide the textbox should be displayed
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputFile($id, $name, $accept='', $size='10',$addttext='')
+	function CreateInputFile($id, $name, $accept='', $size='10',$addttext='',$html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext);
+		return cms_module_CreateInputFile($this, $id, $name, $accept, $size, $addttext,$html_id);
 	}
 
 	/**
@@ -1712,10 +1712,10 @@ class CmsModule extends CmsObject
 	 * @param string The maximum number of characters that should be allowed to be entered
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='')
+	function CreateInputPassword($id, $name, $value='', $size='10', $maxlength='255', $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext);
+		return cms_module_CreateInputPassword($this, $id, $name, $value, $size, $maxlength, $addttext, $html_id);
 	}
 
 	/**
@@ -1727,10 +1727,10 @@ class CmsModule extends CmsObject
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputHidden($id, $name, $value='', $addttext='')
+	function CreateInputHidden($id, $name, $value='', $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext);
+		return cms_module_CreateInputHidden($this, $id, $name, $value, $addttext, $html_id);
 	}
 
 	/**
@@ -1742,10 +1742,10 @@ class CmsModule extends CmsObject
 	 * @param string The predefined value of the field, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputCheckbox($id, $name, $selected = false, $addttext='')
+	function CreateInputCheckbox($id, $name, $selected = false, $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputCheckbox($this, $id, $name, $selected, $addttext);
+		return cms_module_CreateInputCheckbox($this, $id, $name, $selected, $addttext, $html_id);
 	}
 
 
@@ -1759,10 +1759,10 @@ class CmsModule extends CmsObject
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Use an image instead of a regular button
 	 */
-	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='')
+	function CreateInputSubmit($id, $name, $value='', $addttext='', $image='', $confirmtext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext);
+		return cms_module_CreateInputSubmit($this, $id, $name, $value, $addttext, $image, $confirmtext, $html_id);
 	}
 
 	/**
@@ -1774,10 +1774,10 @@ class CmsModule extends CmsObject
 	 * @param string The predefined value of the button, if any
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateInputReset($id, $name, $value='Reset', $addttext='')
+	function CreateInputReset($id, $name, $value='Reset', $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputReset($this, $id, $name, $value, $addttext);
+		return cms_module_CreateInputReset($this, $id, $name, $value, $addttext, $html_id);
 	 }
 
 	/**
@@ -1788,10 +1788,10 @@ class CmsModule extends CmsObject
 	 * @param string The html name of the input
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateFileUploadInput($id, $name, $addttext='')
+	function CreateFileUploadInput($id, $name, $addttext='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext);
+		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $html_id);
 	}
 
 
@@ -1809,10 +1809,10 @@ class CmsModule extends CmsObject
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
 	 */
-	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='', $flip_array = true)
+	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='', $flip_array = true, $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_create_input_dropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array);
+		return cms_module_create_input_dropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array, $html_id);
 	}
 	
 	/**
@@ -1827,10 +1827,10 @@ class CmsModule extends CmsObject
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
 	 */
-	function create_input_dropdown($id, $name, $items, $selected_index = -1, $selected_value = '', $additional_text = '', $flip_array = false)
+	function create_input_dropdown($id, $name, $items, $selected_index = -1, $selected_value = '', $additional_text = '', $flip_array = false, $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_create_input_dropdown($this, $id, $name, $items, $selected_index, $selected_value, $additional_text, $flip_array);
+		return cms_module_create_input_dropdown($this, $id, $name, $items, $selected_index, $selected_value, $additional_text, $flip_array, $html_id);
 	}
 
 	/**
@@ -1845,10 +1845,10 @@ class CmsModule extends CmsObject
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param boolean indicates wether multiple selections are allowed (defaults to true)
 	 */
-	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true)
+	function CreateInputSelectList($id, $name, $items, $selecteditems=array(), $size=3, $addttext='', $multiple = true, $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple);
+		return cms_module_CreateInputSelectList($this, $id, $name, $items, $selecteditems, $size, $addttext, $multiple, $html_id);
 	}
 
 	/**
@@ -1862,10 +1862,10 @@ class CmsModule extends CmsObject
 	 * @param string Any additional text that should be added into the tag when rendered
 	 * @param string A delimiter to throw between each radio button, e.g., a <br /> tag or something for formatting
 	 */
-	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='')
+	function CreateInputRadioGroup($id, $name, $items, $selectedvalue='', $addttext='', $delimiter='', $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter);
+		return cms_module_CreateInputRadioGroup($this, $id, $name, $items, $selectedvalue, $addttext, $delimiter, $html_id);
 	}
 
 	/**

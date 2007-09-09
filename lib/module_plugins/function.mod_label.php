@@ -23,7 +23,7 @@ function smarty_cms_function_mod_label($params, &$smarty)
 
 	$value = (isset($params['translate']) && $params['translate'] == true) ? $module->lang($params['value']) : $params['value'];
 	
-	return $module->CreateLabelForInput($id, $params['name'], $value, coalesce_key($params, 'addttext', ''));
+	return $module->CreateLabelForInput($id, $params['name'], $value, coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
 }
 
 ?>

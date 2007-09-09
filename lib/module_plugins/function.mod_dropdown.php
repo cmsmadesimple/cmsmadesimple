@@ -23,7 +23,7 @@ function smarty_cms_function_mod_dropdown($params, &$smarty)
 
 	return $module->create_input_dropdown($id, $params['name'], coalesce_key($params, 'items', $params['values']), 
 		coalesce_key($params, 'selected_index', '-1'), coalesce_key($params, 'selected_value', ''), 
-		coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'flip_array', false));
+		coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'flip_array', false), coalesce_key($params, 'id', ''));
 }
 
 ?>

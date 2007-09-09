@@ -29,7 +29,7 @@ function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
 			return $module->CreateFormStart($id, coalesce_key($params, 'action', 'default'), $return_id, 
 				coalesce_key($params, 'method', 'post'), coalesce_key($params, 'enctype', ''), 
 				coalesce_key($params, 'inline', false), coalesce_key($params, 'id_suffix', ''), 
-				coalesce_key($params, 'params', array()), coalesce_key($params, 'extra', '')) . 
+				coalesce_key($params, 'params', array()), coalesce_key($params, 'extra', ''), coalesce_key($params, 'id', '')) . 
 				$content . $module->CreateFormEnd();
 		}
 	}

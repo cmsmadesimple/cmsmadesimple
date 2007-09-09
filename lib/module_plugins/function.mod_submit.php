@@ -25,7 +25,7 @@ function smarty_cms_function_mod_submit($params, &$smarty)
 	
 	return $module->CreateInputSubmit($id, $params['name'], $value, 
 				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
-				coalesce_key($params, 'confirm_text', ''));
+				coalesce_key($params, 'confirm_text', ''), coalesce_key($params, 'id', ''));
 }
 
 ?>
