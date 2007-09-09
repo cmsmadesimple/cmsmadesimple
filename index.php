@@ -69,6 +69,12 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 
 require_once($dirname.'/include.php'); #Makes gCms object
 
+if ($config["debug"] == true)
+  {
+    @ini_set('display_errors',1);
+    @error_reporting(E_ALL);
+  }
+
 $params = array_merge($_GET, $_POST);
 
 $smarty = &$gCms->smarty;
