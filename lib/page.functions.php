@@ -884,50 +884,58 @@ function display_login_form()
  {
 	$page_string = "";
 	$from = ($page * $limit) - $limit;
-	$numofpages = $totalrows / $limit;
+	$numofpages = (int)($totalrows / $limit);
+	if( ($totalrows % $limit) != 0 ) ++$numofpages;
 	if ($numofpages > 1)
 	{
 		if($page != 1)
 		{
 			$pageprev = $page-1;
+			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].'?page=1">'.lang('first').'</a>&nbsp;';
 			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pageprev\">".lang('previous')."</a>&nbsp;";
 		}
 		else
 		{
+			$page_string .= lang('first')." ";
 			$page_string .= lang('previous')." ";
 		}
-		for($i = 1; $i <= $numofpages; $i++)
-		{
-			if($i == $page)
-			{
-				$page_string .= $i."&nbsp;";
-			}
-			else
-			{
-				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
-			}
-		}
 
-		if(($totalrows % $limit) != 0)
-		{
-			if($i == $page)
-			{
-				$page_string .= $i."&nbsp;";
-			}
-			else
-			{
-				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
-			}
-		}
+		$page_string .= '&nbsp;'.lang('page')."&nbsp;$page&nbsp;".lang('of')."&nbsp;$numofpages&nbsp;";
+		// links to individual pages
+// 		for($i = 1; $i <= $numofpages; $i++)
+// 		{
+// 			if($i == $page)
+// 			{
+// 				$page_string .= $i."&nbsp;";
+// 			}
+// 			else
+// 			{
+// 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
+// 			}
+// 		}
+
+// 		if(($totalrows % $limit) != 0)
+// 		{
+// 			if($i == $page)
+// 			{
+// 				$page_string .= $i."&nbsp;";
+// 			}
+// 			else
+// 			{
+// 				$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$i\">$i</a>&nbsp;";
+// 			}
+// 		}
 
 		if(($totalrows - ($limit * $page)) > 0)
 		{
 			$pagenext = $page+1;
-			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pagenext\">".lang('next')."</a>";
+			$page_string .= "<a href=\"".$_SERVER['PHP_SELF']."?page=$pagenext\">".lang('next')."</a>&nbsp;";
+			$page_string .= '<a href="'.$_SERVER['PHP_SELF'].'?page='.$numofpages.'">'.lang('last').'</a>';
 		}
 		else
 		{
 			$page_string .= lang('next')." ";
+			$page_string .= lang('last')." ";
 		}
 	}
 	return $page_string;
