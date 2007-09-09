@@ -113,14 +113,8 @@ if ($access)
 		}
 		else if ($templateops->CheckExistingTemplateName($template, $template_id))
 		{
-			$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
-			$row = &$db->GetRow($query, array($template));
-
-			if ($row)
-			{
-				$error .= "<li>".lang('templateexists')."</li>";
-				$validinfo = false;
-			}
+			$error .= "<li>".lang('templateexists')."</li>";
+			$validinfo = false;
 		}
 		if ($content == "")
 		{

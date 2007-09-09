@@ -180,7 +180,7 @@ class StylesheetOperations
 		return $result;
 	}
 
-	function CheckExistingStylesheetName($name)
+	function CheckExistingStylesheetName($name, $id = -1)
 	{
 		$result = false;
 
@@ -188,7 +188,15 @@ class StylesheetOperations
 		$db = &$gCms->GetDb();
 
 		$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = ?";
-		$dbresult = $db->Execute($query,array($name));
+		$attrs = array($name);
+		
+		if ($id > -1)
+		{
+			$query .= ' AND css_id != ?';
+			$attrs[] = $id;
+		}
+		
+		$dbresult = $db->Execute($query, $attrs);
 
 		if ($dbresult && $dbresult->RecordCount() > 0)
 		{

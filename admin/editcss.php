@@ -121,16 +121,10 @@ if ($access)
 		}
 
 		# then check if new name is in use or not
-		else if ($css_name != $orig_css_name)
+		else if ($styleops->CheckExistingStylesheetName($css_name, $css_id))
 		{
-			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . $db->qstr($css_name);
-			$result = $db->Execute($query);
-
-			if ($result && $result->RecordCount() > 0)
-			{
-				$error .= "<li>".lang('cssalreadyused')."</li>";
-				$validinfo = false;
-			}
+			$error .= "<li>".lang('cssalreadyused')."</li>";
+			$validinfo = false;
 		}
 
 		# then check if css has content
