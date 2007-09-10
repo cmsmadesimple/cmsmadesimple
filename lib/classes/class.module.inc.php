@@ -113,6 +113,7 @@ class CMSModule
 		$this->SetParameterType('returnid',CLEAN_INT);
 		$this->SetParameterType('action',CLEAN_STRING);
 		$this->SetParameterType('showtemplate',CLEAN_STRING);
+		$this->SetParameterType('inline',CLEAN_INT);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
