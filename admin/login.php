@@ -35,13 +35,13 @@ if (isset($_SESSION['logout_user_now']))
 
 if (isset($_POST['logincancel']))
 {
-	redirect(CmsConfig::get('root_url') . '/index.php', true);
+	//redirect(CmsConfig::get('root_url') . '/index.php', true);
 }
 
-if (isset($_POST['username']) && isset($_POST['password'])) {
+$username = '';
+if (isset($_POST['username'])) $username = CmsRequest::clean_value($_POST['username']);
 
-	$username = '';
-	if (isset($_POST['username'])) $username = CmsRequest::clean_value($_POST['username']);
+if (isset($_POST['username']) && isset($_POST['password'])) {
 
 	$password = '';
 	if (isset($_POST['password'])) $password = $_POST['password'];
@@ -85,16 +85,28 @@ if (isset($_POST['username']) && isset($_POST['password'])) {
 	}
 }
 
-$theme=get_site_preference('logintheme', 'default');
+CmsAdminTheme::start(true);
 
-if (file_exists(dirname(__FILE__)."/themes/$theme/login.php"))
-{
-	include(dirname(__FILE__)."/themes/$theme/login.php");
-}
-else
-{
-	include(dirname(__FILE__)."/themes/default/login.php");
-}
+$themeObject = CmsAdminTheme::get_instance(true);
+
+cmsms()->variables['admintheme'] =& $themeObject;
+
+$smarty = cms_smarty();
+
+$smarty->assign('base_url', CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/');
+$smarty->assign('username_text', lang('username'));
+$smarty->assign('password_text', lang('password'));
+$smarty->assign('logintitle_text', lang('logintitle'));
+$smarty->assign('loginprompt_text', lang('loginprompt'));
+
+$smarty->assign('submit_text', lang('submit'));
+$smarty->assign('cancel_text', lang('cancel'));
+
+$smarty->assign('username', $username);
+$smarty->assign('error', $error);
+
+$smarty->display($themeObject->theme_template_dir . 'login.tpl');
+
 ?>
 
 <?php

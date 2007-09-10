@@ -111,6 +111,11 @@ class CmsResponse extends CmsObject
 	        {
 	            echo "Debug is on.  Redirecting disabled...  Please click this link to continue.<br />";
 	            echo "<a href=\"".$to."\">".$to."</a><br />";
+
+				echo '<pre>';
+				debug_print_backtrace();
+				echo '</pre>';
+	
 	            exit();
 	        }
 	        else

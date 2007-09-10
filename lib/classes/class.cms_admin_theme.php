@@ -71,22 +71,29 @@ class CmsAdminTheme extends CmsObject
 		$this->theme_template_dir = dirname(dirname(dirname(__FILE__))) . '/' . CmsConfig::get('admin_dir') . '/themes/' . $this->theme_name . '/templates/';
 	}
 	
-	static public function get_instance()
+	static public function get_instance($is_anonymous = false)
 	{
 		if (self::$instance == NULL)
 		{
-			self::$instance = self::get_theme_for_user();
+			self::$instance = self::get_theme_for_user($is_anonymous);
 		}
 		return self::$instance;
 	}
 	
-	static function get_theme_for_user()
+	static function get_theme_for_user($is_anonymous = false)
 	{
 		$gCms = cmsms();
-		$user = CmsLogin::get_current_user();
-		$userid = $user->id;
+		
+		$theme_name = 'default';
+		$userid = -1;
 
-		$theme_name = get_preference($userid, 'admintheme', 'default');
+		if (!$is_anonymous)
+		{
+			$user = CmsLogin::get_current_user();
+			$userid = $user->id;
+
+			$theme_name = get_preference($userid, 'admintheme', 'default');
+		}
 		$theme_file_name = "{$theme_name}_theme";
 		$theme_object_name = ucfirst(camelize($theme_file_name));
 
@@ -101,19 +108,22 @@ class CmsAdminTheme extends CmsObject
 			$themeObject = new CmsAdminTheme($userid);
 		}
 		
-		$themeObject->userid = get_userid();
-		$themeObject->set_module_admin_interfaces();
-		$themeObject->set_aggrigate_permissions();
-		$themeObject->populate_admin_navigation();
+		$themeObject->userid = $userid;
+		if (!$is_anonymous)
+		{
+			$themeObject->set_module_admin_interfaces();
+			$themeObject->set_aggrigate_permissions();
+			$themeObject->populate_admin_navigation();
+		}
 
 		return $themeObject;
 	}
 	
-	static public function start()
+	static public function start($is_anonymous = false)
 	{
 		@ob_start();
 		
-		$admin_theme = self::get_instance();
+		$admin_theme = self::get_instance($is_anonymous);
 		
 		$smarty = cms_smarty();
 		$smarty->assign_by_ref('admin_theme', $admin_theme);
