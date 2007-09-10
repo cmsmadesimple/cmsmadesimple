@@ -28,8 +28,7 @@ class Content extends CmsContentBase
 	
 	public static function create_preview_object($template_object)
 	{
-		$obj = new Content();
-		$blocks = $obj->parse_content_blocks_from_template($template_object);
+		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($template_object);
 		
 		foreach ($blocks as $block)
 		{
@@ -56,7 +55,7 @@ class Content extends CmsContentBase
 		else
 			$template = cmsms()->template->find_by_id($this->template_id);
 
-		$blocks = $this->parse_content_blocks_from_template($template);
+		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($template);
 		
 		foreach ($blocks as $block)
 		{
@@ -99,7 +98,7 @@ class Content extends CmsContentBase
 		else
 			$template = cmsms()->template->find_by_id($this->template_id);
 
-		$blocks = $this->parse_content_blocks_from_template($template);
+		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($template);
 		$contents = '';
 		
 		foreach ($blocks as $block)
@@ -154,7 +153,7 @@ class Content extends CmsContentBase
 		else
 			$template = cmsms()->template->find_by_id($this->template_id);
 
-		$blocks = $this->parse_content_blocks_from_template($template);
+		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($template);
 		$contents = '';
 		
 		foreach ($blocks as $block)
@@ -288,56 +287,6 @@ class Content extends CmsContentBase
 		}
 		
 		return $block_type_obj;
-	}
-	
-	function parse_content_blocks_from_template(&$template)
-	{
-		$blocks = array();
-		
-		if ($template != null)
-		{		
-			$pattern = '/{content([^}]*)}/';
-			$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
-		
-			$matches = array();
-			$result = preg_match_all($pattern, $template->content, $matches);
-
-			if ($result && count($matches[1]) > 0)
-			{
-				foreach ($matches[1] as $wholetag)
-				{
-				    $id = 'default';
-				    $name = 'default';
-				
-					$morematches = array();
-					$result2 = preg_match_all($pattern2, $wholetag, $morematches);
-					if ($result2)
-					{
-						$keyval = array();
-						for ($i = 0; $i < count($morematches[1]); $i++)
-						{
-							$keyval[$morematches[1][$i]] = $morematches[2][$i];
-						}
-
-						foreach ($keyval as $key=>$val)
-						{
-							switch($key)
-							{
-								case 'block':
-								case 'name':
-									$id = strtolower(str_replace(' ', '_', $val));
-									$name = $val;
-									break;
-							}
-						}
-					}
-				
-					$blocks[$name]['id'] = $id;
-				}
-			}
-		}
-		
-		return $blocks;
 	}
 
 }

@@ -244,6 +244,56 @@ class CmsTemplateOperations extends CmsObject
 		
 		return $result;
 	}
+	
+	function parse_content_blocks_from_template(&$template)
+	{
+		$blocks = array();
+		
+		if ($template != null)
+		{		
+			$pattern = '/{content([^}]*)}/';
+			$pattern2 = '/([a-zA-z0-9]*)=["\']([^"\']+)["\']/';
+		
+			$matches = array();
+			$result = preg_match_all($pattern, $template->content, $matches);
+
+			if ($result && count($matches[1]) > 0)
+			{
+				foreach ($matches[1] as $wholetag)
+				{
+				    $id = 'default';
+				    $name = 'default';
+				
+					$morematches = array();
+					$result2 = preg_match_all($pattern2, $wholetag, $morematches);
+					if ($result2)
+					{
+						$keyval = array();
+						for ($i = 0; $i < count($morematches[1]); $i++)
+						{
+							$keyval[$morematches[1][$i]] = $morematches[2][$i];
+						}
+
+						foreach ($keyval as $key=>$val)
+						{
+							switch($key)
+							{
+								case 'block':
+								case 'name':
+									$id = strtolower(str_replace(' ', '_', $val));
+									$name = $val;
+									break;
+							}
+						}
+					}
+				
+					$blocks[$name]['id'] = $id;
+				}
+			}
+		}
+		
+		return $blocks;
+	}
 }
 
 class TemplateOperations extends CmsTemplateOperations

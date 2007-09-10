@@ -214,8 +214,6 @@ function cms_module_CreateInputCheckbox(&$modinstance, $id, $name, $selected = f
 {
 	$id = cms_htmlentities($id);
 	$name = cms_htmlentities($name);
-	$value = cms_htmlentities($value);
-	$selectedvalue = cms_htmlentities($selectedvalue);
 	
 	if ($html_id == '')
 		$html_id = CmsResponse::make_dom_id($id . $name);

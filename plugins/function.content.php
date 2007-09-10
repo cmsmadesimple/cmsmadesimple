@@ -20,13 +20,17 @@ function smarty_cms_function_content($params, &$smarty)
 {
 	global $gCms;
 	$pageinfo =& $gCms->variables['pageinfo'];
-	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id) )
+	if (isset($pageinfo) && $pageinfo !== FALSE && isset($pageinfo->content_id))
 	{
 		$id = '';
 		$modulename = '';
 		$action = '';
 		$inline = false;
-		if (isset($_REQUEST['module'])) $modulename = $_REQUEST['module'];
+		if (isset($_REQUEST['module']))
+		{
+			$modulename = $_REQUEST['module'];
+		}
+
 		if (isset($_REQUEST['id']))
 		{
 			$id = $_REQUEST['id'];
@@ -39,8 +43,11 @@ function smarty_cms_function_content($params, &$smarty)
 			$action = (isset($ary[2])?$ary[2]:'');
 			$inline = (isset($ary[3]) && $ary[3] == 1?true:false);
 		}
-		if (isset($_REQUEST[$id.'action'])) $action = $_REQUEST[$id.'action'];
-		else if (isset($_REQUEST['action'])) $action = $_REQUEST['action'];
+
+		if (isset($_REQUEST[$id.'action']))
+			$action = $_REQUEST[$id.'action'];
+		else if (isset($_REQUEST['action']))
+			$action = $_REQUEST['action'];
 		
 		$block_name = 'default';
 		if (isset($params['block']))
@@ -49,13 +56,30 @@ function smarty_cms_function_content($params, &$smarty)
 			$block_name = $params['name'];
 
 		$block_name = strtolower(str_replace(' ', '_', $block_name));
+		
+		$target_block = 'default';
+		if (isset($_REQUEST[$id.'target']))
+		{
+			//Only if it actually exists do we use it...  just in case the template was changed we want to
+			//make sure the module still shows up
+			$blocks = CmsTemplateOperations::parse_content_blocks_from_template(cms_orm()->template->find_by_id($pageinfo->template_id));
+			foreach ($blocks as $k=>$v)
+			{
+				if ($_REQUEST[$id.'target'] == $k)
+				{
+					$target_block = $_REQUEST[$id.'target'];
+				}
+			}
+		}
+
+		$target_block = strtolower(str_replace(' ', '_', $target_block));
 
 		//Only consider doing module processing if
 		//a. There is no block parameter
 		//b. then
 		//   1. $id is cntnt01
 		//   2. or inline is false
-		if ($block_name == 'default' && ($id == 'cntnt01' || ($id != '' && $inline == false)))
+		if ($block_name == $target_block && ($id == 'cntnt01' || ($id != '' && $inline == false)))
 		{
 			$cmsmodules = &$gCms->modules;
 		

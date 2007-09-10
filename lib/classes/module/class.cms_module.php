@@ -1512,7 +1512,7 @@ class CmsModule extends CmsObject
 		if ($name != '')
 		{
 			$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'action.' . $name . '.php');
-			
+
 			if (@is_file($filename))
 			{
 				{
@@ -1528,31 +1528,31 @@ class CmsModule extends CmsObject
 		}
 	}
 
-	function DoActionBase($name, $id, $params, $returnid='')
+	function DoActionBase($name, $id, $params, $returnid = '')
 	{
-	  if( $returnid != '' )
-	    {
-	      if( !$this->restrict_unknown_params && 
-		  get_site_preference('allowparamcheckwarnings',0))
+		if ($returnid != '')
 		{
-		  trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
+			if (!$this->restrict_unknown_params && get_site_preference('allowparamcheckwarnings',0))
+			{
+				trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
+			}
+			// used to try to avert XSS flaws, this will
+			// clean as many parameters as possible according
+			// to a map specified with the SetParameterType metods.
+			//$params = cleanParamHash($params, $this->param_map, !$this->restrict_unknown_params);
 		}
-	      // used to try to avert XSS flaws, this will
-	      // clean as many parameters as possible according
-	      // to a map specified with the SetParameterType metods.
-	      $params = cleanParamHash($params,$this->param_map,
-				       !$this->restrict_unknown_params);
-	    }
 
 		if (isset($params['lang']))
 		{
 			$this->curlang = $params['lang'];
 			$this->langhash = array();
 		}
-		if( !isset($params['action']) )
+
+		if (!isset($params['action']))
 		{
 			$params['action'] = $name;
 		}
+
 		$params['action'] = cms_htmlentities($params['action']);
 		$returnid = cms_htmlentities($returnid);
 		$id = cms_htmlentities($id);
