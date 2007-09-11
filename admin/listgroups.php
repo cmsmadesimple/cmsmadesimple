@@ -98,12 +98,16 @@ include_once("header.php");
                     echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                     echo "</a></td>\n";
                     }
-				if ($remove)
+				if ($remove && $onegroup->id != 1)
 				    {
-					echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onegroup->name)."');\">";
-                    echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
-                    echo "</a></td>\n";
-                    }
+				      echo "<td class=\"icons_wide\"><a href=\"deletegroup.php?group_id=".$onegroup->id."\" onclick=\"return confirm('".lang('deleteconfirm', $onegroup->name)."');\">";
+				      echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon');
+				      echo "</a></td>\n";
+				    }
+				else
+				  {
+				    echo '<td class="icons_wide">&nbsp;</td>'."\n";
+				  }
 				echo "</tr>\n";
 
 				($currow == "row1"?$currow="row2":$currow="row1");

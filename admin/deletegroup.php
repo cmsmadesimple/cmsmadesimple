@@ -29,6 +29,13 @@ $group_id = -1;
 if (isset($_GET["group_id"]))
 {
 	$group_id = $_GET["group_id"];
+
+	if( $group_id == 1 )
+	  {
+	    // can't delete this group
+	    redirect("listgroups.php");
+	  }
+
 	$group_name = "";
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Groups');
