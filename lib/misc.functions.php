@@ -1474,5 +1474,14 @@ function ini_get_boolean($str)
   return $ret;
 }
 
+function stack_trace()
+{
+  $stack = debug_backtrace();
+  foreach( $stack as $elem )
+    {
+      if( $elem['function'] == 'stack_trace' ) continue;
+      echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
+    }
+}
 # vim:ts=4 sw=4 noet
 ?>
