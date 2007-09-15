@@ -389,7 +389,6 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
   $id = cms_htmlentities($id);
   $action = cms_htmlentities($action);
   $returnid = cms_htmlentities($returnid);
-  $inline = cms_htmlentities($inline);
   $prettyurl = cms_htmlentities($prettyurl);
 
 	global $gCms;
@@ -562,13 +561,13 @@ function cms_module_CreateFieldsetStart(&$modinstance, $id, $name, $legend_text=
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $legend_text = cms_htmlentities($legendtext);
+  $legend_text = cms_htmlentities($legend_text);
 
-	$text = '<fieldset '. $addtext. '>'."\n";
-	$text .= '<legend '. $addtext_legend .'>'."\n";
-	$text .= $legend_text;
-	$text .= '</legend>';
-	return $text;
+  $text = '<fieldset '. $addtext. '>'."\n";
+  $text .= '<legend '. $addtext_legend .'>'."\n";
+  $text .= $legend_text;
+  $text .= '</legend>';
+  return $text;
 }
 
 ?>
