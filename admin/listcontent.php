@@ -574,6 +574,8 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
     global $page;
     global $indent;
 
+    if(empty($currow)) $currow = 'row1';
+
     $one =& $root->getContent();
     $children =& $root->getChildren();
     $thelist = '';
