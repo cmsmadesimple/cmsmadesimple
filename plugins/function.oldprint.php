@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_function_print($params, &$smarty)
+function smarty_cms_function_oldprint($params, &$smarty)
 {
 	global $gCms;
 	$page_url = ''; // Initialize var to prevent errors on preview
@@ -111,7 +111,7 @@ function smarty_cms_function_print($params, &$smarty)
 	return $output.'</a>';
 }
 
-function smarty_cms_help_function_print() {
+function smarty_cms_help_function_oldprint() {
 	?>
 	<h3>What does this do?</h3>
 	<p>Creates a link to only the content of the page.</p>
@@ -137,7 +137,7 @@ function smarty_cms_help_function_print() {
 	<?php
 }
 
-function smarty_cms_about_function_print() {
+function smarty_cms_about_function_oldprint() {
 	?>
 	<p>Author: Brett Batie&lt;brett-cms@classicwebdevelopment.com&gt;</p>
 	<p>Version: 1.0</p>
