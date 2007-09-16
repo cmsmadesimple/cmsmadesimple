@@ -204,7 +204,7 @@ class Content extends ContentBase
             $ret[]= array(lang('parent').':',$contentops->CreateHierarchyDropdown($this->mId, $this->mParentId));
         }
 
-    if( check_permission(get_userid(), 'Modify Page Structure') ) {
+    if( check_permission(get_userid(), 'Modify Page Structure') || $adding ) {
 	      $additionalcall = '';
 	    foreach($gCms->modules as $key=>$value)
 	    {
@@ -238,7 +238,7 @@ class Content extends ContentBase
 	}
 	if ($tab == 1)
 	{
-	  if( check_permission(get_userid(),'Modify Page Structure') ) {
+	  if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
 	    $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	  }

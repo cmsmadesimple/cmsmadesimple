@@ -686,8 +686,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         {
             $thelist .= "<td>&nbsp;</td>\n";
         }
-        if (check_permission($userid, 'Modify Page Structure') ||
-	    check_permission($userid, 'Modify Any Page') )
+        if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Modify Any Page'))
         {
             if ($display == 'edit' || $display == 'structure')
             {
@@ -792,10 +791,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
                 }
+				else
+				{
+                    $thelist .= '<td>&nbsp;</td>' . "\n";					
+				}
             }
             else
             {
-                $thelist .= '<td>&nbsp;</td>' . "\n";
+                $thelist .= "<td>&nbsp;</td><td>&nbsp;</td>\n";
             }
             $thelist .= "</tr>\n";  	
         }
@@ -935,7 +938,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th>".lang('template')."</th>\n";
 	$headoflist .= "<th>".lang('type')."</th>\n";
 	$headoflist .= "<th>".lang('owner')."</th>\n";
-	if (check_permission($userid, 'Modify Page Structure'))
+	if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Modify Any Page'))
     {
 	   $headoflist .= "<th class=\"pagepos\">".lang('active')."</th>\n";
     }
@@ -951,10 +954,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	if (check_permission($userid, 'Modify Page Structure'))
-	{
-	   $headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
-	}
+	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
