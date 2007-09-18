@@ -1827,6 +1827,7 @@ class CMSModule
 	 * @param string The number of characters wide (columns) the resulting textarea should be
 	 * @param string The number of characters high (rows) the resulting textarea should be
 	 * @param string The wysiwyg-system to be forced even if the user has chosen another one
+	 * @param string The language the content should be syntaxhightlighted as
 	 */
 	function CreateTextArea($enablewysiwyg, $id, $text, $name, $classname='', $htmlid='', $encoding='', $stylesheet='', $cols='80', $rows='15',$forcewysiwyg="",$wantedsyntax="")
 	{
