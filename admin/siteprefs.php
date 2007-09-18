@@ -74,16 +74,11 @@ if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage = "1";
 $sitedownmessage = "<p>Site is current down.  Check back later.</p>";
 if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
 
-$defaultpagecontent = '';
-if (isset($_POST['defaultpagecontent'])) $defaultpagecontent = $_POST['defaultpagecontent'];
-
 $sitedownmessagetemplate = "-1";
 if (isset($_POST["sitedownmessagetemplate"])) $sitedownmessagetemplate = $_POST["sitedownmessagetemplate"];
 
 $metadata = '';
 if (isset($_POST['metadata'])) $metadata = $_POST['metadata'];
-
-if (isset($_POST['parent_id'])) $default_parent_page = $_POST['parent_id'];
 
 $sitename = '';
 if (isset($_POST['sitename'])) $sitename = $_POST['sitename'];
@@ -111,9 +106,6 @@ if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
-
-$use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
 if (isset($_POST["cancel"])) {
 	redirect("index.php");
@@ -196,8 +188,6 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('custom404template', $custom404template);
       set_site_preference('enablesitedownmessage', $enablesitedownmessage);
       set_site_preference('sitedownmessage', $sitedownmessage);
-      set_site_preference('defaultpagecontent', $defaultpagecontent);
-      set_site_preference('default_parent_page', $default_parent_page);
 #set_site_preference('sitedownmessagetemplate', $sitedownmessagetemplate);
 #set_site_preference('useadvancedcss', $useadvancedcss);
       set_site_preference('logintheme', $logintheme);
@@ -223,8 +213,6 @@ else if (isset($_POST["editsiteprefs"]))
   $custom404template = get_site_preference('custom404template');
   $enablesitedownmessage = get_site_preference('enablesitedownmessage');
   $sitedownmessage = get_site_preference('sitedownmessage');
-  $defaultpagecontent = get_site_preference('defaultpagecontent');
-  $default_parent_page = get_site_preference('default_parent_page');
   $xmlmodulerepository = get_site_preference('xmlmodulerepository');
   #$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
   #$useadvancedcss = get_site_preference('useadvancedcss');
@@ -434,19 +422,6 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 	</div>
 	<?php }?>
 	
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('defaultpagecontent')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="defaultpagecontent" cols="" rows=""><?php echo $defaultpagecontent?></textarea></p>
-		</div>	
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('defaultparentpage')?>:</p>
-			<p class="pageinput">
-			<?php
-			$contentops =& $gCms->GetContentOperations();
-			echo $contentops->CreateHierarchyDropdown(0, $default_parent_page);
-			?>
-			</p>
-		</div>	
                 <div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('disablesafemodewarning')?>:</p>
 			<p class="pageinput"><input class="pagenb" type="checkbox" name="disablesafemodewarning" <?php if($disablesafemodewarning) echo "checked=\"checked\""?> /></p>

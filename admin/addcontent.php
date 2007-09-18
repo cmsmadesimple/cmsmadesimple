@@ -56,6 +56,11 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
+$cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
+$active = ((get_site_preference('page_active',"1")=="1")?true:false);
+$showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
+$metadata = get_site_preference('page_metadata');
+
 $parent_id = get_site_preference('default_parent_page', -1);
 if (isset($_GET["parent_id"])) $parent_id = $_GET["parent_id"];
 
@@ -255,9 +260,11 @@ else
 	$contentops =& $gCms->GetContentOperations();
 	$contentobj = $contentops->CreateNewContent($content_type);
 	$contentobj->SetOwner($userid);
-	$contentobj->SetActive(True);
-	$contentobj->SetShowInMenu(True);
+	$contentobj->SetCachable($page_cachable);
+	$contentobj->SetActive($active);
+	$contentobj->SetShowInMenu($showinmenu);
 	$contentobj->SetLastModifiedBy($userid);
+	$contentobj->SetMetadata($metadata);
 	$contentobj->SetPropertyValue('content_en', get_site_preference('defaultpagecontent'));
 	if ($parent_id!=-1) $contentobj->SetParentId($parent_id);
 }

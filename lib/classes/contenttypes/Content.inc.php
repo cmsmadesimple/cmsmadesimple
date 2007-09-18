@@ -243,8 +243,11 @@ class Content extends ContentBase
 	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
 	  }
 	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
-	  if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
+	  if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
 	    $ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
+	  }
+	  else {
+            $ret[]= array(lang('pagealias').':','<input type="text" disabled name="alias" value="'.$this->mAlias.'" />');
 	  }
 	    $ret[]= array(lang('metadata').':',create_textarea(false, $this->Metadata(), 'metadata', 'pagesmalltextarea', 'metadata', '', '', '80', '6'));
 
