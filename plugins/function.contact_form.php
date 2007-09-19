@@ -150,6 +150,8 @@ if (FALSE == empty($params['captcha']) && $params['captcha'] && isset($gCms->mod
 
 function smarty_cms_help_function_contact_form() {
 	?>
+  <h2>NOTE: This plugin is deprecated</h2>
+    <p>This smarty plugin is deprecated, and may not be included with further versions of CMS Made Simple.  We recommend you use the formbuilder module and it's included contact form.</p>
 	<h3>What does this do?</h3>
 	<p>Display's a contact form. This can be used to allow others to send an email message to the address specified.</p>
 	<h3>How do I use it?</h3>
