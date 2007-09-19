@@ -1467,7 +1467,7 @@ class ContentBase
 		$this->mAdditionalEditors = $editorarray;
 	}
 
-	function ShowAdditionalEditors()
+	function ShowAdditionalEditors($addteditors = '')
 	{
 		$ret = array();
 
@@ -1479,7 +1479,10 @@ class ContentBase
 		$groupops =& $gCms->GetGroupOperations();
 		$allusers =& $userops->LoadUsers();
 		$allgroups =& $groupops->LoadGroups();
-		$addteditors = $this->GetAdditionalEditors();
+		if( $addteditors == '' )
+		  {
+		    $addteditors = $this->GetAdditionalEditors();
+		  }
 		foreach ($allgroups as $onegroup)
 		  {
 		    $val = $onegroup->id*-1;

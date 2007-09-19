@@ -50,7 +50,7 @@ $page_metadata = get_site_preference('page_metadata',
 $page_defaultcontent = get_site_preference("defaultpagecontent",
 		   "<!-- ".lang('msg_defaultcontent')." -->");
 $page_defaultparent = get_site_preference('default_parent_page',-1);
-
+$additional_editors = get_site_preference('additional_editors','');
 
 if( isset( $_POST['submit'] ) )
   {
@@ -63,6 +63,7 @@ if( isset( $_POST['submit'] ) )
     $page_metadata = $_POST['page_metadata'];
     $page_defaultcontent = $_POST['page_defaultcontent'];
     $page_defaultparent = $_POST['parent_id'];
+    $additional_editors = implode(',',$_POST['additional_editors']);
 
     //
     // Store preferences
@@ -73,6 +74,7 @@ if( isset( $_POST['submit'] ) )
     set_site_preference( 'page_metadata', $page_metadata );
     set_site_preference( 'defaultpagecontent', $page_defaultcontent );
     set_site_preference( 'default_parent_page', $page_defaultparent );
+    set_site_preference( 'additional_editors', $additional_editors );
   }
 
 //
@@ -144,6 +146,20 @@ if ($message != "") {
 	  <p class="pagetext"><?php echo lang('content')?>:</p>
           <p class="pageinput">
 	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="" rows=""><? echo $page_defaultcontent?></textarea>
+          </p>
+        </div>
+
+        <div class="pageoverflow">
+          <?php 
+	    $my_addeditors = explode(',',$additional_editors);
+            $content = new ContentBase();
+            $addeditors = $content->ShowAdditionalEditors($my_addeditors);
+          ?>
+	  <p class="pagetext"><?php echo $addeditors[0] ?>:</p>
+          <p class="pageinput">
+          <?php 
+	     echo $addeditors[1];
+          ?>
           </p>
         </div>
 
