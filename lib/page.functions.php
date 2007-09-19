@@ -777,11 +777,23 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 				$gCms->modules[$key]['active'] == true &&			 //us the module active?
 				$gCms->modules[$key]['object']->IsWYSIWYG())   //is it a wysiwyg module?
 			{
+			  
 				if ($forcewysiwyg=='') {
-					//get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway
-					if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
-						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
-					}
+				  
+				  if (get_userid(false)==false) {
+
+				    //echo "admin";
+					  //get_preference(get_userid(), 'wysiwyg')!="" && //not needed as it won't match the wisiwyg anyway					  
+				    if ($gCms->modules[$key]['object']->GetName()==get_site_preference('frontendwysiwyg')) {
+				      
+					    $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					  }					  
+				  } else {
+				    
+				    if ($gCms->modules[$key]['object']->GetName()==get_preference(get_userid(false), 'wysiwyg')) {
+						  $result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
+					  }
+				  }	 
 				} else {
 					if ($gCms->modules[$key]['object']->GetName()==$forcewysiwyg) {
 						$result=$gCms->modules[$key]['object']->WYSIWYGTextarea($name,$width,$height,$encoding,$text,$stylesheet);
