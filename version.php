@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.1.2";
-$CMS_VERSION_NAME = "Savaii";
+$CMS_VERSION = "1.2-beta1";
+$CMS_VERSION_NAME = "Barbados";
 $CMS_SCHEMA_VERSION = "28";
 
 # vim:ts=4 sw=4 noet
