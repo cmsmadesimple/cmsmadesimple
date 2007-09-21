@@ -50,7 +50,7 @@ if (check_permission($userid, 'Add Groups') || check_permission($userid, 'Remove
 
 }
 
-/*if (check_permission($userid, 'Modify Files'))
+if (check_permission($userid, 'Modify Files'))
 {
 
 ?>
@@ -58,7 +58,7 @@ if (check_permission($userid, 'Add Groups') || check_permission($userid, 'Remove
 <?php
 
 }
-*/
+
 ?>
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
 <?php
