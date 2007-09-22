@@ -46,6 +46,8 @@ $css='';
 
 if (isset($config['old_stylesheet']) && $config['old_stylesheet'] == false)
 {
+  require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'version.php');
+
 	// connect to the database
 	require_once(dirname(__FILE__).DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'misc.functions.php');
 	require_once(cms_join_path(dirname(__FILE__),'lib','adodb.functions.php'));
