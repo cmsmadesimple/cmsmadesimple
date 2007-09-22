@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 
 $ADODB_LANG_ARRAY = array (
 	'LANG'                      => 'fr',

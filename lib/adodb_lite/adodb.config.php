@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 /**
  * ADOdb Lite Configuration File
  */

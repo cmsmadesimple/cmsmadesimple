@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 
 // Russian language file contributed by "Cyrill Malevanov" cyrill#malevanov.spb.ru.
 

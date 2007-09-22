@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 // Italian language file contributed by Tiraboschi Massimiliano aka TiMax  
 // www.maxdev.com  timax@maxdev.com
 $ADODB_LANG_ARRAY = array (

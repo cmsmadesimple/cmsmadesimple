@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 /*
 	Bulgarian language, v1.0, 25.03.2004, encoding by Windows-1251 charset
 	contributed by Valentin Sheiretsky <valio#valio.eu.org>

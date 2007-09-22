@@ -1,4 +1,5 @@
 <?php
+if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
 // by "El-Shamaa, Khaled" <k.el-shamaa#cgiar.org>
 $ADODB_LANG_ARRAY = array (
 			'LANG'			    => 'ar',
