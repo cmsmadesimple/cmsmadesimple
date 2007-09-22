@@ -49,16 +49,16 @@ if (check_permission($userid, 'Add Groups') || check_permission($userid, 'Remove
 <?php
 
 }
-
+/*
 if (check_permission($userid, 'Modify Files'))
 {
 
-?>
-<a href="files.php"><?php echo lang('filemanagement')?></a>
-<?php
+?
+<a href="files.php"><?php echo lang('filemanagement')?</a>
+?php
 
 }
-
+*/
 ?>
 <a href="plugins.php"><?php echo lang('pluginmanagement')?></a>
 <?php
