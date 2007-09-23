@@ -107,7 +107,9 @@
 						{/foreach}
 					</tbody>
 				</table>
-				<input type="submit" name="lang_form_submit" value="{tr}Submit{/tr}" />
+				<button type="submit" name="lang_form_submit" class="positive">
+					<span class="text">{tr}Submit{/tr}</span>
+				</button>    
 			</form>
 
 		</div>
