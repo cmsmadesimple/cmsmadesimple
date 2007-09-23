@@ -215,6 +215,8 @@ else if ($access)
 {
 	if ($submit || $apply)
 	{
+		$page_object->set_property_value('name', $_REQUEST['name'], 'en_US');
+		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], 'en_US');
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
@@ -257,6 +259,10 @@ $smarty->assign('template_names', $templateops->TemplateDropdown('content[templa
 $userops = $gCms->GetUserOperations();
 $smarty->assign('show_owner_dropdown', false);
 $smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
+
+//Name and menu text are multilang, use the parameters
+$smarty->assign('name', $page_object->get_property_value('name'), 'en_US');
+$smarty->assign('menu_text', $page_object->get_property_value('menu_text'), 'en_US');
 
 //Any included smarty templates for this page type?
 $smarty->assign('include_templates', $page_object->add_template($smarty));

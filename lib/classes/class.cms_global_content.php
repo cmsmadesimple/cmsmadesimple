@@ -106,7 +106,7 @@ class CmsGlobalContent extends CmsVersioningExtension
 	function after_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGlobalContentPost' : 'EditGlobalContentPost'), array('global_content' => &$this));
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 	}
 	
 	function before_delete()
@@ -117,7 +117,7 @@ class CmsGlobalContent extends CmsVersioningExtension
 	function after_delete()
 	{
 		CmsEvents::send_event('Core', 'DeleteGlobalContentPost', array('global_content' => &$this));
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 	}
 }
 

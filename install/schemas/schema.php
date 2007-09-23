@@ -71,9 +71,7 @@ CmsInstallOperations::create_table($db, 'content_props', "
 	content_id I,
 	type C(25),
 	prop_name C(255),
-	param1 C(255),
-	param2 C(255),
-	param3 C(255),
+	language C(50),
 	content XL,
 	create_date DT,
 	modified_date DT

@@ -97,7 +97,7 @@ class CmsLanguage extends CmsObject
 		
 		$result = array();
 		
-		asort(self::$nls['language']);
+		//asort(self::$nls['language']);
 		
 		foreach (self::$nls["language"] as $key=>$val)
 		{

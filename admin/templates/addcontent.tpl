@@ -49,7 +49,7 @@
 				  <div class="pageoverflow50">
 				  	<p class="pagetext">{lang string='title'}:</p>
 				  	<p class="pageinput">
-				  	  {html_input id='content_name' name='content[name]' value=$page_object->name useentities='true'}
+				  	  {html_input id='content_name' name='name' value=$name useentities='true'}
 				  	</p>
 				  </div>
 				{/if}
@@ -59,7 +59,7 @@
 				  <div class="pageoverflow50">
 				  	<p class="pagetext">{lang string='menutext'}:</p>
 				  	<p class="pageinput">
-				  	  {html_input id='content_menu_text' name='content[menu_text]' value=$page_object->menu_text useentities='true'}
+				  	  {html_input id='content_menu_text' name='menu_text' value=$menu_text useentities='true'}
 				  	</p>
 				  </div>
 				{/if}

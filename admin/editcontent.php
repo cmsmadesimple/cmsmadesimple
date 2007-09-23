@@ -223,6 +223,8 @@ else if ($access)
 {
 	if ($submit || $apply)
 	{
+		$page_object->set_property_value('name', $_REQUEST['name'], 'en_US');
+		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], 'en_US');
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
@@ -234,6 +236,7 @@ else if ($access)
 			}
 		}
 
+		/*
 		if ($ajax)
 		{
 			header('Content-Type: text/xml');
@@ -258,6 +261,7 @@ else if ($access)
 			print '</EditContent>';
 			exit;
 		}
+		*/
 	}
 }
 
@@ -285,6 +289,10 @@ $smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_ob
 
 //Se the template dropdown
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
+
+//Name and menu text are multilang, use the parameters
+$smarty->assign('name', $page_object->get_property_value('name'), 'en_US');
+$smarty->assign('menu_text', $page_object->get_property_value('menu_text'), 'en_US');
 
 //Set the users
 $userops =& $gCms->GetUserOperations();

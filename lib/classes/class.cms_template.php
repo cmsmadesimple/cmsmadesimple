@@ -80,7 +80,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	function after_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddTemplatePost' : 'EditTemplatePost'), array('template' => &$this));
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 		CmsContentOperations::clear_cache();
 	}
 	
@@ -92,7 +92,7 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	function after_delete()
 	{
 		CmsEvents::send_event('Core', 'DeleteTemplatePost', array('template' => &$this));
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 		CmsContentOperations::clear_cache();
 	}
 }

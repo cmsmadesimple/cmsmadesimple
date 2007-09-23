@@ -32,9 +32,8 @@
 class CmsContentBase extends CmsObjectRelationalMapping
 {
 	var $table = 'content';
-	var $params = array('id' => -1, 'template_id' => -1, 'name' => '', 'menu_text' => '', 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
-	var $field_maps = array('content_name' => 'name', 'content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 
-	'tabindex' => 'tab_index');
+	var $params = array('id' => -1, 'template_id' => -1, 'active' => true, 'default_content' => false, 'parent_id' => -1, 'lft' => 1, 'rgt' => 1);
+	var $field_maps = array('content_alias' => 'alias', 'titleattribute' => 'title_attribute', 'accesskey' => 'access_key', 'tabindex' => 'tab_index');
 	var $unused_fields = array();
 
 	var $mProperties = array();
@@ -199,32 +198,31 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			CmsContentOperations::do_cross_reference($this->id, 'content', $concat);
 		
 		CmsEvents::send_event('Core', 'ContentEditPost', array('content' => &$this));
-		CmsCache::get_instance()->clear();
-		CmsContentOperations::clear_cache();
+		CmsCache::clear();
 	}
 	
 	function validate()
 	{
-		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
-		$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
+		//$this->validate_not_blank('name', lang('nofieldgiven',array(lang('title'))));
+		//$this->validate_not_blank('menu_text', lang('nofieldgiven',array(lang('menutext'))));
 	}
 	
 	/**
 	 * Overloaded so that we can pull out properties and set them separately
 	 */
-	function update_parameters($params)
+	function update_parameters($params, $lang = 'en_US')
 	{
 		if (isset($params['property']) && is_array($params['property']))
 		{
 			foreach ($params['property'] as $k=>$v)
 			{
-				$this->set_property_value($k, $v);
+				$this->set_property_value($k, $v, $lang);
 			}
 		}
 		parent::update_parameters($params);
 	}
 	
-	function set_property_value($name, $value)
+	function set_property_value($name, $value, $lang = 'en_US')
 	{
 		if ($this->prop_names != '' && count($this->mProperties) == 0)
 			$this->load_properties();
@@ -252,12 +250,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			$this->prop_names = implode(',', array_merge(explode(',', $this->prop_names), array($name)));
 	}
 	
-	function get_property_names()
+	function get_property_names($lang = 'en_US')
 	{
 		return explode(',', $this->prop_names);
 	}
 	
-	function get_loaded_property_names()
+	function get_loaded_property_names($lang = 'en_US')
 	{
 		$result = array();
 		foreach ($this->mProperties as &$prop)
@@ -294,7 +292,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
-	function get_property_value($name)
+	function get_property_value($name, $lang = 'en_US')
 	{
 		//See if it exists...
 		if ($this->has_property($name))
@@ -560,7 +558,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		CmsContentOperations::remove_cross_references($this->id, 'content');
 		
 		CmsEvents::SendEvent('Core', 'ContentDeletePost', array('content' => &$this));
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 	}
 	
 	function template_name()

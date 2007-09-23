@@ -18,15 +18,18 @@
 
 function smarty_function_html_checkbox($params, &$smarty)
 {
-	echo '<input type="hidden"';
-	if (isset($params['name']))
-		echo ' name="'.$params['name'].'"';
-	if (isset($params['unchecked_value'])) {
-		echo ' value="'.$params['unchecked_value'].'"';
-	} else {
-		echo ' value="0"';
+	if (!isset($params['full_toggle']) || $params['full_toggle'])
+	{
+		echo '<input type="hidden"';
+		if (isset($params['name']))
+			echo ' name="'.$params['name'].'"';
+		if (isset($params['unchecked_value'])) {
+			echo ' value="'.$params['unchecked_value'].'"';
+		} else {
+			echo ' value="0"';
+		}
+		echo ' />';
 	}
-	echo ' />';
 
 	echo '<input type="checkbox"';
 	if (isset($params['id']))

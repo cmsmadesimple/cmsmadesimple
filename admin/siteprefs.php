@@ -18,26 +18,26 @@
 #
 #$Id$
 
-$CMS_ADMIN_PAGE=1;
-$CMS_TOP_MENU='admin';
-$CMS_ADMIN_TITLE='preferences';
+$CMS_ADMIN_PAGE = 1;
+$CMS_TOP_MENU = 'admin';
+$CMS_ADMIN_TITLE = 'preferences';
 
 require_once("../include.php");
 
 function siteprefs_display_permissions($permsarr)
 {
-  $tmparr = array(lang('owner'),lang('group'),lang('other'));
-  if( count($permsarr) != 3 ) return lang('permissions_parse_error');
+	$tmparr = array(lang('owner'),lang('group'),lang('other'));
+	if( count($permsarr) != 3 ) return lang('permissions_parse_error');
 
-  $result = array();
-  for( $i = 0; $i < 3; $i++ )
-    {
-      $str = $tmparr[$i].': ';
-      $str .= implode(',',$permsarr[$i]);
-      $result[] = $str;
-    }
-  $str = implode('<br/>&nbsp;&nbsp;',$result);
-  return $str;
+	$result = array();
+	for( $i = 0; $i < 3; $i++ )
+	{
+		$str = $tmparr[$i].': ';
+		$str .= implode(',',$permsarr[$i]);
+		$result[] = $str;
+	}
+	$str = implode('<br/>&nbsp;&nbsp;',$result);
+	return $str;
 }
 
 check_login();
@@ -54,9 +54,9 @@ if (isset($_POST["disablesafemodewarning"])) $disablesafemodewarning = 1;
 
 $allowparamcheckwarnings = 0;
 if (isset($_POST["allowparamcheckwarnings"])) 
-  {
-    $allowparamcheckwarnings = 1;
-  }
+{
+	$allowparamcheckwarnings = 1;
+}
 
 $enablecustom404 = "0";
 if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
@@ -98,15 +98,12 @@ if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 
 $global_umask = '022';
 if (isset($_POST['global_umask'])) 
-  {
-    $global_umask = $_POST['global_umask'];
-  }
+{
+	$global_umask = $_POST['global_umask'];
+}
 
-// ADDED
 $logintheme = "default";
 if (isset($_POST["logintheme"])) $logintheme = $_POST["logintheme"];
-// STOP
-
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Site Preferences');
@@ -114,7 +111,8 @@ $access = check_permission($userid, 'Modify Site Preferences');
 $use_javasyntax = false;
 if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("index.php");
 	return;
 }
@@ -122,64 +120,66 @@ if (isset($_POST["cancel"])) {
 $testresults = lang('untested');
 if (isset($_POST["testumask"]))
 {
+	$testdir = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'tmp';
+	$testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
 
-    $testdir = $gCms->config['root_path'].DIRECTORY_SEPARATOR.'tmp';
-    $testfile = $testdir.DIRECTORY_SEPARATOR.'dummy.tst';
-    
-    if( !is_writable($testdir) )
-      {
-	$testresults = lang('errordirectorynotwritable');
-
-      }
-    else
-      {
-
-	@umask(octdec($global_umask));
-
-	$fh = @fopen($testfile,"w");
-
-	if( !$fh )
-	  {
-	    $testresults = lang('errorcantcreatefile').' ('.$testfile.')';
-	  }
+	if( !is_writable($testdir) )
+	{
+		$testresults = lang('errordirectorynotwritable');
+	}
 	else
-	  {
-	    @fclose($fh);
-	    $filestat = stat($testfile);
+	{
+		@umask(octdec($global_umask));
+		$fh = @fopen($testfile,"w");
+		if( !$fh )
+		{
+			$testresults = lang('errorcantcreatefile').' ('.$testfile.')';
+		}
+		else
+		{
+			@fclose($fh);
+			$filestat = stat($testfile);
 
-	    if( $filestat == FALSE )
-	      {
-		$testresults = lang('errorcantcreatefile');
-	      }
-	      
-		  if(function_exists("posix_getpwuid")) //function posix_getpwuid not available on WAMP systems
+			if( $filestat == FALSE )
 			{
-	      $userinfo = @posix_getpwuid($filestat[4]);
+				$testresults = lang('errorcantcreatefile');
+			}
 
-  	    $username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
-	      $permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
-        $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
-				   lang('owner'),$username,
-				   lang('permissions'),$permsstr);
-	      
-	    
-      } else {
-        $testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s",
-				   lang('owner'),"N/A",
-				   lang('permissions'),"N/A");
+			if(function_exists("posix_getpwuid")) //function posix_getpwuid not available on WAMP systems
+			{
+				$userinfo = @posix_getpwuid($filestat[4]);
 
-      }
-	    @unlink($testfile);
-	  }
-	
-      }
-  }
+				$username = isset($userinfo['name'])?$userinfo['name']:lang('unknown');
+				$permsstr = siteprefs_display_permissions(interpret_permissions($filestat[2]));
+				$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s", lang('owner'), $username, lang('permissions'), $permsstr);
+			}
+			else
+			{
+				$testresults = sprintf("%s: %s<br/>%s:<br/>&nbsp;&nbsp;%s", lang('owner'),"N/A", lang('permissions'),"N/A");
+
+			}
+			@unlink($testfile);
+		}
+	}
+}
 
 if (isset($_POST['clearcache']))
 {
 	CmsContentOperations::clear_cache();
 	CmsCache::clear();
 	$message .= lang('cachecleared');
+}
+else if (isset($_POST['lang_enabled']))
+{
+	if ($access)
+	{
+		$enabled_languages = array_keys($_POST['lang_enabled']);
+		CmsApplication::set_preference('enabled_languages', implode(',', $enabled_languages));
+		if (in_array($_POST['default_language'], $enabled_languages))
+			CmsApplication::set_preference('default_language', $_POST['default_language']);
+		else
+			CmsApplication::set_preference('default_language', $enabled_languages[0]);
+	}
 }
 else if (isset($_POST["editsiteprefs"]))
 {
@@ -264,6 +264,21 @@ if (FALSE == is_writable(cms_join_path(CmsConfig::get('root_path'),'tmp','cache'
 {
 	echo $themeObject->ShowErrors(lang('cachenotwritable'));
 }
+
+$lang_list = CmsLanguage::get_language_list();
+$enabled_languages = explode(',', CmsApplication::get_preference('enabled_languages', 'en_US'));
+$default_language = CmsApplication::get_preference('default_language', 'en_US');
+foreach ($lang_list as $k=>$v)
+{
+	$lang_name = $v;
+	$v = array();
+	$v['name'] = $lang_name;
+	$v['enabled'] = in_array($k, $enabled_languages);
+	$v['checkbox_name'] = "lang_enabled[$k]";
+	$v['default'] = '<input type="radio" name="default_language" value="'.$k.'"' . ($default_language == $k ? ' checked="checked"' : '') . '/>';
+	$lang_list[$k] = $v;
+}
+$smarty->assign('lang_list', $lang_list);
 
 /*
 ?>

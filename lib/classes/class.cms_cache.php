@@ -99,7 +99,7 @@ class CmsCache extends CmsObject
 	public function clean($group = FALSE, $mode = 'ingroup')
 	{
 		CmsContentOperations::clear_cache();
-		return $this->clean($group, $mode);
+		return $this->cache->clean($group, $mode);
 	}
 	
 	static public function clear($group = FALSE, $mode = 'ingroup')

@@ -390,7 +390,7 @@ class CmsApplication extends CmsObject
 		}
 
 		if ($result) $result->Close();
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 	}
 
 	/**
@@ -425,7 +425,7 @@ class CmsApplication extends CmsObject
 			$db->Execute($query);
 		}
 		self::$siteprefs[$prefname] = $value;
-		CmsCache::get_instance()->clear();
+		CmsCache::clear();
 	}
 
 	function __destruct()
