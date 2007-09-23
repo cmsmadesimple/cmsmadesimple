@@ -88,6 +88,7 @@
 				<table border="0" cellspacing="0" cellpadding="3">
 					<thead>
 						<tr>
+							<th></th>
 							<th>{tr}Locale{/tr}</th>
 							<th>{tr}Language{/tr}</th>
 							<th>{tr}Enabled{/tr}</th>
@@ -97,6 +98,7 @@
 					<tbody>
 						{foreach from=$lang_list item='v' key='k'}
 							<tr>
+								<td><img src="../{$v.flag_image}" /></td>
 								<td>{$k}</td>
 								<td>{$v.name}</td>
 								<td>{html_checkbox name=$v.checkbox_name selected=$v.enabled full_toggle=false}</td>

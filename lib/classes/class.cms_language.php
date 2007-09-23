@@ -107,6 +107,23 @@ class CmsLanguage extends CmsObject
 		return $result;
 	}
 	
+	public static function get_flag_image($language)
+	{
+		if (self::$nls == null)
+		{
+			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
+		}
+		
+		if (isset(self::$nls['flag_image'][$language]))
+		{
+			return 'images/lang/' . self::$nls['flag_image'][$language];
+		}
+		else
+		{
+			return '';
+		}
+	}
+	
 	private static function load_lang_file($module, $language)
 	{
 		$lang = array();
@@ -156,6 +173,7 @@ class CmsLanguage extends CmsObject
 			$code = (string)$onelang->code;
 			$nls['language'][$code] = (string)$onelang->native_name;
 			$nls['englishlang'][$code] = (string)$onelang->english_name;
+			$nls['flag_image'][$code] = (string)$onelang->flag_image;
 			
 			foreach ($onelang->aliases as $onealias)
 			{

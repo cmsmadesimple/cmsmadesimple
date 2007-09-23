@@ -274,6 +274,7 @@ foreach ($lang_list as $k=>$v)
 	$v = array();
 	$v['name'] = $lang_name;
 	$v['enabled'] = in_array($k, $enabled_languages);
+	$v['flag_image'] = CmsLanguage::get_flag_image($k);
 	$v['checkbox_name'] = "lang_enabled[$k]";
 	$v['default'] = '<input type="radio" name="default_language" value="'.$k.'"' . ($default_language == $k ? ' checked="checked"' : '') . '/>';
 	$lang_list[$k] = $v;
