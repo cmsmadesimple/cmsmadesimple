@@ -91,7 +91,7 @@ class CmsAcl extends CmsObject
 		if ($defn['hierarchical'])
 		{				
 			$query = "SELECT max(gp.has_access)
-						FROM {$cms_db_prefix}{$defn['table']} c, {$cms_db_prefix}{$defn['table']} c2 
+						FROM {$cms_db_prefix}{$defn['link_table']} c, {$cms_db_prefix}{$defn['link_table']} c2 
 							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
 							INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
 						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
@@ -127,20 +127,20 @@ class CmsAcl extends CmsObject
 		}
 	}
 	
-	static public function get_permission_definition($module, $extra_attr, $permission)
+	static public function get_permission_definitions($module, $extra_attr, $permission)
 	{
 		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $permission));
 	}
 	
-	static public function create_permission($module, $extra_attr, $name, $hierarchical = false, $table = '')
+	static public function create_permission_definition($module, $extra_attr, $name, $hierarchical = false, $table = '')
 	{
 		$result = null;
 		
-		$row = cms_db()->GetOne('SELECT * FROM ' . cms_db_prefix() . 'permission_defn WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
+		$row = cms_db()->GetOne('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
 		
 		if (!$row)
 		{
-			$result = cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . 'permission_defn (module, extra_atr, name, hierarchical, table) VALUES (?, ?, ?, ?, ?)');
+			$result = cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . 'permission_defns (module, extra_atr, name, hierarchical, link_table) VALUES (?, ?, ?, ?, ?)');
 		}
 		
 		if ($result)
@@ -149,9 +149,9 @@ class CmsAcl extends CmsObject
 		return false;
 	}
 	
-	static public function delete_permission($module, $extra_attr, $name)
+	static public function delete_permission_definition($module, $extra_attr, $name)
 	{
-		$query = "DELETE FROM " . cms_db_prefix() . "permission_defn WHERE module = ? AND extra_attr = ? AND name = ?";
+		$query = "DELETE FROM " . cms_db_prefix() . "permission_defns WHERE module = ? AND extra_attr = ? AND name = ?";
 		$result = cms_db()->Execute($query, array($module, $extra_attr, $name));
 		
 		if ($result)

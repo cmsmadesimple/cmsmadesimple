@@ -221,7 +221,7 @@ CmsInstallOperations::create_table($db, 'permission_defns', "
 	extra_attr C(50),
 	name C(50),
 	hierarchical I1 DEFAULT 0,
-	table C(50)
+	link_table C(50)
 ");
 
 CmsInstallOperations::create_table($db, 'serialized_versions', "
