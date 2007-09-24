@@ -204,7 +204,7 @@ function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 	return $_contents;
 }
 
-function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $designation = '', $cache = false)
+function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $modulename = '', $cache = false)
 {
 	#$ok = (strpos($tpl_name, '..') === false);
 	#if (!$ok) return;
@@ -215,7 +215,8 @@ function cms_module_ProcessTemplateFromDatabase(&$modinstance, $tpl_name, $desig
 	$oldcache = $smarty->caching;
 	$smarty->caching = false;
 
-	$result = $smarty->fetch('module_db_tpl:'.$modinstance->GetName().';'.$tpl_name, '', ($designation != ''?$designation:$modinstance->GetName()));
+	$modulename = ($modulename != ''?$modulename:$modinstance->GetName());
+	$result = $smarty->fetch('module_db_tpl:'.$modulename.';'.$tpl_name, '', $modulename);
 
 	$smarty->caching = $oldcache;
 
