@@ -2075,10 +2075,10 @@ class CMSModule
 		return cms_module_ProcessTemplateFromData($this, $data);
 	}
 
-	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false)
+	function ProcessTemplateFromDatabase($tpl_name, $designation = '', $cache = false, $modulename = '')
 	{
 		$this->LoadTemplateMethods();
-		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache);
+		return cms_module_ProcessTemplateFromDatabase($this, $tpl_name, $designation, $cache, $modulename);
 	}
 
 	function ListUserTags()
