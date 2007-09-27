@@ -71,7 +71,7 @@ if (isset($_POST["custom404template"])) $custom404template = $_POST["custom404te
 $enablesitedownmessage = "0";
 if (isset($_POST["enablesitedownmessage"])) $enablesitedownmessage = "1";
 
-$sitedownmessage = "<p>Site is current down.  Check back later.</p>";
+$sitedownmessage = "<p>Site is currently down.  Check back later.</p>";
 if (isset($_POST["sitedownmessage"])) $sitedownmessage = $_POST["sitedownmessage"];
 
 $sitedownmessagetemplate = "-1";
