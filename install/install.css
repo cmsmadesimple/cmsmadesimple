@@ -215,3 +215,9 @@ a:hover  { color: #e7ab0b; font-weight: bold; text-decoration: none }
 .important {
 	color: red;
 }
+
+.okmessage { 
+    background-color: #ececec;
+    border: 1px solid #aaa;
+    padding: .5em;
+}
