@@ -320,7 +320,6 @@ function cms_module_CreateInputSelectList(&$modinstance, $id, $name, $items, $se
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
-  $value = cms_htmlentities($value);
   $size = cms_htmlentities($size);
   $multiple = cms_htmlentities($multiple);
 
