@@ -56,7 +56,7 @@ if (isset($_POST["submitbutton"])) $submit = true;
 $apply = false;
 if (isset($_POST["applybutton"])) $apply = true;
 
-$cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
+$page_cachable = ((get_site_preference('page_cachable',"1")=="1")?true:false);
 $active = ((get_site_preference('page_active',"1")=="1")?true:false);
 $showinmenu = ((get_site_preference('page_showinmenu',"1")=="1")?true:false);
 $metadata = get_site_preference('page_metadata');
