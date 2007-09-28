@@ -2,7 +2,7 @@ Developers Past and Present
 ---------------------------
 - Ted Kulp <wishy [AT] cmsmadesimple [DOT] org>
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
-- Robert Campbell <rob [AT] techcom.dyndns [DOT] org>
+- Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
 - Alexander Endresen <alexander [AT] endresen [DOT] org>
 - Daniel Westergren <daniel [AT] wproductions [DOT] se>

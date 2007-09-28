@@ -1,3 +1,30 @@
+Version 1.2 "Barbados"
+-----------------
+- Adds capabilities to have a wysiwyg on the front end
+- Adds the ability to select 'groups' as additional editors
+- Now the 'admin group' automatically has all permissions, not
+  just the admin user
+- Add a new page where default settings for new pages can be set
+- Adds a new file manager
+- Enhance the use of permissions when adding or editing content
+- Adds a new 'print' plugin capable of generating pdf filees
+  from one or more pages
+- News 2.5.1
+  * Moved the default summary and detail templates into
+    their own tab
+  * Adds An extra field
+- Fix issues with stylesheet name changes after hitting 'apply'
+- Fixes issues with spaces or underscores not being allowed in usernames
+- Fixes pagination issues in the admin log, and anywhere that uses
+  the built in pagination functions.
+- Turn error reporting to E_ALL and turn display_errors on
+  if debug mode is on.
+- You can no longer delete the admin group
+
+Version 1.1.3 "Apia" -- September 22. 2007
+-----------------
+- Fixes a potential security hole in adodb lite.
+
 Version 1.1.2 "Savaii" -- September 3, 2007
 -----------------
 - Fixes the order of buttons in the edit template page
