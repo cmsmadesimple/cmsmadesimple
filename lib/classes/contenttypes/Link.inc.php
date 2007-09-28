@@ -52,12 +52,12 @@ class Link extends ContentBase
 		    $this->SetPropertyValue($oneparam, $params[$oneparam]);
 		}
 	    }
-	    if ($_POST['file_url'] != "---")
+	    if (isset($_POST['file_url']) && $_POST['file_url'] != "---")
 	    {
 	    	$this->SetPropertyValue('url', $params['file_url']);
             } 
             # make sure target keeps empty even with the new dropdown value
-	    if ($_POST['target'] == "---")
+	    if (isset($_POST['target']) && $_POST['target'] == "---")
 	    {
 	    	$this->SetPropertyValue('target', '');
             } 
