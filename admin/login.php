@@ -53,6 +53,11 @@ if ($openid_enabled)
 			$user = cms_orm()->user->find_by_checksum($_REQUEST['checksum']);
 			if ($user)
 			{
+				#Put in a new checksum so the return url from provider can't be reused
+				$checksum = CmsOpenid::generate_checksum();
+				$user->checksum = $checksum;
+				$user->save();
+
 				if (CmsLogin::login_by_id($user->id))
 				{
 					if (isset($_SESSION['redirect_url']))
@@ -66,7 +71,19 @@ if ($openid_enabled)
 						redirect(CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/index.php', true);
 					}
 				}
+				else
+				{
+					$error .= lang('authenticationfailed');
+				}
 			}
+			else
+			{
+				$error .= lang('authenticationfailed');
+			}
+		}
+		else
+		{
+			$error .= lang('authenticationfailed');
 		}
 	}
 }
