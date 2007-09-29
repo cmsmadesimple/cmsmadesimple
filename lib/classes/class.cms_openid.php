@@ -118,7 +118,7 @@ class CmsOpenid extends CmsObject
 			$checksum = self::generate_checksum();
 		
 		$return_url .= strpos('?', $return_url) !== FALSE ? '&' : '?';
-		$return_url .= "checksum={$checksum}";
+		$return_url .= "checksum={$checksum}&endpoint=" . urlencode($this->server);
 		$return_url = urlencode($return_url);
 		$trust_root = urlencode(CmsConfig::get('root_url'));
 		$cleaned_delegate = urlencode($this->delegate);
@@ -128,7 +128,7 @@ class CmsOpenid extends CmsObject
 	
 	public function check_authentication($params)
 	{
-		if ($params['openid_mode'] == 'id_res')
+		if ($params['openid_mode'] == 'id_res' || $params['openid.mode'] == 'id_res')
 		{
 			$params_we_need = array();
 
@@ -144,7 +144,7 @@ class CmsOpenid extends CmsObject
 			
 			$params_we_need['openid.mode'] = 'check_authentication';
 
-			return self::do_post_request($params_we_need['openid.op_endpoint'], $params_we_need);
+			return self::do_post_request($params['endpoint'], $params_we_need);
 		}
 		
 		return false;

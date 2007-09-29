@@ -44,7 +44,7 @@ $openid_enabled = CmsOpenid::is_enabled();
 
 if ($openid_enabled)
 {
-	if (isset($_REQUEST['openid_mode']) && $_REQUEST['openid_mode'] == 'id_res')
+	if ((isset($_REQUEST['openid_mode']) && $_REQUEST['openid_mode'] == 'id_res') || (isset($_REQUEST['openid.mode']) && $_REQUEST['openid.mode'] == 'id_res'))
 	{
 		#See if the openid matches
 		if (CmsOpenid::check_authentication($_REQUEST))
