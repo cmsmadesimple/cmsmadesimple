@@ -110,21 +110,21 @@ if ($message != "") {
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('active')?>:</p>
           <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_active" <? if($page_active == "1") echo "checked=\"checked\""?> />
+	    <input class="pagenb" type="checkbox" name="page_active" <?php if($page_active == "1") echo "checked=\"checked\""?> />
           </p>
         </div>
 
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('showinmenu')?>:</p>
           <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_showinmenu" <? if($page_showinmenu == "1") echo "checked=\"checked\""?> />
+	    <input class="pagenb" type="checkbox" name="page_showinmenu" <?php if($page_showinmenu == "1") echo "checked=\"checked\""?> />
           </p>
         </div>
 
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('cachable')?>:</p>
           <p class="pageinput">
-	    <input class="pagenb" type="checkbox" name="page_cachable" <? if($page_cachable == "1") echo "checked=\"checked\""?> />
+	    <input class="pagenb" type="checkbox" name="page_cachable" <?php if($page_cachable == "1") echo "checked=\"checked\""?> />
           </p>
         </div>
 
@@ -141,14 +141,14 @@ if ($message != "") {
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('metadata')?>:</p>
           <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_metadata" cols="" rows=""><? echo $page_metadata?></textarea>
+	    <textarea class="pagesmalltextarea" name="page_metadata" cols="" rows=""><?php echo $page_metadata?></textarea>
           </p>
         </div>
 
         <div class="pageoverflow">
 	  <p class="pagetext"><?php echo lang('content')?>:</p>
           <p class="pageinput">
-	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="" rows=""><? echo $page_defaultcontent?></textarea>
+	    <textarea class="pagesmalltextarea" name="page_defaultcontent" cols="" rows=""><?php echo $page_defaultcontent?></textarea>
           </p>
         </div>
 

@@ -201,7 +201,7 @@ else {
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('passwordagain')?>:</p>
-													   <p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;<? echo lang('info_edituser_passwordagain') ?></p>
+													   <p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" class="standard" />&nbsp;<?php echo lang('info_edituser_passwordagain') ?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('firstname')?>:</p>
