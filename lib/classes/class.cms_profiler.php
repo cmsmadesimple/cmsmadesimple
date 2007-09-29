@@ -120,16 +120,7 @@ class CmsProfiler extends CmsObject
 		}
 		if ($database)
 		{
-			echo '<br />' . cms_db()->query_count . ' queries executed';
-			/*
-			echo '<br />';
-			echo $db->_ticker . ' queries executed';
-			echo '<pre>';
-			foreach ($db->_log as $k=>$sql) {
-				echo $k+1 . "\n" . $sql . '<hr />';
-			}
-			echo '</pre>';
-			*/
+			echo '<br />' . CmsDatabase::query_count() . ' queries executed';
 		}
 		
 		echo '</div>';

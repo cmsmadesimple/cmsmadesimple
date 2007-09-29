@@ -19,8 +19,7 @@
 #$Id$
 
 //Database related defines
-define('ADODB_OUTP', 'mark_sql');
-define('CMS_ADODB_DT', CmsConfig::get('use_adodb_lite') ? 'DT' : 'T');
+define('CMS_ADODB_DT', 'T');
 
 /**
  * Singleton class to represent a connection to the database.
@@ -89,80 +88,40 @@ class CmsDatabase extends CmsObject
 		{
 			self::$prefix = $prefix;
 		}
-
-		global $USE_OLD_ADODB;
 		
-		$loaded_adodb = false;
 		$dbinstance = null;
 
-		if (!$use_adodb_lite || (isset($USE_OLD_ADODB) && $USE_OLD_ADODB == 1))
+		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR,'tmp','cache');
+
+		require(cms_join_path(ROOT_DIR,'lib','adodb','adodb-exceptions.inc.php'));
+        require(cms_join_path(ROOT_DIR,'lib','adodb','adodb.inc.php'));
+
+		try
 		{
-			# CMSMS is configured to use full ADOdb
-		    $full_adodb = cms_join_path(dirname(dirname(__FILE__)),'adodb','adodb.inc.php');
-		    if (! file_exists($full_adodb))
-		    {
-		        # Full ADOdb cannot be found, show a debug error message
-		        $gCms->errors[] = 'CMS Made Simple is configured to use the full ADOdb Database Abstraction library, but it\'s not in the lib' .DIRECTORY_SEPARATOR. 'adodb directory. Switched back to ADOdb Lite.';
-		    }
-		    else
-		    {
-		        # Load (full) ADOdb
-		        require($full_adodb);
-				$dbinstance = &ADONewConnection($dbms);
-		        $loaded_adodb = true;
-		    }
-		}
-		if (!$loaded_adodb)
-		{
-		    $adodb_light = cms_join_path(dirname(dirname(__FILE__)),'adodb_lite','adodb.inc.php');
-		    # The ADOdb library is not yet included, try ADOdb Lite
-		    if (file_exists($adodb_light))
-		    {
-		        # Load ADOdb Lite
-		        require_once($adodb_light);
-				$dbinstance = &ADONewConnection($dbms, 'date:extend:transaction:pear');
-				$loaded_adodb = true;
-		    }
-		    else
-		    {
-		        # ADOdb cannot be found, show a message and stop the script execution
-		        echo "The ADOdb Lite database abstraction library cannot be found, CMS Made Simple cannot load.";
-		        die();
-		    }
-		}
-		
-		$dbinstance->raiseErrorFn = "adodb_error_handler";
+			$dbinstance = &ADONewConnection($dbms);
+			$dbinstance->fnExecute = 'count_execs';
+			$dbinstance->fnCacheExecute = 'count_cached_execs';
 	
-		if ($persistent)
-		{
-			$connect_result = $dbinstance->PConnect($hostname,$username,$password,$dbname);
-		}
-		else
-		{
-			$connect_result = $dbinstance->Connect($hostname,$username,$password,$dbname);
-		}
-		
-		$dbinstance->raiseErrorFn = null;
-		
-		if (FALSE == $connect_result)
-		{
-			if ($die)
+			if ($persistent)
 			{
-				die();
+				$connect_result = $dbinstance->PConnect($hostname,$username,$password,$dbname);
 			}
 			else
 			{
-				return null;
+				$connect_result = $dbinstance->Connect($hostname,$username,$password,$dbname);
 			}
+		}
+		catch (exception $e)
+		{
+			echo "<strong>Database Connection Failed</strong><br />";
+			echo "Error: {$dbinstance->_errorMsg}<br />";
+			echo "Function Performed: {$e->fn}<br />";
+			echo "Host/DB: {$e->host}/{$e->database}<br />";
+			echo "Database Type: {$dbms}<br />";
+			die();
 		}
 
 		$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-		
-		//$dbinstance->debug = true;
-		#if ($debug == true)
-		#{
-			$dbinstance->debug = true;
-		#}
 		
 	    if ($dbms == 'sqlite')
 	    {
@@ -177,23 +136,46 @@ class CmsDatabase extends CmsObject
 
 		return $dbinstance;
 	}
+	
+	public static function query_count()
+	{
+		if (method_exists(self::$instance, 'query_count'))
+		{
+			return self::$instance->query_count();
+		}
+		else
+		{
+			global $EXECS;
+			global $CACHED;
+			return $EXECS + $CACHED;
+		}
+	}
 }
 
-/**
- * Function for adodb to call back to log sql queries and errors.
- **/
-function mark_sql($sql, $newline)
+//TODO: Clean me up.  Globals?  Yuck!
+function count_execs($db, $sql, $inputarray)
 {
 	CmsProfiler::get_instance()->mark($sql);
+
+	global $EXECS;
+
+	if (!is_array($inputarray))
+		$EXECS++;
+	else if (is_array(reset($inputarray)))
+		$EXECS += sizeof($inputarray);
+	else
+		$EXECS++;
+
+	$null = null;
+	return $null;
 }
 
-function adodb_error_handler($dbtype, $function_performed, $error_number, $error_message, $host, $database, &$connection_obj)
+//TODO: You too, slacker!
+function count_cached_execs($db, $secs2cache, $sql, $inputarray)
 {
-	echo "<strong>Database Connection Failed</strong><br />";
-	echo "Error: {$error_message} ({$error_number})<br />";
-	echo "Function Performed: {$function_performed}<br />";
-	echo "Host/DB: {$host}/{$database}<br />";
-	echo "Database Type: {$dbtype}<br />";
+	CmsProfiler::get_instance()->mark('CACHED:' . $sql);
+
+	global $CACHED; $CACHED++;
 }
 
 # vim:ts=4 sw=4 noet
