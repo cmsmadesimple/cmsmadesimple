@@ -26,6 +26,7 @@
 				<div class="lbfieldstext">
 					<p class="lbuser">{$username_text}:</p>
 					<p class="lbpass">{$password_text}:</p>
+					<p class="lbopenid">{$openid_text}:</p>
 				</div>
 				<div class="lbinput">
 					<form method="post" action="login.php">
@@ -36,6 +37,7 @@
 							{else}
 							  <input class="lbpassword" name="password" type="password" size="15" /><br />
 							{/if}
+							<input class="lbopenid" name="openid" id="openid" type="text" size="15" value="{$openid}" /><br />
 							<input class="lbsubmit" name="loginsubmit" type="submit" value="{$submit_text}" /> 
 							<input class="lbsubmit" name="logincancel" type="submit" value="{$cancel_text}" />
 						</p>

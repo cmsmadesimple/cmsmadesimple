@@ -24,6 +24,8 @@ require_once('../include.php');
 
 $error = '';
 
+//var_dump($_REQUEST);
+
 if (isset($_SESSION['logout_user_now']))
 {
 	unset($_SESSION['login_user_username']);
@@ -38,15 +40,75 @@ if (isset($_POST['logincancel']))
 	//redirect(CmsConfig::get('root_url') . '/index.php', true);
 }
 
+$openid_enabled = CmsOpenid::is_enabled();
+
+if ($openid_enabled)
+{
+	if (isset($_REQUEST['openid_mode']) && $_REQUEST['openid_mode'] == 'id_res')
+	{
+		#See if the openid matches
+		if (CmsOpenid::check_authentication($_REQUEST))
+		{
+			#Now see if the checksum actually is for a user
+			$user = cms_orm()->user->find_by_checksum($_REQUEST['checksum']);
+			if ($user)
+			{
+				if (CmsLogin::login_by_id($user->id))
+				{
+					if (isset($_SESSION['redirect_url']))
+					{
+						$tmp = $_SESSION['redirect_url'];
+						unset($_SESSION['redirect_url']);
+						CmsResponse::redirect($tmp);
+					}
+					else
+					{
+						redirect(CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/index.php', true);
+					}
+				}
+			}
+		}
+	}
+}
+
 $username = '';
 if (isset($_POST['username'])) $username = CmsRequest::clean_value($_POST['username']);
+
+$openid = '';
+if (isset($_POST['openid'])) $openid = CmsRequest::clean_value($_POST['openid']);
 
 if (isset($_POST['username']) && isset($_POST['password'])) {
 
 	$password = '';
 	if (isset($_POST['password'])) $password = $_POST['password'];
 
-	if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
+	if ($openid != '' && isset($_POST['loginsubmit']) && $openid_enabled)
+	{
+		#Cleanup the open id and find a user so we can set the checksum
+		#before the redirect
+		$clean_openid = CmsOpenid::cleanup_openid($openid);
+		$user = cms_orm()->user->find_by_openid($clean_openid);
+		
+		if ($user)
+		{
+			$obj = new CmsOpenid();
+			if ($obj->find_server(CmsOpenid::create_url($openid)))
+			{
+				#Make up a checksum and save it to the user
+				$checksum = CmsOpenid::generate_checksum();
+				$user->checksum = $checksum;
+				$user->save();
+
+				#All should be good.  Time to redirect out to the provider.
+				$obj->do_authentication(CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/login.php', $checksum);
+			}
+		}
+		else
+		{
+			$error .= lang('usernameincorrect');
+		}
+	}
+	else if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
 	{
 		if (CmsLogin::login($username, $password))
 		{
@@ -96,6 +158,7 @@ $smarty = cms_smarty();
 $smarty->assign('base_url', CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/');
 $smarty->assign('username_text', lang('username'));
 $smarty->assign('password_text', lang('password'));
+$smarty->assign('openid_text', lang('openid'));
 $smarty->assign('logintitle_text', lang('logintitle'));
 $smarty->assign('loginprompt_text', lang('loginprompt'));
 
@@ -104,6 +167,7 @@ $smarty->assign('cancel_text', lang('cancel'));
 
 $smarty->assign('username', $username);
 $smarty->assign('error', $error);
+$smarty->assign('openid', $openid);
 
 $smarty->display($themeObject->theme_template_dir . 'login.tpl');
 

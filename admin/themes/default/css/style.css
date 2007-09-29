@@ -166,7 +166,8 @@ input.lbsubmit  {
    cursor: pointer;
    }
 
-input.lbpassword  {
+input.lbpassword,
+input.lbopenid  {
    margin-top: 5px;
    }
 
@@ -179,21 +180,31 @@ input.order {
 p.lbuser  {
    color: #555555;
    font-size: 1.2em;
+margin-top: 5px;
    }
 
 p.lbpass  {
    color: #555555;
    font-size: 1.2em;
-   margin-top: 10px;
+   margin-top: 13px;
+   }
+p.lbopenid  {
+   color: #555555;
+   font-size: 1.2em;
+   margin-top: 13px;
    }
 
+#openid {
+	background: #FFFFFF url('../images/cms/openid-icon-small.gif') no-repeat scroll 0pt 50%;
+	padding-left: 18px;
+}
 
 /* Main Page - Menu */
-#nav, #nav ul  {
+#nav, #nav ul {
    list-style-type: none;
    margin: 0;
    padding: 0;
-   }
+}
 
 #nav ul  {
    border: solid 1px #c6c3bd;
