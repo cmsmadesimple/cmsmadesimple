@@ -276,6 +276,8 @@ CmsInstallOperations::create_table($db, 'users', "
 	first_name C(50),
 	last_name C(50),
 	email C(255),
+	openid C(255),
+	checksum C(255),
 	active I1,
 	create_date DT,
 	modified_date DT

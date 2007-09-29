@@ -46,6 +46,9 @@ if (isset($_POST["lastname"])) $lastname = CmsRequest::clean_value($_POST["lastn
 $email = "";
 if (isset($_POST["email"])) $email = CmsRequest::clean_value($_POST["email"]);
 
+$openid = "";
+if (isset($_POST["openid"])) $openid = CmsRequest::clean_value($_POST["openid"]);
+
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["edituser"])) $adminaccess = 0;
 
@@ -113,6 +116,7 @@ if ($access) {
 				$thisuser->email = $email;
 				$thisuser->adminaccess = $adminaccess;
 				$thisuser->active = $active;
+				$thisuser->openid = $openid;
 				if ($password != "")
 				{
 					$thisuser->set_password($password);
@@ -178,6 +182,7 @@ if ($access) {
 		$email = $thisuser->email;
 		$adminaccess = $thisuser->adminaccess;
 		$active = $thisuser->active;
+		$openid = $thisuser->openid;
 	}
 }
 
@@ -218,6 +223,10 @@ else {
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('email')?>:</p>
 			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email?>" class="standard" /></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('openid')?>:</p>
+			<p class="pageinput"><input type="text" name="openid" id="openid" maxlength="255" value="<?php echo $openid?>" class="standard" /></p>
 		</div>
 	   <?php
 	   if( $access_perm && !$access_user ) {
