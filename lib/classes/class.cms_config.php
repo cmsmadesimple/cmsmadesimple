@@ -142,7 +142,6 @@ class CmsConfig extends CmsObject implements ArrayAccess
 		$config["persistent_db_conn"] = false;
 		$config["default_upload_permission"] = '664';
 		$config["page_extension"] = "";
-		$config["use_adodb_lite"] = true;
 		$config["locale"] = "";
 		$config['old_stylesheet'] = true;
 		$config['wiki_url'] = "http://wiki.cmsmadesimple.org/index.php/User_Handbook/Admin_Panel";
@@ -233,7 +232,7 @@ class CmsConfig extends CmsObject implements ArrayAccess
 \$config['db_hostname'] = '{$config['db_hostname']}';
 \$config['db_username'] = '{$config['db_username']}';
 \$config['db_password'] = '{$config['db_password']}';
-\$config['db_name'] = '{$config['db_name']}';
+\$config['db_name'] = '{$config['db_name']}';	
 
 #If app needs to coexist with other tables in the same db,
 #put a prefix here.  e.g. "cms_"
@@ -242,11 +241,6 @@ class CmsConfig extends CmsObject implements ArrayAccess
 #Use persistent connections?  They're generally faster, but not all hosts
 #allow them.
 \$config['persistent_db_conn'] = ${$config['persistent_db_conn']?'true':'false'};
-
-#Use ADODB Lite?  This should be true in almost all cases.  Note, slight
-#tweaks might have to be made to date handling in a "regular" adodb
-#install before it can be used.
-\$config['use_adodb_lite'] = ${$config['use_adodb_lite']?'true':'false'};
 
 #-------------
 #Path Settings

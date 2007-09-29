@@ -68,7 +68,6 @@ class CmsDatabase extends CmsObject
 	static function connect($dbms = '', $hostname = '', $username = '', $password = '', $dbname = '', $debug = false, $die = true, $prefix = '', $make_global = true)
 	{
 		$gCms = cmsms();
-		$use_adodb_lite = true;
 		$persistent = false;
 		
 		if ($dbms == '')
@@ -81,7 +80,6 @@ class CmsDatabase extends CmsObject
 			$dbname = $config['db_name'];
 			$debug = $config['debug'];
 			$persistent = $config['persistent_db_conn'];
-			$use_adodb_lite = $config['use_adodb_lite'];
 		}
 		
 		if ($prefix != '')
