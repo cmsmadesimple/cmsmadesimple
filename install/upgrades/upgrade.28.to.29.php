@@ -29,7 +29,7 @@ else
 }
 
 echo '<p>Updating schema version... ';
-#$query = 'UPDATE '.cms_db_prefix().'version SET version = 29';
+$query = 'UPDATE '.cms_db_prefix().'version SET version = 29';
 $db->Execute($query);
 echo '[done]</p>';  
 
