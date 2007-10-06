@@ -1,5 +1,5 @@
 <?php
-if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
+if(!defined('CMS_VERSION')) die('Attempt to use ADODB from outside of CMS');
 /** 
  * @version V4.93 10 Oct 2006 (c) 2000-2006 John Lim (jlim#natsoft.com.my). All rights reserved.
  * Released under both BSD license and Lesser GPL library license. 

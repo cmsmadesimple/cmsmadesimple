@@ -1,5 +1,5 @@
 <?php
-if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
+if(!defined('CMS_VERSION')) die('Attempt to use ADODB from outside of CMS');
 /**
 ADOdb Date Library, part of the ADOdb abstraction library
 Download: http://phplens.com/phpeverywhere/

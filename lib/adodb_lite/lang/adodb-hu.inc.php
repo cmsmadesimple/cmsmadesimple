@@ -1,5 +1,5 @@
 <?php
-if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
+if(!defined('CMS_VERSION')) die('Attempt to use ADODB from outside of CMS');
 # Hungarian language, encoding by ISO 8859-2 charset (Iso Latin-2)
 # Halászvári Gábor <g.halaszvari#portmax.hu>
 $ADODB_LANG_ARRAY = array (

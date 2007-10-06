@@ -1,5 +1,5 @@
 <?php
-if( !isset($GLOBALS['CMS_VERSION']) ) die('Attempt to use ADODB from outside of CMS');
+if(!defined('CMS_VERSION')) die('Attempt to use ADODB from outside of CMS');
 // Chinese language file contributed by "Cuiyan (cysoft)" cysoft#php.net.
 // Encode by GB2312
 // Simplified Chinese
