@@ -26,10 +26,10 @@ require_once("../include.php");
 check_login();
 
 $plugin = "";
-if (isset($_GET["plugin"])) $plugin = $_GET["plugin"];
+if (isset($_GET["plugin"])) $plugin = cms_htmlentities($_GET["plugin"]);
 
 $action = "";
-if (isset($_GET["action"])) $action = $_GET["action"];
+if (isset($_GET["action"])) $action = cms_htmlentities($_GET["action"]);
 
 $userid = get_userid();
 $access = check_permission($userid, "Modify Modules");
