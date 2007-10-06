@@ -57,81 +57,85 @@ include_once("header.php");
 $userid = get_userid();
 $access = check_permission($userid, 'Clear Admin Log');
 
-if (isset($_GET['clear']) && $access) {
-       $query = "DELETE FROM ".cms_db_prefix()."adminlog";
-       $db->Execute($query);
-       echo $themeObject->ShowMessage(lang('adminlogcleared'));
-}
-
-$page = 1;
-if (isset($_GET['page']))$page = $_GET['page'];
-
-$limit = 20;
-$page_string = "";
-$from = ($page * $limit) - $limit;
-
-$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
-
-
-echo '<div class="pagecontainer">';
-echo '<div class="pageoverflow">';
-
-if ($result && $result->RecordCount() > 0) 
+if (check_permission($userid, 'Modify Site Preferences'))
 {
+	if (isset($_GET['clear']) && $access) {
+	       $query = "DELETE FROM ".cms_db_prefix()."adminlog";
+	       $db->Execute($query);
+	       echo $themeObject->ShowMessage(lang('adminlogcleared'));
+	}
+
+	$page = 1;
+	if (isset($_GET['page']))$page = $_GET['page'];
+
+	$limit = 20;
+	$page_string = "";
+	$from = ($page * $limit) - $limit;
+
+	$result = $db->SelectLimit('SELECT * from '.cms_db_prefix().'adminlog ORDER BY timestamp DESC', $limit, $from);
+
+
+	echo '<div class="pagecontainer">';
+	echo '<div class="pageoverflow">';
+
+	if ($result && $result->RecordCount() > 0) 
+	{
 	
-	$page_string = pagination($page, $totalrows, $limit);
-	echo "<p class=\"pageshowrows\">".$page_string."</p>";
-	echo $themeObject->ShowHeader('adminlog').'</div>';
-	echo '<a href="adminlog.php?download=1">'.lang('download').'</a>';
+		$page_string = pagination($page, $totalrows, $limit);
+		echo "<p class=\"pageshowrows\">".$page_string."</p>";
+		echo $themeObject->ShowHeader('adminlog').'</div>';
+		echo '<a href="adminlog.php?download=1">'.lang('download').'</a>';
 
-	echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
-	echo '<thead>';
-	echo "<tr>\n";
-	echo "<th>".lang('user')."</th>\n";
-	echo "<th>".lang('itemid')."</th>\n";
-	echo "<th>".lang('itemname')."</th>\n";
-	echo "<th>".lang('action')."</th>\n";
-	echo "<th>".lang('date')."</th>\n";
-	echo "</tr>\n";
-	echo '</thead>';
-	echo '<tbody>';
+		echo "<table cellspacing=\"0\" class=\"pagetable\">\n";
+		echo '<thead>';
+		echo "<tr>\n";
+		echo "<th>".lang('user')."</th>\n";
+		echo "<th>".lang('itemid')."</th>\n";
+		echo "<th>".lang('itemname')."</th>\n";
+		echo "<th>".lang('action')."</th>\n";
+		echo "<th>".lang('date')."</th>\n";
+		echo "</tr>\n";
+		echo '</thead>';
+		echo '<tbody>';
 
-       $currow = "row1";
-       while ($row = $result->FetchRow()) {
+	       $currow = "row1";
+	       while ($row = $result->FetchRow()) {
 
-               echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-               echo "<td>".$row["username"]."</td>\n";
-               echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
-               echo "<td>".$row["item_name"]."</td>\n";
-               echo "<td>".$row["action"]."</td>\n";
-			   echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
-	       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
-               echo "</tr>\n";
+	               echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
+	               echo "<td>".$row["username"]."</td>\n";
+	               echo "<td>".($row["item_id"]!=-1?$row["item_id"]:"&nbsp;")."</td>\n";
+	               echo "<td>".$row["item_name"]."</td>\n";
+	               echo "<td>".$row["action"]."</td>\n";
+				   echo "<td>".strftime($dateformat,$row['timestamp'])."</td>\n";
+		       //               echo "<td>".date("D M j, Y G:i:s", $row["timestamp"])."</td>\n";
+	               echo "</tr>\n";
 
-               ($currow == "row1"?$currow="row2":$currow="row1");
+	               ($currow == "row1"?$currow="row2":$currow="row1");
 
-       }
+	       }
 	   
-	echo '</tbody>';
-	echo '</table>';
+		echo '</tbody>';
+		echo '</table>';
 
-	}
-	else {
-		echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
-		echo '<p>'.lang('adminlogempty').'</p>';
+		}
+		else {
+			echo '<p class="pageheader">'.lang('adminlog').'</p></div>';
+			echo '<p>'.lang('adminlogempty').'</p>';
+		}
+
+	if ($access && $result && $result->RecordCount() > 0) {
+		echo '<div class="pageoptions">';
+		echo '<p class="pageoptions">';
+		echo '<a href="adminlog.php?clear=true">';
+		echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
+		echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
+		echo '</p>';
+		echo '</div>';
 	}
 
-if ($access && $result && $result->RecordCount() > 0) {
-	echo '<div class="pageoptions">';
-	echo '<p class="pageoptions">';
-	echo '<a href="adminlog.php?clear=true">';
-	echo $themeObject->DisplayImage('icons/system/delete.gif', lang('delete'),'','','systemicon').'</a>';
-	echo '<a class="pageoptions" href="adminlog.php?clear=true">'.lang('clearadminlog').'</a>';
-	echo '</p>';
 	echo '</div>';
-}
 
-echo '</div>';
+}
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 
