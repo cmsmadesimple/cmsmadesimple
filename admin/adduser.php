@@ -24,6 +24,7 @@ require_once("../include.php");
 require_once("../lib/classes/class.user.inc.php");
 
 check_login();
+$userid = get_userid();
 
 $error = "";
 
@@ -51,7 +52,7 @@ if (!isset($_POST["active"]) && isset($_POST["adduser"])) $active = 0;
 $adminaccess = 1;
 if (!isset($_POST["adminaccess"]) && isset($_POST["adduser"])) $adminaccess = 0;
 
-if (isset($_POST["cancel"]))
+if (isset($_POST["cancel"]) || !check_permission($userid, 'Add Users'))
 {
 	redirect("listusers.php");
 	return;
