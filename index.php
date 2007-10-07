@@ -220,7 +220,7 @@ if (isset($pageinfo) && $pageinfo !== FALSE)
 	
 	$smarty->assign('content_id', $pageinfo->content_id);
 	$smarty->assign('page', $page);
-	$smarty->assign('page_id', $page);	
+	$smarty->assign('page_id', $page);
 	$smarty->assign('page_name', $pageinfo->content_alias);
 	$smarty->assign('page_alias', $pageinfo->content_alias);
 	$smarty->assign('position', $pageinfo->content_hierarchy);
