@@ -44,7 +44,7 @@ class CMSInstallerPage1 extends CMSInstallerPage
 	{
 		$settings = array('required' => array(), 'recommended' => array());
 		
-		$settings['required'][] = $this->testBoolean(1, 'Checking for PHP version 4.2+', (@version_compare(phpversion(), '4.2.0') > -1));
+		$settings['required'][] = $this->testBoolean(1, 'Checking for PHP version 4.3+', (@version_compare(phpversion(), '4.3.0') > -1));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for Session Functions', function_exists('session_start'));
 		$settings['required'][] = $this->testBoolean(1, 'Checking for md5 Function', function_exists('md5'));
 		
