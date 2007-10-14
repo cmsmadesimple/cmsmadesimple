@@ -263,9 +263,17 @@ class Content extends ContentBase
 
 	    if ($adding || $showadmin)
 	    {
-	      $addeditors = get_site_preference('additional_editors','');
-	      $addteditors = explode(",",$addeditors);
-	      $ret[]= $this->ShowAdditionalEditors($addteditors);
+	      $addteditors = array();
+	      if( $adding )
+		{
+		  $addeditors = get_site_preference('additional_editors','');
+		  $addteditors = explode(",",$addeditors);
+		  $ret[]= $this->ShowAdditionalEditors($addteditors);
+		}
+	      else
+		{
+		  $ret[]= $this->ShowAdditionalEditors();
+		}
 	    }
 	    $ret[]=array(lang('last_modified_at').':', strftime( get_preference(get_userid(),'date_format_string','%x %X') , strtotime($this->mModifiedDate) ) );
 	    $modifiedbyuser = $userops->LoadUserByID($this->mLastModifiedBy);

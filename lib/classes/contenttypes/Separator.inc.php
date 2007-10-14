@@ -105,7 +105,16 @@ class Separator extends ContentBase
 
 	if ($adding || $showadmin)
 	{
-	    $ret[]= $this->ShowAdditionalEditors();
+	  if( $adding )
+	    {
+	      $addeditors = get_site_preference('additional_editors','');
+	      $addteditors = explode(",",$addeditors);
+	      $ret[]= $this->ShowAdditionalEditors($addteditors);
+	    }
+	  else
+	    {
+	      $ret[]= $this->ShowAdditionalEditors();
+	    }
 	}
 
 	return $ret;
