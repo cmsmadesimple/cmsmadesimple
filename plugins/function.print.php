@@ -25,7 +25,7 @@ function smarty_cms_function_print($params, &$smarty)
 function smarty_cms_help_function_print() {
 	?>
 	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=News">Printing module</a> to make the tag syntax easier. 
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Printing">Printing module</a> to make the tag syntax easier. 
 	Instead of having to use <code>{cms_module module='Printing'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
 	</p>
 	<h3>How do I use it?</h3>
