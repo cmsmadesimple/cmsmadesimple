@@ -18,6 +18,14 @@
 #
 #$Id$
 
+/**
+ * Simple implementation of the OpenID protocol for logging into 
+ * the CMSMS system.  It only handles the simple "dumb mode" of 
+ * OpenID.
+ *
+ * @since 2.0
+ * @author Ted Kulp
+ **/
 class CmsOpenid extends CmsObject
 {
 	public $server = '';
@@ -29,16 +37,39 @@ class CmsOpenid extends CmsObject
 		parent::__construct();
 	}
 	
+	/**
+	 * Check to see if we can support doing the backend call
+	 * to the server after the login procedure.
+	 *
+	 * @return boolean
+	 * @author Ted Kulp
+	 **/
 	public static function is_enabled()
 	{
 		return ini_get('allow_url_fopen');
 	}
 	
+	/**
+	 * Generate a checksum to use for matching the user and the
+	 * login request.
+	 *
+	 * @return string The checksum string
+	 * @author Ted Kulp
+	 **/
 	public static function generate_checksum()
 	{
 		return sha1(time() . CMS_VERSION . ROOT_DIR);
 	}
 	
+	/**
+	 * Take a given OpenId identifier and clean it up so that is 
+	 * follows a generic format.  This would mean no
+	 * protocol at the beginning and no slash at the end
+	 *
+	 * @param string The given OpenId identifier
+	 * @return string The cleaned up OpenId identifier
+	 * @author Ted Kulp
+	 **/
 	public static function cleanup_openid($url)
 	{
 		$u = parse_url(strtolower(trim($url)));
@@ -75,11 +106,27 @@ class CmsOpenid extends CmsObject
 		}
 	}
 	
+	/**
+	 * Create a URL from the given OpenId identifier
+	 * for use in the initial lookup of the provider.
+	 *
+	 * @param string The OpenId identifier
+	 * @return string The url of the given OpenId identifier
+	 * @author Ted Kulp
+	 **/
 	public static function create_url($url)
 	{
 		return 'http://' . self::cleanup_openid($url);
 	}
 	
+	/**
+	 * Lookup the provider (and delegate, if set) from the given url.
+	 * These are then set internally.
+	 *
+	 * @param string The url to lookup the provider of
+	 * @return boolean Wether or not the provider lookup was successful
+	 * @author Ted Kulp
+	 **/
 	public function find_server($url)
 	{
 		$file = fopen($url, 'r');
@@ -109,6 +156,14 @@ class CmsOpenid extends CmsObject
 		return false;
 	}
 	
+	/**
+	 * Create the return_url and redirect to the set provider for authentication.
+	 *
+	 * @param string The url to return to after the authentication is complete
+	 * @param string The checksum to use.  If none is given, one is created.
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	public function do_authentication($return_url, $checksum = '')
 	{
 		if ($this->server == '' || $this->delegate == '' || $return_url == '')
@@ -126,6 +181,15 @@ class CmsOpenid extends CmsObject
 		CmsResponse::redirect("{$this->server}?openid.mode={$this->mode}&openid.identity={$cleaned_delegate}&openid.return_to={$return_url}&openid.trust_root={$trust_root}");
 	}
 	
+	/**
+	 * Does the final authentication check.  This posts back to the provider the details
+	 * given to check that the provider did indeed approve the authentication request.
+	 *
+	 * @param array The array of parameters to send back to the provider for it's
+	 *        checking process
+	 * @return boolean Whether or not the authentication process was successful
+	 * @author Ted Kulp
+	 **/
 	public function check_authentication($params)
 	{
 		if ($params['openid_mode'] == 'id_res' || $params['openid.mode'] == 'id_res')
@@ -154,6 +218,9 @@ class CmsOpenid extends CmsObject
 	 * Posts behind the scenes to another page.
 	 * Taken from: http://netevil.org/blog/2006/nov/http-post-from-php-without-curl
 	 *
+	 * @param string The url to post to
+	 * @param string The data to send in the post's payload
+	 * @param string The method to use (POST or GET -- POST is default)
 	 * @return string Response from the posted page
 	 * @author Wez Furlong, modified by Ted Kulp
 	 **/

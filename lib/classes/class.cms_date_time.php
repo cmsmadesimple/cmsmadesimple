@@ -18,6 +18,15 @@
 #
 #$Id$
 
+/**
+ * Wraps the DateTime class in PHP 5.2+.  It allows us to have a consistent
+ * object for handling dates and is especially useful when handing dates over
+ * to the ORM system.  Includes methods for manipulating the stored date and
+ * time.
+ *
+ * @since 2.0
+ * @author Ted Kulp
+ **/
 class CmsDateTime extends DateTime
 {
 	function __construct($datetime)
@@ -30,6 +39,13 @@ class CmsDateTime extends DateTime
 		return $this->to_format_string();
 	}
 
+	/**
+	 * Returns a formatted string based on the individual user's settings.
+	 * If no one is logged in, then a default based on locale is used.
+	 *
+	 * @return String The formatted datetime string
+	 * @author Ted Kulp
+	 **/
 	function to_format_string()
 	{
 		$format = '%x %X';
@@ -41,6 +57,12 @@ class CmsDateTime extends DateTime
 		return strftime($format, $this->format('U'));		
 	}
 	
+	/**
+	 * Returns a formating string based on the current database connection.
+	 *
+	 * @return String the formatted datetime string
+	 * @author Ted Kulp
+	 */
 	function to_sql_string()
 	{
 		return cms_db()->DBTimeStamp($this->format('U'));
