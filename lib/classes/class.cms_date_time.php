@@ -29,8 +29,13 @@
  **/
 class CmsDateTime extends DateTime
 {
-	function __construct($datetime)
+	function __construct($datetime = null)
 	{
+		if ($datetime == null)
+			$datetime = strftime('%x %X', time());
+		else if (is_int($datetime))
+			$datetime = strftime('%x %X', $datetime);
+
 		parent::__construct($datetime);
 	}
 	
