@@ -969,14 +969,29 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *
 	 * @param array Reference to the hash for this record that came from the database
 	 * @param mixed Reference to the object we should fill
-	 * @return The object we filled (php4 doesn't seem to handle the reference right)
+	 * @return The object we filled
 	 */
 	function fill_object(&$resulthash, &$object)
 	{
+		$db = cms_db();
+		$fields = $this->get_columns_in_table(); //Relax, it's cached
+
 		foreach ($resulthash as $k=>$v)
 		{
+			$datetime = false;
+			if (array_key_exists($k, $fields) && strtolower($fields[$k]->type) == 'datetime')
+				$datetime = true;
+
 			if (array_key_exists($k, $this->field_maps)) $k = $this->field_maps[$k];
-			$object->params[$k] = $v;
+
+			if ($datetime)
+			{
+				$object->params[$k] = new CmsDateTime($v);
+			}
+			else
+			{
+				$object->params[$k] = $v;
+			}
 		}
 		
 		$this->dirty = false;
