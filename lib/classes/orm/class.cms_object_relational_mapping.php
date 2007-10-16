@@ -131,7 +131,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		//Setup the predefined fields in the $params array.  Relax: The definitions are cached.
 		$fields = $this->get_columns_in_table();
 		if (count($fields) > 0) {
-			foreach ($fields as $field) {
+			foreach ($fields as $field=>$data) {
 				if (array_key_exists($field, $this->field_maps)) $field = $this->field_maps[$field];
 				if (!array_key_exists($field, $this->params)) {
 					$this->params[$field] = '';
@@ -775,7 +775,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$midpart = '';
 				$queryparams = array();
 
-				foreach($fields as $onefield)
+				foreach($fields as $onefield=>$obj)
 				{
 					$localname = $onefield;
 					if (array_key_exists($localname, $this->field_maps)) $localname = $this->field_maps[$localname];
@@ -1059,14 +1059,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	
 	function _get_columns_in_table($table)
 	{
-		$config = cms_config();
+		$fields = array();
 
-		$dbms = $config['dbms'];
-		if ($dbms == 'mysqli') $dbms = 'mysql';
-
-		include_once(cms_join_path(ROOT_DIR, 'lib', 'dbo', "{$dbms}.get_columns_in_table.php"));
-		
-		$fields = dbo_get_columns_in_table($table);
+		$cols = cms_db()->MetaColumns($table);
+		foreach ($cols as $k=>$v)
+		{
+			$fields[$v->name] = $v;
+		}
 		
 		return $fields;
 	}
