@@ -793,8 +793,15 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					}
 					else if (array_key_exists($localname, $this->params))
 					{
-						$queryparams[] = $this->params[$localname];
-						$midpart .= "{$onefield} = ?, ";
+						if ($this->params[$localname] instanceof CmsDateTime)
+						{
+							$midpart .= "{$onefield} = " . $this->params[$localname]->to_sql_string() . ", ";
+						}
+						else
+						{
+							$queryparams[] = $this->params[$localname];
+							$midpart .= "{$onefield} = ?, ";
+						}
 					}
 				}
 
@@ -857,7 +864,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				{
 					if (!($new_id == -1 && $localname == $this->id_field))
 					{
-						$queryparams[] = $this->params[$localname];
+						if ($this->params[$localname] instanceof CmsDateTime)
+							$queryparams[] = trim($this->params[$localname]->to_sql_string(), "'");
+						else
+							$queryparams[] = $this->params[$localname];
 						$midpart .= $onefield . ', ';
 					}
 				}

@@ -27,13 +27,23 @@ class CmsDateTime extends DateTime
 	
 	function __toString()
 	{
+		return $this->to_format_string();
+	}
+
+	function to_format_string()
+	{
 		$format = '%x %X';
 
 		$user = CmsLogin::get_current_user();
 		if ($user != null)
 			$format = get_preference($user->id, 'date_format_string', $format);
 
-		return strftime($format, $this->format('U'));
+		return strftime($format, $this->format('U'));		
+	}
+	
+	function to_sql_string()
+	{
+		return cms_db()->DBTimeStamp($this->format('U'));
 	}
 }
 
