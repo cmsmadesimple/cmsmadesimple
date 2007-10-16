@@ -20,6 +20,7 @@
 
 //Database related defines
 define('CMS_ADODB_DT', 'T');
+define('ADODB_OUTP', 'adodb_outp');
 
 /**
  * Singleton class to represent a connection to the database.
@@ -120,6 +121,7 @@ class CmsDatabase extends CmsObject
 		}
 
 		$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
+		$dbinstance->debug = $debug;
 		
 	    if ($dbms == 'sqlite')
 	    {
@@ -150,10 +152,20 @@ class CmsDatabase extends CmsObject
 	}
 }
 
+function adodb_outp($msg, $newline = true)
+{
+	if ($newline)
+		$msg .= "<br>\n";
+
+	$msg = str_replace('<hr />', '', $msg);
+
+	CmsProfiler::get_instance()->mark($msg);
+}
+
 //TODO: Clean me up.  Globals?  Yuck!
 function count_execs($db, $sql, $inputarray)
 {
-	CmsProfiler::get_instance()->mark($sql);
+	//CmsProfiler::get_instance()->mark($sql);
 
 	global $EXECS;
 
