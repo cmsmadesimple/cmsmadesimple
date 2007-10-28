@@ -244,8 +244,14 @@ class Content extends ContentBase
 	  }
 	  else
 	    {
-	      $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active" disabled="disabled"'.($this->mActive?' checked="checked"':'').' />');
-	      $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu" disabled="disabled"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	      if( $this->mActive )
+		{
+		  $ret[]= array('','<input type="hidden" name="active" value="1"/>');
+		}
+	      if( $this->mShowInMenu )
+		{
+		  $ret[]= array('','<input type="hidden" name="showinmenu" value="1"/>');
+		}
 	    }
 
 	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
