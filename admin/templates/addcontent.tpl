@@ -33,6 +33,7 @@
 			<div id="content">
 				{html_hidden id='serialized_content' name='serialized_content' value=$serialized_object}
 				{html_hidden id='orig_page_type' name='orig_page_type' value=$orig_page_type}
+				{html_hidden id='orig_current_language' name='orig_current_language' value=$orig_current_language}
 
 				{* Page Type *}
 				<div class="pageoverflow">
@@ -41,6 +42,16 @@
 				    <select name="page_type" onchange="document.contentform.submit()" class="standard">
 				      {html_options options=$page_types selected=$selected_page_type}
 				    </select>
+					</p>
+				</div>
+				
+				{* Language *}
+				<div class="pageoverflow">
+					<p class="pagetext">{tr}Language{/tr}:</p>
+					<p class="pageinput">
+						<select name="current_language" onchange="document.contentform.submit()" class="standard">
+							{html_options options=$languages selected=$orig_current_language}
+						</select>
 					</p>
 				</div>
 

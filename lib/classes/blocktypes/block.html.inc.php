@@ -35,32 +35,32 @@ class BlockHtml extends CmsObject
 		return 'HTML Text';
 	}
 	
-	function show(&$page, $block_name)
+	function show(&$page, $block_name, $lang = 'en_US')
 	{
-		return $page->get_property_value($block_name . '-content');
+		return $page->get_property_value($block_name . '-content', $lang);
 	}
 	
-	function validate(&$page, $block_name)
+	function validate(&$page, $block_name, $lang = 'en_US')
 	{
-		if ($page->get_property_value($block_name . '-content') == '')
+		if ($page->get_property_value($block_name . '-content', $lang) == '')
 		{
 			$page->add_validation_error(lang('nofieldgiven', array(lang('content'))));	
 		}
 	}
 	
-	function block_add_template(&$page, $block_name, &$template)
+	function block_add_template(&$page, $block_name, &$template, $lang = 'en_US')
 	{
 		return "
-		<p class=\"pagetext\">".lang('content').":</p>
-  		<p class=\"pageinput\">
-			{literal}" . create_textarea(true, $page->get_property_value($block_name . '-content'), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '15', '') . "{/literal}
+		<p>".lang('content').":</p>
+  		<p>
+			{literal}" . create_textarea(true, $page->get_property_value($block_name . '-content', $lang), 'content[property][' . $block_name . '-content]', '', 'content_' . $block_name . '_block', '', '', '80', '12', '') . "{/literal}
 		</p>	
 		";
 	}
 	
-	function block_edit_template(&$page, $block_name, &$template)
+	function block_edit_template(&$page, $block_name, &$template, $lang = 'en_US')
 	{
-		return $this->block_add_template($page, $block_name, $template);
+		return $this->block_add_template($page, $block_name, $template, $lang);
 	}
 }
 

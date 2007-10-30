@@ -90,7 +90,7 @@ class Content extends CmsContentBase
 		}
 	}
 	
-	function add_template(&$smarty)
+	function add_template(&$smarty, $lang = 'en_US')
 	{
 		$template = null;
 		if ($this->template_id == '' || $this->template_id == -1)
@@ -145,7 +145,7 @@ class Content extends CmsContentBase
 		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
 	}
 	
-	function edit_template(&$smarty)
+	function edit_template(&$smarty, $lang = 'en_US')
 	{
 		$template = null;
 		if ($this->template_id == '' || $this->template_id == -1)
@@ -169,12 +169,14 @@ class Content extends CmsContentBase
 				<div class="accordion_content">
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
-						<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="xajax_change_block_type(xajax.getFormValues(\'contentform\'), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
-							'.$this->create_block_type_options($type).'
-						</select>
+						<p class="pageinput">
+							<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="xajax_change_block_type(xajax.getFormValues(\'contentform\'), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
+								'.$this->create_block_type_options($type).'
+							</select>
+						</p>
 					</div>
 					<div class="pageoverflow" id="content-form-' .  $block['id'] . '">
-						'.$this->create_block_type($block['id']).'
+						'.$this->create_block_type($block['id'], $lang).'
 			      	</div>
 				</div>
 			';
@@ -200,7 +202,7 @@ class Content extends CmsContentBase
 		return array(cms_join_path(dirname(__FILE__), 'Content.tpl'));
 	}
 	
-	public function create_block_type($block_id)
+	public function create_block_type($block_id, $lang = 'en_US')
 	{
 		$template = null;
 		if ($this->template_id == '' || $this->template_id == -1)
@@ -223,7 +225,7 @@ class Content extends CmsContentBase
 			$class_name = camelize('block_' . $block_type_obj->type);
 			$class = new $class_name;
 
-			return $class->block_edit_template($this, $block_id, $template);
+			return $class->block_edit_template($this, $block_id, $template, $lang);
 		}
 		
 		return '';

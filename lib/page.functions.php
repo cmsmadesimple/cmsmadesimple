@@ -83,6 +83,7 @@ function load_all_permissions($userid)
 	try
 	{
 		$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ?";
+		/*
 		$result = &$db->Execute($query, array($userid));
 		while ($result && !$result->EOF)
 		{
@@ -91,6 +92,7 @@ function load_all_permissions($userid)
 		}
 	
 		if ($result) $result->Close();
+		*/
 	}
 	catch (exception $e)
 	{

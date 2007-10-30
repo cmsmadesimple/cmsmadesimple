@@ -229,7 +229,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 		foreach ($this->mProperties as &$prop)
 		{
-			if ($prop->prop_name == $name)
+			if ($prop->prop_name == $name && $prop->language == $lang)
 			{
 				$prop->content = $value;
 
@@ -244,6 +244,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$newprop = new CmsContentProperty();
 		$newprop->prop_name = $name;
 		$newprop->content = $value;
+		$newprop->language = $lang;
 		$this->mProperties[] = $newprop;
 		
 		if (!$this->has_property($name))
@@ -300,7 +301,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			//Loop through and see if it's loaded
 			foreach ($this->mProperties as &$prop)
 			{
-				if ($prop->prop_name == $name)
+				if ($prop->prop_name == $name && $prop->language == $lang)
 				{
 					return $prop->content;
 				}
@@ -311,7 +312,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			//Loop through and see if it's loaded now
 			foreach ($this->mProperties as &$prop)
 			{
-				if ($prop->prop_name == $name)
+				if ($prop->prop_name == $name && $prop->language == $lang)
 				{
 					return $prop->content;
 				}
@@ -321,12 +322,12 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return '';
 	}
 	
-	function add_template(&$smarty)
+	function add_template(&$smarty, $lang = 'en_US')
 	{
 		return array();
 	}
 	
-	function edit_template(&$smarty)
+	function edit_template(&$smarty, $lang = 'en_US')
 	{
 		return array();
 	}
