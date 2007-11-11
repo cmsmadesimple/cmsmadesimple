@@ -75,7 +75,7 @@ function cms_module_GetTemplate(&$modinstance, $tpl_name, $modulename = '')
  */
 function cms_module_GetTemplateFromFile(&$modinstance, $template_name)
 {
-	$ok = (strpos($tpl_name, '..') === false);
+	$ok = (strpos($template_name, '..') === false);
 	if (!$ok) return;
 
 	global $gCms;

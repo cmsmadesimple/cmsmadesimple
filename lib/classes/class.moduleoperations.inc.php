@@ -212,12 +212,12 @@ class ModuleOperations
 		  if( isset( $gCms->modules[$moduledetails['name']] ) )
 		    {
 		      $version = $gCms->modules[$moduledetails['name']]['object']->GetVersion();
-		      if( $moduledetails['version'] < $version && $brief == 0)
+		      if( version_compare($moduledetails['version'],$version) < 0 && $brief == 0)
 			{
 			  ModuleOperations::SetError( lang('errorattempteddowngrade') );
 			  return false;
 			}
-		      else if ($moduledetails['version'] == $version && $brief == 0 )
+		      else if (version_compare($moduledetails['version'],$version) == 0 && $brief == 0 )
 			{
 			  ModuleOperations::SetError( lang('moduleinstalled') );
 			  return false;
