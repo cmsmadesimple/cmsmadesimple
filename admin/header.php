@@ -19,6 +19,7 @@
 #$Id$
 
 $current_user = CmsLogin::get_current_user();
+$config = cms_config();
 if ($current_user->is_anonymous())
 {
 	$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];

@@ -30,16 +30,20 @@
  **/
 class CmsMultiLanguage extends CmsObject
 {
-	private static function get_client_language()
+	public static function get_client_language()
 	{
 		//TODO: Pull from clients cookies...  or something
 		return 'en_US';
 	}
 	
-	private static function get_default_language()
+	public static function get_default_language()
 	{
-		//TODO: Pull from CmsConfig
-		return 'en_US';
+		return CmsApplication::get_preference('default_language', 'en_US');
+	}
+	
+	public static function get_enabled_languages()
+	{
+		return explode(',', CmsApplication::get_preference('enabled_languages', 'en_US'));
 	}
 	
 	/**

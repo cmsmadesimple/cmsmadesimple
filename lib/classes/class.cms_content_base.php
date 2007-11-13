@@ -400,7 +400,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		}
 	}
 	
-    function get_url($rewrite = true)
+    function get_url($rewrite = true, $lang = '')
     {
 		$config = cms_config();
 		$url = "";
@@ -409,11 +409,11 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		{
 		    if ($config['use_hierarchy'] == true)
 		    {
-				$url = $config['root_url']. '/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		    }
 		    else
 		    {
-				$url = $config['root_url']. '/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		    }
 		}
 		else
@@ -422,16 +422,16 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		    {
 				if ($config['use_hierarchy'] == true)
 				{
-				    $url = $config['root_url'] . '/index.php/' . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				    $url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 				}
 				else
 				{
-				    $url = $config['root_url'] . '/index.php/' . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
+				    $url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
 				}
 		    }
 		    else
 		    {
-				$url = $config['root_url'] . '/index.php?' . $config['query_var'] . '=' . $alias;
+				$url = $config['root_url'] . '/index.php?' . $config['query_var'] . '=' . $alias . ($lang != '' ? '&amp;lang=' . $lang : '');
 		    }
 		}
 		return $url;
