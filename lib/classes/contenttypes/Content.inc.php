@@ -249,7 +249,7 @@ class Content extends CmsContentBase
 		return $result;
 	}
 	
-	function show($block_name = 'default')
+	function show($block_name = 'default', $lang = 'en_US')
 	{
 		$type = 'html';
 		if ($this->has_property($block_name . '-block-type'))
@@ -260,7 +260,7 @@ class Content extends CmsContentBase
 		$block_type_obj = $this->get_block_type_object($type);
 		
 		if ($block_type_obj != null)
-		{			
+		{
 			require_once($block_type_obj->filename);
 		}
 
@@ -268,7 +268,7 @@ class Content extends CmsContentBase
 		{
 			$class_name = camelize('block_' . $type);
 			$class = new $class_name;
-			return $class->show($this, $block_name);
+			return $class->show($this, $block_name, $lang);
 		}
 		catch (Exception $e)
 		{

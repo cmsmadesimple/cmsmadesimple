@@ -124,7 +124,30 @@ class CmsRequest extends CmsObject
 				$page = $calced;
 		}
 		
+		$page = self::strip_language_from_page($page);
+		
 		return rtrim($page, '/');
+	}
+	
+	public static function strip_language_from_page($page)
+	{
+		$enabled_languages = CmsMultiLanguage::get_enabled_languages();
+		$exploded = explode('/', $page);
+		if (count($exploded) > 1)
+		{
+			if(in_array($exploded[0], $enabled_languages))
+			{
+				//TODO: Set $exploded[0] as the current language
+				$page = str_replace($exploded[0] . '/', '', $page);
+				CmsMultiLanguage::$current_language = $exploded[0];
+			}
+		}
+		else if (isset($_REQUEST['lang']))
+		{
+			//TODO: Set $_REQUEST['lang'] as the current language
+			CmsMultiLanguage::$current_language = $_REQUEST['lang'];
+		}
+		return $page;
 	}
 	
 	/**

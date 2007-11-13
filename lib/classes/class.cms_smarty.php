@@ -412,7 +412,7 @@ class CmsSmarty extends Smarty {
 			$tpl_source = 'No Content Found in Preview File';
 			if (is_array($data) && count($data) == 2)
 			{
-				$tpl_source = $data[1]->show($tpl_name);
+				$tpl_source = $data[1]->show($tpl_name, CmsMultiLanguage::get_client_language());
 			}
 			return true;
 		}
@@ -423,7 +423,7 @@ class CmsSmarty extends Smarty {
 
 			if (isset($node) && $node !== FALSE)
 			{
-				$tpl_source = $node->show($tpl_name);
+				$tpl_source = $node->show($tpl_name, CmsMultiLanguage::get_client_language());
 				
 				//do_cross_reference($pageinfo->content_id, 'content', $tpl_source);
 

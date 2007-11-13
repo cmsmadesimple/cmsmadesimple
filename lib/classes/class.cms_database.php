@@ -121,7 +121,8 @@ class CmsDatabase extends CmsObject
 		}
 
 		$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);
-		$dbinstance->debug = $debug;
+		//$dbinstance->debug = $debug;
+		$dbinstance->debug = true;
 		
 	    if ($dbms == 'sqlite')
 	    {

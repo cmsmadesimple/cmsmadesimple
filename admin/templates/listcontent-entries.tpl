@@ -25,7 +25,7 @@
     <td class="hierarchy">{$content_item->hierarchy()}</td>
     <td>
       {if $has_edit}
-        <a href="editcontent.php?content_id={$content_item->id}">{$content_item->get_property_value('name')}</a>
+        <a href="editcontent.php?content_id={$content_item->id}">{$content_item->get_property_value('name', $language)}</a>
       {else}
         {$content_item->name}
       {/if}

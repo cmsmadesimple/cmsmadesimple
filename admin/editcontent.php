@@ -36,6 +36,9 @@ $templateops =& $gCms->GetTemplateOperations();
 check_login();
 $userid = get_userid();
 
+$language = get_preference($userid, 'default_cms_language', 'en_US');
+$smarty->assign('language', $language);
+
 //Need to know where we're submitting to
 $smarty->assign('action', 'editcontent.php');
 
@@ -43,8 +46,8 @@ $smarty->assign('action', 'editcontent.php');
 $content_id = coalesce_key($_REQUEST, 'content_id', '-1');
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
 $orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
-$current_language = coalesce_key($_POST, 'current_language', 'en_US');
-$orig_current_language = coalesce_key($_POST, 'orig_current_language', 'en_US');
+$current_language = coalesce_key($_POST, 'current_language', $language);
+$orig_current_language = coalesce_key($_POST, 'orig_current_language', $language);
 $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
@@ -153,11 +156,13 @@ function change_block_type($params, $block_id, $new_block_type)
 	$content_id = coalesce_key($params, 'content_id', '-1');
 	$page_type = coalesce_key($params, 'page_type', 'content');
 	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
-	$orig_current_language = coalesce_key($params, 'orig_current_language', 'en_US');
 	
 	$userid = get_userid();
 	$config = cms_config();
 	$smarty = cms_smarty();
+	
+	$language = get_preference($userid, 'default_cms_language', 'en_US');
+	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
 
 	$page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $params, $orig_current_language);
 	$type_param = $block_id . '-block-type';
@@ -183,8 +188,10 @@ function ajaxpreview($params)
 	$content_id = coalesce_key($params, 'content_id', '-1');
 	$page_type = coalesce_key($params, 'page_type', 'content');
 	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
-	$orig_current_language = coalesce_key($params, 'orig_current_language', 'en_US');
 	$userid = get_userid();
+	
+	$language = get_preference($userid, 'default_cms_language', 'en_US');
+	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
 	
 	$config =& cmsms()->GetConfig();
 

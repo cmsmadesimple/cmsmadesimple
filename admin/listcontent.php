@@ -101,6 +101,7 @@ if (isset($_GET['col']) && isset($_GET['content_id']))
 }
 
 $userid = get_userid();
+$smarty->assign('language', get_preference($userid, 'default_cms_language', 'en_US'));
 include_once("header.php");
 
 $smarty->assign('header_name', $themeObject->ShowHeader('currentpages'));

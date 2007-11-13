@@ -30,10 +30,39 @@
  **/
 class CmsMultiLanguage extends CmsObject
 {
+	public static $current_language = '';
+
 	public static function get_client_language()
 	{
-		//TODO: Pull from clients cookies...  or something
-		return 'en_US';
+		//TODO: 
+		//1. See if there is a forced language from the url (in $current_language)
+		//2. Try to grab a usable language from the browser
+		//3. Use the default language of the site
+		if (self::$current_language != '')
+		{
+			return self::$current_language;
+		}
+
+		if (isset($_SERVER['HTTP_ACCEPT_LANGUAGE']))
+		{
+			$browser_languages = explode(';', $_SERVER['HTTP_ACCEPT_LANGUAGE']);
+			$cms_languages = self::get_enabled_languages();
+			
+			//Hackish because of the case insensitivity needed
+			foreach ($cms_languages as $cms_lang)
+			{
+				foreach ($browser_languages as $browser_lang)
+				{
+					if (strtolower($cms_lang) == strtolower(str_replace('-', '_', $browser_lang)))
+					{
+						return $cms_lang;
+					}
+					//TODO: Logic to handle browser sending a 2 char code?
+				}
+			}
+		}
+
+		return self::get_default_language();
 	}
 	
 	public static function get_default_language()

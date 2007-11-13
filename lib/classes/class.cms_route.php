@@ -40,7 +40,7 @@ class CmsRoute extends CmsObject
 	}
 	
 	public static function match_route($page)
-	{
+	{	
 		if (strpos($page, '/') !== FALSE)
 		{
 			$routes =& cmsms()->variables['routes'];
