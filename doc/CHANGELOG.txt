@@ -1,3 +1,11 @@
+Version 1.2.1 "Bridgedown"
+-----------------
+- New versions of News, Search, and FileManager modules
+- Fixes the issue with pages being set inactive on edit if not edited by somebody
+  with the 'Modify Site Structure' permission
+- Adds the cms_move_uploaded_file function that all modules should use from now
+  on to assist in handling file uploads.
+
 Version 1.2 "Barbados"
 -----------------
 - Adds capabilities to have a wysiwyg on the front end

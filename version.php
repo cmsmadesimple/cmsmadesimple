@@ -18,8 +18,8 @@
 #
 #$Id$
 
-$CMS_VERSION = "1.2";
-$CMS_VERSION_NAME = "Barbados";
+$CMS_VERSION = "1.2.1";
+$CMS_VERSION_NAME = "Bridgetown";
 $CMS_SCHEMA_VERSION = "29";
 
 define('CMS_VERSION', $CMS_VERSION);
