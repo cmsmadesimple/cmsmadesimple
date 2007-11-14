@@ -1483,5 +1483,20 @@ function stack_trace()
       echo $elem['file'].':'.$elem['line'].' - '.$elem['function'].'<br/>';
     }
 }
+
+function cms_move_uploaded_file( $tmpfile, $destination )
+{
+   global $gCms;
+   $config =& $gCms->GetConfig();
+
+   if( !@move_uploaded_file( $tmpfile, $destination ) )
+   {
+      return false;
+   }
+
+   @chmod($destination,octdec($config['default_upload_permission']));
+   return true;
+}
+
 # vim:ts=4 sw=4 noet
 ?>
