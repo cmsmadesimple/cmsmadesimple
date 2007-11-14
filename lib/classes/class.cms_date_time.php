@@ -67,6 +67,18 @@ class CmsDateTime extends CmsObject
 			return '';
 		}
 	}
+	
+	function strftime($format)
+	{
+		try
+		{
+			return @strftime($format, $this->datetime->format('U'));
+		}
+		catch (Exception $e)
+		{
+			return '';
+		}
+	}
 
 	/**
 	 * Returns a formatted string based on the individual user's settings.
