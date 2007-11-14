@@ -753,9 +753,9 @@ function cms_module_plugin($params,&$smarty)
 
 	$returnid = '';
 	if (isset($gCms->variables['pageinfo']) && isset($gCms->variables['pageinfo']->content_id))
-	  {
-	    $returnid = $gCms->variables['pageinfo']->content_id;
-	  }
+	{
+		$returnid = $gCms->variables['pageinfo']->content_id;
+	}
 	$params = array_merge($params, GetModuleParameters($id));
 
 	$modulename = '';

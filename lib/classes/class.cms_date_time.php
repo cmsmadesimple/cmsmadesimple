@@ -79,6 +79,11 @@ class CmsDateTime extends CmsObject
 			return '';
 		}
 	}
+	
+	function timestamp()
+	{
+		return $this->format('U');
+	}
 
 	/**
 	 * Returns a formatted string based on the individual user's settings.
@@ -95,7 +100,7 @@ class CmsDateTime extends CmsObject
 		if ($user != null)
 			$format = get_preference($user->id, 'date_format_string', $format);
 
-		return strftime($format, $this->format('U'));
+		return $this->strftime($format);
 	}
 	
 	/**
@@ -106,7 +111,7 @@ class CmsDateTime extends CmsObject
 	 */
 	function to_sql_string()
 	{
-		return cms_db()->DBTimeStamp($this->format('U'));
+		return cms_db()->DBTimeStamp($this->timestamp());
 	}
 }
 
