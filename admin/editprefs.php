@@ -48,8 +48,8 @@ if (isset($_POST['indent'])) $indent = $_POST['indent'];
 $paging = 0;
 if (isset($_POST['paging'])) $paging = $_POST['paging'];
 
-
-$page_message = '';
+$homepage = '';
+if (isset($_POST['homepage'])) $homepage = $_POST['homepage'];
 
 $wysiwyg = '';
 if (isset($_POST["wysiwyg"])) $wysiwyg = $_POST["wysiwyg"];
@@ -81,6 +81,7 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'indent', $indent);
 	set_preference($userid, 'paging', $paging);
 	set_preference($userid, 'date_format_string', $date_format_string);
+	set_preference($userid, 'homepage', $homepage );
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
 	#redirect("index.php");
@@ -96,6 +97,7 @@ if (isset($_POST["submit_form"])) {
 	$indent = get_preference($userid, 'indent', true);
 	$paging = get_preference($userid, 'paging', 0);
 	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
+	$homepage = get_preference($userid,'homepage');
 	$hide_help_links = get_preference($userid, 'hide_help_links');
 }
 
@@ -224,6 +226,14 @@ if (FALSE == empty($page_message)) {
 					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
 				</p>
 			</div>
+
+			<div class="pageoverflow">
+				<p class="pagetext"><?php echo lang('homepage'); ?>:</p>
+				<p class="pageinput">
+						  <?php echo $themeObject->GetAdminPageDropdown('homepage',$homepage); ?>
+				</p>
+			</div>
+
 			<!--
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>

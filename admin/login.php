@@ -41,7 +41,19 @@ if (isset($_SESSION['logout_user_now']))
      $is_logged_in = check_login($no_redirect);
      if (true == $is_logged_in)
        {
-	 redirect($gCms->config['root_url'].'/'.$config['admin_dir'].'/index.php');
+	 $userid = get_userid();
+	 $dest = cms_join_path($config['root_url'],$config['admin_dir']);
+	 $homepage = get_preference($userid,'homepage');
+	 if( $homepage == '' )
+	   {
+	     $homepage = 'index.php';
+	   }
+	 {
+	   $tmp = explode('?',$homepage);
+	   if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+	 }
+	 $dest = cms_join_path($dest,$homepage);
+	 redirect($dest);
        }
    }
 if (isset($_POST["logincancel"]))
@@ -142,7 +154,16 @@ if (isset($_POST["username"]) && isset($_POST["password"])) {
 			else
 			{
 				#echo ('<html><head><title>Logging in... please wait</title><meta http-equiv="refresh" content="1; url=./index.php"></head><body>Logging in and redirecting to <a href="./index.php">index.php</a>, one moment please...</body></html>');
-				redirect("index.php");
+			  $homepage = get_preference($oneuser->id,'homepage');
+			  if( $homepage == '' )
+			    {
+			      $homepage = 'index.php';
+			    }
+			  {
+			    $tmp = explode('?',$homepage);
+			    if( !file_exists($tmp[0]) ) $homepage = 'index.php';
+			  }
+			  redirect($homepage);
 			}
 		}
 		return;
