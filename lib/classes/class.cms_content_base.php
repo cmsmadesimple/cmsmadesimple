@@ -224,8 +224,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	function set_property_value($name, $value, $lang = 'en_US')
 	{
-		if ($this->prop_names != '' && count($this->mProperties) == 0)
-			$this->load_properties();
+		$this->load_properties(false);
 
 		foreach ($this->mProperties as &$prop)
 		{
@@ -279,16 +278,18 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		return in_array($name, explode(',', $this->prop_names));
 	}
 	
-	function load_properties()
+	function load_properties($force = true)
 	{
-		//No go.  Ok, load all of them...
-		$props = cmsms()->content_property->find_all_by_content_id($this->id);
-		foreach ($props as &$prop)
+		if ($force || $this->prop_names != '' && count($this->mProperties) == 0)
 		{
-			//Make sure we don't overwrite any newly set properties
-			if (!in_array($prop->name, $this->get_loaded_property_names()))
+			$props = cmsms()->content_property->find_all_by_content_id($this->id);
+			foreach ($props as &$prop)
 			{
-				$this->mProperties[] = $prop;
+				//Make sure we don't overwrite any newly set properties
+				if (!in_array($prop->name, $this->get_loaded_property_names()))
+				{
+					$this->mProperties[] = $prop;
+				}
 			}
 		}
 	}
@@ -312,7 +313,7 @@ class CmsContentBase extends CmsObjectRelationalMapping
 				}
 			}
 			
-			$this->load_properties();
+			$this->load_properties(false);
 			
 			//Loop through and see if it's loaded now
 			foreach ($this->mProperties as &$prop)
