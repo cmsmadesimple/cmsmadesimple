@@ -295,6 +295,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	
 	function get_property_value($name, $lang = 'en_US')
 	{
+		$default_lang = CmsMultiLanguage::get_default_language();
+
 		//See if it exists...
 		if ($this->has_property($name))
 		{	
@@ -303,7 +305,10 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			{
 				if ($prop->prop_name == $name && $prop->language == $lang)
 				{
-					return $prop->content;
+					if ($prop->content != '')
+					{
+						return $prop->content;
+					}
 				}
 			}
 			
@@ -314,12 +319,18 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			{
 				if ($prop->prop_name == $name && $prop->language == $lang)
 				{
-					return $prop->content;
+					if ($prop->content != '')
+					{
+						return $prop->content;
+					}
 				}
 			}
 		}
-
-		return '';
+		
+		if ($lang != $default_lang)
+			return $this->get_property_value($name, $default_lang);
+		else
+			return '';
 	}
 	
 	function add_template(&$smarty, $lang = 'en_US')
