@@ -677,6 +677,9 @@ class AdminTheme
             'main'=>array('url'=>'index.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('main')),
                     'description'=>'','show_in_menu'=>true),
+	    'home'=>array('url'=>'home.php','parent'=>'main',
+		    'title'=>$this->FixSpaces(lang('home')),
+                    'description'=>'','show_in_menu'=>true),
             // base content menu ---------------------------------------------------------
             'content'=>array('url'=>'topcontent.php','parent'=>-1,
                     'title'=>$this->FixSpaces(lang('content')),
@@ -1714,6 +1717,69 @@ class AdminTheme
 	
 	}
 	
+	function GetAdminPageDropdown($name,$selected)
+	{
+	  $opts = array();
+	  $opts[ucfirst(lang('none'))] = '';
+
+	  $depth = 0;
+	  foreach( $this->menuItems as $sectionKey=>$menuItem )
+	    {
+	      if( $menuItem['parent'] != -1 )
+		{
+		  continue;
+		}
+	      if( !$menuItem['show_in_menu'] || strlen($menuItem['url']) < 1 )
+		{
+		  continue;
+		}
+	      if( $sectionKey == 'viewsite' )
+		{
+		  continue;
+		}
+	      
+	      $opts[$menuItem['title']] = $menuItem['url'];
+
+	      if( is_array($menuItem['children']) && 
+		  count($menuItem['children']) )
+		{
+		  foreach( $menuItem['children'] as $thisChild )
+		    {
+		      if( $thisChild == 'home' )
+			{
+			  continue;
+			}
+
+		      $menuChild = $this->menuItems[$thisChild];
+		      if( !$menuChild['show_in_menu'] || strlen($menuChild['url']) < 1 )
+			{
+			  continue;
+			}
+
+		      
+		      $opts['&nbsp;&nbsp;'.$menuChild['title']] = $menuChild['url'];
+
+		    }
+		}
+	    }
+
+	  $output = '<select name="'.$name.'">';
+	  foreach( $opts as $key => $value )
+	    {
+	      if( $value == $selected )
+		{
+		  $output .= sprintf("<option \"selected=selected\" value=\"%s\">%s</option>",
+				     $value,$key);
+		}
+	      else
+		{
+		  $output .= sprintf("<option value=\"%s\">%s</option>",
+				 $value,$key);
+		}
+	    }
+	  $output .= '</select>';
+	  return $output;
+	}
 }
 
 # vim:ts=4 sw=4 noet
