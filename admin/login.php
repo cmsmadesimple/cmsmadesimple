@@ -42,7 +42,7 @@ if (isset($_SESSION['logout_user_now']))
      if (true == $is_logged_in)
        {
 	 $userid = get_userid();
-	 $dest = cms_join_path($config['root_url'],$config['admin_dir']);
+	 $dest = $config['root_url'].'/'.$config['admin_dir'];
 	 $homepage = get_preference($userid,'homepage');
 	 if( $homepage == '' )
 	   {
@@ -52,7 +52,7 @@ if (isset($_SESSION['logout_user_now']))
 	   $tmp = explode('?',$homepage);
 	   if( !file_exists($tmp[0]) ) $homepage = 'index.php';
 	 }
-	 $dest = cms_join_path($dest,$homepage);
+	 $dest = $dest.'/'.$homepage;
 	 redirect($dest);
        }
    }
