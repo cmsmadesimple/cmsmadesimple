@@ -62,6 +62,9 @@ if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
 $xmlmodulerepository = "";
 if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 
+$defaultdateformat = "";
+if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
+
 $custom404 = "<p>Page not found<//p>";
 if (isset($_POST["custom404"])) $custom404 = $_POST["custom404"];
 
@@ -184,6 +187,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('frontendwysiwyg', $frontendwysiwyg);
       set_site_preference('enablecustom404', $enablecustom404);
       set_site_preference('xmlmodulerepository', $xmlmodulerepository);
+      set_site_preference('defaultdateformat', $defaultdateformat);
       set_site_preference('custom404', $custom404);
       set_site_preference('custom404template', $custom404template);
       set_site_preference('enablesitedownmessage', $enablesitedownmessage);
@@ -214,6 +218,7 @@ else if (isset($_POST["editsiteprefs"]))
   $enablesitedownmessage = get_site_preference('enablesitedownmessage');
   $sitedownmessage = get_site_preference('sitedownmessage');
   $xmlmodulerepository = get_site_preference('xmlmodulerepository');
+  $defaultdateformat = get_site_preference('defaultdateformat');
   #$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
   #$useadvancedcss = get_site_preference('useadvancedcss');
   $logintheme = get_site_preference('logintheme', 'default');
@@ -430,6 +435,12 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 			<p class="pagetext"><?php echo lang('allowparamcheckwarnings')?>:</p>
 			<p class="pageinput"><input class="pagenb" type="checkbox" name="allowparamcheckwarnings" <?php if($allowparamcheckwarnings) echo "checked=\"checked\""?> /></p>
                 </div>
+
+                <div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('date_format_string')?>:</p>
+																		     <p class="pageinput"><input class="pagenb" type="text" name="defaultdateformat" size="20" maxlength="255" value="<?php echo $defaultdateformat; ?>"/>&nbsp;<?php echo lang('date_format_string_help'); ?></p>
+                </div>
+
 	<?php if ($access) { ?>
 	<div class="pageoverflow">
 		<p class="pagetext">&nbsp;</p>
