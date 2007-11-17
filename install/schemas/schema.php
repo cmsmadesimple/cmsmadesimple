@@ -29,7 +29,7 @@ CmsInstallOperations::create_table($db, 'admin_recent_pages', "
 	user_id I,
 	title C(255),
 	url C(255),
-	access_time DT
+	access_time T
 ");
 
 CmsInstallOperations::create_table($db, 'content', "
@@ -59,8 +59,8 @@ CmsInstallOperations::create_table($db, 'content', "
 	tabindex C(10),
 	accesskey C(5),
 	last_modified_by I,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'content', 'alias_and_active', 'content_alias,active');
 CmsInstallOperations::create_index($db, 'content', 'default_content', 'default_content');
@@ -73,8 +73,8 @@ CmsInstallOperations::create_table($db, 'content_props', "
 	prop_name C(255),
 	language C(50),
 	content XL,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'content_props', 'content_id', 'content_id');
 
@@ -83,8 +83,8 @@ CmsInstallOperations::create_table($db, 'crossref', "
 	child_id I,
 	parent_type C(100),
 	parent_id I,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_index($db, 'crossref', 'child_type_and_id', 'child_type,child_id');
@@ -95,8 +95,8 @@ CmsInstallOperations::create_table($db, 'css', "
 	css_name C(255),
 	css_text XL,
 	media_type C(255),
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'css', 'css_name', 'css_name');
 
@@ -104,8 +104,8 @@ CmsInstallOperations::create_table($db, 'css_assoc', "
 	assoc_to_id I,
 	assoc_css_id I,
 	assoc_type C(80),
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_to_id', 'assoc_to_id');
 CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id', 'assoc_css_id');
@@ -131,8 +131,8 @@ CmsInstallOperations::create_table($db, 'group_perms', "
 	id I KEY AUTO,
 	group_id I,
 	permission_id I,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'group_perms', 'group_and_permission', 'group_id,permission_id');
 
@@ -148,8 +148,8 @@ CmsInstallOperations::create_table($db, 'groups', "
 	id I KEY AUTO,
 	group_name C(25),
 	active I1,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'htmlblobs', "
@@ -158,8 +158,8 @@ CmsInstallOperations::create_table($db, 'htmlblobs', "
 	html XL,
 	owner I,
 	version I,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'htmlblobs', 'htmlblob_name', 'htmlblob_name');
 
@@ -182,16 +182,16 @@ CmsInstallOperations::create_table($db, 'module_deps', "
 	parent_module C(25),
 	child_module C(25),
 	minimum_version C(25),
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'module_templates', "
 	module_name C(200),
 	template_name C(200),
 	content XL,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'module_templates', 'module_and_template', 'module_name,template_name');
 
@@ -203,16 +203,16 @@ CmsInstallOperations::create_table($db, 'multilanguage', "
 	property_name C(100),
 	language C(5),
 	content XL,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'permissions', "
 	id I KEY AUTO,
 	permission_name C(255),
 	permission_text C(255),
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'permission_defns', "
@@ -230,15 +230,15 @@ CmsInstallOperations::create_table($db, 'serialized_versions', "
 	object_id I,
 	data B,
 	type C(255),
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'siteprefs', "
 	sitepref_name C(255) KEY,
 	sitepref_value text,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'templates', "
@@ -248,16 +248,16 @@ CmsInstallOperations::create_table($db, 'templates', "
 	encoding C(25),
 	active I1,
 	default_template I1,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 CmsInstallOperations::create_index($db, 'templates', 'template_name', 'template_name');
 
 CmsInstallOperations::create_table($db, 'user_groups', "
 	group_id I,
 	user_id I,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'userprefs', "
@@ -279,16 +279,16 @@ CmsInstallOperations::create_table($db, 'users', "
 	openid C(255),
 	checksum C(255),
 	active I1,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'userplugins', "
 	id I KEY AUTO,
 	userplugin_name C(255),
 	code X,
-	create_date DT,
-	modified_date DT
+	create_date T,
+	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'version', "

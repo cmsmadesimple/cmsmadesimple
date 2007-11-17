@@ -92,8 +92,8 @@ class CmsDatabase extends CmsObject
 
 		$_GLOBALS['ADODB_CACHE_DIR'] = cms_join_path(ROOT_DIR,'tmp','cache');
 
-		require(cms_join_path(ROOT_DIR,'lib','adodb','adodb-exceptions.inc.php'));
-        require(cms_join_path(ROOT_DIR,'lib','adodb','adodb.inc.php'));
+		require_once(cms_join_path(ROOT_DIR,'lib','adodb','adodb-exceptions.inc.php'));
+        require_once(cms_join_path(ROOT_DIR,'lib','adodb','adodb.inc.php'));
 
 		try
 		{
@@ -103,21 +103,28 @@ class CmsDatabase extends CmsObject
 	
 			if ($persistent)
 			{
-				$connect_result = $dbinstance->PConnect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->PConnect($hostname,$username,$password,$dbname);
 			}
 			else
 			{
-				$connect_result = $dbinstance->Connect($hostname,$username,$password,$dbname);
+				$connect_result = @$dbinstance->Connect($hostname,$username,$password,$dbname);
 			}
 		}
 		catch (exception $e)
 		{
-			echo "<strong>Database Connection Failed</strong><br />";
-			echo "Error: {$dbinstance->_errorMsg}<br />";
-			echo "Function Performed: {$e->fn}<br />";
-			echo "Host/DB: {$e->host}/{$e->database}<br />";
-			echo "Database Type: {$dbms}<br />";
-			die();
+			if ($die)
+			{
+				echo "<strong>Database Connection Failed</strong><br />";
+				echo "Error: {$dbinstance->_errorMsg}<br />";
+				echo "Function Performed: {$e->fn}<br />";
+				echo "Host/DB: {$e->host}/{$e->database}<br />";
+				echo "Database Type: {$dbms}<br />";
+				die();
+			}
+			else
+			{
+				return null;
+			}
 		}
 
 		$dbinstance->SetFetchMode(ADODB_FETCH_ASSOC);

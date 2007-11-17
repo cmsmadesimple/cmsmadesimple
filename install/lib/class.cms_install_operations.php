@@ -240,8 +240,15 @@ class CmsInstallOperations extends CmsObject
 			$db = CmsDatabase::connect($driver, $hostname, $username, $password, $dbname, false, false, $prefix);
 			if ($db != null && $db->IsConnected())
 			{
-				include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'schema.php'));
-				return true;
+				try
+				{
+					include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'schema.php'));
+					return true;
+				}
+				catch (Exception $e)
+				{
+					var_dump('There was an error creating the database');
+				}
 			}
 		}
 		
