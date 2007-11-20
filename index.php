@@ -88,7 +88,7 @@ $page = CmsRequest::calculate_page_from_request();
 //output any cached data.
 if (CmsConfig::get('full_page_caching'))
 {
-	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page))
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page, CmsMultiLanguage::get_client_language()))
 	{
 		echo $data;
 		$endtime = $profiler->get_time();

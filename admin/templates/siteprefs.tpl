@@ -25,7 +25,7 @@
 
 		<div id="general" class="fragment">
 
-			<form method="post" name="generalform" id="generalform">
+			<form method="post" name="generalform" id="generalform" action="siteprefs.php">
 
 				<div class="pageoverflow">
 					<p class="pagetext">{tr}Clear Cache{/tr}:</p>
@@ -84,7 +84,7 @@
 
 		<div id="languages" class="fragment">
 
-			<form method="post" name="languagesform" id="languagesform">
+			<form method="post" name="languagesform" id="languagesform" action="siteprefs.php">
 				<table border="0" cellspacing="0" cellpadding="3">
 					<thead>
 						<tr>
