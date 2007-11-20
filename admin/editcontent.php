@@ -285,7 +285,7 @@ $smarty->assign('serialized_object', serialize_object($page_object));
 $smarty->assign('orig_page_type', $orig_page_type);
 
 //Language related stuff
-$smarty->assign('languages', CmsLanguage::get_language_list(true));
+$smarty->assign('languages', CmsMultiLanguage::get_enabled_languages_as_hash());
 $smarty->assign('current_language', $current_language);
 $smarty->assign('orig_current_language', $current_language); //orig_current_language should match current_language now that saves and stuff are done
 

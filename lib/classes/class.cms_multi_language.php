@@ -75,6 +75,22 @@ class CmsMultiLanguage extends CmsObject
 		return explode(',', CmsApplication::get_preference('enabled_languages', 'en_US'));
 	}
 	
+	public static function get_enabled_languages_as_hash()
+	{
+		$enabled = CmsMultiLanguage::get_enabled_languages();
+
+		$result = array();
+		foreach (CmsLanguage::get_language_list(true) as $k=>$v)
+		{
+			if (in_array($k, $enabled))
+			{
+				$result[$k] = $v;
+			}
+		}
+
+		return $result;
+	}
+	
 	/**
 	 * Get a list of languages that this content is currently translated to
 	 *

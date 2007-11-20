@@ -45,7 +45,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 			}
 			$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
 			if ($media != '')
-			{z
+			{
 				$stylesheet .= '&amp;mediatype='.urlencode($media);
 			}
 			$stylesheet .= "\" />\n"; 

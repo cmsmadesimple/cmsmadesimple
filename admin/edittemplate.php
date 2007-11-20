@@ -45,7 +45,6 @@ $template_id = coalesce_key($_REQUEST, 'template_id', '-1');
 
 function &get_template_object($template_id)
 {
-	var_dump($template_id);
 	$template_object = cmsms()->cms_template->find_by_id($template_id);
 	
 	if (isset($_REQUEST['template']))

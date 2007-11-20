@@ -53,7 +53,7 @@ if (!file_exists($config_location) || filesize($config_location) < 800)
     }
 	else
 	{
-		die('Do a redirect - ' . $config_location);
+		//die('Do a redirect - ' . $config_location);
         CmsResponse::redirect('install/index.php');
     }
 }

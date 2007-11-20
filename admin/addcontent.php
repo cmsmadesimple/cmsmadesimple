@@ -36,12 +36,17 @@ $templateops = $gCms->GetTemplateOperations();
 check_login();
 $userid = get_userid();
 
+$language = get_preference($userid, 'default_cms_language', 'en_US');
+$smarty->assign('language', $language);
+
 //Need to know where we're submitting to
 $smarty->assign('action', 'addcontent.php');
 
 //See if some variables are returned
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
 $orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
+$current_language = coalesce_key($_POST, 'current_language', $language);
+$orig_current_language = coalesce_key($_POST, 'orig_current_language', $language);
 $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
@@ -92,14 +97,14 @@ function copycontentobj(&$page_object, $page_type)
 	$page_object = $tmpobj;
 }
 
-function &get_page_object(&$page_type, &$orig_page_type, $userid, $params)
+function &get_page_object(&$page_type, &$orig_page_type, $userid, $params, $lang = 'en_US')
 {
 	$page_object = new StdClass();
 
 	if (isset($params["serialized_content"]))
 	{
 		$page_object = unserialize_object($params["serialized_content"]);
-		$page_object->update_parameters($params['content']);
+		$page_object->update_parameters($params['content'], $lang);
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
 			copycontentobj($page_object, $page_type);
@@ -148,8 +153,11 @@ function change_block_type($params, $block_id, $new_block_type)
 	$userid = get_userid();
 	$config = cms_config();
 	$smarty = cms_smarty();
+	
+	$language = get_preference($userid, 'default_cms_language', 'en_US');
+	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
 
-	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params);
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params, $orig_current_language);
 	$type_param = $block_id . '-block-type';
 	$div_id = 'content-form-' . $block_id;
 	$page_object->$type_param = $new_block_type;
@@ -174,9 +182,12 @@ function ajaxpreview($params)
 	$orig_page_type = coalesce_key($params, 'orig_page_type', 'content');
 	$userid = get_userid();
 	
+	$language = get_preference($userid, 'default_cms_language', 'en_US');
+	$orig_current_language = coalesce_key($params, 'orig_current_language', $language);
+	
 	$config =& cmsms()->GetConfig();
 
-	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params);
+	$page_object = get_page_object($page_type, $orig_page_type, $userid, $params, $orig_current_language);
 	$tmpfname = create_preview($page_object);
 	$url = $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname));
 	
@@ -195,7 +206,7 @@ function ajaxpreview($params)
 }
 
 //Get a working page object
-$page_object = get_page_object($page_type, $orig_page_type, $userid, $_REQUEST);
+$page_object = get_page_object($page_type, $orig_page_type, $userid, $_REQUEST, $orig_current_language);
 
 //Preview?
 $smarty->assign('showpreview', false);
@@ -215,8 +226,8 @@ else if ($access)
 {
 	if ($submit || $apply)
 	{
-		$page_object->set_property_value('name', $_REQUEST['name'], 'en_US');
-		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], 'en_US');
+		$page_object->set_property_value('name', $_REQUEST['name'], $orig_current_language);
+		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $orig_current_language);
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
@@ -237,6 +248,11 @@ $smarty->assign('header_name', $themeObject->ShowHeader('addcontent'));
 $smarty->assign_by_ref('page_object', $page_object);
 $smarty->assign('serialized_object', serialize_object($page_object));
 $smarty->assign('orig_page_type', $orig_page_type);
+
+//Language related stuff
+$smarty->assign('languages', CmsMultiLanguage::get_enabled_languages_as_hash());
+$smarty->assign('current_language', $current_language);
+$smarty->assign('orig_current_language', $current_language); //orig_current_language should match current_language now that saves and stuff are done
 
 //Can we preview?
 $smarty->assign('can_preview', $page_object->preview);
@@ -261,11 +277,11 @@ $smarty->assign('show_owner_dropdown', false);
 $smarty->assign('owner_dropdown', $userops->GenerateDropdown($page_object->owner_id, 'content[owner_id]'));
 
 //Name and menu text are multilang, use the parameters
-$smarty->assign('name', $page_object->get_property_value('name'), 'en_US');
-$smarty->assign('menu_text', $page_object->get_property_value('menu_text'), 'en_US');
+$smarty->assign('name', $page_object->get_property_value('name'), $current_language);
+$smarty->assign('menu_text', $page_object->get_property_value('menu_text'), $current_language);
 
 //Any included smarty templates for this page type?
-$smarty->assign('include_templates', $page_object->add_template($smarty));
+$smarty->assign('include_templates', $page_object->add_template($smarty, $current_language));
 
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
