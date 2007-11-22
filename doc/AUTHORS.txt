@@ -4,6 +4,7 @@ Developers Past and Present
 - Samuel Goldstein <cmsmadesimple [AT] fogbound [DOT] net>
 - Robert Campbell <calguy1000 [AT] cmsmadesimple [DOT] org>
 - Morten Poulsen <morten [AT] poulsen [DOT] org>
+- Tatu Wikman <tsw [AT] cmsmadesimple [DOT] org>
 - Alexander Endresen <alexander [AT] endresen [DOT] org>
 - Daniel Westergren <daniel [AT] wproductions [DOT] se>
 - Patricia Brun <cmsms [AT] virtuaza [DOT] net>
