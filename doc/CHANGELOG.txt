@@ -2,7 +2,7 @@ Version 1.2.1 "Bridgetown"
 -----------------
 - New versions of News, Search, Tiny, and FileManager modules
   - see the documentation for each module to learn what has changed
-  - some of these modules have been released seperately at an earlier date
+  - some of these modules may have been released seperately at an earlier date
 - Fixes the issue with pages being set inactive on edit if not edited by somebody
   with the 'Modify Site Structure' permission
 - Adds the cms_move_uploaded_file function that all modules should use from now
@@ -10,6 +10,9 @@ Version 1.2.1 "Bridgetown"
 - Adds the ability to set a 'home page' in the user prefences to determine
   a page to redirect to upon login.
 - Adds a 'Home' menu item under 'Main' 
+- Adds a site preference for date format
+- Adds the cms_date_format modifier that reads the site preference
+  as well as the user preference for date format (when in the admin section)
 
 Version 1.2 "Barbados"
 -----------------
