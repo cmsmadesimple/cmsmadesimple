@@ -19,8 +19,8 @@
 	<div id="page_tabs">
 
 		<ul class="anchors">
-			<li><a href="#general">{tr}General{/tr}</a></li>
-			<li><a href="#languages">{tr}Languages{/tr}</a></li>
+			<li><a href="#general"><span>{tr}General{/tr}</span></a></li>
+			<li><a href="#languages"><span>{tr}Languages{/tr}</span></a></li>
 		</ul>
 
 		<div id="general" class="fragment">

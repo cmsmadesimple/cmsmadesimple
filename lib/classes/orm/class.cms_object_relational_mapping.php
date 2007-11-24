@@ -1094,11 +1094,18 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function _get_columns_in_table($table)
 	{
 		$fields = array();
-
-		$cols = cms_db()->MetaColumns($table);
-		foreach ($cols as $k=>$v)
+		
+		try
 		{
-			$fields[$v->name] = $v;
+			$cols = cms_db()->MetaColumns($table);
+			foreach ($cols as $k=>$v)
+			{
+				$fields[$v->name] = $v;
+			}
+		}
+		catch (Exception $e)
+		{
+
 		}
 		
 		return $fields;

@@ -94,9 +94,7 @@ if ($access)
 		{
 			$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
 			$blobobj->name = $htmlblob;
-			var_dump('here');
 			$blobobj->set_multi_language_content('content', 'en_US', $content);
-			var_dump('there');
 			$blobobj->owner = $owner_id;
 
 			$blobobj->ClearAuthors();
