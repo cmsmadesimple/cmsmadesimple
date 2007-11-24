@@ -28,12 +28,23 @@
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsGlobalContent extends CmsVersioningExtension
+class CmsGlobalContent extends CmsObjectRelationalMapping
 {	
-	var $params = array('id' => -1, 'name' => '', 'content' => '', 'owner' => -1);
-	var $field_maps = array('htmlblob_id' => 'id', 'htmlblob_name' => 'name', 'html' => 'content');
+	var $params = array('id' => -1, 'name' => '', 'owner' => -1);
+	var $field_maps = array('htmlblob_name' => 'name', 'html' => 'content');
 	var $table = 'htmlblobs';
-	var $sequence = 'htmlblobs_seq';
+	var $multi_language_params = array('content'); //For acts_as_multi_language
+	var $content_type = 'global_content'; //For acts_as_multi_language
+	
+	public function __construct()
+	{
+		parent::__construct();
+	}
+	
+	public function setup()
+	{
+		$this->assign_acts_as('MultiLanguage');
+	}
 
 	function IsOwner($user_id)
 	{

@@ -22,11 +22,11 @@
 
 		<div id="page_tabs">
 			<ul>
-				<li><a href="#content">Content</a></li>
-				<li><a href="#advanced">Advanced</a></li>
-				<li><a href="#permissions">Permissions</a></li>
+				<li><a href="#content"><span>Content</span></a></li>
+				<li><a href="#advanced"><span>Advanced</span></a></li>
+				<li><a href="#permissions"><span>Permissions</span></a></li>
 				{if $can_preview eq true}
-				  <li><a href="#preview"{if $showpreview eq true} class="active"{/if} onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;">Preview</a></li>
+				  <li><a href="#preview"{if $showpreview eq true} class="active"{/if} onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;"><span>Preview</span></a></li>
 				{/if}
 			</ul>
 

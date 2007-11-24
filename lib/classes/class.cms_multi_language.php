@@ -167,6 +167,21 @@ class CmsMultiLanguage extends CmsObject
 		return $original_content;
 	}
 	
+	public static function get_all_content($module_name, $content_type, $object_id)
+	{
+		$content = array();
+		$db = cms_db();
+		
+		$dbresult = $db->Execute('SELECT property_name, language, content FROM ' . cms_db_prefix() . 'multilanguage WHERE module_name = ? AND content_type = ? and object_id = ?', array($module_name, $content_type, $object_id));
+		while ($dbresult && !$dbresult->EOF)
+		{
+			$content[$dbresult->fields['property_name']][$dbresult->fields['language']] = $dbresult->fields['content'];
+			$dbresult->MoveNext();
+		}
+
+		return $content;
+	}
+	
 	/**
 	 * Save content translations to the multilanguage subsystem.
 	 *
@@ -221,6 +236,16 @@ class CmsMultiLanguage extends CmsObject
 			$query .= ' AND language = ?';
 			$params[] = $language;
 		}
+
+		return $db->Execute($query, $params);
+	}
+	
+	public static function delete_all_content($module_name, $content_type, $object_id = -1)
+	{
+		$db = cms_db();
+		
+		$query = "DELETE FROM " . cms_db_prefix() . "multilanguage WHERE module_name = ? and content_type = ? and object_id = ?";
+		$params = array($module_name, $content_type, $object_id);
 
 		return $db->Execute($query, $params);
 	}

@@ -133,7 +133,7 @@ class Content extends CmsContentBase
 			<script type="text/javascript">
 			{literal}
 			<!--
-				$(\'#page_accordion\').Accordion({ header: \'div.accordion_header\' });
+				//$(\'#page_accordion\').accordion({ header: \'div.accordion_header\' });
 			//-->
 			{/literal}
 			</script>
@@ -190,7 +190,7 @@ class Content extends CmsContentBase
 			<script type="text/javascript">
 			{literal}
 			<!--
-				$(\'#page_accordion\').Accordion({ header: \'div.accordion_header\' });
+				//$(\'#page_accordion\').accordion({ header: \'div.accordion_header\' });
 			//-->
 			{/literal}
 			</script>

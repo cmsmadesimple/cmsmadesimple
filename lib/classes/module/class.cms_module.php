@@ -2187,7 +2187,7 @@ class CmsModule extends CmsObject
 		}
 		//$this->tab_titles[$tabid] = $title;
 		// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-		return '<li><a href="#'.$tabid.'">'.$title.'</a></li>';
+		return '<li><a href="#'.$tabid.'"><span>'.$title.'</span></a></li>';
 	}
 
 	function EndTabHeaders()

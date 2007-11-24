@@ -71,7 +71,7 @@ if ($access) {
 		{
 			$blobobj = new CmsGlobalContent();
 			$blobobj->name = $htmlblob;
-			$blobobj->content = $content;
+			$blobobj->set_multi_language_content('content', 'en_US', $content);
 			$blobobj->owner = $userid;
 
 			$result = $blobobj->save();
@@ -100,12 +100,12 @@ $db = cms_db();
 
 $addt_users = "";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
+$query = "SELECT id, username FROM ".cms_db_prefix()."users WHERE id <> ? ORDER BY username";
 $result = $db->Execute($query, array($userid));
 
 if ($result && $result->RecordCount() > 0) {
 	while($row = $result->FetchRow()) {
-		$addt_users .= "<option value=\"".$row["user_id"]."\">".$row["username"]."</option>";
+		$addt_users .= "<option value=\"".$row["id"]."\">".$row["username"]."</option>";
 	}
 }else{
 	$addt_users = "<option>&nbsp;</option>";

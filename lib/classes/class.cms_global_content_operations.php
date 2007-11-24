@@ -182,7 +182,7 @@ class CmsGlobalContentOperations extends CmsObject
 		$db = &$gCms->GetDb();
 		$result = false;
 
-		$query = "SELECT additional_htmlblob_users_id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
+		$query = "SELECT id FROM ".cms_db_prefix()."additional_htmlblob_users WHERE htmlblob_id = ? AND user_id = ?";
 		$row = &$db->GetRow($query, array($id, $user_id));
 
 		if ($row)
@@ -208,9 +208,8 @@ class CmsGlobalContentOperations extends CmsObject
 		global $gCms;
 		$db = &$gCms->GetDb();
 
-		$new_id = $db->GenID(cms_db_prefix()."additional_htmlblob_users_seq");
-		$query = "INSERT INTO ".cms_db_prefix()."additional_htmlblob_users (additional_htmlblob_users_id, htmlblob_id, user_id) VALUES (?,?,?)";
-		$dbresult = $db->Execute($query, array($new_id,$id,$user_id));
+		$query = "INSERT INTO ".cms_db_prefix()."additional_htmlblob_users (id, htmlblob_id, user_id) VALUES (?,?,?)";
+		$dbresult = $db->Execute($query, array($new_id, $id, $user_id));
 	}
 }
 

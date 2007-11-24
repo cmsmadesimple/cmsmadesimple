@@ -94,7 +94,9 @@ if ($access)
 		{
 			$blobobj = cmsms()->global_content->find_by_id($htmlblob_id);
 			$blobobj->name = $htmlblob;
-			$blobobj->content = $content;
+			var_dump('here');
+			$blobobj->set_multi_language_content('content', 'en_US', $content);
+			var_dump('there');
 			$blobobj->owner = $owner_id;
 
 			$blobobj->ClearAuthors();
@@ -145,7 +147,7 @@ if ($access)
 		$htmlblob = $onehtmlblob->name;
 		$oldhtmlblob = $onehtmlblob->name;
 		$owner_id = $onehtmlblob->owner;
-		$content = $onehtmlblob->content;
+		$content = $onehtmlblob->get_multi_language_content('content', 'en_US');
 	}
 }
 
@@ -240,13 +242,13 @@ $db = cms_db();
 
 $owners = "<select name=\"owner_id\">";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users ORDER BY username";
+$query = "SELECT id, username FROM ".cms_db_prefix()."users ORDER BY username";
 $result = $db->Execute($query);
 
 while($result && $row = $result->FetchRow())
 {
-	$owners .= "<option value=\"".$row["user_id"]."\"";
-	if ($row["user_id"] == $owner_id)
+	$owners .= "<option value=\"".$row["id"]."\"";
+	if ($row["id"] == $owner_id)
 	{
 		$owners .= " selected=\"selected\"";
 	}
@@ -257,13 +259,13 @@ $owners .= "</select>";
 
 $addt_users = "";
 
-$query = "SELECT user_id, username FROM ".cms_db_prefix()."users WHERE user_id <> ? ORDER BY username";
+$query = "SELECT id, username FROM ".cms_db_prefix()."users WHERE id <> ? ORDER BY username";
 $result = $db->Execute($query,array($userid));
 
 while($result && $row = $result->FetchRow())
 {
-	$addt_users .= "<option value=\"".$row["user_id"]."\"";
-	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["user_id"]." AND htmlblob_id = ?";
+	$addt_users .= "<option value=\"".$row["id"]."\"";
+	$query = "SELECT * from ".cms_db_prefix()."additional_htmlblob_users WHERE user_id = ".$row["id"]." AND htmlblob_id = ?";
 	$newresult = $db->Execute($query,array($htmlblob_id));
 	if ($newresult && $newresult->RecordCount() > 0)
 	{

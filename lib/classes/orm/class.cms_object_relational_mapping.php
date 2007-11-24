@@ -140,6 +140,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		}
 		
 		$this->setup(true);
+
+		//Run the setup methods for any acts_as classes attached
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->setup($this);
+		}
 	}
 	
 	public function __wakeup()
@@ -418,6 +424,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function __call($function, $arguments)
 	{
 		$function_converted = underscore($function);
+		$drop_first = substr($function_converted, 4); //For the set_ check
 		if (array_key_exists($function, $this->field_maps)) $function_converted = $this->field_maps[$function];
 
 		if (starts_with($function, 'find_by_'))
@@ -432,10 +439,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		{
 			return $this->find_count_by_($function, $arguments);
 		}
-		else if (starts_with($function_converted, 'set_'))
+		else if (starts_with($function_converted, 'set_') && $this->has_parameter($drop_first))
 		{
 			#This handles the SetSomeParam() dynamic function calls
-			return $this->__set(substr($function_converted, 4), $arguments[0]);
+			return $this->__set($drop_first, $arguments[0]);
 		}
 		else
 		{
@@ -443,6 +450,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$acts_as_list = cms_orm()->get_acts_as($this);
 			if (count($acts_as_list) > 0)
 			{
+				$arguments = array_merge(array(&$this), $arguments);
 				foreach ($acts_as_list as $one_acts_as)
 				{
 					if (method_exists($one_acts_as, $function))

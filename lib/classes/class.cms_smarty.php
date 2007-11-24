@@ -239,11 +239,11 @@ class CmsSmarty extends Smarty {
 		$oneblob = CmsCache::get_instance()->call(array(cmsms()->global_content, 'find_by_name'), $tpl_name);
 		if ($oneblob)
 		{
-			$tpl_source = $oneblob->content;
+			$tpl_source = $oneblob->get_multi_language_content('content', 'en_US');
 		}
 		else
 		{
-			$tpl_source = "<!-- Html blob '" . $tpl_name . "' does not exist  -->";
+			$tpl_source = "<!-- Global content block named '" . $tpl_name . "' does not exist  -->";
 		}
 		debug_buffer('end global_content_get_template');
 		return true;

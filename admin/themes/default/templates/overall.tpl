@@ -8,42 +8,39 @@
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{sitename} - Tags</title>
 	<link rel="stylesheet" type="text/css" href="style.php" />
-  <link rel="stylesheet" href="../lib/jquery/tabs/jquery.tabs.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="themes/default/css/tabs.css" type="text/css" media="print, projection, screen" />
 
 	{literal}
 	
 	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
-	<script type="text/javascript" src="../lib/jquery/interface/interface.js"></script>
-	<!-- <script type="text/javascript" src="../lib/jquery/tabs/jquery.history.js"></script> -->
-	<script type="text/javascript" src="../lib/jquery/tabs/jquery.tabs.js"></script>
-	<script type="text/javascript" src="../lib/jquery/accordion/jquery.accordion.js"></script>
+	<script type="text/javascript" src="../lib/jquery/ui/ui.tabs.js"></script>
+	<script type="text/javascript" src="../lib/jquery/ui/ui.accordion.js"></script>
 	
-  <script type="text/javascript">//<![CDATA[
-      // form handling stuff
-	$(document).ready(function() {
-	// disable all buttons
-	$('button').addClass("disabled").attr("disabled", true);
-	// but enable cancel
-	$('button[@name="cancel"]').removeClass("disabled").attr("disabled", false);
+	<script type="text/javascript">//<![CDATA[
+		// form handling stuff
+		$(document).ready(function() {
+			// disable all buttons
+			$('button').addClass("disabled").attr("disabled", true);
+			// but enable cancel
+			$('button[@name="cancel"]').removeClass("disabled").attr("disabled", false);
 	
-	// assign event for every input
-	$('form :input').one("change", function() {
-		// on change call enable form
-		enableForm(this.form);
-		// mark in title
-		if(document.title[0] != "*") {
-			document.title = "*"+document.title;
-		}
+			// assign event for every input
+			$('form :input').one("change", function() {
+				// on change call enable form
+				enableForm(this.form);
+				// mark in title
+				if(document.title[0] != "*") {
+					document.title = "*"+document.title;
+				}
+			});
 		});
 
-	});
+		function enableForm(form) {
+			var input = $('button', form);
+			input.attr('disabled', false).removeClass('disabled');
+		}
 
-	function enableForm(form) {
-     		var input = $('button', form);
-        	input.attr('disabled', false).removeClass('disabled');
-	} 	
-
-  //]]></script>
+	//]]></script>
 
 	{/literal}
 	
