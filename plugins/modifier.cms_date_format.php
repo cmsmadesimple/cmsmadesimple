@@ -1,15 +1,9 @@
 <?php
 
-global $gCms;
-$smarty =& $gCms->GetSmarty();
-$config =& $gCms->GetConfig();
-$fn = cms_join_path($config['root_path'],'lib','smarty','plugins','modifier.date_format.php');
-if( !file_exists($fn) ) die();
-require_once( $fn );
-
 function smarty_cms_modifier_cms_date_format($string, $format = '',
 					     $default_date = '')
 {
+
 
   if( $format == '' )
     {
@@ -28,6 +22,13 @@ function smarty_cms_modifier_cms_date_format($string, $format = '',
 	    }
 	}
     }
+
+  global $gCms;
+  $smarty =& $gCms->GetSmarty();
+  $config =& $gCms->GetConfig();
+  $fn = cms_join_path($config['root_path'],'lib','smarty','plugins','modifier.date_format.php');
+  if( !file_exists($fn) ) die();
+  require_once( $fn );
 
   return smarty_modifier_date_format($string,$format,$default_date);
 }
