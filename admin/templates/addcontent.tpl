@@ -198,106 +198,41 @@
 			
 			<div id="permissions">
 				
-				<h4>View</h4>
-				
-				<table cellpadding="5" cellspacing="0" border="0">
-					<thead>
-						<tr>
-							<th>Group</th>
-							<th>Allow</th>
-							<th>Inherited From</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr style="color: #666;" class="row1">
-							<td>Everyone</td>
-							<td>True</td>
-							<td>Root</td>
-							<td></td>
-							<td></td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<hr />
-				
-				<h4>Edit</h4>
-				
-				<table cellpadding="5" cellspacing="0" border="0">
-					<thead>
-						<tr>
-							<th>Group</th>
-							<th>Allow</th>
-							<th>Inherited From</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr style="color: #666;" class="row1">
-							<td>Everyone</td>
-							<td>False</td>
-							<td>Root</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr style="color: #666;" class="row2">
-							<td>Users</td>
-							<td>True</td>
-							<td>Root</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="row1">
-							<td>Designers</td>
-							<td>True</td>
-							<td></td>
-							<td><a href="#">Edit</a></td>
-							<td><a href="#">Delete</a></td>
-						</tr>
-					</tbody>
-				</table>
-				
-				<hr />
-				
-				<h4>Delete</h4>
-				
-				<table cellpadding="5" cellspacing="0" border="0">
-					<thead>
-						<tr>
-							<th>Group</th>	
-							<th>Allow</th>
-							<th>Inherited From</th>
-							<th></th>
-							<th></th>
-						</tr>
-					</thead>
-					<tbody>
-						<tr style="color: #666;" class="row1">
-							<td>Everyone</td>
-							<td>False</td>
-							<td>Root</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr style="color: #666;" class="row2">
-							<td>Designers</td>
-							<td>False</td>
-							<td>1.1 - Test 1.1</td>
-							<td></td>
-							<td></td>
-						</tr>
-						<tr class="row1">
-							<td>Editors</td>
-							<td>True</td>
-							<td></td>
-							<td><a href="#">Edit</a></td>
-							<td><a href="#">Delete</a></td>
-						</tr>
-					</tbody>
-				</table>
+				{section name='defns' loop=$permission_defns}
+
+					<h4>{$permission_defns[defns].name}</h4>
+					
+					<table cellpadding="5" cellspacing="0" border="0">
+						<thead>
+							<tr>
+								<th>Group</th>
+								<th>Allow</th>
+								<th>Inherited From</th>
+								<th></th>
+								<th></th>
+							</tr>
+						</thead>
+						<tbody>
+							{foreach item='entry' from=$permission_defns[defns].entries}
+								<tr style="color: #666;" class="{cycle values="row1,row2"}">
+									<td>{$entry.group_name}</td>
+									<td>{$entry.has_access}</td>
+									<td>{$entry.object_name}</td>
+									{if $entry.object_id eq $page_object.id and $entry.object_id gt -1}
+										<td><a href="blah.php">Edit</a></td>
+										<td><a href="blah.php">Delete</a></td>
+									{else}
+										<td></td>
+										<td></td>
+									{/if}
+								</tr>
+							{/foreach}
+						</tbody>
+					</table>
+					
+					<hr />
+
+				{/section}
 				
 				<br />
 				
@@ -308,7 +243,6 @@
 					Allow: <input type="checkbox" /><br />
 					<input type="submit" name="Submit" value="Submit" />
 				</fieldset>
-					
 					
 			</div> <!-- End permissions -->
 

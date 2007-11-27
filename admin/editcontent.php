@@ -321,6 +321,31 @@ $smarty->assign('include_templates', $page_object->edit_template($smarty, $curre
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
 
+//Get the permissions definitions
+$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+for ($x = 0; $x < count($permission_defns); $x++)
+{
+	$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
+	foreach ($entries as &$oneentry)
+	{
+		$oneentry['object_name'] = '';
+		if ($oneentry['object_id'] == 1)
+		{
+			$oneentry['object_name'] = lang('root');
+		}
+		else
+		{
+			$content = cms_orm()->content->find_by_id($oneentry['object_id']);
+			if ($content != null)
+			{
+				$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
+			}
+		}
+	}
+	$permission_defns[$x]['entries'] = $entries;
+}
+$smarty->assign('permission_defns', $permission_defns);
+
 $smarty->display('addcontent.tpl');
 
 include_once("footer.php");

@@ -89,7 +89,7 @@ class CmsAcl extends CmsObject
 		$result = false;
 		
 		if ($defn['hierarchical'])
-		{				
+		{
 			$query = "SELECT max(gp.has_access)
 						FROM {$cms_db_prefix}{$defn['link_table']} c, {$cms_db_prefix}{$defn['link_table']} c2 
 							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
@@ -101,8 +101,7 @@ class CmsAcl extends CmsObject
 							AND pd.name = ? 
 							{$groupids}
 						GROUP BY gp.object_id 
-						ORDER BY c.lft DESC, gp.group_id DESC 
-						LIMIT 1";
+						ORDER BY c.lft DESC, gp.group_id DESC";
 			
 			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
 		}
@@ -127,9 +126,48 @@ class CmsAcl extends CmsObject
 		}
 	}
 	
-	static public function get_permission_definitions($module, $extra_attr, $permission)
+	static public function get_permissions($module, $extra_attr, $permission, $object_id, $replace_text = false)
 	{
-		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $permission));
+		$result = array();
+		$cms_db_prefix = cms_db_prefix();
+		$defn = self::get_permission_definition($module, $extra_attr, $permission);
+
+		if ($defn['hierarchical'])
+		{
+			$result = cms_db()->GetAll("SELECT gp.*, g.group_name as group_name
+						FROM {$cms_db_prefix}{$defn['link_table']} c, {$cms_db_prefix}{$defn['link_table']} c2 
+							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
+							LEFT OUTER JOIN {$cms_db_prefix}groups g ON g.id = gp.group_id
+						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
+							AND c2.id = ? 
+							AND gp.permission_defn_id = ?
+						ORDER BY c.lft ASC", array($object_id, $defn['id']));
+		}
+		else
+		{
+			
+		}
+		
+		if ($replace_text)
+		{
+			foreach ($result as &$onerow)
+			{
+				$onerow['group_name'] = $onerow['group_id'] == -1 ? lang('everyone') : $onerow['group_name'];
+				$onerow['has_access'] = $onerow['has_access'] ? lang('true') : lang('false');
+			}
+		}
+		
+		return $result;
+	}
+	
+	static public function get_permission_definition($module, $extra_attr, $name)
+	{
+		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
+	}
+	
+	static public function get_permission_definitions($module, $extra_attr)
+	{
+		return cms_db()->GetAll('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ?', array($module, $extra_attr));
 	}
 	
 	static public function create_permission_definition($module, $extra_attr, $name, $hierarchical = false, $table = '')
@@ -140,7 +178,7 @@ class CmsAcl extends CmsObject
 		
 		if (!$row)
 		{
-			$result = cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . 'permission_defns (module, extra_atr, name, hierarchical, link_table) VALUES (?, ?, ?, ?, ?)');
+			$result = cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . 'permission_defns (module, extra_attr, name, hierarchical, link_table) VALUES (?, ?, ?, ?, ?)', array($module, $extra_attr, $name, $hierarchical, $table));
 		}
 		
 		if ($result)
