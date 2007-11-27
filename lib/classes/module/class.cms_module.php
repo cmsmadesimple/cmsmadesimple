@@ -2272,15 +2272,22 @@ class CmsModule extends CmsObject
 		global $gCms;
 		$db =& $gCms->GetDB();
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
-		$count = $db->GetOne($query, array($permission_name));
-
-		if (intval($count) == 0)
+		try
 		{
-			$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
-			$time = $db->DBTimeStamp(time());
-			$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
-			$db->Execute($query, array($new_id, $permission_name, $permission_text));
+			$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
+			$count = $db->GetOne($query, array($permission_name));
+
+			if (intval($count) == 0)
+			{
+				$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
+				$time = $db->DBTimeStamp(time());
+				$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+				$db->Execute($query, array($new_id, $permission_name, $permission_text));
+			}
+		}
+		catch (Exception $e)
+		{
+			trigger_error("Could not run CreatePermission", E_WARNING);
 		}
 	}
 
