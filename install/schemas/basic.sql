@@ -7,9 +7,8 @@ INSERT INTO content_props (id, content_id, type, prop_name, language, content, c
 INSERT INTO content_props (id, content_id, type, prop_name, language, content, create_date, modified_date) VALUES (5,2,'cmscontentproperty','name','en_US','Home','2007-11-20 17:39:47','2007-11-20 18:07:27');
 INSERT INTO content_props (id, content_id, type, prop_name, language, content, create_date, modified_date) VALUES (6,2,'cmscontentproperty','menu_text','en_US','Home','2007-11-20 17:39:47','2007-11-20 18:07:27');
 INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (1, 1, -1, 1, 1),
-INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (2, 1, 1, 2, 1),
-INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (3, 2, -1, 1, 0),
-INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (4, 3, -1, 1, 0);
+INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (2, 2, -1, 1, 0),
+INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (3, 3, -1, 1, 0);
 INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (1, 'Users', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31'),
 INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (2, 'Editors', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
 INSERT INTO permission_defns (id, module, extra_attr, name, hierarchical, link_table) VALUES (1, 'Core', 'Page', 'View', 1, 'content'),
