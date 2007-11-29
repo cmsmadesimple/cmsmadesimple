@@ -378,7 +378,7 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
-			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo $sitedownmessage?></textarea></p>
+			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo cms_htmlentities($sitedownmessage) ?></textarea></p>
 		</div>
 		<!--
 		<div class="pageoverflow">
