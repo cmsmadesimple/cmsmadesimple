@@ -174,8 +174,8 @@ function display_page($smarty, $action = '')
 			$installed = CmsInstallOperations::install_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
 			if ($installed)
 			{
-				$user_created = CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $admin_account['username'], $admin_account['password']);
 				$basic_loaded = CmsInstallOperations::load_basic_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
+				$user_created = CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $admin_account['username'], $admin_account['password']);
 				$config_created = CmsInstallOperations::install_config($connection,$_SESSION['config']);
 			}	
 			$smarty->assign('installed', $installed);

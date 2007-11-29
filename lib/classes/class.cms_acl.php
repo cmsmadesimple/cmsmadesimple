@@ -69,7 +69,8 @@ class CmsAcl extends CmsObject
 			if ($group != null)
 			{
 				//Return true if we're in the Admin group
-				if ($group->name == 'Admin')
+				//if ($group->name == 'Admin')
+				if ($group->id == 1)
 					return true;
 
 				$groupids[] = $group->id;

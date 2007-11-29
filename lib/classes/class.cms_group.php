@@ -44,6 +44,17 @@ class CmsGroup extends CmsObjectRelationalMapping
 		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
 	}
 	
+	public function add_user($user)
+	{
+		if ($this->id > -1)
+		{
+			$date = cms_db()->DBTimeStamp(time());
+			return cms_db()->Execute('INSERT INTO ' . cms_db_prefix() . "user_groups (user_id, group_id, create_date, modified_date) VALUES (?,?,{$date},{$date})", array($user->id, $this->id));
+		}
+		
+		return false;
+	}
+	
 	//Callback handlers
 	function before_save()
 	{

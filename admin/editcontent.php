@@ -43,6 +43,7 @@ $smarty->assign('language', $language);
 $smarty->assign('action', 'editcontent.php');
 
 //See if some variables are returned
+$start_tab = coalesce_key($_REQUEST, 'start_tab', '1');
 $content_id = coalesce_key($_REQUEST, 'content_id', '-1');
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
 $orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
@@ -323,8 +324,10 @@ $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, '
 
 //Get the permissions definitions
 $permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+$permission_list = array();
 for ($x = 0; $x < count($permission_defns); $x++)
 {
+	$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
 	$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
 	foreach ($entries as &$oneentry)
 	{
@@ -345,6 +348,9 @@ for ($x = 0; $x < count($permission_defns); $x++)
 	$permission_defns[$x]['entries'] = $entries;
 }
 $smarty->assign('permission_defns', $permission_defns);
+$smarty->assign('permission_list', $permission_list);
+
+$smarty->assign('start_tab', $start_tab);
 
 $smarty->display('addcontent.tpl');
 

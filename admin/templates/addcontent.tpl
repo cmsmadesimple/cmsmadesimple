@@ -239,7 +239,7 @@
 				<fieldset>
 					<legend>Add Permission</legend>
 					Group: <select name="group_id"><option>Everyone</option></select><br />
-					Permission: <select name="permission"><option>View</option></select><br />
+					Permission: <select name="permission">{html_options options=$permission_list}</select><br />
 					Allow: <input type="checkbox" /><br />
 					<input type="submit" name="Submit" value="Submit" />
 				</fieldset>
@@ -279,6 +279,6 @@
 
 <script type="text/javascript">
 <!--
-	$('#page_tabs').tabs();
+	$('#page_tabs').tabs({$start_tab});
 //-->
 </script>

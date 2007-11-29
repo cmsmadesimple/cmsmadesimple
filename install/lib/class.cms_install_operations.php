@@ -262,7 +262,7 @@ class CmsInstallOperations extends CmsObject
 
 		if ($username != '' && $hostname != '')
 		{
-			$db = CmsDatabase::connect($driver, $hostname, $dbusername, $dbpassword, $dbname, false, false, $prefix);
+			$db = CmsDatabase::connect($driver, $hostname, $dbusername, $dbpassword, $dbname, true, false, $prefix);
 			if ($db != null && $db->IsConnected())
 			{
 				$user = new CmsUser();
@@ -270,7 +270,14 @@ class CmsInstallOperations extends CmsObject
 				$user->set_password($password);
 				$user->active = true;
 				$user->admin_access = true;
-				return $user->save();
+				if ($user->save())
+				{
+					$group = cms_orm()->cms_group->find_by_id(1);
+					if ($group != null)
+					{
+						return $group->add_user($user) !== false;
+					}
+				}
 			}
 		}
 		
