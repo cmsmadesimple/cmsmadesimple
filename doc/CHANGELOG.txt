@@ -1,3 +1,9 @@
+Version 1.2.2 "Holetown" -- November 30, 2007
+-----------------
+- Fix a bug in the cms_date_time plugin that was causing random
+  issues with User Defined Tags
+- Fix a minor issue with the handling of the site down message
+
 Version 1.2.1 "Bridgetown"
 -----------------
 - New versions of News, Search, Tiny, and FileManager modules
