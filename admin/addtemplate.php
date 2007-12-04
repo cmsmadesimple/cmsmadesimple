@@ -134,8 +134,7 @@ else if ($access)
 			if ($submit)
 			{
 				audit($template_object->id, $template_object->name, 'Added Template');
-				if ($submit)
-					redirect("listtemplates.php");
+				redirect("listtemplates.php");
 			}
 		}
 	}

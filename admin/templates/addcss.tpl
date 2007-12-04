@@ -1,7 +1,5 @@
 {validation_errors for=$stylesheet_object}
-<div class="pagecontainer">
 {$header_name}
-
 <form method="post" name="cssform" id="cssform" action="{$action}">
 	<div id="page_tabs">
 		<ul>
@@ -27,17 +25,12 @@
 			{/foreach}
 		</div>
 	</div>
-	<div class="pageoverflow">
-		<p class="pagetext">&nbsp;</p>
-		<p class="pageinput">
-			<input type="hidden" name="addcss" value="true" />
-			<input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		</p>
+	<div class="submitrow">
+		<input type="hidden" name="addcss" value="true" />
+		<input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+		<input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 	</div>	
-  </form>
-</div>
-
+</form>
 
 <script type="text/javascript">
 <!--

@@ -153,9 +153,12 @@ input.pagebuttonhover {
 	background:#FFF;
     border: 1px solid #52b4fc;
 }	
-div.pagecontainer input.pagebutton,
-div.pagecontainer input.pagebuttonhover {
+div input.pagebutton,
+div input.pagebuttonhover {
 	width:auto;
+}
+div.submitrow {
+	margin-top:0.5em;
 }
 
 /* End Form Styles */

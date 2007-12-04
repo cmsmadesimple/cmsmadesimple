@@ -41,6 +41,23 @@ class CmsGlobalContent extends CmsObjectRelationalMapping
 		parent::__construct();
 	}
 	
+	public function validate()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('name'))));
+		$this->validate_not_blank('content', lang('nofieldgiven',array(lang('content'))));
+		if ($this->name != '')
+		{
+			$result = $this->find_all_by_name($this->name);
+			if (count($result) > 0)
+			{
+				if ($result[0]->id != $this->id)
+				{
+					$this->add_validation_error(lang('htmlblobexists'));
+				}
+			}
+		}
+	}
+	
 	public function setup()
 	{
 		$this->assign_acts_as('MultiLanguage');

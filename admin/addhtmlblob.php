@@ -16,14 +16,10 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
 
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-
-check_login();
-
 $error = "";
 
 $htmlblob = "";
@@ -32,77 +28,29 @@ if (isset($_POST['htmlblob'])) $htmlblob = $_POST['htmlblob'];
 $content = "";
 if (isset($_POST['content'])) $content = $_POST['content'];
 
-if (isset($_POST["cancel"])) {
+if (isset($_POST["cancel"]))
+{
 	redirect("listhtmlblobs.php");
-	return;
 }
 
+$gCms = cmsms();
+$smarty = cms_smarty();
+$smarty->assign('action', 'addhtmlblob.php');
+
+$contentops = $gCms->GetContentOperations();
+$gcbops = $gCms->GetGlobalContentOperations();
+
+#Make sure we're logged in and get that user id
+check_login();
 $userid = get_userid();
 $access = check_permission($userid, 'Add Global Content Blocks');
 
-/*
-$use_javasyntax = false;
-if (get_preference($userid, 'use_wysiwyg') == "1") {
-	$htmlarea_flag = true;
-    $use_javasyntax = false;
-}else if (get_preference($userid, 'use_javasyntax') == "1"){
-    $use_javasyntax = true;
-}
-*/
-$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
-
-
-if ($access) {
-	if (isset($_POST["addhtmlblob"])) {
-		
-		$gCms = cmsms();	
-
-		$validinfo = true;
-		if ($htmlblob == ""){
-			$error .= "<li>".lang('nofieldgiven', array('addhtmlblob'))."</li>";
-			$validinfo = false;
-		}
-		else if (CmsGlobalContentOperations::check_existing_name($htmlblob)){
-			$error .= "<li>".lang('blobexists')."</li>";
-			$validinfo = false;
-		}
-
-		if ($validinfo)
-		{
-			$blobobj = new CmsGlobalContent();
-			$blobobj->name = $htmlblob;
-			$blobobj->set_multi_language_content('content', 'en_US', $content);
-			$blobobj->owner = $userid;
-
-			$result = $blobobj->save();
-
-			if ($result) {
-				if (isset($_POST["additional_editors"])) {
-					foreach ($_POST["additional_editors"] as $addt_user_id) {
-						$blobobj->AddAuthor($addt_user_id);
-					}
-				}
-				audit($blobobj->id, $blobobj->name, 'Added Html Blob');
-
-				CmsResponse::redirect("listhtmlblobs.php");
-				return;
-			}
-			else {
-				$error .= "<li>".lang('errorinsertingblob')."</li>";
-			}
-		}
-	}
-}
-
-include_once("header.php");
-
+require_once("header.php");
+// Create an array of additional editors
 $db = cms_db();
-
 $addt_users = "";
-
 $query = "SELECT id, username FROM ".cms_db_prefix()."users WHERE id <> ? ORDER BY username";
 $result = $db->Execute($query, array($userid));
-
 if ($result && $result->RecordCount() > 0) {
 	while($row = $result->FetchRow()) {
 		$addt_users .= "<option value=\"".$row["id"]."\">".$row["username"]."</option>";
@@ -111,49 +59,48 @@ if ($result && $result->RecordCount() > 0) {
 	$addt_users = "<option>&nbsp;</option>";
 }
 
-if (!$access)
+
+$submit = array_key_exists('submitbutton', $_POST);
+
+function &get_gcb_object()
 {
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addhtmlblob')))."</p></div>";
+	$gcb_object = new CmsGlobalContent();
+	if (isset($_REQUEST['gcb']))
+		$gcb_object->update_parameters($_REQUEST['gcb']);
+	return $gcb_object;
 }
-else
+
+//Get a working page object
+$gcb_object = get_gcb_object($userid);
+$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
+
+if ($access)
 {
-	if ($error != "") {
-			echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";
+	if ($submit)
+	{
+		if ($gcb_object->save())
+		{
+			if (isset($_POST["additional_editors"])) {
+				foreach ($_POST["additional_editors"] as $addt_user_id) {
+					$gcb_object->AddAuthor($addt_user_id);
+				}
+			}
+			audit($gcb_object->id, $gcb_object->name, 'Added Global Content Block');
+			redirect("listhtmlblobs.php");
+		}
 	}
-?>
-
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('addhtmlblob'); ?>
-	<form method="post" action="addhtmlblob.php">
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
-			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="addhtmlblob" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
-		</div>
-	</form>
-</div>
-
-<?php
 }
 
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+//Add the header
+$smarty->assign('header_name', $themeObject->ShowHeader('addhtmlblob'));
+
+//Assign additional editors
+$smarty->assign('addt_users', $addt_users);
+
+//Setup the gcb object
+$smarty->assign_by_ref('gcb_object', $gcb_object);
+
+$smarty->display('addhtmlblob.tpl');
 
 include_once("footer.php");
-
-# vim:ts=4 sw=4 noet
 ?>
