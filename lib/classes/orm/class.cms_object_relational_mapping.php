@@ -956,17 +956,21 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 *
 	 * @param array The hash of keys and values to set in the object
 	 */
-	function update_parameters($params)
+	function update_parameters($params, $strip_slashes = false)
 	{
 		foreach ($params as $k=>$v)
 		{
 			if (array_key_exists($k, $this->params))
 			{
+				if ($strip_slashes && is_string($v)) $v = stripslashes($v);
+
 				if (method_exists($this, 'set_' . $k))
 					call_user_func_array(array($this, 'set_'.$k), array($v));
 				else
+				{
 					//Just in case there is an override
 					$this->params[$k] = $v;
+				}
 				$this->dirty = true;
 			}
 		}

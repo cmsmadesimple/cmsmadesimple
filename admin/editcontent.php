@@ -43,7 +43,7 @@ $smarty->assign('language', $language);
 $smarty->assign('action', 'editcontent.php');
 
 //See if some variables are returned
-$start_tab = coalesce_key($_REQUEST, 'start_tab', '1');
+$start_tab = coalesce_key($_REQUEST, 'start_tab', isset($_REQUEST['permission_add_submit']) ? '3' : '1');
 $content_id = coalesce_key($_REQUEST, 'content_id', '-1');
 $page_type = coalesce_key($_REQUEST, 'page_type', 'content');
 $orig_page_type = coalesce_key($_POST, 'orig_page_type', 'content');
@@ -113,7 +113,7 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 	if (isset($params["serialized_content"]))
 	{
 		$page_object = unserialize_object($params["serialized_content"]);
-		$page_object->update_parameters($params['content'], $lang);
+		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
 			copycontentobj($page_object, $page_type);
@@ -130,6 +130,62 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 	
 	return $page_object;
 }
+
+function load_permissions($params, $page_object)
+{
+	$smarty = cms_smarty();
+
+	$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
+	$permission_list = array();
+
+	if (isset($params["serialized_permissions_list"]))
+	{
+		$permission_list = unserialize_object($params["serialized_permissions_list"]);
+		$permission_defns = unserialize_object($params["serialized_permissions_defns"]);
+
+		if (isset($params['permission_add_submit']))
+		{
+			for ($x = 0; $x < count($permission_defns); $x++)
+			{
+				if ($params['permission_id'] == $permission_defns[$x]['id'])
+				{
+					$permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => -1, 'group_name' => 'everyone');
+				}
+			}
+		}
+	}
+	else
+	{
+		for ($x = 0; $x < count($permission_defns); $x++)
+		{
+			$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
+			$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
+			foreach ($entries as &$oneentry)
+			{
+				$oneentry['object_name'] = '';
+				if ($oneentry['object_id'] == 1)
+				{
+					$oneentry['object_name'] = lang('root');
+				}
+				else
+				{
+					$content = cms_orm()->content->find_by_id($oneentry['object_id']);
+					if ($content != null)
+					{
+						$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
+					}
+				}
+			}
+			$permission_defns[$x]['entries'] = $entries;
+		}
+	}
+	
+	$smarty->assign('permission_defns', $permission_defns);
+	$smarty->assign('permission_list', $permission_list);
+	$smarty->assign("serialized_permissions_list", serialize_object($permission_list));
+	$smarty->assign("serialized_permissions_defns", serialize_object($permission_defns));
+}
+
 
 function create_preview(&$page_object)
 {
@@ -217,6 +273,9 @@ function ajaxpreview($params)
 //Get a working page object
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
 
+//Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
+load_permissions($_REQUEST, $page_object);
+
 //Preview?
 $smarty->assign('showpreview', false);
 if ($preview)
@@ -247,33 +306,6 @@ else if ($access)
 					redirect('listcontent.php?message=contentupdated');
 			}
 		}
-
-		/*
-		if ($ajax)
-		{
-			header('Content-Type: text/xml');
-			print '<?xml version="1.0" encoding="UTF-8"?>';
-			print '<EditContent>';
-			if ($error !== false)
-			{
-				print '<Response>Error</Response>';
-				print '<Details><![CDATA[';
-				if (!is_array($error))
-				{
-					$error = array($error);
-				}
-				print '<li>' . join('</li><li>', $error) . '</li>';
-				print ']]></Details>';
-			}
-			else
-			{
-				print '<Response>Success</Response>';
-				print '<Details><![CDATA[' . lang('contentupdated') . ']]></Details>';
-			}
-			print '</EditContent>';
-			exit;
-		}
-		*/
 	}
 }
 
@@ -321,34 +353,6 @@ $smarty->assign('include_templates', $page_object->edit_template($smarty, $curre
 
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
-
-//Get the permissions definitions
-$permission_defns = CmsAcl::get_permission_definitions('Core', 'Page');
-$permission_list = array();
-for ($x = 0; $x < count($permission_defns); $x++)
-{
-	$permission_list[$permission_defns[$x]['id']] = $permission_defns[$x]['name'];
-	$entries = CmsAcl::get_permissions('Core', 'Page', $permission_defns[$x]['name'], $page_object->id, true);
-	foreach ($entries as &$oneentry)
-	{
-		$oneentry['object_name'] = '';
-		if ($oneentry['object_id'] == 1)
-		{
-			$oneentry['object_name'] = lang('root');
-		}
-		else
-		{
-			$content = cms_orm()->content->find_by_id($oneentry['object_id']);
-			if ($content != null)
-			{
-				$oneentry['object_name'] = $content->get_property_value('menu_text', $current_language) . ' - ' . $content->hierarchy;
-			}
-		}
-	}
-	$permission_defns[$x]['entries'] = $entries;
-}
-$smarty->assign('permission_defns', $permission_defns);
-$smarty->assign('permission_list', $permission_list);
 
 $smarty->assign('start_tab', $start_tab);
 

@@ -210,16 +210,17 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	/**
 	 * Overloaded so that we can pull out properties and set them separately
 	 */
-	function update_parameters($params, $lang = 'en_US')
+	function update_parameters($params, $lang = 'en_US', $strip_slashes = false)
 	{
 		if (isset($params['property']) && is_array($params['property']))
 		{
 			foreach ($params['property'] as $k=>$v)
 			{
+				if ($strip_slashes && is_string($v)) $v = stripslashes($v);
 				$this->set_property_value($k, $v, $lang);
 			}
 		}
-		parent::update_parameters($params);
+		parent::update_parameters($params, $strip_slashes);
 	}
 	
 	function set_property_value($name, $value, $lang = 'en_US')
