@@ -105,7 +105,7 @@ else if ($access)
 }
 
 //Add the header
-$smarty->assign('header_name', $themeObject->ShowHeader('addtemplate'));
+$smarty->assign('header_name', $themeObject->ShowHeader('edittemplate'));
 
 //Can we preview?
 $smarty->assign('can_preview', true);

@@ -16,22 +16,121 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
 
-/**
- * This page is both the interface of the CSS editing, and used for actually
- * updating the CSS in the DB. The first part checks that all parameters are
- * valids, and then insert into the DB and redirect.
- *
- * The second part show the form to edit the CSS
- *
- * It takes one argument when called externally :
- * - $css_id : the id of the css to edit
- *
- * @since	0.6
- * @author	calexico
- */
+$CMS_ADMIN_PAGE=1;
 
+require_once("../include.php");
+
+if (isset($_POST["cancel"]))
+{
+	redirect("listcss.php");
+}
+
+$gCms = cmsms();
+$smarty = cms_smarty();
+$smarty->assign('action', 'editcss.php');
+
+$contentops = $gCms->GetContentOperations();
+$stylesheetops = $gCms->GetStylesheetOperations();
+
+#Make sure we're logged in and get that user id
+check_login();
+$userid = get_userid();
+$access = check_permission($userid, 'Add Stylesheets');
+
+require_once("header.php");
+
+$submit = array_key_exists('submitbutton', $_POST);
+$apply = array_key_exists('applybutton', $_POST);
+
+function &get_stylesheet_object($stylesheet_id)
+{
+	$stylesheet_object = cmsms()->cms_stylesheet->find_by_id($stylesheet_id);
+	if (isset($_REQUEST['stylesheet']))
+		$stylesheet_object->update_parameters($_REQUEST['stylesheet']);	
+	return $stylesheet_object;
+}
+		//Get the css_id
+		$stylesheet_id = coalesce_key($_REQUEST, 'css_id', '-1');
+
+		//Get a working page object
+		$stylesheet_object = get_stylesheet_object($stylesheet_id);
+
+// Create the media_types array
+$media_types = array(
+	array('name' => "all"),
+	array('name' => "aural"),
+	array('name' => "braille"),
+	array('name' => "embossed"),
+	array('name' => "handheld"),
+	array('name' => "print"),
+	array('name' => "projection"),
+	array('name' => "screen"),
+	array('name' => "tty"),
+	array('name' => "tv")
+);
+
+if ($access)
+{
+	if ($submit || $apply)
+	{
+		// Handle the media types
+		$submitted_types = $_POST['media_types'];
+		foreach ($submitted_types as $key => $onetype) 
+		{
+			if($onetype != 0)
+			{	
+				$types .= $media_types[$key]['name'] . ', ';			
+				$media_types[$key]['selected'] = true;
+			}
+		}
+		if ($types!='') 
+		{
+			$types = substr($types, 0, -2); #strip last space and comma
+		} 
+		else 
+		{
+			$types='';
+		}
+
+		$stylesheet_object->media_type = $types;	
+		
+		if ($stylesheet_object->save())
+		{
+			audit($stylesheet_object->id, $stylesheet_object->name, 'Edited Stylesheet');
+			if ($submit)
+			{
+				redirect("listcss.php");
+			}
+		}
+	}
+}
+
+//Add the header
+$smarty->assign('header_name', $themeObject->ShowHeader('editstylesheet'));
+
+//Assign the stylesheet media types
+$smarty->assign('media_types', $media_types);
+
+//Setup the stylesheet object
+$smarty->assign_by_ref('stylesheet_object', $stylesheet_object);
+
+//Can we apply?
+$smarty->assign('can_apply', true);
+
+$smarty->display('addcss.tpl');
+
+include_once("footer.php");
+?>
+
+
+
+
+
+
+
+<?php
+/* ==== OLD STUFF ====
 
 $CMS_ADMIN_PAGE=1;
 
@@ -391,7 +490,7 @@ else
 			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
 			<p class="pageinput">
 <?php
-
+/*
 #open up the list to array
 
 
@@ -465,4 +564,5 @@ echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'"
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
+*/
 ?>
