@@ -41,39 +41,6 @@ $access = check_permission($userid, 'Add Templates');
 
 require_once("header.php");
 
-$dflt_content='
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
-<head>
-<title>{sitename} - {title}</title>
-{metadata}
-{stylesheet}
-</head>
-<body>
-
-<!-- start header -->
-<div id="header">
-  <h1>{sitename}</h1>
-</div>
-<!-- end header -->
-
-<!-- start menu -->
-<div id="menu">
-  {menu}
-</div>
-<!-- end menu -->
-
-<!-- start content -->
-<div id="content">
-  <h1>{title}</h1>
-  {content}
-</div>
-<!-- end content -->
-
-</body>
-</html>
-';
-
 $preview = array_key_exists('previewbutton', $_POST);
 $submit = array_key_exists('submitbutton', $_POST);
 $apply = array_key_exists('applybutton', $_POST);
@@ -138,6 +105,42 @@ else if ($access)
 			}
 		}
 	}
+}
+
+if(empty($_POST))
+{
+$template_object->content = '
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" >
+<head>
+<title>{sitename} - {title}</title>
+{metadata}
+{stylesheet}
+</head>
+<body>
+
+<!-- start header -->
+<div id="header">
+  <h1>{sitename}</h1>
+</div>
+<!-- end header -->
+
+<!-- start menu -->
+<div id="menu">
+  {menu}
+</div>
+<!-- end menu -->
+
+<!-- start content -->
+<div id="content">
+  <h1>{title}</h1>
+  {content}
+</div>
+<!-- end content -->
+
+</body>
+</html>
+';
 }
 
 //Add the header

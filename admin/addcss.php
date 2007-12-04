@@ -69,7 +69,7 @@ $media_types = array(
 
 if ($access)
 {
-	if ($submit || $apply)
+	if ($submit)
 	{
 		// Handle the media types
 		$submitted_types = $_POST['media_types'];
