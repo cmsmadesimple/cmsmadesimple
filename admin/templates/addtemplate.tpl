@@ -1,10 +1,7 @@
 {validation_errors for=$template_object}
 
 <div class="pagecontainer">
-
-  <div class="pageoverflow">
-    {$header_name}
-  </div>
+{$header_name}
 
   <form method="post" name="templateform" id="templateform" action="{$action}">
     

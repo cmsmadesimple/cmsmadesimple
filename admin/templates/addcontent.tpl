@@ -61,8 +61,6 @@
    
 				{* Parent Dropdown *}
 				{if $show_parent_dropdown eq true}
-
-				
 				  <div class="row">
 					<label>{lang string='parent'}:</label>
 				  	  {$parent_dropdown}
@@ -104,7 +102,7 @@
     
 		    {* Metadata *}
 		    {if $page_object->field_used('metadata')}
-		      <div class="row">
+		      <div class="row smalltext">
 		        <label>{lang string='metadata'}:</label>
 		          {$metadata_box}
 		      </div>
@@ -175,10 +173,16 @@
 				
 				<fieldset>
 					<legend>Add Permission</legend>
-					Group: <select name="group_id"><option value='-1'>Everyone</option></select><br />
-					Permission: <select name="permission_id">{html_options options=$permission_list}</select><br />
-					Allow: <input type="hidden" name="permission_allow" value="0" /><input type="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
-					<input type="submit" name="permission_add_submit" value="Submit" />
+					<div class="row">
+						<label>Group:</label>
+						<select name="group_id"><option value='-1'>Everyone</option></select>
+					</div>
+					{admin_input type='select' label='Permission' id='permission_id' name='permission_id'  options=$permission_list}
+					<div class="row">
+						<label for="permission_allow">Allow:</label>
+						<input type="hidden" name="permission_allow" value="0" /><input type="checkbox" class="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
+					</div>
+					<input type="submit" name="permission_add_submit" value="Submit" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"  />
 				</fieldset>
 					
 			</div> <!-- End permissions -->

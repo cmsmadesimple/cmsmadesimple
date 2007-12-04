@@ -35,7 +35,7 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 	var $table = 'css';
 	var $sequence = 'css_seq';
 	
-	public function validation()
+	public function validate()
 	{
 		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('name'))));
 		$this->validate_not_blank('value', lang('nofieldgiven',array(lang('content'))));

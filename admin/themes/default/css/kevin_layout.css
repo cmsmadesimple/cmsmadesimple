@@ -116,7 +116,11 @@ div.row {
 		width:auto;
 	}
 	div.row textarea {
-		width:35em;
+		width:40em;
+		height:25em;
+	}
+	div.smalltext textarea {
+		height:10em;
 	}
 input, textarea, select, option {  
 	background:#FCFCFC;

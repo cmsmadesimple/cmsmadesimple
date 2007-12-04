@@ -16,259 +16,81 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #
-#$Id$
 
-/**
- * This page is responsible for showing the interface to add a new CSS. There is
- * a form that returns back to this page. The content of the form is then
- * checked to verify that all parameters are valid.
- *
- * - If all parameter are valid, the result is stored in the DB
- * - If one or more parameters are not valid, the form is redisplayed. An error
- *   message indictaes to the user what went wrong.
- *
- * There is no GET parameters.
- *
- * @since	0.6
- * @author  calexico
- */
-
- 
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
 
-check_login();
-
-global $gCms;
-$styleops =& $gCms->GetStylesheetOperations();
-$db =& $gCms->GetDb();
-
-#******************************************************************************
-# global variables definitions
-#******************************************************************************
-
-# this variable is used to store an eventual error message.
-$error = "";
-
-#******************************************************************************
-# we get the content of the form if there are not empty.
-#******************************************************************************
-
-# first ; the content of the css
-$css_text = "";
-if (isset($_POST["css_text"])) $css_text = $_POST["css_text"];
-
-# then its name
-$css_name = "";
-if (isset($_POST["css_name"])) $css_name = $_POST["css_name"];
-
-// Now clean up name
-$css_name = htmlspecialchars($css_name, ENT_QUOTES);
-
-$media_type = array();
-if (isset($_POST['media_type'])) $media_type = $_POST['media_type'];
-
-#******************************************************************************
-# if the form was cancelled, we get back to the CSS list
-#******************************************************************************
 if (isset($_POST["cancel"]))
 {
 	redirect("listcss.php");
-	return;
 }
 
-#******************************************************************************
-# we now check that user has access to add CSS
-#******************************************************************************
+$gCms = cmsms();
+$smarty = cms_smarty();
+$smarty->assign('action', 'addcss.php');
+
+$contentops = $gCms->GetContentOperations();
+$stylesheetops = $gCms->GetStylesheetOperations();
+
+#Make sure we're logged in and get that user id
+check_login();
 $userid = get_userid();
 $access = check_permission($userid, 'Add Stylesheets');
 
+require_once("header.php");
+
+$submit = array_key_exists('submitbutton', $_POST);
+
+function &get_stylesheet_object()
+{
+	$stylesheet_object = new CmsStylesheet();
+	if (isset($_REQUEST['stylesheet']))
+		$stylesheet_object->update_parameters($_REQUEST['stylesheet']);
+	return $stylesheet_object;
+}
+
+//Get a working page object
+$stylesheet_object = get_stylesheet_object($userid);
+
 if ($access)
 {
-
-#******************************************************************************
-# if the var "addcss" is set, this means that the form has been submitted.
-# we check if params are valid
-#******************************************************************************
-	if (isset($_POST["addcss"]))
+	if ($submit || $apply)
 	{
-		# used to check if we will save the form or not
-		$validinfo = true;
-
-		# if no CSS name was given
-		if ("" == $css_name)
+		if ($stylesheet_object->save())
 		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('name')))."</li>";
-			$validinfo = false;
-			
-		}
-		# the CSS has a name, we check if it already exists or not
-		else 
-		{
-			$query = "SELECT css_id from ".cms_db_prefix()."css WHERE css_name = " . cms_db()->qstr($css_name);
-			$result = cms_db()->Execute($query);
-
-			if ($result && $result->RecordCount() > 0)
+			if ($submit)
 			{
-				$error .= "<li>".lang('cssalreadyused')."</li>";
-				$validinfo = false;
-			}
-		}
-
-		# now checking the content of the CSS
-		if ("" == $css_text)
-		{
-			$error .= "<li>".lang('nofieldgiven', array(lang('content')))."</li>";
-			$validinfo = false;
-		}
-
-#******************************************************************************
-# everythings seems to be ok, we can try to save the form
-#******************************************************************************
-		if ($validinfo)
-		{
-			$newstylesheet = new CmsStylesheet();
-			$newstylesheet->name = $css_name;
-			$newstylesheet->value = $css_text;
-			$types = "";
-                        
-			#generate comma separated list
-			foreach ($media_type as $onetype) {
-                          $types .= "$onetype, ";
-                        }
-                        if ($types!='') {
-			  $types = substr($types, 0, -2); #strip last space and comma
-			} else {
-			  $types='';
-			}
-
-			$newstylesheet->media_type = $types;
-			
-			//Events::SendEvent('Core', 'AddStylesheetPre', array('stylesheet' => &$newstylesheet));
-
-			$result = $newstylesheet->save();
-
-			# we now have to check that everything went well
-			if ($result)
-			{
-				#Sent the post event
-				//Events::SendEvent('Core', 'AddStylesheetPost', array('stylesheet' => &$newstylesheet));
-				
-				# it's ok, we record the operation in the admin log
-				audit($newstylesheet->id, $css_name, 'Added CSS');
-
-				# and goes back to the css list
-				redirect("listcss.php");
-				return;
-			}
-			else
-			{
-				$error .= "<li>".lang('errorinsertingcss')."</li>";
+				audit($stylesheet_object->id, $stylesheet_object->name, 'Added Stylesheet');
+				if ($submit)
+					redirect("listcss.php");
 			}
 		}
 	}
 }
 
-include_once("header.php");
+//Add the header
+$smarty->assign('header_name', $themeObject->ShowHeader('addstylesheet'));
 
-#******************************************************************************
-# the user does not have access : error message 
-#******************************************************************************
-if (!$access)
-{
-	echo "<div class=\"pageerrorcontainer\"><p class=\"pageerror\">".lang('noaccessto', array(lang('addstylesheet')))."</p></div>";
-}
-#******************************************************************************
-# the user has access, we display the form
-#******************************************************************************
-else
-{
+//Assign the stylesheet media types
+   $media_types = array(
+   	  "all",
+	  "aural",
+	  "braille",
+	  "embossed",
+	  "handheld",
+	  "print",
+	  "projection",
+	  "screen",
+	  "tty",
+	  "tv"
+	 );
+$smarty->assign('media_types', $media_types);
 
-	# the user has correct rights, we display error message if any
-	if ("" != $error)
-	{
-		echo "<div class=\"pageerrorcontainer\"><ul class=\"pageerror\">".$error."</ul></div>";		
-	}
+//Setup the stylesheet object
+$smarty->assign_by_ref('stylesheet_object', $stylesheet_object);
 
-#******************************************************************************
-# we now display the content of the form, in HTML
-#******************************************************************************
-?>
+$smarty->display('addcss.tpl');
 
-
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('addstylesheet'); ?>
-		<form method="post" action="addcss.php">
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" class="name" name="css_name" maxlength="255" value="<?php echo $css_name?>" /></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('content')?>:</p>
-			<p class="pageinput">
-			<?php echo create_textarea(false, $css_text, 'css_text', 'pagebigtextarea', 'css_text', '', '', '80', '15','','css')?>
-			<!-- <textarea class="pagebigtextarea" name="css_text" cols="" rows=""><_?php echo $css_text?></textarea>  -->
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('mediatype')?>:</p>
-			<p class="pageinput">
-<?php
-		   $existingtypes = array("all",
-					  "aural",
-					  "braille",
-					  "embossed",
-					  "handheld",
-					  "print",
-					  "projection",
-					  "screen",
-					  "tty",
-                       "tv"
-					  );
-
-        $types = "";
-        $types .= "<fieldset style=\"width:60em;\">\n";
-        $types .= "<legend>Media type</legend>\n";
-	$i = 0;
-        foreach ($existingtypes as $onetype)
-          {
-	    $i++;
-            $types .= '<input name="media_type['.$i.']" type="checkbox" value="'.$onetype.'"';
-
-            if (is_array($media_type)) {
-              if (in_array($onetype, $media_type) )
-                {
-                  $types .= ' checked="checked" ';
-                }
-            }
-            $types .= " />\n\n";
-            $types .= '<label for="media_type['.$i.']">'. lang("mediatype_".$onetype) ."</label>\n<br />";
-
-          }
-        $types .= "</fieldset>";
-
-        echo $types;
-?>
-
-
-			</p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="addcss" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
-		</div>
-		</form>
-</div>
-
-<?php
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
-} # end of displaying the form
 include_once("footer.php");
-
-# vim:ts=4 sw=4 noet
 ?>

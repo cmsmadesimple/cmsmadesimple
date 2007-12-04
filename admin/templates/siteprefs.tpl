@@ -27,14 +27,14 @@
 
 			<form method="post" name="generalform" id="generalform" action="siteprefs.php">
 				{admin_input type='submit' label='Clear Cache' id='clearcache' name='clearcache' value='Clear'}
-				{admin_input type='input' label='Site Name' name='sitename' value=$sitename}
-				{admin_input type='input' label='File Creation Mask (umask)' name='global_umask' value=$global_umask size='4'}
-				{admin_input type='textarea' label='Global Metadata' name='metadata' value=$metadata}
+				{admin_input type='input' label='Site Name' name='sitename' id='sitename' value=$sitename}
+				{admin_input type='input' label='File Creation Mask (umask)' name='global_umask' id='global_umask' value=$global_umask size='4'}
+				{admin_input type='textarea' class='smalltext' label='Global Metadata' name='metadata' id='metadata' value=$metadata}
 				{admin_input type='checkbox' label='Enable Custom 404 Message' name='enablecustom404' id='enablecustom404' value=$enablecustom404}				
-				{admin_input type='textarea' label='Custom 404 Error Message' name='custom404' id='custom404' value=$custom404}
+				{admin_input type='textarea' class='smalltext' label='Custom 404 Error Message' name='custom404' id='custom404' value=$custom404}
 				{admin_input type='select' label='Template' name='custom404template' id='custom404template' options=$templates selected=$custom404template}				
 				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage}				
-				{admin_input type='textarea' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
+				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
 	
 				<div class="pageoverflow">
 					<p class="pagetext">&nbsp;</p>
