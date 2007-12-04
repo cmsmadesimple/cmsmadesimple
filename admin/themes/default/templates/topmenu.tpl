@@ -1,9 +1,5 @@
-<div>
-  <p class="logocontainer">
-    <img src="themes/default/images/logo.gif" alt="" />
-    <span class="logotext">{$adminpaneltitle}</span>
-  </p>
-</div>
+<div id="header">
+	<h1>{$adminpaneltitle}</h1>
 
 {if $root_node->has_children()}
 
@@ -11,7 +7,6 @@
     <ul id="nav">
 
       {foreach from=$root_node->get_children() item=node name=node}
-      
         <li><a href="{$node->url|escape:'html'}" class="{if $node->selected} selected{/if}"{if $node->target ne ''} rel="external"{/if}>{$node->title}</a>
         
           {if $node->has_children()}
@@ -50,6 +45,5 @@
     </p>
   </div>
   
-  <div class="hstippled">&nbsp;</div>
-    
 {/if}
+</div>

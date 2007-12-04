@@ -9,36 +9,22 @@
   <form method="post" name="templateform" id="templateform" action="{$action}">
     
     {* Name *}
-		<div class="pageoverflow">
-			<p class="pagetext">*{lang string='name'}:</p>
-			<p class="pageinput">
-			 {html_input id='template_name' name='template[name]' value=$template_object->name}
-			</p>
-		</div>
+	{admin_input type='input' label='name' id='template_name' name='template[name]' value=$template_object->name}
 
     {* Content *}
-		<div class="pageoverflow">
-			<p class="pagetext">*{lang string='content'}:</p>
-			<p class="pageinput">
+		<div class="row">
+			<label>*{lang string='content'}:</label>
 			  {$content_box}
-			</p>
 		</div>
 
 		{* Encoding *}
-		<div class="pageoverflow">
-			<p class="pagetext">{lang string='encoding'}:</p>
-			<p class="pageinput">
-			  {$encoding_dropdown}
-			</p>
+		<div class="row">
+			<label>{lang string='encoding'}:</label>
+ 		    {$encoding_dropdown}
 		</div>
 
     {* Active *}
-		<div class="pageoverflow">
-			<p class="pagetext">{lang string='active'}:</p>
-			<p class="pageinput">
-			  {html_checkbox id='template_active' name='template[active]' selected=$template_object->active}
-			</p>
-		</div>
+	{admin_input type='checkbox' label='active' id='template_active' name='template[active]' selected=$template_object->active}	
     
     {* Preview *}
     {if $showpreview eq true}

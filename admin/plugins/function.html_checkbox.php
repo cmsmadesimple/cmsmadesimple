@@ -31,7 +31,7 @@ function smarty_function_html_checkbox($params, &$smarty)
 		echo ' />';
 	}
 
-	echo '<input type="checkbox"';
+	echo '<input type="checkbox" class="checkbox"';
 	if (isset($params['id']))
 		echo ' id="'.$params['id'].'"';
 	if (isset($params['name']))

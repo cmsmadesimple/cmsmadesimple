@@ -7,8 +7,9 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{sitename} - Tags</title>
-	<link rel="stylesheet" type="text/css" href="style.php" />
-	<link rel="stylesheet" href="themes/default/css/tabs.css" type="text/css" media="print, projection, screen" />
+	<link rel="stylesheet" href="themes/default/css/kevin_layout.css" type="text/css" />
+	<link rel="stylesheet" href="themes/default/css/kevin_tabs.css" type="text/css" />
+	
 
 	{literal}
 	

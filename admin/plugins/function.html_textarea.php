@@ -19,7 +19,7 @@
 function smarty_function_html_textarea($params, &$smarty)
 {
 	echo create_textarea($enablewysiwyg,
-			$params['text'],
+			$params['value'],
 			$params['name'],
 			isset($params['classname']) ? $params['classname'] : '',
 			isset($params['id']) ? $params['id'] : '',

@@ -26,55 +26,22 @@
 		<div id="general" class="fragment">
 
 			<form method="post" name="generalform" id="generalform" action="siteprefs.php">
-
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Clear Cache{/tr}:</p>
-					<p class="pageinput">
-						{html_submit name='clearcache' value='Clear' onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" tr=true}
-					</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Site Name{/tr}:</p>
-					<p class="pageinput">{html_input name='sitename' class='pagesmalltextarea' size='30' value=$sitename}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}File Creation Mask (umask){/tr}:</p>
-					<p class="pageinput">{html_input name='global_umask' class='pagesmalltextarea' size='4' value=$global_umask}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Global Metadata{/tr}:</p>
-					<p class="pageinput">{html_textarea text=$metadata name='metadata' class='pagesmalltextarea'}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Enable Custom 404 Message{/tr}:</p>
-					<p class="pageinput">{html_checkbox class='pagenb' name='enablecustom404' value=$enablecustom404}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Custom 404 Error Message{/tr}:</p>
-					<p class="pageinput">{html_textarea text=$custom404 name='custom404' class='pagesmalltextarea'}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Template{/tr}:</p>
-					<p class="pageinput">
-				        <select name="custom404template">
-				          {html_options options=$templates selected=$custom404template}
-				        </select>
-					</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Enable Site Down Message{/tr}:</p>
-					<p class="pageinput">{html_checkbox class='pagenb' name='enablesitedownmessage' value=$enablesitedownmessage}</p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Site Down Message{/tr}:</p>
-					<p class="pageinput">{html_textarea text=$sitedownmessage name='sitedownmessage' class='pagesmalltextarea'}</p>
-				</div>
+				{admin_input type='submit' label='Clear Cache' id='clearcache' name='clearcache' value='Clear'}
+				{admin_input type='input' label='Site Name' name='sitename' value=$sitename}
+				{admin_input type='input' label='File Creation Mask (umask)' name='global_umask' value=$global_umask size='4'}
+				{admin_input type='textarea' label='Global Metadata' name='metadata' value=$metadata}
+				{admin_input type='checkbox' label='Enable Custom 404 Message' name='enablecustom404' id='enablecustom404' value=$enablecustom404}				
+				{admin_input type='textarea' label='Custom 404 Error Message' name='custom404' id='custom404' value=$custom404}
+				{admin_input type='select' label='Template' name='custom404template' id='custom404template' options=$templates selected=$custom404template}				
+				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage}				
+				{admin_input type='textarea' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
+	
 				<div class="pageoverflow">
 					<p class="pagetext">&nbsp;</p>
 					<p class="pageinput">
 						<input type="hidden" name="editsiteprefs" value="true" />
-						{html_submit name='submit' value='Submit' class='pagebutton' onmouseover='this.className='pagebuttonhover'' onmouseout='this.className='pagebutton'' tr=true}
-						{html_submit name='cancel' value='Cancel' class='pagebutton' onmouseover='this.className='pagebuttonhover'' onmouseout='this.className='pagebutton'' tr=true}
+						{html_submit name='submit' value='Submit' class='pagebutton' onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" tr=true}
+						{html_submit name='cancel' value='Cancel' class='pagebutton' onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" tr=true}
 					</p>
 				</div>
 

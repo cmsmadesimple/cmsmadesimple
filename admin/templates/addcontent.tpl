@@ -36,43 +36,19 @@
 				{html_hidden id='orig_current_language' name='orig_current_language' value=$orig_current_language}
 
 				{* Page Type *}
-				<div class="pageoverflow">
-					<p class="pagetext">{lang string='contenttype'}:</p>
-					<p class="pageinput">
-				    <select name="page_type" onchange="document.contentform.submit()" class="standard">
-				      {html_options options=$page_types selected=$selected_page_type}
-				    </select>
-					</p>
-				</div>
+				{admin_input type='select' label='contenttype' id='page_type' name='page_type' options=$page_types selected=$selected_page_type onchange='document.contentform.submit();'}
 				
 				{* Language *}
-				<div class="pageoverflow">
-					<p class="pagetext">{tr}Language{/tr}:</p>
-					<p class="pageinput">
-						<select name="current_language" onchange="document.contentform.submit()" class="standard">
-							{html_options options=$languages selected=$orig_current_language}
-						</select>
-					</p>
-				</div>
+				{admin_input type='select' label='Language' id='current_language' name='current_language' options=$languages selected=$orig_current_language}
 
 				{* Page Title *}
-				{if $page_object->field_used('name')}
-				  <div class="pageoverflow50">
-				  	<p class="pagetext">{lang string='title'}:</p>
-				  	<p class="pageinput">
-				  	  {html_input id='content_name' name='name' value=$name useentities='true'}
-				  	</p>
-				  </div>
+				{if $page_object->field_used('name')}				
+					{admin_input type='input' label='title' id='content_name' name='name' value=$name useentities='true'}					  
 				{/if}
 
 				{* Menu Text *}
 				{if $page_object->field_used('menu_text')}
-				  <div class="pageoverflow50">
-				  	<p class="pagetext">{lang string='menutext'}:</p>
-				  	<p class="pageinput">
-				  	  {html_input id='content_menu_text' name='menu_text' value=$menu_text useentities='true'}
-				  	</p>
-				  </div>
+					{admin_input type='input' label='menutext' id='content_menu_text' name='menu_text' value=$menu_text useentities='true'}					  
 				{/if}
 
 				<div id="page_content_blocks">
@@ -83,11 +59,11 @@
    
 				{* Parent Dropdown *}
 				{if $show_parent_dropdown eq true}
-				  <div class="pageoverflow">
-				  	<p class="pagetext">{lang string='parent'}:</p>
-				  	<p class="pageinput">
+
+				
+				  <div class="row">
+					<label>{lang string='parent'}:</label>
 				  	  {$parent_dropdown}
-				  	</p>
 				  </div>
 				{/if}
 			</div> <!-- End content -->
@@ -95,102 +71,61 @@
 			<div id="advanced">
 		    {* Template Dropdown *}
 		    {if $page_object->field_used('template_id')}
-		      <div class="pageoverflow">
-		      	<p class="pagetext">{lang string='template'}:</p>
-		      	<p class="pageinput">
+		      <div class="row">
+		      	<label>{lang string='template'}:</label>
 		      	  {$template_names}
-		      	</p>
 		      </div>
 		    {/if}
 
 		    {* Active Checkbox *}
 		    {if $page_object->field_used('active')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='active'}:</p>
-		      	<p class="pageinput">
-		      	  {html_checkbox id='content_active' name='content[active]' selected=$page_object->active}
-		      	</p>
-		      </div>
-		    {/if}
+				{admin_input type='checkbox' label='active' id='content_active' name='content[active]'  selected=$page_object->active}					  
+			{/if}
     
 		    {* Show in Menu Checkbox *}
 		    {if $page_object->field_used('show_in_menu')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='showinmenu'}:</p>
-		      	<p class="pageinput">
-		      	  {html_checkbox id='content_show_in_menu' name='content[show_in_menu]' selected=$page_object->show_in_menu}
-		      	</p>
-		      </div>
+				{admin_input type='checkbox' label='showinmenu' id='content_show_in_menu' name='content[show_in_menu]'  selected=$page_object->show_in_menu}					  
 		    {/if}
     
 		    {* Cacheable Flag *}
 		    {if $page_object->field_used('cachable')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='cachable'}:</p>
-		      	<p class="pageinput">
-		      	  {html_checkbox id='content_cachable' name='content[cachable]' selected=$page_object->cachable}
-		      	</p>
-		      </div>
+				{admin_input type='checkbox' label='cachable' id='content_cachable' name='content[cachable]'  selected=$page_object->cachable}					  			
 		    {/if}
     
 		    {* Owner Dropdown *}
 		    {if $show_owner_dropdown eq true}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='owner'}:</p>
-		      	<p class="pageinput">
+		      <div class="row">
+		      	<label>{lang string='owner'}:</label>
 		      	  {$owner_dropdown}
-		      	</p>
 		      </div>
 		    {/if}
     
 		    {* Metadata *}
 		    {if $page_object->field_used('metadata')}
-		      <div class="pageoverflow">
-		        <p class="pagetext">{lang string='metadata'}:</p>
-		        <p class="pageinput">
+		      <div class="row">
+		        <label>{lang string='metadata'}:</label>
 		          {$metadata_box}
-		        </p>
 		      </div>
 		    {/if}
     
 		    {* Ttile Attribute *}
 		    {if $page_object->field_used('title_attribute')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='titleattribute'}:</p>
-		      	<p class="pageinput">
-		      	  {html_input id='content_title_attribute' name='content[title_attribute]' value=$page_object->title_attribute}
-		      	</p>
-		      </div>
+				{admin_input type='input' label='titleattribute' id='content_title_attribute' name='content[title_attribute]'  value=$page_object->title_attribute}					  			
 		    {/if}
 
 		    {* Tab Index *}
 		    {if $page_object->field_used('tab_index')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='tabindex'}:</p>
-		      	<p class="pageinput">
-		      	  {html_input id='content_tab_index' name='content[tab_index]' value=$page_object->tab_index}
-		      	</p>
-		      </div>
+				{admin_input type='input' label='tabindex' id='content_tab_index' name='content[tab_index]'  value=$page_object->tab_index}
 		    {/if}
     
 		    {* Access Key *}
 		    {if $page_object->field_used('access_key')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='accesskey'}:</p>
-		      	<p class="pageinput">
-		      	  {html_input id='content_access_key' name='content[access_key]' value=$page_object->access_key}
-		      	</p>
-		      </div>
+				{admin_input type='input' label='accesskey' id='content_access_key' name='content[access_key]'  value=$page_object->access_key}			
 		    {/if}
     
 		    {* Page Alias *}
 		    {if $page_object->field_used('alias')}
-		      <div class="pageoverflow50">
-		      	<p class="pagetext">{lang string='pagealias'}:</p>
-		      	<p class="pageinput">
-		      	  {html_input id='content_alias' name='content[alias]' value=$page_object->alias useentities='true'}
-		      	</p>
-		      </div>
+				{admin_input type='input' label='pagealias' id='content_alias' name='content[alias]'  value=$page_object->alias useentities='true'}						
 		    {/if}
 		    <div class="clearb"></div>
 
@@ -236,13 +171,11 @@
 				
 				<br />
 				
-				<fieldset>
-					<legend>Add Permission</legend>
-					Group: <select name="group_id"><option>Everyone</option></select><br />
-					Permission: <select name="permission">{html_options options=$permission_list}</select><br />
-					Allow: <input type="checkbox" /><br />
-					<input type="submit" name="Submit" value="Submit" />
-				</fieldset>
+
+				{admin_input type='select' label='Group' id='group_permission' name='content[group]' options='Everyone'}						
+				{admin_input type='select' label='Permission' id='permission_list' name='content[permission_list]' options=$permission_list}										
+				{admin_input type='checkbox' label='Allow' id='Allow' name='content[Allow]'}										
+				{admin_input type='submit' value='Submit' id='submit_button'}
 					
 			</div> <!-- End permissions -->
 

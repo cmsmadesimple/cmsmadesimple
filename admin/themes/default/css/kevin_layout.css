@@ -1,0 +1,371 @@
+/* Generic Styles */
+* { margin:0; padding:0; }
+a img { border:0; }
+.clearb { clear:both; }
+div.navt_menu { display:none; }
+#_DebugFooter { display:none; }
+p.pageback { clear:both; margin-top:1em;}
+/* End Generic Styles */
+
+
+
+/* Layout Styles */
+body {
+	background:#E6E6E6;
+	color:#333333;	
+}
+div#header {
+	background:#000000 url(../images/kevin_layout/header-bg.jpg) repeat;
+}
+div#header h1 {
+	dispaly:block;
+	padding:30px 0 0.5em 60px;
+	font-size:1.5em;	
+	color:#FFFFFF;
+	background: url(../images/kevin_layout/logo.gif) no-repeat 0.3em 0.6em;
+}
+div.breadcrumbs {
+	background:#FFFFFF;
+	padding:0.3em;
+	border-bottom:1px solid #DFDFDF;
+}
+div#MainContent {
+	padding:0.5em 1em 1em 1em;
+	background:#FFFFFF;
+}
+div.pageheader {
+	border-bottom:1px solid #CCCCCC;
+	font-size:1.3em;
+	letter-spacing:0.1em;
+	margin-bottom:1em;
+	color:#DE7010;
+	}
+	div.pageheader span.helptext {
+		font-size:0.50em;
+		color:#333333;
+		margin-left:1em;
+	}
+	div.pageheader span.helptext a {
+		text-decoration:none;
+		font-size:1em;
+	}	
+	div.pageheader span.helptext a:hover {
+		text-decoration:underline;
+	}
+p.footer {
+	background-image:url(../images/kevin_layout/footer-bg.gif);
+	background-repeat:repeat-x;
+	padding-top:25px;
+	display:block;
+	margin-bottom:50px;	
+	text-align:center;
+	font-size:0.8em;
+	}
+	p.footer a {
+	}
+/* End Layout Styles */
+
+
+
+
+
+
+
+/* Typography */
+* {
+	font-family:Arial,sans-serif;
+}
+a, p, td, th, label { 
+	font-size:.9em;
+}
+a {
+	color:#333333;
+}
+a:hover {
+	color:#FFFFFF;
+	background:#52B4FC;
+}
+/* End Typography */
+
+
+
+
+
+
+
+/* Form Styles */
+div.row {
+	clear:left;
+	overflow:hidden;
+	margin-top:0.5em;
+	}
+	div.row label {
+		float:left;
+		width:10em;
+	}
+	div.row input,
+	div.row textarea,
+	div.row select {
+		color:#384654;
+		float:left;
+	}
+	div.row input {
+		width:20em;
+		}
+		div.row input.checkbox {
+		width:auto;
+	}
+	div.row textarea {
+		width:35em;
+	}
+input, textarea, select, option {  
+	background:#FCFCFC;
+	font-size:0.9em;
+}
+input,
+textarea {
+	color:#333333;
+	padding:0.25em;
+	border:1px solid #CCCCCC;
+	width:85%;
+}
+select {
+	border:1px solid #CCCCCC;
+	height:1.5em;
+}	
+option {
+	padding:0.25em;
+}
+textarea#content,
+textarea.pagebigtextarea {
+	height:30em;
+	width:50em;
+	display:block;
+}
+input:focus,
+textarea:focus,
+select:focus,
+input.pagebuttonhover {
+	background:#FFF;
+    border: 1px solid #52b4fc;
+}	
+div.pagecontainer input.pagebutton,
+div.pagecontainer input.pagebuttonhover {
+	width:auto;
+}
+
+/* End Form Styles */
+
+
+
+
+
+
+
+
+
+/* Table Styles */
+table.pagetable {
+	width:95%;
+	margin:auto;
+	border:1px solid #CCCCCC;
+	}
+	table.pagetable tr {
+		}
+		table.pagetable tr th {
+			background-color:#F2F2F2;
+			border-bottom:1px solid #CCCCCC;
+			text-align:left;
+		}
+		th.pagew50 {
+			width:50%;
+		}
+		table.pagetable tr th.pagepos {
+			text-align:center;
+		}
+		table.pagetable tr td {
+			color:#333333;
+			background:#FFFFFF none repeat scroll 0%;
+			/*border-right:1px solid #CCCCCC;*/
+			empty-cells:show;
+			vertical-align:top;
+			white-space:nowrap;
+		}	
+		table.pagetable tr td.pagepos {
+			text-align:center;
+		}
+	table.pagetable tr.row1 {
+		background-color:#FFFFFF;
+	}
+	table.pagetable tr.row1hover td,
+	table.pagetable tr.row2hover td {
+		background-color:#D5E7F3;
+	}
+	table.pagetable tr.row2 td {
+		background:#F4F4F4 none repeat scroll 0%;
+	}
+/* End Table Styles */
+
+
+
+
+
+
+
+
+
+/* Navigation Styles */
+div.topmenucontainer {
+	/*background:#2E72B8 url(http://www.kevingrandon.com/cms/images/kevin_layout/nav-bg.gif) repeat-x scroll left center;*/
+}
+ul#nav {
+
+}
+ul#nav,
+ul#nav ul {
+   list-style-type: none;
+}
+ul#nav ul  {
+	/*border: solid 1px #c6c3bd;*/
+   }
+ul#nav a:hover {
+	/*text-decoration:underline;*/
+}   
+ul#nav li a.selected {
+	color:#000000;
+	background:#FFFFFF;
+	border-top:1px solid #CCC;
+	border-left:1px solid #CCC;
+	border-right:1px solid #CCC;	
+}
+ul#nav li:hover a.selected {
+	border-top:1px solid transparent;
+	border-left:1px solid transparent;
+	border-right:1px solid transparent;	
+}
+ul#nav li:hover ul li a.selected {
+	border:0;
+	border-bottom:1px solid #215893;
+}
+ul#nav li {
+	margin-right:2px;
+}
+ul#nav li a  {
+	color: #FFFFFF;
+	text-decoration: none;
+	font-size: 13px;
+	margin-top: 2px;
+	padding: 5px 10px;
+	padding-bottom: 2px;	
+	display: block;
+	font-weight:bold;
+}
+ul#nav li:hover a {
+	color:#FFFFFF;
+	background:#215893;
+} 
+ul#nav li:hover a:hover {
+	color:#FFFFFF;
+	background:#215893;
+}
+ul#nav li ul li {
+	margin-right:0;
+}
+ul#nav li ul a  {
+	text-align: left;
+	margin-top: 0px;
+	padding-bottom: 0px;
+	position: relative;
+	border-bottom:1px solid #215893;
+	color:#FFFFFF;
+	background:#2E72B8;
+	width:15em;
+	font-size:0.75em;
+	padding:0.25em 1em;
+	font-weight:normal;
+	margin-right:0;
+}
+ul#nav li:hover ul a {
+	color:#FFFFFF;
+	background:#2E72B8;
+	border:0;
+	border-bottom:1px solid #215893;
+}
+ul#nav li:hover ul a:hover {
+	color:#FFFFFF;
+	background:#215893;
+}
+ul#nav li {
+   float: left;
+   }
+	#nav li ul  {
+		position: absolute;
+		width: auto;
+		height: auto;
+		display: none;
+		position:absolute;
+		z-index:999;
+		border-left:1px solid #215893;
+		border-right:1px solid #215893;
+		border-top:1px solid #215893;
+	}
+ul#nav li li  {
+   float: none;
+   margin: 0px;
+   padding: 0px;
+}
+ul#nav li:hover ul ul, #nav li.cssHover ul ul  {
+   display: none;
+   }
+ul#nav li:hover ul, #nav li.cssHover ul  {
+   display: block;
+   }
+ul#nav li:hover, #nav li.cssHover, a.module:hover, a.first_module:hover  {
+   }
+li.selected  {
+   background-color: #bdc0c6;
+   }
+a.module  {
+   background-color: #f0f0f0;
+   }
+a.first_module  {
+   background-color: #f0f0f0;
+   border-top: 1px solid #c6c3bd;
+   }
+
+ul#nav li.sep  {
+   line-height: 2px;
+   border-bottom: 1px solid #c6c3bd;
+   }
+/* End Navigation Styles */
+
+
+/* Top Page Styles */
+div.itemmenucontainer {
+	background-color:#ECECEC;
+	border:1px solid #666666;
+	color:#384654;
+	margin:10px;
+	padding:5px;
+	width:45em;
+}
+div.itemoverflow img {
+	border:medium none;
+}
+p.itemicon {
+	float:left;
+	margin-right:10px;
+}
+img.itemicon {
+	border:0px none;
+	height:32px;
+	width:32px;
+}
+p.itemtext {
+	float:left;
+	width:39em;
+}
+div.itemoverflow {
+	overflow:hidden;
+}
+/* End Top Page Styles */
