@@ -53,17 +53,51 @@ function &get_stylesheet_object()
 //Get a working page object
 $stylesheet_object = get_stylesheet_object($userid);
 
+// Create the media_types array
+$media_types = array(
+	array('name' => "all"),
+	array('name' => "aural"),
+	array('name' => "braille"),
+	array('name' => "embossed"),
+	array('name' => "handheld"),
+	array('name' => "print"),
+	array('name' => "projection"),
+	array('name' => "screen"),
+	array('name' => "tty"),
+	array('name' => "tv")
+);
+
 if ($access)
 {
 	if ($submit || $apply)
 	{
+		// Handle the media types
+		$submitted_types = $_POST['media_types'];
+		foreach ($submitted_types as $key => $onetype) 
+		{
+			if($onetype != 0)
+			{	
+				$types .= $media_types[$key]['name'] . ', ';			
+				$media_types[$key]['selected'] = true;
+			}
+		}
+		if ($types!='') 
+		{
+			$types = substr($types, 0, -2); #strip last space and comma
+		} 
+		else 
+		{
+			$types='';
+		}
+
+		$stylesheet_object->media_type = $types;	
+		
 		if ($stylesheet_object->save())
 		{
 			if ($submit)
 			{
 				audit($stylesheet_object->id, $stylesheet_object->name, 'Added Stylesheet');
-				if ($submit)
-					redirect("listcss.php");
+				redirect("listcss.php");
 			}
 		}
 	}
@@ -73,18 +107,6 @@ if ($access)
 $smarty->assign('header_name', $themeObject->ShowHeader('addstylesheet'));
 
 //Assign the stylesheet media types
-   $media_types = array(
-   	  "all",
-	  "aural",
-	  "braille",
-	  "embossed",
-	  "handheld",
-	  "print",
-	  "projection",
-	  "screen",
-	  "tty",
-	  "tv"
-	 );
 $smarty->assign('media_types', $media_types);
 
 //Setup the stylesheet object

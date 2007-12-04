@@ -15,7 +15,15 @@
 		<div id="advanced">
 			<h3>{lang string='mediatype'}</h3>
 			{foreach from=$media_types item='type'}
-				{admin_input type='checkbox' label=$type id=$type name='media_types[]'}
+				<div class="row">
+					{if isset($type.selected)}
+						{html_checkbox id=$type.name name='media_types[]' selected=true}
+					{else}
+						{html_checkbox id=$type.name name='media_types[]'}
+					{/if}
+					{capture assign='lang_key'}mediatype_{$type.name}{/capture}
+					<label for="{$type.name}" style="white-space:nowrap;margin-left:10px;">{lang string=$lang_key}</label>
+				</div>
 			{/foreach}
 		</div>
 	</div>
