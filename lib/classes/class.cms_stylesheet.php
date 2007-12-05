@@ -33,7 +33,6 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => 'all');
 	var $field_maps = array('id' => 'id', 'css_name' => 'name', 'css_text' => 'value');
 	var $table = 'css';
-	var $sequence = 'css_seq';
 	
 	public function validate()
 	{

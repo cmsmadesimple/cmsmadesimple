@@ -73,12 +73,13 @@ if ($access)
 	{
 		// Handle the media types
 		$submitted_types = $_POST['media_types'];
+
 		foreach ($submitted_types as $key => $onetype) 
 		{
-			if($onetype != 0)
+			if($onetype != -1)
 			{	
-				$types .= $media_types[$key]['name'] . ', ';			
-				$media_types[$key]['selected'] = true;
+				$types .= $media_types[$onetype]['name'] . ', ';			
+				$media_types[$onetype]['selected'] = true;
 			}
 		}
 		if ($types!='') 
@@ -91,7 +92,7 @@ if ($access)
 		}
 
 		$stylesheet_object->media_type = $types;	
-		
+
 		if ($stylesheet_object->save())
 		{
 			if ($submit)

@@ -78,10 +78,10 @@ if ($access)
 		$submitted_types = $_POST['media_types'];
 		foreach ($submitted_types as $key => $onetype) 
 		{
-			if($onetype != 0)
+			if($onetype != -1)
 			{	
-				$types .= $media_types[$key]['name'] . ', ';			
-				$media_types[$key]['selected'] = true;
+				$types .= $media_types[$onetype]['name'] . ', ';			
+				$media_types[$onetype]['selected'] = true;
 			}
 		}
 		if ($types!='') 
@@ -92,9 +92,9 @@ if ($access)
 		{
 			$types='';
 		}
-
+			
 		$stylesheet_object->media_type = $types;	
-		
+
 		if ($stylesheet_object->save())
 		{
 			audit($stylesheet_object->id, $stylesheet_object->name, 'Edited Stylesheet');
@@ -103,6 +103,18 @@ if ($access)
 				redirect("listcss.php");
 			}
 		}
+	}
+}
+
+if (!is_array($stylesheet_object->media_type)) {
+  $selected_media_types = split (", " , $stylesheet_object->media_type);
+}
+
+foreach($media_types AS $key => $value)
+{
+	if(in_array($value['name'], $selected_media_types))
+	{
+		$media_types[$key]['selected'] = true;	
 	}
 }
 
