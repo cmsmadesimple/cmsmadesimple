@@ -25,6 +25,75 @@ require_once("../include.php");
 check_login();
 global $gCms;
 $db =& $gCms->GetDb();
+
+$smarty = cms_smarty();
+$smarty->assign('action', 'adduserplugin.php');
+
+$error = array();
+
+if (isset($_POST["cancel"])) {
+	redirect("listusertags.php");
+	return;
+}
+
+$userid = get_userid();
+$access = check_permission($userid, 'Modify User-defined Tags');
+
+global $gCms;
+$db =& $gCms->GetDb();
+
+$submit = array_key_exists('submitbutton', $_POST);
+
+function &get_udt_object()
+{
+	$udt_object = new CmsUserTag();
+	if (isset($_REQUEST['udt']))
+		$udt_object->update_parameters($_REQUEST['udt']);
+	return $udt_object;
+}
+$udt_object = get_udt_object();
+
+// Handle form submission
+if ($access)
+{
+	if($submit)
+	{
+		if ($udt_object->save())
+		{
+			audit($udt_object->id, $udt_object->name, 'Added User Defined Tag');
+			redirect("listusertags.php");
+		}
+	}
+}
+
+
+include_once("header.php");
+
+// Assign the header
+$smarty->assign('header_name', $themeObject->ShowHeader('addusertag'));
+
+// Assign the Object
+$smarty->assign('udt_object', $udt_object);
+
+// Display the template
+$smarty->display('adduserplugin.tpl');
+
+include_once("footer.php");
+
+# vim:ts=4 sw=4 noet
+?>
+
+
+
+<?php
+/*
+$CMS_ADMIN_PAGE=1;
+
+require_once("../include.php");
+
+check_login();
+global $gCms;
+$db =& $gCms->GetDb();
 $error = array();
 
 $plugin_name= "";
@@ -40,12 +109,6 @@ if (isset($_POST["cancel"])) {
 
 $userid = get_userid();
 $access = check_permission($userid, 'Modify User-defined Tags');
-
-$use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
-
-// $smarty = new Smarty_CMS($gCms->config);
-// load_plugins($smarty);
 
 global $gCms;
 $db =& $gCms->GetDb();
@@ -147,7 +210,6 @@ else {
 		<div class="row">
 			<label>*<?php echo lang('code')?></label>
 			<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
-			<!--  <textarea class="pagetextarea" name="code" rows="" cols=""><_?php echo $code ?></textarea>-->
 		</div>
 		<div class="submitrow">
 			<input type="hidden" name="addplugin" value="true" />
@@ -159,8 +221,9 @@ else {
 
 <?php
 }
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
+*/
 ?>

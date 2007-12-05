@@ -51,7 +51,7 @@ function &get_stylesheet_object()
 }
 
 //Get a working page object
-$stylesheet_object = get_stylesheet_object($userid);
+$stylesheet_object = get_stylesheet_object();
 
 // Create the media_types array
 $media_types = array(
