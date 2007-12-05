@@ -72,6 +72,7 @@ else if (get_preference($userid, 'use_javasyntax') == "1")
     $use_javasyntax = true;
 }
 */
+
 $gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
 
 if ($access)
@@ -296,26 +297,37 @@ else
 				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" /></p>
+	<div id="page_tabs" style="margin-top:0.5em;">
+		<ul>
+			<li><a href="#content"><span>Content</span></a></li>
+			<li><a href="#permissions"><span>Permissions</span></a></li>
+		</ul>
+		<div id="content">		
+		
+		<div class="row">
+			<label><?php echo lang('name')?>:</label>
+			<input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?></p>
+		<div class="row">
+			<label>*<?php echo lang('content')?>:</label>
+			<?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content');?>
 		</div>
+	</div>
+	<div id="permissions">
 	<?php if ($adminaccess) { ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('owner')?>:</p>
-			<p class="pageinput"><?php echo $owners?></p>
+		<div class="row">
+			<label><?php echo lang('owner')?>:</label>
+			<?php echo $owners?>
 		</div>
 	<?php } ?>
 	<?php if ($addt_users != '') { ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
-			<p class="pageinput"><select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select></p>
+		<div class="row">
+			<label><?php echo lang('additionaleditors')?>:</label>
+			<select name="additional_editors[]" multiple="multiple" size="3"><?php echo $addt_users?></select>
 		</div>
 	<?php } ?>
+	</div>
+	</div>
 		<div class="pageoverflow">
 			<p class="pagetext">&nbsp;</p>
 			<p class="pageinput">
@@ -332,6 +344,11 @@ else
 		</div>
 	</form>
 </div>
+<script type="text/javascript">
+<!--
+	$('#page_tabs').tabs('content');
+//-->
+</script>
 
 <?php
 }

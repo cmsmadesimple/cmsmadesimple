@@ -29,7 +29,6 @@
   </div>
   
   <div class="breadcrumbs">
-    <p class="breadcrumbs">
       {if count($breadcrumbs) gt 0}
         {foreach from=$breadcrumbs item=breadcrumb name=breadcrumb}
           {if $breadcrumb.url ne ''}
@@ -42,7 +41,6 @@
           {/if}
         {/foreach}
       {/if}
-    </p>
   </div>
   
 {/if}

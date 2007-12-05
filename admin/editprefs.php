@@ -107,152 +107,128 @@ if (FALSE == empty($page_message)) {
 
 ?>
 
-<div class="pagecontainer">
-	<div class="pageoverflow">
-		<?php echo $themeObject->ShowHeader('userprefs'); ?>
-		<form method="post" action="editprefs.php" name="prefsform">
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('wysiwygtouse'); ?>:</p>
-				<p class="pageinput">
-					<select name="wysiwyg">
-					<option value=""><?php echo lang('none'); ?></option>
-					<?php
-						foreach($gCms->modules as $key=>$value)
+	<?php echo $themeObject->ShowHeader('userprefs'); ?>
+	<form method="post" action="editprefs.php" name="prefsform">
+		<div class="row">
+			<label><?php echo lang('wysiwygtouse'); ?>:</label>
+				<select name="wysiwyg">
+				<option value=""><?php echo lang('none'); ?></option>
+				<?php
+					foreach($gCms->modules as $key=>$value)
+					{
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true &&
+							$gCms->modules[$key]['object']->IsWYSIWYG())
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsWYSIWYG())
+							echo '<option value="'.$key.'"';
+							if ($wysiwyg == $key)
 							{
-								echo '<option value="'.$key.'"';
-								if ($wysiwyg == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
+								echo ' selected="selected"';
 							}
+							echo '>'.$key.'</option>';
 						}
-					?>
-					</select>
-				</p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('syntaxhighlightertouse'); ?>:</p>
-				<p class="pageinput">
-					<select name="syntaxhighlighter">
-					<option value=""><?php echo lang('none'); ?></option>
-					<?php
-						foreach($gCms->modules as $key=>$value)
+					}
+				?>
+				</select>
+		</div>
+		<div class="row">
+			<label><?php echo lang('syntaxhighlightertouse'); ?>:</label>
+			<select name="syntaxhighlighter">
+				<option value=""><?php echo lang('none'); ?></option>
+				<?php
+					foreach($gCms->modules as $key=>$value)
+					{
+						if ($gCms->modules[$key]['installed'] == true &&
+							$gCms->modules[$key]['active'] == true &&
+							$gCms->modules[$key]['object']->IsSyntaxHighlighter())
 						{
-							if ($gCms->modules[$key]['installed'] == true &&
-								$gCms->modules[$key]['active'] == true &&
-								$gCms->modules[$key]['object']->IsSyntaxHighlighter())
+							echo '<option value="'.$key.'"';
+							if ($syntaxhighlighter == $key)
 							{
-								echo '<option value="'.$key.'"';
-								if ($syntaxhighlighter == $key)
-								{
-									echo ' selected="selected"';
-								}
-								echo '>'.$key.'</option>';
+								echo ' selected="selected"';
 							}
+							echo '>'.$key.'</option>';
 						}
-					?>
-					</select>
-				</p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
-				</p>
-			</div>
-				<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('language'); ?>:</p>
-				<p class="pageinput">
-					<select name="default_cms_lang" style="vertical-align: middle;">
-					<option value=""><?php echo lang('nodefault'); ?></option>
-					<?php
-						$list = CmsLanguage::get_language_list(true);
-						foreach ($list as $key=>$val) {
-							echo "<option value=\"$key\"";
-							if ($default_cms_lang == $key) {
-								echo " selected=\"selected\"";
-							}
-							echo ">$val";
-							echo "</option>\n";
+					}
+				?>
+			</select>
+		</div>
+		<div class="row">
+			<label><?php echo lang('gcb_wysiwyg'); ?>:</label>
+			<input class="checkbox" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('gcb_wysiwyg_help') ?></span>
+		</div>
+			<div class="row">
+			<label><?php echo lang('language'); ?>:</label>
+			<select name="default_cms_lang" style="vertical-align: middle;">
+				<option value=""><?php echo lang('nodefault'); ?></option>
+				<?php
+					$list = CmsLanguage::get_language_list(true);
+					foreach ($list as $key=>$val) {
+						echo "<option value=\"$key\"";
+						if ($default_cms_lang == $key) {
+							echo " selected=\"selected\"";
 						}
-					?>
-					</select>
-				</p>
-			</div>
-	    <div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('date_format_string'); ?>:</p>
-		<p class="pageinput">
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20" /><?php echo lang('date_format_string_help') ?>
-		</p>
-	    </div>
-            <div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('admintheme');  ?>:</p>
-				<p class="pageinput">
-					<?php
-						if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
-								echo '<select name="admintheme">';
-									while (($file = readdir($dir)) !== false) {
-										if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
-											echo '<option value="'.$file.'"';
-											echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
-											echo '>'.$file.'</option>';
-										}
+						echo ">$val";
+						echo "</option>\n";
+					}
+				?>
+			</select>
+		</div>
+    <div class="row">
+	<label><?php echo lang('date_format_string'); ?>:</label>
+		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20" /><span class="tooltip_info"><?php echo lang('date_format_string_help') ?></span>
+    </div>
+           <div class="row">
+			<label><?php echo lang('admintheme');  ?>:</label>
+				<?php
+					if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+							echo '<select name="admintheme">';
+								while (($file = readdir($dir)) !== false) {
+									if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
+										echo '<option value="'.$file.'"';
+										echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
+										echo '>'.$file.'</option>';
 									}
-								echo '</select>';
-						}
-					?>	
-				</p>					
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('admincallout'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><?php echo lang('showbookmarks') ?>
-				</p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('hide_help_links'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><?php echo lang('hide_help_links_help') ?>
-				</p>
-			</div>
-			<!--
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>
-				<p class="pageinput">
-					<select name="paging">
-					<option value="0"<?php if ($paging == 0) echo " selected";?>><?php echo lang('nopaging');?></option>
-					<option value="10"<?php if ($paging == 10) echo " selected";?>>10</option>
-					<option value="20"<?php if ($paging == 20) echo " selected";?>>20</option>
-					<option value="30"<?php if ($paging == 30) echo " selected";?>>30</option>
-					<option value="40"<?php if ($paging == 40) echo " selected";?>>40</option>
-					<option value="50"<?php if ($paging == 50) echo " selected";?>>50</option>
-					<option value="100"<?php if ($paging == 100) echo " selected";?>>100</option>
-					</select>
-				</p>
-			</div>
-			-->
-			<div class="pageoverflow">
-				<p class="pagetext"><?php echo lang('adminindent'); ?>:</p>
-				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><?php echo lang('indent') ?>
-				</p>
-			</div>
-			<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
+									}
+							echo '</select>';
+					}
+				?>	
+		</div>
+		<div class="row">
+			<label><?php echo lang('admincallout'); ?>:</label>
+			<input class="checkbox" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('showbookmarks') ?></span>
+		</div>
+		<div class="row">
+			<label><?php echo lang('hide_help_links'); ?>:</label>
+			<input class="checkbox" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('hide_help_links_help') ?></span>
+		</div>
+		<!--
+		<div class="row">
+			<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>
 			<p class="pageinput">
-				<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+				<select name="paging">
+				<option value="0"<?php if ($paging == 0) echo " selected";?>><?php echo lang('nopaging');?></option>
+				<option value="10"<?php if ($paging == 10) echo " selected";?>>10</option>
+				<option value="20"<?php if ($paging == 20) echo " selected";?>>20</option>
+				<option value="30"<?php if ($paging == 30) echo " selected";?>>30</option>
+				<option value="40"<?php if ($paging == 40) echo " selected";?>>40</option>
+				<option value="50"<?php if ($paging == 50) echo " selected";?>>50</option>
+				<option value="100"<?php if ($paging == 100) echo " selected";?>>100</option>
+				</select>
 			</p>
-			</div>			
-		</form>
-	</div>
-</div>	
+		</div>
+		-->
+		<div class="row">
+			<label><?php echo lang('adminindent'); ?>:</label>
+			<input class="checkbox" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('indent') ?></span>
+		</div>
+		<div class="submitrow">
+			<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
+			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
+			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
+		</div>			
+	</form>
+
 
 <?php
 

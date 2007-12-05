@@ -102,27 +102,23 @@ if ($error != "")
 }
 ?>
 
-<div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('editbookmark'); ?>
 	<form method="post" action="editbookmark.php">
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('title')?>:</p>
-			<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
+		<div class="row">
+			<label><?php echo lang('title')?>:</label>
+			<input type="text" name="title" maxlength="255" value="<?php echo $title?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('url')?>:</p>
-			<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" /></p>
+		<div class="row">
+			<label><?php echo lang('url')?>:</label>
+			<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
+		<div class="submitrow">
 				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
 				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 			</p>
 		</div>		
 	</form>
-</div>
 <?php
 
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';

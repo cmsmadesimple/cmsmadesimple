@@ -25,7 +25,7 @@
     clear: both;
     content: " ";
 }
-.ui-tabs-nav ul {
+#MainContent .ui-tabs-nav ul {
 	list-style-type: none;
 	padding-left:3px;
 }

@@ -78,29 +78,22 @@ if ($error != "")
 }
 ?>
 
-<div class="pagecontainer">
-	<div class="pageoverflow">
-			<?php echo $themeObject->ShowHeader('addbookmark'); ?>
-			<form method="post" action="addbookmark.php">
-				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('title')?>:</p>
-					<p class="pageinput"><input type="text" name="title" maxlength="255" value="<?php echo $title?>" /></p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext"><?php echo lang('url')?>:</p>
-					<p class="pageinput"><input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" /></p>
-				</div>
-				<div class="pageoverflow">
-					<p class="pagetext">&nbsp;</p>
-					<p class="pageinput">
-						<input type="hidden" name="addbookmark" value="true" />
-						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-					</p>
-				</div>		
-			</form>
-	</div>
-</div>
+		<?php echo $themeObject->ShowHeader('addbookmark'); ?>
+		<form method="post" action="addbookmark.php">
+			<div class="row">
+				<label><?php echo lang('title')?>:</label>
+				<input type="text" name="title" maxlength="255" value="<?php echo $title?>" />
+			</div>
+			<div class="row">
+				<label><?php echo lang('url')?>:</label>
+				<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" />
+			</div>
+			<div class="submitrow">
+				<input type="hidden" name="addbookmark" value="true" />
+				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			</div>		
+		</form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 
 <?php

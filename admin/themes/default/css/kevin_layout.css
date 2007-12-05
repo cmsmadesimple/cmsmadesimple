@@ -3,7 +3,7 @@
 a img { border:0; }
 .clearb { clear:both; }
 div.navt_menu { display:none; }
-#_DebugFooter { display:none; }
+#_DebugFooter {  }
 p.pageback { clear:both; margin-top:1em;}
 /* End Generic Styles */
 
@@ -28,6 +28,7 @@ div.breadcrumbs {
 	background:#FFFFFF;
 	padding:0.3em;
 	border-bottom:1px solid #DFDFDF;
+	font-size:0.9em;
 }
 div#MainContent {
 	padding:0.5em 1em 1em 1em;
@@ -75,7 +76,8 @@ p.footer {
 * {
 	font-family:Arial,sans-serif;
 }
-a, p, td, th, label { 
+a, p, td, th, label, 
+#MainContent li { 
 	font-size:.9em;
 }
 a {
@@ -84,6 +86,19 @@ a {
 a:hover {
 	color:#FFFFFF;
 	background:#52B4FC;
+}
+#MainContent ul, ol {
+	padding-left:4em;
+}
+h3 {
+	margin-bottom:0.5em;
+}
+#MainContent ul, ol, p {
+	margin-bottom:1em;
+}
+span.tooltip_info {
+	font-size:0.9em;
+	margin-left:0.35em;
 }
 /* End Typography */
 

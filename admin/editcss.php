@@ -36,7 +36,7 @@ $stylesheetops = $gCms->GetStylesheetOperations();
 #Make sure we're logged in and get that user id
 check_login();
 $userid = get_userid();
-$access = check_permission($userid, 'Add Stylesheets');
+$access = check_permission($userid, 'Modify Stylesheets');
 
 require_once("header.php");
 
