@@ -222,11 +222,11 @@ if (FALSE == empty($page_message)) {
 			<label><?php echo lang('adminindent'); ?>:</label>
 			<input class="checkbox" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('indent') ?></span>
 		</div>
+		<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
 		<div class="submitrow">
-			<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
-			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="submit_form" value="<?php echo lang('submit'); ?>" />
-			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel'); ?>" />
-		</div>			
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		</div>
 	</form>
 
 

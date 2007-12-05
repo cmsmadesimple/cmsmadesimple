@@ -112,12 +112,11 @@ if ($error != "")
 			<label><?php echo lang('url')?>:</label>
 			<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" />
 		</div>
+		<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
 		<div class="submitrow">
-				<input type="hidden" name="bookmark_id" value="<?php echo $bookmark_id?>" /><input type="hidden" name="editbookmark" value="true" /><input type="hidden" name="userid" value="<?php echo $userid?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
-		</div>		
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		</div>
 	</form>
 <?php
 

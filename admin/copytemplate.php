@@ -154,13 +154,13 @@ else
 			<?php echo $template_name; ?>
 		</div>
 		<div class="row">
-			<label><?php echo lang('newtemplatename'); ?>:</label>
-			<input type="text" name="template" maxlength="255" value="<?php echo $template?>">
+			<label for="new_template_name"><?php echo lang('newtemplatename'); ?>:</label>
+			<input type="text" id="new_template_name" name="template" maxlength="255" value="<?php echo $template?>">
 		</div>
+		<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
 		<div class="submitrow">
-			<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
-			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
 		</div>
 	</form>
 </div>

@@ -88,11 +88,11 @@ if ($error != "")
 				<label><?php echo lang('url')?>:</label>
 				<input type="text" name="url" maxlength="255" value="<?php echo $url ?>" class="standard" />
 			</div>
-			<div class="submitrow">
-				<input type="hidden" name="addbookmark" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</div>		
+			<input type="hidden" name="addbookmark" value="true" />
+		<div class="submitrow">
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		</div>
 		</form>
 <p class="pageback"><a class="pageback" href="<?php echo $themeObject->BackUrl(); ?>">&#171; <?php echo lang('back')?></a></p>
 

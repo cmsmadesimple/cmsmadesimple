@@ -163,17 +163,40 @@ textarea.pagebigtextarea {
 }
 button {
 	color:#333333;
-	padding:0.2em 0.25em;
+	padding:0.2em 0.35em 0.2em 16px;
 	border:1px solid #CCCCCC;
 	width:85%;
-	background:#FFF;
+	background:#2D86DF url(../images/kevin_layout/button-bg.gif);
 	font-size:0.9em;
+}
+button.apply,
+button.positive {
+	background-color:#78D261;
+}
+button.apply:hover,
+button.positive:hover {
+	background-color:#48EB1E;
+}
+button.negative {
+	background-color:#DE7010;
+}
+button.negative:hover {
+	background-color:#FF0000;
+}
+button.preview {
+	background-color:#2D86DF;
+}
+button.preview:hover {
+	background-color:#3399FF;
+}
+button:hover {
+	/*border: 1px solid #52b4fc;*/
+	background-color:#3399FF;
 }
 input:focus,
 textarea:focus,
 select:focus,
-input.pagebuttonhover,
-button:hover {
+input.pagebuttonhover {
 	background:#FFF;
     border: 1px solid #52b4fc;
 }	

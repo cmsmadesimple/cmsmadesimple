@@ -117,13 +117,13 @@ $smarty->assign('encoding_dropdown', create_encoding_dropdown('template[encoding
 $ExtraButtons = array(
 		      array(
 			    'name'    => 'previewbutton',
-			    'class'   => '',
+			    'class'   => 'preview',
 			    'image'   => '',
 			    'caption' => lang('preview'),
 			    ),
 			   array(
 			    'name'    => 'applybutton',
-			    'class'   => '',
+			    'class'   => 'apply',
 			    'image'   => '',
 			    'caption' => lang('apply'),
 			    ),

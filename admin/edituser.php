@@ -240,11 +240,11 @@ else {
 			echo '<input type="hidden" name="active" value="'.$active.'" />';
 	   }
            ?>
+		<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
+		<input type="hidden" name="edituser" value="true" />
 		<div class="submitrow">
-			<input type="hidden" name="user_id" value="<?php echo $user_id?>" />
-			<input type="hidden" name="edituser" value="true" />
-			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
-			<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
 		</div>
 	</form>
 </div>

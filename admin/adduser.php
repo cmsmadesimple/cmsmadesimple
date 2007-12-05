@@ -168,42 +168,39 @@ else {
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('adduser'); ?>
 	<form method="post" action="adduser.php">		
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="user" maxlength="255" value="<?php echo $user?>" /></p>
+		<div class="row">
+			<label>*<?php echo lang('name')?>:</label>
+			<input type="text" name="user" maxlength="255" value="<?php echo $user?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('password')?>:</p>
-			<p class="pageinput"><input type="password" name="password" maxlength="25" value="" /></p>
+		<div class="row">
+			<label>*<?php echo lang('password')?>:</label>
+			<input type="password" name="password" maxlength="25" value="" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('passwordagain')?>:</p>
-			<p class="pageinput"><input type="password" name="passwordagain" maxlength="25" value="" /></p>
+		<div class="row">
+			<label>*<?php echo lang('passwordagain')?>:</label>
+			<input type="password" name="passwordagain" maxlength="25" value="" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('firstname')?>:</p>
-			<p class="pageinput"><input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" /></p>
+		<div class="row">
+			<label><?php echo lang('firstname')?>:</label>
+			<input type="text" name="firstname" maxlength="50" value="<?php echo $firstname ?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('lastname')?>:</p>
-			<p class="pageinput"><input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" /></p>
+		<div class="row">
+			<label><?php echo lang('lastname')?>:</label>
+			<input type="text" name="lastname" maxlength="50" value="<?php echo $lastname ?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('email')?>:</p>
-			<p class="pageinput"><input type="text" name="email" maxlength="255" value="<?php echo $email ?>" /></p>
+		<div class="row">
+			<label><?php echo lang('email')?>:</label>
+			<input type="text" name="email" maxlength="255" value="<?php echo $email ?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		<div class="row">
+			<label><?php echo lang('active')?>:</label>
+			<input class="checkbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="adduser" value="true" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('submit')?>" />
-				<input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="cancel" value="<?php echo lang('cancel')?>" />
-			</p>
-		</div>
+		<input type="hidden" name="adduser" value="true" />
+		<div class="submitrow">
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		</div>		
 	</form>
 </div>
 

@@ -87,27 +87,22 @@ else
 	}
 ?>
 
-<div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('addgroup'); ?>
 	<form method="post" action="addgroup.php">
-		<div class="pageoverflow">
-			<p class="pagetext">*<?php echo lang('name')?>:</p>
-			<p class="pageinput"><input type="text" name="group" maxlength="255" value="<?php echo $group?>" /></p>
+		<div class="row">
+			<label>*<?php echo lang('name')?>:</label>
+			<input type="text" name="group" maxlength="255" value="<?php echo $group?>" />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('active')?>:</p>
-			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
+		<div class="row">
+			<label><?php echo lang('active')?>:</label>
+			<input class="checkbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> />
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="addgroup" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />			
-			</p>
-		</div>
+		<input type="hidden" name="addgroup" value="true" />
+		<div class="submitrow">
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		</div>	
 	</form>
-</div>
 
 <?php
 }

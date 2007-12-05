@@ -290,7 +290,7 @@ $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, '
 $ExtraButtons = array(
 		      array(
 			    'name'    => 'preview',
-			    'class'   => 'positive',
+			    'class'   => 'positive preview',
 			    'image'   => $themeObject->DisplayImage('icons/system/preview.gif', '','','',''),
 			    'caption' => lang('preview'),
 			    ),

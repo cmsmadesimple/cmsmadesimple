@@ -112,13 +112,13 @@ else
 			<?php echo $stylesheet_name; ?>
 		</div>
 		<div class="row">
-			<label><?php echo lang('newstylesheetname'); ?>:</label>
-			<input type="text" name="stylesheet" maxlength="255" value="<?php echo $stylesheet?>">
+			<label for="new_stylesheet_name"><?php echo lang('newstylesheetname'); ?>:</label>
+			<input type="text" name="stylesheet" id="new_stylesheet_name" maxlength="255" value="<?php echo $stylesheet?>">
 		</div>
-		<div class="pageoverflow">
-			<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
-			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+		<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
+		<div class="submitrow">
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
 		</div>
 	</form>
 </div>

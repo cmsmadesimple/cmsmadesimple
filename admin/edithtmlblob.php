@@ -289,11 +289,11 @@ else
 <div class="pagecontainer">
 	<?php echo $themeObject->ShowHeader('edithtmlblob'); ?>
 	<form id="Edit_Blob" method="post" action="edithtmlblob.php">
-		<div class="submitrow">
-			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		</div>
+	<div class="submitrow">
+		<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+		<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+		<button class="apply" name="applybutton" type="submit"><?php echo lang('apply')?></button>	
+	</div>
 	<div id="page_tabs" style="margin-top:0.5em;">
 		<ul>
 			<li><a href="#content"><span>Content</span></a></li>
@@ -302,8 +302,8 @@ else
 		<div id="content">		
 		
 		<div class="row">
-			<label><?php echo lang('name')?>:</label>
-			<input type="text" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" />
+			<label for="htmlblob"><?php echo lang('name')?>:</label>
+			<input type="text" id="htmlblob" name="htmlblob" maxlength="255" value="<?php echo $htmlblob?>" class="standard" />
 		</div>
 		<div class="row">
 			<label>*<?php echo lang('content')?>:</label>
@@ -325,19 +325,16 @@ else
 	<?php } ?>
 	</div>
 	</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="edithtmlblob" value="true" />
-				<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
-				<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<?php if (!$adminaccess) { ?>
-					<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
-				<?php } ?>
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" onclick="return window.Edit_Blob_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
+		<input type="hidden" name="edithtmlblob" value="true" />
+		<input type="hidden" name="oldhtmlblob" value="<?php echo $oldhtmlblob; ?>" />
+		<input type="hidden" name="htmlblob_id" value="<?php echo $htmlblob_id; ?>" />
+		<?php if (!$adminaccess) { ?>
+			<input type="hidden" name="owner_id" value="<?php echo $owner_id ?>" />
+		<?php } ?>
+		<div class="submitrow">
+			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
+			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
+			<button class="apply" name="applybutton" type="submit"><?php echo lang('apply')?></button>	
 		</div>
 	</form>
 </div>
