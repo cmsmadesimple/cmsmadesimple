@@ -37,7 +37,7 @@ if (isset($_GET["userplugin_id"])) {
 
 	if ($access) {
 
-		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
+		$query = "SELECT userplugin_name FROM ".cms_db_prefix()."userplugins WHERE id = ?";
 		$result = $db->Execute($query, array($userplugin_id));
 
 		if ($result && $result->RecordCount()) {
@@ -45,12 +45,12 @@ if (isset($_GET["userplugin_id"])) {
 			$userplugin_name = $row['userplugin_name'];
 		}
 
-		Events::SendEvent('Core', 'DeleteUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$userplugin_name));
-		$query = "DELETE FROM ".cms_db_prefix()."userplugins where userplugin_id = ?";
+		CmsEvents::SendEvent('Core', 'DeleteUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$userplugin_name));
+		$query = "DELETE FROM ".cms_db_prefix()."userplugins where id = ?";
 		$result = $db->Execute($query,array($userplugin_id));
 		if ($result)
 		{
-			Events::SendEvent('Core', 'DeleteUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$userplugin_name));
+			CmsEvents::SendEvent('Core', 'DeleteUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$userplugin_name));
 			audit($userplugin_id, $userplugin_name, 'Deleted User Defined Tag');
 		}
 	}

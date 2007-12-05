@@ -23,282 +23,66 @@ $CMS_ADMIN_PAGE=1;
 require_once("../include.php");
 
 check_login();
+$gCms = cmsms();
 
-$db = cms_db();
+$smarty = cms_smarty();
+$smarty->assign('action', 'edituserplugin.php');
+
 $error = array();
-
-$userplugin_id = "";
-if (isset($_POST["userplugin_id"])) $userplugin_id = $_POST["userplugin_id"];
-else if (isset($_GET["userplugin_id"])) $userplugin_id = $_GET["userplugin_id"];
-
-$plugin_name= "";
-if (isset($_POST["plugin_name"])) $plugin_name = $_POST["plugin_name"];
-
-$orig_plugin_name = "";
-if (isset($_POST["origpluginname"])) $orig_plugin_name = $_POST["origpluginname"];
-
-$code= "";
-if (isset($_POST["code"])) $code = $_POST["code"];
 
 if (isset($_POST["cancel"])) {
 	redirect("listusertags.php");
 	return;
 }
 
-$userid = get_userid();
-$access = check_permission($userid, 'Modify User-defined Tags');
+$access = check_permission(get_userid(), 'Modify User-defined Tags');
 
-$use_javasyntax = false;
-if (get_preference($userid, 'use_javasyntax') == "1") $use_javasyntax = true;
+$submit = array_key_exists('submitbutton', $_POST);
+$apply = array_key_exists('applybutton', $_POST);
 
-// $smarty = new Smarty_CMS($gCms->config);
-// load_plugins($smarty);
-
-$ajax = false;
-if (isset($_POST['ajax']) && $_POST['ajax']) $ajax = true;
-
-if ($access) {
-	if (isset($_POST["editplugin"])) {
-
-        $CMS_EXCLUDE_FROM_RECENT = 1;
-		$validinfo = true;
-		if ($plugin_name == "") {
-			$error[] = lang('nofieldgiven', array(lang('editusertag')));
-			$validinfo = false;
-		}
-		else
-		{
-			if ($plugin_name != $orig_plugin_name && in_array($plugin_name, $gCms->cmsplugins))
-			{
-				$error[] = lang('usertagexists');
-				$validinfo = false;
-			}
-		}
-		// Make sure no spaces are put into plugin name.
-		$without_spaces = str_replace(' ', '', $plugin_name);
-		if ($plugin_name != $without_spaces)
-		{
-			$error[] = lang('error_udt_name_whitespace');
-			$validinfo = false;
-		}
-		if ($code == "") {
-			$error[] = lang('nofieldgiven', array(lang('code')));
-			$validinfo = false;
-		}
-		else if (strrpos($code, '{') !== FALSE)
-		{
-			$lastopenbrace = strrpos($code, '{');
-			$lastclosebrace = strrpos($code, '}');
-			if ($lastopenbrace > $lastclosebrace)
-			{
-				$error[] = lang('invalidcode');
-                                $error[] = lang('invalidcode_brace_missing');
-				$validinfo = false;
-			}
-		}
-		
-		if ($validinfo)
-		{
-			srand();
-			ob_start();
-			if (eval('function testfunction'.rand().'() {'.$code.'}') === FALSE)
-			{
-				$error[] = lang('invalidcode');
-                                //catch the error
-                                //eval('function testfunction'.rand().'() {'.$code.'}');
-                                $buffer = ob_get_clean();
-                                //add error
-                                $error[] = preg_replace('/<br \/>/', '', $buffer ); 
-				$validinfo = false;
-			}
-			else
-			{
-				ob_get_clean();
-			}
-		}
-
-		if ($validinfo) {
-			Events::SendEvent('Core', 'EditUserDefinedTagPre', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-			$query = "UPDATE ".cms_db_prefix()."userplugins SET userplugin_name = ".$db->qstr($plugin_name).", code = ".$db->qstr($code).", modified_date = ".$db->DBTimeStamp(time())." WHERE userplugin_id = ". $db->qstr($userplugin_id);
-			$result = $db->Execute($query);
-			if ($result) {
-				Events::SendEvent('Core', 'EditUserDefinedTagPost', array('id' => $userplugin_id, 'name' => &$plugin_name, 'code' => &$code));
-				audit($userplugin_id, $plugin_name, 'Edited User Defined Tag');
-
-				if( !isset( $_POST['apply'] ) )
-				  {
-				    redirect("listusertags.php?message=usertagupdated");
-				    return;
-				  }
-			}
-			else {
-				$error[] = lang('errorupdatingusertag');
-			}
-		}
-
-		if ($ajax)
-		{
-			header('Content-Type: text/xml');
-			print '<?xml version="1.0" encoding="UTF-8"?>';
-			print '<EditUserPlugin>';
-			if (sizeof($error))
-			{
-				print '<Response>Error</Response>';
-				print '<Details><![CDATA[';
-				if (!is_array($error))
-				{
-					$error = array($error);
-				}
-				print '<li>' . join('</li><li>', $error) . '</li>';
-				print ']]></Details>';
-			}
-			else
-			{
-				print '<Response>Success</Response>';
-				print '<Details><![CDATA[' . lang('usertagupdated') . ']]></Details>';
-			}
-			print '</EditUserPlugin>';
-			exit;
-		}
-	}
-	else if ($userplugin_id != -1) {
-
-		$query = "SELECT * from ".cms_db_prefix()."userplugins WHERE userplugin_id = ?";
-		$result = $db->Execute($query,array($userplugin_id));
-		
-		$row = $result->FetchRow();
-
-		$plugin_name = $row["userplugin_name"];
-		$orig_plugin_name = $plugin_name;
-		$code = $row['code'];
-	}
-}
-if (strlen($plugin_name)>0)
-    {
-    $CMS_ADMIN_SUBTITLE = $plugin_name;
-    }
-
-$addlScriptSubmit = '';
-foreach (array_keys($gCms->modules) as $moduleKey)
+function &get_udt_object($udt_id)
 {
-	$module =& $gCms->modules[$moduleKey];
-	if (!($module['installed'] && $module['active'] && $module['object']->IsSyntaxHighlighter()))
-	{
-		continue;
-	}
-
-	if ($module['object']->SyntaxActive() or get_preference(get_userid(), 'syntaxhighlighter') == $module['object']->GetName())
-	{
-		$addlScriptSubmit .= $module['object']->SyntaxPageFormSubmit();
-	}
+	$udt_object = cmsms()->cms_user_tag->find_by_id($udt_id);
+	if (isset($_REQUEST['udt']))
+		$udt_object->update_parameters($_REQUEST['udt']);
+	return $udt_object;
 }
 
-$headtext = <<<EOSCRIPT
-<script type="text/javascript">
-window.Edit_UserPlugin_Apply = function(button)
+// Get the UDT object
+$udt_id = coalesce_key($_REQUEST, 'userplugin_id', '-1');
+$udt_object = get_udt_object($udt_id);
+
+// Handle form submission
+if ($access)
 {
-	$addlScriptSubmit
-	$('Edit_UserPlugin_Result').innerHTML = '';
-	button.disabled = 'disabled';
-
-	var data = new Array();
-	data.push('ajax=1');
-	data.push('apply=1');
-
-	var elements = Form.getElements($('Edit_UserPlugin'));
-	for (var cnt = 0; cnt < elements.length; cnt++)
+	if($submit || $apply)
 	{
-		var elem = elements[cnt];
-		if (elem.type == 'submit')
+		if ($udt_object->save())
 		{
-			continue;
+			audit($udt_object->id, $udt_object->name, 'Edited User Defined Tag');
+			if($submit)
+			{
+				redirect("listusertags.php");
+			}
 		}
-		var query = Form.Element.serialize(elem);
-		data.push(query);
 	}
-
-	new Ajax.Request(
-		'{$_SERVER['REQUEST_URI']}'
-		, {
-			method: 'post'
-			, parameters: data.join('&')
-			, onSuccess: function(t)
-			{
-				button.removeAttribute('disabled');
-				var response = t.responseXML.documentElement.childNodes[0];
-				var details = t.responseXML.documentElement.childNodes[1];
-				if (response.textContent) { response = response.textContent; } else { response = response.text; } 
-				if (details.textContent) { details = details.textContent; } else { details = details.text; }
-				
-				var htmlShow = '';
-				if (response == 'Success')
-				{
-					htmlShow = '<div class="pagemcontainer"><p class="pagemessage">' + details + '</p></div>';
-				}
-				else
-				{
-					htmlShow = '<div class="pageerrorcontainer"><ul class="pageerror">' + details + '</ul></div>';
-				}
-				$('Edit_UserPlugin_Result').innerHTML = htmlShow;
-			}
-			, onFailure: function(t)
-			{
-				alert('Could not save: ' + t.status + ' -- ' + t.statusText);
-			}
-		}
-	);
-
-	return false;
 }
-</script>
-EOSCRIPT;
+
 
 include_once("header.php");
 
-// AJAX result container is below the apply buttons, in this case (no top apply button)
+// Assign the header
+$smarty->assign('header_name', $themeObject->ShowHeader('editusertag'));
 
-if (!$access) {
-	echo '<div class=\"pageerrorcontainer\"><p class="pageerror">'.lang('noaccessto', array(lang('addusertag'))).'</p></div>';
-}
-else {
-	if (FALSE == empty($error)) {
-		echo $themeObject->ShowErrors($error);		
-	}
+// Assign the Object
+$smarty->assign('udt_object', $udt_object);
 
-?>
+// Can apply
+$smarty->assign('can_apply', true);
 
-<div class="pagecontainer">
-	<?php echo $themeObject->ShowHeader('editusertag'); ?>
-		<form id="Edit_UserPlugin" enctype="multipart/form-data" action="edituserplugin.php" method="post">
-			<div class="pageoverflow">
-				<p class="pagetext">*<?php echo lang('name')?>:</p>
-				<p class="pageinput"><input type="text" name="plugin_name" maxlength="255" value="<?php echo $plugin_name?>" /></p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext">*<?php echo lang('code')?></p>
-				<p class="pageinput">
-				<?php echo create_textarea(false, $code, 'code', 'pagebigtextarea', 'code', '', '', '80', '15','','php')?>
-				<?php/* echo textarea_highlight($use_javasyntax, $code, "code", "pagetextarea", "Java")*/ ?>
-				</p>
-			</div>
-			<div class="pageoverflow">
-				<p class="pagetext">&nbsp;</p>
-				<p class="pageinput">
-						<input type="hidden" name="userplugin_id" value="<?php echo $userplugin_id?>" />
-						<input type="hidden" name="origpluginname" value="<?php echo $orig_plugin_name?>" />
-						<input type="hidden" name="editplugin" value="true" />
-						<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-						<input type="submit" onclick="return window.Edit_UserPlugin_Apply(this);" name="apply" value="<?php echo lang('apply')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+// Display the template
+$smarty->display('adduserplugin.tpl');
 
-				</p>
-			</div>
-		</form>
-</div>
-<?php
-}
-print '<div id="Edit_UserPlugin_Result"></div>';
-echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once("footer.php");
 
 # vim:ts=4 sw=4 noet
