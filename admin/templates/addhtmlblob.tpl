@@ -19,11 +19,8 @@
 			</div>			
 		</div>
 	</div>
-	<div class="submitrow">
-		<input type="hidden" name="addhtmlblob" value="true" />
-		<input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		<input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-	</div>	
+	<input type="hidden" name="addhtmlblob" value="true" />
+	{include file='elements/buttons.tpl'}	
 </form>
 
 <script type="text/javascript">

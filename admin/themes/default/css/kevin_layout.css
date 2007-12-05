@@ -161,15 +161,25 @@ textarea.pagebigtextarea {
 	width:50em;
 	display:block;
 }
+button {
+	color:#333333;
+	padding:0.2em 0.25em;
+	border:1px solid #CCCCCC;
+	width:85%;
+	background:#FFF;
+	font-size:0.9em;
+}
 input:focus,
 textarea:focus,
 select:focus,
-input.pagebuttonhover {
+input.pagebuttonhover,
+button:hover {
 	background:#FFF;
     border: 1px solid #52b4fc;
 }	
 div input.pagebutton,
-div input.pagebuttonhover {
+div input.pagebuttonhover,
+button {
 	width:auto;
 }
 div.submitrow {

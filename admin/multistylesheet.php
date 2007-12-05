@@ -68,7 +68,7 @@ else
 	{
 		?>
 		<div class="pagecontainer">
-			<p class="pageheader"><?php echo lang('deletetemplate') ?></p><br />
+			<div class="pageheader"><?php echo lang('deletetemplate') ?></div>
 		<?php
 		$userid = get_userid();
 		$access = check_permission($userid, 'Remove Stylesheets');

@@ -105,23 +105,20 @@ else
 
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('copystylesheet')?></p>
+	<div class="pageheader"><?php echo lang('copystylesheet')?></div>
 	<form method="post" action="copystylesheet.php">
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('stylesheet'); ?>:</p>
-			<p class="pageinput"><?php echo $stylesheet_name; ?></p>
+		<div class="row">
+			<label><?php echo lang('stylesheet'); ?>:</label>
+			<?php echo $stylesheet_name; ?>
+		</div>
+		<div class="row">
+			<label><?php echo lang('newstylesheetname'); ?>:</label>
+			<input type="text" name="stylesheet" maxlength="255" value="<?php echo $stylesheet?>">
 		</div>
 		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('newstylesheetname'); ?>:</p>
-			<p class="pageinput"><input type="text" name="stylesheet" maxlength="255" value="<?php echo $stylesheet?>"></p>
-		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-				<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
+			<input type="hidden" name="stylesheet_id" value="<?php echo $stylesheet_id?>" /><input type="hidden" name="copystylesheet" value="true" />
+			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 		</div>
 	</form>
 </div>

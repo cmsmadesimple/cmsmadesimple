@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.template.inc.php");
+//require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -101,7 +101,7 @@ if ($access)
 				//Copy attached CSS templates as well...
 				$db = &$gCms->GetDb();
 
-				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = css_id";
+				$query = "SELECT assoc_css_id, assoc_type, css_name FROM ".cms_db_prefix()."css_assoc, ".cms_db_prefix()."css WHERE assoc_to_id = " . $db->qstr($template_id) . " AND assoc_css_id = id";
 				debug_buffer($query);
 				$result2 = $db->Execute($query);
 				debug_buffer($result2);
@@ -147,23 +147,20 @@ else
 
 
 <div class="pagecontainer">
-	<p class="pageheader"><?php echo lang('copytemplate')?></p>
+	<div class="pageheader"><?php echo lang('copytemplate')?></div>
 	<form method="post" action="copytemplate.php">
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('template'); ?>:</p>
-			<p class="pageinput"><?php echo $template_name; ?></p>
+		<div class="row">
+			<label><?php echo lang('template'); ?>:</label>
+			<?php echo $template_name; ?>
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('newtemplatename'); ?>:</p>
-			<p class="pageinput"><input type="text" name="template" maxlength="255" value="<?php echo $template?>"></p>
+		<div class="row">
+			<label><?php echo lang('newtemplatename'); ?>:</label>
+			<input type="text" name="template" maxlength="255" value="<?php echo $template?>">
 		</div>
-		<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-			      <input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
-				<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-				<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-			</p>
+		<div class="submitrow">
+			<input type="hidden" name="template_id" value="<?php echo $template_id?>" /><input type="hidden" name="copytemplate" value="true" /><input type="hidden" name="from" value="<?php echo $from?>" />
+			<input type="submit" value="<?php echo lang('submit')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
+			<input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
 		</div>
 	</form>
 </div>

@@ -180,26 +180,7 @@
 			{/if}
 
 		</div> <!-- End tabs -->
-
-
-		<div class="footerbuttons buttons">
-
-{* generic buttons template *}
-{include file='buttons.tpl'}
-
-{* todo: remove these *}
-<!--		    <input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-
-		    <input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		    {if $can_apply eq true}
-		      <input type="submit" name="applybutton" value="{lang string='apply'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'"   onmouseout="this.className='pagebutton'" />
-		    {/if}
-		    {if $can_preview eq true}
-		      <input type="submit" name="previewbutton" value="{lang string='preview'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;" />
--->
-		    {/if}
-		</div> <!-- end footerbuttons -->
-
+		{include file='elements/buttons.tpl'}
 </form>
 
 

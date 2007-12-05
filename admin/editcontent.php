@@ -75,7 +75,7 @@ CmsAdminTheme::inject_header_text($xajax->getJavascript('../lib/xajax')."\n");
 #No access?  Just display an error and exit.
 if (!$access) {
 	$smarty->assign('error_message', lang('noaccessto',array(lang('addcontent'))));
-	$smarty->display('pageerror.tpl');
+	$smarty->display('elements/pageerror.tpl');
 	include_once('footer.php');
 	exit;
 }

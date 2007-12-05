@@ -199,7 +199,7 @@ class CmsTemplateOperations extends CmsObject
 	{
 		$result = false;
 
-		$query = "SELECT template_id from ".cms_db_prefix()."templates WHERE template_name = ?";
+		$query = "SELECT id from ".cms_db_prefix()."templates WHERE template_name = ?";
 		$row = cms_db()->GetRow($query,array($name));
 
 		if ($row)

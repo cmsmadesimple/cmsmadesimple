@@ -77,8 +77,17 @@ $smarty->assign('header_name', $themeObject->ShowHeader('editusertag'));
 // Assign the Object
 $smarty->assign('udt_object', $udt_object);
 
-// Can apply
-$smarty->assign('can_apply', true);
+//extra buttons
+$ExtraButtons = array(
+		      array(
+			    'name'    => 'applybutton',
+			    'class'   => '',
+			    'image'   => '',
+			    'caption' => lang('apply'),
+			    ),
+		      );
+
+$smarty->assign('DisplayButtons', $ExtraButtons);
 
 // Display the template
 $smarty->display('adduserplugin.tpl');

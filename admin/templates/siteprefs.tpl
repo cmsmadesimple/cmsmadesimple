@@ -36,15 +36,8 @@
 				{admin_input type='checkbox' label='Enable Site Down Message' name='enablesitedownmessage' id='enablesitedownmessage' value=$enablesitedownmessage}				
 				{admin_input type='textarea' class='smalltext' label='Site Down Message' name='sitedownmessage' id='sitedownmessage' value=$sitedownmessage}
 	
-				<div class="pageoverflow">
-					<p class="pagetext">&nbsp;</p>
-					<p class="pageinput">
-						<input type="hidden" name="editsiteprefs" value="true" />
-						{html_submit name='submit' value='Submit' class='pagebutton' onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" tr=true}
-						{html_submit name='cancel' value='Cancel' class='pagebutton' onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" tr=true}
-					</p>
-				</div>
-
+				<input type="hidden" name="editsiteprefs" value="true" />
+				{include file='elements/buttons.tpl'}
 			</form>
 
 		</div>

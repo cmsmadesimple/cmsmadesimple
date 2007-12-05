@@ -70,7 +70,7 @@ if (isset($_GET["css_id"]))
 	{
 
 		# first we get the name of the css for logging
-		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE css_id = ?";
+		$query = "SELECT css_name FROM ".cms_db_prefix()."css WHERE id = ?";
 		$result = cms_db()->Execute($query, array($css_id));
 		
 		if ($result && $result->RecordCount())

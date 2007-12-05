@@ -21,7 +21,7 @@
 $CMS_ADMIN_PAGE=1;
 
 require_once("../include.php");
-require_once("../lib/classes/class.template.inc.php");
+//require_once("../lib/classes/class.template.inc.php");
 
 check_login();
 
@@ -64,7 +64,7 @@ if (isset($_GET["template_id"]))
 				}
 			}
 			
-			Events::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
+			CmsEvents::SendEvent('Core', 'DeleteTemplatePre', array('template' => &$onetemplate));
 
 			$result = $templateops->DeleteTemplateByID($template_id);
 
@@ -80,7 +80,7 @@ if (isset($_GET["template_id"]))
 					}
 				}
 				
-				Events::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
+				CmsEvents::SendEvent('Core', 'DeleteTemplatePost', array('template' => &$onetemplate));
 
 				audit($template_id, $onetemplate->name, 'Deleted Template');
 			}

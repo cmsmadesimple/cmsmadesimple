@@ -25,17 +25,11 @@
 			{/foreach}
 		</div>
 	</div>
-	<div class="submitrow">
-		<input type="hidden" name="addcss" value="true" />
-		{if $stylesheet_object->id > 0}
-			<input type="hidden" name="css_id" value="{$stylesheet_object->id}" />
-		{/if}
-		<input type="submit" name="submitbutton" value="{lang string='submit'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		<input type="submit" name="cancel" value="{lang string='cancel'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		{if isset($can_apply)}
-			<input type="submit" name="applybutton" value="{lang string='apply'}" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
-		{/if}
-	</div>	
+	<input type="hidden" name="addcss" value="true" />
+	{if $stylesheet_object->id > 0}
+		<input type="hidden" name="css_id" value="{$stylesheet_object->id}" />
+	{/if}
+	{include file='elements/buttons.tpl'}	
 </form>
 
 <script type="text/javascript">
