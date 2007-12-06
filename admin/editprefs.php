@@ -33,6 +33,8 @@ if ($default_cms_lang != '')
 require_once("../include.php");
 check_login();
 
+$smarty = cms_smarty();
+
 $admintheme = 'default';
 if (isset($_POST['admintheme'])) $admintheme = $_POST['admintheme'];
 
@@ -66,7 +68,7 @@ if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_form
 $userid = get_userid();
 
 if (isset($_POST["cancel"])) {
-	redirect("index.php");
+	redirect("topmyprefs.php");
 	return;
 }
 
@@ -83,20 +85,20 @@ if (isset($_POST["submit_form"])) {
 	set_preference($userid, 'date_format_string', $date_format_string);
 	audit(-1, '', 'Edited User Preferences');
 	$page_message = lang('prefsupdated');
-	#redirect("index.php");
-	#return;
+	redirect("topmyprefs.php");
+	return;
 } else if (!isset($_POST["edituserprefs"])) {
-	$gcb_wysiwyg = get_preference($userid, 'gcb_wysiwyg', 1);
-	$wysiwyg = get_preference($userid, 'wysiwyg');
-	$syntaxhighlighter = get_preference($userid, 'syntaxhighlighter');
-	$default_cms_lang = get_preference($userid, 'default_cms_language');
-	$old_default_cms_lang = $default_cms_lang;
-	$admintheme = get_preference($userid, 'admintheme');
-	$bookmarks = get_preference($userid, 'bookmarks');
-	$indent = get_preference($userid, 'indent', true);
-	$paging = get_preference($userid, 'paging', 0);
-	$date_format_string = get_preference($userid, 'date_format_string','%x %X');
-	$hide_help_links = get_preference($userid, 'hide_help_links');
+	$smarty->assign('gcb_wysiwyg', get_preference($userid, 'gcb_wysiwyg', 1));
+	$smarty->assign('wysiwyg', get_preference($userid, 'wysiwyg'));
+	$smarty->assign('syntaxhighlighter', get_preference($userid, 'syntaxhighlighter'));
+	$smarty->assign('default_cms_lang', get_preference($userid, 'default_cms_language'));
+	$smarty->assign('old_default_cms_lang', $default_cms_lang);
+	$smarty->assign('admintheme', get_preference($userid, 'admintheme'));
+	$smarty->assign('bookmarks', get_preference($userid, 'bookmarks'));
+	$smarty->assign('indent', get_preference($userid, 'indent', true));
+	$smarty->assign('paging', get_preference($userid, 'paging', 0));
+	$smarty->assign('date_format_string', get_preference($userid, 'date_format_string','%x %X'));
+	$smarty->assign('hide_help_links', get_preference($userid, 'hide_help_links'));
 }
 
 include_once("header.php");
@@ -105,132 +107,59 @@ if (FALSE == empty($page_message)) {
 	echo $themeObject->ShowMessage($page_message);
 }
 
-?>
+// Assign the header
+$smarty->assign('header_name', $themeObject->ShowHeader('userprefs'));
 
-	<?php echo $themeObject->ShowHeader('userprefs'); ?>
-	<form method="post" action="editprefs.php" name="prefsform">
-		<div class="row">
-			<label><?php echo lang('wysiwygtouse'); ?>:</label>
-				<select name="wysiwyg">
-				<option value=""><?php echo lang('none'); ?></option>
-				<?php
-					foreach($gCms->modules as $key=>$value)
-					{
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true &&
-							$gCms->modules[$key]['object']->IsWYSIWYG())
-						{
-							echo '<option value="'.$key.'"';
-							if ($wysiwyg == $key)
-							{
-								echo ' selected="selected"';
-							}
-							echo '>'.$key.'</option>';
-						}
-					}
-				?>
-				</select>
-		</div>
-		<div class="row">
-			<label><?php echo lang('syntaxhighlightertouse'); ?>:</label>
-			<select name="syntaxhighlighter">
-				<option value=""><?php echo lang('none'); ?></option>
-				<?php
-					foreach($gCms->modules as $key=>$value)
-					{
-						if ($gCms->modules[$key]['installed'] == true &&
-							$gCms->modules[$key]['active'] == true &&
-							$gCms->modules[$key]['object']->IsSyntaxHighlighter())
-						{
-							echo '<option value="'.$key.'"';
-							if ($syntaxhighlighter == $key)
-							{
-								echo ' selected="selected"';
-							}
-							echo '>'.$key.'</option>';
-						}
-					}
-				?>
-			</select>
-		</div>
-		<div class="row">
-			<label><?php echo lang('gcb_wysiwyg'); ?>:</label>
-			<input class="checkbox" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('gcb_wysiwyg_help') ?></span>
-		</div>
-			<div class="row">
-			<label><?php echo lang('language'); ?>:</label>
-			<select name="default_cms_lang" style="vertical-align: middle;">
-				<option value=""><?php echo lang('nodefault'); ?></option>
-				<?php
-					$list = CmsLanguage::get_language_list(true);
-					foreach ($list as $key=>$val) {
-						echo "<option value=\"$key\"";
-						if ($default_cms_lang == $key) {
-							echo " selected=\"selected\"";
-						}
-						echo ">$val";
-						echo "</option>\n";
-					}
-				?>
-			</select>
-		</div>
-    <div class="row">
-	<label><?php echo lang('date_format_string'); ?>:</label>
-		<input class="pagenb" type="text" name="date_format_string" value="<?php echo $date_format_string; ?>" size="20" maxlength="20" /><span class="tooltip_info"><?php echo lang('date_format_string_help') ?></span>
-    </div>
-           <div class="row">
-			<label><?php echo lang('admintheme');  ?>:</label>
-				<?php
-					if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
-							echo '<select name="admintheme">';
-								while (($file = readdir($dir)) !== false) {
-									if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
-										echo '<option value="'.$file.'"';
-										echo (get_preference($userid,"admintheme")==$file?" selected=\"selected\"":"");
-										echo '>'.$file.'</option>';
-									}
-									}
-							echo '</select>';
-					}
-				?>	
-		</div>
-		<div class="row">
-			<label><?php echo lang('admincallout'); ?>:</label>
-			<input class="checkbox" type="checkbox" name="bookmarks" <?php if ($bookmarks) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('showbookmarks') ?></span>
-		</div>
-		<div class="row">
-			<label><?php echo lang('hide_help_links'); ?>:</label>
-			<input class="checkbox" type="checkbox" name="hide_help_links" <?php if ($hide_help_links) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('hide_help_links_help') ?></span>
-		</div>
-		<!--
-		<div class="row">
-			<p class="pagetext"><?php echo lang('adminpaging'); ?>:</p>
-			<p class="pageinput">
-				<select name="paging">
-				<option value="0"<?php if ($paging == 0) echo " selected";?>><?php echo lang('nopaging');?></option>
-				<option value="10"<?php if ($paging == 10) echo " selected";?>>10</option>
-				<option value="20"<?php if ($paging == 20) echo " selected";?>>20</option>
-				<option value="30"<?php if ($paging == 30) echo " selected";?>>30</option>
-				<option value="40"<?php if ($paging == 40) echo " selected";?>>40</option>
-				<option value="50"<?php if ($paging == 50) echo " selected";?>>50</option>
-				<option value="100"<?php if ($paging == 100) echo " selected";?>>100</option>
-				</select>
-			</p>
-		</div>
-		-->
-		<div class="row">
-			<label><?php echo lang('adminindent'); ?>:</label>
-			<input class="checkbox" type="checkbox" name="indent" <?php if ($indent) echo "checked=\"checked\""; ?> /><span class="tooltip_info"><?php echo lang('indent') ?></span>
-		</div>
-		<input type="hidden" name="edituserprefs" value="true" /><input type="hidden" name="old_default_cms_lang" value="<?php echo $old_default_cms_lang; ?>" />
-		<div class="submitrow">
-			<button class="positive disabled" name="submitbutton" type="submit" disabled=""><?php echo lang('submit')?></button>
-			<button class="negative" name="cancel" type="submit"><?php echo lang('cancel')?></button>
-		</div>
-	</form>
+// Assign the WYSIWYG options
+$wysiwyg_options = array();
+$wysiwyg_options[] = lang('none');
+foreach($gCms->modules as $key=>$value)
+{
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true &&
+		$gCms->modules[$key]['object']->IsWYSIWYG())
+		{
+			$wysiwyg_options[$key] = $key;
+		}
+}
+$smarty->assign('wysiwyg_options', $wysiwyg_options);
 
+// Assign the Syntax Highlighter Options
+$syntaxhighlighter_options = array();
+$syntaxhighlighter_options[] = lang('none');
+foreach($gCms->modules as $key=>$value)
+{
+	if ($gCms->modules[$key]['installed'] == true &&
+		$gCms->modules[$key]['active'] == true &&
+		$gCms->modules[$key]['object']->IsSyntaxHighlighter())
+	{
+		$syntaxhighlighter_options[$key] = $key;
+	}
+}
+$smarty->assign('syntaxhighlighter_options', $syntaxhighlighter_options);
 
-<?php
+// Assign the language options
+$default_cms_lang_options = array();
+$default_cms_lang_options[] = lang('nodefault');
+$list = CmsLanguage::get_language_list(true);
+foreach ($list as $key=>$val) {
+	$default_cms_lang_options[$key] = $val;
+}
+$smarty->assign('default_cms_lang_options', $default_cms_lang_options);
+
+// Assign the admin theme options
+$admintheme_options = array();
+if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
+	while (($file = readdir($dir)) !== false) {
+		if (@is_dir("themes/".$file) && ( $file[0] != '.')) {
+			$admintheme_options[$file] = $file;
+		}
+	}
+}
+$smarty->assign('admintheme_options', $admintheme_options);
+
+// Display the template
+$smarty->display('editprefs.tpl');
 
 include_once("footer.php");
 
