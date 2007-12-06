@@ -5,6 +5,10 @@ a img { border:0; }
 div.navt_menu { display:none; }
 #_DebugFooter {  }
 p.pageback { clear:both; margin-top:1em;}
+iframe.imageframe {
+	height:25em;
+	width:60em;
+}
 /* End Generic Styles */
 
 
@@ -79,6 +83,13 @@ p.footer {
 a, p, td, th, label, 
 #MainContent li { 
 	font-size:.9em;
+}
+a *,
+p *,
+td *,
+th *,
+label * {
+	font-size:1em;
 }
 a {
 	color:#333333;
@@ -163,15 +174,21 @@ textarea.pagebigtextarea {
 }
 button {
 	color:#333333;
-	padding:0.2em 0.35em 0.2em 16px;
+	padding:0.15em 0.35em 0.2em 16px;
+	border:0;
 	border:1px solid #CCCCCC;
-	width:85%;
+	width:7em;
+	height:1.8em;
+	overflow:hidden;
 	background:#2D86DF url(../images/kevin_layout/button-bg.gif);
-	font-size:0.9em;
+	font-size:0.85em;
+	margin-right:0.5em;
+	display:block;
+	float:left;
 }
 button.apply,
 button.positive {
-	background-color:#78D261;
+	background-color:#50A839;
 }
 button.apply:hover,
 button.positive:hover {
@@ -192,6 +209,7 @@ button.preview:hover {
 button:hover {
 	/*border: 1px solid #52b4fc;*/
 	background-color:#3399FF;
+	cursor:pointer;
 }
 input:focus,
 textarea:focus,
@@ -201,11 +219,12 @@ input.pagebuttonhover {
     border: 1px solid #52b4fc;
 }	
 div input.pagebutton,
-div input.pagebuttonhover,
-button {
+div input.pagebuttonhover{
 	width:auto;
 }
 div.submitrow {
+	height:1.8em;
+	overflow:hidden;
 	margin-top:0.5em;
 }
 

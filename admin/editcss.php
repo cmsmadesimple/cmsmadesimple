@@ -33,8 +33,7 @@ $smarty->assign('action', 'editcss.php');
 $contentops = $gCms->GetContentOperations();
 $stylesheetops = $gCms->GetStylesheetOperations();
 
-#Make sure we're logged in and get that user id
-check_login();
+// Make sure we have permission to access this page
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Stylesheets');
 
@@ -50,25 +49,11 @@ function &get_stylesheet_object($stylesheet_id)
 		$stylesheet_object->update_parameters($_REQUEST['stylesheet']);	
 	return $stylesheet_object;
 }
-		//Get the css_id
-		$stylesheet_id = coalesce_key($_REQUEST, 'css_id', '-1');
 
-		//Get a working page object
-		$stylesheet_object = get_stylesheet_object($stylesheet_id);
-
-// Create the media_types array
-$media_types = array(
-	array('name' => "all"),
-	array('name' => "aural"),
-	array('name' => "braille"),
-	array('name' => "embossed"),
-	array('name' => "handheld"),
-	array('name' => "print"),
-	array('name' => "projection"),
-	array('name' => "screen"),
-	array('name' => "tty"),
-	array('name' => "tv")
-);
+//Get a working page object
+$stylesheet_id = coalesce_key($_REQUEST, 'css_id', '-1');
+$stylesheet_object = get_stylesheet_object($stylesheet_id);
+$media_types = $stylesheet_object->media_types;
 
 if ($access)
 {
@@ -131,8 +116,6 @@ $smarty->assign_by_ref('stylesheet_object', $stylesheet_object);
 $ExtraButtons = array(
 		      array(
 			    'name'    => 'applybutton',
-			    'class'   => '',
-			    'image'   => '',
 			    'caption' => lang('apply'),
 			    ),
 		      );

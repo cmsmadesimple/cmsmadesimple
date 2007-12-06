@@ -30,11 +30,7 @@ $gCms = cmsms();
 $smarty = cms_smarty();
 $smarty->assign('action', 'addcss.php');
 
-$contentops = $gCms->GetContentOperations();
-$stylesheetops = $gCms->GetStylesheetOperations();
-
-#Make sure we're logged in and get that user id
-check_login();
+// Make sure we have permissions for this page
 $userid = get_userid();
 $access = check_permission($userid, 'Add Stylesheets');
 
@@ -52,20 +48,7 @@ function &get_stylesheet_object()
 
 //Get a working page object
 $stylesheet_object = get_stylesheet_object();
-
-// Create the media_types array
-$media_types = array(
-	array('name' => "all"),
-	array('name' => "aural"),
-	array('name' => "braille"),
-	array('name' => "embossed"),
-	array('name' => "handheld"),
-	array('name' => "print"),
-	array('name' => "projection"),
-	array('name' => "screen"),
-	array('name' => "tty"),
-	array('name' => "tv")
-);
+$media_types = $stylesheet_object->media_types;
 
 if ($access)
 {

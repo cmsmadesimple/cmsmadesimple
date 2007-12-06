@@ -77,9 +77,12 @@ if (isset($_GET["message"])) {
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";
-				echo "<td><a href=\"gcbversions.php?id=".$onehtmlblob->id."\">";
+				/*echo "<td><a href=\"gcbversions.php?id=".$onehtmlblob->id."\">";
 				echo $themeObject->DisplayImage('icons/system/versions.gif', lang('versions'),'','','systemicon');
-				echo "</a></td>\n";
+				echo "</a></td>\n";*/
+				echo "<td>";
+				echo "{global_content name=\"$onehtmlblob->name\"}";
+				echo "</td>\n";				
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">";
 				echo $themeObject->DisplayImage('icons/system/edit.gif', lang('edit'),'','','systemicon');
                 echo "</a></td>\n";

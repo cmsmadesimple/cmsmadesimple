@@ -9,7 +9,10 @@
 	<title>{sitename} - Tags</title>
 	<link rel="stylesheet" href="themes/default/css/kevin_layout.css" type="text/css" />
 	<link rel="stylesheet" href="themes/default/css/kevin_tabs.css" type="text/css" />
-	
+	<!--[if IE]>
+		<script src="themes/default/includes/IE7/ie7-standard-p.js" type="text/javascript">
+	</script>
+	<![endif]-->	
 
 	{literal}
 	

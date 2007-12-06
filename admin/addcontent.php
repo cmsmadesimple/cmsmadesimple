@@ -291,7 +291,7 @@ $ExtraButtons = array(
 		      array(
 			    'name'    => 'preview',
 			    'class'   => 'positive preview',
-			    'image'   => $themeObject->DisplayImage('icons/system/preview.gif', '','','',''),
+			    'image'   => '',
 			    'caption' => lang('preview'),
 			    ),
 		      );

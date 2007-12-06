@@ -31,8 +31,7 @@ $gCms = cmsms();
 $smarty = cms_smarty();
 $smarty->assign('action', 'edittemplate.php');
 
-#Make sure we're logged in and get that user id
-check_login();
+// Make sure we have permissions for this page
 $userid = get_userid();
 $access = check_permission($userid, 'Modify Templates');
 
@@ -118,13 +117,11 @@ $ExtraButtons = array(
 		      array(
 			    'name'    => 'previewbutton',
 			    'class'   => 'preview',
-			    'image'   => '',
 			    'caption' => lang('preview'),
 			    ),
 			   array(
 			    'name'    => 'applybutton',
 			    'class'   => 'apply',
-			    'image'   => '',
 			    'caption' => lang('apply'),
 			    ),
 		      );

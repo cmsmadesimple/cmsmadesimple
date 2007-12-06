@@ -13,7 +13,7 @@
 	{* loop through to get custom buttons *}
 	{foreach from=$DisplayButtons item=OneButton}
 		<button type="submit" name="{$OneButton.name}" class="{$OneButton.class}">
-			{$OneButton.image}
+			{if $OneButton.image != ''}{$OneButton.image}{/if}
 			{$OneButton.caption}
 		</button> 
 	{/foreach}

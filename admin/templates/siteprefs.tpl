@@ -67,9 +67,7 @@
 						{/foreach}
 					</tbody>
 				</table>
-				<button type="submit" name="lang_form_submit" class="positive">
-					<span class="text">{tr}Submit{/tr}</span>
-				</button>    
+				{include file='elements/buttons.tpl'}
 			</form>
 
 		</div>

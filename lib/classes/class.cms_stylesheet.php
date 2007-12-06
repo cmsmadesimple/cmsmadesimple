@@ -33,6 +33,18 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 	var $params = array('id' => -1, 'name' => '', 'value' => '', 'media_type' => 'all');
 	var $field_maps = array('id' => 'id', 'css_name' => 'name', 'css_text' => 'value');
 	var $table = 'css';
+	var $media_types = array(
+			array('name' => "all"),
+			array('name' => "aural"),
+			array('name' => "braille"),
+			array('name' => "embossed"),
+			array('name' => "handheld"),
+			array('name' => "print"),
+			array('name' => "projection"),
+			array('name' => "screen"),
+			array('name' => "tty"),
+			array('name' => "tv")
+		);
 	
 	public function validate()
 	{
@@ -50,6 +62,7 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 			}
 		}
 	}
+	
 	
 	//Callback handlers
 	function before_save()

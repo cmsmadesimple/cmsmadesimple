@@ -241,17 +241,15 @@ if ($access)
 ?>
 
 <form enctype="multipart/form-data" action="imagefiles.php" method="post" name="uploader">
-	<div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
-		<p class="pageinput">
+	<div class="row">
+		<label><?php echo lang('uploadfile')?>:</label>
 			<input type="hidden" name="MAX_FILE_SIZE" value="<?php echo $config["max_upload_size"]?>" />
 			<input type="hidden" name="reldir" value="<?php echo $reldir?>" />
-			<input name="uploadfile" type="file" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('send')?>" />
-		</p>
+			<input name="uploadfile" type="file" style="margin-right:20px;" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" value="<?php echo lang('send')?>" />
 	</div>
-	<div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('createnewfolder')?>:</p>
-		<p class="pageinput"><input type="text" name="newdir" /> <input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" /></p>
+	<div class="row">
+		<label><?php echo lang('createnewfolder')?>:</label>
+		<input type="text" name="newdir" style="margin-right:20px;" /><input class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" type="submit" name="newdirsubmit" value="<?php echo lang('create')?>" />
 	</div>
 </form>
 
