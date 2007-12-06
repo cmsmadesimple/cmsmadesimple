@@ -172,7 +172,12 @@ textarea.pagebigtextarea {
 	width:50em;
 	display:block;
 }
-div.submitrow input {
+input#groupsubmit {
+	width:auto;
+	margin-left:10px;
+}
+div.submitrow input,
+div.submitrow button {
 	color:#333333;
 	padding:0.15em 0.35em 0.2em 16px;
 	border:0;
@@ -186,27 +191,27 @@ div.submitrow input {
 	display:block;
 	float:left;
 }
-div.submitrow input.apply,
-div.submitrow input.positive {
+div.submitrow .apply,
+div.submitrow .positive {
 	background-color:#50A839;
 }
-div.submitrow input.apply:hover,
-div.submitrow input.positive:hover {
+div.submitrow .apply:hover,
+div.submitrow .positive:hover {
 	background-color:#48EB1E;
 }
-div.submitrow input.negative {
+div.submitrow .negative {
 	background-color:#DE7010;
 }
-div.submitrow input.negative:hover {
+div.submitrow .negative:hover {
 	background-color:#FF0000;
 }
-div.submitrow input.preview {
+div.submitrow .preview {
 	background-color:#2D86DF;
 }
-div.submitrow input.preview:hover {
+div.submitrow .preview:hover {
 	background-color:#3399FF;
 }
-div.submitrow input:hover {
+div.submitrow *:hover {
 	/*border: 1px solid #52b4fc;*/
 	background-color:#3399FF;
 	cursor:pointer;

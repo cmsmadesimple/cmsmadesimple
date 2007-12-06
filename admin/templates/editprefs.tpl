@@ -2,7 +2,7 @@
 	<form method="post" action="editprefs.php" name="prefsform">
 	<div id="page_tabs">
 		<ul>
-			<li><a href="#content"><span>Content</span></a></li>
+			<li><a href="#content"><span>Admin Panel</span></a></li>
 		</ul>
 	    <div id="content">
 			{admin_input type='select' label='wysiwygtouse' id='wysiwyg' name='wysiwyg' options=$wysiwyg_options selected=$wysiwyg}
