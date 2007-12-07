@@ -32,7 +32,7 @@ $smarty->assign('action', 'edituser.php');
 
 // Make sure we have permissions for this page
 $userid = get_userid();
-$access = check_permission($userid, 'Add users');
+$access = check_permission($userid, 'Modify Users');
 
 require_once("header.php");
 
@@ -48,7 +48,7 @@ function &get_user_object($user_id)
 }
 
 //Get a working page object
-$user_id = coalesce_key($_REQUEST, 'user_id', '-1');
+$user_id = coalesce_key($_REQUEST, 'user_id', $userid);
 $user_object = get_user_object($user_id);
 
 if ($access)

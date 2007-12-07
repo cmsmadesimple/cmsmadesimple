@@ -43,15 +43,10 @@ class CmsUser extends CmsObjectRelationalMapping
 	{
 		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('username'))));
 		
-		// Make sure there are no illegal characters in the username
-		if ( !preg_match("/^[a-zA-Z0-9\.]+$/", $this->name) ) 
-		{
-			$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
-		} 
-
-		// Make sure the name is unique
+		// Username validation
 		if ($this->name != '')
 		{
+			// Make sure the name is unique
 			$result = $this->find_all_by_name($this->name);
 			if (count($result) > 0)
 			{
@@ -60,8 +55,13 @@ class CmsUser extends CmsObjectRelationalMapping
 					$this->add_validation_error(lang('userexists'));
 				}
 			}
+			
+			// Make sure the name has no illegal characters
+			if ( !preg_match("/^[a-zA-Z0-9\.]+$/", $this->name) ) 
+			{
+				$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
+			} 
 		}
-		
 
 		// Validate password if we're either adding a new record, or updating one and supplying the password.
 		if((!isset($_POST['user_id'])) || (isset($_POST['user_id']) && !empty($_POST['user']['password'])))
