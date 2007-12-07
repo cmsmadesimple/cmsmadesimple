@@ -2,5 +2,5 @@
 	<label for="{$params.id}">
 		{lang string=$params.label}
 	</label>
-	{$input_html}
+	{$input_html}{if isset($params.tooltip)}<span class="tooltip_info">{lang string=$params.tooltip}</span>{/if}
 </div>

@@ -16,34 +16,19 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_function_html_checkbox($params, &$smarty)
+function smarty_function_html_password($params, &$smarty)
 {
-	if (!isset($params['full_toggle']) || $params['full_toggle'])
-	{
-		echo '<input type="hidden"';
-		if (isset($params['name']))
-			echo ' name="'.$params['name'].'"';
-		if (isset($params['unchecked_value'])) {
-			echo ' value="'.$params['unchecked_value'].'"';
-		} else {
-			echo ' value="0"';
-		}
-		echo ' />';
-	}
-
-	echo '<input type="checkbox" class="checkbox"';
+	echo '<input type="password"';
 	if (isset($params['id']))
 		echo ' id="'.$params['id'].'"';
 	if (isset($params['name']))
 		echo ' name="'.$params['name'].'"';
-	if (isset($params['checked_value'])) {
-		echo ' value="'.$params['checked_value'].'"';
-	} else {
-		echo ' value="1"';
-	}
-	if (isset($params['selected']) && ($params['selected'] == true || $params['selected'] == 'on' || $params['selected'] == 1)) {
-		echo ' checked="checked"';
-	}
+	if (isset($params['size']))
+		echo ' size="'.$params['size'].'"';
+	if (isset($params['maxlength']))
+		echo ' maxlength="'.$params['maxlength'].'"';
+	if (isset($params['class']))
+		echo ' class="'.$params['class'].'"';
 	echo ' />';
 }
 

@@ -90,22 +90,6 @@ if (FALSE == empty($error))
 	$remove = check_permission($userid, 'Remove Users');
 
 	$userlist = CmsUserOperations::load_users();
-
-	/*
-	foreach ($userlist[0]->bookmarks as $onebook)
-	{
-		//print_r($onebook);
-	}
-	//print_r('Number of bookmarks:' . $userlist[0]->bookmarks->count());
-	if ($userlist[0]->bookmarks->count() > 0)
-	{
-		//print_r('<br />Username:' . $userlist[0]->bookmarks[0]->user->username);
-	}
-
-	var_dump($userlist[0]->groups);
-	$group = cms_orm()->cms_group->find_by_id(1);
-	var_dump($group->users);
-	*/
 	
 	$page = 1;
 	if (isset($_GET['page'])) $page = $_GET['page'];
@@ -114,6 +98,7 @@ if (FALSE == empty($error))
 	{
 		echo "<p class=\"pageshowrows\">".pagination($page, count($userlist), $limit)."</p>";
 	}
+
 	echo $themeObject->ShowHeader('currentusers').'</div>';
 	if ($userlist && count($userlist) > 0)
 	{
@@ -140,7 +125,7 @@ if (FALSE == empty($error))
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit)
 			{
   			    echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
-				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->username."</a></td>\n";
+				echo "<td><a href=\"edituser.php?user_id=".$oneuser->id."\">".$oneuser->name."</a></td>\n";
 				echo "<td class=\"pagepos\"><a href=\"listusers.php?toggleactive=".$oneuser->id."\">".($oneuser->active == 1?$image_true:$image_false)."</a></td>\n";
 				if ($edit || $userid == $oneuser->id)
 				{

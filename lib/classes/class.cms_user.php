@@ -31,13 +31,52 @@
 class CmsUser extends CmsObjectRelationalMapping
 {
 	var $params = array('id' => -1, 'username' => '', 'password' => '', 'firstname' => '', 'lastname' => '', 'email' => '', 'active' => false);
-	var $field_maps = array('first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess');
+	var $field_maps = array('first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess', 'username' => 'name');
 	var $table = 'users';
 	
 	public function __construct()
 	{
 		parent::__construct();
 	}
+
+	public function validate()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('username'))));
+		
+		// Make sure there are no illegal characters in the username
+		if ( !preg_match("/^[a-zA-Z0-9\.]+$/", $this->name) ) 
+		{
+			$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
+		} 
+
+		// Make sure the name is unique
+		if ($this->name != '')
+		{
+			$result = $this->find_all_by_name($this->name);
+			if (count($result) > 0)
+			{
+				if ($result[0]->id != $this->id)
+				{
+					$this->add_validation_error(lang('userexists'));
+				}
+			}
+		}
+		
+
+		// Validate password if we're either adding a new record, or updating one and supplying the password.
+		if((!isset($_POST['user_id'])) || (isset($_POST['user_id']) && !empty($_POST['user']['password'])))
+		{
+			$this->validate_not_blank('password', lang('nofieldgiven',array(lang('password'))));
+			if(empty($_POST['user']['password']))
+			{
+				$this->add_validation_error(lang('nofieldgiven', array(lang('password'))));
+			}
+			elseif($_POST['user']['password'] != $_POST['user']['passwordagain'])
+			{
+				$this->add_validation_error(lang('nopasswordmatch'));
+			}
+		}
+	}	
 
 	function setup($first_time = false)
 	{
