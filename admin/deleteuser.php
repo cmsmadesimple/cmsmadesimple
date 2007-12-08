@@ -37,7 +37,7 @@ if (isset($_GET["user_id"]))
 	if ($access)
 	{
 		$oneuser = CmsUserOperations::load_user_by_id($user_id);
-		$user_name = $oneuser->username;
+		$user_name = $oneuser->name;
 		$ownercount = CmsUserOperations::count_page_ownership_by_id($user_id);
 
 		if ($ownercount > 0)

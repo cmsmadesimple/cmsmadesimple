@@ -25,6 +25,24 @@
  */
 
 /**
+ * Shortcut to the print_r function.
+ * Wraps the output in <pre> and </pre> for easy reading
+ * 
+ * @param array $var 
+ * @param bool $exit
+ *
+ */
+function pr($var, $exit = 1)
+{
+	echo '<pre>';
+		print_r($var);
+	echo '</pre>';	
+	if(isset($exit)) 	
+		die();
+}
+
+
+/**
  * Simple template parser
  *
  * @since 0.6.1

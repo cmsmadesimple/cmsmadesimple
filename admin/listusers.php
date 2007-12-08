@@ -62,7 +62,7 @@ if (isset($_GET["toggleactive"]))
 
 			if ($result)
 			{
-				audit($_GET["toggleactive"], $thisuser->username, 'Edited User');
+				audit($_GET["toggleactive"], $thisuser->name, 'Edited User');
 			}
 			else
 			{
