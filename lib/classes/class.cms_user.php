@@ -64,7 +64,7 @@ class CmsUser extends CmsObjectRelationalMapping
 		}
 
 		// Quick fix to prevent the password from getting double encrypted on an update
-		if((empty($_POST['user']['password'])) && (isset($this->params['password'])))
+		if(!isset($_POST['config']) && empty($_POST['user']['password']) && isset($this->params['password']))
 			unset($this->params['password']);
 
 		// Validate password if we're either adding a new record, or updating one and supplying the password.

@@ -270,7 +270,6 @@ class CmsInstallOperations extends CmsObject
 				$user->set_password($password);
 				$user->active = true;
 				$user->admin_access = true;
-
 				if ($user->save())
 				{
 					$group = cms_orm()->cms_group->find_by_id(1);
@@ -279,6 +278,7 @@ class CmsInstallOperations extends CmsObject
 						return $group->add_user($user) !== false;
 					}
 				}
+			}
 		}
 		
 		return false;
