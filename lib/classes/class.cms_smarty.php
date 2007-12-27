@@ -39,18 +39,18 @@ class CmsSmarty extends Smarty {
 
 		$config = cms_config();
 		
-		$this->template_dir = $config["root_path"].'/tmp/templates/';
+		$this->template_dir = dirname(__FILE__).'/../../tmp/templates/';
 		if (isset($GLOBALS['CMS_ADMIN_PAGE']))
 		{
-			$this->template_dir = $config["root_path"].'/admin/templates/';
+			$this->template_dir = dirname(__FILE__).'/../../admin/templates/';
 		}
 		$this->compile_dir = TMP_TEMPLATES_C_LOCATION;
-		$this->config_dir = $config["root_path"].'/tmp/configs/';
+		$this->config_dir = dirname(__FILE__).'/../../tmp/configs/';
 		$this->cache_dir = TMP_CACHE_LOCATION;
-		$this->plugins_dir = array($config["root_path"].'/lib/smarty/plugins/', $config["root_path"].'/plugins/', $config["root_path"].'/lib/module_plugins/');
+		$this->plugins_dir = array(dirname(__FILE__).'/../smarty/plugins/', dirname(__FILE__).'/../../plugins/', dirname(__FILE__).'/../module_plugins/');
 		if (isset($GLOBALS['CMS_ADMIN_PAGE']))
 		{
-			$this->plugins_dir[] = $config['root_path'] . '/admin/plugins/';
+			$this->plugins_dir[] = dirname(__FILE__).'/../../admin/plugins/';
 		}
 
 		$this->compiler_file = 'CMS_Compiler.class.php';

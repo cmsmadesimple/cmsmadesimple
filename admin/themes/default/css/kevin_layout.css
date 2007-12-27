@@ -19,7 +19,7 @@ body {
 	color:#333333;	
 }
 div#header {
-	background:#000000 url(../images/kevin_layout/header-bg.jpg) repeat;
+	background:#000000 url(../images/kevin_layout/header-bg.jpg) repeat-x bottom;
 }
 div#header h1 {
 	dispaly:block;

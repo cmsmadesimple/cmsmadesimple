@@ -297,6 +297,13 @@
         <description>adminlogdescription</description>
         <show_in_menu><permission>adminPerms</permission></show_in_menu>
       </node>
+      <node>
+        <name>multisite</name>
+        <title>multisite</title>
+        <url>listmultisites.php</url>
+        <description>multisitedescription</description>
+        <show_in_menu><permission>sitePrefPerms</permission></show_in_menu>
+      </node>	  
     </children>
   </node>
   <node>

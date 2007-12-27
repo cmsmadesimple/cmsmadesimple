@@ -191,7 +191,17 @@ class CmsConfig extends CmsObject implements ArrayAccess
 			}
 		}
 		
+		// Begin Multisite Modifications
+		$subsite_config = $config['root_path'].DIRECTORY_SEPARATOR.'sites'.DIRECTORY_SEPARATOR.$_SERVER['HTTP_HOST'].DIRECTORY_SEPARATOR.'config.php';
+		if(file_exists($subsite_config))
+		{
+			include $subsite_config;
+			$config['is_subsite'] = true;
+		}
+		// End Multisite Modifications		
+
 		$this->params = $config;
+
 	}
 	
 	function save()

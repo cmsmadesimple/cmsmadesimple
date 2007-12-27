@@ -37,7 +37,7 @@ function pr($var, $exit = 1)
 	echo '<pre>';
 		print_r($var);
 	echo '</pre>';	
-	if(isset($exit)) 	
+	if($exit == 1) 	
 		die();
 }
 
