@@ -36,7 +36,7 @@ $nls['englishlang']['ro_RO'] = 'Romanian';
 
 #Possible aliases for language
 $nls['alias']['ro'] = 'ro_RO';
-$nls['alias']['italiano'] = 'ro_RO' ;
+$nls['alias']['Română'] = 'ro_RO' ;
 $nls['alias']['rom'] = 'ro_RO' ;
 $nls['alias']['romanian'] = 'ro_RO' ;
 $nls['alias']['ro_RO.ISO8859-2'] = 'ro_RO' ;
