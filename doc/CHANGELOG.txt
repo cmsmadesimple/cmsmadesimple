@@ -1,3 +1,7 @@
+Version 1.2.3 "Black Rock" -- January 2, 2008
+-----------------
+- Fixed a SQL injection
+
 Version 1.2.2 "Holetown" -- November 30, 2007
 -----------------
 - Fix a bug in the cms_date_time plugin that was causing random
