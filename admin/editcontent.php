@@ -389,9 +389,6 @@ $smarty->assign('orig_current_language', $current_language); //orig_current_lang
 //Can we preview?
 $smarty->assign('can_preview', $page_object->preview);
 
-//How about apply?
-$smarty->assign('can_apply', true);
-
 //Set the pagetypes
 $smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
 $smarty->assign('selected_page_type', $page_type);
@@ -421,6 +418,27 @@ $smarty->assign('include_templates', $page_object->edit_template($smarty, $curre
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
 
 $smarty->assign('start_tab', $start_tab);
+
+$ExtraButtons = array(
+	array(
+		'name'    => 'applybutton',
+		'class'   => 'positive apply',
+		'image'   => '',
+		'caption' => lang('apply'),
+	)
+);
+
+if ($page_object->preview)
+{
+	$ExtraButtons[] = array(
+			'name'    => 'previewbutton',
+			'class'   => 'positive preview',
+			'image'   => '',
+			'caption' => lang('preview'),
+	);
+}
+
+$smarty->assign('DisplayButtons', $ExtraButtons);
 
 $smarty->display('addcontent.tpl');
 
