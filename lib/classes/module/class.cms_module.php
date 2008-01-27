@@ -77,6 +77,7 @@ class CmsModule extends CmsObject
   <!ELEMENT data (#PCDATA)>
 ]>';
 	var $smarty;
+	var $is_installed = false;
 
 	function __construct()
 	{
@@ -534,11 +535,14 @@ class CmsModule extends CmsObject
 	
 	function register_data_object($class_name, $file_name)
 	{
-		if (include($file_name))
+		if ($this->is_installed())
 		{
-			$orm =& cmsms()->orm;
-			$orm[underscore($class_name)] = new $class_name;
-			return true;
+			if (include($file_name))
+			{
+				$orm =& cmsms()->orm;
+				$orm[underscore($class_name)] = new $class_name;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -548,6 +552,16 @@ class CmsModule extends CmsObject
 	 * Installation Related Functions
 	 * ------------------------------------------------------------------
 	 */
+	
+	/**
+	 * Method to tell whether or not a module is installed.
+	 *
+	 * @return boolean Whether or not the module is installed
+	 */
+	function is_installed()
+	{
+		return $this->is_installed;
+	}
 
 	/**
 	 * Function that will get called as module is installed. This function should
@@ -2287,7 +2301,7 @@ class CmsModule extends CmsObject
 		}
 		catch (Exception $e)
 		{
-			trigger_error("Could not run CreatePermission", E_WARNING);
+			//trigger_error("Could not run CreatePermission", E_WARNING);
 		}
 	}
 

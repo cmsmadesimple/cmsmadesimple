@@ -116,7 +116,6 @@ class CmsModuleLoader extends CmsObject
 										$newmodule = new $modulename;
 										$name = $newmodule->GetName();
 
-										global $CMS_VERSION;
 										$dbversion = $result->fields['version'];
 
 										#Check to see if there is an update and wether or not we should perform it
@@ -130,8 +129,9 @@ class CmsModuleLoader extends CmsObject
 										}
 
 										#Check to see if version in db matches file version
-										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), $CMS_VERSION) != 1)
+										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), CMS_VERSION) != 1)
 										{
+											$newmodule->is_installed = true;
 											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
