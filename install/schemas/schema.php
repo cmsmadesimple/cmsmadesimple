@@ -113,7 +113,7 @@ CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id', 'assoc_css_
 CmsInstallOperations::create_table($db, 'event_handlers', "
 	event_id      I,
 	tag_name      c(255),
-	module_name   c(255),
+	module_name   c(100),
 	removable     I,
 	handler_order I,
 	id    I KEY
@@ -170,25 +170,25 @@ CmsInstallOperations::create_table($db, 'additional_htmlblob_users', "
 ");
 
 CmsInstallOperations::create_table($db, 'modules', "
-	module_name C(255),
-	status C(255),
-	version C(255),
+	module_name C(100),
+	status C(50),
+	version C(50),
 	admin_only I1 DEFAULT 0,
 	active I1
 ");
 CmsInstallOperations::create_index($db, 'modules', 'module_name', 'module_name');
 
 CmsInstallOperations::create_table($db, 'module_deps', "
-	parent_module C(25),
-	child_module C(25),
+	parent_module C(100),
+	child_module C(100),
 	minimum_version C(25),
 	create_date T,
 	modified_date T
 ");
 
 CmsInstallOperations::create_table($db, 'module_templates', "
-	module_name C(200),
-	template_name C(200),
+	module_name C(100),
+	template_name C(150),
 	content XL,
 	create_date T,
 	modified_date T
@@ -197,7 +197,7 @@ CmsInstallOperations::create_index($db, 'module_templates', 'module_and_template
 
 CmsInstallOperations::create_table($db, 'multilanguage', "
 	id I KEY AUTO,
-	module_name C(25),
+	module_name C(100),
 	content_type C(25),
 	object_id I,
 	property_name C(100),
@@ -217,7 +217,7 @@ CmsInstallOperations::create_table($db, 'permissions', "
 
 CmsInstallOperations::create_table($db, 'permission_defns', "
 	id I KEY AUTO,
-	module C(50),
+	module C(100),
 	extra_attr C(50),
 	name C(50),
 	hierarchical I1 DEFAULT 0,
