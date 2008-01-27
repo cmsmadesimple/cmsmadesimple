@@ -276,7 +276,7 @@ function ajaxpreview($params)
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
 
 //Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
-//load_permissions($_REQUEST, $page_object);
+load_permissions($_REQUEST, $page_object);
 
 //Preview?
 $smarty->assign('showpreview', false);
