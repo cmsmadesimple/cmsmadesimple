@@ -151,7 +151,53 @@ function load_permissions($params, $page_object)
 			{
 				if ($params['permission_id'] == $permission_defns[$x]['id'])
 				{
-					$permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => -1, 'group_name' => 'everyone');
+					$add_me = true;
+
+					$group_id = -1;
+					$gorup_name = lang('Everyone');
+					
+					if (isset($params['group_id']) && $params['group_id'] > -1)
+					{
+						$group = cms_orm()->cms_group->find_by_id($params['group_id']);
+						if ($group)
+						{
+							$group_id = $group->id;
+							$group_name = $group->name;
+						}
+						else
+						{
+							$add_me = false;
+						}
+					}
+					
+					$permission_defns[$x]['entries'][] = array('has_access' => $params['permission_allow'] == 1 ? lang('true') : lang('false'), 'object_name' => $page_object->get_property_value('menu_text', $current_language) . ' - ' . $page_object->hierarchy, 'group_id' => $group_id, 'group_name' => $group_name, 'object_id' => $page_object->id);
+				}
+			}
+		}
+		else
+		{
+			foreach ($params as $k=>$v)
+			{
+				if (starts_with($k, 'delete_permission'))
+				{
+					list($blah, $group_id, $permission_id) = explode('-', $k);
+					if ($group_id && $permission_id)
+					{
+						for ($x = 0; $x < count($permission_defns); $x++)
+						{
+							if ($permission_id == $permission_defns[$x]['id'])
+							{
+								for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
+								{
+									if ($permission_defns[$x]['entries'][$y]['group_id'] == $group_id)
+									{
+										unset($permission_defns[$x]['entries'][$y]);
+										break;
+									}
+								}
+							}
+						}
+					}
 				}
 			}
 		}
@@ -186,8 +232,25 @@ function load_permissions($params, $page_object)
 	$smarty->assign('permission_list', $permission_list);
 	$smarty->assign("serialized_permissions_list", serialize_object($permission_list));
 	$smarty->assign("serialized_permissions_defns", serialize_object($permission_defns));
+	
+	return $permission_defns;
 }
 
+function save_permissions($params, $page_object, $permission_defns)
+{
+	for ($x = 0; $x < count($permission_defns); $x++)
+	{
+		$dfn = $permission_defns[$x];
+		for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
+		{
+			$perm = $permission_defns[$x]['entries'][$y];
+			if ($perm['id'] == $page_object->id)
+			{
+				CmsAcl::set_permission('Core', 'Page', $dfn['name'], $page_object->id, $perm['group_id'], $perm['has_access'] == 'True' ? 1 : 0);
+			}
+		}
+	}
+}
 
 function create_preview(&$page_object)
 {
@@ -276,7 +339,7 @@ function ajaxpreview($params)
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
 
 //Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
-load_permissions($_REQUEST, $page_object);
+$permission_defns = load_permissions($_REQUEST, $page_object);
 
 //Preview?
 $smarty->assign('showpreview', false);
@@ -299,6 +362,7 @@ else if ($access)
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
+			save_permissions($params, $page_object, $permission_defns);
 			if ($submit)
 			{
 				audit($page_object->id, $page_object->name, 'Edited Content');
@@ -338,6 +402,8 @@ $smarty->assign('parent_dropdown', $contentops->CreateHierarchyDropdown($page_ob
 
 //Se the template dropdown
 $smarty->assign('template_names', $templateops->TemplateDropdown('content[template_id]', $page_object->template_id, 'onchange="document.contentform.submit()"'));
+
+$smarty->assign('group_dropdown', CmsGroup::get_groups_for_dropdowm(true));
 
 //Name and menu text are multilang, use the parameters
 $smarty->assign('name', $page_object->get_property_value('name', $current_language));

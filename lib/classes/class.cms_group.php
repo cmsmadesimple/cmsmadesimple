@@ -56,12 +56,12 @@ class CmsGroup extends CmsObjectRelationalMapping
 	}
 	
 	//Callback handlers
-	function before_save()
+	public function before_save()
 	{
 		CmsEvents::send_event( 'Core', ($this->id == -1 ? 'AddGroupPre' : 'EditGroupPre'), array('group' => &$this));
 	}
 	
-	function after_save()
+	public function after_save()
 	{
 		//Add the group to the aro table so we can do acls on it
 		//Only happens on a new insert
@@ -72,15 +72,33 @@ class CmsGroup extends CmsObjectRelationalMapping
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
 	}
 	
-	function before_delete()
+	public function before_delete()
 	{
 		CmsEvents::send_event('Core', 'DeleteGroupPre', array('group' => &$this));
 	}
 	
-	function after_delete()
+	public function after_delete()
 	{
 		CmsAcl::delete_aro($this->id, 'Group');
 		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
+	}
+	
+	public static function get_groups_for_dropdowm($add_everyone = false)
+	{
+		$result = array();
+		
+		if ($add_everyone)
+		{
+			$result[-1] = lang('Everyone');
+		}
+		
+		$groups = cmsms()->group->find_all(array('order' => 'name ASC'));
+		foreach ($groups as $group)
+		{
+			$result[$group->id] = $group->name;
+		}
+		
+		return $result;
 	}
 }
 

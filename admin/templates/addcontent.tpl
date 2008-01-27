@@ -125,7 +125,7 @@
 		{section name='defns' loop=$permission_defns}
 			<h4>{$permission_defns[defns].name}</h4>
 				
-				<table cellpadding="5" cellspacing="0" border="0">
+				<table cellpadding="5" cellspacing="5" border="0">
 					<thead>
 						<tr>
 							<th>Group</th>
@@ -141,11 +141,9 @@
 								<td>{$entry.group_name}</td>
 								<td>{$entry.has_access}</td>
 								<td>{$entry.object_name}</td>
-								{if $entry.object_id eq $page_object.id and $entry.object_id gt -1}
-									<td><a href="blah.php">Edit</a></td>
-									<td><a href="blah.php">Delete</a></td>
+								{if $entry.object_id eq $page_object->id and $entry.object_id gt -1}
+									<td><input type="submit" name="delete_permission-{$entry.group_id}-{$permission_defns[defns].id}" value="Delete" /></td>
 								{else}
-									<td></td>
 									<td></td>
 								{/if}
 							</tr>
@@ -157,30 +155,30 @@
 			
 		<br />
 			
-				<fieldset>
-					<legend>Add Permission</legend>
-					<div class="row">
-						<label>Group:</label>
-						<select name="group_id"><option value='-1'>Everyone</option></select>
-					</div>
-					{admin_input type='select' label='Permission' id='permission_id' name='permission_id'  options=$permission_list}
-					<div class="row">
-						<label for="permission_allow">Allow:</label>
-						<input type="hidden" name="permission_allow" value="0" /><input type="checkbox" class="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
-					</div>
-					<input type="submit" name="permission_add_submit" value="Submit" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"  />
-				</fieldset>
-					
-			</div> <!-- End permissions -->
+			<fieldset>
+				<legend>Add Permission</legend>
+				<div class="row">
+					<label>Group:</label>
+					<select name="group_id">{html_options options=$group_dropdown}</select>
+				</div>
+				{admin_input type='select' label='Permission' id='permission_id' name='permission_id'  options=$permission_list}
+				<div class="row">
+					<label for="permission_allow">Allow:</label>
+					<input type="hidden" name="permission_allow" value="0" /><input type="checkbox" class="checkbox" id="permission_allow" name="permission_allow" value="1" /><br />
+				</div>
+				<input type="submit" name="permission_add_submit" value="Submit" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'"  />
+			</fieldset>
+			
+		</div> <!-- End permissions -->
 
-			{if $can_preview eq true}
-			<div id="preview">
-			  <iframe name="previewframe" class="preview" id="previewframe" src="{$previewfname}"></iframe>
-			</div> <!-- End preview -->
-			{/if}
+		{if $can_preview eq true}
+		<div id="preview">
+		  <iframe name="previewframe" class="preview" id="previewframe" src="{$previewfname}"></iframe>
+		</div> <!-- End preview -->
+		{/if}
 
-		</div> <!-- End tabs -->
-		{include file='elements/buttons.tpl'}
+	</div> <!-- End tabs -->
+	{include file='elements/buttons.tpl'}
 </form>
 
 

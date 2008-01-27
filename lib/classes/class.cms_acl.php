@@ -153,7 +153,7 @@ class CmsAcl extends CmsObject
 		{
 			foreach ($result as &$onerow)
 			{
-				$onerow['group_name'] = $onerow['group_id'] == -1 ? lang('everyone') : $onerow['group_name'];
+				$onerow['group_name'] = $onerow['group_id'] == -1 ? lang('Everyone') : $onerow['group_name'];
 				$onerow['has_access'] = $onerow['has_access'] ? lang('true') : lang('false');
 			}
 		}
@@ -171,6 +171,30 @@ class CmsAcl extends CmsObject
 		return cms_db()->GetAll('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ?', array($module, $extra_attr));
 	}
 	
+	static public function set_permission($module, $extra_attr, $permission, $object_id, $group_id, $allowed = false)
+	{
+		$cms_db_prefix = cms_db_prefix();
+		$defn = self::get_permission_definition($module, $extra_attr, $permission);
+		
+		if ($defn)
+		{
+			$id = cms_db()->GetOne("SELECT id FROM {$cms_db_prefix}group_permissions WHERE permission_defn_id = ? AND group_id = ? AND object_id = ?", array($defn['id'], $group_id, $object_id));
+			if ($id)
+			{
+				return cms_db()->Execute("UPDATE {$cms_db_prefix}group_permissions SET has_access = ? WHERE id = ?", array($allowed, $id));
+			}
+			else
+			{
+				return cms_db()->Execute("INSERT INTO {$cms_db_prefix}group_permissions (permission_defn_id, group_id, object_id, has_access) VALUES (?, ?, ?, ?)", array($defn['id'], $group_id, $object_id, $allowed));
+			}
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * TODO: Cache me!
+	 */
 	static public function create_permission_definition($module, $extra_attr, $name, $hierarchical = false, $table = '')
 	{
 		$result = null;
@@ -188,6 +212,9 @@ class CmsAcl extends CmsObject
 		return false;
 	}
 	
+	/**
+	 * TODO: Clear cache
+	 */
 	static public function delete_permission_definition($module, $extra_attr, $name)
 	{
 		$query = "DELETE FROM " . cms_db_prefix() . "permission_defns WHERE module = ? AND extra_attr = ? AND name = ?";
