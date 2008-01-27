@@ -18,6 +18,13 @@
 #
 #$Id$
 
+//Cut them off at the pass...
+if (version_compare(phpversion(), "5.2", "<"))
+{ 
+    echo 'CMS Made Simple 2.0 requires php 5.2 and above to run.  Please upgrade your system before proceeding.';
+    exit;
+} 
+
 require_once('../lib/cmsms.api.php');
 require_once('lib/class.cms_install_operations.php');
 

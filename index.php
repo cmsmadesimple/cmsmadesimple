@@ -21,6 +21,12 @@
 /**
  * Entry point for all non-admin pages
  **/
+//Cut them off at the pass...
+if (version_compare(phpversion(), "5.2", "<"))
+{ 
+    echo 'CMS Made Simple 2.0 requires php 5.2 and above to run.  Please upgrade your system before proceeding.';
+    exit;
+}
 
 //Where are we?
 $dirname = dirname(__FILE__);
