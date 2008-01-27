@@ -244,7 +244,7 @@ function save_permissions($params, $page_object, $permission_defns)
 		for ($y = 0; $y < count($permission_defns[$x]['entries']); $y++)
 		{
 			$perm = $permission_defns[$x]['entries'][$y];
-			if ($perm['id'] == $page_object->id)
+			if ($perm['object_id'] == $page_object->id)
 			{
 				CmsAcl::set_permission('Core', 'Page', $dfn['name'], $page_object->id, $perm['group_id'], $perm['has_access'] == 'True' ? 1 : 0);
 			}
