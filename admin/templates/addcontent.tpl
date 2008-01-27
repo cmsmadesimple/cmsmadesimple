@@ -31,7 +31,7 @@
 			{admin_input type='select' label='contenttype' id='page_type' name='page_type' options=$page_types selected=$selected_page_type onchange='document.contentform.submit();'}
 			
 			{* Language *}
-			{admin_input type='select' label='Language' id='current_language' name='current_language' options=$languages selected=$orig_current_language}
+			{admin_input type='select' label='Language' id='current_language' name='current_language' options=$languages selected=$orig_current_language onchange='document.contentform.submit();'}
 
 			{* Page Title *}
 			{if $page_object->field_used('name')}				

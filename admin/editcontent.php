@@ -114,6 +114,8 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 	{
 		$page_object = unserialize_object($params["serialized_content"]);
 		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
+		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
+		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
 			copycontentobj($page_object, $page_type);
@@ -274,7 +276,7 @@ function ajaxpreview($params)
 $page_object = get_page_object($page_type, $orig_page_type, $userid, $content_id, $_REQUEST, $orig_current_language);
 
 //Load permissions (from db or serialized versions) and put them into smarty for dispaly on the template
-load_permissions($_REQUEST, $page_object);
+//load_permissions($_REQUEST, $page_object);
 
 //Preview?
 $smarty->assign('showpreview', false);
@@ -294,8 +296,6 @@ else if ($access)
 {
 	if ($submit || $apply)
 	{
-		$page_object->set_property_value('name', $_REQUEST['name'], $orig_current_language);
-		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $orig_current_language);
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();
