@@ -47,10 +47,10 @@ class CmsUser extends CmsObjectRelationalMapping
 		if ($this->name != '')
 		{
 			// Make sure the name is unique
-			$result = $this->find_all_by_name($this->name);
-			if (count($result) > 0)
+			$result = $this->find_by_name($this->name);
+			if ($result)
 			{
-				if ($result[0]->id != $this->id)
+				if ($result->id != $this->id)
 				{
 					$this->add_validation_error(lang('userexists'));
 				}
@@ -61,23 +61,6 @@ class CmsUser extends CmsObjectRelationalMapping
 			{
 				$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
 			} 
-		}
-
-		// Quick fix to prevent the password from getting double encrypted on an update
-		if(!isset($_POST['config']) && empty($_POST['user']['password']) && isset($this->params['password']))
-			unset($this->params['password']);
-
-		// Validate password if we're either adding a new record, or updating one and supplying the password.
-		if((!isset($_POST['user_id'])) || (isset($_POST['user_id']) && !empty($_POST['user']['password'])))
-		{
-			if(empty($this->params['password']))
-			{
-				$this->add_validation_error(lang('nofieldgiven', array(lang('password'))));
-			}
-			elseif((isset($_POST['user']['passwordagain'])) && ($_POST['user']['password'] != $_POST['user']['passwordagain']))
-			{
-				$this->add_validation_error(lang('nopasswordmatch'));
-			}
 		}
 	}	
 

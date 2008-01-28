@@ -73,17 +73,17 @@ if ($openid_enabled)
 				}
 				else
 				{
-					$error .= lang('authenticationfailed');
+					$error .= lang('authenticationfailed 3');
 				}
 			}
 			else
 			{
-				$error .= lang('authenticationfailed');
+				$error .= lang('authenticationfailed 2');
 			}
 		}
 		else
 		{
-			$error .= lang('authenticationfailed');
+			$error .= lang('authenticationfailed 1');
 		}
 	}
 }

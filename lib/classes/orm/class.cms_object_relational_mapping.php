@@ -115,6 +115,13 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	var $dirty = false;
 	
 	/**
+	 * A flag that allows something outside of the object to set a validation
+	 * error before save() (and eventually, validate()) are called.  After one
+	 * call to validate, any errors are cleared out anyway.
+	 */
+	var $clear_errors = true;
+	
+	/**
 	 * Used in situations where we're doing a bit of polymorphism.  The type 
 	 * field will store the name of the class that this object currently is.
 	 * Then, when it's loaded, we will automatically instantiate that type of 
@@ -1330,6 +1337,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	function add_validation_error($message)
 	{
 		$this->validation_errors[] = $message;
+		$this->clear_errors = false;
 	}
 	
 	/**
@@ -1341,7 +1349,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	public function _call_validation()
 	{	
 		//Clear them out first
-		$this->validation_errors = array();
+		if ($this->clear_errors)
+			$this->validation_errors = array();
+			
+		$this->clear_errors = true;
 		
 		//Call the validate method
 		$this->validate();
