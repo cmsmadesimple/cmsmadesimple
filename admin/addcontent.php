@@ -104,6 +104,11 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $params, $lang
 	if (isset($params["serialized_content"]))
 	{
 		$page_object = unserialize_object($params["serialized_content"]);
+		
+		//Do this first -- so alias gets set
+		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
+		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
+
 		$page_object->update_parameters($params['content'], $lang);
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
@@ -226,8 +231,6 @@ else if ($access)
 {
 	if ($submit || $apply)
 	{
-		$page_object->set_property_value('name', $_REQUEST['name'], $orig_current_language);
-		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $orig_current_language);
 		if ($page_object->save())
 		{
 			$contentops->SetAllHierarchyPositions();

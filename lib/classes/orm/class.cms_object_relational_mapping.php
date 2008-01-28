@@ -964,6 +964,10 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function update_parameters($params, $strip_slashes = false)
 	{
+		//Because a set_ method might rely on other values already being set,
+		//we do those last
+		$do_sets_last = array();
+
 		foreach ($params as $k=>$v)
 		{
 			if (array_key_exists($k, $this->params))
@@ -972,7 +976,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 				if (method_exists($this, 'set_' . $k))
 				{
-					call_user_func_array(array($this, 'set_'.$k), array($v));
+					//call_user_func_array(array($this, 'set_'.$k), array($v));
+					$do_sets_last[$k] = $v;
 				}
 				else
 				{
@@ -980,6 +985,14 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					$this->params[$k] = $v;
 				}
 				$this->dirty = true;
+			}
+		}
+		
+		foreach ($do_sets_last as $k=>$v)
+		{
+			if (method_exists($this, 'set_' . $k))
+			{
+				call_user_func_array(array($this, 'set_'.$k), array($v));
 			}
 		}
 	}

@@ -463,14 +463,15 @@ class CmsContentBase extends CmsObjectRelationalMapping
 
 		if ($alias == '' && $config['auto_alias_content'] == true)
 		{
-			$alias = trim($this->menu_text);
+			$alias = trim($this->get_property_value('menu_text', CmsMultiLanguage::get_default_language()));
 			if ($alias == '')
 			{
-			    $alias = trim($this->name);
+			    $alias = trim($this->get_property_value('name', CmsMultiLanguage::get_default_language()));
 			}
 			
 			$tolower = true;
 			$alias = munge_string_to_url($alias, $tolower);
+
 			// Make sure auto-generated new alias is not already in use on a different page, if it does, add "-2" to the alias
 			$error = cmsms()->GetContentOperations()->CheckAliasError($alias);
 			if ($error !== FALSE)

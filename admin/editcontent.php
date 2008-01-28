@@ -113,9 +113,12 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $content_id, $
 	if (isset($params["serialized_content"]))
 	{
 		$page_object = unserialize_object($params["serialized_content"]);
-		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
+		
+		//Do this first -- so alias gets set
 		$page_object->set_property_value('name', $_REQUEST['name'], $lang);
 		$page_object->set_property_value('menu_text', $_REQUEST['menu_text'], $lang);
+
+		$page_object->update_parameters($params['content'], $lang, get_magic_quotes_gpc());
 		if (strtolower(get_class($page_object)) != $page_type)
 		{
 			copycontentobj($page_object, $page_type);
@@ -385,6 +388,9 @@ $smarty->assign('orig_page_type', $orig_page_type);
 $smarty->assign('languages', CmsMultiLanguage::get_enabled_languages_as_hash());
 $smarty->assign('current_language', $current_language);
 $smarty->assign('orig_current_language', $current_language); //orig_current_language should match current_language now that saves and stuff are done
+
+//Can we preview?
+$smarty->assign('can_preview', $page_object->preview);
 
 //Set the pagetypes
 $smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
