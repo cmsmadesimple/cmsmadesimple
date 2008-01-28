@@ -10,8 +10,8 @@
 		</ul>
 	    <div id="account">
 			{admin_input type='input' label='username' id='username' name='user[name]' value=$user_object->name}
-			{admin_input type='password' label='password' id='password' name='user[password]' value=$user_object->password}
-			{admin_input type='password' label='passwordagain' id='passwordagain' name='user[passwordagain]' value=$user_object->passwordagain}		
+			{admin_input type='password' label='password' id='password' name='user[password]'}
+			{admin_input type='password' label='passwordagain' id='passwordagain' name='passwordagain'}		
 			{admin_input type='input' label='firstname' id='firstname' name='user[firstname]' value=$user_object->firstname}			
 			{admin_input type='input' label='lastname' id='lastname' name='user[lastname]' value=$user_object->lastname}						
 			{admin_input type='input' label='email' id='email' name='user[email]' value=$user_object->email}

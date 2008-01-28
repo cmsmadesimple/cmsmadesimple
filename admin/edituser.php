@@ -38,9 +38,8 @@ require_once("header.php");
 
 $submit = array_key_exists('submitbutton', $_POST);
 
-function &get_user_object($user_id)
+function get_user_object($user_id)
 {
-	$user_object = new CmsUser();
 	$user_object = cmsms()->cms_user->find_by_id($user_id);
 	if (isset($_REQUEST['user']))
 		$user_object->update_parameters($_REQUEST['user']);
@@ -55,13 +54,12 @@ if ($access)
 {
 	if ($submit)
 	{
-		$user_object->password = $_POST['user']['password'];
 		if ($user_object->save())
 		{
 			if ($submit)
 			{
 				audit($user_object->id, $user_object->name, 'Edited user');
-				redirect("listusers.php");
+				//redirect("listusers.php");
 			}
 		}
 	}

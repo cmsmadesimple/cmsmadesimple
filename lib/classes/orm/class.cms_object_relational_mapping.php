@@ -778,7 +778,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			CmsProfiler::get_instance()->mark('Before Update');
 			if ($this->dirty)
 			{
-				CmsProfiler::get_instance()->mark('Dirty Bit Not Set');
+				CmsProfiler::get_instance()->mark('Dirty Bit True');
 				$query = "UPDATE {$table} SET ";
 				$midpart = '';
 				$queryparams = array();
@@ -790,26 +790,26 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					if ($onefield == $this->modified_date_field)
 					{
 						#$queryparams[] = $time;
-						$midpart .= "{$onefield} = {$time}, ";
+						$midpart .= "{$table}.{$onefield} = {$time}, ";
 						$this->$onefield = time();
 					}
 					else if ($this->type_field != '' && $this->type_field == $onefield)
 					{
 						$this->$onefield = strtolower(get_class($this));
 						$queryparams[] = strtolower(get_class($this));
-						$midpart .= "{$onefield} = ?, ";
+						$midpart .= "{$table}.{$onefield} = ?, ";
 					}
 					else if (array_key_exists($localname, $this->params))
 					{
 						if ($this->params[$localname] instanceof CmsDateTime)
 						{
 							//var_dump($this->params[$localname]);
-							$midpart .= "{$onefield} = " . $this->params[$localname]->to_sql_string() . ", ";
+							$midpart .= "{$table}.{$onefield} = " . $this->params[$localname]->to_sql_string() . ", ";
 						}
 						else
 						{
 							$queryparams[] = $this->params[$localname];
-							$midpart .= "{$onefield} = ?, ";
+							$midpart .= "{$table}.{$onefield} = ?, ";
 						}
 					}
 				}
@@ -817,7 +817,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				if ($midpart != '')
 				{	
 					$midpart = substr($midpart, 0, -2);
-					$query .= $midpart . " WHERE {$id_field} = ?";
+					$query .= $midpart . " WHERE {$table}.{$id_field} = ?";
 					$queryparams[] = $id;
 				}
 			
@@ -826,13 +826,12 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				if ($result)
 				{
 					$this->dirty = false;
+					CmsProfiler::get_instance()->mark('Dirty Bit Reset');
 					$this->after_save_caller();
 				}
 				
 				return $result;
 			}
-			
-			CmsProfiler::get_instance()->mark('Dirty Bit Set');
 			
 			return true;
 		}
@@ -965,7 +964,9 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				if ($strip_slashes && is_string($v)) $v = stripslashes($v);
 
 				if (method_exists($this, 'set_' . $k))
+				{
 					call_user_func_array(array($this, 'set_'.$k), array($v));
+				}
 				else
 				{
 					//Just in case there is an override
@@ -1017,7 +1018,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			}
 		}
 		
-		$this->dirty = false;
+		$object->dirty = false;
 		
 		$object->after_load_caller();
 
@@ -1296,7 +1297,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function validate()
+	public function validate()
 	{
 	}
 	

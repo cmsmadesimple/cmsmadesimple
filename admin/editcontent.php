@@ -386,9 +386,6 @@ $smarty->assign('languages', CmsMultiLanguage::get_enabled_languages_as_hash());
 $smarty->assign('current_language', $current_language);
 $smarty->assign('orig_current_language', $current_language); //orig_current_language should match current_language now that saves and stuff are done
 
-//Can we preview?
-$smarty->assign('can_preview', $page_object->preview);
-
 //Set the pagetypes
 $smarty->assign('page_types', array_combine(array_map('get_type', $gCms->contenttypes), array_map('get_friendlyname', $gCms->contenttypes)));
 $smarty->assign('selected_page_type', $page_type);
