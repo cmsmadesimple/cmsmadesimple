@@ -364,7 +364,7 @@ else if ($access)
 	{
 		if ($page_object->save())
 		{
-			$contentops->SetAllHierarchyPositions();
+			$contentops->set_all_hierarchy_positions($page_object->lft);
 			save_permissions($params, $page_object, $permission_defns);
 			if ($submit)
 			{

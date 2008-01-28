@@ -207,7 +207,7 @@ class CmsContentOperations extends CmsObject
     /**
      * Updates the hierarchy position of one item
      */
-	public static function SetHierarchyPosition($contentid)
+	public static function set_hierarchy_position($contentid)
 	{
 		global $gCms;
 		$db = $gCms->GetDb();
@@ -257,25 +257,39 @@ class CmsContentOperations extends CmsObject
 		$query = "UPDATE ".cms_db_prefix()."content SET hierarchy = ?, id_hierarchy = ?, hierarchy_path = ?, prop_names = ? WHERE id = ?";
 		$db->Execute($query, array($current_hierarchy_position, $current_id_hierarchy_position, $current_hierarchy_path, implode(',', $prop_name_array), $contentid));
 	}
+	
+	public static function SetHierarchyPosition($contentid)
+	{
+		return self::set_hierarchy_position($contentid);
+	}
 
     /**
      * Updates the hierarchy position of all items
      */
-	public static function SetAllHierarchyPositions()
+	public static function set_all_hierarchy_positions($lft = -1)
 	{
 		global $gCms;
 		$db = $gCms->GetDb();
 
-		$query = "SELECT id FROM ".cms_db_prefix()."content WHERE id > 1";
-		$dbresult = &$db->Execute($query);
+		if ($lft > -1)
+			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE lft >= " . $db->qstr($lft);
+		else
+			$query = "SELECT id FROM ".cms_db_prefix()."content WHERE id > 1";
+
+		$dbresult = $db->Execute($query);
 
 		while ($dbresult && !$dbresult->EOF)
 		{
-			self::SetHierarchyPosition($dbresult->fields['id']);
+			self::set_hierarchy_position($dbresult->fields['id']);
 			$dbresult->MoveNext();
 		}
 		
 		if ($dbresult) $dbresult->Close();
+	}
+	
+	public static function SetAllHierarchyPositions($lft = -1)
+	{
+		return self::set_all_hierarchy_positions($lft);
 	}
 	
 	/**
