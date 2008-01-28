@@ -52,7 +52,7 @@ class CmsUser extends CmsObjectRelationalMapping
 			{
 				if ($result->id != $this->id)
 				{
-					$this->add_validation_error(lang('userexists'));
+					$this->add_validation_error(lang('The username is already in use'));
 				}
 			}
 			
@@ -61,6 +61,19 @@ class CmsUser extends CmsObjectRelationalMapping
 			{
 				$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
 			} 
+		}
+		
+		//Make sure the open id is unique
+		if ($this->openid != '')
+		{
+			$result = $this->find_by_openid($this->openid);
+			if ($result)
+			{
+				if ($result->id != $this->id)
+				{
+					$this->add_validation_error(lang('The openid address is already in use'));
+				}
+			}
 		}
 	}	
 

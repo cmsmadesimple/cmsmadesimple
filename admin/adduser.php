@@ -42,7 +42,28 @@ function &get_user_object()
 {
 	$user_object = new CmsUser();
 	if (isset($_REQUEST['user']))
+	{
 		$user_object->update_parameters($_REQUEST['user']);
+
+		//Handle password separately -- too much room for error
+		//to put all the login in the CmsUser class
+		if ($_REQUEST['password'] != '')
+		{
+			if ($_REQUEST['password'] == $_REQUEST['passwordagain'])
+			{
+				$user_object->set_password($_REQUEST['password']);
+			}
+			else
+			{
+				//Add validation error about passwords not matching
+				$user_object->add_validation_error(lang("Passwords don't match"));
+			}
+		}
+		else
+		{
+			$user_object->add_validation_error(lang("No password given"));
+		}
+	}
 	return $user_object;
 }
 
@@ -53,7 +74,6 @@ if ($access)
 {
 	if ($submit)
 	{
-		$user_object->password = $_POST['user']['password'];
 		if ($user_object->save())
 		{
 			if ($submit)
