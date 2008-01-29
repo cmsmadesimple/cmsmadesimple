@@ -111,6 +111,7 @@ function load_all_permissions($userid)
  */
 function check_permission($userid, $permname)
 {
+	/*
 	$check = false;
 
 	global $gCms;
@@ -129,6 +130,8 @@ function check_permission($userid, $permname)
 	}
 
 	return $check;
+	*/
+	return CmsAcl::check_core_permission($permname, cms_orm()->cms_user->find_by_id($userid));
 }
 
 /**

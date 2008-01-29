@@ -42,7 +42,12 @@ class CmsAcl extends CmsObject
 		return self::$instance;
 	}
 	
-	public static function check_permission($module, $extra_attr, $permission, $object_id, $group = null, $user = null)
+	public static function check_core_permission($permission, $user)
+	{
+		return self::check_permission('Core', '', $permission, -1, null, $user);
+	}
+	
+	public static function check_permission($module, $extra_attr, $permission, $object_id = -1, $group = null, $user = null)
 	{
 		$groups = array();
 		
@@ -111,9 +116,9 @@ class CmsAcl extends CmsObject
 			$query = "SELECT gp.has_access
 						FROM {$cms_db_prefix}group_permissions gp 
 						INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
-						WHERE gp.object_id = ? AND pd.module = ? AND pd.extra_attr = ? AND pd.name = ? {$groupids}";
+						WHERE gp.object_id = ? AND pd.id = ? {$groupids}";
 					
-			$result = cms_db()->GetOne($query, array($object_id, $module, $extra_attr, $permission));
+			$result = cms_db()->GetOne($query, array($object_id, $defn['id']));
 		}
 
 		//Make sure we get a real boolean...  php is so weird sometimes
@@ -127,7 +132,7 @@ class CmsAcl extends CmsObject
 		}
 	}
 	
-	static public function get_permissions($module, $extra_attr, $permission, $object_id, $replace_text = false)
+	static public function get_permissions($module, $extra_attr, $permission, $object_id = -1, $replace_text = false)
 	{
 		$result = array();
 		$cms_db_prefix = cms_db_prefix();
@@ -146,7 +151,10 @@ class CmsAcl extends CmsObject
 		}
 		else
 		{
-			
+			$result = cms_db()->GetAll("SELECT gp.*, g.group_name as group_name
+						FROM {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
+							LEFT OUTER JOIN {$cms_db_prefix}groups g ON g.id = gp.group_id
+						WHERE gp.permission_defn_id = ?", array($defn['id']));
 		}
 		
 		if ($replace_text)
@@ -166,12 +174,17 @@ class CmsAcl extends CmsObject
 		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
 	}
 	
-	static public function get_permission_definitions($module, $extra_attr)
+	static public function get_permission_definitions($module, $extra_attr, $show_hierarchical = true)
 	{
-		return cms_db()->GetAll('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ?', array($module, $extra_attr));
+		$ext = '';
+		
+		if (!$show_hierarchical)
+			$ext .= ' AND hierarchical = 0';
+			
+		return cms_db()->GetAll('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ?' . $ext, array($module, $extra_attr));
 	}
 	
-	static public function set_permission($module, $extra_attr, $permission, $object_id, $group_id, $allowed = false)
+	static public function set_permission($module, $extra_attr, $permission, $object_id = -1, $group_id = -1, $allowed = false)
 	{
 		$cms_db_prefix = cms_db_prefix();
 		$defn = self::get_permission_definition($module, $extra_attr, $permission);
