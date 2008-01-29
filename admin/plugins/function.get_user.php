@@ -20,7 +20,7 @@ function smarty_function_get_user($params, &$smarty)
 {
 	if (!isset($params['id']) || $params['id'] < 0)
 	{
-		var_dump('not found');
+		//var_dump('not found');
 		return;
 	}
 

@@ -652,7 +652,8 @@ class CmsContentBase extends CmsObjectRelationalMapping
 			//created yet.  We should probably do that.
 			if (!$this->children_loaded())
 			{
-				$this->tree->load_child_nodes(-1, $this->lft, $this->rgt);
+				//$this->tree->load_child_nodes(-1, $this->lft, $this->rgt);
+				$this->tree->load_child_nodes($this->id);
 			}
 		}
 		return $this->children;

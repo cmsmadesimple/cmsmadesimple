@@ -69,6 +69,9 @@ class CmsPageTree extends CmsTree
 			$pages = cms_orm()->content->find_all(array('conditions' => array('lft > ? AND rgt < ?', $lft, $rgt), 'order' => 'lft ASC'));
 		}
 		
+		//var_dump(count($pages));
+		//debug_print_backtrace();
+		
 		foreach ($pages as $page)
 		{
 			$parent_node = $this->get_node_by_id($page->parent_id);
@@ -93,7 +96,8 @@ class CmsPageTree extends CmsTree
 			$top_nodes = $this->tree->get_root_node()->get_children();
 			foreach ($top_nodes as $one_node)
 			{
-				if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id) //Don't bother doing this if we're only level 2
+				//Don't bother doing this if we're only level 2
+				if ($one_node->lft < $page->lft && $one_node->rgt > $page->rgt && $one_node->id != $page->id)
 				{
 					$ancestor = $one_node;
 					break;
