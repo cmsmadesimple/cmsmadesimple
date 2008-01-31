@@ -24,22 +24,17 @@ require_once("../include.php");
 
 check_login();
 
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-
-require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'xajax' . DIRECTORY_SEPARATOR . 'xajax.inc.php');
 $cms_ajax = new CmsAjax();
-$xajax = new xajax();
+
 $cms_ajax->register_function('content_setactive'); 
 $cms_ajax->register_function('content_setinactive');
-$xajax->registerFunction('content_list_ajax');
+$cms_ajax->register_function('content_list_ajax');
 $cms_ajax->register_function('content_setdefault');
-$xajax->registerFunction('content_expandall');
-$xajax->registerFunction('content_collapseall');
-$xajax->registerFunction('content_toggleexpand');
-$xajax->registerFunction('content_move');
-$xajax->registerFunction('content_delete');
-$xajax->registerFunction('reorder_display_list');
-$xajax->registerFunction('reorder_process');
+$cms_ajax->register_function('content_expandall');
+$cms_ajax->register_function('content_collapseall');
+$cms_ajax->register_function('content_toggleexpand');
+$cms_ajax->register_function('content_move');
+$cms_ajax->register_function('content_delete');
 
 function check_modify_all($userid)
 {
@@ -54,9 +49,8 @@ $templateops = $gCms->GetTemplateOperations();
 
 //include_once("../lib/classes/class.admintheme.inc.php");
 
-$xajax->processRequests();
 $cms_ajax->process_requests();
-CmsAdminTheme::inject_header_text($xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n");
+
 CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
 
 if (isset($_GET["makedefault"]))
@@ -174,10 +168,11 @@ function display_content_list()
 
 function content_list_ajax()
 {
-	$objResponse = new xajaxResponse();
-	$objResponse->addClear("contentlist", "innerHTML");
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$resp = new CmsAjaxResponse();
+
+	$resp->modify_html('#contentlist', display_content_list());
+	
+	return $resp->get_result();
 }
 
 function content_setactive($contentid) 
@@ -239,7 +234,7 @@ function content_setdefault($contentid)
 	
 	setdefault($contentid);
 
-	$resp->modify_html("contentlist", display_content_list());
+	$resp->modify_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
 
 	return $resp->get_result();
@@ -247,22 +242,24 @@ function content_setdefault($contentid)
 
 function content_expandall()
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	expandall();
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$resp->modify_html('#contentlist', display_content_list());
+
+	return $resp->get_result();
 }
 
 function content_collapseall()
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	collapseall();
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
+	$resp->modify_html('#contentlist', display_content_list());
+
+	return $resp->get_result();
 }
 
 function expandall()
@@ -289,24 +286,27 @@ function collapseall()
 
 function content_toggleexpand($contentid, $collapse)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	toggleexpand($contentid, $collapse=='true'?true:false);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
-	return $objResponse->getXML();
+	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+
+	return $resp->get_result();
 }
 
 function content_delete($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	deletecontent($contentid);
 
 	//$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
-	return $objResponse->getXML();
+	//$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
+	$resp->modify_html('#contentlist', display_content_list());
+	
+	return $resp->get_result();
 }
 
 function toggleexpand($contentid, $collapse = false)
@@ -366,14 +366,15 @@ function setactive($contentid, $active = true)
 }
 
 function content_move($contentid, $parentid, $direction)
-{
-	$objResponse = new xajaxResponse();
+{	
+	$resp = new CmsAjaxResponse();
 	
 	movecontent($contentid, $parentid, $direction);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
-	return $objResponse->getXML();
+	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+
+	return $resp->get_result();
 }
 
 function movecontent($contentid, $parentid, $direction = 'down')
@@ -395,6 +396,7 @@ function movecontent($contentid, $parentid, $direction = 'down')
 
 function deletecontent($contentid)
 {
+	//TODO: Rewrite me
 	$userid = get_userid();
 	$access = check_permission($userid, 'Remove Pages') || check_permission($userid, 'Modify Page Structure');
 	
@@ -491,115 +493,6 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	{
 		$output .= "</li>\n";
 	}
-}
-
-function reorder_display_list()
-{
-	$objResponse = new xajaxResponse();
-
-	$config =& cmsms()->GetConfig();	
-	$userid = get_userid();
-	
-	$path = cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists', 'SLLists.class.php');
-	require($path);
-
-	$sortableLists = new SLLists($config["root_url"].'/lib/scriptaculous');
-	
-	$hierManager = cmsms()->GetHierarchyManager();
-	$hierarchy = $hierManager->getRootNode();
-	
-	$listArray = array();
-	$output = '';
-	
-	$sortableLists->addList('parent0','parent0ListOrder');
-	$listArray[0] = 'parent0ListOrder';
-	$output .= '<ul id="parent0" class="sortableList">'."\n";
-	
-	foreach ($hierarchy->getChildren() as $child)
-	{
-		show_h($child, $sortableLists, $listArray, $output);
-	}
-	
-	$output .= '</ul>';
-
-	ob_start();
-	//$sortableLists->printTopJS();
-	$sortableLists->printForm($_SERVER['PHP_SELF'], 'POST', lang('submit'), 'button', 'sortableListForm', lang('cancel'), $output);
-	$contents = ob_get_contents();
-	ob_end_clean();
-	
-	ob_start();
-	$sortableLists->printBottomJs();
-	$script = ob_get_contents();
-	ob_end_clean();
-	
-	$objResponse->addAssign("contentlist", "innerHTML", $contents);
-	$objResponse->addScript($script);
-
-	return $objResponse->getXML();
-}
-
-function reorder_process($get)
-{
-	$userid = get_userid();
-	$objResponse = new xajaxResponse();
-
-	if (check_modify_all($userid))
-	{
-		global $gCms;
-		$config =& $gCms->GetConfig();
-		$db =& $gCms->GetDb();
-		$contentops =& $gCms->GetContentOperations();
-	    $hm = CmsPageTree::get_instance();
-		$hierarchy = $hm->get_root_node();
-	
-		require(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'sllists','SLLists.class.php'));
-		$sortableLists = new SLLists( $config["root_url"].'/lib/scriptaculous');
-	
-		$listArray = array();
-		$output = '';
-		
-		$sortableLists->addList('parent0','parent0ListOrder');
-		$listArray[0] = 'parent0ListOrder';
-		$output .= '<ul id="parent0" class="sortableList">'."\n";
-
-		foreach ($hierarchy->get_children() as $child)
-		{
-			show_h($child, $sortableLists, $listArray, $output);
-		}
-		
-		$output .= '</ul>';
-	
-		$order_changed = FALSE;
-		foreach ($listArray AS $parent_id => $order)
-		{
-			$orderArray = SLLists::getOrderArray($get[$order], 'parent'.$parent_id);
-			foreach($orderArray as $item)
-			{
-				$node =& $hm->sureGetNodeById($item['element']);
-				if ($node != NULL)
-				{
-				    $one =& $node->getContent();
-				    // Only update if order has changed.
-				    if ($one->ItemOrder() != $item['order'])
-				    {
-					$order_changed = TRUE;
-					$query = 'UPDATE '.cms_db_prefix().'content SET item_order = ? WHERE id = ?';
-					$db->Execute($query, array($item['order'], $item['element']));
-				    }
-				}
-			}
-		}
-		if (TRUE == $order_changed) {
-			global $gCms;
-			$contentops =& $gCms->GetContentOperations();
-			$contentops->SetAllHierarchyPositions();
-			$contentops->ClearCache();
-		}
-	}
-	
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	return $objResponse->getXML();
 }
 
 # vim:ts=4 sw=4 noet

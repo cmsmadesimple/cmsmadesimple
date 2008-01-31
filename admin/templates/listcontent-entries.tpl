@@ -3,7 +3,6 @@
   {* Some Custom Plugins *}
   {get_content item=$current to=content_item}
   {get_template id=$content_item->template_id to=template}
-  {get_user id=$content_item->owner_id to=user}
   {get_edit_permission userid=$content_item->owner_id id=$content_item->id mypages=$mypages modify_any_page=$check_modify_all to=has_edit}
   
   {* Do a row *}
@@ -13,9 +12,9 @@
     <td width="12">
       {if $current->has_children()}
         {if in_array($content_item->id, $opened_items)}
-          <a href="listcontent.php?content_id={$content_item->id}&amp;col=1" onclick="xajax_content_toggleexpand({$content_item->id}, 'true'); return false;">{$contract_image}</a>
+          <a href="listcontent.php?content_id={$content_item->id}&amp;col=1" onclick="cms_ajax_content_toggleexpand({$content_item->id}, 'true'); return false;">{$contract_image}</a>
         {else}
-          <a href="listcontent.php?content_id={$content_item->id}&amp;col=0" onclick="xajax_content_toggleexpand({$content_item->id}, 'false'); return false;">{$expand_image}</a>
+          <a href="listcontent.php?content_id={$content_item->id}&amp;col=0" onclick="cms_ajax_content_toggleexpand({$content_item->id}, 'false'); return false;">{$expand_image}</a>
         {/if}
       {/if}
     </td>
@@ -32,7 +31,6 @@
     </td>
     <td>{$template->name}</td>
     <td>{$content_item->friendly_name()}</td>
-    <td>{$user->username}</td>
 
     
     {* Active *}
@@ -66,10 +64,10 @@
       <td class="move">
         {if $siblingcount gt 1}
           {if $content_item->item_order - 1 lt $siblingcount - 1}
-            <a onclick="xajax_content_move({$content_item->id}, {$content_item->parent_id}, 'down'); return false;" href="listcontent.php?direction=down&amp;content_id={$content_item->id}&amp;parent_id={$content_item->parent_id}">{$down_image}</a>
+            <a onclick="cms_ajax_content_move({$content_item->id}, {$content_item->parent_id}, 'down'); return false;" href="listcontent.php?direction=down&amp;content_id={$content_item->id}&amp;parent_id={$content_item->parent_id}">{$down_image}</a>
           {/if}
           {if $content_item->item_order - 1 gt 0}
-            <a onclick="xajax_content_move({$content_item->id}, {$content_item->parent_id}, 'up'); return false;" href="listcontent.php?direction=up&amp;content_id={$content_item->id}&amp;parent_id={$content_item->parent_id}">{$up_image}</a>
+            <a onclick="cms_ajax_content_move({$content_item->id}, {$content_item->parent_id}, 'up'); return false;" href="listcontent.php?direction=up&amp;content_id={$content_item->id}&amp;parent_id={$content_item->parent_id}">{$up_image}</a>
           {/if}
         {/if}
       </td>
@@ -98,7 +96,7 @@
     {* Delete *}
     <td class="pagepos">
       {if $content_item->default_content eq false and $current->get_children_count() eq 0 and ($modify_page_structure eq true or $remove_pages eq true)}
-        <a href="listcontent.php?deletecontent={$content_item->id}" onclick="if (confirm('{lang string='deleteconfirm'}')) xajax_content_delete({$content_item->id}); return false;">{$delete_image}</a>
+        <a href="listcontent.php?deletecontent={$content_item->id}" onclick="if (confirm('{lang string='deleteconfirm'}')) cms_ajax_content_delete({$content_item->id}); return false;">{$delete_image}</a>
       {/if}
     </td>
 
