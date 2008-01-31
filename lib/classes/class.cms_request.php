@@ -201,6 +201,29 @@ class CmsRequest extends CmsObject
 		return $result;
 
 	}
+	
+	/**
+	 * Determines the uri that was requested
+	 */
+	public static function get_requested_uri()
+	{
+		$result = '';
+		if (isset($_SERVER['HTTP_HOST']))
+		{
+			$result .= 'http://' . $_SERVER['HTTP_HOST'];
+		}
+		
+		if (isset($_SERVER['REQUEST_URI']))
+		{
+			$result .= $_SERVER['REQUEST_URI'];
+		}
+		else if (isset($_SERVER['SCRIPT_NAME']))
+		{
+			$result .= $_SERVER['SCRIPT_NAME'];
+		}
+		
+		return $result;
+	}
 
 	/**
 	 * Strips the slashes from all incoming superglobals,

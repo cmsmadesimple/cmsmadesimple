@@ -41,10 +41,10 @@
         {if $content_item->default_content eq true}
           <td class="pagepos">{$true_image}</td>
         {else}
-          <td class="pagepos"><a href="listcontent.php?setinactive={$content_item->id}" onclick="xajax_content_setinactive({$content_item->id}); return false;">{$setfalse_image}</a></td>
+          <td class="pagepos"><a href="listcontent.php?setinactive={$content_item->id}" onclick="cms_ajax_content_setinactive({$content_item->id}); return false;">{$setfalse_image}</a></td>
         {/if}
       {else}
-        <td class="pagepos"><a href="listcontent.php?setactive={$content_item->id}" onclick="xajax_content_setactive({$content_item->id}); return false;">{$settrue_image}</a></td>
+        <td class="pagepos"><a href="listcontent.php?setactive={$content_item->id}" onclick="cms_ajax_content_setactive({$content_item->id}); return false;">{$settrue_image}</a></td>
       {/if}
     {/if}
 
@@ -54,7 +54,7 @@
       {if $content_item->default_content eq true}
         <td class="pagepos">{$true_image}</td>
       {else}
-        <td class="pagepos"><a href="listcontent.php?makedefault={$content_item->id}" onclick="if(confirm('{lang string="confirmdefault"}')) xajax_content_setdefault({$content_item->id}); return false;">{$settrue_image}</a></td>
+        <td class="pagepos"><a href="listcontent.php?makedefault={$content_item->id}" onclick="if(confirm('{lang string="confirmdefault"}')) cms_ajax_content_setdefault({$content_item->id}); return false;">{$settrue_image}</a></td>
       {/if}
     {else}
       <td>&nbsp;</td>

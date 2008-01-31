@@ -27,11 +27,12 @@ check_login();
 define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
 
 require_once(dirname(dirname(__FILE__)) . DIRECTORY_SEPARATOR . 'lib' . DIRECTORY_SEPARATOR . 'xajax' . DIRECTORY_SEPARATOR . 'xajax.inc.php');
+$cms_ajax = new CmsAjax();
 $xajax = new xajax();
-$xajax->registerFunction('content_setactive'); 
-$xajax->registerFunction('content_setinactive');
+$cms_ajax->register_function('content_setactive'); 
+$cms_ajax->register_function('content_setinactive');
 $xajax->registerFunction('content_list_ajax');
-$xajax->registerFunction('content_setdefault');
+$cms_ajax->register_function('content_setdefault');
 $xajax->registerFunction('content_expandall');
 $xajax->registerFunction('content_collapseall');
 $xajax->registerFunction('content_toggleexpand');
@@ -54,7 +55,9 @@ $templateops = $gCms->GetTemplateOperations();
 //include_once("../lib/classes/class.admintheme.inc.php");
 
 $xajax->processRequests();
+$cms_ajax->process_requests();
 CmsAdminTheme::inject_header_text($xajax->getJavascript($config['root_url'] . '/lib/xajax')."\n");
+CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
 
 if (isset($_GET["makedefault"]))
 {
@@ -178,25 +181,27 @@ function content_list_ajax()
 }
 
 function content_setactive($contentid) 
-{ 
-	$objResponse = new xajaxResponse(); 
- 
-	setactive($contentid, true); 
-
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list()); 
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
-	return $objResponse->getXML(); 
+{	
+	$resp = new CmsAjaxResponse();
+	
+	setactive($contentid, true);
+	
+	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	
+	return $resp->get_result();
 }
 
 function content_setinactive($contentid) 
-{ 
-	$objResponse = new xajaxResponse(); 
- 
-	setactive($contentid, false); 
-
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
-	return $objResponse->getXML(); 
+{ 	
+	$resp = new CmsAjaxResponse();
+	
+	setactive($contentid, false);
+	
+	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	
+	return $resp->get_result();
 }
 
 function setdefault($contentid)
@@ -230,13 +235,14 @@ function setdefault($contentid)
 
 function content_setdefault($contentid)
 {
-	$objResponse = new xajaxResponse();
+	$resp = new CmsAjaxResponse();
 	
 	setdefault($contentid);
 
-	$objResponse->addAssign("contentlist", "innerHTML", display_content_list());
-	$objResponse->addScript("$('#tr_{$contentid}').Highlight(1500, '#ff0');");
-	return $objResponse->getXML();
+	$resp->modify_html("contentlist", display_content_list());
+	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+
+	return $resp->get_result();
 }
 
 function content_expandall()
