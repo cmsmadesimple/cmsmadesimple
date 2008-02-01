@@ -170,7 +170,7 @@ class Content extends CmsContentBase
 					<div class="pageoverflow">
 						<p class="pagetext">'.lang('blocktype').':</p>
 						<p class="pageinput">
-							<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="xajax_change_block_type(xajax.getFormValues(\'contentform\'), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
+							<select name="content[property]['.$block['id'].'-block-type]" id="'.$block['id'].'-block-type" onchange="cms_ajax_change_block_type($(\'#contentform\').serializeForCmsAjax(), \''.$block['id'].'\', \'\' + $(\'#'.$block['id'].'-block-type\').val()); return false;">
 								'.$this->create_block_type_options($type).'
 							</select>
 						</p>

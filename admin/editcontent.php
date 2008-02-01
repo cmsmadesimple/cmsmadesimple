@@ -55,13 +55,12 @@ $apply = array_key_exists('applybutton', $_POST);
 
 $dateformat = get_preference(get_userid(),'date_format_string','%x %X');
 
-define('XAJAX_DEFAULT_CHAR_ENCODING', $config['admin_encoding']);
-require_once(dirname(dirname(__FILE__)) . '/lib/xajax/xajax.inc.php');
-$xajax = new xajax();
-$xajax->registerFunction('ajaxpreview');
-$xajax->registerFunction('change_block_type');
+$cms_ajax = new CmsAjax();
 
-$xajax->processRequests();
+$cms_ajax->register_function('ajaxpreview');
+$cms_ajax->register_function('change_block_type');
+
+$cms_ajax->process_requests();
 
 #See what kind of permissions we have
 $access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page');
@@ -70,7 +69,7 @@ if (!$access)
 	$access = check_authorship($userid, $content_id);
 
 require_once("header.php");
-CmsAdminTheme::inject_header_text($xajax->getJavascript('../lib/xajax')."\n");
+CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");
 
 #No access?  Just display an error and exit.
 if (!$access) {
@@ -294,8 +293,9 @@ function change_block_type($params, $block_id, $new_block_type)
 	$div_id = 'content-form-' . $block_id;
 	$page_object->$type_param = $new_block_type;
 	
-	$objResponse = new xajaxResponse();
-	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
+	$resp = new CmsAjaxResponse();
+
+	$resp->modify_attribute("#serialized_content", "value", serialize_object($page_object));
 	
 	$smarty->_compile_source('metadata template', $page_object->create_block_type($block_id), $_compiled);
 	@ob_start();
@@ -303,9 +303,9 @@ function change_block_type($params, $block_id, $new_block_type)
 	$result = @ob_get_contents();
 	@ob_end_clean();
 	
-	$objResponse->addAssign($div_id, 'innerHTML', $result);
+	$resp->modify_html("#$div_id", $result);
 	
-	return $objResponse->getXML();
+	return $resp->get_result();
 }
 
 function ajaxpreview($params)
@@ -324,18 +324,12 @@ function ajaxpreview($params)
 	$tmpfname = create_preview($page_object);
 	$url = $config["root_url"] . '/index.php?tmpfile=' . urlencode(basename($tmpfname));
 	
-	$objResponse = new xajaxResponse();
-	$objResponse->addAssign("previewframe", "src", $url);
-	$objResponse->addAssign("serialized_content", "value", serialize_object($page_object));
-	$count = 0;
+	$resp = new CmsAjaxResponse();
 
-	foreach (array("content", "advanced") as $tabname)
-	{
-		$objResponse->addScript("Element.removeClassName('".$tabname."', 'active');Element.removeClassName('".$tabname."_c', 'active');$('".$tabname."_c').style.display = 'none';");
-	}
-	$objResponse->addScript("Element.addClassName('preview', 'active');Element.addClassName('preview_c', 'active');$('preview_c').style.display = '';");
+	$resp->modify_attribute("#previewframe", "src", $url);
+	$resp->modify_attribute("#serialized_content", "value", serialize_object($page_object));
 
-	return $objResponse->getXML();
+	return $resp->get_result();
 }
 
 //Get a working page object
@@ -438,6 +432,7 @@ if ($page_object->preview)
 			'class'   => 'positive preview',
 			'image'   => '',
 			'caption' => lang('preview'),
+			'onclick' => "$('#page_tabs').tabsClick(4);return false;"
 	);
 }
 
