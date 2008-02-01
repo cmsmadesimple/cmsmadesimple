@@ -29,7 +29,12 @@ class CmsAjaxResponse extends CmsObject
 	
 	function modify_html($selector, $text)
 	{
-		$this->result .= '<as><s>' . $selector . '</s><t><![CDATA[' . $text . ']]></t></as>';
+		$this->result .= '<mh><s>' . $selector . '</s><t><![CDATA[' . $text . ']]></t></mh>';
+	}
+	
+	function modify_attribute($selector, $attribute, $text)
+	{
+		$this->result .= '<ma><s>' . $selector . '</s><a><![CDATA[' . $attribute . ']]></a><t><![CDATA[' . $text . ']]></t></ma>';
 	}
 	
 	function script($text)

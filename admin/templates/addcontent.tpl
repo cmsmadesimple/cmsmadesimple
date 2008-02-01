@@ -17,7 +17,7 @@
 			<li><a href="#advanced"><span>Advanced</span></a></li>
 			<li><a href="#permissions"><span>Permissions</span></a></li>
 			{if $can_preview eq true}
-			  <li><a href="#preview"{if $showpreview eq true} class="active"{/if} onclick="xajax_ajaxpreview(xajax.getFormValues('contentform'));return false;"><span>Preview</span></a></li>
+			  <li><a href="#preview"{if $showpreview eq true} class="active"{/if} onclick="cms_ajax_ajaxpreview($('#contentform').serializeForCmsAjax());return false;"><span>Preview</span></a></li>
 			{/if}
 		</ul>
 		<div id="content">

@@ -43,9 +43,22 @@ class CmsAjax extends CmsObject
 			$args = array();
 			if ($xml)
 			{
-				foreach($xml->e as $element)
+				foreach ($xml->xpath('/ajaxarray/*') as $element)
 				{
-					$args[] = (string)$element;
+					switch($element->getName())
+					{
+						case 'e':
+							$args[] = (string)$element;
+							break;
+						case 'sf':
+							$str = (string)$element;
+							$result = array();
+
+							parse_str($str, $result);
+							
+							$args[] = $result;
+							break;
+					}
 				}
 			}
 			

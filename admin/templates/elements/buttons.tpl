@@ -5,7 +5,7 @@
 
 	{* loop through to get custom buttons *}
 	{foreach from=$DisplayButtons item=OneButton}
-		<input type="submit" value="{$OneButton.caption}" name="{$OneButton.name}" class="{$OneButton.class}" />
+		<input type="submit" value="{$OneButton.caption}" name="{$OneButton.name}" class="{$OneButton.class}" {if isset($OneButton.class)} onclick="{$OneButton.onclick}" {/if} />
 	{/foreach}
 
 </div>
