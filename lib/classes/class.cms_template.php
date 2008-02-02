@@ -34,6 +34,11 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	var $field_maps = array('template_name' => 'name', 'default_template' => 'default', 'template_content' => 'content');
 	var $table = 'templates';
 	//var $sequence = 'templates_seq';
+	
+	public function setup()
+	{
+		$this->create_has_and_belongs_to_many_association('stylesheets', 'stylesheet', 'cms_stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'cms_stylesheet_template_assoc.order_num ASC'));
+	}
 
 	function UsageCount()
 	{

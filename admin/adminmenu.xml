@@ -126,7 +126,7 @@
       <node>
         <name>stylesheets</name>
         <title>stylesheets</title>
-        <url>listcss.php</url>
+        <url>liststylesheets.php</url>
         <description>stylesheetdescription</description>
         <show_in_menu><permission>cssAssocPerms</permission></show_in_menu>
       </node>

@@ -80,8 +80,8 @@ if ($access)
 		{
 			if ($submit)
 			{
-				audit($stylesheet_object->id, $stylesheet_object->name, 'Added Stylesheet');
-				redirect("listcss.php");
+				//audit($stylesheet_object->id, $stylesheet_object->name, 'Added Stylesheet');
+				//redirect("listcss.php");
 			}
 		}
 	}
