@@ -23,44 +23,40 @@ require_once("../include.php");
 
 if (isset($_POST["cancel"]))
 {
-	redirect("listcss.php");
+	redirect("liststylesheets.php");
 }
 
 $gCms = cmsms();
 $smarty = cms_smarty();
-$smarty->assign('action', 'editcss.php');
+$smarty->assign('action', 'addstylesheet.php');
 
-$contentops = $gCms->GetContentOperations();
-$stylesheetops = $gCms->GetStylesheetOperations();
-
-// Make sure we have permission to access this page
+// Make sure we have permissions for this page
 $userid = get_userid();
-$access = check_permission($userid, 'Modify Stylesheets');
+$access = check_permission($userid, 'Add Stylesheets');
 
 require_once("header.php");
 
 $submit = array_key_exists('submitbutton', $_POST);
-$apply = array_key_exists('applybutton', $_POST);
 
-function &get_stylesheet_object($stylesheet_id)
+function &get_stylesheet_object()
 {
-	$stylesheet_object = cmsms()->cms_stylesheet->find_by_id($stylesheet_id);
+	$stylesheet_object = new CmsStylesheet();
 	if (isset($_REQUEST['stylesheet']))
-		$stylesheet_object->update_parameters($_REQUEST['stylesheet']);	
+		$stylesheet_object->update_parameters($_REQUEST['stylesheet']);
 	return $stylesheet_object;
 }
 
 //Get a working page object
-$stylesheet_id = coalesce_key($_REQUEST, 'css_id', '-1');
-$stylesheet_object = get_stylesheet_object($stylesheet_id);
+$stylesheet_object = get_stylesheet_object();
 $media_types = $stylesheet_object->media_types;
 
 if ($access)
 {
-	if ($submit || $apply)
+	if ($submit)
 	{
 		// Handle the media types
 		$submitted_types = $_POST['media_types'];
+
 		foreach ($submitted_types as $key => $onetype) 
 		{
 			if($onetype != -1)
@@ -77,34 +73,22 @@ if ($access)
 		{
 			$types='';
 		}
-			
+
 		$stylesheet_object->media_type = $types;	
 
 		if ($stylesheet_object->save())
 		{
-			audit($stylesheet_object->id, $stylesheet_object->name, 'Edited Stylesheet');
 			if ($submit)
 			{
-				redirect("listcss.php");
+				audit($stylesheet_object->id, $stylesheet_object->name, 'Added Stylesheet');
+				redirect("liststylesheets.php");
 			}
 		}
 	}
 }
 
-if (!is_array($stylesheet_object->media_type)) {
-  $selected_media_types = split (", " , $stylesheet_object->media_type);
-}
-
-foreach($media_types AS $key => $value)
-{
-	if(in_array($value['name'], $selected_media_types))
-	{
-		$media_types[$key]['selected'] = true;	
-	}
-}
-
 //Add the header
-$smarty->assign('header_name', $themeObject->ShowHeader('editstylesheet'));
+$smarty->assign('header_name', $themeObject->ShowHeader('addstylesheet'));
 
 //Assign the stylesheet media types
 $smarty->assign('media_types', $media_types);
@@ -112,17 +96,7 @@ $smarty->assign('media_types', $media_types);
 //Setup the stylesheet object
 $smarty->assign_by_ref('stylesheet_object', $stylesheet_object);
 
-//extra buttons
-$ExtraButtons = array(
-		      array(
-			    'name'    => 'applybutton',
-			    'caption' => lang('apply'),
-			    ),
-		      );
-
-$smarty->assign('DisplayButtons', $ExtraButtons);
-
-$smarty->display('addcss.tpl');
+$smarty->display('addstylesheet.tpl');
 
 include_once("footer.php");
 ?>

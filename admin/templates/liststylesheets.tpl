@@ -7,8 +7,8 @@
 		<div class="pageoverflow">
 			<p class="pageoptions">
 				{if $modify_layout eq true}
-				<a href="addcss.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addstylesheet'}</a>
-				<a href="addcss.php" class="pageoptions">{tr}addstylesheet{/tr}</a>
+				<a href="addstylesheet.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addstylesheet'}</a>
+				<a href="addstylesheet.php" class="pageoptions">{tr}addstylesheet{/tr}</a>
 				{/if}
 			</p>
 		</div><!-- pageoverflow -->
@@ -33,7 +33,7 @@
 				<tr class="{$currow}" onouseover="this.className='{$currow}hover';" onmouseout="this.className='{$currow}';">
 					<td>
 						{if $modify_layout eq true}
-						<a href="editcss.php?css_id={$current->id}">
+						<a href="editstylesheet.php?css_id={$current->id}">
 							{$current->name}
 						</a>
 						{/if}
@@ -55,7 +55,7 @@
 						<a href="copystylesheet.php?stylesheet_id={$current->id}">{adminicon icon='copy.gif' alt_lang='copy'}</a>
 					</td>
 					<td class="icons_wide">
-						<a href="editcss.php?css_id={$current->id}">{adminicon icon='edit.gif' alt_lang='edit'}</a>
+						<a href="editstylesheet.php?css_id={$current->id}">{adminicon icon='edit.gif' alt_lang='edit'}</a>
 					</td>
 					<td class="icons_wide">
 						<a href="deletecss.php?css_id=={$current->id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
@@ -70,8 +70,8 @@
 		<div class="pageoverflow">
 			<p class="pageoptions">
 				{if $modify_groups eq true}
-				<a href="addcss.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addstylesheet'}</a>
-				<a href="addcss.php" class="pageoptions">{tr}addstylesheet{/tr}</a>
+				<a href="addstylesheet.php" class="pageoptions">{adminicon icon='newobject.gif' alt_lang='addstylesheet'}</a>
+				<a href="addstylesheet.php" class="pageoptions">{tr}addstylesheet{/tr}</a>
 				{/if}
 			</p>
 		</div><!-- pageoverflow -->

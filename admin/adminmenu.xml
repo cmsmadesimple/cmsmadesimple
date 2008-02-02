@@ -131,17 +131,17 @@
         <show_in_menu><permission>cssAssocPerms</permission></show_in_menu>
       </node>
       <node>
-        <name>addcss</name>
+        <name>addstylesheet</name>
         <title>addstylesheet</title>
-        <url>addcss.php</url>
+        <url>addstylesheet.php</url>
         <description>addstylesheet</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
-        <name>editcss</name>
-        <title>editcss</title>
-        <url>editcss.php</url>
-        <description>editcss</description>
+        <name>editstylesheet</name>
+        <title>editstylesheet</title>
+        <url>editstylesheet.php</url>
+        <description>editstylesheet</description>
         <show_in_menu>false</show_in_menu>
       </node>
       <node>
