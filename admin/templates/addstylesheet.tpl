@@ -3,12 +3,13 @@
 <form method="post" name="cssform" id="cssform" action="{$action}">
 	<div id="page_tabs">
 		<ul>
-			<li><a href="#content"><span>Content</span></a></li>
-			<li><a href="#advanced"><span>Advanced</span></a></li>
+			<li><a href="#content"><span>{tr}Content{/tr}</span></a></li>
+			<li><a href="#advanced"><span>{tr}Advanced{/tr}</span></a></li>
 		</ul>
 	    <div id="content">
 			{admin_input type='input' label='name' id='css_name' name='stylesheet[name]' value=$stylesheet_object->name}
 			{admin_input type='textarea' label='content' id='css_text' name='stylesheet[value]' value=$stylesheet_object->value}
+			{admin_input type='checkbox' label='active' id='css_active' name='stylesheet[active]' selected=$stylesheet_object->active}
 		</div>
 		<div id="advanced">
 			<h3>{lang string='mediatype'}</h3>

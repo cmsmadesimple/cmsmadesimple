@@ -30,6 +30,15 @@ check_login();
 $page = 1;
 if (isset($_GET['page'])) $page = $_GET['page'];
 
+//Hadle changing an active flag
+//TODO: Check permission
+if (isset($_REQUEST['makeactive']) && isset($_REQUEST['stylesheet_id']))
+{
+	$ss = cms_orm()->cms_stylesheet->find_by_id($_REQUEST['stylesheet_id']);
+	$ss->active = $_REQUEST['makeactive'];
+	$ss->save();
+}
+
 // 
 // Begin Output
 //

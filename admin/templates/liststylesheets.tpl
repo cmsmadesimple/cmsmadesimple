@@ -40,10 +40,18 @@
 					</td>
 
 					<td class="pagepos">
-						{if $current->active eq 1}
-						{adminicon icon='true.gif' alt_lang='yes'}
+						{if $modify_layout eq true}
+							{if $current->active eq 1}
+								<a href="liststylesheets.php?stylesheet_id={$current->id}&amp;makeactive=0">{adminicon icon='true.gif' alt_lang='true'}</a>
+							{else}
+								<a href="liststylesheets.php?stylesheet_id={$current->id}&amp;makeactive=1">{adminicon icon='false.gif' alt_lang='false'}</a>
+							{/if}
 						{else}
-						{adminicon icon='false.gif' alt_lang='no'}
+							{if $current->active eq 1}
+							{adminicon icon='true.gif' alt_lang='true'}
+							{else}
+							{adminicon icon='false.gif' alt_lang='false'}
+							{/if}
 						{/if}
 					</td>
 
