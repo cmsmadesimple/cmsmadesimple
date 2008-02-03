@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -15,6 +15,8 @@
 #You should have received a copy of the GNU General Public License
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
+#
+#$Id$
 
 function smarty_cms_function_header($params, &$smarty)
 {
@@ -128,4 +130,5 @@ function smarty_cms_about_function_header() {
 	</p>
 	<?php
 }
+# vim:ts=4 sw=4 noet
 ?>

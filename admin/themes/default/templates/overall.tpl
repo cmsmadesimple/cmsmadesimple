@@ -3,7 +3,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 
 <head>
-	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2007 Ted Kulp. All rights reserved." />
+	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2008 Ted Kulp. All rights reserved." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	<title>{sitename} - Tags</title>

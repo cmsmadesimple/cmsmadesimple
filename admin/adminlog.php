@@ -1,6 +1,6 @@
 <?php
 #CMS - CMS Made Simple
-#(c)2004 by Ted Kulp (wishy@users.sf.net)
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.sf.net
 #
 #This program is free software; you can redistribute it and/or modify
