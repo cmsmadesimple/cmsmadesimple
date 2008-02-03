@@ -19,8 +19,8 @@
 function smarty_cms_function_header($params, &$smarty)
 {
 	global $gCms;
-	$config =& $gCms->GetConfig();
 	$pageinfo =& $gCms->variables['pageinfo'];
+	$root_url = CmsConfig::get('root_url');
 	
 	$result = '';
 	
@@ -31,24 +31,28 @@ function smarty_cms_function_header($params, &$smarty)
 		{
 			$result .= 'media="' . $params['media'] . '" ';
 		}
-		$result .= 'href="'.$config['root_url'].'/stylesheet.php?name='.$params['name'];
+		$result .= 'href="'.$root_url.'/stylesheet.php?name='.$params['name'];
 		$result .= "\" />\n"; 
 	}
 	else
 	{
-		foreach (get_stylesheet_media_types($pageinfo->template_id) as $media)
+		$template = cms_orm('cms_template')->find_by_id($pageinfo->template_id);
+		if ($template)
 		{
-			$result .= '<link rel="result" type="text/css" ';
-			if ($media != '')
+			foreach ($template->get_stylesheet_media_types() as $media)
 			{
-				$result .= 'media="'.$media.'" ';
+				$result .= '<link rel="result" type="text/css" ';
+				if ($media != '')
+				{
+					$result .= 'media="'.$media.'" ';
+				}
+				$result .= "href=\"{$root_url}/stylesheet.php?templateid={$pageinfo->template_id}";
+				if ($media != '')
+				{
+					$result .= '&amp;mediatype='.urlencode($media);
+				}
+				$result .= "\" />\n"; 
 			}
-			$result .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
-			if ($media != '')
-			{
-				$result .= '&amp;mediatype='.urlencode($media);
-			}
-			$result .= "\" />\n"; 
 		}
 	}
 	
@@ -85,7 +89,7 @@ function smarty_cms_function_header($params, &$smarty)
 
 	if ($showbase)
 	{
-		$result .= "\n<base href=\"".$config['root_url']."/\" />\n";
+		$result .= "\n<base href=\"".$root_url."/\" />\n";
 	}
 	
 	if (array_key_exists('assign', $params))

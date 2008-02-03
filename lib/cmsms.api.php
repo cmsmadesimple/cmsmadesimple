@@ -144,9 +144,12 @@ function cms_db()
 	return CmsDatabase::get_instance();
 }
 
-function cms_orm()
+function cms_orm($class = '')
 {
-	return CmsObjectRelationalManager::get_instance();
+	if ($class == '')
+		return CmsObjectRelationalManager::get_instance();
+	else
+		return CmsObjectRelationalManager::get_instance()->$class;
 }
 
 /**

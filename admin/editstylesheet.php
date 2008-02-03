@@ -78,7 +78,7 @@ if ($access)
 			$types='';
 		}
 			
-		$stylesheet_object->media_type = $types;	
+		$stylesheet_object->media_type = $types;
 
 		if ($stylesheet_object->save())
 		{

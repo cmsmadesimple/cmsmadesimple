@@ -90,26 +90,6 @@ CmsInstallOperations::create_table($db, 'crossref', "
 CmsInstallOperations::create_index($db, 'crossref', 'child_type_and_id', 'child_type,child_id');
 CmsInstallOperations::create_index($db, 'crossref', 'parent_type_and_id', 'parent_type,parent_id');
 
-CmsInstallOperations::create_table($db, 'css', "
-	id I KEY AUTO,
-	css_name C(255),
-	css_text XL,
-	media_type C(255),
-	create_date T,
-	modified_date T
-");
-CmsInstallOperations::create_index($db, 'css', 'css_name', 'css_name');
-
-CmsInstallOperations::create_table($db, 'css_assoc', "
-	assoc_to_id I,
-	assoc_css_id I,
-	assoc_type C(80),
-	create_date T,
-	modified_date T
-");
-CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_to_id', 'assoc_to_id');
-CmsInstallOperations::create_index($db, 'css_assoc', 'assoc_css_id', 'assoc_css_id');
-
 CmsInstallOperations::create_table($db, 'event_handlers', "
 	event_id      I,
 	tag_name      c(255),
@@ -241,12 +221,34 @@ CmsInstallOperations::create_table($db, 'siteprefs', "
 	modified_date T
 ");
 
+CmsInstallOperations::create_table($db, 'stylesheets', "
+	id I KEY AUTO,
+	name C(255),
+	value XL,
+	active I1 default 1,
+	media_type C(255),
+	create_date T,
+	modified_date T
+");
+CmsInstallOperations::create_index($db, 'stylesheets', 'name', 'name');
+
+CmsInstallOperations::create_table($db, 'stylesheet_template_assoc', "
+	stylesheet_id I,
+	template_id I,
+	order_num I,
+	create_date T,
+	modified_date T
+");
+CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'stylesheet_id', 'stylesheet_id');
+CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'template_id', 'template_id');
+CmsInstallOperations::create_index($db, 'stylesheet_template_assoc', 'stylesheet_id_template_id', 'stylesheet_id,template_id');
+
 CmsInstallOperations::create_table($db, 'templates', "
 	id I KEY AUTO,
 	template_name C(255),
 	template_content XL,
 	encoding C(25),
-	active I1,
+	active I1 default 1,
 	default_template I1,
 	create_date T,
 	modified_date T

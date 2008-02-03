@@ -19,51 +19,50 @@
 function smarty_cms_function_stylesheet($params, &$smarty)
 {
 	global $gCms;
-	$config = cms_config();
-	$pageinfo = &$gCms->variables['pageinfo'];
-
-	$stylesheet = '';
+	$pageinfo =& $gCms->variables['pageinfo'];
+	$root_url = CmsConfig::get('root_url');
+	
+	$result = '';
 	
 	if (isset($params['name']) && $params['name'] != '')
 	{
-		$stylesheet .= '<link rel="stylesheet" type="text/css" ';
+		$result .= '<link rel="result" type="text/css" ';
 		if (isset($params['media']) && $params['media'] != '')
 		{
-			$stylesheet .= 'media="' . $params['media'] . '" ';
+			$result .= 'media="' . $params['media'] . '" ';
 		}
-		$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?name='.$params['name'];
-		$stylesheet .= "\" />\n"; 
+		$result .= 'href="'.$root_url.'/stylesheet.php?name='.$params['name'];
+		$result .= "\" />\n"; 
 	}
 	else
 	{
-		foreach (get_stylesheet_media_types($pageinfo->template_id) as $media)
+		$template = cms_orm('cms_template')->find_by_id($pageinfo->template_id);
+		if ($template)
 		{
-			$stylesheet .= '<link rel="stylesheet" type="text/css" ';
-			if ($media != '')
+			foreach ($template->get_stylesheet_media_types() as $media)
 			{
-				$stylesheet .= 'media="'.$media.'" ';
+				$result .= '<link rel="result" type="text/css" ';
+				if ($media != '')
+				{
+					$result .= 'media="'.$media.'" ';
+				}
+				$result .= "href=\"{$root_url}/stylesheet.php?templateid={$pageinfo->template_id}";
+				if ($media != '')
+				{
+					$result .= '&amp;mediatype='.urlencode($media);
+				}
+				$result .= "\" />\n"; 
 			}
-			$stylesheet .= 'href="'.$config['root_url'].'/stylesheet.php?templateid='.$pageinfo->template_id;
-			if ($media != '')
-			{
-				$stylesheet .= '&amp;mediatype='.urlencode($media);
-			}
-			$stylesheet .= "\" />\n"; 
 		}
-	}
-
-	if (!(isset($config['use_smarty_php_tags']) && $config['use_smarty_php_tags'] == true))
-	{
-		$stylesheet = ereg_replace("\{\/?php\}", '', $stylesheet);
 	}
 	
 	if (array_key_exists('assign', $params))
 	{
-		$smarty->assign($params['assign'], $stylesheet);
+		$smarty->assign($params['assign'], $result);
 	}
 	else
 	{
-		return $stylesheet;
+		return $result;
 	}
 }
 

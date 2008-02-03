@@ -37,12 +37,8 @@ class CmsTemplate extends CmsObjectRelationalMapping
 	
 	public function setup()
 	{
-		$this->create_has_and_belongs_to_many_association('stylesheets', 'stylesheet', 'cms_stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'cms_stylesheet_template_assoc.order_num ASC'));
-	}
-
-	function UsageCount()
-	{
-		return $this->usage_count();
+		$this->create_has_and_belongs_to_many_association('stylesheets', 'stylesheet', 'stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'order_num ASC'));
+		$this->create_has_and_belongs_to_many_association('active_stylesheets', 'stylesheet', 'stylesheet_template_assoc', 'stylesheet_id', 'template_id', array('order' => 'order_num ASC', 'conditions' => 'stylesheets.active = 1'));
 	}
 	
 	function usage_count()
@@ -52,6 +48,11 @@ class CmsTemplate extends CmsObjectRelationalMapping
 			return $templateops->UsageCount($this->id);
 		else
 			return 0;
+	}
+	
+	function UsageCount()
+	{
+		return $this->usage_count();
 	}
 	
 	function validate()
@@ -69,6 +70,22 @@ class CmsTemplate extends CmsObjectRelationalMapping
 				}
 			}
 		}
+	}
+	
+	public function get_stylesheet_media_types($show_inactive = false)
+	{
+		$result = array();
+		
+		foreach ($this->active_stylesheets as $stylesheet)
+		{
+			foreach ($stylesheet->get_media_types_as_array() as $media_type)
+			{
+				if (!in_array($media_type, $result))
+					$result[] = $media_type;
+			}
+		}
+
+		return $result;
 	}
 	
 	//Callback handlers

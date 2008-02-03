@@ -62,9 +62,15 @@ class CmsStylesheet extends CmsObjectRelationalMapping
 		}
 	}
 	
+	public function get_media_types_as_array()
+	{
+		return explode(', ', $this->media_type);
+	}
+	
 	public function setup()
 	{
-		$this->create_has_and_belongs_to_many_association('templates', 'template', 'cms_stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('order' => 'cms_stylesheet_template_assoc.order_num ASC'));
+		$this->create_has_and_belongs_to_many_association('templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('order' => 'order_num ASC'));
+		$this->create_has_and_belongs_to_many_association('active_templates', 'template', 'stylesheet_template_assoc', 'template_id', 'stylesheet_id', array('order' => 'order_num ASC', 'conditions' => 'templates.active = 1'));
 	}
 	
 	//Callback handlers
