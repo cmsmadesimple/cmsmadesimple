@@ -43,13 +43,15 @@ if (isset($_REQUEST['makeactive']) && isset($_REQUEST['stylesheet_id']))
 // Begin Output
 //
 include_once("header.php");
+
 $smarty = cms_smarty();
 $smarty->assign('header_name',$themeObject->ShowHeader('currentstylesheets'));
-local_setup_smarty( $themeObject, $page );
+local_setup_smarty($page);
 $smarty->display('liststylesheets.tpl');
+
 include_once("footer.php");
 
-function local_setup_smarty( &$themeObject, $page )
+function local_setup_smarty($page)
 {
 	$smarty = cms_smarty();
 	$userid = get_userid();

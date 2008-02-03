@@ -36,6 +36,8 @@
 						<a href="editstylesheet.php?css_id={$current->id}">
 							{$current->name}
 						</a>
+						{else}
+							{$current->name}
 						{/if}
 					</td>
 

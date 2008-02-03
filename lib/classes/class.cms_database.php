@@ -62,6 +62,7 @@ class CmsDatabase extends CmsObject
 		if (self::$prefix == NULL)
 		{
 			self::$prefix = CmsConfig::get('db_prefix');
+			define('CMS_DB_PREFIX', self::$prefix);
 		}
 		return self::$prefix;
 	}
@@ -141,6 +142,9 @@ class CmsDatabase extends CmsObject
 		{
 			self::$instance = $dbinstance;
 		}
+		
+		//Initialize the CMS_DB_PREFIX define
+		self::get_prefix();
 
 		return $dbinstance;
 	}
