@@ -18,8 +18,17 @@
 	
 	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
 	<script type="text/javascript" src="../lib/jquery/jquery.color.js"></script>
+	<script type="text/javascript" src="../lib/jquery/jquery.dimensions.js"></script>
 	<script type="text/javascript" src="../lib/jquery/ui/ui.tabs.js"></script>
 	<script type="text/javascript" src="../lib/jquery/ui/ui.accordion.js"></script>
+	<!--
+	<script type="text/javascript" src="../lib/jquery/ui/ui.mouse.js"></script> 
+	<script type="text/javascript" src="../lib/jquery/ui/ui.draggable.js"></script> 
+	<script type="text/javascript" src="../lib/jquery/ui/ui.droppable.js"></script> 
+	<script type="text/javascript" src="../lib/jquery/ui/ui.draggable.ext.js"></script> 
+	<script type="text/javascript" src="../lib/jquery/ui/ui.droppable.ext.js"></script>
+	<script type="text/javascript" src="../lib/jquery/ui/ui.sortable.js"></script>
+	-->
 	
 	<script type="text/javascript">//<![CDATA[
 		// form handling stuff
