@@ -139,10 +139,10 @@ function local_setup_smarty($page, $modify_layout, $type)
 	}
 	else if ($type == 'stylesheet')
 	{
-		$stylesheet = cms_orm('stylesheet')->find_by_id($template_id);
+		$stylesheet = cms_orm('stylesheet')->find_by_id($stylesheet_id);
 		if ($stylesheet)
 		{
-			$assigned_templates = $template->templates;
+			$assigned_templates = $stylesheet->templates;
 			$all_templates = cms_orm('template')->find_all(array('order' => 'name ASC'));
 			$unassigned_templates = array_udiff($all_templates, $assigned_templates->children, 'orm_array_udiff_compare');
 			

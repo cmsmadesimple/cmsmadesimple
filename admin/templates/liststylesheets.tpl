@@ -59,7 +59,7 @@
 
 					{if $modify_layout eq true}
 					<td class="icons_wide">
-						<a href="templatecss.php?id={$current->id}&amp;type=template">{adminicon icon='css.gif' alt_lang='attachtotemplate'}</a>
+						<a href="assignstylesheets.php?stylesheet_id={$current->id}&amp;type=stylesheet">{adminicon icon='css.gif' alt_lang='attachtotemplate'}</a>
 					</td>
 					<td class="pagepos icons_wide">
 						<a href="copystylesheet.php?stylesheet_id={$current->id}">{adminicon icon='copy.gif' alt_lang='copy'}</a>

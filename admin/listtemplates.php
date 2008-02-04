@@ -186,7 +186,7 @@ if (isset($_GET["message"]))
 					echo "<td class=\"pagepos\"><a href=\"listtemplates.php?action=setallcontent&amp;template_id=".$onetemplate->id."\" onclick=\"return confirm('".lang('setallcontentconfirm')."');\">".lang('setallcontent')."</a></td>\n";
 
 				# view css association
-				echo "<td class=\"icons_wide\"><a href=\"listcssassoc.php?type=template&amp;id=".$onetemplate->id."\">";
+				echo "<td class=\"icons_wide\"><a href=\"assignstylesheets.php?type=template&amp;template_id=".$onetemplate->id."\">";
                 echo $themeObject->DisplayImage('icons/system/css.gif', lang('attachstylesheets'),'','','systemicon');
                 echo "</a></td>\n";
 

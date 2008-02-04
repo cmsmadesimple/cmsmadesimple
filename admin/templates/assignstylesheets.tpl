@@ -9,10 +9,10 @@
 				<tr>
 					<th class="pagew60">{tr}name{/tr}</th>
 					{if $modify_layout eq true}
-					{if type eq 'template'}
-					<th class="pageicon">&nbsp;</th>
-					{/if}
-					<th class="pageicon">&nbsp;</th>
+						{if $type eq 'template'}
+							<th class="pageicon">&nbsp;</th>
+						{/if}
+						<th class="pageicon">&nbsp;</th>
 					{/if}
 				</tr>
 			</thead>
@@ -25,16 +25,18 @@
 								{$current->name}
 							</td>
 							{if $modify_layout eq true}
-								{if type eq 'template'}
+								{if $type eq 'template'}
 								<td class="icons_wide">
-									order
+									order goes here
 								</td>
 								{/if}
-							<td class="icons_wide">
-								{if $type eq 'template'}
-									<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$template_id}&amp;stylesheet_id={$current->id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
-								{/if}
-							</td>
+								<td class="icons_wide">
+									{if $type eq 'template'}
+										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$template_id}&amp;stylesheet_id={$current->id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
+									{elseif $type eq 'stylesheet'}
+										<a href="assignstylesheets.php?action=remove&amp;type={$type}&amp;template_id={$current->id}&amp;stylesheet_id={$stylesheet_id}" onclick="return confirm('{tr}deleteconfirm{/tr} - {$current->name} - ?');">{adminicon icon='delete.gif' alt_lang='delete'}</a>
+									{/if}
+								</td>
 							{/if}
 						</tr>
 					{/foreach}
