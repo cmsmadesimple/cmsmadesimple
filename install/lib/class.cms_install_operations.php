@@ -31,6 +31,10 @@ class CmsInstallOperations extends CmsObject
 		$taboptarray = array('mysql' => 'TYPE=MyISAM');
 
 		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
+		if (count($sqlarray))
+		{
+			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
+		}
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
