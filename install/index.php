@@ -177,17 +177,20 @@ function display_page($smarty, $action = '')
 			$admin_account = $_SESSION['admin_account'];
 			
 			$user_created = false;
+			$config_created = false;
+			$config_file_contents = '';
 			
-			$installed = CmsInstallOperations::install_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
+			$installed = CmsInstallOperations::install_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $connection['drop_tables']);
 			if ($installed)
 			{
 				$basic_loaded = CmsInstallOperations::load_basic_schema($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix']);
 				$user_created = CmsInstallOperations::install_account($connection['driver'], $connection['hostname'], $connection['username'], $connection['password'], $connection['dbname'], $connection['table_prefix'], $admin_account['username'], $admin_account['password']);
-				$config_created = CmsInstallOperations::install_config($connection,$_SESSION['config']);
+				$config_created = CmsInstallOperations::install_config($connection,$_SESSION['config'], $config_file_contents);
 			}	
 			$smarty->assign('installed', $installed);
 			$smarty->assign('user_created', $user_created);
 			$smarty->assign('config_created', $config_created);
+			$smarty->assign('config_file_contents', $config_file_contents);
 			$smarty->assign('include_file', 'create_schema.tpl');
 			$smarty->display('body.tpl');
 		

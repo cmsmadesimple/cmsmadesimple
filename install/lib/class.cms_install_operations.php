@@ -42,6 +42,14 @@ class CmsInstallOperations extends CmsObject
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
+	static function drop_table($db, $table)
+	{
+		$dbdict = NewDataDictionary($db);
+
+		$sqlarray = $dbdict->DropTableSQL(CmsDatabase::get_prefix().$table);
+		$dbdict->ExecuteSQLArray($sqlarray);
+	}
+	
 	static function get_action()
 	{
 		$value = CmsRequest::get('action');
@@ -201,7 +209,7 @@ class CmsInstallOperations extends CmsObject
 		return false;
 	}
 	
-	static function install_config($conn,$url)
+	static function install_config($conn,$url,&$file_data)
 	{
 		//Get an instance of CMSConfig(we need a list of all the variables plus defaults)
 		$config = CmsConfig::get_instance();
@@ -225,12 +233,12 @@ class CmsInstallOperations extends CmsObject
 		//Generate the file
 		$file_data = "<?php\n";
 		$file_data .= $config->config_text($config_data);
-		$file_data .= "?>";
+		$file_data .= "\n?>";
 		//Write the file
-		return file_put_contents(CONFIG_FILE_LOCATION,$file_data) > 0;
+		return @file_put_contents(CONFIG_FILE_LOCATION,$file_data) > 0;
 	}
 	
-	static function install_schema($driver = '', $hostname = '', $username = '', $password = '', $dbname = '', $prefix = '')
+	static function install_schema($driver = '', $hostname = '', $username = '', $password = '', $dbname = '', $prefix = '', $drop_tables = false)
 	{
 		$drivers = self::get_loaded_database_modules();
 		$driver = $drivers[$driver];
@@ -242,6 +250,10 @@ class CmsInstallOperations extends CmsObject
 			{
 				try
 				{
+					if ($drop_tables)
+					{
+						include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'droptables.php'));
+					}
 					include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'schema.php'));
 					return true;
 				}

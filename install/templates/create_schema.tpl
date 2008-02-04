@@ -6,6 +6,7 @@
 		<p>{tr}The config file was created.{/tr}</p>
 	{else}
 		<p>{tr}The config file could not be created{/tr}</p>
+		<textarea rows="25" cols="80">{$config_file_contents}</textarea>
 	{/if}
   {else}
     <p>{tr}The user account could not be created.{/tr}</p>
