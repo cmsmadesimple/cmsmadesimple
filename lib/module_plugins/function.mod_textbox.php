@@ -22,7 +22,7 @@ function smarty_cms_function_mod_textbox($params, &$smarty)
 	$id = $smarty->get_template_vars('cms_mapi_id');
 	#$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 
-	return $module->CreateInputText($id, $params['name'], coalesce_key($params, 'value', ''), coalesce_key($params, 'size', '10'), coalesce_key($params, 'maxlength', '255'), coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
+	return $module->create_input_text($id, $params['name'], coalesce_key($params, 'value', ''), coalesce_key($params, 'size', '10'), coalesce_key($params, 'maxlength', '255'), coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
 }
 
 ?>

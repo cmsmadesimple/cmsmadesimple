@@ -18,7 +18,7 @@
 #
 #$Id$
 
-class CmsAssociationCollection extends CmsObject implements ArrayAccess, Iterator
+class CmsAssociationCollection extends CmsObject implements ArrayAccess, Iterator, Countable
 {
 	var $children = array();
 	var $currentIndex = 0;

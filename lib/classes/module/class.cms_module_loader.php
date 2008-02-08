@@ -66,7 +66,7 @@ class CmsModuleLoader extends CmsObject
 				if (class_exists($onemodule))
 				{
 					$newmodule = new $onemodule;
-					$name = $newmodule->GetName();
+					$name = $newmodule->get_name();
 					$cmsmodules[$name]['object'] = $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
@@ -114,24 +114,23 @@ class CmsModuleLoader extends CmsObject
 									if (class_exists($modulename))
 									{
 										$newmodule = new $modulename;
-										$name = $newmodule->GetName();
+										$name = $newmodule->get_name();
 
 										$dbversion = $result->fields['version'];
 
 										#Check to see if there is an update and wether or not we should perform it
-										if (version_compare($dbversion, $newmodule->GetVersion()) == -1 && $newmodule->AllowAutoUpgrade() == TRUE)
+										if (version_compare($dbversion, $newmodule->get_version()) == -1 && $newmodule->allow_auto_upgrade())
 										{
-											$newmodule->Upgrade($dbversion, $newmodule->GetVersion());
+											$newmodule->Upgrade($dbversion, $newmodule->get_version());
 											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-											$db->Execute($query, array($newmodule->GetVersion(), $name));
-											CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->GetVersion()));
-											$dbversion = $newmodule->GetVersion();
+											$db->Execute($query, array($newmodule->get_version(), $name));
+											CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->get_version()));
+											$dbversion = $newmodule->get_version();
 										}
 
 										#Check to see if version in db matches file version
-										if ($dbversion == $newmodule->GetVersion() && version_compare($newmodule->MinimumCMSVersion(), CMS_VERSION) != 1)
+										if ($dbversion == $newmodule->get_version() && version_compare($newmodule->minimum_core_version(), CMS_VERSION) != 1)
 										{
-											$newmodule->is_installed = true;
 											$cmsmodules[$name]['object'] = $newmodule;
 											$cmsmodules[$name]['installed'] = true;
 											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
@@ -178,17 +177,24 @@ class CmsModuleLoader extends CmsObject
 
 		foreach (get_declared_classes() as $oneclass)
 		{
-		  $parent = get_parent_class($oneclass);
-		  while( $parent !== FALSE )
-		    {
-		      $str = strtolower($parent);
-		      if( $str == 'cmsmodule' ) 
+			$parent = get_parent_class($oneclass);
+			while( $parent !== FALSE )
 			{
-			  $result[] = strtolower($oneclass);
-			  break;
+				$str = strtolower($parent);
+				if(starts_with($str, 'cmsmodule')) 
+				{
+					$str = strtolower($oneclass);
+					if(!starts_with($str, 'cmsmodule'))
+					{
+						if (!in_array($oneclass, $result))
+						{
+							$result[] = $oneclass;
+							break;
+						}
+					}
+				}
+				$parent = get_parent_class($parent);
 			}
-		      $parent = get_parent_class($parent);
-		    }
 		}
 
 		sort($result);

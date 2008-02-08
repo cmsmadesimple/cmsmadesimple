@@ -57,7 +57,7 @@ if ($access)
 		'modules'.DIRECTORY_SEPARATOR.$module, 0777 );
 		if( !$result )
 		{
-			echo $themeObject->ShowErrors(lang('cantchmodfiles'));
+			echo $themeObject->show_errors(lang('cantchmodfiles'));
 		}
 		else
 		{
@@ -79,7 +79,7 @@ if ($access)
 		}
 		else 
 		{
-			$xmlname = $object->GetName().'-'.$object->GetVersion().'.xml';
+			$xmlname = $object->get_name().'-'.$object->get_version().'.xml';
 
 			// and send the file
 			ob_end_clean();
@@ -158,7 +158,7 @@ if ($access)
 		}
 		else
 		{
-			$content = $gCms->modules[$module]['object']->InstallPostMessage();
+			$content = $gCms->modules[$module]['object']->install_post_message();
 			if( $content != FALSE )
 			{
 				//Redirect right away so that the installed module shows in the menu
@@ -175,13 +175,13 @@ if ($access)
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance = $gCms->modules[$module]['object'];
-			if ($modinstance->InstallPostMessage() != FALSE)
+			if ($modinstance->install_post_message() != FALSE)
 			{
 				@ob_start();
-				echo $modinstance->InstallPostMessage();
+				echo $modinstance->install_post_message();
 				$content = @ob_get_contents();
 				@ob_end_clean();
-				echo $themeObject->ShowMessage($content);
+				echo $themeObject->show_message($content);
 			}
 		}
 	}
@@ -295,7 +295,7 @@ if ($action == "showmoduleabout")
 	{
 		echo '<div class="pagecontainer">';
 		echo '<p class="pageheader">'.lang('moduleabout', array($module)).'</p>';
-		echo $gCms->modules[$module]['object']->GetAbout();
+		echo $gCms->modules[$module]['object']->get_about();
 		echo "</div>";
 	}
 	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
@@ -311,7 +311,7 @@ else if ($action == "showmodulehelp")
 		$header  = '<div class="pageheader">';
 		$header .= lang('modulehelp', array($module));
 		$wikiUrl = $config['wiki_url'];
-		$module_name = $gCms->modules[$module]['object']->GetName();
+		$module_name = $gCms->modules[$module]['object']->get_name();
 		// Turn ModuleName into _Module_Name
 		$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
 		$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
@@ -322,7 +322,7 @@ else if ($action == "showmodulehelp")
 		// Include English translation of titles. (Can't find better way to get them)
 		$dirname = dirname(__FILE__);
 		include($dirname.'/lang/en_US/admin.inc.php');
-		$section = $lang['admin'][$gCms->modules[$module]['object']->GetAdminSection()];
+		$section = $lang['admin'][$gCms->modules[$module]['object']->get_admin_section()];
 		$wikiUrl .= '/'.$section.'/'.$moduleName;
 		if (FALSE == get_preference($userid, 'hide_help_links'))
 		{
@@ -340,7 +340,7 @@ else if ($action == "showmodulehelp")
 		$header .= '</div>';
 		echo $header;     
 
-		echo $gCms->modules[$module]['object']->GetHelpPage();
+		echo $gCms->modules[$module]['object']->get_help_page();
 		echo "</div>";
 	}
 
@@ -359,12 +359,12 @@ else if ($action == 'missingdeps')
 	if (isset($gCms->modules[$module]))
 	{
 		$modinstance = $gCms->modules[$module]['object'];
-		if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+		if (count($modinstance->get_dependencies()) > 0) #Check for any deps
 		{
 			$curclass = 'row1';
 			#Now check to see if we can satisfy any deps
-			debug_buffer($modinstance->GetDependencies(), 'deps in module');
-			foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+			debug_buffer($modinstance->get_dependencies(), 'deps in module');
+			foreach ($modinstance->get_dependencies() as $onedepkey=>$onedepvalue)
 			{
 				echo '<tr class="'.$curclass.'"><td>'.$onedepkey.'</td><td>'.$onedepvalue.'</td><td>';
 
@@ -373,7 +373,7 @@ else if ($action == 'missingdeps')
 				if (isset($gCms->modules[$onedepkey]) && 
 				$gCms->modules[$onedepkey]['installed'] == true &&
 				$gCms->modules[$onedepkey]['active'] == true &&
-				version_compare($gCms->modules[$onedepkey]['object']->GetVersion(), $onedepvalue) > -1)
+				version_compare($gCms->modules[$onedepkey]['object']->get_version(), $onedepvalue) > -1)
 				{
 					$havedep = true;
 				}
@@ -468,7 +468,7 @@ else
 			$xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
 
 			//Is there help?
-			if ($modinstance->GetHelp() != '')
+			if ($modinstance->get_help() != '')
 			{
 				$namecol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a>";
 			}
@@ -478,31 +478,21 @@ else
 			'modules'.DIRECTORY_SEPARATOR.$key );
 
 			#Make sure it's a valid module for this version of CMSMS
-			if (version_compare($modinstance->MinimumCMSVersion(), $CMS_VERSION) == 1)
+			if (version_compare($modinstance->minimum_core_version(), $CMS_VERSION) == 1)
 			{
 				// Fix undefined index error if module is not already installed.
 				if (FALSE == empty($dbm[$key]['Version'])) {
 					echo "<td>".$dbm[$key]['Version']."</td>";
 				}
-				$statuscol = '<span class="important">'.lang('minimumversionrequired').': '.$modinstance->MinimumCMSVersion().'</span>';
+				$statuscol = '<span class="important">'.lang('minimumversionrequired').': '.$modinstance->minimum_core_version().'</span>';
 				$xmlcol = "&nbsp;";
 				$statusspans = true;
-			}
-			else if (version_compare($modinstance->MaximumCMSVersion(), $CMS_VERSION) == -1)
-			{
-				// Fix undefined index error if module is not already installed.
-				if (FALSE == empty($dbm[$key]['Version'])) {
-					echo "<td>".$dbm[$key]['Version']."</td>";
-				}
-				$statuspans = true;
-				$xmlcol = "&nbsp;";
-				$statuscol  = lang('maximumversionsupported').': '.$modinstance->MaximumCMSVersion();
 			}
 			else if (!isset($dbm[$key])) #Not installed, lets put up the install button
 			{
 				$brokendeps = 0;
 
-				$dependencies = $modinstance->GetDependencies();
+				$dependencies = $modinstance->get_dependencies();
 
 				if (count($dependencies) > 0) #Check for any deps
 				{
@@ -519,7 +509,7 @@ else
 					}
 				}
 
-				$versioncol = $modinstance->GetVersion();
+				$versioncol = $modinstance->get_version();
 				$statuscol = lang('notinstalled');
 
 				if ($brokendeps > 0)
@@ -544,12 +534,12 @@ else
 					}
 				}
 			}
-			else if (version_compare($modinstance->GetVersion(), $dbm[$key]['Version']) == 1) #Check for an upgrade
+			else if (version_compare($modinstance->get_version(), $dbm[$key]['Version']) == 1) #Check for an upgrade
 			{
 				$versioncol = $dbm[$key]['Version'];
 				$statuscol  = '<span class="important">'.lang('needupgrade').'</span>';
 				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-				$actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->GetVersion()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
+				$actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->get_version()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
 				$xmlcol = '&nbsp;';
 			}
 			else #Must be installed
@@ -559,10 +549,10 @@ else
 				$actioncol  = "&nbsp;";
 
 				#Can't be removed if it has a dependency...
-				if (!$modinstance->CheckForDependents())
+				if (!$modinstance->check_for_dependents())
 				{
 					$activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->UninstallPreMessage() !== FALSE? cms_utf8entities($modinstance->UninstallPreMessage()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
+					$actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->uninstall_pre_message() !== FALSE? cms_utf8entities($modinstance->uninstall_pre_message()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
 				}
 				else
 				{
@@ -588,7 +578,7 @@ else
 			}
 
 			//Is there help?
-			if ($modinstance->GetHelp() != '')
+			if ($modinstance->get_help() != '')
 			{
 				$helpcol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a>";
 			}

@@ -100,7 +100,7 @@ function smarty_cms_function_content($params, &$smarty)
 						if (isset($cmsmodules[$modulename]['object'])
 							&& $cmsmodules[$modulename]['installed'] == true
 							&& $cmsmodules[$modulename]['active'] == true
-							&& $cmsmodules[$modulename]['object']->IsPluginModule())
+							&& $cmsmodules[$modulename]['object']->is_plugin_module())
 						{
 							@ob_start();
 							$params = array_merge($params, GetModuleParameters($id));
@@ -114,7 +114,7 @@ function smarty_cms_function_content($params, &$smarty)
 							{
 								$returnid = $pageinfo->content_id;
 							}
-							$result = $cmsmodules[$modulename]['object']->DoActionBase($action, $id, $params, $returnid);
+							$result = $cmsmodules[$modulename]['object']->do_action_base($action, $id, $params, $returnid);
 							if ($result !== FALSE)
 							{
 								echo $result;

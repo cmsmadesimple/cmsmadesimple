@@ -52,8 +52,8 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	#$goto = 'moduleinterface.php';
 	if ($inline && $returnid != '')
 	{
-		#$goto = 'index.php?module='.$this->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		#$goto = 'index.php?mact='.$this->GetName().','.$id.','.$action;
+		#$goto = 'index.php?module='.$this->get_name().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+		#$goto = 'index.php?mact='.$this->get_name().','.$id.','.$action;
 		#$goto .= '&amp;'.$id.'returnid='.$returnid;
 		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
 	}
@@ -66,7 +66,7 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	{
 		$text .= ' '.$extra;
 	}
-	$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0).'" />';
+	$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$modinstance->get_name().','.$id.','.$action.','.($inline == true?1:0).'" />';
 	if ($returnid != '')
 	{
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';
@@ -455,8 +455,8 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 			$text .= '/'.$config['admin_dir'];
 		}
 
-		#$text .= '/'.$goto.'?module='.$modinstance->GetName().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		$text .= '/'.$goto.'?mact='.$modinstance->GetName().','.$id.','.$action.','.($inline == true?1:0);
+		#$text .= '/'.$goto.'?module='.$modinstance->get_name().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
+		$text .= '/'.$goto.'?mact='.$modinstance->get_name().','.$id.','.$action.','.($inline == true?1:0);
 
 		foreach ($params as $key=>$value)
 		{

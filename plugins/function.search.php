@@ -19,7 +19,7 @@
 function smarty_cms_function_search($params, &$smarty)
 {
   $params['module'] = 'Search';
-  return cms_module_plugin($params,$smarty);
+  return CmsModuleBase::cms_module_plugin($params,$smarty);
 }
 
 function smarty_cms_help_function_search() {

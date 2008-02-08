@@ -16,7 +16,7 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
+function smarty_cms_block_tab_content($params, $content, &$smarty, &$repeat)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
@@ -26,18 +26,7 @@ function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
 	{
 		if (isset($content))
 		{
-			return $module->create_form_start(
-				$id,
-				coalesce_key($params, 'action', 'default'),
-				$return_id, 
-				coalesce_key($params, 'method', 'post'),
-				coalesce_key($params, 'enctype', ''), 
-				coalesce_key($params, 'inline', false),
-				coalesce_key($params, 'id_suffix', ''), 
-				coalesce_key($params, 'params', array()),
-				coalesce_key($params, 'extra', ''),
-				coalesce_key($params, 'id', '')) . 
-				$content . $module->create_form_end();
+			return CmsModuleTabs::start_tab($params['name']) . $content . CmsModuleTabs::end_tab();
 		}
 	}
 }

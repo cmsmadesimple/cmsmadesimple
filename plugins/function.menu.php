@@ -19,7 +19,7 @@
 function smarty_cms_function_menu($params, &$smarty)
 {
   $params['module'] = 'MenuManager';
-  return cms_module_plugin($params,$smarty);
+  return CmsModuleBase::cms_module_plugin($params, $smarty);
 }
 
 function smarty_cms_help_function_menu() {

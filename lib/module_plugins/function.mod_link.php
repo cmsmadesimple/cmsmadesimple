@@ -26,13 +26,13 @@ function smarty_cms_function_mod_link($params, &$smarty)
 	if (isset($params['theme_image']))
 	{
 		$themeObject = CmsAdminTheme::get_instance();
-		$value = $themeObject->DisplayImage($params['theme_image'], $value,'','','systemicon');
+		$value = $themeObject->display_image($params['theme_image'], $value,'','','systemicon');
 	}
 
 	$other_params = remove_keys($params, array('action', 'value', 'warn_message', 'translate', 'only_href', 
 						'inline', 'additional_text', 'target_container_only', 'pretty_url', 'theme_image'));
 
-	$blah = $module->CreateLink($id, $params['action'], $return_id, $value, 
+	$blah = $module->create_link($id, $params['action'], $return_id, $value, 
 						$other_params, coalesce_key($params, 'warn_message', ''), coalesce_key($params, 'only_href', false), 
 						coalesce_key($params, 'inline', false), coalesce_key($params, 'additional_text', ''), 
 						coalesce_key($params, 'target_container_only', false), coalesce_key($params, 'pretty_url', ''));

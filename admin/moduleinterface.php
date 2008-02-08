@@ -25,7 +25,7 @@ require_once("../include.php");
 check_login();
 $userid = get_userid();
 
-$smarty =& $gCms->GetSmarty();
+$smarty = cms_smarty();
 $smarty->assign('date_format_string',get_preference($userid,'date_format_string','%x %X'));
 
 $id = '';
@@ -46,7 +46,7 @@ elseif (isset($_REQUEST['mact']))
   $action = (isset($ary[2])?$ary[2]:'');
 }
 
-if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIWYG())
+if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->is_wysiwyg())
 {
 	if (get_preference($userid, 'use_wysiwyg') == "1")
 	{
@@ -56,7 +56,7 @@ if (isset($gCms->modules[$module]) && $gCms->modules[$module]['object']->IsWYSIW
 }
 
 $USE_OUTPUT_BUFFERING = true;
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->HasAdminBuffering() == false)
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->has_admin_buffering() == false)
 {
 	$USE_OUTPUT_BUFFERING = false;
 }
@@ -78,16 +78,16 @@ else if( isset( $_REQUEST['disable_theme'] ))
 {
 	$USE_THEME = false;
 }
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->GetHeaderHTML() != false)
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->get_header_html() != false)
   {
-    $headtext =  $gCms->modules[$module]['object']->GetHeaderHTML();
+    $headtext =  $gCms->modules[$module]['object']->get_header_html();
   }
  else
    {
      $headtext = '';
    }
 
-if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->SuppressAdminOutput($_REQUEST) != false)
+if (isset($gCms->modules[$module]['object']) && $gCms->modules[$module]['object']->suppress_admin_output($_REQUEST) != false)
 	{
 	$suppressOutput = true;
 	}
@@ -107,17 +107,17 @@ if (count($gCms->modules) > 0)
 	  $params = GetModuleParameters($id);
 	  if (FALSE == empty($params['module_message']))
 	    {
-	      echo $themeObject->ShowMessage($params['module_message']);
+	      echo $themeObject->show_message($params['module_message']);
 	    }
 	  if (FALSE == empty($params['module_error']))
 	    {
-	      echo $themeObject->ShowErrors($params['module_error']);
+	      echo $themeObject->show_errors($params['module_error']);
 	    }
 	  if (!$suppressOutput)
 	    {
 	      echo '<div class="pagecontainer">';
 	      echo '<div class="pageoverflow">';
-	      echo $themeObject->ShowHeader($gCms->modules[$module]['object']->GetFriendlyName(), '', '', 'both').'</div>';
+	      echo $themeObject->show_header($gCms->modules[$module]['object']->get_friendly_name(), '', '', 'both').'</div>';
 	    }
 	}
 
@@ -129,7 +129,7 @@ if (count($gCms->modules) > 0)
 		}
 		$id = 'm1_';
 		$params = GetModuleParameters($id);
-		echo $gCms->modules[$module]['object']->DoActionBase($action, $id, $params);
+		echo $gCms->modules[$module]['object']->do_action_base($action, $id, $params);
 		if (!(isset($USE_OUTPUT_BUFFERING) && $USE_OUTPUT_BUFFERING == false))
 		{
 			$content = @ob_get_contents();
@@ -153,7 +153,7 @@ if (isset($USE_THEME) && $USE_THEME == false)
 }
 elseif (!$suppressOutput)
 {
-	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->back_url().'">&#171; '.lang('back').'</a></p>';
 }
 if (!$suppressOutput)
 	{

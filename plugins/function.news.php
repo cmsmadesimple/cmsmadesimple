@@ -19,7 +19,7 @@
 function smarty_cms_function_news($params, &$smarty)
 {
 	$params['module'] = 'News';
-	return cms_module_plugin($params,$smarty);
+	return CmsModuleBase::cms_module_plugin($params, $smarty);
 }
 
 function smarty_cms_help_function_news() {

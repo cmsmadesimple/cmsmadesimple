@@ -139,7 +139,7 @@ class CmsAdminTheme extends CmsObject
 		{
 			if ($gCms->modules[$key]['installed'] == true &&
 				$gCms->modules[$key]['active'] == true &&
-				$gCms->modules[$key]['object']->IsWYSIWYG()
+				$gCms->modules[$key]['object']->is_wysiwyg()
 				)
 			{
 				$loadit=false;
@@ -149,7 +149,7 @@ class CmsAdminTheme extends CmsObject
 				}
 				else
 				{
-					if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->GetName())
+					if (get_preference(get_userid(), 'wysiwyg')==$gCms->modules[$key]['object']->get_name())
 					{
 						$loadit=true;
 					}
@@ -492,28 +492,28 @@ class CmsAdminTheme extends CmsObject
 			if (isset($cmsmodules[$key]['object'])
 				&& $cmsmodules[$key]['installed'] == true
 				&& $cmsmodules[$key]['active'] == true
-				&& $cmsmodules[$key]['object']->HasAdmin()
-				&& $cmsmodules[$key]['object']->VisibleToAdminUser())
+				&& $cmsmodules[$key]['object']->has_admin()
+				&& $cmsmodules[$key]['object']->visible_to_admin_user())
 			{
-				$section = $cmsmodules[$key]['object']->GetAdminSection();
+				$section = $cmsmodules[$key]['object']->get_admin_section();
 				if (! isset($this->section_count[$section]))
 				{
 					$this->section_count[$section] = 0;
 				}
 				$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $key;
-				if ($cmsmodules[$key]['object']->GetFriendlyName() != '')
+				if ($cmsmodules[$key]['object']->get_friendly_name() != '')
 				{
 					$this->modules_by_section[$section][$this->section_count[$section]]['name'] =
-					$cmsmodules[$key]['object']->GetFriendlyName();
+					$cmsmodules[$key]['object']->get_friendly_name();
 				}
 				else
 				{
 					$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
 				}
-				if ($cmsmodules[$key]['object']->GetAdminDescription() != '')
+				if ($cmsmodules[$key]['object']->get_admin_description() != '')
 				{
 					$this->modules_by_section[$section][$this->section_count[$section]]['description'] =
-					$cmsmodules[$key]['object']->GetAdminDescription();
+					$cmsmodules[$key]['object']->get_admin_description();
 				}
 				else
 				{

@@ -30,7 +30,7 @@ function cms_module_Redirect(&$modinstance, $id, $action, $returnid='', $params=
 	global $gCms;
 	$config = $gCms->config;
 
-	$name = $modinstance->GetName();
+	$name = $modinstance->get_name();
 
 	#Suggestion by Calguy to make sure 2 actions don't get sent
 	if (isset($params['action']))

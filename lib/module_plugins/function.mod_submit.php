@@ -23,7 +23,7 @@ function smarty_cms_function_mod_submit($params, &$smarty)
 	
 	$value = (isset($params['translate']) && $params['translate'] == true) ? $module->lang($params['value']) : $params['value'];
 	
-	return $module->CreateInputSubmit($id, $params['name'], $value, 
+	return $module->create_input_submit($id, $params['name'], $value, 
 				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
 				coalesce_key($params, 'confirm_text', ''), coalesce_key($params, 'id', ''));
 }

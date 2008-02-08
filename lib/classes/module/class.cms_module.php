@@ -34,7 +34,7 @@ define('CLEAN_REGEXP','regexp:');
  * @lastmodified $Date$
  * @license GPL
  **/
-class CmsModule extends CmsObject
+class CmsModule extends CmsModuleBase
 {
 	/**
 	 * ------------------------------------------------------------------
@@ -117,11 +117,11 @@ class CmsModule extends CmsObject
 
 		$this->smarty = cms_smarty();
 
-		$this->SetParameterType('module',CLEAN_STRING);
-		$this->SetParameterType('lang',CLEAN_STRING);
-		$this->SetParameterType('returnid',CLEAN_INT);
-		$this->SetParameterType('action',CLEAN_STRING);
-		$this->SetParameterType('showtemplate',CLEAN_STRING);
+		$this->SetParameterType('module', FILTER_SANITIZE_STRING);
+		$this->SetParameterType('lang', FILTER_SANITIZE_STRING);
+		$this->SetParameterType('returnid', FILTER_SANITIZE_NUMBER_INT);
+		$this->SetParameterType('action', FILTER_SANITIZE_STRING);
+		$this->SetParameterType('showtemplate', FILTER_SANITIZE_STRING);
 		$this->SetParameters();
 		
 		$this->modinstall = false;
@@ -207,6 +207,11 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns a sufficient about page for a module
 	 */
+	function get_about()
+	{
+		return $this->GetAbout();
+	}
+
 	function GetAbout()
 	{
 		$this->LoadMiscMethods();
@@ -217,15 +222,25 @@ class CmsModule extends CmsObject
 	 * Returns a sufficient help page for a module
 	 * this function should not be overridden
 	 */
+	function get_help_page()
+	{
+		return $this->GetHelpPage();
+	}
+
 	function GetHelpPage()
 	{
-		$this->LoadMiscMethods();
+		$this->load_misc_methods();
 		return cms_module_GetHelpPage($this);
 	}
 
 	/**
 	 * Returns the name of the module
-	 */
+	 */	
+	public function get_name()
+	{
+		return $this->GetName();
+	}
+
 	function GetName()
 	{
 		return 'unset';
@@ -234,6 +249,11 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns the full path of the module directory.
 	 */
+	function get_module_path()
+	{
+		return $this->GetModulePath();
+	}
+
 	function GetModulePath()
 	{
 		if (is_subclass_of($this, 'CMSModule'))
@@ -249,7 +269,12 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns a translatable name of the module.  For modulues who's names can
 	 * probably be translated into another language (like News)
-	 */
+	 */	
+	function get_friendly_name()
+	{
+		return $this->GetName();
+	}
+
 	function GetFriendlyName()
 	{
 		return $this->GetName();
@@ -258,6 +283,11 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns the version of the module
 	 */
+	public function get_version()
+	{
+		return $this->GetVersion();
+	}
+
 	function GetVersion()
 	{
 		return '0.0.0.1';
@@ -265,7 +295,12 @@ class CmsModule extends CmsObject
 
 	/**
 	 * Returns the minimum version necessary to run this version of the module.
-	 */
+	 */	
+	public function minimum_core_version()
+	{
+		return $this->MinimumCMSVersion();
+	}
+
 	function MinimumCMSVersion()
 	{
 		global $CMS_VERSION;
@@ -286,10 +321,15 @@ class CmsModule extends CmsObject
 	 *
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
-	 */
+	 */	
+	function get_help($lang = 'en_US')
+	{
+		return $this->GetHelp($lang);
+	}
+
 	function GetHelp($lang = 'en_US')
 	{
-		return '';
+		return parent::get_help($lang);
 	}
 
 	/**
@@ -317,63 +357,72 @@ class CmsModule extends CmsObject
 	 * @param string Route to register
 	 * @param array Defaults for parameters that might not be included in the url
 	 */
+	function register_route($routeregex, $defaults = array())
+	{
+		return $this->RegisterRoute($routeregex, $defaults);
+	}
+
 	function RegisterRoute($routeregex, $defaults = array())
 	{
-		global $gCms;
-		$route = new CmsRoute();
-		$route->module = $this->GetName();
-		$route->defaults = $defaults;
-		$route->regex = $routeregex;
-		$routes =& $gCms->variables['routes'];
-		$routes[] =& $route;
+		return parent::register_route($routeregex, $defaults);
 	}
 
 	/**
 	 * Returns a list of parameters and their help strings in a hash.  This is generally
 	 * used internally.
 	 */
+	function get_parameters()
+	{
+		return $this->GetParameters();
+	}
+
 	function GetParameters()
 	{
-		return $this->params;
+		return parent::get_parameters();
 	}
 
 	/**
 	 * Setup your parameters here.  It doesn't have to be here, but it makes the
 	 * code more legible.
 	 */
+	function setup()
+	{
+		return $this->SetParameters();
+	}
+	
 	function SetParameters()
 	{
+		return parent::setup();
+	}
+	
+	function restrict_unknown_params($flag = true)
+	{
+		return $this->RestrictUnknownParams($flag);
 	}
 
 	function RestrictUnknownParams($flag = true)
 	{
-	  $this->restrict_unknown_params = $flag;
+		return parent::restrict_unknown_params($flag);
+	}
+	
+	function set_parameter_type($param, $type)
+	{
+		return $this->SetParameterType($param, $type);
 	}
 
 	function SetParameterType($param, $type)
 	{
-	  switch($type)
-	    {
-	    case CLEAN_INT:
-	    case CLEAN_FLOAT:
-	    case CLEAN_NONE:
-	    case CLEAN_STRING:
-	      $this->param_map[trim($param)] = $type;
-	      break;
-	    default:
-	      trigger_error('Attempt to set invalid parameter type');
-	      break;
-	    }
+		//return parent::set_parameter_type($param, $type);
+	}
+
+	function create_parameter($param, $defaultval='', $helpstring='', $optional=true)
+	{
+		return $this->CreateParameter($param, $defaulval, $helpstring, $optional);
 	}
 
 	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)
 	{
-		array_unshift($this->params, array(
-			'name' => $param,
-			'default' => $defaultval,
-			'help' => $helpstring,
-			'optional' => $optional
-		));
+		return parent::create_parameter($param, FILTER_NONE, $defaultval, $helpstring, $optional);
 	}
 
 	/**
@@ -382,6 +431,11 @@ class CmsModule extends CmsObject
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
+	function get_description($lang = 'en_US')
+	{
+		return $this->GetDescription($lang);
+	}
+
 	function GetDescription($lang = 'en_US')
 	{
 		return '';
@@ -393,6 +447,11 @@ class CmsModule extends CmsObject
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */
+	function get_admin_description($lang = 'en_US')
+	{
+		return $this->GetAdminDescription($lang);
+	}
+
 	function GetAdminDescription($lang = 'en_US')
 	{
 		return '';
@@ -409,6 +468,11 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns the changelog for the module
 	 */
+	function get_change_log()
+	{
+		return $this->GetChangeLog();
+	}
+
 	function GetChangeLog()
 	{
 		return '';
@@ -417,6 +481,10 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns the name of the author
 	 */
+	function get_author()
+	{
+		return $this->GetAuthor();
+	}
 	function GetAuthor()
 	{
 		return '';
@@ -425,6 +493,10 @@ class CmsModule extends CmsObject
 	/**
 	 * Returns the email address of the author
 	 */
+	function get_author_email()
+	{
+		return $this->GetAuthorEmail();
+	}
 	function GetAuthorEmail()
 	{
 		return '';
@@ -1575,7 +1647,7 @@ class CmsModule extends CmsObject
 	}
 
 
-        /**
+    /**
 	 * Returns the xhtml equivalent of an fieldset and legend.  This is basically a nice little wrapper
 	 * to make sure that id's are placed in names and also that it's xhtml compliant.
 	 *

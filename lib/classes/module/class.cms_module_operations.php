@@ -450,19 +450,19 @@ class CmsModuleOperations extends CmsObject
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance =& $gCms->modules[$module]['object'];
-			$result = $modinstance->Install();
+			$result = $modinstance->install();
 
 			#now insert a record
 			if (!isset($result) || $result === FALSE)
 			{
 				$query = "INSERT INTO ".cms_db_prefix()."modules (module_name, version, status, admin_only, active) VALUES (?,?,'installed',?,?)";
-				$db->Execute($query, array($module,$modinstance->GetVersion(),($modinstance->IsAdminOnly()==true?1:0),1));
+				$db->Execute($query, array($module,$modinstance->get_version(),($modinstance->is_admin_only()==true?1:0),1));
 
 				#and insert any dependancies
-				if (count($modinstance->GetDependencies()) > 0) #Check for any deps
+				if (count($modinstance->get_dependencies()) > 0) #Check for any deps
 				{
 					#Now check to see if we can satisfy any deps
-					foreach ($modinstance->GetDependencies() as $onedepkey=>$onedepvalue)
+					foreach ($modinstance->get_dependencies() as $onedepkey=>$onedepvalue)
 					{
 						$time = $db->DBTimeStamp(time());
 						$query = "INSERT INTO ".cms_db_prefix()."module_deps (parent_module, child_module, minimum_version, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
@@ -471,7 +471,7 @@ class CmsModuleOperations extends CmsObject
 				}
 
 				#send an event saying the module has been installed
-				CmsEvents::SendEvent('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->GetVersion()));
+				CmsEvents::send_event('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->get_version()));
 
 				// and we're done
 				return array(true);
