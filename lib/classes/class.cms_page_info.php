@@ -135,18 +135,6 @@ class CmsPageInfo extends CmsObject
 			//CmsEvents::send_event('Core', 'ContentPostRenderNonCached', array(&$html));
 		}
 
-		#Perform the content postrender callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =& $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				$gCms->modules[$key]['object']->ContentPostRender($html);
-			}
-		}
-
 		CmsEvents::send_event('Core', 'ContentPostRender', array('content' => &$html));
 		
 		return $html;

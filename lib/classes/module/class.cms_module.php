@@ -79,7 +79,7 @@ class CmsModule extends CmsModuleBase
 	var $smarty;
 	var $is_installed = false;
 
-	function __construct()
+	function CMSModule()
 	{
 		parent::__construct();
 		
@@ -214,8 +214,7 @@ class CmsModule extends CmsModuleBase
 
 	function GetAbout()
 	{
-		$this->LoadMiscMethods();
-		return cms_module_GetAbout($this);
+		return parent::get_about();
 	}
 
 	/**
@@ -229,8 +228,7 @@ class CmsModule extends CmsModuleBase
 
 	function GetHelpPage()
 	{
-		$this->load_misc_methods();
-		return cms_module_GetHelpPage($this);
+		return parent::get_help_page();
 	}
 
 	/**
@@ -256,14 +254,7 @@ class CmsModule extends CmsModuleBase
 
 	function GetModulePath()
 	{
-		if (is_subclass_of($this, 'CMSModule'))
-		{
-			return cms_join_path($this->config['root_path'], 'modules' , $this->GetName());
-		}
-		else
-		{
-			return dirname(__FILE__);
-		}
+		return parent::get_module_path();
 	}
 
 	/**
@@ -272,12 +263,12 @@ class CmsModule extends CmsModuleBase
 	 */	
 	function get_friendly_name()
 	{
-		return $this->GetName();
+		return $this->GetFriendlyName();
 	}
 
 	function GetFriendlyName()
 	{
-		return $this->GetName();
+		return parent::get_friendly_name();
 	}
 
 	/**
@@ -322,19 +313,24 @@ class CmsModule extends CmsModuleBase
 	 * @param string Optional language that the admin is using.	 If that language
 	 * is not defined, use en_US.
 	 */	
-	function get_help($lang = 'en_US')
+	function get_help()
 	{
-		return $this->GetHelp($lang);
+		return $this->GetHelp();
 	}
 
 	function GetHelp($lang = 'en_US')
 	{
-		return parent::get_help($lang);
+		return parent::get_help();
 	}
 
 	/**
 	 * Returns XHTML that nees to go between the <head> tags
 	 */
+	function get_header_html()
+	{
+		return $this->GetHeaderHTML();
+	}
+
 	function GetHeaderHTML()
 	{
 	  return '';
@@ -346,9 +342,14 @@ class CmsModule extends CmsModuleBase
 	 * Do this by returning true.
 	 *
 	 */
+	function suppress_admin_output($request)
+	{
+		return $this->SuppressAdminOutput($request);
+	}
+
 	function SuppressAdminOutput(&$request)
 	{
-		return false;
+		return parent::suppress_admin_output($request);
 	}
 
 	/**
@@ -460,9 +461,14 @@ class CmsModule extends CmsModuleBase
 	/**
 	 * Returns whether this module should only be loaded from the admin
 	 */
+	function is_admin_only()
+	{
+		return $this->IsAdminOnly();
+	}
+
 	function IsAdminOnly()
 	{
-		return false;
+		return parent::is_admin_only();
 	}
 
 	/**
@@ -531,7 +537,8 @@ class CmsModule extends CmsModuleBase
 	 */
 	function &GetVariables()
 	{
-		return $this->cms->variables;
+		$vars = cmsms()->variables;
+		return $vars;
 	}
 
 	/**
@@ -543,9 +550,19 @@ class CmsModule extends CmsModuleBase
 	/**
 	 * Does this module support a custom content type?
 	 */
+	function has_content_type()
+	{
+		return $this->HasContentType();
+	}
+
 	function HasContentType()
 	{
-		return FALSE;
+		return parent::has_content_type();
+	}
+	
+	function register_content_type($name, $file, $friendlyname = '')
+	{
+		return $this->RegisterContentType($name, $file, $friendlyname);
 	}
 	
 	function RegisterContentType($name, $file, $friendlyname = '')
@@ -566,9 +583,14 @@ class CmsModule extends CmsModuleBase
 	/**
 	 * Return an instance of the new content type
 	 */
+	function get_content_type_instance()
+	{
+		return $this->GetContentTypeInstance();
+	}
+
 	function GetContentTypeInstance()
 	{
-		return FALSE;
+		return parent::get_content_type_instance();
 	}
 	
 	/**
@@ -592,6 +614,11 @@ class CmsModule extends CmsModuleBase
 			$obj->friendlyname = ($friendlyname != '' ? $friendlyname : $name);
 			$block_types[strtolower($name)] =& $obj;
 		}
+	}
+
+	function is_exclusive()
+	{
+		return $this->IsExclusive();
 	}
 
 	function IsExclusive()
@@ -641,32 +668,22 @@ class CmsModule extends CmsModuleBase
 	 * should return a string message if there is a failure. Returning nothing (FALSE)
 	 * will allow the install procedure to proceed.
 	 */
-	function Install()
+	function install()
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.install.php');
-		if (@is_file($filename))
-		{
-			{
-				global $gCms;
-				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
-
-				include($filename);
-			}
-		}
-		else
-		{
-			return FALSE;
-		}
+		return parent::install();
 	}
 
 	/**
 	 * Display a message after a successful installation of the module.
 	 */
+	function install_post_message()
+	{
+		return $this->InstallPostMessage();
+	}
+
 	function InstallPostMessage()
 	{
-		return FALSE;
+		return parent::install_post_message();
 	}
 
 	/**
@@ -675,41 +692,36 @@ class CmsModule extends CmsModuleBase
 	 * It should return a string message if there is a failure. Returning nothing
 	 * (FALSE) will allow the uninstall procedure to proceed.
 	 */
-	function Uninstall()
+	function uninstall()
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.uninstall.php');
-		if (@is_file($filename))
-		{
-			{
-				global $gCms;
-				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
-				$smarty =& $gCms->GetSmarty();
-
-				include($filename);
-			}
-		}
-		else
-		{
-			return FALSE;
-		}
+		return parent::uninstall();
 	}
 
 	/**
 	 * Display a message and a Yes/No dialog before doing an uninstall.	 Returning noting
 	 * (FALSE) will go right to the uninstall.
 	 */
+	function uninstall_pre_message()
+	{
+		return $this->UninstallPreMessage();
+	}
+
 	function UninstallPreMessage()
 	{
-		return FALSE;
+		return parent::uninstall_pre_message();
 	}
 
 	/**
 	 * Display a message after a successful uninstall of the module.
 	 */
+	function uninstall_post_message()
+	{
+		return $this->UninstallPostMessage();
+	}
+
 	function UninstallPostMessage()
 	{
-		return FALSE;
+		return parent::uninstall_post_message();
 	}
 
 	/**
@@ -723,20 +735,9 @@ class CmsModule extends CmsModuleBase
 	 * @param string The version we are upgrading from
 	 * @param string The version we are upgrading to
 	 */
-	function Upgrade($oldversion, $newversion)
+	function upgrade($oldversion, $newversion)
 	{
-		$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'method.upgrade.php');
-		if (@is_file($filename))
-		{
-			{
-				global $gCms;
-				$db =& $gCms->GetDb();
-				$config =& $gCms->GetConfig();
-				$smarty = $gCms->GetSmarty();
-
-				include($filename);
-			}
-		}
+		return parent::upgrade($oldversion, $newversion);
 	}
 
 	/**
@@ -746,9 +747,14 @@ class CmsModule extends CmsModuleBase
 	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
+	function allow_auto_install()
+	{
+		return $this->AllowAutoInstall();
+	}
+
 	function AllowAutoInstall()
 	{
-		return TRUE;
+		return parent::allow_auto_install();
 	}
 
 	/**
@@ -758,9 +764,14 @@ class CmsModule extends CmsModuleBase
 	 * different distributions with different modules included in them.	 Defaults
 	 * to TRUE, as there is not many reasons to not allow it.
 	 */
+	function allow_auto_upgrade()
+	{
+		return $this->AllowAutoUpgrade();
+	}
+
 	function AllowAutoUpgrade()
 	{
-		return TRUE;
+		return parent::allow_auto_upgrade();
 	}
 
 	/**
@@ -768,9 +779,14 @@ class CmsModule extends CmsModuleBase
 	 * requires. It should return an hash, eg.
 	 * return array('somemodule'=>'1.0', 'othermodule'=>'1.1');
 	 */
+	function get_dependencies()
+	{
+		return $this->GetDependencies();
+	}
+
 	function GetDependencies()
 	{
-		return array();
+		return self::get_dependencies();
 	}
 
 	/**
@@ -778,22 +794,14 @@ class CmsModule extends CmsModuleBase
 	 * used by the plugins.php page to make sure that a module can't be uninstalled
 	 * before any modules depending on it are uninstalled first.
 	 */
+	function check_for_dependents()
+	{
+		return $this->CheckForDependents();
+	}
+
 	function CheckForDependents()
 	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-
-		$result = false;
-
-		$query = "SELECT * FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
-		$dbresult = $db->Execute($query, array($this->GetName()));
-
-		if ($dbresult && $dbresult->RecordCount() > 0)
-		{
-			$result = true;
-		}
-
-		return $result;
+		return parent::check_for_dependents();
 	}
 
 
@@ -802,9 +810,12 @@ class CmsModule extends CmsModuleBase
 	 */
 	function CreateXMLPackage( &$message, &$filecount )
 	{
+		/*
 		global $gCms;
 		$modops =& $gCms->GetModuleOperations();
 		return $modops->CreateXmlPackage($this, $message, $filecount);
+		*/
+		return false;
 	}
 
 
@@ -812,17 +823,27 @@ class CmsModule extends CmsModuleBase
 	 * Return true if there is an admin for the module.	 Returns false by
 	 * default.
 	 */
+	function has_admin()
+	{
+		return $this->HasAdmin();
+	}
+
 	function HasAdmin()
 	{
-		return false;
+		return parent::has_admin();
 	}
 
 	/**
 	 * Should we use output buffering in the admin for this module?
 	 */
+	function has_admin_buffering()
+	{
+		return $this->HasAdminBuffering();
+	}
+	
 	function HasAdminBuffering()
 	{
-		return true;
+		return parent::has_admin_buffering();
 	}
 
 	/**
@@ -833,9 +854,14 @@ class CmsModule extends CmsModuleBase
 	 * content, layout, files, usersgroups, extensions, preferences, admin
 	 *
 	 */
+	function get_admin_section()
+	{
+		return $this->GetAdminSection();
+	}
+	
 	function GetAdminSection()
 	{
-		return 'extensions';
+		return parent::get_admin_section();
 	}
 
 	/**
@@ -844,35 +870,55 @@ class CmsModule extends CmsModuleBase
 	 *
 	 * Defaults to true.
 	 */
+	function visible_to_admin_user()
+	{
+		return $this->VisibleToAdminUser();
+	}
+
 	function VisibleToAdminUser()
 	{
-		return true;
+		return parent::visible_to_admin_user();
 	}
 
 	/**
 	 * Returns true if the module should be treated as a content module.
 	 * Returns false by default.
 	 */
+	function is_content_module()
+	{
+		return $this->IsContentModule();
+	}
+
 	function IsContentModule()
 	{
-		return false;
+		return parent::is_content_module();
 	}
 
 	/**
 	 * Returns true if the module should be treated as a plugin module (like
 	 * {cms_module module='name'}.	Returns false by default.
 	 */
+	function is_plugin_module()
+	{
+		return $this->IsPluginModule();
+	}
+
 	function IsPluginModule()
 	{
-		return false;
+		return parent::is_plugin_module();
 	}
 
 	/**
 	 * Returns true if the module acts as a soap server
 	 */
+	function is_soap_module()
+	{
+		return $this->IsSoapModule();
+	}
+
 	function IsSoapModule()
 	{
-		return false;
+		return parent::is_soap_module();
 	}
 
 	/**
@@ -1593,57 +1639,24 @@ class CmsModule extends CmsModuleBase
 	 * @param string The ID of the module
 	 * @param string The parameters targeted for this module
 	 */
-	function DoAction($name, $id, $params, $returnid='')
+	function do_action($name, $id, $params, $returnid='')
 	{
-		if ($name != '')
-		{
-			$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'action.' . $name . '.php');
-
-			if (@is_file($filename))
-			{
-				{
-					$gCms = cmsms();
-					$db = cms_db();
-					$config = cms_config();
-					$smarty = cms_smarty();
-
-					include($filename);
-
-				}
-			}
-		}
+		return $this->DoAction($name, $id, $params, $returnid);
 	}
 
+	function DoAction($name, $id, $params, $returnid='')
+	{
+		return parent::do_action($name, $id, $params, $returnid);
+	}
+
+	function do_action_base($name, $id, $params, $returnid = '')
+	{
+		return $this->DoAction($name, $id, $params, $returnid);
+	}
+		
 	function DoActionBase($name, $id, $params, $returnid = '')
 	{
-		if ($returnid != '')
-		{
-			if (!$this->restrict_unknown_params && get_site_preference('allowparamcheckwarnings',0))
-			{
-				trigger_error('WARNING: '.$this->GetName().' is not properly cleaning input params.',E_USER_WARNING);
-			}
-			// used to try to avert XSS flaws, this will
-			// clean as many parameters as possible according
-			// to a map specified with the SetParameterType metods.
-			//$params = cleanParamHash($params, $this->param_map, !$this->restrict_unknown_params);
-		}
-
-		if (isset($params['lang']))
-		{
-			$this->curlang = $params['lang'];
-			$this->langhash = array();
-		}
-
-		if (!isset($params['action']))
-		{
-			$params['action'] = $name;
-		}
-
-		$params['action'] = cms_htmlentities($params['action']);
-		$returnid = cms_htmlentities($returnid);
-		$id = cms_htmlentities($id);
-		$name = cms_htmlentities($name);
-		return $this->DoAction($name, $id, $params, $returnid);
+		return parent::do_action_base($name, $id, $params, $returnid);
 	}
 
 
@@ -2057,7 +2070,7 @@ class CmsModule extends CmsModuleBase
 	 */
 	function RedirectForFrontEnd($id, $returnid, $action, $params = array(), $inline = true )
 	{
-	  return $this->Redirect($id, $action, $returnid, $params, $inline );
+	  return parent::redirect($id, $action, $returnid, $params, $inline );
 	}
 
 	/**
@@ -2071,8 +2084,7 @@ class CmsModule extends CmsModuleBase
 	 */
 	function Redirect($id, $action, $returnid='', $params=array(), $inline=false)
 	{
-		$this->LoadRedirectMethods();
-		return cms_module_Redirect($this, $id, $action, $returnid, $params, $inline);
+		return parent::redirect($id, $action, $returnid, $params, $inline);
 	}
 
 	/**
@@ -2084,7 +2096,7 @@ class CmsModule extends CmsModuleBase
 	 */
 	function RedirectContent($id)
 	{
-	  redirect_to_alias($id);
+		parent::redirect_content($id);
 	}
 
 	/**
@@ -2095,16 +2107,7 @@ class CmsModule extends CmsModuleBase
 
 	public static function GetModuleInstance($module)
 	{
-		$gCms = cmsms();
-
-		if (isset($gCms->modules[$module]) &&
-			$gCms->modules[$module]['installed'] == true &&
-			$gCms->modules[$module]['active'] == true)
-		{
-			return $gCms->modules[$module]['object'];
-		}
-
-		return FALSE;
+		return CmsModuleBase::get_module_instance($module);
 	}
 
 	/**
@@ -2118,9 +2121,14 @@ class CmsModule extends CmsModuleBase
 	 * should be at least a language file for this language if the Lang()
 	 * function is used at all.
 	 */
+	function default_language()
+	{
+		return $this->DefaultLanguage();
+	}
+
 	function DefaultLanguage()
 	{
-		return 'en_US';
+		return parent::default_language();
 	}
 
 	/**
@@ -2132,8 +2140,7 @@ class CmsModule extends CmsModuleBase
 	 */
 	function lang()
 	{
-		$args = func_get_args();
-		return CmsLanguage::translate($args[0], array_slice($args, 1), $this->GetName(), '', $this->DefaultLanguage());
+		return parent::lang(func_get_args());
 	}
 
 	/**
@@ -2253,60 +2260,37 @@ class CmsModule extends CmsModuleBase
 	 */
 	function StartTabHeaders()
 	{
-		//return '<div id="mainTabContainer" dojoType="TabContainer" style="width: 100%; height: 70%" selectedTab="tab1">';
-		//return '<div id="page_tabs">';
-		return '<div id="module_page_tabs"><ul class="anchors">';
+		return CmsModuleTabs::start_tab_headers();
 	}
 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-		if (!isset($this->tab_header_shown))
-		{
-			// TODO, If non-default theme is chosen then add templateCssPath="/path/to/TabContainer.css"
-			//$this->tab_header_output = '<div id="mainTabContainer" dojo:dolayout="FALSE" width ="100%" dojoType="TabContainer"';
-			//$this->tab_header_shown = true;
-		}
-		if (TRUE == $active)
-		{
-			//$this->tab_header_output .= ' selectedChild="'.$tabid.'"';
-			// $this->mActiveTab = $tabid;
-		}
-		//$this->tab_titles[$tabid] = $title;
-		// $output .= '<div id="'.$tabid.'"'.$a.'>'.$title.'</div>';
-		return '<li><a href="#'.$tabid.'"><span>'.$title.'</span></a></li>';
+		return CmsModuleTabs::set_tab_header(tabid, $title, $active);
 	}
 
 	function EndTabHeaders()
 	{
-		//return $this->tab_header_output.'"><!-- EndTabHeaders -->'."\n";
-		return '</ul>';
+		return CmsMdouleTabs::end_tab_headers();
 	}
 
 	function StartTabContent()
 	{
-		return '';
+		return CmsMdouleTabs::start_tab_content();
 	}
 
 	function EndTabContent()
 	{
-		return "</div><script>$('#module_page_tabs').tabs({fxAutoHeight: false});</script>";
+		return CmsMdouleTabs::end_tab_content();
 	}
 
 	function StartTab($tabid, $params = array())
 	{
-		/*
-		if (FALSE == empty($this->mActiveTab) && $tabid == $this->mActiveTab && FALSE == empty($params['tab_message'])) {
-			$message = $this->ShowMessage($this->Lang($params['tab_message']));
-		} else {
-			$message = '';
-		}
-		*/
-		return '<div id="' . $tabid . '" class="fragment">';
+		return CmsModuleTabs::start_tab($tabid, $params);
 	}
 
 	function EndTab()
 	{
-		return "</div> <!-- EndTab -->\n";
+		return CmsMdouleTabs::end_tab();
 	}
 
 	/**
@@ -2320,9 +2304,14 @@ class CmsModule extends CmsModuleBase
 	  * Module can spit out extra CSS for the admin side
 	  *
 	  */
+	function admin_style()
+	{
+		return $this->AdminStyle();
+	}
+
 	function AdminStyle()
 	{
-	  return '';
+		return parent::admin_style();
 	}
 
 	/**
@@ -2330,10 +2319,14 @@ class CmsModule extends CmsModuleBase
 	 *
 	 * @param string Value to set the content-type header too
 	 */
+	function set_content_type($contenttype)
+	{
+		return $this->SetContentType($contenttype);
+	}
+
 	function SetContentType($contenttype)
 	{
-		$variables = &$this->cms->variables;
-		$variables['content-type'] = $contenttype;
+		return parent::set_content_type($contenttype);
 	}
 
 	/**
@@ -2547,25 +2540,14 @@ class CmsModule extends CmsModuleBase
 	 *
 	 * @returns boolean
 	 */
+	function do_event($originator, $eventname, &$params)
+	{
+		return $this->DoEvent($originator, $eventname, $params);
+	}
+
 	function DoEvent( $originator, $eventname, &$params )
 	{
-		if ($originator != '' && $eventname != '')
-		{
-			$filename = cms_join_path(ROOT_DIR, 'modules', $this->GetName(), 'event.' . $originator . '.' . $eventname . '.php');
-
-			if (@is_file($filename))
-			{
-				{
-					global $gCms;
-					$db =& $gCms->GetDb();
-					$config =& $gCms->GetConfig();
-					$smarty =& $gCms->GetSmarty();
-
-					include($filename);
-
-				}
-			}
-		}
+		return parent::do_event($originator, $eventname, $params);
 	}
 
 
@@ -2577,9 +2559,14 @@ class CmsModule extends CmsModuleBase
 	 *
 	 * @returns text string
 	 */
+	function get_event_description( $eventname )
+	{
+		return $this->GetEventDescription($eventname);
+	}
+
 	function GetEventDescription( $eventname )
 	{
-		return "";
+		return parent::get_event_description($eventname);
 	}
 
 
@@ -2590,9 +2577,14 @@ class CmsModule extends CmsModuleBase
 	 *
 	 * @param string The name of the event
 	 */
+	function get_event_help( $eventname )
+	{
+		return $this->GetEventHelp( $eventname );
+	}
+
 	function GetEventHelp( $eventname )
 	{
-		return "";
+		return parent::get_event_help( $eventname );
 	}
 
 
@@ -2600,9 +2592,14 @@ class CmsModule extends CmsModuleBase
 	 * A callback indicating if this module has a DoEvent method to
 	 * handle incoming events.
          */
+	function handles_events()
+	{
+		return $this->HandlesEvents();
+	}
+
 	function HandlesEvents()
 	{
-		return false;
+		return parent::handles_events();
 	}
 
 	/**

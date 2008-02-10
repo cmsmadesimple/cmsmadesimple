@@ -433,7 +433,7 @@ abstract class CmsModuleBase extends CmsObject
 	 * Do this by returning true.
 	 *
 	 */
-	public function suppress_admin_output(&$request)
+	public function suppress_admin_output($request)
 	{
 		return false;
 	}
@@ -518,17 +518,10 @@ abstract class CmsModuleBase extends CmsObject
 					if (isset($set_param['filter']) && $set_param['filter'] != FILTER_NONE)
 					{
 						$filter_result = filter_var_array(array($key => $value), array($key => $set_param));
-						if ($filter_result)
-						{
-							if ($filter_result[$key] !== FALSE && $set_param['filter'] != FILTER_VALIDATE_BOOLEAN)
-								$value = $filter_result[$key];
-							else
-								$value = '';
-						}
+						if ($filter_result && ($set_param['filter'] == FILTER_VALIDATE_BOOLEAN || $filter_result[$key] !== FALSE))
+							$value = $filter_result[$key];
 						else
-						{
 							$value = '';
-						}
 					}
 					
 					$mapped = true;
@@ -1267,7 +1260,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function redirect_content($id)
 	{
-		redirect_to_alias($id);
+		CmsResponse::redirect_to_alias($id);
 	}
 	
 	/**
@@ -1315,6 +1308,8 @@ abstract class CmsModuleBase extends CmsObject
 	function lang()
 	{
 		$args = func_get_args();
+		if (is_array($args) && count($args) == 1 && is_array($args[0]))
+			$args = $args[0];
 		return CmsLanguage::translate($args[0], array_slice($args, 1), $this->get_name(), '', $this->default_language());
 	}
 	
