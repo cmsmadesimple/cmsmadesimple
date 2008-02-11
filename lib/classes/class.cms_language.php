@@ -60,17 +60,18 @@ class CmsLanguage extends CmsObject
 		$result = null;
 		
 		if (array_key_exists($name, self::$lang[$module][$current_language]))
+		{
 			$result = self::$lang[$module][$current_language][$name];
+		}
 		else if ($default_language != $current_language && array_key_exists($name, self::$lang[$module][$default_language]))
+		{
 			$result = self::$lang[$module][$default_language][$name];
+		}
 		else
-			{
-				//$result = "--Add Me - $module - $name --";
-				// calguy1000 - a move to the tr plugin
-				// just return the original text
-				return $name;
-			}
-			
+		{
+			$result = "--Add Me - $module - $name --";
+		}
+
 		if (count($params) > 0)
 		{
 			$result = vsprintf($result, $params);
@@ -145,6 +146,10 @@ class CmsLanguage extends CmsObject
 				if (!is_file($file))
 				{
 					$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', $language . '.php');
+					if (!is_file($file))
+					{
+						$file = cms_join_path(ROOT_DIR, 'modules', $module, 'lang', 'ext', $language . '.php');						
+					}
 				}
 			}
 		}

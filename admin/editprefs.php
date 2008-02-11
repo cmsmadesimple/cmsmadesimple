@@ -117,7 +117,7 @@ foreach($gCms->modules as $key=>$value)
 {
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsWYSIWYG())
+		$gCms->modules[$key]['object']->is_wysiwyg())
 		{
 			$wysiwyg_options[$key] = $key;
 		}
@@ -127,15 +127,17 @@ $smarty->assign('wysiwyg_options', $wysiwyg_options);
 // Assign the Syntax Highlighter Options
 $syntaxhighlighter_options = array();
 $syntaxhighlighter_options[] = lang('none');
+/*
 foreach($gCms->modules as $key=>$value)
 {
 	if ($gCms->modules[$key]['installed'] == true &&
 		$gCms->modules[$key]['active'] == true &&
-		$gCms->modules[$key]['object']->IsSyntaxHighlighter())
+		$gCms->modules[$key]['object']->is_syntax_highlighter())
 	{
 		$syntaxhighlighter_options[$key] = $key;
 	}
 }
+*/
 $smarty->assign('syntaxhighlighter_options', $syntaxhighlighter_options);
 
 // Assign the language options
