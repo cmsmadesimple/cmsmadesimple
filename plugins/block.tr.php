@@ -18,18 +18,18 @@
 
 function smarty_cms_block_tr($params,$content,&$smarty)
 {
-  if( is_null($content) ) return;
+	if( is_null($content) ) return;
 
-  $txt = lang(trim($content));
+	$txt = CmsLanguage::translate(trim($content));
 
-  if( isset($params['assign']) )
-    {
-      $smarty->assign($params['assign'],$txt);
-    }
-  else
-    {
-      return $txt;
-    }
+	if( isset($params['assign']) )
+	{
+		$smarty->assign($params['assign'],$txt);
+	}
+	else
+	{
+		return $txt;
+	}
 }
 
 // EOF
