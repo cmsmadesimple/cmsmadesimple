@@ -311,6 +311,11 @@ function cms_module_create_input_dropdown(&$modinstance, $id, $name, $items, $se
 	$selectedindex = cms_htmlentities($selectedindex);
 	$selectedvalue = cms_htmlentities($selectedvalue);
 	
+	if ($flip_array)
+	{
+		$items = @array_flip($items);
+	}
+	
 	if ($html_id == '')
 		$html_id = CmsResponse::make_dom_id($id . $name);
 

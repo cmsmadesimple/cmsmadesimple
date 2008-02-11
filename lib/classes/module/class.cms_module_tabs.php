@@ -27,7 +27,7 @@ class CmsModuleTabs extends CmsObject
 	
 	static public function start_tab_headers()
 	{
-		return '<div id="module_page_tabs"><ul class="anchors">';
+		return '<div id="module_page_tabs"><ul>';
 	}
 
 	static public function set_tab_header($tabid, $title, $active=false)
@@ -47,7 +47,7 @@ class CmsModuleTabs extends CmsObject
 
 	static public function end_tab_content()
 	{
-		return "</div>\n<script>\n<!--\n$('#module_page_tabs').tabs();\n//-->\n</script>\n";
+		return "</div>\n<script>\n<!--\n$('#module_page_tabs > ul').tabs();\n//-->\n</script>\n";
 	}
 
 	static public function start_tab($tabid)

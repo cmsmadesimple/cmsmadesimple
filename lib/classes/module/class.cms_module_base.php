@@ -1233,7 +1233,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function redirect_for_front_end($id, $returnid, $action, $params = array(), $inline = true )
 	{
-		return $this->redirect($id, $action, $returnid, $params, $inline );
+		return $this->redirect($id, $action, $returnid, $params, $inline);
 	}
 
 	/**

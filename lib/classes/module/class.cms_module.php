@@ -1911,24 +1911,6 @@ class CmsModule extends CmsModuleBase
 	function CreateInputDropdown($id, $name, $items, $selectedindex=-1, $selectedvalue='', $addttext='', $flip_array = true, $html_id = '')
 	{
 		$this->LoadFormMethods();
-		return cms_module_create_input_dropdown($this, $id, $name, $items, $selectedindex, $selectedvalue, $addttext, $flip_array, $html_id);
-	}
-	
-	/**
-	 * Returns the xhtml equivalent of a dropdown list.	 This is basically a nice little wrapper
-	 * to make sure that id's are placed in names and also that it is xhtml compliant.
-	 *
-	 * @param string The id given to the module on execution
-	 * @param string The html name of the dropdown list
-	 * @param string An array of items to put into the dropdown list... they should be $key=>$value pairs
-	 * @param string The default selected index of the dropdown list.  Setting to -1 will result in the first choice being selected
-	 * @param string The default selected value of the dropdown list.  Setting to '' will result in the first choice being selected
-	 * @param string Any additional text that should be added into the tag when rendered
-	 * @param string Whether or not the array should be flipped (keys and values of has have opposite meanings)
-	 */
-	function create_input_dropdown($id, $name, $items, $selected_index = -1, $selected_value = '', $additional_text = '', $flip_array = false, $html_id = '')
-	{
-		$this->LoadFormMethods();
 		return cms_module_create_input_dropdown($this, $id, $name, $items, $selected_index, $selected_value, $additional_text, $flip_array, $html_id);
 	}
 
@@ -2265,22 +2247,22 @@ class CmsModule extends CmsModuleBase
 
 	function SetTabHeader($tabid,$title,$active=false)
 	{
-		return CmsModuleTabs::set_tab_header(tabid, $title, $active);
+		return CmsModuleTabs::set_tab_header($tabid, $title, $active);
 	}
 
 	function EndTabHeaders()
 	{
-		return CmsMdouleTabs::end_tab_headers();
+		return CmsModuleTabs::end_tab_headers();
 	}
 
 	function StartTabContent()
 	{
-		return CmsMdouleTabs::start_tab_content();
+		return CmsModuleTabs::start_tab_content();
 	}
 
 	function EndTabContent()
 	{
-		return CmsMdouleTabs::end_tab_content();
+		return CmsModuleTabs::end_tab_content();
 	}
 
 	function StartTab($tabid, $params = array())
@@ -2290,7 +2272,7 @@ class CmsModule extends CmsModuleBase
 
 	function EndTab()
 	{
-		return CmsMdouleTabs::end_tab();
+		return CmsModuleTabs::end_tab();
 	}
 
 	/**
