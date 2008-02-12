@@ -24,7 +24,7 @@ if(isset($_SERVER['HTTP_USER_AGENT']) && preg_match('/MSIE/', $_SERVER['HTTP_USE
 }
 
 $templateid = '';
-if (isset($_GET["templateid"])) $templateid = $_GET["templateid"];
+if (isset($_GET["templateid"])) $templateid = intval($_GET["templateid"]);
 
 $mediatype = '';
 if (isset($_GET["mediatype"])) $mediatype = $_GET["mediatype"];
