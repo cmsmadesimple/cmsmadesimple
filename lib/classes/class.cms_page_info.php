@@ -93,29 +93,21 @@ class CmsPageInfo extends CmsObject
 		$gCms = cmsms();
 		$smarty = cms_smarty();
 
-		if (isset($_GET["print"]))
+		#If this is a case where a module doesn't want a template to be shown, just disable caching
+		if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
 		{
-			($smarty->is_cached('print:'.$page, '', $this->template_id)?$cached="":$cached="not ");
-			$html = $smarty->fetch('print:'.$page, '', $this->template_id) . "\n";
+			$html = $smarty->fetch('template:notemplate') . "\n";
 		}
 		else
 		{
-			#If this is a case where a module doesn't want a template to be shown, just disable caching
-			if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
+			$smarty->caching = false;
+			$smarty->compile_check = true;
+			($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
+			// Added HTTP_HOST here to work with multisites - SK
+			$html = $smarty->fetch('template:'.$this->template_id.$_SERVER['HTTP_HOST']) . "\n";
+			if (isset($_REQUEST['tmpfile']))
 			{
-				$html = $smarty->fetch('template:notemplate') . "\n";
-			}
-			else
-			{
-				$smarty->caching = false;
-				$smarty->compile_check = true;
-				($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
-				// Added HTTP_HOST here to work with multisites - SK
-				$html = $smarty->fetch('template:'.$this->template_id.$_SERVER['HTTP_HOST']) . "\n";
-				if (isset($_REQUEST['tmpfile']))
-				{
-					$smarty->clear_compiled_tpl('template:'.$this->template_id);
-				}
+				$smarty->clear_compiled_tpl('template:'.$this->template_id);
 			}
 		}
 

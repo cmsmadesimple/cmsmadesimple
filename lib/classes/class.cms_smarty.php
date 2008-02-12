@@ -103,10 +103,6 @@ class CmsSmarty extends Smarty {
 							       "template_get_timestamp",
 							       "db_get_secure",
 							       "db_get_trusted"));
-			$this->register_resource("print", array(&$this, "template_get_template",
-							       "template_get_timestamp",
-							       "db_get_secure",
-							       "db_get_trusted"));
 			$this->register_resource("template", array(&$this, "template_get_template",
 							       "template_get_timestamp",
 							       "db_get_secure",
@@ -298,36 +294,6 @@ class CmsSmarty extends Smarty {
 
 				return true;
 			}
-			else if (isset($_GET["print"]))
-			{
-				$script = '';
-
-				if (isset($_GET["js"]) and $_GET["js"] == 1)
-					$script = '<script language="JavaScript">window.print();</script>';
-
-				if (isset($_GET["goback"]) and $_GET["goback"] == 0)
-				{
-					$tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;">{content}'.$script.'</body></html>';
-				}
-				else
-				{
-				  $hm =& $gCms->GetHierarchyManager();
-				  if (true == $config['assume_mod_rewrite'])
-				    {
-				      $curnode =& $hm->getNodeByAlias($tpl_name);
-				    }
-				  else
-				    {
-				      $curnode =& $hm->getNodeById($tpl_name);
-				    }
-				  $curcontent =& $curnode->GetContent();
-				  $page_url = $curcontent->GetURL();
-				  
-				  $tpl_source = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">'."\n".'<html><head><title>{title}</title><meta name="robots" content="noindex"></meta>{metadata}{stylesheet}{literal}<style type="text/css" media="print">#back {display: none;}</style>{/literal}</head><body style="background-color: white; color: black; background-image: none; text-align: left;"><p><a id="back" href="'.$page_url.'">&laquo; Go Back</a></p>{content}'.$script.'</body></html>';
-				}
-
-				return true;
-			}
 			else
 			{
 				global $gCms;
@@ -370,11 +336,6 @@ class CmsSmarty extends Smarty {
 			return true;
 		}
 		else if (isset($_GET["tmpfile"]) && $_GET["tmpfile"] != "")
-		{
-			$tpl_timestamp = time();
-			return true;
-		}
-		else if (isset($_GET['print']))
 		{
 			$tpl_timestamp = time();
 			return true;
