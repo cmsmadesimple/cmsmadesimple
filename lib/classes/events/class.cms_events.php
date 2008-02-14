@@ -18,24 +18,20 @@
 #
 #$Id$
 
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('../lib/cmsms.api.php');
-
-list( $usec, $sec ) = explode( ' ', microtime() );
-$start_time = ((float)$usec + (float)$sec);
-$profiler = CmsProfiler::get_instance('', $start_time);
-
-$config = CmsConfig::get_instance();
-//$config['db_name'] = 'cms_test';
-
-$test = &new TestSuite('Core Tests');
-//$test->addTestFile('test.cms_acl.php');
-$test->addTestFile('test.cms_event_operations.php');
-$test->run(new HtmlReporter());
-
-echo CmsProfiler::get_instance()->report();
-echo 'time: ' . CmsProfiler::get_instance()->get_time();
+/**
+ * Deprecated name for CmsEventOperations.  This is just
+ * here to make sure things don't break.
+ *
+ * @package default
+ * @author Ted Kulp
+ **/
+class CmsEvents extends CmsEventOperations
+{
+	function __construct()
+	{
+		parent::__construct();
+	}
+}
 
 # vim:ts=4 sw=4 noet
 ?>

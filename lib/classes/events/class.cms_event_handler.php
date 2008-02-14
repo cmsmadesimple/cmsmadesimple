@@ -18,24 +18,25 @@
 #
 #$Id$
 
-require_once('simpletest/unit_tester.php');
-require_once('simpletest/reporter.php');
-require_once('../lib/cmsms.api.php');
+class CmsEventHandler extends CmsObjectRelationalMapping
+{
+	var $params = array('id' => -1, 'order_num' => -1);
+	var $field_maps = array('handler_order' => 'order_num');
+	var $table = 'event_handlers';
+	
+	var $list_filter_fields = array('event_id');
 
-list( $usec, $sec ) = explode( ' ', microtime() );
-$start_time = ((float)$usec + (float)$sec);
-$profiler = CmsProfiler::get_instance('', $start_time);
-
-$config = CmsConfig::get_instance();
-//$config['db_name'] = 'cms_test';
-
-$test = &new TestSuite('Core Tests');
-//$test->addTestFile('test.cms_acl.php');
-$test->addTestFile('test.cms_event_operations.php');
-$test->run(new HtmlReporter());
-
-echo CmsProfiler::get_instance()->report();
-echo 'time: ' . CmsProfiler::get_instance()->get_time();
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	function setup()
+	{
+		$this->create_belongs_to_association('event', 'CmsEvent', 'event_id');
+		$this->assign_acts_as('list');
+	}
+}
 
 # vim:ts=4 sw=4 noet
 ?>

@@ -109,18 +109,18 @@ CmsInstallOperations::create_index($db, 'crossref', 'child_type_and_id', 'child_
 CmsInstallOperations::create_index($db, 'crossref', 'parent_type_and_id', 'parent_type,parent_id');
 
 CmsInstallOperations::create_table($db, 'event_handlers', "
-	event_id      I,
-	tag_name      c(255),
-	module_name   c(100),
-	removable     I,
-	handler_order I,
-	id    I KEY
+	id I KEY AUTO,
+	event_id I,
+	tag_name C(255),
+	module_name C(100),
+	removable I,
+	handler_order I
 ");
 
 CmsInstallOperations::create_table($db, 'events', "
-	originator   c(200) NOTNULL,
-	event_name   c(200) NOTNULL,
-	id     I KEY
+	id I KEY AUTO,
+	originator C(200) NOTNULL,
+	event_name C(200) NOTNULL
 ");
 CmsInstallOperations::create_index($db, 'events', 'originator', 'originator');
 CmsInstallOperations::create_index($db, 'events', 'event_name', 'event_name');
