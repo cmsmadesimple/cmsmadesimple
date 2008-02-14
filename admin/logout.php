@@ -40,18 +40,8 @@ audit($userid, $username, 'User Logout');
 #setcookie('cms_admin_user_id', '', time() - 3600);
 #setcookie('cms_passhash', '', time() - 3600);
 
-#Perform the logout_post callback
-foreach($gCms->modules as $key=>$value)
-{
-	if ($gCms->modules[$key]['installed'] == true &&
-		$gCms->modules[$key]['active'] == true)
-	{
-		$gCms->modules[$key]['object']->LogoutPost();
-	}
-}
-
 #Now call the event
-CmsEvents::SendEvent('Core', 'LogoutPost');
+CmsEventOperations::send_event('Core', 'LogoutPost');
 
 $_SESSION['logout_user_now'] = "1";
 redirect("login.php");

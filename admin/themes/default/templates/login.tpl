@@ -12,10 +12,10 @@
 
 <body>
 <div class="lball">
-	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">{$logintitle_text}</span></p></div>
+	<div class="lblayout lbtopmargin"><p><img src="themes/default/images/logo.gif" alt="" /><span class="logotext">{tr}logintitle{/tr}</span></p></div>
 	<div id="loginbox" class="lblayout lbcontainer">
 			<div class="lbinfo">
-				<p>{$loginprompt_text} <br /><br />
+				<p>{tr}loginprompt{/tr} <br /><br />
 					{$debug_buffer}
 					{if !empty($error)}
 						<span class="loginerror">{$error}</span>
@@ -24,9 +24,9 @@
 			</div>
 			<div class="lbfields">
 				<div class="lbfieldstext">
-					<p class="lbuser">{$username_text}:</p>
-					<p class="lbpass">{$password_text}:</p>
-					<p class="lbopenid">{$openid_text}:</p>
+					<p class="lbuser">{tr}username{/tr}:</p>
+					<p class="lbpass">{tr}password{/tr}:</p>
+					<p class="lbopenid">{tr}openid{/tr}:</p>
 				</div>
 				<div class="lbinput">
 					<form method="post" action="login.php">
@@ -37,9 +37,9 @@
 							{else}
 							  <input class="lbpassword" name="password" type="password" size="15" /><br />
 							{/if}
-							<input class="lbopenid" name="openid" id="openid" type="text" size="15" value="{$openid}" /><br />
-							<input class="lbsubmit" name="loginsubmit" type="submit" value="{$submit_text}" /> 
-							<input class="lbsubmit" name="logincancel" type="submit" value="{$cancel_text}" />
+							<input class="lbopenid" name="openid" id="openid" type="text" size="15" value="{$openid}" /><br /><br />
+							{html_submit name="loginsubmit" name="loginsubmit" value=$submit_text} 
+							{html_submit name="logincancel" name="logincancel" value=$cancel_text}
 						</p>
 					</form>
 				</div>

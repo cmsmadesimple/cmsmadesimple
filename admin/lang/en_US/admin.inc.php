@@ -835,4 +835,5 @@ $lang['admin']['permissions'] = 'Permissions';
 $lang['admin']['unknown'] = 'Unknown';
 $lang['admin']['download'] = 'Download';
 $lang['admin']['blocktype'] = 'Block Type';
+$lang['admin']['openid'] = 'Open ID';
 ?>
