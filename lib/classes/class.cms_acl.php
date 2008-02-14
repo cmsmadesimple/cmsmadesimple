@@ -97,11 +97,11 @@ class CmsAcl extends CmsObject
 		if ($defn['hierarchical'])
 		{
 			$query = "SELECT max(gp.has_access)
-						FROM {$cms_db_prefix}{$defn['link_table']} c, {$cms_db_prefix}{$defn['link_table']} c2 
+						FROM {$cms_db_prefix}{$defn['link_table']} c
+							INNER JOIN {$cms_db_prefix}{$defn['link_table']} c2 ON c2.lft BETWEEN c.lft AND c.rgt
 							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
 							INNER JOIN {$cms_db_prefix}permission_defns pd ON pd.id = gp.permission_defn_id 
-						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
-							AND c2.id = ? 
+						WHERE c2.id = ? 
 							AND pd.module = ? 
 							AND pd.extra_attr = ? 
 							AND pd.name = ? 
@@ -141,11 +141,11 @@ class CmsAcl extends CmsObject
 		if ($defn['hierarchical'])
 		{
 			$result = cms_db()->GetAll("SELECT gp.*, g.group_name as group_name
-						FROM {$cms_db_prefix}{$defn['link_table']} c, {$cms_db_prefix}{$defn['link_table']} c2 
+						FROM {$cms_db_prefix}{$defn['link_table']} c
+							INNER JOIN {$cms_db_prefix}{$defn['link_table']} c2 ON c2.lft BETWEEN c.lft AND c.rgt
 							LEFT OUTER JOIN {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
 							LEFT OUTER JOIN {$cms_db_prefix}groups g ON g.id = gp.group_id
-						WHERE (c2.lft BETWEEN c.lft AND c.rgt) 
-							AND c2.id = ? 
+						WHERE c2.id = ? 
 							AND gp.permission_defn_id = ?
 						ORDER BY c.lft ASC", array($object_id, $defn['id']));
 		}
