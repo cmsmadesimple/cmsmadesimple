@@ -87,7 +87,7 @@ class CmsPreview extends CmsObject
 	
 	public static function clean_filename($fname)
 	{
-		$fname = str_replace('.', '', $fname);
+//		$fname = str_replace('.', '', $fname);
 		$fname = str_replace("\\", '', $fname);
 		$fname = str_replace('/', '', $fname);
 		$fname = str_replace(DIRECTORY_SEPARATOR, '', $fname);
