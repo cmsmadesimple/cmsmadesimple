@@ -62,7 +62,7 @@ class CmsSmarty extends Smarty {
 		if ($have_db)
 		{
 			#Setup the site name
-			$this->assign('sitename', get_site_preference('sitename', 'CMSMS Site'));
+			$this->assign('sitename', CmsApplication::get_preference('sitename', 'CMSMS Site'));
 		}
 
 		if ($config["debug"] == true)
@@ -71,7 +71,7 @@ class CmsSmarty extends Smarty {
 			//$this->debugging = true;
 		}
 
-		if ($have_db && get_site_preference('enablesitedownmessage') == "1")
+		if ($have_db && CmsApplication::get_preference('enablesitedownmessage') == "1")
 		{
 			$this->caching = false;
 			$this->force_compile = true;
