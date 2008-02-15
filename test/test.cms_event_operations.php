@@ -157,18 +157,10 @@ class TestCmsEventOperations extends UnitTestCase
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
 		$list = CmsEventOperations::list_event_handlers('TestModule', 'TestEvent1');
+
 		$this->assertTrue($list != null);
 		$this->assertTrue(count($list) == 2);
 		CmsEventOperations::remove_all_event_handlers('TestModule', 'TestEvent1');
-
-		//cached?
-		if (!CmsConfig::get('debug'))
-		{
-			$list = CmsEventOperations::list_event_handlers('TestModule', 'TestEvent1');
-			$this->assertTrue($list != null);
-			$this->assertTrue(count($list) == 2);
-			CmsCache::clear();
-		}
 		
 		$list = CmsEventOperations::list_event_handlers('TestModule', 'TestEvent1');
 		$this->assertTrue($list != null);

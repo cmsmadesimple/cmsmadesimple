@@ -36,6 +36,16 @@ class CmsEventHandler extends CmsObjectRelationalMapping
 		$this->create_belongs_to_association('event', 'CmsEvent', 'event_id');
 		$this->assign_acts_as('list');
 	}
+	
+	function after_save()
+	{
+		CmsCache::clear();
+	}
+	
+	function after_delete()
+	{
+		CmsCache::clear();
+	}
 }
 
 # vim:ts=4 sw=4 noet

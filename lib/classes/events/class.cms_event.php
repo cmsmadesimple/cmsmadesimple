@@ -51,6 +51,16 @@ class CmsEvent extends CmsObjectRelationalMapping
 			}
 		}
 	}
+	
+	function after_save()
+	{
+		CmsCache::clear();
+	}
+	
+	function after_delete()
+	{
+		CmsCache::clear();
+	}
 }
 
 # vim:ts=4 sw=4 noet

@@ -32,6 +32,7 @@ $config = CmsConfig::get_instance();
 $test = &new TestSuite('Core Tests');
 //$test->addTestFile('test.cms_acl.php');
 $test->addTestFile('test.cms_event_operations.php');
+$test->addTestFile('test.cms_user_tag_operations.php');
 $test->run(new HtmlReporter());
 
 echo CmsProfiler::get_instance()->report();

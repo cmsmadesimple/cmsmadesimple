@@ -42,6 +42,8 @@ class CmsModuleLoader extends CmsObject
 		$cmsmodules = &$gCms->modules;
 
 		$dir = cms_join_path(ROOT_DIR,'modules');
+		
+		$loaded_modules = array();
 
 		if ($loadall == true)
 		{
@@ -67,6 +69,7 @@ class CmsModuleLoader extends CmsObject
 				{
 					$newmodule = new $onemodule;
 					$name = $newmodule->get_name();
+					$loaded_modules[] = $name;
 					$cmsmodules[$name]['object'] = $newmodule;
 					$cmsmodules[$name]['installed'] = false;
 					$cmsmodules[$name]['active'] = false;
@@ -115,6 +118,7 @@ class CmsModuleLoader extends CmsObject
 									{
 										$newmodule = new $modulename;
 										$name = $newmodule->get_name();
+										$loaded_modules[] = $name;
 
 										$dbversion = $result->fields['version'];
 
@@ -159,7 +163,7 @@ class CmsModuleLoader extends CmsObject
 			if ($result) $result->Close();
 		}
 		
-		CmsEventOperations::send_event('Core', 'AllModulesLoaded');
+		CmsEventOperations::send_event('Core', 'AllModulesLoaded', array('loaded_modules' => $loaded_modules));
 	}
 	
 	/**
