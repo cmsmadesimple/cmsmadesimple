@@ -13,6 +13,7 @@ $lang['admin']['other'] = 'Other';
 $lang['admin']['event_desc_moduleupgraded'] = 'Sent after a module is upgraded';
 $lang['admin']['event_desc_moduleinstalled'] = 'Sent after a module is installed';
 $lang['admin']['event_desc_moduleuninstalled'] = 'Sent after a module is uninstalled';
+$lang['admin']['event_desc_allmodulesloaded'] = 'Sent after all modules are loaded';
 $lang['admin']['event_desc_edituserdefinedtagpost'] = 'Sent after a user defined tag is updated';
 $lang['admin']['event_desc_edituserdefinedtagpre'] = 'Sent prior to a user defined tag update';
 $lang['admin']['event_desc_deleteuserdefinedtagpre'] = 'Sent prior to deleting a user defined tag';
@@ -483,6 +484,7 @@ $lang['admin']['troubleshooting'] = '(Troubleshooting)';
 $lang['admin']['originator'] = 'Originator';
 $lang['admin']['event_desc_loginpost'] = 'Sent after a user logs into the admin panel';
 $lang['admin']['event_desc_logoutpost'] = 'Sent after a user logs out of the admin panel';
+$lang['admin']['event_desc_loginfailed'] = 'Sent if a user fails to login';
 $lang['admin']['event_desc_adduserpre'] = 'Sent before a new user is created';
 $lang['admin']['event_desc_adduserpost'] = 'Sent after a new user is created';
 $lang['admin']['event_desc_edituserpre'] = 'Sent before edits to a user are saved';
@@ -539,6 +541,13 @@ $lang['admin']['event_help_logoutpost'] = '<p>Sent after a user logs out of the 
 <h4>Parameters</h4>
 <ul>
 <li>\'user\' - Reference to the affected user object.</li>
+</ul>
+';
+$lang['admin']['event_help_loginfailed'] = '<p>Sent if a user fails to login.</p>
+<h4>Parameters</h4>
+<ul>
+<li>\'username\' - The username they attempted to use.</li>
+<li>\'password\' - The password they attempted to use.</li>
 </ul>
 ';
 $lang['admin']['event_help_adduserpre'] = '<p>Sent before a new user is created.</p>

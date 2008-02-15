@@ -259,6 +259,11 @@ class CmsInstallOperations extends CmsObject
 						include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'droptables.php'));
 					}
 					include_once(cms_join_path(dirname(dirname(__FILE__)), 'schemas', 'schema.php'));
+					
+					//Install the core events after the database
+					//is created.
+					CmsEventOperations::setup_core_events();
+					
 					return true;
 				}
 				catch (Exception $e)

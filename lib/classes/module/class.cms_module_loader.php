@@ -158,6 +158,8 @@ class CmsModuleLoader extends CmsObject
 			
 			if ($result) $result->Close();
 		}
+		
+		CmsEventOperations::send_event('Core', 'AllModulesLoaded');
 	}
 	
 	/**

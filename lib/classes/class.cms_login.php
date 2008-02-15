@@ -137,6 +137,9 @@ class CmsLogin extends CmsObject
 			return true;
 		}
 		
+		//TODO: Is sending the wrong password a bad idea?
+		CmsEvents::send_event('Core', 'LoginFailed', array('username' => $username, 'password' => $password));
+		
 		return false;
 	}
 	

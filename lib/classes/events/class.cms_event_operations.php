@@ -382,6 +382,7 @@ class CmsEventOperations extends CmsObject
 
 		self::create_event( $modulename, 'LoginPost');
 		self::create_event( $modulename, 'LogoutPost');
+		self::create_event( $modulename, 'LoginFailed');
 		
 		self::create_event( $modulename, 'AddUserPre');
 		self::create_event( $modulename, 'AddUserPost');
@@ -437,6 +438,7 @@ class CmsEventOperations extends CmsObject
 		self::create_event( $modulename, 'ModuleInstalled');
 		self::create_event( $modulename, 'ModuleUninstalled');
 		self::create_event( $modulename, 'ModuleUpgraded');
+		self::create_event( $modulename, 'AllModulesLoaded');
 		
 		self::create_event( $modulename, 'ContentStylesheet');
 		self::create_event( $modulename, 'ContentPreCompile');
