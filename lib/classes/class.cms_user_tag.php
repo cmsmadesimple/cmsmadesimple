@@ -69,6 +69,22 @@ class CmsUserTag extends CmsObjectRelationalMapping
 		}
 	}
 	
+	public function call(&$params)
+	{
+		$result = null;
+		$smarty = cms_smarty();
+
+		$functionname = "tmpcallusertag_".$this->name."_userplugin_function";
+		if (function_exists($functionname) || 
+			!(@eval('function '.$functionname.'(&$params, &$smarty) {'.$this->code.'}') === FALSE))
+		{
+			
+			$result = call_user_func_array($functionname, array(&$params, &$smarty));
+		}
+		
+		return $result;
+	}
+	
 	//Callback handlers
 	function before_save()
 	{

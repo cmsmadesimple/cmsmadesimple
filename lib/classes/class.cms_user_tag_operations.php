@@ -61,7 +61,7 @@ class CmsUserTagOperations extends CmsObject
 	 *
 	 * @returns mixed If successfull, the body of the user tag (string).  If it fails, false
 	 */
-	function get_user_tag($name)
+	function get_user_tag_code($name)
 	{
 		$user_tag = cms_orm('CmsUserTag')->find_by_name($name);
 		if ($user_tag != null)
@@ -74,7 +74,7 @@ class CmsUserTagOperations extends CmsObject
 
 	function GetUserTag( $name )
 	{
-		return self::get_user_tag($name);
+		return self::get_user_tag_code($name);
 	}
 
 
@@ -147,20 +147,13 @@ class CmsUserTagOperations extends CmsObject
 	
 	function call_user_tag($name, &$params)
 	{
-		$smarty = cms_smarty();
-		
-		$code = self::GetUserTag($name);
-		
-		$result = FALSE;
-		
-		$functionname = "tmpcallusertag_".$name."_userplugin_function";
-		
-		if (function_exists($functionname) || !(@eval('function '.$functionname.'(&$params, &$smarty) {'.$code.'}') === FALSE))
+		$user_tag = cms_orm('CmsUserTag')->find_by_name($name);
+		if ($user_tag != null)
 		{
-			$result = call_user_func_array($functionname, array(&$params, &$smarty));
+			return $user_tag->call($params);
 		}
-		
-		return $result;
+
+		return null;
 	}
 	
 	function CallUserTag($name, &$params)

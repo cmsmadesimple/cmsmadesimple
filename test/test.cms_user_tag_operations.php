@@ -76,6 +76,16 @@ class TestCmsUserTagOperations extends UnitTestCase
 		$params = array('TestValue');
 		$this->assertEqual(CmsUserTagOperations::call_user_tag('TestTag', $params), 'TestValue');
 	}
+	
+	function test_call_tag_from_orm()
+	{
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEqual($this->select_count(), 1);
+		$user_tag = cms_orm('CmsUserTag')->find_by_name('TestTag');
+		$this->assertNotNull($user_tag);
+		$params = array('TestValue');
+		$this->assertEqual($user_tag->call($params), 'TestValue');
+	}
 }
 
 # vim:ts=4 sw=4 noet
