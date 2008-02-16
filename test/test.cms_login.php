@@ -55,14 +55,21 @@ class TestCmsLogin extends UnitTestCase
 		$this->callback_test = $this->callback_test + 1;
 	}
 	
+	function test_bad_passsword()
+	{
+		$this->add_test_user();
+		$this->assertFalse(CmsLogin::login('sometestuser', 'some_bad_password'));
+		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
+	}
+	
 	function test_login_failed_event()
 	{
 		$this->callback_test = 1;
 		CmsEventOperations::add_temp_event_handler('Core', 'LoginFailed', array($this, 'temp_callback'));
-		CmsLogin::login('sometestuser', 'some_password');
+		$this->assertFalse(CmsLogin::login('sometestuser', 'some_password'));
 		$this->assertEqual($this->callback_test, 2);
 		$this->add_test_user();
-		CmsLogin::login('sometestuser', 'some_password');
+		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
 		$this->assertEqual($this->callback_test, 2);
 	}
 }

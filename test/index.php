@@ -31,7 +31,7 @@ $profiler = CmsProfiler::get_instance('', $start_time);
 $config = CmsConfig::get_instance();
 //$config['db_name'] = 'cms_test';
 
-$test = &new TestSuite('Core Tests');
+$test = new TestSuite('Core Tests');
 //$test->addTestFile('test.cms_acl.php');
 $test->addTestFile('test.cms_event_operations.php');
 $test->addTestFile('test.cms_user_tag_operations.php');
