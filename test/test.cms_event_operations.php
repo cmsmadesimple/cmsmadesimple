@@ -69,8 +69,10 @@ class TestCmsEventOperations extends UnitTestCase
 		return cms_orm('CmsEventHandler')->find_count_by_module_name_or_tag_name('TestModuleMethod', 'TestEventTag');
 	}
 	
-	function temp_callback(&$params)
+	function temp_callback($originator, $event_name, &$params)
 	{
+		$this->assertEqual($originator, 'TestModule');
+		$this->assertEqual($event_name, 'TestEvent1');
 		$this->callback_test = $this->callback_test + 1;
 	}
 	

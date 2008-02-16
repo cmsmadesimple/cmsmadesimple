@@ -132,11 +132,12 @@ class CmsEventOperations extends CmsObject
 		//Send "before" temp handlers
 		if (self::$before_temp_calls != null)
 		{
+			$send_params = array($modulename, $eventname, $params);
 			if (isset(self::$before_temp_calls[$modulename][$eventname]))
 			{
 				foreach (self::$before_temp_calls[$modulename][$eventname] as &$one_method)
 				{
-					call_user_func_array($one_method, $params);
+					call_user_func_array($one_method, $send_params);
 				}
 			}
 		}
@@ -175,11 +176,12 @@ class CmsEventOperations extends CmsObject
 		//Send "after" temp handlers
 		if (self::$after_temp_calls != null)
 		{
+			$send_params = array($modulename, $eventname, $params);
 			if (isset(self::$after_temp_calls[$modulename][$eventname]))
 			{
 				foreach (self::$after_temp_calls[$modulename][$eventname] as &$one_method)
 				{
-					call_user_func_array($one_method, $params);
+					call_user_func_array($one_method, $send_params);
 				}
 			}
 		}

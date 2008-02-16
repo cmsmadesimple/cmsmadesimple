@@ -1332,19 +1332,34 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 
 	/**
-	* Add an event handler for a module event
-	*
-	* @param string $modulename      The name of the module sending the event
-	* @param string $eventname       The name of the event
-	* @param boolean $removable      Can this event be removed from the list?
-	*
-	* @returns mixed If successful, true.  If it fails, false.
-	*/
-	public function add_event_handler($modulename, $eventname, $removable = true)
+	 * Add an event handler for a module event
+	 *
+	 * @param string $module_name  The name of the module sending the event
+	 * @param string $event_name  The name of the event
+	 * @param boolean $removable  Can this event be removed from the list?
+	 *
+	 * @return void
+	 **/
+	public function add_event_handler($module_name, $event_name, $removable = true)
 	{
-		CmsEvents::add_event_handler($modulename, $eventname, false, $this->get_name(), $removable);
+		CmsEvents::add_event_handler($module_name, $event_name, false, $this->get_name(), $removable);
 	}
-
+	
+	/**
+	 * Add a temporary event handler to the given module/event.  This only lasts for the duration
+	 * of the request.
+	 *
+	 * @param string $module_name The name of the module sending the event
+	 * @param string $event_name The name of the event
+	 * @param string $callback_method The name of the method to callback to when this event fires.  Defaults to 'do_event'
+	 * @param boolean $before_calls Should this callback before or after the stored events.  Defaults to false (after)
+	 *
+	 * @return void
+	 **/
+	public function add_temp_event_handler($module_name, $event_name, $callback_method = 'do_event', $before_calls = false)
+	{
+		CmsEvents::add_temp_event_handler($module_name, $event_name, array($this, $callback_method), $before_calls);
+	}
 
 	/**
 	 * Inform the system about a new event that can be generated
