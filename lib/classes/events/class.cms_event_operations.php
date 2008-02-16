@@ -31,6 +31,35 @@
 class CmsEventOperations extends CmsObject
 {
 	private static $handlercache;
+	private static $instance = null;
+	
+	//arrays to handle "on the fly" event handlers
+	//either before or after the actual calls to the stored handlers
+	//(defaults to after)
+	public static $before_temp_calls = null;
+	public static $after_temp_calls = null;
+	
+	function __construct()
+	{
+		parent::__construct();
+	}
+	
+	/**
+	 * Get an instance of this object, though most people should be using
+	 * the static methods instead.  This is more for compatibility than
+	 * anything else.
+	 *
+	 * @return CmsUserTagOperations The instance of the singleton object.
+	 * @author Ted Kulp
+	 **/
+	static public function get_instance()
+	{
+		if (self::$instance == NULL)
+		{
+			self::$instance = new CmsEventOperations();
+		}
+		return self::$instance;
+	}
 
 	/**
 	 * Inform the system about a new event that can be generated
@@ -100,9 +129,17 @@ class CmsEventOperations extends CmsObject
 	 **/
 	public static function send_event( $modulename, $eventname, $params = array() )
 	{
-		//var_dump("Sending $eventname on $modulename");
-		global $gCms;
-		//$usertagops =& $gCms->GetUserTagOperations();
+		//Send "before" temp handlers
+		if (self::$before_temp_calls != null)
+		{
+			if (isset(self::$before_temp_calls[$modulename][$eventname]))
+			{
+				foreach (self::$before_temp_calls[$modulename][$eventname] as &$one_method)
+				{
+					call_user_func_array($one_method, $params);
+				}
+			}
+		}
 
 		$results = self::list_event_handlers($modulename, $eventname);
 		
@@ -125,12 +162,24 @@ class CmsEventOperations extends CmsObject
 					}
 
 					// and call the module event handler.
-					$obj =& CmsModule::get_module_instance($row['module_name']);
+					$obj = CmsModule::get_module_instance($row['module_name']);
 					if( $obj )
 					{
 						debug_buffer('calling module ' . $row['module_name'] . ' from event ' . $eventname);
 						$obj->DoEvent( $modulename, $eventname, $params );
 					}
+				}
+			}
+		}
+		
+		//Send "after" temp handlers
+		if (self::$after_temp_calls != null)
+		{
+			if (isset(self::$after_temp_calls[$modulename][$eventname]))
+			{
+				foreach (self::$after_temp_calls[$modulename][$eventname] as &$one_method)
+				{
+					call_user_func_array($one_method, $params);
 				}
 			}
 		}
@@ -251,6 +300,35 @@ class CmsEventOperations extends CmsObject
 	public static function AddEventHandler( $modulename, $eventname, $tag_name = false, $module_handler = false, $removable = true)
 	{
 		return self::add_event_handler( $modulename, $eventname, $tag_name, $module_handler, $removable );
+	}
+	
+	/**
+	 * Add an event handler "on the fly" for a module event.  This means that
+	 * it only lasts for the duration of the request.
+	 *
+	 * @param string $module_name  The name of the module sending the event
+	 * @param string $event_name  The name of the event
+	 * @param array $method  The callback method.  This should be in the standard array($object, $method) structure
+	 * @param boolean $before_calls  Do we call this before or after the stored handlers?  Defaults to false (after)
+	 *
+	 * @return void
+	 */
+	public static function add_temp_event_handler($module_name, $event_name, $method, $before_calls = false)
+	{	
+		if ($before_calls)
+		{
+			if (self::$before_temp_calls == null)
+				self::$before_temp_calls = array();
+
+			self::$before_temp_calls[$module_name][$event_name][] = $method;
+		}
+		else
+		{
+			if (self::$after_temp_calls == null)
+				self::$after_temp_calls = array();
+
+			self::$after_temp_calls[$module_name][$event_name][] = $method;
+		}
 	}
 
 	/**

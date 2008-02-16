@@ -20,6 +20,8 @@
 
 class TestCmsEventOperations extends UnitTestCase
 {
+	var $callback_test = false;
+
 	function __construct()
 	{
 		parent::__construct();
@@ -65,6 +67,11 @@ class TestCmsEventOperations extends UnitTestCase
 	function get_event_handler_count()
 	{
 		return cms_orm('CmsEventHandler')->find_count_by_module_name_or_tag_name('TestModuleMethod', 'TestEventTag');
+	}
+	
+	function temp_callback(&$params)
+	{
+		$this->callback_test = $this->callback_test + 1;
 	}
 	
 	function test_create_event()
@@ -173,6 +180,21 @@ class TestCmsEventOperations extends UnitTestCase
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
 		$this->assertTrue(CmsEventOperations::list_events() > 0);
+	}
+	
+	function test_add_temp_event_handler()
+	{
+		$this->callback_test = 1;
+		$this->create_event();
+		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'));
+		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
+		$this->assertEqual($this->callback_test, 2);
+		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'));
+		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
+		$this->assertEqual($this->callback_test, 4);		
+		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'), true);
+		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
+		$this->assertEqual($this->callback_test, 7);
 	}
 }
 
