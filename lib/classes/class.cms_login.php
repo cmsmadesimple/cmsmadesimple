@@ -132,7 +132,7 @@ class CmsLogin extends CmsObject
 		{
 			self::generate_user_object($oneuser->id);
 			CmsEvents::send_event('Core', 'LoginPost', array('user' => &$oneuser));
-			audit($oneuser->id, $oneuser->username, 'User Login');
+			//audit($oneuser->id, $oneuser->username, 'User Login');
 			
 			return true;
 		}
@@ -161,7 +161,7 @@ class CmsLogin extends CmsObject
 		{
 			self::generate_user_object($oneuser->id);
 			CmsEvents::send_event('Core', 'LoginPost', array('user' => &$oneuser));
-			audit($oneuser->id, $oneuser->username, 'User Login');
+			//audit($oneuser->id, $oneuser->username, 'User Login');
 			
 			return true;
 		}
@@ -259,8 +259,11 @@ class CmsLogin extends CmsObject
 		{
 			$_SESSION['cmsms_user'] = $oneuser;
 			$_SESSION['cmsms_user_id'] = $oneuser->id; //TODO: Remove me
-			setcookie('cmsms_user_id', $oneuser->id, 0, self::get_cookie_path());
-			setcookie('cmsms_passhash', md5(md5(ROOT_DIR . '--' . $oneuser->password)), 0, self::get_cookie_path());
+			if (!headers_sent())
+			{
+				setcookie('cmsms_user_id', $oneuser->id, 0, self::get_cookie_path());
+				setcookie('cmsms_passhash', md5(md5(ROOT_DIR . '--' . $oneuser->password)), 0, self::get_cookie_path());
+			}
 			return $oneuser;
 		}
 		
@@ -276,8 +279,11 @@ class CmsLogin extends CmsObject
 	{
 		unset($_SESSION['cmsms_user']);
 		unset($_SESSION['cmsms_user_id']); //TODO: Remove me
-		setcookie('cmsms_user_id', '', time() - 3600, self::get_cookie_path());
-		setcookie('cmsms_passhash', '', time() - 3600, self::get_cookie_path());
+		if (!headers_sent())
+		{
+			setcookie('cmsms_user_id', '', time() - 3600, self::get_cookie_path());
+			setcookie('cmsms_passhash', '', time() - 3600, self::get_cookie_path());
+		}
 	}
 	
 	static public function get_cookie_path()

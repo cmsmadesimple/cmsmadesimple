@@ -22,6 +22,8 @@ require_once('simpletest/unit_tester.php');
 require_once('simpletest/reporter.php');
 require_once('../lib/cmsms.api.php');
 
+@ob_start();
+
 list( $usec, $sec ) = explode( ' ', microtime() );
 $start_time = ((float)$usec + (float)$sec);
 $profiler = CmsProfiler::get_instance('', $start_time);
@@ -33,10 +35,13 @@ $test = &new TestSuite('Core Tests');
 //$test->addTestFile('test.cms_acl.php');
 $test->addTestFile('test.cms_event_operations.php');
 $test->addTestFile('test.cms_user_tag_operations.php');
+$test->addTestFile('test.cms_login.php');
 $test->run(new HtmlReporter());
 
 echo CmsProfiler::get_instance()->report();
 echo 'time: ' . CmsProfiler::get_instance()->get_time();
+
+@ob_flush();
 
 # vim:ts=4 sw=4 noet
 ?>
