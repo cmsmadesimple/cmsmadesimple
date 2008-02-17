@@ -1761,7 +1761,7 @@ abstract class CmsModuleBase extends CmsObject
 		return $smarty->is_cached('module_db_tpl:' . $this->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
 	}
 	
-	public function process_template_from_database($template_type, $template_name, $id, $return_id, $designation = '', $cache_id = '')
+	public function process_template_from_database($id, $return_id, $template_type, $template_name = '', $designation = '', $cache_id = '')
 	{
 		$smarty = cms_smarty();
 

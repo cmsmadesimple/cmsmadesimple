@@ -202,8 +202,20 @@ class CmsSmarty extends Smarty {
     {
         $db = cms_db();
 
-        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
-        $row = $db->GetRow($query, split(';', $tpl_name));
+		list($module_name , $template_type, $template_name) = split(';', $tpl_name);
+		
+		$row = null;
+
+		if ($template_name == '')
+		{
+	        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and default_template = 1";
+	        $row = $db->GetRow($query, array($module_name , $template_type));			
+		}
+		else
+		{
+	        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
+	        $row = $db->GetRow($query, array($module_name , $template_type, $template_name));
+		}
 
         if ($row)
         {
@@ -218,8 +230,21 @@ class CmsSmarty extends Smarty {
 	{
 		$db = cms_db();
 
-		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
-		$row = $db->GetRow($query, split(';', $tpl_name));
+		list($module_name , $template_type, $template_name) = split(';', $tpl_name);
+		
+		$row = null;
+
+		if ($template_name == '')
+		{
+	        $query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and default_template = 1";
+	        $row = $db->GetRow($query, array($module_name , $template_type));			
+		}
+		else
+		{
+	        $query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
+	        $row = $db->GetRow($query, array($module_name , $template_type, $template_name));
+		}
+
 		if ($row)
 		{
 			$tpl_timestamp = $db->UnixTimeStamp($row['modified_date']);
