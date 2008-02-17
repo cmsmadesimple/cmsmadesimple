@@ -185,9 +185,12 @@ CmsInstallOperations::create_table($db, 'module_deps', "
 ");
 
 CmsInstallOperations::create_table($db, 'module_templates', "
-	module_name C(100),
-	template_name C(150),
+	id I KEY AUTO,
+	module_name C(100) NOTNULL,
+	template_type C(100) NOTNULL default '',
+	template_name C(150) NOTNULL,
 	content XL,
+	default_template I1 default 0,
 	create_date T,
 	modified_date T
 ");

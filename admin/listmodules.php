@@ -239,10 +239,10 @@ if ($access)
 				$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
 				$db->Execute($query, array($module));
 
-				Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module));
+				CmsEventOperations::send_event('Core', 'ModuleUninstalled', array('name' => $module));
 
 				#and show the uninstallpost if necessary...
-				if ($modinstance->UninstallPostMessage() != FALSE)
+				if ($modinstance->uninstall_post_message() != FALSE)
 				{
 					//Redirect right away so that the uninstalled module is removed from the menu
 					redirect('listmodules.php?action=showpostuninstall&module='.$module);
@@ -263,13 +263,13 @@ if ($access)
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance = $gCms->modules[$module]['object'];
-			if ($modinstance->UninstallPostMessage() != FALSE)
+			if ($modinstance->uninstall_post_message() != FALSE)
 			{
 				@ob_start();
-				echo $modinstance->UninstallPostMessage();
+				echo $modinstance->uninstall_post_message();
 				$content = @ob_get_contents();
 				@ob_end_clean();
-				echo $themeObject->ShowMessage($content);
+				echo $themeObject->show_message($content);
 			}
 		}
 	}

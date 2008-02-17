@@ -1675,20 +1675,20 @@ abstract class CmsModuleBase extends CmsObject
 	 * ------------------------------------------------------------------
 	 */
 
-	public function list_templates($modulename = '')
+	public function list_templates($module_name = '', $template_type = '')
 	{
 		$this->load_template_methods();
-		return cms_module_ListTemplates($this, $modulename);
+		return cms_module_ListTemplates($this, $module_name, $template_type);
 	}
 
 	/**
 	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
 	 * follow any smarty caching rules.
 	 */
-	public function get_template($tpl_name, $modulename = '')
+	public function get_template($tpl_name, $module_name = '', $template_type = '')
 	{
 		$this->load_template_methods();
-		return cms_module_GetTemplate($this, $tpl_name, $modulename);
+		return cms_module_GetTemplate($this, $tpl_name, $module_name, $template_type);
 	}
 
 	/**
@@ -1701,16 +1701,16 @@ abstract class CmsModuleBase extends CmsObject
 		return cms_module_GetTemplateFromFile($this, $template_name);
 	}
 
-	public function set_template($tpl_name, $content, $modulename = '')
+	public function set_template($tpl_name, $content, $module_name = '', $template_type = '')
 	{
 		$this->load_template_methods();
-		return cms_module_SetTemplate($this, $tpl_name, $content, $modulename);
+		return cms_module_SetTemplate($this, $tpl_name, $content, $module_name, $template_type);
 	}
 
-	public function delete_template($tpl_name = '', $modulename = '')
+	public function delete_template($tpl_name = '', $module_name = '', $template_type = '')
 	{
 		$this->load_template_methods();
-		return cms_module_DeleteTemplate($this, $tpl_name, $modulename);
+		return cms_module_DeleteTemplate($this, $tpl_name, $module_name, $template_type);
 	}
 
 	public function is_file_template_cached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
