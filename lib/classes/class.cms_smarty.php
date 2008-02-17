@@ -202,7 +202,7 @@ class CmsSmarty extends Smarty {
     {
         $db = cms_db();
 
-        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+        $query = "SELECT content from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
         $row = $db->GetRow($query, split(';', $tpl_name));
 
         if ($row)
@@ -218,7 +218,7 @@ class CmsSmarty extends Smarty {
 	{
 		$db = cms_db();
 
-		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_name = ?";
+		$query = "SELECT modified_date from ".cms_db_prefix()."module_templates WHERE module_name = ? and template_type = ? and template_name = ?";
 		$row = $db->GetRow($query, split(';', $tpl_name));
 		if ($row)
 		{

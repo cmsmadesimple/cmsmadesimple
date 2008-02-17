@@ -191,8 +191,7 @@ function cms_module_IsDatabaseTemplateCached(&$modinstance, $tpl_name, $designat
  */
 function cms_module_ProcessTemplateFromData(&$modinstance, $data)
 {
-	global $gCms;
-	$smarty = &$gCms->GetSmarty();
+	$smarty = cms_smarty();
 	$smarty->_compile_source('temporary template', $data, $_compiled );
 	@ob_start();
 	$smarty->_eval('?>' . $_compiled);

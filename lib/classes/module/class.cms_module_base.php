@@ -1675,20 +1675,18 @@ abstract class CmsModuleBase extends CmsObject
 	 * ------------------------------------------------------------------
 	 */
 
-	public function list_templates($module_name = '', $template_type = '')
+	public function list_templates($template_type)
 	{
-		$this->load_template_methods();
-		return cms_module_ListTemplates($this, $module_name, $template_type);
+		return cms_orm('CmsModuleTemplates')->find_all_by_module_and_template_type($this->get_name(), $template_type);
 	}
 
 	/**
 	 * Returns a database saved template.  This should be used for admin functions only, as it doesn't
 	 * follow any smarty caching rules.
 	 */
-	public function get_template($tpl_name, $module_name = '', $template_type = '')
+	public function get_template($template_type, $template_name)
 	{
-		$this->load_template_methods();
-		return cms_module_GetTemplate($this, $tpl_name, $module_name, $template_type);
+		return cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
 	}
 
 	/**
@@ -1697,54 +1695,96 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function get_template_from_file($template_name)
 	{
-		$this->load_template_methods();
-		return cms_module_GetTemplateFromFile($this, $template_name);
+		$ok = (strpos($tpl_name, '..') === false);
+		if (!$ok) return;
+
+		$template = cms_join_path(ROOT_DIR, 'modules', $this->get_name(), 'templates', $template_name.'.tpl');
+		if (is_file($template)) {
+			return file_get_contents($template);
+		}
+		else
+		{
+			return lang('errorinsertingtemplate');
+		}
 	}
 
-	public function set_template($tpl_name, $content, $module_name = '', $template_type = '')
+	public function set_template($module_name, $template_type, $template_name, $content, $default = false)
 	{
-		$this->load_template_methods();
-		return cms_module_SetTemplate($this, $tpl_name, $content, $module_name, $template_type);
+		$template = cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+		if ($template != null)
+		{
+			$template->content = $content;
+			return $template->save();
+		}
+		else
+		{
+			$template = new CmsModuleTemplate();
+			$template->module = $module_name;
+			$template->template_type = $template_type;
+			$template->template_name = $template_name;
+			$template->content = $content;
+			$template->default = $default;
+			return $template->save();
+		}
 	}
 
-	public function delete_template($tpl_name = '', $module_name = '', $template_type = '')
+	public function delete_template($module_name, $template_type, $template_name)
 	{
-		$this->load_template_methods();
-		return cms_module_DeleteTemplate($this, $tpl_name, $module_name, $template_type);
+		$template = cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+		if ($template != null)
+		{
+			return $template->delete();
+		}
 	}
 
-	public function is_file_template_cached($tpl_name, $designation = '', $timestamp = '', $cacheid = '')
+	public function is_file_template_cached($template_name, $designation = '', $timestamp = '', $cache_id = '')
 	{
-		$this->load_template_methods();
-		return cms_module_IsFileTemplateCached($this, $tpl_name, $designation, $timestamp, $cacheid);
+		$ok = (strpos($template_name, '..') === false);
+		if (!$ok) return;
+
+		return $smarty->is_cached('module_file_tpl:' . $this->get_name() . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
 	}
 	
-	public function process_template($tpl_name, $id, $return_id, $designation = '', $cache = false, $cacheid = '')
+	public function process_template($template_name, $id, $return_id, $designation = '', $cache_id = '')
 	{
-		$this->load_template_methods();
-		return cms_module_process_template($this, $tpl_name, $id, $return_id, $designation, $cache = false, $cacheid);
+		$smarty = cms_smarty();
+
+		$smarty->assign_by_ref('cms_mapi_module', $this);
+		$smarty->assign('cms_mapi_id', $id);
+		$smarty->assign('cms_mapi_return_id', $return_id);
+
+		return $smarty->fetch('module_file_tpl:'.$this->get_name() . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
 	}
 
-	public function is_database_template_cached($tpl_name, $designation = '', $timestamp = '')
+	public function is_database_template_cached($template_type, $template_name, $designation = '', $timestamp = '', $cache_id = '')
 	{
-		$this->load_template_methods();
-		return cms_module_IsDatabaseTemplateCached($this, $tpl_name, $designation, $timestamp);
+		return $smarty->is_cached('module_db_tpl:' . $this->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
 	}
+	
+	public function process_template_from_database($template_type, $template_name, $id, $return_id, $designation = '', $cache_id = '')
+	{
+		$smarty = cms_smarty();
 
+		$smarty->assign_by_ref('cms_mapi_module', $this);
+		$smarty->assign('cms_mapi_id', $id);
+		$smarty->assign('cms_mapi_return_id', $return_id);
+
+		return $smarty->fetch('module_db_tpl:' . $this->get_name() . ';' . $template_type . ';' . $template_name, $cache_id, ($designation != '' ? $designation : $this->get_name()));
+	}
+	
 	/**
 	 * Given a template in a variable, this method processes it through smarty
 	 * note, there is no caching involved.
 	 */
-	public function ProcessTemplateFromData( $data )
+	public function process_template_from_data( $data )
 	{
-		$this->load_template_methods();
-		return cms_module_ProcessTemplateFromData($this, $data);
-	}
-	
-	public function process_template_from_database($tpl_name, $id, $return_id, $designation = '', $cache = false)
-	{
-		$this->load_template_methods();
-		return cms_module_process_template_from_database($this, $tpl_name, $id, $return_id, $designation, $cache);
+		$smarty = cms_smarty();
+		$smarty->_compile_source('temporary template', $data, $_compiled );
+		@ob_start();
+		$smarty->_eval('?>' . $_compiled);
+		$_contents = @ob_get_contents();
+		@ob_end_clean();
+		return $_contents;
 	}
 
 	public function list_user_tags()
