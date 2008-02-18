@@ -16,24 +16,12 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_tab_headers($params, $content, &$smarty, &$repeat)
+function smarty_cms_function_mod_hidden($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
-	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
-	
-	if (isset($params['active']))
-	{
-		$smarty->assign('active_tab_for_modules', $params['active']);
-	}
-	
-	if (!$repeat)
-	{
-		if (isset($content))
-		{
-			return CmsModuleTabs::start_tab_headers() . $content . CmsModuleTabs::end_tab_headers();
-		}
-	}
+
+	return $module->create_input_hidden($id, $params['name'], coalesce_key($params, 'value', ''), coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
 }
 
 ?>

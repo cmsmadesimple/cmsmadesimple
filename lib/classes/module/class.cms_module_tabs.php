@@ -30,9 +30,9 @@ class CmsModuleTabs extends CmsObject
 		return '<div id="module_page_tabs"><ul>';
 	}
 
-	static public function set_tab_header($tabid, $title, $active=false)
+	static public function set_tab_header($tabid, $title, $active = false)
 	{
-		return '<li><a href="#'.$tabid.'"><span>'.$title.'</span></a></li>';
+		return '<li' . ($active ? ' class="ui-tabs-selected"' : '') . '><a href="#'.$tabid.'"><span>'.$title.'</span></a></li>';
 	}
 
 	static public function end_tab_headers()
