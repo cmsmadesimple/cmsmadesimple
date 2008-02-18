@@ -598,8 +598,13 @@ abstract class CmsModuleBase extends CmsObject
 	 * @return void
 	 * @author Ted Kulp
 	 **/
-	public function register_data_object($class_name, $file_name)
+	public function register_data_object($class_name, $file_name = '')
 	{
+		if ($file_name == '')
+		{
+			$file_name = cms_join_path($this->get_module_path(), 'class.' . underscore($class_name) . '.php');
+		}
+
 		if (include($file_name))
 		{
 			$orm =& cmsms()->orm;
@@ -647,6 +652,27 @@ abstract class CmsModuleBase extends CmsObject
 	public function install_post_message()
 	{
 		return FALSE;
+	}
+	
+	public function create_table($table, $fields)
+	{
+		$dbdict = NewDataDictionary(cms_db());
+		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+
+		$sqlarray = $dbdict->CreateTableSQL(CMS_DB_PREFIX.$table, $fields, $taboptarray);
+		if (count($sqlarray))
+		{
+			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
+		}
+		$dbdict->ExecuteSQLArray($sqlarray);
+	}
+	
+	public function create_index($table, $name, $field)
+	{	
+		$dbdict = NewDataDictionary(cms_db());
+
+		$sqlarray = $dbdict->CreateIndexSQL($name, CMS_DB_PREFIX.$table, $field);
+		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
 	/**
@@ -702,6 +728,14 @@ abstract class CmsModuleBase extends CmsObject
 	public function uninstall_post_message()
 	{
 		return FALSE;
+	}
+	
+	public function drop_table($table)
+	{
+		$dbdict = NewDataDictionary(cms_db());
+
+		$sqlarray = $dbdict->DropTableSQL(CMS_DB_PREFIX.$table);
+		$dbdict->ExecuteSQLArray($sqlarray);
 	}
 	
 	/**
@@ -1677,7 +1711,7 @@ abstract class CmsModuleBase extends CmsObject
 
 	public function list_templates($template_type)
 	{
-		return cms_orm('CmsModuleTemplates')->find_all_by_module_and_template_type($this->get_name(), $template_type);
+		return cms_orm('CmsModuleTemplate')->find_all_by_module_and_template_type($this->get_name(), $template_type);
 	}
 
 	/**
@@ -1686,7 +1720,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function get_template($template_type, $template_name)
 	{
-		return cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+		return cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
 	}
 
 	/**
@@ -1708,9 +1742,9 @@ abstract class CmsModuleBase extends CmsObject
 		}
 	}
 
-	public function set_template($module_name, $template_type, $template_name, $content, $default = false)
+	public function set_template($template_type, $template_name, $content, $default = false)
 	{
-		$template = cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+		$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
 		if ($template != null)
 		{
 			$template->content = $content;
@@ -1719,7 +1753,7 @@ abstract class CmsModuleBase extends CmsObject
 		else
 		{
 			$template = new CmsModuleTemplate();
-			$template->module = $module_name;
+			$template->module = $this->get_name();
 			$template->template_type = $template_type;
 			$template->template_name = $template_name;
 			$template->content = $content;
@@ -1728,9 +1762,9 @@ abstract class CmsModuleBase extends CmsObject
 		}
 	}
 
-	public function delete_template($module_name, $template_type, $template_name)
+	public function delete_template($template_type, $template_name)
 	{
-		$template = cms_orm('CmsModuleTemplates')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+		$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
 		if ($template != null)
 		{
 			return $template->delete();

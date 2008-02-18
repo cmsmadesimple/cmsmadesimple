@@ -758,6 +758,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function save()
 	{
+		$this->before_validation_caller();
+
 		if ($this->_call_validation())
 			return false;
 
@@ -1198,6 +1200,34 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	}
 	
 	/**
+	 * Callback sent before the object is validated.  This allows the object to
+	 * do any initial cleanup so that validation may pass properly.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	protected function before_validation()
+	{
+	}
+	
+	/**
+	 * Wrapper function for before_validation.  Only should be 
+	 * called by classes that extend the functionality of 
+	 * the ORM system.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function before_validation_caller()
+	{
+		foreach (cms_orm()->get_acts_as($this) as $one_acts_as)
+		{
+			$one_acts_as->before_validation($this);
+		}
+		$this->before_validation();
+	}
+	
+	/**
 	 * Callback sent before the object is saved.  This allows the object to
 	 * send any events, manipulate any values, etc before the objects is
 	 * persisted.
@@ -1211,7 +1241,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	
 	/**
 	 * Wrapper function for before_save.  Only should be 
-	 * called by classes that entend the functionality of 
+	 * called by classes that extend the functionality of 
 	 * the ORM system.
 	 *
 	 * @return void

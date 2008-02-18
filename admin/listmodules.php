@@ -162,10 +162,10 @@ if ($access)
 			if( $content != FALSE )
 			{
 				//Redirect right away so that the installed module shows in the menu
-				redirect('listmodules.php?action=showpostinstall&module='.$module);
+				//redirect('listmodules.php?action=showpostinstall&module='.$module);
 			}
 			// all is good, but no postinstall message
-			redirect("listmodules.php");
+			//redirect("listmodules.php");
 		}
 	}
 

@@ -180,8 +180,8 @@ class CmsSmarty extends Smarty {
     {
         $params = split(';', $tpl_name);
         if (count($params) == 2 && file_exists(dirname(dirname(dirname(__FILE__))) . '/modules/' . $params[0] . '/templates/' . $params[1]))
-        {   
-            $tpl_source = @file_get_contents(dirname(dirname(dirname(__FILE__))) . '/modules/' . $params[0] . '/templates/' . $params[1]);
+        {
+            $tpl_source = @file_get_contents(dirname(dirname(dirname(__FILE__))) . '/modules/' . $params[0] . '/templates/' . $params[1]);;
             return true;
         }
         return false;

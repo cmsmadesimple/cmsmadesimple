@@ -55,6 +55,11 @@ class CmsActsAs extends CmsObject
 
 	}
 	
+	public function before_validation(&$obj)
+	{
+		
+	}
+	
 	public function before_save(&$obj)
 	{
 		
