@@ -308,7 +308,7 @@ abstract class CmsModuleBase extends CmsObject
 	public function function_plugin($params, &$smarty)
 	{
 		$params['module'] = $this->get_name();
-		self::cms_module_plugin($params, $smarty);
+		return self::cms_module_plugin($params, $smarty);
 	}
 
 	/**
@@ -316,8 +316,8 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public static function cms_module_plugin($params, &$smarty)
 	{
-		global $gCms;
-		$cmsmodules = &$gCms->modules;
+		$gCms = cmsms();
+		$cmsmodules = cmsms()->modules;
 
 		$id = 'm' . ++$gCms->variables["modulenum"];
 
