@@ -151,6 +151,13 @@
         <description>templatecss</description>
         <show_in_menu>false</show_in_menu>
       </node>
+      <node>
+        <name>moduletemplate</name>
+        <title>moduletemplates</title>
+        <url>listmoduletemplates.php</url>
+        <description>moduletemplatesdescription</description>
+        <show_in_menu><permission>templatePerms</permission></show_in_menu>
+      </node>
     </children>
   </node>
   <node>

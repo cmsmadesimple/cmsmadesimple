@@ -129,6 +129,11 @@ class CmsUser extends CmsObjectRelationalMapping
 	{
 		return false;
 	}
+	
+	public function full_name()
+	{
+		return $this->firstname . ' ' . $this->lastname;
+	}
 }
 
 /**
