@@ -94,8 +94,9 @@ $page = CmsRequest::calculate_page_from_request();
 //output any cached data.
 if (CmsConfig::get('full_page_caching'))
 {
-	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && $data = CmsCache::get_instance('page')->get($page, CmsMultiLanguage::get_client_language()))
+	if (!isset($_REQUEST['mact']) && !isset($_REQUEST['id']) && CmsCache::get_instance('Core')->test('page__' . $page . '__' . CmsMultiLanguage::get_client_language()))
 	{
+		$data = CmsCache::get_instance('Core')->get('page__' . $page . '__' . CmsMultiLanguage::get_client_language());
 		echo $data;
 		$endtime = $profiler->get_time();
 		$memory = $profiler->get_memory();
@@ -168,7 +169,7 @@ $memory = $profiler->get_memory();
 if (CmsConfig::get('full_page_caching'))
 {
 	$data = @ob_get_flush();
-	CmsCache::get_instance('page')->save($data);
+	CmsCache::get_instance('Core')->save($data, 'page__' . $page . '__' . CmsMultiLanguage::get_client_language());
 }
 else
 {

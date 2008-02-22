@@ -426,8 +426,7 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 	$inline = cms_htmlentities($inline);
 	$prettyurl = cms_htmlentities($prettyurl);
 
-	global $gCms;
-	$config =& $gCms->GetConfig();
+	$config = cms_config();
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 

@@ -55,7 +55,7 @@ class CmsPageInfo extends CmsObject
 		parent::__construct();
 
 		$this->content_props = array();
-		$this->content_last_modified_date = CmsCache::get_instance()->call(array(&$this, 'get_max_modified_date'));
+		$this->content_last_modified_date = CmsCache::get_instance()->call(array($this, 'get_max_modified_date'));
 	}
 	
 	public function get_max_modified_date()
