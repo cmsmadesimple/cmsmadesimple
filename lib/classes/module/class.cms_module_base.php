@@ -1062,8 +1062,25 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function create_input_checkbox($id, $name, $selected = false, $addttext='', $html_id = '')
 	{
-		$this->load_form_methods();
-		return cms_module_CreateInputCheckbox($this, $id, $name, $selected, $addttext, $html_id);
+		$id = cms_htmlentities($id);
+		$name = cms_htmlentities($name);
+
+		if ($html_id == '')
+			$html_id = CmsResponse::make_dom_id($id . $name);
+
+		$text = '<input type="hidden" name="'.$id.$name.'" value="0" />';
+		$text .= '<input type="checkbox" name="'.$id.$name.'" id="'.$html_id.'" value="1"';
+		if ($selected)
+		{
+			$text .= ' checked="checked"';
+		}
+		if ($addttext != '')
+		{
+			$text .= ' '.$addttext;
+		}
+		$text .= " />\n";
+
+		return $text;
 	}
 
 
