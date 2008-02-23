@@ -3,15 +3,16 @@
 # within a cmsms install
 
 # finds the name
-_this=`basename "$0"`
+_this=`basename $0`
 _configfile=${HOME}/.CreateRelease.rc
-_pwd="`pwd`"
-_name=`basename "$_pwd"`
+_pwd=`pwd`
+_name=`basename $_pwd`
 _destdir=${HOME}
 _version=0
 _excludes="*~ #*# .svn CVS *.bak"
 _tmpfile="/tmp/$_this.$$"
 _yes=0
+_svn=1
 
 usage()
 {
@@ -24,6 +25,7 @@ usage()
   echo "  -v|--exclude <pattern>     : exclude files matching this pattern"
   echo "                               from the resulting archive"
   echo "  -q|--quiet                 : assume non interactive mode"
+  echo "  -s|--svn                   : skip the svn update step"
   echo "  -h|-help|--help            : this text"
   echo 
   echo "NOTE: This utility expects the module or the desired export directory"
@@ -77,6 +79,12 @@ while [ $# -gt 0 ]; do
       continue
       ;;
 
+    -s|--svn)
+      _svn=0
+      shift
+      continue
+      ;;
+
     -h|--help|-help)
       usage;
       exit 0;
@@ -104,7 +112,7 @@ fi
 
 # find the version
 # thanks to _SjG_ the perl regexp expert
-_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*[\"\047]([^;\047\"]+)(.*)/$2/s'`
+_version2=`cat ${_fn} | perl -0777 -p -e 's/(.*?)function\s+GetVersion\(\)\s*\{\s*return\s*([^;]+)(.*)/$2/s' | cut -d\' -f2 | cut -d\" -f2`
 if [ ${_version2:-notset} = notset ]; then
   echo "WARNING: could not auto-detect the version from the module.php file"
 fi
@@ -127,12 +135,21 @@ if [ $_yes = 0 ]; then
   echo "  in ${_destdir} using the contents of "
   echo -n "  $_pwd  (y/n)?"
   read _ans
-  if [ $_ans = 'y' -o $_ans = 'Y' -o $_ans = 'YES' -o $_ans = 'yes' ]; then
+  if [ ${_ans:-ns} = ns ]; then
+    _ans=n
+  fi
+  if [ "$_ans" = 'y' -o "$_ans" = 'Y' -o "$_ans" = 'YES' -o "$_ans" = 'yes' ]; then
     _yes=1
   fi   
 fi
 if [ $_yes = 0 ]; then
   exit 0;
+fi
+
+# do an svn update
+if [ $_svn = 1 ]; then
+  echo "Performing svn update"
+  svn update >/dev/null 2>&1
 fi
 
 # make a temporary file of all the stuff we don't want in the archive
