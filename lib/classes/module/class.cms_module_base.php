@@ -936,11 +936,12 @@ abstract class CmsModuleBase extends CmsObject
 	 * @param string Text to append to the end of the id and name of the form
 	 * @param array Extra parameters to pass along when the form is submitted
 	 * @param string Text to append to the <form>-statement, for instanse for javascript-validation code
+	 * @param boolean A flag to determine if the action should just redirect back to this exact page
 	 */
-	public function create_form_start($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '')
+	public function create_form_start($id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '', $use_current_page_as_action = false)
 	{
 		$this->load_form_methods();
-		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra, $html_id);
+		return cms_module_CreateFormStart($this, $id, $action, $returnid, $method, $enctype, $inline, $idsuffix, $params, $extra, $html_id, $use_current_page_as_action);
 	}
 
 	/**

@@ -93,6 +93,7 @@ class CmsRoute extends CmsObject
 					}
 
 					$_REQUEST['mact'] = $matches['module'] . ',' . $matches['id'] . ',' . $matches['action'] . ',' . $matches['inline'];
+					$_REQUEST[$matches['id'] . 'returnid'] = $matches['returnid'];
 					$page = $matches['returnid'];
 					$smarty->id = $matches['id'];
 

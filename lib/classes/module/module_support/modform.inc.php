@@ -25,7 +25,7 @@
  * @package		CMS
  */
 
-function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '')
+function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $returnid='', $method='post', $enctype='', $inline=false, $idsuffix='', $params = array(), $extra='', $html_id = '', $use_current_page_as_action = false)
 {
 	global $gCms;
 
@@ -43,20 +43,18 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	$idsuffix = cms_htmlentities($idsuffix);
 	$extra = cms_htmlentities($extra);
 
-	#if ($idsuffix == '')
-	#	$idsuffix = $formcount;
 	if ($html_id == '')
 		$html_id = $id.$action.$idsuffix;
 
-	$goto = ($returnid==''?'moduleinterface.php':'index.php');
-	#$goto = 'moduleinterface.php';
-	if ($inline && $returnid != '')
-	{
-		#$goto = 'index.php?module='.$this->get_name().'&amp;id='.$id.'&amp;'.$id.'action='.$action;
-		#$goto = 'index.php?mact='.$this->get_name().','.$id.','.$action;
-		#$goto .= '&amp;'.$id.'returnid='.$returnid;
-		#$goto .= '&amp;'.$this->cms->config['query_var'].'='.$returnid;
-	}
+	if ($returnid == null)
+		$returnid = '';
+
+	$goto = '';
+	if ($use_current_page_as_action)
+		$goto = CmsRequest::get_requested_uri();
+	else
+		$goto = ($returnid==''?'moduleinterface.php':'index.php');
+
 	$text = '<form id="'.$html_id.'" name="'.$id.$action.$idsuffix.'" method="'.$method.'" action="'.$goto.'"';
 	if ($enctype != '')
 	{
@@ -66,7 +64,13 @@ function cms_module_CreateFormStart(&$modinstance, $id, $action='default', $retu
 	{
 		$text .= ' '.$extra;
 	}
-	$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$modinstance->get_name().','.$id.','.$action.','.($inline == true?1:0).'" />';
+
+	if ($use_current_page_as_action)
+		$text .= '><div class="hidden">';
+	else
+		$text .= '><div class="hidden"><input type="hidden" name="mact" value="'.$modinstance->get_name().','.$id.','.$action.','.($inline == true?1:0).'" />';
+		
+		
 	if ($returnid != '')
 	{
 		$text .= '<input type="hidden" name="'.$id.'returnid" value="'.$returnid.'" />';

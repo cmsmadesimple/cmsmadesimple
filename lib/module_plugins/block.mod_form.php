@@ -36,7 +36,8 @@ function smarty_cms_block_mod_form($params, $content, &$smarty, &$repeat)
 				coalesce_key($params, 'id_suffix', ''), 
 				coalesce_key($params, 'params', array()),
 				coalesce_key($params, 'extra', ''),
-				coalesce_key($params, 'id', '')) . 
+				coalesce_key($params, 'id', ''),
+				coalesce_key($params, 'use_current_page_as_action', false)) . 
 				$content . $module->create_form_end();
 		}
 	}
