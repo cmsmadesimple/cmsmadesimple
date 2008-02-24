@@ -53,7 +53,6 @@ class CmsModuleOrm extends CmsObjectRelationalMapping
 					if ($one_module == $this->module_name)
 					{
 						$this->mod =& $v['object'];
-						var_dump($this->mod);
 					}
 				}
 			}
