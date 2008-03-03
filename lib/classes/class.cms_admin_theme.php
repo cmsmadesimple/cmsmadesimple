@@ -43,6 +43,8 @@ class CmsAdminTheme extends CmsObject
 	public $theme_template_dir = '';
 	public $theme_name = '';
 	public $themeName = '';
+	public $errors = array();
+	public $messages = array();
 
 	function __construct($userid, $theme_name = 'default')
 	{
@@ -176,6 +178,7 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign('admin_topmenu', $topmenu);
 		
 		$smarty->assign('headtext', self::get_instance()->headtext);
+		$smarty->assign_by_ref('theme_object', self::get_instance());
 		
 		$smarty->display(self::get_instance()->theme_template_dir . 'overall.tpl');
 		
@@ -812,6 +815,26 @@ class CmsAdminTheme extends CmsObject
 		{
 			return CmsConfig::get('root_url') . '/' . CmsConfig::get('admin_dir') . '/themes/default/images/icons/topfiles/' . $name;
 		}
+	}
+	
+	public function add_error($error_string)
+	{
+		$this->errors[] = $error_string;
+	}
+	
+	public function has_errors()
+	{
+		return count($this->errors) > 0;
+	}
+	
+	public function add_message($message_string)
+	{
+		$this->messages[] = $message_string;
+	}
+	
+	public function has_messages()
+	{
+		return count($this->messages) > 0;
 	}
 	
     /**

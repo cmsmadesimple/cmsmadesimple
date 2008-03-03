@@ -24,632 +24,173 @@ $LOAD_ALL_MODULES=1;
 require_once("../include.php");
 
 check_login();
-
-$module = "";
-if (isset($_GET["module"])) $module = $_GET["module"];
-
-$plugin = "";
-if (isset($_GET["plugin"])) $plugin = $_GET["plugin"];
-
-$action = "";
-if (isset($_GET["action"])) $action = $_GET["action"];
-
-$allowoverwritemodules = 0;
-if (isset($_POST["allowoverwrite"])) $allowoverwritemodules = $_POST["allowoverwrite"];
-
-$autoinstallupgrade = 0; // keep this here for a bit, just incase
-
-$userid = get_userid();
-$access = check_permission($userid, "Modify Modules");
-
-$db = cms_db();
-
-//Messagestring (success) for module operations
-$modulemessage="";
+$smarty = cms_smarty();
 
 include_once("header.php");
 
-if ($access)
+$action = coalesce_key($_REQUEST, 'action', '');
+$module = coalesce_key($_REQUEST, 'module', '');
+$plugin = coalesce_key($_REQUEST, 'plugin', '');
+
+$show_list = true;
+
+if ($action == 'install' && $module != '')
 {
-	if ($action == "chmod" )
+	$result = CmsModuleOperations::install_module($module, false);
+	if ($result)
 	{
-		$result = chmod_r( $config['root_path'].DIRECTORY_SEPARATOR.
-		'modules'.DIRECTORY_SEPARATOR.$module, 0777 );
-		if( !$result )
+		if (cmsms()->modules[$module]['object']->install_post_message())
 		{
-			echo $themeObject->show_errors(lang('cantchmodfiles'));
+			CmsResponse::redirect("listmodules.php?action=show_post_install&module={$module}");
 		}
-		else
-		{
-			redirect("listmodules.php");
-		}
+		CmsResponse::redirect('listmodules.php');
 	}
-
-	if ($action == "exportxml")
+	else
 	{
-		// get our xml
-		$message = '';
-		$files = 0;
-		$modops =& $gCms->GetModuleOperations();
-		$object = $gCms->modules[$module]['object'];
-		$xmltxt = $modops->CreateXMLPackage($object,$message,$files);
-		if( $files == 0 )
-		{
-			echo "<p class=\"error\">".lang('errornofilesexported')."</p>";
-		}
-		else 
-		{
-			$xmlname = $object->get_name().'-'.$object->get_version().'.xml';
-
-			// and send the file
-			ob_end_clean();
-			header('Content-Description: File Transfer');
-			header('Content-Type: application/force-download');
-			header('Content-Disposition: attachment; filename='.$xmlname);
-			//     header('Content-Type: text/xml');
-			echo $xmltxt;
-			exit();
-		}
-	}
-
-	if ($action == "importxml" )
-	{
-		$fieldName = "browse_xml";
-		if (!isset ($_FILES[$fieldName]) || !isset ($_FILES)
-		|| !is_array ($_FILES[$fieldName]) || !$_FILES[$fieldName]['name'])
-		{
-			echo $themeObject->ShowErrors(lang('noxmlfileuploaded'));
-		}
-		else
-		{
-			// normalize the file variable
-			$file = $_FILES[$fieldName];
-
-			// $file['tmp_name'] is the file we have to parse
-			$xml = file_get_contents( $file['tmp_name'] );
-
-			// and parse it
-			$modops =& $gCms->GetModuleOperations();
-			$result = $modops->ExpandXMLPackage( $xml, $allowoverwritemodules );
-			// at this point, all of the files in that module may have become unusable
-			// in the current version of cms.
-			if( !$result )
-			{
-				echo $themeObject->ShowErrors($modops->GetLastError());
-			}
-			else if( $autoinstallupgrade == 0 )
-			{
-				// no auto install or upgrade
-				redirect("listmodules.php");
-			}
-			// note, wishy, when you dig in here next, everything below here
-			// can probably go.
-			/*
-			else if( !isset( $gCms->modules[$result['name']] ) )
-			{
-				// looks like we're installing this module
-				redirect("listmodules.php?action=install&module=".$result['name']);
-			}
-			else 
-			{ 
-				// allow the auto upgrade stuff to do it's thing
-				// need new version and old version
-				$oldversion = $gCms->modules[$result['name']]['object']->GetVersion();
-				$newversion = $result['version'];
-				redirect("listmodules.php?action=upgrade&module=".$result['name']."&oldversion=".$oldversion."&newversion=".$newversion);
-			}
-			*/
-		}  
-	}
-
-	if ($action == "install")
-	{
-		$modops =& $gCms->GetModuleOperations();
-		$result = $modops->InstallModule($module,false);
-		if( $result[0] == false )
-		{
-			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', $module).'</p>';					
-			echo $result[1];
-			echo "</div>";
-			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-			include_once("footer.php");
-			exit;
-		}
-		else
-		{
-			$content = $gCms->modules[$module]['object']->install_post_message();
-			if( $content != FALSE )
-			{
-				//Redirect right away so that the installed module shows in the menu
-				//redirect('listmodules.php?action=showpostinstall&module='.$module);
-			}
-			// all is good, but no postinstall message
-			//redirect("listmodules.php");
-		}
-	}
-
-	if ($action == 'showpostinstall')
-	{
-		// this is probably dead code now
-		if (isset($gCms->modules[$module]))
-		{
-			$modinstance = $gCms->modules[$module]['object'];
-			if ($modinstance->install_post_message() != FALSE)
-			{
-				@ob_start();
-				echo $modinstance->install_post_message();
-				$content = @ob_get_contents();
-				@ob_end_clean();
-				echo $themeObject->show_message($content);
-			}
-		}
-	}
-
-	if ($action == 'remove')
-	{
-		$result = recursive_delete( $config['root_path'].DIRECTORY_SEPARATOR.
-		'modules'.DIRECTORY_SEPARATOR.$module );
-		if( !$result )
-		{
-			echo '<div class="pagecontainer">';
-			echo '<p class="pageheader">'.lang('moduleerrormessage', array($module)).'</p>';					
-			echo lang('cantremovefiles');
-			echo "</div>";
-			echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-			include_once("footer.php");
-		}
-		else
-		{
-			redirect("listmodules.php");
-		}
-	}
-
-	if ($action == 'upgrade')
-	{
-		$modops =& $gCms->GetModuleOperations();
-		$result = $modops->UpgradeModule( $module, $_GET['oldversion'], $_GET['newversion'] );	  
-		if( !$result )
-		{
-			@ob_start();
-			echo $modops->GetLastError();
-			$content = @ob_get_contents();
-			@ob_end_clean();
-			echo $themeObject->ShowErrors(lang('moduleupgradeerror'));
-		}
-		redirect("listmodules.php");
-	}
-
-
-	if ($action == "uninstall")
-	{
-		if (isset($gCms->modules[$module]))
-		{
-			$modinstance = $gCms->modules[$module]['object'];
-			$result = $modinstance->Uninstall();
-
-			#now insert a record
-			if (!isset($result) || $result === FALSE)
-			{
-				#now delete the record
-				$query = "DELETE FROM ".cms_db_prefix()."modules WHERE module_name = ?";
-				$db->Execute($query, array($module));
-
-				#delete any dependencies
-				$query = "DELETE FROM ".cms_db_prefix()."module_deps WHERE child_module = ?";
-				$db->Execute($query, array($module));
-
-				CmsEventOperations::send_event('Core', 'ModuleUninstalled', array('name' => $module));
-
-				#and show the uninstallpost if necessary...
-				if ($modinstance->uninstall_post_message() != FALSE)
-				{
-					//Redirect right away so that the uninstalled module is removed from the menu
-					redirect('listmodules.php?action=showpostuninstall&module='.$module);
-				}
-			}
-			else
-			{
-				//TODO: Echo error
-			}
-		}
-
-		redirect("listmodules.php");
-	}
-
-	if ($action == 'showpostuninstall')
-	{
-		// this is probably dead code now
-		if (isset($gCms->modules[$module]))
-		{
-			$modinstance = $gCms->modules[$module]['object'];
-			if ($modinstance->uninstall_post_message() != FALSE)
-			{
-				@ob_start();
-				echo $modinstance->uninstall_post_message();
-				$content = @ob_get_contents();
-				@ob_end_clean();
-				echo $themeObject->show_message($content);
-			}
-		}
-	}
-
-	if ($action == "settrue")
-	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(1,$module));
-		redirect("listmodules.php");
-	}
-
-	if ($action == "setfalse")
-	{
-		$query = "UPDATE ".cms_db_prefix()."modules SET active = ? WHERE module_name = ?";
-		$db->Execute($query, array(0,$module));
-		redirect("listmodules.php");
+		$themeObject->add_error(CmsModuleOperations::get_last_error());
 	}
 }
-
-if ($action == "showmoduleabout")
+else if ($action == 'show_post_install' && $module != '')
 {
-	if (isset($gCms->modules[$module]['object']))
+	if (cmsms()->modules[$module]['object']->install_post_message() !== FALSE)
 	{
-		echo '<div class="pagecontainer">';
-		echo '<p class="pageheader">'.lang('moduleabout', array($module)).'</p>';
-		echo $gCms->modules[$module]['object']->get_about();
-		echo "</div>";
+		$themeObject->add_message(cmsms()->modules[$module]['object']->install_post_message());
 	}
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 }
-else if ($action == "showmodulehelp")
+else if ($action == 'uninstall' && $module != '')
 {
-	if (isset($gCms->modules[$module]['object']))
+	$result = CmsModuleOperations::uninstall_module($module, false);
+	if ($result)
 	{
-		echo '<div class="pagecontainer">';
-		// Commented out because of bug #914 and had to use code extra below
-		// echo $themeObject->ShowHeader(lang('modulehelp', array($module)), '', lang('wikihelp', $module), 'wiki');
-
-		$header  = '<div class="pageheader">';
-		$header .= lang('modulehelp', array($module));
-		$wikiUrl = $config['wiki_url'];
-		$module_name = $gCms->modules[$module]['object']->get_name();
-		// Turn ModuleName into _Module_Name
-		$moduleName =  preg_replace('/([A-Z])/', "_$1", $module_name);
-		$moduleName =  preg_replace('/_([A-Z])_/', "$1", $moduleName);
-		if ($moduleName{0} == '_')
+		if (cmsms()->modules[$module]['object']->uninstall_post_message())
 		{
-			$moduleName = substr($moduleName, 1);
+			CmsResponse::redirect("listmodules.php?action=show_post_uninstall&module={$module}");
 		}
-		// Include English translation of titles. (Can't find better way to get them)
-		$dirname = dirname(__FILE__);
-		include($dirname.'/lang/en_US/admin.inc.php');
-		$section = $lang['admin'][$gCms->modules[$module]['object']->get_admin_section()];
-		$wikiUrl .= '/'.$section.'/'.$moduleName;
-		if (FALSE == get_preference($userid, 'hide_help_links'))
-		{
-			// Clean up URL
-			$wikiUrl = str_replace(' ', '_', $wikiUrl);
-			$wikiUrl = str_replace('&amp;', 'and', $wikiUrl);
-
-			$help_title = lang('help_external');
-
-			$image_help = $themeObject->DisplayImage('icons/system/info.gif', lang('help'),'','','systemicon');
-			$image_help_external = $themeObject->DisplayImage('icons/system/info-external.gif', lang('help'),'','','systemicon');		
-			$header .= '<span class="helptext"><a href="'.$wikiUrl.'" target="_blank">'.$image_help_external.'</a> <a href="'.$wikiUrl.'" target="_blank">'.lang('help').'</a> ('.lang('new_window').')</span>';
-		}
-
-		$header .= '</div>';
-		echo $header;     
-
-		echo $gCms->modules[$module]['object']->get_help_page();
-		echo "</div>";
+		CmsResponse::redirect('listmodules.php');
 	}
-
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
-}
-else if ($action == 'missingdeps')
-{
-	echo '<div class="pagecontainer">';
-	echo '<p class="pageheader">'.lang('depsformodule', array($module)).'</p>';
-	echo '<table cellspacing="0" class="AdminTable">';
-	echo '<thead>';
-	echo '<tr><th>'.lang('name').'</th><th>'.lang('minimumversion').'</th><th>'.lang('installed').'</th></tr>';
-	echo '</thead>';
-	echo '<tbody>';
-
-	if (isset($gCms->modules[$module]))
+	else
 	{
-		$modinstance = $gCms->modules[$module]['object'];
-		if (count($modinstance->get_dependencies()) > 0) #Check for any deps
-		{
-			$curclass = 'row1';
-			#Now check to see if we can satisfy any deps
-			debug_buffer($modinstance->get_dependencies(), 'deps in module');
-			foreach ($modinstance->get_dependencies() as $onedepkey=>$onedepvalue)
-			{
-				echo '<tr class="'.$curclass.'"><td>'.$onedepkey.'</td><td>'.$onedepvalue.'</td><td>';
-
-				$havedep = false;
-
-				if (isset($gCms->modules[$onedepkey]) && 
-				$gCms->modules[$onedepkey]['installed'] == true &&
-				$gCms->modules[$onedepkey]['active'] == true &&
-				version_compare($gCms->modules[$onedepkey]['object']->get_version(), $onedepvalue) > -1)
-				{
-					$havedep = true;
-				}
-
-				echo lang(($havedep?'true':'false'));
-				echo '</td></tr>';
-				($curclass=="row1"?$curclass="row2":$curclass="row1");
-			}
-		}
+		$themeObject->add_error(CmsModuleOperations::get_last_error());
 	}
-
-	echo '</tbody>';
-	echo '</table>';
-	echo '</div>';
-	echo '<p class="pageback"><a class="pageback" href="listmodules.php">&#171; '.lang('back').'</a></p>';
 }
-else
+else if ($action == 'show_post_uninstall' && $module != '')
 {
+	if (cmsms()->modules[$module]['object']->uninstall_post_message() !== FALSE)
+	{
+		$themeObject->add_message(cmsms()->modules[$module]['object']->uninstall_post_message());
+	}
+}
+else if ($action == 'upgrade' && $module != '')
+{
+	$result = CmsModuleOperations::upgrade_module($module);
+	if ($result)
+	{
+		CmsResponse::redirect('listmodules.php');
+	}
+	else
+	{
+		$themeObject->add_error(CmsModuleOperations::get_last_error());
+	}
+}
+else if ($action == 'deactivate' && $module != '')
+{
+	CmsModuleOperations::deactivate_module($module);
+	CmsResponse::redirect('listmodules.php');
+}
+else if ($action == 'activate' && $module != '')
+{
+	CmsModuleOperations::activate_module($module);
+	CmsResponse::redirect('listmodules.php');
+}
+else if ($action == 'show_about' && $module != '')
+{
+	echo cmsms()->modules[$module]['object']->get_about();
+	$show_list = false;
+}
+else if ($action == 'show_help' && $module != '')
+{
+	echo cmsms()->modules[$module]['object']->get_help_page();
+	$show_list = false;
+}
 
-	if ($action != "" && !$access) {
-		echo "<p class=\"error\">".lang('needpermissionto', array('Modify Modules'))."</p>";
+$image_true = $themeObject->display_image('icons/system/true.gif', lang('true'), '', '', 'systemicon');
+$image_false = $themeObject->display_image('icons/system/false.gif', lang('false'), '', '', 'systemicon');
+
+$module_list = array();
+foreach (CmsModuleOperations::get_all_modules() as $k => $v)
+{
+	$module = array();
+	$module['name'] = $k;
+	if ($v['object']->get_help() != '')
+	{
+		$module['name'] = '<a href="listmodules.php?action=showmodulehelp&amp;module=' . $k . '">' . $k . '</a>';
+	}
+	$module['version'] = $v['object']->get_version();
+	$module['object'] = $v['object'];
+	$module['status'] = $v['installed'] ? lang('installed') : lang('notinstalled');
+	$module['use_span'] = false;
+
+	$module['active'] = '<a href="listmodules.php?action=deactivate&amp;module=' . $k . '">' . $image_true . '</a>';
+	if (!$v['active'])
+	{
+		$module['active'] = '<a href="listmodules.php?action=activate&amp;module=' . $k . '">' . $image_false . '</a>';
 	}
 
-	if (count($gCms->modules) > 0) {
-
-		$query = "SELECT * from ".cms_db_prefix()."modules";
-		$result = $db->Execute($query);
-		while ($result && $row = $result->FetchRow()) {
-			$dbm[$row['module_name']]['Status'] = $row['status'];
-			$dbm[$row['module_name']]['Version'] = $row['version'];
-			$dbm[$row['module_name']]['Active'] = ($row['active'] == 1?true:false);
-		}
-
-		?>
-
-		<div class="pagecontainer">
-		<div class="pageoverflow">
-		<?php
-
-		if (isset($_SESSION['modules_messages']) && count($_SESSION['modules_messages']) > 0)
-		{
-			echo '<ul class="messages">';
-
-			// do we need to worry about this for XSS?
-			foreach ($_SESSION['modules_messages'] as $onemessage)
-			{
-				echo "<li>" . $onemessage . "</li>";
-			}
-			echo "</ul>";
-			unset($_SESSION['modules_messages']);
-		}
-
-		?>
-
-		<?php echo $themeObject->ShowHeader('modules').'</div>'; ?>
-		<table cellspacing="0" class="pagetable">
-		<thead>
-		<tr>
-		<th><?php echo lang('name')?></th>
-		<th><?php echo lang('version')?></th>
-		<th><?php echo lang('status')?></th>
-		<th class="pagepos"><?php echo lang('active')?></th>
-		<th><?php echo lang('action')?></th>
-		<th><?php echo lang('help')?></th>
-		<th><?php echo lang('about')?></th>
-		<th><?php echo lang('export')?></th>
-		</tr>
-		</thead>
-		<tbody>
-		<?php
-
-		$curclass = "row1";
-		// construct true/false button images
-		$image_true = $themeObject->DisplayImage('icons/system/true.gif', lang('true'),'','','systemicon');
-		$image_false = $themeObject->DisplayImage('icons/system/false.gif', lang('false'),'','','systemicon');
-
-		foreach($gCms->modules as $key=>$value)
-		{
-			$modinstance = $value['object'];
-			$is_sysmodule = (array_search( $key, $gCms->cmssystemmodules ) !== FALSE);
-			$namecol = $key;
-			$versioncol = "&nbsp;";
-			$statuscol = "&nbsp;";
-			$statusspans = false;
-			$actioncol = "&nbsp;";
-			$activecol = "&nbsp;";
-			$helpcol = "&nbsp;";
-			$aboutcol = "&nbsp;";
-
-			$xmlcol = "&nbsp;";
-
-			$xmlcol = '<a href="listmodules.php?action=exportxml&amp;module='.$key.'"><img border="0" src="../images/cms/xml_rss.gif" alt="'.lang('xml').'" /></a>';
-
-			//Is there help?
-			if ($modinstance->get_help() != '')
-			{
-				$namecol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".$key."</a>";
-			}
-
-			// check these modules permissions to see if we can uninstall this thing
-			$permsok = is_directory_writable( $config['root_path'].DIRECTORY_SEPARATOR.
-			'modules'.DIRECTORY_SEPARATOR.$key );
-
-			#Make sure it's a valid module for this version of CMSMS
-			if (version_compare($modinstance->minimum_core_version(), $CMS_VERSION) == 1)
-			{
-				// Fix undefined index error if module is not already installed.
-				if (FALSE == empty($dbm[$key]['Version'])) {
-					echo "<td>".$dbm[$key]['Version']."</td>";
-				}
-				$statuscol = '<span class="important">'.lang('minimumversionrequired').': '.$modinstance->minimum_core_version().'</span>';
-				$xmlcol = "&nbsp;";
-				$statusspans = true;
-			}
-			else if (!isset($dbm[$key])) #Not installed, lets put up the install button
-			{
-				$brokendeps = 0;
-
-				$dependencies = $modinstance->get_dependencies();
-
-				if (count($dependencies) > 0) #Check for any deps
-				{
-					#Now check to see if we can satisfy any deps
-					foreach ($dependencies as $onedepkey=>$onedepvalue)
-					{
-						if (!isset($gCms->modules[$onedepkey]) ||
-						$gCms->modules[$onedepkey]['installed'] != true ||
-						$gCms->modules[$onedepkey]['active'] != true ||
-						version_compare($gCms->modules[$onedepkey]['object']->GetVersion(), $onedepvalue) < 0)
-						{
-							$brokendeps++;
-						}
-					}
-				}
-
-				$versioncol = $modinstance->get_version();
-				$statuscol = lang('notinstalled');
-
-				if ($brokendeps > 0)
-				{
-					$actioncol = '<a href="listmodules.php?action=missingdeps&amp;module='.$key.'">'.lang('missingdependency').'</a>';
-				}
-				else
-				{
-					$actioncol = "<a href=\"listmodules.php?action=install&amp;module=".$key."\">".lang('install')."</a>";
-					$xmlcol = '&nbsp;';
-				}
-
-				if( !$is_sysmodule )
-				{
-					if( $permsok )
-					{
-						$actioncol .= "<br/><a href=\"listmodules.php?action=remove&amp;module=".$key."\" onclick=\"return confirm('".lang('removeconfirm')."');\">".lang('remove')."</a>";
-					}
-					else
-					{
-						$actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
-					}
-				}
-			}
-			else if (version_compare($modinstance->get_version(), $dbm[$key]['Version']) == 1) #Check for an upgrade
-			{
-				$versioncol = $dbm[$key]['Version'];
-				$statuscol  = '<span class="important">'.lang('needupgrade').'</span>';
-				$activecol  = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-				$actioncol  = "<a href=\"listmodules.php?action=upgrade&amp;module=".$key."&amp;oldversion=".$dbm[$key]['Version']."&amp;newversion=".$modinstance->get_version()."\" onclick=\"return confirm('".lang('upgradeconfirm')."');\">".lang('upgrade')."</a>";
-				$xmlcol = '&nbsp;';
-			}
-			else #Must be installed
-			{
-				$versioncol = $dbm[$key]['Version'];
-				$statuscol  = lang('installed');
-				$actioncol  = "&nbsp;";
-
-				#Can't be removed if it has a dependency...
-				if (!$modinstance->check_for_dependents())
-				{
-					$activecol = ($dbm[$key]['Active']==true?"<a href='listmodules.php?action=setfalse&amp;module=".$key."'>".$image_true."</a>":"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$actioncol = "<a href=\"listmodules.php?action=uninstall&amp;module=".$key."\" onclick=\"return confirm('".($modinstance->uninstall_pre_message() !== FALSE? cms_utf8entities($modinstance->uninstall_pre_message()):lang('uninstallconfirm').' '.$key)."');\">".lang('uninstall')."</a>";
-				}
-				else
-				{
-					// HAS DEPENDENTS ===============
-					$result = $db->Execute("SELECT child_module from
-					".cms_db_prefix()."module_deps WHERE parent_module='$key'");
-
-					$dependentof = array();;
-					while ($result && $row = $result->FetchRow()) {
-						$dependentof[$row['child_module']] = "";
-					}
-					$str = implode(array_keys($dependentof),",");
-					$activecol = ($dbm[$key]['Active']==true?$image_true:"<a href='listmodules.php?action=settrue&amp;module=".$key."'>".$image_false."</a>");
-					$statuscol .= "<br/>".lang('hasdependents')." (<strong>$str</strong>)";
-					// END HAS DEPENDENTS ===========
-				}
-
-				if( !$permsok )
-				{
-					$statuscol .= "<br/>".lang('cantremove');
-					$actioncol .= "<br/><a href=\"listmodules.php?action=chmod&amp;module=".$key."\" onclick=\"return confirm('".lang('changepermissionsconfirm')."');\">".lang('changepermissions')."</a>";
-				}
-			}
-
-			//Is there help?
-			if ($modinstance->get_help() != '')
-			{
-				$helpcol = "<a href=\"listmodules.php?action=showmodulehelp&amp;module=".$key."\">".lang('help')."</a>";
-			}
-
-			//About is constructed from other details now
-			$aboutcol = "<a href=\"listmodules.php?action=showmoduleabout&amp;module=".$key."\">".lang('about')."</a>";
-
-			// row output
-			echo "<tr class=\"".$curclass."\" onmouseover=\"this.className='".$curclass.'hover'."';\" onmouseout=\"this.className='".$curclass."';\">\n";
-			echo "<td>$namecol</td>";
-			echo "<td>$versioncol</td>";
-			if( $statusspans )
-			{
-				echo "<td colspan=\"3\">$statuscol</td>";
-			}
-			else
-			{
-				echo "<td>$statuscol</td>";
-				echo '<td class="pagepos">'.$activecol.'</td>';
-				echo "<td>$actioncol</td>";
-			}
-			echo "<td>$helpcol</td>";
-			echo "<td>$aboutcol</td>";
-			echo "<td>$xmlcol</td>";
-			echo "</tr>\n";
-
-			($curclass=="row1"?$curclass="row2":$curclass="row1");
-		}
-
-		?>
-
-		</tbody>
-		</table>
-		<?php
-		// Only show XML upload form if the modules folder is writable
-		//if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'modules'))
-	        if (FALSE == can_admin_upload())
-		  {
-		    echo $themeObject->ShowErrors(lang('modulesnotwritable'));
-		  }
-		else
-		  {
-			?>
-			<form method="post" action="listmodules.php?action=importxml" enctype="multipart/form-data">
-			<fieldset>
-			<legend><?php echo lang('uploadxmlfile')?></legend>
-			<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('uploadfile')?>:</p>
-			<p class="pageinput">
-			<input type="file" name="browse_xml"/>
-			</p>
-			</div>
-			<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('overwritemodule')?>:</p>
-			<p class="pageinput">
-			<input type="checkbox" name="allowoverwrite" value="1" />
-			</p>
-			</div>
-			<div class="pageoverflow">
-			<p class="pagetext">&nbsp;</p>
-			<p class="pageinput">
-			<input type="submit" name="submit" value="<?php echo lang('submit')?>" />
-			</p>
-			</div>
-			</fieldset>
-			</form>
-			<?php
-		}
-		echo '</div>';
+	$module['action'] = '&nbsp;';
+	if (!$module['object']->meets_minimum_requirements()) //Show the core isn't the right version message
+	{
+		$module['status'] = '<span class="important">' . lang('minimumversionrequired') . ': ' . $module['object']->minimum_core_version() . '</span>';
+		$module['use_span'] = true;
 	}
-	echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
+	else if (!CmsModuleOperations::is_installed($k)) //We're not installed
+	{
+		if ($module['object']->is_installable()) //All deps, show install button
+		{
+			$module['action'] = '<a href="listmodules.php?action=install&amp;module=' . $k . '">' . lang('install') . '</a>';
+		}
+		else //Broken deps
+		{
+			$module['action'] = '<a href="listmodules.php?action=missingdeps&amp;module=' . $k . '">' . lang('missingdependency') . '</a>';
+		}
+	}
+	else //We're installed
+	{
+		//Display any deps
+		$deps = CmsModuleOperations::get_installed_dependency_names($k);
+		if (count($deps) > 4)
+			$module['status'] .= '<br />' . lang('hasdependents') . ' (' . implode(', ', $deps) . ')';
+		else if (count($deps) > 0)
+			$module['status'] .= '<br />' . lang('hasdependents') . ' (' . implode(', ', $deps) . ')';
+
+		if ($module['object']->needs_upgrade()) //Show the upgrade button
+		{
+			$module['status'] = '<span class="important">' . lang('needupgrade') . '</span>';
+			$module['action'] = '<a href="listmodules.php?action=upgrade&amp;module=' . $k . '">' . lang('upgrade') . '</a>';
+			$module['active'] = $image_false;
+			$module['version'] = CmsModuleOperations::get_installed_version($k); //Show the version # CMSMS thinks is installed
+		}
+		else if ($module['object']->is_uninstallable()) //We can uninstall, show the button
+		{
+			$module['action'] = '<a href="listmodules.php?action=uninstall&amp;module=' . $k . '" onclick="return confirm(\'' . ($v['object']->uninstall_pre_message() !== FALSE ?  cms_utf8entities($v['object']->uninstall_pre_message()) : lang('uninstallconfirm') . ' ' . $k) . '\');">' . lang('uninstall') . '</a>';
+		}
+		else //Can't break deps, so can't uninstall -- don't display anything?
+		{
+		}
+	}
+
+	$module['helplink'] = '&nbsp;';
+	if ($v['object']->get_help() != '')
+	{
+		$module['helplink'] = '<a href="listmodules.php?action=show_help&amp;module=' . $k . '">' . lang('help') . '</a>';
+	}
+	$module['aboutlink'] = '<a href="listmodules.php?action=show_about&amp;module=' . $k . '">' . lang('about') . '</a>';
+	$module_list[] = $module;
+}
+
+if ($show_list)
+{
+	$smarty->assign_by_ref('modules', $module_list);
+	$smarty->display('listmodules.tpl');
 }
 
 include_once("footer.php");

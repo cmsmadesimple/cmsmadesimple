@@ -65,6 +65,80 @@ class CmsModuleOperations extends CmsObject
 		}
 		return self::$instance;
 	}
+	
+	
+	/**
+	 * Returns whether or not a module is installed
+	 *
+	 * @param string Name of the module
+	 * @return boolean Whether or not the module is installed
+	 * @author Ted Kulp
+	 **/
+	public static function is_installed($module_name)
+	{
+		$modules = cmsms()->modules;
+		return isset($modules[$module_name]) && $modules[$module_name]['installed'];
+	}
+	
+	/**
+	 * Returns whether or not a module is active and installed
+	 *
+	 * @param string Name of the module
+	 * @return boolean Whether or not the module is active and installed
+	 * @author Ted Kulp
+	 **/
+	public static function is_active($module_nakme)
+	{
+		$modules = cmsms()->modules;
+		return isset($modules[$module_name]) && $modules[$module_name]['installed'] && $modules[$module_name]['active'];
+	}
+	
+	/**
+	 * Returns the module object if it is installed and active.
+	 *
+	 * @param string Name of the module
+	 * @return mixed The module object
+	 * @author Ted Kulp
+	 **/
+	public static function get_module($module_name)
+	{
+		$modules = cmsms()->modules;
+		if (self::is_active($module_name))
+			return $modules[$module_name]['object'];
+		return null;
+	}
+	
+	public static function get_file_version($module_name)
+	{
+		$module = self::get_module($module_name);
+		if ($module != null)
+		{
+			return $module->get_version();
+		}
+
+		return null;
+	}
+	
+	public static function get_installed_version($module_name)
+	{
+		$cms_db_prefix = CMS_DB_PREFIX;
+		return cms_db()->GetOne("SELECT version FROM {$cms_db_prefix}modules WHERE module_name = ?", array($module_name));
+	}
+	
+	public static function get_installed_dependency_names($module_name)
+	{
+		$cms_db_prefix = CMS_DB_PREFIX;
+		$result = array();
+
+		$dbresult = cms_db()->Execute("SELECT parent_module FROM {$cms_db_prefix}module_deps WHERE child_module = ?", array($module_name));
+		while ($dbresult && !$dbresult->EOF)
+		{
+			$result[] = $dbresult->fields['parent_module'];
+			$dbresult->MoveNext();
+		}
+		
+		return $result;
+	}
 
 	/**
 	* ------------------------------------------------------------------
@@ -73,23 +147,45 @@ class CmsModuleOperations extends CmsObject
 	*/
 
 	/**
-	* Set an error condition
-	*/
+	 * Sets an error condition for the system.  This is usually used for 
+	 * module operations.
+	 *
+	 * @param string Error message to set
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	function set_error($str = '')
+	{
+		cmsms()->variables['error'] = $str;
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Use CmsModuleOperations::get_error instead.
+	 **/
 	function SetError($str = '')
 	{
-		global $gCms;
-		$gCms->variables['error'] = $str;
+		self::set_error($str);
 	}
 
 	/**
-	* Return the last error
-	*/
+	 * Returns the error message set by CmsModuleOperations::set_error().
+	 *
+	 * @return string The error message
+	 * @author Ted Kulp
+	 **/
+	function get_last_error()
+	{
+		if(isset(cmsms()->variables['error']))
+			return cmsms()->variables['error'];
+		return "";
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Use CmsModuleOperations::get_last_error instead.
+	 **/
 	function GetLastError()
 	{
-		global $gCms;
-		if( isset( $gCms->variables['error'] ) )
-		return $gCms->variables['error'];
-		return "";
+		return self::get_last_error();
 	}
 
 	/**
@@ -428,25 +524,28 @@ class CmsModuleOperations extends CmsObject
 	/**
 	* Install a module into the database
 	*/
-	function InstallModule($module, $loadifnecessary = false)
+	function install_module($module, $load_if_necessary = false)
 	{
-		global $gCms;
-		if( !isset( $gCms->modules[$module] ) )
+		$gCms = cmsms();
+
+		if (!isset( $gCms->modules[$module]))
 		{
-			if( $loadifnecessary == false )
+			if ($load_if_necessary == false)
 			{
-				return array(false,lang('errormodulenotloaded'));
+				self::set_error(lang('errormodulenotloaded'));
+				return false;
 			}
 			else
 			{
 				if( !self::LoadNewModule( $module ) )
 				{
-					return array(false,lang('errormodulewontload'));
+					self::set_error(lang('errormodulewontload'));
+					return false;
 				}
 			}
 		}
 
-		$db =& $gCms->GetDb();
+		$db = cms_db();
 		if (isset($gCms->modules[$module]))
 		{
 			$modinstance =& $gCms->modules[$module]['object'];
@@ -471,10 +570,10 @@ class CmsModuleOperations extends CmsObject
 				}
 
 				#send an event saying the module has been installed
-				CmsEvents::send_event('Core', 'ModuleInstalled', array('name' => &$module, 'version' => $modinstance->get_version()));
+				CmsEvents::send_event('Core', 'ModuleInstalled', array('name' => $module, 'version' => $modinstance->get_version(), 'module' => &$modinstance));
 
 				// and we're done
-				return array(true);
+				return true;
 			}
 			else
 			{
@@ -482,88 +581,153 @@ class CmsModuleOperations extends CmsObject
 				{
 					$result = lang('errorinstallfailed');
 				}
-				return array(false,$result);
+
+				self::set_error($result);
+				return false;
 			}
 		}    
 		else
 		{
-			return array(false,lang('errormodulenotfound'));
+			self::set_error(lang('errormodulenotfound'));
+			return false;
 		}
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Use CmsModuleOperations::install_module instead.
+	 **/
+	function InstallModule($module, $loadifnecessary = false)
+	{
+		return self::install_module($module, $loadifnecessary);
 	}
 
 
 	/**
-	* Load a single module from the filesystem
-	*/
-	function LoadNewModule( $modulename )
+	 * Load a module into the system.  It will be marked as not installed
+	 * or active.
+	 *
+	 * @param string The name of the module to load
+	 * @return boolean Whether or not the load was successful
+	 * @author Ted Kulp
+	 **/
+	function load_new_module($module_name)
 	{
 		global $gCms;
-		$db =& $gCms->GetDb();
+		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = cms_join_path(ROOT_DIR, 'modules');
 
-		if (@is_file("$dir/$modulename/$modulename.module.php"))
+		if (@is_file("$dir/$module_name/$module_name.module.php"))
 		{
 			// question: is this a potential XSS vulnerability
-			include("$dir/$modulename/$modulename.module.php");
-			if( !class_exists( $modulename ) )
+			include("$dir/$module_name/$module_name.module.php");
+			if(!class_exists($module_name))
 			{
 				return false;
 			}
 
-			$newmodule = new $modulename;
-			$name = $newmodule->GetName();
+			$newmodule = new $module_name;
+			$name = $newmodule->get_name();
 			$cmsmodules[$name]['object'] =& $newmodule;
 			$cmsmodules[$name]['installed'] = false;
 			$cmsmodules[$name]['active'] = false;
 		}
 		else
 		{
-			unset($cmsmodules[$modulename]);
+			unset($cmsmodules[$module_name]);
 			return false;
 		}
+
 		return true;
+	}
+	
+	/**
+	 * @deprecated Deprecated. Use CmsModuleOperations::load_new_module instead.
+	 **/
+	function LoadNewModule($modulename)
+	{
+		return self::load_new_module($modulename);
 	}
 
 	/**
-	* Upgrade a module
-	*/
-	function UpgradeModule( $module, $oldversion, $newversion )
-	{
-		global $gCms;
-		$db =& $gCms->GetDb();
-
-		if (!isset($gCms->modules[$module]))
+	 * Updates a module from old_version to new_version.
+	 *
+	 * @param string The name of the module to upgrade
+	 * @param string The version number of the old version
+	 * @param string The version number of the new version
+	 * @return boolean Whether or not the upgrade was successful
+	 * @author Ted Kulp
+	 **/
+	function upgrade_module($module_name)
+	{		
+		$modinstance = self::get_module($module_name);
+		if ($modinstance != null)
 		{
 			return false;
 		}
+		
+		$old_version = self::get_installed_version($module_name);
+		$new_version = self::get_file_version($module_name);
 
-		$modinstance = $gCms->modules[$module]['object'];
-		$result = $modinstance->Upgrade($oldversion, $newversion);
+		$result = $modinstance->upgrade($old_version, $new_version);
 		if( $result === FALSE )
 		{
 			return false;
 		}
 
-		$query = "UPDATE ".cms_db_prefix()."modules SET version = ?, admin_only = ? WHERE module_name = ?";
-		$db->Execute($query,array($newversion,($modinstance->IsAdminOnly()==true?1:0),$module));
+		$query = "UPDATE " . CMS_DB_PREFIX . "modules SET version = ?, admin_only = ? WHERE module_name = ?";
+		cms_db()->Execute($query, array($new_version, ($modinstance->is_admin_only()==true?1:0), $module_name));
 
-		CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $module, 
-		'oldversion' => $oldversion, 
-		'newversion' => $oldversion));
+		CmsEventOperations::send_event('Core', 'ModuleUpgraded', array('name' => $module_name, 'oldversion' => $old_version, 'newversion' => $new_version));
 
 		return true;
+	}
+	
+	/**
+	 * @deprecated Deprecated. Use CmsModuleOperations::upgrade_module instead.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	function UpgradeModule( $module, $oldversion, $newversion )
+	{
+		return self::upgrade_module($module);
+	}
+	
+	public static function activate_module($module_name)
+	{
+		$query = "UPDATE ".CMS_DB_PREFIX."modules SET active = 1 WHERE module_name = ?";
+		cms_db()->Execute($query, array($module_name));
+	}
+	
+	public static function deactivate_module($module_name)
+	{
+		$query = "UPDATE ".CMS_DB_PREFIX."modules SET active = 0 WHERE module_name = ?";
+		cms_db()->Execute($query, array($module_name));
 	}
 
 	/**
 	* Returns a hash of all loaded modules.  This will include all
-	* modules loaded by LoadModules, which could either be all or them,
+	* modules loaded by load_modules, which could either be all or them,
 	* or just ones that are active and installed.
+	*
+	* @return array Hash of all the loaded modules
+	* @author Ted Kulp
 	*/
+	function &get_all_modules()
+	{
+		$gCms = cmsms();
+		$cms_modules = &$gCms->modules;
+		return $cms_modules;
+	}
+	
+	/**
+	 * @deprecated Deprecated.  Please use CmsModuleOperations::get_all_modules instead.
+	 **/
 	function &GetAllModules()
 	{
-		global $gCms;
+		$gCms = cmsms();
 		$cmsmodules = &$gCms->modules;
 		return $cmsmodules;
 	}

@@ -34,6 +34,11 @@ class CmsModuleLoader extends CmsObject
 	* Loads modules from the filesystem.  If loadall is true, then it will load all
 	* modules whether they're installed, or active.  If it is false, then it will
 	* only load modules which are installed and active.
+	*
+	* @param boolean Whether or not all modules should be loaded
+	* @param boolean Whether or not we should load modules that are only admin panel related
+	* @return void
+	* @author Ted Kulp
 	*/
 	public static function load_modules($loadall = false, $noadmin = false)
 	{
@@ -41,7 +46,7 @@ class CmsModuleLoader extends CmsObject
 		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 
-		$dir = cms_join_path(ROOT_DIR,'modules');
+		$dir = cms_join_path(ROOT_DIR, 'modules');
 		
 		$loaded_modules = array();
 
@@ -167,7 +172,7 @@ class CmsModuleLoader extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use load_modules instead.
+	 * @deprecated Deprecated.  Use CmsModuleLoader::load_modules instead.
 	 **/
 	public static function LoadModules($loadall = false, $noadmin = false)
 	{
@@ -176,6 +181,9 @@ class CmsModuleLoader extends CmsObject
 
 	/**
 	 * Finds all classes extending cmsmodule for loading
+	 *
+	 * @return array The list of module classes loaded
+	 * @author Ted Kulp
 	 */
 	public static function find_modules()
 	{
@@ -209,7 +217,7 @@ class CmsModuleLoader extends CmsObject
 	}
 	
 	/**
-	 * Deprecated.  Use find_modules instead.
+	 * @deprecated Deprecated.  Use CmsModuleLoader::find_modules instead.
 	 **/
 	public static function FindModules()
 	{

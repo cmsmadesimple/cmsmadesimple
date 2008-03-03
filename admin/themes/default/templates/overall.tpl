@@ -89,6 +89,20 @@
 		</div>
 
 		<div>
+			{if $theme_object->has_errors()}
+				<p class="errors">
+					{foreach from=$theme_object->errors item='one_error'}
+						{$one_error}<br />
+					{/foreach}
+				</p>
+			{/if}
+			{if $theme_object->has_messages()}
+				<p class="messages">
+					{foreach from=$theme_object->messages item='one_message'}
+						{$one_message}<br />
+					{/foreach}
+				</p>
+			{/if}
 			{$admin_content}
 			<div class="clearb"></div>
 		</div>

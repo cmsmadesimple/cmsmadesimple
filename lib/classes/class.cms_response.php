@@ -177,6 +177,7 @@ class CmsResponse extends CmsObject
 	{
 		return trim(preg_replace("/[^a-z0-9_\-]+/", '_', strtolower($text)), ' _');
 	}
+
 }
 
 # vim:ts=4 sw=4 noet

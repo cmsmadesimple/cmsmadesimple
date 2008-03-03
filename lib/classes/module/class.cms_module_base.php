@@ -122,6 +122,18 @@ abstract class CmsModuleBase extends CmsObject
 	}
 	
 	/**
+	 * Checks to see whether this module will work on the currently installed
+	 * version of CMSMS core.
+	 *
+	 * @return boolean Whether or not it meets the minimum core version requirement.
+	 * @author Ted Kulp
+	 **/
+	final public function meets_minimum_requirements()
+	{
+		return version_compare($this->minimum_core_version(), CMS_VERSION) < 1;
+	}
+	
+	/**
 	 * Returns a sufficient about page for a module
 	 */
 	public function get_about()
@@ -654,6 +666,30 @@ abstract class CmsModuleBase extends CmsObject
 		return FALSE;
 	}
 	
+	final public function is_installable()
+	{
+		$gCms = cmsms();
+		$broken_deps = 0;
+
+		$dependencies = $this->get_dependencies();
+		if (count($dependencies) > 0) #Check for any deps
+		{
+			#Now check to see if we can satisfy any deps
+			foreach ($dependencies as $onedepkey => $onedepvalue)
+			{
+				if (!isset($gCms->modules[$onedepkey]) ||
+				$gCms->modules[$onedepkey]['installed'] != true ||
+				$gCms->modules[$onedepkey]['active'] != true ||
+				version_compare($gCms->modules[$onedepkey]['object']->get_version(), $onedepvalue) < 0)
+				{
+					$broken_deps++;
+				}
+			}
+		}
+		
+		return $broken_deps == 0;
+	}
+	
 	public function create_table($table, $fields)
 	{
 		$dbdict = NewDataDictionary(cms_db());
@@ -730,6 +766,11 @@ abstract class CmsModuleBase extends CmsObject
 		return FALSE;
 	}
 	
+	final public function is_uninstallable()
+	{
+		return !$this->check_for_dependents();
+	}
+	
 	public function drop_table($table)
 	{
 		$dbdict = NewDataDictionary(cms_db());
@@ -777,6 +818,11 @@ abstract class CmsModuleBase extends CmsObject
 		return TRUE;
 	}
 	
+	final public function needs_upgrade()
+	{
+		return version_compare(CmsModuleOperations::get_installed_version($this->get_name()), $this->get_version());
+	}
+	
 	/**
 	 * Returns a list of dependencies and minimum versions that this module
 	 * requires. It should return an hash, eg.
@@ -786,6 +832,11 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		return array();
 	}
+	
+	public function get_dependency_names()
+	{
+		return array_keys($this->get_dependencies());
+	}
 
 	/**
 	 * Checks to see if currently installed modules depend on this module.	This is
@@ -794,7 +845,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function check_for_dependents()
 	{
-		$query = "SELECT * FROM ".cms_db_prefix()."module_deps WHERE parent_module = ?";
+		$query = "SELECT * FROM " . cms_db_prefix() . "module_deps WHERE parent_module = ?";
 		$row = cms_db()->GetRow($query, array($this->get_name()));
 
 		if ($row)
