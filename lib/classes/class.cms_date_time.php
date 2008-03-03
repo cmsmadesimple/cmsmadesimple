@@ -84,16 +84,6 @@ class CmsDateTime extends CmsObject
 	{
 		return $this->format('U');
 	}
-	
-	function get_timezone()
-	{
-		return date_timezone_get($this->datetime);
-	}
-	
-	function get_offset()
-	{
-		return timezone_offset_get($this->get_timezone(), $this->datetime);
-	}
 
 	/**
 	 * Returns a formatted string based on the individual user's settings.
@@ -121,7 +111,6 @@ class CmsDateTime extends CmsObject
 	 */
 	function to_sql_string()
 	{
-		//return cms_db()->DBTimeStamp($this->timestamp() - $this->get_offset());
 		return cms_db()->DBTimeStamp($this->timestamp());
 	}
 }

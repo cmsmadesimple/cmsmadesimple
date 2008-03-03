@@ -1115,7 +1115,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	 */
 	function get_columns_in_table()
 	{
-		return CmsCache::get_instance()->call(array($this, '_get_columns_in_table'), $this->get_table());
+		return CmsCache::get_instance()->call(array(&$this, '_get_columns_in_table'), $this->get_table());
 	}
 	
 	function _get_columns_in_table($table)

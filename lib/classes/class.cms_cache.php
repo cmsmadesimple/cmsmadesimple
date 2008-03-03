@@ -33,30 +33,33 @@ class CmsCache extends CmsObject
 	static private $instances = null;
 	private $cache = null;
 	
-	function __construct($type = 'Function')
+	function __construct($type = 'function')
 	{
 		parent::__construct();
-		
-		ini_set('include_path', cms_join_path(ROOT_DIR, 'lib/'));
-		require_once cms_join_path(ROOT_DIR, 'lib', 'Zend', 'Cache.php');
 
 		// Set a few options
-		$frontend_options = array(
-			'automatic_serialization' => true,
+		$options = array(
+		    'cacheDir' => cms_join_path(ROOT_DIR, 'tmp', 'cache/'),
 		    'lifeTime' => 300
 		);
-		
-		$backend_options = array('cache_dir' => cms_join_path(ROOT_DIR, 'tmp', 'cache/'));
-		
-		if ($type == 'Function')
-		{
-			$frontend_options['caching'] = CmsConfig::get('function_caching');
-		}
 
-		$this->cache = Zend_Cache::factory($type, 'File', $frontend_options, $backend_options);
+		if ($type == 'function')
+		{
+			//if (!CmsConfig::get('function_caching') || CmsConfig::get('debug'))
+			if (!CmsConfig::get('function_caching'))
+				$options['caching'] = false;
+
+			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
+			$this->cache = new Cache_Lite_Function($options);
+		}
+		else
+		{
+			require_once(cms_join_path(ROOT_DIR, 'lib', 'pear', 'cache', 'lite', 'Function.php'));
+			$this->cache = new Cache_Lite($options);
+		}
 	}
 	
-	public static function get_instance($type = 'Function')
+	public static function get_instance($type = 'function')
 	{
 		if (self::$instances == null)
 		{
@@ -71,47 +74,37 @@ class CmsCache extends CmsObject
 		return self::$instances[$type];
 	}
 	
-	public function get($id)
+	public function get($id, $group = 'default', $doNotTestCacheValidity = FALSE)
 	{
-		return $this->cache->load($id);
+		return $this->cache->get($id, $group, $doNotTestCacheValidity);
 	}
 	
-	public function save($data, $id = NULL)
+	public function save($data, $id = NULL, $group = 'default')
 	{
-		return $this->cache->save($data, $id);
-	}
-	
-	public function test($id = NULL)
-	{
-		return $this->cache->test($id);
+		return $this->cache->save($data, $id, $group);
 	}
 	
 	public function call()
 	{
 		$args = func_get_args();
-		if (count($args) < 2 || !is_array($args[1]))
-			$args[1] = array($args[1]);
 		return call_user_func_array(array($this->cache, 'call'), $args);
 	}
 	
 	public function drop()
 	{
 		$args = func_get_args();
-		if (count($args) < 2 || !is_array($args[1]))
-			$args[1] = array($args[1]);
 		return call_user_func_array(array($this->cache, 'drop'), $args);
 	}
 	
-	public function clean($group = FALSE)
+	public function clean($group = FALSE, $mode = 'ingroup')
 	{
 		CmsContentOperations::clear_cache();
-		$this->cache->setOption('caching', false);
-		return $this->cache->clean(Zend_Cache::CLEANING_MODE_ALL);
+		return $this->cache->clean($group, $mode);
 	}
 	
-	static public function clear($group = FALSE)
+	static public function clear($group = FALSE, $mode = 'ingroup')
 	{
-		return self::get_instance()->clean($group);
+		return self::get_instance()->clean($group, $mode);
 	}
 }
 

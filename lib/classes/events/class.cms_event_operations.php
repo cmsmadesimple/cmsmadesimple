@@ -206,7 +206,7 @@ class CmsEventOperations extends CmsObject
 	 **/
 	public static function list_event_handlers($module_name, $event_name)
 	{
-		return CmsCache::get_instance()->call('CmsEventOperations::list_event_handlers_impl', array($module_name, $event_name));
+		return CmsCache::get_instance()->call('CmsEventOperations::list_event_handlers_impl', $module_name, $event_name);
 	}
 	
 	public static function ListEventHandlers($modulename, $eventname)
