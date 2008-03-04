@@ -160,7 +160,7 @@ function setup_smarty($themeObject)
 function display_content_list()
 {
 	$userid = get_userid();
-	$themeObject = AdminTheme::get_theme_for_user($userid);
+	$themeObject = CmsAdminTheme::get_theme_for_user($userid);
 	$smarty = cms_smarty();
 	setup_smarty($themeObject);
 	return $smarty->fetch('listcontent-tree.tpl');
@@ -382,14 +382,12 @@ function movecontent($contentid, $parentid, $direction = 'down')
 	$userid = get_userid();
 
 	if (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure'))
-	{		
+	{
 		$content = cms_orm()->content->find_by_id($contentid);
 		
 		if ($content != null)
 		{
 			$content->shift_position($direction);
-			CmsContentOperations::SetAllHierarchyPositions();
-			CmsCache::clear();
 		}
 	}
 }
