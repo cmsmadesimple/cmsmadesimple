@@ -929,6 +929,16 @@ abstract class CmsModuleBase extends CmsObject
 	
 	/**
 	 * ------------------------------------------------------------------
+	 * Web Service Methods
+	 * ------------------------------------------------------------------
+	 */
+	function add_xmlrpc_method($method_name, $namespace = '')
+	{
+		CmsXmlrpc::add_method($method_name, array($this, $method_name), $namespace);
+	}
+	
+	/**
+	 * ------------------------------------------------------------------
 	 * Form Methods
 	 * ------------------------------------------------------------------
 	 */

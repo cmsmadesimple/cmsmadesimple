@@ -116,6 +116,13 @@ if (CmsConfig::get('full_page_caching'))
 //All systems are go...  let's include all the good stuff
 require_once($dirname.DIRECTORY_SEPARATOR.'include.php');
 
+//If we need the xmlrpc server, then jump out		
+if ($page == 'cmsms/xmlrpc.php')
+{
+	CmsXmlrpc::handle_requests();
+	exit;
+}
+
 //Make sure the id is set inside smarty if needed for modules
 cms_smarty()->set_id_from_request();
 
