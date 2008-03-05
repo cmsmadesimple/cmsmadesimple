@@ -874,6 +874,8 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function do_action($name, $id, $params, $returnid='')
 	{
+		$return_id = $returnid; //avoid confusion
+
 		if ($name != '')
 		{
 			$filename = cms_join_path($this->get_module_path(), 'action.' . $name . '.php');
