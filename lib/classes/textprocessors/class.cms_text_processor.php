@@ -47,6 +47,18 @@ class CmsTextProcessor extends CmsObject
 		return array('none', 'simple', 'markdown');
 	}
 	
+	static public function list_processors_for_dropdown()
+	{
+		$result = array();
+
+		foreach (self::list_processors() as $one_item)
+		{
+			$result[$one_item] = ucwords($one_item);
+		}
+		
+		return $result;
+	}
+	
 	static public function process($text, $processor = 'none')
 	{
 		switch ($processor)
