@@ -164,31 +164,5 @@ function cms_header_filter_plugin_function($params, &$smarty)
 	}
 }
 
-function smarty_cms_help_outputfilter_header() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Displays the stylesheet link and metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template like: <code>{header}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
-		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
-		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
-		<li><em>(optional)</em>assign - Assign the output to a smarty variable named in assign instead of outputting it directly.</li>
-	</ul>
-	<?php
-}
-
-function smarty_cms_about_outputfilter_header() {
-	?>
-	<p>Author: Ted Kulp&lt;ted@cmsmadesimple.org&gt;</p>
-	<p>Version: 1.0</p>
-	<p>
-	Change History:<br/>
-	None
-	</p>
-	<?php
-}
 # vim:ts=4 sw=4 noet
 ?>

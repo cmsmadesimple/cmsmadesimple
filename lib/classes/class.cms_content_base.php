@@ -281,27 +281,13 @@ class CmsContentBase extends CmsObjectRelationalMapping
 		$alias = ($this->alias != ''?$this->alias:$this->id);
 		if ($config["assume_mod_rewrite"] && $rewrite == true)
 		{
-		    if ($config['use_hierarchy'] == true)
-		    {
-				$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-		    }
-		    else
-		    {
-				$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
-		    }
+			$url = $config['root_url']. '/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
 		}
 		else
 		{
 		    if (isset($_SERVER['PHP_SELF']) && $config['internal_pretty_urls'] == true)
 		    {
-				if ($config['use_hierarchy'] == true)
-				{
-				    $url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension'])?$config['page_extension']:'.html');
-				}
-				else
-				{
-				    $url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $alias . (isset($config['page_extension'])?$config['page_extension']:'.html');
-				}
+				$url = $config['root_url'] . '/index.php/' . ($lang != '' ? "$lang/" : '') . $this->HierarchyPath() . (isset($config['page_extension']) ? $config['page_extension'] : '.html');
 		    }
 		    else
 		    {

@@ -435,11 +435,11 @@ function cms_module_CreateLink(&$modinstance, $id, $action, $returnid='', $conte
 
 	$class = (isset($params['class'])?cms_htmlentities($params['class']):'');
 
-	if ($prettyurl != '' && $config['assume_mod_rewrite'] == true && $config['use_hierarchy'] == true)
+	if ($prettyurl != '' && $config['assume_mod_rewrite'] == true)
 	{
 		$text = $config['root_url'] . '/' . $prettyurl . $config['page_extension'];
 	}
-	else if ($prettyurl != '' && $config['internal_pretty_urls'] == true && $config['use_hierarchy'] == true)
+	else if ($prettyurl != '' && $config['internal_pretty_urls'] == true)
 	{
 		$text = $config['root_url'] . '/index.php/' . $prettyurl . $config['page_extension'];
 	}
