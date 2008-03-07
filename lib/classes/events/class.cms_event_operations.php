@@ -520,6 +520,8 @@ class CmsEventOperations extends CmsObject
 		self::create_event( $modulename, 'ModuleUpgraded');
 		self::create_event( $modulename, 'AllModulesLoaded');
 		
+		self::create_event( $modulename, 'HeaderTagRender');
+		
 		self::create_event( $modulename, 'ContentStylesheet');
 		self::create_event( $modulename, 'ContentPreCompile');
 		self::create_event( $modulename, 'ContentPostCompile');

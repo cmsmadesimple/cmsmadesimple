@@ -20,88 +20,17 @@
 
 function smarty_cms_function_header($params, &$smarty)
 {
-	global $gCms;
-	$pageinfo =& $gCms->variables['pageinfo'];
-	$root_url = CmsConfig::get('root_url');
+	$result = '<!-- headertag';
 	
-	$result = '';
-	
-	if (isset($params['name']) && $params['name'] != '')
+	foreach ($params as $k=>$v)
 	{
-		$result .= '<link rel="result" type="text/css" ';
-		if (isset($params['media']) && $params['media'] != '')
-		{
-			$result .= 'media="' . $params['media'] . '" ';
-		}
-		$result .= 'href="'.$root_url.'/stylesheet.php?name='.$params['name'];
-		$result .= "\" />\n"; 
-	}
-	else
-	{
-		$template = cms_orm('cms_template')->find_by_id($pageinfo->template_id);
-		if ($template)
-		{
-			foreach ($template->get_stylesheet_media_types() as $media)
-			{
-				$result .= '<link rel="result" type="text/css" ';
-				if ($media != '')
-				{
-					$result .= 'media="'.$media.'" ';
-				}
-				$result .= "href=\"{$root_url}/stylesheet.php?templateid={$pageinfo->template_id}";
-				if ($media != '')
-				{
-					$result .= '&amp;mediatype='.urlencode($media);
-				}
-				$result .= "\" />\n"; 
-			}
-		}
+		$v = str_replace('"', 'xxx_double_quote_here_xxx', $v);
+		$result .= " $k=\"$v\"";
 	}
 	
-	$result .= get_site_preference('metadata', '');
-
-	if (isset($pageinfo) && $pageinfo !== FALSE)
-	{
-		if (isset($pageinfo->content_metadata) && $pageinfo->content_metadata != '')
-		{
-			$result .= "\n" . $pageinfo->content_metadata;
-		}
-	}
-
-	if ((!strpos($result,$smarty->left_delimiter) === false) and (!strpos($result,$smarty->right_delimiter) === false))
-	{
-		$smarty->_compile_source('metadata template', $result, $_compiled);
-		@ob_start();
-		$smarty->_eval('?>' . $_compiled);
-		$result = @ob_get_contents();
-		@ob_end_clean();
-	}
+	$result .= ' -->';
 	
-	$showbase = true;
-	
-	#Show a base tag unless showbase is false in config.php
-	#It really can't hinder, only help.
-	if (isset($params['showbase']))
-	{
-		if ($params['showbase'] == 'false')
-		{
-			$showbase = false;
-		}
-	}
-
-	if ($showbase)
-	{
-		$result .= "\n<base href=\"".$root_url."/\" />\n";
-	}
-	
-	if (array_key_exists('assign', $params))
-	{
-		$smarty->assign($params['assign'], $result);
-	}
-	else
-	{
-		return $result;
-	}
+	return $result;
 }
 
 function smarty_cms_help_function_header() {
