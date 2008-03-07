@@ -40,6 +40,8 @@ abstract class CmsModuleBase extends CmsObject
 	var $modredirect = false;
 	var $modmisc = false;
 	
+	var $has_added_header_text = false;
+	
 	var $set_params;
 	
 	function __construct()
@@ -1628,6 +1630,35 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		$variables = &$this->cms->variables;
 		$variables['content-type'] = $contenttype;
+	}
+	
+	/**
+	 * Adds text to be displayed by the {header} tag in the frontend rendering
+	 * process.
+	 *
+	 * @param string The text to add to the {header} output
+	 * @return void
+	 * @author Ted Kulp
+	 **/
+	public function add_header_text($text)
+	{
+		$headers = cmsms()->get('header_additions');
+		if ($headers == null)
+			$headers = array();
+		$headers[] = $text;
+		cmsms()->set('header_additions', $headers);
+		$this->has_added_header_text = true;
+	}
+	
+	/**
+	 * Checks to see if any add_header_text calls have been made yet.
+	 *
+	 * @return boolean Whether or not header text has been added
+	 * @author Ted Kulp
+	 **/
+	public function has_added_header_text()
+	{
+		return $this->has_added_header_text;
 	}
 
 	/**

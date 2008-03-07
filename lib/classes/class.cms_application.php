@@ -177,6 +177,16 @@ class CmsApplication extends CmsObject
 		return CmsDatabase::get_instance();
 	}
 	
+	function get($name)
+	{
+		return $this->variables[$name];
+	}
+	
+	function set($name, $value)
+	{
+		$this->variables[$name] = $value;
+	}
+	
 	/**
 	 * Getter overload method.  Called when an $obj->field and field
 	 * does not exist in the object's variable list.  In this case,

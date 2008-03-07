@@ -138,6 +138,14 @@ function cms_header_filter_plugin_function($params, &$smarty)
 			$showbase = false;
 		}
 	}
+	
+	if (cmsms()->get('header_additions') != null)
+	{
+		foreach (cmsms()->get('header_additions') as $addt)
+		{
+			$result .= $addt . "\n";
+		}
+	}
 
 	if ($showbase)
 	{
