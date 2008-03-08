@@ -154,14 +154,7 @@ function cms_header_filter_plugin_function($params, &$smarty)
 	
 	CmsEventOperations::send_event('Core', 'HeaderTagRender', array('content' => &$result));
 	
-	if (array_key_exists('assign', $params))
-	{
-		$smarty->assign($params['assign'], $result);
-	}
-	else
-	{
-		return $result;
-	}
+	return $result;
 }
 
 # vim:ts=4 sw=4 noet

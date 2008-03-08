@@ -92,16 +92,18 @@ class CmsPageInfo extends CmsObject
 		
 		$gCms = cmsms();
 		$smarty = cms_smarty();
+		
+		$id = CmsRequest::get_id_from_request();
 
 		#If this is a case where a module doesn't want a template to be shown, just disable caching
-		if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
+		if (isset($id) && $id != '' && isset($_REQUEST[$id.'showtemplate']) && ($_REQUEST[$id.'showtemplate'] == 'false' || $_REQUEST[$id.'showtemplate'] == false))
 		{
 			$html = $smarty->fetch('template:notemplate') . "\n";
 		}
 		else
 		{
-			$smarty->caching = false;
-			$smarty->compile_check = true;
+			//$smarty->caching = false;
+			//$smarty->compile_check = true;
 			($smarty->is_cached('template:'.$this->template_id)?$cached="":$cached="not ");
 			// Added HTTP_HOST here to work with multisites - SK
 			$html = $smarty->fetch('template:'.$this->template_id.$_SERVER['HTTP_HOST']) . "\n";
@@ -113,18 +115,7 @@ class CmsPageInfo extends CmsObject
 
 		if (!$cached)
 		{
-			#Perform the content postrendernoncached callback
-			reset($gCms->modules);
-			while (list($key) = each($gCms->modules))
-			{
-				$value =& $gCms->modules[$key];
-				if ($gCms->modules[$key]['installed'] == true &&
-					$gCms->modules[$key]['active'] == true)
-				{
-					$gCms->modules[$key]['object']->ContentPostRenderNonCached($html);
-				}
-			}
-			//CmsEvents::send_event('Core', 'ContentPostRenderNonCached', array(&$html));
+			CmsEvents::send_event('Core', 'ContentPostRenderNonCached', array(&$html));
 		}
 
 		CmsEvents::send_event('Core', 'ContentPostRender', array('content' => &$html));

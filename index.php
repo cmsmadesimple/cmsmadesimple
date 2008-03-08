@@ -187,11 +187,11 @@ echo "<!-- CMS Made Simple - Released under the GPL - http://cmsmadesimple.org -
 
 //var_dump(CmsLogin::get_current_user());
 
-#if (CmsConfig::get('debug'))
-#{
+if (CmsConfig::get('debug'))
+{
 	echo "<p>Generated in ".$endtime." seconds by CMS Made Simple using ".CmsDatabase::query_count()." SQL queries and " . $memory . " bytes of memory</p>";
 	echo CmsProfiler::get_instance()->report();
-#}
+}
 
 if (get_site_preference('enablesitedownmessage') == "1" || $config['debug'] == true)
 {
