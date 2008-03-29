@@ -258,11 +258,11 @@ function ErrorHandler404()
 
 	}	// end parse_template();
 
-function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
+function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8", $convert_single_quotes = false)
 {
 	$result = "";
 	#$result = htmlentities($string, $param, $charset);
-	$result = my_htmlentities($string);
+	$result = my_htmlentities($string, $convert_single_quotes);
 	return $result;
 }
 
@@ -354,7 +354,7 @@ function cms_calculate_url()
  *     ENT_QUOTES   : Will convert both double and single quotes. 
  *     ENT_NOQUOTES : Will leave both double and single quotes unconverted. 
  */
-function my_htmlentities($val)
+function my_htmlentities($val, $convert_single_quotes = false)
 {
 	if ($val == "")
 	{
@@ -395,6 +395,12 @@ function my_htmlentities($val)
 	//{ 
 	//	$val = stripslashes($val); 
 	//} 
+	
+	if ($convert_single_quotes)
+	{
+		$val = str_replace("\\'", "&apos;", $val);
+		$val = str_replace("'", "&apos;", $val);
+	}
 
 	// Swop user inputted backslashes 
 

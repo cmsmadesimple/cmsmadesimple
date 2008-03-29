@@ -228,7 +228,7 @@ class Content extends ContentBase
 	    {
 		if ($blockNameId['oneline'] == 'true')
 		{
-		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.$this->GetPropertyValue($blockNameId['id']).'" />');
+		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($this->GetPropertyValue($blockNameId['id']), ENT_NOQUOTES, get_encoding('')).'" />');
 		}
 		else
 		{

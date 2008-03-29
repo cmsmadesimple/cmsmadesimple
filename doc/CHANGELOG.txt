@@ -1,3 +1,9 @@
+Version 1.2.4 "Greenland" -- March 29, 2008
+-----------------
+- Fixed a potential security issue with the applet upload in File Mananger
+- Fixed a bug where IE users would have content list issues if there were odd characters in a page name
+- Fixed a bug where putting quotes in a "oneline" content block would cause issues while editing
+
 Version 1.2.3 "Black Rock" -- January 2, 2008
 -----------------
 - Fixed a SQL injection

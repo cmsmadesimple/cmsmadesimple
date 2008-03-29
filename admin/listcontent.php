@@ -415,7 +415,7 @@ function show_h(&$root, &$sortableLists, &$listArray, &$output)
 	$contentops =& $gCms->GetContentOperations();
 
 	$output .= '<li id="item_'.$content->mId.'">'."\n";
-	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.$content->mMenuText;
+	$output .= '('.$contentops->CreateFriendlyHierarchyPosition($content->mHierarchy).') '.cms_htmlentities($content->mMenuText, '', '', true);
 
 	if ($root->getChildrenCount()>0)
 	{
@@ -662,14 +662,14 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         } ## if indent
 
         if ($display == 'edit')
-            $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. htmlspecialchars($one->mName.' ('.$one->mAlias) .')">'.$one->mMenuText.'</a></td>'. "\n";
+            $thelist .= '<a href="editcontent.php?content_id='.$one->mId.'&amp;page='.$page.'" title="'. cms_htmlentities($one->mName.' ('.$one->mAlias.')', '', '', true). '">'. cms_htmlentities($one->mMenuText, '', '', true) . '</a></td>'. "\n";
         else
-            $thelist .= $one->mMenuText."</td>\n";
+            $thelist .= cms_htmlentities($one->mMenuText, '', '', true) . "</td>\n";
 
 
         if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name)
         {
-            $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".$templates[$one->TemplateId()]->name."</a></td>\n";
+            $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a></td>\n";
         }
         else
         {
@@ -708,7 +708,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 		{
 			if ($one->IsDefaultPossible() && ($display == 'edit' || $display == 'structure'))
 			{
-				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".lang("confirmdefault", $one->mName)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
+				$thelist .= "<td class=\"pagepos\">".($one->DefaultContent()?$image_true:"<a href=\"listcontent.php?makedefault=".$one->Id()."\" onclick=\"if(confirm('".cms_htmlentities(lang("confirmdefault", $one->mName), '', '', true)."')) xajax_content_setdefault(".$one->Id().");return false;\">".$image_set_true."</a>")."</td>\n";
 			}
 			else
 			{
@@ -779,7 +779,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
 				//var_dump($one->ChildCount());
                 if ($root->getChildrenCount() == 0 && (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages')))
                 {
-                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".lang('deleteconfirm', $one->mName)."')) xajax_content_delete(".$one->Id()."); return false;\">";
+                    $thelist .= "<td class=\"pagepos\"><a href=\"listcontent.php?deletecontent=".$one->Id()."\" onclick=\"if (confirm('".cms_htmlentities(lang('deleteconfirm', $one->mName), '', '', true)."')) xajax_content_delete(".$one->Id()."); return false;\">";
                     $thelist .= $deleteImg;
                     $thelist .= "</a></td>\n";
                 }
