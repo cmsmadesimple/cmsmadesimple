@@ -9,9 +9,9 @@ INSERT INTO content_props (id, content_id, type, prop_name, language, content, c
 INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (1, 1, -1, 1, 1);
 INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (2, 2, -1, 1, 0);
 INSERT INTO group_permissions (id, permission_defn_id, group_id, object_id, has_access) VALUES (3, 3, -1, 1, 0);
-INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (1, 'Admin', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
-INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (2, 'Users', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
-INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (3, 'Editors', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
+INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (1, 'Anonymous', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
+INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (2, 'Admin', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
+INSERT INTO groups (id, group_name, active, create_date, modified_date) VALUES (3, 'Users', 1, '2007-11-25 16:01:31', '2007-11-25 16:01:31');
 INSERT INTO permission_defns (id, module, extra_attr, name, hierarchical, link_table) VALUES (1, 'Core', 'Page', 'View', 1, 'content');
 INSERT INTO permission_defns (id, module, extra_attr, name, hierarchical, link_table) VALUES (2, 'Core', 'Page', 'Edit', 1, 'content');
 INSERT INTO permission_defns (id, module, extra_attr, name, hierarchical, link_table) VALUES (3, 'Core', 'Page', 'Delete', 1, 'content');

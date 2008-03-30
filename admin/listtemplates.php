@@ -43,7 +43,8 @@ if (isset($_GET["message"]))
 <?php
 
 	$userid	= get_userid();
-	$add = check_permission($userid, 'Add Templates');
+	$current_user = CmsLogin::get_current_user();
+	$add = CmsAcl::check_core_permission('Add', $current_user, 'Template');
 	$edit = check_permission($userid, 'Modify Templates');
 	$all = check_permission($userid, 'Modify Any Page');
 	$remove	= check_permission($userid, 'Remove Templates');

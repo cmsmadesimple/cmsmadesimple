@@ -293,7 +293,7 @@ class CmsInstallOperations extends CmsObject
 				$user->admin_access = true;
 				if ($user->save())
 				{
-					$group = cms_orm()->cms_group->find_by_id(1);
+					$group = cms_orm()->cms_group->find_by_id(2);
 					if ($group != null)
 					{
 						return $group->add_user($user) !== false;

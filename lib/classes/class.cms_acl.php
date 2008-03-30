@@ -42,9 +42,9 @@ class CmsAcl extends CmsObject
 		return self::$instance;
 	}
 	
-	public static function check_core_permission($permission, $user)
+	public static function check_core_permission($permission, $user, $extra_attr = '')
 	{
-		return self::check_permission('Core', '', $permission, -1, null, $user);
+		return self::check_permission('Core', $extra_attr, $permission, -1, null, $user);
 	}
 	
 	public static function check_permission($module, $extra_attr, $permission, $object_id = -1, $group = null, $user = null)
@@ -74,8 +74,7 @@ class CmsAcl extends CmsObject
 			if ($group != null)
 			{
 				//Return true if we're in the Admin group
-				//if ($group->name == 'Admin')
-				if ($group->id == 1)
+				if ($group->id == 2) //1 is Anonymous
 					return true;
 
 				$groupids[] = $group->id;
