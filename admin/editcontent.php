@@ -416,6 +416,8 @@ $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, '
 
 $smarty->assign('start_tab', $start_tab);
 
+$smarty->assign('attribute_defns', cms_orm('CmsAttributeDefinition')->find_all_by_module_and_extra_attr('Core', 'Content'));
+
 $ExtraButtons = array(
 	array(
 		'name'    => 'applybutton',

@@ -34,9 +34,13 @@ class CmsUser extends CmsObjectRelationalMapping
 	var $field_maps = array('first_name' => 'firstname', 'last_name' => 'lastname', 'admin_access' => 'adminaccess', 'username' => 'name');
 	var $table = 'users';
 	
+	var $attr_module = 'Core';
+	var $attr_extra = 'User';
+	
 	public function __construct()
 	{
 		parent::__construct();
+		$this->assign_acts_as('Attributed');
 	}
 
 	public function validate()

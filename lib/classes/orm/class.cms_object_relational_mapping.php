@@ -830,7 +830,14 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					$queryparams[] = $id;
 				}
 			
-				$result = $db->Execute($query, $queryparams);
+				try
+				{
+					$result = $db->Execute($query, $queryparams) ? true : false;
+				}
+				catch (Exception $e)
+				{
+					$result = false;
+				}
 				
 				if ($result)
 				{
@@ -898,7 +905,14 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 				$query .= ')';
 			}
 			
-			$result = $db->Execute($query, $queryparams);
+			try
+			{
+				$result = $db->Execute($query, $queryparams) ? true : false;
+			}
+			catch (Exception $e)
+			{
+				$result = false;
+			}
 			
 			if ($result)
 			{
@@ -949,7 +963,7 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 			$new_map = array_flip($this->field_maps); //Flip the keys, since this is the reverse operation
 			if (array_key_exists($id_field, $new_map)) $id_field = $new_map[$id_field];
 
-			$result = cms_db()->Execute("DELETE FROM {$table} WHERE ".$this->get_table($id_field)." = {$id}");
+			$result = cms_db()->Execute("DELETE FROM {$table} WHERE ".$this->get_table($id_field)." = {$id}") ? true : false;
 		
 			if ($result)
 				$this->after_delete_caller();

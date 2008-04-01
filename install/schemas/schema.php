@@ -50,6 +50,31 @@ CmsInstallOperations::create_table($db, 'admin_recent_pages', "
 	access_time T
 ");
 
+CmsInstallOperations::create_table($db, 'attribute_defns', "
+	id I KEY AUTO,
+	module C(100),
+	extra_attr C(50),
+	name C(50),
+	attribute_type C(50),
+	optional X,
+	user_generated I1 default 1,
+	create_date T,
+	modified_date T
+");
+
+CmsInstallOperations::create_table($db, 'attributes', "
+	id I KEY AUTO,
+	attribute_id I,
+	object_id I,
+	language C(50),
+	content XL,
+	create_date T,
+	modified_date T
+");
+CmsInstallOperations::create_index($db, 'attributes', 'object_id', 'object_id');
+CmsInstallOperations::create_index($db, 'attributes', 'attribute_id', 'attribute_id');
+CmsInstallOperations::create_index($db, 'attributes', 'attribute_and_object', 'attribute_id,object_id');
+
 CmsInstallOperations::create_table($db, 'content', "
 	id I KEY AUTO,
 	content_name C(255),

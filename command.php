@@ -37,7 +37,7 @@ while($__shell->input()) {
             $__shell->resetCode();
         }
     } catch(Exception $__shell_exception) {
-        print $__shell_exception->getMessage();
+        print $__shell_exception->getTraceAsString();
         
         $__shell->resetCode();
 

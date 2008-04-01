@@ -290,12 +290,21 @@
 	</language>
 	<language>
 		<code>pt_BR</code>
-		<native_name>Português do Brasil</native_name>
-		<english_name>Brazilian Portuguese</english_name>
+		<native_name>Português Brasileiro</native_name>
+		<english_name>Portuguese [Brazilian]</english_name>
 		<aliases>
 			<alias>pt-BR</alias>
 		</aliases>
 		<flag_image>pt_BR.png</flag_image>
+	</language>
+	<language>
+		<code>pt_PT</code>
+		<native_name>Português</native_name>
+		<english_name>Portuguese</english_name>
+		<aliases>
+			<alias>pt-PT</alias>
+		</aliases>
+		<flag_image>pt_PT.png</flag_image>
 	</language>
 	<language>
 		<code>ru_RU</code>

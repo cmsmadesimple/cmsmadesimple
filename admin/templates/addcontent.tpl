@@ -117,6 +117,12 @@
 	    {if $page_object->field_used('alias')}
 			{admin_input type='input' label='pagealias' id='content_alias' name='content[alias]'  value=$page_object->alias useentities='true'}						
 	    {/if}
+	
+		{foreach item='defn' from=$attribute_defns}
+			{if $defn.attribute_type eq 'textbox'}
+				{admin_input type='input' label="`$defn.name`" id="attr_def-`$defn.id`" name="content[property][attr_def-`$defn->id`]" value=$page_object->get_property_value("attr_def-`$defn.id`", $orig_current_language) useentities='true' }
+			{/if}
+		{/foreach}
 	    <div class="clearb"></div>
 
 	</div> <!-- End advanced -->

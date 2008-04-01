@@ -284,6 +284,8 @@ $smarty->assign('include_templates', $page_object->add_template($smarty, $curren
 //Other fields that aren't easily done with smarty
 $smarty->assign('metadata_box', create_textarea(false, $page_object->metadata, 'content[metadata]', 'pagesmalltextarea', 'content_metadata', '', '', '80', '6'));
 
+$smarty->assign('attribute_defns', cms_orm('CmsAttributeDefinition')->find_all_by_module_and_extra_attr('Core', 'Content'));
+
 //extra buttons
 $ExtraButtons = array(
 	array(
