@@ -28,7 +28,7 @@ class CmsActsAsList extends CmsActsAs
 	public function before_save(&$obj)
 	{
 		//Fix the max value of "order_num" and set that before the save
-		$field_name = $this->get_order_field(&$obj);
+		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
 		$curval = $obj->$field_name;
 		if ($curval == null || intval($curval) < 1)
@@ -53,7 +53,7 @@ class CmsActsAsList extends CmsActsAs
 	
 	public function move_up(&$obj)
 	{
-		$field_name = $this->get_order_field(&$obj);
+		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
 		$id_field = $obj->id_field;
 
@@ -81,7 +81,7 @@ class CmsActsAsList extends CmsActsAs
 	
 	public function move_down(&$obj)
 	{
-		$field_name = $this->get_order_field(&$obj);
+		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
 		$id_field = $obj->id_field;
 
@@ -109,7 +109,7 @@ class CmsActsAsList extends CmsActsAs
 	
 	public function after_delete(&$obj)
 	{
-		$field_name = $this->get_order_field(&$obj);
+		$field_name = $this->get_order_field($obj);
 		$table_name = $obj->get_table();
 		$id_field = $obj->id_field;
 
