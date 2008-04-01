@@ -418,7 +418,7 @@ class CmsModule extends CmsModuleBase
 
 	function create_parameter($param, $defaultval='', $helpstring='', $optional=true)
 	{
-		return $this->CreateParameter($param, $defaulval, $helpstring, $optional);
+		return $this->CreateParameter($param, $defaultval, $helpstring, $optional);
 	}
 
 	function CreateParameter($param, $defaultval='', $helpstring='', $optional=true)

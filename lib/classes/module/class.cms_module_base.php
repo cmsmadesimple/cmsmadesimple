@@ -497,10 +497,20 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		return $this->create_parameter_with_filter_options($name, $filter, array(), array(), $defaultval, $helpstring, $optional);
 	}
+	
+	private function filter_id_list()
+	{
+		$result = array();
+		foreach(filter_list() as $k=>$filter)
+		{
+			$result[] = filter_id($filter);
+		}
+		return $result;
+	}
 
 	public function create_parameter_with_filter_options($name, $filter = FILTER_NONE, $filter_flags = array(), $filter_params = array(), $defaultval='', $helpstring='', $optional=true)
 	{
-		if ($filter == FILTER_NONE && !in_array($type, array_keys(filter_list())))
+		if ($filter != FILTER_NONE && !in_array($filter, $this->filter_id_list()))
 		{
 			trigger_error('Attempt to set invalid parameter type');
 		}

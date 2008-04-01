@@ -529,7 +529,7 @@ class CmsSmarty extends Smarty {
 			if (!in_array($result->fields['userplugin_name'], $plugins))
 			{
 				$plugins[] =& $result->fields['userplugin_name'];
-				$userplugins[$result->fields['userplugin_name']] = $result->fields['userplugin_id'];
+				$userplugins[$result->fields['userplugin_name']] = $result->fields['id'];
 				$functionname = "cms_tmp_".$result->fields['userplugin_name']."_userplugin_function";
 				//Only register valid code
 				if (!(@eval('function '.$functionname.'($params, &$smarty) {'.$result->fields['code'].'}') === FALSE))
