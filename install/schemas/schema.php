@@ -18,13 +18,6 @@
 #
 #$Id$
 
-CmsInstallOperations::create_table($db, 'additional_users', "
-	id I KEY AUTO,
-	user_id I,
-	page_id I,
-	content_id I
-");
-
 CmsInstallOperations::create_table($db, 'admin_bookmarks', "
 	id I KEY AUTO,
 	user_id I,
@@ -320,7 +313,6 @@ CmsInstallOperations::create_table($db, 'users', "
 	id I KEY AUTO,
 	username C(25),
 	password C(40),
-	admin_access I1,
 	first_name C(50),
 	last_name C(50),
 	email C(255),
