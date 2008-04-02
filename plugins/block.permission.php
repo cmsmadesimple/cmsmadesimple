@@ -16,30 +16,29 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_tr($params,$content,&$smarty)
+function smarty_cms_block_permission($params,$content,&$smarty)
 {
-  if( is_null($content) ) return;
-  $module =& $smarty->get_template_vars('cms_mapi_module');
-
-  $txt = '';
-  if( !is_object($module) )
+  if( isset($params['check']) )
     {
-      $txt = CmsLanguage::translate(trim($content));
+      $check = explode(',',trim($params['check']));
+      $user = CmsLogin::get_current_user();
+      foreach( $check as $oneitem )
+	{
+	  list($module,$perm) = explode(':',$oneitem);
+	  $res = '';
+	  if( $perm == '' )
+	    {
+	      $perm = $module;
+	      $res = CmsAcl::check_core_permission($perm,$user);
+	    }
+	  else
+	    {
+	      $res = CmsAcl::check_permission($module,'',$perm,-1,null,$user);
+	    }
+	  if( $res ) return $content;
+	}
     }
-  else
-    {
-      $txt = $module->Lang(trim($content));
-    }
-  
-  if( isset($params['assign']) )
-    {
-      $smarty->assign($params['assign'],$txt);
-    }
-  else
-    {
-      return $txt;
-    }
+  return '';
 }
 
-// EOF
 ?>
