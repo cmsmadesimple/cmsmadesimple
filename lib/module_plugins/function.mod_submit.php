@@ -1,6 +1,6 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
-#(c)2004-2006 by Ted Kulp (ted@cmsmadesimple.org)
+#(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
 #This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
@@ -20,12 +20,15 @@ function smarty_cms_function_mod_submit($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
-	$translate = coalesce_key($params,'translate',true);
+	$translate = coalesce_key($params, 'translate', true, FILTER_VALIDATE_BOOLEAN);
+
 	$value = ($translate === true) ? $module->lang($params['value']) : $params['value'];
 	$confirm_text = ($translate === true) ? $module->Lang($params['confirm_text']) : $params['confirm_text'];
+
 	return $module->create_input_submit($id, $params['name'], $value, 
 				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
 				$confirm_text, coalesce_key($params, 'id', ''));
 }
 
+# vim:ts=4 sw=4 noet
 ?>

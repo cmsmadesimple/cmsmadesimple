@@ -258,17 +258,27 @@ function humanize($lowerCaseAndUnderscoredWord)
 
 /**
  * Looks through the hash given.  If a key named val1 exists, then it's value is 
- * returned.  If not, then val2 is returned.
+ * returned.  If not, then val2 is returned.  Furthermore, passing one of the php
+ * filter ids (http://www.php.net/manual/en/ref.filter.php) will filter the 
+ * returned value.
  *
+ * @param array The has to parse through
+ * @param string The key to look for
+ * @param mixed The value to return if the key isn't found
+ * @param integer An optional filter id to pass the returned value through
+ * @param array Optional parameters for the filter_var call
  * @return mixed The result of the coalesce
  * @author Ted Kulp
  * @since 1.1
  **/
-function coalesce_key($array, $val1, $val2)
+function coalesce_key($array, $val1, $val2, $filter = -1, $filter_options = array())
 {
 	if (isset($array[$val1]))
 	{
-		return $array[$val1];
+		if ($filter > -1)
+			return filter_var($array[$val1], $filter, $filter_options);
+		else
+			return $array[$val1];
 	}
 	return $val2;
 }

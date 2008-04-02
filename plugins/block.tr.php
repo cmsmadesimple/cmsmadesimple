@@ -1,7 +1,7 @@
-<?php
+<?php // -*- mode:php; tab-width:4; indent-tabs-mode:t; c-basic-offset:4; -*-
 #CMS - CMS Made Simple
 #(c)2004-2008 by Ted Kulp (ted@cmsmadesimple.org)
-#This project's homepage is: http://cmsmadesimple.sf.net
+#This project's homepage is: http://cmsmadesimple.org
 #
 #This program is free software; you can redistribute it and/or modify
 #it under the terms of the GNU General Public License as published by
@@ -16,30 +16,30 @@
 #along with this program; if not, write to the Free Software
 #Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
-function smarty_cms_block_tr($params,$content,&$smarty)
+function smarty_cms_block_tr($params, $content, &$smarty)
 {
-  if( is_null($content) ) return;
-  $module =& $smarty->get_template_vars('cms_mapi_module');
+	if (is_null($content)) return;
+	$module = $smarty->get_template_vars('cms_mapi_module');
 
-  $txt = '';
-  if( !is_object($module) )
-    {
-      $txt = CmsLanguage::translate(trim($content));
-    }
-  else
-    {
-      $txt = $module->Lang(trim($content));
-    }
-  
-  if( isset($params['assign']) )
-    {
-      $smarty->assign($params['assign'],$txt);
-    }
-  else
-    {
-      return $txt;
-    }
+	$txt = '';
+	if (!is_object($module))
+	{
+		$txt = CmsLanguage::translate(trim($content));
+	}
+	else
+	{
+		$txt = $module->Lang(trim($content));
+	}
+
+	if (isset($params['assign']))
+	{
+		$smarty->assign($params['assign'], $txt);
+	}
+	else
+	{
+		return $txt;
+	}
 }
 
-// EOF
+# vim:ts=4 sw=4 noet
 ?>
