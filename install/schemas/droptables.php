@@ -22,6 +22,8 @@ CmsInstallOperations::drop_table($db, 'additional_users');
 CmsInstallOperations::drop_table($db, 'admin_bookmarks');
 CmsInstallOperations::drop_table($db, 'adminlog');
 CmsInstallOperations::drop_table($db, 'admin_recent_pages');
+CmsInstallOperations::drop_table($db, 'attribute_defns');
+CmsInstallOperations::drop_table($db, 'attributes');
 CmsInstallOperations::drop_table($db, 'content');
 CmsInstallOperations::drop_table($db, 'content_props');
 CmsInstallOperations::drop_table($db, 'crossref');
