@@ -67,6 +67,10 @@ class CmsLanguage extends CmsObject
 		{
 			$result = self::$lang[$module][$default_language][$name];
 		}
+		else if ($default_language == $current_language && $current_language == 'en_US')
+		{
+			$result = $name;
+		}
 		else
 		{
 			$result = "--Add Me - $module - $name --";
