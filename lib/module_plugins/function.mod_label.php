@@ -20,8 +20,9 @@ function smarty_cms_function_mod_label($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
+	$translate = coalesce_key($params,'translate',true);
 
-	$value = (isset($params['translate']) && $params['translate'] == true) ? $module->lang($params['value']) : $params['value'];
+	$value = ($translate === true) ? $module->lang($params['value']) : $params['value'];
 	
 	return $module->create_label_for_input($id, $params['name'], $value, coalesce_key($params, 'addttext', ''), coalesce_key($params, 'id', ''));
 }

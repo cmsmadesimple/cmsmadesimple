@@ -20,12 +20,12 @@ function smarty_cms_function_mod_submit($params, &$smarty)
 {
 	$module =& $smarty->get_template_vars('cms_mapi_module');
 	$id = $smarty->get_template_vars('cms_mapi_id');
-	
-	$value = (isset($params['translate']) && $params['translate'] == true) ? $module->lang($params['value']) : $params['value'];
-	
+	$translate = coalesce_key($params,'translate',true);
+	$value = ($translate === true) ? $module->lang($params['value']) : $params['value'];
+	$confirm_text = ($translate === true) ? $module->Lang($params['confirm_text']) : $params['confirm_text'];
 	return $module->create_input_submit($id, $params['name'], $value, 
 				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
-				coalesce_key($params, 'confirm_text', ''), coalesce_key($params, 'id', ''));
+				$confirm_text, coalesce_key($params, 'id', ''));
 }
 
 ?>
