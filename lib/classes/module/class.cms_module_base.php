@@ -900,6 +900,8 @@ abstract class CmsModuleBase extends CmsObject
 					$config = cms_config();
 					$smarty = cms_smarty();
 
+					$smarty->assign('module_action',$name);
+
 					include($filename);
 
 				}
