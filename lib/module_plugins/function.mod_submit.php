@@ -25,9 +25,28 @@ function smarty_cms_function_mod_submit($params, &$smarty)
 	$value = ($translate === true) ? $module->lang($params['value']) : $params['value'];
 	$confirm_text = ($translate === true) ? $module->Lang($params['confirm_text']) : $params['confirm_text'];
 
+	$addtext = '';
+	$class = coalesce_key($params,'class','');
+	if( !empty($class) )
+		{
+			$addtext = 'class="'.$class.'"';
+		}
+	$tmp = coalesce_key($params,'additional_text','');
+	if( !empty($tmp) )
+		{
+			if( empty($addtext) )
+				{
+					$addtext=$tmp;
+				}
+			else
+				{
+					$addtext .= ' '.$tmp;
+				}
+		}
 	return $module->create_input_submit($id, $params['name'], $value, 
-				coalesce_key($params, 'additional_text', ''), coalesce_key($params, 'image', ''), 
-				$confirm_text, coalesce_key($params, 'id', ''));
+										$addtext, 
+										coalesce_key($params, 'image', ''), 
+										$confirm_text, coalesce_key($params, 'id', ''));
 }
 
 # vim:ts=4 sw=4 noet
