@@ -271,7 +271,7 @@ function check_ownership($userid, $contentid = '', $strict = false)
  */
 function check_authorship($userid, $contentid = '')
 {
-	$check = false; return false; // hack by calguy1000
+	$check = false;
 	global $gCms;
 
 	if (!isset($gCms->variables['authorpages']))
@@ -335,29 +335,29 @@ function author_pages($userid)
 		if ($result) $result->Close();
 
 		// Get all of the pages this user has access to.
-// 		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
-// 		$result = &$db->Execute($query);
+		$query = "SELECT user_id,content_id FROM ".cms_db_prefix()."additional_users";
+		$result = &$db->Execute($query);
 
-// 		while ($result && !$result->EOF)
-// 		{
-// 		  $uid = $result->fields['user_id'];
-// 		  $content_id = $result->fields['content_id'];
-// 		  if( $uid == $userid )
-// 		    {
-// 		      $variables['authorpages'][] = $content_id;
-// 		    }
-// 		  else if( $uid < 0 )
-// 		    {
-// 		      $gid = $uid * -1;
-// 		      if( $userops->UserInGroup($userid,$gid) )
-// 			{
-// 			  $variables['authorpages'][] = $content_id;
-// 			}
-// 		    }
-// 		  $result->MoveNext();
-// 		}
+		while ($result && !$result->EOF)
+		{
+		  $uid = $result->fields['user_id'];
+		  $content_id = $result->fields['content_id'];
+		  if( $uid == $userid )
+		    {
+		      $variables['authorpages'][] = $content_id;
+		    }
+		  else if( $uid < 0 )
+		    {
+		      $gid = $uid * -1;
+		      if( $userops->UserInGroup($userid,$gid) )
+			{
+			  $variables['authorpages'][] = $content_id;
+			}
+		    }
+		  $result->MoveNext();
+		}
 		
-// 		if ($result) $result->Close();
+		if ($result) $result->Close();
 	}
 
 	return $variables['authorpages'];
