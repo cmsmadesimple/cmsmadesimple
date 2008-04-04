@@ -185,6 +185,7 @@ function check_ownership($userid, $contentid = '')
  */
 function check_authorship($userid, $contentid = '')
 {
+	return false; // temporary hack, calguy1000
 	$check = false;
 	global $gCms;
 
@@ -225,7 +226,8 @@ function check_authorship($userid, $contentid = '')
  * @since 0.11
  */
 function author_pages($userid)
-{
+{	
+	return array(); // temporary hack, calguy1000
 	global $gCms;
 	$db = cms_db();
     $variables = &$gCms->variables;
