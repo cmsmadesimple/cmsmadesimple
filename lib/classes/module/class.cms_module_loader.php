@@ -43,7 +43,6 @@ class CmsModuleLoader extends CmsObject
 	public static function load_modules($loadall = false, $noadmin = false)
 	{
 		$gCms = cmsms();
-		$db = cms_db();
 		$cmsmodules = &$gCms->modules;
 
 		$dir = cms_join_path(ROOT_DIR, 'modules');
@@ -68,7 +67,7 @@ class CmsModuleLoader extends CmsObject
 			
 			//Find modules and instantiate them
 			$allmodules = CmsModuleLoader::find_modules();
-			foreach ($allmodules as &$onemodule)
+			foreach ($allmodules as $onemodule)
 			{
 				if (class_exists($onemodule))
 				{
@@ -88,85 +87,77 @@ class CmsModuleLoader extends CmsObject
 
 		#Figger out what modules are active and/or installed
 		#Load them if loadall is false
-		if (isset($db))
+		$query = '';
+		if ($noadmin)
+			$query = "SELECT module_name, active, version FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
+		else
+			$query = "SELECT module_name, active, version FROM ".cms_db_prefix()."modules ORDER BY module_name";
+
+		$result = cms_db()->Execute($query);
+		while ($result && !$result->EOF)
 		{
-			$query = '';
-			if ($noadmin)
-				$query = "SELECT * FROM ".cms_db_prefix()."modules WHERE admin_only = 0 ORDER BY module_name";
-			else
-				$query = "SELECT * FROM ".cms_db_prefix()."modules ORDER BY module_name";
-			$result = &$db->Execute($query);
-			while ($result && !$result->EOF)
+			$modulename = $result->fields['module_name'];
+			if ($loadall == true)
 			{
-				if (isset($result->fields['module_name']))
+				if (array_key_exists($modulename, $cmsmodules))
 				{
-					$modulename = $result->fields['module_name'];
-					if (isset($modulename))
-					{
-						if ($loadall == true)
-						{
-							if (isset($cmsmodules[$modulename]))
-							{
-								$cmsmodules[$modulename]['installed'] = true;
-								$cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
-							}
-						}
-						else
-						{
-							if ($result->fields['active'] == 1)
-							{
-								if (@is_file("$dir/$modulename/$modulename.module.php"))
-								{
-									#var_dump('loading module:' . $modulename);
-									include_once("$dir/$modulename/$modulename.module.php");
-									if (class_exists($modulename))
-									{
-										$newmodule = new $modulename;
-										$name = $newmodule->get_name();
-										$loaded_modules[] = $name;
-
-										$dbversion = $result->fields['version'];
-
-										#Check to see if there is an update and wether or not we should perform it
-										if (version_compare($dbversion, $newmodule->get_version()) == -1 && $newmodule->allow_auto_upgrade())
-										{
-											$newmodule->Upgrade($dbversion, $newmodule->get_version());
-											$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
-											$db->Execute($query, array($newmodule->get_version(), $name));
-											CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->get_version()));
-											$dbversion = $newmodule->get_version();
-										}
-
-										#Check to see if version in db matches file version
-										if ($dbversion == $newmodule->get_version() && version_compare($newmodule->minimum_core_version(), CMS_VERSION) != 1)
-										{
-											$cmsmodules[$name]['object'] = $newmodule;
-											$cmsmodules[$name]['installed'] = true;
-											$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
-										}
-										else
-										{
-											unset($cmsmodules[$name]);
-										}
-									}
-									else //No point in doing anything with it
-									{
-										unset($cmsmodules[$modulename]);
-									}
-								}
-								else
-								{
-									unset($cmsmodules[$modulename]);
-								}
-							}
-						}
-					}
-					$result->MoveNext();
+					$cmsmodules[$modulename]['installed'] = true;
+					$cmsmodules[$modulename]['active'] = ($result->fields['active'] == 1?true:false);
 				}
 			}
-			
-			if ($result) $result->Close();
+			else
+			{
+				if ($result->fields['active'] == 1)
+				{
+					if (@is_file("$dir/$modulename/$modulename.module.php"))
+					{
+						#var_dump('loading module:' . $modulename);
+						include_once("$dir/$modulename/$modulename.module.php");
+						if (class_exists($modulename))
+						{
+							$newmodule = new $modulename;
+							$name = $newmodule->get_name();
+							$loaded_modules[] = $name;
+
+							$dbversion = $result->fields['version'];
+
+							#Check to see if there is an update and wether or not we should perform it
+							if (version_compare($dbversion, $newmodule->get_version()) == -1 && $newmodule->allow_auto_upgrade())
+							{
+								$newmodule->Upgrade($dbversion, $newmodule->get_version());
+								$query = "UPDATE ".cms_db_prefix()."modules SET version = ? WHERE module_name = ?";
+								cms_db()->Execute($query, array($newmodule->get_version(), $name));
+								CmsEvents::SendEvent('Core', 'ModuleUpgraded', array('name' => $name, 'oldversion' => $dbversion, 'newversion' => $newmodule->get_version()));
+								$dbversion = $newmodule->get_version();
+							}
+
+							#Check to see if version in db matches file version
+							if ($dbversion == $newmodule->get_version() && version_compare($newmodule->minimum_core_version(), CMS_VERSION) != 1)
+							{
+								$cmsmodules[$name]['object'] = $newmodule;
+								$cmsmodules[$name]['installed'] = true;
+								$cmsmodules[$name]['active'] = ($result->fields['active'] == 1?true:false);
+							}
+							else
+							{
+								unset($cmsmodules[$name]);
+							}
+						}
+						else //No point in doing anything with it
+						{
+							unset($cmsmodules[$modulename]);
+						}
+					}
+					else
+					{
+						unset($cmsmodules[$modulename]);
+					}
+				}
+			}
+			$result->MoveNext();
 		}
+		
+		if ($result) $result->Close();
 		
 		CmsEventOperations::send_event('Core', 'AllModulesLoaded', array('loaded_modules' => $loaded_modules));
 	}

@@ -1149,6 +1149,8 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 
 		}
 		
+		cms_db()->SetFetchMode(ADODB_FETCH_ASSOC); //Data dictionary resets this
+		
 		return $fields;
 	}
 	

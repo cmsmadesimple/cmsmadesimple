@@ -121,6 +121,7 @@ foreach (CmsModuleOperations::get_all_modules() as $k => $v)
 {
 	$module = array();
 	$module['name'] = $k;
+
 	if ($v['object']->get_help() != '')
 	{
 		$module['name'] = '<a href="listmodules.php?action=showmodulehelp&amp;module=' . $k . '">' . $k . '</a>';
