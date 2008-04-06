@@ -50,12 +50,23 @@ class CmsAcl extends CmsObject
 	public static function check_permission($module, $extra_attr, $permission, $object_id = -1, $group = null, $user = null)
 	{
 		$groups = array();
+
+		$userid = -1;
+		if (is_int(intval($user)))
+			$userid = intval($user);
+		else if ($user != null)
+			$userid = $user->id;
 		
 		if ($group == null && $user != null)
 		{
 			//Return true if we're the #1 account
-			if ($user->id == 1)
+			if ($userid == 1)
 				return true;
+
+			if (is_int(intval($user)))
+			{
+				$user = cms_orm('CmsUser')->find_by_id($userid);
+			}
 
 			$groups = $user->groups;
 		}

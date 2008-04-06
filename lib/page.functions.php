@@ -74,32 +74,7 @@ function generate_user_object($userid)
  */
 function load_all_permissions($userid)
 {
-	$perms = array();
-	
-	global $gCms;
-	$db = cms_db();
-	$variables = &$gCms->variables;
-
-	try
-	{
-		$query = "SELECT DISTINCT permission_name FROM ".cms_db_prefix()."user_groups ug INNER JOIN ".cms_db_prefix()."group_perms gp ON gp.group_id = ug.group_id INNER JOIN ".cms_db_prefix()."permissions p ON p.permission_id = gp.permission_id WHERE ug.user_id = ?";
-		/*
-		$result = &$db->Execute($query, array($userid));
-		while ($result && !$result->EOF)
-		{
-			$perms[] =& $result->fields['permission_name'];
-			$result->MoveNext();
-		}
-	
-		if ($result) $result->Close();
-		*/
-	}
-	catch (exception $e)
-	{
-		
-	}
-
-	$variables['userperms'] = $perms;
+	//Doesn't do anything anymore
 }
 
 /**
@@ -111,27 +86,7 @@ function load_all_permissions($userid)
  */
 function check_permission($userid, $permname)
 {
-	/*
-	$check = false;
-
-	global $gCms;
-
-	if (!isset($gCms->variables['userperms']))
-	{
-		load_all_permissions($userid);
-	}
-
-	if (isset($gCms->variables['userperms']))
-	{
-		if (in_array($permname, $gCms->variables['userperms']) || $userid == 1 )
-		{
-			$check = true;
-		}
-	}
-
-	return $check;
-	*/
-	return CmsAcl::check_core_permission($permname, cms_orm()->cms_user->find_by_id($userid));
+	return CmsAcl::check_core_permission($permname, $userid);
 }
 
 /**
