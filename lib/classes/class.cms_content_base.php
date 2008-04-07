@@ -68,6 +68,19 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 	*/
 	
+	public function index()
+	{
+		$content = '';
+		foreach ($this->get_property_names() as $prop_name)
+		{
+			if (ends_with($prop_name, '-content'))
+			{
+				$content .= ' ' . $this->get_property_value($prop_name);
+			}
+		}
+		CmsSearch::get_instance()->add_content('Core', 'Content', $this->id, $this->get_url(), $this->get_property_value('name'), trim($content));
+	}
+	
 	public function check_permission($userid = null)
 	{
 		$user = CmsLogin::get_current_user();

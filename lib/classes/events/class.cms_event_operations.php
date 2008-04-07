@@ -528,6 +528,8 @@ class CmsEventOperations extends CmsObject
 		self::create_event( $modulename, 'ContentPostRender');
 		self::create_event( $modulename, 'SmartyPreCompile');
 		self::create_event( $modulename, 'SmartyPostCompile');
+		
+		self::create_event( $modulename, 'search_reindex');
 	}
 	
 	/**

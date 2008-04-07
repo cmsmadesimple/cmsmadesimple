@@ -605,6 +605,16 @@ class CmsContentOperations extends CmsObject
 		$query = 'DELETE FROM '.cms_db_prefix().'crossref WHERE child_id = ? AND child_type = ?';
 		$db->Execute($query, array($child_id, $child_type));
 	}
+	
+	public static function reindex_content()
+	{
+		$content = cms_orm('ContentBase')->find_all();
+		foreach ($content as $one_item)
+		{
+			$one_item->index();
+		}
+		CmsSearch::get_instance()->commit();
+	}
 
 }
 
