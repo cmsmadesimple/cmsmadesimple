@@ -40,6 +40,11 @@ class BlockHtml extends CmsObject
 		return $page->get_property_value($block_name . '-content', $lang);
 	}
 	
+	function get_index_content(&$page, $block_name, $lang = 'en_US')
+	{
+		return $page->get_property_value($block_name . '-content', $lang);
+	}
+	
 	function validate(&$page, $block_name, $lang = 'en_US')
 	{
 		if ($page->get_property_value($block_name . '-content', $lang) == '')

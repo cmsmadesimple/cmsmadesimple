@@ -68,17 +68,16 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	}
 	*/
 	
+	/**
+	 * Method to override for indexing content in the search index.  If this is not overridden,
+	 * then the content type won't be searchable.
+	 *
+	 * @return void
+	 * @author Ted Kulp
+	 **/
 	public function index()
 	{
-		$content = '';
-		foreach ($this->get_property_names() as $prop_name)
-		{
-			if (ends_with($prop_name, '-content'))
-			{
-				$content .= ' ' . $this->get_property_value($prop_name);
-			}
-		}
-		CmsSearch::get_instance()->add_content('Core', 'Content', $this->id, $this->get_url(), $this->get_property_value('name'), trim($content));
+		var_dump(get_class());
 	}
 	
 	public function check_permission($userid = null)

@@ -39,6 +39,39 @@ class Content extends CmsContentBase
 		
 		return $obj;
 	}
+	
+	public function index()
+	{
+		$content = '';
+		$blocks = CmsTemplateOperations::parse_content_blocks_from_template($this->template);
+		
+		foreach ($blocks as $block)
+		{
+			$type = 'html';
+			if ($this->has_property($block_name . '-block-type'))
+			{
+				$type = $this->get_property_value($block_name . '-block-type');
+			}
+
+			$block_type_obj = $this->get_block_type_object($type);
+
+			if ($block_type_obj != null)
+			{
+				require_once($block_type_obj->filename);
+			}
+			
+			try
+			{
+				$class_name = camelize('block_' . $type);
+				$class = new $class_name;
+				$content = $class->get_index_content($this, $block_name, $lang);
+			}
+			catch (Exception $e)
+			{
+			}
+		}
+		CmsSearch::get_instance()->add_content('Core', 'Content', $this->id, $this->get_url(), $this->get_property_value('name'), trim($content));
+	}
 
 	function friendly_name()
 	{
