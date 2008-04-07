@@ -65,6 +65,34 @@ class CmsUser extends CmsObjectRelationalMapping
 			{
 				$this->add_validation_error(lang('illegalcharacters', array(lang('username'))));
 			} 
+
+			// Make sure the name is a valid length
+			if( $this->min_username_length != null) 
+			{
+				if( strlen($this->name) < $this->min_username_length )
+				{
+					$this->add_validation_error(lang('The username is too short'));
+				}
+			}
+
+			// the minimum password length
+			if( ($this->min_password_length != null) && 
+				($this->clear_password != null) )
+			{
+				if( strlen($this->clear_password) < $this->min_password_length )
+				{
+					$this->add_validation_error(lang('The password is too short'));
+				}
+			}
+
+			if( ($this->clear_repeat_password != null) && 
+				($this->clear_password != null) )
+			{
+				if( $this->clear_repeat_password != $this->clear_password )
+				{
+					$this->add_validation_error(lang('The passwords do not match'));
+				}
+			}
 		}
 		
 		//Make sure the open id is unique
