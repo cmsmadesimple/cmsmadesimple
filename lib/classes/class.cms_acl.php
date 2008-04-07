@@ -52,7 +52,7 @@ class CmsAcl extends CmsObject
 		$groups = array();
 
 		$userid = -1;
-		if (is_int(intval($user)))
+		if (!is_object($user))
 			$userid = intval($user);
 		else if ($user != null)
 			$userid = $user->id;

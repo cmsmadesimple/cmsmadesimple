@@ -884,13 +884,13 @@ abstract class CmsModuleBase extends CmsObject
 	 * @param string The ID of the module
 	 * @param string The parameters targeted for this module
 	 */
-	public function do_action($name, $id, $params, $returnid='')
+	public function do_action($action_name, $id, $params, $returnid='')
 	{
 		$return_id = $returnid; //avoid confusion
 
-		if ($name != '')
+		if ($action_name != '')
 		{
-			$filename = cms_join_path($this->get_module_path(), 'action.' . $name . '.php');
+			$filename = cms_join_path($this->get_module_path(), 'action.' . $action_name . '.php');
 
 			if (@is_file($filename))
 			{
@@ -900,7 +900,7 @@ abstract class CmsModuleBase extends CmsObject
 					$config = cms_config();
 					$smarty = cms_smarty();
 
-					$smarty->assign('module_action',$name);
+					$smarty->assign('module_action',$action_name);
 
 					include($filename);
 
