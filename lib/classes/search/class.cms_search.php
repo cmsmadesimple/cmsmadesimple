@@ -34,12 +34,22 @@ class CmsSearch extends CmsObject
 		$this->index_path = cms_join_path(ROOT_DIR, 'tmp', 'search');
 		try
 		{
-			$this->index = Zend_Search_Lucene::open($this->index_path);
+			$this->open_index();
 		}
 		catch (Zend_Search_Lucene_Exception $e)
 		{
-			$this->index = Zend_Search_Lucene::create($this->index_path);
+			$this->create_index();
 		}
+	}
+	
+	function open_index()
+	{
+		$this->index = Zend_Search_Lucene::open($this->index_path);
+	}
+	
+	function create_index()
+	{
+		$this->index = Zend_Search_Lucene::create($this->index_path);
 	}
 	
 	/**
@@ -59,10 +69,13 @@ class CmsSearch extends CmsObject
 
 	function add_content($module_name, $extra_attr, $object_id, $url = '', $title = '', $content = '', $lang = 'en_US', $teaser = '', $pretty_url = '')
 	{
+		$this->remove_content($module_name, $extra_attr, $object_id);
+
 		$doc = new Zend_Search_Lucene_Document();
 
 		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('module_name', $module_name));
-		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('extra_attr', $extra_attr));
+		if ($extra_attr != '')
+			$doc->addField(Zend_Search_Lucene_Field::UnIndexed('extra_attr', $extra_attr));
 		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('object_id', $object_id));
 		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('url', $url));
 		$doc->addField(Zend_Search_Lucene_Field::UnIndexed('pretty_url', $pretty_url));
@@ -131,8 +144,9 @@ class CmsSearch extends CmsObject
 	
 	function reindex()
 	{
+		$this->create_index(); //aka clear index
 		CmsContentOperations::reindex_content();
-		CmsEventOperations::send_event('Core', 'search_reindex');
+		CmsEventOperations::send_event('Core', 'SearchReindex');
 	}
 }
 
