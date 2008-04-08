@@ -162,7 +162,7 @@ class CmsAcl extends CmsObject
 		else
 		{
 			$result = cms_db()->GetAll("SELECT gp.*, g.group_name as group_name
-						FROM {$cms_db_prefix}group_permissions gp ON gp.object_id = c.id 
+						FROM {$cms_db_prefix}group_permissions gp
 							LEFT OUTER JOIN {$cms_db_prefix}groups g ON g.id = gp.group_id
 						WHERE gp.permission_defn_id = ?", array($defn['id']));
 		}
@@ -240,11 +240,20 @@ class CmsAcl extends CmsObject
 	 */
 	static public function delete_permission_definition($module, $extra_attr, $name)
 	{
-		$query = "DELETE FROM " . cms_db_prefix() . "permission_defns WHERE module = ? AND extra_attr = ? AND name = ?";
-		$result = cms_db()->Execute($query, array($module, $extra_attr, $name));
+		$cms_db_prefix = cms_db_prefix();
+		$row = cms_db()->GetOne('SELECT id FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
 		
-		if ($result)
-			return true;
+		if ($row)
+		{
+			$query = "DELETE FROM " . cms_db_prefix() . "permission_defns WHERE id = ?";
+			$result = cms_db()->Execute($query, array($row['id']));
+		
+			if ($result)
+			{
+				cms_db()->Execute("DELETE FROM {$cms_db_prefix}group_permissions WHERE permission_defn_id = ?", array($row['id']));
+				return true;
+			}
+		}
 			
 		return false;
 	}
