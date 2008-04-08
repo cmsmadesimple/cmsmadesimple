@@ -54,6 +54,16 @@ class CmsGroup extends CmsObjectRelationalMapping
 		
 		return false;
 	}
+
+	public function remove_user($user)
+	{
+		if ($this->id > -1)
+		{
+			return cms_db()->Execute('DELETE FROM '.cms_db_prefix().'user_groups WHERE user_id = ? AND group_id = ?', array($user->id, $this->id));
+		}
+
+		return false;
+	}
 	
 	//Callback handlers
 	public function before_save()

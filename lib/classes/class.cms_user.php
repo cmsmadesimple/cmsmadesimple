@@ -67,6 +67,7 @@ class CmsUser extends CmsObjectRelationalMapping
 			} 
 
 			// Make sure the name is a valid length
+			// the min_username_length member may not exist
 			if( $this->min_username_length != null) 
 			{
 				if( strlen($this->name) < $this->min_username_length )
@@ -76,6 +77,7 @@ class CmsUser extends CmsObjectRelationalMapping
 			}
 
 			// the minimum password length
+			// the min_password_length member may not exist
 			if( ($this->min_password_length != null) && 
 				($this->clear_password != null) )
 			{
@@ -85,6 +87,9 @@ class CmsUser extends CmsObjectRelationalMapping
 				}
 			}
 
+			// the clear_repeat_password and clear_password members
+			// may not exist, but if they do, verify that they
+			// match.
 			if( ($this->clear_repeat_password != null) && 
 				($this->clear_password != null) )
 			{
