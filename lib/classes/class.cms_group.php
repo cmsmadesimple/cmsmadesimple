@@ -44,6 +44,31 @@ class CmsGroup extends CmsObjectRelationalMapping
 		$this->create_has_and_belongs_to_many_association('users', 'user', 'user_groups', 'user_id', 'group_id');
 	}
 	
+	public function validate()
+	{
+		$this->validate_not_blank('name', lang('nofieldgiven',array(lang('username'))));
+		
+		// Username validation
+		if ($this->name != '')
+		{
+			// Make sure the name is unique
+			$result = $this->find_by_name($this->name);
+			if ($result)
+			{
+				if ($result->id != $this->id)
+				{
+					$this->add_validation_error(lang('The group name is already in use'));
+				}
+			}
+			
+			// Make sure the name has no illegal characters
+			if ( !preg_match("/^[a-zA-Z0-9\.]+$/", $this->name) ) 
+			{
+				$this->add_validation_error(lang('illegalcharacters', array(lang('groupname'))));
+			}
+		}
+	}
+
 	public function add_user($user)
 	{
 		if ($this->id > -1)
@@ -77,19 +102,21 @@ class CmsGroup extends CmsObjectRelationalMapping
 		//Only happens on a new insert
 		if ($this->create_date == $this->modified_date)
 		{
-			CmsAcl::add_aro($this->id, 'Group');
+			//CmsAcl::add_aro($this->id, 'Group');
 		}
 		CmsEvents::send_event( 'Core', ($this->create_date == $this->modified_date ? 'AddGroupPost' : 'EditGroupPost'), array('group' => &$this));
 	}
 	
 	public function before_delete()
 	{
+		cms_db()->Execute('DELETE FROM '.cms_db_prefix().'user_groups WHERE group_id = ?',
+						  array($this->id));
 		CmsEvents::send_event('Core', 'DeleteGroupPre', array('group' => &$this));
 	}
 	
 	public function after_delete()
 	{
-		CmsAcl::delete_aro($this->id, 'Group');
+		//CmsAcl::delete_aro($this->id, 'Group');
 		CmsEvents::send_event('Core', 'DeleteGroupPost', array('group' => &$this));
 	}
 	
@@ -102,6 +129,7 @@ class CmsGroup extends CmsObjectRelationalMapping
 			$result[-1] = lang('Everyone');
 		}
 		
+
 		$groups = cmsms()->group->find_all(array('order' => 'name ASC'));
 		foreach ($groups as $group)
 		{

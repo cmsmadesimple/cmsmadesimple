@@ -121,10 +121,6 @@ class CmsGroupOperations extends CmsObject
 		$query = "DELETE FROM ".cms_db_prefix()."group_perms where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
-
-		$query = 'DELETE FROM '.cms_db_prefix().'user_groups WHERE group_id = ?';
-		$dbresult = $db->Execute($query, array($id));
-
 		$query = "DELETE FROM ".cms_db_prefix()."groups where group_id = ?";
 		$dbresult = $db->Execute($query, array($id));
 
