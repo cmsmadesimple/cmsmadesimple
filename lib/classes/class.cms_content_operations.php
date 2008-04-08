@@ -608,8 +608,7 @@ class CmsContentOperations extends CmsObject
 	
 	public static function reindex_content()
 	{
-		self::find_content_types();
-		$content = cms_orm()->content_base->find_all();
+		$content = cms_orm('ContentBase')->find_all();
 		foreach ($content as $one_item)
 		{
 			$one_item->index();

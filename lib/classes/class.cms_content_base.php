@@ -77,7 +77,6 @@ class CmsContentBase extends CmsObjectRelationalMapping
 	 **/
 	public function index()
 	{
-		var_dump(get_class());
 	}
 	
 	public function check_permission($userid = null)
