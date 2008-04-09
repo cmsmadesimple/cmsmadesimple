@@ -178,22 +178,92 @@ class CmsAcl extends CmsObject
 		
 		return $result;
 	}
+
+	static public function get_group_permissions($group,$module = '',$extra_attr = '')
+	{
+		$gid = is_object($group) ? $group->id : $group;
+
+		$parms = array();
+		$where = array();
+
+		$where[] = 'gp.group_id = ?';
+		$parms[] = $gid;
+
+		if( !empty($module) )
+		{
+			$where[] = 'module = ?';
+			$parms[] = $module;
+		}
+		if( !empty($extra_attr) )
+		{
+			$where[] = 'extra_attr = ?';
+			$parms[] = $extra_attr;
+		}
+
+		$result = false;
+		$query = "SELECT pd.*
+					FROM ".cms_db_prefix()."permission_defns pd
+                    LEFT JOIN ".cms_db_prefix()."group_permissions gp 
+                           ON gp.permission_defn_id = pd.id";
+		$query .= ' WHERE ' . implode(' AND ',$where);
+		return cms_db()->GetAll($query,$parms);
+	}
 	
+	static public function get_permission_definition_by_id($id)
+	{
+		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE id = ?', 
+								array($id));
+	}
+
 	static public function get_permission_definition($module, $extra_attr, $name)
 	{
 		return cms_db()->GetRow('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ? AND name = ?', array($module, $extra_attr, $name));
 	}
 	
-	static public function get_permission_definitions($module, $extra_attr, $show_hierarchical = true)
+	static public function get_permission_definitions($module = '', $extra_attr = '', $show_hierarchical = true)
 	{
-		$ext = '';
-		
+		$where = array();
+		$parms = array();
+		if( !empty($module) )
+		{
+			$where[] = 'module = ?';
+			$parms[] = $module;
+		}
+		if( !empty($extra_attr) )
+		{
+			$where[] = 'extra_attr = ?';
+			$parms[] = $extra_attr;
+		}
 		if (!$show_hierarchical)
-			$ext .= ' AND hierarchical = 0';
-			
-		return cms_db()->GetAll('SELECT * FROM ' . cms_db_prefix() . 'permission_defns WHERE module = ? AND extra_attr = ?' . $ext, array($module, $extra_attr));
+		{
+			$where[] = 'hierarchical = 0';
+		}
+
+		$query = 'SELECT * FROM '.cms_db_prefix().'permission_defns';
+		if( count($where) )
+		{
+			$query .= ' WHERE '.implode(' AND ',$where);
+		}
+
+		return cms_db()->GetAll($query,$parms);
 	}
 	
+	static public function remove_permission($module, $extra_attr, $permission, $group_id, $object_id = -1)
+	{
+		$cms_db_prefix = cms_db_prefix();
+		$defn = self::get_permission_definition($module, $extra_attr, $permission);
+		
+		if (!$defn) return false;
+
+		$id = cms_db()->GetOne("SELECT id FROM {$cms_db_prefix}group_permissions WHERE permission_defn_id = ? AND group_id = ? AND object_id = ?", array($defn['id'], $group_id, $object_id));
+		
+		if (!$id) return false;
+
+		return cms_db()->Execute("DELETE FROM {$cms_db_prefix}group_permissions 
+                                   WHERE permission_defn_id = ? AND group_id = ? AND object_id = ?",
+								 array($defn['id'],$group_id,$object_id));
+	}
+
 	static public function set_permission($module, $extra_attr, $permission, $object_id = -1, $group_id = -1, $allowed = false)
 	{
 		$cms_db_prefix = cms_db_prefix();
