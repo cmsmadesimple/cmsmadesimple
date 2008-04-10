@@ -59,7 +59,7 @@ else if ($action == 'show_post_install' && $module != '')
 }
 else if ($action == 'uninstall' && $module != '')
 {
-	$result = CmsModuleOperations::uninstall_module($module, false);
+	$result = CmsModuleOperations::uninstall_module($module);
 	if ($result)
 	{
 		if (cmsms()->modules[$module]['object']->uninstall_post_message())

@@ -87,7 +87,7 @@ class CmsModuleOperations extends CmsObject
 	 * @return boolean Whether or not the module is active and installed
 	 * @author Ted Kulp
 	 **/
-	public static function is_active($module_nakme)
+	public static function is_active($module_name)
 	{
 		$modules = cmsms()->modules;
 		return isset($modules[$module_name]) && $modules[$module_name]['installed'] && $modules[$module_name]['active'];
@@ -693,6 +693,34 @@ class CmsModuleOperations extends CmsObject
 	function UpgradeModule( $module, $oldversion, $newversion )
 	{
 		return self::upgrade_module($module);
+	}
+	
+	function uninstall_module($module_name)
+	{
+		$modinstance = self::get_module($module_name);
+		if ($modinstance == null)
+		{
+			return false;
+		}
+		
+		$result = $modinstance->uninstall();
+		
+		if ($result === FALSE)
+		{
+			return false;
+		}
+
+		#now delete the record
+		$query = "DELETE FROM ".CMS_DB_PREFIX."modules WHERE module_name = ?";
+		cms_db()->Execute($query, array($module_name));
+
+		#delete any dependencies
+		$query = "DELETE FROM ".CMS_DB_PREFIX."module_deps WHERE child_module = ?";
+		cms_db()->Execute($query, array($module_name));
+
+		Events::SendEvent('Core', 'ModuleUninstalled', array('name' => $module_name));
+		
+		return true;
 	}
 	
 	public static function activate_module($module_name)

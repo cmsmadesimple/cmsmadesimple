@@ -755,10 +755,12 @@ abstract class CmsModuleBase extends CmsObject
 				include($filename);
 			}
 		}
+		/* //Maybe the module doesn't need any cleanup?
 		else
 		{
 			return FALSE;
 		}
+		*/
 	}
 
 	/**
