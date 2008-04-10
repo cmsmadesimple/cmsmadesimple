@@ -18,7 +18,7 @@
 #
 #$Id: class.cms_anonymous_user.php 4093 2007-08-27 00:44:25Z wishy $
 
-class CmsMailer extends CmsObject
+class CmsMail extends CmsObject
 {
   var $mailer_object;
 
@@ -217,7 +217,7 @@ class CmsMailer extends CmsObject
   }
 
 
-  function set_host($val)
+  function set_mailer($val)
   {
     $this->mailer_object->Host = $val;
   }
@@ -369,7 +369,7 @@ class CmsMailer extends CmsObject
 
   function add_address( $address, $name = '' )
   {
-    4eturn $this->mailer_object->AddAddress($address,$name);
+    return $this->mailer_object->AddAddress($address,$name);
   }
 
 
