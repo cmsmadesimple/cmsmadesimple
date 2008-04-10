@@ -166,64 +166,6 @@
     <url>topusers.php</url>
     <description></description>
     <show_in_menu><permission>usersGroupsPerms</permission></show_in_menu>
-    <children>
-      <node>
-        <name>users</name>
-        <title>users</title>
-        <url>listusers.php</url>
-        <description>usersdescription</description>
-        <show_in_menu><permission>userPerms</permission></show_in_menu>
-      </node>
-      <node>
-        <name>adduser</name>
-        <title>adduser</title>
-        <url>adduser.php</url>
-        <description>adduser</description>
-        <show_in_menu>false</show_in_menu>
-      </node>
-      <node>
-        <name>edituser</name>
-        <title>edituser</title>
-        <url>edituser.php</url>
-        <description>edituser</description>
-        <show_in_menu>false</show_in_menu>
-      </node>
-      <node>
-        <name>groups</name>
-        <title>groups</title>
-        <url>listgroups.php</url>
-        <description>groupsdescription</description>
-        <show_in_menu><permission>groupPerms</permission></show_in_menu>
-      </node>
-      <node>
-        <name>addgroup</name>
-        <title>addgroup</title>
-        <url>addgroup.php</url>
-        <description>addgroup</description>
-        <show_in_menu>false</show_in_menu>
-      </node>
-      <node>
-        <name>editgroup</name>
-        <title>editgroup</title>
-        <url>editgroup.php</url>
-        <description>editgroup</description>
-        <show_in_menu>false</show_in_menu>
-      </node>
-      <node>
-        <name>groupmembers</name>
-        <title>groupassignments</title>
-        <url>changegroupassign.php</url>
-        <description>groupassignmentdescription</description>
-        <show_in_menu><permission>groupMemberPerms</permission></show_in_menu>
-      </node>
-      <node>
-        <name>groupperms</name>
-        <title>groupperms</title>
-        <url>changegroupperm.php</url>
-        <description>grouppermsdescription</description>
-        <show_in_menu><permission>groupPermPerms</permission></show_in_menu>
-      </node>
-    </children>
   </node>
   <node>
     <name>extensions</name>

@@ -33,7 +33,7 @@ class CmsInstallOperations extends CmsObject
 		$sqlarray = $dbdict->CreateTableSQL(CmsDatabase::get_prefix().$table, $fields, $taboptarray);
 		if (count($sqlarray))
 		{
-			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
+#			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
 		}
 		$dbdict->ExecuteSQLArray($sqlarray);
 	}
@@ -269,6 +269,7 @@ class CmsInstallOperations extends CmsObject
 				catch (Exception $e)
 				{
 					var_dump('There was an error creating the database');
+					echo $db->ErrorMsg().'<br/>';
 				}
 			}
 		}
