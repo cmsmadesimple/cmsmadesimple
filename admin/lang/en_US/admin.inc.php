@@ -1,4 +1,10 @@
 <?php
+$lang['admin']['edited_mail_preferences'] = 'Edited Mail Preferences';
+$lang['admin']['sendmail_short_help'] = 'This setting (the path to the sendmail binary on your host) is only used if mailer selected is \'sendmail\'';
+$lang['admin']['smtp_short_help'] = 'These settings only apply if the mailer selected is \'SMTP\'';
+$lang['admin']['smtp_mail_settings'] = 'SMTP Mail Settings';
+$lang['admin']['mail_settings_short_help'] = 'You may need to contact your host to correctly configure these settings so that CMS Made Simple can send emails.';
+
 $lang['admin']['disablesafemodewarning'] = 'Disable admin safe mode warning';
 $lang['admin']['allowparamcheckwarnings'] = 'Allow parameter checks to create warning messages';
 $lang['admin']['date_format_string'] = 'Date Format String';

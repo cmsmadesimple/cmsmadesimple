@@ -208,6 +208,37 @@ else if (isset($_POST["editsiteprefs"]))
 		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
 	}
 }
+else if( isset($_POST['mailsettings']) )
+{
+  if( $access )
+	{
+	  $mail_mailer       = coalesce_key($_POST,'mail_mailer','mail');
+	  $mail_host         = coalesce_key($_POST,'mail_host','');
+	  $mail_port         = coalesce_key($_POST,'mail_port','');
+	  $mail_smtpauth     = coalesce_key($_POST,'mail_smtpauth',false);
+	  $mail_smtpauthuser = coalesce_key($_POST,'mail_smtpauthuser','');
+	  $mail_smtpauthpw   = coalesce_key($_POST,'mail_smtpauthpw','');
+	  $mail_sendmail     = coalesce_key($_POST,'mail_sendmail','');
+	  $mail_from         = coalesce_key($_POST,'mail_from','');
+	  $mail_fromuser     = coalesce_key($_POST,'mail_fromuser','');
+	 
+	  CmsApplication::set_preference('mail_mailer',$mail_mailer);
+	  CmsApplication::set_preference('mail_host',$mail_host);
+	  CmsApplication::set_preference('mail_port',$mail_port);
+	  CmsApplication::set_preference('mail_smtpauth',$mail_smtpauth);
+	  CmsApplication::set_preference('mail_smtpauthuser',$mail_smtpauthuser);
+	  CmsApplication::set_preference('mail_smtpauthpw',$mail_smtpauthpw);
+	  CmsApplication::set_preference('mail_sendmail',$mail_sendmail);
+	  CmsApplication::set_preference('mail_from',$mail_from);
+	  CmsApplication::set_preference('mail_fromuser',$mail_fromuser);
+	  audit(-1, '', lang('edited_mail_preferences'));
+	  $message .= lang('prefsupdated');
+	}
+  else
+	{
+		$error .= "<li>".lang('noaccessto', array('Modify Site Permissions'))."</li>";
+	}
+}
 else if (!isset($_POST["submit"]))
 {
 	$global_umask = CmsApplication::get_preference('global_umask',$global_umask);
@@ -237,6 +268,16 @@ $smarty->assign('xmlmodulerepository', $xmlmodulerepository);
 $smarty->assign('logintheme', $logintheme);
 $smarty->assign('metadata', $metadata);
 $smarty->assign('sitename', $sitename);
+
+$smarty->assign('mail_mailer',CmsApplication::get_preference('mail_mailer','mail'));
+$smarty->assign('mail_host',CmsApplication::get_preference('mail_host',''));
+$smarty->assign('mail_port',CmsApplication::get_preference('mail_port',''));
+$smarty->assign('mail_smtpauth',CmsApplication::get_preference('mail_smtpauth',''));
+$smarty->assign('mail_smtpauthuser',CmsApplication::get_preference('mail_smtpauthuser',''));
+$smarty->assign('mail_smtpauthpw',CmsApplication::get_preference('mail_smtpauthpw',''));
+$smarty->assign('mail_sendmail',CmsApplication::get_preference('mail_sendmail',''));
+$smarty->assign('mail_from',CmsApplication::get_preference('mail_from',''));
+$smarty->assign('mail_fromuser',CmsApplication::get_preference('mail_fromuser',''));
 
 $templates = array();
 $templates['-1'] = 'None';

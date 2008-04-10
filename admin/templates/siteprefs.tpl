@@ -18,9 +18,11 @@
 
 	<div id="page_tabs">
 
+		{* tab headers *}
 		<ul class="anchors">
 			<li><a href="#general"><span>{tr}General{/tr}</span></a></li>
 			<li><a href="#languages"><span>{tr}Languages{/tr}</span></a></li>
+			<li><a href="#mail"><span>{tr}Mail Settings{/tr}</span></a></li>
 		</ul>
 
 		<div id="general" class="fragment">
@@ -70,6 +72,34 @@
 				{include file='elements/buttons.tpl'}
 			</form>
 
+		</div>
+
+		<div id="mail" class="fragment">
+			<form method="post" name="mailform" id="mailform" action="siteprefs.php">
+				<p>{lang string='mail_settings_short_help'}</p>
+				{assign var='tmp1' value=','|explode:"mail,sendmail,smtp"}
+				{assign var='tmp2' value=','|explode:"Mail,Sendmail,Smtp"}
+				{admin_input type='select' label='Mailer' name='mail_mailer' id='mail_mailer' options=$tmp2 values=$tmp1 selected=$mail_mailer}
+				<fieldset>
+                  <legend>&nbsp;{lang string='smtp_mail_settings'}&nbsp;</legend>
+				  <p>{lang string='smtp_short_help'}</p>
+				  {admin_input type='input' label='SMTP Host' name='mail_host' id='mail_host' value=$mail_host}
+				  {admin_input type='input' label='SMTP Port' name='mail_port' id='mail_port' value=$mail_port}
+				  {admin_input type='checkbox' label='Use SMTP Auth' name='mail_smtpauth' id='mail_smtpauth' value=$mail_smtpauth}				
+				  {admin_input type='input' label='SMTP Auth Username' name='mail_smtpauthuser' id='mail_smtpauthuser' value=$mail_smtpauthuser}
+				  {admin_input type='input' label='SMTP Auth Password' name='mail_smtpauthpw' id='mail_smtpauthpw' value=$mail_smtpauthpw}
+                </fieldset>
+				<fieldset>
+				  <legend>&nbsp;{lang string='sendmail_settings'}&nbsp;</legend>
+				  <p>{lang string='sendmail_short_help'}</p>
+				  {admin_input type='input' label='Sendmail Path' name='mail_sendmail' id='mail_sendmail' value=$mail_sendmail}
+				</fieldset>
+			    {admin_input type='input' label='Default From Address' name='mail_from' id='mail_from' value=$mail_from}
+			    {admin_input type='input' label='Default From Name' name='mail_fromname' id='mail_fromname' value=$mail_fromname}
+		
+				<input type="hidden" name="mailsettings" value="true" />
+				{include file='elements/buttons.tpl'}
+			</form>
 		</div>
 	</div>
 </div>
