@@ -162,6 +162,17 @@ if (isset($_POST["testumask"]))
 		}
 	}
 }
+else if( isset($_POST['test_mail']) )
+{
+  $mailer = new CmsMail;
+  $mailer->add_address( $_POST['test_address'] );
+  $mailer->set_body( lang('test_email_body') );
+  $mailer->set_subject( lang('test_email_subject') );
+  $mailer->send();
+
+  // todo, display a nice message here
+  $message .= lang('test_message_sent');
+}
 
 if (isset($_POST['clearcache']))
 {

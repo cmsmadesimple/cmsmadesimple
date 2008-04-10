@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['test_email_subject'] = 'CMS Made Simple Test Message';
+$lang['admin']['test_email_body'] = 'This is a test message.  If you received this message it probably means that the email settings you have selected have worked.  Keep up the good work!';
+$lang['admin']['test_message_sent'] = 'The test message has been sent.  Please check the destination email address for a new message';
+$lang['admin']['mail_test_shorthelp'] = 'After adjusting the settings above according to the instructions provided by your host you should perform a test to make sure that mail can actually get through';
+$lang['admin']['mail_test'] = 'Test Mail Settings';
 $lang['admin']['edited_mail_preferences'] = 'Edited Mail Preferences';
 $lang['admin']['sendmail_short_help'] = 'This setting (the path to the sendmail binary on your host) is only used if mailer selected is \'sendmail\'';
 $lang['admin']['smtp_short_help'] = 'These settings only apply if the mailer selected is \'SMTP\'';

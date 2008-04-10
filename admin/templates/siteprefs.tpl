@@ -99,6 +99,14 @@
 		
 				<input type="hidden" name="mailsettings" value="true" />
 				{include file='elements/buttons.tpl'}
+
+				<fieldset>
+				  <p>{lang string='mail_test_shorthelp'}</p>
+                                  <legend>&nbsp;{lang string='mail_test'}&nbsp;</legend>
+				  {admin_input type='input' label='Test Address' name='test_address' id='test_address'}
+				  {admin_input type='submit' label='Test' id='test_mail' name='test_mail' value='Start'}
+
+                                </fieldset>
 			</form>
 		</div>
 	</div>
