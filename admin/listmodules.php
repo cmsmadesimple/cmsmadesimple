@@ -59,18 +59,22 @@ else if ($action == 'show_post_install' && $module != '')
 }
 else if ($action == 'uninstall' && $module != '')
 {
-	$result = CmsModuleOperations::uninstall_module($module);
-	if ($result)
+  // you can't uninstall core modules.
+  if( !CmsModuleOperations::is_core($module) )
 	{
-		if (cmsms()->modules[$module]['object']->uninstall_post_message())
+	  $result = CmsModuleOperations::uninstall_module($module);
+	  if ($result)
 		{
-			CmsResponse::redirect("listmodules.php?action=show_post_uninstall&module={$module}");
+		  if (cmsms()->modules[$module]['object']->uninstall_post_message())
+			{
+			  CmsResponse::redirect("listmodules.php?action=show_post_uninstall&module={$module}");
+			}
+		  CmsResponse::redirect('listmodules.php');
 		}
-		CmsResponse::redirect('listmodules.php');
-	}
-	else
-	{
-		$themeObject->add_error(CmsModuleOperations::get_last_error());
+	  else
+		{
+		  $themeObject->add_error(CmsModuleOperations::get_last_error());
+		}
 	}
 }
 else if ($action == 'show_post_uninstall' && $module != '')
@@ -94,12 +98,20 @@ else if ($action == 'upgrade' && $module != '')
 }
 else if ($action == 'deactivate' && $module != '')
 {
-	CmsModuleOperations::deactivate_module($module);
-	CmsResponse::redirect('listmodules.php');
+  // you can't deactivate core modules
+  if( !CmsModuleOperations::is_core($module) )
+    {
+	  CmsModuleOperations::deactivate_module($module);
+    }
+  CmsResponse::redirect('listmodules.php');
 }
 else if ($action == 'activate' && $module != '')
 {
-	CmsModuleOperations::activate_module($module);
+  // or activate core modules
+  if( !CmsModuleOperations::is_core($module) )
+	{
+	  CmsModuleOperations::activate_module($module);
+	}
 	CmsResponse::redirect('listmodules.php');
 }
 else if ($action == 'show_about' && $module != '')
@@ -132,6 +144,7 @@ foreach (CmsModuleOperations::get_all_modules() as $k => $v)
 	$module['use_span'] = false;
 
 	$module['active'] = '&nbsp;';
+	// you can't activate or de-activate core modules
 	if( !$v['object']->is_core() )
 	{
 		$module['active'] = '<a href="listmodules.php?action=deactivate&amp;module=' . $k . '">' . $image_true . '</a>';
