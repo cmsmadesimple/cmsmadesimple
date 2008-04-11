@@ -677,7 +677,12 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		return FALSE;
 	}
-	
+
+	final public function is_core()
+	{
+		return CmsModuleOperations::is_core($this->get_name());
+	}
+
 	final public function is_installable()
 	{
 		$gCms = cmsms();
@@ -782,7 +787,7 @@ abstract class CmsModuleBase extends CmsObject
 	
 	final public function is_uninstallable()
 	{
-		return !$this->check_for_dependents();
+		return !$this->check_for_dependents() && !$this->is_core();
 	}
 	
 	public function drop_table($table)

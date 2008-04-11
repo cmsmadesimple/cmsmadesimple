@@ -137,6 +137,7 @@ class CmsApplication extends CmsObject
 		$this->variables['pluginnum'] = 1;
 		
 		#Setup hash for storing all modules and plugins
+		$this->coremodules         = array('UserAdmin','MenuManager');
 		$this->cmsmodules          = array();
 		$this->userplugins         = array();
 		$this->userpluginfunctions = array();

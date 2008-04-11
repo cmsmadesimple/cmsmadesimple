@@ -38,6 +38,10 @@ class CmsModuleOperations extends CmsObject
 	var $error;
 
 	/**
+	 * A member to hold a list of core module names
+	 */
+
+	/**
 	* A member to hold the id of the active tab
 	*/
 	var $mActiveTab = '';
@@ -93,6 +97,16 @@ class CmsModuleOperations extends CmsObject
 		return isset($modules[$module_name]) && $modules[$module_name]['installed'] && $modules[$module_name]['active'];
 	}
 	
+	/**
+	 * Returns wether or not a module is a 'core' module or not
+	 *
+	 * @param string Name of the module
+	 */
+	public static function is_core($module_name)
+	{
+		return in_array($module_name,cmsms()->coremodules);
+	}
+
 	/**
 	 * Returns the module object if it is installed and active.
 	 *
