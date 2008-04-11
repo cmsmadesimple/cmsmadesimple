@@ -131,10 +131,14 @@ foreach (CmsModuleOperations::get_all_modules() as $k => $v)
 	$module['status'] = $v['installed'] ? lang('installed') : lang('notinstalled');
 	$module['use_span'] = false;
 
-	$module['active'] = '<a href="listmodules.php?action=deactivate&amp;module=' . $k . '">' . $image_true . '</a>';
-	if (!$v['active'])
+	$module['active'] = '&nbsp;';
+	if( !$v['object']->is_core() )
 	{
-		$module['active'] = '<a href="listmodules.php?action=activate&amp;module=' . $k . '">' . $image_false . '</a>';
+		$module['active'] = '<a href="listmodules.php?action=deactivate&amp;module=' . $k . '">' . $image_true . '</a>';
+		if (!$v['active'])
+		{
+			$module['active'] = '<a href="listmodules.php?action=activate&amp;module=' . $k . '">' . $image_false . '</a>';
+		}
 	}
 
 	$module['action'] = '&nbsp;';
