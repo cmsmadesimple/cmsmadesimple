@@ -114,6 +114,133 @@ class CmsLogin extends CmsObject
 		}
 	}
 	
+	static public function handle_login_request($redirect_url, &$username, &$openid, &$error, $check_for_upgrade = false)
+	{
+		$openid_enabled = CmsOpenid::is_enabled();
+
+		if ($openid_enabled)
+		{
+			if ((isset($_REQUEST['openid_mode']) && $_REQUEST['openid_mode'] == 'id_res') || (isset($_REQUEST['openid.mode']) && $_REQUEST['openid.mode'] == 'id_res'))
+			{
+				#See if the openid matches
+				if (CmsOpenid::check_authentication($_REQUEST))
+				{
+					#Now see if the checksum actually is for a user
+					$user = cms_orm('CmsUser')->find_by_checksum($_REQUEST['checksum']);
+					if ($user)
+					{
+						#Put in a new checksum so the return url from provider can't be reused
+						$checksum = CmsOpenid::generate_checksum();
+						$user->checksum = $checksum;
+						$user->save();
+
+						if (CmsLogin::login_by_id($user->id))
+						{
+							if (isset($_SESSION['redirect_url']))
+							{
+								$tmp = $_SESSION['redirect_url'];
+								unset($_SESSION['redirect_url']);
+								CmsResponse::redirect($tmp);
+							}
+							else
+							{
+								CmsResponse::redirect($redirect_url, true);
+							}
+						}
+						else
+						{
+							$error .= lang('authenticationfailed 3');
+						}
+					}
+					else
+					{
+						$error .= lang('authenticationfailed 2');
+					}
+				}
+				else
+				{
+					$error .= lang('authenticationfailed 1');
+				}
+			}
+		}
+
+		if (isset($_POST['username'])) $username = CmsRequest::clean_value($_POST['username']);
+		if (isset($_POST['openid'])) $openid = CmsRequest::clean_value($_POST['openid']);
+
+		if (isset($_POST['username']) && isset($_POST['password']))
+		{
+			$password = '';
+			if (isset($_POST['password'])) $password = $_POST['password'];
+
+			if ($openid != '' && isset($_POST['loginsubmit']) && $openid_enabled)
+			{
+				#Cleanup the open id and find a user so we can set the checksum
+				#before the redirect
+				$clean_openid = CmsOpenid::cleanup_openid($openid);
+				$user = cms_orm('CmsUser')->find_by_openid($clean_openid);
+
+				if ($user)
+				{
+					$obj = new CmsOpenid();
+					if ($obj->find_server(CmsOpenid::create_url($openid)))
+					{
+						#Make up a checksum and save it to the user
+						$checksum = CmsOpenid::generate_checksum();
+						$user->checksum = $checksum;
+						$user->save();
+
+						#All should be good.  Time to redirect out to the provider.
+						$obj->do_authentication(CmsRequest::get_requested_uri(), $checksum);
+					}
+				}
+				else
+				{
+					$error .= lang('usernameincorrect');
+				}
+			}
+			else if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
+			{
+				if (CmsLogin::login($username, $password))
+				{
+					if ($check_for_upgrade)
+					{
+						// redirect to upgrade if db_schema it's old
+						$current_version = $CMS_SCHEMA_VERSION;
+
+						$query = 'SELECT version from '.cms_db_prefix().'version';
+						$row = cms_db()->GetRow($query);
+						if ($row) $current_version = $row['version'];
+
+						if ($current_version < $CMS_SCHEMA_VERSION)
+						{
+							CmsResponse::redirect(CmsConfig::get('root_url') . '/install/upgrade.php');
+						}
+						// end of version check
+					}
+
+					if (isset($_SESSION['redirect_url']))
+					{
+						$tmp = $_SESSION['redirect_url'];
+						unset($_SESSION['redirect_url']);
+						CmsResponse::redirect($tmp);
+					}
+					else
+					{
+						CmsResponse::redirect($redirect_url, true);
+					}
+				}
+				else
+				{
+					$error .= lang('usernameincorrect');
+				}
+			}
+			else
+			{
+				$error .= lang('usernameincorrect');
+			}
+		}
+	}
+	
 	/**
 	 * Given the username and password, will login the user, generate the proper session 
 	 * and cookie credentials.  It will return true if the login was successful, or false if

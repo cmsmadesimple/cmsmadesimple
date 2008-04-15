@@ -177,8 +177,7 @@ class CmsOpenid extends CmsObject
 		$return_url = urlencode($return_url);
 		$trust_root = urlencode(CmsConfig::get('root_url'));
 		$cleaned_delegate = urlencode($this->delegate);
-		
-		CmsResponse::redirect("{$this->server}?openid.mode={$this->mode}&openid.identity={$cleaned_delegate}&openid.return_to={$return_url}&openid.trust_root={$trust_root}");
+		CmsResponse::redirect("{$this->server}?openid.mode={$this->mode}&openid.identity={$cleaned_delegate}&" . "openid.return_to={$return_url}&openid.trust_root={$trust_root}");
 	}
 	
 	/**
