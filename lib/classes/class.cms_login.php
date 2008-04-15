@@ -62,32 +62,32 @@ class CmsLogin extends CmsObject
 		//Handle a current login if one is in queue in the SESSION
 		if (isset($_SESSION['login_user_id']))
 		{
-			debug_buffer("Found login_user_id.  Going to generate the user object.");
+			//debug_buffer("Found login_user_id.  Going to generate the user object.");
 			self::generate_user_object($_SESSION['login_user_id']);
 			unset($_SESSION['login_user_id']);
 		}
 
 		if (isset($_SESSION['login_cms_language']))
 		{
-			debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
+			//debug_buffer('Setting language to: ' . $_SESSION['login_cms_language']);
 			setcookie('cms_language', $_SESSION['login_cms_language'], 0, self::get_cookie_path());
 			unset($_SESSION['login_cms_language']);
 		}
 
 		if (!isset($_SESSION["cmsms_user_id"]))
 		{
-			debug_buffer('No session found.  Now check for cookies');
+			//debug_buffer('No session found.  Now check for cookies');
 			if (isset($_COOKIE["cmsms_user_id"]) && isset($_COOKIE["cmsms_passhash"]))
 			{
 				debug_buffer('Cookies found, do a passhash check');
 				if (check_passhash(isset($_COOKIE["cmsms_user_id"]), isset($_COOKIE["cmsms_passhash"])))
 				{
-					debug_buffer('passhash check succeeded...  creating session object');
+					//debug_buffer('passhash check succeeded...  creating session object');
 					self::generate_user_object($_COOKIE["cmsms_user_id"]);
 				}
 				else
 				{
-					debug_buffer('passhash check failed...  redirect to login');
+					//debug_buffer('passhash check failed...  redirect to login');
 					$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 					if (false == $no_redirect)
 					{
@@ -98,7 +98,7 @@ class CmsLogin extends CmsObject
 			}
 			else
 			{
-				debug_buffer('No cookies found.  Redirect to login.');
+				//debug_buffer('No cookies found.  Redirect to login.');
 				$_SESSION["redirect_url"] = $_SERVER["REQUEST_URI"];
 				if (false == $no_redirect)
 				{
@@ -109,7 +109,7 @@ class CmsLogin extends CmsObject
 		}
 		else
 		{
-			debug_buffer('Session found.  Moving on...');
+			//debug_buffer('Session found.  Moving on...');
 			return true;
 		}
 	}
@@ -149,17 +149,17 @@ class CmsLogin extends CmsObject
 						}
 						else
 						{
-							$error .= lang('authenticationfailed 3');
+							$error .= _('Invalid OpenID');
 						}
 					}
 					else
 					{
-						$error .= lang('authenticationfailed 2');
+						$error .= _('Invalid OpenID');
 					}
 				}
 				else
 				{
-					$error .= lang('authenticationfailed 1');
+					$error .= _('Invalid OpenID');
 				}
 			}
 		}
@@ -195,7 +195,7 @@ class CmsLogin extends CmsObject
 				}
 				else
 				{
-					$error .= lang('usernameincorrect');
+					$error .= _('Username or password incorrect');
 				}
 			}
 			else if ($username != '' && $password != '' && isset($_POST['loginsubmit']))
@@ -231,12 +231,12 @@ class CmsLogin extends CmsObject
 				}
 				else
 				{
-					$error .= lang('usernameincorrect');
+					$error .= _('Username or password incorrect');
 				}
 			}
 			else
 			{
-				$error .= lang('usernameincorrect');
+				$error .= _('Username or password incorrect');
 			}
 		}
 	}
@@ -253,7 +253,7 @@ class CmsLogin extends CmsObject
 	 */
 	static public function login($username, $password)
 	{
-		$oneuser = cmsms()->cms_user->find_by_username($username);
+		$oneuser = cms_orm('CmsUser')->find_by_username($username);
 
 		if ($oneuser != null && $oneuser->password == md5($password))
 		{
@@ -282,7 +282,7 @@ class CmsLogin extends CmsObject
 	 */
 	static public function login_by_id($user_id)
 	{
-		$oneuser = cmsms()->cms_user->find_by_id($user_id);
+		$oneuser = cms_orm('CmsUser')->find_by_id($user_id);
 
 		if ($oneuser != null)
 		{
@@ -370,7 +370,7 @@ class CmsLogin extends CmsObject
 	
 	static public function check_passhash($userid, $checksum)
 	{
-		$oneuser = cmsms()->cms_user->find_by_id($userid);
+		$oneuser = cms_orm('CmsUser')->find_by_id($userid);
 		if ($oneuser && $checksum == md5(md5(ROOT_DIR . '--' . $oneuser->password)))
 		{
 			return true;
@@ -381,7 +381,7 @@ class CmsLogin extends CmsObject
 	
 	static public function generate_user_object($userid)
 	{
-		$oneuser = cmsms()->cms_user->find_by_id($userid);
+		$oneuser = cms_orm('CmsUser')->find_by_id($userid);
 		if ($oneuser)
 		{
 			$_SESSION['cmsms_user'] = $oneuser;
