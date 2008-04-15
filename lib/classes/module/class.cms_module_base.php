@@ -1912,7 +1912,7 @@ abstract class CmsModuleBase extends CmsObject
 				$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type($this->get_name(), $template_type);
 				foreach( $templates as $one )
 					{
-						$template->delete();
+						$templates->delete();
 					}
 				return true;
 			}
@@ -1921,7 +1921,7 @@ abstract class CmsModuleBase extends CmsObject
 				$templates = cms_orm('CmsModuleTemplate')->find_by_module($this->get_name());
 				foreach( $templates as $one )
 					{
-						$template->delete();
+						$templates->delete();
 					}
 				return true;
 			}
