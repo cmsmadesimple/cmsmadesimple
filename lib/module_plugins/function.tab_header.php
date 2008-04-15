@@ -22,13 +22,18 @@ function smarty_function_tab_header($params, &$smarty)
 	$id = $smarty->get_template_vars('cms_mapi_id');
 	$return_id = $smarty->get_template_vars('cms_mapi_return_id');
 
+
+	$translate = coalesce_key($params, 'translate', true, FILTER_VALIDATE_BOOLEAN);
+	$text = coalesce_key($params,'text',$params['name']);
+	$text = ($translate === true) ? $module->lang($text) : $text;
+
 	$active = false;
 	if ($smarty->get_template_vars('active_tab_for_modules') != null && $params['name'] == $smarty->get_template_vars('active_tab_for_modules'))
 	{
 		$active = true;
 	}
 
-	return CmsModuleTabs::set_tab_header($params['name'], $params['text'] != '' ? $params['text'] : $params['name'], $active);
+	return CmsModuleTabs::set_tab_header($params['name'], $text, $active);
 }
 
 ?>
