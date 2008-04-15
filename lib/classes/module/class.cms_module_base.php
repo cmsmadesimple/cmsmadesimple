@@ -1711,7 +1711,7 @@ abstract class CmsModuleBase extends CmsObject
 			{
 				$new_id = $db->GenID(cms_db_prefix()."permissions_seq");
 				$time = $db->DBTimeStamp(time());
-				$query = "INSERT INTO ".cms_db_prefix()."permissions (permission_id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
+				$query = "INSERT INTO ".cms_db_prefix()."permissions (id, permission_name, permission_text, create_date, modified_date) VALUES (?,?,?,".$time.",".$time.")";
 				$db->Execute($query, array($new_id, $permission_name, $permission_text));
 			}
 		}
@@ -1743,17 +1743,17 @@ abstract class CmsModuleBase extends CmsObject
 		global $gCms;
 		$db = cms_db();
 
-		$query = "SELECT permission_id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
+		$query = "SELECT id FROM ".cms_db_prefix()."permissions WHERE permission_name = ?";
 		$row = &$db->GetRow($query, array($permission_name));
 
 		if ($row)
 		{
-			$id = $row["permission_id"];
+			$id = $row["id"];
 
 			$query = "DELETE FROM ".cms_db_prefix()."group_perms WHERE permission_id = ?";
 			$db->Execute($query, array($id));
 
-			$query = "DELETE FROM ".cms_db_prefix()."permissions WHERE permission_id = ?";
+			$query = "DELETE FROM ".cms_db_prefix()."permissions WHERE id = ?";
 			$db->Execute($query, array($id));
 		}
 	}
@@ -1840,8 +1840,12 @@ abstract class CmsModuleBase extends CmsObject
 	 * ------------------------------------------------------------------
 	 */
 
-	public function list_templates($template_type)
+	public function list_templates($template_type = '')
 	{
+		if( empty($template_type) )
+			{
+				return cms_orm('CmsModuleTemplate')->find_all_by_module($this->get_name());
+			}
 		return cms_orm('CmsModuleTemplate')->find_all_by_module_and_template_type($this->get_name(), $template_type);
 	}
 
@@ -1893,13 +1897,35 @@ abstract class CmsModuleBase extends CmsObject
 		}
 	}
 
-	public function delete_template($template_type, $template_name)
+	public function delete_template($template_type = '', $template_name = '')
 	{
-		$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
-		if ($template != null)
-		{
-			return $template->delete();
-		}
+		if( $template_type != '' && $template_name != '' )
+			{
+				$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type_and_name($this->get_name(), $template_type, $template_name);
+				if ($template != null)
+					{
+						return $template->delete();
+					}
+			}
+		else if( $template_type != '' && empty($template_name) )
+			{
+				$template = cms_orm('CmsModuleTemplate')->find_by_module_and_template_type($this->get_name(), $template_type);
+				foreach( $templates as $one )
+					{
+						$template->delete();
+					}
+				return true;
+			}
+		else if( empty($template_type) && empty($template_name) )
+			{
+				$templates = cms_orm('CmsModuleTemplate')->find_by_module($this->get_name());
+				foreach( $templates as $one )
+					{
+						$template->delete();
+					}
+				return true;
+			}
+		return false;
 	}
 
 	public function is_file_template_cached($template_name, $designation = '', $timestamp = '', $cache_id = '')
