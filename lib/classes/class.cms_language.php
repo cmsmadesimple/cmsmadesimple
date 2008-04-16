@@ -131,11 +131,20 @@ class CmsLanguage extends CmsObject
 	
 	private static function load_lang_file($module, $language)
 	{
-		$lang = array();
-
-		$file = cms_join_path(ROOT_DIR, 'lang', $module . '.' . $language . '.php');
-		if (!is_file($file))
+		$file = cms_join_path(ROOT_DIR, 'tmp', 'translations', $module . '.' . $language . '.xml');
+		if (is_file($file))
 		{
+			//New parsing code
+			$xml = simplexml_load_file($file);
+			foreach ($xml as $one_entry)
+			{
+				self::$lang[$module][$language][(string)$one_entry->st] = (string)$one_entry->tr;
+			}
+		}
+		else
+		{
+			$lang = array();
+
 			if ($module == 'core')
 			{
 			    $file = cms_join_path(ROOT_DIR, 'admin', 'lang', 'ext', $language, 'admin.inc.php');
@@ -156,19 +165,19 @@ class CmsLanguage extends CmsObject
 					}
 				}
 			}
-		}
+			
+		    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === false)
+		    {
+				CmsProfiler::get_instance()->mark('Load:' . $file);
+		        include ($file);
+				if (isset($lang['admin']) && is_array($lang['admin']) && count($lang['admin'] > 1))
+				{
+					$lang = $lang['admin'];
+				}
+		    }
 
-	    if (is_file($file) && strlen($language) == 5 && strpos($language, ".") === false)
-	    {
-			CmsProfiler::get_instance()->mark('Load:' . $file);
-	        include ($file);
-			if (isset($lang['admin']) && is_array($lang['admin']) && count($lang['admin'] > 1))
-			{
-				$lang = $lang['admin'];
-			}
-	    }
-		
-		self::$lang[$module][$language] =& $lang;
+			self::$lang[$module][$language] =& $lang;
+		}
 	}
 	
 	public static function load_nls_files()
