@@ -38,7 +38,7 @@ class CmsLanguage extends CmsObject
 		parent::__construct();
 	}
 	
-	public static function translate($name, $params = array(), $module = 'core', $current_language = '', $default_language = 'en_US')
+	public static function translate($string, $params = array(), $module = 'core', $current_language = '', $default_language = 'en_US')
 	{
 		if (self::$nls == null)
 		{
@@ -59,21 +59,23 @@ class CmsLanguage extends CmsObject
 
 		$result = null;
 		
-		if (array_key_exists($name, self::$lang[$module][$current_language]))
+		if (array_key_exists($string, self::$lang[$module][$current_language]))
 		{
-			$result = self::$lang[$module][$current_language][$name];
+			$result = self::$lang[$module][$current_language][$string];
 		}
-		else if ($default_language != $current_language && array_key_exists($name, self::$lang[$module][$default_language]))
+		else if ($default_language != $current_language && array_key_exists($string, self::$lang[$module][$default_language]))
 		{
-			$result = self::$lang[$module][$default_language][$name];
+			$result = self::$lang[$module][$default_language][$string];
 		}
 		else if ($default_language == $current_language && $current_language == 'en_US')
 		{
-			$result = $name;
+			$result = $string;
 		}
 		else
 		{
-			$result = "--Add Me - $module - $name --";
+			//Send event here
+			CmsEventOperations::send_event('Core', 'MissingTranslation', array('module' => $module, 'language' => $current_language, 'string' => $string));
+			$result = "--Add Me - $module - $string --";
 		}
 
 		if (count($params) > 0)

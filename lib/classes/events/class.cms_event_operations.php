@@ -531,8 +531,10 @@ class CmsEventOperations extends CmsObject
 		
 		self::create_event( $modulename, 'SearchReindex');
 
-		self::create_event( $modulename, 'AdminDisplayStart');		
+		self::create_event( $modulename, 'AdminDisplayStart');
 		self::create_event( $modulename, 'AdminDisplayFinish');
+		
+		self::create_event( $modulename, 'MissingTranslation');
 	}
 	
 	/**
