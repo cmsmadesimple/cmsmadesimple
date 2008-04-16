@@ -123,6 +123,8 @@ class CmsAdminTheme extends CmsObject
 	
 	static public function start($is_anonymous = false)
 	{
+		CmsEventOperations::send_event('core', 'AdminDisplayStart');
+
 		@ob_start();
 		
 		$admin_theme = self::get_instance($is_anonymous);
@@ -181,6 +183,9 @@ class CmsAdminTheme extends CmsObject
 		$smarty->assign_by_ref('theme_object', self::get_instance());
 		
 		$smarty->display(self::get_instance()->theme_template_dir . 'overall.tpl');
+		
+		//Now that it's all done, send out an event telling everyone
+		CmsEventOperations::send_event('core', 'AdminDisplayFinish');
 		
 		echo '<div id="_DebugFooter">';
 		echo CmsProfiler::get_instance()->report();

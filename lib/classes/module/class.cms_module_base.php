@@ -212,6 +212,20 @@ abstract class CmsModuleBase extends CmsObject
 	}
 	
 	/**
+	 * Returns the name of the project from dev.cmsmadesimple.org, if it
+	 * was developed there.  This allows the system to join up for handling
+	 * automatic translations.
+	 *
+	 * @return string Name of the dev forge project
+	 * @author Ted Kulp
+	 * @since 2.0-svn
+	 */
+	function get_forge_project_name()
+	{
+		return '';
+	}
+	
+	/**
 	 * Returns which admin section this module belongs to.
 	 * this is used to place the module in the appropriate admin navigation
 	 * section. Valid options are currently:
