@@ -1472,7 +1472,10 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	function __()
 	{
-		return $this->lang(func_get_args());
+		$args = func_get_args();
+		if (is_array($args) && count($args) == 1 && is_array($args[0]))
+			$args = $args[0];
+		return CmsLanguage::translate($args[0], array_slice($args, 1), $this->get_name(), '', $this->default_language());
 	}
 	
 	/**

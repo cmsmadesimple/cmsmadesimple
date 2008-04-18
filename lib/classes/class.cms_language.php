@@ -38,8 +38,11 @@ class CmsLanguage extends CmsObject
 		parent::__construct();
 	}
 	
-	public static function translate($string, $params = array(), $module = 'core', $current_language = '', $default_language = 'en_US')
+	public static function translate($string, $params = array(), $module = 'core', $current_language = '')
 	{
+		if ($string == null || $string == '')
+			return '';
+
 		if (self::$nls == null)
 		{
 			self::$nls = CmsCache::get_instance()->call(array('CmsLanguage', 'load_nls_files'));
@@ -49,12 +52,7 @@ class CmsLanguage extends CmsObject
 		
 		if (!array_key_exists($module, self::$lang) || !array_key_exists($current_language, self::$lang[$module]))
 		{
-			CmsLanguage::load_lang_file($module, $default_language);
-			
-			if ($current_language != $default_language)
-			{
-				CmsLanguage::load_lang_file($module, $current_language);
-			}
+			CmsLanguage::load_lang_file($module, $current_language);
 		}
 
 		$result = null;
@@ -63,19 +61,11 @@ class CmsLanguage extends CmsObject
 		{
 			$result = self::$lang[$module][$current_language][$string];
 		}
-		else if ($default_language != $current_language && array_key_exists($string, self::$lang[$module][$default_language]))
-		{
-			$result = self::$lang[$module][$default_language][$string];
-		}
-		else if ($default_language == $current_language && $current_language == 'en_US')
-		{
-			$result = $string;
-		}
 		else
 		{
 			//Send event here
-			CmsEventOperations::send_event('Core', 'MissingTranslation', array('module' => $module, 'language' => $current_language, 'string' => $string));
-			$result = "--Add Me - $module - $string --";
+			CmsEventOperations::send_event('Core', 'MissingTranslation', array('module' => $module, 'language' => $current_language, 'string' => $string, 'hash' => self::create_bt_hash(debug_backtrace())));
+			$result = $string;
 		}
 
 		if (count($params) > 0)
@@ -84,6 +74,20 @@ class CmsLanguage extends CmsObject
 		}
 		
 		return $result;
+	}
+	
+	public static function create_bt_hash($backtrace)
+	{
+		if (count($backtrace) > 1)
+		{
+			$num = 1;
+			#if (($backtrace[$num]["function"] == '_' || $backtrace[$num]["function"] == '__' || $backtrace[$num]["function"] == 'call_user_func_array') && count($backtrace) > 2)
+			#	$num = 2;
+			#print_r($string, $backtrace[$num]["line"] . basename($backtrace[$num]["file"]) . $backtrace[$num]["function"] . '<br />');
+			return md5($backtrace[$num]["line"] . basename($backtrace[$num]["file"]));
+		}
+		
+		return '';
 	}
 	
 	/**
@@ -238,6 +242,9 @@ class CmsLanguage extends CmsObject
 			{
 				$current_language = $_COOKIE["cms_language"];
 			}
+			
+			if ($current_language == '0')
+				$current_language = '';
 			
 			//Anything yet?
 			if ($current_language == '')
