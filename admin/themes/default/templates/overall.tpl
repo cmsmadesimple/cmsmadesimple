@@ -6,30 +6,30 @@
 	<meta name="Generator" content="CMS Made Simple - Copyright (C) 2004-2008 Ted Kulp. All rights reserved." />
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
+	{cms_config var='root_url' assign='root'}
 	<title>{sitename} - Tags</title>
-	<link rel="stylesheet" href="themes/default/css/kevin_layout.css" type="text/css" />
-	<link rel="stylesheet" href="themes/default/css/kevin_tabs.css" type="text/css" />
+	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_layout.css" type="text/css" />
+	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
 	<!--[if IE]>
-		<script src="themes/default/includes/ie7-standard-p.js" type="text/javascript">
+		<script src="{$root}/themes/default/includes/ie7-standard-p.js" type="text/javascript">
 	</script>
 	<![endif]-->	
 
-	{literal}
-	
-	<script type="text/javascript" src="../lib/jquery/jquery.js"></script>
-	<script type="text/javascript" src="../lib/jquery/jquery.color.js"></script>
-	<script type="text/javascript" src="../lib/jquery/ui/ui.tabs.js"></script>
-	<script type="text/javascript" src="../lib/jquery/ui/ui.accordion.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/jquery.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
 	<!--
-	<script type="text/javascript" src="../lib/jquery/jquery.dimensions.js"></script>
-	<script type="text/javascript" src="../lib/jquery/ui/ui.mouse.js"></script> 
-	<script type="text/javascript" src="../lib/jquery/ui/ui.draggable.js"></script> 
-	<script type="text/javascript" src="../lib/jquery/ui/ui.droppable.js"></script> 
-	<script type="text/javascript" src="../lib/jquery/ui/ui.draggable.ext.js"></script> 
-	<script type="text/javascript" src="../lib/jquery/ui/ui.droppable.ext.js"></script>
-	<script type="text/javascript" src="../lib/jquery/ui/ui.sortable.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/jquery.dimensions.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script> 
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script> 
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script> 
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.ext.js"></script> 
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.ext.js"></script>
+	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>
 	-->
 	
+	{literal}	
 	<script type="text/javascript">//<![CDATA[
 		// form handling stuff
 		$(document).ready(function() {
