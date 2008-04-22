@@ -47,7 +47,7 @@ class CmsModuleTabs extends CmsObject
 
 	static public function end_tab_content()
 	{
-		return "</div>\n<script>\n<!--\n$('#module_page_tabs > ul').tabs();\n//-->\n</script>\n";
+		return "</div>\n<script type='text/javascript'>\n<!--\n$('#module_page_tabs > ul').tabs();\n//-->\n</script>\n";
 	}
 
 	static public function start_tab($tabid)
