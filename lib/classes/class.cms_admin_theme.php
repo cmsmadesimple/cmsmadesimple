@@ -363,7 +363,7 @@ class CmsAdminTheme extends CmsObject
 			{
 				$newnode = CmsAdminTree::get_instance()->create_node();
 				$newnode->name = $module['name'];
-				$newnode->title = $module['name'];
+				$newnode->title = $module['title'];
 				$newnode->url = $module['url'];
 				$newnode->description = $module['description'];
 				$newnode->show_in_menu = true;
@@ -509,15 +509,9 @@ class CmsAdminTheme extends CmsObject
 					$this->section_count[$section] = 0;
 				}
 				$this->modules_by_section[$section][$this->section_count[$section]]['key'] = $key;
-				if ($cmsmodules[$key]['object']->get_friendly_name() != '')
-				{
-					$this->modules_by_section[$section][$this->section_count[$section]]['name'] =
-					$cmsmodules[$key]['object']->get_friendly_name();
-				}
-				else
-				{
-					$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
-				}
+				$this->modules_by_section[$section][$this->section_count[$section]]['name'] = $key;
+				$this->modules_by_section[$section][$this->section_count[$section]]['title'] = 
+					$value['object']->get_friendly_name();
 				if ($cmsmodules[$key]['object']->get_admin_description() != '')
 				{
 					$this->modules_by_section[$section][$this->section_count[$section]]['description'] =
@@ -561,6 +555,7 @@ class CmsAdminTheme extends CmsObject
 				$sectionModule['key'];
 				$modList[$sectionModule['key']]['description'] = $sectionModule['description'];
 				$modList[$sectionModule['key']]['name'] = $sectionModule['name'];
+				$modList[$sectionModule['key']]['title'] = $sectionModule['title'];
 			}
 		}
 		return $modList;

@@ -7,7 +7,7 @@
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="robots" content="noindex, nofollow" />
 	{cms_config var='root_url' assign='root'}
-	<title>{sitename} - Tags</title>
+	<title>{sitename} - {$admin_theme->title}</title>
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_layout.css" type="text/css" />
 	<link rel="stylesheet" href="{$root}/admin/themes/default/css/kevin_tabs.css" type="text/css" />
 	<!--[if IE]>
