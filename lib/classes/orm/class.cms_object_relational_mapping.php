@@ -628,29 +628,34 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		
 		$classname = get_class($this);
 
-		$row = $db->GetRow($query, $queryparams);
-		
-		//var_dump($query, $queryparams, $row, '<br />');
-
-		if($row)
+		try
 		{
-			//Basically give before_load a chance to load that class type if necessary
-			$newclassname = $classname;
-			if ($this->type_field != '' && isset($row[$this->type_field]))
-			{
-				$newclassname = $row[$this->type_field];
-			}
-			
-			$this->before_load_caller($newclassname, $row);
-			
-			if (!($newclassname != $classname && class_exists($newclassname)))
-			{
-				$newclassname = $classname;
-			}
+			$row = $db->GetRow($query, $queryparams);
 
-			$oneobj = new $newclassname;
-			$oneobj = $this->fill_object($row, $oneobj);
-			return $oneobj;
+			if($row)
+			{
+				//Basically give before_load a chance to load that class type if necessary
+				$newclassname = $classname;
+				if ($this->type_field != '' && isset($row[$this->type_field]))
+				{
+					$newclassname = $row[$this->type_field];
+				}
+			
+				$this->before_load_caller($newclassname, $row);
+			
+				if (!($newclassname != $classname && class_exists($newclassname)))
+				{
+					$newclassname = $classname;
+				}
+
+				$oneobj = new $newclassname;
+				$oneobj = $this->fill_object($row, $oneobj);
+				return $oneobj;
+			}
+		}
+		catch (Exception $e)
+		{
+			//Don't do anything
 		}
 
 		return null;
@@ -692,34 +697,39 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 		$classname = get_class($this);
 
 		$result = array();
-
-		$dbresult = $db->SelectLimit($query, $numrows, $offset, $queryparams);
 		
-		//var_dump($query, $queryparams, $dbresult->EOF, '<br />');
-
-		while ($dbresult && !$dbresult->EOF)
+		try
 		{
-			//Basically give before_load a chance to load that class type if necessary
-			$newclassname = $classname;
-			if ($this->type_field != '' && isset($dbresult->fields[$this->type_field]))
-			{
-				$newclassname = $dbresult->fields[$this->type_field];
-			}
-			
-			$this->before_load_caller($newclassname, $dbresult->fields);
+			$dbresult = $db->SelectLimit($query, $numrows, $offset, $queryparams);
 
-			if (!($newclassname != $classname && class_exists($newclassname)))
+			while ($dbresult && !$dbresult->EOF)
 			{
+				//Basically give before_load a chance to load that class type if necessary
 				$newclassname = $classname;
-			}
+				if ($this->type_field != '' && isset($dbresult->fields[$this->type_field]))
+				{
+					$newclassname = $dbresult->fields[$this->type_field];
+				}
+			
+				$this->before_load_caller($newclassname, $dbresult->fields);
 
-			$oneobj = new $newclassname;
-			$oneobj = $this->fill_object($dbresult->fields, $oneobj);
-			$result[] = $oneobj;
-			$dbresult->MoveNext();
-		}
+				if (!($newclassname != $classname && class_exists($newclassname)))
+				{
+					$newclassname = $classname;
+				}
+
+				$oneobj = new $newclassname;
+				$oneobj = $this->fill_object($dbresult->fields, $oneobj);
+				$result[] = $oneobj;
+				$dbresult->MoveNext();
+			}
 		
-		if ($dbresult) $dbresult->Close();
+			if ($dbresult) $dbresult->Close();
+		}
+		catch (Exception $e)
+		{
+			//Nothing again
+		}
 		
 		return $result;
 	}

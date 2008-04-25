@@ -37,6 +37,8 @@ require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_object.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_config.php');
 require_once(ROOT_DIR.DS.'lib'.DS.'classes'.DS.'class.cms_cache.php');
 
+set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
+
 /**
  * The one and only autoload function for the system.  This basically allows us 
  * to remove a lot of the require_once BS and keep the file loading to as much 
@@ -347,6 +349,20 @@ function cms_db_prefix()
 function in_debug()
 {
 	return CmsConfig::get("debug") == true;
+}
+
+/**
+ * Error handler so that we can swallow warning messages unless the
+ * debug flag is on.
+ *
+ * @author Ted Kulp
+ */
+function cms_warning_handler($errno, $errstr, $errfile = '', $errline = -1, $errcontext = array())
+{
+	if (in_debug())
+	{
+		trigger_error($errstr, E_USER_WARNING);
+	}
 }
 
 ?>

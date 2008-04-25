@@ -41,11 +41,11 @@ $smarty->force_compile = true;
 $smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DS);
 $smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','smarty','plugins'.DS), cms_join_path(dirname(__FILE__),'plugins'.DS));
 
-require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
-$xajax = new xajax();
-$xajax->registerFunction('test_connection');
-$xajax->processRequests();
-$smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
+//require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'xajax', 'xajax.inc.php'));
+//$xajax = new xajax();
+//$xajax->registerFunction('test_connection');
+//$xajax->processRequests();
+//$smarty->assign('xajax_header', $xajax->getJavascript('../lib/xajax'));
 
 display_page($smarty);
 

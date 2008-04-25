@@ -53,9 +53,9 @@ require_once($dirname.DIRECTORY_SEPARATOR.'lib'.DIRECTORY_SEPARATOR.'cmsms.api.p
 $config_location = CmsConfig::get_config_filename();
 if (!file_exists($config_location) || filesize($config_location) < 800)
 {
-    if (FALSE == is_file($dirname.'/install/install.php'))
+    if (FALSE == is_file($dirname.'/install/index.php'))
 	{
-        die ('There is no config.php file or install/install.php please correct one these errors!');
+        die ('There is no config.php file or install/index.php please correct one these errors!');
     }
 	else
 	{
