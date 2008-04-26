@@ -41,7 +41,6 @@ $smarty->force_compile = true;
 $smarty->template_dir = cms_join_path(dirname(dirname(__FILE__)),'install','templates'.DS);
 $smarty->plugins_dir = array(cms_join_path(dirname(dirname(__FILE__)),'lib','smarty','plugins'.DS), cms_join_path(dirname(__FILE__),'plugins'.DS));
 
-require_once(cms_join_path(dirname(dirname(__FILE__)), 'lib', 'classes','ajax','class.cms_ajax.php'));
 $xajax = new CmsAjax();
 $xajax->register_function('test_connection');
 $xajax->process_requests();
@@ -202,7 +201,9 @@ function test_connection($params, $ajax = true)
 {
 	global $smarty; //Too lazy to set it all up again
 
-	$objResponse = new CmsAjaxResponse();
+	$response = new CmsAjaxResponse();
+	
+	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname']);
 	
 	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], 
 															 $params['connection']['hostname'], 
@@ -211,11 +212,11 @@ function test_connection($params, $ajax = true)
 															 $params['connection']['dbname']);
 
 	$smarty->assign('databasetestresult', $result);
-	$objResponse->modify_html("#connection_options", $smarty->fetch('databaseinsert.tpl'));
-	//$objResponse->script("alert('test');");
-	$objResponse->script("$('#connection_options').slideDown('slow');");
+	$response->modify_html("#connection_options", $smarty->fetch('databaseinsert.tpl'));
+	
+	$response->script("$('#connection_options').slideDown('slow');");
 
-	return $objResponse->get_result();
+	return $response->get_result();
 }
 
 # vim:ts=4 sw=4 noet
