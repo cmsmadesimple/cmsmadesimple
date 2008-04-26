@@ -44,7 +44,7 @@ set_error_handler('cms_warning_handler', E_WARNING | E_USER_WARNING);
  * to remove a lot of the require_once BS and keep the file loading to as much 
  * of a minimum as possible.
  */
-function __autoload($class_name)
+function cms_autoload($class_name)
 {
 	//$files = scan_classes();
 	$files = CmsCache::get_instance()->call('scan_classes');
@@ -73,6 +73,8 @@ function __autoload($class_name)
 	{
 	}
 }
+
+spl_autoload_register('cms_autoload');
 
 function scan_classes()
 {

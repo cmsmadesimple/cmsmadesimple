@@ -18,60 +18,69 @@
 #
 #$Id$
 
-include_once('../lib/page.functions.php');
+include_once(dirname(dirname(__FILE__)) . '/lib/cmsms.api.php');
 
-class TestCmsLogin extends UnitTestCase
+class DescribeCmsLogin extends PHPSpec_Context
 {
 	var $callback_test = false;
+	var $originator = '';
+	var $event_name = '';
 
-	function __construct()
-	{
-		parent::__construct();
-	}
-	
-	function setUp()
+	public function before()
 	{
 		CmsCache::clear();
 		cms_db()->Execute('DELETE FROM ' . cms_db_prefix() . 'users WHERE username = ?', array('sometestuser'));
 	}
 	
-	function tearDown()
+	public function after()
 	{
-		$this->setUp();
+		$this->before();
 	}
 	
-	function add_test_user()
+	public function add_test_user()
 	{
 		$user = new CmsUser();
 		$user->username = 'sometestuser';
 		$user->set_password('some_password');
-		$this->assertTrue($user->save());
+		return $user->save();
 	}
 	
 	function temp_callback($originator, $event_name, &$params)
 	{
-		$this->assertEqual($originator, 'Core');
-		$this->assertEqual($event_name, 'LoginFailed');
+		$this->originator = $originator;
+		$this->event_name = $event_name;
 		$this->callback_test = $this->callback_test + 1;
 	}
-	
-	function test_bad_passsword()
+
+	public function itShouldBeAbleToSaveANewUser()
 	{
-		$this->add_test_user();
-		$this->assertFalse(CmsLogin::login('sometestuser', 'some_bad_password'));
-		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
+		$this->spec($this->add_test_user())->should->beTrue();
 	}
 	
-	function test_login_failed_event()
+	public function itShouldNotBeAbleToLogInWithBadPassword()
+	{
+		$this->add_test_user();
+		$this->spec(CmsLogin::login('sometestuser', 'some_bad_password'))->should->beFalse();
+		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beTrue();
+	}
+	
+	public function itShouldProperlyCallTheLoginFailedEvent()
 	{
 		$this->callback_test = 1;
+		$this->originator = '';
+		$this->event_name = '';
 		CmsEventOperations::add_temp_event_handler('Core', 'LoginFailed', array($this, 'temp_callback'));
-		$this->assertFalse(CmsLogin::login('sometestuser', 'some_password'));
-		$this->assertEqual($this->callback_test, 2);
+		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beFalse();
+		$this->spec($this->callback_test)->should->be(2);
+		$this->spec($this->originator)->should->be('Core');
+		$this->spec($this->event_name)->should->be('LoginFailed');
 		$this->add_test_user();
-		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
-		$this->assertEqual($this->callback_test, 2);
+		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beTrue();
+		$this->spec($this->callback_test)->should->be(2);
+		$this->spec($this->originator)->should->be('Core');
+		$this->spec($this->event_name)->should->be('LoginFailed');
 	}
 }
+
 # vim:ts=4 sw=4 noet
 ?>

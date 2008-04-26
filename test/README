@@ -1,0 +1,12 @@
+Testing is using phpspec. See:
+http://phpspec.org
+
+Install like so (might need sudo):
+pear channel-discover pear.phpspec.org
+pear install phpspec/PHPSpec
+
+And run from this directory like:
+phpspec -r --specdoc
+
+This does use the current database set in config.php.  They're generally not 
+descructive, but the content stuff is a bit messy.
