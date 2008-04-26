@@ -21,6 +21,11 @@
 require_once cms_join_path(ROOT_DIR,'lib','xmlrpc','xmlrpc.inc');
 require_once cms_join_path(ROOT_DIR,'lib','xmlrpc','xmlrpcs.inc');
 
+class CmsXmlRpcException extends Exception
+{
+	
+}
+
 class CmsXmlrpc extends CmsObject
 {
 	static private $server = null;
@@ -53,6 +58,23 @@ class CmsXmlrpc extends CmsObject
 			$name = $namespace . "." . $name;
 
 		self::$server->add_to_map($name, $callback);
+	}
+	
+	function send_message($name, $params, $url)
+	{
+		$msg = new xmlrpcmsg($name, $params);
+		$client = new xmlrpc_client($url);
+		$client->return_type = 'phpvals';
+		
+		$result = $client->send($msg);
+		if (!$result->faultCode())
+		{
+			return $result->value();
+		}
+		else
+		{
+			throw new CmsXmlRpcException($result->faultString(), $result->faultCode());
+		}
 	}
 }
 
