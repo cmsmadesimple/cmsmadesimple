@@ -45,7 +45,7 @@
 
 			// assign an event for every form row
 			$("div[id*='formrow']").bind("click", function() {
-				var help = $(this).html();
+				var help = $(this).children("input[id*='help_']").val();
 				$('#HelpContent').html(help);
 			});
 			
