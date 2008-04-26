@@ -72,7 +72,7 @@
         {tr}Click here to test your connection settings{/tr}:
       </span>
       <span class="go_right">
-        <input type="submit" name="test_connection" value="{tr}Test{/tr}" onclick="{literal}$('#connection_options').hide(); xajax_test_connection(xajax.getFormValues('connectionform')); return false;{/literal}" />
+        <input type="submit" name="test_connection" value="{tr}Test{/tr}" onclick="{literal}$('#connection_options').hide(); cms_ajax_test_connection(ajax.getFormValues('connectionform')); return false;{/literal}" />
       </span>
     </p>
     <input type="hidden" name="action" value="database" />
