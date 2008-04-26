@@ -203,8 +203,6 @@ function test_connection($params, $ajax = true)
 
 	$response = new CmsAjaxResponse();
 	
-	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], $params['connection']['hostname'], $params['connection']['username'], $params['connection']['password'], $params['connection']['dbname']);
-	
 	$result = CmsInstallOperations::test_database_connection($params['connection']['driver'], 
 															 $params['connection']['hostname'], 
 															 $params['connection']['username'], 
