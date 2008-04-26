@@ -18,13 +18,15 @@
 
 function smarty_cms_block_mod_formrow($params,$content,&$smarty,&$repeat)
 {
+  static $counter=1;
   $module =& $smarty->get_template_vars('cms_mapi_module');
   $id = $smarty->get_template_vars('cms_mapi_id');
   $return_id = $smarty->get_template_vars('cms_mapi_return_id');
-  $htmlid = $id.'formrow_'.$params['name'];
+  $name = coalesce_key($params,'name',$counter++);
+  $htmlid = $id.'formrow_'.$name;
 
   $class=coalesce_key($params,'class','row');
-  $output = "<div class='$class' id='$htmlid'>";
+  $output = "<div name='$name' class='$class' id='$htmlid'>";
   $output .= $content;
   $output .= '</div>';
   return $output;
