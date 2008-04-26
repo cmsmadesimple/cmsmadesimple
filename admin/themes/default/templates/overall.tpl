@@ -19,15 +19,6 @@
 	<script type="text/javascript" src="{$root}/lib/jquery/jquery.color.js"></script>
 	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.tabs.js"></script>
 	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.accordion.js"></script>
-	<!--
-	<script type="text/javascript" src="{$root}/lib/jquery/jquery.dimensions.js"></script>
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.mouse.js"></script> 
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.js"></script> 
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.js"></script> 
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.draggable.ext.js"></script> 
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.droppable.ext.js"></script>
-	<script type="text/javascript" src="{$root}/lib/jquery/ui/ui.sortable.js"></script>
-	-->
 	
 	{literal}	
 	<script type="text/javascript">//<![CDATA[
@@ -47,6 +38,17 @@
 					document.title = "*"+document.title;
 				}
 			});
+
+			// fill the default help text
+			var help = $('#default_helptext').html();	
+			$('#HelpContent').html(help);
+
+			// assign an event for every form row
+			$("div[id*='formrow']").bind("click", function() {
+				var help = $(this).html();
+				$('#HelpContent').html(help);
+			});
+			
 		});
 
 		function enableForm(form) {
@@ -55,7 +57,6 @@
 		}
 
 	//]]></script>
-
 	{/literal}
 	
 	{$headtext}
@@ -108,7 +109,7 @@
 		</div>
 
 	</div>
-	
+	<div id="HelpContent"></div>	
 
 </div><!-- end MainContent -->
 

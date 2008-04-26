@@ -22,7 +22,7 @@ div#header {
 	background:#000000 url(../images/kevin_layout/header-bg.jpg) repeat-x bottom;
 }
 div#header h1 {
-	dispaly:block;
+	display:block;
 	padding:30px 0 0.5em 60px;
 	font-size:1.5em;	
 	color:#FFFFFF;
@@ -232,6 +232,8 @@ div.submitrow {
 	overflow:hidden;
 	margin-top:0.5em;
 }
+
+.hidden { display:none; }
 
 /* End Form Styles */
 
