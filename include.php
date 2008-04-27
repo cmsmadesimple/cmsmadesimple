@@ -70,21 +70,7 @@ if ($frontendlang != '')
 }
 
 cms_smarty()->assign('lang', $frontendlang);
-cms_smarty()->assign('encoding', get_encoding());
-
-/*
-if (isset($CMS_ADMIN_PAGE))
-{
-    include_once(cms_join_path($dirname, CmsConfig::get('admin_dir'), 'lang.php'));
-
-	#This will only matter on upgrades now.  All new stuff (0.13 on) will be UTF-8.
-	if (is_file(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php')))
-	{
-		include(cms_join_path($dirname,'lib','convert','ConvertCharset.class.php'));
-		$gCms->variables['convertclass'] = new ConvertCharset();
-	}
-}
-*/
+cms_smarty()->assign('encoding', 'UTF-8');
 
 #Load all installed module code
 CmsModuleLoader::load_modules(isset($LOAD_ALL_MODULES), !isset($CMS_ADMIN_PAGE));

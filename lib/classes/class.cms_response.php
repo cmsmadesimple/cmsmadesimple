@@ -35,6 +35,11 @@ class CmsResponse extends CmsObject
 		parent::__construct();
 	}
 	
+	function get_encoding()
+	{
+		return 'UTF-8';
+	}
+	
 	/**
 	 * Redirects a user to given url.
 	 *

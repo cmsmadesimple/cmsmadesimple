@@ -75,8 +75,7 @@ class CmsPageInfo extends CmsObject
 	
 	public function send_headers()
 	{
-		header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=" . 
-			(isset($this->template_encoding) && $this->template_encoding != ''?$this->template_encoding:get_encoding()));
+		header("Content-Type: " . cmsms()->variables['content-type'] . "; charset=" . CmsResponse::get_encoding());
 	}
 	
 	/**

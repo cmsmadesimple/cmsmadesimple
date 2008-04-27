@@ -59,7 +59,7 @@ else
 	}
 	else
 	{
-		$themeObject->SendHeaders(isset($charsetsent), get_encoding('', false));
+		$themeObject->SendHeaders(isset($charsetsent), CmsResponse::get_encoding());
 	}
 	$themeObject->PopulateAdminNavigation(isset($CMS_ADMIN_SUBTITLE)?$CMS_ADMIN_SUBTITLE:'');
 

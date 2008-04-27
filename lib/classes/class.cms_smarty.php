@@ -475,7 +475,7 @@ class CmsSmarty extends Smarty {
 			$tpl_source = $modoutput;
 		}
 		
-		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . (isset($line['encoding']) && $line['encoding'] != ''?$line['encoding']:get_encoding()));
+		header("Content-Type: ".$gCms->variables['content-type']."; charset=" . CmsResponse::get_encoding());
 		if (isset($gCms->variables['content-filename']) && $gCms->variables['content-filename'] != '')
 		{
 			header('Content-Disposition: attachment; filename="'.$gCms->variables['content-filename'].'"');

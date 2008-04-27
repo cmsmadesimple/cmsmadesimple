@@ -419,14 +419,7 @@ function get_stylesheet($template_id, $media_type = '')
 	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
 	{
 		#Grab the encoding
-		if ($templateobj->encoding !== FALSE && $templateobj->encoding != '')
-		{
-			$result['encoding'] = $templateobj->encoding;
-		}
-		else
-		{
-			$result['encoding'] = get_encoding();
-		}
+		$result['encoding'] = CmsResponse::get_encoding();
 
 		#Load in the "standard" template CSS if media type is empty
 		if ($media_type == '')
@@ -455,7 +448,7 @@ function get_stylesheet($template_id, $media_type = '')
 	else
 	{
 		$result['nostylesheet'] = true;
-		$result['encoding'] = get_encoding();
+		$result['encoding'] = CmsResponse::get_encoding();
 	}
 
 	#$css = preg_replace("/[\r\n]/", "", $css); //hack for tinymce
@@ -588,7 +581,7 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 		{
 			$result .= ' id="'.$id.'"';
 		}
-		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+		$result .= '>'.cms_htmlentities($text,ENT_NOQUOTES,CmsResponse::get_encoding()).'</textarea>';
 	}
 
 	return $result;
@@ -634,7 +627,7 @@ function textarea_highlight($use_javasyntax, $text, $name, $class_name="syntaxHi
             class="'.$class_name.'"';
         if ($id<>"")
             $output.=' id="'.$id.'"';
-        $output.='>'.cms_htmlentities($text,ENT_NOQUOTES,get_encoding($encoding)).'</textarea>';
+        $output.='>'.cms_htmlentities($text,ENT_NOQUOTES,CmsResponse::get_encoding()).'</textarea>';
     }
 
     return $output;
