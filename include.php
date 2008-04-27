@@ -50,7 +50,7 @@ CmsContentOperations::find_content_types();
 CmsContentOperations::find_block_types();
 
 #Set a umask
-$global_umask = CmsApplication::get_preference(('global_umask','');
+$global_umask = CmsApplication::get_preference('global_umask','');
 if( $global_umask != '' )
 {
 	@umask( octdec($global_umask) );
@@ -58,7 +58,7 @@ if( $global_umask != '' )
 
 #Set the locale if it's set
 #either in the config, or as a site preference.
-$frontendlang = CmsApplication::get_preference(('frontendlang','');
+$frontendlang = CmsApplication::get_preference('frontendlang','');
 if (CmsConfig::exists('locale') && CmsConfig::get('locale') != '')
 {
     $frontendlang = CmsConfig::get('locale');

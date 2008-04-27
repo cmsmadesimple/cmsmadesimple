@@ -174,11 +174,11 @@ function smarty_cms_function_sitemap($params, &$smarty)
                 {
                     $menu .= ' target="' . $onecontent->GetPropertyValue('target') . '"';
                 }
-                $menu .= '>' . my_htmlentities($onecontent->MenuText()) . '</a>';
+                $menu .= '>' . cms_htmlentities($onecontent->MenuText()) . '</a>';
             }
             else
             {
-                $menu .= my_htmlentities($onecontent->MenuText());
+                $menu .= cms_htmlentities($onecontent->MenuText());
             }
         }
         else

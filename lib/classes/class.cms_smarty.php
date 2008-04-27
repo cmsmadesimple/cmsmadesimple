@@ -291,9 +291,9 @@ class CmsSmarty extends Smarty {
 		global $gCms;
 		$config = cms_config();
 
-		if (CmsApplication::get_preference(('enablesitedownmessage') == "1")
+		if (CmsApplication::get_preference('enablesitedownmessage') == "1")
 		{
-			$tpl_source = CmsApplication::get_preference(('sitedownmessage');
+			$tpl_source = CmsApplication::get_preference('sitedownmessage');
 			return true;
 		}
 		else
@@ -350,7 +350,7 @@ class CmsSmarty extends Smarty {
 	{
 		global $gCms;
 
-		if (CmsApplication::get_preference(('enablesitedownmessage') == "1" || $tpl_name == 'notemplate')
+		if (CmsApplication::get_preference('enablesitedownmessage') == "1" || $tpl_name == 'notemplate')
 		{
 			$tpl_timestamp = time();
 			return true;
@@ -386,7 +386,7 @@ class CmsSmarty extends Smarty {
 			header("HTTP/1.0 404 Not Found");
 			header("Status: 404 Not Found");
 			if ($tpl_name == 'default')
-				$tpl_source = CmsApplication::get_preference(('custom404');
+				$tpl_source = CmsApplication::get_preference('custom404');
 			else
 				$tpl_source = '';
 			return true;

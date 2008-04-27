@@ -61,6 +61,12 @@ function generate_user_object($userid)
 	return CmsLogin::generate_user_object($userid);
 }
 
+function check_permission($userid, $permname)
+{
+	return CmsAcl::check_core_permission($permname, $userid);
+}
+
+
 /**
  * Put an event into the audit (admin) log.  This should be
  * done on most admin events for consistency.

@@ -22,18 +22,12 @@
 		    {/if}
 		</div>
 		<div id="advanced">
-			{* Encoding *}
-			<div class="row">
-				<label>{lang string='encoding'}:</label>
-	 		    {$encoding_dropdown}
-			</div>
-	
-	    {* Active *}
-		{admin_input type='checkbox' label='active' id='template_active' name='template[active]' selected=$template_object->active}	
+		    {* Active *}
+			{admin_input type='checkbox' label='active' id='template_active' name='template[active]' selected=$template_object->active}	
    
-	    {html_hidden name='is_postback' value='true'}
-	    {html_hidden name='template[id]' value=$template_object->id}
-	    {html_hidden name='template_id' value=$template_object->id}
+		    {html_hidden name='is_postback' value='true'}
+		    {html_hidden name='template[id]' value=$template_object->id}
+		    {html_hidden name='template_id' value=$template_object->id}
 		</div>
 	</div><!-- End Tabs -->
 	{include file='elements/buttons.tpl'}

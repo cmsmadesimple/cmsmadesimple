@@ -108,7 +108,7 @@ function cms_header_filter_plugin_function($params, &$smarty)
 		}
 	}
 	
-	$result .= CmsApplication::get_preference(('metadata', '');
+	$result .= CmsApplication::get_preference('metadata', '');
 
 	if (isset($pageinfo) && $pageinfo !== FALSE)
 	{

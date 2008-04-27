@@ -934,7 +934,7 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		if ($returnid != '')
 		{
-			if (!$this->restrict_unknown_params && CmsApplication::get_preference(('allowparamcheckwarnings', 0))
+			if (!$this->restrict_unknown_params && CmsApplication::get_preference('allowparamcheckwarnings', 0))
 			{
 				trigger_error('WARNING: '.$this->get_name().' is not properly cleaning input params.', E_USER_WARNING);
 			}
@@ -1783,7 +1783,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function get_preference($preference_name, $defaultvalue='')
 	{
-		return CmsApplication::get_preference(($this->get_name() . "_mapi_pref_" . $preference_name, $defaultvalue);
+		return CmsApplication::get_preference($this->get_name() . "_mapi_pref_" . $preference_name, $defaultvalue);
 	}
 
 	/**

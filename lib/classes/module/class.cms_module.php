@@ -94,7 +94,7 @@ class CmsModule extends CmsModuleBase
 		}
 		else
 		{
-		  $this->curlang = CmsApplication::get_preference(('frontendlang','');
+		  $this->curlang = CmsApplication::get_preference('frontendlang','');
 		  if (isset($config['locale']) && $config['locale'] != '') {
 		      $this->curlang = $config['locale'];
 		    }
@@ -2397,7 +2397,7 @@ class CmsModule extends CmsModuleBase
 	 */
 	function GetPreference($preference_name, $defaultvalue='')
 	{
-		return CmsApplication::get_preference(($this->GetName() . "_mapi_pref_" . $preference_name, $defaultvalue);
+		return CmsApplication::get_preference($this->GetName() . "_mapi_pref_" . $preference_name, $defaultvalue);
 	}
 
 	/**

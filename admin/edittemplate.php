@@ -110,7 +110,6 @@ $smarty->assign('header_name', $themeObject->ShowHeader('edittemplate'));
 $smarty->assign_by_ref('template_object', $template_object);
 
 $smarty->assign('content_box', create_textarea(false, $template_object->content, 'template[content]', 'pagebigtextarea', '', $template_object->encoding));
-$smarty->assign('encoding_dropdown', create_encoding_dropdown('template[encoding]', $template_object->encoding));
 
 //extra buttons
 $ExtraButtons = array(

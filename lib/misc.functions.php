@@ -25,82 +25,6 @@
  */
 
 /**
- * Shortcut to the print_r function.
- * Wraps the output in <pre> and </pre> for easy reading
- * 
- * @param array $var 
- * @param bool $exit
- *
- */
-function pr($var, $exit = 1)
-{
-	echo '<pre>';
-		print_r($var);
-	echo '</pre>';	
-	if($exit == 1) 	
-		die();
-}
-
-
-/**
- * Simple template parser
- *
- * @since 0.6.1
- */
-function parse_template($template, $tpl_array, $warn=0)
-{
-	while ( list ($key,$val) = each ($tpl_array) )
-	{
-		if (!(empty($key)))
-		{
-			if(gettype($val) != "string")
-			{
-				settype($val,"string");
-			}
-			$template = eregi_replace('\{' . $key . '\}',$val,$template);
-		}
-	}
-
-	if(!$warn)
-	{
-		// Silently remove anything not already found
-
-		$template = ereg_replace('\{[A-Z0-9_]+\}', "", $template);
-	}
-	else
-	{
-		// Warn about unresolved template variables
-		if (ereg('\{[A-Z0-9_]+\}',$template))
-		{
-			$unknown = split("\n",$template);
-			while (list ($Element,$Line) = each($unknown) )
-			{
-				$UnkVar = $Line;
-				if(!(empty($UnkVar)))
-				{
-					$this->show_unknowns($UnkVar);
-				}
-			}
-		}
-	}
-	return $template;
-
-}	// end parse_template();
-
-function cms_html_entities($string, $param=ENT_QUOTES, $charset="UTF-8")
-{
-	$result = "";
-	#$result = htmlentities($string, $param, $charset);
-	$result = my_htmlentities($string);
-	return $result;
-}
-
-function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
-{
-	return cms_html_entities($string, $param, $charset);
-}
-
-/**
  * Enter description here...
  *
  * @param unknown $val
@@ -112,213 +36,25 @@ function cms_htmlentities($string, $param=ENT_QUOTES, $charset="UTF-8")
  *     ENT_QUOTES   : Will convert both double and single quotes. 
  *     ENT_NOQUOTES : Will leave both double and single quotes unconverted. 
  */
-function my_htmlentities($val)
+function cms_htmlentities($val, $param=ENT_QUOTES, $charset="UTF-8")
 {
 	if ($val == "")
 	{
 		return "";
 	}
 	$val = str_replace( "&#032;", " ", $val ); 
-
-	//Remove sneaky spaces 
-	// $val = str_replace( chr(0xCA), "", $val );   
-
 	$val = str_replace( "&"            , "&amp;"         , $val ); 
 	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val ); 
 	$val = str_replace( "-->"          , "--&#62;"       , $val ); 
 	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val ); 
 	$val = str_replace( ">"            , "&gt;"          , $val ); 
 	$val = str_replace( "<"            , "&lt;"          , $val ); 
-	
-	
 	$val = str_replace( "\""           , "&quot;"        , $val ); 
-
-	// Uncomment it if you need to convert literal newlines 
-	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
-
 	$val = preg_replace( "/\\$/"      , "&#036;"        , $val ); 
-
-	// Uncomment it if you need to remove literal carriage returns 
-	//$val = preg_replace( "/\r/"        , ""              , $val ); 
-
 	$val = str_replace( "!"            , "&#33;"         , $val ); 
 	$val = str_replace( "'"            , "&#39;"         , $val ); 
 	 
-	// Uncomment if you need to convert unicode chars 
-	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val ); 
-
-	// Strip slashes if not already done so. 
-
-	//if ( get_magic_quotes_gpc() ) 
-	//{ 
-	//	$val = stripslashes($val); 
-	//} 
-
-	// Swop user inputted backslashes 
-
-	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
-
 	return $val;
-}
-
-
-/**
- * Enter description here...
- *
- * @param unknown $val
- * @return unknown
- */
-function cms_utf8_entities($val)
-{
-	if ($val == "")
-	{
-		return "";
-	}
-	$val = str_replace( "&#032;", " ", $val ); 
-
-	//Remove sneaky spaces 
-	// $val = str_replace( chr(0xCA), "", $val );   
-
-	$val = str_replace( "&"            , "\u0026"         , $val ); 
-#	$val = str_replace( "<!--"         , "&#60;&#33;--"  , $val ); 
-#	$val = str_replace( "-->"          , "--&#62;"       , $val ); 
-#	$val = preg_replace( "/<script/i"  , "&#60;script"   , $val ); 
-	$val = str_replace( ">"            , "\u003E"          , $val ); 
-	$val = str_replace( "<"            , "\u003C"          , $val ); 
-	
-	
-	$val = str_replace( "\""           , "\u0022"        , $val ); 
-
-	// Uncomment it if you need to convert literal newlines 
-	//$val = preg_replace( "/\n/"        , "<br>"          , $val ); 
-
-	#$val = preg_replace( "/\\$/"      , "&#036;"        , $val ); 
-
-	// Uncomment it if you need to remove literal carriage returns 
-	//$val = preg_replace( "/\r/"        , ""              , $val ); 
-
-	$val = str_replace( "!"            , "\u0021"         , $val ); 
-	$val = str_replace( "'"            , "\u0027"         , $val ); 
-	 
-	// Uncomment if you need to convert unicode chars 
-	//$val = preg_replace("/&#([0-9]+);/s", "&#\1;", $val ); 
-
-	// Strip slashes if not already done so. 
-
-	//if ( get_magic_quotes_gpc() ) 
-	//{ 
-	//	$val = stripslashes($val); 
-	//} 
-
-	// Swop user inputted backslashes 
-
-	//$val = preg_replace( "/\(?!&#|?#)/", "&#092;", $val );
-
-	return $val;
-}
-
-function cms_utf8entities($val)
-{
-	return cms_utf8_entities($val);
-}
-
-//Taken from http://www.webmasterworld.com/forum88/164.htm
-function nl2pnbr( $text )
-{
-	// Use \n for newline on all systems
-	$text = preg_replace("/(\r\n|\n|\r)/", "\n", $text);
-
-	// Only allow two newlines in a row.
-	$text = preg_replace("/\n\n+/", "\n\n", $text);
-
-	// Put <p>..</p> around paragraphs
-	$text = preg_replace('/\n?(.+?)(\n\n|\z)/s', "<p>$1</p>", $text);
-
-	// Convert newlines not preceded by </p> to a <br /> tag
-	$text = preg_replace('|(?<!</p>)\s*\n|', "<br />", $text);
-
-	return $text;
-}
-
-/**
-* Debug function to display $var nicely in html.
-* 
-* @param mixed $var
-* @param string $title (optional)
-* @param boolean $echo_to_screen (optional)
-* @return string
-*/
-function debug_display($var, $title="", $echo_to_screen = true, $use_html = true)
-{
-	global $gCms;
-	$variables =& $gCms->variables;
-
-	$starttime = microtime();
-	if (isset($variables['starttime']))
-		$starttime = $variables['starttime'];
-	else
-		$variables['starttime'] = $starttime;
-	
-	$titleText = "Debug: ";
-	if($title)
-	{
-		$titleText = "Debug display of '$title':";
-	}
-	//$titleText .= '(' . microtime_diff($starttime,microtime()) . ')';
-	
-	if (function_exists('memory_get_usage'))
-	{
-		$titleText .= ' - ('.memory_get_usage().')';
-	}
-
-	ob_start();
-	if ($use_html)
-		echo "<div><b>$titleText</b>\n";
-
-	if(FALSE == empty($var))
-	{
-		if ($use_html)
-		{
-			echo '<pre>';
-		}
-		if(is_array($var))
-		{
-			echo "Number of elements: " . count($var) . "\n";
-			print_r($var);
-		}
-		elseif(is_object($var))
-		{
-			print_r($var);
-		}
-		elseif(is_string($var))
-		{
-			print_r(htmlentities(str_replace("\t", '  ', $var)));
-		}
-		elseif(is_bool($var))
-		{
-			echo $var === true ? 'true' : 'false';
-		}
-		else
-		{
-			print_r($var);
-		}
-		if ($use_html)
-		{
-			echo '</pre>';
-		}
-	}
-	if ($use_html)
-		echo "</div>\n";
-
-	$output = ob_get_contents();
-	ob_end_clean();
-
-	if($echo_to_screen)
-	{
-		echo $output;
-	}
-
-	return $output;
 }
 
 /**
@@ -329,50 +65,7 @@ function debug_display($var, $title="", $echo_to_screen = true, $use_html = true
  */
 function debug_buffer($var, $title="")
 {
-	global $gCms;
-	if ($gCms)
-	{
-		$config = cms_config();
-		//debug_to_log($var, $title='');
-		if($config["debug"] == true)
-		{
-			$gCms->errors[] = debug_display($var, $title, false, true);
-		}
-	}
-}
-
-function debug_sql($str, $newline)
-{
-	global $gCms;
-	if ($gCms)
-	{
-		$config =& $gCms->GetConfig();
-		if($config["debug"] == true)
-		{
-			$gCms->errors[] = debug_display($str, '', false, true);
-		}
-	}
-}
-
-function create_encoding_dropdown($name = 'encoding', $selected = '')
-{
-	$result = '';
-
-	$encodings = array(''=>'Default','UTF-8'=>'Unicode','ISO-8859-1'=>'Latin 1/West European','ISO-8859-2'=>'Latin 2/Central European','ISO-8859-3'=>'Latin 3/South European','ISO-8859-4'=>'Latin 4/North European','ISO-8859-5'=>'Cyrilic','ISO-8859-6'=>'Arabic','ISO-8859-7'=>'Greek','ISO-8859-8'=>'Hebrew','ISO-8859-9'=>'Latin 5/Turkish','ISO-8859-11'=>'TIS-620/Thai','ISO-8859-14'=>'Latin 8','ISO-8859-15'=>'Latin 9','Big5'=>'Taiwanese','GB2312'=>'Chinese','EUC-JP'=>'Japanese','EUC-KR'=>'Korean','KOI8-R'=>'Russian','Windows-1250'=>'Central Europe','Windows-1251'=>'Cyrilic','Windows-1252'=>'Latin 1','Windows-1253'=>'Greek','Windows-1254'=>'Turkish','Windows-1255'=>'Hebrew','Windows-1256'=>'Arabic','Windows-1257'=>'Baltic','Windows-1258'=>'Vietnam');
-
-	$result .= '<select name="'.$name.'">';
-	foreach ($encodings as $key=>$value)
-	{
-		$result .= '<option value="'.$key.'"';
-		if ($selected == $key)
-		{
-			$result .= ' selected="selected"';
-		}
-		$result .= '>'.$key.($key!=''?' - ':'').$value.'</option>';
-	}
-	$result .= '</select>';
-
-	return $result;
+	CmsProfiler::get_instance()->mark(print_r($var));
 }
 
 function filespec_is_excluded( $file, $excludes )
