@@ -185,131 +185,6 @@ function set_preference($userid, $prefname, $value)
 		$db->Execute($query, array($value, $userid, $prefname));
 	}
 }
-
-/**
- * Returns the stylesheet for the given templateid.  Returns a hash with encoding and stylesheet entries.
- *
- * @since 0.1
- */
-function get_stylesheet($template_id, $media_type = '')
-{
-	$result = array();
-	$css = "";
-
-	global $gCms;
-	$db = cms_db();
-	$templateops = $gCms->GetTemplateOperations();
-
-	$templateobj = FALSE;
-
-	#Grab template id and make sure it's actually "somewhat" valid
-	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-	{
-		#Ok, it's valid, let's load the bugger
-		$templateobj =& $templateops->LoadTemplateById($template_id);
-	}
-
-	#If it's valid after loading, then start the process...
-	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
-	{
-		#Grab the encoding
-		$result['encoding'] = CmsResponse::get_encoding();
-
-		#Load in the "standard" template CSS if media type is empty
-		if ($media_type == '')
-		{
-			if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
-			{
-				$css .= $templateobj->stylesheet;
-			}
-		}
-
-		#Handle "advanced" CSS Management
-		$cssquery = "SELECT css_text FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc ca
-			WHERE	id		= assoc_css_id
-			AND		assoc_type	= 'template'
-			AND		assoc_to_id = ?
-			AND		c.media_type = ? ORDER BY ca.create_date";
-		$cssresult =& $db->Execute($cssquery, array($template_id, $media_type));
-
-		while ($cssresult && $cssline = $cssresult->FetchRow())
-		{
-			$css .= "\n".$cssline['css_text']."\n";
-		}
-		
-		if ($cssresult) $cssresult->Close();
-	}
-	else
-	{
-		$result['nostylesheet'] = true;
-		$result['encoding'] = CmsResponse::get_encoding();
-	}
-
-	#$css = preg_replace("/[\r\n]/", "", $css); //hack for tinymce
-	$result['stylesheet'] = $css;
-
-	return $result;
-}
-
-function get_stylesheet_media_types($template_id)
-{
-	$result = array();
-
-	global $gCms;
-	$db =& $gCms->GetDb();
-	$templateops =& $gCms->GetTemplateOperations();
-
-	$templateobj = FALSE;
-
-	#Grab template id and make sure it's actually "somewhat" valid
-	if (isset($template_id) && is_numeric($template_id) && $template_id > -1)
-	{
-		#Ok, it's valid, let's load the bugger
-		$templateobj = $templateops->LoadTemplateById($template_id);
-		if (isset($templateobj->stylesheet) && $templateobj->stylesheet != '')
-		{
-			$result[] = '';
-		}
-	}
-
-	#If it's valid after loading, then start the process...
-	if ($templateobj !== FALSE && ($templateobj->active == '1' || $templateobj->active == TRUE) )
-	{
-		#Handle "advanced" CSS Management
-		$cssquery = "SELECT DISTINCT media_type FROM ".cms_db_prefix()."css c, ".cms_db_prefix()."css_assoc
-			WHERE	id		= assoc_css_id
-			AND		assoc_type	= 'template'
-			AND		assoc_to_id = ?";
-		$cssresult = &$db->Execute($cssquery, array($template_id));
-
-		while ($cssresult && !$cssresult->EOF)
-		{
-			if (!in_array($cssresult->fields['media_type'], $result))
-				$result[] =& $cssresult->fields['media_type'];
-			$cssresult->MoveNext();
-		}
-		
-		if ($cssresult) $cssresult->Close();
-	}
-
-	return $result;
-}
-
-/**
- * Strips slashes from an array of values.
- */
-function & stripslashes_deep(&$value) 
-{ 
-        if (is_array($value)) 
-        { 
-                $value = array_map('stripslashes_deep', $value); 
-        } 
-        elseif (!empty($value) && is_string($value)) 
-        { 
-                $value = stripslashes($value); 
-        } 
-        return $value;
-}
 	
 function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $encoding='', $stylesheet='', $width='80', $height='15',$forcewysiwyg='',$wantedsyntax='')
 {
@@ -381,18 +256,6 @@ function create_textarea($enablewysiwyg, $text, $name, $classname='', $id='', $e
 	return $result;
 }
 
-/*
- * Displays the login form (frontend)
- */
-function display_login_form()
-{
-	return '<form method=post action="'.$_SERVER['PHP_SELF'].'">'.
-	'Name: <input type="text" name="login_name"><br>'.
-	'Password: <input type="password" name="login_password"><br>'.
-	'<input type="submit">'.
-	'</form>';
-}
-
 /**
  * Creates a string containing links to all the pages.
  * @param page - the current page to display
@@ -400,8 +263,8 @@ function display_login_form()
  * @param limit - the amount of items to list per page
  * @return a string containing links to all the pages (ex. next 1,2 prev)
  */
- function pagination($page, $totalrows, $limit)
- {
+function pagination($page, $totalrows, $limit)
+{
 	$page_string = "";
 	$from = ($page * $limit) - $limit;
 	$numofpages = $totalrows / $limit;
@@ -451,39 +314,6 @@ function display_login_form()
 		}
 	}
 	return $page_string;
- }
-
-
-function wysiwyg_form_submit()
-{
-	global $gCms;
-	$result = '';
-
-	$userid = get_userid(false);
-    if( $userid != '' ) 
-    {
-	    $wysiwyg = get_preference($userid, 'wysiwyg');
-    }
-
-	if (isset($wysiwyg) && $wysiwyg != '')
-	{
-		#Perform the content title callback
-		reset($gCms->modules);
-		while (list($key) = each($gCms->modules))
-		{
-			$value =&  $gCms->modules[$key];
-			if ($gCms->modules[$key]['installed'] == true &&
-				$gCms->modules[$key]['active'] == true)
-			{
-				@ob_start();
-				$gCms->modules[$key]['object']->WYSIWYGPageFormSubmit();
-				$result = @ob_get_contents();
-				@ob_end_clean();
-			}
-		}
-	}
-
-	return $result;
 }
 
 # vim:ts=4 sw=4 noet
