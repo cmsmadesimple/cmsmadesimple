@@ -27,7 +27,6 @@ $dirname = ROOT_DIR;
 //Load stuff that hasn't been moved to static methods yet
 require_once(cms_join_path($dirname,'lib','misc.functions.php'));
 require_once(cms_join_path($dirname,'lib','page.functions.php'));
-require_once(cms_join_path($dirname,'lib','translation.functions.php'));
 
 //Setup the session
 CmsSession::setup();
@@ -51,7 +50,7 @@ CmsContentOperations::find_content_types();
 CmsContentOperations::find_block_types();
 
 #Set a umask
-$global_umask = get_site_preference('global_umask','');
+$global_umask = CmsApplication::get_preference(('global_umask','');
 if( $global_umask != '' )
 {
 	@umask( octdec($global_umask) );
@@ -59,7 +58,7 @@ if( $global_umask != '' )
 
 #Set the locale if it's set
 #either in the config, or as a site preference.
-$frontendlang = get_site_preference('frontendlang','');
+$frontendlang = CmsApplication::get_preference(('frontendlang','');
 if (CmsConfig::exists('locale') && CmsConfig::get('locale') != '')
 {
     $frontendlang = CmsConfig::get('locale');

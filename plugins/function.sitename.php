@@ -18,7 +18,7 @@
 
 function smarty_cms_function_sitename($params, &$smarty)
 {
-	$result = get_site_preference('sitename', 'CMSMS Site');
+	$result = CmsApplication::get_preference(('sitename', 'CMSMS Site');
 	if (array_key_exists('assign', $params))
 	{
 		$smarty->assign($params['assign'], $result);

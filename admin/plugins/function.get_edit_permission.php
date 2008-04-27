@@ -26,7 +26,7 @@ function smarty_function_get_edit_permission($params, &$smarty)
 
 	$result = false;
 
-	if ($params['modify_any_page'] == true || check_ownership($params['userid'], $params['id']) || quick_check_authorship($params['id'], $params['mypages']))
+	if ($params['modify_any_page'] == true)
 	{
 		$result = true;
 	}

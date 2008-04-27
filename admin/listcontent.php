@@ -121,7 +121,7 @@ function setup_smarty($themeObject)
 	$smarty->assign('modify_page_structure', check_permission($userid, 'Modify Page Structure'));
 	$smarty->assign('check_modify_all', check_permission($userid, 'Modify Any Page'));
 	$smarty->assign('remove_pages', check_permission($userid, 'Remove Pages'));
-	$smarty->assign('mypages', author_pages($userid));
+	$smarty->assign('mypages', array()); //TODO: Fix me!
 	
 	//Setup the images
 	$smarty->assign('newobject_image', $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon'));
@@ -346,10 +346,7 @@ function setactive($contentid, $active = true)
 	$userid = get_userid();
 	
 	// to activate a page, you must be admin, owner, or additional author
-	$permission = (check_modify_all($userid) || 
-			check_ownership($userid, $contentid) ||
-			check_authorship($userid, $contentid) ||
-			check_permission($userid, 'Modify Page Structure')
+	$permission = (check_modify_all($userid) || check_permission($userid, 'Modify Page Structure')
 	);
 
 	if($permission)

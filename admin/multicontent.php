@@ -311,7 +311,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_persmission($userid, 'Modify Page Structure'));
 
 			if ($permission)
 			{
@@ -331,7 +331,7 @@ else
 
 		foreach ($nodelist as $node)
 		{
-			$permission = ($modifyall || check_ownership($userid, $node->Id()) || check_authorship($userid, $node->Id()) || check_persmission($userid, 'Modify Page Structure'));
+			$permission = ($modifyall || check_persmission($userid, 'Modify Page Structure'));
 
 			if ($permission)
 			{

@@ -934,7 +934,7 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		if ($returnid != '')
 		{
-			if (!$this->restrict_unknown_params && get_site_preference('allowparamcheckwarnings', 0))
+			if (!$this->restrict_unknown_params && CmsApplication::get_preference(('allowparamcheckwarnings', 0))
 			{
 				trigger_error('WARNING: '.$this->get_name().' is not properly cleaning input params.', E_USER_WARNING);
 			}
@@ -1783,7 +1783,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function get_preference($preference_name, $defaultvalue='')
 	{
-		return get_site_preference($this->get_name() . "_mapi_pref_" . $preference_name, $defaultvalue);
+		return CmsApplication::get_preference(($this->get_name() . "_mapi_pref_" . $preference_name, $defaultvalue);
 	}
 
 	/**
@@ -1794,7 +1794,7 @@ abstract class CmsModuleBase extends CmsObject
 	 */
 	public function set_preference($preference_name, $value)
 	{
-		return set_site_preference($this->get_name() . "_mapi_pref_" . $preference_name, $value);
+		return CmsApplication::set_preference($this->get_name() . "_mapi_pref_" . $preference_name, $value);
 	}
 
 	/**
@@ -1807,9 +1807,9 @@ abstract class CmsModuleBase extends CmsObject
 	{
 		if( $preference_name == '' )
 		{
-			return remove_site_preference("^".$this->get_name()."_mapi_pref_",true);
+			return CmsApplication::remove_preference("^".$this->get_name()."_mapi_pref_",true);
 		}
-		return remove_site_preference($this->GetName() . "_mapi_pref_" . $preference_name);
+		return CmsApplication::remove_preference($this->GetName() . "_mapi_pref_" . $preference_name);
 	}
 
     /**

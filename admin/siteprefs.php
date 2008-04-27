@@ -473,7 +473,7 @@ $smarty->assign('lang_list', $lang_list);
 			  while (($file = readdir($dir)) !== false) {
 				  	if (@is_dir("themes/".$file) && ($file[0]!='.')) {
 			?>
-		  		<option value="<?php echo $file?>"<?php echo (get_site_preference('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?php echo $file?></option>				  
+		  		<option value="<?php echo $file?>"<?php echo (CmsApplication::get_preference(('logintheme', 'default')==$file?" selected=\"selected\"":"")?>><?php echo $file?></option>				  
 				  <?php
 		  	}
 		  }

@@ -63,10 +63,8 @@ $cms_ajax->register_function('change_block_type');
 $cms_ajax->process_requests();
 
 #See what kind of permissions we have
-$access = check_ownership($userid, $content_id) || check_permission($userid, 'Modify Any Page');
+$access = check_permission($userid, 'Modify Any Page');
 $adminaccess = $access;
-if (!$access)
-	$access = check_authorship($userid, $content_id);
 
 require_once("header.php");
 CmsAdminTheme::inject_header_text($cms_ajax->get_javascript()."\n");

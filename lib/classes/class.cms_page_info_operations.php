@@ -73,13 +73,13 @@ class CmsPageInfoOperations extends CmsObject
 		else
 		{
 			#Page isn't found.  Should we setup an alternate page?
-			#if (get_site_preference('custom404template') > 0 && get_site_preference('enablecustom404') == "1")
-			if (get_site_preference('enablecustom404') == "1")
+			#if (CmsApplication::get_preference(('custom404template') > 0 && CmsApplication::get_preference(('enablecustom404') == "1")
+			if (CmsApplication::get_preference(('enablecustom404') == "1")
 			{
 				$onepageinfo = new CmsPageInfo();
 				$onepageinfo->cachable = false;
-				if (get_site_preference('custom404template') > 0)
-					$onepageinfo->template_id = get_site_preference('custom404template');
+				if (CmsApplication::get_preference(('custom404template') > 0)
+					$onepageinfo->template_id = CmsApplication::get_preference(('custom404template');
 				else
 					$onepageinfo->template_id = 'notemplate';
 				$onepageinfo->template_modified_date = time();

@@ -73,7 +73,7 @@ if (isset($_GET["message"])) {
 		$counter = 0;
 		foreach ($htmlbloblist as $onehtmlblob){
 			if ($counter < $page*$limit && $counter >= ($page*$limit)-$limit) {
-            if ($modifyall ||  quick_check_authorship($onehtmlblob->id, $myblobs))
+            if ($modifyall)
 				{
 				echo "<tr class=\"$currow\" onmouseover=\"this.className='".$currow.'hover'."';\" onmouseout=\"this.className='".$currow."';\">\n";
 				echo "<td><a href=\"edithtmlblob.php?htmlblob_id=".$onehtmlblob->id."\">".$onehtmlblob->name."</a></td>\n";

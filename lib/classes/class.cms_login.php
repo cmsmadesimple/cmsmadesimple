@@ -80,7 +80,7 @@ class CmsLogin extends CmsObject
 			if (isset($_COOKIE["cmsms_user_id"]) && isset($_COOKIE["cmsms_passhash"]))
 			{
 				debug_buffer('Cookies found, do a passhash check');
-				if (check_passhash(isset($_COOKIE["cmsms_user_id"]), isset($_COOKIE["cmsms_passhash"])))
+				if (self::check_passhash(isset($_COOKIE["cmsms_user_id"]), isset($_COOKIE["cmsms_passhash"])))
 				{
 					//debug_buffer('passhash check succeeded...  creating session object');
 					self::generate_user_object($_COOKIE["cmsms_user_id"]);

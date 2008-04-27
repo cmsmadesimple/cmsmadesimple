@@ -593,7 +593,7 @@ class CmsAdminTheme extends CmsObject
 			check_permission($this->userid, 'Modify Page Structure')
 			);
 
-		$thisUserPages = author_pages($this->userid);
+		$thisUserPages = array(); //TODO: Fix me!!!
 		if (count($thisUserPages) > 0)
 		{
 			$this->perms['pagePerms'] = true;
