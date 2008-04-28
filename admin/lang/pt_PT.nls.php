@@ -5,7 +5,7 @@
 #Portuguese 
 
 #Native language name
-$nls['language']['pt_PT'] = 'Portugus de Portugal';
+$nls['language']['pt_PT'] = 'Português de Portugal';
 $nls['englishlang']['pt_PT'] = 'Portuguese';
 
 #Possible aliases for language
