@@ -226,6 +226,7 @@ class Content extends ContentBase
 	    $this->GetAdditionalContentBlocks(); // this is needed as this is the first time we get a call to our class when editing.
 	    foreach($this->additionalContentBlocks as $blockName => $blockNameId)
 	    {
+		if (empty($blockName)) continue; 
 		if ($blockNameId['oneline'] == 'true')
 		{
 		    $ret[]= array(ucwords($blockName).':','<input type="text" name="'.$blockNameId['id'].'" value="'.cms_htmlentities($this->GetPropertyValue($blockNameId['id']), ENT_NOQUOTES, get_encoding('')).'" />');
