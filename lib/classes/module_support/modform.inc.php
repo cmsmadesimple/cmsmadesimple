@@ -240,7 +240,7 @@ function cms_module_CreateInputSubmit(&$modinstance, $id, $name, $value='', $add
 	}
 	if ($confirmtext != '' )
 	  {
-		$text .= 'onclick="return confirm(\''.$confirmtext.'\');"';
+		$text .= ' onclick="return confirm(\''.$confirmtext.'\');"';
 	  }
 	if ($addttext != '')
 	{
