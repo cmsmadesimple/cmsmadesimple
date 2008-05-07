@@ -69,9 +69,6 @@ if (isset($_POST["content"])) $content = $_POST["content"];
 $stylesheet = "";
 if (isset($_POST["stylesheet"])) $stylesheet = $_POST["stylesheet"];
 
-$encoding = "";
-if (isset($_POST["encoding"])) $encoding = $_POST["encoding"];
-
 $preview = false;
 if (isset($_POST["preview"])) $preview = true;
 
@@ -139,7 +136,6 @@ if ($access)
 			$newtemplate->name = $template;
 			$newtemplate->content = $content;
 			$newtemplate->stylesheet = $stylesheet;
-			$newtemplate->encoding = $encoding;
 			$newtemplate->active = $active;
 			$newtemplate->default = 0;
 
@@ -203,7 +199,6 @@ else
 		#$data["template_id"] = $template_id;
 		$data["stylesheet"] = $stylesheet;
 		$data["template"] = $content;
-		$data["encoding"] = $encoding;
 
 		$tmpfname = '';
 		if (is_writable($config["previews_path"]))
@@ -238,18 +233,14 @@ else
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
 			
-			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', $encoding, '', '80', '15','','html')?></p>
+			<p class="pageinput"><?php echo create_textarea(false, $content, 'content', 'pagebigtextarea', 'content', '', '', '80', '15','','html')?></p>
 		</div>
 		<?php if ($templateops->StylesheetsUsed() > 0) { ?>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('stylesheet')?>:</p>
-			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', $encoding, '', '80', '15','','css')?></p>
+			<p class="pageinput"><?php echo create_textarea(false, $stylesheet, 'stylesheet', 'pagebigtextarea', '', '', '', '80', '15','','css')?></p>
 		</div>
 		<?php } ?>
-		<div class="pageoverflow">
-			<p class="pagetext"><?php echo lang('encoding')?>:</p>
-			<p class="pageinput"><?php echo create_encoding_dropdown('encoding', $encoding) ?></p>
-		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('active')?>:</p>
 			<p class="pageinput"><input class="pagecheckbox" type="checkbox" name="active" <?php echo ($active == 1?"checked=\"checked\"":"")?> /></p>
