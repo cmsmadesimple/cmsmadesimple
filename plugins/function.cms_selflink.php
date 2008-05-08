@@ -201,14 +201,13 @@ if ( isset($params['urlparams']) && ( strlen($params['urlparams'] > 0 ) ) ) {
 			{
 				#return '';
 				$flatcontent =& $hm->getFlatList();
+				$contentops =& $gCms->GetContentOperations();
+				$defaultid = $contentops->GetDefaultPageID();
 				$number = 0;
 				for ($i = 0; $i < count($flatcontent); $i++)
 				{
 					if ($condition == '-')
 					{
-						global $gCms;
-						$contentops =& $gCms->GetContentOperations();
-						$defaultid = $contentops->GetDefaultPageID();
 						if ($flatcontent[$i]->getTag() == $defaultid)
 						{
 							$number = $i;
