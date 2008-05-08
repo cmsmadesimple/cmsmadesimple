@@ -672,7 +672,7 @@ class ContentOperations
 		if ($allcontent !== FALSE && count($allcontent) > 0)
 		{
 			$result .= '<select name="'.$name.'">';
-			$result .= '<option value="-1">None</option>';
+			$result .= '<option value="-1">'.lang('none').'</option>';
 
 			$curhierarchy = '';
 

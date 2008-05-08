@@ -230,7 +230,7 @@ else if (isset($_POST["editsiteprefs"]))
 
 
 $templates = array();
-$templates['-1'] = 'None';
+$templates['-1'] = lang('none');
 
 $query = "SELECT * FROM ".cms_db_prefix()."templates ORDER BY template_name";
 $result = $db->Execute($query);
