@@ -28,7 +28,7 @@ class PageLink extends ContentBase
 	
     function FriendlyName()
     {
-		return 'Page Link';
+	return 'Page Link';
     }
 	
     function SetProperties()
@@ -219,7 +219,6 @@ class PageLink extends ContentBase
       
       global $gCms;
       $contentops =& $gCms->GetContentOperations();
-      echo "DEBUG: page = $page<br/>";
       $destcontent =& $contentops->LoadContentFromId($page);
       $alias = $destcontent->Alias();
       $config = &$gCms->GetConfig();
