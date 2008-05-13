@@ -108,7 +108,11 @@ function cms_module_Lang(&$modinstance)
 		}
 
 		# try to load an admin modifiable version of the lang file if one exists
-		if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php") )
+		if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/$ourlang.php") )
+		  {
+		    include("$dir/module_custom/".$modinstance->GetName()."/lang/$ourlang.php");
+		  }
+		else if( @is_file("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php") )
 		{
 			include("$dir/module_custom/".$modinstance->GetName()."/lang/".$modinstance->DefaultLanguage().".php");
 		}
