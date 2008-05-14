@@ -1107,7 +1107,10 @@ if(!function_exists("readfile"))
       echo file_get_contents($filename);
       $result = @ob_get_contents();
       @ob_end_clean();
-      if( !empty($result) ) return TRUE;
+      if( !empty($result) ) {
+	echo $result;
+        return TRUE;
+      }
       return FALSE;
     }
 }
