@@ -1083,6 +1083,7 @@ function munge_string_to_url($alias, $tolower = false)
 	return $alias;
 }
 
+
 if(!function_exists("file_get_contents"))
 {
    function file_get_contents($filename)
@@ -1095,6 +1096,20 @@ if(!function_exists("file_get_contents"))
 	   else
 		   return false;
    }
+}
+
+
+if(!function_exists("readfile"))
+{
+    function readfile($filename)
+    {
+      @ob_start();
+      echo file_get_contents($filename);
+      $result = @ob_get_contents();
+      @ob_end_clean();
+      if( !empty($result) ) return TRUE;
+      return FALSE;
+    }
 }
 
 // create the array_walk_recursive function in PHP4
