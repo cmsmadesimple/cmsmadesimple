@@ -192,7 +192,7 @@ class ImageManager
 				{
 				$backpath = substr($backpath,strlen($this->getBaseDir()));
 				}
-		    echo '<p class="pageheader">'.$path.'</p>';
+//		    echo '<p class="pageheader">'.$path.'</p>';
 			if($path != '/') {
 					$relative = Files::fixPath($backpath);
 					$full = Files::fixPath($backpath);
