@@ -1421,15 +1421,26 @@ class ContentBase
     /**
      * Does this have children?
      */
-	function HasChildren()
+	function HasChildren($activeonly = false)
 	{
+		if( $activeonly && !($this->Active() || $this->ShowInMenu()))
+			{
+				return false;
+			}
+
 		global $gCms, $config, $sql_queries, $debug_errors;
 		$db = &$gCms->GetDb();
 
 		$result = false;
 
 		$query = "SELECT content_id FROM ".cms_db_prefix()."content WHERE parent_id = ?";
-		$row = &$db->GetRow($query, array($this->mId));
+		$parms = array($this->mId);
+		if( $activeonly )
+			{
+				$query .= ' AND show_in_menu = 1 AND active = 1';
+			}
+
+		$row = &$db->GetRow($query, array($parms));
 
 		if ($row)
 		{
