@@ -175,7 +175,9 @@ if ($message != "") {
 	    <input type="submit" name="cancel" value="<?php echo lang('cancel')?>" class="pagebutton" onmouseover="this.className='pagebuttonhover'" onmouseout="this.className='pagebutton'" />
           </p>
         </div>
+      </form>
     <?php } ?>
+</div><!-- pagecontainer -->
 <?php
 echo '<p class="pageback"><a class="pageback" href="'.$themeObject->BackUrl().'">&#171; '.lang('back').'</a></p>';
 include_once('footer.php');
