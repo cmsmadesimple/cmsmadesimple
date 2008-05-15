@@ -803,6 +803,9 @@ class AdminTheme
             'pagedefaults'=>array('url'=>'pagedefaults.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('pagedefaults')),
                     'description'=>lang('pagedefaultsdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
+            'sitetests'=>array('url'=>'sitetests.php','parent'=>'siteadmin',
+                    'title'=>$this->FixSpaces(lang('sitetests')),
+                    'description'=>lang('sitetestsdescription'),'show_in_menu'=>$this->HasPerm('sitePrefPerms')),
             'adminlog'=>array('url'=>'adminlog.php','parent'=>'siteadmin',
                     'title'=>$this->FixSpaces(lang('adminlog')),
                     'description'=>lang('adminlogdescription'),'show_in_menu'=>$this->HasPerm('adminPerms')),
@@ -1768,7 +1771,7 @@ class AdminTheme
 	    {
 	      if( $value == $selected )
 		{
-		  $output .= sprintf("<option \"selected=selected\" value=\"%s\">%s</option>",
+		  $output .= sprintf("<option selected=\"selected\" value=\"%s\">%s</option>",
 				     $value,$key);
 		}
 	      else
