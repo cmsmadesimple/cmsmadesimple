@@ -22,14 +22,7 @@ function smarty_cms_function_cms_versionname() {
 } ## smarty_function_cms_versionname
 
 function smarty_cms_help_function_cms_versionname() {
-	?>
-	<h3>What does this do?</h3>
-	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
-	<h3>How do I use it?</h3>
-	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code>
-	<h3>What parameters does it take?</h3>
-	<p>It takes no parameters.</p>
-	<?php
+  echo lang('help_function_cms_versionname');
 }
 
 function smarty_cms_about_function_cms_versionname() {

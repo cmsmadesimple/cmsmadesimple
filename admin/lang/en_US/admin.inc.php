@@ -1,4 +1,69 @@
 <?php
+$lang['admin']['help_function_content'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
+<p>Example:</p>
+<pre>{content block="Second Content Block"}</pre>
+<p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
+		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
+		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
+		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
+<p>Example of passing page content to a User Defined Tag as a parameter:</p>
+<pre>
+         {content assign=pagecontent}
+         {table_of_contents thepagecontent="\$pagecontent"}
+</pre>
+</li>
+	</ul>
+EOT;
+
+$lang['admin']['help_function_contact_form'] = <<<EOT
+  <h2>NOTE: This plugin is deprecated</h2>
+    <p>This smarty plugin is deprecated, and may not be included with further versions of CMS Made Simple.  We recommend you use the formbuilder module and it's included contact form.</p>
+	<h3>What does this do?</h3>
+	<p>Display's a contact form. This can be used to allow others to send an email message to the address specified.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{contact_form email="yourname@yourdomain.com"}</code><br>
+	<br>
+	If you would like to send an email to multiple adresses, seperate each address with a comma.</p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li>email - The email address that the message will be sent to.</li>
+		<li><em>(optional)</em>style - true/false, use the predefined styles. Default is true.</li>
+		<li><em>(optional)</em>subject_get_var - string, allows you to specify which _GET var to use as the default value for subject.
+               <p>Example:</p>
+               <pre>{contact_form email="yourname@yourdomain.com" subject_get_var="subject"}</pre>
+             <p>Then call the page with the form on it like this: /index.php?page=contact&subject=test+subject</p>
+             <p>And the following will appear in the "Subject" box: "test subject"
+           </li>
+		<li><em>(optional)</em>captcha - true/false, use Captcha response test (Captcha module must be installed). Default is false.</li>
+	</ul>
+	</p>
+EOT;
+
+$lang['admin']['help_function_cms_versionname'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This tag is used to insert the current version name of CMS into your template or page.  It doesn't display any extra besides the version name.</p>
+	<h3>How do I use it?</h3>
+	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_versionname}</code>
+	<h3>What parameters does it take?</h3>
+	<p>It takes no parameters.</p>
+EOT;
+
+$lang['admin']['help_function_cms_version'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This tag is used to insert the current version number of CMS into your template or page.  It doesn't display any extra besides the version number.</p>
+	<h3>How do I use it?</h3>
+	<p>This is just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_version}</code>
+	<h3>What parameters does it take?</h3>
+	<p>It takes no parameters.</p>
+EOT;
+
 $lang['admin']['about_function_cms_selflink'] = <<<EOT
 		<p>Author: Ted Kulp &lt;tedkulp@users.sf.net&gt;</p>
 		<p>Version: 1.1</p>

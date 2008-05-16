@@ -135,28 +135,7 @@ function _smarty_cms_function_content_return($result, &$params, &$smarty)
 
 function smarty_cms_help_function_content()
 {
-	?>
-	<h3>What does this do?</h3>
-	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template like: <code>{content}</code>.</p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>block - Allows you to have more than one content block per page.  When multiple content tags are put on a template, that number of edit boxes will be displayed when the page is edited.
-<p>Example:</p>
-<pre>{content block="Second Content Block"}</pre>
-<p>Now, when you edit a page there will a textarea called "Second Content Block".</li>
-		<li><em>(optional)</em>wysiwyg (true/false) - If set to false, then a wysiwyg will never be used while editing this block.  If true, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional)</em>oneline (true/false) - If set to true, then only one edit line will be shown while editing this block.  If false, then it acts as normal.  Only works when block parameter is used.</li>
-		<li><em>(optional)</em>assign - Assigns the content to a smarty parameter, which you can then use in other areas of the page, or use to test whether content exists in it or not.
-<p>Example of passing page content to a User Defined Tag as a parameter:</p>
-<pre>
-         {content assign=pagecontent}
-         {table_of_contents thepagecontent="$pagecontent"}
-</pre>
-</li>
-	</ul>
-	<?php
+  echo lang('help_function_content');
 }
 
 function smarty_cms_about_function_content()
