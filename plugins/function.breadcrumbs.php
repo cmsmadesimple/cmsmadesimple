@@ -164,44 +164,11 @@ function smarty_cms_function_breadcrumbs($params, &$smarty)
 }
 	
 function smarty_cms_help_function_breadcrumbs() {
-// tdh added the classid help text
-?>
-<h3>What does this do?</h3>
-<p>Prints a breadcrumb trail .</p>
-<h3>How do I use it?</h3>
-<p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
-<h3>What parameters does it take?</h3>
-<p>
-<ul>
-<li><em>(optional)</em> <tt>delimiter</tt> - Text to seperate entries in the list (default "&gt;&gt;").</li>
-<li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
-<li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
-    the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
-<li><em>(optional)</em> <tt>root_url</tt> - Override the URL of the root page. Useful for making link be to '/' instead of '/home/'. This requires that the root page be set as the default page.</li>
-
-<li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
-<li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
-<li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
-</ul>
-</p>
-<?php
+  echo lang('help_function_breadcrumbs');
 }
 
 function smarty_cms_about_function_breadcrumbs() {
-?>
-<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
-<p>Version: 1.7</p>
-<p>
-Change History:<br/>
-1.1 - Modified to use new content rewrite (wishy)<br />
-1.2 - Added parameters: delimiter, initial, and root (arl)<br />
-1.3 - Added parameter: classid (tdh / perl4ever)<br />
-1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
-1.5 - Modified to use new hierarchy manager<br />
-1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
-1.7 - Added root_url parameter (elijahlofgren)<br />
-</p>
-<?php
+  echo lang('about_function_breadcrumbs');
 }
 # vim:ts=4 sw=4 noet
 ?>

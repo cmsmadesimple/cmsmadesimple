@@ -1,4 +1,99 @@
 <?php
+$lang['admin']['about_function_cms_module'] = <<<EOT
+	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.0</p>
+	<p>
+	Change History:<br/>
+	None
+	</p>
+EOT;
+$lang['admin']['help_function_cms_module'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This tag is used to insert modules into your templates and pages.  If a module is created to be used as a tag plugin (check it's help for details), then you should be able to insert it with this tag.</p>
+	<h3>How do I use it?</h3>
+	<p>It's just a basic tag plugin.  You would insert it into your template or page like so: <code>{cms_module module="somemodulename"}</code>
+	<h3>What parameters does it take?</h3>
+	<p>There is only one required parameter.  All other parameters are passed on to the module.
+	<ul>
+		<li>module - Name of the module to insert.  This is not case sensitive.</li>
+	</ul>
+	</p>
+EOT;
+
+$lang['admin']['about_function_breadcrumbs'] = <<<EOT
+<p>Author: Marcus Deglos &lt;<a href="mailto:md@zioncore.com">md@zioncore.com</a>&gt;</p>
+<p>Version: 1.7</p>
+<p>
+Change History:<br/>
+1.1 - Modified to use new content rewrite (wishy)<br />
+1.2 - Added parameters: delimiter, initial, and root (arl)<br />
+1.3 - Added parameter: classid (tdh / perl4ever)<br />
+1.4 - Added parameter currentclassid and fixed some bugs (arl)<br />
+1.5 - Modified to use new hierarchy manager<br />
+1.6 - Modified to skip any parents that are marked to be "not shown in menu" except for root<br />
+1.7 - Added root_url parameter (elijahlofgren)<br />
+</p>
+EOT;
+
+$lang['admin']['help_function_breadcrumbs'] = <<<EOT
+<h3>What does this do?</h3>
+<p>Prints a breadcrumb trail .</p>
+<h3>How do I use it?</h3>
+<p>Just insert the tag into your template/page like: <code>{breadcrumbs}</code></p>
+<h3>What parameters does it take?</h3>
+<p>
+<ul>
+<li><em>(optional)</em> <tt>delimiter</tt> - Text to seperate entries in the list (default "&gt;&gt;").</li>
+<li><em>(optional)</em> <tt>initial</tt> - 1/0 If set to 1 start the breadcrumbs with a delimiter (default 0).</li>
+<li><em>(optional)</em> <tt>root</tt> - Page alias of a page you want to always appear as the first page in
+    the list. Can be used to make a page (e.g. the front page) appear to be the root of everything even though it is not.</li>
+<li><em>(optional)</em> <tt>root_url</tt> - Override the URL of the root page. Useful for making link be to '/' instead of '/home/'. This requires that the root page be set as the default page.</li>
+
+<li><em>(optional)</em> <tt>classid</tt> - The CSS class for the non current page names, i.e. the first n-1 pages in the list. If the name is a link it is added to the &lt;a href&gt; tags, otherwise it is added to the &lt;span&gt; tags.</li>
+<li><em>(optional)</em> <tt>currentclassid</tt> - The CSS class for the &lt;span&gt; tag surrounding the current page name.</li>
+<li><em>(optional)</em> <tt>starttext</tt> - Text to append to the front of the breadcrumbs list, something like &quot;You are here&quot;.</li>
+</ul>
+</p>
+EOT;
+
+$lang['admin']['about_function_anchor'] = <<<EOT
+	<p>Author: Ted Kulp&lt;tedkulp@users.sf.net&gt;</p>
+	<p>Version: 1.1</p>
+	<p>
+	Change History:<br/>
+	<strong>Update to version 1.1 from 1.0</strong> <em>2006/07/19</em><br/>
+	Russ added the means to insert a title, a tabindex and a class for the anchor link. Westis added accesskey and changed parameter names to not include 'anchorlink'.<br/>
+	</hr>
+	</p>
+EOT;
+$lang['admin']['help_function_anchor'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Makes a proper anchor link.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{anchor anchor='here' text='Scroll Down'}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p>
+	<ul>
+	<li><tt>anchor</tt> - Where we are linking to.  The part after the #.</li>
+	<li><tt>text</tt> - The text to display in the link.</li>
+	<li><tt>class</tt> - The class for the link, if any</li>
+	<li><tt>title</tt> - The title to display for the link, if any.</li>
+	<li><tt>tabindex</tt> - The numeric tabindex for the link, if any.</li>
+	<li><tt>accesskey</tt> - The accesskey for the link, if any.</li>
+	<li><em>(optional)</em> <tt>onlyhref</tt> - Only display the href and not the entire link. No other options will work</li>
+	</ul>
+	</p>
+EOT;
+
+$lang['admin']['help_function_site_mapper'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier, and to simplify creating a sitemap.</p>
+<h3>How do I use it?</h3>
+  <p>Just put <code>{site_mapper}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.</p>
+  <p>By default, if no template option is specified the minimal_menu.tpl file will be used.</p>
+  <p>Any parameters used in the tag are available in the menumanager template as <code>{\$menuparams.paramname}</code></p>
+EOT;
+
 $lang['admin']['help_function_redirect_url'] = <<<EOT
 <h3>What does this do?</h3>
   <p>This plugin allows you to easily redirect to a specified url.  It is handy inside of smarty conditional logic (for example, redirect to a splash page if the site is not live yet).</p>
@@ -11,6 +106,7 @@ $lang['admin']['help_function_redirect_page'] = <<<EOT
 <h3>How do I use it?</h3>
 <p>Simply insert this tage into your page or template: <code>{redirect_page page='some-page-alias'}</code></p>
 EOT;
+
 $lang['admin']['of'] = 'of';
 $lang['admin']['first'] = 'First';
 $lang['admin']['last'] = 'Last';

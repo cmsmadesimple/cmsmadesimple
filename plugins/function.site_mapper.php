@@ -27,16 +27,7 @@ function smarty_cms_function_site_mapper($params, &$smarty)
 }
 
 function smarty_cms_help_function_site_mapper() {
-	?>
-	<h3>What does this do?</h3>
-   <p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier, and to simplify creating a sitemap. 
-	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
-	</p>
-	<h3>How do I use it?</h3>
-	<p>Just put <code>{site_mapper}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.
-        <p>By default, if no template option is specified the minimal_menu.tpl file will be used.</p>
-	   <p>Any parameters used in the tag are available in the menumanager template as <code>{$menuparams.paramname}</code></p>
-	<?php
+  echo lang('help_function_site_mapper');
 }
 
 
