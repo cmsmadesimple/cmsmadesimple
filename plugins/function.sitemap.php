@@ -214,6 +214,8 @@ function smarty_cms_function_sitemap($params, &$smarty)
 function smarty_cms_help_function_sitemap()
 {
 ?>
+    <h3>Notice</h3>
+    <p>This plugin is deprecated.  Users should now see the <code>{site_mapper}</code> plugin.</p>
     <h3>What does this do?</h3>
     <p>Prints out a sitemap.</p>
     <h3>How do I use it?</h3>
