@@ -192,9 +192,24 @@ class Tree
 	*
 	* @return bool Any child nodes or not
     */
-	function hasChildren()
+	function hasChildren($activeonly = false)
 	{
-		return !empty($this->nodes->nodes);
+	  if( !$activeonly )
+	    return !empty($this->nodes->nodes);
+
+	  if( empty($this->nodes->nodes) ) return false;
+	  $result = false;
+	  foreach( $this->nodes->nodes as $onenode )
+	    {
+	      $contentobj =& $onenode->content;
+	      if( $contentobj->Active() && $contentobj->ShowInMenu() )
+		{
+		  $result = true;
+		  break;
+		}
+	    }
+
+	  return $result;
 	}
 	
 	/**
@@ -595,9 +610,25 @@ class Tree_Node
 	*
 	* @return bool Any child nodes or not
     */
-	function hasChildren()
+	function hasChildren($activeonly = false)
 	{
-		return !empty($this->nodes->nodes);
+	  if( !$activeonly )
+	    return !empty($this->nodes->nodes);
+
+	  if( empty($this->nodes->nodes) ) return false;
+
+	  $result = false;
+	  foreach( $this->nodes->nodes as $onenode )
+	    {
+	      $contentobj =& $onenode->getContent();
+	      if( $contentobj->Active() && $contentobj->ShowInMenu() )
+		{
+		  $result = true;
+		  break;
+		}
+	    }
+
+	  return $result;
 	}
 	
 	/**
