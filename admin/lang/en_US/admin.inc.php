@@ -1,4 +1,16 @@
 <?php
+$lang['admin']['help_function_redirect_url'] = <<<EOT
+<h3>What does this do?</h3>
+  <p>This plugin allows you to easily redirect to a specified url.  It is handy inside of smarty conditional logic (for example, redirect to a splash page if the site is not live yet).</p>
+<h3>How do I use it?</h3>
+<p>Simply insert this tage into your page or template: <code>{redirect_url urle='www.cmsmadesimple.org'}</code></p>
+EOT;
+$lang['admin']['help_function_redirect_page'] = <<<EOT
+<h3>What does this do?</h3>
+ <p>This plugin allows you to easily redirect to another page.  It is handy inside of smarty conditional logic (for example, redirect to a login page if the user is not logged in.)</p>
+<h3>How do I use it?</h3>
+<p>Simply insert this tage into your page or template: <code>{redirect_page page='some-page-alias'}</code></p>
+EOT;
 $lang['admin']['of'] = 'of';
 $lang['admin']['first'] = 'First';
 $lang['admin']['last'] = 'Last';
