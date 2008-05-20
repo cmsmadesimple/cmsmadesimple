@@ -63,16 +63,7 @@ function smarty_cms_function_edit($params, &$smarty)
 }
 
 function smarty_cms_help_function_edit() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Creates a link to edit the page</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{edit}</code><br></p>
-        <h3>What parameters does it take?</h3>
-        <ul>
-                <li><em>(optional)</em>showbutton - Set to "true" and will show a edit graphic instead of a text link.</li>
-        </ul>
-	<?php
+  echo lang('help_function_edit');
 }
 
 function smarty_cms_about_function_edit() {

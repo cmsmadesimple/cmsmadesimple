@@ -113,25 +113,7 @@ IFRAMECODE;
 }
 
 function smarty_cms_help_function_embed() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Enable inclusion (embeding) of any other application into the CMS. The most usual use could be a forum. 
-	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
-	that works without modifing the embeded application.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{embed url=http://www.google.com/}</code><br></p>
-        <h4>Example to make the iframe larger</h4>
-	<p>Add the following to your style sheet:</p>
-        <pre>#myframe { height: 600px; }</pre>
-        <h3>What parameters does it take?</h3>
-        <ul>
-               <li><em>(required)</em>url - the url to be included 
-               <li><em>(optional)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
-
-        </ul>
-       <p>You must include in your page content {embed url=..} and in the "Metadata:" section (advanced tab) you must put {embed header=true}. Also be sure to put this in between the "head" tags of your template: {metadata}</p>
-                                                      
-	<?php
+  echo lang('help_function_embed');
 }
 
 function smarty_cms_about_function_embed() {

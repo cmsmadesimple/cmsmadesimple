@@ -111,19 +111,7 @@ function smarty_cms_function_googlepr($params, &$smarty) {
 }
 
 function smarty_cms_help_function_googlepr() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Display's a number that represents your google pagerank.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{googlepr}</code><br>
-	<br>
-
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em> domain - The website to display the pagerank for.</li>
-	</ul>
-	</p>
-	<?php
+  echo lang('help_function_googlepr');
 }
 
 function smarty_cms_about_function_googlepr() {

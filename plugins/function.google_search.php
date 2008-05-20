@@ -37,23 +37,7 @@ function smarty_cms_function_google_search($params, &$smarty) {
 }
 
 function smarty_cms_help_function_google_search() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Search's your website using Google's search engine.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br>
-	<br>
-	Note: Google needs to have your website indexed for this to work. You can submit your website to google <a href="http://www.google.com/addurl.html">here</a>.</p>
-	<h3>What if I want to change the look of the textbox or button?</h3>
-	<p>The look of the textbox and button can be changed via css. The textbox is given an id of textSearch and the button is given an id of buttonSearch.</p>
-
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em> domain - This tells google the website domain to search. This script tries to determine this automatically.</li>
-		<li><em>(optional)</em> buttonText - The text you want to display on the search button. The default is "Search Site".</li>
-	</ul>
-	</p>
-	<?php
+  echo lang('help_function_google_search');
 }
 
 function smarty_cms_about_function_google_search() {

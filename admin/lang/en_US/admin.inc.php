@@ -1,4 +1,102 @@
 <?php
+$lang['admin']['help_function_html_blob'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>See the help for global_content for a description.</p>
+EOT;
+$lang['admin']['help_function_googlepr'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Display's a number that represents your google pagerank.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{googlepr}</code><br>
+	<br>
+
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em> domain - The website to display the pagerank for.</li>
+	</ul>
+	</p>
+EOT;
+$lang['admin']['help_function_google_search'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Search's your website using Google's search engine.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{google_search}</code><br>
+	<br>
+	Note: Google needs to have your website indexed for this to work. You can submit your website to google <a href="http://www.google.com/addurl.html">here</a>.</p>
+	<h3>What if I want to change the look of the textbox or button?</h3>
+	<p>The look of the textbox and button can be changed via css. The textbox is given an id of textSearch and the button is given an id of buttonSearch.</p>
+
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em> domain - This tells google the website domain to search. This script tries to determine this automatically.</li>
+		<li><em>(optional)</em> buttonText - The text you want to display on the search button. The default is "Search Site".</li>
+	</ul>
+	</p>
+EOT;
+$lang['admin']['help_function_global_content'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Inserts a global content block into your template or page.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{global_content name='myblob'}</code>, where name is the name given to the block when it was created.</p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li>name - The name of the global content block to display.</li>
+	</ul>
+EOT;
+$lang['admin']['help_function_get_template_vars'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Dumps all the known smarty variables into your page</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{get_template_vars}</code></p>
+	<h3>What parameters does it take?</h3>
+											  <p>None at this time</p>
+EOT;
+$lang['admin']['help_function_embed'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Enable inclusion (embeding) of any other application into the CMS. The most usual use could be a forum. 
+	This implementation is using IFRAMES so older browsers can have problems. Sorry bu this is the only known way 
+	that works without modifing the embeded application.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{embed url=http://www.google.com/}</code><br></p>
+        <h4>Example to make the iframe larger</h4>
+	<p>Add the following to your style sheet:</p>
+        <pre>#myframe { height: 600px; }</pre>
+        <h3>What parameters does it take?</h3>
+        <ul>
+               <li><em>(required)</em>url - the url to be included 
+               <li><em>(optional)</em>header=true - this will generate the header code for good resizing of the IFRAME.</li>
+
+        </ul>
+       <p>You must include in your page content {embed url=..} and in the "Metadata:" section (advanced tab) you must put {embed header=true}. Also be sure to put this in between the "head" tags of your template: {metadata}</p>
+EOT;
+$lang['admin']['help_function_edit'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Creates a link to edit the page</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{edit}</code><br></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>showbutton - Set to "true" and will show a edit graphic instead of a text link.</li>
+        </ul>
+EOT;
+$lang['admin']['help_function_description'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the description (title attribute) of the page.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{description}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p>None at this time.</p>
+EOT;
+$lang['admin']['help_function_created_date'] = <<<EOT
+        <h3>What does this do?</h3>
+        <p>Prints the date and time the page was created.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+        <h3>How do I use it?</h3>
+        <p>Just insert the tag into your template/page like: <code>{created_date format="%A %d-%b-%y %T %Z"}</code></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+        </ul>
+EOT;
 $lang['admin']['help_function_content'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is where the content for your page will be displayed.  It's inserted into the template and changed based on the current page being displayed.</p>

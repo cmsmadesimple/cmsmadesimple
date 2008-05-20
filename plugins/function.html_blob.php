@@ -22,10 +22,7 @@ function smarty_cms_function_html_blob($params, &$smarty)
 }
 
 function smarty_cms_help_function_html_blob() {
-	?>
-	<h3>What does this do?</h3>
-	<p>See the help for global_content for a description.</p>
-	<?php
+  echo lang('help_function_html_blob.php');
 }
 
 function smarty_cms_about_function_html_blob() {
