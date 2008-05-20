@@ -1,4 +1,14 @@
 <?php
+$lang['admin']['login_info_title'] = 'Information';
+$lang['admin']['login_info'] = 'From this point should take into consideration the following parameters';
+$lang['admin']['login_info_params'] = <<<EOT
+<ol> 
+  <li>Cookies enabled in your browser</li> 
+  <li>Javascript enabled in your browser </li> 
+  <li>Windows popup active to the following address:</li> 
+</ol>
+EOT;
+
 $lang['admin']['help_function_news'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=News">News module</a> to make the tag syntax easier. 
