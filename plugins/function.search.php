@@ -23,15 +23,7 @@ function smarty_cms_function_search($params, &$smarty)
 }
 
 function smarty_cms_help_function_search() {
-	?>
-	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module</a> to make the tag syntax easier. 
-	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
-	</p>
-	<h3>How do I use it?</h3>
-	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module help</a>.
-
-	<?php
+  echo lang('help_function_search');
 }
 
 function smarty_cms_about_function_search() {

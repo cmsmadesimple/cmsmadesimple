@@ -21,4 +21,9 @@ function smarty_cms_function_repeat($params, &$smarty)
 	return (isset($params['times']) && intval($params['times']) > 0 ? str_repeat($params['string'], $params['times']) : '');
 	#return str_repeat($params['string'], $params['times']);
 }
+
+function smarty_cms_help_function_repeat()
+{
+  echo lang('help_function_repeat');
+}
 ?>

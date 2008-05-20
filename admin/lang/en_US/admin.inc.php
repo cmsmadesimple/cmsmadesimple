@@ -1,4 +1,86 @@
 <?php
+$lang['admin']['help_function_sitename'] = <<<EOT
+        <h3>What does this do?</h3>
+        <p>Shows the name of the site.  This is defined during install and can bbe modified in the Global Settings section of the admin panel.</p>
+        <h3>How do I use it?</h3>
+        <p>Just insert the tag into your template/page like: <code>{sitename}</code></p>
+        <h3>What parameters does it take?</h3>
+        <p>None</p>
+EOT;
+$lang['admin']['help_function_search'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module</a> to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='Search'}</code> you can now just use <code>{search}</code> to insert the module in a template.
+	</p>
+	<h3>How do I use it?</h3>
+	<p>Just put <code>{search}</code> in a template where you want the search input box to appear. For help about the Search module, please refer to the <a href="listmodules.php?action=showmodulehelp&module=Search">Search module help</a>.
+EOT;
+$lang['admin']['help_function_root_url'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the root url location for the site.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{root_url}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p>None at this time.</p>
+EOT;
+$lang['admin']['help_function_repeat'] = <<<EOT
+  <h3>What does this do?</h3>
+  <p>Repeats a specified sequence of characters, a specified number of times</p>
+  <h3>How do I use it?</h3>
+  <p>Insert a tag similar to the following into your template/page, like this: <code>{recently_updated string='repeat this ' times='3'}</code>
+  <h3>What parameters does it take?</h3>
+  <ul>
+  <li>string='text' - The string to repeat</li>
+  <li>times='num' - The number of times to repeat it.</li>
+  </ul>
+EOT;
+$lang['admin']['help_function_recently_updated'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Outputs a list of recently updated pages.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{recently_updated}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+											 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: <pre>{recently_updated number='15'}</pre></p></li>
+											 	<li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: <pre>{recently_updated leadin='Last Changed'}</pre></p></li>
+											 	<li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: <pre>{recently_updated showtitle='true'}</pre></p></li>											 	
+											 	<li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: <pre>{recently_updated css_class='some_name'}</pre></p></li>											 	
+											 		<li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: <pre>{recently_updated dateformat='D M j G:i:s T Y'}</pre></p></li>											 	
+	</ul>
+	<p>or combined:</p>
+	<pre>{recently_updated number='15' showtitle='false' leadin='Last Change: ' css_class='my_changes' dateformat='D M j G:i:s T Y'}</pre>
+EOT;
+$lang['admin']['help_function_print'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=Printing">Printing module</a> to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='Printing'}</code> you can now just use <code>{print}</code> to insert the module on pages and templates.
+	</p>
+	<h3>How do I use it?</h3>
+	<p>Just put <code>{print}</code> on a page or in a template. For help about the Printing module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=Printing">Printing module help</a>.
+EOT;
+$lang['admin']['help_function_oldprint'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Creates a link to only the content of the page.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
+                <li><em>(optional)</em> popup - Set to "true" and page for printing will by opened in new window.</li>
+                <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
+                <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
+                <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
+                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.
+                <li><em>(optional)</em> title - Text to show for title attribute. If blank show text parameter.</li>
+                <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
+                <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
+                <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
+
+                    <p>Example:</p>
+                     <pre>{print text="Printable Page"}</pre>      
+                     </li>
+        </ul>
+EOT;
 $lang['admin']['login_info_title'] = 'Information';
 $lang['admin']['login_info'] = 'From this point should take into consideration the following parameters';
 $lang['admin']['login_info_params'] = <<<EOT

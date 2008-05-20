@@ -112,29 +112,7 @@ function smarty_cms_function_oldprint($params, &$smarty)
 }
 
 function smarty_cms_help_function_oldprint() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Creates a link to only the content of the page.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
-        <h3>What parameters does it take?</h3>
-        <ul>
-                <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
-                <li><em>(optional)</em> popup - Set to "true" and page for printing will by opened in new window.</li>
-                <li><em>(optional)</em> script - Set to "true" and in print page will by used java script for run print of page.</li>
-                <li><em>(optional)</em> showbutton - Set to "true" and will show a printer graphic instead of a text link.</li>
-                <li><em>(optional)</em> class - class for the link, defaults to "noprint".</li>
-                <li><em>(optional)</em> text - Text to use instead of "Print This Page" for the print link.
-                <li><em>(optional)</em> title - Text to show for title attribute. If blank show text parameter.</li>
-                <li><em>(optional)</em> more - Place additional options inside the &lt;a&gt; link.</li>
-                <li><em>(optional)</em> src_img - Show this image file. Default images/cms/printbutton.gif.</li>
-                <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
-
-                    <p>Example:</p>
-                     <pre>{print text="Printable Page"}</pre>      
-                     </li>
-        </ul>
-	<?php
+  echo lang('help_function_oldprint');
 }
 
 function smarty_cms_about_function_oldprint() {

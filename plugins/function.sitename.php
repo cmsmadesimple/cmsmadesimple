@@ -23,14 +23,7 @@ function smarty_cms_function_sitename($params, &$smarty)
 
 function smarty_cms_help_function_sitename()
 {
-        ?>
-        <h3>What does this do?</h3>
-        <p>Shows the name of the site.  This is defined during install and can bbe modified in the Global Settings section of the admin panel.</p>
-        <h3>How do I use it?</h3>
-        <p>Just insert the tag into your template/page like: <code>{sitename}</code></p>
-        <h3>What parameters does it take?</h3>
-        <p>None</p>
-        <?php
+  echo lang('help_function_sitename');
 }
 
 function smarty_cms_about_function_sitename()
