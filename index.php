@@ -69,12 +69,6 @@ if (!is_writable(TMP_TEMPLATES_C_LOCATION) || !is_writable(TMP_CACHE_LOCATION))
 
 require_once($dirname.'/include.php'); #Makes gCms object
 
-if ($config["debug"] == true)
-  {
-    @ini_set('display_errors',1);
-    @error_reporting(E_ALL);
-  }
-
 $params = array_merge($_GET, $_POST);
 
 $smarty = &$gCms->smarty;
@@ -243,7 +237,8 @@ if (isset($_GET["print"]))
 else
 {
 	#If this is a case where a module doesn't want a template to be shown, just disable caching
-	if (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false')
+  if ((isset($_REQUEST['showtemplate']) && $_REQUEST['showtemplate'] == 'false') || 
+      (isset($smarty->id) && $smarty->id != '' && isset($_REQUEST[$smarty->id.'showtemplate']) && $_REQUEST[$smarty->id.'showtemplate'] == 'false'))
 	{
 		$html = $smarty->fetch('template:notemplate') . "\n";
 	}

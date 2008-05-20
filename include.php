@@ -21,6 +21,12 @@
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
+if ($config["debug"] == true)
+  {
+    @ini_set('display_errors',1);
+    @error_reporting(E_ALL);
+  }
+
 $session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
