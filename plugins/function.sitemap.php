@@ -213,27 +213,7 @@ function smarty_cms_function_sitemap($params, &$smarty)
 
 function smarty_cms_help_function_sitemap()
 {
-?>
-    <h3>Notice</h3>
-    <p>This plugin is deprecated.  Users should now see the <code>{site_mapper}</code> plugin.</p>
-    <h3>What does this do?</h3>
-    <p>Prints out a sitemap.</p>
-    <h3>How do I use it?</h3>
-    <p>Just insert the tag into your template/page like: <code>{sitemap}</code></p>
-    <h3>What parameters does it take?</h3>
-    <p>
-        <ul>
-            <li><em>(optional)</em> <tt>class</tt> - A css_class for the ul-tag which includes the complete sitemap.</li>
-            <li><em>(optional)</em> <tt>start_element</tt> - The hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu. You can use the page alias instead of hierarchy.</li>
-            <li><em>(optional)</em> <tt>number_of_levels</tt> - An integer, the number of levels you want to show in your menu. Should be set to 2 using a delimiter.</li>
-            <li><em>(optional)</em> <tt>delimiter</tt> - Text to separate entries not on depth 1 of the sitemap (i.e. 1.1, 1.2). This is helpful for showing entries on depth 2 beside each other (using css display:inline).</li>
-            <li><em>(optional)</em> <tt>initial 1/0</tt> - If set to 1, begin also the first entries not on depth 1 with a delimiter (i.e. 1.1, 2.1).</li>
-            <li><em>(optional)</em> <tt>relative 1/0</tt> - We are not going to show current page (with the sitemap) - we'll show only his childs.</li>
-            <li><em>(optional)</em> <tt>showall 1/0</tt> - We are going to show all pages if showall is enabled, else we'll only show pages with active menu entries.</li>
-            <li><em>(optional)</em> <tt>add_elements</tt> - A comma separated list of alias names which will be added to the shown pages with active menu entries (showall not enabled).</li>
-        </ul>
-        </p>
-<?php
+  echo lang('help_function_sitemap');
 }
 
 function smarty_cms_about_function_sitemap()

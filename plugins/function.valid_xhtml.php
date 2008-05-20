@@ -86,27 +86,7 @@ function smarty_cms_function_valid_xhtml($params, &$smarty)
 
 function smarty_cms_help_function_valid_xhtml() 
 {
-?>
-<h3>What does this do?</h3>
-<p>Returns a link to the w3c HTML validator.</p>
-<h3>How do I use it?</h3>
-<p>Just insert the tag into your template/page like: <code>{valid_xhtml}</code></p>
-<h3>What parameters does it take?</h3>
-<p>
-    <ul>
-	<li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://validator.w3.org/check/referer is used.</li>
-	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
-	<li><em>(optional)</em> target      (string)     - If set, this will be used as target attribute for the link (a) element</li>
-	<li><em>(optional)</em> image       (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
-	<li><em>(optional)</em> text        (string)     - If set, this will be used for the link text or alternate text for the image. Default is 'valid XHTML 1.0 Transitional'.<br /> When an image is used, the given string will also be used for the image alt attribute (by default, this can be overridden by using the 'alt' parameter).</li>
-	<li><em>(optional)</em> image_class (string)     - Only if 'image' is not set to false. If set, this will be used as class attribute for the image (img) element</li>
-	<li><em>(optional)</em> src         (string)     - Only if 'image' is not set to false. The icon to show. Default is http://www.w3.org/Icons/valid-xhtml10</li>
-	<li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://www.w3.org/Icons/valid-xhtml10)</li>
-	<li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://www.w3.org/Icons/valid-xhtml10)</li>
-	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
-    </ul>
-</p>
-<?php
+  echo lang('help_function_valid_xhtml');
 }
 
 function smarty_cms_about_function_valid_xhtml() 

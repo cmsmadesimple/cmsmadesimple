@@ -1,4 +1,172 @@
 <?php
+$lang['admin']['help_function_current_date'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the current date and time.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{current_date format="%A %d-%b-%y %T %Z"}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+		<li><em>(optional)</em>ucword - If true return uppercase the first character of each word.</li>
+	</ul>
+	</p>
+EOT;
+$lang['admin']['help_function_valid_xhtml'] = <<<EOT
+<h3>What does this do?</h3>
+<p>Returns a link to the w3c HTML validator.</p>
+<h3>How do I use it?</h3>
+<p>Just insert the tag into your template/page like: <code>{valid_xhtml}</code></p>
+<h3>What parameters does it take?</h3>
+<p>
+    <ul>
+	<li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://validator.w3.org/check/referer is used.</li>
+	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
+	<li><em>(optional)</em> target      (string)     - If set, this will be used as target attribute for the link (a) element</li>
+	<li><em>(optional)</em> image       (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
+	<li><em>(optional)</em> text        (string)     - If set, this will be used for the link text or alternate text for the image. Default is 'valid XHTML 1.0 Transitional'.<br /> When an image is used, the given string will also be used for the image alt attribute (by default, this can be overridden by using the 'alt' parameter).</li>
+	<li><em>(optional)</em> image_class (string)     - Only if 'image' is not set to false. If set, this will be used as class attribute for the image (img) element</li>
+	<li><em>(optional)</em> src         (string)     - Only if 'image' is not set to false. The icon to show. Default is http://www.w3.org/Icons/valid-xhtml10</li>
+	<li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://www.w3.org/Icons/valid-xhtml10)</li>
+	<li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://www.w3.org/Icons/valid-xhtml10)</li>
+	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
+    </ul>
+</p>
+EOT;
+$lang['admin']['help_function_valid_css'] = <<<EOT
+<h3>What does this do?</h3>
+<p>Returns a link to the w3c CSS validator.</p>
+<h3>How do I use it?</h3>
+<p>Just insert the tag into your template/page like: <code>{valid_css}</code></p>
+<h3>What parameters does it take?</h3>
+<p>
+    <ul>
+        <li><em>(optional)</em> url         (string)     - The URL used for validation, if none is given http://jigsaw.w3.org/css-validator/check/referer is used.</li>
+	<li><em>(optional)</em> class       (string)     - If set, this will be used as class attribute for the link (a) element</li>
+	<li><em>(optional)</em> target      (string)     - If set, this will be used as target attribute for the link (a) element</li>
+	<li><em>(optional)</em> image       (true/false) - If set to false, a text link will be used instead of an image/icon.</li>
+	<li><em>(optional)</em> text        (string)     - If set, this will be used for the link text or alternate text for the image. Default is 'Valid CSS 2.1'.<br /> When an image is used, the given string will also be used for the image alt attribute (by default, this can be overridden by using the 'alt' parameter).</li>
+	<li><em>(optional)</em> image_class (string)     - Only if 'image' is not set to false. If set, this will be used as class attribute for the image (img) element</li>
+        <li><em>(optional)</em> src         (string)     - Only if 'image' is not set to false. The icon to show. Default is http://jigsaw.w3.org/css-validator/images/vcss</li>
+        <li><em>(optional)</em> width       (string)     - Only if 'image' is not set to false. The image width. Default is 88 (width of http://jigsaw.w3.org/css-validator/images/vcss)</li>
+        <li><em>(optional)</em> height      (string)     - Only if 'image' is not set to false. The image height. Default is 31 (height of http://jigsaw.w3.org/css-validator/images/vcss)</li>
+	<li><em>(optional)</em> alt         (string)     - Only if 'image' is not set to false. The alternate text ('alt' attribute) for the image (element). If none is given the link text will be used.</li>
+    </ul>
+</p>
+EOT;
+$lang['admin']['help_function_title'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the title of the page.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{title}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p>None at this time.</p>
+EOT;
+$lang['admin']['help_function_stylesheet'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
+		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
+	</ul>
+	</p>
+EOT;
+$lang['admin']['help_function_stopexpandcollapse'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Enables content to be expandable and collapsable. Like the following:<br />
+	<a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
+
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like:<br />
+	<br />
+	<code>{startExpandCollapse id="name" title="Click Here"}<br />
+	This is all the content the user will see when they click the title "Click Here" above. It will display all the content that is between the {startExpandCollapse} and {stopExpandCollapse} when clicked.<br />
+	{stopExpandCollapse}
+	</code>
+	<br />
+	<br />
+	Note: If you intend to use this multiple times on a single page each startExpandCollapse tag must have a unique id.</p>
+	<h3>What if I want to change the look of the title?</h3>
+	<p>The look of the title can be changed via css. The title is wrapped in a div with the id you specify.</p>
+
+	<h3>What parameters does it take?</h3>
+	<p>
+	<i>startExpandCollapse takes the following parameters</i><br />
+	&nbsp; &nbsp;id - A unique id for the expand/collapse section.<br />
+	&nbsp; &nbsp;title - The text that will be displayed to expand/collapse the content.<br />
+	<i>stopExpandCollapse takes no parameters</i><br />
+	</p>
+EOT;
+$lang['admin']['help_function_startexpandcollapse'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Enables content to be expandable and collapsable. Like the following:<br />
+	<a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
+
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{startExpandCollapse id="name" title="Click Here"}</code>. Also, you must use the {stopExpandCollapse} at the end of the collapseable content. Here is an example:<br />
+	<br />
+	<code>{startExpandCollapse id="name" title="Click Here"}<br />
+	This is all the content the user will see when they click the title "Click Here" above. It will display all the content that is between the {startExpandCollapse} and {stopExpandCollapse} when clicked.<br />
+	{stopExpandCollapse}
+	</code>
+	<br />
+	<br />
+	Note: If you intend to use this multiple times on a single page each startExpandCollapse tag must have a unique id.</p>
+	<h3>What if I want to change the look of the title?</h3>
+	<p>The look of the title can be changed via css. The title is wrapped in a div with the id you specify.</p>
+
+	<h3>What parameters does it take?</h3>
+	<p>
+	<i>startExpandCollapse takes the following parameters</i><br />
+	&nbsp; &nbsp;id - A unique id for the expand/collapse section.<br />
+	&nbsp; &nbsp;title - The text that will be displayed to expand/collapse the content.<br />
+	<i>stopExpandCollapse takes no parameters</i><br />
+	</p>
+EOT;
+$lang['admin']['help_function_sitemap'] = <<<EOT
+    <h3>Notice</h3>
+    <p>This plugin is deprecated.  Users should now see the <code>{site_mapper}</code> plugin.</p>
+    <h3>What does this do?</h3>
+    <p>Prints out a sitemap.</p>
+    <h3>How do I use it?</h3>
+    <p>Just insert the tag into your template/page like: <code>{sitemap}</code></p>
+    <h3>What parameters does it take?</h3>
+    <p>
+        <ul>
+            <li><em>(optional)</em> <tt>class</tt> - A css_class for the ul-tag which includes the complete sitemap.</li>
+            <li><em>(optional)</em> <tt>start_element</tt> - The hierarchy of your element (ie : 1.2 or 3.5.1 for example). This parameter sets the root of the menu. You can use the page alias instead of hierarchy.</li>
+            <li><em>(optional)</em> <tt>number_of_levels</tt> - An integer, the number of levels you want to show in your menu. Should be set to 2 using a delimiter.</li>
+            <li><em>(optional)</em> <tt>delimiter</tt> - Text to separate entries not on depth 1 of the sitemap (i.e. 1.1, 1.2). This is helpful for showing entries on depth 2 beside each other (using css display:inline).</li>
+            <li><em>(optional)</em> <tt>initial 1/0</tt> - If set to 1, begin also the first entries not on depth 1 with a delimiter (i.e. 1.1, 2.1).</li>
+            <li><em>(optional)</em> <tt>relative 1/0</tt> - We are not going to show current page (with the sitemap) - we'll show only his childs.</li>
+            <li><em>(optional)</em> <tt>showall 1/0</tt> - We are going to show all pages if showall is enabled, else we'll only show pages with active menu entries.</li>
+            <li><em>(optional)</em> <tt>add_elements</tt> - A comma separated list of alias names which will be added to the shown pages with active menu entries (showall not enabled).</li>
+        </ul>
+        </p>
+EOT;
+$lang['admin']['help_function_adsense'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Google adsense is a popular advertising program for websites.  This tag will take the basic parameters that would be provided by the adsense program and puts them in a easy to use tag that makes your templates look much cleaner.  See <a href="http://www.google.com/adsense" target="_blank">here</a> for more details on adsense.</p>
+	<h3>How do I use it?</h3>
+	<p>First, sign up for a google adsense account and get the parameters for your ad.  Then just use the tag in your page/template like so: <code>{adsense ad_client="pub-random#" ad_width="120" ad_height="600" ad_format="120x600_as"}</code>
+	<h3>What parameters does it take?</h3>
+	<p>All parameters are optional, though skipping one might not necessarily made the ad work right.  Options are:
+	<ul>
+		<li>ad_client - This would be the pub_random# id that would represent your adsense account number</li>
+		<li>ad_width - width of the ad</li>
+		<li>ad_height - height of the ad</li>
+		<li>ad_format - "format" of the ad <em>e.g. 120x600_as</em></li>
+		<li>ad_channel - channels are an advanced feature of adsense.  Put it here if you use it.</li>
+		<li>ad_type - possible options are text, image or text_image.</li>
+		<li>color_border - the color of the border. Use HEX color or type the color name (Ex. Red)</li>
+		<li>color_link - the color of the linktext. Use HEX color or type the color name (Ex. Red)</li>
+		<li>color_url - the color of the URL. Use HEX color or type the color name (Ex. Red)</li>
+		<li>color_text - the color of the text. Use HEX color or type the color name (Ex. Red)</li>
+	</ul>
+	</p>
+EOT;
 $lang['admin']['help_function_sitename'] = <<<EOT
         <h3>What does this do?</h3>
         <p>Shows the name of the site.  This is defined during install and can bbe modified in the Global Settings section of the admin panel.</p>
@@ -27,7 +195,7 @@ $lang['admin']['help_function_repeat'] = <<<EOT
   <h3>What does this do?</h3>
   <p>Repeats a specified sequence of characters, a specified number of times</p>
   <h3>How do I use it?</h3>
-  <p>Insert a tag similar to the following into your template/page, like this: <code>{recently_updated string='repeat this ' times='3'}</code>
+  <p>Insert a tag similar to the following into your template/page, like this: <code>{repeat string='repeat this ' times='3'}</code>
   <h3>What parameters does it take?</h3>
   <ul>
   <li>string='text' - The string to repeat</li>

@@ -61,18 +61,7 @@ function smarty_cms_function_stylesheet($params, &$smarty)
 }
 
 function smarty_cms_help_function_stylesheet() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Gets stylesheet information from the system.  By default, it grabs all of the stylesheets attached to the current template.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page's head section like: <code>{stylesheet}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>name - Instead of getting all stylesheets for the given page, it will only get one spefically named one, whether it's attached to the current template or not.</li>
-		<li><em>(optional)</em>media - If name is defined, this allows you set a different media type for that stylesheet.</li>
-	</ul>
-	</p>
-	<?php
+  echo lang('help_function_stylesheet');
 }
 
 function smarty_cms_about_function_stylesheet() {

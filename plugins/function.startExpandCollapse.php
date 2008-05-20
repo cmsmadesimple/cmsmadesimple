@@ -42,32 +42,7 @@ function smarty_cms_function_startExpandCollapse($params, &$smarty)
 }
 
 function smarty_cms_help_function_startExpandCollapse() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Enables content to be expandable and collapsable. Like the following:<br />
-	<a href="#expand1" onClick="expandcontent('expand1')" style="cursor:hand; cursor:pointer">Click here for more info</a><span id="expand1" class="expand"><a name="help"></a> - Here is all the info you will ever need...</a></span></p>
-
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{startExpandCollapse id="name" title="Click Here"}</code>. Also, you must use the {stopExpandCollapse} at the end of the collapseable content. Here is an example:<br />
-	<br />
-	<code>{startExpandCollapse id="name" title="Click Here"}<br />
-	This is all the content the user will see when they click the title "Click Here" above. It will display all the content that is between the {startExpandCollapse} and {stopExpandCollapse} when clicked.<br />
-	{stopExpandCollapse}
-	</code>
-	<br />
-	<br />
-	Note: If you intend to use this multiple times on a single page each startExpandCollapse tag must have a unique id.</p>
-	<h3>What if I want to change the look of the title?</h3>
-	<p>The look of the title can be changed via css. The title is wrapped in a div with the id you specify.</p>
-
-	<h3>What parameters does it take?</h3>
-	<p>
-	<i>startExpandCollapse takes the following parameters</i><br />
-	&nbsp; &nbsp;id - A unique id for the expand/collapse section.<br />
-	&nbsp; &nbsp;title - The text that will be displayed to expand/collapse the content.<br />
-	<i>stopExpandCollapse takes no parameters</i><br />
-	</p>
-	<?php
+  echo lang('help_function_startexpandcollapse');
 }
 
 function smarty_cms_about_function_startExpandCollapse() {
