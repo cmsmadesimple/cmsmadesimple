@@ -64,16 +64,7 @@ function smarty_cms_function_metadata($params, &$smarty)
 }
 
 function smarty_cms_help_function_metadata() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Displays the metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
-	<h3>What parameters does it take?</h3>
-	<ul>
-		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
-	</ul>
-	<?php
+  echo lang('help_function_metadata');
 }
 
 function smarty_cms_about_function_metadata() {

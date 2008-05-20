@@ -1,4 +1,253 @@
 <?php
+$lang['admin']['help_function_news'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=News">News module</a> to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='News'}</code> you can now just use <code>{news}</code> to insert the module on pages and templates.
+	</p>
+	<h3>How do I use it?</h3>
+	<p>Just put <code>{news}</code> on a page or in a template. For help about the News module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=News">News module help</a>.
+EOT;
+$lang['admin']['help_function_modified_date'] = <<<EOT
+        <h3>What does this do?</h3>
+        <p>Prints the date and time the page was last modified.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
+        <h3>How do I use it?</h3>
+        <p>Just insert the tag into your template/page like: <code>{modified_date format="%A %d-%b-%y %T %Z"}</code></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>format - Date/Time format using parameters from php's strftime function.  See <a href="http://php.net/strftime" target="_blank">here</a> for a parameter list and information.</li>
+        </ul>
+EOT;
+$lang['admin']['help_function_metadata'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Displays the metadata for this page. Both global metdata from the global settings page and metadata for each page will be shown.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template like: <code>{metadata}</code></p>
+	<h3>What parameters does it take?</h3>
+	<ul>
+		<li><em>(optional)</em>showbase (true/false) - If set to false, the base tag will not be sent to the browser.  Defaults to true if use_hierarchy is set to true in config.php.</li>
+	</ul>
+EOT;
+$lang['admin']['help_function_menu_text'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Prints the menu text of the page.</p>
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template/page like: <code>{menu_text}</code></p>
+	<h3>What parameters does it take?</h3>
+	<p>None at this time.</p>
+EOT;
+$lang['admin']['help_function_menu'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier. 
+	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
+	</p>
+	<h3>How do I use it?</h3>
+	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.
+EOT;
+$lang['admin']['help_function_last_modified_by'] = <<<EOT
+        <h3>What does this do?</h3>
+        <p>Prints last person that edited this page.  If no format is given, it will default to a ID number of user .</p>
+        <h3>How do I use it?</h3>
+        <p>Just insert the tag into your template/page like: <code>{last_modified_by format="fullname"}</code></p>
+        <h3>What parameters does it take?</h3>
+        <ul>
+                <li><em>(optional)</em>format - id, username, fullname</li>
+        </ul>
+EOT;
+$lang['admin']['help_function_iamge'] = <<<EOT
+  <h3>What does this do?</h3>
+  <p>Creates an image tag to an image stored within your images directory</p>
+  <h3>How do I use it?</h3>
+  <p>Just insert the tag into your template/page like: <code>{image src="something.jpg"}</code></p>
+  <h3>What parameters does it take?</h3>
+  <ul>
+     <li><em>(required)</em>  <tt>src</tt> - Image filename within your images directory.</li>
+     <li><em>(optional)</em>  <tt>width</tt> - Width of the image within the page. Defaults to true size.</li>
+     <li><em>(optional)</em>  <tt>height</tt> - Height of the image within the page. Defaults to true size.</li>
+     <li><em>(optional)</em>  <tt>alt</tt> - Alt text for the image -- needed for xhtml compliance. Defaults to filename.</li>
+     <li><em>(optional)</em>  <tt>class</tt> - CSS class for the image.</li>
+     <li><em>(optional)</em>  <tt>title</tt> - Mouse over text for the image. Defaults to Alt text.</li>
+     <li><em>(optional)</em>  <tt>addtext</tt> - Additional text to put into the tag</li>
+  </ul>
+EOT;
+$lang['admin']['help_function_imagegallery'] = <<<EOT
+	<h3>What does this do?</h3>
+	<p>Creates a gallery out of a folder of images (.gif, .jpg or .png). 
+	You can click on a thumbnail image to view the bigger image. It can use 
+	captions which are based on the image name, minus the file extension. It 
+	follows web standards and uses CSS for formatting. There are classes 
+	for various elements and for the surrounding 'div'. Check out the CSS below for
+	more information.</p>
+
+	<h3>How do I use it?</h3>
+	<p>Just insert the tag into your template or page like: </p>
+	<code>{ImageGallery picFolder="uploads/images/yourfolder/"}</code>
+	<p>Where picFolder is the folder where your images are stored.</p>
+	
+    <h3>What parameters does it take?</h3>
+    <p>It can take quite a few parameters, but the example above is probably 
+good for most people :) </p>
+        <ol>
+		<li><strong>picFolder e.g. picFolder="uploads/images/yourfolder/"</strong><br/>
+		Is the path to the gallery (yourfolder) ending in'/'. So you can have 
+		lots of directories and lots of galleries.</li>
+
+		<li><strong>type e.g. type="click" or type="popup"</strong><br/>
+		For the "popup" function to work you need to include the popup javascript into
+		the head of your template e.g. "&lt;head&gt;&lt;/head&gt;". The javascript is at
+		the bottom of this page! <em>The default is 'click'.</em></li>
+
+		<li><strong>divID e.g. divID ="imagegallery"</strong><br/>
+		Sets the wrapping 'div id' around your gallery so that you can have 
+		different CSS for each gallery. <em>The default is 'imagegallery'.</em></li>
+
+		<li><strong>sortBy e.g. sortBy = "name" or sortBy = "date"</strong><br/>
+		Sort images by 'name' OR 'date'. <em>No default.</em></li>
+
+		<li><strong>sortByOrder e.g. sortByOrder = "asc" or sortByOrder = "desc"</strong><br/> 
+		 <em>No default.</em>.</li>
+
+		<li>This sets caption above the big (clicked on) image<br/>
+		<strong>bigPicCaption = "name" </strong>(filename excluding extension)<em> or </em><br/>
+		<strong>bigPicCaption = "file" </strong>(filename including extension)<em> or </em><br/>
+		<strong>bigPicCaption = "number" </strong>(a number sequence)<em> or </em><br/>
+		<strong>bigPicCaption = "none" </strong>(No caption)<br/>
+		<em>The Default is "name". </em></li>
+
+		<li>This sets the caption below the small thumbnail<br/>
+		<strong>thumbPicCaption = "name"</strong> (filename excluding extension)<em> or </em><br/>
+		<strong>thumbPicCaption = "file"</strong> (filename including extension)<em> or </em><br/>
+		<strong>thumbPicCaption = "number" </strong>(a number sequence)<em> or </em><br/>
+		<strong>thumbPicCaption = "none" </strong>(No caption)<br/>
+		<em>The Default is "name".</em></li>
+
+		<li>Sets the 'alt' tag for the big image - compulsory.<br/>
+		<strong>bigPicAltTag = "name" </strong>(filename excluding extension)<em> or </em><br/>
+		<strong>bigPicAltTag = "file" </strong>(filename including extension)<em> or </em><br/>
+		<strong>bigPicAltTag = "number" </strong>(a number sequence)<br/>
+		<em>The Default is "name".</em></li>
+
+		<li> Sets the 'title' tag for the big image. <br/>
+		<strong>bigPicTitleTag = "name" </strong>(filename excluding extension)<em> or </em><br/>
+		<strong>bigPicTitleTag = "file" </strong>(filename including extension)<em> or </em><br/>
+		<strong>bigPicTitleTag = "number" </strong>(a number sequence)<em> or </em><br/>
+		<strong>bigPicTitleTag = "none" </strong>(No title)<br/>
+		<em>The Default is "name".</em></li>
+
+		<li><strong>thumbPicAltTag</strong><br/>
+		<em>Is the same as bigPicAltTag, but for the small thumbnail images.<em></li>
+
+		<li><strong>thumbPicTitleTag *</strong><br/>
+		<em>Is the same as bigPicTitleTag but for the small thumbnail images.<br/>
+		<strong>*Except that after the options you have '... click for a bigger image' 
+		or if you do not set this option then you get the default of 
+		'Click for a bigger image...'</em></strong></li>
+        </ol>
+  <p>A More Complex Example</p>
+        <p>'div id' is 'cdcovers', no Caption on big images, thumbs have default caption. 
+        'alt' tags for the big image are set to the name of the image file without the extension 
+        and the big image 'title' tag is set to the same but with an extension. 
+        The thumbs have the default 'alt' and 'title' tags. The default being the name 
+        of the image file without the extension for 'alt' and 'Click for a bigger image...' for the 'title',
+		would be:</p>
+		<code>{ImageGallery picFolder="uploads/images/cdcovers/" divID="cdcovers" bigPicCaption="none"  bigPicAltTag="name" bigPicTitleTag="file"}</code>
+        <br/>
+		<p>It's got lots of options but I wanted to keep it very flexible and you don't have to set them, the defaults are sensible.</p>
+		
+  <br/>
+	<h4>Example CSS</h4>
+<pre>
+	/* Image Gallery - Small Thumbnail Images */
+	.thumb {
+		margin: 1em 1em 1.6em 0; /* Space between images */
+		padding: 0;
+		float: left;
+		text-decoration: none;
+		line-height: normal;
+		text-align: left;
+	}
+
+	.thumb img, .thumb a img, .thumb a:link img{ /* Set link formatting*/
+		width: 100px; /* Image width*/
+		height: 100px; /* Image height*/
+		display: inline;
+		padding: 12px; /* Image padding to form photo frame */
+		/* You can set the above to 0px = no frame - but no hover indication! Adjust other widths ot text!*/
+		margin: 0;
+		background-color: white; /*Background of photo */ 
+		border-top: 1px solid #eee; /* Borders of photo frame */
+		border-right: 2px solid #ccc;
+		border-bottom: 2px solid #ccc;
+		border-left: 1px solid #eee;
+		text-decoration: none;
+	}
+
+	.thumb a:visited img {
+		background-color: #eee; /*Background of photo on hover - sort of a light grey */
+	}
+
+	.thumb a:hover img {
+		background-color: #dae6e4; /*Background of photo on hover - sort of light blue/green */
+	}
+
+	.thumbPicCaption {
+		text-align: center;
+		font-size: smaller;
+		margin: 0 1px 0 0;
+		padding: 0;
+		width: 124px; /* Image width plus 2 x padding for image (photo frame) - to center text on image */
+		/* display: none;  if you do not want to display this text */
+	}
+
+	/* Image Gallery - Big Images */
+	.bigPic {
+		margin: 10px 0 5px 0;
+		padding: 0;
+		line-height: normal;
+	}
+
+	.bigPicCaption { /*Big Image Name - above image above .bigpicImageFileName (Without extension) */
+		text-align: center;
+		font-weight: bold;
+		font-variant: small-caps;
+		font-weight: bold;
+		margin: 0 1px 0 0;
+		padding: 0;
+		width: 386px; /* Image width plus 2 x padding for image (photo frame) - to center text on image */
+		/* display: none;  if you do not want to display this text */
+	}
+
+	.bigPic img{ /* Big Image settings */
+		width: 350px; /* Width of Big Image */
+			height: auto;
+		display: inline;
+		padding: 18px; /* Image padding to form photo frame. */
+		/* You can set the above to 0px = no frame - but no hover indication! Adjust other widths ot text!*/
+		margin: 0;
+		background-color: white; /* Background of photo */ 
+		border-top: 1px solid #eee; /* Borders of photo frame */
+		border-right: 2px solid #ccc; 
+		border-bottom: 2px solid #ccc;
+		border-left: 1px solid #eee;
+		text-decoration: none; 
+		text-align: left;
+	}
+
+	.bigPicNav { /* Big Image information: 'Image 1 of 4' and gallery navigation */
+		margin: 0;
+		width: 386px; /* Image width plus 2 x padding for image (photo frame) - to center text on image */
+		padding: 0;
+		color: #000;
+		font-size: smaller;
+		line-height: normal;
+		text-align: center;
+		/* display: none;  if you do not want to display this text. Why? You Lose Navigation! */
+	}
+
+</pre>
+<br/>
+
+	<h4>The popup javascript is now included in plugin code and will be generated automatically if you still have javascript in your template please remove it.</h4>
+EOT;
 $lang['admin']['help_function_html_blob'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>See the help for global_content for a description.</p>

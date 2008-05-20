@@ -71,22 +71,7 @@ function smarty_cms_function_image($params, &$smarty)
 
 function smarty_cms_help_function_image()
 {
-  ?>
-  <h3>What does this do?</h3>
-  <p>Creates an image tag to an image stored within your images directory</p>
-  <h3>How do I use it?</h3>
-  <p>Just insert the tag into your template/page like: <code>{image src="something.jpg"}</code></p>
-  <h3>What parameters does it take?</h3>
-  <ul>
-     <li><em>(required)</em>  <tt>src</tt> - Image filename within your images directory.</li>
-     <li><em>(optional)</em>  <tt>width</tt> - Width of the image within the page. Defaults to true size.</li>
-     <li><em>(optional)</em>  <tt>height</tt> - Height of the image within the page. Defaults to true size.</li>
-     <li><em>(optional)</em>  <tt>alt</tt> - Alt text for the image -- needed for xhtml compliance. Defaults to filename.</li>
-     <li><em>(optional)</em>  <tt>class</tt> - CSS class for the image.</li>
-     <li><em>(optional)</em>  <tt>title</tt> - Mouse over text for the image. Defaults to Alt text.</li>
-     <li><em>(optional)</em>  <tt>addtext</tt> - Additional text to put into the tag</li>
-  </ul>
-  <?php
+  echo lang('help_function_image');
 }
 
 

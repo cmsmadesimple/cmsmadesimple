@@ -57,16 +57,7 @@ function smarty_cms_function_last_modified_by($params, &$smarty)
 
 function smarty_cms_help_function_last_modified_by()
 {
-        ?>
-        <h3>What does this do?</h3>
-        <p>Prints last person that edited this page.  If no format is given, it will default to a ID number of user .</p>
-        <h3>How do I use it?</h3>
-        <p>Just insert the tag into your template/page like: <code>{last_modified_by format="fullname"}</code></p>
-        <h3>What parameters does it take?</h3>
-        <ul>
-                <li><em>(optional)</em>format - id, username, fullname</li>
-        </ul>
-        <?php
+  echo lang('help_function_last_modified_by');
 }
 
 function smarty_cms_about_function_last_modified_by() {

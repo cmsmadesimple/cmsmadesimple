@@ -38,14 +38,7 @@ function smarty_cms_function_menu_text($params, &$smarty)
 }
 
 function smarty_cms_help_function_menu_text() {
-	?>
-	<h3>What does this do?</h3>
-	<p>Prints the menu text of the page.</p>
-	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{menu_text}</code></p>
-	<h3>What parameters does it take?</h3>
-	<p>None at this time.</p>
-	<?php
+  echo lang('help_function_menu_text');
 }
 
 function smarty_cms_about_function_menu_text() {

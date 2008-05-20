@@ -23,14 +23,7 @@ function smarty_cms_function_menu($params, &$smarty)
 }
 
 function smarty_cms_help_function_menu() {
-	?>
-	<h3>What does this do?</h3>
-	<p>This is actually just a wrapper tag for the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module</a> to make the tag syntax easier. 
-	Instead of having to use <code>{cms_module module='MenuManager'}</code> you can now just use <code>{menu}</code> to insert the module on pages and templates.
-	</p>
-	<h3>How do I use it?</h3>
-	<p>Just put <code>{menu}</code> on a page or in a template. For help about the Menu Manager module, what parameters it takes etc., please refer to the <a href="listmodules.php?action=showmodulehelp&module=MenuManager">Menu Manager module help</a>.
-	<?php
+  echo lang('help_function_menu');
 }
 
 function smarty_cms_about_function_menu() {
