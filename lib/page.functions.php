@@ -569,7 +569,6 @@ function get_preference($userid, $prefname, $default='')
 {
 	global $gCms;
 	$db =& $gCms->GetDb();
-	$userprefs = &$gCms->userprefs;
 
 	$result = '';
 
@@ -578,6 +577,7 @@ function get_preference($userid, $prefname, $default='')
 		load_all_preferences($userid);
 	}
 
+	$userprefs = &$gCms->userprefs;
 	if (isset($gCms->userprefs))
 	{
 		if (isset($userprefs[$prefname]))
@@ -604,6 +604,12 @@ function set_preference($userid, $prefname, $value)
 
 	global $gCms;
 	$db =& $gCms->GetDb();
+
+	if (!isset($gCms->userprefs))
+	{
+		load_all_preferences($userid);
+	}
+
 
 	$userprefs = &$gCms->userprefs;
 	$userprefs[$prefname] = $value;
