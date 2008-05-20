@@ -674,7 +674,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
         }
         else
         {
-            $thelist .= "<td>&nbsp;</td>\n";
+	  $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
         }
 
         $thelist .= "<td>".$one->FriendlyName()."</td>\n";
@@ -774,6 +774,13 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 $thelist .= $editImg;
                 $thelist .= "</a></td>\n";
             }
+	    else
+	    {
+	      $thelist .= "<td class=\"pagepos\">";
+	      $thelist .= "&nbsp;&nbsp;";
+	      $thelist .= "</td>\n";
+	    }
+			
             if ($one->DefaultContent() != true)
             {
                 //if ($one->ChildCount() == 0 && !in_array($one->Id(),$openedArray))
@@ -788,7 +795,7 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
                 {
                     $thelist .= '<td>&nbsp;</td>' . "\n";
                 }
-                if (check_permission($userid, 'Modify Page Structure'))
+                if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages') )
                 {
                     $thelist .= '<td class="checkbox"><input type="checkbox" name="multicontent-'.$one->Id().'" /></td>';
                 }
@@ -947,6 +954,9 @@ function display_content_list($themeObject = null)
 	{
 		$headoflist .= "<th class=\"pagepos\">".lang('default')."</th>\n";
 	}
+	else{
+	  $headoflist .= "<th class=\"pagepos\">&nbsp;</th>\n";
+	}
 	if (check_modify_all($userid) && check_permission($userid, 'Modify Page Structure'))
 	{
 		$headoflist .= "<th class=\"move\">".lang('move')."</th>\n";
@@ -955,7 +965,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n";
+	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n"; // checkbox column
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
