@@ -247,7 +247,7 @@ $lang['admin']['help_function_oldprint'] = <<<EOT
                 <li><em>(optional)</em> class_img - Class of &lt;img&gt; tag if showbutton is sets.</li>
 
                     <p>Example:</p>
-                     <pre>{print text="Printable Page"}</pre>      
+                     <pre>{oldprint text="Printable Page"}</pre>      
                      </li>
         </ul>
 EOT;
