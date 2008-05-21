@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['destination_page'] = 'Destination Page';
+$lang['admin']['additional_params'] = 'Additional Parameters';
 $lang['admin']['help_function_current_date'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Prints the current date and time.  If no format is given, it will default to a format similar to 'Jan 01, 2004'.</p>
@@ -230,7 +232,7 @@ $lang['admin']['help_function_oldprint'] = <<<EOT
 	<h3>What does this do?</h3>
 	<p>Creates a link to only the content of the page.</p>
 	<h3>How do I use it?</h3>
-	<p>Just insert the tag into your template/page like: <code>{print}</code><br></p>
+	<p>Just insert the tag into your template/page like: <code>{oldprint}</code><br></p>
         <h3>What parameters does it take?</h3>
         <ul>
                 <li><em>(optional)</em> goback - Set to "true" to show a "Go Back" link on the page to print.</li>
