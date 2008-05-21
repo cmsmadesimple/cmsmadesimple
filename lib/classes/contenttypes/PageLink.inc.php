@@ -220,6 +220,9 @@ class PageLink extends ContentBase
       global $gCms;
       $contentops =& $gCms->GetContentOperations();
       $destcontent =& $contentops->LoadContentFromId($page);
+      if( is_object( $destcontent ) ) 
+	return $destcontent->GetURL();
+      /*
       $alias = $destcontent->Alias();
       $config = &$gCms->GetConfig();
       $url = "";
@@ -260,6 +263,7 @@ class PageLink extends ContentBase
 	    }
 	}
       return cms_htmlentities($url.$params);
+      */
     } 
 }
 
