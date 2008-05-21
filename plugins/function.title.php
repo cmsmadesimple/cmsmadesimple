@@ -21,10 +21,11 @@ function smarty_cms_function_title($params, &$smarty)
 	global $gCms;
 	$pageinfo = &$gCms->variables['pageinfo'];
 	$config = &$gCms->GetConfig();
+	$result = '';
 	if (isset($pageinfo) && $pageinfo->content_id == -1)
 	{
 		#We've a custom error message...  set a current timestamp
-		return "404 Error";
+		$result = "404 Error";
 	}
 	else
 	{
@@ -33,8 +34,15 @@ function smarty_cms_function_title($params, &$smarty)
 		{
 			$result = ereg_replace("\{\/?php\}", "", $result);
 		}
-		return $result;
 	}
+
+	if( isset($params['assign']) )
+	{
+	    $smarty =& $gCms->GetSmarty();
+	    $smarty->assign($params['assign'],$result);
+	    return;
+        }
+        return $result;
 }
 
 function smarty_cms_help_function_title() {

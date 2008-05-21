@@ -18,7 +18,15 @@
 
 function smarty_cms_function_sitename($params, &$smarty)
 {
-	return get_site_preference('sitename', 'CMSMS Site');
+     $result = get_site_preference('sitename', 'CMSMS Site');
+     if( isset($params['assign']) )
+	{
+	   global $gCms;
+           $smarty =& $gCms->GetSmarty();
+           $smarty->assign(trim($params['assign']),$result);
+	   return;
+	}
+     return $result;
 }
 
 function smarty_cms_help_function_sitename()
