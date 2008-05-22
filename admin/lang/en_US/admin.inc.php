@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['nogcbwysiwyg'] = 'Disallow WYSIWYG editors on global content blocks';
 $lang['admin']['destination_page'] = 'Destination Page';
 $lang['admin']['additional_params'] = 'Additional Parameters';
 $lang['admin']['help_function_current_date'] = <<<EOT

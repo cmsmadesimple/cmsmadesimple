@@ -95,6 +95,9 @@ if (isset($_POST['frontendlang'])) $frontendlang = $_POST['frontendlang'];
 $frontendwysiwyg = '';
 if (isset($_POST['frontendwysiwyg'])) $frontendwysiwyg = $_POST['frontendwysiwyg'];
 
+$nogcbwysiwyg = '0';
+if (isset($_POST['nogcbwysiwyg'])) $nogcbwysiwyg = '1';
+
 $global_umask = '022';
 if (isset($_POST['global_umask'])) 
   {
@@ -185,6 +188,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('global_umask', $global_umask);
       set_site_preference('frontendlang', $frontendlang);      
       set_site_preference('frontendwysiwyg', $frontendwysiwyg);
+      set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
       set_site_preference('enablecustom404', $enablecustom404);
       set_site_preference('xmlmodulerepository', $xmlmodulerepository);
       set_site_preference('defaultdateformat', $defaultdateformat);
@@ -212,6 +216,7 @@ else if (isset($_POST["editsiteprefs"]))
   $global_umask = get_site_preference('global_umask',$global_umask);
   $frontendlang = get_site_preference('frontendlang');
   $frontendwysiwyg = get_site_preference('frontendwysiwyg');
+  $nogcbwysiwyg = get_site_preference('nogcbwysiwyg');
   $enablecustom404 = get_site_preference('enablecustom404');
   $custom404 = get_site_preference('custom404');
   $custom404template = get_site_preference('custom404template');
@@ -341,7 +346,10 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 			</div>
 		
 		
-		
+		<div class="pageoverflow">
+			  <p class="pagetext"><?php echo lang('nogcbwysiwyg')?>:</p>
+					<p class="pageinput"><input class="pagenb" type="checkbox" name="nogcbwysiwyg" <?php if ($nogcbwysiwyg == "1") echo "checked=\"checked\""?> /></p>
+		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('globalmetadata')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="metadata" cols="" rows=""><?php echo $metadata?></textarea></p>

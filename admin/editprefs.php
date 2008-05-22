@@ -58,7 +58,7 @@ $syntaxhighlighter = '';
 if (isset($_POST["syntaxhighlighter"])) $syntaxhighlighter = $_POST["syntaxhighlighter"];
 
 $gcb_wysiwyg = 0;
-if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = $_POST['gcb_wysiwyg'];
+if (isset($_POST['gcb_wysiwyg'])) $gcb_wysiwyg = 1;
 
 $date_format_string = '%x %X';
 if (isset($_POST['date_format_string'])) $date_format_string = $_POST['date_format_string'];
@@ -164,7 +164,7 @@ if (FALSE == empty($page_message)) {
 			<div class="pageoverflow">
 				<p class="pagetext"><?php echo lang('gcb_wysiwyg'); ?>:</p>
 				<p class="pageinput">
-					<input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
+  <input class="pagenb" type="checkbox" name="gcb_wysiwyg" <?php if ($gcb_wysiwyg) echo "checked=\"checked\""; if( get_site_preference('nogcbwysiwyg') == '1' ) echo "disabled=\"disabled\""; ?> /><?php echo lang('gcb_wysiwyg_help') ?>
 				</p>
 			</div>
 				<div class="pageoverflow">
