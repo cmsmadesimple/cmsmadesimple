@@ -1,3 +1,48 @@
+Version 1.3-beta1 "Cuba"
+-----------------
+- Massive updates to translations
+- Includes News 2.8
+  - Fixes for pretty urls
+  - Adds news_extra and custom field support to the fesubmit action
+  - Uses cms_html_entity_decode for php4 compatibility
+  - Removes the News content type once and for all
+- Includes Search 1.5
+  - Adds the ability to change the search output on a per module basis
+  - Adds an ability to track search words
+  - Better templating for News
+  - More
+- Includes MenuManager 1.5
+  - Pass all parameters to the menumanager template for easier customization
+  - Fixes for has_children
+  - Minor fixes
+- Includes ModuleManager 1.1.6
+  - Now indicates that a module available in the repository is incompatible
+    with the current CMS version
+  - A nice big notice on the top of the display about xml vs zip modules
+  - Cleanup on uninstall
+- Includes a new admin theme generously donated by Nuno Costa
+- All plugins are now translatable
+- The title and sitename plugins now support the assign param
+- Adds two new plugins (redirect_page and redirect_url)
+- Debug mode now tweaks the display_errors and error levels 
+  in the admin section as we
+- Listcontent is now cleanedup and has better security checks
+- Minor improvements to listmodules
+- Admin templates are now override-able by creating a matching file in 
+  module_custom/<module name>/templates/<template filename>.tpl
+- All language files are now override-able by creating a matching file in
+  module_custom/<module name>/lang/<language name>.php
+- Adds a new PageLink content type to allow linking to an internal page
+  easily
+- The {sitemap} plugin is deprecated, and replaced by {site_mapper} which
+  is just a simple wrapper around menumanager
+- Fixes so that menumanager sets has_children properly
+- Attempt to handle hosts that have disabled the readfile function
+- Add cms_html_entity_decode which is php4 compatible as html_entity_decode
+  may not be.
+- Fix un-necessary queries in cms_selflink
+- Fixes for bugs #2227, 2205, 2230, 2207
+
 Version 1.2.4 "Greenland" -- March 29, 2008
 -----------------
 - Fixed a potential security issue with the applet upload in File Mananger
