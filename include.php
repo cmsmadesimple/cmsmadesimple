@@ -21,12 +21,6 @@
 $dirname = dirname(__FILE__);
 require_once($dirname.DIRECTORY_SEPARATOR.'fileloc.php');
 
-if ($config["debug"] == true)
-  {
-    @ini_set('display_errors',1);
-    @error_reporting(E_ALL);
-  }
-
 $session_key = substr(md5($dirname), 0, 8);
 
 #Setup session with different id and start it
@@ -88,6 +82,13 @@ if (isset($_SESSION['cms_admin_username']))
 {
     $gCms->variables['username'] = $_SESSION['cms_admin_username'];
 }
+
+if ($config["debug"] == true)
+  {
+    @ini_set('display_errors',1);
+    @error_reporting(E_ALL);
+  }
+
 
 debug_buffer('loading smarty');
 require(cms_join_path($dirname,'lib','smarty','Smarty.class.php'));
