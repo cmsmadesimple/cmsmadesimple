@@ -18,7 +18,7 @@
 
 function smarty_cms_function_redirect_page($params, &$smarty)
 {
-  if( isset($params['page']) ) redirect(trim($params['page']));
+  if( isset($params['page']) ) redirect_to_alias(trim($params['page']));
 }
 
 function smarty_cms_help_function_redirect_page()
