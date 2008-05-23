@@ -1754,10 +1754,10 @@ class CMSModule
 	 * @param string The html name of the input
 	 * @param string Any additional text that should be added into the tag when rendered
 	 */
-	function CreateFileUploadInput($id, $name, $addttext='')
+	function CreateFileUploadInput($id, $name, $addttext='',$size='10', $maxlength='255')
 	{
 		$this->LoadFormMethods();
-		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext);
+		return cms_module_CreateFileUploadInput($this, $id, $name, $addttext, $size, $maxlength);
 	}
 
 

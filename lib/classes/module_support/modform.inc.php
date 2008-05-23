@@ -267,12 +267,13 @@ function cms_module_CreateInputReset(&$modinstance, $id, $name, $value='Reset', 
 	return $text . "\n";
 }
 
-function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='')
+function cms_module_CreateFileUploadInput(&$modinstance, $id, $name, $addttext='', $size='10',
+					  $maxlength='255')
 {
   $id = cms_htmlentities($id);
   $name = cms_htmlentities($name);
 
-	$text = '<input type="file" name="'.$id.$name.'"';
+	$text = '<input type="file" name="'.$id.$name.'" size="'.$size.'" maxlength="'.$maxlength.'"';
 	if ($addttext != '')
 	{
 		$text .= ' '.$addttext;
