@@ -336,13 +336,15 @@ $typesdropdown = '<select name="content_type" onchange="document.contentform.sub
 $cur_content_type = '';
 foreach ($gCms->contenttypes as $onetype)
 {
+	$contentops->LoadContentType($onetype->type);
+	$type_obj = new $onetype->type;
 	$typesdropdown .= '<option value="' . $onetype->type . '"';
 	if ($onetype->type == $content_type)
 	{
 		$typesdropdown .= ' selected="selected" ';
 		$cur_content_type = $onetype->type;
 	}
-	$typesdropdown .= ">".($onetype->friendlyname)."</option>";
+	$typesdropdown .= ">".($type_obj->FriendlyName())."</option>";
 }
 $typesdropdown .= "</select>";
 
