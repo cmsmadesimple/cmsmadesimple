@@ -1,6 +1,10 @@
 Version 1.3-beta1 "Cuba"
 -----------------
 - Massive updates to translations
+- Includes TinyMCE 2.4.0b5
+  (this should be a release version by the time 1.3 comes out)
+- Includes FileManager 0.3.0b2
+  (this should be a release version by the time 1.3 comes out)
 - Includes News 2.8
   - Fixes for pretty urls
   - Adds news_extra and custom field support to the fesubmit action
@@ -25,8 +29,8 @@ Version 1.3-beta1 "Cuba"
 - The title and sitename plugins now support the assign param
 - Adds two new plugins (redirect_page and redirect_url)
 - Debug mode now tweaks the display_errors and error levels 
-  in the admin section as we
-- Listcontent is now cleanedup and has better security checks
+  in the admin section as well as in the frontend
+- Listcontent is now cleaned-up and has better security checks
 - Minor improvements to listmodules
 - Admin templates are now override-able by creating a matching file in 
   module_custom/<module name>/templates/<template filename>.tpl
