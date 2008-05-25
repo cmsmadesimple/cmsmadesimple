@@ -965,7 +965,7 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"checkbox\">&nbsp;</th>\n"; // checkbox column
+	$headoflist .= "<th class=\"checkbox\"><input type=\"checkbox\" onclick=\"selectall();\" /></th>\n"; // checkbox column
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
@@ -973,7 +973,7 @@ function display_content_list($themeObject = null)
 	if (check_permission($userid, 'Modify Page Structure')) 
     {
 ?>
-			<div class="pageoptions" style="margin-right: 3%;" >
+			<div class="pageoptions"  >
 			<div style="margin-top: 0; float: right; text-align: right">
 			<?php echo lang('selecteditems'); ?>: <select name="multiaction">
 			<option value="delete"><?php echo lang('delete') ?></option>
@@ -981,9 +981,6 @@ function display_content_list($themeObject = null)
 			<option value="inactive"><?php echo lang('inactive') ?></option>
 			</select>
 			<input type="submit" value="<?php echo lang('submit') ?>" />
-			<span style="margin-left: 10px;">
-			<a href="javascript:selectall();"><?php echo lang('selectall'); ?></a>
-			</span>
 			</div>
                         </div>
 <?php
@@ -1095,9 +1092,13 @@ echo '<div id="contentlist">'.display_content_list($themeObject).'</div>';
 		function selectall()
 		{
 	        checkboxes = document.getElementsByTagName("input");
+		state = checkboxes[0].checked;
 	        for (i=0; i<checkboxes.length ; i++)
 	        {
-	                if (checkboxes[i].type == "checkbox") checkboxes[i].checked=true;
+	                if (checkboxes[i].type == "checkbox") 
+			  {
+			    checkboxes[i].checked=state;
+			  }
 	        }
 		}
 		//]]>
