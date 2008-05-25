@@ -965,7 +965,10 @@ function display_content_list($themeObject = null)
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
 	$headoflist .= "<th class=\"pageicon\">&nbsp;</th>\n";
-	$headoflist .= "<th class=\"checkbox\"><input type=\"checkbox\" onclick=\"selectall();\" /></th>\n"; // checkbox column
+	if (check_permission($userid, 'Modify Page Structure') || check_permission($userid, 'Remove Pages') )
+	  {
+	    $headoflist .= "<th class=\"checkbox\"><input type=\"checkbox\" onclick=\"selectall();\" /></th>\n"; // checkbox column
+	  }
 	$headoflist .= "</tr>\n";
 	$headoflist .= '</thead>';
 	$headoflist .= '<tbody>';
