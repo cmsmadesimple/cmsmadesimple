@@ -28,7 +28,7 @@ class Link extends ContentBase
 
     function FriendlyName()
     {
-	return 'Link';
+      return lang('contenttype_link');
     }
 
     function SetProperties()

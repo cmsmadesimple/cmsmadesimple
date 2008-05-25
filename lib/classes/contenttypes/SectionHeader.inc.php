@@ -28,7 +28,7 @@ class SectionHeader extends ContentBase
 
     function FriendlyName()
     {
-	return 'Section Header';
+      return lang('contenttype_sectionheader');
     }
 
     function SetProperties()

@@ -33,7 +33,7 @@ class Content extends ContentBase
 	
     function FriendlyName()
     {
-	return 'Content';
+      return lang('contenttype_content');
     }
 
     function SetProperties()

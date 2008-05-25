@@ -28,7 +28,7 @@ class PageLink extends ContentBase
 	
     function FriendlyName()
     {
-	return 'Page Link';
+      return lang('contenttype_pagelink');
     }
 	
     function SetProperties()

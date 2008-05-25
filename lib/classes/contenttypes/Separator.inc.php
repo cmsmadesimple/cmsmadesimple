@@ -28,7 +28,7 @@ class Separator extends ContentBase
     
     function FriendlyName()
     {
-	return 'Separator';
+      return lang('contenttype_separator');
     }
 
     function SetProperties()

@@ -1,4 +1,9 @@
 <?php
+$lang['admin']['contenttype_separator'] = 'Separator';
+$lang['admin']['contenttype_sectionheader'] = 'Section Header';
+$lang['admin']['contenttype_link'] = 'External Link';
+$lang['admin']['contenttype_content'] = 'Content';
+$lang['admin']['contenttype_pagelink'] = 'Internal Page Link';
 $lang['admin']['nogcbwysiwyg'] = 'Disallow WYSIWYG editors on global content blocks';
 $lang['admin']['destination_page'] = 'Destination Page';
 $lang['admin']['additional_params'] = 'Additional Parameters';
@@ -1070,7 +1075,7 @@ $lang['admin']['language'] = 'Language';
 $lang['admin']['lastname'] = 'Last Name';
 $lang['admin']['logout'] = 'Logout';
 $lang['admin']['loginprompt'] = 'Enter a valid user credential to get access to the Admin Console.'; // needs translation
-$lang['admin']['logintitle'] = 'CMS Made Simple Admin Login'; // needs translation
+$lang['admin']['logintitle'] = 'Login to CMS Made Simple'; // needs translation
 $lang['admin']['menutext'] = 'Menu Text';
 $lang['admin']['missingparams'] = 'Some parameters were missing or invalid';
 $lang['admin']['modifygroupassignments'] = 'Modify Group Assignments';
