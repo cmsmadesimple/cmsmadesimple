@@ -42,6 +42,8 @@ Version 1.3-beta1 "Cuba"
   may not be.
 - Fix un-necessary queries in cms_selflink
 - Fixes for bugs #2227, 2205, 2230, 2207
+- Content type names are now translatable
+- Replaced the 'select all' link in Listcontent with a checkbox which is a bit more standardish
 
 Version 1.2.4 "Greenland" -- March 29, 2008
 -----------------
