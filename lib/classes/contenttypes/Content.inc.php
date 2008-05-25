@@ -242,6 +242,7 @@ class Content extends ContentBase
 	  if( check_permission(get_userid(),'Modify Page Structure') || $adding ) {
 	    $ret[]= array(lang('active').':','<input class="pagecheckbox" type="checkbox" name="active"'.($this->mActive?' checked="checked"':'').' />');
 	    $ret[]= array(lang('showinmenu').':','<input class="pagecheckbox" type="checkbox" name="showinmenu"'.($this->mShowInMenu?' checked="checked"':'').' />');
+	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
 	  }
 	  else
 	    {
@@ -253,9 +254,12 @@ class Content extends ContentBase
 		{
 		  $ret[]= array('','<input type="hidden" name="showinmenu" value="1"/>');
 		}
+	      if( $this->mCachable )
+		{
+		  $ret[] = array('','<input type="hidden" name="cachable" value="1"/>');
+		}
 	    }
 
-	    $ret[]= array(lang('cachable').':','<input class="pagecheckbox" type="checkbox" name="cachable"'.($this->mCachable?' checked="checked"':'').' />');
 	  if( check_permission(get_userid(),'Modify Page Structure') || $adding == true) {
 	    $ret[]= array(lang('pagealias').':','<input type="text" name="alias" value="'.$this->mAlias.'" />');
 	  }
