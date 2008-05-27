@@ -18,20 +18,21 @@
 #
 #$Id$
 
+require_once 'PHPUnit/Framework/TestCase.php';
 include_once(dirname(dirname(__FILE__)) . '/lib/cmsms.api.php');
 
-class DescribeCmsUserTags extends PHPSpec_Context
+class TestCmsUserTags extends PHPUnit_Framework_TestCase
 {
-	public function before()
+	public function setUp()
 	{
 		CmsCache::clear();
 		$cms_db_prefix = CMS_DB_PREFIX;
 		cms_db()->Execute("DELETE FROM {$cms_db_prefix}userplugins WHERE userplugin_name = ?", array('TestTag'));
 	}
 	
-	public function after()
+	public function tearDown()
 	{
-		$this->before();
+		$this->setUp();
 	}
 	
 	public function create_user_tag()
@@ -44,44 +45,44 @@ class DescribeCmsUserTags extends PHPSpec_Context
 		return cms_orm('CmsUserTag')->find_count_by_name('TestTag');
 	}
 	
-	public function itShouldCreateUserTag()
+	public function testShouldCreateUserTag()
 	{
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count())->should->be(1);
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
 	}
 	
-	public function itShouldNotAllowDuplicates()
+	public function testShouldNotAllowDuplicates()
 	{
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count())->should->be(1);
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count())->should->be(1);
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
 	}
 	
-	public function itShouldProperlyDeleteATag()
+	public function testShouldProperlyDeleteATag()
 	{
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count())->should->be(1);
-		$this->spec(CmsUserTagOperations::remove_user_tag('TestTag'))->should->beTrue();
-		$this->spec($this->select_count())->should->be(0);
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
+		$this->assertTrue(CmsUserTagOperations::remove_user_tag('TestTag'));
+		$this->assertEquals(0, $this->select_count());
 	}
 	
-	public function itShouldBeAbleToCallATag()
+	public function testShouldBeAbleToCallATag()
 	{
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count())->should->be(1);
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
 		$params = array('TestValue');
-		$this->spec(CmsUserTagOperations::call_user_tag('TestTag', $params))->should->beEqualTo('TestValue');
+		$this->assertEquals('TestValue', CmsUserTagOperations::call_user_tag('TestTag', $params));
 	}
 
-	public function itShouldBeAbleToCallATagFromTheOrm()
+	public function testShouldBeAbleToCallATagFromTheOrm()
 	{
-		$this->spec($this->create_user_tag())->should->beTrue();
-		$this->spec($this->select_count(), 1)->should->be(1);
+		$this->assertTrue($this->create_user_tag());
+		$this->assertEquals(1, $this->select_count());
 		$user_tag = cms_orm('CmsUserTag')->find_by_name('TestTag');
-		$this->spec($user_tag)->shouldNot->beNull();
+		$this->assertNotNull($user_tag);
 		$params = array('TestValue');
-		$this->spec($user_tag->call($params))->should->beEqualTo('TestValue');
+		$this->assertEquals('TestValue', $user_tag->call($params));
 	}
 }
 

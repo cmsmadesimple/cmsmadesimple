@@ -18,23 +18,24 @@
 #
 #$Id$
 
+require_once 'PHPUnit/Framework/TestCase.php';
 include_once(dirname(dirname(__FILE__)) . '/lib/cmsms.api.php');
 
-class DescribeCmsLogin extends PHPSpec_Context
+class TestCmsLogin extends PHPUnit_Framework_TestCase
 {
 	var $callback_test = false;
 	var $originator = '';
 	var $event_name = '';
 
-	public function before()
+	public function setUp()
 	{
 		CmsCache::clear();
 		cms_db()->Execute('DELETE FROM ' . cms_db_prefix() . 'users WHERE username = ?', array('sometestuser'));
 	}
 	
-	public function after()
+	public function tearDown()
 	{
-		$this->before();
+		$this->setUp();
 	}
 	
 	public function add_test_user()
@@ -52,33 +53,33 @@ class DescribeCmsLogin extends PHPSpec_Context
 		$this->callback_test = $this->callback_test + 1;
 	}
 
-	public function itShouldBeAbleToSaveANewUser()
+	public function testShouldBeAbleToSaveANewUser()
 	{
-		$this->spec($this->add_test_user())->should->beTrue();
+		$this->assertTrue($this->add_test_user());
 	}
 	
-	public function itShouldNotBeAbleToLogInWithBadPassword()
+	public function testShouldNotBeAbleToLogInWithBadPassword()
 	{
 		$this->add_test_user();
-		$this->spec(CmsLogin::login('sometestuser', 'some_bad_password'))->should->beFalse();
-		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beTrue();
+		$this->assertFalse(CmsLogin::login('sometestuser', 'some_bad_password'));
+		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
 	}
 	
-	public function itShouldProperlyCallTheLoginFailedEvent()
+	public function testShouldProperlyCallTheLoginFailedEvent()
 	{
 		$this->callback_test = 1;
 		$this->originator = '';
 		$this->event_name = '';
 		CmsEventOperations::add_temp_event_handler('Core', 'LoginFailed', array($this, 'temp_callback'));
-		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beFalse();
-		$this->spec($this->callback_test)->should->be(2);
-		$this->spec($this->originator)->should->be('Core');
-		$this->spec($this->event_name)->should->be('LoginFailed');
+		$this->assertFalse(CmsLogin::login('sometestuser', 'some_password'));
+		$this->assertEquals(2, $this->callback_test);
+		$this->assertEquals('Core', $this->originator);
+		$this->assertEquals('LoginFailed', $this->event_name);
 		$this->add_test_user();
-		$this->spec(CmsLogin::login('sometestuser', 'some_password'))->should->beTrue();
-		$this->spec($this->callback_test)->should->be(2);
-		$this->spec($this->originator)->should->be('Core');
-		$this->spec($this->event_name)->should->be('LoginFailed');
+		$this->assertTrue(CmsLogin::login('sometestuser', 'some_password'));
+		$this->assertEquals(2, $this->callback_test);
+		$this->assertEquals('Core', $this->originator);
+		$this->assertEquals('LoginFailed', $this->event_name);
 	}
 }
 

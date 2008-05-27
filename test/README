@@ -1,12 +1,12 @@
-Testing is using phpspec. See:
-http://phpspec.org
+Testing is using phpunit. See:
+http://www.phpunit.de
 
 Install like so (might need sudo):
-pear channel-discover pear.phpspec.org
-pear install phpspec/PHPSpec
+pear channel-discover pear.phpunit.de
+pear install phpunit/PHPUnit
 
 And run from this directory like:
-phpspec -r --specdoc
+phpunit --configuration tests.xml
 
 This does use the current database set in config.php.  They're generally not 
 descructive, but the content stuff is a bit messy.

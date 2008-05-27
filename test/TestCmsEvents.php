@@ -18,24 +18,25 @@
 #
 #$Id$
 
+require_once 'PHPUnit/Framework/TestCase.php';
 include_once(dirname(dirname(__FILE__)) . '/lib/cmsms.api.php');
 
-class DescribeCmsEvents extends PHPSpec_Context
+class TestCmsEvents extends PHPUnit_Framework_TestCase
 {
 	var $callback_test = false;
 	var $originator = '';
 	var $event_name = '';
 
-	public function before()
+	public function setUp()
 	{
 		CmsCache::clear();
 		cms_db()->Execute('DELETE FROM ' . cms_db_prefix() . 'events WHERE originator = ?', array('TestModule'));
 		cms_db()->Execute('DELETE FROM ' . cms_db_prefix() . 'event_handlers WHERE module_name = ? or tag_name = ?', array('TestModuleMethod', 'TestEventTag'));
 	}
 	
-	public function after()
+	public function tearDown()
 	{
-		$this->before();
+		$this->setUp();
 	}
 	
 	public function create_event()
@@ -75,115 +76,115 @@ class DescribeCmsEvents extends PHPSpec_Context
 		$this->callback_test = $this->callback_test + 1;
 	}
 	
-	public function itShouldBeAbleToCreateAnEvent()
+	public function testShouldBeAbleToCreateAnEvent()
 	{
 		$this->create_event();
-		$this->spec($this->get_event_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_count());
 	}
 	
-	public function itShouldNotAllowDuplicates()
+	public function testShouldNotAllowDuplicates()
 	{
 		$this->create_event();
-		$this->spec($this->get_event_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_count());
 		
 		$this->create_event();
-		$this->spec($this->get_event_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_count());
 	}
 	
-	public function itShouldProperlyDeleteAnEventByObject()
+	public function testShouldProperlyDeleteAnEventByObject()
 	{
 		$this->create_event();
 		$event = $this->get_event();
-		$this->spec($event != null)->should->beTrue();
+		$this->assertTrue($event != null);
 		$event->delete();
-		$this->spec($this->get_event_count())->should->be(0);
+		$this->assertEquals(0, $this->get_event_count());
 	}
 	
-	public function itShouldProperlyDeleteAnEventByOperations()
+	public function testShouldProperlyDeleteAnEventByOperations()
 	{
 		$this->create_event();
 		$event = $this->get_event();
-		$this->spec($event != null)->should->beTrue();
+		$this->assertTrue($event != null);
 		CmsEventOperations::remove_event('TestModule', 'TestEvent1');
-		$this->spec($this->get_event_count())->should->be(0);
+		$this->assertEquals(0, $this->get_event_count());
 	}
 	
-	public function itShouldCreateAnEventHandler()
+	public function testShouldCreateAnEventHandler()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
-		$this->spec($this->get_event_handler_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_handler_count());
 	}
 	
-	public function itShouldNotCreateADuplicateEventHandler()
+	public function testShouldNotCreateADuplicateEventHandler()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
-		$this->spec($this->get_event_handler_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_handler_count());
 		                                            
 		$this->create_event_handler_for_tag();      
-		$this->spec($this->get_event_handler_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_handler_count());
 	}
 	
-	public function itShouldBeAbleToDeleteHandlersByOperations()
+	public function testShouldBeAbleToDeleteHandlersByOperations()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
-		$this->spec($this->get_event_handler_count())->should->be(2);
+		$this->assertEquals(2, $this->get_event_handler_count());
 		CmsEventOperations::remove_event('TestModule', 'TestEvent1');
-		$this->spec($this->get_event_handler_count())->should->be(0);
-		$this->spec($this->get_event_count())->should->be(0);
+		$this->assertEquals(0, $this->get_event_handler_count());
+		$this->assertEquals(0, $this->get_event_count());
 	}
 	
-	function itShouldBeAbleToRemoveHandlers()
+	public function testShouldBeAbleToRemoveHandlers()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
-		$this->spec($this->get_event_handler_count())->should->be(2);
+		$this->assertEquals(2, $this->get_event_handler_count());
 		CmsEventOperations::remove_event_handler('TestModule', 'TestEvent1', 'TestEventTag');
-		$this->spec($this->get_event_handler_count())->should->be(1);
+		$this->assertEquals(1, $this->get_event_handler_count());
 		CmsEventOperations::remove_event_handler('TestModule', 'TestEvent1', false, 'TestModuleMethod');
-		$this->spec($this->get_event_handler_count())->should->be(0);
+		$this->assertEquals(0, $this->get_event_handler_count());
 	}
 	
-	public function itShouldBeAbleToRemoveAllEventHandlers()
+	public function testShouldBeAbleToRemoveAllEventHandlers()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
-		$this->spec($this->get_event_handler_count())->should->be(2);
+		$this->assertEquals(2, $this->get_event_handler_count());
 		CmsEventOperations::remove_all_event_handlers('TestModule', 'TestEvent1');
-		$this->spec($this->get_event_handler_count())->should->be(0);
-		$this->spec($this->get_event_count())->should->be(1);
+		$this->assertEquals(0, $this->get_event_handler_count());
+		$this->assertEquals(1, $this->get_event_count());
 	}
 	
-	public function itShouldBeAbleToListEventHandlers()
+	public function testShouldBeAbleToListEventHandlers()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
 		$list = CmsEventOperations::list_event_handlers('TestModule', 'TestEvent1');
 
-		$this->spec($list)->shouldNot->beNull();
-		$this->spec(count($list))->should->be(2);
+		$this->assertNotNull($list);
+		$this->assertEquals(2, count($list));
 		CmsEventOperations::remove_all_event_handlers('TestModule', 'TestEvent1');
 		
 		$list = CmsEventOperations::list_event_handlers('TestModule', 'TestEvent1');
-		$this->spec($list)->shouldNot->beNull();
-		$this->spec(count($list))->should->be(0);
+		$this->assertNotNull($list);
+		$this->assertEquals(0, count($list));
 	}
 	
-	public function itShouldBeAbleToListEvents()
+	public function testShouldBeAbleToListEvents()
 	{
 		$this->create_event();
 		$this->create_event_handler_for_tag();
 		$this->create_event_handler_for_module();
-		$this->spec(CmsEventOperations::list_events())->should->beGreaterThan(0);
+		$this->assertGreaterThan(0, CmsEventOperations::list_events());
 	}
 	
-	public function itShouldBeAbleToAddTemporaryEventHandlers()
+	public function testShouldBeAbleToAddTemporaryEventHandlers()
 	{
 		$this->callback_test = 1;
 		$this->originator = '';
@@ -191,19 +192,19 @@ class DescribeCmsEvents extends PHPSpec_Context
 		$this->create_event();
 		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'));
 		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
-		$this->spec($this->callback_test)->should->be(2);
-		$this->spec($this->originator)->should->be('TestModule');
-		$this->spec($this->event_name)->should->be('TestEvent1');
+		$this->assertEquals(2, $this->callback_test);
+		$this->assertEquals('TestModule', $this->originator);
+		$this->assertEquals('TestEvent1', $this->event_name);
 		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'));
 		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
-		$this->spec($this->callback_test)->should->be(4);
-		$this->spec($this->originator)->should->be('TestModule');
-		$this->spec($this->event_name)->should->be('TestEvent1');
+		$this->assertEquals(4, $this->callback_test);
+		$this->assertEquals('TestModule', $this->originator);
+		$this->assertEquals('TestEvent1', $this->event_name);
 		CmsEventOperations::add_temp_event_handler('TestModule', 'TestEvent1', array($this, 'temp_callback'), true);
 		CmsEventOperations::send_event('TestModule', 'TestEvent1', array('test stuff'));
-		$this->spec($this->callback_test)->should->be(7);
-		$this->spec($this->originator)->should->be('TestModule');
-		$this->spec($this->event_name)->should->be('TestEvent1');
+		$this->assertEquals(7, $this->callback_test);
+		$this->assertEquals('TestModule', $this->originator);
+		$this->assertEquals('TestEvent1', $this->event_name);
 	}
 
 }
