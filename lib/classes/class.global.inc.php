@@ -125,7 +125,7 @@ class CmsObject {
 	function CmsObject()
 	{
 		$this->cmssystemmodules = 
-		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager' );
+		  array( 'FileManager','nuSOAP', 'MenuManager', 'ModuleManager', 'Search', 'CMSMailer' );
 		$this->modules = array();
 		$this->errors = array();
 		$this->nls = array();
