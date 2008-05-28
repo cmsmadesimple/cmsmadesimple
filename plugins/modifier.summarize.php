@@ -23,7 +23,7 @@ while($i < $numwords){
 }
 
 //If set, the suffix (by default "...") will now be added to the summary ($returnstring)
-$returnstring .= "...";
+$returnstring .= $etc;
 
 //Return the summary!
 return $returnstring;
