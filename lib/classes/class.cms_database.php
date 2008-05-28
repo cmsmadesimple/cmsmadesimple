@@ -161,6 +161,35 @@ class CmsDatabase extends CmsObject
 			return $EXECS + $CACHED;
 		}
 	}
+	
+	public static function create_table($table, $fields)
+	{	
+		$dbdict = NewDataDictionary(self::get_instance());
+		$taboptarray = array('mysql' => 'TYPE=MyISAM');
+
+		$sqlarray = $dbdict->CreateTableSQL(self::get_prefix().$table, $fields, $taboptarray);
+		if (count($sqlarray))
+		{
+#			$sqlarray[0] .= "\n/*!40100 DEFAULT CHARACTER SET UTF8 */";
+		}
+		$dbdict->ExecuteSQLArray($sqlarray);
+	}
+	
+	public static function create_index($table, $name, $field)
+	{	
+		$dbdict = NewDataDictionary(self::get_instance());
+
+		$sqlarray = $dbdict->CreateIndexSQL($name, self::get_prefix().$table, $field);
+		$dbdict->ExecuteSQLArray($sqlarray);
+	}
+	
+	public static function drop_table($table)
+	{
+		$dbdict = NewDataDictionary(self::get_instance());
+
+		$sqlarray = $dbdict->DropTableSQL(self::get_prefix().$table);
+		$dbdict->ExecuteSQLArray($sqlarray);
+	}
 }
 
 function adodb_outp($msg, $newline = true)

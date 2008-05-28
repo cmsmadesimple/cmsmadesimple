@@ -1,8 +1,5 @@
 <phpunit>
   <testsuite name="CMSMS Core">
     <directory>./</directory>
-    <file>TestCmsEvents.php</file>
-    <file>TestCmsLogin.php</file>
-    <file>TestCmsUserTags.php</file>
   </testsuite>
 </phpunit>
