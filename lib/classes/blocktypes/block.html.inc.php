@@ -49,7 +49,7 @@ class BlockHtml extends CmsObject
 	{
 		if ($page->get_property_value($block_name . '-content', $lang) == '')
 		{
-			$page->add_validation_error(lang('nofieldgiven', array(lang('content'))));	
+			$page->add_error(lang('nofieldgiven', array(lang('content'))));	
 		}
 	}
 	

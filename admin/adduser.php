@@ -56,12 +56,12 @@ function &get_user_object()
 			else
 			{
 				//Add validation error about passwords not matching
-				$user_object->add_validation_error(lang("Passwords don't match"));
+				$user_object->add_error(lang("Passwords don't match"));
 			}
 		}
 		else
 		{
-			$user_object->add_validation_error(lang("No password given"));
+			$user_object->add_error(lang("No password given"));
 		}
 	}
 	return $user_object;

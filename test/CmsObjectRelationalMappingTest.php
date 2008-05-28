@@ -32,18 +32,32 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 			id I KEY AUTO,
 			test_field C(255),
 			another_test_field C(255),
+			some_int I,
+			some_float F,
 			create_date T,
 			modified_date T
 		");
 		
 		$cms_db_prefix = CMS_DB_PREFIX;
-		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, create_date, modified_date) VALUES ('test', 'blah', now() - 10, now() - 10)");
+		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, another_test_field, some_int, some_float, create_date, modified_date) VALUES ('test', 'blah', 5, 5.501, now() - 10, now() - 10)");
 		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, create_date, modified_date) VALUES ('test2', now(), now())");
 		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table (test_field, create_date, modified_date) VALUES ('test3', now(), now())");
+		
+		@CmsDatabase::drop_table('test_orm_table_child');
+		CmsDatabase::create_table('test_orm_table_child', "
+			id I KEY AUTO,
+			parent_id I,
+			some_other_field C(255),
+			create_date T,
+			modified_date T
+		");
+		
+		cms_db()->Execute("INSERT INTO {$cms_db_prefix}test_orm_table_child (parent_id, some_other_field, create_date, modified_date) VALUES (1, 'test', now(), now())");
 	}
 	
 	public function tearDown()
 	{
+		CmsDatabase::drop_table('test_orm_table_child');
 		CmsDatabase::drop_table('test_orm_table');
 		CmsCache::clear();
 	}
@@ -57,7 +71,7 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 	public function testGetColumnsInTableShouldWork()
 	{
 		$result = cms_orm('test_orm_table')->get_columns_in_table();
-		$this->assertEquals(5, count($result));
+		$this->assertEquals(7, count($result));
 		$this->assertEquals('int', $result['id']->type);
 		$this->assertEquals('varchar', $result['test_field']->type);
 		$this->assertEquals('datetime', $result['create_date']->type);
@@ -168,12 +182,89 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($result->has_parameter('modified_date'));
 		$this->assertFalse($result->has_parameter('i_made_this_up'));
 	}
+	
+	public function testValidatorWillNotAllowSaves()
+	{
+		$result = cms_orm('test_orm_table')->find();
+		$result->test_field = '';
+		$result->another_test_field = '';
+		$this->assertFalse($result->save());
+		$result->test_field = 'test';
+		$this->assertFalse($result->save());
+		$result->another_test_field = 'blah';
+		$this->assertTrue($result->save());
+	}
+	
+	public function testNumericalityOfValidatorShouldActuallyWork()
+	{
+		$result = cms_orm('test_orm_table')->find();
+		$result->some_int = '';  #We're testing numbers, not empty strings -- do another validation
+		$this->assertTrue($result->save());
+		$result->some_int = '5';
+		$this->assertTrue($result->save());
+		$result->some_int = 5;
+		$this->assertTrue($result->save());
+		$result->some_float = 'sdfsdfsdfsfd';
+		$this->assertFalse($result->save());
+		$result->some_float = '5.501';
+		$this->assertTrue($result->save());
+		$result->some_float = 5.501;
+		$this->assertTrue($result->save());
+	}
+	
+	public function testHasManyShouldWork()
+	{
+		$result = cms_orm('test_orm_table')->find_by_id(1);
+		$this->assertNotNull($result);
+		$this->assertEquals(1, count($result->children));
+		$this->assertEquals('test', $result->children[0]->some_other_field);
+	}
+	
+	public function testBelongsToShouldWorkAsWell()
+	{
+		$result = cms_orm('test_orm_table')->find_by_id(1);
+		$this->assertNotNull($result);
+		$this->assertEquals(1, count($result->children));
+		$this->assertNotNull(count($result->children[0]->parent));
+		$this->assertEquals(1, $result->children[0]->parent->id);
+	}
+	
+	public function testDeleteShouldActuallyDelete()
+	{
+		$result = cms_orm('test_orm_table')->find_by_id(1);
+		$this->assertNotNull($result);
+		$result->delete();
+		$result = cms_orm('test_orm_table')->find_all();
+		$this->assertEquals(2, count($result));
+	}
 
 }
 
 class TestOrmTable extends CmsObjectRelationalMapping
 {
-	
+	public function setup()
+	{
+		$this->create_has_many_association('children', 'TestOrmTableChild', 'parent_id');
+	}
+
+	public function validate()
+	{
+		$this->validate_not_blank('test_field');
+		if (strlen($this->another_test_field) == 0)
+		{
+			$this->add_validation_error('can\'t be blank');
+		}
+		$this->validate_numericality_of('some_int');
+		$this->validate_numericality_of('some_float');
+	}
+}
+
+class TestOrmTableChild extends CmsObjectRelationalMapping
+{	
+	public function setup()
+	{
+		$this->create_belongs_to_association('parent', 'test_orm_table', 'parent_id');
+	}
 }
 
 # vim:ts=4 sw=4 noet

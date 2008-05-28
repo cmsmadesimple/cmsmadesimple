@@ -822,7 +822,6 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 					{
 						if ($this->params[$localname] instanceof CmsDateTime)
 						{
-							//var_dump($this->params[$localname]);
 							$midpart .= "{$table}.{$onefield} = " . $this->params[$localname]->to_sql_string() . ", ";
 						}
 						else
@@ -1391,22 +1390,59 @@ abstract class CmsObjectRelationalMapping extends CmsObject implements ArrayAcce
 	{
 		if ($this->$field == null || $this->$field == '')
 		{
-			$this->add_validation_error(($message != '' ? $message : lang('nofieldgiven',array($field))));
+			$this->add_validation_error(($message != '' ? $message : lang("%s must not be blank", $this->$field)));
+		}
+	}
+	
+	/**
+	 * Validation method to see if a parameter has been filled in.  This should
+	 * be called from an object's validate() method on each field that needs to be
+	 * filled in before it can be saved.
+	 *
+	 * @param string Name of the field to check
+	 * @param string If given, this is the message that will be set in the object if the method didn't succed.
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	function validate_numericality_of($field, $message = '')
+	{
+		if (!($this->$field == null || $this->field != ''))
+		{
+			if ((string)$this->$field != (string)intval($this->$field) && (string)$this->$field != (string)floatval($this->$field))
+			{
+				$this->add_validation_error(($message != '' ? $message : lang("%s must be a number", $this->$field)));
+			}
 		}
 	}
 	
 	/**
 	 * Method for quickly adding a new validation error to the object.  If this is
-	 * called, then it's a safe bet that save() will fail.
+	 * called, then it's a safe bet that save() will fail.  This should only be
+	 * used for setting validation errors from external sources.
 	 *
 	 * @param string Message to add to the validation error stack
 	 * @return void
 	 * @author Ted Kulp
 	 */
-	function add_validation_error($message)
+	public function add_error($message)
+	{
+		$this->add_validation_error($message);
+		$this->clear_errors = false;
+	}
+	
+	/**
+	 * Method for quickly adding a new validation error to the object.  If this is
+	 * called, then it's a safe bet that save() will fail.  This should only be
+	 * used for setting validation errors from the object itself, as it doesn't
+	 * set the clear_errors flag.
+	 *
+	 * @param string Message to add to the validation error stack
+	 * @return void
+	 * @author Ted Kulp
+	 */
+	protected function add_validation_error($message)
 	{
 		$this->validation_errors[] = $message;
-		$this->clear_errors = false;
 	}
 	
 	/**
