@@ -237,11 +237,49 @@ class CmsObjectRelationalMappingTest extends PHPUnit_Framework_TestCase
 		$result = cms_orm('test_orm_table')->find_all();
 		$this->assertEquals(2, count($result));
 	}
+	
+	public function testLoadCallbacksShouldGetCalled()
+	{
+		$result = cms_orm('test_orm_table')->find();
+		$this->assertNotNull($result);
+		$this->assertEquals(1, $result->counter);
+	}
+	
+	public function testSaveCallbacksShouldGetCalled()
+	{
+		$result = cms_orm('test_orm_table')->find();
+		$this->assertNotNull($result);
+		$this->assertEquals(1, $result->counter);
+		
+		#First no updates -- before gets called, after doesn't
+		$result->save();
+		$this->assertEquals(2, $result->counter);
+		
+		#Now with updates -- before and after get called
+		$result->test_field = 'test10';
+		$result->save();
+		$this->assertEquals(5, $result->counter);
+	}
+	
+	public function testDeleteCallbacksShouldGetCalled()
+	{
+		$result = cms_orm('test_orm_table')->find();
+		$this->assertNotNull($result);
+		$this->assertEquals(1, $result->counter);
+		
+		$result->delete();
+		$this->assertEquals(4, $result->counter);
+		
+		$result = cms_orm('test_orm_table')->find_all();
+		$this->assertEquals(2, count($result));
+	}
 
 }
 
 class TestOrmTable extends CmsObjectRelationalMapping
 {
+	var $counter = 0;
+
 	public function setup()
 	{
 		$this->create_has_many_association('children', 'TestOrmTableChild', 'parent_id');
@@ -256,6 +294,33 @@ class TestOrmTable extends CmsObjectRelationalMapping
 		}
 		$this->validate_numericality_of('some_int');
 		$this->validate_numericality_of('some_float');
+	}
+	
+	public function after_load()
+	{
+		$this->counter++;
+	}
+	
+	public function before_save()
+	{
+		$this->counter++;
+	}
+	
+	public function after_save()
+	{
+		$this->counter++;
+		$this->counter++;
+	}
+	
+	public function before_delete()
+	{
+		$this->counter++;
+	}
+	
+	public function after_delete()
+	{
+		$this->counter++;
+		$this->counter++;
 	}
 }
 
