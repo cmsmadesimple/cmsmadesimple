@@ -57,7 +57,7 @@ function lang()
 
 	if (isset($lang[$realm][$name]))
 	{
-		if (isset($params))
+		if (count($params))
 		{
 			$result = vsprintf($lang[$realm][$name], $params);
 		}
