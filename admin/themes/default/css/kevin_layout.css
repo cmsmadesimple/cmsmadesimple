@@ -157,7 +157,7 @@ textarea {
 	color:#333333;
 	padding:0.25em;
 	border:1px solid #CCCCCC;
-	width:85%;
+	width:auto;
 }
 select {
 	border:1px solid #CCCCCC;
