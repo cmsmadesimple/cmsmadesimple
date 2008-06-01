@@ -178,7 +178,7 @@ $lang['admin']['help_function_adsense'] = <<<EOT
 EOT;
 $lang['admin']['help_function_sitename'] = <<<EOT
         <h3>What does this do?</h3>
-        <p>Shows the name of the site.  This is defined during install and can bbe modified in the Global Settings section of the admin panel.</p>
+        <p>Shows the name of the site.  This is defined during install and can be modified in the Global Settings section of the admin panel.</p>
         <h3>How do I use it?</h3>
         <p>Just insert the tag into your template/page like: <code>{sitename}</code></p>
         <h3>What parameters does it take?</h3>
@@ -218,11 +218,11 @@ $lang['admin']['help_function_recently_updated'] = <<<EOT
 	<p>Just insert the tag into your template/page like: <code>{recently_updated}</code></p>
 	<h3>What parameters does it take?</h3>
 	<ul>
-											 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: <pre>{recently_updated number='15'}</pre></p></li>
-											 	<li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: <pre>{recently_updated leadin='Last Changed'}</pre></p></li>
-											 	<li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: <pre>{recently_updated showtitle='true'}</pre></p></li>											 	
-											 	<li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: <pre>{recently_updated css_class='some_name'}</pre></p></li>											 	
-											 		<li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: <pre>{recently_updated dateformat='D M j G:i:s T Y'}</pre></p></li>											 	
+	 <li><p><em>(optional)</em> number='10' - Number of updated pages to show.</p><p>Example: <pre>{recently_updated number='15'}</pre></p></li>
+ 	 <li><p><em>(optional)</em> leadin='Last changed' - Text to show left of the modified date.</p><p>Example: <pre>{recently_updated leadin='Last Changed'}</pre></p></li>
+ 	 <li><p><em>(optional)</em> showtitle='true' - Shows the titleattribute if it exists as well (true|false).</p><p>Example: <pre>{recently_updated showtitle='true'}</pre></p></li>											 	
+	 <li><p><em>(optional)</em> css_class='some_name' - Warp a div tag with this class around the list.</p><p>Example: <pre>{recently_updated css_class='some_name'}</pre></p></li>											 	
+	 <li><p><em>(optional)</em> dateformat='d.m.y h:m' - default is d.m.y h:m , use the format you whish (php -date- format)</p><p>Example: <pre>{recently_updated dateformat='D M j G:i:s T Y'}</pre></p></li>											 	
 	</ul>
 	<p>or combined:</p>
 	<pre>{recently_updated number='15' showtitle='false' leadin='Last Change: ' css_class='my_changes' dateformat='D M j G:i:s T Y'}</pre>
