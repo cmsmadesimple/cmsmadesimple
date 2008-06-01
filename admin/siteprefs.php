@@ -418,7 +418,7 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 	if ($dir=opendir(dirname(__FILE__)."/themes/")) { //Does the themedir exist at all, it should...
 	?>
 	<div class="pageoverflow">
-		<p class="pagetext"><?php echo lang('admintheme') ?>:</p>
+		<p class="pagetext"><?php echo lang('master_admintheme') ?>:</p>
 		<p class="pageinput">
 		<select name="logintheme">
 			<?php
