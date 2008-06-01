@@ -1,5 +1,5 @@
 <?php
-$lang['admin']['master_admintheme'] = 'Default Admininstration Theme (for the login page and new user accounts';
+$lang['admin']['master_admintheme'] = 'Default Admininstration Theme (for the login page and new user accounts)';
 $lang['admin']['contenttype_separator'] = 'Separator';
 $lang['admin']['contenttype_sectionheader'] = 'Section Header';
 $lang['admin']['contenttype_link'] = 'External Link';
