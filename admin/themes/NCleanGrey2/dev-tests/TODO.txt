@@ -1,0 +1,10 @@
+# NCleanGrey2 for cmsms serie's 2x
+
+
+1) Ajust tabs
+
+2) Fix All Form's vs Styles (wow much work)
+
+3) Icons and login have pach for default theme (report ted an calguy1000)
+
+4) ...
