@@ -667,15 +667,22 @@ function display_hierarchy(&$root, &$userid, $modifyall, &$templates, &$users, &
             $thelist .= cms_htmlentities($one->mMenuText, '', '', true) . "</td>\n";
 
 
-        if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name &&
-	    check_permission($userid,'Modify Templates'))
-        {
-            $thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a></td>\n";
-        }
-        else
-        {
-	  $thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
-        }
+	if( $one->Type() == 'pagelink' || $one->Type() == 'link' || $one->Type() == 'sectionheader' )
+	  {
+	    $thelist .= "<td>&nbsp;</td>\n";
+	  }
+	else
+	  {
+	    if (isset($templates[$one->TemplateId()]->name) && $templates[$one->TemplateId()]->name &&
+		check_permission($userid,'Modify Templates'))
+	      {
+		$thelist .= "<td><a href=\"edittemplate.php?template_id=".$one->TemplateId()."&amp;from=content\">".cms_htmlentities($templates[$one->TemplateId()]->name, '', '', true)."</a></td>\n";
+	      }
+	    else
+	      {
+		$thelist .= "<td>".$templates[$one->TemplateId()]->name."</td>\n";
+	      }
+	  }
 
         $thelist .= "<td>".$one->FriendlyName()."</td>\n";
 
