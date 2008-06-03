@@ -40,17 +40,25 @@ $themeObject->DisplayDashboardCallout(TMP_CACHE_LOCATION . '/SITEDOWN', lang('si
 $timelastchecked = get_site_preference('lastcmsversioncheck',0);
 $tmpl = '<div class="pageerrorcontainer"><div class="pageoverflow"><p class="pageerror">%s</p></div></div>';
 $cms_is_uptodate = 1;
-if( $timelastchecked < time() || isset($_GET['forceversioncheck']) )
+$do_getpref = 0;
+$url = strtolower(trim(get_site_preference('urlcheckversion','')));
+if( $url != 'none' &&
+    ($timelastchecked < time() || isset($_GET['forceversioncheck'])) )
   {
     // check forced
     // get the url
+    $do_getpref = 1;
     $goodtest = false;
-    $url = trim(get_site_preference('urlcheckversion',''));
     if( empty($url) )
       {
 	$url = CMS_DEFAULT_VERSIONCHECK_URL;
       }
-    if( strtolower($url) != 'none')
+    if( $url == 'none')
+      {
+	$cms_is_uptodate = 1;
+	$do_getpref = 0;
+      }
+    else
       {
 	// we have a 'theoretically' valid url
 	$txt = @file_get_contents($url);
@@ -92,7 +100,8 @@ if( $timelastchecked < time() || isset($_GET['forceversioncheck']) )
 
 
 // check cached
-if( $cms_is_uptodate == 0 || get_site_preference('cms_is_uptodate',1) == 0 )
+if( $cms_is_uptodate == 0 || 
+    ($do_getpref == 1 && get_site_preference('cms_is_uptodate',1) == 0) )
   {
     // it wasn't up-to-date last time either
     printf($tmpl,lang('new_version_available'));
