@@ -44,6 +44,7 @@ if( $timelastchecked < time() || isset($_GET['forceversioncheck']) )
   {
     // check forced
     // get the url
+    $goodtest = false;
     $url = trim(get_site_preference('urlcheckversion',''));
     if( empty($url) )
       {
@@ -57,6 +58,7 @@ if( $timelastchecked < time() || isset($_GET['forceversioncheck']) )
 	  {
 	    // the url worked
 	    // do a version check
+	    $goodtest = true;
 	    $parts = explode(':',$txt);
 	    if( is_array( $parts ) && 
 		strtolower($parts[0]) == 'cmsmadesimple' )
@@ -81,8 +83,11 @@ if( $timelastchecked < time() || isset($_GET['forceversioncheck']) )
 
     // update the last check time
     // to midnight of the current day
-    set_site_preference('lastcmsversioncheck',
-			strtotime("23:59:55"));
+    if( $goodtest )
+      {
+	set_site_preference('lastcmsversioncheck',
+			    strtotime("23:59:55"));
+      }
   }
 
 
