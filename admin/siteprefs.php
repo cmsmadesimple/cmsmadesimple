@@ -395,7 +395,7 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('urlcheckversion') ?>:</p>
-			<p class="pageinput"><input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="<?php echo $urlcheckversion; ?>"/></p>
+			  <p class="pageinput"><input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="<?php echo $urlcheckversion; ?>"/><br/><?php echo lang('info_urlcheckversion'); ?></p>
 		</div>
 		<!--
 		<div class="pageoverflow">
