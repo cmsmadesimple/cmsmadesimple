@@ -148,6 +148,8 @@ if (!defined('SMARTY_DIR')) {
     define('SMARTY_DIR', cms_join_path($dirname,'lib','smarty') . DIRECTORY_SEPARATOR);
 }
 
+define('CMS_DEFAULT_VERSIONCHECK_URL','http://www.cmsmadesimple.org/check_version');
+
 #Stupid magic quotes...
 if(get_magic_quotes_gpc())
 {
