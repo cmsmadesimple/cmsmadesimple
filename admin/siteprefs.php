@@ -62,6 +62,9 @@ if (isset($_POST["enablecustom404"])) $enablecustom404 = "1";
 $xmlmodulerepository = "";
 if (isset($_POST["xmlmodulerepository"])) $xmlmodulerepository = $_POST["xmlmodulerepository"];
 
+$urlcheckversion = "";
+if (isset($_POST["urlcheckversion"])) $urlcheckversion = $_POST["urlcheckversion"];
+
 $defaultdateformat = "";
 if (isset($_POST["defaultdateformat"])) $defaultdateformat = $_POST["defaultdateformat"];
 
@@ -191,6 +194,7 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('nogcbwysiwyg', $nogcbwysiwyg);
       set_site_preference('enablecustom404', $enablecustom404);
       set_site_preference('xmlmodulerepository', $xmlmodulerepository);
+      set_site_preference('urlcheckversion', $urlcheckversion);
       set_site_preference('defaultdateformat', $defaultdateformat);
       set_site_preference('custom404', $custom404);
       set_site_preference('custom404template', $custom404template);
@@ -223,6 +227,7 @@ else if (isset($_POST["editsiteprefs"]))
   $enablesitedownmessage = get_site_preference('enablesitedownmessage');
   $sitedownmessage = get_site_preference('sitedownmessage');
   $xmlmodulerepository = get_site_preference('xmlmodulerepository');
+  $urlcheckversion = get_site_preference('urlcheckversion');
   $defaultdateformat = get_site_preference('defaultdateformat');
   #$sitedownmessagetemplate = get_site_preference('sitedownmessagetemplate');
   #$useadvancedcss = get_site_preference('useadvancedcss');
@@ -387,6 +392,10 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('sitedownmessage')?>:</p>
 			<p class="pageinput"><textarea class="pagesmalltextarea" name="sitedownmessage" cols="" rows=""><?php echo cms_htmlentities($sitedownmessage) ?></textarea></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('urlcheckversion') ?>:</p>
+			<p class="pageinput"><input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="<?php echo $urlcheckversion; ?>"/></p>
 		</div>
 		<!--
 		<div class="pageoverflow">

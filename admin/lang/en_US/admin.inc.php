@@ -1,4 +1,6 @@
 <?php
+$lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple is available.  Please notify your administrator.';
+$lang['admin']['urlcheckversion'] = 'URL Used for new version tests.<br/>If this url is the word "none", no checks will be made.<br/>An empty string will result in a default URL being used.';
 $lang['admin']['master_admintheme'] = 'Default Admininstration Theme (for the login page and new user accounts)';
 $lang['admin']['contenttype_separator'] = 'Separator';
 $lang['admin']['contenttype_sectionheader'] = 'Section Header';
