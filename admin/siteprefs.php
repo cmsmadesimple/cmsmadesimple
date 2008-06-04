@@ -195,6 +195,11 @@ else if (isset($_POST["editsiteprefs"]))
       set_site_preference('enablecustom404', $enablecustom404);
       set_site_preference('xmlmodulerepository', $xmlmodulerepository);
       set_site_preference('urlcheckversion', $urlcheckversion);
+      if( isset($_POST["clear_vc_cache"])) 
+	{
+	  set_site_preference('lastchsversioncheck',0);
+	}
+
       set_site_preference('defaultdateformat', $defaultdateformat);
       set_site_preference('custom404', $custom404);
       set_site_preference('custom404template', $custom404template);
@@ -396,6 +401,10 @@ if (FALSE == is_writable($config['root_path'].DIRECTORY_SEPARATOR.'tmp'.DIRECTOR
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('urlcheckversion') ?>:</p>
 			  <p class="pageinput"><input class="pagenb" type="text" name="urlcheckversion" size="80" maxlength="255" value="<?php echo $urlcheckversion; ?>"/><br/><?php echo lang('info_urlcheckversion'); ?></p>
+		</div>
+		<div class="pageoverflow">
+			<p class="pagetext"><?php echo lang('clear_version_check_cache') ?>:</p>
+			  <p class="pageinput"><input class="pagenb" type="checkbox" name="clear_vc_cache" /></p>
 		</div>
 		<!--
 		<div class="pageoverflow">
