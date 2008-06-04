@@ -161,7 +161,7 @@ else
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext">*<?php echo lang('content')?>:</p>
-			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?>
+			<p class="pageinput"><?php echo create_textarea($gcb_wysiwyg, $content, 'content', 'wysiwyg', 'content'); ?></p>
 		</div>
 		<div class="pageoverflow">
 			<p class="pagetext"><?php echo lang('additionaleditors')?>:</p>
