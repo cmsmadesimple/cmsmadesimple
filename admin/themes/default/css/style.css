@@ -508,7 +508,7 @@ div.pageerrorcontainer  {
    padding: 5px;
    border: solid 1px #666;
    color: #fff;
-   width: 95%;
+   width: auto;
    }
 div.pageerrorcontainer a {
    color: #fff;
@@ -520,7 +520,7 @@ div.pageerrorinstalldir  {
    margin: 10px;
    padding: 5px;
    border: solid 1px #666;
-   width: 45em;
+   width: auto;
    color: #fff;
    }
 
