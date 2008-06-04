@@ -1086,6 +1086,15 @@ deleted
 * Fixed it so textareas are filled proeperly with html encoded characters
 * Upgraded schema to version 2
 * Removed some code from install.php that was breaking on non-posix systems
+* By popular request, there is now a feature in the 'main' section of the admin panel
+  to check for a newer version of CMS Made simple.  This check is done once per day.
+  There are two new options in the global settings panel.  The first will 
+  allow overriding the default hardcoded URL to check for a new version, or to
+  disable checking all together.  The second will force clearing all cached information
+  and result in a version check occurring the next time the 'main' section of the
+  admin panel is accessed.
+  
+
 
 Version 0.1 -- Thu Jul 01 2004
 -----------------
