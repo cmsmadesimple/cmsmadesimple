@@ -295,6 +295,7 @@ function cms_html_entity_decode($text_to_convert) {
 		"&zeta;" => "".chr(206).chr(182)."",
 		"&zwj;" => "".chr(226).chr(128).chr(141)."",
 		"&zwnj;" => "".chr(226).chr(128).chr(140)."",
+		"&quot;" => '"',
 		"&gt;" => ">",
 		"&lt;" => "<"
 	);
