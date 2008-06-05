@@ -881,3 +881,9 @@ ul.sortableList li li li li li {
 .important {
  color: red;
 }
+/*FILEMANGER MESSAGES*/
+span.fm-messages{
+margin-left:20px;
+padding: 0px 2px 2px 10px;
+display:block;
+}
