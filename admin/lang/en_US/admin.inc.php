@@ -1,4 +1,5 @@
 <?php
+$lang['admin']['error'] = 'Error';
 $lang['admin']['clear_version_check_cache'] = 'Clear any cached version check information on submit';
 $lang['admin']['new_version_available'] = '<em>Notice:</em> A new version of CMS Made Simple is available.  Please notify your administrator.';
 $lang['admin']['info_urlcheckversion'] = 'If this url is the word &quot;none&quot; no checks will be made.<br/>An empty string will result in a default URL being used.';
