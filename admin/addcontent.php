@@ -123,6 +123,7 @@ function &get_page_object(&$page_type, &$orig_page_type, $userid, $params, $lang
 		$page_object->active = TRUE;
 		$page_object->show_in_menu = TRUE;
 		$page_object->last_modified_by = $userid;
+		$page_object->parent_id = coalesce_key($_REQUEST, 'parent_id', '-1');
 	}
 	
 	return $page_object;

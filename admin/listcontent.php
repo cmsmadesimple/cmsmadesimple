@@ -35,6 +35,7 @@ $cms_ajax->register_function('content_collapseall');
 $cms_ajax->register_function('content_toggleexpand');
 $cms_ajax->register_function('content_move');
 $cms_ajax->register_function('content_delete');
+$cms_ajax->register_function('context_menu');
 
 function check_modify_all($userid)
 {
@@ -117,11 +118,7 @@ function setup_smarty($themeObject)
 	$userid = get_userid();
 
 	//Set permissions
-	$smarty->assign('add_pages', check_permission($userid, 'Add Pages'));
-	$smarty->assign('modify_page_structure', check_permission($userid, 'Modify Page Structure'));
-	$smarty->assign('check_modify_all', check_permission($userid, 'Modify Any Page'));
-	$smarty->assign('remove_pages', check_permission($userid, 'Remove Pages'));
-	$smarty->assign('mypages', array()); //TODO: Fix me!
+	set_permissions($smarty);
 	
 	//Setup the images
 	$smarty->assign('newobject_image', $themeObject->DisplayImage('icons/system/newobject.gif', lang('addcontent'),'','','systemicon'));
@@ -157,6 +154,17 @@ function setup_smarty($themeObject)
 	$smarty->assign('content', cmsms()->GetHierarchyManager()->getRootNode());
 }
 
+function set_permissions(&$smarty)
+{
+	$userid = get_userid();
+
+	$smarty->assign('add_pages', check_permission($userid, 'Add Pages'));
+	$smarty->assign('modify_page_structure', check_permission($userid, 'Modify Page Structure'));
+	$smarty->assign('check_modify_all', check_permission($userid, 'Modify Any Page'));
+	$smarty->assign('remove_pages', check_permission($userid, 'Remove Pages'));
+	$smarty->assign('mypages', array()); //TODO: Fix me!
+}
+
 function display_content_list()
 {
 	$userid = get_userid();
@@ -171,6 +179,7 @@ function content_list_ajax()
 	$resp = new CmsAjaxResponse();
 
 	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script('set_context_menu();');
 	
 	return $resp->get_result();
 }
@@ -182,7 +191,8 @@ function content_setactive($contentid)
 	setactive($contentid, true);
 	
 	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script('set_context_menu();');
+	$resp->script("$('#content_span_{$contentid}').highlight('#ff0', 1500);");
 	
 	return $resp->get_result();
 }
@@ -194,7 +204,8 @@ function content_setinactive($contentid)
 	setactive($contentid, false);
 	
 	$resp->modify_html('#contentlist', display_content_list());
-	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script('set_context_menu();');
+	$resp->script("$('#content_span_{$contentid}').highlight('#ff0', 1500);");
 	
 	return $resp->get_result();
 }
@@ -236,6 +247,7 @@ function content_setdefault($contentid)
 
 	$resp->modify_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -247,6 +259,7 @@ function content_expandall()
 	expandall();
 
 	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -258,8 +271,24 @@ function content_collapseall()
 	collapseall();
 
 	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script('set_context_menu();');
 
 	return $resp->get_result();
+}
+
+function context_menu($content_id)
+{
+	$smarty = cms_smarty();
+	$resp = new CmsAjaxResponse();
+	
+	set_permissions($smarty);
+	
+	$content = cms_orm('content')->find_by_id(substr($content_id, strlen('content_span_')));
+	$smarty->assign_by_ref('current', $content);
+
+	$resp->modify_html('#context_menu', $smarty->fetch('listcontent-context_menu.tpl'));
+	
+	return $resp->get_result();	
 }
 
 function expandall()
@@ -292,6 +321,7 @@ function content_toggleexpand($contentid, $collapse)
 
 	$resp->modify_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
@@ -305,6 +335,7 @@ function content_delete($contentid)
 	//$objResponse->addScript("new Effect.Fade('tr_$contentid', { afterFinish:function() { xajax_content_list_ajax(); } });");
 	//$objResponse->addScript("$('#tr_{$contentid}').Highlight(500, '#f00', function() { xajax_content_list_ajax(); });");
 	$resp->modify_html('#contentlist', display_content_list());
+	$resp->script('set_context_menu();');
 	
 	return $resp->get_result();
 }
@@ -370,6 +401,7 @@ function content_move($contentid, $parentid, $direction)
 
 	$resp->modify_html('#contentlist', display_content_list());
 	$resp->script("$('#tr_{$contentid} > td').highlight('#ff0', 1500);");
+	$resp->script('set_context_menu();');
 
 	return $resp->get_result();
 }
